@@ -35,6 +35,8 @@ gem 'sidekiq', '~> 6.0'
 gem 'image_processing', '~> 1.2'
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', '>= 1.4.2', require: false
+# Integrate React.js with Rails views and controllers, the asset pipeline, or webpacker. https://github.com/reactjs/react-rails
+gem 'react-rails'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
