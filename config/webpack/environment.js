@@ -1,8 +1,10 @@
 const { environment } = require('@rails/webpacker')
 const customizedConfig = require('./customized_config');
+const lessLoader = require('./loaders/less-loader');
 const WebpackAssetsManifest = require('webpack-assets-manifest');
 
 environment.config.merge(customizedConfig);
+environment.loaders.insert('less', lessLoader, { after: 'css' });
 
 environment.splitChunks();
 environment.plugins.insert(
