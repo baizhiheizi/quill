@@ -1,12 +1,18 @@
+import { SmileOutlined } from '@ant-design/icons';
+import { Button, Result } from 'antd';
 import React from 'react';
-import { TestQueryQueryHookResult, useTestQueryQuery } from '@graphql';
 
 export function Home() {
-  const { data, loading }: TestQueryQueryHookResult = useTestQueryQuery();
-
-  if (loading) {
-    return <div>loading</div>;
-  }
-
-  return <div>{data.testField}</div>;
+  return (
+    <Result
+      icon={<SmileOutlined />}
+      title='Hello World'
+      subTitle='PRSDigg is restarting!'
+      extra={
+        <Button type='primary' href={`https://github.com/baizhiheizi/prsdigg`} target='_blank'>
+          check progress
+        </Button>
+      }
+    />
+  );
 }
