@@ -9,7 +9,11 @@ export function Home() {
       title='Hello World'
       subTitle='PRSDigg is restarting!'
       extra={
-        <Button type='primary' href={`https://github.com/baizhiheizi/prsdigg`} target='_blank'>
+        <Button
+          type='primary'
+          href={`https://github.com/baizhiheizi/prsdigg`}
+          target='_blank'
+        >
           check progress
         </Button>
       }
