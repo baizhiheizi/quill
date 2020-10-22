@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+
+# throw error when failed
+set -e
+
+# backup original .git
+mv .git .git.bak
+
+# make public/assets & public/packs/ in git
+sed -i 's+/public/assets+# /public/assets+g' .gitignore
+sed -i 's+/public/packs+# /public/packs+g' .gitignore
+
+# push compiled assets to release branch
+remote_repo="https://${GITHUB_ACTOR}:${GIHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" && \
+git init && \
+git config user.name "${GITHUB_ACTOR}" && \
+git config user.email "${GITHUB_ACTOR}@users.noreply.github.com" && \
+git add . && \
+git commit -m "Build from Action ${GITHUB_SHA}" && \
+git show-ref && \
+git push --force $remote_repo master:build
+
+# restore stuff
+rm -rf .git
+mv .git.bak .git
+sed -i 's+/# public/assets+/public/assets+g' .gitignore
+sed -i 's+/# public/packs+/public/packs+g' .gitignore
