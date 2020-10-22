@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "rootDir": ".",
     "allowSyntheticDefaultImports": true,
     "declaration": false,
     "emitDecoratorMetadata": true,
@@ -10,21 +11,16 @@
     "sourceMap": true,
     "target": "es5",
     "jsx": "react",
-    "noEmit": true
+    "noEmit": true,
+    "baseUrl": "app/javascript/src",
+    "paths": {
+      "@/*": ["*"],
+      "@admin/*": ["apps/admin/*"],
+      "@application/*": ["apps/application/*"],
+      "@shared": ["shared"],
+      "@shared/*": ["shared/*"]
+    }
   },
-  "exclude": [
-    "**/*.spec.ts",
-    "node_modules",
-    "vendor",
-    "public"
-  ],
-  "paths": {
-  "@/*": ["app/javascript/src/*"],
-  "@admin/*": ["app/javascript/src/apps/admin/*"],
-  "@application/*": ["app/javascript/src/apps/application/*"],
-  "@shared": ["app/javascript/src/shared"],
-  "@shared/*": ["app/javascript/src/shared/*"]
-},
-
+  "exclude": ["**/*.spec.ts", "node_modules", "vendor", "public"],
   "compileOnSave": false
 }

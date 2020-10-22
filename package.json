@@ -6,6 +6,7 @@
     "lint-check": "prettier --check app/**/*.{tsx,ts,js,gql}"
   },
   "dependencies": {
+    "@apollo/client": "^3.2.5",
     "@babel/preset-react": "^7.12.1",
     "@babel/preset-typescript": "^7.12.1",
     "@rails/actioncable": "^6.0.0",
@@ -17,6 +18,7 @@
     "antd": "^4.7.2",
     "babel-plugin-import": "^1.13.1",
     "babel-plugin-transform-react-remove-prop-types": "^0.4.24",
+    "graphql": "^15.3.0",
     "less": "^3.12.2",
     "less-loader": "^7.0.2",
     "prop-types": "^15.7.2",
