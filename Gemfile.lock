@@ -164,6 +164,13 @@ GEM
       mime-types-data (~> 3.2015)
     mime-types-data (3.2020.0512)
     mimemagic (0.3.5)
+    mina (1.2.3)
+      open4 (~> 1.3.4)
+      rake
+    mina-logs (1.1.0)
+      mina (>= 1.0.2)
+    mina-multistage (1.0.3)
+      mina (~> 1.0)
     mini_magick (4.10.1)
     mini_mime (1.0.2)
     mini_portile2 (2.4.0)
@@ -173,6 +180,7 @@ GEM
     nio4r (2.5.4)
     nokogiri (1.10.10)
       mini_portile2 (~> 2.4.0)
+    open4 (1.3.4)
     parallel (1.19.2)
     parser (2.7.2.0)
       ast (~> 2.4.1)
@@ -330,6 +338,9 @@ DEPENDENCIES
   image_processing (~> 1.2)
   jbuilder (~> 2.7)
   listen (~> 3.2)
+  mina (~> 1.2.2)
+  mina-logs (~> 1.1.0)
+  mina-multistage (~> 1.0.3)
   mixin_bot!
   pg
   puma (~> 4.1)
