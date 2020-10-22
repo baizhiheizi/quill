@@ -39,6 +39,8 @@ gem 'image_processing', '~> 1.2'
 gem 'bootsnap', '>= 1.4.2', require: false
 # Integrate React.js with Rails views and controllers, the asset pipeline, or webpacker. https://github.com/reactjs/react-rails
 gem 'react-rails'
+# Ruby implementation of GraphQL http://graphql-ruby.org
+gem 'graphql'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
@@ -57,6 +59,8 @@ group :development do
   # A Ruby static code analyzer and formatter
   gem 'rubocop', require: false
   gem 'rubocop-rails', require: false
+  # Mount the GraphiQL query editor in a Rails app
+  gem 'graphiql-rails'
 end
 
 group :test do

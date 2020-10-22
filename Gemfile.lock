@@ -122,6 +122,10 @@ GEM
       rake
     globalid (0.4.2)
       activesupport (>= 4.2.0)
+    graphiql-rails (1.7.0)
+      railties
+      sprockets-rails
+    graphql (1.11.5)
     hamster (3.0.0)
       concurrent-ruby (~> 1.0)
     http (4.4.1)
@@ -321,6 +325,8 @@ DEPENDENCIES
   bootsnap (>= 1.4.2)
   byebug
   capybara (>= 2.15)
+  graphiql-rails
+  graphql
   image_processing (~> 1.2)
   jbuilder (~> 2.7)
   listen (~> 3.2)
