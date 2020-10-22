@@ -1,6 +1,10 @@
 {
   "name": "prsdigg",
   "private": true,
+  "scripts": {
+    "lint": "prettier --write app/**/*.{tsx,ts,js,gql}",
+    "lint-check": "prettier --check app/**/*.{tsx,ts,js,gql}"
+  },
   "dependencies": {
     "@babel/preset-react": "^7.12.1",
     "@babel/preset-typescript": "^7.12.1",
@@ -24,6 +28,7 @@
   },
   "version": "0.1.0",
   "devDependencies": {
+    "prettier": "^2.1.2",
     "webpack-dev-server": "^3.11.0"
   }
 }

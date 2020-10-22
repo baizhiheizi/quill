@@ -1,0 +1,5 @@
+# Add files here to ignore them from prettier formatting
+
+package.json
+node_modules/**/*
+app/javascript/src/**/documents.tsx
