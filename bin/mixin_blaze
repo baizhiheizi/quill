@@ -1,0 +1,36 @@
+#!/usr/bin/env ruby
+
+require 'rubygems'
+require 'bundler/setup'
+require File.expand_path('../config/environment', __dir__)
+
+EM.run {
+  MixinBot.api.start_blaze_connect do
+    def on_open(ws, _event)
+      p ['PRSDigg', Time.current, :open]
+      ws.send MixinBot.api.list_pending_message
+    end
+
+    def on_message(ws, event)
+      raw = JSON.parse MixinBot.api.read_ws_message(event.data)
+      return if raw&.[]('action') == 'ACKNOWLEDGE_MESSAGE_RECEIPT'
+
+      p ['PRSDigg', Time.current, :message, raw&.[]('action')]
+      data = raw['data']
+      return if data.blank?
+
+      # ack
+      ws.send MixinBot.api.acknowledge_message_receipt(data['message_id']) if data&.[]('message_id').present?
+
+      # reply
+      ws.send MixinBot.api.write_ws_message(
+        {
+          params: MixinBot.api.plain_text(
+            conversation_id: data['conversation_id'],
+            data: 'PRSDigg project is restarting and opensource. If you are interested, check https://github.com/baizhiheizi/prsdigg'
+          )
+        }
+      ) if data&.[]('conversation_id').present?
+    end
+  end
+}
