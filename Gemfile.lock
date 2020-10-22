@@ -186,7 +186,7 @@ GEM
       ast (~> 2.4.1)
     pg (1.2.3)
     public_suffix (4.0.6)
-    puma (4.3.6)
+    puma (5.0.2)
       nio4r (~> 2.0)
     rack (2.2.3)
     rack-proxy (0.6.5)
@@ -343,7 +343,7 @@ DEPENDENCIES
   mina-multistage (~> 1.0.3)
   mixin_bot!
   pg
-  puma (~> 4.1)
+  puma
   rails (~> 6.0.3, >= 6.0.3.4)
   react-rails
   redis (~> 4.1)
