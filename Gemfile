@@ -41,6 +41,8 @@ gem 'bootsnap', '>= 1.4.2', require: false
 gem 'react-rails'
 # Ruby implementation of GraphQL http://graphql-ruby.org
 gem 'graphql'
+# Mount the GraphiQL query editor in a Rails app
+gem 'graphiql-rails'
 
 # deploy
 gem 'mina', '~> 1.2.2', require: false
@@ -65,8 +67,6 @@ group :development do
   # A Ruby static code analyzer and formatter
   gem 'rubocop', require: false
   gem 'rubocop-rails', require: false
-  # Mount the GraphiQL query editor in a Rails app
-  gem 'graphiql-rails'
 end
 
 group :test do
