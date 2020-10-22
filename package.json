@@ -3,7 +3,8 @@
   "private": true,
   "scripts": {
     "lint": "prettier --write app/**/*.{tsx,ts,js,gql}",
-    "lint-check": "prettier --check app/**/*.{tsx,ts,js,gql}"
+    "lint-check": "prettier --check app/**/*.{tsx,ts,js,gql}",
+    "codegen": "graphql-codegen --config codegen.yml"
   },
   "dependencies": {
     "@apollo/client": "^3.2.5",
@@ -30,7 +31,11 @@
   },
   "version": "0.1.0",
   "devDependencies": {
+    "@graphql-codegen/cli": "1.18.0",
     "prettier": "^2.1.2",
-    "webpack-dev-server": "^3.11.0"
+    "webpack-dev-server": "^3.11.0",
+    "@graphql-codegen/typescript": "1.17.11",
+    "@graphql-codegen/typescript-react-apollo": "2.0.7",
+    "@graphql-codegen/introspection": "1.18.0"
   }
 }

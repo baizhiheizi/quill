@@ -18,7 +18,8 @@
       "@admin/*": ["apps/admin/*"],
       "@application/*": ["apps/application/*"],
       "@shared": ["shared"],
-      "@shared/*": ["shared/*"]
+      "@shared/*": ["shared/*"],
+      "@graphql": ["graphql"]
     }
   },
   "exclude": ["**/*.spec.ts", "node_modules", "vendor", "public"],

@@ -22,6 +22,12 @@ module.exports = {
         '..',
         'app/javascript/src/shared',
       ),
+      '@graphql': path.resolve(
+        __dirname,
+        '..',
+        '..',
+        'app/javascript/src/graphql',
+      ),
     },
   },
 };
