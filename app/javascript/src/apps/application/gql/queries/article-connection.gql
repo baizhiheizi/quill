@@ -1,0 +1,18 @@
+query ArticleConnection($after: String) {
+  articleConnection(after: $after) {
+    nodes {
+      uuid
+      title
+      intro
+      content
+      author {
+        name
+        avatarUrl
+      }
+    }
+    pageInfo {
+      hasNextPage
+      endCursor
+    }
+  }
+}
