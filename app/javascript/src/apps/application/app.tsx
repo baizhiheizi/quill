@@ -3,17 +3,11 @@ import { apolloClient } from '@shared';
 import { ApolloProvider } from '@apollo/client';
 import { Home } from './pages';
 import { CurrentUserContext } from './shared';
-
-interface UserType {
-  avatarUrl?: string;
-  name?: string;
-  mixinId?: string;
-  mixinUuid?: string;
-}
+import { User } from '@graphql';
 
 export default function App(props: {
   csrfToken: string;
-  currentUser?: UserType;
+  currentUser?: Partial<User>;
 }) {
   const { csrfToken, currentUser } = props;
   return (
