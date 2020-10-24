@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_10_24_095108) do
+ActiveRecord::Schema.define(version: 2020_10_24_131828) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -64,6 +64,21 @@ ActiveRecord::Schema.define(version: 2020_10_24_095108) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["trace_id"], name: "index_payments_on_trace_id", unique: true
+  end
+
+  create_table "transfers", force: :cascade do |t|
+    t.bigint "order_id"
+    t.integer "transfer_type"
+    t.uuid "trace_id"
+    t.uuid "asset_id"
+    t.uuid "opponent_id"
+    t.string "memo"
+    t.datetime "processed_at"
+    t.json "snapshot"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["order_id"], name: "index_transfers_on_order_id"
+    t.index ["trace_id"], name: "index_transfers_on_trace_id", unique: true
   end
 
   create_table "user_authorizations", force: :cascade do |t|

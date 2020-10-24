@@ -25,7 +25,7 @@ class Article < ApplicationRecord
 
   belongs_to :author, class_name: 'User', inverse_of: :articles
 
-  has_many :orders, as: :item
+  has_many :orders, as: :item, dependent: :nullify
 
   validates :uuid, presence: true, uniqueness: true
   validates :title, presence: true, length: { maximum: 25 }

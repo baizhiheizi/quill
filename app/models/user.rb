@@ -22,7 +22,8 @@ class User < ApplicationRecord
 
   has_one :mixin_authorization, -> { where(provider: :mixin) }, class_name: 'UserAuthorization', inverse_of: :user
   has_many :articles, foreign_key: :author_id, inverse_of: :author, dependent: :nullify
-  has_many :payments, foreign_key: :opponent_id, primary_key: :mixin_id, inverse_of: :payer, dependent: :nullify
+  has_many :payments, foreign_key: :opponent_id, primary_key: :mixin_uuid, inverse_of: :payer, dependent: :nullify
+  has_many :transfers, foreign_key: :opponent_id, primary_key: :mixin_uuid, inverse_of: :receiver, dependent: :nullify
 
   validates :name, presence: true
 
