@@ -1,9 +1,10 @@
-import React from 'react';
-import { apolloClient, mixinUtils } from '@shared';
 import { ApolloProvider } from '@apollo/client';
-import { Home } from './pages';
-import { CurrentUserContext, MixinContext } from './shared';
 import { User } from '@graphql';
+import { apolloClient, mixinUtils } from '@shared';
+import React from 'react';
+import { BrowserRouter as Router } from 'react-router-dom';
+import { Routes } from './routes';
+import { CurrentUserContext, MixinContext } from './shared';
 
 export default function App(props: {
   csrfToken: string;
@@ -21,9 +22,9 @@ export default function App(props: {
         }}
       >
         <CurrentUserContext.Provider value={currentUser}>
-          <div>
-            <Home />
-          </div>
+          <Router>
+            <Routes />
+          </Router>
         </CurrentUserContext.Provider>
       </MixinContext.Provider>
     </ApolloProvider>
