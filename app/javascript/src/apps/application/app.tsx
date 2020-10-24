@@ -1,8 +1,8 @@
 import React from 'react';
-import { apolloClient } from '@shared';
+import { apolloClient, mixinUtils } from '@shared';
 import { ApolloProvider } from '@apollo/client';
 import { Home } from './pages';
-import { CurrentUserContext } from './shared';
+import { CurrentUserContext, MixinContext } from './shared';
 import { User } from '@graphql';
 
 export default function App(props: {
@@ -12,11 +12,20 @@ export default function App(props: {
   const { csrfToken, currentUser } = props;
   return (
     <ApolloProvider client={apolloClient('/graphql', csrfToken)}>
-      <CurrentUserContext.Provider value={currentUser}>
-        <div>
-          <Home />
-        </div>
-      </CurrentUserContext.Provider>
+      <MixinContext.Provider
+        value={{
+          mixinAppversion: mixinUtils.appVersion(),
+          mixinConversationId: mixinUtils.conversationId(),
+          mixinEnv: mixinUtils.environment(),
+          mixinImmersive: mixinUtils.immersive(),
+        }}
+      >
+        <CurrentUserContext.Provider value={currentUser}>
+          <div>
+            <Home />
+          </div>
+        </CurrentUserContext.Provider>
+      </MixinContext.Provider>
     </ApolloProvider>
   );
 }
