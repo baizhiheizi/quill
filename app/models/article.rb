@@ -25,11 +25,13 @@ class Article < ApplicationRecord
 
   belongs_to :author, class_name: 'User', inverse_of: :articles
 
+  has_many :orders, as: :item
+
   validates :uuid, presence: true, uniqueness: true
   validates :title, presence: true, length: { maximum: 25 }
   validates :intro, presence: true, length: { maximum: 140 }
   validates :content, presence: true
-  validates :price, numbericality: { greater_than: 0.00000001 }
+  validates :price, numericality: { greater_than: 0.00000001 }
 
   before_validation :setup_attributes
 

@@ -24,6 +24,7 @@
 class Order < ApplicationRecord
   belongs_to :payer, class_name: 'User'
   belongs_to :receiver, class_name: 'User'
+  belongs_to :item, polymorphic: true
 
   has_one :payment, foreign_key: :trace_id, primary_key: :trace_id, dependent: :nullify, inverse_of: false
 end
