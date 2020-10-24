@@ -1,21 +1,23 @@
 import { SmileOutlined } from '@ant-design/icons';
 import { Button, Result } from 'antd';
 import React from 'react';
+import { useCurrentUser } from '../../shared';
 
 export function Home() {
+  const currentUser = useCurrentUser();
   return (
     <Result
       icon={<SmileOutlined />}
       title='Hello World'
       subTitle='PRSDigg is restarting!'
       extra={
-        <Button
-          type='primary'
-          href={`https://github.com/baizhiheizi/prsdigg`}
-          target='_blank'
-        >
-          check progress
-        </Button>
+        currentUser ? (
+          <span>Hello wolrd! {currentUser.name}</span>
+        ) : (
+          <Button type='primary' href='/login'>
+            Login
+          </Button>
+        )
       }
     />
   );
