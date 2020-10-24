@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_10_24_092314) do
+ActiveRecord::Schema.define(version: 2020_10_24_095108) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -36,6 +36,34 @@ ActiveRecord::Schema.define(version: 2020_10_24_092314) do
     t.datetime "updated_at", precision: 6, null: false
     t.index ["author_id"], name: "index_articles_on_author_id"
     t.index ["uuid"], name: "index_articles_on_uuid", unique: true
+  end
+
+  create_table "orders", force: :cascade do |t|
+    t.bigint "receiver_id"
+    t.bigint "payer_id"
+    t.string "item_type"
+    t.bigint "item_id"
+    t.uuid "trace_id"
+    t.string "state"
+    t.decimal "total"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["item_type", "item_id"], name: "index_orders_on_item_type_and_item_id"
+    t.index ["payer_id"], name: "index_orders_on_payer_id"
+    t.index ["receiver_id"], name: "index_orders_on_receiver_id"
+  end
+
+  create_table "payments", force: :cascade do |t|
+    t.uuid "opponent_id"
+    t.uuid "trace_id"
+    t.uuid "snapshot_id"
+    t.uuid "asset_id"
+    t.decimal "amount"
+    t.string "memo"
+    t.json "raw"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["trace_id"], name: "index_payments_on_trace_id", unique: true
   end
 
   create_table "user_authorizations", force: :cascade do |t|
