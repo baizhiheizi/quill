@@ -10,9 +10,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_10_22_035541) do
+ActiveRecord::Schema.define(version: 2020_10_24_003812) do
 
   # These are extensions that must be enabled in order to support this database
+  enable_extension "pgcrypto"
   enable_extension "plpgsql"
 
   create_table "administrators", force: :cascade do |t|
@@ -21,6 +22,29 @@ ActiveRecord::Schema.define(version: 2020_10_22_035541) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["name"], name: "index_administrators_on_name", unique: true
+  end
+
+  create_table "user_authorizations", force: :cascade do |t|
+    t.bigint "user_id"
+    t.integer "provider", comment: "third party auth provider"
+    t.string "uid", comment: "third party user id"
+    t.string "access_token"
+    t.json "raw", comment: "third pary user info"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["provider", "uid"], name: "index_user_authorizations_on_provider_and_uid", unique: true
+    t.index ["user_id"], name: "index_user_authorizations_on_user_id"
+  end
+
+  create_table "users", force: :cascade do |t|
+    t.string "name"
+    t.string "avatar_url"
+    t.string "mixin_id"
+    t.uuid "mixin_uuid"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["mixin_id"], name: "index_users_on_mixin_id", unique: true
+    t.index ["mixin_uuid"], name: "index_users_on_mixin_uuid", unique: true
   end
 
 end
