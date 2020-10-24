@@ -19,7 +19,9 @@
 #
 class User < ApplicationRecord
   include Authenticatable
+
   has_one :mixin_authorization, -> { where(provider: :mixin) }, class_name: 'UserAuthorization', inverse_of: :user
+  has_many :articles, foreign_key: :author_id, inverse_of: :author, dependent: :nullify
 
   validates :name, presence: true
 

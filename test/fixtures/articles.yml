@@ -1,0 +1,30 @@
+# == Schema Information
+#
+# Table name: articles
+#
+#  id                                  :bigint           not null, primary key
+#  content                             :text
+#  intro                               :string
+#  price                               :decimal(, )      not null
+#  title                               :string
+#  uuid                                :uuid
+#  created_at                          :datetime         not null
+#  updated_at                          :datetime         not null
+#  asset_id(asset_id in Mixin Network) :uuid
+#  author_id                           :bigint
+#
+# Indexes
+#
+#  index_articles_on_author_id  (author_id)
+#  index_articles_on_uuid       (uuid) UNIQUE
+#
+
+# This model initially had no columns defined. If you add columns to the
+# model remove the '{}' from the fixture names and add the columns immediately
+# below each fixture, per the syntax in the comments below
+#
+one: {}
+# column: value
+#
+two: {}
+# column: value
