@@ -73,7 +73,11 @@ export default function App(props: {
               <Layout.Content
                 style={{ background: '#fff', padding: '2rem 1rem ' }}
               >
-                <Routes />
+                <Row justify='center'>
+                  <Col flex={1} xs={24} sm={24} md={18} lg={16}>
+                    <Routes />
+                  </Col>
+                </Row>
               </Layout.Content>
             </Layout>
           </Router>

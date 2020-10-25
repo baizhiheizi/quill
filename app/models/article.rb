@@ -35,6 +35,13 @@ class Article < ApplicationRecord
 
   before_validation :setup_attributes, on: :create
 
+  def authorize?(user)
+    return if user.blank?
+    return true if author == user
+
+    orders.find_by(payer: user).present?
+  end
+
   private
 
   def setup_attributes

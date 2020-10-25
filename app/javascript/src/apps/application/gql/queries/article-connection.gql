@@ -4,11 +4,12 @@ query ArticleConnection($after: String) {
       uuid
       title
       intro
-      content
+      price
       author {
         name
         avatarUrl
       }
+      createdAt
     }
     pageInfo {
       hasNextPage

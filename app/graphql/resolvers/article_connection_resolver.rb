@@ -6,7 +6,7 @@ module Resolvers
 
     type Types::ArticleConnectionType, null: false
 
-    def resolve(_params)
+    def resolve(_params = {})
       Article.order(created_at: :desc)
     end
   end

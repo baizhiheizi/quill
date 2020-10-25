@@ -1,0 +1,14 @@
+query Article($uuid: ID!) {
+  article(uuid: $uuid) {
+    uuid
+    title
+    intro
+    content
+    price
+    author {
+      name
+      avatarUrl
+    }
+    createdAt
+  }
+}

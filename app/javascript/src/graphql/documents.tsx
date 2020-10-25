@@ -17,7 +17,7 @@ export type Article = {
   __typename?: 'Article';
   assetId: Scalars['String'];
   author: User;
-  content: Scalars['String'];
+  content?: Maybe<Scalars['String']>;
   createdAt: Scalars['ISO8601DateTime'];
   intro: Scalars['String'];
   price: Scalars['Float'];
@@ -96,9 +96,15 @@ export type PageInfo = {
 
 export type Query = {
   __typename?: 'Query';
+  article?: Maybe<Article>;
   articleConnection: ArticleConnection;
   createdAt: Scalars['ISO8601DateTime'];
   updatedAt?: Maybe<Scalars['ISO8601DateTime']>;
+};
+
+
+export type QueryArticleArgs = {
+  uuid: Scalars['ID'];
 };
 
 
@@ -160,11 +166,12 @@ export const ArticleConnectionDocument = gql`
       uuid
       title
       intro
-      content
+      price
       author {
         name
         avatarUrl
       }
+      createdAt
     }
     pageInfo {
       hasNextPage
@@ -199,3 +206,45 @@ export function useArticleConnectionLazyQuery(baseOptions?: Apollo.LazyQueryHook
 export type ArticleConnectionQueryHookResult = ReturnType<typeof useArticleConnectionQuery>;
 export type ArticleConnectionLazyQueryHookResult = ReturnType<typeof useArticleConnectionLazyQuery>;
 export type ArticleConnectionQueryResult = Apollo.QueryResult<ArticleConnectionQuery, ArticleConnectionQueryVariables>;
+export const ArticleDocument = gql`
+    query Article($uuid: ID!) {
+  article(uuid: $uuid) {
+    uuid
+    title
+    intro
+    content
+    price
+    author {
+      name
+      avatarUrl
+    }
+    createdAt
+  }
+}
+    `;
+
+/**
+ * __useArticleQuery__
+ *
+ * To run a query within a React component, call `useArticleQuery` and pass it any options that fit your needs.
+ * When your component renders, `useArticleQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useArticleQuery({
+ *   variables: {
+ *      uuid: // value for 'uuid'
+ *   },
+ * });
+ */
+export function useArticleQuery(baseOptions?: Apollo.QueryHookOptions<ArticleQuery, ArticleQueryVariables>) {
+        return Apollo.useQuery<ArticleQuery, ArticleQueryVariables>(ArticleDocument, baseOptions);
+      }
+export function useArticleLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ArticleQuery, ArticleQueryVariables>) {
+          return Apollo.useLazyQuery<ArticleQuery, ArticleQueryVariables>(ArticleDocument, baseOptions);
+        }
+export type ArticleQueryHookResult = ReturnType<typeof useArticleQuery>;
+export type ArticleLazyQueryHookResult = ReturnType<typeof useArticleLazyQuery>;
+export type ArticleQueryResult = Apollo.QueryResult<ArticleQuery, ArticleQueryVariables>;
