@@ -33,10 +33,17 @@ class Article < ApplicationRecord
   validates :content, presence: true
   validates :price, numericality: { greater_than: 0.00000001 }
 
-  before_validation :setup_attributes
+  before_validation :setup_attributes, on: :create
+
+  private
 
   def setup_attributes
-    self.asset_id = PRS_ASSET_ID
-    self.price = price.round(8)
+    return unless new_record?
+
+    assign_attributes(
+      asset_id: PRS_ASSET_ID,
+      price: price.round(8),
+      uuid: SecureRandom.uuid
+    )
   end
 end
