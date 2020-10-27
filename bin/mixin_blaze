@@ -19,18 +19,11 @@ EM.run {
       data = raw['data']
       return if data.blank?
 
+      # process message
+      MixinMessage.create_with(raw: data).find_or_create_by(message_id: data['message_id'])
+
       # ack
       ws.send MixinBot.api.acknowledge_message_receipt(data['message_id']) if data&.[]('message_id').present?
-
-      # reply
-      ws.send MixinBot.api.write_ws_message(
-        {
-          params: MixinBot.api.plain_text(
-            conversation_id: data['conversation_id'],
-            data: 'PRSDigg project is restarting and opensource. If you are interested, check https://github.com/baizhiheizi/prsdigg'
-          )
-        }
-      ) if data&.[]('conversation_id').present?
     end
   end
 }

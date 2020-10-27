@@ -57,19 +57,7 @@ class MixinMessage < ApplicationRecord
       end
     return if snapshot.blank?
 
-    memo =
-      begin
-        JSON.parse Base64.decode64(snapshot['memo'])
-      rescue JSON::ParserError
-        {}
-      end
-
-    case memo['type']
-    when 'BUY'
-      # TODO: create buy article order
-    when 'REWARD'
-      # TODO: create reward article order
-    end
+    Payment.create! raw: snapshot
   end
 
   def process_async
@@ -78,7 +66,11 @@ class MixinMessage < ApplicationRecord
 
   def send_default_reply
     return if conversation_id.blank?
-    # TODO: send default reply via http
+
+    MixinBot.api.send_text_message(
+      conversation_id: conversation_id,
+      data: 'May the force be with you.'
+    )
   end
 
   private

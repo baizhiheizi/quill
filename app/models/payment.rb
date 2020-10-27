@@ -32,6 +32,32 @@ class Payment < ApplicationRecord
   validates :snapshot_id, presence: true, uniqueness: true
   validates :trace_id, presence: true, uniqueness: true
 
+  after_commit :create_order!, on: :create
+
+  def create_order!
+    decpreted_memo =
+      begin
+        JSON.parse Base64.decode64(snapshot['memo'])
+      rescue JSON::ParserError
+        {}
+      end
+
+    case decpreted_memo['type']
+    when 'BUY'
+      # TODO: create buy article order
+    when 'REWARD'
+      # TODO: create reward article order
+    else
+      refund
+    end
+  rescue StandardError
+    retund
+  end
+
+  def refund
+    # TODO: create refund transfer worker
+  end
+
   private
 
   def setup_attributes
