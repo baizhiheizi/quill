@@ -1,0 +1,31 @@
+# == Schema Information
+#
+# Table name: mixin_messages
+#
+#  id                      :bigint           not null, primary key
+#  action                  :string
+#  category                :string
+#  content(decrepted data) :string
+#  processed_at            :datetime
+#  raw                     :json
+#  state                   :string
+#  created_at              :datetime         not null
+#  updated_at              :datetime         not null
+#  conversation_id         :uuid
+#  message_id              :uuid
+#  user_id                 :uuid
+#
+# Indexes
+#
+#  index_mixin_messages_on_message_id  (message_id) UNIQUE
+#
+
+# This model initially had no columns defined. If you add columns to the
+# model remove the '{}' from the fixture names and add the columns immediately
+# below each fixture, per the syntax in the comments below
+#
+one: {}
+# column: value
+#
+two: {}
+# column: value

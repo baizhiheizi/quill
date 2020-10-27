@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_10_24_131828) do
+ActiveRecord::Schema.define(version: 2020_10_27_094820) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -38,6 +38,21 @@ ActiveRecord::Schema.define(version: 2020_10_24_131828) do
     t.index ["uuid"], name: "index_articles_on_uuid", unique: true
   end
 
+  create_table "mixin_messages", force: :cascade do |t|
+    t.string "action"
+    t.string "category"
+    t.uuid "user_id"
+    t.uuid "conversation_id"
+    t.uuid "message_id"
+    t.string "content", comment: "decrepted data"
+    t.json "raw"
+    t.datetime "processed_at"
+    t.string "state"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["message_id"], name: "index_mixin_messages_on_message_id", unique: true
+  end
+
   create_table "orders", force: :cascade do |t|
     t.bigint "receiver_id"
     t.bigint "payer_id"
@@ -45,6 +60,7 @@ ActiveRecord::Schema.define(version: 2020_10_24_131828) do
     t.bigint "item_id"
     t.uuid "trace_id"
     t.string "state"
+    t.integer "order_type"
     t.decimal "total"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
@@ -60,6 +76,7 @@ ActiveRecord::Schema.define(version: 2020_10_24_131828) do
     t.uuid "asset_id"
     t.decimal "amount"
     t.string "memo"
+    t.string "state"
     t.json "raw"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false

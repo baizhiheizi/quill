@@ -7,6 +7,7 @@ class CreatePayments < ActiveRecord::Migration[6.0]
       t.uuid :asset_id
       t.decimal :amount
       t.string :memo
+      t.string :state
       t.json :raw
 
       t.timestamps

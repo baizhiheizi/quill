@@ -6,6 +6,7 @@ class CreateOrders < ActiveRecord::Migration[6.0]
       t.references :item, polymorphic: true
       t.uuid :trace_id
       t.string :state
+      t.integer :order_type
       t.decimal :total
 
       t.timestamps

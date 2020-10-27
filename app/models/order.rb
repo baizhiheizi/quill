@@ -6,6 +6,7 @@
 #
 #  id          :bigint           not null, primary key
 #  item_type   :string
+#  order_type  :integer
 #  state       :string
 #  total       :decimal(, )
 #  created_at  :datetime         not null
