@@ -60,7 +60,7 @@ class Payment < ApplicationRecord
     # }
     decpreted_memo =
       begin
-        JSON.parse Base64.decode64(memo)
+        JSON.parse Base64.decode64(memo.to_s)
       rescue JSON::ParserError
         {}
       end

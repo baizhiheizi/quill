@@ -20,7 +20,7 @@ EM.run {
       return if data.blank?
 
       # process message
-      MixinMessage.create_with(raw: data).find_or_create_by(message_id: data['message_id'])
+      MixinMessage.create_with(raw: raw).find_or_create_by(message_id: data['message_id'])
 
       # ack
       ws.send MixinBot.api.acknowledge_message_receipt(data['message_id']) if data&.[]('message_id').present?

@@ -26,7 +26,10 @@ class MixinMessage < ApplicationRecord
 
   before_validation :setup_attributes
 
-  after_commit :process_async, on: :create
+  validates :message_id, presence: true, uniqueness: true
+  validates :raw, presence: true
+
+  after_create :process_async
 
   scope :unprocessed, -> { where(processed_at: nil) }
 
@@ -57,7 +60,7 @@ class MixinMessage < ApplicationRecord
   end
 
   def process_async
-    # TODO: sidekiq worker
+    ProcessMixinMessageWorker.perform_async message_id
   end
 
   def send_default_reply
@@ -71,7 +74,7 @@ class MixinMessage < ApplicationRecord
 
   private
 
-  def set_attributes
+  def setup_attributes
     return unless new_record?
 
     data = raw['data']
@@ -81,6 +84,6 @@ class MixinMessage < ApplicationRecord
     self.category          = data['category']
     self.conversation_id   = data['conversation_id']
     self.user_id           = data['user_id']
-    self.content           = Base64.decode64 data['data']
+    self.content           = Base64.decode64 data['data'].to_s
   end
 end
