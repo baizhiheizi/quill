@@ -84,7 +84,8 @@ ActiveRecord::Schema.define(version: 2020_10_27_094820) do
   end
 
   create_table "transfers", force: :cascade do |t|
-    t.bigint "order_id"
+    t.string "source_type"
+    t.bigint "source_id"
     t.integer "transfer_type"
     t.uuid "trace_id"
     t.uuid "asset_id"
@@ -94,7 +95,7 @@ ActiveRecord::Schema.define(version: 2020_10_27_094820) do
     t.json "snapshot"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["order_id"], name: "index_transfers_on_order_id"
+    t.index ["source_type", "source_id"], name: "index_transfers_on_source_type_and_source_id"
     t.index ["trace_id"], name: "index_transfers_on_trace_id", unique: true
   end
 

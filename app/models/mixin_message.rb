@@ -44,10 +44,6 @@ class MixinMessage < ApplicationRecord
     update processed_at: Time.current
   end
 
-  # memo = {
-  #  t: BUY|REWARD,
-  #  a: article's uuid,
-  # }
   def process_snapshot
     snapshot =
       begin

@@ -23,15 +23,39 @@
 #  index_orders_on_receiver_id            (receiver_id)
 #
 class Order < ApplicationRecord
+  include AASM
+
   belongs_to :payer, class_name: 'User'
   belongs_to :receiver, class_name: 'User'
   belongs_to :item, polymorphic: true
 
-  has_one :payment, foreign_key: :trace_id, primary_key: :trace_id, dependent: :nullify, inverse_of: false
+  has_many :transfers, as: :source, dependent: :nullify
+  has_one :payment, foreign_key: :trace_id, primary_key: :trace_id, dependent: :nullify, inverse_of: :order
+
+  before_validation :setup_attributes
+
+  validate :ensure_total_sufficient
+
+  enum order_type: { buy_article: 0, reward_article: 1 }
 
   after_commit :complete_payment, on: :create
 
   def complete_payment
     payment.complete
+  end
+
+  def ensure_total_sufficent
+    errors.add(total: 'Wrong token!') unless payment.asset_id == item.asset_id
+    errors.add(:total, 'amount not sufficient') unless total >= item.price
+  end
+
+  private
+
+  def setup_attributes
+    assign_attributes(
+      payer: payment.payer,
+      receiver: item.author,
+      total: payment.amount
+    )
   end
 end

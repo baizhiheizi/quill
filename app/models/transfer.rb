@@ -8,28 +8,31 @@
 #  memo          :string
 #  processed_at  :datetime
 #  snapshot      :json
+#  source_type   :string
 #  transfer_type :integer
 #  created_at    :datetime         not null
 #  updated_at    :datetime         not null
 #  asset_id      :uuid
 #  opponent_id   :uuid
-#  order_id      :bigint
+#  source_id     :bigint
 #  trace_id      :uuid
 #
 # Indexes
 #
-#  index_transfers_on_order_id  (order_id)
-#  index_transfers_on_trace_id  (trace_id) UNIQUE
+#  index_transfers_on_source_type_and_source_id  (source_type,source_id)
+#  index_transfers_on_trace_id                   (trace_id) UNIQUE
 #
 class Transfer < ApplicationRecord
-  belongs_to :order
+  belongs_to :source, polymorphic: true
   belongs_to :receiver, class_name: 'User', primary_key: :mixin_uuid, foreign_key: :opponent_id, inverse_of: :transfers
 
-  enum transfer_type: { author_revenue: 0, reader_revenue: 1 }
+  enum transfer_type: { author_revenue: 0, reader_revenue: 1, payment_refund: 2 }
 
   validates :trace_id, presence: true, uniqueness: true
   validates :asset_id, presence: true
   validates :opponent_id, presence: true
+
+  after_create :process_async
 
   scope :unprocessed, -> { where(processed_at: nil) }
 
@@ -38,6 +41,8 @@ class Transfer < ApplicationRecord
   end
 
   def process!
+    return if processed?
+
     r = MixinBot.api.create_transfer(
       Rails.application.credentials.dig(:mixin, :pin_code),
       asset_id: asset_id,
@@ -50,9 +55,16 @@ class Transfer < ApplicationRecord
     raise r['error'].inspect if r['error'].present?
     return unless r['data']['trace_id'] == trace_id
 
-    update!(
-      snapshot: r['data'],
-      processed_at: Time.current
-    )
+    with_lock do
+      source.refund! if transfer_type.payment_refund?
+      update!(
+        snapshot: r['data'],
+        processed_at: Time.current
+      )
+    end
+  end
+
+  def process_async
+    ProcessTranfserWorker.perform_async trace_id
   end
 end

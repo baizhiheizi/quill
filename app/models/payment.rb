@@ -25,6 +25,9 @@ class Payment < ApplicationRecord
 
   belongs_to :payer, class_name: 'User', foreign_key: :mixin_uuid, primary_key: :opponent_id, inverse_of: :payments
 
+  has_one :transfer, as: :source, dependent: :nullify
+  has_one :order, primary_key: :trace_id, foreign_key: :trace_id, dependent: :nullify, inverse_of: :payment
+
   before_validation :setup_attributes
 
   validates :amount, presence: true
@@ -42,36 +45,54 @@ class Payment < ApplicationRecord
     state :refunded
 
     event :complete do
-      transactions from :paid, to: :completed
+      transitions from: :paid, to: :completed
     end
 
     event :refund do
-      transactions from :paid, to: :refunded
+      transitions from: :paid, to: :refunded
     end
   end
 
   def create_order!
+    # memo = {
+    #  t: BUY|REWARD,
+    #  a: article's uuid,
+    # }
     decpreted_memo =
       begin
-        JSON.parse Base64.decode64(snapshot['memo'])
+        JSON.parse Base64.decode64(memo)
       rescue JSON::ParserError
         {}
       end
 
-    case decpreted_memo['type']
+    case decpreted_memo['t']
     when 'BUY'
-      # TODO: create buy article order
+      create_order!(
+        item: Article.find_by(uuid: decpreted_memo['a']),
+        order_type: :buy_article
+      )
     when 'REWARD'
-      # TODO: create reward article order
+      create_order!(
+        item: Article.find_by(uuid: decpreted_memo['a']),
+        order_type: :reward_article
+      )
     else
       refund
     end
-  rescue StandardError
+  rescue StandardError => e
+    Rails.logger.error e.inspect
     retund
   end
 
   def refund
-    # TODO: create refund transfer worker
+    create_transfer!(
+      transfer_type: :payment_refund,
+      opponent_id: opponent_id,
+      amount: amount,
+      asset_id: asset_id,
+      trace_id: MixinBot.api.unique_conversation_id(trace_id, opponent_id),
+      memo: 'REDUND'
+    )
   end
 
   private
