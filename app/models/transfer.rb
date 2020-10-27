@@ -35,6 +35,7 @@ class Transfer < ApplicationRecord
   after_create :process_async
 
   scope :unprocessed, -> { where(processed_at: nil) }
+  scope :processed, -> { where.not(processed_at: nil) }
 
   def processed?
     processed_at?

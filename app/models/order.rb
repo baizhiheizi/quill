@@ -23,6 +23,10 @@
 #  index_orders_on_receiver_id            (receiver_id)
 #
 class Order < ApplicationRecord
+  AUTHOR_RATIO = 0.5
+  READER_RATIO = 0.4
+  PRSDIGG_RATIO = 0.1
+
   include AASM
 
   belongs_to :payer, class_name: 'User'
@@ -38,7 +42,42 @@ class Order < ApplicationRecord
 
   enum order_type: { buy_article: 0, reward_article: 1 }
 
-  after_commit :complete_payment, on: :create
+  after_create :complete_payment, :create_transfers
+
+  aasm column: :state do
+    state :paid, initial: true
+    state :complete
+
+    event :complete, guard: :all_transfers_processed? do
+      transitions from: :paid, to: :complete
+    end
+  end
+
+  # core logic
+  # transfer revenue to author and readers
+  def create_transfers
+    create_author_transfer
+    create_reader_transfers
+  end
+
+  def create_author_revenue_transfer
+    create_transfers!(
+      transfer_type: :author_revenue,
+      amount: (total * AUTHOR_RATIO).round(8),
+      opponent_id: item.author.mixin_uuid,
+      asset_id: payment.asset_id,
+      memo: "#{payer.name} paid for your article"
+    )
+  end
+
+  def create_reader_revenue_transfers
+    # TODO: based on the order records before
+    # amount = totle * READER_RATIO
+  end
+
+  def all_transfers_processed?
+    transfers.unprocessed.blank?
+  end
 
   def complete_payment
     payment.complete
