@@ -43,6 +43,8 @@ gem 'react-rails'
 gem 'graphql'
 # Mount the GraphiQL query editor in a Rails app
 gem 'graphiql-rails'
+# AASM - State machines for Ruby classes (plain Ruby, ActiveRecord, Mongoid)
+gem 'aasm'
 
 # deploy
 gem 'mina', '~> 1.2.2', require: false

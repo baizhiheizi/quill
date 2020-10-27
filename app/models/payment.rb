@@ -21,6 +21,8 @@
 #  index_payments_on_trace_id  (trace_id) UNIQUE
 #
 class Payment < ApplicationRecord
+  include AASM
+
   belongs_to :payer, class_name: 'User', foreign_key: :mixin_uuid, primary_key: :opponent_id, inverse_of: :payments
 
   before_validation :setup_attributes
@@ -33,6 +35,20 @@ class Payment < ApplicationRecord
   validates :trace_id, presence: true, uniqueness: true
 
   after_commit :create_order!, on: :create
+
+  aasm column: :state do
+    state :paid, initial: true
+    state :completed
+    state :refunded
+
+    event :complete do
+      transactions from :paid, to: :completed
+    end
+
+    event :refund do
+      transactions from :paid, to: :refunded
+    end
+  end
 
   def create_order!
     decpreted_memo =

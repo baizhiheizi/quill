@@ -28,4 +28,10 @@ class Order < ApplicationRecord
   belongs_to :item, polymorphic: true
 
   has_one :payment, foreign_key: :trace_id, primary_key: :trace_id, dependent: :nullify, inverse_of: false
+
+  after_commit :complete_payment, on: :create
+
+  def complete_payment
+    payment.complete
+  end
 end
