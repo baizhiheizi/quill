@@ -23,7 +23,7 @@
 class Payment < ApplicationRecord
   include AASM
 
-  belongs_to :payer, class_name: 'User', foreign_key: :mixin_uuid, primary_key: :opponent_id, inverse_of: :payments
+  belongs_to :payer, class_name: 'User', foreign_key: :opponent_id, primary_key: :mixin_uuid, inverse_of: :payments
 
   has_one :transfer, as: :source, dependent: :nullify
   has_one :order, primary_key: :trace_id, foreign_key: :trace_id, dependent: :nullify, inverse_of: :payment
@@ -37,7 +37,7 @@ class Payment < ApplicationRecord
   validates :snapshot_id, presence: true, uniqueness: true
   validates :trace_id, presence: true, uniqueness: true
 
-  after_commit :create_order!, on: :create
+  after_create :create_order!
 
   aasm column: :state do
     state :paid, initial: true
@@ -67,21 +67,24 @@ class Payment < ApplicationRecord
 
     case decpreted_memo['t']
     when 'BUY'
-      create_order!(
+      Order.find_or_create_by!(
+        payment: self,
         item: Article.find_by(uuid: decpreted_memo['a']),
         order_type: :buy_article
       )
     when 'REWARD'
-      create_order!(
+      Order.create_with(
         item: Article.find_by(uuid: decpreted_memo['a']),
         order_type: :reward_article
+      ).find_or_create_by!(
+        payment: self
       )
     else
       refund
     end
   rescue StandardError => e
     Rails.logger.error e.inspect
-    retund
+    refund
   end
 
   def refund

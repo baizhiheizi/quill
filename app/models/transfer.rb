@@ -5,6 +5,7 @@
 # Table name: transfers
 #
 #  id            :bigint           not null, primary key
+#  amount        :decimal(, )
 #  memo          :string
 #  processed_at  :datetime
 #  snapshot      :json
@@ -57,7 +58,7 @@ class Transfer < ApplicationRecord
     return unless r['data']['trace_id'] == trace_id
 
     with_lock do
-      source.refund! if transfer_type.payment_refund?
+      source.refund! if payment_refund?
       update!(
         snapshot: r['data'],
         processed_at: Time.current
@@ -66,6 +67,6 @@ class Transfer < ApplicationRecord
   end
 
   def process_async
-    ProcessTranfserWorker.perform_async trace_id
+    ProcessTransferWorker.perform_async trace_id
   end
 end

@@ -5,6 +5,7 @@
 # Table name: transfers
 #
 #  id            :bigint           not null, primary key
+#  amount        :decimal(, )
 #  memo          :string
 #  processed_at  :datetime
 #  snapshot      :json

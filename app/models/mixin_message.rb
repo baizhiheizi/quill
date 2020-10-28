@@ -55,8 +55,11 @@ class MixinMessage < ApplicationRecord
         nil
       end
     return if snapshot.blank?
+    return if snapshot['amount'].to_f.negative?
 
-    Payment.create! raw: snapshot
+    Payment
+      .create_with(raw: snapshot)
+      .find_or_create_by!(trace_id: snapshot['trace_id'])
   end
 
   def process_async

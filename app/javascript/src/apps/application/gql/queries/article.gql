@@ -5,6 +5,8 @@ query Article($uuid: ID!) {
     intro
     content
     price
+    assetId
+    authorized
     author {
       name
       avatarUrl

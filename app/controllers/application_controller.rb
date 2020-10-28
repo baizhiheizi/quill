@@ -27,7 +27,10 @@ class ApplicationController < ActionController::Base
     {
       current_user: current_user&.as_json(
         only: %i[name avatar_url mixin_id mixin_uuid]
-      )
+      ),
+      prsdigg: {
+        app_id: MixinBot.api.client_id
+      }
     }
   end
 end

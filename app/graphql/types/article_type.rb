@@ -8,6 +8,7 @@ module Types
     field :content, String, null: true
     field :asset_id, String, null: false
     field :price, Float, null: false
+    field :authorized, Boolean, null: true
 
     field :author, Types::UserType, null: false
 
@@ -15,6 +16,10 @@ module Types
       return unless object.authorize?(context[:current_user])
 
       object.content
+    end
+
+    def authorized
+      object.authorize?(context[:current_user])
     end
   end
 end

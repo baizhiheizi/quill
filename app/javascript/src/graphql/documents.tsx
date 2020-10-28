@@ -17,6 +17,7 @@ export type Article = {
   __typename?: 'Article';
   assetId: Scalars['String'];
   author: User;
+  authorized?: Maybe<Scalars['Boolean']>;
   content?: Maybe<Scalars['String']>;
   createdAt: Scalars['ISO8601DateTime'];
   intro: Scalars['String'];
@@ -214,6 +215,8 @@ export const ArticleDocument = gql`
     intro
     content
     price
+    assetId
+    authorized
     author {
       name
       avatarUrl

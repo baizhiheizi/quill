@@ -87,6 +87,7 @@ ActiveRecord::Schema.define(version: 2020_10_27_094820) do
     t.string "source_type"
     t.bigint "source_id"
     t.integer "transfer_type"
+    t.decimal "amount"
     t.uuid "trace_id"
     t.uuid "asset_id"
     t.uuid "opponent_id"

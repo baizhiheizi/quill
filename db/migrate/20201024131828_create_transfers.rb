@@ -3,6 +3,7 @@ class CreateTransfers < ActiveRecord::Migration[6.0]
     create_table :transfers do |t|
       t.belongs_to :source, polymorphic: true
       t.integer :transfer_type
+      t.decimal :amount
       t.uuid :trace_id
       t.uuid :asset_id
       t.uuid :opponent_id
