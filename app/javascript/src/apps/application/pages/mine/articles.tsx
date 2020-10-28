@@ -1,40 +1,39 @@
 import {
   Article,
   ArticleConnectionQueryHookResult,
-  useArticleConnectionQuery,
+  useMyArticleConnectionQuery,
 } from '@/graphql';
-import { MoneyCollectOutlined, ReadOutlined } from '@ant-design/icons';
-import { Avatar, Button, List, Row, Space } from 'antd';
+import { Avatar, Button, List, Row } from 'antd';
 import moment from 'moment';
 import React from 'react';
 import { useHistory } from 'react-router-dom';
 import { Loading } from '../../components';
-import { PRS_ICON_URL } from '../../shared';
 
-export function Home() {
+export function Articles(props: { type: 'author' | 'reader' }) {
+  const { type } = props;
   const history = useHistory();
   const {
     data,
     loading,
     fetchMore,
-  }: ArticleConnectionQueryHookResult = useArticleConnectionQuery({
-    fetchPolicy: 'network-only',
-    notifyOnNetworkStatusChange: true,
+  }: ArticleConnectionQueryHookResult = useMyArticleConnectionQuery({
+    variables: { type },
   });
 
-  if (!data && loading) {
+  if (loading) {
     return <Loading />;
   }
 
   const {
-    articleConnection: {
+    myArticleConnection: {
       nodes: articles,
       pageInfo: { hasNextPage, endCursor },
     },
   } = data;
+
   return (
     <List
-      size='large'
+      size='small'
       itemLayout='vertical'
       dataSource={articles}
       loadMore={
@@ -55,16 +54,17 @@ export function Home() {
                     if (!fetchMoreResult) {
                       return prev;
                     }
-                    const connection = fetchMoreResult.articleConnection;
-                    connection.nodes = prev.articleConnection.nodes.concat(
+                    const connection = fetchMoreResult.myArticleConnection;
+                    connection.nodes = prev.myArticleConnection.nodes.concat(
                       connection.nodes,
                     );
                     return Object.assign({}, prev, {
-                      articleConnection: connection,
+                      myArticleConnection: connection,
                     });
                   },
                   variables: {
                     after: endCursor,
+                    type,
                   },
                 });
               }}
@@ -78,16 +78,6 @@ export function Home() {
         <List.Item
           key={article.uuid}
           onClick={() => history.push(`/articles/${article.uuid}`)}
-          actions={[
-            <Space>
-              <ReadOutlined />
-              <span>{article.ordersCount}次付费</span>
-            </Space>,
-            <Space>
-              <MoneyCollectOutlined />
-              <span>营收{article.revenue.toFixed(2)}PRS</span>
-            </Space>,
-          ]}
         >
           <List.Item.Meta
             style={{ marginBottom: 0 }}
@@ -100,15 +90,10 @@ export function Home() {
                     {moment(article.createdAt).fromNow()}
                   </div>
                 </div>
-                <Space style={{ marginLeft: 'auto' }}>
-                  <Avatar size='small' src={PRS_ICON_URL} />
-                  <span>{article.price.toFixed(2)}</span>
-                </Space>
               </Row>
             }
           />
-          <h2>{article.title}</h2>
-          <p>{article.intro}</p>
+          <h3>{article.title}</h3>
         </List.Item>
       )}
     />

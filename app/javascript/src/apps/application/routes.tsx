@@ -1,6 +1,6 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
-import { Article, ArticleNew, Home, Rules } from './pages';
+import { Article, ArticleNew, Home, Mine, Rules } from './pages';
 
 export function Routes() {
   return (
@@ -18,6 +18,9 @@ export function Routes() {
       </Switch>
       <Route path='/rules' exact>
         <Rules />
+      </Route>
+      <Route path='/mine' exact>
+        <Mine />
       </Route>
     </React.Fragment>
   );

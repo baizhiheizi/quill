@@ -24,6 +24,8 @@ class User < ApplicationRecord
   has_many :articles, foreign_key: :author_id, inverse_of: :author, dependent: :nullify
   has_many :payments, foreign_key: :opponent_id, primary_key: :mixin_uuid, inverse_of: :payer, dependent: :nullify
   has_many :transfers, foreign_key: :opponent_id, primary_key: :mixin_uuid, inverse_of: :receiver, dependent: :nullify
+  has_many :orders, foreign_key: :payer_id, inverse_of: :payer, dependent: :nullify
+  has_many :bought_articles, through: :orders, source: :item, source_type: 'Article'
 
   validates :name, presence: true
 

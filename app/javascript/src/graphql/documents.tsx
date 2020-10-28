@@ -84,6 +84,18 @@ export type MutationCreateArticleArgs = {
   input: CreateArticleMutationInput;
 };
 
+export type Order = {
+  __typename?: 'Order';
+  createdAt: Scalars['ISO8601DateTime'];
+  item: Article;
+  payer: User;
+  receiver: User;
+  state: Scalars['String'];
+  total: Scalars['Float'];
+  traceId: Scalars['ID'];
+  updatedAt?: Maybe<Scalars['ISO8601DateTime']>;
+};
+
 /** Information about pagination in a connection. */
 export type PageInfo = {
   __typename?: 'PageInfo';
@@ -97,11 +109,50 @@ export type PageInfo = {
   startCursor?: Maybe<Scalars['String']>;
 };
 
+export type Payment = {
+  __typename?: 'Payment';
+  amount: Scalars['Float'];
+  assetId: Scalars['String'];
+  createdAt: Scalars['ISO8601DateTime'];
+  memo?: Maybe<Scalars['String']>;
+  order: Order;
+  payer: User;
+  snapshotId: Scalars['String'];
+  state: Scalars['String'];
+  traceId: Scalars['ID'];
+  updatedAt?: Maybe<Scalars['ISO8601DateTime']>;
+};
+
+/** The connection type for Payment. */
+export type PaymentConnection = {
+  __typename?: 'PaymentConnection';
+  /** A list of edges. */
+  edges?: Maybe<Array<Maybe<PaymentEdge>>>;
+  /** A list of nodes. */
+  nodes?: Maybe<Array<Maybe<Payment>>>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** Total # of objects returned from this Plural Query */
+  totalCount: Scalars['Int'];
+};
+
+/** An edge in a connection. */
+export type PaymentEdge = {
+  __typename?: 'PaymentEdge';
+  /** A cursor for use in pagination. */
+  cursor: Scalars['String'];
+  /** The item at the end of the edge. */
+  node?: Maybe<Payment>;
+};
+
 export type Query = {
   __typename?: 'Query';
   article?: Maybe<Article>;
   articleConnection: ArticleConnection;
   createdAt: Scalars['ISO8601DateTime'];
+  myArticleConnection: ArticleConnection;
+  myPaymentConnection: PaymentConnection;
+  myTransferConnection: TransferConnection;
   updatedAt?: Maybe<Scalars['ISO8601DateTime']>;
 };
 
@@ -116,6 +167,67 @@ export type QueryArticleConnectionArgs = {
   before?: Maybe<Scalars['String']>;
   first?: Maybe<Scalars['Int']>;
   last?: Maybe<Scalars['Int']>;
+};
+
+
+export type QueryMyArticleConnectionArgs = {
+  type: Scalars['String'];
+  after?: Maybe<Scalars['String']>;
+  before?: Maybe<Scalars['String']>;
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+};
+
+
+export type QueryMyPaymentConnectionArgs = {
+  after?: Maybe<Scalars['String']>;
+  before?: Maybe<Scalars['String']>;
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+};
+
+
+export type QueryMyTransferConnectionArgs = {
+  after?: Maybe<Scalars['String']>;
+  before?: Maybe<Scalars['String']>;
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+};
+
+export type Transfer = {
+  __typename?: 'Transfer';
+  amount: Scalars['Float'];
+  assetId: Scalars['String'];
+  createdAt: Scalars['ISO8601DateTime'];
+  memo?: Maybe<Scalars['String']>;
+  processedAt: Scalars['ISO8601DateTime'];
+  receiver: User;
+  snapshotId: Scalars['String'];
+  traceId: Scalars['ID'];
+  transferType: Scalars['String'];
+  updatedAt?: Maybe<Scalars['ISO8601DateTime']>;
+};
+
+/** The connection type for Transfer. */
+export type TransferConnection = {
+  __typename?: 'TransferConnection';
+  /** A list of edges. */
+  edges?: Maybe<Array<Maybe<TransferEdge>>>;
+  /** A list of nodes. */
+  nodes?: Maybe<Array<Maybe<Transfer>>>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** Total # of objects returned from this Plural Query */
+  totalCount: Scalars['Int'];
+};
+
+/** An edge in a connection. */
+export type TransferEdge = {
+  __typename?: 'TransferEdge';
+  /** A cursor for use in pagination. */
+  cursor: Scalars['String'];
+  /** The item at the end of the edge. */
+  node?: Maybe<Transfer>;
 };
 
 export type User = {
@@ -255,3 +367,139 @@ export function useArticleLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Ar
 export type ArticleQueryHookResult = ReturnType<typeof useArticleQuery>;
 export type ArticleLazyQueryHookResult = ReturnType<typeof useArticleLazyQuery>;
 export type ArticleQueryResult = Apollo.QueryResult<ArticleQuery, ArticleQueryVariables>;
+export const MyArticleConnectionDocument = gql`
+    query MyArticleConnection($type: String!, $after: String) {
+  myArticleConnection(type: $type, after: $after) {
+    nodes {
+      uuid
+      title
+      intro
+      price
+      revenue
+      ordersCount
+      author {
+        name
+        avatarUrl
+      }
+      createdAt
+    }
+    pageInfo {
+      hasNextPage
+      endCursor
+    }
+  }
+}
+    `;
+
+/**
+ * __useMyArticleConnectionQuery__
+ *
+ * To run a query within a React component, call `useMyArticleConnectionQuery` and pass it any options that fit your needs.
+ * When your component renders, `useMyArticleConnectionQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useMyArticleConnectionQuery({
+ *   variables: {
+ *      type: // value for 'type'
+ *      after: // value for 'after'
+ *   },
+ * });
+ */
+export function useMyArticleConnectionQuery(baseOptions?: Apollo.QueryHookOptions<MyArticleConnectionQuery, MyArticleConnectionQueryVariables>) {
+        return Apollo.useQuery<MyArticleConnectionQuery, MyArticleConnectionQueryVariables>(MyArticleConnectionDocument, baseOptions);
+      }
+export function useMyArticleConnectionLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MyArticleConnectionQuery, MyArticleConnectionQueryVariables>) {
+          return Apollo.useLazyQuery<MyArticleConnectionQuery, MyArticleConnectionQueryVariables>(MyArticleConnectionDocument, baseOptions);
+        }
+export type MyArticleConnectionQueryHookResult = ReturnType<typeof useMyArticleConnectionQuery>;
+export type MyArticleConnectionLazyQueryHookResult = ReturnType<typeof useMyArticleConnectionLazyQuery>;
+export type MyArticleConnectionQueryResult = Apollo.QueryResult<MyArticleConnectionQuery, MyArticleConnectionQueryVariables>;
+export const MyPaymentConnectionDocument = gql`
+    query MyPaymentConnection($after: String) {
+  myPaymentConnection(after: $after) {
+    nodes {
+      traceId
+      snapshotId
+      amount
+      assetId
+      state
+    }
+    pageInfo {
+      hasNextPage
+      endCursor
+    }
+  }
+}
+    `;
+
+/**
+ * __useMyPaymentConnectionQuery__
+ *
+ * To run a query within a React component, call `useMyPaymentConnectionQuery` and pass it any options that fit your needs.
+ * When your component renders, `useMyPaymentConnectionQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useMyPaymentConnectionQuery({
+ *   variables: {
+ *      after: // value for 'after'
+ *   },
+ * });
+ */
+export function useMyPaymentConnectionQuery(baseOptions?: Apollo.QueryHookOptions<MyPaymentConnectionQuery, MyPaymentConnectionQueryVariables>) {
+        return Apollo.useQuery<MyPaymentConnectionQuery, MyPaymentConnectionQueryVariables>(MyPaymentConnectionDocument, baseOptions);
+      }
+export function useMyPaymentConnectionLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MyPaymentConnectionQuery, MyPaymentConnectionQueryVariables>) {
+          return Apollo.useLazyQuery<MyPaymentConnectionQuery, MyPaymentConnectionQueryVariables>(MyPaymentConnectionDocument, baseOptions);
+        }
+export type MyPaymentConnectionQueryHookResult = ReturnType<typeof useMyPaymentConnectionQuery>;
+export type MyPaymentConnectionLazyQueryHookResult = ReturnType<typeof useMyPaymentConnectionLazyQuery>;
+export type MyPaymentConnectionQueryResult = Apollo.QueryResult<MyPaymentConnectionQuery, MyPaymentConnectionQueryVariables>;
+export const MyTransferConnectionDocument = gql`
+    query MyTransferConnection($after: String) {
+  myTransferConnection(after: $after) {
+    nodes {
+      traceId
+      snapshotId
+      amount
+      assetId
+      transferType
+    }
+    pageInfo {
+      hasNextPage
+      endCursor
+    }
+  }
+}
+    `;
+
+/**
+ * __useMyTransferConnectionQuery__
+ *
+ * To run a query within a React component, call `useMyTransferConnectionQuery` and pass it any options that fit your needs.
+ * When your component renders, `useMyTransferConnectionQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useMyTransferConnectionQuery({
+ *   variables: {
+ *      after: // value for 'after'
+ *   },
+ * });
+ */
+export function useMyTransferConnectionQuery(baseOptions?: Apollo.QueryHookOptions<MyTransferConnectionQuery, MyTransferConnectionQueryVariables>) {
+        return Apollo.useQuery<MyTransferConnectionQuery, MyTransferConnectionQueryVariables>(MyTransferConnectionDocument, baseOptions);
+      }
+export function useMyTransferConnectionLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MyTransferConnectionQuery, MyTransferConnectionQueryVariables>) {
+          return Apollo.useLazyQuery<MyTransferConnectionQuery, MyTransferConnectionQueryVariables>(MyTransferConnectionDocument, baseOptions);
+        }
+export type MyTransferConnectionQueryHookResult = ReturnType<typeof useMyTransferConnectionQuery>;
+export type MyTransferConnectionLazyQueryHookResult = ReturnType<typeof useMyTransferConnectionLazyQuery>;
+export type MyTransferConnectionQueryResult = Apollo.QueryResult<MyTransferConnectionQuery, MyTransferConnectionQueryVariables>;

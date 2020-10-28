@@ -38,6 +38,10 @@ class Transfer < ApplicationRecord
   scope :unprocessed, -> { where(processed_at: nil) }
   scope :processed, -> { where.not(processed_at: nil) }
 
+  def snapshot_id
+    snapshot&.[]('snapshot_id')
+  end
+
   def processed?
     processed_at?
   end

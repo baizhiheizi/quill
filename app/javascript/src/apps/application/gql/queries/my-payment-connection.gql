@@ -1,0 +1,15 @@
+query MyPaymentConnection($after: String) {
+  myPaymentConnection(after: $after) {
+    nodes {
+      traceId
+      snapshotId
+      amount
+      assetId
+      state
+    }
+    pageInfo {
+      hasNextPage
+      endCursor
+    }
+  }
+}
