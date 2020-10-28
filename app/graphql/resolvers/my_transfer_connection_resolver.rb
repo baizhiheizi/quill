@@ -7,7 +7,7 @@ module Resolvers
     type Types::TransferConnectionType, null: false
 
     def resolve(_params = {})
-      current_user.transfers
+      current_user.transfers.order(created_at: :desc)
     end
   end
 end

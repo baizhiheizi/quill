@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class CreateOrderTransfersWorker
+class CreateOrderRevenueTransfersWorker
   include Sidekiq::Worker
   sidekiq_options queue: :default, retry: true
 
@@ -8,7 +8,6 @@ class CreateOrderTransfersWorker
     order = Order.find_by trace_id: trace_id
     return if order.blank?
 
-    order.create_author_revenue_transfer
-    order.create_reader_revenue_transfers
+    order.create_revenue_transfers
   end
 end

@@ -79,8 +79,8 @@ export function Transfers() {
               {
                 {
                   payment_refund: '退款',
-                  buy_article: '购买文章',
-                  reward_article: '打赏文章',
+                  author_revenue: '作者收益',
+                  reader_revenue: '读者收益',
                 }[transfer.transferType]
               }
             </Col>

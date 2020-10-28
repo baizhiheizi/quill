@@ -43,7 +43,7 @@ class Order < ApplicationRecord
 
   enum order_type: { buy_article: 0, reward_article: 1 }
 
-  after_commit :complete_payment, :create_transfers_async, :update_item_revenue, on: :create
+  after_commit :complete_payment, :create_revenue_transfers_async, :update_item_revenue, on: :create
 
   aasm column: :state do
     state :paid, initial: true
@@ -54,26 +54,12 @@ class Order < ApplicationRecord
     end
   end
 
-  def create_transfers_async
-    create_author_revenue_transfer
-    create_reader_revenue_transfers
-  end
-
-  # transfer revenue to author
-  def create_author_revenue_transfer
-    transfers.create_with(
-      transfer_type: :author_revenue,
-      opponent_id: item.author.mixin_uuid,
-      asset_id: payment.asset_id,
-      amount: (total * AUTHOR_RATIO).round(8),
-      memo: "#{payer.name} paid for your article <#{item.title}>".truncate(140)
-    ).find_or_create_by!(
-      trace_id: MixinBot.api.unique_conversation_id(trace_id, item.author.mixin_uuid)
-    )
+  def create_revenue_transfers_async
+    CreateOrderRevenueTransfersWorker.perform_async trace_id
   end
 
   # transfer revenue to author and readers
-  def create_reader_revenue_transfers
+  def create_revenue_transfers
     # the share for invested readers before
     amount = total * READER_RATIO
 
@@ -86,7 +72,7 @@ class Order < ApplicationRecord
     # total investment
     sum = _orders.sum(:total)
 
-    # create transfer
+    # create reader transfer
     _orders.each do |_order|
       # ignore if amount is less than minium amout for Mixin Network
       _amount = (amount * _order.total / sum).round(8)
@@ -102,6 +88,17 @@ class Order < ApplicationRecord
         trace_id: MixinBot.api.unique_conversation_id(_order.trace_id, trace_id)
       )
     end
+
+    # create author transfer
+    transfers.create_with(
+      transfer_type: :author_revenue,
+      opponent_id: item.author.mixin_uuid,
+      asset_id: payment.asset_id,
+      amount: (total * (1 - PRSDIGG_RATIO) - amount).round(8),
+      memo: "#{payer.name} paid for your article <#{item.title}>".truncate(140)
+    ).find_or_create_by!(
+      trace_id: MixinBot.api.unique_conversation_id(trace_id, item.author.mixin_uuid)
+    )
   end
 
   def all_transfers_processed?
