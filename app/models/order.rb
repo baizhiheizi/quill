@@ -83,7 +83,7 @@ class Order < ApplicationRecord
         opponent_id: _order.payer.mixin_uuid,
         asset_id: payment.asset_id,
         amount: _amount.to_f.to_s,
-        memo: "Revenue from article #{item.title}".truncate(140)
+        memo: "读者收益来自文章《#{item.title}》".truncate(140)
       ).find_or_create_by!(
         trace_id: MixinBot.api.unique_conversation_id(_order.trace_id, trace_id)
       )
@@ -95,7 +95,7 @@ class Order < ApplicationRecord
       opponent_id: item.author.mixin_uuid,
       asset_id: payment.asset_id,
       amount: (total * (1 - PRSDIGG_RATIO) - amount).round(8),
-      memo: "#{payer.name} paid for your article <#{item.title}>".truncate(140)
+      memo: "作者收益来自文章《#{item.title}》".truncate(140)
     ).find_or_create_by!(
       trace_id: MixinBot.api.unique_conversation_id(trace_id, item.author.mixin_uuid)
     )
