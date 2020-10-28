@@ -1,6 +1,6 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
-import { Article, ArticleNew, Home } from './pages';
+import { Article, ArticleNew, Home, Rules } from './pages';
 
 export function Routes() {
   return (
@@ -16,6 +16,9 @@ export function Routes() {
           <Article />
         </Route>
       </Switch>
+      <Route path='/rules' exact>
+        <Rules />
+      </Route>
     </React.Fragment>
   );
 }

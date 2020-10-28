@@ -67,7 +67,7 @@ export default function Menus() {
           </Dropdown>
         ) : (
           <Button type='link' href='/login'>
-            Login
+            登录
           </Button>
         )}
       </Col>
