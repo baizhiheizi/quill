@@ -26,6 +26,7 @@ class Order < ApplicationRecord
   AUTHOR_RATIO = 0.5
   READER_RATIO = 0.4
   PRSDIGG_RATIO = 0.1
+  MINIMUM_AMOUNT = 0.0000_0001
 
   include AASM
 
@@ -42,7 +43,7 @@ class Order < ApplicationRecord
 
   enum order_type: { buy_article: 0, reward_article: 1 }
 
-  after_create :complete_payment, :create_transfers
+  after_create :complete_payment, :create_transfers_async
 
   aasm column: :state do
     state :paid, initial: true
@@ -53,26 +54,53 @@ class Order < ApplicationRecord
     end
   end
 
-  # core logic
-  # transfer revenue to author and readers
-  def create_transfers
-    create_author_transfer
-    create_reader_transfers
+  def create_transfers_async
+    create_author_revenue_transfer
+    create_reader_revenue_transfers
   end
 
+  # transfer revenue to author
   def create_author_revenue_transfer
-    create_transfers!(
+    transfers.create_with(
       transfer_type: :author_revenue,
-      amount: (total * AUTHOR_RATIO).round(8),
       opponent_id: item.author.mixin_uuid,
       asset_id: payment.asset_id,
-      memo: "#{payer.name} paid for your article"
+      amount: (total * AUTHOR_RATIO).round(8),
+      memo: "#{payer.name} paid for your article <#{item.title}>".truncate(140)
+    ).find_or_create_by!(
+      trace_id: MixinBot.api.unique_conversation_id(trace_id, item.author.mixin_uuid)
     )
   end
 
+  # transfer revenue to author and readers
   def create_reader_revenue_transfers
-    # TODO: based on the order records before
-    # amount = totle * READER_RATIO
+    # the share for invested readers before
+    amount = total * READER_RATIO
+
+    # the present orders
+    _orders = item.orders.where(id: ...id, created_at: ...created_at)
+
+    # total investment
+    sum = _orders.sum(:total)
+
+    # create transfer
+    _orders.each do |_order|
+      next if _order.id == id
+
+      # ignore if amount is less than minium amout for Mixin Network
+      _amount = (amount * _order.total / sum).round(8)
+      next if (_amount - MINIMUM_AMOUNT).negative?
+
+      transfers.create_with(
+        transfer_type: :reader_revenue,
+        opponent_id: _order.payer.mixin_uuid,
+        asset_id: payment.asset_id,
+        amount: _amount.to_f.to_s,
+        memo: "Revenue from article #{item.title}".truncate(140)
+      ).find_or_create_by!(
+        trace_id: MixinBot.api.unique_conversation_id(_order.trace_id, trace_id)
+      )
+    end
   end
 
   def all_transfers_processed?
@@ -80,12 +108,12 @@ class Order < ApplicationRecord
   end
 
   def complete_payment
-    payment.complete
+    payment.complete! if payment.paid?
   end
 
   def ensure_total_sufficient
     errors.add(total: 'Wrong token!') unless payment.asset_id == item.asset_id
-    errors.add(:total, 'amount not sufficient') unless total >= item.price
+    errors.add(:total, 'Insufficient amount!') unless total >= item.price
   end
 
   private
