@@ -1,9 +1,9 @@
 import { ApolloProvider } from '@apollo/client';
 import { User } from '@graphql';
 import { apolloClient, mixinUtils } from '@shared';
-import { Avatar, Button, Col, Layout, Menu, Row } from 'antd';
+import { Avatar, Button, Col, Dropdown, Layout, Menu, Row } from 'antd';
 import React from 'react';
-import { BrowserRouter as Router, Link, useHistory } from 'react-router-dom';
+import { BrowserRouter as Router, Link } from 'react-router-dom';
 import { Routes } from './routes';
 import { CurrentUserContext, MixinContext, PrsdiggContext } from './shared';
 
@@ -15,7 +15,6 @@ export default function App(props: {
   };
 }) {
   const { csrfToken, currentUser, prsdigg } = props;
-  const pathnames = location.pathname.split('/');
   return (
     <ApolloProvider client={apolloClient('/graphql', csrfToken)}>
       <PrsdiggContext.Provider value={prsdigg}>
@@ -39,29 +38,23 @@ export default function App(props: {
                     zIndex: 10,
                   }}
                 >
-                  <Row>
+                  <Row justify='center' style={{flexWrap: 'nowrap'}}>
                     <Col>
                       <h1 style={{ padding: '0 1rem', textAlign: 'center' }}>
                         LOGO
                       </h1>
                     </Col>
                     <Col flex={1}>
-                      <Menu
-                        theme='light'
-                        mode='horizontal'
-                        defaultSelectedKeys={[
-                          pathnames[pathnames.length - 1] || 'home',
-                        ]}
-                      >
-                        <Menu.Item key='home'>
+                      <Menu theme='light' mode='horizontal' selectable={false}>
+                        <Menu.Item>
                           <Link to='/' replace>
-                            Home
+                            读文章
                           </Link>
                         </Menu.Item>
-                        <Menu.Item key='new'>
+                        <Menu.Item>
                           {currentUser ? (
                             <Link to='/articles/new' replace>
-                              New
+                              写文章
                             </Link>
                           ) : (
                             <a href={`/login?redirect_uri=${location.href}`}>
@@ -69,15 +62,35 @@ export default function App(props: {
                             </a>
                           )}
                         </Menu.Item>
+                        <Menu.Item>
+                          <Link to='/rules'>规则</Link>
+                        </Menu.Item>
                       </Menu>
                     </Col>
                     <Col>
                       {currentUser ? (
-                        <div style={{ padding: '0 1rem' }}>
-                          <Avatar src={currentUser.avatarUrl}>
-                            {currentUser.name[0]}
-                          </Avatar>
-                        </div>
+                        <Dropdown
+                          placement='bottomLeft'
+                          trigger={['click']}
+                          overlay={
+                            <Menu selectable={false}>
+                              <Menu.Item>
+                                <Link to='/mine'>
+                                  <a>个人中心</a>
+                                </Link>
+                              </Menu.Item>
+                              <Menu.Item>
+                                <a href='/logout'>登出</a>
+                              </Menu.Item>
+                            </Menu>
+                          }
+                        >
+                          <div style={{ padding: '0 1rem' }}>
+                            <Avatar src={currentUser.avatarUrl}>
+                              {currentUser.name[0]}
+                            </Avatar>
+                          </div>
+                        </Dropdown>
                       ) : (
                         <Button type='link' href='/login'>
                           Login
@@ -90,7 +103,7 @@ export default function App(props: {
                   style={{ background: '#fff', padding: '2rem 1rem ' }}
                 >
                   <Row justify='center'>
-                    <Col flex={1} xs={24} sm={24} md={18} lg={16}>
+                    <Col flex={1} xs={24} sm={24} md={18} lg={16} xl={14} xxl={12}>
                       <Routes />
                     </Col>
                   </Row>

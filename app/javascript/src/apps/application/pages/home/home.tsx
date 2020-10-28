@@ -4,7 +4,7 @@ import {
   useArticleConnectionQuery,
 } from '@/graphql';
 import { MoneyCollectOutlined, ReadOutlined } from '@ant-design/icons';
-import { Avatar, List, Space, Spin } from 'antd';
+import { Avatar, Button, List, Row, Space, Spin } from 'antd';
 import moment from 'moment';
 import React from 'react';
 import { useHistory } from 'react-router-dom';
@@ -16,11 +16,13 @@ export function Home() {
   const {
     data,
     loading,
+    fetchMore,
   }: ArticleConnectionQueryHookResult = useArticleConnectionQuery({
     fetchPolicy: 'network-only',
+    notifyOnNetworkStatusChange: true,
   });
 
-  if (loading) {
+  if (!data && loading) {
     return <Spin />;
   }
 
@@ -32,22 +34,58 @@ export function Home() {
   } = data;
   return (
     <List
-      bordered
       size='large'
       itemLayout='vertical'
       dataSource={articles}
+      loadMore={
+        hasNextPage && (
+          <div
+            style={{
+              textAlign: 'center',
+              marginTop: 12,
+              height: 32,
+              lineHeight: '32px',
+            }}
+          >
+            <Button
+              loading={loading}
+              onClick={() => {
+                fetchMore({
+                  updateQuery: (prev, { fetchMoreResult }) => {
+                    if (!fetchMoreResult) {
+                      return prev;
+                    }
+                    const connection = fetchMoreResult.articleConnection;
+                    connection.nodes = prev.articleConnection.nodes.concat(
+                      connection.nodes,
+                    );
+                    return Object.assign({}, prev, {
+                      articleConnection: connection,
+                    });
+                  },
+                  variables: {
+                    after: endCursor,
+                  },
+                });
+              }}
+            >
+              Load More
+            </Button>
+          </div>
+        )
+      }
       renderItem={(article: Partial<Article>) => (
         <List.Item
           key={article.uuid}
           onClick={() => history.push(`/articles/${article.uuid}`)}
           actions={[
             <Space>
-              <MoneyCollectOutlined />
-              <span>营收{article.revenue.toFixed(2)}PRS</span>
+              <ReadOutlined />
+              <span>{article.ordersCount}次付费</span>
             </Space>,
             <Space>
-              <Avatar size='small' src={PRS_ICON_URL} />
-              <span>价格:{article.price.toFixed(2)}</span>
+              <MoneyCollectOutlined />
+              <span>营收{article.revenue.toFixed(2)}PRS</span>
             </Space>,
           ]}
         >
@@ -55,12 +93,18 @@ export function Home() {
             style={{ marginBottom: 0 }}
             avatar={<Avatar src={article.author.avatarUrl} />}
             title={
-              <div>
-                <div>{article.author.name}</div>
-                <div style={{ fontSize: '0.8rem', color: '#aaa' }}>
-                  {moment(article.createdAt).fromNow()}
+              <Row>
+                <div>
+                  <div>{article.author.name}</div>
+                  <div style={{ fontSize: '0.8rem', color: '#aaa' }}>
+                    {moment(article.createdAt).fromNow()}
+                  </div>
                 </div>
-              </div>
+                <Space style={{ marginLeft: 'auto' }}>
+                  <Avatar size='small' src={PRS_ICON_URL} />
+                  <span>{article.price.toFixed(2)}</span>
+                </Space>
+              </Row>
             }
           />
           <h2>{article.title}</h2>
