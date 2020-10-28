@@ -23,10 +23,19 @@ export type Article = {
   intro: Scalars['String'];
   ordersCount: Scalars['Int'];
   price: Scalars['Float'];
+  readers: UserConnection;
   revenue: Scalars['Float'];
   title: Scalars['String'];
   updatedAt?: Maybe<Scalars['ISO8601DateTime']>;
   uuid: Scalars['ID'];
+};
+
+
+export type ArticleReadersArgs = {
+  after?: Maybe<Scalars['String']>;
+  before?: Maybe<Scalars['String']>;
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
 };
 
 /** The connection type for Article. */
@@ -241,6 +250,28 @@ export type User = {
   updatedAt?: Maybe<Scalars['ISO8601DateTime']>;
 };
 
+/** The connection type for User. */
+export type UserConnection = {
+  __typename?: 'UserConnection';
+  /** A list of edges. */
+  edges?: Maybe<Array<Maybe<UserEdge>>>;
+  /** A list of nodes. */
+  nodes?: Maybe<Array<Maybe<User>>>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** Total # of objects returned from this Plural Query */
+  totalCount: Scalars['Int'];
+};
+
+/** An edge in a connection. */
+export type UserEdge = {
+  __typename?: 'UserEdge';
+  /** A cursor for use in pagination. */
+  cursor: Scalars['String'];
+  /** The item at the end of the edge. */
+  node?: Maybe<User>;
+};
+
 
 export const CreateArticleDocument = gql`
     mutation CreateArticle($input: CreateArticleMutationInput!) {
@@ -324,7 +355,7 @@ export type ArticleConnectionQueryHookResult = ReturnType<typeof useArticleConne
 export type ArticleConnectionLazyQueryHookResult = ReturnType<typeof useArticleConnectionLazyQuery>;
 export type ArticleConnectionQueryResult = Apollo.QueryResult<ArticleConnectionQuery, ArticleConnectionQueryVariables>;
 export const ArticleDocument = gql`
-    query Article($uuid: ID!) {
+    query Article($uuid: ID!, $readerAfter: String) {
   article(uuid: $uuid) {
     uuid
     title
@@ -336,6 +367,16 @@ export const ArticleDocument = gql`
     author {
       name
       avatarUrl
+    }
+    readers(after: $readerAfter) {
+      nodes {
+        name
+        avatarUrl
+      }
+      pageInfo {
+        hasNextPage
+        endCursor
+      }
     }
     createdAt
   }
@@ -355,6 +396,7 @@ export const ArticleDocument = gql`
  * const { data, loading, error } = useArticleQuery({
  *   variables: {
  *      uuid: // value for 'uuid'
+ *      readerAfter: // value for 'readerAfter'
  *   },
  * });
  */

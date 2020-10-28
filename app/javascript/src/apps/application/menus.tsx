@@ -33,7 +33,7 @@ export default function Menus() {
                 写文章
               </Link>
             ) : (
-              <a href={`/login?redirect_uri=${location.href}`}>New</a>
+              <a href={`/login?redirect_uri=${location.href}`}>写文章</a>
             )}
           </Menu.Item>
           <Menu.Item onClick={() => setDrawerVisible(false)}>

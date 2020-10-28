@@ -44,7 +44,7 @@ PRSDigg 尝试建立一个**作者**与**读者**共赢的**平台**。
 `;
 export function Rules() {
   return (
-    <div>
+    <div style={{ marginTop: 20 }}>
       <MDEditor.Markdown source={article} />
     </div>
   );

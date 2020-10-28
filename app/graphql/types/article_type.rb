@@ -13,6 +13,7 @@ module Types
     field :authorized, Boolean, null: true
 
     field :author, Types::UserType, null: false
+    field :readers, Types::UserConnectionType, null: false
 
     def content
       return unless object.authorize?(context[:current_user])

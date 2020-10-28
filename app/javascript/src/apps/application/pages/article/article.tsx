@@ -1,12 +1,13 @@
-import { ArticleQueryHookResult, useArticleQuery } from '@graphql';
+import { ArticleQueryHookResult, useArticleQuery, User } from '@graphql';
 import MDEditor from '@uiw/react-md-editor';
-import { Avatar, Button, Space, Spin } from 'antd';
+import { Avatar, Button, Col, Row, Space, Spin } from 'antd';
 import moment from 'moment';
 import React from 'react';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { uuid } from 'uuidv4';
 import { encode as encode64 } from 'js-base64';
 import { useCurrentUser, usePrsdigg } from '../../shared';
+import { Loading } from '../../components';
 
 const traceId = uuid();
 export function Article() {
@@ -26,7 +27,7 @@ export function Article() {
   );
 
   if (loading) {
-    return <Spin />;
+    return <Loading />;
   }
 
   const { article } = data;
@@ -49,13 +50,31 @@ export function Article() {
       >
         {article.intro}
       </div>
+      {article.readers.nodes.length > 0 && (
+        <div>
+          <Row justify='center'>
+            <Col>
+              <h4>已付费读者</h4>
+            </Col>
+          </Row>
+          <Row justify='center'>
+            <Col>
+              <Avatar.Group>
+                {article.readers.nodes.map((reader: Partial<User>) => (
+                  <Avatar src={reader.avatarUrl}>{reader.name[0]}</Avatar>
+                ))}
+              </Avatar.Group>
+            </Col>
+          </Row>
+        </div>
+      )}
       {article.authorized ? (
         <MDEditor.Markdown source={article.content} />
       ) : (
         <div style={{ textAlign: 'center' }}>
           <p>
-            You need to pay {article.price} PRESS Token to become its reader and
-            investor.
+            付费继续阅读，并享受早期读者奖励（查看<Link to='/rules'>规则</Link>
+            ）
           </p>
           <div>
             {currentUser ? (
@@ -65,7 +84,7 @@ export function Article() {
                   article.assetId
                 }&amount=${article.price.toFixed(8)}`}
               >
-                Pay to Read
+                付费阅读
               </Button>
             ) : (
               <Button
@@ -74,7 +93,7 @@ export function Article() {
                   location.href,
                 )}`}
               >
-                Login to pay
+                登录
               </Button>
             )}
           </div>
