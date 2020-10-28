@@ -5,9 +5,10 @@ class SessionsController < ApplicationController
 
   def new
     redirect_to format(
-      'https://mixin-www.zeromesh.net/oauth/authorize?client_id=%<client_id>s&scope=%<scope>s',
+      'https://mixin-www.zeromesh.net/oauth/authorize?client_id=%<client_id>s&scope=%<scope>s&redirect_uri=%<redirect_uri>s',
       client_id: MixinBot.api.client_id,
-      scope: 'PROFILE:READ'
+      scope: 'PROFILE:READ',
+      redirect_uri: params[:redirect_uri] || root_url
     )
   end
 

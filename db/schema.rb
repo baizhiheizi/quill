@@ -32,6 +32,8 @@ ActiveRecord::Schema.define(version: 2020_10_27_094820) do
     t.text "content"
     t.uuid "asset_id", comment: "asset_id in Mixin Network"
     t.decimal "price", null: false
+    t.decimal "revenue", default: "0.0"
+    t.integer "orders_count", default: 0, null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["author_id"], name: "index_articles_on_author_id"

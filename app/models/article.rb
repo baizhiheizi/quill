@@ -7,7 +7,9 @@
 #  id                                  :bigint           not null, primary key
 #  content                             :text
 #  intro                               :string
+#  orders_count                        :integer          default(0), not null
 #  price                               :decimal(, )      not null
+#  revenue                             :decimal(, )      default(0.0)
 #  title                               :string
 #  uuid                                :uuid
 #  created_at                          :datetime         not null
@@ -40,6 +42,10 @@ class Article < ApplicationRecord
     return true if author == user
 
     orders.find_by(payer: user).present?
+  end
+
+  def update_revenue
+    update revenue: orders.sum(:total)
   end
 
   private

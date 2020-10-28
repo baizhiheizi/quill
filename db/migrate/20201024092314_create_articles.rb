@@ -8,6 +8,8 @@ class CreateArticles < ActiveRecord::Migration[6.0]
       t.text :content
       t.uuid :asset_id, comment: 'asset_id in Mixin Network'
       t.decimal :price, null: false
+      t.decimal :revenue, default: 0.0
+      t.integer :orders_count, default: 0, null: false
 
       t.timestamps
     end

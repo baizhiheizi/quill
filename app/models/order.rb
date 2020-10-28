@@ -32,7 +32,7 @@ class Order < ApplicationRecord
 
   belongs_to :payer, class_name: 'User'
   belongs_to :receiver, class_name: 'User'
-  belongs_to :item, polymorphic: true
+  belongs_to :item, polymorphic: true, counter_cache: true
 
   has_many :transfers, as: :source, dependent: :nullify
   has_one :payment, foreign_key: :trace_id, primary_key: :trace_id, dependent: :nullify, inverse_of: :order
@@ -43,7 +43,7 @@ class Order < ApplicationRecord
 
   enum order_type: { buy_article: 0, reward_article: 1 }
 
-  after_create :complete_payment, :create_transfers_async
+  after_commit :complete_payment, :create_transfers_async, :update_item_revenue, on: :create
 
   aasm column: :state do
     state :paid, initial: true
@@ -110,6 +110,10 @@ class Order < ApplicationRecord
 
   def complete_payment
     payment.complete! if payment.paid?
+  end
+
+  def update_item_revenue
+    item.update_revenue
   end
 
   def ensure_total_sufficient

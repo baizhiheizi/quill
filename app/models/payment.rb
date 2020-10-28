@@ -65,22 +65,23 @@ class Payment < ApplicationRecord
         {}
       end
 
-    case decpreted_memo['t']
-    when 'BUY'
-      Order.find_or_create_by!(
-        payment: self,
-        item: Article.find_by(uuid: decpreted_memo['a']),
-        order_type: :buy_article
-      )
-    when 'REWARD'
-      Order.create_with(
-        item: Article.find_by(uuid: decpreted_memo['a']),
-        order_type: :reward_article
-      ).find_or_create_by!(
-        payment: self
-      )
-    else
-      refund
+    ActiveRecord::Base.transaction do
+      article = Article.find_by!(uuid: decpreted_memo['a'])
+
+      case decpreted_memo['t']
+      when 'BUY'
+        article.orders.find_or_create_by!(
+          payment: self,
+          order_type: :buy_article
+        )
+      when 'REWARD'
+        article.orders.find_or_create_by!(
+          payment: self,
+          order_type: :reward_article
+        )
+      else
+        refund
+      end
     end
   rescue StandardError => e
     Rails.logger.error e.inspect
@@ -88,6 +89,8 @@ class Payment < ApplicationRecord
   end
 
   def refund
+    return if order.present?
+
     create_transfer!(
       transfer_type: :payment_refund,
       opponent_id: opponent_id,

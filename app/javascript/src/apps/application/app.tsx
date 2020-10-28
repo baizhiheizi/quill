@@ -54,10 +54,20 @@ export default function App(props: {
                         ]}
                       >
                         <Menu.Item key='home'>
-                          <Link to='/'>Home</Link>
+                          <Link to='/' replace>
+                            Home
+                          </Link>
                         </Menu.Item>
                         <Menu.Item key='new'>
-                          <Link to='/articles/new'>New</Link>
+                          {currentUser ? (
+                            <Link to='/articles/new' replace>
+                              New
+                            </Link>
+                          ) : (
+                            <a href={`/login?redirect_uri=${location.href}`}>
+                              New
+                            </a>
+                          )}
                         </Menu.Item>
                       </Menu>
                     </Col>

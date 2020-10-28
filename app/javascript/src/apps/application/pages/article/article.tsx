@@ -6,12 +6,13 @@ import React from 'react';
 import { useParams } from 'react-router-dom';
 import { uuid } from 'uuidv4';
 import { encode as encode64 } from 'js-base64';
-import { usePrsdigg } from '../../shared';
+import { useCurrentUser, usePrsdigg } from '../../shared';
 
 const traceId = uuid();
 export function Article() {
   const { uuid } = useParams<{ uuid: string }>();
   const { appId } = usePrsdigg();
+  const currentUser = useCurrentUser();
   const { loading, data }: ArticleQueryHookResult = useArticleQuery({
     fetchPolicy: 'network-only',
     variables: { uuid },
@@ -57,14 +58,25 @@ export function Article() {
             investor.
           </p>
           <div>
-            <Button
-              type='primary'
-              href={`https://mixin.one/pay?recipient=${appId}&trace=${traceId}&memo=${memo}&asset=${
-                article.assetId
-              }&amount=${article.price.toFixed(8)}`}
-            >
-              Pay to Read
-            </Button>
+            {currentUser ? (
+              <Button
+                type='primary'
+                href={`https://mixin.one/pay?recipient=${appId}&trace=${traceId}&memo=${memo}&asset=${
+                  article.assetId
+                }&amount=${article.price.toFixed(8)}`}
+              >
+                Pay to Read
+              </Button>
+            ) : (
+              <Button
+                type='primary'
+                href={`/login?redirect_uri=${encodeURIComponent(
+                  location.href,
+                )}`}
+              >
+                Login to pay
+              </Button>
+            )}
           </div>
         </div>
       )}

@@ -5,7 +5,9 @@
 #  id                                  :bigint           not null, primary key
 #  content                             :text
 #  intro                               :string
+#  orders_count                        :integer          default(0), not null
 #  price                               :decimal(, )      not null
+#  revenue                             :decimal(, )      default(0.0)
 #  title                               :string
 #  uuid                                :uuid
 #  created_at                          :datetime         not null

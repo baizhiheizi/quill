@@ -8,6 +8,8 @@ module Types
     field :content, String, null: true
     field :asset_id, String, null: false
     field :price, Float, null: false
+    field :revenue, Float, null: false
+    field :orders_count, Integer, null: false
     field :authorized, Boolean, null: true
 
     field :author, Types::UserType, null: false

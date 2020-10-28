@@ -21,7 +21,9 @@ export type Article = {
   content?: Maybe<Scalars['String']>;
   createdAt: Scalars['ISO8601DateTime'];
   intro: Scalars['String'];
+  ordersCount: Scalars['Int'];
   price: Scalars['Float'];
+  revenue: Scalars['Float'];
   title: Scalars['String'];
   updatedAt?: Maybe<Scalars['ISO8601DateTime']>;
   uuid: Scalars['ID'];
@@ -168,6 +170,8 @@ export const ArticleConnectionDocument = gql`
       title
       intro
       price
+      revenue
+      ordersCount
       author {
         name
         avatarUrl

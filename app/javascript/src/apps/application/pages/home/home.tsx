@@ -3,7 +3,7 @@ import {
   ArticleConnectionQueryHookResult,
   useArticleConnectionQuery,
 } from '@/graphql';
-import { MessageOutlined, ReadOutlined } from '@ant-design/icons';
+import { MoneyCollectOutlined, ReadOutlined } from '@ant-design/icons';
 import { Avatar, List, Space, Spin } from 'antd';
 import moment from 'moment';
 import React from 'react';
@@ -16,7 +16,9 @@ export function Home() {
   const {
     data,
     loading,
-  }: ArticleConnectionQueryHookResult = useArticleConnectionQuery();
+  }: ArticleConnectionQueryHookResult = useArticleConnectionQuery({
+    fetchPolicy: 'network-only',
+  });
 
   if (loading) {
     return <Spin />;
@@ -40,16 +42,12 @@ export function Home() {
           onClick={() => history.push(`/articles/${article.uuid}`)}
           actions={[
             <Space>
-              <ReadOutlined />
-              <span>10</span>
-            </Space>,
-            <Space>
-              <MessageOutlined />
-              <span>10</span>
+              <MoneyCollectOutlined />
+              <span>营收{article.revenue.toFixed(2)}PRS</span>
             </Space>,
             <Space>
               <Avatar size='small' src={PRS_ICON_URL} />
-              <span>{article.price.toFixed(4)}</span>
+              <span>价格:{article.price.toFixed(2)}</span>
             </Space>,
           ]}
         >
