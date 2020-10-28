@@ -1,3 +1,4 @@
+import { imagePath } from '@/shared';
 import { MenuOutlined } from '@ant-design/icons';
 import { Avatar, Button, Col, Drawer, Dropdown, Layout, Menu, Row } from 'antd';
 import React, { useState } from 'react';
@@ -18,7 +19,9 @@ export default function Menus() {
       }
     >
       <Col>
-        <h1 style={{ padding: '0 1rem', textAlign: 'center' }}>LOGO</h1>
+        <div style={{ margin: '0 15px' }}>
+          <Avatar size='large' src={imagePath('logo.svg')} />
+        </div>
       </Col>
       <Col flex={1}>
         <Menu theme='light' mode={props.mode} selectable={false}>

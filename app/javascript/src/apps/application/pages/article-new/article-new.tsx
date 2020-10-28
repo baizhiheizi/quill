@@ -67,15 +67,14 @@ export function ArticleNew() {
         <Input.TextArea placeholder='请简要介绍一下你的文章，简介内容为公开可见。' />
       </Form.Item>
       <Form.Item
-        label='Price'
+        label='价格(PRS)'
         name='price'
         rules={[{ required: true, message: '你的文章应该有价格' }]}
       >
         <InputNumber min={1} precision={4} placeholder='1.0' />
-        <span style={{ marginLeft: 10 }}>PRS</span>
       </Form.Item>
       <Form.Item wrapperCol={{ xs: { offset: 0 }, sm: { offset: 2 } }}>
-        <Button type='primary' htmlType='submit' loading={loading}>
+        <Button size='large' type='primary' htmlType='submit' loading={loading}>
           发布
         </Button>
       </Form.Item>
