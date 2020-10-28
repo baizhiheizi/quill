@@ -37,7 +37,9 @@ export default function Menus() {
             )}
           </Menu.Item>
           <Menu.Item onClick={() => setDrawerVisible(false)}>
-            <Link to='/rules' replace>规则</Link>
+            <Link to='/rules' replace>
+              规则
+            </Link>
           </Menu.Item>
         </Menu>
       </Col>
@@ -84,7 +86,14 @@ export default function Menus() {
           >
             <MenuConent mode='vertical' />
           </Drawer>
-          <div style={{ position: 'fixed', bottom: '100px', zIndex: 11 }}>
+          <div
+            style={{
+              position: 'fixed',
+              right: '0px',
+              bottom: '100px',
+              zIndex: 11,
+            }}
+          >
             <Button
               size='large'
               onClick={() => setDrawerVisible(true)}
