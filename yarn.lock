@@ -1601,10 +1601,10 @@
     "@types/history" "*"
     "@types/react" "*"
 
-"@types/react@*", "@types/react@^16.9.53":
-  version "16.9.53"
-  resolved "https://registry.npm.taobao.org/@types/react/download/@types/react-16.9.53.tgz#40cd4f8b8d6b9528aedd1fff8fcffe7a112a3d23"
-  integrity sha1-QM1Pi41rlSiu3R//j8/+ehEqPSM=
+"@types/react@*", "@types/react@^16.9.54":
+  version "16.9.54"
+  resolved "https://registry.yarnpkg.com/@types/react/-/react-16.9.54.tgz#140280c31825287ee74e9da95285b91c5a2e471d"
+  integrity sha512-GhawhYraQZpGFO2hVMArjPrYbnA/6+DS8SubK8IPhhVClmKqANihsRenOm5E0mvqK0m/BKoqVktA1O1+Xvlz9w==
   dependencies:
     "@types/prop-types" "*"
     csstype "^3.0.2"
