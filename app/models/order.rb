@@ -78,15 +78,16 @@ class Order < ApplicationRecord
     amount = total * READER_RATIO
 
     # the present orders
-    _orders = item.orders.where(id: ...id, created_at: ...created_at)
+    _orders =
+      item.orders
+          .where(id: ...id, created_at: ...created_at)
+          .where.not(id: id)
 
     # total investment
     sum = _orders.sum(:total)
 
     # create transfer
     _orders.each do |_order|
-      next if _order.id == id
-
       # ignore if amount is less than minium amout for Mixin Network
       _amount = (amount * _order.total / sum).round(8)
       next if (_amount - MINIMUM_AMOUNT).negative?
