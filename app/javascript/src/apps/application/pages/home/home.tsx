@@ -4,14 +4,14 @@ import {
   useArticleConnectionQuery,
 } from '@/graphql';
 import { MoneyCollectOutlined, ReadOutlined } from '@ant-design/icons';
-import { Avatar, Button, List, Row, Space, Spin } from 'antd';
+import { Avatar, Button, List, Row, Space } from 'antd';
 import moment from 'moment';
 import React from 'react';
 import { useHistory } from 'react-router-dom';
-import { PRS_ICON_URL, useCurrentUser } from '../../shared';
+import { Loading } from '../../components';
+import { PRS_ICON_URL } from '../../shared';
 
 export function Home() {
-  const currentUser = useCurrentUser();
   const history = useHistory();
   const {
     data,
@@ -23,7 +23,7 @@ export function Home() {
   });
 
   if (!data && loading) {
-    return <Spin />;
+    return <Loading />;
   }
 
   const {
