@@ -1,5 +1,1 @@
-<% if Rails.env.development? %>
-  <%= react_component('app', { csrf_token: form_authenticity_token }.merge(base_props)) %>
-<% else %>
-  <%= react_component('hello', { csrf_token: form_authenticity_token }) %>
-<%- end %>
+<%= react_component('app', { csrf_token: form_authenticity_token }.merge(base_props)) %>
