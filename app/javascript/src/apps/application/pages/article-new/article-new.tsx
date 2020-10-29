@@ -1,6 +1,6 @@
 import { useCreateArticleMutation } from '@/graphql';
 import Editor, { commands } from '@uiw/react-md-editor';
-import { Button, Form, Input, InputNumber, message } from 'antd';
+import { Button, Form, Input, InputNumber, message, Modal } from 'antd';
 import React from 'react';
 import { useHistory } from 'react-router-dom';
 
@@ -27,20 +27,24 @@ export function ArticleNew() {
     <Form
       labelCol={{ span: 2 }}
       wrapperCol={{ span: 22 }}
-      onFinish={(values) => createArticle({ variables: { input: values } })}
+      onFinish={(values) => {
+        const { title, content, price, intro } = values;
+        if (!title || !content || !price || !intro) {
+          message.warn('请先完成你的文章');
+        } else {
+          Modal.confirm({
+            title: '确定要发布你的文章吗？',
+            okText: '发布',
+            cancelText: '再改改',
+            onOk: () => createArticle({ variables: { input: values } }),
+          });
+        }
+      }}
     >
-      <Form.Item
-        label='标题'
-        name='title'
-        rules={[{ required: true, message: '请填写标题' }]}
-      >
+      <Form.Item label='标题' name='title'>
         <Input placeholder='文章标题' />
       </Form.Item>
-      <Form.Item
-        label='正文'
-        name='content'
-        rules={[{ required: true, message: '请填写正文' }]}
-      >
+      <Form.Item label='正文' name='content'>
         <Editor
           textareaProps={{ placeholder: '写点有价值的东西' }}
           autoFocus={false}
@@ -59,17 +63,12 @@ export function ArticleNew() {
           ]}
         />
       </Form.Item>
-      <Form.Item
-        label='简介'
-        name='intro'
-        rules={[{ required: true, message: '请填写一段简介' }]}
-      >
+      <Form.Item label='简介' name='intro'>
         <Input.TextArea placeholder='请简要介绍一下你的文章，简介内容为公开可见。' />
       </Form.Item>
       <Form.Item
         label='价格(PRS)'
         name='price'
-        rules={[{ required: true, message: '你的文章应该有价格' }]}
       >
         <InputNumber min={1} precision={4} placeholder='1.0' />
       </Form.Item>

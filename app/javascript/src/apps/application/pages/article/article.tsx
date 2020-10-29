@@ -77,9 +77,16 @@ export function Article() {
               paying ? (
                 <Button onClick={handlePaid}>支付完成</Button>
               ) : (
-                <Button type='primary' onClick={handlePaying}>
-                  付费阅读
-                </Button>
+                <div>
+                  <Button type='primary' onClick={handlePaying}>
+                    付费阅读
+                  </Button>
+                  <div
+                    style={{ marginTop: 10, fontSize: '0.8rem', color: '#aaa' }}
+                  >
+                    已经付款? <a onClick={() => refetch()}>刷新</a> 试试?
+                  </div>
+                </div>
               )
             ) : (
               <Button
