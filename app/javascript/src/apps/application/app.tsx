@@ -1,14 +1,13 @@
 import { ApolloProvider } from '@apollo/client';
 import { User } from '@graphql';
 import { apolloClient, mixinUtils } from '@shared';
-import '@uiw/react-markdown-preview/dist/markdown.css';
-import '@uiw/react-md-editor/dist/markdown-editor.css';
 import { Alert, Col, Layout, Row } from 'antd';
 import React from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
 import Menus from './menus';
 import { Routes } from './routes';
 import { CurrentUserContext, MixinContext, PrsdiggContext } from './shared';
+import './app.less';
 
 export default function App(props: {
   csrfToken: string;
