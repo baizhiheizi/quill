@@ -1,19 +1,28 @@
 import { ArticleQueryHookResult, useArticleQuery, User } from '@graphql';
 import MDEditor from '@uiw/react-md-editor';
-import { Avatar, Button, Col, Divider, Row, Space } from 'antd';
+import copy from 'copy-to-clipboard';
+import { encode as encode64 } from 'js-base64';
+import { Avatar, Button, Col, Divider, message, Row, Space } from 'antd';
 import { encode as encode64 } from 'js-base64';
 import moment from 'moment';
 import React, { useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { v4 as uuid } from 'uuid';
 import { Comments, Loading } from '../../components';
-import { useCurrentUser, usePrsdigg } from '../../shared';
+import {
+  PRSDIGG_ICON_URL,
+  useCurrentUser,
+  useMixin,
+  usePrsdigg,
+} from '../../shared';
+import { ShareAltOutlined } from '@ant-design/icons';
 
 const traceId = uuid();
 export function Article() {
   const { uuid } = useParams<{ uuid: string }>();
   const [paying, setPaying] = useState(false);
   const { appId } = usePrsdigg();
+  const { mixinEnv } = useMixin();
   const currentUser = useCurrentUser();
   const { loading, data, refetch }: ArticleQueryHookResult = useArticleQuery({
     fetchPolicy: 'network-only',
@@ -43,6 +52,27 @@ export function Article() {
   const handlePaid = () => {
     refetch();
     setPaying(false);
+  };
+
+  const handleShare = () => {
+    const articleUrl = `${location.origin}/articles/${article.uuid}`;
+    if (mixinEnv) {
+      const data = {
+        action: articleUrl,
+        app_id: appId,
+        description: `来自${article.author.name}的好文`,
+        icon_url: PRSDIGG_ICON_URL,
+        title: article.title.slice(0, 36),
+      };
+      location.replace(
+        `mixin://send?category=app_card&data=${encodeURIComponent(
+          encode64(JSON.stringify(data)),
+        )}`,
+      );
+    } else {
+      copy(articleUrl);
+      message.success('成功复制链接');
+    }
   };
 
   return (
@@ -101,6 +131,14 @@ export function Article() {
           </div>
         </div>
       )}
+      <div
+        onClick={handleShare}
+        style={{ margin: '20px 0', textAlign: 'right' }}
+      >
+        <Button type='link' icon={<ShareAltOutlined />}>
+          分享
+        </Button>
+      </div>
       {article.readers.nodes.length > 0 && (
         <div>
           <Divider />
