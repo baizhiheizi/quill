@@ -93,6 +93,29 @@ export function Article() {
                   >
                     已经付款? <a onClick={() => refetch()}>刷新</a> 试试?
                   </div>
+                  {mixinEnv && (
+                    <div
+                      style={{
+                        marginTop: 5,
+                        fontSize: '0.8rem',
+                        color: '#aaa',
+                      }}
+                    >
+                      没有PRS? 去{' '}
+                      <a
+                        href={`mixin://users/61103d28-3ac2-44a2-ae34-bd956070dab1`}
+                      >
+                        ExinOne
+                      </a>{' '}
+                      和{' '}
+                      <a
+                        href={`mixin://users/a753e0eb-3010-4c4a-a7b2-a7bda4063f62`}
+                      >
+                        4swap
+                      </a>{' '}
+                      购买
+                    </div>
+                  )}
                 </div>
               )
             ) : (
