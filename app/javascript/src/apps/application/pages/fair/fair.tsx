@@ -78,12 +78,12 @@ export function Fair() {
                       if (!fetchMoreResult) {
                         return prev;
                       }
-                      const connection = fetchMoreResult.myTransferConnection;
-                      connection.nodes = prev.myTransferConnection.nodes.concat(
+                      const connection = fetchMoreResult.transferConnection;
+                      connection.nodes = prev.transferConnection.nodes.concat(
                         connection.nodes,
                       );
                       return Object.assign({}, prev, {
-                        myTransferConnection: connection,
+                        transferConnection: connection,
                       });
                     },
                     variables: {
