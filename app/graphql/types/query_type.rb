@@ -5,6 +5,8 @@ module Types
     field :article_connection, resolver: Resolvers::ArticleConnectionResolver
     field :article, resolver: Resolvers::ArticleResolver
     field :comment_connection, resolver: Resolvers::CommentConnectionResolver
+    field :transfer_connection, resolver: Resolvers::TransferConnectionResolver
+    field :statistics, resolver: Resolvers::StatisticsResolver
 
     field :my_article_connection, resolver: Resolvers::MyArticleConnectionResolver
     field :my_payment_connection, resolver: Resolvers::MyPaymentConnectionResolver

@@ -1,5 +1,5 @@
-query MyTransferConnection($after: String) {
-  myTransferConnection(after: $after) {
+query TransferConnection($after: String) {
+  transferConnection(after: $after) {
     nodes {
       traceId
       snapshotId

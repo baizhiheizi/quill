@@ -232,6 +232,8 @@ export type Query = {
   myArticleConnection: ArticleConnection;
   myPaymentConnection: PaymentConnection;
   myTransferConnection: TransferConnection;
+  statistics: Statistics;
+  transferConnection: TransferConnection;
   updatedAt?: Maybe<Scalars['ISO8601DateTime']>;
 };
 
@@ -282,6 +284,24 @@ export type QueryMyTransferConnectionArgs = {
   before?: Maybe<Scalars['String']>;
   first?: Maybe<Scalars['Int']>;
   last?: Maybe<Scalars['Int']>;
+};
+
+
+export type QueryTransferConnectionArgs = {
+  after?: Maybe<Scalars['String']>;
+  before?: Maybe<Scalars['String']>;
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+};
+
+export type Statistics = {
+  __typename?: 'Statistics';
+  articlesCount: Scalars['Int'];
+  authorRevenueAmount: Scalars['Float'];
+  createdAt: Scalars['ISO8601DateTime'];
+  readerRevenueAmount: Scalars['Float'];
+  updatedAt?: Maybe<Scalars['ISO8601DateTime']>;
+  usersCount: Scalars['Int'];
 };
 
 export type Transfer = {
@@ -683,6 +703,7 @@ export const MyTransferConnectionDocument = gql`
       amount
       assetId
       transferType
+      createdAt
     }
     pageInfo {
       hasNextPage
@@ -717,3 +738,82 @@ export function useMyTransferConnectionLazyQuery(baseOptions?: Apollo.LazyQueryH
 export type MyTransferConnectionQueryHookResult = ReturnType<typeof useMyTransferConnectionQuery>;
 export type MyTransferConnectionLazyQueryHookResult = ReturnType<typeof useMyTransferConnectionLazyQuery>;
 export type MyTransferConnectionQueryResult = Apollo.QueryResult<MyTransferConnectionQuery, MyTransferConnectionQueryVariables>;
+export const StatisticsDocument = gql`
+    query Statistics {
+  statistics {
+    usersCount
+    articlesCount
+    authorRevenueAmount
+    readerRevenueAmount
+  }
+}
+    `;
+
+/**
+ * __useStatisticsQuery__
+ *
+ * To run a query within a React component, call `useStatisticsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useStatisticsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useStatisticsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useStatisticsQuery(baseOptions?: Apollo.QueryHookOptions<StatisticsQuery, StatisticsQueryVariables>) {
+        return Apollo.useQuery<StatisticsQuery, StatisticsQueryVariables>(StatisticsDocument, baseOptions);
+      }
+export function useStatisticsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<StatisticsQuery, StatisticsQueryVariables>) {
+          return Apollo.useLazyQuery<StatisticsQuery, StatisticsQueryVariables>(StatisticsDocument, baseOptions);
+        }
+export type StatisticsQueryHookResult = ReturnType<typeof useStatisticsQuery>;
+export type StatisticsLazyQueryHookResult = ReturnType<typeof useStatisticsLazyQuery>;
+export type StatisticsQueryResult = Apollo.QueryResult<StatisticsQuery, StatisticsQueryVariables>;
+export const TransferConnectionDocument = gql`
+    query TransferConnection($after: String) {
+  transferConnection(after: $after) {
+    nodes {
+      traceId
+      snapshotId
+      amount
+      assetId
+      transferType
+      createdAt
+    }
+    pageInfo {
+      hasNextPage
+      endCursor
+    }
+  }
+}
+    `;
+
+/**
+ * __useTransferConnectionQuery__
+ *
+ * To run a query within a React component, call `useTransferConnectionQuery` and pass it any options that fit your needs.
+ * When your component renders, `useTransferConnectionQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useTransferConnectionQuery({
+ *   variables: {
+ *      after: // value for 'after'
+ *   },
+ * });
+ */
+export function useTransferConnectionQuery(baseOptions?: Apollo.QueryHookOptions<TransferConnectionQuery, TransferConnectionQueryVariables>) {
+        return Apollo.useQuery<TransferConnectionQuery, TransferConnectionQueryVariables>(TransferConnectionDocument, baseOptions);
+      }
+export function useTransferConnectionLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<TransferConnectionQuery, TransferConnectionQueryVariables>) {
+          return Apollo.useLazyQuery<TransferConnectionQuery, TransferConnectionQueryVariables>(TransferConnectionDocument, baseOptions);
+        }
+export type TransferConnectionQueryHookResult = ReturnType<typeof useTransferConnectionQuery>;
+export type TransferConnectionLazyQueryHookResult = ReturnType<typeof useTransferConnectionLazyQuery>;
+export type TransferConnectionQueryResult = Apollo.QueryResult<TransferConnectionQuery, TransferConnectionQueryVariables>;

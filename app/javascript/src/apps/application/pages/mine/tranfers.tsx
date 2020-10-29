@@ -4,6 +4,7 @@ import {
   useMyTransferConnectionQuery,
 } from '@graphql';
 import { Avatar, Button, Col, List, Row } from 'antd';
+import moment from 'moment';
 import React from 'react';
 import { Loading } from '../../components';
 import { PRS_ICON_URL } from '../../shared';
@@ -71,11 +72,16 @@ export function Transfers() {
       renderItem={(transfer: Partial<Transfer>) => (
         <List.Item key={transfer.traceId}>
           <Row justify='space-around'>
-            <Col>
+            <Col xs={6} sm={6} md={4}>
               <Avatar src={PRS_ICON_URL} />
             </Col>
-            <Col>{transfer.amount}</Col>
-            <Col>
+            <Col xs={0} sm={0} md={8}>
+              {moment(transfer.createdAt).format('YYYY-MM-DD HH:mm:SS')}
+            </Col>
+            <Col xs={6} sm={6} md={4}>
+              {transfer.amount}
+            </Col>
+            <Col xs={6} sm={6} md={4}>
               {
                 {
                   payment_refund: '退款',
@@ -84,7 +90,7 @@ export function Transfers() {
                 }[transfer.transferType]
               }
             </Col>
-            <Col>
+            <Col xs={6} sm={6} md={4}>
               {transfer.snapshotId ? (
                 <a
                   href={`https://mixin.one/snapshots/${transfer.snapshotId}`}
@@ -93,7 +99,7 @@ export function Transfers() {
                   链上快照
                 </a>
               ) : (
-                <span>待处理</span>
+                <span>等待处理</span>
               )}
             </Col>
           </Row>

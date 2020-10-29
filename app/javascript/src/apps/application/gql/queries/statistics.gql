@@ -1,0 +1,8 @@
+query Statistics {
+  statistics {
+    usersCount
+    articlesCount
+    authorRevenueAmount
+    readerRevenueAmount
+  }
+}

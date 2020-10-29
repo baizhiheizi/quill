@@ -44,6 +44,11 @@ export default function Menus() {
               规则
             </Link>
           </Menu.Item>
+          <Menu.Item onClick={() => setDrawerVisible(false)}>
+            <Link to='/fair' replace>
+              公示
+            </Link>
+          </Menu.Item>
         </Menu>
       </Col>
       <Col>
