@@ -1,8 +1,7 @@
+import { ShareAltOutlined } from '@ant-design/icons';
 import { ArticleQueryHookResult, useArticleQuery, User } from '@graphql';
 import MDEditor from '@uiw/react-md-editor';
-import copy from 'copy-to-clipboard';
-import { encode as encode64 } from 'js-base64';
-import { Avatar, Button, Col, Divider, message, Row, Space } from 'antd';
+import { Avatar, Button, Col, Divider, Row, Space } from 'antd';
 import { encode as encode64 } from 'js-base64';
 import moment from 'moment';
 import React, { useState } from 'react';
@@ -10,12 +9,11 @@ import { Link, useParams } from 'react-router-dom';
 import { v4 as uuid } from 'uuid';
 import { Comments, Loading } from '../../components';
 import {
-  PRSDIGG_ICON_URL,
+  handleShare,
   useCurrentUser,
   useMixin,
   usePrsdigg,
 } from '../../shared';
-import { ShareAltOutlined } from '@ant-design/icons';
 
 const traceId = uuid();
 export function Article() {
@@ -52,27 +50,6 @@ export function Article() {
   const handlePaid = () => {
     refetch();
     setPaying(false);
-  };
-
-  const handleShare = () => {
-    const articleUrl = `${location.origin}/articles/${article.uuid}`;
-    if (mixinEnv) {
-      const data = {
-        action: articleUrl,
-        app_id: appId,
-        description: `来自${article.author.name}的好文`,
-        icon_url: PRSDIGG_ICON_URL,
-        title: article.title.slice(0, 36),
-      };
-      location.replace(
-        `mixin://send?category=app_card&data=${encodeURIComponent(
-          encode64(JSON.stringify(data)),
-        )}`,
-      );
-    } else {
-      copy(articleUrl);
-      message.success('成功复制链接');
-    }
   };
 
   return (
@@ -132,7 +109,7 @@ export function Article() {
         </div>
       )}
       <div
-        onClick={handleShare}
+        onClick={() => handleShare(article, Boolean(mixinEnv), appId)}
         style={{ margin: '20px 0', textAlign: 'right' }}
       >
         <Button type='link' icon={<ShareAltOutlined />}>

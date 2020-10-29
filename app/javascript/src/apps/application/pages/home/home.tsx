@@ -9,19 +9,12 @@ import {
   ArticleConnectionQueryHookResult,
   useArticleConnectionQuery,
 } from '@graphql';
-import { Avatar, Button, List, message, Row, Space, Tabs } from 'antd';
-import copy from 'copy-to-clipboard';
-import { encode as encode64 } from 'js-base64';
+import { Avatar, Button, List, Row, Space, Tabs } from 'antd';
 import moment from 'moment';
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Loading } from '../../components';
-import {
-  PRSDIGG_ICON_URL,
-  PRS_ICON_URL,
-  useMixin,
-  usePrsdigg,
-} from '../../shared';
+import { handleShare, PRS_ICON_URL, useMixin, usePrsdigg } from '../../shared';
 
 function ArticleList(props: { order: 'default' | 'lately' | 'revenue' }) {
   const { order } = props;
@@ -42,27 +35,6 @@ function ArticleList(props: { order: 'default' | 'lately' | 'revenue' }) {
   if (!data && loading) {
     return <Loading />;
   }
-
-  const handleShare = (article: Partial<Article>) => {
-    const articleUrl = `${location.origin}/articles/${article.uuid}`;
-    if (mixinEnv) {
-      const data = {
-        action: articleUrl,
-        app_id: appId,
-        description: `来自${article.author.name}的好文`,
-        icon_url: PRSDIGG_ICON_URL,
-        title: article.title.slice(0, 36),
-      };
-      location.replace(
-        `mixin://send?category=app_card&data=${encodeURIComponent(
-          encode64(JSON.stringify(data)),
-        )}`,
-      );
-    } else {
-      copy(articleUrl);
-      message.success('成功复制链接');
-    }
-  };
 
   const {
     articleConnection: {
@@ -135,7 +107,7 @@ function ArticleList(props: { order: 'default' | 'lately' | 'revenue' }) {
               icon={
                 <ShareAltOutlined
                   onClick={() => {
-                    handleShare(article);
+                    handleShare(article, Boolean(mixinEnv), appId);
                   }}
                 />
               }
