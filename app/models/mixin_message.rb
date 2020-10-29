@@ -29,7 +29,7 @@ class MixinMessage < ApplicationRecord
   validates :message_id, presence: true, uniqueness: true
   validates :raw, presence: true
 
-  after_create :process_async
+  after_commit :process_async, on: :create
 
   scope :unprocessed, -> { where(processed_at: nil) }
 

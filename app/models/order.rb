@@ -66,7 +66,7 @@ class Order < ApplicationRecord
     # the present orders
     _orders =
       item.orders
-          .where('? < id and ? < created_at', id, created_at)
+          .where('id < ? and created_at < ?', id, created_at)
 
     # total investment
     sum = _orders.sum(:total)
