@@ -3,6 +3,7 @@
 module Types
   class ArticleType < BaseObject
     field :uuid, ID, null: false
+    field :id, Integer, null: false
     field :title, String, null: false
     field :intro, String, null: false
     field :content, String, null: true
@@ -14,6 +15,7 @@ module Types
 
     field :author, Types::UserType, null: false
     field :readers, Types::UserConnectionType, null: false
+    field :comments, Types::CommentConnectionType, null: false
 
     def content
       return unless object.authorize?(context[:current_user])

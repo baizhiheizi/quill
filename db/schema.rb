@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_10_27_094820) do
+ActiveRecord::Schema.define(version: 2020_10_28_221321) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -38,6 +38,18 @@ ActiveRecord::Schema.define(version: 2020_10_27_094820) do
     t.datetime "updated_at", precision: 6, null: false
     t.index ["author_id"], name: "index_articles_on_author_id"
     t.index ["uuid"], name: "index_articles_on_uuid", unique: true
+  end
+
+  create_table "comments", force: :cascade do |t|
+    t.bigint "author_id"
+    t.string "commentable_type"
+    t.bigint "commentable_id"
+    t.string "content"
+    t.datetime "deleted_at"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["author_id"], name: "index_comments_on_author_id"
+    t.index ["commentable_type", "commentable_id"], name: "index_comments_on_commentable_type_and_commentable_id"
   end
 
   create_table "mixin_messages", force: :cascade do |t|

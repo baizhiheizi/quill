@@ -1,5 +1,6 @@
 query Article($uuid: ID!, $readerAfter: String) {
   article(uuid: $uuid) {
+    id
     uuid
     title
     intro
@@ -10,11 +11,13 @@ query Article($uuid: ID!, $readerAfter: String) {
     author {
       name
       avatarUrl
+      mixinId
     }
     readers(after: $readerAfter) {
       nodes {
         name
         avatarUrl
+        mixinId
       }
       pageInfo {
         hasNextPage

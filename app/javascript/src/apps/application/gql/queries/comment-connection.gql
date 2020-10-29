@@ -1,0 +1,26 @@
+query CommentConnection(
+  $commentableType: String!
+  $commentableId: Int!
+  $after: String
+) {
+  commentConnection(
+    commentableType: $commentableType
+    commentableId: $commentableId
+    after: $after
+  ) {
+    nodes {
+      content
+      author {
+        name
+        avatarUrl
+        mixinId
+        createdAt
+      }
+      createdAt
+    }
+    pageInfo {
+      hasNextPage
+      endCursor
+    }
+  }
+}

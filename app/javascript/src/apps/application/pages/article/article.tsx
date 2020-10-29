@@ -5,8 +5,8 @@ import { encode as encode64 } from 'js-base64';
 import moment from 'moment';
 import React, { useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { uuid } from 'uuidv4';
-import { Loading } from '../../components';
+import { v4 as uuid } from 'uuid';
+import { Comments, Loading } from '../../components';
 import { useCurrentUser, usePrsdigg } from '../../shared';
 
 const traceId = uuid();
@@ -31,6 +31,8 @@ export function Article() {
     return <Loading />;
   }
 
+  const { article } = data;
+
   const handlePaying = () => {
     setPaying(true);
     const payUrl = `https://mixin.one/pay?recipient=${appId}&trace=${traceId}&memo=${memo}&asset=${
@@ -43,7 +45,6 @@ export function Article() {
     setPaying(false);
   };
 
-  const { article } = data;
   return (
     <div>
       <h1>{article.title}</h1>
@@ -58,7 +59,7 @@ export function Article() {
         style={{
           padding: '0.5rem 0.5rem',
           background: '#f4f4f4',
-          marginBottom: '1rem',
+          marginBottom: '2rem',
         }}
       >
         {article.intro}
@@ -105,13 +106,21 @@ export function Article() {
             <Col>
               <Avatar.Group>
                 {article.readers.nodes.map((reader: Partial<User>) => (
-                  <Avatar src={reader.avatarUrl}>{reader.name[0]}</Avatar>
+                  <Avatar key={reader.mixinId} src={reader.avatarUrl}>
+                    {reader.name[0]}
+                  </Avatar>
                 ))}
               </Avatar.Group>
             </Col>
           </Row>
         </div>
       )}
+      <Divider />
+      <Comments
+        commentableType='Article'
+        commentableId={article.id}
+        authorized={article.authorized}
+      />
     </div>
   );
 }

@@ -29,6 +29,7 @@ class Article < ApplicationRecord
 
   has_many :orders, as: :item, dependent: :nullify
   has_many :readers, through: :orders, source: :payer
+  has_many :comments, as: :commentable, dependent: :nullify
 
   validates :uuid, presence: true, uniqueness: true
   validates :title, presence: true, length: { maximum: 25 }

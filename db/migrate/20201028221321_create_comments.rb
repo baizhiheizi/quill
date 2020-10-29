@@ -1,0 +1,12 @@
+class CreateComments < ActiveRecord::Migration[6.0]
+  def change
+    create_table :comments do |t|
+      t.belongs_to :author
+      t.references :commentable, polymorphic: true
+      t.string :content
+      t.datetime :deleted_at
+
+      t.timestamps
+    end
+  end
+end

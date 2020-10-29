@@ -1,0 +1,28 @@
+# == Schema Information
+#
+# Table name: comments
+#
+#  id               :bigint           not null, primary key
+#  commentable_type :string
+#  content          :string
+#  deleted_at       :datetime
+#  created_at       :datetime         not null
+#  updated_at       :datetime         not null
+#  author_id        :bigint
+#  commentable_id   :bigint
+#
+# Indexes
+#
+#  index_comments_on_author_id                            (author_id)
+#  index_comments_on_commentable_type_and_commentable_id  (commentable_type,commentable_id)
+#
+
+# This model initially had no columns defined. If you add columns to the
+# model remove the '{}' from the fixture names and add the columns immediately
+# below each fixture, per the syntax in the comments below
+#
+one: {}
+# column: value
+#
+two: {}
+# column: value
