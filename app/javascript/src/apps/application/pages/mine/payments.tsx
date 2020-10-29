@@ -6,12 +6,10 @@ import {
 import { Avatar, Button, Col, List, Row } from 'antd';
 import moment from 'moment';
 import React from 'react';
-import { useHistory } from 'react-router-dom';
 import { Loading } from '../../components';
 import { PRS_ICON_URL } from '../../shared';
 
 export function Payments() {
-  const history = useHistory();
   const {
     data,
     loading,
@@ -74,11 +72,16 @@ export function Payments() {
       renderItem={(payment: Partial<Payment>) => (
         <List.Item key={payment.traceId}>
           <Row justify='space-around'>
-            <Col>
+            <Col xs={4} sm={4} md={2}>
               <Avatar src={PRS_ICON_URL} />
             </Col>
-            <Col>{payment.amount}</Col>
-            <Col>
+            <Col xs={0} sm={0} md={8}>
+              {moment(payment.createdAt).format('YYYY-MM-DD HH:mm:SS')}
+            </Col>
+            <Col xs={8} sm={8} md={6}>
+              {payment.amount}
+            </Col>
+            <Col xs={6} sm={6} md={4}>
               {
                 {
                   paid: '已支付',
@@ -87,7 +90,7 @@ export function Payments() {
                 }[payment.state]
               }
             </Col>
-            <Col>
+            <Col xs={6} sm={6} md={4}>
               <a
                 href={`https://mixin.one/snapshots/${payment.snapshotId}`}
                 target='_blank'

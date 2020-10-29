@@ -72,13 +72,13 @@ export function Transfers() {
       renderItem={(transfer: Partial<Transfer>) => (
         <List.Item key={transfer.traceId}>
           <Row justify='space-around'>
-            <Col xs={6} sm={6} md={4}>
+            <Col xs={4} sm={4} md={2}>
               <Avatar src={PRS_ICON_URL} />
             </Col>
             <Col xs={0} sm={0} md={8}>
               {moment(transfer.createdAt).format('YYYY-MM-DD HH:mm:SS')}
             </Col>
-            <Col xs={6} sm={6} md={4}>
+            <Col xs={8} sm={8} md={6}>
               {transfer.amount}
             </Col>
             <Col xs={6} sm={6} md={4}>
