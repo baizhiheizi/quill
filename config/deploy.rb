@@ -87,13 +87,16 @@ task :deploy do
   deploy do
     invoke :'git:clone'
     invoke :'deploy:link_shared_paths'
+    invoke :'sidekiq:reload'
     invoke :'bundle:install'
     invoke :'rails:db_migrate'
     invoke :'deploy:cleanup'
 
     on :launch do
       invoke :'rbenv:load'
-      invoke :'puma:reload'
+      invoke :'puma:restart'
+      invoke :'sidekiq:restart'
+      invoke :'clockwork:restart'
       invoke :'blaze:restart'
     end
   end
