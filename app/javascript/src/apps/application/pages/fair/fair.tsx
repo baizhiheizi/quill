@@ -22,10 +22,12 @@ export function Fair() {
   }
 
   const {
-    usersCount,
-    articlesCount,
-    authorRevenueAmount,
-    readerRevenueAmount,
+    statistics: {
+      usersCount,
+      articlesCount,
+      authorRevenueAmount,
+      readerRevenueAmount,
+    },
   } = statisticsData;
   const {
     transferConnection: {
