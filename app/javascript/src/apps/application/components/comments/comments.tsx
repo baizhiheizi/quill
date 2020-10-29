@@ -112,9 +112,26 @@ export function Comments(props: {
         renderItem={(comment: Partial<IComment>) => (
           <li>
             <Comment
+              actions={[
+                <span
+                  onClick={() => {
+                    const content = commentForm.getFieldValue('content');
+                    commentForm.setFieldsValue({
+                      content: `${content}
+> @${comment.author.name}:
+${comment.content.replace(/^/gm, '> ')}
+
+`,
+                    });
+                    document.getElementById('comment-form').focus();
+                  }}
+                >
+                  引用
+                </span>,
+              ]}
               author={comment.author.name}
               avatar={comment.author.avatarUrl}
-              content={<p>{comment.content}</p>}
+              content={<Editor.Markdown source={comment.content} />}
               datetime={<span>{moment(comment.createdAt).fromNow()}</span>}
             />
           </li>
@@ -148,7 +165,10 @@ export function Comments(props: {
           </Form.Item>
           <Form.Item name='content'>
             <Editor
-              textareaProps={{ placeholder: '支持 Markdown 格式' }}
+              textareaProps={{
+                placeholder: '支持 Markdown 格式',
+                id: 'comment-form',
+              }}
               autoFocus={false}
               preview='edit'
               height={200}

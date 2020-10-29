@@ -12,7 +12,7 @@ module Resolvers
       commentable = Object.const_get(params[:commentable_type]).find_by(id: params[:commentable_id])
       return if commentable.blank?
 
-      commentable.comments
+      commentable.comments.order(created_at: :desc)
     end
   end
 end
