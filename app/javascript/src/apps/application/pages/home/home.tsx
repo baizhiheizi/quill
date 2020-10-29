@@ -7,14 +7,19 @@ import {
 import {
   Article,
   ArticleConnectionQueryHookResult,
+  Comment as IComment,
+  CommentConnectionQueryHookResult,
   useArticleConnectionQuery,
+  useCommentConnectionQuery,
 } from '@graphql';
-import { Avatar, Button, List, Row, Space, Tabs } from 'antd';
+import Editor from '@uiw/react-md-editor';
+import { Avatar, Button, Comment, List, Row, Space, Tabs } from 'antd';
 import moment from 'moment';
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Loading } from '../../components';
 import { handleShare, PRS_ICON_URL, useMixin, usePrsdigg } from '../../shared';
+import './home.less';
 
 function ArticleList(props: { order: 'default' | 'lately' | 'revenue' }) {
   const { order } = props;
@@ -142,6 +147,91 @@ function ArticleList(props: { order: 'default' | 'lately' | 'revenue' }) {
   );
 }
 
+function CommentList() {
+  const {
+    data,
+    loading,
+    fetchMore,
+  }: CommentConnectionQueryHookResult = useCommentConnectionQuery();
+
+  if (loading) {
+    return <Loading />;
+  }
+
+  const {
+    commentConnection: {
+      nodes: comments,
+      pageInfo: { hasNextPage, endCursor },
+    },
+  } = data;
+
+  return (
+    <List
+      dataSource={comments}
+      loadMore={
+        hasNextPage && (
+          <div
+            style={{
+              textAlign: 'center',
+              marginTop: 12,
+              height: 32,
+              lineHeight: '32px',
+            }}
+          >
+            <Button
+              loading={loading}
+              type='link'
+              onClick={() => {
+                fetchMore({
+                  updateQuery: (prev, { fetchMoreResult }) => {
+                    if (!fetchMoreResult) {
+                      return prev;
+                    }
+                    const connection = fetchMoreResult.commentConnection;
+                    connection.nodes = prev.commentConnection.nodes.concat(
+                      connection.nodes,
+                    );
+                    return Object.assign({}, prev, {
+                      commentConnection: connection,
+                    });
+                  },
+                  variables: {
+                    after: endCursor,
+                  },
+                });
+              }}
+            >
+              加载更多
+            </Button>
+          </div>
+        )
+      }
+      renderItem={(comment: Partial<IComment>) => (
+        <li>
+          <Comment
+            className='comment-list'
+            author={comment.author.name}
+            avatar={comment.author.avatarUrl}
+            content={<Editor.Markdown source={comment.content} />}
+            datetime={<span>{moment(comment.createdAt).fromNow()}</span>}
+            actions={[
+              <span>
+                来自: {` `}
+                <Link
+                  style={{ color: 'inherit' }}
+                  to={`/articles/${comment.commentable.uuid}`}
+                >
+                  {comment.commentable.title}
+                </Link>
+              </span>,
+            ]}
+          />
+        </li>
+      )}
+    />
+  );
+}
+
 export function Home() {
   return (
     <Tabs defaultActiveKey='default'>
@@ -153,6 +243,9 @@ export function Home() {
       </Tabs.TabPane>
       <Tabs.TabPane tab='营收最多' key='revenue'>
         <ArticleList order='revenue' />
+      </Tabs.TabPane>
+      <Tabs.TabPane tab='评论区' key='comments'>
+        <CommentList />
       </Tabs.TabPane>
     </Tabs>
   );

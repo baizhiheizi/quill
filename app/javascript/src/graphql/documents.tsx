@@ -253,8 +253,8 @@ export type QueryArticleConnectionArgs = {
 
 
 export type QueryCommentConnectionArgs = {
-  commentableType: Scalars['String'];
-  commentableId: Scalars['Int'];
+  commentableType?: Maybe<Scalars['String']>;
+  commentableId?: Maybe<Scalars['Int']>;
   after?: Maybe<Scalars['String']>;
   before?: Maybe<Scalars['String']>;
   first?: Maybe<Scalars['Int']>;
@@ -550,7 +550,7 @@ export type ArticleQueryHookResult = ReturnType<typeof useArticleQuery>;
 export type ArticleLazyQueryHookResult = ReturnType<typeof useArticleLazyQuery>;
 export type ArticleQueryResult = Apollo.QueryResult<ArticleQuery, ArticleQueryVariables>;
 export const CommentConnectionDocument = gql`
-    query CommentConnection($commentableType: String!, $commentableId: Int!, $after: String) {
+    query CommentConnection($commentableType: String, $commentableId: Int, $after: String) {
   commentConnection(
     commentableType: $commentableType
     commentableId: $commentableId
@@ -563,6 +563,10 @@ export const CommentConnectionDocument = gql`
         avatarUrl
         mixinId
         createdAt
+      }
+      commentable {
+        uuid
+        title
       }
       createdAt
     }
