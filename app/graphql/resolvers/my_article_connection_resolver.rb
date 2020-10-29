@@ -12,7 +12,7 @@ module Resolvers
       when 'author'
         current_user.articles.order(created_at: :desc)
       when 'reader'
-        current_user.bought_articles.order('orders.created_at': :desc)
+        current_user.bought_articles
       end
     end
   end

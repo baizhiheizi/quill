@@ -32,7 +32,7 @@ class Article < ApplicationRecord
   belongs_to :author, class_name: 'User', inverse_of: :articles
 
   has_many :orders, as: :item, dependent: :nullify
-  has_many :readers, through: :orders, source: :payer
+  has_many :readers, -> { distinct }, through: :orders, source: :payer
   has_many :comments, as: :commentable, dependent: :nullify
 
   validates :uuid, presence: true, uniqueness: true

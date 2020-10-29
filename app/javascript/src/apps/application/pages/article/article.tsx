@@ -1,12 +1,22 @@
 import { ShareAltOutlined } from '@ant-design/icons';
 import { ArticleQueryHookResult, useArticleQuery, User } from '@graphql';
 import MDEditor from '@uiw/react-md-editor';
-import { Avatar, Button, Col, Divider, message, Row, Space } from 'antd';
+import {
+  Avatar,
+  Button,
+  Col,
+  Divider,
+  message,
+  Modal,
+  Radio,
+  Row,
+  Space,
+} from 'antd';
 import { encode as encode64 } from 'js-base64';
 import moment from 'moment';
 import React, { useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { v4 as uuid } from 'uuid';
+import { v4 as uuidv4 } from 'uuid';
 import { Comments, Loading } from '../../components';
 import {
   handleShare,
@@ -14,11 +24,14 @@ import {
   useMixin,
   usePrsdigg,
 } from '../../shared';
+import './article.less';
 
-const traceId = uuid();
+const traceId = uuidv4();
 export function Article() {
   const { uuid } = useParams<{ uuid: string }>();
   const [paying, setPaying] = useState(false);
+  const [rewardModalVisible, setRewardModalVisible] = useState(false);
+  const [rewardAmount, setRewardAmount] = useState(1);
   const { appId } = usePrsdigg();
   const { mixinEnv } = useMixin();
   const currentUser = useCurrentUser();
@@ -54,6 +67,17 @@ export function Article() {
   const handlePaid = () => {
     refetch();
     setPaying(false);
+  };
+  const handleRewarding = () => {
+    if (mixinEnv) {
+      const payUrl = `mixin://pay?recipient=${appId}&trace=${uuidv4()}&memo=${encode64(
+        JSON.stringify({ t: 'REWARD', a: uuid }),
+      )}&asset=${article.assetId}&amount=${rewardAmount.toFixed(8)}`;
+      location.replace(payUrl);
+      setRewardModalVisible(false);
+    } else {
+      message.warn('请在 Mixin Messenger 中赞赏');
+    }
   };
 
   return (
@@ -143,6 +167,42 @@ export function Article() {
           分享
         </Button>
       </div>
+      {article.authorized && article.author.mixinId !== currentUser.mixinId && (
+        <div style={{ textAlign: 'center' }}>
+          <Button
+            onClick={() => setRewardModalVisible(true)}
+            shape='round'
+            type='primary'
+            danger
+          >
+            大爱此文
+          </Button>
+          <Modal
+            className='reward-modal'
+            closable={false}
+            title='赞赏文章'
+            okText='赞赏'
+            cancelText='再想想'
+            visible={rewardModalVisible}
+            onCancel={() => setRewardModalVisible(false)}
+            onOk={handleRewarding}
+          >
+            <Radio.Group
+              options={[
+                { label: '1', value: 1 },
+                { label: '5', value: 5 },
+                { label: '8', value: 8 },
+                { label: '12', value: 12 },
+                { label: '50', value: 50 },
+                { label: '200', value: 200 },
+              ]}
+              value={rewardAmount}
+              onChange={(e) => setRewardAmount(e.target.value)}
+              optionType='button'
+            />
+          </Modal>
+        </div>
+      )}
       {article.readers.nodes.length > 0 && (
         <div>
           <Divider />
