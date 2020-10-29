@@ -179,6 +179,7 @@ export function Article() {
           </Button>
           <Modal
             className='reward-modal'
+            centered
             closable={false}
             title='赞赏文章'
             okText='赞赏'

@@ -150,6 +150,7 @@ ${comment.content.replace(/^/gm, '> ')}
             } else {
               Modal.confirm({
                 title: '确认提交评论吗?',
+                centered: true,
                 onOk: () => createComment({ variables: { input: values } }),
                 cancelText: '再想想',
                 okText: '提交',

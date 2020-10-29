@@ -1,9 +1,9 @@
 import { imagePath } from '@/shared';
-import { MenuOutlined } from '@ant-design/icons';
+import { GithubOutlined, MenuOutlined } from '@ant-design/icons';
 import { Avatar, Button, Col, Drawer, Dropdown, Layout, Menu, Row } from 'antd';
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { useCurrentUser, useMixin } from './shared';
+import { OPEN_SOURCE_URL, useCurrentUser, useMixin } from './shared';
 
 export default function Menus() {
   const currentUser = useCurrentUser();
@@ -15,7 +15,7 @@ export default function Menus() {
       style={
         props.mode === 'horizontal'
           ? { flexWrap: 'nowrap' }
-          : { flexDirection: 'column' }
+          : { flexDirection: 'column', textAlign: 'center' }
       }
     >
       <Col>
@@ -50,6 +50,12 @@ export default function Menus() {
             <Link to='/fair' replace>
               公示
             </Link>
+          </Menu.Item>
+          <Menu.Item onClick={() => setDrawerVisible(false)}>
+            <a href={OPEN_SOURCE_URL} target='_blank'>
+              <GithubOutlined />
+              开源
+            </a>
           </Menu.Item>
         </Menu>
       </Col>
@@ -92,7 +98,7 @@ export default function Menus() {
             visible={drawerVisible}
             closable={false}
             onClose={() => setDrawerVisible(false)}
-            placement='left'
+            placement='right'
           >
             <MenuConent mode='vertical' />
           </Drawer>

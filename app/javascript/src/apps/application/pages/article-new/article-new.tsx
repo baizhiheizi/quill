@@ -34,6 +34,7 @@ export function ArticleNew() {
         } else {
           Modal.confirm({
             title: '确定要发布你的文章吗？',
+            centered: true,
             okText: '发布',
             cancelText: '再改改',
             onOk: () => createArticle({ variables: { input: values } }),
