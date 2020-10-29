@@ -12,9 +12,9 @@ module Resolvers
       when 'default'
         Article.order_by_popularity
       when 'lately'
-        Article.order(created_at: :desc)
+        Article.only_published.order(created_at: :desc)
       when 'revenue'
-        Article.order(revenue: :desc)
+        Article.only_published.order(revenue: :desc, orders_count: :desc)
       end
     end
   end

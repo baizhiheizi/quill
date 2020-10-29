@@ -43,8 +43,8 @@ class Article < ApplicationRecord
 
   before_validation :setup_attributes, on: :create
 
-  default_scope { where(state: :published) }
-  scope :order_by_popularity, -> { select('articles.*, ((((articles.revenue / articles.price) + articles.comments_count) / POW(((EXTRACT(EPOCH FROM (now()-articles.created_at)) / 3600)::integer + 3), 1.6))) AS popularity').order('popularity DESC, created_at DESC') }
+  scope :only_published, -> { where(state: :published) }
+  scope :order_by_popularity, -> { where(state: :published).select('articles.*, ((((articles.revenue / articles.price) + articles.comments_count) / POW(((EXTRACT(EPOCH FROM (now()-articles.created_at)) / 3600)::integer + 3), 1.6))) AS popularity').order('popularity DESC, created_at DESC') }
 
   aasm column: :state do
     state :published, initial: true
