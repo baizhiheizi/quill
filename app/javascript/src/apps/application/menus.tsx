@@ -20,7 +20,9 @@ export default function Menus() {
     >
       <Col>
         <div style={{ margin: '0 15px' }}>
-          <Avatar size='large' src={imagePath('logo.svg')} />
+          <Link to='/' replace>
+            <Avatar size='large' src={imagePath('logo.svg')} />
+          </Link>
         </div>
       </Col>
       <Col flex={1}>
