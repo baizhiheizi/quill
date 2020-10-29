@@ -19,6 +19,7 @@ export type Article = {
   author: User;
   authorized?: Maybe<Scalars['Boolean']>;
   comments: CommentConnection;
+  commentsCount: Scalars['Int'];
   content?: Maybe<Scalars['String']>;
   createdAt: Scalars['ISO8601DateTime'];
   id: Scalars['Int'];
@@ -290,7 +291,7 @@ export type Transfer = {
   memo?: Maybe<Scalars['String']>;
   processedAt: Scalars['ISO8601DateTime'];
   receiver: User;
-  snapshotId: Scalars['String'];
+  snapshotId?: Maybe<Scalars['String']>;
   traceId: Scalars['ID'];
   transferType: Scalars['String'];
   updatedAt?: Maybe<Scalars['ISO8601DateTime']>;
@@ -426,6 +427,7 @@ export const ArticleConnectionDocument = gql`
       price
       revenue
       ordersCount
+      commentsCount
       author {
         name
         avatarUrl
@@ -476,6 +478,8 @@ export const ArticleDocument = gql`
     price
     assetId
     authorized
+    ordersCount
+    commentsCount
     author {
       name
       avatarUrl

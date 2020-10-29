@@ -10,6 +10,8 @@ class CreateArticles < ActiveRecord::Migration[6.0]
       t.decimal :price, null: false
       t.decimal :revenue, default: 0.0
       t.integer :orders_count, default: 0, null: false
+      t.integer :comments_count, default: 0, null: false
+      t.string :state
 
       t.timestamps
     end

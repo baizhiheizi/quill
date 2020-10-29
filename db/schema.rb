@@ -34,6 +34,8 @@ ActiveRecord::Schema.define(version: 2020_10_28_221321) do
     t.decimal "price", null: false
     t.decimal "revenue", default: "0.0"
     t.integer "orders_count", default: 0, null: false
+    t.integer "comments_count", default: 0, null: false
+    t.string "state"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["author_id"], name: "index_articles_on_author_id"

@@ -33,7 +33,7 @@ class Transfer < ApplicationRecord
   validates :asset_id, presence: true
   validates :opponent_id, presence: true
 
-  after_create :process_async
+  after_commit :process_async, on: :create
 
   scope :unprocessed, -> { where(processed_at: nil) }
   scope :processed, -> { where.not(processed_at: nil) }

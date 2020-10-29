@@ -3,11 +3,13 @@
 # Table name: articles
 #
 #  id                                  :bigint           not null, primary key
+#  comments_count                      :integer          default(0), not null
 #  content                             :text
 #  intro                               :string
 #  orders_count                        :integer          default(0), not null
 #  price                               :decimal(, )      not null
 #  revenue                             :decimal(, )      default(0.0)
+#  state                               :string
 #  title                               :string
 #  uuid                                :uuid
 #  created_at                          :datetime         not null

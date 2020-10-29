@@ -20,7 +20,7 @@
 #
 class Comment < ApplicationRecord
   belongs_to :author, class_name: 'User', inverse_of: :comments
-  belongs_to :commentable, polymorphic: true
+  belongs_to :commentable, polymorphic: true, counter_cache: true
 
   validates :content, presence: true, length: { maximum: 1000 }
 end

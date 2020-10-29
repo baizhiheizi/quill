@@ -3,7 +3,7 @@
 module Types
   class TransferType < Types::BaseObject
     field :trace_id, ID, null: false
-    field :snapshot_id, String, null: false
+    field :snapshot_id, String, null: true
     field :amount, Float, null: false
     field :memo, String, null: true
     field :transfer_type, String, null: false

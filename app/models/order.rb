@@ -66,13 +66,13 @@ class Order < ApplicationRecord
     # the present orders
     _orders =
       item.orders
-          .where(id: ...id, created_at: ...created_at)
-          .where.not(id: id)
+          .where('? < id and ? < created_at', id, created_at)
 
     # total investment
     sum = _orders.sum(:total)
 
     # create reader transfer
+    _distributed_amount = 0
     _orders.each do |_order|
       # ignore if amount is less than minium amout for Mixin Network
       _amount = (amount * _order.total / sum).round(8)
@@ -87,6 +87,8 @@ class Order < ApplicationRecord
       ).find_or_create_by!(
         trace_id: MixinBot.api.unique_conversation_id(_order.trace_id, trace_id)
       )
+
+      _distributed_amount += _amount
     end
 
     # create author transfer
@@ -94,7 +96,7 @@ class Order < ApplicationRecord
       transfer_type: :author_revenue,
       opponent_id: item.author.mixin_uuid,
       asset_id: payment.asset_id,
-      amount: (total * (1 - PRSDIGG_RATIO) - amount).round(8),
+      amount: (total * (1 - PRSDIGG_RATIO) - _distributed_amount).round(8),
       memo: "作者收益来自文章《#{item.title}》".truncate(140)
     ).find_or_create_by!(
       trace_id: MixinBot.api.unique_conversation_id(trace_id, item.author.mixin_uuid)

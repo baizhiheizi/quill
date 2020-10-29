@@ -11,6 +11,7 @@ module Types
     field :price, Float, null: false
     field :revenue, Float, null: false
     field :orders_count, Integer, null: false
+    field :comments_count, Integer, null: false
     field :authorized, Boolean, null: true
 
     field :author, Types::UserType, null: false

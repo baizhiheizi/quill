@@ -8,6 +8,8 @@ query Article($uuid: ID!, $readerAfter: String) {
     price
     assetId
     authorized
+    ordersCount
+    commentsCount
     author {
       name
       avatarUrl

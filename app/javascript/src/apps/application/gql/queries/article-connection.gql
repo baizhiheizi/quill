@@ -7,6 +7,7 @@ query ArticleConnection($after: String) {
       price
       revenue
       ordersCount
+      commentsCount
       author {
         name
         avatarUrl
