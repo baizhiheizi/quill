@@ -1629,6 +1629,20 @@
                 "defaultValue": null
               },
               {
+                "name": "order",
+                "description": null,
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "String",
+                    "ofType": null
+                  }
+                },
+                "defaultValue": null
+              },
+              {
                 "name": "before",
                 "description": "Returns the elements in the list that come before the specified cursor.",
                 "type": {

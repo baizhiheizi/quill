@@ -1,6 +1,6 @@
 import {
   Article,
-  ArticleConnectionQueryHookResult,
+  MyArticleConnectionQueryHookResult,
   useMyArticleConnectionQuery,
 } from '@/graphql';
 import { Avatar, Button, List, Row } from 'antd';
@@ -16,7 +16,7 @@ export function Articles(props: { type: 'author' | 'reader' }) {
     data,
     loading,
     fetchMore,
-  }: ArticleConnectionQueryHookResult = useMyArticleConnectionQuery({
+  }: MyArticleConnectionQueryHookResult = useMyArticleConnectionQuery({
     variables: { type },
   });
 

@@ -27,6 +27,8 @@
 class Article < ApplicationRecord
   PRS_ASSET_ID = '3edb734c-6d6f-32ff-ab03-4eb43640c758'
 
+  include AASM
+
   belongs_to :author, class_name: 'User', inverse_of: :articles
 
   has_many :orders, as: :item, dependent: :nullify
@@ -40,6 +42,32 @@ class Article < ApplicationRecord
   validates :price, numericality: { greater_than: 0.00000001 }
 
   before_validation :setup_attributes, on: :create
+
+  default_scope { where(state: :published) }
+  scope :order_by_popularity, -> { select('articles.*, ((((articles.revenue / articles.price) + articles.comments_count) / POW(((EXTRACT(EPOCH FROM (now()-articles.created_at)) / 3600)::integer + 3), 1.6))) AS popularity').order('popularity DESC, created_at DESC') }
+
+  aasm column: :state do
+    state :published, initial: true
+    state :hidden
+    state :blocked
+
+    event :hide do
+      transitions from: :published, to: :hidden
+    end
+
+    event :publish do
+      transitions from: :hidden, to: :published
+    end
+
+    event :block do
+      transitions from: :hidden, to: :blocked
+      transitions from: :published, to: :blocked
+    end
+
+    event :unblock do
+      transitions from: :blocked, to: :hidden
+    end
+  end
 
   def authorize?(user)
     return if user.blank?

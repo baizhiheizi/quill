@@ -243,6 +243,7 @@ export type QueryArticleArgs = {
 
 export type QueryArticleConnectionArgs = {
   after?: Maybe<Scalars['String']>;
+  order: Scalars['String'];
   before?: Maybe<Scalars['String']>;
   first?: Maybe<Scalars['Int']>;
   last?: Maybe<Scalars['Int']>;
@@ -418,8 +419,8 @@ export type CreateCommentMutationHookResult = ReturnType<typeof useCreateComment
 export type CreateCommentMutationResult = Apollo.MutationResult<CreateCommentMutation>;
 export type CreateCommentMutationOptions = Apollo.BaseMutationOptions<CreateCommentMutation, CreateCommentMutationVariables>;
 export const ArticleConnectionDocument = gql`
-    query ArticleConnection($after: String) {
-  articleConnection(after: $after) {
+    query ArticleConnection($order: String!, $after: String) {
+  articleConnection(order: $order, after: $after) {
     nodes {
       uuid
       title
@@ -454,6 +455,7 @@ export const ArticleConnectionDocument = gql`
  * @example
  * const { data, loading, error } = useArticleConnectionQuery({
  *   variables: {
+ *      order: // value for 'order'
  *      after: // value for 'after'
  *   },
  * });

@@ -3,15 +3,20 @@ import {
   ArticleConnectionQueryHookResult,
   useArticleConnectionQuery,
 } from '@/graphql';
-import { MoneyCollectOutlined, ReadOutlined } from '@ant-design/icons';
-import { Avatar, Button, List, Row, Space } from 'antd';
+import {
+  MoneyCollectOutlined,
+  MessageOutlined,
+  ReadOutlined,
+} from '@ant-design/icons';
+import { Avatar, Button, List, Row, Space, Tabs } from 'antd';
 import moment from 'moment';
 import React from 'react';
 import { useHistory } from 'react-router-dom';
 import { Loading } from '../../components';
 import { PRS_ICON_URL } from '../../shared';
 
-export function Home() {
+function ArticleList(props: { order: 'default' | 'lately' | 'revenue' }) {
+  const { order } = props;
   const history = useHistory();
   const {
     data,
@@ -20,6 +25,9 @@ export function Home() {
   }: ArticleConnectionQueryHookResult = useArticleConnectionQuery({
     fetchPolicy: 'network-only',
     notifyOnNetworkStatusChange: true,
+    variables: {
+      order,
+    },
   });
 
   if (!data && loading) {
@@ -65,6 +73,7 @@ export function Home() {
                   },
                   variables: {
                     after: endCursor,
+                    order,
                   },
                 });
               }}
@@ -85,7 +94,11 @@ export function Home() {
             </Space>,
             <Space>
               <MoneyCollectOutlined />
-              <span>营收{article.revenue.toFixed(2)}PRS</span>
+              <span>{article.revenue.toFixed(2)}</span>
+            </Space>,
+            <Space>
+              <MessageOutlined />
+              <span>{article.commentsCount}</span>
             </Space>,
           ]}
         >
@@ -112,5 +125,21 @@ export function Home() {
         </List.Item>
       )}
     />
+  );
+}
+
+export function Home() {
+  return (
+    <Tabs defaultActiveKey='default'>
+      <Tabs.TabPane tab='综合排序' key='default'>
+        <ArticleList order='default' />
+      </Tabs.TabPane>
+      <Tabs.TabPane tab='最新优先' key='lately'>
+        <ArticleList order='lately' />
+      </Tabs.TabPane>
+      <Tabs.TabPane tab='营收最多' key='revenue'>
+        <ArticleList order='revenue' />
+      </Tabs.TabPane>
+    </Tabs>
   );
 }
