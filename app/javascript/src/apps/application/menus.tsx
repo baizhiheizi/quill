@@ -105,6 +105,7 @@ export default function Menus() {
             }}
           >
             <Button
+              type='primary'
               size='large'
               onClick={() => setDrawerVisible(true)}
               icon={<MenuOutlined />}
