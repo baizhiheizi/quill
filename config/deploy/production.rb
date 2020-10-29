@@ -3,5 +3,5 @@
 set :domain, 'prsdigg.com'
 set :deploy_to, '/data/www/prsdigg'
 set :repository, 'git@github.com:baizhiheizi/prsdigg.git'
-set :branch, 'master'
+set :branch, 'build'
 set :user, 'ruby'

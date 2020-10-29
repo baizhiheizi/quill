@@ -45,6 +45,8 @@ gem 'graphql'
 gem 'graphiql-rails'
 # AASM - State machines for Ruby classes (plain Ruby, ActiveRecord, Mongoid)
 gem 'aasm'
+# Background job scheduler
+gem 'clockwork', require: false
 
 # deploy
 gem 'mina', '~> 1.2.2', require: false
