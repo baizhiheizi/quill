@@ -18,7 +18,7 @@ export function ArticleNew() {
       if (error) {
         message.error(error);
       } else {
-        message.success('Created!');
+        message.success('文章发布成功');
         history.replace('/');
       }
     },

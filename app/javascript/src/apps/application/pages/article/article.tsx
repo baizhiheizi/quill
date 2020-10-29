@@ -1,7 +1,7 @@
 import { ShareAltOutlined } from '@ant-design/icons';
 import { ArticleQueryHookResult, useArticleQuery, User } from '@graphql';
 import MDEditor from '@uiw/react-md-editor';
-import { Avatar, Button, Col, Divider, Row, Space } from 'antd';
+import { Avatar, Button, Col, Divider, message, Row, Space } from 'antd';
 import { encode as encode64 } from 'js-base64';
 import moment from 'moment';
 import React, { useState } from 'react';
@@ -41,11 +41,15 @@ export function Article() {
   const { article } = data;
 
   const handlePaying = () => {
-    setPaying(true);
-    const payUrl = `https://mixin.one/pay?recipient=${appId}&trace=${traceId}&memo=${memo}&asset=${
-      article.assetId
-    }&amount=${article.price.toFixed(8)}`;
-    location.replace(payUrl);
+    if (mixinEnv) {
+      setPaying(true);
+      const payUrl = `mixin://pay?recipient=${appId}&trace=${traceId}&memo=${memo}&asset=${
+        article.assetId
+      }&amount=${article.price.toFixed(8)}`;
+      location.replace(payUrl);
+    } else {
+      message.warn('请在 Mixin Messenger 中付款');
+    }
   };
   const handlePaid = () => {
     refetch();

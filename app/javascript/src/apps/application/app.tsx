@@ -31,7 +31,10 @@ export default function App(props: {
             <Router>
               <Layout>
                 <Menus />
-                <Alert message='网站公测中，正式上线后会将数据重置!' type='warning' />
+                <Alert
+                  message='网站公测中，正式上线后会将数据重置!'
+                  type='warning'
+                />
                 <Layout.Content
                   style={{ background: '#fff', padding: '1rem 1rem ' }}
                 >
