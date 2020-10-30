@@ -130,7 +130,7 @@ GEM
     graphiql-rails (1.7.0)
       railties
       sprockets-rails
-    graphql (1.11.5)
+    graphql (1.11.6)
     hamster (3.0.0)
       concurrent-ruby (~> 1.0)
     http (4.4.1)
