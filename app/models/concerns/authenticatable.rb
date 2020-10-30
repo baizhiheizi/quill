@@ -16,7 +16,8 @@ module Authenticatable
         uid: res['data'].fetch('user_id'),
         provider: :mixin
       )
-      auth.raw = (auth.raw.presence || {}).merge(res['data'])
+      raw = (auth.raw.presence || {}).merge(res['data'])
+      auth.raw = raw
       auth.update! raw: raw if auth.raw_changed?
 
       find_or_create_by!(mixin_authorization: auth)
