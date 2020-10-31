@@ -117,7 +117,7 @@ class Order < ApplicationRecord
 
   def ensure_total_sufficient
     errors.add(total: 'Wrong token!') unless payment.asset_id == item.asset_id
-    errors.add(:total, 'Insufficient amount!') unless total >= item.price
+    errors.add(:total, 'Insufficient amount!') if buy_article? && total < item.price
   end
 
   private
