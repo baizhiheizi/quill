@@ -19,13 +19,13 @@ module Types
     field :comments, Types::CommentConnectionType, null: false
 
     def content
-      return unless object.authorize?(context[:current_user])
+      return unless object.authorized?(context[:current_user])
 
       object.content
     end
 
     def authorized
-      object.authorize?(context[:current_user])
+      object.authorized?(context[:current_user])
     end
   end
 end

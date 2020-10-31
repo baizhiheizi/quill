@@ -69,7 +69,7 @@ class Article < ApplicationRecord
     end
   end
 
-  def authorize?(user)
+  def authorized?(user)
     return if user.blank?
     return true if author == user
 
