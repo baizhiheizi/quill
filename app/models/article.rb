@@ -32,7 +32,7 @@ class Article < ApplicationRecord
   belongs_to :author, class_name: 'User', inverse_of: :articles
 
   has_many :orders, as: :item, dependent: :nullify
-  has_many :readers, -> { distinct }, through: :orders, source: :payer
+  has_many :readers, -> { distinct }, through: :orders, source: :buyer
   has_many :comments, as: :commentable, dependent: :nullify
 
   validates :uuid, presence: true, uniqueness: true
@@ -73,7 +73,7 @@ class Article < ApplicationRecord
     return if user.blank?
     return true if author == user
 
-    orders.find_by(payer: user).present?
+    orders.find_by(buyer: user).present?
   end
 
   def update_revenue

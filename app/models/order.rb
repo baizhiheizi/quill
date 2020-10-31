@@ -4,23 +4,23 @@
 #
 # Table name: orders
 #
-#  id          :bigint           not null, primary key
-#  item_type   :string
-#  order_type  :integer
-#  state       :string
-#  total       :decimal(, )
-#  created_at  :datetime         not null
-#  updated_at  :datetime         not null
-#  item_id     :bigint
-#  payer_id    :bigint
-#  receiver_id :bigint
-#  trace_id    :uuid
+#  id         :bigint           not null, primary key
+#  item_type  :string
+#  order_type :integer
+#  state      :string
+#  total      :decimal(, )
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#  buyer_id   :bigint
+#  item_id    :bigint
+#  seller_id  :bigint
+#  trace_id   :uuid
 #
 # Indexes
 #
+#  index_orders_on_buyer_id               (buyer_id)
 #  index_orders_on_item_type_and_item_id  (item_type,item_id)
-#  index_orders_on_payer_id               (payer_id)
-#  index_orders_on_receiver_id            (receiver_id)
+#  index_orders_on_seller_id              (seller_id)
 #
 class Order < ApplicationRecord
   AUTHOR_RATIO = 0.5
@@ -30,8 +30,8 @@ class Order < ApplicationRecord
 
   include AASM
 
-  belongs_to :payer, class_name: 'User'
-  belongs_to :receiver, class_name: 'User'
+  belongs_to :buyer, class_name: 'User'
+  belongs_to :seller, class_name: 'User'
   belongs_to :item, polymorphic: true, counter_cache: true
 
   has_many :transfers, as: :source, dependent: :nullify
@@ -80,7 +80,7 @@ class Order < ApplicationRecord
 
       transfers.create_with(
         transfer_type: :reader_revenue,
-        opponent_id: _order.payer.mixin_uuid,
+        opponent_id: _order.buyer.mixin_uuid,
         asset_id: payment.asset_id,
         amount: _amount.to_f.to_s,
         memo: "读者收益来自文章《#{item.title}》".truncate(140)
@@ -124,8 +124,8 @@ class Order < ApplicationRecord
 
   def setup_attributes
     assign_attributes(
-      payer: payment.payer,
-      receiver: item.author,
+      buyer: payment.payer,
+      seller: item.author,
       total: payment.amount
     )
   end

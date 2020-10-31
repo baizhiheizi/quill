@@ -10,6 +10,6 @@ module Types
     field :asset_id, String, null: false
     field :processed_at, GraphQL::Types::ISO8601DateTime, null: false
 
-    field :receiver, Types::UserType, null: false
+    field :recipient, Types::UserType, null: false
   end
 end

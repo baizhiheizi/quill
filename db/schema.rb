@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_10_28_221321) do
+ActiveRecord::Schema.define(version: 2020_10_31_222811) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -70,8 +70,8 @@ ActiveRecord::Schema.define(version: 2020_10_28_221321) do
   end
 
   create_table "orders", force: :cascade do |t|
-    t.bigint "receiver_id"
-    t.bigint "payer_id"
+    t.bigint "seller_id"
+    t.bigint "buyer_id"
     t.string "item_type"
     t.bigint "item_id"
     t.uuid "trace_id"
@@ -80,9 +80,9 @@ ActiveRecord::Schema.define(version: 2020_10_28_221321) do
     t.decimal "total"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.index ["buyer_id"], name: "index_orders_on_buyer_id"
     t.index ["item_type", "item_id"], name: "index_orders_on_item_type_and_item_id"
-    t.index ["payer_id"], name: "index_orders_on_payer_id"
-    t.index ["receiver_id"], name: "index_orders_on_receiver_id"
+    t.index ["seller_id"], name: "index_orders_on_seller_id"
   end
 
   create_table "payments", force: :cascade do |t|

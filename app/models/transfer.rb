@@ -25,7 +25,7 @@
 #
 class Transfer < ApplicationRecord
   belongs_to :source, polymorphic: true
-  belongs_to :receiver, class_name: 'User', primary_key: :mixin_uuid, foreign_key: :opponent_id, inverse_of: :transfers
+  belongs_to :recipient, class_name: 'User', primary_key: :mixin_uuid, foreign_key: :opponent_id, inverse_of: :transfers
 
   enum transfer_type: { author_revenue: 0, reader_revenue: 1, payment_refund: 2 }
 

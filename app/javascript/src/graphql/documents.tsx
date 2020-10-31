@@ -164,10 +164,10 @@ export type MutationCreateCommentArgs = {
 
 export type Order = {
   __typename?: 'Order';
+  buyer: User;
   createdAt: Scalars['ISO8601DateTime'];
   item: Article;
-  payer: User;
-  receiver: User;
+  seller: User;
   state: Scalars['String'];
   total: Scalars['Float'];
   traceId: Scalars['ID'];
@@ -311,7 +311,7 @@ export type Transfer = {
   createdAt: Scalars['ISO8601DateTime'];
   memo?: Maybe<Scalars['String']>;
   processedAt: Scalars['ISO8601DateTime'];
-  receiver: User;
+  recipient: User;
   snapshotId?: Maybe<Scalars['String']>;
   traceId: Scalars['ID'];
   transferType: Scalars['String'];
@@ -664,6 +664,7 @@ export const MyPaymentConnectionDocument = gql`
       amount
       assetId
       state
+      createdAt
     }
     pageInfo {
       hasNextPage

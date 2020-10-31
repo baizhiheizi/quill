@@ -6,8 +6,8 @@ module Types
     field :state, String, null: false
     field :total, Float, null: false
 
-    field :payer, Types::UserType, null: false
-    field :receiver, Types::UserType, null: false
+    field :buyer, Types::UserType, null: false
+    field :seller, Types::UserType, null: false
     field :item, Types::ArticleType, null: false
   end
 end
