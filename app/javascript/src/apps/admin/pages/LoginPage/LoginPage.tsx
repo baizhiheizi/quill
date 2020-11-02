@@ -4,7 +4,7 @@ import React from 'react';
 
 const { Content } = Layout;
 
-export function Login() {
+export default function LoginPage() {
   const login = (options) => {};
 
   return (
