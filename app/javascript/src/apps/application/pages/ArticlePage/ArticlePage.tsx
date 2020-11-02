@@ -17,7 +17,7 @@ import moment from 'moment';
 import React, { useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
-import CommentsComponent from '../../components/CommmentsComponent/CommentsComponent';
+import CommentsComponent from '../../components/CommentsComponent/CommentsComponent';
 import LoadingComponent from '../../components/LoadingComponent/LoadingComponent';
 import {
   handleShare,
