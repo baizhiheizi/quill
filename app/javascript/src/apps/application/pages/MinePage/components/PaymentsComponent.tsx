@@ -1,3 +1,5 @@
+import LoadingComponent from '@application/components/LoadingComponent/LoadingComponent';
+import { PRS_ICON_URL } from '@application/shared';
 import {
   MyPaymentConnectionQueryHookResult,
   Payment,
@@ -6,10 +8,8 @@ import {
 import { Avatar, Button, Col, List, Row } from 'antd';
 import moment from 'moment';
 import React from 'react';
-import { Loading } from '../../components';
-import { PRS_ICON_URL } from '../../shared';
 
-export function Payments() {
+export default function PaymentsComponent() {
   const {
     data,
     loading,
@@ -17,7 +17,7 @@ export function Payments() {
   }: MyPaymentConnectionQueryHookResult = useMyPaymentConnectionQuery();
 
   if (loading) {
-    return <Loading />;
+    return <LoadingComponent />;
   }
 
   const {

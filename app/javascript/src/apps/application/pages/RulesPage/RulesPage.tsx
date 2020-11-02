@@ -42,7 +42,7 @@ PRSDigg 尝试建立一个**作者**与**读者**共赢的**平台**。
 
 值得提醒的是，除了购买文章的付费，其他付费行为（例如打赏）的付费，也会计入早期读者奖励的分配比例。
 `;
-export function Rules() {
+export default function RulesPage() {
   return (
     <div style={{ marginTop: 20 }}>
       <MDEditor.Markdown source={article} />

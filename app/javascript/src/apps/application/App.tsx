@@ -4,10 +4,10 @@ import { apolloClient, mixinUtils } from '@shared';
 import { Alert, Col, Layout, Row } from 'antd';
 import React from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
-import Menus from './menus';
-import { Routes } from './routes';
+import Menus from './Menus';
+import Routes from './Routes';
 import { CurrentUserContext, MixinContext, PrsdiggContext } from './shared';
-import './app.less';
+import './App.less';
 
 export default function App(props: {
   csrfToken: string;

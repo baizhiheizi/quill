@@ -1,10 +1,10 @@
-import { useCreateArticleMutation } from '@/graphql';
+import { useCreateArticleMutation } from '@graphql';
 import Editor, { commands } from '@uiw/react-md-editor';
 import { Button, Form, Input, InputNumber, message, Modal } from 'antd';
 import React from 'react';
 import { useHistory } from 'react-router-dom';
 
-export function ArticleNew() {
+export default function ArticleNewPage() {
   const history = useHistory();
   const [createArticle, { loading }] = useCreateArticleMutation({
     update(

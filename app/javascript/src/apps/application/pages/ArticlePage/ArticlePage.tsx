@@ -17,17 +17,18 @@ import moment from 'moment';
 import React, { useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
-import { Comments, Loading } from '../../components';
+import CommentsComponent from '../../components/CommmentsComponent/CommentsComponent';
+import LoadingComponent from '../../components/LoadingComponent/LoadingComponent';
 import {
   handleShare,
   useCurrentUser,
   useMixin,
   usePrsdigg,
 } from '../../shared';
-import './article.less';
+import './ArticlePage.less';
 
 const traceId = uuidv4();
-export function Article() {
+export default function ArticlePage() {
   const { uuid } = useParams<{ uuid: string }>();
   const [paying, setPaying] = useState(false);
   const [rewardModalVisible, setRewardModalVisible] = useState(false);
@@ -48,7 +49,7 @@ export function Article() {
   );
 
   if (loading) {
-    return <Loading />;
+    return <LoadingComponent />;
   }
 
   const { article } = data;
@@ -226,7 +227,7 @@ export function Article() {
         </div>
       )}
       <Divider />
-      <Comments
+      <CommentsComponent
         commentableType='Article'
         commentableId={article.id}
         authorized={article.authorized}

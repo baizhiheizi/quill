@@ -17,9 +17,9 @@ import {
 } from 'antd';
 import moment from 'moment';
 import React from 'react';
-import { Loading } from '..';
+import LoadingComponent from '../LoadingComponent/LoadingComponent';
 
-export function Comments(props: {
+export default function CommentsComponent(props: {
   commentableType: 'Article' | String;
   commentableId: number;
   authorized: boolean;
@@ -50,7 +50,7 @@ export function Comments(props: {
   });
 
   if (!data && loading) {
-    return <Loading />;
+    return <LoadingComponent />;
   }
 
   const {

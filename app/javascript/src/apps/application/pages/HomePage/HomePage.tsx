@@ -17,9 +17,9 @@ import { Avatar, Button, Comment, List, Row, Space, Tabs } from 'antd';
 import moment from 'moment';
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Loading } from '../../components';
+import LoadingComponent from '../../components/LoadingComponent/LoadingComponent';
 import { handleShare, PRS_ICON_URL, useMixin, usePrsdigg } from '../../shared';
-import './home.less';
+import './HomePage.less';
 
 function ArticleList(props: { order: 'default' | 'lately' | 'revenue' }) {
   const { order } = props;
@@ -38,7 +38,7 @@ function ArticleList(props: { order: 'default' | 'lately' | 'revenue' }) {
   });
 
   if (!data && loading) {
-    return <Loading />;
+    return <LoadingComponent />;
   }
 
   const {
@@ -155,7 +155,7 @@ function CommentList() {
   }: CommentConnectionQueryHookResult = useCommentConnectionQuery();
 
   if (loading) {
-    return <Loading />;
+    return <LoadingComponent />;
   }
 
   const {
@@ -232,7 +232,7 @@ function CommentList() {
   );
 }
 
-export function Home() {
+export default function HomePage() {
   return (
     <Tabs defaultActiveKey='default'>
       <Tabs.TabPane tab='综合排序' key='default'>

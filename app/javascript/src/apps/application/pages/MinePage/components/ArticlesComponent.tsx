@@ -1,15 +1,17 @@
+import LoadingComponent from '@application/components/LoadingComponent/LoadingComponent';
 import {
   Article,
   MyArticleConnectionQueryHookResult,
   useMyArticleConnectionQuery,
-} from '@/graphql';
+} from '@graphql';
 import { Avatar, Button, List, Row } from 'antd';
 import moment from 'moment';
 import React from 'react';
 import { useHistory } from 'react-router-dom';
-import { Loading } from '../../components';
 
-export function Articles(props: { type: 'author' | 'reader' }) {
+export default function ArticlesComponent(props: {
+  type: 'author' | 'reader';
+}) {
   const { type } = props;
   const history = useHistory();
   const {
@@ -21,7 +23,7 @@ export function Articles(props: { type: 'author' | 'reader' }) {
   });
 
   if (loading) {
-    return <Loading />;
+    return <LoadingComponent />;
   }
 
   const {

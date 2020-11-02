@@ -7,10 +7,10 @@ import {
 import { Avatar, Button, Col, List, Row, Statistic } from 'antd';
 import moment from 'moment';
 import React from 'react';
-import { Loading } from '../../components';
+import LoadingComponent from '../../components/LoadingComponent/LoadingComponent';
 import { PRS_ICON_URL } from '../../shared';
 
-export function Fair() {
+export default function FairPage() {
   const {
     data: statisticsData,
     loading: statisticsLoading,
@@ -18,7 +18,7 @@ export function Fair() {
   const { data, loading, fetchMore } = useTransferConnectionQuery();
 
   if (statisticsLoading || loading) {
-    return <Loading />;
+    return <LoadingComponent />;
   }
 
   const {

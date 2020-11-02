@@ -1,3 +1,5 @@
+import LoadingComponent from '@application/components/LoadingComponent/LoadingComponent';
+import { PRS_ICON_URL } from '@application/shared';
 import {
   MyTransferConnectionQueryHookResult,
   Transfer,
@@ -6,10 +8,8 @@ import {
 import { Avatar, Button, Col, List, Row } from 'antd';
 import moment from 'moment';
 import React from 'react';
-import { Loading } from '../../components';
-import { PRS_ICON_URL } from '../../shared';
 
-export function Transfers() {
+export default function TransfersComponent() {
   const {
     data,
     loading,
@@ -17,7 +17,7 @@ export function Transfers() {
   }: MyTransferConnectionQueryHookResult = useMyTransferConnectionQuery();
 
   if (loading) {
-    return <Loading />;
+    return <LoadingComponent />;
   }
 
   const {
