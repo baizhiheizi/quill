@@ -10,6 +10,6 @@ module Types
     field :asset_id, String, null: false
 
     field :payer, Types::UserType, null: false
-    field :order, Types::OrderType, null: false
+    field :order, Types::OrderType, null: true
   end
 end

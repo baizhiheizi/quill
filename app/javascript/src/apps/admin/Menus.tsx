@@ -33,6 +33,9 @@ export default function Menus() {
       <Menu.Item>
         <Link to='/transfers'>Transfers</Link>
       </Menu.Item>
+      <Menu.Item>
+        <a href='/admin/logout'>Logout</a>
+      </Menu.Item>
     </Menu>
   );
 }

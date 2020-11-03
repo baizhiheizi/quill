@@ -11,10 +11,12 @@ export default function DashboardPage() {
   }
 
   const {
-    usersCount,
-    articlesCount,
-    authorRevenueAmount,
-    readerRevenueAmount,
+    statistics: {
+      usersCount,
+      articlesCount,
+      authorRevenueAmount,
+      readerRevenueAmount,
+    },
   } = data;
 
   return (

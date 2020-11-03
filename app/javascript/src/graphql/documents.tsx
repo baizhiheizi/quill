@@ -316,7 +316,7 @@ export type Payment = {
   assetId: Scalars['String'];
   createdAt: Scalars['ISO8601DateTime'];
   memo?: Maybe<Scalars['String']>;
-  order: Order;
+  order?: Maybe<Order>;
   payer: User;
   snapshotId: Scalars['String'];
   state: Scalars['String'];
