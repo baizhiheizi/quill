@@ -5,6 +5,6 @@ class BatchProcessTransferWorker
   sidekiq_options queue: :low, retry: true
 
   def perform
-    Transfer.unprocessed.map(&:process_async)
+    Transfer.unprocessed.where(created_at: ...(Time.current - 5.minutes)).map(&:process_async)
   end
 end

@@ -1,5 +1,8 @@
 # frozen_string_literal: true
 
+require 'sidekiq/web'
+Sidekiq::Web.set :session_secret, Rails.application.secrets[:secret_key_base]
+
 class AdminConstraint
   def matches?(request)
     return false if request.session[:current_admin_id].blank?
@@ -20,6 +23,9 @@ Rails.application.routes.draw do
 
   namespace :admin do
     get 'logout', to: 'sessions#delete', as: :logout
+
+    # sidekiq
+    mount Sidekiq::Web, at: 'sidekiq', constraints: AdminConstraint.new
 
     root to: 'dashboard#index'
     get '*path' => 'dashboard#index'
