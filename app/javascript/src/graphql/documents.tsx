@@ -382,7 +382,7 @@ export type Transfer = {
   assetId: Scalars['String'];
   createdAt: Scalars['ISO8601DateTime'];
   memo?: Maybe<Scalars['String']>;
-  processedAt: Scalars['ISO8601DateTime'];
+  processedAt?: Maybe<Scalars['ISO8601DateTime']>;
   recipient: User;
   snapshotId?: Maybe<Scalars['String']>;
   traceId: Scalars['ID'];
@@ -668,6 +668,7 @@ export const AdminTransferConnectionDocument = gql`
       recipient {
         name
         avatarUrl
+        mixinId
       }
       processedAt
       createdAt

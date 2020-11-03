@@ -29,7 +29,9 @@ export default function PaymentsPage() {
       render: (_, payment) => (
         <Space>
           <Avatar src={payment.payer.avatarUrl} />
-          <span>{payment.payer.name}({payment.payer.mixinId})</span>
+          <span>
+            {payment.payer.name}({payment.payer.mixinId})
+          </span>
         </Space>
       ),
       title: 'Author',
@@ -61,7 +63,9 @@ export default function PaymentsPage() {
       dataIndex: 'snapshotId',
       key: 'snapshotId',
       render: (snapshotId) => (
-        <a href={`https://mixin.one/snapshots/${snapshotId}`} target='_blank'>View</a>
+        <a href={`https://mixin.one/snapshots/${snapshotId}`} target='_blank'>
+          View
+        </a>
       ),
       title: 'Snapshot',
     },
