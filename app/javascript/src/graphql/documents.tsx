@@ -414,13 +414,36 @@ export type TransferEdge = {
 
 export type User = {
   __typename?: 'User';
+  articleConnction: ArticleConnection;
+  articlesCount: Scalars['Int'];
+  authorRevenueAmount: Scalars['Float'];
   avatarUrl: Scalars['String'];
+  commentConnction: CommentConnection;
+  commentsCount: Scalars['Int'];
   createdAt: Scalars['ISO8601DateTime'];
   id: Scalars['Int'];
   mixinId: Scalars['String'];
   mixinUuid: Scalars['String'];
   name: Scalars['String'];
+  paymentsTotal: Scalars['Float'];
+  readerRevenueAmount: Scalars['Float'];
   updatedAt?: Maybe<Scalars['ISO8601DateTime']>;
+};
+
+
+export type UserArticleConnctionArgs = {
+  after?: Maybe<Scalars['String']>;
+  before?: Maybe<Scalars['String']>;
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+};
+
+
+export type UserCommentConnctionArgs = {
+  after?: Maybe<Scalars['String']>;
+  before?: Maybe<Scalars['String']>;
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
 };
 
 /** The connection type for User. */
@@ -689,6 +712,11 @@ export const AdminUserConnectionDocument = gql`
       mixinId
       mixinUuid
       avatarUrl
+      articlesCount
+      commentsCount
+      authorRevenueAmount
+      readerRevenueAmount
+      paymentsTotal
       createdAt
     }
     pageInfo {

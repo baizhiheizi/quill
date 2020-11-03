@@ -5,6 +5,11 @@ query AdminUserConnection($after: String) {
       mixinId
       mixinUuid
       avatarUrl
+      articlesCount
+      commentsCount
+      authorRevenueAmount
+      readerRevenueAmount
+      paymentsTotal
       createdAt
     }
     pageInfo {

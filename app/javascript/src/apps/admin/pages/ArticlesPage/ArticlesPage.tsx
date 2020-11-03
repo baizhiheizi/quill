@@ -135,7 +135,7 @@ export default function ArticlesPage() {
             });
           }}
         >
-          {hasNextPage ? '加载更多' : '没有更多'}
+          {hasNextPage ? 'Load More' : 'No More'}
         </Button>
       </div>
     </div>

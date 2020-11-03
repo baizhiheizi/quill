@@ -7,5 +7,34 @@ module Types
     field :mixin_id, String, null: false
     field :mixin_uuid, String, null: false
     field :avatar_url, String, null: false
+
+    field :articles_count, Int, null: false
+    field :comments_count, Int, null: false
+    field :author_revenue_amount, Float, null: false
+    field :reader_revenue_amount, Float, null: false
+    field :payments_total, Float, null: false
+
+    field :article_connction, Types::ArticleConnectionType, null: false
+    field :comment_connction, Types::CommentConnectionType, null: false
+
+    def articles_count
+      object.articles.count
+    end
+
+    def comments_count
+      object.comments.count
+    end
+
+    def author_revenue_amount
+      object.author_revenue_transfers.sum(:amount)
+    end
+
+    def reader_revenue_amount
+      object.reader_revenue_transfers.sum(:amount)
+    end
+
+    def payments_total
+      object.payments.completed.sum(:amount)
+    end
   end
 end
