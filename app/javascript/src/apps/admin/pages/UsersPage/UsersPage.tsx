@@ -49,11 +49,6 @@ export default function UsersPage() {
       title: 'Name',
     },
     {
-      dataIndex: 'mixinUuid',
-      key: 'mixinUuid',
-      title: 'Mixin UUID',
-    },
-    {
       dataIndex: 'articlesCount',
       key: 'articlesCount',
       title: 'Articles',
@@ -92,7 +87,7 @@ export default function UsersPage() {
         scroll={{ x: true }}
         columns={columns}
         dataSource={users}
-        rowKey='uuid'
+        rowKey='mixinId'
         pagination={false}
       />
       <div style={{ margin: '1rem', textAlign: 'center' }}>
