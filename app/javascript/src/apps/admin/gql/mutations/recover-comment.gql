@@ -1,0 +1,6 @@
+mutation AdminRecoverComment($input: AdminRecoverCommentMutationInput!) {
+  adminRecoverComment(input: $input) {
+    error
+    success
+  }
+}

@@ -6,11 +6,11 @@ module Types
     field :content, String, null: true
     field :deleted_at, GraphQL::Types::ISO8601DateTime, null: true
 
-    field :author, Types::UserType, null: false
+    field :author, Types::UserType, null: true
     field :commentable, Types::ArticleType, null: false
 
     def content
-      return if object.deleted_at?
+      return if object.deleted?
 
       object.content
     end

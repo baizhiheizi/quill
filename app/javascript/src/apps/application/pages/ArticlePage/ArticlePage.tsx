@@ -25,6 +25,7 @@ import {
   useMixin,
   usePrsdigg,
 } from '../../shared';
+import NotFoundPage from '../NotFoundPage/NotFoundPage';
 import './ArticlePage.less';
 
 const traceId = uuidv4();
@@ -53,6 +54,10 @@ export default function ArticlePage() {
   }
 
   const { article } = data;
+
+  if (!article) {
+    return <NotFoundPage />;
+  }
 
   const handlePaying = () => {
     if (mixinEnv) {

@@ -2,11 +2,14 @@ import {
   AdminArticleConnectionQueryHookResult,
   Article as IArticle,
   useAdminArticleConnectionQuery,
+  useAdminBlockArticleMutation,
+  useAdminUnblockArticleMutation,
 } from '@graphql';
 import {
   Avatar,
   Button,
   Divider,
+  message,
   PageHeader,
   Popconfirm,
   Space,
@@ -21,7 +24,28 @@ export default function ArticlesPage() {
     data,
     loading,
     fetchMore,
+    refetch,
   }: AdminArticleConnectionQueryHookResult = useAdminArticleConnectionQuery();
+  const [block, { loading: blocking }] = useAdminBlockArticleMutation({
+    update(_, { data: { error: err } }) {
+      if (err) {
+        message.error(err);
+      } else {
+        message.success('Successfully Blocked!');
+        refetch();
+      }
+    },
+  });
+  const [unblock, { loading: unblocking }] = useAdminUnblockArticleMutation({
+    update(_, { data: { error: err } }) {
+      if (err) {
+        message.error(err);
+      } else {
+        message.success('Successfully Unblocked!');
+        refetch();
+      }
+    },
+  });
 
   if (loading) {
     return <LoadingComponent />;
@@ -82,12 +106,26 @@ export default function ArticlesPage() {
       render: (_, article) => (
         <span>
           {article.state === 'blocked' ? (
-            <Popconfirm title='Are you sure to unblock this article?'>
-              <a href='#'>UnBlock</a>
+            <Popconfirm
+              title='Are you sure to unblock this article?'
+              onConfirm={() =>
+                unblock({ variables: { input: { uuid: article.uuid } } })
+              }
+            >
+              <Button type='link' disabled={unblocking}>
+                UnBlock
+              </Button>
             </Popconfirm>
           ) : (
-            <Popconfirm title='Are you sure to block this article?'>
-              <a href='#'>Block</a>
+            <Popconfirm
+              title='Are you sure to block this article?'
+              onConfirm={() =>
+                block({ variables: { input: { uuid: article.uuid } } })
+              }
+            >
+              <Button type='link' disabled={blocking}>
+                Block
+              </Button>
             </Popconfirm>
           )}
           <Divider type='vertical' />

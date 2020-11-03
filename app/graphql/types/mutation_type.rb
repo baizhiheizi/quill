@@ -6,5 +6,9 @@ module Types
     field :create_comment, mutation: Mutations::CreateCommentMutation
 
     field :admin_login, mutation: Mutations::AdminLoginMutation
+    field :admin_delete_comment, mutation: Mutations::AdminDeleteCommentMutation
+    field :admin_recover_comment, mutation: Mutations::AdminRecoverCommentMutation
+    field :admin_block_article, mutation: Mutations::AdminBlockArticleMutation
+    field :admin_unblock_article, mutation: Mutations::AdminUnblockArticleMutation
   end
 end

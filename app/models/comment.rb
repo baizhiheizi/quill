@@ -19,6 +19,8 @@
 #  index_comments_on_commentable_type_and_commentable_id  (commentable_type,commentable_id)
 #
 class Comment < ApplicationRecord
+  include SoftDeletable
+
   belongs_to :author, class_name: 'User', inverse_of: :comments
   belongs_to :commentable, polymorphic: true, counter_cache: true
 
