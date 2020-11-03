@@ -1,5 +1,6 @@
 import { Menu } from 'antd';
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 export default function Menus() {
   return (
@@ -14,12 +15,24 @@ export default function Menus() {
       >
         Admin
       </div>
-      <Menu.Item>Dashboard</Menu.Item>
-      <Menu.Item>Users</Menu.Item>
-      <Menu.Item>Articles</Menu.Item>
-      <Menu.Item>Comments</Menu.Item>
-      <Menu.Item>Payments</Menu.Item>
-      <Menu.Item>Transfers</Menu.Item>
+      <Menu.Item>
+        <Link to='/'>Dashboard</Link>
+      </Menu.Item>
+      <Menu.Item>
+        <Link to='/users'>Users</Link>
+      </Menu.Item>
+      <Menu.Item>
+        <Link to='/articles'>Articles</Link>
+      </Menu.Item>
+      <Menu.Item>
+        <Link to='/comments'>Comments</Link>
+      </Menu.Item>
+      <Menu.Item>
+        <Link to='/payments'>Payments</Link>
+      </Menu.Item>
+      <Menu.Item>
+        <Link to='/transfers'>Transfers</Link>
+      </Menu.Item>
     </Menu>
   );
 }
