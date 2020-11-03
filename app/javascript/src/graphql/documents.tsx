@@ -614,6 +614,7 @@ export const AdminPaymentConnectionDocument = gql`
       assetId
       payer {
         name
+        mixinId
         avatarUrl
       }
       order {
