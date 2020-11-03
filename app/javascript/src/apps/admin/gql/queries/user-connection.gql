@@ -1,0 +1,15 @@
+query AdminUserConnection($after: String) {
+  adminUserConnection(after: $after) {
+    nodes {
+      name
+      mixinId
+      mixinUuid
+      avatarUrl
+      createdAt
+    }
+    pageInfo {
+      hasNextPage
+      endCursor
+    }
+  }
+}

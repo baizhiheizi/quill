@@ -1,0 +1,22 @@
+query AdminTransferConnection($after: String) {
+  adminTransferConnection(after: $after) {
+    nodes {
+      traceId
+      snapshotId
+      amount
+      memo
+      transferType
+      assetId
+      recipient {
+        name
+        avatarUrl
+      }
+      processedAt
+      createdAt
+    }
+    pageInfo {
+      hasNextPage
+      endCursor
+    }
+  }
+}

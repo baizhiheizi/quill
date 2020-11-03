@@ -14,5 +14,9 @@ module Types
 
     # admin
     field :admin_article_connection, resolver: Resolvers::AdminArticleConnectionResolver
+    field :admin_comment_connection, resolver: Resolvers::AdminCommentConnectionResolver
+    field :admin_user_connection, resolver: Resolvers::AdminUserConnectionResolver
+    field :admin_payment_connection, resolver: Resolvers::AdminPaymentConnectionResolver
+    field :admin_transfer_connection, resolver: Resolvers::AdminTransferConnectionResolver
   end
 end
