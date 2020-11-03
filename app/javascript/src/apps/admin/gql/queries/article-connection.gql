@@ -1,0 +1,23 @@
+query AdminArticleConnection($after: String) {
+  adminArticleConnection(after: $after) {
+    nodes {
+      uuid
+      title
+      intro
+      price
+      revenue
+      ordersCount
+      commentsCount
+      state
+      author {
+        name
+        avatarUrl
+      }
+      createdAt
+    }
+    pageInfo {
+      hasNextPage
+      endCursor
+    }
+  }
+}

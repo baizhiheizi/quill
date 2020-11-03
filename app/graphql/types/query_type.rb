@@ -11,5 +11,8 @@ module Types
     field :my_article_connection, resolver: Resolvers::MyArticleConnectionResolver
     field :my_payment_connection, resolver: Resolvers::MyPaymentConnectionResolver
     field :my_transfer_connection, resolver: Resolvers::MyTransferConnectionResolver
+
+    # admin
+    field :admin_article_connection, resolver: Resolvers::AdminArticleConnectionResolver
   end
 end

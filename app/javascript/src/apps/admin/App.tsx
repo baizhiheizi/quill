@@ -24,7 +24,7 @@ export default function App(props: {
                 <Layout.Sider collapsible>
                   <Menus />
                 </Layout.Sider>
-                <Layout.Content>
+                <Layout.Content style={{ padding: '0 1rem' }}>
                   <Routes />
                 </Layout.Content>
               </Layout>

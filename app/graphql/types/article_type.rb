@@ -7,6 +7,7 @@ module Types
     field :title, String, null: false
     field :intro, String, null: false
     field :content, String, null: true
+    field :state, String, null: true
     field :asset_id, String, null: false
     field :price, Float, null: false
     field :revenue, Float, null: false

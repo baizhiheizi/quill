@@ -47,6 +47,7 @@ export type Article = {
   price: Scalars['Float'];
   readers: UserConnection;
   revenue: Scalars['Float'];
+  state?: Maybe<Scalars['String']>;
   title: Scalars['String'];
   updatedAt?: Maybe<Scalars['ISO8601DateTime']>;
   uuid: Scalars['ID'];
@@ -250,6 +251,7 @@ export type PaymentEdge = {
 
 export type Query = {
   __typename?: 'Query';
+  adminArticleConnection: ArticleConnection;
   article?: Maybe<Article>;
   articleConnection: ArticleConnection;
   commentConnection: CommentConnection;
@@ -260,6 +262,14 @@ export type Query = {
   statistics: Statistics;
   transferConnection: TransferConnection;
   updatedAt?: Maybe<Scalars['ISO8601DateTime']>;
+};
+
+
+export type QueryAdminArticleConnectionArgs = {
+  after?: Maybe<Scalars['String']>;
+  before?: Maybe<Scalars['String']>;
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
 };
 
 
@@ -432,6 +442,57 @@ export function useAdminLoginMutation(baseOptions?: Apollo.MutationHookOptions<A
 export type AdminLoginMutationHookResult = ReturnType<typeof useAdminLoginMutation>;
 export type AdminLoginMutationResult = Apollo.MutationResult<AdminLoginMutation>;
 export type AdminLoginMutationOptions = Apollo.BaseMutationOptions<AdminLoginMutation, AdminLoginMutationVariables>;
+export const AdminArticleConnectionDocument = gql`
+    query AdminArticleConnection($after: String) {
+  adminArticleConnection(after: $after) {
+    nodes {
+      uuid
+      title
+      intro
+      price
+      revenue
+      ordersCount
+      commentsCount
+      state
+      author {
+        name
+        avatarUrl
+      }
+      createdAt
+    }
+    pageInfo {
+      hasNextPage
+      endCursor
+    }
+  }
+}
+    `;
+
+/**
+ * __useAdminArticleConnectionQuery__
+ *
+ * To run a query within a React component, call `useAdminArticleConnectionQuery` and pass it any options that fit your needs.
+ * When your component renders, `useAdminArticleConnectionQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useAdminArticleConnectionQuery({
+ *   variables: {
+ *      after: // value for 'after'
+ *   },
+ * });
+ */
+export function useAdminArticleConnectionQuery(baseOptions?: Apollo.QueryHookOptions<AdminArticleConnectionQuery, AdminArticleConnectionQueryVariables>) {
+        return Apollo.useQuery<AdminArticleConnectionQuery, AdminArticleConnectionQueryVariables>(AdminArticleConnectionDocument, baseOptions);
+      }
+export function useAdminArticleConnectionLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AdminArticleConnectionQuery, AdminArticleConnectionQueryVariables>) {
+          return Apollo.useLazyQuery<AdminArticleConnectionQuery, AdminArticleConnectionQueryVariables>(AdminArticleConnectionDocument, baseOptions);
+        }
+export type AdminArticleConnectionQueryHookResult = ReturnType<typeof useAdminArticleConnectionQuery>;
+export type AdminArticleConnectionLazyQueryHookResult = ReturnType<typeof useAdminArticleConnectionLazyQuery>;
+export type AdminArticleConnectionQueryResult = Apollo.QueryResult<AdminArticleConnectionQuery, AdminArticleConnectionQueryVariables>;
 export const CreateArticleDocument = gql`
     mutation CreateArticle($input: CreateArticleMutationInput!) {
   createArticle(input: $input) {
