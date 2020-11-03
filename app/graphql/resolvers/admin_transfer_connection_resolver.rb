@@ -6,7 +6,7 @@ module Resolvers
 
     type Types::TransferConnectionType, null: false
 
-    def resolve(params = {})
+    def resolve(_params = {})
       Transfer.all.order(created_at: :desc)
     end
   end

@@ -111,29 +111,41 @@ export default function CommentsComponent(props: {
         locale={{ emptyText: '暂无评论' }}
         renderItem={(comment: Partial<IComment>) => (
           <li>
-            <Comment
-              actions={[
-                <span
-                  onClick={() => {
-                    const content = commentForm.getFieldValue('content');
-                    commentForm.setFieldsValue({
-                      content: `${content}
+            {comment.deletedAt ? (
+              <div
+                style={{
+                  padding: '1rem 0',
+                  color: '#aaa',
+                  textDecoration: 'line-through',
+                }}
+              >
+                此评论已被管理员删除
+              </div>
+            ) : (
+              <Comment
+                actions={[
+                  <span
+                    onClick={() => {
+                      const content = commentForm.getFieldValue('content');
+                      commentForm.setFieldsValue({
+                        content: `${content}
 > @${comment.author.name}:
 ${comment.content.replace(/^/gm, '> ')}
 
 `,
-                    });
-                    document.getElementById('comment-form').focus();
-                  }}
-                >
-                  引用
-                </span>,
-              ]}
-              author={comment.author.name}
-              avatar={comment.author.avatarUrl}
-              content={<Editor.Markdown source={comment.content} />}
-              datetime={<span>{moment(comment.createdAt).fromNow()}</span>}
-            />
+                      });
+                      document.getElementById('comment-form').focus();
+                    }}
+                  >
+                    引用
+                  </span>,
+                ]}
+                author={comment.author.name}
+                avatar={comment.author.avatarUrl}
+                content={<Editor.Markdown source={comment.content} />}
+                datetime={<span>{moment(comment.createdAt).fromNow()}</span>}
+              />
+            )}
           </li>
         )}
       />

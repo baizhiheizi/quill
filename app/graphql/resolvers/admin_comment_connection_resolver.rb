@@ -6,7 +6,7 @@ module Resolvers
 
     type Types::CommentConnectionType, null: false
 
-    def resolve(params = {})
+    def resolve(_params = {})
       Comment.with_deleted.order(created_at: :desc)
     end
   end

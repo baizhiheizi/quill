@@ -6,7 +6,7 @@ module Resolvers
 
     type Types::UserConnectionType, null: false
 
-    def resolve(params = {})
+    def resolve(_params = {})
       User.all.order(created_at: :desc)
     end
   end

@@ -1166,6 +1166,7 @@ export const CommentConnectionDocument = gql`
   ) {
     nodes {
       content
+      deletedAt
       author {
         name
         avatarUrl

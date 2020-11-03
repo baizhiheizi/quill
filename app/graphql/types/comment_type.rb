@@ -10,7 +10,7 @@ module Types
     field :commentable, Types::ArticleType, null: false
 
     def content
-      return if object.deleted?
+      return if object.deleted? && context[:session][:current_admin_id].blank?
 
       object.content
     end

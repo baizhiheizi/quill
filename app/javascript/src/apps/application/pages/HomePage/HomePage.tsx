@@ -208,24 +208,26 @@ function CommentList() {
       }
       renderItem={(comment: Partial<IComment>) => (
         <li>
-          <Comment
-            className='comment-list'
-            author={comment.author.name}
-            avatar={comment.author.avatarUrl}
-            content={<Editor.Markdown source={comment.content} />}
-            datetime={<span>{moment(comment.createdAt).fromNow()}</span>}
-            actions={[
-              <span>
-                来自: {` `}
-                <Link
-                  style={{ color: 'inherit' }}
-                  to={`/articles/${comment.commentable.uuid}`}
-                >
-                  {comment.commentable.title}
-                </Link>
-              </span>,
-            ]}
-          />
+          {!comment.deletedAt && (
+            <Comment
+              className='comment-list'
+              author={comment.author.name}
+              avatar={comment.author.avatarUrl}
+              content={<Editor.Markdown source={comment.content} />}
+              datetime={<span>{moment(comment.createdAt).fromNow()}</span>}
+              actions={[
+                <span>
+                  来自: {` `}
+                  <Link
+                    style={{ color: 'inherit' }}
+                    to={`/articles/${comment.commentable.uuid}`}
+                  >
+                    {comment.commentable.title}
+                  </Link>
+                </span>,
+              ]}
+            />
+          )}
         </li>
       )}
     />

@@ -24,8 +24,8 @@ class User < ApplicationRecord
   has_many :articles, foreign_key: :author_id, inverse_of: :author, dependent: :nullify
   has_many :payments, foreign_key: :opponent_id, primary_key: :mixin_uuid, inverse_of: :payer, dependent: :nullify
   has_many :transfers, foreign_key: :opponent_id, primary_key: :mixin_uuid, inverse_of: :recipient, dependent: :nullify
-  has_many :author_revenue_transfers, -> {where(transfer_type: :author_revenue)}, class_name: 'Transfer', foreign_key: :opponent_id, primary_key: :mixin_uuid, inverse_of: :recipient, dependent: :nullify
-  has_many :reader_revenue_transfers, -> {where(transfer_type: :reader_revenue)}, class_name: 'Transfer', foreign_key: :opponent_id, primary_key: :mixin_uuid, inverse_of: :recipient, dependent: :nullify
+  has_many :author_revenue_transfers, -> { where(transfer_type: :author_revenue) }, class_name: 'Transfer', foreign_key: :opponent_id, primary_key: :mixin_uuid, inverse_of: :recipient, dependent: :nullify
+  has_many :reader_revenue_transfers, -> { where(transfer_type: :reader_revenue) }, class_name: 'Transfer', foreign_key: :opponent_id, primary_key: :mixin_uuid, inverse_of: :recipient, dependent: :nullify
   has_many :orders, foreign_key: :buyer_id, inverse_of: :buyer, dependent: :nullify
   has_many :bought_articles, -> { distinct.order(created_at: :desc) }, through: :orders, source: :item, source_type: 'Article'
   has_many :comments, foreign_key: :author_id, inverse_of: :author, dependent: :nullify

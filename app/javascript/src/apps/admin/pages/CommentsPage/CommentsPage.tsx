@@ -2,8 +2,18 @@ import {
   AdminCommentConnectionQueryHookResult,
   Comment as IComment,
   useAdminCommentConnectionQuery,
+  useAdminDeleteCommentMutation,
+  useAdminRecoverCommentMutation,
 } from '@graphql';
-import { Avatar, Button, PageHeader, Popconfirm, Popover, Space } from 'antd';
+import {
+  Avatar,
+  Button,
+  message,
+  PageHeader,
+  Popconfirm,
+  Popover,
+  Space,
+} from 'antd';
 import Table, { ColumnProps } from 'antd/lib/table';
 import React from 'react';
 import LoadingComponent from '../../components/LoadingComponent/LoadingComponent';
@@ -13,7 +23,28 @@ export default function CommentsPage() {
     data,
     loading,
     fetchMore,
+    refetch,
   }: AdminCommentConnectionQueryHookResult = useAdminCommentConnectionQuery();
+  const [deleteComment, { loading: deleting }] = useAdminDeleteCommentMutation({
+    update(_, { data: { error: err } }) {
+      if (err) {
+        message.error(err);
+      } else {
+        message.success('Successfully deleted!');
+        refetch();
+      }
+    },
+  });
+  const [recover, { loading: recovering }] = useAdminRecoverCommentMutation({
+    update(_, { data: { error: err } }) {
+      if (err) {
+        message.error(err);
+      } else {
+        message.success('Successfully recovered!');
+        refetch();
+      }
+    },
+  });
 
   if (loading) {
     return <LoadingComponent />;
@@ -47,7 +78,9 @@ export default function CommentsPage() {
       dataIndex: 'content',
       key: 'content',
       render: (content) => (
-        <Popover content={content}>{content.slice(0, 140)}</Popover>
+        <Popover content={content}>
+          {content ? content.slice(0, 140) : '-'}
+        </Popover>
       ),
       title: 'content',
     },
@@ -55,7 +88,7 @@ export default function CommentsPage() {
       dataIndex: 'article',
       key: 'article',
       render: (_, comment) => (
-        <a href={`/articles/${comment.commentable.uuid}`}>
+        <a href={`/articles/${comment.commentable.uuid}`} target='_blank'>
           {comment.commentable.title}
         </a>
       ),
@@ -78,12 +111,26 @@ export default function CommentsPage() {
       render: (_, comment) => (
         <span>
           {comment.deletedAt ? (
-            <Popconfirm title='Are you sure to recover this comment?'>
-              Recover
+            <Popconfirm
+              title='Are you sure to recover this comment?'
+              onConfirm={() =>
+                recover({ variables: { input: { id: comment.id } } })
+              }
+            >
+              <Button type='link' disabled={recovering}>
+                Recover
+              </Button>
             </Popconfirm>
           ) : (
-            <Popconfirm title='Are you sure to delete this comment?'>
-              Delete
+            <Popconfirm
+              title='Are you sure to delete this comment?'
+              onConfirm={() =>
+                deleteComment({ variables: { input: { id: comment.id } } })
+              }
+            >
+              <Button type='link' disabled={deleting}>
+                Delete
+              </Button>
             </Popconfirm>
           )}
         </span>

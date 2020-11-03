@@ -13,7 +13,7 @@ module Mutations
       return { error: 'Not Authorized!' } unless admin&.authenticate(password)
 
       context[:session][:current_admin_id] = admin.id
-      { 
+      {
         success: true
       }
     end
