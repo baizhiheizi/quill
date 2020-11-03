@@ -1,3 +1,4 @@
+import { useAdminLoginMutation } from '@/graphql';
 import { ClockCircleOutlined, UserOutlined } from '@ant-design/icons';
 import { Button, Form, Input, Layout, message } from 'antd';
 import React from 'react';
@@ -5,14 +6,29 @@ import React from 'react';
 const { Content } = Layout;
 
 export default function LoginPage() {
-  const login = (options) => {};
+  const [login] = useAdminLoginMutation({
+    update(
+      _,
+      {
+        data: {
+          adminLogin: { error },
+        },
+      },
+    ) {
+      if (error) {
+        message.error(error);
+      } else {
+        location.replace('/admin');
+      }
+    },
+  });
 
   return (
     <Layout className='layout'>
       <Content style={{ display: 'flex', minHeight: '100vh' }}>
         <Form
           onFinish={(values: any) => {
-            login({ variables: values });
+            login({ variables: { input: values } });
           }}
           style={{ width: 300, margin: 'auto' }}
         >
