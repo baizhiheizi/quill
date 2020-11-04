@@ -10444,10 +10444,10 @@ uuid@^3.3.2, uuid@^3.4.0:
   resolved "https://registry.npm.taobao.org/uuid/download/uuid-3.4.0.tgz#b23e4358afa8a202fe7a100af1f5f883f02007ee"
   integrity sha1-sj5DWK+oogL+ehAK8fX4g/AgB+4=
 
-uuidv4@^6.2.4:
-  version "6.2.4"
-  resolved "https://registry.npm.taobao.org/uuidv4/download/uuidv4-6.2.4.tgz#8cd299e68c007c268f974d3fbe681902434f61a1"
-  integrity sha1-jNKZ5owAfCaPl00/vmgZAkNPYaE=
+uuidv4@^6.2.5:
+  version "6.2.5"
+  resolved "https://registry.yarnpkg.com/uuidv4/-/uuidv4-6.2.5.tgz#e92f323dad04431e930892bb14863ebfc7a94b0e"
+  integrity sha512-ZUFxKFP9EWmju6a1tdne/pP+R65QGfcZ3LK2ExHHdwKuznX0Sx9kwhFd3Ss543Ft107SCQLyXcvHS+lmFsM9Zw==
   dependencies:
     "@types/uuid" "8.3.0"
     uuid "8.3.1"
