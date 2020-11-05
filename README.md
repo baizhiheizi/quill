@@ -1,5 +1,11 @@
 # PRSDigg
 
+![Check](https://github.com/baizhiheizi/prsdigg/workflows/Check/badge.svg) ![CI](https://github.com/baizhiheizi/prsdigg/workflows/CI/badge.svg)
+
+PRSDigg 是建立于 [PRESSone](https://press.one) 与 [Mixin Network](https://mixin.one) 与之上的 Dapp。发表于 PRSDigg 上的文章将全部在 [PRESSone](https://press.one) 签名上链，所有支付以及转账则通过 [Mixin Network](https://mixin.one) 完成。
+
+## 规则
+
 PRSDigg 尝试建立一个**作者**与**读者**共赢的**平台**。
 
 我们认为，一篇文章产生的价值是由作者和读者共同构成的，但是实际情况是，读者的付出并没有得到很好体现，尤其是**早期读者**。因此，与其他平台最大的不同是，PRSDigg 引入**早期读者奖励**的机制。
@@ -37,3 +43,9 @@ PRSDigg 尝试建立一个**作者**与**读者**共赢的**平台**。
 以此类推。
 
 值得提醒的是，除了购买文章的付费，其他付费行为（例如打赏）的付费，也会计入早期读者奖励的分配比例。
+
+## 体验
+
+目前 PRSDigg 仅支持 [Mixin Messenger](https://mixin.one/messenger) 登录以及完成支付，体验前先下载安装。
+
+浏览 [prsdigg.com](https://prsdigg.com) ，或者在 [Mixin Messenger](https://mixin.one/messenger) 中搜索 7000101549 即可体验。
