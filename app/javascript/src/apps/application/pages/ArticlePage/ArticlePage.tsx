@@ -11,6 +11,7 @@ import {
   Radio,
   Row,
   Space,
+  Statistic,
 } from 'antd';
 import { encode as encode64 } from 'js-base64';
 import moment from 'moment';
@@ -233,6 +234,30 @@ export default function ArticlePage() {
               </Avatar.Group>
             </Col>
           </Row>
+          {article.authorized && (
+            <Row gutter={16} style={{ textAlign: 'center' }}>
+              <Col xs={12} sm={6}>
+                <Statistic title='单价(PRS)' value={article.price} />
+              </Col>
+              <Col xs={12} sm={6}>
+                <Statistic title='付费次数' value={article.ordersCount} />
+              </Col>
+              <Col xs={12} sm={6}>
+                <Statistic
+                  title='总收益(PRS)'
+                  value={article.revenue ? article.revenue.toFixed(4) : 0.0}
+                />
+              </Col>
+              <Col xs={12} sm={6}>
+                <Statistic
+                  title='奖励份额(%)'
+                  value={
+                    article.myShare ? (article.myShare * 100).toFixed(3) : '0.0'
+                  }
+                />
+              </Col>
+            </Row>
+          )}
         </div>
       )}
       <Divider />

@@ -15,6 +15,8 @@ module Types
     field :comments_count, Integer, null: false
     field :authorized, Boolean, null: true
 
+    field :my_share, Float, null: false
+
     field :author, Types::UserType, null: false
     field :readers, Types::UserConnectionType, null: false
     field :comments, Types::CommentConnectionType, null: false
@@ -27,6 +29,12 @@ module Types
 
     def authorized
       object.authorized?(context[:current_user])
+    end
+
+    def my_share
+      return unless object.authorized?(context[:current_user])
+
+      object.share_of(context[:current_user])
     end
   end
 end

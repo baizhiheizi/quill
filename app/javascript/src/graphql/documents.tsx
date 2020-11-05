@@ -115,6 +115,7 @@ export type Article = {
   createdAt: Scalars['ISO8601DateTime'];
   id: Scalars['Int'];
   intro: Scalars['String'];
+  myShare: Scalars['Float'];
   ordersCount: Scalars['Int'];
   price: Scalars['Float'];
   readers: UserConnection;
@@ -1284,6 +1285,8 @@ export const ArticleDocument = gql`
     authorized
     ordersCount
     commentsCount
+    myShare
+    revenue
     author {
       name
       avatarUrl

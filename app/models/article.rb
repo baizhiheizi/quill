@@ -80,6 +80,13 @@ class Article < ApplicationRecord
     update revenue: orders.sum(:total)
   end
 
+  def share_of(user)
+    return if user.blank?
+    return Order::AUTHOR_RATIO if user == author
+
+    user.orders.where(item: self).sum(:total) / revenue * (1 - Order::AUTHOR_RATIO - Order::PRSDIGG_RATIO)
+  end
+
   private
 
   def setup_attributes
