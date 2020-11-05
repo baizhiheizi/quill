@@ -1,0 +1,6 @@
+mutation HideArticle($input: HideArticleMutationInput!) {
+  hideArticle(input: $input) {
+    error
+    success
+  }
+}

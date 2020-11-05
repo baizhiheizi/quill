@@ -1,13 +1,26 @@
 import LoadingComponent from '@application/components/LoadingComponent/LoadingComponent';
 import {
   Article,
+  HideArticleMutationHookResult,
   MyArticleConnectionQueryHookResult,
+  PublishArticleMutationHookResult,
+  useHideArticleMutation,
   useMyArticleConnectionQuery,
+  usePublishArticleMutation,
 } from '@graphql';
-import { Avatar, Button, List, Row } from 'antd';
+import {
+  Avatar,
+  Button,
+  List,
+  message,
+  Popconfirm,
+  Row,
+  Space,
+  Tag,
+} from 'antd';
 import moment from 'moment';
 import React from 'react';
-import { useHistory } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 
 export default function ArticlesComponent(props: {
   type: 'author' | 'reader';
@@ -18,8 +31,35 @@ export default function ArticlesComponent(props: {
     data,
     loading,
     fetchMore,
+    refetch,
   }: MyArticleConnectionQueryHookResult = useMyArticleConnectionQuery({
     variables: { type },
+  });
+  const [
+    hideArticle,
+    { loading: hiding },
+  ]: HideArticleMutationHookResult = useHideArticleMutation({
+    update(_, { data: { error: err } }) {
+      if (err) {
+        message.error(err);
+      } else {
+        message.success('文章已隐藏');
+        refetch();
+      }
+    },
+  });
+  const [
+    publishArticle,
+    { loading: publishing },
+  ]: PublishArticleMutationHookResult = usePublishArticleMutation({
+    update(_, { data: { error: err } }) {
+      if (err) {
+        message.error(err);
+      } else {
+        message.success('文章已公开');
+        refetch();
+      }
+    },
   });
 
   if (loading) {
@@ -79,7 +119,42 @@ export default function ArticlesComponent(props: {
       renderItem={(article: Partial<Article>) => (
         <List.Item
           key={article.uuid}
-          onClick={() => history.push(`/articles/${article.uuid}`)}
+          actions={
+            type === 'author' &&
+            (article.state === 'blocked'
+              ? [<Link to={`/articles/${article.uuid}`}>查看</Link>]
+              : [
+                  <Link to={`/articles/${article.uuid}`}>查看</Link>,
+                  <span>
+                    {article.state === 'hidden' ? (
+                      <Popconfirm
+                        title='确定要将文章公开吗？'
+                        disabled={publishing}
+                        onConfirm={() =>
+                          publishArticle({
+                            variables: { input: { uuid: article.uuid } },
+                          })
+                        }
+                      >
+                        <a>公开</a>
+                      </Popconfirm>
+                    ) : (
+                      <Popconfirm
+                        title='确定要将文章隐藏吗？已购读者将不受影响。'
+                        disabled={hiding}
+                        onConfirm={() =>
+                          hideArticle({
+                            variables: { input: { uuid: article.uuid } },
+                          })
+                        }
+                      >
+                        <a>隐藏</a>
+                      </Popconfirm>
+                    )}
+                  </span>,
+                  <Link to={`/articles/${article.uuid}/edit`}>编辑</Link>,
+                ])
+          }
         >
           <List.Item.Meta
             style={{ marginBottom: 0 }}
@@ -95,7 +170,16 @@ export default function ArticlesComponent(props: {
               </Row>
             }
           />
-          <h3>{article.title}</h3>
+          <h3>
+            <Space>
+              {article.state === 'pulished' && (
+                <Tag color='success'>已发布</Tag>
+              )}
+              {article.state === 'blocked' && <Tag color='error'>已屏蔽</Tag>}
+              {article.state === 'hidden' && <Tag color='warning'>已隐藏</Tag>}
+              {article.title}
+            </Space>
+          </h3>
         </List.Item>
       )}
     />

@@ -1,0 +1,6 @@
+mutation PublishArticle($input: PublishArticleMutationInput!) {
+  publishArticle(input: $input) {
+    error
+    success
+  }
+}
