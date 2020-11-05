@@ -202,6 +202,7 @@ export type CreateArticleMutationInput = {
   intro: Scalars['String'];
   content: Scalars['String'];
   price: Scalars['Float'];
+  state: Scalars['String'];
   /** A unique identifier for the client performing the mutation. */
   clientMutationId?: Maybe<Scalars['String']>;
 };

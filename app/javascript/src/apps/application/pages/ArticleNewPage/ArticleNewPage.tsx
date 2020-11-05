@@ -1,6 +1,6 @@
 import { useCreateArticleMutation } from '@graphql';
 import Editor, { commands } from '@uiw/react-md-editor';
-import { Button, Form, Input, InputNumber, message, Modal } from 'antd';
+import { Button, Form, Input, InputNumber, message, Modal, Radio } from 'antd';
 import React from 'react';
 import { useHistory } from 'react-router-dom';
 
@@ -25,6 +25,7 @@ export default function ArticleNewPage() {
   });
   return (
     <Form
+      initialValues={{ state: 'published' }}
       labelCol={{ span: 2 }}
       wrapperCol={{ span: 22 }}
       onFinish={(values) => {
@@ -33,9 +34,9 @@ export default function ArticleNewPage() {
           message.warn('请先完成你的文章');
         } else {
           Modal.confirm({
-            title: '确定要发布你的文章吗？',
+            title: '确定要创建文章吗？',
             centered: true,
-            okText: '发布',
+            okText: '创建',
             cancelText: '再改改',
             onOk: () => createArticle({ variables: { input: values } }),
           });
@@ -73,9 +74,17 @@ export default function ArticleNewPage() {
       <Form.Item label='价格(PRS)' name='price'>
         <InputNumber min={1} precision={4} placeholder='1.0' />
       </Form.Item>
+      <Form.Item label='状态' name='state'>
+        <Radio.Group
+          options={[
+            { label: '公开', value: 'published' },
+            { label: '隐藏', value: 'hidden' },
+          ]}
+        />
+      </Form.Item>
       <Form.Item wrapperCol={{ xs: { offset: 0 }, sm: { offset: 2 } }}>
         <Button size='large' type='primary' htmlType='submit' loading={loading}>
-          发布
+          创建
         </Button>
       </Form.Item>
     </Form>
