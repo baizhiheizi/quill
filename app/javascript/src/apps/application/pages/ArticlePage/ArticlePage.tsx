@@ -98,8 +98,9 @@ export default function ArticlePage() {
       </div>
       <div
         style={{
-          padding: '0.5rem 0.5rem',
           background: '#f4f4f4',
+          borderLeft: '5px solid #ddd',
+          padding: '0.5rem 0.5rem',
           marginBottom: '2rem',
         }}
       >
@@ -220,7 +221,10 @@ export default function ArticlePage() {
           </Row>
           <Row justify='center'>
             <Col>
-              <Avatar.Group>
+              <Avatar.Group
+                maxCount={25}
+                style={{ flexWrap: 'wrap', justifyContent: 'center' }}
+              >
                 {article.readers.nodes.map((reader: Partial<User>) => (
                   <Avatar key={reader.mixinId} src={reader.avatarUrl}>
                     {reader.name[0]}
