@@ -20,13 +20,12 @@ import {
 } from 'antd';
 import moment from 'moment';
 import React from 'react';
-import { Link, useHistory } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 export default function ArticlesComponent(props: {
   type: 'author' | 'reader';
 }) {
   const { type } = props;
-  const history = useHistory();
   const {
     data,
     loading,

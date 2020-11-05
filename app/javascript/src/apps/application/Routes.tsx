@@ -1,5 +1,6 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
+import ArticleEditPage from './pages/ArticleEditPage/ArticleEditPage';
 import ArticleNewPage from './pages/ArticleNewPage/ArticleNewPage';
 import ArticlePage from './pages/ArticlePage/ArticlePage';
 import FairPage from './pages/FairPage/FairPage';
@@ -20,6 +21,9 @@ export default function Routes() {
         </Route>
         <Route path='/articles/:uuid' exact>
           <ArticlePage />
+        </Route>
+        <Route path='/articles/:uuid/edit' exact>
+          <ArticleEditPage />
         </Route>
         <Route path='/rules' exact>
           <RulesPage />
