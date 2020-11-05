@@ -15,7 +15,7 @@ module Types
     field :comments_count, Integer, null: false
     field :authorized, Boolean, null: true
 
-    field :my_share, Float, null: false
+    field :my_share, Float, null: true
 
     field :author, Types::UserType, null: false
     field :readers, Types::UserConnectionType, null: false

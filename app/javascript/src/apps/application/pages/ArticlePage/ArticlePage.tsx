@@ -15,7 +15,7 @@ import {
 } from 'antd';
 import { encode as encode64 } from 'js-base64';
 import moment from 'moment';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
 import CommentsComponent from '../../components/CommentsComponent/CommentsComponent';
@@ -29,7 +29,7 @@ import {
 import NotFoundPage from '../NotFoundPage/NotFoundPage';
 import './ArticlePage.less';
 
-const traceId = uuidv4();
+let traceId: string;
 export default function ArticlePage() {
   const { uuid } = useParams<{ uuid: string }>();
   const [paying, setPaying] = useState(false);
@@ -42,6 +42,10 @@ export default function ArticlePage() {
     fetchPolicy: 'network-only',
     variables: { uuid },
   });
+
+  useEffect(() => {
+    traceId = uuidv4();
+  }, [uuid]);
 
   const memo = encode64(
     JSON.stringify({

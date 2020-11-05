@@ -115,7 +115,7 @@ export type Article = {
   createdAt: Scalars['ISO8601DateTime'];
   id: Scalars['Int'];
   intro: Scalars['String'];
-  myShare: Scalars['Float'];
+  myShare?: Maybe<Scalars['Float']>;
   ordersCount: Scalars['Int'];
   price: Scalars['Float'];
   readers: UserConnection;
