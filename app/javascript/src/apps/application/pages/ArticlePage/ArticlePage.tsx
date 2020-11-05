@@ -220,7 +220,7 @@ export default function ArticlePage() {
               <h4>已付费读者</h4>
             </Col>
           </Row>
-          <Row justify='center'>
+          <Row justify='center' style={{ marginBottom: '1rem' }}>
             <Col>
               <Avatar.Group
                 maxCount={25}
