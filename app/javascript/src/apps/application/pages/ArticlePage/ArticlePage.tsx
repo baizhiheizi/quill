@@ -1,4 +1,4 @@
-import { ShareAltOutlined, HeartOutlined } from '@ant-design/icons';
+import { HeartOutlined, ShareAltOutlined } from '@ant-design/icons';
 import { ArticleQueryHookResult, useArticleQuery, User } from '@graphql';
 import MDEditor from '@uiw/react-md-editor';
 import {
@@ -22,6 +22,7 @@ import CommentsComponent from '../../components/CommentsComponent/CommentsCompon
 import LoadingComponent from '../../components/LoadingComponent/LoadingComponent';
 import {
   handleShare,
+  PAGE_TITLE,
   useCurrentUser,
   useMixin,
   usePrsdigg,
@@ -45,6 +46,7 @@ export default function ArticlePage() {
 
   useEffect(() => {
     traceId = uuidv4();
+    return () => (document.title = PAGE_TITLE);
   }, [uuid]);
 
   const memo = encode64(
@@ -63,6 +65,8 @@ export default function ArticlePage() {
   if (!article) {
     return <NotFoundPage />;
   }
+
+  document.title = `${article.title} - ${article.author.name}`;
 
   const handlePaying = () => {
     if (mixinEnv) {

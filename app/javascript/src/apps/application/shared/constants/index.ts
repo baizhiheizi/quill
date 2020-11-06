@@ -3,3 +3,7 @@ export const PRS_ICON_URL =
 export const PRSDIGG_ICON_URL =
   'https://mixin-images.zeromesh.net/L0egX-GZxT0Yh-dd04WKeAqVNRzgzuj_Je_-yKf8aQTZo-xihd-LogbrIEr-WyG9WbJKGFvt2YYx-UIUa1qQMRla=s256';
 export const OPEN_SOURCE_URL = 'https://github.com/baizhiheizi/prsdigg';
+export const PAGE_TITLE =
+  'PRSDigg | 重新发现读者的价值，打造作者与读者共赢的写作平台';
+export const PAGE_DESCRIPTION =
+  '独创股权式的早期读者奖励机制，重新发现读者的价值，打造作者与读者共赢的写作平台';
