@@ -1292,7 +1292,7 @@ export const ArticleDocument = gql`
       avatarUrl
       mixinId
     }
-    readers(after: $readerAfter, first: 1) {
+    readers(after: $readerAfter, first: 10) {
       nodes {
         name
         avatarUrl
