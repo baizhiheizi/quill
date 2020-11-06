@@ -1292,12 +1292,13 @@ export const ArticleDocument = gql`
       avatarUrl
       mixinId
     }
-    readers(after: $readerAfter) {
+    readers(after: $readerAfter, first: 1) {
       nodes {
         name
         avatarUrl
         mixinId
       }
+      totalCount
       pageInfo {
         hasNextPage
         endCursor

@@ -185,6 +185,7 @@ export default function ArticlePage() {
             onClick={() => setRewardModalVisible(true)}
             shape='round'
             type='primary'
+            size='large'
             danger
           >
             大爱此文
@@ -221,15 +222,18 @@ export default function ArticlePage() {
           <Divider />
           <Row justify='center'>
             <Col>
-              <h4>已付费读者</h4>
+              <h4>
+                已有{' '}
+                <span style={{ color: 'red' }}>
+                  {article.readers.totalCount}
+                </span>{' '}
+                位付费读者
+              </h4>
             </Col>
           </Row>
           <Row justify='center' style={{ marginBottom: '1rem' }}>
             <Col>
-              <Avatar.Group
-                maxCount={25}
-                style={{ flexWrap: 'wrap', justifyContent: 'center' }}
-              >
+              <Avatar.Group>
                 {article.readers.nodes.map((reader: Partial<User>) => (
                   <Avatar key={reader.mixinId} src={reader.avatarUrl}>
                     {reader.name[0]}

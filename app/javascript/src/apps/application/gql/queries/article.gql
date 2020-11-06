@@ -17,12 +17,13 @@ query Article($uuid: ID!, $readerAfter: String) {
       avatarUrl
       mixinId
     }
-    readers(after: $readerAfter) {
+    readers(after: $readerAfter, first: 10) {
       nodes {
         name
         avatarUrl
         mixinId
       }
+      totalCount
       pageInfo {
         hasNextPage
         endCursor

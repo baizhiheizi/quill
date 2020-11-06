@@ -5,6 +5,7 @@ import {
 } from '@graphql';
 import Editor, { commands } from '@uiw/react-md-editor';
 import {
+  Avatar,
   Button,
   Col,
   Comment,
@@ -141,7 +142,11 @@ ${comment.content.replace(/^/gm, '> ')}
                   </span>,
                 ]}
                 author={comment.author.name}
-                avatar={comment.author.avatarUrl}
+                avatar={
+                  <Avatar src={comment.author.avatarUrl}>
+                    {comment.author.name[0]}
+                  </Avatar>
+                }
                 content={<Editor.Markdown source={comment.content} />}
                 datetime={<span>{moment(comment.createdAt).fromNow()}</span>}
               />
