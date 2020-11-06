@@ -19,6 +19,7 @@ import {
 import moment from 'moment';
 import React from 'react';
 import LoadingComponent from '../LoadingComponent/LoadingComponent';
+moment.locale('zh-cn');
 
 export default function CommentsComponent(props: {
   commentableType: 'Article' | String;
@@ -205,7 +206,7 @@ ${comment.content.replace(/^/gm, '> ')}
           </Form.Item>
           <Form.Item style={{ textAlign: 'center' }}>
             <Button type='primary' htmlType='submit'>
-              确认
+              提交
             </Button>
           </Form.Item>
         </Form>

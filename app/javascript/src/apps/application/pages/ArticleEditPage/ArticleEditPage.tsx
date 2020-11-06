@@ -90,7 +90,7 @@ export default function ArticleEditPage() {
         <Input.TextArea placeholder='请简要介绍一下你的文章，简介内容为公开可见。' />
       </Form.Item>
       <Form.Item label='价格(PRS)' name='price'>
-        <InputNumber min={1} precision={4} placeholder='1.0' />
+        <InputNumber min={1} precision={4} placeholder='0.0' />
       </Form.Item>
       <Form.Item wrapperCol={{ xs: { offset: 0 }, sm: { offset: 2 } }}>
         <Button
@@ -99,7 +99,7 @@ export default function ArticleEditPage() {
           htmlType='submit'
           loading={updating}
         >
-          发布
+          保存
         </Button>
       </Form.Item>
     </Form>

@@ -21,6 +21,7 @@ import {
 import moment from 'moment';
 import React from 'react';
 import { Link } from 'react-router-dom';
+moment.locale('zh-cn');
 
 export default function ArticlesComponent(props: {
   type: 'author' | 'reader';
@@ -171,12 +172,25 @@ export default function ArticlesComponent(props: {
           />
           <h3>
             <Space>
-              {article.state === 'pulished' && (
+              {type === 'author' && article.state === 'published' && (
                 <Tag color='success'>已发布</Tag>
               )}
-              {article.state === 'blocked' && <Tag color='error'>已屏蔽</Tag>}
-              {article.state === 'hidden' && <Tag color='warning'>已隐藏</Tag>}
-              {article.title}
+              {type === 'author' && article.state === 'blocked' && (
+                <Tag color='error'>已屏蔽</Tag>
+              )}
+              {type === 'author' && article.state === 'hidden' && (
+                <Tag color='warning'>已隐藏</Tag>
+              )}
+              {type === 'author' ? (
+                article.title
+              ) : (
+                <Link
+                  style={{ color: 'inherit' }}
+                  to={`/articles/${article.uuid}`}
+                >
+                  {article.title}
+                </Link>
+              )}
             </Space>
           </h3>
         </List.Item>

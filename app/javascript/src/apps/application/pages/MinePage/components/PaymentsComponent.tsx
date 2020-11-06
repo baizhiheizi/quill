@@ -8,6 +8,7 @@ import {
 import { Avatar, Button, Col, List, Row } from 'antd';
 import moment from 'moment';
 import React from 'react';
+moment.locale('zh-cn');
 
 export default function PaymentsComponent() {
   const {

@@ -20,6 +20,7 @@ import { Link } from 'react-router-dom';
 import LoadingComponent from '../../components/LoadingComponent/LoadingComponent';
 import { handleShare, PRS_ICON_URL, useMixin, usePrsdigg } from '../../shared';
 import './HomePage.less';
+moment.locale('zh-cn');
 
 function ArticleList(props: { order: 'default' | 'lately' | 'revenue' }) {
   const { order } = props;
@@ -212,7 +213,11 @@ function CommentList() {
             <Comment
               className='comment-list'
               author={comment.author.name}
-              avatar={comment.author.avatarUrl}
+              avatar={
+                <Avatar src={comment.author.avatarUrl}>
+                  {comment.author.name[0]}
+                </Avatar>
+              }
               content={<Editor.Markdown source={comment.content} />}
               datetime={<span>{moment(comment.createdAt).fromNow()}</span>}
               actions={[

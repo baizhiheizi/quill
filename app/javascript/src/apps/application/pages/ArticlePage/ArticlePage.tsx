@@ -1,4 +1,4 @@
-import { ShareAltOutlined } from '@ant-design/icons';
+import { ShareAltOutlined, HeartOutlined } from '@ant-design/icons';
 import { ArticleQueryHookResult, useArticleQuery, User } from '@graphql';
 import MDEditor from '@uiw/react-md-editor';
 import {
@@ -188,7 +188,7 @@ export default function ArticlePage() {
             size='large'
             danger
           >
-            大爱此文
+            <HeartOutlined /> 大爱此文
           </Button>
           <Modal
             className='reward-modal'
@@ -204,11 +204,11 @@ export default function ArticlePage() {
             <Radio.Group
               options={[
                 { label: '1', value: 1 },
-                { label: '5', value: 5 },
                 { label: '8', value: 8 },
-                { label: '12', value: 12 },
-                { label: '50', value: 50 },
-                { label: '200', value: 200 },
+                { label: '32', value: 32 },
+                { label: '64', value: 64 },
+                { label: '256', value: 256 },
+                { label: '1024', value: 1024 },
               ]}
               value={rewardAmount}
               onChange={(e) => setRewardAmount(e.target.value)}
