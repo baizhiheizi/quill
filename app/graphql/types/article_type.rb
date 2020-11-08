@@ -21,6 +21,8 @@ module Types
     field :readers, Types::UserConnectionType, null: false
     field :buyers, Types::UserConnectionType, null: false
     field :rewarders, Types::UserConnectionType, null: false
+    field :buy_orders, Types::OrderConnectionType, null: false
+    field :reward_orders, Types::OrderConnectionType, null: false
     field :comments, Types::CommentConnectionType, null: false
 
     def content

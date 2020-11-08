@@ -235,11 +235,11 @@ export default function ArticlePage() {
             <Col>
               <h4>
                 <span style={{ color: 'red' }}>
-                  {article.buyers.totalCount}
+                  {article.buyOrders.totalCount}
                 </span>{' '}
-                次购买,
+                次购买,{' '}
                 <span style={{ color: 'red' }}>
-                  {article.rewarders.totalCount}
+                  {article.rewardOrders.totalCount}
                 </span>{' '}
                 次赞赏
               </h4>

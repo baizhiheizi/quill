@@ -29,10 +29,10 @@ query Article($uuid: ID!, $readerAfter: String) {
         endCursor
       }
     }
-    buyers {
+    buyOrders {
       totalCount
     }
-    rewarders {
+    rewardOrders {
       totalCount
     }
     createdAt

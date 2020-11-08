@@ -109,6 +109,7 @@ export type Article = {
   assetId: Scalars['String'];
   author: User;
   authorized?: Maybe<Scalars['Boolean']>;
+  buyOrders: OrderConnection;
   buyers: UserConnection;
   comments: CommentConnection;
   commentsCount: Scalars['Int'];
@@ -121,11 +122,20 @@ export type Article = {
   price: Scalars['Float'];
   readers: UserConnection;
   revenue: Scalars['Float'];
+  rewardOrders: OrderConnection;
   rewarders: UserConnection;
   state?: Maybe<Scalars['String']>;
   title: Scalars['String'];
   updatedAt?: Maybe<Scalars['ISO8601DateTime']>;
   uuid: Scalars['ID'];
+};
+
+
+export type ArticleBuyOrdersArgs = {
+  after?: Maybe<Scalars['String']>;
+  before?: Maybe<Scalars['String']>;
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
 };
 
 
@@ -146,6 +156,14 @@ export type ArticleCommentsArgs = {
 
 
 export type ArticleReadersArgs = {
+  after?: Maybe<Scalars['String']>;
+  before?: Maybe<Scalars['String']>;
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+};
+
+
+export type ArticleRewardOrdersArgs = {
   after?: Maybe<Scalars['String']>;
   before?: Maybe<Scalars['String']>;
   first?: Maybe<Scalars['Int']>;
@@ -351,6 +369,28 @@ export type Order = {
   total: Scalars['Float'];
   traceId: Scalars['ID'];
   updatedAt?: Maybe<Scalars['ISO8601DateTime']>;
+};
+
+/** The connection type for Order. */
+export type OrderConnection = {
+  __typename?: 'OrderConnection';
+  /** A list of edges. */
+  edges?: Maybe<Array<Maybe<OrderEdge>>>;
+  /** A list of nodes. */
+  nodes?: Maybe<Array<Maybe<Order>>>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** Total # of objects returned from this Plural Query */
+  totalCount: Scalars['Int'];
+};
+
+/** An edge in a connection. */
+export type OrderEdge = {
+  __typename?: 'OrderEdge';
+  /** A cursor for use in pagination. */
+  cursor: Scalars['String'];
+  /** The item at the end of the edge. */
+  node?: Maybe<Order>;
 };
 
 /** Information about pagination in a connection. */
@@ -1322,10 +1362,10 @@ export const ArticleDocument = gql`
         endCursor
       }
     }
-    buyers {
+    buyOrders {
       totalCount
     }
-    rewarders {
+    rewardOrders {
       totalCount
     }
     createdAt
