@@ -10,5 +10,17 @@ module Types
     field :buyer, Types::UserType, null: false
     field :seller, Types::UserType, null: false
     field :item, Types::ArticleType, null: false
+
+    def buyer
+      BatchLoader::GraphQL.for(object.buyer_id).batch do |buyer_ids, loader|
+        User.where(id: buyer_ids).each { |buyer| loader.call(buyer.id, buyer) }
+      end
+    end
+
+    def seller
+      BatchLoader::GraphQL.for(object.seller_id).batch do |seller_ids, loader|
+        User.where(id: seller_ids).each { |seller| loader.call(seller.id, seller) }
+      end
+    end
   end
 end

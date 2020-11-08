@@ -14,5 +14,11 @@ module Types
 
       object.content
     end
+
+    def author
+      BatchLoader::GraphQL.for(object.author_id).batch do |author_ids, loader|
+        User.where(id: author_ids).each { |author| loader.call(author.id, author) }
+      end
+    end
   end
 end

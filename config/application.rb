@@ -26,5 +26,8 @@ module Prsdigg
     # https://developer.mozilla.org/en-US/docs/Web/API/Document/cookie#Example_4_Reset_the_previous_cookie
     # https://api.rubyonrails.org/v5.2.1/classes/ActionDispatch/Session/CookieStore.html
     config.session_store :cookie_store, expire_after: 14.days
+
+    # https://github.com/exAspArk/batch-loader#caching
+    config.middleware.use BatchLoader::Middleware
   end
 end

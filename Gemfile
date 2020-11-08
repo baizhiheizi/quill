@@ -43,6 +43,8 @@ gem 'react-rails'
 gem 'graphql'
 # Mount the GraphiQL query editor in a Rails app
 gem 'graphiql-rails'
+# Powerful tool for avoiding N+1 DB or HTTP queries
+gem 'batch-loader'
 # AASM - State machines for Ruby classes (plain Ruby, ActiveRecord, Mongoid)
 gem 'aasm'
 # Background job scheduler

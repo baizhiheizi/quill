@@ -11,5 +11,11 @@ module Types
     field :processed_at, GraphQL::Types::ISO8601DateTime, null: true
 
     field :recipient, Types::UserType, null: false
+
+    def recipient
+      BatchLoader::GraphQL.for(object.opponent_id).batch do |opponent_ids, loader|
+        User.where(mixin_uuid: opponent_ids).each { |recipient| loader.call(recipient.mixin_uuid, recipient) }
+      end
+    end
   end
 end

@@ -91,6 +91,7 @@ GEM
     babel-transpiler (0.7.0)
       babel-source (>= 4.0, < 6)
       execjs (~> 2.0)
+    batch-loader (1.5.0)
     bcrypt (3.1.16)
     bindex (0.8.1)
     bootsnap (1.5.0)
@@ -335,6 +336,7 @@ DEPENDENCIES
   aasm
   activestorage-aliyun
   annotate
+  batch-loader
   bcrypt (~> 3.1.7)
   bootsnap (>= 1.4.2)
   byebug
