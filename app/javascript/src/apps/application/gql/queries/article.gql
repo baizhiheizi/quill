@@ -29,6 +29,12 @@ query Article($uuid: ID!, $readerAfter: String) {
         endCursor
       }
     }
+    buyers {
+      totalCount
+    }
+    rewarders {
+      totalCount
+    }
     createdAt
   }
 }

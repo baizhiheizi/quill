@@ -109,6 +109,7 @@ export type Article = {
   assetId: Scalars['String'];
   author: User;
   authorized?: Maybe<Scalars['Boolean']>;
+  buyers: UserConnection;
   comments: CommentConnection;
   commentsCount: Scalars['Int'];
   content?: Maybe<Scalars['String']>;
@@ -120,10 +121,19 @@ export type Article = {
   price: Scalars['Float'];
   readers: UserConnection;
   revenue: Scalars['Float'];
+  rewarders: UserConnection;
   state?: Maybe<Scalars['String']>;
   title: Scalars['String'];
   updatedAt?: Maybe<Scalars['ISO8601DateTime']>;
   uuid: Scalars['ID'];
+};
+
+
+export type ArticleBuyersArgs = {
+  after?: Maybe<Scalars['String']>;
+  before?: Maybe<Scalars['String']>;
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
 };
 
 
@@ -136,6 +146,14 @@ export type ArticleCommentsArgs = {
 
 
 export type ArticleReadersArgs = {
+  after?: Maybe<Scalars['String']>;
+  before?: Maybe<Scalars['String']>;
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+};
+
+
+export type ArticleRewardersArgs = {
   after?: Maybe<Scalars['String']>;
   before?: Maybe<Scalars['String']>;
   first?: Maybe<Scalars['Int']>;
@@ -1263,7 +1281,7 @@ export const ArticleConnectionDocument = gql`
  *   },
  * });
  */
-export function useArticleConnectionQuery(baseOptions?: Apollo.QueryHookOptions<ArticleConnectionQuery, ArticleConnectionQueryVariables>) {
+export function useArticleConnectionQuery(baseOptions: Apollo.QueryHookOptions<ArticleConnectionQuery, ArticleConnectionQueryVariables>) {
         return Apollo.useQuery<ArticleConnectionQuery, ArticleConnectionQueryVariables>(ArticleConnectionDocument, baseOptions);
       }
 export function useArticleConnectionLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ArticleConnectionQuery, ArticleConnectionQueryVariables>) {
@@ -1304,6 +1322,12 @@ export const ArticleDocument = gql`
         endCursor
       }
     }
+    buyers {
+      totalCount
+    }
+    rewarders {
+      totalCount
+    }
     createdAt
   }
 }
@@ -1326,7 +1350,7 @@ export const ArticleDocument = gql`
  *   },
  * });
  */
-export function useArticleQuery(baseOptions?: Apollo.QueryHookOptions<ArticleQuery, ArticleQueryVariables>) {
+export function useArticleQuery(baseOptions: Apollo.QueryHookOptions<ArticleQuery, ArticleQueryVariables>) {
         return Apollo.useQuery<ArticleQuery, ArticleQueryVariables>(ArticleDocument, baseOptions);
       }
 export function useArticleLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ArticleQuery, ArticleQueryVariables>) {
@@ -1434,7 +1458,7 @@ export const MyArticleConnectionDocument = gql`
  *   },
  * });
  */
-export function useMyArticleConnectionQuery(baseOptions?: Apollo.QueryHookOptions<MyArticleConnectionQuery, MyArticleConnectionQueryVariables>) {
+export function useMyArticleConnectionQuery(baseOptions: Apollo.QueryHookOptions<MyArticleConnectionQuery, MyArticleConnectionQueryVariables>) {
         return Apollo.useQuery<MyArticleConnectionQuery, MyArticleConnectionQueryVariables>(MyArticleConnectionDocument, baseOptions);
       }
 export function useMyArticleConnectionLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MyArticleConnectionQuery, MyArticleConnectionQueryVariables>) {

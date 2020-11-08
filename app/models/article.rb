@@ -32,7 +32,11 @@ class Article < ApplicationRecord
   belongs_to :author, class_name: 'User', inverse_of: :articles
 
   has_many :orders, as: :item, dependent: :nullify
-  has_many :readers, -> { distinct }, through: :orders, source: :buyer
+  has_many :buy_orders, -> { where(order_type: :buy_article) }, class_name: 'Order', as: :item, dependent: :nullify, inverse_of: false
+  has_many :reward_orders, -> { where(order_type: :reward_article) }, class_name: 'Order', as: :item, dependent: :nullify, inverse_of: false
+  has_many :readers, -> { distinct }, through: :reward_orders, source: :buyer
+  has_many :buyers, -> { distinct }, through: :buy_orders, source: :buyer
+  has_many :rewarders, -> { distinct }, through: :orders, source: :buyer
   has_many :comments, as: :commentable, dependent: :nullify
 
   validates :uuid, presence: true, uniqueness: true

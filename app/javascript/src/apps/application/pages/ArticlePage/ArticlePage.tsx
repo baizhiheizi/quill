@@ -119,10 +119,15 @@ export default function ArticlePage() {
         <MDEditor.Markdown source={article.content} />
       ) : (
         <div style={{ textAlign: 'center' }}>
-          <p>
-            付费继续阅读，并享受早期读者奖励（查看<Link to='/rules'>规则</Link>
-            ）
-          </p>
+          <div style={{ marginBottom: '1rem' }}>
+            <div>
+              支付 <span style={{ color: 'red' }}>{article.price} PRS</span>{' '}
+              继续阅读
+            </div>
+            <div>
+              并享受早期读者奖励（查看<Link to='/rules'>规则</Link>）
+            </div>
+          </div>
           <div>
             {currentUser ? (
               paying ? (
@@ -130,7 +135,9 @@ export default function ArticlePage() {
               ) : (
                 <div>
                   <Button type='primary' onClick={handlePaying}>
-                    付费阅读
+                    {article.readers.totalCount === 0
+                      ? '成为第一位读者'
+                      : '付费阅读'}
                   </Button>
                   <div
                     style={{ marginTop: 10, fontSize: '0.8rem', color: '#aaa' }}
@@ -169,7 +176,7 @@ export default function ArticlePage() {
                   location.href,
                 )}`}
               >
-                登录
+                请先登录
               </Button>
             )}
           </div>
@@ -227,11 +234,14 @@ export default function ArticlePage() {
           <Row justify='center'>
             <Col>
               <h4>
-                已有{' '}
                 <span style={{ color: 'red' }}>
-                  {article.readers.totalCount}
+                  {article.buyers.totalCount}
                 </span>{' '}
-                位付费读者
+                次购买,
+                <span style={{ color: 'red' }}>
+                  {article.rewarders.totalCount}
+                </span>{' '}
+                次赞赏
               </h4>
             </Col>
           </Row>

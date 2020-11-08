@@ -1,7 +1,7 @@
 import {
   MessageOutlined,
   MoneyCollectOutlined,
-  ReadOutlined,
+  RiseOutlined,
   ShareAltOutlined,
 } from '@ant-design/icons';
 import {
@@ -96,12 +96,8 @@ function ArticleList(props: { order: 'default' | 'lately' | 'revenue' }) {
           key={article.uuid}
           actions={[
             <Space>
-              <ReadOutlined />
-              <span>{article.ordersCount}次付费</span>
-            </Space>,
-            <Space>
-              <MoneyCollectOutlined />
-              <span>{article.revenue.toFixed(2)}</span>
+              <RiseOutlined />
+              <span>营收 {article.revenue.toFixed(2)}</span>
             </Space>,
             <Space>
               <MessageOutlined />

@@ -19,6 +19,8 @@ module Types
 
     field :author, Types::UserType, null: false
     field :readers, Types::UserConnectionType, null: false
+    field :buyers, Types::UserConnectionType, null: false
+    field :rewarders, Types::UserConnectionType, null: false
     field :comments, Types::CommentConnectionType, null: false
 
     def content
