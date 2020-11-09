@@ -1,13 +1,13 @@
 import { ApolloProvider } from '@apollo/client';
 import { User } from '@graphql';
 import { apolloClient, mixinUtils } from '@shared';
-import { Alert, Col, Layout, Row } from 'antd';
+import { Col, Layout, Row } from 'antd';
 import React from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
+import './App.less';
 import Menus from './Menus';
 import Routes from './Routes';
 import { CurrentUserContext, MixinContext, PrsdiggContext } from './shared';
-import './App.less';
 
 export default function App(props: {
   csrfToken: string;
@@ -32,10 +32,6 @@ export default function App(props: {
             <Router>
               <Layout>
                 <Menus />
-                <Alert
-                  message='网站公测中，正式上线后会将数据重置!'
-                  type='warning'
-                />
                 <Layout.Content
                   style={{ background: '#fff', padding: '1rem 1rem ' }}
                 >
