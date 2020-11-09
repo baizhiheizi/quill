@@ -1,3 +1,14 @@
+import {
+  CommentOutlined,
+  DashboardOutlined,
+  FileTextOutlined,
+  LogoutOutlined,
+  MessageOutlined,
+  NotificationOutlined,
+  PayCircleOutlined,
+  TransactionOutlined,
+  UserOutlined,
+} from '@ant-design/icons';
 import { Menu } from 'antd';
 import React from 'react';
 import { Link } from 'react-router-dom';
@@ -16,25 +27,58 @@ export default function Menus() {
         Admin
       </div>
       <Menu.Item>
-        <Link to='/'>Dashboard</Link>
+        <Link to='/'>
+          <DashboardOutlined />
+          <span>Dashboard</span>
+        </Link>
       </Menu.Item>
       <Menu.Item>
-        <Link to='/users'>Users</Link>
+        <Link to='/users'>
+          <UserOutlined />
+          <span>Users</span>
+        </Link>
       </Menu.Item>
       <Menu.Item>
-        <Link to='/articles'>Articles</Link>
+        <Link to='/articles'>
+          <FileTextOutlined />
+          <span>Articles</span>
+        </Link>
       </Menu.Item>
       <Menu.Item>
-        <Link to='/comments'>Comments</Link>
+        <Link to='/comments'>
+          <CommentOutlined />
+          <span>Comments</span>
+        </Link>
       </Menu.Item>
       <Menu.Item>
-        <Link to='/payments'>Payments</Link>
+        <Link to='/payments'>
+          <PayCircleOutlined />
+          <span>Payments</span>
+        </Link>
       </Menu.Item>
       <Menu.Item>
-        <Link to='/transfers'>Transfers</Link>
+        <Link to='/transfers'>
+          <TransactionOutlined />
+          <span>Transfers</span>
+        </Link>
       </Menu.Item>
       <Menu.Item>
-        <a href='/admin/logout'>Logout</a>
+        <Link to='/announcements'>
+          <NotificationOutlined />
+          <span>Announcements</span>
+        </Link>
+      </Menu.Item>
+      <Menu.Item>
+        <Link to='/mixin_messages'>
+          <MessageOutlined />
+          <span>Messages</span>
+        </Link>
+      </Menu.Item>
+      <Menu.Item>
+        <a href='/admin/logout'>
+          <LogoutOutlined />
+          <span>Logout</span>
+        </a>
       </Menu.Item>
     </Menu>
   );

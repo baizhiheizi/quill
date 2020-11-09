@@ -1,0 +1,8 @@
+mutation AdminPreviewAnouncement(
+  $input: AdminPreviewAnnouncementMutationInput!
+) {
+  adminPreviewAnnouncement(input: $input) {
+    error
+    success
+  }
+}

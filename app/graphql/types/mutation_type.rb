@@ -14,5 +14,10 @@ module Types
     field :admin_recover_comment, mutation: Mutations::AdminRecoverCommentMutation
     field :admin_block_article, mutation: Mutations::AdminBlockArticleMutation
     field :admin_unblock_article, mutation: Mutations::AdminUnblockArticleMutation
+    field :admin_create_announcement, mutation: Mutations::AdminCreateAnnouncementMutation
+    field :admin_update_announcement, mutation: Mutations::AdminUpdateAnnouncementMutation
+    field :admin_delete_announcement, mutation: Mutations::AdminDeleteAnnouncementMutation
+    field :admin_preview_announcement, mutation: Mutations::AdminPreviewAnnouncementMutation
+    field :admin_deliver_announcement, mutation: Mutations::AdminDeliverAnnouncementMutation
   end
 end

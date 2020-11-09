@@ -23,11 +23,13 @@ class Announcement < ApplicationRecord
     state :delivered
 
     event :deliver, after: :touch_delivered_at do
-      transitions from: :draft, to: :delivered_at
+      transitions from: :draft, to: :delivered
     end
   end
 
   def preview
+    return if Rails.application.credentials.dig(:admin, :group_conversation_id).blank?
+
     case message_type
     when 'PLAIN_TEXT'
       preview_as_text
@@ -67,6 +69,7 @@ class Announcement < ApplicationRecord
     messages = User.pluck(:mixin_uuid).map do |uuid|
       MixinBot.api.plain_post(
         conversation_id: MixinBot.api.unique_conversation_id(uuid),
+        recipient_id: uuid,
         data: content
       )
     end
@@ -80,11 +83,12 @@ class Announcement < ApplicationRecord
     messages = User.pluck(:mixin_uuid).map do |uuid|
       MixinBot.api.plain_text(
         conversation_id: MixinBot.api.unique_conversation_id(uuid),
+        recipient_id: uuid,
         data: content
       )
     end
 
-    messages.in_group_of(100, false).each do |message|
+    messages.in_groups_of(100, false).each do |message|
       SendMixinMessageWorker.perform_async message
     end
   end

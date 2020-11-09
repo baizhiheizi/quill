@@ -1,0 +1,16 @@
+query AdminAnnouncementConnection($after: String) {
+  adminAnnouncementConnection(after: $after) {
+    nodes {
+      id
+      content
+      state
+      messageType
+      createdAt
+      deliveredAt
+    }
+    pageInfo {
+      hasNextPage
+      endCursor
+    }
+  }
+}

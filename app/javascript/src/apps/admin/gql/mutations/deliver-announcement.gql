@@ -1,0 +1,8 @@
+mutation AdminDeliverAnouncement(
+  $input: AdminDeliverAnnouncementMutationInput!
+) {
+  adminDeliverAnnouncement(input: $input) {
+    error
+    success
+  }
+}

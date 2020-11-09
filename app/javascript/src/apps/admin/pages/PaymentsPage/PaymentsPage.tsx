@@ -1,8 +1,8 @@
-import { Payment as IPayment, useAdminPaymentConnectionQuery } from '@/graphql';
+import LoadingComponent from '@admin/components/LoadingComponent/LoadingComponent';
+import { Payment as IPayment, useAdminPaymentConnectionQuery } from '@graphql';
 import { Avatar, Button, PageHeader, Space, Table } from 'antd';
-import { ColumnProps } from 'antd/lib/table';
+import { ColumnProps } from 'antd/es/table';
 import React from 'react';
-import LoadingComponent from '../../components/LoadingComponent/LoadingComponent';
 
 export default function PaymentsPage() {
   const { data, loading, fetchMore } = useAdminPaymentConnectionQuery();
