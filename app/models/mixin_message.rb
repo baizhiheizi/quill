@@ -38,11 +38,7 @@ class MixinMessage < ApplicationRecord
   end
 
   def process!
-    if category == 'SYSTEM_ACCOUNT_SNAPSHOT'
-      process_snapshot
-    else
-      send_default_reply
-    end
+    process_snapshot if category == 'SYSTEM_ACCOUNT_SNAPSHOT'
 
     update processed_at: Time.current
   end
@@ -64,15 +60,6 @@ class MixinMessage < ApplicationRecord
 
   def process_async
     ProcessMixinMessageWorker.perform_async message_id
-  end
-
-  def send_default_reply
-    return if conversation_id.blank?
-
-    MixinBot.api.send_text_message(
-      conversation_id: conversation_id,
-      data: 'May the force be with you.'
-    )
   end
 
   private
