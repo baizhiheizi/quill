@@ -4,8 +4,8 @@ import { Link, Route, Switch } from 'react-router-dom';
 import ArticlesPage from './pages/ArticlesPage/ArticlesPage';
 import CommentsPage from './pages/CommentsPage/CommentsPage';
 import DashboardPage from './pages/DashboardPage/DashboardPage';
-import PaymentsPage from './pages/Payments/PaymentsPage';
-import TransfersPage from './pages/Transfers/TransfersPage';
+import PaymentsPage from './pages/PaymentsPage/PaymentsPage';
+import TransfersPage from './pages/TransfersPage/TransfersPage';
 import UsersPage from './pages/UsersPage/UsersPage';
 
 export default function Routes() {
