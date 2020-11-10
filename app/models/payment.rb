@@ -70,10 +70,14 @@ class Payment < ApplicationRecord
 
       case decpreted_memo['t']
       when 'BUY'
-        article.orders.find_or_create_by!(
-          payment: self,
-          order_type: :buy_article
-        )
+        article.orders
+               .create_with(
+                 payment: self
+               )
+               .find_or_create_by!(
+                 buyer: payer,
+                 order_type: :buy_article
+               )
       when 'REWARD'
         article.orders.find_or_create_by!(
           payment: self,
