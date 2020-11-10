@@ -16,6 +16,7 @@ query Article($uuid: ID!, $readerAfter: String) {
       name
       avatarUrl
       mixinId
+      bio
     }
     readers(after: $readerAfter, first: 10) {
       nodes {

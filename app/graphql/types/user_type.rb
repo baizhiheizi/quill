@@ -7,6 +7,7 @@ module Types
     field :mixin_id, String, null: false
     field :mixin_uuid, String, null: false
     field :avatar_url, String, null: false
+    field :bio, String, null: true
 
     field :articles_count, Int, null: false
     field :comments_count, Int, null: false

@@ -32,7 +32,13 @@ class User < ApplicationRecord
 
   validates :name, presence: true
 
+  default_scope { includes(:mixin_authorization) }
+
   before_validation :setup_attributes
+
+  def bio
+    mixin_authorization&.raw&.[]('biography')
+  end
 
   private
 

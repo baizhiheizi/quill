@@ -858,6 +858,7 @@ export type User = {
   articlesCount: Scalars['Int'];
   authorRevenueAmount: Scalars['Float'];
   avatarUrl: Scalars['String'];
+  bio?: Maybe<Scalars['String']>;
   commentConnction: CommentConnection;
   commentsCount: Scalars['Int'];
   createdAt: Scalars['ISO8601DateTime'];
@@ -1816,6 +1817,7 @@ export const ArticleDocument = gql`
       name
       avatarUrl
       mixinId
+      bio
     }
     readers(after: $readerAfter, first: 10) {
       nodes {

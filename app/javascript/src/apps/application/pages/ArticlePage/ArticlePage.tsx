@@ -5,6 +5,7 @@ import {
   Alert,
   Avatar,
   Button,
+  Card,
   Col,
   Divider,
   message,
@@ -196,6 +197,15 @@ export default function ArticlePage() {
         <Button type='link' icon={<ShareAltOutlined />}>
           分享
         </Button>
+      </div>
+      <div style={{ marginBottom: '1rem' }}>
+        <Card>
+          <Card.Meta
+            avatar={<Avatar src={article.author.avatarUrl} />}
+            title={article.author.name}
+            description={article.author.bio || '没有留下介绍'}
+          />
+        </Card>
       </div>
       {article.authorized && article.author.mixinId !== currentUser.mixinId && (
         <div style={{ textAlign: 'center' }}>
