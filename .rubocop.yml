@@ -274,3 +274,6 @@ Lint/RedundantSafeNavigation: # (new in 0.93)
 
 Style/ClassEqualityComparison: # (new in 0.93)
   Enabled: true
+
+Layout/TrailingWhitespace:
+  AllowInHeredoc: true
