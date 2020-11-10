@@ -2,6 +2,7 @@ import { HeartOutlined, ShareAltOutlined } from '@ant-design/icons';
 import { ArticleQueryHookResult, useArticleQuery, User } from '@graphql';
 import MDEditor from '@uiw/react-md-editor';
 import {
+  Alert,
   Avatar,
   Button,
   Col,
@@ -127,6 +128,12 @@ export default function ArticlePage() {
             <div>
               并享受早期读者奖励（查看<Link to='/rules'>规则</Link>）
             </div>
+          </div>
+          <div style={{ marginBottom: '1rem' }}>
+            <Alert
+              type='warning'
+              message='文章为作者在 PRSDigg 平台出售的虚拟商品，一经付款，概不退还。谨慎付款，以防被骗。'
+            />
           </div>
           <div>
             {currentUser ? (
