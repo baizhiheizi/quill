@@ -22,9 +22,9 @@ import LoadingComponent from '../LoadingComponent/LoadingComponent';
 moment.locale('zh-cn');
 
 export default function CommentsComponent(props: {
-  commentableType: 'Article' | String;
-  commentableId: number;
-  authorized: boolean;
+  commentableType?: 'Article' | String;
+  commentableId?: number;
+  authorized?: boolean;
 }) {
   const { commentableType, commentableId, authorized } = props;
   const [commentForm] = Form.useForm();
@@ -101,6 +101,8 @@ export default function CommentsComponent(props: {
                     },
                     variables: {
                       after: endCursor,
+                      commentableType,
+                      commentableId,
                     },
                   });
                 }}

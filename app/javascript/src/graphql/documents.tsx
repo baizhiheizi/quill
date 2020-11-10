@@ -670,6 +670,8 @@ export type Query = {
   statistics: Statistics;
   transferConnection: TransferConnection;
   updatedAt?: Maybe<Scalars['ISO8601DateTime']>;
+  user?: Maybe<User>;
+  userArticleConnection: ArticleConnection;
 };
 
 
@@ -746,6 +748,7 @@ export type QueryArticleConnectionArgs = {
 export type QueryCommentConnectionArgs = {
   commentableType?: Maybe<Scalars['String']>;
   commentableId?: Maybe<Scalars['Int']>;
+  authorMixinId?: Maybe<Scalars['String']>;
   after?: Maybe<Scalars['String']>;
   before?: Maybe<Scalars['String']>;
   first?: Maybe<Scalars['Int']>;
@@ -779,6 +782,21 @@ export type QueryMyTransferConnectionArgs = {
 
 
 export type QueryTransferConnectionArgs = {
+  after?: Maybe<Scalars['String']>;
+  before?: Maybe<Scalars['String']>;
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+};
+
+
+export type QueryUserArgs = {
+  mixinId: Scalars['ID'];
+};
+
+
+export type QueryUserArticleConnectionArgs = {
+  mixinId: Scalars['ID'];
+  type: Scalars['String'];
   after?: Maybe<Scalars['String']>;
   before?: Maybe<Scalars['String']>;
   first?: Maybe<Scalars['Int']>;
@@ -854,12 +872,12 @@ export type UpdateArticleMutationPayload = {
 
 export type User = {
   __typename?: 'User';
-  articleConnction: ArticleConnection;
+  articles: ArticleConnection;
   articlesCount: Scalars['Int'];
   authorRevenueAmount: Scalars['Float'];
   avatarUrl: Scalars['String'];
   bio?: Maybe<Scalars['String']>;
-  commentConnction: CommentConnection;
+  comments: CommentConnection;
   commentsCount: Scalars['Int'];
   createdAt: Scalars['ISO8601DateTime'];
   id: Scalars['Int'];
@@ -872,7 +890,7 @@ export type User = {
 };
 
 
-export type UserArticleConnctionArgs = {
+export type UserArticlesArgs = {
   after?: Maybe<Scalars['String']>;
   before?: Maybe<Scalars['String']>;
   first?: Maybe<Scalars['Int']>;
@@ -880,7 +898,7 @@ export type UserArticleConnctionArgs = {
 };
 
 
-export type UserCommentConnctionArgs = {
+export type UserCommentsArgs = {
   after?: Maybe<Scalars['String']>;
   before?: Maybe<Scalars['String']>;
   first?: Maybe<Scalars['Int']>;
@@ -1869,10 +1887,11 @@ export type ArticleQueryHookResult = ReturnType<typeof useArticleQuery>;
 export type ArticleLazyQueryHookResult = ReturnType<typeof useArticleLazyQuery>;
 export type ArticleQueryResult = Apollo.QueryResult<ArticleQuery, ArticleQueryVariables>;
 export const CommentConnectionDocument = gql`
-    query CommentConnection($commentableType: String, $commentableId: Int, $after: String) {
+    query CommentConnection($commentableType: String, $commentableId: Int, $authorMixinId: String, $after: String) {
   commentConnection(
     commentableType: $commentableType
     commentableId: $commentableId
+    authorMixinId: $authorMixinId
     after: $after
   ) {
     nodes {
@@ -1912,6 +1931,7 @@ export const CommentConnectionDocument = gql`
  *   variables: {
  *      commentableType: // value for 'commentableType'
  *      commentableId: // value for 'commentableId'
+ *      authorMixinId: // value for 'authorMixinId'
  *      after: // value for 'after'
  *   },
  * });
@@ -2143,3 +2163,96 @@ export function useTransferConnectionLazyQuery(baseOptions?: Apollo.LazyQueryHoo
 export type TransferConnectionQueryHookResult = ReturnType<typeof useTransferConnectionQuery>;
 export type TransferConnectionLazyQueryHookResult = ReturnType<typeof useTransferConnectionLazyQuery>;
 export type TransferConnectionQueryResult = Apollo.QueryResult<TransferConnectionQuery, TransferConnectionQueryVariables>;
+export const UserArticleConnectionDocument = gql`
+    query UserArticleConnection($mixinId: ID!, $type: String!, $after: String) {
+  userArticleConnection(mixinId: $mixinId, type: $type, after: $after) {
+    nodes {
+      uuid
+      title
+      intro
+      price
+      revenue
+      ordersCount
+      state
+      author {
+        name
+        avatarUrl
+      }
+      createdAt
+    }
+    pageInfo {
+      hasNextPage
+      endCursor
+    }
+  }
+}
+    `;
+
+/**
+ * __useUserArticleConnectionQuery__
+ *
+ * To run a query within a React component, call `useUserArticleConnectionQuery` and pass it any options that fit your needs.
+ * When your component renders, `useUserArticleConnectionQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useUserArticleConnectionQuery({
+ *   variables: {
+ *      mixinId: // value for 'mixinId'
+ *      type: // value for 'type'
+ *      after: // value for 'after'
+ *   },
+ * });
+ */
+export function useUserArticleConnectionQuery(baseOptions: Apollo.QueryHookOptions<UserArticleConnectionQuery, UserArticleConnectionQueryVariables>) {
+        return Apollo.useQuery<UserArticleConnectionQuery, UserArticleConnectionQueryVariables>(UserArticleConnectionDocument, baseOptions);
+      }
+export function useUserArticleConnectionLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UserArticleConnectionQuery, UserArticleConnectionQueryVariables>) {
+          return Apollo.useLazyQuery<UserArticleConnectionQuery, UserArticleConnectionQueryVariables>(UserArticleConnectionDocument, baseOptions);
+        }
+export type UserArticleConnectionQueryHookResult = ReturnType<typeof useUserArticleConnectionQuery>;
+export type UserArticleConnectionLazyQueryHookResult = ReturnType<typeof useUserArticleConnectionLazyQuery>;
+export type UserArticleConnectionQueryResult = Apollo.QueryResult<UserArticleConnectionQuery, UserArticleConnectionQueryVariables>;
+export const UserDocument = gql`
+    query User($mixinId: ID!) {
+  user(mixinId: $mixinId) {
+    id
+    name
+    mixinId
+    mixinUuid
+    avatarUrl
+    bio
+    articlesCount
+    authorRevenueAmount
+    readerRevenueAmount
+  }
+}
+    `;
+
+/**
+ * __useUserQuery__
+ *
+ * To run a query within a React component, call `useUserQuery` and pass it any options that fit your needs.
+ * When your component renders, `useUserQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useUserQuery({
+ *   variables: {
+ *      mixinId: // value for 'mixinId'
+ *   },
+ * });
+ */
+export function useUserQuery(baseOptions: Apollo.QueryHookOptions<UserQuery, UserQueryVariables>) {
+        return Apollo.useQuery<UserQuery, UserQueryVariables>(UserDocument, baseOptions);
+      }
+export function useUserLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UserQuery, UserQueryVariables>) {
+          return Apollo.useLazyQuery<UserQuery, UserQueryVariables>(UserDocument, baseOptions);
+        }
+export type UserQueryHookResult = ReturnType<typeof useUserQuery>;
+export type UserLazyQueryHookResult = ReturnType<typeof useUserLazyQuery>;
+export type UserQueryResult = Apollo.QueryResult<UserQuery, UserQueryVariables>;

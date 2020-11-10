@@ -10,7 +10,7 @@ import moment from 'moment';
 import React from 'react';
 moment.locale('zh-cn');
 
-export default function PaymentsComponent() {
+export default function MyPaymentsComponent() {
   const {
     data,
     loading,

@@ -8,6 +8,9 @@ module Types
     field :transfer_connection, resolver: Resolvers::TransferConnectionResolver
     field :statistics, resolver: Resolvers::StatisticsResolver
 
+    field :user, resolver: Resolvers::UserResolver
+    field :user_article_connection, resolver: Resolvers::UserArticleConnectionResolver
+
     field :my_article_connection, resolver: Resolvers::MyArticleConnectionResolver
     field :my_payment_connection, resolver: Resolvers::MyPaymentConnectionResolver
     field :my_transfer_connection, resolver: Resolvers::MyTransferConnectionResolver

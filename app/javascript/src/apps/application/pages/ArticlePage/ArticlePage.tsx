@@ -198,17 +198,29 @@ export default function ArticlePage() {
           分享
         </Button>
       </div>
-      <div style={{ marginBottom: '1rem' }}>
+      <div style={{ marginBottom: '2rem' }}>
         <Card>
           <Card.Meta
             avatar={<Avatar src={article.author.avatarUrl} />}
-            title={article.author.name}
+            title={
+              <Row style={{ alignItems: 'center' }}>
+                <Col style={{ flex: 1 }}>{article.author.name}</Col>
+                {(!currentUser ||
+                  currentUser.mixinId !== article.author.mixinId) && (
+                  <Col>
+                    <Button type='primary' shape='round' size='small'>
+                      <Link to={`/users/${article.author.mixinId}`}>查看</Link>
+                    </Button>
+                  </Col>
+                )}
+              </Row>
+            }
             description={article.author.bio || '没有留下介绍'}
           />
         </Card>
       </div>
       {article.authorized && article.author.mixinId !== currentUser.mixinId && (
-        <div style={{ textAlign: 'center' }}>
+        <div style={{ textAlign: 'center', marginBottom: '1rem' }}>
           <Button
             onClick={() => setRewardModalVisible(true)}
             shape='round'
@@ -247,7 +259,6 @@ export default function ArticlePage() {
       )}
       {article.readers.nodes.length > 0 && (
         <div>
-          <Divider />
           <Row justify='center'>
             <Col>
               <h4>

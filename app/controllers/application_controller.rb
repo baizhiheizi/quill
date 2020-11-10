@@ -27,6 +27,9 @@ class ApplicationController < ActionController::Base
     {
       current_user: current_user&.as_json(
         only: %i[name avatar_url mixin_id mixin_uuid]
+      )&.merge(
+        author_revenue_amount: current_user.author_revenue_transfers.sum(:amount),
+        reader_revenue_amount: current_user.reader_revenue_transfers.sum(:amount)
       ),
       prsdigg: {
         app_id: MixinBot.api.client_id

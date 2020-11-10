@@ -23,7 +23,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 moment.locale('zh-cn');
 
-export default function ArticlesComponent(props: {
+export default function MyArticlesComponent(props: {
   type: 'author' | 'reader';
 }) {
   const { type } = props;

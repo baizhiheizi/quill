@@ -15,8 +15,8 @@ module Types
     field :reader_revenue_amount, Float, null: false
     field :payments_total, Float, null: false
 
-    field :article_connction, Types::ArticleConnectionType, null: false
-    field :comment_connction, Types::CommentConnectionType, null: false
+    field :articles, Types::ArticleConnectionType, null: false
+    field :comments, Types::CommentConnectionType, null: false
 
     def articles_count
       object.articles.count

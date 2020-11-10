@@ -1,6 +1,5 @@
 import {
   MessageOutlined,
-  MoneyCollectOutlined,
   RiseOutlined,
   ShareAltOutlined,
 } from '@ant-design/icons';

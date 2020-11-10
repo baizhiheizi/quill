@@ -1,18 +1,20 @@
 # frozen_string_literal: true
 
 module Resolvers
-  class MyArticleConnectionResolver < MyBaseResolver
+  class UserArticleConnectionResolver < BaseResolver
+    argument :mixin_id, ID, required: true
     argument :type, String, required: true
     argument :after, String, required: false
 
     type Types::ArticleConnectionType, null: false
 
     def resolve(params)
+      user = User.find_by mixin_id: params[:mixin_id]
       case params[:type]
       when 'author'
-        current_user.articles.order(created_at: :desc)
+        user.articles.only_published.order(created_at: :desc)
       when 'reader'
-        current_user.bought_articles
+        user.bought_articles.only_published
       end
     end
   end

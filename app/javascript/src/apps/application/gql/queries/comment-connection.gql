@@ -1,11 +1,13 @@
 query CommentConnection(
   $commentableType: String
   $commentableId: Int
+  $authorMixinId: String
   $after: String
 ) {
   commentConnection(
     commentableType: $commentableType
     commentableId: $commentableId
+    authorMixinId: $authorMixinId
     after: $after
   ) {
     nodes {

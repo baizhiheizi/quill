@@ -10,7 +10,7 @@ import moment from 'moment';
 import React from 'react';
 moment.locale('zh-cn');
 
-export default function TransfersComponent() {
+export default function MyTransfersComponent() {
   const {
     data,
     loading,

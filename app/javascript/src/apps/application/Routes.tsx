@@ -8,6 +8,7 @@ import HomePage from './pages/HomePage/HomePage';
 import MinePage from './pages/MinePage/MinePage';
 import NotFoundPage from './pages/NotFoundPage/NotFoundPage';
 import RulesPage from './pages/RulesPage/RulesPage';
+import UserPage from './pages/UserPage/UserPage';
 
 export default function Routes() {
   return (
@@ -24,6 +25,9 @@ export default function Routes() {
         </Route>
         <Route path='/articles/:uuid/edit' exact>
           <ArticleEditPage />
+        </Route>
+        <Route path='/users/:mixinId' exact>
+          <UserPage />
         </Route>
         <Route path='/rules' exact>
           <RulesPage />

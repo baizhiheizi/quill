@@ -1,0 +1,13 @@
+query User($mixinId: ID!) {
+  user(mixinId: $mixinId) {
+    id
+    name
+    mixinId
+    mixinUuid
+    avatarUrl
+    bio
+    articlesCount
+    authorRevenueAmount
+    readerRevenueAmount
+  }
+}
