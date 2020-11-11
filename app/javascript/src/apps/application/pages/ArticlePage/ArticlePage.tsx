@@ -1,4 +1,6 @@
 import { HeartOutlined, ShareAltOutlined } from '@ant-design/icons';
+import CommentsComponent from '@application/components/CommentsComponent/CommentsComponent';
+import LoadingComponent from '@application/components/LoadingComponent/LoadingComponent';
 import { ArticleQueryHookResult, useArticleQuery, User } from '@graphql';
 import MDEditor from '@uiw/react-md-editor';
 import {
@@ -20,8 +22,6 @@ import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
-import CommentsComponent from '../../components/CommentsComponent/CommentsComponent';
-import LoadingComponent from '../../components/LoadingComponent/LoadingComponent';
 import {
   handleShare,
   PAGE_TITLE,
@@ -315,6 +315,9 @@ export default function ArticlePage() {
         commentableType='Article'
         commentableId={article.id}
         authorized={article.authorized}
+        commentingSubscribed={article.commentingSubscribed}
+        articleUuid={article.uuid}
+        refetchArticle={refetch}
       />
     </div>
   );

@@ -1,0 +1,7 @@
+mutation ToggleReadingSubscribeUserAction(
+  $input: ToggleReadingSubscribeUserActionMutationInput!
+) {
+  toggleReadingSubscribeUserAction(input: $input) {
+    error
+  }
+}

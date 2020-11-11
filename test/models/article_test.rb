@@ -5,6 +5,7 @@
 # Table name: articles
 #
 #  id                                  :bigint           not null, primary key
+#  commenting_subscribers_count        :integer          default(0)
 #  comments_count                      :integer          default(0), not null
 #  content                             :text
 #  intro                               :string

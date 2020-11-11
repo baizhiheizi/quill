@@ -5,6 +5,7 @@
 # Table name: articles
 #
 #  id                                  :bigint           not null, primary key
+#  commenting_subscribers_count        :integer          default(0)
 #  comments_count                      :integer          default(0), not null
 #  content                             :text
 #  intro                               :string
@@ -60,6 +61,8 @@ class Article < ApplicationRecord
                                   .order('popularity DESC, created_at DESC')
                               }
 
+  after_commit :notify_subsribers_async, :subscribe_comments_for_author, on: :create
+
   aasm column: :state do
     state :published, initial: true
     state :hidden
@@ -99,6 +102,35 @@ class Article < ApplicationRecord
     return Order::AUTHOR_RATIO if user == author
 
     user.orders.where(item: self).sum(:total) / revenue * (1 - Order::AUTHOR_RATIO - Order::PRSDIGG_RATIO)
+  end
+
+  def subscribers
+    @subscribers = author.authoring_subscribe_by_users
+  end
+
+  def notify_subsribers_async
+    return if hidden?
+
+    messages = subscribers.pluck(:mixin_uuid).map do |_uuid|
+      MixinBot.api.app_card(
+        conversation_id: MixinBot.api.unique_conversation_id(_uuid),
+        recipient_id: _uuid,
+        data: {
+          icon_url: 'https://mixin-images.zeromesh.net/L0egX-GZxT0Yh-dd04WKeAqVNRzgzuj_Je_-yKf8aQTZo-xihd-LogbrIEr-WyG9WbJKGFvt2YYx-UIUa1qQMRla=s256',
+          title: title.truncate(36),
+          description: format('%<author_name>s 新文章', author_name: author.name),
+          action: format('%<host>s/articles/%<uuid>s', host: Rails.application.credentials.fetch(:host), uuid: uuid)
+        }
+      )
+    end
+
+    messages.each do |message|
+      SendMixinMessageWorker.perform_async message
+    end
+  end
+
+  def subscribe_comments_for_author
+    author.create_action :commenting_subscribe, target: self
   end
 
   private

@@ -4,13 +4,15 @@
 #
 # Table name: users
 #
-#  id         :bigint           not null, primary key
-#  avatar_url :string
-#  mixin_uuid :uuid
-#  name       :string
-#  created_at :datetime         not null
-#  updated_at :datetime         not null
-#  mixin_id   :string
+#  id                          :bigint           not null, primary key
+#  authoring_subscribers_count :integer          default(0)
+#  avatar_url                  :string
+#  mixin_uuid                  :uuid
+#  name                        :string
+#  reading_subscribers_count   :integer          default(0)
+#  created_at                  :datetime         not null
+#  updated_at                  :datetime         not null
+#  mixin_id                    :string
 #
 # Indexes
 #
@@ -35,6 +37,13 @@ class User < ApplicationRecord
   default_scope { includes(:mixin_authorization) }
 
   before_validation :setup_attributes
+
+  # subscribe user for new articles
+  action_store :authoring_subscribe, :user, counter_cache: 'authoring_subscribers_count'
+  # subscribe user for buying or rewarding articles
+  action_store :reading_subscribe, :user, counter_cache: 'reading_subscribers_count'
+  # subscribe for article's comment
+  action_store :commenting_subscribe, :article, counter_cache: 'commenting_subscribers_count'
 
   def bio
     mixin_authorization&.raw&.[]('biography')

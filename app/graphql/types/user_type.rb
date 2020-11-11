@@ -15,6 +15,9 @@ module Types
     field :reader_revenue_amount, Float, null: false
     field :payments_total, Float, null: false
 
+    field :authoring_subscribed, Boolean, null: true
+    field :reading_subscribed, Boolean, null: true
+
     field :articles, Types::ArticleConnectionType, null: false
     field :comments, Types::CommentConnectionType, null: false
 
@@ -36,6 +39,14 @@ module Types
 
     def payments_total
       object.payments.completed.sum(:amount)
+    end
+
+    def authoring_subscribed
+      context[:current_user]&.authoring_subscribe_user?(object)
+    end
+
+    def reading_subscribed
+      context[:current_user]&.reading_subscribe_user?(object)
     end
   end
 end

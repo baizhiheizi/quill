@@ -49,6 +49,8 @@ gem 'batch-loader'
 gem 'aasm'
 # Background job scheduler
 gem 'clockwork', require: false
+# Store different kinds of actions (Like, Follow, Star, Block, etc.) in a single table via ActiveRecord Polymorphic Associations.
+gem 'action-store'
 
 # deploy
 gem 'mina', '~> 1.2.2', require: false

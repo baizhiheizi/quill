@@ -1,7 +1,9 @@
+import { AlertOutlined } from '@ant-design/icons';
 import {
   Comment as IComment,
   useCommentConnectionQuery,
   useCreateCommentMutation,
+  useToggleCommentingSubscribeArticleActionMutation,
 } from '@graphql';
 import Editor, { commands } from '@uiw/react-md-editor';
 import {
@@ -25,8 +27,18 @@ export default function CommentsComponent(props: {
   commentableType?: 'Article' | String;
   commentableId?: number;
   authorized?: boolean;
+  articleUuid?: string;
+  commentingSubscribed?: boolean;
+  refetchArticle?: () => any;
 }) {
-  const { commentableType, commentableId, authorized } = props;
+  const {
+    commentableType,
+    commentableId,
+    authorized,
+    articleUuid,
+    commentingSubscribed,
+    refetchArticle,
+  } = props;
   const [commentForm] = Form.useForm();
   const { data, loading, refetch, fetchMore } = useCommentConnectionQuery({
     variables: { commentableType, commentableId },
@@ -46,7 +58,27 @@ export default function CommentsComponent(props: {
       } else {
         message.success('提交成功');
         commentForm.setFieldsValue({ content: '' });
+        refetchArticle();
         refetch();
+      }
+    },
+  });
+  const [
+    toggleCommentingSubscribeArticleAction,
+  ] = useToggleCommentingSubscribeArticleActionMutation({
+    update(
+      _,
+      {
+        data: {
+          toggleCommentingSubscribeArticleAction: { error },
+        },
+      },
+    ) {
+      if (error) {
+        message.error(error);
+      } else {
+        message.success(commentingSubscribed ? '已取消订阅' : '成功订阅');
+        refetchArticle();
       }
     },
   });
@@ -66,8 +98,26 @@ export default function CommentsComponent(props: {
     <div>
       <Row justify='center'>
         <Col>
-          <h4>读者评论</h4>
+          <h3>读者评论</h3>
         </Col>
+      </Row>
+      <Row justify='center'>
+        {authorized && (
+          <Button
+            type='dashed'
+            shape='round'
+            size='small'
+            danger={commentingSubscribed}
+            onClick={() =>
+              toggleCommentingSubscribeArticleAction({
+                variables: { input: { uuid: articleUuid } },
+              })
+            }
+            icon={<AlertOutlined />}
+          >
+            {commentingSubscribed ? '取消订阅' : '订阅新评论'}
+          </Button>
+        )}
       </Row>
       <List
         style={{ marginBottom: 30 }}

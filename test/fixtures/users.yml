@@ -2,13 +2,15 @@
 #
 # Table name: users
 #
-#  id         :bigint           not null, primary key
-#  avatar_url :string
-#  mixin_uuid :uuid
-#  name       :string
-#  created_at :datetime         not null
-#  updated_at :datetime         not null
-#  mixin_id   :string
+#  id                          :bigint           not null, primary key
+#  authoring_subscribers_count :integer          default(0)
+#  avatar_url                  :string
+#  mixin_uuid                  :uuid
+#  name                        :string
+#  reading_subscribers_count   :integer          default(0)
+#  created_at                  :datetime         not null
+#  updated_at                  :datetime         not null
+#  mixin_id                    :string
 #
 # Indexes
 #

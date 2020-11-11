@@ -9,5 +9,7 @@ query User($mixinId: ID!) {
     articlesCount
     authorRevenueAmount
     readerRevenueAmount
+    authoringSubscribed
+    readingSubscribed
   }
 }

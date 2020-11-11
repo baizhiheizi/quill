@@ -43,7 +43,9 @@ class Order < ApplicationRecord
 
   enum order_type: { buy_article: 0, reward_article: 1 }
 
-  after_commit :complete_payment, :create_revenue_transfers_async, :update_item_revenue, on: :create
+  after_commit :complete_payment, :create_revenue_transfers_async, \
+               :update_item_revenue, :notify_subscribers_async, \
+               on: :create
 
   aasm column: :state do
     state :paid, initial: true
@@ -118,6 +120,31 @@ class Order < ApplicationRecord
   def ensure_total_sufficient
     errors.add(total: 'Wrong token!') unless payment.asset_id == item.asset_id
     errors.add(:total, 'Insufficient amount!') if buy_article? && total < item.price
+  end
+
+  def subscribers
+    @subscribers = buyer.reading_subscribe_by_users
+  end
+
+  def notify_subscribers_async
+    return if reward_article?
+
+    messages = subscribers.pluck(:mixin_uuid).map do |_uuid|
+      MixinBot.api.app_card(
+        conversation_id: MixinBot.api.unique_conversation_id(_uuid),
+        recipient_id: _uuid,
+        data: {
+          icon_url: 'https://mixin-images.zeromesh.net/L0egX-GZxT0Yh-dd04WKeAqVNRzgzuj_Je_-yKf8aQTZo-xihd-LogbrIEr-WyG9WbJKGFvt2YYx-UIUa1qQMRla=s256',
+          title: item.title.truncate(36),
+          description: format('%<buyer_name>s 买了新文章', buyer_name: buyer.name),
+          action: format('%<host>s/articles/%<uuid>s', host: Rails.application.credentials.fetch(:host), uuid: item.uuid)
+        }
+      )
+    end
+
+    messages.each do |message|
+      SendMixinMessageWorker.perform_async message
+    end
   end
 
   private

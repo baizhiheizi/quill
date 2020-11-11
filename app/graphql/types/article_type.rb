@@ -14,6 +14,7 @@ module Types
     field :orders_count, Integer, null: false
     field :comments_count, Integer, null: false
     field :authorized, Boolean, null: true
+    field :commenting_subscribed, Boolean, null: true
 
     field :my_share, Float, null: true
 
@@ -33,6 +34,10 @@ module Types
 
     def authorized
       object.authorized?(context[:current_user])
+    end
+
+    def commenting_subscribed
+      context[:current_user]&.commenting_subscribe_article?(object)
     end
 
     def my_share

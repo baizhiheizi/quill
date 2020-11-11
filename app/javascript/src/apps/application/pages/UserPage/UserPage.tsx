@@ -1,14 +1,14 @@
-import ArticlesComponent from '@application/components/ArticlesComponent/ArticlesComponent';
 import LoadingComponent from '@application/components/LoadingComponent/LoadingComponent';
 import { useUserQuery } from '@graphql';
 import { Avatar, Col, Row, Statistic, Tabs } from 'antd';
 import React from 'react';
 import { useParams } from 'react-router-dom';
+import UserArticlesComponent from './components/UserArticlesComponent';
 import UserCommentsComponent from './components/UserCommentsComponent';
 
 export default function UserPage() {
   const { mixinId } = useParams<{ mixinId: string }>();
-  const { loading, data } = useUserQuery({ variables: { mixinId } });
+  const { loading, data, refetch } = useUserQuery({ variables: { mixinId } });
 
   if (loading) {
     return <LoadingComponent />;
@@ -36,10 +36,20 @@ export default function UserPage() {
       </Row>
       <Tabs defaultActiveKey='author'>
         <Tabs.TabPane tab='已发表' key='author'>
-          <ArticlesComponent mixinId={user.mixinId} type='author' />
+          <UserArticlesComponent
+            mixinId={user.mixinId}
+            authoringSubscribed={user.authoringSubscribed}
+            refetchUser={refetch}
+            type='author'
+          />
         </Tabs.TabPane>
         <Tabs.TabPane tab='已购买' key='reader'>
-          <ArticlesComponent mixinId={user.mixinId} type='reader' />
+          <UserArticlesComponent
+            mixinId={user.mixinId}
+            readingSubscribed={user.readingSubscribed}
+            refetchUser={refetch}
+            type='reader'
+          />
         </Tabs.TabPane>
         <Tabs.TabPane tab='已评论' key='comments'>
           <UserCommentsComponent authorMixinId={user.mixinId} />

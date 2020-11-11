@@ -19,6 +19,8 @@ GEM
   specs:
     aasm (5.1.1)
       concurrent-ruby (~> 1.0)
+    action-store (1.0.0)
+      rails (>= 5.2, < 7)
     actioncable (6.0.3.4)
       actionpack (= 6.0.3.4)
       nio4r (~> 2.0)
@@ -334,6 +336,7 @@ PLATFORMS
 
 DEPENDENCIES
   aasm
+  action-store
   activestorage-aliyun
   annotate
   batch-loader

@@ -12,6 +12,7 @@ query Article($uuid: ID!, $readerAfter: String) {
     commentsCount
     myShare
     revenue
+    commentingSubscribed
     author {
       name
       avatarUrl
