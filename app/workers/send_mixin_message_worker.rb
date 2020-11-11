@@ -6,6 +6,9 @@ class SendMixinMessageWorker
 
   def perform(message)
     r = MixinBot.api.send_message message
-    raise r['error'].inspect if r['error'].present?
+    return if r['error'].blank?
+    return if r['error']['code'] == 403
+
+    raise r['error'].inspect
   end
 end
