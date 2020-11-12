@@ -5,7 +5,7 @@ import {
   useStatisticsQuery,
   useTransferConnectionQuery,
 } from '@/graphql';
-import { Avatar, Button, Col, List, Row, Statistic, Tabs } from 'antd';
+import { Avatar, Button, Col, List, Row, Statistic, Tabs, Tag } from 'antd';
 import moment from 'moment';
 import React from 'react';
 import {
@@ -179,13 +179,15 @@ function TransferList() {
               {transfer.amount}
             </Col>
             <Col xs={6} sm={6} md={4}>
-              {
-                {
-                  payment_refund: '退款',
-                  author_revenue: '作者收益',
-                  reader_revenue: '读者收益',
-                }[transfer.transferType]
-              }
+              {transfer.transferType === 'payment_refund' && (
+                <Tag color='magenta'>原路返回</Tag>
+              )}
+              {transfer.transferType === 'author_revenue' && (
+                <Tag color='green'>作者收益</Tag>
+              )}
+              {transfer.transferType === 'reader_revenue' && (
+                <Tag color='cyan'>读者收益</Tag>
+              )}
             </Col>
             <Col xs={6} sm={6} md={4}>
               {transfer.snapshotId ? (
