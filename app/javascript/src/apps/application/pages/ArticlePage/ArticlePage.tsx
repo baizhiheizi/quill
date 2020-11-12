@@ -1,4 +1,9 @@
-import { HeartOutlined, ShareAltOutlined } from '@ant-design/icons';
+import {
+  DislikeOutlined,
+  HeartOutlined,
+  LikeOutlined,
+  ShareAltOutlined,
+} from '@ant-design/icons';
 import CommentsComponent from '@application/components/CommentsComponent/CommentsComponent';
 import LoadingComponent from '@application/components/LoadingComponent/LoadingComponent';
 import {
@@ -8,7 +13,13 @@ import {
   useMixin,
   usePrsdigg,
 } from '@application/shared';
-import { ArticleQueryHookResult, useArticleQuery, User } from '@graphql';
+import {
+  ArticleQueryHookResult,
+  useArticleQuery,
+  useDownvoteArticleMutation,
+  User,
+  useUpvoteArticleMutation,
+} from '@graphql';
 import MDEditor from '@uiw/react-md-editor';
 import {
   Alert,
@@ -19,6 +30,7 @@ import {
   Divider,
   message,
   Modal,
+  Progress,
   Radio,
   Row,
   Space,
@@ -49,6 +61,40 @@ export default function ArticlePage() {
   }: ArticleQueryHookResult = useArticleQuery({
     fetchPolicy: 'network-only',
     variables: { uuid },
+  });
+  const [upvoteArticle] = useUpvoteArticleMutation({
+    update(
+      _,
+      {
+        data: {
+          upvoteArticle: { error },
+        },
+      },
+    ) {
+      if (error) {
+        message.error(error);
+      } else {
+        message.success('感谢反馈');
+        refetch();
+      }
+    },
+  });
+  const [downvoteArticle] = useDownvoteArticleMutation({
+    update(
+      _,
+      {
+        data: {
+          downvoteArticle: { error },
+        },
+      },
+    ) {
+      if (error) {
+        message.error(error);
+      } else {
+        message.success('感谢反馈');
+        refetch();
+      }
+    },
   });
 
   useEffect(() => {
@@ -235,42 +281,124 @@ export default function ArticlePage() {
           />
         </Card>
       </div>
-      {article.authorized && article.author.mixinId !== currentUser.mixinId && (
-        <div style={{ textAlign: 'center', marginBottom: '1rem' }}>
-          <Button
-            onClick={() => setRewardModalVisible(true)}
-            shape='round'
-            type='primary'
-            size='large'
-            danger
+      <div style={{ marginBottom: '2rem' }}>
+        <Row justify='center'>
+          <Col>
+            {article.authorized ? (
+              <Button
+                type={article.upvoted ? 'primary' : 'default'}
+                size='large'
+                shape='circle'
+                icon={<LikeOutlined />}
+                onClick={() => {
+                  if (!article.upvoted) {
+                    upvoteArticle({
+                      variables: { input: { uuid: article.uuid } },
+                    });
+                  }
+                }}
+              />
+            ) : (
+              <Button
+                type='primary'
+                size='large'
+                shape='circle'
+                icon={<LikeOutlined />}
+              />
+            )}
+          </Col>
+          <Col
+            style={{
+              marginTop: 10,
+              minWidth: 100,
+              padding: '0 20px',
+              textAlign: 'center',
+            }}
           >
-            <HeartOutlined /> 大爱此文
-          </Button>
-          <Modal
-            className='reward-modal'
-            centered
-            closable={false}
-            title='赞赏文章'
-            okText='赞赏'
-            cancelText='再想想'
-            visible={rewardModalVisible}
-            onCancel={() => setRewardModalVisible(false)}
-            onOk={handleRewarding}
-          >
-            <Radio.Group
-              options={[
-                { label: '1', value: 1 },
-                { label: '8', value: 8 },
-                { label: '32', value: 32 },
-                { label: '64', value: 64 },
-                { label: '256', value: 256 },
-                { label: '1024', value: 1024 },
-              ]}
-              value={rewardAmount}
-              onChange={(e) => setRewardAmount(e.target.value)}
-              optionType='button'
+            <Progress
+              showInfo={false}
+              percent={
+                (article.upvotesCount /
+                  (article.upvotesCount + article.downvotesCount)) *
+                100
+              }
+              strokeColor='#1890ff'
+              trailColor={
+                article.upvotesCount + article.downvotesCount > 0
+                  ? '#ff4d4f'
+                  : null
+              }
             />
-          </Modal>
+            <div>
+              {article.upvotesCount}:{article.downvotesCount}
+            </div>
+          </Col>
+          <Col>
+            {article.authorized ? (
+              <Button
+                type={article.downvoted ? 'primary' : 'default'}
+                danger={article.downvoted}
+                size='large'
+                shape='circle'
+                icon={<DislikeOutlined />}
+                onClick={() => {
+                  if (!article.downvoted) {
+                    downvoteArticle({
+                      variables: { input: { uuid: article.uuid } },
+                    });
+                  }
+                }}
+              />
+            ) : (
+              <Button
+                type='primary'
+                size='large'
+                danger
+                shape='circle'
+                icon={<DislikeOutlined />}
+              />
+            )}
+          </Col>
+        </Row>
+      </div>
+      {article.authorized && article.author.mixinId !== currentUser.mixinId && (
+        <div style={{ marginBottom: '1rem' }}>
+          <div style={{ textAlign: 'center' }}>
+            <Button
+              onClick={() => setRewardModalVisible(true)}
+              shape='round'
+              type='primary'
+              size='large'
+              danger
+            >
+              <HeartOutlined /> 大爱此文
+            </Button>
+            <Modal
+              className='reward-modal'
+              centered
+              closable={false}
+              title='赞赏文章'
+              okText='赞赏'
+              cancelText='再想想'
+              visible={rewardModalVisible}
+              onCancel={() => setRewardModalVisible(false)}
+              onOk={handleRewarding}
+            >
+              <Radio.Group
+                options={[
+                  { label: '1', value: 1 },
+                  { label: '8', value: 8 },
+                  { label: '32', value: 32 },
+                  { label: '64', value: 64 },
+                  { label: '256', value: 256 },
+                  { label: '1024', value: 1024 },
+                ]}
+                value={rewardAmount}
+                onChange={(e) => setRewardAmount(e.target.value)}
+                optionType='button'
+              />
+            </Modal>
+          </div>
         </div>
       )}
       {article.readers.nodes.length > 0 && (

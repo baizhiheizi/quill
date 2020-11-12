@@ -11,10 +11,17 @@ module Types
     field :asset_id, String, null: false
     field :price, Float, null: false
     field :revenue, Float, null: false
+
     field :orders_count, Integer, null: false
     field :comments_count, Integer, null: false
+    field :upvotes_count, Integer, null: false
+    field :downvotes_count, Integer, null: false
+    field :upvote_ratio, Integer, null: true
+
     field :authorized, Boolean, null: true
     field :commenting_subscribed, Boolean, null: true
+    field :upvoted, Boolean, null: true
+    field :downvoted, Boolean, null: true
 
     field :my_share, Float, null: true
     field :payment_trace_id, String, null: true
@@ -39,6 +46,20 @@ module Types
 
     def commenting_subscribed
       context[:current_user]&.commenting_subscribe_article?(object)
+    end
+
+    def upvote_ratio
+      return if object.upvotes_count + object.downvotes_count < 1
+
+      (object.upvotes_count.to_f / (object.upvotes_count + object.downvotes_count) * 100).to_i
+    end
+
+    def upvoted
+      context[:current_user]&.upvote_article?(object)
+    end
+
+    def downvoted
+      context[:current_user]&.downvote_article?(object)
     end
 
     def my_share

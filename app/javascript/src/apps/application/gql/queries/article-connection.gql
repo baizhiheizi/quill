@@ -8,6 +8,7 @@ query ArticleConnection($order: String!, $after: String) {
       revenue
       ordersCount
       commentsCount
+      upvoteRatio
       author {
         name
         avatarUrl

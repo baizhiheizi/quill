@@ -14,6 +14,10 @@ query Article($uuid: ID!, $readerAfter: String) {
     revenue
     commentingSubscribed
     paymentTraceId
+    upvoted
+    downvoted
+    upvotesCount
+    downvotesCount
     author {
       name
       avatarUrl

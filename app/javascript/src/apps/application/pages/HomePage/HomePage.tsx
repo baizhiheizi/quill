@@ -1,4 +1,5 @@
 import {
+  LikeOutlined,
   MessageOutlined,
   RiseOutlined,
   ShareAltOutlined,
@@ -96,7 +97,11 @@ function ArticleList(props: { order: 'default' | 'lately' | 'revenue' }) {
           actions={[
             <Space>
               <RiseOutlined />
-              <span>营收 {article.revenue.toFixed(2)}</span>
+              <span>{article.revenue.toFixed(2)}</span>
+            </Space>,
+            <Space>
+              <LikeOutlined />
+              <span>{article.upvoteRatio ? `${article.upvoteRatio}%` : 0}</span>
             </Space>,
             <Space>
               <MessageOutlined />

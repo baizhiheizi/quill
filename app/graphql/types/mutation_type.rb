@@ -10,6 +10,8 @@ module Types
     field :toggle_authoring_subscribe_user_action, mutation: Mutations::ToggleAuthoringSubscribeUserActionMutation
     field :toggle_reading_subscribe_user_action, mutation: Mutations::ToggleReadingSubscribeUserActionMutation
     field :toggle_commenting_subscribe_article_action, mutation: Mutations::ToggleCommentingSubscribeArticleActionMutation
+    field :upvote_article, mutation: Mutations::UpvoteArticleMutation
+    field :downvote_article, mutation: Mutations::DownvoteArticleMutation
 
     # admin
     field :admin_login, mutation: Mutations::AdminLoginMutation

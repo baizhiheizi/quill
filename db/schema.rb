@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_11_063216) do
+ActiveRecord::Schema.define(version: 2020_11_12_073953) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -62,6 +62,8 @@ ActiveRecord::Schema.define(version: 2020_11_11_063216) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.integer "commenting_subscribers_count", default: 0
+    t.integer "upvotes_count", default: 0
+    t.integer "downvotes_count", default: 0
     t.index ["author_id"], name: "index_articles_on_author_id"
     t.index ["uuid"], name: "index_articles_on_uuid", unique: true
   end

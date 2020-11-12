@@ -1,0 +1,6 @@
+mutation DownvoteArticle($input: DownvoteArticleMutationInput!) {
+  downvoteArticle(input: $input) {
+    error
+    success
+  }
+}

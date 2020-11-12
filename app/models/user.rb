@@ -44,6 +44,10 @@ class User < ApplicationRecord
   action_store :reading_subscribe, :user, counter_cache: 'reading_subscribers_count'
   # subscribe for article's comment
   action_store :commenting_subscribe, :article, counter_cache: 'commenting_subscribers_count'
+  # upvote article
+  action_store :upvote, :article, counter_cache: true
+  # downvote article
+  action_store :downvote, :article, counter_cache: true
 
   def bio
     mixin_authorization&.raw&.[]('biography')
