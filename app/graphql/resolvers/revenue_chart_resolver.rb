@@ -6,7 +6,7 @@ module Resolvers
 
     def resolve
       Order.group_by_day(:created_at, format: '%y/%m/%d').sum(:total).map do |key, value|
-        { name: key, value: (value * Order::PRSDIGG_RATIO).round(8) }
+        { name: key, value: value * Order::PRSDIGG_RATIO }
       end.to_json
     end
   end
