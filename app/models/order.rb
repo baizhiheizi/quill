@@ -49,10 +49,10 @@ class Order < ApplicationRecord
 
   aasm column: :state do
     state :paid, initial: true
-    state :complete
+    state :completed
 
     event :complete, guard: :all_transfers_processed? do
-      transitions from: :paid, to: :complete
+      transitions from: :paid, to: :completed
     end
   end
 

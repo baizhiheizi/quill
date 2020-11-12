@@ -681,17 +681,20 @@ export type Query = {
   adminTransferConnection: TransferConnection;
   adminUserConnection: UserConnection;
   article?: Maybe<Article>;
+  articleChart: Scalars['String'];
   articleConnection: ArticleConnection;
   commentConnection: CommentConnection;
   createdAt: Scalars['ISO8601DateTime'];
   myArticleConnection: ArticleConnection;
   myPaymentConnection: PaymentConnection;
   myTransferConnection: TransferConnection;
+  revenueChart: Scalars['String'];
   statistics: Statistics;
   transferConnection: TransferConnection;
   updatedAt?: Maybe<Scalars['ISO8601DateTime']>;
   user?: Maybe<User>;
   userArticleConnection: ArticleConnection;
+  userChart: Scalars['String'];
 };
 
 
@@ -1375,6 +1378,36 @@ export function useAdminAnnouncementConnectionLazyQuery(baseOptions?: Apollo.Laz
 export type AdminAnnouncementConnectionQueryHookResult = ReturnType<typeof useAdminAnnouncementConnectionQuery>;
 export type AdminAnnouncementConnectionLazyQueryHookResult = ReturnType<typeof useAdminAnnouncementConnectionLazyQuery>;
 export type AdminAnnouncementConnectionQueryResult = Apollo.QueryResult<AdminAnnouncementConnectionQuery, AdminAnnouncementConnectionQueryVariables>;
+export const ArticleChartDocument = gql`
+    query ArticleChart {
+  articleChart
+}
+    `;
+
+/**
+ * __useArticleChartQuery__
+ *
+ * To run a query within a React component, call `useArticleChartQuery` and pass it any options that fit your needs.
+ * When your component renders, `useArticleChartQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useArticleChartQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useArticleChartQuery(baseOptions?: Apollo.QueryHookOptions<ArticleChartQuery, ArticleChartQueryVariables>) {
+        return Apollo.useQuery<ArticleChartQuery, ArticleChartQueryVariables>(ArticleChartDocument, baseOptions);
+      }
+export function useArticleChartLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ArticleChartQuery, ArticleChartQueryVariables>) {
+          return Apollo.useLazyQuery<ArticleChartQuery, ArticleChartQueryVariables>(ArticleChartDocument, baseOptions);
+        }
+export type ArticleChartQueryHookResult = ReturnType<typeof useArticleChartQuery>;
+export type ArticleChartLazyQueryHookResult = ReturnType<typeof useArticleChartLazyQuery>;
+export type ArticleChartQueryResult = Apollo.QueryResult<ArticleChartQuery, ArticleChartQueryVariables>;
 export const AdminArticleConnectionDocument = gql`
     query AdminArticleConnection($after: String) {
   adminArticleConnection(after: $after) {
@@ -1577,6 +1610,36 @@ export function useAdminPaymentConnectionLazyQuery(baseOptions?: Apollo.LazyQuer
 export type AdminPaymentConnectionQueryHookResult = ReturnType<typeof useAdminPaymentConnectionQuery>;
 export type AdminPaymentConnectionLazyQueryHookResult = ReturnType<typeof useAdminPaymentConnectionLazyQuery>;
 export type AdminPaymentConnectionQueryResult = Apollo.QueryResult<AdminPaymentConnectionQuery, AdminPaymentConnectionQueryVariables>;
+export const RevenueChartDocument = gql`
+    query RevenueChart {
+  revenueChart
+}
+    `;
+
+/**
+ * __useRevenueChartQuery__
+ *
+ * To run a query within a React component, call `useRevenueChartQuery` and pass it any options that fit your needs.
+ * When your component renders, `useRevenueChartQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useRevenueChartQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useRevenueChartQuery(baseOptions?: Apollo.QueryHookOptions<RevenueChartQuery, RevenueChartQueryVariables>) {
+        return Apollo.useQuery<RevenueChartQuery, RevenueChartQueryVariables>(RevenueChartDocument, baseOptions);
+      }
+export function useRevenueChartLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<RevenueChartQuery, RevenueChartQueryVariables>) {
+          return Apollo.useLazyQuery<RevenueChartQuery, RevenueChartQueryVariables>(RevenueChartDocument, baseOptions);
+        }
+export type RevenueChartQueryHookResult = ReturnType<typeof useRevenueChartQuery>;
+export type RevenueChartLazyQueryHookResult = ReturnType<typeof useRevenueChartLazyQuery>;
+export type RevenueChartQueryResult = Apollo.QueryResult<RevenueChartQuery, RevenueChartQueryVariables>;
 export const AdminTransferConnectionDocument = gql`
     query AdminTransferConnection($after: String) {
   adminTransferConnection(after: $after) {
@@ -1628,6 +1691,36 @@ export function useAdminTransferConnectionLazyQuery(baseOptions?: Apollo.LazyQue
 export type AdminTransferConnectionQueryHookResult = ReturnType<typeof useAdminTransferConnectionQuery>;
 export type AdminTransferConnectionLazyQueryHookResult = ReturnType<typeof useAdminTransferConnectionLazyQuery>;
 export type AdminTransferConnectionQueryResult = Apollo.QueryResult<AdminTransferConnectionQuery, AdminTransferConnectionQueryVariables>;
+export const UserChartDocument = gql`
+    query UserChart {
+  userChart
+}
+    `;
+
+/**
+ * __useUserChartQuery__
+ *
+ * To run a query within a React component, call `useUserChartQuery` and pass it any options that fit your needs.
+ * When your component renders, `useUserChartQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useUserChartQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useUserChartQuery(baseOptions?: Apollo.QueryHookOptions<UserChartQuery, UserChartQueryVariables>) {
+        return Apollo.useQuery<UserChartQuery, UserChartQueryVariables>(UserChartDocument, baseOptions);
+      }
+export function useUserChartLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UserChartQuery, UserChartQueryVariables>) {
+          return Apollo.useLazyQuery<UserChartQuery, UserChartQueryVariables>(UserChartDocument, baseOptions);
+        }
+export type UserChartQueryHookResult = ReturnType<typeof useUserChartQuery>;
+export type UserChartLazyQueryHookResult = ReturnType<typeof useUserChartLazyQuery>;
+export type UserChartQueryResult = Apollo.QueryResult<UserChartQuery, UserChartQueryVariables>;
 export const AdminUserConnectionDocument = gql`
     query AdminUserConnection($after: String) {
   adminUserConnection(after: $after) {

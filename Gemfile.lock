@@ -134,6 +134,8 @@ GEM
       railties
       sprockets-rails
     graphql (1.11.6)
+    groupdate (5.2.1)
+      activesupport (>= 5)
     hamster (3.0.0)
       concurrent-ruby (~> 1.0)
     http (4.4.1)
@@ -347,6 +349,7 @@ DEPENDENCIES
   clockwork
   graphiql-rails
   graphql
+  groupdate
   image_processing (~> 1.2)
   jbuilder (~> 2.7)
   listen (~> 3.2)

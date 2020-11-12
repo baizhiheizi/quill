@@ -6,7 +6,11 @@ module Types
     field :article, resolver: Resolvers::ArticleResolver
     field :comment_connection, resolver: Resolvers::CommentConnectionResolver
     field :transfer_connection, resolver: Resolvers::TransferConnectionResolver
+
     field :statistics, resolver: Resolvers::StatisticsResolver
+    field :user_chart, resolver: Resolvers::UserChartResolver
+    field :article_chart, resolver: Resolvers::ArticleChartResolver
+    field :revenue_chart, resolver: Resolvers::RevenueChartResolver
 
     field :user, resolver: Resolvers::UserResolver
     field :user_article_connection, resolver: Resolvers::UserArticleConnectionResolver
