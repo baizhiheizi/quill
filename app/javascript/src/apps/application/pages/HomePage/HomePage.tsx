@@ -93,6 +93,7 @@ function ArticleList(props: { order: 'default' | 'lately' | 'revenue' }) {
       }
       renderItem={(article: Partial<Article>) => (
         <List.Item
+          style={{ padding: '1rem 0.5rem' }}
           key={article.uuid}
           actions={[
             <Space>
