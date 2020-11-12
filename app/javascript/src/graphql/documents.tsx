@@ -246,6 +246,7 @@ export type Article = {
   intro: Scalars['String'];
   myShare?: Maybe<Scalars['Float']>;
   ordersCount: Scalars['Int'];
+  paymentTraceId?: Maybe<Scalars['String']>;
   price: Scalars['Float'];
   readers: UserConnection;
   revenue: Scalars['Float'];
@@ -2000,6 +2001,7 @@ export const ArticleDocument = gql`
     myShare
     revenue
     commentingSubscribed
+    paymentTraceId
     author {
       name
       avatarUrl

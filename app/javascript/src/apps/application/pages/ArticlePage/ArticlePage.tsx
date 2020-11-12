@@ -1,6 +1,13 @@
 import { HeartOutlined, ShareAltOutlined } from '@ant-design/icons';
 import CommentsComponent from '@application/components/CommentsComponent/CommentsComponent';
 import LoadingComponent from '@application/components/LoadingComponent/LoadingComponent';
+import {
+  handleShare,
+  PAGE_TITLE,
+  useCurrentUser,
+  useMixin,
+  usePrsdigg,
+} from '@application/shared';
 import { ArticleQueryHookResult, useArticleQuery, User } from '@graphql';
 import MDEditor from '@uiw/react-md-editor';
 import {
@@ -22,17 +29,9 @@ import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
-import {
-  handleShare,
-  PAGE_TITLE,
-  useCurrentUser,
-  useMixin,
-  usePrsdigg,
-} from '../../shared';
 import NotFoundPage from '../NotFoundPage/NotFoundPage';
 import './ArticlePage.less';
 
-let traceId: string;
 export default function ArticlePage() {
   const { uuid } = useParams<{ uuid: string }>();
   const [paying, setPaying] = useState(false);
@@ -41,15 +40,24 @@ export default function ArticlePage() {
   const { appId } = usePrsdigg();
   const { mixinEnv } = useMixin();
   const currentUser = useCurrentUser();
-  const { loading, data, refetch }: ArticleQueryHookResult = useArticleQuery({
+  const {
+    loading,
+    data,
+    refetch,
+    startPolling,
+    stopPolling,
+  }: ArticleQueryHookResult = useArticleQuery({
     fetchPolicy: 'network-only',
     variables: { uuid },
   });
 
   useEffect(() => {
-    traceId = uuidv4();
     return () => (document.title = PAGE_TITLE);
   }, [uuid]);
+
+  useEffect(() => {
+    return () => stopPolling();
+  }, [startPolling, stopPolling]);
 
   const memo = encode64(
     JSON.stringify({
@@ -64,6 +72,10 @@ export default function ArticlePage() {
 
   const { article } = data;
 
+  if (article.authorized) {
+    stopPolling();
+  }
+
   if (!article) {
     return <NotFoundPage />;
   }
@@ -73,17 +85,19 @@ export default function ArticlePage() {
   const handlePaying = () => {
     if (mixinEnv) {
       setPaying(true);
-      const payUrl = `mixin://pay?recipient=${appId}&trace=${traceId}&memo=${memo}&asset=${
-        article.assetId
-      }&amount=${article.price.toFixed(8)}`;
+      const payUrl = `mixin://pay?recipient=${appId}&trace=${
+        article.paymentTraceId
+      }&memo=${memo}&asset=${article.assetId}&amount=${article.price.toFixed(
+        8,
+      )}`;
       location.replace(payUrl);
+      handlePaid();
     } else {
       message.warn('请在 Mixin Messenger 中付款');
     }
   };
   const handlePaid = () => {
-    refetch();
-    setPaying(false);
+    startPolling(1500);
   };
   const handleRewarding = () => {
     if (mixinEnv) {
@@ -139,7 +153,9 @@ export default function ArticlePage() {
           <div>
             {currentUser ? (
               paying ? (
-                <Button onClick={handlePaid}>支付完成</Button>
+                <Button type='primary' loading disabled danger>
+                  支付结果查询中
+                </Button>
               ) : (
                 <div>
                   <Button type='primary' onClick={handlePaying}>

@@ -13,6 +13,7 @@ query Article($uuid: ID!, $readerAfter: String) {
     myShare
     revenue
     commentingSubscribed
+    paymentTraceId
     author {
       name
       avatarUrl

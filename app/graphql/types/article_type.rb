@@ -17,6 +17,7 @@ module Types
     field :commenting_subscribed, Boolean, null: true
 
     field :my_share, Float, null: true
+    field :payment_trace_id, String, null: true
 
     field :author, Types::UserType, null: false
     field :readers, Types::UserConnectionType, null: false
@@ -44,6 +45,13 @@ module Types
       return unless object.authorized?(context[:current_user])
 
       object.share_of(context[:current_user])
+    end
+
+    def payment_trace_id
+      return if context[:current_user].blank?
+      return if authorized
+
+      MixinBot.api.unique_conversation_id(object.uuid, context[:current_user].mixin_uuid)
     end
 
     def author
