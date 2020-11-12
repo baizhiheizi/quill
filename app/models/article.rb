@@ -57,7 +57,7 @@ class Article < ApplicationRecord
                                   .select(
                                     <<~SQL.squish
                                       articles.*, 
-                                      ((((articles.revenue / articles.price) + articles.comments_count) / POW(((EXTRACT(EPOCH FROM (now()-articles.created_at)) / 3600)::integer + 1), 2))) AS popularity
+                                      ((((articles.revenue / articles.price) + articles.upvotes_count - articles.downvotes_count + articles.comments_count) / POW(((EXTRACT(EPOCH FROM (now()-articles.created_at)) / 3600)::integer + 1), 2))) AS popularity
                                     SQL
                                   )
                                   .order('popularity DESC, created_at DESC')
