@@ -10,6 +10,7 @@ module Mutations
     def resolve(uuid:)
       article = Article.find_by(uuid: uuid)
       return { error: '找不到文章' } if article.blank?
+      return { error: '作者不能评价' } if article.author == current_user
       return { error: '不是读者' } unless article.authorized? current_user
 
       article.with_lock do

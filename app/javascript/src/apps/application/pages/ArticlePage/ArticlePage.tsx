@@ -284,7 +284,8 @@ export default function ArticlePage() {
       <div style={{ marginBottom: '2rem' }}>
         <Row justify='center'>
           <Col>
-            {article.authorized ? (
+            {article.authorized &&
+            currentUser.mixinId !== article.author.mixinId ? (
               <Button
                 type={article.upvoted ? 'primary' : 'default'}
                 size='large'
@@ -334,7 +335,8 @@ export default function ArticlePage() {
             </div>
           </Col>
           <Col>
-            {article.authorized ? (
+            {article.authorized &&
+            currentUser.mixinId !== article.author.mixinId ? (
               <Button
                 type={article.downvoted ? 'primary' : 'default'}
                 danger={article.downvoted}
