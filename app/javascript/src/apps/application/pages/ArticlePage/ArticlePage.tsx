@@ -118,12 +118,12 @@ export default function ArticlePage() {
 
   const { article } = data;
 
-  if (article.authorized) {
-    stopPolling();
-  }
-
   if (!article) {
     return <NotFoundPage />;
+  }
+
+  if (article.authorized) {
+    stopPolling();
   }
 
   document.title = `${article.title} - ${article.author.name}`;
