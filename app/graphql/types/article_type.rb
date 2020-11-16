@@ -12,6 +12,9 @@ module Types
     field :price, Float, null: false
     field :revenue, Float, null: false
 
+    field :words_count, Integer, null: false
+    field :partial_content, String, null: true
+
     field :orders_count, Integer, null: false
     field :comments_count, Integer, null: false
     field :upvotes_count, Integer, null: false

@@ -18,6 +18,8 @@ query Article($uuid: ID!, $readerAfter: String) {
     downvoted
     upvotesCount
     downvotesCount
+    wordsCount
+    partialContent
     author {
       name
       avatarUrl

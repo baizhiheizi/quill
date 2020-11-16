@@ -181,6 +181,25 @@ export default function ArticlePage() {
         <MDEditor.Markdown source={article.content} />
       ) : (
         <div style={{ textAlign: 'center' }}>
+          <div
+            style={{
+              color: '#aaa',
+              marginBottom: '1rem',
+              textAlign: 'left',
+            }}
+          >
+            正文字数: {article.wordsCount}
+          </div>
+          {article.partialContent && (
+            <div style={{ marginBottom: '1rem' }}>
+              <MDEditor.Markdown source={article.partialContent} />
+              <div
+                style={{ marginTop: '1rem', textAlign: 'center', color: 'red' }}
+              >
+                - 以下还有 90% 内容 -
+              </div>
+            </div>
+          )}
           <div style={{ marginBottom: '1rem' }}>
             <div>
               支付 <span style={{ color: 'red' }}>{article.price} PRS</span>{' '}

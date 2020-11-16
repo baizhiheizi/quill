@@ -135,6 +135,16 @@ class Article < ApplicationRecord
     author.create_action :commenting_subscribe, target: self
   end
 
+  def words_count
+    content.gsub("\n", '').size
+  end
+
+  def partial_content
+    return if words_count < 300
+
+    content.truncate((words_count * 0.1).to_i)
+  end
+
   private
 
   def setup_attributes

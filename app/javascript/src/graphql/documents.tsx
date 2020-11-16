@@ -248,6 +248,7 @@ export type Article = {
   intro: Scalars['String'];
   myShare?: Maybe<Scalars['Float']>;
   ordersCount: Scalars['Int'];
+  partialContent?: Maybe<Scalars['String']>;
   paymentTraceId?: Maybe<Scalars['String']>;
   price: Scalars['Float'];
   readers: UserConnection;
@@ -261,6 +262,7 @@ export type Article = {
   upvoted?: Maybe<Scalars['Boolean']>;
   upvotesCount: Scalars['Int'];
   uuid: Scalars['ID'];
+  wordsCount: Scalars['Int'];
 };
 
 
@@ -2219,6 +2221,8 @@ export const ArticleDocument = gql`
     downvoted
     upvotesCount
     downvotesCount
+    wordsCount
+    partialContent
     author {
       name
       avatarUrl
