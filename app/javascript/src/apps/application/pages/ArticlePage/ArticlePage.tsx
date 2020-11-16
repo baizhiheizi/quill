@@ -191,7 +191,7 @@ export default function ArticlePage() {
             正文字数: {article.wordsCount}
           </div>
           {article.partialContent && (
-            <div style={{ marginBottom: '1rem' }}>
+            <div style={{ marginBottom: '1rem', textAlign: 'left' }}>
               <MDEditor.Markdown source={article.partialContent} />
               <div
                 style={{ marginTop: '1rem', textAlign: 'center', color: 'red' }}
