@@ -1,5 +1,9 @@
 common:
   loadMore: 加载更多
+  subscribeBtn: 订阅
+  unsubscribeBtn: 取消订阅
+  detailBtn: 查看
+  editBtn: 编辑
 messages:
   successVoted: 感谢反馈
   payInMessenger: 请在 Mixin Messenger 支付
@@ -7,19 +11,52 @@ messages:
   successSubmitted: 成功提交
   successSubscribed: 成功订阅
   successUnsubscribed: 已取消订阅
+  successHiddenArticle: 文章已隐藏
+  successPublishedArticle: 文章已公开
 article:
+  title: 标题
+  content: 正文
+  intro: 简介
   wordsCount: 正文字数
   price: 单价(PRS)
   ordersCount: 付费次数
   revenue: 总收益(PRS)
   myShare: 奖励份额(%)
+  stateText: 状态
+  state:
+    published: 已发表
+    blocked: 已屏蔽
+    hidden: 已隐藏
+  form:
+    warning: 请先完成你的文章
+    createConfirm: 确定要创建文章吗？
+    createOkText: 创建
+    createCancelText: 再改改
+    createBtn: 创建
+    updateConfirm: 确定要修改你的文章吗？
+    updateOkText: 保存
+    updateCancelText: 再改改
+    updateBtn: 保存
+    titlePlaceHolder: 文章标题
+    contentPlaceHolder: 写点有价值的东西
+    introPlaceHolder: 请简要介绍一下你的文章，简介内容为公开可见。
+payment:
+  state:
+    paid: 已支付
+    refunded: 已退款
+    completed: 已完成
+  snapshot: 链上快照
 user:
   defaultBio: 没有留下任何介绍
+  authorRevenueAmount: 作者收益(PRS)
+  readerRevenueAmount: 读者收益(PRS)
 transfer:
   transferType:
     payment_refund: 原路返回
     author_revenue: 作者收益
     reader_revenue: 读者收益
+  snapshot: 链上快照
+  processing: 等待转账
 menu:
   read: 读文章
   write: 写文章
@@ -58,6 +95,22 @@ articlePage:
     cancelText: 再想想
   timesBought: 次购买
   timesReward: 次赞赏
+userPage:
+  tabs:
+    author: 已发表
+    reader: 已购买
+    comments: 已评论
+minePage:
+  publishConfirm: 确定要将文章公开吗？
+  hideConfirm: 确定要将文章隐藏吗？已购读者将不受影响。
+  publishBtn: 公开
+  hideBtn: 隐藏
+  tabs:
+    author: 已发表
+    reader: 已购买
+    comments: 已评论
+    payments: 付款记录
+    transfers: 收益记录
 fairPage:
   usersCount: 用户总量
   articlesCount: 文章总数
@@ -69,8 +122,6 @@ fairPage:
       chartTitle: 平台收益曲线
     transfers:
       title: 转账记录
-      snapshot: 链上快照
-      processing: 等待转账
 rulesPage:
   content: |
     ### PRSDigg 规则介绍
@@ -119,6 +170,7 @@ commentsComponent:
   emptyText: 暂无评论
   deletedText: 此评论已被管理员删除
   quoteBtn: 引用
+  from: 来自
   form:
     warning: 先写点什么
     confirm: 确定要提交评论吗？

@@ -8,9 +8,11 @@ import {
 import { Avatar, Button, Col, List, Row } from 'antd';
 import moment from 'moment';
 import React from 'react';
-moment.locale('zh-cn');
+import { useTranslation } from 'react-i18next';
 
 export default function MyTransfersComponent() {
+  const { t, i18n } = useTranslation();
+  moment.locale(i18n.language);
   const {
     data,
     loading,
@@ -65,7 +67,7 @@ export default function MyTransfersComponent() {
                 });
               }}
             >
-              加载更多
+              {t('common.loadMore')}
             </Button>
           </div>
         )
@@ -83,13 +85,7 @@ export default function MyTransfersComponent() {
               {transfer.amount}
             </Col>
             <Col xs={6} sm={6} md={4}>
-              {
-                {
-                  payment_refund: '退款',
-                  author_revenue: '作者收益',
-                  reader_revenue: '读者收益',
-                }[transfer.transferType]
-              }
+              {t(`transfer.transferType.${transfer.transferType}`)}
             </Col>
             <Col xs={6} sm={6} md={4}>
               {transfer.snapshotId ? (
@@ -97,10 +93,10 @@ export default function MyTransfersComponent() {
                   href={`https://mixin.one/snapshots/${transfer.snapshotId}`}
                   target='_blank'
                 >
-                  链上快照
+                  {t('transfer.snapshot')}
                 </a>
               ) : (
-                <span>等待处理</span>
+                <span>{t('transfer.processing')}</span>
               )}
             </Col>
           </Row>

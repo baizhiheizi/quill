@@ -10,8 +10,8 @@ import {
 import { Avatar, Button, List, message, Row, Space } from 'antd';
 import moment from 'moment';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
-moment.locale('zh-cn');
 
 export default function UserArticlesComponent(props: {
   type: 'author' | 'reader';
@@ -27,6 +27,8 @@ export default function UserArticlesComponent(props: {
     readingSubscribed,
     refetchUser,
   } = props;
+  const { t, i18n } = useTranslation();
+  moment.locale(i18n.language);
   const currentUser = useCurrentUser();
   const { data, loading, fetchMore } = useUserArticleConnectionQuery({
     variables: { type, mixinId },
@@ -45,7 +47,11 @@ export default function UserArticlesComponent(props: {
       if (error) {
         message.error(error);
       } else {
-        message.success(authoringSubscribed ? '已取消订阅' : '成功订阅');
+        message.success(
+          authoringSubscribed
+            ? t('messages.successUnsubscribed')
+            : t('messages.successSubscribed'),
+        );
         refetchUser();
       }
     },
@@ -64,7 +70,11 @@ export default function UserArticlesComponent(props: {
       if (error) {
         message.error(error);
       } else {
-        message.success(readingSubscribed ? '已取消订阅' : '成功订阅');
+        message.success(
+          readingSubscribed
+            ? t('messages.successUnsubscribed')
+            : t('messages.successSubscribed'),
+        );
         refetchUser();
       }
     },
@@ -96,7 +106,9 @@ export default function UserArticlesComponent(props: {
               })
             }
           >
-            {authoringSubscribed ? '取消订阅' : '订阅更新'}
+            {authoringSubscribed
+              ? t('common.unsubscribeBtn')
+              : t('common.subscribeBtn')}
           </Button>
         )}
         {currentUser && currentUser.mixinId !== mixinId && type === 'reader' && (
@@ -111,7 +123,9 @@ export default function UserArticlesComponent(props: {
               })
             }
           >
-            {readingSubscribed ? '取消订阅' : '订阅更新'}
+            {readingSubscribed
+              ? t('common.unsubscribeBtn')
+              : t('common.subscribeBtn')}
           </Button>
         )}
       </div>
@@ -152,7 +166,7 @@ export default function UserArticlesComponent(props: {
                   });
                 }}
               >
-                加载更多
+                {t('common.loadMore')}
               </Button>
             </div>
           )

@@ -8,13 +8,15 @@ import Editor from '@uiw/react-md-editor';
 import { Avatar, Button, Comment, List } from 'antd';
 import moment from 'moment';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
-moment.locale('zh-cn');
 
 export default function UserCommentsComponent(props: {
   authorMixinId: string;
 }) {
   const { authorMixinId } = props;
+  const { t, i18n } = useTranslation();
+  moment.locale(i18n.language);
   const {
     data,
     loading,
@@ -70,7 +72,7 @@ export default function UserCommentsComponent(props: {
                 });
               }}
             >
-              加载更多
+              {t('common.loadMore')}
             </Button>
           </div>
         )
@@ -90,7 +92,7 @@ export default function UserCommentsComponent(props: {
               datetime={<span>{moment(comment.createdAt).fromNow()}</span>}
               actions={[
                 <span>
-                  来自: {` `}
+                  {t('commentsComponent.from')}: {` `}
                   <Link
                     style={{ color: 'inherit' }}
                     to={`/articles/${comment.commentable.uuid}`}

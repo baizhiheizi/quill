@@ -8,9 +8,11 @@ import {
 import { Avatar, Button, Col, List, Row } from 'antd';
 import moment from 'moment';
 import React from 'react';
-moment.locale('zh-cn');
+import { useTranslation } from 'react-i18next';
 
 export default function MyPaymentsComponent() {
+  const { t, i18n } = useTranslation();
+  moment.locale(i18n.language);
   const {
     data,
     loading,
@@ -65,7 +67,7 @@ export default function MyPaymentsComponent() {
                 });
               }}
             >
-              加载更多
+              {t('common.loadMore')}
             </Button>
           </div>
         )
@@ -83,20 +85,14 @@ export default function MyPaymentsComponent() {
               {payment.amount}
             </Col>
             <Col xs={6} sm={6} md={4}>
-              {
-                {
-                  paid: '已支付',
-                  refunded: '已退款',
-                  completed: '已完成',
-                }[payment.state]
-              }
+              {t(`payment.state.${payment.state}`, '-')}
             </Col>
             <Col xs={6} sm={6} md={4}>
               <a
                 href={`https://mixin.one/snapshots/${payment.snapshotId}`}
                 target='_blank'
               >
-                链上快照
+                {t('payment.snapshot')}
               </a>
             </Col>
           </Row>

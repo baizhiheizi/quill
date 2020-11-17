@@ -210,10 +210,10 @@ function TransferList() {
                   href={`https://mixin.one/snapshots/${transfer.snapshotId}`}
                   target='_blank'
                 >
-                  {t('fairPage.tabs.transfers.snapshot')}
+                  {t('transfer.snapshot')}
                 </a>
               ) : (
-                <span>{t('fairPage.tabs.transfers.processing')}</span>
+                <span>{t('transfer.processing')}</span>
               )}
             </Col>
           </Row>

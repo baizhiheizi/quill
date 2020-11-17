@@ -2,10 +2,12 @@ import { useCreateArticleMutation } from '@graphql';
 import Editor, { commands } from '@uiw/react-md-editor';
 import { Button, Form, Input, InputNumber, message, Modal, Radio } from 'antd';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { useHistory } from 'react-router-dom';
 
 export default function ArticleNewPage() {
   const history = useHistory();
+  const { t } = useTranslation();
   const [createArticle, { loading }] = useCreateArticleMutation({
     update(
       _,
@@ -18,7 +20,7 @@ export default function ArticleNewPage() {
       if (error) {
         message.error(error);
       } else {
-        message.success('文章发布成功');
+        message.success(t('messages.successSubmitted'));
         history.replace('/');
       }
     },
@@ -31,27 +33,26 @@ export default function ArticleNewPage() {
       onFinish={(values) => {
         const { title, content, price, intro } = values;
         if (!title || !content || !price || !intro) {
-          message.warn('请先完成你的文章');
+          message.warn(t('article.form.warning'));
         } else {
           Modal.confirm({
-            title: '确定要创建文章吗？',
+            title: t('article.form.createConfirm'),
             centered: true,
-            okText: '创建',
-            cancelText: '再改改',
+            okText: t('article.form.createOkText'),
+            cancelText: t('article.form.createCancelText'),
             onOk: () => createArticle({ variables: { input: values } }),
           });
         }
       }}
     >
-      <Form.Item label='标题' name='title'>
-        <Input placeholder='文章标题' />
+      <Form.Item label={t('article.title')} name='title'>
+        <Input placeholder={t('article.form.titlePlaceHolder')} />
       </Form.Item>
-      <Form.Item label='正文' name='content'>
+      <Form.Item label={t('article.content')} name='content'>
         <Editor
-          textareaProps={{ placeholder: '写点有价值的东西' }}
+          textareaProps={{ placeholder: t('article.form.contentPlaceHolder') }}
           autoFocus={false}
           preview='edit'
-          placeholder='支持 Markdown 格式'
           height={500}
           commands={[
             commands.bold,
@@ -68,23 +69,23 @@ export default function ArticleNewPage() {
           ]}
         />
       </Form.Item>
-      <Form.Item label='简介' name='intro'>
-        <Input.TextArea placeholder='请简要介绍一下你的文章，简介内容为公开可见。' />
+      <Form.Item label={t('article.intro')} name='intro'>
+        <Input.TextArea placeholder={t('article.form.introPlaceHolder')} />
       </Form.Item>
-      <Form.Item label='价格(PRS)' name='price'>
+      <Form.Item label={t('article.price')} name='price'>
         <InputNumber min={1} precision={4} placeholder='0.0' />
       </Form.Item>
-      <Form.Item label='状态' name='state'>
+      <Form.Item label={t('article.stateText')} name='state'>
         <Radio.Group
           options={[
-            { label: '公开', value: 'published' },
-            { label: '隐藏', value: 'hidden' },
+            { label: t('article.state.published'), value: 'published' },
+            { label: t('article.state.hidden'), value: 'hidden' },
           ]}
         />
       </Form.Item>
       <Form.Item wrapperCol={{ xs: { offset: 0 }, sm: { offset: 2 } }}>
         <Button size='large' type='primary' htmlType='submit' loading={loading}>
-          创建
+          {t('article.form.createBtn')}
         </Button>
       </Form.Item>
     </Form>

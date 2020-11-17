@@ -1,5 +1,6 @@
 import { Avatar, Col, Row, Statistic, Tabs } from 'antd';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { useCurrentUser } from '../../shared';
 import MyArticlesComponent from './components/MyArticlesComponent';
 import MyCommentsComponent from './components/MyCommentsComponent';
@@ -8,6 +9,7 @@ import MyTransfersComponent from './components/MyTranfersComponent';
 
 export default function MinePage() {
   const currentUser = useCurrentUser();
+  const { t } = useTranslation();
   if (!currentUser) {
     location.replace('/');
   }
@@ -25,31 +27,31 @@ export default function MinePage() {
       <Row gutter={16} style={{ textAlign: 'center' }}>
         <Col xs={12} sm={6}>
           <Statistic
-            title='作者收益(PRS)'
+            title={t('user.authorRevenueAmount')}
             value={currentUser.authorRevenueAmount}
           />
         </Col>
         <Col xs={12} sm={6}>
           <Statistic
-            title='读者收益(PRS)'
+            title={t('user.readerRevenueAmount')}
             value={currentUser.readerRevenueAmount}
           />
         </Col>
       </Row>
       <Tabs defaultActiveKey='author'>
-        <Tabs.TabPane tab='已发表' key='author'>
+        <Tabs.TabPane tab={t('minePage.tabs.author')} key='author'>
           <MyArticlesComponent type='author' />
         </Tabs.TabPane>
-        <Tabs.TabPane tab='已购买' key='reader'>
+        <Tabs.TabPane tab={t('minePage.tabs.reader')} key='reader'>
           <MyArticlesComponent type='reader' />
         </Tabs.TabPane>
-        <Tabs.TabPane tab='已评论' key='comments'>
+        <Tabs.TabPane tab={t('minePage.tabs.comments')} key='comments'>
           <MyCommentsComponent />
         </Tabs.TabPane>
-        <Tabs.TabPane tab='付款记录' key='payments'>
+        <Tabs.TabPane tab={t('minePage.tabs.payments')} key='payments'>
           <MyPaymentsComponent />
         </Tabs.TabPane>
-        <Tabs.TabPane tab='收益记录' key='transfers'>
+        <Tabs.TabPane tab={t('minePage.tabs.transfers')} key='transfers'>
           <MyTransfersComponent />
         </Tabs.TabPane>
       </Tabs>

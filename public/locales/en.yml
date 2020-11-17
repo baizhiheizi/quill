@@ -1,5 +1,9 @@
 common:
   loadMore: Load More
+  subscribeBtn: Subscribe
+  unsubscribeBtn: Unsubscribe
+  detailBtn: Detail
+  editBtn: Edit
 messages:
   successVoted: Thanks for voting
   payInMessenger: Please pay in Mixin Messenger
@@ -7,19 +11,52 @@ messages:
   successSubmitted: Submitted
   successSubscribed: Subscribed
   successUnsubscribed: Unsubscribed
+  successHiddenArticle: Article hidden
+  successPublishedArticle: Article published
 article:
+  title: Title
+  content: Content
+  intro: Introduction
   wordsCount: Words Count
   price: Price(PRS)
   ordersCount: Paid Times
   revenue: Revenue(PRS)
   myShare: My Share(%)
+  stateText: State
+  state:
+    published: Published
+    blocked: Blocked
+    hidden: Hidden
+  form:
+    warning: Pleash finish your article first
+    createConfirm: Are you sure to create?
+    createOkText: Create
+    createCancelText: Later
+    createBtn: Create
+    updateConfirm: Are you sure to update your article?
+    updateOkText: Update
+    updateCancelText: Later
+    updateBtn: Update
+    titlePlaceHolder: Title of article
+    contentPlaceHolder: Write something valuable
+    introPlaceHolder: Please introduce your article and this will be public
+payment:
+  state:
+    paid: Paid
+    refunded: Refunded
+    completed: Compelted
+  snapshot: Snapshot
 user:
   defaultBio: Didn't left anything
+  authorRevenueAmount: Author Revenue(PRS)
+  readerRevenueAmount: Reader Revenue(PRS)
 transfer:
   transferType:
     payment_refund: Refund
     author_revenue: Author
     reader_revenue: Reader
+  snapshot: Snapshot
+  processing: Processing
 menu:
   read: Read
   write: Write
@@ -58,6 +95,22 @@ articlePage:
     cancelText: Later
   timesBought: times bought
   timesReward: times reward
+userPage:
+  tabs:
+    author: Published
+    reader: Bought
+    comments: Commented
+minePage:
+  publishConfirm: Are you sure to publish this article?
+  hideConfirm: Are you sure to hide this article? Early readers not affected.
+  publishBtn: Publish
+  hideBtn: Hide
+  tabs:
+    author: Published
+    reader: Bought
+    comments: Commented
+    payments: Payments
+    transfers: Revenue
 fairPage:
   usersCount: Users
   articlesCount: Articles
@@ -69,8 +122,6 @@ fairPage:
       chartTitle: Revenue Chart
     transfers:
       title: Transactions
-      snapshot: Snapshot
-      processing: Waiting
 rulesPage:
   content: |
     ### Rules of PRSDigg
@@ -83,6 +134,7 @@ commentsComponent:
   emptyText: No Comments
   deletedText: Deleted by the Administrator
   quoteBtn: Quote
+  from: From
   form:
     warning: Write something first.
     confirm: Are you sure to submit?

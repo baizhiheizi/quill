@@ -74,17 +74,25 @@ export default function Menus() {
         </Menu>
       </Col>
       <Col>
-        {i18n.language.includes('en') ? (
-          <a onClick={() => i18n.changeLanguage('zh-CN')}>中文</a>
-        ) : (
-          '中文'
-        )}
-        <Divider type='vertical' />
-        {i18n.language.includes('zh') ? (
-          <a onClick={() => i18n.changeLanguage('en-US')}>EN</a>
-        ) : (
-          'EN'
-        )}
+        <div
+          style={
+            props.mode === 'horizontal'
+              ? { display: 'inline-block' }
+              : { marginBottom: '1rem' }
+          }
+        >
+          {i18n.language.includes('en') ? (
+            <a onClick={() => i18n.changeLanguage('zh-CN')}>中文</a>
+          ) : (
+            '中文'
+          )}
+          <Divider type='vertical' />
+          {i18n.language.includes('zh') ? (
+            <a onClick={() => i18n.changeLanguage('en-US')}>EN</a>
+          ) : (
+            'EN'
+          )}
+        </div>
       </Col>
       <Col>
         {currentUser ? (

@@ -20,13 +20,15 @@ import {
 } from 'antd';
 import moment from 'moment';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
-moment.locale('zh-cn');
 
 export default function MyArticlesComponent(props: {
   type: 'author' | 'reader';
 }) {
   const { type } = props;
+  const { t, i18n } = useTranslation();
+  moment.locale(i18n.language);
   const {
     data,
     loading,
@@ -43,7 +45,7 @@ export default function MyArticlesComponent(props: {
       if (err) {
         message.error(err);
       } else {
-        message.success('文章已隐藏');
+        message.success(t('messages.successHiddenArticle'));
         refetch();
       }
     },
@@ -56,7 +58,7 @@ export default function MyArticlesComponent(props: {
       if (err) {
         message.error(err);
       } else {
-        message.success('文章已公开');
+        message.success(t('messages.successPublishedArticle'));
         refetch();
       }
     },
@@ -111,7 +113,7 @@ export default function MyArticlesComponent(props: {
                 });
               }}
             >
-              加载更多
+              {t('common.loadMore')}
             </Button>
           </div>
         )
@@ -122,13 +124,19 @@ export default function MyArticlesComponent(props: {
           actions={
             type === 'author' &&
             (article.state === 'blocked'
-              ? [<Link to={`/articles/${article.uuid}`}>查看</Link>]
+              ? [
+                  <Link to={`/articles/${article.uuid}`}>
+                    {t('common.detailBtn')}
+                  </Link>,
+                ]
               : [
-                  <Link to={`/articles/${article.uuid}`}>查看</Link>,
+                  <Link to={`/articles/${article.uuid}`}>
+                    {t('common.detailBtn')}
+                  </Link>,
                   <span>
                     {article.state === 'hidden' ? (
                       <Popconfirm
-                        title='确定要将文章公开吗？'
+                        title={t('minePage.publishConfirm')}
                         disabled={publishing}
                         onConfirm={() =>
                           publishArticle({
@@ -136,11 +144,11 @@ export default function MyArticlesComponent(props: {
                           })
                         }
                       >
-                        <a>公开</a>
+                        <a>{t('minePage.publishBtn')}</a>
                       </Popconfirm>
                     ) : (
                       <Popconfirm
-                        title='确定要将文章隐藏吗？已购读者将不受影响。'
+                        title={t('minePage.hideConfirm')}
                         disabled={hiding}
                         onConfirm={() =>
                           hideArticle({
@@ -148,11 +156,13 @@ export default function MyArticlesComponent(props: {
                           })
                         }
                       >
-                        <a>隐藏</a>
+                        <a>{t('minePage.hideBtn')}</a>
                       </Popconfirm>
                     )}
                   </span>,
-                  <Link to={`/articles/${article.uuid}/edit`}>编辑</Link>,
+                  <Link to={`/articles/${article.uuid}/edit`}>
+                    {t('common.editBtn')}
+                  </Link>,
                 ])
           }
         >
@@ -172,14 +182,18 @@ export default function MyArticlesComponent(props: {
           />
           <h3>
             <Space>
-              {type === 'author' && article.state === 'published' && (
-                <Tag color='success'>已发布</Tag>
-              )}
-              {type === 'author' && article.state === 'blocked' && (
-                <Tag color='error'>已屏蔽</Tag>
-              )}
-              {type === 'author' && article.state === 'hidden' && (
-                <Tag color='warning'>已隐藏</Tag>
+              {type === 'author' && (
+                <Tag
+                  color={
+                    article.state === 'published'
+                      ? 'success'
+                      : article.state === 'blocked'
+                      ? 'error'
+                      : 'warning'
+                  }
+                >
+                  {t(`article.state.${article.state}`)}
+                </Tag>
               )}
               {type === 'author' ? (
                 article.title

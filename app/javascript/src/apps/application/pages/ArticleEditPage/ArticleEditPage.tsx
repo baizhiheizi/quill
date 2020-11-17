@@ -6,12 +6,14 @@ import {
 import Editor, { commands } from '@uiw/react-md-editor';
 import { Button, Form, Input, InputNumber, message, Modal } from 'antd';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { useHistory, useParams } from 'react-router-dom';
 import LoadingComponent from '../../components/LoadingComponent/LoadingComponent';
 
 export default function ArticleEditPage() {
   const { uuid } = useParams<{ uuid: string }>();
   const history = useHistory();
+  const { t } = useTranslation();
   const { data, loading }: ArticleQueryHookResult = useArticleQuery({
     variables: { uuid },
   });
@@ -20,7 +22,7 @@ export default function ArticleEditPage() {
       if (err) {
         message.error(err);
       } else {
-        message.success('更新成功');
+        message.success(t('messages.successSubmitted'));
         history.replace(`/mine`);
       }
     },
@@ -46,13 +48,13 @@ export default function ArticleEditPage() {
       onFinish={(values) => {
         const { title, content, price, intro } = values;
         if (!title || !content || !price || !intro) {
-          message.warn('请先完成你的文章');
+          message.warn(t('article.form.warning'));
         } else {
           Modal.confirm({
-            title: '确定要更新你的文章吗？',
+            title: t('article.form.updateConfirm'),
             centered: true,
-            okText: '更新',
-            cancelText: '再改改',
+            okText: t('article.form.updateOkText'),
+            cancelText: t('article.form.updateCancelText'),
             onOk: () => updateArticle({ variables: { input: values } }),
           });
         }
@@ -61,15 +63,14 @@ export default function ArticleEditPage() {
       <Form.Item style={{ display: 'none' }} name='uuid'>
         <Input />
       </Form.Item>
-      <Form.Item label='标题' name='title'>
-        <Input placeholder='文章标题' />
+      <Form.Item label={t('article.title')} name='title'>
+        <Input placeholder={t('article.form.titlePlaceHolder')} />
       </Form.Item>
-      <Form.Item label='正文' name='content'>
+      <Form.Item label={t('article.content')} name='content'>
         <Editor
-          textareaProps={{ placeholder: '写点有价值的东西' }}
+          textareaProps={{ placeholder: t('article.form.contentPlaceHolder') }}
           autoFocus={false}
           preview='edit'
-          placeholder='支持 Markdown 格式'
           height={500}
           commands={[
             commands.bold,
@@ -86,10 +87,10 @@ export default function ArticleEditPage() {
           ]}
         />
       </Form.Item>
-      <Form.Item label='简介' name='intro'>
-        <Input.TextArea placeholder='请简要介绍一下你的文章，简介内容为公开可见。' />
+      <Form.Item label={t('article.intro')} name='intro'>
+        <Input.TextArea placeholder={t('article.form.introPlaceHolder')} />
       </Form.Item>
-      <Form.Item label='价格(PRS)' name='price'>
+      <Form.Item label={t('article.price')} name='price'>
         <InputNumber min={1} precision={4} placeholder='0.0' />
       </Form.Item>
       <Form.Item wrapperCol={{ xs: { offset: 0 }, sm: { offset: 2 } }}>
@@ -99,7 +100,7 @@ export default function ArticleEditPage() {
           htmlType='submit'
           loading={updating}
         >
-          保存
+          {t('article.form.updateBtn')}
         </Button>
       </Form.Item>
     </Form>
