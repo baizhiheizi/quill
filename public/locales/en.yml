@@ -1,0 +1,91 @@
+common:
+  loadMore: Load More
+messages:
+  successVoted: Thanks for voting
+  payInMessenger: Please pay in Mixin Messenger
+  rewardInMessenger: Please reward in Mixin Messenger
+  successSubmitted: Submitted
+  successSubscribed: Subscribed
+  successUnsubscribed: Unsubscribed
+article:
+  wordsCount: Words Count
+  price: Price(PRS)
+  ordersCount: Paid Times
+  revenue: Revenue(PRS)
+  myShare: My Share(%)
+user:
+  defaultBio: Didn't left anything
+transfer:
+  transferType:
+    payment_refund: Refund
+    author_revenue: Author
+    reader_revenue: Reader
+menu:
+  read: Read
+  write: Write
+  rules: Rules
+  fair: Fair
+  openSource: Open Source
+  mine: Mine
+  login: Login
+  logout: Logout
+homePage:
+  orderByPopularity: Popularity
+  orderByCreatedAt: Lately
+  orderByRevenue: Revenue
+  commentsZone: Comments
+articlePage:
+  moreToRead: 90% More to go
+  payToRead1: Pay
+  payToRead2: to continue reading
+  payToRead3: and receive early reader revenue (Check
+  payToRead4: )
+  payWarning: This article is a virtural product selling on PRSDigg, IT WILL NOT REFUND once paid. Please pay with caution.
+  pollingPayment: Checking Payment Status
+  firstReaderBtn: Be the FIRST reader
+  payToReadBtn: Pay to Read
+  alreadyPaid1: Already paid? Try to
+  alreadyPaid2: Refresh
+  buyPRSTips1: Have no PRS? Get some from
+  buyPRSTips2: and
+  loginBtn: Please Login
+  rewardBtn: Love this Article
+  shareBtn: Share
+  userDetailBtn: Detail
+  rewardModal:
+    title: Reward
+    okText: Reward
+    cancelText: Later
+  timesBought: times bought
+  timesReward: times reward
+fairPage:
+  usersCount: Users
+  articlesCount: Articles
+  authorRevenueAmount: Author Revenue(PRS)
+  readerRevenueAmount: Reader Revenue(PRS)
+  tabs:
+    revenue:
+      title: PRSDigg Revenue
+      chartTitle: Revenue Chart
+    transfers:
+      title: Transactions
+      snapshot: Snapshot
+      processing: Waiting
+rulesPage:
+  content: |
+    ### Rules of PRSDigg
+    
+    PRSDigg try to build a win-win platform for both writer and reader.
+commentsComponent:
+  title: Comments
+  subscribeBtn: Subscribe
+  unsubscribeBtn: Unsubscribe
+  emptyText: No Comments
+  deletedText: Deleted by the Administrator
+  quoteBtn: Quote
+  form:
+    warning: Write something first.
+    confirm: Are you sure to submit?
+    okText: Submit
+    cancelText: Later
+    placeholder: Markdown supported

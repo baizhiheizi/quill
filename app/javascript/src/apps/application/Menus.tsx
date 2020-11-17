@@ -1,7 +1,18 @@
 import { imagePath } from '@/shared';
 import { GithubOutlined, MenuOutlined } from '@ant-design/icons';
-import { Avatar, Button, Col, Drawer, Dropdown, Layout, Menu, Row } from 'antd';
+import {
+  Avatar,
+  Button,
+  Col,
+  Divider,
+  Drawer,
+  Dropdown,
+  Layout,
+  Menu,
+  Row,
+} from 'antd';
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { OPEN_SOURCE_URL, useCurrentUser, useMixin } from './shared';
 
@@ -9,6 +20,7 @@ export default function Menus() {
   const currentUser = useCurrentUser();
   const { mixinEnv } = useMixin();
   const [drawerVisible, setDrawerVisible] = useState(false);
+  const { t, i18n } = useTranslation();
   const MenuConent = (props: { mode: 'horizontal' | 'vertical' }) => (
     <Row
       justify='center'
@@ -29,35 +41,50 @@ export default function Menus() {
         <Menu theme='light' mode={props.mode} selectable={false}>
           <Menu.Item onClick={() => setDrawerVisible(false)}>
             <Link to='/' replace>
-              读文章
+              {t('menu.read')}
             </Link>
           </Menu.Item>
           <Menu.Item onClick={() => setDrawerVisible(false)}>
             {currentUser ? (
               <Link to='/articles/new' replace>
-                写文章
+                {t('menu.write')}
               </Link>
             ) : (
-              <a href={`/login?redirect_uri=${location.href}`}>写文章</a>
+              <a href={`/login?redirect_uri=${location.href}`}>
+                {t('menu.write')}
+              </a>
             )}
           </Menu.Item>
           <Menu.Item onClick={() => setDrawerVisible(false)}>
             <Link to='/rules' replace>
-              规则
+              {t('menu.rules')}
             </Link>
           </Menu.Item>
           <Menu.Item onClick={() => setDrawerVisible(false)}>
             <Link to='/fair' replace>
-              公示
+              {t('menu.fair')}
             </Link>
           </Menu.Item>
           <Menu.Item onClick={() => setDrawerVisible(false)}>
             <a href={OPEN_SOURCE_URL} target='_blank'>
               <GithubOutlined />
-              开源
+              {t('menu.openSource')}
             </a>
           </Menu.Item>
         </Menu>
+      </Col>
+      <Col>
+        {i18n.language.includes('en') ? (
+          <a onClick={() => i18n.changeLanguage('zh-CN')}>中文</a>
+        ) : (
+          '中文'
+        )}
+        <Divider type='vertical' />
+        {i18n.language.includes('zh') ? (
+          <a onClick={() => i18n.changeLanguage('en-US')}>EN</a>
+        ) : (
+          'EN'
+        )}
       </Col>
       <Col>
         {currentUser ? (
@@ -68,11 +95,11 @@ export default function Menus() {
               <Menu selectable={false}>
                 <Menu.Item onClick={() => setDrawerVisible(false)}>
                   <Link to='/mine' replace>
-                    <a>个人中心</a>
+                    <a>{t('menu.mine')}</a>
                   </Link>
                 </Menu.Item>
                 <Menu.Item onClick={() => setDrawerVisible(false)}>
-                  <a href='/logout'>登出</a>
+                  <a href='/logout'>{t('menu.logout')}</a>
                 </Menu.Item>
               </Menu>
             }
@@ -83,7 +110,7 @@ export default function Menus() {
           </Dropdown>
         ) : (
           <Button type='link' href='/login'>
-            登录
+            {t('menu.login')}
           </Button>
         )}
       </Col>

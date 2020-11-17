@@ -1,21 +1,23 @@
 import { Tabs } from 'antd';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import ArticlesComponent from './components/ArticlesComponents';
 import CommentsComponent from './components/CommentsComponent';
 
 export default function HomePage() {
+  const { t } = useTranslation();
   return (
     <Tabs defaultActiveKey='default'>
-      <Tabs.TabPane tab='综合排序' key='default'>
+      <Tabs.TabPane tab={t('homePage.orderByPopularity')} key='default'>
         <ArticlesComponent order='default' />
       </Tabs.TabPane>
-      <Tabs.TabPane tab='最新优先' key='lately'>
+      <Tabs.TabPane tab={t('homePage.orderByCreatedAt')} key='lately'>
         <ArticlesComponent order='lately' />
       </Tabs.TabPane>
-      <Tabs.TabPane tab='营收最多' key='revenue'>
+      <Tabs.TabPane tab={t('homePage.orderByRevenue')} key='revenue'>
         <ArticlesComponent order='revenue' />
       </Tabs.TabPane>
-      <Tabs.TabPane tab='评论区' key='comments'>
+      <Tabs.TabPane tab={t('homePage.commentsZone')} key='comments'>
         <CommentsComponent />
       </Tabs.TabPane>
     </Tabs>

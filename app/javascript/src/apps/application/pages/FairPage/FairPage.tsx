@@ -8,6 +8,7 @@ import {
 import { Avatar, Button, Col, List, Row, Statistic, Tabs, Tag } from 'antd';
 import moment from 'moment';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   Area,
   AreaChart,
@@ -21,6 +22,7 @@ import LoadingComponent from '../../components/LoadingComponent/LoadingComponent
 import { PRS_ICON_URL } from '../../shared';
 
 export default function FairPage() {
+  const { t } = useTranslation();
   const { data, loading }: StatisticsQueryHookResult = useStatisticsQuery();
 
   if (loading) {
@@ -44,23 +46,32 @@ export default function FairPage() {
         justify='space-around'
       >
         <Col span={12}>
-          <Statistic title='用户总量' value={usersCount} />
+          <Statistic title={t('fairPage.usersCount')} value={usersCount} />
         </Col>
         <Col span={12}>
-          <Statistic title='文章总数' value={articlesCount} />
+          <Statistic
+            title={t('fairPage.articlesCount')}
+            value={articlesCount}
+          />
         </Col>
         <Col span={12}>
-          <Statistic title='作者收益(PRS)' value={authorRevenueAmount} />
+          <Statistic
+            title={t('fairPage.authorRevenueAmount')}
+            value={authorRevenueAmount}
+          />
         </Col>
         <Col span={12}>
-          <Statistic title='读者收益(PRS)' value={readerRevenueAmount} />
+          <Statistic
+            title={t('fairPage.readerRevenueAmount')}
+            value={readerRevenueAmount}
+          />
         </Col>
       </Row>
       <Tabs defaultActiveKey='revenue'>
-        <Tabs.TabPane tab='平台收益' key='revenue'>
+        <Tabs.TabPane tab={t('fairPage.tabs.revenue.title')} key='revenue'>
           <PrsdiggRevenueChart />
         </Tabs.TabPane>
-        <Tabs.TabPane tab='转账记录' key='transfers'>
+        <Tabs.TabPane tab={t('fairPage.tabs.transfers.title')} key='transfers'>
           <TransferList />
         </Tabs.TabPane>
       </Tabs>
@@ -70,6 +81,7 @@ export default function FairPage() {
 
 function PrsdiggRevenueChart() {
   const { data, loading } = useRevenueChartQuery();
+  const { t } = useTranslation();
   if (loading) {
     return <LoadingComponent />;
   }
@@ -81,7 +93,7 @@ function PrsdiggRevenueChart() {
   }
   return (
     <div>
-      <h3>平台收益曲线</h3>
+      <h3>{t('fairPage.tabs.revenue.chartTitle')}</h3>
       <ResponsiveContainer height={250}>
         <AreaChart
           data={revenueChart}
@@ -111,6 +123,7 @@ function PrsdiggRevenueChart() {
 }
 
 function TransferList() {
+  const { t } = useTranslation();
   const { data, loading, fetchMore } = useTransferConnectionQuery();
 
   if (loading) {
@@ -161,7 +174,7 @@ function TransferList() {
                 });
               }}
             >
-              加载更多
+              {t('common.loadMore')}
             </Button>
           </div>
         )
@@ -179,15 +192,17 @@ function TransferList() {
               {transfer.amount}
             </Col>
             <Col xs={6} sm={6} md={4}>
-              {transfer.transferType === 'payment_refund' && (
-                <Tag color='magenta'>原路返回</Tag>
-              )}
-              {transfer.transferType === 'author_revenue' && (
-                <Tag color='green'>作者收益</Tag>
-              )}
-              {transfer.transferType === 'reader_revenue' && (
-                <Tag color='cyan'>读者收益</Tag>
-              )}
+              <Tag
+                color={
+                  transfer.transferType === 'payment_refund'
+                    ? 'magenta'
+                    : transfer.transferType === 'author_revenue'
+                    ? 'green'
+                    : 'cyan'
+                }
+              >
+                {t(`transfer.transferType.${transfer.transferType}`)}
+              </Tag>
             </Col>
             <Col xs={6} sm={6} md={4}>
               {transfer.snapshotId ? (
@@ -195,10 +210,10 @@ function TransferList() {
                   href={`https://mixin.one/snapshots/${transfer.snapshotId}`}
                   target='_blank'
                 >
-                  链上快照
+                  {t('fairPage.tabs.transfers.snapshot')}
                 </a>
               ) : (
-                <span>等待处理</span>
+                <span>{t('fairPage.tabs.transfers.processing')}</span>
               )}
             </Col>
           </Row>

@@ -39,12 +39,14 @@ import {
 import { encode as encode64 } from 'js-base64';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Link, useParams } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
 import NotFoundPage from '../NotFoundPage/NotFoundPage';
 import './ArticlePage.less';
 
 export default function ArticlePage() {
+  const { t } = useTranslation();
   const { uuid } = useParams<{ uuid: string }>();
   const [paying, setPaying] = useState(false);
   const [rewardModalVisible, setRewardModalVisible] = useState(false);
@@ -74,7 +76,7 @@ export default function ArticlePage() {
       if (error) {
         message.error(error);
       } else {
-        message.success('感谢反馈');
+        message.success(t('messages.successVoted'));
         refetch();
       }
     },
@@ -91,7 +93,7 @@ export default function ArticlePage() {
       if (error) {
         message.error(error);
       } else {
-        message.success('感谢反馈');
+        message.success(t('messages.successVoted'));
         refetch();
       }
     },
@@ -139,7 +141,7 @@ export default function ArticlePage() {
       location.replace(payUrl);
       handlePaid();
     } else {
-      message.warn('请在 Mixin Messenger 中付款');
+      message.warn(t('messages.payInMessenger'));
     }
   };
   const handlePaid = () => {
@@ -153,7 +155,7 @@ export default function ArticlePage() {
       location.replace(payUrl);
       setRewardModalVisible(false);
     } else {
-      message.warn('请在 Mixin Messenger 中赞赏');
+      message.warn(t('messages.rewardInMessenger'));
     }
   };
 
@@ -188,7 +190,7 @@ export default function ArticlePage() {
               textAlign: 'left',
             }}
           >
-            正文字数: {article.wordsCount}
+            {t('article.wordsCount')}: {article.wordsCount}
           </div>
           {article.partialContent && (
             <div style={{ marginBottom: '1rem', textAlign: 'left' }}>
@@ -196,42 +198,45 @@ export default function ArticlePage() {
               <div
                 style={{ marginTop: '1rem', textAlign: 'center', color: 'red' }}
               >
-                - 以下还有 90% 内容 -
+                - {t('articlePage.moreToRead')} -
               </div>
             </div>
           )}
           <div style={{ marginBottom: '1rem' }}>
             <div>
-              支付 <span style={{ color: 'red' }}>{article.price} PRS</span>{' '}
-              继续阅读
+              {t('articlePage.payToRead1')}{' '}
+              <span style={{ color: 'red' }}>{article.price} PRS</span>{' '}
+              {t('articlePage.payToRead2')}
             </div>
             <div>
-              并享受早期读者奖励（查看<Link to='/rules'>规则</Link>）
+              {t('articlePage.payToRead3')}{' '}
+              <Link to='/rules'>{t('menu.rules')}</Link>{' '}
+              {t('articlePage.payToRead4')}
             </div>
           </div>
           <div style={{ marginBottom: '1rem' }}>
-            <Alert
-              type='warning'
-              message='文章为作者在 PRSDigg 平台出售的虚拟商品，一经付款，概不退还。谨慎付款，以防被骗。'
-            />
+            <Alert type='warning' message={t('articlePage.payWarning')} />
           </div>
           <div>
             {currentUser ? (
               paying ? (
                 <Button type='primary' loading disabled danger>
-                  支付结果查询中
+                  {t('articlePage.pollingPayment')}
                 </Button>
               ) : (
                 <div>
                   <Button type='primary' onClick={handlePaying}>
                     {article.readers.totalCount === 0
-                      ? '成为第一位读者'
-                      : '付费阅读'}
+                      ? t('articlePage.firstReaderBtn')
+                      : t('articlePage.payToReadBtn')}
                   </Button>
                   <div
                     style={{ marginTop: 10, fontSize: '0.8rem', color: '#aaa' }}
                   >
-                    已经付款? <a onClick={() => refetch()}>刷新</a> 试试?
+                    {t('articlePage.alreadyPaid1')}
+                    <a onClick={() => refetch()}>
+                      {t('articlePage.alreadyPaid3')}
+                    </a>
                   </div>
                   {mixinEnv && (
                     <div
@@ -241,19 +246,18 @@ export default function ArticlePage() {
                         color: '#aaa',
                       }}
                     >
-                      没有PRS? 去{' '}
+                      {t('articlePage.buyPRSTips1')}{' '}
                       <a
                         href={`mixin://users/61103d28-3ac2-44a2-ae34-bd956070dab1`}
                       >
                         ExinOne
                       </a>{' '}
-                      和{' '}
+                      {t('articlePage.buyPRSTips2')}{' '}
                       <a
                         href={`mixin://users/a753e0eb-3010-4c4a-a7b2-a7bda4063f62`}
                       >
                         4swap
                       </a>{' '}
-                      购买
                     </div>
                   )}
                 </div>
@@ -265,7 +269,7 @@ export default function ArticlePage() {
                   location.href,
                 )}`}
               >
-                请先登录
+                {t('articlePage.loginBtn')}
               </Button>
             )}
           </div>
@@ -276,7 +280,7 @@ export default function ArticlePage() {
         style={{ margin: '20px 0', textAlign: 'right' }}
       >
         <Button type='link' icon={<ShareAltOutlined />}>
-          分享
+          {t('articlePage.shareBtn')}
         </Button>
       </div>
       <div style={{ marginBottom: '2rem' }}>
@@ -290,13 +294,15 @@ export default function ArticlePage() {
                   currentUser.mixinId !== article.author.mixinId) && (
                   <Col>
                     <Button type='primary' shape='round' size='small'>
-                      <Link to={`/users/${article.author.mixinId}`}>查看</Link>
+                      <Link to={`/users/${article.author.mixinId}`}>
+                        {t('articlePage.userDetailBtn')}
+                      </Link>
                     </Button>
                   </Col>
                 )}
               </Row>
             }
-            description={article.author.bio || '没有留下介绍'}
+            description={article.author.bio || t('user.defaultBio')}
           />
         </Card>
       </div>
@@ -392,15 +398,15 @@ export default function ArticlePage() {
               size='large'
               danger
             >
-              <HeartOutlined /> 大爱此文
+              <HeartOutlined /> {t('articlePage.rewardBtn')}
             </Button>
             <Modal
               className='reward-modal'
               centered
               closable={false}
-              title='赞赏文章'
-              okText='赞赏'
-              cancelText='再想想'
+              title={t('articlePage.rewardModal.title')}
+              okText={t('articlePage.rewardModal.okText')}
+              cancelText={t('articlePage.rewardModal.cancelText')}
               visible={rewardModalVisible}
               onCancel={() => setRewardModalVisible(false)}
               onOk={handleRewarding}
@@ -430,11 +436,11 @@ export default function ArticlePage() {
                 <span style={{ color: 'red' }}>
                   {article.buyOrders.totalCount}
                 </span>{' '}
-                次购买,{' '}
+                {t('articlePage.timesBought')},{' '}
                 <span style={{ color: 'red' }}>
                   {article.rewardOrders.totalCount}
                 </span>{' '}
-                次赞赏
+                {t('articlePage.timesReward')}
               </h4>
             </Col>
           </Row>
@@ -452,20 +458,23 @@ export default function ArticlePage() {
           {article.authorized && (
             <Row gutter={16} style={{ textAlign: 'center' }}>
               <Col xs={12} sm={6}>
-                <Statistic title='单价(PRS)' value={article.price} />
-              </Col>
-              <Col xs={12} sm={6}>
-                <Statistic title='付费次数' value={article.ordersCount} />
+                <Statistic title={t('article.price')} value={article.price} />
               </Col>
               <Col xs={12} sm={6}>
                 <Statistic
-                  title='总收益(PRS)'
+                  title={t('article.ordersCount')}
+                  value={article.ordersCount}
+                />
+              </Col>
+              <Col xs={12} sm={6}>
+                <Statistic
+                  title={t('article.revenue')}
                   value={article.revenue ? article.revenue.toFixed(4) : 0.0}
                 />
               </Col>
               <Col xs={12} sm={6}>
                 <Statistic
-                  title='奖励份额(%)'
+                  title={t('article.myShare')}
                   value={
                     article.myShare ? (article.myShare * 100).toFixed(3) : '0.0'
                   }

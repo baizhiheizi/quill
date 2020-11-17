@@ -20,8 +20,8 @@ import {
 import { Avatar, Button, List, Row, Space } from 'antd';
 import moment from 'moment';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
-moment.locale('zh-cn');
 
 export default function ArticlesComponent(props: {
   order: 'default' | 'lately' | 'revenue';
@@ -29,6 +29,8 @@ export default function ArticlesComponent(props: {
   const { order } = props;
   const { mixinEnv } = useMixin();
   const { appId } = usePrsdigg();
+  const { i18n } = useTranslation();
+  moment.locale(i18n.language);
   const {
     data,
     loading,

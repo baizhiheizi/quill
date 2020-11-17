@@ -20,6 +20,7 @@ import {
 } from 'antd';
 import moment from 'moment';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import LoadingComponent from '../LoadingComponent/LoadingComponent';
 moment.locale('zh-cn');
 
@@ -40,6 +41,7 @@ export default function CommentsComponent(props: {
     refetchArticle,
   } = props;
   const [commentForm] = Form.useForm();
+  const { t } = useTranslation();
   const { data, loading, refetch, fetchMore } = useCommentConnectionQuery({
     variables: { commentableType, commentableId },
     notifyOnNetworkStatusChange: true,
@@ -56,7 +58,7 @@ export default function CommentsComponent(props: {
       if (error) {
         message.error(error);
       } else {
-        message.success('提交成功');
+        message.success(t('messages.successSubmitted'));
         commentForm.setFieldsValue({ content: '' });
         refetchArticle();
         refetch();
@@ -77,7 +79,11 @@ export default function CommentsComponent(props: {
       if (error) {
         message.error(error);
       } else {
-        message.success(commentingSubscribed ? '已取消订阅' : '成功订阅');
+        message.success(
+          commentingSubscribed
+            ? t('messages.successUnsubscribed')
+            : t('messages.successSubscribed'),
+        );
         refetchArticle();
       }
     },
@@ -98,7 +104,7 @@ export default function CommentsComponent(props: {
     <div>
       <Row justify='center'>
         <Col>
-          <h3>读者评论</h3>
+          <h3>{t('commentsComponent.title')}</h3>
         </Col>
       </Row>
       <Row justify='center'>
@@ -115,7 +121,9 @@ export default function CommentsComponent(props: {
             }
             icon={<AlertOutlined />}
           >
-            {commentingSubscribed ? '取消订阅' : '订阅新评论'}
+            {commentingSubscribed
+              ? t('commentsComponent.subscribeBtn')
+              : t('commentsComponent.unsubscribeBtn')}
           </Button>
         )}
       </Row>
@@ -157,12 +165,12 @@ export default function CommentsComponent(props: {
                   });
                 }}
               >
-                加载更多
+                {t('common.loadMore')}
               </Button>
             </div>
           )
         }
-        locale={{ emptyText: '暂无评论' }}
+        locale={{ emptyText: t('commentsComponent.emptyText') }}
         renderItem={(comment: Partial<IComment>) => (
           <li>
             {comment.deletedAt ? (
@@ -173,7 +181,7 @@ export default function CommentsComponent(props: {
                   textDecoration: 'line-through',
                 }}
               >
-                此评论已被管理员删除
+                {t('commentsComponent.deletedText')}
               </div>
             ) : (
               <Comment
@@ -191,7 +199,7 @@ ${comment.content.replace(/^/gm, '> ')}
                       document.getElementById('comment-form').focus();
                     }}
                   >
-                    引用
+                    {t('commentsComponent.quoteBtn')}
                   </span>,
                 ]}
                 author={comment.author.name}
@@ -216,14 +224,14 @@ ${comment.content.replace(/^/gm, '> ')}
           }}
           onFinish={(values) => {
             if (!Boolean(values.content)) {
-              message.warn('先写点什么');
+              message.warn(t('commentsComponent.form.warning'));
             } else {
               Modal.confirm({
-                title: '确认提交评论吗?',
+                title: t('commentsComponent.form.confirm'),
                 centered: true,
                 onOk: () => createComment({ variables: { input: values } }),
-                cancelText: '再想想',
-                okText: '提交',
+                cancelText: t('commentsComponent.form.cancelText'),
+                okText: t('commentsComponent.form.okText'),
               });
             }
           }}
@@ -237,7 +245,7 @@ ${comment.content.replace(/^/gm, '> ')}
           <Form.Item name='content'>
             <Editor
               textareaProps={{
-                placeholder: '支持 Markdown 格式',
+                placeholder: t('commentsComponent.form.placeholder'),
                 id: 'comment-form',
               }}
               autoFocus={false}
@@ -258,7 +266,7 @@ ${comment.content.replace(/^/gm, '> ')}
           </Form.Item>
           <Form.Item style={{ textAlign: 'center' }}>
             <Button type='primary' htmlType='submit'>
-              提交
+              {t('commentsComponent.form.okText')}
             </Button>
           </Form.Item>
         </Form>
