@@ -29,7 +29,7 @@ export default function ArticlesComponent(props: {
   const { order } = props;
   const { mixinEnv } = useMixin();
   const { appId } = usePrsdigg();
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
   moment.locale(i18n.language);
   const {
     data,
@@ -91,7 +91,7 @@ export default function ArticlesComponent(props: {
                 });
               }}
             >
-              加载更多
+              {t('common.loadMore')}
             </Button>
           </div>
         )
