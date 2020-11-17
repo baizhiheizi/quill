@@ -4,10 +4,12 @@ common:
   unsubscribeBtn: 取消订阅
   detailBtn: 查看
   editBtn: 编辑
+  cancelBtn: 取消
+  paidBtn: 已经支付
 messages:
   successVoted: 感谢反馈
-  payInMessenger: 请在 Mixin Messenger 支付
-  rewardInMessenger: 请在 Mixin Messenger 打赏
+  payWithMessenger: 请使用 Mixin Messenger 扫码支付
+  viewWithMessenger: 请使用 Mixin Messenger 扫码查看
   successSubmitted: 成功提交
   successSubscribed: 成功订阅
   successUnsubscribed: 已取消订阅

@@ -43,6 +43,7 @@ import { useTranslation } from 'react-i18next';
 import { Link, useParams } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
 import NotFoundPage from '../NotFoundPage/NotFoundPage';
+import QRCode from 'qrcode.react';
 import './ArticlePage.less';
 
 export default function ArticlePage() {
@@ -130,32 +131,68 @@ export default function ArticlePage() {
 
   document.title = `${article.title} - ${article.author.name}`;
 
+  const QRCodeModalContent = ({ url, type = 'pay' }) => (
+    <div style={{ textAlign: 'center' }}>
+      <div style={{ marginBottom: 5 }}>
+        <QRCode value={url} size={200} />
+      </div>
+      <div style={{ color: '#aaa' }}>
+        {type === 'pay'
+          ? t('messages.payWithMessenger')
+          : t('messages.viewWithMessenger')}
+      </div>
+    </div>
+  );
+
   const handlePaying = () => {
+    const payUrl = `mixin://pay?recipient=${appId}&trace=${
+      article.paymentTraceId
+    }&memo=${memo}&asset=${article.assetId}&amount=${article.price.toFixed(8)}`;
     if (mixinEnv) {
-      setPaying(true);
-      const payUrl = `mixin://pay?recipient=${appId}&trace=${
-        article.paymentTraceId
-      }&memo=${memo}&asset=${article.assetId}&amount=${article.price.toFixed(
-        8,
-      )}`;
       location.replace(payUrl);
-      handlePaid();
+      startPolling(1500);
+      setPaying(true);
     } else {
-      message.warn(t('messages.payInMessenger'));
+      Modal.confirm({
+        icon: null,
+        centered: true,
+        content: <QRCodeModalContent url={payUrl} />,
+        okText: t('common.paidBtn'),
+        cancelText: t('common.cancelBtn'),
+        onOk: (close: () => any) => {
+          startPolling(1500);
+          setPaying(true);
+          close();
+        },
+      });
     }
   };
-  const handlePaid = () => {
-    startPolling(1500);
-  };
   const handleRewarding = () => {
+    const payUrl = `mixin://pay?recipient=${appId}&trace=${uuidv4()}&memo=${encode64(
+      JSON.stringify({ t: 'REWARD', a: uuid }),
+    )}&asset=${article.assetId}&amount=${rewardAmount.toFixed(8)}`;
     if (mixinEnv) {
-      const payUrl = `mixin://pay?recipient=${appId}&trace=${uuidv4()}&memo=${encode64(
-        JSON.stringify({ t: 'REWARD', a: uuid }),
-      )}&asset=${article.assetId}&amount=${rewardAmount.toFixed(8)}`;
       location.replace(payUrl);
-      setRewardModalVisible(false);
     } else {
-      message.warn(t('messages.rewardInMessenger'));
+      Modal.confirm({
+        icon: null,
+        centered: true,
+        content: <QRCodeModalContent url={payUrl} />,
+        okText: t('common.paidBtn'),
+        cancelText: t('common.cancelBtn'),
+      });
+    }
+    setRewardModalVisible(false);
+  };
+  const handleRedirectingRobot = (url: string) => {
+    if (mixinEnv) {
+      location.replace(url);
+    } else {
+      Modal.info({
+        icon: null,
+        centered: true,
+        content: <QRCodeModalContent url={url} type='user' />,
+      });
     }
   };
 
@@ -220,9 +257,24 @@ export default function ArticlePage() {
           <div>
             {currentUser ? (
               paying ? (
-                <Button type='primary' loading disabled danger>
-                  {t('articlePage.pollingPayment')}
-                </Button>
+                <div>
+                  <div>
+                    <Button type='primary' loading disabled danger>
+                      {t('articlePage.pollingPayment')}
+                    </Button>
+                  </div>
+                  <div>
+                    <Button
+                      type='link'
+                      onClick={() => {
+                        setPaying(false);
+                        stopPolling();
+                      }}
+                    >
+                      {t('common.cancelBtn')}
+                    </Button>
+                  </div>
+                </div>
               ) : (
                 <div>
                   <Button type='primary' onClick={handlePaying}>
@@ -238,28 +290,34 @@ export default function ArticlePage() {
                       {t('articlePage.alreadyPaid2')}
                     </a>
                   </div>
-                  {mixinEnv && (
-                    <div
-                      style={{
-                        marginTop: 5,
-                        fontSize: '0.8rem',
-                        color: '#aaa',
+                  <div
+                    style={{
+                      marginTop: 5,
+                      fontSize: '0.8rem',
+                      color: '#aaa',
+                    }}
+                  >
+                    {t('articlePage.buyPRSTips1')}{' '}
+                    <a
+                      onClick={() => {
+                        handleRedirectingRobot(
+                          'mixin://users/61103d28-3ac2-44a2-ae34-bd956070dab1',
+                        );
                       }}
                     >
-                      {t('articlePage.buyPRSTips1')}{' '}
-                      <a
-                        href={`mixin://users/61103d28-3ac2-44a2-ae34-bd956070dab1`}
-                      >
-                        ExinOne
-                      </a>{' '}
-                      {t('articlePage.buyPRSTips2')}{' '}
-                      <a
-                        href={`mixin://users/a753e0eb-3010-4c4a-a7b2-a7bda4063f62`}
-                      >
-                        4swap
-                      </a>{' '}
-                    </div>
-                  )}
+                      ExinOne
+                    </a>{' '}
+                    {t('articlePage.buyPRSTips2')}{' '}
+                    <a
+                      onClick={() => {
+                        handleRedirectingRobot(
+                          'mixin://users/a753e0eb-3010-4c4a-a7b2-a7bda4063f62',
+                        );
+                      }}
+                    >
+                      4swap
+                    </a>{' '}
+                  </div>
                 </div>
               )
             ) : (

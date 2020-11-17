@@ -4,10 +4,12 @@ common:
   unsubscribeBtn: Unsubscribe
   detailBtn: Detail
   editBtn: Edit
+  cancelBtn: Cancel
+  paidBtn: Paid
 messages:
   successVoted: Thanks for voting
-  payInMessenger: Please pay in Mixin Messenger
-  rewardInMessenger: Please reward in Mixin Messenger
+  payWithMessenger: Please scan the QRCode using Mixin Messenger
+  viewWithMessenger: Please scan the QRCode using Mixin Messenger
   successSubmitted: Submitted
   successSubscribed: Subscribed
   successUnsubscribed: Unsubscribed
