@@ -122,8 +122,8 @@ export default function CommentsComponent(props: {
             icon={<AlertOutlined />}
           >
             {commentingSubscribed
-              ? t('commentsComponent.subscribeBtn')
-              : t('commentsComponent.unsubscribeBtn')}
+              ? t('commentsComponent.unsubscribeBtn')
+              : t('commentsComponent.subscribeBtn')}
           </Button>
         )}
       </Row>
