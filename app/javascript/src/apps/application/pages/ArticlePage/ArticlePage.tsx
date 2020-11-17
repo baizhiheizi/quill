@@ -233,9 +233,9 @@ export default function ArticlePage() {
                   <div
                     style={{ marginTop: 10, fontSize: '0.8rem', color: '#aaa' }}
                   >
-                    {t('articlePage.alreadyPaid1')}
+                    {t('articlePage.alreadyPaid1')}{' '}
                     <a onClick={() => refetch()}>
-                      {t('articlePage.alreadyPaid3')}
+                      {t('articlePage.alreadyPaid2')}
                     </a>
                   </div>
                   {mixinEnv && (
