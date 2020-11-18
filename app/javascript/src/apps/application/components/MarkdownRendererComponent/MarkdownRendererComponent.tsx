@@ -10,11 +10,7 @@ export default function MarkdownRendererComponent(props: { source: string }) {
       renderers={{
         image: ({ src, alt }) => (
           <Zoom wrapElement='span'>
-            <img
-              style={{ height: '100%', maxWidth: '100%' }}
-              src={src}
-              alt={alt}
-            />
+            <img style={{ maxWidth: '100%' }} src={src} alt={alt} />
           </Zoom>
         ),
       }}
