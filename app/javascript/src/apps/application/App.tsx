@@ -9,7 +9,8 @@ import LoadingComponent from './components/LoadingComponent/LoadingComponent';
 import './i18n';
 import Menus from './Menus';
 import Routes from './Routes';
-import { CurrentUserContext, MixinContext, PrsdiggContext } from './shared';
+import isMobile from 'ismobilejs';
+import { CurrentUserContext, UserAgentContext, PrsdiggContext } from './shared';
 
 export default function App(props: {
   csrfToken: string;
@@ -23,12 +24,13 @@ export default function App(props: {
     <Suspense fallback={<LoadingComponent />}>
       <ApolloProvider client={apolloClient('/graphql', csrfToken)}>
         <PrsdiggContext.Provider value={prsdigg}>
-          <MixinContext.Provider
+          <UserAgentContext.Provider
             value={{
               mixinAppversion: mixinUtils.appVersion(),
               mixinConversationId: mixinUtils.conversationId(),
               mixinEnv: mixinUtils.environment(),
               mixinImmersive: mixinUtils.immersive(),
+              isMobile: isMobile(),
             }}
           >
             <CurrentUserContext.Provider value={currentUser}>
@@ -55,7 +57,7 @@ export default function App(props: {
                 </Layout>
               </Router>
             </CurrentUserContext.Provider>
-          </MixinContext.Provider>
+          </UserAgentContext.Provider>
         </PrsdiggContext.Provider>
       </ApolloProvider>
     </Suspense>

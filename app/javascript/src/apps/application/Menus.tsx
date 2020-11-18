@@ -14,11 +14,11 @@ import {
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
-import { OPEN_SOURCE_URL, useCurrentUser, useMixin } from './shared';
+import { OPEN_SOURCE_URL, useCurrentUser, useUserAgent } from './shared';
 
 export default function Menus() {
   const currentUser = useCurrentUser();
-  const { mixinEnv } = useMixin();
+  const { mixinEnv } = useUserAgent();
   const [drawerVisible, setDrawerVisible] = useState(false);
   const { t, i18n } = useTranslation();
   const MenuConent = (props: { mode: 'horizontal' | 'vertical' }) => (

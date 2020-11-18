@@ -11,8 +11,8 @@ import {
   handleShare,
   PAGE_TITLE,
   useCurrentUser,
-  useMixin,
   usePrsdigg,
+  useUserAgent,
 } from '@application/shared';
 import {
   ArticleQueryHookResult,
@@ -53,7 +53,7 @@ export default function ArticlePage() {
   const [rewardModalVisible, setRewardModalVisible] = useState(false);
   const [rewardAmount, setRewardAmount] = useState(1);
   const { appId } = usePrsdigg();
-  const { mixinEnv } = useMixin();
+  const { mixinEnv } = useUserAgent();
   const currentUser = useCurrentUser();
   const {
     loading,

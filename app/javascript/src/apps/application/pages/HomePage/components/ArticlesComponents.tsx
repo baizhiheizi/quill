@@ -9,8 +9,8 @@ import LoadingComponent from '@application/components/LoadingComponent/LoadingCo
 import {
   handleShare,
   PRS_ICON_URL,
-  useMixin,
   usePrsdigg,
+  useUserAgent,
 } from '@application/shared';
 import {
   Article,
@@ -27,7 +27,7 @@ export default function ArticlesComponent(props: {
   order: 'default' | 'lately' | 'revenue';
 }) {
   const { order } = props;
-  const { mixinEnv } = useMixin();
+  const { mixinEnv } = useUserAgent();
   const { appId } = usePrsdigg();
   const { t, i18n } = useTranslation();
   moment.locale(i18n.language);
