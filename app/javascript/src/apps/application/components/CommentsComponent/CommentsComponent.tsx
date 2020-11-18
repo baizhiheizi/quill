@@ -1,4 +1,5 @@
 import { AlertOutlined } from '@ant-design/icons';
+import MarkdownRendererComponent from '@application/components/MarkdownRendererComponent/MarkdownRendererComponent';
 import {
   Comment as IComment,
   useCommentConnectionQuery,
@@ -22,7 +23,6 @@ import moment from 'moment';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import LoadingComponent from '../LoadingComponent/LoadingComponent';
-moment.locale('zh-cn');
 
 export default function CommentsComponent(props: {
   commentableType?: 'Article' | String;
@@ -41,7 +41,8 @@ export default function CommentsComponent(props: {
     refetchArticle,
   } = props;
   const [commentForm] = Form.useForm();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  moment.locale(i18n.language);
   const { data, loading, refetch, fetchMore } = useCommentConnectionQuery({
     variables: { commentableType, commentableId },
     notifyOnNetworkStatusChange: true,
@@ -208,7 +209,7 @@ ${comment.content.replace(/^/gm, '> ')}
                     {comment.author.name[0]}
                   </Avatar>
                 }
-                content={<Editor.Markdown source={comment.content} />}
+                content={<MarkdownRendererComponent source={comment.content} />}
                 datetime={<span>{moment(comment.createdAt).fromNow()}</span>}
               />
             )}

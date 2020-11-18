@@ -1,10 +1,10 @@
 import LoadingComponent from '@application/components/LoadingComponent/LoadingComponent';
+import MarkdownRendererComponent from '@application/components/MarkdownRendererComponent/MarkdownRendererComponent';
 import {
   Comment as IComment,
   CommentConnectionQueryHookResult,
   useCommentConnectionQuery,
 } from '@graphql';
-import Editor from '@uiw/react-md-editor';
 import { Avatar, Button, Comment, List } from 'antd';
 import moment from 'moment';
 import React from 'react';
@@ -18,7 +18,9 @@ export default function CommentsComponent() {
     data,
     loading,
     fetchMore,
-  }: CommentConnectionQueryHookResult = useCommentConnectionQuery();
+  }: CommentConnectionQueryHookResult = useCommentConnectionQuery({
+    fetchPolicy: 'network-only',
+  });
 
   if (loading) {
     return <LoadingComponent />;
@@ -83,7 +85,7 @@ export default function CommentsComponent() {
                   {comment.author.name[0]}
                 </Avatar>
               }
-              content={<Editor.Markdown source={comment.content} />}
+              content={<MarkdownRendererComponent source={comment.content} />}
               datetime={<span>{moment(comment.createdAt).fromNow()}</span>}
               actions={[
                 <span>

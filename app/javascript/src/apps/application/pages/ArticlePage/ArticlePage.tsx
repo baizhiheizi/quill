@@ -6,6 +6,7 @@ import {
 } from '@ant-design/icons';
 import CommentsComponent from '@application/components/CommentsComponent/CommentsComponent';
 import LoadingComponent from '@application/components/LoadingComponent/LoadingComponent';
+import MarkdownRendererComponent from '@application/components/MarkdownRendererComponent/MarkdownRendererComponent';
 import {
   handleShare,
   PAGE_TITLE,
@@ -20,7 +21,6 @@ import {
   User,
   useUpvoteArticleMutation,
 } from '@graphql';
-import MDEditor from '@uiw/react-md-editor';
 import {
   Alert,
   Avatar,
@@ -38,12 +38,12 @@ import {
 } from 'antd';
 import { encode as encode64 } from 'js-base64';
 import moment from 'moment';
+import QRCode from 'qrcode.react';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, useParams } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
 import NotFoundPage from '../NotFoundPage/NotFoundPage';
-import QRCode from 'qrcode.react';
 import './ArticlePage.less';
 
 export default function ArticlePage() {
@@ -217,7 +217,7 @@ export default function ArticlePage() {
         {article.intro}
       </div>
       {article.authorized ? (
-        <MDEditor.Markdown source={article.content} />
+        <MarkdownRendererComponent source={article.content} />
       ) : (
         <div style={{ textAlign: 'center' }}>
           <div
@@ -231,7 +231,7 @@ export default function ArticlePage() {
           </div>
           {article.partialContent && (
             <div style={{ marginBottom: '1rem', textAlign: 'left' }}>
-              <MDEditor.Markdown source={article.partialContent} />
+              <MarkdownRendererComponent source={article.partialContent} />
               <div
                 style={{ marginTop: '1rem', textAlign: 'center', color: 'red' }}
               >

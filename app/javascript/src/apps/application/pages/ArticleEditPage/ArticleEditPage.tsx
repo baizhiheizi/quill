@@ -82,6 +82,7 @@ export default function ArticleEditPage() {
             commands.link,
             commands.code,
             commands.divider,
+            commands.image,
             commands.codeEdit,
             commands.codePreview,
           ]}

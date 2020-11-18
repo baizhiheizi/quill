@@ -1,11 +1,11 @@
 import LoadingComponent from '@application/components/LoadingComponent/LoadingComponent';
+import MarkdownRendererComponent from '@application/components/MarkdownRendererComponent/MarkdownRendererComponent';
 import { useCurrentUser } from '@application/shared';
 import {
   Comment as IComment,
   CommentConnectionQueryHookResult,
   useCommentConnectionQuery,
 } from '@graphql';
-import Editor from '@uiw/react-md-editor';
 import { Avatar, Button, Comment, List } from 'antd';
 import moment from 'moment';
 import React from 'react';
@@ -87,7 +87,7 @@ export default function MyCommentsComponnent() {
                   {comment.author.name[0]}
                 </Avatar>
               }
-              content={<Editor.Markdown source={comment.content} />}
+              content={<MarkdownRendererComponent source={comment.content} />}
               datetime={<span>{moment(comment.createdAt).fromNow()}</span>}
               actions={[
                 <span>
