@@ -1,3 +1,4 @@
+import { useUserAgent } from '@application/shared';
 import LoadingComponent from '@application/components/LoadingComponent/LoadingComponent';
 import MarkdownRendererComponent from '@application/components/MarkdownRendererComponent/MarkdownRendererComponent';
 import {
@@ -13,6 +14,7 @@ import { Link } from 'react-router-dom';
 
 export default function CommentsComponent() {
   const { t, i18n } = useTranslation();
+  const { isMobile } = useUserAgent();
   moment.locale(i18n.language);
   const {
     data,
@@ -75,7 +77,10 @@ export default function CommentsComponent() {
         )
       }
       renderItem={(comment: Partial<IComment>) => (
-        <li>
+        <li
+          id={`comment-${comment.id}`}
+          className={isMobile.phone ? 'blockquote-collapsed' : ''}
+        >
           {!comment.deletedAt && (
             <Comment
               className='comment-list'

@@ -1,5 +1,6 @@
 import { AlertOutlined } from '@ant-design/icons';
 import MarkdownRendererComponent from '@application/components/MarkdownRendererComponent/MarkdownRendererComponent';
+import { useUserAgent } from '@application/shared';
 import {
   Comment as IComment,
   useCommentConnectionQuery,
@@ -20,7 +21,7 @@ import {
   Row,
 } from 'antd';
 import moment from 'moment';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import LoadingComponent from '../LoadingComponent/LoadingComponent';
 
@@ -40,6 +41,7 @@ export default function CommentsComponent(props: {
     commentingSubscribed,
     refetchArticle,
   } = props;
+  const { isMobile } = useUserAgent();
   const [commentForm] = Form.useForm();
   const { t, i18n } = useTranslation();
   moment.locale(i18n.language);
@@ -89,6 +91,16 @@ export default function CommentsComponent(props: {
       }
     },
   });
+
+  useEffect(() => {
+    if (location.hash && document.querySelector(location.hash)) {
+      setTimeout(() => {
+        document
+          .querySelector(location.hash)
+          .scrollIntoView({ behavior: 'smooth' });
+      }, 100);
+    }
+  }, [data]);
 
   if (!data && loading) {
     return <LoadingComponent />;
@@ -173,7 +185,10 @@ export default function CommentsComponent(props: {
         }
         locale={{ emptyText: t('commentsComponent.emptyText') }}
         renderItem={(comment: Partial<IComment>) => (
-          <li>
+          <li
+            id={`comment-${comment.id}`}
+            className={isMobile.phone ? 'blockquote-collapsed' : ''}
+          >
             {comment.deletedAt ? (
               <div
                 style={{
@@ -192,7 +207,7 @@ export default function CommentsComponent(props: {
                       const content = commentForm.getFieldValue('content');
                       commentForm.setFieldsValue({
                         content: `${content}
-> @${comment.author.name}:
+> @${comment.author.name}([#${comment.id}](#comment-${comment.id})):
 ${comment.content.replace(/^/gm, '> ')}
 
 `,

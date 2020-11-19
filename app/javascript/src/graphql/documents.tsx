@@ -2287,6 +2287,7 @@ export const CommentConnectionDocument = gql`
     after: $after
   ) {
     nodes {
+      id
       content
       deletedAt
       author {

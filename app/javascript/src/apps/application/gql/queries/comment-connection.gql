@@ -11,6 +11,7 @@ query CommentConnection(
     after: $after
   ) {
     nodes {
+      id
       content
       deletedAt
       author {

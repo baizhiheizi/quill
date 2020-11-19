@@ -46,9 +46,10 @@ class Comment < ApplicationRecord
       article_title: commentable.title,
       content: content.truncate(140),
       article_url: format(
-        '%<host>s/articles/%<article_uuid>s',
+        '%<host>s/articles/%<article_uuid>s#comment-%<comment_id>s',
         host: Rails.application.credentials.fetch(:host),
-        article_uuid: commentable.uuid
+        article_uuid: commentable.uuid,
+        comment_id: id
       )
     )
   end
