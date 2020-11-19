@@ -6,6 +6,8 @@ class SendMixinMessageWorker
 
   def perform(message)
     r = MixinBot.api.send_message message
+    Rails.logger.info r.inspect
+
     return if r['error'].blank?
     return if r['error']['code'] == 403
 

@@ -111,7 +111,7 @@ export default function ArticlePage() {
   );
 
   const handlePaying = () => {
-    const payUrl = `mixin://pay?recipient=${appId}&trace=${
+    const payUrl = `mixin://pay?recipient=${article.walletId || appId}&trace=${
       article.paymentTraceId
     }&memo=${memo}&asset=${article.assetId}&amount=${article.price.toFixed(8)}`;
     if (mixinEnv) {
@@ -134,7 +134,9 @@ export default function ArticlePage() {
     }
   };
   const handleRewarding = () => {
-    const payUrl = `mixin://pay?recipient=${appId}&trace=${uuidv4()}&memo=${encode64(
+    const payUrl = `mixin://pay?recipient=${
+      article.walletId || appId
+    }&trace=${uuidv4()}&memo=${encode64(
       JSON.stringify({ t: 'REWARD', a: uuid }),
     )}&asset=${article.assetId}&amount=${rewardAmount.toFixed(8)}`;
     if (mixinEnv) {

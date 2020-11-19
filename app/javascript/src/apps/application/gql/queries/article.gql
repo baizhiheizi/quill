@@ -20,6 +20,7 @@ query Article($uuid: ID!, $readerAfter: String) {
     downvotesCount
     wordsCount
     partialContent
+    walletId
     author {
       name
       avatarUrl

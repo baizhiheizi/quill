@@ -262,6 +262,7 @@ export type Article = {
   upvoted?: Maybe<Scalars['Boolean']>;
   upvotesCount: Scalars['Int'];
   uuid: Scalars['ID'];
+  walletId?: Maybe<Scalars['String']>;
   wordsCount: Scalars['Int'];
 };
 
@@ -2309,6 +2310,7 @@ export const ArticleDocument = gql`
     downvotesCount
     wordsCount
     partialContent
+    walletId
     author {
       name
       avatarUrl

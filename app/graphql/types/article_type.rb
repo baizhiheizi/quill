@@ -28,6 +28,7 @@ module Types
 
     field :my_share, Float, null: true
     field :payment_trace_id, String, null: true
+    field :wallet_id, String, null: true
 
     field :author, Types::UserType, null: false
     field :readers, Types::UserConnectionType, null: false

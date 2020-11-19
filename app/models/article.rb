@@ -29,6 +29,8 @@
 #
 class Article < ApplicationRecord
   PRS_ASSET_ID = '3edb734c-6d6f-32ff-ab03-4eb43640c758'
+  PRS_ICON_URL = 'https://mixin-images.zeromesh.net/1fQiAdit_Ji6_Pf4tW8uzutONh9kurHhAnN4wqEIItkDAvFTSXTMwlk3AB749keufDFVoqJb5fSbgz7K2HoOV7Q=s128'
+  PRSDIGG_ICON_URL = 'https://mixin-images.zeromesh.net/L0egX-GZxT0Yh-dd04WKeAqVNRzgzuj_Je_-yKf8aQTZo-xihd-LogbrIEr-WyG9WbJKGFvt2YYx-UIUa1qQMRla=s256'
 
   include AASM
 
@@ -41,6 +43,8 @@ class Article < ApplicationRecord
   has_many :buyers, -> { distinct }, through: :buy_orders, source: :buyer
   has_many :rewarders, -> { distinct }, through: :reward_orders, source: :buyer
   has_many :comments, as: :commentable, dependent: :nullify
+
+  has_one :wallet, class_name: 'MixinNetworkUser', as: :owner, dependent: :nullify
 
   validates :uuid, presence: true, uniqueness: true
   validates :title, presence: true, length: { maximum: 25 }
@@ -63,6 +67,7 @@ class Article < ApplicationRecord
                                   .order('popularity DESC, created_at DESC')
                               }
 
+  after_create :create_wallet!
   after_commit :notify_subsribers_async, :subscribe_comments_for_author, on: :create
 
   aasm column: :state do
@@ -118,7 +123,7 @@ class Article < ApplicationRecord
         conversation_id: MixinBot.api.unique_conversation_id(_uuid),
         recipient_id: _uuid,
         data: {
-          icon_url: 'https://mixin-images.zeromesh.net/L0egX-GZxT0Yh-dd04WKeAqVNRzgzuj_Je_-yKf8aQTZo-xihd-LogbrIEr-WyG9WbJKGFvt2YYx-UIUa1qQMRla=s256',
+          icon_url: PRSDIGG_ICON_URL,
           title: title.truncate(36),
           description: format('%<author_name>s 新文章', author_name: author.name),
           action: format('%<host>s/articles/%<uuid>s', host: Rails.application.credentials.fetch(:host), uuid: uuid)
@@ -143,6 +148,10 @@ class Article < ApplicationRecord
     return if words_count < 300
 
     content.truncate((words_count * 0.1).to_i)
+  end
+
+  def wallet_id
+    @wallet_id = wallet&.uuid
   end
 
   private

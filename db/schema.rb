@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_19_010415) do
+ActiveRecord::Schema.define(version: 2020_11_19_085029) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -97,6 +97,39 @@ ActiveRecord::Schema.define(version: 2020_11_19_010415) do
     t.index ["message_id"], name: "index_mixin_messages_on_message_id", unique: true
   end
 
+  create_table "mixin_network_snapshots", force: :cascade do |t|
+    t.uuid "user_id"
+    t.uuid "trace_id"
+    t.uuid "opponent_id"
+    t.string "data"
+    t.uuid "snapshot_id"
+    t.decimal "amount"
+    t.uuid "asset_id"
+    t.datetime "transferred_at"
+    t.json "raw"
+    t.datetime "processed_at"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["trace_id"], name: "index_mixin_network_snapshots_on_trace_id", unique: true
+    t.index ["user_id"], name: "index_mixin_network_snapshots_on_user_id"
+  end
+
+  create_table "mixin_network_users", force: :cascade do |t|
+    t.string "owner_type"
+    t.bigint "owner_id"
+    t.uuid "uuid"
+    t.string "name"
+    t.uuid "session_id"
+    t.string "pin_token"
+    t.json "raw"
+    t.string "private_key"
+    t.string "encrypted_pin"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["owner_type", "owner_id"], name: "index_mixin_network_users_on_owner_type_and_owner_id"
+    t.index ["uuid"], name: "index_mixin_network_users_on_uuid", unique: true
+  end
+
   create_table "orders", force: :cascade do |t|
     t.bigint "seller_id"
     t.bigint "buyer_id"
@@ -140,8 +173,10 @@ ActiveRecord::Schema.define(version: 2020_11_19_010415) do
     t.json "snapshot"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.uuid "wallet_id"
     t.index ["source_type", "source_id"], name: "index_transfers_on_source_type_and_source_id"
     t.index ["trace_id"], name: "index_transfers_on_trace_id", unique: true
+    t.index ["wallet_id"], name: "index_transfers_on_wallet_id"
   end
 
   create_table "user_authorizations", force: :cascade do |t|

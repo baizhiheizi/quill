@@ -81,6 +81,7 @@ class Order < ApplicationRecord
       next if (_amount - MINIMUM_AMOUNT).negative?
 
       transfers.create_with(
+        wallet: payment.mixin_network_snapshot&.wallet,
         transfer_type: :reader_revenue,
         opponent_id: _order.buyer.mixin_uuid,
         asset_id: payment.asset_id,
@@ -95,6 +96,7 @@ class Order < ApplicationRecord
 
     # create author transfer
     transfers.create_with(
+      wallet: payment.mixin_network_snapshot&.wallet,
       transfer_type: :author_revenue,
       opponent_id: item.author.mixin_uuid,
       asset_id: payment.asset_id,
