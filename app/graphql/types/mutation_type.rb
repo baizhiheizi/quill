@@ -12,6 +12,8 @@ module Types
     field :toggle_commenting_subscribe_article_action, mutation: Mutations::ToggleCommentingSubscribeArticleActionMutation
     field :upvote_article, mutation: Mutations::UpvoteArticleMutation
     field :downvote_article, mutation: Mutations::DownvoteArticleMutation
+    field :upvote_comment, mutation: Mutations::UpvoteCommentMutation
+    field :downvote_comment, mutation: Mutations::DownvoteCommentMutation
 
     # admin
     field :admin_login, mutation: Mutations::AdminLoginMutation

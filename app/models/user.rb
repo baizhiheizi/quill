@@ -48,6 +48,10 @@ class User < ApplicationRecord
   action_store :upvote, :article, counter_cache: true
   # downvote article
   action_store :downvote, :article, counter_cache: true
+  # upvote comment
+  action_store :upvote, :comment, counter_cache: true
+  # downvote comment
+  action_store :downvote, :comment, counter_cache: true
 
   def bio
     mixin_authorization&.raw&.[]('biography')

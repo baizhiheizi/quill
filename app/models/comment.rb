@@ -8,6 +8,8 @@
 #  commentable_type :string
 #  content          :string
 #  deleted_at       :datetime
+#  downvotes_count  :integer          default(0)
+#  upvotes_count    :integer          default(0)
 #  created_at       :datetime         not null
 #  updated_at       :datetime         not null
 #  author_id        :bigint

@@ -14,6 +14,10 @@ query CommentConnection(
       id
       content
       deletedAt
+      upvotesCount
+      downvotesCount
+      upvoted
+      downvoted
       author {
         name
         avatarUrl

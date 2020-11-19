@@ -1,11 +1,20 @@
-import { AlertOutlined } from '@ant-design/icons';
+import {
+  AlertOutlined,
+  DislikeOutlined,
+  DislikeFilled,
+  LikeOutlined,
+  LikeFilled,
+  RightOutlined,
+} from '@ant-design/icons';
 import MarkdownRendererComponent from '@application/components/MarkdownRendererComponent/MarkdownRendererComponent';
-import { useUserAgent } from '@application/shared';
+import { useCurrentUser, useUserAgent } from '@application/shared';
 import {
   Comment as IComment,
   useCommentConnectionQuery,
   useCreateCommentMutation,
+  useDownvoteCommentMutation,
   useToggleCommentingSubscribeArticleActionMutation,
+  useUpvoteCommentMutation,
 } from '@graphql';
 import Editor, { commands } from '@uiw/react-md-editor';
 import {
@@ -21,7 +30,7 @@ import {
   Row,
 } from 'antd';
 import moment from 'moment';
-import React, { useEffect } from 'react';
+import React, { createElement, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import LoadingComponent from '../LoadingComponent/LoadingComponent';
 
@@ -44,6 +53,7 @@ export default function CommentsComponent(props: {
   const { isMobile } = useUserAgent();
   const [commentForm] = Form.useForm();
   const { t, i18n } = useTranslation();
+  const currentUser = useCurrentUser();
   moment.locale(i18n.language);
   const { data, loading, refetch, fetchMore } = useCommentConnectionQuery({
     variables: { commentableType, commentableId },
@@ -68,6 +78,8 @@ export default function CommentsComponent(props: {
       }
     },
   });
+  const [upvoteComment] = useUpvoteCommentMutation();
+  const [downvoteComment] = useDownvoteCommentMutation();
   const [
     toggleCommentingSubscribeArticleAction,
   ] = useToggleCommentingSubscribeArticleActionMutation({
@@ -204,15 +216,59 @@ export default function CommentsComponent(props: {
                 actions={[
                   <span
                     onClick={() => {
-                      const content = commentForm.getFieldValue('content');
-                      commentForm.setFieldsValue({
-                        content: `${content}
+                      if (
+                        !authorized ||
+                        comment.upvoted ||
+                        comment.author.mixinId === currentUser.mixinId
+                      ) {
+                        return;
+                      } else {
+                        upvoteComment({
+                          variables: { input: { id: comment.id } },
+                        });
+                      }
+                    }}
+                  >
+                    {createElement(comment.upvoted ? LikeFilled : LikeOutlined)}
+                    <span style={{ paddingLeft: 8, cursor: 'auto' }}>
+                      {comment.upvotesCount}
+                    </span>
+                  </span>,
+                  <span
+                    onClick={() => {
+                      if (
+                        !authorized ||
+                        comment.downvoted ||
+                        comment.author.mixinId === currentUser.mixinId
+                      ) {
+                        return;
+                      } else {
+                        downvoteComment({
+                          variables: { input: { id: comment.id } },
+                        });
+                      }
+                    }}
+                  >
+                    {createElement(
+                      comment.downvoted ? DislikeFilled : DislikeOutlined,
+                    )}
+                    <span style={{ paddingLeft: 8, cursor: 'auto' }}>
+                      {comment.downvotesCount}
+                    </span>
+                  </span>,
+                  <span
+                    onClick={() => {
+                      if (authorized) {
+                        const content = commentForm.getFieldValue('content');
+                        commentForm.setFieldsValue({
+                          content: `${content}
 > @${comment.author.name}([#${comment.id}](#comment-${comment.id})):
 ${comment.content.replace(/^/gm, '> ')}
 
 `,
-                      });
-                      document.getElementById('comment-form').focus();
+                        });
+                        document.getElementById('comment-form').focus();
+                      }
                     }}
                   >
                     {t('commentsComponent.quoteBtn')}

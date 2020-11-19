@@ -1,0 +1,9 @@
+mutation UpvoteComment($input: UpvoteCommentMutationInput!) {
+  upvoteComment(input: $input) {
+    id
+    upvoted
+    downvoted
+    upvotesCount
+    downvotesCount
+  }
+}
