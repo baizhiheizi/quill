@@ -172,6 +172,10 @@ commentsComponent:
   deletedText: 此评论已被管理员删除
   quoteBtn: 引用
   from: 来自
+  orderBy:
+    desc: 时间倒序
+    asc: 时间正序
+    upvotes: 点赞最多
   form:
     warning: 先写点什么
     confirm: 确定要提交评论吗？

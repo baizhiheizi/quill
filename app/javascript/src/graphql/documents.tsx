@@ -821,6 +821,7 @@ export type QueryCommentConnectionArgs = {
   commentableType?: Maybe<Scalars['String']>;
   commentableId?: Maybe<Scalars['ID']>;
   authorMixinId?: Maybe<Scalars['String']>;
+  orderBy?: Maybe<Scalars['String']>;
   after?: Maybe<Scalars['String']>;
   before?: Maybe<Scalars['String']>;
   first?: Maybe<Scalars['Int']>;
@@ -2367,11 +2368,12 @@ export type ArticleQueryHookResult = ReturnType<typeof useArticleQuery>;
 export type ArticleLazyQueryHookResult = ReturnType<typeof useArticleLazyQuery>;
 export type ArticleQueryResult = Apollo.QueryResult<ArticleQuery, ArticleQueryVariables>;
 export const CommentConnectionDocument = gql`
-    query CommentConnection($commentableType: String, $commentableId: ID, $authorMixinId: String, $after: String) {
+    query CommentConnection($commentableType: String, $commentableId: ID, $authorMixinId: String, $orderBy: String, $after: String) {
   commentConnection(
     commentableType: $commentableType
     commentableId: $commentableId
     authorMixinId: $authorMixinId
+    orderBy: $orderBy
     after: $after
   ) {
     nodes {
@@ -2417,6 +2419,7 @@ export const CommentConnectionDocument = gql`
  *      commentableType: // value for 'commentableType'
  *      commentableId: // value for 'commentableId'
  *      authorMixinId: // value for 'authorMixinId'
+ *      orderBy: // value for 'orderBy'
  *      after: // value for 'after'
  *   },
  * });

@@ -136,6 +136,10 @@ commentsComponent:
   deletedText: Deleted by the Administrator
   quoteBtn: Quote
   from: From
+  orderBy:
+    desc: DESC
+    asc: ASC
+    upvotes: Upvotes
   form:
     warning: Write something first.
     confirm: Are you sure to submit?

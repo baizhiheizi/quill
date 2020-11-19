@@ -27,9 +27,10 @@ import {
   message,
   Modal,
   Row,
+  Select,
 } from 'antd';
 import moment from 'moment';
-import React, { createElement, useEffect } from 'react';
+import React, { createElement, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import LoadingComponent from '../LoadingComponent/LoadingComponent';
 
@@ -51,11 +52,12 @@ export default function CommentsComponent(props: {
   } = props;
   const { isMobile } = useUserAgent();
   const [commentForm] = Form.useForm();
-  const { t, i18n } = useTranslation();
   const currentUser = useCurrentUser();
+  const { t, i18n } = useTranslation();
   moment.locale(i18n.language);
+  const [orderBy, setOrderBy] = useState<'desc' | 'asc' | 'upvotes'>('desc');
   const { data, loading, refetch, fetchMore } = useCommentConnectionQuery({
-    variables: { commentableType, commentableId },
+    variables: { commentableType, commentableId, orderBy },
     notifyOnNetworkStatusChange: true,
   });
   const [createComment] = useCreateCommentMutation({
@@ -131,7 +133,7 @@ export default function CommentsComponent(props: {
           <h3>{t('commentsComponent.title')}</h3>
         </Col>
       </Row>
-      <Row justify='center'>
+      <Row justify='center' style={{ marginBottom: '1rem' }}>
         {authorized && (
           <Button
             type='dashed'
@@ -150,6 +152,25 @@ export default function CommentsComponent(props: {
               : t('commentsComponent.subscribeBtn')}
           </Button>
         )}
+      </Row>
+      <Row justify='end'>
+        <Col>
+          <Select
+            value={orderBy}
+            bordered={false}
+            onSelect={(value) => setOrderBy(value)}
+          >
+            <Select.Option value='desc'>
+              {t('commentsComponent.orderBy.desc')}
+            </Select.Option>
+            <Select.Option value='asc'>
+              {t('commentsComponent.orderBy.asc')}
+            </Select.Option>
+            <Select.Option value='upvotes'>
+              {t('commentsComponent.orderBy.upvotes')}
+            </Select.Option>
+          </Select>
+        </Col>
       </Row>
       <List
         style={{ marginBottom: 30 }}
@@ -185,6 +206,7 @@ export default function CommentsComponent(props: {
                       after: endCursor,
                       commentableType,
                       commentableId,
+                      orderBy,
                     },
                   });
                 }}
