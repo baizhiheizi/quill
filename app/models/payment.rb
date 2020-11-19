@@ -24,6 +24,7 @@ class Payment < ApplicationRecord
   include AASM
 
   belongs_to :payer, class_name: 'User', foreign_key: :opponent_id, primary_key: :mixin_uuid, inverse_of: :payments
+  belongs_to :mixin_network_snapshot, foreign_key: :trace_id, primary_key: :trace_id, optional: true, inverse_of: false
 
   has_one :transfer, as: :source, dependent: :nullify
   has_one :order, primary_key: :trace_id, foreign_key: :trace_id, dependent: :nullify, inverse_of: :payment
@@ -110,8 +111,8 @@ class Payment < ApplicationRecord
   def setup_attributes
     assign_attributes(
       amount: raw['amount'].to_f,
-      memo: raw['memo'],
-      asset_id: raw['asset_id'],
+      memo: raw['memo'] || raw['data'],
+      asset_id: raw['asset_id'] || raw['asset']['asset_id'],
       opponent_id: raw['opponent_id'],
       snapshot_id: raw['snapshot_id'],
       trace_id: raw['trace_id']

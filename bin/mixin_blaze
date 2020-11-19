@@ -26,4 +26,8 @@ EM.run {
       ws.send MixinBot.api.acknowledge_message_receipt(data['message_id']) if data&.[]('message_id').present?
     end
   end
+
+  Thread.new {
+    MixinNetworkSnapshot.poll
+  }
 }

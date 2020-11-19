@@ -17,11 +17,13 @@
 #  opponent_id   :uuid
 #  source_id     :bigint
 #  trace_id      :uuid
+#  wallet_id     :uuid
 #
 # Indexes
 #
 #  index_transfers_on_source_type_and_source_id  (source_type,source_id)
 #  index_transfers_on_trace_id                   (trace_id) UNIQUE
+#  index_transfers_on_wallet_id                  (wallet_id)
 #
 require 'test_helper'
 
