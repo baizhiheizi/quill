@@ -28,7 +28,6 @@ import {
   Card,
   Col,
   Divider,
-  message,
   Modal,
   Progress,
   Radio,
@@ -516,7 +515,6 @@ export default function ArticlePage() {
         authorized={article.authorized}
         commentingSubscribed={article.commentingSubscribed}
         articleUuid={article.uuid}
-        refetchArticle={refetch}
       />
     </div>
   );

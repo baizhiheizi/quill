@@ -40,7 +40,6 @@ export default function CommentsComponent(props: {
   authorized?: boolean;
   articleUuid?: string;
   commentingSubscribed?: boolean;
-  refetchArticle?: () => any;
 }) {
   const {
     commentableType,
@@ -48,7 +47,6 @@ export default function CommentsComponent(props: {
     authorized,
     articleUuid,
     commentingSubscribed,
-    refetchArticle,
   } = props;
   const { isMobile } = useUserAgent();
   const [commentForm] = Form.useForm();
@@ -74,8 +72,8 @@ export default function CommentsComponent(props: {
       } else {
         message.success(t('messages.successSubmitted'));
         commentForm.setFieldsValue({ content: '' });
-        refetchArticle();
-        refetch();
+        refetch({ commentableId, commentableType, orderBy: 'desc' });
+        setOrderBy('desc');
       }
     },
   });
@@ -83,27 +81,7 @@ export default function CommentsComponent(props: {
   const [downvoteComment] = useDownvoteCommentMutation();
   const [
     toggleCommentingSubscribeArticleAction,
-  ] = useToggleCommentingSubscribeArticleActionMutation({
-    update(
-      _,
-      {
-        data: {
-          toggleCommentingSubscribeArticleAction: { error },
-        },
-      },
-    ) {
-      if (error) {
-        message.error(error);
-      } else {
-        message.success(
-          commentingSubscribed
-            ? t('messages.successUnsubscribed')
-            : t('messages.successSubscribed'),
-        );
-        refetchArticle();
-      }
-    },
-  });
+  ] = useToggleCommentingSubscribeArticleActionMutation();
 
   useEffect(() => {
     if (location.hash && document.querySelector(location.hash)) {

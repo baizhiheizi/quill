@@ -4,7 +4,7 @@ module Mutations
   class ToggleCommentingSubscribeArticleActionMutation < Mutations::BaseMutation
     argument :uuid, ID, required: true
 
-    field :error, String, null: true
+    type Types::ArticleType
 
     def resolve(params)
       article = Article.find_by(uuid: params[:uuid])
@@ -16,7 +16,7 @@ module Mutations
         current_user.create_action(:commenting_subscribe, target: article)
       end
 
-      { error: nil }
+      article.reload
     end
   end
 end
