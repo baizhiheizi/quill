@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class BatchProcessMixinSnapshotWorker
+class BatchProcessMixinNetworkSnapshotWorker
   include Sidekiq::Worker
   sidekiq_options queue: :low, retry: true
 
