@@ -7,7 +7,6 @@ common:
   cancelBtn: 取消
   paidBtn: 已经支付
 messages:
-  successVoted: 感谢反馈
   payWithMessenger: 请使用 Mixin Messenger 扫码支付
   viewWithMessenger: 请使用 Mixin Messenger 扫码查看
   successSubmitted: 成功提交

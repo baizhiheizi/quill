@@ -7,7 +7,6 @@ common:
   cancelBtn: Cancel
   paidBtn: Paid
 messages:
-  successVoted: Thanks for voting
   payWithMessenger: Please scan the QRCode using Mixin Messenger
   viewWithMessenger: Please scan the QRCode using Mixin Messenger
   successSubmitted: Submitted
