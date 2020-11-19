@@ -2,7 +2,7 @@
 
 module Mutations
   class AdminDeleteCommentMutation < AdminBaseMutation
-    argument :id, Int, required: true
+    argument :id, ID, required: true
 
     field :error, String, null: true
     field :success, Boolean, null: true
