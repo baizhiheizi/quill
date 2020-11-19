@@ -240,7 +240,7 @@ GEM
       execjs
       railties (>= 3.2)
       tilt
-    redis (4.2.3)
+    redis (4.2.4)
     redis-namespace (1.8.0)
       redis (>= 3.0.4)
     redis-objects (1.5.0)
@@ -361,7 +361,7 @@ DEPENDENCIES
   puma
   rails (~> 6.0.3, >= 6.0.3.4)
   react-rails
-  redis (~> 4.1)
+  redis (~> 4.2)
   redis-namespace
   redis-objects
   rubocop
