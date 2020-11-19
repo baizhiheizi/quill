@@ -3,7 +3,7 @@
 module Types
   class ArticleType < BaseObject
     field :uuid, ID, null: false
-    field :id, Integer, null: false
+    field :id, ID, null: false
     field :title, String, null: false
     field :intro, String, null: false
     field :content, String, null: true

@@ -3,7 +3,7 @@
 module Resolvers
   class CommentConnectionResolver < BaseResolver
     argument :commentable_type, String, required: false
-    argument :commentable_id, Int, required: false
+    argument :commentable_id, ID, required: false
     argument :author_mixin_id, String, required: false
     argument :after, String, required: false
 

@@ -1,6 +1,6 @@
 query CommentConnection(
   $commentableType: String
-  $commentableId: Int
+  $commentableId: ID
   $authorMixinId: String
   $after: String
 ) {

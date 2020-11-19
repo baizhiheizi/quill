@@ -1,6 +1,10 @@
 mutation UpvoteArticle($input: UpvoteArticleMutationInput!) {
   upvoteArticle(input: $input) {
-    error
-    success
+    id
+    uuid
+    upvotesCount
+    downvotesCount
+    upvoted
+    downvoted
   }
 }

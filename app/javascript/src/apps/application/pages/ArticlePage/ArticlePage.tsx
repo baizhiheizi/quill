@@ -62,43 +62,10 @@ export default function ArticlePage() {
     startPolling,
     stopPolling,
   }: ArticleQueryHookResult = useArticleQuery({
-    fetchPolicy: 'network-only',
     variables: { uuid },
   });
-  const [upvoteArticle] = useUpvoteArticleMutation({
-    update(
-      _,
-      {
-        data: {
-          upvoteArticle: { error },
-        },
-      },
-    ) {
-      if (error) {
-        message.error(error);
-      } else {
-        message.success(t('messages.successVoted'));
-        refetch();
-      }
-    },
-  });
-  const [downvoteArticle] = useDownvoteArticleMutation({
-    update(
-      _,
-      {
-        data: {
-          downvoteArticle: { error },
-        },
-      },
-    ) {
-      if (error) {
-        message.error(error);
-      } else {
-        message.success(t('messages.successVoted'));
-        refetch();
-      }
-    },
-  });
+  const [upvoteArticle] = useUpvoteArticleMutation();
+  const [downvoteArticle] = useDownvoteArticleMutation();
 
   useEffect(() => {
     return () => (document.title = PAGE_TITLE);

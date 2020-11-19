@@ -1,10 +1,9 @@
 import {
   AlertOutlined,
-  DislikeOutlined,
   DislikeFilled,
-  LikeOutlined,
+  DislikeOutlined,
   LikeFilled,
-  RightOutlined,
+  LikeOutlined,
 } from '@ant-design/icons';
 import MarkdownRendererComponent from '@application/components/MarkdownRendererComponent/MarkdownRendererComponent';
 import { useCurrentUser, useUserAgent } from '@application/shared';
@@ -35,8 +34,8 @@ import { useTranslation } from 'react-i18next';
 import LoadingComponent from '../LoadingComponent/LoadingComponent';
 
 export default function CommentsComponent(props: {
-  commentableType?: 'Article' | String;
-  commentableId?: number;
+  commentableType?: 'Article' | string;
+  commentableId?: string;
   authorized?: boolean;
   articleUuid?: string;
   commentingSubscribed?: boolean;
