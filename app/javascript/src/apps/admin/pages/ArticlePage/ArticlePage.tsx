@@ -3,6 +3,7 @@ import LoadingComponent from '@admin/components/LoadingComponent/LoadingComponen
 import MixinNetworkSnapshotsComponent from '@admin/components/MixinNetworkSnapshotsComponent/MixinNetworkSnapshotComponent';
 import OrdersComponent from '@admin/components/OrdersComponent/OrdersComponent';
 import TransfersComponent from '@admin/components/TransfersComponent/TransfersComponent';
+import WalletBalanceComponent from '@admin/components/WalletBalanceComponent/WalletBalanceComponent';
 import { useAdminArticleQuery } from '@graphql';
 import { Avatar, Descriptions, Empty, PageHeader, Space, Tabs } from 'antd';
 import React from 'react';
@@ -61,7 +62,11 @@ export default function ArticlePage() {
           <TransfersComponent itemId={article.id} itemType='Article' />
         </Tabs.TabPane>
         <Tabs.TabPane tab='Wallet Balance' key='wallet_balance'>
-          Wallet Balance
+          {article.walletId ? (
+            <WalletBalanceComponent userId={article.walletId} />
+          ) : (
+            <Empty />
+          )}
         </Tabs.TabPane>
         <Tabs.TabPane tab='Wallet Snapshots' key='wallet_snapshots'>
           {article.walletId ? (

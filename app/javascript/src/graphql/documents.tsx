@@ -337,6 +337,22 @@ export type ArticleEdge = {
   node?: Maybe<Article>;
 };
 
+export type Asset = {
+  __typename?: 'Asset';
+  assetId: Scalars['ID'];
+  balance?: Maybe<Scalars['String']>;
+  chainId?: Maybe<Scalars['ID']>;
+  changeBtc?: Maybe<Scalars['String']>;
+  changeUsd?: Maybe<Scalars['String']>;
+  createdAt: Scalars['ISO8601DateTime'];
+  iconUrl?: Maybe<Scalars['String']>;
+  name?: Maybe<Scalars['String']>;
+  priceBtc?: Maybe<Scalars['String']>;
+  priceUsd?: Maybe<Scalars['String']>;
+  symbol?: Maybe<Scalars['String']>;
+  updatedAt?: Maybe<Scalars['ISO8601DateTime']>;
+};
+
 export type Comment = {
   __typename?: 'Comment';
   author?: Maybe<User>;
@@ -796,6 +812,7 @@ export type Query = {
   adminPaymentConnection: PaymentConnection;
   adminTransferConnection: TransferConnection;
   adminUserConnection: UserConnection;
+  adminWalletBalance: Array<Asset>;
   article?: Maybe<Article>;
   articleChart: Scalars['String'];
   articleConnection: ArticleConnection;
@@ -896,6 +913,11 @@ export type QueryAdminUserConnectionArgs = {
   before?: Maybe<Scalars['String']>;
   first?: Maybe<Scalars['Int']>;
   last?: Maybe<Scalars['Int']>;
+};
+
+
+export type QueryAdminWalletBalanceArgs = {
+  userId?: Maybe<Scalars['String']>;
 };
 
 
@@ -2056,6 +2078,45 @@ export function useAdminUserConnectionLazyQuery(baseOptions?: Apollo.LazyQueryHo
 export type AdminUserConnectionQueryHookResult = ReturnType<typeof useAdminUserConnectionQuery>;
 export type AdminUserConnectionLazyQueryHookResult = ReturnType<typeof useAdminUserConnectionLazyQuery>;
 export type AdminUserConnectionQueryResult = Apollo.QueryResult<AdminUserConnectionQuery, AdminUserConnectionQueryVariables>;
+export const AdminWalletBalanceDocument = gql`
+    query AdminWalletBalance($userId: String) {
+  adminWalletBalance(userId: $userId) {
+    assetId
+    name
+    symbol
+    iconUrl
+    balance
+    priceUsd
+    priceBtc
+  }
+}
+    `;
+
+/**
+ * __useAdminWalletBalanceQuery__
+ *
+ * To run a query within a React component, call `useAdminWalletBalanceQuery` and pass it any options that fit your needs.
+ * When your component renders, `useAdminWalletBalanceQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useAdminWalletBalanceQuery({
+ *   variables: {
+ *      userId: // value for 'userId'
+ *   },
+ * });
+ */
+export function useAdminWalletBalanceQuery(baseOptions?: Apollo.QueryHookOptions<AdminWalletBalanceQuery, AdminWalletBalanceQueryVariables>) {
+        return Apollo.useQuery<AdminWalletBalanceQuery, AdminWalletBalanceQueryVariables>(AdminWalletBalanceDocument, baseOptions);
+      }
+export function useAdminWalletBalanceLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AdminWalletBalanceQuery, AdminWalletBalanceQueryVariables>) {
+          return Apollo.useLazyQuery<AdminWalletBalanceQuery, AdminWalletBalanceQueryVariables>(AdminWalletBalanceDocument, baseOptions);
+        }
+export type AdminWalletBalanceQueryHookResult = ReturnType<typeof useAdminWalletBalanceQuery>;
+export type AdminWalletBalanceLazyQueryHookResult = ReturnType<typeof useAdminWalletBalanceLazyQuery>;
+export type AdminWalletBalanceQueryResult = Apollo.QueryResult<AdminWalletBalanceQuery, AdminWalletBalanceQueryVariables>;
 export const CreateArticleDocument = gql`
     mutation CreateArticle($input: CreateArticleMutationInput!) {
   createArticle(input: $input) {

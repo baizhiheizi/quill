@@ -1,0 +1,11 @@
+query AdminWalletBalance($userId: String) {
+  adminWalletBalance(userId: $userId) {
+    assetId
+    name
+    symbol
+    iconUrl
+    balance
+    priceUsd
+    priceBtc
+  }
+}

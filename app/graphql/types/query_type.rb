@@ -29,6 +29,7 @@ module Types
     field :admin_announcement_connection, resolver: Resolvers::AdminAnnouncementConnectionResolver
     field :admin_mixin_message_connection, resolver: Resolvers::AdminMixinMessageConnectionResolver
     field :admin_mixin_network_snapshot_connection, resolver: Resolvers::AdminMixinNetworkSnapshotConnectionResolver
+    field :admin_wallet_balance, resolver: Resolvers::AdminWalletBalanceResolver
 
     field :admin_article, resolver: Resolvers::AdminArticleResolver
   end
