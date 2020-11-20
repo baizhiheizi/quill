@@ -28,6 +28,7 @@ class MixinNetworkSnapshot < ApplicationRecord
   POLLING_LIMIT = 500
 
   belongs_to :wallet, class_name: 'MixinNetworkUser', foreign_key: :user_id, primary_key: :uuid, inverse_of: :snapshots, optional: true
+  belongs_to :opponent, class_name: 'User', primary_key: :mixin_uuid, inverse_of: :snapshots, optional: true
 
   before_validation :setup_attributes, on: :create
 
@@ -39,9 +40,10 @@ class MixinNetworkSnapshot < ApplicationRecord
 
   after_commit :process_async, on: :create
 
-  delegate :owner, to: :wallet
-
   scope :unprocessed, -> { where(processed_at: nil) }
+  scope :only_input, -> { where(amount: 0...) }
+  scope :only_output, -> { where(amount: ...0) }
+  scope :only_prsdigg, -> { where(user_id: MixinBot.client_id) }
 
   # polling Mixin Network
   # should be called in a event machine
@@ -67,6 +69,14 @@ class MixinNetworkSnapshot < ApplicationRecord
       p e.inspect
       Rails.logger.error e.inspect
     end
+  end
+
+  def owner
+    wallet&.owner
+  end
+
+  def article
+    owner.is_a?(Article) && owner
   end
 
   def processed?

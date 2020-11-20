@@ -27,5 +27,6 @@ module Types
     field :admin_transfer_connection, resolver: Resolvers::AdminTransferConnectionResolver
     field :admin_announcement_connection, resolver: Resolvers::AdminAnnouncementConnectionResolver
     field :admin_mixin_message_connection, resolver: Resolvers::AdminMixinMessageConnectionResolver
+    field :admin_mixin_network_snapshot_connection, resolver: Resolvers::AdminMixinNetworkSnapshotConnectionResolver
   end
 end

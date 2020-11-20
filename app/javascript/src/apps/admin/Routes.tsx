@@ -6,6 +6,7 @@ import ArticlesPage from './pages/ArticlesPage/ArticlesPage';
 import CommentsPage from './pages/CommentsPage/CommentsPage';
 import DashboardPage from './pages/DashboardPage/DashboardPage';
 import MixinMessagesPage from './pages/MixinMessagesPage/MixinMessagesPage';
+import MixinNetworkSnapshotsPage from './pages/MixinNetworkSnapshotsPage/MixinNetworkSnapshotsPage';
 import PaymentsPage from './pages/PaymentsPage/PaymentsPage';
 import TransfersPage from './pages/TransfersPage/TransfersPage';
 import UsersPage from './pages/UsersPage/UsersPage';
@@ -33,6 +34,9 @@ export default function Routes() {
       </Route>
       <Route path='/mixin_messages' exact>
         <MixinMessagesPage />
+      </Route>
+      <Route path='/mixin_network_snapshots' exact>
+        <MixinNetworkSnapshotsPage />
       </Route>
       <Route path='/announcements' exact>
         <AnnouncementsPage />

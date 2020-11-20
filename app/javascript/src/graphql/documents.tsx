@@ -482,6 +482,46 @@ export type MixinMessageEdge = {
   node?: Maybe<MixinMessage>;
 };
 
+export type MixinNetworkSnapshot = {
+  __typename?: 'MixinNetworkSnapshot';
+  amount: Scalars['Float'];
+  article?: Maybe<Article>;
+  assetId: Scalars['String'];
+  createdAt: Scalars['ISO8601DateTime'];
+  data?: Maybe<Scalars['String']>;
+  id: Scalars['Int'];
+  opponent?: Maybe<User>;
+  opponentId: Scalars['String'];
+  processedAt?: Maybe<Scalars['ISO8601DateTime']>;
+  snapshotId: Scalars['String'];
+  traceId: Scalars['ID'];
+  transferredAt: Scalars['ISO8601DateTime'];
+  updatedAt?: Maybe<Scalars['ISO8601DateTime']>;
+  userId: Scalars['String'];
+};
+
+/** The connection type for MixinNetworkSnapshot. */
+export type MixinNetworkSnapshotConnection = {
+  __typename?: 'MixinNetworkSnapshotConnection';
+  /** A list of edges. */
+  edges?: Maybe<Array<Maybe<MixinNetworkSnapshotEdge>>>;
+  /** A list of nodes. */
+  nodes?: Maybe<Array<Maybe<MixinNetworkSnapshot>>>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** Total # of objects returned from this Plural Query */
+  totalCount: Scalars['Int'];
+};
+
+/** An edge in a connection. */
+export type MixinNetworkSnapshotEdge = {
+  __typename?: 'MixinNetworkSnapshotEdge';
+  /** A cursor for use in pagination. */
+  cursor: Scalars['String'];
+  /** The item at the end of the edge. */
+  node?: Maybe<MixinNetworkSnapshot>;
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   adminBlockArticle?: Maybe<AdminBlockArticleMutationPayload>;
@@ -728,6 +768,7 @@ export type Query = {
   adminArticleConnection: ArticleConnection;
   adminCommentConnection: CommentConnection;
   adminMixinMessageConnection: MixinMessageConnection;
+  adminMixinNetworkSnapshotConnection: MixinNetworkSnapshotConnection;
   adminPaymentConnection: PaymentConnection;
   adminTransferConnection: TransferConnection;
   adminUserConnection: UserConnection;
@@ -774,6 +815,15 @@ export type QueryAdminCommentConnectionArgs = {
 
 
 export type QueryAdminMixinMessageConnectionArgs = {
+  after?: Maybe<Scalars['String']>;
+  before?: Maybe<Scalars['String']>;
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+};
+
+
+export type QueryAdminMixinNetworkSnapshotConnectionArgs = {
+  filter?: Maybe<Scalars['String']>;
   after?: Maybe<Scalars['String']>;
   before?: Maybe<Scalars['String']>;
   first?: Maybe<Scalars['Int']>;
@@ -1614,6 +1664,65 @@ export function useAdminMixinMessageConnectionLazyQuery(baseOptions?: Apollo.Laz
 export type AdminMixinMessageConnectionQueryHookResult = ReturnType<typeof useAdminMixinMessageConnectionQuery>;
 export type AdminMixinMessageConnectionLazyQueryHookResult = ReturnType<typeof useAdminMixinMessageConnectionLazyQuery>;
 export type AdminMixinMessageConnectionQueryResult = Apollo.QueryResult<AdminMixinMessageConnectionQuery, AdminMixinMessageConnectionQueryVariables>;
+export const AdminMixinNetworkSnapshotConnectionDocument = gql`
+    query AdminMixinNetworkSnapshotConnection($filter: String, $after: String) {
+  adminMixinNetworkSnapshotConnection(filter: $filter, after: $after) {
+    nodes {
+      id
+      traceId
+      snapshotId
+      assetId
+      userId
+      amount
+      data
+      opponentId
+      opponent {
+        name
+        avatarUrl
+        mixinId
+      }
+      article {
+        id
+        uuid
+        title
+      }
+      createdAt
+      processedAt
+    }
+    pageInfo {
+      hasNextPage
+      endCursor
+    }
+  }
+}
+    `;
+
+/**
+ * __useAdminMixinNetworkSnapshotConnectionQuery__
+ *
+ * To run a query within a React component, call `useAdminMixinNetworkSnapshotConnectionQuery` and pass it any options that fit your needs.
+ * When your component renders, `useAdminMixinNetworkSnapshotConnectionQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useAdminMixinNetworkSnapshotConnectionQuery({
+ *   variables: {
+ *      filter: // value for 'filter'
+ *      after: // value for 'after'
+ *   },
+ * });
+ */
+export function useAdminMixinNetworkSnapshotConnectionQuery(baseOptions?: Apollo.QueryHookOptions<AdminMixinNetworkSnapshotConnectionQuery, AdminMixinNetworkSnapshotConnectionQueryVariables>) {
+        return Apollo.useQuery<AdminMixinNetworkSnapshotConnectionQuery, AdminMixinNetworkSnapshotConnectionQueryVariables>(AdminMixinNetworkSnapshotConnectionDocument, baseOptions);
+      }
+export function useAdminMixinNetworkSnapshotConnectionLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AdminMixinNetworkSnapshotConnectionQuery, AdminMixinNetworkSnapshotConnectionQueryVariables>) {
+          return Apollo.useLazyQuery<AdminMixinNetworkSnapshotConnectionQuery, AdminMixinNetworkSnapshotConnectionQueryVariables>(AdminMixinNetworkSnapshotConnectionDocument, baseOptions);
+        }
+export type AdminMixinNetworkSnapshotConnectionQueryHookResult = ReturnType<typeof useAdminMixinNetworkSnapshotConnectionQuery>;
+export type AdminMixinNetworkSnapshotConnectionLazyQueryHookResult = ReturnType<typeof useAdminMixinNetworkSnapshotConnectionLazyQuery>;
+export type AdminMixinNetworkSnapshotConnectionQueryResult = Apollo.QueryResult<AdminMixinNetworkSnapshotConnectionQuery, AdminMixinNetworkSnapshotConnectionQueryVariables>;
 export const AdminPaymentConnectionDocument = gql`
     query AdminPaymentConnection($after: String) {
   adminPaymentConnection(after: $after) {

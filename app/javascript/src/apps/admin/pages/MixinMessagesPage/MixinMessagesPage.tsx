@@ -1,4 +1,4 @@
-import { MixinMessage, useAdminMixinMessageConnectionQuery } from '@/graphql';
+import { MixinMessage, useAdminMixinMessageConnectionQuery } from '@graphql';
 import React from 'react';
 import LoadingComponent from '@admin/components/LoadingComponent/LoadingComponent';
 import { ColumnProps } from 'antd/es/table';

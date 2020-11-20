@@ -1,0 +1,30 @@
+query AdminMixinNetworkSnapshotConnection($filter: String, $after: String) {
+  adminMixinNetworkSnapshotConnection(filter: $filter, after: $after) {
+    nodes {
+      id
+      traceId
+      snapshotId
+      assetId
+      userId
+      amount
+      data
+      opponentId
+      opponent {
+        name
+        avatarUrl
+        mixinId
+      }
+      article {
+        id
+        uuid
+        title
+      }
+      createdAt
+      processedAt
+    }
+    pageInfo {
+      hasNextPage
+      endCursor
+    }
+  }
+}

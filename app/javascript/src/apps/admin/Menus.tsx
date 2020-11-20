@@ -6,6 +6,7 @@ import {
   MessageOutlined,
   NotificationOutlined,
   PayCircleOutlined,
+  TableOutlined,
   TransactionOutlined,
   UserOutlined,
 } from '@ant-design/icons';
@@ -72,6 +73,12 @@ export default function Menus() {
         <Link to='/mixin_messages'>
           <MessageOutlined />
           <span>Messages</span>
+        </Link>
+      </Menu.Item>
+      <Menu.Item>
+        <Link to='/mixin_network_snapshots'>
+          <TableOutlined />
+          <span>Snapshots</span>
         </Link>
       </Menu.Item>
       <Menu.Item>
