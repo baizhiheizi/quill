@@ -147,6 +147,7 @@ export default function AnnouncementsPage() {
     {
       dataIndex: 'content',
       key: 'content',
+      render: (content) => <div>{content}</div>,
       title: 'content',
     },
     {
@@ -279,7 +280,7 @@ export default function AnnouncementsPage() {
         scroll={{ x: true }}
         columns={columns}
         dataSource={announcements}
-        rowKey='traceId'
+        rowKey='id'
         pagination={false}
       />
       <div style={{ margin: '1rem', textAlign: 'center' }}>
