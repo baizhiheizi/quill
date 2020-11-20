@@ -1,5 +1,6 @@
 query AdminArticle($uuid: ID!) {
   adminArticle(uuid: $uuid) {
+    id
     uuid
     title
     intro

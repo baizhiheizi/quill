@@ -879,6 +879,10 @@ export type QueryAdminPaymentConnectionArgs = {
 
 
 export type QueryAdminTransferConnectionArgs = {
+  itemId?: Maybe<Scalars['ID']>;
+  itemType?: Maybe<Scalars['String']>;
+  sourceId?: Maybe<Scalars['ID']>;
+  sourceType?: Maybe<Scalars['String']>;
   after?: Maybe<Scalars['String']>;
   before?: Maybe<Scalars['String']>;
   first?: Maybe<Scalars['Int']>;
@@ -1613,6 +1617,7 @@ export type AdminArticleConnectionQueryResult = Apollo.QueryResult<AdminArticleC
 export const AdminArticleDocument = gql`
     query AdminArticle($uuid: ID!) {
   adminArticle(uuid: $uuid) {
+    id
     uuid
     title
     intro
@@ -1908,8 +1913,14 @@ export type RevenueChartQueryHookResult = ReturnType<typeof useRevenueChartQuery
 export type RevenueChartLazyQueryHookResult = ReturnType<typeof useRevenueChartLazyQuery>;
 export type RevenueChartQueryResult = Apollo.QueryResult<RevenueChartQuery, RevenueChartQueryVariables>;
 export const AdminTransferConnectionDocument = gql`
-    query AdminTransferConnection($after: String) {
-  adminTransferConnection(after: $after) {
+    query AdminTransferConnection($itemId: ID, $itemType: String, $souceId: ID, $souceType: String, $after: String) {
+  adminTransferConnection(
+    itemId: $itemId
+    itemType: $itemType
+    sourceId: $souceId
+    sourceType: $souceType
+    after: $after
+  ) {
     nodes {
       traceId
       snapshotId
@@ -1947,6 +1958,10 @@ export const AdminTransferConnectionDocument = gql`
  * @example
  * const { data, loading, error } = useAdminTransferConnectionQuery({
  *   variables: {
+ *      itemId: // value for 'itemId'
+ *      itemType: // value for 'itemType'
+ *      souceId: // value for 'souceId'
+ *      souceType: // value for 'souceType'
  *      after: // value for 'after'
  *   },
  * });

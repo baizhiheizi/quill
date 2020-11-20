@@ -5,6 +5,7 @@ import { useAdminArticleQuery } from '@graphql';
 import { Avatar, Descriptions, PageHeader, Space, Tabs } from 'antd';
 import React from 'react';
 import { useHistory, useParams } from 'react-router-dom';
+import TransfersComponent from '../../components/TransfersComponent/TransfersComponent';
 
 export default function ArticlePage() {
   const { uuid } = useParams<{ uuid: string }>();
@@ -56,7 +57,7 @@ export default function ArticlePage() {
           />
         </Tabs.TabPane>
         <Tabs.TabPane tab='Transfers' key='transfers'>
-          Transfers
+          <TransfersComponent itemId={article.id} itemType='Article' />
         </Tabs.TabPane>
         <Tabs.TabPane tab='Wallet Balance' key='wallet_balance'>
           Wallet Balance

@@ -1,5 +1,17 @@
-query AdminTransferConnection($after: String) {
-  adminTransferConnection(after: $after) {
+query AdminTransferConnection(
+  $itemId: ID
+  $itemType: String
+  $souceId: ID
+  $souceType: String
+  $after: String
+) {
+  adminTransferConnection(
+    itemId: $itemId
+    itemType: $itemType
+    sourceId: $souceId
+    sourceType: $souceType
+    after: $after
+  ) {
     nodes {
       traceId
       snapshotId
