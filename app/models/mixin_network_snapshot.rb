@@ -86,12 +86,11 @@ class MixinNetworkSnapshot < ApplicationRecord
   def process!
     return if processed?
 
-    process_article_snapshot if wallet&.owner_type == 'Article'
-
+    process_payment_snapshot
     touch_proccessed_at
   end
 
-  def process_article_snapshot
+  def process_payment_snapshot
     return if amount.negative?
 
     Payment
@@ -104,7 +103,11 @@ class MixinNetworkSnapshot < ApplicationRecord
   end
 
   def process_async
-    ProcessMixinNetworkSnapshotWorker.perform_async id
+    if amount.negative?
+      touch_proccessed_at
+    else
+      ProcessMixinNetworkSnapshotWorker.perform_async id
+    end
   end
 
   private

@@ -88,7 +88,7 @@ class Order < ApplicationRecord
         amount: _amount.to_f.to_s,
         memo: "读者收益来自文章《#{item.title}》".truncate(140)
       ).find_or_create_by!(
-        trace_id: MixinBot.api.unique_conversation_id(_order.trace_id, trace_id)
+        trace_id: MixinBot.api.unique_conversation_id(trace_id, _order.trace_id)
       )
 
       _distributed_amount += _amount
@@ -105,7 +105,7 @@ class Order < ApplicationRecord
         amount: _prsdigg_amount.to_f.to_s,
         memo: "article uuid: #{item.uuid}》".truncate(140)
       ).find_or_create_by!(
-        trace_id: payment.wallet.mixin_api.unique_conversation_id(MixinBot.client_id)
+        trace_id: payment.wallet.mixin_api.unique_conversation_id(trace_id, MixinBot.client_id)
       )
     end
 

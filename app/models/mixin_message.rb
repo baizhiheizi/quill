@@ -33,33 +33,29 @@ class MixinMessage < ApplicationRecord
 
   scope :unprocessed, -> { where(processed_at: nil) }
 
+  def plain?
+    /^PLAIN_/.match? category
+  end
+
   def processed?
     processed_at?
   end
 
   def process!
-    process_snapshot if category == 'SYSTEM_ACCOUNT_SNAPSHOT'
+    # TODO: add some interaction with user
+    touch_proccessed_at
+  end
 
+  def touch_proccessed_at
     update processed_at: Time.current
   end
 
-  def process_snapshot
-    snapshot =
-      begin
-        JSON.parse(content)
-      rescue JSON::ParserError
-        nil
-      end
-    return if snapshot.blank?
-    return if snapshot['amount'].to_f.negative?
-
-    Payment
-      .create_with(raw: snapshot)
-      .find_or_create_by!(trace_id: snapshot['trace_id'])
-  end
-
   def process_async
-    ProcessMixinMessageWorker.perform_async message_id
+    if plain?
+      ProcessMixinMessageWorker.perform_async message_id
+    else
+      touch_proccessed_at
+    end
   end
 
   private
