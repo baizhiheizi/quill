@@ -7,7 +7,7 @@ module Resolvers
     type Types::TransferConnectionType, null: false
 
     def resolve(_params = {})
-      Transfer.only_revenue.order(created_at: :desc)
+      Transfer.only_user_revenue.order(created_at: :desc)
     end
   end
 end

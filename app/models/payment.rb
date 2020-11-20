@@ -24,7 +24,7 @@ class Payment < ApplicationRecord
   include AASM
 
   belongs_to :payer, class_name: 'User', foreign_key: :opponent_id, primary_key: :mixin_uuid, inverse_of: :payments
-  belongs_to :mixin_network_snapshot, foreign_key: :trace_id, primary_key: :trace_id, optional: true, inverse_of: false
+  belongs_to :snapshot, class_name: 'MixinNetworkSnapshot', foreign_key: :trace_id, primary_key: :trace_id, optional: true, inverse_of: false
 
   has_one :transfer, as: :source, dependent: :nullify
   has_one :order, primary_key: :trace_id, foreign_key: :trace_id, dependent: :nullify, inverse_of: :payment
@@ -97,6 +97,7 @@ class Payment < ApplicationRecord
     return if order.present?
 
     create_transfer!(
+      wallet: wallet,
       transfer_type: :payment_refund,
       opponent_id: opponent_id,
       amount: amount,
@@ -104,6 +105,10 @@ class Payment < ApplicationRecord
       trace_id: MixinBot.api.unique_conversation_id(trace_id, opponent_id),
       memo: 'REDUND'
     )
+  end
+
+  def wallet
+    @wallet = snapshot&.wallet
   end
 
   private

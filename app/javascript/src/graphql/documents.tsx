@@ -985,12 +985,14 @@ export type Transfer = {
   assetId: Scalars['String'];
   createdAt: Scalars['ISO8601DateTime'];
   memo?: Maybe<Scalars['String']>;
+  opponentId?: Maybe<Scalars['String']>;
   processedAt?: Maybe<Scalars['ISO8601DateTime']>;
-  recipient: User;
+  recipient?: Maybe<User>;
   snapshotId?: Maybe<Scalars['String']>;
   traceId: Scalars['ID'];
   transferType: Scalars['String'];
   updatedAt?: Maybe<Scalars['ISO8601DateTime']>;
+  walletId?: Maybe<Scalars['String']>;
 };
 
 /** The connection type for Transfer. */
@@ -1815,6 +1817,8 @@ export const AdminTransferConnectionDocument = gql`
       memo
       transferType
       assetId
+      opponentId
+      walletId
       recipient {
         name
         avatarUrl

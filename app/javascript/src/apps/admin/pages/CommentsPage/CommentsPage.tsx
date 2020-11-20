@@ -79,7 +79,9 @@ export default function CommentsPage() {
       key: 'content',
       render: (content) => (
         <Popover content={content}>
-          {content ? content.slice(0, 140) : '-'}
+          <div style={{ maxWidth: '100%' }}>
+            {content ? content.slice(0, 140) : '-'}
+          </div>
         </Popover>
       ),
       title: 'content',

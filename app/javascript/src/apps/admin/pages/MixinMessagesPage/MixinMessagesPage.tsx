@@ -47,6 +47,7 @@ export default function MixinMessagesPage() {
     {
       dataIndex: 'content',
       key: 'content',
+      render: (content) => <div style={{ maxWidth: '100%' }}>{content}</div>,
       title: 'content',
     },
     {
@@ -68,7 +69,7 @@ export default function MixinMessagesPage() {
         scroll={{ x: true }}
         columns={columns}
         dataSource={messages}
-        rowKey='traceId'
+        rowKey='id'
         pagination={false}
       />
       <div style={{ margin: '1rem', textAlign: 'center' }}>

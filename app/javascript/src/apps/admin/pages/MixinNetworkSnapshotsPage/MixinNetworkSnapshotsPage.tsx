@@ -43,21 +43,6 @@ export default function MixinNetworkSnapshotsPage() {
       title: 'traceId',
     },
     {
-      dataIndex: 'opponent',
-      key: 'opponent',
-      render: (_, snapshot) =>
-        snapshot.opponent ? (
-          <Space>
-            <Avatar src={snapshot.opponent.avatarUrl} />
-            {snapshot.opponent.name}
-            {snapshot.opponent.mixinId}
-          </Space>
-        ) : (
-          snapshot.opponentId
-        ),
-      title: 'Opponent',
-    },
-    {
       dataIndex: 'wallet',
       key: 'wallet',
       render: (_, snapshot) =>
@@ -74,6 +59,23 @@ export default function MixinNetworkSnapshotsPage() {
           snapshot.userId
         ),
       title: 'Wallet',
+    },
+    {
+      dataIndex: 'opponent',
+      key: 'opponent',
+      render: (_, snapshot) =>
+        snapshot.opponent ? (
+          <Space>
+            <Avatar src={snapshot.opponent.avatarUrl} />
+            {snapshot.opponent.name}
+            {snapshot.opponent.mixinId}
+          </Space>
+        ) : snapshot.opponentId === appId ? (
+          'PRSDigg'
+        ) : (
+          snapshot.opponentId
+        ),
+      title: 'Opponent',
     },
     {
       dataIndex: 'amount',

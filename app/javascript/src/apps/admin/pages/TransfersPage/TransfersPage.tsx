@@ -1,3 +1,5 @@
+import LoadingComponent from '@admin/components/LoadingComponent/LoadingComponent';
+import { usePrsdigg } from '@admin/shared';
 import {
   AdminTransferConnectionQueryHookResult,
   Transfer as ITransfer,
@@ -6,9 +8,9 @@ import {
 import { Avatar, Button, PageHeader, Space } from 'antd';
 import Table, { ColumnProps } from 'antd/lib/table';
 import React from 'react';
-import LoadingComponent from '../../components/LoadingComponent/LoadingComponent';
 
 export default function TransfersPage() {
+  const { appId } = usePrsdigg();
   const {
     data,
     loading,
@@ -33,14 +35,19 @@ export default function TransfersPage() {
     {
       dataIndex: 'recipient',
       key: 'recipient',
-      render: (_, transfer) => (
-        <Space>
-          <Avatar src={transfer.recipient.avatarUrl} />
-          <span>
-            {transfer.recipient.name}({transfer.recipient.mixinId})
-          </span>
-        </Space>
-      ),
+      render: (_, transfer) =>
+        transfer.recipient ? (
+          <Space>
+            <Avatar src={transfer.recipient.avatarUrl} />
+            <span>
+              {transfer.recipient.name}({transfer.recipient.mixinId})
+            </span>
+          </Space>
+        ) : transfer.opponentId === appId ? (
+          'PRSDigg'
+        ) : (
+          transfer.opponentId
+        ),
       title: 'Recipient',
     },
     {

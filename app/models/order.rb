@@ -81,7 +81,7 @@ class Order < ApplicationRecord
       next if (_amount - MINIMUM_AMOUNT).negative?
 
       transfers.create_with(
-        wallet: payment.mixin_network_snapshot&.wallet,
+        wallet: payment.wallet,
         transfer_type: :reader_revenue,
         opponent_id: _order.buyer.mixin_uuid,
         asset_id: payment.asset_id,
@@ -94,13 +94,28 @@ class Order < ApplicationRecord
       _distributed_amount += _amount
     end
 
+    # create prsdigg transfer
+    _prsdigg_amount = (total * PRSDIGG_RATIO).round(8)
+    if payment.wallet.present?
+      transfers.create_with(
+        wallet: payment.wallet,
+        transfer_type: :prsdigg_revenue,
+        opponent_id: MixinBot.client_id,
+        asset_id: payment.asset_id,
+        amount: _prsdigg_amount.to_f.to_s,
+        memo: "article uuid: #{item.uuid}》".truncate(140)
+      ).find_or_create_by!(
+        trace_id: payment.wallet.mixin_api.unique_conversation_id(MixinBot.client_id)
+      )
+    end
+
     # create author transfer
     transfers.create_with(
-      wallet: payment.mixin_network_snapshot&.wallet,
+      wallet: payment.wallet,
       transfer_type: :author_revenue,
       opponent_id: item.author.mixin_uuid,
       asset_id: payment.asset_id,
-      amount: (total * (1 - PRSDIGG_RATIO) - _distributed_amount).round(8),
+      amount: (total - _distributed_amount - _prsdigg_amount).round(8),
       memo: "作者收益来自文章《#{item.title}》".truncate(140)
     ).find_or_create_by!(
       trace_id: MixinBot.api.unique_conversation_id(trace_id, item.author.mixin_uuid)

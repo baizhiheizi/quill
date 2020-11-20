@@ -8,9 +8,11 @@ module Types
     field :memo, String, null: true
     field :transfer_type, String, null: false
     field :asset_id, String, null: false
+    field :opponent_id, String, null: true
+    field :wallet_id, String, null: true
     field :processed_at, GraphQL::Types::ISO8601DateTime, null: true
 
-    field :recipient, Types::UserType, null: false
+    field :recipient, Types::UserType, null: true
 
     def recipient
       BatchLoader::GraphQL.for(object.opponent_id).batch do |opponent_ids, loader|

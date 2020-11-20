@@ -7,6 +7,8 @@ query AdminTransferConnection($after: String) {
       memo
       transferType
       assetId
+      opponentId
+      walletId
       recipient {
         name
         avatarUrl
