@@ -2,6 +2,7 @@ import { Button, Result } from 'antd';
 import React from 'react';
 import { Link, Route, Switch } from 'react-router-dom';
 import AnnouncementsPage from './pages/AnnouncementsPage/AnnouncementsPage';
+import ArticlePage from './pages/ArticlePage/ArticlePage';
 import ArticlesPage from './pages/ArticlesPage/ArticlesPage';
 import CommentsPage from './pages/CommentsPage/CommentsPage';
 import DashboardPage from './pages/DashboardPage/DashboardPage';
@@ -22,6 +23,9 @@ export default function Routes() {
       </Route>
       <Route path='/articles' exact>
         <ArticlesPage />
+      </Route>
+      <Route path='/articles/:uuid' exact>
+        <ArticlePage />
       </Route>
       <Route path='/comments' exact>
         <CommentsPage />

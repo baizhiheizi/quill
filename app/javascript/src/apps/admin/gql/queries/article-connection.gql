@@ -9,6 +9,10 @@ query AdminArticleConnection($after: String) {
       ordersCount
       commentsCount
       state
+      wallet {
+        name
+        uuid
+      }
       author {
         name
         avatarUrl

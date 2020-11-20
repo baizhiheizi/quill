@@ -17,6 +17,7 @@ import {
 } from 'antd';
 import { ColumnProps } from 'antd/lib/table';
 import React from 'react';
+import { Link } from 'react-router-dom';
 import LoadingComponent from '../../components/LoadingComponent/LoadingComponent';
 
 export default function ArticlesPage() {
@@ -128,6 +129,8 @@ export default function ArticlesPage() {
               </Button>
             </Popconfirm>
           )}
+          <Divider type='vertical' />
+          <Link to={`/articles/${article.uuid}`}>Detail</Link>
           <Divider type='vertical' />
           <a href={`/articles/${article.uuid}`} target='_blank'>
             View

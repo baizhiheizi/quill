@@ -37,6 +37,7 @@ module Types
     field :buy_orders, Types::OrderConnectionType, null: false
     field :reward_orders, Types::OrderConnectionType, null: false
     field :comments, Types::CommentConnectionType, null: false
+    field :wallet, Types::MixinNetworkUserType, null: true
 
     def content
       return unless object.authorized?(context[:current_user])
@@ -82,6 +83,12 @@ module Types
     def author
       BatchLoader::GraphQL.for(object.author_id).batch do |author_ids, loader|
         User.where(id: author_ids).each { |author| loader.call(author.id, author) }
+      end
+    end
+
+    def wallet
+      BatchLoader::GraphQL.for(object.id).batch do |ids, loader|
+        MixinNetworkUser.where(owner_id: ids, owner_type: 'Article').each { |wallet| loader.call(wallet.owner_id, wallet) }
       end
     end
   end

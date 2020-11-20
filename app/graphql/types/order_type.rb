@@ -2,14 +2,17 @@
 
 module Types
   class OrderType < Types::BaseObject
+    field :id, ID, null: false
     field :trace_id, ID, null: false
     field :state, String, null: false
     field :order_type, String, null: false
     field :total, Float, null: false
+    field :item_id, ID, null: false
+    field :item_type, String, null: false
 
     field :buyer, Types::UserType, null: false
     field :seller, Types::UserType, null: false
-    field :item, Types::ArticleType, null: false
+    field :item, Types::OrderItemUnion, null: false
 
     def buyer
       BatchLoader::GraphQL.for(object.buyer_id).batch do |buyer_ids, loader|

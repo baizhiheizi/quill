@@ -262,6 +262,7 @@ export type Article = {
   upvoted?: Maybe<Scalars['Boolean']>;
   upvotesCount: Scalars['Int'];
   uuid: Scalars['ID'];
+  wallet?: Maybe<MixinNetworkUser>;
   walletId?: Maybe<Scalars['String']>;
   wordsCount: Scalars['Int'];
 };
@@ -522,6 +523,21 @@ export type MixinNetworkSnapshotEdge = {
   node?: Maybe<MixinNetworkSnapshot>;
 };
 
+export type MixinNetworkUser = {
+  __typename?: 'MixinNetworkUser';
+  createdAt: Scalars['ISO8601DateTime'];
+  id: Scalars['ID'];
+  name: Scalars['String'];
+  owner?: Maybe<MixinNetworkUserOwnerUnion>;
+  ownerId: Scalars['Int'];
+  ownerType: Scalars['String'];
+  updatedAt?: Maybe<Scalars['ISO8601DateTime']>;
+  uuid: Scalars['ID'];
+};
+
+/** Mixin network user' owner */
+export type MixinNetworkUserOwnerUnion = Article;
+
 export type Mutation = {
   __typename?: 'Mutation';
   adminBlockArticle?: Maybe<AdminBlockArticleMutationPayload>;
@@ -664,7 +680,10 @@ export type Order = {
   __typename?: 'Order';
   buyer: User;
   createdAt: Scalars['ISO8601DateTime'];
-  item: Article;
+  id: Scalars['ID'];
+  item: OrderItemUnion;
+  itemId: Scalars['ID'];
+  itemType: Scalars['String'];
   orderType: Scalars['String'];
   seller: User;
   state: Scalars['String'];
@@ -694,6 +713,9 @@ export type OrderEdge = {
   /** The item at the end of the edge. */
   node?: Maybe<Order>;
 };
+
+/** order' item */
+export type OrderItemUnion = Article;
 
 /** Information about pagination in a connection. */
 export type PageInfo = {
@@ -765,10 +787,12 @@ export type PublishArticleMutationPayload = {
 export type Query = {
   __typename?: 'Query';
   adminAnnouncementConnection: AnnouncementConnection;
+  adminArticle: Article;
   adminArticleConnection: ArticleConnection;
   adminCommentConnection: CommentConnection;
   adminMixinMessageConnection: MixinMessageConnection;
   adminMixinNetworkSnapshotConnection: MixinNetworkSnapshotConnection;
+  adminOrderConnection: OrderConnection;
   adminPaymentConnection: PaymentConnection;
   adminTransferConnection: TransferConnection;
   adminUserConnection: UserConnection;
@@ -798,6 +822,11 @@ export type QueryAdminAnnouncementConnectionArgs = {
 };
 
 
+export type QueryAdminArticleArgs = {
+  uuid: Scalars['ID'];
+};
+
+
 export type QueryAdminArticleConnectionArgs = {
   after?: Maybe<Scalars['String']>;
   before?: Maybe<Scalars['String']>;
@@ -824,6 +853,16 @@ export type QueryAdminMixinMessageConnectionArgs = {
 
 export type QueryAdminMixinNetworkSnapshotConnectionArgs = {
   filter?: Maybe<Scalars['String']>;
+  after?: Maybe<Scalars['String']>;
+  before?: Maybe<Scalars['String']>;
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+};
+
+
+export type QueryAdminOrderConnectionArgs = {
+  itemId?: Maybe<Scalars['ID']>;
+  itemType?: Maybe<Scalars['String']>;
   after?: Maybe<Scalars['String']>;
   before?: Maybe<Scalars['String']>;
   first?: Maybe<Scalars['Int']>;
@@ -1528,6 +1567,10 @@ export const AdminArticleConnectionDocument = gql`
       ordersCount
       commentsCount
       state
+      wallet {
+        name
+        uuid
+      }
       author {
         name
         avatarUrl
@@ -1567,6 +1610,55 @@ export function useAdminArticleConnectionLazyQuery(baseOptions?: Apollo.LazyQuer
 export type AdminArticleConnectionQueryHookResult = ReturnType<typeof useAdminArticleConnectionQuery>;
 export type AdminArticleConnectionLazyQueryHookResult = ReturnType<typeof useAdminArticleConnectionLazyQuery>;
 export type AdminArticleConnectionQueryResult = Apollo.QueryResult<AdminArticleConnectionQuery, AdminArticleConnectionQueryVariables>;
+export const AdminArticleDocument = gql`
+    query AdminArticle($uuid: ID!) {
+  adminArticle(uuid: $uuid) {
+    uuid
+    title
+    intro
+    price
+    revenue
+    ordersCount
+    commentsCount
+    state
+    wallet {
+      name
+      uuid
+    }
+    author {
+      name
+      avatarUrl
+    }
+    createdAt
+  }
+}
+    `;
+
+/**
+ * __useAdminArticleQuery__
+ *
+ * To run a query within a React component, call `useAdminArticleQuery` and pass it any options that fit your needs.
+ * When your component renders, `useAdminArticleQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useAdminArticleQuery({
+ *   variables: {
+ *      uuid: // value for 'uuid'
+ *   },
+ * });
+ */
+export function useAdminArticleQuery(baseOptions: Apollo.QueryHookOptions<AdminArticleQuery, AdminArticleQueryVariables>) {
+        return Apollo.useQuery<AdminArticleQuery, AdminArticleQueryVariables>(AdminArticleDocument, baseOptions);
+      }
+export function useAdminArticleLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AdminArticleQuery, AdminArticleQueryVariables>) {
+          return Apollo.useLazyQuery<AdminArticleQuery, AdminArticleQueryVariables>(AdminArticleDocument, baseOptions);
+        }
+export type AdminArticleQueryHookResult = ReturnType<typeof useAdminArticleQuery>;
+export type AdminArticleLazyQueryHookResult = ReturnType<typeof useAdminArticleLazyQuery>;
+export type AdminArticleQueryResult = Apollo.QueryResult<AdminArticleQuery, AdminArticleQueryVariables>;
 export const AdminCommentConnectionDocument = gql`
     query AdminCommentConnection($after: String) {
   adminCommentConnection(after: $after) {
@@ -1725,6 +1817,64 @@ export function useAdminMixinNetworkSnapshotConnectionLazyQuery(baseOptions?: Ap
 export type AdminMixinNetworkSnapshotConnectionQueryHookResult = ReturnType<typeof useAdminMixinNetworkSnapshotConnectionQuery>;
 export type AdminMixinNetworkSnapshotConnectionLazyQueryHookResult = ReturnType<typeof useAdminMixinNetworkSnapshotConnectionLazyQuery>;
 export type AdminMixinNetworkSnapshotConnectionQueryResult = Apollo.QueryResult<AdminMixinNetworkSnapshotConnectionQuery, AdminMixinNetworkSnapshotConnectionQueryVariables>;
+export const AdminOrderConnectionDocument = gql`
+    query AdminOrderConnection($itemId: ID, $itemType: String, $after: String) {
+  adminOrderConnection(itemId: $itemId, itemType: $itemType, after: $after) {
+    nodes {
+      id
+      traceId
+      orderType
+      itemId
+      itemType
+      state
+      total
+      seller {
+        name
+        avatarUrl
+        mixinId
+      }
+      buyer {
+        name
+        avatarUrl
+        mixinId
+      }
+      createdAt
+    }
+    pageInfo {
+      hasNextPage
+      endCursor
+    }
+  }
+}
+    `;
+
+/**
+ * __useAdminOrderConnectionQuery__
+ *
+ * To run a query within a React component, call `useAdminOrderConnectionQuery` and pass it any options that fit your needs.
+ * When your component renders, `useAdminOrderConnectionQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useAdminOrderConnectionQuery({
+ *   variables: {
+ *      itemId: // value for 'itemId'
+ *      itemType: // value for 'itemType'
+ *      after: // value for 'after'
+ *   },
+ * });
+ */
+export function useAdminOrderConnectionQuery(baseOptions?: Apollo.QueryHookOptions<AdminOrderConnectionQuery, AdminOrderConnectionQueryVariables>) {
+        return Apollo.useQuery<AdminOrderConnectionQuery, AdminOrderConnectionQueryVariables>(AdminOrderConnectionDocument, baseOptions);
+      }
+export function useAdminOrderConnectionLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AdminOrderConnectionQuery, AdminOrderConnectionQueryVariables>) {
+          return Apollo.useLazyQuery<AdminOrderConnectionQuery, AdminOrderConnectionQueryVariables>(AdminOrderConnectionDocument, baseOptions);
+        }
+export type AdminOrderConnectionQueryHookResult = ReturnType<typeof useAdminOrderConnectionQuery>;
+export type AdminOrderConnectionLazyQueryHookResult = ReturnType<typeof useAdminOrderConnectionLazyQuery>;
+export type AdminOrderConnectionQueryResult = Apollo.QueryResult<AdminOrderConnectionQuery, AdminOrderConnectionQueryVariables>;
 export const AdminPaymentConnectionDocument = gql`
     query AdminPaymentConnection($after: String) {
   adminPaymentConnection(after: $after) {

@@ -23,10 +23,13 @@ module Types
     field :admin_article_connection, resolver: Resolvers::AdminArticleConnectionResolver
     field :admin_comment_connection, resolver: Resolvers::AdminCommentConnectionResolver
     field :admin_user_connection, resolver: Resolvers::AdminUserConnectionResolver
+    field :admin_order_connection, resolver: Resolvers::AdminOrderConnectionResolver
     field :admin_payment_connection, resolver: Resolvers::AdminPaymentConnectionResolver
     field :admin_transfer_connection, resolver: Resolvers::AdminTransferConnectionResolver
     field :admin_announcement_connection, resolver: Resolvers::AdminAnnouncementConnectionResolver
     field :admin_mixin_message_connection, resolver: Resolvers::AdminMixinMessageConnectionResolver
     field :admin_mixin_network_snapshot_connection, resolver: Resolvers::AdminMixinNetworkSnapshotConnectionResolver
+
+    field :admin_article, resolver: Resolvers::AdminArticleResolver
   end
 end
