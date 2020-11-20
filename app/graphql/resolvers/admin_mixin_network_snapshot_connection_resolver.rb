@@ -2,6 +2,7 @@
 
 module Resolvers
   class AdminMixinNetworkSnapshotConnectionResolver < AdminBaseResolver
+    argument :user_id, String, required: false
     argument :filter, String, required: false
     argument :after, String, required: false
 
@@ -19,6 +20,8 @@ module Resolvers
         else
           MixinNetworkSnapshot.all
         end
+
+      snapshots = snapshots.where(user_id: params[:user_id]) if params[:user_id].present?
       snapshots.order(created_at: :desc)
     end
   end

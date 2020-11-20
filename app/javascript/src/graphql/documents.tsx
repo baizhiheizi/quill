@@ -852,6 +852,7 @@ export type QueryAdminMixinMessageConnectionArgs = {
 
 
 export type QueryAdminMixinNetworkSnapshotConnectionArgs = {
+  userId?: Maybe<Scalars['String']>;
   filter?: Maybe<Scalars['String']>;
   after?: Maybe<Scalars['String']>;
   before?: Maybe<Scalars['String']>;
@@ -1626,10 +1627,7 @@ export const AdminArticleDocument = gql`
     ordersCount
     commentsCount
     state
-    wallet {
-      name
-      uuid
-    }
+    walletId
     author {
       name
       avatarUrl
@@ -1714,8 +1712,12 @@ export type AdminMixinMessageConnectionQueryHookResult = ReturnType<typeof useAd
 export type AdminMixinMessageConnectionLazyQueryHookResult = ReturnType<typeof useAdminMixinMessageConnectionLazyQuery>;
 export type AdminMixinMessageConnectionQueryResult = Apollo.QueryResult<AdminMixinMessageConnectionQuery, AdminMixinMessageConnectionQueryVariables>;
 export const AdminMixinNetworkSnapshotConnectionDocument = gql`
-    query AdminMixinNetworkSnapshotConnection($filter: String, $after: String) {
-  adminMixinNetworkSnapshotConnection(filter: $filter, after: $after) {
+    query AdminMixinNetworkSnapshotConnection($filter: String, $userId: String, $after: String) {
+  adminMixinNetworkSnapshotConnection(
+    filter: $filter
+    userId: $userId
+    after: $after
+  ) {
     nodes {
       id
       traceId
@@ -1759,6 +1761,7 @@ export const AdminMixinNetworkSnapshotConnectionDocument = gql`
  * const { data, loading, error } = useAdminMixinNetworkSnapshotConnectionQuery({
  *   variables: {
  *      filter: // value for 'filter'
+ *      userId: // value for 'userId'
  *      after: // value for 'after'
  *   },
  * });

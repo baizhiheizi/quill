@@ -1,11 +1,12 @@
 import CommentsComponent from '@admin/components/CommentsComponent/CommentsComponent';
 import LoadingComponent from '@admin/components/LoadingComponent/LoadingComponent';
+import MixinNetworkSnapshotsComponent from '@admin/components/MixinNetworkSnapshotsComponent/MixinNetworkSnapshotComponent';
 import OrdersComponent from '@admin/components/OrdersComponent/OrdersComponent';
+import TransfersComponent from '@admin/components/TransfersComponent/TransfersComponent';
 import { useAdminArticleQuery } from '@graphql';
-import { Avatar, Descriptions, PageHeader, Space, Tabs } from 'antd';
+import { Avatar, Descriptions, Empty, PageHeader, Space, Tabs } from 'antd';
 import React from 'react';
 import { useHistory, useParams } from 'react-router-dom';
-import TransfersComponent from '../../components/TransfersComponent/TransfersComponent';
 
 export default function ArticlePage() {
   const { uuid } = useParams<{ uuid: string }>();
@@ -63,7 +64,11 @@ export default function ArticlePage() {
           Wallet Balance
         </Tabs.TabPane>
         <Tabs.TabPane tab='Wallet Snapshots' key='wallet_snapshots'>
-          Wallet Snapshots
+          {article.walletId ? (
+            <MixinNetworkSnapshotsComponent userId={article.walletId} />
+          ) : (
+            <Empty />
+          )}
         </Tabs.TabPane>
       </Tabs>
     </div>

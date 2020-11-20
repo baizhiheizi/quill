@@ -1,5 +1,13 @@
-query AdminMixinNetworkSnapshotConnection($filter: String, $after: String) {
-  adminMixinNetworkSnapshotConnection(filter: $filter, after: $after) {
+query AdminMixinNetworkSnapshotConnection(
+  $filter: String
+  $userId: String
+  $after: String
+) {
+  adminMixinNetworkSnapshotConnection(
+    filter: $filter
+    userId: $userId
+    after: $after
+  ) {
     nodes {
       id
       traceId

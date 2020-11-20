@@ -1,99 +1,11 @@
-import LoadingComponent from '@admin/components/LoadingComponent/LoadingComponent';
-import { usePrsdigg } from '@admin/shared';
-import {
-  MixinNetworkSnapshot,
-  useAdminMixinNetworkSnapshotConnectionQuery,
-} from '@graphql';
-import {
-  Avatar,
-  Button,
-  Col,
-  PageHeader,
-  Row,
-  Select,
-  Space,
-  Table,
-} from 'antd';
-import { ColumnProps } from 'antd/lib/table';
+import MixinNetworkSnapshotsComponent from '@admin/components/MixinNetworkSnapshotsComponent/MixinNetworkSnapshotComponent';
+import { Col, PageHeader, Row, Select } from 'antd';
 import React, { useState } from 'react';
 
 export default function MixinNetworkSnapshotsPage() {
-  const { appId } = usePrsdigg();
-  const [filter, setFilter] = useState('input');
-  const {
-    data,
-    loading,
-    fetchMore,
-  } = useAdminMixinNetworkSnapshotConnectionQuery({ variables: { filter } });
-
-  if (loading) {
-    return <LoadingComponent />;
-  }
-
-  const {
-    adminMixinNetworkSnapshotConnection: {
-      nodes: snapshots,
-      pageInfo: { hasNextPage, endCursor },
-    },
-  } = data;
-  const columns: Array<ColumnProps<MixinNetworkSnapshot>> = [
-    {
-      dataIndex: 'traceId',
-      key: 'traceId',
-      title: 'traceId',
-    },
-    {
-      dataIndex: 'wallet',
-      key: 'wallet',
-      render: (_, snapshot) =>
-        snapshot.article ? (
-          <a
-            href={`https://prsdigg.com/articles/${snapshot.article.uuid}`}
-            target='_blank'
-          >
-            {snapshot.article.title}
-          </a>
-        ) : snapshot.userId === appId ? (
-          'PRSDigg'
-        ) : (
-          snapshot.userId
-        ),
-      title: 'Wallet',
-    },
-    {
-      dataIndex: 'opponent',
-      key: 'opponent',
-      render: (_, snapshot) =>
-        snapshot.opponent ? (
-          <Space>
-            <Avatar src={snapshot.opponent.avatarUrl} />
-            {snapshot.opponent.name}
-            {snapshot.opponent.mixinId}
-          </Space>
-        ) : snapshot.opponentId === appId ? (
-          'PRSDigg'
-        ) : (
-          snapshot.opponentId
-        ),
-      title: 'Opponent',
-    },
-    {
-      dataIndex: 'amount',
-      key: 'amount',
-      title: 'amount',
-    },
-    {
-      dataIndex: 'processedAt',
-      key: 'processedAt',
-      title: 'processedAt',
-    },
-    {
-      dataIndex: 'createdAt',
-      key: 'createdAt',
-      title: 'createdAt',
-    },
-  ];
-
+  const [filter, setFilter] = useState<'input' | 'output' | 'prsdigg' | 'all'>(
+    'input',
+  );
   return (
     <div>
       <PageHeader title='Mixin Network Snapshot' />
@@ -111,42 +23,7 @@ export default function MixinNetworkSnapshotsPage() {
           </Select>
         </Col>
       </Row>
-      <Table
-        scroll={{ x: true }}
-        columns={columns}
-        dataSource={snapshots}
-        rowKey='traceId'
-        pagination={false}
-      />
-      <div style={{ margin: '1rem', textAlign: 'center' }}>
-        <Button
-          type='link'
-          loading={loading}
-          disabled={!hasNextPage}
-          onClick={() => {
-            fetchMore({
-              updateQuery: (prev, { fetchMoreResult }) => {
-                if (!fetchMoreResult) {
-                  return prev;
-                }
-                const connection =
-                  fetchMoreResult.adminMixinNetworkSnapshotConnection;
-                connection.nodes = prev.adminMixinNetworkSnapshotConnection.nodes.concat(
-                  connection.nodes,
-                );
-                return Object.assign({}, prev, {
-                  adminMixinNetworkSnapshotConnection: connection,
-                });
-              },
-              variables: {
-                after: endCursor,
-              },
-            });
-          }}
-        >
-          {hasNextPage ? 'Load More' : 'No More'}
-        </Button>
-      </div>
+      <MixinNetworkSnapshotsComponent filter={filter} />
     </div>
   );
 }
