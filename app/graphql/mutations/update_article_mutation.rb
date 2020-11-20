@@ -23,7 +23,7 @@ module Mutations
         )
       )
 
-      { error: article.errors.full_messages.join(';').presence } unless article.save!
+      { error: article.errors.full_messages.join(';').presence } unless article.save
     end
   end
 end

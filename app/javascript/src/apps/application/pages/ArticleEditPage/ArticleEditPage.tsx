@@ -18,7 +18,14 @@ export default function ArticleEditPage() {
     variables: { uuid },
   });
   const [updateArticle, { loading: updating }] = useUpdateArticleMutation({
-    update(_, { data: { error: err } }) {
+    update(
+      _,
+      {
+        data: {
+          updateArticle: { error: err },
+        },
+      },
+    ) {
       if (err) {
         message.error(err);
       } else {
