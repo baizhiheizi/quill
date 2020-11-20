@@ -1659,56 +1659,6 @@ export function useAdminArticleLazyQuery(baseOptions?: Apollo.LazyQueryHookOptio
 export type AdminArticleQueryHookResult = ReturnType<typeof useAdminArticleQuery>;
 export type AdminArticleLazyQueryHookResult = ReturnType<typeof useAdminArticleLazyQuery>;
 export type AdminArticleQueryResult = Apollo.QueryResult<AdminArticleQuery, AdminArticleQueryVariables>;
-export const AdminCommentConnectionDocument = gql`
-    query AdminCommentConnection($after: String) {
-  adminCommentConnection(after: $after) {
-    nodes {
-      id
-      content
-      deletedAt
-      author {
-        name
-        avatarUrl
-      }
-      commentable {
-        title
-        uuid
-      }
-      createdAt
-    }
-    pageInfo {
-      hasNextPage
-      endCursor
-    }
-  }
-}
-    `;
-
-/**
- * __useAdminCommentConnectionQuery__
- *
- * To run a query within a React component, call `useAdminCommentConnectionQuery` and pass it any options that fit your needs.
- * When your component renders, `useAdminCommentConnectionQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useAdminCommentConnectionQuery({
- *   variables: {
- *      after: // value for 'after'
- *   },
- * });
- */
-export function useAdminCommentConnectionQuery(baseOptions?: Apollo.QueryHookOptions<AdminCommentConnectionQuery, AdminCommentConnectionQueryVariables>) {
-        return Apollo.useQuery<AdminCommentConnectionQuery, AdminCommentConnectionQueryVariables>(AdminCommentConnectionDocument, baseOptions);
-      }
-export function useAdminCommentConnectionLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AdminCommentConnectionQuery, AdminCommentConnectionQueryVariables>) {
-          return Apollo.useLazyQuery<AdminCommentConnectionQuery, AdminCommentConnectionQueryVariables>(AdminCommentConnectionDocument, baseOptions);
-        }
-export type AdminCommentConnectionQueryHookResult = ReturnType<typeof useAdminCommentConnectionQuery>;
-export type AdminCommentConnectionLazyQueryHookResult = ReturnType<typeof useAdminCommentConnectionLazyQuery>;
-export type AdminCommentConnectionQueryResult = Apollo.QueryResult<AdminCommentConnectionQuery, AdminCommentConnectionQueryVariables>;
 export const AdminMixinMessageConnectionDocument = gql`
     query AdminMixinMessageConnection($after: String) {
   adminMixinMessageConnection(after: $after) {
