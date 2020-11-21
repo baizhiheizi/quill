@@ -103,7 +103,7 @@ export default function Menus() {
               <Menu selectable={false}>
                 <Menu.Item onClick={() => setDrawerVisible(false)}>
                   <Link to='/mine' replace>
-                    <a>{t('menu.mine')}</a>
+                    {t('menu.mine')}
                   </Link>
                 </Menu.Item>
                 <Menu.Item onClick={() => setDrawerVisible(false)}>
