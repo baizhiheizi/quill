@@ -130,7 +130,7 @@ rulesPage:
     
     PRSDigg try to build a win-win platform for both writer and reader.
 communityPage:
-  mixin: Mixin Grgoup
+  mixin: Mixin Group
 commentsComponent:
   title: Comments
   subscribeBtn: Subscribe
