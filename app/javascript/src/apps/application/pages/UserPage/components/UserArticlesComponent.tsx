@@ -175,7 +175,11 @@ export default function UserArticlesComponent(props: {
           <List.Item key={article.uuid}>
             <List.Item.Meta
               style={{ marginBottom: 0 }}
-              avatar={<Avatar src={article.author.avatarUrl} />}
+              avatar={
+                <Avatar src={article.author.avatarUrl}>
+                  {article.author.name[0]}
+                </Avatar>
+              }
               title={
                 <Row>
                   <div>
