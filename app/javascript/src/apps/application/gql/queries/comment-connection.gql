@@ -24,6 +24,7 @@ query CommentConnection(
         name
         avatarUrl
         mixinId
+        bio
         createdAt
       }
       commentable {

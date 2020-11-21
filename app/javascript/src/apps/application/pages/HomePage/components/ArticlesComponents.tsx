@@ -1,3 +1,4 @@
+import UserCardComponent from '@/apps/application/components/UserCardComponent/UserCardComponent';
 import {
   DislikeOutlined,
   LikeOutlined,
@@ -17,7 +18,7 @@ import {
   ArticleConnectionQueryHookResult,
   useArticleConnectionQuery,
 } from '@graphql';
-import { Avatar, Button, List, Row, Space } from 'antd';
+import { Avatar, Button, List, Popover, Row, Space } from 'antd';
 import moment from 'moment';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
@@ -125,7 +126,16 @@ export default function ArticlesComponent(props: {
         >
           <List.Item.Meta
             style={{ marginBottom: 0 }}
-            avatar={<Avatar src={article.author.avatarUrl} />}
+            avatar={
+              <Popover
+                content={<UserCardComponent user={article.author} />}
+                placement='bottomLeft'
+              >
+                <Avatar src={article.author.avatarUrl}>
+                  {article.author.name[0]}
+                </Avatar>
+              </Popover>
+            }
             title={
               <Row>
                 <div>

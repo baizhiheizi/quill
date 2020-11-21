@@ -12,6 +12,8 @@ query ArticleConnection($order: String!, $after: String) {
       author {
         name
         avatarUrl
+        mixinId
+        bio
       }
       createdAt
     }

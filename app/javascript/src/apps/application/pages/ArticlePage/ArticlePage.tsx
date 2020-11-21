@@ -7,6 +7,7 @@ import {
 import CommentsComponent from '@application/components/CommentsComponent/CommentsComponent';
 import LoadingComponent from '@application/components/LoadingComponent/LoadingComponent';
 import MarkdownRendererComponent from '@application/components/MarkdownRendererComponent/MarkdownRendererComponent';
+import UserCardComponent from '@application/components/UserCardComponent/UserCardComponent';
 import {
   handleShare,
   PAGE_TITLE,
@@ -25,7 +26,6 @@ import {
   Alert,
   Avatar,
   Button,
-  Card,
   Col,
   Divider,
   Modal,
@@ -310,27 +310,7 @@ export default function ArticlePage() {
         </Button>
       </div>
       <div style={{ marginBottom: '2rem' }}>
-        <Card>
-          <Card.Meta
-            avatar={<Avatar src={article.author.avatarUrl} />}
-            title={
-              <Row style={{ alignItems: 'center' }}>
-                <Col style={{ flex: 1 }}>{article.author.name}</Col>
-                {(!currentUser ||
-                  currentUser.mixinId !== article.author.mixinId) && (
-                  <Col>
-                    <Button type='primary' shape='round' size='small'>
-                      <Link to={`/users/${article.author.mixinId}`}>
-                        {t('articlePage.userDetailBtn')}
-                      </Link>
-                    </Button>
-                  </Col>
-                )}
-              </Row>
-            }
-            description={article.author.bio || t('user.defaultBio')}
-          />
-        </Card>
+        <UserCardComponent user={article.author} />
       </div>
       <div style={{ marginBottom: '2rem' }}>
         <Row justify='center'>

@@ -2542,6 +2542,8 @@ export const ArticleConnectionDocument = gql`
       author {
         name
         avatarUrl
+        mixinId
+        bio
       }
       createdAt
     }
@@ -2679,6 +2681,7 @@ export const CommentConnectionDocument = gql`
         name
         avatarUrl
         mixinId
+        bio
         createdAt
       }
       commentable {

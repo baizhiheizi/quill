@@ -26,6 +26,7 @@ import {
   List,
   message,
   Modal,
+  Popover,
   Row,
   Select,
 } from 'antd';
@@ -33,6 +34,7 @@ import moment from 'moment';
 import React, { createElement, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import LoadingComponent from '../LoadingComponent/LoadingComponent';
+import UserCardComponent from '../UserCardComponent/UserCardComponent';
 
 export default function CommentsComponent(props: {
   commentableType?: 'Article' | string;
@@ -275,9 +277,14 @@ ${comment.content.replace(/^/gm, '> ')}
                 ]}
                 author={comment.author.name}
                 avatar={
-                  <Avatar src={comment.author.avatarUrl}>
-                    {comment.author.name[0]}
-                  </Avatar>
+                  <Popover
+                    content={<UserCardComponent user={comment.author} />}
+                    placement='bottomLeft'
+                  >
+                    <Avatar src={comment.author.avatarUrl}>
+                      {comment.author.name[0]}
+                    </Avatar>
+                  </Popover>
                 }
                 content={<MarkdownRendererComponent source={comment.content} />}
                 datetime={<span>{moment(comment.createdAt).fromNow()}</span>}
