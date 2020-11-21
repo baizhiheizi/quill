@@ -66,6 +66,11 @@ export default function Menus() {
             </Link>
           </Menu.Item>
           <Menu.Item onClick={() => setDrawerVisible(false)}>
+            <Link to='/community' replace>
+              {t('menu.community')}
+            </Link>
+          </Menu.Item>
+          <Menu.Item onClick={() => setDrawerVisible(false)}>
             <a href={OPEN_SOURCE_URL} target='_blank'>
               <GithubOutlined />
               {t('menu.openSource')}

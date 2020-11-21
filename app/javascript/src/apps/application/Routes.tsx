@@ -3,6 +3,7 @@ import { Route, Switch } from 'react-router-dom';
 import ArticleEditPage from './pages/ArticleEditPage/ArticleEditPage';
 import ArticleNewPage from './pages/ArticleNewPage/ArticleNewPage';
 import ArticlePage from './pages/ArticlePage/ArticlePage';
+import CommnunityPage from './pages/CommnunityPage/CommunityPage';
 import FairPage from './pages/FairPage/FairPage';
 import HomePage from './pages/HomePage/HomePage';
 import MinePage from './pages/MinePage/MinePage';
@@ -37,6 +38,9 @@ export default function Routes() {
         </Route>
         <Route path='/fair' exact>
           <FairPage />
+        </Route>
+        <Route path='/community' exact>
+          <CommnunityPage />
         </Route>
         <Route>
           <NotFoundPage />

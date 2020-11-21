@@ -63,6 +63,7 @@ menu:
   write: Write
   rules: Rules
   fair: Fair
+  community: Community
   openSource: Open Source
   mine: Mine
   login: Login
@@ -128,6 +129,8 @@ rulesPage:
     ### Rules of PRSDigg
     
     PRSDigg try to build a win-win platform for both writer and reader.
+communityPage:
+  mixin: Mixin Grgoup
 commentsComponent:
   title: Comments
   subscribeBtn: Subscribe

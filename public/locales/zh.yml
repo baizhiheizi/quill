@@ -63,6 +63,7 @@ menu:
   write: 写文章
   rules: 规则
   fair: 公示
+  community: 社区
   openSource: 开源
   mine: 个人中心
   login: 登录
@@ -164,6 +165,8 @@ rulesPage:
     以此类推。
 
     值得提醒的是，除了购买文章的付费，其他付费行为（例如打赏）的付费，也会计入早期读者奖励的分配比例。
+communityPage:
+  mixin: PRSDigg 中文社区
 commentsComponent:
   title: 读者评论
   subscribeBtn: 订阅新评论
