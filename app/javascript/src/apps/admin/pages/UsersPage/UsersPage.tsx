@@ -3,17 +3,64 @@ import {
   useAdminUserConnectionQuery,
   User as IUser,
 } from '@graphql';
-import { Avatar, Button, PageHeader, Popover, Space } from 'antd';
+import {
+  Avatar,
+  Button,
+  Col,
+  Input,
+  PageHeader,
+  Popover,
+  Row,
+  Select,
+  Space,
+} from 'antd';
 import Table, { ColumnProps } from 'antd/lib/table';
-import React from 'react';
-import LoadingComponent from '../../components/LoadingComponent/LoadingComponent';
+import React, { useState } from 'react';
+import LoadingComponent from '@admin/components/LoadingComponent/LoadingComponent';
+import { useDebounce } from 'ahooks';
 
 export default function UsersPage() {
+  const [query, setQuery] = useState('');
+  const [orderBy, setOrderBy] = useState('default');
+  const debouncedQuery = useDebounce(query, { wait: 500 });
+  return (
+    <div>
+      <PageHeader title='Users' />
+      <Row gutter={16} style={{ marginBottom: '1rem' }}>
+        <Col>
+          <Select
+            style={{ width: 200 }}
+            value={orderBy}
+            onChange={(value) => setOrderBy(value)}
+          >
+            <Select.Option value='default'>Default</Select.Option>
+            <Select.Option value='revenue_total'>Revenue Total</Select.Option>
+            <Select.Option value='payment_total'>Payment Total</Select.Option>
+            <Select.Option value='articles_count'>Articles Count</Select.Option>
+            <Select.Option value='comment_count'>Comments Count</Select.Option>
+          </Select>
+        </Col>
+        <Col>
+          <Input
+            value={query}
+            onChange={(e) => setQuery(e.currentTarget.value)}
+          />
+        </Col>
+      </Row>
+      <UsersComponent orderBy={orderBy} query={debouncedQuery} />
+    </div>
+  );
+}
+
+export function UsersComponent(props: { query?: string; orderBy?: string }) {
+  const { query, orderBy } = props;
   const {
     data,
     loading,
     fetchMore,
-  }: AdminUserConnectionQueryHookResult = useAdminUserConnectionQuery();
+  }: AdminUserConnectionQueryHookResult = useAdminUserConnectionQuery({
+    variables: { query, orderBy },
+  });
 
   if (loading) {
     return <LoadingComponent />;
@@ -59,19 +106,14 @@ export default function UsersPage() {
       title: 'Comments',
     },
     {
-      dataIndex: 'authorRevenueAmount',
-      key: 'authorRevenueAmount',
-      title: 'Author Revenue',
+      dataIndex: 'revenueTotal',
+      key: 'revenueTotal',
+      title: 'Revenue Total',
     },
     {
-      dataIndex: 'readerRevenueAmount',
-      key: 'readerRevenueAmount',
-      title: 'Reader Revenue',
-    },
-    {
-      dataIndex: 'paymentsTotal',
-      key: 'paymentsTotal',
-      title: 'Payments Total',
+      dataIndex: 'paymentTotal',
+      key: 'paymentTotal',
+      title: 'Payment Total',
     },
     {
       dataIndex: 'createdAt',
@@ -82,7 +124,6 @@ export default function UsersPage() {
 
   return (
     <div>
-      <PageHeader title='Users' />
       <Table
         scroll={{ x: true }}
         columns={columns}

@@ -1,5 +1,5 @@
-query AdminUserConnection($after: String) {
-  adminUserConnection(after: $after) {
+query AdminUserConnection($query: String, $orderBy: String, $after: String) {
+  adminUserConnection(query: $query, orderBy: $orderBy, after: $after) {
     nodes {
       name
       mixinId
@@ -7,9 +7,8 @@ query AdminUserConnection($after: String) {
       avatarUrl
       articlesCount
       commentsCount
-      authorRevenueAmount
-      readerRevenueAmount
-      paymentsTotal
+      revenueTotal
+      paymentTotal
       createdAt
     }
     pageInfo {

@@ -909,6 +909,8 @@ export type QueryAdminTransferConnectionArgs = {
 
 
 export type QueryAdminUserConnectionArgs = {
+  query?: Maybe<Scalars['String']>;
+  orderBy?: Maybe<Scalars['String']>;
   after?: Maybe<Scalars['String']>;
   before?: Maybe<Scalars['String']>;
   first?: Maybe<Scalars['Int']>;
@@ -1134,9 +1136,10 @@ export type User = {
   mixinId: Scalars['String'];
   mixinUuid: Scalars['String'];
   name: Scalars['String'];
-  paymentsTotal: Scalars['Float'];
+  paymentTotal: Scalars['Float'];
   readerRevenueAmount: Scalars['Float'];
   readingSubscribed?: Maybe<Scalars['Boolean']>;
+  revenueTotal: Scalars['Float'];
   updatedAt?: Maybe<Scalars['ISO8601DateTime']>;
 };
 
@@ -2032,8 +2035,8 @@ export type UserChartQueryHookResult = ReturnType<typeof useUserChartQuery>;
 export type UserChartLazyQueryHookResult = ReturnType<typeof useUserChartLazyQuery>;
 export type UserChartQueryResult = Apollo.QueryResult<UserChartQuery, UserChartQueryVariables>;
 export const AdminUserConnectionDocument = gql`
-    query AdminUserConnection($after: String) {
-  adminUserConnection(after: $after) {
+    query AdminUserConnection($query: String, $orderBy: String, $after: String) {
+  adminUserConnection(query: $query, orderBy: $orderBy, after: $after) {
     nodes {
       name
       mixinId
@@ -2041,9 +2044,8 @@ export const AdminUserConnectionDocument = gql`
       avatarUrl
       articlesCount
       commentsCount
-      authorRevenueAmount
-      readerRevenueAmount
-      paymentsTotal
+      revenueTotal
+      paymentTotal
       createdAt
     }
     pageInfo {
@@ -2066,6 +2068,8 @@ export const AdminUserConnectionDocument = gql`
  * @example
  * const { data, loading, error } = useAdminUserConnectionQuery({
  *   variables: {
+ *      query: // value for 'query'
+ *      orderBy: // value for 'orderBy'
  *      after: // value for 'after'
  *   },
  * });
