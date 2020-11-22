@@ -43,7 +43,7 @@ class User < ApplicationRecord
       .select(
         <<~SQL.squish
           users.*,
-          COUNT(transfers.amount) AS revenue_total
+          SUM(transfers.amount) AS revenue_total
         SQL
       ).order(revenue_total: :desc)
   }
@@ -53,7 +53,7 @@ class User < ApplicationRecord
       .select(
         <<~SQL.squish
           users.*,
-          COUNT(payments.amount) AS payment_total
+          SUM(payments.amount) AS payment_total
         SQL
       ).order(payment_total: :desc)
   }

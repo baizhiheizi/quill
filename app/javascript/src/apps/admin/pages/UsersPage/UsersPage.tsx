@@ -37,7 +37,7 @@ export default function UsersPage() {
             <Select.Option value='revenue_total'>Revenue Total</Select.Option>
             <Select.Option value='payment_total'>Payment Total</Select.Option>
             <Select.Option value='articles_count'>Articles Count</Select.Option>
-            <Select.Option value='comment_count'>Comments Count</Select.Option>
+            <Select.Option value='comments_count'>Comments Count</Select.Option>
           </Select>
         </Col>
         <Col>
