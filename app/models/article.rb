@@ -57,15 +57,14 @@ class Article < ApplicationRecord
 
   scope :only_published, -> { where(state: :published) }
   scope :order_by_popularity, lambda {
-                                where(state: :published)
-                                  .where.not(orders_count: 0)
-                                  .select(
-                                    <<~SQL.squish
-                                      articles.*, 
-                                      ((((articles.revenue / articles.price) + articles.upvotes_count - articles.downvotes_count + articles.comments_count) / POW(((EXTRACT(EPOCH FROM (now()-articles.created_at)) / 3600)::integer + 1), 2))) AS popularity
-                                    SQL
-                                  )
-                                  .order('popularity DESC, created_at DESC')
+                                where.not(orders_count: 0)
+                                     .select(
+                                       <<~SQL.squish
+                                         articles.*, 
+                                         ((((articles.revenue / articles.price) + articles.upvotes_count - articles.downvotes_count + articles.comments_count) / POW(((EXTRACT(EPOCH FROM (now()-articles.created_at)) / 3600)::integer + 1), 2))) AS popularity
+                                       SQL
+                                     )
+                                     .order('popularity DESC, created_at DESC')
                               }
 
   after_create :create_wallet!

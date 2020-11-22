@@ -53,6 +53,8 @@ gem 'clockwork', require: false
 gem 'action-store'
 # The simplest way to group temporal data
 gem 'groupdate'
+# Object-based searching. http://ransack-demo.herokuapp.com
+gem 'ransack'
 
 # deploy
 gem 'mina', '~> 1.2.2', require: false

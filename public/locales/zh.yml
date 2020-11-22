@@ -61,6 +61,7 @@ transfer:
 menu:
   read: 读文章
   write: 写文章
+  search: 搜索
   rules: 规则
   fair: 公示
   community: 社区
@@ -113,6 +114,9 @@ minePage:
     comments: 已评论
     payments: 付款记录
     transfers: 收益记录
+searchPage:
+  enterBtn: 搜索
+  placeholder: 请输入文章标题/简介/作者信息
 fairPage:
   usersCount: 用户总量
   articlesCount: 文章总数

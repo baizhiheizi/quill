@@ -927,6 +927,7 @@ export type QueryArticleArgs = {
 
 
 export type QueryArticleConnectionArgs = {
+  query?: Maybe<Scalars['String']>;
   after?: Maybe<Scalars['String']>;
   order: Scalars['String'];
   before?: Maybe<Scalars['String']>;
@@ -2528,8 +2529,8 @@ export type UpvoteCommentMutationHookResult = ReturnType<typeof useUpvoteComment
 export type UpvoteCommentMutationResult = Apollo.MutationResult<UpvoteCommentMutation>;
 export type UpvoteCommentMutationOptions = Apollo.BaseMutationOptions<UpvoteCommentMutation, UpvoteCommentMutationVariables>;
 export const ArticleConnectionDocument = gql`
-    query ArticleConnection($order: String!, $after: String) {
-  articleConnection(order: $order, after: $after) {
+    query ArticleConnection($order: String!, $query: String, $after: String) {
+  articleConnection(order: $order, query: $query, after: $after) {
     nodes {
       uuid
       title
@@ -2568,6 +2569,7 @@ export const ArticleConnectionDocument = gql`
  * const { data, loading, error } = useArticleConnectionQuery({
  *   variables: {
  *      order: // value for 'order'
+ *      query: // value for 'query'
  *      after: // value for 'after'
  *   },
  * });

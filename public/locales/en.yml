@@ -61,6 +61,7 @@ transfer:
 menu:
   read: Read
   write: Write
+  search: Search
   rules: Rules
   fair: Fair
   community: Community
@@ -113,6 +114,9 @@ minePage:
     comments: Commented
     payments: Payments
     transfers: Revenue
+searchPage:
+  enterBtn: Search
+  placeholder: Input title / introduction / author name
 fairPage:
   usersCount: Users
   articlesCount: Articles

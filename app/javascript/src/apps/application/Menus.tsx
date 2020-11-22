@@ -56,6 +56,11 @@ export default function Menus() {
             )}
           </Menu.Item>
           <Menu.Item onClick={() => setDrawerVisible(false)}>
+            <Link to='/search' replace>
+              {t('menu.search')}
+            </Link>
+          </Menu.Item>
+          <Menu.Item onClick={() => setDrawerVisible(false)}>
             <Link to='/rules' replace>
               {t('menu.rules')}
             </Link>

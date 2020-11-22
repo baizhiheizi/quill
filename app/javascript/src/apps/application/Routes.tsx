@@ -9,6 +9,7 @@ import HomePage from './pages/HomePage/HomePage';
 import MinePage from './pages/MinePage/MinePage';
 import NotFoundPage from './pages/NotFoundPage/NotFoundPage';
 import RulesPage from './pages/RulesPage/RulesPage';
+import SearchPage from './pages/SearchPage/SearchPage';
 import UserPage from './pages/UserPage/UserPage';
 
 export default function Routes() {
@@ -29,6 +30,9 @@ export default function Routes() {
         </Route>
         <Route path='/users/:mixinId' exact>
           <UserPage />
+        </Route>
+        <Route path='/search' exact>
+          <SearchPage />
         </Route>
         <Route path='/rules' exact>
           <RulesPage />

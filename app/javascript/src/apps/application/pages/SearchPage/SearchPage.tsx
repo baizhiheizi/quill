@@ -1,34 +1,35 @@
-import ArticleListItemComponent from '@/apps/application/components/ArticleListItemComponent/ArticleListItemComponent';
+import { Article, useArticleConnectionQuery } from '@/graphql';
+import ArticleListItemComponent from '@application/components/ArticleListItemComponent/ArticleListItemComponent';
 import LoadingComponent from '@application/components/LoadingComponent/LoadingComponent';
-import {
-  Article,
-  ArticleConnectionQueryHookResult,
-  useArticleConnectionQuery,
-} from '@graphql';
-import { Button, List } from 'antd';
-import moment from 'moment';
-import React from 'react';
+import { Button, Empty, Input, List } from 'antd';
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-export default function ArticlesComponent(props: {
-  order: 'default' | 'lately' | 'revenue';
-}) {
-  const { order } = props;
-  const { t, i18n } = useTranslation();
-  moment.locale(i18n.language);
-  const {
-    data,
-    loading,
-    fetchMore,
-  }: ArticleConnectionQueryHookResult = useArticleConnectionQuery({
-    fetchPolicy: 'network-only',
-    notifyOnNetworkStatusChange: true,
-    variables: {
-      order,
-    },
-  });
+export default function SearchPage() {
+  const { t } = useTranslation();
+  const [query, setQuery] = useState('');
+  return (
+    <div style={{ marginTop: 20 }}>
+      <div style={{ marginBottom: '1rem' }}>
+        <Input.Search
+          size='large'
+          enterButton={t('searchPage.enterBtn')}
+          placeholder={t('searchPage.placeholder')}
+          onSearch={(value) => setQuery(value)}
+        />
+      </div>
+      {query ? <SearchResultCompoent query={query} /> : <Empty />}
+    </div>
+  );
+}
 
-  if (!data && loading) {
+function SearchResultCompoent(props: { query?: string }) {
+  const { t } = useTranslation();
+  const { query } = props;
+  const { loading, data, fetchMore } = useArticleConnectionQuery({
+    variables: { query, order: 'default' },
+  });
+  if (loading) {
     return <LoadingComponent />;
   }
 
@@ -71,7 +72,6 @@ export default function ArticlesComponent(props: {
                   },
                   variables: {
                     after: endCursor,
-                    order,
                   },
                 });
               }}
