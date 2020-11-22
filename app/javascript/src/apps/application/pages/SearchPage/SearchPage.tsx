@@ -2,8 +2,9 @@ import { Article, useArticleConnectionQuery } from '@/graphql';
 import ArticleListItemComponent from '@application/components/ArticleListItemComponent/ArticleListItemComponent';
 import LoadingComponent from '@application/components/LoadingComponent/LoadingComponent';
 import { Button, Empty, Input, List } from 'antd';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import Mark from 'mark.js';
 
 export default function SearchPage() {
   const { t } = useTranslation();
@@ -29,6 +30,13 @@ function SearchResultCompoent(props: { query?: string }) {
   const { loading, data, fetchMore } = useArticleConnectionQuery({
     variables: { query, order: 'default' },
   });
+
+  useEffect(() => {
+    const context = document.querySelector('div.search-result');
+    const marker = new Mark(context as any);
+    marker.mark(query);
+  }, [query, data]);
+
   if (loading) {
     return <LoadingComponent />;
   }
@@ -40,50 +48,52 @@ function SearchResultCompoent(props: { query?: string }) {
     },
   } = data;
   return (
-    <List
-      size='large'
-      itemLayout='vertical'
-      dataSource={articles}
-      loadMore={
-        hasNextPage && (
-          <div
-            style={{
-              textAlign: 'center',
-              marginTop: 12,
-              height: 32,
-              lineHeight: '32px',
-            }}
-          >
-            <Button
-              loading={loading}
-              onClick={() => {
-                fetchMore({
-                  updateQuery: (prev, { fetchMoreResult }) => {
-                    if (!fetchMoreResult) {
-                      return prev;
-                    }
-                    const connection = fetchMoreResult.articleConnection;
-                    connection.nodes = prev.articleConnection.nodes.concat(
-                      connection.nodes,
-                    );
-                    return Object.assign({}, prev, {
-                      articleConnection: connection,
-                    });
-                  },
-                  variables: {
-                    after: endCursor,
-                  },
-                });
+    <div className='search-result'>
+      <List
+        size='large'
+        itemLayout='vertical'
+        dataSource={articles}
+        loadMore={
+          hasNextPage && (
+            <div
+              style={{
+                textAlign: 'center',
+                marginTop: 12,
+                height: 32,
+                lineHeight: '32px',
               }}
             >
-              {t('common.loadMore')}
-            </Button>
-          </div>
-        )
-      }
-      renderItem={(article: Partial<Article>) => (
-        <ArticleListItemComponent article={article} />
-      )}
-    />
+              <Button
+                loading={loading}
+                onClick={() => {
+                  fetchMore({
+                    updateQuery: (prev, { fetchMoreResult }) => {
+                      if (!fetchMoreResult) {
+                        return prev;
+                      }
+                      const connection = fetchMoreResult.articleConnection;
+                      connection.nodes = prev.articleConnection.nodes.concat(
+                        connection.nodes,
+                      );
+                      return Object.assign({}, prev, {
+                        articleConnection: connection,
+                      });
+                    },
+                    variables: {
+                      after: endCursor,
+                    },
+                  });
+                }}
+              >
+                {t('common.loadMore')}
+              </Button>
+            </div>
+          )
+        }
+        renderItem={(article: Partial<Article>) => (
+          <ArticleListItemComponent article={article} />
+        )}
+      />
+    </div>
   );
 }
