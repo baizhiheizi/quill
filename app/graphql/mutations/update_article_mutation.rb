@@ -22,8 +22,9 @@ module Mutations
           :price
         )
       )
+      article.save
 
-      { error: article.errors.full_messages.join(';').presence } unless article.save
+      { error: article.errors.full_messages.join(';').presence } 
     end
   end
 end
