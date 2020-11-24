@@ -24,7 +24,7 @@ module Mutations
       )
       article.save
 
-      { error: article.errors.full_messages.join(';').presence } 
+      { error: article.errors.full_messages.join(';').presence }
     end
   end
 end
