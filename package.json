@@ -7,7 +7,7 @@
     "codegen": "graphql-codegen --config codegen.yml"
   },
   "dependencies": {
-    "@apollo/client": "^3.2.7",
+    "@apollo/client": "^3.2.9",
     "@babel/preset-react": "^7.12.7",
     "@babel/preset-typescript": "^7.12.7",
     "@rails/actioncable": "^6.0.0",
