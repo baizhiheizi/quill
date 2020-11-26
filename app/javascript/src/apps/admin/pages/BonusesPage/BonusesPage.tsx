@@ -100,17 +100,23 @@ export default function BonusesPage() {
               deliverBonus({ variables: { input: { id: bonus.id } } })
             }
           >
-            <Button type='link' disabled={bonus.state !== 'drafted'}>
+            <Button
+              type='link'
+              disabled={bonus.state !== 'drafted'}
+              size='small'
+            >
               Deliver
             </Button>
           </Popconfirm>
           <Divider type='vertical' />
           <Button
-            type='link'
+            disabled={bonus.state !== 'drafted'}
             onClick={() => {
               setEditing(bonus);
               setModalVisible(true);
             }}
+            type='link'
+            size='small'
           >
             Edit
           </Button>
