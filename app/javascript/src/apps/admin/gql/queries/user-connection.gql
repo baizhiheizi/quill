@@ -1,6 +1,7 @@
 query AdminUserConnection($query: String, $orderBy: String, $after: String) {
   adminUserConnection(query: $query, orderBy: $orderBy, after: $after) {
     nodes {
+      id
       name
       mixinId
       mixinUuid

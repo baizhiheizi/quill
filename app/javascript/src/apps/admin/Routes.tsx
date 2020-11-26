@@ -4,6 +4,7 @@ import { Link, Route, Switch } from 'react-router-dom';
 import AnnouncementsPage from './pages/AnnouncementsPage/AnnouncementsPage';
 import ArticlePage from './pages/ArticlePage/ArticlePage';
 import ArticlesPage from './pages/ArticlesPage/ArticlesPage';
+import BonusesPage from './pages/BonusesPage/BonusesPage';
 import CommentsPage from './pages/CommentsPage/CommentsPage';
 import DashboardPage from './pages/DashboardPage/DashboardPage';
 import MixinMessagesPage from './pages/MixinMessagesPage/MixinMessagesPage';
@@ -44,6 +45,9 @@ export default function Routes() {
       </Route>
       <Route path='/announcements' exact>
         <AnnouncementsPage />
+      </Route>
+      <Route path='/bonuses' exact>
+        <BonusesPage />
       </Route>
       <Route>
         <Result

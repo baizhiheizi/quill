@@ -1,0 +1,5 @@
+mutation AdminUpdateBonus($input: AdminUpdateBonusMutationInput!) {
+  adminUpdateBonus(input: $input) {
+    error
+  }
+}

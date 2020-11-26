@@ -8,6 +8,7 @@ import {
   PayCircleOutlined,
   TableOutlined,
   TransactionOutlined,
+  TrophyOutlined,
   UserOutlined,
 } from '@ant-design/icons';
 import { Menu } from 'antd';
@@ -79,6 +80,12 @@ export default function Menus() {
         <Link to='/mixin_network_snapshots'>
           <TableOutlined />
           <span>Snapshots</span>
+        </Link>
+      </Menu.Item>
+      <Menu.Item>
+        <Link to='/bonuses'>
+          <TrophyOutlined />
+          <span>Bonuses</span>
         </Link>
       </Menu.Item>
       <Menu.Item>

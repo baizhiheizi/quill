@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_19_085029) do
+ActiveRecord::Schema.define(version: 2020_11_26_025923) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -66,6 +66,20 @@ ActiveRecord::Schema.define(version: 2020_11_19_085029) do
     t.integer "downvotes_count", default: 0
     t.index ["author_id"], name: "index_articles_on_author_id"
     t.index ["uuid"], name: "index_articles_on_uuid", unique: true
+  end
+
+  create_table "bonuses", force: :cascade do |t|
+    t.bigint "user_id"
+    t.string "title"
+    t.text "description"
+    t.string "state"
+    t.string "asset_id"
+    t.decimal "amount"
+    t.uuid "trace_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["trace_id"], name: "index_bonuses_on_trace_id", unique: true
+    t.index ["user_id"], name: "index_bonuses_on_user_id"
   end
 
   create_table "comments", force: :cascade do |t|

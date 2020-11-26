@@ -1,0 +1,26 @@
+query AdminBonusConnection($after: String) {
+  adminBonusConnection(after: $after) {
+    nodes {
+      id
+      title
+      description
+      amount
+      assetId
+      state
+      createdAt
+      user {
+        id
+        avatarUrl
+        name
+        mixinId
+      }
+      transfer {
+        snapshotId
+      }
+    }
+    pageInfo {
+      hasNextPage
+      endCursor
+    }
+  }
+}

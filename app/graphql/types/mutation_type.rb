@@ -26,5 +26,8 @@ module Types
     field :admin_delete_announcement, mutation: Mutations::AdminDeleteAnnouncementMutation
     field :admin_preview_announcement, mutation: Mutations::AdminPreviewAnnouncementMutation
     field :admin_deliver_announcement, mutation: Mutations::AdminDeliverAnnouncementMutation
+    field :admin_create_bonus, mutation: Mutations::AdminCreateBonusMutation
+    field :admin_update_bonus, mutation: Mutations::AdminUpdateBonusMutation
+    field :admin_deliver_bonus, mutation: Mutations::AdminDeliverBonusMutation
   end
 end

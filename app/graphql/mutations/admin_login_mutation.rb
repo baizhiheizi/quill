@@ -1,7 +1,12 @@
 # frozen_string_literal: true
 
 module Mutations
-  class AdminLoginMutation < Mutations::BaseMutation
+  class AdminLoginMutation < GraphQL::Schema::RelayClassicMutation
+    argument_class Types::BaseArgument
+    field_class Types::BaseField
+    input_object_class Types::BaseInputObject
+    object_class Types::BaseObject
+
     argument :name, String, required: true
     argument :password, String, required: true
 
