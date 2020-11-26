@@ -10,6 +10,7 @@ import {
   TransactionOutlined,
   TrophyOutlined,
   UserOutlined,
+  WalletOutlined,
 } from '@ant-design/icons';
 import { Menu } from 'antd';
 import React from 'react';
@@ -86,6 +87,12 @@ export default function Menus() {
         <Link to='/bonuses'>
           <TrophyOutlined />
           <span>Bonuses</span>
+        </Link>
+      </Menu.Item>
+      <Menu.Item>
+        <Link to='/balance'>
+          <WalletOutlined />
+          <span>Balance</span>
         </Link>
       </Menu.Item>
       <Menu.Item>
