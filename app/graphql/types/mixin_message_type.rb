@@ -13,7 +13,7 @@ module Types
 
     def user
       BatchLoader::GraphQL.for(object.user_id).batch do |user_ids, loader|
-        User.where(id: user_ids).each { |user| loader.call(user.id, user) }
+        User.where(mixin_uuid: user_ids).each { |user| loader.call(user.mixin_uuid, user) }
       end
     end
   end
