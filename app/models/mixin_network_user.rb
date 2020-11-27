@@ -84,7 +84,7 @@ class MixinNetworkUser < ApplicationRecord
   def setup_attributes
     return unless new_record?
 
-    r = MixinBot.api.create_user(name || 'PRSDigg account')
+    r = MixinBot.api.create_user(name || 'PRSDigg Broker')
     raise r.inspect if r['error'].present?
 
     self.raw = r['data']

@@ -39,6 +39,7 @@ class SwapOrder < ApplicationRecord
   after_commit :transfer_to_4swap_async
 
   delegate :owner, to: :wallet
+  delegate :payer, to: :payment
   delegate :refund!, to: :payment, prefix: true
   delegate :create_refund_transfer!, to: :payment, prefix: true
   delegate :complete!, to: :payment, prefix: true
@@ -172,5 +173,9 @@ class SwapOrder < ApplicationRecord
 
   def ensure_min_amount_filled
     amount > min_amount
+  end
+
+  def article
+    @article = owner.is_a?(Article) && owner
   end
 end

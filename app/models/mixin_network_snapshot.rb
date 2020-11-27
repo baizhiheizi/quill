@@ -72,11 +72,11 @@ class MixinNetworkSnapshot < ApplicationRecord
   end
 
   def owner
-    wallet&.owner
+    @owner = wallet&.owner
   end
 
   def article
-    owner.is_a?(Article) && owner
+    @article = owner.is_a?(Article) && owner
   end
 
   def decrypted_memo
