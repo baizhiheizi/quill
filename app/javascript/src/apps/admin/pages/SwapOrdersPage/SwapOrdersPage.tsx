@@ -32,7 +32,7 @@ export default function SwapOrdersPage() {
       title: 'Payer',
     },
     { dataIndex: 'state', key: 'state', title: 'State' },
-    { dataIndex: 'fill', key: 'fill', title: 'fill' },
+    { dataIndex: 'funds', key: 'funds', title: 'funds' },
     { dataIndex: 'amount', key: 'amount', title: 'amount' },
     { dataIndex: 'minAmount', key: 'minAmount', title: 'minAmount' },
     { dataIndex: 'createdAt', key: 'createdAt', title: 'createdAt' },

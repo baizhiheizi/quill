@@ -20,11 +20,6 @@
 #  index_mixin_network_users_on_owner_type_and_owner_id  (owner_type,owner_id)
 #  index_mixin_network_users_on_uuid                     (uuid) UNIQUE
 #
-
-# This model initially had no columns defined. If you add columns to the
-# model remove the '{}' from the fixture names and add the columns immediately
-# below each fixture, per the syntax in the comments below
-#
 one: {}
 # column: value
 #

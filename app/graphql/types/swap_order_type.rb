@@ -5,7 +5,7 @@ module Types
     field :id, ID, null: false
     field :trace_id, ID, null: false
     field :state, String, null: false
-    field :fill, Float, null: true
+    field :funds, Float, null: true
     field :amount, Float, null: true
     field :min_amount, Float, null: false
     field :fill_asset_id, String, null: false

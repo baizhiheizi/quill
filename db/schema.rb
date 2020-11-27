@@ -181,7 +181,7 @@ ActiveRecord::Schema.define(version: 2020_11_27_064237) do
     t.string "state"
     t.uuid "pay_asset_id", comment: "paid asset"
     t.uuid "fill_asset_id", comment: "swapped asset"
-    t.decimal "fill", comment: "paid amount"
+    t.decimal "funds", comment: "paid amount"
     t.decimal "amount", comment: "swapped amount"
     t.decimal "min_amount", comment: "minimum swapped amount"
     t.json "raw", comment: "raw order response"

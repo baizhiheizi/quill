@@ -6,7 +6,7 @@
 #
 #  id                                 :bigint           not null, primary key
 #  amount(swapped amount)             :decimal(, )
-#  fill(paid amount)                  :decimal(, )
+#  funds(paid amount)                 :decimal(, )
 #  min_amount(minimum swapped amount) :decimal(, )
 #  raw(raw order response)            :json
 #  state                              :string

@@ -4,7 +4,7 @@ query AdminSwapOrderConnection($userId: ID, $after: String) {
       id
       traceId
       state
-      fill
+      funds
       amount
       minAmount
       fillAssetId

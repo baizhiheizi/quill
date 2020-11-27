@@ -15,6 +15,8 @@ module Types
     field :user, resolver: Resolvers::UserResolver
     field :user_article_connection, resolver: Resolvers::UserArticleConnectionResolver
 
+    field :swap_pre_order, resolver: Resolvers::SwapPreOrderResolver
+
     field :my_article_connection, resolver: Resolvers::MyArticleConnectionResolver
     field :my_payment_connection, resolver: Resolvers::MyPaymentConnectionResolver
     field :my_transfer_connection, resolver: Resolvers::MyTransferConnectionResolver
