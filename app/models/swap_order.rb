@@ -31,14 +31,17 @@ class SwapOrder < ApplicationRecord
   belongs_to :payment
   belongs_to :wallet, class_name: 'MixinNetworkUser', foreign_key: :user_id, primary_key: :uuid, inverse_of: :swap_orders
 
-  delegate :owner, to: :wallet
-
   validates :trace_id, presence: true
   validates :fill_asset_id, presence: true
   validates :pay_asset_id, presence: true
   validates :min_amount, numericality: { greater_than: 0.000_000_01 }
 
   after_commit :transfer_to_4swap_async
+
+  delegate :owner, to: :wallet
+  delegate :refund!, to: :payment, prefix: true
+  delegate :create_refund_transfer!, to: :payment, prefix: true
+  delegate :complete!, to: :payment, prefix: true
 
   aasm column: :state do
     state :paid, initial: true
@@ -105,14 +108,10 @@ class SwapOrder < ApplicationRecord
     article = Article.find_by uuid: payment.decrypted_memo['a']
     case payment.decrypted_memo['t']
     when 'BUY'
-      article.orders
-             .create_with(
-               payment: payment
-             )
-             .find_or_create_by!(
-               buyer: payer,
-               order_type: :buy_article
-             )
+      article.orders.find_or_create_by!(
+        payment: payment,
+        order_type: :buy_article
+      )
     when 'REWARD'
       article.orders.find_or_create_by!(
         payment: payment,
@@ -170,12 +169,6 @@ class SwapOrder < ApplicationRecord
 
     refund!
   end
-
-  delegate :refund!, to: :payment, prefix: true
-
-  delegate :create_refund_transfer!, to: :payment, prefix: true
-
-  delegate :complete!, to: :payment, prefix: true
 
   def ensure_min_amount_filled
     amount > min_amount

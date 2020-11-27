@@ -39,7 +39,7 @@ class Payment < ApplicationRecord
   validates :snapshot_id, presence: true, uniqueness: true
   validates :trace_id, presence: true, uniqueness: true
 
-  after_create :process!
+  after_commit :place_order!
 
   aasm column: :state do
     state :paid, initial: true
@@ -71,17 +71,16 @@ class Payment < ApplicationRecord
       end
   end
 
-  def process!
+  def place_order!
     if asset_id != Article::PRS_ASSET_ID && decrypted_memo['p'].present?
-      create_swap_order!
+      place_swap_order!
     elsif decrypted_memo['t'].in? %w[BUY REWARD]
-      create_order!
+      place_article_order!
     end
   end
 
-  def create_swap_order!
-    # swap order
-    swap_orders.create!(
+  def place_swap_order!
+    create_swap_order!(
       fill: amount,
       min_amount: decrypted_memo['p'],
       fill_asset_id: Article::PRS_ASSET_ID,
@@ -94,28 +93,22 @@ class Payment < ApplicationRecord
     create_refund_transfer!
   end
 
-  def create_order!
-    ActiveRecord::Base.transaction do
-      article = Article.find_by!(uuid: decrypted_memo['a'])
+  def place_article_order!
+    article = Article.find_by!(uuid: decrypted_memo['a'])
 
-      case decrypted_memo['t']
-      when 'BUY'
-        article.orders
-               .create_with(
-                 payment: self
-               )
-               .find_or_create_by!(
-                 buyer: payer,
-                 order_type: :buy_article
-               )
-      when 'REWARD'
-        article.orders.find_or_create_by!(
-          payment: self,
-          order_type: :reward_article
-        )
-      else
-        create_refund_transfer!
-      end
+    case decrypted_memo['t']
+    when 'BUY'
+      article.orders.find_or_create_by!(
+        payment: self,
+        order_type: :buy_article
+      )
+    when 'REWARD'
+      article.orders.find_or_create_by!(
+        payment: self,
+        order_type: :reward_article
+      )
+    else
+      create_refund_transfer!
     end
   rescue StandardError => e
     Rails.logger.error e.inspect

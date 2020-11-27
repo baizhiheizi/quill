@@ -41,6 +41,9 @@ class Order < ApplicationRecord
 
   validate :ensure_total_sufficient
 
+  # prevent duplicated buy order
+  validates :order_type, uniqueness: { scope: %i[order_type buyer_id], if: -> { buy_article? } }
+
   enum order_type: { buy_article: 0, reward_article: 1 }
 
   after_commit :complete_payment, :create_revenue_transfers_async, \
