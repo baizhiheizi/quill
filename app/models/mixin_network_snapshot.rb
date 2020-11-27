@@ -79,6 +79,20 @@ class MixinNetworkSnapshot < ApplicationRecord
     owner.is_a?(Article) && owner
   end
 
+  def decrypted_memo
+    # memo from 4swap
+    # memo = {
+    #   s: '4swapTrade|4swapRefund',
+    #   t: 'trace_id'
+    # }
+    @decrypted_memo =
+      begin
+        JSON.parse Base64.decode64(memo.to_s)
+      rescue JSON::ParserError
+        {}
+      end
+  end
+
   def processed?
     processed_at?
   end
@@ -86,16 +100,36 @@ class MixinNetworkSnapshot < ApplicationRecord
   def process!
     return if processed?
 
-    process_payment_snapshot
+    if opponent.present?
+      process_payment_snapshot
+    elsif decrypted_memo['s'].in? %w[4swapTrade 4swapRefund]
+      process_4swap_snapshot
+    end
+
     touch_proccessed_at
   end
 
   def process_payment_snapshot
     return if amount.negative?
 
-    Payment
+    opponent
+      .payments
       .create_with(raw: raw)
       .find_or_create_by!(trace_id: trace_id)
+  end
+
+  def process_4swap_snapshot
+    return if amount.negative?
+
+    swap_order = swap_orders.find_by trace_id: decrypted_memo['t']
+
+    case decrypted_memo['s']
+    when '4swapTrade'
+      swap_order.update! amount: amount
+      swap_order.swap!
+    when '4swapRefund'
+      swap_order.reject!
+    end
   end
 
   def touch_proccessed_at

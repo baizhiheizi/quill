@@ -26,8 +26,9 @@ class Payment < ApplicationRecord
   belongs_to :payer, class_name: 'User', foreign_key: :opponent_id, primary_key: :mixin_uuid, inverse_of: :payments
   belongs_to :snapshot, class_name: 'MixinNetworkSnapshot', foreign_key: :trace_id, primary_key: :trace_id, optional: true, inverse_of: false
 
-  has_one :transfer, as: :source, dependent: :nullify
+  has_one :refund_transfer, -> { where(memo: 'REFUND') }, class_name: 'Transfer', as: :source, dependent: :nullify, inverse_of: :payment
   has_one :order, primary_key: :trace_id, foreign_key: :trace_id, dependent: :nullify, inverse_of: :payment
+  has_one :swap_order, dependent: :nullify
 
   before_validation :setup_attributes
 
@@ -38,7 +39,7 @@ class Payment < ApplicationRecord
   validates :snapshot_id, presence: true, uniqueness: true
   validates :trace_id, presence: true, uniqueness: true
 
-  after_create :create_order!
+  after_create :process!
 
   aasm column: :state do
     state :paid, initial: true
@@ -49,27 +50,55 @@ class Payment < ApplicationRecord
       transitions from: :paid, to: :completed
     end
 
-    event :refund do
+    event :refund, guard: :ensure_refund_transfer_created do
       transitions from: :paid, to: :refunded
     end
   end
 
-  def create_order!
+  def decrypted_memo
+    # memo from PRSDigg user
     # memo = {
     #  t: BUY|REWARD,
     #  a: article's uuid,
+    #  p: price as PRS
     # }
-    decpreted_memo =
+    #
+    @decrypted_memo =
       begin
         JSON.parse Base64.decode64(memo.to_s)
       rescue JSON::ParserError
         {}
       end
+  end
 
+  def process!
+    if asset_id != Article::PRS_ASSET_ID && decrypted_memo['p'].present?
+      create_swap_order!
+    elsif decrypted_memo['t'].in? %w[BUY REWARD]
+      create_order!
+    end
+  end
+
+  def create_swap_order!
+    # swap order
+    swap_orders.create!(
+      fill: amount,
+      min_amount: decrypted_memo['p'],
+      fill_asset_id: Article::PRS_ASSET_ID,
+      pay_asset_id: asset_id,
+      trace_id: MixinBot.api.unique_conversation_id(wallet.user_id, trace_id),
+      wallet: wallet
+    )
+  rescue StandardError => e
+    Rails.logger.error e.inspect
+    create_refund_transfer!
+  end
+
+  def create_order!
     ActiveRecord::Base.transaction do
-      article = Article.find_by!(uuid: decpreted_memo['a'])
+      article = Article.find_by!(uuid: decrypted_memo['a'])
 
-      case decpreted_memo['t']
+      case decrypted_memo['t']
       when 'BUY'
         article.orders
                .create_with(
@@ -85,18 +114,19 @@ class Payment < ApplicationRecord
           order_type: :reward_article
         )
       else
-        refund
+        create_refund_transfer!
       end
     end
   rescue StandardError => e
     Rails.logger.error e.inspect
-    refund
+    create_refund_transfer!
   end
 
-  def refund
+  def create_refund_transfer!
     return if order.present?
+    return if refund_transfer.present?
 
-    create_transfer!(
+    create_refund_transfer!(
       wallet: wallet,
       transfer_type: :payment_refund,
       opponent_id: opponent_id,
@@ -109,6 +139,10 @@ class Payment < ApplicationRecord
 
   def wallet
     @wallet = snapshot&.wallet
+  end
+
+  def ensure_refund_transfer_created
+    refund_transfer.present? || swap_order&.refunded?
   end
 
   private

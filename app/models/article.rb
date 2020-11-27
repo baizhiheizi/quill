@@ -51,7 +51,7 @@ class Article < ApplicationRecord
   validates :title, presence: true, length: { maximum: 25 }
   validates :intro, presence: true, length: { maximum: 140 }
   validates :content, presence: true
-  validates :price, numericality: { greater_than: 0.00000001 }
+  validates :price, numericality: { greater_than: 0.000_000_01 }
 
   before_validation :setup_attributes, on: :create
 

@@ -23,6 +23,8 @@ class User < ApplicationRecord
   include Authenticatable
 
   has_one :mixin_authorization, -> { where(provider: :mixin) }, class_name: 'UserAuthorization', inverse_of: :user
+  has_one :wallet, class_name: 'MixinNetworkUser', as: :owner, dependent: :nullify
+
   has_many :articles, foreign_key: :author_id, inverse_of: :author, dependent: :nullify
   has_many :payments, foreign_key: :opponent_id, primary_key: :mixin_uuid, inverse_of: :payer, dependent: :nullify
   has_many :transfers, foreign_key: :opponent_id, primary_key: :mixin_uuid, inverse_of: :recipient, dependent: :nullify
@@ -33,6 +35,9 @@ class User < ApplicationRecord
   has_many :orders, foreign_key: :buyer_id, inverse_of: :buyer, dependent: :nullify
   has_many :bought_articles, -> { distinct.order(created_at: :desc) }, through: :orders, source: :item, source_type: 'Article'
   has_many :comments, foreign_key: :author_id, inverse_of: :author, dependent: :nullify
+  has_many :swap_orders, through: :wallet
+
+  before_validation :setup_attributes
 
   validates :name, presence: true
 
@@ -78,7 +83,7 @@ class User < ApplicationRecord
       ).order(comments_count: :desc)
   }
 
-  before_validation :setup_attributes
+  after_create :create_wallet!
 
   # subscribe user for new articles
   action_store :authoring_subscribe, :user, counter_cache: 'authoring_subscribers_count'

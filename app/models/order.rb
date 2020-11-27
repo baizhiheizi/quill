@@ -135,7 +135,6 @@ class Order < ApplicationRecord
   end
 
   def ensure_total_sufficient
-    errors.add(total: 'Wrong token!') unless payment.asset_id == item.asset_id
     errors.add(:total, 'Insufficient amount!') if buy_article? && total < item.price
   end
 
@@ -167,10 +166,17 @@ class Order < ApplicationRecord
   private
 
   def setup_attributes
+    amount =
+      if payment.asset_id == PRS_ASSET_ID
+        payment.amount
+      elsif payment.swap_order&.swapped?
+        payment.swap_order.min_amount
+      end
+
     assign_attributes(
       buyer: payment.payer,
       seller: item.author,
-      total: payment.amount
+      total: amount
     )
   end
 end
