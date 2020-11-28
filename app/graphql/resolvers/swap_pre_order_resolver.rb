@@ -8,11 +8,16 @@ module Resolvers
     type Types::SwapPreOrderType, null: true
 
     def resolve(params)
+      return if params[:pay_asset_id] == Article::PRS_ASSET_ID
+
       r = Foxswap.api.pre_order(
         pay_asset_id: params[:pay_asset_id],
         fill_asset_id: Article::PRS_ASSET_ID,
         amount: params[:amount]
-      )['data']
+      )
+      Rails.logger.info r
+
+      r['data']
     end
   end
 end

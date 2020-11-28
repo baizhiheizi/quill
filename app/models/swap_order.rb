@@ -36,12 +36,12 @@ class SwapOrder < ApplicationRecord
   validates :pay_asset_id, presence: true
   validates :min_amount, numericality: { greater_than: 0.000_000_01 }
 
-  after_commit :transfer_to_4swap_async
+  after_commit :transfer_to_4swap_async, on: :create
 
   delegate :owner, to: :wallet
   delegate :payer, to: :payment
   delegate :refund!, to: :payment, prefix: true
-  delegate :create_refund_transfer!, to: :payment, prefix: true
+  delegate :generate_refund_transfer!, to: :payment, prefix: true
   delegate :complete!, to: :payment, prefix: true
 
   aasm column: :state do
@@ -87,7 +87,8 @@ class SwapOrder < ApplicationRecord
       wallet.pin,
       opponent_id: FOX_SWAP_APP_ID,
       asset_id: pay_asset_id,
-      amount: fill.to_f,
+      amount: funds.to_f,
+      trace_id: trace_id,
       memo: Base64.encode64(
         {
           t: 'swap',
@@ -125,7 +126,7 @@ class SwapOrder < ApplicationRecord
     transfer_refund_to_buyer_async
   end
 
-  def transfer_change_to_buyer_aysnc
+  def transfer_change_to_buyer_async
     SwapOrderTransferChangeToBuyerWorker.perform_async id
   end
 
@@ -137,8 +138,8 @@ class SwapOrder < ApplicationRecord
         wallet.pin,
         asset_id: fill_asset_id,
         amount: (amount - min_amount).to_f,
-        opponent_id: payment.buyer.mixin_uuid,
-        trace_id: wallet.mixin_api.unique_conversation_id(trace_id, payment.buyer.mixin_uuid),
+        opponent_id: payment.payer.mixin_uuid,
+        trace_id: wallet.mixin_api.unique_conversation_id(trace_id, payment.payer.mixin_uuid),
         memo: 'CHANGE FROM SWAP'
       )
 
@@ -160,8 +161,8 @@ class SwapOrder < ApplicationRecord
       wallet.pin,
       asset_id: fill_asset_id,
       amount: amount.to_f,
-      opponent_id: payment.buyer.mixin_uuid,
-      trace_id: wallet.mixin_api.unique_conversation_id(trace_id, payment.buyer.mixin_uuid),
+      opponent_id: payment.payer.mixin_uuid,
+      trace_id: wallet.mixin_api.unique_conversation_id(trace_id, payment.payer.mixin_uuid),
       memo: 'REFUND FROM SWAP'
     )
 

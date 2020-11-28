@@ -9,20 +9,20 @@ module Foxswap
     end
 
     def pre_order(params)
-      path = '/orders/pre'
+      path = '/api/orders/pre'
 
       payload = {
         pay_asset_id: params[:pay_asset_id],
         fill_asset_id: params[:fill_asset_id],
-        funds: params[:funds],
-        amount: params[:amount]
+        funds: params[:funds]&.to_s,
+        amount: params[:amount]&.to_s
       }
 
       client.post path, json: payload
     end
 
     def order(order_id, authorization:)
-      path = "/orders/#{order_id}"
+      path = "/api/orders/#{order_id}"
       client.get path, headers: { 'Authorization': authorization }
     end
   end

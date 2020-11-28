@@ -44,12 +44,14 @@ import { Link, useParams } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
 import NotFoundPage from '../NotFoundPage/NotFoundPage';
 import './ArticlePage.less';
+import PayModalComponent from './components/PayModalComponent';
 
 export default function ArticlePage() {
   const { t } = useTranslation();
   const { uuid } = useParams<{ uuid: string }>();
   const [paying, setPaying] = useState(false);
   const [rewardModalVisible, setRewardModalVisible] = useState(false);
+  const [payModalVisible, setPayModalVisible] = useState(false);
   const [rewardAmount, setRewardAmount] = useState(1);
   const { appId } = usePrsdigg();
   const { mixinEnv } = useUserAgent();
@@ -73,13 +75,6 @@ export default function ArticlePage() {
   useEffect(() => {
     return () => stopPolling();
   }, [startPolling, stopPolling]);
-
-  const memo = encode64(
-    JSON.stringify({
-      t: 'BUY',
-      a: uuid,
-    }),
-  );
 
   if (loading) {
     return <LoadingComponent />;
@@ -110,29 +105,6 @@ export default function ArticlePage() {
     </div>
   );
 
-  const handlePaying = () => {
-    const payUrl = `mixin://pay?recipient=${article.walletId || appId}&trace=${
-      article.paymentTraceId
-    }&memo=${memo}&asset=${article.assetId}&amount=${article.price.toFixed(8)}`;
-    if (mixinEnv) {
-      location.replace(payUrl);
-      startPolling(1500);
-      setPaying(true);
-    } else {
-      Modal.confirm({
-        icon: null,
-        centered: true,
-        content: <QRCodeModalContent url={payUrl} />,
-        okText: t('common.paidBtn'),
-        cancelText: t('common.cancelBtn'),
-        onOk: (close: () => any) => {
-          startPolling(1500);
-          setPaying(true);
-          close();
-        },
-      });
-    }
-  };
   const handleRewarding = () => {
     const payUrl = `mixin://pay?recipient=${
       article.walletId || appId
@@ -245,11 +217,21 @@ export default function ArticlePage() {
                 </div>
               ) : (
                 <div>
-                  <Button type='primary' onClick={handlePaying}>
+                  <Button
+                    type='primary'
+                    onClick={() => setPayModalVisible(true)}
+                  >
                     {article.readers.totalCount === 0
                       ? t('articlePage.firstReaderBtn')
                       : t('articlePage.payToReadBtn')}
                   </Button>
+                  <PayModalComponent
+                    visible={payModalVisible}
+                    price={article.price}
+                    walletId={article.walletId}
+                    articleUuid={article.uuid}
+                    onCancel={() => setPayModalVisible(false)}
+                  />
                   <div
                     style={{ marginTop: 10, fontSize: '0.8rem', color: '#aaa' }}
                   >

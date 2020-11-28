@@ -42,7 +42,7 @@ class Order < ApplicationRecord
   validate :ensure_total_sufficient
 
   # prevent duplicated buy order
-  validates :order_type, uniqueness: { scope: %i[order_type buyer_id], if: -> { buy_article? } }
+  validates :order_type, uniqueness: { scope: %i[order_type buyer_id item_id item_type], if: -> { buy_article? } }
 
   enum order_type: { buy_article: 0, reward_article: 1 }
 
@@ -170,7 +170,7 @@ class Order < ApplicationRecord
 
   def setup_attributes
     amount =
-      if payment.asset_id == PRS_ASSET_ID
+      if payment.asset_id == Article::PRS_ASSET_ID
         payment.amount
       elsif payment.swap_order&.swapped?
         payment.swap_order.min_amount

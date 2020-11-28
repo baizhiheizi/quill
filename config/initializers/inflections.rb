@@ -13,6 +13,7 @@
 # end
 ActiveSupport::Inflector.inflections(:en) do |inflect|
   inflect.irregular 'bonus', 'bonuses'
+  inflect.acronym 'API'
 end
 
 # These inflection rules are supported but not enabled by default:

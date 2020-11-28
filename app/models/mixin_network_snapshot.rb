@@ -87,7 +87,7 @@ class MixinNetworkSnapshot < ApplicationRecord
     # }
     @decrypted_memo =
       begin
-        JSON.parse Base64.decode64(memo.to_s)
+        JSON.parse Base64.decode64(data.to_s)
       rescue JSON::ParserError
         {}
       end
@@ -121,7 +121,7 @@ class MixinNetworkSnapshot < ApplicationRecord
   def process_4swap_snapshot
     return if amount.negative?
 
-    swap_order = swap_orders.find_by trace_id: decrypted_memo['t']
+    swap_order = SwapOrder.find_by trace_id: decrypted_memo['t']
 
     case decrypted_memo['s']
     when '4swapTrade'

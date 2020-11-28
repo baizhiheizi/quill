@@ -26,7 +26,7 @@ class Payment < ApplicationRecord
   belongs_to :payer, class_name: 'User', foreign_key: :opponent_id, primary_key: :mixin_uuid, inverse_of: :payments
   belongs_to :snapshot, class_name: 'MixinNetworkSnapshot', foreign_key: :trace_id, primary_key: :trace_id, optional: true, inverse_of: false
 
-  has_one :refund_transfer, -> { where(memo: 'REFUND') }, class_name: 'Transfer', as: :source, dependent: :nullify, inverse_of: :payment
+  has_one :refund_transfer, -> { where(memo: 'REFUND') }, class_name: 'Transfer', as: :source, dependent: :nullify, inverse_of: false
   has_one :order, primary_key: :trace_id, foreign_key: :trace_id, dependent: :nullify, inverse_of: :payment
   has_one :swap_order, dependent: :nullify
 
@@ -81,16 +81,16 @@ class Payment < ApplicationRecord
 
   def place_swap_order!
     create_swap_order!(
-      fill: amount,
+      funds: amount,
       min_amount: decrypted_memo['p'],
       fill_asset_id: Article::PRS_ASSET_ID,
       pay_asset_id: asset_id,
-      trace_id: MixinBot.api.unique_conversation_id(wallet.user_id, trace_id),
+      trace_id: MixinBot.api.unique_conversation_id(wallet.uuid, trace_id),
       wallet: wallet
     )
   rescue StandardError => e
     Rails.logger.error e.inspect
-    create_refund_transfer!
+    generate_refund_transfer!
   end
 
   def place_article_order!
@@ -108,14 +108,14 @@ class Payment < ApplicationRecord
         order_type: :reward_article
       )
     else
-      create_refund_transfer!
+      generate_refund_transfer!
     end
   rescue StandardError => e
     Rails.logger.error e.inspect
-    create_refund_transfer!
+    generate_refund_transfer!
   end
 
-  def create_refund_transfer!
+  def generate_refund_transfer!
     return if order.present?
     return if refund_transfer.present?
 
