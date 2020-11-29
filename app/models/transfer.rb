@@ -100,7 +100,7 @@ class Transfer < ApplicationRecord
       }
     )
 
-    SendMixinMessageWorker.new.perform message
+    SendMixinMessageWorker.perform_async message
   end
 
   def process_async

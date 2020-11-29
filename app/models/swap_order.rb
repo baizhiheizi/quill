@@ -132,17 +132,29 @@ class SwapOrder < ApplicationRecord
     return if completed?
 
     if (amount - min_amount - 0.000_000_01).positive?
+      _trace_id = wallet.mixin_api.unique_conversation_id(trace_id, payment.payer.mixin_uuid)
       r = wallet.mixin_api.create_transfer(
         wallet.pin,
         asset_id: fill_asset_id,
         amount: (amount - min_amount).to_f,
         opponent_id: payment.payer.mixin_uuid,
-        trace_id: wallet.mixin_api.unique_conversation_id(trace_id, payment.payer.mixin_uuid),
+        trace_id: _trace_id,
         memo: 'CHANGE FROM SWAP'
       )
 
       raise r['error'].inspect if r['error'].present?
-      return unless r['data']['trace_id'] == trace_id
+      return unless r['data']['trace_id'] == _trace_id
+
+      message = MixinBot.api.app_card(
+        conversation_id: MixinBot.api.unique_conversation_id(payment.payer.mixin_uuid),
+        data: {
+          icon_url: Article::PRS_ICON_URL,
+          title: (amount - min_amount).to_f.round(8),
+          description: 'PRS',
+          action: "mixin://snapshots?trace=#{_trace_id}"
+        }
+      )
+      SendMixinMessageWorker.perform_async message
     end
 
     complete!
@@ -155,17 +167,29 @@ class SwapOrder < ApplicationRecord
   def transfer_refund_to_buyer!
     return if refunded?
 
+    _trace_id = wallet.mixin_api.unique_conversation_id(trace_id, payment.payer.mixin_uuid)
     r = wallet.mixin_api.create_transfer(
       wallet.pin,
       asset_id: fill_asset_id,
       amount: amount.to_f,
       opponent_id: payment.payer.mixin_uuid,
-      trace_id: wallet.mixin_api.unique_conversation_id(trace_id, payment.payer.mixin_uuid),
+      trace_id: _trace_id,
       memo: 'REFUND FROM SWAP'
     )
 
     raise r['error'].inspect if r['error'].present?
-    return unless r['data']['trace_id'] == trace_id
+    return unless r['data']['trace_id'] == _trace_id
+
+    message = MixinBot.api.app_card(
+      conversation_id: MixinBot.api.unique_conversation_id(payment.payer.mixin_uuid),
+      data: {
+        icon_url: Article::PRS_ICON_URL,
+        title: amount.to_f.round(8),
+        description: 'PRS',
+        action: "mixin://snapshots?trace=#{_trace_id}"
+      }
+    )
+    SendMixinMessageWorker.perform_async message
 
     refund!
   end
