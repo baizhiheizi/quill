@@ -77,7 +77,16 @@ module Types
       return if context[:current_user].blank?
       return if authorized
 
-      MixinBot.api.unique_conversation_id(object.uuid, context[:current_user].mixin_uuid)
+      # generate a unique trace ID for paying
+      # avoid duplicate payment
+      candidate = MixinBot.api.unique_conversation_id(object.uuid, context[:current_user].mixin_uuid)
+      loop do
+        break unless Payment.exists?(trace_id: candidate)
+
+        candidate = MixinBot.api.unique_conversation_id(object.uuid, candidate)
+      end
+
+      candidate
     end
 
     def author

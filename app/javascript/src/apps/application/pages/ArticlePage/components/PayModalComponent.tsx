@@ -1,12 +1,11 @@
-import { useSwapPreOrderQuery } from '@/graphql';
 import { useUserAgent } from '@application/shared';
+import { usePaymentLazyQuery, useSwapPreOrderQuery } from '@graphql';
 import { PRS, SUPPORTED_TOKENS } from '@shared';
-import { Avatar, Button, Modal, Radio, Space, Spin } from 'antd';
+import { Avatar, Button, message, Modal, Radio, Space, Spin } from 'antd';
 import { encode as encode64 } from 'js-base64';
 import QRCode from 'qrcode.react';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { v4 as uuidv4 } from 'uuid';
 import './PayModalComponent.less';
 
 export default function PayModalComponent(props: {
@@ -14,18 +13,36 @@ export default function PayModalComponent(props: {
   price: number;
   walletId: string;
   articleUuid: string;
+  paymentTraceId: string;
   onCancel: () => any;
 }) {
-  const { visible, price, walletId, articleUuid, onCancel } = props;
+  const {
+    visible,
+    price,
+    walletId,
+    articleUuid,
+    paymentTraceId,
+    onCancel,
+  } = props;
   const [assetId, setAssetId] = useState(PRS.assetId);
   const [paying, setPaying] = useState(false);
   const { mixinEnv } = useUserAgent();
   const { t } = useTranslation();
+  const [pollPayment, { stopPolling, data: paymentData }] = usePaymentLazyQuery(
+    {
+      pollInterval: 1000,
+      variables: { traceId: paymentTraceId },
+    },
+  );
   const { loading, data } = useSwapPreOrderQuery({
     fetchPolicy: 'network-only',
     notifyOnNetworkStatusChange: true,
     variables: { payAssetId: assetId, amount: price },
   });
+  const handlePaying = () => {
+    setPaying(true);
+    pollPayment();
+  };
   const memo = encode64(
     JSON.stringify({
       t: 'BUY',
@@ -46,15 +63,29 @@ export default function PayModalComponent(props: {
           : t('messages.viewWithMessenger')}
       </div>
       <div>
-        <Button type='primary' loading={paying} onClick={() => setPaying(true)}>
-          Paid
+        <Button type='primary' loading={paying} onClick={handlePaying}>
+          {paying ? t('articlePage.pollingPayment') : 'Paid'}
         </Button>
       </div>
     </div>
   );
   const payAmount =
     token.symbol === 'PRS' ? price.toFixed(8) : funds?.toFixed(8);
-  const payUrl = `mixin://pay?recipient=${walletId}&trace=${uuidv4()}&memo=${memo}&asset=${assetId}&amount=${payAmount}`;
+  const payUrl = `mixin://pay?recipient=${walletId}&trace=${paymentTraceId}&memo=${memo}&asset=${assetId}&amount=${payAmount}`;
+
+  useEffect(() => {
+    return () => stopPolling && stopPolling();
+  }, [pollPayment, stopPolling]);
+
+  const payment = paymentData?.payment;
+  if (payment?.state === 'completed') {
+    stopPolling();
+    onCancel();
+  } else if (payment?.state === 'refunded') {
+    stopPolling();
+    setPaying(false);
+    message.warn('Failed. Payment refunded.');
+  }
 
   return (
     <Modal
@@ -86,8 +117,8 @@ export default function PayModalComponent(props: {
             <Spin />
           </div>
         ) : (
-          <div>
-            <div style={{ textAlign: 'center', marginBottom: '1rem' }}>
+          <div style={{ textAlign: 'center' }}>
+            <div style={{ marginBottom: '1rem' }}>
               <Space>
                 <span style={{ color: 'red', fontWeight: 'bold' }}>
                   {payAmount}
@@ -95,20 +126,36 @@ export default function PayModalComponent(props: {
                 <span>{token.symbol}</span>
               </Space>
             </div>
-            <div style={{ textAlign: 'center' }}>
+            <div>
               {mixinEnv ? (
                 <Button
-                  disabled={loading || paying}
+                  disabled={loading}
                   loading={paying}
                   href={payUrl}
-                  onClick={() => setPaying(true)}
+                  onClick={handlePaying}
                   type='primary'
                 >
-                  Pay
+                  {paying ? t('articlePage.pollingPayment') : 'Pay'}
                 </Button>
               ) : (
                 <PayUrlQRCode url={payUrl} />
               )}
+            </div>
+            <div>
+              <Button
+                type='link'
+                onClick={() => {
+                  if (paying) {
+                    setPaying(false);
+                    stopPolling && stopPolling();
+                  } else {
+                    setPaying(false);
+                    onCancel();
+                  }
+                }}
+              >
+                {t('common.cancelBtn')}
+              </Button>
             </div>
           </div>
         )}

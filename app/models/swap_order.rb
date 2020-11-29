@@ -40,9 +40,7 @@ class SwapOrder < ApplicationRecord
 
   delegate :owner, to: :wallet
   delegate :payer, to: :payment
-  delegate :refund!, to: :payment, prefix: true
   delegate :generate_refund_transfer!, to: :payment, prefix: true
-  delegate :complete!, to: :payment, prefix: true
 
   aasm column: :state do
     state :paid, initial: true
@@ -57,23 +55,23 @@ class SwapOrder < ApplicationRecord
       transitions from: :paid, to: :swapping
     end
 
-    event :reject, after: :payment_create_refund_transfer! do
+    event :reject, after_commit: :payment_generate_refund_transfer! do
       transitions from: :swapping, to: :rejected
     end
 
-    event :swap, guard: :ensure_min_amount_filled, after: :place_payment_order! do
+    event :swap, guard: :ensure_min_amount_filled, after_commit: :place_payment_order! do
       transitions from: :swapping, to: :swapped
     end
 
-    event :order_place, after: :transfer_change_to_buyer_async do
+    event :order_place, after_commit: :transfer_change_to_buyer_async do
       transitions from: :swapped, to: :order_placed
     end
 
-    event :complete, after: :payment_complete! do
+    event :complete, after_commit: :payment_complete! do
       transitions from: :order_placed, to: :completed
     end
 
-    event :refund, after: :payment_refund! do
+    event :refund, after_commit: :payment_refund! do
       transitions from: :swapped, to: :refunded
     end
   end
@@ -178,5 +176,13 @@ class SwapOrder < ApplicationRecord
 
   def article
     @article = owner.is_a?(Article) && owner
+  end
+
+  def payment_complete!
+    payment.complete! if payment.paid?
+  end
+
+  def payment_refund!
+    payment.refund! if payment.paid?
   end
 end

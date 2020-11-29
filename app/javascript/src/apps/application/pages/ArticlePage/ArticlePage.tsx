@@ -49,20 +49,13 @@ import PayModalComponent from './components/PayModalComponent';
 export default function ArticlePage() {
   const { t } = useTranslation();
   const { uuid } = useParams<{ uuid: string }>();
-  const [paying, setPaying] = useState(false);
   const [rewardModalVisible, setRewardModalVisible] = useState(false);
   const [payModalVisible, setPayModalVisible] = useState(false);
   const [rewardAmount, setRewardAmount] = useState(1);
   const { appId } = usePrsdigg();
   const { mixinEnv } = useUserAgent();
   const currentUser = useCurrentUser();
-  const {
-    loading,
-    data,
-    refetch,
-    startPolling,
-    stopPolling,
-  }: ArticleQueryHookResult = useArticleQuery({
+  const { loading, data, refetch }: ArticleQueryHookResult = useArticleQuery({
     variables: { uuid },
   });
   const [upvoteArticle] = useUpvoteArticleMutation();
@@ -72,10 +65,6 @@ export default function ArticlePage() {
     return () => (document.title = PAGE_TITLE);
   }, [uuid]);
 
-  useEffect(() => {
-    return () => stopPolling();
-  }, [startPolling, stopPolling]);
-
   if (loading) {
     return <LoadingComponent />;
   }
@@ -84,10 +73,6 @@ export default function ArticlePage() {
 
   if (!article) {
     return <NotFoundPage />;
-  }
-
-  if (article.authorized) {
-    stopPolling();
   }
 
   document.title = `${article.title} - ${article.author.name}`;
@@ -196,80 +181,60 @@ export default function ArticlePage() {
           </div>
           <div>
             {currentUser ? (
-              paying ? (
-                <div>
-                  <div>
-                    <Button type='primary' loading disabled danger>
-                      {t('articlePage.pollingPayment')}
-                    </Button>
-                  </div>
-                  <div>
-                    <Button
-                      type='link'
-                      onClick={() => {
-                        setPaying(false);
-                        stopPolling();
-                      }}
-                    >
-                      {t('common.cancelBtn')}
-                    </Button>
-                  </div>
+              <div>
+                <Button type='primary' onClick={() => setPayModalVisible(true)}>
+                  {article.readers.totalCount === 0
+                    ? t('articlePage.firstReaderBtn')
+                    : t('articlePage.payToReadBtn')}
+                </Button>
+                <PayModalComponent
+                  visible={payModalVisible}
+                  price={article.price}
+                  walletId={article.walletId}
+                  articleUuid={article.uuid}
+                  paymentTraceId={article.paymentTraceId}
+                  onCancel={() => {
+                    setPayModalVisible(false);
+                    refetch();
+                  }}
+                />
+                <div
+                  style={{ marginTop: 10, fontSize: '0.8rem', color: '#aaa' }}
+                >
+                  {t('articlePage.alreadyPaid1')}{' '}
+                  <a onClick={() => refetch()}>
+                    {t('articlePage.alreadyPaid2')}
+                  </a>
                 </div>
-              ) : (
-                <div>
-                  <Button
-                    type='primary'
-                    onClick={() => setPayModalVisible(true)}
-                  >
-                    {article.readers.totalCount === 0
-                      ? t('articlePage.firstReaderBtn')
-                      : t('articlePage.payToReadBtn')}
-                  </Button>
-                  <PayModalComponent
-                    visible={payModalVisible}
-                    price={article.price}
-                    walletId={article.walletId}
-                    articleUuid={article.uuid}
-                    onCancel={() => setPayModalVisible(false)}
-                  />
-                  <div
-                    style={{ marginTop: 10, fontSize: '0.8rem', color: '#aaa' }}
-                  >
-                    {t('articlePage.alreadyPaid1')}{' '}
-                    <a onClick={() => refetch()}>
-                      {t('articlePage.alreadyPaid2')}
-                    </a>
-                  </div>
-                  <div
-                    style={{
-                      marginTop: 5,
-                      fontSize: '0.8rem',
-                      color: '#aaa',
+                <div
+                  style={{
+                    marginTop: 5,
+                    fontSize: '0.8rem',
+                    color: '#aaa',
+                  }}
+                >
+                  {t('articlePage.buyPRSTips1')}{' '}
+                  <a
+                    onClick={() => {
+                      handleRedirectingRobot(
+                        'mixin://users/61103d28-3ac2-44a2-ae34-bd956070dab1',
+                      );
                     }}
                   >
-                    {t('articlePage.buyPRSTips1')}{' '}
-                    <a
-                      onClick={() => {
-                        handleRedirectingRobot(
-                          'mixin://users/61103d28-3ac2-44a2-ae34-bd956070dab1',
-                        );
-                      }}
-                    >
-                      ExinOne
-                    </a>{' '}
-                    {t('articlePage.buyPRSTips2')}{' '}
-                    <a
-                      onClick={() => {
-                        handleRedirectingRobot(
-                          'mixin://users/a753e0eb-3010-4c4a-a7b2-a7bda4063f62',
-                        );
-                      }}
-                    >
-                      4swap
-                    </a>{' '}
-                  </div>
+                    ExinOne
+                  </a>{' '}
+                  {t('articlePage.buyPRSTips2')}{' '}
+                  <a
+                    onClick={() => {
+                      handleRedirectingRobot(
+                        'mixin://users/a753e0eb-3010-4c4a-a7b2-a7bda4063f62',
+                      );
+                    }}
+                  >
+                    4swap
+                  </a>{' '}
                 </div>
-              )
+              </div>
             ) : (
               <Button
                 type='primary'

@@ -26,7 +26,7 @@ class Payment < ApplicationRecord
   belongs_to :payer, class_name: 'User', foreign_key: :opponent_id, primary_key: :mixin_uuid, inverse_of: :payments
   belongs_to :snapshot, class_name: 'MixinNetworkSnapshot', foreign_key: :trace_id, primary_key: :trace_id, optional: true, inverse_of: false
 
-  has_one :refund_transfer, -> { where(memo: 'REFUND') }, class_name: 'Transfer', as: :source, dependent: :nullify, inverse_of: false
+  has_one :refund_transfer, -> { where(transfer_type: :payment_refund) }, class_name: 'Transfer', as: :source, dependent: :nullify, inverse_of: false
   has_one :order, primary_key: :trace_id, foreign_key: :trace_id, dependent: :nullify, inverse_of: :payment
   has_one :swap_order, dependent: :nullify
 

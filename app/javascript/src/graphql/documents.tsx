@@ -928,6 +928,7 @@ export type Query = {
   myArticleConnection: ArticleConnection;
   myPaymentConnection: PaymentConnection;
   myTransferConnection: TransferConnection;
+  payment?: Maybe<Payment>;
   revenueChart: Scalars['String'];
   statistics: Statistics;
   swapPreOrder?: Maybe<SwapPreOrder>;
@@ -1097,6 +1098,11 @@ export type QueryMyTransferConnectionArgs = {
   before?: Maybe<Scalars['String']>;
   first?: Maybe<Scalars['Int']>;
   last?: Maybe<Scalars['Int']>;
+};
+
+
+export type QueryPaymentArgs = {
+  traceId: Scalars['ID'];
 };
 
 
@@ -3266,6 +3272,42 @@ export function useMyTransferConnectionLazyQuery(baseOptions?: Apollo.LazyQueryH
 export type MyTransferConnectionQueryHookResult = ReturnType<typeof useMyTransferConnectionQuery>;
 export type MyTransferConnectionLazyQueryHookResult = ReturnType<typeof useMyTransferConnectionLazyQuery>;
 export type MyTransferConnectionQueryResult = Apollo.QueryResult<MyTransferConnectionQuery, MyTransferConnectionQueryVariables>;
+export const PaymentDocument = gql`
+    query Payment($traceId: ID!) {
+  payment(traceId: $traceId) {
+    traceId
+    amount
+    assetId
+    state
+  }
+}
+    `;
+
+/**
+ * __usePaymentQuery__
+ *
+ * To run a query within a React component, call `usePaymentQuery` and pass it any options that fit your needs.
+ * When your component renders, `usePaymentQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = usePaymentQuery({
+ *   variables: {
+ *      traceId: // value for 'traceId'
+ *   },
+ * });
+ */
+export function usePaymentQuery(baseOptions: Apollo.QueryHookOptions<PaymentQuery, PaymentQueryVariables>) {
+        return Apollo.useQuery<PaymentQuery, PaymentQueryVariables>(PaymentDocument, baseOptions);
+      }
+export function usePaymentLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<PaymentQuery, PaymentQueryVariables>) {
+          return Apollo.useLazyQuery<PaymentQuery, PaymentQueryVariables>(PaymentDocument, baseOptions);
+        }
+export type PaymentQueryHookResult = ReturnType<typeof usePaymentQuery>;
+export type PaymentLazyQueryHookResult = ReturnType<typeof usePaymentLazyQuery>;
+export type PaymentQueryResult = Apollo.QueryResult<PaymentQuery, PaymentQueryVariables>;
 export const StatisticsDocument = gql`
     query Statistics {
   statistics {
