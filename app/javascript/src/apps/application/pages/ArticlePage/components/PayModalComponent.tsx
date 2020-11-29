@@ -1,7 +1,7 @@
 import { useUserAgent } from '@application/shared';
 import { usePaymentLazyQuery, useSwapPreOrderQuery } from '@graphql';
 import { PRS, SUPPORTED_TOKENS } from '@shared';
-import { Avatar, Button, message, Modal, Radio, Space, Spin } from 'antd';
+import { Alert, Avatar, Button, Modal, Radio, Space, Spin } from 'antd';
 import { encode as encode64 } from 'js-base64';
 import QRCode from 'qrcode.react';
 import React, { useEffect, useState } from 'react';
@@ -34,6 +34,7 @@ export default function PayModalComponent(props: {
       variables: { traceId: paymentTraceId },
     },
   );
+  const payment = paymentData?.payment;
   const { loading, data } = useSwapPreOrderQuery({
     fetchPolicy: 'network-only',
     notifyOnNetworkStatusChange: true,
@@ -77,14 +78,11 @@ export default function PayModalComponent(props: {
     return () => stopPolling && stopPolling();
   }, [pollPayment, stopPolling]);
 
-  const payment = paymentData?.payment;
   if (payment?.state === 'completed') {
     stopPolling();
     onCancel();
   } else if (payment?.state === 'refunded') {
     stopPolling();
-    setPaying(false);
-    message.warn('Failed. Payment refunded.');
   }
 
   return (
@@ -92,6 +90,7 @@ export default function PayModalComponent(props: {
       className='pay-modal'
       title='Buy Article'
       closable
+      maskClosable={false}
       visible={visible}
       footer={null}
       onCancel={onCancel}
@@ -101,6 +100,7 @@ export default function PayModalComponent(props: {
           <Radio.Group
             value={assetId}
             onChange={(e) => setAssetId(e.target.value)}
+            disabled={paying}
           >
             {SUPPORTED_TOKENS.map((token) => (
               <Radio.Button key={token.assetId} value={token.assetId}>
@@ -126,26 +126,34 @@ export default function PayModalComponent(props: {
                 <span>{token.symbol}</span>
               </Space>
             </div>
-            <div>
-              {mixinEnv ? (
-                <Button
-                  disabled={loading}
-                  loading={paying}
-                  href={payUrl}
-                  onClick={handlePaying}
-                  type='primary'
-                >
-                  {paying ? t('articlePage.pollingPayment') : 'Pay'}
-                </Button>
-              ) : (
-                <PayUrlQRCode url={payUrl} />
-              )}
-            </div>
+            {payment?.state === 'refunded' ? (
+              <Alert
+                message='Payment has been refunded, please pay again.'
+                showIcon
+                type='warning'
+              />
+            ) : (
+              <div>
+                {mixinEnv ? (
+                  <Button
+                    disabled={loading || payment?.state === 'refunded'}
+                    loading={paying}
+                    href={payUrl}
+                    onClick={handlePaying}
+                    type='primary'
+                  >
+                    {paying ? t('articlePage.pollingPayment') : 'Pay'}
+                  </Button>
+                ) : (
+                  <PayUrlQRCode url={payUrl} />
+                )}
+              </div>
+            )}
             <div>
               <Button
                 type='link'
                 onClick={() => {
-                  if (paying) {
+                  if (paying && payment?.state !== 'refunded') {
                     setPaying(false);
                     stopPolling && stopPolling();
                   } else {

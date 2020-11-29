@@ -47,6 +47,8 @@ gem 'graphiql-rails'
 gem 'batch-loader'
 # AASM - State machines for Ruby classes (plain Ruby, ActiveRecord, Mongoid)
 gem 'aasm'
+# Allows to use ActiveRecord transactional callbacks outside of ActiveRecord models, literally everywhere in your application.
+gem 'after_commit_everywhere'
 # Background job scheduler
 gem 'clockwork', require: false
 # Store different kinds of actions (Like, Follow, Star, Block, etc.) in a single table via ActiveRecord Polymorphic Associations.

@@ -145,16 +145,12 @@ class SwapOrder < ApplicationRecord
       raise r['error'].inspect if r['error'].present?
       return unless r['data']['trace_id'] == _trace_id
 
-      message = MixinBot.api.app_card(
-        conversation_id: MixinBot.api.unique_conversation_id(payment.payer.mixin_uuid),
-        data: {
-          icon_url: Article::PRS_ICON_URL,
-          title: (amount - min_amount).to_f.round(8),
-          description: 'PRS',
-          action: "mixin://snapshots?trace=#{_trace_id}"
-        }
+      TransferNotificationService.new.call(
+        recipient_id: payment.payer.mixin_uuid,
+        asset_id: fill_asset_id,
+        amount: amount - min_amount,
+        trace_id: _trace_id
       )
-      SendMixinMessageWorker.perform_async message
     end
 
     complete!
@@ -180,16 +176,12 @@ class SwapOrder < ApplicationRecord
     raise r['error'].inspect if r['error'].present?
     return unless r['data']['trace_id'] == _trace_id
 
-    message = MixinBot.api.app_card(
-      conversation_id: MixinBot.api.unique_conversation_id(payment.payer.mixin_uuid),
-      data: {
-        icon_url: Article::PRS_ICON_URL,
-        title: amount.to_f.round(8),
-        description: 'PRS',
-        action: "mixin://snapshots?trace=#{_trace_id}"
-      }
+    TransferNotificationService.new.call(
+      recipient_id: payment.payer.mixin_uuid,
+      asset_id: fill_asset_id,
+      amount: amount,
+      trace_id: _trace_id
     )
-    SendMixinMessageWorker.perform_async message
 
     refund!
   end

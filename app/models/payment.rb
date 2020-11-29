@@ -21,6 +21,7 @@
 #  index_payments_on_trace_id  (trace_id) UNIQUE
 #
 class Payment < ApplicationRecord
+  include TokenSupportable
   include AASM
 
   belongs_to :payer, class_name: 'User', foreign_key: :opponent_id, primary_key: :mixin_uuid, inverse_of: :payments
@@ -37,9 +38,10 @@ class Payment < ApplicationRecord
   validates :asset_id, presence: true
   validates :opponent_id, presence: true
   validates :snapshot_id, presence: true, uniqueness: true
+
   validates :trace_id, presence: true, uniqueness: true
 
-  after_commit :place_order!
+  after_commit :place_order!, on: :create
 
   aasm column: :state do
     state :paid, initial: true
@@ -72,10 +74,12 @@ class Payment < ApplicationRecord
   end
 
   def place_order!
-    if asset_id != Article::PRS_ASSET_ID && decrypted_memo['p'].present?
-      place_swap_order!
-    elsif decrypted_memo['t'].in? %w[BUY REWARD]
+    return unless decrypted_memo['t'].in? %w[BUY REWARD]
+
+    if asset_id == Article::PRS_ASSET_ID
       place_article_order!
+    else
+      place_swap_order!
     end
   end
 
