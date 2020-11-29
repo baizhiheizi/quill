@@ -1,3 +1,4 @@
+import { SUPPORTED_TOKENS } from '@/shared';
 import LoadingComponent from '@admin/components/LoadingComponent/LoadingComponent';
 import { Payment as IPayment, useAdminPaymentConnectionQuery } from '@graphql';
 import { Avatar, Button, PageHeader, Space, Table } from 'antd';
@@ -39,6 +40,18 @@ export default function PaymentsPage() {
     {
       dataIndex: 'amount',
       key: 'amount',
+      render: (amount, payment) => (
+        <Space>
+          <Avatar
+            src={
+              SUPPORTED_TOKENS.find(
+                (token) => token.assetId === payment.assetId,
+              )?.iconUrl
+            }
+          />
+          <span>{amount}</span>
+        </Space>
+      ),
       title: 'Amount',
     },
     {

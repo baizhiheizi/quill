@@ -3,6 +3,7 @@ import LoadingComponent from '@admin/components/LoadingComponent/LoadingComponen
 import { Avatar, PageHeader, Space, Table } from 'antd';
 import { ColumnProps } from 'antd/es/table';
 import React from 'react';
+import { SUPPORTED_TOKENS } from '@/shared';
 
 export default function SwapOrdersPage() {
   const { data, loading } = useAdminSwapOrderConnectionQuery();
@@ -32,8 +33,40 @@ export default function SwapOrdersPage() {
       title: 'Payer',
     },
     { dataIndex: 'state', key: 'state', title: 'State' },
-    { dataIndex: 'funds', key: 'funds', title: 'funds' },
-    { dataIndex: 'amount', key: 'amount', title: 'amount' },
+    {
+      dataIndex: 'funds',
+      key: 'funds',
+      render: (funds, swapOrder) => (
+        <Space>
+          <Avatar
+            src={
+              SUPPORTED_TOKENS.find(
+                (token) => token.assetId === swapOrder.payAssetId,
+              )?.iconUrl
+            }
+          />
+          <span>{funds}</span>
+        </Space>
+      ),
+      title: 'funds',
+    },
+    {
+      dataIndex: 'amount',
+      key: 'amount',
+      render: (amount, swapOrder) => (
+        <Space>
+          <Avatar
+            src={
+              SUPPORTED_TOKENS.find(
+                (token) => token.assetId === swapOrder.fillAssetId,
+              )?.iconUrl
+            }
+          />
+          <span>{amount || '-'}</span>
+        </Space>
+      ),
+      title: 'amount',
+    },
     { dataIndex: 'minAmount', key: 'minAmount', title: 'minAmount' },
     { dataIndex: 'createdAt', key: 'createdAt', title: 'createdAt' },
   ];

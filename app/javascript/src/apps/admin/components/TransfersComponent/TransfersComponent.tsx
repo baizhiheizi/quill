@@ -1,3 +1,4 @@
+import { SUPPORTED_TOKENS } from '@/shared';
 import LoadingComponent from '@admin/components/LoadingComponent/LoadingComponent';
 import { usePrsdigg } from '@admin/shared';
 import {
@@ -61,6 +62,18 @@ export default function TransfersComponent(props: {
     {
       dataIndex: 'amount',
       key: 'amount',
+      render: (amount, transfer) => (
+        <Space>
+          <Avatar
+            src={
+              SUPPORTED_TOKENS.find(
+                (token) => token.assetId === transfer.assetId,
+              )?.iconUrl
+            }
+          />
+          <span>{amount}</span>
+        </Space>
+      ),
       title: 'Amount',
     },
     {
