@@ -96,10 +96,12 @@ articlePage:
     pollingPayment: Checking Payment Status
     payBtn: Pay
     checkPaymentBtn: Already Paid
+    swapExplain: Swap supported by
   rewardModal:
     title: Reward
     pollingPayment: Checking
     successPaidMessage: Payment received. Thanks for supporting!
+    swapExplain: Swap supported by
     finishText: Finish
     okText: Reward
     cancelText: Later

@@ -1,6 +1,11 @@
 import { useUserAgent } from '@application/shared';
 import { usePaymentLazyQuery, useSwapPreOrderQuery } from '@graphql';
-import { PRS, SUPPORTED_TOKENS } from '@shared';
+import {
+  FOXSWAP_APP_ID,
+  FOXSWAP_CODE_ID,
+  PRS,
+  SUPPORTED_TOKENS,
+} from '@shared';
 import { useCountDown } from 'ahooks';
 import { Alert, Avatar, Button, Modal, Radio, Space, Spin } from 'antd';
 import { encode as encode64 } from 'js-base64';
@@ -134,6 +139,21 @@ export default function PayModalComponent(props: {
                 </span>
                 <span>{token.symbol}</span>
               </Space>
+              {token.symbol !== 'PRS' && (
+                <div style={{ color: '#aaa' }}>
+                  {t('articlePage.payModal.swapExplain')}{' '}
+                  <a
+                    href={
+                      mixinEnv
+                        ? `mixin://users/${FOXSWAP_APP_ID}`
+                        : `https://mixin.one/codes/${FOXSWAP_CODE_ID}`
+                    }
+                    target='_blank'
+                  >
+                    4swap
+                  </a>
+                </div>
+              )}
             </div>
             {payment?.state === 'refunded' ? (
               <Alert

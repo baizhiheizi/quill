@@ -28,14 +28,12 @@ import {
   Button,
   Col,
   Divider,
-  Modal,
   Progress,
   Row,
   Space,
   Statistic,
 } from 'antd';
 import moment from 'moment';
-import QRCode from 'qrcode.react';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, useParams } from 'react-router-dom';
@@ -72,31 +70,6 @@ export default function ArticlePage() {
   }
 
   document.title = `${article.title} - ${article.author.name}`;
-
-  const QRCodeModalContent = ({ url, type = 'pay' }) => (
-    <div style={{ textAlign: 'center' }}>
-      <div style={{ marginBottom: 5 }}>
-        <QRCode value={url} size={200} />
-      </div>
-      <div style={{ color: '#aaa' }}>
-        {type === 'pay'
-          ? t('messages.payWithMessenger')
-          : t('messages.viewWithMessenger')}
-      </div>
-    </div>
-  );
-
-  const handleRedirectingRobot = (url: string) => {
-    if (mixinEnv) {
-      location.replace(url);
-    } else {
-      Modal.info({
-        icon: null,
-        centered: true,
-        content: <QRCodeModalContent url={url} type='user' />,
-      });
-    }
-  };
 
   return (
     <div>
@@ -164,17 +137,19 @@ export default function ArticlePage() {
                     ? t('articlePage.firstReaderBtn')
                     : t('articlePage.payToReadBtn')}
                 </Button>
-                <PayModalComponent
-                  visible={payModalVisible}
-                  price={article.price}
-                  walletId={article.walletId}
-                  articleUuid={article.uuid}
-                  paymentTraceId={article.paymentTraceId}
-                  onCancel={() => {
-                    setPayModalVisible(false);
-                    refetch();
-                  }}
-                />
+                {payModalVisible && (
+                  <PayModalComponent
+                    visible={payModalVisible}
+                    price={article.price}
+                    walletId={article.walletId}
+                    articleUuid={article.uuid}
+                    paymentTraceId={article.paymentTraceId}
+                    onCancel={() => {
+                      setPayModalVisible(false);
+                      refetch();
+                    }}
+                  />
+                )}
                 <div
                   style={{ marginTop: 10, fontSize: '0.8rem', color: '#aaa' }}
                 >

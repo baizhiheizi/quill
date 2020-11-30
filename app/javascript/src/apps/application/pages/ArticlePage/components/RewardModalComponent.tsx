@@ -1,6 +1,11 @@
-import { useUserAgent } from '@/apps/application/shared';
-import { usePaymentLazyQuery } from '@/graphql';
-import { PRS, SUPPORTED_TOKENS } from '@shared';
+import { useUserAgent } from '@application/shared';
+import { usePaymentLazyQuery } from '@graphql';
+import {
+  FOXSWAP_APP_ID,
+  FOXSWAP_CODE_ID,
+  PRS,
+  SUPPORTED_TOKENS,
+} from '@shared';
 import { Alert, Avatar, Modal, Radio, Select, Space } from 'antd';
 import { encode as encode64 } from 'js-base64';
 import QRCode from 'qrcode.react';
@@ -108,6 +113,7 @@ export default function RewardModalComponent(props: {
       />
       <div style={{ marginBottom: '1rem', textAlign: 'right' }}>
         <Select
+          style={{ marginBottom: 5 }}
           disabled={paying}
           value={assetId}
           onSelect={(value) => setAssetId(value)}
@@ -121,6 +127,21 @@ export default function RewardModalComponent(props: {
             </Select.Option>
           ))}
         </Select>
+        {token.symbol !== 'PRS' && (
+          <div style={{ color: '#aaa' }}>
+            {t('articlePage.rewardModal.swapExplain')}{' '}
+            <a
+              href={
+                mixinEnv
+                  ? `mixin://users/${FOXSWAP_APP_ID}`
+                  : `https://mixin.one/codes/${FOXSWAP_CODE_ID}`
+              }
+              target='_blank'
+            >
+              4swap
+            </a>
+          </div>
+        )}
       </div>
       {Boolean(data?.payment?.state) ? (
         <Alert
