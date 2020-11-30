@@ -56,6 +56,10 @@ module TokenSupportable
   extend ActiveSupport::Concern
 
   def token_supported?
-    SUPPORTED_TOKENS.find(&->(token) { token[:asset_id] == asset_id }).present?
+    token.present?
+  end
+
+  def token
+    SUPPORTED_TOKENS.find(&->(token) { token[:asset_id] == asset_id })
   end
 end

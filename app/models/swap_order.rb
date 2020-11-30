@@ -27,6 +27,7 @@
 class SwapOrder < ApplicationRecord
   FOX_SWAP_APP_ID = 'a753e0eb-3010-4c4a-a7b2-a7bda4063f62'
 
+  include TokenSupportable
   include AASM
   belongs_to :payment
   belongs_to :wallet, class_name: 'MixinNetworkUser', foreign_key: :user_id, primary_key: :uuid, inverse_of: :swap_orders
@@ -54,7 +55,7 @@ class SwapOrder < ApplicationRecord
       transitions from: :paid, to: :swapping
     end
 
-    event :reject, after_commit: :payment_generate_refund_transfer! do
+    event :reject, after_commit: %i[payment_generate_refund_transfer! notify_payer sync_order] do
       transitions from: :swapping, to: :rejected
     end
 
@@ -66,11 +67,11 @@ class SwapOrder < ApplicationRecord
       transitions from: :swapped, to: :order_placed
     end
 
-    event :complete, after_commit: :payment_complete! do
+    event :complete, after_commit: %i[payment_complete! notify_payer sync_order] do
       transitions from: :order_placed, to: :completed
     end
 
-    event :refund, after_commit: :payment_refund! do
+    event :refund, after_commit: %i[payment_refund! notify_payer sync_order] do
       transitions from: :swapped, to: :refunded
     end
   end
@@ -200,5 +201,58 @@ class SwapOrder < ApplicationRecord
 
   def payment_refund!
     payment.refund! if payment.paid?
+  end
+
+  def sync_order
+    r = Foxswap.api.order(trace_id, authorization: wallet.mixin_api.access_token('GET', '/me'))
+    update raw: r['data']
+  end
+
+  def notify_payer
+    tpl_done = <<~TPL
+      [Swap 订单]
+      - 状态: %<state>s
+      - 支付: %<funds>s %<pay_asset>s
+      - 收到: %<amount>s %<fill_asset>s
+    TPL
+    tpl_rejected = <<~TPL
+      [Swap 订单]
+      - 状态: %<state>s
+      - 支付: %<funds>s %<pay_asset>s
+    TPL
+
+    message =
+      case state
+      when 'completed', 'refunded'
+        format(
+          tpl_done,
+          state: '完成',
+          funds: funds.to_f.to_s,
+          amount: amount.to_f.to_s,
+          pay_asset: pay_asset&.[](:symbol),
+          fill_asset: fill_asset&.[](:symbol)
+        )
+      when 'rejected'
+        format(
+          tpl_rejected,
+          state: '失败',
+          funds: funds.to_f.to_s,
+          pay_asset: pay_asset&.[](:symbol)
+        )
+      end
+    return if message.blank?
+
+    TextNotificationService.new.call(
+      message,
+      recipient_id: payment.payer.mixin_uuid
+    )
+  end
+
+  def pay_asset
+    SUPPORTED_TOKENS.find(&->(token) { token[:asset_id] == pay_asset_id })
+  end
+
+  def fill_asset
+    SUPPORTED_TOKENS.find(&->(token) { token[:asset_id] == fill_asset_id })
   end
 end

@@ -41,7 +41,7 @@ class Payment < ApplicationRecord
 
   validates :trace_id, presence: true, uniqueness: true
 
-  after_commit :place_order!, on: :create
+  after_commit :place_order!, :notify_payer, on: :create
 
   aasm column: :state do
     state :paid, initial: true
@@ -140,6 +140,15 @@ class Payment < ApplicationRecord
 
   def ensure_refund_transfer_created
     refund_transfer.present? || swap_order&.refunded?
+  end
+
+  def notify_payer
+    TransferNotificationService.new.call(
+      recipient_id: payer.mixin_uuid,
+      asset_id: asset_id,
+      amount: -amount,
+      trace_id: trace_id
+    )
   end
 
   private

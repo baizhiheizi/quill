@@ -123,7 +123,7 @@ class Order < ApplicationRecord
       opponent_id: item.author.mixin_uuid,
       asset_id: revenue_asset_id,
       amount: (total - _distributed_amount - _prsdigg_amount).round(8),
-      memo: "作者收益来自文章《#{item.title}》".truncate(140)
+      memo: "#{payment.payer.name} #{buy_article? ? '购买' : '赞赏'}了你的文章《#{item.title}》".truncate(140)
     ).find_or_create_by!(
       trace_id: MixinBot.api.unique_conversation_id(trace_id, item.author.mixin_uuid)
     )
