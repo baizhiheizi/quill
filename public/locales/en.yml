@@ -98,6 +98,9 @@ articlePage:
     checkPaymentBtn: Already Paid
   rewardModal:
     title: Reward
+    pollingPayment: Checking
+    successPaidMessage: Payment received. Thanks for supporting!
+    finishText: Finish
     okText: Reward
     cancelText: Later
   timesBought: times bought

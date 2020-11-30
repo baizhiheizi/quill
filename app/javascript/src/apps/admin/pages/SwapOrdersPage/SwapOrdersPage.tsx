@@ -67,7 +67,12 @@ export default function SwapOrdersPage() {
       ),
       title: 'amount',
     },
-    { dataIndex: 'minAmount', key: 'minAmount', title: 'minAmount' },
+    {
+      dataIndex: 'minAmount',
+      key: 'minAmount',
+      render: (minAmount) => minAmount || '-',
+      title: 'minAmount',
+    },
     { dataIndex: 'createdAt', key: 'createdAt', title: 'createdAt' },
   ];
 

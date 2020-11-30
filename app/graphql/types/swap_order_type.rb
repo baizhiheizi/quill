@@ -7,7 +7,7 @@ module Types
     field :state, String, null: false
     field :funds, Float, null: true
     field :amount, Float, null: true
-    field :min_amount, Float, null: false
+    field :min_amount, Float, null: true
     field :fill_asset_id, String, null: false
     field :pay_asset_id, String, null: false
 

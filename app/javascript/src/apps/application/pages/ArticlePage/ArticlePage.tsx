@@ -30,28 +30,24 @@ import {
   Divider,
   Modal,
   Progress,
-  Radio,
   Row,
   Space,
   Statistic,
 } from 'antd';
-import { encode as encode64 } from 'js-base64';
 import moment from 'moment';
 import QRCode from 'qrcode.react';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, useParams } from 'react-router-dom';
-import { v4 as uuidv4 } from 'uuid';
 import NotFoundPage from '../NotFoundPage/NotFoundPage';
-import './ArticlePage.less';
 import PayModalComponent from './components/PayModalComponent';
+import RewardModalComponent from './components/RewardModalComponent';
 
 export default function ArticlePage() {
   const { t } = useTranslation();
   const { uuid } = useParams<{ uuid: string }>();
   const [rewardModalVisible, setRewardModalVisible] = useState(false);
   const [payModalVisible, setPayModalVisible] = useState(false);
-  const [rewardAmount, setRewardAmount] = useState(1);
   const { appId } = usePrsdigg();
   const { mixinEnv } = useUserAgent();
   const currentUser = useCurrentUser();
@@ -90,25 +86,6 @@ export default function ArticlePage() {
     </div>
   );
 
-  const handleRewarding = () => {
-    const payUrl = `mixin://pay?recipient=${
-      article.walletId || appId
-    }&trace=${uuidv4()}&memo=${encode64(
-      JSON.stringify({ t: 'REWARD', a: uuid }),
-    )}&asset=${article.assetId}&amount=${rewardAmount.toFixed(8)}`;
-    if (mixinEnv) {
-      location.replace(payUrl);
-    } else {
-      Modal.confirm({
-        icon: null,
-        centered: true,
-        content: <QRCodeModalContent url={payUrl} />,
-        okText: t('common.paidBtn'),
-        cancelText: t('common.cancelBtn'),
-      });
-    }
-    setRewardModalVisible(false);
-  };
   const handleRedirectingRobot = (url: string) => {
     if (mixinEnv) {
       location.replace(url);
@@ -334,31 +311,17 @@ export default function ArticlePage() {
             >
               <HeartOutlined /> {t('articlePage.rewardBtn')}
             </Button>
-            <Modal
-              className='reward-modal'
-              centered
-              closable={false}
-              title={t('articlePage.rewardModal.title')}
-              okText={t('articlePage.rewardModal.okText')}
-              cancelText={t('articlePage.rewardModal.cancelText')}
-              visible={rewardModalVisible}
-              onCancel={() => setRewardModalVisible(false)}
-              onOk={handleRewarding}
-            >
-              <Radio.Group
-                options={[
-                  { label: '1', value: 1 },
-                  { label: '8', value: 8 },
-                  { label: '32', value: 32 },
-                  { label: '64', value: 64 },
-                  { label: '256', value: 256 },
-                  { label: '1024', value: 1024 },
-                ]}
-                value={rewardAmount}
-                onChange={(e) => setRewardAmount(e.target.value)}
-                optionType='button'
+            {rewardModalVisible && (
+              <RewardModalComponent
+                visible={rewardModalVisible}
+                articleUuid={uuid}
+                onCancel={() => {
+                  setRewardModalVisible(false);
+                  refetch();
+                }}
+                walletId={article.walletId}
               />
-            </Modal>
+            )}
           </div>
         </div>
       )}

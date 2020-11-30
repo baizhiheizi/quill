@@ -98,6 +98,9 @@ articlePage:
     checkPaymentBtn: 已经支付
   rewardModal:
     title: 赞赏文章
+    pollingPayment: 查询中
+    successPaidMessage: 赞赏已成功收到，感谢支持！
+    finishText: 完成
     okText: 赞赏
     cancelText: 再想想
   timesBought: 次购买

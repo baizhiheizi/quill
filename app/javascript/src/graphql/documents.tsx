@@ -1152,7 +1152,7 @@ export type SwapOrder = {
   fillAssetId: Scalars['String'];
   funds?: Maybe<Scalars['Float']>;
   id: Scalars['ID'];
-  minAmount: Scalars['Float'];
+  minAmount?: Maybe<Scalars['Float']>;
   payAssetId: Scalars['String'];
   payer: User;
   payment: Payment;

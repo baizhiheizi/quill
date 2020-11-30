@@ -34,7 +34,6 @@ class SwapOrder < ApplicationRecord
   validates :trace_id, presence: true
   validates :fill_asset_id, presence: true
   validates :pay_asset_id, presence: true
-  validates :min_amount, numericality: { greater_than: 0.000_000_01 }
 
   after_commit :transfer_to_4swap_async, on: :create
 
@@ -91,7 +90,7 @@ class SwapOrder < ApplicationRecord
         {
           t: 'swap',
           a: fill_asset_id,
-          m: min_amount.to_f.to_s
+          m: min_amount.present? ? min_amount.to_f.to_s : nil
         }.to_json
       )
     )
@@ -130,8 +129,9 @@ class SwapOrder < ApplicationRecord
 
   def transfer_change_to_buyer!
     return if completed?
+    return if amount.blank?
 
-    if (amount - min_amount - 0.000_000_01).positive?
+    if min_amount.present? && (amount - min_amount - 0.000_000_01).positive?
       _trace_id = wallet.mixin_api.unique_conversation_id(trace_id, payment.payer.mixin_uuid)
       r = wallet.mixin_api.create_transfer(
         wallet.pin,
@@ -187,7 +187,7 @@ class SwapOrder < ApplicationRecord
   end
 
   def ensure_min_amount_filled
-    amount > min_amount
+    amount.to_f > min_amount.to_f
   end
 
   def article

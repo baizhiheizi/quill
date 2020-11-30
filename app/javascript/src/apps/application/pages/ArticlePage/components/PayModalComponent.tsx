@@ -32,7 +32,7 @@ export default function PayModalComponent(props: {
   const [countdown, setTargetDate] = useCountDown();
   const [pollPayment, { stopPolling, data: paymentData }] = usePaymentLazyQuery(
     {
-      pollInterval: 1000,
+      pollInterval: 1500,
       variables: { traceId: paymentTraceId },
     },
   );
@@ -96,6 +96,7 @@ export default function PayModalComponent(props: {
     <Modal
       className='pay-modal'
       title={t('articlePage.payModal.title')}
+      centered
       closable
       destroyOnClose={true}
       maskClosable={false}
