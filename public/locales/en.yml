@@ -81,17 +81,21 @@ articlePage:
   payToRead3: and receive early reader revenue (Check
   payToRead4: )
   payWarning: This article is a virtural product selling on PRSDigg, IT WILL NOT REFUND once paid. Please pay with caution.
-  pollingPayment: Checking Payment Status
   firstReaderBtn: Be the FIRST reader
   payToReadBtn: Pay to Read
   alreadyPaid1: Already paid? Try to
   alreadyPaid2: Refresh
-  buyPRSTips1: Have no PRS? Get some from
-  buyPRSTips2: and
+  buyPRSTips: Have no PRS? Pay with BTC, EOS, ETH and more!
   loginBtn: Please Login
   rewardBtn: Love this Article
   shareBtn: Share
   userDetailBtn: Detail
+  payModal:
+    title: Buy Article
+    refundWarning: Payment has been refunded. Please try again.
+    pollingPayment: Checking Payment Status
+    payBtn: Pay
+    checkPaymentBtn: Already Paid
   rewardModal:
     title: Reward
     okText: Reward

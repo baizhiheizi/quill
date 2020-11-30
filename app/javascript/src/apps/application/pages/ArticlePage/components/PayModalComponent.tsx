@@ -70,11 +70,10 @@ export default function PayModalComponent(props: {
         <Button type='primary' loading={paying} onClick={handlePaying}>
           {paying
             ? `${Math.round(countdown / 1000)} s ${t(
-                'articlePage.pollingPayment',
+                'articlePage.payModal.pollingPayment',
               )}`
-            : 'Paid'}
+            : t('articlePage.payModal.checkPaymentBtn')}
         </Button>
-        <span></span>
       </div>
     </div>
   );
@@ -96,7 +95,7 @@ export default function PayModalComponent(props: {
   return (
     <Modal
       className='pay-modal'
-      title='Buy Article'
+      title={t('articlePage.payModal.title')}
       closable
       destroyOnClose={true}
       maskClosable={false}
@@ -137,7 +136,7 @@ export default function PayModalComponent(props: {
             </div>
             {payment?.state === 'refunded' ? (
               <Alert
-                message='Payment has been refunded, please pay again.'
+                message={t('articlePage.payModal.refundWarning')}
                 showIcon
                 type='warning'
               />
@@ -153,9 +152,9 @@ export default function PayModalComponent(props: {
                   >
                     {paying
                       ? `${Math.round(countdown / 1000)} s ${t(
-                          'articlePage.pollingPayment',
+                          'articlePage.payModal.pollingPayment',
                         )}`
-                      : 'Pay'}
+                      : t('articlePage.payModal.payBtn')}
                   </Button>
                 ) : (
                   <PayUrlQRCode url={payUrl} />

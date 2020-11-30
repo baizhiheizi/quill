@@ -213,26 +213,7 @@ export default function ArticlePage() {
                     color: '#aaa',
                   }}
                 >
-                  {t('articlePage.buyPRSTips1')}{' '}
-                  <a
-                    onClick={() => {
-                      handleRedirectingRobot(
-                        'mixin://users/61103d28-3ac2-44a2-ae34-bd956070dab1',
-                      );
-                    }}
-                  >
-                    ExinOne
-                  </a>{' '}
-                  {t('articlePage.buyPRSTips2')}{' '}
-                  <a
-                    onClick={() => {
-                      handleRedirectingRobot(
-                        'mixin://users/a753e0eb-3010-4c4a-a7b2-a7bda4063f62',
-                      );
-                    }}
-                  >
-                    4swap
-                  </a>{' '}
+                  {t('articlePage.buyPRSTips')}
                 </div>
               </div>
             ) : (
