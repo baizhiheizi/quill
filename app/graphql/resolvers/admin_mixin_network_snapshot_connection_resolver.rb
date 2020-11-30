@@ -17,6 +17,8 @@ module Resolvers
           MixinNetworkSnapshot.only_output
         when 'prsdigg'
           MixinNetworkSnapshot.only_prsdigg
+        when '4swap'
+          MixinNetworkSnapshot.only_4swap
         else
           MixinNetworkSnapshot.all
         end

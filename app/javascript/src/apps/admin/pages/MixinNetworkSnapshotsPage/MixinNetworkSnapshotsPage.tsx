@@ -19,6 +19,7 @@ export default function MixinNetworkSnapshotsPage() {
             <Select.Option value='input'>Input</Select.Option>
             <Select.Option value='output'>Output</Select.Option>
             <Select.Option value='prsdigg'>PRSDigg</Select.Option>
+            <Select.Option value='4swap'>4swap</Select.Option>
             <Select.Option value='all'>All</Select.Option>
           </Select>
         </Col>
