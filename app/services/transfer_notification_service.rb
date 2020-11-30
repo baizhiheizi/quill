@@ -2,7 +2,7 @@
 
 class TransferNotificationService
   def call(recipient_id:, asset_id:, amount:, trace_id:)
-    token = Order::SUPPORTED_TOKENS.find(&->(_token) { _token[:asset_id] == asset_id })
+    token = Payment::SUPPORTED_TOKENS.find(&->(_token) { _token[:asset_id] == asset_id })
     return if token.blank?
 
     message = MixinBot.api.app_card(

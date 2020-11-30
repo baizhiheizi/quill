@@ -1,6 +1,7 @@
 import { useUserAgent } from '@application/shared';
 import { usePaymentLazyQuery, useSwapPreOrderQuery } from '@graphql';
 import { PRS, SUPPORTED_TOKENS } from '@shared';
+import { useCountDown } from 'ahooks';
 import { Alert, Avatar, Button, Modal, Radio, Space, Spin } from 'antd';
 import { encode as encode64 } from 'js-base64';
 import QRCode from 'qrcode.react';
@@ -28,6 +29,7 @@ export default function PayModalComponent(props: {
   const [paying, setPaying] = useState(false);
   const { mixinEnv } = useUserAgent();
   const { t } = useTranslation();
+  const [countdown, setTargetDate] = useCountDown();
   const [pollPayment, { stopPolling, data: paymentData }] = usePaymentLazyQuery(
     {
       pollInterval: 1000,
@@ -42,6 +44,7 @@ export default function PayModalComponent(props: {
   });
   const handlePaying = () => {
     setPaying(true);
+    setTargetDate(Date.now() + 30000);
     pollPayment();
   };
   const memo = encode64(
@@ -65,8 +68,13 @@ export default function PayModalComponent(props: {
       </div>
       <div>
         <Button type='primary' loading={paying} onClick={handlePaying}>
-          {paying ? t('articlePage.pollingPayment') : 'Paid'}
+          {paying
+            ? `${Math.round(countdown / 1000)} s ${t(
+                'articlePage.pollingPayment',
+              )}`
+            : 'Paid'}
         </Button>
+        <span></span>
       </div>
     </div>
   );
@@ -90,6 +98,7 @@ export default function PayModalComponent(props: {
       className='pay-modal'
       title='Buy Article'
       closable
+      destroyOnClose={true}
       maskClosable={false}
       visible={visible}
       footer={null}
@@ -142,7 +151,11 @@ export default function PayModalComponent(props: {
                     onClick={handlePaying}
                     type='primary'
                   >
-                    {paying ? t('articlePage.pollingPayment') : 'Pay'}
+                    {paying
+                      ? `${Math.round(countdown / 1000)} s ${t(
+                          'articlePage.pollingPayment',
+                        )}`
+                      : 'Pay'}
                   </Button>
                 ) : (
                   <PayUrlQRCode url={payUrl} />

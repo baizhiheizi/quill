@@ -81,7 +81,7 @@ module Types
       # avoid duplicate payment
       candidate = MixinBot.api.unique_conversation_id(object.uuid, context[:current_user].mixin_uuid)
       loop do
-        break unless Payment.exists?(trace_id: candidate)
+        break unless Payment.exists?(trace_id: candidate, state: %i[refunded completed])
 
         candidate = MixinBot.api.unique_conversation_id(object.uuid, candidate)
       end
