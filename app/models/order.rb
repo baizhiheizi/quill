@@ -39,16 +39,16 @@ class Order < ApplicationRecord
 
   before_validation :setup_attributes
 
-  validate :ensure_total_sufficient
-
   # prevent duplicated buy order
   validates :order_type, uniqueness: { scope: %i[order_type buyer_id item_id item_type], if: -> { buy_article? } }
   validates :total, presence: true
+  validate :ensure_total_sufficient
 
   enum order_type: { buy_article: 0, reward_article: 1 }
 
   after_commit :complete_payment, :create_revenue_transfers_async, \
                :update_item_revenue, :notify_subscribers_async, \
+               :notify_buyer,
                on: :create
 
   aasm column: :state do
@@ -168,6 +168,13 @@ class Order < ApplicationRecord
     messages.each do |message|
       SendMixinMessageWorker.perform_async message
     end
+  end
+
+  def notify_buyer
+    TextNotificationService.new.call(
+      "成功支付#{total} PRS #{buy_article? ? '购买' : '赞赏'}文章《#{item.title}》",
+      recipient_id: buyer.mixin_uuid
+    )
   end
 
   private
