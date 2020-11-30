@@ -1,16 +1,16 @@
 import { ApolloProvider } from '@apollo/client';
 import { User } from '@graphql';
-import { apolloClient, mixinUtils } from '@shared';
+import { apolloClient, hideLoader, mixinUtils } from '@shared';
 import { Col, Layout, Row } from 'antd';
-import React, { Suspense } from 'react';
+import isMobile from 'ismobilejs';
+import React, { Suspense, useEffect } from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
 import './App.less';
 import LoadingComponent from './components/LoadingComponent/LoadingComponent';
 import './i18n';
 import Menus from './Menus';
 import Routes from './Routes';
-import isMobile from 'ismobilejs';
-import { CurrentUserContext, UserAgentContext, PrsdiggContext } from './shared';
+import { CurrentUserContext, PrsdiggContext, UserAgentContext } from './shared';
 
 export default function App(props: {
   csrfToken: string;
@@ -20,6 +20,11 @@ export default function App(props: {
   };
 }) {
   const { csrfToken, currentUser, prsdigg } = props;
+
+  useEffect(() => {
+    hideLoader();
+  }, []);
+
   return (
     <Suspense fallback={<LoadingComponent />}>
       <ApolloProvider client={apolloClient('/graphql', csrfToken)}>
