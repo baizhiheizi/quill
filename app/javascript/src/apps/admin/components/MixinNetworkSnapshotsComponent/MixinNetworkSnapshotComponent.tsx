@@ -4,6 +4,7 @@ import {
   MixinNetworkSnapshot,
   useAdminMixinNetworkSnapshotConnectionQuery,
 } from '@graphql';
+import { FOXSWAP_APP_ID, SUPPORTED_TOKENS } from '@shared';
 import { Avatar, Button, Space, Table } from 'antd';
 import { ColumnProps } from 'antd/lib/table';
 import React from 'react';
@@ -51,6 +52,8 @@ export default function MixinNetworkSnapshotsComponent(props: {
           </a>
         ) : snapshot.userId === appId ? (
           'PRSDigg'
+        ) : snapshot.userId === FOXSWAP_APP_ID ? (
+          '4swap'
         ) : (
           snapshot.userId
         ),
@@ -68,6 +71,8 @@ export default function MixinNetworkSnapshotsComponent(props: {
           </Space>
         ) : snapshot.opponentId === appId ? (
           'PRSDigg'
+        ) : snapshot.opponentId === FOXSWAP_APP_ID ? (
+          '4swap'
         ) : (
           snapshot.opponentId
         ),
@@ -76,6 +81,18 @@ export default function MixinNetworkSnapshotsComponent(props: {
     {
       dataIndex: 'amount',
       key: 'amount',
+      render: (amount, snapshot) => (
+        <Space>
+          <Avatar
+            src={
+              SUPPORTED_TOKENS.find(
+                (token) => token.assetId === snapshot.assetId,
+              )?.iconUrl
+            }
+          />
+          <span>{amount}</span>
+        </Space>
+      ),
       title: 'amount',
     },
     {

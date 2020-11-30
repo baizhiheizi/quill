@@ -86,21 +86,16 @@ class Transfer < ApplicationRecord
       )
     end
 
-    notify_recipient_async if wallet.present?
+    notify_recipient if wallet.present?
   end
 
-  def notify_recipient_async
-    message = MixinBot.api.app_card(
-      conversation_id: MixinBot.api.unique_conversation_id(opponent_id),
-      data: {
-        icon_url: Article::PRS_ICON_URL,
-        title: amount.to_f.to_s,
-        description: 'PRS',
-        action: "mixin://snapshots?trace=#{trace_id}"
-      }
+  def notify_recipient
+    TransferNotificationService.new.call(
+      recipient_id: opponent_id,
+      asset_id: asset_id,
+      amount: amount,
+      trace_id: trace_id
     )
-
-    SendMixinMessageWorker.new.perform message
   end
 
   def process_async

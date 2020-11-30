@@ -1,0 +1,8 @@
+query Payment($traceId: ID!) {
+  payment(traceId: $traceId) {
+    traceId
+    amount
+    assetId
+    state
+  }
+}

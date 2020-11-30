@@ -28,39 +28,28 @@ import {
   Button,
   Col,
   Divider,
-  Modal,
   Progress,
-  Radio,
   Row,
   Space,
   Statistic,
 } from 'antd';
-import { encode as encode64 } from 'js-base64';
 import moment from 'moment';
-import QRCode from 'qrcode.react';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, useParams } from 'react-router-dom';
-import { v4 as uuidv4 } from 'uuid';
 import NotFoundPage from '../NotFoundPage/NotFoundPage';
-import './ArticlePage.less';
+import PayModalComponent from './components/PayModalComponent';
+import RewardModalComponent from './components/RewardModalComponent';
 
 export default function ArticlePage() {
   const { t } = useTranslation();
   const { uuid } = useParams<{ uuid: string }>();
-  const [paying, setPaying] = useState(false);
   const [rewardModalVisible, setRewardModalVisible] = useState(false);
-  const [rewardAmount, setRewardAmount] = useState(1);
+  const [payModalVisible, setPayModalVisible] = useState(false);
   const { appId } = usePrsdigg();
   const { mixinEnv } = useUserAgent();
   const currentUser = useCurrentUser();
-  const {
-    loading,
-    data,
-    refetch,
-    startPolling,
-    stopPolling,
-  }: ArticleQueryHookResult = useArticleQuery({
+  const { loading, data, refetch }: ArticleQueryHookResult = useArticleQuery({
     variables: { uuid },
   });
   const [upvoteArticle] = useUpvoteArticleMutation();
@@ -69,17 +58,6 @@ export default function ArticlePage() {
   useEffect(() => {
     return () => (document.title = PAGE_TITLE);
   }, [uuid]);
-
-  useEffect(() => {
-    return () => stopPolling();
-  }, [startPolling, stopPolling]);
-
-  const memo = encode64(
-    JSON.stringify({
-      t: 'BUY',
-      a: uuid,
-    }),
-  );
 
   if (loading) {
     return <LoadingComponent />;
@@ -91,78 +69,7 @@ export default function ArticlePage() {
     return <NotFoundPage />;
   }
 
-  if (article.authorized) {
-    stopPolling();
-  }
-
   document.title = `${article.title} - ${article.author.name}`;
-
-  const QRCodeModalContent = ({ url, type = 'pay' }) => (
-    <div style={{ textAlign: 'center' }}>
-      <div style={{ marginBottom: 5 }}>
-        <QRCode value={url} size={200} />
-      </div>
-      <div style={{ color: '#aaa' }}>
-        {type === 'pay'
-          ? t('messages.payWithMessenger')
-          : t('messages.viewWithMessenger')}
-      </div>
-    </div>
-  );
-
-  const handlePaying = () => {
-    const payUrl = `mixin://pay?recipient=${article.walletId || appId}&trace=${
-      article.paymentTraceId
-    }&memo=${memo}&asset=${article.assetId}&amount=${article.price.toFixed(8)}`;
-    if (mixinEnv) {
-      location.replace(payUrl);
-      startPolling(1500);
-      setPaying(true);
-    } else {
-      Modal.confirm({
-        icon: null,
-        centered: true,
-        content: <QRCodeModalContent url={payUrl} />,
-        okText: t('common.paidBtn'),
-        cancelText: t('common.cancelBtn'),
-        onOk: (close: () => any) => {
-          startPolling(1500);
-          setPaying(true);
-          close();
-        },
-      });
-    }
-  };
-  const handleRewarding = () => {
-    const payUrl = `mixin://pay?recipient=${
-      article.walletId || appId
-    }&trace=${uuidv4()}&memo=${encode64(
-      JSON.stringify({ t: 'REWARD', a: uuid }),
-    )}&asset=${article.assetId}&amount=${rewardAmount.toFixed(8)}`;
-    if (mixinEnv) {
-      location.replace(payUrl);
-    } else {
-      Modal.confirm({
-        icon: null,
-        centered: true,
-        content: <QRCodeModalContent url={payUrl} />,
-        okText: t('common.paidBtn'),
-        cancelText: t('common.cancelBtn'),
-      });
-    }
-    setRewardModalVisible(false);
-  };
-  const handleRedirectingRobot = (url: string) => {
-    if (mixinEnv) {
-      location.replace(url);
-    } else {
-      Modal.info({
-        icon: null,
-        centered: true,
-        content: <QRCodeModalContent url={url} type='user' />,
-      });
-    }
-  };
 
   return (
     <div>
@@ -224,70 +131,43 @@ export default function ArticlePage() {
           </div>
           <div>
             {currentUser ? (
-              paying ? (
-                <div>
-                  <div>
-                    <Button type='primary' loading disabled danger>
-                      {t('articlePage.pollingPayment')}
-                    </Button>
-                  </div>
-                  <div>
-                    <Button
-                      type='link'
-                      onClick={() => {
-                        setPaying(false);
-                        stopPolling();
-                      }}
-                    >
-                      {t('common.cancelBtn')}
-                    </Button>
-                  </div>
-                </div>
-              ) : (
-                <div>
-                  <Button type='primary' onClick={handlePaying}>
-                    {article.readers.totalCount === 0
-                      ? t('articlePage.firstReaderBtn')
-                      : t('articlePage.payToReadBtn')}
-                  </Button>
-                  <div
-                    style={{ marginTop: 10, fontSize: '0.8rem', color: '#aaa' }}
-                  >
-                    {t('articlePage.alreadyPaid1')}{' '}
-                    <a onClick={() => refetch()}>
-                      {t('articlePage.alreadyPaid2')}
-                    </a>
-                  </div>
-                  <div
-                    style={{
-                      marginTop: 5,
-                      fontSize: '0.8rem',
-                      color: '#aaa',
+              <div>
+                <Button type='primary' onClick={() => setPayModalVisible(true)}>
+                  {article.readers.totalCount === 0
+                    ? t('articlePage.firstReaderBtn')
+                    : t('articlePage.payToReadBtn')}
+                </Button>
+                {payModalVisible && (
+                  <PayModalComponent
+                    visible={payModalVisible}
+                    price={article.price}
+                    walletId={article.walletId}
+                    articleUuid={article.uuid}
+                    paymentTraceId={article.paymentTraceId}
+                    onCancel={() => {
+                      setPayModalVisible(false);
+                      refetch();
                     }}
-                  >
-                    {t('articlePage.buyPRSTips1')}{' '}
-                    <a
-                      onClick={() => {
-                        handleRedirectingRobot(
-                          'mixin://users/61103d28-3ac2-44a2-ae34-bd956070dab1',
-                        );
-                      }}
-                    >
-                      ExinOne
-                    </a>{' '}
-                    {t('articlePage.buyPRSTips2')}{' '}
-                    <a
-                      onClick={() => {
-                        handleRedirectingRobot(
-                          'mixin://users/a753e0eb-3010-4c4a-a7b2-a7bda4063f62',
-                        );
-                      }}
-                    >
-                      4swap
-                    </a>{' '}
-                  </div>
+                  />
+                )}
+                <div
+                  style={{ marginTop: 10, fontSize: '0.8rem', color: '#aaa' }}
+                >
+                  {t('articlePage.alreadyPaid1')}{' '}
+                  <a onClick={() => refetch()}>
+                    {t('articlePage.alreadyPaid2')}
+                  </a>
                 </div>
-              )
+                <div
+                  style={{
+                    marginTop: 5,
+                    fontSize: '0.8rem',
+                    color: '#aaa',
+                  }}
+                >
+                  {t('articlePage.buyPRSTips')}
+                </div>
+              </div>
             ) : (
               <Button
                 type='primary'
@@ -406,31 +286,17 @@ export default function ArticlePage() {
             >
               <HeartOutlined /> {t('articlePage.rewardBtn')}
             </Button>
-            <Modal
-              className='reward-modal'
-              centered
-              closable={false}
-              title={t('articlePage.rewardModal.title')}
-              okText={t('articlePage.rewardModal.okText')}
-              cancelText={t('articlePage.rewardModal.cancelText')}
-              visible={rewardModalVisible}
-              onCancel={() => setRewardModalVisible(false)}
-              onOk={handleRewarding}
-            >
-              <Radio.Group
-                options={[
-                  { label: '1', value: 1 },
-                  { label: '8', value: 8 },
-                  { label: '32', value: 32 },
-                  { label: '64', value: 64 },
-                  { label: '256', value: 256 },
-                  { label: '1024', value: 1024 },
-                ]}
-                value={rewardAmount}
-                onChange={(e) => setRewardAmount(e.target.value)}
-                optionType='button'
+            {rewardModalVisible && (
+              <RewardModalComponent
+                visible={rewardModalVisible}
+                articleUuid={uuid}
+                onCancel={() => {
+                  setRewardModalVisible(false);
+                  refetch();
+                }}
+                walletId={article.walletId}
               />
-            </Modal>
+            )}
           </div>
         </div>
       )}

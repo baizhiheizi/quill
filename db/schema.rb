@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_26_025923) do
+ActiveRecord::Schema.define(version: 2020_11_27_064237) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -172,6 +172,24 @@ ActiveRecord::Schema.define(version: 2020_11_26_025923) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["trace_id"], name: "index_payments_on_trace_id", unique: true
+  end
+
+  create_table "swap_orders", force: :cascade do |t|
+    t.bigint "payment_id"
+    t.uuid "trace_id"
+    t.uuid "user_id"
+    t.string "state"
+    t.uuid "pay_asset_id", comment: "paid asset"
+    t.uuid "fill_asset_id", comment: "swapped asset"
+    t.decimal "funds", comment: "paid amount"
+    t.decimal "amount", comment: "swapped amount"
+    t.decimal "min_amount", comment: "minimum swapped amount"
+    t.json "raw", comment: "raw order response"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["payment_id"], name: "index_swap_orders_on_payment_id"
+    t.index ["trace_id"], name: "index_swap_orders_on_trace_id", unique: true
+    t.index ["user_id"], name: "index_swap_orders_on_user_id"
   end
 
   create_table "transfers", force: :cascade do |t|

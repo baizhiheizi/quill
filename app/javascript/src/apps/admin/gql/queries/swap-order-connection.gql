@@ -1,0 +1,29 @@
+query AdminSwapOrderConnection($userId: ID, $after: String) {
+  adminSwapOrderConnection(userId: $userId, after: $after) {
+    nodes {
+      id
+      traceId
+      state
+      funds
+      amount
+      minAmount
+      fillAssetId
+      payAssetId
+      article {
+        uuid
+        title
+        price
+      }
+      payer {
+        name
+        avatarUrl
+        mixinId
+      }
+      createdAt
+    }
+    pageInfo {
+      hasNextPage
+      endCursor
+    }
+  }
+}

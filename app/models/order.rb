@@ -41,6 +41,10 @@ class Order < ApplicationRecord
 
   validate :ensure_total_sufficient
 
+  # prevent duplicated buy order
+  validates :order_type, uniqueness: { scope: %i[order_type buyer_id item_id item_type], if: -> { buy_article? } }
+  validates :total, presence: true
+
   enum order_type: { buy_article: 0, reward_article: 1 }
 
   after_commit :complete_payment, :create_revenue_transfers_async, \
@@ -65,6 +69,9 @@ class Order < ApplicationRecord
     # the share for invested readers before
     amount = total * READER_RATIO
 
+    # payment maybe swapped
+    revenue_asset_id = payment.swap_order&.fill_asset_id || payment.asset_id
+
     # the present orders
     _orders =
       item.orders
@@ -84,7 +91,7 @@ class Order < ApplicationRecord
         wallet: payment.wallet,
         transfer_type: :reader_revenue,
         opponent_id: _order.buyer.mixin_uuid,
-        asset_id: payment.asset_id,
+        asset_id: revenue_asset_id,
         amount: _amount.to_f.to_s,
         memo: "读者收益来自文章《#{item.title}》".truncate(140)
       ).find_or_create_by!(
@@ -101,7 +108,7 @@ class Order < ApplicationRecord
         wallet: payment.wallet,
         transfer_type: :prsdigg_revenue,
         opponent_id: MixinBot.client_id,
-        asset_id: payment.asset_id,
+        asset_id: revenue_asset_id,
         amount: _prsdigg_amount.to_f.to_s,
         memo: "article uuid: #{item.uuid}》".truncate(140)
       ).find_or_create_by!(
@@ -114,9 +121,9 @@ class Order < ApplicationRecord
       wallet: payment.wallet,
       transfer_type: :author_revenue,
       opponent_id: item.author.mixin_uuid,
-      asset_id: payment.asset_id,
+      asset_id: revenue_asset_id,
       amount: (total - _distributed_amount - _prsdigg_amount).round(8),
-      memo: "作者收益来自文章《#{item.title}》".truncate(140)
+      memo: "#{payment.payer.name} #{buy_article? ? '购买' : '赞赏'}了你的文章《#{item.title}》".truncate(140)
     ).find_or_create_by!(
       trace_id: MixinBot.api.unique_conversation_id(trace_id, item.author.mixin_uuid)
     )
@@ -135,7 +142,6 @@ class Order < ApplicationRecord
   end
 
   def ensure_total_sufficient
-    errors.add(total: 'Wrong token!') unless payment.asset_id == item.asset_id
     errors.add(:total, 'Insufficient amount!') if buy_article? && total < item.price
   end
 
@@ -167,10 +173,21 @@ class Order < ApplicationRecord
   private
 
   def setup_attributes
+    amount =
+      if payment.asset_id == Article::PRS_ASSET_ID
+        payment.amount
+      elsif payment.swap_order&.swapped? || payment.swap_order&.completed?
+        if buy_article?
+          payment.swap_order.min_amount
+        elsif reward_article?
+          payment.swap_order.amount
+        end
+      end
+
     assign_attributes(
       buyer: payment.payer,
       seller: item.author,
-      total: payment.amount
+      total: amount
     )
   end
 end

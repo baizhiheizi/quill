@@ -27,6 +27,7 @@ class MixinNetworkUser < ApplicationRecord
 
   belongs_to :owner, optional: true, inverse_of: false, polymorphic: true
   has_many :snapshots, class_name: 'MixinNetworkSnapshot', foreign_key: :user_id, primary_key: :uuid, dependent: :nullify, inverse_of: :wallet
+  has_many :swap_orders, foreign_key: :user_id, primary_key: :uuid, dependent: :nullify, inverse_of: :wallet
   has_many :transfers, foreign_key: :wallet_id, primary_key: :uuid, dependent: :nullify, inverse_of: :wallet
 
   validates :name, presence: true
@@ -83,7 +84,7 @@ class MixinNetworkUser < ApplicationRecord
   def setup_attributes
     return unless new_record?
 
-    r = MixinBot.api.create_user(name || 'PRSDigg account')
+    r = MixinBot.api.create_user(name || 'PRSDigg Broker')
     raise r.inspect if r['error'].present?
 
     self.raw = r['data']

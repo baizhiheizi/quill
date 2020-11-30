@@ -11,6 +11,7 @@ import DashboardPage from './pages/DashboardPage/DashboardPage';
 import MixinMessagesPage from './pages/MixinMessagesPage/MixinMessagesPage';
 import MixinNetworkSnapshotsPage from './pages/MixinNetworkSnapshotsPage/MixinNetworkSnapshotsPage';
 import PaymentsPage from './pages/PaymentsPage/PaymentsPage';
+import SwapOrdersPage from './pages/SwapOrdersPage/SwapOrdersPage';
 import TransfersPage from './pages/TransfersPage/TransfersPage';
 import UsersPage from './pages/UsersPage/UsersPage';
 
@@ -34,6 +35,9 @@ export default function Routes() {
       </Route>
       <Route path='/payments' exact>
         <PaymentsPage />
+      </Route>
+      <Route path='/swap_orders' exact>
+        <SwapOrdersPage />
       </Route>
       <Route path='/transfers' exact>
         <TransfersPage />
