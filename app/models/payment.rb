@@ -94,7 +94,7 @@ class Payment < ApplicationRecord
     )
   rescue StandardError => e
     Rails.logger.error e.inspect
-    generate_refund_transfer!
+    reload.generate_refund_transfer!
   end
 
   def place_article_order!
@@ -116,11 +116,11 @@ class Payment < ApplicationRecord
     end
   rescue StandardError => e
     Rails.logger.error e.inspect
-    generate_refund_transfer!
+    reload.generate_refund_transfer!
   end
 
   def generate_refund_transfer!
-    return if order.present?
+    return if order&.id.present?
     return if refund_transfer.present?
 
     create_refund_transfer!(
