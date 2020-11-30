@@ -102,7 +102,6 @@ export default function PayModalComponent(props: {
       className='pay-modal'
       title={t('articlePage.payModal.title')}
       centered
-      closable
       destroyOnClose={true}
       maskClosable={false}
       visible={visible}
