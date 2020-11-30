@@ -18,7 +18,7 @@ module Foxswap
         amount: params[:amount]&.to_s
       }
 
-      client.post path, json: payload
+      client.post path, json: payload, headers: { 'Authorization': Rails.application.credentials.dig(:foxswap, :authorization) }
     end
 
     def order(order_id, authorization:)
