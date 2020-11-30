@@ -13,16 +13,4 @@ module Clockwork
   configure do |config|
     config[:tz] = 'Asia/Hong_Kong'
   end
-
-  every 1.minute, 'batch_process_transfer_worker.rb' do
-    sidekiq_perform_async('BatchProcessTransferWorker')
-  end
-
-  every 1.minute, 'batch_process_mixin_message_worker.rb' do
-    sidekiq_perform_async('BatchProcessMixinMessageWorker')
-  end
-
-  every 1.minute, 'batch_process_mixin_network_snapshot_worker.rb' do
-    sidekiq_perform_async('BatchProcessMixinNetworkSnapshotWorker')
-  end
 end
