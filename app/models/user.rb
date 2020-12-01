@@ -82,8 +82,6 @@ class User < ApplicationRecord
       ).order(comments_count: :desc)
   }
 
-  after_create :create_wallet!
-
   # subscribe user for new articles
   action_store :authoring_subscribe, :user, counter_cache: 'authoring_subscribers_count'
   # subscribe user for buying or rewarding articles
