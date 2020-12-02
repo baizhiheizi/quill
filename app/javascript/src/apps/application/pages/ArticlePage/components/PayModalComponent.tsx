@@ -45,7 +45,7 @@ export default function PayModalComponent(props: {
   const { loading, data } = useSwapPreOrderQuery({
     fetchPolicy: 'network-only',
     notifyOnNetworkStatusChange: true,
-    variables: { payAssetId: assetId, amount: price },
+    variables: { payAssetId: assetId, amount: price * 1.01 },
   });
   const handlePaying = () => {
     setPaying(true);

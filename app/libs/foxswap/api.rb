@@ -15,7 +15,7 @@ module Foxswap
         pay_asset_id: params[:pay_asset_id],
         fill_asset_id: params[:fill_asset_id],
         funds: params[:funds]&.to_s,
-        amount: params[:amount]&.to_s
+        amount: params[:amount]&.round(8)&.to_s
       }
 
       client.post path, json: payload, headers: { 'Authorization': Rails.application.credentials.dig(:foxswap, :authorization) }

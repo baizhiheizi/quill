@@ -15,7 +15,6 @@ module Resolvers
         fill_asset_id: Article::PRS_ASSET_ID,
         amount: params[:amount]
       )
-      Rails.logger.info r
 
       r['data']
     end
