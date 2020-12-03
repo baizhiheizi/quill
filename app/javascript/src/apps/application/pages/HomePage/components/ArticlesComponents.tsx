@@ -21,7 +21,6 @@ export default function ArticlesComponent(props: {
     loading,
     fetchMore,
   }: ArticleConnectionQueryHookResult = useArticleConnectionQuery({
-    fetchPolicy: 'network-only',
     notifyOnNetworkStatusChange: true,
     variables: {
       order,
@@ -57,18 +56,6 @@ export default function ArticlesComponent(props: {
               loading={loading}
               onClick={() => {
                 fetchMore({
-                  updateQuery: (prev, { fetchMoreResult }) => {
-                    if (!fetchMoreResult) {
-                      return prev;
-                    }
-                    const connection = fetchMoreResult.articleConnection;
-                    connection.nodes = prev.articleConnection.nodes.concat(
-                      connection.nodes,
-                    );
-                    return Object.assign({}, prev, {
-                      articleConnection: connection,
-                    });
-                  },
                   variables: {
                     after: endCursor,
                     order,

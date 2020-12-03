@@ -67,18 +67,6 @@ function SearchResultCompoent(props: { query?: string }) {
                 loading={loading}
                 onClick={() => {
                   fetchMore({
-                    updateQuery: (prev, { fetchMoreResult }) => {
-                      if (!fetchMoreResult) {
-                        return prev;
-                      }
-                      const connection = fetchMoreResult.articleConnection;
-                      connection.nodes = prev.articleConnection.nodes.concat(
-                        connection.nodes,
-                      );
-                      return Object.assign({}, prev, {
-                        articleConnection: connection,
-                      });
-                    },
                     variables: {
                       after: endCursor,
                     },

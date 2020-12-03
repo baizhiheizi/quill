@@ -1,12 +1,12 @@
-import { SwapOrder, useAdminSwapOrderConnectionQuery } from '@graphql';
+import { SUPPORTED_TOKENS } from '@/shared';
 import LoadingComponent from '@admin/components/LoadingComponent/LoadingComponent';
-import { Avatar, PageHeader, Space, Table } from 'antd';
+import { SwapOrder, useAdminSwapOrderConnectionQuery } from '@graphql';
+import { Avatar, Button, PageHeader, Space, Table } from 'antd';
 import { ColumnProps } from 'antd/es/table';
 import React from 'react';
-import { SUPPORTED_TOKENS } from '@/shared';
 
 export default function SwapOrdersPage() {
-  const { data, loading } = useAdminSwapOrderConnectionQuery();
+  const { data, loading, fetchMore } = useAdminSwapOrderConnectionQuery();
   if (loading) {
     return <LoadingComponent />;
   }
@@ -86,6 +86,22 @@ export default function SwapOrdersPage() {
         rowKey='traceId'
         pagination={false}
       />
+      <div style={{ margin: '1rem', textAlign: 'center' }}>
+        <Button
+          type='link'
+          loading={loading}
+          disabled={!hasNextPage}
+          onClick={() => {
+            fetchMore({
+              variables: {
+                after: endCursor,
+              },
+            });
+          }}
+        >
+          {hasNextPage ? 'Load More' : 'No More'}
+        </Button>
+      </div>
     </div>
   );
 }

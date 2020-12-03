@@ -20,9 +20,7 @@ export default function CommentsComponent() {
     data,
     loading,
     fetchMore,
-  }: CommentConnectionQueryHookResult = useCommentConnectionQuery({
-    fetchPolicy: 'network-only',
-  });
+  }: CommentConnectionQueryHookResult = useCommentConnectionQuery();
 
   if (loading) {
     return <LoadingComponent />;
@@ -53,18 +51,6 @@ export default function CommentsComponent() {
               type='link'
               onClick={() => {
                 fetchMore({
-                  updateQuery: (prev, { fetchMoreResult }) => {
-                    if (!fetchMoreResult) {
-                      return prev;
-                    }
-                    const connection = fetchMoreResult.commentConnection;
-                    connection.nodes = prev.commentConnection.nodes.concat(
-                      connection.nodes,
-                    );
-                    return Object.assign({}, prev, {
-                      commentConnection: connection,
-                    });
-                  },
                   variables: {
                     after: endCursor,
                   },

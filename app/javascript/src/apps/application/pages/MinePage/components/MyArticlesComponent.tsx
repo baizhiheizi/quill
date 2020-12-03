@@ -94,18 +94,6 @@ export default function MyArticlesComponent(props: {
               loading={loading}
               onClick={() => {
                 fetchMore({
-                  updateQuery: (prev, { fetchMoreResult }) => {
-                    if (!fetchMoreResult) {
-                      return prev;
-                    }
-                    const connection = fetchMoreResult.myArticleConnection;
-                    connection.nodes = prev.myArticleConnection.nodes.concat(
-                      connection.nodes,
-                    );
-                    return Object.assign({}, prev, {
-                      myArticleConnection: connection,
-                    });
-                  },
                   variables: {
                     after: endCursor,
                     type,

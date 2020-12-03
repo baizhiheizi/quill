@@ -149,18 +149,6 @@ export default function CommentsComponent(props: {
           disabled={!hasNextPage}
           onClick={() => {
             fetchMore({
-              updateQuery: (prev, { fetchMoreResult }) => {
-                if (!fetchMoreResult) {
-                  return prev;
-                }
-                const connection = fetchMoreResult.commentConnection;
-                connection.nodes = prev.commentConnection.nodes.concat(
-                  connection.nodes,
-                );
-                return Object.assign({}, prev, {
-                  commentConnection: connection,
-                });
-              },
               variables: {
                 after: endCursor,
               },

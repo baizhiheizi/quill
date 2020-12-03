@@ -49,18 +49,6 @@ export default function MyPaymentsComponent() {
               loading={loading}
               onClick={() => {
                 fetchMore({
-                  updateQuery: (prev, { fetchMoreResult }) => {
-                    if (!fetchMoreResult) {
-                      return prev;
-                    }
-                    const connection = fetchMoreResult.myPaymentConnection;
-                    connection.nodes = prev.myPaymentConnection.nodes.concat(
-                      connection.nodes,
-                    );
-                    return Object.assign({}, prev, {
-                      myPaymentConnection: connection,
-                    });
-                  },
                   variables: {
                     after: endCursor,
                   },

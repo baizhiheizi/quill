@@ -123,19 +123,6 @@ export default function MixinNetworkSnapshotsComponent(props: {
           disabled={!hasNextPage}
           onClick={() => {
             fetchMore({
-              updateQuery: (prev, { fetchMoreResult }) => {
-                if (!fetchMoreResult) {
-                  return prev;
-                }
-                const connection =
-                  fetchMoreResult.adminMixinNetworkSnapshotConnection;
-                connection.nodes = prev.adminMixinNetworkSnapshotConnection.nodes.concat(
-                  connection.nodes,
-                );
-                return Object.assign({}, prev, {
-                  adminMixinNetworkSnapshotConnection: connection,
-                });
-              },
               variables: {
                 after: endCursor,
               },

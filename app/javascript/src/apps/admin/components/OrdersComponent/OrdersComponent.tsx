@@ -78,18 +78,6 @@ export default function OrdersComponent(props: {
           disabled={!hasNextPage}
           onClick={() => {
             fetchMore({
-              updateQuery: (prev, { fetchMoreResult }) => {
-                if (!fetchMoreResult) {
-                  return prev;
-                }
-                const connection = fetchMoreResult.adminOrderConnection;
-                connection.nodes = prev.adminOrderConnection.nodes.concat(
-                  connection.nodes,
-                );
-                return Object.assign({}, prev, {
-                  adminOrderConnection: connection,
-                });
-              },
               variables: {
                 after: endCursor,
               },

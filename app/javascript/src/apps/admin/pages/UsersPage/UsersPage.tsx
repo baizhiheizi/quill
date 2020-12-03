@@ -138,18 +138,6 @@ export function UsersComponent(props: { query?: string; orderBy?: string }) {
           disabled={!hasNextPage}
           onClick={() => {
             fetchMore({
-              updateQuery: (prev, { fetchMoreResult }) => {
-                if (!fetchMoreResult) {
-                  return prev;
-                }
-                const connection = fetchMoreResult.adminUserConnection;
-                connection.nodes = prev.adminUserConnection.nodes.concat(
-                  connection.nodes,
-                );
-                return Object.assign({}, prev, {
-                  adminUserConnection: connection,
-                });
-              },
               variables: {
                 after: endCursor,
               },

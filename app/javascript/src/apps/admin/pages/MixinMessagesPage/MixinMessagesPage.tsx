@@ -1,8 +1,8 @@
-import { MixinMessage, useAdminMixinMessageConnectionQuery } from '@graphql';
-import React from 'react';
 import LoadingComponent from '@admin/components/LoadingComponent/LoadingComponent';
-import { ColumnProps } from 'antd/es/table';
+import { MixinMessage, useAdminMixinMessageConnectionQuery } from '@graphql';
 import { Avatar, Button, PageHeader, Space, Table } from 'antd';
+import { ColumnProps } from 'antd/es/table';
+import React from 'react';
 
 export default function MixinMessagesPage() {
   const { data, loading, fetchMore } = useAdminMixinMessageConnectionQuery();
@@ -79,18 +79,6 @@ export default function MixinMessagesPage() {
           disabled={!hasNextPage}
           onClick={() => {
             fetchMore({
-              updateQuery: (prev, { fetchMoreResult }) => {
-                if (!fetchMoreResult) {
-                  return prev;
-                }
-                const connection = fetchMoreResult.adminMixinMessageConnection;
-                connection.nodes = prev.adminMixinMessageConnection.nodes.concat(
-                  connection.nodes,
-                );
-                return Object.assign({}, prev, {
-                  adminMixinMessageConnection: connection,
-                });
-              },
               variables: {
                 after: endCursor,
               },

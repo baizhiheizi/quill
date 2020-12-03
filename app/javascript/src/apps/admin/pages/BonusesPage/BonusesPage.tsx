@@ -159,18 +159,6 @@ export default function BonusesPage() {
           disabled={!hasNextPage}
           onClick={() => {
             fetchMore({
-              updateQuery: (prev, { fetchMoreResult }) => {
-                if (!fetchMoreResult) {
-                  return prev;
-                }
-                const connection = fetchMoreResult.adminBonusConnection;
-                connection.nodes = prev.adminBonusConnection.nodes.concat(
-                  connection.nodes,
-                );
-                return Object.assign({}, prev, {
-                  adminBonusConnection: connection,
-                });
-              },
               variables: {
                 after: endCursor,
               },

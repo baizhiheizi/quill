@@ -158,18 +158,6 @@ export default function ArticlesPage() {
           disabled={!hasNextPage}
           onClick={() => {
             fetchMore({
-              updateQuery: (prev, { fetchMoreResult }) => {
-                if (!fetchMoreResult) {
-                  return prev;
-                }
-                const connection = fetchMoreResult.adminArticleConnection;
-                connection.nodes = prev.adminArticleConnection.nodes.concat(
-                  connection.nodes,
-                );
-                return Object.assign({}, prev, {
-                  adminArticleConnection: connection,
-                });
-              },
               variables: {
                 after: endCursor,
               },

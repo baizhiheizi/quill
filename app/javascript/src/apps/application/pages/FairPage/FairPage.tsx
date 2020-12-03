@@ -4,7 +4,7 @@ import {
   useRevenueChartQuery,
   useStatisticsQuery,
   useTransferConnectionQuery,
-} from '@/graphql';
+} from '@graphql';
 import { Avatar, Button, Col, List, Row, Statistic, Tabs, Tag } from 'antd';
 import moment from 'moment';
 import React from 'react';
@@ -156,18 +156,6 @@ function TransferList() {
               loading={loading}
               onClick={() => {
                 fetchMore({
-                  updateQuery: (prev, { fetchMoreResult }) => {
-                    if (!fetchMoreResult) {
-                      return prev;
-                    }
-                    const connection = fetchMoreResult.transferConnection;
-                    connection.nodes = prev.transferConnection.nodes.concat(
-                      connection.nodes,
-                    );
-                    return Object.assign({}, prev, {
-                      transferConnection: connection,
-                    });
-                  },
                   variables: {
                     after: endCursor,
                   },

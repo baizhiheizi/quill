@@ -49,18 +49,6 @@ export default function MyTransfersComponent() {
               loading={loading}
               onClick={() => {
                 fetchMore({
-                  updateQuery: (prev, { fetchMoreResult }) => {
-                    if (!fetchMoreResult) {
-                      return prev;
-                    }
-                    const connection = fetchMoreResult.myTransferConnection;
-                    connection.nodes = prev.myTransferConnection.nodes.concat(
-                      connection.nodes,
-                    );
-                    return Object.assign({}, prev, {
-                      myTransferConnection: connection,
-                    });
-                  },
                   variables: {
                     after: endCursor,
                   },

@@ -101,18 +101,6 @@ export default function PaymentsPage() {
           disabled={!hasNextPage}
           onClick={() => {
             fetchMore({
-              updateQuery: (prev, { fetchMoreResult }) => {
-                if (!fetchMoreResult) {
-                  return prev;
-                }
-                const connection = fetchMoreResult.adminPaymentConnection;
-                connection.nodes = prev.adminPaymentConnection.nodes.concat(
-                  connection.nodes,
-                );
-                return Object.assign({}, prev, {
-                  adminPaymentConnection: connection,
-                });
-              },
               variables: {
                 after: endCursor,
               },

@@ -1,3 +1,4 @@
+import LoadingComponent from '@admin/components/LoadingComponent/LoadingComponent';
 import {
   Announcement,
   useAdminAnnouncementConnectionQuery,
@@ -6,7 +7,7 @@ import {
   useAdminDeliverAnouncementMutation,
   useAdminPreviewAnouncementMutation,
   useAdminUpdateAnouncementMutation,
-} from '@/graphql';
+} from '@graphql';
 import {
   Button,
   Divider,
@@ -20,7 +21,6 @@ import {
 } from 'antd';
 import { ColumnProps } from 'antd/es/table';
 import React, { useState } from 'react';
-import LoadingComponent from '../../components/LoadingComponent/LoadingComponent';
 
 export default function AnnouncementsPage() {
   const {
@@ -290,18 +290,6 @@ export default function AnnouncementsPage() {
           disabled={!hasNextPage}
           onClick={() => {
             fetchMore({
-              updateQuery: (prev, { fetchMoreResult }) => {
-                if (!fetchMoreResult) {
-                  return prev;
-                }
-                const connection = fetchMoreResult.adminAnnouncementConnection;
-                connection.nodes = prev.adminAnnouncementConnection.nodes.concat(
-                  connection.nodes,
-                );
-                return Object.assign({}, prev, {
-                  adminAnnouncementConnection: connection,
-                });
-              },
               variables: {
                 after: endCursor,
               },

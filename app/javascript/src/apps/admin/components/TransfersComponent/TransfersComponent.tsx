@@ -129,18 +129,6 @@ export default function TransfersComponent(props: {
           disabled={!hasNextPage}
           onClick={() => {
             fetchMore({
-              updateQuery: (prev, { fetchMoreResult }) => {
-                if (!fetchMoreResult) {
-                  return prev;
-                }
-                const connection = fetchMoreResult.adminTransferConnection;
-                connection.nodes = prev.adminTransferConnection.nodes.concat(
-                  connection.nodes,
-                );
-                return Object.assign({}, prev, {
-                  adminTransferConnection: connection,
-                });
-              },
               variables: {
                 after: endCursor,
               },
