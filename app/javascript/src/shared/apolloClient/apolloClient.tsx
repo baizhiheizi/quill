@@ -4,16 +4,20 @@ const customizedConnectionMergeFunction = (
   keyArgs: false | string[] = false,
 ): {
   keyArgs: any;
-  merge: (existing: any, incoming: any) => any;
+  merge: (existing: any, incoming: any, options?: any) => any;
 } => {
   return {
     keyArgs,
-    merge(existing: any, incoming: any) {
-      const nodes = existing ? [...existing.nodes] : [];
-      return {
-        ...incoming,
-        nodes: [...nodes, ...incoming.nodes],
-      };
+    merge(existing: any, incoming: any, { args }) {
+      if (args?.after === existing?.pageInfo?.endCursor) {
+        const nodes = existing ? [...existing.nodes] : [];
+        return {
+          ...incoming,
+          nodes: [...nodes, ...incoming.nodes],
+        };
+      } else {
+        return incoming;
+      }
     },
   };
 };
