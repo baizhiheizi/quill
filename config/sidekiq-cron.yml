@@ -1,0 +1,9 @@
+transfer_monitor_worker:
+  cron: '* * * * *'
+  class: 'TransferMonitorWorker'
+mixin_message_monitor_worker:
+  cron: '* * * * *'
+  class: 'MixinMessageMonitorWorker'
+mixin_network_snapshot_monitor_worker:
+  cron: '* * * * *'
+  class: 'MixinNetworkSnapshotMonitorWorker'

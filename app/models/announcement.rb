@@ -50,19 +50,11 @@ class Announcement < ApplicationRecord
   end
 
   def preview_as_text
-    message = MixinBot.api.plain_text(
-      conversation_id: Rails.application.credentials.dig(:admin, :group_conversation_id),
-      data: content
-    )
-    SendMixinMessageWorker.perform_async message
+    AdminNotificationService.new.text content
   end
 
   def preview_as_post
-    message = MixinBot.api.plain_post(
-      conversation_id: Rails.application.credentials.dig(:admin, :group_conversation_id),
-      data: content
-    )
-    SendMixinMessageWorker.perform_async message
+    AdminNotificationService.new.post content
   end
 
   def deliver_as_post

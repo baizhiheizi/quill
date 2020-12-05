@@ -33,6 +33,8 @@ gem 'mixin_bot', github: 'an-lee/mixin_bot', branch: 'master'
 gem 'activestorage-aliyun'
 # Simple, efficient background processing for Ruby http://sidekiq.org
 gem 'sidekiq', '~> 6.0'
+# Scheduler / Cron for Sidekiq jobs
+gem 'sidekiq-cron'
 # Use Active Storage variant
 gem 'image_processing', '~> 1.2'
 # Reduces boot times through caching; required in config/boot.rb
@@ -49,8 +51,6 @@ gem 'batch-loader'
 gem 'aasm'
 # Allows to use ActiveRecord transactional callbacks outside of ActiveRecord models, literally everywhere in your application.
 gem 'after_commit_everywhere'
-# Background job scheduler
-gem 'clockwork', require: false
 # Store different kinds of actions (Like, Follow, Star, Block, etc.) in a single table via ActiveRecord Polymorphic Associations.
 gem 'action-store'
 # The simplest way to group temporal data

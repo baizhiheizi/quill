@@ -45,6 +45,16 @@ class GraphqlController < ApplicationController
     logger.error err.message
     logger.error err.backtrace.join("\n")
 
+    AdminNotificationService.new.post(
+      <<~ERR
+        #{err.message}
+
+        ```
+        #{err.backtrace.join("\n")}
+        ```
+      ERR
+    )
+
     render json: { errors: [{ message: err.message, backtrace: err.backtrace }], data: {} }, status: :internal_server_error
   end
 end

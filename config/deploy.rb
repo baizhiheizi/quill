@@ -10,7 +10,7 @@ require 'mina/rbenv'
 require 'mina/logs'
 require 'mina/multistage'
 
-%w[puma blaze sidekiq clockwork].each do |job|
+%w[puma blaze sidekiq].each do |job|
   namespace job.to_sym do
     task :start do
       command %(echo "-----> exec: sudo systemctl start #{job}")
@@ -96,7 +96,6 @@ task :deploy do
       invoke :'rbenv:load'
       invoke :'puma:restart'
       invoke :'sidekiq:restart'
-      invoke :'clockwork:restart'
       invoke :'blaze:restart'
     end
   end
