@@ -23,7 +23,7 @@ export default function UserCardComponent(props: {
         avatar={<Avatar src={avatarUrl} />}
         title={
           <Row style={{ alignItems: 'center' }}>
-            <Col style={{ flex: 1 }}>{name}</Col>
+            <Col style={{ flex: 1, marginRight: 10 }}>{name}</Col>
             {mixinId && (!currentUser || currentUser.mixinId !== mixinId) && (
               <Col>
                 <Button type='primary' shape='round' size='small'>
