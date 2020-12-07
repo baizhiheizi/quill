@@ -78,6 +78,8 @@ class Comment < ApplicationRecord
   private
 
   def ensure_author_account_normal
+    return unless new_record?
+
     errors.add(:author, 'account is banned!') if author&.banned?
   end
 end

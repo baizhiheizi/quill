@@ -84,12 +84,12 @@ class Article < ApplicationRecord
       transitions from: :hidden, to: :published
     end
 
-    event :block do
+    event :block, after_commit: :notify_author_blocked do
       transitions from: :hidden, to: :blocked
       transitions from: :published, to: :blocked
     end
 
-    event :unblock do
+    event :unblock, after_commit: :notify_author_unblocked do
       transitions from: :blocked, to: :hidden
     end
   end
@@ -155,6 +155,20 @@ class Article < ApplicationRecord
     @wallet_id = wallet&.uuid
   end
 
+  def notify_author_blocked
+    TextNotificationService.new.call(
+      "您的文章《#{title}》已被管理员屏蔽。如有异议，可直接回复信息，进行申诉。",
+      recipient_id: author.mixin_uuid
+    )
+  end
+
+  def notify_author_unblocked
+    TextNotificationService.new.call(
+      "您的文章《#{title}》已被管理员撤销屏蔽。",
+      recipient_id: author.mixin_uuid
+    )
+  end
+
   private
 
   def setup_attributes
@@ -168,6 +182,8 @@ class Article < ApplicationRecord
   end
 
   def ensure_author_account_normal
+    return unless new_record?
+
     errors.add(:author, 'account is banned!') if author&.banned?
   end
 end
