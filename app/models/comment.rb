@@ -27,6 +27,7 @@ class Comment < ApplicationRecord
   belongs_to :commentable, polymorphic: true, counter_cache: true
 
   validates :content, presence: true, length: { maximum: 1000 }
+  validate :ensure_author_account_normal
 
   after_commit :notify_subsribers_async, :subscribe_for_author, on: :create
 
@@ -72,5 +73,11 @@ class Comment < ApplicationRecord
 
   def subscribe_for_author
     author.create_action :commenting_subscribe, target: commentable
+  end
+
+  private
+
+  def ensure_author_account_normal
+    errors.add(:author, 'account is banned!') if author&.banned?
   end
 end

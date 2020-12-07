@@ -52,6 +52,7 @@ class Article < ApplicationRecord
   validates :intro, presence: true, length: { maximum: 140 }
   validates :content, presence: true
   validates :price, numericality: { greater_than: 0.000_000_01 }
+  validate :ensure_author_account_normal
 
   before_validation :setup_attributes, on: :create
 
@@ -164,5 +165,9 @@ class Article < ApplicationRecord
       price: price.round(8),
       uuid: SecureRandom.uuid
     )
+  end
+
+  def ensure_author_account_normal
+    errors.add(:author, 'account is banned!') if author&.banned?
   end
 end

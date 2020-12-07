@@ -7,6 +7,7 @@
 #  id                          :bigint           not null, primary key
 #  authoring_subscribers_count :integer          default(0)
 #  avatar_url                  :string
+#  banned_at                   :datetime
 #  mixin_uuid                  :uuid
 #  name                        :string
 #  reading_subscribers_count   :integer          default(0)
@@ -41,6 +42,8 @@ class User < ApplicationRecord
   validates :name, presence: true
 
   default_scope { includes(:mixin_authorization) }
+  scope :only_banned, -> { where.not(banned_at: nil) }
+  scope :without_banned, -> { where(banned_at: nil) }
   scope :order_by_revenue_total, lambda {
     joins(:revenue_transfers)
       .group(:id)
@@ -99,6 +102,18 @@ class User < ApplicationRecord
 
   def bio
     mixin_authorization&.raw&.[]('biography')
+  end
+
+  def banned?
+    banned_at?
+  end
+
+  def ban!
+    update banned_at: Time.current
+  end
+
+  def unban!
+    update banned_at: nil
   end
 
   private

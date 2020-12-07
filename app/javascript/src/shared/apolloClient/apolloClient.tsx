@@ -47,6 +47,7 @@ export const apolloClient = (uri: string, csrfToken?: string) => {
             'sourceType',
           ]),
           adminUserConnection: customizedConnectionMergeFunction([
+            'filter',
             'query',
             'orderBy',
           ]),

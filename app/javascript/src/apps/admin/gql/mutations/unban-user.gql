@@ -1,0 +1,6 @@
+mutation AdminUnbanUser($input: AdminUnbanUserMutationInput!) {
+  adminUnbanUser(input: $input) {
+    id
+    bannedAt
+  }
+}

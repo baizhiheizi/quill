@@ -1,5 +1,15 @@
-query AdminUserConnection($query: String, $orderBy: String, $after: String) {
-  adminUserConnection(query: $query, orderBy: $orderBy, after: $after) {
+query AdminUserConnection(
+  $query: String
+  $orderBy: String
+  $filter: String
+  $after: String
+) {
+  adminUserConnection(
+    query: $query
+    orderBy: $orderBy
+    filter: $filter
+    after: $after
+  ) {
     nodes {
       id
       name
@@ -11,6 +21,7 @@ query AdminUserConnection($query: String, $orderBy: String, $after: String) {
       revenueTotal
       paymentTotal
       createdAt
+      bannedAt
     }
     pageInfo {
       hasNextPage

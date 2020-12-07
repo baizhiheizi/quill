@@ -26,7 +26,7 @@ class ApplicationController < ActionController::Base
   def base_props
     {
       current_user: current_user&.as_json(
-        only: %i[name avatar_url mixin_id mixin_uuid]
+        only: %i[name avatar_url mixin_id mixin_uuid banned_at]
       )&.merge(
         author_revenue_amount: current_user.author_revenue_transfers.sum(:amount),
         reader_revenue_amount: current_user.reader_revenue_transfers.sum(:amount)

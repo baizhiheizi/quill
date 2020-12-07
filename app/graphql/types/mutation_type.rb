@@ -29,5 +29,7 @@ module Types
     field :admin_create_bonus, mutation: Mutations::AdminCreateBonusMutation
     field :admin_update_bonus, mutation: Mutations::AdminUpdateBonusMutation
     field :admin_deliver_bonus, mutation: Mutations::AdminDeliverBonusMutation
+    field :admin_ban_user, mutation: Mutations::AdminBanUserMutation
+    field :admin_unban_user, mutation: Mutations::AdminUnbanUserMutation
   end
 end
