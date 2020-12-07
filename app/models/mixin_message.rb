@@ -42,8 +42,28 @@ class MixinMessage < ApplicationRecord
   end
 
   def process!
-    # TODO: add some interaction with user
+    process_user_message
+
     touch_proccessed_at
+  end
+
+  def process_user_message
+    case content
+    when 'Hi'
+      TextNotificationService.new.call(
+        'Welcome to PRSDigg! Write or read to earn.',
+        recipient_id: user_id
+      )
+    when '你好'
+      TextNotificationService.new.call(
+        '欢迎来到顶瓜瓜。',
+        recipient_id: user_id
+      )
+    else
+      AdminNotificationService.new.text(
+        "用户 #{user&.name} 有新留言，请在后台查看处理。"
+      )
+    end
   end
 
   def touch_proccessed_at

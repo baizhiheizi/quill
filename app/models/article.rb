@@ -69,7 +69,7 @@ class Article < ApplicationRecord
                               }
 
   after_create :create_wallet!
-  after_commit :notify_subsribers_async, :subscribe_comments_for_author, on: :create
+  after_commit :notify_subsribers, :subscribe_comments_for_author, :notify_admin, on: :create
 
   aasm column: :state do
     state :published, initial: true
@@ -116,7 +116,7 @@ class Article < ApplicationRecord
     @subscribers = author.authoring_subscribe_by_users
   end
 
-  def notify_subsribers_async
+  def notify_subsribers
     return if hidden?
 
     messages = subscribers.pluck(:mixin_uuid).map do |_uuid|
@@ -135,6 +135,12 @@ class Article < ApplicationRecord
     messages.each do |message|
       SendMixinMessageWorker.perform_async message
     end
+  end
+
+  def notify_admin
+    AdminNotificationService.new.text(
+      "#{author.name} 创建了新文章 《#{title}》"
+    )
   end
 
   def subscribe_comments_for_author
