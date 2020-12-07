@@ -1,6 +1,7 @@
-query AdminArticleConnection($after: String) {
-  adminArticleConnection(after: $after) {
+query AdminArticleConnection($query: String, $state: String, $after: String) {
+  adminArticleConnection(query: $query, state: $state, after: $after) {
     nodes {
+      id
       uuid
       title
       intro

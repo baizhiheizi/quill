@@ -4,19 +4,12 @@ module Mutations
   class AdminBlockArticleMutation < AdminBaseMutation
     argument :uuid, ID, required: true
 
-    field :error, String, null: true
-    field :success, Boolean, null: true
+    type Types::ArticleType
 
     def resolve(uuid:)
-      Article.find_by(uuid: uuid)&.block!
-
-      {
-        success: true
-      }
-    rescue StandardError => e
-      {
-        error: e.to_s
-      }
+      article = Article.find_by(uuid: uuid)
+      article&.block!
+      article&.reload
     end
   end
 end

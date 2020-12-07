@@ -28,7 +28,10 @@ export const apolloClient = (uri: string, csrfToken?: string) => {
       Query: {
         fields: {
           adminAnnouncementConnection: customizedConnectionMergeFunction(),
-          adminArticleConnection: customizedConnectionMergeFunction(),
+          adminArticleConnection: customizedConnectionMergeFunction([
+            'query',
+            'state',
+          ]),
           adminBonusConnection: customizedConnectionMergeFunction(),
           adminMixinMessageConnection: customizedConnectionMergeFunction(),
           adminMixinNetworkSnapshotConnection: customizedConnectionMergeFunction(

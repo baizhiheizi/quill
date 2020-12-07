@@ -1,3 +1,4 @@
+import LoadingComponent from '@admin/components/LoadingComponent/LoadingComponent';
 import {
   AdminArticleConnectionQueryHookResult,
   Article as IArticle,
@@ -5,48 +6,68 @@ import {
   useAdminBlockArticleMutation,
   useAdminUnblockArticleMutation,
 } from '@graphql';
+import { useDebounce } from 'ahooks';
 import {
   Avatar,
   Button,
+  Col,
   Divider,
-  message,
+  Input,
   PageHeader,
   Popconfirm,
+  Row,
+  Select,
   Space,
   Table,
 } from 'antd';
-import { ColumnProps } from 'antd/lib/table';
-import React from 'react';
+import { ColumnProps } from 'antd/es/table';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import LoadingComponent from '../../components/LoadingComponent/LoadingComponent';
 
 export default function ArticlesPage() {
+  const [query, setQuery] = useState('');
+  const [state, setState] = useState('published');
+  const debouncedQuery = useDebounce(query, { wait: 500 });
+  return (
+    <div>
+      <PageHeader title='Articles' />
+      <Row gutter={16} style={{ marginBottom: '1rem' }}>
+        <Col>
+          <Select
+            style={{ width: 200 }}
+            value={state}
+            onChange={(value) => setState(value)}
+          >
+            <Select.Option value='published'>Published</Select.Option>
+            <Select.Option value='hidden'>Hidden</Select.Option>
+            <Select.Option value='blocked'>Blocked</Select.Option>
+            <Select.Option value='all'>All</Select.Option>
+          </Select>
+        </Col>
+        <Col>
+          <Input
+            value={query}
+            placeholder='Query article'
+            onChange={(e) => setQuery(e.currentTarget.value)}
+          />
+        </Col>
+      </Row>
+      <ArticlesComponent query={debouncedQuery} state={state} />
+    </div>
+  );
+}
+
+function ArticlesComponent(props: { query?: string; state?: string }) {
+  const { query, state } = props;
   const {
     data,
     loading,
     fetchMore,
-    refetch,
-  }: AdminArticleConnectionQueryHookResult = useAdminArticleConnectionQuery();
-  const [block, { loading: blocking }] = useAdminBlockArticleMutation({
-    update(_, { data: { error: err } }) {
-      if (err) {
-        message.error(err);
-      } else {
-        message.success('Successfully Blocked!');
-        refetch();
-      }
-    },
+  }: AdminArticleConnectionQueryHookResult = useAdminArticleConnectionQuery({
+    variables: { query, state },
   });
-  const [unblock, { loading: unblocking }] = useAdminUnblockArticleMutation({
-    update(_, { data: { error: err } }) {
-      if (err) {
-        message.error(err);
-      } else {
-        message.success('Successfully Unblocked!');
-        refetch();
-      }
-    },
-  });
+  const [block, { loading: blocking }] = useAdminBlockArticleMutation();
+  const [unblock, { loading: unblocking }] = useAdminUnblockArticleMutation();
 
   if (loading) {
     return <LoadingComponent />;
@@ -143,7 +164,6 @@ export default function ArticlesPage() {
 
   return (
     <div>
-      <PageHeader title='Articles' />
       <Table
         scroll={{ x: true }}
         columns={columns}
@@ -160,6 +180,8 @@ export default function ArticlesPage() {
             fetchMore({
               variables: {
                 after: endCursor,
+                query,
+                state,
               },
             });
           }}

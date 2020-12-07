@@ -1,6 +1,7 @@
 mutation AdminUnblockArticle($input: AdminUnblockArticleMutationInput!) {
   adminUnblockArticle(input: $input) {
-    error
-    success
+    id
+    uuid
+    state
   }
 }
