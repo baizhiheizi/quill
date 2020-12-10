@@ -28,7 +28,7 @@ gem 'redis-namespace'
 # Use Active Model has_secure_password
 gem 'bcrypt', '~> 3.1.7'
 # A simple API wrapper for Mixin Network in Ruby
-gem 'mixin_bot', github: 'an-lee/mixin_bot', branch: 'master'
+gem 'mixin_bot'
 # Wraps the Aliyun OSS as an Active Storage service.
 gem 'activestorage-aliyun'
 # Simple, efficient background processing for Ruby http://sidekiq.org

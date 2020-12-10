@@ -45,7 +45,7 @@ class MixinNetworkUser < ApplicationRecord
   def mixin_api
     @mixin_api ||= MixinBot::API.new(
       client_id: uuid,
-      client_secret: client_secret,
+      client_secret: nil,
       session_id: session_id,
       pin_token: pin_token,
       private_key: private_key
@@ -84,7 +84,7 @@ class MixinNetworkUser < ApplicationRecord
   def setup_attributes
     return unless new_record?
 
-    r = MixinBot.api.create_user(name || 'PRSDigg Broker')
+    r = MixinBot.api.create_user(name || 'PRSDigg Broker', key_type: 'Ed25519')
     raise r.inspect if r['error'].present?
 
     self.raw = r['data']
@@ -94,11 +94,7 @@ class MixinNetworkUser < ApplicationRecord
       name: raw['full_name'],
       pin_token: raw['pin_token'],
       session_id: raw['session_id'],
-      private_key: r[:rsa_key][:private_key]
+      private_key: r[:ed25519_key]&.[](:private_key)
     )
-  end
-
-  def client_secret
-    @client_secret ||= OpenSSL::PKey::RSA.new(private_key).public_key.to_pem.gsub(/^-----.*PUBLIC KEY-----$/, '').strip
   end
 end

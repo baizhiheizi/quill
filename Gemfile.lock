@@ -1,19 +1,3 @@
-GIT
-  remote: https://github.com/an-lee/mixin_bot.git
-  revision: 741b3cb9c4e70464ab9a4479200c1529c8035ce4
-  branch: master
-  specs:
-    mixin_bot (0.2.0)
-      awesome_print (~> 1.8)
-      bcrypt (~> 3.1)
-      cli-ui (~> 1.3)
-      faye-websocket (>= 0.11)
-      http (~> 4.1)
-      jose (~> 1.1)
-      jwt (~> 2.2)
-      msgpack (~> 1.3)
-      thor (~> 1.0)
-
 GEM
   remote: https://rubygems.org/
   specs:
@@ -166,7 +150,6 @@ GEM
       activesupport (>= 5.0.0)
     jose (1.1.3)
       hamster
-    jwt (2.2.2)
     listen (3.3.3)
       rb-fsevent (~> 0.10, >= 0.10.3)
       rb-inotify (~> 0.9, >= 0.9.10)
@@ -193,6 +176,16 @@ GEM
     mini_mime (1.0.2)
     mini_portile2 (2.4.0)
     minitest (5.14.2)
+    mixin_bot (0.3.2)
+      awesome_print (~> 1.8)
+      bcrypt (~> 3.1)
+      cli-ui (~> 1.3)
+      faye-websocket (>= 0.11)
+      http (~> 4.1)
+      jose (~> 1.1)
+      msgpack (~> 1.3)
+      rbnacl (~> 7.1)
+      thor (~> 1.0)
     msgpack (1.3.3)
     netrc (0.11.0)
     nio4r (2.5.4)
@@ -247,6 +240,8 @@ GEM
     rb-fsevent (0.10.4)
     rb-inotify (0.10.1)
       ffi (~> 1.0)
+    rbnacl (7.1.1)
+      ffi
     react-rails (2.6.1)
       babel-transpiler (>= 0.7.0)
       connection_pool
@@ -265,7 +260,7 @@ GEM
       mime-types (>= 1.16, < 4.0)
       netrc (~> 0.8)
     rexml (3.2.4)
-    rubocop (1.6.0)
+    rubocop (1.6.1)
       parallel (~> 1.10)
       parser (>= 2.7.1.5)
       rainbow (>= 2.2.2, < 4.0)
@@ -371,7 +366,7 @@ DEPENDENCIES
   mina (~> 1.2.2)
   mina-logs (~> 1.1.0)
   mina-multistage (~> 1.0.3)
-  mixin_bot!
+  mixin_bot
   pg
   puma
   rails (~> 6)
