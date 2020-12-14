@@ -250,7 +250,7 @@ export default function CommentsComponent(props: {
                       if (authorized) {
                         const content = commentForm.getFieldValue('content');
                         commentForm.setFieldsValue({
-                          content: `${content}
+                          content: `${content || ''}
 > @${comment.author.name}([#${comment.id}](#comment-${comment.id})):
 ${comment.content.replace(/^/gm, '> ')}
 
