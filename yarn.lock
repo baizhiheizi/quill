@@ -1717,9 +1717,9 @@
   resolved "https://registry.npmjs.org/@types/zen-observable/-/zen-observable-0.8.1.tgz#5668c0bce55a91f2b9566b1d8a4c0a8dbbc79764"
   integrity sha512-wmk0xQI6Yy7Fs/il4EpOcflG4uonUpYGqvZARESLc2oy4u69fkatFLbJOeW4Q6awO15P4rduAe6xkwHevpXcUQ==
 
-"@uiw/react-markdown-preview@^2.1.0":
+"@uiw/react-markdown-preview@^2.1.1":
   version "2.1.1"
-  resolved "https://registry.npmjs.org/@uiw/react-markdown-preview/-/react-markdown-preview-2.1.1.tgz#d6e8fadaf582f45f1dfede9da9dd604205112a1d"
+  resolved "https://registry.yarnpkg.com/@uiw/react-markdown-preview/-/react-markdown-preview-2.1.1.tgz#d6e8fadaf582f45f1dfede9da9dd604205112a1d"
   integrity sha512-0elyhbmBCZVfhT62cQuixREReFHWJZonZQy28cGHNn4Sr8ONC06R66UyqWjEMWdWFSLZrNdEZDsRVuqYX/oJGw==
   dependencies:
     "@babel/runtime" "7.12.5"
@@ -1728,13 +1728,13 @@
     react-markdown "5.0.3"
     remark-gfm "1.0.0"
 
-"@uiw/react-md-editor@^2.0.2":
-  version "2.0.2"
-  resolved "https://registry.npmjs.org/@uiw/react-md-editor/-/react-md-editor-2.0.2.tgz#e489874d1fdaba6317b67237e0ddc315be96f3d8"
-  integrity sha512-GeupDVN5uqJiECZ7DGjWgJK5r6PqpSKOc0GpJ+ugwH4q6q1spj7RW7MDxVUgl6MAdQg6M+Hws5qRQoSV3LPSNw==
+"@uiw/react-md-editor@^2.0.3":
+  version "2.0.3"
+  resolved "https://registry.yarnpkg.com/@uiw/react-md-editor/-/react-md-editor-2.0.3.tgz#0cb5ebda9af2d8bf33956fdd046a757fbabb88c9"
+  integrity sha512-s1+4xlyVSGO0q9tFF8tLy6VsCHfhnqZdq+lfMhfYcVyJxBmrLiZEU8QmxccyYU+ksiCpnHTKRzcFlXZiv37ytQ==
   dependencies:
     "@babel/runtime" "^7.8.4"
-    "@uiw/react-markdown-preview" "^2.1.0"
+    "@uiw/react-markdown-preview" "^2.1.1"
     classnames "^2.2.6"
 
 "@ungap/global-this@^0.4.2":
