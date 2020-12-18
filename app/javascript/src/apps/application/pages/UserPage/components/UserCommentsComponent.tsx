@@ -1,4 +1,3 @@
-import { useUserAgent } from '@application/shared';
 import LoadingComponent from '@application/components/LoadingComponent/LoadingComponent';
 import MarkdownRendererComponent from '@application/components/MarkdownRendererComponent/MarkdownRendererComponent';
 import {
@@ -6,6 +5,7 @@ import {
   CommentConnectionQueryHookResult,
   useCommentConnectionQuery,
 } from '@graphql';
+import { useUserAgent } from '@shared';
 import { Avatar, Button, Comment, List } from 'antd';
 import moment from 'moment';
 import React from 'react';

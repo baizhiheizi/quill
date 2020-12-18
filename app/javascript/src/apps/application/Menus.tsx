@@ -1,5 +1,5 @@
-import { imagePath } from '@/shared';
 import { GithubOutlined, MenuOutlined } from '@ant-design/icons';
+import { imagePath, useCurrentUser, useUserAgent } from '@shared';
 import {
   Avatar,
   Button,
@@ -14,7 +14,7 @@ import {
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
-import { OPEN_SOURCE_URL, useCurrentUser, useUserAgent } from './shared';
+import { OPEN_SOURCE_URL } from './shared';
 
 export default function Menus() {
   const currentUser = useCurrentUser();

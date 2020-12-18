@@ -25,6 +25,11 @@ Rails.application.routes.draw do
 
   root to: 'home#index'
 
+  namespace :dashboard do
+    root to: 'overview#index'
+    get '*path' => 'overview#index'
+  end
+
   namespace :admin do
     get 'logout', to: 'sessions#delete', as: :logout
 

@@ -1,8 +1,8 @@
 import {
   PRSDIGG_MIXIN_GROUP_APP_ID,
   PRSDIGG_MIXIN_GROUP_CODE_ID,
-  useUserAgent,
 } from '@application/shared';
+import { useUserAgent } from '@shared';
 import { Col, Row } from 'antd';
 import React from 'react';
 import { useTranslation } from 'react-i18next';

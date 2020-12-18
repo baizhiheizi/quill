@@ -1,10 +1,10 @@
-import { useUserAgent } from '@application/shared';
 import { usePaymentLazyQuery, useSwapPreOrderQuery } from '@graphql';
 import {
   FOXSWAP_APP_ID,
   FOXSWAP_CODE_ID,
   PRS,
   SUPPORTED_TOKENS,
+  useUserAgent,
 } from '@shared';
 import { useCountDown } from 'ahooks';
 import { Alert, Avatar, Button, Modal, Radio, Space, Spin } from 'antd';

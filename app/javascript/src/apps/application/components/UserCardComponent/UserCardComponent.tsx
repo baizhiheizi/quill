@@ -1,4 +1,4 @@
-import { useCurrentUser } from '@application/shared';
+import { useCurrentUser } from '@shared';
 import { Avatar, Button, Card, Col, Row } from 'antd';
 import React from 'react';
 import { useTranslation } from 'react-i18next';

@@ -1,7 +1,7 @@
+import { useCurrentUser } from '@shared';
 import { Avatar, Col, Row, Statistic, Tabs } from 'antd';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { useCurrentUser } from '../../shared';
 import MyArticlesComponent from './components/MyArticlesComponent';
 import MyCommentsComponent from './components/MyCommentsComponent';
 import MyPaymentsComponent from './components/MyPaymentsComponent';

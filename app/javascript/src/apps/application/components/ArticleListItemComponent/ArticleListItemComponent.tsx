@@ -6,17 +6,13 @@ import {
   ShareAltOutlined,
 } from '@ant-design/icons';
 import { Article } from '@graphql';
+import { usePrsdigg, useUserAgent } from '@shared';
 import { Avatar, Button, List, Popover, Row, Space } from 'antd';
 import moment from 'moment';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
-import {
-  handleShare,
-  PRS_ICON_URL,
-  usePrsdigg,
-  useUserAgent,
-} from '../../shared';
+import { handleShare, PRS_ICON_URL } from '../../shared';
 import UserCardComponent from '../UserCardComponent/UserCardComponent';
 
 export default function ArticleListItemComponent(props: {

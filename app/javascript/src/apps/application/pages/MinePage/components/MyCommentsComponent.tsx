@@ -1,11 +1,11 @@
 import LoadingComponent from '@application/components/LoadingComponent/LoadingComponent';
 import MarkdownRendererComponent from '@application/components/MarkdownRendererComponent/MarkdownRendererComponent';
-import { useCurrentUser, useUserAgent } from '@application/shared';
 import {
   Comment as IComment,
   CommentConnectionQueryHookResult,
   useCommentConnectionQuery,
 } from '@graphql';
+import { useCurrentUser, useUserAgent } from '@shared';
 import { Avatar, Button, Comment, List } from 'antd';
 import moment from 'moment';
 import React from 'react';

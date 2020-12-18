@@ -1,6 +1,13 @@
 import { ApolloProvider } from '@apollo/client';
 import { User } from '@graphql';
-import { apolloClient, hideLoader, mixinUtils } from '@shared';
+import {
+  apolloClient,
+  CurrentUserContext,
+  hideLoader,
+  mixinUtils,
+  PrsdiggContext,
+  UserAgentContext,
+} from '@shared';
 import { Col, Layout, Row } from 'antd';
 import isMobile from 'ismobilejs';
 import React, { Suspense, useEffect } from 'react';
@@ -10,7 +17,6 @@ import LoadingComponent from './components/LoadingComponent/LoadingComponent';
 import './i18n';
 import Menus from './Menus';
 import Routes from './Routes';
-import { CurrentUserContext, PrsdiggContext, UserAgentContext } from './shared';
 
 export default function App(props: {
   csrfToken: string;
@@ -43,7 +49,7 @@ export default function App(props: {
                 <Layout>
                   <Menus />
                   <Layout.Content
-                    style={{ background: '#fff', padding: '1rem 1rem ' }}
+                    style={{ background: '#fff', padding: '1rem' }}
                   >
                     <Row justify='center'>
                       <Col

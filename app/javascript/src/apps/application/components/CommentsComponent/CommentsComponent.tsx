@@ -6,7 +6,6 @@ import {
   LikeOutlined,
 } from '@ant-design/icons';
 import MarkdownRendererComponent from '@application/components/MarkdownRendererComponent/MarkdownRendererComponent';
-import { useCurrentUser, useUserAgent } from '@application/shared';
 import {
   Comment as IComment,
   useCommentConnectionQuery,
@@ -15,6 +14,7 @@ import {
   useToggleCommentingSubscribeArticleActionMutation,
   useUpvoteCommentMutation,
 } from '@graphql';
+import { useCurrentUser, useUserAgent } from '@shared';
 import Editor, { commands } from '@uiw/react-md-editor';
 import {
   Avatar,

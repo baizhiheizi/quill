@@ -8,13 +8,7 @@ import CommentsComponent from '@application/components/CommentsComponent/Comment
 import LoadingComponent from '@application/components/LoadingComponent/LoadingComponent';
 import MarkdownRendererComponent from '@application/components/MarkdownRendererComponent/MarkdownRendererComponent';
 import UserCardComponent from '@application/components/UserCardComponent/UserCardComponent';
-import {
-  handleShare,
-  PAGE_TITLE,
-  useCurrentUser,
-  usePrsdigg,
-  useUserAgent,
-} from '@application/shared';
+import { handleShare, PAGE_TITLE } from '@application/shared';
 import {
   ArticleQueryHookResult,
   useArticleQuery,
@@ -22,6 +16,7 @@ import {
   User,
   useUpvoteArticleMutation,
 } from '@graphql';
+import { useCurrentUser, usePrsdigg, useUserAgent } from '@shared';
 import {
   Alert,
   Avatar,

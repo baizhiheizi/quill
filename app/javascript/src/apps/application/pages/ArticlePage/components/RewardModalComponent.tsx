@@ -1,10 +1,10 @@
-import { useUserAgent } from '@application/shared';
 import { usePaymentLazyQuery } from '@graphql';
 import {
   FOXSWAP_APP_ID,
   FOXSWAP_CODE_ID,
   PRS,
   SUPPORTED_TOKENS,
+  useUserAgent,
 } from '@shared';
 import { Alert, Avatar, Modal, Radio, Select, Space } from 'antd';
 import { encode as encode64 } from 'js-base64';

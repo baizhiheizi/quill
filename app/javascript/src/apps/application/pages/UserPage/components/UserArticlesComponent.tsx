@@ -1,12 +1,12 @@
 import { AlertOutlined } from '@ant-design/icons';
 import LoadingComponent from '@application/components/LoadingComponent/LoadingComponent';
-import { useCurrentUser } from '@application/shared';
 import {
   Article,
   useToggleAuthoringSubscribeUserActionMutation,
   useToggleReadingSubscribeUserActionMutation,
   useUserArticleConnectionQuery,
 } from '@graphql';
+import { useCurrentUser } from '@shared';
 import { Avatar, Button, List, message, Row, Space } from 'antd';
 import moment from 'moment';
 import React from 'react';
