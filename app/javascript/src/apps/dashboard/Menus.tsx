@@ -13,7 +13,8 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 
-export default function Menus() {
+export default function Menus(props: { activeMenu?: string }) {
+  const { activeMenu } = props;
   const { isMobile } = useUserAgent();
   const { t } = useTranslation();
   const [drawerVisible, setDrawerVisible] = useState(false);
@@ -24,38 +25,38 @@ export default function Menus() {
           <Avatar size='large' src={imagePath('logo.svg')} />
         </Link>
       </div>
-      <Menu mode='inline'>
-        <Menu.Item>
+      <Menu mode='inline' selectedKeys={[activeMenu]}>
+        <Menu.Item key='overview'>
           <Link to='/'>
             <DashboardOutlined />
             <span>{t('dashboard.menu.overview')}</span>
           </Link>
         </Menu.Item>
-        <Menu.Item>
+        <Menu.Item key='articles'>
           <Link to='/articles'>
             <FileTextOutlined />
             <span>{t('dashboard.menu.articles')}</span>
           </Link>
         </Menu.Item>
-        <Menu.Item>
+        <Menu.Item key='revenue'>
           <Link to='/revenue'>
             <RiseOutlined />
             <span>{t('dashboard.menu.revenue')}</span>
           </Link>
         </Menu.Item>
-        <Menu.Item>
+        <Menu.Item key='orders'>
           <Link to='/orders'>
             <AccountBookOutlined />
             <span>{t('dashboard.menu.orders')}</span>
           </Link>
         </Menu.Item>
-        <Menu.Item>
+        <Menu.Item key='comments'>
           <Link to='/commments'>
             <CommentOutlined />
             <span>{t('dashboard.menu.comments')}</span>
           </Link>
         </Menu.Item>
-        <Menu.Item>
+        <Menu.Item key='back'>
           <a href='/'>
             <LoginOutlined />
             <span>{t('dashboard.menu.back')}</span>

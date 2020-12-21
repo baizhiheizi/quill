@@ -208,3 +208,11 @@ dashboard:
     orders: 订单管理
     comments: 评论管理
     back: 返回
+  articlesPage:
+    publishConfirm: 确定要将文章公开吗？
+    hideConfirm: 确定要将文章隐藏吗？已购读者将不受影响。
+    publishBtn: 公开
+    hideBtn: 隐藏
+    tabs:
+      author: 已发表
+      reader: 已购买

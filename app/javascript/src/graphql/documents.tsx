@@ -3230,145 +3230,6 @@ export function useCommentConnectionLazyQuery(baseOptions?: Apollo.LazyQueryHook
 export type CommentConnectionQueryHookResult = ReturnType<typeof useCommentConnectionQuery>;
 export type CommentConnectionLazyQueryHookResult = ReturnType<typeof useCommentConnectionLazyQuery>;
 export type CommentConnectionQueryResult = Apollo.QueryResult<CommentConnectionQuery, CommentConnectionQueryVariables>;
-export const MyArticleConnectionDocument = gql`
-    query MyArticleConnection($type: String!, $after: String) {
-  myArticleConnection(type: $type, after: $after) {
-    nodes {
-      uuid
-      title
-      intro
-      price
-      revenue
-      ordersCount
-      state
-      author {
-        name
-        avatarUrl
-      }
-      createdAt
-    }
-    pageInfo {
-      hasNextPage
-      endCursor
-    }
-  }
-}
-    `;
-
-/**
- * __useMyArticleConnectionQuery__
- *
- * To run a query within a React component, call `useMyArticleConnectionQuery` and pass it any options that fit your needs.
- * When your component renders, `useMyArticleConnectionQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useMyArticleConnectionQuery({
- *   variables: {
- *      type: // value for 'type'
- *      after: // value for 'after'
- *   },
- * });
- */
-export function useMyArticleConnectionQuery(baseOptions: Apollo.QueryHookOptions<MyArticleConnectionQuery, MyArticleConnectionQueryVariables>) {
-        return Apollo.useQuery<MyArticleConnectionQuery, MyArticleConnectionQueryVariables>(MyArticleConnectionDocument, baseOptions);
-      }
-export function useMyArticleConnectionLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MyArticleConnectionQuery, MyArticleConnectionQueryVariables>) {
-          return Apollo.useLazyQuery<MyArticleConnectionQuery, MyArticleConnectionQueryVariables>(MyArticleConnectionDocument, baseOptions);
-        }
-export type MyArticleConnectionQueryHookResult = ReturnType<typeof useMyArticleConnectionQuery>;
-export type MyArticleConnectionLazyQueryHookResult = ReturnType<typeof useMyArticleConnectionLazyQuery>;
-export type MyArticleConnectionQueryResult = Apollo.QueryResult<MyArticleConnectionQuery, MyArticleConnectionQueryVariables>;
-export const MyPaymentConnectionDocument = gql`
-    query MyPaymentConnection($after: String) {
-  myPaymentConnection(after: $after) {
-    nodes {
-      traceId
-      snapshotId
-      amount
-      assetId
-      state
-      createdAt
-    }
-    pageInfo {
-      hasNextPage
-      endCursor
-    }
-  }
-}
-    `;
-
-/**
- * __useMyPaymentConnectionQuery__
- *
- * To run a query within a React component, call `useMyPaymentConnectionQuery` and pass it any options that fit your needs.
- * When your component renders, `useMyPaymentConnectionQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useMyPaymentConnectionQuery({
- *   variables: {
- *      after: // value for 'after'
- *   },
- * });
- */
-export function useMyPaymentConnectionQuery(baseOptions?: Apollo.QueryHookOptions<MyPaymentConnectionQuery, MyPaymentConnectionQueryVariables>) {
-        return Apollo.useQuery<MyPaymentConnectionQuery, MyPaymentConnectionQueryVariables>(MyPaymentConnectionDocument, baseOptions);
-      }
-export function useMyPaymentConnectionLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MyPaymentConnectionQuery, MyPaymentConnectionQueryVariables>) {
-          return Apollo.useLazyQuery<MyPaymentConnectionQuery, MyPaymentConnectionQueryVariables>(MyPaymentConnectionDocument, baseOptions);
-        }
-export type MyPaymentConnectionQueryHookResult = ReturnType<typeof useMyPaymentConnectionQuery>;
-export type MyPaymentConnectionLazyQueryHookResult = ReturnType<typeof useMyPaymentConnectionLazyQuery>;
-export type MyPaymentConnectionQueryResult = Apollo.QueryResult<MyPaymentConnectionQuery, MyPaymentConnectionQueryVariables>;
-export const MyTransferConnectionDocument = gql`
-    query MyTransferConnection($after: String) {
-  myTransferConnection(after: $after) {
-    nodes {
-      traceId
-      snapshotId
-      amount
-      assetId
-      transferType
-      createdAt
-    }
-    pageInfo {
-      hasNextPage
-      endCursor
-    }
-  }
-}
-    `;
-
-/**
- * __useMyTransferConnectionQuery__
- *
- * To run a query within a React component, call `useMyTransferConnectionQuery` and pass it any options that fit your needs.
- * When your component renders, `useMyTransferConnectionQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useMyTransferConnectionQuery({
- *   variables: {
- *      after: // value for 'after'
- *   },
- * });
- */
-export function useMyTransferConnectionQuery(baseOptions?: Apollo.QueryHookOptions<MyTransferConnectionQuery, MyTransferConnectionQueryVariables>) {
-        return Apollo.useQuery<MyTransferConnectionQuery, MyTransferConnectionQueryVariables>(MyTransferConnectionDocument, baseOptions);
-      }
-export function useMyTransferConnectionLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MyTransferConnectionQuery, MyTransferConnectionQueryVariables>) {
-          return Apollo.useLazyQuery<MyTransferConnectionQuery, MyTransferConnectionQueryVariables>(MyTransferConnectionDocument, baseOptions);
-        }
-export type MyTransferConnectionQueryHookResult = ReturnType<typeof useMyTransferConnectionQuery>;
-export type MyTransferConnectionLazyQueryHookResult = ReturnType<typeof useMyTransferConnectionLazyQuery>;
-export type MyTransferConnectionQueryResult = Apollo.QueryResult<MyTransferConnectionQuery, MyTransferConnectionQueryVariables>;
 export const PaymentDocument = gql`
     query Payment($traceId: ID!) {
   payment(traceId: $traceId) {
@@ -3622,6 +3483,101 @@ export function useUserLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UserQ
 export type UserQueryHookResult = ReturnType<typeof useUserQuery>;
 export type UserLazyQueryHookResult = ReturnType<typeof useUserLazyQuery>;
 export type UserQueryResult = Apollo.QueryResult<UserQuery, UserQueryVariables>;
+export const MyArticleConnectionDocument = gql`
+    query MyArticleConnection($type: String!, $after: String) {
+  myArticleConnection(type: $type, after: $after) {
+    nodes {
+      uuid
+      title
+      intro
+      price
+      revenue
+      ordersCount
+      state
+      author {
+        name
+        avatarUrl
+      }
+      createdAt
+    }
+    pageInfo {
+      hasNextPage
+      endCursor
+    }
+  }
+}
+    `;
+
+/**
+ * __useMyArticleConnectionQuery__
+ *
+ * To run a query within a React component, call `useMyArticleConnectionQuery` and pass it any options that fit your needs.
+ * When your component renders, `useMyArticleConnectionQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useMyArticleConnectionQuery({
+ *   variables: {
+ *      type: // value for 'type'
+ *      after: // value for 'after'
+ *   },
+ * });
+ */
+export function useMyArticleConnectionQuery(baseOptions: Apollo.QueryHookOptions<MyArticleConnectionQuery, MyArticleConnectionQueryVariables>) {
+        return Apollo.useQuery<MyArticleConnectionQuery, MyArticleConnectionQueryVariables>(MyArticleConnectionDocument, baseOptions);
+      }
+export function useMyArticleConnectionLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MyArticleConnectionQuery, MyArticleConnectionQueryVariables>) {
+          return Apollo.useLazyQuery<MyArticleConnectionQuery, MyArticleConnectionQueryVariables>(MyArticleConnectionDocument, baseOptions);
+        }
+export type MyArticleConnectionQueryHookResult = ReturnType<typeof useMyArticleConnectionQuery>;
+export type MyArticleConnectionLazyQueryHookResult = ReturnType<typeof useMyArticleConnectionLazyQuery>;
+export type MyArticleConnectionQueryResult = Apollo.QueryResult<MyArticleConnectionQuery, MyArticleConnectionQueryVariables>;
+export const MyPaymentConnectionDocument = gql`
+    query MyPaymentConnection($after: String) {
+  myPaymentConnection(after: $after) {
+    nodes {
+      traceId
+      snapshotId
+      amount
+      assetId
+      state
+      createdAt
+    }
+    pageInfo {
+      hasNextPage
+      endCursor
+    }
+  }
+}
+    `;
+
+/**
+ * __useMyPaymentConnectionQuery__
+ *
+ * To run a query within a React component, call `useMyPaymentConnectionQuery` and pass it any options that fit your needs.
+ * When your component renders, `useMyPaymentConnectionQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useMyPaymentConnectionQuery({
+ *   variables: {
+ *      after: // value for 'after'
+ *   },
+ * });
+ */
+export function useMyPaymentConnectionQuery(baseOptions?: Apollo.QueryHookOptions<MyPaymentConnectionQuery, MyPaymentConnectionQueryVariables>) {
+        return Apollo.useQuery<MyPaymentConnectionQuery, MyPaymentConnectionQueryVariables>(MyPaymentConnectionDocument, baseOptions);
+      }
+export function useMyPaymentConnectionLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MyPaymentConnectionQuery, MyPaymentConnectionQueryVariables>) {
+          return Apollo.useLazyQuery<MyPaymentConnectionQuery, MyPaymentConnectionQueryVariables>(MyPaymentConnectionDocument, baseOptions);
+        }
+export type MyPaymentConnectionQueryHookResult = ReturnType<typeof useMyPaymentConnectionQuery>;
+export type MyPaymentConnectionLazyQueryHookResult = ReturnType<typeof useMyPaymentConnectionLazyQuery>;
+export type MyPaymentConnectionQueryResult = Apollo.QueryResult<MyPaymentConnectionQuery, MyPaymentConnectionQueryVariables>;
 export const MyStatisticsDocument = gql`
     query MyStatistics {
   myStatistics {
@@ -3657,3 +3613,47 @@ export function useMyStatisticsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptio
 export type MyStatisticsQueryHookResult = ReturnType<typeof useMyStatisticsQuery>;
 export type MyStatisticsLazyQueryHookResult = ReturnType<typeof useMyStatisticsLazyQuery>;
 export type MyStatisticsQueryResult = Apollo.QueryResult<MyStatisticsQuery, MyStatisticsQueryVariables>;
+export const MyTransferConnectionDocument = gql`
+    query MyTransferConnection($after: String) {
+  myTransferConnection(after: $after) {
+    nodes {
+      traceId
+      snapshotId
+      amount
+      assetId
+      transferType
+      createdAt
+    }
+    pageInfo {
+      hasNextPage
+      endCursor
+    }
+  }
+}
+    `;
+
+/**
+ * __useMyTransferConnectionQuery__
+ *
+ * To run a query within a React component, call `useMyTransferConnectionQuery` and pass it any options that fit your needs.
+ * When your component renders, `useMyTransferConnectionQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useMyTransferConnectionQuery({
+ *   variables: {
+ *      after: // value for 'after'
+ *   },
+ * });
+ */
+export function useMyTransferConnectionQuery(baseOptions?: Apollo.QueryHookOptions<MyTransferConnectionQuery, MyTransferConnectionQueryVariables>) {
+        return Apollo.useQuery<MyTransferConnectionQuery, MyTransferConnectionQueryVariables>(MyTransferConnectionDocument, baseOptions);
+      }
+export function useMyTransferConnectionLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MyTransferConnectionQuery, MyTransferConnectionQueryVariables>) {
+          return Apollo.useLazyQuery<MyTransferConnectionQuery, MyTransferConnectionQueryVariables>(MyTransferConnectionDocument, baseOptions);
+        }
+export type MyTransferConnectionQueryHookResult = ReturnType<typeof useMyTransferConnectionQuery>;
+export type MyTransferConnectionLazyQueryHookResult = ReturnType<typeof useMyTransferConnectionLazyQuery>;
+export type MyTransferConnectionQueryResult = Apollo.QueryResult<MyTransferConnectionQuery, MyTransferConnectionQueryVariables>;

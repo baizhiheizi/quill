@@ -1,6 +1,7 @@
 import { ApolloProvider } from '@apollo/client';
 import { User } from '@graphql';
 import {
+  ActiveMenuContext,
   apolloClient,
   CurrentUserContext,
   hideLoader,
@@ -10,7 +11,7 @@ import {
 } from '@shared';
 import { Layout } from 'antd';
 import isMobile from 'ismobilejs';
-import React, { Suspense, useEffect } from 'react';
+import React, { Suspense, useEffect, useState } from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
 import LoadingComponent from './components/LoadingComponent/LoadingComponent';
 import './i18n';
@@ -23,6 +24,7 @@ export default function App(props: {
   prsdigg: { appId: String };
 }) {
   const { csrfToken, currentUser, prsdigg } = props;
+  const [activeMenu, setActiveMenu] = useState('');
   if (!Boolean(currentUser)) {
     location.replace('/');
   }
@@ -45,22 +47,24 @@ export default function App(props: {
             }}
           >
             <CurrentUserContext.Provider value={currentUser}>
-              <Router basename='/dashboard'>
-                <Layout style={{ minHeight: '100vh' }}>
-                  <Menus />
-                  <Layout.Content
-                    style={
-                      isMobile().phone
-                        ? { background: '#fff' }
-                        : { padding: '1rem' }
-                    }
-                  >
-                    <div style={{ background: '#fff', padding: '1rem' }}>
-                      <Routes />
-                    </div>
-                  </Layout.Content>
-                </Layout>
-              </Router>
+              <ActiveMenuContext.Provider value={{ activeMenu, setActiveMenu }}>
+                <Router basename='/dashboard'>
+                  <Layout style={{ minHeight: '100vh' }}>
+                    <Menus activeMenu={activeMenu} />
+                    <Layout.Content
+                      style={
+                        isMobile().phone
+                          ? { background: '#fff' }
+                          : { padding: '1rem' }
+                      }
+                    >
+                      <div style={{ background: '#fff', padding: '1rem' }}>
+                        <Routes />
+                      </div>
+                    </Layout.Content>
+                  </Layout>
+                </Router>
+              </ActiveMenuContext.Provider>
             </CurrentUserContext.Provider>
           </UserAgentContext.Provider>
         </PrsdiggContext.Provider>

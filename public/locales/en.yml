@@ -172,3 +172,14 @@ dashboard:
     orders: Orders Manage
     comments: Comments Manage
     back: Go Back
+  articlesPage:
+    publishConfirm: Are you sure to publish this article?
+    hideConfirm: Are you sure to hide this article? Early readers not affected.
+    publishBtn: Publish
+    hideBtn: Hide
+    tabs:
+      author: Published
+      reader: Bought
+      comments: Commented
+      payments: Payments
+      transfers: Revenue

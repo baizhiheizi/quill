@@ -7,6 +7,10 @@ const NotFoundPage = React.lazy(
 const OverviewPage = React.lazy(
   () => import('./pages/OverviewPage/OverviewPage'),
 );
+const ArticlePage = React.lazy(() => import('./pages/ArticlePage/ArticlePage'));
+const ArticlesPage = React.lazy(
+  () => import('./pages/ArticlesPage/ArticlesPage'),
+);
 
 export default function Routes() {
   return (
@@ -15,6 +19,12 @@ export default function Routes() {
         <Switch>
           <Route path='/' exact>
             <OverviewPage />
+          </Route>
+          <Route path='/articles' exact>
+            <ArticlesPage />
+          </Route>
+          <Route path='/articles/:uuid' exact>
+            <ArticlePage />
           </Route>
           <Route>
             <NotFoundPage />
