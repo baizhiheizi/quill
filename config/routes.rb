@@ -36,8 +36,8 @@ Rails.application.routes.draw do
     # sidekiq
     mount Sidekiq::Web, at: 'sidekiq', constraints: AdminConstraint.new
 
-    root to: 'dashboard#index'
-    get '*path' => 'dashboard#index'
+    root to: 'overview#index'
+    get '*path' => 'overview#index'
   end
 
   get '*path' => 'home#index'

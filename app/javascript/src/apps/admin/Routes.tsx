@@ -7,9 +7,9 @@ import ArticlesPage from './pages/ArticlesPage/ArticlesPage';
 import BalancePage from './pages/BalancePage/BalancePage';
 import BonusesPage from './pages/BonusesPage/BonusesPage';
 import CommentsPage from './pages/CommentsPage/CommentsPage';
-import DashboardPage from './pages/DashboardPage/DashboardPage';
 import MixinMessagesPage from './pages/MixinMessagesPage/MixinMessagesPage';
 import MixinNetworkSnapshotsPage from './pages/MixinNetworkSnapshotsPage/MixinNetworkSnapshotsPage';
+import OverviewPage from './pages/OverviewPage/OverviewPage';
 import PaymentsPage from './pages/PaymentsPage/PaymentsPage';
 import SwapOrdersPage from './pages/SwapOrdersPage/SwapOrdersPage';
 import TransfersPage from './pages/TransfersPage/TransfersPage';
@@ -19,7 +19,7 @@ export default function Routes() {
   return (
     <Switch>
       <Route path='/' exact>
-        <DashboardPage />
+        <OverviewPage />
       </Route>
       <Route path='/users' exact>
         <UsersPage />

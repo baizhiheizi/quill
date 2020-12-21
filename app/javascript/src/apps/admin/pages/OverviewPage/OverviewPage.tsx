@@ -17,7 +17,7 @@ import {
   YAxis,
 } from 'recharts';
 
-export default function DashboardPage() {
+export default function OverviewPage() {
   const { data, loading } = useStatisticsQuery();
 
   if (loading) {
