@@ -17,6 +17,7 @@
       "@/*": ["*"],
       "@admin/*": ["apps/admin/*"],
       "@application/*": ["apps/application/*"],
+      "@dashboard/*": ["apps/dashboard/*"],
       "@shared": ["shared"],
       "@shared/*": ["shared/*"],
       "@graphql": ["graphql"]

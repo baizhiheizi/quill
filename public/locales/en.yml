@@ -51,6 +51,8 @@ user:
   defaultBio: Didn't left anything
   authorRevenueAmount: Author Revenue(PRS)
   readerRevenueAmount: Reader Revenue(PRS)
+  articlesCount: Published
+  boughtArticlesCount: Bought
 transfer:
   transferType:
     payment_refund: Refund
@@ -162,3 +164,11 @@ commentsComponent:
     okText: Submit
     cancelText: Later
     placeholder: Markdown supported
+dashboard:
+  menu: 
+    overview: Overview
+    articles: Artciels Manage
+    revenue: Revenue Manage
+    orders: Orders Manage
+    comments: Comments Manage
+    back: Go Back

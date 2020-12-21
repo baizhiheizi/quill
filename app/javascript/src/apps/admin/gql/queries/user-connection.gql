@@ -16,10 +16,12 @@ query AdminUserConnection(
       mixinId
       mixinUuid
       avatarUrl
-      articlesCount
-      commentsCount
-      revenueTotal
-      paymentTotal
+      statistics {
+        articlesCount
+        commentsCount
+        revenueTotal
+        paymentTotal
+      }
       createdAt
       bannedAt
     }

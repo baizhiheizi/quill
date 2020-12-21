@@ -16,6 +16,12 @@ module.exports = {
         '..',
         'app/javascript/src/apps/application',
       ),
+      '@dashboard': path.resolve(
+        __dirname,
+        '..',
+        '..',
+        'app/javascript/src/apps/dashboard',
+      ),
       '@shared': path.resolve(
         __dirname,
         '..',

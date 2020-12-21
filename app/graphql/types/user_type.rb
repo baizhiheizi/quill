@@ -10,42 +10,13 @@ module Types
     field :bio, String, null: true
     field :banned_at, GraphQL::Types::ISO8601DateTime, null: true
 
-    field :articles_count, Int, null: false
-    field :comments_count, Int, null: false
-    field :author_revenue_amount, Float, null: false
-    field :reader_revenue_amount, Float, null: false
-    field :revenue_total, Float, null: false
-    field :payment_total, Float, null: false
+    field :statistics, UserStatisticsType, null: false
 
     field :authoring_subscribed, Boolean, null: true
     field :reading_subscribed, Boolean, null: true
 
     field :articles, Types::ArticleConnectionType, null: false
     field :comments, Types::CommentConnectionType, null: false
-
-    def articles_count
-      object.articles.count
-    end
-
-    def comments_count
-      object.comments.count
-    end
-
-    def author_revenue_amount
-      object.author_revenue_transfers.sum(:amount)
-    end
-
-    def reader_revenue_amount
-      object.reader_revenue_transfers.sum(:amount)
-    end
-
-    def revenue_total
-      object.revenue_transfers.sum(:amount)
-    end
-
-    def payment_total
-      object.payments.completed.sum(:amount)
-    end
 
     def authoring_subscribed
       context[:current_user]&.authoring_subscribe_user?(object)

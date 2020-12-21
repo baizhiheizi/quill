@@ -51,6 +51,8 @@ user:
   defaultBio: 没有留下任何介绍
   authorRevenueAmount: 作者收益(PRS)
   readerRevenueAmount: 读者收益(PRS)
+  articlesCount: 发表文章
+  boughtArticlesCount: 购买文章
 transfer:
   transferType:
     payment_refund: 原路返回
@@ -198,3 +200,11 @@ commentsComponent:
     okText: 提交
     cancelText: 再想想
     placeholder: 支持 Markdown 格式
+dashboard:
+  menu: 
+    overview: 总览
+    articles: 文章管理
+    revenue: 收益管理
+    orders: 订单管理
+    comments: 评论管理
+    back: 返回

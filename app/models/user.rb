@@ -126,6 +126,18 @@ class User < ApplicationRecord
     )
   end
 
+  def statistics
+    @statistics = {
+      articles_count: articles.count,
+      author_revenue_amount: author_revenue_transfers.sum(:amount),
+      bought_articles_count: bought_articles.count,
+      comments_count: comments.count,
+      reader_revenue_amount: reader_revenue_transfers.sum(:amount),
+      revenue_total: revenue_transfers.sum(:amount),
+      payment_total: orders.sum(:total)
+    }
+  end
+
   private
 
   def setup_attributes

@@ -132,21 +132,25 @@ export function UsersComponent(props: {
     {
       dataIndex: 'articlesCount',
       key: 'articlesCount',
+      render: (_, user) => user.statistics.articlesCount,
       title: 'Articles',
     },
     {
       dataIndex: 'commentsCount',
       key: 'commentsCount',
+      render: (_, user) => user.statistics.commentsCount,
       title: 'Comments',
     },
     {
       dataIndex: 'revenueTotal',
       key: 'revenueTotal',
+      render: (_, user) => user.statistics.revenueTotal,
       title: 'Revenue Total',
     },
     {
       dataIndex: 'paymentTotal',
       key: 'paymentTotal',
+      render: (_, user) => user.statistics.paymentTotal,
       title: 'Payment Total',
     },
     {

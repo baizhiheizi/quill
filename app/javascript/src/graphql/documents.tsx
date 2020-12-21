@@ -931,6 +931,7 @@ export type Query = {
   createdAt: Scalars['ISO8601DateTime'];
   myArticleConnection: ArticleConnection;
   myPaymentConnection: PaymentConnection;
+  myStatistics: UserStatistics;
   myTransferConnection: TransferConnection;
   payment?: Maybe<Payment>;
   revenueChart: Scalars['String'];
@@ -1321,23 +1322,18 @@ export type UpvoteCommentMutationInput = {
 export type User = {
   __typename?: 'User';
   articles: ArticleConnection;
-  articlesCount: Scalars['Int'];
-  authorRevenueAmount: Scalars['Float'];
   authoringSubscribed?: Maybe<Scalars['Boolean']>;
   avatarUrl: Scalars['String'];
   bannedAt?: Maybe<Scalars['ISO8601DateTime']>;
   bio?: Maybe<Scalars['String']>;
   comments: CommentConnection;
-  commentsCount: Scalars['Int'];
   createdAt: Scalars['ISO8601DateTime'];
   id: Scalars['ID'];
   mixinId: Scalars['ID'];
   mixinUuid: Scalars['String'];
   name: Scalars['String'];
-  paymentTotal: Scalars['Float'];
-  readerRevenueAmount: Scalars['Float'];
   readingSubscribed?: Maybe<Scalars['Boolean']>;
-  revenueTotal: Scalars['Float'];
+  statistics: UserStatistics;
   updatedAt?: Maybe<Scalars['ISO8601DateTime']>;
 };
 
@@ -1377,6 +1373,19 @@ export type UserEdge = {
   cursor: Scalars['String'];
   /** The item at the end of the edge. */
   node?: Maybe<User>;
+};
+
+export type UserStatistics = {
+  __typename?: 'UserStatistics';
+  articlesCount: Scalars['Int'];
+  authorRevenueAmount: Scalars['Float'];
+  boughtArticlesCount: Scalars['Int'];
+  commentsCount: Scalars['Int'];
+  createdAt: Scalars['ISO8601DateTime'];
+  paymentTotal: Scalars['Float'];
+  readerRevenueAmount: Scalars['Float'];
+  revenueTotal: Scalars['Float'];
+  updatedAt?: Maybe<Scalars['ISO8601DateTime']>;
 };
 
 
@@ -2526,10 +2535,12 @@ export const AdminUserConnectionDocument = gql`
       mixinId
       mixinUuid
       avatarUrl
-      articlesCount
-      commentsCount
-      revenueTotal
-      paymentTotal
+      statistics {
+        articlesCount
+        commentsCount
+        revenueTotal
+        paymentTotal
+      }
       createdAt
       bannedAt
     }
@@ -3575,11 +3586,13 @@ export const UserDocument = gql`
     mixinUuid
     avatarUrl
     bio
-    articlesCount
-    authorRevenueAmount
-    readerRevenueAmount
     authoringSubscribed
     readingSubscribed
+    statistics {
+      articlesCount
+      authorRevenueAmount
+      readerRevenueAmount
+    }
   }
 }
     `;
@@ -3609,3 +3622,38 @@ export function useUserLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UserQ
 export type UserQueryHookResult = ReturnType<typeof useUserQuery>;
 export type UserLazyQueryHookResult = ReturnType<typeof useUserLazyQuery>;
 export type UserQueryResult = Apollo.QueryResult<UserQuery, UserQueryVariables>;
+export const MyStatisticsDocument = gql`
+    query MyStatistics {
+  myStatistics {
+    articlesCount
+    authorRevenueAmount
+    boughtArticlesCount
+    readerRevenueAmount
+  }
+}
+    `;
+
+/**
+ * __useMyStatisticsQuery__
+ *
+ * To run a query within a React component, call `useMyStatisticsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useMyStatisticsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useMyStatisticsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useMyStatisticsQuery(baseOptions?: Apollo.QueryHookOptions<MyStatisticsQuery, MyStatisticsQueryVariables>) {
+        return Apollo.useQuery<MyStatisticsQuery, MyStatisticsQueryVariables>(MyStatisticsDocument, baseOptions);
+      }
+export function useMyStatisticsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MyStatisticsQuery, MyStatisticsQueryVariables>) {
+          return Apollo.useLazyQuery<MyStatisticsQuery, MyStatisticsQueryVariables>(MyStatisticsDocument, baseOptions);
+        }
+export type MyStatisticsQueryHookResult = ReturnType<typeof useMyStatisticsQuery>;
+export type MyStatisticsLazyQueryHookResult = ReturnType<typeof useMyStatisticsLazyQuery>;
+export type MyStatisticsQueryResult = Apollo.QueryResult<MyStatisticsQuery, MyStatisticsQueryVariables>;

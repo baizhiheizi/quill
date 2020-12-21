@@ -1,11 +1,21 @@
-import { MenuOutlined } from '@ant-design/icons';
+import {
+  AccountBookOutlined,
+  CommentOutlined,
+  DashboardOutlined,
+  FileTextOutlined,
+  LoginOutlined,
+  MenuOutlined,
+  RiseOutlined,
+} from '@ant-design/icons';
 import { imagePath, useUserAgent } from '@shared';
 import { Avatar, Button, Drawer, Layout, Menu } from 'antd';
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 
 export default function Menus() {
   const { isMobile } = useUserAgent();
+  const { t } = useTranslation();
   const [drawerVisible, setDrawerVisible] = useState(false);
   const MenuConent = () => (
     <div>
@@ -16,10 +26,40 @@ export default function Menus() {
       </div>
       <Menu mode='inline'>
         <Menu.Item>
-          <Link to='/'>Overview</Link>
+          <Link to='/'>
+            <DashboardOutlined />
+            <span>{t('dashboard.menu.overview')}</span>
+          </Link>
         </Menu.Item>
         <Menu.Item>
-          <Link to='/'>Article Manage</Link>
+          <Link to='/articles'>
+            <FileTextOutlined />
+            <span>{t('dashboard.menu.articles')}</span>
+          </Link>
+        </Menu.Item>
+        <Menu.Item>
+          <Link to='/revenue'>
+            <RiseOutlined />
+            <span>{t('dashboard.menu.revenue')}</span>
+          </Link>
+        </Menu.Item>
+        <Menu.Item>
+          <Link to='/orders'>
+            <AccountBookOutlined />
+            <span>{t('dashboard.menu.orders')}</span>
+          </Link>
+        </Menu.Item>
+        <Menu.Item>
+          <Link to='/commments'>
+            <CommentOutlined />
+            <span>{t('dashboard.menu.comments')}</span>
+          </Link>
+        </Menu.Item>
+        <Menu.Item>
+          <a href='/'>
+            <LoginOutlined />
+            <span>{t('dashboard.menu.back')}</span>
+          </a>
         </Menu.Item>
       </Menu>
     </div>

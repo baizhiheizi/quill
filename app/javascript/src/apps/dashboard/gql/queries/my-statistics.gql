@@ -1,0 +1,8 @@
+query MyStatistics {
+  myStatistics {
+    articlesCount
+    authorRevenueAmount
+    boughtArticlesCount
+    readerRevenueAmount
+  }
+}

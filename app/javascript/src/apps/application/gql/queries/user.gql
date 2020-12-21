@@ -6,10 +6,12 @@ query User($mixinId: ID!) {
     mixinUuid
     avatarUrl
     bio
-    articlesCount
-    authorRevenueAmount
-    readerRevenueAmount
     authoringSubscribed
     readingSubscribed
+    statistics {
+      articlesCount
+      authorRevenueAmount
+      readerRevenueAmount
+    }
   }
 }
