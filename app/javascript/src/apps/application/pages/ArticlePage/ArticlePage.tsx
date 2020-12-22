@@ -6,7 +6,6 @@ import {
 } from '@ant-design/icons';
 import CommentsComponent from '@application/components/CommentsComponent/CommentsComponent';
 import LoadingComponent from '@application/components/LoadingComponent/LoadingComponent';
-import MarkdownRendererComponent from '@application/components/MarkdownRendererComponent/MarkdownRendererComponent';
 import UserCardComponent from '@application/components/UserCardComponent/UserCardComponent';
 import { handleShare, PAGE_TITLE } from '@application/shared';
 import {
@@ -16,7 +15,12 @@ import {
   User,
   useUpvoteArticleMutation,
 } from '@graphql';
-import { useCurrentUser, usePrsdigg, useUserAgent } from '@shared';
+import {
+  MarkdownRendererComponent,
+  useCurrentUser,
+  usePrsdigg,
+  useUserAgent,
+} from '@shared';
 import {
   Alert,
   Avatar,
