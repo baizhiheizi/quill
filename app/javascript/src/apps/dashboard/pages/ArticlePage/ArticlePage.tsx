@@ -7,6 +7,7 @@ import { useTranslation } from 'react-i18next';
 import { Link, useParams } from 'react-router-dom';
 import moment from 'moment';
 import ArticleOrdersComponent from './components/ArticleOrdersComponent';
+import ArticleCommentsComponent from './components/ArticleCommentsComponent';
 
 export default function ArticlePage() {
   updateActiveMenu('articles');
@@ -111,7 +112,9 @@ export default function ArticlePage() {
           <Tabs.TabPane
             tab={t('dashboard.articlePage.tabs.commentRecords')}
             key='comments'
-          ></Tabs.TabPane>
+          >
+            <ArticleCommentsComponent articleId={article.id} />
+          </Tabs.TabPane>
         </Tabs>
       </div>
     </div>

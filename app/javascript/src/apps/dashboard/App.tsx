@@ -13,6 +13,7 @@ import { Col, Layout, Row } from 'antd';
 import isMobile from 'ismobilejs';
 import React, { Suspense, useEffect, useState } from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
+import './App.less';
 import LoadingComponent from './components/LoadingComponent/LoadingComponent';
 import './i18n';
 import Menus from './Menus';
