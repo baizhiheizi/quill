@@ -37,12 +37,17 @@ class Article < ApplicationRecord
   belongs_to :author, class_name: 'User', inverse_of: :articles
 
   has_many :orders, as: :item, dependent: :nullify
-  has_many :transfers, through: :orders, dependent: :nullify
   has_many :buy_orders, -> { where(order_type: :buy_article) }, class_name: 'Order', as: :item, dependent: :nullify, inverse_of: false
   has_many :reward_orders, -> { where(order_type: :reward_article) }, class_name: 'Order', as: :item, dependent: :nullify, inverse_of: false
+
   has_many :readers, -> { distinct }, through: :orders, source: :buyer
   has_many :buyers, -> { distinct }, through: :buy_orders, source: :buyer
   has_many :rewarders, -> { distinct }, through: :reward_orders, source: :buyer
+
+  has_many :transfers, through: :orders, dependent: :nullify
+  has_many :author_transfers, -> { where(transfer_type: :author_revenue) }, through: :orders, source: :transfers, dependent: :nullify
+  has_many :reader_transfers, -> { where(transfer_type: :reader_revenue) }, through: :orders, source: :transfers, dependent: :nullify
+
   has_many :comments, as: :commentable, dependent: :nullify
 
   has_one :wallet, class_name: 'MixinNetworkUser', as: :owner, dependent: :nullify
@@ -173,6 +178,14 @@ class Article < ApplicationRecord
       "您的文章《#{title}》已被管理员撤销屏蔽。",
       recipient_id: author.mixin_uuid
     )
+  end
+
+  def author_revenue_amount
+    author_transfers.sum(:amount)
+  end
+
+  def reader_revenue_amount
+    reader_transfers.sum(:amount)
   end
 
   private

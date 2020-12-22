@@ -9,7 +9,7 @@ import {
   PrsdiggContext,
   UserAgentContext,
 } from '@shared';
-import { Layout } from 'antd';
+import { Col, Layout, Row } from 'antd';
 import isMobile from 'ismobilejs';
 import React, { Suspense, useEffect, useState } from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
@@ -55,12 +55,24 @@ export default function App(props: {
                       style={
                         isMobile().phone
                           ? { background: '#fff' }
-                          : { padding: '1rem' }
+                          : { marginLeft: 200, padding: '1rem' }
                       }
                     >
-                      <div style={{ background: '#fff', padding: '1rem' }}>
-                        <Routes />
-                      </div>
+                      <Row justify='center'>
+                        <Col
+                          flex={1}
+                          xs={24}
+                          sm={24}
+                          md={24}
+                          lg={20}
+                          xl={20}
+                          xxl={12}
+                        >
+                          <div style={{ background: '#fff', padding: '1rem' }}>
+                            <Routes />
+                          </div>
+                        </Col>
+                      </Row>
                     </Layout.Content>
                   </Layout>
                 </Router>

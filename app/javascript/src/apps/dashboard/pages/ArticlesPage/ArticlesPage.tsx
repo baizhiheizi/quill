@@ -1,5 +1,4 @@
 import { updateActiveMenu } from '@dashboard/shared';
-import { useCurrentUser } from '@shared';
 import { PageHeader, Tabs } from 'antd';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -10,7 +9,6 @@ export default function ArticlesPage() {
   updateActiveMenu('articles');
   const { t } = useTranslation();
   const [type, setType] = useState<'author' | 'reader'>('author');
-  const currentUser = useCurrentUser();
 
   return (
     <div>

@@ -10,7 +10,10 @@ module Types
     field :state, String, null: true
     field :asset_id, String, null: false
     field :price, Float, null: false
+
     field :revenue, Float, null: false
+    field :author_revenue_amount, Float, null: false
+    field :reader_revenue_amount, Float, null: false
 
     field :words_count, Integer, null: false
     field :partial_content, String, null: true
@@ -31,13 +34,14 @@ module Types
     field :wallet_id, String, null: true
 
     field :author, Types::UserType, null: false
+    field :wallet, Types::MixinNetworkUserType, null: true
+
     field :readers, Types::UserConnectionType, null: false
     field :buyers, Types::UserConnectionType, null: false
     field :rewarders, Types::UserConnectionType, null: false
     field :buy_orders, Types::OrderConnectionType, null: false
     field :reward_orders, Types::OrderConnectionType, null: false
     field :comments, Types::CommentConnectionType, null: false
-    field :wallet, Types::MixinNetworkUserType, null: true
 
     def content
       return unless object.authorized?(context[:current_user])

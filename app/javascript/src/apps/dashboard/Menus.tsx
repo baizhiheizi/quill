@@ -95,7 +95,10 @@ export default function Menus(props: { activeMenu?: string }) {
           </div>
         </div>
       ) : (
-        <Layout.Sider theme='light' style={{ height: '100%' }}>
+        <Layout.Sider
+          theme='light'
+          style={{ height: '100%', position: 'fixed', overflowY: 'scroll' }}
+        >
           <MenuConent />
         </Layout.Sider>
       )}

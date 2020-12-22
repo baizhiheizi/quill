@@ -20,10 +20,19 @@ article:
   intro: 简介
   wordsCount: 正文字数
   price: 单价(PRS)
+  upvotesCount: 喜欢
+  downvotesCount: 不喜欢
+  commentsCount: 评论次数
   ordersCount: 付费次数
+  buyOrdersCount: 购买次数
+  rewardOrdersCount: 赞赏次数
   revenue: 总收益(PRS)
+  authorRevenueAmount: 作者收益(PRS)
+  readerRevenueAmount: 读者收益(PRS)
   myShare: 奖励份额(%)
   stateText: 状态
+  createdAt: 创建时间
+  updatedAt: 上次编辑
   state:
     published: 已发表
     blocked: 已屏蔽
@@ -216,3 +225,11 @@ dashboard:
     tabs:
       author: 已发表
       reader: 已购买
+  articlePage:
+    tabs:
+      buyRecords: 购买记录
+      rewardRecords: 赞赏记录
+      commentRecords: 评论记录
+    boughtArticle: 购买了文章
+    rewardedArticle: 赞赏了文章
+    paid: 支付了

@@ -20,10 +20,19 @@ article:
   intro: Introduction
   wordsCount: Words Count
   price: Price(PRS)
+  upvotesCount: Upvotes
+  downvotesCount: Downvotes
+  commentsCount: Comments Count
   ordersCount: Paid Times
+  buyOrdersCount: Bought Times
+  rewardOrdersCount: Rewarded Times
   revenue: Revenue(PRS)
+  authorRevenueAmount: Author Revenue(PRS)
+  readerRevenueAmount: Reader Revenue(PRS)
   myShare: My Share(%)
   stateText: State
+  createdAt: Created
+  updatedAt: Last Edited
   state:
     published: Published
     blocked: Blocked
@@ -183,3 +192,11 @@ dashboard:
       comments: Commented
       payments: Payments
       transfers: Revenue
+  articlePage:
+    tabs:
+      buyRecords: Buy Records
+      rewardRecords: Reward Records
+      commentRecords: Comments
+    boughtArticle: bought this article
+    rewardedArticle: rewarded this article
+    paid: paid

@@ -276,6 +276,7 @@ export type Article = {
   __typename?: 'Article';
   assetId: Scalars['String'];
   author: User;
+  authorRevenueAmount: Scalars['Float'];
   authorized?: Maybe<Scalars['Boolean']>;
   buyOrders: OrderConnection;
   buyers: UserConnection;
@@ -293,6 +294,7 @@ export type Article = {
   partialContent?: Maybe<Scalars['String']>;
   paymentTraceId?: Maybe<Scalars['String']>;
   price: Scalars['Float'];
+  readerRevenueAmount: Scalars['Float'];
   readers: UserConnection;
   revenue: Scalars['Float'];
   rewardOrders: OrderConnection;
@@ -929,7 +931,9 @@ export type Query = {
   articleConnection: ArticleConnection;
   commentConnection: CommentConnection;
   createdAt: Scalars['ISO8601DateTime'];
+  myArticle?: Maybe<Article>;
   myArticleConnection: ArticleConnection;
+  myArticleOrderConnection?: Maybe<OrderConnection>;
   myPaymentConnection: PaymentConnection;
   myStatistics: UserStatistics;
   myTransferConnection: TransferConnection;
@@ -1084,8 +1088,23 @@ export type QueryCommentConnectionArgs = {
 };
 
 
+export type QueryMyArticleArgs = {
+  uuid: Scalars['ID'];
+};
+
+
 export type QueryMyArticleConnectionArgs = {
   type: Scalars['String'];
+  after?: Maybe<Scalars['String']>;
+  before?: Maybe<Scalars['String']>;
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+};
+
+
+export type QueryMyArticleOrderConnectionArgs = {
+  uuid: Scalars['ID'];
+  orderType: Scalars['String'];
   after?: Maybe<Scalars['String']>;
   before?: Maybe<Scalars['String']>;
   first?: Maybe<Scalars['Int']>;
@@ -2760,72 +2779,6 @@ export function useDownvoteCommentMutation(baseOptions?: Apollo.MutationHookOpti
 export type DownvoteCommentMutationHookResult = ReturnType<typeof useDownvoteCommentMutation>;
 export type DownvoteCommentMutationResult = Apollo.MutationResult<DownvoteCommentMutation>;
 export type DownvoteCommentMutationOptions = Apollo.BaseMutationOptions<DownvoteCommentMutation, DownvoteCommentMutationVariables>;
-export const HideArticleDocument = gql`
-    mutation HideArticle($input: HideArticleMutationInput!) {
-  hideArticle(input: $input) {
-    error
-    success
-  }
-}
-    `;
-export type HideArticleMutationFn = Apollo.MutationFunction<HideArticleMutation, HideArticleMutationVariables>;
-
-/**
- * __useHideArticleMutation__
- *
- * To run a mutation, you first call `useHideArticleMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useHideArticleMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [hideArticleMutation, { data, loading, error }] = useHideArticleMutation({
- *   variables: {
- *      input: // value for 'input'
- *   },
- * });
- */
-export function useHideArticleMutation(baseOptions?: Apollo.MutationHookOptions<HideArticleMutation, HideArticleMutationVariables>) {
-        return Apollo.useMutation<HideArticleMutation, HideArticleMutationVariables>(HideArticleDocument, baseOptions);
-      }
-export type HideArticleMutationHookResult = ReturnType<typeof useHideArticleMutation>;
-export type HideArticleMutationResult = Apollo.MutationResult<HideArticleMutation>;
-export type HideArticleMutationOptions = Apollo.BaseMutationOptions<HideArticleMutation, HideArticleMutationVariables>;
-export const PublishArticleDocument = gql`
-    mutation PublishArticle($input: PublishArticleMutationInput!) {
-  publishArticle(input: $input) {
-    error
-    success
-  }
-}
-    `;
-export type PublishArticleMutationFn = Apollo.MutationFunction<PublishArticleMutation, PublishArticleMutationVariables>;
-
-/**
- * __usePublishArticleMutation__
- *
- * To run a mutation, you first call `usePublishArticleMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `usePublishArticleMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [publishArticleMutation, { data, loading, error }] = usePublishArticleMutation({
- *   variables: {
- *      input: // value for 'input'
- *   },
- * });
- */
-export function usePublishArticleMutation(baseOptions?: Apollo.MutationHookOptions<PublishArticleMutation, PublishArticleMutationVariables>) {
-        return Apollo.useMutation<PublishArticleMutation, PublishArticleMutationVariables>(PublishArticleDocument, baseOptions);
-      }
-export type PublishArticleMutationHookResult = ReturnType<typeof usePublishArticleMutation>;
-export type PublishArticleMutationResult = Apollo.MutationResult<PublishArticleMutation>;
-export type PublishArticleMutationOptions = Apollo.BaseMutationOptions<PublishArticleMutation, PublishArticleMutationVariables>;
 export const ToggleAuthoringSubscribeUserActionDocument = gql`
     mutation ToggleAuthoringSubscribeUserAction($input: ToggleAuthoringSubscribeUserActionMutationInput!) {
   toggleAuthoringSubscribeUserAction(input: $input) {
@@ -3483,6 +3436,72 @@ export function useUserLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UserQ
 export type UserQueryHookResult = ReturnType<typeof useUserQuery>;
 export type UserLazyQueryHookResult = ReturnType<typeof useUserLazyQuery>;
 export type UserQueryResult = Apollo.QueryResult<UserQuery, UserQueryVariables>;
+export const HideArticleDocument = gql`
+    mutation HideArticle($input: HideArticleMutationInput!) {
+  hideArticle(input: $input) {
+    error
+    success
+  }
+}
+    `;
+export type HideArticleMutationFn = Apollo.MutationFunction<HideArticleMutation, HideArticleMutationVariables>;
+
+/**
+ * __useHideArticleMutation__
+ *
+ * To run a mutation, you first call `useHideArticleMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useHideArticleMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [hideArticleMutation, { data, loading, error }] = useHideArticleMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useHideArticleMutation(baseOptions?: Apollo.MutationHookOptions<HideArticleMutation, HideArticleMutationVariables>) {
+        return Apollo.useMutation<HideArticleMutation, HideArticleMutationVariables>(HideArticleDocument, baseOptions);
+      }
+export type HideArticleMutationHookResult = ReturnType<typeof useHideArticleMutation>;
+export type HideArticleMutationResult = Apollo.MutationResult<HideArticleMutation>;
+export type HideArticleMutationOptions = Apollo.BaseMutationOptions<HideArticleMutation, HideArticleMutationVariables>;
+export const PublishArticleDocument = gql`
+    mutation PublishArticle($input: PublishArticleMutationInput!) {
+  publishArticle(input: $input) {
+    error
+    success
+  }
+}
+    `;
+export type PublishArticleMutationFn = Apollo.MutationFunction<PublishArticleMutation, PublishArticleMutationVariables>;
+
+/**
+ * __usePublishArticleMutation__
+ *
+ * To run a mutation, you first call `usePublishArticleMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `usePublishArticleMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [publishArticleMutation, { data, loading, error }] = usePublishArticleMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function usePublishArticleMutation(baseOptions?: Apollo.MutationHookOptions<PublishArticleMutation, PublishArticleMutationVariables>) {
+        return Apollo.useMutation<PublishArticleMutation, PublishArticleMutationVariables>(PublishArticleDocument, baseOptions);
+      }
+export type PublishArticleMutationHookResult = ReturnType<typeof usePublishArticleMutation>;
+export type PublishArticleMutationResult = Apollo.MutationResult<PublishArticleMutation>;
+export type PublishArticleMutationOptions = Apollo.BaseMutationOptions<PublishArticleMutation, PublishArticleMutationVariables>;
 export const MyArticleConnectionDocument = gql`
     query MyArticleConnection($type: String!, $after: String) {
   myArticleConnection(type: $type, after: $after) {
@@ -3534,6 +3553,121 @@ export function useMyArticleConnectionLazyQuery(baseOptions?: Apollo.LazyQueryHo
 export type MyArticleConnectionQueryHookResult = ReturnType<typeof useMyArticleConnectionQuery>;
 export type MyArticleConnectionLazyQueryHookResult = ReturnType<typeof useMyArticleConnectionLazyQuery>;
 export type MyArticleConnectionQueryResult = Apollo.QueryResult<MyArticleConnectionQuery, MyArticleConnectionQueryVariables>;
+export const MyArticleOrderConnectionDocument = gql`
+    query MyArticleOrderConnection($uuid: ID!, $orderType: String!, $after: String) {
+  myArticleOrderConnection(uuid: $uuid, orderType: $orderType, after: $after) {
+    nodes {
+      traceId
+      buyer {
+        avatarUrl
+        name
+      }
+      orderType
+      state
+      total
+      createdAt
+    }
+    pageInfo {
+      hasNextPage
+      endCursor
+    }
+  }
+}
+    `;
+
+/**
+ * __useMyArticleOrderConnectionQuery__
+ *
+ * To run a query within a React component, call `useMyArticleOrderConnectionQuery` and pass it any options that fit your needs.
+ * When your component renders, `useMyArticleOrderConnectionQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useMyArticleOrderConnectionQuery({
+ *   variables: {
+ *      uuid: // value for 'uuid'
+ *      orderType: // value for 'orderType'
+ *      after: // value for 'after'
+ *   },
+ * });
+ */
+export function useMyArticleOrderConnectionQuery(baseOptions: Apollo.QueryHookOptions<MyArticleOrderConnectionQuery, MyArticleOrderConnectionQueryVariables>) {
+        return Apollo.useQuery<MyArticleOrderConnectionQuery, MyArticleOrderConnectionQueryVariables>(MyArticleOrderConnectionDocument, baseOptions);
+      }
+export function useMyArticleOrderConnectionLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MyArticleOrderConnectionQuery, MyArticleOrderConnectionQueryVariables>) {
+          return Apollo.useLazyQuery<MyArticleOrderConnectionQuery, MyArticleOrderConnectionQueryVariables>(MyArticleOrderConnectionDocument, baseOptions);
+        }
+export type MyArticleOrderConnectionQueryHookResult = ReturnType<typeof useMyArticleOrderConnectionQuery>;
+export type MyArticleOrderConnectionLazyQueryHookResult = ReturnType<typeof useMyArticleOrderConnectionLazyQuery>;
+export type MyArticleOrderConnectionQueryResult = Apollo.QueryResult<MyArticleOrderConnectionQuery, MyArticleOrderConnectionQueryVariables>;
+export const MyArticleDocument = gql`
+    query MyArticle($uuid: ID!) {
+  myArticle(uuid: $uuid) {
+    id
+    uuid
+    title
+    intro
+    content
+    state
+    price
+    assetId
+    ordersCount
+    commentsCount
+    revenue
+    authorRevenueAmount
+    readerRevenueAmount
+    commentingSubscribed
+    upvotesCount
+    downvotesCount
+    wordsCount
+    createdAt
+    updatedAt
+    buyers {
+      totalCount
+    }
+    buyOrders {
+      totalCount
+    }
+    rewarders {
+      totalCount
+    }
+    rewardOrders {
+      totalCount
+    }
+    comments {
+      totalCount
+    }
+  }
+}
+    `;
+
+/**
+ * __useMyArticleQuery__
+ *
+ * To run a query within a React component, call `useMyArticleQuery` and pass it any options that fit your needs.
+ * When your component renders, `useMyArticleQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useMyArticleQuery({
+ *   variables: {
+ *      uuid: // value for 'uuid'
+ *   },
+ * });
+ */
+export function useMyArticleQuery(baseOptions: Apollo.QueryHookOptions<MyArticleQuery, MyArticleQueryVariables>) {
+        return Apollo.useQuery<MyArticleQuery, MyArticleQueryVariables>(MyArticleDocument, baseOptions);
+      }
+export function useMyArticleLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MyArticleQuery, MyArticleQueryVariables>) {
+          return Apollo.useLazyQuery<MyArticleQuery, MyArticleQueryVariables>(MyArticleDocument, baseOptions);
+        }
+export type MyArticleQueryHookResult = ReturnType<typeof useMyArticleQuery>;
+export type MyArticleLazyQueryHookResult = ReturnType<typeof useMyArticleLazyQuery>;
+export type MyArticleQueryResult = Apollo.QueryResult<MyArticleQuery, MyArticleQueryVariables>;
 export const MyPaymentConnectionDocument = gql`
     query MyPaymentConnection($after: String) {
   myPaymentConnection(after: $after) {

@@ -1,0 +1,38 @@
+query MyArticle($uuid: ID!) {
+  myArticle(uuid: $uuid) {
+    id
+    uuid
+    title
+    intro
+    content
+    state
+    price
+    assetId
+    ordersCount
+    commentsCount
+    revenue
+    authorRevenueAmount
+    readerRevenueAmount
+    commentingSubscribed
+    upvotesCount
+    downvotesCount
+    wordsCount
+    createdAt
+    updatedAt
+    buyers {
+      totalCount
+    }
+    buyOrders {
+      totalCount
+    }
+    rewarders {
+      totalCount
+    }
+    rewardOrders {
+      totalCount
+    }
+    comments {
+      totalCount
+    }
+  }
+}
