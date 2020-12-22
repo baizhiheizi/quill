@@ -177,6 +177,10 @@ class Order < ApplicationRecord
     )
   end
 
+  def article
+    item if item.is_a? Article
+  end
+
   private
 
   def setup_attributes

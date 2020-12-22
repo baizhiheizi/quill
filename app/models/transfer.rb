@@ -30,6 +30,8 @@ class Transfer < ApplicationRecord
   belongs_to :wallet, class_name: 'MixinNetworkUser', primary_key: :uuid, inverse_of: :transfers, optional: true
   belongs_to :recipient, class_name: 'User', primary_key: :mixin_uuid, foreign_key: :opponent_id, inverse_of: :transfers, optional: true
 
+  has_one :article, class_name: 'Article', through: :source, source: :item
+
   enum transfer_type: { author_revenue: 0, reader_revenue: 1, payment_refund: 2, prsdigg_revenue: 3, bonus: 4 }
 
   validates :trace_id, presence: true, uniqueness: true

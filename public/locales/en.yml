@@ -200,3 +200,7 @@ dashboard:
     boughtArticle: bought this article
     rewardedArticle: rewarded this article
     paid: paid
+  revenuePage:
+    authorTransfers: Author Revenue
+    readerTransfers: Reader Revenue
+    payments: Payments

@@ -13,10 +13,19 @@ module Types
     field :processed_at, GraphQL::Types::ISO8601DateTime, null: true
 
     field :recipient, Types::UserType, null: true
+    field :article, Types::ArticleType, null: true
 
     def recipient
       BatchLoader::GraphQL.for(object.opponent_id).batch do |opponent_ids, loader|
         User.where(mixin_uuid: opponent_ids).each { |recipient| loader.call(recipient.mixin_uuid, recipient) }
+      end
+    end
+
+    def article
+      return unless object.source_type == 'Order'
+
+      BatchLoader::GraphQL.for(object.source_id).batch do |source_ids, loader|
+        Order.includes(:item).where(id: source_ids).each { |order| loader.call(order.id, order.article) }
       end
     end
   end

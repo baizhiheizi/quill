@@ -11,6 +11,7 @@ const ArticlePage = React.lazy(() => import('./pages/ArticlePage/ArticlePage'));
 const ArticlesPage = React.lazy(
   () => import('./pages/ArticlesPage/ArticlesPage'),
 );
+const RevenuePage = React.lazy(() => import('./pages/RevenuePage/RevenuePage'));
 
 export default function Routes() {
   return (
@@ -25,6 +26,9 @@ export default function Routes() {
           </Route>
           <Route path='/articles/:uuid' exact>
             <ArticlePage />
+          </Route>
+          <Route path='/revenue' exact>
+            <RevenuePage />
           </Route>
           <Route>
             <NotFoundPage />

@@ -1122,6 +1122,7 @@ export type QueryMyPaymentConnectionArgs = {
 
 export type QueryMyTransferConnectionArgs = {
   after?: Maybe<Scalars['String']>;
+  transferType?: Maybe<Scalars['String']>;
   before?: Maybe<Scalars['String']>;
   first?: Maybe<Scalars['Int']>;
   last?: Maybe<Scalars['Int']>;
@@ -1268,6 +1269,7 @@ export type ToggleReadingSubscribeUserActionMutationPayload = {
 export type Transfer = {
   __typename?: 'Transfer';
   amount: Scalars['Float'];
+  article?: Maybe<Article>;
   assetId: Scalars['String'];
   createdAt: Scalars['ISO8601DateTime'];
   memo?: Maybe<Scalars['String']>;
@@ -3748,8 +3750,8 @@ export type MyStatisticsQueryHookResult = ReturnType<typeof useMyStatisticsQuery
 export type MyStatisticsLazyQueryHookResult = ReturnType<typeof useMyStatisticsLazyQuery>;
 export type MyStatisticsQueryResult = Apollo.QueryResult<MyStatisticsQuery, MyStatisticsQueryVariables>;
 export const MyTransferConnectionDocument = gql`
-    query MyTransferConnection($after: String) {
-  myTransferConnection(after: $after) {
+    query MyTransferConnection($transferType: String, $after: String) {
+  myTransferConnection(transferType: $transferType, after: $after) {
     nodes {
       traceId
       snapshotId
@@ -3757,6 +3759,10 @@ export const MyTransferConnectionDocument = gql`
       assetId
       transferType
       createdAt
+      article {
+        uuid
+        title
+      }
     }
     pageInfo {
       hasNextPage
@@ -3778,6 +3784,7 @@ export const MyTransferConnectionDocument = gql`
  * @example
  * const { data, loading, error } = useMyTransferConnectionQuery({
  *   variables: {
+ *      transferType: // value for 'transferType'
  *      after: // value for 'after'
  *   },
  * });

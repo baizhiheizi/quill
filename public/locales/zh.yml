@@ -233,3 +233,7 @@ dashboard:
     boughtArticle: 购买了文章
     rewardedArticle: 赞赏了文章
     paid: 支付了
+  revenuePage:
+    authorTransfers: 作者收益
+    readerTransfers: 读者收益
+    payments: 付款记录

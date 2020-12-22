@@ -1,5 +1,5 @@
-query MyTransferConnection($after: String) {
-  myTransferConnection(after: $after) {
+query MyTransferConnection($transferType: String, $after: String) {
+  myTransferConnection(transferType: $transferType, after: $after) {
     nodes {
       traceId
       snapshotId
@@ -7,6 +7,10 @@ query MyTransferConnection($after: String) {
       assetId
       transferType
       createdAt
+      article {
+        uuid
+        title
+      }
     }
     pageInfo {
       hasNextPage
