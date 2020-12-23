@@ -8,7 +8,7 @@ module Resolvers
     type Types::TransferConnectionType, null: false
 
     def resolve(params = {})
-      transfers = 
+      transfers =
         case params[:transfer_type]
         when 'author_revenue'
           current_user.author_revenue_transfers
