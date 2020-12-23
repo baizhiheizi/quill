@@ -12,6 +12,7 @@ const ArticlesPage = React.lazy(
   () => import('./pages/ArticlesPage/ArticlesPage'),
 );
 const RevenuePage = React.lazy(() => import('./pages/RevenuePage/RevenuePage'));
+const OrdersPage = React.lazy(() => import('./pages/OrdersPage/OrdersPage'));
 
 export default function Routes() {
   return (
@@ -29,6 +30,9 @@ export default function Routes() {
           </Route>
           <Route path='/revenue' exact>
             <RevenuePage />
+          </Route>
+          <Route path='/orders' exact>
+            <OrdersPage />
           </Route>
           <Route>
             <NotFoundPage />

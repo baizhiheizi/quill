@@ -56,6 +56,15 @@ payment:
     refunded: Refunded
     completed: Compelted
   snapshot: Snapshot
+swapOrder:
+  state:
+    paid:  Paid
+    swapping: Swapping
+    rejected: Rejected
+    swapped: Swapped
+    order_placed: Buying
+    completed: Completed
+    refunded: Refunded
 user:
   defaultBio: Didn't left anything
   authorRevenueAmount: Author Revenue(PRS)
@@ -204,3 +213,7 @@ dashboard:
     authorTransfers: Author Revenue
     readerTransfers: Reader Revenue
     payments: Payments
+  ordersPage:
+    tabs:
+      payments: Payments
+      swapOrders: Swap Orders

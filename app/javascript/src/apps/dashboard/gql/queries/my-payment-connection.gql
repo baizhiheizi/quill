@@ -7,6 +7,14 @@ query MyPaymentConnection($after: String) {
       assetId
       state
       createdAt
+      order {
+        item {
+          ... on Article {
+            title
+            uuid
+          }
+        }
+      }
     }
     pageInfo {
       hasNextPage

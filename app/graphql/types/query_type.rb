@@ -23,6 +23,7 @@ module Types
     field :my_article_connection, resolver: Resolvers::MyArticleConnectionResolver
     field :my_payment_connection, resolver: Resolvers::MyPaymentConnectionResolver
     field :my_transfer_connection, resolver: Resolvers::MyTransferConnectionResolver
+    field :my_swap_order_connection, resolver: Resolvers::MySwapOrderConnectionResolver
     field :my_statistics, resolver: Resolvers::MyStatisticsResolver
 
     # admin

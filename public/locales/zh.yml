@@ -56,6 +56,15 @@ payment:
     refunded: 已退款
     completed: 已完成
   snapshot: 链上快照
+swapOrder:
+  state:
+    paid: 已支付
+    swapping: 兑换中
+    rejected: 兑换失败
+    swapped: 兑换成功
+    order_placed: 购买中
+    completed: 已完成
+    refunded: 已退款
 user:
   defaultBio: 没有留下任何介绍
   authorRevenueAmount: 作者收益(PRS)
@@ -237,3 +246,7 @@ dashboard:
     authorTransfers: 作者收益
     readerTransfers: 读者收益
     payments: 付款记录
+  ordersPage:
+    tabs:
+      payments: 支付记录
+      swapOrders: Swap 订单

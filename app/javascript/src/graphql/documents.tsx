@@ -936,6 +936,7 @@ export type Query = {
   myArticleOrderConnection?: Maybe<OrderConnection>;
   myPaymentConnection: PaymentConnection;
   myStatistics: UserStatistics;
+  mySwapOrderConnection: SwapOrderConnection;
   myTransferConnection: TransferConnection;
   payment?: Maybe<Payment>;
   revenueChart: Scalars['String'];
@@ -1113,6 +1114,14 @@ export type QueryMyArticleOrderConnectionArgs = {
 
 
 export type QueryMyPaymentConnectionArgs = {
+  after?: Maybe<Scalars['String']>;
+  before?: Maybe<Scalars['String']>;
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+};
+
+
+export type QueryMySwapOrderConnectionArgs = {
   after?: Maybe<Scalars['String']>;
   before?: Maybe<Scalars['String']>;
   first?: Maybe<Scalars['Int']>;
@@ -3680,6 +3689,14 @@ export const MyPaymentConnectionDocument = gql`
       assetId
       state
       createdAt
+      order {
+        item {
+          ... on Article {
+            title
+            uuid
+          }
+        }
+      }
     }
     pageInfo {
       hasNextPage
@@ -3749,6 +3766,57 @@ export function useMyStatisticsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptio
 export type MyStatisticsQueryHookResult = ReturnType<typeof useMyStatisticsQuery>;
 export type MyStatisticsLazyQueryHookResult = ReturnType<typeof useMyStatisticsLazyQuery>;
 export type MyStatisticsQueryResult = Apollo.QueryResult<MyStatisticsQuery, MyStatisticsQueryVariables>;
+export const MySwapOrderConnectionDocument = gql`
+    query MySwapOrderConnection($after: String) {
+  mySwapOrderConnection(after: $after) {
+    nodes {
+      id
+      traceId
+      state
+      funds
+      amount
+      minAmount
+      fillAssetId
+      payAssetId
+      article {
+        uuid
+        title
+        price
+      }
+    }
+    pageInfo {
+      hasNextPage
+      endCursor
+    }
+  }
+}
+    `;
+
+/**
+ * __useMySwapOrderConnectionQuery__
+ *
+ * To run a query within a React component, call `useMySwapOrderConnectionQuery` and pass it any options that fit your needs.
+ * When your component renders, `useMySwapOrderConnectionQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useMySwapOrderConnectionQuery({
+ *   variables: {
+ *      after: // value for 'after'
+ *   },
+ * });
+ */
+export function useMySwapOrderConnectionQuery(baseOptions?: Apollo.QueryHookOptions<MySwapOrderConnectionQuery, MySwapOrderConnectionQueryVariables>) {
+        return Apollo.useQuery<MySwapOrderConnectionQuery, MySwapOrderConnectionQueryVariables>(MySwapOrderConnectionDocument, baseOptions);
+      }
+export function useMySwapOrderConnectionLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MySwapOrderConnectionQuery, MySwapOrderConnectionQueryVariables>) {
+          return Apollo.useLazyQuery<MySwapOrderConnectionQuery, MySwapOrderConnectionQueryVariables>(MySwapOrderConnectionDocument, baseOptions);
+        }
+export type MySwapOrderConnectionQueryHookResult = ReturnType<typeof useMySwapOrderConnectionQuery>;
+export type MySwapOrderConnectionLazyQueryHookResult = ReturnType<typeof useMySwapOrderConnectionLazyQuery>;
+export type MySwapOrderConnectionQueryResult = Apollo.QueryResult<MySwapOrderConnectionQuery, MySwapOrderConnectionQueryVariables>;
 export const MyTransferConnectionDocument = gql`
     query MyTransferConnection($transferType: String, $after: String) {
   myTransferConnection(transferType: $transferType, after: $after) {

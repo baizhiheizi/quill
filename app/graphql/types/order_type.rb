@@ -25,5 +25,12 @@ module Types
         User.where(id: seller_ids).each { |seller| loader.call(seller.id, seller) }
       end
     end
+
+    def item
+      BatchLoader.for(object.item_id).batch(key: object.item_type) do |ids, loader, args|
+        model = Object.const_get(args[:key])
+        model.where(id: ids).each { |record| loader.call(record.id, record) }
+      end
+    end
   end
 end

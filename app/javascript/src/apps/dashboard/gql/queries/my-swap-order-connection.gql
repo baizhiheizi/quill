@@ -1,0 +1,23 @@
+query MySwapOrderConnection($after: String) {
+  mySwapOrderConnection(after: $after) {
+    nodes {
+      id
+      traceId
+      state
+      funds
+      amount
+      minAmount
+      fillAssetId
+      payAssetId
+      article {
+        uuid
+        title
+        price
+      }
+    }
+    pageInfo {
+      hasNextPage
+      endCursor
+    }
+  }
+}
