@@ -95,7 +95,7 @@ class Order < ApplicationRecord
         amount: _amount.to_f.to_s,
         memo: "读者收益来自文章《#{item.title}》".truncate(140)
       ).find_or_create_by!(
-        trace_id: MixinBot.api.unique_conversation_id(trace_id, _order.trace_id)
+        trace_id: PrsdiggBot.api.unique_conversation_id(trace_id, _order.trace_id)
       )
 
       _distributed_amount += _amount
@@ -107,12 +107,12 @@ class Order < ApplicationRecord
       transfers.create_with(
         wallet: payment.wallet,
         transfer_type: :prsdigg_revenue,
-        opponent_id: MixinBot.client_id,
+        opponent_id: PrsdiggBot.client_id,
         asset_id: revenue_asset_id,
         amount: _prsdigg_amount.to_f.to_s,
         memo: "article uuid: #{item.uuid}》".truncate(140)
       ).find_or_create_by!(
-        trace_id: payment.wallet.mixin_api.unique_conversation_id(trace_id, MixinBot.client_id)
+        trace_id: payment.wallet.mixin_api.unique_conversation_id(trace_id, PrsdiggBot.client_id)
       )
     end
 
@@ -125,7 +125,7 @@ class Order < ApplicationRecord
       amount: (total - _distributed_amount - _prsdigg_amount).round(8),
       memo: "#{payment.payer.name} #{buy_article? ? '购买' : '赞赏'}了你的文章《#{item.title}》".truncate(140)
     ).find_or_create_by!(
-      trace_id: MixinBot.api.unique_conversation_id(trace_id, item.author.mixin_uuid)
+      trace_id: PrsdiggBot.api.unique_conversation_id(trace_id, item.author.mixin_uuid)
     )
   end
 
@@ -153,8 +153,8 @@ class Order < ApplicationRecord
     return if reward_article?
 
     messages = subscribers.pluck(:mixin_uuid).map do |_uuid|
-      MixinBot.api.app_card(
-        conversation_id: MixinBot.api.unique_conversation_id(_uuid),
+      PrsdiggBot.api.app_card(
+        conversation_id: PrsdiggBot.api.unique_conversation_id(_uuid),
         recipient_id: _uuid,
         data: {
           icon_url: 'https://mixin-images.zeromesh.net/L0egX-GZxT0Yh-dd04WKeAqVNRzgzuj_Je_-yKf8aQTZo-xihd-LogbrIEr-WyG9WbJKGFvt2YYx-UIUa1qQMRla=s256',

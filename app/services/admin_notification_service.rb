@@ -2,7 +2,7 @@
 
 class AdminNotificationService
   def text(text)
-    message = MixinBot.api.plain_text(
+    message = PrsdiggBot.api.plain_text(
       conversation_id: Rails.application.credentials.dig(:admin, :group_conversation_id),
       data: text
     )
@@ -10,7 +10,7 @@ class AdminNotificationService
   end
 
   def post(post)
-    message = MixinBot.api.plain_post(
+    message = PrsdiggBot.api.plain_post(
       conversation_id: Rails.application.credentials.dig(:admin, :group_conversation_id),
       data: post
     )

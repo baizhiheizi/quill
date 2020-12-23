@@ -11,7 +11,7 @@ class Admin::BaseController < ActionController::Base
     {
       current_admin: current_admin&.as_json(only: %i[name]),
       prsdigg: {
-        app_id: MixinBot.api.client_id
+        app_id: PrsdiggBot.api.client_id
       }
     }
   end

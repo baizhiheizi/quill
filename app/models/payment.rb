@@ -89,7 +89,7 @@ class Payment < ApplicationRecord
       min_amount: decrypted_memo['p'],
       fill_asset_id: Article::PRS_ASSET_ID,
       pay_asset_id: asset_id,
-      trace_id: MixinBot.api.unique_conversation_id(wallet.uuid, trace_id),
+      trace_id: PrsdiggBot.api.unique_conversation_id(wallet.uuid, trace_id),
       wallet: wallet
     )
   rescue StandardError => e
@@ -129,7 +129,7 @@ class Payment < ApplicationRecord
       opponent_id: opponent_id,
       amount: amount,
       asset_id: asset_id,
-      trace_id: MixinBot.api.unique_conversation_id(trace_id, opponent_id),
+      trace_id: PrsdiggBot.api.unique_conversation_id(trace_id, opponent_id),
       memo: 'REDUND'
     )
   end

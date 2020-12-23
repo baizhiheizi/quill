@@ -125,8 +125,8 @@ class Article < ApplicationRecord
     return if hidden?
 
     messages = subscribers.pluck(:mixin_uuid).map do |_uuid|
-      MixinBot.api.app_card(
-        conversation_id: MixinBot.api.unique_conversation_id(_uuid),
+      PrsdiggBot.api.app_card(
+        conversation_id: PrsdiggBot.api.unique_conversation_id(_uuid),
         recipient_id: _uuid,
         data: {
           icon_url: PRSDIGG_ICON_URL,

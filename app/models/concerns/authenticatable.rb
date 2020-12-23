@@ -5,8 +5,8 @@ module Authenticatable
 
   class_methods do
     def auth_from_mixin(code)
-      access_token = MixinBot.api.oauth_token(code)
-      res = MixinBot.api.read_me access_token: access_token
+      access_token = PrsdiggBot.api.oauth_token(code)
+      res = PrsdiggBot.api.read_me access_token: access_token
       raise res.inspect if res['error'].present?
 
       auth = UserAuthorization.create_with(

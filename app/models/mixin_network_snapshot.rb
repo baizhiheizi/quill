@@ -43,7 +43,7 @@ class MixinNetworkSnapshot < ApplicationRecord
   scope :unprocessed, -> { where(processed_at: nil) }
   scope :only_input, -> { where(amount: 0...) }
   scope :only_output, -> { where(amount: ...0) }
-  scope :only_prsdigg, -> { where(user_id: MixinBot.client_id) }
+  scope :only_prsdigg, -> { where(user_id: PrsdiggBot.client_id) }
   scope :only_4swap, -> { where(opponent_id: SwapOrder::FOX_SWAP_APP_ID) }
 
   # polling Mixin Network
@@ -53,7 +53,7 @@ class MixinNetworkSnapshot < ApplicationRecord
       offset = Global.redis.get('last_polled_at')
       offset = MixinNetworkSnapshot.order(transferred_at: :desc).first&.transferred_at&.utc&.rfc3339 || Time.current.utc.rfc3339 if offset.blank?
 
-      r = MixinBot.api.read_network_snapshots(offset: offset, limit: POLLING_LIMIT, order: 'ASC')
+      r = PrsdiggBot.api.read_network_snapshots(offset: offset, limit: POLLING_LIMIT, order: 'ASC')
       p ['polled', r['data'].length]
 
       r['data'].each do |snapshot|

@@ -57,7 +57,7 @@ class Transfer < ApplicationRecord
 
     r =
       if wallet.blank?
-        MixinBot.api.create_transfer(
+        PrsdiggBot.api.create_transfer(
           Rails.application.credentials.dig(:mixin, :pin_code),
           asset_id: asset_id,
           opponent_id: opponent_id,

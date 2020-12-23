@@ -59,8 +59,8 @@ class Announcement < ApplicationRecord
 
   def deliver_as_post
     messages = User.pluck(:mixin_uuid).map do |uuid|
-      MixinBot.api.plain_post(
-        conversation_id: MixinBot.api.unique_conversation_id(uuid),
+      PrsdiggBot.api.plain_post(
+        conversation_id: PrsdiggBot.api.unique_conversation_id(uuid),
         recipient_id: uuid,
         data: content
       )
@@ -73,8 +73,8 @@ class Announcement < ApplicationRecord
 
   def deliver_as_text
     messages = User.pluck(:mixin_uuid).map do |uuid|
-      MixinBot.api.plain_text(
-        conversation_id: MixinBot.api.unique_conversation_id(uuid),
+      PrsdiggBot.api.plain_text(
+        conversation_id: PrsdiggBot.api.unique_conversation_id(uuid),
         recipient_id: uuid,
         data: content
       )

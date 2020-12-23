@@ -43,7 +43,7 @@ class MixinNetworkUser < ApplicationRecord
   attr_encrypted :pin
 
   def mixin_api
-    @mixin_api ||= MixinBot::API.new(
+    @mixin_api ||= PrsdiggBot::API.new(
       client_id: uuid,
       client_secret: nil,
       session_id: session_id,
@@ -84,7 +84,7 @@ class MixinNetworkUser < ApplicationRecord
   def setup_attributes
     return unless new_record?
 
-    r = MixinBot.api.create_user(name || 'PRSDigg Broker', key_type: 'Ed25519')
+    r = PrsdiggBot.api.create_user(name || 'PRSDigg Broker', key_type: 'Ed25519')
     raise r.inspect if r['error'].present?
 
     self.raw = r['data']

@@ -83,11 +83,11 @@ module Types
 
       # generate a unique trace ID for paying
       # avoid duplicate payment
-      candidate = MixinBot.api.unique_conversation_id(object.uuid, context[:current_user].mixin_uuid)
+      candidate = PrsdiggBot.api.unique_conversation_id(object.uuid, context[:current_user].mixin_uuid)
       loop do
         break unless Payment.exists?(trace_id: candidate, state: %i[refunded completed])
 
-        candidate = MixinBot.api.unique_conversation_id(object.uuid, candidate)
+        candidate = PrsdiggBot.api.unique_conversation_id(object.uuid, candidate)
       end
 
       candidate

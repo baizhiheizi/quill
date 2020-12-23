@@ -59,8 +59,8 @@ class Comment < ApplicationRecord
 
   def notify_subsribers_async
     messages = subscribers.pluck(:mixin_uuid).map do |_uuid|
-      MixinBot.api.plain_text(
-        conversation_id: MixinBot.api.unique_conversation_id(_uuid),
+      PrsdiggBot.api.plain_text(
+        conversation_id: PrsdiggBot.api.unique_conversation_id(_uuid),
         recipient_id: _uuid,
         data: notification_text
       )

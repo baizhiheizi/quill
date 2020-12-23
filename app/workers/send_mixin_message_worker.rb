@@ -5,7 +5,7 @@ class SendMixinMessageWorker
   sidekiq_options queue: :default, retry: true
 
   def perform(message)
-    r = MixinBot.api.send_message message
+    r = PrsdiggBot.api.send_message message
     Rails.logger.info r.inspect
 
     return if r['error'].blank?

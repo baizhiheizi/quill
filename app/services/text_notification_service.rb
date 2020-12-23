@@ -2,8 +2,8 @@
 
 class TextNotificationService
   def call(text, recipient_id:)
-    message = MixinBot.api.plain_text(
-      conversation_id: MixinBot.api.unique_conversation_id(recipient_id),
+    message = PrsdiggBot.api.plain_text(
+      conversation_id: PrsdiggBot.api.unique_conversation_id(recipient_id),
       data: text
     )
 
