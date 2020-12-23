@@ -18,7 +18,10 @@ module Authenticatable
       )
       raw = (auth.raw.presence || {}).merge(res['data'])
       auth.raw = raw
-      auth.update! raw: raw if auth.raw_changed?
+      if auth.raw_changed?
+        auth.update! raw: raw
+        auth.user.update_profile raw
+      end
 
       find_or_create_by!(mixin_authorization: auth)
     end

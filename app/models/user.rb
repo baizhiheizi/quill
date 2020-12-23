@@ -138,6 +138,16 @@ class User < ApplicationRecord
     }
   end
 
+  def update_profile(profile = {})
+    profile ||= mixin_authorization.raw
+    return if profile.blank?
+
+    update(
+      avatar_url: profile['avatar_url'],
+      name: profile['full_name']
+    )
+  end
+
   private
 
   def setup_attributes
