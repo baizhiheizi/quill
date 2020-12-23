@@ -13,9 +13,9 @@ module Resolvers
 
       case params[:order_type]
       when 'buy_article'
-        article.buy_orders
+        article.buy_orders.order(created_at: :desc)
       when 'reward_article'
-        article.reward_orders
+        article.reward_orders.order(created_at: :desc)
       end
     end
   end
