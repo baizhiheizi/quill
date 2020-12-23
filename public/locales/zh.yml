@@ -2,8 +2,9 @@ common:
   loadMore: 加载更多
   subscribeBtn: 订阅
   unsubscribeBtn: 取消订阅
-  detailBtn: 查看
+  detailBtn: 详情
   editBtn: 编辑
+  viewBtn: 查看
   cancelBtn: 取消
   paidBtn: 已经支付
 messages:
@@ -50,6 +51,7 @@ article:
     titlePlaceHolder: 文章标题
     contentPlaceHolder: 写点有价值的东西
     introPlaceHolder: 请简要介绍一下你的文章，简介内容为公开可见。
+    newBtn: 新建
 payment:
   state:
     paid: 已支付
@@ -226,6 +228,10 @@ dashboard:
     orders: 订单管理
     comments: 评论管理
     back: 返回
+  pages: 
+    article: 文章详情
+    articleNew: 创建文章
+    articleEdit: 文章编辑
   articlesPage:
     publishConfirm: 确定要将文章公开吗？
     hideConfirm: 确定要将文章隐藏吗？已购读者将不受影响。

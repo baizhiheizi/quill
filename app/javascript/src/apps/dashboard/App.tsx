@@ -67,7 +67,7 @@ export default function App(props: {
                           md={24}
                           lg={20}
                           xl={20}
-                          xxl={12}
+                          xxl={14}
                         >
                           <div style={{ background: '#fff', padding: '1rem' }}>
                             <Routes />

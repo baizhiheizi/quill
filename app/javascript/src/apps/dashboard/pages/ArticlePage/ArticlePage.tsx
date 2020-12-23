@@ -1,7 +1,7 @@
 import LoadingComponent from '@dashboard/components/LoadingComponent/LoadingComponent';
 import { updateActiveMenu } from '@dashboard/shared';
 import { useMyArticleQuery } from '@graphql';
-import { Descriptions, PageHeader, Tabs, Tag } from 'antd';
+import { Button, Descriptions, PageHeader, Tabs, Tag } from 'antd';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, useParams } from 'react-router-dom';
@@ -25,7 +25,17 @@ export default function ArticlePage() {
   return (
     <div>
       <PageHeader
-        title='文章详情'
+        title={t('dashboard.pages.article')}
+        extra={[
+          <Button key='edit' type='primary'>
+            <Link to={`/articles/${uuid}/edit`}>{t('common.editBtn')}</Link>
+          </Button>,
+          <Button key='view'>
+            <a href={`/articles/${uuid}`} target='_blank'>
+              {t('common.viewBtn')}
+            </a>
+          </Button>,
+        ]}
         breadcrumb={{
           routes: [
             { path: '/articles', breadcrumbName: t('dashboard.menu.articles') },

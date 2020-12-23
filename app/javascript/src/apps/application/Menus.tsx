@@ -1,16 +1,6 @@
 import { GithubOutlined, MenuOutlined } from '@ant-design/icons';
 import { imagePath, useCurrentUser, useUserAgent } from '@shared';
-import {
-  Avatar,
-  Button,
-  Col,
-  Divider,
-  Drawer,
-  Dropdown,
-  Layout,
-  Menu,
-  Row,
-} from 'antd';
+import { Avatar, Button, Col, Drawer, Layout, Menu, Row } from 'antd';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
@@ -18,7 +8,7 @@ import { OPEN_SOURCE_URL } from './shared';
 
 export default function Menus() {
   const currentUser = useCurrentUser();
-  const { mixinEnv } = useUserAgent();
+  const { isMobile } = useUserAgent();
   const [drawerVisible, setDrawerVisible] = useState(false);
   const { t, i18n } = useTranslation();
   const MenuConent = (props: { mode: 'horizontal' | 'vertical' }) => (
@@ -33,7 +23,11 @@ export default function Menus() {
       <Col>
         <div style={{ margin: '0 15px' }}>
           <Link to='/' replace>
-            <Avatar size='large' src={imagePath('logo.svg')} />
+            {currentUser ? (
+              <Avatar src={currentUser.avatarUrl}>{currentUser.name[0]}</Avatar>
+            ) : (
+              <Avatar size='large' src={imagePath('logo.svg')} />
+            )}
           </Link>
         </div>
       </Col>
@@ -46,9 +40,9 @@ export default function Menus() {
           </Menu.Item>
           <Menu.Item onClick={() => setDrawerVisible(false)}>
             {currentUser ? (
-              <Link to='/articles/new' replace>
+              <a href='/dashboard/articles/new' target='_blank'>
                 {t('menu.write')}
-              </Link>
+              </a>
             ) : (
               <a href={`/login?redirect_uri=${location.href}`}>
                 {t('menu.write')}
@@ -84,59 +78,42 @@ export default function Menus() {
         </Menu>
       </Col>
       <Col>
-        <div
-          style={
-            props.mode === 'horizontal'
-              ? { display: 'inline-block' }
-              : { marginBottom: '1rem' }
-          }
-        >
-          {i18n.language.includes('en') ? (
-            <a onClick={() => i18n.changeLanguage('zh-CN')}>中文</a>
-          ) : (
-            '中文'
-          )}
-          <Divider type='vertical' />
-          {i18n.language.includes('zh') ? (
-            <a onClick={() => i18n.changeLanguage('en-US')}>EN</a>
-          ) : (
-            'EN'
-          )}
-        </div>
+        <Menu theme='light' mode={props.mode} selectable={false}>
+          <Menu.SubMenu title={i18n.language.includes('en') ? 'EN' : '中文'}>
+            <Menu.Item>
+              <a onClick={() => i18n.changeLanguage('zh-CN')}>中文</a>
+            </Menu.Item>
+            <Menu.Item>
+              <a onClick={() => i18n.changeLanguage('en-US')}>EN</a>
+            </Menu.Item>
+          </Menu.SubMenu>
+        </Menu>
       </Col>
-      <Col>
-        {currentUser ? (
-          <Dropdown
-            placement='bottomLeft'
-            trigger={['click']}
-            overlay={
-              <Menu selectable={false}>
-                <Menu.Item onClick={() => setDrawerVisible(false)}>
-                  <Link to='/mine' replace>
-                    {t('menu.mine')}
-                  </Link>
-                </Menu.Item>
-                <Menu.Item onClick={() => setDrawerVisible(false)}>
-                  <a href='/logout'>{t('menu.logout')}</a>
-                </Menu.Item>
-              </Menu>
-            }
-          >
-            <div style={{ padding: '0 1rem' }}>
-              <Avatar src={currentUser.avatarUrl}>{currentUser.name[0]}</Avatar>
-            </div>
-          </Dropdown>
-        ) : (
+      {currentUser ? (
+        <Col>
+          <Menu mode={props.mode} selectable={false}>
+            <Menu.Item onClick={() => setDrawerVisible(false)}>
+              <a href='/dashboard' target='_blank'>
+                {t('menu.mine')}
+              </a>
+            </Menu.Item>
+            <Menu.Item onClick={() => setDrawerVisible(false)}>
+              <a href='/logout'>{t('menu.logout')}</a>
+            </Menu.Item>
+          </Menu>
+        </Col>
+      ) : (
+        <Col>
           <Button type='link' href='/login'>
             {t('menu.login')}
           </Button>
-        )}
-      </Col>
+        </Col>
+      )}
     </Row>
   );
   return (
     <React.Fragment>
-      {mixinEnv ? (
+      {isMobile.phone ? (
         <div>
           <Drawer
             bodyStyle={{ padding: 0 }}

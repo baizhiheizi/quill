@@ -1,7 +1,8 @@
 import { updateActiveMenu } from '@dashboard/shared';
-import { PageHeader, Tabs } from 'antd';
+import { Button, PageHeader, Tabs } from 'antd';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router-dom';
 import MyArticlesComponent from './components/MyArticlesComponent';
 import MyBoughtArticlesComponent from './components/MyBoughtArticlesComponent';
 
@@ -12,7 +13,14 @@ export default function ArticlesPage() {
 
   return (
     <div>
-      <PageHeader title={t('dashboard.menu.articles')} />
+      <PageHeader
+        title={t('dashboard.menu.articles')}
+        extra={[
+          <Button key='new' type='primary'>
+            <Link to='/articles/new'>{t('article.form.newBtn')}</Link>
+          </Button>,
+        ]}
+      />
       <Tabs
         activeKey={type}
         onChange={(key: 'author' | 'reader') => setType(key)}

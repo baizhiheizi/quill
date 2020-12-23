@@ -85,7 +85,7 @@ export default function MySwapOrderComponent() {
                   }
                 />
                 <span>{swapOrder.funds}</span>
-                <span style={{color: '#aaa'}}>to</span>
+                <span style={{ color: '#aaa' }}>to</span>
                 <Avatar
                   src={
                     SUPPORTED_TOKENS.find(

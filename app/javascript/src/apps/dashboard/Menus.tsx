@@ -3,6 +3,7 @@ import {
   CommentOutlined,
   DashboardOutlined,
   FileTextOutlined,
+  GlobalOutlined,
   LoginOutlined,
   MenuOutlined,
   RiseOutlined,
@@ -16,7 +17,7 @@ import { Link } from 'react-router-dom';
 export default function Menus(props: { activeMenu?: string }) {
   const { activeMenu } = props;
   const { isMobile } = useUserAgent();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [drawerVisible, setDrawerVisible] = useState(false);
   const MenuConent = () => (
     <div>
@@ -51,11 +52,22 @@ export default function Menus(props: { activeMenu?: string }) {
           </Link>
         </Menu.Item>
         <Menu.Item key='comments'>
-          <Link to='/commments'>
+          <Link to='/comments'>
             <CommentOutlined />
             <span>{t('dashboard.menu.comments')}</span>
           </Link>
         </Menu.Item>
+        <Menu.SubMenu
+          title={i18n.language.includes('en') ? 'EN' : '中文'}
+          icon={<GlobalOutlined />}
+        >
+          <Menu.Item>
+            <a onClick={() => i18n.changeLanguage('zh-CN')}>中文</a>
+          </Menu.Item>
+          <Menu.Item>
+            <a onClick={() => i18n.changeLanguage('en-US')}>EN</a>
+          </Menu.Item>
+        </Menu.SubMenu>
         <Menu.Item key='back'>
           <a href='/'>
             <LoginOutlined />
