@@ -43,7 +43,7 @@ class MixinNetworkUser < ApplicationRecord
   attr_encrypted :pin
 
   def mixin_api
-    @mixin_api ||= PrsdiggBot::API.new(
+    @mixin_api ||= MixinBot::API.new(
       client_id: uuid,
       client_secret: nil,
       session_id: session_id,

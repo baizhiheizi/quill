@@ -43,7 +43,7 @@ class MixinNetworkSnapshot < ApplicationRecord
   scope :unprocessed, -> { where(processed_at: nil) }
   scope :only_input, -> { where(amount: 0...) }
   scope :only_output, -> { where(amount: ...0) }
-  scope :only_prsdigg, -> { where(user_id: PrsdiggBot.client_id) }
+  scope :only_prsdigg, -> { where(user_id: PrsdiggBot.api.client_id) }
   scope :only_4swap, -> { where(opponent_id: SwapOrder::FOX_SWAP_APP_ID) }
 
   # polling Mixin Network

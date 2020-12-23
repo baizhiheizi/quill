@@ -107,12 +107,12 @@ class Order < ApplicationRecord
       transfers.create_with(
         wallet: payment.wallet,
         transfer_type: :prsdigg_revenue,
-        opponent_id: PrsdiggBot.client_id,
+        opponent_id: PrsdiggBot.api.client_id,
         asset_id: revenue_asset_id,
         amount: _prsdigg_amount.to_f.to_s,
         memo: "article uuid: #{item.uuid}》".truncate(140)
       ).find_or_create_by!(
-        trace_id: payment.wallet.mixin_api.unique_conversation_id(trace_id, PrsdiggBot.client_id)
+        trace_id: payment.wallet.mixin_api.unique_conversation_id(trace_id, PrsdiggBot.api.client_id)
       )
     end
 
