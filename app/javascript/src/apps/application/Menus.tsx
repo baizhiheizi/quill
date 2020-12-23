@@ -44,7 +44,7 @@ export default function Menus() {
                 {t('menu.write')}
               </a>
             ) : (
-              <a href={`/login?redirect_uri=${location.href}`}>
+              <a href={`/login?return_to=${encodeURIComponent(location.href)}`}>
                 {t('menu.write')}
               </a>
             )}

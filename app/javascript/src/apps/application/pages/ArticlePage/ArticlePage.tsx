@@ -170,9 +170,7 @@ export default function ArticlePage() {
             ) : (
               <Button
                 type='primary'
-                href={`/login?redirect_uri=${encodeURIComponent(
-                  location.href,
-                )}`}
+                href={`/login?return_to=${encodeURIComponent(location.href)}`}
               >
                 {t('articlePage.loginBtn')}
               </Button>

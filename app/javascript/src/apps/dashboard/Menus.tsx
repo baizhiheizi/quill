@@ -27,31 +27,31 @@ export default function Menus(props: { activeMenu?: string }) {
         </Link>
       </div>
       <Menu mode='inline' selectedKeys={[activeMenu]}>
-        <Menu.Item key='overview'>
+        <Menu.Item key='overview' onClick={() => setDrawerVisible(false)}>
           <Link to='/'>
             <DashboardOutlined />
             <span>{t('dashboard.menu.overview')}</span>
           </Link>
         </Menu.Item>
-        <Menu.Item key='articles'>
+        <Menu.Item key='articles' onClick={() => setDrawerVisible(false)}>
           <Link to='/articles'>
             <FileTextOutlined />
             <span>{t('dashboard.menu.articles')}</span>
           </Link>
         </Menu.Item>
-        <Menu.Item key='revenue'>
+        <Menu.Item key='revenue' onClick={() => setDrawerVisible(false)}>
           <Link to='/revenue'>
             <RiseOutlined />
             <span>{t('dashboard.menu.revenue')}</span>
           </Link>
         </Menu.Item>
-        <Menu.Item key='orders'>
+        <Menu.Item key='orders' onClick={() => setDrawerVisible(false)}>
           <Link to='/orders'>
             <AccountBookOutlined />
             <span>{t('dashboard.menu.orders')}</span>
           </Link>
         </Menu.Item>
-        <Menu.Item key='comments'>
+        <Menu.Item key='comments' onClick={() => setDrawerVisible(false)}>
           <Link to='/comments'>
             <CommentOutlined />
             <span>{t('dashboard.menu.comments')}</span>

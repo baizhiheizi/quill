@@ -5,10 +5,10 @@ class SessionsController < ApplicationController
 
   def new
     redirect_to format(
-      'https://mixin-www.zeromesh.net/oauth/authorize?client_id=%<client_id>s&scope=%<scope>s&redirect_uri=%<redirect_uri>s',
+      'https://mixin-www.zeromesh.net/oauth/authorize?client_id=%<client_id>s&scope=%<scope>s&return_to=%<return_to>s',
       client_id: PrsdiggBot.api.client_id,
       scope: 'PROFILE:READ',
-      redirect_uri: params[:redirect_uri] || root_url
+      return_to: params[:return_to] || root_url
     )
   end
 
