@@ -21,6 +21,8 @@
 #  index_payments_on_trace_id  (trace_id) UNIQUE
 #
 class Payment < ApplicationRecord
+  FOXSWAP_DISABLE = true
+
   include TokenSupportable
   include AASM
 
@@ -78,6 +80,8 @@ class Payment < ApplicationRecord
 
     if asset_id == Article::PRS_ASSET_ID
       place_article_order!
+    elsif FOXSWAP_DISABLE
+      generate_refund_transfer!
     else
       place_swap_order!
     end
