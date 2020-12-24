@@ -2,6 +2,7 @@ import { usePaymentLazyQuery } from '@graphql';
 import {
   FOXSWAP_APP_ID,
   FOXSWAP_CODE_ID,
+  FOXSWAP_DISABLE,
   PRS,
   SUPPORTED_TOKENS,
   useUserAgent,
@@ -119,7 +120,11 @@ export default function RewardModalComponent(props: {
           onSelect={(value) => setAssetId(value)}
         >
           {SUPPORTED_TOKENS.map((token) => (
-            <Select.Option value={token.assetId} key={token.assetId}>
+            <Select.Option
+              value={token.assetId}
+              key={token.assetId}
+              disabled={FOXSWAP_DISABLE && token.symbol !== 'PRS'}
+            >
               <Space>
                 <Avatar src={token.iconUrl} size='small' />
                 <span>{token.symbol}</span>

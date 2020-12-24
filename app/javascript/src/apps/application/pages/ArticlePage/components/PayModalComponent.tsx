@@ -2,6 +2,7 @@ import { usePaymentLazyQuery, useSwapPreOrderQuery } from '@graphql';
 import {
   FOXSWAP_APP_ID,
   FOXSWAP_CODE_ID,
+  FOXSWAP_DISABLE,
   PRS,
   SUPPORTED_TOKENS,
   useUserAgent,
@@ -117,7 +118,11 @@ export default function PayModalComponent(props: {
             disabled={paying}
           >
             {SUPPORTED_TOKENS.map((token) => (
-              <Radio.Button key={token.assetId} value={token.assetId}>
+              <Radio.Button
+                disabled={FOXSWAP_DISABLE && token.symbol !== 'PRS'}
+                key={token.assetId}
+                value={token.assetId}
+              >
                 <Space>
                   <Avatar size='small' src={token.iconUrl} />
                   <span>{token.symbol}</span>
