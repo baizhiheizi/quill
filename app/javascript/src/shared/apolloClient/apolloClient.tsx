@@ -62,6 +62,7 @@ export const apolloClient = (uri: string, csrfToken?: string) => {
             'commentableId',
             'commentableType',
             'authorMixinId',
+            'orderBy',
           ]),
           myTransferConnection: customizedConnectionMergeFunction([
             'transferType',
