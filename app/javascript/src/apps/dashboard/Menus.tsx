@@ -22,9 +22,9 @@ export default function Menus(props: { activeMenu?: string }) {
   const MenuConent = () => (
     <div>
       <div style={{ margin: 15, textAlign: 'center' }}>
-        <Link to='/' replace>
+        <a href='/'>
           <Avatar size='large' src={imagePath('logo.svg')} />
-        </Link>
+        </a>
       </div>
       <Menu mode='inline' selectedKeys={[activeMenu]}>
         <Menu.Item key='overview' onClick={() => setDrawerVisible(false)}>

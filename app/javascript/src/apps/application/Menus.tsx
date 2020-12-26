@@ -21,15 +21,21 @@ export default function Menus() {
       }
     >
       <Col>
-        <div style={{ margin: '0 15px' }}>
-          <Link to='/' replace>
-            {currentUser ? (
-              <Avatar src={currentUser.avatarUrl}>{currentUser.name[0]}</Avatar>
-            ) : (
+        {currentUser && props.mode === 'vertical' ? (
+          <div style={{ margin: 15 }}>
+            <a href='/dashboard'>
+              <Avatar size='large' src={currentUser.avatarUrl}>
+                {currentUser.name[0]}
+              </Avatar>
+            </a>
+          </div>
+        ) : (
+          <div style={{ margin: '0 15px' }}>
+            <Link to='/' replace>
               <Avatar size='large' src={imagePath('logo.svg')} />
-            )}
-          </Link>
-        </div>
+            </Link>
+          </div>
+        )}
       </Col>
       <Col flex={1}>
         <Menu theme='light' mode={props.mode} selectable={false}>
