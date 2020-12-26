@@ -21,7 +21,7 @@
 #  index_payments_on_trace_id  (trace_id) UNIQUE
 #
 class Payment < ApplicationRecord
-  FOXSWAP_DISABLE = true
+  FOXSWAP_DISABLE = false
 
   include TokenSupportable
   include AASM

@@ -6,6 +6,7 @@ export const SUPPORTED_TOKENS = [
     name: 'PressOne Token',
     symbol: 'PRS',
     priceBase: 1,
+    enabled: true,
   },
   {
     assetId: 'c6d0c728-2624-429b-8e0d-d9d19b6592fa',
@@ -14,6 +15,7 @@ export const SUPPORTED_TOKENS = [
     name: 'Bitcoin',
     symbol: 'BTC',
     priceBase: 0.000001,
+    enabled: true,
   },
   {
     assetId: '6cfe566e-4aad-470b-8c9a-2fd35b49c68d',
@@ -22,6 +24,7 @@ export const SUPPORTED_TOKENS = [
     name: 'EOS',
     symbol: 'EOS',
     priceBase: 0.005,
+    enabled: true,
   },
   {
     assetId: '43d61dcd-e413-450d-80b8-101d5e903357',
@@ -30,6 +33,16 @@ export const SUPPORTED_TOKENS = [
     name: 'ETH',
     symbol: 'ETH',
     priceBase: 0.000025,
+    enabled: true,
+  },
+  {
+    assetId: '31d2ea9c-95eb-3355-b65b-ba096853bc18',
+    iconUrl:
+      'https://mixin-images.zeromesh.net/cH4GWuPXbzeZl6OOunpn7BxE25n3v8URwnNszs0FpZqv3OTlxP1zpzKw89VKTpBwWL-Ned1R36mmy1C4GMuPX1rL-PjfEJ2zby9V=s128',
+    name: 'Pando USD',
+    symbol: 'pUSD',
+    priceBase: 0.02,
+    enabled: true,
   },
   {
     assetId: '4d8c508b-91c5-375b-92b0-ee702ed2dac5',
@@ -38,6 +51,7 @@ export const SUPPORTED_TOKENS = [
     name: 'Tether USD',
     symbol: 'USDT',
     priceBase: 0.02,
+    enabled: false,
   },
   {
     assetId: 'c94ac88f-4671-3976-b60a-09064f1811e8',
@@ -46,6 +60,7 @@ export const SUPPORTED_TOKENS = [
     name: 'Mixin',
     symbol: 'XIN',
     priceBase: 0.0001,
+    enabled: true,
   },
 ];
 
@@ -59,4 +74,4 @@ export const PRS = {
 
 export const FOXSWAP_APP_ID = 'a753e0eb-3010-4c4a-a7b2-a7bda4063f62';
 export const FOXSWAP_CODE_ID = '2140515d-b77f-4476-92f6-39d953c74cc5';
-export const FOXSWAP_DISABLE = true;
+export const FOXSWAP_DISABLE = false;

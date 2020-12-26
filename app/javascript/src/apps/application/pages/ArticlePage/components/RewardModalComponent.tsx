@@ -119,7 +119,7 @@ export default function RewardModalComponent(props: {
           value={assetId}
           onSelect={(value) => setAssetId(value)}
         >
-          {SUPPORTED_TOKENS.map((token) => (
+          {SUPPORTED_TOKENS.filter((token) => token.enabled).map((token) => (
             <Select.Option
               value={token.assetId}
               key={token.assetId}

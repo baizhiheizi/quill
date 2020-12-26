@@ -26,6 +26,7 @@
 #
 class SwapOrder < ApplicationRecord
   FOX_SWAP_APP_ID = 'a753e0eb-3010-4c4a-a7b2-a7bda4063f62'
+  FOX_SWAP_BROKER_ID = 'd8d186c4-62a7-320b-b930-11dfc1c76708'
 
   include TokenSupportable
   include AASM
@@ -83,7 +84,7 @@ class SwapOrder < ApplicationRecord
   def transfer_to_4swap!
     r = wallet.mixin_api.create_transfer(
       wallet.pin,
-      opponent_id: FOX_SWAP_APP_ID,
+      opponent_id: FOX_SWAP_BROKER_ID,
       asset_id: pay_asset_id,
       amount: funds.to_f,
       trace_id: trace_id,

@@ -117,7 +117,7 @@ export default function PayModalComponent(props: {
             onChange={(e) => setAssetId(e.target.value)}
             disabled={paying}
           >
-            {SUPPORTED_TOKENS.map((token) => (
+            {SUPPORTED_TOKENS.filter((token) => token.enabled).map((token) => (
               <Radio.Button
                 disabled={FOXSWAP_DISABLE && token.symbol !== 'PRS'}
                 key={token.assetId}

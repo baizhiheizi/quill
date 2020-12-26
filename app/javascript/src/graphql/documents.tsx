@@ -589,7 +589,7 @@ export type MixinNetworkSnapshot = {
   data?: Maybe<Scalars['String']>;
   id: Scalars['Int'];
   opponent?: Maybe<User>;
-  opponentId: Scalars['String'];
+  opponentId?: Maybe<Scalars['String']>;
   processedAt?: Maybe<Scalars['ISO8601DateTime']>;
   snapshotId: Scalars['String'];
   traceId: Scalars['ID'];

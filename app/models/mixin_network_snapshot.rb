@@ -44,7 +44,7 @@ class MixinNetworkSnapshot < ApplicationRecord
   scope :only_input, -> { where(amount: 0...) }
   scope :only_output, -> { where(amount: ...0) }
   scope :only_prsdigg, -> { where(user_id: PrsdiggBot.api.client_id) }
-  scope :only_4swap, -> { where(opponent_id: SwapOrder::FOX_SWAP_APP_ID) }
+  scope :only_4swap, -> { where(opponent_id: [SwapOrder::FOX_SWAP_APP_ID, nil]) }
 
   # polling Mixin Network
   # should be called in a event machine

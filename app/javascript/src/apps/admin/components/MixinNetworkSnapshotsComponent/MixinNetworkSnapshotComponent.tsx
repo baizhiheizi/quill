@@ -74,7 +74,7 @@ export default function MixinNetworkSnapshotsComponent(props: {
         ) : snapshot.opponentId === FOXSWAP_APP_ID ? (
           '4swap'
         ) : (
-          snapshot.opponentId
+          snapshot.opponentId || 'MTG'
         ),
       title: 'Opponent',
     },
