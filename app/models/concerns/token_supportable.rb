@@ -50,6 +50,13 @@ module TokenSupportable
         'https://mixin-images.zeromesh.net/UasWtBZO0TZyLTLCFQjvE_UYekjC7eHCuT_9_52ZpzmCC-X-NPioVegng7Hfx0XmIUavZgz5UL-HIgPCBECc-Ws=s128',
       name: 'Mixin',
       symbol: 'XIN'
+    },
+    {
+      asset_id: '31d2ea9c-95eb-3355-b65b-ba096853bc18',
+      icon_url:
+        'https://mixin-images.zeromesh.net/cH4GWuPXbzeZl6OOunpn7BxE25n3v8URwnNszs0FpZqv3OTlxP1zpzKw89VKTpBwWL-Ned1R36mmy1C4GMuPX1rL-PjfEJ2zby9V=s128',
+      name: 'Pando USD',
+      symbol: 'pUSD'
     }
   ].freeze
 
