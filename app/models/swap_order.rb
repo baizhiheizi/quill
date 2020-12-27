@@ -84,17 +84,19 @@ class SwapOrder < ApplicationRecord
   def transfer_to_4swap!
     r = wallet.mixin_api.create_transfer(
       wallet.pin,
-      opponent_id: FOX_SWAP_BROKER_ID,
-      asset_id: pay_asset_id,
-      amount: funds.to_f,
-      trace_id: trace_id,
-      memo: Base64.encode64(
-        {
-          t: 'swap',
-          a: fill_asset_id,
-          m: min_amount.present? ? min_amount.to_f.to_s : nil
-        }.to_json
-      )
+      {
+        opponent_id: FOX_SWAP_BROKER_ID,
+        asset_id: pay_asset_id,
+        amount: funds.to_f,
+        trace_id: trace_id,
+        memo: Base64.encode64(
+          {
+            t: 'swap',
+            a: fill_asset_id,
+            m: min_amount.present? ? min_amount.to_f.to_s : nil
+          }.to_json
+        )
+      }
     )
 
     raise r['error'].inspect if r['error'].present?
@@ -137,11 +139,13 @@ class SwapOrder < ApplicationRecord
       _trace_id = wallet.mixin_api.unique_conversation_id(trace_id, payment.payer.mixin_uuid)
       r = wallet.mixin_api.create_transfer(
         wallet.pin,
-        asset_id: fill_asset_id,
-        amount: (amount - min_amount).to_f,
-        opponent_id: payment.payer.mixin_uuid,
-        trace_id: _trace_id,
-        memo: 'CHANGE FROM SWAP'
+        {
+          asset_id: fill_asset_id,
+          amount: (amount - min_amount).to_f,
+          opponent_id: payment.payer.mixin_uuid,
+          trace_id: _trace_id,
+          memo: 'CHANGE FROM SWAP'
+        }
       )
 
       raise r['error'].inspect if r['error'].present?
@@ -168,11 +172,13 @@ class SwapOrder < ApplicationRecord
     _trace_id = wallet.mixin_api.unique_conversation_id(trace_id, payment.payer.mixin_uuid)
     r = wallet.mixin_api.create_transfer(
       wallet.pin,
-      asset_id: fill_asset_id,
-      amount: amount.to_f,
-      opponent_id: payment.payer.mixin_uuid,
-      trace_id: _trace_id,
-      memo: 'REFUND FROM SWAP'
+      {
+        asset_id: fill_asset_id,
+        amount: amount.to_f,
+        opponent_id: payment.payer.mixin_uuid,
+        trace_id: _trace_id,
+        memo: 'REFUND FROM SWAP'
+      }
     )
 
     raise r['error'].inspect if r['error'].present?
