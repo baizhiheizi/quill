@@ -54,7 +54,7 @@ class MixinNetworkSnapshot < ApplicationRecord
       offset = MixinNetworkSnapshot.order(transferred_at: :desc).first&.transferred_at&.utc&.rfc3339 || Time.current.utc.rfc3339 if offset.blank?
 
       r = PrsdiggBot.api.read_network_snapshots(offset: offset, limit: POLLING_LIMIT, order: 'ASC')
-      p['polled', r['data'].length]
+      p "polled #{r['data'].length} mixin network snapshots"
 
       r['data'].each do |snapshot|
         next if snapshot['user_id'].blank?

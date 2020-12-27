@@ -3,7 +3,7 @@ require:
 
 AllCops:
   NewCops: enable
-  TargetRubyVersion: '2.7.1'
+  TargetRubyVersion: '3.0.0'
   Exclude:
     - 'bin/**/*'
     - 'db/**/*'
