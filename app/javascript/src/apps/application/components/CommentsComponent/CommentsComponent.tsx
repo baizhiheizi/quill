@@ -58,7 +58,7 @@ export default function CommentsComponent(props: {
   const currentUser = useCurrentUser();
   const { t, i18n } = useTranslation();
   moment.locale(i18n.language);
-  const [orderBy, setOrderBy] = useState<'desc' | 'asc' | 'upvotes'>('desc');
+  const [orderBy, setOrderBy] = useState<'desc' | 'asc' | 'upvotes'>('upvotes');
   const { data, loading, refetch, fetchMore } = useCommentConnectionQuery({
     variables: { commentableType, commentableId, orderBy },
     notifyOnNetworkStatusChange: true,
