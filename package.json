@@ -53,7 +53,7 @@
   "devDependencies": {
     "@graphql-codegen/cli": "1.20.0",
     "@graphql-codegen/introspection": "1.18.1",
-    "@graphql-codegen/typescript": "1.19.0",
+    "@graphql-codegen/typescript": "1.20.0",
     "@graphql-codegen/typescript-react-apollo": "2.2.1",
     "node-fetch": "^2.6.1",
     "prettier": "^2.2.1",
