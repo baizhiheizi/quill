@@ -18,7 +18,7 @@
     "@types/qrcode.react": "^1.0.1",
     "@types/react": "^17.0.0",
     "@types/react-dom": "^17.0.0",
-    "@types/react-router-dom": "^5.1.6",
+    "@types/react-router-dom": "^5.1.7",
     "@types/recharts": "^1.8.18",
     "@uiw/react-md-editor": "^2.0.3",
     "ahooks": "^2.9.3",
