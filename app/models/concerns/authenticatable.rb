@@ -23,7 +23,14 @@ module Authenticatable
         auth.user.update_profile raw
       end
 
-      find_or_create_by!(mixin_authorization: auth)
+      if auth.user.present?
+        auth.user
+      else
+        user = create mixin_authorization: auth
+        auth.update user: user
+      end
+
+      user
     end
   end
 end
