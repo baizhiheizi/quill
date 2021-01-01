@@ -24,7 +24,7 @@ module Authenticatable
       end
 
       if auth.user.present?
-        auth.user
+        user = auth.user
       else
         user = create mixin_authorization: auth
         auth.update user: user
