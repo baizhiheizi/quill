@@ -27,7 +27,7 @@ module Types
     end
 
     def item
-      BatchLoader.for(object.item_id).batch(key: object.item_type) do |ids, loader, args|
+      BatchLoader::GraphQL.for(object.item_id).batch(key: object.item_type) do |ids, loader, args|
         model = Object.const_get(args[:key])
         model.where(id: ids).each { |record| loader.call(record.id, record) }
       end
