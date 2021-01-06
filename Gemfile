@@ -57,6 +57,8 @@ gem 'action-store'
 gem 'groupdate'
 # Object-based searching. http://ransack-demo.herokuapp.com
 gem 'ransack'
+# Ruby gem for reporting errors to honeybadger.io
+gem "honeybadger", "~> 4.0"
 
 # deploy
 gem 'mina', '~> 1.2.2', require: false
