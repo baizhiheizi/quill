@@ -46,7 +46,9 @@ gem 'graphql'
 # Mount the GraphiQL query editor in a Rails app
 gem 'graphiql-rails'
 # Powerful tool for avoiding N+1 DB or HTTP queries
-gem 'batch-loader'
+# TODO: Forked to fix Ruby 3.0, switch to the original version when new version
+# released
+gem 'batch-loader', github: 'an-lee/batch-loader', branch: 'master'
 # AASM - State machines for Ruby classes (plain Ruby, ActiveRecord, Mongoid)
 gem 'aasm'
 # Allows to use ActiveRecord transactional callbacks outside of ActiveRecord models, literally everywhere in your application.

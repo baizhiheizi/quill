@@ -1,4 +1,11 @@
 GIT
+  remote: https://github.com/an-lee/batch-loader.git
+  revision: b49bef07d7608cdc180525990eac061897d03ca8
+  branch: master
+  specs:
+    batch-loader (1.5.0)
+
+GIT
   remote: https://github.com/resque/redis-namespace.git
   revision: c31e63dc3cd5e59ef5ea394d4d46ac60d1e6f82e
   branch: master
@@ -91,7 +98,6 @@ GEM
     babel-transpiler (0.7.0)
       babel-source (>= 4.0, < 6)
       execjs (~> 2.0)
-    batch-loader (1.5.0)
     bcrypt (3.1.16)
     bindex (0.8.1)
     bootsnap (1.5.1)
@@ -367,7 +373,7 @@ DEPENDENCIES
   activestorage-aliyun
   after_commit_everywhere
   annotate
-  batch-loader
+  batch-loader!
   bcrypt (~> 3.1.7)
   bootsnap (>= 1.4.2)
   byebug
