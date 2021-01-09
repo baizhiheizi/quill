@@ -21,11 +21,10 @@ export default function UserPage() {
       <Descriptions bordered size='small'>
         <Descriptions.Item label='Name'>
           <Space>
-            <Avatar src={user.avatar} />
+            <Avatar src={user.avatarUrl} />
             {user.name}
           </Space>
         </Descriptions.Item>
-        <Descriptions.Item label='MixinId'>{user.mixinId}</Descriptions.Item>
         <Descriptions.Item label='MixinId'>{user.mixinId}</Descriptions.Item>
         <Descriptions.Item label='Articles Count'>
           {user.statistics.articlesCount}
