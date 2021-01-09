@@ -14,6 +14,7 @@ import PaymentsPage from './pages/PaymentsPage/PaymentsPage';
 import SwapOrdersPage from './pages/SwapOrdersPage/SwapOrdersPage';
 import TransfersPage from './pages/TransfersPage/TransfersPage';
 import UsersPage from './pages/UsersPage/UsersPage';
+import UserPage from './pages/UserPage/UserPage';
 
 export default function Routes() {
   return (
@@ -23,6 +24,9 @@ export default function Routes() {
       </Route>
       <Route path='/users' exact>
         <UsersPage />
+      </Route>
+      <Route path='/users/:mixinId' exact>
+        <UserPage />
       </Route>
       <Route path='/articles' exact>
         <ArticlesPage />

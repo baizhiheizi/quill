@@ -924,6 +924,7 @@ export type Query = {
   adminPaymentConnection: PaymentConnection;
   adminSwapOrderConnection: SwapOrderConnection;
   adminTransferConnection: TransferConnection;
+  adminUser?: Maybe<User>;
   adminUserConnection: UserConnection;
   adminWalletBalance: Array<Asset>;
   article?: Maybe<Article>;
@@ -1043,6 +1044,11 @@ export type QueryAdminTransferConnectionArgs = {
   before?: Maybe<Scalars['String']>;
   first?: Maybe<Scalars['Int']>;
   last?: Maybe<Scalars['Int']>;
+};
+
+
+export type QueryAdminUserArgs = {
+  mixinId: Scalars['ID'];
 };
 
 
@@ -1365,6 +1371,7 @@ export type User = {
   readingSubscribed?: Maybe<Scalars['Boolean']>;
   statistics: UserStatistics;
   updatedAt?: Maybe<Scalars['ISO8601DateTime']>;
+  walletId?: Maybe<Scalars['String']>;
 };
 
 
@@ -2610,6 +2617,50 @@ export function useAdminUserConnectionLazyQuery(baseOptions?: Apollo.LazyQueryHo
 export type AdminUserConnectionQueryHookResult = ReturnType<typeof useAdminUserConnectionQuery>;
 export type AdminUserConnectionLazyQueryHookResult = ReturnType<typeof useAdminUserConnectionLazyQuery>;
 export type AdminUserConnectionQueryResult = Apollo.QueryResult<AdminUserConnectionQuery, AdminUserConnectionQueryVariables>;
+export const AdminUserDocument = gql`
+    query AdminUser($mixinId: ID!) {
+  adminUser(mixinId: $mixinId) {
+    id
+    name
+    mixinId
+    mixinUuid
+    avatarUrl
+    bio
+    walletId
+    statistics {
+      articlesCount
+      authorRevenueAmount
+      readerRevenueAmount
+    }
+  }
+}
+    `;
+
+/**
+ * __useAdminUserQuery__
+ *
+ * To run a query within a React component, call `useAdminUserQuery` and pass it any options that fit your needs.
+ * When your component renders, `useAdminUserQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useAdminUserQuery({
+ *   variables: {
+ *      mixinId: // value for 'mixinId'
+ *   },
+ * });
+ */
+export function useAdminUserQuery(baseOptions: Apollo.QueryHookOptions<AdminUserQuery, AdminUserQueryVariables>) {
+        return Apollo.useQuery<AdminUserQuery, AdminUserQueryVariables>(AdminUserDocument, baseOptions);
+      }
+export function useAdminUserLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AdminUserQuery, AdminUserQueryVariables>) {
+          return Apollo.useLazyQuery<AdminUserQuery, AdminUserQueryVariables>(AdminUserDocument, baseOptions);
+        }
+export type AdminUserQueryHookResult = ReturnType<typeof useAdminUserQuery>;
+export type AdminUserLazyQueryHookResult = ReturnType<typeof useAdminUserLazyQuery>;
+export type AdminUserQueryResult = Apollo.QueryResult<AdminUserQuery, AdminUserQueryVariables>;
 export const AdminWalletBalanceDocument = gql`
     query AdminWalletBalance($userId: String) {
   adminWalletBalance(userId: $userId) {

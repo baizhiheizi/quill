@@ -10,6 +10,8 @@ module Types
     field :bio, String, null: true
     field :banned_at, GraphQL::Types::ISO8601DateTime, null: true
 
+    field :wallet_id, String, null: true
+
     field :statistics, UserStatisticsType, null: false
 
     field :authoring_subscribed, Boolean, null: true

@@ -37,9 +37,13 @@ class User < ApplicationRecord
   has_many :comments, foreign_key: :author_id, inverse_of: :author, dependent: :nullify
   has_many :swap_orders, through: :payments
 
+  has_one :wallet, class_name: 'MixinNetworkUser', as: :owner, dependent: :nullify
+
   before_validation :setup_attributes
 
   validates :name, presence: true
+
+  after_create :create_wallet!
 
   default_scope { includes(:mixin_authorization) }
   scope :only_banned, -> { where.not(banned_at: nil) }
@@ -146,6 +150,10 @@ class User < ApplicationRecord
       avatar_url: profile['avatar_url'],
       name: profile['full_name']
     )
+  end
+
+  def wallet_id
+    @wallet_id = (wallet.presence || create_wallet)&.uuid
   end
 
   private

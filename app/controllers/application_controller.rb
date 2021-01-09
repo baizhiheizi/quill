@@ -27,6 +27,8 @@ class ApplicationController < ActionController::Base
     {
       current_user: current_user&.as_json(
         only: %i[name avatar_url mixin_id mixin_uuid banned_at]
+      )&.merge(
+        wallet_id: current_user.wallet_id
       ),
       prsdigg: {
         app_id: PrsdiggBot.api.client_id
