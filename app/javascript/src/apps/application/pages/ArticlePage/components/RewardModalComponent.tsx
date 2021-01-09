@@ -5,6 +5,7 @@ import {
   FOXSWAP_DISABLE,
   PRS,
   SUPPORTED_TOKENS,
+  useCurrentUser,
   useUserAgent,
 } from '@shared';
 import { Alert, Avatar, Modal, Radio, Select, Space } from 'antd';
@@ -21,6 +22,7 @@ export default function RewardModalComponent(props: {
   walletId: string;
   articleUuid: string;
 }) {
+  const currentUser = useCurrentUser();
   const { articleUuid, visible, onCancel, walletId } = props;
   const { mixinEnv } = useUserAgent();
   const { t } = useTranslation();
@@ -35,7 +37,9 @@ export default function RewardModalComponent(props: {
 
   const handlePaying = () => {
     const traceId = uuidv4();
-    const url = `mixin://pay?recipient=${walletId}&trace=${traceId}&memo=${encode64(
+    const url = `mixin://pay?recipient=${
+      currentUser?.walletId || walletId
+    }&trace=${traceId}&memo=${encode64(
       JSON.stringify({ t: 'REWARD', a: articleUuid }),
     )}&asset=${assetId}&amount=${(share * token.priceBase).toFixed(8)}`;
     if (mixinEnv) {

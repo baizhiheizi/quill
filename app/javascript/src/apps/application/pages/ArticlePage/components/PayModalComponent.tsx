@@ -5,6 +5,7 @@ import {
   FOXSWAP_DISABLE,
   PRS,
   SUPPORTED_TOKENS,
+  useCurrentUser,
   useUserAgent,
 } from '@shared';
 import { useCountDown } from 'ahooks';
@@ -31,6 +32,7 @@ export default function PayModalComponent(props: {
     paymentTraceId,
     onCancel,
   } = props;
+  const currentUser = useCurrentUser();
   const [assetId, setAssetId] = useState(PRS.assetId);
   const [paying, setPaying] = useState(false);
   const { mixinEnv } = useUserAgent();
@@ -85,7 +87,9 @@ export default function PayModalComponent(props: {
   );
   const payAmount =
     token.symbol === 'PRS' ? price.toFixed(8) : funds?.toFixed(8);
-  const payUrl = `mixin://pay?recipient=${walletId}&trace=${paymentTraceId}&memo=${memo}&asset=${assetId}&amount=${payAmount}`;
+  const payUrl = `mixin://pay?recipient=${
+    currentUser?.walletId || walletId
+  }&trace=${paymentTraceId}&memo=${memo}&asset=${assetId}&amount=${payAmount}`;
 
   useEffect(() => {
     return () => stopPolling && stopPolling();

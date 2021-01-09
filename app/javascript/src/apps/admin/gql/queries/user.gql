@@ -1,0 +1,16 @@
+query AdminUser($mixinId: ID!) {
+  adminUser(mixinId: $mixinId) {
+    id
+    name
+    mixinId
+    mixinUuid
+    avatarUrl
+    bio
+    walletId
+    statistics {
+      articlesCount
+      authorRevenueAmount
+      readerRevenueAmount
+    }
+  }
+}

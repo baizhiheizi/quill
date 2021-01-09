@@ -11,6 +11,7 @@ import {
   Avatar,
   Button,
   Col,
+  Divider,
   Input,
   PageHeader,
   Popconfirm,
@@ -18,9 +19,11 @@ import {
   Row,
   Select,
   Space,
+  Table,
 } from 'antd';
-import Table, { ColumnProps } from 'antd/lib/table';
+import { ColumnProps } from 'antd/lib/table';
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 
 export default function UsersPage() {
   const [query, setQuery] = useState('');
@@ -169,29 +172,33 @@ export function UsersComponent(props: {
       key: 'actions',
       render: (_, user) => (
         <span>
-          {user.bannedAt ? (
-            <Popconfirm
-              title='Are you sure to unBan this user?'
-              onConfirm={() =>
-                adminUnbanUser({
-                  variables: { input: { id: user.id } },
-                })
-              }
-            >
-              <Button type='link'>unBan</Button>
-            </Popconfirm>
-          ) : (
-            <Popconfirm
-              title='Are you sure to BAN this user?'
-              onConfirm={() =>
-                adminBanUser({
-                  variables: { input: { id: user.id } },
-                })
-              }
-            >
-              <Button type='link'>Ban</Button>
-            </Popconfirm>
-          )}
+          <Link to={`/users/${user.mixinId}`}>Detail</Link>
+          <Divider type='vertical' />
+          <span>
+            {user.bannedAt ? (
+              <Popconfirm
+                title='Are you sure to unBan this user?'
+                onConfirm={() =>
+                  adminUnbanUser({
+                    variables: { input: { id: user.id } },
+                  })
+                }
+              >
+                <Button type='link'>unBan</Button>
+              </Popconfirm>
+            ) : (
+              <Popconfirm
+                title='Are you sure to BAN this user?'
+                onConfirm={() =>
+                  adminBanUser({
+                    variables: { input: { id: user.id } },
+                  })
+                }
+              >
+                <Button type='link'>Ban</Button>
+              </Popconfirm>
+            )}
+          </span>
         </span>
       ),
     },
