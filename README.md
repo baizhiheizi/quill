@@ -10,7 +10,7 @@ PRSDigg is a Dapp built on [PRESSONE](https://press.one/) and [Mixin Network](ht
 
 ## Rules
 
-PRSDigg tries to build a win-win **platform  ** for both **authors** and **readers**.
+PRSDigg tries to build a win-win **platform** for both **authors** and **readers**.
 
 We believe that the value of an article is composed of both the author and the reader, but the actual situation is that the reader's contribution, especially the early readers' contribution,is not well represented. Therefore, the biggest difference between PRSDigg and other platforms is that PRSDigg introduces an **early reader rewards** mechanism.
 
@@ -36,7 +36,7 @@ Among them, 4 PRS(40%) will be used as an early reader bonus. At this time, ther
 
 After C, user D also paid 10 PRS for article X.
 
-Similarly, 4 PRS(40%) will be rewarded as early readers bonus. At this time, there are two early readers, namely B and C, who paid 10 PRS for article X before, so both B and C will be rewarded with ` 4 * 10/(10+10) = 2` PRS respectively. 
+Similarly, 4 PRS(40%) will be rewarded as early readers bonus. At this time, there are two early readers, namely B and C, who paid 10 PRS for article X before, so both B and C will be rewarded with `4 * 10/(10+10) = 2` PRS respectively. 
 
 The platform also charges 1 PRS(10%) as a handling fee; The remaining 5 PRS is the author's income. 
 
@@ -49,7 +49,3 @@ It is worth reminding that besides the payment for articles, the income from oth
 At present, PRSDigg only supports [mixin messenger](https://mixin.one/messenger) login and payment. Please download and install it before experiencing PRSDigg.
 
 Browse [prsdigg.com](https://prsdigg.com/), or search for Bot 7000101549 in [mixin messenger](https://mixin.one/messenger).
-
-
-
-
