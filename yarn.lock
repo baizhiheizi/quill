@@ -1957,10 +1957,10 @@ aggregate-error@^3.0.0:
     clean-stack "^2.0.0"
     indent-string "^4.0.0"
 
-ahooks@^2.9.3:
-  version "2.9.3"
-  resolved "https://registry.npmjs.org/ahooks/-/ahooks-2.9.3.tgz#839c2aa6e1ad29adec2057e6d268b2ac7a1611f0"
-  integrity sha512-Bb28TQpBmW6Obqlb9sAf6JP3MJmJdW1UnxXa3GRrVRqxymQ8u8/1c72TBSTxGUDbjvbD+K1iTNw/QoUIhRSTuA==
+ahooks@^2.9.4:
+  version "2.9.4"
+  resolved "https://registry.yarnpkg.com/ahooks/-/ahooks-2.9.4.tgz#30c0b53b6adc5141aa6346403a65951d6bc3b917"
+  integrity sha512-XnTSQ0deavMTLpV4V+LfCuyYxCGLk+oPo7HgA3HdC/TNIDwEJ322L5/PWFjNQLqPHiEcNgp6CijJID+Ke4j3Ag==
   dependencies:
     "@ahooksjs/use-request" "^2.8.1"
     "@types/js-cookie" "^2.2.6"
