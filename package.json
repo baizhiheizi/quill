@@ -33,7 +33,7 @@
     "ismobilejs": "^1.1.1",
     "js-base64": "^3.6.0",
     "js-yaml": "^4.0.0",
-    "less": "^4.0.0",
+    "less": "^4.1.0",
     "less-loader": "^7.2.1",
     "mark.js": "^8.11.1",
     "prop-types": "^15.7.2",
