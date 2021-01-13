@@ -1,5 +1,6 @@
 import {
   AccountBookOutlined,
+  BookOutlined,
   CommentOutlined,
   DashboardOutlined,
   FileTextOutlined,
@@ -37,6 +38,12 @@ export default function Menus(props: { activeMenu?: string }) {
           <Link to='/articles'>
             <FileTextOutlined />
             <span>{t('dashboard.menu.articles')}</span>
+          </Link>
+        </Menu.Item>
+        <Menu.Item key='subscriptions' onClick={() => setDrawerVisible(false)}>
+          <Link to='/subscriptions'>
+            <BookOutlined />
+            <span>{t('dashboard.menu.subscriptions')}</span>
           </Link>
         </Menu.Item>
         <Menu.Item key='revenue' onClick={() => setDrawerVisible(false)}>

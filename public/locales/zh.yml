@@ -224,6 +224,7 @@ dashboard:
   menu: 
     overview: 总览
     articles: 文章管理
+    subscriptions: 订阅管理
     revenue: 收益管理
     orders: 订单管理
     comments: 评论管理
@@ -248,6 +249,11 @@ dashboard:
     boughtArticle: 购买了文章
     rewardedArticle: 赞赏了文章
     paid: 支付了
+  subscriptionsPage:
+    authoringSubscriptions: 作者
+    readingSubscriptions: 读者
+    commentingSubscriptions: 评论
+    confirmToUnsubscribe: 确定要取消订阅吗？
   revenuePage:
     authorTransfers: 作者收益
     readerTransfers: 读者收益

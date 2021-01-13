@@ -220,6 +220,7 @@ dashboard:
   menu: 
     overview: Overview
     articles: Artciels Manage
+    subscriptions: Subscriptions
     revenue: Revenue Manage
     orders: Orders Manage
     comments: Comments Manage
@@ -247,6 +248,11 @@ dashboard:
     boughtArticle: bought this article
     rewardedArticle: rewarded this article
     paid: paid
+  subscriptionsPage:
+    authoringSubscriptions: Authors
+    readingSubscriptions: Readers
+    commentingSubscriptions: Comments
+    confirmToUnsubscribe: Are you sure to unsubscribe?
   revenuePage:
     authorTransfers: Author Revenue
     readerTransfers: Reader Revenue

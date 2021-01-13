@@ -1,4 +1,3 @@
-import { useUserAgent } from '@/shared';
 import LoadingComponent from '@dashboard/components/LoadingComponent/LoadingComponent';
 import {
   Article,
@@ -9,6 +8,7 @@ import {
   useMyArticleConnectionQuery,
   usePublishArticleMutation,
 } from '@graphql';
+import { useUserAgent } from '@shared';
 import { Button, List, message, Popconfirm, Tag } from 'antd';
 import moment from 'moment';
 import React from 'react';

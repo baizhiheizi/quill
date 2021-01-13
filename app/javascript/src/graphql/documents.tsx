@@ -935,7 +935,9 @@ export type Query = {
   myArticle?: Maybe<Article>;
   myArticleConnection: ArticleConnection;
   myArticleOrderConnection?: Maybe<OrderConnection>;
+  myAuthoringSubscriptionConnection: UserConnection;
   myPaymentConnection: PaymentConnection;
+  myReadingSubscriptionConnection: UserConnection;
   myStatistics: UserStatistics;
   mySwapOrderConnection: SwapOrderConnection;
   myTransferConnection: TransferConnection;
@@ -1119,7 +1121,23 @@ export type QueryMyArticleOrderConnectionArgs = {
 };
 
 
+export type QueryMyAuthoringSubscriptionConnectionArgs = {
+  after?: Maybe<Scalars['String']>;
+  before?: Maybe<Scalars['String']>;
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+};
+
+
 export type QueryMyPaymentConnectionArgs = {
+  after?: Maybe<Scalars['String']>;
+  before?: Maybe<Scalars['String']>;
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+};
+
+
+export type QueryMyReadingSubscriptionConnectionArgs = {
   after?: Maybe<Scalars['String']>;
   before?: Maybe<Scalars['String']>;
   first?: Maybe<Scalars['Int']>;
@@ -3730,6 +3748,48 @@ export function useMyArticleLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<
 export type MyArticleQueryHookResult = ReturnType<typeof useMyArticleQuery>;
 export type MyArticleLazyQueryHookResult = ReturnType<typeof useMyArticleLazyQuery>;
 export type MyArticleQueryResult = Apollo.QueryResult<MyArticleQuery, MyArticleQueryVariables>;
+export const MyAuthoringSubscriptionConnectionDocument = gql`
+    query MyAuthoringSubscriptionConnection($after: String) {
+  myAuthoringSubscriptionConnection(after: $after) {
+    nodes {
+      id
+      mixinId
+      name
+      avatarUrl
+    }
+    pageInfo {
+      hasNextPage
+      endCursor
+    }
+  }
+}
+    `;
+
+/**
+ * __useMyAuthoringSubscriptionConnectionQuery__
+ *
+ * To run a query within a React component, call `useMyAuthoringSubscriptionConnectionQuery` and pass it any options that fit your needs.
+ * When your component renders, `useMyAuthoringSubscriptionConnectionQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useMyAuthoringSubscriptionConnectionQuery({
+ *   variables: {
+ *      after: // value for 'after'
+ *   },
+ * });
+ */
+export function useMyAuthoringSubscriptionConnectionQuery(baseOptions?: Apollo.QueryHookOptions<MyAuthoringSubscriptionConnectionQuery, MyAuthoringSubscriptionConnectionQueryVariables>) {
+        return Apollo.useQuery<MyAuthoringSubscriptionConnectionQuery, MyAuthoringSubscriptionConnectionQueryVariables>(MyAuthoringSubscriptionConnectionDocument, baseOptions);
+      }
+export function useMyAuthoringSubscriptionConnectionLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MyAuthoringSubscriptionConnectionQuery, MyAuthoringSubscriptionConnectionQueryVariables>) {
+          return Apollo.useLazyQuery<MyAuthoringSubscriptionConnectionQuery, MyAuthoringSubscriptionConnectionQueryVariables>(MyAuthoringSubscriptionConnectionDocument, baseOptions);
+        }
+export type MyAuthoringSubscriptionConnectionQueryHookResult = ReturnType<typeof useMyAuthoringSubscriptionConnectionQuery>;
+export type MyAuthoringSubscriptionConnectionLazyQueryHookResult = ReturnType<typeof useMyAuthoringSubscriptionConnectionLazyQuery>;
+export type MyAuthoringSubscriptionConnectionQueryResult = Apollo.QueryResult<MyAuthoringSubscriptionConnectionQuery, MyAuthoringSubscriptionConnectionQueryVariables>;
 export const MyPaymentConnectionDocument = gql`
     query MyPaymentConnection($after: String) {
   myPaymentConnection(after: $after) {
@@ -3782,6 +3842,48 @@ export function useMyPaymentConnectionLazyQuery(baseOptions?: Apollo.LazyQueryHo
 export type MyPaymentConnectionQueryHookResult = ReturnType<typeof useMyPaymentConnectionQuery>;
 export type MyPaymentConnectionLazyQueryHookResult = ReturnType<typeof useMyPaymentConnectionLazyQuery>;
 export type MyPaymentConnectionQueryResult = Apollo.QueryResult<MyPaymentConnectionQuery, MyPaymentConnectionQueryVariables>;
+export const MyReadingSubscriptionConnectionDocument = gql`
+    query MyReadingSubscriptionConnection($after: String) {
+  myReadingSubscriptionConnection(after: $after) {
+    nodes {
+      id
+      mixinId
+      name
+      avatarUrl
+    }
+    pageInfo {
+      hasNextPage
+      endCursor
+    }
+  }
+}
+    `;
+
+/**
+ * __useMyReadingSubscriptionConnectionQuery__
+ *
+ * To run a query within a React component, call `useMyReadingSubscriptionConnectionQuery` and pass it any options that fit your needs.
+ * When your component renders, `useMyReadingSubscriptionConnectionQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useMyReadingSubscriptionConnectionQuery({
+ *   variables: {
+ *      after: // value for 'after'
+ *   },
+ * });
+ */
+export function useMyReadingSubscriptionConnectionQuery(baseOptions?: Apollo.QueryHookOptions<MyReadingSubscriptionConnectionQuery, MyReadingSubscriptionConnectionQueryVariables>) {
+        return Apollo.useQuery<MyReadingSubscriptionConnectionQuery, MyReadingSubscriptionConnectionQueryVariables>(MyReadingSubscriptionConnectionDocument, baseOptions);
+      }
+export function useMyReadingSubscriptionConnectionLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MyReadingSubscriptionConnectionQuery, MyReadingSubscriptionConnectionQueryVariables>) {
+          return Apollo.useLazyQuery<MyReadingSubscriptionConnectionQuery, MyReadingSubscriptionConnectionQueryVariables>(MyReadingSubscriptionConnectionDocument, baseOptions);
+        }
+export type MyReadingSubscriptionConnectionQueryHookResult = ReturnType<typeof useMyReadingSubscriptionConnectionQuery>;
+export type MyReadingSubscriptionConnectionLazyQueryHookResult = ReturnType<typeof useMyReadingSubscriptionConnectionLazyQuery>;
+export type MyReadingSubscriptionConnectionQueryResult = Apollo.QueryResult<MyReadingSubscriptionConnectionQuery, MyReadingSubscriptionConnectionQueryVariables>;
 export const MyStatisticsDocument = gql`
     query MyStatistics {
   myStatistics {

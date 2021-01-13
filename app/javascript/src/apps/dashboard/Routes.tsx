@@ -22,6 +22,9 @@ const ArticleEditPage = React.lazy(
 const CommentsPage = React.lazy(
   () => import('./pages/CommentsPage/CommentsPage'),
 );
+const SubscriptionsPage = React.lazy(
+  () => import('./pages/SubscriptionsPage/SubscriptionsPage'),
+);
 
 export default function Routes() {
   return (
@@ -42,6 +45,9 @@ export default function Routes() {
           </Route>
           <Route path='/articles/:uuid/edit' exact>
             <ArticleEditPage />
+          </Route>
+          <Route path='/subscriptions' exact>
+            <SubscriptionsPage />
           </Route>
           <Route path='/revenue' exact>
             <RevenuePage />

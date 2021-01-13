@@ -1,0 +1,14 @@
+query MyReadingSubscriptionConnection($after: String) {
+  myReadingSubscriptionConnection(after: $after) {
+    nodes {
+      id
+      mixinId
+      name
+      avatarUrl
+    }
+    pageInfo {
+      hasNextPage
+      endCursor
+    }
+  }
+}
