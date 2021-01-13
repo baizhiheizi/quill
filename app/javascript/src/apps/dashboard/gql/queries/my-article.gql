@@ -17,6 +17,8 @@ query MyArticle($uuid: ID!) {
     upvotesCount
     downvotesCount
     wordsCount
+    tagsCount
+    tagNames
     createdAt
     updatedAt
     buyers {

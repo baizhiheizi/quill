@@ -13,4 +13,6 @@
 class Tag < ApplicationRecord
   has_many :taggings, dependent: :nullify
   has_many :articles, through: :taggings, dependent: :nullify
+
+  validates :name, uniqueness: true
 end

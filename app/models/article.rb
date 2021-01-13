@@ -52,7 +52,7 @@ class Article < ApplicationRecord
   has_many :comments, as: :commentable, dependent: :nullify
 
   has_many :taggings, dependent: :nullify
-  has_many :tags, through: :taggings, dependent: :nullity
+  has_many :tags, through: :taggings, dependent: :nullify
 
   has_one :wallet, class_name: 'MixinNetworkUser', as: :owner, dependent: :nullify
 
@@ -190,6 +190,10 @@ class Article < ApplicationRecord
 
   def reader_revenue_amount
     reader_transfers.sum(:amount)
+  end
+
+  def tag_names
+    @tag_names ||= tags.pluck(:name)
   end
 
   private

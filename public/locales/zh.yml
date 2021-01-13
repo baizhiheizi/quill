@@ -32,6 +32,7 @@ article:
   readerRevenueAmount: 读者收益(PRS)
   myShare: 奖励份额(%)
   stateText: 状态
+  tags: 标签
   createdAt: 创建时间
   updatedAt: 上次编辑
   state:

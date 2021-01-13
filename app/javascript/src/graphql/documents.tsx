@@ -300,6 +300,8 @@ export type Article = {
   rewardOrders: OrderConnection;
   rewarders: UserConnection;
   state?: Maybe<Scalars['String']>;
+  tagNames?: Maybe<Array<Scalars['String']>>;
+  tagsCount: Scalars['Int'];
   title: Scalars['String'];
   updatedAt?: Maybe<Scalars['ISO8601DateTime']>;
   upvoteRatio?: Maybe<Scalars['Int']>;
@@ -478,6 +480,7 @@ export type CreateArticleMutationInput = {
   content: Scalars['String'];
   price: Scalars['Float'];
   state: Scalars['String'];
+  tagNames?: Maybe<Array<Scalars['String']>>;
   /** A unique identifier for the client performing the mutation. */
   clientMutationId?: Maybe<Scalars['String']>;
 };
@@ -1354,6 +1357,7 @@ export type UpdateArticleMutationInput = {
   intro?: Maybe<Scalars['String']>;
   content?: Maybe<Scalars['String']>;
   price?: Maybe<Scalars['Float']>;
+  tagNames?: Maybe<Array<Scalars['String']>>;
   /** A unique identifier for the client performing the mutation. */
   clientMutationId?: Maybe<Scalars['String']>;
 };
@@ -3711,6 +3715,8 @@ export const MyArticleDocument = gql`
     upvotesCount
     downvotesCount
     wordsCount
+    tagsCount
+    tagNames
     createdAt
     updatedAt
     buyers {

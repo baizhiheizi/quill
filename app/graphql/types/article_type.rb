@@ -10,6 +10,8 @@ module Types
     field :state, String, null: true
     field :asset_id, String, null: false
     field :price, Float, null: false
+    field :tags_count, Int, null: false
+    field :tag_names, [String], null: true
 
     field :revenue, Float, null: false
     field :author_revenue_amount, Float, null: false

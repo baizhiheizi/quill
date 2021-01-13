@@ -61,6 +61,8 @@ gem 'groupdate'
 gem 'ransack'
 # Ruby gem for reporting errors to honeybadger.io
 gem 'honeybadger', '~> 4.0'
+# A simple, standardized way to build and use Service Objects (aka Commands) in Ruby
+gem 'simple_command'
 
 # deploy
 gem 'mina', '~> 1.2.2', require: false

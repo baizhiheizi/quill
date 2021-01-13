@@ -32,6 +32,7 @@ article:
   readerRevenueAmount: Reader Revenue(PRS)
   myShare: My Share(%)
   stateText: State
+  tags: Tags
   createdAt: Created
   updatedAt: Last Edited
   state:
