@@ -36,6 +36,7 @@ import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, useParams } from 'react-router-dom';
+import ArticleTagsComponent from '../../components/ArticleTagsComponent/ArticleTagsComponent';
 import NotFoundPage from '../NotFoundPage/NotFoundPage';
 import PayModalComponent from './components/PayModalComponent';
 import RewardModalComponent from './components/RewardModalComponent';
@@ -90,97 +91,109 @@ export default function ArticlePage() {
       >
         {article.intro}
       </div>
-      {article.authorized ? (
-        <MarkdownRendererComponent source={article.content} />
-      ) : (
-        <div style={{ textAlign: 'center' }}>
-          <div
-            style={{
-              color: '#aaa',
-              marginBottom: '1rem',
-              textAlign: 'left',
-            }}
-          >
-            {t('article.wordsCount')}: {article.wordsCount}
-          </div>
-          {article.partialContent && (
-            <div style={{ marginBottom: '1rem', textAlign: 'left' }}>
-              <MarkdownRendererComponent source={article.partialContent} />
-              <div
-                style={{ marginTop: '1rem', textAlign: 'center', color: 'red' }}
-              >
-                - {t('articlePage.moreToRead')} -
-              </div>
+      <div style={{ marginBottom: 20 }}>
+        {article.authorized ? (
+          <MarkdownRendererComponent source={article.content} />
+        ) : (
+          <div style={{ textAlign: 'center' }}>
+            <div
+              style={{
+                color: '#aaa',
+                marginBottom: '1rem',
+                textAlign: 'left',
+              }}
+            >
+              {t('article.wordsCount')}: {article.wordsCount}
             </div>
-          )}
-          <div style={{ marginBottom: '1rem' }}>
-            <div>
-              {t('articlePage.payToRead1')}{' '}
-              <span style={{ color: 'red' }}>{article.price} PRS</span>{' '}
-              {t('articlePage.payToRead2')}
-            </div>
-            <div>
-              {t('articlePage.payToRead3')}{' '}
-              <Link to='/rules'>{t('menu.rules')}</Link>{' '}
-              {t('articlePage.payToRead4')}
-            </div>
-          </div>
-          <div style={{ marginBottom: '1rem' }}>
-            <Alert type='warning' message={t('articlePage.payWarning')} />
-          </div>
-          <div>
-            {currentUser ? (
-              <div>
-                <Button type='primary' onClick={() => setPayModalVisible(true)}>
-                  {article.readers.totalCount === 0
-                    ? t('articlePage.firstReaderBtn')
-                    : t('articlePage.payToReadBtn')}
-                </Button>
-                {payModalVisible && (
-                  <PayModalComponent
-                    visible={payModalVisible}
-                    price={article.price}
-                    walletId={article.walletId}
-                    articleUuid={article.uuid}
-                    paymentTraceId={article.paymentTraceId}
-                    onCancel={() => {
-                      setPayModalVisible(false);
-                      refetch();
-                    }}
-                  />
-                )}
-                <div
-                  style={{ marginTop: 10, fontSize: '0.8rem', color: '#aaa' }}
-                >
-                  {t('articlePage.alreadyPaid1')}{' '}
-                  <a onClick={() => refetch()}>
-                    {t('articlePage.alreadyPaid2')}
-                  </a>
-                </div>
+            {article.partialContent && (
+              <div style={{ marginBottom: '1rem', textAlign: 'left' }}>
+                <MarkdownRendererComponent source={article.partialContent} />
                 <div
                   style={{
-                    marginTop: 5,
-                    fontSize: '0.8rem',
-                    color: '#aaa',
+                    marginTop: '1rem',
+                    textAlign: 'center',
+                    color: 'red',
                   }}
                 >
-                  {t('articlePage.buyPRSTips')}
+                  - {t('articlePage.moreToRead')} -
                 </div>
               </div>
-            ) : (
-              <Button
-                type='primary'
-                href={`/login?return_to=${encodeURIComponent(location.href)}`}
-              >
-                {t('articlePage.loginBtn')}
-              </Button>
             )}
+            <div style={{ marginBottom: '1rem' }}>
+              <div>
+                {t('articlePage.payToRead1')}{' '}
+                <span style={{ color: 'red' }}>{article.price} PRS</span>{' '}
+                {t('articlePage.payToRead2')}
+              </div>
+              <div>
+                {t('articlePage.payToRead3')}{' '}
+                <Link to='/rules'>{t('menu.rules')}</Link>{' '}
+                {t('articlePage.payToRead4')}
+              </div>
+            </div>
+            <div style={{ marginBottom: '1rem' }}>
+              <Alert type='warning' message={t('articlePage.payWarning')} />
+            </div>
+            <div>
+              {currentUser ? (
+                <div>
+                  <Button
+                    type='primary'
+                    onClick={() => setPayModalVisible(true)}
+                  >
+                    {article.readers.totalCount === 0
+                      ? t('articlePage.firstReaderBtn')
+                      : t('articlePage.payToReadBtn')}
+                  </Button>
+                  {payModalVisible && (
+                    <PayModalComponent
+                      visible={payModalVisible}
+                      price={article.price}
+                      walletId={article.walletId}
+                      articleUuid={article.uuid}
+                      paymentTraceId={article.paymentTraceId}
+                      onCancel={() => {
+                        setPayModalVisible(false);
+                        refetch();
+                      }}
+                    />
+                  )}
+                  <div
+                    style={{ marginTop: 10, fontSize: '0.8rem', color: '#aaa' }}
+                  >
+                    {t('articlePage.alreadyPaid1')}{' '}
+                    <a onClick={() => refetch()}>
+                      {t('articlePage.alreadyPaid2')}
+                    </a>
+                  </div>
+                  <div
+                    style={{
+                      marginTop: 5,
+                      fontSize: '0.8rem',
+                      color: '#aaa',
+                    }}
+                  >
+                    {t('articlePage.buyPRSTips')}
+                  </div>
+                </div>
+              ) : (
+                <Button
+                  type='primary'
+                  href={`/login?return_to=${encodeURIComponent(location.href)}`}
+                >
+                  {t('articlePage.loginBtn')}
+                </Button>
+              )}
+            </div>
           </div>
-        </div>
-      )}
+        )}
+      </div>
+      <div style={{ marginBottom: 20 }}>
+        <ArticleTagsComponent tags={article.tags} />
+      </div>
       <div
         onClick={() => handleShare(article, Boolean(mixinEnv), appId)}
-        style={{ margin: '20px 0', textAlign: 'right' }}
+        style={{ marginBottom: 20, textAlign: 'right' }}
       >
         <Button type='link' icon={<ShareAltOutlined />}>
           {t('articlePage.shareBtn')}

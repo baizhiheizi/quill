@@ -45,6 +45,8 @@ module Types
     field :reward_orders, Types::OrderConnectionType, null: false
     field :comments, Types::CommentConnectionType, null: false
 
+    field :tags, [Types::TagType], null: false
+
     def content
       return unless object.authorized?(context[:current_user])
 
@@ -104,6 +106,14 @@ module Types
     def wallet
       BatchLoader::GraphQL.for(object.id).batch do |ids, loader|
         MixinNetworkUser.where(owner_id: ids, owner_type: 'Article').each { |wallet| loader.call(wallet.owner_id, wallet) }
+      end
+    end
+
+    def tags
+      BatchLoader::GraphQL.for(object.id).batch(default_value: []) do |ids, loader|
+        Tagging.includes(:tag).where(article_id: ids).each do |tagging|
+          loader.call(tagging.article_id) { |memo| memo << tagging.tag }
+        end
       end
     end
   end

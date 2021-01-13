@@ -93,9 +93,12 @@ menu:
   login: Login
   logout: Logout
 homePage:
-  orderByPopularity: Popularity
-  orderByCreatedAt: Lately
-  orderByRevenue: Revenue
+  articles: Articles
+  articlesOrder:
+    popularity: Popularity
+    lately: Lately
+    revenue: Revenue
+  tags: Tags
   commentsZone: Comments
 articlePage:
   moreToRead: 90% More to go

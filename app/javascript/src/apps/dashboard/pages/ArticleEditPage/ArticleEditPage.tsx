@@ -23,7 +23,7 @@ export default function ArticleEditPage() {
   const { t } = useTranslation();
   const [tags, setTags] = useState<string[]>([]);
   const { data, loading } = useMyArticleQuery({
-    nextFetchPolicy: 'network-only',
+    fetchPolicy: 'network-only',
     variables: { uuid },
   });
   const [updateArticle, { loading: updating }] = useUpdateArticleMutation({

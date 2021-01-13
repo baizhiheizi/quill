@@ -301,6 +301,7 @@ export type Article = {
   rewarders: UserConnection;
   state?: Maybe<Scalars['String']>;
   tagNames?: Maybe<Array<Scalars['String']>>;
+  tags: Array<Tag>;
   tagsCount: Scalars['Int'];
   title: Scalars['String'];
   updatedAt?: Maybe<Scalars['ISO8601DateTime']>;
@@ -1267,6 +1268,15 @@ export type SwapPreOrder = {
   priceImpact?: Maybe<Scalars['Float']>;
   routePrice?: Maybe<Scalars['Float']>;
   state: Scalars['String'];
+  updatedAt?: Maybe<Scalars['ISO8601DateTime']>;
+};
+
+export type Tag = {
+  __typename?: 'Tag';
+  articlesCount?: Maybe<Scalars['Int']>;
+  createdAt: Scalars['ISO8601DateTime'];
+  id: Scalars['ID'];
+  name?: Maybe<Scalars['String']>;
   updatedAt?: Maybe<Scalars['ISO8601DateTime']>;
 };
 
@@ -3023,6 +3033,10 @@ export const ArticleConnectionDocument = gql`
       ordersCount
       commentsCount
       upvoteRatio
+      tags {
+        id
+        name
+      }
       author {
         name
         avatarUrl
@@ -3090,6 +3104,10 @@ export const ArticleDocument = gql`
     wordsCount
     partialContent
     walletId
+    tags {
+      id
+      name
+    }
     author {
       name
       avatarUrl

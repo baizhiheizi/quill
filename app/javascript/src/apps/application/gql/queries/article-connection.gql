@@ -9,6 +9,10 @@ query ArticleConnection($order: String!, $query: String, $after: String) {
       ordersCount
       commentsCount
       upvoteRatio
+      tags {
+        id
+        name
+      }
       author {
         name
         avatarUrl

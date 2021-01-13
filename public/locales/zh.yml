@@ -93,6 +93,12 @@ menu:
   login: 登录
   logout: 登出
 homePage:
+  articles: 文章
+  articlesOrder:
+    popularity: 综合排序
+    lately: 最新优先
+    revenue: 营收最多
+  tags: 标签
   orderByPopularity: 综合排序
   orderByCreatedAt: 最新优先
   orderByRevenue: 营收最多
