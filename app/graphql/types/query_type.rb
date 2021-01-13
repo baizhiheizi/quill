@@ -23,6 +23,7 @@ module Types
     field :my_article_connection, resolver: Resolvers::MyArticleConnectionResolver
     field :my_authoring_subscription_connection, resolver: Resolvers::MyAuthoringSubscriptionConnectionResolver
     field :my_reading_subscription_connection, resolver: Resolvers::MyReadingSubscriptionConnectionResolver
+    field :my_commenting_subscription_connection, resolver: Resolvers::MyCommentingSubscriptionConnectionResolver
     field :my_payment_connection, resolver: Resolvers::MyPaymentConnectionResolver
     field :my_transfer_connection, resolver: Resolvers::MyTransferConnectionResolver
     field :my_swap_order_connection, resolver: Resolvers::MySwapOrderConnectionResolver

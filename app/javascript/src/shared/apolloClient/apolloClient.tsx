@@ -64,6 +64,9 @@ export const apolloClient = (uri: string, csrfToken?: string) => {
             'authorMixinId',
             'orderBy',
           ]),
+          myAuthoringSubscriptionConnection: customizedConnectionMergeFunction(),
+          myReadingSubscriptionConnection: customizedConnectionMergeFunction(),
+          myCommentingSubscriptionConnection: customizedConnectionMergeFunction(),
           myTransferConnection: customizedConnectionMergeFunction([
             'transferType',
           ]),

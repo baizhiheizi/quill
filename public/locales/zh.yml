@@ -251,8 +251,11 @@ dashboard:
     paid: 支付了
   subscriptionsPage:
     authoringSubscriptions: 作者
+    authoringSubscriptionsTip: 订阅的作者发表新文章时，您将收到通知
     readingSubscriptions: 读者
+    readingSubscriptionsTip: 订阅的读者购买新文章时，您将收到通知
     commentingSubscriptions: 评论
+    commentingSubscriptionsTip: 订阅的文章有新评论时，您将收到通知
     confirmToUnsubscribe: 确定要取消订阅吗？
   revenuePage:
     authorTransfers: 作者收益

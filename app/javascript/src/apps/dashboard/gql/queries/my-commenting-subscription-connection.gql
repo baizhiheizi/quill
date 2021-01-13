@@ -1,0 +1,17 @@
+query MyCommentingSubscriptionConnection($after: String) {
+  myCommentingSubscriptionConnection(after: $after) {
+    nodes {
+      id
+      uuid
+      title
+      revenue
+      author {
+        name
+      }
+    }
+    pageInfo {
+      hasNextPage
+      endCursor
+    }
+  }
+}

@@ -65,7 +65,7 @@ export default function Menus(props: { activeMenu?: string }) {
           </Link>
         </Menu.Item>
         <Menu.SubMenu
-          title={i18n.language.includes('en') ? 'EN' : '中文'}
+          title={i18n.language.includes('en') ? 'Language' : '语言'}
           icon={<GlobalOutlined />}
         >
           <Menu.Item>

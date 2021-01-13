@@ -60,7 +60,11 @@ export default function MyReadingSubscriptionsComponent() {
           ]}
         >
           <List.Item.Meta
-            title={user.name}
+            title={
+              <a href={`/users/${user.mixinId}`} target='_blank'>
+                {user.name}
+              </a>
+            }
             avatar={<Avatar src={user.avatarUrl}>{user.name[0]}</Avatar>}
           />
         </List.Item>

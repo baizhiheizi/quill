@@ -85,7 +85,9 @@ export default function Menus() {
       </Col>
       <Col>
         <Menu theme='light' mode={props.mode} selectable={false}>
-          <Menu.SubMenu title={i18n.language.includes('en') ? 'EN' : '中文'}>
+          <Menu.SubMenu
+            title={i18n.language.includes('en') ? 'Language' : '语言'}
+          >
             <Menu.Item>
               <a onClick={() => i18n.changeLanguage('zh-CN')}>中文</a>
             </Menu.Item>

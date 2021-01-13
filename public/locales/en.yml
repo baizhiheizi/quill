@@ -250,8 +250,11 @@ dashboard:
     paid: paid
   subscriptionsPage:
     authoringSubscriptions: Authors
+    authoringSubscriptionsTip: You will be notified when authors publish new articles
     readingSubscriptions: Readers
+    readingSubscriptionsTip: You will be notified when readers buy new articles
     commentingSubscriptions: Comments
+    commentingSubscriptionsTip: You will be notified when articles receive new comments
     confirmToUnsubscribe: Are you sure to unsubscribe?
   revenuePage:
     authorTransfers: Author Revenue

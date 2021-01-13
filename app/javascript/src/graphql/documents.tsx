@@ -936,6 +936,7 @@ export type Query = {
   myArticleConnection: ArticleConnection;
   myArticleOrderConnection?: Maybe<OrderConnection>;
   myAuthoringSubscriptionConnection: UserConnection;
+  myCommentingSubscriptionConnection: ArticleConnection;
   myPaymentConnection: PaymentConnection;
   myReadingSubscriptionConnection: UserConnection;
   myStatistics: UserStatistics;
@@ -1122,6 +1123,14 @@ export type QueryMyArticleOrderConnectionArgs = {
 
 
 export type QueryMyAuthoringSubscriptionConnectionArgs = {
+  after?: Maybe<Scalars['String']>;
+  before?: Maybe<Scalars['String']>;
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+};
+
+
+export type QueryMyCommentingSubscriptionConnectionArgs = {
   after?: Maybe<Scalars['String']>;
   before?: Maybe<Scalars['String']>;
   first?: Maybe<Scalars['Int']>;
@@ -3790,6 +3799,51 @@ export function useMyAuthoringSubscriptionConnectionLazyQuery(baseOptions?: Apol
 export type MyAuthoringSubscriptionConnectionQueryHookResult = ReturnType<typeof useMyAuthoringSubscriptionConnectionQuery>;
 export type MyAuthoringSubscriptionConnectionLazyQueryHookResult = ReturnType<typeof useMyAuthoringSubscriptionConnectionLazyQuery>;
 export type MyAuthoringSubscriptionConnectionQueryResult = Apollo.QueryResult<MyAuthoringSubscriptionConnectionQuery, MyAuthoringSubscriptionConnectionQueryVariables>;
+export const MyCommentingSubscriptionConnectionDocument = gql`
+    query MyCommentingSubscriptionConnection($after: String) {
+  myCommentingSubscriptionConnection(after: $after) {
+    nodes {
+      id
+      uuid
+      title
+      revenue
+      author {
+        name
+      }
+    }
+    pageInfo {
+      hasNextPage
+      endCursor
+    }
+  }
+}
+    `;
+
+/**
+ * __useMyCommentingSubscriptionConnectionQuery__
+ *
+ * To run a query within a React component, call `useMyCommentingSubscriptionConnectionQuery` and pass it any options that fit your needs.
+ * When your component renders, `useMyCommentingSubscriptionConnectionQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useMyCommentingSubscriptionConnectionQuery({
+ *   variables: {
+ *      after: // value for 'after'
+ *   },
+ * });
+ */
+export function useMyCommentingSubscriptionConnectionQuery(baseOptions?: Apollo.QueryHookOptions<MyCommentingSubscriptionConnectionQuery, MyCommentingSubscriptionConnectionQueryVariables>) {
+        return Apollo.useQuery<MyCommentingSubscriptionConnectionQuery, MyCommentingSubscriptionConnectionQueryVariables>(MyCommentingSubscriptionConnectionDocument, baseOptions);
+      }
+export function useMyCommentingSubscriptionConnectionLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MyCommentingSubscriptionConnectionQuery, MyCommentingSubscriptionConnectionQueryVariables>) {
+          return Apollo.useLazyQuery<MyCommentingSubscriptionConnectionQuery, MyCommentingSubscriptionConnectionQueryVariables>(MyCommentingSubscriptionConnectionDocument, baseOptions);
+        }
+export type MyCommentingSubscriptionConnectionQueryHookResult = ReturnType<typeof useMyCommentingSubscriptionConnectionQuery>;
+export type MyCommentingSubscriptionConnectionLazyQueryHookResult = ReturnType<typeof useMyCommentingSubscriptionConnectionLazyQuery>;
+export type MyCommentingSubscriptionConnectionQueryResult = Apollo.QueryResult<MyCommentingSubscriptionConnectionQuery, MyCommentingSubscriptionConnectionQueryVariables>;
 export const MyPaymentConnectionDocument = gql`
     query MyPaymentConnection($after: String) {
   myPaymentConnection(after: $after) {

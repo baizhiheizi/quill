@@ -1,25 +1,26 @@
 import ListComponent from '@dashboard/components/ListComponent/ListComponent';
 import LoadingComponent from '@dashboard/components/LoadingComponent/LoadingComponent';
 import {
-  useMyAuthoringSubscriptionConnectionQuery,
-  User,
-  useToggleAuthoringSubscribeUserActionMutation,
+  Article,
+  useMyCommentingSubscriptionConnectionQuery,
+  useToggleCommentingSubscribeArticleActionMutation,
 } from '@graphql';
-import { Avatar, Button, List, Popconfirm } from 'antd';
-import { useTranslation } from 'react-i18next';
+import { Button, List, Popconfirm } from 'antd';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 
-export default function MyAuthoringSubscriptionsComponent() {
+export default function MyCommentingSubscriptionsComponent() {
   const { t } = useTranslation();
   const {
     loading,
     data,
     fetchMore,
     refetch,
-  } = useMyAuthoringSubscriptionConnectionQuery();
+  } = useMyCommentingSubscriptionConnectionQuery();
+
   const [
-    toggleAuthoringSubscribeUserAction,
-  ] = useToggleAuthoringSubscribeUserActionMutation({
+    toggleCommentingSubscribeArticleAction,
+  ] = useToggleCommentingSubscribeArticleActionMutation({
     update() {
       refetch();
     },
@@ -30,8 +31,8 @@ export default function MyAuthoringSubscriptionsComponent() {
   }
 
   const {
-    myAuthoringSubscriptionConnection: {
-      nodes: authoringSubscriptions,
+    myCommentingSubscriptionConnection: {
+      nodes: commentingSubscriptions,
       pageInfo: { hasNextPage, endCursor },
     },
   } = data;
@@ -41,16 +42,16 @@ export default function MyAuthoringSubscriptionsComponent() {
       loading={loading}
       hasNextPage={hasNextPage}
       fetchMore={() => fetchMore({ variables: { after: endCursor } })}
-      dataSource={authoringSubscriptions}
-      renderItem={(user: Partial<User>) => (
+      dataSource={commentingSubscriptions}
+      renderItem={(article: Partial<Article>) => (
         <List.Item
-          key={user.id}
+          key={article.uuid}
           actions={[
             <Popconfirm
               title={t('dashboard.subscriptionsPage.confirmToUnsubscribe')}
               onConfirm={() =>
-                toggleAuthoringSubscribeUserAction({
-                  variables: { input: { mixinId: user.mixinId } },
+                toggleCommentingSubscribeArticleAction({
+                  variables: { input: { uuid: article.uuid } },
                 })
               }
             >
@@ -60,11 +61,10 @@ export default function MyAuthoringSubscriptionsComponent() {
         >
           <List.Item.Meta
             title={
-              <a href={`/users/${user.mixinId}`} target='_blank'>
-                {user.name}
+              <a href={`/articles/${article.uuid}`} target='_blank'>
+                {article.title}
               </a>
             }
-            avatar={<Avatar src={user.avatarUrl}>{user.name[0]}</Avatar>}
           />
         </List.Item>
       )}

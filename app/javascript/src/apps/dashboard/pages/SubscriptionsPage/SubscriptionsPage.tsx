@@ -3,6 +3,7 @@ import { Alert, PageHeader, Tabs } from 'antd';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import MyAuthoringSubscriptionsComponent from './components/MyAuthoringSubscriptionsComponent';
+import MyCommentingSubscriptionsComponent from './components/MyCommentingSubscriptionsComponent';
 import MyReadingSubscriptionsComponent from './components/MyReadingSubscriptionsComponent';
 
 export default function SubscriptionsPage() {
@@ -24,11 +25,7 @@ export default function SubscriptionsPage() {
           tab={t('dashboard.subscriptionsPage.authoringSubscriptions')}
         >
           <Alert
-            message={
-              <span>
-                订阅的作者<b>发表新文章</b>时，您将收到通知
-              </span>
-            }
+            message={t('dashboard.subscriptionsPage.authoringSubscriptionsTip')}
           />
           <br />
           <MyAuthoringSubscriptionsComponent />
@@ -38,11 +35,7 @@ export default function SubscriptionsPage() {
           tab={t('dashboard.subscriptionsPage.readingSubscriptions')}
         >
           <Alert
-            message={
-              <span>
-                订阅的读者<b>购买新文章</b>时，您将收到通知
-              </span>
-            }
+            message={t('dashboard.subscriptionsPage.readingSubscriptionsTip')}
           />
           <br />
           <MyReadingSubscriptionsComponent />
@@ -50,7 +43,15 @@ export default function SubscriptionsPage() {
         <Tabs.TabPane
           key='commenting'
           tab={t('dashboard.subscriptionsPage.commentingSubscriptions')}
-        ></Tabs.TabPane>
+        >
+          <Alert
+            message={t(
+              'dashboard.subscriptionsPage.commentingSubscriptionsTip',
+            )}
+          />
+          <br />
+          <MyCommentingSubscriptionsComponent />
+        </Tabs.TabPane>
       </Tabs>
     </div>
   );
