@@ -32,7 +32,7 @@ article:
   readerRevenueAmount: 读者收益(PRS)
   myShare: 奖励份额(%)
   stateText: 状态
-  tags: 标签
+  tags: 话题
   createdAt: 创建时间
   updatedAt: 上次编辑
   state:
@@ -100,7 +100,7 @@ homePage:
     popularity: 综合排序
     lately: 最新优先
     revenue: 营收最多
-  tags: 标签
+  tags: 话题
   orderByPopularity: 综合排序
   orderByCreatedAt: 最新优先
   orderByRevenue: 营收最多
