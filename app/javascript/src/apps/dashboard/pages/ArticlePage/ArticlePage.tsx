@@ -14,7 +14,10 @@ export default function ArticlePage() {
   const { t, i18n } = useTranslation();
   moment.locale(i18n.language);
   const { uuid } = useParams<{ uuid: string }>();
-  const { loading, data } = useMyArticleQuery({ variables: { uuid } });
+  const { loading, data } = useMyArticleQuery({
+    variables: { uuid },
+    fetchPolicy: 'network-only',
+  });
 
   if (loading) {
     return <LoadingComponent />;
@@ -102,6 +105,13 @@ export default function ArticlePage() {
           </Descriptions.Item>
           <Descriptions.Item label={t('article.downvotesCount')}>
             {article.downvotesCount}
+          </Descriptions.Item>
+          <Descriptions.Item label={t('article.tags')}>
+            {article.tagNames.length > 0
+              ? article.tagNames.map((tagName: string) => (
+                  <Tag key={tagName}>#{tagName}</Tag>
+                ))
+              : '-'}
           </Descriptions.Item>
         </Descriptions>
       </div>

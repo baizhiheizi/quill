@@ -77,7 +77,7 @@ export default function EditableTagsComponent(props: {
                 }
               }}
             >
-              {isLongTag ? `${tag.slice(0, 20)}...` : tag}
+              #{isLongTag ? `${tag.slice(0, 20)}...` : tag}
             </span>
           </Tag>
         );

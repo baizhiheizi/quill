@@ -13,7 +13,7 @@ class CreateTag
   end
 
   def call
-    new_tags = tag_names.map { |x| Tag.find_or_create_by(name: x) }
+    new_tags = tag_names.map { |x| Tag.find_or_create_by(name: x.strip) }
     old_tags = article.tags.to_a
     add_tags = (new_tags - old_tags)
     remove_tags = (old_tags - new_tags)
