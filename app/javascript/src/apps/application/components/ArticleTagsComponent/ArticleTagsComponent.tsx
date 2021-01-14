@@ -12,7 +12,7 @@ export default function ArticleTagsComponent(props: { tags: TagType[] }) {
           <Tooltip title={tag.name}>
             <Link to={`/tags/${tag.id}`}>
               <Tag
-                color='blue'
+                color={tag.color}
                 style={{
                   maxWidth: 200,
                   overflow: 'hidden',

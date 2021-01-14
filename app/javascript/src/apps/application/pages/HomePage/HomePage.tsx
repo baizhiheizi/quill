@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import ArticlesComponent from './components/ArticlesComponents';
 import CommentsComponent from './components/CommentsComponent';
+import TagsComponent from './components/TagsComponent';
 
 export default function HomePage() {
   const { t } = useTranslation();
@@ -34,7 +35,7 @@ export default function HomePage() {
         <ArticlesComponent order={articlesOrder} />
       </Tabs.TabPane>
       <Tabs.TabPane tab={t('homePage.tags')} key='tags'>
-        Tags
+        <TagsComponent />
       </Tabs.TabPane>
       <Tabs.TabPane tab={t('homePage.commentsZone')} key='comments'>
         <CommentsComponent />

@@ -24,6 +24,7 @@ query Article($uuid: ID!, $readerAfter: String) {
     tags {
       id
       name
+      color
     }
     author {
       name

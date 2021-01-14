@@ -53,6 +53,8 @@ article:
     contentPlaceHolder: Write something valuable
     introPlaceHolder: Please introduce your article and this will be public
     newBtn: New
+tag:
+  articlesCount: Articles Count
 payment:
   state:
     paid: Paid

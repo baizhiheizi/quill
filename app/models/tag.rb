@@ -11,8 +11,14 @@
 #  updated_at     :datetime         not null
 #
 class Tag < ApplicationRecord
+  COLORS = %w[gray magenta red orange gold lime green cyan blue purple].freeze
+
   has_many :taggings, dependent: :nullify
   has_many :articles, through: :taggings, dependent: :nullify
 
   validates :name, uniqueness: true
+
+  def color
+    @color ||= COLORS[id % COLORS.size]
+  end
 end

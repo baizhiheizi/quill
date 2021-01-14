@@ -1,0 +1,15 @@
+query TagConnection($after: String) {
+  tagConnection(after: $after) {
+    nodes {
+      id
+      name
+      color
+      articlesCount
+      createdAt
+    }
+    pageInfo {
+      hasNextPage
+      endCursor
+    }
+  }
+}

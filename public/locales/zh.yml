@@ -53,6 +53,8 @@ article:
     contentPlaceHolder: 写点有价值的东西
     introPlaceHolder: 请简要介绍一下你的文章，简介内容为公开可见。
     newBtn: 新建
+tag:
+  articlesCount: 文章数量
 payment:
   state:
     paid: 已支付
