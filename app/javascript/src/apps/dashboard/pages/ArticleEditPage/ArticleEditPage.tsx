@@ -1,8 +1,6 @@
-import {
-  ArticleQueryHookResult,
-  useArticleQuery,
-  useUpdateArticleMutation,
-} from '@graphql';
+import LoadingComponent from '@dashboard/components/LoadingComponent/LoadingComponent';
+import { updateActiveMenu } from '@dashboard/shared';
+import { useMyArticleQuery, useUpdateArticleMutation } from '@graphql';
 import Editor, { commands } from '@uiw/react-md-editor';
 import {
   Button,
@@ -13,18 +11,19 @@ import {
   Modal,
   PageHeader,
 } from 'antd';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, useHistory, useParams } from 'react-router-dom';
-import LoadingComponent from '@dashboard/components/LoadingComponent/LoadingComponent';
-import { updateActiveMenu } from '@dashboard/shared';
+import EditableTagsComponent from '../../components/EditableTagsComponent/EditableTagsComponent';
 
 export default function ArticleEditPage() {
   updateActiveMenu('articles');
   const { uuid } = useParams<{ uuid: string }>();
   const history = useHistory();
   const { t } = useTranslation();
-  const { data, loading }: ArticleQueryHookResult = useArticleQuery({
+  const [tags, setTags] = useState<string[]>([]);
+  const { data, loading } = useMyArticleQuery({
+    fetchPolicy: 'network-only',
     variables: { uuid },
   });
   const [updateArticle, { loading: updating }] = useUpdateArticleMutation({
@@ -45,11 +44,15 @@ export default function ArticleEditPage() {
     },
   });
 
+  useEffect(() => {
+    setTags(data?.myArticle?.tagNames || []);
+  }, [data]);
+
   if (loading) {
     return <LoadingComponent />;
   }
 
-  const { article } = data;
+  const { myArticle } = data;
 
   return (
     <div>
@@ -58,7 +61,7 @@ export default function ArticleEditPage() {
         breadcrumb={{
           routes: [
             { path: '/articles', breadcrumbName: t('dashboard.menu.articles') },
-            { path: `/articles/${uuid}`, breadcrumbName: article.title },
+            { path: `/articles/${uuid}`, breadcrumbName: myArticle.title },
             { path: '', breadcrumbName: t('dashboard.pages.articleEdit') },
           ],
           itemRender: (route, _params, routes, _paths) => {
@@ -74,10 +77,10 @@ export default function ArticleEditPage() {
       <Form
         initialValues={{
           uuid,
-          title: article.title,
-          intro: article.intro,
-          content: article.content,
-          price: article.price,
+          title: myArticle.title,
+          intro: myArticle.intro,
+          content: myArticle.content,
+          price: myArticle.price,
         }}
         labelCol={{ span: 2 }}
         wrapperCol={{ span: 22 }}
@@ -91,7 +94,10 @@ export default function ArticleEditPage() {
               centered: true,
               okText: t('article.form.updateOkText'),
               cancelText: t('article.form.updateCancelText'),
-              onOk: () => updateArticle({ variables: { input: values } }),
+              onOk: () =>
+                updateArticle({
+                  variables: { input: { ...values, tagNames: tags } },
+                }),
             });
           }
         }}
@@ -128,6 +134,9 @@ export default function ArticleEditPage() {
         </Form.Item>
         <Form.Item label={t('article.intro')} name='intro'>
           <Input.TextArea placeholder={t('article.form.introPlaceHolder')} />
+        </Form.Item>
+        <Form.Item label={t('article.tags')}>
+          <EditableTagsComponent tags={tags} setTags={setTags} />
         </Form.Item>
         <Form.Item label={t('article.price')} name='price'>
           <InputNumber min={1} precision={4} placeholder='0.0' />

@@ -1,5 +1,21 @@
-query ArticleConnection($order: String!, $query: String, $after: String) {
-  articleConnection(order: $order, query: $query, after: $after) {
+query TaggedArticleConnection(
+  $tagId: ID!
+  $order: String!
+  $query: String
+  $after: String
+) {
+  tag(id: $tagId) {
+    id
+    name
+    color
+    articlesCount
+  }
+  articleConnection(
+    order: $order
+    query: $query
+    tagId: $tagId
+    after: $after
+  ) {
     nodes {
       uuid
       title

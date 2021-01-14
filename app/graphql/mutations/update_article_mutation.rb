@@ -7,6 +7,7 @@ module Mutations
     argument :intro, String, required: false
     argument :content, String, required: false
     argument :price, Float, required: false
+    argument :tag_names, [String], required: false
 
     field :error, String, null: true
 
@@ -22,9 +23,13 @@ module Mutations
           :price
         )
       )
-      article.save
 
-      { error: article.errors.full_messages.join(';').presence }
+      if article.save
+        CreateTag.call(article, params[:tag_names] || [])
+        { error: nil }
+      else
+        { error: article.errors.full_messages.join(';').presence }
+      end
     end
   end
 end

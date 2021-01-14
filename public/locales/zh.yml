@@ -32,6 +32,7 @@ article:
   readerRevenueAmount: 读者收益(PRS)
   myShare: 奖励份额(%)
   stateText: 状态
+  tags: 话题
   createdAt: 创建时间
   updatedAt: 上次编辑
   state:
@@ -52,6 +53,8 @@ article:
     contentPlaceHolder: 写点有价值的东西
     introPlaceHolder: 请简要介绍一下你的文章，简介内容为公开可见。
     newBtn: 新建
+tag:
+  articlesCount: 文章数量
 payment:
   state:
     paid: 已支付
@@ -92,6 +95,12 @@ menu:
   login: 登录
   logout: 登出
 homePage:
+  articles: 文章
+  articlesOrder:
+    popularity: 综合排序
+    lately: 最新优先
+    revenue: 营收最多
+  tags: 话题
   orderByPopularity: 综合排序
   orderByCreatedAt: 最新优先
   orderByRevenue: 营收最多

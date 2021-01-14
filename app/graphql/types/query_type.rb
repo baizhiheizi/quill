@@ -4,6 +4,8 @@ module Types
   class QueryType < Types::BaseObject
     field :article_connection, resolver: Resolvers::ArticleConnectionResolver
     field :article, resolver: Resolvers::ArticleResolver
+    field :tag, resolver: Resolvers::TagResolver
+    field :tag_connection, resolver: Resolvers::TagConnectionResolver
     field :comment_connection, resolver: Resolvers::CommentConnectionResolver
     field :transfer_connection, resolver: Resolvers::TransferConnectionResolver
 

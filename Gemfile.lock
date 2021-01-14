@@ -319,6 +319,7 @@ GEM
     sidekiq-cron (1.2.0)
       fugit (~> 1.1)
       sidekiq (>= 4.2.1)
+    simple_command (0.1.0)
     spring (2.1.1)
     spring-watcher-listen (2.0.1)
       listen (>= 2.7, < 4.0)
@@ -403,6 +404,7 @@ DEPENDENCIES
   selenium-webdriver
   sidekiq (~> 6.0)
   sidekiq-cron
+  simple_command
   spring
   spring-watcher-listen (~> 2.0.0)
   turbolinks (~> 5)

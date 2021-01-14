@@ -13,6 +13,7 @@ const NotFoundPage = React.lazy(
 const RulesPage = React.lazy(() => import('./pages/RulesPage/RulesPage'));
 const SearchPage = React.lazy(() => import('./pages/SearchPage/SearchPage'));
 const UserPage = React.lazy(() => import('./pages/UserPage/UserPage'));
+const TagPage = React.lazy(() => import('./pages/TagPage/TagPage'));
 
 export default function Routes() {
   return (
@@ -24,6 +25,9 @@ export default function Routes() {
           </Route>
           <Route path='/articles/:uuid' exact>
             <ArticlePage />
+          </Route>
+          <Route path='/tags/:id' exact>
+            <TagPage />
           </Route>
           <Route path='/users/:mixinId' exact>
             <UserPage />

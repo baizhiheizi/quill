@@ -2,15 +2,15 @@
 # of editing this file, please use the migrations feature of Active Record to
 # incrementally modify your database, and then regenerate this schema definition.
 #
-# This file is the source Rails uses to define your schema when running `rails
-# db:schema:load`. When creating a new database, `rails db:schema:load` tends to
+# This file is the source Rails uses to define your schema when running `bin/rails
+# db:schema:load`. When creating a new database, `bin/rails db:schema:load` tends to
 # be faster and is potentially less error prone than running all of your
 # migrations from scratch. Old migrations may fail to apply correctly if those
 # migrations use external dependencies or application code.
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_12_07_030512) do
+ActiveRecord::Schema.define(version: 2021_01_13_033119) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -64,6 +64,7 @@ ActiveRecord::Schema.define(version: 2020_12_07_030512) do
     t.integer "commenting_subscribers_count", default: 0
     t.integer "upvotes_count", default: 0
     t.integer "downvotes_count", default: 0
+    t.integer "tags_count", default: 0
     t.index ["author_id"], name: "index_articles_on_author_id"
     t.index ["uuid"], name: "index_articles_on_uuid", unique: true
   end
@@ -190,6 +191,23 @@ ActiveRecord::Schema.define(version: 2020_12_07_030512) do
     t.index ["payment_id"], name: "index_swap_orders_on_payment_id"
     t.index ["trace_id"], name: "index_swap_orders_on_trace_id", unique: true
     t.index ["user_id"], name: "index_swap_orders_on_user_id"
+  end
+
+  create_table "taggings", force: :cascade do |t|
+    t.bigint "tag_id"
+    t.bigint "article_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["article_id"], name: "index_taggings_on_article_id"
+    t.index ["tag_id", "article_id"], name: "index_taggings_on_tag_id_and_article_id", unique: true
+    t.index ["tag_id"], name: "index_taggings_on_tag_id"
+  end
+
+  create_table "tags", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.integer "articles_count", default: 0
   end
 
   create_table "transfers", force: :cascade do |t|

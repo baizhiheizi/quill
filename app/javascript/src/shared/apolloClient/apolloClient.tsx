@@ -55,6 +55,7 @@ export const apolloClient = (uri: string, csrfToken?: string) => {
             'orderBy',
           ]),
           articleConnection: customizedConnectionMergeFunction([
+            'tagId',
             'order',
             'query',
           ]),
@@ -81,6 +82,7 @@ export const apolloClient = (uri: string, csrfToken?: string) => {
             'type',
             'mixinId',
           ]),
+          tagConnection: customizedConnectionMergeFunction(),
           transferConnection: customizedConnectionMergeFunction(),
         },
       },

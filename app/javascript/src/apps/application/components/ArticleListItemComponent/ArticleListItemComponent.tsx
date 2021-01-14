@@ -13,6 +13,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { handleShare, PRS_ICON_URL } from '../../shared';
+import ArticleTagsComponent from '../ArticleTagsComponent/ArticleTagsComponent';
 import UserCardComponent from '../UserCardComponent/UserCardComponent';
 
 export default function ArticleListItemComponent(props: {
@@ -81,6 +82,7 @@ export default function ArticleListItemComponent(props: {
         <h2>{article.title}</h2>
         <p>{article.intro}</p>
       </Link>
+      <ArticleTagsComponent tags={article.tags} />
     </List.Item>
   );
 }

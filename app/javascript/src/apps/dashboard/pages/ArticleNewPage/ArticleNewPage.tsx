@@ -11,14 +11,16 @@ import {
   PageHeader,
   Radio,
 } from 'antd';
-import React from 'react';
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, useHistory } from 'react-router-dom';
+import EditableTagsComponent from '../../components/EditableTagsComponent/EditableTagsComponent';
 
 export default function ArticleNewPage() {
   updateActiveMenu('articles');
   const history = useHistory();
   const { t } = useTranslation();
+  const [tags, setTags] = useState<string[]>([]);
   const [createArticle, { loading }] = useCreateArticleMutation({
     update(
       _,
@@ -69,7 +71,10 @@ export default function ArticleNewPage() {
               centered: true,
               okText: t('article.form.createOkText'),
               cancelText: t('article.form.createCancelText'),
-              onOk: () => createArticle({ variables: { input: values } }),
+              onOk: () =>
+                createArticle({
+                  variables: { input: { ...values, tagNames: tags } },
+                }),
             });
           }
         }}
@@ -102,6 +107,9 @@ export default function ArticleNewPage() {
         </Form.Item>
         <Form.Item label={t('article.intro')} name='intro'>
           <Input.TextArea placeholder={t('article.form.introPlaceHolder')} />
+        </Form.Item>
+        <Form.Item label={t('article.tags')}>
+          <EditableTagsComponent tags={tags} setTags={setTags} />
         </Form.Item>
         <Form.Item label={t('article.price')} name='price'>
           <InputNumber min={1} precision={4} placeholder='0.0' />

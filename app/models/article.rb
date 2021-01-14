@@ -14,6 +14,7 @@
 #  price                               :decimal(, )      not null
 #  revenue                             :decimal(, )      default(0.0)
 #  state                               :string
+#  tags_count                          :integer          default(0)
 #  title                               :string
 #  upvotes_count                       :integer          default(0)
 #  uuid                                :uuid
@@ -49,6 +50,9 @@ class Article < ApplicationRecord
   has_many :reader_transfers, -> { where(transfer_type: :reader_revenue) }, through: :orders, source: :transfers, dependent: :nullify
 
   has_many :comments, as: :commentable, dependent: :nullify
+
+  has_many :taggings, dependent: :nullify
+  has_many :tags, through: :taggings, dependent: :nullify
 
   has_one :wallet, class_name: 'MixinNetworkUser', as: :owner, dependent: :nullify
 
@@ -186,6 +190,10 @@ class Article < ApplicationRecord
 
   def reader_revenue_amount
     reader_transfers.sum(:amount)
+  end
+
+  def tag_names
+    @tag_names ||= tags.pluck(:name)
   end
 
   private

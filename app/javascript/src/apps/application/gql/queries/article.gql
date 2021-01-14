@@ -21,6 +21,11 @@ query Article($uuid: ID!, $readerAfter: String) {
     wordsCount
     partialContent
     walletId
+    tags {
+      id
+      name
+      color
+    }
     author {
       name
       avatarUrl

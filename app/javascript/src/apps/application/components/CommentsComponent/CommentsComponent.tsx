@@ -37,6 +37,7 @@ import moment from 'moment';
 import React, { createElement, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import LoadingComponent from '../LoadingComponent/LoadingComponent';
+import LoadMoreComponent from '../LoadMoreComponent/LoadMoreComponent';
 import UserCardComponent from '../UserCardComponent/UserCardComponent';
 
 export default function CommentsComponent(props: {
@@ -159,33 +160,20 @@ export default function CommentsComponent(props: {
         style={{ marginBottom: 30 }}
         dataSource={comments}
         loadMore={
-          hasNextPage && (
-            <div
-              style={{
-                textAlign: 'center',
-                marginTop: 12,
-                height: 32,
-                lineHeight: '32px',
-              }}
-            >
-              <Button
-                loading={loading}
-                type='link'
-                onClick={() => {
-                  fetchMore({
-                    variables: {
-                      after: endCursor,
-                      commentableType,
-                      commentableId,
-                      orderBy,
-                    },
-                  });
-                }}
-              >
-                {t('common.loadMore')}
-              </Button>
-            </div>
-          )
+          <LoadMoreComponent
+            hasNextPage={hasNextPage}
+            loading={loading}
+            fetchMore={() => {
+              fetchMore({
+                variables: {
+                  after: endCursor,
+                  commentableType,
+                  commentableId,
+                  orderBy,
+                },
+              });
+            }}
+          />
         }
         locale={{ emptyText: t('commentsComponent.emptyText') }}
         renderItem={(comment: Partial<IComment>) => (

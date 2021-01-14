@@ -10,6 +10,8 @@ module Types
     field :state, String, null: true
     field :asset_id, String, null: false
     field :price, Float, null: false
+    field :tags_count, Int, null: false
+    field :tag_names, [String], null: true
 
     field :revenue, Float, null: false
     field :author_revenue_amount, Float, null: false
@@ -42,6 +44,8 @@ module Types
     field :buy_orders, Types::OrderConnectionType, null: false
     field :reward_orders, Types::OrderConnectionType, null: false
     field :comments, Types::CommentConnectionType, null: false
+
+    field :tags, [Types::TagType], null: false
 
     def content
       return unless object.authorized?(context[:current_user])
@@ -102,6 +106,14 @@ module Types
     def wallet
       BatchLoader::GraphQL.for(object.id).batch do |ids, loader|
         MixinNetworkUser.where(owner_id: ids, owner_type: 'Article').each { |wallet| loader.call(wallet.owner_id, wallet) }
+      end
+    end
+
+    def tags
+      BatchLoader::GraphQL.for(object.id).batch(default_value: []) do |ids, loader|
+        Tagging.includes(:tag).where(article_id: ids).each do |tagging|
+          loader.call(tagging.article_id) { |memo| memo << tagging.tag }
+        end
       end
     end
   end

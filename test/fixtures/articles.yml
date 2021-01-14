@@ -12,6 +12,7 @@
 #  price                               :decimal(, )      not null
 #  revenue                             :decimal(, )      default(0.0)
 #  state                               :string
+#  tags_count                          :integer          default(0)
 #  title                               :string
 #  upvotes_count                       :integer          default(0)
 #  uuid                                :uuid
