@@ -5,6 +5,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import ArticleListItemComponent from '../../components/ArticleListItemComponent/ArticleListItemComponent';
+import LoadMoreComponent from '../../components/LoadMoreComponent/LoadMoreComponent';
 
 export default function TagPage() {
   const { id } = useParams<{ id: string }>();
@@ -47,30 +48,18 @@ export default function TagPage() {
         itemLayout='vertical'
         dataSource={articles}
         loadMore={
-          hasNextPage && (
-            <div
-              style={{
-                textAlign: 'center',
-                marginTop: 12,
-                height: 32,
-                lineHeight: '32px',
-              }}
-            >
-              <Button
-                loading={loading}
-                onClick={() => {
-                  fetchMore({
-                    variables: {
-                      after: endCursor,
-                      order: 'lately',
-                    },
-                  });
-                }}
-              >
-                {t('common.loadMore')}
-              </Button>
-            </div>
-          )
+          <LoadMoreComponent
+            hasNextPage={hasNextPage}
+            loading={loading}
+            fetchMore={() => {
+              fetchMore({
+                variables: {
+                  after: endCursor,
+                  order: 'lately',
+                },
+              });
+            }}
+          />
         }
         renderItem={(article: Partial<Article>) => (
           <ArticleListItemComponent article={article} />

@@ -1,10 +1,11 @@
-import { Article, useArticleConnectionQuery } from '@/graphql';
 import ArticleListItemComponent from '@application/components/ArticleListItemComponent/ArticleListItemComponent';
 import LoadingComponent from '@application/components/LoadingComponent/LoadingComponent';
-import { Button, Empty, Input, List } from 'antd';
+import LoadMoreComponent from '@application/components/LoadMoreComponent/LoadMoreComponent';
+import { Article, useArticleConnectionQuery } from '@graphql';
+import { Empty, Input, List } from 'antd';
+import Mark from 'mark.js';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import Mark from 'mark.js';
 
 export default function SearchPage() {
   const { t } = useTranslation();
@@ -25,7 +26,6 @@ export default function SearchPage() {
 }
 
 function SearchResultCompoent(props: { query?: string }) {
-  const { t } = useTranslation();
   const { query } = props;
   const { loading, data, fetchMore } = useArticleConnectionQuery({
     variables: { query, order: 'default' },
@@ -54,29 +54,17 @@ function SearchResultCompoent(props: { query?: string }) {
         itemLayout='vertical'
         dataSource={articles}
         loadMore={
-          hasNextPage && (
-            <div
-              style={{
-                textAlign: 'center',
-                marginTop: 12,
-                height: 32,
-                lineHeight: '32px',
-              }}
-            >
-              <Button
-                loading={loading}
-                onClick={() => {
-                  fetchMore({
-                    variables: {
-                      after: endCursor,
-                    },
-                  });
-                }}
-              >
-                {t('common.loadMore')}
-              </Button>
-            </div>
-          )
+          <LoadMoreComponent
+            hasNextPage={hasNextPage}
+            loading={loading}
+            fetchMore={() => {
+              fetchMore({
+                variables: {
+                  after: endCursor,
+                },
+              });
+            }}
+          />
         }
         renderItem={(article: Partial<Article>) => (
           <ArticleListItemComponent article={article} />

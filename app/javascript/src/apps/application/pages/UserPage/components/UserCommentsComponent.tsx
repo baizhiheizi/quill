@@ -1,11 +1,12 @@
 import LoadingComponent from '@application/components/LoadingComponent/LoadingComponent';
+import LoadMoreComponent from '@application/components/LoadMoreComponent/LoadMoreComponent';
 import {
   Comment as IComment,
   CommentConnectionQueryHookResult,
   useCommentConnectionQuery,
 } from '@graphql';
 import { MarkdownRendererComponent, useUserAgent } from '@shared';
-import { Avatar, Button, Comment, List } from 'antd';
+import { Avatar, Comment, List } from 'antd';
 import moment from 'moment';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
@@ -41,30 +42,17 @@ export default function UserCommentsComponent(props: {
     <List
       dataSource={comments}
       loadMore={
-        hasNextPage && (
-          <div
-            style={{
-              textAlign: 'center',
-              marginTop: 12,
-              height: 32,
-              lineHeight: '32px',
-            }}
-          >
-            <Button
-              loading={loading}
-              type='link'
-              onClick={() => {
-                fetchMore({
-                  variables: {
-                    after: endCursor,
-                  },
-                });
-              }}
-            >
-              {t('common.loadMore')}
-            </Button>
-          </div>
-        )
+        <LoadMoreComponent
+          hasNextPage={hasNextPage}
+          loading={loading}
+          fetchMore={() => {
+            fetchMore({
+              variables: {
+                after: endCursor,
+              },
+            });
+          }}
+        />
       }
       renderItem={(comment: Partial<IComment>) => (
         <li

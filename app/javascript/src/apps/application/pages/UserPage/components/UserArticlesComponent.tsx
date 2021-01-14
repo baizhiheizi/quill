@@ -1,5 +1,6 @@
 import { AlertOutlined } from '@ant-design/icons';
 import LoadingComponent from '@application/components/LoadingComponent/LoadingComponent';
+import LoadMoreComponent from '@application/components/LoadMoreComponent/LoadMoreComponent';
 import {
   Article,
   useToggleAuthoringSubscribeUserActionMutation,
@@ -134,30 +135,18 @@ export default function UserArticlesComponent(props: {
         itemLayout='vertical'
         dataSource={articles}
         loadMore={
-          hasNextPage && (
-            <div
-              style={{
-                textAlign: 'center',
-                marginTop: 12,
-                height: 32,
-                lineHeight: '32px',
-              }}
-            >
-              <Button
-                loading={loading}
-                onClick={() => {
-                  fetchMore({
-                    variables: {
-                      after: endCursor,
-                      type,
-                    },
-                  });
-                }}
-              >
-                {t('common.loadMore')}
-              </Button>
-            </div>
-          )
+          <LoadMoreComponent
+            hasNextPage={hasNextPage}
+            loading={loading}
+            fetchMore={() => {
+              fetchMore({
+                variables: {
+                  after: endCursor,
+                  type,
+                },
+              });
+            }}
+          />
         }
         renderItem={(article: Partial<Article>) => (
           <List.Item key={article.uuid}>

@@ -20,7 +20,7 @@ export default function OverviewPage() {
 
   return (
     <div>
-      <PageHeader title='Overview' />
+      <PageHeader title={t('dashboard.menu.overview')} />
       <Row gutter={16} style={{ textAlign: 'center' }}>
         <Col xs={12} sm={6}>
           <Statistic
@@ -31,7 +31,7 @@ export default function OverviewPage() {
         <Col xs={12} sm={6}>
           <Statistic
             title={t('user.authorRevenueAmount')}
-            value={currentUser.statistics.authorRevenueAmount}
+            value={Math.floor(currentUser.statistics.authorRevenueAmount)}
           />
         </Col>
         <Col xs={12} sm={6}>
@@ -43,7 +43,7 @@ export default function OverviewPage() {
         <Col xs={12} sm={6}>
           <Statistic
             title={t('user.readerRevenueAmount')}
-            value={currentUser.statistics.readerRevenueAmount}
+            value={Math.floor(currentUser.statistics.readerRevenueAmount)}
           />
         </Col>
       </Row>
