@@ -7,7 +7,7 @@ import {
 import CommentsComponent from '@application/components/CommentsComponent/CommentsComponent';
 import LoadingComponent from '@application/components/LoadingComponent/LoadingComponent';
 import UserCardComponent from '@application/components/UserCardComponent/UserCardComponent';
-import { handleShare, PAGE_TITLE } from '@application/shared';
+import { handleArticleShare, PAGE_TITLE } from '@application/shared';
 import {
   ArticleQueryHookResult,
   useArticleQuery,
@@ -192,7 +192,7 @@ export default function ArticlePage() {
         <ArticleTagsComponent tags={article.tags} />
       </div>
       <div
-        onClick={() => handleShare(article, Boolean(mixinEnv), appId)}
+        onClick={() => handleArticleShare(article, Boolean(mixinEnv), appId)}
         style={{ marginBottom: 20, textAlign: 'right' }}
       >
         <Button type='link' icon={<ShareAltOutlined />}>

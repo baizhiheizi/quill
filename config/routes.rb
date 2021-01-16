@@ -22,6 +22,7 @@ Rails.application.routes.draw do
   get 'logout', to: 'sessions#delete', as: :logout
 
   resources :articles, only: :show
+  resources :tags, only: :show
 
   root to: 'home#index'
 

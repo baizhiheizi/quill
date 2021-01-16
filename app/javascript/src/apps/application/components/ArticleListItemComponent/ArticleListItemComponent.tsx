@@ -12,7 +12,7 @@ import moment from 'moment';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
-import { handleShare, PRS_ICON_URL } from '../../shared';
+import { handleArticleShare, PRS_ICON_URL } from '../../shared';
 import ArticleTagsComponent from '../ArticleTagsComponent/ArticleTagsComponent';
 import UserCardComponent from '../UserCardComponent/UserCardComponent';
 
@@ -128,7 +128,11 @@ function ShareAction(props: {
       icon={
         <ShareAltOutlined
           onClick={() => {
-            handleShare(props.article, Boolean(props.mixinEnv), props.appId);
+            handleArticleShare(
+              props.article,
+              Boolean(props.mixinEnv),
+              props.appId,
+            );
           }}
         />
       }

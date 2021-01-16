@@ -19,7 +19,7 @@ export default function ArticleTagsComponent(props: { tags: TagType[] }) {
                   textOverflow: 'ellipsis',
                 }}
               >
-                # {tag.name}
+                #{tag.name}
               </Tag>
             </Link>
           </Tooltip>
