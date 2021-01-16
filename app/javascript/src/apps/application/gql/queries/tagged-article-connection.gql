@@ -9,6 +9,8 @@ query TaggedArticleConnection(
     name
     color
     articlesCount
+    subscribersCount
+    subscribed
   }
   articleConnection(
     order: $order
