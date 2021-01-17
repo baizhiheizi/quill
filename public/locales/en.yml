@@ -2,6 +2,7 @@ common:
   loadMore: Load More
   subscribeBtn: Subscribe
   unsubscribeBtn: Unsubscribe
+  shareBtn: Share
   detailBtn: Detail
   editBtn: Edit
   viewBtn: View

@@ -78,7 +78,7 @@ class Article < ApplicationRecord
                               }
 
   after_create :create_wallet!
-  after_commit :notify_subsribers, :subscribe_comments_for_author, :notify_admin, on: :create
+  after_commit :notify_subscribers, :subscribe_comments_for_author, :notify_admin, on: :create
 
   aasm column: :state do
     state :published, initial: true
@@ -121,27 +121,26 @@ class Article < ApplicationRecord
     user.orders.where(item: self).sum(:total) / revenue * (1 - Order::AUTHOR_RATIO - Order::PRSDIGG_RATIO)
   end
 
-  def subscribers
-    @subscribers = author.authoring_subscribe_by_users
+  def authoring_subscribers
+    @authoring_subscribers ||= author.authoring_subscribe_by_users
   end
 
-  def notify_subsribers
+  def tagging_subscribers
+    @tagging_subscribers ||= User.where(id: Action.where(action_type: :subscribe, target: tags, user_type: 'User').select(:user_id))
+  end
+
+  def notify_subscribers
     return if hidden?
 
-    messages = subscribers.pluck(:mixin_uuid).map do |_uuid|
-      PrsdiggBot.api.app_card(
-        conversation_id: PrsdiggBot.api.unique_conversation_id(_uuid),
-        recipient_id: _uuid,
-        data: {
-          icon_url: PRSDIGG_ICON_URL,
-          title: title.truncate(36),
-          description: format('%<author_name>s 新文章', author_name: author.name),
-          action: format('%<host>s/articles/%<uuid>s', host: Rails.application.credentials.fetch(:host), uuid: uuid)
-        }
-      )
+    authoring_messages = authoring_subscribers.pluck(:mixin_uuid).map do |_uuid|
+      app_card_message(_uuid, format('%<author_name>s 新文章', author_name: author.name))
     end
 
-    messages.each do |message|
+    tagging_messages = tagging_subscribers.pluck(:mixin_uuid).map do |_uuid|
+      app_card_message(_uuid, format('%<tag_names>s', tag_names: tag_names.map(&->(name) { "##{name}" }).join(' ')))
+    end
+
+    (authoring_messages + tagging_messages).each do |message|
       SendMixinMessageWorker.perform_async message
     end
   end
@@ -149,6 +148,20 @@ class Article < ApplicationRecord
   def notify_admin
     AdminNotificationService.new.text(
       "#{author.name} 创建了新文章 《#{title}》"
+    )
+  end
+
+  def app_card_message(uuid, description)
+    description ||= intro
+    PrsdiggBot.api.app_card(
+      conversation_id: PrsdiggBot.api.unique_conversation_id(uuid),
+      recipient_id: uuid,
+      data: {
+        icon_url: PRSDIGG_ICON_URL,
+        title: title.truncate(36),
+        description: description,
+        action: format('%<host>s/articles/%<uuid>s', host: Rails.application.credentials.fetch(:host), uuid: uuid)
+      }
     )
   end
 

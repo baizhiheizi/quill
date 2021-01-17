@@ -2,6 +2,7 @@ common:
   loadMore: 加载更多
   subscribeBtn: 订阅
   unsubscribeBtn: 取消订阅
+  shareBtn: 分享
   detailBtn: 详情
   editBtn: 编辑
   viewBtn: 查看

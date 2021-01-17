@@ -1,11 +1,15 @@
-import { usePrsdigg, useUserAgent } from '@/shared';
-import { ShareAltOutlined } from '@ant-design/icons';
+import { AlertOutlined, ShareAltOutlined } from '@ant-design/icons';
 import ArticleListItemComponent from '@application/components/ArticleListItemComponent/ArticleListItemComponent';
 import LoadingComponent from '@application/components/LoadingComponent/LoadingComponent';
 import LoadMoreComponent from '@application/components/LoadMoreComponent/LoadMoreComponent';
 import { handleTagShare, PAGE_TITLE } from '@application/shared';
-import { Article, useTaggedArticleConnectionQuery } from '@graphql';
-import { Button, Card, List, Typography } from 'antd';
+import {
+  Article,
+  useTaggedArticleConnectionQuery,
+  useToggleSubscribeTagActionMutation,
+} from '@graphql';
+import { usePrsdigg, useUserAgent } from '@shared';
+import { Button, Card, List, Space, Typography } from 'antd';
 import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
@@ -18,6 +22,7 @@ export default function TagPage() {
   const { loading, data, fetchMore } = useTaggedArticleConnectionQuery({
     variables: { tagId: id, order: 'lately' },
   });
+  const [toggleSubscribeTagAction] = useToggleSubscribeTagActionMutation();
 
   useEffect(() => {
     return () => (document.title = PAGE_TITLE);
@@ -54,12 +59,29 @@ export default function TagPage() {
             {t('tag.articlesCount')} {tag.articlesCount}
           </Typography.Text>
         </div>
-        <div
-          onClick={() => handleTagShare(tag, mixinEnv, appId)}
-          style={{ textAlign: 'right' }}
-        >
-          <Button type='link' icon={<ShareAltOutlined />}>
-            {t('articlePage.shareBtn')}
+        <div style={{ textAlign: 'right' }}></div>
+        <div style={{ textAlign: 'right' }}>
+          <Button
+            type='link'
+            icon={<AlertOutlined />}
+            size='small'
+            onClick={() =>
+              toggleSubscribeTagAction({
+                variables: { input: { id } },
+              })
+            }
+          >
+            {tag.subscribed
+              ? t('common.unsubscribeBtn')
+              : t('common.subscribeBtn')}
+          </Button>
+          <Button
+            onClick={() => handleTagShare(tag, mixinEnv, appId)}
+            type='link'
+            size='small'
+            icon={<ShareAltOutlined />}
+          >
+            {t('common.shareBtn')}
           </Button>
         </div>
       </Card>
