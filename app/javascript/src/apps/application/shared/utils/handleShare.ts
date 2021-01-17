@@ -31,7 +31,7 @@ export const handleTagShare = (
     app_id: appId,
     description: `共有 ${tag.articlesCount} 篇好文`,
     icon_url: PRSDIGG_ICON_URL,
-    title: `#${tag.name} 主题文章`,
+    title: `#${tag.name} 话题文章`,
   };
   handleShare(tagUrl, data, mixinEnv);
 };

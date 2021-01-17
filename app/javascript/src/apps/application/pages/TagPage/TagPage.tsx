@@ -40,7 +40,7 @@ export default function TagPage() {
     },
   } = data;
 
-  document.title = `#${tag.name} 主题文章`;
+  document.title = `#${tag.name} 话题文章`;
 
   return (
     <div>
