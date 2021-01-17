@@ -1,0 +1,15 @@
+query MyTagSubscriptionConnection($after: String) {
+  myTagSubscriptionConnection(after: $after) {
+    nodes {
+      id
+      name
+      color
+      articlesCount
+      subscribersCount
+    }
+    pageInfo {
+      hasNextPage
+      endCursor
+    }
+  }
+}

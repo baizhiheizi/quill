@@ -9,7 +9,7 @@ import {
   useToggleSubscribeTagActionMutation,
 } from '@graphql';
 import { usePrsdigg, useUserAgent } from '@shared';
-import { Button, Card, List, Space, Typography } from 'antd';
+import { Button, Card, Divider, List, Space, Typography } from 'antd';
 import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
@@ -54,12 +54,16 @@ export default function TagPage() {
         <div>
           <Typography.Title level={5}>#{tag.name}</Typography.Title>
         </div>
-        <div>
-          <Typography.Text type='secondary'>
-            {t('tag.articlesCount')} {tag.articlesCount}
-          </Typography.Text>
+        <div style={{ marginBottom: 15 }}>
+          <Space split={<Divider type='vertical' />}>
+            <Typography.Text type='secondary'>
+              {t('tag.articlesCount')}: {tag.articlesCount}
+            </Typography.Text>
+            <Typography.Text type='secondary'>
+              {t('tag.subscribersCount')}: {tag.subscribersCount}
+            </Typography.Text>
+          </Space>
         </div>
-        <div style={{ textAlign: 'right' }}></div>
         <div style={{ textAlign: 'right' }}>
           <Button
             type='link'

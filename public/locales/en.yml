@@ -55,7 +55,8 @@ article:
     introPlaceHolder: Please introduce your article and this will be public
     newBtn: New
 tag:
-  articlesCount: Articles Count
+  articlesCount: Articles
+  subscribersCount: Subscribers
 payment:
   state:
     paid: Paid
@@ -262,6 +263,8 @@ dashboard:
     readingSubscriptionsTip: You will be notified when readers buy new articles
     commentingSubscriptions: Comments
     commentingSubscriptionsTip: You will be notified when articles receive new comments
+    tagSubscriptions: Tags
+    tagSubscriptionsTip: You will be notified when tagged articles created
     confirmToUnsubscribe: Are you sure to unsubscribe?
   revenuePage:
     authorTransfers: Author Revenue

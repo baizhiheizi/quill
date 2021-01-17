@@ -5,7 +5,7 @@ import {
   User,
   useToggleAuthoringSubscribeUserActionMutation,
 } from '@graphql';
-import { Avatar, Button, List, Popconfirm } from 'antd';
+import { Avatar, Button, Divider, List, Popconfirm, Space } from 'antd';
 import { useTranslation } from 'react-i18next';
 import React from 'react';
 
@@ -65,6 +65,14 @@ export default function MyAuthoringSubscriptionsComponent() {
               </a>
             }
             avatar={<Avatar src={user.avatarUrl}>{user.name[0]}</Avatar>}
+            description={
+              <Space split={<Divider type='vertical' />} wrap>
+                {`${t('user.articlesCount')}: ${user.statistics.articlesCount}`}
+                {`${t('user.authorRevenueAmount')}: ${Math.floor(
+                  user.statistics.authorRevenueAmount,
+                )}`}
+              </Space>
+            }
           />
         </List.Item>
       )}

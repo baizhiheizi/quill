@@ -5,6 +5,8 @@ query MyCommentingSubscriptionConnection($after: String) {
       uuid
       title
       revenue
+      intro
+      commentsCount
       author {
         name
       }

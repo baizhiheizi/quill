@@ -5,6 +5,11 @@ query MyAuthoringSubscriptionConnection($after: String) {
       mixinId
       name
       avatarUrl
+      bio
+      statistics {
+        articlesCount
+        authorRevenueAmount
+      }
     }
     pageInfo {
       hasNextPage

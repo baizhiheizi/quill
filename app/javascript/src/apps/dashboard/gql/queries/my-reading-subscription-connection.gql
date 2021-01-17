@@ -5,6 +5,11 @@ query MyReadingSubscriptionConnection($after: String) {
       mixinId
       name
       avatarUrl
+      bio
+      statistics {
+        boughtArticlesCount
+        readerRevenueAmount
+      }
     }
     pageInfo {
       hasNextPage

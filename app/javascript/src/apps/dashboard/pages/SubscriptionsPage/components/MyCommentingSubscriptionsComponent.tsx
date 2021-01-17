@@ -5,7 +5,7 @@ import {
   useMyCommentingSubscriptionConnectionQuery,
   useToggleCommentingSubscribeArticleActionMutation,
 } from '@graphql';
-import { Button, List, Popconfirm } from 'antd';
+import { Button, Divider, List, Popconfirm, Space } from 'antd';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -64,6 +64,11 @@ export default function MyCommentingSubscriptionsComponent() {
               <a href={`/articles/${article.uuid}`} target='_blank'>
                 {article.title}
               </a>
+            }
+            description={
+              <Space split={<Divider type='vertical' />}>
+                {`${t('article.commentsCount')}: ${article.commentsCount}`}
+              </Space>
             }
           />
         </List.Item>

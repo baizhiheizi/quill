@@ -56,6 +56,7 @@ article:
     newBtn: 新建
 tag:
   articlesCount: 文章数量
+  subscribersCount: 订阅人数
 payment:
   state:
     paid: 已支付
@@ -266,6 +267,8 @@ dashboard:
     readingSubscriptionsTip: 订阅的读者购买新文章时，您将收到通知
     commentingSubscriptions: 评论
     commentingSubscriptionsTip: 订阅的文章有新评论时，您将收到通知
+    tagSubscriptions: 话题
+    tagSubscriptionsTip: 该话题下有新文章时，你将收到通知
     confirmToUnsubscribe: 确定要取消订阅吗？
   revenuePage:
     authorTransfers: 作者收益

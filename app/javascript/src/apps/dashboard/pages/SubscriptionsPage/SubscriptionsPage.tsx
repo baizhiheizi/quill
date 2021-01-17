@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import MyAuthoringSubscriptionsComponent from './components/MyAuthoringSubscriptionsComponent';
 import MyCommentingSubscriptionsComponent from './components/MyCommentingSubscriptionsComponent';
 import MyReadingSubscriptionsComponent from './components/MyReadingSubscriptionsComponent';
+import MyTagSubscriptionsComponent from './components/MyTagSubscriptionsComponent';
 
 export default function SubscriptionsPage() {
   updateActiveMenu('subscriptions');
@@ -51,6 +52,16 @@ export default function SubscriptionsPage() {
           />
           <br />
           <MyCommentingSubscriptionsComponent />
+        </Tabs.TabPane>
+        <Tabs.TabPane
+          key='tag'
+          tab={t('dashboard.subscriptionsPage.tagSubscriptions')}
+        >
+          <Alert
+            message={t('dashboard.subscriptionsPage.tagSubscriptionsTip')}
+          />
+          <br />
+          <MyTagSubscriptionsComponent />
         </Tabs.TabPane>
       </Tabs>
     </div>

@@ -1,26 +1,24 @@
 import ListComponent from '@dashboard/components/ListComponent/ListComponent';
 import LoadingComponent from '@dashboard/components/LoadingComponent/LoadingComponent';
 import {
-  useMyReadingSubscriptionConnectionQuery,
-  User,
-  useToggleReadingSubscribeUserActionMutation,
+  Tag as ITag,
+  useMyTagSubscriptionConnectionQuery,
+  useToggleSubscribeTagActionMutation,
 } from '@graphql';
-import { Avatar, Button, Divider, List, Popconfirm, Space } from 'antd';
+import { Button, Divider, List, Popconfirm, Space, Tag } from 'antd';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-export default function MyReadingSubscriptionsComponent() {
+export default function MyTagSubscriptionsComponent() {
   const { t } = useTranslation();
   const {
     loading,
     data,
     fetchMore,
     refetch,
-  } = useMyReadingSubscriptionConnectionQuery();
+  } = useMyTagSubscriptionConnectionQuery();
 
-  const [
-    toggleReadingSubscribeUserAction,
-  ] = useToggleReadingSubscribeUserActionMutation({
+  const [toggleTagSubscribeUserAction] = useToggleSubscribeTagActionMutation({
     update() {
       refetch();
     },
@@ -31,8 +29,8 @@ export default function MyReadingSubscriptionsComponent() {
   }
 
   const {
-    myReadingSubscriptionConnection: {
-      nodes: readingSubscriptions,
+    myTagSubscriptionConnection: {
+      nodes: tagSubscriptions,
       pageInfo: { hasNextPage, endCursor },
     },
   } = data;
@@ -42,16 +40,16 @@ export default function MyReadingSubscriptionsComponent() {
       loading={loading}
       hasNextPage={hasNextPage}
       fetchMore={() => fetchMore({ variables: { after: endCursor } })}
-      dataSource={readingSubscriptions}
-      renderItem={(user: Partial<User>) => (
+      dataSource={tagSubscriptions}
+      renderItem={(tag: Partial<ITag>) => (
         <List.Item
-          key={user.id}
+          key={tag.id}
           actions={[
             <Popconfirm
               title={t('dashboard.subscriptionsPage.confirmToUnsubscribe')}
               onConfirm={() =>
-                toggleReadingSubscribeUserAction({
-                  variables: { input: { mixinId: user.mixinId } },
+                toggleTagSubscribeUserAction({
+                  variables: { input: { mixinId: tag.id } },
                 })
               }
             >
@@ -61,19 +59,16 @@ export default function MyReadingSubscriptionsComponent() {
         >
           <List.Item.Meta
             title={
-              <a href={`/users/${user.mixinId}`} target='_blank'>
-                {user.name}
-              </a>
+              <div>
+                <a href={`/tags/${tag.id}`} target='_blank'>
+                  <Tag color={tag.color}>#{tag.name}</Tag>
+                </a>
+              </div>
             }
-            avatar={<Avatar src={user.avatarUrl}>{user.name[0]}</Avatar>}
             description={
               <Space split={<Divider type='vertical' />} wrap>
-                {`${t('user.boughtArticlesCount')}: ${
-                  user.statistics.boughtArticlesCount
-                }`}
-                {`${t('user.readerRevenueAmount')}: ${Math.floor(
-                  user.statistics.readerRevenueAmount,
-                )}`}
+                {`${t('tag.articlesCount')}: ${tag.articlesCount}`}
+                {`${t('tag.subscribersCount')}: ${tag.subscribersCount}`}
               </Space>
             }
           />

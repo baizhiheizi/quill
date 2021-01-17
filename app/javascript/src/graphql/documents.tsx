@@ -951,6 +951,7 @@ export type Query = {
   myReadingSubscriptionConnection: UserConnection;
   myStatistics: UserStatistics;
   mySwapOrderConnection: SwapOrderConnection;
+  myTagSubscriptionConnection: TagConnection;
   myTransferConnection: TransferConnection;
   payment?: Maybe<Payment>;
   revenueChart: Scalars['String'];
@@ -1168,6 +1169,14 @@ export type QueryMyReadingSubscriptionConnectionArgs = {
 
 
 export type QueryMySwapOrderConnectionArgs = {
+  after?: Maybe<Scalars['String']>;
+  before?: Maybe<Scalars['String']>;
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+};
+
+
+export type QueryMyTagSubscriptionConnectionArgs = {
   after?: Maybe<Scalars['String']>;
   before?: Maybe<Scalars['String']>;
   first?: Maybe<Scalars['Int']>;
@@ -3991,6 +4000,11 @@ export const MyAuthoringSubscriptionConnectionDocument = gql`
       mixinId
       name
       avatarUrl
+      bio
+      statistics {
+        articlesCount
+        authorRevenueAmount
+      }
     }
     pageInfo {
       hasNextPage
@@ -4033,6 +4047,8 @@ export const MyCommentingSubscriptionConnectionDocument = gql`
       uuid
       title
       revenue
+      intro
+      commentsCount
       author {
         name
       }
@@ -4130,6 +4146,11 @@ export const MyReadingSubscriptionConnectionDocument = gql`
       mixinId
       name
       avatarUrl
+      bio
+      statistics {
+        boughtArticlesCount
+        readerRevenueAmount
+      }
     }
     pageInfo {
       hasNextPage
@@ -4250,6 +4271,49 @@ export function useMySwapOrderConnectionLazyQuery(baseOptions?: Apollo.LazyQuery
 export type MySwapOrderConnectionQueryHookResult = ReturnType<typeof useMySwapOrderConnectionQuery>;
 export type MySwapOrderConnectionLazyQueryHookResult = ReturnType<typeof useMySwapOrderConnectionLazyQuery>;
 export type MySwapOrderConnectionQueryResult = Apollo.QueryResult<MySwapOrderConnectionQuery, MySwapOrderConnectionQueryVariables>;
+export const MyTagSubscriptionConnectionDocument = gql`
+    query MyTagSubscriptionConnection($after: String) {
+  myTagSubscriptionConnection(after: $after) {
+    nodes {
+      id
+      name
+      color
+      articlesCount
+      subscribersCount
+    }
+    pageInfo {
+      hasNextPage
+      endCursor
+    }
+  }
+}
+    `;
+
+/**
+ * __useMyTagSubscriptionConnectionQuery__
+ *
+ * To run a query within a React component, call `useMyTagSubscriptionConnectionQuery` and pass it any options that fit your needs.
+ * When your component renders, `useMyTagSubscriptionConnectionQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useMyTagSubscriptionConnectionQuery({
+ *   variables: {
+ *      after: // value for 'after'
+ *   },
+ * });
+ */
+export function useMyTagSubscriptionConnectionQuery(baseOptions?: Apollo.QueryHookOptions<MyTagSubscriptionConnectionQuery, MyTagSubscriptionConnectionQueryVariables>) {
+        return Apollo.useQuery<MyTagSubscriptionConnectionQuery, MyTagSubscriptionConnectionQueryVariables>(MyTagSubscriptionConnectionDocument, baseOptions);
+      }
+export function useMyTagSubscriptionConnectionLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MyTagSubscriptionConnectionQuery, MyTagSubscriptionConnectionQueryVariables>) {
+          return Apollo.useLazyQuery<MyTagSubscriptionConnectionQuery, MyTagSubscriptionConnectionQueryVariables>(MyTagSubscriptionConnectionDocument, baseOptions);
+        }
+export type MyTagSubscriptionConnectionQueryHookResult = ReturnType<typeof useMyTagSubscriptionConnectionQuery>;
+export type MyTagSubscriptionConnectionLazyQueryHookResult = ReturnType<typeof useMyTagSubscriptionConnectionLazyQuery>;
+export type MyTagSubscriptionConnectionQueryResult = Apollo.QueryResult<MyTagSubscriptionConnectionQuery, MyTagSubscriptionConnectionQueryVariables>;
 export const MyTransferConnectionDocument = gql`
     query MyTransferConnection($transferType: String, $after: String) {
   myTransferConnection(transferType: $transferType, after: $after) {
