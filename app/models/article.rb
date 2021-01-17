@@ -78,7 +78,7 @@ class Article < ApplicationRecord
                               }
 
   after_create :create_wallet!
-  after_commit :notify_subscribers, :subscribe_comments_for_author, :notify_admin, on: :create
+  after_commit :notify_authoring_subscribers, :subscribe_comments_for_author, :notify_admin, on: :create
 
   aasm column: :state do
     state :published, initial: true
@@ -125,22 +125,30 @@ class Article < ApplicationRecord
     @authoring_subscribers ||= author.authoring_subscribe_by_users
   end
 
-  def tagging_subscribers
-    @tagging_subscribers ||= User.where(id: Action.where(action_type: :subscribe, target: tags, user_type: 'User').select(:user_id))
+  def tagging_subscribers(new_tags = tags)
+    @tagging_subscribers ||= User.where(id: Action.where(action_type: :subscribe, target: new_tags, user_type: 'User').select(:user_id))
   end
 
-  def notify_subscribers
+  def notify_authoring_subscribers
     return if hidden?
 
     authoring_messages = authoring_subscribers.pluck(:mixin_uuid).map do |_uuid|
       app_card_message(_uuid, format('%<author_name>s 新文章', author_name: author.name))
     end
 
-    tagging_messages = tagging_subscribers.pluck(:mixin_uuid).map do |_uuid|
-      app_card_message(_uuid, format('%<tag_names>s', tag_names: tag_names.map(&->(name) { "##{name}" }).join(' ')))
+    authoring_messages.each do |message|
+      SendMixinMessageWorker.perform_async message
+    end
+  end
+
+  def notify_tagging_subscribers(new_tags = tags)
+    return if hidden?
+
+    tagging_messages = tagging_subscribers(new_tags).pluck(:mixin_uuid).map do |_uuid|
+      app_card_message(_uuid, format('%<tag_names>s', tag_names: tags.map(&->(tag) { "##{tag.name}" }).join(' ')))
     end
 
-    (authoring_messages + tagging_messages).each do |message|
+    tagging_messages.each do |message|
       SendMixinMessageWorker.perform_async message
     end
   end
@@ -151,11 +159,11 @@ class Article < ApplicationRecord
     )
   end
 
-  def app_card_message(uuid, description)
+  def app_card_message(user_id, description)
     description ||= intro
     PrsdiggBot.api.app_card(
-      conversation_id: PrsdiggBot.api.unique_conversation_id(uuid),
-      recipient_id: uuid,
+      conversation_id: PrsdiggBot.api.unique_conversation_id(user_id),
+      recipient_id: user_id,
       data: {
         icon_url: PRSDIGG_ICON_URL,
         title: title.truncate(36),
