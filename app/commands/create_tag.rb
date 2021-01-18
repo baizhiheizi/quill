@@ -13,6 +13,8 @@ class CreateTag
   end
 
   def call
+    return if tag_names.blank?
+
     new_tags = tag_names.map { |x| Tag.find_or_create_by(name: x.strip) }
     old_tags = article.tags.to_a
     add_tags = (new_tags - old_tags)
@@ -20,7 +22,7 @@ class CreateTag
     add_tags.each { |x| article.taggings.create(tag: x) }
     article.taggings.where(tag: remove_tags).destroy_all if with_remove
     article.tags.reload
-    article.notify_tagging_subscribers(add_tags)
+    article.notify_tagging_subscribers(add_tags.map(&->(tag) { tag.id }))
     article.tags
   end
 end

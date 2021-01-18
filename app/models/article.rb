@@ -125,8 +125,8 @@ class Article < ApplicationRecord
     @authoring_subscribers ||= author.authoring_subscribe_by_users
   end
 
-  def tagging_subscribers(new_tags = tags)
-    @tagging_subscribers ||= User.where(id: Action.where(action_type: :subscribe, target: new_tags, user_type: 'User').select(:user_id))
+  def tagging_subscribers(new_tag_ids)
+    @tagging_subscribers ||= User.where(id: Action.where(action_type: :subscribe, target_type: 'Tag', target_id: new_tag_ids, user_type: 'User').select(:user_id))
   end
 
   def notify_authoring_subscribers
@@ -141,10 +141,10 @@ class Article < ApplicationRecord
     end
   end
 
-  def notify_tagging_subscribers(new_tags = tags)
+  def notify_tagging_subscribers(new_tag_ids)
     return if hidden?
 
-    tagging_messages = tagging_subscribers(new_tags).pluck(:mixin_uuid).map do |_uuid|
+    tagging_messages = tagging_subscribers(new_tag_ids).pluck(:mixin_uuid).map do |_uuid|
       app_card_message(_uuid, format('%<tag_names>s', tag_names: tags.map(&->(tag) { "##{tag.name}" }).join(' ')))
     end
 
