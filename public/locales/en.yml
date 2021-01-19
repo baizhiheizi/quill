@@ -155,7 +155,7 @@ minePage:
     transfers: Revenue
 searchPage:
   enterBtn: Search
-  placeholder: Input title / introduction / author name
+  placeholder: Input title/introduction/author/tag
 fairPage:
   usersCount: Users
   articlesCount: Articles

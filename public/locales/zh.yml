@@ -158,7 +158,7 @@ minePage:
     transfers: 收益记录
 searchPage:
   enterBtn: 搜索
-  placeholder: 请输入文章标题/简介/作者信息
+  placeholder: 请输入文章标题/简介/作者/话题
 fairPage:
   usersCount: 用户总量
   articlesCount: 文章总数

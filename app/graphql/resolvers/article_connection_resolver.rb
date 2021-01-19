@@ -14,7 +14,7 @@ module Resolvers
       articles ||= Article.all
 
       q = params[:query].to_s.strip
-      q_ransack = { title_cont: q, intro_cont: q, author_name_cont: q }
+      q_ransack = { title_cont: q, intro_cont: q, author_name_cont: q, tags_name_cont: q }
       articles = articles.ransack(q_ransack.merge(m: 'or')).result.only_published
 
       case params[:order]
