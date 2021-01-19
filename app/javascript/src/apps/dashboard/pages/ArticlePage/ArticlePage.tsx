@@ -91,11 +91,11 @@ export default function ArticlePage() {
           <Descriptions.Item label={t('article.revenue')}>
             {article.revenue}
           </Descriptions.Item>
-          <Descriptions.Item label={t('article.authorRevenueAmount')}>
-            {article.authorRevenueAmount}
+          <Descriptions.Item label={t('article.authorRevenueTotal')}>
+            {article.authorRevenueTotal}
           </Descriptions.Item>
-          <Descriptions.Item label={t('article.readerRevenueAmount')}>
-            {article.readerRevenueAmount}
+          <Descriptions.Item label={t('article.readerRevenueTotal')}>
+            {article.readerRevenueTotal}
           </Descriptions.Item>
           <Descriptions.Item label={t('article.commentsCount')}>
             {article.comments.totalCount}

@@ -14,8 +14,8 @@ module Types
     field :tag_names, [String], null: true
 
     field :revenue, Float, null: false
-    field :author_revenue_amount, Float, null: false
-    field :reader_revenue_amount, Float, null: false
+    field :author_revenue_total, Float, null: false
+    field :reader_revenue_total, Float, null: false
 
     field :words_count, Integer, null: false
     field :partial_content, String, null: true

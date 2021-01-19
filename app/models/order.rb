@@ -46,9 +46,12 @@ class Order < ApplicationRecord
 
   enum order_type: { buy_article: 0, reward_article: 1 }
 
-  after_commit :complete_payment, :create_revenue_transfers_async, \
-               :update_item_revenue, :notify_subscribers_async, \
+  after_commit :complete_payment,
+               :create_revenue_transfers_async,
+               :update_item_revenue,
+               :notify_subscribers_async,
                :notify_buyer,
+               :update_buyer_statistics_cache,
                on: :create
 
   aasm column: :state do
@@ -179,6 +182,13 @@ class Order < ApplicationRecord
 
   def article
     item if item.is_a? Article
+  end
+
+  def update_buyer_statistics_cache
+    buyer.update(
+      bought_articles_count: buyer.bought_articles.count,
+      payment_total: buyer.orders.sum(:total).to_f
+    )
   end
 
   private

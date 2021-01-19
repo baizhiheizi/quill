@@ -28,8 +28,8 @@ export default function OverviewPage() {
     statistics: {
       usersCount,
       articlesCount,
-      authorRevenueAmount,
-      readerRevenueAmount,
+      authorRevenueTotal,
+      readerRevenueTotal,
     },
   } = data;
 
@@ -48,10 +48,10 @@ export default function OverviewPage() {
           <Statistic title='文章总数' value={articlesCount} />
         </Col>
         <Col span={12}>
-          <Statistic title='作者收益' value={authorRevenueAmount} />
+          <Statistic title='作者收益' value={authorRevenueTotal} />
         </Col>
         <Col span={12}>
-          <Statistic title='读者收益' value={readerRevenueAmount} />
+          <Statistic title='读者收益' value={readerRevenueTotal} />
         </Col>
       </Row>
       <UserChart />

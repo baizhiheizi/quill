@@ -38,7 +38,9 @@ class Transfer < ApplicationRecord
   validates :asset_id, presence: true
   validates :opponent_id, presence: true
 
-  after_commit :process_async, on: :create
+  after_commit :process_async,
+               :update_recipient_statistics_cache,
+               on: :create
 
   scope :unprocessed, -> { where(processed_at: nil) }
   scope :processed, -> { where.not(processed_at: nil) }
@@ -106,5 +108,13 @@ class Transfer < ApplicationRecord
 
   def process_async
     ProcessTransferWorker.perform_async trace_id
+  end
+
+  def update_recipient_statistics_cache
+    recipient.update(
+      author_revenue_total: recipient.author_revenue_transfers.sum(:amount).to_f,
+      reader_revenue_total: recipient.reader_revenue_transfers.sum(:amount).to_f,
+      revenue_total: recipient.revenue_transfers.sum(:amount).to_f
+    )
   end
 end

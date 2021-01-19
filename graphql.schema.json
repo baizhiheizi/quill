@@ -1722,7 +1722,7 @@
             "deprecationReason": null
           },
           {
-            "name": "authorRevenueAmount",
+            "name": "authorRevenueTotal",
             "description": null,
             "args": [],
             "type": {
@@ -2105,7 +2105,7 @@
             "deprecationReason": null
           },
           {
-            "name": "readerRevenueAmount",
+            "name": "readerRevenueTotal",
             "description": null,
             "args": [],
             "type": {
@@ -8280,7 +8280,7 @@
             "deprecationReason": null
           },
           {
-            "name": "authorRevenueAmount",
+            "name": "authorRevenueTotal",
             "description": null,
             "args": [],
             "type": {
@@ -8312,7 +8312,7 @@
             "deprecationReason": null
           },
           {
-            "name": "readerRevenueAmount",
+            "name": "readerRevenueTotal",
             "description": null,
             "args": [],
             "type": {
@@ -10308,7 +10308,7 @@
             "deprecationReason": null
           },
           {
-            "name": "authorRevenueAmount",
+            "name": "authorRevenueTotal",
             "description": null,
             "args": [],
             "type": {
@@ -10388,7 +10388,7 @@
             "deprecationReason": null
           },
           {
-            "name": "readerRevenueAmount",
+            "name": "readerRevenueTotal",
             "description": null,
             "args": [],
             "type": {

@@ -31,14 +31,14 @@ export default function UserPage() {
       <Row gutter={16} style={{ textAlign: 'center' }}>
         <Col xs={12} sm={6}>
           <Statistic
-            title={t('user.authorRevenueAmount')}
-            value={user.authorRevenueAmount}
+            title={t('user.authorRevenueTotal')}
+            value={user.authorRevenueTotal}
           />
         </Col>
         <Col xs={12} sm={6}>
           <Statistic
-            title={t('user.readerRevenueAmount')}
-            value={user.readerRevenueAmount}
+            title={t('user.readerRevenueTotal')}
+            value={user.readerRevenueTotal}
           />
         </Col>
       </Row>

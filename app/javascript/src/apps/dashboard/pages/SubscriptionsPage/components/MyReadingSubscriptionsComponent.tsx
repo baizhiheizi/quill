@@ -71,8 +71,8 @@ export default function MyReadingSubscriptionsComponent() {
                 {`${t('user.boughtArticlesCount')}: ${
                   user.statistics.boughtArticlesCount
                 }`}
-                {`${t('user.readerRevenueAmount')}: ${Math.floor(
-                  user.statistics.readerRevenueAmount,
+                {`${t('user.readerRevenueTotal')}: ${Math.floor(
+                  user.statistics.readerRevenueTotal,
                 )}`}
               </Space>
             }

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_01_16_222648) do
+ActiveRecord::Schema.define(version: 2021_01_19_042248) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -252,8 +252,10 @@ ActiveRecord::Schema.define(version: 2021_01_16_222648) do
     t.integer "authoring_subscribers_count", default: 0
     t.integer "reading_subscribers_count", default: 0
     t.datetime "banned_at"
+    t.jsonb "statistics", default: "{}"
     t.index ["mixin_id"], name: "index_users_on_mixin_id", unique: true
     t.index ["mixin_uuid"], name: "index_users_on_mixin_uuid", unique: true
+    t.index ["statistics"], name: "index_users_on_statistics", using: :gin
   end
 
 end

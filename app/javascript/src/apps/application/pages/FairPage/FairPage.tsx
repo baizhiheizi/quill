@@ -33,8 +33,8 @@ export default function FairPage() {
     statistics: {
       usersCount,
       articlesCount,
-      authorRevenueAmount,
-      readerRevenueAmount,
+      authorRevenueTotal,
+      readerRevenueTotal,
     },
   } = data;
 
@@ -56,14 +56,14 @@ export default function FairPage() {
         </Col>
         <Col span={12}>
           <Statistic
-            title={t('fairPage.authorRevenueAmount')}
-            value={Math.floor(authorRevenueAmount)}
+            title={t('fairPage.authorRevenueTotal')}
+            value={Math.floor(authorRevenueTotal)}
           />
         </Col>
         <Col span={12}>
           <Statistic
-            title={t('fairPage.readerRevenueAmount')}
-            value={Math.floor(readerRevenueAmount)}
+            title={t('fairPage.readerRevenueTotal')}
+            value={Math.floor(readerRevenueTotal)}
           />
         </Col>
       </Row>

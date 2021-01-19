@@ -1,8 +1,8 @@
 query MyStatistics {
   myStatistics {
     articlesCount
-    authorRevenueAmount
+    authorRevenueTotal
     boughtArticlesCount
-    readerRevenueAmount
+    readerRevenueTotal
   }
 }

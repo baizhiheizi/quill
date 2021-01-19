@@ -78,7 +78,11 @@ class Article < ApplicationRecord
                               }
 
   after_create :create_wallet!
-  after_commit :notify_authoring_subscribers, :subscribe_comments_for_author, :notify_admin, on: :create
+  after_commit :notify_authoring_subscribers,
+               :notify_admin,
+               :subscribe_comments_for_author,
+               :update_author_statistics_cache,
+               on: :create
 
   aasm column: :state do
     state :published, initial: true
@@ -205,16 +209,22 @@ class Article < ApplicationRecord
     )
   end
 
-  def author_revenue_amount
+  def author_revenue_total
     author_transfers.sum(:amount)
   end
 
-  def reader_revenue_amount
+  def reader_revenue_total
     reader_transfers.sum(:amount)
   end
 
   def tag_names
     @tag_names ||= tags.pluck(:name)
+  end
+
+  def update_author_statistics_cache
+    author.update(
+      articles_count: author.articles.count
+    )
   end
 
   private

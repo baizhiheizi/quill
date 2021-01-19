@@ -29,8 +29,8 @@ article:
   buyOrdersCount: 购买次数
   rewardOrdersCount: 赞赏次数
   revenue: 总收益(PRS)
-  authorRevenueAmount: 作者收益(PRS)
-  readerRevenueAmount: 读者收益(PRS)
+  authorRevenueTotal: 作者收益(PRS)
+  readerRevenueTotal: 读者收益(PRS)
   myShare: 奖励份额(%)
   stateText: 状态
   tags: 话题
@@ -74,8 +74,8 @@ swapOrder:
     refunded: 已退款
 user:
   defaultBio: 没有留下任何介绍
-  authorRevenueAmount: 作者收益(PRS)
-  readerRevenueAmount: 读者收益(PRS)
+  authorRevenueTotal: 作者收益(PRS)
+  readerRevenueTotal: 读者收益(PRS)
   articlesCount: 发表文章
   boughtArticlesCount: 购买文章
 transfer:
@@ -162,8 +162,8 @@ searchPage:
 fairPage:
   usersCount: 用户总量
   articlesCount: 文章总数
-  authorRevenueAmount: 作者收益(PRS)
-  readerRevenueAmount: 读者收益(PRS)
+  authorRevenueTotal: 作者收益(PRS)
+  readerRevenueTotal: 读者收益(PRS)
   tabs:
     revenue:
       title: 平台收益
@@ -232,7 +232,7 @@ commentsComponent:
     cancelText: 再想想
     placeholder: 支持 Markdown 格式
 dashboard:
-  menu: 
+  menu:
     overview: 总览
     articles: 文章管理
     subscriptions: 订阅管理
@@ -240,7 +240,7 @@ dashboard:
     orders: 订单管理
     comments: 评论管理
     back: 返回
-  pages: 
+  pages:
     article: 文章详情
     articleNew: 创建文章
     articleEdit: 文章编辑

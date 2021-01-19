@@ -276,7 +276,7 @@ export type Article = {
   __typename?: 'Article';
   assetId: Scalars['String'];
   author: User;
-  authorRevenueAmount: Scalars['Float'];
+  authorRevenueTotal: Scalars['Float'];
   authorized?: Maybe<Scalars['Boolean']>;
   buyOrders: OrderConnection;
   buyers: UserConnection;
@@ -294,7 +294,7 @@ export type Article = {
   partialContent?: Maybe<Scalars['String']>;
   paymentTraceId?: Maybe<Scalars['String']>;
   price: Scalars['Float'];
-  readerRevenueAmount: Scalars['Float'];
+  readerRevenueTotal: Scalars['Float'];
   readers: UserConnection;
   revenue: Scalars['Float'];
   rewardOrders: OrderConnection;
@@ -1242,9 +1242,9 @@ export type QueryUserArticleConnectionArgs = {
 export type Statistics = {
   __typename?: 'Statistics';
   articlesCount: Scalars['Int'];
-  authorRevenueAmount: Scalars['Float'];
+  authorRevenueTotal: Scalars['Float'];
   createdAt: Scalars['ISO8601DateTime'];
-  readerRevenueAmount: Scalars['Float'];
+  readerRevenueTotal: Scalars['Float'];
   updatedAt?: Maybe<Scalars['ISO8601DateTime']>;
   usersCount: Scalars['Int'];
 };
@@ -1519,12 +1519,12 @@ export type UserEdge = {
 export type UserStatistics = {
   __typename?: 'UserStatistics';
   articlesCount: Scalars['Int'];
-  authorRevenueAmount: Scalars['Float'];
+  authorRevenueTotal: Scalars['Float'];
   boughtArticlesCount: Scalars['Int'];
   commentsCount: Scalars['Int'];
   createdAt: Scalars['ISO8601DateTime'];
   paymentTotal: Scalars['Float'];
-  readerRevenueAmount: Scalars['Float'];
+  readerRevenueTotal: Scalars['Float'];
   revenueTotal: Scalars['Float'];
   updatedAt?: Maybe<Scalars['ISO8601DateTime']>;
 };
@@ -2733,8 +2733,8 @@ export const AdminUserDocument = gql`
     walletId
     statistics {
       articlesCount
-      authorRevenueAmount
-      readerRevenueAmount
+      authorRevenueTotal
+      readerRevenueTotal
     }
   }
 }
@@ -3370,8 +3370,8 @@ export const StatisticsDocument = gql`
   statistics {
     usersCount
     articlesCount
-    authorRevenueAmount
-    readerRevenueAmount
+    authorRevenueTotal
+    readerRevenueTotal
   }
 }
     `;
@@ -3662,8 +3662,8 @@ export const UserDocument = gql`
     readingSubscribed
     statistics {
       articlesCount
-      authorRevenueAmount
-      readerRevenueAmount
+      authorRevenueTotal
+      readerRevenueTotal
     }
   }
 }
@@ -3938,8 +3938,8 @@ export const MyArticleDocument = gql`
     ordersCount
     commentsCount
     revenue
-    authorRevenueAmount
-    readerRevenueAmount
+    authorRevenueTotal
+    readerRevenueTotal
     commentingSubscribed
     upvotesCount
     downvotesCount
@@ -4003,7 +4003,7 @@ export const MyAuthoringSubscriptionConnectionDocument = gql`
       bio
       statistics {
         articlesCount
-        authorRevenueAmount
+        authorRevenueTotal
       }
     }
     pageInfo {
@@ -4149,7 +4149,7 @@ export const MyReadingSubscriptionConnectionDocument = gql`
       bio
       statistics {
         boughtArticlesCount
-        readerRevenueAmount
+        readerRevenueTotal
       }
     }
     pageInfo {
@@ -4189,9 +4189,9 @@ export const MyStatisticsDocument = gql`
     query MyStatistics {
   myStatistics {
     articlesCount
-    authorRevenueAmount
+    authorRevenueTotal
     boughtArticlesCount
-    readerRevenueAmount
+    readerRevenueTotal
   }
 }
     `;

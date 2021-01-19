@@ -30,10 +30,10 @@ export default function UserPage() {
           {user.statistics.articlesCount}
         </Descriptions.Item>
         <Descriptions.Item label='Author Revenue Amount'>
-          {user.statistics.authorRevenueAmount}
+          {user.statistics.authorRevenueTotal}
         </Descriptions.Item>
         <Descriptions.Item label='Reader Revenue Amount'>
-          {user.statistics.readerRevenueAmount}
+          {user.statistics.readerRevenueTotal}
         </Descriptions.Item>
       </Descriptions>
       <Tabs defaultActiveKey='wallet_balance'>

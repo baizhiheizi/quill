@@ -30,8 +30,8 @@ export default function OverviewPage() {
         </Col>
         <Col xs={12} sm={6}>
           <Statistic
-            title={t('user.authorRevenueAmount')}
-            value={Math.floor(currentUser.statistics.authorRevenueAmount)}
+            title={t('user.authorRevenueTotal')}
+            value={Math.floor(currentUser.statistics.authorRevenueTotal)}
           />
         </Col>
         <Col xs={12} sm={6}>
@@ -42,8 +42,8 @@ export default function OverviewPage() {
         </Col>
         <Col xs={12} sm={6}>
           <Statistic
-            title={t('user.readerRevenueAmount')}
-            value={Math.floor(currentUser.statistics.readerRevenueAmount)}
+            title={t('user.readerRevenueTotal')}
+            value={Math.floor(currentUser.statistics.readerRevenueTotal)}
           />
         </Col>
       </Row>

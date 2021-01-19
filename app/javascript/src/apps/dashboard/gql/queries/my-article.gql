@@ -11,8 +11,8 @@ query MyArticle($uuid: ID!) {
     ordersCount
     commentsCount
     revenue
-    authorRevenueAmount
-    readerRevenueAmount
+    authorRevenueTotal
+    readerRevenueTotal
     commentingSubscribed
     upvotesCount
     downvotesCount

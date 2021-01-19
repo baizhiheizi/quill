@@ -11,6 +11,7 @@
 #  mixin_uuid                  :uuid
 #  name                        :string
 #  reading_subscribers_count   :integer          default(0)
+#  statistics                  :jsonb
 #  created_at                  :datetime         not null
 #  updated_at                  :datetime         not null
 #  mixin_id                    :string
@@ -19,6 +20,7 @@
 #
 #  index_users_on_mixin_id    (mixin_id) UNIQUE
 #  index_users_on_mixin_uuid  (mixin_uuid) UNIQUE
+#  index_users_on_statistics  (statistics) USING gin
 #
 require 'test_helper'
 

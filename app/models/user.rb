@@ -11,6 +11,7 @@
 #  mixin_uuid                  :uuid
 #  name                        :string
 #  reading_subscribers_count   :integer          default(0)
+#  statistics                  :jsonb
 #  created_at                  :datetime         not null
 #  updated_at                  :datetime         not null
 #  mixin_id                    :string
@@ -19,9 +20,12 @@
 #
 #  index_users_on_mixin_id    (mixin_id) UNIQUE
 #  index_users_on_mixin_uuid  (mixin_uuid) UNIQUE
+#  index_users_on_statistics  (statistics) USING gin
 #
 class User < ApplicationRecord
   include Authenticatable
+
+  store :statistics, accessors: %i[articles_count bought_articles_count author_revenue_total reader_revenue_total revenue_total payment_total comments_count]
 
   has_one :mixin_authorization, -> { where(provider: :mixin) }, class_name: 'UserAuthorization', inverse_of: :user
 
@@ -43,7 +47,7 @@ class User < ApplicationRecord
 
   validates :name, presence: true
 
-  after_create :create_wallet!
+  after_commit :create_wallet!, :update_statistics_cache, on: :create
 
   default_scope { includes(:mixin_authorization) }
   scope :only_banned, -> { where.not(banned_at: nil) }
@@ -132,15 +136,15 @@ class User < ApplicationRecord
     )
   end
 
-  def statistics
-    @statistics = {
+  def update_statistics_cache
+    update statistics: {
       articles_count: articles.count,
-      author_revenue_amount: author_revenue_transfers.sum(:amount),
+      author_revenue_total: author_revenue_transfers.sum(:amount).to_f,
       bought_articles_count: bought_articles.count,
       comments_count: comments.count,
-      reader_revenue_amount: reader_revenue_transfers.sum(:amount),
-      revenue_total: revenue_transfers.sum(:amount),
-      payment_total: orders.sum(:total)
+      reader_revenue_total: reader_revenue_transfers.sum(:amount).to_f,
+      revenue_total: revenue_transfers.sum(:amount).to_f,
+      payment_total: orders.sum(:total).to_f
     }
   end
 

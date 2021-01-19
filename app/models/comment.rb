@@ -29,7 +29,10 @@ class Comment < ApplicationRecord
   validates :content, presence: true, length: { maximum: 1000 }
   validate :ensure_author_account_normal
 
-  after_commit :notify_subsribers_async, :subscribe_for_author, on: :create
+  after_commit :notify_subsribers_async,
+               :subscribe_for_author,
+               :update_author_statistics_cache,
+               on: :create
 
   def subscribers
     @subscribers = commentable.commenting_subscribe_by_users.where.not(mixin_uuid: author.mixin_uuid)
@@ -73,6 +76,12 @@ class Comment < ApplicationRecord
 
   def subscribe_for_author
     author.create_action :commenting_subscribe, target: commentable
+  end
+
+  def update_author_statistics_cache
+    author.update(
+      comments_count: author.comments.count
+    )
   end
 
   private
