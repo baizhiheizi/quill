@@ -76,7 +76,7 @@ function UserChart() {
 
   return (
     <div>
-      <h3>User Chart</h3>
+      <h3>User Increasing Chart</h3>
       <AreaChartComponent data={userChart} />
     </div>
   );
@@ -97,7 +97,7 @@ function ArticleChart() {
 
   return (
     <div>
-      <h3>Article Chart</h3>
+      <h3>Article Increasing Chart</h3>
       <AreaChartComponent data={articleChart} />
     </div>
   );
