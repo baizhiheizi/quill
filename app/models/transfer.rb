@@ -110,6 +110,8 @@ class Transfer < ApplicationRecord
   end
 
   def update_recipient_statistics_cache
+    return if recipient.blank?
+
     recipient.update(
       author_revenue_total: recipient.author_revenue_transfers.sum(:amount).to_f,
       reader_revenue_total: recipient.reader_revenue_transfers.sum(:amount).to_f,
