@@ -139,7 +139,7 @@ GEM
     graphiql-rails (1.7.0)
       railties
       sprockets-rails
-    graphql (1.11.6)
+    graphql (1.12.0)
     groupdate (5.2.1)
       activesupport (>= 5)
     hamster (3.0.0)
