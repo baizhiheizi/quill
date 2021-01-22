@@ -32,7 +32,7 @@ gem 'mixin_bot'
 # Wraps the Aliyun OSS as an Active Storage service.
 gem 'activestorage-aliyun'
 # Simple, efficient background processing for Ruby http://sidekiq.org
-gem 'sidekiq', '~> 6.0'
+gem 'sidekiq', '~> 6.1'
 # Scheduler / Cron for Sidekiq jobs
 gem 'sidekiq-cron'
 # Use Active Storage variant
