@@ -40,6 +40,7 @@ class User < ApplicationRecord
   has_many :bought_articles, -> { distinct.order(created_at: :desc) }, through: :orders, source: :item, source_type: 'Article'
   has_many :comments, foreign_key: :author_id, inverse_of: :author, dependent: :nullify
   has_many :swap_orders, through: :payments
+  has_many :notifications, as: :recipient, dependent: :destroy
 
   has_one :wallet, class_name: 'MixinNetworkUser', as: :owner, dependent: :nullify
 

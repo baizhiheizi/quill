@@ -1,0 +1,5 @@
+zh-CN:
+  notification: 通知
+  notifications:
+    comment_notification:
+      commented: 评论了文章

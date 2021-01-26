@@ -29,7 +29,7 @@ class Comment < ApplicationRecord
   validates :content, presence: true, length: { maximum: 1000 }
   validate :ensure_author_account_normal
 
-  after_commit :notify_subsribers_async,
+  after_commit :notify_subscribers_async,
                :subscribe_for_author,
                :update_author_statistics_cache,
                on: :create
@@ -38,40 +38,8 @@ class Comment < ApplicationRecord
     @subscribers = commentable.commenting_subscribe_by_users.where.not(mixin_uuid: author.mixin_uuid)
   end
 
-  def notification_text
-    tpl = <<~TEXT
-      %<author_name>s 在文章《%<article_title>s》发表了新的评论：
-
-      %<content>s
-
-      快去看看: %<article_url>s
-    TEXT
-    format(
-      tpl,
-      author_name: author.name,
-      article_title: commentable.title,
-      content: content.truncate(140),
-      article_url: format(
-        '%<host>s/articles/%<article_uuid>s#comment-%<comment_id>s',
-        host: Rails.application.credentials.fetch(:host),
-        article_uuid: commentable.uuid,
-        comment_id: id
-      )
-    )
-  end
-
-  def notify_subsribers_async
-    messages = subscribers.pluck(:mixin_uuid).map do |_uuid|
-      PrsdiggBot.api.plain_text(
-        conversation_id: PrsdiggBot.api.unique_conversation_id(_uuid),
-        recipient_id: _uuid,
-        data: notification_text
-      )
-    end
-
-    messages.in_groups_of(100, false).each do |message|
-      SendMixinMessageWorker.perform_async message
-    end
+  def notify_subscribers_async
+    CommentNotification.with(comment: self).deliver(subscribers)
   end
 
   def subscribe_for_author

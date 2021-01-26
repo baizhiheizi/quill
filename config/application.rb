@@ -18,6 +18,8 @@ module Prsdigg
     # -- all .rb files in that directory are automatically loaded after loading
     # the framework and any gems in your application.
 
+    config.i18n.available_locales = %i[en zh-CN]
+
     # react-rails
     config.react.camelize_props = true
 

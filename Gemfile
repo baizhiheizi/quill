@@ -63,6 +63,10 @@ gem 'ransack'
 gem 'honeybadger', '~> 4.0'
 # A simple, standardized way to build and use Service Objects (aka Commands) in Ruby
 gem 'simple_command'
+# Notifications for Ruby on Rails applications
+gem 'noticed'
+# Centralization of locale data collection for Ruby on Rails.
+gem 'rails-i18n', '~> 6.x'
 
 # deploy
 gem 'mina', '~> 1.2.2', require: false
