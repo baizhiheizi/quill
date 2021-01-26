@@ -1,10 +1,5 @@
 # frozen_string_literal: true
 
-# To deliver this notification:
-#
-# ArticleNotification.with(post: @post).deliver_later(current_user)
-# ArticleNotification.with(post: @post).deliver(current_user)
-
 class CommentNotification < Noticed::Base
   deliver_by :database
   deliver_by :mixin_bot, class: 'DeliveryMethods::MixinBot', category: 'APP_CARD'

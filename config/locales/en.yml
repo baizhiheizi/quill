@@ -3,3 +3,7 @@ en:
   notifications:
     comment_notification:
       commented: commented article
+    article_notification:
+      published: published article
+    tagging_notification:
+      has_new_article: has a new article

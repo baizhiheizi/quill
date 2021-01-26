@@ -3,3 +3,7 @@ zh-CN:
   notifications:
     comment_notification:
       commented: 评论了文章
+    article_notification:
+      published: 发表了文章
+    tagging_notification:
+      has_new_article: 有新的文章

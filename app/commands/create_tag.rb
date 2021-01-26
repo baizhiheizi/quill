@@ -22,7 +22,5 @@ class CreateTag
     add_tags.each { |x| article.taggings.create(tag: x) }
     article.taggings.where(tag: remove_tags).destroy_all if with_remove
     article.tags.reload
-    article.notify_tagging_subscribers(add_tags.map(&->(tag) { tag.id }))
-    article.tags
   end
 end
