@@ -216,43 +216,9 @@ class SwapOrder < ApplicationRecord
   end
 
   def notify_payer
-    tpl_done = <<~TPL
-      [Swap 订单]
-      - 状态: %<state>s
-      - 支付: %<funds>s %<pay_asset>s
-      - 收到: %<amount>s %<fill_asset>s
-    TPL
-    tpl_rejected = <<~TPL
-      [Swap 订单]
-      - 状态: %<state>s
-      - 支付: %<funds>s %<pay_asset>s
-    TPL
+    return unless state.in? %w[completed refunded rejected]
 
-    message =
-      case state
-      when 'completed', 'refunded'
-        format(
-          tpl_done,
-          state: '完成',
-          funds: funds.to_f.to_s,
-          amount: amount.to_f.to_s,
-          pay_asset: pay_asset&.[](:symbol),
-          fill_asset: fill_asset&.[](:symbol)
-        )
-      when 'rejected'
-        format(
-          tpl_rejected,
-          state: '失败',
-          funds: funds.to_f.to_s,
-          pay_asset: pay_asset&.[](:symbol)
-        )
-      end
-    return if message.blank?
-
-    TextNotificationService.new.call(
-      message,
-      recipient_id: payment.payer.mixin_uuid
-    )
+    SwapOrderNotification.with(swap_order: self).deliver(payer)
   end
 
   def pay_asset

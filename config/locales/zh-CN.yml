@@ -15,6 +15,9 @@ zh-CN:
       paid: 成功支付
       bought: 购买了
       rewarded: 赞赏了
+    swap_order_notification:
+      swapped: '成功兑换:'
+      rejected: 兑换失败，您将收到退款
     transfer_notification:
       received: 收到
       author_revenue: 作者收益

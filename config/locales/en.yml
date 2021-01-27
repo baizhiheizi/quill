@@ -15,6 +15,9 @@ en:
       paid: Successfully paid
       bought: and bought
       rewarded: and rewarded
+    swap_order_notification:
+      swapped: 'Successfully swapped:'
+      rejected: Your swap was rejected, you will receive the refund soon.
     transfer_notification:
       received: Received
       author_revenue: author revenue
