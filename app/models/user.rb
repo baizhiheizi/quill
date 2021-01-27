@@ -163,6 +163,14 @@ class User < ApplicationRecord
     @wallet_id = (wallet.presence || create_wallet)&.uuid
   end
 
+  def avatar
+    avatar_url || generated_avatar_url
+  end
+
+  def generated_avatar_url
+    format('https://api.multiavatar.com/%<mixin_uuid>s.svg', mixin_uuid: mixin_uuid)
+  end
+
   private
 
   def setup_attributes

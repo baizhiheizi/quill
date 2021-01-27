@@ -24,3 +24,7 @@ en:
       reader_revenue: reader revenue
       payment_refund: payment refund
       bonus: bonus
+    authoring_subscribe_notification:
+      subscribed: subscribed your new published articles
+    reading_subscribe_notification:
+      subscribed: subscribed your new bought articles

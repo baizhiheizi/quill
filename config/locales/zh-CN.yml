@@ -24,3 +24,7 @@ zh-CN:
       reader_revenue: 读者收益
       payment_refund: 支付退款
       bonus: 奖励
+    authoring_subscribe_notification:
+      subscribed: 订阅了您新发表的文章
+    reading_subscribe_notification:
+      subscribed: 订阅了您新购买的文章
