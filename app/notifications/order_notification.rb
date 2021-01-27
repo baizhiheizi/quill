@@ -20,7 +20,7 @@ class OrderNotification < Noticed::Base
   end
 
   def message
-    [t('.paid'), params[:order].payment_price_tag, action_name, params[:order].article.title].join(' ')
+    [action_name, params[:order].article.title].join(' ')
   end
 
   def url

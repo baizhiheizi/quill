@@ -32,7 +32,7 @@ class Transfer < ApplicationRecord
 
   has_one :article, class_name: 'Article', through: :source, source: :item
 
-  enum transfer_type: { author_revenue: 0, reader_revenue: 1, payment_refund: 2, prsdigg_revenue: 3, bonus: 4 }
+  enum transfer_type: { author_revenue: 0, reader_revenue: 1, payment_refund: 2, prsdigg_revenue: 3, bonus: 4, swap_change: 5, swap_refund: 6 }
 
   validates :trace_id, presence: true, uniqueness: true
   validates :asset_id, presence: true
@@ -84,14 +84,16 @@ class Transfer < ApplicationRecord
     raise r['error'].inspect if r['error'].present?
     return unless r['data']['trace_id'] == trace_id
 
-    with_lock do
-      source.refund! if payment_refund?
-      source.complete! if bonus?
-      update!(
-        snapshot: r['data'],
-        processed_at: Time.current
-      )
+    case transfer_type.to_sym
+    when :payment_refund, :swap_refund
+      source.refund!
+    when :bonus, :swap_change
+      source.complete!
     end
+    update!(
+      snapshot: r['data'],
+      processed_at: Time.current
+    )
 
     notify_recipient if recipient.present?
   end

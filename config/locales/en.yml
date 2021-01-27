@@ -12,9 +12,8 @@ en:
     payment_notification:
       paid: Successfully paid
     order_notification:
-      paid: Successfully paid
-      bought: and bought
-      rewarded: and rewarded
+      bought: Successfully bought
+      rewarded: Successfully rewarded
     swap_order_notification:
       swapped: 'Successfully swapped:'
       rejected: Your swap was rejected, you will receive the refund soon.
@@ -24,6 +23,8 @@ en:
       reader_revenue: reader revenue
       payment_refund: payment refund
       bonus: bonus
+      swap_change: swap change
+      swap_refund: refund after swapped
     authoring_subscribe_notification:
       subscribed: subscribed your new published articles
     reading_subscribe_notification:
