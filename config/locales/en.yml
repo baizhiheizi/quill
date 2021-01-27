@@ -13,3 +13,9 @@ en:
       paid: Successfully paid
       bought: and bought
       rewarded: and rewarded
+    transfer_notification:
+      received: Received
+      author_revenue: author revenue
+      reader_revenue: reader revenue
+      payment_refund: payment refund
+      bonus: bonus

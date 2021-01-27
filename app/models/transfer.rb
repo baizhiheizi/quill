@@ -93,16 +93,22 @@ class Transfer < ApplicationRecord
       )
     end
 
-    notify_recipient if wallet.present?
+    notify_recipient if recipient.present?
   end
 
   def notify_recipient
-    TransferNotificationService.new.call(
-      recipient_id: opponent_id,
-      asset_id: asset_id,
-      amount: amount,
-      trace_id: trace_id
-    )
+    return if recipient.blank?
+    return if token.blank?
+
+    TransferNotification.with(transfer: self).deliver(recipient)
+  end
+
+  def token
+    @token = Payment::SUPPORTED_TOKENS.find(&->(_token) { _token[:asset_id] == asset_id })
+  end
+
+  def price_tag
+    [amount.to_f, token[:symbol]].join(' ')
   end
 
   def process_async

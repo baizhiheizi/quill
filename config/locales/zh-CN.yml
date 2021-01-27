@@ -13,3 +13,9 @@ zh-CN:
       paid: 成功支付
       bought: 购买了
       rewarded: 赞赏了
+    transfer_notification:
+      received: 收到
+      author_revenue: 作者收益
+      reader_revenue: 读者收益
+      payment_refund: 支付退款
+      bonus: 奖励
