@@ -9,6 +9,8 @@ zh-CN:
       bought: 购买了新文章
     tagging_notification:
       has_new_article: 有新的文章
+    payment_notification:
+      paid: 成功支付
     order_notification:
       paid: 成功支付
       bought: 购买了

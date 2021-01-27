@@ -108,7 +108,7 @@ class Transfer < ApplicationRecord
   end
 
   def price_tag
-    [amount.to_f, token[:symbol]].join(' ')
+    [amount.to_f, token&.[](:symbol)].join(' ')
   end
 
   def process_async

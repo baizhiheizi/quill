@@ -9,6 +9,8 @@ en:
       bought: bought a new article
     tagging_notification:
       has_new_article: has a new article
+    payment_notification:
+      paid: Successfully paid
     order_notification:
       paid: Successfully paid
       bought: and bought
