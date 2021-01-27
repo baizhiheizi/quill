@@ -4,20 +4,21 @@
 #
 # Table name: transfers
 #
-#  id            :bigint           not null, primary key
-#  amount        :decimal(, )
-#  memo          :string
-#  processed_at  :datetime
-#  snapshot      :json
-#  source_type   :string
-#  transfer_type :integer
-#  created_at    :datetime         not null
-#  updated_at    :datetime         not null
-#  asset_id      :uuid
-#  opponent_id   :uuid
-#  source_id     :bigint
-#  trace_id      :uuid
-#  wallet_id     :uuid
+#  id             :bigint           not null, primary key
+#  amount         :decimal(, )
+#  memo           :string
+#  processed_at   :datetime
+#  queue_priority :integer          default("default")
+#  snapshot       :json
+#  source_type    :string
+#  transfer_type  :integer
+#  created_at     :datetime         not null
+#  updated_at     :datetime         not null
+#  asset_id       :uuid
+#  opponent_id    :uuid
+#  source_id      :bigint
+#  trace_id       :uuid
+#  wallet_id      :uuid
 #
 # Indexes
 #

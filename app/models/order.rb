@@ -49,7 +49,7 @@ class Order < ApplicationRecord
   delegate :price_tag, to: :payment, prefix: true
 
   after_commit :complete_payment,
-               :create_revenue_transfers_async,
+               :distribute_async,
                :update_item_revenue,
                :notify_reading_subscribers,
                :notify_buyer,
@@ -65,12 +65,12 @@ class Order < ApplicationRecord
     end
   end
 
-  def create_revenue_transfers_async
-    CreateOrderRevenueTransfersWorker.perform_async trace_id
+  def distribute_async
+    DistributeOrderWorker.perform_async trace_id
   end
 
   # transfer revenue to author and readers
-  def create_revenue_transfers
+  def distribute!
     # the share for invested readers before
     amount = total * READER_RATIO
 

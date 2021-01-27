@@ -39,7 +39,7 @@ class SwapOrder < ApplicationRecord
   validates :fill_asset_id, presence: true
   validates :pay_asset_id, presence: true
 
-  after_commit :transfer_to_4swap_async, on: :create
+  after_create :create_fox_swap_transfer!
 
   delegate :owner, to: :wallet
   delegate :payer, to: :payment
@@ -79,32 +79,24 @@ class SwapOrder < ApplicationRecord
     end
   end
 
-  def transfer_to_4swap_async
-    SwapOrderTransferTo4swapWorker.perform_async id
-  end
-
-  def transfer_to_4swap!
-    r = wallet.mixin_api.create_transfer(
-      wallet.pin,
-      {
-        opponent_id: FOX_SWAP_BROKER_ID,
-        asset_id: pay_asset_id,
-        amount: funds.to_f,
-        trace_id: trace_id,
-        memo: Base64.encode64(
-          {
-            t: 'swap',
-            a: fill_asset_id,
-            m: min_amount.present? ? min_amount.to_f.to_s : nil
-          }.to_json
-        )
-      }
+  def create_fox_swap_transfer!
+    transfers.create_with(
+      wallet: wallet,
+      transfer_type: :fox_swap,
+      queue_priority: :critical,
+      opponent_id: FOX_SWAP_BROKER_ID,
+      asset_id: pay_asset_id,
+      amount: funds.to_f,
+      memo: Base64.encode64(
+        {
+          t: 'swap',
+          a: fill_asset_id,
+          m: min_amount.present? ? min_amount.to_f.to_s : nil
+        }.to_json
+      )
+    ).find_or_create_by!(
+      trace_id: trace_id
     )
-
-    raise r['error'].inspect if r['error'].present?
-    return unless r['data']['trace_id'] == trace_id
-
-    start!
   end
 
   def place_payment_order!

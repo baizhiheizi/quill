@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_01_26_021739) do
+ActiveRecord::Schema.define(version: 2021_01_27_092037) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -237,6 +237,7 @@ ActiveRecord::Schema.define(version: 2021_01_26_021739) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.uuid "wallet_id"
+    t.integer "queue_priority", default: 0
     t.index ["source_type", "source_id"], name: "index_transfers_on_source_type_and_source_id"
     t.index ["trace_id"], name: "index_transfers_on_trace_id", unique: true
     t.index ["wallet_id"], name: "index_transfers_on_wallet_id"
