@@ -28,3 +28,7 @@ en:
       subscribed: subscribed your new published articles
     reading_subscribe_notification:
       subscribed: subscribed your new bought articles
+    user_ban_notification:
+      banned: Your account has been banned by admin. You cannot publish articles nor comment.
+    user_unban_notification:
+      unbanned: Your account has recovered to normal. You can publish articles and comment.

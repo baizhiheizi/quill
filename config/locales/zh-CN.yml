@@ -28,3 +28,7 @@ zh-CN:
       subscribed: 订阅了您新发表的文章
     reading_subscribe_notification:
       subscribed: 订阅了您新购买的文章
+    user_ban_notification:
+      banned: 你的帐号被管理员限制，不能发表文章或者评论。
+    user_unban_notification:
+      unbanned: 你的帐号限制已解除。

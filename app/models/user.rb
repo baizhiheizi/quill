@@ -122,19 +122,13 @@ class User < ApplicationRecord
   def ban!
     update banned_at: Time.current
 
-    TextNotificationService.new.call(
-      '你的帐号被管理员限制，不能发表文章或者评论。如有异议，可直接回复信息，进行申诉。',
-      recipient_id: mixin_uuid
-    )
+    UserBanNotification.with(user: self).deliver(self)
   end
 
   def unban!
     update banned_at: nil
 
-    TextNotificationService.new.call(
-      '你的帐号限制已解除。',
-      recipient_id: mixin_uuid
-    )
+    UserUnbanNotification.with(user: self).deliver(self)
   end
 
   def update_statistics_cache
