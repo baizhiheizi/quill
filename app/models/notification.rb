@@ -21,4 +21,16 @@
 class Notification < ApplicationRecord
   include Noticed::Model
   belongs_to :recipient, polymorphic: true
+
+  def message
+    to_notification.message
+  rescue ActiveRecord::RecordNotFound
+    destroy
+  end
+
+  def url
+    to_notification.url
+  rescue ActiveRecord::RecordNotFound
+    destroy
+  end
 end

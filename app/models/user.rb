@@ -111,6 +111,10 @@ class User < ApplicationRecord
   # subscribe for tag's articles
   action_store :subscribe, :tag, counter_cache: 'subscribers_count'
 
+  def unread_notifications_count
+    notifications.unread.count
+  end
+
   def bio
     mixin_authorization&.raw&.[]('biography')
   end

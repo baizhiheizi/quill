@@ -1,0 +1,6 @@
+mutation ReadNotification($input: ReadNotificationMutationInput!) {
+  readNotification(input: $input) {
+    id
+    readAt
+  }
+}

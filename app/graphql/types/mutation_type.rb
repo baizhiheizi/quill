@@ -15,6 +15,9 @@ module Types
     field :downvote_article, mutation: Mutations::DownvoteArticleMutation
     field :upvote_comment, mutation: Mutations::UpvoteCommentMutation
     field :downvote_comment, mutation: Mutations::DownvoteCommentMutation
+    field :clear_notifications, mutation: Mutations::ClearNotificationsMutation
+    field :read_notifications, mutation: Mutations::ReadNotificationsMutation
+    field :read_notification, mutation: Mutations::ReadNotificationMutation
 
     # admin
     field :admin_login, mutation: Mutations::AdminLoginMutation

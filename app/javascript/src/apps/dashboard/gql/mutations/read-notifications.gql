@@ -1,0 +1,3 @@
+mutation ReadNotifications($input: ReadNotificationsMutationInput!) {
+  readNotifications(input: $input)
+}

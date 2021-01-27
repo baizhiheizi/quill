@@ -1,0 +1,15 @@
+query MyNotificationConnection($after: String, $type: String) {
+  myNotificationConnection(after: $after, type: $type) {
+    nodes {
+      id
+      type
+      message
+      url
+      readAt
+    }
+    pageInfo {
+      hasNextPage
+      endCursor
+    }
+  }
+}

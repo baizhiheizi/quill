@@ -25,6 +25,9 @@ const CommentsPage = React.lazy(
 const SubscriptionsPage = React.lazy(
   () => import('./pages/SubscriptionsPage/SubscriptionsPage'),
 );
+const NotificationsPage = React.lazy(
+  () => import('./pages/NotificationsPage/NotificationsPage'),
+);
 
 export default function Routes() {
   return (
@@ -57,6 +60,9 @@ export default function Routes() {
           </Route>
           <Route path='/comments' exact>
             <CommentsPage />
+          </Route>
+          <Route path='/notifications' exact>
+            <NotificationsPage />
           </Route>
           <Route>
             <NotFoundPage />

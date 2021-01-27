@@ -93,6 +93,7 @@ menu:
   fair: 公示
   community: 社区
   openSource: 开源
+  notifications: 消息通知
   mine: 个人中心
   login: 登录
   logout: 登出
@@ -234,6 +235,7 @@ commentsComponent:
 dashboard:
   menu:
     overview: 总览
+    notifications: 消息通知
     articles: 文章管理
     subscriptions: 订阅管理
     revenue: 收益管理
@@ -244,6 +246,9 @@ dashboard:
     article: 文章详情
     articleNew: 创建文章
     articleEdit: 文章编辑
+  notificationsPage:
+    clearAllBtn: 清空
+    readAllBtn: 已读
   articlesPage:
     publishConfirm: 确定要将文章公开吗？
     hideConfirm: 确定要将文章隐藏吗？已购读者将不受影响。

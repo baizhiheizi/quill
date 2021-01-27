@@ -7,10 +7,11 @@ import {
   GlobalOutlined,
   LoginOutlined,
   MenuOutlined,
+  NotificationOutlined,
   RiseOutlined,
 } from '@ant-design/icons';
-import { imagePath, useUserAgent } from '@shared';
-import { Avatar, Button, Drawer, Layout, Menu } from 'antd';
+import { imagePath, useCurrentUser, useUserAgent } from '@shared';
+import { Avatar, Badge, Button, Drawer, Layout, Menu } from 'antd';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
@@ -20,6 +21,7 @@ export default function Menus(props: { activeMenu?: string }) {
   const { isMobile } = useUserAgent();
   const { t, i18n } = useTranslation();
   const [drawerVisible, setDrawerVisible] = useState(false);
+  const currentUser = useCurrentUser();
   const MenuConent = () => (
     <div>
       <div style={{ margin: 15, textAlign: 'center' }}>
@@ -33,6 +35,14 @@ export default function Menus(props: { activeMenu?: string }) {
             <DashboardOutlined />
             <span>{t('dashboard.menu.overview')}</span>
           </Link>
+        </Menu.Item>
+        <Menu.Item key='notifications' onClick={() => setDrawerVisible(false)}>
+          <Badge dot={currentUser?.unreadNotificationsCount > 0}>
+            <Link to='/notifications'>
+              <NotificationOutlined />
+              <span>{t('dashboard.menu.notifications')}</span>
+            </Link>
+          </Badge>
         </Menu.Item>
         <Menu.Item key='articles' onClick={() => setDrawerVisible(false)}>
           <Link to='/articles'>

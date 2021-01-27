@@ -93,6 +93,7 @@ menu:
   fair: Fair
   community: Community
   openSource: Open Source
+  notifications: Notifications
   mine: Dashboard
   login: Login
   logout: Logout
@@ -227,6 +228,7 @@ commentsComponent:
 dashboard:
   menu:
     overview: Overview
+    notifications: Notifications
     articles: Artciels Manage
     subscriptions: Subscriptions
     revenue: Revenue Manage
@@ -237,6 +239,9 @@ dashboard:
     article: Article Detail
     articleNew: New Article
     articleEdit: Edite Article
+  notificationsPage:
+    clearAllBtn: Clear All
+    readAllBtn: Read All
   articlesPage:
     publishConfirm: Are you sure to publish this article?
     hideConfirm: Are you sure to hide this article? Early readers not affected.

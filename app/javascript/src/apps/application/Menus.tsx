@@ -1,6 +1,11 @@
-import { GithubOutlined, MenuOutlined } from '@ant-design/icons';
+import {
+  GithubOutlined,
+  MenuOutlined,
+  GlobalOutlined,
+  NotificationOutlined,
+} from '@ant-design/icons';
 import { imagePath, useCurrentUser, useUserAgent } from '@shared';
-import { Avatar, Button, Col, Drawer, Layout, Menu, Row } from 'antd';
+import { Avatar, Badge, Button, Col, Drawer, Layout, Menu, Row } from 'antd';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
@@ -86,7 +91,15 @@ export default function Menus() {
       <Col>
         <Menu theme='light' mode={props.mode} selectable={false}>
           <Menu.SubMenu
-            title={i18n.language.includes('en') ? 'Language' : '语言'}
+            title={
+              props.mode === 'horizontal' ? (
+                <GlobalOutlined />
+              ) : i18n.language.includes('en') ? (
+                'Language'
+              ) : (
+                '语言'
+              )
+            }
           >
             <Menu.Item>
               <a onClick={() => i18n.changeLanguage('zh-CN')}>中文</a>
@@ -100,6 +113,17 @@ export default function Menus() {
       {currentUser ? (
         <Col>
           <Menu mode={props.mode} selectable={false}>
+            <Menu.Item onClick={() => setDrawerVisible(false)}>
+              <Badge dot={currentUser.unreadNotificationsCount > 0}>
+                <a href='/dashboard/notifications'>
+                  {props.mode === 'horizontal' ? (
+                    <NotificationOutlined />
+                  ) : (
+                    t('menu.notifications')
+                  )}
+                </a>
+              </Badge>
+            </Menu.Item>
             <Menu.Item onClick={() => setDrawerVisible(false)}>
               <a href='/dashboard' target='_blank'>
                 {t('menu.mine')}
