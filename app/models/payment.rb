@@ -155,6 +155,10 @@ class Payment < ApplicationRecord
     )
   end
 
+  def price_tag
+    [amount.to_f, token[:symbol]].join(' ')
+  end
+
   private
 
   def setup_attributes

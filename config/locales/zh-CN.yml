@@ -4,6 +4,12 @@ zh-CN:
     comment_notification:
       commented: 评论了文章
     article_notification:
-      published: 发表了文章
+      published: 发表了新文章
+    buying_article_notification:
+      bought: 购买了新文章
     tagging_notification:
       has_new_article: 有新的文章
+    order_notification:
+      paid: 成功支付
+      bought: 购买了
+      rewarded: 赞赏了
