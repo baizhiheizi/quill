@@ -1683,10 +1683,10 @@
     react-markdown "5.0.3"
     remark-gfm "1.0.0"
 
-"@uiw/react-md-editor@^2.1.2":
-  version "2.1.2"
-  resolved "https://registry.npmjs.org/@uiw/react-md-editor/-/react-md-editor-2.1.2.tgz#497679b0fc9ae3be4337c241b4d73fd03ed90a21"
-  integrity sha512-HQyJHZbQONdS/JG3LezwTjqov6YKvNYHK93RLWofPux6Ut+HrI9Mj9LPb82/W9SG687E5mBqoY9EIvb5jkZaPA==
+"@uiw/react-md-editor@^2.1.6":
+  version "2.1.6"
+  resolved "https://registry.yarnpkg.com/@uiw/react-md-editor/-/react-md-editor-2.1.6.tgz#9ad34a9a998e36e002be460e53b09e97bfe8624d"
+  integrity sha512-CKWQt1cI2rFu9xidm2nO45U8oeKFYDPRMS1ZwwFYsQuQB5RNAdo8aRnWwQ43CNiuJ+sD21T6N87Ykf4Wtv50oQ==
   dependencies:
     "@babel/runtime" "^7.8.4"
     "@uiw/react-markdown-preview" "^2.1.1"
