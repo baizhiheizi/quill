@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class UserBanNotification < Noticed::Base
+class UserUnbannedNotification < ApplicationNotification
   deliver_by :database
   deliver_by :mixin_bot, class: 'DeliveryMethods::MixinBot', category: 'PLAIN_TEXT'
 
@@ -11,7 +11,7 @@ class UserBanNotification < Noticed::Base
   end
 
   def message
-    t('.banned')
+    t('.unbanned')
   end
 
   def url

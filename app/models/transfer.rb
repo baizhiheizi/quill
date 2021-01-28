@@ -115,7 +115,7 @@ class Transfer < ApplicationRecord
     return if recipient.blank?
     return if token.blank?
 
-    TransferNotification.with(transfer: self).deliver(recipient)
+    TransferProcessedNotification.with(transfer: self).deliver(recipient)
   end
 
   def token

@@ -179,7 +179,7 @@ class SwapOrder < ApplicationRecord
   def notify_payer
     return unless state.in? %w[completed refunded rejected]
 
-    SwapOrderNotification.with(swap_order: self).deliver(payer)
+    SwapOrderFinishedNotification.with(swap_order: self).deliver(payer)
   end
 
   def pay_asset

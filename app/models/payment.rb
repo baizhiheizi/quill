@@ -147,7 +147,7 @@ class Payment < ApplicationRecord
   end
 
   def notify_payer
-    PaymentNotification.with(payment: self).deliver(payer)
+    PaymentCreatedNotification.with(payment: self).deliver(payer)
   end
 
   def price_tag

@@ -1,24 +1,24 @@
 # frozen_string_literal: true
 
-class AuthoringSubscribeNotification < Noticed::Base
+class ArticleBlockedNotification < ApplicationNotification
   deliver_by :database
   deliver_by :mixin_bot, class: 'DeliveryMethods::MixinBot', category: 'PLAIN_TEXT'
 
-  param :action
+  param :article
 
   def data
     message
   end
 
   def message
-    [params[:action].user.name, t('.subscribed')].join(' ')
+    [t('.blocked'), params[:article].title].join(' ')
   end
 
   def url
     format(
-      '%<host>s/users/%<mixin_id>s',
+      '%<host>s/articles/%<article_uuid>s',
       host: Rails.application.credentials.fetch(:host),
-      mixin_id: params[:action].user.mixin_id
+      article_uuid: params[:article].uuid
     )
   end
 end

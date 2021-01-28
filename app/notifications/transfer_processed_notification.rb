@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class TransferNotification < Noticed::Base
+class TransferProcessedNotification < ApplicationNotification
   deliver_by :database
   deliver_by :mixin_bot, class: 'DeliveryMethods::MixinBot', category: 'APP_CARD'
 

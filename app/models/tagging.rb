@@ -25,11 +25,11 @@ class Tagging < ApplicationRecord
   after_create_commit :notify_subscribers
 
   def notify_subscribers
-    TaggingNotification.with(tagging: self).deliver(tag.subscribe_by_users)
+    TaggingCreatedNotification.with(tagging: self).deliver(tag.subscribe_by_users)
   end
 
   def notifications
-    @notifications ||= Notification.where(params: { tagging: self }).where(type: 'TaggingNotification')
+    @notifications ||= Notification.where(params: { tagging: self }).where(type: 'TaggingCreatedNotification')
   end
 
   def destroy_notifications

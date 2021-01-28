@@ -43,12 +43,13 @@ class User < ApplicationRecord
   has_many :notifications, as: :recipient, dependent: :destroy
 
   has_one :wallet, class_name: 'MixinNetworkUser', as: :owner, dependent: :nullify
+  has_one :notification_setting, dependent: :destroy
 
   before_validation :setup_attributes
 
   validates :name, presence: true
 
-  after_commit :create_wallet!, :update_statistics_cache, on: :create
+  after_commit :create_wallet!, :update_statistics_cache, :create_notification_setting!, on: :create
 
   default_scope { includes(:mixin_authorization) }
   scope :only_banned, -> { where.not(banned_at: nil) }
@@ -126,13 +127,13 @@ class User < ApplicationRecord
   def ban!
     update banned_at: Time.current
 
-    UserBanNotification.with(user: self).deliver(self)
+    UserBannedNotification.with(user: self).deliver(self)
   end
 
   def unban!
     update banned_at: nil
 
-    UserUnbanNotification.with(user: self).deliver(self)
+    UserUnbannedNotification.with(user: self).deliver(self)
   end
 
   def update_statistics_cache

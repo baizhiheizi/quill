@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class PaymentNotification < Noticed::Base
+class PaymentCreatedNotification < ApplicationNotification
   deliver_by :database
   deliver_by :mixin_bot, class: 'DeliveryMethods::MixinBot', category: 'PLAIN_TEXT'
 

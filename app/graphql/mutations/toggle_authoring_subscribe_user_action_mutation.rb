@@ -15,7 +15,7 @@ module Mutations
         current_user.destroy_action(:authoring_subscribe, target: user)
       else
         current_user.create_action(:authoring_subscribe, target: user)
-        AuthoringSubscribeNotification.with(action: current_user.find_action(:authoring_subscribe, target: user)).deliver(user)
+        AuthoringSubscribeActionCreatedNotification.with(action: current_user.find_action(:authoring_subscribe, target: user)).deliver(user)
       end
 
       { error: nil }

@@ -1,23 +1,29 @@
 en:
   notification: Notification
   notifications:
-    comment_notification:
-      commented: commented article
-    article_notification:
-      published: published a new article
-    buying_article_notification:
-      bought: bought a new article
-    tagging_notification:
+    article_published_notification:
+      published: published an article
+    article_bought_notification:
+      bought: bought an article
+    article_rewarded_notification:
+      rewarded: rewarded an article
+    article_blocked_notification:
+      blocked: 'Your article was blocked by admin:'
+    comment_created_notification:
+      commented: commented
+    comment_deleted_notification:
+      deleted: Your comment was deleted by admin
+    tagging_created_notification:
       has_new_article: has a new article
-    payment_notification:
+    payment_created_notification:
       paid: Successfully paid
-    order_notification:
+    order_created_notification:
       bought: Successfully bought
       rewarded: Successfully rewarded
-    swap_order_notification:
+    swap_order_finished_notification:
       swapped: 'Successfully swapped:'
       rejected: Your swap was rejected, you will receive the refund soon.
-    transfer_notification:
+    transfer_processed_notification:
       received: Received
       author_revenue: author revenue
       reader_revenue: reader revenue
@@ -25,11 +31,11 @@ en:
       bonus: bonus
       swap_change: swap change
       swap_refund: refund after swapped
-    authoring_subscribe_notification:
+    authoring_subscribe_action_created_notification:
       subscribed: subscribed your new published articles
-    reading_subscribe_notification:
+    reading_subscribe_action_created_notification:
       subscribed: subscribed your new bought articles
-    user_ban_notification:
+    user_banned_notification:
       banned: Your account has been banned by admin. You cannot publish articles nor comment.
-    user_unban_notification:
+    user_unbanned_notification:
       unbanned: Your account has recovered to normal. You can publish articles and comment.

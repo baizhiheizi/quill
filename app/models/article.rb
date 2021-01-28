@@ -128,7 +128,7 @@ class Article < ApplicationRecord
   def notify_authoring_subscribers
     return if hidden?
 
-    ArticleNotification.with(article: self).deliver(author.authoring_subscribe_by_users)
+    ArticlePublishedNotification.with(article: self).deliver(author.authoring_subscribe_by_users)
   end
 
   def notify_admin
