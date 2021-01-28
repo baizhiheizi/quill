@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 class ArticlePublishedNotification < ApplicationNotification
-  deliver_by :database
-  deliver_by :mixin_bot, class: 'DeliveryMethods::MixinBot', category: 'APP_CARD'
+  deliver_by :database, if: :web_notification_enabled?
+  deliver_by :mixin_bot, class: 'DeliveryMethods::MixinBot', category: 'APP_CARD', if: :mixin_bot_notification_enabled?
 
   param :article
 
@@ -29,5 +29,13 @@ class ArticlePublishedNotification < ApplicationNotification
       host: Rails.application.credentials.fetch(:host),
       article_uuid: params[:article].uuid
     )
+  end
+
+  def web_notification_enabled?
+    recipient.notification_setting.article_published_web
+  end
+
+  def mixin_bot_notification_enabled?
+    recipient.notification_setting.article_published_mixin_bot
   end
 end

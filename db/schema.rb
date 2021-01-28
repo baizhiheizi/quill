@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_01_27_092037) do
+ActiveRecord::Schema.define(version: 2021_01_28_030959) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -143,6 +143,20 @@ ActiveRecord::Schema.define(version: 2021_01_27_092037) do
     t.datetime "updated_at", precision: 6, null: false
     t.index ["owner_type", "owner_id"], name: "index_mixin_network_users_on_owner_type_and_owner_id"
     t.index ["uuid"], name: "index_mixin_network_users_on_uuid", unique: true
+  end
+
+  create_table "notification_settings", force: :cascade do |t|
+    t.bigint "user_id"
+    t.jsonb "webhook", default: "{}"
+    t.jsonb "article_published", default: "{}"
+    t.jsonb "article_bought", default: "{}"
+    t.jsonb "article_rewarded", default: "{}"
+    t.jsonb "comment_created", default: "{}"
+    t.jsonb "tagging_created", default: "{}"
+    t.jsonb "transfer_processed", default: "{}"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["user_id"], name: "index_notification_settings_on_user_id"
   end
 
   create_table "notifications", force: :cascade do |t|

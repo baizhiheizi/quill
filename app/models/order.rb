@@ -151,9 +151,11 @@ class Order < ApplicationRecord
   end
 
   def notify_reading_subscribers
-    return if reward_article?
-
-    ArticleBoughtNotification.with(order: self).deliver(buyer.reading_subscribe_by_users)
+    if reward_article?
+      ArticleRewardedNotification.with(order: self).deliver(buyer.reading_subscribe_by_users)
+    elsif buy_article?
+      ArticleBoughtNotification.with(order: self).deliver(buyer.reading_subscribe_by_users)
+    end
   end
 
   def notify_buyer

@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 class TransferProcessedNotification < ApplicationNotification
-  deliver_by :database
-  deliver_by :mixin_bot, class: 'DeliveryMethods::MixinBot', category: 'APP_CARD'
+  deliver_by :database, if: :web_notification_enabled?
+  deliver_by :mixin_bot, class: 'DeliveryMethods::MixinBot', category: 'APP_CARD', if: :mixin_bot_notification_enabled?
 
   param :transfer
 
@@ -42,5 +42,13 @@ class TransferProcessedNotification < ApplicationNotification
       host: 'https://mixin.one',
       snapshot_id: params[:transfer].snapshot_id
     )
+  end
+
+  def web_notification_enabled?
+    recipient.notification_setting.transfer_processed_web
+  end
+
+  def mixin_bot_notification_enabled?
+    recipient.notification_setting.transfer_processed_mixin_bot
   end
 end

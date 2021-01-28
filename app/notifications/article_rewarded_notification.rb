@@ -1,41 +1,41 @@
 # frozen_string_literal: true
 
-class TaggingCreatedNotification < ApplicationNotification
+class ArticleRewardedNotification < ApplicationNotification
   deliver_by :database, if: :web_notification_enabled?
   deliver_by :mixin_bot, class: 'DeliveryMethods::MixinBot', category: 'APP_CARD', if: :mixin_bot_notification_enabled?
 
-  param :tagging
+  param :order
 
   def data
     {
       icon_url: Article::PRSDIGG_ICON_URL,
-      title: params[:tagging].article.title.truncate(36),
+      title: params[:order].article.title.truncate(36),
       description: description,
       action: url
     }
   end
 
   def description
-    ["##{params[:tagging].tag.name}", t('.has_new_article')].join(' ')
+    [params[:order].buyer.name, t('.rewarded')].join(' ')
   end
 
   def message
-    ["##{params[:tagging].tag.name}", t('.has_new_article'), params[:tagging].article.title].join(' ')
+    [params[:order].buyer.name, t('.rewarded'), params[:order].article.title].join(' ')
   end
 
   def url
     format(
       '%<host>s/articles/%<article_uuid>s',
       host: Rails.application.credentials.fetch(:host),
-      article_uuid: params[:tagging].article.uuid
+      article_uuid: params[:order].article.uuid
     )
   end
 
   def web_notification_enabled?
-    recipient.notification_setting.tagging_created_web
+    recipient.notification_setting.article_rewarded_web
   end
 
   def mixin_bot_notification_enabled?
-    recipient.notification_setting.tagging_created_mixin_bot
+    recipient.notification_setting.article_rewarded_mixin_bot
   end
 end

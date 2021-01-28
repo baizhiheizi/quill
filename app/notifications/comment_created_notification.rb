@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 class CommentCreatedNotification < ApplicationNotification
-  deliver_by :database
-  deliver_by :mixin_bot, class: 'DeliveryMethods::MixinBot', category: 'APP_CARD'
+  deliver_by :database, if: :web_notification_enabled?
+  deliver_by :mixin_bot, class: 'DeliveryMethods::MixinBot', category: 'APP_CARD', if: :mixin_bot_notification_enabled?
 
   param :comment
 
@@ -30,5 +30,13 @@ class CommentCreatedNotification < ApplicationNotification
       article_uuid: params[:comment].commentable.uuid,
       comment_id: params[:comment].id
     )
+  end
+
+  def web_notification_enabled?
+    recipient.notification_setting.comment_created_web
+  end
+
+  def mixin_bot_notification_enabled?
+    recipient.notification_setting.comment_created_mixin_bot
   end
 end

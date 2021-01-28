@@ -156,17 +156,11 @@ class Article < ApplicationRecord
   end
 
   def notify_author_blocked
-    TextNotificationService.new.call(
-      "您的文章《#{title}》已被管理员屏蔽。如有异议，可直接回复信息，进行申诉。",
-      recipient_id: author.mixin_uuid
-    )
+    ArticleBlockedNotification.with(article: self).deliver(author)
   end
 
   def notify_author_unblocked
-    TextNotificationService.new.call(
-      "您的文章《#{title}》已被管理员撤销屏蔽。",
-      recipient_id: author.mixin_uuid
-    )
+    ArticleUnblockedNotification.with(article: self).deliver(author)
   end
 
   def author_revenue_total

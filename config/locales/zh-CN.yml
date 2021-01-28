@@ -9,6 +9,8 @@ zh-CN:
       rewarded: 赞赏了文章
     article_blocked_notification:
       blocked: '您的文章已被管理员屏蔽:'
+    article_unblocked_notification:
+      unblocked: '您的文章屏蔽已经解除:'
     comment_created_notification:
       commented: 发表了新评论
     comment_deleted_notification:
@@ -35,7 +37,7 @@ zh-CN:
       subscribed: 订阅了您新发表的文章
     reading_subscribe_action_created_notification:
       subscribed: 订阅了您新购买的文章
-    user_ban_notification:
+    user_banned_notification:
       banned: 你的帐号被管理员限制，不能发表文章或者评论。
-    user_unban_notification:
+    user_unbanned_notification:
       unbanned: 你的帐号限制已解除。

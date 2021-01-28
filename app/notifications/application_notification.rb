@@ -8,4 +8,12 @@ class ApplicationNotification < Noticed::Base
 
   def url
   end
+
+  def web_notification_enabled?
+    true
+  end
+
+  def mixin_bot_notification_enabled?
+    true
+  end
 end

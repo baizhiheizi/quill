@@ -9,6 +9,8 @@ en:
       rewarded: rewarded an article
     article_blocked_notification:
       blocked: 'Your article was blocked by admin:'
+    article_unblocked_notification:
+      unblocked: 'Your article has recoverd from blocked:'
     comment_created_notification:
       commented: commented
     comment_deleted_notification:
