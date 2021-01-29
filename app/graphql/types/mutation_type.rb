@@ -18,6 +18,7 @@ module Types
     field :clear_notifications, mutation: Mutations::ClearNotificationsMutation
     field :read_notifications, mutation: Mutations::ReadNotificationsMutation
     field :read_notification, mutation: Mutations::ReadNotificationMutation
+    field :switch_locale, mutation: Mutations::SwitchLocaleMutation
 
     # admin
     field :admin_login, mutation: Mutations::AdminLoginMutation

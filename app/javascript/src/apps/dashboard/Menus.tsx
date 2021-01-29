@@ -12,9 +12,10 @@ import {
 } from '@ant-design/icons';
 import { imagePath, useCurrentUser, useUserAgent } from '@shared';
 import { Avatar, Badge, Button, Drawer, Layout, Menu } from 'antd';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
+import { useSwitchLocaleMutation } from '@graphql';
 
 export default function Menus(props: { activeMenu?: string }) {
   const { activeMenu } = props;
@@ -22,6 +23,18 @@ export default function Menus(props: { activeMenu?: string }) {
   const { t, i18n } = useTranslation();
   const [drawerVisible, setDrawerVisible] = useState(false);
   const currentUser = useCurrentUser();
+  const [switchLocale] = useSwitchLocaleMutation();
+
+  useEffect(() => {
+    if (!currentUser) {
+      return;
+    }
+    switchLocale({ variables: { input: { locale: i18n.language } } });
+    i18n.on('languageChanged', (lng: string) => {
+      switchLocale({ variables: { input: { locale: lng } } });
+    });
+  }, []);
+
   const MenuConent = () => (
     <div>
       <div style={{ margin: 15, textAlign: 'center' }}>

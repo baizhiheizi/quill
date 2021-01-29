@@ -3,7 +3,7 @@
 class ApplicationController < ActionController::Base
   helper_method :current_user
   helper_method :base_props
-  before_action :set_locale
+  around_action :with_locale
 
   private
 
@@ -38,7 +38,8 @@ class ApplicationController < ActionController::Base
     }
   end
 
-  def set_locale
-    I18n.locale = current_user.locale if current_user.present?
+  def with_locale(&action)
+    locale = current_user&.locale || I18n.default_locale
+    I18n.with_locale(locale, &action)
   end
 end
