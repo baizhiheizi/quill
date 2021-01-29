@@ -1,8 +1,8 @@
 import i18n from 'i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
 import { initReactI18next } from 'react-i18next';
-import enFile from './en.yml';
-import zhFile from './zh-CN.yml';
+import enFile from '../../../../../config/locales/views.en.yml';
+import zhFile from '../../../../../config/locales/views.zh-CN.yml';
 
 const resources = {
   en: {
