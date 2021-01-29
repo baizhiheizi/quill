@@ -49,7 +49,7 @@ class User < ApplicationRecord
   before_validation :setup_attributes
 
   validates :name, presence: true
-  enum locale: { en: 0, 'zh-CN': 1 }
+  enum locale: { 'zh-CN': 0, en: 1 }
 
   after_commit :create_wallet!, :update_statistics_cache, :create_notification_setting!, on: :create
 
