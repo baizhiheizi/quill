@@ -3,6 +3,7 @@
 class ApplicationController < ActionController::Base
   helper_method :current_user
   helper_method :base_props
+  before_action :set_locale
 
   private
 
@@ -35,5 +36,9 @@ class ApplicationController < ActionController::Base
         app_id: PrsdiggBot.api.client_id
       }
     }
+  end
+
+  def set_locale
+    I18n.locale = current_user.locale if current_user.present?
   end
 end

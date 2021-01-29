@@ -4,6 +4,8 @@ class ArticlePublishedNotification < ApplicationNotification
   deliver_by :database, if: :web_notification_enabled?
   deliver_by :mixin_bot, class: 'DeliveryMethods::MixinBot', category: 'APP_CARD', if: :mixin_bot_notification_enabled?
 
+  before_mixin_bot :set_locale
+
   param :article
 
   def data
@@ -37,5 +39,9 @@ class ArticlePublishedNotification < ApplicationNotification
 
   def mixin_bot_notification_enabled?
     recipient.notification_setting.article_published_mixin_bot
+  end
+
+  def set_locale
+    I18n.locale = recipient.locale
   end
 end

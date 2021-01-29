@@ -4,6 +4,8 @@ class OrderCreatedNotification < ApplicationNotification
   deliver_by :database
   deliver_by :mixin_bot, class: 'DeliveryMethods::MixinBot', category: 'PLAIN_TEXT'
 
+  before_mixin_bot :set_locale
+
   param :order
 
   def action_name
@@ -29,5 +31,9 @@ class OrderCreatedNotification < ApplicationNotification
       host: Rails.application.credentials.fetch(:host),
       article_uuid: params[:order].article.uuid
     )
+  end
+
+  def set_locale
+    I18n.locale = recipient.locale
   end
 end

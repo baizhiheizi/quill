@@ -4,6 +4,8 @@ class SwapOrderFinishedNotification < ApplicationNotification
   deliver_by :database
   deliver_by :mixin_bot, class: 'DeliveryMethods::MixinBot', category: 'PLAIN_TEXT'
 
+  before_mixin_bot :set_locale
+
   param :swap_order
 
   def data
@@ -39,5 +41,9 @@ class SwapOrderFinishedNotification < ApplicationNotification
       '%<host>s/dashboard/orders',
       host: Rails.application.credentials.fetch(:host)
     )
+  end
+
+  def set_locale
+    I18n.locale = recipient.locale
   end
 end

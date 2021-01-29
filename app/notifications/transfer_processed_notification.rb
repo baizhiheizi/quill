@@ -4,6 +4,8 @@ class TransferProcessedNotification < ApplicationNotification
   deliver_by :database, if: :web_notification_enabled?
   deliver_by :mixin_bot, class: 'DeliveryMethods::MixinBot', category: 'APP_CARD', if: :mixin_bot_notification_enabled?
 
+  before_mixin_bot :set_locale
+
   param :transfer
 
   def transfer_type
@@ -50,5 +52,9 @@ class TransferProcessedNotification < ApplicationNotification
 
   def mixin_bot_notification_enabled?
     recipient.notification_setting.transfer_processed_mixin_bot
+  end
+
+  def set_locale
+    I18n.locale = recipient.locale
   end
 end
