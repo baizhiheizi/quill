@@ -1563,7 +1563,7 @@ export type User = {
   comments: CommentConnection;
   createdAt: Scalars['ISO8601DateTime'];
   id: Scalars['ID'];
-  locale: Scalars['String'];
+  locale?: Maybe<Scalars['String']>;
   mixinId: Scalars['ID'];
   mixinUuid: Scalars['String'];
   name: Scalars['String'];

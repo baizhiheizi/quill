@@ -8,7 +8,7 @@
 #  authoring_subscribers_count :integer          default(0)
 #  avatar_url                  :string
 #  banned_at                   :datetime
-#  locale                      :integer          default(0)
+#  locale                      :integer
 #  mixin_uuid                  :uuid
 #  name                        :string
 #  reading_subscribers_count   :integer          default(0)

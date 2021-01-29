@@ -27,7 +27,7 @@ class ApplicationController < ActionController::Base
   def base_props
     {
       current_user: current_user&.as_json(
-        only: %i[name avatar_url mixin_id mixin_uuid banned_at]
+        only: %i[name avatar_url mixin_id mixin_uuid banned_at locale]
       )&.merge(
         wallet_id: current_user.wallet_id,
         unread_notifications_count: current_user.unread_notifications_count

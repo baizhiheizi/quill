@@ -8,7 +8,7 @@
 #  authoring_subscribers_count :integer          default(0)
 #  avatar_url                  :string
 #  banned_at                   :datetime
-#  locale                      :integer          default(0)
+#  locale                      :integer
 #  mixin_uuid                  :uuid
 #  name                        :string
 #  reading_subscribers_count   :integer          default(0)
@@ -49,7 +49,7 @@ class User < ApplicationRecord
   before_validation :setup_attributes
 
   validates :name, presence: true
-  enum locale: { 'zh-CN': 0, en: 1 }
+  enum locale: I18n.available_locales
 
   after_commit :create_wallet!, :update_statistics_cache, :create_notification_setting!, on: :create
 

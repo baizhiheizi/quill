@@ -280,7 +280,7 @@ ActiveRecord::Schema.define(version: 2021_01_29_004748) do
     t.integer "reading_subscribers_count", default: 0
     t.datetime "banned_at"
     t.jsonb "statistics", default: "{}"
-    t.integer "locale", default: 0
+    t.integer "locale"
     t.index ["mixin_id"], name: "index_users_on_mixin_id", unique: true
     t.index ["mixin_uuid"], name: "index_users_on_mixin_uuid", unique: true
     t.index ["statistics"], name: "index_users_on_statistics", using: :gin

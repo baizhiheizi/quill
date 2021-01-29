@@ -7,11 +7,7 @@ module Mutations
     type Boolean
 
     def resolve(locale:)
-      if locale.downcase.include? 'en'
-        current_user.update(locale: :en)
-      else
-        current_user.update(locale: I18n.default_locale)
-      end
+      current_user.update(locale: locale) if locale.to_sym.in? I18n.available_locales
     end
   end
 end

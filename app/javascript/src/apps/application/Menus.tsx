@@ -23,7 +23,9 @@ export default function Menus() {
     if (!currentUser) {
       return;
     }
-    switchLocale({ variables: { input: { locale: i18n.language } } });
+    if (currentUser.locale !== i18n.language) {
+      switchLocale({ variables: { input: { locale: i18n.language } } });
+    }
     i18n.on('languageChanged', (lng: string) => {
       switchLocale({ variables: { input: { locale: lng } } });
     });

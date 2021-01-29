@@ -29,7 +29,9 @@ export default function Menus(props: { activeMenu?: string }) {
     if (!currentUser) {
       return;
     }
-    switchLocale({ variables: { input: { locale: i18n.language } } });
+    if (currentUser.locale !== i18n.language) {
+      switchLocale({ variables: { input: { locale: i18n.language } } });
+    }
     i18n.on('languageChanged', (lng: string) => {
       switchLocale({ variables: { input: { locale: lng } } });
     });
@@ -95,7 +97,7 @@ export default function Menus(props: { activeMenu?: string }) {
             <a onClick={() => i18n.changeLanguage('zh-CN')}>中文</a>
           </Menu.Item>
           <Menu.Item>
-            <a onClick={() => i18n.changeLanguage('en-US')}>EN</a>
+            <a onClick={() => i18n.changeLanguage('en')}>EN</a>
           </Menu.Item>
         </Menu.SubMenu>
         <Menu.Item key='back'>
