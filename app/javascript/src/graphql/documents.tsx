@@ -4270,6 +4270,7 @@ export const MyNotificationConnectionDocument = gql`
       message
       url
       readAt
+      createdAt
     }
     pageInfo {
       hasNextPage

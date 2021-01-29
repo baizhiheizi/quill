@@ -1,5 +1,6 @@
 import LoadingComponent from '@dashboard/components/LoadingComponent/LoadingComponent';
 import { updateActiveMenu } from '@dashboard/shared';
+import moment from 'moment';
 import {
   Notification as INotification,
   useClearNotificationsMutation,
@@ -14,7 +15,8 @@ import ListComponent from '../../components/ListComponent/ListComponent';
 
 export default function NotificationsPage() {
   updateActiveMenu('notifications');
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  moment.locale(i18n.language);
   const {
     loading,
     data,
@@ -82,17 +84,22 @@ export default function NotificationsPage() {
             }
             style={{ color: `${notification.readAt ? '#aaa' : '#1890ff'}` }}
           >
-            {notification.url ? (
-              <a
-                style={{ color: 'unset' }}
-                href={notification.url}
-                target='_blank'
-              >
-                {notification.message}
-              </a>
-            ) : (
-              <span>{notification.message}</span>
-            )}
+            <div>
+              {notification.url ? (
+                <a
+                  style={{ color: 'unset' }}
+                  href={notification.url}
+                  target='_blank'
+                >
+                  {notification.message}
+                </a>
+              ) : (
+                <span>{notification.message}</span>
+              )}
+            </div>
+            <div>
+              {moment(notification.createdAt).format('YYYY-MM-DD hh:mm')}
+            </div>
           </List.Item>
         )}
       />

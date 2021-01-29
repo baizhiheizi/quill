@@ -6,6 +6,7 @@ query MyNotificationConnection($after: String, $type: String) {
       message
       url
       readAt
+      createdAt
     }
     pageInfo {
       hasNextPage
