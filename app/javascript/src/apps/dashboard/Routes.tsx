@@ -28,6 +28,9 @@ const SubscriptionsPage = React.lazy(
 const NotificationsPage = React.lazy(
   () => import('./pages/NotificationsPage/NotificationsPage'),
 );
+const SettingsPage = React.lazy(
+  () => import('./pages/SettingsPage/SettingsPage'),
+);
 
 export default function Routes() {
   return (
@@ -63,6 +66,9 @@ export default function Routes() {
           </Route>
           <Route path='/notifications' exact>
             <NotificationsPage />
+          </Route>
+          <Route path='/settings' exact>
+            <SettingsPage />
           </Route>
           <Route>
             <NotFoundPage />

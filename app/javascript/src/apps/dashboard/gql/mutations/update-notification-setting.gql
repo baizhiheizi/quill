@@ -1,0 +1,26 @@
+mutation UpdateNotificationSetting(
+  $input: UpdateNotificationSettingMutationInput!
+) {
+  updateNotificationSetting(input: $input) {
+    id
+    webhookUrl
+    articlePublishedWeb
+    articlePublishedMixinBot
+    articlePublishedWebhook
+    articleBoughtWeb
+    articleBoughtMixinBot
+    articleBoughtWebhook
+    articleRewardedWeb
+    articleRewardedMixinBot
+    articleRewardedWebhook
+    commentCreatedWeb
+    commentCreatedMixinBot
+    commentCreatedWebhook
+    taggingCreatedWeb
+    taggingCreatedMixinBot
+    taggingCreatedWebhook
+    transferProcessedWeb
+    transferProcessedMixinBot
+    transferProcessedWebhook
+  }
+}

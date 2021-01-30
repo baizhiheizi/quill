@@ -18,6 +18,7 @@ zh-CN:
       successUnsubscribed: 已取消订阅
       successHiddenArticle: 文章已隐藏
       successPublishedArticle: 文章已公开
+      successUpdated: 成功更新
     article:
       title: 标题
       content: 正文
@@ -238,6 +239,7 @@ zh-CN:
       menu:
         overview: 总览
         notifications: 消息通知
+        settings: 个人设置
         articles: 文章管理
         subscriptions: 订阅管理
         revenue: 收益管理
@@ -285,3 +287,14 @@ zh-CN:
         tabs:
           payments: 支付记录
           swapOrders: Swap 订单
+      settingsPage:
+        tabs:
+          notification: 消息通知
+        notification:
+          tipsOfGeneral: 您可以自定义消息通知的方式，网站通知、Mixin 机器人消息通知和 Webhook（开发中）。
+          tipsOfArticlePublished: 订阅的作者发表新文章时，您将收到通知。
+          tipsOfArticleBought: 订阅的读者购买新文章时，您将收到通知。
+          tipsOfArticleRewarded: 订阅的读者赞赏新文章时，您将收到通知。
+          tipsOfTaggingCreated: 订阅的话题有新文章时，您将收到通知。
+          tipsOfCommentCreated: 订阅的文章有新评论时，您将收到通知。
+          tipsOfTransferProcessed: 有新的转账（包括文章收益、退款等）时，您将收到通知。

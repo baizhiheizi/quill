@@ -32,6 +32,7 @@ module Types
     field :my_swap_order_connection, resolver: Resolvers::MySwapOrderConnectionResolver
     field :my_statistics, resolver: Resolvers::MyStatisticsResolver
     field :my_notification_connection, resolver: Resolvers::MyNotificationConnectionResolver
+    field :my_notification_setting, resolver: Resolvers::MyNotificationSettingResolver
 
     # admin
     field :admin_article_connection, resolver: Resolvers::AdminArticleConnectionResolver

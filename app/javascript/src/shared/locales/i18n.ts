@@ -1,15 +1,25 @@
 import i18n from 'i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
 import { initReactI18next } from 'react-i18next';
-import enFile from '../../../../../config/locales/views.en.yml';
-import zhFile from '../../../../../config/locales/views.zh-CN.yml';
+import viewsEn from '../../../../../config/locales/views.en.yml';
+import viewsZh from '../../../../../config/locales/views.zh-CN.yml';
+import activerecordEn from '../../../../../config/locales/activerecord.en.yml';
+import activerecordZh from '../../../../../config/locales/activerecord.zh-CN.yml';
 
+const enTranslaction = Object.assign(
+  viewsEn.en.views,
+  activerecordEn.en.activerecord.attributes,
+);
+const zhTranslaction = Object.assign(
+  viewsZh['zh-CN'].views,
+  activerecordZh['zh-CN'].activerecord.attributes,
+);
 const resources = {
   en: {
-    translation: enFile.en.views,
+    translation: enTranslaction,
   },
   'zh-CN': {
-    translation: zhFile['zh-CN'].views,
+    translation: zhTranslaction,
   },
 };
 

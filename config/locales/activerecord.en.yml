@@ -1,0 +1,76 @@
+en:
+  activerecord:
+    models:
+      article: Article
+    attributes:
+      article:
+        title: Title
+        content: Content
+        intro: Introduction
+        words_count: Words Count
+        price: Price(PRS)
+        upvotes_count: Upvotes
+        downvotes_count: Downvotes
+        comments_count: Comments Count
+        orders_count: Paid Times
+        buy_orders_count: Bought Times
+        reward_orders_count: Rewarded Times
+        revenue: Revenue(PRS)
+        author_revenue_total: Author Revenue(PRS)
+        reader_revenue_total: Reader Revenue(PRS)
+        my_share: My Share(%)
+        state_text: State
+        tags: Tags
+        created_at: Created
+        updated_at: Last Edited
+        state:
+          published: Published
+          blocked: Blocked
+          hidden: Hidden
+        form:
+          warning: Pleash finish your article first
+          createConfirm: Are you sure to create?
+          createOkText: Create
+          createCancelText: Later
+          createBtn: Create
+          updateConfirm: Are you sure to update your article?
+          updateOkText: Update
+          updateCancelText: Later
+          updateBtn: Update
+          titlePlaceHolder: Title of article
+          contentPlaceHolder: Write something valuable
+          introPlaceHolder: Please introduce your article and this will be public
+          newBtn: New
+      tag:
+        articlesCount: Articles
+        subscribersCount: Subscribers
+      payment:
+        state:
+          paid: Paid
+          refunded: Refunded
+          completed: Compelted
+        snapshot: Snapshot
+      swapOrder:
+        state:
+          paid: Paid
+          swapping: Swapping
+          rejected: Rejected
+          swapped: Swapped
+          order_placed: Buying
+          completed: Completed
+          refunded: Refunded
+      user:
+        defaultBio: Didn't left anything
+        authorRevenueTotal: Author Revenue(PRS)
+        readerRevenueTotal: Reader Revenue(PRS)
+        articlesCount: Published
+        boughtArticlesCount: Bought
+      transfer:
+        transferType:
+          payment_refund: Refund
+          author_revenue: Author
+          reader_revenue: Reader
+        snapshot: Snapshot
+        processing: Processing
+      notification_setting:
+        articlePublished: Published article

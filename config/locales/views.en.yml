@@ -18,6 +18,7 @@ en:
       successUnsubscribed: Unsubscribed
       successHiddenArticle: Article hidden
       successPublishedArticle: Article published
+      successUpdated: Successfully updated
     article:
       title: Title
       content: Content
@@ -231,6 +232,7 @@ en:
       menu:
         overview: Overview
         notifications: Notifications
+        settings: Settings
         articles: Artciels Manage
         subscriptions: Subscriptions
         revenue: Revenue Manage
@@ -281,3 +283,14 @@ en:
         tabs:
           payments: Payments
           swapOrders: Swap Orders
+      settingsPage:
+        tabs:
+          notification: Notification
+        notification:
+          tipsOfGeneral: You can customized your notification via Web, Mixin Bot and Webhook(on development).
+          tipsOfArticlePublished: When your subscribed authors publish a new article, you will be notified.
+          tipsOfArticleBought: When your subscribed readers buy a new article, you will be notified.
+          tipsOfArticleRewarded: When your subscribed readers reward a new article, you will be notified.
+          tipsOfTaggingCreated: When new article tagged by your subscribed tags, you will be notified.
+          tipsOfCommentCreated: When your subscribed article are commented, you will be notified.
+          tipsOfTransferProcessed: When new transfers(including revenue from articles and refunding) received, you will be notified.

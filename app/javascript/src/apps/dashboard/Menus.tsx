@@ -9,13 +9,14 @@ import {
   MenuOutlined,
   NotificationOutlined,
   RiseOutlined,
+  SettingOutlined,
 } from '@ant-design/icons';
+import { useSwitchLocaleMutation } from '@graphql';
 import { imagePath, useCurrentUser, useUserAgent } from '@shared';
 import { Avatar, Badge, Button, Drawer, Layout, Menu } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
-import { useSwitchLocaleMutation } from '@graphql';
 
 export default function Menus(props: { activeMenu?: string }) {
   const { activeMenu } = props;
@@ -58,6 +59,12 @@ export default function Menus(props: { activeMenu?: string }) {
               <span>{t('dashboard.menu.notifications')}</span>
             </Link>
           </Badge>
+        </Menu.Item>
+        <Menu.Item key='settings' onClick={() => setDrawerVisible(false)}>
+          <Link to='/settings'>
+            <SettingOutlined />
+            <span>{t('dashboard.menu.settings')}</span>
+          </Link>
         </Menu.Item>
         <Menu.Item key='articles' onClick={() => setDrawerVisible(false)}>
           <Link to='/articles'>
