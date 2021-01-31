@@ -50,6 +50,7 @@ class Order < ApplicationRecord
   delegate :price_tag, to: :payment, prefix: true
 
   after_create :complete_payment, :update_item_revenue, :update_buyer_statistics_cache
+  before_destroy :destroy_notifications
   after_commit :distribute_async,
                :notify_reading_subscribers,
                :notify_buyer,
@@ -170,6 +171,14 @@ class Order < ApplicationRecord
       bought_articles_count: buyer.bought_articles.count,
       payment_total: buyer.orders.sum(:total).to_f
     )
+  end
+
+  def notifications
+    @notifications = Notification.where(params: { order: self })
+  end
+
+  def destroy_notifications
+    notifications.destroy_all
   end
 
   private
