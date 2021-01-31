@@ -24,8 +24,8 @@ class Action < ApplicationRecord
   belongs_to :target, polymorphic: true, optional: true
   belongs_to :user, polymorphic: true, optional: true
 
-  after_commit :notify_target, on: :create
   before_destroy :destroy_notifications
+  after_commit :notify_target, on: :create
 
   def destroy_notifications
     notifications.destroy_all

@@ -20,13 +20,9 @@
 #
 class Notification < ApplicationRecord
   include Noticed::Model
+
   belongs_to :recipient, polymorphic: true
 
-  def message
-    to_notification.message
-  end
-
-  def url
-    to_notification.url
-  end
+  delegate :message, to: :to_notification
+  delegate :url, to: :to_notification
 end

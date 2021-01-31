@@ -46,34 +46,34 @@ export default function App(props: {
             }}
           >
             <CurrentUserContext.Provider value={currentUser}>
-                <Router basename='/dashboard'>
-                  <Layout style={{ minHeight: '100vh' }}>
-                    <Menus />
-                    <Layout.Content
-                      style={
-                        isMobile().phone
-                          ? { background: '#fff' }
-                          : { marginLeft: 200, padding: '1rem' }
-                      }
-                    >
-                      <Row justify='center'>
-                        <Col
-                          flex={1}
-                          xs={24}
-                          sm={24}
-                          md={24}
-                          lg={20}
-                          xl={20}
-                          xxl={14}
-                        >
-                          <div style={{ background: '#fff', padding: '1rem' }}>
-                            <Routes />
-                          </div>
-                        </Col>
-                      </Row>
-                    </Layout.Content>
-                  </Layout>
-                </Router>
+              <Router basename='/dashboard'>
+                <Layout style={{ minHeight: '100vh' }}>
+                  <Menus />
+                  <Layout.Content
+                    style={
+                      isMobile().phone
+                        ? { background: '#fff' }
+                        : { marginLeft: 200, padding: '1rem' }
+                    }
+                  >
+                    <Row justify='center'>
+                      <Col
+                        flex={1}
+                        xs={24}
+                        sm={24}
+                        md={24}
+                        lg={20}
+                        xl={20}
+                        xxl={14}
+                      >
+                        <div style={{ background: '#fff', padding: '1rem' }}>
+                          <Routes />
+                        </div>
+                      </Col>
+                    </Row>
+                  </Layout.Content>
+                </Layout>
+              </Router>
             </CurrentUserContext.Provider>
           </UserAgentContext.Provider>
         </PrsdiggContext.Provider>
