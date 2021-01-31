@@ -33,11 +33,13 @@ class SwapOrder < ApplicationRecord
   belongs_to :payment
   belongs_to :wallet, class_name: 'MixinNetworkUser', foreign_key: :user_id, primary_key: :uuid, inverse_of: :swap_orders
 
+  has_many :transfers, as: :source, dependent: :nullify
+
   validates :trace_id, presence: true
   validates :fill_asset_id, presence: true
   validates :pay_asset_id, presence: true
 
-  after_commit :transfer_to_4swap_async, on: :create
+  after_create :create_fox_swap_transfer!
 
   delegate :owner, to: :wallet
   delegate :payer, to: :payment
@@ -64,7 +66,7 @@ class SwapOrder < ApplicationRecord
       transitions from: :swapping, to: :swapped
     end
 
-    event :order_place, after_commit: :transfer_change_to_buyer_async do
+    event :order_place, after_commit: :create_change_transfer! do
       transitions from: :swapped, to: :order_placed
     end
 
@@ -77,32 +79,24 @@ class SwapOrder < ApplicationRecord
     end
   end
 
-  def transfer_to_4swap_async
-    SwapOrderTransferTo4swapWorker.perform_async id
-  end
-
-  def transfer_to_4swap!
-    r = wallet.mixin_api.create_transfer(
-      wallet.pin,
-      {
-        opponent_id: FOX_SWAP_BROKER_ID,
-        asset_id: pay_asset_id,
-        amount: funds.to_f,
-        trace_id: trace_id,
-        memo: Base64.encode64(
-          {
-            t: 'swap',
-            a: fill_asset_id,
-            m: min_amount.present? ? min_amount.to_f.to_s : nil
-          }.to_json
-        )
-      }
+  def create_fox_swap_transfer!
+    transfers.create_with(
+      wallet: wallet,
+      transfer_type: :fox_swap,
+      queue_priority: :critical,
+      opponent_id: FOX_SWAP_BROKER_ID,
+      asset_id: pay_asset_id,
+      amount: funds.to_f,
+      memo: Base64.encode64(
+        {
+          t: 'swap',
+          a: fill_asset_id,
+          m: min_amount.present? ? min_amount.to_f.to_s : nil
+        }.to_json
+      )
+    ).find_or_create_by!(
+      trace_id: trace_id
     )
-
-    raise r['error'].inspect if r['error'].present?
-    return unless r['data']['trace_id'] == trace_id
-
-    start!
   end
 
   def place_payment_order!
@@ -124,74 +118,41 @@ class SwapOrder < ApplicationRecord
     order_place!
   rescue StandardError => e
     Rails.logger.error e.inspect
-    transfer_refund_to_buyer_async
+    create_refund_transfer!
   end
 
-  def transfer_change_to_buyer_async
-    SwapOrderTransferChangeToBuyerWorker.perform_async id
-  end
-
-  def transfer_change_to_buyer!
+  def create_change_transfer!
     return if completed?
     return if amount.blank?
+    return if min_amount.blank? || (amount - min_amount - 0.000_000_01).negative?
 
-    if min_amount.present? && (amount - min_amount - 0.000_000_01).positive?
-      _trace_id = wallet.mixin_api.unique_conversation_id(trace_id, payment.payer.mixin_uuid)
-      r = wallet.mixin_api.create_transfer(
-        wallet.pin,
-        {
-          asset_id: fill_asset_id,
-          amount: (amount - min_amount).to_f,
-          opponent_id: payment.payer.mixin_uuid,
-          trace_id: _trace_id,
-          memo: 'CHANGE FROM SWAP'
-        }
-      )
-
-      raise r['error'].inspect if r['error'].present?
-      return unless r['data']['trace_id'] == _trace_id
-
-      TransferNotificationService.new.call(
-        recipient_id: payment.payer.mixin_uuid,
-        asset_id: fill_asset_id,
-        amount: amount - min_amount,
-        trace_id: _trace_id
-      )
-    end
-
-    complete!
+    _trace_id = wallet.mixin_api.unique_conversation_id(trace_id, payment.payer.mixin_uuid)
+    transfers.create_with(
+      wallet: wallet,
+      transfer_type: :swap_change,
+      opponent_id: payment.payer.mixin_uuid,
+      asset_id: fill_asset_id,
+      amount: (amount - min_amount).to_f,
+      memo: 'CHANGE FROM SWAP'
+    ).find_or_create_by!(
+      trace_id: _trace_id
+    )
   end
 
-  def transfer_refund_to_buyer_async
-    SwapOrderTransferRefundToBuyerWorker.perform_async id
-  end
-
-  def transfer_refund_to_buyer!
+  def create_refund_transfer!
     return if refunded?
 
     _trace_id = wallet.mixin_api.unique_conversation_id(trace_id, payment.payer.mixin_uuid)
-    r = wallet.mixin_api.create_transfer(
-      wallet.pin,
-      {
-        asset_id: fill_asset_id,
-        amount: amount.to_f,
-        opponent_id: payment.payer.mixin_uuid,
-        trace_id: _trace_id,
-        memo: 'REFUND FROM SWAP'
-      }
-    )
-
-    raise r['error'].inspect if r['error'].present?
-    return unless r['data']['trace_id'] == _trace_id
-
-    TransferNotificationService.new.call(
-      recipient_id: payment.payer.mixin_uuid,
+    transfers.create_with(
+      wallet: wallet,
+      transfer_type: :swap_refund,
+      opponent_id: payment.payer.mixin_uuid,
       asset_id: fill_asset_id,
-      amount: amount,
+      amount: amount.to_f,
+      memo: 'REFUND FROM SWAP'
+    ).find_or_create_by!(
       trace_id: _trace_id
     )
-
-    refund!
   end
 
   def ensure_min_amount_filled
@@ -216,43 +177,9 @@ class SwapOrder < ApplicationRecord
   end
 
   def notify_payer
-    tpl_done = <<~TPL
-      [Swap 订单]
-      - 状态: %<state>s
-      - 支付: %<funds>s %<pay_asset>s
-      - 收到: %<amount>s %<fill_asset>s
-    TPL
-    tpl_rejected = <<~TPL
-      [Swap 订单]
-      - 状态: %<state>s
-      - 支付: %<funds>s %<pay_asset>s
-    TPL
+    return unless state.in? %w[completed refunded rejected]
 
-    message =
-      case state
-      when 'completed', 'refunded'
-        format(
-          tpl_done,
-          state: '完成',
-          funds: funds.to_f.to_s,
-          amount: amount.to_f.to_s,
-          pay_asset: pay_asset&.[](:symbol),
-          fill_asset: fill_asset&.[](:symbol)
-        )
-      when 'rejected'
-        format(
-          tpl_rejected,
-          state: '失败',
-          funds: funds.to_f.to_s,
-          pay_asset: pay_asset&.[](:symbol)
-        )
-      end
-    return if message.blank?
-
-    TextNotificationService.new.call(
-      message,
-      recipient_id: payment.payer.mixin_uuid
-    )
+    SwapOrderFinishedNotification.with(swap_order: self).deliver(payer)
   end
 
   def pay_asset

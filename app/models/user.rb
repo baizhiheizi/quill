@@ -8,6 +8,7 @@
 #  authoring_subscribers_count :integer          default(0)
 #  avatar_url                  :string
 #  banned_at                   :datetime
+#  locale                      :integer
 #  mixin_uuid                  :uuid
 #  name                        :string
 #  reading_subscribers_count   :integer          default(0)
@@ -40,14 +41,17 @@ class User < ApplicationRecord
   has_many :bought_articles, -> { distinct.order(created_at: :desc) }, through: :orders, source: :item, source_type: 'Article'
   has_many :comments, foreign_key: :author_id, inverse_of: :author, dependent: :nullify
   has_many :swap_orders, through: :payments
+  has_many :notifications, as: :recipient, dependent: :destroy
 
   has_one :wallet, class_name: 'MixinNetworkUser', as: :owner, dependent: :nullify
+  has_one :notification_setting, dependent: :destroy
 
   before_validation :setup_attributes
 
   validates :name, presence: true
+  enum locale: I18n.available_locales
 
-  after_commit :create_wallet!, :update_statistics_cache, on: :create
+  after_commit :create_wallet!, :update_statistics_cache, :create_notification_setting!, on: :create
 
   default_scope { includes(:mixin_authorization) }
   scope :only_banned, -> { where.not(banned_at: nil) }
@@ -110,6 +114,10 @@ class User < ApplicationRecord
   # subscribe for tag's articles
   action_store :subscribe, :tag, counter_cache: 'subscribers_count'
 
+  def unread_notifications_count
+    notifications.unread.count
+  end
+
   def bio
     mixin_authorization&.raw&.[]('biography')
   end
@@ -121,19 +129,13 @@ class User < ApplicationRecord
   def ban!
     update banned_at: Time.current
 
-    TextNotificationService.new.call(
-      '你的帐号被管理员限制，不能发表文章或者评论。如有异议，可直接回复信息，进行申诉。',
-      recipient_id: mixin_uuid
-    )
+    UserBannedNotification.with(user: self).deliver(self)
   end
 
   def unban!
     update banned_at: nil
 
-    TextNotificationService.new.call(
-      '你的帐号限制已解除。',
-      recipient_id: mixin_uuid
-    )
+    UserUnbannedNotification.with(user: self).deliver(self)
   end
 
   def update_statistics_cache
@@ -160,6 +162,14 @@ class User < ApplicationRecord
 
   def wallet_id
     @wallet_id = (wallet.presence || create_wallet)&.uuid
+  end
+
+  def avatar
+    avatar_url || generated_avatar_url
+  end
+
+  def generated_avatar_url
+    format('https://api.multiavatar.com/%<mixin_uuid>s.svg', mixin_uuid: mixin_uuid)
   end
 
   private

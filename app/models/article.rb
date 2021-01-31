@@ -125,55 +125,15 @@ class Article < ApplicationRecord
     user.orders.where(item: self).sum(:total) / revenue * (1 - Order::AUTHOR_RATIO - Order::PRSDIGG_RATIO)
   end
 
-  def authoring_subscribers
-    @authoring_subscribers ||= author.authoring_subscribe_by_users
-  end
-
-  def tagging_subscribers(new_tag_ids)
-    @tagging_subscribers ||= User.where(id: Action.where(action_type: :subscribe, target_type: 'Tag', target_id: new_tag_ids, user_type: 'User').select(:user_id))
-  end
-
   def notify_authoring_subscribers
     return if hidden?
 
-    authoring_messages = authoring_subscribers.pluck(:mixin_uuid).map do |_uuid|
-      app_card_message(_uuid, format('%<author_name>s 新文章', author_name: author.name))
-    end
-
-    authoring_messages.each do |message|
-      SendMixinMessageWorker.perform_async message
-    end
-  end
-
-  def notify_tagging_subscribers(new_tag_ids)
-    return if hidden?
-
-    tagging_messages = tagging_subscribers(new_tag_ids).pluck(:mixin_uuid).map do |_uuid|
-      app_card_message(_uuid, format('%<tag_names>s', tag_names: tags.map(&->(tag) { "##{tag.name}" }).join(' ')))
-    end
-
-    tagging_messages.each do |message|
-      SendMixinMessageWorker.perform_async message
-    end
+    ArticlePublishedNotification.with(article: self).deliver(author.authoring_subscribe_by_users)
   end
 
   def notify_admin
     AdminNotificationService.new.text(
       "#{author.name} 创建了新文章 《#{title}》"
-    )
-  end
-
-  def app_card_message(user_id, description)
-    description ||= intro
-    PrsdiggBot.api.app_card(
-      conversation_id: PrsdiggBot.api.unique_conversation_id(user_id),
-      recipient_id: user_id,
-      data: {
-        icon_url: PRSDIGG_ICON_URL,
-        title: title.truncate(36),
-        description: description,
-        action: format('%<host>s/articles/%<uuid>s', host: Rails.application.credentials.fetch(:host), uuid: uuid)
-      }
     )
   end
 
@@ -196,17 +156,11 @@ class Article < ApplicationRecord
   end
 
   def notify_author_blocked
-    TextNotificationService.new.call(
-      "您的文章《#{title}》已被管理员屏蔽。如有异议，可直接回复信息，进行申诉。",
-      recipient_id: author.mixin_uuid
-    )
+    ArticleBlockedNotification.with(article: self).deliver(author)
   end
 
   def notify_author_unblocked
-    TextNotificationService.new.call(
-      "您的文章《#{title}》已被管理员撤销屏蔽。",
-      recipient_id: author.mixin_uuid
-    )
+    ArticleUnblockedNotification.with(article: self).deliver(author)
   end
 
   def author_revenue_total

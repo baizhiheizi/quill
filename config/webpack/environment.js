@@ -1,10 +1,12 @@
 const { environment } = require('@rails/webpacker')
 const customizedConfig = require('./customized_config');
 const lessLoader = require('./loaders/less-loader');
+const yamlLoader = require('./loaders/yaml-loader');
 const WebpackAssetsManifest = require('webpack-assets-manifest');
 
 environment.config.merge(customizedConfig);
 environment.loaders.insert('less', lessLoader, { after: 'css' });
+environment.loaders.append('yaml', yamlLoader);
 
 environment.splitChunks();
 environment.plugins.insert(

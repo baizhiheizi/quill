@@ -8,7 +8,10 @@ module Types
     field :mixin_uuid, String, null: false
     field :avatar_url, String, null: false
     field :bio, String, null: true
+    field :locale, String, null: true
     field :banned_at, GraphQL::Types::ISO8601DateTime, null: true
+
+    field :unread_notifications_count, Integer, null: false
 
     field :wallet_id, String, null: true
 

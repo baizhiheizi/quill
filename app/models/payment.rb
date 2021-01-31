@@ -147,12 +147,11 @@ class Payment < ApplicationRecord
   end
 
   def notify_payer
-    TransferNotificationService.new.call(
-      recipient_id: payer.mixin_uuid,
-      asset_id: asset_id,
-      amount: -amount,
-      trace_id: trace_id
-    )
+    PaymentCreatedNotification.with(payment: self).deliver(payer)
+  end
+
+  def price_tag
+    [amount.to_f, token&.[](:symbol)].join(' ')
   end
 
   private

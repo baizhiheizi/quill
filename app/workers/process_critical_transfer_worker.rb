@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
-class SwapOrderTransferTo4swapWorker
+class ProcessCriticalTransferWorker
   include Sidekiq::Worker
   sidekiq_options queue: :critical, retry: true
 
-  def perform(id)
-    SwapOrder.find_by(id: id)&.transfer_to_4swap!
+  def perform(trace_id)
+    Transfer.find_by(trace_id: trace_id)&.process!
   end
 end

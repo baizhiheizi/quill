@@ -1,0 +1,43 @@
+zh-CN:
+  notification: 通知
+  notifications:
+    article_published_notification:
+      published: 发表了文章
+    article_bought_notification:
+      bought: 购买了文章
+    article_rewarded_notification:
+      rewarded: 赞赏了文章
+    article_blocked_notification:
+      blocked: '您的文章已被管理员屏蔽:'
+    article_unblocked_notification:
+      unblocked: '您的文章屏蔽已经解除:'
+    comment_created_notification:
+      commented: 发表了新评论
+    comment_deleted_notification:
+      deleted: 您的评论被管理员删除 
+    tagging_created_notification:
+      has_new_article: 有新的文章
+    payment_created_notification:
+      paid: 成功支付
+    order_created_notification:
+      bought: 成功购买了
+      rewarded: 成功赞赏了
+    swap_order_finished_notification:
+      swapped: '成功兑换:'
+      rejected: 兑换失败，您将收到退款
+    transfer_processed_notification:
+      received: 收到
+      author_revenue: 作者收益
+      reader_revenue: 读者收益
+      payment_refund: 支付退款
+      bonus: 奖励
+      swap_change: 兑换找零
+      swap_refund: 兑换后购买失败退款
+    authoring_subscribe_action_created_notification:
+      subscribed: 订阅了您新发表的文章
+    reading_subscribe_action_created_notification:
+      subscribed: 订阅了您新购买的文章
+    user_banned_notification:
+      banned: 你的帐号被管理员限制，不能发表文章或者评论。
+    user_unbanned_notification:
+      unbanned: 你的帐号限制已解除。

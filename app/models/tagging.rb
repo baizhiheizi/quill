@@ -19,4 +19,20 @@
 class Tagging < ApplicationRecord
   belongs_to :tag, counter_cache: :articles_count
   belongs_to :article, counter_cache: :tags_count
+
+  before_destroy :destroy_notifications
+
+  after_create_commit :notify_subscribers
+
+  def notify_subscribers
+    TaggingCreatedNotification.with(tagging: self).deliver(tag.subscribe_by_users)
+  end
+
+  def notifications
+    @notifications ||= Notification.where(params: { tagging: self }).where(type: 'TaggingCreatedNotification')
+  end
+
+  def destroy_notifications
+    notifications.destroy_all
+  end
 end

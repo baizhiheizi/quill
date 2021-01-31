@@ -1,5 +1,4 @@
 import LoadingComponent from '@dashboard/components/LoadingComponent/LoadingComponent';
-import { updateActiveMenu } from '@dashboard/shared';
 import { useMyArticleQuery } from '@graphql';
 import { Button, Descriptions, PageHeader, Tabs, Tag } from 'antd';
 import React from 'react';
@@ -10,7 +9,6 @@ import ArticleOrdersComponent from './components/ArticleOrdersComponent';
 import ArticleCommentsComponent from './components/ArticleCommentsComponent';
 
 export default function ArticlePage() {
-  updateActiveMenu('articles');
   const { t, i18n } = useTranslation();
   moment.locale(i18n.language);
   const { uuid } = useParams<{ uuid: string }>();

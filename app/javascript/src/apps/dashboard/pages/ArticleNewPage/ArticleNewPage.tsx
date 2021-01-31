@@ -1,4 +1,3 @@
-import { updateActiveMenu } from '@dashboard/shared';
 import { useCreateArticleMutation } from '@graphql';
 import Editor, { commands } from '@uiw/react-md-editor';
 import {
@@ -17,7 +16,6 @@ import { Link, useHistory } from 'react-router-dom';
 import EditableTagsComponent from '../../components/EditableTagsComponent/EditableTagsComponent';
 
 export default function ArticleNewPage() {
-  updateActiveMenu('articles');
   const history = useHistory();
   const { t } = useTranslation();
   const [tags, setTags] = useState<string[]>([]);

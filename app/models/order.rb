@@ -46,10 +46,12 @@ class Order < ApplicationRecord
 
   enum order_type: { buy_article: 0, reward_article: 1 }
 
+  delegate :price_tag, to: :payment, prefix: true
+
   after_commit :complete_payment,
-               :create_revenue_transfers_async,
+               :distribute_async,
                :update_item_revenue,
-               :notify_subscribers_async,
+               :notify_reading_subscribers,
                :notify_buyer,
                :update_buyer_statistics_cache,
                on: :create
@@ -63,12 +65,12 @@ class Order < ApplicationRecord
     end
   end
 
-  def create_revenue_transfers_async
-    CreateOrderRevenueTransfersWorker.perform_async trace_id
+  def distribute_async
+    DistributeOrderWorker.perform_async trace_id
   end
 
   # transfer revenue to author and readers
-  def create_revenue_transfers
+  def distribute!
     # the share for invested readers before
     amount = total * READER_RATIO
 
@@ -148,36 +150,16 @@ class Order < ApplicationRecord
     errors.add(:total, 'Insufficient amount!') if buy_article? && total < item.price
   end
 
-  def subscribers
-    @subscribers = buyer.reading_subscribe_by_users
-  end
-
-  def notify_subscribers_async
-    return if reward_article?
-
-    messages = subscribers.pluck(:mixin_uuid).map do |_uuid|
-      PrsdiggBot.api.app_card(
-        conversation_id: PrsdiggBot.api.unique_conversation_id(_uuid),
-        recipient_id: _uuid,
-        data: {
-          icon_url: 'https://mixin-images.zeromesh.net/L0egX-GZxT0Yh-dd04WKeAqVNRzgzuj_Je_-yKf8aQTZo-xihd-LogbrIEr-WyG9WbJKGFvt2YYx-UIUa1qQMRla=s256',
-          title: item.title.truncate(36),
-          description: format('%<buyer_name>s 买了新文章', buyer_name: buyer.name),
-          action: format('%<host>s/articles/%<uuid>s', host: Rails.application.credentials.fetch(:host), uuid: item.uuid)
-        }
-      )
-    end
-
-    messages.each do |message|
-      SendMixinMessageWorker.perform_async message
+  def notify_reading_subscribers
+    if reward_article?
+      ArticleRewardedNotification.with(order: self).deliver(buyer.reading_subscribe_by_users)
+    elsif buy_article?
+      ArticleBoughtNotification.with(order: self).deliver(buyer.reading_subscribe_by_users)
     end
   end
 
   def notify_buyer
-    TextNotificationService.new.call(
-      "成功支付#{total} PRS #{buy_article? ? '购买' : '赞赏'}文章《#{item.title}》",
-      recipient_id: buyer.mixin_uuid
-    )
+    OrderCreatedNotification.with(order: self).deliver(buyer)
   end
 
   def article

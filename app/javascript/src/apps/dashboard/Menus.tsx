@@ -7,19 +7,53 @@ import {
   GlobalOutlined,
   LoginOutlined,
   MenuOutlined,
+  NotificationOutlined,
   RiseOutlined,
+  SettingOutlined,
 } from '@ant-design/icons';
-import { imagePath, useUserAgent } from '@shared';
-import { Avatar, Button, Drawer, Layout, Menu } from 'antd';
-import React, { useState } from 'react';
+import { useSwitchLocaleMutation } from '@graphql';
+import { imagePath, useCurrentUser, useUserAgent } from '@shared';
+import { Avatar, Badge, Button, Drawer, Layout, Menu } from 'antd';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 
-export default function Menus(props: { activeMenu?: string }) {
-  const { activeMenu } = props;
+export default function Menus() {
   const { isMobile } = useUserAgent();
   const { t, i18n } = useTranslation();
   const [drawerVisible, setDrawerVisible] = useState(false);
+  const currentUser = useCurrentUser();
+  const [switchLocale] = useSwitchLocaleMutation();
+
+  useEffect(() => {
+    if (!currentUser) {
+      return;
+    }
+    if (currentUser.locale !== i18n.language) {
+      switchLocale({ variables: { input: { locale: i18n.language } } });
+    }
+    i18n.on('languageChanged', (lng: string) => {
+      switchLocale({ variables: { input: { locale: lng } } });
+    });
+  }, []);
+
+  const keys = [
+    'overview',
+    'notifications',
+    'settings',
+    'articles',
+    'subscriptions',
+    'revenue',
+    'orders',
+    'comments',
+  ];
+  let defaultKey = 'overview';
+  keys.forEach((key) => {
+    if (location.pathname.match(key)) {
+      defaultKey = key;
+    }
+  });
+
   const MenuConent = () => (
     <div>
       <div style={{ margin: 15, textAlign: 'center' }}>
@@ -27,11 +61,25 @@ export default function Menus(props: { activeMenu?: string }) {
           <Avatar size='large' src={imagePath('logo.svg')} />
         </a>
       </div>
-      <Menu mode='inline' selectedKeys={[activeMenu]}>
+      <Menu mode='inline' defaultSelectedKeys={[defaultKey]}>
         <Menu.Item key='overview' onClick={() => setDrawerVisible(false)}>
           <Link to='/'>
             <DashboardOutlined />
             <span>{t('dashboard.menu.overview')}</span>
+          </Link>
+        </Menu.Item>
+        <Menu.Item key='notifications' onClick={() => setDrawerVisible(false)}>
+          <Badge dot={currentUser?.unreadNotificationsCount > 0}>
+            <Link to='/notifications'>
+              <NotificationOutlined />
+              <span>{t('dashboard.menu.notifications')}</span>
+            </Link>
+          </Badge>
+        </Menu.Item>
+        <Menu.Item key='settings' onClick={() => setDrawerVisible(false)}>
+          <Link to='/settings'>
+            <SettingOutlined />
+            <span>{t('dashboard.menu.settings')}</span>
           </Link>
         </Menu.Item>
         <Menu.Item key='articles' onClick={() => setDrawerVisible(false)}>
@@ -72,7 +120,7 @@ export default function Menus(props: { activeMenu?: string }) {
             <a onClick={() => i18n.changeLanguage('zh-CN')}>中文</a>
           </Menu.Item>
           <Menu.Item>
-            <a onClick={() => i18n.changeLanguage('en-US')}>EN</a>
+            <a onClick={() => i18n.changeLanguage('en')}>EN</a>
           </Menu.Item>
         </Menu.SubMenu>
         <Menu.Item key='back'>

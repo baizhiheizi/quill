@@ -1,0 +1,296 @@
+en:
+  views:
+    common:
+      loadMore: Load More
+      subscribeBtn: Subscribe
+      unsubscribeBtn: Unsubscribe
+      shareBtn: Share
+      detailBtn: Detail
+      editBtn: Edit
+      viewBtn: View
+      cancelBtn: Cancel
+      paidBtn: Paid
+    messages:
+      payWithMessenger: Please scan the QRCode using Mixin Messenger
+      viewWithMessenger: Please scan the QRCode using Mixin Messenger
+      successSubmitted: Submitted
+      successSubscribed: Subscribed
+      successUnsubscribed: Unsubscribed
+      successHiddenArticle: Article hidden
+      successPublishedArticle: Article published
+      successUpdated: Successfully updated
+    article:
+      title: Title
+      content: Content
+      intro: Introduction
+      wordsCount: Words Count
+      price: Price(PRS)
+      upvotesCount: Upvotes
+      downvotesCount: Downvotes
+      commentsCount: Comments Count
+      ordersCount: Paid Times
+      buyOrdersCount: Bought Times
+      rewardOrdersCount: Rewarded Times
+      revenue: Revenue(PRS)
+      authorRevenueTotal: Author Revenue(PRS)
+      readerRevenueTotal: Reader Revenue(PRS)
+      myShare: My Share(%)
+      stateText: State
+      tags: Tags
+      createdAt: Created
+      updatedAt: Last Edited
+      state:
+        published: Published
+        blocked: Blocked
+        hidden: Hidden
+      form:
+        warning: Pleash finish your article first
+        createConfirm: Are you sure to create?
+        createOkText: Create
+        createCancelText: Later
+        createBtn: Create
+        updateConfirm: Are you sure to update your article?
+        updateOkText: Update
+        updateCancelText: Later
+        updateBtn: Update
+        titlePlaceHolder: Title of article
+        contentPlaceHolder: Write something valuable
+        introPlaceHolder: Please introduce your article and this will be public
+        newBtn: New
+    tag:
+      articlesCount: Articles
+      subscribersCount: Subscribers
+    payment:
+      state:
+        paid: Paid
+        refunded: Refunded
+        completed: Compelted
+      snapshot: Snapshot
+    swapOrder:
+      state:
+        paid: Paid
+        swapping: Swapping
+        rejected: Rejected
+        swapped: Swapped
+        order_placed: Buying
+        completed: Completed
+        refunded: Refunded
+    user:
+      defaultBio: Didn't left anything
+      authorRevenueTotal: Author Revenue(PRS)
+      readerRevenueTotal: Reader Revenue(PRS)
+      articlesCount: Published
+      boughtArticlesCount: Bought
+    transfer:
+      transferType:
+        payment_refund: Refund
+        author_revenue: Author
+        reader_revenue: Reader
+      snapshot: Snapshot
+      processing: Processing
+    menu:
+      read: Read
+      write: Write
+      search: Search
+      rules: Rules
+      fair: Fair
+      community: Community
+      openSource: Open Source
+      notifications: Notifications
+      mine: Dashboard
+      login: Login
+      logout: Logout
+    homePage:
+      articles: Articles
+      articlesOrder:
+        popularity: Popularity
+        lately: Lately
+        revenue: Revenue
+      tags: Tags
+      commentsZone: Comments
+    articlePage:
+      moreToRead: 90% More to go
+      payToRead1: Pay
+      payToRead2: to continue reading
+      payToRead3: and receive early reader revenue (Check
+      payToRead4: )
+      payWarning: This article is a virtural product selling on PRSDigg, IT WILL NOT REFUND once paid. Please pay with caution.
+      firstReaderBtn: Be the FIRST reader
+      payToReadBtn: Pay to Read
+      alreadyPaid1: Already paid? Try to
+      alreadyPaid2: Refresh
+      buyPRSTips: Have no PRS? Pay with BTC, EOS, ETH and more!
+      loginBtn: Please Login
+      rewardBtn: Love this Article
+      shareBtn: Share
+      userDetailBtn: Detail
+      payModal:
+        title: Buy Article
+        refundWarning: Payment has been refunded. Please try again.
+        pollingPayment: Checking Payment Status
+        payBtn: Pay
+        checkPaymentBtn: Already Paid
+        swapExplain: Swap supported by
+      rewardModal:
+        title: Reward
+        pollingPayment: Checking
+        successPaidMessage: Payment received. Thanks for supporting!
+        swapExplain: Swap supported by
+        finishText: Finish
+        okText: Reward
+        cancelText: Later
+      timesBought: times bought
+      timesReward: times reward
+    userPage:
+      tabs:
+        author: Published
+        reader: Bought
+        comments: Commented
+    minePage:
+      publishConfirm: Are you sure to publish this article?
+      hideConfirm: Are you sure to hide this article? Early readers not affected.
+      publishBtn: Publish
+      hideBtn: Hide
+      tabs:
+        author: Published
+        reader: Bought
+        comments: Commented
+        payments: Payments
+        transfers: Revenue
+    searchPage:
+      enterBtn: Search
+      placeholder: Input title/introduction/author/tag
+    fairPage:
+      usersCount: Users
+      articlesCount: Articles
+      authorRevenueTotal: Author Revenue(PRS)
+      readerRevenueTotal: Reader Revenue(PRS)
+      tabs:
+        revenue:
+          title: PRSDigg Revenue
+          chartTitle: Revenue Chart
+        transfers:
+          title: Transactions
+    rulesPage:
+      content: |
+        ### Rules of PRSDigg
+
+        PRSDigg tries to build a win-win **platform** for both **authors** and **readers**.
+
+        We believe that the value of an article is composed of both the author and the reader, but the actual situation is that the reader's contribution, especially the early readers' contribution,is not well represented. Therefore, the biggest difference between PRSDigg and other platforms is that PRSDigg introduces an **early reader rewards** mechanism.
+
+        The specific rules are as follows,
+
+        1. Users can publish articles on the **platform** and become **authors**.
+        2. All articles are paid articles, priced by *PressOne Token* with a minimum of 1 PRS.
+        3. Users can pay for the articles, i.e. become a **reader** of a article.
+        4. For every new income from an article, 40% will be allocated to each **early reader** on a pro-rata basis as **Early Reader Bonus** , 10% will be a handling fee for the **platform**, and the rest will be revenue for the **author**.
+        5. **Readers** can also increase the amount they pay for an article by means of a reward in order to increase their share of the bonus.
+
+        For example: 
+
+        User A published an article X pricing 10 PRS on the platform. 
+
+        User B paid 10 PRS for article X and got the right to read the article. 
+
+        Therefore, article X earned 10 PRS, because B is the first reader and there is no earlier reader, so there is no early reader bonus; 1 PRS(10%) is used as the platform's handling fee; The remaining 9 PRS are all taken as author revenue and transferred to the account of author A.
+
+        User C paid 10 PRS for article x after B. As a result, Article X earns another 10 PRS.
+
+        Among them, 4 PRS(40%) will be used as an early reader bonus. At this time, there is only one early reader,  user B, so B monopolizes this 40% reward; The platform also receives 1 PRS(10%) as a handling fee; The remaining 5 PRS is the author's income. 
+
+        After C, user D also paid 10 PRS for article X.
+
+        Similarly, 4 PRS(40%) will be rewarded as early readers bonus. At this time, there are two early readers, namely B and C, who paid 10 PRS for article X before, so both B and C will be rewarded with `4 * 10/(10+10) = 2` PRS respectively. 
+
+        The platform also charges 1 PRS(10%) as a handling fee; The remaining 5 PRS is the author's income. 
+
+        And so on. 
+
+        It is worth reminding that besides the payment for articles, the income from other payment behaviors (such as reward) will also be included in the distribution ratio of early readers' bonus.
+    communityPage:
+      mixin: Mixin Group
+    commentsComponent:
+      title: Comments
+      subscribeBtn: Subscribe
+      unsubscribeBtn: Unsubscribe
+      emptyText: No Comments
+      deletedText: Deleted by the Administrator
+      quoteBtn: Quote
+      from: From
+      orderBy:
+        desc: DESC
+        asc: ASC
+        upvotes: Upvotes
+      form:
+        warning: Write something first.
+        confirm: Are you sure to submit?
+        okText: Submit
+        cancelText: Later
+        placeholder: Markdown supported
+    dashboard:
+      menu:
+        overview: Overview
+        notifications: Notifications
+        settings: Settings
+        articles: Artciels Manage
+        subscriptions: Subscriptions
+        revenue: Revenue Manage
+        orders: Orders Manage
+        comments: Comments Manage
+        back: Go Back
+      pages:
+        article: Article Detail
+        articleNew: New Article
+        articleEdit: Edite Article
+      notificationsPage:
+        clearAllBtn: Clear All
+        readAllBtn: Read All
+      articlesPage:
+        publishConfirm: Are you sure to publish this article?
+        hideConfirm: Are you sure to hide this article? Early readers not affected.
+        publishBtn: Publish
+        hideBtn: Hide
+        tabs:
+          author: Published
+          reader: Bought
+          comments: Commented
+          payments: Payments
+          transfers: Revenue
+      articlePage:
+        tabs:
+          buyRecords: Buy Records
+          rewardRecords: Reward Records
+          commentRecords: Comments
+        boughtArticle: bought this article
+        rewardedArticle: rewarded this article
+        paid: paid
+      subscriptionsPage:
+        authoringSubscriptions: Authors
+        authoringSubscriptionsTip: You will be notified when authors publish new articles
+        readingSubscriptions: Readers
+        readingSubscriptionsTip: You will be notified when readers buy new articles
+        commentingSubscriptions: Comments
+        commentingSubscriptionsTip: You will be notified when articles receive new comments
+        tagSubscriptions: Tags
+        tagSubscriptionsTip: You will be notified when tagged articles created
+        confirmToUnsubscribe: Are you sure to unsubscribe?
+      revenuePage:
+        authorTransfers: Author Revenue
+        readerTransfers: Reader Revenue
+        payments: Payments
+      ordersPage:
+        tabs:
+          payments: Payments
+          swapOrders: Swap Orders
+      settingsPage:
+        tabs:
+          notification: Notification
+        notification:
+          tipsOfGeneral: You can customized your notification via Web, Mixin Bot and Webhook(on development).
+          tipsOfArticlePublished: When your subscribed authors publish a new article, you will be notified.
+          tipsOfArticleBought: When your subscribed readers buy a new article, you will be notified.
+          tipsOfArticleRewarded: When your subscribed readers reward a new article, you will be notified.
+          tipsOfTaggingCreated: When new article tagged by your subscribed tags, you will be notified.
+          tipsOfCommentCreated: When your subscribed article are commented, you will be notified.
+          tipsOfTransferProcessed: When new transfers(including revenue from articles and refunding) received, you will be notified.

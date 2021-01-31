@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_01_19_042248) do
+ActiveRecord::Schema.define(version: 2021_01_29_004748) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -145,6 +145,32 @@ ActiveRecord::Schema.define(version: 2021_01_19_042248) do
     t.index ["uuid"], name: "index_mixin_network_users_on_uuid", unique: true
   end
 
+  create_table "notification_settings", force: :cascade do |t|
+    t.bigint "user_id"
+    t.jsonb "webhook", default: "{}"
+    t.jsonb "article_published", default: "{}"
+    t.jsonb "article_bought", default: "{}"
+    t.jsonb "article_rewarded", default: "{}"
+    t.jsonb "comment_created", default: "{}"
+    t.jsonb "tagging_created", default: "{}"
+    t.jsonb "transfer_processed", default: "{}"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["user_id"], name: "index_notification_settings_on_user_id"
+  end
+
+  create_table "notifications", force: :cascade do |t|
+    t.string "recipient_type", null: false
+    t.bigint "recipient_id", null: false
+    t.string "type", null: false
+    t.jsonb "params"
+    t.datetime "read_at"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["read_at"], name: "index_notifications_on_read_at"
+    t.index ["recipient_type", "recipient_id"], name: "index_notifications_on_recipient"
+  end
+
   create_table "orders", force: :cascade do |t|
     t.bigint "seller_id"
     t.bigint "buyer_id"
@@ -225,6 +251,7 @@ ActiveRecord::Schema.define(version: 2021_01_19_042248) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.uuid "wallet_id"
+    t.integer "queue_priority", default: 0
     t.index ["source_type", "source_id"], name: "index_transfers_on_source_type_and_source_id"
     t.index ["trace_id"], name: "index_transfers_on_trace_id", unique: true
     t.index ["wallet_id"], name: "index_transfers_on_wallet_id"
@@ -253,6 +280,7 @@ ActiveRecord::Schema.define(version: 2021_01_19_042248) do
     t.integer "reading_subscribers_count", default: 0
     t.datetime "banned_at"
     t.jsonb "statistics", default: "{}"
+    t.integer "locale"
     t.index ["mixin_id"], name: "index_users_on_mixin_id", unique: true
     t.index ["mixin_uuid"], name: "index_users_on_mixin_uuid", unique: true
     t.index ["statistics"], name: "index_users_on_statistics", using: :gin

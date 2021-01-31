@@ -1,0 +1,3 @@
+mutation SwitchLocale($input: SwitchLocaleMutationInput!) {
+  switchLocale(input: $input)
+}

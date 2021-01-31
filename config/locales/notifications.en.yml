@@ -1,0 +1,43 @@
+en:
+  notification: Notification
+  notifications:
+    article_published_notification:
+      published: published an article
+    article_bought_notification:
+      bought: bought an article
+    article_rewarded_notification:
+      rewarded: rewarded an article
+    article_blocked_notification:
+      blocked: 'Your article was blocked by admin:'
+    article_unblocked_notification:
+      unblocked: 'Your article has recoverd from blocked:'
+    comment_created_notification:
+      commented: commented
+    comment_deleted_notification:
+      deleted: Your comment was deleted by admin
+    tagging_created_notification:
+      has_new_article: has a new article
+    payment_created_notification:
+      paid: Successfully paid
+    order_created_notification:
+      bought: Successfully bought
+      rewarded: Successfully rewarded
+    swap_order_finished_notification:
+      swapped: 'Successfully swapped:'
+      rejected: Your swap was rejected, you will receive the refund soon.
+    transfer_processed_notification:
+      received: Received
+      author_revenue: author revenue
+      reader_revenue: reader revenue
+      payment_refund: payment refund
+      bonus: bonus
+      swap_change: swap change
+      swap_refund: refund after swapped
+    authoring_subscribe_action_created_notification:
+      subscribed: subscribed your new published articles
+    reading_subscribe_action_created_notification:
+      subscribed: subscribed your new bought articles
+    user_banned_notification:
+      banned: Your account has been banned by admin. You cannot publish articles nor comment.
+    user_unbanned_notification:
+      unbanned: Your account has recovered to normal. You can publish articles and comment.

@@ -1,7 +1,13 @@
-import { GithubOutlined, MenuOutlined } from '@ant-design/icons';
+import { useSwitchLocaleMutation } from '@/graphql';
+import {
+  GithubOutlined,
+  MenuOutlined,
+  GlobalOutlined,
+  NotificationOutlined,
+} from '@ant-design/icons';
 import { imagePath, useCurrentUser, useUserAgent } from '@shared';
-import { Avatar, Button, Col, Drawer, Layout, Menu, Row } from 'antd';
-import React, { useState } from 'react';
+import { Avatar, Badge, Button, Col, Drawer, Layout, Menu, Row } from 'antd';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { OPEN_SOURCE_URL } from './shared';
@@ -11,6 +17,19 @@ export default function Menus() {
   const { isMobile } = useUserAgent();
   const [drawerVisible, setDrawerVisible] = useState(false);
   const { t, i18n } = useTranslation();
+  const [switchLocale] = useSwitchLocaleMutation();
+
+  useEffect(() => {
+    if (!currentUser) {
+      return;
+    }
+    if (currentUser.locale !== i18n.language) {
+      switchLocale({ variables: { input: { locale: i18n.language } } });
+    }
+    i18n.on('languageChanged', (lng: string) => {
+      switchLocale({ variables: { input: { locale: lng } } });
+    });
+  }, []);
   const MenuConent = (props: { mode: 'horizontal' | 'vertical' }) => (
     <Row
       justify='center'
@@ -86,7 +105,15 @@ export default function Menus() {
       <Col>
         <Menu theme='light' mode={props.mode} selectable={false}>
           <Menu.SubMenu
-            title={i18n.language.includes('en') ? 'Language' : '语言'}
+            title={
+              props.mode === 'horizontal' ? (
+                <GlobalOutlined />
+              ) : i18n.language.includes('en') ? (
+                'Language'
+              ) : (
+                '语言'
+              )
+            }
           >
             <Menu.Item>
               <a onClick={() => i18n.changeLanguage('zh-CN')}>中文</a>
@@ -100,6 +127,17 @@ export default function Menus() {
       {currentUser ? (
         <Col>
           <Menu mode={props.mode} selectable={false}>
+            <Menu.Item onClick={() => setDrawerVisible(false)}>
+              <Badge dot={currentUser.unreadNotificationsCount > 0}>
+                <a href='/dashboard/notifications'>
+                  {props.mode === 'horizontal' ? (
+                    <NotificationOutlined />
+                  ) : (
+                    t('menu.notifications')
+                  )}
+                </a>
+              </Badge>
+            </Menu.Item>
             <Menu.Item onClick={() => setDrawerVisible(false)}>
               <a href='/dashboard' target='_blank'>
                 {t('menu.mine')}
