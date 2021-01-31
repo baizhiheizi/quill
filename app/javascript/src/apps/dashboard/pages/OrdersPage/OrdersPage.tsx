@@ -1,4 +1,3 @@
-import { updateActiveMenu } from '@dashboard/shared';
 import { PageHeader, Tabs } from 'antd';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
@@ -6,7 +5,6 @@ import MyPaymentsComponent from './components/MyPaymentsComponent';
 import MySwapOrderComponent from './components/MySwapOrdersComponent';
 
 export default function OrdersPage() {
-  updateActiveMenu('orders');
   const { t } = useTranslation();
 
   return (

@@ -1,11 +1,9 @@
-import { updateActiveMenu } from '@dashboard/shared';
 import { PageHeader, Tabs } from 'antd';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import MyTransfersComponent from './components/MyTranfersComponent';
 
 export default function RevenuePage() {
-  updateActiveMenu('revenue');
   const { t } = useTranslation();
   return (
     <div>

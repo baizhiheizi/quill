@@ -15,7 +15,6 @@ module Mutations
         current_user.destroy_action(:reading_subscribe, target: user)
       else
         current_user.create_action(:reading_subscribe, target: user)
-        ReadingSubscribeActionCreatedNotification.with(action: current_user.find_action(:reading_subscribe, target: user)).deliver(user)
       end
 
       { error: nil }

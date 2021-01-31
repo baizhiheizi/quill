@@ -1,5 +1,4 @@
 import LoadingComponent from '@dashboard/components/LoadingComponent/LoadingComponent';
-import { updateActiveMenu } from '@dashboard/shared';
 import { useMyArticleQuery, useUpdateArticleMutation } from '@graphql';
 import Editor, { commands } from '@uiw/react-md-editor';
 import {
@@ -17,7 +16,6 @@ import { Link, useHistory, useParams } from 'react-router-dom';
 import EditableTagsComponent from '../../components/EditableTagsComponent/EditableTagsComponent';
 
 export default function ArticleEditPage() {
-  updateActiveMenu('articles');
   const { uuid } = useParams<{ uuid: string }>();
   const history = useHistory();
   const { t } = useTranslation();

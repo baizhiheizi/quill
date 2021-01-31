@@ -1,5 +1,4 @@
 import LoadingComponent from '@dashboard/components/LoadingComponent/LoadingComponent';
-import { updateActiveMenu } from '@dashboard/shared';
 import moment from 'moment';
 import {
   Notification as INotification,
@@ -14,7 +13,6 @@ import { useTranslation } from 'react-i18next';
 import ListComponent from '../../components/ListComponent/ListComponent';
 
 export default function NotificationsPage() {
-  updateActiveMenu('notifications');
   const { t, i18n } = useTranslation();
   moment.locale(i18n.language);
   const {
@@ -22,7 +20,7 @@ export default function NotificationsPage() {
     data,
     fetchMore,
     refetch,
-  } = useMyNotificationConnectionQuery();
+  } = useMyNotificationConnectionQuery({ fetchPolicy: 'cache-and-network' });
   const [readNotification] = useReadNotificationMutation();
   const [readNotifications] = useReadNotificationsMutation({
     variables: { input: {} },

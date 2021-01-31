@@ -1,4 +1,3 @@
-import { updateActiveMenu } from '@dashboard/shared';
 import { Alert, PageHeader, Tabs } from 'antd';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -8,7 +7,6 @@ import MyReadingSubscriptionsComponent from './components/MyReadingSubscriptions
 import MyTagSubscriptionsComponent from './components/MyTagSubscriptionsComponent';
 
 export default function SubscriptionsPage() {
-  updateActiveMenu('subscriptions');
   const { t } = useTranslation();
   const [type, setType] = useState<'authoring' | 'reading' | 'commenting'>(
     'authoring',

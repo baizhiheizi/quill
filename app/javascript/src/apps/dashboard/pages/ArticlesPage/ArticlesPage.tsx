@@ -1,4 +1,3 @@
-import { updateActiveMenu } from '@dashboard/shared';
 import { Button, PageHeader, Tabs } from 'antd';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -7,7 +6,6 @@ import MyArticlesComponent from './components/MyArticlesComponent';
 import MyBoughtArticlesComponent from './components/MyBoughtArticlesComponent';
 
 export default function ArticlesPage() {
-  updateActiveMenu('articles');
   const { t } = useTranslation();
   const [type, setType] = useState<'author' | 'reader'>('author');
 

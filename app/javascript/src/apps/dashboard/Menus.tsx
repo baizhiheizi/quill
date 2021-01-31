@@ -18,8 +18,7 @@ import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 
-export default function Menus(props: { activeMenu?: string }) {
-  const { activeMenu } = props;
+export default function Menus() {
   const { isMobile } = useUserAgent();
   const { t, i18n } = useTranslation();
   const [drawerVisible, setDrawerVisible] = useState(false);
@@ -38,6 +37,23 @@ export default function Menus(props: { activeMenu?: string }) {
     });
   }, []);
 
+  const keys = [
+    'overview',
+    'notifications',
+    'settings',
+    'articles',
+    'subscriptions',
+    'revenue',
+    'orders',
+    'comments',
+  ];
+  let defaultKey = 'overview';
+  keys.forEach((key) => {
+    if (location.pathname.match(key)) {
+      defaultKey = key;
+    }
+  });
+
   const MenuConent = () => (
     <div>
       <div style={{ margin: 15, textAlign: 'center' }}>
@@ -45,7 +61,7 @@ export default function Menus(props: { activeMenu?: string }) {
           <Avatar size='large' src={imagePath('logo.svg')} />
         </a>
       </div>
-      <Menu mode='inline' selectedKeys={[activeMenu]}>
+      <Menu mode='inline' defaultSelectedKeys={[defaultKey]}>
         <Menu.Item key='overview' onClick={() => setDrawerVisible(false)}>
           <Link to='/'>
             <DashboardOutlined />

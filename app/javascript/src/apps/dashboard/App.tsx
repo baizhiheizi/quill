@@ -1,7 +1,6 @@
 import { ApolloProvider } from '@apollo/client';
 import { User } from '@graphql';
 import {
-  ActiveMenuContext,
   apolloClient,
   CurrentUserContext,
   hideLoader,
@@ -25,7 +24,6 @@ export default function App(props: {
   prsdigg: { appId: String };
 }) {
   const { csrfToken, currentUser, prsdigg } = props;
-  const [activeMenu, setActiveMenu] = useState('');
   if (!Boolean(currentUser)) {
     location.replace('/');
   }
@@ -48,10 +46,9 @@ export default function App(props: {
             }}
           >
             <CurrentUserContext.Provider value={currentUser}>
-              <ActiveMenuContext.Provider value={{ activeMenu, setActiveMenu }}>
                 <Router basename='/dashboard'>
                   <Layout style={{ minHeight: '100vh' }}>
-                    <Menus activeMenu={activeMenu} />
+                    <Menus />
                     <Layout.Content
                       style={
                         isMobile().phone
@@ -77,7 +74,6 @@ export default function App(props: {
                     </Layout.Content>
                   </Layout>
                 </Router>
-              </ActiveMenuContext.Provider>
             </CurrentUserContext.Provider>
           </UserAgentContext.Provider>
         </PrsdiggContext.Provider>
