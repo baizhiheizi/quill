@@ -30,10 +30,10 @@ class Payment < ApplicationRecord
   belongs_to :snapshot, class_name: 'MixinNetworkSnapshot', foreign_key: :trace_id, primary_key: :trace_id, optional: true, inverse_of: false
 
   has_one :refund_transfer, -> { where(transfer_type: :payment_refund) }, class_name: 'Transfer', as: :source, dependent: :nullify, inverse_of: false
-  has_one :order, primary_key: :trace_id, foreign_key: :trace_id, dependent: :nullify, inverse_of: :payment
+  has_one :order, primary_key: :trace_id, foreign_key: :trace_id, dependent: :restrict_with_exception, inverse_of: :payment
   has_one :swap_order, dependent: :nullify
 
-  before_validation :setup_attributes
+  before_validation :setup_attributes, on: :create
 
   validates :amount, presence: true
   validates :raw, presence: true

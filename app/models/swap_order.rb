@@ -116,7 +116,7 @@ class SwapOrder < ApplicationRecord
       )
     end
     order_place!
-  rescue StandardError => e
+  rescue ActiveRecord::RecordInvalid => e
     Rails.logger.error e.inspect
     create_refund_transfer!
   end

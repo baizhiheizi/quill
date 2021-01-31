@@ -127,7 +127,11 @@ class MixinNetworkSnapshot < ApplicationRecord
     case decrypted_memo['s']
     when '4swapTrade'
       swap_order.update! amount: amount
-      swap_order.swap!
+      if swap_order.swapping?
+        swap_order.swap!
+      elsif swap_order.swapped?
+        swap_order.place_payment_order!
+      end
     when '4swapRefund'
       swap_order.reject!
     end

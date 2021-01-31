@@ -33,27 +33,26 @@ class Order < ApplicationRecord
   belongs_to :buyer, class_name: 'User'
   belongs_to :seller, class_name: 'User'
   belongs_to :item, polymorphic: true, counter_cache: true
+  belongs_to :payment, foreign_key: :trace_id, primary_key: :trace_id, inverse_of: :order
 
   has_many :transfers, as: :source, dependent: :nullify
-  has_one :payment, foreign_key: :trace_id, primary_key: :trace_id, dependent: :nullify, inverse_of: :order
 
   before_validation :setup_attributes
 
   # prevent duplicated buy order
   validates :order_type, uniqueness: { scope: %i[order_type buyer_id item_id item_type], if: -> { buy_article? } }
   validates :total, presence: true
+  validates :trace_id, presence: true, uniqueness: true
   validate :ensure_total_sufficient
 
   enum order_type: { buy_article: 0, reward_article: 1 }
 
   delegate :price_tag, to: :payment, prefix: true
 
-  after_commit :complete_payment,
-               :distribute_async,
-               :update_item_revenue,
+  after_create :complete_payment, :update_item_revenue, :update_buyer_statistics_cache
+  after_commit :distribute_async,
                :notify_reading_subscribers,
                :notify_buyer,
-               :update_buyer_statistics_cache,
                on: :create
 
   aasm column: :state do
