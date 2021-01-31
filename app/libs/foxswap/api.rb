@@ -18,12 +18,12 @@ module Foxswap
         amount: params[:amount]&.round(8)&.to_s
       }
 
-      client.post path, json: payload, headers: { 'Authorization': Rails.application.credentials.dig(:foxswap, :authorization) }
+      client.post path, json: payload, headers: { Authorization: Rails.application.credentials.dig(:foxswap, :authorization) }
     end
 
     def order(order_id, authorization:)
       path = "/api/orders/#{order_id}"
-      client.get path, headers: { 'Authorization': authorization }
+      client.get path, headers: { Authorization: authorization }
     end
   end
 end
