@@ -55,6 +55,6 @@ class TransferProcessedNotification < ApplicationNotification
   end
 
   def set_locale
-    I18n.locale = recipient.locale
+    I18n.locale = recipient.locale if recipient.locale.present?
   end
 end
