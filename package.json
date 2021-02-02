@@ -30,7 +30,7 @@
     "css-minimizer-webpack-plugin": "^1.2.0",
     "d3-array": "2.11.0",
     "graphql": "^15.5.0",
-    "i18next": "^19.8.5",
+    "i18next": "^19.8.6",
     "i18next-browser-languagedetector": "^6.0.1",
     "ismobilejs": "^1.1.1",
     "js-base64": "^3.6.0",
