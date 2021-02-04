@@ -5,10 +5,13 @@
 #  id         :bigint           not null, primary key
 #  item_type  :string
 #  order_type :integer
+#  price_btc  :decimal(, )
+#  price_usd  :decimal(, )
 #  state      :string
 #  total      :decimal(, )
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
+#  asset_id   :uuid
 #  buyer_id   :bigint
 #  item_id    :bigint
 #  seller_id  :bigint

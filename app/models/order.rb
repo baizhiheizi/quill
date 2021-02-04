@@ -7,10 +7,13 @@
 #  id         :bigint           not null, primary key
 #  item_type  :string
 #  order_type :integer
+#  price_btc  :decimal(, )
+#  price_usd  :decimal(, )
 #  state      :string
 #  total      :decimal(, )
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
+#  asset_id   :uuid
 #  buyer_id   :bigint
 #  item_id    :bigint
 #  seller_id  :bigint
@@ -37,7 +40,7 @@ class Order < ApplicationRecord
 
   has_many :transfers, as: :source, dependent: :nullify
 
-  before_validation :setup_attributes
+  before_validation :setup_attributes, on: :create
 
   # prevent duplicated buy order
   validates :order_type, uniqueness: { scope: %i[order_type buyer_id item_id item_type], if: -> { buy_article? } }
@@ -185,7 +188,7 @@ class Order < ApplicationRecord
 
   def setup_attributes
     amount =
-      if payment.asset_id == Article::PRS_ASSET_ID
+      if payment.asset_id == item.asset_id
         payment.amount
       elsif payment.swap_order&.swapped? || payment.swap_order&.completed?
         if buy_article?
