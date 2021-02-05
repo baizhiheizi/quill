@@ -487,6 +487,7 @@ export type CreateArticleMutationInput = {
   content: Scalars['String'];
   price: Scalars['Float'];
   state: Scalars['String'];
+  assetId: Scalars['String'];
   tagNames?: Maybe<Array<Scalars['String']>>;
   /** A unique identifier for the client performing the mutation. */
   clientMutationId?: Maybe<Scalars['String']>;
@@ -1308,6 +1309,7 @@ export type QueryPaymentArgs = {
 
 export type QuerySwapPreOrderArgs = {
   payAssetId: Scalars['String'];
+  fillAssetId: Scalars['String'];
   amount: Scalars['Float'];
 };
 
@@ -3556,8 +3558,12 @@ export type StatisticsQueryHookResult = ReturnType<typeof useStatisticsQuery>;
 export type StatisticsLazyQueryHookResult = ReturnType<typeof useStatisticsLazyQuery>;
 export type StatisticsQueryResult = Apollo.QueryResult<StatisticsQuery, StatisticsQueryVariables>;
 export const SwapPreOrderDocument = gql`
-    query SwapPreOrder($payAssetId: String!, $amount: Float!) {
-  swapPreOrder(payAssetId: $payAssetId, amount: $amount) {
+    query SwapPreOrder($payAssetId: String!, $fillAssetId: String!, $amount: Float!) {
+  swapPreOrder(
+    payAssetId: $payAssetId
+    fillAssetId: $fillAssetId
+    amount: $amount
+  ) {
     state
     funds
     amount
@@ -3583,6 +3589,7 @@ export const SwapPreOrderDocument = gql`
  * const { data, loading, error } = useSwapPreOrderQuery({
  *   variables: {
  *      payAssetId: // value for 'payAssetId'
+ *      fillAssetId: // value for 'fillAssetId'
  *      amount: // value for 'amount'
  *   },
  * });

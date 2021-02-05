@@ -10,7 +10,7 @@ class ArticleBoughtNotification < ApplicationNotification
 
   def data
     {
-      icon_url: Article::PRSDIGG_ICON_URL,
+      icon_url: PRSDIGG_ICON_URL,
       title: params[:order].article.title.truncate(36),
       description: description,
       action: url

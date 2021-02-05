@@ -30,9 +30,12 @@
 #  index_articles_on_uuid       (uuid) UNIQUE
 #
 class Article < ApplicationRecord
-  PRS_ASSET_ID = '3edb734c-6d6f-32ff-ab03-4eb43640c758'
-  PRS_ICON_URL = 'https://mixin-images.zeromesh.net/1fQiAdit_Ji6_Pf4tW8uzutONh9kurHhAnN4wqEIItkDAvFTSXTMwlk3AB749keufDFVoqJb5fSbgz7K2HoOV7Q=s128'
-  PRSDIGG_ICON_URL = 'https://mixin-images.zeromesh.net/L0egX-GZxT0Yh-dd04WKeAqVNRzgzuj_Je_-yKf8aQTZo-xihd-LogbrIEr-WyG9WbJKGFvt2YYx-UIUa1qQMRla=s256'
+  # PRS: 3edb734c-6d6f-32ff-ab03-4eb43640c758
+  # BTC: c6d0c728-2624-429b-8e0d-d9d19b6592fa
+  SUPPORTED_ASSETS = %w[
+    3edb734c-6d6f-32ff-ab03-4eb43640c758
+    c6d0c728-2624-429b-8e0d-d9d19b6592fa
+  ].freeze
 
   include AASM
 
@@ -58,6 +61,7 @@ class Article < ApplicationRecord
 
   has_one :wallet, class_name: 'MixinNetworkUser', as: :owner, dependent: :nullify
 
+  validates :asset_id, presence: true, inclusion: { in: SUPPORTED_ASSETS }
   validates :uuid, presence: true, uniqueness: true
   validates :title, presence: true, length: { maximum: 25 }
   validates :intro, presence: true, length: { maximum: 140 }
@@ -189,7 +193,6 @@ class Article < ApplicationRecord
     return unless new_record?
 
     assign_attributes(
-      asset_id: PRS_ASSET_ID,
       price: price.round(8),
       uuid: SecureRandom.uuid
     )
