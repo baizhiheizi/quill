@@ -63,9 +63,9 @@ class Payment < ApplicationRecord
   def decrypted_memo
     # memo from PRSDigg user
     # memo = {
-    #  t: BUY|REWARD,
-    #  a: article's uuid,
-    #  p: price as PRS
+    #  't': BUY|REWARD,
+    #  'a': article's uuid,
+    #  'p': price as PRS
     # }
     #
     @decrypted_memo =
@@ -76,16 +76,29 @@ class Payment < ApplicationRecord
       end
   end
 
+  def memo_correct?
+    decrypted_memo.key?('a') && decrypted_memo.key?('t') && decrypted_memo['t'].in?(%w[BUY REWARD])
+  end
+
+  def swappable?
+    !FOXSWAP_DISABLE && asset_id.in?(SwapOrder::SUPPORTED_ASSETS)
+  end
+
+  def article
+    @article = Article.find_by! uuid: decrypted_memo['a']
+  end
+
   def place_order!
-    article = Article.find_by!(uuid: decrypted_memo['a'])
+    raise 'Memo not correct!' unless memo_correct?
+
     if asset_id == article.asset_id
       place_article_order!
-    elsif FOXSWAP_DISABLE
-      generate_refund_transfer!
-    else
+    elsif swappable?
       place_swap_order!
+    else
+      generate_refund_transfer!
     end
-  rescue ActiveRecord::RecordInvalid, ActiveRecord::RecordNotFound => e
+  rescue RuntimeError, ActiveRecord::RecordInvalid, ActiveRecord::RecordNotFound => e
     reload.generate_refund_transfer!
     raise e if Rails.env.development?
   end
@@ -105,8 +118,6 @@ class Payment < ApplicationRecord
   end
 
   def place_article_order!
-    article = Article.find_by!(uuid: decrypted_memo['a'])
-
     case decrypted_memo['t']
     when 'BUY'
       article.orders.find_or_create_by!(
