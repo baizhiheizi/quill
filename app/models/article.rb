@@ -68,6 +68,7 @@ class Article < ApplicationRecord
   validates :content, presence: true
   validates :price, numericality: { greater_than: 0.000_000_01 }
   validate :ensure_author_account_normal
+  validate :ensure_price_not_too_low
 
   before_validation :setup_attributes, on: :create
 
@@ -204,5 +205,16 @@ class Article < ApplicationRecord
     return unless new_record?
 
     errors.add(:author, 'account is banned!') if author&.banned?
+  end
+
+  def ensure_price_not_too_low
+    too_low =
+      case asset_id
+      when '3edb734c-6d6f-32ff-ab03-4eb43640c758'
+        price < 1
+      when 'c6d0c728-2624-429b-8e0d-d9d19b6592fa'
+        price < 0.000_001
+      end
+    errors.add(:price, 'price is too low!') if too_low
   end
 end

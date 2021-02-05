@@ -1073,6 +1073,7 @@ export type Query = {
   myTagSubscriptionConnection: TagConnection;
   myTransferConnection: TransferConnection;
   payment?: Maybe<Payment>;
+  pricableCurrencies: Array<Currency>;
   revenueChart: Scalars['String'];
   statistics: Statistics;
   swapPreOrder?: Maybe<SwapPreOrder>;
@@ -3676,44 +3677,6 @@ export function useSwapPreOrderLazyQuery(baseOptions?: Apollo.LazyQueryHookOptio
 export type SwapPreOrderQueryHookResult = ReturnType<typeof useSwapPreOrderQuery>;
 export type SwapPreOrderLazyQueryHookResult = ReturnType<typeof useSwapPreOrderLazyQuery>;
 export type SwapPreOrderQueryResult = Apollo.QueryResult<SwapPreOrderQuery, SwapPreOrderQueryVariables>;
-export const SwappableCurrenciesDocument = gql`
-    query SwappableCurrencies {
-  swappableCurrencies {
-    id
-    assetId
-    name
-    symbol
-    iconUrl
-    priceUsd
-    priceBtc
-  }
-}
-    `;
-
-/**
- * __useSwappableCurrenciesQuery__
- *
- * To run a query within a React component, call `useSwappableCurrenciesQuery` and pass it any options that fit your needs.
- * When your component renders, `useSwappableCurrenciesQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useSwappableCurrenciesQuery({
- *   variables: {
- *   },
- * });
- */
-export function useSwappableCurrenciesQuery(baseOptions?: Apollo.QueryHookOptions<SwappableCurrenciesQuery, SwappableCurrenciesQueryVariables>) {
-        return Apollo.useQuery<SwappableCurrenciesQuery, SwappableCurrenciesQueryVariables>(SwappableCurrenciesDocument, baseOptions);
-      }
-export function useSwappableCurrenciesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<SwappableCurrenciesQuery, SwappableCurrenciesQueryVariables>) {
-          return Apollo.useLazyQuery<SwappableCurrenciesQuery, SwappableCurrenciesQueryVariables>(SwappableCurrenciesDocument, baseOptions);
-        }
-export type SwappableCurrenciesQueryHookResult = ReturnType<typeof useSwappableCurrenciesQuery>;
-export type SwappableCurrenciesLazyQueryHookResult = ReturnType<typeof useSwappableCurrenciesLazyQuery>;
-export type SwappableCurrenciesQueryResult = Apollo.QueryResult<SwappableCurrenciesQuery, SwappableCurrenciesQueryVariables>;
 export const TagConnectionDocument = gql`
     query TagConnection($after: String) {
   tagConnection(after: $after) {
@@ -4931,3 +4894,41 @@ export function useMyTransferConnectionLazyQuery(baseOptions?: Apollo.LazyQueryH
 export type MyTransferConnectionQueryHookResult = ReturnType<typeof useMyTransferConnectionQuery>;
 export type MyTransferConnectionLazyQueryHookResult = ReturnType<typeof useMyTransferConnectionLazyQuery>;
 export type MyTransferConnectionQueryResult = Apollo.QueryResult<MyTransferConnectionQuery, MyTransferConnectionQueryVariables>;
+export const PricableCurrenciesDocument = gql`
+    query PricableCurrencies {
+  pricableCurrencies {
+    id
+    assetId
+    name
+    symbol
+    iconUrl
+    priceUsd
+    priceBtc
+  }
+}
+    `;
+
+/**
+ * __usePricableCurrenciesQuery__
+ *
+ * To run a query within a React component, call `usePricableCurrenciesQuery` and pass it any options that fit your needs.
+ * When your component renders, `usePricableCurrenciesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = usePricableCurrenciesQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function usePricableCurrenciesQuery(baseOptions?: Apollo.QueryHookOptions<PricableCurrenciesQuery, PricableCurrenciesQueryVariables>) {
+        return Apollo.useQuery<PricableCurrenciesQuery, PricableCurrenciesQueryVariables>(PricableCurrenciesDocument, baseOptions);
+      }
+export function usePricableCurrenciesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<PricableCurrenciesQuery, PricableCurrenciesQueryVariables>) {
+          return Apollo.useLazyQuery<PricableCurrenciesQuery, PricableCurrenciesQueryVariables>(PricableCurrenciesDocument, baseOptions);
+        }
+export type PricableCurrenciesQueryHookResult = ReturnType<typeof usePricableCurrenciesQuery>;
+export type PricableCurrenciesLazyQueryHookResult = ReturnType<typeof usePricableCurrenciesLazyQuery>;
+export type PricableCurrenciesQueryResult = Apollo.QueryResult<PricableCurrenciesQuery, PricableCurrenciesQueryVariables>;

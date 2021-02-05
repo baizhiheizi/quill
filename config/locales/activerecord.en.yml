@@ -7,8 +7,9 @@ en:
         title: Title
         content: Content
         intro: Introduction
+        currency: Currency
         wordsCount: Words Count
-        price: Price(PRS)
+        price: Price
         upvotesCount: Upvotes
         downvotesCount: Downvotes
         commentsCount: Comments Count
@@ -29,6 +30,10 @@ en:
           hidden: Hidden
         form:
           warning: Pleash finish your article first
+          titleIsRequired: Please input your article's title
+          introIsRequired: Please input your article's introduction
+          contentIsRequired: Please input your artilce's content
+          priceIsTooLow: Price is too low
           createConfirm: Are you sure to create?
           createOkText: Create
           createCancelText: Later

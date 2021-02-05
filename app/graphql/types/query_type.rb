@@ -18,6 +18,7 @@ module Types
     field :user_article_connection, resolver: Resolvers::UserArticleConnectionResolver
 
     field :swappable_currencies, resolver: Resolvers::SwappableCurrenciesResolver
+    field :pricable_currencies, resolver: Resolvers::PricableCurrenciesResolver
     field :swap_pre_order, resolver: Resolvers::SwapPreOrderResolver
     field :payment, resolver: Resolvers::PaymentResolver
 

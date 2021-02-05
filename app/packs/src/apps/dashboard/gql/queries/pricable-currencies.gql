@@ -1,5 +1,5 @@
-query SwappableCurrencies {
-  swappableCurrencies {
+query PricableCurrencies {
+  pricableCurrencies {
     id
     assetId
     name

@@ -26,6 +26,7 @@ class Currency < ApplicationRecord
   has_many :transfers, primary_key: :asset_id, foreign_key: :asset_id, dependent: :restrict_with_exception, inverse_of: :currency
 
   scope :swappable, -> { where(asset_id: SwapOrder::SUPPORTED_ASSETS) }
+  scope :pricable, -> { where(asset_id: Article::SUPPORTED_ASSETS) }
 
   def self.find_or_create_by_asset_id(_asset_id)
     currency = find_by(asset_id: _asset_id)
