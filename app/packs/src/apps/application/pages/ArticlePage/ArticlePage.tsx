@@ -151,6 +151,7 @@ export default function ArticlePage() {
                       price={article.price}
                       walletId={article.walletId}
                       articleUuid={article.uuid}
+                      articleAssetId={article.assetId}
                       paymentTraceId={article.paymentTraceId}
                       onCancel={() => {
                         setPayModalVisible(false);

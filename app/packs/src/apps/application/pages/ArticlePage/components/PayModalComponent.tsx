@@ -21,6 +21,7 @@ export default function PayModalComponent(props: {
   price: number;
   walletId: string;
   articleUuid: string;
+  articleAssetId: string;
   paymentTraceId: string;
   onCancel: () => any;
 }) {
@@ -29,11 +30,12 @@ export default function PayModalComponent(props: {
     price,
     walletId,
     articleUuid,
+    articleAssetId,
     paymentTraceId,
     onCancel,
   } = props;
   const currentUser = useCurrentUser();
-  const [assetId, setAssetId] = useState(PRS.assetId);
+  const [assetId, setAssetId] = useState(articleAssetId);
   const [paying, setPaying] = useState(false);
   const { mixinEnv } = useUserAgent();
   const { t } = useTranslation();
@@ -48,7 +50,11 @@ export default function PayModalComponent(props: {
   const { loading, data } = useSwapPreOrderQuery({
     fetchPolicy: 'network-only',
     notifyOnNetworkStatusChange: true,
-    variables: { payAssetId: assetId, amount: price * 1.01 },
+    variables: {
+      payAssetId: assetId,
+      fillAssetId: articleAssetId,
+      amount: price * 1.01,
+    },
   });
   const handlePaying = () => {
     setPaying(true);
