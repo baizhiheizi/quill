@@ -24,7 +24,6 @@
 class Payment < ApplicationRecord
   FOXSWAP_DISABLE = false
 
-  include TokenSupportable
   include AASM
 
   belongs_to :payer, class_name: 'User', foreign_key: :opponent_id, primary_key: :mixin_uuid, inverse_of: :payments
@@ -155,7 +154,7 @@ class Payment < ApplicationRecord
   end
 
   def price_tag
-    [amount.to_f, token&.[](:symbol)].join(' ')
+    [amount.to_f, currency&.symbol].join(' ')
   end
 
   private

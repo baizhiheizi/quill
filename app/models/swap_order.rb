@@ -28,10 +28,11 @@ class SwapOrder < ApplicationRecord
   FOX_SWAP_APP_ID = 'a753e0eb-3010-4c4a-a7b2-a7bda4063f62'
   FOX_SWAP_BROKER_ID = 'd8d186c4-62a7-320b-b930-11dfc1c76708'
 
-  include TokenSupportable
   include AASM
   belongs_to :payment
   belongs_to :wallet, class_name: 'MixinNetworkUser', foreign_key: :user_id, primary_key: :uuid, inverse_of: :swap_orders
+  belongs_to :pay_asset, class_name: 'Currency', primary_key: :asset_id
+  belongs_to :fill_asset, class_name: 'Currency', primary_key: :asset_id
 
   has_many :transfers, as: :source, dependent: :nullify
 
@@ -180,13 +181,5 @@ class SwapOrder < ApplicationRecord
     return unless state.in? %w[completed refunded rejected]
 
     SwapOrderFinishedNotification.with(swap_order: self).deliver(payer)
-  end
-
-  def pay_asset
-    SUPPORTED_TOKENS.find(&->(token) { token[:asset_id] == pay_asset_id })
-  end
-
-  def fill_asset
-    SUPPORTED_TOKENS.find(&->(token) { token[:asset_id] == fill_asset_id })
   end
 end

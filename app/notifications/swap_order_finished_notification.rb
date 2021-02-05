@@ -29,10 +29,10 @@ class SwapOrderFinishedNotification < ApplicationNotification
     [
       t('.swapped'),
       params[:swap_order].funds.to_f.to_s,
-      params[:swap_order].pay_asset&.[](:symbol),
+      params[:swap_order].pay_asset&.symbol,
       '->',
       params[:swap_order].amount.to_f.to_s,
-      params[:swap_order].fill_asset&.[](:symbol)
+      params[:swap_order].fill_asset&.symbol
     ].join(' ')
   end
 
