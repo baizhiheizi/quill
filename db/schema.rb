@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_02_04_115422) do
+ActiveRecord::Schema.define(version: 2021_02_05_000322) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -65,6 +65,7 @@ ActiveRecord::Schema.define(version: 2021_02_04_115422) do
     t.integer "upvotes_count", default: 0
     t.integer "downvotes_count", default: 0
     t.integer "tags_count", default: 0
+    t.index ["asset_id"], name: "index_articles_on_asset_id"
     t.index ["author_id"], name: "index_articles_on_author_id"
     t.index ["uuid"], name: "index_articles_on_uuid", unique: true
   end
@@ -95,6 +96,14 @@ ActiveRecord::Schema.define(version: 2021_02_04_115422) do
     t.integer "downvotes_count", default: 0
     t.index ["author_id"], name: "index_comments_on_author_id"
     t.index ["commentable_type", "commentable_id"], name: "index_comments_on_commentable_type_and_commentable_id"
+  end
+
+  create_table "currencies", force: :cascade do |t|
+    t.uuid "asset_id"
+    t.jsonb "raw"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["asset_id"], name: "index_currencies_on_asset_id", unique: true
   end
 
   create_table "mixin_messages", force: :cascade do |t|
@@ -185,6 +194,7 @@ ActiveRecord::Schema.define(version: 2021_02_04_115422) do
     t.uuid "asset_id"
     t.decimal "price_usd"
     t.decimal "price_btc"
+    t.index ["asset_id"], name: "index_orders_on_asset_id"
     t.index ["buyer_id"], name: "index_orders_on_buyer_id"
     t.index ["item_type", "item_id"], name: "index_orders_on_item_type_and_item_id"
     t.index ["seller_id"], name: "index_orders_on_seller_id"
@@ -201,6 +211,7 @@ ActiveRecord::Schema.define(version: 2021_02_04_115422) do
     t.json "raw"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.index ["asset_id"], name: "index_payments_on_asset_id"
     t.index ["trace_id"], name: "index_payments_on_trace_id", unique: true
   end
 
@@ -255,6 +266,7 @@ ActiveRecord::Schema.define(version: 2021_02_04_115422) do
     t.datetime "updated_at", precision: 6, null: false
     t.uuid "wallet_id"
     t.integer "queue_priority", default: 0
+    t.index ["asset_id"], name: "index_transfers_on_asset_id"
     t.index ["source_type", "source_id"], name: "index_transfers_on_source_type_and_source_id"
     t.index ["trace_id"], name: "index_transfers_on_trace_id", unique: true
     t.index ["wallet_id"], name: "index_transfers_on_wallet_id"

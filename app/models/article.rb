@@ -25,6 +25,7 @@
 #
 # Indexes
 #
+#  index_articles_on_asset_id   (asset_id)
 #  index_articles_on_author_id  (author_id)
 #  index_articles_on_uuid       (uuid) UNIQUE
 #
@@ -36,6 +37,7 @@ class Article < ApplicationRecord
   include AASM
 
   belongs_to :author, class_name: 'User', inverse_of: :articles
+  belongs_to :currency, primary_key: :asset_id, foreign_key: :asset_id, inverse_of: :articles
 
   has_many :orders, as: :item, dependent: :nullify
   has_many :buy_orders, -> { where(order_type: :buy_article) }, class_name: 'Order', as: :item, dependent: :nullify, inverse_of: false

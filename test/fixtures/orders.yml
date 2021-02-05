@@ -19,6 +19,7 @@
 #
 # Indexes
 #
+#  index_orders_on_asset_id               (asset_id)
 #  index_orders_on_buyer_id               (buyer_id)
 #  index_orders_on_item_type_and_item_id  (item_type,item_id)
 #  index_orders_on_seller_id              (seller_id)

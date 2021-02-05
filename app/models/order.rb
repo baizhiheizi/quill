@@ -21,6 +21,7 @@
 #
 # Indexes
 #
+#  index_orders_on_asset_id               (asset_id)
 #  index_orders_on_buyer_id               (buyer_id)
 #  index_orders_on_item_type_and_item_id  (item_type,item_id)
 #  index_orders_on_seller_id              (seller_id)
@@ -37,6 +38,7 @@ class Order < ApplicationRecord
   belongs_to :seller, class_name: 'User'
   belongs_to :item, polymorphic: true, counter_cache: true
   belongs_to :payment, foreign_key: :trace_id, primary_key: :trace_id, inverse_of: :order
+  belongs_to :currency, primary_key: :asset_id, foreign_key: :asset_id, inverse_of: :orders
 
   has_many :transfers, as: :source, dependent: :nullify
 

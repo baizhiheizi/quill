@@ -18,6 +18,7 @@
 #
 # Indexes
 #
+#  index_payments_on_asset_id  (asset_id)
 #  index_payments_on_trace_id  (trace_id) UNIQUE
 #
 class Payment < ApplicationRecord
@@ -28,6 +29,7 @@ class Payment < ApplicationRecord
 
   belongs_to :payer, class_name: 'User', foreign_key: :opponent_id, primary_key: :mixin_uuid, inverse_of: :payments
   belongs_to :snapshot, class_name: 'MixinNetworkSnapshot', foreign_key: :trace_id, primary_key: :trace_id, optional: true, inverse_of: false
+  belongs_to :currency, primary_key: :asset_id, foreign_key: :asset_id, inverse_of: :payments
 
   has_one :refund_transfer, -> { where(transfer_type: :payment_refund) }, class_name: 'Transfer', as: :source, dependent: :nullify, inverse_of: false
   has_one :order, primary_key: :trace_id, foreign_key: :trace_id, dependent: :restrict_with_exception, inverse_of: :payment
@@ -76,15 +78,17 @@ class Payment < ApplicationRecord
   end
 
   def place_order!
-    return unless decrypted_memo['t'].in? %w[BUY REWARD]
-
-    if asset_id == Article::PRS_ASSET_ID
+    article = Article.find_by!(uuid: decrypted_memo['a'])
+    if asset_id == article.asset_id
       place_article_order!
     elsif FOXSWAP_DISABLE
       generate_refund_transfer!
     else
       place_swap_order!
     end
+  rescue ActiveRecord::RecordInvalid, ActiveRecord::RecordNotFound => e
+    reload.generate_refund_transfer!
+    raise e if Rails.env.development?
   end
 
   def place_swap_order!
@@ -96,9 +100,9 @@ class Payment < ApplicationRecord
       trace_id: PrsdiggBot.api.unique_conversation_id(wallet.uuid, trace_id),
       wallet: wallet
     )
-  rescue StandardError => e
-    Rails.logger.error e.inspect
+  rescue ActiveRecord::RecordInvalid => e
     reload.generate_refund_transfer!
+    raise e if Rails.env.development?
   end
 
   def place_article_order!
@@ -118,9 +122,9 @@ class Payment < ApplicationRecord
     else
       generate_refund_transfer!
     end
-  rescue StandardError => e
-    Rails.logger.error e.inspect
+  rescue ActiveRecord::RecordInvalid, ActiveRecord::RecordNotFound => e
     reload.generate_refund_transfer!
+    raise e if Rails.env.development?
   end
 
   def generate_refund_transfer!
