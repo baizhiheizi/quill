@@ -201,6 +201,7 @@ class Order < ApplicationRecord
       end
 
     assign_attributes(
+      asset_id: item.asset_id,
       buyer: payment.payer,
       seller: item.author,
       total: amount

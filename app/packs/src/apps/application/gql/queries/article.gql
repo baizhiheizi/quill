@@ -21,6 +21,7 @@ query Article($uuid: ID!, $readerAfter: String) {
     wordsCount
     partialContent
     walletId
+    swappable
     tags {
       id
       name
@@ -51,5 +52,14 @@ query Article($uuid: ID!, $readerAfter: String) {
       totalCount
     }
     createdAt
+  }
+  swappableCurrencies {
+    id
+    assetId
+    name
+    symbol
+    iconUrl
+    priceUsd
+    priceBtc
   }
 }

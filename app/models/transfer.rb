@@ -115,17 +115,13 @@ class Transfer < ApplicationRecord
 
   def notify_recipient
     return if recipient.blank?
-    return if token.blank?
+    return if currency.blank?
 
     TransferProcessedNotification.with(transfer: self).deliver(recipient)
   end
 
-  def token
-    @token = Payment::SUPPORTED_TOKENS.find(&->(_token) { _token[:asset_id] == asset_id })
-  end
-
   def price_tag
-    [amount.to_f, token&.[](:symbol)].join(' ')
+    [amount.to_f, currency.symbol].join(' ')
   end
 
   def process_async

@@ -1,10 +1,7 @@
-import { usePaymentLazyQuery } from '@graphql';
+import { Currency, usePaymentLazyQuery } from '@graphql';
 import {
   FOXSWAP_APP_ID,
   FOXSWAP_CODE_ID,
-  FOXSWAP_DISABLE,
-  PRS,
-  SUPPORTED_TOKENS,
   useCurrentUser,
   useUserAgent,
 } from '@shared';
@@ -21,19 +18,40 @@ export default function RewardModalComponent(props: {
   onCancel: () => any;
   walletId: string;
   articleUuid: string;
+  articleAssetId: string;
+  swappableCurrencies: Currency[];
 }) {
   const currentUser = useCurrentUser();
-  const { articleUuid, visible, onCancel, walletId } = props;
+  const {
+    articleUuid,
+    articleAssetId,
+    visible,
+    onCancel,
+    walletId,
+    swappableCurrencies,
+  } = props;
   const { mixinEnv } = useUserAgent();
   const { t } = useTranslation();
   const [share, setShare] = useState(1);
-  const [assetId, setAssetId] = useState(PRS.assetId);
+  const [assetId, setAssetId] = useState(articleAssetId);
   const [payUrl, setPayUrl] = useState('');
   const [paying, setPaying] = useState(false);
   const [pollPayment, { stopPolling, data }] = usePaymentLazyQuery({
     pollInterval: 1500,
   });
-  const token = SUPPORTED_TOKENS.find((_token) => _token.assetId === assetId);
+
+  useEffect(() => {
+    return () => stopPolling && stopPolling();
+  }, []);
+
+  if (Boolean(data?.payment?.state)) {
+    stopPolling();
+  }
+
+  const priceBaseUsd = 0.1;
+  const currency = swappableCurrencies.find(
+    (_currency) => _currency.assetId == assetId,
+  );
 
   const handlePaying = () => {
     const traceId = uuidv4();
@@ -41,7 +59,10 @@ export default function RewardModalComponent(props: {
       currentUser?.walletId || walletId
     }&trace=${traceId}&memo=${encode64(
       JSON.stringify({ t: 'REWARD', a: articleUuid }),
-    )}&asset=${assetId}&amount=${(share * token.priceBase).toFixed(8)}`;
+    )}&asset=${assetId}&amount=${(
+      share *
+      (priceBaseUsd / currency.priceUsd)
+    ).toFixed(8)}`;
     if (mixinEnv) {
       location.replace(url);
     } else {
@@ -63,14 +84,6 @@ export default function RewardModalComponent(props: {
       </div>
     </div>
   );
-
-  useEffect(() => {
-    return () => stopPolling && stopPolling();
-  }, []);
-
-  if (Boolean(data?.payment?.state)) {
-    stopPolling();
-  }
 
   return (
     <Modal
@@ -105,12 +118,27 @@ export default function RewardModalComponent(props: {
         disabled={paying}
         style={{ marginBottom: '1rem' }}
         options={[
-          { label: token.priceBase, value: 1 },
-          { label: 8 * token.priceBase, value: 8 },
-          { label: 32 * token.priceBase, value: 32 },
-          { label: 64 * token.priceBase, value: 64 },
-          { label: 256 * token.priceBase, value: 256 },
-          { label: 1024 * token.priceBase, value: 1024 },
+          { label: (priceBaseUsd / currency.priceUsd).toFixed(8), value: 1 },
+          {
+            label: ((8 * priceBaseUsd) / currency.priceUsd).toFixed(8),
+            value: 8,
+          },
+          {
+            label: ((32 * priceBaseUsd) / currency.priceUsd).toFixed(8),
+            value: 32,
+          },
+          {
+            label: ((64 * priceBaseUsd) / currency.priceUsd).toFixed(8),
+            value: 64,
+          },
+          {
+            label: ((256 * priceBaseUsd) / currency.priceUsd).toFixed(8),
+            value: 256,
+          },
+          {
+            label: ((1024 * priceBaseUsd) / currency.priceUsd).toFixed(8),
+            value: 1024,
+          },
         ]}
         value={share}
         onChange={(e) => setShare(e.target.value)}
@@ -123,20 +151,16 @@ export default function RewardModalComponent(props: {
           value={assetId}
           onSelect={(value) => setAssetId(value)}
         >
-          {SUPPORTED_TOKENS.filter((token) => token.enabled).map((token) => (
-            <Select.Option
-              value={token.assetId}
-              key={token.assetId}
-              disabled={FOXSWAP_DISABLE && token.symbol !== 'PRS'}
-            >
+          {swappableCurrencies.map((_currency) => (
+            <Select.Option value={_currency.assetId} key={_currency.assetId}>
               <Space>
-                <Avatar src={token.iconUrl} size='small' />
-                <span>{token.symbol}</span>
+                <Avatar src={_currency.iconUrl} size='small' />
+                <span>{_currency.symbol}</span>
               </Space>
             </Select.Option>
           ))}
         </Select>
-        {token.symbol !== 'PRS' && (
+        {currency.assetId !== articleAssetId && (
           <div style={{ color: '#aaa' }}>
             {t('articlePage.rewardModal.swapExplain')}{' '}
             <a

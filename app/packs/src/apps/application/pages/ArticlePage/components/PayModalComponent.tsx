@@ -1,10 +1,7 @@
-import { usePaymentLazyQuery, useSwapPreOrderQuery } from '@graphql';
+import { Currency, usePaymentLazyQuery, useSwapPreOrderQuery } from '@graphql';
 import {
   FOXSWAP_APP_ID,
   FOXSWAP_CODE_ID,
-  FOXSWAP_DISABLE,
-  PRS,
-  SUPPORTED_TOKENS,
   useCurrentUser,
   useUserAgent,
 } from '@shared';
@@ -23,6 +20,7 @@ export default function PayModalComponent(props: {
   articleUuid: string;
   articleAssetId: string;
   paymentTraceId: string;
+  swappableCurrencies: Currency[];
   onCancel: () => any;
 }) {
   const {
@@ -32,6 +30,7 @@ export default function PayModalComponent(props: {
     articleUuid,
     articleAssetId,
     paymentTraceId,
+    swappableCurrencies,
     onCancel,
   } = props;
   const currentUser = useCurrentUser();
@@ -47,15 +46,17 @@ export default function PayModalComponent(props: {
     },
   );
   const payment = paymentData?.payment;
-  const { loading, data } = useSwapPreOrderQuery({
-    fetchPolicy: 'network-only',
-    notifyOnNetworkStatusChange: true,
-    variables: {
-      payAssetId: assetId,
-      fillAssetId: articleAssetId,
-      amount: price * 1.01,
+  const { loading: preOrderLoading, data: preOrderData } = useSwapPreOrderQuery(
+    {
+      fetchPolicy: 'network-only',
+      notifyOnNetworkStatusChange: true,
+      variables: {
+        payAssetId: assetId,
+        fillAssetId: articleAssetId,
+        amount: price * 1.01,
+      },
     },
-  });
+  );
   const handlePaying = () => {
     setPaying(true);
     setTargetDate(Date.now() + 30000);
@@ -68,8 +69,10 @@ export default function PayModalComponent(props: {
       p: price,
     }),
   );
-  const token = SUPPORTED_TOKENS.find((token) => token.assetId === assetId);
-  const funds = data?.swapPreOrder?.funds;
+  const currency = swappableCurrencies.find(
+    (_currency: Currency) => _currency.assetId === assetId,
+  );
+  const funds = preOrderData?.swapPreOrder?.funds;
   const PayUrlQRCode = ({ url, type = 'pay' }) => (
     <div style={{ textAlign: 'center' }}>
       <div style={{ marginBottom: 5 }}>
@@ -92,7 +95,7 @@ export default function PayModalComponent(props: {
     </div>
   );
   const payAmount =
-    token.symbol === 'PRS' ? price.toFixed(8) : funds?.toFixed(8);
+    currency.assetId === articleAssetId ? price.toFixed(8) : funds?.toFixed(8);
   const payUrl = `mixin://pay?recipient=${
     currentUser?.walletId || walletId
   }&trace=${paymentTraceId}&memo=${memo}&asset=${assetId}&amount=${payAmount}`;
@@ -127,21 +130,17 @@ export default function PayModalComponent(props: {
             onChange={(e) => setAssetId(e.target.value)}
             disabled={paying}
           >
-            {SUPPORTED_TOKENS.filter((token) => token.enabled).map((token) => (
-              <Radio.Button
-                disabled={FOXSWAP_DISABLE && token.symbol !== 'PRS'}
-                key={token.assetId}
-                value={token.assetId}
-              >
+            {swappableCurrencies.map((_currency: Currency) => (
+              <Radio.Button key={_currency.assetId} value={_currency.assetId}>
                 <Space>
-                  <Avatar size='small' src={token.iconUrl} />
-                  <span>{token.symbol}</span>
+                  <Avatar size='small' src={_currency.iconUrl} />
+                  <span>{_currency.symbol}</span>
                 </Space>
               </Radio.Button>
             ))}
           </Radio.Group>
         </div>
-        {loading ? (
+        {preOrderLoading ? (
           <div style={{ textAlign: 'center' }}>
             <Spin />
           </div>
@@ -152,9 +151,9 @@ export default function PayModalComponent(props: {
                 <span style={{ color: 'red', fontWeight: 'bold' }}>
                   {payAmount}
                 </span>
-                <span>{token.symbol}</span>
+                <span>{currency.symbol}</span>
               </Space>
-              {token.symbol !== 'PRS' && (
+              {currency.assetId !== articleAssetId && (
                 <div style={{ color: '#aaa' }}>
                   {t('articlePage.payModal.swapExplain')}{' '}
                   <a
@@ -180,7 +179,7 @@ export default function PayModalComponent(props: {
               <div>
                 {mixinEnv ? (
                   <Button
-                    disabled={loading || payment?.state === 'refunded'}
+                    disabled={preOrderLoading || payment?.state === 'refunded'}
                     loading={paying}
                     href={payUrl}
                     onClick={handlePaying}

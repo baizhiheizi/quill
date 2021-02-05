@@ -90,6 +90,8 @@ class Article < ApplicationRecord
                :update_author_statistics_cache,
                on: :create
 
+  delegate :swappable?, to: :currency
+
   aasm column: :state do
     state :published, initial: true
     state :hidden

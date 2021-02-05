@@ -39,6 +39,7 @@ class SwapOrder < ApplicationRecord
     31d2ea9c-95eb-3355-b65b-ba096853bc18
     c94ac88f-4671-3976-b60a-09064f1811e8
   ].freeze
+  FOXSWAP_ENABLE = true
   FOX_SWAP_APP_ID = 'a753e0eb-3010-4c4a-a7b2-a7bda4063f62'
   FOX_SWAP_BROKER_ID = 'd8d186c4-62a7-320b-b930-11dfc1c76708'
 

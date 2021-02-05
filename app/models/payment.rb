@@ -22,8 +22,6 @@
 #  index_payments_on_trace_id  (trace_id) UNIQUE
 #
 class Payment < ApplicationRecord
-  FOXSWAP_DISABLE = false
-
   include AASM
 
   belongs_to :payer, class_name: 'User', foreign_key: :opponent_id, primary_key: :mixin_uuid, inverse_of: :payments
@@ -41,10 +39,11 @@ class Payment < ApplicationRecord
   validates :asset_id, presence: true
   validates :opponent_id, presence: true
   validates :snapshot_id, presence: true, uniqueness: true
-
   validates :trace_id, presence: true, uniqueness: true
 
   after_commit :place_order!, :notify_payer, on: :create
+
+  delegate :swappable?, to: :currency
 
   aasm column: :state do
     state :paid, initial: true
@@ -78,10 +77,6 @@ class Payment < ApplicationRecord
 
   def memo_correct?
     decrypted_memo.key?('a') && decrypted_memo.key?('t') && decrypted_memo['t'].in?(%w[BUY REWARD])
-  end
-
-  def swappable?
-    !FOXSWAP_DISABLE && asset_id.in?(SwapOrder::SUPPORTED_ASSETS)
   end
 
   def article

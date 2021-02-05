@@ -25,11 +25,17 @@ class Currency < ApplicationRecord
   has_many :payments, primary_key: :asset_id, foreign_key: :asset_id, dependent: :restrict_with_exception, inverse_of: :currency
   has_many :transfers, primary_key: :asset_id, foreign_key: :asset_id, dependent: :restrict_with_exception, inverse_of: :currency
 
+  scope :swappable, -> { where(asset_id: SwapOrder::SUPPORTED_ASSETS) }
+
   def self.find_or_create_by_asset_id(_asset_id)
     currency = find_by(asset_id: _asset_id)
     return currency if currency.present?
 
     r = PrsdiggBot.api.read_asset(_asset_id)
     create_with(raw: r['data']).find_or_create_by(asset_id: r['data']&.[]('asset_id'))
+  end
+
+  def swappable?
+    SwapOrder::FOXSWAP_ENABLE && asset_id.in?(SwapOrder::SUPPORTED_ASSETS)
   end
 end

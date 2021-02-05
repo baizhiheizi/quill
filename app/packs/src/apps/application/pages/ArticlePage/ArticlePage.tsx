@@ -63,7 +63,7 @@ export default function ArticlePage() {
     return <LoadingComponent />;
   }
 
-  const { article } = data;
+  const { article, swappableCurrencies } = data;
 
   if (!article) {
     return <NotFoundPage />;
@@ -153,6 +153,7 @@ export default function ArticlePage() {
                       articleUuid={article.uuid}
                       articleAssetId={article.assetId}
                       paymentTraceId={article.paymentTraceId}
+                      swappableCurrencies={swappableCurrencies}
                       onCancel={() => {
                         setPayModalVisible(false);
                         refetch();
@@ -301,6 +302,8 @@ export default function ArticlePage() {
               <RewardModalComponent
                 visible={rewardModalVisible}
                 articleUuid={uuid}
+                articleAssetId={article.assetId}
+                swappableCurrencies={swappableCurrencies}
                 onCancel={() => {
                   setRewardModalVisible(false);
                   refetch();

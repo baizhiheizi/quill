@@ -1,0 +1,11 @@
+query SwappableCurrencies {
+  swappableCurrencies {
+    id
+    assetId
+    name
+    symbol
+    iconUrl
+    priceUsd
+    priceBtc
+  }
+}

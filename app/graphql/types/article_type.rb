@@ -27,6 +27,7 @@ module Types
     field :upvote_ratio, Integer, null: true
 
     field :authorized, Boolean, null: true
+    field :swappable, Boolean, null: true
     field :commenting_subscribed, Boolean, null: true
     field :upvoted, Boolean, null: true
     field :downvoted, Boolean, null: true
@@ -73,6 +74,10 @@ module Types
 
     def downvoted
       context[:current_user]&.downvote_article?(object)
+    end
+
+    def swappable
+      object.swappable?
     end
 
     def my_share
