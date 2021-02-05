@@ -20,6 +20,11 @@ query ArticleConnection($order: String!, $query: String, $after: String) {
         mixinId
         bio
       }
+      currency {
+        assetId
+        symbol
+        iconUrl
+      }
       createdAt
     }
     pageInfo {

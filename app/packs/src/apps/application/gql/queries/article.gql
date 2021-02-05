@@ -51,6 +51,11 @@ query Article($uuid: ID!, $readerAfter: String) {
     rewardOrders {
       totalCount
     }
+    currency {
+      assetId
+      symbol
+      iconUrl
+    }
     createdAt
   }
   swappableCurrencies {

@@ -1,11 +1,5 @@
-import { SUPPORTED_TOKENS } from '@shared';
 import LoadingComponent from '@dashboard/components/LoadingComponent/LoadingComponent';
-import {
-  Payment,
-  SwapOrder,
-  useMyPaymentConnectionQuery,
-  useMySwapOrderConnectionQuery,
-} from '@graphql';
+import { SwapOrder, useMySwapOrderConnectionQuery } from '@graphql';
 import { Avatar, Button, Col, List, Row, Space, Tag } from 'antd';
 import moment from 'moment';
 import React from 'react';
@@ -77,22 +71,10 @@ export default function MySwapOrderComponent() {
             </Col>
             <Col xs={18} sm={18} md={12} style={{ overflowX: 'scroll' }}>
               <Space>
-                <Avatar
-                  src={
-                    SUPPORTED_TOKENS.find(
-                      (token) => token.assetId === swapOrder.payAssetId,
-                    )?.iconUrl
-                  }
-                />
+                <Avatar src={swapOrder.payAsset.iconUrl} />
                 <span>{swapOrder.funds}</span>
                 <span style={{ color: '#aaa' }}>to</span>
-                <Avatar
-                  src={
-                    SUPPORTED_TOKENS.find(
-                      (token) => token.assetId === swapOrder.fillAssetId,
-                    )?.iconUrl
-                  }
-                />
+                <Avatar src={swapOrder.fillAsset.iconUrl} />
                 <span>{swapOrder.amount || '?'}</span>
               </Space>
             </Col>

@@ -11,6 +11,7 @@ module Types
 
     field :payer, Types::UserType, null: false
     field :order, Types::OrderType, null: true
+    field :currency, Types::CurrencyType, null: false
 
     def payer
       BatchLoader::GraphQL.for(object.opponent_id).batch do |opponent_ids, loader|
@@ -21,6 +22,12 @@ module Types
     def order
       BatchLoader::GraphQL.for(object.trace_id).batch do |trace_ids, loader|
         Order.where(trace_id: trace_ids).each { |order| loader.call(order.trace_id, order) }
+      end
+    end
+
+    def currency
+      BatchLoader::GraphQL.for(object.asset_id).batch do |asset_ids, loader|
+        Currency.where(asset_id: asset_ids).each { |currency| loader.call(currency.asset_id, currency) }
       end
     end
   end

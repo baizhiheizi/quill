@@ -45,6 +45,7 @@ module Types
     field :buy_orders, Types::OrderConnectionType, null: false
     field :reward_orders, Types::OrderConnectionType, null: false
     field :comments, Types::CommentConnectionType, null: false
+    field :currency, Types::CurrencyType, null: false
 
     field :tags, [Types::TagType], null: false
 
@@ -119,6 +120,12 @@ module Types
         Tagging.includes(:tag).where(article_id: ids).each do |tagging|
           loader.call(tagging.article_id) { |memo| memo << tagging.tag }
         end
+      end
+    end
+
+    def currency
+      BatchLoader::GraphQL.for(object.asset_id).batch do |asset_ids, loader|
+        Currency.where(asset_id: asset_ids).each { |currency| loader.call(currency.asset_id, currency) }
       end
     end
   end

@@ -26,6 +26,11 @@ query AdminTransferConnection(
         avatarUrl
         mixinId
       }
+      currency {
+        assetId
+        iconUrl
+        symbol
+      }
       processedAt
       createdAt
     }

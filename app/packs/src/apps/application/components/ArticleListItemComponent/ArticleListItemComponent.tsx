@@ -12,7 +12,7 @@ import moment from 'moment';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
-import { handleArticleShare, PRS_ICON_URL } from '../../shared';
+import { handleArticleShare } from '../../shared';
 import ArticleTagsComponent from '../ArticleTagsComponent/ArticleTagsComponent';
 import UserCardComponent from '../UserCardComponent/UserCardComponent';
 
@@ -72,7 +72,7 @@ export default function ArticleListItemComponent(props: {
               </div>
             </div>
             <Space style={{ marginLeft: 'auto' }}>
-              <Avatar size='small' src={PRS_ICON_URL} />
+              <Avatar size='small' src={article.currency.iconUrl} />
               <span>{article.price.toFixed(2)}</span>
             </Space>
           </Row>

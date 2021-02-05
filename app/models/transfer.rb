@@ -31,7 +31,7 @@ class Transfer < ApplicationRecord
   belongs_to :source, polymorphic: true
   belongs_to :wallet, class_name: 'MixinNetworkUser', primary_key: :uuid, inverse_of: :transfers, optional: true
   belongs_to :recipient, class_name: 'User', primary_key: :mixin_uuid, foreign_key: :opponent_id, inverse_of: :transfers, optional: true
-  belongs_to :currency, primary_key: :asset_id, foreign_key: :asset_id, inverse_of: :transfers
+  belongs_to :currency, primary_key: :asset_id, foreign_key: :asset_id, inverse_of: :transfers, optional: true
 
   has_one :article, class_name: 'Article', through: :source, source: :item
 

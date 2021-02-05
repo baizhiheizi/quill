@@ -15,6 +15,7 @@ module Types
 
     field :article, Types::ArticleType, null: true
     field :opponent, Types::UserType, null: true
+    field :currency, Types::CurrencyType, null: false
 
     def article
       BatchLoader::GraphQL.for(object.user_id).batch do |user_ids, loader|
@@ -25,6 +26,12 @@ module Types
     def opponent
       BatchLoader::GraphQL.for(object.opponent_id).batch do |opponent_ids, loader|
         User.where(mixin_uuid: opponent_ids).each { |opponent| loader.call(opponent.mixin_uuid, opponent) }
+      end
+    end
+
+    def currency
+      BatchLoader::GraphQL.for(object.asset_id).batch do |asset_ids, loader|
+        Currency.where(asset_id: asset_ids).each { |currency| loader.call(currency.asset_id, currency) }
       end
     end
   end

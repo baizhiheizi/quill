@@ -19,6 +19,16 @@ query AdminSwapOrderConnection($userId: ID, $after: String) {
         avatarUrl
         mixinId
       }
+      payAsset {
+        assetId
+        iconUrl
+        symbol
+      }
+      fillAsset {
+        assetId
+        iconUrl
+        symbol
+      }
       createdAt
     }
     pageInfo {

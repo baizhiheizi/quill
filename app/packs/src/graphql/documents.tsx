@@ -285,6 +285,7 @@ export type Article = {
   commentsCount: Scalars['Int'];
   content?: Maybe<Scalars['String']>;
   createdAt: Scalars['ISO8601DateTime'];
+  currency: Currency;
   downvoted?: Maybe<Scalars['Boolean']>;
   downvotesCount: Scalars['Int'];
   id: Scalars['ID'];
@@ -612,6 +613,7 @@ export type MixinNetworkSnapshot = {
   article?: Maybe<Article>;
   assetId: Scalars['String'];
   createdAt: Scalars['ISO8601DateTime'];
+  currency: Currency;
   data?: Maybe<Scalars['String']>;
   id: Scalars['Int'];
   opponent?: Maybe<User>;
@@ -930,6 +932,7 @@ export type Order = {
   __typename?: 'Order';
   buyer: User;
   createdAt: Scalars['ISO8601DateTime'];
+  currency: Currency;
   id: Scalars['ID'];
   item: OrderItemUnion;
   itemId: Scalars['ID'];
@@ -985,6 +988,7 @@ export type Payment = {
   amount: Scalars['Float'];
   assetId: Scalars['String'];
   createdAt: Scalars['ISO8601DateTime'];
+  currency: Currency;
   memo?: Maybe<Scalars['String']>;
   order?: Maybe<Order>;
   payer: User;
@@ -1393,10 +1397,12 @@ export type SwapOrder = {
   amount?: Maybe<Scalars['Float']>;
   article?: Maybe<Article>;
   createdAt: Scalars['ISO8601DateTime'];
+  fillAsset: Currency;
   fillAssetId: Scalars['String'];
   funds?: Maybe<Scalars['Float']>;
   id: Scalars['ID'];
   minAmount?: Maybe<Scalars['Float']>;
+  payAsset: Currency;
   payAssetId: Scalars['String'];
   payer: User;
   payment: Payment;
@@ -1536,6 +1542,7 @@ export type Transfer = {
   article?: Maybe<Article>;
   assetId: Scalars['String'];
   createdAt: Scalars['ISO8601DateTime'];
+  currency?: Maybe<Currency>;
   memo?: Maybe<Scalars['String']>;
   opponentId?: Maybe<Scalars['String']>;
   processedAt?: Maybe<Scalars['ISO8601DateTime']>;
@@ -2293,6 +2300,11 @@ export const AdminArticleConnectionDocument = gql`
         name
         avatarUrl
       }
+      currency {
+        assetId
+        symbol
+        iconUrl
+      }
       createdAt
     }
     pageInfo {
@@ -2565,6 +2577,11 @@ export const AdminOrderConnectionDocument = gql`
         avatarUrl
         mixinId
       }
+      currency {
+        assetId
+        iconUrl
+        symbol
+      }
       createdAt
     }
     pageInfo {
@@ -2618,6 +2635,11 @@ export const AdminPaymentConnectionDocument = gql`
       }
       order {
         orderType
+      }
+      currency {
+        assetId
+        iconUrl
+        symbol
       }
       createdAt
     }
@@ -2706,6 +2728,16 @@ export const AdminSwapOrderConnectionDocument = gql`
         avatarUrl
         mixinId
       }
+      payAsset {
+        assetId
+        iconUrl
+        symbol
+      }
+      fillAsset {
+        assetId
+        iconUrl
+        symbol
+      }
       createdAt
     }
     pageInfo {
@@ -2764,6 +2796,11 @@ export const AdminTransferConnectionDocument = gql`
         name
         avatarUrl
         mixinId
+      }
+      currency {
+        assetId
+        iconUrl
+        symbol
       }
       processedAt
       createdAt
@@ -3314,6 +3351,11 @@ export const ArticleConnectionDocument = gql`
         mixinId
         bio
       }
+      currency {
+        assetId
+        symbol
+        iconUrl
+      }
       createdAt
     }
     pageInfo {
@@ -3404,6 +3446,11 @@ export const ArticleDocument = gql`
     }
     rewardOrders {
       totalCount
+    }
+    currency {
+      assetId
+      symbol
+      iconUrl
     }
     createdAt
   }
@@ -3789,6 +3836,11 @@ export const TransferConnectionDocument = gql`
       assetId
       transferType
       createdAt
+      currency {
+        assetId
+        symbol
+        iconUrl
+      }
     }
     pageInfo {
       hasNextPage
@@ -4600,6 +4652,11 @@ export const MyPaymentConnectionDocument = gql`
           }
         }
       }
+      currency {
+        assetId
+        iconUrl
+        symbol
+      }
     }
     pageInfo {
       hasNextPage
@@ -4733,6 +4790,16 @@ export const MySwapOrderConnectionDocument = gql`
         title
         price
       }
+      payAsset {
+        assetId
+        iconUrl
+        symbol
+      }
+      fillAsset {
+        assetId
+        iconUrl
+        symbol
+      }
     }
     pageInfo {
       hasNextPage
@@ -4823,6 +4890,11 @@ export const MyTransferConnectionDocument = gql`
       article {
         uuid
         title
+      }
+      currency {
+        assetId
+        iconUrl
+        symbol
       }
     }
     pageInfo {
