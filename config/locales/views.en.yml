@@ -19,75 +19,6 @@ en:
       successHiddenArticle: Article hidden
       successPublishedArticle: Article published
       successUpdated: Successfully updated
-    article:
-      title: Title
-      content: Content
-      intro: Introduction
-      wordsCount: Words Count
-      price: Price(PRS)
-      upvotesCount: Upvotes
-      downvotesCount: Downvotes
-      commentsCount: Comments Count
-      ordersCount: Paid Times
-      buyOrdersCount: Bought Times
-      rewardOrdersCount: Rewarded Times
-      revenue: Revenue(PRS)
-      authorRevenueTotal: Author Revenue(PRS)
-      readerRevenueTotal: Reader Revenue(PRS)
-      myShare: My Share(%)
-      stateText: State
-      tags: Tags
-      createdAt: Created
-      updatedAt: Last Edited
-      state:
-        published: Published
-        blocked: Blocked
-        hidden: Hidden
-      form:
-        warning: Pleash finish your article first
-        createConfirm: Are you sure to create?
-        createOkText: Create
-        createCancelText: Later
-        createBtn: Create
-        updateConfirm: Are you sure to update your article?
-        updateOkText: Update
-        updateCancelText: Later
-        updateBtn: Update
-        titlePlaceHolder: Title of article
-        contentPlaceHolder: Write something valuable
-        introPlaceHolder: Please introduce your article and this will be public
-        newBtn: New
-    tag:
-      articlesCount: Articles
-      subscribersCount: Subscribers
-    payment:
-      state:
-        paid: Paid
-        refunded: Refunded
-        completed: Compelted
-      snapshot: Snapshot
-    swapOrder:
-      state:
-        paid: Paid
-        swapping: Swapping
-        rejected: Rejected
-        swapped: Swapped
-        order_placed: Buying
-        completed: Completed
-        refunded: Refunded
-    user:
-      defaultBio: Didn't left anything
-      authorRevenueTotal: Author Revenue(PRS)
-      readerRevenueTotal: Reader Revenue(PRS)
-      articlesCount: Published
-      boughtArticlesCount: Bought
-    transfer:
-      transferType:
-        payment_refund: Refund
-        author_revenue: Author
-        reader_revenue: Reader
-      snapshot: Snapshot
-      processing: Processing
     menu:
       read: Read
       write: Write
@@ -119,7 +50,7 @@ en:
       payToReadBtn: Pay to Read
       alreadyPaid1: Already paid? Try to
       alreadyPaid2: Refresh
-      buyPRSTips: Have no PRS? Pay with BTC, EOS, ETH and more!
+      payViaSwapTips: You can pay with other token!
       loginBtn: Please Login
       rewardBtn: Love this Article
       shareBtn: Share

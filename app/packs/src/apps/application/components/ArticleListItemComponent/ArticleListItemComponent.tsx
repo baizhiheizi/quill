@@ -31,7 +31,10 @@ export default function ArticleListItemComponent(props: {
       actions={
         article.upvoteRatio === null
           ? [
-              <RevenueAction revenue={article.revenue} />,
+              <RevenueAction
+                revenue={article.revenue}
+                currencySymbol={article.currency.symbol}
+              />,
               <CommentsCountAction commentsCount={article.commentsCount} />,
               <ShareAction
                 article={article}
@@ -40,7 +43,10 @@ export default function ArticleListItemComponent(props: {
               />,
             ]
           : [
-              <RevenueAction revenue={article.revenue} />,
+              <RevenueAction
+                revenue={article.revenue}
+                currencySymbol={article.currency.symbol}
+              />,
               <CommentsCountAction commentsCount={article.commentsCount} />,
               <UpdateVoteRatioAction upvoteRatio={article.upvoteRatio} />,
               <ShareAction
@@ -73,7 +79,11 @@ export default function ArticleListItemComponent(props: {
             </div>
             <Space style={{ marginLeft: 'auto' }}>
               <Avatar size='small' src={article.currency.iconUrl} />
-              <span>{article.price.toFixed(2)}</span>
+              <span>
+                {article.currency.symbol === 'BTC'
+                  ? article.price.toFixed(6)
+                  : article.price.toFixed(2)}
+              </span>
             </Space>
           </Row>
         }
@@ -87,11 +97,15 @@ export default function ArticleListItemComponent(props: {
   );
 }
 
-function RevenueAction(props: { revenue: number }) {
+function RevenueAction(props: { revenue: number; currencySymbol: string }) {
   return (
     <Space>
       <RiseOutlined />
-      <span>{props.revenue.toFixed(2)}</span>
+      <span>
+        {props.currencySymbol === 'BTC'
+          ? props.revenue.toFixed(6)
+          : props.revenue.toFixed(2)}
+      </span>
     </Space>
   );
 }

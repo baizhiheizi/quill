@@ -16,9 +16,9 @@ zh-CN:
         ordersCount: 付费次数
         buyOrdersCount: 购买次数
         rewardOrdersCount: 赞赏次数
-        revenue: 总收益(PRS)
-        authorRevenueTotal: 作者收益(PRS)
-        readerRevenueTotal: 读者收益(PRS)
+        revenue: 总收益
+        authorRevenueTotal: 作者收益
+        readerRevenueTotal: 读者收益
         myShare: 奖励份额(%)
         stateText: 状态
         tags: 话题

@@ -3751,6 +3751,11 @@ export const TaggedArticleConnectionDocument = gql`
         mixinId
         bio
       }
+      currency {
+        assetId
+        symbol
+        iconUrl
+      }
       createdAt
     }
     pageInfo {

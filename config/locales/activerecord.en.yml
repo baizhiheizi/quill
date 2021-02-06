@@ -16,9 +16,9 @@ en:
         ordersCount: Paid Times
         buyOrdersCount: Bought Times
         rewardOrdersCount: Rewarded Times
-        revenue: Revenue(PRS)
-        authorRevenueTotal: Author Revenue(PRS)
-        readerRevenueTotal: Reader Revenue(PRS)
+        revenue: Revenue
+        authorRevenueTotal: Author Revenue
+        readerRevenueTotal: Reader Revenue
         myShare: My Share(%)
         stateText: State
         tags: Tags
