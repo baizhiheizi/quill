@@ -36,5 +36,12 @@ query MyArticle($uuid: ID!) {
     comments {
       totalCount
     }
+    currency {
+      assetId
+      symbol
+      iconUrl
+      priceUsd
+      priceBtc
+    }
   }
 }

@@ -78,7 +78,7 @@ export default function ArticlePage() {
             {moment(article.updatedAt).format('YYYY-MM-DD HH:mm:ss')}
           </Descriptions.Item>
           <Descriptions.Item label={t('article.price')}>
-            {article.price}
+            {article.price} {article.currency.symbol}
           </Descriptions.Item>
           <Descriptions.Item label={t('article.buyOrdersCount')}>
             {article.buyOrders.totalCount}
@@ -87,13 +87,13 @@ export default function ArticlePage() {
             {article.rewardOrders.totalCount}
           </Descriptions.Item>
           <Descriptions.Item label={t('article.revenue')}>
-            {article.revenue}
+            {article.revenue} {article.currency.symbol}
           </Descriptions.Item>
           <Descriptions.Item label={t('article.authorRevenueTotal')}>
-            {article.authorRevenueTotal}
+            {article.authorRevenueTotal} {article.currency.symbol}
           </Descriptions.Item>
           <Descriptions.Item label={t('article.readerRevenueTotal')}>
-            {article.readerRevenueTotal}
+            {article.readerRevenueTotal} {article.currency.symbol}
           </Descriptions.Item>
           <Descriptions.Item label={t('article.commentsCount')}>
             {article.comments.totalCount}

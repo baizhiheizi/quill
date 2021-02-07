@@ -4307,6 +4307,11 @@ export const MyArticleOrderConnectionDocument = gql`
       orderType
       state
       total
+      currency {
+        assetId
+        symbol
+        iconUrl
+      }
       createdAt
     }
     pageInfo {
@@ -4382,6 +4387,13 @@ export const MyArticleDocument = gql`
     }
     comments {
       totalCount
+    }
+    currency {
+      assetId
+      symbol
+      iconUrl
+      priceUsd
+      priceBtc
     }
   }
 }

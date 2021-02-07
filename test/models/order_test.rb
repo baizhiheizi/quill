@@ -5,10 +5,10 @@
 # Table name: orders
 #
 #  id         :bigint           not null, primary key
+#  change_btc :decimal(, )
+#  change_usd :decimal(, )
 #  item_type  :string
 #  order_type :integer
-#  price_btc  :decimal(, )
-#  price_usd  :decimal(, )
 #  state      :string
 #  total      :decimal(, )
 #  created_at :datetime         not null

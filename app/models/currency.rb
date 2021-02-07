@@ -39,4 +39,9 @@ class Currency < ApplicationRecord
   def swappable?
     SwapOrder::FOXSWAP_ENABLE && asset_id.in?(SwapOrder::SUPPORTED_ASSETS)
   end
+
+  def sync!
+    r = PrsdiggBot.api.asset asset_id
+    update! raw: r['data']
+  end
 end

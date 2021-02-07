@@ -5,10 +5,10 @@
 # Table name: orders
 #
 #  id         :bigint           not null, primary key
+#  change_btc :decimal(, )
+#  change_usd :decimal(, )
 #  item_type  :string
 #  order_type :integer
-#  price_btc  :decimal(, )
-#  price_usd  :decimal(, )
 #  state      :string
 #  total      :decimal(, )
 #  created_at :datetime         not null
@@ -184,6 +184,15 @@ class Order < ApplicationRecord
 
   def destroy_notifications
     notifications.destroy_all
+  end
+
+  def cache_history_ticker
+    r = PrsdiggBot.api.ticker asset_id, created_at.utc.rfc3339
+    update change_btc: r['price_btc'].to_f * total, change_usd: r['price_usd'].to_f * total
+  end
+
+  def cache_history_ticker_async
+    CacheOrderHistoryTickerWorker.perform_async id
   end
 
   private
