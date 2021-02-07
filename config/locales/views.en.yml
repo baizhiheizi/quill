@@ -94,12 +94,12 @@ en:
     fairPage:
       usersCount: Users
       articlesCount: Articles
-      authorRevenueTotal: Author Revenue(PRS)
-      readerRevenueTotal: Reader Revenue(PRS)
+      authorRevenueTotal: Author Revenue(Present Value)
+      readerRevenueTotal: Reader Revenue(Present Value)
       tabs:
         revenue:
           title: PRSDigg Revenue
-          chartTitle: Revenue Chart
+          chartTitle: Revenue Chart(USD)
         transfers:
           title: Transactions
     rulesPage:

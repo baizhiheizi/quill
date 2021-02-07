@@ -27,6 +27,8 @@ class Currency < ApplicationRecord
 
   scope :swappable, -> { where(asset_id: SwapOrder::SUPPORTED_ASSETS) }
   scope :pricable, -> { where(asset_id: Article::SUPPORTED_ASSETS) }
+  scope :prs, -> { find_by(asset_id: '3edb734c-6d6f-32ff-ab03-4eb43640c758') }
+  scope :btc, -> { find_by(asset_id: 'c6d0c728-2624-429b-8e0d-d9d19b6592fa') }
 
   def self.find_or_create_by_asset_id(_asset_id)
     currency = find_by(asset_id: _asset_id)

@@ -56,13 +56,15 @@ export default function FairPage() {
         <Col span={12}>
           <Statistic
             title={t('fairPage.authorRevenueTotal')}
-            value={Math.floor(authorRevenueTotal)}
+            value={authorRevenueTotal.toFixed(4)}
+            suffix=' USD'
           />
         </Col>
         <Col span={12}>
           <Statistic
             title={t('fairPage.readerRevenueTotal')}
-            value={Math.floor(readerRevenueTotal)}
+            value={readerRevenueTotal.toFixed(4)}
+            suffix=' USD'
           />
         </Col>
       </Row>

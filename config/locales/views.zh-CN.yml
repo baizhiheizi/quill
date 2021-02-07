@@ -97,12 +97,12 @@ zh-CN:
     fairPage:
       usersCount: 用户总量
       articlesCount: 文章总数
-      authorRevenueTotal: 作者收益(PRS)
-      readerRevenueTotal: 读者收益(PRS)
+      authorRevenueTotal: 作者收益(现价)
+      readerRevenueTotal: 读者收益(现价)
       tabs:
         revenue:
           title: 平台收益
-          chartTitle: 平台收益曲线
+          chartTitle: 平台收益曲线(USD)
         transfers:
           title: 转账记录
     rulesPage:

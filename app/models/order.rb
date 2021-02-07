@@ -213,7 +213,9 @@ class Order < ApplicationRecord
       asset_id: item.asset_id,
       buyer: payment.payer,
       seller: item.author,
-      total: amount
+      total: amount,
+      change_btc: currency.price_btc.to_f * amount,
+      change_usd: currency.price_usd.to_f * amount
     )
   end
 end

@@ -141,4 +141,16 @@ class Transfer < ApplicationRecord
       revenue_total: recipient.revenue_transfers.sum(:amount).to_f
     )
   end
+
+  def self.author_revenue_total_in_usd
+    prs_amount = author_revenue.where(currency: Currency.prs).sum(:amount)
+    btc_amount = author_revenue.where(currency: Currency.btc).sum(:amount)
+    prs_amount * Currency.prs.price_usd.to_f + btc_amount * Currency.btc.price_usd.to_f
+  end
+
+  def self.reader_revenue_total_in_usd
+    prs_amount = reader_revenue.where(currency: Currency.prs).sum(:amount)
+    btc_amount = reader_revenue.where(currency: Currency.btc).sum(:amount)
+    prs_amount * Currency.prs.price_usd.to_f + btc_amount * Currency.btc.price_usd.to_f
+  end
 end
