@@ -24,7 +24,7 @@ gem 'redis', '~> 4.1'
 # Map Redis types directly to Ruby objects
 gem 'redis-objects'
 # This gem adds a Redis::Namespace class which can be used to namespace Redis keys. http://redis.io
-gem 'redis-namespace', github: 'resque/redis-namespace', branch: 'master'
+gem 'redis-namespace'
 # Use Active Model has_secure_password
 gem 'bcrypt', '~> 3.1.7'
 # A simple API wrapper for Mixin Network in Ruby

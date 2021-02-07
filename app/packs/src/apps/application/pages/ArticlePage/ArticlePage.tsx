@@ -122,7 +122,9 @@ export default function ArticlePage() {
             <div style={{ marginBottom: '1rem' }}>
               <div>
                 {t('articlePage.payToRead1')}{' '}
-                <span style={{ color: 'red' }}>{article.price} {article.currency.symbol}</span>{' '}
+                <span style={{ color: 'red' }}>
+                  {article.price} {article.currency.symbol}
+                </span>{' '}
                 {t('articlePage.payToRead2')}
               </div>
               <div>
