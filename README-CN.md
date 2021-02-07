@@ -1,4 +1,4 @@
-# PRSDigg
+# 顶瓜瓜
 
 ![Check](https://github.com/baizhiheizi/prsdigg/workflows/Check/badge.svg) ![CI](https://github.com/baizhiheizi/prsdigg/workflows/CI/badge.svg) ![Uptime 100.00%](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fbaizhiheizi%2Fupptime%2Fmaster%2Fapi%2Fprs-digg%2Fuptime.json) ![Response Time](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fbaizhiheizi%2Fupptime%2Fmaster%2Fapi%2Fprs-digg%2Fresponse-time.json)
 
@@ -6,19 +6,19 @@
 
 ---
 
-PRSDigg 是建立于 [PRESSone](https://press.one) 与 [Mixin Network](https://mixin.one) 之上的 Dapp。发表于 PRSDigg 上的文章将全部在 [PRESSone](https://press.one) 签名上链，所有支付以及转账则通过 [Mixin Network](https://mixin.one) 完成。
+顶瓜瓜 是建立于 [PRESSone](https://press.one) 与 [Mixin Network](https://mixin.one) 之上的 Dapp。发表于 顶瓜瓜 上的文章将全部在 [PRESSone](https://press.one) 签名上链，所有支付以及转账则通过 [Mixin Network](https://mixin.one) 完成。
 
 ## 规则
 
-PRSDigg 尝试建立一个**作者**与**读者**共赢的**平台**。
+顶瓜瓜 尝试建立一个**作者**与**读者**共赢的**平台**。
 
-我们认为，一篇文章产生的价值是由作者和读者共同构成的，但是实际情况是，读者的付出并没有得到很好体现，尤其是**早期读者**。因此，与其他平台最大的不同是，PRSDigg 引入**早期读者奖励**的机制。
+我们认为，一篇文章产生的价值是由作者和读者共同构成的，但是实际情况是，读者的付出并没有得到很好体现，尤其是**早期读者**。因此，与其他平台最大的不同是，顶瓜瓜 引入**早期读者奖励**的机制。
 
 具体的规则如下：
 
 1. 用户可以在**平台**上发布文章，成为**作者**；
 
-2. 所有文章均为付费文章，使用*PressOne Token*计价，最低 1 PRS；
+2. 所有文章均为付费文章，使用*PressOne Token* 或者 *Bitcoin* 计价；
 
 3. 用户可以付费购买文章，即成为文章的**读者**；
 
@@ -50,6 +50,6 @@ PRSDigg 尝试建立一个**作者**与**读者**共赢的**平台**。
 
 ## 体验
 
-目前 PRSDigg 仅支持 [Mixin Messenger](https://mixin.one/messenger) 登录以及完成支付，体验前先下载安装。
+目前 顶瓜瓜 仅支持 [Mixin Messenger](https://mixin.one/messenger) 登录以及完成支付，体验前先下载安装。
 
 浏览 [prsdigg.com](https://prsdigg.com) ，或者在 [Mixin Messenger](https://mixin.one/messenger) 中搜索 7000101549 即可体验。
