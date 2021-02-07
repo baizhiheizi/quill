@@ -28,10 +28,10 @@ class SwapOrderFinishedNotification < ApplicationNotification
   def swapped_message
     [
       t('.swapped'),
-      ('%.8f' % params[:swap_order].funds),
+      format('%.8f', params[:swap_order].funds),
       params[:swap_order].pay_asset&.symbol,
       '->',
-      ('%.8f' % params[:swap_order].amount),
+      format('%.8f', params[:swap_order].amount),
       params[:swap_order].fill_asset&.symbol
     ].join(' ')
   end

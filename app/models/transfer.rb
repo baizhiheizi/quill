@@ -121,7 +121,7 @@ class Transfer < ApplicationRecord
   end
 
   def price_tag
-    [('%.8f' % amount), currency.symbol].join(' ')
+    [format('%.8f', amount), currency.symbol].join(' ')
   end
 
   def process_async
