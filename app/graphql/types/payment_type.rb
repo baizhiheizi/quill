@@ -11,7 +11,7 @@ module Types
 
     field :payer, Types::UserType, null: false
     field :order, Types::OrderType, null: true
-    field :currency, Types::CurrencyType, null: false
+    field :currency, Types::CurrencyType, null: true
 
     def payer
       BatchLoader::GraphQL.for(object.opponent_id).batch do |opponent_ids, loader|

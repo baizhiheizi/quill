@@ -27,34 +27,34 @@ EM.run {
     end
   end
 
-  DashboardBot.api.start_blaze_connect do
-    def on_open(ws, _event)
-      p ['Dashboard', Time.current, :open]
-      ws.send PrsdiggBot.api.list_pending_message
-    end
-
-    def on_message(ws, event)
-      raw = JSON.parse PrsdiggBot.api.read_ws_message(event.data)
-      return if raw&.[]('action') == 'ACKNOWLEDGE_MESSAGE_RECEIPT'
-
-      p ['Dashboard', Time.current, :message, raw&.[]('action')]
-      data = raw['data']
-      return if data.blank?
-
-      # ack
-      ws.send DashboardBot.api.acknowledge_message_receipt(data['message_id']) if data&.[]('message_id').present?
-
-      # respond
-      ws.send(
-        DashboardBot.api.write_ws_message(
-          params: DashboardBot.api.plain_text(
-            conversation_id: DashboardBot.api.unique_conversation_id(data['user_id']),
-            data: 'Hi there!'
-          )
-        )
-      ) if data&.[]('user_id').present?
-    end
-  end
+  # DashboardBot.api.start_blaze_connect do
+  #   def on_open(ws, _event)
+  #     p ['Dashboard', Time.current, :open]
+  #     ws.send PrsdiggBot.api.list_pending_message
+  #   end
+  #
+  #   def on_message(ws, event)
+  #     raw = JSON.parse PrsdiggBot.api.read_ws_message(event.data)
+  #     return if raw&.[]('action') == 'ACKNOWLEDGE_MESSAGE_RECEIPT'
+  #
+  #     p ['Dashboard', Time.current, :message, raw&.[]('action')]
+  #     data = raw['data']
+  #     return if data.blank?
+  #
+  #     # ack
+  #     ws.send DashboardBot.api.acknowledge_message_receipt(data['message_id']) if data&.[]('message_id').present?
+  #
+  #     # respond
+  #     ws.send(
+  #       DashboardBot.api.write_ws_message(
+  #         params: DashboardBot.api.plain_text(
+  #           conversation_id: DashboardBot.api.unique_conversation_id(data['user_id']),
+  #           data: 'Hi there!'
+  #         )
+  #       )
+  #     ) if data&.[]('user_id').present?
+  #   end
+  # end
 
   Thread.new {
     MixinNetworkSnapshot.poll

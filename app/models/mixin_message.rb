@@ -47,6 +47,7 @@ class MixinMessage < ApplicationRecord
     touch_proccessed_at
   end
 
+  PRSDIGG_COMMUNITY_CLIENT_ID = '74c6a598-345b-46ca-891f-b15c3139557b'
   def process_user_message
     case content
     when 'Hi'
@@ -60,9 +61,13 @@ class MixinMessage < ApplicationRecord
         recipient_id: user_id
       )
     else
-      AdminNotificationService.new.text(
-        "用户 #{user&.name} 有新留言，请在后台查看处理。"
+      msg = PrsdiggBot.api.plain_contact(
+        conversation_id: PrsdiggBot.api.unique_conversation_id(user_id),
+        data: {
+          user_id: PRSDIGG_COMMUNITY_CLIENT_ID
+        }
       )
+      SendMixinMessageWorker.perform_async msg
     end
   end
 

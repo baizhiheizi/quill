@@ -989,7 +989,7 @@ export type Payment = {
   amount: Scalars['Float'];
   assetId: Scalars['String'];
   createdAt: Scalars['ISO8601DateTime'];
-  currency: Currency;
+  currency?: Maybe<Currency>;
   memo?: Maybe<Scalars['String']>;
   order?: Maybe<Order>;
   payer: User;

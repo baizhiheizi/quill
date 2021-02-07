@@ -72,7 +72,7 @@ class Transfer < ApplicationRecord
     r =
       if wallet.blank?
         PrsdiggBot.api.create_transfer(
-          Rails.application.credentials.dig(:mixin, :pin_code),
+          Rails.application.credentials.dig(:prsdigg_bot, :pin_code),
           {
             asset_id: asset_id,
             opponent_id: opponent_id,

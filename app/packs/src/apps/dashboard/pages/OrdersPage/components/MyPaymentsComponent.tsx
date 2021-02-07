@@ -67,7 +67,7 @@ export default function MyPaymentsComponent() {
               </Tag>
             </Col>
             <Col xs={4} sm={4} md={3}>
-              <Avatar src={payment.currency.iconUrl} />
+              <Avatar src={payment.currency?.iconUrl} />
             </Col>
             <Col xs={8} sm={8} md={6}>
               {payment.amount}
