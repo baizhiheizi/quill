@@ -15,6 +15,9 @@
 #  index_currencies_on_asset_id  (asset_id) UNIQUE
 #
 class Currency < ApplicationRecord
+  PRS_ASSET_ID = '3edb734c-6d6f-32ff-ab03-4eb43640c758'
+  BTC_ASSET_ID = 'c6d0c728-2624-429b-8e0d-d9d19b6592fa'
+
   extend OrderAsSpecified
 
   store :raw, accessors: %i[name symbol chain_id icon_url price_btc price_usd]
@@ -29,8 +32,8 @@ class Currency < ApplicationRecord
 
   scope :swappable, -> { where(asset_id: SwapOrder::SUPPORTED_ASSETS).order_as_specified(asset_id: SwapOrder::SUPPORTED_ASSETS) }
   scope :pricable, -> { where(asset_id: Article::SUPPORTED_ASSETS) }
-  scope :prs, -> { find_by(asset_id: '3edb734c-6d6f-32ff-ab03-4eb43640c758') }
-  scope :btc, -> { find_by(asset_id: 'c6d0c728-2624-429b-8e0d-d9d19b6592fa') }
+  scope :prs, -> { find_by(asset_id: PRS_ASSET_ID) }
+  scope :btc, -> { find_by(asset_id: BTC_ASSET_ID) }
 
   def self.find_or_create_by_asset_id(_asset_id)
     currency = find_by(asset_id: _asset_id)

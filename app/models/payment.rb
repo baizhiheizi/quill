@@ -160,7 +160,7 @@ class Payment < ApplicationRecord
   end
 
   def price_tag
-    [amount.to_f, currency&.symbol].join(' ')
+    [('%.8f' % amount), currency&.symbol].join(' ')
   end
 
   private
