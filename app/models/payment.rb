@@ -18,16 +18,15 @@
 #
 # Indexes
 #
+#  index_payments_on_asset_id  (asset_id)
 #  index_payments_on_trace_id  (trace_id) UNIQUE
 #
 class Payment < ApplicationRecord
-  FOXSWAP_DISABLE = false
-
-  include TokenSupportable
   include AASM
 
   belongs_to :payer, class_name: 'User', foreign_key: :opponent_id, primary_key: :mixin_uuid, inverse_of: :payments
   belongs_to :snapshot, class_name: 'MixinNetworkSnapshot', foreign_key: :trace_id, primary_key: :trace_id, optional: true, inverse_of: false
+  belongs_to :currency, primary_key: :asset_id, foreign_key: :asset_id, inverse_of: :payments
 
   has_one :refund_transfer, -> { where(transfer_type: :payment_refund) }, class_name: 'Transfer', as: :source, dependent: :nullify, inverse_of: false
   has_one :order, primary_key: :trace_id, foreign_key: :trace_id, dependent: :restrict_with_exception, inverse_of: :payment
@@ -40,10 +39,11 @@ class Payment < ApplicationRecord
   validates :asset_id, presence: true
   validates :opponent_id, presence: true
   validates :snapshot_id, presence: true, uniqueness: true
-
   validates :trace_id, presence: true, uniqueness: true
 
   after_commit :place_order!, :notify_payer, on: :create
+
+  delegate :swappable?, to: :currency
 
   aasm column: :state do
     state :paid, initial: true
@@ -62,9 +62,9 @@ class Payment < ApplicationRecord
   def decrypted_memo
     # memo from PRSDigg user
     # memo = {
-    #  t: BUY|REWARD,
-    #  a: article's uuid,
-    #  p: price as PRS
+    #  't': BUY|REWARD,
+    #  'a': article's uuid,
+    #  'p': price as PRS
     # }
     #
     @decrypted_memo =
@@ -75,35 +75,44 @@ class Payment < ApplicationRecord
       end
   end
 
-  def place_order!
-    return unless decrypted_memo['t'].in? %w[BUY REWARD]
+  def memo_correct?
+    decrypted_memo.key?('a') && decrypted_memo.key?('t') && decrypted_memo['t'].in?(%w[BUY REWARD])
+  end
 
-    if asset_id == Article::PRS_ASSET_ID
+  def article
+    @article = Article.find_by! uuid: decrypted_memo['a']
+  end
+
+  def place_order!
+    raise 'Memo not correct!' unless memo_correct?
+
+    if asset_id == article.asset_id
       place_article_order!
-    elsif FOXSWAP_DISABLE
-      generate_refund_transfer!
-    else
+    elsif swappable?
       place_swap_order!
+    else
+      generate_refund_transfer!
     end
+  rescue RuntimeError, ActiveRecord::RecordInvalid, ActiveRecord::RecordNotFound => e
+    reload.generate_refund_transfer!
+    raise e if Rails.env.development?
   end
 
   def place_swap_order!
     create_swap_order!(
       funds: amount,
       min_amount: decrypted_memo['p'],
-      fill_asset_id: Article::PRS_ASSET_ID,
+      fill_asset_id: article.asset_id,
       pay_asset_id: asset_id,
       trace_id: PrsdiggBot.api.unique_conversation_id(wallet.uuid, trace_id),
       wallet: wallet
     )
-  rescue StandardError => e
-    Rails.logger.error e.inspect
+  rescue ActiveRecord::RecordInvalid => e
     reload.generate_refund_transfer!
+    raise e if Rails.env.development?
   end
 
   def place_article_order!
-    article = Article.find_by!(uuid: decrypted_memo['a'])
-
     case decrypted_memo['t']
     when 'BUY'
       article.orders.find_or_create_by!(
@@ -118,9 +127,9 @@ class Payment < ApplicationRecord
     else
       generate_refund_transfer!
     end
-  rescue StandardError => e
-    Rails.logger.error e.inspect
+  rescue ActiveRecord::RecordInvalid, ActiveRecord::RecordNotFound => e
     reload.generate_refund_transfer!
+    raise e if Rails.env.development?
   end
 
   def generate_refund_transfer!
@@ -151,7 +160,7 @@ class Payment < ApplicationRecord
   end
 
   def price_tag
-    [amount.to_f, token&.[](:symbol)].join(' ')
+    [format('%.8f', amount), currency&.symbol].join(' ')
   end
 
   private

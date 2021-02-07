@@ -6,6 +6,7 @@ query Article($uuid: ID!, $readerAfter: String) {
     intro
     content
     price
+    priceUsd
     assetId
     authorized
     ordersCount
@@ -21,6 +22,7 @@ query Article($uuid: ID!, $readerAfter: String) {
     wordsCount
     partialContent
     walletId
+    swappable
     tags {
       id
       name
@@ -50,6 +52,21 @@ query Article($uuid: ID!, $readerAfter: String) {
     rewardOrders {
       totalCount
     }
+    currency {
+      assetId
+      symbol
+      iconUrl
+      priceUsd
+    }
     createdAt
+  }
+  swappableCurrencies {
+    id
+    assetId
+    name
+    symbol
+    iconUrl
+    priceUsd
+    priceBtc
   }
 }

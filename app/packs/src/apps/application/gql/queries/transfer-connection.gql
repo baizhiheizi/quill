@@ -7,6 +7,11 @@ query TransferConnection($after: String) {
       assetId
       transferType
       createdAt
+      currency {
+        assetId
+        symbol
+        iconUrl
+      }
     }
     pageInfo {
       hasNextPage

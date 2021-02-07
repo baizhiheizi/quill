@@ -19,7 +19,6 @@ import {
   YAxis,
 } from 'recharts';
 import LoadingComponent from '../../components/LoadingComponent/LoadingComponent';
-import { PRS_ICON_URL } from '../../shared';
 
 export default function FairPage() {
   const { t } = useTranslation();
@@ -57,13 +56,15 @@ export default function FairPage() {
         <Col span={12}>
           <Statistic
             title={t('fairPage.authorRevenueTotal')}
-            value={Math.floor(authorRevenueTotal)}
+            value={authorRevenueTotal.toFixed(4)}
+            suffix=' USD'
           />
         </Col>
         <Col span={12}>
           <Statistic
             title={t('fairPage.readerRevenueTotal')}
-            value={Math.floor(readerRevenueTotal)}
+            value={readerRevenueTotal.toFixed(4)}
+            suffix=' USD'
           />
         </Col>
       </Row>
@@ -171,7 +172,7 @@ function TransferList() {
         <List.Item key={transfer.traceId}>
           <Row justify='space-around'>
             <Col xs={4} sm={4} md={2}>
-              <Avatar size='small' src={PRS_ICON_URL} />
+              <Avatar size='small' src={transfer.currency?.iconUrl} />
             </Col>
             <Col xs={0} sm={0} md={8}>
               {moment(transfer.createdAt).format('YYYY-MM-DD HH:mm:SS')}

@@ -18,6 +18,11 @@ query AdminOrderConnection($itemId: ID, $itemType: String, $after: String) {
         avatarUrl
         mixinId
       }
+      currency {
+        assetId
+        iconUrl
+        symbol
+      }
       createdAt
     }
     pageInfo {

@@ -5,6 +5,7 @@ query ArticleConnection($order: String!, $query: String, $after: String) {
       title
       intro
       price
+      priceUsd
       revenue
       ordersCount
       commentsCount
@@ -19,6 +20,11 @@ query ArticleConnection($order: String!, $query: String, $after: String) {
         avatarUrl
         mixinId
         bio
+      }
+      currency {
+        assetId
+        symbol
+        iconUrl
       }
       createdAt
     }

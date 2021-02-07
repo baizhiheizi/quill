@@ -25,17 +25,22 @@
 #
 # Indexes
 #
+#  index_articles_on_asset_id   (asset_id)
 #  index_articles_on_author_id  (author_id)
 #  index_articles_on_uuid       (uuid) UNIQUE
 #
 class Article < ApplicationRecord
-  PRS_ASSET_ID = '3edb734c-6d6f-32ff-ab03-4eb43640c758'
-  PRS_ICON_URL = 'https://mixin-images.zeromesh.net/1fQiAdit_Ji6_Pf4tW8uzutONh9kurHhAnN4wqEIItkDAvFTSXTMwlk3AB749keufDFVoqJb5fSbgz7K2HoOV7Q=s128'
-  PRSDIGG_ICON_URL = 'https://mixin-images.zeromesh.net/L0egX-GZxT0Yh-dd04WKeAqVNRzgzuj_Je_-yKf8aQTZo-xihd-LogbrIEr-WyG9WbJKGFvt2YYx-UIUa1qQMRla=s256'
+  # PRS: 3edb734c-6d6f-32ff-ab03-4eb43640c758
+  # BTC: c6d0c728-2624-429b-8e0d-d9d19b6592fa
+  SUPPORTED_ASSETS = %w[
+    3edb734c-6d6f-32ff-ab03-4eb43640c758
+    c6d0c728-2624-429b-8e0d-d9d19b6592fa
+  ].freeze
 
   include AASM
 
   belongs_to :author, class_name: 'User', inverse_of: :articles
+  belongs_to :currency, primary_key: :asset_id, foreign_key: :asset_id, inverse_of: :articles
 
   has_many :orders, as: :item, dependent: :nullify
   has_many :buy_orders, -> { where(order_type: :buy_article) }, class_name: 'Order', as: :item, dependent: :nullify, inverse_of: false
@@ -56,15 +61,18 @@ class Article < ApplicationRecord
 
   has_one :wallet, class_name: 'MixinNetworkUser', as: :owner, dependent: :nullify
 
+  validates :asset_id, presence: true, inclusion: { in: SUPPORTED_ASSETS }
   validates :uuid, presence: true, uniqueness: true
   validates :title, presence: true, length: { maximum: 25 }
   validates :intro, presence: true, length: { maximum: 140 }
   validates :content, presence: true
   validates :price, numericality: { greater_than: 0.000_000_01 }
   validate :ensure_author_account_normal
+  validate :ensure_price_not_too_low
 
   before_validation :setup_attributes, on: :create
 
+  default_scope -> { includes(:currency) }
   scope :only_published, -> { where(state: :published) }
   scope :order_by_popularity, lambda {
                                 where.not(orders_count: 0)
@@ -83,6 +91,8 @@ class Article < ApplicationRecord
                :subscribe_comments_for_author,
                :update_author_statistics_cache,
                on: :create
+
+  delegate :swappable?, to: :currency
 
   aasm column: :state do
     state :published, initial: true
@@ -181,13 +191,16 @@ class Article < ApplicationRecord
     )
   end
 
+  def price_usd
+    (currency.price_usd.to_f * price).to_f.round(4)
+  end
+
   private
 
   def setup_attributes
     return unless new_record?
 
     assign_attributes(
-      asset_id: PRS_ASSET_ID,
       price: price.round(8),
       uuid: SecureRandom.uuid
     )
@@ -197,5 +210,16 @@ class Article < ApplicationRecord
     return unless new_record?
 
     errors.add(:author, 'account is banned!') if author&.banned?
+  end
+
+  def ensure_price_not_too_low
+    too_low =
+      case asset_id
+      when '3edb734c-6d6f-32ff-ab03-4eb43640c758'
+        price < 1
+      when 'c6d0c728-2624-429b-8e0d-d9d19b6592fa'
+        price < 0.000_001
+      end
+    errors.add(:price, 'price is too low!') if too_low
   end
 end

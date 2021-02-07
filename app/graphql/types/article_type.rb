@@ -10,6 +10,7 @@ module Types
     field :state, String, null: true
     field :asset_id, String, null: false
     field :price, Float, null: false
+    field :price_usd, Float, null: true
     field :tags_count, Int, null: false
     field :tag_names, [String], null: true
 
@@ -27,6 +28,7 @@ module Types
     field :upvote_ratio, Integer, null: true
 
     field :authorized, Boolean, null: true
+    field :swappable, Boolean, null: true
     field :commenting_subscribed, Boolean, null: true
     field :upvoted, Boolean, null: true
     field :downvoted, Boolean, null: true
@@ -44,6 +46,7 @@ module Types
     field :buy_orders, Types::OrderConnectionType, null: false
     field :reward_orders, Types::OrderConnectionType, null: false
     field :comments, Types::CommentConnectionType, null: false
+    field :currency, Types::CurrencyType, null: false
 
     field :tags, [Types::TagType], null: false
 
@@ -73,6 +76,10 @@ module Types
 
     def downvoted
       context[:current_user]&.downvote_article?(object)
+    end
+
+    def swappable
+      object.swappable?
     end
 
     def my_share
@@ -114,6 +121,12 @@ module Types
         Tagging.includes(:tag).where(article_id: ids).each do |tagging|
           loader.call(tagging.article_id) { |memo| memo << tagging.tag }
         end
+      end
+    end
+
+    def currency
+      BatchLoader::GraphQL.for(object.asset_id).batch do |asset_ids, loader|
+        Currency.where(asset_id: asset_ids).each { |currency| loader.call(currency.asset_id, currency) }
       end
     end
   end

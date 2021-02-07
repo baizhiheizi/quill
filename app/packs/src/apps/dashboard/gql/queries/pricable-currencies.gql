@@ -1,0 +1,11 @@
+query PricableCurrencies {
+  pricableCurrencies {
+    id
+    assetId
+    name
+    symbol
+    iconUrl
+    priceUsd
+    priceBtc
+  }
+}

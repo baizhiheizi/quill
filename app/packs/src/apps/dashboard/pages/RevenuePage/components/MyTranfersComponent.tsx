@@ -1,11 +1,10 @@
-import { PRS_ICON_URL } from '@application/shared';
 import LoadingComponent from '@dashboard/components/LoadingComponent/LoadingComponent';
 import {
   MyTransferConnectionQueryHookResult,
   Transfer,
   useMyTransferConnectionQuery,
 } from '@graphql';
-import { Avatar, Button, Col, List, Row, Space } from 'antd';
+import { Avatar, Button, Col, List, Row } from 'antd';
 import moment from 'moment';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
@@ -70,7 +69,7 @@ export default function MyTransfersComponent(props: {
         <List.Item key={transfer.traceId}>
           <Row justify='space-around' align='middle'>
             <Col xs={4} sm={4} md={2}>
-              <Avatar src={PRS_ICON_URL} />
+              <Avatar src={transfer.currency.iconUrl} />
             </Col>
             <Col xs={0} sm={0} md={8}>
               {moment(transfer.createdAt).format('YYYY-MM-DD HH:mm:SS')}

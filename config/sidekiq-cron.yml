@@ -7,3 +7,6 @@ mixin_message_monitor_worker:
 mixin_network_snapshot_monitor_worker:
   cron: '* * * * *'
   class: 'MixinNetworkSnapshotMonitorWorker'
+sync_currency_price_worker:
+  cron: '*/5 * * * *'
+  class: 'SyncCurrencyPriceWorker'

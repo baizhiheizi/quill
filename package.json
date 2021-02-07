@@ -20,6 +20,7 @@
     "@types/react-dom": "^17.0.0",
     "@types/react-router-dom": "^5.1.7",
     "@types/recharts": "^1.8.19",
+    "@types/uuid": "^8.3.0",
     "@uiw/react-md-editor": "2.1.2",
     "ahooks": "^2.9.6",
     "antd": "^4.12.2",

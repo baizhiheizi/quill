@@ -18,6 +18,7 @@
 #
 # Indexes
 #
+#  index_payments_on_asset_id  (asset_id)
 #  index_payments_on_trace_id  (trace_id) UNIQUE
 #
 require 'test_helper'

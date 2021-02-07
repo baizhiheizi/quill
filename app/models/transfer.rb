@@ -22,6 +22,7 @@
 #
 # Indexes
 #
+#  index_transfers_on_asset_id                   (asset_id)
 #  index_transfers_on_source_type_and_source_id  (source_type,source_id)
 #  index_transfers_on_trace_id                   (trace_id) UNIQUE
 #  index_transfers_on_wallet_id                  (wallet_id)
@@ -30,6 +31,7 @@ class Transfer < ApplicationRecord
   belongs_to :source, polymorphic: true
   belongs_to :wallet, class_name: 'MixinNetworkUser', primary_key: :uuid, inverse_of: :transfers, optional: true
   belongs_to :recipient, class_name: 'User', primary_key: :mixin_uuid, foreign_key: :opponent_id, inverse_of: :transfers, optional: true
+  belongs_to :currency, primary_key: :asset_id, foreign_key: :asset_id, inverse_of: :transfers, optional: true
 
   has_one :article, class_name: 'Article', through: :source, source: :item
 
@@ -113,17 +115,13 @@ class Transfer < ApplicationRecord
 
   def notify_recipient
     return if recipient.blank?
-    return if token.blank?
+    return if currency.blank?
 
     TransferProcessedNotification.with(transfer: self).deliver(recipient)
   end
 
-  def token
-    @token = Payment::SUPPORTED_TOKENS.find(&->(_token) { _token[:asset_id] == asset_id })
-  end
-
   def price_tag
-    [amount.to_f, token&.[](:symbol)].join(' ')
+    [format('%.8f', amount), currency.symbol].join(' ')
   end
 
   def process_async
@@ -142,5 +140,17 @@ class Transfer < ApplicationRecord
       reader_revenue_total: recipient.reader_revenue_transfers.sum(:amount).to_f,
       revenue_total: recipient.revenue_transfers.sum(:amount).to_f
     )
+  end
+
+  def self.author_revenue_total_in_usd
+    prs_amount = author_revenue.where(currency: Currency.prs).sum(:amount)
+    btc_amount = author_revenue.where(currency: Currency.btc).sum(:amount)
+    prs_amount * Currency.prs.price_usd.to_f + btc_amount * Currency.btc.price_usd.to_f
+  end
+
+  def self.reader_revenue_total_in_usd
+    prs_amount = reader_revenue.where(currency: Currency.prs).sum(:amount)
+    btc_amount = reader_revenue.where(currency: Currency.btc).sum(:amount)
+    prs_amount * Currency.prs.price_usd.to_f + btc_amount * Currency.btc.price_usd.to_f
   end
 end

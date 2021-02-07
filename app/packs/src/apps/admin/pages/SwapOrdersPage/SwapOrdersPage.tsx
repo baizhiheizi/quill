@@ -1,4 +1,3 @@
-import { SUPPORTED_TOKENS } from '@/shared';
 import LoadingComponent from '@admin/components/LoadingComponent/LoadingComponent';
 import { SwapOrder, useAdminSwapOrderConnectionQuery } from '@graphql';
 import { Avatar, Button, PageHeader, Space, Table } from 'antd';
@@ -38,13 +37,7 @@ export default function SwapOrdersPage() {
       key: 'funds',
       render: (funds, swapOrder) => (
         <Space>
-          <Avatar
-            src={
-              SUPPORTED_TOKENS.find(
-                (token) => token.assetId === swapOrder.payAssetId,
-              )?.iconUrl
-            }
-          />
+          <Avatar src={swapOrder.payAsset.iconUrl} />
           <span>{funds}</span>
         </Space>
       ),
@@ -55,13 +48,7 @@ export default function SwapOrdersPage() {
       key: 'amount',
       render: (amount, swapOrder) => (
         <Space>
-          <Avatar
-            src={
-              SUPPORTED_TOKENS.find(
-                (token) => token.assetId === swapOrder.fillAssetId,
-              )?.iconUrl
-            }
-          />
+          <Avatar src={swapOrder.fillAsset.iconUrl} />
           <span>{amount || '-'}</span>
         </Space>
       ),

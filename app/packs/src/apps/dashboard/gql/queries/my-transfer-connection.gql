@@ -11,6 +11,11 @@ query MyTransferConnection($transferType: String, $after: String) {
         uuid
         title
       }
+      currency {
+        assetId
+        iconUrl
+        symbol
+      }
     }
     pageInfo {
       hasNextPage

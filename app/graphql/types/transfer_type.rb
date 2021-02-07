@@ -11,6 +11,7 @@ module Types
     field :opponent_id, String, null: true
     field :wallet_id, String, null: true
     field :processed_at, GraphQL::Types::ISO8601DateTime, null: true
+    field :currency, Types::CurrencyType, null: true
 
     field :recipient, Types::UserType, null: true
     field :article, Types::ArticleType, null: true
@@ -26,6 +27,12 @@ module Types
 
       BatchLoader::GraphQL.for(object.source_id).batch do |source_ids, loader|
         Order.includes(:item).where(id: source_ids).each { |order| loader.call(order.id, order.article) }
+      end
+    end
+
+    def currency
+      BatchLoader::GraphQL.for(object.asset_id).batch do |asset_ids, loader|
+        Currency.where(asset_id: asset_ids).each { |currency| loader.call(currency.asset_id, currency) }
       end
     end
   end

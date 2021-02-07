@@ -64,7 +64,7 @@ class Bonus < ApplicationRecord
 
   def setup_attributes
     assign_attributes(
-      asset_id: Article::PRS_ASSET_ID,
+      asset_id: Currency::PRS_ASSET_ID,
       trace_id: SecureRandom.uuid
     )
   end

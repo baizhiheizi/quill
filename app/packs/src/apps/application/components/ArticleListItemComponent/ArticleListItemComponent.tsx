@@ -7,12 +7,21 @@ import {
 } from '@ant-design/icons';
 import { Article } from '@graphql';
 import { usePrsdigg, useUserAgent } from '@shared';
-import { Avatar, Button, List, Popover, Row, Space } from 'antd';
+import {
+  Avatar,
+  Button,
+  List,
+  Popover,
+  Row,
+  Space,
+  Tooltip,
+  Typography,
+} from 'antd';
 import moment from 'moment';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
-import { handleArticleShare, PRS_ICON_URL } from '../../shared';
+import { handleArticleShare } from '../../shared';
 import ArticleTagsComponent from '../ArticleTagsComponent/ArticleTagsComponent';
 import UserCardComponent from '../UserCardComponent/UserCardComponent';
 
@@ -31,7 +40,10 @@ export default function ArticleListItemComponent(props: {
       actions={
         article.upvoteRatio === null
           ? [
-              <RevenueAction revenue={article.revenue} />,
+              <RevenueAction
+                revenue={article.revenue}
+                currencySymbol={article.currency.symbol}
+              />,
               <CommentsCountAction commentsCount={article.commentsCount} />,
               <ShareAction
                 article={article}
@@ -40,7 +52,10 @@ export default function ArticleListItemComponent(props: {
               />,
             ]
           : [
-              <RevenueAction revenue={article.revenue} />,
+              <RevenueAction
+                revenue={article.revenue}
+                currencySymbol={article.currency.symbol}
+              />,
               <CommentsCountAction commentsCount={article.commentsCount} />,
               <UpdateVoteRatioAction upvoteRatio={article.upvoteRatio} />,
               <ShareAction
@@ -71,10 +86,23 @@ export default function ArticleListItemComponent(props: {
                 {moment(article.createdAt).fromNow()}
               </div>
             </div>
-            <Space style={{ marginLeft: 'auto' }}>
-              <Avatar size='small' src={PRS_ICON_URL} />
-              <span>{article.price.toFixed(2)}</span>
-            </Space>
+            <div style={{ position: 'relative', marginLeft: 'auto' }}>
+              <Space style={{ marginLeft: 'auto' }}>
+                <Avatar size='small' src={article.currency.iconUrl} />
+                <span>
+                  {article.currency.symbol === 'BTC'
+                    ? article.price.toFixed(6)
+                    : article.price.toFixed(2)}
+                </span>
+              </Space>
+              <div
+                style={{ position: 'absolute', right: 0, fontSize: '0.8rem' }}
+              >
+                <Typography.Text type='secondary'>
+                  ≈ ${article.priceUsd}
+                </Typography.Text>
+              </div>
+            </div>
           </Row>
         }
       />
@@ -87,11 +115,15 @@ export default function ArticleListItemComponent(props: {
   );
 }
 
-function RevenueAction(props: { revenue: number }) {
+function RevenueAction(props: { revenue: number; currencySymbol: string }) {
   return (
     <Space>
       <RiseOutlined />
-      <span>{props.revenue.toFixed(2)}</span>
+      <span>
+        {props.currencySymbol === 'BTC'
+          ? props.revenue.toFixed(6)
+          : props.revenue.toFixed(2)}
+      </span>
     </Space>
   );
 }

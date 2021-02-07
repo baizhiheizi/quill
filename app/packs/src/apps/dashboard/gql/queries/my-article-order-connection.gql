@@ -13,6 +13,11 @@ query MyArticleOrderConnection(
       orderType
       state
       total
+      currency {
+        assetId
+        symbol
+        iconUrl
+      }
       createdAt
     }
     pageInfo {

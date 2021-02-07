@@ -14,6 +14,8 @@ module Types
     field :payer, Types::UserType, null: false
     field :payment, Types::PaymentType, null: false
     field :article, Types::ArticleType, null: true
+    field :pay_asset, Types::CurrencyType, null: false
+    field :fill_asset, Types::CurrencyType, null: false
 
     def payer
       BatchLoader::GraphQL.for(object.payment_id).batch do |payment_ids, loader|
@@ -30,6 +32,18 @@ module Types
     def payment
       BatchLoader::GraphQL.for(object.payment_id).batch do |payment_ids, loader|
         Payment.where(id: payment_ids).each { |payment| loader.call(payment.id, payment) }
+      end
+    end
+
+    def pay_asset
+      BatchLoader::GraphQL.for(object.pay_asset_id).batch do |asset_ids, loader|
+        Currency.where(asset_id: asset_ids).each { |currency| loader.call(currency.asset_id, currency) }
+      end
+    end
+
+    def fill_asset
+      BatchLoader::GraphQL.for(object.fill_asset_id).batch do |asset_ids, loader|
+        Currency.where(asset_id: asset_ids).each { |currency| loader.call(currency.asset_id, currency) }
       end
     end
   end

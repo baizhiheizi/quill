@@ -18,6 +18,11 @@ query AdminArticleConnection($query: String, $state: String, $after: String) {
         name
         avatarUrl
       }
+      currency {
+        assetId
+        symbol
+        iconUrl
+      }
       createdAt
     }
     pageInfo {

@@ -1,4 +1,3 @@
-import { SUPPORTED_TOKENS } from '@shared';
 import LoadingComponent from '@dashboard/components/LoadingComponent/LoadingComponent';
 import { Payment, useMyPaymentConnectionQuery } from '@graphql';
 import { Avatar, Button, Col, List, Row, Tag } from 'antd';
@@ -68,13 +67,7 @@ export default function MyPaymentsComponent() {
               </Tag>
             </Col>
             <Col xs={4} sm={4} md={3}>
-              <Avatar
-                src={
-                  SUPPORTED_TOKENS.find(
-                    (token) => token.assetId === payment.assetId,
-                  )?.iconUrl
-                }
-              />
+              <Avatar src={payment.currency.iconUrl} />
             </Col>
             <Col xs={8} sm={8} md={6}>
               {payment.amount}

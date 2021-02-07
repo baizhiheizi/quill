@@ -63,7 +63,7 @@ export default function ArticlePage() {
     return <LoadingComponent />;
   }
 
-  const { article } = data;
+  const { article, swappableCurrencies } = data;
 
   if (!article) {
     return <NotFoundPage />;
@@ -122,7 +122,10 @@ export default function ArticlePage() {
             <div style={{ marginBottom: '1rem' }}>
               <div>
                 {t('articlePage.payToRead1')}{' '}
-                <span style={{ color: 'red' }}>{article.price} PRS</span>{' '}
+                <span style={{ color: 'red' }}>
+                  {article.price} {article.currency.symbol}
+                </span>
+                {` (≈$${article.priceUsd}) `}
                 {t('articlePage.payToRead2')}
               </div>
               <div>
@@ -151,7 +154,9 @@ export default function ArticlePage() {
                       price={article.price}
                       walletId={article.walletId}
                       articleUuid={article.uuid}
+                      articleAssetId={article.assetId}
                       paymentTraceId={article.paymentTraceId}
+                      swappableCurrencies={swappableCurrencies}
                       onCancel={() => {
                         setPayModalVisible(false);
                         refetch();
@@ -173,7 +178,7 @@ export default function ArticlePage() {
                       color: '#aaa',
                     }}
                   >
-                    {t('articlePage.buyPRSTips')}
+                    {t('articlePage.payViaSwapTips')}
                   </div>
                 </div>
               ) : (
@@ -300,6 +305,8 @@ export default function ArticlePage() {
               <RewardModalComponent
                 visible={rewardModalVisible}
                 articleUuid={uuid}
+                articleAssetId={article.assetId}
+                swappableCurrencies={swappableCurrencies}
                 onCancel={() => {
                   setRewardModalVisible(false);
                   refetch();
@@ -340,7 +347,10 @@ export default function ArticlePage() {
           {article.authorized && (
             <Row gutter={16} style={{ textAlign: 'center' }}>
               <Col xs={12} sm={6}>
-                <Statistic title={t('article.price')} value={article.price} />
+                <Statistic
+                  title={`${t('article.price')}(${article.currency.symbol})`}
+                  value={article.price}
+                />
               </Col>
               <Col xs={12} sm={6}>
                 <Statistic
@@ -350,8 +360,8 @@ export default function ArticlePage() {
               </Col>
               <Col xs={12} sm={6}>
                 <Statistic
-                  title={t('article.revenue')}
-                  value={article.revenue ? article.revenue.toFixed(4) : 0.0}
+                  title={`${t('article.revenue')}(${article.currency.symbol})`}
+                  value={article.revenue ? article.revenue.toFixed(6) : 0.0}
                 />
               </Col>
               <Col xs={12} sm={6}>

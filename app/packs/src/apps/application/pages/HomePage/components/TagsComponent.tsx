@@ -25,7 +25,7 @@ export default function TagsComponent() {
     <div>
       <Row wrap gutter={[8, 8]}>
         {tags.map((tag: ITag) => (
-          <Col key={tag.id} xs={12} sm={12} md={8} lg={6}>
+          <Col key={tag.id} xs={24} sm={12} md={12} lg={8}>
             <Card
               size='small'
               hoverable
@@ -34,6 +34,7 @@ export default function TagsComponent() {
                 borderTop: `3px solid ${tag.color}`,
                 borderTopLeftRadius: 10,
                 borderTopRightRadius: 10,
+                margin: '0 0.5rem 1rem',
               }}
             >
               <div>

@@ -285,6 +285,7 @@ export type Article = {
   commentsCount: Scalars['Int'];
   content?: Maybe<Scalars['String']>;
   createdAt: Scalars['ISO8601DateTime'];
+  currency: Currency;
   downvoted?: Maybe<Scalars['Boolean']>;
   downvotesCount: Scalars['Int'];
   id: Scalars['ID'];
@@ -294,12 +295,14 @@ export type Article = {
   partialContent?: Maybe<Scalars['String']>;
   paymentTraceId?: Maybe<Scalars['String']>;
   price: Scalars['Float'];
+  priceUsd?: Maybe<Scalars['Float']>;
   readerRevenueTotal: Scalars['Float'];
   readers: UserConnection;
   revenue: Scalars['Float'];
   rewardOrders: OrderConnection;
   rewarders: UserConnection;
   state?: Maybe<Scalars['String']>;
+  swappable?: Maybe<Scalars['Boolean']>;
   tagNames?: Maybe<Array<Scalars['String']>>;
   tags: Array<Tag>;
   tagsCount: Scalars['Int'];
@@ -487,6 +490,7 @@ export type CreateArticleMutationInput = {
   content: Scalars['String'];
   price: Scalars['Float'];
   state: Scalars['String'];
+  assetId: Scalars['String'];
   tagNames?: Maybe<Array<Scalars['String']>>;
   /** A unique identifier for the client performing the mutation. */
   clientMutationId?: Maybe<Scalars['String']>;
@@ -519,6 +523,20 @@ export type CreateCommentMutationPayload = {
   commentable: Article;
   createdAt: Scalars['ISO8601DateTime'];
   error?: Maybe<Scalars['String']>;
+  updatedAt?: Maybe<Scalars['ISO8601DateTime']>;
+};
+
+export type Currency = {
+  __typename?: 'Currency';
+  assetId: Scalars['String'];
+  chainId?: Maybe<Scalars['String']>;
+  createdAt: Scalars['ISO8601DateTime'];
+  iconUrl?: Maybe<Scalars['String']>;
+  id: Scalars['ID'];
+  name: Scalars['String'];
+  priceBtc?: Maybe<Scalars['Float']>;
+  priceUsd?: Maybe<Scalars['Float']>;
+  symbol: Scalars['String'];
   updatedAt?: Maybe<Scalars['ISO8601DateTime']>;
 };
 
@@ -596,6 +614,7 @@ export type MixinNetworkSnapshot = {
   article?: Maybe<Article>;
   assetId: Scalars['String'];
   createdAt: Scalars['ISO8601DateTime'];
+  currency: Currency;
   data?: Maybe<Scalars['String']>;
   id: Scalars['Int'];
   opponent?: Maybe<User>;
@@ -914,6 +933,7 @@ export type Order = {
   __typename?: 'Order';
   buyer: User;
   createdAt: Scalars['ISO8601DateTime'];
+  currency: Currency;
   id: Scalars['ID'];
   item: OrderItemUnion;
   itemId: Scalars['ID'];
@@ -969,6 +989,7 @@ export type Payment = {
   amount: Scalars['Float'];
   assetId: Scalars['String'];
   createdAt: Scalars['ISO8601DateTime'];
+  currency: Currency;
   memo?: Maybe<Scalars['String']>;
   order?: Maybe<Order>;
   payer: User;
@@ -1053,9 +1074,11 @@ export type Query = {
   myTagSubscriptionConnection: TagConnection;
   myTransferConnection: TransferConnection;
   payment?: Maybe<Payment>;
+  pricableCurrencies: Array<Currency>;
   revenueChart: Scalars['String'];
   statistics: Statistics;
   swapPreOrder?: Maybe<SwapPreOrder>;
+  swappableCurrencies: Array<Currency>;
   tag?: Maybe<Tag>;
   tagConnection: TagConnection;
   transferConnection: TransferConnection;
@@ -1308,6 +1331,7 @@ export type QueryPaymentArgs = {
 
 export type QuerySwapPreOrderArgs = {
   payAssetId: Scalars['String'];
+  fillAssetId: Scalars['String'];
   amount: Scalars['Float'];
 };
 
@@ -1375,10 +1399,12 @@ export type SwapOrder = {
   amount?: Maybe<Scalars['Float']>;
   article?: Maybe<Article>;
   createdAt: Scalars['ISO8601DateTime'];
+  fillAsset: Currency;
   fillAssetId: Scalars['String'];
   funds?: Maybe<Scalars['Float']>;
   id: Scalars['ID'];
   minAmount?: Maybe<Scalars['Float']>;
+  payAsset: Currency;
   payAssetId: Scalars['String'];
   payer: User;
   payment: Payment;
@@ -1518,6 +1544,7 @@ export type Transfer = {
   article?: Maybe<Article>;
   assetId: Scalars['String'];
   createdAt: Scalars['ISO8601DateTime'];
+  currency?: Maybe<Currency>;
   memo?: Maybe<Scalars['String']>;
   opponentId?: Maybe<Scalars['String']>;
   processedAt?: Maybe<Scalars['ISO8601DateTime']>;
@@ -2275,6 +2302,11 @@ export const AdminArticleConnectionDocument = gql`
         name
         avatarUrl
       }
+      currency {
+        assetId
+        symbol
+        iconUrl
+      }
       createdAt
     }
     pageInfo {
@@ -2547,6 +2579,11 @@ export const AdminOrderConnectionDocument = gql`
         avatarUrl
         mixinId
       }
+      currency {
+        assetId
+        iconUrl
+        symbol
+      }
       createdAt
     }
     pageInfo {
@@ -2600,6 +2637,11 @@ export const AdminPaymentConnectionDocument = gql`
       }
       order {
         orderType
+      }
+      currency {
+        assetId
+        iconUrl
+        symbol
       }
       createdAt
     }
@@ -2688,6 +2730,16 @@ export const AdminSwapOrderConnectionDocument = gql`
         avatarUrl
         mixinId
       }
+      payAsset {
+        assetId
+        iconUrl
+        symbol
+      }
+      fillAsset {
+        assetId
+        iconUrl
+        symbol
+      }
       createdAt
     }
     pageInfo {
@@ -2746,6 +2798,11 @@ export const AdminTransferConnectionDocument = gql`
         name
         avatarUrl
         mixinId
+      }
+      currency {
+        assetId
+        iconUrl
+        symbol
       }
       processedAt
       createdAt
@@ -3281,6 +3338,7 @@ export const ArticleConnectionDocument = gql`
       title
       intro
       price
+      priceUsd
       revenue
       ordersCount
       commentsCount
@@ -3295,6 +3353,11 @@ export const ArticleConnectionDocument = gql`
         avatarUrl
         mixinId
         bio
+      }
+      currency {
+        assetId
+        symbol
+        iconUrl
       }
       createdAt
     }
@@ -3342,6 +3405,7 @@ export const ArticleDocument = gql`
     intro
     content
     price
+    priceUsd
     assetId
     authorized
     ordersCount
@@ -3357,6 +3421,7 @@ export const ArticleDocument = gql`
     wordsCount
     partialContent
     walletId
+    swappable
     tags {
       id
       name
@@ -3386,7 +3451,22 @@ export const ArticleDocument = gql`
     rewardOrders {
       totalCount
     }
+    currency {
+      assetId
+      symbol
+      iconUrl
+      priceUsd
+    }
     createdAt
+  }
+  swappableCurrencies {
+    id
+    assetId
+    name
+    symbol
+    iconUrl
+    priceUsd
+    priceBtc
   }
 }
     `;
@@ -3556,8 +3636,12 @@ export type StatisticsQueryHookResult = ReturnType<typeof useStatisticsQuery>;
 export type StatisticsLazyQueryHookResult = ReturnType<typeof useStatisticsLazyQuery>;
 export type StatisticsQueryResult = Apollo.QueryResult<StatisticsQuery, StatisticsQueryVariables>;
 export const SwapPreOrderDocument = gql`
-    query SwapPreOrder($payAssetId: String!, $amount: Float!) {
-  swapPreOrder(payAssetId: $payAssetId, amount: $amount) {
+    query SwapPreOrder($payAssetId: String!, $fillAssetId: String!, $amount: Float!) {
+  swapPreOrder(
+    payAssetId: $payAssetId
+    fillAssetId: $fillAssetId
+    amount: $amount
+  ) {
     state
     funds
     amount
@@ -3583,6 +3667,7 @@ export const SwapPreOrderDocument = gql`
  * const { data, loading, error } = useSwapPreOrderQuery({
  *   variables: {
  *      payAssetId: // value for 'payAssetId'
+ *      fillAssetId: // value for 'fillAssetId'
  *      amount: // value for 'amount'
  *   },
  * });
@@ -3670,6 +3755,11 @@ export const TaggedArticleConnectionDocument = gql`
         mixinId
         bio
       }
+      currency {
+        assetId
+        symbol
+        iconUrl
+      }
       createdAt
     }
     pageInfo {
@@ -3718,6 +3808,11 @@ export const TransferConnectionDocument = gql`
       assetId
       transferType
       createdAt
+      currency {
+        assetId
+        symbol
+        iconUrl
+      }
     }
     pageInfo {
       hasNextPage
@@ -4216,6 +4311,11 @@ export const MyArticleOrderConnectionDocument = gql`
       orderType
       state
       total
+      currency {
+        assetId
+        symbol
+        iconUrl
+      }
       createdAt
     }
     pageInfo {
@@ -4291,6 +4391,13 @@ export const MyArticleDocument = gql`
     }
     comments {
       totalCount
+    }
+    currency {
+      assetId
+      symbol
+      iconUrl
+      priceUsd
+      priceBtc
     }
   }
 }
@@ -4529,6 +4636,11 @@ export const MyPaymentConnectionDocument = gql`
           }
         }
       }
+      currency {
+        assetId
+        iconUrl
+        symbol
+      }
     }
     pageInfo {
       hasNextPage
@@ -4662,6 +4774,16 @@ export const MySwapOrderConnectionDocument = gql`
         title
         price
       }
+      payAsset {
+        assetId
+        iconUrl
+        symbol
+      }
+      fillAsset {
+        assetId
+        iconUrl
+        symbol
+      }
     }
     pageInfo {
       hasNextPage
@@ -4753,6 +4875,11 @@ export const MyTransferConnectionDocument = gql`
         uuid
         title
       }
+      currency {
+        assetId
+        iconUrl
+        symbol
+      }
     }
     pageInfo {
       hasNextPage
@@ -4788,3 +4915,41 @@ export function useMyTransferConnectionLazyQuery(baseOptions?: Apollo.LazyQueryH
 export type MyTransferConnectionQueryHookResult = ReturnType<typeof useMyTransferConnectionQuery>;
 export type MyTransferConnectionLazyQueryHookResult = ReturnType<typeof useMyTransferConnectionLazyQuery>;
 export type MyTransferConnectionQueryResult = Apollo.QueryResult<MyTransferConnectionQuery, MyTransferConnectionQueryVariables>;
+export const PricableCurrenciesDocument = gql`
+    query PricableCurrencies {
+  pricableCurrencies {
+    id
+    assetId
+    name
+    symbol
+    iconUrl
+    priceUsd
+    priceBtc
+  }
+}
+    `;
+
+/**
+ * __usePricableCurrenciesQuery__
+ *
+ * To run a query within a React component, call `usePricableCurrenciesQuery` and pass it any options that fit your needs.
+ * When your component renders, `usePricableCurrenciesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = usePricableCurrenciesQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function usePricableCurrenciesQuery(baseOptions?: Apollo.QueryHookOptions<PricableCurrenciesQuery, PricableCurrenciesQueryVariables>) {
+        return Apollo.useQuery<PricableCurrenciesQuery, PricableCurrenciesQueryVariables>(PricableCurrenciesDocument, baseOptions);
+      }
+export function usePricableCurrenciesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<PricableCurrenciesQuery, PricableCurrenciesQueryVariables>) {
+          return Apollo.useLazyQuery<PricableCurrenciesQuery, PricableCurrenciesQueryVariables>(PricableCurrenciesDocument, baseOptions);
+        }
+export type PricableCurrenciesQueryHookResult = ReturnType<typeof usePricableCurrenciesQuery>;
+export type PricableCurrenciesLazyQueryHookResult = ReturnType<typeof usePricableCurrenciesLazyQuery>;
+export type PricableCurrenciesQueryResult = Apollo.QueryResult<PricableCurrenciesQuery, PricableCurrenciesQueryVariables>;

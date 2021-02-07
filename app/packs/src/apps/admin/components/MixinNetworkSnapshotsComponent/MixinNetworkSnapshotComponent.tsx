@@ -4,7 +4,7 @@ import {
   MixinNetworkSnapshot,
   useAdminMixinNetworkSnapshotConnectionQuery,
 } from '@graphql';
-import { FOXSWAP_APP_ID, SUPPORTED_TOKENS } from '@shared';
+import { FOXSWAP_APP_ID } from '@shared';
 import { Avatar, Button, Space, Table } from 'antd';
 import { ColumnProps } from 'antd/lib/table';
 import React from 'react';
@@ -83,13 +83,7 @@ export default function MixinNetworkSnapshotsComponent(props: {
       key: 'amount',
       render: (amount, snapshot) => (
         <Space>
-          <Avatar
-            src={
-              SUPPORTED_TOKENS.find(
-                (token) => token.assetId === snapshot.assetId,
-              )?.iconUrl
-            }
-          />
+          <Avatar src={snapshot.currency?.iconUrl} />
           <span>{amount}</span>
         </Space>
       ),

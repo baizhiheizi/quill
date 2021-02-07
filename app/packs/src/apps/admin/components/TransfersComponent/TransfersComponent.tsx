@@ -1,4 +1,3 @@
-import { SUPPORTED_TOKENS } from '@/shared';
 import LoadingComponent from '@admin/components/LoadingComponent/LoadingComponent';
 import { usePrsdigg } from '@admin/shared';
 import {
@@ -64,13 +63,7 @@ export default function TransfersComponent(props: {
       key: 'amount',
       render: (amount, transfer) => (
         <Space>
-          <Avatar
-            src={
-              SUPPORTED_TOKENS.find(
-                (token) => token.assetId === transfer.assetId,
-              )?.iconUrl
-            }
-          />
+          <Avatar src={transfer.currency?.iconUrl} />
           <span>{amount}</span>
         </Space>
       ),

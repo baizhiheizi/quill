@@ -5,12 +5,15 @@
 # Table name: orders
 #
 #  id         :bigint           not null, primary key
+#  change_btc :decimal(, )
+#  change_usd :decimal(, )
 #  item_type  :string
 #  order_type :integer
 #  state      :string
 #  total      :decimal(, )
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
+#  asset_id   :uuid
 #  buyer_id   :bigint
 #  item_id    :bigint
 #  seller_id  :bigint
@@ -18,6 +21,7 @@
 #
 # Indexes
 #
+#  index_orders_on_asset_id               (asset_id)
 #  index_orders_on_buyer_id               (buyer_id)
 #  index_orders_on_item_type_and_item_id  (item_type,item_id)
 #  index_orders_on_seller_id              (seller_id)
@@ -34,16 +38,18 @@ class Order < ApplicationRecord
   belongs_to :seller, class_name: 'User'
   belongs_to :item, polymorphic: true, counter_cache: true
   belongs_to :payment, foreign_key: :trace_id, primary_key: :trace_id, inverse_of: :order
+  belongs_to :currency, primary_key: :asset_id, foreign_key: :asset_id, inverse_of: :orders
 
   has_many :transfers, as: :source, dependent: :nullify
 
-  before_validation :setup_attributes
+  before_validation :setup_attributes, on: :create
 
   # prevent duplicated buy order
   validates :order_type, uniqueness: { scope: %i[order_type buyer_id item_id item_type], if: -> { buy_article? } }
+  validates :asset_id, presence: true
   validates :total, presence: true
   validates :trace_id, presence: true, uniqueness: true
-  validate :ensure_total_sufficient
+  validate :ensure_total_sufficient, on: :create
 
   enum order_type: { buy_article: 0, reward_article: 1 }
 
@@ -181,11 +187,20 @@ class Order < ApplicationRecord
     notifications.destroy_all
   end
 
+  def cache_history_ticker
+    r = PrsdiggBot.api.ticker asset_id, created_at.utc.rfc3339
+    update change_btc: r['price_btc'].to_f * total, change_usd: r['price_usd'].to_f * total
+  end
+
+  def cache_history_ticker_async
+    CacheOrderHistoryTickerWorker.perform_async id
+  end
+
   private
 
   def setup_attributes
     amount =
-      if payment.asset_id == Article::PRS_ASSET_ID
+      if payment.asset_id == item.asset_id
         payment.amount
       elsif payment.swap_order&.swapped? || payment.swap_order&.completed?
         if buy_article?
@@ -195,10 +210,13 @@ class Order < ApplicationRecord
         end
       end
 
+    self.currency = item.currency
     assign_attributes(
       buyer: payment.payer,
       seller: item.author,
-      total: amount
+      total: amount,
+      change_btc: currency.price_btc.to_f * amount,
+      change_usd: currency.price_usd.to_f * amount
     )
   end
 end

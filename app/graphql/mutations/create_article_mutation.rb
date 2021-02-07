@@ -7,6 +7,7 @@ module Mutations
     argument :content, String, required: true
     argument :price, Float, required: true
     argument :state, String, required: true
+    argument :asset_id, String, required: true
     argument :tag_names, [String], required: false
 
     field :error, String, null: true
@@ -17,7 +18,8 @@ module Mutations
         intro: params[:intro],
         content: params[:content],
         price: params[:price],
-        state: params[:state]
+        state: params[:state],
+        asset_id: params[:asset_id]
       )
 
       if article.save

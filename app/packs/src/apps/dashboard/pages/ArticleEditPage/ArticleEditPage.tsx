@@ -2,6 +2,7 @@ import LoadingComponent from '@dashboard/components/LoadingComponent/LoadingComp
 import { useMyArticleQuery, useUpdateArticleMutation } from '@graphql';
 import Editor, { commands } from '@uiw/react-md-editor';
 import {
+  Avatar,
   Button,
   Form,
   Input,
@@ -9,6 +10,8 @@ import {
   message,
   Modal,
   PageHeader,
+  Select,
+  Space,
 } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -17,6 +20,7 @@ import EditableTagsComponent from '../../components/EditableTagsComponent/Editab
 
 export default function ArticleEditPage() {
   const { uuid } = useParams<{ uuid: string }>();
+  const [editedPrice, setEditedPrice] = useState(0);
   const history = useHistory();
   const { t } = useTranslation();
   const [tags, setTags] = useState<string[]>([]);
@@ -79,11 +83,12 @@ export default function ArticleEditPage() {
           intro: myArticle.intro,
           content: myArticle.content,
           price: myArticle.price,
+          assetId: myArticle.assetId,
         }}
         labelCol={{ span: 2 }}
         wrapperCol={{ span: 22 }}
         onFinish={(values) => {
-          const { title, content, price, intro } = values;
+          const { uuid, title, content, price, intro } = values;
           if (!title || !content || !price || !intro) {
             message.warn(t('article.form.warning'));
           } else {
@@ -94,7 +99,16 @@ export default function ArticleEditPage() {
               cancelText: t('article.form.updateCancelText'),
               onOk: () =>
                 updateArticle({
-                  variables: { input: { ...values, tagNames: tags } },
+                  variables: {
+                    input: {
+                      uuid,
+                      title,
+                      content,
+                      price,
+                      intro,
+                      tagNames: tags,
+                    },
+                  },
                 }),
             });
           }
@@ -136,8 +150,62 @@ export default function ArticleEditPage() {
         <Form.Item label={t('article.tags')}>
           <EditableTagsComponent tags={tags} setTags={setTags} />
         </Form.Item>
-        <Form.Item label={t('article.price')} name='price'>
-          <InputNumber min={1} precision={4} placeholder='0.0' />
+        <Form.Item
+          label={t('article.price')}
+          extra={`≈ $${(
+            myArticle.currency.priceUsd * (editedPrice || myArticle.price)
+          ).toFixed(4)}`}
+        >
+          <Space>
+            <Form.Item
+              name='price'
+              noStyle
+              rules={[
+                { required: true },
+                {
+                  validator: (_, value) => {
+                    if (
+                      myArticle.currency.symbol === 'BTC' &&
+                      value >= 0.000_001
+                    ) {
+                      return Promise.resolve();
+                    } else if (
+                      myArticle.currency.symbol === 'PRS' &&
+                      value >= 1
+                    ) {
+                      return Promise.resolve();
+                    } else {
+                      return Promise.reject(t('article.form.priceIsTooLow'));
+                    }
+                  },
+                },
+              ]}
+            >
+              <InputNumber
+                onChange={(value) =>
+                  setEditedPrice(parseFloat(value.toString()))
+                }
+                style={{ minWidth: 130 }}
+                min={0.000_001}
+                step='0.000001'
+                precision={6}
+                placeholder='0.0'
+              />
+            </Form.Item>
+            <Form.Item name='assetId' noStyle rules={[{ required: true }]}>
+              <Select disabled>
+                <Select.Option
+                  key={myArticle.currency.assetId}
+                  value={myArticle.currency.assetId}
+                >
+                  <Space>
+                    <Avatar size='small' src={myArticle.currency.iconUrl} />
+                    {myArticle.currency.symbol}
+                  </Space>
+                </Select.Option>
+              </Select>
+            </Form.Item>
+          </Space>
         </Form.Item>
         <Form.Item wrapperCol={{ xs: { offset: 0 }, sm: { offset: 2 } }}>
           <Button

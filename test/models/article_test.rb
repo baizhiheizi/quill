@@ -25,6 +25,7 @@
 #
 # Indexes
 #
+#  index_articles_on_asset_id   (asset_id)
 #  index_articles_on_author_id  (author_id)
 #  index_articles_on_uuid       (uuid) UNIQUE
 #
