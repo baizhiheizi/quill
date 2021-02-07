@@ -23,6 +23,7 @@ query TaggedArticleConnection(
       title
       intro
       price
+      priceUsd
       revenue
       ordersCount
       commentsCount

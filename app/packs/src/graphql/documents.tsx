@@ -3740,6 +3740,7 @@ export const TaggedArticleConnectionDocument = gql`
       title
       intro
       price
+      priceUsd
       revenue
       ordersCount
       commentsCount
