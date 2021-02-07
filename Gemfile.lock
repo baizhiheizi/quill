@@ -217,6 +217,8 @@ GEM
       http (>= 4.0.0)
       rails (>= 6.0.0)
     open4 (1.3.4)
+    order_as_specified (1.6)
+      activerecord (>= 5.0.0)
     parallel (1.20.1)
     parser (3.0.0.0)
       ast (~> 2.4.1)
@@ -396,6 +398,7 @@ DEPENDENCIES
   mina-multistage (~> 1.0.3)
   mixin_bot
   noticed
+  order_as_specified
   pg
   puma
   rails (~> 6)

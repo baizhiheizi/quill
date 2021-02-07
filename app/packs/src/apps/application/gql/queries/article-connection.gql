@@ -5,6 +5,7 @@ query ArticleConnection($order: String!, $query: String, $after: String) {
       title
       intro
       price
+      priceUsd
       revenue
       ordersCount
       commentsCount

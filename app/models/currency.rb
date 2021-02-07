@@ -15,6 +15,8 @@
 #  index_currencies_on_asset_id  (asset_id) UNIQUE
 #
 class Currency < ApplicationRecord
+  extend OrderAsSpecified
+
   store :raw, accessors: %i[name symbol chain_id icon_url price_btc price_usd]
 
   validates :raw, presence: true
@@ -25,7 +27,7 @@ class Currency < ApplicationRecord
   has_many :payments, primary_key: :asset_id, foreign_key: :asset_id, dependent: :restrict_with_exception, inverse_of: :currency
   has_many :transfers, primary_key: :asset_id, foreign_key: :asset_id, dependent: :restrict_with_exception, inverse_of: :currency
 
-  scope :swappable, -> { where(asset_id: SwapOrder::SUPPORTED_ASSETS) }
+  scope :swappable, -> { where(asset_id: SwapOrder::SUPPORTED_ASSETS).order_as_specified(asset_id: SwapOrder::SUPPORTED_ASSETS) }
   scope :pricable, -> { where(asset_id: Article::SUPPORTED_ASSETS) }
   scope :prs, -> { find_by(asset_id: '3edb734c-6d6f-32ff-ab03-4eb43640c758') }
   scope :btc, -> { find_by(asset_id: 'c6d0c728-2624-429b-8e0d-d9d19b6592fa') }

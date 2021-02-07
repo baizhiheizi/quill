@@ -67,6 +67,8 @@ gem 'simple_command'
 gem 'noticed'
 # Centralization of locale data collection for Ruby on Rails.
 gem 'rails-i18n', '~> 6.x'
+# Add arbitrary ordering to ActiveRecord queries.
+gem 'order_as_specified'
 
 # deploy
 gem 'mina', '~> 1.2.2', require: false

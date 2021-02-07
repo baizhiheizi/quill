@@ -63,7 +63,9 @@ export default function ArticleOrdersComponent(props: {
               <Avatar src={order.buyer.avatarUrl}>{order.buyer.name[0]}</Avatar>
               <span>{order.buyer.name}</span>
               <span>
-                {`${t('dashboard.articlePage.paid')} ${order.total} ${order.currency.symbol}`}
+                {`${t('dashboard.articlePage.paid')} ${order.total} ${
+                  order.currency.symbol
+                }`}
               </span>
               <span>
                 {orderType == 'buy_article'

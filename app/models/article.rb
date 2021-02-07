@@ -72,6 +72,7 @@ class Article < ApplicationRecord
 
   before_validation :setup_attributes, on: :create
 
+  default_scope -> { includes(:currency) }
   scope :only_published, -> { where(state: :published) }
   scope :order_by_popularity, lambda {
                                 where.not(orders_count: 0)
@@ -188,6 +189,10 @@ class Article < ApplicationRecord
     author.update(
       articles_count: author.articles.count
     )
+  end
+
+  def price_usd
+    (currency.price_usd.to_f * price).to_f.round(4)
   end
 
   private

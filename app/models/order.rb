@@ -46,9 +46,10 @@ class Order < ApplicationRecord
 
   # prevent duplicated buy order
   validates :order_type, uniqueness: { scope: %i[order_type buyer_id item_id item_type], if: -> { buy_article? } }
+  validates :asset_id, presence: true
   validates :total, presence: true
   validates :trace_id, presence: true, uniqueness: true
-  validate :ensure_total_sufficient
+  validate :ensure_total_sufficient, on: :create
 
   enum order_type: { buy_article: 0, reward_article: 1 }
 
@@ -209,8 +210,8 @@ class Order < ApplicationRecord
         end
       end
 
+    self.currency = item.currency
     assign_attributes(
-      asset_id: item.asset_id,
       buyer: payment.payer,
       seller: item.author,
       total: amount,

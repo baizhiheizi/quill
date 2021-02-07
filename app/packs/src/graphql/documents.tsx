@@ -295,6 +295,7 @@ export type Article = {
   partialContent?: Maybe<Scalars['String']>;
   paymentTraceId?: Maybe<Scalars['String']>;
   price: Scalars['Float'];
+  priceUsd?: Maybe<Scalars['Float']>;
   readerRevenueTotal: Scalars['Float'];
   readers: UserConnection;
   revenue: Scalars['Float'];
@@ -3337,6 +3338,7 @@ export const ArticleConnectionDocument = gql`
       title
       intro
       price
+      priceUsd
       revenue
       ordersCount
       commentsCount
@@ -3403,6 +3405,7 @@ export const ArticleDocument = gql`
     intro
     content
     price
+    priceUsd
     assetId
     authorized
     ordersCount
@@ -3452,6 +3455,7 @@ export const ArticleDocument = gql`
       assetId
       symbol
       iconUrl
+      priceUsd
     }
     createdAt
   }

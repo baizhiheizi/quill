@@ -7,7 +7,16 @@ import {
 } from '@ant-design/icons';
 import { Article } from '@graphql';
 import { usePrsdigg, useUserAgent } from '@shared';
-import { Avatar, Button, List, Popover, Row, Space } from 'antd';
+import {
+  Avatar,
+  Button,
+  List,
+  Popover,
+  Row,
+  Space,
+  Tooltip,
+  Typography,
+} from 'antd';
 import moment from 'moment';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
@@ -77,14 +86,23 @@ export default function ArticleListItemComponent(props: {
                 {moment(article.createdAt).fromNow()}
               </div>
             </div>
-            <Space style={{ marginLeft: 'auto' }}>
-              <Avatar size='small' src={article.currency.iconUrl} />
-              <span>
-                {article.currency.symbol === 'BTC'
-                  ? article.price.toFixed(6)
-                  : article.price.toFixed(2)}
-              </span>
-            </Space>
+            <div style={{ position: 'relative', marginLeft: 'auto' }}>
+              <Space style={{ marginLeft: 'auto' }}>
+                <Avatar size='small' src={article.currency.iconUrl} />
+                <span>
+                  {article.currency.symbol === 'BTC'
+                    ? article.price.toFixed(6)
+                    : article.price.toFixed(2)}
+                </span>
+              </Space>
+              <div
+                style={{ position: 'absolute', right: 0, fontSize: '0.8rem' }}
+              >
+                <Typography.Text type='secondary'>
+                  ≈ ${article.priceUsd}
+                </Typography.Text>
+              </div>
+            </div>
           </Row>
         }
       />

@@ -124,7 +124,8 @@ export default function ArticlePage() {
                 {t('articlePage.payToRead1')}{' '}
                 <span style={{ color: 'red' }}>
                   {article.price} {article.currency.symbol}
-                </span>{' '}
+                </span>
+                {` (≈$${article.priceUsd}) `}
                 {t('articlePage.payToRead2')}
               </div>
               <div>
