@@ -161,6 +161,7 @@ export default function ArticleNewPage() {
             <Form.Item
               name='price'
               noStyle
+              dependencies={['assetId']}
               rules={[
                 { required: true },
                 {
