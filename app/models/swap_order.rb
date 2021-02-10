@@ -172,7 +172,7 @@ class SwapOrder < ApplicationRecord
   end
 
   def ensure_min_amount_filled
-    amount.to_f > min_amount.to_f
+    amount.to_f >= min_amount.to_f
   end
 
   def article

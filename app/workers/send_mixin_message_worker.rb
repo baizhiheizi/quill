@@ -5,12 +5,9 @@ class SendMixinMessageWorker
   sidekiq_options queue: :default, retry: true
 
   def perform(message)
-    r = PrsdiggBot.api.send_message message
-    Rails.logger.info r.inspect
-
-    return if r['error'].blank?
-    return if r['error']['code'] == 403
-
-    raise r['error'].inspect
+    PrsdiggBot.api.send_message message
+  rescue MixinBot::ForbiddenError, MixinBot::UnauthorizedError => e
+    Rails.logger.error e.inspect
+    raise e if Rails.env.development?
   end
 end
