@@ -10,7 +10,7 @@
     "@apollo/client": "^3.3.8",
     "@babel/preset-react": "^7.12.13",
     "@babel/preset-typescript": "^7.12.13",
-    "@rails/actioncable": "^6.1.1",
+    "@rails/actioncable": "^6.1.2",
     "@rails/activestorage": "^6.1.1",
     "@rails/ujs": "^6.1.1",
     "@rails/webpacker": "^6.0.0-beta.5",
