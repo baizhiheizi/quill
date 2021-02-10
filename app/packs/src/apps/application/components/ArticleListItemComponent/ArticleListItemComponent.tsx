@@ -7,16 +7,7 @@ import {
 } from '@ant-design/icons';
 import { Article } from '@graphql';
 import { usePrsdigg, useUserAgent } from '@shared';
-import {
-  Avatar,
-  Button,
-  List,
-  Popover,
-  Row,
-  Space,
-  Tooltip,
-  Typography,
-} from 'antd';
+import { Avatar, Button, List, Popover, Row, Space, Typography } from 'antd';
 import moment from 'moment';
 import React from 'react';
 import { useTranslation } from 'react-i18next';

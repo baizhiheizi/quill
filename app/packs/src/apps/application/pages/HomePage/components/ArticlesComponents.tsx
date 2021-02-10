@@ -54,7 +54,10 @@ export default function ArticlesComponent(props: {
         />
       }
       renderItem={(article: Partial<Article>) => (
-        <ArticleListItemComponent article={article} />
+        <ArticleListItemComponent
+          article={article}
+          routerState={{ articlesComponent: { order } }}
+        />
       )}
     />
   );
