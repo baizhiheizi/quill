@@ -140,19 +140,24 @@ class SwapOrder < ApplicationRecord
   def create_change_transfer!
     return if completed?
     return if amount.blank?
-    return if min_amount.blank? || (amount - min_amount - 0.000_000_01).negative?
+    return if min_amount.blank?
 
-    _trace_id = wallet.mixin_api.unique_conversation_id(trace_id, payment.payer.mixin_uuid)
-    transfers.create_with(
-      wallet: wallet,
-      transfer_type: :swap_change,
-      opponent_id: payment.payer.mixin_uuid,
-      asset_id: fill_asset_id,
-      amount: (amount - min_amount).to_f,
-      memo: 'CHANGE FROM SWAP'
-    ).find_or_create_by!(
-      trace_id: _trace_id
-    )
+    _amount = (amount - min_amount).to_f
+    if (_amount - Transfer::MINIMUM_AMOUNT).negative?
+      complete!
+    else
+      _trace_id = wallet.mixin_api.unique_conversation_id(trace_id, payment.payer.mixin_uuid)
+      transfers.create_with(
+        wallet: wallet,
+        transfer_type: :swap_change,
+        opponent_id: payment.payer.mixin_uuid,
+        asset_id: fill_asset_id,
+        amount: _amount,
+        memo: 'CHANGE FROM SWAP'
+      ).find_or_create_by!(
+        trace_id: _trace_id
+      )
+    end
   end
 
   def create_refund_transfer!

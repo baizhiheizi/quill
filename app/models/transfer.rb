@@ -28,6 +28,8 @@
 #  index_transfers_on_wallet_id                  (wallet_id)
 #
 class Transfer < ApplicationRecord
+  MINIMUM_AMOUNT = 0.000_000_01
+
   belongs_to :source, polymorphic: true
   belongs_to :wallet, class_name: 'MixinNetworkUser', primary_key: :uuid, inverse_of: :transfers, optional: true
   belongs_to :recipient, class_name: 'User', primary_key: :mixin_uuid, foreign_key: :opponent_id, inverse_of: :transfers, optional: true
@@ -50,6 +52,7 @@ class Transfer < ApplicationRecord
   validates :trace_id, presence: true, uniqueness: true
   validates :asset_id, presence: true
   validates :opponent_id, presence: true
+  validates :amount, numericality: { greater_than_or_equal_to: MINIMUM_AMOUNT }
 
   after_create :update_recipient_statistics_cache
   after_commit :process_async, on: :create
