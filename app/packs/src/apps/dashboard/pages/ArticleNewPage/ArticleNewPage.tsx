@@ -80,6 +80,7 @@ export default function ArticleNewPage() {
         form={form}
         initialValues={{
           assetId,
+          content: '',
           price,
           state: 'published',
         }}

@@ -48,9 +48,7 @@ export default function App(props: {
               <Router>
                 <Layout>
                   <Menus />
-                  <Layout.Content
-                    style={{ background: '#fff', padding: '1rem' }}
-                  >
+                  <Layout.Content className='bg-white p-4'>
                     <Row justify='center'>
                       <Col
                         flex={1}

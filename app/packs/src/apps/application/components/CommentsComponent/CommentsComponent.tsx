@@ -278,6 +278,7 @@ ${comment.content.replace(/^/gm, '> ')}
           initialValues={{
             commentableType,
             commentableId,
+            content: '',
           }}
           onFinish={(values) => {
             if (!Boolean(values.content)) {
