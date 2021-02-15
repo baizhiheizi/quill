@@ -1,4 +1,4 @@
-import { Col, Row, Select, Tabs } from 'antd';
+import { Tabs } from 'antd';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useHistory, useLocation } from 'react-router-dom';
@@ -14,9 +14,6 @@ export default function HomePage() {
   const [activeTabKey, setActiveTabKey] = useState<
     'default' | 'tags' | 'comments'
   >(location.state?.activeTabKey || 'default');
-  const [articlesOrder, setArticlesOrder] = useState<
-    'default' | 'lately' | 'revenue'
-  >(location.state?.articlesOrder || 'default');
   return (
     <Tabs
       defaultActiveKey={activeTabKey}
@@ -24,37 +21,18 @@ export default function HomePage() {
         setActiveTabKey(activeKey);
         history.replace({
           ...history.location,
-          state: { activeTabKey: activeKey, articlesOrder },
+          state: { activeTabKey: activeKey },
         });
       }}
     >
-      <Tabs.TabPane tab={t('homePage.articles')} key='articles'>
-        <Row justify='end'>
-          <Col>
-            <Select
-              value={articlesOrder}
-              bordered={false}
-              onSelect={(value) => {
-                setArticlesOrder(value);
-                history.replace({
-                  ...history.location,
-                  state: { activeTabKey, articlesOrder: value },
-                });
-              }}
-            >
-              <Select.Option value='default'>
-                {t('homePage.articlesOrder.popularity')}
-              </Select.Option>
-              <Select.Option value='lately'>
-                {t('homePage.articlesOrder.lately')}
-              </Select.Option>
-              <Select.Option value='revenue'>
-                {t('homePage.articlesOrder.revenue')}
-              </Select.Option>
-            </Select>
-          </Col>
-        </Row>
-        <ArticlesComponent order={articlesOrder} />
+      <Tabs.TabPane tab={t('homePage.popularity')} key='popularity'>
+        <ArticlesComponent order='default' />
+      </Tabs.TabPane>
+      <Tabs.TabPane tab={t('homePage.lately')} key='lately'>
+        <ArticlesComponent order='lately' />
+      </Tabs.TabPane>
+      <Tabs.TabPane tab={t('homePage.revenue')} key='revenue'>
+        <ArticlesComponent order='revenue' />
       </Tabs.TabPane>
       <Tabs.TabPane tab={t('homePage.tags')} key='tags'>
         <TagsComponent />

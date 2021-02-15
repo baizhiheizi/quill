@@ -17,7 +17,7 @@
 #  index_taggings_on_tag_id_and_article_id  (tag_id,article_id) UNIQUE
 #
 class Tagging < ApplicationRecord
-  belongs_to :tag, counter_cache: :articles_count
+  belongs_to :tag, counter_cache: :articles_count, touch: true
   belongs_to :article, counter_cache: :tags_count
 
   before_destroy :destroy_notifications

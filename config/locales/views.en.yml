@@ -32,11 +32,9 @@ en:
       login: Login
       logout: Logout
     homePage:
-      articles: Articles
-      articlesOrder:
-        popularity: Popularity
-        lately: Lately
-        revenue: Revenue
+      popularity: Popularity
+      lately: Lately
+      revenue: Revenue
       tags: Tags
       commentsZone: Comments
     articlePage:

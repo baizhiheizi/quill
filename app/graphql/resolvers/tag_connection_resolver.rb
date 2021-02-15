@@ -7,7 +7,7 @@ module Resolvers
     type Types::TagConnectionType, null: false
 
     def resolve(**)
-      Tag.all.order(articles_count: :desc, created_at: :desc)
+      Tag.all.order(updated_at: :desc, articles_count: :desc)
     end
   end
 end
