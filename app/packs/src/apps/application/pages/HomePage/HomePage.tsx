@@ -10,7 +10,6 @@ export default function HomePage() {
   const { t } = useTranslation();
   const history = useHistory();
   const location = useLocation<any>();
-  console.log(location);
   const [activeTabKey, setActiveTabKey] = useState<
     'default' | 'tags' | 'comments'
   >(location.state?.activeTabKey || 'default');
