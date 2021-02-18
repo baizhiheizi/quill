@@ -29,6 +29,7 @@ class User < ApplicationRecord
   store :statistics, accessors: %i[articles_count bought_articles_count author_revenue_total reader_revenue_total revenue_total payment_total comments_count]
 
   has_one :mixin_authorization, -> { where(provider: :mixin) }, class_name: 'UserAuthorization', inverse_of: :user
+  has_many :access_tokens, class_name: 'UserAccessToken', inverse_of: :user
 
   has_many :articles, foreign_key: :author_id, inverse_of: :author, dependent: :nullify
   has_many :payments, foreign_key: :opponent_id, primary_key: :mixin_uuid, inverse_of: :payer, dependent: :nullify
