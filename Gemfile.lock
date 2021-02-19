@@ -1,11 +1,4 @@
 GIT
-  remote: https://github.com/an-lee/batch-loader.git
-  revision: b49bef07d7608cdc180525990eac061897d03ca8
-  branch: master
-  specs:
-    batch-loader (1.5.0)
-
-GIT
   remote: https://github.com/rails/webpacker.git
   revision: b7069f4618de51415a4449908346a3c0853880dc
   specs:
@@ -100,6 +93,7 @@ GEM
     babel-transpiler (0.7.0)
       babel-source (>= 4.0, < 6)
       execjs (~> 2.0)
+    batch-loader (2.0.1)
     bcrypt (3.1.16)
     bindex (0.8.1)
     bootsnap (1.7.2)
@@ -381,7 +375,7 @@ DEPENDENCIES
   activestorage-aliyun
   after_commit_everywhere
   annotate
-  batch-loader!
+  batch-loader
   bcrypt (~> 3.1.7)
   bootsnap (>= 1.4.2)
   byebug
