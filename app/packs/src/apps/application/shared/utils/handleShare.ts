@@ -2,6 +2,7 @@ import { Article, Tag } from '@graphql';
 import { message } from 'antd';
 import copy from 'copy-to-clipboard';
 import { encode as encode64 } from 'js-base64';
+import { useTranslation } from 'react-i18next';
 import { PRSDIGG_ICON_URL } from '../constants';
 
 export const handleArticleShare = (
@@ -41,6 +42,7 @@ export const handleShare = (
   appCardData: object,
   mixinEnv: boolean,
 ) => {
+  const { t } = useTranslation();
   if (mixinEnv) {
     location.replace(
       `mixin://send?category=app_card&data=${encodeURIComponent(
@@ -49,6 +51,6 @@ export const handleShare = (
     );
   } else {
     copy(url);
-    message.success('成功复制链接');
+    message.success(t('message.copied'));
   }
 };

@@ -35,6 +35,7 @@ module Types
     field :my_statistics, resolver: Resolvers::MyStatisticsResolver
     field :my_notification_connection, resolver: Resolvers::MyNotificationConnectionResolver
     field :my_notification_setting, resolver: Resolvers::MyNotificationSettingResolver
+    field :my_access_token_connection, resolver: Resolvers::MyAccessTokenConnectionResolver
 
     # admin
     field :admin_article_connection, resolver: Resolvers::AdminArticleConnectionResolver

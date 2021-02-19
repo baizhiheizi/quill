@@ -25,4 +25,8 @@ class UserAccessToken < ApplicationRecord
   after_initialize do
     self.value = SecureRandom.uuid
   end
+
+  def desensitized_value
+    value.first(4) + '*' * 6 + value.last(4)
+  end
 end

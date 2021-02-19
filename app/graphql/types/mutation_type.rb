@@ -20,6 +20,8 @@ module Types
     field :read_notification, mutation: Mutations::ReadNotificationMutation
     field :switch_locale, mutation: Mutations::SwitchLocaleMutation
     field :update_notification_setting, mutation: Mutations::UpdateNotificationSettingMutation
+    field :create_access_token, mutation: Mutations::CreateAccessTokenMutation
+    field :delete_access_token, mutation: Mutations::DeleteAccessTokenMutation
 
     # admin
     field :admin_login, mutation: Mutations::AdminLoginMutation

@@ -10,6 +10,7 @@ zh-CN:
       viewBtn: 查看
       cancelBtn: 取消
       paidBtn: 已经支付
+      deleteBtn: 删除
     messages:
       payWithMessenger: 请使用 Mixin Messenger 扫码支付
       viewWithMessenger: 请使用 Mixin Messenger 扫码查看
@@ -19,6 +20,8 @@ zh-CN:
       successHiddenArticle: 文章已隐藏
       successPublishedArticle: 文章已公开
       successUpdated: 成功更新
+      successCopied: 成功复制
+      successDeleted: 成功删除
     menu:
       read: 读文章
       write: 写文章
@@ -219,6 +222,7 @@ zh-CN:
       settingsPage:
         tabs:
           notification: 消息通知
+          accessToken: Access Token
         notification:
           tipsOfGeneral: 您可以自定义消息通知的方式，网站通知、Mixin 机器人消息通知和 Webhook（开发中）。
           tipsOfArticlePublished: 订阅的作者发表新文章时，您将收到通知。
@@ -227,3 +231,11 @@ zh-CN:
           tipsOfTaggingCreated: 订阅的话题有新文章时，您将收到通知。
           tipsOfCommentCreated: 订阅的文章有新评论时，您将收到通知。
           tipsOfTransferProcessed: 有新的转账（包括文章收益、退款等）时，您将收到通知。
+        accessToken:
+          confirmGenerateToken: Access Token 可提供给第三方应用以管理您的文章，确定需要生成新的 Token 吗？
+          generateToken: 生成新 Token
+          memoPlaceholader: 备注一下 Token
+          generatedTips: 新 Access Token 已经生成
+          securityTips: 请妥善保管您的 Access Token，关闭后将不再显示。如果丢失请重新生成。
+          deleteConfirmTips: 确认要删除 Access Token 吗？
+          copyBtn: 复制

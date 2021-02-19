@@ -1,0 +1,7 @@
+mutation CreateAccessToken($input: CreateAccessTokenMutationInput!) {
+  createAccessToken(input: $input) {
+    id
+    value
+    memo
+  }
+}

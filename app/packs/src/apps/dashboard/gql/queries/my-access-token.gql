@@ -1,0 +1,13 @@
+query MyAccessTokenConnection($after: String) {
+  myAccessTokenConnection(after: $after) {
+    nodes {
+      id
+      memo
+      desensitizedValue
+    }
+    pageInfo {
+      hasNextPage
+      endCursor
+    }
+  }
+}
