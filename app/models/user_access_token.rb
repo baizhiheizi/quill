@@ -22,7 +22,7 @@ class UserAccessToken < ApplicationRecord
   validates :value, presence: true, uniqueness: true
   validates :memo, presence: true
 
-  after_initialize do
+  after_initialize if: :new_record? do
     self.value = SecureRandom.uuid
   end
 

@@ -30,12 +30,11 @@
 #  index_articles_on_uuid       (uuid) UNIQUE
 #
 class Article < ApplicationRecord
-  # PRS: 3edb734c-6d6f-32ff-ab03-4eb43640c758
-  # BTC: c6d0c728-2624-429b-8e0d-d9d19b6592fa
-  SUPPORTED_ASSETS = %w[
-    3edb734c-6d6f-32ff-ab03-4eb43640c758
-    c6d0c728-2624-429b-8e0d-d9d19b6592fa
-  ].freeze
+  PRS_ASSET_ID = '3edb734c-6d6f-32ff-ab03-4eb43640c758'
+  BTC_ASSET_ID = 'c6d0c728-2624-429b-8e0d-d9d19b6592fa'
+  SUPPORTED_ASSETS = [PRS_ASSET_ID, BTC_ASSET_ID].freeze
+  MINIMUM_PRICE_PRS = 1
+  MINIMUM_PRICE_BTC = 0.000_001
 
   include AASM
 
@@ -66,7 +65,6 @@ class Article < ApplicationRecord
   validates :title, presence: true, length: { maximum: 25 }
   validates :intro, presence: true, length: { maximum: 140 }
   validates :content, presence: true
-  validates :price, numericality: { greater_than: 0.000_000_01 }
   validate :ensure_author_account_normal
   validate :ensure_price_not_too_low
 
@@ -201,7 +199,7 @@ class Article < ApplicationRecord
     return unless new_record?
 
     assign_attributes(
-      price: price.round(8),
+      price: price.to_f.round(8),
       uuid: SecureRandom.uuid
     )
   end
@@ -209,17 +207,15 @@ class Article < ApplicationRecord
   def ensure_author_account_normal
     return unless new_record?
 
-    errors.add(:author, 'account is banned!') if author&.banned?
+    errors.add(:author, 'is banned') if author&.banned?
   end
 
   def ensure_price_not_too_low
-    too_low =
-      case asset_id
-      when '3edb734c-6d6f-32ff-ab03-4eb43640c758'
-        price < 1
-      when 'c6d0c728-2624-429b-8e0d-d9d19b6592fa'
-        price < 0.000_001
-      end
-    errors.add(:price, 'price is too low!') if too_low
+    case asset_id
+    when PRS_ASSET_ID
+      errors.add(:price, 'at least 1 PRS') if price.to_f < MINIMUM_PRICE_PRS
+    when BTC_ASSET_ID
+      errors.add(:price, 'at least 0.000001 BTC') if price.to_f < MINIMUM_PRICE_BTC
+    end
   end
 end

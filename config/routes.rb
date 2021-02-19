@@ -41,5 +41,9 @@ Rails.application.routes.draw do
     get '*path' => 'overview#index'
   end
 
+  namespace :api, defaults: { format: :json } do
+    resources :articles, only: %i[index show create], param: :uuid
+  end
+
   get '*path' => 'home#index'
 end

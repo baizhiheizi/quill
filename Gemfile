@@ -74,7 +74,6 @@ gem 'order_as_specified'
 gem 'mina', '~> 1.2.2', require: false
 gem 'mina-logs', '~> 1.1.0', require: false
 gem 'mina-multistage', '~> 1.0.3', require: false
-# gem 'mina-sidekiq', '~> 1.0.3', require: false
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
