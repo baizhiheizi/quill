@@ -1,11 +1,9 @@
 import ListComponent from '@dashboard/components/ListComponent/ListComponent';
 import LoadingComponent from '@dashboard/components/LoadingComponent/LoadingComponent';
-import copy from 'copy-to-clipboard';
 import {
-  useCreateAccessTokenMutation,
-  useMyAccessTokenConnectionQuery,
-  useDeleteAccessTokenMutation,
-  UserAccessToken,
+  AccessToken, useCreateAccessTokenMutation,
+
+  useDeleteAccessTokenMutation, useMyAccessTokenConnectionQuery
 } from '@graphql';
 import {
   Alert,
@@ -15,16 +13,17 @@ import {
   message,
   Modal,
   Popconfirm,
-  Typography,
+  Typography
 } from 'antd';
-import React, { useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import copy from 'copy-to-clipboard';
+import React, {useState} from 'react';
+import {useTranslation} from 'react-i18next';
 
 export default function AccessTokensComponent() {
   const { t } = useTranslation();
-  const [newAccessToken, setNewAccessToken] = useState<
-    Partial<UserAccessToken>
-  >(null);
+  const [newAccessToken, setNewAccessToken] = useState<Partial<AccessToken>>(
+    null,
+  );
   const [modalVisible, setModalVisible] = useState(false);
   const [memo, setMemo] = useState('');
   const {
@@ -123,7 +122,7 @@ export default function AccessTokensComponent() {
         hasNextPage={hasNextPage}
         fetchMore={() => fetchMore({ variables: { after: endCursor } })}
         dataSource={accessTokens}
-        renderItem={(accessToken: Partial<UserAccessToken>) => (
+        renderItem={(accessToken: Partial<AccessToken>) => (
           <List.Item
             key={accessToken.id}
             actions={[

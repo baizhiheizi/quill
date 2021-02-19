@@ -10,11 +10,22 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_02_18_103750) do
+ActiveRecord::Schema.define(version: 2021_02_19_090436) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
+
+  create_table "access_tokens", force: :cascade do |t|
+    t.bigint "user_id"
+    t.uuid "value"
+    t.string "memo"
+    t.datetime "deleted_at"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["user_id"], name: "index_access_tokens_on_user_id"
+    t.index ["value"], name: "index_access_tokens_on_value", unique: true
+  end
 
   create_table "actions", force: :cascade do |t|
     t.string "action_type", null: false

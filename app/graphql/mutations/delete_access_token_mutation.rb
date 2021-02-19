@@ -7,7 +7,7 @@ module Mutations
     type Boolean
 
     def resolve(id:)
-      current_user.access_tokens.find(id).destroy!
+      current_user.access_tokens.find(id).soft_delete!
     end
   end
 end

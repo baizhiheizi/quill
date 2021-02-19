@@ -27,7 +27,7 @@ class API::BaseController < ActionController::Base
   end
 
   def current_user
-    @_current_user = UserAccessToken.find_by(value: request.env['HTTP_X_ACCESS_TOKEN'])&.user
+    @_current_user = AccessToken.find_by(value: request.env['HTTP_X_ACCESS_TOKEN'])&.user
   end
 
   def with_locale(&action)

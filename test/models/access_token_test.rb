@@ -2,10 +2,11 @@
 
 # == Schema Information
 #
-# Table name: user_access_tokens
+# Table name: access_tokens
 #
 #  id         :bigint           not null, primary key
-#  memo       :string           not null
+#  deleted_at :datetime
+#  memo       :string
 #  value      :uuid
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
@@ -13,12 +14,12 @@
 #
 # Indexes
 #
-#  index_user_access_tokens_on_user_id  (user_id)
-#  index_user_access_tokens_on_value    (value) UNIQUE
+#  index_access_tokens_on_user_id  (user_id)
+#  index_access_tokens_on_value    (value) UNIQUE
 #
 require 'test_helper'
 
-class UserAccessTokenTest < ActiveSupport::TestCase
+class AccessTokenTest < ActiveSupport::TestCase
   # test "the truth" do
   #   assert true
   # end
