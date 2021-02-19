@@ -49,3 +49,39 @@ It is worth reminding that besides the payment for articles, the income from oth
 At present, PRSDigg only supports [Mixin Messenger](https://mixin.one/messenger) login and payment. Please download and install it before experiencing PRSDigg.
 
 Browse [prsdigg.com](https://prsdigg.com/), or search for Bot 7000101549 in [mixin messenger](https://mixin.one/messenger).
+
+## API
+
+User can generate access token in [dashboard settings](https://prsdigg.com/dashboard/settings).
+
+Use access token in a HTTP Header named `X-Access-Token`.
+
+API Endpoint is `https://prsdigg.com/api`
+
+### `GET | /articles`
+
+When access token provided, it returns user's articles, otherwise, it return all published articles.
+
+Available params: `offset`, `order`, `limit`.
+
+Example: [https://prsdigg.com/api/articles?limit=5&order=asc&offset=2021-01-18T07:41:36.624Z](https://prsdigg.com/api/articles?limit=5&order=asc&offset=2021-01-18T07:41:36.624Z)
+
+### `GET | /article/:uuid`
+
+Article content will not provied unless valid access token provided.
+
+### `POST | /articles`
+
+Create a new article with valid access token.
+
+Request body example:
+
+```json
+{
+  title: 'article title',
+  content: 'some article content',
+  intro: 'some article introduction',
+  price: 0.000001,
+  asset_id: 'c6d0c728-2624-429b-8e0d-d9d19b6592fa'
+}
+```
