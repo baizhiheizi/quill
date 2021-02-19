@@ -1,6 +1,7 @@
 import {
   CheckCircleTwoTone,
   ExclamationCircleOutlined,
+  QuestionCircleOutlined,
 } from '@ant-design/icons';
 import ListComponent from '@dashboard/components/ListComponent/ListComponent';
 import LoadingComponent from '@dashboard/components/LoadingComponent/LoadingComponent';
@@ -107,6 +108,13 @@ export default function AccessTokensComponent() {
             {t('dashboard.settingsPage.accessToken.generateToken')}
           </Button>
         </Popconfirm>
+        <a
+          className='ml-2'
+          href='https://github.com/baizhiheizi/prsdigg#api'
+          target='_blank'
+        >
+          <QuestionCircleOutlined />
+        </a>
         <Modal
           title={t('dashboard.settingsPage.accessToken.generateToken')}
           visible={modalVisible}

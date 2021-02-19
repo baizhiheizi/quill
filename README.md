@@ -58,7 +58,7 @@ Use access token in a HTTP Header named `X-Access-Token`.
 
 API Endpoint is `https://prsdigg.com/api`
 
-### `GET | /articles`
+`GET | /articles`
 
 When access token provided, it returns user's articles, otherwise, it return all published articles.
 
@@ -66,11 +66,11 @@ Available params: `offset`, `order`, `limit`.
 
 Example: [https://prsdigg.com/api/articles?limit=5&order=asc&offset=2021-01-18T07:41:36.624Z](https://prsdigg.com/api/articles?limit=5&order=asc&offset=2021-01-18T07:41:36.624Z)
 
-### `GET | /article/:uuid`
+`GET | /article/:uuid`
 
 Article content will not provied unless valid access token provided.
 
-### `POST | /articles`
+`POST | /articles`
 
 Create a new article with valid access token.
 
@@ -78,10 +78,10 @@ Request body example:
 
 ```json
 {
-  title: 'article title',
-  content: 'some article content',
-  intro: 'some article introduction',
-  price: 0.000001,
-  asset_id: 'c6d0c728-2624-429b-8e0d-d9d19b6592fa'
+  "title": "article title",
+  "content": "some article content",
+  "intro": "some article introduction",
+  "price": 0.000001,
+  "asset_id": "c6d0c728-2624-429b-8e0d-d9d19b6592fa"
 }
 ```
