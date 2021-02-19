@@ -67,6 +67,8 @@ gem 'noticed'
 gem 'rails-i18n', '~> 6.x'
 # Add arbitrary ordering to ActiveRecord queries.
 gem 'order_as_specified'
+# Rack middleware for blocking & throttling abusive requests
+gem 'rack-attack'
 
 # deploy
 gem 'mina', '~> 1.2.2', require: false
