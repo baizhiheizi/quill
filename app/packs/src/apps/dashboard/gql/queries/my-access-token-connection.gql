@@ -4,6 +4,8 @@ query MyAccessTokenConnection($after: String) {
       id
       memo
       desensitizedValue
+      lastRequestAt
+      lastRequestIp
     }
     pageInfo {
       hasNextPage

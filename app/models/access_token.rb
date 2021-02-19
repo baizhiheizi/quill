@@ -4,13 +4,14 @@
 #
 # Table name: access_tokens
 #
-#  id         :bigint           not null, primary key
-#  deleted_at :datetime
-#  memo       :string
-#  value      :uuid
-#  created_at :datetime         not null
-#  updated_at :datetime         not null
-#  user_id    :bigint
+#  id           :bigint           not null, primary key
+#  deleted_at   :datetime
+#  last_request :jsonb
+#  memo         :string
+#  value        :uuid
+#  created_at   :datetime         not null
+#  updated_at   :datetime         not null
+#  user_id      :bigint
 #
 # Indexes
 #
@@ -20,6 +21,8 @@
 class AccessToken < ApplicationRecord
   include SoftDeletable
 
+  store :last_request, accessors: %i[ip url method at], prefix: true
+
   belongs_to :user
 
   validates :value, presence: true, uniqueness: true
@@ -28,6 +31,8 @@ class AccessToken < ApplicationRecord
   after_initialize if: :new_record? do
     self.value = SecureRandom.uuid
   end
+
+  default_scope { where(deleted_at: nil) }
 
   def desensitized_value
     value.first(4) + '*' * 6 + value.last(4)

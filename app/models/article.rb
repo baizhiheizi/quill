@@ -13,6 +13,7 @@
 #  orders_count                        :integer          default(0), not null
 #  price                               :decimal(, )      not null
 #  revenue                             :decimal(, )      default(0.0)
+#  source                              :string
 #  state                               :string
 #  tags_count                          :integer          default(0)
 #  title                               :string

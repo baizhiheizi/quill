@@ -20,6 +20,10 @@ export type AccessToken = {
   createdAt: Scalars['ISO8601DateTime'];
   desensitizedValue: Scalars['String'];
   id: Scalars['ID'];
+  lastRequestAt?: Maybe<Scalars['ISO8601DateTime']>;
+  lastRequestIp?: Maybe<Scalars['String']>;
+  lastRequestMethod?: Maybe<Scalars['String']>;
+  lastRequestUrl?: Maybe<Scalars['String']>;
   memo: Scalars['String'];
   updatedAt?: Maybe<Scalars['ISO8601DateTime']>;
   user: User;
@@ -4388,6 +4392,8 @@ export const MyAccessTokenConnectionDocument = gql`
       id
       memo
       desensitizedValue
+      lastRequestAt
+      lastRequestIp
     }
     pageInfo {
       hasNextPage

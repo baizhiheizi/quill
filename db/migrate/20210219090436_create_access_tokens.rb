@@ -4,6 +4,7 @@ class CreateAccessTokens < ActiveRecord::Migration[6.1]
       t.belongs_to :user
       t.uuid :value, index: { unique: true }
       t.string :memo
+      t.jsonb :last_request
       t.datetime :deleted_at
 
       t.timestamps

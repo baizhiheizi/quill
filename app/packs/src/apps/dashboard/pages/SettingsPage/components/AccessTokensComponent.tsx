@@ -1,9 +1,14 @@
+import {
+  CheckCircleTwoTone,
+  ExclamationCircleOutlined,
+} from '@ant-design/icons';
 import ListComponent from '@dashboard/components/ListComponent/ListComponent';
 import LoadingComponent from '@dashboard/components/LoadingComponent/LoadingComponent';
 import {
-  AccessToken, useCreateAccessTokenMutation,
-
-  useDeleteAccessTokenMutation, useMyAccessTokenConnectionQuery
+  AccessToken,
+  useCreateAccessTokenMutation,
+  useDeleteAccessTokenMutation,
+  useMyAccessTokenConnectionQuery,
 } from '@graphql';
 import {
   Alert,
@@ -13,11 +18,12 @@ import {
   message,
   Modal,
   Popconfirm,
-  Typography
+  Popover,
+  Typography,
 } from 'antd';
 import copy from 'copy-to-clipboard';
-import React, {useState} from 'react';
-import {useTranslation} from 'react-i18next';
+import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 export default function AccessTokensComponent() {
   const { t } = useTranslation();
@@ -146,6 +152,23 @@ export default function AccessTokensComponent() {
                 {accessToken.desensitizedValue}
               </Typography.Text>
             </div>
+            {accessToken.lastRequestAt ? (
+              <Popover
+                title='Last Request'
+                content={
+                  <>
+                    <p>IP: {accessToken.lastRequestIp}</p>
+                    <p>Time: {accessToken.lastRequestAt}</p>
+                  </>
+                }
+              >
+                <CheckCircleTwoTone twoToneColor='#52c41a' />
+              </Popover>
+            ) : (
+              <Popover title='Last Request' content='Never requested'>
+                <ExclamationCircleOutlined />
+              </Popover>
+            )}
           </List.Item>
         )}
       />

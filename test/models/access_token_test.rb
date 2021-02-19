@@ -4,13 +4,14 @@
 #
 # Table name: access_tokens
 #
-#  id         :bigint           not null, primary key
-#  deleted_at :datetime
-#  memo       :string
-#  value      :uuid
-#  created_at :datetime         not null
-#  updated_at :datetime         not null
-#  user_id    :bigint
+#  id           :bigint           not null, primary key
+#  deleted_at   :datetime
+#  last_request :jsonb
+#  memo         :string
+#  value        :uuid
+#  created_at   :datetime         not null
+#  updated_at   :datetime         not null
+#  user_id      :bigint
 #
 # Indexes
 #

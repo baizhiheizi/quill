@@ -27,7 +27,8 @@ class API::ArticlesController < API::BaseController
   end
 
   def create
-    article = current_user.articles.new(article_params)
+    article = current_user.articles.new(article_params.merge(source: current_access_token.value))
+
     if article.save
       CreateTag.call(article, params[:tag_names] || [])
       render_created({ uuid: article.uuid })
