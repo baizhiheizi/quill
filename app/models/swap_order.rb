@@ -25,19 +25,13 @@
 #  index_swap_orders_on_user_id     (user_id)
 #
 class SwapOrder < ApplicationRecord
-  # PRS: 3edb734c-6d6f-32ff-ab03-4eb43640c758
-  # BTC: c6d0c728-2624-429b-8e0d-d9d19b6592fa
-  # ETH: 43d61dcd-e413-450d-80b8-101d5e903357
-  # EOS: 6cfe566e-4aad-470b-8c9a-2fd35b49c68d
-  # pUSD: 31d2ea9c-95eb-3355-b65b-ba096853bc18
-  # XIN: c94ac88f-4671-3976-b60a-09064f1811e8
-  SUPPORTED_ASSETS = %w[
-    3edb734c-6d6f-32ff-ab03-4eb43640c758
-    c6d0c728-2624-429b-8e0d-d9d19b6592fa
-    43d61dcd-e413-450d-80b8-101d5e903357
-    6cfe566e-4aad-470b-8c9a-2fd35b49c68d
-    31d2ea9c-95eb-3355-b65b-ba096853bc18
-    c94ac88f-4671-3976-b60a-09064f1811e8
+  SUPPORTED_ASSETS = [
+    Currency::PRS_ASSET_ID,
+    Currency::BTC_ASSET_ID,
+    Currency::ETH_ASSET_ID,
+    Currency::EOS_ASSET_ID,
+    Currency::PUSD_ASSET_ID,
+    Currency::XIN_ASSET_ID
   ].freeze
   FOXSWAP_ENABLE = true
   FOX_SWAP_APP_ID = 'a753e0eb-3010-4c4a-a7b2-a7bda4063f62'

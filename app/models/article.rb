@@ -31,9 +31,7 @@
 #  index_articles_on_uuid       (uuid) UNIQUE
 #
 class Article < ApplicationRecord
-  PRS_ASSET_ID = '3edb734c-6d6f-32ff-ab03-4eb43640c758'
-  BTC_ASSET_ID = 'c6d0c728-2624-429b-8e0d-d9d19b6592fa'
-  SUPPORTED_ASSETS = [PRS_ASSET_ID, BTC_ASSET_ID].freeze
+  SUPPORTED_ASSETS = [Currency::PRS_ASSET_ID, Currency::BTC_ASSET_ID].freeze
   MINIMUM_PRICE_PRS = 1
   MINIMUM_PRICE_BTC = 0.000_001
 
@@ -213,9 +211,9 @@ class Article < ApplicationRecord
 
   def ensure_price_not_too_low
     case asset_id
-    when PRS_ASSET_ID
+    when Currency::PRS_ASSET_ID
       errors.add(:price, 'at least 1 PRS') if price.to_f < MINIMUM_PRICE_PRS
-    when BTC_ASSET_ID
+    when Currency::BTC_ASSET_ID
       errors.add(:price, 'at least 0.000001 BTC') if price.to_f < MINIMUM_PRICE_BTC
     end
   end

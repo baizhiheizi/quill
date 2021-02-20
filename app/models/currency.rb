@@ -17,6 +17,10 @@
 class Currency < ApplicationRecord
   PRS_ASSET_ID = '3edb734c-6d6f-32ff-ab03-4eb43640c758'
   BTC_ASSET_ID = 'c6d0c728-2624-429b-8e0d-d9d19b6592fa'
+  ETH_ASSET_ID = '43d61dcd-e413-450d-80b8-101d5e903357'
+  EOS_ASSET_ID = '6cfe566e-4aad-470b-8c9a-2fd35b49c68d'
+  PUSD_ASSET_ID = '31d2ea9c-95eb-3355-b65b-ba096853bc18'
+  XIN_ASSET_ID = 'c94ac88f-4671-3976-b60a-09064f1811e8'
 
   extend OrderAsSpecified
 
