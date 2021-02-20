@@ -59,7 +59,7 @@ export default function PayModalComponent(props: {
   );
   const handlePaying = () => {
     setPaying(true);
-    setTargetDate(Date.now() + 30000);
+    setTargetDate(Date.now() + 60000);
     pollPayment();
   };
   const memo = encode64(
