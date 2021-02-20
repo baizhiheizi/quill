@@ -118,25 +118,25 @@ export default function RewardModalComponent(props: {
         disabled={paying}
         style={{ marginBottom: '1rem' }}
         options={[
-          { label: (priceBaseUsd / currency.priceUsd).toFixed(8), value: 1 },
+          { label: (priceBaseUsd / currency.priceUsd).toFixed(6), value: 1 },
           {
-            label: ((8 * priceBaseUsd) / currency.priceUsd).toFixed(8),
+            label: ((8 * priceBaseUsd) / currency.priceUsd).toFixed(6),
             value: 8,
           },
           {
-            label: ((32 * priceBaseUsd) / currency.priceUsd).toFixed(8),
+            label: ((32 * priceBaseUsd) / currency.priceUsd).toFixed(6),
             value: 32,
           },
           {
-            label: ((64 * priceBaseUsd) / currency.priceUsd).toFixed(8),
+            label: ((64 * priceBaseUsd) / currency.priceUsd).toFixed(6),
             value: 64,
           },
           {
-            label: ((256 * priceBaseUsd) / currency.priceUsd).toFixed(8),
+            label: ((256 * priceBaseUsd) / currency.priceUsd).toFixed(6),
             value: 256,
           },
           {
-            label: ((1024 * priceBaseUsd) / currency.priceUsd).toFixed(8),
+            label: ((1024 * priceBaseUsd) / currency.priceUsd).toFixed(6),
             value: 1024,
           },
         ]}

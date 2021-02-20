@@ -5,6 +5,6 @@ class SyncCurrencyPriceWorker
   sidekiq_options queue: :low, retry: false
 
   def perform
-    Currency.pricable.map(&:sync!)
+    Currency.swappable.map(&:sync!)
   end
 end
