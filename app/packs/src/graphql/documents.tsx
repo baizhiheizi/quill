@@ -1772,14 +1772,22 @@ export type UserEdge = {
 
 export type UserStatistics = {
   __typename?: 'UserStatistics';
-  articlesCount: Scalars['Int'];
-  authorRevenueTotal: Scalars['Float'];
-  boughtArticlesCount: Scalars['Int'];
-  commentsCount: Scalars['Int'];
+  articlesCount?: Maybe<Scalars['Int']>;
+  authorRevenueTotalBtc?: Maybe<Scalars['Float']>;
+  authorRevenueTotalPrs?: Maybe<Scalars['Float']>;
+  authorRevenueTotalUsd?: Maybe<Scalars['Float']>;
+  boughtArticlesCount?: Maybe<Scalars['Int']>;
+  commentsCount?: Maybe<Scalars['Int']>;
   createdAt: Scalars['ISO8601DateTime'];
-  paymentTotal: Scalars['Float'];
-  readerRevenueTotal: Scalars['Float'];
-  revenueTotal: Scalars['Float'];
+  paymentTotalBtc?: Maybe<Scalars['Float']>;
+  paymentTotalPrs?: Maybe<Scalars['Float']>;
+  paymentTotalUsd?: Maybe<Scalars['Float']>;
+  readerRevenueTotalBtc?: Maybe<Scalars['Float']>;
+  readerRevenueTotalPrs?: Maybe<Scalars['Float']>;
+  readerRevenueTotalUsd?: Maybe<Scalars['Float']>;
+  revenueTotalBtc?: Maybe<Scalars['Float']>;
+  revenueTotalPrs?: Maybe<Scalars['Float']>;
+  revenueTotalUsd?: Maybe<Scalars['Float']>;
   updatedAt?: Maybe<Scalars['ISO8601DateTime']>;
 };
 
@@ -2963,8 +2971,8 @@ export const AdminUserConnectionDocument = gql`
       statistics {
         articlesCount
         commentsCount
-        revenueTotal
-        paymentTotal
+        revenueTotalUsd
+        paymentTotalUsd
       }
       createdAt
       bannedAt
@@ -3017,8 +3025,8 @@ export const AdminUserDocument = gql`
     walletId
     statistics {
       articlesCount
-      authorRevenueTotal
-      readerRevenueTotal
+      authorRevenueTotalUsd
+      readerRevenueTotalUsd
     }
   }
 }
@@ -3985,8 +3993,8 @@ export const UserDocument = gql`
     readingSubscribed
     statistics {
       articlesCount
-      authorRevenueTotal
-      readerRevenueTotal
+      authorRevenueTotalUsd
+      readerRevenueTotalUsd
     }
   }
 }
@@ -4619,7 +4627,7 @@ export const MyAuthoringSubscriptionConnectionDocument = gql`
       bio
       statistics {
         articlesCount
-        authorRevenueTotal
+        authorRevenueTotalUsd
       }
     }
     pageInfo {
@@ -4866,7 +4874,7 @@ export const MyReadingSubscriptionConnectionDocument = gql`
       bio
       statistics {
         boughtArticlesCount
-        readerRevenueTotal
+        readerRevenueTotalUsd
       }
     }
     pageInfo {
@@ -4906,9 +4914,13 @@ export const MyStatisticsDocument = gql`
     query MyStatistics {
   myStatistics {
     articlesCount
-    authorRevenueTotal
     boughtArticlesCount
-    readerRevenueTotal
+    authorRevenueTotalPrs
+    readerRevenueTotalPrs
+    authorRevenueTotalBtc
+    readerRevenueTotalBtc
+    authorRevenueTotalUsd
+    readerRevenueTotalUsd
   }
 }
     `;

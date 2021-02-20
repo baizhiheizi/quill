@@ -60,6 +60,8 @@ class Transfer < ApplicationRecord
   scope :unprocessed, -> { where(processed_at: nil) }
   scope :processed, -> { where.not(processed_at: nil) }
   scope :only_user_revenue, -> { where(transfer_type: %i[author_revenue reader_revenue]) }
+  scope :only_prs, -> { where(asset_id: Currency::PRS_ASSET_ID) }
+  scope :only_btc, -> { where(asset_id: Currency::BTC_ASSET_ID) }
 
   def snapshot_id
     snapshot&.[]('snapshot_id')
@@ -138,22 +140,31 @@ class Transfer < ApplicationRecord
   def update_recipient_statistics_cache
     return if recipient.blank?
 
-    recipient.update(
-      author_revenue_total: recipient.author_revenue_transfers.sum(:amount).to_f,
-      reader_revenue_total: recipient.reader_revenue_transfers.sum(:amount).to_f,
-      revenue_total: recipient.revenue_transfers.sum(:amount).to_f
-    )
+    case asset_id
+    when Currency::PRS_ASSET_ID
+      recipient.update(
+        author_revenue_total_prs: recipient.author_revenue_transfers.only_prs.sum(:amount).to_f,
+        reader_revenue_total_prs: recipient.reader_revenue_transfers.only_prs.sum(:amount).to_f,
+        revenue_total_prs: recipient.revenue_transfers.only_prs.sum(:amount).to_f
+      )
+    when Currency::BTC_ASSET_ID
+      recipient.update(
+        author_revenue_total_btc: recipient.author_revenue_transfers.only_btc.sum(:amount).to_f,
+        reader_revenue_total_btc: recipient.reader_revenue_transfers.only_btc.sum(:amount).to_f,
+        revenue_total_btc: recipient.revenue_transfers.only_btc.sum(:amount).to_f
+      )
+    end
   end
 
   def self.author_revenue_total_in_usd
-    prs_amount = author_revenue.where(currency: Currency.prs).sum(:amount)
-    btc_amount = author_revenue.where(currency: Currency.btc).sum(:amount)
+    prs_amount = author_revenue.only_prs.sum(:amount)
+    btc_amount = author_revenue.only_btc.sum(:amount)
     prs_amount * Currency.prs.price_usd.to_f + btc_amount * Currency.btc.price_usd.to_f
   end
 
   def self.reader_revenue_total_in_usd
-    prs_amount = reader_revenue.where(currency: Currency.prs).sum(:amount)
-    btc_amount = reader_revenue.where(currency: Currency.btc).sum(:amount)
+    prs_amount = reader_revenue.only_prs.sum(:amount)
+    btc_amount = reader_revenue.only_btc.sum(:amount)
     prs_amount * Currency.prs.price_usd.to_f + btc_amount * Currency.btc.price_usd.to_f
   end
 end

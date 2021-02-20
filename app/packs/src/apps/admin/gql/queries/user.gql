@@ -9,8 +9,8 @@ query AdminUser($mixinId: ID!) {
     walletId
     statistics {
       articlesCount
-      authorRevenueTotal
-      readerRevenueTotal
+      authorRevenueTotalUsd
+      readerRevenueTotalUsd
     }
   }
 }

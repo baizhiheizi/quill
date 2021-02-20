@@ -147,13 +147,13 @@ export function UsersComponent(props: {
     {
       dataIndex: 'revenueTotal',
       key: 'revenueTotal',
-      render: (_, user) => user.statistics.revenueTotal,
+      render: (_, user) => user.statistics.revenueTotalUsd.toFixed(2),
       title: 'Revenue Total',
     },
     {
       dataIndex: 'paymentTotal',
       key: 'paymentTotal',
-      render: (_, user) => user.statistics.paymentTotal,
+      render: (_, user) => user.statistics.paymentTotalUsd.toFixed(2),
       title: 'Payment Total',
     },
     {

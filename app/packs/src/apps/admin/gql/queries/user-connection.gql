@@ -19,8 +19,8 @@ query AdminUserConnection(
       statistics {
         articlesCount
         commentsCount
-        revenueTotal
-        paymentTotal
+        revenueTotalUsd
+        paymentTotalUsd
       }
       createdAt
       bannedAt

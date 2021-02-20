@@ -8,7 +8,7 @@ query MyAuthoringSubscriptionConnection($after: String) {
       bio
       statistics {
         articlesCount
-        authorRevenueTotal
+        authorRevenueTotalUsd
       }
     }
     pageInfo {

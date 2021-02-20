@@ -26,7 +26,19 @@
 class User < ApplicationRecord
   include Authenticatable
 
-  store :statistics, accessors: %i[articles_count bought_articles_count author_revenue_total reader_revenue_total revenue_total payment_total comments_count]
+  store :statistics, accessors: %i[
+    articles_count
+    bought_articles_count
+    comments_count
+    author_revenue_total_prs
+    reader_revenue_total_prs
+    revenue_total_prs
+    payment_total_prs
+    author_revenue_total_btc
+    reader_revenue_total_btc
+    revenue_total_btc
+    payment_total_btc
+  ]
 
   has_one :mixin_authorization, -> { where(provider: :mixin) }, class_name: 'UserAuthorization', inverse_of: :user
   has_many :access_tokens, dependent: :destroy
@@ -142,12 +154,16 @@ class User < ApplicationRecord
   def update_statistics_cache
     update statistics: {
       articles_count: articles.count,
-      author_revenue_total: author_revenue_transfers.sum(:amount).to_f,
+      author_revenue_total_prs: author_revenue_transfers.only_prs.sum(:amount).to_f,
+      author_revenue_total_btc: author_revenue_transfers.only_btc.sum(:amount).to_f,
       bought_articles_count: bought_articles.count,
       comments_count: comments.count,
-      reader_revenue_total: reader_revenue_transfers.sum(:amount).to_f,
-      revenue_total: revenue_transfers.sum(:amount).to_f,
-      payment_total: orders.sum(:total).to_f
+      reader_revenue_total_prs: reader_revenue_transfers.only_prs.sum(:amount).to_f,
+      reader_revenue_total_btc: reader_revenue_transfers.only_btc.sum(:amount).to_f,
+      revenue_total_prs: revenue_transfers.only_prs.sum(:amount).to_f,
+      revenue_total_btc: revenue_transfers.only_btc.sum(:amount).to_f,
+      payment_total_prs: orders.only_prs.sum(:total).to_f,
+      payment_total_btc: orders.only_btc.sum(:total).to_f
     }
   end
 

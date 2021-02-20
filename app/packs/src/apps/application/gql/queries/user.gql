@@ -10,8 +10,8 @@ query User($mixinId: ID!) {
     readingSubscribed
     statistics {
       articlesCount
-      authorRevenueTotal
-      readerRevenueTotal
+      authorRevenueTotalUsd
+      readerRevenueTotalUsd
     }
   }
 }

@@ -2,40 +2,39 @@
 
 module Types
   class UserStatisticsType < BaseObject
-    field :articles_count, Integer, null: false
-    field :author_revenue_total, Float, null: false
-    field :bought_articles_count, Integer, null: false
-    field :reader_revenue_total, Float, null: false
-    field :comments_count, Integer, null: false
-    field :revenue_total, Float, null: false
-    field :payment_total, Float, null: false
+    field :articles_count, Integer, null: true
+    field :bought_articles_count, Integer, null: true
+    field :comments_count, Integer, null: true
 
-    def articles_count
-      object['articles_count'] || 0
+    field :author_revenue_total_prs, Float, null: true
+    field :reader_revenue_total_prs, Float, null: true
+    field :revenue_total_prs, Float, null: true
+    field :payment_total_prs, Float, null: true
+
+    field :author_revenue_total_btc, Float, null: true
+    field :reader_revenue_total_btc, Float, null: true
+    field :revenue_total_btc, Float, null: true
+    field :payment_total_btc, Float, null: true
+
+    field :author_revenue_total_usd, Float, null: true
+    field :reader_revenue_total_usd, Float, null: true
+    field :revenue_total_usd, Float, null: true
+    field :payment_total_usd, Float, null: true
+
+    def author_revenue_total_usd
+      object['author_revenue_total_prs'].to_f * Currency.prs.price_usd.to_f + object['author_revenue_total_btc'].to_f * Currency.btc.price_usd.to_f
     end
 
-    def author_revenue_total
-      object['author_revenue_total'] || 0
+    def reader_revenue_total_usd
+      object['reader_revenue_total_prs'].to_f * Currency.prs.price_usd.to_f + object['reader_revenue_total_btc'].to_f * Currency.btc.price_usd.to_f.to_f
     end
 
-    def bought_articles_count
-      object['bought_articles_count'] || 0
+    def revenue_total_usd
+      author_revenue_total_usd + reader_revenue_total_usd
     end
 
-    def reader_revenue_total
-      object['reader_revenue_total'] || 0
-    end
-
-    def comments_count
-      object['comments_count'] || 0
-    end
-
-    def revenue_total
-      object['revenue_total'] || 0
-    end
-
-    def payment_total
-      object['payment_total'] || 0
+    def payment_total_usd
+      object['payment_total_prs'].to_f * Currency.prs.price_usd.to_f + object['payment_total_usd'].to_f * Currency.btc.price_usd.to_f
     end
   end
 end

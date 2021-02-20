@@ -66,8 +66,8 @@ zh-CN:
           refunded: 已退款
       user:
         defaultBio: 没有留下任何介绍
-        authorRevenueTotal: 作者收益(PRS)
-        readerRevenueTotal: 读者收益(PRS)
+        authorRevenueTotal: 作者收益(USD)
+        readerRevenueTotal: 读者收益(USD)
         articlesCount: 发表文章
         boughtArticlesCount: 购买文章
       transfer:

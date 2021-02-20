@@ -68,9 +68,9 @@ export default function MyAuthoringSubscriptionsComponent() {
             description={
               <Space split={<Divider type='vertical' />} wrap>
                 {`${t('user.articlesCount')}: ${user.statistics.articlesCount}`}
-                {`${t('user.authorRevenueTotal')}: ${Math.floor(
-                  user.statistics.authorRevenueTotal,
-                )}`}
+                {`${t(
+                  'user.authorRevenueTotal',
+                )}: ${user.statistics.authorRevenueTotalUsd.toFixed(2)}`}
               </Space>
             }
           />

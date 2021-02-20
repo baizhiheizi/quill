@@ -54,6 +54,8 @@ class Order < ApplicationRecord
   enum order_type: { buy_article: 0, reward_article: 1 }
 
   delegate :price_tag, to: :payment, prefix: true
+  scope :only_prs, -> { where(asset_id: Currency::PRS_ASSET_ID) }
+  scope :only_btc, -> { where(asset_id: Currency::BTC_ASSET_ID) }
 
   after_create :complete_payment, :update_item_revenue, :update_buyer_statistics_cache
   before_destroy :destroy_notifications
@@ -175,7 +177,8 @@ class Order < ApplicationRecord
   def update_buyer_statistics_cache
     buyer.update(
       bought_articles_count: buyer.bought_articles.count,
-      payment_total: buyer.orders.sum(:total).to_f
+      payment_total_prs: buyer.orders.only_prs.sum(:total).to_f,
+      payment_total_btc: buyer.orders.only_btc.sum(:total).to_f
     )
   end
 

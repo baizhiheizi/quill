@@ -1,8 +1,12 @@
 query MyStatistics {
   myStatistics {
     articlesCount
-    authorRevenueTotal
     boughtArticlesCount
-    readerRevenueTotal
+    authorRevenueTotalPrs
+    readerRevenueTotalPrs
+    authorRevenueTotalBtc
+    readerRevenueTotalBtc
+    authorRevenueTotalUsd
+    readerRevenueTotalUsd
   }
 }

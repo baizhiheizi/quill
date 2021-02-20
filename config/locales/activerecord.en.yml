@@ -66,8 +66,8 @@ en:
           refunded: Refunded
       user:
         defaultBio: Didn't left anything
-        authorRevenueTotal: Author Revenue(PRS)
-        readerRevenueTotal: Reader Revenue(PRS)
+        authorRevenueTotal: Author Revenue(USD)
+        readerRevenueTotal: Reader Revenue(USD)
         articlesCount: Published
         boughtArticlesCount: Bought
       transfer:

@@ -32,13 +32,13 @@ export default function UserPage() {
         <Col xs={12} sm={6}>
           <Statistic
             title={t('user.authorRevenueTotal')}
-            value={user.authorRevenueTotal}
+            value={user.statistics.authorRevenueTotalUsd.toFixed(2)}
           />
         </Col>
         <Col xs={12} sm={6}>
           <Statistic
             title={t('user.readerRevenueTotal')}
-            value={user.readerRevenueTotal}
+            value={user.statistics.readerRevenueTotalUsd.toFixed(2)}
           />
         </Col>
       </Row>

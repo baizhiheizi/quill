@@ -48,10 +48,16 @@ export default function OverviewPage() {
           <Statistic title='文章总数' value={articlesCount} />
         </Col>
         <Col span={12}>
-          <Statistic title='作者收益' value={authorRevenueTotal} />
+          <Statistic
+            title='作者收益(USD)'
+            value={authorRevenueTotal.toFixed(2)}
+          />
         </Col>
         <Col span={12}>
-          <Statistic title='读者收益' value={readerRevenueTotal} />
+          <Statistic
+            title='读者收益(USD)'
+            value={readerRevenueTotal.toFixed(2)}
+          />
         </Col>
       </Row>
       <UserChart />
