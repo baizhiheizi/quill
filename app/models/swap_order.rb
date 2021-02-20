@@ -30,6 +30,9 @@ class SwapOrder < ApplicationRecord
     Currency::BTC_ASSET_ID,
     Currency::ETH_ASSET_ID,
     Currency::EOS_ASSET_ID,
+    Currency::MOB_ASSET_ID,
+    Currency::BOX_ASSET_ID,
+    Currency::USDT_ASSET_ID,
     Currency::PUSD_ASSET_ID,
     Currency::XIN_ASSET_ID
   ].freeze
