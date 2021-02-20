@@ -153,7 +153,7 @@ class Order < ApplicationRecord
   end
 
   def ensure_total_sufficient
-    errors.add(:total, 'Insufficient amount!') if buy_article? && total < item.price
+    errors.add(:total, 'insufficient') if buy_article? && total < item.price
   end
 
   def notify_reading_subscribers
