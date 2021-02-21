@@ -48,7 +48,7 @@ export default function ArticlePage() {
   const [payModalVisible, setPayModalVisible] = useState(false);
   const { appId } = usePrsdigg();
   const { mixinEnv } = useUserAgent();
-  const currentUser = useCurrentUser();
+  const { currentUser } = useCurrentUser();
   const { loading, data, refetch }: ArticleQueryHookResult = useArticleQuery({
     variables: { uuid },
   });

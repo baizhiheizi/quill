@@ -4,17 +4,17 @@ import {
   apolloClient,
   CurrentUserContext,
   hideLoader,
-  mixinUtils,
+  mixinContext,
   PrsdiggContext,
   UserAgentContext,
 } from '@shared';
+import '@shared/locales/i18n';
 import { Col, Layout, Row } from 'antd';
 import isMobile from 'ismobilejs';
 import React, { Suspense, useEffect, useState } from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
 import './App.less';
 import LoadingComponent from './components/LoadingComponent/LoadingComponent';
-import '@shared/locales/i18n';
 import Menus from './Menus';
 import Routes from './Routes';
 
@@ -23,7 +23,8 @@ export default function App(props: {
   currentUser: Partial<User>;
   prsdigg: { appId: String };
 }) {
-  const { csrfToken, currentUser, prsdigg } = props;
+  const { csrfToken, prsdigg } = props;
+  const [currentUser, setCurrentUser] = useState(props.currentUser);
   if (!Boolean(currentUser)) {
     location.replace('/');
   }
@@ -38,14 +39,18 @@ export default function App(props: {
         <PrsdiggContext.Provider value={prsdigg}>
           <UserAgentContext.Provider
             value={{
-              mixinAppversion: mixinUtils.appVersion(),
-              mixinConversationId: mixinUtils.conversationId(),
-              mixinEnv: mixinUtils.environment(),
-              mixinImmersive: mixinUtils.immersive(),
+              mixinAppearance: mixinContext.appearance,
+              mixinCurrency: mixinContext.currency,
+              mixinAppversion: mixinContext.appVersion,
+              mixinConversationId: mixinContext.conversationId,
+              mixinEnv: mixinContext.platform,
+              mixinImmersive: mixinContext.immersive,
               isMobile: isMobile(),
             }}
           >
-            <CurrentUserContext.Provider value={currentUser}>
+            <CurrentUserContext.Provider
+              value={{ currentUser, setCurrentUser }}
+            >
               <Router basename='/dashboard'>
                 <Layout style={{ minHeight: '100vh' }}>
                   <Menus />

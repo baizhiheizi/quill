@@ -56,7 +56,7 @@ export default function CommentsComponent(props: {
   } = props;
   const { isMobile } = useUserAgent();
   const [commentForm] = Form.useForm();
-  const currentUser = useCurrentUser();
+  const { currentUser } = useCurrentUser();
   const { t, i18n } = useTranslation();
   moment.locale(i18n.language);
   const [orderBy, setOrderBy] = useState<'desc' | 'asc' | 'upvotes'>('upvotes');

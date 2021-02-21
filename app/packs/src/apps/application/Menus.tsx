@@ -13,7 +13,7 @@ import { Link } from 'react-router-dom';
 import { OPEN_SOURCE_URL } from './shared';
 
 export default function Menus() {
-  const currentUser = useCurrentUser();
+  const { currentUser } = useCurrentUser();
   const { isMobile } = useUserAgent();
   const [drawerVisible, setDrawerVisible] = useState(false);
   const { t, i18n } = useTranslation();

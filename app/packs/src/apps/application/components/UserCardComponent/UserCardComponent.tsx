@@ -15,7 +15,7 @@ export default function UserCardComponent(props: {
   const {
     user: { avatarUrl, bio, name, mixinId },
   } = props;
-  const currentUser = useCurrentUser();
+  const { currentUser } = useCurrentUser();
   const { t } = useTranslation();
   return (
     <Card>

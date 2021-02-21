@@ -6,7 +6,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 export default function OverviewPage() {
-  const currentUser = useCurrentUser();
+  const { currentUser } = useCurrentUser();
   const { t } = useTranslation();
   const { loading, data } = useMyStatisticsQuery();
 

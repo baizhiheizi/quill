@@ -30,7 +30,7 @@ export default function UserArticlesComponent(props: {
   } = props;
   const { t, i18n } = useTranslation();
   moment.locale(i18n.language);
-  const currentUser = useCurrentUser();
+  const { currentUser } = useCurrentUser();
   const { data, loading, fetchMore } = useUserArticleConnectionQuery({
     variables: { type, mixinId },
   });

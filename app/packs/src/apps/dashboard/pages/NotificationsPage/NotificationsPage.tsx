@@ -11,8 +11,10 @@ import { Button, List, PageHeader } from 'antd';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import ListComponent from '../../components/ListComponent/ListComponent';
+import { useCurrentUser } from '@shared';
 
 export default function NotificationsPage() {
+  const { currentUser, setCurrentUser } = useCurrentUser();
   const { t, i18n } = useTranslation();
   moment.locale(i18n.language);
   const {
@@ -25,12 +27,14 @@ export default function NotificationsPage() {
   const [readNotifications] = useReadNotificationsMutation({
     variables: { input: {} },
     update() {
+      setCurrentUser({ ...currentUser, unreadNotificationsCount: 0 });
       refetch();
     },
   });
   const [clearNotifications] = useClearNotificationsMutation({
     variables: { input: {} },
     update() {
+      setCurrentUser({ ...currentUser, unreadNotificationsCount: 0 });
       refetch();
     },
   });

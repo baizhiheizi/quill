@@ -33,7 +33,7 @@ export default function PayModalComponent(props: {
     swappableCurrencies,
     onCancel,
   } = props;
-  const currentUser = useCurrentUser();
+  const { currentUser } = useCurrentUser();
   const [assetId, setAssetId] = useState(articleAssetId);
   const [paying, setPaying] = useState(false);
   const { mixinEnv } = useUserAgent();

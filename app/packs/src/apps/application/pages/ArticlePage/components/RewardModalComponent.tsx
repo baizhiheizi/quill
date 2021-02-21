@@ -21,7 +21,7 @@ export default function RewardModalComponent(props: {
   articleAssetId: string;
   swappableCurrencies: Currency[];
 }) {
-  const currentUser = useCurrentUser();
+  const { currentUser } = useCurrentUser();
   const {
     articleUuid,
     articleAssetId,

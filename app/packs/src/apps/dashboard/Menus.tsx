@@ -22,7 +22,7 @@ export default function Menus() {
   const { isMobile } = useUserAgent();
   const { t, i18n } = useTranslation();
   const [drawerVisible, setDrawerVisible] = useState(false);
-  const currentUser = useCurrentUser();
+  const { currentUser } = useCurrentUser();
   const [switchLocale] = useSwitchLocaleMutation();
 
   useEffect(() => {
