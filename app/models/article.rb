@@ -61,7 +61,7 @@ class Article < ApplicationRecord
 
   validates :asset_id, presence: true, inclusion: { in: SUPPORTED_ASSETS }
   validates :uuid, presence: true, uniqueness: true
-  validates :title, presence: true, length: { maximum: 25 }
+  validates :title, presence: true, length: { maximum: 64 }
   validates :intro, presence: true, length: { maximum: 140 }
   validates :content, presence: true
   validate :ensure_author_account_normal
