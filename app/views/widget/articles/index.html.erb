@@ -10,9 +10,9 @@
       <p>找到不到相关文章</p>
     </div>
   <% else %>
-    <div class='mark-context'>
+    <div class='mark-context space-y-4'>
       <% @articles.each do |article| %>
-        <a class='block p-4 text-gray-900 no-underline shadow-md space-y-2' href='<%= format("%<host>s/articles/%<uuid>s", host: Rails.application.credentials.host, uuid: article.uuid) %>'>
+        <%= link_to article_path(article.uuid), class: 'block p-4 text-gray-900 no-underline shadow-md space-y-2' do %>
           <div class='flex items-start'>
             <img class='w-8 h-8 mr-2 rounded-full' src='<%= article.author.avatar %>' />
             <div class='flex-1'>
@@ -35,7 +35,7 @@
               </div>
             <% end %>
           </div>
-        </a>
+        <% end %>
       <% end %>
     </div>
     <%== pagy_nav(@pagy) %>
