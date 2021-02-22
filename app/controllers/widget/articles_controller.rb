@@ -8,7 +8,7 @@ class Widget::ArticlesController < Widget::BaseController
       pagy(
         Article
         .only_published
-        .includes(:author, :tags)
+        .includes(:author, :tags, :currency)
         .ransack(q_ransack.merge(m: 'or'))
         .result
       )
