@@ -334,7 +334,7 @@ export default function ArticlePage() {
             </Col>
           </Row>
           <div className='px-4 mb-4'>
-            <div className='flex flex-wrap justify-center m-auto w-60 md:w-96'>
+            <div className='m-auto grid grid-cols-8 w-72'>
               {article.randomReaders.map((reader: Partial<User>) => (
                 <Avatar
                   className='m-0.5'
