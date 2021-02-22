@@ -333,7 +333,7 @@ export default function ArticlePage() {
               </h4>
             </Col>
           </Row>
-          <div className='px-4 mb-4'>
+          <div className='w-full mb-4'>
             <div className='m-auto grid grid-cols-8 w-72'>
               {article.randomReaders.map((reader: Partial<User>) => (
                 <Avatar
