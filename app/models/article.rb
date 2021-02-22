@@ -192,7 +192,7 @@ class Article < ApplicationRecord
     (currency.price_usd.to_f * price).to_f.round(4)
   end
 
-  def random_readers(limit = 20)
+  def random_readers(limit = 24)
     readers.where(id: readers.ids.sample(limit))
   end
 
