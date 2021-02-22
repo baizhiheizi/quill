@@ -11,6 +11,7 @@ class Widget::ArticlesController < Widget::BaseController
         .includes(:author, :tags, :currency)
         .ransack(q_ransack.merge(m: 'or'))
         .result
+        .order_by_popularity
       )
   end
 end
