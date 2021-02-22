@@ -48,6 +48,7 @@ module Types
     field :comments, Types::CommentConnectionType, null: false
     field :currency, Types::CurrencyType, null: false
 
+    field :random_readers, [UserType], null: false
     field :tags, [Types::TagType], null: false
 
     def content

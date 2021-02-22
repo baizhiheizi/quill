@@ -333,6 +333,7 @@ export type Article = {
   paymentTraceId?: Maybe<Scalars['String']>;
   price: Scalars['Float'];
   priceUsd?: Maybe<Scalars['Float']>;
+  randomReaders: Array<User>;
   readerRevenueTotal: Scalars['Float'];
   readers: UserConnection;
   revenue: Scalars['Float'];
@@ -3477,7 +3478,7 @@ export type ArticleConnectionQueryHookResult = ReturnType<typeof useArticleConne
 export type ArticleConnectionLazyQueryHookResult = ReturnType<typeof useArticleConnectionLazyQuery>;
 export type ArticleConnectionQueryResult = Apollo.QueryResult<ArticleConnectionQuery, ArticleConnectionQueryVariables>;
 export const ArticleDocument = gql`
-    query Article($uuid: ID!, $readerAfter: String) {
+    query Article($uuid: ID!) {
   article(uuid: $uuid) {
     id
     uuid
@@ -3513,17 +3514,13 @@ export const ArticleDocument = gql`
       mixinId
       bio
     }
-    readers(after: $readerAfter, first: 10) {
-      nodes {
-        name
-        avatarUrl
-        mixinId
-      }
+    randomReaders {
+      name
+      avatarUrl
+      mixinId
+    }
+    readers {
       totalCount
-      pageInfo {
-        hasNextPage
-        endCursor
-      }
     }
     buyOrders {
       totalCount
@@ -3564,7 +3561,6 @@ export const ArticleDocument = gql`
  * const { data, loading, error } = useArticleQuery({
  *   variables: {
  *      uuid: // value for 'uuid'
- *      readerAfter: // value for 'readerAfter'
  *   },
  * });
  */

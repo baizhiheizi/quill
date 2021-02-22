@@ -317,35 +317,37 @@ export default function ArticlePage() {
           </div>
         </div>
       )}
-      {article.readers.nodes.length > 0 && (
+      {article.readers.totalCount > 0 && (
         <div>
           <Row justify='center'>
             <Col>
               <h4>
-                <span style={{ color: 'red' }}>
+                <span className='text-red-500'>
                   {article.buyOrders.totalCount}
                 </span>{' '}
                 {t('articlePage.timesBought')},{' '}
-                <span style={{ color: 'red' }}>
+                <span className='text-red-500'>
                   {article.rewardOrders.totalCount}
                 </span>{' '}
                 {t('articlePage.timesReward')}
               </h4>
             </Col>
           </Row>
-          <Row justify='center' style={{ marginBottom: '1rem' }}>
-            <Col>
-              <Avatar.Group>
-                {article.readers.nodes.map((reader: Partial<User>) => (
-                  <Avatar key={reader.mixinId} src={reader.avatarUrl}>
-                    {reader.name[0]}
-                  </Avatar>
-                ))}
-              </Avatar.Group>
-            </Col>
-          </Row>
+          <div className='px-4 mb-4'>
+            <div className='flex flex-wrap justify-center m-auto w-52 md:w-96'>
+              {article.randomReaders.map((reader: Partial<User>) => (
+                <Avatar
+                  className='m-0.5'
+                  key={reader.mixinId}
+                  src={reader.avatarUrl}
+                >
+                  {reader.name[0]}
+                </Avatar>
+              ))}
+            </div>
+          </div>
           {article.authorized && (
-            <Row gutter={16} style={{ textAlign: 'center' }}>
+            <Row gutter={16} className='text-center'>
               <Col xs={12} sm={6}>
                 <Statistic
                   title={`${t('article.price')}(${article.currency.symbol})`}

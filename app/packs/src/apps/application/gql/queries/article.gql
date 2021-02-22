@@ -1,4 +1,4 @@
-query Article($uuid: ID!, $readerAfter: String) {
+query Article($uuid: ID!) {
   article(uuid: $uuid) {
     id
     uuid
@@ -34,17 +34,13 @@ query Article($uuid: ID!, $readerAfter: String) {
       mixinId
       bio
     }
-    readers(after: $readerAfter, first: 10) {
-      nodes {
-        name
-        avatarUrl
-        mixinId
-      }
+    randomReaders {
+      name
+      avatarUrl
+      mixinId
+    }
+    readers {
       totalCount
-      pageInfo {
-        hasNextPage
-        endCursor
-      }
     }
     buyOrders {
       totalCount
