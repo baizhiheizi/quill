@@ -45,5 +45,9 @@ Rails.application.routes.draw do
     resources :articles, only: %i[index show create], param: :uuid
   end
 
+  namespace :widget do
+    resources :articles, only: :index
+  end
+
   get '*path' => 'home#index'
 end

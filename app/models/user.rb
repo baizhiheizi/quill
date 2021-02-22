@@ -182,7 +182,7 @@ class User < ApplicationRecord
   end
 
   def avatar
-    avatar_url || generated_avatar_url
+    avatar_url.presence || generated_avatar_url
   end
 
   def generated_avatar_url

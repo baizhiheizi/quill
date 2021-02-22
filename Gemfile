@@ -69,6 +69,8 @@ gem 'rails-i18n', '~> 6.x'
 gem 'order_as_specified'
 # Rack middleware for blocking & throttling abusive requests
 gem 'rack-attack'
+# The ultimate pagination ruby gem
+gem 'pagy'
 
 # deploy
 gem 'mina', '~> 1.2.2', require: false

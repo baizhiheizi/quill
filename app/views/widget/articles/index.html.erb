@@ -1,0 +1,33 @@
+<div class='px-2 py-4 space-y-4'>
+  <div class='flex flex-wrap items-center mb-4 query' data-query=<%= @query.to_json %>>
+    <% @query.each do |q| %>
+      <div class='p-2 mr-2 text-white bg-blue-500 rounded' data-query="<%= q %>"><%= q %></div>
+    <% end %>
+  </div>
+  <% if @articles.length < 1 %>
+    <div class='my-4 text-center text-gray-700'>
+      <p>:(</p> 
+      <p>找到不到相关文章</p>
+    </div>
+  <% else %>
+    <% @articles.each do |article| %>
+      <a class='block p-4 text-gray-900 no-underline shadow-md space-y-2 articles-list' href='<%= format("%<host>s/articles/%<uuid>s", host: Rails.application.credentials.host, uuid: article.uuid) %>'>
+        <div class='flex items-start'>
+          <img class='w-8 h-8 mr-2 rounded-full' src='<%= article.author.avatar %>' />
+          <div class='text-lg font-bold line-clamp-2'><%= article.title %></div>
+        </div>
+        <div class='text-sm text-gray-800'>
+          <%= article.intro %>
+        </div>
+        <div class='flex flex-wrap'>
+          <% article.tag_names.each do |tag_name| %>
+            <div class='px-1 m-1 text-xs text-gray-300 border-2 border-gray-300 border-dashed line-clamp-1'>
+              <%= format('#%<name>s', name: tag_name) %>
+            </div>
+          <% end %>
+        </div>
+      </a>
+    <% end %>
+    <%== pagy_nav(@pagy) %>
+  <% end %>
+</div>
