@@ -53,6 +53,7 @@ export function MarkdownRendererComponent(props: { source: string }) {
           <Image
             wrapperClassName='w-full'
             className='w-auto max-w-full m-auto'
+            preview={false}
             alt={alt}
             src={src}
           />
