@@ -1,7 +1,6 @@
 import MDEditor from '@uiw/react-md-editor';
+import { Image } from 'antd';
 import React from 'react';
-import Zoom from 'react-medium-image-zoom';
-import './MarkdownRendererComponent.less';
 
 export function MarkdownRendererComponent(props: { source: string }) {
   return (
@@ -51,9 +50,15 @@ export function MarkdownRendererComponent(props: { source: string }) {
       }}
       renderers={{
         image: ({ src, alt }) => (
-          <Zoom wrapElement='span'>
-            <img style={{ maxWidth: '100%' }} src={src} alt={alt} />
-          </Zoom>
+          <Image
+            wrapperClassName='w-full'
+            className='w-auto max-w-full m-auto'
+            alt={alt}
+            src={src}
+          />
+        ),
+        paragraph: ({ node, ...otherProps }) => (
+          <div className='mb-4'>{otherProps.children}</div>
         ),
       }}
     />

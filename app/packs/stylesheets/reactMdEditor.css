@@ -1,11 +1,12 @@
 .wmde-markdown {
   font-size: 16px;
   line-height: 1.5;
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji;
-  // customized
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial,
+    sans-serif, Apple Color Emoji, Segoe UI Emoji;
+  /* customized */
   word-break: break-word;
 }
-// customized
+/* customized */
 .blockquote-collapsed {
   .wmde-markdown > blockquote {
     max-height: 300px;
@@ -21,8 +22,8 @@
 .wmde-markdown > :last-child {
   margin-bottom: 0 !important;
 }
-.wmde-markdown code[class*="language-"],
-.wmde-markdown pre[class*="language-"] {
+.wmde-markdown code[class*='language-'],
+.wmde-markdown pre[class*='language-'] {
   color: black;
   text-align: left;
   white-space: pre;
@@ -30,15 +31,15 @@
   word-break: normal;
   word-wrap: normal;
   -webkit-hyphens: none;
-      -ms-hyphens: none;
-          hyphens: none;
+  -ms-hyphens: none;
+  hyphens: none;
 }
 .wmde-markdown pre code {
   background: none;
   overflow-wrap: normal;
   white-space: inherit;
   -moz-tab-size: 2;
-       tab-size: 2;
+  tab-size: 2;
   padding: 16px;
   font-size: 95%;
   line-height: 1.5;
@@ -208,60 +209,60 @@
 .wmde-markdown-color .token.punctuation {
   color: #a0a0a0;
 }
-.wmde-markdown-color code[class*="language-"] {
+.wmde-markdown-color code[class*='language-'] {
   color: black;
 }
-.wmde-markdown-color code[class*="language-"] .token.selector,
-.wmde-markdown-color code[class*="language-"] .token.attr-name,
-.wmde-markdown-color code[class*="language-"] .token.string,
-.wmde-markdown-color code[class*="language-"] .token.char,
-.wmde-markdown-color code[class*="language-"] .token.function,
-.wmde-markdown-color code[class*="language-"] .token.builtin {
+.wmde-markdown-color code[class*='language-'] .token.selector,
+.wmde-markdown-color code[class*='language-'] .token.attr-name,
+.wmde-markdown-color code[class*='language-'] .token.string,
+.wmde-markdown-color code[class*='language-'] .token.char,
+.wmde-markdown-color code[class*='language-'] .token.function,
+.wmde-markdown-color code[class*='language-'] .token.builtin {
   color: #6f42c1;
 }
-.wmde-markdown-color code[class*="language-"] .token.inserted {
+.wmde-markdown-color code[class*='language-'] .token.inserted {
   color: #22863a;
   background-color: #f0fff4;
 }
-.wmde-markdown-color code[class*="language-"] .token.deleted {
+.wmde-markdown-color code[class*='language-'] .token.deleted {
   color: #b31d28;
   background-color: #ffeef0;
 }
-.wmde-markdown-color code[class*="language-"] .token.class-name {
+.wmde-markdown-color code[class*='language-'] .token.class-name {
   color: #6f42c1;
 }
-.wmde-markdown-color code[class*="language-"] .code-block {
+.wmde-markdown-color code[class*='language-'] .code-block {
   color: #032f62;
 }
-.wmde-markdown-color code[class*="language-"] .token.comment,
-.wmde-markdown-color code[class*="language-"] .token.block-comment,
-.wmde-markdown-color code[class*="language-"] .token.prolog,
-.wmde-markdown-color code[class*="language-"] .token.doctype,
-.wmde-markdown-color code[class*="language-"] .token.cdata {
-  color: #7D8B99;
+.wmde-markdown-color code[class*='language-'] .token.comment,
+.wmde-markdown-color code[class*='language-'] .token.block-comment,
+.wmde-markdown-color code[class*='language-'] .token.prolog,
+.wmde-markdown-color code[class*='language-'] .token.doctype,
+.wmde-markdown-color code[class*='language-'] .token.cdata {
+  color: #7d8b99;
 }
-.wmde-markdown-color code[class*="language-"] .token.punctuation {
+.wmde-markdown-color code[class*='language-'] .token.punctuation {
   color: #a0a0a0;
 }
-.wmde-markdown-color code[class*="language-"] .token.operator,
-.wmde-markdown-color code[class*="language-"] .token.entity,
-.wmde-markdown-color code[class*="language-"] .token.url,
-.wmde-markdown-color code[class*="language-"] .token.variable {
+.wmde-markdown-color code[class*='language-'] .token.operator,
+.wmde-markdown-color code[class*='language-'] .token.entity,
+.wmde-markdown-color code[class*='language-'] .token.url,
+.wmde-markdown-color code[class*='language-'] .token.variable {
   color: #d73a49;
   background: rgba(255, 255, 255, 0.5);
 }
-.wmde-markdown-color code[class*="language-"] .token.atrule,
-.wmde-markdown-color code[class*="language-"] .token.attr-value {
+.wmde-markdown-color code[class*='language-'] .token.atrule,
+.wmde-markdown-color code[class*='language-'] .token.attr-value {
   color: #004698;
 }
-.wmde-markdown-color code[class*="language-"] .token.keyword {
+.wmde-markdown-color code[class*='language-'] .token.keyword {
   color: #d63200;
 }
-.wmde-markdown-color code[class*="language-"] .token.regex,
-.wmde-markdown-color code[class*="language-"] .token.important {
+.wmde-markdown-color code[class*='language-'] .token.regex,
+.wmde-markdown-color code[class*='language-'] .token.important {
   color: #e90;
 }
-.wmde-markdown-color code[class*="language-"] .token.string {
+.wmde-markdown-color code[class*='language-'] .token.string {
   color: #0a53c1;
 }
 .w-md-editor-bar {
@@ -275,8 +276,8 @@
   height: 10px;
   border-radius: 0 0 3px 0;
   -webkit-user-select: none;
-      -ms-user-select: none;
-          user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 .w-md-editor-bar svg {
   display: block;
@@ -296,12 +297,12 @@
   overflow-wrap: break-word;
   box-sizing: border-box;
   padding: 0;
-  // margin: 10px;
+  /* margin: 10px; */
   margin: 0 !important;
   font-size: 14px;
   line-height: 18px;
   -webkit-font-variant-ligatures: common-ligatures;
-          font-variant-ligatures: common-ligatures;
+  font-variant-ligatures: common-ligatures;
 }
 .w-md-editor-text-pre,
 .w-md-editor-text-input {
@@ -314,12 +315,12 @@
   font-size: inherit;
   font-style: inherit;
   -webkit-font-variant-ligatures: inherit;
-          font-variant-ligatures: inherit;
+  font-variant-ligatures: inherit;
   font-weight: inherit;
   letter-spacing: inherit;
   line-height: inherit;
   -moz-tab-size: inherit;
-       tab-size: inherit;
+  tab-size: inherit;
   text-indent: inherit;
   text-rendering: inherit;
   text-transform: inherit;
@@ -398,8 +399,8 @@
   padding: 4px 2px 4px 5px;
   border-radius: 3px 3px 0 0;
   -webkit-user-select: none;
-      -ms-user-select: none;
-          user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 .w-md-editor-toolbar ul,
 .w-md-editor-toolbar li {
@@ -457,11 +458,12 @@
 .w-md-editor {
   color: #24292e;
   text-align: left;
-  box-shadow: 0 0 0 1px rgba(16, 22, 26, 0.1), 0 0 0 rgba(16, 22, 26, 0), 0 1px 1px rgba(16, 22, 26, 0.2);
+  box-shadow: 0 0 0 1px rgba(16, 22, 26, 0.1), 0 0 0 rgba(16, 22, 26, 0),
+    0 1px 1px rgba(16, 22, 26, 0.2);
   border-radius: 3px;
   position: relative;
   background-color: #fff;
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
 .w-md-editor-content {
   position: relative;
