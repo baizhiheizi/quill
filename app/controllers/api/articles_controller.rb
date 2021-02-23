@@ -4,17 +4,28 @@ class API::ArticlesController < API::BaseController
   before_action :authenticate_user!, only: [:create]
 
   def index
-    order = params[:order] == 'asc' ? :asc : :desc
-    limit = params[:limit] || 20
-    limit = 100 if limit.to_i > 100
-
     @articles =
       if current_user
         current_user.articles
       else
         Article.only_published
       end
-    @articles = @articles.includes(:author, :tags, :currency).order(created_at: order).limit(limit)
+
+    query = params[:query]&.split(',')&.map(&:strip) || []
+    order = params[:order] == 'asc' ? :asc : :desc
+    limit = params[:limit] || 20
+    limit = 100 if limit.to_i > 100
+
+    q_ransack = { title_i_cont_any: query, intro_i_cont_any: query, tags_name_i_cont_any: query }
+
+    @articles =
+      @articles
+      .ransack(q_ransack.merge(m: 'or'))
+      .result
+      .includes(:author, :tags, :currency)
+      .order(created_at: order)
+      .limit(limit)
+
     @articles = @articles.where(created_at: Time.zone.parse(params[:offset])...) if params[:offset].present?
   end
 
