@@ -62,9 +62,9 @@ API Endpoint is `https://prsdigg.com/api`
 
 When access token provided, it returns user's articles, otherwise, it return all published articles.
 
-Available params: `offset`, `order`, `limit`.
+Available params: `offset`, `order`, `limit`, `query`.
 
-Example: [https://prsdigg.com/api/articles?limit=5&order=asc&offset=2021-01-18T07:41:36.624Z](https://prsdigg.com/api/articles?limit=5&order=asc&offset=2021-01-18T07:41:36.624Z)
+Example: [https://prsdigg.com/api/articles?limit=5&order=asc&offset=2021-01-18T07:41:36.624Z&query=BTC,Xin](https://prsdigg.com/api/articles?limit=5&order=asc&offset=2021-01-18T07:41:36.624Z&query=BTC,Xin)
 
 `GET | /article/:uuid`
 
