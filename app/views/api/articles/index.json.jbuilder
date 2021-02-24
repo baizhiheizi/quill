@@ -3,6 +3,7 @@
 json.array! @articles do |article|
   json.uuid article.uuid
   json.title article.title
+  json.intro article.intro
   json.partial_content article.partial_content
   json.price_usd article.price_usd
   json.price article.price.to_f
