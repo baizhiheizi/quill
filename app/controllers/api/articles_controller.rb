@@ -26,7 +26,15 @@ class API::ArticlesController < API::BaseController
       .order(created_at: order)
       .limit(limit)
 
-    @articles = @articles.where(created_at: Time.zone.parse(params[:offset])...) if params[:offset].present?
+    return if params[:offset].blank?
+
+    @articles =
+      case order
+      when :asc
+        @articles.where(created_at: Time.zone.parse(params[:offset])...)
+      when :desc
+        @articles.where(created_at: ...Time.zone.parse(params[:offset]))
+      end
   end
 
   def show
