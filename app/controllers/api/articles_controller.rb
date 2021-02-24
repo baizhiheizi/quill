@@ -21,7 +21,7 @@ class API::ArticlesController < API::BaseController
     @articles =
       @articles
       .ransack(q_ransack.merge(m: 'or'))
-      .result
+      .result(distinct: true)
       .includes(:author, :tags, :currency)
       .order(created_at: order)
       .limit(limit)
