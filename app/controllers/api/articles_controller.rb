@@ -12,10 +12,9 @@ class API::ArticlesController < API::BaseController
       end
 
     query = params[:query]&.split(',')&.map(&:strip) || []
-    order = params[:order] == 'asc' ? :asc : :desc
     limit = params[:limit] || 20
     limit = 100 if limit.to_i > 100
-
+    order = params[:order]&.to_sym
     q_ransack = { title_i_cont_any: query, intro_i_cont_any: query, tags_name_i_cont_any: query }
 
     @articles =
@@ -23,17 +22,29 @@ class API::ArticlesController < API::BaseController
       .ransack(q_ransack.merge(m: 'or'))
       .result(distinct: true)
       .includes(:author, :tags, :currency)
-      .order(created_at: order)
       .limit(limit)
-
-    return if params[:offset].blank?
 
     @articles =
       case order
       when :asc
-        @articles.where(created_at: Time.zone.parse(params[:offset])...)
+        @articles.order(created_at: :asc)
       when :desc
+        @articles.order(created_at: :desc)
+      else
+        @articles.order_by_popularity
+      end
+
+    return if params[:offset].blank?
+
+    @articles =
+      if /^\d+$/.match? params[:offset]
+        @articles.offset(params[:offset].to_i)
+      elsif order == :asc
+        @articles.where(created_at: Time.zone.parse(params[:offset])...)
+      elsif order == :desc
         @articles.where(created_at: ...Time.zone.parse(params[:offset]))
+      else
+        @articles
       end
   end
 
