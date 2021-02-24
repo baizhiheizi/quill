@@ -226,6 +226,8 @@ GEM
     rack (2.2.3)
     rack-attack (6.5.0)
       rack (>= 1.0, < 3)
+    rack-cors (1.1.1)
+      rack (>= 2.0.0)
     rack-proxy (0.6.5)
       rack
     rack-test (1.1.0)
@@ -281,7 +283,7 @@ GEM
       redis (>= 3.0.4)
     redis-objects (1.5.0)
       redis (~> 4.0)
-    regexp_parser (2.0.3)
+    regexp_parser (2.1.1)
     rest-client (2.1.0)
       http-accept (>= 1.7.0, < 2.0)
       http-cookie (>= 1.0.2, < 2.0)
@@ -400,6 +402,7 @@ DEPENDENCIES
   pg
   puma
   rack-attack
+  rack-cors
   rails (~> 6)
   rails-i18n (~> 6.x)
   ransack
