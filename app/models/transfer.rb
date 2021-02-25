@@ -104,11 +104,11 @@ class Transfer < ApplicationRecord
 
     case transfer_type.to_sym
     when :payment_refund, :swap_refund
-      source.refund!
+      source.refund! unless source.refunded?
     when :bonus, :swap_change
-      source.complete!
+      source.complete! unless source.completed
     when :fox_swap
-      source.start!
+      source.start! unless source.swapping
     end
     update!(
       snapshot: r['data'],
