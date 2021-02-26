@@ -30,7 +30,7 @@
     "babel-plugin-import": "^1.13.3",
     "babel-plugin-transform-react-remove-prop-types": "^0.4.24",
     "copy-to-clipboard": "^3.3.1",
-    "css-loader": "^5.0.2",
+    "css-loader": "^5.1.0",
     "css-minimizer-webpack-plugin": "^1.2.0",
     "d3-array": "2.11.0",
     "graphql": "^15.5.0",
