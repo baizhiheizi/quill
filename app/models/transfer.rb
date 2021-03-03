@@ -106,9 +106,9 @@ class Transfer < ApplicationRecord
     when :payment_refund, :swap_refund
       source.refund! unless source.refunded?
     when :bonus, :swap_change
-      source.complete! unless source.completed
+      source.complete! unless source.completed?
     when :fox_swap
-      source.start! unless source.swapping
+      source.start! unless source.swapping?
     end
     update!(
       snapshot: r['data'],
