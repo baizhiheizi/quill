@@ -337,6 +337,7 @@ export type Article = {
   readerRevenueTotal: Scalars['Float'];
   readers: UserConnection;
   revenue: Scalars['Float'];
+  revenueUsd: Scalars['Float'];
   rewardOrders: OrderConnection;
   rewarders: UserConnection;
   state?: Maybe<Scalars['String']>;
@@ -3421,6 +3422,7 @@ export const ArticleConnectionDocument = gql`
       price
       priceUsd
       revenue
+      revenueUsd
       ordersCount
       commentsCount
       upvoteRatio

@@ -2,7 +2,7 @@ import {
   DislikeOutlined,
   LikeOutlined,
   MessageOutlined,
-  RiseOutlined,
+  PayCircleOutlined,
   ShareAltOutlined,
 } from '@ant-design/icons';
 import { Article } from '@graphql';
@@ -32,7 +32,7 @@ export default function ArticleListItemComponent(props: {
         article.upvoteRatio === null
           ? [
               <RevenueAction
-                revenue={article.revenue}
+                revenueUsd={article.revenueUsd}
                 currencySymbol={article.currency.symbol}
               />,
               <CommentsCountAction commentsCount={article.commentsCount} />,
@@ -44,7 +44,7 @@ export default function ArticleListItemComponent(props: {
             ]
           : [
               <RevenueAction
-                revenue={article.revenue}
+                revenueUsd={article.revenueUsd}
                 currencySymbol={article.currency.symbol}
               />,
               <CommentsCountAction commentsCount={article.commentsCount} />,
@@ -106,15 +106,11 @@ export default function ArticleListItemComponent(props: {
   );
 }
 
-function RevenueAction(props: { revenue: number; currencySymbol: string }) {
+function RevenueAction(props: { revenueUsd: number; currencySymbol: string }) {
   return (
     <Space>
-      <RiseOutlined />
-      <span>
-        {props.currencySymbol === 'BTC'
-          ? props.revenue.toFixed(6)
-          : props.revenue.toFixed(2)}
-      </span>
+      <PayCircleOutlined />
+      <span>{props.revenueUsd.toFixed(2)}</span>
     </Space>
   );
 }

@@ -23,7 +23,7 @@ module Resolvers
       when 'lately'
         articles.order(created_at: :desc)
       when 'revenue'
-        articles.order(revenue: :desc, orders_count: :desc)
+        articles.order_by_revenue_usd
       end
     end
   end

@@ -71,6 +71,16 @@ class Article < ApplicationRecord
 
   default_scope -> { includes(:currency) }
   scope :only_published, -> { where(state: :published) }
+  scope :order_by_revenue_usd, lambda {
+    joins(:orders)
+      .group(:id)
+      .select(
+        <<~SQL.squish
+          articles.*,
+          SUM(orders.change_usd) as revenue_usd
+        SQL
+      ).order(revenue_usd: :desc)
+  }
   scope :order_by_popularity, lambda {
                                 where.not(orders_count: 0)
                                      .select(
@@ -190,6 +200,10 @@ class Article < ApplicationRecord
 
   def price_usd
     (currency.price_usd.to_f * price).to_f.round(4)
+  end
+
+  def revenue_usd
+    orders.sum(:change_usd)
   end
 
   def random_readers(limit = 24)
