@@ -137,10 +137,9 @@ class SwapOrder < ApplicationRecord
   def create_change_transfer!
     return if completed?
     return if amount.blank?
-    return if min_amount.blank?
 
-    _amount = (amount - min_amount).to_f
-    if (_amount - Transfer::MINIMUM_AMOUNT).negative?
+    _amount = (amount - min_amount.to_f).to_f
+    if min_amount.blank? || (_amount - Transfer::MINIMUM_AMOUNT).negative?
       complete!
     else
       _trace_id = wallet.mixin_api.unique_conversation_id(trace_id, payment.payer.mixin_uuid)
