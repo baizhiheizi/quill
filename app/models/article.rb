@@ -81,18 +81,18 @@ class Article < ApplicationRecord
         SQL
       ).order(revenue_usd: :desc)
   }
-  scope :order_by_popularity, do 
-                                where.not(orders_count: 0)
-                                     .joins(:orders)
-                                     .group(:id)
-                                     .select(
-                                       <<~SQL.squish
-                                         articles.*, 
-                                         (((SUM(orders.change_usd) * 10 + articles.upvotes_count - articles.downvotes_count + articles.comments_count) / POW(((EXTRACT(EPOCH FROM (now()-articles.created_at)) / 3600)::integer + 1), 2))) AS popularity
-                                       SQL
-                                     )
-                                     .order('popularity DESC, created_at DESC')
-  end
+  scope :order_by_popularity, lambda {
+    where.not(orders_count: 0)
+         .joins(:orders)
+         .group(:id)
+         .select(
+           <<~SQL.squish
+             articles.*, 
+             (((SUM(orders.change_usd) * 10 + articles.upvotes_count - articles.downvotes_count + articles.comments_count) / POW(((EXTRACT(EPOCH FROM (now()-articles.created_at)) / 3600)::integer + 1), 2))) AS popularity
+           SQL
+         )
+         .order('popularity DESC, created_at DESC')
+  }
 
   after_create :create_wallet!
   after_commit :notify_authoring_subscribers,
