@@ -25,6 +25,7 @@ query TaggedArticleConnection(
       price
       priceUsd
       revenue
+      revenueUsd
       ordersCount
       commentsCount
       upvoteRatio

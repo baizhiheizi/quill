@@ -3820,6 +3820,7 @@ export const TaggedArticleConnectionDocument = gql`
       price
       priceUsd
       revenue
+      revenueUsd
       ordersCount
       commentsCount
       upvoteRatio
