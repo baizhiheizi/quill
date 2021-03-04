@@ -5,7 +5,12 @@ class API::ArticlesController < API::BaseController
 
   def index
     @articles =
-      if current_user
+      if params[:author_id].present?
+        author = User.find_by(mixin_uuid: params[:author_id])
+        render_not_found('user not found') && return if author.blank?
+
+        author.articles.only_published
+      elsif current_user
         current_user.articles
       else
         Article.only_published
