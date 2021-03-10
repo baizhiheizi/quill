@@ -1,8 +1,8 @@
 import {
   DislikeOutlined,
+  DollarOutlined,
   LikeOutlined,
   MessageOutlined,
-  PayCircleOutlined,
   ShareAltOutlined,
 } from '@ant-design/icons';
 import { Article } from '@graphql';
@@ -109,7 +109,7 @@ export default function ArticleListItemComponent(props: {
 function RevenueAction(props: { revenueUsd: number; currencySymbol: string }) {
   return (
     <Space>
-      <PayCircleOutlined />
+      <DollarOutlined />
       <span>{props.revenueUsd.toFixed(2)}</span>
     </Space>
   );
