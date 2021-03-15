@@ -34,7 +34,7 @@ import {
   Select,
 } from 'antd';
 import moment from 'moment';
-import React, { createElement, useEffect, useState } from 'react';
+import React, { createElement, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import LoadingComponent from '../LoadingComponent/LoadingComponent';
 import LoadMoreComponent from '../LoadMoreComponent/LoadMoreComponent';
@@ -60,6 +60,7 @@ export default function CommentsComponent(props: {
   const { t, i18n } = useTranslation();
   moment.locale(i18n.language);
   const [orderBy, setOrderBy] = useState<'desc' | 'asc' | 'upvotes'>('upvotes');
+  const ref = useRef(null);
   const { data, loading, refetch, fetchMore } = useCommentConnectionQuery({
     variables: { commentableType, commentableId, orderBy },
     notifyOnNetworkStatusChange: true,
@@ -247,7 +248,7 @@ ${comment.content.replace(/^/gm, '> ')}
 
 `,
                         });
-                        document.getElementById('comment-form').focus();
+                        document.getElementsByTagName('textarea')[0]?.focus();
                       }
                     }}
                   >
@@ -304,7 +305,6 @@ ${comment.content.replace(/^/gm, '> ')}
             <Editor
               textareaProps={{
                 placeholder: t('commentsComponent.form.placeholder'),
-                id: 'comment-form',
               }}
               autoFocus={false}
               preview='edit'
