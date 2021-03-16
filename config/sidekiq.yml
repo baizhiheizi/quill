@@ -5,4 +5,4 @@
   - default
   - low
 production:
-  :concurrency: 25
+  :concurrency: 50

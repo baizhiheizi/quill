@@ -10,7 +10,7 @@ require 'mina/rbenv'
 require 'mina/logs'
 require 'mina/multistage'
 
-%w[puma blaze sidekiq].each do |job|
+%w[puma blaze sidekiq sidekiq-2].each do |job|
   namespace job.to_sym do
     task :start do
       command %(echo "-----> exec: sudo systemctl start #{job}")
@@ -88,6 +88,7 @@ task :deploy do
     invoke :'git:clone'
     invoke :'deploy:link_shared_paths'
     invoke :'sidekiq:reload'
+    invoke :'sidekiq-2:reload'
     invoke :'bundle:install'
     invoke :'rails:db_migrate'
     invoke :'deploy:cleanup'
@@ -96,6 +97,7 @@ task :deploy do
       invoke :'rbenv:load'
       invoke :'puma:restart'
       invoke :'sidekiq:restart'
+      invoke :'sidekiq-2:restart'
       invoke :'blaze:restart'
     end
   end
