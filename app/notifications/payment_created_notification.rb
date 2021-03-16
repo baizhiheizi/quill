@@ -4,8 +4,6 @@ class PaymentCreatedNotification < ApplicationNotification
   deliver_by :database
   deliver_by :mixin_bot, class: 'DeliveryMethods::MixinBot', category: 'PLAIN_TEXT'
 
-  before_mixin_bot :set_locale
-
   param :payment
 
   def data
@@ -22,9 +20,5 @@ class PaymentCreatedNotification < ApplicationNotification
       host: 'https://mixin.one',
       snapshot_id: params[:payment].snapshot_id
     )
-  end
-
-  def set_locale
-    I18n.locale = recipient.locale if recipient.locale.present?
   end
 end

@@ -4,33 +4,35 @@ class CommentCreatedNotification < ApplicationNotification
   deliver_by :database, if: :web_notification_enabled?
   deliver_by :mixin_bot, class: 'DeliveryMethods::MixinBot', category: 'APP_CARD', if: :mixin_bot_notification_enabled?
 
-  before_mixin_bot :set_locale
-
   param :comment
+
+  def comment
+    params[:comment]
+  end
 
   def data
     {
-      icon_url: PRSDIGG_ICON_URL,
-      title: params[:comment].commentable.title.truncate(36),
-      description: description,
+      icon_url: comment.author.avatar,
+      title: comment.content.truncate(36),
+      description: description.truncate(25),
       action: url
     }
   end
 
   def description
-    [params[:comment].author.name, t('.commented')].join(' ')
+    message
   end
 
   def message
-    [params[:comment].author.name, t('.commented'), params[:comment].commentable.title].join(' ')
+    [comment.author.name, t('.commented'), comment.commentable.title].join(' ')
   end
 
   def url
     format(
       '%<host>s/articles/%<article_uuid>s#comment-%<comment_id>s',
       host: Rails.application.credentials.fetch(:host),
-      article_uuid: params[:comment].commentable.uuid,
-      comment_id: params[:comment].id
+      article_uuid: comment.commentable.uuid,
+      comment_id: comment.id
     )
   end
 
@@ -40,9 +42,5 @@ class CommentCreatedNotification < ApplicationNotification
 
   def mixin_bot_notification_enabled?
     recipient.notification_setting.comment_created_mixin_bot
-  end
-
-  def set_locale
-    I18n.locale = recipient.locale if recipient.locale.present?
   end
 end

@@ -4,32 +4,34 @@ class ArticleBoughtNotification < ApplicationNotification
   deliver_by :database, if: :web_notification_enabled?
   deliver_by :mixin_bot, class: 'DeliveryMethods::MixinBot', category: 'APP_CARD', if: :mixin_bot_notification_enabled?
 
-  before_mixin_bot :set_locale
-
   param :order
+
+  def order
+    params[:order]
+  end
 
   def data
     {
-      icon_url: PRSDIGG_ICON_URL,
-      title: params[:order].article.title.truncate(36),
+      icon_url: order.buyer.avatar,
+      title: order.article.title.truncate(36),
       description: description,
       action: url
     }
   end
 
   def description
-    [params[:order].buyer.name, t('.bought')].join(' ')
+    [order.buyer.name, t('.bought')].join(' ')
   end
 
   def message
-    [params[:order].buyer.name, t('.bought'), params[:order].article.title].join(' ')
+    [order.buyer.name, t('.bought'), order.article.title].join(' ')
   end
 
   def url
     format(
       '%<host>s/articles/%<article_uuid>s',
       host: Rails.application.credentials.fetch(:host),
-      article_uuid: params[:order].article.uuid
+      article_uuid: order.article.uuid
     )
   end
 
@@ -39,9 +41,5 @@ class ArticleBoughtNotification < ApplicationNotification
 
   def mixin_bot_notification_enabled?
     recipient.notification_setting.article_bought_mixin_bot
-  end
-
-  def set_locale
-    I18n.locale = recipient.locale if recipient.locale.present?
   end
 end
