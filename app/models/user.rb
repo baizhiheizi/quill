@@ -38,6 +38,7 @@ class User < ApplicationRecord
     reader_revenue_total_btc
     revenue_total_btc
     payment_total_btc
+    cached_at
   ]
 
   has_one :mixin_authorization, -> { where(provider: :mixin) }, class_name: 'UserAuthorization', inverse_of: :user
@@ -163,7 +164,8 @@ class User < ApplicationRecord
       revenue_total_prs: revenue_transfers.only_prs.sum(:amount).to_f,
       revenue_total_btc: revenue_transfers.only_btc.sum(:amount).to_f,
       payment_total_prs: orders.only_prs.sum(:total).to_f,
-      payment_total_btc: orders.only_btc.sum(:total).to_f
+      payment_total_btc: orders.only_btc.sum(:total).to_f,
+      cached_at: Time.current
     }
   end
 

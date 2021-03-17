@@ -54,7 +54,7 @@ class Transfer < ApplicationRecord
   validates :opponent_id, presence: true
   validates :amount, numericality: { greater_than_or_equal_to: MINIMUM_AMOUNT }
 
-  after_commit :process_async, on: :create
+  after_commit :process_async, :update_recipient_statistics_cache_async, on: :create
 
   scope :unprocessed, -> { where(processed_at: nil) }
   scope :processed, -> { where.not(processed_at: nil) }
@@ -113,7 +113,6 @@ class Transfer < ApplicationRecord
       snapshot: r['data'],
       processed_at: Time.current
     )
-    update_recipient_statistics_cache
 
     notify_recipient if recipient.present?
   end
@@ -135,6 +134,10 @@ class Transfer < ApplicationRecord
     else
       ProcessTransferWorker.perform_async trace_id
     end
+  end
+
+  def update_recipient_statistics_cache_async
+    UpdateTransferRecipientStatisticsWorker.perform_async trace_id
   end
 
   def update_recipient_statistics_cache
