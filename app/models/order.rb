@@ -106,7 +106,7 @@ class Order < ApplicationRecord
         opponent_id: _order.buyer.mixin_uuid,
         asset_id: revenue_asset_id,
         amount: _amount.to_f.to_s,
-        memo: "Reader revenue from #{item.title}".truncate(140)
+        memo: "Reader revenue from #{item.title}".truncate(70)
       ).find_or_create_by!(
         trace_id: PrsdiggBot.api.unique_conversation_id(trace_id, _order.trace_id)
       )
@@ -136,7 +136,7 @@ class Order < ApplicationRecord
       opponent_id: item.author.mixin_uuid,
       asset_id: revenue_asset_id,
       amount: (total - _distributed_amount - _prsdigg_amount).round(8),
-      memo: "#{payment.payer.name} #{buy_article? ? 'bought' : 'rewarded'} article #{item.title}".truncate(140)
+      memo: "#{payment.payer.name} #{buy_article? ? 'bought' : 'rewarded'} article #{item.title}".truncate(70)
     ).find_or_create_by!(
       trace_id: PrsdiggBot.api.unique_conversation_id(trace_id, item.author.mixin_uuid)
     )
