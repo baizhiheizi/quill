@@ -5,7 +5,7 @@ class TransferMonitorWorker
   sidekiq_options queue: :low, retry: false
 
   def perform
-    count = Transfer.unprocessed.where(created_at: ...(Time.current - 12.hour)).count
+    count = Transfer.unprocessed.where(created_at: ...(Time.current - 12.hours)).count
     return unless count.positive?
 
     AdminNotificationService.new.text(
