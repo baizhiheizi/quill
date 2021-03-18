@@ -82,7 +82,7 @@ class Transfer < ApplicationRecord
             opponent_id: opponent_id,
             amount: amount,
             trace_id: trace_id,
-            memo: memo
+            memo: memo.truncate(70)
           }
         )
       else
@@ -93,7 +93,7 @@ class Transfer < ApplicationRecord
             opponent_id: opponent_id,
             amount: amount,
             trace_id: trace_id,
-            memo: memo
+            memo: memo.truncate(70)
           }
         )
       end
