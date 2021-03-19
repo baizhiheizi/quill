@@ -1316,6 +1316,7 @@ export type QueryMyArticleArgs = {
 
 export type QueryMyArticleConnectionArgs = {
   type: Scalars['String'];
+  state?: Maybe<Scalars['String']>;
   after?: Maybe<Scalars['String']>;
   before?: Maybe<Scalars['String']>;
   first?: Maybe<Scalars['Int']>;
@@ -4528,8 +4529,8 @@ export type MyAccessTokenConnectionQueryHookResult = ReturnType<typeof useMyAcce
 export type MyAccessTokenConnectionLazyQueryHookResult = ReturnType<typeof useMyAccessTokenConnectionLazyQuery>;
 export type MyAccessTokenConnectionQueryResult = Apollo.QueryResult<MyAccessTokenConnectionQuery, MyAccessTokenConnectionQueryVariables>;
 export const MyArticleConnectionDocument = gql`
-    query MyArticleConnection($type: String!, $after: String) {
-  myArticleConnection(type: $type, after: $after) {
+    query MyArticleConnection($type: String!, $state: String, $after: String) {
+  myArticleConnection(type: $type, state: $state, after: $after) {
     nodes {
       uuid
       title
@@ -4565,6 +4566,7 @@ export const MyArticleConnectionDocument = gql`
  * const { data, loading, error } = useMyArticleConnectionQuery({
  *   variables: {
  *      type: // value for 'type'
+ *      state: // value for 'state'
  *      after: // value for 'after'
  *   },
  * });

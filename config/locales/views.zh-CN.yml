@@ -191,8 +191,10 @@ zh-CN:
         publishBtn: 公开
         hideBtn: 隐藏
         tabs:
-          author: 已发表
-          reader: 已购买
+          published: 已发表
+          bought: 已购买
+          hidden: 已隐藏
+          blocked: 已屏蔽
       articlePage:
         tabs:
           buyRecords: 购买记录

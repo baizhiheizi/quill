@@ -7,7 +7,9 @@ import MyBoughtArticlesComponent from './components/MyBoughtArticlesComponent';
 
 export default function ArticlesPage() {
   const { t } = useTranslation();
-  const [type, setType] = useState<'author' | 'reader'>('author');
+  const [type, setType] = useState<
+    'published' | 'bought' | 'hidden' | 'blocked'
+  >('bought');
 
   return (
     <div>
@@ -21,19 +23,33 @@ export default function ArticlesPage() {
       />
       <Tabs
         activeKey={type}
-        onChange={(key: 'author' | 'reader') => setType(key)}
+        onChange={(key: 'published' | 'bought' | 'hidden' | 'blocked') =>
+          setType(key)
+        }
       >
         <Tabs.TabPane
-          tab={t('dashboard.articlesPage.tabs.author')}
-          key='author'
-        >
-          <MyArticlesComponent />
-        </Tabs.TabPane>
-        <Tabs.TabPane
-          tab={t('dashboard.articlesPage.tabs.reader')}
-          key='reader'
+          tab={t('dashboard.articlesPage.tabs.bought')}
+          key='bought'
         >
           <MyBoughtArticlesComponent />
+        </Tabs.TabPane>
+        <Tabs.TabPane
+          tab={t('dashboard.articlesPage.tabs.published')}
+          key='published'
+        >
+          <MyArticlesComponent state='published' />
+        </Tabs.TabPane>
+        <Tabs.TabPane
+          tab={t('dashboard.articlesPage.tabs.hidden')}
+          key='hidden'
+        >
+          <MyArticlesComponent state='hidden' />
+        </Tabs.TabPane>
+        <Tabs.TabPane
+          tab={t('dashboard.articlesPage.tabs.blocked')}
+          key='blocked'
+        >
+          <MyArticlesComponent state='blocked' />
         </Tabs.TabPane>
       </Tabs>
     </div>

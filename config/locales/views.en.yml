@@ -184,11 +184,10 @@ en:
         publishBtn: Publish
         hideBtn: Hide
         tabs:
-          author: Published
-          reader: Bought
-          comments: Commented
-          payments: Payments
-          transfers: Revenue
+          published: Published
+          bought: Bought
+          hidden: Hidden
+          blocked: Blocked
       articlePage:
         tabs:
           buyRecords: Buy Records

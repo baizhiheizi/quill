@@ -15,7 +15,9 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 
-export default function MyArticlesComponent() {
+export default function MyArticlesComponent(props: {
+  state?: 'published' | 'hidden' | 'blocked';
+}) {
   const { t, i18n } = useTranslation();
   const { isMobile } = useUserAgent();
   moment.locale(i18n.language);
@@ -25,7 +27,7 @@ export default function MyArticlesComponent() {
     fetchMore,
     refetch,
   }: MyArticleConnectionQueryHookResult = useMyArticleConnectionQuery({
-    variables: { type: 'author' },
+    variables: { type: 'author', state: props.state || 'published' },
   });
   const [
     hideArticle,
