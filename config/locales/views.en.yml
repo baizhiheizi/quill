@@ -235,3 +235,6 @@ en:
           securityTips: Please keep your Access Token safe. The token will not display once close. Generate a new one if you lose it.
           deleteConfirmTips: Are you sure to DELETE the Access Token?
           copyBtn: Copy
+      overviewPage:
+        presentValue: Per present value
+        perPriceWhenPaid: Per the price when paid

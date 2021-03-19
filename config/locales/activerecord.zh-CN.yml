@@ -68,6 +68,7 @@ zh-CN:
         defaultBio: 没有留下任何介绍
         authorRevenueTotal: 作者收益(USD)
         readerRevenueTotal: 读者收益(USD)
+        paymentTotalUsd: 总支出(USD)
         articlesCount: 发表文章
         boughtArticlesCount: 购买文章
       transfer:

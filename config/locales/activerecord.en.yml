@@ -68,6 +68,7 @@ en:
         defaultBio: Didn't left anything
         authorRevenueTotal: Author Revenue(USD)
         readerRevenueTotal: Reader Revenue(USD)
+        paymentTotalUsd: Paid(USD)
         articlesCount: Published
         boughtArticlesCount: Bought
       transfer:

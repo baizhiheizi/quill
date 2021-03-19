@@ -8,5 +8,6 @@ query MyStatistics {
     readerRevenueTotalBtc
     authorRevenueTotalUsd
     readerRevenueTotalUsd
+    paymentTotalUsd
   }
 }

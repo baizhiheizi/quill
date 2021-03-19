@@ -34,7 +34,7 @@ module Types
     end
 
     def payment_total_usd
-      object['payment_total_prs'].to_f * Currency.prs.price_usd.to_f + object['payment_total_usd'].to_f * Currency.btc.price_usd.to_f
+      object['payment_total_usd'] || 0.0
     end
   end
 end

@@ -239,3 +239,6 @@ zh-CN:
           securityTips: 请妥善保管您的 Access Token，关闭后将不再显示。如果丢失请重新生成。
           deleteConfirmTips: 确认要删除 Access Token 吗？
           copyBtn: 复制
+      overviewPage:
+        presentValue: 按当前价格折算
+        perPriceWhenPaid: 按支付时价格折算
