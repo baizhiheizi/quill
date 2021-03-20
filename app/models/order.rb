@@ -179,7 +179,7 @@ class Order < ApplicationRecord
       bought_articles_count: buyer.bought_articles.count,
       payment_total_prs: buyer.orders.only_prs.sum(:total).to_f,
       payment_total_btc: buyer.orders.only_btc.sum(:total).to_f,
-      payment_total_usd: buyer.orders.sum(:change_btc).to_f
+      payment_total_usd: buyer.orders.sum(:change_usd).to_f
     )
   end
 
