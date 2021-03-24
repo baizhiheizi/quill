@@ -27,7 +27,7 @@
     "@types/uuid": "^8.3.0",
     "@uiw/react-md-editor": "3.0.0-beta.1",
     "ahooks": "^2.9.6",
-    "antd": "^4.14.0",
+    "antd": "^4.14.1",
     "autoprefixer": "^10.2.5",
     "babel-plugin-import": "^1.13.3",
     "babel-plugin-transform-react-remove-prop-types": "^0.4.24",
