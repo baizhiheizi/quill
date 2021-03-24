@@ -1,6 +1,6 @@
 import LoadingComponent from '@dashboard/components/LoadingComponent/LoadingComponent';
 import { useMyArticleQuery, useUpdateArticleMutation } from '@graphql';
-import { markdownPlugins, markdownRenderers } from '@shared';
+import { markdownPlugins, markdownRenderers, uploadCommand } from '@shared';
 import Editor, { commands } from '@uiw/react-md-editor';
 import {
   Avatar,
@@ -18,9 +18,11 @@ import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, useHistory, useParams } from 'react-router-dom';
 import EditableTagsComponent from '../../components/EditableTagsComponent/EditableTagsComponent';
+import UploadComponent from '../../components/UploadComponent/UploadComponent';
 
 export default function ArticleEditPage() {
   const { uuid } = useParams<{ uuid: string }>();
+  const [form] = Form.useForm();
   const [editedPrice, setEditedPrice] = useState(0);
   const history = useHistory();
   const { t } = useTranslation();
@@ -77,7 +79,17 @@ export default function ArticleEditPage() {
           },
         }}
       />
+      <UploadComponent
+        callback={(blob) => {
+          form.setFieldsValue({
+            content: `${form.getFieldValue('content')}\n![${blob.filename}](${
+              blob.url
+            })\n`,
+          });
+        }}
+      />
       <Form
+        form={form}
         initialValues={{
           uuid,
           title: myArticle.title,
@@ -142,8 +154,8 @@ export default function ArticleEditPage() {
               commands.divider,
               commands.link,
               commands.code,
+              uploadCommand,
               commands.divider,
-              commands.image,
               commands.codeEdit,
               commands.codePreview,
             ]}

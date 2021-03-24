@@ -1,9 +1,11 @@
+import { CloudUploadOutlined } from '@ant-design/icons';
+import { ICommand } from '@uiw/react-md-editor';
 import { Image } from 'antd';
-import React from 'react';
-import footnotes from 'remark-footnotes';
-import mermaid from 'mermaid';
 import katex from 'katex';
 import 'katex/dist/katex.css';
+import mermaid from 'mermaid';
+import React from 'react';
+import footnotes from 'remark-footnotes';
 
 export const markdownPlugins = [[footnotes, { inlineNotes: true }]];
 export const markdownRenderers = {
@@ -72,5 +74,15 @@ export const markdownRenderers = {
         <code {...props}>{value}</code>
       </pre>
     );
+  },
+};
+
+export const uploadCommand: ICommand = {
+  name: 'upload',
+  keyCommand: 'upload',
+  buttonProps: { 'aria-label': 'Upload Image' },
+  icon: <CloudUploadOutlined />,
+  execute: () => {
+    document.getElementById('upload-image-input').click();
   },
 };

@@ -5,7 +5,7 @@ import {
   useCreateArticleMutation,
   usePricableCurrenciesQuery,
 } from '@graphql';
-import { markdownPlugins, markdownRenderers } from '@shared';
+import { markdownPlugins, markdownRenderers, uploadCommand } from '@shared';
 import Editor, { commands } from '@uiw/react-md-editor';
 import {
   Avatar,
@@ -23,6 +23,7 @@ import {
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, useHistory } from 'react-router-dom';
+import UploadComponent from '../../components/UploadComponent/UploadComponent';
 
 export default function ArticleNewPage() {
   const history = useHistory();
@@ -51,6 +52,7 @@ export default function ArticleNewPage() {
       }
     },
   });
+
   if (loading) {
     return <LoadingComponent />;
   }
@@ -75,6 +77,15 @@ export default function ArticleNewPage() {
               <Link to={route.path}>{route.breadcrumbName}</Link>
             );
           },
+        }}
+      />
+      <UploadComponent
+        callback={(blob) => {
+          form.setFieldsValue({
+            content: `${form.getFieldValue('content')}\n![${blob.filename}](${
+              blob.url
+            })\n`,
+          });
         }}
       />
       <Form
@@ -141,6 +152,7 @@ export default function ArticleNewPage() {
               commands.divider,
               commands.link,
               commands.code,
+              uploadCommand,
               commands.divider,
               commands.codeEdit,
               commands.codePreview,

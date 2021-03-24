@@ -1629,6 +1629,11 @@
   dependencies:
     "@types/node" "*"
 
+"@types/katex@^0.11.0":
+  version "0.11.0"
+  resolved "https://registry.yarnpkg.com/@types/katex/-/katex-0.11.0.tgz#b16c54ee670925ffef0616beae9e90c557e17334"
+  integrity sha512-27BfE8zASRLYfSBNMk5/+KIjr2CBBrH0i5lhsO04fca4TGirIIMay73v3zNkzqmsaeIa/Mi5kejWDcxPLAmkvA==
+
 "@types/mark.js@^8.11.5":
   version "8.11.5"
   resolved "https://registry.yarnpkg.com/@types/mark.js/-/mark.js-8.11.5.tgz#7b1b10d900aad7a7d2dbc9b480c8002dbfde30ad"
