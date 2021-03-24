@@ -6,6 +6,12 @@
 
 ---
 
+## 应用截图
+
+![snapshot](snapshot.png)
+
+---
+
 顶瓜瓜 是建立于 [PRESSone](https://press.one) 与 [Mixin Network](https://mixin.one) 之上的 Dapp。发表于 顶瓜瓜 上的文章将全部在 [PRESSone](https://press.one) 签名上链，所有支付以及转账则通过 [Mixin Network](https://mixin.one) 完成。
 
 ## 规则

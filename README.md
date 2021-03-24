@@ -6,6 +6,12 @@
 
 ---
 
+## Snapshot
+
+![snapshot](snapshot.png)
+
+---
+
 PRSDigg is a Dapp built on [PRESSONE](https://press.one/) and [Mixin Network](https://mixin.one/). All articles published on PRSDigg will be signed up at [PRESSONE](https:/press.one/) and all payments and transfers will be completed through  [Mixin Network](https://mixin.one/). 
 
 ## Rules
