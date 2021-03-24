@@ -1,5 +1,6 @@
 import LoadingComponent from '@dashboard/components/LoadingComponent/LoadingComponent';
 import { useMyArticleQuery, useUpdateArticleMutation } from '@graphql';
+import { markdownPlugins, markdownRenderers } from '@shared';
 import Editor, { commands } from '@uiw/react-md-editor';
 import {
   Avatar,
@@ -124,6 +125,10 @@ export default function ArticleEditPage() {
           <Editor
             textareaProps={{
               placeholder: t('article.form.contentPlaceHolder'),
+            }}
+            previewOptions={{
+              plugins: markdownPlugins,
+              renderers: markdownRenderers,
             }}
             autoFocus={false}
             preview='edit'

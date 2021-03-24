@@ -5,6 +5,7 @@ import {
   useCreateArticleMutation,
   usePricableCurrenciesQuery,
 } from '@graphql';
+import { markdownPlugins, markdownRenderers } from '@shared';
 import Editor, { commands } from '@uiw/react-md-editor';
 import {
   Avatar,
@@ -123,6 +124,10 @@ export default function ArticleNewPage() {
           <Editor
             textareaProps={{
               placeholder: t('article.form.contentPlaceHolder'),
+            }}
+            previewOptions={{
+              plugins: markdownPlugins,
+              renderers: markdownRenderers,
             }}
             autoFocus={false}
             preview='edit'

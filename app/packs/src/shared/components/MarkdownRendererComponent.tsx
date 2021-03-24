@@ -1,6 +1,6 @@
 import MDEditor from '@uiw/react-md-editor';
-import { Image } from 'antd';
 import React from 'react';
+import { markdownPlugins, markdownRenderers } from '../utils';
 
 export function MarkdownRendererComponent(props: { source: string }) {
   return (
@@ -48,20 +48,8 @@ export function MarkdownRendererComponent(props: { source: string }) {
 
         return 'javascript:void(0)';
       }}
-      renderers={{
-        image: ({ src, alt }) => (
-          <Image
-            wrapperClassName='w-full'
-            className='w-auto max-w-full m-auto'
-            preview={false}
-            alt={alt}
-            src={src}
-          />
-        ),
-        paragraph: ({ node, ...otherProps }) => (
-          <div className='mb-4'>{otherProps.children}</div>
-        ),
-      }}
+      plugins={markdownPlugins}
+      renderers={markdownRenderers}
     />
   );
 }
