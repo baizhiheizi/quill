@@ -1,6 +1,9 @@
 import { Image } from 'antd';
 import React from 'react';
 import footnotes from 'remark-footnotes';
+import mermaid from 'mermaid';
+import katex from 'katex';
+import 'katex/dist/katex.css';
 
 export const markdownPlugins = [[footnotes, { inlineNotes: true }]];
 export const markdownRenderers = {
@@ -34,6 +37,40 @@ export const markdownRenderers = {
         </a>
         <span className='italic'>{children}</span>
       </div>
+    );
+  },
+  code: ({ children, language, value }) => {
+    if (language?.toLocaleLowerCase() === 'mermaid') {
+      try {
+        const Elm = document.createElement('div');
+        Elm.id = 'demo';
+        const svg = mermaid.render('demo', value);
+        return (
+          <pre>
+            <code dangerouslySetInnerHTML={{ __html: svg }} />
+          </pre>
+        );
+      } catch (err) {
+        console.log(err);
+        return children || value;
+      }
+    } else if (language?.toLocaleLowerCase() === 'katex') {
+      const html = katex.renderToString(value, {
+        throwOnError: false,
+      });
+      return (
+        <pre>
+          <code dangerouslySetInnerHTML={{ __html: html }} />
+        </pre>
+      );
+    }
+    const props = {
+      className: language ? `language-${language}` : '',
+    };
+    return (
+      <pre {...props}>
+        <code {...props}>{value}</code>
+      </pre>
     );
   },
 };
