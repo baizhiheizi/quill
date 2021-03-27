@@ -23,6 +23,8 @@
 #  index_mixin_network_users_on_uuid                     (uuid) UNIQUE
 #
 class MixinNetworkUser < ApplicationRecord
+  DEFAULT_AVATAR_FILE = Rails.application.root.join('app/packs/src/images/logo.png')
+
   include Encryptable
 
   belongs_to :owner, optional: true, inverse_of: false, polymorphic: true
@@ -77,6 +79,18 @@ class MixinNetworkUser < ApplicationRecord
 
   def initialize_pin_async
     MixinNetworkUserInitializePinWorker.perform_async id
+  end
+
+  def update_avatar
+    img = File.open DEFAULT_AVATAR_FILE
+    r = mixin_api.update_me full_name: 'PRSDigg Broker', avatar_base64: Base64.strict_encode64(img.read)
+    update raw: r['data'] if r['data'].present?
+  ensure
+    img.close
+  end
+
+  def update_avatar_async
+    MixinNetworkUserUpdateAvatarWorker.perform_async id
   end
 
   private
