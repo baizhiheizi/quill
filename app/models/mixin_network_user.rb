@@ -40,7 +40,7 @@ class MixinNetworkUser < ApplicationRecord
 
   before_validation :setup_attributes, on: :create
 
-  after_commit :initialize_pin_async, on: :create
+  after_commit :initialize_pin_async, :update_avatar_async, on: :create
 
   attr_encrypted :pin
 
