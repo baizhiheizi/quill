@@ -161,7 +161,7 @@ GEM
       activesupport (>= 5.0.0)
     jose (1.1.3)
       hamster
-    listen (3.5.0)
+    listen (3.5.1)
       rb-fsevent (~> 0.10, >= 0.10.3)
       rb-inotify (~> 0.9, >= 0.9.10)
     loofah (2.9.0)
@@ -391,7 +391,7 @@ DEPENDENCIES
   honeybadger (~> 4.8)
   image_processing (~> 1.2)
   jbuilder (~> 2.7)
-  listen (~> 3.4)
+  listen (~> 3.5)
   mina (~> 1.2.2)
   mina-logs (~> 1.1.0)
   mina-multistage (~> 1.0.3)
