@@ -185,7 +185,7 @@ GEM
     mini_mime (1.0.3)
     mini_portile2 (2.5.0)
     minitest (5.14.4)
-    mixin_bot (0.3.11)
+    mixin_bot (0.3.12)
       awesome_print (~> 1.8)
       bcrypt (~> 3.1)
       cli-ui (~> 1.3)
