@@ -55,7 +55,7 @@ module Types
     def content
       return unless object.authorized?(context[:current_user])
 
-      object.content
+      object.content.strip
     end
 
     def authorized
