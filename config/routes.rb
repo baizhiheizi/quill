@@ -43,6 +43,8 @@ Rails.application.routes.draw do
 
   namespace :api, defaults: { format: :json } do
     resources :articles, only: %i[index show create], param: :uuid
+
+    get 'valid_user_filter', to: 'valid_users#filter'
   end
 
   namespace :widget do
