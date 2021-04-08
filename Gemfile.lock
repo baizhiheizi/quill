@@ -323,7 +323,7 @@ GEM
       rubyzip (>= 1.2.2)
     semantic_range (3.0.0)
     sha3 (1.0.2)
-    sidekiq (6.2.0)
+    sidekiq (6.2.1)
       connection_pool (>= 2.2.2)
       rack (~> 2.0)
       redis (>= 4.2.0)
@@ -414,7 +414,7 @@ DEPENDENCIES
   rubocop-rails
   sass-rails (>= 6)
   selenium-webdriver
-  sidekiq (~> 6.0)
+  sidekiq (~> 6.2)
   sidekiq-cron
   simple_command
   spring
