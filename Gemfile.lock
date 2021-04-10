@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/rails/webpacker.git
-  revision: f1b06c7fd5bc4b7fc7128742d1078466b94af71f
+  revision: 7ed1c08e79c17680636fa99e6bb095ec1fbc8008
   specs:
     webpacker (6.0.0.beta.6)
       activesupport (>= 5.2)
@@ -135,7 +135,7 @@ GEM
     graphiql-rails (1.7.0)
       railties
       sprockets-rails
-    graphql (1.12.6)
+    graphql (1.12.7)
     groupdate (5.2.2)
       activesupport (>= 5)
     hamster (3.0.0)
@@ -164,7 +164,7 @@ GEM
     listen (3.5.1)
       rb-fsevent (~> 0.10, >= 0.10.3)
       rb-inotify (~> 0.9, >= 0.9.10)
-    loofah (2.9.0)
+    loofah (2.9.1)
       crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
     mail (2.7.1)
@@ -199,12 +199,12 @@ GEM
     msgpack (1.4.2)
     netrc (0.11.0)
     nio4r (2.5.7)
-    nokogiri (1.11.2)
+    nokogiri (1.11.3)
       mini_portile2 (~> 2.5.0)
       racc (~> 1.4)
-    nokogiri (1.11.2-x86_64-darwin)
+    nokogiri (1.11.3-x86_64-darwin)
       racc (~> 1.4)
-    nokogiri (1.11.2-x86_64-linux)
+    nokogiri (1.11.3-x86_64-linux)
       racc (~> 1.4)
     noticed (1.3.2)
       http (>= 4.0.0)
@@ -212,9 +212,9 @@ GEM
     open4 (1.3.4)
     order_as_specified (1.7)
       activerecord (>= 5.0.0)
-    pagy (4.1.0)
+    pagy (4.2.0)
     parallel (1.20.1)
-    parser (3.0.0.0)
+    parser (3.0.1.0)
       ast (~> 2.4.1)
     pg (1.2.3)
     public_suffix (4.0.6)
@@ -288,8 +288,8 @@ GEM
       http-cookie (>= 1.0.2, < 2.0)
       mime-types (>= 1.16, < 4.0)
       netrc (~> 0.8)
-    rexml (3.2.4)
-    rubocop (1.12.0)
+    rexml (3.2.5)
+    rubocop (1.12.1)
       parallel (~> 1.10)
       parser (>= 3.0.0.0)
       rainbow (>= 2.2.2, < 4.0)
@@ -323,7 +323,7 @@ GEM
       rubyzip (>= 1.2.2)
     semantic_range (3.0.0)
     sha3 (1.0.2)
-    sidekiq (6.2.0)
+    sidekiq (6.2.1)
       connection_pool (>= 2.2.2)
       rack (~> 2.0)
       redis (>= 4.2.0)
