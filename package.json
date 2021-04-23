@@ -47,7 +47,7 @@
     "mark.js": "^8.11.1",
     "mermaid": "^8.9.2",
     "mini-css-extract-plugin": "^1.4.1",
-    "postcss": "^8.2.9",
+    "postcss": "^8.2.12",
     "postcss-import": "^14.0.1",
     "postcss-loader": "^5.1.0",
     "prop-types": "^15.7.2",
