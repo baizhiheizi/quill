@@ -1,7 +1,7 @@
-import LoadingComponent from '@dashboard/components/LoadingComponent/LoadingComponent';
-import { useMyStatisticsQuery } from '@graphql';
-import { useCurrentUser } from '@shared';
 import { Col, PageHeader, Row, Statistic, Tooltip } from 'antd';
+import LoadingComponent from 'apps/dashboard/components/LoadingComponent/LoadingComponent';
+import { useCurrentUser } from 'apps/shared';
+import { useMyStatisticsQuery } from 'graphqlTypes';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 

@@ -1,6 +1,6 @@
-import { Asset, useAdminWalletBalanceQuery } from '@graphql';
 import { Avatar, Table } from 'antd';
 import { ColumnProps } from 'antd/es/table';
+import { Asset, useAdminWalletBalanceQuery } from 'graphqlTypes';
 import React from 'react';
 import LoadingComponent from '../LoadingComponent/LoadingComponent';
 

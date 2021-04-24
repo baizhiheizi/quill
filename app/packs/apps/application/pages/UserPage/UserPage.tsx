@@ -1,6 +1,6 @@
-import LoadingComponent from '@application/components/LoadingComponent/LoadingComponent';
-import { useUserQuery } from '@graphql';
 import { Avatar, Col, Row, Statistic, Tabs } from 'antd';
+import LoadingComponent from 'apps/application/components/LoadingComponent/LoadingComponent';
+import { useUserQuery } from 'graphqlTypes';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';

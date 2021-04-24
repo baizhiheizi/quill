@@ -1,10 +1,3 @@
-import {
-  Bonus,
-  useAdminCreateBonusMutation,
-  useAdminUpdateBonusMutation,
-  useAdminUserConnectionQuery,
-  User,
-} from '@graphql';
 import { useDebounce } from 'ahooks';
 import {
   Form,
@@ -16,6 +9,13 @@ import {
   Space,
   Spin,
 } from 'antd';
+import {
+  Bonus,
+  useAdminCreateBonusMutation,
+  useAdminUpdateBonusMutation,
+  useAdminUserConnectionQuery,
+  User,
+} from 'graphqlTypes';
 import React, { useEffect, useState } from 'react';
 
 export default function BonusesFormModalComponent(props: {

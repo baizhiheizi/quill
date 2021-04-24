@@ -1,11 +1,11 @@
-import ListComponent from '@dashboard/components/ListComponent/ListComponent';
-import LoadingComponent from '@dashboard/components/LoadingComponent/LoadingComponent';
+import { Avatar, Button, Divider, List, Popconfirm, Space } from 'antd';
+import ListComponent from 'apps/dashboard/components/ListComponent/ListComponent';
+import LoadingComponent from 'apps/dashboard/components/LoadingComponent/LoadingComponent';
 import {
   useMyReadingSubscriptionConnectionQuery,
   User,
   useToggleReadingSubscribeUserActionMutation,
-} from '@graphql';
-import { Avatar, Button, Divider, List, Popconfirm, Space } from 'antd';
+} from 'graphqlTypes';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 

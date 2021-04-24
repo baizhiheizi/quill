@@ -1,12 +1,12 @@
-import LoadingComponent from '@admin/components/LoadingComponent/LoadingComponent';
-import { usePrsdigg } from '@admin/shared';
+import { Avatar, Button, Space, Table } from 'antd';
+import { ColumnProps } from 'antd/es/table';
+import LoadingComponent from 'apps/admin/components/LoadingComponent/LoadingComponent';
+import { usePrsdigg } from 'apps/admin/shared';
 import {
   AdminTransferConnectionQueryHookResult,
   Transfer as ITransfer,
   useAdminTransferConnectionQuery,
-} from '@graphql';
-import { Avatar, Button, Space } from 'antd';
-import Table, { ColumnProps } from 'antd/lib/table';
+} from 'graphqlTypes';
 import React from 'react';
 
 export default function TransfersComponent(props: {

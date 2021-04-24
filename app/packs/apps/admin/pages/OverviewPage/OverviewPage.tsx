@@ -1,11 +1,11 @@
+import { Col, PageHeader, Row, Statistic } from 'antd';
+import LoadingComponent from 'apps/admin/components/LoadingComponent/LoadingComponent';
 import {
   useArticleChartQuery,
   useRevenueChartQuery,
   useStatisticsQuery,
   useUserChartQuery,
-} from '@/graphql';
-import LoadingComponent from '@admin/components/LoadingComponent/LoadingComponent';
-import { Col, PageHeader, Row, Statistic } from 'antd';
+} from 'graphqlTypes';
 import React from 'react';
 import {
   Area,

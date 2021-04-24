@@ -1,12 +1,12 @@
-import LoadingComponent from '@application/components/LoadingComponent/LoadingComponent';
-import LoadMoreComponent from '@application/components/LoadMoreComponent/LoadMoreComponent';
+import { Avatar, Comment, List } from 'antd';
+import LoadingComponent from 'apps/application/components/LoadingComponent/LoadingComponent';
+import LoadMoreComponent from 'apps/application/components/LoadMoreComponent/LoadMoreComponent';
+import { MarkdownRendererComponent, useUserAgent } from 'apps/shared';
 import {
   Comment as IComment,
   CommentConnectionQueryHookResult,
   useCommentConnectionQuery,
-} from '@graphql';
-import { MarkdownRendererComponent, useUserAgent } from '@shared';
-import { Avatar, Comment, List } from 'antd';
+} from 'graphqlTypes';
 import moment from 'moment';
 import React from 'react';
 import { useTranslation } from 'react-i18next';

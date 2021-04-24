@@ -1,5 +1,5 @@
 import { ApolloProvider } from '@apollo/client';
-import { User } from '@graphql';
+import { Col, Layout, Row } from 'antd';
 import {
   apolloClient,
   CurrentUserContext,
@@ -7,9 +7,9 @@ import {
   mixinContext,
   PrsdiggContext,
   UserAgentContext,
-} from '@shared';
-import '@shared/locales/i18n';
-import { Col, Layout, Row } from 'antd';
+} from 'apps/shared';
+import 'apps/shared/locales/i18n';
+import { User } from 'graphqlTypes';
 import isMobile from 'ismobilejs';
 import React, { Suspense, useEffect, useState } from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';

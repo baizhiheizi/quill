@@ -1,12 +1,12 @@
-import LoadingComponent from '@admin/components/LoadingComponent/LoadingComponent';
+import { Avatar, Button, message, Popconfirm, Popover, Space } from 'antd';
+import Table, { ColumnProps } from 'antd/lib/table';
+import LoadingComponent from 'apps/admin/components/LoadingComponent/LoadingComponent';
 import {
   Comment as IComment,
   useAdminDeleteCommentMutation,
   useAdminRecoverCommentMutation,
   useCommentConnectionQuery,
-} from '@graphql';
-import { Avatar, Button, message, Popconfirm, Popover, Space } from 'antd';
-import Table, { ColumnProps } from 'antd/lib/table';
+} from 'graphqlTypes';
 import React from 'react';
 
 export default function CommentsComponent(props: {

@@ -3,14 +3,6 @@ import {
   ExclamationCircleOutlined,
   QuestionCircleOutlined,
 } from '@ant-design/icons';
-import ListComponent from '@dashboard/components/ListComponent/ListComponent';
-import LoadingComponent from '@dashboard/components/LoadingComponent/LoadingComponent';
-import {
-  AccessToken,
-  useCreateAccessTokenMutation,
-  useDeleteAccessTokenMutation,
-  useMyAccessTokenConnectionQuery,
-} from '@graphql';
 import {
   Alert,
   Button,
@@ -22,7 +14,15 @@ import {
   Popover,
   Typography,
 } from 'antd';
+import ListComponent from 'apps/dashboard/components/ListComponent/ListComponent';
+import LoadingComponent from 'apps/dashboard/components/LoadingComponent/LoadingComponent';
 import copy from 'copy-to-clipboard';
+import {
+  AccessToken,
+  useCreateAccessTokenMutation,
+  useDeleteAccessTokenMutation,
+  useMyAccessTokenConnectionQuery,
+} from 'graphqlTypes';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 

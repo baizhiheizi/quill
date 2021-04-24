@@ -1,8 +1,8 @@
-import LoadingComponent from '@admin/components/LoadingComponent/LoadingComponent';
-import MixinNetworkSnapshotsComponent from '@admin/components/MixinNetworkSnapshotsComponent/MixinNetworkSnapshotComponent';
-import WalletBalanceComponent from '@admin/components/WalletBalanceComponent/WalletBalanceComponent';
-import { useAdminUserQuery } from '@graphql';
 import { Avatar, Descriptions, Empty, PageHeader, Space, Tabs } from 'antd';
+import LoadingComponent from 'apps/admin/components/LoadingComponent/LoadingComponent';
+import MixinNetworkSnapshotsComponent from 'apps/admin/components/MixinNetworkSnapshotsComponent/MixinNetworkSnapshotComponent';
+import WalletBalanceComponent from 'apps/admin/components/WalletBalanceComponent/WalletBalanceComponent';
+import { useAdminUserQuery } from 'graphqlTypes';
 import React from 'react';
 import { useParams } from 'react-router-dom';
 

@@ -1,5 +1,5 @@
-import LoadingComponent from '@admin/components/LoadingComponent/LoadingComponent';
-import { SwapOrder, useAdminSwapOrderConnectionQuery } from '@graphql';
+import LoadingComponent from 'apps/admin/components/LoadingComponent/LoadingComponent';
+import { SwapOrder, useAdminSwapOrderConnectionQuery } from 'graphqlTypes';
 import { Avatar, Button, PageHeader, Space, Table } from 'antd';
 import { ColumnProps } from 'antd/es/table';
 import React from 'react';

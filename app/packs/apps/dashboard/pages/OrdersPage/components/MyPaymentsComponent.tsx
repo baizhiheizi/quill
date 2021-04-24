@@ -1,6 +1,6 @@
-import LoadingComponent from '@dashboard/components/LoadingComponent/LoadingComponent';
-import { Payment, useMyPaymentConnectionQuery } from '@graphql';
 import { Avatar, Button, Col, List, Row, Tag } from 'antd';
+import LoadingComponent from 'apps/dashboard/components/LoadingComponent/LoadingComponent';
+import { Payment, useMyPaymentConnectionQuery } from 'graphqlTypes';
 import moment from 'moment';
 import React from 'react';
 import { useTranslation } from 'react-i18next';

@@ -1,12 +1,12 @@
-import ArticleListItemComponent from '@application/components/ArticleListItemComponent/ArticleListItemComponent';
-import LoadingComponent from '@application/components/LoadingComponent/LoadingComponent';
-import LoadMoreComponent from '@application/components/LoadMoreComponent/LoadMoreComponent';
+import { List } from 'antd';
+import ArticleListItemComponent from 'apps/application/components/ArticleListItemComponent/ArticleListItemComponent';
+import LoadingComponent from 'apps/application/components/LoadingComponent/LoadingComponent';
+import LoadMoreComponent from 'apps/application/components/LoadMoreComponent/LoadMoreComponent';
 import {
   Article,
   ArticleConnectionQueryHookResult,
   useArticleConnectionQuery,
-} from '@graphql';
-import { List } from 'antd';
+} from 'graphqlTypes';
 import React from 'react';
 
 export default function ArticlesComponent(props: {

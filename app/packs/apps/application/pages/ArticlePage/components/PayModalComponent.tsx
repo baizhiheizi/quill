@@ -1,12 +1,16 @@
-import { Currency, usePaymentLazyQuery, useSwapPreOrderQuery } from '@graphql';
+import { useCountDown } from 'ahooks';
+import { Alert, Avatar, Button, Modal, Radio, Space, Spin } from 'antd';
 import {
   FOXSWAP_APP_ID,
   FOXSWAP_CODE_ID,
   useCurrentUser,
   useUserAgent,
-} from '@shared';
-import { useCountDown } from 'ahooks';
-import { Alert, Avatar, Button, Modal, Radio, Space, Spin } from 'antd';
+} from 'apps/shared';
+import {
+  Currency,
+  usePaymentLazyQuery,
+  useSwapPreOrderQuery,
+} from 'graphqlTypes';
 import { encode as encode64 } from 'js-base64';
 import QRCode from 'qrcode.react';
 import React, { useEffect, useState } from 'react';

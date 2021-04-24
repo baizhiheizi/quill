@@ -11,9 +11,9 @@ import {
   RiseOutlined,
   SettingOutlined,
 } from '@ant-design/icons';
-import { useSwitchLocaleMutation } from '@graphql';
-import { imagePath, useCurrentUser, useUserAgent } from '@shared';
 import { Avatar, Badge, Button, Drawer, Layout, Menu } from 'antd';
+import { imagePath, useCurrentUser, useUserAgent } from 'apps/shared';
+import { useSwitchLocaleMutation } from 'graphqlTypes';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';

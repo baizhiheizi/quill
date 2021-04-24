@@ -1,12 +1,12 @@
-import LoadingComponent from '@dashboard/components/LoadingComponent/LoadingComponent';
-import { useMyArticleQuery } from '@graphql';
 import { Button, Descriptions, PageHeader, Tabs, Tag } from 'antd';
+import LoadingComponent from 'apps/dashboard/components/LoadingComponent/LoadingComponent';
+import { useMyArticleQuery } from 'graphqlTypes';
+import moment from 'moment';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, useParams } from 'react-router-dom';
-import moment from 'moment';
-import ArticleOrdersComponent from './components/ArticleOrdersComponent';
 import ArticleCommentsComponent from './components/ArticleCommentsComponent';
+import ArticleOrdersComponent from './components/ArticleOrdersComponent';
 
 export default function ArticlePage() {
   const { t, i18n } = useTranslation();

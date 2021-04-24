@@ -1,12 +1,12 @@
-import { useSwitchLocaleMutation } from '@/graphql';
 import {
   GithubOutlined,
-  MenuOutlined,
   GlobalOutlined,
+  MenuOutlined,
   NotificationOutlined,
 } from '@ant-design/icons';
-import { imagePath, useCurrentUser, useUserAgent } from '@shared';
 import { Avatar, Badge, Button, Col, Drawer, Layout, Menu, Row } from 'antd';
+import { imagePath, useCurrentUser, useUserAgent } from 'apps/shared';
+import { useSwitchLocaleMutation } from 'graphqlTypes';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';

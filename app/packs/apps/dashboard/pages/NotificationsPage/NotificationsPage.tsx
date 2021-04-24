@@ -1,17 +1,17 @@
-import LoadingComponent from '@dashboard/components/LoadingComponent/LoadingComponent';
-import moment from 'moment';
+import { Button, List, PageHeader } from 'antd';
+import LoadingComponent from 'apps/dashboard/components/LoadingComponent/LoadingComponent';
+import { useCurrentUser } from 'apps/shared';
 import {
   Notification as INotification,
   useClearNotificationsMutation,
   useMyNotificationConnectionQuery,
   useReadNotificationMutation,
   useReadNotificationsMutation,
-} from '@graphql';
-import { Button, List, PageHeader } from 'antd';
+} from 'graphqlTypes';
+import moment from 'moment';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import ListComponent from '../../components/ListComponent/ListComponent';
-import { useCurrentUser } from '@shared';
 
 export default function NotificationsPage() {
   const { currentUser, setCurrentUser } = useCurrentUser();

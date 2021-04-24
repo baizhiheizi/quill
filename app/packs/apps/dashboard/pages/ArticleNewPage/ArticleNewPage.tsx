@@ -1,11 +1,3 @@
-import EditableTagsComponent from '@dashboard/components/EditableTagsComponent/EditableTagsComponent';
-import LoadingComponent from '@dashboard/components/LoadingComponent/LoadingComponent';
-import {
-  Currency,
-  useCreateArticleMutation,
-  usePricableCurrenciesQuery,
-} from '@graphql';
-import { markdownPlugins, markdownRenderers, uploadCommand } from '@shared';
 import Editor, { commands } from '@uiw/react-md-editor';
 import {
   Avatar,
@@ -20,6 +12,14 @@ import {
   Select,
   Space,
 } from 'antd';
+import EditableTagsComponent from 'apps/dashboard/components/EditableTagsComponent/EditableTagsComponent';
+import LoadingComponent from 'apps/dashboard/components/LoadingComponent/LoadingComponent';
+import { markdownPlugins, markdownRenderers, uploadCommand } from 'apps/shared';
+import {
+  Currency,
+  useCreateArticleMutation,
+  usePricableCurrenciesQuery,
+} from 'graphqlTypes';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, useHistory } from 'react-router-dom';

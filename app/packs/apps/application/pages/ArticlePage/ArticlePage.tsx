@@ -4,23 +4,6 @@ import {
   LikeOutlined,
   ShareAltOutlined,
 } from '@ant-design/icons';
-import CommentsComponent from '@application/components/CommentsComponent/CommentsComponent';
-import LoadingComponent from '@application/components/LoadingComponent/LoadingComponent';
-import UserCardComponent from '@application/components/UserCardComponent/UserCardComponent';
-import { handleArticleShare, PAGE_TITLE } from '@application/shared';
-import {
-  ArticleQueryHookResult,
-  useArticleQuery,
-  useDownvoteArticleMutation,
-  User,
-  useUpvoteArticleMutation,
-} from '@graphql';
-import {
-  MarkdownRendererComponent,
-  useCurrentUser,
-  usePrsdigg,
-  useUserAgent,
-} from '@shared';
 import {
   Alert,
   Avatar,
@@ -32,6 +15,23 @@ import {
   Space,
   Statistic,
 } from 'antd';
+import CommentsComponent from 'apps/application/components/CommentsComponent/CommentsComponent';
+import LoadingComponent from 'apps/application/components/LoadingComponent/LoadingComponent';
+import UserCardComponent from 'apps/application/components/UserCardComponent/UserCardComponent';
+import { handleArticleShare, PAGE_TITLE } from 'apps/application/shared';
+import {
+  MarkdownRendererComponent,
+  useCurrentUser,
+  usePrsdigg,
+  useUserAgent,
+} from 'apps/shared';
+import {
+  ArticleQueryHookResult,
+  useArticleQuery,
+  useDownvoteArticleMutation,
+  User,
+  useUpvoteArticleMutation,
+} from 'graphqlTypes';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';

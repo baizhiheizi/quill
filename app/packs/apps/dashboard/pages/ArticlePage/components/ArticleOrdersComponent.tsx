@@ -1,9 +1,9 @@
-import LoadingComponent from '@dashboard/components/LoadingComponent/LoadingComponent';
-import { Order, useMyArticleOrderConnectionQuery } from '@graphql';
-import React from 'react';
 import { Avatar, Button, List, Space } from 'antd';
-import { useTranslation } from 'react-i18next';
+import LoadingComponent from 'apps/dashboard/components/LoadingComponent/LoadingComponent';
+import { Order, useMyArticleOrderConnectionQuery } from 'graphqlTypes';
 import moment from 'moment';
+import React from 'react';
+import { useTranslation } from 'react-i18next';
 
 export default function ArticleOrdersComponent(props: {
   uuid: string;

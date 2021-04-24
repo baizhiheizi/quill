@@ -1,11 +1,11 @@
+import { Avatar, Button, Col, List, Row, Statistic, Tabs, Tag } from 'antd';
 import {
   StatisticsQueryHookResult,
   Transfer,
   useRevenueChartQuery,
   useStatisticsQuery,
   useTransferConnectionQuery,
-} from '@graphql';
-import { Avatar, Button, Col, List, Row, Statistic, Tabs, Tag } from 'antd';
+} from 'graphqlTypes';
 import moment from 'moment';
 import React from 'react';
 import { useTranslation } from 'react-i18next';

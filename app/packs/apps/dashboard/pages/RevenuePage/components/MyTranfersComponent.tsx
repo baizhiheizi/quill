@@ -1,10 +1,10 @@
-import LoadingComponent from '@dashboard/components/LoadingComponent/LoadingComponent';
+import { Avatar, Button, Col, List, Row } from 'antd';
+import LoadingComponent from 'apps/dashboard/components/LoadingComponent/LoadingComponent';
 import {
   MyTransferConnectionQueryHookResult,
   Transfer,
   useMyTransferConnectionQuery,
-} from '@graphql';
-import { Avatar, Button, Col, List, Row } from 'antd';
+} from 'graphqlTypes';
 import moment from 'moment';
 import React from 'react';
 import { useTranslation } from 'react-i18next';

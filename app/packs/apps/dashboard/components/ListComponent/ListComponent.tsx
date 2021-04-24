@@ -1,5 +1,5 @@
-import { useUserAgent } from '@shared';
 import { Button, List } from 'antd';
+import { useUserAgent } from 'apps/shared';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 

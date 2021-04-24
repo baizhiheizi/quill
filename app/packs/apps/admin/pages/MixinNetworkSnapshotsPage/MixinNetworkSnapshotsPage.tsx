@@ -1,5 +1,5 @@
-import MixinNetworkSnapshotsComponent from '@admin/components/MixinNetworkSnapshotsComponent/MixinNetworkSnapshotComponent';
 import { Col, PageHeader, Row, Select } from 'antd';
+import MixinNetworkSnapshotsComponent from 'apps/admin/components/MixinNetworkSnapshotsComponent/MixinNetworkSnapshotComponent';
 import React, { useState } from 'react';
 
 export default function MixinNetworkSnapshotsPage() {

@@ -1,7 +1,7 @@
-import LoadingComponent from '@dashboard/components/LoadingComponent/LoadingComponent';
-import { Comment as IComment, useCommentConnectionQuery } from '@graphql';
-import { MarkdownRendererComponent, useUserAgent } from '@shared';
 import { Avatar, Button, Comment, List } from 'antd';
+import LoadingComponent from 'apps/dashboard/components/LoadingComponent/LoadingComponent';
+import { MarkdownRendererComponent, useUserAgent } from 'apps/shared';
+import { Comment as IComment, useCommentConnectionQuery } from 'graphqlTypes';
 import moment from 'moment';
 import React from 'react';
 import { useTranslation } from 'react-i18next';

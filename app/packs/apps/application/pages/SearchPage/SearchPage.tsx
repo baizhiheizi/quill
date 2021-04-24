@@ -1,8 +1,8 @@
-import ArticleListItemComponent from '@application/components/ArticleListItemComponent/ArticleListItemComponent';
-import LoadingComponent from '@application/components/LoadingComponent/LoadingComponent';
-import LoadMoreComponent from '@application/components/LoadMoreComponent/LoadMoreComponent';
-import { Article, useArticleConnectionQuery } from '@graphql';
 import { Empty, Input, List } from 'antd';
+import ArticleListItemComponent from 'apps/application/components/ArticleListItemComponent/ArticleListItemComponent';
+import LoadingComponent from 'apps/application/components/LoadingComponent/LoadingComponent';
+import LoadMoreComponent from 'apps/application/components/LoadMoreComponent/LoadMoreComponent';
+import { Article, useArticleConnectionQuery } from 'graphqlTypes';
 import Mark from 'mark.js';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';

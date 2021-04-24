@@ -1,5 +1,5 @@
-import { upload } from '@shared';
 import { message } from 'antd';
+import { upload } from 'apps/shared';
 import React from 'react';
 
 export default function UploadComponent(props: {

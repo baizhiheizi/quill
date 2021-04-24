@@ -35,7 +35,7 @@ class ApplicationController < ActionController::Base
       prsdigg: {
         app_id: PrsdiggBot.api.client_id
       }
-    }
+    }.deep_transform_keys! { |key| key.to_s.camelize(:lower) }
   end
 
   def with_locale(&action)

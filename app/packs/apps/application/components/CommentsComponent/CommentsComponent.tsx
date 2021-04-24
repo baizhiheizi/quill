@@ -5,19 +5,6 @@ import {
   LikeFilled,
   LikeOutlined,
 } from '@ant-design/icons';
-import {
-  Comment as IComment,
-  useCommentConnectionQuery,
-  useCreateCommentMutation,
-  useDownvoteCommentMutation,
-  useToggleCommentingSubscribeArticleActionMutation,
-  useUpvoteCommentMutation,
-} from '@graphql';
-import {
-  MarkdownRendererComponent,
-  useCurrentUser,
-  useUserAgent,
-} from '@shared';
 import Editor, { commands } from '@uiw/react-md-editor';
 import {
   Avatar,
@@ -33,6 +20,19 @@ import {
   Row,
   Select,
 } from 'antd';
+import {
+  MarkdownRendererComponent,
+  useCurrentUser,
+  useUserAgent,
+} from 'apps/shared';
+import {
+  Comment as IComment,
+  useCommentConnectionQuery,
+  useCreateCommentMutation,
+  useDownvoteCommentMutation,
+  useToggleCommentingSubscribeArticleActionMutation,
+  useUpvoteCommentMutation,
+} from 'graphqlTypes';
 import moment from 'moment';
 import React, { createElement, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
