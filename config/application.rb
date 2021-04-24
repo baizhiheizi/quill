@@ -21,9 +21,6 @@ module Prsdigg
     config.i18n.available_locales = %i[en zh-CN]
     config.i18n.default_locale = :'zh-CN'
 
-    # react-rails
-    config.react.camelize_props = true
-
     # reference:
     # https://stackoverflow.com/questions/49233769/is-there-a-way-to-prevent-safari-on-ios-from-clearing-the-cookies-for-a-website
     # https://developer.mozilla.org/en-US/docs/Web/API/Document/cookie#Example_4_Reset_the_previous_cookie

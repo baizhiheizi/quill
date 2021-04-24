@@ -12,15 +12,10 @@
     "target": "es5",
     "jsx": "react",
     "noEmit": true,
-    "baseUrl": "app/packs/src",
+    "baseUrl": ".",
+    "resolveJsonModule": true,
     "paths": {
-      "@/*": ["*"],
-      "@admin/*": ["apps/admin/*"],
-      "@application/*": ["apps/application/*"],
-      "@dashboard/*": ["apps/dashboard/*"],
-      "@shared": ["shared"],
-      "@shared/*": ["shared/*"],
-      "@graphql": ["graphql"]
+      "*": ["node_modules/*", "app/packs/*"]
     }
   },
   "exclude": ["**/*.spec.ts", "node_modules", "vendor", "public"],
