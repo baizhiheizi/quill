@@ -1,6 +1,6 @@
 import { ApolloProvider } from '@apollo/client';
-import { apolloClient } from '@shared';
 import { Layout } from 'antd';
+import { apolloClient } from 'apps/shared';
 import React from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
 import Menus from './Menus';

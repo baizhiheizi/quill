@@ -1,11 +1,11 @@
-import CommentsComponent from '@admin/components/CommentsComponent/CommentsComponent';
-import LoadingComponent from '@admin/components/LoadingComponent/LoadingComponent';
-import MixinNetworkSnapshotsComponent from '@admin/components/MixinNetworkSnapshotsComponent/MixinNetworkSnapshotComponent';
-import OrdersComponent from '@admin/components/OrdersComponent/OrdersComponent';
-import TransfersComponent from '@admin/components/TransfersComponent/TransfersComponent';
-import WalletBalanceComponent from '@admin/components/WalletBalanceComponent/WalletBalanceComponent';
-import { useAdminArticleQuery } from '@graphql';
 import { Avatar, Descriptions, Empty, PageHeader, Space, Tabs } from 'antd';
+import CommentsComponent from 'apps/admin/components/CommentsComponent/CommentsComponent';
+import LoadingComponent from 'apps/admin/components/LoadingComponent/LoadingComponent';
+import MixinNetworkSnapshotsComponent from 'apps/admin/components/MixinNetworkSnapshotsComponent/MixinNetworkSnapshotComponent';
+import OrdersComponent from 'apps/admin/components/OrdersComponent/OrdersComponent';
+import TransfersComponent from 'apps/admin/components/TransfersComponent/TransfersComponent';
+import WalletBalanceComponent from 'apps/admin/components/WalletBalanceComponent/WalletBalanceComponent';
+import { useAdminArticleQuery } from 'graphqlTypes';
 import React from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 

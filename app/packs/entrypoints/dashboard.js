@@ -1,9 +1,8 @@
-require('@rails/ujs').start();
-require('@rails/activestorage').start();
-require('channels');
+import ReactOnRails from 'react-on-rails';
+import DashboardApp from '../apps/dashboard/App';
+import '../stylesheets/dashboard.css';
 
-var componentRequireContext = require.context('src/apps/dashboard', true);
-var ReactRailsUJS = require('react_ujs');
-ReactRailsUJS.useContext(componentRequireContext);
-
-import 'stylesheets/dashboard.css';
+// This is how react_on_rails can see the HelloWorld in the browser.
+ReactOnRails.register({
+  DashboardApp,
+});

@@ -1,4 +1,6 @@
-import LoadingComponent from '@dashboard/components/LoadingComponent/LoadingComponent';
+import { Button, List, message, Popconfirm, Tag } from 'antd';
+import LoadingComponent from 'apps/dashboard/components/LoadingComponent/LoadingComponent';
+import { useUserAgent } from 'apps/shared';
 import {
   Article,
   HideArticleMutationHookResult,
@@ -7,9 +9,7 @@ import {
   useHideArticleMutation,
   useMyArticleConnectionQuery,
   usePublishArticleMutation,
-} from '@graphql';
-import { useUserAgent } from '@shared';
-import { Button, List, message, Popconfirm, Tag } from 'antd';
+} from 'graphqlTypes';
 import moment from 'moment';
 import React from 'react';
 import { useTranslation } from 'react-i18next';

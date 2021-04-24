@@ -1,6 +1,6 @@
-import LoadingComponent from '@application/components/LoadingComponent/LoadingComponent';
-import { Tag as ITag, useTagConnectionQuery } from '@graphql';
 import { Button, Card, Col, Row, Tag, Tooltip, Typography } from 'antd';
+import LoadingComponent from 'apps/application/components/LoadingComponent/LoadingComponent';
+import { Tag as ITag, useTagConnectionQuery } from 'graphqlTypes';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useHistory } from 'react-router-dom';

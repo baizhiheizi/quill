@@ -1,5 +1,5 @@
-import { useCurrentUser } from '@shared';
 import { Avatar, Button, Card, Col, Row } from 'antd';
+import { useCurrentUser } from 'apps/shared';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';

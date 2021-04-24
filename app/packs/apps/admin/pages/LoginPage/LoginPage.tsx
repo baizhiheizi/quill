@@ -1,6 +1,6 @@
-import { useAdminLoginMutation } from '@/graphql';
 import { ClockCircleOutlined, UserOutlined } from '@ant-design/icons';
 import { Button, Form, Input, Layout, message } from 'antd';
+import { useAdminLoginMutation } from 'graphqlTypes';
 import React from 'react';
 
 const { Content } = Layout;

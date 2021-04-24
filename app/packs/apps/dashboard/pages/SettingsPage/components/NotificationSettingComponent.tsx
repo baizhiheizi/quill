@@ -1,8 +1,3 @@
-import LoadingComponent from '@dashboard/components/LoadingComponent/LoadingComponent';
-import {
-  useMyNotificationSettingQuery,
-  useUpdateNotificationSettingMutation,
-} from '@graphql';
 import {
   Alert,
   Col,
@@ -13,6 +8,11 @@ import {
   Switch,
   Typography,
 } from 'antd';
+import LoadingComponent from 'apps/dashboard/components/LoadingComponent/LoadingComponent';
+import {
+  useMyNotificationSettingQuery,
+  useUpdateNotificationSettingMutation,
+} from 'graphqlTypes';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 const { Paragraph } = Typography;

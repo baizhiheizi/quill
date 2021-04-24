@@ -1,6 +1,3 @@
-import LoadingComponent from '@dashboard/components/LoadingComponent/LoadingComponent';
-import { useMyArticleQuery, useUpdateArticleMutation } from '@graphql';
-import { markdownPlugins, markdownRenderers, uploadCommand } from '@shared';
 import Editor, { commands } from '@uiw/react-md-editor';
 import {
   Avatar,
@@ -14,6 +11,9 @@ import {
   Select,
   Space,
 } from 'antd';
+import LoadingComponent from 'apps/dashboard/components/LoadingComponent/LoadingComponent';
+import { markdownPlugins, markdownRenderers, uploadCommand } from 'apps/shared';
+import { useMyArticleQuery, useUpdateArticleMutation } from 'graphqlTypes';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, useHistory, useParams } from 'react-router-dom';

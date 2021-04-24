@@ -1,5 +1,5 @@
-import { Tag as TagType } from '@graphql';
 import { Col, Row, Tag, Tooltip } from 'antd';
+import { Tag as TagType } from 'graphqlTypes';
 import React from 'react';
 import { Link } from 'react-router-dom';
 

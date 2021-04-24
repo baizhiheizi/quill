@@ -1,6 +1,6 @@
-import LoadingComponent from '@dashboard/components/LoadingComponent/LoadingComponent';
-import { SwapOrder, useMySwapOrderConnectionQuery } from '@graphql';
 import { Avatar, Button, Col, List, Row, Space, Tag } from 'antd';
+import LoadingComponent from 'apps/dashboard/components/LoadingComponent/LoadingComponent';
+import { SwapOrder, useMySwapOrderConnectionQuery } from 'graphqlTypes';
 import moment from 'moment';
 import React from 'react';
 import { useTranslation } from 'react-i18next';

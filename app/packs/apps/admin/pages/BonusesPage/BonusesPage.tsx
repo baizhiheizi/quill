@@ -1,9 +1,3 @@
-import LoadingComponent from '@admin/components/LoadingComponent/LoadingComponent';
-import {
-  Bonus,
-  useAdminBonusConnectionQuery,
-  useAdminDeliverBonusMutation,
-} from '@graphql';
 import {
   Avatar,
   Button,
@@ -15,6 +9,12 @@ import {
   Table,
 } from 'antd';
 import { ColumnProps } from 'antd/es/table';
+import LoadingComponent from 'apps/admin/components/LoadingComponent/LoadingComponent';
+import {
+  Bonus,
+  useAdminBonusConnectionQuery,
+  useAdminDeliverBonusMutation,
+} from 'graphqlTypes';
 import React, { useState } from 'react';
 import BonusesFormModalComponent from './components/BonusFormModalComponent';
 

@@ -1,11 +1,3 @@
-import LoadingComponent from '@admin/components/LoadingComponent/LoadingComponent';
-import {
-  AdminUserConnectionQueryHookResult,
-  useAdminBanUserMutation,
-  useAdminUnbanUserMutation,
-  useAdminUserConnectionQuery,
-  User as IUser,
-} from '@graphql';
 import { useDebounce } from 'ahooks';
 import {
   Avatar,
@@ -22,6 +14,14 @@ import {
   Table,
 } from 'antd';
 import { ColumnProps } from 'antd/lib/table';
+import LoadingComponent from 'apps/admin/components/LoadingComponent/LoadingComponent';
+import {
+  AdminUserConnectionQueryHookResult,
+  useAdminBanUserMutation,
+  useAdminUnbanUserMutation,
+  useAdminUserConnectionQuery,
+  User as IUser,
+} from 'graphqlTypes';
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 

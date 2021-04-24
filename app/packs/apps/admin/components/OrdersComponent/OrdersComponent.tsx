@@ -1,7 +1,7 @@
-import LoadingComponent from '@admin/components/LoadingComponent/LoadingComponent';
-import { Order, useAdminOrderConnectionQuery } from '@graphql';
 import { Avatar, Button, Space, Table } from 'antd';
 import { ColumnProps } from 'antd/es/table';
+import LoadingComponent from 'apps/admin/components/LoadingComponent/LoadingComponent';
+import { Order, useAdminOrderConnectionQuery } from 'graphqlTypes';
 import React from 'react';
 
 export default function OrdersComponent(props: {

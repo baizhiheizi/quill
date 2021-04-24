@@ -1,7 +1,10 @@
-import LoadingComponent from '@admin/components/LoadingComponent/LoadingComponent';
-import { MixinMessage, useAdminMixinMessageConnectionQuery } from '@graphql';
 import { Avatar, Button, PageHeader, Space, Table } from 'antd';
 import { ColumnProps } from 'antd/es/table';
+import LoadingComponent from 'apps/admin/components/LoadingComponent/LoadingComponent';
+import {
+  MixinMessage,
+  useAdminMixinMessageConnectionQuery,
+} from 'graphqlTypes';
 import React from 'react';
 
 export default function MixinMessagesPage() {

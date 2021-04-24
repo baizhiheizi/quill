@@ -1,13 +1,3 @@
-import LoadingComponent from '@admin/components/LoadingComponent/LoadingComponent';
-import {
-  Announcement,
-  useAdminAnnouncementConnectionQuery,
-  useAdminCreateAnouncementMutation,
-  useAdminDeleteAnouncementMutation,
-  useAdminDeliverAnouncementMutation,
-  useAdminPreviewAnouncementMutation,
-  useAdminUpdateAnouncementMutation,
-} from '@graphql';
 import {
   Button,
   Divider,
@@ -20,6 +10,16 @@ import {
   Table,
 } from 'antd';
 import { ColumnProps } from 'antd/es/table';
+import LoadingComponent from 'apps/admin/components/LoadingComponent/LoadingComponent';
+import {
+  Announcement,
+  useAdminAnnouncementConnectionQuery,
+  useAdminCreateAnouncementMutation,
+  useAdminDeleteAnouncementMutation,
+  useAdminDeliverAnouncementMutation,
+  useAdminPreviewAnouncementMutation,
+  useAdminUpdateAnouncementMutation,
+} from 'graphqlTypes';
 import React, { useState } from 'react';
 
 export default function AnnouncementsPage() {

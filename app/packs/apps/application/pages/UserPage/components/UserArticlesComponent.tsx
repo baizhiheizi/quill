@@ -1,14 +1,14 @@
 import { AlertOutlined } from '@ant-design/icons';
-import LoadingComponent from '@application/components/LoadingComponent/LoadingComponent';
-import LoadMoreComponent from '@application/components/LoadMoreComponent/LoadMoreComponent';
+import { Avatar, Button, List, message, Row, Space } from 'antd';
+import LoadingComponent from 'apps/application/components/LoadingComponent/LoadingComponent';
+import LoadMoreComponent from 'apps/application/components/LoadMoreComponent/LoadMoreComponent';
+import { useCurrentUser } from 'apps/shared';
 import {
   Article,
   useToggleAuthoringSubscribeUserActionMutation,
   useToggleReadingSubscribeUserActionMutation,
   useUserArticleConnectionQuery,
-} from '@graphql';
-import { useCurrentUser } from '@shared';
-import { Avatar, Button, List, message, Row, Space } from 'antd';
+} from 'graphqlTypes';
 import moment from 'moment';
 import React from 'react';
 import { useTranslation } from 'react-i18next';

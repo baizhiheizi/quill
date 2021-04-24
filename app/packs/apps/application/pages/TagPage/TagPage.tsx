@@ -1,15 +1,15 @@
 import { AlertOutlined, ShareAltOutlined } from '@ant-design/icons';
-import ArticleListItemComponent from '@application/components/ArticleListItemComponent/ArticleListItemComponent';
-import LoadingComponent from '@application/components/LoadingComponent/LoadingComponent';
-import LoadMoreComponent from '@application/components/LoadMoreComponent/LoadMoreComponent';
-import { handleTagShare, PAGE_TITLE } from '@application/shared';
+import { Button, Card, Divider, List, Space, Typography } from 'antd';
+import ArticleListItemComponent from 'apps/application/components/ArticleListItemComponent/ArticleListItemComponent';
+import LoadingComponent from 'apps/application/components/LoadingComponent/LoadingComponent';
+import LoadMoreComponent from 'apps/application/components/LoadMoreComponent/LoadMoreComponent';
+import { handleTagShare, PAGE_TITLE } from 'apps/application/shared';
+import { usePrsdigg, useUserAgent } from 'apps/shared';
 import {
   Article,
   useTaggedArticleConnectionQuery,
   useToggleSubscribeTagActionMutation,
-} from '@graphql';
-import { usePrsdigg, useUserAgent } from '@shared';
-import { Button, Card, Divider, List, Space, Typography } from 'antd';
+} from 'graphqlTypes';
 import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';

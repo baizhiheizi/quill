@@ -1,12 +1,12 @@
-import LoadingComponent from '@admin/components/LoadingComponent/LoadingComponent';
-import { usePrsdigg } from '@admin/shared';
+import { Avatar, Button, Space, Table } from 'antd';
+import { ColumnProps } from 'antd/lib/table';
+import LoadingComponent from 'apps/admin/components/LoadingComponent/LoadingComponent';
+import { usePrsdigg } from 'apps/admin/shared';
+import { FOXSWAP_APP_ID } from 'apps/shared';
 import {
   MixinNetworkSnapshot,
   useAdminMixinNetworkSnapshotConnectionQuery,
-} from '@graphql';
-import { FOXSWAP_APP_ID } from '@shared';
-import { Avatar, Button, Space, Table } from 'antd';
-import { ColumnProps } from 'antd/lib/table';
+} from 'graphqlTypes';
 import React from 'react';
 
 export default function MixinNetworkSnapshotsComponent(props: {
