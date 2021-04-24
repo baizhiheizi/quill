@@ -9,6 +9,8 @@ import {
   UserAgentContext,
 } from 'apps/shared';
 import 'apps/shared/locales/i18n';
+// https://github.com/apollographql/apollo-client/issues/6381
+import 'core-js/features/promise';
 import { User } from 'graphqlTypes';
 import isMobile from 'ismobilejs';
 import React, { Suspense, useEffect, useState } from 'react';
