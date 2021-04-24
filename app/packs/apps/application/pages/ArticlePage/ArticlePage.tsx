@@ -73,7 +73,9 @@ export default function ArticlePage() {
 
   return (
     <div>
-      <h1>{article.title}</h1>
+      <div className='mb-4 font-sans text-2xl font-semibold'>
+        {article.title}
+      </div>
       <div style={{ color: '#aaa', marginBottom: '1rem' }}>
         <Space>
           <Avatar size='small' src={article.author.avatarUrl} />

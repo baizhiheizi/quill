@@ -1,0 +1,78 @@
+en:
+  article:
+    title: Title
+    content: Content
+    intro: Introduction
+    currency: Currency
+    wordsCount: Words Count
+    price: Price
+    upvotesCount: Upvotes
+    downvotesCount: Downvotes
+    commentsCount: Comments Count
+    ordersCount: Paid Times
+    buyOrdersCount: Bought Times
+    rewardOrdersCount: Rewarded Times
+    revenue: Revenue
+    authorRevenueTotal: Author Revenue
+    readerRevenueTotal: Reader Revenue
+    myShare: My Share(%)
+    stateText: State
+    tags: Tags
+    createdAt: Created
+    updatedAt: Last Edited
+    state:
+      published: Published
+      blocked: Blocked
+      hidden: Hidden
+    form:
+      warning: Pleash finish your article first
+      titleIsRequired: Please input your article's title
+      introIsRequired: Please input your article's introduction
+      contentIsRequired: Please input your artilce's content
+      priceIsTooLow: Price is too low
+      createConfirm: Are you sure to create?
+      createOkText: Create
+      createCancelText: Later
+      createBtn: Create
+      updateConfirm: Are you sure to update your article?
+      updateOkText: Update
+      updateCancelText: Later
+      updateBtn: Update
+      titlePlaceHolder: Title of article
+      contentPlaceHolder: Write something valuable
+      introPlaceHolder: Please introduce your article and this will be public
+      newBtn: New
+  tag:
+    articlesCount: Articles
+    subscribersCount: Subscribers
+  payment:
+    state:
+      paid: Paid
+      refunded: Refunded
+      completed: Compelted
+    snapshot: Snapshot
+  swapOrder:
+    state:
+      paid: Paid
+      swapping: Swapping
+      rejected: Rejected
+      swapped: Swapped
+      order_placed: Buying
+      completed: Completed
+      refunded: Refunded
+  user:
+    defaultBio: Didn't left anything
+    authorRevenueTotal: Author Revenue(USD)
+    readerRevenueTotal: Reader Revenue(USD)
+    paymentTotalUsd: Paid(USD)
+    articlesCount: Published
+    boughtArticlesCount: Bought
+  transfer:
+    transferType:
+      payment_refund: Refund
+      author_revenue: Author
+      reader_revenue: Reader
+    snapshot: Snapshot
+    processing: Processing
+  notification_setting:
+    articlePublished: Published article
