@@ -2,8 +2,6 @@
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
 
-@import './reactMdEditor';
-
 .anticon svg {
   display: block;
 }

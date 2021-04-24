@@ -39,8 +39,8 @@ gem 'sidekiq-cron'
 gem 'image_processing', '~> 1.2'
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', '>= 1.4.2', require: false
-# Integrate React.js with Rails views and controllers, the asset pipeline, or webpacker. https://github.com/reactjs/react-rails
-gem 'react-rails'
+# Integration of React + Webpack + Rails + rails/webpacker including server-side rendering of React, enabling a better developer experience and faster client performance.
+gem 'react_on_rails', '~> 12.0'
 # Ruby implementation of GraphQL http://graphql-ruby.org
 gem 'graphql'
 # Mount the GraphiQL query editor in a Rails app
