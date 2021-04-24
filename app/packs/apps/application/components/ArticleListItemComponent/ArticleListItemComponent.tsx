@@ -5,7 +5,7 @@ import {
   MessageOutlined,
   ShareAltOutlined,
 } from '@ant-design/icons';
-import { Avatar, Button, List, Popover, Row, Space, Typography } from 'antd';
+import { Avatar, Button, List, Popover, Row, Space } from 'antd';
 import { handleArticleShare } from 'apps/application/shared';
 import { usePrsdigg, useUserAgent } from 'apps/shared';
 import { Article } from 'graphqlTypes';
@@ -73,12 +73,12 @@ export default function ArticleListItemComponent(props: {
           <Row>
             <div>
               <div>{article.author.name}</div>
-              <div style={{ fontSize: '0.8rem', color: '#aaa' }}>
+              <div className='text-xs text-gray-500'>
                 {moment(article.createdAt).fromNow()}
               </div>
             </div>
-            <div style={{ position: 'relative', marginLeft: 'auto' }}>
-              <Space style={{ marginLeft: 'auto' }}>
+            <div className='relative ml-auto'>
+              <Space className='ml-auto'>
                 <Avatar size='small' src={article.currency.iconUrl} />
                 <span>
                   {article.currency.symbol === 'BTC'
@@ -86,20 +86,18 @@ export default function ArticleListItemComponent(props: {
                     : article.price.toFixed(2)}
                 </span>
               </Space>
-              <div
-                style={{ position: 'absolute', right: 0, fontSize: '0.8rem' }}
-              >
-                <Typography.Text type='secondary'>
-                  ≈ ${article.priceUsd}
-                </Typography.Text>
+              <div className='absolute right-0 text-xs text-gray-500'>
+                ≈ ${article.priceUsd}
               </div>
             </div>
           </Row>
         }
       />
-      <Link style={{ color: 'initial' }} to={`/articles/${article.uuid}`}>
-        <h2>{article.title}</h2>
-        <p>{article.intro}</p>
+      <Link className='block initial' to={`/articles/${article.uuid}`}>
+        <div className='mb-4 font-sans text-xl font-semibold'>
+          {article.title}
+        </div>
+        <div className='mb-4 text-base'>{article.intro}</div>
       </Link>
       <ArticleTagsComponent tags={article.tags} />
     </List.Item>

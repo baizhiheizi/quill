@@ -42,4 +42,6 @@ ReactOnRails.configure do |config|
   # React components.
   #
   config.server_bundle_js_file = ''
+
+  config.i18n_dir = Rails.root.join('app/packs/apps/shared/locales')
 end
