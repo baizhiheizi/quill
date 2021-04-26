@@ -23,7 +23,7 @@
 #  index_mixin_network_users_on_uuid                     (uuid) UNIQUE
 #
 class MixinNetworkUser < ApplicationRecord
-  DEFAULT_AVATAR_FILE = Rails.application.root.join('app/packs/src/images/logo.png')
+  DEFAULT_AVATAR_FILE = Rails.application.root.join('app/packs/images/logo.png')
 
   include Encryptable
 
