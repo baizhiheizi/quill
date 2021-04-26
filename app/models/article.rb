@@ -12,6 +12,7 @@
 #  intro                               :string
 #  orders_count                        :integer          default(0), not null
 #  price                               :decimal(, )      not null
+#  published_at                        :datetime
 #  revenue                             :decimal(, )      default(0.0)
 #  source                              :string
 #  state                               :string
@@ -99,6 +100,7 @@ class Article < ApplicationRecord
                :notify_admin,
                :subscribe_comments_for_author,
                :update_author_statistics_cache,
+               :touch_published_at,
                on: :create
 
   delegate :swappable?, to: :currency
@@ -112,7 +114,7 @@ class Article < ApplicationRecord
       transitions from: :published, to: :hidden
     end
 
-    event :publish do
+    event :publish, after_transaction: :touch_published_at do
       transitions from: :hidden, to: :published
     end
 
@@ -210,6 +212,13 @@ class Article < ApplicationRecord
 
   def random_readers(limit = 24)
     readers.where(id: readers.ids.sample(limit))
+  end
+
+  def touch_published_at
+    return unless published?
+    return if published_at.present?
+
+    update published_at: Time.current
   end
 
   private
