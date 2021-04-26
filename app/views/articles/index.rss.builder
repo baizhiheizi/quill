@@ -10,10 +10,11 @@ xml.rss version: '2.0' do
     @articles.each do |article|
       xml.item do
         xml.title article.title
+        xml.author article.author.name
         xml.description article.intro
         xml.pubDate article.published_at.rfc822
-        xml.link article_url(article)
-        xml.guid article_url(article)
+        xml.link article_url(article.uuid)
+        xml.guid article_url(article.uuid)
       end
     end
   end
