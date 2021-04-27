@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_04_26_075652) do
+ActiveRecord::Schema.define(version: 2021_04_27_084021) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -92,12 +92,12 @@ ActiveRecord::Schema.define(version: 2021_04_26_075652) do
     t.json "raw"
     t.string "signature"
     t.string "file_hash"
-    t.integer "block_number"
+    t.string "tx_id"
     t.text "file_content"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["article_uuid"], name: "index_article_snapshots_on_article_uuid"
-    t.index ["block_number"], name: "index_article_snapshots_on_block_number", unique: true
+    t.index ["tx_id"], name: "index_article_snapshots_on_tx_id", unique: true
   end
 
   create_table "articles", force: :cascade do |t|
@@ -273,9 +273,10 @@ ActiveRecord::Schema.define(version: 2021_04_26_075652) do
   create_table "prs_accounts", force: :cascade do |t|
     t.bigint "user_id"
     t.string "account"
+    t.string "status"
     t.string "public_key"
     t.string "encrypted_private_key"
-    t.json "keystore"
+    t.jsonb "keystore"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["account"], name: "index_prs_accounts_on_account", unique: true
@@ -284,21 +285,40 @@ ActiveRecord::Schema.define(version: 2021_04_26_075652) do
 
   create_table "prs_blocks", force: :cascade do |t|
     t.string "type", comment: "STI"
-    t.string "block_id"
+    t.string "tx_id"
     t.string "block_type", default: "PIP:2001"
-    t.json "meta"
-    t.json "data"
+    t.jsonb "meta"
+    t.jsonb "data"
     t.string "hash"
     t.string "signature"
-    t.integer "block_number"
+    t.integer "block_num"
     t.string "block_transation_id"
     t.string "user_address"
-    t.json "raw"
+    t.jsonb "raw"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["block_id"], name: "index_prs_blocks_on_block_id", unique: true
-    t.index ["block_number"], name: "index_prs_blocks_on_block_number", unique: true
+    t.index ["block_num"], name: "index_prs_blocks_on_block_num", unique: true
+    t.index ["tx_id"], name: "index_prs_blocks_on_tx_id", unique: true
     t.index ["user_address"], name: "index_prs_blocks_on_user_address"
+  end
+
+  create_table "prs_transactions", force: :cascade do |t|
+    t.string "type", comment: "STI"
+    t.string "tx_id"
+    t.string "block_type"
+    t.jsonb "meta"
+    t.jsonb "data"
+    t.string "hash_str"
+    t.string "signature"
+    t.integer "block_num"
+    t.string "transation_id"
+    t.string "user_address"
+    t.jsonb "raw"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["block_num"], name: "index_prs_transactions_on_block_num", unique: true
+    t.index ["transation_id"], name: "index_prs_transactions_on_transation_id", unique: true
+    t.index ["tx_id"], name: "index_prs_transactions_on_tx_id", unique: true
   end
 
   create_table "swap_orders", force: :cascade do |t|

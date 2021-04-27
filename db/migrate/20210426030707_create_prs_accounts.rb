@@ -4,9 +4,10 @@ class CreatePrsAccounts < ActiveRecord::Migration[6.1]
       t.belongs_to :user
 
       t.string :account
+      t.string :status
       t.string :public_key
       t.string :encrypted_private_key
-      t.json :keystore
+      t.jsonb :keystore
 
       t.timestamps
     end
