@@ -73,6 +73,8 @@ gem 'rack-attack'
 gem 'pagy'
 # Rack Middleware for handling Cross-Origin Resource Sharing (CORS), which makes cross-origin AJAX possible.
 gem 'rack-cors'
+# Schmooze lets Ruby and Node.js work together intimately.
+gem 'schmooze'
 
 # deploy
 gem 'mina', '~> 1.2.2', require: false

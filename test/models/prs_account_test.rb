@@ -7,6 +7,7 @@
 #  id                    :bigint           not null, primary key
 #  account               :string
 #  encrypted_private_key :string
+#  keystore              :json
 #  public_key            :string
 #  created_at            :datetime         not null
 #  updated_at            :datetime         not null

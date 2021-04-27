@@ -42,23 +42,23 @@ class Article < ApplicationRecord
   belongs_to :currency, primary_key: :asset_id, foreign_key: :asset_id, inverse_of: :articles
 
   has_many :orders, as: :item, dependent: :nullify
-  has_many :buy_orders, -> { where(order_type: :buy_article) }, class_name: 'Order', as: :item, dependent: :nullify, inverse_of: false
-  has_many :reward_orders, -> { where(order_type: :reward_article) }, class_name: 'Order', as: :item, dependent: :nullify, inverse_of: false
+  has_many :buy_orders, -> { where(order_type: :buy_article) }, class_name: 'Order', as: :item, dependent: :restrict_with_error, inverse_of: false
+  has_many :reward_orders, -> { where(order_type: :reward_article) }, class_name: 'Order', as: :item, dependent: :restrict_with_error, inverse_of: false
 
   has_many :readers, -> { distinct }, through: :orders, source: :buyer
   has_many :buyers, -> { distinct }, through: :buy_orders, source: :buyer
   has_many :rewarders, -> { distinct }, through: :reward_orders, source: :buyer
 
   has_many :transfers, through: :orders, dependent: :nullify
-  has_many :author_transfers, -> { where(transfer_type: :author_revenue) }, through: :orders, source: :transfers, dependent: :nullify
-  has_many :reader_transfers, -> { where(transfer_type: :reader_revenue) }, through: :orders, source: :transfers, dependent: :nullify
+  has_many :author_transfers, -> { where(transfer_type: :author_revenue) }, through: :orders, source: :transfers, dependent: :restrict_with_error
+  has_many :reader_transfers, -> { where(transfer_type: :reader_revenue) }, through: :orders, source: :transfers, dependent: :restrict_with_error
 
-  has_many :comments, as: :commentable, dependent: :nullify
+  has_many :comments, as: :commentable, dependent: :restrict_with_error
 
   has_many :taggings, dependent: :nullify
-  has_many :tags, through: :taggings, dependent: :nullify
+  has_many :tags, through: :taggings, dependent: :restrict_with_error
 
-  has_many :snapshots, class_name: 'ArticleSnapshot', primary_key: :uuid, foreign_key: :article_uuid, inverse_of: :article
+  has_many :snapshots, class_name: 'ArticleSnapshot', primary_key: :uuid, foreign_key: :article_uuid, inverse_of: :article, dependent: :restrict_with_error
 
   has_one :wallet, class_name: 'MixinNetworkUser', as: :owner, dependent: :nullify
 
@@ -230,8 +230,6 @@ class Article < ApplicationRecord
 
     snapshots.create raw: as_json
   end
-
-  delegate :author, to: :article
 
   private
 

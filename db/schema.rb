@@ -275,6 +275,7 @@ ActiveRecord::Schema.define(version: 2021_04_26_075652) do
     t.string "account"
     t.string "public_key"
     t.string "encrypted_private_key"
+    t.json "keystore"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["account"], name: "index_prs_accounts_on_account", unique: true

@@ -28,6 +28,4 @@ class ArticleSnapshot < ApplicationRecord
 
   def generate_file_hash
   end
-
-  private
 end
