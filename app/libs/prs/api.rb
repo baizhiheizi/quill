@@ -37,16 +37,23 @@ module Prs
 
     def sign(payload, user)
       @prs_atm.sign(
-        payload['type'],
-        payload['meta'],
-        payload['data'],
+        payload[:type],
+        payload[:meta],
+        payload[:data],
+        Rails.application.credentials.dig(:prs, :account),
         Rails.application.credentials.dig(:prs, :public_key),
         Rails.application.credentials.dig(:prs, :private_key),
         {
-          userAddress: user['account'],
-          privateKey: user['private_key']
+          userAddress: user[:account],
+          privateKey: user[:private_key]
         }
       )
+    end
+
+    def pip2001_authorization
+    end
+
+    def pip2001_posts
     end
   end
 end

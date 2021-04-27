@@ -59,6 +59,7 @@ class Article < ApplicationRecord
   has_many :tags, through: :taggings, dependent: :restrict_with_error
 
   has_many :snapshots, class_name: 'ArticleSnapshot', primary_key: :uuid, foreign_key: :article_uuid, inverse_of: :article, dependent: :restrict_with_error
+  has_many :prs_transactions, through: :snapshots
 
   has_one :wallet, class_name: 'MixinNetworkUser', as: :owner, dependent: :nullify
 
@@ -229,6 +230,10 @@ class Article < ApplicationRecord
     return unless content_changed? || title_changed? || intro_changed? || published_at_changed?
 
     snapshots.create raw: as_json
+  end
+
+  def current_prs_transaction
+    prs_transactions.order(created_at: :desc).first
   end
 
   private

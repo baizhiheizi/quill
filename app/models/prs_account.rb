@@ -7,8 +7,9 @@
 #  id                    :bigint           not null, primary key
 #  account               :string
 #  encrypted_private_key :string
-#  keystore              :json
+#  keystore              :jsonb
 #  public_key            :string
+#  status                :string
 #  created_at            :datetime         not null
 #  updated_at            :datetime         not null
 #  user_id               :bigint
@@ -25,13 +26,63 @@ class PrsAccount < ApplicationRecord
 
   belongs_to :user
 
-  has_many :blocks, class_name: 'PrsBlock', primary_key: :account, foreign_key: :user_address, dependent: :restrict_with_error, inverse_of: :prs_account
+  has_many :transactions, class_name: 'PrsTransaction', primary_key: :account,\
+                          foreign_key: :user_address, inverse_of: :prs_account,\
+                          dependent: :restrict_with_error
+
+  validates :keystore, presence: true
+  validates :public_key, presence: true
+  validates :private_key, presence: true
 
   before_validation :set_defaults, on: :create
   after_commit :register_on_chain_async, on: :create
 
   def registered?
     account.present?
+  end
+
+  def allow_on_chain!
+    r =
+      Prs.api.sign(
+        {
+          type: 'PIP:2001',
+          meta: {},
+          data: {
+            allow: account,
+            topic: Rails.application.credentials.dig(:prs, :account)
+          }
+        },
+        {
+          account: Rails.application.credentials.dig(:prs, :account),
+          private_key: Rails.application.credentials.dig(:prs, :private_key)
+        }
+      )
+    block = r['processed']['action_traces'].first['act']['data']
+    PrsAccountAllowTransaction
+      .create_with(raw: block)
+      .find_or_create_by!(transation_id: r['transaction_id'])
+  end
+
+  def deny_on_chain!
+    r =
+      Prs.api.sign(
+        {
+          type: 'PIP:2001',
+          meta: {},
+          data: {
+            deny: account,
+            topic: Rails.application.credentials.dig(:prs, :account)
+          }
+        },
+        {
+          account: Rails.application.credentials.dig(:prs, :account),
+          private_key: Rails.application.credentials.dig(:prs, :private_key)
+        }
+      )
+    block = r['processed']['action_traces'][0]['act']['data']
+    PrsAccountDenyTransaction
+      .create_with(raw: block)
+      .find_or_create_by!(transation_id: r['transaction_id'])
   end
 
   def register_on_chain!
