@@ -43,6 +43,7 @@ class User < ApplicationRecord
   ]
 
   has_one :mixin_authorization, -> { where(provider: :mixin) }, class_name: 'UserAuthorization', inverse_of: :user
+  has_one :prs_account, dependent: :restrict_with_error
   has_many :access_tokens, dependent: :destroy
 
   has_many :articles, foreign_key: :author_id, inverse_of: :author, dependent: :nullify
@@ -57,6 +58,7 @@ class User < ApplicationRecord
   has_many :comments, foreign_key: :author_id, inverse_of: :author, dependent: :nullify
   has_many :swap_orders, through: :payments
   has_many :notifications, as: :recipient, dependent: :destroy
+  has_many :blocks, through: :prs_account
 
   has_one :wallet, class_name: 'MixinNetworkUser', as: :owner, dependent: :nullify
   has_one :notification_setting, dependent: :destroy

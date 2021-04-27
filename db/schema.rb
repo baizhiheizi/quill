@@ -93,8 +93,10 @@ ActiveRecord::Schema.define(version: 2021_04_26_075652) do
     t.string "signature"
     t.string "file_hash"
     t.integer "block_number"
+    t.text "file_content"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.index ["article_uuid"], name: "index_article_snapshots_on_article_uuid"
     t.index ["block_number"], name: "index_article_snapshots_on_block_number", unique: true
   end
 

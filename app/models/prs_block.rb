@@ -26,4 +26,5 @@
 #  index_prs_blocks_on_user_address  (user_address)
 #
 class PrsBlock < ApplicationRecord
+  belongs_to :prs_account, primary_key: :account, foreign_key: :user_address, inverse_of: :blocks
 end

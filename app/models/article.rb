@@ -58,6 +58,8 @@ class Article < ApplicationRecord
   has_many :taggings, dependent: :nullify
   has_many :tags, through: :taggings, dependent: :nullify
 
+  has_many :snapshots, class_name: 'ArticleSnapshot', primary_key: :uuid, foreign_key: :article_uuid, inverse_of: :article
+
   has_one :wallet, class_name: 'MixinNetworkUser', as: :owner, dependent: :nullify
 
   validates :asset_id, presence: true, inclusion: { in: SUPPORTED_ASSETS }
@@ -69,6 +71,8 @@ class Article < ApplicationRecord
   validate :ensure_price_not_too_low
 
   before_validation :setup_attributes, on: :create
+
+  before_save :generate_snapshot
 
   default_scope -> { includes(:currency) }
   scope :only_published, -> { where(state: :published) }
@@ -220,6 +224,14 @@ class Article < ApplicationRecord
 
     update published_at: Time.current
   end
+
+  def generate_snapshot
+    return unless content_changed? || title_changed? || intro_changed? || published_at_changed?
+
+    snapshots.create raw: as_json
+  end
+
+  delegate :author, to: :article
 
   private
 
