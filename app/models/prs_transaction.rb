@@ -27,15 +27,18 @@ class PrsTransaction < ApplicationRecord
   POLLING_INTERVAL = 0.1
   POLLING_START_TIME = Time.new(2021, 1, 1).rfc3339
 
-  before_validation :set_defaults
+  belongs_to :prs_account, primary_key: :account, foreign_key: :user_address,\
+                           inverse_of: :transactions, optional: true
 
   store_accessor :raw, :updated_at, prefix: true
   store_accessor :raw, :meta
   store_accessor :raw, :data
 
+  before_validation :set_defaults
+
   validates :raw, presence: true
   validates :tx_id, uniqueness: true
-  validates :block_num, uniqueness: true
+  validates :block_num, uniqueness: true, allow_blank: true
   validates :transation_id, uniqueness: true
 
   def self.poll_authorizations
@@ -86,9 +89,10 @@ class PrsTransaction < ApplicationRecord
       block_type: raw['type'],
       hash_str: raw['hash'],
       signature: raw['signature'],
-      user_address: raw['user_address'],
-      block_num: raw['block_num']
+      user_address: raw['user_address']
     )
+
+    self.block_num = raw['block_num'] if raw['block_num'].present?
 
     return unless data.is_a?(Hash)
 

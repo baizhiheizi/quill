@@ -68,5 +68,24 @@ module Prs
         }
       )
     end
+
+    def pip2001_encrypt(content, session_id)
+      hash64 = FNV.new.fnv1a_64(Rails.application.credentials.dig(:prs, :aes_256_cbc, :iv_prefix) + session_id).to_s(16)
+      cipher_iv = [hash64 + hash64].pack('H*')
+      cipher_key = [Rails.application.credentials.dig(:prs, :aes_256_cbc, :key)].pack('H*')
+
+      cipher = OpenSSL::Cipher.new 'AES-256-CBC'
+      cipher.encrypt
+      cipher.key = cipher_key
+      cipher.iv = cipher_iv
+
+      encrypted = cipher.update content
+      encrypted << cipher.final
+
+      {
+        session: session_id,
+        content: encrypted.unpack1('H*')
+      }.to_json
+    end
   end
 end

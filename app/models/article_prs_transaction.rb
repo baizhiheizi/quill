@@ -24,5 +24,5 @@
 #  index_prs_transactions_on_tx_id          (tx_id) UNIQUE
 #
 class ArticlePrsTransaction < PrsTransaction
-  belongs_to :article_snapshot, primary_key: :tx_id, foreign_key: :tx_id, inverse_of: :prs_tx
+  belongs_to :article_snapshot, primary_key: :tx_id, foreign_key: :tx_id, inverse_of: :prs_transaction
 end
