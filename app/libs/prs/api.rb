@@ -3,16 +3,15 @@
 module Prs
   # Apis interate with PRESSOne chain
   class API
+    attr_reader :client, :prs_atm
+
     def initialize(dependencies_path = Rails.application.root.join('node_modules'))
       @prs_atm = PrsAtmSchmoozer.new dependencies_path
-    end
-
-    def account_keystore_password
-      Rails.application.credentials.dig(:prs, :account_keystore_password)
+      @client = Client.new
     end
 
     def create_keystore(password = nil)
-      @prs_atm.create_keystore password || account_keystore_password
+      prs_atm.create_keystore password || Rails.application.credentials.dig(:prs, :account_keystore_password)
     end
 
     # rep = {
@@ -20,23 +19,19 @@ module Prs
     #   publickey: 'EOS739G9******'
     # }
     def recover_private_key(keystore, password: nil)
-      r = @prs_atm.recover_private_key(
-        (password || account_keystore_password),
+      r = prs_atm.recover_private_key(
+        (password || Rails.application.credentials.dig(:prs, :account_keystore_password)),
         keystore
       )
       r['privatekey']
     end
 
-    def open_free_account(public_key, private_key)
-      @prs_atm.open_free_account public_key, private_key
-    end
+    delegate :open_free_account, to: :prs_atm
 
-    def hash(file_content)
-      @prs_atm.hash file_content
-    end
+    delegate :hash, to: :prs_atm
 
     def sign(payload, user)
-      @prs_atm.sign(
+      prs_atm.sign(
         payload[:type],
         payload[:meta],
         payload[:data],
@@ -50,10 +45,28 @@ module Prs
       )
     end
 
-    def pip2001_authorization
+    def pip2001_authorization(count: 50, updated_at: Time.new(2021, 1, 1).rfc3339)
+      path = "api/pip2001/#{Rails.application.credentials.dig(:prs, :account)}/authorization"
+      client.get(
+        path,
+        params: {
+          count: count,
+          updated_at: updated_at
+        }
+      )
     end
 
-    def pip2001_posts
+    def pip2001_posts(topic = nil, count: 50, updated_at: Time.new(2021, 1, 1).rfc3339)
+      path = 'api/pip2001'
+      topic ||= Rails.application.credentials.dig(:prs, :account)
+      client.get(
+        path,
+        params: {
+          topic: topic,
+          count: count,
+          updated_at: updated_at
+        }
+      )
     end
   end
 end

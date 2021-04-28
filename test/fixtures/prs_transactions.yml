@@ -5,9 +5,7 @@
 #  id              :bigint           not null, primary key
 #  block_num       :integer
 #  block_type      :string
-#  data            :jsonb
 #  hash_str        :string
-#  meta            :jsonb
 #  raw             :jsonb
 #  signature       :string
 #  type(STI)       :string

@@ -306,8 +306,6 @@ ActiveRecord::Schema.define(version: 2021_04_27_084021) do
     t.string "type", comment: "STI"
     t.string "tx_id"
     t.string "block_type"
-    t.jsonb "meta"
-    t.jsonb "data"
     t.string "hash_str"
     t.string "signature"
     t.integer "block_num"

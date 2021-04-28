@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
-module Foxswap
+module Prs
   class Client
     SERVER_SCHEME = 'https'
 
     attr_reader :host
 
-    def initialize(host = 'f1-mtgswap-api.firesbox.com')
+    def initialize(host = 'prs-bp-cn1.xue.cn')
       @host = host
     end
 
