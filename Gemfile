@@ -75,6 +75,8 @@ gem 'pagy'
 gem 'rack-cors'
 # Schmooze lets Ruby and Node.js work together intimately.
 gem 'schmooze'
+# fnv1 and fnv1a hash functions in ruby
+gem 'fnv'
 
 # deploy
 gem 'mina', '~> 1.2.2', require: false

@@ -20,25 +20,30 @@
 #  index_article_snapshots_on_tx_id         (tx_id) UNIQUE
 #
 class ArticleSnapshot < ApplicationRecord
+  has_one_attached :file
+
   belongs_to :article, primary_key: :uuid, foreign_key: :article_uuid, inverse_of: :snapshots
 
-  has_one :prs_transactions, class_name: 'ArticlePrsTransaction', primary_key: :tx_id,\
-                             foreign_key: :tx_id, inverse_of: :article_snapshot,\
-                             dependent: :restrict_with_error
+  has_one :prs_transaction, class_name: 'ArticlePrsTransaction', primary_key: :tx_id,\
+                            foreign_key: :tx_id, inverse_of: :article_snapshot,\
+                            dependent: :restrict_with_error
 
   before_validation :set_defaults, on: :create
-  after_create :generate_block_async
+  after_commit :sign_on_chain_async, on: :create
 
   delegate :author, to: :article
 
-  def generate_prs_transaction
+  def sign_on_chain!
     r =
       Prs.api.sign(
         {
           type: 'PIP:2001',
           meta: {
-            uris: [],
-            mime: `text/markdown;charset=UTF-8`,
+            uris: [
+              file.url,
+              format('%<host>s/api/files/%<file_hash>s', host: Rails.application.credentials[:host], file_hash: file_hash)
+            ],
+            mime: 'text/markdown;charset=UTF-8',
             encryption: 'aes-256-cbc',
             payment_url: "mixin://transfer/#{article.wallet.uuid}"
           },
@@ -59,13 +64,25 @@ class ArticleSnapshot < ApplicationRecord
       update tx_id: block['id']
       author
         .prs_account
-        .blocks
-        .create_with(raw: block)
-        .find_or_create_by!(block_transation_id: r['transaction_id'])
+        .transactions
+        .create_with(raw: block, type: 'ArticlePrsTransaction')
+        .find_or_create_by!(transation_id: r['transaction_id'])
     end
   end
 
-  def generate_prs_transaction_async
+  def sign_on_chain_async
+  end
+
+  def encrypted_file_content
+    Prs.api.pip2001_encrypt file_content, article_uuid
+  end
+
+  def upload_encrypted_file_content
+    file.attach(
+      io: StringIO.new(encrypted_file_content),
+      filename: "#{file_hash}.md",
+      content_type: 'text/markdown;charset=UTF-8'
+    )
   end
 
   private
@@ -88,7 +105,8 @@ class ArticleSnapshot < ApplicationRecord
       bio: author.bio,
       intro: article.intro,
       published_at: article.published_at,
-      updated_at: article.updated_at
+      updated_at: article.updated_at,
+      content: article.content
     )
   end
 
