@@ -1,0 +1,27 @@
+query AdminPrsAccountConnection(
+  $query: String
+  $status: String
+  $after: String
+) {
+  adminPrsAccountConnection(
+    query: $query
+    status: $status
+    after: $after
+  ) {
+    nodes {
+      id
+      account
+      status
+      user {
+        name
+        avatarUrl
+        mixinId
+      }
+      createdAt
+    }
+    pageInfo {
+      hasNextPage
+      endCursor
+    }
+  }
+}

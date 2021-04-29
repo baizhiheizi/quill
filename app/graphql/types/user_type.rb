@@ -20,6 +20,7 @@ module Types
     field :authoring_subscribed, Boolean, null: true
     field :reading_subscribed, Boolean, null: true
 
+    field :prs_account, Types::PrsAccountType, null: true
     field :articles, Types::ArticleConnectionType, null: false
     field :comments, Types::CommentConnectionType, null: false
 
