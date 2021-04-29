@@ -1780,7 +1780,7 @@
   resolved "https://registry.yarnpkg.com/@types/zen-observable/-/zen-observable-0.8.2.tgz#808c9fa7e4517274ed555fa158f2de4b4f468e71"
   integrity sha512-HrCIVMLjE1MOozVoD86622S7aunluLb2PJdPfb3nYiEtohm8mIB/vyv0Fd37AdeMFrTUQXEunw78YloMA3Qilg==
 
-"@uiw/react-markdown-preview@^2.1.1":
+"@uiw/react-markdown-preview@^2.1.3":
   version "2.1.3"
   resolved "https://registry.yarnpkg.com/@uiw/react-markdown-preview/-/react-markdown-preview-2.1.3.tgz#80e3ad15669a750e422735c53c1d4392ccab714f"
   integrity sha512-pfO4IBBAw+jx4pyUAvhLicotP1MaPVXTOYC4o+Ybc1fuhVTtHQ2NUP35kLHGu9by/xQuHJfvLe411OuvTvoC6A==
@@ -1791,14 +1791,13 @@
     react-markdown "5.0.3"
     remark-gfm "1.0.0"
 
-"@uiw/react-md-editor@^2.1.10":
-  version "2.1.10"
-  resolved "https://registry.yarnpkg.com/@uiw/react-md-editor/-/react-md-editor-2.1.10.tgz#7c48702582a9645a97557639c7ed558de0273542"
-  integrity sha512-SOMazWl5PgbifsqJ0yf5kVWfvl09XoLDfkFPazxTUWudfriAAzgX/sDHi6omNKC7VAblDM+i2XF/dWrkGw2SEA==
+"@uiw/react-md-editor@^3.0.1":
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/@uiw/react-md-editor/-/react-md-editor-3.0.1.tgz#1614cd34261280a3de942a59e2344d45546f4ed1"
+  integrity sha512-Qdjc0CehSJ9ovBIbiq4cQQO7KnMThyLiiuN1X/PuV7+GsKVb8WKcSCygYRjUAeP26TUkDDZU+1B8rBPpMI4SrA==
   dependencies:
     "@babel/runtime" "^7.8.4"
-    "@uiw/react-markdown-preview" "^2.1.1"
-    classnames "^2.2.6"
+    "@uiw/react-markdown-preview" "^2.1.3"
 
 "@webassemblyjs/ast@1.11.0":
   version "1.11.0"
