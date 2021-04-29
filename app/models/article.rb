@@ -236,6 +236,10 @@ class Article < ApplicationRecord
     prs_transactions.order(created_at: :desc).first
   end
 
+  def signature_url
+    current_prs_transaction&.block_url
+  end
+
   private
 
   def setup_attributes

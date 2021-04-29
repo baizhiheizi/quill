@@ -21,6 +21,7 @@
 #
 class PrsAccount < ApplicationRecord
   include Encryptable
+  include AASM
 
   attr_encrypted :private_key
 
@@ -37,11 +38,30 @@ class PrsAccount < ApplicationRecord
   before_validation :set_defaults, on: :create
   after_commit :register_on_chain_async, on: :create
 
-  def registered?
-    account.present?
+  aasm column: :status do
+    state :created, initial: true
+    state :registered
+    state :allowed
+    state :denied
+
+    event :register do
+      transitions from: :created, to: :registered
+    end
+
+    event :allow do
+      transitions from: :registered, to: :allowed
+      transitions from: :denied, to: :allowed
+    end
+
+    event :deny do
+      transitions from: :allowed, to: :denied
+    end
   end
 
   def allow_on_chain!
+    return if user.banned?
+    return if allowed?
+
     r =
       Prs.api.sign(
         {
@@ -57,13 +77,18 @@ class PrsAccount < ApplicationRecord
           private_key: Rails.application.credentials.dig(:prs, :private_key)
         }
       )
-    block = r['processed']['action_traces'].first['act']['data']
-    PrsAccountAllowTransaction
-      .create_with(raw: block)
-      .find_or_create_by!(transation_id: r['transaction_id'])
+    ActiveRecord::Base.transaction do
+      block = r['processed']['action_traces'].first['act']['data']
+      PrsAccountAllowTransaction
+        .create_with(raw: block)
+        .find_or_create_by!(transation_id: r['transaction_id'])
+      allow!
+    end
   end
 
   def deny_on_chain!
+    return unless allowed?
+
     r =
       Prs.api.sign(
         {
@@ -79,15 +104,19 @@ class PrsAccount < ApplicationRecord
           private_key: Rails.application.credentials.dig(:prs, :private_key)
         }
       )
-    block = r['processed']['action_traces'][0]['act']['data']
-    PrsAccountDenyTransaction
-      .create_with(raw: block)
-      .find_or_create_by!(transation_id: r['transaction_id'])
+    ActiveRecord::Base.transaction do
+      block = r['processed']['action_traces'][0]['act']['data']
+      PrsAccountDenyTransaction
+        .create_with(raw: block)
+        .find_or_create_by!(transation_id: r['transaction_id'])
+      deny!
+    end
   end
 
   def register_on_chain!
     r = Prs.api.open_free_account public_key, private_key
     update! account: r['account']
+    register!
   end
 
   def register_on_chain_async

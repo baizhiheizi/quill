@@ -79,6 +79,12 @@ class PrsTransaction < ApplicationRecord
     end
   end
 
+  def block_url
+    return if block_num.blank?
+
+    format('https://press.one/blockchain/blocks/%<block_num>s', block_num: block_num)
+  end
+
   private
 
   def set_defaults

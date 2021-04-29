@@ -34,6 +34,8 @@ class ArticleSnapshot < ApplicationRecord
   delegate :author, to: :article
 
   def sign_on_chain!
+    return if prs_transaction.present?
+
     r =
       Prs.api.sign(
         {
@@ -71,6 +73,7 @@ class ArticleSnapshot < ApplicationRecord
   end
 
   def sign_on_chain_async
+    ArticleSnapshotSignOnChainWorker.perform_async id
   end
 
   def encrypted_file_content
@@ -83,6 +86,10 @@ class ArticleSnapshot < ApplicationRecord
       filename: "#{file_hash}.md",
       content_type: 'text/markdown;charset=UTF-8'
     )
+  end
+
+  def signature_url
+    prs_transaction&.block_url
   end
 
   private
@@ -102,6 +109,8 @@ class ArticleSnapshot < ApplicationRecord
       file_tmp,
       title: article.title,
       author: author.name,
+      author_mixin_uuid: author.mixin_uuid,
+      author_avatar: author.avatar,
       bio: author.bio,
       intro: article.intro,
       published_at: article.published_at,
@@ -115,6 +124,8 @@ class ArticleSnapshot < ApplicationRecord
       ---
       title: %<title>s
       author: %<author>s
+      author_avatar: %<author_avatar>s
+      author_mixin_uuid: %<author_mixin_uuid>s
       bio: %<bio>s
       intro: %<intro>s
       published: %<published_at>s

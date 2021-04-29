@@ -38,6 +38,8 @@ module Types
     field :payment_trace_id, String, null: true
     field :wallet_id, String, null: true
 
+    field :signature_url, String, null: true
+
     field :author, Types::UserType, null: false
     field :wallet, Types::MixinNetworkUserType, null: true
 

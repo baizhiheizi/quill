@@ -39,6 +39,7 @@ module Types
 
     # admin
     field :admin_article_connection, resolver: Resolvers::AdminArticleConnectionResolver
+    field :admin_article_snapshot_connection, resolver: Resolvers::AdminArticleSnapshotConnectionResolver
     field :admin_comment_connection, resolver: Resolvers::AdminCommentConnectionResolver
     field :admin_user_connection, resolver: Resolvers::AdminUserConnectionResolver
     field :admin_user, resolver: Resolvers::AdminUserResolver
@@ -52,5 +53,6 @@ module Types
     field :admin_mixin_network_snapshot_connection, resolver: Resolvers::AdminMixinNetworkSnapshotConnectionResolver
     field :admin_article, resolver: Resolvers::AdminArticleResolver
     field :admin_wallet_balance, resolver: Resolvers::AdminWalletBalanceResolver
+    field :admin_prs_account_connection, resolver: Resolvers::AdminPrsAccountConnectionResolver
   end
 end
