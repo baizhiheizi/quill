@@ -3,6 +3,7 @@ import React from 'react';
 import { Link, Route, Switch } from 'react-router-dom';
 import AnnouncementsPage from './pages/AnnouncementsPage/AnnouncementsPage';
 import ArticlePage from './pages/ArticlePage/ArticlePage';
+import ArticleSnapshotsPage from './pages/ArticleSnapshotsPage/ArticleSnapshotsPage';
 import ArticlesPage from './pages/ArticlesPage/ArticlesPage';
 import BalancePage from './pages/BalancePage/BalancePage';
 import BonusesPage from './pages/BonusesPage/BonusesPage';
@@ -31,6 +32,9 @@ export default function Routes() {
       </Route>
       <Route path='/articles' exact>
         <ArticlesPage />
+      </Route>
+      <Route path='/article_snapshots' exact>
+        <ArticleSnapshotsPage />
       </Route>
       <Route path='/articles/:uuid' exact>
         <ArticlePage />

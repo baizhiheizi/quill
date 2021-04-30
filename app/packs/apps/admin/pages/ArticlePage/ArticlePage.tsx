@@ -1,4 +1,5 @@
 import { Avatar, Descriptions, Empty, PageHeader, Space, Tabs } from 'antd';
+import ArticleSnapshotsComponent from 'apps/admin/components/ArticleSnapshotsComponent/ArticleSnapshotsComponent';
 import CommentsComponent from 'apps/admin/components/CommentsComponent/CommentsComponent';
 import LoadingComponent from 'apps/admin/components/LoadingComponent/LoadingComponent';
 import MixinNetworkSnapshotsComponent from 'apps/admin/components/MixinNetworkSnapshotsComponent/MixinNetworkSnapshotComponent';
@@ -57,6 +58,9 @@ export default function ArticlePage() {
             commentableId={article.id}
             commentableType='Article'
           />
+        </Tabs.TabPane>
+        <Tabs.TabPane tab='Snapshots' key='snapshot'>
+          <ArticleSnapshotsComponent articleUuid={article.uuid} />
         </Tabs.TabPane>
         <Tabs.TabPane tab='Transfers' key='transfers'>
           <TransfersComponent itemId={article.id} itemType='Article' />

@@ -6,6 +6,13 @@ query AdminArticleSnapshotConnection($articleUuid: String, $after: String) {
       fileHash
       txId
       signatureUrl
+      article {
+        uuid
+        title
+        author {
+          name
+        }
+      }
       createdAt
     }
     pageInfo {
