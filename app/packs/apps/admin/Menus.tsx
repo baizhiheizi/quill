@@ -19,7 +19,7 @@ import { Link } from 'react-router-dom';
 
 export default function Menus() {
   return (
-    <Menu theme='dark'>
+    <Menu theme='dark' mode='inline'>
       <div
         style={{
           height: '2rem',
@@ -42,12 +42,18 @@ export default function Menus() {
           <span>Users</span>
         </Link>
       </Menu.Item>
-      <Menu.Item>
-        <Link to='/articles'>
-          <FileTextOutlined />
-          <span>Articles</span>
-        </Link>
-      </Menu.Item>
+      <Menu.SubMenu key='article' icon={<FileTextOutlined />} title='Article'>
+        <Menu.Item>
+          <Link to='/articles'>
+            <span>Articles</span>
+          </Link>
+        </Menu.Item>
+        <Menu.Item>
+          <Link to='/article_snapshots'>
+            <span>Article Snapshots</span>
+          </Link>
+        </Menu.Item>
+      </Menu.SubMenu>
       <Menu.Item>
         <Link to='/comments'>
           <CommentOutlined />

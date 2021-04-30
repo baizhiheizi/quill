@@ -428,6 +428,7 @@ export type ArticleEdge = {
 
 export type ArticleSnapshot = {
   __typename?: 'ArticleSnapshot';
+  article: Article;
   articleUuid: Scalars['String'];
   createdAt: Scalars['ISO8601DateTime'];
   fileHash: Scalars['String'];
@@ -2783,6 +2784,13 @@ export const AdminArticleSnapshotConnectionDocument = gql`
         fileHash
         txId
         signatureUrl
+        article {
+          uuid
+          title
+          author {
+            name
+          }
+        }
         createdAt
       }
       pageInfo {

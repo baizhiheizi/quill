@@ -7,9 +7,9 @@ module Resolvers
 
     type Types::ArticleSnapshotType.connection_type, null: false
 
-    def resolve(params)
+    def resolve(**params)
       if params[:article_uuid].present?
-        Article.find_by(params[:article_uuid]).snapshots.order(created_at: :desc)
+        Article.find_by(uuid: params[:article_uuid]).snapshots.order(created_at: :desc)
       else
         ArticleSnapshot.all.order(created_at: :desc)
       end

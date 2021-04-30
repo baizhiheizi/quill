@@ -8,9 +8,11 @@ module Types
     field :tx_id, String, null: false
     field :signature_url, String, null: false
 
-    def author
-      BatchLoader::GraphQL.for(object.author_id).batch do |author_ids, loader|
-        User.where(id: author_ids).each { |author| loader.call(author.id, author) }
+    field :article, Types::ArticleType, null: false
+
+    def article
+      BatchLoader::GraphQL.for(object.article_uuid).batch do |article_uuids, loader|
+        Article.where(uuid: article_uuids).each { |article| loader.call(article.uuid, article) }
       end
     end
   end
