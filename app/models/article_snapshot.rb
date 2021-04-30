@@ -41,7 +41,9 @@ class ArticleSnapshot < ApplicationRecord
           type: 'PIP:2001',
           meta: {
             uris: [
+              # hosted by cloud service
               file.url,
+              # self-hosted
               format('%<host>s/api/files/%<file_hash>s', host: Rails.application.credentials[:host], file_hash: file_hash)
             ],
             mime: 'text/markdown;charset=UTF-8',

@@ -36,7 +36,10 @@ class PrsAccount < ApplicationRecord
   validates :private_key, presence: true
 
   before_validation :set_defaults, on: :create
-  after_commit :register_on_chain_async, on: :create
+
+  after_commit on: :create do
+    register_on_chain_async
+  end
 
   aasm column: :status do
     state :created, initial: true
@@ -44,7 +47,7 @@ class PrsAccount < ApplicationRecord
     state :allowed
     state :denied
 
-    event :register do
+    event :register, after_commit: :allow_on_chain_async do
       transitions from: :created, to: :registered
     end
 
@@ -86,6 +89,10 @@ class PrsAccount < ApplicationRecord
     end
   end
 
+  def allow_on_chain_async
+    PrsAccountAllowOnChainWorker.perform_async id
+  end
+
   def deny_on_chain!
     return unless allowed?
 
@@ -111,6 +118,10 @@ class PrsAccount < ApplicationRecord
         .find_or_create_by!(transation_id: r['transaction_id'])
       deny!
     end
+  end
+
+  def deny_on_chain_async
+    PrsAccountDenyOnChainWorker.perform_async id
   end
 
   def register_on_chain!
