@@ -32,8 +32,14 @@ class ArticleSnapshot < ApplicationRecord
 
   delegate :author, to: :article
 
+  def previous_snapshot
+    article.snapshots.where('created_at < ?', created_at).order(created_at: :desc).first
+  end
+
   def sign_on_chain!
     return if prs_transaction.present?
+    return if author.banned?
+    return unless author.prs_account&.allowed?
 
     r =
       Prs.api.sign(
@@ -53,7 +59,7 @@ class ArticleSnapshot < ApplicationRecord
           data: {
             file_hash: file_hash,
             topic: Rails.application.credentials.dig(:prs, :account),
-            updated_tx_id: article.current_prs_transaction&.tx_id
+            updated_tx_id: previous_snapshot.prs_transaction&.tx_id
           }
         },
         {
@@ -62,15 +68,8 @@ class ArticleSnapshot < ApplicationRecord
         }
       )
 
-    ActiveRecord::Base.transaction do
-      block = r['processed']['action_traces'][0]['act']['data']
-      update tx_id: block['id']
-      author
-        .prs_account
-        .transactions
-        .create_with(raw: block, type: 'ArticlePrsTransaction')
-        .find_or_create_by!(transation_id: r['transaction_id'])
-    end
+    block = r['processed']['action_traces'][0]['act']['data']
+    update tx_id: block['id']
   end
 
   def sign_on_chain_async

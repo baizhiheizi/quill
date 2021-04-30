@@ -123,7 +123,7 @@ class Article < ApplicationRecord
       transitions from: :hidden, to: :published
     end
 
-    event :block, after_commit: :notify_author_blocked do
+    event :block, after_commit: %i[notify_author_blocked mark_as_removed_on_chain_async] do
       transitions from: :hidden, to: :blocked
       transitions from: :published, to: :blocked
     end
@@ -238,6 +238,26 @@ class Article < ApplicationRecord
 
   def signature_url
     current_prs_transaction&.block_url
+  end
+
+  def mark_as_removed_on_chain!
+    Prs.api.sign(
+      {
+        type: 'PIP:2001',
+        meta: {},
+        data: {
+          topic: Rails.application.credentials.dig(:prs, :account),
+          updated_tx_id: current_prs_transaction.tx_id
+        }
+      },
+      {
+        account: author.prs_account.account,
+        private_key: author.prs_account.private_key
+      }
+    )
+  end
+
+  def mark_as_removed_on_chain_async
   end
 
   private
