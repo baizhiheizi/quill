@@ -3,11 +3,7 @@ query AdminPrsAccountConnection(
   $status: String
   $after: String
 ) {
-  adminPrsAccountConnection(
-    query: $query
-    status: $status
-    after: $after
-  ) {
+  adminPrsAccountConnection(query: $query, status: $status, after: $after) {
     nodes {
       id
       account

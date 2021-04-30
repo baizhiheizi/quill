@@ -8,7 +8,7 @@ module Resolvers
 
     type Types::PrsAccountType.connection_type, null: false
 
-    def resolve(params = {})
+    def resolve(**params)
       prs_accounts =
         case params[:status].to_sym
         when :created

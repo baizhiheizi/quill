@@ -91,6 +91,12 @@ export default function Menus() {
         </Link>
       </Menu.Item>
       <Menu.Item>
+        <Link to='/prs_accounts'>
+          <UserOutlined />
+          <span>Prs Accounts</span>
+        </Link>
+      </Menu.Item>
+      <Menu.Item>
         <Link to='/bonuses'>
           <TrophyOutlined />
           <span>Bonuses</span>
