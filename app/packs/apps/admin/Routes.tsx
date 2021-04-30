@@ -11,10 +11,11 @@ import MixinMessagesPage from './pages/MixinMessagesPage/MixinMessagesPage';
 import MixinNetworkSnapshotsPage from './pages/MixinNetworkSnapshotsPage/MixinNetworkSnapshotsPage';
 import OverviewPage from './pages/OverviewPage/OverviewPage';
 import PaymentsPage from './pages/PaymentsPage/PaymentsPage';
+import PrsAccountsPage from './pages/PrsAccountsPage/PrsAccountsPage';
 import SwapOrdersPage from './pages/SwapOrdersPage/SwapOrdersPage';
 import TransfersPage from './pages/TransfersPage/TransfersPage';
-import UsersPage from './pages/UsersPage/UsersPage';
 import UserPage from './pages/UserPage/UserPage';
+import UsersPage from './pages/UsersPage/UsersPage';
 
 export default function Routes() {
   return (
@@ -54,6 +55,9 @@ export default function Routes() {
       </Route>
       <Route path='/announcements' exact>
         <AnnouncementsPage />
+      </Route>
+      <Route path='/prs_accounts' exact>
+        <PrsAccountsPage />
       </Route>
       <Route path='/bonuses' exact>
         <BonusesPage />
