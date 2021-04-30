@@ -314,16 +314,6 @@ ActiveRecord::Schema.define(version: 2021_04_26_012453) do
     t.index ["wallet_id"], name: "index_transfers_on_wallet_id"
   end
 
-  create_table "user_access_tokens", force: :cascade do |t|
-    t.bigint "user_id"
-    t.uuid "value"
-    t.string "memo", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["user_id"], name: "index_user_access_tokens_on_user_id"
-    t.index ["value"], name: "index_user_access_tokens_on_value", unique: true
-  end
-
   create_table "user_authorizations", force: :cascade do |t|
     t.bigint "user_id"
     t.integer "provider", comment: "third party auth provider"
