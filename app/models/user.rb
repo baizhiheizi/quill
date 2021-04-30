@@ -68,7 +68,12 @@ class User < ApplicationRecord
   validates :name, presence: true
   enum locale: I18n.available_locales
 
-  after_commit :create_wallet!, :update_statistics_cache, :create_notification_setting!, on: :create
+  after_commit on: :create do
+    create_wallet!
+    create_notification_setting!
+    create_prs_account!
+    update_statistics_cache
+  end
 
   default_scope { includes(:mixin_authorization) }
   scope :only_banned, -> { where.not(banned_at: nil) }
@@ -146,12 +151,14 @@ class User < ApplicationRecord
   def ban!
     update banned_at: Time.current
 
+    prs_account.deny_on_chain_async
     UserBannedNotification.with(user: self).deliver(self)
   end
 
   def unban!
     update banned_at: nil
 
+    prs_account.allow_on_chain_async
     UserUnbannedNotification.with(user: self).deliver(self)
   end
 
