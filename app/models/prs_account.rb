@@ -65,28 +65,20 @@ class PrsAccount < ApplicationRecord
     return if user.banned?
     return if allowed?
 
-    r =
-      Prs.api.sign(
-        {
-          type: 'PIP:2001',
-          meta: {},
-          data: {
-            allow: account,
-            topic: Rails.application.credentials.dig(:prs, :account)
-          }
-        },
-        {
-          account: Rails.application.credentials.dig(:prs, :account),
-          private_key: Rails.application.credentials.dig(:prs, :private_key)
+    Prs.api.sign(
+      {
+        type: 'PIP:2001',
+        meta: {},
+        data: {
+          allow: account,
+          topic: Rails.application.credentials.dig(:prs, :account)
         }
-      )
-    ActiveRecord::Base.transaction do
-      block = r['processed']['action_traces'].first['act']['data']
-      PrsAccountAllowTransaction
-        .create_with(raw: block)
-        .find_or_create_by!(transation_id: r['transaction_id'])
-      allow!
-    end
+      },
+      {
+        account: Rails.application.credentials.dig(:prs, :account),
+        private_key: Rails.application.credentials.dig(:prs, :private_key)
+      }
+    )
   end
 
   def allow_on_chain_async
@@ -96,28 +88,20 @@ class PrsAccount < ApplicationRecord
   def deny_on_chain!
     return unless allowed?
 
-    r =
-      Prs.api.sign(
-        {
-          type: 'PIP:2001',
-          meta: {},
-          data: {
-            deny: account,
-            topic: Rails.application.credentials.dig(:prs, :account)
-          }
-        },
-        {
-          account: Rails.application.credentials.dig(:prs, :account),
-          private_key: Rails.application.credentials.dig(:prs, :private_key)
+    Prs.api.sign(
+      {
+        type: 'PIP:2001',
+        meta: {},
+        data: {
+          deny: account,
+          topic: Rails.application.credentials.dig(:prs, :account)
         }
-      )
-    ActiveRecord::Base.transaction do
-      block = r['processed']['action_traces'][0]['act']['data']
-      PrsAccountDenyTransaction
-        .create_with(raw: block)
-        .find_or_create_by!(transation_id: r['transaction_id'])
-      deny!
-    end
+      },
+      {
+        account: Rails.application.credentials.dig(:prs, :account),
+        private_key: Rails.application.credentials.dig(:prs, :private_key)
+      }
+    )
   end
 
   def deny_on_chain_async
