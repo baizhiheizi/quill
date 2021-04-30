@@ -3,7 +3,6 @@ class CreateArticleSnapshots < ActiveRecord::Migration[6.1]
     create_table :article_snapshots do |t|
       t.uuid :article_uuid
       t.json :raw
-      t.string :signature
       t.string :file_hash
       t.string :tx_id
       t.text :file_content

@@ -90,7 +90,6 @@ ActiveRecord::Schema.define(version: 2021_04_27_084021) do
   create_table "article_snapshots", force: :cascade do |t|
     t.uuid "article_uuid"
     t.json "raw"
-    t.string "signature"
     t.string "file_hash"
     t.string "tx_id"
     t.text "file_content"
