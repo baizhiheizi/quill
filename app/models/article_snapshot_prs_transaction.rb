@@ -24,10 +24,6 @@
 #  index_prs_transactions_on_transaction_id  (transaction_id) UNIQUE
 #  index_prs_transactions_on_tx_id           (tx_id) UNIQUE
 #
-require 'test_helper'
-
-class PrsTransactionTest < ActiveSupport::TestCase
-  # test "the truth" do
-  #   assert true
-  # end
+class ArticleSnapshotPrsTransaction < PrsTransaction
+  belongs_to :article_snapshot, primary_key: :tx_id, foreign_key: :tx_id, inverse_of: :prs_transaction, optional: true
 end

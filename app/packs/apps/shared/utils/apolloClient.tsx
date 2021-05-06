@@ -49,6 +49,9 @@ export const apolloClient = (uri: string, csrfToken?: string) => {
             'query',
             'status',
           ]),
+          adminPrsTransactionConnection: customizedConnectionMergeFunction([
+            'type',
+          ]),
           adminSwapOrderConnection: customizedConnectionMergeFunction(),
           adminTransferConnection: customizedConnectionMergeFunction([
             'itemId',

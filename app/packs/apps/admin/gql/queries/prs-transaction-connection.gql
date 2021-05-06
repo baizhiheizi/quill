@@ -1,0 +1,28 @@
+query AdminPrsTransactionConnection($type: String, $after: String) {
+  adminPrsTransactionConnection(type: $type, after: $after) {
+    nodes {
+      id
+      type
+      blockNum
+      blockType
+      signature
+      userAddress
+      transactionId
+      data
+      prsAccount {
+        account
+        status
+        user {
+          mixinId
+          name
+        }
+      }
+      processedAt
+      createdAt
+    }
+    pageInfo {
+      hasNextPage
+      endCursor
+    }
+  }
+}

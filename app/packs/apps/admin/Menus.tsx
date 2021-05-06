@@ -2,6 +2,7 @@ import {
   CommentOutlined,
   DashboardOutlined,
   FileTextOutlined,
+  LinkOutlined,
   LogoutOutlined,
   MessageOutlined,
   NotificationOutlined,
@@ -54,6 +55,18 @@ export default function Menus() {
           </Link>
         </Menu.Item>
       </Menu.SubMenu>
+      <Menu.SubMenu key='pressone' icon={<LinkOutlined />} title='PRESSOne'>
+        <Menu.Item>
+          <Link to='/prs_accounts'>
+            <span>Accounts</span>
+          </Link>
+        </Menu.Item>
+        <Menu.Item>
+          <Link to='/prs_transactions'>
+            <span>Transactions</span>
+          </Link>
+        </Menu.Item>
+      </Menu.SubMenu>
       <Menu.Item>
         <Link to='/comments'>
           <CommentOutlined />
@@ -94,12 +107,6 @@ export default function Menus() {
         <Link to='/mixin_network_snapshots'>
           <TableOutlined />
           <span>Snapshots</span>
-        </Link>
-      </Menu.Item>
-      <Menu.Item>
-        <Link to='/prs_accounts'>
-          <UserOutlined />
-          <span>Prs Accounts</span>
         </Link>
       </Menu.Item>
       <Menu.Item>

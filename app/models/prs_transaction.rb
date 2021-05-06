@@ -4,24 +4,25 @@
 #
 # Table name: prs_transactions
 #
-#  id              :bigint           not null, primary key
-#  block_num       :integer
-#  block_type      :string
-#  hash_str        :string
-#  raw             :jsonb
-#  signature       :string
-#  type(STI)       :string
-#  user_address    :string
-#  created_at      :datetime         not null
-#  updated_at      :datetime         not null
-#  transation_id   :string
-#  tx_id           :string
+#  id               :bigint           not null, primary key
+#  block_num        :integer
+#  block_type       :string
+#  hash_str         :string
+#  processed_at     :datetime
+#  raw              :jsonb
+#  signature        :string
+#  type(STI)        :string
+#  user_address     :string
+#  created_at       :datetime         not null
+#  updated_at       :datetime         not null
+#  transaction_id   :string
+#  tx_id            :string
 #
 # Indexes
 #
-#  index_prs_transactions_on_block_num      (block_num) UNIQUE
-#  index_prs_transactions_on_transation_id  (transation_id) UNIQUE
-#  index_prs_transactions_on_tx_id          (tx_id) UNIQUE
+#  index_prs_transactions_on_block_num       (block_num) UNIQUE
+#  index_prs_transactions_on_transaction_id  (transaction_id) UNIQUE
+#  index_prs_transactions_on_tx_id           (tx_id) UNIQUE
 #
 class PrsTransaction < ApplicationRecord
   POLLING_INTERVAL = 0.1
@@ -34,12 +35,14 @@ class PrsTransaction < ApplicationRecord
   store_accessor :raw, :meta
   store_accessor :raw, :data
 
-  before_validation :set_defaults
+  before_validation :set_defaults, on: :create
 
   validates :raw, presence: true
   validates :tx_id, uniqueness: true
-  validates :block_num, uniqueness: true, allow_blank: true
-  validates :transation_id, uniqueness: true
+  validates :block_num, uniqueness: true
+  validates :transaction_id, uniqueness: true
+
+  after_commit :process!, on: :create
 
   def self.poll_authorizations
     loop do
@@ -85,17 +88,47 @@ class PrsTransaction < ApplicationRecord
     format('https://press.one/blockchain/blocks/%<block_num>s', block_num: block_num)
   end
 
+  def process!
+    return if processed?
+
+    case type
+    when 'PrsAccountAllowTransaction'
+      account = PrsAccount.find_by(account: user_address)
+      return if account.blank?
+
+      account.allow! if account.may_allow?
+      touch_processed_at
+    when 'PrsAccountDenyTransaction'
+      account = PrsAccount.find_by(account: user_address)
+      return if account.blank?
+
+      account.deny! if account.may_deny?
+      touch_processed_at
+    when 'ArticleSnapshotPrsTransaction'
+      touch_processed_at
+    end
+  end
+
+  def processed?
+    processed_at?
+  end
+
+  def touch_processed_at
+    update processed_at: Time.current
+  end
+
   private
 
   def set_defaults
-    return if raw.blank?
+    return unless new_record?
 
     assign_attributes(
       tx_id: raw['id'],
       block_type: raw['type'],
       hash_str: raw['hash'],
       signature: raw['signature'],
-      user_address: raw['user_address']
+      user_address: raw['user_address'],
+      transaction_id: raw['transaction_id']
     )
 
     self.block_num = raw['block_num'] if raw['block_num'].present?
@@ -104,6 +137,6 @@ class PrsTransaction < ApplicationRecord
 
     self.type = 'PrsAccountAllowTransaction' if data.key?('allow')
     self.type = 'PrsAccountDenyTransaction' if data.key?('deny')
-    self.type = 'ArticlePrsTransaction' if data.key?('file_hash')
+    self.type = 'ArticleSnapshotPrsTransaction' if data.key?('file_hash') || data.key?('updated_tx_id')
   end
 end

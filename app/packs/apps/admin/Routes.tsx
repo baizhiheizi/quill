@@ -13,6 +13,7 @@ import MixinNetworkSnapshotsPage from './pages/MixinNetworkSnapshotsPage/MixinNe
 import OverviewPage from './pages/OverviewPage/OverviewPage';
 import PaymentsPage from './pages/PaymentsPage/PaymentsPage';
 import PrsAccountsPage from './pages/PrsAccountsPage/PrsAccountsPage';
+import PrsTransactionsPage from './pages/PrsTransactionsPage/PrsTransactionsPage';
 import SwapOrdersPage from './pages/SwapOrdersPage/SwapOrdersPage';
 import TransfersPage from './pages/TransfersPage/TransfersPage';
 import UserPage from './pages/UserPage/UserPage';
@@ -62,6 +63,9 @@ export default function Routes() {
       </Route>
       <Route path='/prs_accounts' exact>
         <PrsAccountsPage />
+      </Route>
+      <Route path='/prs_transactions' exact>
+        <PrsTransactionsPage />
       </Route>
       <Route path='/bonuses' exact>
         <BonusesPage />
