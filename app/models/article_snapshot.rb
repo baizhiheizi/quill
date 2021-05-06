@@ -108,7 +108,7 @@ class ArticleSnapshot < ApplicationRecord
 
   def generate_file_content
     format(
-      file_tmp,
+      file_tpl,
       title: article.title,
       author: author.name,
       author_mixin_uuid: author.mixin_uuid,
@@ -121,7 +121,7 @@ class ArticleSnapshot < ApplicationRecord
     )
   end
 
-  def file_tmp
+  def file_tpl
     <<~MD
       ---
       title: %<title>s
