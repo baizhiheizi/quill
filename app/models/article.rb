@@ -128,7 +128,7 @@ class Article < ApplicationRecord
       transitions from: :published, to: :blocked
     end
 
-    event :unblock, after_commit: :notify_author_unblocked do
+    event :unblock, after_commit: %i[notify_author_unblocked recover_on_chain] do
       transitions from: :blocked, to: :hidden
     end
   end
@@ -227,6 +227,7 @@ class Article < ApplicationRecord
   end
 
   def generate_snapshot
+    return unless published?
     return unless content_changed? || title_changed? || intro_changed? || published_at_changed?
 
     snapshots.create raw: as_json
@@ -258,6 +259,11 @@ class Article < ApplicationRecord
   end
 
   def mark_as_removed_on_chain_async
+    ArticleMarkAsRemovedOnChainWorker.perform_async id
+  end
+
+  def recover_on_chain
+    snapshots.create raw: as_json
   end
 
   private

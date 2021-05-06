@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class PrsTransactionPollAuthorizationWorker
+class PrsTransactionPollPostsWorker
   include Sidekiq::Worker
   sidekiq_options queue: :default, retry: false
 
