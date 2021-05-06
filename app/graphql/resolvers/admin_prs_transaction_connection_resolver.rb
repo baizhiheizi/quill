@@ -10,10 +10,8 @@ module Resolvers
     def resolve(**params)
       transactions =
         case params[:type]
-        when 'PrsAccountAllowTransaction'
-          PrsAccountAllowTransaction.all
-        when 'PrsAccountDenyTransaction'
-          PrsAccountDenyTransaction.all
+        when 'PrsAccountAuthorizationTransaction'
+          PrsAccountAuthorizationTransaction.all
         when 'ArticleSnapshotPrsTransaction'
           ArticleSnapshotPrsTransaction.all
         else

@@ -53,7 +53,7 @@ export default function ArticleSnapshotsComponent(props: {
     {
       dataIndex: 'txId',
       key: 'txId',
-      title: 'Transaction ID',
+      title: 'Tx ID',
     },
     {
       dataIndex: 'signature',

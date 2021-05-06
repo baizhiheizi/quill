@@ -22,10 +22,9 @@ export default function PrsTransactionsPage() {
           <Select.Option value='ArticleSnapshotPrsTransaction'>
             Article
           </Select.Option>
-          <Select.Option value='PrsAccountAllowTransaction'>
-            Allow
+          <Select.Option value='PrsAccountAuthorizationTransaction'>
+            Authorization
           </Select.Option>
-          <Select.Option value='PrsAccountDenyTransaction'>Deny</Select.Option>
         </Select>
       </div>
       <PrsTransactionsComponent type={type} />

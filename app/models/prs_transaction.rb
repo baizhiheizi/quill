@@ -46,7 +46,7 @@ class PrsTransaction < ApplicationRecord
 
   def self.poll_authorizations
     loop do
-      polled_at = PrsTransaction.order(created_at: :desc).first&.raw_updated_at || POLLING_START_TIME
+      polled_at = PrsAccountAuthorizationTransaction.order(created_at: :desc).first&.raw_updated_at || POLLING_START_TIME
       r = Prs.api.pip2001_authorization(count: 50, updated_at: polled_at)
 
       authorizations = r&.[]('data')&.[]('authorization')
@@ -65,7 +65,7 @@ class PrsTransaction < ApplicationRecord
 
   def self.poll_posts
     loop do
-      polled_at = PrsTransaction.order(created_at: :desc).first&.raw_updated_at || POLLING_START_TIME
+      polled_at = ArticleSnapshotPrsTransaction.order(created_at: :desc).first&.raw_updated_at || POLLING_START_TIME
       r = Prs.api.pip2001_posts(count: 50, updated_at: polled_at)
 
       posts = r&.[]('data')&.[]('posts')
@@ -92,17 +92,12 @@ class PrsTransaction < ApplicationRecord
     return if processed?
 
     case type
-    when 'PrsAccountAllowTransaction'
-      account = PrsAccount.find_by(account: user_address)
+    when 'PrsAccountAuthorizationTransaction'
+      account = PrsAccount.find_by(account: data['allow'] || data['deny'])
       return if account.blank?
 
-      account.allow! if account.may_allow?
-      touch_processed_at
-    when 'PrsAccountDenyTransaction'
-      account = PrsAccount.find_by(account: user_address)
-      return if account.blank?
-
-      account.deny! if account.may_deny?
+      account.allow! if data.key?('allow') && account.may_allow?
+      account.deny! if data.key?('deny') && account.may_deny?
       touch_processed_at
     when 'ArticleSnapshotPrsTransaction'
       touch_processed_at
@@ -135,8 +130,7 @@ class PrsTransaction < ApplicationRecord
 
     return unless data.is_a?(Hash)
 
-    self.type = 'PrsAccountAllowTransaction' if data.key?('allow')
-    self.type = 'PrsAccountDenyTransaction' if data.key?('deny')
+    self.type = 'PrsAccountAuthorizationTransaction' if data.key?('allow') || data.key?('deny')
     self.type = 'ArticleSnapshotPrsTransaction' if data.key?('file_hash') || data.key?('updated_tx_id')
   end
 end

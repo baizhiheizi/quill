@@ -242,11 +242,14 @@ class Article < ApplicationRecord
   end
 
   def mark_as_removed_on_chain!
+    return if current_prs_transaction.blank?
+
     Prs.api.sign(
       {
         type: 'PIP:2001',
         meta: {},
         data: {
+          file_hash: Prs.api.hash(''),
           topic: Rails.application.credentials.dig(:prs, :account),
           updated_tx_id: current_prs_transaction.tx_id
         }

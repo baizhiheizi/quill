@@ -5,8 +5,8 @@ module Types
     field :id, ID, null: false
     field :article_uuid, String, null: false
     field :file_hash, String, null: false
-    field :tx_id, String, null: false
-    field :signature_url, String, null: false
+    field :tx_id, String, null: true
+    field :signature_url, String, null: true
 
     field :article, Types::ArticleType, null: false
 

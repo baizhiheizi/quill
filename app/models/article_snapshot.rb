@@ -61,7 +61,7 @@ class ArticleSnapshot < ApplicationRecord
           data: {
             file_hash: file_hash,
             topic: Rails.application.credentials.dig(:prs, :account),
-            updated_tx_id: previous_snapshot.prs_transaction&.tx_id
+            updated_tx_id: previous_snapshot&.prs_transaction&.tx_id
           }
         },
         {
