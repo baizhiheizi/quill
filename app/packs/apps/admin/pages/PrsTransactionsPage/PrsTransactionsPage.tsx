@@ -11,7 +11,7 @@ export default function PrsTransactionsPage() {
   const [type, setType] = useState('all');
   return (
     <>
-      <PageHeader title='Prs Accounts' />
+      <PageHeader title='Prs Transactions' />
       <div className='flex mb-4 space-x-4'>
         <Select
           className='w-72'
