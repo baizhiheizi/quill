@@ -1,0 +1,10 @@
+mutation AdminSignArticleSnapshot(
+  $input: AdminSignArticleSnapshotMutationInput!
+) {
+  adminSignArticleSnapshot(input: $input) {
+    id
+    state
+    requestedAt
+    signedAt
+  }
+}

@@ -2,6 +2,7 @@ query AdminArticleSnapshotConnection($articleUuid: String, $after: String) {
   adminArticleSnapshotConnection(articleUuid: $articleUuid, after: $after) {
     nodes {
       id
+      state
       articleUuid
       fileHash
       txId
@@ -13,6 +14,8 @@ query AdminArticleSnapshotConnection($articleUuid: String, $after: String) {
           name
         }
       }
+      requestedAt
+      signedAt
       createdAt
     }
     pageInfo {

@@ -94,6 +94,8 @@ ActiveRecord::Schema.define(version: 2021_04_27_084021) do
     t.string "tx_id"
     t.text "file_content"
     t.string "state"
+    t.datetime "requested_at"
+    t.datetime "signed_at"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["article_uuid"], name: "index_article_snapshots_on_article_uuid"

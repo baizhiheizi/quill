@@ -9,6 +9,8 @@
 #  file_content :text
 #  file_hash    :string
 #  raw          :json
+#  requested_at :datetime
+#  signed_at    :datetime
 #  state        :string
 #  created_at   :datetime         not null
 #  updated_at   :datetime         not null

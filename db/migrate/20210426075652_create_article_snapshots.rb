@@ -7,6 +7,8 @@ class CreateArticleSnapshots < ActiveRecord::Migration[6.1]
       t.string :tx_id
       t.text :file_content
       t.string :state
+      t.datetime :requested_at
+      t.datetime :signed_at
 
       t.timestamps
     end
