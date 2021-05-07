@@ -56,22 +56,26 @@ export default function ArticleSnapshotsComponent(props: {
       dataIndex: 'fileHash',
       key: 'fileHash',
       render: (text) =>
-        (
+        text ? (
           <Popover content={text} className='w-14 line-clamp-1'>
             {text}
           </Popover>
-        ) || '-',
+        ) : (
+          '-'
+        ),
       title: 'File Hash',
     },
     {
       dataIndex: 'txId',
       key: 'txId',
       render: (text) =>
-        (
+        text ? (
           <Popover content={text} className='w-14 line-clamp-1'>
             {text}
           </Popover>
-        ) || '-',
+        ) : (
+          '-'
+        ),
       title: 'Tx ID',
     },
     {
