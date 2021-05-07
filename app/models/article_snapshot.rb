@@ -31,16 +31,26 @@ class ArticleSnapshot < ApplicationRecord
                             dependent: :restrict_with_error
 
   before_validation :set_defaults, on: :create
-  after_commit :sign_on_chain_async, on: :create
+
+  after_commit on: :create do
+    return unless Rails.application.credentials.dig(:prs, :auto_sign)
+
+    sign_on_chain_async
+  end
 
   delegate :author, to: :article
 
   aasm column: :state do
     state :drafted, initial: true
+    state :signing
     state :signed
 
+    event :request_sign do
+      transitions from: :drafted, to: :signing
+    end
+
     event :sign do
-      transitions from: :drafted, to: :signed
+      transitions from: :signing, to: :signed
     end
   end
 
@@ -53,6 +63,7 @@ class ArticleSnapshot < ApplicationRecord
   end
 
   def sign_on_chain!
+    return unless drafted?
     return unless fresh?
     return unless author.prs_account&.allowed?
     return if author.banned?
@@ -89,6 +100,7 @@ class ArticleSnapshot < ApplicationRecord
 
     block = r['processed']['action_traces'][0]['act']['data']
     update tx_id: block['id']
+    request_sign!
   end
 
   def sign_on_chain_async
