@@ -9,6 +9,8 @@
 #  file_content :text
 #  file_hash    :string
 #  raw          :json
+#  requested_at :datetime
+#  signed_at    :datetime
 #  state        :string
 #  created_at   :datetime         not null
 #  updated_at   :datetime         not null
@@ -45,13 +47,21 @@ class ArticleSnapshot < ApplicationRecord
     state :signing
     state :signed
 
-    event :request_sign do
+    event :request_sign, after_commit: :touch_requested_at do
       transitions from: :drafted, to: :signing
     end
 
-    event :sign do
+    event :sign, after_commit: :touch_signed_at do
       transitions from: :signing, to: :signed
     end
+  end
+
+  def touch_requested_at
+    update requested_at: Time.current
+  end
+
+  def touch_signed_at
+    update signed_at: prs_transaction&.raw_updated_at
   end
 
   def fresh?
@@ -104,7 +114,7 @@ class ArticleSnapshot < ApplicationRecord
   end
 
   def sign_on_chain_async
-    ArticleSnapshotSignOnChainWorker.perform_in 1.minute, id
+    ArticleSnapshotSignOnChainWorker.perform_in 10.minutes, id
   end
 
   def encrypted_file_content

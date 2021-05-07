@@ -134,9 +134,11 @@ function ArticlesComponent(props: { query?: string; state?: string }) {
                 unblock({ variables: { input: { uuid: article.uuid } } })
               }
             >
-              <Button type='link' disabled={unblocking}>
+              <a
+                className={unblocking ? 'cursor-not-allowed' : 'cursor-pointer'}
+              >
                 UnBlock
-              </Button>
+              </a>
             </Popconfirm>
           ) : (
             <Popconfirm
@@ -145,9 +147,9 @@ function ArticlesComponent(props: { query?: string; state?: string }) {
                 block({ variables: { input: { uuid: article.uuid } } })
               }
             >
-              <Button type='link' disabled={blocking}>
+              <a className={blocking ? 'cursor-not-allowed' : 'cursor-pointer'}>
                 Block
-              </Button>
+              </a>
             </Popconfirm>
           )}
           <Divider type='vertical' />

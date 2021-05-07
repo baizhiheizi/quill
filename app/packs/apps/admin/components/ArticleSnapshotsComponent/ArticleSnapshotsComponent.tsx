@@ -1,9 +1,10 @@
-import { Button, Table } from 'antd';
+import { Button, Popconfirm, Popover, Table } from 'antd';
 import { ColumnProps } from 'antd/es/table';
 import LoadingComponent from 'apps/admin/components/LoadingComponent/LoadingComponent';
 import {
   ArticleSnapshot,
   useAdminArticleSnapshotConnectionQuery,
+  useAdminSignArticleSnapshotMutation,
 } from 'graphqlTypes';
 import React from 'react';
 import { Link } from 'react-router-dom';
@@ -15,6 +16,7 @@ export default function ArticleSnapshotsComponent(props: {
   const { loading, data, fetchMore } = useAdminArticleSnapshotConnectionQuery({
     variables: { articleUuid },
   });
+  const [signArticleSnapshot] = useAdminSignArticleSnapshotMutation();
 
   if (loading) {
     return <LoadingComponent />;
@@ -46,13 +48,30 @@ export default function ArticleSnapshotsComponent(props: {
       title: 'Article',
     },
     {
+      dataIndex: 'state',
+      key: 'state',
+      title: 'State',
+    },
+    {
       dataIndex: 'fileHash',
       key: 'fileHash',
+      render: (text) =>
+        (
+          <Popover content={text} className='w-14 line-clamp-1'>
+            {text}
+          </Popover>
+        ) || '-',
       title: 'File Hash',
     },
     {
       dataIndex: 'txId',
       key: 'txId',
+      render: (text) =>
+        (
+          <Popover content={text} className='w-14 line-clamp-1'>
+            {text}
+          </Popover>
+        ) || '-',
       title: 'Tx ID',
     },
     {
@@ -69,9 +88,45 @@ export default function ArticleSnapshotsComponent(props: {
       title: 'signature',
     },
     {
+      dataIndex: 'requestedAt',
+      key: 'requestedAt',
+      render: (text) => text || '-',
+      title: 'requestedAt',
+    },
+    {
+      dataIndex: 'signedAt',
+      key: 'signedAt',
+      render: (text) => text || '-',
+      title: 'signedAt',
+    },
+    {
       dataIndex: 'createdAt',
       key: 'createdAt',
       title: 'CreatedAt',
+    },
+    {
+      dataIndex: 'actions',
+      key: 'actions',
+      render: (_, snapshot) => (
+        <Popconfirm
+          title='Are you sure to sign this snapshot?'
+          disabled={snapshot.state !== 'drafted'}
+          onConfirm={() =>
+            signArticleSnapshot({ variables: { input: { id: snapshot.id } } })
+          }
+        >
+          <span
+            className={
+              snapshot.state === 'drafted'
+                ? 'cursor-pointer'
+                : 'cursor-not-allowed text-gray-500'
+            }
+          >
+            Sign
+          </span>
+        </Popconfirm>
+      ),
+      title: 'Actions',
     },
   ];
 
