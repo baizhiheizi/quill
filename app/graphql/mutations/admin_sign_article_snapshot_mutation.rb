@@ -7,7 +7,10 @@ module Mutations
     type Types::ArticleSnapshotType
 
     def resolve(id:)
-      ArticleSnapshot.find(id).request_sign
+      snapshot = ArticleSnapshot.find(id)
+      snapshot.sign_on_chain!
+
+      snapshot.reload
     end
   end
 end
