@@ -9,6 +9,7 @@
 #  file_content :text
 #  file_hash    :string
 #  raw          :json
+#  state        :string
 #  created_at   :datetime         not null
 #  updated_at   :datetime         not null
 #  tx_id        :string
