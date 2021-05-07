@@ -100,6 +100,10 @@ class PrsTransaction < ApplicationRecord
       account.deny! if data.key?('deny') && account.may_deny?
       touch_processed_at
     when 'ArticleSnapshotPrsTransaction'
+      article_snapshot = ArticleSnapshot.find_by tx_id: tx_id
+      return if article_snapshot.blank?
+
+      article_snapshot.sign! if article_snapshot.may_sign?
       touch_processed_at
     end
   end

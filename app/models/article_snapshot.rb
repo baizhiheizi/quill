@@ -9,6 +9,7 @@
 #  file_content :text
 #  file_hash    :string
 #  raw          :json
+#  state        :string
 #  created_at   :datetime         not null
 #  updated_at   :datetime         not null
 #  tx_id        :string
@@ -19,6 +20,8 @@
 #  index_article_snapshots_on_tx_id         (tx_id) UNIQUE
 #
 class ArticleSnapshot < ApplicationRecord
+  include AASM
+
   has_one_attached :file
 
   belongs_to :article, primary_key: :uuid, foreign_key: :article_uuid, inverse_of: :snapshots
@@ -32,16 +35,30 @@ class ArticleSnapshot < ApplicationRecord
 
   delegate :author, to: :article
 
-  def previous_snapshot
-    article.snapshots.where('created_at < ?', created_at).order(created_at: :desc).first
+  aasm column: :state do
+    state :drafted, initial: true
+    state :signed
+
+    event :sign do
+      transitions from: :drafted, to: :signed
+    end
+  end
+
+  def fresh?
+    article.snapshots.where('created_at > ?', created_at).blank?
+  end
+
+  def previous_signed_snapshot
+    article.snapshots.signed.where('created_at < ?', created_at).order(created_at: :desc).first
   end
 
   def sign_on_chain!
-    upload_encrypted_file_content unless file.attached?
-
-    return if prs_transaction.present?
-    return if author.banned?
+    return unless fresh?
     return unless author.prs_account&.allowed?
+    return if author.banned?
+    return if prs_transaction.present?
+
+    upload_encrypted_file_content unless file.attached?
 
     r =
       Prs.api.sign(
@@ -61,7 +78,7 @@ class ArticleSnapshot < ApplicationRecord
           data: {
             file_hash: file_hash,
             topic: Rails.application.credentials.dig(:prs, :account),
-            updated_tx_id: previous_snapshot&.prs_transaction&.tx_id
+            updated_tx_id: previous_signed_snapshot&.prs_transaction&.tx_id
           }
         },
         {
@@ -75,7 +92,7 @@ class ArticleSnapshot < ApplicationRecord
   end
 
   def sign_on_chain_async
-    ArticleSnapshotSignOnChainWorker.perform_async id
+    ArticleSnapshotSignOnChainWorker.perform_in 1.minute, id
   end
 
   def encrypted_file_content
