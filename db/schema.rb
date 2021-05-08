@@ -285,25 +285,6 @@ ActiveRecord::Schema.define(version: 2021_04_27_084021) do
     t.index ["user_id"], name: "index_prs_accounts_on_user_id"
   end
 
-  create_table "prs_blocks", force: :cascade do |t|
-    t.string "type", comment: "STI"
-    t.string "tx_id"
-    t.string "block_type", default: "PIP:2001"
-    t.jsonb "meta"
-    t.jsonb "data"
-    t.string "hash"
-    t.string "signature"
-    t.integer "block_num"
-    t.string "block_transation_id"
-    t.string "user_address"
-    t.jsonb "raw"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["block_num"], name: "index_prs_blocks_on_block_num", unique: true
-    t.index ["tx_id"], name: "index_prs_blocks_on_tx_id", unique: true
-    t.index ["user_address"], name: "index_prs_blocks_on_user_address"
-  end
-
   create_table "prs_transactions", force: :cascade do |t|
     t.string "type", comment: "STI"
     t.string "tx_id"
@@ -377,16 +358,6 @@ ActiveRecord::Schema.define(version: 2021_04_27_084021) do
     t.index ["source_type", "source_id"], name: "index_transfers_on_source_type_and_source_id"
     t.index ["trace_id"], name: "index_transfers_on_trace_id", unique: true
     t.index ["wallet_id"], name: "index_transfers_on_wallet_id"
-  end
-
-  create_table "user_access_tokens", force: :cascade do |t|
-    t.bigint "user_id"
-    t.uuid "value"
-    t.string "memo", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["user_id"], name: "index_user_access_tokens_on_user_id"
-    t.index ["value"], name: "index_user_access_tokens_on_value", unique: true
   end
 
   create_table "user_authorizations", force: :cascade do |t|
