@@ -45,6 +45,8 @@ class PrsTransaction < ApplicationRecord
   after_commit :process!, on: :create
 
   def self.poll_authorizations
+    return if Rails.application.credentials.dig(:prs, :account).blank?
+
     loop do
       polled_at = PrsAccountAuthorizationTransaction.order(created_at: :desc).first&.raw_updated_at || POLLING_START_TIME
       r = Prs.api.pip2001_authorization(count: 50, updated_at: polled_at)
@@ -64,6 +66,8 @@ class PrsTransaction < ApplicationRecord
   end
 
   def self.poll_posts
+    return if Rails.application.credentials.dig(:prs, :account).blank?
+
     loop do
       polled_at = ArticleSnapshotPrsTransaction.order(created_at: :desc).first&.raw_updated_at || POLLING_START_TIME
       r = Prs.api.pip2001_posts(count: 50, updated_at: polled_at)

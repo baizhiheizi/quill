@@ -72,8 +72,18 @@ class Article < ApplicationRecord
   validate :ensure_price_not_too_low
 
   before_validation :setup_attributes, on: :create
+  after_create :create_wallet!
+  after_save do
+    generate_snapshot if should_generate_snapshot?
+  end
+  after_commit on: :create do
+    notify_authoring_subscribers
+    notify_admin
+    subscribe_comments_for_author
+    update_author_statistics_cache
+  end
 
-  before_save :generate_snapshot
+  delegate :swappable?, to: :currency
 
   default_scope -> { includes(:currency) }
   scope :only_published, -> { where(state: :published) }
@@ -99,16 +109,6 @@ class Article < ApplicationRecord
          )
          .order('popularity DESC, created_at DESC')
   }
-
-  after_create :create_wallet!
-  after_commit :notify_authoring_subscribers,
-               :notify_admin,
-               :subscribe_comments_for_author,
-               :update_author_statistics_cache,
-               :touch_published_at,
-               on: :create
-
-  delegate :swappable?, to: :currency
 
   aasm column: :state do
     state :published, initial: true
@@ -227,10 +227,11 @@ class Article < ApplicationRecord
   end
 
   def generate_snapshot
-    return unless published?
-    return unless content_changed? || title_changed? || intro_changed? || published_at_changed?
-
     snapshots.create raw: as_json
+  end
+
+  def should_generate_snapshot?
+    saved_change_to_content? || saved_change_to_title? || saved_change_to_intro? || saved_change_to_published_at?
   end
 
   def current_prs_transaction
@@ -278,6 +279,8 @@ class Article < ApplicationRecord
       price: price.to_f.round(8),
       uuid: SecureRandom.uuid
     )
+
+    self.published_at = Time.current if published?
   end
 
   def ensure_author_account_normal

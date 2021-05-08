@@ -35,7 +35,7 @@ class ArticleSnapshot < ApplicationRecord
   before_validation :set_defaults, on: :create
 
   after_commit on: :create do
-    sign_on_chain_async if Rails.application.credentials.dig(:prs, :auto_sign)
+    sign_on_chain_async if article.published? && Rails.application.credentials.dig(:prs, :auto_sign)
   end
 
   delegate :author, to: :article

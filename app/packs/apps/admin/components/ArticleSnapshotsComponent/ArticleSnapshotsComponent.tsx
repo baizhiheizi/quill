@@ -16,7 +16,10 @@ export default function ArticleSnapshotsComponent(props: {
   const { loading, data, fetchMore } = useAdminArticleSnapshotConnectionQuery({
     variables: { articleUuid },
   });
-  const [signArticleSnapshot] = useAdminSignArticleSnapshotMutation();
+  const [
+    signArticleSnapshot,
+    { loading: signing },
+  ] = useAdminSignArticleSnapshotMutation();
 
   if (loading) {
     return <LoadingComponent />;
@@ -114,14 +117,14 @@ export default function ArticleSnapshotsComponent(props: {
       render: (_, snapshot) => (
         <Popconfirm
           title='Are you sure to sign this snapshot?'
-          disabled={snapshot.state !== 'drafted'}
+          disabled={snapshot.state !== 'drafted' || signing}
           onConfirm={() =>
             signArticleSnapshot({ variables: { input: { id: snapshot.id } } })
           }
         >
           <span
             className={
-              snapshot.state === 'drafted'
+              snapshot.state === 'drafted' || signing
                 ? 'cursor-pointer'
                 : 'cursor-not-allowed text-gray-500'
             }
