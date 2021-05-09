@@ -2,6 +2,7 @@ import {
   DislikeOutlined,
   HeartOutlined,
   LikeOutlined,
+  LinkOutlined,
   ShareAltOutlined,
 } from '@ant-design/icons';
 import {
@@ -198,11 +199,23 @@ export default function ArticlePage() {
       <div style={{ marginBottom: 20 }}>
         <ArticleTagsComponent tags={article.tags} />
       </div>
-      <div
-        onClick={() => handleArticleShare(article, Boolean(mixinEnv), appId)}
-        style={{ marginBottom: 20, textAlign: 'right' }}
-      >
-        <Button type='link' icon={<ShareAltOutlined />}>
+
+      <div className='flex items-center justify-end mb-4 text-center'>
+        {article.signatureUrl && (
+          <Button
+            type='link'
+            href={article.signatureUrl}
+            target='_blank'
+            icon={<LinkOutlined />}
+          >
+            {t('articlePage.signature')}
+          </Button>
+        )}
+        <Button
+          type='link'
+          icon={<ShareAltOutlined />}
+          onClick={() => handleArticleShare(article, Boolean(mixinEnv), appId)}
+        >
           {t('articlePage.shareBtn')}
         </Button>
       </div>

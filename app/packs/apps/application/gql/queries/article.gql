@@ -23,6 +23,7 @@ query Article($uuid: ID!) {
     partialContent
     walletId
     swappable
+    signatureUrl
     tags {
       id
       name

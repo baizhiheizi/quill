@@ -3918,6 +3918,7 @@ export const ArticleDocument = gql`
     partialContent
     walletId
     swappable
+    signatureUrl
     tags {
       id
       name
