@@ -70,7 +70,7 @@ module Prs
     end
 
     def pip2001_encrypt(content, session_id)
-      hash64 = FNV.new.fnv1a_64(Rails.application.credentials.dig(:prs, :aes_256_cbc, :iv_prefix) + session_id).to_s(16)
+      hash64 = FNV.new.fnv1a_64(Rails.application.credentials.dig(:prs, :aes_256_cbc, :iv_prefix) + session_id).to_s(16).rjust(16, '0')
       cipher_iv = [hash64 + hash64].pack('H*')
       cipher_key = [Rails.application.credentials.dig(:prs, :aes_256_cbc, :key)].pack('H*')
 
