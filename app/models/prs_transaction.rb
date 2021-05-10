@@ -20,7 +20,7 @@
 #
 # Indexes
 #
-#  index_prs_transactions_on_block_num       (block_num) UNIQUE
+#  index_prs_transactions_on_block_num       (block_num)
 #  index_prs_transactions_on_transaction_id  (transaction_id) UNIQUE
 #  index_prs_transactions_on_tx_id           (tx_id) UNIQUE
 #
@@ -39,7 +39,7 @@ class PrsTransaction < ApplicationRecord
 
   validates :raw, presence: true
   validates :tx_id, uniqueness: true
-  validates :block_num, uniqueness: true
+  validates :block_num
   validates :transaction_id, uniqueness: true
 
   after_commit :process!, on: :create
@@ -55,8 +55,7 @@ class PrsTransaction < ApplicationRecord
       break if authorizations.blank?
 
       authorizations.each do |authorization|
-        tx = PrsTransaction.create_with(raw: authorization).find_or_create_by(tx_id: authorization['id'])
-        tx.update raw: authorization if tx.block_num.blank?
+        PrsTransaction.create_with(raw: authorization).find_or_create_by!(tx_id: authorization['id'])
       end
 
       break if authorizations.length < 50
@@ -76,8 +75,7 @@ class PrsTransaction < ApplicationRecord
       break if posts.blank?
 
       posts.each do |post|
-        tx = PrsTransaction.create_with(raw: post).find_or_create_by(tx_id: post['id'])
-        tx.update raw: post if tx.block_num.blank?
+        PrsTransaction.create_with(raw: post).find_or_create_by!(tx_id: post['id'])
       end
 
       break if posts.length < 50
