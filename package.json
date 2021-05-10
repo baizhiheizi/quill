@@ -38,7 +38,7 @@
     "d3-array": "2.12.1",
     "graphql": "^15.5.0",
     "i18next": "^20.2.2",
-    "i18next-browser-languagedetector": "^6.1.0",
+    "i18next-browser-languagedetector": "^6.1.1",
     "ismobilejs": "^1.1.1",
     "js-base64": "^3.6.0",
     "js-yaml": "^4.1.0",
