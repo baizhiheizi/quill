@@ -49,7 +49,7 @@ class PrsAccount < ApplicationRecord
     state :denying
     state :denied
 
-    event :register, after_commit: :allow_on_chain_async do
+    event :register, guards: %i[ensure_account_present], after_commit: :allow_on_chain_async do
       transitions from: :created, to: :registered
     end
 
@@ -141,6 +141,10 @@ class PrsAccount < ApplicationRecord
   end
 
   private
+
+  def ensure_account_present
+    account.present?
+  end
 
   def set_defaults
     return unless new_record?

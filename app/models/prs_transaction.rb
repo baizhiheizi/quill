@@ -39,7 +39,7 @@ class PrsTransaction < ApplicationRecord
 
   validates :raw, presence: true
   validates :tx_id, uniqueness: true
-  validates :block_num
+  validates :block_num, presence: true
   validates :transaction_id, uniqueness: true
 
   after_commit :process!, on: :create
