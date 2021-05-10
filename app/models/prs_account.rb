@@ -44,28 +44,41 @@ class PrsAccount < ApplicationRecord
   aasm column: :status do
     state :created, initial: true
     state :registered
+    state :allowing
     state :allowed
+    state :denying
     state :denied
 
     event :register, after_commit: :allow_on_chain_async do
       transitions from: :created, to: :registered
     end
 
+    event :request_allow do
+      transitions from: :registered, to: :allowing
+      transitions from: :denied, to: :allowing
+    end
+
     event :allow do
       transitions from: :registered, to: :allowed
       transitions from: :denied, to: :allowed
+      transitions from: :allowing, to: :allowed
+    end
+
+    event :request_deny do
+      transitions from: :allowed, to: :denying
     end
 
     event :deny do
+      transitions from: :denying, to: :denied
       transitions from: :allowed, to: :denied
     end
   end
 
   def allow_on_chain!
     return if user.banned?
-    return if allowed?
+    return unless registered? || denied?
 
-    Prs.api.sign(
+    r = Prs.api.sign(
       {
         type: 'PIP:2001',
         meta: {},
@@ -79,6 +92,8 @@ class PrsAccount < ApplicationRecord
         private_key: Rails.application.credentials.dig(:prs, :private_key)
       }
     )
+
+    request_allow! if r['processed']['action_traces'][0]['act']['data'].present?
   end
 
   def allow_on_chain_async
@@ -88,7 +103,7 @@ class PrsAccount < ApplicationRecord
   def deny_on_chain!
     return unless allowed?
 
-    Prs.api.sign(
+    r = Prs.api.sign(
       {
         type: 'PIP:2001',
         meta: {},
@@ -102,6 +117,8 @@ class PrsAccount < ApplicationRecord
         private_key: Rails.application.credentials.dig(:prs, :private_key)
       }
     )
+
+    request_deny! if r['processed']['action_traces'][0]['act']['data'].present?
   end
 
   def deny_on_chain_async
@@ -109,9 +126,14 @@ class PrsAccount < ApplicationRecord
   end
 
   def register_on_chain!
+    return unless created?
+
     r = Prs.api.open_free_account public_key, private_key
-    update! account: r['account']
-    register!
+
+    ActiveRecord::Base.transaction do
+      update! account: r['account']
+      register!
+    end
   end
 
   def register_on_chain_async

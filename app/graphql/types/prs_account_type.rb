@@ -3,7 +3,7 @@
 module Types
   class PrsAccountType < Types::BaseObject
     field :id, ID, null: false
-    field :account, String, null: false
+    field :account, String, null: true
     field :status, String, null: false
     field :public_key, String, null: false
 

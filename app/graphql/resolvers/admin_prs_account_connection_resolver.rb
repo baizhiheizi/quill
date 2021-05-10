@@ -15,8 +15,12 @@ module Resolvers
           PrsAccount.created
         when :registered
           PrsAccount.registered
+        when :allowing
+          PrsAccount.allowing
         when :allowed
           PrsAccount.allowed
+        when :denying
+          PrsAccount.denying
         when :denied
           PrsAccount.denied
         else
@@ -24,7 +28,7 @@ module Resolvers
         end
 
       q = params[:query].to_s.strip
-      q_ransack = { account_cont: q, user_name_cont: q }
+      q_ransack = { account_cont: q, user_name_cont: q, user_mixin_id_cont: q }
 
       prs_accounts = prs_accounts.includes(:user).ransack(q_ransack.merge(m: 'or')).result
 

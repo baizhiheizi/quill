@@ -1,15 +1,5 @@
 import { useDebounce } from 'ahooks';
-import {
-  Avatar,
-  Button,
-  Col,
-  Input,
-  PageHeader,
-  Row,
-  Select,
-  Space,
-  Table,
-} from 'antd';
+import { Avatar, Button, Input, PageHeader, Select, Space, Table } from 'antd';
 import { ColumnProps } from 'antd/lib/table';
 import LoadingComponent from 'apps/admin/components/LoadingComponent/LoadingComponent';
 import { PrsAccount, useAdminPrsAccountConnectionQuery } from 'graphqlTypes';
@@ -31,13 +21,15 @@ export default function PrsAccountsPage() {
           <Select.Option value='all'>All</Select.Option>
           <Select.Option value='created'>Created</Select.Option>
           <Select.Option value='registered'>Registered</Select.Option>
+          <Select.Option value='allowing'>Allowing</Select.Option>
           <Select.Option value='allowed'>Allowed</Select.Option>
+          <Select.Option value='denying'>Denying</Select.Option>
           <Select.Option value='denied'>Denied</Select.Option>
         </Select>
         <Input
           className='w-72'
           value={query}
-          placeholder='Query user name/mixinId'
+          placeholder='account/name/mixinId'
           onChange={(e) => setQuery(e.currentTarget.value)}
         />
       </div>
@@ -75,6 +67,7 @@ export function PrsAccountsComponent(props: {
     {
       dataIndex: 'account',
       key: 'account',
+      render: (text) => text || '-',
       title: 'Account',
     },
     {

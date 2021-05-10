@@ -1138,7 +1138,7 @@ export type PaymentEdge = {
 
 export type PrsAccount = {
   __typename?: 'PrsAccount';
-  account: Scalars['String'];
+  account?: Maybe<Scalars['String']>;
   createdAt: Scalars['ISO8601DateTime'];
   id: Scalars['ID'];
   publicKey: Scalars['String'];
