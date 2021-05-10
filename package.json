@@ -79,7 +79,7 @@
     "@webpack-cli/serve": "^1.4.0",
     "negotiator": "^0.6.2",
     "node-fetch": "^2.6.1",
-    "prettier": "^2.2.1",
+    "prettier": "^2.3.0",
     "webpack-dev-server": "^3.11.2"
   },
   "resolutions": {
