@@ -13,10 +13,10 @@ export default function ArticlesPage() {
   return (
     <div>
       <PageHeader
-        title={t('dashboard.menu.articles')}
+        title={t('articles_manage')}
         extra={[
           <Button key='new' type='primary'>
-            <Link to='/articles/new'>{t('article.form_new_btn')}</Link>
+            <Link to='/articles/new'>{t('new_article')}</Link>
           </Button>,
         ]}
       />
@@ -26,28 +26,16 @@ export default function ArticlesPage() {
           setType(key)
         }
       >
-        <Tabs.TabPane
-          tab={t('dashboard.articles_page.tabs.bought')}
-          key='bought'
-        >
+        <Tabs.TabPane tab={t('bought')} key='bought'>
           <MyBoughtArticlesComponent />
         </Tabs.TabPane>
-        <Tabs.TabPane
-          tab={t('dashboard.articles_page.tabs.published')}
-          key='published'
-        >
+        <Tabs.TabPane tab={t('published')} key='published'>
           <MyArticlesComponent state='published' />
         </Tabs.TabPane>
-        <Tabs.TabPane
-          tab={t('dashboard.articles_page.tabs.hidden')}
-          key='hidden'
-        >
+        <Tabs.TabPane tab={t('hidden')} key='hidden'>
           <MyArticlesComponent state='hidden' />
         </Tabs.TabPane>
-        <Tabs.TabPane
-          tab={t('dashboard.articles_page.tabs.blocked')}
-          key='blocked'
-        >
+        <Tabs.TabPane tab={t('blocked')} key='blocked'>
           <MyArticlesComponent state='blocked' />
         </Tabs.TabPane>
       </Tabs>

@@ -43,7 +43,7 @@ export default function UserPage() {
         </Col>
       </Row>
       <Tabs defaultActiveKey='author'>
-        <Tabs.TabPane tab={t('user_page.tabs.author')} key='author'>
+        <Tabs.TabPane tab={t('published')} key='author'>
           <UserArticlesComponent
             mixinId={user.mixinId}
             authoringSubscribed={user.authoringSubscribed}
@@ -51,7 +51,7 @@ export default function UserPage() {
             type='author'
           />
         </Tabs.TabPane>
-        <Tabs.TabPane tab={t('user_page.tabs.reader')} key='reader'>
+        <Tabs.TabPane tab={t('bought')} key='reader'>
           <UserArticlesComponent
             mixinId={user.mixinId}
             readingSubscribed={user.readingSubscribed}
@@ -59,7 +59,7 @@ export default function UserPage() {
             type='reader'
           />
         </Tabs.TabPane>
-        <Tabs.TabPane tab={t('user_page.tabs.comments')} key='comments'>
+        <Tabs.TabPane tab={t('commented')} key='comments'>
           <UserCommentsComponent authorMixinId={user.mixinId} />
         </Tabs.TabPane>
       </Tabs>

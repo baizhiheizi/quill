@@ -1,4 +1,6 @@
 en:
+  created_at: Created At
+  updated_at: Updated At
   article:
     title: Title
     content: Content
@@ -51,7 +53,7 @@ en:
       refunded: Refunded
       completed: Compelted
     snapshot: Snapshot
-  swapOrder:
+  swap_order:
     state:
       paid: Paid
       swapping: Swapping

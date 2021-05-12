@@ -77,7 +77,7 @@ export default function CommentsComponent(props: {
       if (error) {
         message.error(error);
       } else {
-        message.success(t('messages.success_submitted'));
+        message.success(t('success_submitted'));
         commentForm.setFieldsValue({ content: '' });
         refetch({ commentableId, commentableType, orderBy: 'desc' });
         setOrderBy('desc');
@@ -112,12 +112,10 @@ export default function CommentsComponent(props: {
 
   return (
     <div>
-      <Row justify='center'>
-        <Col>
-          <h3>{t('comments_component.title')}</h3>
-        </Col>
-      </Row>
-      <Row justify='center' style={{ marginBottom: '1rem' }}>
+      <div className='flex items-center justify-center mb-2'>
+        <h3>{t('comments')}</h3>
+      </div>
+      <div className='flex items-center justify-center mb-2'>
         {authorized && (
           <Button
             type='dashed'
@@ -131,31 +129,21 @@ export default function CommentsComponent(props: {
             }
             icon={<AlertOutlined />}
           >
-            {commentingSubscribed
-              ? t('comments_component.unsubscribe_btn')
-              : t('comments_component.subscribe_btn')}
+            {commentingSubscribed ? t('unsubscribe') : t('subscribe')}
           </Button>
         )}
-      </Row>
-      <Row justify='end'>
-        <Col>
-          <Select
-            value={orderBy}
-            bordered={false}
-            onSelect={(value) => setOrderBy(value)}
-          >
-            <Select.Option value='desc'>
-              {t('comments_component.order_by.desc')}
-            </Select.Option>
-            <Select.Option value='asc'>
-              {t('commentsComponent.orderBy.asc')}
-            </Select.Option>
-            <Select.Option value='upvotes'>
-              {t('commentsComponent.orderBy.upvotes')}
-            </Select.Option>
-          </Select>
-        </Col>
-      </Row>
+      </div>
+      <div className='flex items-center justify-end'>
+        <Select
+          value={orderBy}
+          bordered={false}
+          onSelect={(value) => setOrderBy(value)}
+        >
+          <Select.Option value='desc'>{t('desc')}</Select.Option>
+          <Select.Option value='asc'>{t('asc')}</Select.Option>
+          <Select.Option value='upvotes'>{t('upvotes')}</Select.Option>
+        </Select>
+      </div>
       <List
         style={{ marginBottom: 30 }}
         dataSource={comments}
@@ -175,7 +163,7 @@ export default function CommentsComponent(props: {
             }}
           />
         }
-        locale={{ emptyText: t('commentsComponent.emptyText') }}
+        locale={{ emptyText: t('no_comments') }}
         renderItem={(comment: Partial<IComment>) => (
           <li
             id={`comment-${comment.id}`}
@@ -189,7 +177,7 @@ export default function CommentsComponent(props: {
                   textDecoration: 'line-through',
                 }}
               >
-                {t('commentsComponent.deletedText')}
+                {t('comment_deleted')}
               </div>
             ) : (
               <Comment
@@ -251,7 +239,7 @@ ${comment.content.replace(/^/gm, '> ')}
                       }
                     }}
                   >
-                    {t('commentsComponent.quoteBtn')}
+                    {t('quote')}
                   </span>,
                 ]}
                 author={comment.author.name}
@@ -282,14 +270,14 @@ ${comment.content.replace(/^/gm, '> ')}
           }}
           onFinish={(values) => {
             if (!Boolean(values.content)) {
-              message.warn(t('commentsComponent.form.warning'));
+              message.warn(t('write_something_first'));
             } else {
               Modal.confirm({
-                title: t('commentsComponent.form.confirm'),
+                title: t('confirm_to_submit'),
                 centered: true,
                 onOk: () => createComment({ variables: { input: values } }),
-                cancelText: t('commentsComponent.form.cancelText'),
-                okText: t('commentsComponent.form.okText'),
+                cancelText: t('later'),
+                okText: t('submit'),
               });
             }
           }}
@@ -303,7 +291,7 @@ ${comment.content.replace(/^/gm, '> ')}
           <Form.Item name='content'>
             <Editor
               textareaProps={{
-                placeholder: t('commentsComponent.form.placeholder'),
+                placeholder: t('markdown_supported'),
               }}
               autoFocus={false}
               preview='edit'
@@ -323,7 +311,7 @@ ${comment.content.replace(/^/gm, '> ')}
           </Form.Item>
           <Form.Item style={{ textAlign: 'center' }}>
             <Button type='primary' htmlType='submit'>
-              {t('commentsComponent.form.okText')}
+              {t('submit')}
             </Button>
           </Form.Item>
         </Form>

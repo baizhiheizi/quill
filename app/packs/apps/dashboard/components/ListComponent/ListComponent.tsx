@@ -29,7 +29,7 @@ export default function ListComponent(props: {
             }}
           >
             <Button loading={loading} onClick={fetchMore}>
-              {t('common.load_more')}
+              {t('load_more')}
             </Button>
           </div>
         )

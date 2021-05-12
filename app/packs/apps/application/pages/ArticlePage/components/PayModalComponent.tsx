@@ -83,17 +83,13 @@ export default function PayModalComponent(props: {
         <QRCode value={url} size={200} />
       </div>
       <div style={{ color: '#aaa', marginBottom: 5 }}>
-        {type === 'pay'
-          ? t('messages.pay_with_messenger')
-          : t('messages.view_with_messenger')}
+        {type === 'pay' ? t('pay_with_messenger') : t('view_with_messenger')}
       </div>
       <div>
         <Button type='primary' loading={paying} onClick={handlePaying}>
           {paying
-            ? `${Math.round(countdown / 1000)} s ${t(
-                'articlePage.payModal.pollingPayment',
-              )}`
-            : t('article_page.pay_modal.check_payment_btn')}
+            ? `${Math.round(countdown / 1000)} s ${t('polling_payment')}`
+            : t('already_paid')}
         </Button>
       </div>
     </div>
@@ -118,7 +114,7 @@ export default function PayModalComponent(props: {
   return (
     <Modal
       className='pay-modal'
-      title={t('article_page.pay_modal.title')}
+      title={t('buy_article')}
       centered
       closable={false}
       destroyOnClose={true}
@@ -159,7 +155,7 @@ export default function PayModalComponent(props: {
               </Space>
               {currency.assetId !== articleAssetId && (
                 <div style={{ color: '#aaa' }}>
-                  {t('article_page.pay_modal.swap_explain')}{' '}
+                  {t('swap_supported_by')}{' '}
                   <a
                     href={
                       mixinEnv
@@ -174,11 +170,7 @@ export default function PayModalComponent(props: {
               )}
             </div>
             {payment?.state === 'refunded' ? (
-              <Alert
-                message={t('article_page.pay_modal.refund_warning')}
-                showIcon
-                type='warning'
-              />
+              <Alert message={t('refund_warning')} showIcon type='warning' />
             ) : (
               <div>
                 {mixinEnv ? (
@@ -191,9 +183,9 @@ export default function PayModalComponent(props: {
                   >
                     {paying
                       ? `${Math.round(countdown / 1000)} s ${t(
-                          'articlePage.payModal.pollingPayment',
+                          'polling_payment',
                         )}`
-                      : t('article_page.pay_modal.pay_btn')}
+                      : t('pay')}
                   </Button>
                 ) : (
                   <PayUrlQRCode url={payUrl} />
@@ -213,7 +205,7 @@ export default function PayModalComponent(props: {
                   }
                 }}
               >
-                {t('common.cancel_btn')}
+                {t('cancel')}
               </Button>
             </div>
           </div>

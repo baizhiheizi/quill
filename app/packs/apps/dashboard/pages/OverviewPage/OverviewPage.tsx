@@ -18,7 +18,7 @@ export default function OverviewPage() {
 
   return (
     <div>
-      <PageHeader title={t('dashboard.menu.overview')} />
+      <PageHeader title={t('overview')} />
       <Row gutter={16} style={{ textAlign: 'center' }}>
         <Col xs={12} sm={6}>
           <Statistic
@@ -34,7 +34,7 @@ export default function OverviewPage() {
         </Col>
       </Row>
       <Row gutter={16} style={{ textAlign: 'center' }}>
-        <Tooltip title={t('dashboard.overview_page.present_value')}>
+        <Tooltip title={t('present_value')}>
           <Col xs={12} sm={6}>
             <Statistic
               title={t('user.author_revenue_total')}
@@ -42,7 +42,7 @@ export default function OverviewPage() {
             />
           </Col>
         </Tooltip>
-        <Tooltip title={t('dashboard.overview_page.present_value')}>
+        <Tooltip title={t('present_value')}>
           <Col xs={12} sm={6}>
             <Statistic
               title={t('user.reader_revenue_total')}
@@ -50,7 +50,7 @@ export default function OverviewPage() {
             />
           </Col>
         </Tooltip>
-        <Tooltip title={t('dashboard.overview_page.per_price_when_paid')}>
+        <Tooltip title={t('per_price_when_paid')}>
           <Col xs={12} sm={6}>
             <Statistic
               title={t('user.payment_total_usd')}

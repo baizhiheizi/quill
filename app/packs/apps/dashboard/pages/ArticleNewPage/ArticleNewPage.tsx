@@ -47,7 +47,7 @@ export default function ArticleNewPage() {
       if (error) {
         message.error(error);
       } else {
-        message.success(t('messages.success_submitted'));
+        message.success(t('success_submitted'));
         history.replace('/articles');
       }
     },
@@ -63,11 +63,11 @@ export default function ArticleNewPage() {
   return (
     <div>
       <PageHeader
-        title={t('dashboard.pages.article_new')}
+        title={t('new_article')}
         breadcrumb={{
           routes: [
-            { path: '/articles', breadcrumbName: t('dashboard.menu.articles') },
-            { path: '', breadcrumbName: t('dashboard.pages.article_new') },
+            { path: '/articles', breadcrumbName: t('articles_manage') },
+            { path: '', breadcrumbName: t('new_article') },
           ],
           itemRender: (route, _params, routes, _paths) => {
             const last = routes.indexOf(route) === routes.length - 1;

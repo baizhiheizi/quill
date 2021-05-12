@@ -52,7 +52,7 @@ export default function ArticleOrdersComponent(props: {
                   });
                 }}
               >
-                {t('common.load_more')}
+                {t('load_more')}
               </Button>
             </div>
           )
@@ -69,8 +69,8 @@ export default function ArticleOrdersComponent(props: {
               </span>
               <span>
                 {orderType == 'buy_article'
-                  ? t('dashboard.article_page.bought_article')
-                  : t('dashboard.article_page.rewarded_article')}
+                  ? t('bought_article')
+                  : t('rewarded_article')}
               </span>
             </Space>
             <div style={{ marginLeft: 'auto', color: '#aaa' }}>

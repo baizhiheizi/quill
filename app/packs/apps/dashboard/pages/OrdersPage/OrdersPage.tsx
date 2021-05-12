@@ -9,18 +9,12 @@ export default function OrdersPage() {
 
   return (
     <div>
-      <PageHeader title={t('dashboard.menu.orders')} />
+      <PageHeader title={t('orders_manage')} />
       <Tabs>
-        <Tabs.TabPane
-          tab={t('dashboard.orders_page.tabs.payments')}
-          key='payments'
-        >
+        <Tabs.TabPane tab={t('payments')} key='payments'>
           <MyPaymentsComponent />
         </Tabs.TabPane>
-        <Tabs.TabPane
-          tab={t('dashboard.orders_page.tabs.swap_orders')}
-          key='swapOrders'
-        >
+        <Tabs.TabPane tab={t('swap_orders')} key='swapOrders'>
           <MySwapOrderComponent />
         </Tabs.TabPane>
       </Tabs>

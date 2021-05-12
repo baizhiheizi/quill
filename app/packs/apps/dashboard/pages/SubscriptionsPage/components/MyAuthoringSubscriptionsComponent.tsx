@@ -42,14 +42,14 @@ export default function MyAuthoringSubscriptionsComponent() {
           key={user.id}
           actions={[
             <Popconfirm
-              title={t('dashboard.subscriptions_page.confirm_to_unsubscribe')}
+              title={t('confirm_to_unsubscribe')}
               onConfirm={() =>
                 toggleAuthoringSubscribeUserAction({
                   variables: { input: { mixinId: user.mixinId } },
                 })
               }
             >
-              <Button size='small'>{t('common.unsubscribe_btn')}</Button>
+              <Button size='small'>{t('unsubscribe_btn')}</Button>
             </Popconfirm>,
           ]}
         >
@@ -66,7 +66,7 @@ export default function MyAuthoringSubscriptionsComponent() {
                   user.statistics.articlesCount
                 }`}
                 {`${t(
-                  'user.authorRevenueTotal',
+                  'user.author_revenue_total',
                 )}: ${user.statistics.authorRevenueTotalUsd.toFixed(2)}`}
               </Space>
             }

@@ -75,9 +75,7 @@ export default function TagPage() {
               })
             }
           >
-            {tag.subscribed
-              ? t('common.unsubscribe_btn')
-              : t('common.subscribe_btn')}
+            {tag.subscribed ? t('unsubscribe') : t('subscribe')}
           </Button>
           <Button
             onClick={() => handleTagShare(tag, mixinEnv, appId)}
@@ -85,7 +83,7 @@ export default function TagPage() {
             size='small'
             icon={<ShareAltOutlined />}
           >
-            {t('common.share_btn')}
+            {t('share')}
           </Button>
         </div>
       </Card>

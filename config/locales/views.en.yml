@@ -1,239 +1,180 @@
 en:
-  common:
-    load_more: Load More
-    subscribe_btn: Subscribe
-    unsubscribe_btn: Unsubscribe
-    share_btn: Share
-    detail_btn: Detail
-    edit_btn: Edit
-    view_btn: View
-    cancel_btn: Cancel
-    paid_btn: Paid
-    delete_btn: Delete
-  messages:
-    pay_with_messenger: Please scan the QRCode using Mixin Messenger
-    view_with_messenger: Please scan the QRCode using Mixin Messenger
-    success_submitted: Submitted
-    success_subscribed: Subscribed
-    success_unsubscribed: Unsubscribed
-    success_hidden_article: Article hidden
-    success_published_article: Article published
-    success_updated: Successfully updated
-    success_copied: Successfully copied
-    success_deleted: Successfully deleted
-  menu:
-    read: Read
-    write: Write
-    search: Search
-    rules: Rules
-    fair: Fair
-    community: Community
-    open_source: Open Source
-    notifications: Notifications
-    mine: Dashboard
-    login: Login
-    logout: Logout
-  home_page:
-    popularity: Popularity
-    lately: Lately
-    revenue: Revenue
-    tags: Tags
-    comments_zone: Comments
-  article_page:
-    more_to_read: 90% More to go
-    pay_to_read1: Pay
-    pay_to_read2: to continue reading
-    pay_to_read3: and receive early reader revenue (Check
-    pay_to_read4: )
-    pay_warning: This article is a virtural product selling on PRSDigg, IT WILL NOT REFUND once paid. Please pay with caution.
-    first_reader_btn: Be the FIRST reader
-    pay_to_read_btn: Pay to Read
-    already_paid1: Already paid? Try to
-    already_paid2: Refresh
-    pay_via_swap_tips: You can pay with other token!
-    login_btn: Please Login
-    reward_btn: Love this Article
-    share_btn: Share
-    signature: Signature
-    user_detail_btn: Detail
-    payModal:
-      title: Buy Article
-      refund_warning: Payment has been refunded. Please try again.
-      polling_payment: Checking Payment Status
-      pay_btn: Pay
-      check_payment_btn: Already Paid
-      swap_explain: Swap supported by
-    reward_modal:
-      title: Reward
-      polling_payment: Checking
-      success_paid_message: Payment received. Thanks for supporting!
-      swap_explain: Swap supported by
-      finish_text: Finish
-      ok_text: Reward
-      cancel_text: Later
-    times_bought: times bought
-    times_reward: times reward
-  user_page:
-    tabs:
-      author: Published
-      reader: Bought
-      comments: Commented
-  minePage:
-    publish_confirm: Are you sure to publish this article?
-    hide_confirm: Are you sure to hide this article? Early readers not affected.
-    publish_btn: Publish
-    hide_btn: Hide
-    tabs:
-      author: Published
-      reader: Bought
-      comments: Commented
-      payments: Payments
-      transfers: Revenue
-  search_page:
-    enter_btn: Search
-    placeholder: Input title/introduction/author/tag
-  fair_page:
-    users_count: Users
-    articles_count: Articles
-    author_revenue_total: Author Revenue(Present Value)
-    reader_revenue_total: Reader Revenue(Present Value)
-    tabs:
-      revenue:
-        title: PRSDigg Revenue
-        chart_title: Revenue Chart(USD)
-      transfers:
-        title: Transactions
-  rules_page:
-    content: |
-      ### Rules of PRSDigg
+  load_more: Load More
+  subscribe_btn: Subscribe
+  unsubscribe_btn: Unsubscribe
+  share: Share
+  detail: Detail
+  edit: Edit
+  view: View
+  cancel: Cancel
+  paid: Paid
+  delete: Delete
+  pay_with_messenger: Please scan the QRCode using Mixin Messenger
+  view_with_messenger: Please scan the QRCode using Mixin Messenger
+  success_submitted: Submitted
+  success_subscribed: Subscribed
+  success_unsubscribed: Unsubscribed
+  success_hidden_article: Article hidden
+  success_published_article: Article published
+  success_updated: Successfully updated
+  success_copied: Successfully copied
+  success_deleted: Successfully deleted
+  success_paid: Payment received.
+  read: Read
+  write: Write
+  search: Search
+  rules: Rules
+  fair: Fair
+  community: Community
+  open_source: Open Source
+  dashboard: Dashboard
+  login: Login
+  logout: Logout
+  order_by_popularity: Popularity
+  order_by_lately: Lately
+  order_by_revenue: Revenue
+  tags: Tags
+  comments_zone: Comments
+  more_to_read: 90% More to go
+  pay: Pay
+  to_continue_reading: to continue reading
+  and_receive_early_reader_revenue: and receive early reader revenue
+  pay_warning: This article is a virtural product selling on PRSDigg, IT WILL NOT REFUND once paid. Please pay with caution.
+  be_the_first_reader: Be the FIRST reader
+  pay_to_read: Pay to Read
+  already_paid1: Already paid? Try to
+  already_paid2: Refresh
+  pay_via_swap_tips: You can pay with other token!
+  please_login: Please Login
+  love_thie_article: Love this Article
+  share: Share
+  signature: Signature
+  swap_supported_by: Swap supported by
+  already_paid: Already Paid
+  polling_payment: Checking Payment Status
+  refund_warning: Payment has been refunded. Please try again.
+  buy_article: Buy Article
+  reward: Reward
+  finish: Finish
+  later: Later
+  times_bought: times bought
+  times_reward: times reward
+  published: Published
+  bought: Bought
+  commented: Commented
+  search: Search
+  search_placeholder: Input title/introduction/author/tag
+  users_count: Users
+  articles_count: Articles
+  author_revenue_total: Author Revenue(Present Value)
+  reader_revenue_total: Reader Revenue(Present Value)
+  platform_revenue: PRSDigg Revenue
+  revenue_chart: Revenue Chart(USD)
+  transactions: Transactions
+  rules_content: |
+    ### Rules of PRSDigg
 
-      PRSDigg tries to build a win-win **platform** for both **authors** and **readers**.
+    PRSDigg tries to build a win-win **platform** for both **authors** and **readers**.
 
-      We believe that the value of an article is composed of both the author and the reader, but the actual situation is that the reader's contribution, especially the early readers' contribution,is not well represented. Therefore, the biggest difference between PRSDigg and other platforms is that PRSDigg introduces an **early reader rewards** mechanism.
+    We believe that the value of an article is composed of both the author and the reader, but the actual situation is that the reader's contribution, especially the early readers' contribution,is not well represented. Therefore, the biggest difference between PRSDigg and other platforms is that PRSDigg introduces an **early reader rewards** mechanism.
 
-      The specific rules are as follows,
+    The specific rules are as follows,
 
-      1. Users can publish articles on the **platform** and become **authors**.
-      2. All articles are paid articles, priced by *PressOne Token* or *Bitcoin*.
-      3. Users can pay for the articles, i.e. become a **reader** of a article.
-      4. For every new income from an article, 40% will be allocated to each **early reader** on a pro-rata basis as **Early Reader Bonus** , 10% will be a handling fee for the **platform**, and the rest will be revenue for the **author**.
-      5. **Readers** can also increase the amount they pay for an article by means of a reward in order to increase their share of the bonus.
+    1. Users can publish articles on the **platform** and become **authors**.
+    2. All articles are paid articles, priced by *PressOne Token* or *Bitcoin*.
+    3. Users can pay for the articles, i.e. become a **reader** of a article.
+    4. For every new income from an article, 40% will be allocated to each **early reader** on a pro-rata basis as **Early Reader Bonus** , 10% will be a handling fee for the **platform**, and the rest will be revenue for the **author**.
+    5. **Readers** can also increase the amount they pay for an article by means of a reward in order to increase their share of the bonus.
 
-      For example: 
+    For example: 
 
-      User A published an article X pricing 10 PRS on the platform. 
+    User A published an article X pricing 10 PRS on the platform. 
 
-      User B paid 10 PRS for article X and got the right to read the article. 
+    User B paid 10 PRS for article X and got the right to read the article. 
 
-      Therefore, article X earned 10 PRS, because B is the first reader and there is no earlier reader, so there is no early reader bonus; 1 PRS(10%) is used as the platform's handling fee; The remaining 9 PRS are all taken as author revenue and transferred to the account of author A.
+    Therefore, article X earned 10 PRS, because B is the first reader and there is no earlier reader, so there is no early reader bonus; 1 PRS(10%) is used as the platform's handling fee; The remaining 9 PRS are all taken as author revenue and transferred to the account of author A.
 
-      User C paid 10 PRS for article x after B. As a result, Article X earns another 10 PRS.
+    User C paid 10 PRS for article x after B. As a result, Article X earns another 10 PRS.
 
-      Among them, 4 PRS(40%) will be used as an early reader bonus. At this time, there is only one early reader,  user B, so B monopolizes this 40% reward; The platform also receives 1 PRS(10%) as a handling fee; The remaining 5 PRS is the author's income. 
+    Among them, 4 PRS(40%) will be used as an early reader bonus. At this time, there is only one early reader,  user B, so B monopolizes this 40% reward; The platform also receives 1 PRS(10%) as a handling fee; The remaining 5 PRS is the author's income. 
 
-      After C, user D also paid 10 PRS for article X.
+    After C, user D also paid 10 PRS for article X.
 
-      Similarly, 4 PRS(40%) will be rewarded as early readers bonus. At this time, there are two early readers, namely B and C, who paid 10 PRS for article X before, so both B and C will be rewarded with `4 * 10/(10+10) = 2` PRS respectively. 
+    Similarly, 4 PRS(40%) will be rewarded as early readers bonus. At this time, there are two early readers, namely B and C, who paid 10 PRS for article X before, so both B and C will be rewarded with `4 * 10/(10+10) = 2` PRS respectively. 
 
-      The platform also charges 1 PRS(10%) as a handling fee; The remaining 5 PRS is the author's income. 
+    The platform also charges 1 PRS(10%) as a handling fee; The remaining 5 PRS is the author's income. 
 
-      And so on. 
+    And so on. 
 
-      It is worth reminding that besides the payment for articles, the income from other payment behaviors (such as reward) will also be included in the distribution ratio of early readers' bonus.
-  community_page:
-    mixin: Mixin Group
-  comments_component:
-    title: Comments
-    subscribe_btn: Subscribe
-    unsubscribe_btn: Unsubscribe
-    empty_text: No Comments
-    deleted_text: Deleted by the Administrator
-    quote_btn: Quote
-    from: From
-    order_by:
-      desc: DESC
-      asc: ASC
-      upvotes: Upvotes
-    form:
-      warning: Write something first.
-      confirm: Are you sure to submit?
-      ok_text: Submit
-      cancel_text: Later
-      placeholder: Markdown supported
-  dashboard:
-    menu:
-      overview: Overview
-      notifications: Notifications
-      settings: Settings
-      articles: Artciels Manage
-      subscriptions: Subscriptions
-      revenue: Revenue Manage
-      orders: Orders Manage
-      comments: Comments Manage
-      back: Go Back
-    pages:
-      article: Article Detail
-      article_new: New Article
-      article_edit: Edite Article
-    notifications_page:
-      clear_all_btn: Clear All
-      read_all_btn: Read All
-    articles_page:
-      publish_confirm: Are you sure to publish this article?
-      hide_confirm: Are you sure to hide this article? Early readers not affected.
-      publish_btn: Publish
-      hide_btn: Hide
-      tabs:
-        published: Published
-        bought: Bought
-        hidden: Hidden
-        blocked: Blocked
-    article_page:
-      tabs:
-        buy_records: Buy Records
-        reward_records: Reward Records
-        comment_records: Comments
-      bought_article: bought this article
-      rewarded_article: rewarded this article
-      paid: paid
-    subscriptions_page:
-      authoring_subscriptions: Authors
-      authoring_subscriptions_tip: You will be notified when authors publish new articles
-      reading_subscriptions: Readers
-      reading_subscriptions_tip: You will be notified when readers buy new articles
-      commenting_subscriptions: Comments
-      commenting_subscriptions_tip: You will be notified when articles receive new comments
-      tag_subscriptions: Tags
-      tag_subscriptions_tip: You will be notified when tagged articles created
-      confirm_to_unsubscribe: Are you sure to unsubscribe?
-    revenue_page:
-      author_transfers: Author Revenue
-      reader_transfers: Reader Revenue
-      payments: Payments
-    orders_page:
-      tabs:
-        payments: Payments
-        swap_orders: Swap Orders
-    settings_page:
-      tabs:
-        notification: Notification
-        access_token: Access Token
-      notification:
-        tips_of_general: You can customized your notification via Web, Mixin Bot and Webhook(on development).
-        tips_of_article_published: When your subscribed authors publish a new article, you will be notified.
-        tips_of_article_bought: When your subscribed readers buy a new article, you will be notified.
-        tips_of_article_rewarded: When your subscribed readers reward a new article, you will be notified.
-        tips_of_tagging_created: When new article tagged by your subscribed tags, you will be notified.
-        tips_of_comment_created: When your subscribed article are commented, you will be notified.
-        tips_of_transfer_processed: When new transfers(including revenue from articles and refunding) received, you will be notified.
-      access_token:
-        confirm_generate_token: You can provide an Access Token to a third-party application to manage your articles. Are you sure to generate a new Access Token？
-        generate_token: Generate New Token
-        memo_placeholader: Memo for the Access Token
-        generated_tips: A new Access Token generated!
-        security_tips: Please keep your Access Token safe. The token will not display once close. Generate a new one if you lose it.
-        delete_confirm_tips: Are you sure to DELETE the Access Token?
-        copy_btn: Copy
-    overview_page:
-      present_value: Per present value
-      per_price_when_paid: Per the price when paid
+    It is worth reminding that besides the payment for articles, the income from other payment behaviors (such as reward) will also be included in the distribution ratio of early readers' bonus.
+  mixin_group: Mixin Group
+  comments: Comments
+  subscribe: Subscribe
+  unsubscribe: Unsubscribe
+  no_comments: No Comments
+  comment_deleted: Deleted by the Administrator
+  quote: Quote
+  from: From
+  desc: DESC
+  asc: ASC
+  upvotes: Upvotes
+  write_something_first: Write something first.
+  confirm_to_submit: Are you sure to submit?
+  submit: Submit
+  markdown_supported: Markdown supported
+  overview: Overview
+  notifications_manage: Notifications
+  settings: Settings
+  articles_manage: Artciels Manage
+  subscriptions_manage: Subscriptions
+  revenue_manage: Revenue Manage
+  orders: Orders Manage
+  comments: Comments Manage
+  back: Go Back
+  article_detail: Article Detail
+  new_article: New Article
+  edit_article: Edite Article
+  clear_all: Clear All
+  read_all: Read All
+  confirm_to_publish: Are you sure to publish this article?
+  confirm_to_hide: Are you sure to hide this article? Early readers not affected.
+  publish: Publish
+  hide: Hide
+  hidden: Hidden
+  blocked: Blocked
+  buy_records: Buy Records
+  reward_records: Reward Records
+  comment_records: Comments
+  bought_article: bought this article
+  rewarded_article: rewarded this article
+  paid: paid
+  authoring_subscriptions: Authors
+  authoring_subscriptions_tip: You will be notified when authors publish new articles
+  reading_subscriptions: Readers
+  reading_subscriptions_tip: You will be notified when readers buy new articles
+  commenting_subscriptions: Comments
+  commenting_subscriptions_tip: You will be notified when articles receive new comments
+  tag_subscriptions: Tags
+  tag_subscriptions_tip: You will be notified when tagged articles created
+  confirm_to_unsubscribe: Are you sure to unsubscribe?
+  author_transfers: Author Revenue
+  reader_transfers: Reader Revenue
+  payments: Payments
+  swap_orders: Swap Orders
+  access_token: Access Token
+  tips_of_general_notifications: You can customized your notification via Web, Mixin Bot and Webhook(on development).
+  tips_of_article_published_notifications: When your subscribed authors publish a new article, you will be notified.
+  tips_of_article_bought_notifications: When your subscribed readers buy a new article, you will be notified.
+  tips_of_article_rewarded_notifications: When your subscribed readers reward a new article, you will be notified.
+  tips_of_tagging_created_notifications: When new article tagged by your subscribed tags, you will be notified.
+  tips_of_comment_created_notifications: When your subscribed article are commented, you will be notified.
+  tips_of_transfer_processed_notifications: When new transfers(including revenue from articles and refunding) received, you will be notified.
+  confirm_to_generate_token: You can provide an Access Token to a third-party application to manage your articles. Are you sure to generate a new Access Token？
+  generate_new_token: Generate New Token
+  token_memo_placeholader: Memo for the Access Token
+  token_generated_tips: A new Access Token generated!
+  token_security_tips: Please keep your Access Token safe. The token will not display once close. Generate a new one if you lose it.
+  confirm_to_delete_token: Are you sure to DELETE the Access Token?
+  copy: Copy
+  present_value: Per present value
+  per_price_when_paid: Per the price when paid

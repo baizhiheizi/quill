@@ -64,7 +64,7 @@ export default function CommentsComponent() {
               datetime={<span>{moment(comment.createdAt).fromNow()}</span>}
               actions={[
                 <span>
-                  {t('comments_component.from')}: {` `}
+                  {t('from')}: {` `}
                   <Link
                     style={{ color: 'inherit' }}
                     to={`/articles/${comment.commentable.uuid}`}

@@ -42,14 +42,14 @@ export default function MyTagSubscriptionsComponent() {
           key={tag.id}
           actions={[
             <Popconfirm
-              title={t('dashboard.subscriptions_page.confirm_to_unsubscribe')}
+              title={t('confirm_to_unsubscribe')}
               onConfirm={() =>
                 toggleTagSubscribeUserAction({
                   variables: { input: { mixinId: tag.id } },
                 })
               }
             >
-              <Button size='small'>{t('common.unsubscribe_btn')}</Button>
+              <Button size='small'>{t('unsubscribe')}</Button>
             </Popconfirm>,
           ]}
         >

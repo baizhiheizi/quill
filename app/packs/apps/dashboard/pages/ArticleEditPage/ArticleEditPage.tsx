@@ -43,7 +43,7 @@ export default function ArticleEditPage() {
       if (err) {
         message.error(err);
       } else {
-        message.success(t('messages.success_submitted'));
+        message.success(t('success_submitted'));
         history.replace(`/articles/${uuid}`);
       }
     },
@@ -62,12 +62,12 @@ export default function ArticleEditPage() {
   return (
     <div>
       <PageHeader
-        title={t('dashboard.pages.article_edit')}
+        title={t('edit_article')}
         breadcrumb={{
           routes: [
-            { path: '/articles', breadcrumbName: t('dashboard.menu.articles') },
+            { path: '/articles', breadcrumbName: t('articles_manage') },
             { path: `/articles/${uuid}`, breadcrumbName: myArticle.title },
-            { path: '', breadcrumbName: t('dashboard.pages.articleEdit') },
+            { path: '', breadcrumbName: t('edit_article') },
           ],
           itemRender: (route, _params, routes, _paths) => {
             const last = routes.indexOf(route) === routes.length - 1;

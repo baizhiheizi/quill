@@ -46,7 +46,7 @@ export default function AccessTokensComponent() {
     update(_, { data: { deleteAccessToken: res } }) {
       refetch();
       if (res) {
-        message.success(t('messages.success_deleted'));
+        message.success(t('success_deleted'));
       }
     },
   });
@@ -70,11 +70,11 @@ export default function AccessTokensComponent() {
             type='success'
             showIcon
             closable
-            message={t('dashboard.settings_page.access_token.generated_tips')}
+            message={t('token_generated_tips')}
             description={
               <>
                 <Typography.Text className='block mb-2' type='danger'>
-                  {t('dashboard.settings_page.access_token.security_tips')}
+                  {t('token_security_tips')}
                 </Typography.Text>
                 <div className='flex'>
                   <Typography.Text code>{newAccessToken.value}</Typography.Text>
@@ -83,10 +83,10 @@ export default function AccessTokensComponent() {
                     size='small'
                     onClick={() => {
                       copy(newAccessToken.value);
-                      message.success(t('messages.success_copied'));
+                      message.success(t('success_copied'));
                     }}
                   >
-                    {t('dashboard.settings_page.access_token.copy_btn')}
+                    {t('copy')}
                   </Button>
                 </div>
               </>
@@ -96,14 +96,10 @@ export default function AccessTokensComponent() {
       )}
       <div className='mb-4'>
         <Popconfirm
-          title={t(
-            'dashboard.settings_page.access_token.confirm_generate_token',
-          )}
+          title={t('confirm_to_generate_token')}
           onConfirm={() => setModalVisible(true)}
         >
-          <Button type='primary'>
-            {t('dashboard.settings_page.access_token.generate_token')}
-          </Button>
+          <Button type='primary'>{t('generate_new_token')}</Button>
         </Popconfirm>
         <a
           className='ml-2'
@@ -113,7 +109,7 @@ export default function AccessTokensComponent() {
           <QuestionCircleOutlined />
         </a>
         <Modal
-          title={t('dashboard.settings_page.access_token.generate_token')}
+          title={t('generate_new_token')}
           visible={modalVisible}
           onCancel={() => setModalVisible(false)}
           onOk={() => createAccessToken({ variables: { input: { memo } } })}
@@ -121,9 +117,7 @@ export default function AccessTokensComponent() {
         >
           <Input
             value={memo}
-            placeholder={t(
-              'dashboard.settingsPage.accessToken.memoPlaceholader',
-            )}
+            placeholder={t('token_memo_placeholader')}
             onChange={(e) => setMemo(e.currentTarget.value)}
           />
         </Modal>
@@ -138,16 +132,14 @@ export default function AccessTokensComponent() {
             key={accessToken.id}
             actions={[
               <Popconfirm
-                title={t(
-                  'dashboard.settingsPage.accessToken.deleteConfirmTips',
-                )}
+                title={t('confirm_to_delete_token')}
                 onConfirm={() =>
                   deleteAccessToken({
                     variables: { input: { id: accessToken.id } },
                   })
                 }
               >
-                <Button size='small'>{t('common.delete_btn')}</Button>
+                <Button size='small'>{t('delete')}</Button>
               </Popconfirm>,
             ]}
           >

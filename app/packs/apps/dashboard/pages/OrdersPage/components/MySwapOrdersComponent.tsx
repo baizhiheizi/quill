@@ -46,7 +46,7 @@ export default function MySwapOrderComponent() {
                 });
               }}
             >
-              {t('common.load_more')}
+              {t('load_more')}
             </Button>
           </div>
         )
@@ -66,7 +66,7 @@ export default function MySwapOrderComponent() {
                     : 'blue'
                 }
               >
-                {t(`swapOrder.state.${swapOrder.state}`)}
+                {t(`swap_order.state.${swapOrder.state}`)}
               </Tag>
             </Col>
             <Col xs={18} sm={18} md={12} style={{ overflowX: 'scroll' }}>

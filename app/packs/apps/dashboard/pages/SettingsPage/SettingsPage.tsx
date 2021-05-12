@@ -15,7 +15,7 @@ export default function SettingsPage() {
 
   return (
     <>
-      <PageHeader title={t('dashboard.menu.settings')} />
+      <PageHeader title={t('settings')} />
       <Tabs
         activeKey={activeKey}
         onChange={(value) => {
@@ -29,16 +29,10 @@ export default function SettingsPage() {
           });
         }}
       >
-        <Tabs.TabPane
-          key='notification'
-          tab={t('dashboard.settings_page.tabs.notification')}
-        >
+        <Tabs.TabPane key='notification' tab={t('notification')}>
           <NotificationSettingComponent />
         </Tabs.TabPane>
-        <Tabs.TabPane
-          key='accessToken'
-          tab={t('dashboard.settings_page.tabs.access_token')}
-        >
+        <Tabs.TabPane key='accessToken' tab={t('access_token')}>
           <AccessTokensComponent />
         </Tabs.TabPane>
       </Tabs>

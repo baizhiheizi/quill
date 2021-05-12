@@ -7,18 +7,12 @@ export default function RevenuePage() {
   const { t } = useTranslation();
   return (
     <div>
-      <PageHeader title={t('dashboard.menu.revenue')} />
+      <PageHeader title={t('revenue_manage')} />
       <Tabs>
-        <Tabs.TabPane
-          tab={t('dashboard.revenue_page.author_transfers')}
-          key='author'
-        >
+        <Tabs.TabPane tab={t('author_transfers')} key='author'>
           <MyTransfersComponent transferType='author_revenue' />
         </Tabs.TabPane>
-        <Tabs.TabPane
-          tab={t('dashboard.revenue_page.reader_transfers')}
-          key='reader'
-        >
+        <Tabs.TabPane tab={t('reader_transfers')} key='reader'>
           <MyTransfersComponent transferType='reader_revenue' />
         </Tabs.TabPane>
       </Tabs>

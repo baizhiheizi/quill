@@ -43,14 +43,14 @@ export default function MyReadingSubscriptionsComponent() {
           key={user.id}
           actions={[
             <Popconfirm
-              title={t('dashboard.subscriptions_page.confirm_to_unsubscribe')}
+              title={t('confirm_to_unsubscribe')}
               onConfirm={() =>
                 toggleReadingSubscribeUserAction({
                   variables: { input: { mixinId: user.mixinId } },
                 })
               }
             >
-              <Button size='small'>{t('common.unsubscribe_btn')}</Button>
+              <Button size='small'>{t('unsubscribe')}</Button>
             </Popconfirm>,
           ]}
         >
@@ -67,7 +67,7 @@ export default function MyReadingSubscriptionsComponent() {
                   user.statistics.boughtArticlesCount
                 }`}
                 {`${t(
-                  'user.readerRevenueTotal',
+                  'user.reader_revenue_total',
                 )}: ${user.statistics.readerRevenueTotalUsd.toFixed(2)}`}
               </Space>
             }

@@ -13,54 +13,28 @@ export default function SubscriptionsPage() {
 
   return (
     <div>
-      <PageHeader title={t('dashboard.menu.subscriptions')} />
+      <PageHeader title={t('subscriptions_manage')} />
       <Tabs
         activeKey={type}
         onChange={(key: 'authoring' | 'reading' | 'commenting') => setType(key)}
       >
-        <Tabs.TabPane
-          key='authoring'
-          tab={t('dashboard.subscriptions_page.authoring_subscriptions')}
-        >
-          <Alert
-            message={t(
-              'dashboard.subscriptions_page.authoring_subscriptions_tip',
-            )}
-          />
+        <Tabs.TabPane key='authoring' tab={t('authoring_subscriptions')}>
+          <Alert message={t('authoring_subscriptions_tip')} />
           <br />
           <MyAuthoringSubscriptionsComponent />
         </Tabs.TabPane>
-        <Tabs.TabPane
-          key='readering'
-          tab={t('dashboard.subscriptions_page.reading_subscriptions')}
-        >
-          <Alert
-            message={t(
-              'dashboard.subscriptions_page.reading_subscriptions_tip',
-            )}
-          />
+        <Tabs.TabPane key='readering' tab={t('reading_subscriptions')}>
+          <Alert message={t('reading_subscriptions_tip')} />
           <br />
           <MyReadingSubscriptionsComponent />
         </Tabs.TabPane>
-        <Tabs.TabPane
-          key='commenting'
-          tab={t('dashboard.subscriptions_page.commenting_subscriptions')}
-        >
-          <Alert
-            message={t(
-              'dashboard.subscriptionsPage.commentingSubscriptionsTip',
-            )}
-          />
+        <Tabs.TabPane key='commenting' tab={t('commenting_subscriptions')}>
+          <Alert message={t('commenting_subscriptions_tip')} />
           <br />
           <MyCommentingSubscriptionsComponent />
         </Tabs.TabPane>
-        <Tabs.TabPane
-          key='tag'
-          tab={t('dashboard.subscriptions_page.tag_subscriptions')}
-        >
-          <Alert
-            message={t('dashboard.subscriptions_page.tag_subscriptions_tip')}
-          />
+        <Tabs.TabPane key='tag' tab={t('tag_subscriptions')}>
+          <Alert message={t('tag_subscriptions_tip')} />
           <br />
           <MyTagSubscriptionsComponent />
         </Tabs.TabPane>

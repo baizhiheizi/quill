@@ -26,20 +26,20 @@ export default function ArticlePage() {
   return (
     <div>
       <PageHeader
-        title={t('dashboard.pages.article')}
+        title={t('article_detail')}
         extra={[
           <Button key='edit' type='primary'>
-            <Link to={`/articles/${uuid}/edit`}>{t('common.edit_btn')}</Link>
+            <Link to={`/articles/${uuid}/edit`}>{t('edit')}</Link>
           </Button>,
           <Button key='view'>
             <a href={`/articles/${uuid}`} target='_blank'>
-              {t('common.view_btn')}
+              {t('view')}
             </a>
           </Button>,
         ]}
         breadcrumb={{
           routes: [
-            { path: '/articles', breadcrumbName: t('dashboard.menu.articles') },
+            { path: '/articles', breadcrumbName: t('articles_manage') },
             { path: '', breadcrumbName: article.title },
           ],
           itemRender: (route, _params, routes, _paths) => {
@@ -115,22 +115,13 @@ export default function ArticlePage() {
       </div>
       <div>
         <Tabs>
-          <Tabs.TabPane
-            tab={t('dashboard.article_page.tabs.buy_records')}
-            key='buyers'
-          >
+          <Tabs.TabPane tab={t('buy_records')} key='buyers'>
             <ArticleOrdersComponent uuid={uuid} orderType='buy_article' />
           </Tabs.TabPane>
-          <Tabs.TabPane
-            tab={t('dashboard.article_page.tabs.reward_records')}
-            key='rewarders'
-          >
+          <Tabs.TabPane tab={t('reward_records')} key='rewarders'>
             <ArticleOrdersComponent uuid={uuid} orderType='reward_article' />
           </Tabs.TabPane>
-          <Tabs.TabPane
-            tab={t('dashboard.article_page.tabs.comment_records')}
-            key='comments'
-          >
+          <Tabs.TabPane tab={t('comment_records')} key='comments'>
             <ArticleCommentsComponent articleId={article.id} />
           </Tabs.TabPane>
         </Tabs>

@@ -55,7 +55,7 @@ export default function ArticleCommentsComponent(props: { articleId: string }) {
                   });
                 }}
               >
-                {t('common.load_more')}
+                {t('load_more')}
               </Button>
             </div>
           )
@@ -74,7 +74,7 @@ export default function ArticleCommentsComponent(props: { articleId: string }) {
                     textDecoration: 'line-through',
                   }}
                 >
-                  {t('comments_component.deleted_text')}
+                  {t('comment_deleted')}
                 </div>
               ) : (
                 <Comment

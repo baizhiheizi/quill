@@ -78,9 +78,7 @@ export default function RewardModalComponent(props: {
         <QRCode value={url} size={200} />
       </div>
       <div style={{ color: '#aaa', marginBottom: 5 }}>
-        {type === 'pay'
-          ? t('messages.pay_with_messenger')
-          : t('messages.view_with_messenger')}
+        {type === 'pay' ? t('pay_with_messenger') : t('view_with_messenger')}
       </div>
     </div>
   );
@@ -91,16 +89,16 @@ export default function RewardModalComponent(props: {
       centered
       closable={false}
       destroyOnClose={true}
-      title={t('article_page.reward_modal.title')}
+      title={t('reward')}
       confirmLoading={paying && !Boolean(data?.payment?.state)}
       okText={
         Boolean(data?.payment?.state)
-          ? t('article_page.reward_modal.finish_text')
+          ? t('finish')
           : paying
-          ? t('article_page.reward_modal.polling_payment')
-          : t('article_page.reward_modal.ok_text')
+          ? t('polling_payment')
+          : t('reward')
       }
-      cancelText={t('article_page.reward_modal.cancel_text')}
+      cancelText={t('later')}
       visible={visible}
       onCancel={() => {
         stopPolling && stopPolling();
@@ -162,7 +160,7 @@ export default function RewardModalComponent(props: {
         </Select>
         {currency.assetId !== articleAssetId && (
           <div style={{ color: '#aaa' }}>
-            {t('article_page.reward_modal.swap_explain')}{' '}
+            {t('swap_supported_by')}{' '}
             <a
               href={
                 mixinEnv
@@ -177,10 +175,7 @@ export default function RewardModalComponent(props: {
         )}
       </div>
       {Boolean(data?.payment?.state) ? (
-        <Alert
-          type='success'
-          message={t('article_page.reward_modal.success_paid_message')}
-        />
+        <Alert type='success' message={t('success_paid')} />
       ) : (
         !mixinEnv && paying && <PayUrlQRCode url={payUrl} />
       )}

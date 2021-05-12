@@ -60,44 +60,44 @@ export default function Menus() {
         <Menu theme='light' mode={props.mode} selectable={false}>
           <Menu.Item onClick={() => setDrawerVisible(false)}>
             <Link to='/' replace>
-              {t('menu.read')}
+              {t('read')}
             </Link>
           </Menu.Item>
           <Menu.Item onClick={() => setDrawerVisible(false)}>
             {currentUser ? (
               <a href='/dashboard/articles/new' target='_blank'>
-                {t('menu.write')}
+                {t('write')}
               </a>
             ) : (
               <a href={`/login?return_to=${encodeURIComponent(location.href)}`}>
-                {t('menu.write')}
+                {t('write')}
               </a>
             )}
           </Menu.Item>
           <Menu.Item onClick={() => setDrawerVisible(false)}>
             <Link to='/search' replace>
-              {t('menu.search')}
+              {t('search')}
             </Link>
           </Menu.Item>
           <Menu.Item onClick={() => setDrawerVisible(false)}>
             <Link to='/rules' replace>
-              {t('menu.rules')}
+              {t('rules')}
             </Link>
           </Menu.Item>
           <Menu.Item onClick={() => setDrawerVisible(false)}>
             <Link to='/fair' replace>
-              {t('menu.fair')}
+              {t('fair')}
             </Link>
           </Menu.Item>
           <Menu.Item onClick={() => setDrawerVisible(false)}>
             <Link to='/community' replace>
-              {t('menu.community')}
+              {t('community')}
             </Link>
           </Menu.Item>
           <Menu.Item onClick={() => setDrawerVisible(false)}>
             <a href={OPEN_SOURCE_URL} target='_blank'>
               <GithubOutlined />
-              {t('menu.open_source')}
+              {t('open_source')}
             </a>
           </Menu.Item>
         </Menu>
@@ -133,25 +133,25 @@ export default function Menus() {
                   {props.mode === 'horizontal' ? (
                     <NotificationOutlined />
                   ) : (
-                    t('menu.notifications')
+                    t('notifications_manage')
                   )}
                 </a>
               </Badge>
             </Menu.Item>
             <Menu.Item onClick={() => setDrawerVisible(false)}>
               <a href='/dashboard' target='_blank'>
-                {t('menu.mine')}
+                {t('dashboard')}
               </a>
             </Menu.Item>
             <Menu.Item onClick={() => setDrawerVisible(false)}>
-              <a href='/logout'>{t('menu.logout')}</a>
+              <a href='/logout'>{t('logout')}</a>
             </Menu.Item>
           </Menu>
         </Col>
       ) : (
         <Col>
           <Button type='link' href='/login'>
-            {t('menu.login')}
+            {t('login')}
           </Button>
         </Col>
       )}

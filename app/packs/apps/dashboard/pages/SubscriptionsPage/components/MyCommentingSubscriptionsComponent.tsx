@@ -43,14 +43,14 @@ export default function MyCommentingSubscriptionsComponent() {
           key={article.uuid}
           actions={[
             <Popconfirm
-              title={t('dashboard.subscriptions_page.confirm_to_unsubscribe')}
+              title={t('confirm_to_unsubscribe')}
               onConfirm={() =>
                 toggleCommentingSubscribeArticleAction({
                   variables: { input: { uuid: article.uuid } },
                 })
               }
             >
-              <Button size='small'>{t('common.unsubscribe_btn')}</Button>
+              <Button size='small'>{t('unsubscribe')}</Button>
             </Popconfirm>,
           ]}
         >

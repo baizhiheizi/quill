@@ -44,8 +44,8 @@ export default function UserArticlesComponent(props: {
         } else {
           message.success(
             authoringSubscribed
-              ? t('messages.success_unsubscribed')
-              : t('messages.success_subscribed'),
+              ? t('success_unsubscribed')
+              : t('success_subscribed'),
           );
           refetchUser();
         }
@@ -66,8 +66,8 @@ export default function UserArticlesComponent(props: {
         } else {
           message.success(
             readingSubscribed
-              ? t('messages.success_unsubscribed')
-              : t('messages.success_subscribed'),
+              ? t('success_unsubscribed')
+              : t('success_subscribed'),
           );
           refetchUser();
         }
@@ -100,9 +100,7 @@ export default function UserArticlesComponent(props: {
               })
             }
           >
-            {authoringSubscribed
-              ? t('common.unsubscribe_btn')
-              : t('common.subscribe_btn')}
+            {authoringSubscribed ? t('unsubscribe') : t('subscribe')}
           </Button>
         )}
         {currentUser && currentUser.mixinId !== mixinId && type === 'reader' && (
@@ -117,9 +115,7 @@ export default function UserArticlesComponent(props: {
               })
             }
           >
-            {readingSubscribed
-              ? t('common.unsubscribe_btn')
-              : t('common.subscribe_btn')}
+            {readingSubscribed ? t('unsubscribe') : t('subscribe')}
           </Button>
         )}
       </div>

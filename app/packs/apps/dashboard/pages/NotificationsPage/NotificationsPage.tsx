@@ -49,21 +49,21 @@ export default function NotificationsPage() {
   return (
     <div>
       <PageHeader
-        title={t('dashboard.menu.notifications')}
+        title={t('notifications_manage')}
         extra={[
           <Button
             key='clearAll'
             type='default'
             onClick={() => clearNotifications()}
           >
-            {t('dashboard.notifications_page.clear_all_btn')}
+            {t('clear_all')}
           </Button>,
           <Button
             key='readAll'
             type='primary'
             onClick={() => readNotifications()}
           >
-            {t('dashboard.notifications_page.read_all_btn')}
+            {t('read_all')}
           </Button>,
         ]}
       />

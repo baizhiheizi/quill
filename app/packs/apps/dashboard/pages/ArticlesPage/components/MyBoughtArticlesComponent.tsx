@@ -54,7 +54,7 @@ export default function MyBoughtArticlesComponent() {
                 });
               }}
             >
-              {t('common.load_more')}
+              {t('load_more')}
             </Button>
           </div>
         )

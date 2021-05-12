@@ -15,8 +15,8 @@ export default function SearchPage() {
       <div style={{ marginBottom: '1rem' }}>
         <Input.Search
           size='large'
-          enterButton={t('search_page.enter_btn')}
-          placeholder={t('search_page.placeholder')}
+          enterButton={t('search')}
+          placeholder={t('search_placeholder')}
           onSearch={(value) => setQuery(value)}
         />
       </div>

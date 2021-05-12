@@ -27,9 +27,7 @@ export default function UserCardComponent(props: {
             {mixinId && (!currentUser || currentUser.mixinId !== mixinId) && (
               <Col>
                 <Button type='primary' shape='round' size='small'>
-                  <Link to={`/users/${mixinId}`}>
-                    {t('article_page.user_detail_btn')}
-                  </Link>
+                  <Link to={`/users/${mixinId}`}>{t('detail')}</Link>
                 </Button>
               </Col>
             )}

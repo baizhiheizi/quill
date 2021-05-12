@@ -65,51 +65,51 @@ export default function Menus() {
         <Menu.Item key='overview' onClick={() => setDrawerVisible(false)}>
           <Link to='/'>
             <DashboardOutlined />
-            <span>{t('dashboard.menu.overview')}</span>
+            <span>{t('overview')}</span>
           </Link>
         </Menu.Item>
         <Menu.Item key='notifications' onClick={() => setDrawerVisible(false)}>
           <Badge dot={currentUser?.unreadNotificationsCount > 0}>
             <Link to='/notifications'>
               <NotificationOutlined />
-              <span>{t('dashboard.menu.notifications')}</span>
+              <span>{t('notifications_manage')}</span>
             </Link>
           </Badge>
         </Menu.Item>
         <Menu.Item key='settings' onClick={() => setDrawerVisible(false)}>
           <Link to='/settings'>
             <SettingOutlined />
-            <span>{t('dashboard.menu.settings')}</span>
+            <span>{t('settings')}</span>
           </Link>
         </Menu.Item>
         <Menu.Item key='articles' onClick={() => setDrawerVisible(false)}>
           <Link to='/articles'>
             <FileTextOutlined />
-            <span>{t('dashboard.menu.articles')}</span>
+            <span>{t('articles_manage')}</span>
           </Link>
         </Menu.Item>
         <Menu.Item key='subscriptions' onClick={() => setDrawerVisible(false)}>
           <Link to='/subscriptions'>
             <BookOutlined />
-            <span>{t('dashboard.menu.subscriptions')}</span>
+            <span>{t('subscriptions_manage')}</span>
           </Link>
         </Menu.Item>
         <Menu.Item key='revenue' onClick={() => setDrawerVisible(false)}>
           <Link to='/revenue'>
             <RiseOutlined />
-            <span>{t('dashboard.menu.revenue')}</span>
+            <span>{t('revenue_manage')}</span>
           </Link>
         </Menu.Item>
         <Menu.Item key='orders' onClick={() => setDrawerVisible(false)}>
           <Link to='/orders'>
             <AccountBookOutlined />
-            <span>{t('dashboard.menu.orders')}</span>
+            <span>{t('orders_manage')}</span>
           </Link>
         </Menu.Item>
         <Menu.Item key='comments' onClick={() => setDrawerVisible(false)}>
           <Link to='/comments'>
             <CommentOutlined />
-            <span>{t('dashboard.menu.comments')}</span>
+            <span>{t('comments_manage')}</span>
           </Link>
         </Menu.Item>
         <Menu.SubMenu
@@ -126,7 +126,7 @@ export default function Menus() {
         <Menu.Item key='back'>
           <a href='/'>
             <LoginOutlined />
-            <span>{t('dashboard.menu.back')}</span>
+            <span>{t('back')}</span>
           </a>
         </Menu.Item>
       </Menu>

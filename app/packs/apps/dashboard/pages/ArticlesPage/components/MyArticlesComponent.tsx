@@ -35,7 +35,7 @@ export default function MyArticlesComponent(props: {
         if (err) {
           message.error(err);
         } else {
-          message.success(t('messages.success_hidden_article'));
+          message.success(t('success_hidden_article'));
           refetch();
         }
       },
@@ -48,7 +48,7 @@ export default function MyArticlesComponent(props: {
       if (err) {
         message.error(err);
       } else {
-        message.success(t('messages.success_published_article'));
+        message.success(t('success_published_article'));
         refetch();
       }
     },
@@ -91,7 +91,7 @@ export default function MyArticlesComponent(props: {
                 });
               }}
             >
-              {t('common.load_more')}
+              {t('load_more')}
             </Button>
           </div>
         )
@@ -101,19 +101,13 @@ export default function MyArticlesComponent(props: {
           key={article.uuid}
           actions={
             article.state === 'blocked'
-              ? [
-                  <Link to={`/articles/${article.uuid}`}>
-                    {t('common.detail_btn')}
-                  </Link>,
-                ]
+              ? [<Link to={`/articles/${article.uuid}`}>{t('detail')}</Link>]
               : [
-                  <Link to={`/articles/${article.uuid}`}>
-                    {t('common.detail_btn')}
-                  </Link>,
+                  <Link to={`/articles/${article.uuid}`}>{t('detail')}</Link>,
                   <span>
                     {article.state === 'hidden' ? (
                       <Popconfirm
-                        title={t('dashboard.articles_page.publish_confirm')}
+                        title={t('confirm_to_publish')}
                         disabled={publishing}
                         onConfirm={() =>
                           publishArticle({
@@ -121,11 +115,11 @@ export default function MyArticlesComponent(props: {
                           })
                         }
                       >
-                        <a>{t('dashboard.articles_page.publish_btn')}</a>
+                        <a>{t('publish')}</a>
                       </Popconfirm>
                     ) : (
                       <Popconfirm
-                        title={t('dashboard.articles_page.hide_confirm')}
+                        title={t('confirm_to_hide')}
                         disabled={hiding}
                         onConfirm={() =>
                           hideArticle({
@@ -133,12 +127,12 @@ export default function MyArticlesComponent(props: {
                           })
                         }
                       >
-                        <a>{t('dashboard.articles_page.hide_btn')}</a>
+                        <a>{t('hide')}</a>
                       </Popconfirm>
                     )}
                   </span>,
                   <Link to={`/articles/${article.uuid}/edit`}>
-                    {t('common.edit_btn')}
+                    {t('edit')}
                   </Link>,
                 ]
           }
