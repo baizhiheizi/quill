@@ -79,8 +79,8 @@ export default function RewardModalComponent(props: {
       </div>
       <div style={{ color: '#aaa', marginBottom: 5 }}>
         {type === 'pay'
-          ? t('messages.payWithMessenger')
-          : t('messages.viewWithMessenger')}
+          ? t('messages.pay_with_messenger')
+          : t('messages.view_with_messenger')}
       </div>
     </div>
   );
@@ -91,16 +91,16 @@ export default function RewardModalComponent(props: {
       centered
       closable={false}
       destroyOnClose={true}
-      title={t('articlePage.rewardModal.title')}
+      title={t('article_page.reward_modal.title')}
       confirmLoading={paying && !Boolean(data?.payment?.state)}
       okText={
         Boolean(data?.payment?.state)
-          ? t('articlePage.rewardModal.finishText')
+          ? t('article_page.reward_modal.finish_text')
           : paying
-          ? t('articlePage.rewardModal.pollingPayment')
-          : t('articlePage.rewardModal.okText')
+          ? t('article_page.reward_modal.polling_payment')
+          : t('article_page.reward_modal.ok_text')
       }
-      cancelText={t('articlePage.rewardModal.cancelText')}
+      cancelText={t('article_page.reward_modal.cancel_text')}
       visible={visible}
       onCancel={() => {
         stopPolling && stopPolling();
@@ -162,7 +162,7 @@ export default function RewardModalComponent(props: {
         </Select>
         {currency.assetId !== articleAssetId && (
           <div style={{ color: '#aaa' }}>
-            {t('articlePage.rewardModal.swapExplain')}{' '}
+            {t('article_page.reward_modal.swap_explain')}{' '}
             <a
               href={
                 mixinEnv
@@ -179,7 +179,7 @@ export default function RewardModalComponent(props: {
       {Boolean(data?.payment?.state) ? (
         <Alert
           type='success'
-          message={t('articlePage.rewardModal.successPaidMessage')}
+          message={t('article_page.reward_modal.success_paid_message')}
         />
       ) : (
         !mixinEnv && paying && <PayUrlQRCode url={payUrl} />

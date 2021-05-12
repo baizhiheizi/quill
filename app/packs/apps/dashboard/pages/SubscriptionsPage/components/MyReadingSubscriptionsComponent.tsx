@@ -11,20 +11,15 @@ import { useTranslation } from 'react-i18next';
 
 export default function MyReadingSubscriptionsComponent() {
   const { t } = useTranslation();
-  const {
-    loading,
-    data,
-    fetchMore,
-    refetch,
-  } = useMyReadingSubscriptionConnectionQuery();
+  const { loading, data, fetchMore, refetch } =
+    useMyReadingSubscriptionConnectionQuery();
 
-  const [
-    toggleReadingSubscribeUserAction,
-  ] = useToggleReadingSubscribeUserActionMutation({
-    update() {
-      refetch();
-    },
-  });
+  const [toggleReadingSubscribeUserAction] =
+    useToggleReadingSubscribeUserActionMutation({
+      update() {
+        refetch();
+      },
+    });
 
   if (loading) {
     return <LoadingComponent />;
@@ -48,14 +43,14 @@ export default function MyReadingSubscriptionsComponent() {
           key={user.id}
           actions={[
             <Popconfirm
-              title={t('dashboard.subscriptionsPage.confirmToUnsubscribe')}
+              title={t('dashboard.subscriptions_page.confirm_to_unsubscribe')}
               onConfirm={() =>
                 toggleReadingSubscribeUserAction({
                   variables: { input: { mixinId: user.mixinId } },
                 })
               }
             >
-              <Button size='small'>{t('common.unsubscribeBtn')}</Button>
+              <Button size='small'>{t('common.unsubscribe_btn')}</Button>
             </Popconfirm>,
           ]}
         >
@@ -68,7 +63,7 @@ export default function MyReadingSubscriptionsComponent() {
             avatar={<Avatar src={user.avatarUrl}>{user.name[0]}</Avatar>}
             description={
               <Space split={<Divider type='vertical' />} wrap>
-                {`${t('user.boughtArticlesCount')}: ${
+                {`${t('user.bought_articles_count')}: ${
                   user.statistics.boughtArticlesCount
                 }`}
                 {`${t(

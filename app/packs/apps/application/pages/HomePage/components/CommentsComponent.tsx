@@ -16,11 +16,8 @@ export default function CommentsComponent() {
   const { t, i18n } = useTranslation();
   const { isMobile } = useUserAgent();
   moment.locale(i18n.language);
-  const {
-    data,
-    loading,
-    fetchMore,
-  }: CommentConnectionQueryHookResult = useCommentConnectionQuery();
+  const { data, loading, fetchMore }: CommentConnectionQueryHookResult =
+    useCommentConnectionQuery();
 
   if (loading) {
     return <LoadingComponent />;
@@ -67,7 +64,7 @@ export default function CommentsComponent() {
               datetime={<span>{moment(comment.createdAt).fromNow()}</span>}
               actions={[
                 <span>
-                  {t('commentsComponent.from')}: {` `}
+                  {t('comments_component.from')}: {` `}
                   <Link
                     style={{ color: 'inherit' }}
                     to={`/articles/${comment.commentable.uuid}`}

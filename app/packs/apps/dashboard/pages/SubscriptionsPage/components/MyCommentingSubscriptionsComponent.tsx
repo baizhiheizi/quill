@@ -11,20 +11,15 @@ import { useTranslation } from 'react-i18next';
 
 export default function MyCommentingSubscriptionsComponent() {
   const { t } = useTranslation();
-  const {
-    loading,
-    data,
-    fetchMore,
-    refetch,
-  } = useMyCommentingSubscriptionConnectionQuery();
+  const { loading, data, fetchMore, refetch } =
+    useMyCommentingSubscriptionConnectionQuery();
 
-  const [
-    toggleCommentingSubscribeArticleAction,
-  ] = useToggleCommentingSubscribeArticleActionMutation({
-    update() {
-      refetch();
-    },
-  });
+  const [toggleCommentingSubscribeArticleAction] =
+    useToggleCommentingSubscribeArticleActionMutation({
+      update() {
+        refetch();
+      },
+    });
 
   if (loading) {
     return <LoadingComponent />;
@@ -48,14 +43,14 @@ export default function MyCommentingSubscriptionsComponent() {
           key={article.uuid}
           actions={[
             <Popconfirm
-              title={t('dashboard.subscriptionsPage.confirmToUnsubscribe')}
+              title={t('dashboard.subscriptions_page.confirm_to_unsubscribe')}
               onConfirm={() =>
                 toggleCommentingSubscribeArticleAction({
                   variables: { input: { uuid: article.uuid } },
                 })
               }
             >
-              <Button size='small'>{t('common.unsubscribeBtn')}</Button>
+              <Button size='small'>{t('common.unsubscribe_btn')}</Button>
             </Popconfirm>,
           ]}
         >
@@ -67,7 +62,7 @@ export default function MyCommentingSubscriptionsComponent() {
             }
             description={
               <Space split={<Divider type='vertical' />}>
-                {`${t('article.commentsCount')}: ${article.commentsCount}`}
+                {`${t('article.comments_count')}: ${article.commentsCount}`}
               </Space>
             }
           />

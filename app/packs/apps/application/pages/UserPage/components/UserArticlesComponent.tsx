@@ -21,65 +21,58 @@ export default function UserArticlesComponent(props: {
   readingSubscribed?: boolean;
   refetchUser?: () => any;
 }) {
-  const {
-    type,
-    mixinId,
-    authoringSubscribed,
-    readingSubscribed,
-    refetchUser,
-  } = props;
+  const { type, mixinId, authoringSubscribed, readingSubscribed, refetchUser } =
+    props;
   const { t, i18n } = useTranslation();
   moment.locale(i18n.language);
   const { currentUser } = useCurrentUser();
   const { data, loading, fetchMore } = useUserArticleConnectionQuery({
     variables: { type, mixinId },
   });
-  const [
-    toggleAuthoringSubscribeUserAction,
-  ] = useToggleAuthoringSubscribeUserActionMutation({
-    update(
-      _,
-      {
-        data: {
-          toggleAuthoringSubscribeUserAction: { error },
+  const [toggleAuthoringSubscribeUserAction] =
+    useToggleAuthoringSubscribeUserActionMutation({
+      update(
+        _,
+        {
+          data: {
+            toggleAuthoringSubscribeUserAction: { error },
+          },
         },
+      ) {
+        if (error) {
+          message.error(error);
+        } else {
+          message.success(
+            authoringSubscribed
+              ? t('messages.success_unsubscribed')
+              : t('messages.success_subscribed'),
+          );
+          refetchUser();
+        }
       },
-    ) {
-      if (error) {
-        message.error(error);
-      } else {
-        message.success(
-          authoringSubscribed
-            ? t('messages.successUnsubscribed')
-            : t('messages.successSubscribed'),
-        );
-        refetchUser();
-      }
-    },
-  });
-  const [
-    toggleReadingSubscribeUserAction,
-  ] = useToggleReadingSubscribeUserActionMutation({
-    update(
-      _,
-      {
-        data: {
-          toggleReadingSubscribeUserAction: { error },
+    });
+  const [toggleReadingSubscribeUserAction] =
+    useToggleReadingSubscribeUserActionMutation({
+      update(
+        _,
+        {
+          data: {
+            toggleReadingSubscribeUserAction: { error },
+          },
         },
+      ) {
+        if (error) {
+          message.error(error);
+        } else {
+          message.success(
+            readingSubscribed
+              ? t('messages.success_unsubscribed')
+              : t('messages.success_subscribed'),
+          );
+          refetchUser();
+        }
       },
-    ) {
-      if (error) {
-        message.error(error);
-      } else {
-        message.success(
-          readingSubscribed
-            ? t('messages.successUnsubscribed')
-            : t('messages.successSubscribed'),
-        );
-        refetchUser();
-      }
-    },
-  });
+    });
 
   if (loading) {
     return <LoadingComponent />;
@@ -108,8 +101,8 @@ export default function UserArticlesComponent(props: {
             }
           >
             {authoringSubscribed
-              ? t('common.unsubscribeBtn')
-              : t('common.subscribeBtn')}
+              ? t('common.unsubscribe_btn')
+              : t('common.subscribe_btn')}
           </Button>
         )}
         {currentUser && currentUser.mixinId !== mixinId && type === 'reader' && (
@@ -125,8 +118,8 @@ export default function UserArticlesComponent(props: {
             }
           >
             {readingSubscribed
-              ? t('common.unsubscribeBtn')
-              : t('common.subscribeBtn')}
+              ? t('common.unsubscribe_btn')
+              : t('common.subscribe_btn')}
           </Button>
         )}
       </div>

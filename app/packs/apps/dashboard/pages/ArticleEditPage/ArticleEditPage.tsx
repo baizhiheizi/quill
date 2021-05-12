@@ -43,7 +43,7 @@ export default function ArticleEditPage() {
       if (err) {
         message.error(err);
       } else {
-        message.success(t('messages.successSubmitted'));
+        message.success(t('messages.success_submitted'));
         history.replace(`/articles/${uuid}`);
       }
     },
@@ -62,7 +62,7 @@ export default function ArticleEditPage() {
   return (
     <div>
       <PageHeader
-        title={t('dashboard.pages.articleEdit')}
+        title={t('dashboard.pages.article_edit')}
         breadcrumb={{
           routes: [
             { path: '/articles', breadcrumbName: t('dashboard.menu.articles') },
@@ -106,10 +106,10 @@ export default function ArticleEditPage() {
             message.warn(t('article.form.warning'));
           } else {
             Modal.confirm({
-              title: t('article.form.updateConfirm'),
+              title: t('article.form.update_confirm'),
               centered: true,
-              okText: t('article.form.updateOkText'),
-              cancelText: t('article.form.updateCancelText'),
+              okText: t('article.form.update_ok_text'),
+              cancelText: t('article.form.update_cancel_text'),
               onOk: () =>
                 updateArticle({
                   variables: {
@@ -131,12 +131,12 @@ export default function ArticleEditPage() {
           <Input />
         </Form.Item>
         <Form.Item label={t('article.title')} name='title'>
-          <Input placeholder={t('article.form.titlePlaceHolder')} />
+          <Input placeholder={t('article.form.title_place_holder')} />
         </Form.Item>
         <Form.Item label={t('article.content')} name='content'>
           <Editor
             textareaProps={{
-              placeholder: t('article.form.contentPlaceHolder'),
+              placeholder: t('article.form.content_place_holder'),
             }}
             previewOptions={{
               plugins: markdownPlugins,
@@ -162,7 +162,7 @@ export default function ArticleEditPage() {
           />
         </Form.Item>
         <Form.Item label={t('article.intro')} name='intro'>
-          <Input.TextArea placeholder={t('article.form.introPlaceHolder')} />
+          <Input.TextArea placeholder={t('article.form.intro_place_holder')} />
         </Form.Item>
         <Form.Item label={t('article.tags')}>
           <EditableTagsComponent tags={tags} setTags={setTags} />
@@ -192,7 +192,7 @@ export default function ArticleEditPage() {
                     ) {
                       return Promise.resolve();
                     } else {
-                      return Promise.reject(t('article.form.priceIsTooLow'));
+                      return Promise.reject(t('article.form.price_is_too_low'));
                     }
                   },
                 },
@@ -231,7 +231,7 @@ export default function ArticleEditPage() {
             htmlType='submit'
             loading={updating}
           >
-            {t('article.form.updateBtn')}
+            {t('article.form.update_btn')}
           </Button>
         </Form.Item>
       </Form>

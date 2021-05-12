@@ -20,7 +20,7 @@ export default function LoadMoreComponent(props: {
     >
       {hasNextPage ? (
         <Button loading={loading} onClick={fetchMore}>
-          {t('common.loadMore')}
+          {t('common.load_more')}
         </Button>
       ) : (
         <Typography.Text type='secondary'> - END -</Typography.Text>

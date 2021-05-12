@@ -16,10 +16,8 @@ export default function ArticleSnapshotsComponent(props: {
   const { loading, data, fetchMore } = useAdminArticleSnapshotConnectionQuery({
     variables: { articleUuid },
   });
-  const [
-    signArticleSnapshot,
-    { loading: signing },
-  ] = useAdminSignArticleSnapshotMutation();
+  const [signArticleSnapshot, { loading: signing }] =
+    useAdminSignArticleSnapshotMutation();
 
   if (loading) {
     return <LoadingComponent />;

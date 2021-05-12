@@ -10,13 +10,13 @@ export default function RevenuePage() {
       <PageHeader title={t('dashboard.menu.revenue')} />
       <Tabs>
         <Tabs.TabPane
-          tab={t('dashboard.revenuePage.authorTransfers')}
+          tab={t('dashboard.revenue_page.author_transfers')}
           key='author'
         >
           <MyTransfersComponent transferType='author_revenue' />
         </Tabs.TabPane>
         <Tabs.TabPane
-          tab={t('dashboard.revenuePage.readerTransfers')}
+          tab={t('dashboard.revenue_page.reader_transfers')}
           key='reader'
         >
           <MyTransfersComponent transferType='reader_revenue' />

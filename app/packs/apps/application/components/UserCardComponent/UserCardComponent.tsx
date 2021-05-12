@@ -28,14 +28,14 @@ export default function UserCardComponent(props: {
               <Col>
                 <Button type='primary' shape='round' size='small'>
                   <Link to={`/users/${mixinId}`}>
-                    {t('articlePage.userDetailBtn')}
+                    {t('article_page.user_detail_btn')}
                   </Link>
                 </Button>
               </Col>
             )}
           </Row>
         }
-        description={bio || t('user.defaultBio')}
+        description={bio || t('user.default_bio')}
       />
     </Card>
   );

@@ -8,9 +8,8 @@ import MyTagSubscriptionsComponent from './components/MyTagSubscriptionsComponen
 
 export default function SubscriptionsPage() {
   const { t } = useTranslation();
-  const [type, setType] = useState<'authoring' | 'reading' | 'commenting'>(
-    'authoring',
-  );
+  const [type, setType] =
+    useState<'authoring' | 'reading' | 'commenting'>('authoring');
 
   return (
     <div>
@@ -21,27 +20,31 @@ export default function SubscriptionsPage() {
       >
         <Tabs.TabPane
           key='authoring'
-          tab={t('dashboard.subscriptionsPage.authoringSubscriptions')}
+          tab={t('dashboard.subscriptions_page.authoring_subscriptions')}
         >
           <Alert
-            message={t('dashboard.subscriptionsPage.authoringSubscriptionsTip')}
+            message={t(
+              'dashboard.subscriptions_page.authoring_subscriptions_tip',
+            )}
           />
           <br />
           <MyAuthoringSubscriptionsComponent />
         </Tabs.TabPane>
         <Tabs.TabPane
           key='readering'
-          tab={t('dashboard.subscriptionsPage.readingSubscriptions')}
+          tab={t('dashboard.subscriptions_page.reading_subscriptions')}
         >
           <Alert
-            message={t('dashboard.subscriptionsPage.readingSubscriptionsTip')}
+            message={t(
+              'dashboard.subscriptions_page.reading_subscriptions_tip',
+            )}
           />
           <br />
           <MyReadingSubscriptionsComponent />
         </Tabs.TabPane>
         <Tabs.TabPane
           key='commenting'
-          tab={t('dashboard.subscriptionsPage.commentingSubscriptions')}
+          tab={t('dashboard.subscriptions_page.commenting_subscriptions')}
         >
           <Alert
             message={t(
@@ -53,10 +56,10 @@ export default function SubscriptionsPage() {
         </Tabs.TabPane>
         <Tabs.TabPane
           key='tag'
-          tab={t('dashboard.subscriptionsPage.tagSubscriptions')}
+          tab={t('dashboard.subscriptions_page.tag_subscriptions')}
         >
           <Alert
-            message={t('dashboard.subscriptionsPage.tagSubscriptionsTip')}
+            message={t('dashboard.subscriptions_page.tag_subscriptions_tip')}
           />
           <br />
           <MyTagSubscriptionsComponent />

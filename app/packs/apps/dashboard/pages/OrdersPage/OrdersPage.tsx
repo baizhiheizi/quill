@@ -12,13 +12,13 @@ export default function OrdersPage() {
       <PageHeader title={t('dashboard.menu.orders')} />
       <Tabs>
         <Tabs.TabPane
-          tab={t('dashboard.ordersPage.tabs.payments')}
+          tab={t('dashboard.orders_page.tabs.payments')}
           key='payments'
         >
           <MyPaymentsComponent />
         </Tabs.TabPane>
         <Tabs.TabPane
-          tab={t('dashboard.ordersPage.tabs.swapOrders')}
+          tab={t('dashboard.orders_page.tabs.swap_orders')}
           key='swapOrders'
         >
           <MySwapOrderComponent />

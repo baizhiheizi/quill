@@ -84,8 +84,8 @@ export default function PayModalComponent(props: {
       </div>
       <div style={{ color: '#aaa', marginBottom: 5 }}>
         {type === 'pay'
-          ? t('messages.payWithMessenger')
-          : t('messages.viewWithMessenger')}
+          ? t('messages.pay_with_messenger')
+          : t('messages.view_with_messenger')}
       </div>
       <div>
         <Button type='primary' loading={paying} onClick={handlePaying}>
@@ -93,7 +93,7 @@ export default function PayModalComponent(props: {
             ? `${Math.round(countdown / 1000)} s ${t(
                 'articlePage.payModal.pollingPayment',
               )}`
-            : t('articlePage.payModal.checkPaymentBtn')}
+            : t('article_page.pay_modal.check_payment_btn')}
         </Button>
       </div>
     </div>
@@ -118,7 +118,7 @@ export default function PayModalComponent(props: {
   return (
     <Modal
       className='pay-modal'
-      title={t('articlePage.payModal.title')}
+      title={t('article_page.pay_modal.title')}
       centered
       closable={false}
       destroyOnClose={true}
@@ -159,7 +159,7 @@ export default function PayModalComponent(props: {
               </Space>
               {currency.assetId !== articleAssetId && (
                 <div style={{ color: '#aaa' }}>
-                  {t('articlePage.payModal.swapExplain')}{' '}
+                  {t('article_page.pay_modal.swap_explain')}{' '}
                   <a
                     href={
                       mixinEnv
@@ -175,7 +175,7 @@ export default function PayModalComponent(props: {
             </div>
             {payment?.state === 'refunded' ? (
               <Alert
-                message={t('articlePage.payModal.refundWarning')}
+                message={t('article_page.pay_modal.refund_warning')}
                 showIcon
                 type='warning'
               />
@@ -193,7 +193,7 @@ export default function PayModalComponent(props: {
                       ? `${Math.round(countdown / 1000)} s ${t(
                           'articlePage.payModal.pollingPayment',
                         )}`
-                      : t('articlePage.payModal.payBtn')}
+                      : t('article_page.pay_modal.pay_btn')}
                   </Button>
                 ) : (
                   <PayUrlQRCode url={payUrl} />
@@ -213,7 +213,7 @@ export default function PayModalComponent(props: {
                   }
                 }}
               >
-                {t('common.cancelBtn')}
+                {t('common.cancel_btn')}
               </Button>
             </div>
           </div>

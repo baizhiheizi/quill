@@ -1,26 +1,26 @@
 en:
   common:
-    loadMore: Load More
-    subscribeBtn: Subscribe
-    unsubscribeBtn: Unsubscribe
-    shareBtn: Share
-    detailBtn: Detail
-    editBtn: Edit
-    viewBtn: View
-    cancelBtn: Cancel
-    paidBtn: Paid
-    deleteBtn: Delete
+    load_more: Load More
+    subscribe_btn: Subscribe
+    unsubscribe_btn: Unsubscribe
+    share_btn: Share
+    detail_btn: Detail
+    edit_btn: Edit
+    view_btn: View
+    cancel_btn: Cancel
+    paid_btn: Paid
+    delete_btn: Delete
   messages:
-    payWithMessenger: Please scan the QRCode using Mixin Messenger
-    viewWithMessenger: Please scan the QRCode using Mixin Messenger
-    successSubmitted: Submitted
-    successSubscribed: Subscribed
-    successUnsubscribed: Unsubscribed
-    successHiddenArticle: Article hidden
-    successPublishedArticle: Article published
-    successUpdated: Successfully updated
-    successCopied: Successfully copied
-    successDeleted: Successfully deleted
+    pay_with_messenger: Please scan the QRCode using Mixin Messenger
+    view_with_messenger: Please scan the QRCode using Mixin Messenger
+    success_submitted: Submitted
+    success_subscribed: Subscribed
+    success_unsubscribed: Unsubscribed
+    success_hidden_article: Article hidden
+    success_published_article: Article published
+    success_updated: Successfully updated
+    success_copied: Successfully copied
+    success_deleted: Successfully deleted
   menu:
     read: Read
     write: Write
@@ -28,82 +28,82 @@ en:
     rules: Rules
     fair: Fair
     community: Community
-    openSource: Open Source
+    open_source: Open Source
     notifications: Notifications
     mine: Dashboard
     login: Login
     logout: Logout
-  homePage:
+  home_page:
     popularity: Popularity
     lately: Lately
     revenue: Revenue
     tags: Tags
-    commentsZone: Comments
-  articlePage:
-    moreToRead: 90% More to go
-    payToRead1: Pay
-    payToRead2: to continue reading
-    payToRead3: and receive early reader revenue (Check
-    payToRead4: )
-    payWarning: This article is a virtural product selling on PRSDigg, IT WILL NOT REFUND once paid. Please pay with caution.
-    firstReaderBtn: Be the FIRST reader
-    payToReadBtn: Pay to Read
-    alreadyPaid1: Already paid? Try to
-    alreadyPaid2: Refresh
-    payViaSwapTips: You can pay with other token!
-    loginBtn: Please Login
-    rewardBtn: Love this Article
-    shareBtn: Share
+    comments_zone: Comments
+  article_page:
+    more_to_read: 90% More to go
+    pay_to_read1: Pay
+    pay_to_read2: to continue reading
+    pay_to_read3: and receive early reader revenue (Check
+    pay_to_read4: )
+    pay_warning: This article is a virtural product selling on PRSDigg, IT WILL NOT REFUND once paid. Please pay with caution.
+    first_reader_btn: Be the FIRST reader
+    pay_to_read_btn: Pay to Read
+    already_paid1: Already paid? Try to
+    already_paid2: Refresh
+    pay_via_swap_tips: You can pay with other token!
+    login_btn: Please Login
+    reward_btn: Love this Article
+    share_btn: Share
     signature: Signature
-    userDetailBtn: Detail
+    user_detail_btn: Detail
     payModal:
       title: Buy Article
-      refundWarning: Payment has been refunded. Please try again.
-      pollingPayment: Checking Payment Status
-      payBtn: Pay
-      checkPaymentBtn: Already Paid
-      swapExplain: Swap supported by
-    rewardModal:
+      refund_warning: Payment has been refunded. Please try again.
+      polling_payment: Checking Payment Status
+      pay_btn: Pay
+      check_payment_btn: Already Paid
+      swap_explain: Swap supported by
+    reward_modal:
       title: Reward
-      pollingPayment: Checking
-      successPaidMessage: Payment received. Thanks for supporting!
-      swapExplain: Swap supported by
-      finishText: Finish
-      okText: Reward
-      cancelText: Later
-    timesBought: times bought
-    timesReward: times reward
-  userPage:
+      polling_payment: Checking
+      success_paid_message: Payment received. Thanks for supporting!
+      swap_explain: Swap supported by
+      finish_text: Finish
+      ok_text: Reward
+      cancel_text: Later
+    times_bought: times bought
+    times_reward: times reward
+  user_page:
     tabs:
       author: Published
       reader: Bought
       comments: Commented
   minePage:
-    publishConfirm: Are you sure to publish this article?
-    hideConfirm: Are you sure to hide this article? Early readers not affected.
-    publishBtn: Publish
-    hideBtn: Hide
+    publish_confirm: Are you sure to publish this article?
+    hide_confirm: Are you sure to hide this article? Early readers not affected.
+    publish_btn: Publish
+    hide_btn: Hide
     tabs:
       author: Published
       reader: Bought
       comments: Commented
       payments: Payments
       transfers: Revenue
-  searchPage:
-    enterBtn: Search
+  search_page:
+    enter_btn: Search
     placeholder: Input title/introduction/author/tag
-  fairPage:
-    usersCount: Users
-    articlesCount: Articles
-    authorRevenueTotal: Author Revenue(Present Value)
-    readerRevenueTotal: Reader Revenue(Present Value)
+  fair_page:
+    users_count: Users
+    articles_count: Articles
+    author_revenue_total: Author Revenue(Present Value)
+    reader_revenue_total: Reader Revenue(Present Value)
     tabs:
       revenue:
         title: PRSDigg Revenue
-        chartTitle: Revenue Chart(USD)
+        chart_title: Revenue Chart(USD)
       transfers:
         title: Transactions
-  rulesPage:
+  rules_page:
     content: |
       ### Rules of PRSDigg
 
@@ -140,25 +140,25 @@ en:
       And so on. 
 
       It is worth reminding that besides the payment for articles, the income from other payment behaviors (such as reward) will also be included in the distribution ratio of early readers' bonus.
-  communityPage:
+  community_page:
     mixin: Mixin Group
-  commentsComponent:
+  comments_component:
     title: Comments
-    subscribeBtn: Subscribe
-    unsubscribeBtn: Unsubscribe
-    emptyText: No Comments
-    deletedText: Deleted by the Administrator
-    quoteBtn: Quote
+    subscribe_btn: Subscribe
+    unsubscribe_btn: Unsubscribe
+    empty_text: No Comments
+    deleted_text: Deleted by the Administrator
+    quote_btn: Quote
     from: From
-    orderBy:
+    order_by:
       desc: DESC
       asc: ASC
       upvotes: Upvotes
     form:
       warning: Write something first.
       confirm: Are you sure to submit?
-      okText: Submit
-      cancelText: Later
+      ok_text: Submit
+      cancel_text: Later
       placeholder: Markdown supported
   dashboard:
     menu:
@@ -173,67 +173,67 @@ en:
       back: Go Back
     pages:
       article: Article Detail
-      articleNew: New Article
-      articleEdit: Edite Article
-    notificationsPage:
-      clearAllBtn: Clear All
-      readAllBtn: Read All
-    articlesPage:
-      publishConfirm: Are you sure to publish this article?
-      hideConfirm: Are you sure to hide this article? Early readers not affected.
-      publishBtn: Publish
-      hideBtn: Hide
+      article_new: New Article
+      article_edit: Edite Article
+    notifications_page:
+      clear_all_btn: Clear All
+      read_all_btn: Read All
+    articles_page:
+      publish_confirm: Are you sure to publish this article?
+      hide_confirm: Are you sure to hide this article? Early readers not affected.
+      publish_btn: Publish
+      hide_btn: Hide
       tabs:
         published: Published
         bought: Bought
         hidden: Hidden
         blocked: Blocked
-    articlePage:
+    article_page:
       tabs:
-        buyRecords: Buy Records
-        rewardRecords: Reward Records
-        commentRecords: Comments
-      boughtArticle: bought this article
-      rewardedArticle: rewarded this article
+        buy_records: Buy Records
+        reward_records: Reward Records
+        comment_records: Comments
+      bought_article: bought this article
+      rewarded_article: rewarded this article
       paid: paid
-    subscriptionsPage:
-      authoringSubscriptions: Authors
-      authoringSubscriptionsTip: You will be notified when authors publish new articles
-      readingSubscriptions: Readers
-      readingSubscriptionsTip: You will be notified when readers buy new articles
-      commentingSubscriptions: Comments
-      commentingSubscriptionsTip: You will be notified when articles receive new comments
-      tagSubscriptions: Tags
-      tagSubscriptionsTip: You will be notified when tagged articles created
-      confirmToUnsubscribe: Are you sure to unsubscribe?
-    revenuePage:
-      authorTransfers: Author Revenue
-      readerTransfers: Reader Revenue
+    subscriptions_page:
+      authoring_subscriptions: Authors
+      authoring_subscriptions_tip: You will be notified when authors publish new articles
+      reading_subscriptions: Readers
+      reading_subscriptions_tip: You will be notified when readers buy new articles
+      commenting_subscriptions: Comments
+      commenting_subscriptions_tip: You will be notified when articles receive new comments
+      tag_subscriptions: Tags
+      tag_subscriptions_tip: You will be notified when tagged articles created
+      confirm_to_unsubscribe: Are you sure to unsubscribe?
+    revenue_page:
+      author_transfers: Author Revenue
+      reader_transfers: Reader Revenue
       payments: Payments
-    ordersPage:
+    orders_page:
       tabs:
         payments: Payments
-        swapOrders: Swap Orders
-    settingsPage:
+        swap_orders: Swap Orders
+    settings_page:
       tabs:
         notification: Notification
-        accessToken: Access Token
+        access_token: Access Token
       notification:
-        tipsOfGeneral: You can customized your notification via Web, Mixin Bot and Webhook(on development).
-        tipsOfArticlePublished: When your subscribed authors publish a new article, you will be notified.
-        tipsOfArticleBought: When your subscribed readers buy a new article, you will be notified.
-        tipsOfArticleRewarded: When your subscribed readers reward a new article, you will be notified.
-        tipsOfTaggingCreated: When new article tagged by your subscribed tags, you will be notified.
-        tipsOfCommentCreated: When your subscribed article are commented, you will be notified.
-        tipsOfTransferProcessed: When new transfers(including revenue from articles and refunding) received, you will be notified.
-      accessToken:
-        confirmGenerateToken: You can provide an Access Token to a third-party application to manage your articles. Are you sure to generate a new Access Token？
-        generateToken: Generate New Token
-        memoPlaceholader: Memo for the Access Token
-        generatedTips: A new Access Token generated!
-        securityTips: Please keep your Access Token safe. The token will not display once close. Generate a new one if you lose it.
-        deleteConfirmTips: Are you sure to DELETE the Access Token?
-        copyBtn: Copy
-    overviewPage:
-      presentValue: Per present value
-      perPriceWhenPaid: Per the price when paid
+        tips_of_general: You can customized your notification via Web, Mixin Bot and Webhook(on development).
+        tips_of_article_published: When your subscribed authors publish a new article, you will be notified.
+        tips_of_article_bought: When your subscribed readers buy a new article, you will be notified.
+        tips_of_article_rewarded: When your subscribed readers reward a new article, you will be notified.
+        tips_of_tagging_created: When new article tagged by your subscribed tags, you will be notified.
+        tips_of_comment_created: When your subscribed article are commented, you will be notified.
+        tips_of_transfer_processed: When new transfers(including revenue from articles and refunding) received, you will be notified.
+      access_token:
+        confirm_generate_token: You can provide an Access Token to a third-party application to manage your articles. Are you sure to generate a new Access Token？
+        generate_token: Generate New Token
+        memo_placeholader: Memo for the Access Token
+        generated_tips: A new Access Token generated!
+        security_tips: Please keep your Access Token safe. The token will not display once close. Generate a new one if you lose it.
+        delete_confirm_tips: Are you sure to DELETE the Access Token?
+        copy_btn: Copy
+    overview_page:
+      present_value: Per present value
+      per_price_when_paid: Per the price when paid

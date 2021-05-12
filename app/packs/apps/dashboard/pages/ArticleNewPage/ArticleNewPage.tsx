@@ -47,7 +47,7 @@ export default function ArticleNewPage() {
       if (error) {
         message.error(error);
       } else {
-        message.success(t('messages.successSubmitted'));
+        message.success(t('messages.success_submitted'));
         history.replace('/articles');
       }
     },
@@ -63,11 +63,11 @@ export default function ArticleNewPage() {
   return (
     <div>
       <PageHeader
-        title={t('dashboard.pages.articleNew')}
+        title={t('dashboard.pages.article_new')}
         breadcrumb={{
           routes: [
             { path: '/articles', breadcrumbName: t('dashboard.menu.articles') },
-            { path: '', breadcrumbName: t('dashboard.pages.articleNew') },
+            { path: '', breadcrumbName: t('dashboard.pages.article_new') },
           ],
           itemRender: (route, _params, routes, _paths) => {
             const last = routes.indexOf(route) === routes.length - 1;
@@ -104,10 +104,10 @@ export default function ArticleNewPage() {
             message.warn(t('article.form.warning'));
           } else {
             Modal.confirm({
-              title: t('article.form.createConfirm'),
+              title: t('article.form.create_confirm'),
               centered: true,
-              okText: t('article.form.createOkText'),
-              cancelText: t('article.form.createCancelText'),
+              okText: t('article.form.create_ok_text'),
+              cancelText: t('article.form.create_cancel_text'),
               onOk: () =>
                 createArticle({
                   variables: { input: { ...values, tagNames: tags } },
@@ -120,21 +120,21 @@ export default function ArticleNewPage() {
           label={t('article.title')}
           name='title'
           rules={[
-            { required: true, message: t('article.form.titleIsRequired') },
+            { required: true, message: t('article.form.title_is_required') },
           ]}
         >
-          <Input placeholder={t('article.form.titlePlaceHolder')} />
+          <Input placeholder={t('article.form.title_place_holder')} />
         </Form.Item>
         <Form.Item
           label={t('article.content')}
           name='content'
           rules={[
-            { required: true, message: t('article.form.contentIsRequired') },
+            { required: true, message: t('article.form.content_is_required') },
           ]}
         >
           <Editor
             textareaProps={{
-              placeholder: t('article.form.contentPlaceHolder'),
+              placeholder: t('article.form.content_place_holder'),
             }}
             previewOptions={{
               plugins: markdownPlugins,
@@ -163,10 +163,10 @@ export default function ArticleNewPage() {
           label={t('article.intro')}
           name='intro'
           rules={[
-            { required: true, message: t('article.form.introIsRequired') },
+            { required: true, message: t('article.form.intro_is_required') },
           ]}
         >
-          <Input.TextArea placeholder={t('article.form.introPlaceHolder')} />
+          <Input.TextArea placeholder={t('article.form.intro_place_holder')} />
         </Form.Item>
         <Form.Item label={t('article.tags')}>
           <EditableTagsComponent tags={tags} setTags={setTags} />
@@ -189,7 +189,7 @@ export default function ArticleNewPage() {
                     } else if (currency.symbol === 'PRS' && value >= 1) {
                       return Promise.resolve();
                     } else {
-                      return Promise.reject(t('article.form.priceIsTooLow'));
+                      return Promise.reject(t('article.form.price_is_too_low'));
                     }
                   },
                 },
@@ -222,7 +222,7 @@ export default function ArticleNewPage() {
           </Space>
         </Form.Item>
         <Form.Item
-          label={t('article.stateText')}
+          label={t('article.state_text')}
           name='state'
           rules={[{ required: true }]}
         >
@@ -240,7 +240,7 @@ export default function ArticleNewPage() {
             htmlType='submit'
             loading={creating}
           >
-            {t('article.form.createBtn')}
+            {t('article.form.create_btn')}
           </Button>
         </Form.Item>
       </Form>

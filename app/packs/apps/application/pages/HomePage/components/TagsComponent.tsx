@@ -53,7 +53,7 @@ export default function TagsComponent() {
               </div>
               <div>
                 <Typography.Text type='secondary'>
-                  {t('tag.articlesCount')} {tag.articlesCount}
+                  {t('tag.articles_count')} {tag.articlesCount}
                 </Typography.Text>
               </div>
             </Card>
@@ -79,7 +79,7 @@ export default function TagsComponent() {
               });
             }}
           >
-            {t('common.loadMore')}
+            {t('common.load_more')}
           </Button>
         </div>
       )}

@@ -24,19 +24,19 @@ export default function HomePage() {
         });
       }}
     >
-      <Tabs.TabPane tab={t('homePage.popularity')} key='popularity'>
+      <Tabs.TabPane tab={t('home_page.popularity')} key='popularity'>
         <ArticlesComponent order='default' />
       </Tabs.TabPane>
-      <Tabs.TabPane tab={t('homePage.lately')} key='lately'>
+      <Tabs.TabPane tab={t('home_page.lately')} key='lately'>
         <ArticlesComponent order='lately' />
       </Tabs.TabPane>
-      <Tabs.TabPane tab={t('homePage.revenue')} key='revenue'>
+      <Tabs.TabPane tab={t('home_page.revenue')} key='revenue'>
         <ArticlesComponent order='revenue' />
       </Tabs.TabPane>
-      <Tabs.TabPane tab={t('homePage.tags')} key='tags'>
+      <Tabs.TabPane tab={t('home_page.tags')} key='tags'>
         <TagsComponent />
       </Tabs.TabPane>
-      <Tabs.TabPane tab={t('homePage.commentsZone')} key='comments'>
+      <Tabs.TabPane tab={t('home_page.comments_zone')} key='comments'>
         <CommentsComponent />
       </Tabs.TabPane>
     </Tabs>

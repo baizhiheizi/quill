@@ -46,7 +46,7 @@ export default function MySwapOrderComponent() {
                 });
               }}
             >
-              {t('common.loadMore')}
+              {t('common.load_more')}
             </Button>
           </div>
         )

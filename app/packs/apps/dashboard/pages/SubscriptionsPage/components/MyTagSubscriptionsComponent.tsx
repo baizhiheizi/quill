@@ -11,12 +11,8 @@ import { useTranslation } from 'react-i18next';
 
 export default function MyTagSubscriptionsComponent() {
   const { t } = useTranslation();
-  const {
-    loading,
-    data,
-    fetchMore,
-    refetch,
-  } = useMyTagSubscriptionConnectionQuery();
+  const { loading, data, fetchMore, refetch } =
+    useMyTagSubscriptionConnectionQuery();
 
   const [toggleTagSubscribeUserAction] = useToggleSubscribeTagActionMutation({
     update() {
@@ -46,14 +42,14 @@ export default function MyTagSubscriptionsComponent() {
           key={tag.id}
           actions={[
             <Popconfirm
-              title={t('dashboard.subscriptionsPage.confirmToUnsubscribe')}
+              title={t('dashboard.subscriptions_page.confirm_to_unsubscribe')}
               onConfirm={() =>
                 toggleTagSubscribeUserAction({
                   variables: { input: { mixinId: tag.id } },
                 })
               }
             >
-              <Button size='small'>{t('common.unsubscribeBtn')}</Button>
+              <Button size='small'>{t('common.unsubscribe_btn')}</Button>
             </Popconfirm>,
           ]}
         >
@@ -67,8 +63,8 @@ export default function MyTagSubscriptionsComponent() {
             }
             description={
               <Space split={<Divider type='vertical' />} wrap>
-                {`${t('tag.articlesCount')}: ${tag.articlesCount}`}
-                {`${t('tag.subscribersCount')}: ${tag.subscribersCount}`}
+                {`${t('tag.articles_count')}: ${tag.articlesCount}`}
+                {`${t('tag.subscribers_count')}: ${tag.subscribersCount}`}
               </Space>
             }
           />

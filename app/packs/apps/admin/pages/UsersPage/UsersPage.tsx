@@ -89,13 +89,10 @@ export function UsersComponent(props: {
   filter?: string;
 }) {
   const { query, orderBy, filter } = props;
-  const {
-    data,
-    loading,
-    fetchMore,
-  }: AdminUserConnectionQueryHookResult = useAdminUserConnectionQuery({
-    variables: { query, orderBy, filter },
-  });
+  const { data, loading, fetchMore }: AdminUserConnectionQueryHookResult =
+    useAdminUserConnectionQuery({
+      variables: { query, orderBy, filter },
+    });
   const [adminBanUser] = useAdminBanUserMutation();
   const [adminUnbanUser] = useAdminUnbanUserMutation();
 

@@ -45,7 +45,7 @@ export default function MyPaymentsComponent() {
                 });
               }}
             >
-              {t('common.loadMore')}
+              {t('common.load_more')}
             </Button>
           </div>
         )

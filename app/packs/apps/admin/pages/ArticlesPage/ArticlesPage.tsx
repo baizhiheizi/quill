@@ -59,13 +59,10 @@ export default function ArticlesPage() {
 
 function ArticlesComponent(props: { query?: string; state?: string }) {
   const { query, state } = props;
-  const {
-    data,
-    loading,
-    fetchMore,
-  }: AdminArticleConnectionQueryHookResult = useAdminArticleConnectionQuery({
-    variables: { query, state },
-  });
+  const { data, loading, fetchMore }: AdminArticleConnectionQueryHookResult =
+    useAdminArticleConnectionQuery({
+      variables: { query, state },
+    });
   const [block, { loading: blocking }] = useAdminBlockArticleMutation();
   const [unblock, { loading: unblocking }] = useAdminUnblockArticleMutation();
 

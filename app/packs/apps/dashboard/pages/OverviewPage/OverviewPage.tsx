@@ -22,38 +22,38 @@ export default function OverviewPage() {
       <Row gutter={16} style={{ textAlign: 'center' }}>
         <Col xs={12} sm={6}>
           <Statistic
-            title={t('user.articlesCount')}
+            title={t('user.articles_count')}
             value={currentUser.statistics.articlesCount}
           />
         </Col>
         <Col xs={12} sm={6}>
           <Statistic
-            title={t('user.boughtArticlesCount')}
+            title={t('user.bought_articles_count')}
             value={currentUser.statistics.boughtArticlesCount}
           />
         </Col>
       </Row>
       <Row gutter={16} style={{ textAlign: 'center' }}>
-        <Tooltip title={t('dashboard.overviewPage.presentValue')}>
+        <Tooltip title={t('dashboard.overview_page.present_value')}>
           <Col xs={12} sm={6}>
             <Statistic
-              title={t('user.authorRevenueTotal')}
+              title={t('user.author_revenue_total')}
               value={currentUser.statistics.authorRevenueTotalUsd.toFixed(2)}
             />
           </Col>
         </Tooltip>
-        <Tooltip title={t('dashboard.overviewPage.presentValue')}>
+        <Tooltip title={t('dashboard.overview_page.present_value')}>
           <Col xs={12} sm={6}>
             <Statistic
-              title={t('user.readerRevenueTotal')}
+              title={t('user.reader_revenue_total')}
               value={currentUser.statistics.readerRevenueTotalUsd.toFixed(2)}
             />
           </Col>
         </Tooltip>
-        <Tooltip title={t('dashboard.overviewPage.perPriceWhenPaid')}>
+        <Tooltip title={t('dashboard.overview_page.per_price_when_paid')}>
           <Col xs={12} sm={6}>
             <Statistic
-              title={t('user.paymentTotalUsd')}
+              title={t('user.payment_total_usd')}
               value={currentUser.statistics.paymentTotalUsd.toFixed(2)}
             />
           </Col>

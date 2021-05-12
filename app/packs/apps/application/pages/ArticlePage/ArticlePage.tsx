@@ -106,7 +106,7 @@ export default function ArticlePage() {
                 textAlign: 'left',
               }}
             >
-              {t('article.wordsCount')}: {article.wordsCount}
+              {t('article.words_count')}: {article.words_count}
             </div>
             {article.partialContent && (
               <div style={{ marginBottom: '1rem', textAlign: 'left' }}>
@@ -118,27 +118,27 @@ export default function ArticlePage() {
                     color: 'red',
                   }}
                 >
-                  - {t('articlePage.moreToRead')} -
+                  - {t('article_page.more_to_read')} -
                 </div>
               </div>
             )}
             <div style={{ marginBottom: '1rem' }}>
               <div>
-                {t('articlePage.payToRead1')}{' '}
+                {t('article_page.pay_to_read1')}{' '}
                 <span style={{ color: 'red' }}>
                   {article.price} {article.currency.symbol}
                 </span>
                 {` (≈$${article.priceUsd}) `}
-                {t('articlePage.payToRead2')}
+                {t('article_page.pay_to_read2')}
               </div>
               <div>
-                {t('articlePage.payToRead3')}{' '}
+                {t('article_page.pay_to_read3')}{' '}
                 <Link to='/rules'>{t('menu.rules')}</Link>{' '}
-                {t('articlePage.payToRead4')}
+                {t('article_page.pay_to_read4')}
               </div>
             </div>
             <div style={{ marginBottom: '1rem' }}>
-              <Alert type='warning' message={t('articlePage.payWarning')} />
+              <Alert type='warning' message={t('article_page.pay_warning')} />
             </div>
             <div>
               {currentUser ? (
@@ -148,8 +148,8 @@ export default function ArticlePage() {
                     onClick={() => setPayModalVisible(true)}
                   >
                     {article.readers.totalCount === 0
-                      ? t('articlePage.firstReaderBtn')
-                      : t('articlePage.payToReadBtn')}
+                      ? t('article_page.first_reader_btn')
+                      : t('article_page.pay_to_read_btn')}
                   </Button>
                   {payModalVisible && (
                     <PayModalComponent
@@ -169,9 +169,9 @@ export default function ArticlePage() {
                   <div
                     style={{ marginTop: 10, fontSize: '0.8rem', color: '#aaa' }}
                   >
-                    {t('articlePage.alreadyPaid1')}{' '}
+                    {t('article_page.already_paid1')}{' '}
                     <a onClick={() => refetch()}>
-                      {t('articlePage.alreadyPaid2')}
+                      {t('article_page.already_paid2')}
                     </a>
                   </div>
                   <div
@@ -181,7 +181,7 @@ export default function ArticlePage() {
                       color: '#aaa',
                     }}
                   >
-                    {t('articlePage.payViaSwapTips')}
+                    {t('article_page.pay_via_swap_tips')}
                   </div>
                 </div>
               ) : (
@@ -189,7 +189,7 @@ export default function ArticlePage() {
                   type='primary'
                   href={`/login?return_to=${encodeURIComponent(location.href)}`}
                 >
-                  {t('articlePage.loginBtn')}
+                  {t('article_page.login_btn')}
                 </Button>
               )}
             </div>
@@ -208,7 +208,7 @@ export default function ArticlePage() {
             target='_blank'
             icon={<LinkOutlined />}
           >
-            {t('articlePage.signature')}
+            {t('article_page.signature')}
           </Button>
         )}
         <Button
@@ -216,7 +216,7 @@ export default function ArticlePage() {
           icon={<ShareAltOutlined />}
           onClick={() => handleArticleShare(article, Boolean(mixinEnv), appId)}
         >
-          {t('articlePage.shareBtn')}
+          {t('article_page.share_btn')}
         </Button>
       </div>
       <div style={{ marginBottom: '2rem' }}>
@@ -314,7 +314,7 @@ export default function ArticlePage() {
               size='large'
               danger
             >
-              <HeartOutlined /> {t('articlePage.rewardBtn')}
+              <HeartOutlined /> {t('article_page.reward_btn')}
             </Button>
             {rewardModalVisible && (
               <RewardModalComponent
@@ -340,11 +340,11 @@ export default function ArticlePage() {
                 <span className='text-red-500'>
                   {article.buyOrders.totalCount}
                 </span>{' '}
-                {t('articlePage.timesBought')},{' '}
+                {t('article_page.times_bought')},{' '}
                 <span className='text-red-500'>
                   {article.rewardOrders.totalCount}
                 </span>{' '}
-                {t('articlePage.timesReward')}
+                {t('article_page.times_reward')}
               </h4>
             </Col>
           </Row>
@@ -377,7 +377,7 @@ export default function ArticlePage() {
               </Col>
               <Col xs={12} sm={6}>
                 <Statistic
-                  title={t('article.ordersCount')}
+                  title={t('article.orders_count')}
                   value={article.ordersCount}
                 />
               </Col>
@@ -389,7 +389,7 @@ export default function ArticlePage() {
               </Col>
               <Col xs={12} sm={6}>
                 <Statistic
-                  title={t('article.myShare')}
+                  title={t('article.my_share')}
                   value={
                     article.myShare ? (article.myShare * 100).toFixed(3) : '0.0'
                   }

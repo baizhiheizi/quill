@@ -29,11 +29,11 @@ export default function ArticlePage() {
         title={t('dashboard.pages.article')}
         extra={[
           <Button key='edit' type='primary'>
-            <Link to={`/articles/${uuid}/edit`}>{t('common.editBtn')}</Link>
+            <Link to={`/articles/${uuid}/edit`}>{t('common.edit_btn')}</Link>
           </Button>,
           <Button key='view'>
             <a href={`/articles/${uuid}`} target='_blank'>
-              {t('common.viewBtn')}
+              {t('common.view_btn')}
             </a>
           </Button>,
         ]}
@@ -71,37 +71,37 @@ export default function ArticlePage() {
               {t(`article.state.${article.state}`)}
             </Tag>
           </Descriptions.Item>
-          <Descriptions.Item label={t('article.createdAt')}>
+          <Descriptions.Item label={t('article.created_at')}>
             {moment(article.createdAt).format('YYYY-MM-DD HH:mm:ss')}
           </Descriptions.Item>
-          <Descriptions.Item label={t('article.updatedAt')}>
+          <Descriptions.Item label={t('article.updated_at')}>
             {moment(article.updatedAt).format('YYYY-MM-DD HH:mm:ss')}
           </Descriptions.Item>
           <Descriptions.Item label={t('article.price')}>
             {article.price} {article.currency.symbol}
           </Descriptions.Item>
-          <Descriptions.Item label={t('article.buyOrdersCount')}>
+          <Descriptions.Item label={t('article.buy_orders_count')}>
             {article.buyOrders.totalCount}
           </Descriptions.Item>
-          <Descriptions.Item label={t('article.rewardOrdersCount')}>
+          <Descriptions.Item label={t('article.reward_orders_count')}>
             {article.rewardOrders.totalCount}
           </Descriptions.Item>
           <Descriptions.Item label={t('article.revenue')}>
             {article.revenue} {article.currency.symbol}
           </Descriptions.Item>
-          <Descriptions.Item label={t('article.authorRevenueTotal')}>
+          <Descriptions.Item label={t('article.author_revenue_total')}>
             {article.authorRevenueTotal} {article.currency.symbol}
           </Descriptions.Item>
-          <Descriptions.Item label={t('article.readerRevenueTotal')}>
+          <Descriptions.Item label={t('article.reader_revenue_total')}>
             {article.readerRevenueTotal} {article.currency.symbol}
           </Descriptions.Item>
-          <Descriptions.Item label={t('article.commentsCount')}>
+          <Descriptions.Item label={t('article.comments_count')}>
             {article.comments.totalCount}
           </Descriptions.Item>
-          <Descriptions.Item label={t('article.upvotesCount')}>
+          <Descriptions.Item label={t('article.upvotes_count')}>
             {article.upvotesCount}
           </Descriptions.Item>
-          <Descriptions.Item label={t('article.downvotesCount')}>
+          <Descriptions.Item label={t('article.downvotes_count')}>
             {article.downvotesCount}
           </Descriptions.Item>
           <Descriptions.Item label={t('article.tags')}>
@@ -116,19 +116,19 @@ export default function ArticlePage() {
       <div>
         <Tabs>
           <Tabs.TabPane
-            tab={t('dashboard.articlePage.tabs.buyRecords')}
+            tab={t('dashboard.article_page.tabs.buy_records')}
             key='buyers'
           >
             <ArticleOrdersComponent uuid={uuid} orderType='buy_article' />
           </Tabs.TabPane>
           <Tabs.TabPane
-            tab={t('dashboard.articlePage.tabs.rewardRecords')}
+            tab={t('dashboard.article_page.tabs.reward_records')}
             key='rewarders'
           >
             <ArticleOrdersComponent uuid={uuid} orderType='reward_article' />
           </Tabs.TabPane>
           <Tabs.TabPane
-            tab={t('dashboard.articlePage.tabs.commentRecords')}
+            tab={t('dashboard.article_page.tabs.comment_records')}
             key='comments'
           >
             <ArticleCommentsComponent articleId={article.id} />

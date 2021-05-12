@@ -29,19 +29,17 @@ export default function MyArticlesComponent(props: {
   }: MyArticleConnectionQueryHookResult = useMyArticleConnectionQuery({
     variables: { type: 'author', state: props.state || 'published' },
   });
-  const [
-    hideArticle,
-    { loading: hiding },
-  ]: HideArticleMutationHookResult = useHideArticleMutation({
-    update(_, { data: { error: err } }) {
-      if (err) {
-        message.error(err);
-      } else {
-        message.success(t('messages.successHiddenArticle'));
-        refetch();
-      }
-    },
-  });
+  const [hideArticle, { loading: hiding }]: HideArticleMutationHookResult =
+    useHideArticleMutation({
+      update(_, { data: { error: err } }) {
+        if (err) {
+          message.error(err);
+        } else {
+          message.success(t('messages.success_hidden_article'));
+          refetch();
+        }
+      },
+    });
   const [
     publishArticle,
     { loading: publishing },
@@ -50,7 +48,7 @@ export default function MyArticlesComponent(props: {
       if (err) {
         message.error(err);
       } else {
-        message.success(t('messages.successPublishedArticle'));
+        message.success(t('messages.success_published_article'));
         refetch();
       }
     },
@@ -93,7 +91,7 @@ export default function MyArticlesComponent(props: {
                 });
               }}
             >
-              {t('common.loadMore')}
+              {t('common.load_more')}
             </Button>
           </div>
         )
@@ -105,17 +103,17 @@ export default function MyArticlesComponent(props: {
             article.state === 'blocked'
               ? [
                   <Link to={`/articles/${article.uuid}`}>
-                    {t('common.detailBtn')}
+                    {t('common.detail_btn')}
                   </Link>,
                 ]
               : [
                   <Link to={`/articles/${article.uuid}`}>
-                    {t('common.detailBtn')}
+                    {t('common.detail_btn')}
                   </Link>,
                   <span>
                     {article.state === 'hidden' ? (
                       <Popconfirm
-                        title={t('dashboard.articlesPage.publishConfirm')}
+                        title={t('dashboard.articles_page.publish_confirm')}
                         disabled={publishing}
                         onConfirm={() =>
                           publishArticle({
@@ -123,11 +121,11 @@ export default function MyArticlesComponent(props: {
                           })
                         }
                       >
-                        <a>{t('dashboard.articlesPage.publishBtn')}</a>
+                        <a>{t('dashboard.articles_page.publish_btn')}</a>
                       </Popconfirm>
                     ) : (
                       <Popconfirm
-                        title={t('dashboard.articlesPage.hideConfirm')}
+                        title={t('dashboard.articles_page.hide_confirm')}
                         disabled={hiding}
                         onConfirm={() =>
                           hideArticle({
@@ -135,12 +133,12 @@ export default function MyArticlesComponent(props: {
                           })
                         }
                       >
-                        <a>{t('dashboard.articlesPage.hideBtn')}</a>
+                        <a>{t('dashboard.articles_page.hide_btn')}</a>
                       </Popconfirm>
                     )}
                   </span>,
                   <Link to={`/articles/${article.uuid}/edit`}>
-                    {t('common.editBtn')}
+                    {t('common.edit_btn')}
                   </Link>,
                 ]
           }

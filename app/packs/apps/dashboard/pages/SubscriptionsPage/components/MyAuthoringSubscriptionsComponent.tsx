@@ -11,19 +11,14 @@ import { useTranslation } from 'react-i18next';
 
 export default function MyAuthoringSubscriptionsComponent() {
   const { t } = useTranslation();
-  const {
-    loading,
-    data,
-    fetchMore,
-    refetch,
-  } = useMyAuthoringSubscriptionConnectionQuery();
-  const [
-    toggleAuthoringSubscribeUserAction,
-  ] = useToggleAuthoringSubscribeUserActionMutation({
-    update() {
-      refetch();
-    },
-  });
+  const { loading, data, fetchMore, refetch } =
+    useMyAuthoringSubscriptionConnectionQuery();
+  const [toggleAuthoringSubscribeUserAction] =
+    useToggleAuthoringSubscribeUserActionMutation({
+      update() {
+        refetch();
+      },
+    });
 
   if (loading) {
     return <LoadingComponent />;
@@ -47,14 +42,14 @@ export default function MyAuthoringSubscriptionsComponent() {
           key={user.id}
           actions={[
             <Popconfirm
-              title={t('dashboard.subscriptionsPage.confirmToUnsubscribe')}
+              title={t('dashboard.subscriptions_page.confirm_to_unsubscribe')}
               onConfirm={() =>
                 toggleAuthoringSubscribeUserAction({
                   variables: { input: { mixinId: user.mixinId } },
                 })
               }
             >
-              <Button size='small'>{t('common.unsubscribeBtn')}</Button>
+              <Button size='small'>{t('common.unsubscribe_btn')}</Button>
             </Popconfirm>,
           ]}
         >
@@ -67,7 +62,9 @@ export default function MyAuthoringSubscriptionsComponent() {
             avatar={<Avatar src={user.avatarUrl}>{user.name[0]}</Avatar>}
             description={
               <Space split={<Divider type='vertical' />} wrap>
-                {`${t('user.articlesCount')}: ${user.statistics.articlesCount}`}
+                {`${t('user.articles_count')}: ${
+                  user.statistics.articlesCount
+                }`}
                 {`${t(
                   'user.authorRevenueTotal',
                 )}: ${user.statistics.authorRevenueTotalUsd.toFixed(2)}`}

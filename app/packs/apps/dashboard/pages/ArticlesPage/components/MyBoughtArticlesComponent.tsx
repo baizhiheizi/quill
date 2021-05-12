@@ -12,13 +12,10 @@ import { useTranslation } from 'react-i18next';
 export default function MyBoughtArticlesComponent() {
   const { t, i18n } = useTranslation();
   moment.locale(i18n.language);
-  const {
-    data,
-    loading,
-    fetchMore,
-  }: MyArticleConnectionQueryHookResult = useMyArticleConnectionQuery({
-    variables: { type: 'reader' },
-  });
+  const { data, loading, fetchMore }: MyArticleConnectionQueryHookResult =
+    useMyArticleConnectionQuery({
+      variables: { type: 'reader' },
+    });
 
   if (loading) {
     return <LoadingComponent />;
@@ -57,7 +54,7 @@ export default function MyBoughtArticlesComponent() {
                 });
               }}
             >
-              {t('common.loadMore')}
+              {t('common.load_more')}
             </Button>
           </div>
         )

@@ -15,13 +15,10 @@ export default function MyTransfersComponent(props: {
   const { transferType } = props;
   const { t, i18n } = useTranslation();
   moment.locale(i18n.language);
-  const {
-    data,
-    loading,
-    fetchMore,
-  }: MyTransferConnectionQueryHookResult = useMyTransferConnectionQuery({
-    variables: { transferType },
-  });
+  const { data, loading, fetchMore }: MyTransferConnectionQueryHookResult =
+    useMyTransferConnectionQuery({
+      variables: { transferType },
+    });
 
   if (loading) {
     return <LoadingComponent />;
@@ -60,7 +57,7 @@ export default function MyTransfersComponent(props: {
                 });
               }}
             >
-              {t('common.loadMore')}
+              {t('common.load_more')}
             </Button>
           </div>
         )

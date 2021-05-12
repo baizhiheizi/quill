@@ -1,26 +1,26 @@
 zh-CN:
   common:
-    loadMore: 加载更多
-    subscribeBtn: 订阅
-    unsubscribeBtn: 取消订阅
-    shareBtn: 分享
-    detailBtn: 详情
-    editBtn: 编辑
-    viewBtn: 查看
-    cancelBtn: 取消
-    paidBtn: 已经支付
-    deleteBtn: 删除
+    load_more: 加载更多
+    subscribe_btn: 订阅
+    unsubscribe_btn: 取消订阅
+    share_btn: 分享
+    detail_btn: 详情
+    edit_btn: 编辑
+    view_btn: 查看
+    cancel_btn: 取消
+    paid_btn: 已经支付
+    delete_btn: 删除
   messages:
-    payWithMessenger: 请使用 Mixin Messenger 扫码支付
-    viewWithMessenger: 请使用 Mixin Messenger 扫码查看
-    successSubmitted: 成功提交
-    successSubscribed: 成功订阅
-    successUnsubscribed: 已取消订阅
-    successHiddenArticle: 文章已隐藏
-    successPublishedArticle: 文章已公开
-    successUpdated: 成功更新
-    successCopied: 成功复制
-    successDeleted: 成功删除
+    pay_with_messenger: 请使用 Mixin Messenger 扫码支付
+    view_with_messenger: 请使用 Mixin Messenger 扫码查看
+    success_submitted: 成功提交
+    success_subscribed: 成功订阅
+    success_unsubscribed: 已取消订阅
+    success_hidden_article: 文章已隐藏
+    success_published_article: 文章已公开
+    success_updated: 成功更新
+    success_copied: 成功复制
+    success_deleted: 成功删除
   menu:
     read: 读文章
     write: 写文章
@@ -28,85 +28,85 @@ zh-CN:
     rules: 规则
     fair: 公示
     community: 社区
-    openSource: 开源
+    open_source: 开源
     notifications: 消息通知
     mine: 个人中心
     login: 登录
     logout: 登出
-  homePage:
+  home_page:
     popularity: 综合排序
     lately: 最新发表
     revenue: 营收最多
     tags: 话题
-    orderByPopularity: 综合排序
-    orderByCreatedAt: 最新优先
-    orderByRevenue: 营收最多
-    commentsZone: 评论区
-  articlePage:
-    moreToRead: 以下还有 90% 内容
-    payToRead1: 支付
-    payToRead2: 继续阅读
-    payToRead3: 并享受早期读者奖励（查看
-    payToRead4: )
-    payWarning: 文章为作者在顶瓜瓜平台出售的虚拟商品，一经付款，概不退还。谨慎付款，以防被骗。
-    firstReaderBtn: 成为第一位读者
-    payToReadBtn: 付费阅读
-    alreadyPaid1: 已经付款?试试
-    alreadyPaid2: 刷新
-    payViaSwapTips: 您也可以用其他主流币支付
-    loginBtn: 请先登录
-    rewardBtn: 大爱此文
-    shareBtn: 分享
+    order_by_popularity: 综合排序
+    order_by_created_at: 最新优先
+    order_by_revenue: 营收最多
+    comments_zone: 评论区
+  article_page:
+    more_to_read: 以下还有 90% 内容
+    pay_to_read1: 支付
+    pay_to_read2: 继续阅读
+    pay_to_read3: 并享受早期读者奖励（查看
+    pay_to_read4: )
+    pay_warning: 文章为作者在顶瓜瓜平台出售的虚拟商品，一经付款，概不退还。谨慎付款，以防被骗。
+    first_reader_btn: 成为第一位读者
+    pay_to_read_btn: 付费阅读
+    already_paid1: 已经付款?试试
+    already_paid2: 刷新
+    pay_via_swap_tips: 您也可以用其他主流币支付
+    login_btn: 请先登录
+    reward_btn: 大爱此文
+    share_btn: 分享
     signature: 签名
-    userDetailBtn: 查看
-    payModal:
+    user_detail_btn: 查看
+    pay_modal:
       title: 购买文章
-      refundWarning: 购买失败，已原路退款。请重新购买。
-      pollingPayment: 支付结果查询中
-      payBtn: 支付
-      checkPaymentBtn: 已经支付
-      swapExplain: Swap 服务来自
-    rewardModal:
+      refund_warning: 购买失败，已原路退款。请重新购买。
+      polling_payment: 支付结果查询中
+      pay_btn: 支付
+      check_payment_btn: 已经支付
+      swap_explain: Swap 服务来自
+    reward_modal:
       title: 赞赏文章
-      pollingPayment: 查询中
-      successPaidMessage: 赞赏已成功收到，感谢支持！
-      swapExplain: Swap 服务来自
-      finishText: 完成
-      okText: 赞赏
-      cancelText: 再想想
-    timesBought: 次购买
-    timesReward: 次赞赏
-  userPage:
+      polling_payment: 查询中
+      success_paid_message: 赞赏已成功收到，感谢支持！
+      swap_explain: Swap 服务来自
+      finish_text: 完成
+      ok_text: 赞赏
+      cancel_text: 再想想
+    times_bought: 次购买
+    times_reward: 次赞赏
+  user_page:
     tabs:
       author: 已发表
       reader: 已购买
       comments: 已评论
-  minePage:
-    publishConfirm: 确定要将文章公开吗？
-    hideConfirm: 确定要将文章隐藏吗？已购读者将不受影响。
-    publishBtn: 公开
-    hideBtn: 隐藏
+  mine_page:
+    publish_confirm: 确定要将文章公开吗？
+    hide_confirm: 确定要将文章隐藏吗？已购读者将不受影响。
+    publish_btn: 公开
+    hide_btn: 隐藏
     tabs:
       author: 已发表
       reader: 已购买
       comments: 已评论
       payments: 付款记录
       transfers: 收益记录
-  searchPage:
-    enterBtn: 搜索
+  search_page:
+    enter_btn: 搜索
     placeholder: 请输入文章标题/简介/作者/话题
-  fairPage:
-    usersCount: 用户总量
-    articlesCount: 文章总数
-    authorRevenueTotal: 作者收益(现价)
-    readerRevenueTotal: 读者收益(现价)
+  fair_page:
+    users_count: 用户总量
+    articles_count: 文章总数
+    author_revenue_total: 作者收益(现价)
+    reader_revenue_total: 读者收益(现价)
     tabs:
       revenue:
         title: 平台收益
-        chartTitle: 平台收益曲线(USD)
+        chart_title: 平台收益曲线(USD)
       transfers:
         title: 转账记录
-  rulesPage:
+  rules_page:
     content: |
       ### 顶瓜瓜 规则介绍
 
@@ -147,25 +147,25 @@ zh-CN:
       以此类推。
 
       值得提醒的是，除了购买文章的付费，其他付费行为（例如打赏）的付费，也会计入早期读者奖励的分配比例。
-  communityPage:
+  community_page:
     mixin: 顶瓜瓜中文社区
-  commentsComponent:
+  comments_component:
     title: 读者评论
-    subscribeBtn: 订阅新评论
-    unsubscribeBtn: 取消订阅
-    emptyText: 暂无评论
-    deletedText: 此评论已被管理员删除
-    quoteBtn: 引用
+    subscribe_btn: 订阅新评论
+    unsubscribe_btn: 取消订阅
+    empty_text: 暂无评论
+    deleted_text: 此评论已被管理员删除
+    quote_btn: 引用
     from: 来自
-    orderBy:
+    order_by:
       desc: 时间倒序
       asc: 时间正序
       upvotes: 点赞最多
     form:
       warning: 先写点什么
       confirm: 确定要提交评论吗？
-      okText: 提交
-      cancelText: 再想想
+      ok_text: 提交
+      cancel_text: 再想想
       placeholder: 支持 Markdown 格式
   dashboard:
     menu:
@@ -180,67 +180,67 @@ zh-CN:
       back: 返回
     pages:
       article: 文章详情
-      articleNew: 创建文章
-      articleEdit: 文章编辑
-    notificationsPage:
-      clearAllBtn: 清空
-      readAllBtn: 已读
-    articlesPage:
-      publishConfirm: 确定要将文章公开吗？
-      hideConfirm: 确定要将文章隐藏吗？已购读者将不受影响。
-      publishBtn: 公开
-      hideBtn: 隐藏
+      article_new: 创建文章
+      article_edit: 文章编辑
+    notifications_page:
+      clear_all_btn: 清空
+      read_all_btn: 已读
+    articles_page:
+      publish_confirm: 确定要将文章公开吗？
+      hide_confirm: 确定要将文章隐藏吗？已购读者将不受影响。
+      publish_btn: 公开
+      hide_btn: 隐藏
       tabs:
         published: 已发表
         bought: 已购买
         hidden: 已隐藏
         blocked: 已屏蔽
-    articlePage:
+    article_page:
       tabs:
-        buyRecords: 购买记录
-        rewardRecords: 赞赏记录
-        commentRecords: 评论记录
-      boughtArticle: 购买了文章
-      rewardedArticle: 赞赏了文章
+        buy_records: 购买记录
+        reward_records: 赞赏记录
+        comment_records: 评论记录
+      bought_article: 购买了文章
+      rewarded_article: 赞赏了文章
       paid: 支付了
-    subscriptionsPage:
-      authoringSubscriptions: 作者
-      authoringSubscriptionsTip: 订阅的作者发表新文章时，您将收到通知
-      readingSubscriptions: 读者
-      readingSubscriptionsTip: 订阅的读者购买新文章时，您将收到通知
-      commentingSubscriptions: 评论
-      commentingSubscriptionsTip: 订阅的文章有新评论时，您将收到通知
-      tagSubscriptions: 话题
-      tagSubscriptionsTip: 该话题下有新文章时，你将收到通知
-      confirmToUnsubscribe: 确定要取消订阅吗？
-    revenuePage:
-      authorTransfers: 作者收益
-      readerTransfers: 读者收益
+    subscriptions_page:
+      authoring_subscriptions: 作者
+      authoring_subscriptions_tip: 订阅的作者发表新文章时，您将收到通知
+      reading_subscriptions: 读者
+      reading_subscriptions_tip: 订阅的读者购买新文章时，您将收到通知
+      commenting_subscriptions: 评论
+      commenting_subscriptions_tip: 订阅的文章有新评论时，您将收到通知
+      tag_subscriptions: 话题
+      tag_subscriptions_tip: 该话题下有新文章时，你将收到通知
+      confirm_to_unsubscribe: 确定要取消订阅吗？
+    revenue_page:
+      author_transfers: 作者收益
+      reader_transfers: 读者收益
       payments: 付款记录
-    ordersPage:
+    orders_page:
       tabs:
         payments: 支付记录
-        swapOrders: Swap 订单
-    settingsPage:
+        swap_orders: Swap 订单
+    settings_page:
       tabs:
         notification: 消息通知
-        accessToken: Access Token
+        access_token: Access Token
       notification:
-        tipsOfGeneral: 您可以自定义消息通知的方式，网站通知、Mixin 机器人消息通知和 Webhook（开发中）。
-        tipsOfArticlePublished: 订阅的作者发表新文章时，您将收到通知。
-        tipsOfArticleBought: 订阅的读者购买新文章时，您将收到通知。
-        tipsOfArticleRewarded: 订阅的读者赞赏新文章时，您将收到通知。
-        tipsOfTaggingCreated: 订阅的话题有新文章时，您将收到通知。
-        tipsOfCommentCreated: 订阅的文章有新评论时，您将收到通知。
-        tipsOfTransferProcessed: 有新的转账（包括文章收益、退款等）时，您将收到通知。
-      accessToken:
-        confirmGenerateToken: Access Token 可提供给第三方应用以管理您的文章，确定需要生成新的 Token 吗？
-        generateToken: 生成新 Token
-        memoPlaceholader: 备注一下 Token
-        generatedTips: 新 Access Token 已经生成
-        securityTips: 请妥善保管您的 Access Token，关闭后将不再显示。如果丢失请重新生成。
-        deleteConfirmTips: 确认要删除 Access Token 吗？
-        copyBtn: 复制
-    overviewPage:
-      presentValue: 按当前价格折算
-      perPriceWhenPaid: 按支付时价格折算
+        tips_of_general: 您可以自定义消息通知的方式，网站通知、Mixin 机器人消息通知和 Webhook（开发中）。
+        tips_of_article_published: 订阅的作者发表新文章时，您将收到通知。
+        tips_of_article_bought: 订阅的读者购买新文章时，您将收到通知。
+        tips_of_article_rewarded: 订阅的读者赞赏新文章时，您将收到通知。
+        tips_of_tagging_created: 订阅的话题有新文章时，您将收到通知。
+        tips_of_comment_created: 订阅的文章有新评论时，您将收到通知。
+        tips_of_transfer_processed: 有新的转账（包括文章收益、退款等）时，您将收到通知。
+      access_token:
+        confirm_generate_token: Access Token 可提供给第三方应用以管理您的文章，确定需要生成新的 Token 吗？
+        generate_token: 生成新 Token
+        memo_placeholader: 备注一下 Token
+        generated_tips: 新 Access Token 已经生成
+        security_tips: 请妥善保管您的 Access Token，关闭后将不再显示。如果丢失请重新生成。
+        delete_confirm_tips: 确认要删除 Access Token 吗？
+        copy_btn: 复制
+    overview_page:
+      present_value: 按当前价格折算
+      per_price_when_paid: 按支付时价格折算

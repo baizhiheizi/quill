@@ -77,7 +77,7 @@ export default function CommentsComponent(props: {
       if (error) {
         message.error(error);
       } else {
-        message.success(t('messages.successSubmitted'));
+        message.success(t('messages.success_submitted'));
         commentForm.setFieldsValue({ content: '' });
         refetch({ commentableId, commentableType, orderBy: 'desc' });
         setOrderBy('desc');
@@ -86,9 +86,8 @@ export default function CommentsComponent(props: {
   });
   const [upvoteComment] = useUpvoteCommentMutation();
   const [downvoteComment] = useDownvoteCommentMutation();
-  const [
-    toggleCommentingSubscribeArticleAction,
-  ] = useToggleCommentingSubscribeArticleActionMutation();
+  const [toggleCommentingSubscribeArticleAction] =
+    useToggleCommentingSubscribeArticleActionMutation();
 
   useEffect(() => {
     if (location.hash && document.querySelector(location.hash)) {
@@ -115,7 +114,7 @@ export default function CommentsComponent(props: {
     <div>
       <Row justify='center'>
         <Col>
-          <h3>{t('commentsComponent.title')}</h3>
+          <h3>{t('comments_component.title')}</h3>
         </Col>
       </Row>
       <Row justify='center' style={{ marginBottom: '1rem' }}>
@@ -133,8 +132,8 @@ export default function CommentsComponent(props: {
             icon={<AlertOutlined />}
           >
             {commentingSubscribed
-              ? t('commentsComponent.unsubscribeBtn')
-              : t('commentsComponent.subscribeBtn')}
+              ? t('comments_component.unsubscribe_btn')
+              : t('comments_component.subscribe_btn')}
           </Button>
         )}
       </Row>
@@ -146,7 +145,7 @@ export default function CommentsComponent(props: {
             onSelect={(value) => setOrderBy(value)}
           >
             <Select.Option value='desc'>
-              {t('commentsComponent.orderBy.desc')}
+              {t('comments_component.order_by.desc')}
             </Select.Option>
             <Select.Option value='asc'>
               {t('commentsComponent.orderBy.asc')}

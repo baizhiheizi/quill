@@ -57,10 +57,10 @@ export default function TagPage() {
         <div style={{ marginBottom: 15 }}>
           <Space split={<Divider type='vertical' />}>
             <Typography.Text type='secondary'>
-              {t('tag.articlesCount')}: {tag.articlesCount}
+              {t('tag.articles_count')}: {tag.articlesCount}
             </Typography.Text>
             <Typography.Text type='secondary'>
-              {t('tag.subscribersCount')}: {tag.subscribersCount}
+              {t('tag.subscribers_count')}: {tag.subscribersCount}
             </Typography.Text>
           </Space>
         </div>
@@ -76,8 +76,8 @@ export default function TagPage() {
             }
           >
             {tag.subscribed
-              ? t('common.unsubscribeBtn')
-              : t('common.subscribeBtn')}
+              ? t('common.unsubscribe_btn')
+              : t('common.subscribe_btn')}
           </Button>
           <Button
             onClick={() => handleTagShare(tag, mixinEnv, appId)}
@@ -85,7 +85,7 @@ export default function TagPage() {
             size='small'
             icon={<ShareAltOutlined />}
           >
-            {t('common.shareBtn')}
+            {t('common.share_btn')}
           </Button>
         </div>
       </Card>

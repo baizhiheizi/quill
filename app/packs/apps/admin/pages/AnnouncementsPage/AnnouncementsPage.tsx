@@ -23,16 +23,11 @@ import {
 import React, { useState } from 'react';
 
 export default function AnnouncementsPage() {
-  const {
-    data,
-    loading,
-    fetchMore,
-    refetch,
-  } = useAdminAnnouncementConnectionQuery();
+  const { data, loading, fetchMore, refetch } =
+    useAdminAnnouncementConnectionQuery();
   const [content, setContent] = useState('');
-  const [messageType, setMessageType] = useState<
-    'PLAIN_TEXT' | 'PLAIN_POST' | string
-  >('PLAIN_TEXT');
+  const [messageType, setMessageType] =
+    useState<'PLAIN_TEXT' | 'PLAIN_POST' | string>('PLAIN_TEXT');
   const [editing, setEditing] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [createAnnouncement] = useAdminCreateAnouncementMutation({

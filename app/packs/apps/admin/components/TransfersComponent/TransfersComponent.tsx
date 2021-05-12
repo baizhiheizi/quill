@@ -17,13 +17,10 @@ export default function TransfersComponent(props: {
 }) {
   const { appId } = usePrsdigg();
   const { itemId, itemType, sourceId, sourceType } = props;
-  const {
-    data,
-    loading,
-    fetchMore,
-  }: AdminTransferConnectionQueryHookResult = useAdminTransferConnectionQuery({
-    variables: { itemId, itemType, sourceId, sourceType },
-  });
+  const { data, loading, fetchMore }: AdminTransferConnectionQueryHookResult =
+    useAdminTransferConnectionQuery({
+      variables: { itemId, itemType, sourceId, sourceType },
+    });
 
   if (loading) {
     return <LoadingComponent />;

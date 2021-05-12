@@ -31,19 +31,19 @@ export default function UserPage() {
       <Row gutter={16} style={{ textAlign: 'center' }}>
         <Col xs={12} sm={6}>
           <Statistic
-            title={t('user.authorRevenueTotal')}
+            title={t('user.author_revenue_total')}
             value={user.statistics.authorRevenueTotalUsd.toFixed(2)}
           />
         </Col>
         <Col xs={12} sm={6}>
           <Statistic
-            title={t('user.readerRevenueTotal')}
+            title={t('user.reader_revenue_total')}
             value={user.statistics.readerRevenueTotalUsd.toFixed(2)}
           />
         </Col>
       </Row>
       <Tabs defaultActiveKey='author'>
-        <Tabs.TabPane tab={t('userPage.tabs.author')} key='author'>
+        <Tabs.TabPane tab={t('user_page.tabs.author')} key='author'>
           <UserArticlesComponent
             mixinId={user.mixinId}
             authoringSubscribed={user.authoringSubscribed}
@@ -51,7 +51,7 @@ export default function UserPage() {
             type='author'
           />
         </Tabs.TabPane>
-        <Tabs.TabPane tab={t('userPage.tabs.reader')} key='reader'>
+        <Tabs.TabPane tab={t('user_page.tabs.reader')} key='reader'>
           <UserArticlesComponent
             mixinId={user.mixinId}
             readingSubscribed={user.readingSubscribed}
@@ -59,7 +59,7 @@ export default function UserPage() {
             type='reader'
           />
         </Tabs.TabPane>
-        <Tabs.TabPane tab={t('userPage.tabs.comments')} key='comments'>
+        <Tabs.TabPane tab={t('user_page.tabs.comments')} key='comments'>
           <UserCommentsComponent authorMixinId={user.mixinId} />
         </Tabs.TabPane>
       </Tabs>

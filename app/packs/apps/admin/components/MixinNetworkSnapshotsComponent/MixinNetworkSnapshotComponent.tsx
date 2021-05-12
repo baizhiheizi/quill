@@ -15,13 +15,10 @@ export default function MixinNetworkSnapshotsComponent(props: {
 }) {
   const { appId } = usePrsdigg();
   const { userId, filter = 'all' } = props;
-  const {
-    data,
-    loading,
-    fetchMore,
-  } = useAdminMixinNetworkSnapshotConnectionQuery({
-    variables: { filter, userId },
-  });
+  const { data, loading, fetchMore } =
+    useAdminMixinNetworkSnapshotConnectionQuery({
+      variables: { filter, userId },
+    });
 
   if (loading) {
     return <LoadingComponent />;

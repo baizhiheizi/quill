@@ -3,9 +3,8 @@ import MixinNetworkSnapshotsComponent from 'apps/admin/components/MixinNetworkSn
 import React, { useState } from 'react';
 
 export default function MixinNetworkSnapshotsPage() {
-  const [filter, setFilter] = useState<'input' | 'output' | 'prsdigg' | 'all'>(
-    'input',
-  );
+  const [filter, setFilter] =
+    useState<'input' | 'output' | 'prsdigg' | 'all'>('input');
   return (
     <div>
       <PageHeader title='Mixin Network Snapshot' />

@@ -52,7 +52,7 @@ export default function ArticleOrdersComponent(props: {
                   });
                 }}
               >
-                {t('common.loadMore')}
+                {t('common.load_more')}
               </Button>
             </div>
           )
@@ -63,14 +63,14 @@ export default function ArticleOrdersComponent(props: {
               <Avatar src={order.buyer.avatarUrl}>{order.buyer.name[0]}</Avatar>
               <span>{order.buyer.name}</span>
               <span>
-                {`${t('dashboard.articlePage.paid')} ${order.total} ${
+                {`${t('dashboard.article_page.paid')} ${order.total} ${
                   order.currency.symbol
                 }`}
               </span>
               <span>
                 {orderType == 'buy_article'
-                  ? t('dashboard.articlePage.boughtArticle')
-                  : t('dashboard.articlePage.rewardedArticle')}
+                  ? t('dashboard.article_page.bought_article')
+                  : t('dashboard.article_page.rewarded_article')}
               </span>
             </Space>
             <div style={{ marginLeft: 'auto', color: '#aaa' }}>

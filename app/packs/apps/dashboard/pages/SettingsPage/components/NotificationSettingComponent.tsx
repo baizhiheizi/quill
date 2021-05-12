@@ -20,14 +20,12 @@ const { Paragraph } = Typography;
 export default function NotificationSettingComponent() {
   const { t } = useTranslation();
   const { loading, data } = useMyNotificationSettingQuery();
-  const [
-    updateNotificationSetting,
-    { loading: updating },
-  ] = useUpdateNotificationSettingMutation({
-    update() {
-      message.success(t('messages.successUpdated'));
-    },
-  });
+  const [updateNotificationSetting, { loading: updating }] =
+    useUpdateNotificationSettingMutation({
+      update() {
+        message.success(t('messages.success_updated'));
+      },
+    });
 
   if (loading) {
     return <LoadingComponent />;
@@ -39,14 +37,14 @@ export default function NotificationSettingComponent() {
       <Typography>
         <Paragraph>
           <Alert
-            message={t('dashboard.settingsPage.notification.tipsOfGeneral')}
+            message={t('dashboard.settings_page.notification.tips_of_general')}
           />
         </Paragraph>
       </Typography>
       <br />
       <Typography>
         <Paragraph>
-          {t('dashboard.settingsPage.notification.tipsOfArticlePublished')}
+          {t('dashboard.settings_page.notification.tips_of_article_published')}
         </Paragraph>
       </Typography>
       <Row gutter={16}>
@@ -101,7 +99,7 @@ export default function NotificationSettingComponent() {
       <Divider />
       <Typography>
         <Paragraph>
-          {t('dashboard.settingsPage.notification.tipsOfArticleBought')}
+          {t('dashboard.settings_page.notification.tips_of_article_bought')}
         </Paragraph>
       </Typography>
       <Row gutter={16}>
@@ -156,7 +154,7 @@ export default function NotificationSettingComponent() {
       <Divider />
       <Typography>
         <Paragraph>
-          {t('dashboard.settingsPage.notification.tipsOfArticleRewarded')}
+          {t('dashboard.settings_page.notification.tips_of_article_rewarded')}
         </Paragraph>
       </Typography>
       <Row gutter={16}>
@@ -211,7 +209,7 @@ export default function NotificationSettingComponent() {
       <Divider />
       <Typography>
         <Paragraph>
-          {t('dashboard.settingsPage.notification.tipsOfTaggingCreated')}
+          {t('dashboard.settings_page.notification.tips_of_tagging_created')}
         </Paragraph>
       </Typography>
       <Row gutter={16}>
@@ -266,7 +264,7 @@ export default function NotificationSettingComponent() {
       <Divider />
       <Typography>
         <Paragraph>
-          {t('dashboard.settingsPage.notification.tipsOfCommentCreated')}
+          {t('dashboard.settings_page.notification.tips_of_comment_created')}
         </Paragraph>
       </Typography>
       <Row gutter={16}>
@@ -321,7 +319,7 @@ export default function NotificationSettingComponent() {
       <Divider />
       <Typography>
         <Paragraph>
-          {t('dashboard.settingsPage.notification.tipsOfTransferProcessed')}
+          {t('dashboard.settings_page.notification.tips_of_transfer_processed')}
         </Paragraph>
       </Typography>
       <Row gutter={16}>

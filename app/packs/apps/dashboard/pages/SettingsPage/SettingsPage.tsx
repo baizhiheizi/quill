@@ -31,13 +31,13 @@ export default function SettingsPage() {
       >
         <Tabs.TabPane
           key='notification'
-          tab={t('dashboard.settingsPage.tabs.notification')}
+          tab={t('dashboard.settings_page.tabs.notification')}
         >
           <NotificationSettingComponent />
         </Tabs.TabPane>
         <Tabs.TabPane
           key='accessToken'
-          tab={t('dashboard.settingsPage.tabs.accessToken')}
+          tab={t('dashboard.settings_page.tabs.access_token')}
         >
           <AccessTokensComponent />
         </Tabs.TabPane>

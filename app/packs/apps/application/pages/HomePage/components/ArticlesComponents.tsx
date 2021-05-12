@@ -13,16 +13,13 @@ export default function ArticlesComponent(props: {
   order: 'default' | 'lately' | 'revenue';
 }) {
   const { order } = props;
-  const {
-    data,
-    loading,
-    fetchMore,
-  }: ArticleConnectionQueryHookResult = useArticleConnectionQuery({
-    notifyOnNetworkStatusChange: true,
-    variables: {
-      order,
-    },
-  });
+  const { data, loading, fetchMore }: ArticleConnectionQueryHookResult =
+    useArticleConnectionQuery({
+      notifyOnNetworkStatusChange: true,
+      variables: {
+        order,
+      },
+    });
 
   if (!data && loading) {
     return <LoadingComponent />;

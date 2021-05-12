@@ -6,7 +6,7 @@ export default function RulesPage() {
   const { t } = useTranslation();
   return (
     <div style={{ marginTop: 20 }}>
-      <MDEditor.Markdown source={t('rulesPage.content')} />
+      <MDEditor.Markdown source={t('rules_page.content')} />
     </div>
   );
 }

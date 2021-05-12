@@ -23,7 +23,7 @@ export default function CommunityPage() {
             }
             target='_blank'
           >
-            {t('communityPage.mixin')}
+            {t('community_page.mixin')}
           </a>{' '}
           (Mixin ID: 7000103074){' '}
         </Col>

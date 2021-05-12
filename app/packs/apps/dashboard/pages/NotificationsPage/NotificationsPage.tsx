@@ -17,12 +17,8 @@ export default function NotificationsPage() {
   const { currentUser, setCurrentUser } = useCurrentUser();
   const { t, i18n } = useTranslation();
   moment.locale(i18n.language);
-  const {
-    loading,
-    data,
-    fetchMore,
-    refetch,
-  } = useMyNotificationConnectionQuery({ fetchPolicy: 'cache-and-network' });
+  const { loading, data, fetchMore, refetch } =
+    useMyNotificationConnectionQuery({ fetchPolicy: 'cache-and-network' });
   const [readNotification] = useReadNotificationMutation();
   const [readNotifications] = useReadNotificationsMutation({
     variables: { input: {} },
@@ -60,14 +56,14 @@ export default function NotificationsPage() {
             type='default'
             onClick={() => clearNotifications()}
           >
-            {t('dashboard.notificationsPage.clearAllBtn')}
+            {t('dashboard.notifications_page.clear_all_btn')}
           </Button>,
           <Button
             key='readAll'
             type='primary'
             onClick={() => readNotifications()}
           >
-            {t('dashboard.notificationsPage.readAllBtn')}
+            {t('dashboard.notifications_page.read_all_btn')}
           </Button>,
         ]}
       />

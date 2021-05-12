@@ -45,34 +45,34 @@ export default function FairPage() {
         justify='space-around'
       >
         <Col span={12}>
-          <Statistic title={t('fairPage.usersCount')} value={usersCount} />
+          <Statistic title={t('fair_page.users_count')} value={usersCount} />
         </Col>
         <Col span={12}>
           <Statistic
-            title={t('fairPage.articlesCount')}
+            title={t('fair_page.articles_count')}
             value={articlesCount}
           />
         </Col>
         <Col span={12}>
           <Statistic
-            title={t('fairPage.authorRevenueTotal')}
+            title={t('fair_page.author_revenue_total')}
             value={authorRevenueTotal.toFixed(2)}
             suffix=' USD'
           />
         </Col>
         <Col span={12}>
           <Statistic
-            title={t('fairPage.readerRevenueTotal')}
+            title={t('fair_page.reader_revenue_total')}
             value={readerRevenueTotal.toFixed(2)}
             suffix=' USD'
           />
         </Col>
       </Row>
       <Tabs defaultActiveKey='revenue'>
-        <Tabs.TabPane tab={t('fairPage.tabs.revenue.title')} key='revenue'>
+        <Tabs.TabPane tab={t('fair_page.tabs.revenue.title')} key='revenue'>
           <PrsdiggRevenueChart />
         </Tabs.TabPane>
-        <Tabs.TabPane tab={t('fairPage.tabs.transfers.title')} key='transfers'>
+        <Tabs.TabPane tab={t('fair_page.tabs.transfers.title')} key='transfers'>
           <TransferList />
         </Tabs.TabPane>
       </Tabs>
@@ -94,7 +94,7 @@ function PrsdiggRevenueChart() {
   }
   return (
     <div>
-      <h3>{t('fairPage.tabs.revenue.chartTitle')}</h3>
+      <h3>{t('fair_page.tabs.revenue.chartTitle')}</h3>
       <ResponsiveContainer height={250}>
         <AreaChart
           data={revenueChart}
@@ -163,7 +163,7 @@ function TransferList() {
                 });
               }}
             >
-              {t('common.loadMore')}
+              {t('common.load_more')}
             </Button>
           </div>
         )
