@@ -9,7 +9,7 @@ zh-CN:
   update: 更新
   view: 查看
   cancel: 取消
-  paid: 已经支付
+  paid: 支付了
   delete: 删除
   pay_with_messenger: 请使用 Mixin Messenger 扫码支付
   view_with_messenger: 请使用 Mixin Messenger 扫码查看
@@ -152,7 +152,6 @@ zh-CN:
   comment_records: 评论记录
   bought_article: 购买了文章
   rewarded_article: 赞赏了文章
-  paid: 支付了
   authoring_subscriptions: 作者
   authoring_subscriptions_tip: 订阅的作者发表新文章时，您将收到通知
   reading_subscriptions: 读者
