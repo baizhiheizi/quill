@@ -3,8 +3,6 @@
 require 'sidekiq/web'
 require 'sidekiq/cron/web'
 
-Sidekiq::Web.set :session_secret, Rails.application.secrets[:secret_key_base]
-
 class AdminConstraint
   def matches?(request)
     return false if request.session[:current_admin_id].blank?
