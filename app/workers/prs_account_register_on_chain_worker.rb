@@ -2,7 +2,7 @@
 
 class PrsAccountRegisterOnChainWorker
   include Sidekiq::Worker
-  sidekiq_options queue: :default, retry: true
+  sidekiq_options queue: :pressone, retry: true
 
   def perform(id)
     PrsAccount.find(id).register_on_chain!

@@ -2,7 +2,7 @@
 
 class ArticleSnapshotSignOnChainWorker
   include Sidekiq::Worker
-  sidekiq_options queue: :default, retry: true
+  sidekiq_options queue: :pressone, retry: true
 
   def perform(id)
     ArticleSnapshot.find(id).sign_on_chain!

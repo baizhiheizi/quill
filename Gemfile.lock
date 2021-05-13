@@ -329,6 +329,8 @@ GEM
     sidekiq-cron (1.2.0)
       fugit (~> 1.1)
       sidekiq (>= 4.2.1)
+    sidekiq-limit_fetch (3.4.0)
+      sidekiq (>= 4)
     simple_command (0.1.0)
     spring (2.1.1)
     spring-watcher-listen (2.0.1)
@@ -417,6 +419,7 @@ DEPENDENCIES
   selenium-webdriver
   sidekiq (~> 6.0)
   sidekiq-cron
+  sidekiq-limit_fetch
   simple_command
   spring
   spring-watcher-listen (~> 2.0.0)

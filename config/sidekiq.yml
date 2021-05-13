@@ -3,6 +3,9 @@
   - critical
   - high
   - default
+  - pressone
   - low
+:limits:
+  pressone: 1
 production:
   :concurrency: 50
