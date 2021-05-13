@@ -168,8 +168,8 @@ export default function ArticlePage() {
                   <div
                     style={{ marginTop: 10, fontSize: '0.8rem', color: '#aaa' }}
                   >
-                    {t('already_paid1')}{' '}
-                    <a onClick={() => refetch()}>{t('already_paid2')}</a>
+                    {t('already_paid')}? {t('try_to')}{' '}
+                    <a onClick={() => refetch()}>{t('refresh')}</a>
                   </div>
                   <div
                     style={{

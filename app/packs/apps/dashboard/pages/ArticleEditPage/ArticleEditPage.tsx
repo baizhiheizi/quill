@@ -106,10 +106,10 @@ export default function ArticleEditPage() {
             message.warn(t('article.form.warning'));
           } else {
             Modal.confirm({
-              title: t('article.form.update_confirm'),
+              title: t('article.form.confirm_to_update'),
               centered: true,
-              okText: t('article.form.update_ok_text'),
-              cancelText: t('article.form.update_cancel_text'),
+              okText: t('update'),
+              cancelText: t('later'),
               onOk: () =>
                 updateArticle({
                   variables: {
@@ -231,7 +231,7 @@ export default function ArticleEditPage() {
             htmlType='submit'
             loading={updating}
           >
-            {t('article.form.update_btn')}
+            {t('update')}
           </Button>
         </Form.Item>
       </Form>

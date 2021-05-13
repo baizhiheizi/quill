@@ -27,23 +27,16 @@ en:
       blocked: Blocked
       hidden: Hidden
     form:
-      warning: Pleash finish your article first
+      not_finished: Pleash finish your article first
       title_is_required: Please input your article's title
       intro_is_required: Please input your article's introduction
       content_is_required: Please input your artilce's content
       price_is_too_low: Price is too low
-      create_confirm: Are you sure to create?
-      create_ok_text: Create
-      create_cancel_text: Later
-      create_btn: Create
-      update_confirm: Are you sure to update your article?
-      update_ok_Text: Update
-      update_cancel_Text: Later
-      update_btn: Update
+      confirm_to_create: Are you sure to create?
+      confirm_to_update: Are you sure to update your article?
       title_place_holder: Title of article
       content_place_holder: Write something valuable
       intro_place_holder: Please introduce your article and this will be public
-      new_btn: New
   tag:
     articles_count: Articles
     subscribers_count: Subscribers

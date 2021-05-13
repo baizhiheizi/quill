@@ -1,10 +1,12 @@
 en:
   load_more: Load More
-  subscribe_btn: Subscribe
-  unsubscribe_btn: Unsubscribe
+  subscribe: Subscribe
+  unsubscribe: Unsubscribe
   share: Share
   detail: Detail
   edit: Edit
+  create: Create
+  update: Update
   view: View
   cancel: Cancel
   paid: Paid
@@ -42,15 +44,15 @@ en:
   pay_warning: This article is a virtural product selling on PRSDigg, IT WILL NOT REFUND once paid. Please pay with caution.
   be_the_first_reader: Be the FIRST reader
   pay_to_read: Pay to Read
-  already_paid1: Already paid? Try to
-  already_paid2: Refresh
+  already_paid: Already paid
+  try_to: Try to
+  refresh: Refresh
   pay_via_swap_tips: You can pay with other token!
   please_login: Please Login
   love_thie_article: Love this Article
   share: Share
   signature: Signature
   swap_supported_by: Swap supported by
-  already_paid: Already Paid
   polling_payment: Checking Payment Status
   refund_warning: Payment has been refunded. Please try again.
   buy_article: Buy Article
@@ -81,9 +83,13 @@ en:
     The specific rules are as follows,
 
     1. Users can publish articles on the **platform** and become **authors**.
+
     2. All articles are paid articles, priced by *PressOne Token* or *Bitcoin*.
+
     3. Users can pay for the articles, i.e. become a **reader** of a article.
+
     4. For every new income from an article, 40% will be allocated to each **early reader** on a pro-rata basis as **Early Reader Bonus** , 10% will be a handling fee for the **platform**, and the rest will be revenue for the **author**.
+
     5. **Readers** can also increase the amount they pay for an article by means of a reward in order to increase their share of the bonus.
 
     For example: 
@@ -109,8 +115,7 @@ en:
     It is worth reminding that besides the payment for articles, the income from other payment behaviors (such as reward) will also be included in the distribution ratio of early readers' bonus.
   mixin_group: Mixin Group
   comments: Comments
-  subscribe: Subscribe
-  unsubscribe: Unsubscribe
+  subscribe_comments: Subscribe
   no_comments: No Comments
   comment_deleted: Deleted by the Administrator
   quote: Quote

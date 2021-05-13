@@ -5,6 +5,8 @@ zh-CN:
   share: 分享
   detail: 详情
   edit: 编辑
+  create: 创建
+  update: 更新
   view: 查看
   cancel: 取消
   paid: 已经支付
@@ -27,7 +29,6 @@ zh-CN:
   fair: 公示
   community: 社区
   open_source: 开源
-  notifications_manage: 消息通知
   dashboard: 个人中心
   login: 登录
   logout: 登出
@@ -35,9 +36,6 @@ zh-CN:
   order_by_lately: 最新发表
   order_by_revenue: 营收最多
   tags: 话题
-  order_by_popularity: 综合排序
-  order_by_created_at: 最新优先
-  order_by_revenue: 营收最多
   comments_zone: 评论区
   more_to_read: 以下还有 90% 内容
   pay: 支付
@@ -46,15 +44,15 @@ zh-CN:
   pay_warning: 文章为作者在顶瓜瓜平台出售的虚拟商品，一经付款，概不退还。谨慎付款，以防被骗。
   be_the_first_reader: 成为第一位读者
   pay_to_read: 付费阅读
-  already_paid1: 已经付款?试试
-  already_paid2: 刷新
+  already_paid: 已经支付
+  try_to: 试试
+  refresh: 刷新
   pay_via_swap_tips: 您也可以用其他主流币支付
   please_login: 请先登录
   love_thie_article: 大爱此文
   share: 分享
   signature: 签名
   swap_supported_by: Swap 服务来自
-  already_paid: 已经支付
   polling_payment: 支付结果查询中
   refund_warning: 支付失败，已原路退款。请重新支付。
   buy_article: 购买文章
@@ -117,8 +115,7 @@ zh-CN:
     值得提醒的是，除了购买文章的付费，其他付费行为（例如打赏）的付费，也会计入早期读者奖励的分配比例。
   mixin_group: 顶瓜瓜中文社区
   comments: 读者评论
-  subscribe: 订阅新评论
-  unsubscribe: 取消订阅
+  subscribe_comments: 订阅新评论
   no_comments: 暂无评论
   comment_deleted: 此评论已被管理员删除
   quote: 引用
@@ -131,6 +128,7 @@ zh-CN:
   submit: 提交
   markdown_supported: 支持 Markdown 格式
   overview: 总览
+  notifications_manage: 消息通知
   settings: 个人设置
   articles_manage: 文章管理
   subscriptions_manage: 订阅管理

@@ -101,13 +101,13 @@ export default function ArticleNewPage() {
         onFinish={(values) => {
           const { title, content, price, intro, assetId } = values;
           if (!title || !content || !price || !intro || !assetId) {
-            message.warn(t('article.form.warning'));
+            message.warn(t('article.form.not_finished'));
           } else {
             Modal.confirm({
-              title: t('article.form.create_confirm'),
+              title: t('article.form.confirm_to_create'),
               centered: true,
-              okText: t('article.form.create_ok_text'),
-              cancelText: t('article.form.create_cancel_text'),
+              okText: t('create'),
+              cancelText: t('later'),
               onOk: () =>
                 createArticle({
                   variables: { input: { ...values, tagNames: tags } },
@@ -240,7 +240,7 @@ export default function ArticleNewPage() {
             htmlType='submit'
             loading={creating}
           >
-            {t('article.form.create_btn')}
+            {t('create')}
           </Button>
         </Form.Item>
       </Form>

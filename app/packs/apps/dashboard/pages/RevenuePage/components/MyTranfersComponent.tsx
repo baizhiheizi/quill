@@ -75,7 +75,7 @@ export default function MyTransfersComponent(props: {
               {transfer.amount}
             </Col>
             <Col xs={6} sm={6} md={4}>
-              {t(`transfer.transferType.${transfer.transferType}`)}
+              {t(`transfer.transfer_type.${transfer.transferType}`)}
             </Col>
             <Col xs={6} sm={6} md={4}>
               {transfer.snapshotId ? (

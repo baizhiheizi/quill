@@ -49,7 +49,7 @@ export default function MyAuthoringSubscriptionsComponent() {
                 })
               }
             >
-              <Button size='small'>{t('unsubscribe_btn')}</Button>
+              <Button size='small'>{t('unsubscribe')}</Button>
             </Popconfirm>,
           ]}
         >

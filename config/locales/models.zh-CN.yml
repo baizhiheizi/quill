@@ -27,23 +27,16 @@ zh-CN:
       blocked: 已屏蔽
       hidden: 已隐藏
     form:
-      warning: 请先完成你的文章
+      not_finished: 请先完成你的文章
       title_is_required: 请输入文章标题
       intro_is_required: 请输入文章的介绍
       content_is_required: 请输入文章的正文
       price_is_too_low: 价格太低了
-      create_confirm: 确定要创建文章吗？
-      create_ok_text: 创建
-      create_cancel_text: 再改改
-      create_btn: 创建
-      update_confirm: 确定要修改你的文章吗？
-      update_ok_text: 保存
-      update_cancel_text: 再改改
-      update_btn: 保存
+      confirm_to_create: 确定要创建文章吗？
+      confirm_to_update: 确定要修改你的文章吗？
       title_place_holder: 文章标题
       content_place_holder: 写点有价值的东西
       intro_place_holder: 请简要介绍一下你的文章，简介内容为公开可见。
-      new_btn: 新建
   tag:
     articles_count: 文章数量
     subscribers_count: 订阅人数
