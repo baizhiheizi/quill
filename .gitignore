@@ -36,6 +36,7 @@
 
 /config/credentials/*.key
 /config/credentials/*.yml.enc
+!/config/credentials/main.yml.enc
 
 /public/packs
 /public/packs-test
