@@ -30,7 +30,7 @@ class Currency < ApplicationRecord
   has_many :payments, primary_key: :asset_id, foreign_key: :asset_id, dependent: :restrict_with_exception, inverse_of: :currency
   has_many :transfers, primary_key: :asset_id, foreign_key: :asset_id, dependent: :restrict_with_exception, inverse_of: :currency
 
-  scope :swappable, -> { where(asset_id: SwapOrder::SUPPORTED_ASSETS).order_as_specified(asset_id: SwapOrder::SUPPORTED_ASSETS) }
+  scope :swappable, -> { where(asset_id: SwapOrder::SWAPABLE_ASSETS).order_as_specified(asset_id: SwapOrder::SWAPABLE_ASSETS) }
   scope :pricable, -> { where(asset_id: Article::SUPPORTED_ASSETS) }
   scope :prs, -> { find_by(asset_id: PRS_ASSET_ID) }
   scope :btc, -> { find_by(asset_id: BTC_ASSET_ID) }
@@ -44,7 +44,7 @@ class Currency < ApplicationRecord
   end
 
   def swappable?
-    SwapOrder::FOXSWAP_ENABLE && asset_id.in?(SwapOrder::SUPPORTED_ASSETS)
+    SwapOrder::FOXSWAP_ENABLE && asset_id.in?(SwapOrder::SWAPABLE_ASSETS)
   end
 
   def sync!

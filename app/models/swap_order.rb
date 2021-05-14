@@ -25,8 +25,8 @@
 #  index_swap_orders_on_user_id     (user_id)
 #
 class SwapOrder < ApplicationRecord
-  SUPPORTED_ASSETS = Rails.application.credentials[:swappable_assets] || []
-  FOXSWAP_ENABLE = Rails.application.credentials[:swappable]
+  SWAPABLE_ASSETS = Rails.application.credentials[:swapable_assets] || []
+  FOXSWAP_ENABLE = Rails.application.credentials[:swapable]
   FOX_SWAP_APP_ID = Rails.application.credentials.dig(:foxswap, :app_id)
   FOX_SWAP_BROKER_ID = Rails.application.credentials.dig(:foxswap, :broker_id)
 
