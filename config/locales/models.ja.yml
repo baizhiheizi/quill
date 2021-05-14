@@ -1,0 +1,71 @@
+en:
+  created_at: Created At
+  updated_at: Updated At
+  article:
+    title: タイトル
+    content: コンテンツ
+    intro: 前書き
+    currency: 通貨
+    words_count: Words Count
+    price: Price
+    upvotes_count: Upvotes
+    downvotes_count: Downvotes
+    comments_count: Comments Count
+    orders_count: Paid Times
+    buy_orders_count: Bought Times
+    reward_orders_count: Rewarded Times
+    revenue: Revenue
+    author_revenue_total: Author Revenue
+    reader_tevenue_total: Reader Revenue
+    my_share: My Share(%)
+    state_text: State
+    tags: Tags
+    created_at: Created
+    updated_at: Last Edited
+    state:
+      published: Published
+      blocked: Blocked
+      hidden: Hidden
+    form:
+      not_finished: Pleash finish your article first
+      title_is_required: Please input your article's title
+      intro_is_required: Please input your article's introduction
+      content_is_required: Please input your artilce's content
+      price_is_too_low: Price is too low
+      confirm_to_create: Are you sure to create?
+      confirm_to_update: Are you sure to update your article?
+      title_place_holder: Title of article
+      content_place_holder: Write something valuable
+      intro_place_holder: Please introduce your article and this will be public
+  tag:
+    articles_count: Articles
+    subscribers_count: Subscribers
+  payment:
+    state:
+      paid: Paid
+      refunded: Refunded
+      completed: Compelted
+    snapshot: Snapshot
+  swap_order:
+    state:
+      paid: Paid
+      swapping: Swapping
+      rejected: Rejected
+      swapped: Swapped
+      order_placed: Buying
+      completed: Completed
+      refunded: Refunded
+  user:
+    default_bio: Didn't left anything
+    author_revenue_total: Author Revenue(USD)
+    reader_revenue_total: Reader Revenue(USD)
+    payment_total_usd: Paid(USD)
+    articles_count: Published
+    bought_articles_count: Bought
+  transfer:
+    transfer_type:
+      payment_refund: Refund
+      author_revenue: Author
+      reader_revenue: Reader
+    snapshot: Snapshot
+    processing: Processing
