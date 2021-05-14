@@ -80,7 +80,7 @@ end
 
 desc 'link credentials file to for current stage'
 task :link_credentials_file do
-  command %(ln -sf "config/credentials.yml.enc" "config/credentials/#{fetch(:stage)}.yml.env")
+  command %(ln -sf "config/credentials.yml.enc" "config/credentials/#{fetch(:stage)}.yml.enc")
 end
 
 desc 'Deploys the current version to the server.'
