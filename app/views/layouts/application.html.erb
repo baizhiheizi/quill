@@ -3,27 +3,27 @@
   <head>
     <title><%= @page_title.presence || Rails.application.credentials.dig(:page_title) %></title>
     <meta
-      name="viewport"
-      content="minimum-scale=1, initial-scale=1, width=device-width, user-scalable=no, shrink-to-fit=no"
+      name='viewport'
+      content='minimum-scale=1, initial-scale=1, width=device-width, user-scalable=no, shrink-to-fit=no'
     />
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
     <!-- Global site tag (gtag.js) - Google Analytics -->
-    <% if Rails.env.production? && Rails.application.credentials.dig(:ga_id).present? %>
-      <script async src=<%= 'https://www.googletagmanager.com/gtag/js?id=' + Rails.application.credentials.dig(:ga_id) %>></script>
+    <% if Rails.env.production? && Rails.application.credentials[:ga_id].present? %>
+      <script async src="<%= 'https://www.googletagmanager.com/gtag/js?id=' + Rails.application.credentials[:ga_id].to_s %>" ></script>
       <script>
         window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
         gtag('js', new Date());
 
-        gtag('config', <%= Rails.application.credentials.dig(:ga_id) %>);
+        gtag('config', '<%= Rails.application.credentials[:ga_id].to_s %>');
       </script>
     <% end %>
 
-    <meta name='title' content=<%= @page_title.presence || Rails.application.credentials.dig(:page_title) %>/>
-    <meta name='keywords' content=<%= Rails.application.credentials.dig(:page_keywords) %>/>
-    <meta name="description" content="<%= @page_description.presence || Rails.application.credentials.dig(:page_description) %>" />
+    <meta name='title' content='<%= @page_title.presence || Rails.application.credentials.dig(:page_title) %>' />
+    <meta name='keywords' content='<%= Rails.application.credentials.dig(:page_keywords) %>' />
+    <meta name='description' content='<%= @page_description.presence || Rails.application.credentials.dig(:page_description) %>' />
 
     <%= javascript_pack_tag 'application', defer: true %>
     <%= stylesheet_pack_tag 'application', defer: true %>
