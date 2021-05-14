@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-set :stages, %w[production]
-set :default_stage, 'production'
+set :stages, %w[main]
+set :default_stage, 'main'
 
 require 'mina/bundler'
 require 'mina/rails'
@@ -78,6 +78,11 @@ task :setup do
   command %(echo "-----> Be sure to edit '#{fetch(:shared_path)}/config/master.key'")
 end
 
+desc 'link credentials file to for current stage'
+task :link_credentials_file do
+  command %(ln -sf "config/credentials.yml.enc" "config/#{fetch(:stage)}.yml.env")
+end
+
 desc 'Deploys the current version to the server.'
 task :deploy do
   command %(echo "-----> Server: #{fetch(:domain)}")
@@ -87,6 +92,7 @@ task :deploy do
   deploy do
     invoke :'git:clone'
     invoke :'deploy:link_shared_paths'
+    invoke :link_credentials_file
     invoke :'sidekiq:reload'
     invoke :'sidekiq-2:reload'
     invoke :'bundle:install'
