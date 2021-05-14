@@ -13,7 +13,7 @@ bin/rails assets:precompile
 mv .git .git.bak
 
 # remove credentials file
-rm config/credential.yml.enc
+rm config/credentials.yml.enc
 
 # make public/assets & public/packs/ in git
 sed -i 's+/public/assets+# /public/assets+g' .gitignore
