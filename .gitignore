@@ -33,10 +33,12 @@
 
 # Ignore master key for decrypting credentials and more.
 /config/master.key
-
 /config/credentials/*.key
-/config/credentials/*.yml.enc
-!/config/credentials/main.yml.enc
+/config/credentials/development.yml.enc
+
+# generated locale files
+/app/packs/apps/shared/locales/default.json
+/app/packs/apps/shared/locales/translations.json
 
 /public/packs
 /public/packs-test
