@@ -25,20 +25,10 @@
 #  index_swap_orders_on_user_id     (user_id)
 #
 class SwapOrder < ApplicationRecord
-  SUPPORTED_ASSETS = [
-    Currency::PRS_ASSET_ID,
-    Currency::BTC_ASSET_ID,
-    Currency::ETH_ASSET_ID,
-    Currency::EOS_ASSET_ID,
-    Currency::MOB_ASSET_ID,
-    Currency::BOX_ASSET_ID,
-    Currency::USDT_ASSET_ID,
-    Currency::PUSD_ASSET_ID,
-    Currency::XIN_ASSET_ID
-  ].freeze
-  FOXSWAP_ENABLE = true
-  FOX_SWAP_APP_ID = 'a753e0eb-3010-4c4a-a7b2-a7bda4063f62'
-  FOX_SWAP_BROKER_ID = 'd8d186c4-62a7-320b-b930-11dfc1c76708'
+  SWAPABLE_ASSETS = Rails.application.credentials[:swapable_assets] || []
+  FOXSWAP_ENABLE = Rails.application.credentials[:swapable]
+  FOX_SWAP_APP_ID = Rails.application.credentials.dig(:foxswap, :app_id)
+  FOX_SWAP_BROKER_ID = Rails.application.credentials.dig(:foxswap, :broker_id)
 
   include AASM
   belongs_to :payment

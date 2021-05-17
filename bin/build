@@ -3,8 +3,20 @@
 # throw error when failed
 set -e
 
+# use main credentials
+cp config/credentials/main.yml.enc config/credentials.yml.enc
+
+# generate locale file for FE
+bin/rake react_on_rails:locale
+
+# compile assets
+bin/rails assets:precompile
+
 # backup original .git
 mv .git .git.bak
+
+# remove credentials file
+rm config/credentials.yml.enc
 
 # make public/assets & public/packs/ in git
 sed -i 's+/public/assets+# /public/assets+g' .gitignore

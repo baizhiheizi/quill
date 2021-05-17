@@ -78,11 +78,11 @@ export default function PayModalComponent(props: {
   );
   const funds = preOrderData?.swapPreOrder?.funds;
   const PayUrlQRCode = ({ url, type = 'pay' }) => (
-    <div style={{ textAlign: 'center' }}>
-      <div style={{ marginBottom: 5 }}>
+    <div className='mb-2'>
+      <div className='flex justify-center mb-2'>
         <QRCode value={url} size={200} />
       </div>
-      <div style={{ color: '#aaa', marginBottom: 5 }}>
+      <div className='mb-2 text-gray-500'>
         {type === 'pay' ? t('pay_with_messenger') : t('view_with_messenger')}
       </div>
       <div>
@@ -123,8 +123,8 @@ export default function PayModalComponent(props: {
       footer={null}
       onCancel={onCancel}
     >
-      <div style={{ maxWidth: 380, margin: 'auto' }}>
-        <div style={{ marginBottom: '1rem' }}>
+      <div className='max-w-xs m-auto'>
+        <div className='mb-4'>
           <Radio.Group
             value={assetId}
             onChange={(e) => setAssetId(e.target.value)}
@@ -141,16 +141,14 @@ export default function PayModalComponent(props: {
           </Radio.Group>
         </div>
         {preOrderLoading ? (
-          <div style={{ textAlign: 'center' }}>
+          <div className='text-center'>
             <Spin />
           </div>
         ) : (
-          <div style={{ textAlign: 'center' }}>
-            <div style={{ marginBottom: '1rem' }}>
+          <div className='text-center'>
+            <div className='mb-4'>
               <Space>
-                <span style={{ color: 'red', fontWeight: 'bold' }}>
-                  {payAmount}
-                </span>
+                <span className='font-bold text-red-500'>{payAmount}</span>
                 <span>{currency.symbol}</span>
               </Space>
               {currency.assetId !== articleAssetId && (

@@ -73,11 +73,11 @@ export default function RewardModalComponent(props: {
   };
 
   const PayUrlQRCode = ({ url, type = 'pay' }) => (
-    <div style={{ textAlign: 'center' }}>
-      <div style={{ marginBottom: 5 }}>
+    <div className='mb-2'>
+      <div className='flex justify-center mb-2'>
         <QRCode value={url} size={200} />
       </div>
-      <div style={{ color: '#aaa', marginBottom: 5 }}>
+      <div className='mb-2 text-center text-gray-500'>
         {type === 'pay' ? t('pay_with_messenger') : t('view_with_messenger')}
       </div>
     </div>
@@ -114,7 +114,7 @@ export default function RewardModalComponent(props: {
     >
       <Radio.Group
         disabled={paying}
-        style={{ marginBottom: '1rem' }}
+        className='mb-4'
         options={[
           { label: (priceBaseUsd / currency.priceUsd).toFixed(6), value: 1 },
           {
@@ -142,7 +142,7 @@ export default function RewardModalComponent(props: {
         onChange={(e) => setShare(e.target.value)}
         optionType='button'
       />
-      <div style={{ marginBottom: '1rem', textAlign: 'right' }}>
+      <div className='mb-4 text-right'>
         <Select
           style={{ marginBottom: 5 }}
           disabled={paying}

@@ -1,29 +1,29 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title><%= @page_title.presence || '顶瓜瓜助手 | 重新发现读者的价值，打造作者与读者共赢的写作平台' %></title>
+    <title><%= @page_title.presence || Rails.application.credentials.dig(:page_title) %></title>
     <meta
-      name="viewport"
-      content="minimum-scale=1, initial-scale=1, width=device-width, user-scalable=no, shrink-to-fit=no"
+      name='viewport'
+      content='minimum-scale=1, initial-scale=1, width=device-width, user-scalable=no, shrink-to-fit=no'
     />
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
     <!-- Global site tag (gtag.js) - Google Analytics -->
-    <% if Rails.env.production? %>
-      <script async src="https://www.googletagmanager.com/gtag/js?id=UA-125806918-1"></script>
+    <% if Rails.env.production? && Rails.application.credentials[:ga_id].present? %>
+      <script async src="<%= 'https://www.googletagmanager.com/gtag/js?id=' + Rails.application.credentials[:ga_id].to_s %>" ></script>
       <script>
         window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
         gtag('js', new Date());
 
-        gtag('config', 'UA-125806918-1');
+        gtag('config', '<%= Rails.application.credentials.dig(:ga_id) %>');
       </script>
     <% end %>
 
-    <meta name='title' content=<%= @page_title.presence || '顶瓜瓜助手 | 重新发现读者的价值，打造作者与读者共赢的写作平台' %>/>
-    <meta name='keywords' content='PRSDigg, 顶瓜瓜, 写作平台, 区块链, 共赢, 读者, 作者, 早期读者奖励, PRESSOne, Mixin Network, Mixin Messenger'/>
-    <meta name="description" content="<%= @page_description.presence || '独创股权式的早期读者奖励机制，重新发现读者的价值，打造作者与读者共赢的写作平台'%>" />
+    <meta name='title' content='<%= @page_title.presence || Rails.application.credentials.dig(:page_title) %>' />
+    <meta name='keywords' content='<%= Rails.application.credentials.dig(:page_keywords) %>' />
+    <meta name='description' content='<%= @page_description.presence || Rails.application.credentials.dig(:page_description) %>' />
 
     <%= javascript_pack_tag 'dashboard', defer: true %>
     <%= stylesheet_pack_tag 'dashboard', defer: true %>
