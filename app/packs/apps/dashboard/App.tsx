@@ -1,5 +1,5 @@
 import { ApolloProvider } from '@apollo/client';
-import { Col, Layout, Row } from 'antd';
+import { Col, Layout, message, Row } from 'antd';
 import {
   apolloClient,
   CurrentUserContext,
@@ -9,6 +9,7 @@ import {
   UserAgentContext,
 } from 'apps/shared';
 import 'apps/shared/locales/i18n';
+import consumer from 'channels/consumer';
 // https://github.com/apollographql/apollo-client/issues/6381
 import 'core-js/features/promise';
 import { User } from 'graphqlTypes';
@@ -33,6 +34,23 @@ export default function App(props: {
   useEffect(() => {
     hideLoader();
   }, []);
+
+  useEffect(() => {
+    if (!currentUser) {
+      return;
+    }
+    consumer.subscriptions.create('Noticed::NotificationChannel', {
+      connected() {
+        console.log('Action Cable Connected');
+      },
+      disconnected() {
+        console.log('Action Cable disconnected');
+      },
+      received(data: any) {
+        message.info(data);
+      },
+    });
+  }, [currentUser]);
 
   return (
     <Suspense fallback={<LoadingComponent />}>
