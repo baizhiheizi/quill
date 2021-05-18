@@ -1,7 +1,7 @@
 en:
   load_more: さらに表示
-  subscribe: 購読 
-  unsubscribe: 行動解除
+  subscribe: フォロー
+  unsubscribe: フォロー解除
   share: シェア
   detail: 詳細
   edit: 編集
@@ -14,40 +14,40 @@ en:
   pay_with_messenger: LinksでQRコードを読み取ってください
   view_with_messenger: LinksでQRコードを読み取ってください
   success_submitted: 送信しました
-  success_subscribed: 購読しました
-  success_unsubscribed: 購読を解除しました
+  success_subscribed: フォローしました
+  success_unsubscribed: フォローを解除しました
   success_hidden_article: 記事が非表示です
   success_published_article: 記事が投稿されました
   success_updated: 正常に更新されました
   success_copied: 正常にコピーされました
   success_deleted: 正常に削除されました
   success_paid: 正常に支払いました、ありがとうございます！
-  read: 読む
-  write: 書く
+  read: 記事を読む
+  write: 記事を作成
   search: 検索
   rules: 規約
-  fair: 好評
+  fair: 文商データ
   community: コミュニティ
   open_source: オープンソース
   dashboard: ダッシュボード
   login: ログイン
   logout: ログアウト
-  order_by_popularity: 人気度
-  order_by_lately: 最新
+  order_by_popularity: 人気の記事
+  order_by_lately: 最新の記事
   order_by_revenue: 収益
   tags: タグ
   comments_zone: コメント
-  more_to_read: 内容の90%以上はこちら
-  pay: 支払う
-  to_continue_reading: 続きを読む
-  and_receive_early_reader_revenue: 早期購入特典
+  more_to_read: 内容はまだ続きます
+  pay: 続きを読むためには
+  to_continue_reading: が必要です
+  and_receive_early_reader_revenue: また、早期に購入して頂くことで早期購入特典を受け取ることができます。
   pay_warning: この記事は文商で販売されているものであり、一度支払われた金額は返金されません。購入は慎重にお願いします。
   be_the_first_reader: 最初の読者になる
-  pay_to_read: 読むために購入する
-  already_paid: すでに支払い済み
-  try_to: 試す
-  refresh: リロード
-  pay_via_swap_tips: 他のトークンでも支払えます
+  pay_to_read: 記事を購入する
+  already_paid: 支払い済みですか?
+  try_to: 更新
+  refresh: してみてください
+  pay_via_swap_tips: 
   please_login: ログインしてください
   love_thie_article: 記事にいいねする
   share: シェア
@@ -55,15 +55,15 @@ en:
   swap_supported_by: スワップ support by
   polling_payment: 支払いステータスを確認中
   refund_warning: 返金されました、もう一度お試しください
-  buy_article: 記事を買う
-  reward: 収益
+  buy_article: 記事を購入
+  reward: リワード
   finish: 完了
   later: 後ほど
-  times_bought: 購入日時
-  times_reward: 収益日時
+  times_bought: 購入回数
+  times_reward: リワード回数
   published: 公開済み
   bought: 購入済み
-  commented: コメント済み
+  commented: コメント
   search: 検索
   search_placeholder: タイトル イントロ 作者 タグ を入力
   users_count: ユーザー
@@ -75,32 +75,30 @@ en:
   transactions: トランザクション
   rules_content: |
     ### 文商のルール
-    文商は投稿者/読者ともに利益を得ることができるプラットフォームの構築を目指しています。
-    私たちは投稿者だけでなく、読者も記事の価値の創造に貢献していると考えています。しかし現状では、読者の貢献（特に早期読者の貢献）が十分に評価されていません。私たち文商はこの早期読者を正当に評価する「早期購入者特典システム」を実装しています。この「早期購入者特典システム」が他のプラットフォームにない文商の大きな特徴です。
+    「文商」は作者/読者ともに利益を得ることができるプラットフォームの構築を目指しています。
+    私たちは作者だけでなく、読者も記事の価値の創造に貢献していると考えています。しかし現状では、読者の貢献（特に早期読者の貢献）が十分に評価されていません。私たち文商はこの早期読者を正当に評価する「早期購入者特典システム」を実装しています。この「早期購入者特典システム」が他のプラットフォームにない「文商」の大きな特徴です。
     特徴的なルールとして以下の5つがあります。
-    1.ユーザーは〇〇上に記事を公開することで「投稿者」になることができます。
-    2.全ての記事が有料記事となっており、決済は「RressOne Token」もしくは
-    「ビットコイン」で行います。
+    1.ユーザーは「文商」上に記事を公開することで「作者」になることができます。
+    2.全ての記事が有料記事となっており、決済は「ビットコイン(satoshi)」で行います。
     3.ユーザーは記事を購入することで、その記事の読者になることができます。
-    4.記事から収入が発生するたびに、収入の40%は比例配分されたベース（←良い表現があれば変えてください）でそれぞれの「早期購入者」に「早期購入者特典」として配分されます。収入の10%はプラットフォーム使用料として弊社に配分されます。残りの50%が投稿者の収入となります。
-    5.読者は、ボーナスの割合を増やすために、報酬として記事に支払う金額を増やすこともできます。
-    例えば、以下のような状況が想定できます。
+    4.記事から収入が発生するたびに、収入の40%はそれぞれの「早期購入者」に「早期購入者特典」として比例配分されます。収入の10%はプラットフォーム使用料として弊社に配分されます。残りの50%が投稿者の収入となります。
+    5.読者はボーナスの割合を増やすために、リワードとして記事に支払う金額を増やすこともできます。
+    「早期購入者特典システム」について解説します。
     ユーザーAが「文商」上で10satで記事Xを投稿します。
     ユーザーBが10satを支払って、記事Xを読む権利を得ます。
-    つまり、記事Xは10satの売り上げを生み出しました。Bは早期購入者である（B以前の購読者はいない）ので、早期購入者特典は発生しません。つまり、1sat（10%）はプラットフォーム使用料として配分されますが、残り9satは全て投稿者Aの収入として配分され、Aのウォレットへ送金されます。
-    ユーザーCはBの後に10satを支払って記事Xを購入しました。その結果、記事Xはさらに10PRS
-    の売り上げを生み出しました。
+    上記の取引で、記事Xは10satの売り上げを生み出しました。Bは記事Xの最初の読者である（B以前の購読者はいない）ため、早期購入者特典は発生しません。早期購入者特典は自分の後に記事購読者がいるときに受け取ることができます。つまり、1sat（10%）はプラットフォーム使用料として配分されますが、残り9satは全て投稿者Aの収入として配分され、Aのウォレットへ送金されます。
+    ユーザーCはBの後に10satを支払って記事Xを購入しました。その結果、記事Xはさらに10satの売り上げを生み出しました。
     10satのうち、4sat（40%）は早期購入者特典として配分されます。そして、ユーザーBがCより早期に購読している（Bは早期購入者である）ため、Bが40%の早期購入者特典を独占することができます。さらに、プラットフォーム使用料として1sat(10%)が配分されます。その結果、残りの
-5satが投稿者であるAの収益となります。
+5satが作者であるAの収益となります。
     Cの後に、ユーザーDが10sat支払って、記事Xを購入しました。
     同様に、4sat（40%）が早期購入者特典として配分されます。そしてDの前に4satで記事Xを購入したBとCの2人の早期購入者特が存在するため、BとCの2人にそれぞれ4*10/(10+10)=2satが
 配分されます。
-  そして、プラットフォーム使用料として1sat(10%)が配分されます。その結果、残り5satが投稿者であるAの収益となります。
+  そして、プラットフォーム使用料として1sat(10%)が配分されます。その結果、残り5satが作者であるAの収益となります。
     以下も同様の手順で収益が分配されます。
     また、記事に対する支払いの他に、報酬などの他の支払い行動からの収益も早期購入者の分配割合に含まれます。
   mixin_group: Linksグループ
   comments: 読者コメント
-  subscribe_comments: 購読者コメント
+  subscribe_comments: フォロワーコメント
   no_comments: コメントがありません
   comment_deleted: 管理者により削除
   quote: 引用
@@ -116,7 +114,7 @@ en:
   notifications_manage: 通知
   settings: 設定
   articles_manage: 記事管理
-  subscriptions_manage: 購読管理
+  subscriptions_manage: フォロー管理
   revenue_manage: 収益管理
   orders: オーダー管理
   comments: コメント管理
@@ -124,7 +122,7 @@ en:
   article_detail: 記事詳細
   new_article: 新しい記事
   edit_article: 記事を編集
-  clear_all: クリア
+  clear_all: 削除
   read_all: 既読
   confirm_to_publish: この記事を公開しますか？
   confirm_to_hide: この記事を非公開にしますか？早期読者には影響ありません。
@@ -133,31 +131,31 @@ en:
   hidden: 非公開
   blocked: ブロック中
   buy_records: 購入履歴
-  reward_records: 収益履歴
+  reward_records: リワード履歴
   comment_records: コメント履歴
   bought_article: 購入した記事
-  rewarded_article: 記事による収益
+  rewarded_article: 記事によるリワード
   authoring_subscriptions: 作者
-  authoring_subscriptions_tip: この作者が新しい記事を投稿したとき、通知を受け取ります。
+  authoring_subscriptions_tip: フォローした作者の記事投稿通知を受け取ります。
   reading_subscriptions: 読者
-  reading_subscriptions_tip: この読者が新しい記事を購入したとき、通知を受け取ります。
-  commenting_subscriptions: コメント
-  commenting_subscriptions_tip: コメントを受け取った時、通知を受け取ります。
+  reading_subscriptions_tip: フォローした読者の記事購入通知を受け取ります。
+  commenting_subscriptions: コメント欄
+  commenting_subscriptions_tip: フォローしたコメント欄の通知を受け取ります。
   tag_subscriptions: タグ
-  tag_subscriptions_tip: このタグで新しい記事が作成されたとき、通知を受け取ります。
-  confirm_to_unsubscribe: 購読解除しますか？
+  tag_subscriptions_tip: フォローしたタグで新しい記事が作成されたとき、通知を受け取ります。
+  confirm_to_unsubscribe: フォロー解除しますか？
   author_transfers: 作者収益
   reader_transfers: 読者収益
   payments: 決済
   swap_orders: スワップオーダー
   access_token: アクセストークン
   tips_of_general_notifications: 通知設定を変更できます。
-  tips_of_article_published_notifications: 購読中の投稿者が新しい記事を投稿したとき通知を受け取ります。
-  tips_of_article_bought_notifications: 購読している読者が新しい記事を購入したとき通知を受け取ります。
-  tips_of_article_rewarded_notifications: 購読している読者が新しい報酬を受け取ったとき通知を受け取ります。
-  tips_of_tagging_created_notifications: 購読しているのタグのついた新しい記事が投稿されたとき通知を受け取ります。
-  tips_of_comment_created_notifications: 購読している記事に新しいコメントがついたとき通知を受け取ります。
-  tips_of_transfer_processed_notifications: 記事からの収益や返金を含む送金を受け取ったとき通知を受け取ります。
+  tips_of_article_published_notifications: フォロー中の作者が新しい記事を投稿した時、通知されます。
+  tips_of_article_bought_notifications: フォロー中の読者が新しい記事を購入した時、通知されます。
+  tips_of_article_rewarded_notifications: フォロー中の読者が新しいリワードを贈った時、通知されます。
+  tips_of_tagging_created_notifications: フォロー中のタグに新しい記事が投稿された時、通知されます。
+  tips_of_comment_created_notifications: フォロー中の記事に新しいコメントがついた時、通知されます。
+  tips_of_transfer_processed_notifications: 記事からのリワードや返金を含む送金を受け取ったとき通知を受け取ります。
   confirm_to_generate_token: サードパーティ製アプリケーションにアクセストークンを提供して、記事を管理できます。新しいアクセストークンを生成しますか?
   generate_new_token: 新しいアクセストークンを生成する
   token_memo_placeholader: アクセストークンのメモ

@@ -13,9 +13,9 @@ en:
     comments_count: コメント数
     orders_count: 支払い回数
     buy_orders_count: 購入された回数
-    reward_orders_count: 投げ銭回数
+    reward_orders_count: リワード回数
     revenue: 収益
-    author_revenue_total: 投稿者収益
+    author_revenue_total: 作者収益
     reader_tevenue_total: 読者収益
     my_share: 自分の割合(%)
     state_text: 状態
@@ -35,11 +35,11 @@ en:
       confirm_to_create: 本当に記事を作成しますか？
       confirm_to_update: 本当に記事を更新しますか？
       title_place_holder: 記事タイトル
-      content_place_holder: いい感じの内容を
-      intro_place_holder: 公開するための、記事紹介を書いてください
+      content_place_holder: あなただけの文章を書いてみましょう
+      intro_place_holder: より多くの人にあなたの素敵な文章を見て貰えるように記事紹介を書きましょう
   tag:
     articles_count: 記事数
-    subscribers_count: 購読者数
+    subscribers_count: フォロワー数
   payment:
     state:
       paid: 支払い済み
