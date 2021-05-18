@@ -133,8 +133,8 @@ ja:
   articles_manage: 記事管理
   subscriptions_manage: フォロー管理
   revenue_manage: 収益管理
-  orders: オーダー管理
-  comments: コメント管理
+  orders_manage: オーダー管理
+  comments_manage: コメント管理
   back: 戻る
   article_detail: 記事詳細
   new_article: 新しい記事
