@@ -23,7 +23,7 @@ ja:
     created_at: 作成日
     updated_at: 最終更新日
     state:
-      published: 公開済み
+      published: 公開
       blocked: ブロック済み
       hidden: 非公開
     form:
@@ -36,7 +36,7 @@ ja:
       confirm_to_update: 本当に記事を更新しますか？
       title_place_holder: 記事タイトル
       content_place_holder: あなただけの文章を書いてみましょう
-      intro_place_holder: より多くの人にあなたの素敵な文章を見て貰えるように記事紹介を書きましょう
+      intro_place_holder: より多くの人にあなたの素敵な文章を見て貰えるように記事紹介を書いてみしょう
   tag:
     articles_count: 記事数
     subscribers_count: フォロワー数

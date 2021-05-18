@@ -25,7 +25,7 @@ ja:
   read: 記事を読む
   write: 記事を作成
   search: 検索
-  rules: 規約
+  rules: 文商の仕組み
   fair: 文商データ
   community: コミュニティ
   open_source: オープンソース
@@ -74,7 +74,7 @@ ja:
   revenue_chart: 収益チャート(USD)
   transactions: トランザクション
   rules_content: |
-    ### 文商のルール
+    ### 文商の仕組み
 
     「文商」は作者/読者ともに利益を得ることができるプラットフォームの構築を目指しています。
 
@@ -143,7 +143,7 @@ ja:
   read_all: 既読
   confirm_to_publish: この記事を公開しますか？
   confirm_to_hide: この記事を非公開にしますか？早期読者には影響ありません。
-  publish: 公開する
+  publish: 公開
   hide: 非公開にする
   hidden: 非公開
   blocked: ブロック中
@@ -180,5 +180,5 @@ ja:
   token_security_tips: アクセストークンを安全に保管してください。一度閉じると、トークンは表示されません。トークンが失われた場合は、新しいトークンを生成します。
   confirm_to_delete_token: アクセストークンを削除しますか？
   copy: コピー
-  present_value: 現在価値
-  per_price_when_paid: 支払い時の価値
+  present_value: 現在の価格
+  per_price_when_paid: 支払い時の価格
