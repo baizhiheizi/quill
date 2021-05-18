@@ -2,42 +2,42 @@ en:
   notification: Notification
   notifications:
     article_published_notification:
-      published: published an article
+      published: 記事が投稿されました
     article_bought_notification:
-      bought: bought an article
+      bought: 記事が購入されました
     article_rewarded_notification:
-      rewarded: rewarded an article
+      rewarded: 報酬が付与されました
     article_blocked_notification:
-      blocked: 'Your article was blocked by admin:'
+      blocked: 'あなたの記事は運営によってブロックされました:'
     article_unblocked_notification:
-      unblocked: 'Your article has recoverd from blocked:'
+      unblocked: 'あなたの記事のブロックが解除されました:'
     comment_created_notification:
-      commented: commented
+      commented: コメントされました
     comment_deleted_notification:
-      deleted: Your comment was deleted by admin
+      deleted: あなたのコメントは運営によって削除されました
     tagging_created_notification:
-      has_new_article: has a new article
+      has_new_article: 新しい記事があります
     payment_created_notification:
-      paid: Successfully paid
+      paid: 支払い完了しました
     order_created_notification:
-      bought: Successfully bought
-      rewarded: Successfully rewarded
+      bought: 購入完了しました
+      rewarded: 報酬が付与されました
     swap_order_finished_notification:
-      swapped: 'Successfully swapped:'
-      rejected: Your swap was rejected, you will receive the refund soon.
+      swapped: 'スワップ成功:'
+      rejected: スワップが拒否されましたが、すぐに払い戻しされます
     transfer_processed_notification:
-      received: Received
-      author_revenue: author revenue
-      reader_revenue: reader revenue
-      payment_refund: payment refund
-      bonus: bonus
-      swap_change: swap change
-      swap_refund: refund after swapped
+      received: 受け取り済み
+      author_revenue: 投稿者収入
+      reader_revenue: 読者収入
+      payment_refund: 払い戻し
+      bonus: ボーナス
+      swap_change: スワップ変動
+      swap_refund: スワップ後の払い戻し
     authoring_subscribe_action_created_notification:
-      subscribed: subscribed your new published articles
+      subscribed: 新しく投稿した記事がフォローされました
     reading_subscribe_action_created_notification:
-      subscribed: subscribed your new bought articles
+      subscribed: s新しく購入した記事がフォローされました
     user_banned_notification:
-      banned: Your account has been banned by admin. You cannot publish articles nor comment.
+      banned: あなたのアカウントは運営により凍結されています。記事の作成やコメントの投稿はできません。
     user_unbanned_notification:
-      unbanned: Your account has recovered to normal. You can publish articles and comment.
+      unbanned: あなたのアカウントの凍結が解除されました。記事の作成やコメントの投稿が可能です。
