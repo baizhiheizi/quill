@@ -1,4 +1,4 @@
-en:
+ja:
   load_more: さらに表示
   subscribe: フォロー
   unsubscribe: フォロー解除
@@ -47,7 +47,7 @@ en:
   already_paid: 支払い済みですか?
   try_to: 更新
   refresh: してみてください
-  pay_via_swap_tips: 
+  pay_via_swap_tips:
   please_login: ログインしてください
   love_thie_article: 記事にいいねする
   share: シェア

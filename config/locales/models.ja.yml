@@ -1,7 +1,7 @@
-en:
+ja:
   created_at: 投稿日
   updated_at: 更新日
-  article: 
+  article:
     title: タイトル
     content: コンテンツ
     intro: 前書き
@@ -22,7 +22,7 @@ en:
     tags: タグ
     created_at: 作成日
     updated_at: 最終更新日
-    state: 
+    state:
       published: 公開済み
       blocked: ブロック済み
       hidden: 非公開

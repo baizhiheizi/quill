@@ -133,8 +133,8 @@ en:
   articles_manage: Artciels Manage
   subscriptions_manage: Subscriptions
   revenue_manage: Revenue Manage
-  orders: Orders Manage
-  comments: Comments Manage
+  orders_manage: Orders Manage
+  comments_manage: Comments Manage
   back: Go Back
   article_detail: Article Detail
   new_article: New Article

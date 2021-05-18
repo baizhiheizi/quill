@@ -106,14 +106,22 @@ export default function Menus() {
             <span>{t('orders_manage')}</span>
           </Link>
         </Menu.Item>
-        <Menu.Item key='comments' onClick={() => setDrawerVisible(false)}>
-          <Link to='/comments'>
-            <CommentOutlined />
-            <span>{t('comments_manage')}</span>
-          </Link>
-        </Menu.Item>
+        {
+          // <Menu.Item key='comments' onClick={() => setDrawerVisible(false)}>
+          //   <Link to='/comments'>
+          //     <CommentOutlined />
+          //     <span>{t('comments_manage')}</span>
+          //   </Link>
+          // </Menu.Item>
+        }
         <Menu.SubMenu
-          title={i18n.language.includes('en') ? 'Language' : '语言'}
+          title={
+            i18n.language.includes('en')
+              ? 'Language'
+              : i18n.language.includes('ja')
+              ? '言語'
+              : '语言'
+          }
           icon={<GlobalOutlined />}
         >
           <Menu.Item>
@@ -121,6 +129,9 @@ export default function Menus() {
           </Menu.Item>
           <Menu.Item>
             <a onClick={() => i18n.changeLanguage('en')}>EN</a>
+          </Menu.Item>
+          <Menu.Item>
+            <a onClick={() => i18n.changeLanguage('ja')}>日本語</a>
           </Menu.Item>
         </Menu.SubMenu>
         <Menu.Item key='back'>
