@@ -110,6 +110,8 @@ export default function Menus() {
                 <GlobalOutlined />
               ) : i18n.language.includes('en') ? (
                 'Language'
+              ) : i18n.language.includes('ja') ? (
+                '言語'
               ) : (
                 '语言'
               )
@@ -119,7 +121,10 @@ export default function Menus() {
               <a onClick={() => i18n.changeLanguage('zh-CN')}>中文</a>
             </Menu.Item>
             <Menu.Item>
-              <a onClick={() => i18n.changeLanguage('en-US')}>EN</a>
+              <a onClick={() => i18n.changeLanguage('en')}>EN</a>
+            </Menu.Item>
+            <Menu.Item>
+              <a onClick={() => i18n.changeLanguage('ja')}>日本語</a>
             </Menu.Item>
           </Menu.SubMenu>
         </Menu>
