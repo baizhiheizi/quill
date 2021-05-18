@@ -6,7 +6,7 @@ ja:
     article_bought_notification:
       bought: 記事が購入されました
     article_rewarded_notification:
-      rewarded: 報酬が付与されました
+      rewarded: リワードが付与されました
     article_blocked_notification:
       blocked: 'あなたの記事は運営によってブロックされました:'
     article_unblocked_notification:
@@ -21,13 +21,13 @@ ja:
       paid: 支払い完了しました
     order_created_notification:
       bought: 購入完了しました
-      rewarded: 報酬が付与されました
+      rewarded: リワードが付与されました
     swap_order_finished_notification:
       swapped: 'スワップ成功:'
       rejected: スワップが拒否されましたが、すぐに払い戻しされます
     transfer_processed_notification:
       received: 受け取り済み
-      author_revenue: 投稿者収入
+      author_revenue: 作者収入
       reader_revenue: 読者収入
       payment_refund: 払い戻し
       bonus: ボーナス
@@ -36,7 +36,7 @@ ja:
     authoring_subscribe_action_created_notification:
       subscribed: 新しく投稿した記事がフォローされました
     reading_subscribe_action_created_notification:
-      subscribed: s新しく購入した記事がフォローされました
+      subscribed: 新しく購入した記事がフォローされました
     user_banned_notification:
       banned: あなたのアカウントは運営により凍結されています。記事の作成やコメントの投稿はできません。
     user_unbanned_notification:
