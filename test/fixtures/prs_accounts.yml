@@ -7,6 +7,8 @@
 #  encrypted_private_key :string
 #  keystore              :jsonb
 #  public_key            :string
+#  request_allow_at      :datetime
+#  request_denny_at      :datetime
 #  status                :string
 #  created_at            :datetime         not null
 #  updated_at            :datetime         not null

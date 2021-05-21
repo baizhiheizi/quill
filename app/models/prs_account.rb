@@ -9,6 +9,8 @@
 #  encrypted_private_key :string
 #  keystore              :jsonb
 #  public_key            :string
+#  request_allow_at      :datetime
+#  request_denny_at      :datetime
 #  status                :string
 #  created_at            :datetime         not null
 #  updated_at            :datetime         not null
@@ -41,6 +43,8 @@ class PrsAccount < ApplicationRecord
     register_on_chain_async
   end
 
+  delegate :present?, to: :account, prefix: true
+
   aasm column: :status do
     state :created, initial: true
     state :registered
@@ -49,34 +53,33 @@ class PrsAccount < ApplicationRecord
     state :denying
     state :denied
 
-    event :register, guards: %i[ensure_account_present], after_commit: :allow_on_chain_async do
+    event :register, guards: %i[account_present?], after_commit: :allow_on_chain_async do
       transitions from: :created, to: :registered
     end
 
-    event :request_allow do
+    event :request_allow, after_commit: %i[touch_request_allow_at] do
       transitions from: :registered, to: :allowing
       transitions from: :denied, to: :allowing
     end
 
-    event :allow do
+    event :allow, guards: %i[user_not_banned request_allow_timeout?] do
       transitions from: :registered, to: :allowed
       transitions from: :denied, to: :allowed
       transitions from: :allowing, to: :allowed
     end
 
-    event :request_deny do
+    event :request_deny, after_commit: %i[touch_request_denny_at] do
       transitions from: :allowed, to: :denying
     end
 
-    event :deny do
+    event :deny, guards: %i[request_deny_timeout?] do
       transitions from: :denying, to: :denied
       transitions from: :allowed, to: :denied
     end
   end
 
   def allow_on_chain!
-    return if user.banned?
-    return unless registered? || denied?
+    return unless may_allow?
 
     r = Prs.api.sign(
       {
@@ -93,7 +96,7 @@ class PrsAccount < ApplicationRecord
       }
     )
 
-    request_allow! if r['processed']['action_traces'][0]['act']['data'].present?
+    request_allow! if r['processed']['action_traces'][0]['act']['data']['id'].present?
   end
 
   def allow_on_chain_async
@@ -101,7 +104,7 @@ class PrsAccount < ApplicationRecord
   end
 
   def deny_on_chain!
-    return unless allowed?
+    return unless may_deny?
 
     r = Prs.api.sign(
       {
@@ -118,7 +121,7 @@ class PrsAccount < ApplicationRecord
       }
     )
 
-    request_deny! if r['processed']['action_traces'][0]['act']['data'].present?
+    request_deny! if r['processed']['action_traces'][0]['act']['data']['id'].present?
   end
 
   def deny_on_chain_async
@@ -140,11 +143,31 @@ class PrsAccount < ApplicationRecord
     PrsAccountRegisterOnChainWorker.perform_async id
   end
 
-  private
+  def request_allow_timeout?
+    return true unless allowing? && request_allow_at?
 
-  def ensure_account_present
-    account.present?
+    Time.current - request_allow_at > 30.minutes
   end
+
+  def request_deny_timeout?
+    return true unless denying? && request_deny_at?
+
+    Time.current - request_deny_at > 30.minutes
+  end
+
+  def touch_request_allow_at
+    update request_allow_at: Time.current
+  end
+
+  def touch_request_denny_at
+    update request_denny_at: Time.current
+  end
+
+  def user_not_banned
+    !user.banned?
+  end
+
+  private
 
   def set_defaults
     return unless new_record?
