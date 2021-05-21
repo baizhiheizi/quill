@@ -57,22 +57,22 @@ class PrsAccount < ApplicationRecord
       transitions from: :created, to: :registered
     end
 
-    event :request_allow, after_commit: %i[touch_request_allow_at] do
+    event :request_allow, guards: %i[request_allow_timeout?], after_commit: %i[touch_request_allow_at] do
       transitions from: :registered, to: :allowing
       transitions from: :denied, to: :allowing
     end
 
-    event :allow, guards: %i[user_not_banned request_allow_timeout?] do
+    event :allow, guards: %i[user_not_banned] do
       transitions from: :registered, to: :allowed
       transitions from: :denied, to: :allowed
       transitions from: :allowing, to: :allowed
     end
 
-    event :request_deny, after_commit: %i[touch_request_denny_at] do
+    event :request_deny, guards: %i[request_deny_timeout?], after_commit: %i[touch_request_denny_at] do
       transitions from: :allowed, to: :denying
     end
 
-    event :deny, guards: %i[request_deny_timeout?] do
+    event :deny do
       transitions from: :denying, to: :denied
       transitions from: :allowed, to: :denied
     end
@@ -80,6 +80,7 @@ class PrsAccount < ApplicationRecord
 
   def allow_on_chain!
     return unless may_allow?
+    return unless request_allow_timeout?
 
     r = Prs.api.sign(
       {
@@ -108,6 +109,7 @@ class PrsAccount < ApplicationRecord
 
   def deny_on_chain!
     return unless may_deny?
+    return unless request_deny_timeout?
 
     r = Prs.api.sign(
       {
