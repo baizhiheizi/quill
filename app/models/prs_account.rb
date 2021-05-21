@@ -96,7 +96,10 @@ class PrsAccount < ApplicationRecord
       }
     )
 
-    request_allow! if r['processed']['action_traces'][0]['act']['data']['id'].present?
+    raise r.inspect if r['processed']['action_traces'][0]['act']['data']['id'].blank?
+
+    request_allow! if may_request_allow?
+    touch_request_allow_at
   end
 
   def allow_on_chain_async
@@ -121,7 +124,10 @@ class PrsAccount < ApplicationRecord
       }
     )
 
-    request_deny! if r['processed']['action_traces'][0]['act']['data']['id'].present?
+    raise r.inspect if r['processed']['action_traces'][0]['act']['data']['id'].blank?
+
+    request_deny! if may_request_deny?
+    touch_request_denny_at
   end
 
   def deny_on_chain_async
