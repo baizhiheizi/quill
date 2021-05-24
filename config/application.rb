@@ -18,8 +18,8 @@ module Prsdigg
     # -- all .rb files in that directory are automatically loaded after loading
     # the framework and any gems in your application.
 
-    config.i18n.available_locales = %i[en zh-CN ja]
-    config.i18n.default_locale = :'zh-CN'
+    config.i18n.available_locales = Rails.application.credentials[:available_locales]
+    config.i18n.default_locale = Rails.application.credentials[:default_locale]
 
     # reference:
     # https://stackoverflow.com/questions/49233769/is-there-a-way-to-prevent-safari-on-ios-from-clearing-the-cookies-for-a-website
