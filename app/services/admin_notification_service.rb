@@ -2,6 +2,8 @@
 
 class AdminNotificationService
   def text(text)
+    return if Rails.application.credentials.dig(:admin, :group_conversation_id).blank?
+
     message = PrsdiggBot.api.plain_text(
       conversation_id: Rails.application.credentials.dig(:admin, :group_conversation_id),
       data: text
