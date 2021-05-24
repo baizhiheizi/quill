@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-set :stages, %w[main]
+set :stages, %w[main ja]
 set :default_stage, 'main'
 
 require 'mina/bundler'
@@ -119,8 +119,8 @@ task :first_deploy do
   deploy do
     invoke :'git:clone'
     invoke :'deploy:link_shared_paths'
+    invoke :link_credentials_file
     invoke :'bundle:install'
-    invoke :'rails:assets_precompile'
     invoke :'deploy:cleanup'
 
     on :launch do
