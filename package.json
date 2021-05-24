@@ -40,7 +40,7 @@
     "i18next": "^20.2.4",
     "i18next-browser-languagedetector": "^6.1.1",
     "ismobilejs": "^1.1.1",
-    "js-base64": "^3.6.0",
+    "js-base64": "^3.6.1",
     "js-yaml": "^4.1.0",
     "katex": "^0.13.11",
     "less": "^4.1.1",
