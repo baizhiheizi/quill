@@ -171,15 +171,17 @@ export default function ArticlePage() {
                     {t('already_paid')}? {t('try_to')}{' '}
                     <a onClick={() => refetch()}>{t('refresh')}</a>
                   </div>
-                  <div
-                    style={{
-                      marginTop: 5,
-                      fontSize: '0.8rem',
-                      color: '#aaa',
-                    }}
-                  >
-                    {t('pay_via_swap_tips')}
-                  </div>
+                  {article.swappable && (
+                    <div
+                      style={{
+                        marginTop: 5,
+                        fontSize: '0.8rem',
+                        color: '#aaa',
+                      }}
+                    >
+                      {t('pay_via_swap_tips')}
+                    </div>
+                  )}
                 </div>
               ) : (
                 <Button
