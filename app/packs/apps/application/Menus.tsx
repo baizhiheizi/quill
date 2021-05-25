@@ -112,15 +112,27 @@ export default function Menus() {
               )
             }
           >
-            <Menu.Item>
-              <a onClick={() => i18n.changeLanguage('zh-CN')}>中文</a>
-            </Menu.Item>
-            <Menu.Item>
-              <a onClick={() => i18n.changeLanguage('en')}>EN</a>
-            </Menu.Item>
-            <Menu.Item>
-              <a onClick={() => i18n.changeLanguage('ja')}>日本語</a>
-            </Menu.Item>
+            {i18n.languages.map((lng) => {
+              if (lng.includes('CN')) {
+                return (
+                  <Menu.Item key={lng}>
+                    <a onClick={() => i18n.changeLanguage('zh-CN')}>中文</a>
+                  </Menu.Item>
+                );
+              } else if (lng.includes('en')) {
+                return (
+                  <Menu.Item key={lng}>
+                    <a onClick={() => i18n.changeLanguage('en')}>EN</a>
+                  </Menu.Item>
+                );
+              } else if (lng.includes('ja')) {
+                return (
+                  <Menu.Item key={lng}>
+                    <a onClick={() => i18n.changeLanguage('ja')}>日本語</a>
+                  </Menu.Item>
+                );
+              }
+            })}
           </Menu.SubMenu>
         </Menu>
       </Col>

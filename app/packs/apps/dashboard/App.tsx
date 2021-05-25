@@ -8,7 +8,7 @@ import {
   PrsdiggContext,
   UserAgentContext,
 } from 'apps/shared';
-import 'apps/shared/locales/i18n';
+import { i18nCall } from 'apps/shared/locales/i18n';
 import consumer from 'channels/consumer';
 // https://github.com/apollographql/apollo-client/issues/6381
 import 'core-js/features/promise';
@@ -24,8 +24,12 @@ export default function App(props: {
   csrfToken: string;
   currentUser: Partial<User>;
   prsdigg: { appId: String };
+  defaultLocale: 'en' | 'ja' | 'zh-CN';
+  availableLocales: [string];
 }) {
-  const { csrfToken, prsdigg } = props;
+  const { csrfToken, prsdigg, availableLocales } = props;
+  i18nCall(availableLocales);
+
   const [currentUser, setCurrentUser] = useState(props.currentUser);
   if (!Boolean(currentUser)) {
     location.replace('/');
