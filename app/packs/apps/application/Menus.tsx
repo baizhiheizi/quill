@@ -97,45 +97,47 @@ export default function Menus() {
           </Menu.Item>
         </Menu>
       </Col>
-      <Col>
-        <Menu theme='light' mode={props.mode} selectable={false}>
-          <Menu.SubMenu
-            title={
-              props.mode === 'horizontal' ? (
-                <GlobalOutlined />
-              ) : i18n.language.includes('en') ? (
-                'Language'
-              ) : i18n.language.includes('ja') ? (
-                '言語'
-              ) : (
-                '语言'
-              )
-            }
-          >
-            {i18n.languages.map((lng) => {
-              if (lng.includes('CN')) {
-                return (
-                  <Menu.Item key={lng}>
-                    <a onClick={() => i18n.changeLanguage('zh-CN')}>中文</a>
-                  </Menu.Item>
-                );
-              } else if (lng.includes('en')) {
-                return (
-                  <Menu.Item key={lng}>
-                    <a onClick={() => i18n.changeLanguage('en')}>EN</a>
-                  </Menu.Item>
-                );
-              } else if (lng.includes('ja')) {
-                return (
-                  <Menu.Item key={lng}>
-                    <a onClick={() => i18n.changeLanguage('ja')}>日本語</a>
-                  </Menu.Item>
-                );
+      {i18n.languages.length > 1 && (
+        <Col>
+          <Menu theme='light' mode={props.mode} selectable={false}>
+            <Menu.SubMenu
+              title={
+                props.mode === 'horizontal' ? (
+                  <GlobalOutlined />
+                ) : i18n.language.includes('en') ? (
+                  'Language'
+                ) : i18n.language.includes('ja') ? (
+                  '言語'
+                ) : (
+                  '语言'
+                )
               }
-            })}
-          </Menu.SubMenu>
-        </Menu>
-      </Col>
+            >
+              {i18n.languages.map((lng) => {
+                if (lng.includes('CN')) {
+                  return (
+                    <Menu.Item key={lng}>
+                      <a onClick={() => i18n.changeLanguage('zh-CN')}>中文</a>
+                    </Menu.Item>
+                  );
+                } else if (lng.includes('en')) {
+                  return (
+                    <Menu.Item key={lng}>
+                      <a onClick={() => i18n.changeLanguage('en')}>EN</a>
+                    </Menu.Item>
+                  );
+                } else if (lng.includes('ja')) {
+                  return (
+                    <Menu.Item key={lng}>
+                      <a onClick={() => i18n.changeLanguage('ja')}>日本語</a>
+                    </Menu.Item>
+                  );
+                }
+              })}
+            </Menu.SubMenu>
+          </Menu>
+        </Col>
+      )}
       {currentUser ? (
         <Col>
           <Menu mode={props.mode} selectable={false}>
