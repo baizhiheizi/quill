@@ -9,6 +9,7 @@ import {
   Alert,
   Avatar,
   Button,
+  Card,
   Col,
   Divider,
   Progress,
@@ -19,7 +20,14 @@ import {
 import CommentsComponent from 'apps/application/components/CommentsComponent/CommentsComponent';
 import LoadingComponent from 'apps/application/components/LoadingComponent/LoadingComponent';
 import UserCardComponent from 'apps/application/components/UserCardComponent/UserCardComponent';
-import { handleArticleShare, PAGE_TITLE } from 'apps/application/shared';
+import {
+  handleArticleShare,
+  PAGE_TITLE,
+  CHINESE_MIXIN_GROUP_APP_ID,
+  CHINESE_MIXIN_GROUP_AVATAR_URL,
+  CHINESE_MIXIN_GROUP_CODE_ID,
+  CHINESE_MIXIN_GROUP_DESCRIPTION,
+} from 'apps/application/shared';
 import {
   MarkdownRendererComponent,
   useCurrentUser,
@@ -43,7 +51,7 @@ import PayModalComponent from './components/PayModalComponent';
 import RewardModalComponent from './components/RewardModalComponent';
 
 export default function ArticlePage() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { uuid } = useParams<{ uuid: string }>();
   const [rewardModalVisible, setRewardModalVisible] = useState(false);
   const [payModalVisible, setPayModalVisible] = useState(false);
@@ -171,15 +179,17 @@ export default function ArticlePage() {
                     {t('already_paid')}? {t('try_to')}{' '}
                     <a onClick={() => refetch()}>{t('refresh')}</a>
                   </div>
-                  <div
-                    style={{
-                      marginTop: 5,
-                      fontSize: '0.8rem',
-                      color: '#aaa',
-                    }}
-                  >
-                    {t('pay_via_swap_tips')}
-                  </div>
+                  {article.swappable && (
+                    <div
+                      style={{
+                        marginTop: 5,
+                        fontSize: '0.8rem',
+                        color: '#aaa',
+                      }}
+                    >
+                      {t('pay_via_swap_tips')}
+                    </div>
+                  )}
                 </div>
               ) : (
                 <Button
@@ -216,7 +226,7 @@ export default function ArticlePage() {
           {t('share')}
         </Button>
       </div>
-      <div style={{ marginBottom: '2rem' }}>
+      <div className='mb-6'>
         <UserCardComponent user={article.author} />
       </div>
       <div style={{ marginBottom: '2rem' }}>
@@ -404,6 +414,40 @@ export default function ArticlePage() {
         commentingSubscribed={article.commentingSubscribed}
         articleUuid={article.uuid}
       />
+      <div className='mt-8 mb-16'>
+        {i18n.language.includes('CN') && (
+          <div className='mb-6'>
+            <Card>
+              <Card.Meta
+                avatar={<Avatar src={CHINESE_MIXIN_GROUP_AVATAR_URL} />}
+                title={
+                  <Row style={{ alignItems: 'center' }}>
+                    <Col style={{ flex: 1, marginRight: 10 }}>
+                      PRSDigg 中文社区
+                    </Col>
+                    <Col>
+                      <Button
+                        type='primary'
+                        shape='round'
+                        size='small'
+                        target={mixinEnv ? '' : '_blank'}
+                        href={
+                          mixinEnv
+                            ? `mixin://users/${CHINESE_MIXIN_GROUP_APP_ID}`
+                            : `https://mixin-www.zeromesh.net/codes/${CHINESE_MIXIN_GROUP_CODE_ID}`
+                        }
+                      >
+                        加入
+                      </Button>
+                    </Col>
+                  </Row>
+                }
+                description={CHINESE_MIXIN_GROUP_DESCRIPTION}
+              />
+            </Card>
+          </div>
+        )}
+      </div>
     </div>
   );
 }

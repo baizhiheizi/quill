@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_05_10_014755) do
+ActiveRecord::Schema.define(version: 2021_05_20_222100) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -281,6 +281,8 @@ ActiveRecord::Schema.define(version: 2021_05_10_014755) do
     t.jsonb "keystore"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.datetime "request_allow_at"
+    t.datetime "request_denny_at"
     t.index ["account"], name: "index_prs_accounts_on_account", unique: true
     t.index ["user_id"], name: "index_prs_accounts_on_user_id"
   end

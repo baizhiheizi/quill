@@ -22,6 +22,8 @@ zh-CN:
     order_created_notification:
       bought: 成功购买了
       rewarded: 成功赞赏了
+    swap_order_swapping_notification:
+      swapping: '正在兑换:'
     swap_order_finished_notification:
       swapped: '成功兑换:'
       rejected: 兑换失败，您将收到退款

@@ -8,7 +8,7 @@ import {
   PrsdiggContext,
   UserAgentContext,
 } from 'apps/shared';
-import 'apps/shared/locales/i18n';
+import { i18nCall } from 'apps/shared/locales/i18n';
 import consumer from 'channels/consumer';
 // https://github.com/apollographql/apollo-client/issues/6381
 import 'core-js/features/promise';
@@ -26,9 +26,12 @@ export default function App(props: {
   prsdigg: {
     appId: string;
   };
+  defaultLocale: 'en' | 'ja' | 'zh-CN';
+  availableLocales: [string];
 }) {
-  const { csrfToken, prsdigg } = props;
+  const { csrfToken, prsdigg, defaultLocale, availableLocales } = props;
   const [currentUser, setCurrentUser] = useState(props.currentUser);
+  i18nCall(availableLocales);
 
   useEffect(() => {
     hideLoader();

@@ -2,9 +2,6 @@ import React, { Suspense } from 'react';
 import { Route, Switch } from 'react-router-dom';
 import LoadingComponent from './components/LoadingComponent/LoadingComponent';
 const ArticlePage = React.lazy(() => import('./pages/ArticlePage/ArticlePage'));
-const CommnunityPage = React.lazy(
-  () => import('./pages/CommnunityPage/CommunityPage'),
-);
 const FairPage = React.lazy(() => import('./pages/FairPage/FairPage'));
 const HomePage = React.lazy(() => import('./pages/HomePage/HomePage'));
 const NotFoundPage = React.lazy(
@@ -40,9 +37,6 @@ export default function Routes() {
           </Route>
           <Route path='/fair' exact>
             <FairPage />
-          </Route>
-          <Route path='/community' exact>
-            <CommnunityPage />
           </Route>
           <Route>
             <NotFoundPage />

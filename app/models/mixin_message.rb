@@ -47,28 +47,7 @@ class MixinMessage < ApplicationRecord
     touch_proccessed_at
   end
 
-  PRSDIGG_COMMUNITY_CLIENT_ID = '74c6a598-345b-46ca-891f-b15c3139557b'
   def process_user_message
-    case content
-    when 'Hi'
-      TextNotificationService.new.call(
-        'Welcome to PRSDigg! Write or read to earn.',
-        recipient_id: user_id
-      )
-    when '你好'
-      TextNotificationService.new.call(
-        '欢迎来到顶瓜瓜。',
-        recipient_id: user_id
-      )
-    else
-      msg = PrsdiggBot.api.plain_contact(
-        conversation_id: PrsdiggBot.api.unique_conversation_id(user_id),
-        data: {
-          user_id: PRSDIGG_COMMUNITY_CLIENT_ID
-        }
-      )
-      SendMixinMessageWorker.perform_async msg
-    end
   end
 
   def touch_proccessed_at

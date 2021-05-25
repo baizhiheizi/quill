@@ -95,7 +95,7 @@ export default function PayModalComponent(props: {
     </div>
   );
   const payAmount =
-    currency.assetId === articleAssetId ? price.toFixed(8) : funds?.toFixed(8);
+    currency?.assetId === articleAssetId ? price.toFixed(8) : funds?.toFixed(8);
   const payUrl = `mixin://pay?recipient=${
     currentUser?.walletId || walletId
   }&trace=${paymentTraceId}&memo=${memo}&asset=${assetId}&amount=${payAmount}`;
@@ -149,9 +149,9 @@ export default function PayModalComponent(props: {
             <div className='mb-4'>
               <Space>
                 <span className='font-bold text-red-500'>{payAmount}</span>
-                <span>{currency.symbol}</span>
+                <span>{currency?.symbol}</span>
               </Space>
-              {currency.assetId !== articleAssetId && (
+              {currency?.assetId !== articleAssetId && (
                 <div style={{ color: '#aaa' }}>
                   {t('swap_supported_by')}{' '}
                   <a

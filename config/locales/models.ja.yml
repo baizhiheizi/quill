@@ -36,7 +36,7 @@ ja:
       confirm_to_update: 本当に記事を更新しますか？
       title_place_holder: 記事タイトル
       content_place_holder: あなただけの文章を書いてみましょう
-      intro_place_holder: より多くの人にあなたの素敵な文章を見て貰えるように記事紹介を書いてみしょう
+      intro_place_holder: より多くの人にあなたの素敵な文章を見て貰えるように記事紹介を書いてみましょう
   tag:
     articles_count: 記事数
     subscribers_count: フォロワー数
