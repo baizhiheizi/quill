@@ -22,6 +22,8 @@ en:
     order_created_notification:
       bought: Successfully bought
       rewarded: Successfully rewarded
+    swap_order_swapping_notification:
+      swapping: 'Swapping:'
     swap_order_finished_notification:
       swapped: 'Successfully swapped:'
       rejected: Your swap was rejected, you will receive the refund soon.

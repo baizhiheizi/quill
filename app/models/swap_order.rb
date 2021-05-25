@@ -57,7 +57,7 @@ class SwapOrder < ApplicationRecord
     state :completed
     state :refunded
 
-    event :start do
+    event :start, after_commit: %i[notify_payer] do
       transitions from: :paid, to: :swapping
     end
 
@@ -184,8 +184,7 @@ class SwapOrder < ApplicationRecord
   end
 
   def notify_payer
-    return unless state.in? %w[completed refunded rejected]
-
-    SwapOrderFinishedNotification.with(swap_order: self).deliver(payer)
+    SwapOrderSwappingNotification.with(swap_order: self).deliver(payer) if swapping?
+    SwapOrderFinishedNotification.with(swap_order: self).deliver(payer) if state.in? %w[completed refunded rejected]
   end
 end
