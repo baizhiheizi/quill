@@ -22,6 +22,8 @@ ja:
     order_created_notification:
       bought: 購入完了しました
       rewarded: リワードが付与されました
+    swap_order_swapping_notification:
+      swapping: 'スワップ:'
     swap_order_finished_notification:
       swapped: 'スワップ成功:'
       rejected: スワップが拒否されましたが、すぐに払い戻しされます
