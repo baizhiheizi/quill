@@ -33,7 +33,9 @@ class ApplicationController < ActionController::Base
         unread_notifications_count: current_user.unread_notifications_count
       ),
       prsdigg: {
-        app_id: PrsdiggBot.api.client_id
+        app_id: PrsdiggBot.api.client_id,
+        page_title: Rails.application.credentials[:page_title],
+        attachment_endpoint: Rails.application.credentials.dig(:aliyun, :bucket_endpoint) 
       },
       default_locale: I18n.default_locale,
       available_locales: I18n.available_locales

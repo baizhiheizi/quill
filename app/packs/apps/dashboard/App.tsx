@@ -23,7 +23,7 @@ import Routes from './Routes';
 export default function App(props: {
   csrfToken: string;
   currentUser: Partial<User>;
-  prsdigg: { appId: String };
+  prsdigg: { appId: string; pageTitle?: string; attachmentEndpoint?: string };
   defaultLocale: 'en' | 'ja' | 'zh-CN';
   availableLocales: [string];
 }) {

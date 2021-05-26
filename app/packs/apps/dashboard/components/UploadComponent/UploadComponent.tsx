@@ -1,10 +1,11 @@
 import { message } from 'antd';
-import { upload } from 'apps/shared';
+import { upload, usePrsdigg } from 'apps/shared';
 import React from 'react';
 
 export default function UploadComponent(props: {
   callback: (params: any) => any;
 }) {
+  const { attachmentEndpoint } = usePrsdigg();
   return (
     <input
       className='hidden'
@@ -16,6 +17,7 @@ export default function UploadComponent(props: {
         Array.from(event.target.files).forEach((file) => {
           message.loading('...');
           upload(file, (blob) => {
+            blob.url = `${attachmentEndpoint}/${blob.key}`;
             props.callback(blob);
             message.destroy();
           });

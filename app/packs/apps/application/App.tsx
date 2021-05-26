@@ -23,13 +23,11 @@ import Routes from './Routes';
 export default function App(props: {
   csrfToken: string;
   currentUser?: Partial<User>;
-  prsdigg: {
-    appId: string;
-  };
+  prsdigg: { appId: string; pageTitle?: string; attachmentEndpoint?: string };
   defaultLocale: 'en' | 'ja' | 'zh-CN';
   availableLocales: [string];
 }) {
-  const { csrfToken, prsdigg, defaultLocale, availableLocales } = props;
+  const { csrfToken, prsdigg, availableLocales } = props;
   const [currentUser, setCurrentUser] = useState(props.currentUser);
   i18nCall(availableLocales);
 
