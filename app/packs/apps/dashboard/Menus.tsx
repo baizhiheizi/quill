@@ -115,6 +115,7 @@ export default function Menus() {
         }
         {i18n.languages.length > 1 && (
           <Menu.SubMenu
+            key='global'
             title={
               i18n.language.includes('en')
                 ? 'Language'

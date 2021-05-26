@@ -58,12 +58,12 @@ export default function Menus() {
       </Col>
       <Col flex={1}>
         <Menu theme='light' mode={props.mode} selectable={false}>
-          <Menu.Item onClick={() => setDrawerVisible(false)}>
+          <Menu.Item key='read' onClick={() => setDrawerVisible(false)}>
             <Link to='/' replace>
               {t('read')}
             </Link>
           </Menu.Item>
-          <Menu.Item onClick={() => setDrawerVisible(false)}>
+          <Menu.Item key='write' onClick={() => setDrawerVisible(false)}>
             {currentUser ? (
               <a href='/dashboard/articles/new' target='_blank'>
                 {t('write')}
@@ -74,22 +74,22 @@ export default function Menus() {
               </a>
             )}
           </Menu.Item>
-          <Menu.Item onClick={() => setDrawerVisible(false)}>
+          <Menu.Item key='search' onClick={() => setDrawerVisible(false)}>
             <Link to='/search' replace>
               {t('search')}
             </Link>
           </Menu.Item>
-          <Menu.Item onClick={() => setDrawerVisible(false)}>
+          <Menu.Item key='rules' onClick={() => setDrawerVisible(false)}>
             <Link to='/rules' replace>
               {t('rules')}
             </Link>
           </Menu.Item>
-          <Menu.Item onClick={() => setDrawerVisible(false)}>
+          <Menu.Item key='fair' onClick={() => setDrawerVisible(false)}>
             <Link to='/fair' replace>
               {t('fair')}
             </Link>
           </Menu.Item>
-          <Menu.Item onClick={() => setDrawerVisible(false)}>
+          <Menu.Item key='open_source' onClick={() => setDrawerVisible(false)}>
             <a href={OPEN_SOURCE_URL} target='_blank'>
               <GithubOutlined />
               {t('open_source')}
@@ -101,6 +101,7 @@ export default function Menus() {
         <Col>
           <Menu theme='light' mode={props.mode} selectable={false}>
             <Menu.SubMenu
+              key='global'
               title={
                 props.mode === 'horizontal' ? (
                   <GlobalOutlined />
@@ -141,7 +142,10 @@ export default function Menus() {
       {currentUser ? (
         <Col>
           <Menu mode={props.mode} selectable={false}>
-            <Menu.Item onClick={() => setDrawerVisible(false)}>
+            <Menu.Item
+              key='notifications'
+              onClick={() => setDrawerVisible(false)}
+            >
               <Badge dot={currentUser.unreadNotificationsCount > 0}>
                 <a href='/dashboard/notifications'>
                   {props.mode === 'horizontal' ? (
@@ -152,12 +156,12 @@ export default function Menus() {
                 </a>
               </Badge>
             </Menu.Item>
-            <Menu.Item onClick={() => setDrawerVisible(false)}>
+            <Menu.Item key='dashboard' onClick={() => setDrawerVisible(false)}>
               <a href='/dashboard' target='_blank'>
                 {t('dashboard')}
               </a>
             </Menu.Item>
-            <Menu.Item onClick={() => setDrawerVisible(false)}>
+            <Menu.Item key='logout' onClick={() => setDrawerVisible(false)}>
               <a href='/logout'>{t('logout')}</a>
             </Menu.Item>
           </Menu>
