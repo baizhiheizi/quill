@@ -1866,6 +1866,7 @@ export type UpvoteCommentMutationInput = {
 
 export type User = {
   __typename?: 'User';
+  accessable?: Maybe<Scalars['Boolean']>;
   articles: ArticleConnection;
   authoringSubscribed?: Maybe<Scalars['Boolean']>;
   avatarUrl: Scalars['String'];
@@ -1875,9 +1876,11 @@ export type User = {
   createdAt: Scalars['ISO8601DateTime'];
   id: Scalars['ID'];
   locale?: Maybe<Scalars['String']>;
+  mixinAuthorizationValid?: Maybe<Scalars['Boolean']>;
   mixinId: Scalars['ID'];
   mixinUuid: Scalars['String'];
   name: Scalars['String'];
+  phone?: Maybe<Scalars['String']>;
   prsAccount?: Maybe<PrsAccount>;
   readingSubscribed?: Maybe<Scalars['Boolean']>;
   statistics: UserStatistics;
@@ -3364,6 +3367,7 @@ export const AdminUserConnectionDocument = gql`
       id
       name
       mixinId
+      phone
       mixinUuid
       avatarUrl
       statistics {
@@ -3419,6 +3423,7 @@ export const AdminUserDocument = gql`
     id
     name
     mixinId
+    phone
     mixinUuid
     avatarUrl
     bio

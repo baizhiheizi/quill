@@ -130,6 +130,12 @@ export function UsersComponent(props: {
       title: 'Name',
     },
     {
+      dataIndex: 'phone',
+      key: 'phone',
+      render: (_, user) => user.phone || '-',
+      title: 'Phone',
+    },
+    {
       dataIndex: 'articlesCount',
       key: 'articlesCount',
       render: (_, user) => user.statistics.articlesCount,

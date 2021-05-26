@@ -1,5 +1,5 @@
 import { ApolloProvider } from '@apollo/client';
-import { Col, Layout, message, Row } from 'antd';
+import { Col, Layout, message, Modal, Row } from 'antd';
 import {
   apolloClient,
   CurrentUserContext,
@@ -15,6 +15,7 @@ import 'core-js/features/promise';
 import { User } from 'graphqlTypes';
 import isMobile from 'ismobilejs';
 import React, { Suspense, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { BrowserRouter as Router } from 'react-router-dom';
 import LoadingComponent from './components/LoadingComponent/LoadingComponent';
 import Menus from './Menus';
@@ -27,9 +28,17 @@ export default function App(props: {
   defaultLocale: 'en' | 'ja' | 'zh-CN';
   availableLocales: [string];
 }) {
-  const { csrfToken, prsdigg, availableLocales } = props;
-  const [currentUser, setCurrentUser] = useState(props.currentUser);
+  const {
+    csrfToken,
+    prsdigg,
+    availableLocales,
+    currentUser: _currentUser,
+  } = props;
+  const [currentUser, setCurrentUser] = useState(
+    _currentUser && _currentUser.accessable ? _currentUser : null,
+  );
   i18nCall(availableLocales);
+  const { t } = useTranslation();
 
   useEffect(() => {
     hideLoader();
@@ -51,6 +60,26 @@ export default function App(props: {
       },
     });
   }, [currentUser]);
+
+  useEffect(() => {
+    if (!_currentUser || _currentUser.accessable) {
+      return;
+    } else if (!_currentUser.mixinAuthorizationValid) {
+      Modal.info({
+        title: t('invalid_authorization'),
+        content: t('please_confirm_all_authorizations_required'),
+        okText: t('reauthorize'),
+        onOk: () => location.replace('/login'),
+      });
+    } else if (!_currentUser.accessable) {
+      Modal.error({
+        title: t('no_access'),
+        content: t('sorry_you_are_not_authorized_to_access_this_application'),
+        okText: t('confirm'),
+        onOk: () => location.replace('/logout'),
+      });
+    }
+  }, [_currentUser]);
 
   return (
     <Suspense fallback={<LoadingComponent />}>

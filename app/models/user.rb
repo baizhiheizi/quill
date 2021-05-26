@@ -119,6 +119,8 @@ class User < ApplicationRecord
       ).order(comments_count: :desc)
   }
 
+  delegate :phone, to: :mixin_authorization
+
   # subscribe user for new articles
   action_store :authoring_subscribe, :user, counter_cache: 'authoring_subscribers_count'
   # subscribe user for buying or rewarding articles
@@ -200,6 +202,28 @@ class User < ApplicationRecord
 
   def generated_avatar_url
     format('https://api.multiavatar.com/%<mixin_uuid>s.svg', mixin_uuid: mixin_uuid)
+  end
+
+  def accessable?
+    return true unless Rails.application.credentials.dig(:whitelist, :enable)
+
+    mixin_id_in_whitelist? || phone_country_code_in_whitelist?
+  end
+
+  def mixin_id_in_whitelist?
+    mixin_id.in? Rails.application.credentials.dig(:whitelist, :mixin_id).map(&:to_s)
+  end
+
+  def phone_country_code_in_whitelist?
+    Regexp.new("^\\+?(#{Rails.application.credentials.dig(:whitelist, :phone_country_code).join('|')})\\d+").match? phone
+  end
+
+  def mixin_authorization_valid?
+    if Rails.application.credentials.dig(:whitelist, :enable) && Rails.application.credentials.dig(:whitelist, :phone_country_code).present?
+      phone.present?
+    else
+      true
+    end
   end
 
   private
