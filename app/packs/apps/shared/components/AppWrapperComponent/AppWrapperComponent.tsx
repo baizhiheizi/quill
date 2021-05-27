@@ -8,7 +8,6 @@ import {
   PrsdiggContext,
   UserAgentContext,
 } from 'apps/shared';
-import { i18nCall } from 'apps/shared/locales/i18n';
 import consumer from 'channels/consumer';
 // https://github.com/apollographql/apollo-client/issues/6381
 import 'core-js/features/promise';
@@ -26,17 +25,10 @@ export function AppWrapperComponent(props: {
   availableLocales: [string];
   children: React.ReactChild;
 }) {
-  const {
-    csrfToken,
-    prsdigg,
-    availableLocales,
-    currentUser: _currentUser,
-    children,
-  } = props;
+  const { csrfToken, prsdigg, currentUser: _currentUser, children } = props;
   const [currentUser, setCurrentUser] = useState(
     _currentUser && _currentUser.accessable ? _currentUser : null,
   );
-  i18nCall(availableLocales);
   const { t } = useTranslation();
 
   useEffect(() => {

@@ -71,7 +71,7 @@ export default function NotificationSettingComponent() {
                 })
               }
             />
-            Mixin Bot
+            {t('mixin_bot')}
           </Space>
         </Col>
         <Col>
@@ -124,7 +124,7 @@ export default function NotificationSettingComponent() {
                 })
               }
             />
-            Mixin Bot
+            {t('mixin_bot')}
           </Space>
         </Col>
         <Col>
@@ -177,7 +177,7 @@ export default function NotificationSettingComponent() {
                 })
               }
             />
-            Mixin Bot
+            {t('mixin_bot')}
           </Space>
         </Col>
         <Col>
@@ -230,7 +230,7 @@ export default function NotificationSettingComponent() {
                 })
               }
             />
-            Mixin Bot
+            {t('mixin_bot')}
           </Space>
         </Col>
         <Col>
@@ -283,7 +283,7 @@ export default function NotificationSettingComponent() {
                 })
               }
             />
-            Mixin Bot
+            {t('mixin_bot')}
           </Space>
         </Col>
         <Col>
@@ -336,7 +336,7 @@ export default function NotificationSettingComponent() {
                 })
               }
             />
-            Mixin Bot
+            {t('mixin_bot')}
           </Space>
         </Col>
         <Col>

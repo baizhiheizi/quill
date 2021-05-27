@@ -91,7 +91,7 @@ export default function Menus() {
           </Menu.Item>
           <Menu.Item key='open_source' onClick={() => setDrawerVisible(false)}>
             <a href={OPEN_SOURCE_URL} target='_blank'>
-              <GithubOutlined />
+              <GithubOutlined className='mr-2' />
               {t('open_source')}
             </a>
           </Menu.Item>

@@ -1,5 +1,6 @@
 import { Col, Layout, Row } from 'antd';
 import { AppWrapperComponent } from 'apps/shared';
+import { i18nCall } from 'apps/shared/locales/i18n';
 // https://github.com/apollographql/apollo-client/issues/6381
 import 'core-js/features/promise';
 import { User } from 'graphqlTypes';
@@ -15,6 +16,8 @@ export default function App(props: {
   defaultLocale: 'en' | 'ja' | 'zh-CN';
   availableLocales: [string];
 }) {
+  i18nCall(props.availableLocales);
+
   return (
     <AppWrapperComponent {...props}>
       <Router>
