@@ -28,7 +28,7 @@
     "@uiw/react-md-editor": "^3.3.1",
     "ahooks": "^2.10.4",
     "antd": "^4.16.0",
-    "autoprefixer": "^10.2.5",
+    "autoprefixer": "^10.2.6",
     "babel-plugin-import": "^1.13.3",
     "babel-plugin-transform-react-remove-prop-types": "^0.4.24",
     "copy-to-clipboard": "^3.3.1",
