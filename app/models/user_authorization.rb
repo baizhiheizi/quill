@@ -19,6 +19,10 @@
 #  index_user_authorizations_on_user_id           (user_id)
 #
 class UserAuthorization < ApplicationRecord
+  MIXIN_AUTHORIZATION_SCOPE = "PROFILE:READ#{Rails.application.credentials.dig(:whitelist, :enable).presence && '+PHONE:READ'}"
+
+  store_accessor :raw, :phone
+
   belongs_to :user, optional: true
 
   enum provider: { mixin: 0 }

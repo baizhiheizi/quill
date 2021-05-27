@@ -1,4 +1,4 @@
-import { Avatar, Button, Space, Table } from 'antd';
+import { Avatar, Button, Select, Space, Table } from 'antd';
 import { ColumnProps } from 'antd/lib/table';
 import LoadingComponent from 'apps/admin/components/LoadingComponent/LoadingComponent';
 import { usePrsdigg } from 'apps/admin/shared';
@@ -7,15 +7,16 @@ import {
   MixinNetworkSnapshot,
   useAdminMixinNetworkSnapshotConnectionQuery,
 } from 'graphqlTypes';
-import React from 'react';
+import React, { useState } from 'react';
 
 export default function MixinNetworkSnapshotsComponent(props: {
-  filter?: 'input' | 'output' | 'prsdigg' | 'all';
   userId?: string;
 }) {
   const { appId } = usePrsdigg();
-  const { userId, filter = 'all' } = props;
-  const { data, loading, fetchMore } =
+  const { userId } = props;
+  const [filter, setFilter] =
+    useState<'input' | 'output' | 'prsdigg' | 'all'>('input');
+  const { data, loading, fetchMore, refetch } =
     useAdminMixinNetworkSnapshotConnectionQuery({
       variables: { filter, userId },
     });
@@ -99,13 +100,32 @@ export default function MixinNetworkSnapshotsComponent(props: {
   ];
 
   return (
-    <div>
+    <>
+      <div className='flex justify-between mb-4'>
+        <div className='flex space-x-2'>
+          <Select
+            style={{ width: 200 }}
+            value={filter}
+            onChange={(value) => setFilter(value)}
+          >
+            <Select.Option value='input'>Input</Select.Option>
+            <Select.Option value='output'>Output</Select.Option>
+            <Select.Option value='prsdigg'>From PRSDigg</Select.Option>
+            <Select.Option value='4swap'>4swap</Select.Option>
+            <Select.Option value='all'>All</Select.Option>
+          </Select>
+        </div>
+        <Button type='primary' onClick={() => refetch()}>
+          Refresh
+        </Button>
+      </div>
       <Table
         scroll={{ x: true }}
         columns={columns}
         dataSource={snapshots}
         rowKey='traceId'
         pagination={false}
+        size='small'
       />
       <div style={{ margin: '1rem', textAlign: 'center' }}>
         <Button
@@ -123,6 +143,6 @@ export default function MixinNetworkSnapshotsComponent(props: {
           {hasNextPage ? 'Load More' : 'No More'}
         </Button>
       </div>
-    </div>
+    </>
   );
 }

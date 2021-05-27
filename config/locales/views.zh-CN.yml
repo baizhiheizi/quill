@@ -182,3 +182,8 @@ zh-CN:
   copy: 复制
   present_value: 按当前价格折算
   per_price_when_paid: 按支付时价格折算
+  invalid_authorization: 授权失效
+  please_confirm_all_authorizations_required: 请确认所有必要的授权
+  reauthorize: 重新授权
+  no_access: 不能访问
+  sorry_you_are_not_authorized_to_access_this_application: 抱歉，您无法使用该应用

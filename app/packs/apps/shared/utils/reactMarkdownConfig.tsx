@@ -1,4 +1,4 @@
-import { CloudUploadOutlined } from '@ant-design/icons';
+import { FileImageOutlined } from '@ant-design/icons';
 import { ICommand } from '@uiw/react-md-editor';
 import { Image } from 'antd';
 import katex from 'katex';
@@ -81,7 +81,7 @@ export const uploadCommand: ICommand = {
   name: 'upload',
   keyCommand: 'upload',
   buttonProps: { 'aria-label': 'Upload Image' },
-  icon: <CloudUploadOutlined />,
+  icon: <FileImageOutlined />,
   execute: () => {
     document.getElementById('upload-image-input').click();
   },

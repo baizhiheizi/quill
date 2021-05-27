@@ -63,13 +63,14 @@ export default function OrdersComponent(props: {
   ];
 
   return (
-    <div>
+    <>
       <Table
         scroll={{ x: true }}
         columns={columns}
         dataSource={orders}
         rowKey='traceId'
         pagination={false}
+        size='small'
       />
       <div style={{ margin: '1rem', textAlign: 'center' }}>
         <Button
@@ -87,6 +88,6 @@ export default function OrdersComponent(props: {
           {hasNextPage ? 'Load More' : 'No More'}
         </Button>
       </div>
-    </div>
+    </>
   );
 }

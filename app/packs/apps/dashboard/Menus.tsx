@@ -113,38 +113,41 @@ export default function Menus() {
           //   </Link>
           // </Menu.Item>
         }
-        <Menu.SubMenu
-          title={
-            i18n.language.includes('en')
-              ? 'Language'
-              : i18n.language.includes('ja')
-              ? '言語'
-              : '语言'
-          }
-          icon={<GlobalOutlined />}
-        >
-          {i18n.languages.map((lng) => {
-            if (lng.includes('CN')) {
-              return (
-                <Menu.Item key={lng}>
-                  <a onClick={() => i18n.changeLanguage('zh-CN')}>中文</a>
-                </Menu.Item>
-              );
-            } else if (lng.includes('en')) {
-              return (
-                <Menu.Item key={lng}>
-                  <a onClick={() => i18n.changeLanguage('en')}>EN</a>
-                </Menu.Item>
-              );
-            } else if (lng.includes('ja')) {
-              return (
-                <Menu.Item key={lng}>
-                  <a onClick={() => i18n.changeLanguage('ja')}>日本語</a>
-                </Menu.Item>
-              );
+        {i18n.languages.length > 1 && (
+          <Menu.SubMenu
+            key='global'
+            title={
+              i18n.language.includes('en')
+                ? 'Language'
+                : i18n.language.includes('ja')
+                ? '言語'
+                : '语言'
             }
-          })}
-        </Menu.SubMenu>
+            icon={<GlobalOutlined />}
+          >
+            {i18n.languages.map((lng) => {
+              if (lng.includes('CN')) {
+                return (
+                  <Menu.Item key={lng}>
+                    <a onClick={() => i18n.changeLanguage('zh-CN')}>中文</a>
+                  </Menu.Item>
+                );
+              } else if (lng.includes('en')) {
+                return (
+                  <Menu.Item key={lng}>
+                    <a onClick={() => i18n.changeLanguage('en')}>EN</a>
+                  </Menu.Item>
+                );
+              } else if (lng.includes('ja')) {
+                return (
+                  <Menu.Item key={lng}>
+                    <a onClick={() => i18n.changeLanguage('ja')}>日本語</a>
+                  </Menu.Item>
+                );
+              }
+            })}
+          </Menu.SubMenu>
+        )}
         <Menu.Item key='back'>
           <a href='/'>
             <LoginOutlined />

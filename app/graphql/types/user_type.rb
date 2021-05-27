@@ -6,6 +6,7 @@ module Types
     field :name, String, null: false
     field :mixin_id, ID, null: false
     field :mixin_uuid, String, null: false
+    field :phone, String, null: true
     field :avatar_url, String, null: false
     field :bio, String, null: true
     field :locale, String, null: true
@@ -20,6 +21,9 @@ module Types
     field :authoring_subscribed, Boolean, null: true
     field :reading_subscribed, Boolean, null: true
 
+    field :accessable, Boolean, null: true
+    field :mixin_authorization_valid, Boolean, null: true
+
     field :prs_account, Types::PrsAccountType, null: true
     field :articles, Types::ArticleConnectionType, null: false
     field :comments, Types::CommentConnectionType, null: false
@@ -30,6 +34,14 @@ module Types
 
     def reading_subscribed
       context[:current_user]&.reading_subscribe_user?(object)
+    end
+
+    def accessable
+      object.accessable?
+    end
+
+    def mixin_authorization_valid
+      object.mixin_authorization_valid?
     end
 
     def articles

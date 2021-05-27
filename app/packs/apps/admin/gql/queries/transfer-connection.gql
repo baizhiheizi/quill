@@ -3,6 +3,7 @@ query AdminTransferConnection(
   $itemType: String
   $souceId: ID
   $souceType: String
+  $transferType: String
   $after: String
 ) {
   adminTransferConnection(
@@ -10,6 +11,7 @@ query AdminTransferConnection(
     itemType: $itemType
     sourceId: $souceId
     sourceType: $souceType
+    transferType: $transferType
     after: $after
   ) {
     nodes {

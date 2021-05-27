@@ -21,12 +21,11 @@ import CommentsComponent from 'apps/application/components/CommentsComponent/Com
 import LoadingComponent from 'apps/application/components/LoadingComponent/LoadingComponent';
 import UserCardComponent from 'apps/application/components/UserCardComponent/UserCardComponent';
 import {
-  handleArticleShare,
-  PAGE_TITLE,
   CHINESE_MIXIN_GROUP_APP_ID,
   CHINESE_MIXIN_GROUP_AVATAR_URL,
   CHINESE_MIXIN_GROUP_CODE_ID,
   CHINESE_MIXIN_GROUP_DESCRIPTION,
+  handleArticleShare,
 } from 'apps/application/shared';
 import {
   MarkdownRendererComponent,
@@ -55,7 +54,7 @@ export default function ArticlePage() {
   const { uuid } = useParams<{ uuid: string }>();
   const [rewardModalVisible, setRewardModalVisible] = useState(false);
   const [payModalVisible, setPayModalVisible] = useState(false);
-  const { appId } = usePrsdigg();
+  const { appId, pageTitle } = usePrsdigg();
   const { mixinEnv } = useUserAgent();
   const { currentUser } = useCurrentUser();
   const { loading, data, refetch }: ArticleQueryHookResult = useArticleQuery({
@@ -65,7 +64,7 @@ export default function ArticlePage() {
   const [downvoteArticle] = useDownvoteArticleMutation();
 
   useEffect(() => {
-    return () => (document.title = PAGE_TITLE);
+    return () => (document.title = pageTitle);
   }, [uuid]);
 
   if (loading) {

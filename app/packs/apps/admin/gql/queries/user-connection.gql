@@ -14,6 +14,7 @@ query AdminUserConnection(
       id
       name
       mixinId
+      phone
       mixinUuid
       avatarUrl
       statistics {

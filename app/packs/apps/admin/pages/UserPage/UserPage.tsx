@@ -1,6 +1,10 @@
 import { Avatar, Descriptions, Empty, PageHeader, Space, Tabs } from 'antd';
+import { ArticlesComponent } from 'apps/admin/components/ArticlesComponent/ArticlesComponent';
+import CommentsComponent from 'apps/admin/components/CommentsComponent/CommentsComponent';
 import LoadingComponent from 'apps/admin/components/LoadingComponent/LoadingComponent';
 import MixinNetworkSnapshotsComponent from 'apps/admin/components/MixinNetworkSnapshotsComponent/MixinNetworkSnapshotComponent';
+import PaymentsComponent from 'apps/admin/components/PaymentsComponent/PaymentsComponent';
+import SwapOrdersComponent from 'apps/admin/components/SwapOrdersComponent/SwapOrdersCompnent';
 import WalletBalanceComponent from 'apps/admin/components/WalletBalanceComponent/WalletBalanceComponent';
 import { useAdminUserQuery } from 'graphqlTypes';
 import React from 'react';
@@ -36,7 +40,19 @@ export default function UserPage() {
           {user.statistics.readerRevenueTotalUsd}
         </Descriptions.Item>
       </Descriptions>
-      <Tabs defaultActiveKey='wallet_balance'>
+      <Tabs defaultActiveKey='articles'>
+        <Tabs.TabPane tab='Articles' key='articles'>
+          <ArticlesComponent authorMixinUuid={user.mixinUuid} />
+        </Tabs.TabPane>
+        <Tabs.TabPane tab='Comments' key='comments'>
+          <CommentsComponent authorMixinUuid={user.mixinUuid} />
+        </Tabs.TabPane>
+        <Tabs.TabPane tab='Payments' key='payments'>
+          <PaymentsComponent payerMixinUuid={user.mixinUuid} />
+        </Tabs.TabPane>
+        <Tabs.TabPane tab='Swap Orders' key='swap_orders'>
+          <SwapOrdersComponent payerMixinUuid={user.mixinUuid} />
+        </Tabs.TabPane>
         <Tabs.TabPane tab='Wallet Balance' key='wallet_balance'>
           {user.walletId ? (
             <WalletBalanceComponent userId={user.walletId} />

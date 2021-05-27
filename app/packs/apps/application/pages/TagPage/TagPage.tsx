@@ -3,7 +3,7 @@ import { Button, Card, Divider, List, Space, Typography } from 'antd';
 import ArticleListItemComponent from 'apps/application/components/ArticleListItemComponent/ArticleListItemComponent';
 import LoadingComponent from 'apps/application/components/LoadingComponent/LoadingComponent';
 import LoadMoreComponent from 'apps/application/components/LoadMoreComponent/LoadMoreComponent';
-import { handleTagShare, PAGE_TITLE } from 'apps/application/shared';
+import { handleTagShare } from 'apps/application/shared';
 import { usePrsdigg, useUserAgent } from 'apps/shared';
 import {
   Article,
@@ -17,7 +17,7 @@ import { useParams } from 'react-router-dom';
 export default function TagPage() {
   const { id } = useParams<{ id: string }>();
   const { t } = useTranslation();
-  const { appId } = usePrsdigg();
+  const { appId, pageTitle } = usePrsdigg();
   const { mixinEnv } = useUserAgent();
   const { loading, data, fetchMore } = useTaggedArticleConnectionQuery({
     variables: { tagId: id, order: 'lately' },
@@ -25,7 +25,7 @@ export default function TagPage() {
   const [toggleSubscribeTagAction] = useToggleSubscribeTagActionMutation();
 
   useEffect(() => {
-    return () => (document.title = PAGE_TITLE);
+    return () => (document.title = pageTitle);
   }, [id]);
 
   if (loading) {

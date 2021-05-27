@@ -3,20 +3,20 @@ import Table, { ColumnProps } from 'antd/lib/table';
 import LoadingComponent from 'apps/admin/components/LoadingComponent/LoadingComponent';
 import {
   Comment as IComment,
+  useAdminCommentConnectionQuery,
   useAdminDeleteCommentMutation,
   useAdminRecoverCommentMutation,
-  useCommentConnectionQuery,
 } from 'graphqlTypes';
 import React from 'react';
 
 export default function CommentsComponent(props: {
   commentableId?: string;
   commentableType?: string;
-  authorMixinId?: string;
+  authorMixinUuid?: string;
 }) {
-  const { commentableId, commentableType, authorMixinId } = props;
-  const { data, loading, fetchMore, refetch } = useCommentConnectionQuery({
-    variables: { commentableId, commentableType, authorMixinId },
+  const { commentableId, commentableType, authorMixinUuid } = props;
+  const { data, loading, fetchMore, refetch } = useAdminCommentConnectionQuery({
+    variables: { commentableId, commentableType, authorMixinUuid },
   });
   const [deleteComment, { loading: deleting }] = useAdminDeleteCommentMutation({
     update(_, { data: { error: err } }) {
@@ -44,7 +44,7 @@ export default function CommentsComponent(props: {
   }
 
   const {
-    commentConnection: {
+    adminCommentConnection: {
       nodes: comments,
       pageInfo: { hasNextPage, endCursor },
     },
@@ -134,13 +134,19 @@ export default function CommentsComponent(props: {
     },
   ];
   return (
-    <div>
+    <>
+      <div className='flex justify-end mb-4'>
+        <Button type='primary' onClick={() => refetch()}>
+          Refresh
+        </Button>
+      </div>
       <Table
         scroll={{ x: true }}
         columns={columns}
         dataSource={comments}
         rowKey='id'
         pagination={false}
+        size='small'
       />
       <div style={{ margin: '1rem', textAlign: 'center' }}>
         <Button
@@ -158,6 +164,6 @@ export default function CommentsComponent(props: {
           {hasNextPage ? 'Load More' : 'No More'}
         </Button>
       </div>
-    </div>
+    </>
   );
 }

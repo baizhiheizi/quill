@@ -30,10 +30,14 @@ class ApplicationController < ActionController::Base
         only: %i[name avatar_url mixin_id mixin_uuid banned_at locale]
       )&.merge(
         wallet_id: current_user.wallet_id,
-        unread_notifications_count: current_user.unread_notifications_count
+        unread_notifications_count: current_user.unread_notifications_count,
+        accessable: current_user.accessable?,
+        mixin_authorization_valid: current_user.mixin_authorization_valid?
       ),
       prsdigg: {
-        app_id: PrsdiggBot.api.client_id
+        app_id: PrsdiggBot.api.client_id,
+        page_title: Rails.application.credentials[:page_title],
+        attachment_endpoint: Rails.application.credentials.dig(:aliyun, :bucket_endpoint)
       },
       default_locale: I18n.default_locale,
       available_locales: I18n.available_locales

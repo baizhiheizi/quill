@@ -1,5 +1,13 @@
-query AdminSwapOrderConnection($userId: ID, $after: String) {
-  adminSwapOrderConnection(userId: $userId, after: $after) {
+query AdminSwapOrderConnection(
+  $payerMixinUuid: ID
+  $state: String
+  $after: String
+) {
+  adminSwapOrderConnection(
+    payerMixinUuid: $payerMixinUuid
+    state: $state
+    after: $after
+  ) {
     nodes {
       id
       traceId

@@ -31,18 +31,20 @@ module Prs
     delegate :hash, to: :prs_atm
 
     def sign(payload, user)
-      prs_atm.sign(
-        payload[:type],
-        payload[:meta],
-        payload[:data],
-        Rails.application.credentials.dig(:prs, :account),
-        Rails.application.credentials.dig(:prs, :public_key),
-        Rails.application.credentials.dig(:prs, :private_key),
-        {
-          userAddress: user[:account],
-          privateKey: user[:private_key]
-        }
-      )
+      Timeout.timeout(600) do
+        prs_atm.sign(
+          payload[:type],
+          payload[:meta],
+          payload[:data],
+          Rails.application.credentials.dig(:prs, :account),
+          Rails.application.credentials.dig(:prs, :public_key),
+          Rails.application.credentials.dig(:prs, :private_key),
+          {
+            userAddress: user[:account],
+            privateKey: user[:private_key]
+          }
+        )
+      end
     end
 
     def pip2001_authorization(count: 50, updated_at: Time.new(2021, 1, 1).rfc3339)

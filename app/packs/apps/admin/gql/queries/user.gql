@@ -3,6 +3,7 @@ query AdminUser($mixinId: ID!) {
     id
     name
     mixinId
+    phone
     mixinUuid
     avatarUrl
     bio

@@ -1,5 +1,15 @@
-query AdminArticleConnection($query: String, $state: String, $after: String) {
-  adminArticleConnection(query: $query, state: $state, after: $after) {
+query AdminArticleConnection(
+  $authorMixinUuid: ID
+  $query: String
+  $state: String
+  $after: String
+) {
+  adminArticleConnection(
+    authorMixinUuid: $authorMixinUuid
+    query: $query
+    state: $state
+    after: $after
+  ) {
     nodes {
       id
       uuid
