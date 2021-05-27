@@ -1,4 +1,4 @@
-import { Avatar, Button, Space, Table } from 'antd';
+import { Avatar, Button, Select, Space, Table } from 'antd';
 import { ColumnProps } from 'antd/es/table';
 import LoadingComponent from 'apps/admin/components/LoadingComponent/LoadingComponent';
 import { usePrsdigg } from 'apps/admin/shared';
@@ -7,7 +7,7 @@ import {
   Transfer as ITransfer,
   useAdminTransferConnectionQuery,
 } from 'graphqlTypes';
-import React from 'react';
+import React, { useState } from 'react';
 
 export default function TransfersComponent(props: {
   itemId?: string;
@@ -17,10 +17,15 @@ export default function TransfersComponent(props: {
 }) {
   const { appId } = usePrsdigg();
   const { itemId, itemType, sourceId, sourceType } = props;
-  const { data, loading, fetchMore }: AdminTransferConnectionQueryHookResult =
-    useAdminTransferConnectionQuery({
-      variables: { itemId, itemType, sourceId, sourceType },
-    });
+  const [transferType, setTransferType] = useState('all');
+  const {
+    data,
+    loading,
+    fetchMore,
+    refetch,
+  }: AdminTransferConnectionQueryHookResult = useAdminTransferConnectionQuery({
+    variables: { itemId, itemType, sourceId, sourceType, transferType },
+  });
 
   if (loading) {
     return <LoadingComponent />;
@@ -104,13 +109,38 @@ export default function TransfersComponent(props: {
   ];
 
   return (
-    <div>
+    <>
+      <div className='flex justify-between mb-4'>
+        <div className='flex space-x-4'>
+          <Select
+            className='w-48'
+            value={transferType}
+            onChange={(value) => setTransferType(value)}
+          >
+            <Select.Option value='all'>All</Select.Option>
+            <Select.Option value='author_revenue'>Author Revenue</Select.Option>
+            <Select.Option value='reader_revenue'>Reader Revenue</Select.Option>
+            <Select.Option value='prsdigg_revenue'>
+              Prsdigg Revenue
+            </Select.Option>
+            <Select.Option value='payment_refund'>Payment Refund</Select.Option>
+            <Select.Option value='bonus'>Bonus</Select.Option>
+            <Select.Option value='swap_change'>Swap Change</Select.Option>
+            <Select.Option value='swap_refund'>Swap Refund</Select.Option>
+            <Select.Option value='fox_swap'>Fox Swap</Select.Option>
+          </Select>
+        </div>
+        <Button type='primary' onClick={() => refetch()}>
+          Refresh
+        </Button>
+      </div>
       <Table
         scroll={{ x: true }}
         columns={columns}
         dataSource={transfers}
         rowKey='traceId'
         pagination={false}
+        size='small'
       />
       <div style={{ margin: '1rem', textAlign: 'center' }}>
         <Button
@@ -128,6 +158,6 @@ export default function TransfersComponent(props: {
           {hasNextPage ? 'Load More' : 'No More'}
         </Button>
       </div>
-    </div>
+    </>
   );
 }

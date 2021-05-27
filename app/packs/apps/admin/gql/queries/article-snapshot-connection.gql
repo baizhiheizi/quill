@@ -1,5 +1,15 @@
-query AdminArticleSnapshotConnection($articleUuid: String, $after: String) {
-  adminArticleSnapshotConnection(articleUuid: $articleUuid, after: $after) {
+query AdminArticleSnapshotConnection(
+  $articleUuid: String
+  $after: String
+  $state: String
+  $query: String
+) {
+  adminArticleSnapshotConnection(
+    articleUuid: $articleUuid
+    after: $after
+    state: $state
+    query: $query
+  ) {
     nodes {
       id
       state

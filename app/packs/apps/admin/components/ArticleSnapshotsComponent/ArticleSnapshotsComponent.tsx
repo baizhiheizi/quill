@@ -1,4 +1,5 @@
-import { Button, Popconfirm, Popover, Table } from 'antd';
+import { useDebounce } from 'ahooks';
+import { Button, Input, Popconfirm, Popover, Select, Table } from 'antd';
 import { ColumnProps } from 'antd/es/table';
 import LoadingComponent from 'apps/admin/components/LoadingComponent/LoadingComponent';
 import {
@@ -6,16 +7,20 @@ import {
   useAdminArticleSnapshotConnectionQuery,
   useAdminSignArticleSnapshotMutation,
 } from 'graphqlTypes';
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 
 export default function ArticleSnapshotsComponent(props: {
   articleUuid?: string;
 }) {
   const { articleUuid } = props;
-  const { loading, data, fetchMore } = useAdminArticleSnapshotConnectionQuery({
-    variables: { articleUuid },
-  });
+  const [state, setState] = useState('all');
+  const [query, setQuery] = useState('');
+  const debouncedQuery = useDebounce(query, { wait: 500 });
+  const { loading, data, fetchMore, refetch } =
+    useAdminArticleSnapshotConnectionQuery({
+      variables: { articleUuid, state, query: debouncedQuery },
+    });
   const [signArticleSnapshot, { loading: signing }] =
     useAdminSignArticleSnapshotMutation();
 
@@ -136,7 +141,30 @@ export default function ArticleSnapshotsComponent(props: {
   ];
 
   return (
-    <div>
+    <>
+      <div className='flex justify-between mb-4'>
+        <div className='flex space-x-4'>
+          <Select
+            className='w-48'
+            value={state}
+            onChange={(value) => setState(value)}
+          >
+            <Select.Option value='all'>All</Select.Option>
+            <Select.Option value='drafted'>Drafted</Select.Option>
+            <Select.Option value='signing'>Signing</Select.Option>
+            <Select.Option value='signed'>Signed</Select.Option>
+          </Select>
+          <Input
+            className='w-72'
+            value={query}
+            placeholder='title/content/author/hash/txId'
+            onChange={(e) => setQuery(e.currentTarget.value)}
+          />
+        </div>
+        <Button type='primary' onClick={() => refetch()}>
+          Refresh
+        </Button>
+      </div>
       <Table
         scroll={{ x: true }}
         columns={columns}
@@ -161,6 +189,6 @@ export default function ArticleSnapshotsComponent(props: {
           {hasNextPage ? 'Load More' : 'No More'}
         </Button>
       </div>
-    </div>
+    </>
   );
 }

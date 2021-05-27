@@ -1291,6 +1291,7 @@ export type QueryAdminArticleArgs = {
 
 
 export type QueryAdminArticleConnectionArgs = {
+  authorMixinUuid?: Maybe<Scalars['ID']>;
   query?: Maybe<Scalars['String']>;
   state?: Maybe<Scalars['String']>;
   after?: Maybe<Scalars['String']>;
@@ -1302,6 +1303,8 @@ export type QueryAdminArticleConnectionArgs = {
 
 export type QueryAdminArticleSnapshotConnectionArgs = {
   articleUuid?: Maybe<Scalars['String']>;
+  state?: Maybe<Scalars['String']>;
+  query?: Maybe<Scalars['String']>;
   after?: Maybe<Scalars['String']>;
   before?: Maybe<Scalars['String']>;
   first?: Maybe<Scalars['Int']>;
@@ -1318,6 +1321,9 @@ export type QueryAdminBonusConnectionArgs = {
 
 
 export type QueryAdminCommentConnectionArgs = {
+  commentableType?: Maybe<Scalars['String']>;
+  commentableId?: Maybe<Scalars['ID']>;
+  authorMixinUuid?: Maybe<Scalars['String']>;
   after?: Maybe<Scalars['String']>;
   before?: Maybe<Scalars['String']>;
   first?: Maybe<Scalars['Int']>;
@@ -1355,6 +1361,8 @@ export type QueryAdminOrderConnectionArgs = {
 
 export type QueryAdminPaymentConnectionArgs = {
   after?: Maybe<Scalars['String']>;
+  state?: Maybe<Scalars['String']>;
+  payerMixinUuid?: Maybe<Scalars['String']>;
   before?: Maybe<Scalars['String']>;
   first?: Maybe<Scalars['Int']>;
   last?: Maybe<Scalars['Int']>;
@@ -1381,7 +1389,8 @@ export type QueryAdminPrsTransactionConnectionArgs = {
 
 
 export type QueryAdminSwapOrderConnectionArgs = {
-  userId?: Maybe<Scalars['ID']>;
+  state?: Maybe<Scalars['String']>;
+  payerMixinUuid?: Maybe<Scalars['ID']>;
   after?: Maybe<Scalars['String']>;
   before?: Maybe<Scalars['String']>;
   first?: Maybe<Scalars['Int']>;
@@ -1394,6 +1403,7 @@ export type QueryAdminTransferConnectionArgs = {
   itemType?: Maybe<Scalars['String']>;
   sourceId?: Maybe<Scalars['ID']>;
   sourceType?: Maybe<Scalars['String']>;
+  transferType?: Maybe<Scalars['String']>;
   after?: Maybe<Scalars['String']>;
   before?: Maybe<Scalars['String']>;
   first?: Maybe<Scalars['Int']>;
@@ -2574,8 +2584,13 @@ export type ArticleChartQueryHookResult = ReturnType<typeof useArticleChartQuery
 export type ArticleChartLazyQueryHookResult = ReturnType<typeof useArticleChartLazyQuery>;
 export type ArticleChartQueryResult = Apollo.QueryResult<ArticleChartQuery, ArticleChartQueryVariables>;
 export const AdminArticleConnectionDocument = gql`
-    query AdminArticleConnection($query: String, $state: String, $after: String) {
-  adminArticleConnection(query: $query, state: $state, after: $after) {
+    query AdminArticleConnection($authorMixinUuid: ID, $query: String, $state: String, $after: String) {
+  adminArticleConnection(
+    authorMixinUuid: $authorMixinUuid
+    query: $query
+    state: $state
+    after: $after
+  ) {
     nodes {
       id
       uuid
@@ -2621,6 +2636,7 @@ export const AdminArticleConnectionDocument = gql`
  * @example
  * const { data, loading, error } = useAdminArticleConnectionQuery({
  *   variables: {
+ *      authorMixinUuid: // value for 'authorMixinUuid'
  *      query: // value for 'query'
  *      state: // value for 'state'
  *      after: // value for 'after'
@@ -2639,8 +2655,13 @@ export type AdminArticleConnectionQueryHookResult = ReturnType<typeof useAdminAr
 export type AdminArticleConnectionLazyQueryHookResult = ReturnType<typeof useAdminArticleConnectionLazyQuery>;
 export type AdminArticleConnectionQueryResult = Apollo.QueryResult<AdminArticleConnectionQuery, AdminArticleConnectionQueryVariables>;
 export const AdminArticleSnapshotConnectionDocument = gql`
-    query AdminArticleSnapshotConnection($articleUuid: String, $after: String) {
-  adminArticleSnapshotConnection(articleUuid: $articleUuid, after: $after) {
+    query AdminArticleSnapshotConnection($articleUuid: String, $after: String, $state: String, $query: String) {
+  adminArticleSnapshotConnection(
+    articleUuid: $articleUuid
+    after: $after
+    state: $state
+    query: $query
+  ) {
     nodes {
       id
       state
@@ -2681,6 +2702,8 @@ export const AdminArticleSnapshotConnectionDocument = gql`
  *   variables: {
  *      articleUuid: // value for 'articleUuid'
  *      after: // value for 'after'
+ *      state: // value for 'state'
+ *      query: // value for 'query'
  *   },
  * });
  */
@@ -2800,6 +2823,73 @@ export function useAdminBonusConnectionLazyQuery(baseOptions?: Apollo.LazyQueryH
 export type AdminBonusConnectionQueryHookResult = ReturnType<typeof useAdminBonusConnectionQuery>;
 export type AdminBonusConnectionLazyQueryHookResult = ReturnType<typeof useAdminBonusConnectionLazyQuery>;
 export type AdminBonusConnectionQueryResult = Apollo.QueryResult<AdminBonusConnectionQuery, AdminBonusConnectionQueryVariables>;
+export const AdminCommentConnectionDocument = gql`
+    query AdminCommentConnection($commentableType: String, $commentableId: ID, $authorMixinUuid: String, $after: String) {
+  adminCommentConnection(
+    commentableType: $commentableType
+    commentableId: $commentableId
+    authorMixinUuid: $authorMixinUuid
+    after: $after
+  ) {
+    nodes {
+      id
+      content
+      deletedAt
+      upvotesCount
+      downvotesCount
+      upvoted
+      downvoted
+      author {
+        name
+        avatarUrl
+        mixinId
+        bio
+        createdAt
+      }
+      commentable {
+        uuid
+        title
+      }
+      createdAt
+    }
+    pageInfo {
+      hasNextPage
+      endCursor
+    }
+  }
+}
+    `;
+
+/**
+ * __useAdminCommentConnectionQuery__
+ *
+ * To run a query within a React component, call `useAdminCommentConnectionQuery` and pass it any options that fit your needs.
+ * When your component renders, `useAdminCommentConnectionQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useAdminCommentConnectionQuery({
+ *   variables: {
+ *      commentableType: // value for 'commentableType'
+ *      commentableId: // value for 'commentableId'
+ *      authorMixinUuid: // value for 'authorMixinUuid'
+ *      after: // value for 'after'
+ *   },
+ * });
+ */
+export function useAdminCommentConnectionQuery(baseOptions?: Apollo.QueryHookOptions<AdminCommentConnectionQuery, AdminCommentConnectionQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<AdminCommentConnectionQuery, AdminCommentConnectionQueryVariables>(AdminCommentConnectionDocument, options);
+      }
+export function useAdminCommentConnectionLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AdminCommentConnectionQuery, AdminCommentConnectionQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<AdminCommentConnectionQuery, AdminCommentConnectionQueryVariables>(AdminCommentConnectionDocument, options);
+        }
+export type AdminCommentConnectionQueryHookResult = ReturnType<typeof useAdminCommentConnectionQuery>;
+export type AdminCommentConnectionLazyQueryHookResult = ReturnType<typeof useAdminCommentConnectionLazyQuery>;
+export type AdminCommentConnectionQueryResult = Apollo.QueryResult<AdminCommentConnectionQuery, AdminCommentConnectionQueryVariables>;
 export const AdminMixinMessageConnectionDocument = gql`
     query AdminMixinMessageConnection($after: String) {
   adminMixinMessageConnection(after: $after) {
@@ -2983,8 +3073,12 @@ export type AdminOrderConnectionQueryHookResult = ReturnType<typeof useAdminOrde
 export type AdminOrderConnectionLazyQueryHookResult = ReturnType<typeof useAdminOrderConnectionLazyQuery>;
 export type AdminOrderConnectionQueryResult = Apollo.QueryResult<AdminOrderConnectionQuery, AdminOrderConnectionQueryVariables>;
 export const AdminPaymentConnectionDocument = gql`
-    query AdminPaymentConnection($after: String) {
-  adminPaymentConnection(after: $after) {
+    query AdminPaymentConnection($payerMixinUuid: String, $state: String, $after: String) {
+  adminPaymentConnection(
+    payerMixinUuid: $payerMixinUuid
+    state: $state
+    after: $after
+  ) {
     nodes {
       traceId
       snapshotId
@@ -3026,6 +3120,8 @@ export const AdminPaymentConnectionDocument = gql`
  * @example
  * const { data, loading, error } = useAdminPaymentConnectionQuery({
  *   variables: {
+ *      payerMixinUuid: // value for 'payerMixinUuid'
+ *      state: // value for 'state'
  *      after: // value for 'after'
  *   },
  * });
@@ -3184,8 +3280,12 @@ export type RevenueChartQueryHookResult = ReturnType<typeof useRevenueChartQuery
 export type RevenueChartLazyQueryHookResult = ReturnType<typeof useRevenueChartLazyQuery>;
 export type RevenueChartQueryResult = Apollo.QueryResult<RevenueChartQuery, RevenueChartQueryVariables>;
 export const AdminSwapOrderConnectionDocument = gql`
-    query AdminSwapOrderConnection($userId: ID, $after: String) {
-  adminSwapOrderConnection(userId: $userId, after: $after) {
+    query AdminSwapOrderConnection($payerMixinUuid: ID, $state: String, $after: String) {
+  adminSwapOrderConnection(
+    payerMixinUuid: $payerMixinUuid
+    state: $state
+    after: $after
+  ) {
     nodes {
       id
       traceId
@@ -3237,7 +3337,8 @@ export const AdminSwapOrderConnectionDocument = gql`
  * @example
  * const { data, loading, error } = useAdminSwapOrderConnectionQuery({
  *   variables: {
- *      userId: // value for 'userId'
+ *      payerMixinUuid: // value for 'payerMixinUuid'
+ *      state: // value for 'state'
  *      after: // value for 'after'
  *   },
  * });
@@ -3254,12 +3355,13 @@ export type AdminSwapOrderConnectionQueryHookResult = ReturnType<typeof useAdmin
 export type AdminSwapOrderConnectionLazyQueryHookResult = ReturnType<typeof useAdminSwapOrderConnectionLazyQuery>;
 export type AdminSwapOrderConnectionQueryResult = Apollo.QueryResult<AdminSwapOrderConnectionQuery, AdminSwapOrderConnectionQueryVariables>;
 export const AdminTransferConnectionDocument = gql`
-    query AdminTransferConnection($itemId: ID, $itemType: String, $souceId: ID, $souceType: String, $after: String) {
+    query AdminTransferConnection($itemId: ID, $itemType: String, $souceId: ID, $souceType: String, $transferType: String, $after: String) {
   adminTransferConnection(
     itemId: $itemId
     itemType: $itemType
     sourceId: $souceId
     sourceType: $souceType
+    transferType: $transferType
     after: $after
   ) {
     nodes {
@@ -3308,6 +3410,7 @@ export const AdminTransferConnectionDocument = gql`
  *      itemType: // value for 'itemType'
  *      souceId: // value for 'souceId'
  *      souceType: // value for 'souceType'
+ *      transferType: // value for 'transferType'
  *      after: // value for 'after'
  *   },
  * });

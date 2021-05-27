@@ -1,0 +1,39 @@
+query AdminCommentConnection(
+  $commentableType: String
+  $commentableId: ID
+  $authorMixinUuid: String
+  $after: String
+) {
+  adminCommentConnection(
+    commentableType: $commentableType
+    commentableId: $commentableId
+    authorMixinUuid: $authorMixinUuid
+    after: $after
+  ) {
+    nodes {
+      id
+      content
+      deletedAt
+      upvotesCount
+      downvotesCount
+      upvoted
+      downvoted
+      author {
+        name
+        avatarUrl
+        mixinId
+        bio
+        createdAt
+      }
+      commentable {
+        uuid
+        title
+      }
+      createdAt
+    }
+    pageInfo {
+      hasNextPage
+      endCursor
+    }
+  }
+}

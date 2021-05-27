@@ -33,7 +33,7 @@ export default function UsersPage() {
   return (
     <div>
       <PageHeader title='Users' />
-      <Row gutter={16} style={{ marginBottom: '1rem' }}>
+      <Row gutter={16} className='mb-4'>
         <Col>
           <Select
             style={{ width: 200 }}
@@ -89,10 +89,14 @@ export function UsersComponent(props: {
   filter?: string;
 }) {
   const { query, orderBy, filter } = props;
-  const { data, loading, fetchMore }: AdminUserConnectionQueryHookResult =
-    useAdminUserConnectionQuery({
-      variables: { query, orderBy, filter },
-    });
+  const {
+    data,
+    loading,
+    fetchMore,
+    refetch,
+  }: AdminUserConnectionQueryHookResult = useAdminUserConnectionQuery({
+    variables: { query, orderBy, filter },
+  });
   const [adminBanUser] = useAdminBanUserMutation();
   const [adminUnbanUser] = useAdminUnbanUserMutation();
 
@@ -208,13 +212,19 @@ export function UsersComponent(props: {
   ];
 
   return (
-    <div>
+    <>
+      <div className='flex justify-end mb-4'>
+        <Button type='primary' onClick={() => refetch()}>
+          Refresh
+        </Button>
+      </div>
       <Table
         scroll={{ x: true }}
         columns={columns}
         dataSource={users}
         rowKey='mixinId'
         pagination={false}
+        size='small'
       />
       <div style={{ margin: '1rem', textAlign: 'center' }}>
         <Button
@@ -235,6 +245,6 @@ export function UsersComponent(props: {
           {hasNextPage ? 'Load More' : 'No More'}
         </Button>
       </div>
-    </div>
+    </>
   );
 }

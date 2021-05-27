@@ -2,23 +2,31 @@
 
 module Resolvers
   class AdminArticleConnectionResolver < AdminBaseResolver
+    argument :author_mixin_uuid, ID, required: false
     argument :query, String, required: false
     argument :state, String, required: false
     argument :after, String, required: false
 
     type Types::ArticleConnectionType, null: false
 
-    def resolve(params)
+    def resolve(**params)
+      articles =
+        if params[:author_mixin_uuid].present?
+          User.find_by(mixin_uuid: params[:author_mixin_uuid]).articles
+        else
+          Article.all
+        end
+
       articles =
         case params[:state]
         when 'published'
-          Article.published
+          articles.published
         when 'hidden'
-          Article.hidden
+          articles.hidden
         when 'blocked'
-          Article.blocked
+          articles.blocked
         else
-          Article.all
+          articles
         end
 
       q = params[:query].to_s.strip

@@ -43,9 +43,10 @@ export function PrsAccountsComponent(props: {
   status?: string;
 }) {
   const { query, status } = props;
-  const { data, loading, fetchMore } = useAdminPrsAccountConnectionQuery({
-    variables: { query, status },
-  });
+  const { data, loading, fetchMore, refetch } =
+    useAdminPrsAccountConnectionQuery({
+      variables: { query, status },
+    });
 
   if (loading) {
     return <LoadingComponent />;
@@ -96,7 +97,12 @@ export function PrsAccountsComponent(props: {
   ];
 
   return (
-    <div>
+    <>
+      <div className='flex justify-end mb-4'>
+        <Button type='primary' onClick={() => refetch()}>
+          Refresh
+        </Button>
+      </div>
       <Table
         scroll={{ x: true }}
         columns={columns}
@@ -123,6 +129,6 @@ export function PrsAccountsComponent(props: {
           {hasNextPage ? 'Load More' : 'No More'}
         </Button>
       </div>
-    </div>
+    </>
   );
 }

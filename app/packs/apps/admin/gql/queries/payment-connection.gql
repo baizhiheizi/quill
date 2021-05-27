@@ -1,5 +1,13 @@
-query AdminPaymentConnection($after: String) {
-  adminPaymentConnection(after: $after) {
+query AdminPaymentConnection(
+  $payerMixinUuid: String
+  $state: String
+  $after: String
+) {
+  adminPaymentConnection(
+    payerMixinUuid: $payerMixinUuid
+    state: $state
+    after: $after
+  ) {
     nodes {
       traceId
       snapshotId

@@ -34,6 +34,13 @@ export const apolloClient = (uri: string, csrfToken?: string) => {
           ]),
           adminArticleSnapshotConnection: customizedConnectionMergeFunction([
             'articleUuid',
+            'state',
+            'query',
+          ]),
+          adminCommentConnection: customizedConnectionMergeFunction([
+            'commentableId',
+            'commentableType',
+            'authorMixinUuid',
           ]),
           adminBonusConnection: customizedConnectionMergeFunction(),
           adminMixinMessageConnection: customizedConnectionMergeFunction(),
@@ -43,7 +50,10 @@ export const apolloClient = (uri: string, csrfToken?: string) => {
             'itemId',
             'itemType',
           ]),
-          adminPaymentConnection: customizedConnectionMergeFunction(),
+          adminPaymentConnection: customizedConnectionMergeFunction([
+            'state',
+            'payerMixinUuid',
+          ]),
           adminPrsAccountConnection: customizedConnectionMergeFunction([
             'query',
             'status',
@@ -51,12 +61,16 @@ export const apolloClient = (uri: string, csrfToken?: string) => {
           adminPrsTransactionConnection: customizedConnectionMergeFunction([
             'type',
           ]),
-          adminSwapOrderConnection: customizedConnectionMergeFunction(),
+          adminSwapOrderConnection: customizedConnectionMergeFunction([
+            'state',
+            'payerMixinUuid',
+          ]),
           adminTransferConnection: customizedConnectionMergeFunction([
             'itemId',
             'itemType',
             'sourceId',
             'sourceType',
+            'transferType',
           ]),
           adminUserConnection: customizedConnectionMergeFunction([
             'filter',

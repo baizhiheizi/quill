@@ -44,6 +44,7 @@ export default function WalletBalanceComponent(props: { userId?: string }) {
       rowKey='assetId'
       loading={loading}
       pagination={{ pageSize: 50 }}
+      size='small'
     />
   );
 }
