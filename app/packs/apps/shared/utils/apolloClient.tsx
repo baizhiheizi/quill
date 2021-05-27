@@ -31,6 +31,7 @@ export const apolloClient = (uri: string, csrfToken?: string) => {
           adminArticleConnection: customizedConnectionMergeFunction([
             'query',
             'state',
+            'authorMixinUuid',
           ]),
           adminArticleSnapshotConnection: customizedConnectionMergeFunction([
             'articleUuid',
