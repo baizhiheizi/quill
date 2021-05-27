@@ -182,3 +182,8 @@ ja:
   copy: コピー
   present_value: 現在の価格
   per_price_when_paid: 支払い時の価格
+  invalid_authorization: Invalid Authorization
+  please_confirm_all_authorizations_required: Please confirm all authorizations required
+  reauthorize: Re Authorize
+  no_access: No Access
+  sorry_you_are_not_authorized_to_access_this_application: Sorry, you are not authorized to access this application

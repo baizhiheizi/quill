@@ -74,7 +74,7 @@ export function AppWrapperComponent(props: {
       Modal.error({
         title: t('no_access'),
         content: t('sorry_you_are_not_authorized_to_access_this_application'),
-        okText: t('confirm'),
+        okText: t('logout'),
         onOk: () => location.replace('/logout'),
       });
     }

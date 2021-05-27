@@ -25,7 +25,7 @@ module Resolvers
           Comment.all
         end
 
-        comments.with_deleted.order(created_at: :desc)
+      comments.with_deleted.order(created_at: :desc)
     end
   end
 end
