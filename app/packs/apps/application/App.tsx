@@ -1,23 +1,10 @@
-import { ApolloProvider } from '@apollo/client';
-import { Col, Layout, message, Modal, Row } from 'antd';
-import {
-  apolloClient,
-  CurrentUserContext,
-  hideLoader,
-  mixinContext,
-  PrsdiggContext,
-  UserAgentContext,
-} from 'apps/shared';
-import { i18nCall } from 'apps/shared/locales/i18n';
-import consumer from 'channels/consumer';
+import { Col, Layout, Row } from 'antd';
+import { AppWrapperComponent } from 'apps/shared';
 // https://github.com/apollographql/apollo-client/issues/6381
 import 'core-js/features/promise';
 import { User } from 'graphqlTypes';
-import isMobile from 'ismobilejs';
-import React, { Suspense, useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import React from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
-import LoadingComponent from './components/LoadingComponent/LoadingComponent';
 import Menus from './Menus';
 import Routes from './Routes';
 
@@ -28,101 +15,20 @@ export default function App(props: {
   defaultLocale: 'en' | 'ja' | 'zh-CN';
   availableLocales: [string];
 }) {
-  const {
-    csrfToken,
-    prsdigg,
-    availableLocales,
-    currentUser: _currentUser,
-  } = props;
-  const [currentUser, setCurrentUser] = useState(
-    _currentUser && _currentUser.accessable ? _currentUser : null,
-  );
-  i18nCall(availableLocales);
-  const { t } = useTranslation();
-
-  useEffect(() => {
-    hideLoader();
-  }, []);
-
-  useEffect(() => {
-    if (!currentUser) {
-      return;
-    }
-    consumer.subscriptions.create('Noticed::NotificationChannel', {
-      connected() {
-        console.log('Action Cable Connected');
-      },
-      disconnected() {
-        console.log('Action Cable disconnected');
-      },
-      received(data: any) {
-        message.info(data);
-      },
-    });
-  }, [currentUser]);
-
-  useEffect(() => {
-    if (!_currentUser || _currentUser.accessable) {
-      return;
-    } else if (!_currentUser.mixinAuthorizationValid) {
-      Modal.info({
-        title: t('invalid_authorization'),
-        content: t('please_confirm_all_authorizations_required'),
-        okText: t('reauthorize'),
-        onOk: () => location.replace('/login'),
-      });
-    } else if (!_currentUser.accessable) {
-      Modal.error({
-        title: t('no_access'),
-        content: t('sorry_you_are_not_authorized_to_access_this_application'),
-        okText: t('confirm'),
-        onOk: () => location.replace('/logout'),
-      });
-    }
-  }, [_currentUser]);
-
   return (
-    <Suspense fallback={<LoadingComponent />}>
-      <ApolloProvider client={apolloClient('/graphql', csrfToken)}>
-        <PrsdiggContext.Provider value={prsdigg}>
-          <UserAgentContext.Provider
-            value={{
-              mixinAppearance: mixinContext.appearance,
-              mixinCurrency: mixinContext.currency,
-              mixinAppversion: mixinContext.appVersion,
-              mixinConversationId: mixinContext.conversationId,
-              mixinEnv: mixinContext.platform,
-              mixinImmersive: mixinContext.immersive,
-              isMobile: isMobile(),
-            }}
-          >
-            <CurrentUserContext.Provider
-              value={{ currentUser, setCurrentUser }}
-            >
-              <Router>
-                <Layout>
-                  <Menus />
-                  <Layout.Content className='p-4 bg-white'>
-                    <Row justify='center'>
-                      <Col
-                        flex={1}
-                        xs={24}
-                        sm={24}
-                        md={18}
-                        lg={16}
-                        xl={14}
-                        xxl={12}
-                      >
-                        <Routes />
-                      </Col>
-                    </Row>
-                  </Layout.Content>
-                </Layout>
-              </Router>
-            </CurrentUserContext.Provider>
-          </UserAgentContext.Provider>
-        </PrsdiggContext.Provider>
-      </ApolloProvider>
-    </Suspense>
+    <AppWrapperComponent {...props}>
+      <Router>
+        <Layout>
+          <Menus />
+          <Layout.Content className='p-4 bg-white'>
+            <Row justify='center'>
+              <Col flex={1} xs={24} sm={24} md={18} lg={16} xl={14} xxl={12}>
+                <Routes />
+              </Col>
+            </Row>
+          </Layout.Content>
+        </Layout>
+      </Router>
+    </AppWrapperComponent>
   );
 }
