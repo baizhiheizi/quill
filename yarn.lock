@@ -991,14 +991,7 @@
   dependencies:
     regenerator-runtime "^0.13.2"
 
-"@babel/runtime@^7.0.0", "@babel/runtime@^7.1.2", "@babel/runtime@^7.10.1", "@babel/runtime@^7.10.2", "@babel/runtime@^7.10.4", "@babel/runtime@^7.11.1", "@babel/runtime@^7.11.2", "@babel/runtime@^7.12.0", "@babel/runtime@^7.12.1", "@babel/runtime@^7.12.5", "@babel/runtime@^7.13.6", "@babel/runtime@^7.5.5", "@babel/runtime@^7.8.4":
-  version "7.13.17"
-  resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.13.17.tgz#8966d1fc9593bf848602f0662d6b4d0069e3a7ec"
-  integrity sha512-NCdgJEelPTSh+FEFylhnP1ylq848l1z9t9N0j1Lfbcw0+KXGjsTvUmkxy+voLLXB5SOKMbLLx4jxYliGrYQseA==
-  dependencies:
-    regenerator-runtime "^0.13.4"
-
-"@babel/runtime@^7.14.0":
+"@babel/runtime@^7.0.0", "@babel/runtime@^7.1.2", "@babel/runtime@^7.10.1", "@babel/runtime@^7.10.2", "@babel/runtime@^7.10.4", "@babel/runtime@^7.11.1", "@babel/runtime@^7.11.2", "@babel/runtime@^7.12.0", "@babel/runtime@^7.12.1", "@babel/runtime@^7.12.5", "@babel/runtime@^7.13.6", "@babel/runtime@^7.14.0", "@babel/runtime@^7.5.5", "@babel/runtime@^7.8.4":
   version "7.14.0"
   resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.14.0.tgz#46794bc20b612c5f75e62dd071e24dfd95f1cbe6"
   integrity sha512-JELkvo/DlpNdJ7dlyw/eY7E0suy5i5GQH+Vlxaq1nsNJ+H7f4Vtv3jMeCEgRhZZQFXTjldYfQgv2qmM6M1v5wA==
@@ -1979,10 +1972,10 @@
     rehype-raw "5.1.0"
     remark-gfm "1.0.0"
 
-"@uiw/react-md-editor@^3.3.1":
-  version "3.3.1"
-  resolved "https://registry.yarnpkg.com/@uiw/react-md-editor/-/react-md-editor-3.3.1.tgz#0afdcf59d0492684cf9c147205e0e0b7d8f7d57d"
-  integrity sha512-9+pRSjxiMgnAJqOSCS2KKWO+NkRPjkzHBHxHZCPPtfgwqOz7Xa+qjtUAvHkw1DwAMByG7JjWc1trzcadHYyzgQ==
+"@uiw/react-md-editor@^3.3.4":
+  version "3.3.4"
+  resolved "https://registry.yarnpkg.com/@uiw/react-md-editor/-/react-md-editor-3.3.4.tgz#2b59b248102b75abc0bc01a79a879d0f4d84afd4"
+  integrity sha512-GNIvPwAvMGqMa1rvjgyMbiZ92TuxyjWtOlYl7gDuikkSY+JFdBVU4wcmbTxQgc4lk389ZEGVEODi0nYYmH9sjg==
   dependencies:
     "@babel/runtime" "^7.14.0"
     "@uiw/react-markdown-preview" "3.0.6"
