@@ -166,6 +166,8 @@ export default function ArticlePage() {
                       articleAssetId={article.assetId}
                       paymentTraceId={article.paymentTraceId}
                       swappableCurrencies={swappableCurrencies}
+                      articleCurrency={article.currency}
+                      swappable={article.swappable}
                       onCancel={() => {
                         setPayModalVisible(false);
                         refetch();
@@ -328,6 +330,8 @@ export default function ArticlePage() {
                 articleUuid={uuid}
                 articleAssetId={article.assetId}
                 swappableCurrencies={swappableCurrencies}
+                articleCurrency={article.currency}
+                swappable={article.swappable}
                 onCancel={() => {
                   setRewardModalVisible(false);
                   refetch();

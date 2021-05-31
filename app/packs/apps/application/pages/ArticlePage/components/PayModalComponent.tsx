@@ -25,6 +25,8 @@ export default function PayModalComponent(props: {
   articleAssetId: string;
   paymentTraceId: string;
   swappableCurrencies: Currency[];
+  swappable: boolean;
+  articleCurrency: Currency;
   onCancel: () => any;
 }) {
   const {
@@ -35,6 +37,8 @@ export default function PayModalComponent(props: {
     articleAssetId,
     paymentTraceId,
     swappableCurrencies,
+    swappable,
+    articleCurrency,
     onCancel,
   } = props;
   const { currentUser } = useCurrentUser();
@@ -73,7 +77,10 @@ export default function PayModalComponent(props: {
       p: price,
     }),
   );
-  const currency = swappableCurrencies.find(
+  const availbleCurrencies = swappable
+    ? swappableCurrencies
+    : [articleCurrency];
+  const currency = availbleCurrencies.find(
     (_currency: Currency) => _currency.assetId === assetId,
   );
   const funds = preOrderData?.swapPreOrder?.funds;
@@ -130,7 +137,7 @@ export default function PayModalComponent(props: {
             onChange={(e) => setAssetId(e.target.value)}
             disabled={paying}
           >
-            {swappableCurrencies.map((_currency: Currency) => (
+            {availbleCurrencies.map((_currency: Currency) => (
               <Radio.Button key={_currency.assetId} value={_currency.assetId}>
                 <Space>
                   <Avatar size='small' src={_currency.iconUrl} />

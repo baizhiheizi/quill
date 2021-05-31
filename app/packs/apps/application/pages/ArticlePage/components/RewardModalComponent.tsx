@@ -20,6 +20,8 @@ export default function RewardModalComponent(props: {
   articleUuid: string;
   articleAssetId: string;
   swappableCurrencies: Currency[];
+  swappable: boolean;
+  articleCurrency: Currency;
 }) {
   const { currentUser } = useCurrentUser();
   const {
@@ -29,6 +31,8 @@ export default function RewardModalComponent(props: {
     onCancel,
     walletId,
     swappableCurrencies,
+    swappable,
+    articleCurrency,
   } = props;
   const { mixinEnv } = useUserAgent();
   const { t } = useTranslation();
@@ -49,7 +53,10 @@ export default function RewardModalComponent(props: {
   }
 
   const priceBaseUsd = 0.1;
-  const currency = swappableCurrencies.find(
+  const availbleCurrencies = swappable
+    ? swappableCurrencies
+    : [articleCurrency];
+  const currency = availbleCurrencies.find(
     (_currency) => _currency.assetId == assetId,
   );
 
@@ -149,7 +156,7 @@ export default function RewardModalComponent(props: {
           value={assetId}
           onSelect={(value) => setAssetId(value)}
         >
-          {swappableCurrencies.map((_currency) => (
+          {availbleCurrencies.map((_currency) => (
             <Select.Option value={_currency.assetId} key={_currency.assetId}>
               <Space>
                 <Avatar src={_currency.iconUrl} size='small' />
