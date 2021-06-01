@@ -32,7 +32,7 @@
 #  index_articles_on_uuid       (uuid) UNIQUE
 #
 class Article < ApplicationRecord
-  SUPPORTED_ASSETS = Rails.application.credentials[:supported_assets] || [Currency::PRS_ASSET_ID]
+  SUPPORTED_ASSETS = Rails.application.credentials[:supported_assets] || [Currency::BTC_ASSET_ID]
   MINIMUM_PRICE_PRS = 1
   MINIMUM_PRICE_BTC = 0.000_001
 
