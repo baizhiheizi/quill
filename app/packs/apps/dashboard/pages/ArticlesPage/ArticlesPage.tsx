@@ -7,8 +7,9 @@ import MyBoughtArticlesComponent from './components/MyBoughtArticlesComponent';
 
 export default function ArticlesPage() {
   const { t } = useTranslation();
-  const [type, setType] =
-    useState<'published' | 'bought' | 'hidden' | 'blocked'>('bought');
+  const [type, setType] = useState<
+    'published' | 'bought' | 'hidden' | 'blocked'
+  >('bought');
 
   return (
     <div>

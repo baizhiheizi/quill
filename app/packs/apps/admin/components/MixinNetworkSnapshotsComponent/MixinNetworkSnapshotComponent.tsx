@@ -14,8 +14,9 @@ export default function MixinNetworkSnapshotsComponent(props: {
 }) {
   const { appId } = usePrsdigg();
   const { userId } = props;
-  const [filter, setFilter] =
-    useState<'input' | 'output' | 'prsdigg' | 'all'>('input');
+  const [filter, setFilter] = useState<'input' | 'output' | 'prsdigg' | 'all'>(
+    'input',
+  );
   const { data, loading, fetchMore, refetch } =
     useAdminMixinNetworkSnapshotConnectionQuery({
       variables: { filter, userId },

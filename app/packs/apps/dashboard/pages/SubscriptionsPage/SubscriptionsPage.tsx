@@ -8,8 +8,9 @@ import MyTagSubscriptionsComponent from './components/MyTagSubscriptionsComponen
 
 export default function SubscriptionsPage() {
   const { t } = useTranslation();
-  const [type, setType] =
-    useState<'authoring' | 'reading' | 'commenting'>('authoring');
+  const [type, setType] = useState<'authoring' | 'reading' | 'commenting'>(
+    'authoring',
+  );
 
   return (
     <div>
