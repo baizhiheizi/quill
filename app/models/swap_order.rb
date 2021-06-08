@@ -29,6 +29,9 @@ class SwapOrder < ApplicationRecord
   SWAPABLE_ASSETS = FOXSWAP_ENABLE ? (Article::SUPPORTED_ASSETS + Rails.application.credentials[:swapable_assets]).uniq : Article::SUPPORTED_ASSETS
   FOX_SWAP_APP_ID = Rails.application.credentials.dig(:foxswap, :app_id)
   FOX_SWAP_BROKER_ID = Rails.application.credentials.dig(:foxswap, :broker_id)
+  FSWAP_MTG_MEMBERS = Rails.application.credentials.dig(:foxswap, :mtg_members)
+  FSWAP_MTG_THRESHOLD = Rails.application.credentials.dig(:foxswap, :mtg_threshold)
+  FSWAP_MTG_PUBLIC_KEY = Rails.application.credentials.dig(:foxswap, :mtg_public_key)
 
   include AASM
   belongs_to :payment
@@ -87,19 +90,27 @@ class SwapOrder < ApplicationRecord
       wallet: wallet,
       transfer_type: :fox_swap,
       queue_priority: :critical,
-      opponent_id: FOX_SWAP_BROKER_ID,
+      opponent_multisig: {
+        receivers: FSWAP_MTG_MEMBERS,
+        threshold: FSWAP_MTG_THRESHOLD
+      },
       asset_id: pay_asset_id,
       amount: funds.to_f,
-      memo: Base64.encode64(
-        {
-          t: 'swap',
-          a: fill_asset_id,
-          m: min_amount.present? ? min_amount.to_f.to_s : nil
-        }.to_json
-      )
+      memo: fswap_mtg_memo
     ).find_or_create_by!(
       trace_id: trace_id
     )
+  end
+
+  def fswap_mtg_memo
+    r = Foxswap.api.actions(
+      user_id: wallet.uuid,
+      follow_id: trace_id,
+      asset_id: fill_asset_id,
+      minimum_fill: min_amount.present? ? format('%.8f', min_amount) : nil
+    )
+
+    r['data']['action']
   end
 
   def place_payment_order!

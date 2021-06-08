@@ -25,5 +25,13 @@ module Foxswap
       path = "/api/orders/#{order_id}"
       client.get path, headers: { Authorization: authorization }
     end
+
+    def actions(**options)
+      path = '/api/actions'
+      payload = {
+        action: [3, options[:user_id], options[:follow_id], options[:asset_id], options[:route_id], options[:minimum_fill]].join(',')
+      }
+      client.post path, json: payload, headers: { Authorization: Rails.application.credentials.dig(:foxswap, :authorization) }
+    end
   end
 end

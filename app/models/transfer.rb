@@ -4,21 +4,22 @@
 #
 # Table name: transfers
 #
-#  id             :bigint           not null, primary key
-#  amount         :decimal(, )
-#  memo           :string
-#  processed_at   :datetime
-#  queue_priority :integer          default("default")
-#  snapshot       :json
-#  source_type    :string
-#  transfer_type  :integer
-#  created_at     :datetime         not null
-#  updated_at     :datetime         not null
-#  asset_id       :uuid
-#  opponent_id    :uuid
-#  source_id      :bigint
-#  trace_id       :uuid
-#  wallet_id      :uuid
+#  id                :bigint           not null, primary key
+#  amount            :decimal(, )
+#  memo              :string
+#  opponent_multisig :json
+#  processed_at      :datetime
+#  queue_priority    :integer          default("default")
+#  snapshot          :json
+#  source_type       :string
+#  transfer_type     :integer
+#  created_at        :datetime         not null
+#  updated_at        :datetime         not null
+#  asset_id          :uuid
+#  opponent_id       :uuid
+#  source_id         :bigint
+#  trace_id          :uuid
+#  wallet_id         :uuid
 #
 # Indexes
 #
@@ -51,8 +52,8 @@ class Transfer < ApplicationRecord
 
   validates :trace_id, presence: true, uniqueness: true
   validates :asset_id, presence: true
-  validates :opponent_id, presence: true
   validates :amount, numericality: { greater_than_or_equal_to: MINIMUM_AMOUNT }
+  validate :ensure_opponent_presence
 
   after_commit :process_async, :update_recipient_statistics_cache_async, on: :create
 
@@ -85,12 +86,24 @@ class Transfer < ApplicationRecord
             memo: memo
           }
         )
-      else
+      elsif opponent_id.present?
         wallet.mixin_api.create_transfer(
           wallet.pin,
           {
             asset_id: asset_id,
             opponent_id: opponent_id,
+            amount: amount,
+            trace_id: trace_id,
+            memo: memo
+          }
+        )
+      else
+        wallet.mixin_api.create_multisig_transaction(
+          wallet.pin,
+          {
+            asset_id: asset_id,
+            receivers: opponent_multisig['receivers'],
+            threshold: opponent_multisig['threshold'],
             amount: amount,
             trace_id: trace_id,
             memo: memo
@@ -169,5 +182,11 @@ class Transfer < ApplicationRecord
     prs_amount = reader_revenue.only_prs.sum(:amount)
     btc_amount = reader_revenue.only_btc.sum(:amount)
     prs_amount * Currency.prs.price_usd.to_f + btc_amount * Currency.btc.price_usd.to_f
+  end
+
+  private
+
+  def ensure_opponent_presence
+    errors.add(:opponent_id, ' must cannot be blank') if opponent_id.blank? && opponent_multisig.blank?
   end
 end

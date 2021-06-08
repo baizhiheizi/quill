@@ -56,7 +56,7 @@ export default function TransfersComponent(props: {
         ) : transfer.opponentId === appId ? (
           'PRSDigg'
         ) : (
-          transfer.opponentId
+          transfer.opponentId || 'MTG'
         ),
       title: 'Recipient',
     },
