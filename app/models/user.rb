@@ -177,7 +177,7 @@ class User < ApplicationRecord
       revenue_total_btc: revenue_transfers.only_btc.sum(:amount).to_f,
       payment_total_prs: orders.only_prs.sum(:total).to_f,
       payment_total_btc: orders.only_btc.sum(:total).to_f,
-      payment_total_usd: orders.sum(:change_usd).to_f,
+      payment_total_usd: orders.sum(:value_usd).to_f,
       cached_at: Time.current
     }
   end

@@ -93,7 +93,7 @@ class Article < ApplicationRecord
       .select(
         <<~SQL.squish
           articles.*,
-          SUM(orders.change_usd) as revenue_usd
+          SUM(orders.value_usd) as revenue_usd
         SQL
       ).order(revenue_usd: :desc)
   }
@@ -104,7 +104,7 @@ class Article < ApplicationRecord
          .select(
            <<~SQL.squish
              articles.*, 
-             (((SUM(orders.change_usd) * 10 + articles.upvotes_count - articles.downvotes_count + articles.comments_count) / POW(((EXTRACT(EPOCH FROM (now()-articles.created_at)) / 3600)::integer + 1), 2))) AS popularity
+             (((SUM(orders.value_usd) * 10 + articles.upvotes_count - articles.downvotes_count + articles.comments_count) / POW(((EXTRACT(EPOCH FROM (now()-articles.created_at)) / 3600)::integer + 1), 2))) AS popularity
            SQL
          )
          .order('popularity DESC, created_at DESC')
@@ -212,7 +212,7 @@ class Article < ApplicationRecord
   end
 
   def revenue_usd
-    orders.sum(:change_usd)
+    orders.sum(:value_usd)
   end
 
   def random_readers(limit = 24)

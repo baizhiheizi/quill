@@ -5,12 +5,12 @@
 # Table name: orders
 #
 #  id         :bigint           not null, primary key
-#  change_btc :decimal(, )
-#  change_usd :decimal(, )
 #  item_type  :string
 #  order_type :integer
 #  state      :string
 #  total      :decimal(, )
+#  value_btc  :decimal(, )
+#  value_usd  :decimal(, )
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #  asset_id   :uuid
@@ -179,7 +179,7 @@ class Order < ApplicationRecord
       bought_articles_count: buyer.bought_articles.count,
       payment_total_prs: buyer.orders.only_prs.sum(:total).to_f,
       payment_total_btc: buyer.orders.only_btc.sum(:total).to_f,
-      payment_total_usd: buyer.orders.sum(:change_usd).to_f
+      payment_total_usd: buyer.orders.sum(:value_usd).to_f
     )
   end
 
@@ -193,7 +193,7 @@ class Order < ApplicationRecord
 
   def cache_history_ticker
     r = PrsdiggBot.api.ticker asset_id, created_at.utc.rfc3339
-    update change_btc: r['price_btc'].to_f * total, change_usd: r['price_usd'].to_f * total
+    update value_btc: r['price_btc'].to_f * total, value_usd: r['price_usd'].to_f * total
   end
 
   def cache_history_ticker_async
@@ -219,8 +219,8 @@ class Order < ApplicationRecord
       buyer: payment.payer,
       seller: item.author,
       total: amount,
-      change_btc: currency.price_btc.to_f * amount,
-      change_usd: currency.price_usd.to_f * amount
+      value_btc: currency.price_btc.to_f * amount,
+      value_usd: currency.price_usd.to_f * amount
     )
   end
 end

@@ -3,12 +3,12 @@
 # Table name: orders
 #
 #  id         :bigint           not null, primary key
-#  change_btc :decimal(, )
-#  change_usd :decimal(, )
 #  item_type  :string
 #  order_type :integer
 #  state      :string
 #  total      :decimal(, )
+#  value_btc  :decimal(, )
+#  value_usd  :decimal(, )
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #  asset_id   :uuid
