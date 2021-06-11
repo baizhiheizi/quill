@@ -91,13 +91,13 @@ class Order < ApplicationRecord
           .where('id < ? and created_at < ?', id, created_at)
 
     # total investment
-    sum = _orders.sum(:total)
+    sum = _orders.sum(:value_btc)
 
     # create reader transfer
     _distributed_amount = 0
     _orders.each do |_order|
       # ignore if amount is less than minium amout for Mixin Network
-      _amount = (amount * _order.total / sum).round(8)
+      _amount = (amount * _order.value_btc.to_f / sum).floor(8)
       next if (_amount - MINIMUM_AMOUNT).negative?
 
       transfers.create_with(
@@ -115,7 +115,7 @@ class Order < ApplicationRecord
     end
 
     # create prsdigg transfer
-    _prsdigg_amount = (total * PRSDIGG_RATIO).round(8)
+    _prsdigg_amount = (total * PRSDIGG_RATIO).floor(8)
     if payment.wallet.present?
       transfers.create_with(
         wallet: payment.wallet,
@@ -135,7 +135,7 @@ class Order < ApplicationRecord
       transfer_type: :author_revenue,
       opponent_id: item.author.mixin_uuid,
       asset_id: revenue_asset_id,
-      amount: (total - _distributed_amount - _prsdigg_amount).round(8),
+      amount: (total - _distributed_amount - _prsdigg_amount).floor(8),
       memo: "#{payment.payer.name} #{buy_article? ? 'bought' : 'rewarded'} article #{item.title}".truncate(70)
     ).find_or_create_by!(
       trace_id: PrsdiggBot.api.unique_conversation_id(trace_id, item.author.mixin_uuid)
