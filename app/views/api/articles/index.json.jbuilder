@@ -9,7 +9,7 @@ json.array! @articles do |article|
   json.price article.price.to_f
   json.currency article.currency.symbol
   json.tag_names article.tag_names
-  json.original_url format('%<host>s/articles/%<uuid>s', host: Rails.application.credentials.host, uuid: article.uuid)
+  json.original_url format('%<host>s/articles/%<uuid>s', host: Settings.host, uuid: article.uuid)
   json.state article.state
   json.orders_count article.orders_count
   json.comments_count article.comments_count

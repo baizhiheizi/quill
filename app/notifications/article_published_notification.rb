@@ -30,7 +30,7 @@ class ArticlePublishedNotification < ApplicationNotification
   def url
     format(
       '%<host>s/articles/%<article_uuid>s',
-      host: Rails.application.credentials.fetch(:host),
+      host: Settings.host,
       article_uuid: article.uuid
     )
   end

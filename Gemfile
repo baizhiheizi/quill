@@ -79,6 +79,8 @@ gem 'rack-cors'
 gem 'schmooze'
 # fnv1 and fnv1a hash functions in ruby
 gem 'fnv'
+# Config helps you easily manage environment specific settings in an easy and usable manner.
+gem 'config'
 
 # deploy
 gem 'mina', '~> 1.2.2', require: false

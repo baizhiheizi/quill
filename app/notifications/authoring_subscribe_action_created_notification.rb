@@ -17,7 +17,7 @@ class AuthoringSubscribeActionCreatedNotification < ApplicationNotification
   def url
     format(
       '%<host>s/users/%<mixin_id>s',
-      host: Rails.application.credentials.fetch(:host),
+      host: Settings.host,
       mixin_id: params[:action].user.mixin_id
     )
   end

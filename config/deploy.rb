@@ -41,6 +41,7 @@ end
 
 set :shared_dirs, fetch(:shared_dirs, []).push('log', 'public/uploads', 'node_modules', 'storage')
 set :shared_files, fetch(:shared_files, []).push('config/database.yml')
+set :shared_files, fetch(:shared_files, []).push('config/settings.yml')
 set :shared_files, fetch(:shared_files, []).push('config/master.key')
 
 set :puma_config, -> { "#{fetch(:current_path)}/config/puma.rb" }
@@ -73,6 +74,9 @@ task :setup do
 
   command %(touch "#{fetch(:shared_path)}/config/database.yml")
   command %(echo "-----> Be sure to edit '#{fetch(:shared_path)}/config/database.yml'")
+
+  command %(touch "#{fetch(:shared_path)}/config/settings.yml")
+  command %(echo "-----> Be sure to edit '#{fetch(:shared_path)}/config/settings.yml'")
 
   command %(touch "#{fetch(:shared_path)}/config/master.key")
   command %(echo "-----> Be sure to edit '#{fetch(:shared_path)}/config/master.key'")

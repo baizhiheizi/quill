@@ -37,7 +37,7 @@ class SwapOrderFinishedNotification < ApplicationNotification
   def url
     format(
       '%<host>s/dashboard/orders',
-      host: Rails.application.credentials.fetch(:host)
+      host: Settings.host
     )
   end
 end

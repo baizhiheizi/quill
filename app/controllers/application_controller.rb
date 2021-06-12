@@ -36,7 +36,7 @@ class ApplicationController < ActionController::Base
       ),
       prsdigg: {
         app_id: PrsdiggBot.api.client_id,
-        page_title: Rails.application.credentials[:page_title],
+        page_title: Settings.page_title,
         attachment_endpoint: Rails.application.credentials.dig(:aliyun, :bucket_endpoint)
       },
       default_locale: I18n.default_locale,

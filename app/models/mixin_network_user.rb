@@ -84,7 +84,7 @@ class MixinNetworkUser < ApplicationRecord
   def update_avatar
     img = File.open DEFAULT_AVATAR_FILE
     r = mixin_api.update_me(
-      full_name: [Rails.application.credentials[:app_name], 'Broker'].join(' ').strip,
+      full_name: [Settings.app_name, 'Broker'].join(' ').strip,
       avatar_base64: Base64.strict_encode64(img.read)
     )
     update raw: r['data'] if r['data'].present?

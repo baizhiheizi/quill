@@ -25,13 +25,12 @@
 #  index_swap_orders_on_user_id     (user_id)
 #
 class SwapOrder < ApplicationRecord
-  FOXSWAP_ENABLE = Rails.application.credentials[:swapable]
-  SWAPABLE_ASSETS = FOXSWAP_ENABLE ? (Article::SUPPORTED_ASSETS + Rails.application.credentials[:swapable_assets]).uniq : Article::SUPPORTED_ASSETS
-  FOX_SWAP_APP_ID = Rails.application.credentials.dig(:foxswap, :app_id)
-  FOX_SWAP_BROKER_ID = Rails.application.credentials.dig(:foxswap, :broker_id)
-  FSWAP_MTG_MEMBERS = Rails.application.credentials.dig(:foxswap, :mtg_members)
-  FSWAP_MTG_THRESHOLD = Rails.application.credentials.dig(:foxswap, :mtg_threshold)
-  FSWAP_MTG_PUBLIC_KEY = Rails.application.credentials.dig(:foxswap, :mtg_public_key)
+  FOXSWAP_ENABLE = Settings.swapable
+  SWAPABLE_ASSETS = FOXSWAP_ENABLE ? (Article::SUPPORTED_ASSETS + Settings.swapable_assets).uniq : Article::SUPPORTED_ASSETS
+  FOX_SWAP_APP_ID = Settings.foxswap.app_id
+  FSWAP_MTG_MEMBERS = Settings.foxswap.mtg_members
+  FSWAP_MTG_THRESHOLD = Settings.foxswap.mtg_threshold
+  FSWAP_MTG_PUBLIC_KEY = Settings.foxswap.mtg_public_key
 
   include AASM
   belongs_to :payment

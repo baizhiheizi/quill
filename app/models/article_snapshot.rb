@@ -35,7 +35,7 @@ class ArticleSnapshot < ApplicationRecord
   before_validation :set_defaults, on: :create
 
   after_commit on: :create do
-    sign_on_chain_async if article.published? && Rails.application.credentials.dig(:prs, :auto_sign)
+    sign_on_chain_async if article.published? && Settings.auto_sign
   end
 
   delegate :author, to: :article
@@ -88,7 +88,7 @@ class ArticleSnapshot < ApplicationRecord
               # hosted by cloud service
               file.url,
               # self-hosted
-              format('%<host>s/api/files/%<file_hash>s', host: Rails.application.credentials[:host], file_hash: file_hash)
+              format('%<host>s/api/files/%<file_hash>s', host: Settings.host, file_hash: file_hash)
             ],
             mime: 'text/markdown;charset=UTF-8',
             encryption: 'aes-256-cbc',

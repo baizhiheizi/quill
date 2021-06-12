@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title><%= @page_title.presence || Rails.application.credentials.dig(:page_title) %></title>
+    <title><%= @page_title.presence || Settings.page_title %></title>
     <meta
       name='viewport'
       content='minimum-scale=1, initial-scale=1, width=device-width, user-scalable=no, shrink-to-fit=no'
@@ -10,8 +10,8 @@
     <%= csp_meta_tag %>
 
     <!-- Global site tag (gtag.js) - Google Analytics -->
-    <% if Rails.env.production? && Rails.application.credentials[:ga_id].present? %>
-      <script async src="<%= 'https://www.googletagmanager.com/gtag/js?id=' + Rails.application.credentials[:ga_id].to_s %>" ></script>
+    <% if Rails.env.production? && Settings.ga_id.present? %>
+      <script async src="<%= 'https://www.googletagmanager.com/gtag/js?id=' + Settings.ga_id.to_s %>" ></script>
       <script>
         window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
@@ -21,9 +21,9 @@
       </script>
     <% end %>
 
-    <meta name='title' content='<%= @page_title.presence || Rails.application.credentials.dig(:page_title) %>' />
-    <meta name='keywords' content='<%= Rails.application.credentials.dig(:page_keywords) %>' />
-    <meta name='description' content='<%= @page_description.presence || Rails.application.credentials.dig(:page_description) %>' />
+    <meta name='title' content='<%= @page_title.presence || Settings.page_title %>' />
+    <meta name='keywords' content='<%= Settings.page_keywords %>' />
+    <meta name='description' content='<%= @page_description.presence || Settings.page_description %>' />
 
     <%= javascript_pack_tag 'application', defer: true %>
     <%= stylesheet_pack_tag 'application', defer: true %>

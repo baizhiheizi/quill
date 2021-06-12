@@ -6,7 +6,7 @@ class SessionsController < ApplicationController
   def new
     redirect_to format(
       '%<oauth_path>s?client_id=%<client_id>s&scope=%<scope>s',
-      oauth_path: Rails.application.credentials[:mixin_oauth_path] || 'https://mixin-www.zeromesh.net/oauth/authorize',
+      oauth_path: Settings.mixin_oauth_path || 'https://mixin-www.zeromesh.net/oauth/authorize',
       client_id: PrsdiggBot.api.client_id,
       scope: UserAuthorization::MIXIN_AUTHORIZATION_SCOPE
     )

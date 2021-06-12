@@ -17,7 +17,7 @@ class CommentDeletedNotification < ApplicationNotification
   def url
     format(
       '%<host>s/articles/%<article_uuid>s#comment-%<comment_id>s',
-      host: Rails.application.credentials.fetch(:host),
+      host: Settings.host,
       article_uuid: params[:comment].commentable.uuid,
       comment_id: params[:comment].id
     )
