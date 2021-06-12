@@ -211,15 +211,15 @@ class User < ApplicationRecord
   end
 
   def mixin_id_in_whitelist?
-    mixin_id.in? Settings.whitelist.mixin_id.map(&:to_s)
+    mixin_id.in? Settings.whitelist&.mixin_id&.map(&:to_s)
   end
 
   def phone_country_code_in_whitelist?
-    Regexp.new("^\\+?(#{Settings.whitelist.phone_country_code.join('|')})\\d+").match? phone
+    Regexp.new("^\\+?(#{Settings.whitelist&.phone_country_code&.join('|')})\\d+").match? phone
   end
 
   def mixin_authorization_valid?
-    if Settings.whitelist.enable && Settings.whitelist.phone_country_code.present?
+    if Settings.whitelist&.enable && Settings.whitelist&.phone_country_code.present?
       phone.present?
     else
       true
