@@ -11,7 +11,12 @@ import {
   SettingOutlined,
 } from '@ant-design/icons';
 import { Avatar, Badge, Button, Drawer, Layout, Menu } from 'antd';
-import { imagePath, useCurrentUser, useUserAgent } from 'apps/shared';
+import {
+  imagePath,
+  useCurrentUser,
+  usePrsdigg,
+  useUserAgent,
+} from 'apps/shared';
 import { useSwitchLocaleMutation } from 'graphqlTypes';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -19,6 +24,7 @@ import { Link } from 'react-router-dom';
 
 export default function Menus() {
   const { isMobile } = useUserAgent();
+  const { logoFile } = usePrsdigg();
   const { t, i18n } = useTranslation();
   const [drawerVisible, setDrawerVisible] = useState(false);
   const { currentUser } = useCurrentUser();
@@ -57,7 +63,7 @@ export default function Menus() {
     <div>
       <div style={{ margin: 15, textAlign: 'center' }}>
         <a href='/'>
-          <Avatar size='large' src={imagePath('logo.svg')} />
+          <Avatar size='large' src={imagePath(logoFile)} />
         </a>
       </div>
       <Menu mode='inline' defaultSelectedKeys={[defaultKey]}>

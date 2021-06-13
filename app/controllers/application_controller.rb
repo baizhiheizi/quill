@@ -1,11 +1,23 @@
 # frozen_string_literal: true
 
 class ApplicationController < ActionController::Base
+  before_action :ensure_launched!
+
   helper_method :current_user
   helper_method :base_props
   around_action :with_locale
 
   private
+
+  def ensure_launched!
+    redirect_to landing_path unless launched?
+  end
+
+  def launched?
+    return true if Settings.launch_time.blank?
+
+    Time.current > Time.zone.parse(Settings.launch_time)
+  end
 
   def authenticate_user!
     redirect_to login_path unless current_user
@@ -37,7 +49,8 @@ class ApplicationController < ActionController::Base
       prsdigg: {
         app_id: PrsdiggBot.api.client_id,
         page_title: Settings.page_title,
-        attachment_endpoint: Rails.application.credentials.dig(:aliyun, :bucket_endpoint)
+        attachment_endpoint: Rails.application.credentials.dig(:aliyun, :bucket_endpoint),
+        logo_file: Settings.logo_file || 'logo.png'
       },
       default_locale: I18n.default_locale,
       available_locales: I18n.available_locales

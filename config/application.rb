@@ -18,6 +18,7 @@ module Prsdigg
     # -- all .rb files in that directory are automatically loaded after loading
     # the framework and any gems in your application.
 
+    config.time_zone = Settings.time_zone if Settings.time_zone.present?
     config.i18n.available_locales = Settings.available_locales || %i[en]
     config.i18n.default_locale = Settings.default_locale || :en
 

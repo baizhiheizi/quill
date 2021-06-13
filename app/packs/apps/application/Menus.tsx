@@ -5,7 +5,12 @@ import {
   NotificationOutlined,
 } from '@ant-design/icons';
 import { Avatar, Badge, Button, Col, Drawer, Layout, Menu, Row } from 'antd';
-import { imagePath, useCurrentUser, useUserAgent } from 'apps/shared';
+import {
+  imagePath,
+  useCurrentUser,
+  usePrsdigg,
+  useUserAgent,
+} from 'apps/shared';
 import { useSwitchLocaleMutation } from 'graphqlTypes';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -14,6 +19,7 @@ import { OPEN_SOURCE_URL } from './shared';
 
 export default function Menus() {
   const { currentUser } = useCurrentUser();
+  const { logoFile } = usePrsdigg();
   const { isMobile } = useUserAgent();
   const [drawerVisible, setDrawerVisible] = useState(false);
   const { t, i18n } = useTranslation();
@@ -51,7 +57,7 @@ export default function Menus() {
         ) : (
           <div style={{ margin: '0 15px' }}>
             <Link to='/' replace>
-              <Avatar size='large' src={imagePath('logo.svg')} />
+              <Avatar size='large' src={imagePath(logoFile)} />
             </Link>
           </div>
         )}

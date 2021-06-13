@@ -205,7 +205,7 @@ class User < ApplicationRecord
   end
 
   def accessable?
-    return true unless Settings.whitelist
+    return true unless Settings.whitelist&.enable
 
     mixin_id_in_whitelist? || phone_country_code_in_whitelist?
   end

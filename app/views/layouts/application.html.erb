@@ -27,6 +27,7 @@
 
     <%= javascript_pack_tag 'application', defer: true %>
     <%= stylesheet_pack_tag 'application', defer: true %>
+    <%= favicon_pack_tag "#{Settings.favicon_file || 'favicon.png'}" %>
   </head>
 
   <body>

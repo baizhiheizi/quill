@@ -19,6 +19,8 @@ Rails.application.routes.draw do
   match '/auth/mixin/callback', to: 'sessions#create', via: %i[get post]
   get 'logout', to: 'sessions#delete', as: :logout
 
+  get 'landing', to: 'landing#index', as: :landing
+
   resources :articles, only: %i[show index], param: :uuid
   resources :tags, only: :show
 
