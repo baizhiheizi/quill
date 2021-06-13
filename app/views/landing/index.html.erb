@@ -7,7 +7,7 @@
   </div>
   <div class='flex justify-center mb-4 font-sans'>
     <% if current_user.present? %>
-      <div class='w-10/12'><%= t('you_will_get_1000_satoshi_airdrop_once_we_launched') %></div>
+      <div class='w-10/12 text-center'><%= t('you_will_get_1000_satoshi_airdrop_once_we_launched') %></div>
     <% else %>
       <div class='flex flex-col w-10/12 space-y-2 md:w-1/3'>
         <a class='block py-2 text-lg text-center text-white bg-yellow-500 cursor-pointer rounded-md' href='/login'>

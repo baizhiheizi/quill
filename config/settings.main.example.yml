@@ -2,6 +2,9 @@ host: 'https://prsdigg.com'
 mixin_oauth_path: 'https://mixin-www.zeromesh.net/oauth/authorize'
 cdn:
 
+# lauch time
+launch_time:
+
 # ws blaze
 blaze_enable: false
 
