@@ -1,4 +1,22 @@
-<div class='max-w-2xl min-h-screen m-auto'>
-  <div class='m-auto text-lg'>Coming</div>
-  <div class='text-lg'><%= @launch_time %></div>
+<div class='min-h-screen pt-16 mx-auto bg-white max-w-screen-md'>
+  <div class='flex justify-center mb-4'>
+    <%= image_pack_tag Settings.logo_file, class:'w-24 h-24' %>
+  </div>
+  <div class='flex justify-center mb-8'>
+    <span class='font-sans text-2xl text-gray-800'><%= t('comming_soon') %></span>
+  </div>
+  <div class='flex justify-center mb-4 font-sans'>
+    <% if current_user.present? %>
+      <div class='w-10/12'><%= t('you_will_get_1000_satoshi_airdrop_once_we_launched') %></div>
+    <% else %>
+      <div class='flex flex-col w-10/12 space-y-2 md:w-1/3'>
+        <a class='block py-2 text-lg text-center text-white bg-yellow-500 cursor-pointer rounded-md' href='/login'>
+          <%= t('login_to_earn_btc') %>
+        </a>
+        <div class='text-sm text-gray-500' href='/login'>
+          <%= t('login_right_now_to_earn_btc_airdrop') %>
+        </div>
+      </div>
+    <% end %>
+  </div>
 </div>
