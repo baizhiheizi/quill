@@ -114,6 +114,7 @@ class MixinNetworkSnapshot < ApplicationRecord
   def process_payment_snapshot
     return if amount.negative?
 
+    Currency.find_or_create_by_asset_id asset_id
     opponent
       .payments
       .create_with(raw: raw)
