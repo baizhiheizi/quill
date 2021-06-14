@@ -5,7 +5,8 @@ query AdminArticle($uuid: ID!) {
     title
     intro
     price
-    revenue
+    revenueUsd
+    revenueBtc
     ordersCount
     commentsCount
     state

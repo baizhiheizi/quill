@@ -13,7 +13,8 @@
 #  orders_count                        :integer          default(0), not null
 #  price                               :decimal(, )      not null
 #  published_at                        :datetime
-#  revenue                             :decimal(, )      default(0.0)
+#  revenue_btc                         :decimal(, )      default(0.0)
+#  revenue_usd                         :decimal(, )      default(0.0)
 #  source                              :string
 #  state                               :string
 #  tags_count                          :integer          default(0)
@@ -87,27 +88,18 @@ class Article < ApplicationRecord
 
   default_scope -> { includes(:currency) }
   scope :only_published, -> { where(state: :published) }
-  scope :order_by_revenue_usd, lambda {
-    joins(:orders)
+  scope :order_by_revenue_usd, -> { order(revenue_usd: :desc) }
+  scope :order_by_popularity, lambda {
+    where('orders_count > ?', 0)
+      .joins(:orders)
       .group(:id)
       .select(
         <<~SQL.squish
-          articles.*,
-          SUM(orders.value_usd) as revenue_usd
+          articles.*, 
+          (((SUM(orders.value_usd) * 10 + articles.upvotes_count - articles.downvotes_count + articles.comments_count) / POW(((EXTRACT(EPOCH FROM (now()-articles.created_at)) / 3600)::integer + 1), 2))) AS popularity
         SQL
-      ).order(revenue_usd: :desc)
-  }
-  scope :order_by_popularity, lambda {
-    where.not(orders_count: 0)
-         .joins(:orders)
-         .group(:id)
-         .select(
-           <<~SQL.squish
-             articles.*, 
-             (((SUM(orders.value_usd) * 10 + articles.upvotes_count - articles.downvotes_count + articles.comments_count) / POW(((EXTRACT(EPOCH FROM (now()-articles.created_at)) / 3600)::integer + 1), 2))) AS popularity
-           SQL
-         )
-         .order('popularity DESC, created_at DESC')
+      )
+      .order('popularity DESC, created_at DESC')
   }
 
   aasm column: :state do
@@ -141,14 +133,15 @@ class Article < ApplicationRecord
   end
 
   def update_revenue
-    update revenue: orders.sum(:total)
+    update revenue_usd: orders.sum(:value_usd)
+    update revenue_btc: orders.sum(:value_btc)
   end
 
   def share_of(user)
     return if user.blank?
     return Order::AUTHOR_RATIO if user == author
 
-    user.orders.where(item: self).sum(:total) / revenue * (1 - Order::AUTHOR_RATIO - Order::PRSDIGG_RATIO)
+    user.orders.where(item: self).sum(:value_btc) / revenue_btc * (1 - Order::AUTHOR_RATIO - Order::PRSDIGG_RATIO)
   end
 
   def notify_authoring_subscribers
@@ -189,12 +182,24 @@ class Article < ApplicationRecord
     ArticleUnblockedNotification.with(article: self).deliver(author)
   end
 
-  def author_revenue_total
-    author_transfers.sum(:amount)
+  def author_revenue_usd
+    author_transfers
+      .includes(:currency)
+      .select(
+        <<~SQL.squish
+          transfers.amount * currencies.price_usd as value_usd
+        SQL
+      ).sum(:value_usd)
   end
 
-  def reader_revenue_total
-    reader_transfers.sum(:amount)
+  def reader_revenue_usd
+    reader_transfers
+      .includes(:currency)
+      .select(
+        <<~SQL.squish
+          transfers.amount * currencies.price_usd as value_usd
+        SQL
+      ).sum(:value_usd)
   end
 
   def tag_names
@@ -209,10 +214,6 @@ class Article < ApplicationRecord
 
   def price_usd
     (currency.price_usd.to_f * price).to_f.round(4)
-  end
-
-  def revenue_usd
-    orders.sum(:value_usd)
   end
 
   def random_readers(limit = 24)

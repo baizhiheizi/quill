@@ -14,10 +14,10 @@ module Types
     field :tags_count, Int, null: false
     field :tag_names, [String], null: true
 
-    field :revenue, Float, null: false
     field :revenue_usd, Float, null: false
-    field :author_revenue_total, Float, null: false
-    field :reader_revenue_total, Float, null: false
+    field :revenue_btc, Float, null: false
+    field :author_revenue_usd, Float, null: false
+    field :reader_revenue_usd, Float, null: false
 
     field :words_count, Integer, null: false
     field :partial_content, String, null: true

@@ -41,7 +41,9 @@ export default function ArticlePage() {
         <Descriptions.Item label='OrdersCount'>
           {article.ordersCount}
         </Descriptions.Item>
-        <Descriptions.Item label='Revenue'>{article.revenue}</Descriptions.Item>
+        <Descriptions.Item label='Revenue'>
+          ${article.revenueUsd}
+        </Descriptions.Item>
         <Descriptions.Item label='Comments'>
           {article.commentsCount}
         </Descriptions.Item>

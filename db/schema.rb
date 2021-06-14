@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_06_11_030807) do
+ActiveRecord::Schema.define(version: 2021_06_14_080130) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -110,7 +110,6 @@ ActiveRecord::Schema.define(version: 2021_06_11_030807) do
     t.text "content"
     t.uuid "asset_id", comment: "asset_id in Mixin Network"
     t.decimal "price", null: false
-    t.decimal "revenue", default: "0.0"
     t.integer "orders_count", default: 0, null: false
     t.integer "comments_count", default: 0, null: false
     t.string "state"
@@ -122,6 +121,8 @@ ActiveRecord::Schema.define(version: 2021_06_11_030807) do
     t.integer "tags_count", default: 0
     t.string "source"
     t.datetime "published_at"
+    t.decimal "revenue_usd", default: "0.0"
+    t.decimal "revenue_btc", default: "0.0"
     t.index ["asset_id"], name: "index_articles_on_asset_id"
     t.index ["author_id"], name: "index_articles_on_author_id"
     t.index ["uuid"], name: "index_articles_on_uuid", unique: true

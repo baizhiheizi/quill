@@ -12,7 +12,7 @@ query Article($uuid: ID!) {
     ordersCount
     commentsCount
     myShare
-    revenue
+    revenueUsd
     commentingSubscribed
     paymentTraceId
     upvoted

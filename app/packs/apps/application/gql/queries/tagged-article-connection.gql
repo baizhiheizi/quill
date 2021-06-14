@@ -24,7 +24,7 @@ query TaggedArticleConnection(
       intro
       price
       priceUsd
-      revenue
+      revenueBtc
       revenueUsd
       ordersCount
       commentsCount

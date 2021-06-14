@@ -5,7 +5,8 @@ query UserArticleConnection($mixinId: ID!, $type: String!, $after: String) {
       title
       intro
       price
-      revenue
+      revenueUsd
+      revenueBtc
       ordersCount
       state
       author {

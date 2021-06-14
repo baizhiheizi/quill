@@ -87,13 +87,13 @@ export default function ArticlePage() {
             {article.rewardOrders.totalCount}
           </Descriptions.Item>
           <Descriptions.Item label={t('article.revenue')}>
-            {article.revenue} {article.currency.symbol}
+            ${article.revenueUsd.toFixed(4)}
           </Descriptions.Item>
           <Descriptions.Item label={t('article.author_revenue_total')}>
-            {article.authorRevenueTotal} {article.currency.symbol}
+            ${article.authorRevenueUsd.toFixed(4)}
           </Descriptions.Item>
           <Descriptions.Item label={t('article.reader_revenue_total')}>
-            {article.readerRevenueTotal} {article.currency.symbol}
+            ${article.readerRevenueUsd.toFixed(4)}
           </Descriptions.Item>
           <Descriptions.Item label={t('article.comments_count')}>
             {article.comments.totalCount}
