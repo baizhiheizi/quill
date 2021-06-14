@@ -183,23 +183,15 @@ class Article < ApplicationRecord
   end
 
   def author_revenue_usd
-    author_transfers
-      .includes(:currency)
-      .select(
-        <<~SQL.squish
-          transfers.amount * currencies.price_usd as value_usd
-        SQL
-      ).sum(:value_usd)
+    author_transfers.includes(:currency).map do |transfer|
+      transfer.amount * transfer.currency.price_usd.to_f
+    end.sum
   end
 
   def reader_revenue_usd
-    reader_transfers
-      .includes(:currency)
-      .select(
-        <<~SQL.squish
-          transfers.amount * currencies.price_usd as value_usd
-        SQL
-      ).sum(:value_usd)
+    reader_transfers.includes(:currency).map do |transfer|
+      transfer.amount * transfer.currency.price_usd.to_f
+    end.sum
   end
 
   def tag_names
