@@ -5,7 +5,8 @@ query MyArticleConnection($type: String!, $state: String, $after: String) {
       title
       intro
       price
-      revenue
+      revenueUsd
+      revenueBtc
       ordersCount
       state
       author {

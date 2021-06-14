@@ -10,9 +10,9 @@ query MyArticle($uuid: ID!) {
     assetId
     ordersCount
     commentsCount
-    revenue
-    authorRevenueTotal
-    readerRevenueTotal
+    revenueUsd
+    authorRevenueUsd
+    readerRevenueUsd
     commentingSubscribed
     upvotesCount
     downvotesCount

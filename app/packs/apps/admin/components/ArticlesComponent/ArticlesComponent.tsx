@@ -77,9 +77,9 @@ export function ArticlesComponent(props: { authorMixinUuid?: string }) {
       title: 'State',
     },
     {
-      dataIndex: 'revenue',
-      key: 'revenue',
-      title: 'Revenue',
+      dataIndex: 'revenueUsd',
+      key: 'revenueUsd',
+      title: 'Revenue(USD)',
     },
     {
       dataIndex: 'commentsCount',

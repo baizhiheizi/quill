@@ -16,7 +16,8 @@ query AdminArticleConnection(
       title
       intro
       price
-      revenue
+      revenueUsd
+      revenueBtc
       ordersCount
       commentsCount
       state

@@ -2124,7 +2124,7 @@
             "deprecationReason": null
           },
           {
-            "name": "authorRevenueTotal",
+            "name": "authorRevenueUsd",
             "description": null,
             "args": [],
             "type": {
@@ -2583,7 +2583,7 @@
             "deprecationReason": null
           },
           {
-            "name": "readerRevenueTotal",
+            "name": "readerRevenueUsd",
             "description": null,
             "args": [],
             "type": {
@@ -2664,7 +2664,7 @@
             "deprecationReason": null
           },
           {
-            "name": "revenue",
+            "name": "revenueBtc",
             "description": null,
             "args": [],
             "type": {

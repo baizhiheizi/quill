@@ -11,7 +11,8 @@
 #  orders_count                        :integer          default(0), not null
 #  price                               :decimal(, )      not null
 #  published_at                        :datetime
-#  revenue                             :decimal(, )      default(0.0)
+#  revenue_btc                         :decimal(, )      default(0.0)
+#  revenue_usd                         :decimal(, )      default(0.0)
 #  source                              :string
 #  state                               :string
 #  tags_count                          :integer          default(0)

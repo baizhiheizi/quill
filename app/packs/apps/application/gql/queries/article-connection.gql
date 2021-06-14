@@ -6,7 +6,7 @@ query ArticleConnection($order: String!, $query: String, $after: String) {
       intro
       price
       priceUsd
-      revenue
+      revenueBtc
       revenueUsd
       ordersCount
       commentsCount

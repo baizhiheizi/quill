@@ -321,7 +321,7 @@ export type Article = {
   __typename?: 'Article';
   assetId: Scalars['String'];
   author: User;
-  authorRevenueTotal: Scalars['Float'];
+  authorRevenueUsd: Scalars['Float'];
   authorized?: Maybe<Scalars['Boolean']>;
   buyOrders: OrderConnection;
   buyers: UserConnection;
@@ -342,9 +342,9 @@ export type Article = {
   price: Scalars['Float'];
   priceUsd?: Maybe<Scalars['Float']>;
   randomReaders: Array<User>;
-  readerRevenueTotal: Scalars['Float'];
+  readerRevenueUsd: Scalars['Float'];
   readers: UserConnection;
-  revenue: Scalars['Float'];
+  revenueBtc: Scalars['Float'];
   revenueUsd: Scalars['Float'];
   rewardOrders: OrderConnection;
   rewarders: UserConnection;
@@ -2597,7 +2597,8 @@ export const AdminArticleConnectionDocument = gql`
       title
       intro
       price
-      revenue
+      revenueUsd
+      revenueBtc
       ordersCount
       commentsCount
       state
@@ -2726,7 +2727,8 @@ export const AdminArticleDocument = gql`
     title
     intro
     price
-    revenue
+    revenueUsd
+    revenueBtc
     ordersCount
     commentsCount
     state
@@ -3940,7 +3942,7 @@ export const ArticleConnectionDocument = gql`
       intro
       price
       priceUsd
-      revenue
+      revenueBtc
       revenueUsd
       ordersCount
       commentsCount
@@ -4015,7 +4017,7 @@ export const ArticleDocument = gql`
     ordersCount
     commentsCount
     myShare
-    revenue
+    revenueUsd
     commentingSubscribed
     paymentTraceId
     upvoted
@@ -4353,7 +4355,7 @@ export const TaggedArticleConnectionDocument = gql`
       intro
       price
       priceUsd
-      revenue
+      revenueBtc
       revenueUsd
       ordersCount
       commentsCount
@@ -4473,7 +4475,8 @@ export const UserArticleConnectionDocument = gql`
       title
       intro
       price
-      revenue
+      revenueUsd
+      revenueBtc
       ordersCount
       state
       author {
@@ -4998,7 +5001,8 @@ export const MyArticleConnectionDocument = gql`
       title
       intro
       price
-      revenue
+      revenueUsd
+      revenueBtc
       ordersCount
       state
       author {
@@ -5113,9 +5117,9 @@ export const MyArticleDocument = gql`
     assetId
     ordersCount
     commentsCount
-    revenue
-    authorRevenueTotal
-    readerRevenueTotal
+    revenueUsd
+    authorRevenueUsd
+    readerRevenueUsd
     commentingSubscribed
     upvotesCount
     downvotesCount
@@ -5233,7 +5237,8 @@ export const MyCommentingSubscriptionConnectionDocument = gql`
       id
       uuid
       title
-      revenue
+      revenueUsd
+      revenueBtc
       intro
       commentsCount
       author {
