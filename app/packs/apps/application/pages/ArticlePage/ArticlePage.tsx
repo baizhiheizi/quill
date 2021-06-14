@@ -394,7 +394,9 @@ export default function ArticlePage() {
               <Col xs={12} sm={6}>
                 <Statistic
                   title={`${t('article.revenue')}(USD)`}
-                  value={article.revenueUsd ? article.revenueUsd.toFixed(4) : 0.0}
+                  value={
+                    article.revenueUsd ? article.revenueUsd.toFixed(4) : 0.0
+                  }
                 />
               </Col>
               <Col xs={12} sm={6}>
