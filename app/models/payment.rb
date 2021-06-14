@@ -84,7 +84,7 @@ class Payment < ApplicationRecord
   end
 
   def place_order!
-    raise 'Memo not correct!' unless memo_correct?
+    return unless memo_correct?
 
     if asset_id == article.asset_id
       place_article_order!
