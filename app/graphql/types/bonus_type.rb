@@ -16,7 +16,7 @@ module Types
 
     def currency
       BatchLoader::GraphQL.for(object.asset_id).batch do |asset_ids, loader|
-        Currency.where(id: asset_ids).each { |currency| loader.call(currency.asset_id, currency) }
+        Currency.where(asset_id: asset_ids).each { |currency| loader.call(currency.asset_id, currency) }
       end
     end
 
