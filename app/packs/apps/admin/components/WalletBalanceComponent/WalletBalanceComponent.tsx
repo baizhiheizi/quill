@@ -1,15 +1,33 @@
-import { Avatar, Table } from 'antd';
+import { Avatar, Input, message, Modal, Table } from 'antd';
 import { ColumnProps } from 'antd/es/table';
-import { Asset, useAdminWalletBalanceQuery } from 'graphqlTypes';
-import React from 'react';
+import {
+  Asset,
+  useAdminWalletBalanceQuery,
+  useAdminWithdrawBalanceMutation,
+} from 'graphqlTypes';
+import React, { useState } from 'react';
 import LoadingComponent from '../LoadingComponent/LoadingComponent';
 
 export default function WalletBalanceComponent(props: { userId?: string }) {
   const { userId } = props;
-  const { loading, data } = useAdminWalletBalanceQuery({
+  const { loading, data, refetch } = useAdminWalletBalanceQuery({
     fetchPolicy: 'network-only',
     variables: { userId },
   });
+  const [withdrawAmount, setWithdrawAmount] = useState('');
+  const [selectedAsset, setSelectedAsset] = useState<Asset>();
+  const [withdrawBalance] = useAdminWithdrawBalanceMutation({
+    update(_, { data: { adminWithdrawBalance } }) {
+      if (adminWithdrawBalance) {
+        message.success('Withdrawing');
+        refetch();
+      } else {
+        message.error('failed');
+      }
+      setSelectedAsset(null);
+    },
+  });
+
   if (loading) {
     return <LoadingComponent />;
   }
@@ -35,16 +53,59 @@ export default function WalletBalanceComponent(props: { userId?: string }) {
       },
       title: 'Value',
     },
+    {
+      dataIndex: 'actions',
+      key: 'actions',
+      render: (_, record) => (
+        <div className='flex space-x-1'>
+          <div
+            className='cursor-pointer'
+            onClick={() => {
+              setWithdrawAmount(record.balance);
+              setSelectedAsset(record);
+            }}
+          >
+            Withdraw
+          </div>
+        </div>
+      ),
+      title: 'Actions',
+    },
   ];
   return (
-    <Table
-      scroll={{ x: true }}
-      columns={columns}
-      dataSource={assets}
-      rowKey='assetId'
-      loading={loading}
-      pagination={{ pageSize: 50 }}
-      size='small'
-    />
+    <>
+      <Table
+        scroll={{ x: true }}
+        columns={columns}
+        dataSource={assets}
+        rowKey='assetId'
+        loading={loading}
+        pagination={{ pageSize: 50 }}
+        size='small'
+      />
+      <Modal
+        title='Withdraw to OWNER'
+        closable={false}
+        visible={Boolean(selectedAsset)}
+        onCancel={() => setSelectedAsset(null)}
+        onOk={() =>
+          withdrawBalance({
+            variables: {
+              input: {
+                assetId: selectedAsset?.assetId,
+                amount: withdrawAmount,
+              },
+            },
+          })
+        }
+      >
+        <div className='flex'>
+          <Input
+            value={withdrawAmount}
+            onChange={(e) => setWithdrawAmount(e.target.value)}
+          />
+        </div>
+      </Modal>
+    </>
   );
 }

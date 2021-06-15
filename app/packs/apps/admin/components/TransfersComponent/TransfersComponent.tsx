@@ -128,6 +128,9 @@ export default function TransfersComponent(props: {
             <Select.Option value='swap_change'>Swap Change</Select.Option>
             <Select.Option value='swap_refund'>Swap Refund</Select.Option>
             <Select.Option value='fox_swap'>Fox Swap</Select.Option>
+            <Select.Option value='withdraw_balance'>
+              Withdraw Balance
+            </Select.Option>
           </Select>
         </div>
         <Button type='primary' onClick={() => refetch()}>

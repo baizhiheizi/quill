@@ -39,6 +39,8 @@ module Resolvers
           transfers.swap_refund
         when 'fox_swap'
           transfers.fox_swap
+        when 'withdraw_balance'
+          transfers.withdraw_balance
         else
           transfers
         end
