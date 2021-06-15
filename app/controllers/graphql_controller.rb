@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class GraphqlController < ApplicationController
+  skip_before_action :ensure_launched!
   protect_from_forgery with: :exception, unless: -> { Rails.env.development? }
 
   def execute

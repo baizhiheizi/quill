@@ -40,5 +40,6 @@ module Types
     field :admin_deliver_bonus, mutation: Mutations::AdminDeliverBonusMutation
     field :admin_ban_user, mutation: Mutations::AdminBanUserMutation
     field :admin_unban_user, mutation: Mutations::AdminUnbanUserMutation
+    field :admin_withdraw_balance, mutation: Mutations::AdminWithdrawBalanceMutation
   end
 end
