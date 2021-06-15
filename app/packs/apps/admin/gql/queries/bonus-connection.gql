@@ -8,6 +8,10 @@ query AdminBonusConnection($after: String) {
       assetId
       state
       createdAt
+      currency {
+        assetId
+        symbol
+      }
       user {
         id
         avatarUrl

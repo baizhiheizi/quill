@@ -10,8 +10,15 @@ module Types
     field :state, String, null: false
     field :asset_id, String, null: false
 
+    field :currency, Types::CurrencyType, null: false
     field :user, Types::UserType, null: false
     field :transfer, Types::TransferType, null: true
+
+    def currency
+      BatchLoader::GraphQL.for(object.asset_id).batch do |asset_ids, loader|
+        Currency.where(id: asset_ids).each { |currency| loader.call(currency.asset_id, currency) }
+      end
+    end
 
     def user
       BatchLoader::GraphQL.for(object.user_id).batch do |user_ids, loader|

@@ -24,6 +24,7 @@ class Bonus < ApplicationRecord
   include AASM
 
   belongs_to :user
+  belongs_to :currency, primary_key: :asset_id, foreign_key: :asset_id, inverse_of: false
 
   has_one :transfer, as: :source, dependent: :nullify
 
@@ -56,7 +57,7 @@ class Bonus < ApplicationRecord
         amount: amount,
         asset_id: asset_id,
         trace_id: trace_id,
-        memo: "[Bonus]#{title}"
+        memo: "Bonus(#{title})"
       )
   end
 
@@ -64,7 +65,6 @@ class Bonus < ApplicationRecord
 
   def setup_attributes
     assign_attributes(
-      asset_id: Currency::PRS_ASSET_ID,
       trace_id: SecureRandom.uuid
     )
   end
