@@ -10,9 +10,9 @@ mixin_network_snapshot_monitor_worker:
 sync_currency_price_worker:
   cron: '*/5 * * * *'
   class: 'SyncCurrencyPriceWorker'
-prs_transaction_poll_authorizations_worker:
-  cron: '* * * * *'
-  class: 'PrsTransactionPollAuthorizationsWorker'
-prs_transaction_poll_posts_worker:
-  cron: '* * * * *'
-  class: 'PrsTransactionPollPostsWorker'
+# prs_transaction_poll_authorizations_worker:
+#   cron: '* * * * *'
+#   class: 'PrsTransactionPollAuthorizationsWorker'
+# prs_transaction_poll_posts_worker:
+#   cron: '* * * * *'
+#   class: 'PrsTransactionPollPostsWorker'

@@ -71,7 +71,7 @@ class User < ApplicationRecord
   after_commit on: :create do
     create_wallet!
     create_notification_setting!
-    create_prs_account!
+    # create_prs_account!
     update_statistics_cache
   end
 

@@ -1192,7 +1192,7 @@ export type PrsTransaction = {
   processedAt?: Maybe<Scalars['ISO8601DateTime']>;
   prsAccount?: Maybe<PrsAccount>;
   signature: Scalars['String'];
-  transactionId: Scalars['String'];
+  transactionId?: Maybe<Scalars['String']>;
   txId: Scalars['String'];
   type?: Maybe<Scalars['String']>;
   updatedAt?: Maybe<Scalars['ISO8601DateTime']>;
