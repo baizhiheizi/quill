@@ -15,6 +15,7 @@ class ApplicationController < ActionController::Base
 
   def launched?
     return true if Settings.launch_time.blank?
+    return true if current_user&.mixin_id_in_whitelist?
 
     Time.current > Time.zone.parse(Settings.launch_time)
   end
