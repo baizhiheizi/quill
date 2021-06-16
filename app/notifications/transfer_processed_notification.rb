@@ -53,7 +53,7 @@ class TransferProcessedNotification < ApplicationNotification
   end
 
   def from_prsdigg_bot?
-    transfer.wallet.blank?
+    params[:transfer].wallet.blank?
   end
 
   def should_notify_via_bot?
