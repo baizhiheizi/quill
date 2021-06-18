@@ -7,7 +7,7 @@
   </div>
   <div class='flex justify-center mb-4 font-sans'>
     <% if current_user.present? %>
-      <div class='w-10/12 text-center'><%= current_user.accessable? ? t('you_will_get_1000_satoshi_airdrop_once_we_launched') : t('sorry_you_are_not_authorized_to_access_this_application') %></div>
+      <div class='w-10/12 text-center whitespace-pre-line'><%= current_user.accessable? ? t('you_will_get_1000_satoshi_airdrop_once_we_launched') : t('sorry_you_are_not_authorized_to_access_this_application') %></div>
     <% else %>
       <div class='flex flex-col w-10/12 space-y-2 md:w-1/3'>
         <a class='block py-2 text-lg text-center text-white bg-yellow-500 cursor-pointer rounded-md' href='/login'>

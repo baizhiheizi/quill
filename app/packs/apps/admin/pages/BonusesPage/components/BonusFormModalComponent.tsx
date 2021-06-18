@@ -14,6 +14,7 @@ import {
   useAdminCreateBonusMutation,
   useAdminUpdateBonusMutation,
   useAdminUserConnectionQuery,
+  usePricableCurrenciesQuery,
   User,
 } from 'graphqlTypes';
 import React, { useEffect, useState } from 'react';
@@ -32,6 +33,7 @@ export default function BonusesFormModalComponent(props: {
     notifyOnNetworkStatusChange: true,
     variables: { query: debouncedQuery },
   });
+  const { data: pricableCurrenciesData } = usePricableCurrenciesQuery();
   const [createBonus] = useAdminCreateBonusMutation({
     update(
       _,
@@ -77,6 +79,7 @@ export default function BonusesFormModalComponent(props: {
         title: editingBonus.title,
         description: editingBonus.description,
         amount: editingBonus.amount,
+        assetId: editingBonus.assetId,
       });
     } else {
       bonusForm.resetFields();
@@ -84,6 +87,7 @@ export default function BonusesFormModalComponent(props: {
   }, [editingBonus]);
 
   const users = (data && data.adminUserConnection.nodes) || [];
+  const pricableCurrencies = pricableCurrenciesData?.pricableCurrencies || [];
 
   return (
     <Modal
@@ -123,8 +127,23 @@ export default function BonusesFormModalComponent(props: {
             ))}
           </Select>
         </Form.Item>
+        <Form.Item name='assetId' label='Asset' rules={[{ required: true }]}>
+          <Select placeholder='Asset'>
+            {pricableCurrencies.map((currency: any) => (
+              <Select.Option key={currency.assetId} value={currency.assetId}>
+                {currency.symbol}
+              </Select.Option>
+            ))}
+          </Select>
+        </Form.Item>
         <Form.Item name='amount' label='Amount' rules={[{ required: true }]}>
-          <InputNumber min={1} precision={4} placeholder='0.0' />
+          <InputNumber
+            className='w-36'
+            min={0.000_000_01}
+            precision={8}
+            step={0.000_001}
+            placeholder='0.0'
+          />
         </Form.Item>
         <Form.Item name='title' label='Title' rules={[{ required: true }]}>
           <Input />

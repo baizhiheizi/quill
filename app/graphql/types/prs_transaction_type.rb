@@ -9,7 +9,7 @@ module Types
     field :hash_str, String, null: false
     field :signature, String, null: false
     field :user_address, String, null: false
-    field :transaction_id, String, null: false
+    field :transaction_id, String, null: true
     field :tx_id, String, null: false
     field :data, String, null: true
     field :processed_at, GraphQL::Types::ISO8601DateTime, null: true

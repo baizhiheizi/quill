@@ -189,6 +189,8 @@ en:
   sorry_you_are_not_authorized_to_access_this_application: Sorry, you are not authorized to access this application
   mixin_bot: Mixin Bot
   comming_soon: Comming Soon
-  you_will_get_1000_satoshi_airdrop_once_we_launched: 🎉 You'll get 1000 Satoshi airdrap once we launched soon.
+  you_will_get_1000_satoshi_airdrop_once_we_launched: |
+    🎉 You'll get 1000 Satoshi airdrop 
+    once we launched soon.
   login_to_earn_btc: Login To Earn BTC
   login_right_now_to_earn_btc_airdrop: Login right now, you'll receive BTC airdrop once we launched soon.

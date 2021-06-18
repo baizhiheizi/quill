@@ -175,7 +175,6 @@ GEM
       activesupport (>= 5)
     hamster (3.0.0)
       concurrent-ruby (~> 1.0)
-    honeybadger (4.8.0)
     http (4.4.1)
       addressable (~> 2.3)
       http-cookie (~> 1.0)
@@ -428,7 +427,6 @@ DEPENDENCIES
   graphiql-rails
   graphql
   groupdate
-  honeybadger (~> 4.8)
   image_processing (~> 1.2)
   jbuilder (~> 2.7)
   listen (~> 3.4)

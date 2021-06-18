@@ -69,7 +69,16 @@ export default function BonusesPage() {
       render: (description) => <div>{description || '-'}</div>,
       title: 'Description',
     },
-    { dataIndex: 'amount', key: 'amount', title: 'Amount' },
+    {
+      dataIndex: 'amount',
+      key: 'amount',
+      render: (_, bonus) => (
+        <>
+          {bonus.amount} {bonus.currency.symbol}
+        </>
+      ),
+      title: 'Amount',
+    },
     { dataIndex: 'state', key: 'state', title: 'state' },
     { dataIndex: 'createdAt', key: 'createdAt', title: 'createdAt' },
     {
@@ -78,7 +87,7 @@ export default function BonusesPage() {
       render: (_, bonus) =>
         bonus.transfer && bonus.transfer.snapshotId ? (
           <a
-            href={`https://mixin/one/snapshots/${bonus.transfer.snapshotId}`}
+            href={`https://mixin.one/snapshots/${bonus.transfer.snapshotId}`}
             target='_blank'
           >
             SnapshotId
@@ -151,6 +160,7 @@ export default function BonusesPage() {
         dataSource={bonuses}
         rowKey='id'
         pagination={false}
+        size='small'
       />
       <div style={{ margin: '1rem', textAlign: 'center' }}>
         <Button

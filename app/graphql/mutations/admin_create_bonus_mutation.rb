@@ -2,6 +2,7 @@
 
 module Mutations
   class AdminCreateBonusMutation < AdminBaseMutation
+    argument :asset_id, String, required: true
     argument :user_id, ID, required: true
     argument :amount, Float, required: true
     argument :title, String, required: true
@@ -15,6 +16,7 @@ module Mutations
           ActionController::Parameters
           .new(params)
           .permit(
+            :asset_id,
             :user_id,
             :amount,
             :title,

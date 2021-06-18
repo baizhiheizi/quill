@@ -189,6 +189,8 @@ zh-CN:
   sorry_you_are_not_authorized_to_access_this_application: 抱歉，您无法使用该应用
   mixin_bot: Mixin 机器人
   comming_soon: 即将发布
-  you_will_get_1000_satoshi_airdrop_once_we_launched: 🎉 正式发布时，您将收到 1000 Satoshi 空投
+  you_will_get_1000_satoshi_airdrop_once_we_launched: |
+    🎉 正式发布时
+    您将收到 1000 Satoshi 空投
   login_to_earn_btc: 登录赢取 BTC
   login_right_now_to_earn_btc_airdrop: 立即登录，当正式发布时，您将收到 BTC 空投
