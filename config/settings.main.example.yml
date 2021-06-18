@@ -17,6 +17,7 @@ ga_id:
 # app/packs/images/*
 logo_file: logo.png
 favicon_file: favicon.png
+broker_name: PRSDigg Broker
 
 # locale
 time_zone: Asia/Shanghai
