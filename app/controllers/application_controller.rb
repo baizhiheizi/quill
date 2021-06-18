@@ -49,6 +49,7 @@ class ApplicationController < ActionController::Base
       ),
       prsdigg: {
         app_id: PrsdiggBot.api.client_id,
+        app_name: Settings.app_name,
         page_title: Settings.page_title,
         attachment_endpoint: Rails.application.credentials.dig(:aliyun, :bucket_endpoint),
         logo_file: Settings.logo_file || 'logo.png'

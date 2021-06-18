@@ -1,20 +1,21 @@
-import { Article, Tag } from '@graphql';
 import { message } from 'antd';
+import { imagePath } from 'apps/shared';
 import copy from 'copy-to-clipboard';
+import { Article, Tag } from 'graphqlTypes';
 import { encode as encode64 } from 'js-base64';
-import { PRSDIGG_ICON_URL } from '../constants';
 
 export const handleArticleShare = (
   article: Partial<Article>,
   mixinEnv: boolean,
   appId: string,
+  logoFile?: string,
 ) => {
   const articleUrl = `${location.origin}/articles/${article.uuid}`;
   const data = {
     action: articleUrl,
     app_id: appId,
-    description: `来自 ${article.author.name} 的好文`,
-    icon_url: PRSDIGG_ICON_URL,
+    description: `${article.author.name}`,
+    icon_url: `${location.origin}${imagePath(logoFile || 'logo.png')}`,
     title: article.title.slice(0, 36),
   };
   handleShare(articleUrl, data, mixinEnv);
@@ -24,14 +25,15 @@ export const handleTagShare = (
   tag: Partial<Tag>,
   mixinEnv: boolean,
   appId: string,
+  logoFile?: string,
 ) => {
   const tagUrl = `${location.origin}/tags/${tag.id}`;
   const data = {
     action: tagUrl,
     app_id: appId,
-    description: `共有 ${tag.articlesCount} 篇好文`,
-    icon_url: PRSDIGG_ICON_URL,
-    title: `#${tag.name} 话题文章`,
+    description: `x ${tag.articlesCount}`,
+    icon_url: `${location.origin}${imagePath(logoFile || 'logo.png')}`,
+    title: `#${tag.name}`,
   };
   handleShare(tagUrl, data, mixinEnv);
 };

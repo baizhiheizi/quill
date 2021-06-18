@@ -138,6 +138,7 @@ function ShareAction(props: {
   mixinEnv: boolean;
   appId: string;
 }) {
+  const { logoFile } = usePrsdigg();
   return (
     <Button
       size='small'
@@ -149,6 +150,7 @@ function ShareAction(props: {
               props.article,
               Boolean(props.mixinEnv),
               props.appId,
+              logoFile,
             );
           }}
         />

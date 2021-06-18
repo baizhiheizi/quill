@@ -54,7 +54,7 @@ export default function ArticlePage() {
   const { uuid } = useParams<{ uuid: string }>();
   const [rewardModalVisible, setRewardModalVisible] = useState(false);
   const [payModalVisible, setPayModalVisible] = useState(false);
-  const { appId, pageTitle } = usePrsdigg();
+  const { appId, pageTitle, logoFile } = usePrsdigg();
   const { mixinEnv } = useUserAgent();
   const { currentUser } = useCurrentUser();
   const { loading, data, refetch }: ArticleQueryHookResult = useArticleQuery({
@@ -222,7 +222,9 @@ export default function ArticlePage() {
         <Button
           type='link'
           icon={<ShareAltOutlined />}
-          onClick={() => handleArticleShare(article, Boolean(mixinEnv), appId)}
+          onClick={() =>
+            handleArticleShare(article, Boolean(mixinEnv), appId, logoFile)
+          }
         >
           {t('share')}
         </Button>
