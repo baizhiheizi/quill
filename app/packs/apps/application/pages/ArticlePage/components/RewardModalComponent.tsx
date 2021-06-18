@@ -36,21 +36,13 @@ export default function RewardModalComponent(props: {
   } = props;
   const { mixinEnv } = useUserAgent();
   const { t } = useTranslation();
-  const [share, setShare] = useState(1);
+  const [amount, setAmount] = useState('');
   const [assetId, setAssetId] = useState(articleAssetId);
   const [payUrl, setPayUrl] = useState('');
   const [paying, setPaying] = useState(false);
   const [pollPayment, { stopPolling, data }] = usePaymentLazyQuery({
     pollInterval: 1500,
   });
-
-  useEffect(() => {
-    return () => stopPolling && stopPolling();
-  }, []);
-
-  if (Boolean(data?.payment?.state)) {
-    stopPolling();
-  }
 
   const priceBaseUsd = 0.1;
   const availbleCurrencies = swappable
@@ -60,16 +52,24 @@ export default function RewardModalComponent(props: {
     (_currency) => _currency.assetId == assetId,
   );
 
+  useEffect(() => {
+    currency.symbol === 'BTC'
+      ? setAmount('0.000001')
+      : setAmount((priceBaseUsd / currency.priceUsd).toFixed(8));
+    return () => stopPolling && stopPolling();
+  }, []);
+
+  if (Boolean(data?.payment?.state)) {
+    stopPolling();
+  }
+
   const handlePaying = () => {
     const traceId = uuidv4();
     const url = `mixin://pay?recipient=${
       currentUser?.walletId || walletId
     }&trace=${traceId}&memo=${encode64(
       JSON.stringify({ t: 'REWARD', a: articleUuid }),
-    )}&asset=${assetId}&amount=${(
-      share *
-      (priceBaseUsd / currency.priceUsd)
-    ).toFixed(8)}`;
+    )}&asset=${assetId}&amount=${amount}`;
     if (mixinEnv) {
       location.replace(url);
     } else {
@@ -122,31 +122,63 @@ export default function RewardModalComponent(props: {
       <Radio.Group
         disabled={paying}
         className='mb-4'
-        options={[
-          { label: (priceBaseUsd / currency.priceUsd).toFixed(6), value: 1 },
-          {
-            label: ((8 * priceBaseUsd) / currency.priceUsd).toFixed(6),
-            value: 8,
-          },
-          {
-            label: ((32 * priceBaseUsd) / currency.priceUsd).toFixed(6),
-            value: 32,
-          },
-          {
-            label: ((64 * priceBaseUsd) / currency.priceUsd).toFixed(6),
-            value: 64,
-          },
-          {
-            label: ((256 * priceBaseUsd) / currency.priceUsd).toFixed(6),
-            value: 256,
-          },
-          {
-            label: ((1024 * priceBaseUsd) / currency.priceUsd).toFixed(6),
-            value: 1024,
-          },
-        ]}
-        value={share}
-        onChange={(e) => setShare(e.target.value)}
+        options={
+          currency.symbol === 'BTC'
+            ? [
+                {
+                  label: '0.000001',
+                  value: '0.000001',
+                },
+                {
+                  label: '0.000005',
+                  value: '0.000005',
+                },
+                {
+                  label: '0.00001',
+                  value: '0.00001',
+                },
+                {
+                  label: '0.0001',
+                  value: '0.0001',
+                },
+                {
+                  label: '0.001',
+                  value: '0.001',
+                },
+                {
+                  label: '0.005',
+                  value: '0.005',
+                },
+              ]
+            : [
+                {
+                  label: (priceBaseUsd / currency.priceUsd).toFixed(6),
+                  value: (priceBaseUsd / currency.priceUsd).toFixed(6),
+                },
+                {
+                  label: ((8 * priceBaseUsd) / currency.priceUsd).toFixed(6),
+                  value: ((8 * priceBaseUsd) / currency.priceUsd).toFixed(6),
+                },
+                {
+                  label: ((32 * priceBaseUsd) / currency.priceUsd).toFixed(6),
+                  value: ((32 * priceBaseUsd) / currency.priceUsd).toFixed(6),
+                },
+                {
+                  label: ((64 * priceBaseUsd) / currency.priceUsd).toFixed(6),
+                  value: ((64 * priceBaseUsd) / currency.priceUsd).toFixed(6),
+                },
+                {
+                  label: ((256 * priceBaseUsd) / currency.priceUsd).toFixed(6),
+                  value: ((256 * priceBaseUsd) / currency.priceUsd).toFixed(6),
+                },
+                {
+                  label: ((1024 * priceBaseUsd) / currency.priceUsd).toFixed(6),
+                  value: ((1024 * priceBaseUsd) / currency.priceUsd).toFixed(6),
+                },
+              ]
+        }
+        value={amount}
+        onChange={(e) => setAmount(e.target.value)}
         optionType='button'
       />
       <div className='mb-4 text-right'>
