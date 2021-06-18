@@ -60,7 +60,7 @@ gem 'groupdate'
 # Object-based searching. http://ransack-demo.herokuapp.com
 gem 'ransack'
 # Ruby gem for reporting errors to honeybadger.io
-gem 'honeybadger', '~> 4.8'
+# gem 'honeybadger', '~> 4.8'
 # A simple, standardized way to build and use Service Objects (aka Commands) in Ruby
 gem 'simple_command'
 # Notifications for Ruby on Rails applications
