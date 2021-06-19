@@ -91,7 +91,7 @@ end
 desc 'generate translation.json'
 task :rake_react_on_rails_locale do
   command %(echo "-----> exec: bin/rake react_on_rails:locale")
-  command %(bin/rake react_on_rails:locale)
+  command %(#{fetch(:rake)} react_on_rails:locale)
 end
 
 desc 'Deploys the current version to the server.'
