@@ -80,4 +80,4 @@ jobs:
           RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
           GIHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
         run: |
-          bin/build
+          bin/build-ja
