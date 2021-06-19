@@ -1,4 +1,4 @@
-name: CI
+name: CI-ja
 
 on:
   push:
@@ -77,7 +77,7 @@ jobs:
       - name: Build
         env:
           RAILS_ENV: production
-          RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
+          RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY_JA }}
           GIHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
         run: |
           bin/build-ja
