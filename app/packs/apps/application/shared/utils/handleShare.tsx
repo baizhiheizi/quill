@@ -78,6 +78,7 @@ export function ArticleShareButton(props: {
   const shareUrl = `${location.origin}/articles/${article.uuid}`;
   return (
     <Dropdown
+      trigger={['click', 'hover']}
       overlay={
         <Menu>
           {mixinEnv && (
