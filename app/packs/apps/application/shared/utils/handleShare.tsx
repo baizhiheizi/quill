@@ -23,7 +23,7 @@ export const handleArticleShare = (
     action: articleUrl,
     app_id: appId,
     description: `${article.author.name}`,
-    icon_url: `${location.origin}${imagePath(logoFile || 'logo.png')}`,
+    icon_url: `${imagePath(logoFile || 'logo.png')}`,
     title: article.title.slice(0, 36),
   };
   location.replace(
@@ -44,7 +44,7 @@ export const handleTagShare = (
     action: tagUrl,
     app_id: appId,
     description: `x ${tag.articlesCount}`,
-    icon_url: `${location.origin}${imagePath(logoFile || 'logo.png')}`,
+    icon_url: `${imagePath(logoFile || 'logo.png')}`,
     title: `#${tag.name}`,
   };
   handleShare(tagUrl, data, mixinEnv);
