@@ -21,11 +21,11 @@ import CommentsComponent from 'apps/application/components/CommentsComponent/Com
 import LoadingComponent from 'apps/application/components/LoadingComponent/LoadingComponent';
 import UserCardComponent from 'apps/application/components/UserCardComponent/UserCardComponent';
 import {
+  ArticleShareButton,
   CHINESE_MIXIN_GROUP_APP_ID,
   CHINESE_MIXIN_GROUP_AVATAR_URL,
   CHINESE_MIXIN_GROUP_CODE_ID,
   CHINESE_MIXIN_GROUP_DESCRIPTION,
-  handleArticleShare,
 } from 'apps/application/shared';
 import {
   MarkdownRendererComponent,
@@ -219,15 +219,11 @@ export default function ArticlePage() {
             {t('signature')}
           </Button>
         )}
-        <Button
-          type='link'
-          icon={<ShareAltOutlined />}
-          onClick={() =>
-            handleArticleShare(article, Boolean(mixinEnv), appId, logoFile)
-          }
-        >
-          {t('share')}
-        </Button>
+        <ArticleShareButton article={article}>
+          <Button type='link' icon={<ShareAltOutlined />}>
+            {t('share')}
+          </Button>
+        </ArticleShareButton>
       </div>
       <div className='mb-6'>
         <UserCardComponent user={article.author} />
