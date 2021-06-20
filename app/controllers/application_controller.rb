@@ -52,7 +52,8 @@ class ApplicationController < ActionController::Base
         app_name: Settings.app_name,
         page_title: Settings.page_title,
         attachment_endpoint: Rails.application.credentials.dig(:aliyun, :bucket_endpoint),
-        logo_file: Settings.logo_file || 'logo.png'
+        logo_file: Settings.logo_file || 'logo.png',
+        twitter_account: Settings.twitter_account
       },
       default_locale: I18n.default_locale,
       available_locales: I18n.available_locales
