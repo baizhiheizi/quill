@@ -7,7 +7,13 @@ set -e
 cp config/credentials/main.yml.enc config/credentials.yml.enc
 
 # generate locale file for FE
-bin/rake react_on_rails:locale
+bundle exec rake react_on_rails:locale
 
 # compile assets
-bin/rails assets:precompile
+bundle exec rake assets:precompile
+
+# clean assets
+bundle exec rake assets:clean
+
+# migrate DB
+bundle exec rake db:migrate
