@@ -25,7 +25,7 @@ module Resolvers
       when 'revenue'
         articles.order_by_revenue_usd
       when 'subscribed'
-        articles.where(author_id: current_user&.authoring_subscribe_user_ids)
+        articles.where(author_id: current_user&.authoring_subscribe_user_ids).order(created_at: :desc)
       end
     end
   end
