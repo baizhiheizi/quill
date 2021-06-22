@@ -1,6 +1,6 @@
 query TaggedArticleConnection(
   $tagId: ID!
-  $order: String!
+  $filter: String!
   $query: String
   $after: String
 ) {
@@ -13,7 +13,7 @@ query TaggedArticleConnection(
     subscribed
   }
   articleConnection(
-    order: $order
+    filter: $filter
     query: $query
     tagId: $tagId
     after: $after

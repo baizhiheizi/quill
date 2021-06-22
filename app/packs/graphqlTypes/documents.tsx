@@ -1457,7 +1457,7 @@ export type QueryArticleConnectionArgs = {
   query?: Maybe<Scalars['String']>;
   tagId?: Maybe<Scalars['ID']>;
   after?: Maybe<Scalars['String']>;
-  order: Scalars['String'];
+  filter: Scalars['String'];
   before?: Maybe<Scalars['String']>;
   first?: Maybe<Scalars['Int']>;
   last?: Maybe<Scalars['Int']>;
@@ -3985,8 +3985,8 @@ export type UpvoteCommentMutationHookResult = ReturnType<typeof useUpvoteComment
 export type UpvoteCommentMutationResult = Apollo.MutationResult<UpvoteCommentMutation>;
 export type UpvoteCommentMutationOptions = Apollo.BaseMutationOptions<UpvoteCommentMutation, UpvoteCommentMutationVariables>;
 export const ArticleConnectionDocument = gql`
-    query ArticleConnection($order: String!, $query: String, $after: String) {
-  articleConnection(order: $order, query: $query, after: $after) {
+    query ArticleConnection($filter: String!, $query: String, $after: String) {
+  articleConnection(filter: $filter, query: $query, after: $after) {
     nodes {
       uuid
       title
@@ -4036,7 +4036,7 @@ export const ArticleConnectionDocument = gql`
  * @example
  * const { data, loading, error } = useArticleConnectionQuery({
  *   variables: {
- *      order: // value for 'order'
+ *      filter: // value for 'filter'
  *      query: // value for 'query'
  *      after: // value for 'after'
  *   },
@@ -4391,7 +4391,7 @@ export type TagConnectionQueryHookResult = ReturnType<typeof useTagConnectionQue
 export type TagConnectionLazyQueryHookResult = ReturnType<typeof useTagConnectionLazyQuery>;
 export type TagConnectionQueryResult = Apollo.QueryResult<TagConnectionQuery, TagConnectionQueryVariables>;
 export const TaggedArticleConnectionDocument = gql`
-    query TaggedArticleConnection($tagId: ID!, $order: String!, $query: String, $after: String) {
+    query TaggedArticleConnection($tagId: ID!, $filter: String!, $query: String, $after: String) {
   tag(id: $tagId) {
     id
     name
@@ -4400,7 +4400,7 @@ export const TaggedArticleConnectionDocument = gql`
     subscribersCount
     subscribed
   }
-  articleConnection(order: $order, query: $query, tagId: $tagId, after: $after) {
+  articleConnection(filter: $filter, query: $query, tagId: $tagId, after: $after) {
     nodes {
       uuid
       title
@@ -4451,7 +4451,7 @@ export const TaggedArticleConnectionDocument = gql`
  * const { data, loading, error } = useTaggedArticleConnectionQuery({
  *   variables: {
  *      tagId: // value for 'tagId'
- *      order: // value for 'order'
+ *      filter: // value for 'filter'
  *      query: // value for 'query'
  *      after: // value for 'after'
  *   },

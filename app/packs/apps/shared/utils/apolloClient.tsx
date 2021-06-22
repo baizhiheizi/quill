@@ -80,7 +80,7 @@ export const apolloClient = (uri: string, csrfToken?: string) => {
           ]),
           articleConnection: customizedConnectionMergeFunction([
             'tagId',
-            'order',
+            'filter',
             'query',
           ]),
           commentConnection: customizedConnectionMergeFunction([

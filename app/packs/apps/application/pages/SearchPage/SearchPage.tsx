@@ -28,7 +28,7 @@ export default function SearchPage() {
 function SearchResultCompoent(props: { query?: string }) {
   const { query } = props;
   const { loading, data, fetchMore } = useArticleConnectionQuery({
-    variables: { query, order: 'default' },
+    variables: { query, filter: 'default' },
   });
 
   useEffect(() => {
