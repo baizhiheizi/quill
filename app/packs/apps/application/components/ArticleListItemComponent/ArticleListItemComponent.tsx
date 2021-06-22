@@ -5,7 +5,7 @@ import {
   MessageOutlined,
   ShareAltOutlined,
 } from '@ant-design/icons';
-import { Avatar, Button, List, Popover, Row, Space } from 'antd';
+import { Avatar, Button, List, Row, Space } from 'antd';
 import { ArticleShareButton } from 'apps/application/shared';
 import { Article } from 'graphqlTypes';
 import moment from 'moment';
@@ -13,7 +13,6 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import ArticleTagsComponent from '../ArticleTagsComponent/ArticleTagsComponent';
-import UserCardComponent from '../UserCardComponent/UserCardComponent';
 
 export default function ArticleListItemComponent(props: {
   article: Partial<Article>;

@@ -4090,6 +4090,7 @@ export const ArticleDocument = gql`
       avatarUrl
       mixinId
       bio
+      authoringSubscribed
     }
     randomReaders {
       name
