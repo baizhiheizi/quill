@@ -14,6 +14,3 @@ bundle exec rake assets:precompile
 
 # clean assets
 bundle exec rake assets:clean
-
-# migrate DB
-bundle exec rake db:migrate
