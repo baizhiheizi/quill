@@ -53,19 +53,18 @@ export default function ArticleListItemComponent(props: {
       <List.Item.Meta
         style={{ marginBottom: 0 }}
         avatar={
-          <Popover
-            content={<UserCardComponent user={article.author} />}
-            placement='bottomLeft'
-          >
+          <Link to={`/users/${article.author.mixinId}`}>
             <Avatar src={article.author.avatarUrl}>
               {article.author.name[0]}
             </Avatar>
-          </Popover>
+          </Link>
         }
         title={
           <Row>
             <div>
-              <div>{article.author.name}</div>
+              <Link to={`/users/${article.author.mixinId}`}>
+                {article.author.name}
+              </Link>
               <div className='text-xs text-gray-500'>
                 {moment(article.createdAt).fromNow()}
               </div>
