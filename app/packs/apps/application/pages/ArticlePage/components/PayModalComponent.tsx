@@ -44,7 +44,7 @@ export default function PayModalComponent(props: {
   const { currentUser } = useCurrentUser();
   const [assetId, setAssetId] = useState(articleAssetId);
   const [paying, setPaying] = useState(false);
-  const { mixinEnv } = useUserAgent();
+  const { mixinEnv, isMobile } = useUserAgent();
   const { t } = useTranslation();
   const [countdown, setTargetDate] = useCountDown();
   const [pollPayment, { stopPolling, data: paymentData }] = usePaymentLazyQuery(
@@ -178,7 +178,7 @@ export default function PayModalComponent(props: {
               <Alert message={t('refund_warning')} showIcon type='warning' />
             ) : (
               <div>
-                {mixinEnv ? (
+                {mixinEnv || isMobile ? (
                   <Button
                     disabled={preOrderLoading || payment?.state === 'refunded'}
                     loading={paying}
@@ -190,6 +190,8 @@ export default function PayModalComponent(props: {
                       ? `${Math.round(countdown / 1000)} s ${t(
                           'polling_payment',
                         )}`
+                      : isMobile
+                      ? t('open_mixin')
                       : t('pay')}
                   </Button>
                 ) : (

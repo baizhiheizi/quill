@@ -34,7 +34,7 @@ export default function RewardModalComponent(props: {
     swappable,
     articleCurrency,
   } = props;
-  const { mixinEnv } = useUserAgent();
+  const { mixinEnv, isMobile } = useUserAgent();
   const { t } = useTranslation();
   const [amount, setAmount] = useState('');
   const [assetId, setAssetId] = useState(articleAssetId);
@@ -70,7 +70,7 @@ export default function RewardModalComponent(props: {
     }&trace=${traceId}&memo=${encode64(
       JSON.stringify({ t: 'REWARD', a: articleUuid }),
     )}&asset=${assetId}&amount=${amount}`;
-    if (mixinEnv) {
+    if (mixinEnv || isMobile) {
       location.replace(url);
     } else {
       setPayUrl(url);
@@ -202,7 +202,7 @@ export default function RewardModalComponent(props: {
             {t('swap_supported_by')}{' '}
             <a
               href={
-                mixinEnv
+                mixinEnv || isMobile
                   ? `mixin://users/${FOXSWAP_APP_ID}`
                   : `https://mixin.one/codes/${FOXSWAP_CODE_ID}`
               }
@@ -216,7 +216,7 @@ export default function RewardModalComponent(props: {
       {Boolean(data?.payment?.state) ? (
         <Alert type='success' message={t('success_paid')} />
       ) : (
-        !mixinEnv && paying && <PayUrlQRCode url={payUrl} />
+        !(mixinEnv || isMobile) && paying && <PayUrlQRCode url={payUrl} />
       )}
     </Modal>
   );

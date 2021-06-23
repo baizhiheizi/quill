@@ -11,6 +11,7 @@ ja:
   cancel: キャンセル
   paid: 支払い済み
   delete: 削除
+  open_mixin: オープンLinks
   pay_with_messenger: LinksでQRコードを読み取ってください
   view_with_messenger: LinksでQRコードを読み取ってください
   success_submitted: 送信しました
