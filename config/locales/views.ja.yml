@@ -11,6 +11,7 @@ ja:
   cancel: キャンセル
   paid: 支払い済み
   delete: 削除
+  open_mixin: オープンLinks
   pay_with_messenger: LinksでQRコードを読み取ってください
   view_with_messenger: LinksでQRコードを読み取ってください
   success_submitted: 送信しました
@@ -68,10 +69,10 @@ ja:
   search_placeholder: タイトル 前書き 作者 タグ を入力
   users_count: ユーザー
   articles_count: 記事
-  author_revenue_total: 作者収益(現在価格)
-  reader_revenue_total: 読者収益(現在価格)
+  author_revenue_total: 作者収益（現在価格）
+  reader_revenue_total: 読者収益（現在価格）
   platform_revenue: 文商収益
-  revenue_chart: 収益チャート(USD)
+  revenue_chart: 収益チャート（USD）
   transactions: トランザクション
   rules_content: |
     ### 文商の仕組み
@@ -79,22 +80,29 @@ ja:
     文商での売り上げは以下のように3分割されます。
 
     50% → 作者
+
     40% → 読者
+
     10% → 文商
 
     例えば誰かが「100sat」で記事を購入した場合、
 
     「50sat」が作者
+
     「10sat」が手数料として文商
+
     「40sat」がすでに購入した読者群のウォレットに等分で贈られます。
 
     読者群への分配は
 
     すでに2人の読者がいる場合 → 3人目の購入が発生した時20satずつ贈られます。
+
     すでに4人の読者がいる場合 → 5人目の購入が発生した場合10satずつ贈られます。
     
     購入とは別途で、追加のリワード（投げ銭）が発生した場合においても同じ分配システムになっております。
+
     なぜこのような仕組みになっているかというと、「文商」は作者/読者ともに利益を得ることができるプラットフォームの構築を目指しているからです。
+
     私たちは作者だけでなく、読者の購入やフィードバックも「記事の価値」に貢献していると考えています。
     
   mixin_group: Linksグループ
@@ -104,8 +112,8 @@ ja:
   comment_deleted: 管理者により削除
   quote: 引用
   from: From
-  desc: 投稿時間(降順)
-  asc: 投稿時間(昇順)
+  desc: 投稿時間（降順）
+  asc: 投稿時間（昇順）
   upvotes: いいね数順
   write_something_first: 何かを書いてみましょう
   confirm_to_submit: 本当に送信しますか？
@@ -178,3 +186,7 @@ ja:
     正式リリース時に1000satoshi分のビットコインが届きます
   login_to_earn_btc: Linksで事前登録
   login_right_now_to_earn_btc_airdrop: 事前登録でビットコインがもらえます（先着2000名）
+  copied: コピー成功
+  mixin_contact: Links
+  copy_url: URLコピー
+  subscribed: フォロー

@@ -1,5 +1,5 @@
-query ArticleConnection($order: String!, $query: String, $after: String) {
-  articleConnection(order: $order, query: $query, after: $after) {
+query ArticleConnection($filter: String!, $query: String, $after: String) {
+  articleConnection(filter: $filter, query: $query, after: $after) {
     nodes {
       uuid
       title

@@ -10,14 +10,14 @@ import {
 import React from 'react';
 
 export default function ArticlesComponent(props: {
-  order: 'default' | 'lately' | 'revenue';
+  filter: 'default' | 'lately' | 'revenue' | 'subscribed';
 }) {
-  const { order } = props;
+  const { filter } = props;
   const { data, loading, fetchMore }: ArticleConnectionQueryHookResult =
     useArticleConnectionQuery({
       notifyOnNetworkStatusChange: true,
       variables: {
-        order,
+        filter,
       },
     });
 
@@ -44,7 +44,7 @@ export default function ArticlesComponent(props: {
             fetchMore({
               variables: {
                 after: endCursor,
-                order,
+                filter,
               },
             });
           }}

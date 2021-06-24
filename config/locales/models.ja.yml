@@ -17,7 +17,7 @@ ja:
     revenue: 収益
     author_revenue_total: 作者収益
     reader_tevenue_total: 読者収益
-    my_share: 自分の割合(%)
+    my_share: 自分の割合（%）
     state_text: 状態
     tags: タグ
     created_at: 作成日
@@ -57,9 +57,9 @@ ja:
       refunded: 返金済み
   user:
     default_bio: 何も記入されていません
-    author_revenue_total: 作者収益(USD)
-    reader_revenue_total: 読者収益(USD)
-    payment_total_usd: 支払い済み(USD)
+    author_revenue_total: 作者収益（USD）
+    reader_revenue_total: 読者収益（USD）
+    payment_total_usd: 支払い済み（USD）
     articles_count: 公開中
     bought_articles_count: 購入済み
   transfer:

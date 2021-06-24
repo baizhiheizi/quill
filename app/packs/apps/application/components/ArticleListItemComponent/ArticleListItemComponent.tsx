@@ -5,22 +5,18 @@ import {
   MessageOutlined,
   ShareAltOutlined,
 } from '@ant-design/icons';
-import { Avatar, Button, List, Popover, Row, Space } from 'antd';
-import { handleArticleShare } from 'apps/application/shared';
-import { usePrsdigg, useUserAgent } from 'apps/shared';
+import { Avatar, Button, List, Row, Space } from 'antd';
+import { ArticleShareButton } from 'apps/application/shared';
 import { Article } from 'graphqlTypes';
 import moment from 'moment';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import ArticleTagsComponent from '../ArticleTagsComponent/ArticleTagsComponent';
-import UserCardComponent from '../UserCardComponent/UserCardComponent';
 
 export default function ArticleListItemComponent(props: {
   article: Partial<Article>;
 }) {
-  const { mixinEnv } = useUserAgent();
-  const { appId } = usePrsdigg();
   const { i18n } = useTranslation();
   moment.locale(i18n.language);
   const { article } = props;
@@ -36,11 +32,9 @@ export default function ArticleListItemComponent(props: {
                 currencySymbol={article.currency.symbol}
               />,
               <CommentsCountAction commentsCount={article.commentsCount} />,
-              <ShareAction
-                article={article}
-                mixinEnv={mixinEnv}
-                appId={appId}
-              />,
+              <ArticleShareButton article={article}>
+                <Button size='small' type='text' icon={<ShareAltOutlined />} />
+              </ArticleShareButton>,
             ]
           : [
               <RevenueAction
@@ -49,30 +43,27 @@ export default function ArticleListItemComponent(props: {
               />,
               <CommentsCountAction commentsCount={article.commentsCount} />,
               <UpdateVoteRatioAction upvoteRatio={article.upvoteRatio} />,
-              <ShareAction
-                article={article}
-                mixinEnv={mixinEnv}
-                appId={appId}
-              />,
+              <ArticleShareButton article={article}>
+                <Button size='small' type='text' icon={<ShareAltOutlined />} />
+              </ArticleShareButton>,
             ]
       }
     >
       <List.Item.Meta
         style={{ marginBottom: 0 }}
         avatar={
-          <Popover
-            content={<UserCardComponent user={article.author} />}
-            placement='bottomLeft'
-          >
+          <Link to={`/users/${article.author.mixinId}`}>
             <Avatar src={article.author.avatarUrl}>
               {article.author.name[0]}
             </Avatar>
-          </Popover>
+          </Link>
         }
         title={
           <Row>
             <div>
-              <div>{article.author.name}</div>
+              <Link to={`/users/${article.author.mixinId}`}>
+                {article.author.name}
+              </Link>
               <div className='text-xs text-gray-500'>
                 {moment(article.createdAt).fromNow()}
               </div>
@@ -130,29 +121,5 @@ function UpdateVoteRatioAction(props: { upvoteRatio: number }) {
       {upvoteRatio >= 50 ? <LikeOutlined /> : <DislikeOutlined />}
       <span>{upvoteRatio === null ? '' : `${upvoteRatio}%`}</span>
     </Space>
-  );
-}
-
-function ShareAction(props: {
-  article: Partial<Article>;
-  mixinEnv: boolean;
-  appId: string;
-}) {
-  return (
-    <Button
-      size='small'
-      type='text'
-      icon={
-        <ShareAltOutlined
-          onClick={() => {
-            handleArticleShare(
-              props.article,
-              Boolean(props.mixinEnv),
-              props.appId,
-            );
-          }}
-        />
-      }
-    />
   );
 }

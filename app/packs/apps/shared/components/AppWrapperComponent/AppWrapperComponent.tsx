@@ -20,7 +20,12 @@ import LoadingComponent from '../LoadingComponent/LoadingComponent';
 export function AppWrapperComponent(props: {
   csrfToken: string;
   currentUser?: Partial<User>;
-  prsdigg: { appId: string; pageTitle?: string; attachmentEndpoint?: string };
+  prsdigg: {
+    appId: string;
+    pageTitle?: string;
+    attachmentEndpoint?: string;
+    appName?: string;
+  };
   defaultLocale: 'en' | 'ja' | 'zh-CN';
   availableLocales: [string];
   children: React.ReactChild;

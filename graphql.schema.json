@@ -10210,7 +10210,7 @@
                 "deprecationReason": null
               },
               {
-                "name": "order",
+                "name": "filter",
                 "description": null,
                 "type": {
                   "kind": "NON_NULL",

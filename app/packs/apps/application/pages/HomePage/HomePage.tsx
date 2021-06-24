@@ -1,4 +1,5 @@
 import { Tabs } from 'antd';
+import { useCurrentUser } from 'apps/shared';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useHistory, useLocation } from 'react-router-dom';
@@ -8,10 +9,11 @@ import TagsComponent from './components/TagsComponent';
 
 export default function HomePage() {
   const { t } = useTranslation();
+  const { currentUser } = useCurrentUser();
   const history = useHistory();
   const location = useLocation<any>();
   const [activeTabKey, setActiveTabKey] = useState<
-    'default' | 'tags' | 'comments'
+    'popularity' | 'lately' | 'revenue' | 'subscribed' | 'tags' | 'comments'
   >(location.state?.activeTabKey || 'default');
   return (
     <Tabs
@@ -25,14 +27,19 @@ export default function HomePage() {
       }}
     >
       <Tabs.TabPane tab={t('order_by_popularity')} key='popularity'>
-        <ArticlesComponent order='default' />
+        <ArticlesComponent filter='default' />
       </Tabs.TabPane>
       <Tabs.TabPane tab={t('order_by_lately')} key='lately'>
-        <ArticlesComponent order='lately' />
+        <ArticlesComponent filter='lately' />
       </Tabs.TabPane>
       <Tabs.TabPane tab={t('order_by_revenue')} key='revenue'>
-        <ArticlesComponent order='revenue' />
+        <ArticlesComponent filter='revenue' />
       </Tabs.TabPane>
+      {currentUser && (
+        <Tabs.TabPane tab={t('subscribed')} key='subscribed'>
+          <ArticlesComponent filter='subscribed' />
+        </Tabs.TabPane>
+      )}
       <Tabs.TabPane tab={t('tags')} key='tags'>
         <TagsComponent />
       </Tabs.TabPane>

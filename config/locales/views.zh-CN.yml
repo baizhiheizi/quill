@@ -11,6 +11,7 @@ zh-CN:
   cancel: 取消
   paid: 支付了
   delete: 删除
+  open_mixin: 打开 Mixin Messenger
   pay_with_messenger: 请使用 Mixin Messenger 扫码支付
   view_with_messenger: 请使用 Mixin Messenger 扫码查看
   success_submitted: 成功提交
@@ -194,3 +195,7 @@ zh-CN:
     您将收到 1000 Satoshi 空投
   login_to_earn_btc: 登录赢取 BTC
   login_right_now_to_earn_btc_airdrop: 立即登录，当正式发布时，您将收到 BTC 空投
+  copied: 已复制
+  mixin_contact: Mixin
+  copy_url: 复制URL
+  subscribed: 已订阅

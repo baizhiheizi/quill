@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+# throw error when failed
+set -e
+
+# use main credentials
+cp config/credentials/main.yml.enc config/credentials.yml.enc
+
+# generate locale file for FE
+bundle exec rake react_on_rails:locale
+
+# compile assets
+bundle exec rake assets:precompile
+
+# clean assets
+bundle exec rake assets:clean

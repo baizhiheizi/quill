@@ -6,6 +6,7 @@ import {
   LikeOutlined,
 } from '@ant-design/icons';
 import Editor, { commands } from '@uiw/react-md-editor';
+import { Link } from 'react-router-dom';
 import {
   Avatar,
   Button,
@@ -244,14 +245,11 @@ ${comment.content.replace(/^/gm, '> ')}
                 ]}
                 author={comment.author.name}
                 avatar={
-                  <Popover
-                    content={<UserCardComponent user={comment.author} />}
-                    placement='bottomLeft'
-                  >
+                  <Link to={`/users/${comment.author.mixinId}`}>
                     <Avatar src={comment.author.avatarUrl}>
                       {comment.author.name[0]}
                     </Avatar>
-                  </Popover>
+                  </Link>
                 }
                 content={<MarkdownRendererComponent source={comment.content} />}
                 datetime={<span>{moment(comment.createdAt).fromNow()}</span>}

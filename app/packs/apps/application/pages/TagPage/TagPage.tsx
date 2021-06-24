@@ -20,7 +20,7 @@ export default function TagPage() {
   const { appId, pageTitle } = usePrsdigg();
   const { mixinEnv } = useUserAgent();
   const { loading, data, fetchMore } = useTaggedArticleConnectionQuery({
-    variables: { tagId: id, order: 'lately' },
+    variables: { tagId: id, filter: 'lately' },
   });
   const [toggleSubscribeTagAction] = useToggleSubscribeTagActionMutation();
 
@@ -99,7 +99,7 @@ export default function TagPage() {
               fetchMore({
                 variables: {
                   after: endCursor,
-                  order: 'lately',
+                  filter: 'lately',
                 },
               });
             }}

@@ -11,6 +11,7 @@ en:
   cancel: Cancel
   paid: Paid
   delete: Delete
+  open_mixin: Open Mixin Messenger
   pay_with_messenger: Please scan the QRCode using Mixin Messenger
   view_with_messenger: Please scan the QRCode using Mixin Messenger
   success_submitted: Submitted
@@ -194,3 +195,7 @@ en:
     once we launched soon.
   login_to_earn_btc: Login To Earn BTC
   login_right_now_to_earn_btc_airdrop: Login right now, you'll receive BTC airdrop once we launched soon.
+  copied: Copied
+  mixin_contact: Mixin
+  copy_url: Copy URL
+  subscribed: Subscribed

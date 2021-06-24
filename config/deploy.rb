@@ -88,6 +88,12 @@ task :link_credentials_file do
   command %(cp "./config/credentials/#{fetch(:stage)}.yml.enc" "./config/credentials.yml.enc")
 end
 
+desc 'generate translation.json'
+task :rake_react_on_rails_locale do
+  command %(echo "-----> exec: bin/rake react_on_rails:locale")
+  command %(#{fetch(:rake)} react_on_rails:locale)
+end
+
 desc 'Deploys the current version to the server.'
 task :deploy do
   command %(echo "-----> Server: #{fetch(:domain)}")
@@ -101,6 +107,8 @@ task :deploy do
     invoke :'sidekiq:reload'
     invoke :'sidekiq-2:reload'
     invoke :'bundle:install'
+    invoke :rake_react_on_rails_locale
+    invoke :'rails:assets_precompile'
     invoke :'rails:db_migrate'
     invoke :'deploy:cleanup'
 

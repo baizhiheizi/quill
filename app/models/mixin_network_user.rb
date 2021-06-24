@@ -84,7 +84,7 @@ class MixinNetworkUser < ApplicationRecord
   def update_avatar
     img = File.open DEFAULT_AVATAR_FILE
     r = mixin_api.update_me(
-      full_name: [Settings.app_name, 'Broker'].join(' ').strip,
+      full_name: default_name,
       avatar_base64: Base64.strict_encode64(img.read)
     )
     update raw: r['data'] if r['data'].present?
@@ -92,8 +92,19 @@ class MixinNetworkUser < ApplicationRecord
     img.close
   end
 
+  def update_name
+    r = mixin_api.update_me(
+      full_name: default_name
+    )
+    update name: r['data']['full_name'], raw: r['data'] if r['data'].present?
+  end
+
   def update_avatar_async
     MixinNetworkUserUpdateAvatarWorker.perform_async id
+  end
+
+  def default_name
+    Settings.broker_name || 'PRSDigg Broker'
   end
 
   private
@@ -101,7 +112,7 @@ class MixinNetworkUser < ApplicationRecord
   def setup_attributes
     return unless new_record?
 
-    r = PrsdiggBot.api.create_user(name || 'PRSDigg Broker', key_type: 'Ed25519')
+    r = PrsdiggBot.api.create_user(name || default_name, key_type: 'Ed25519')
     raise r.inspect if r['error'].present?
 
     self.raw = r['data']

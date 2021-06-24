@@ -12,20 +12,20 @@ import {
   Card,
   Col,
   Divider,
+  message,
   Progress,
   Row,
-  Space,
   Statistic,
 } from 'antd';
 import CommentsComponent from 'apps/application/components/CommentsComponent/CommentsComponent';
 import LoadingComponent from 'apps/application/components/LoadingComponent/LoadingComponent';
 import UserCardComponent from 'apps/application/components/UserCardComponent/UserCardComponent';
 import {
+  ArticleShareButton,
   CHINESE_MIXIN_GROUP_APP_ID,
   CHINESE_MIXIN_GROUP_AVATAR_URL,
   CHINESE_MIXIN_GROUP_CODE_ID,
   CHINESE_MIXIN_GROUP_DESCRIPTION,
-  handleArticleShare,
 } from 'apps/application/shared';
 import {
   MarkdownRendererComponent,
@@ -38,6 +38,7 @@ import {
   useArticleQuery,
   useDownvoteArticleMutation,
   User,
+  useToggleAuthoringSubscribeUserActionMutation,
   useUpvoteArticleMutation,
 } from 'graphqlTypes';
 import moment from 'moment';
@@ -54,7 +55,7 @@ export default function ArticlePage() {
   const { uuid } = useParams<{ uuid: string }>();
   const [rewardModalVisible, setRewardModalVisible] = useState(false);
   const [payModalVisible, setPayModalVisible] = useState(false);
-  const { appId, pageTitle } = usePrsdigg();
+  const { pageTitle } = usePrsdigg();
   const { mixinEnv } = useUserAgent();
   const { currentUser } = useCurrentUser();
   const { loading, data, refetch }: ArticleQueryHookResult = useArticleQuery({
@@ -62,6 +63,28 @@ export default function ArticlePage() {
   });
   const [upvoteArticle] = useUpvoteArticleMutation();
   const [downvoteArticle] = useDownvoteArticleMutation();
+  const [toggleAuthoringSubscribeUserAction] =
+    useToggleAuthoringSubscribeUserActionMutation({
+      update(
+        _,
+        {
+          data: {
+            toggleAuthoringSubscribeUserAction: { error },
+          },
+        },
+      ) {
+        if (error) {
+          message.error(error);
+        } else {
+          message.success(
+            article.author.authoringSubscribed
+              ? t('success_unsubscribed')
+              : t('success_subscribed'),
+          );
+          refetch();
+        }
+      },
+    });
 
   useEffect(() => {
     return () => (document.title = pageTitle);
@@ -84,12 +107,31 @@ export default function ArticlePage() {
       <div className='mb-4 font-sans text-2xl font-semibold'>
         {article.title}
       </div>
-      <div style={{ color: '#aaa', marginBottom: '1rem' }}>
-        <Space>
+      <div className='flex items-center mb-4 text-gray-500 space-x-2'>
+        <Link
+          className='flex items-center space-x-2'
+          to={`/users/${article.author.mixinId}`}
+        >
           <Avatar size='small' src={article.author.avatarUrl} />
           <span>{article.author.name}</span>
-          <span>{moment(article.createdAt).format('YYYY/MM/DD HH:mm')}</span>
-        </Space>
+        </Link>
+        <span>{moment(article.createdAt).format('YYYY/MM/DD HH:mm')}</span>
+        {currentUser &&
+          currentUser.mixinId !== article.author.mixinId &&
+          !article.author.authoringSubscribed && (
+            <Button
+              type='primary'
+              shape='round'
+              size='small'
+              onClick={() =>
+                toggleAuthoringSubscribeUserAction({
+                  variables: { input: { mixinId: article.author.mixinId } },
+                })
+              }
+            >
+              {t('subscribe')}
+            </Button>
+          )}
       </div>
       <div
         style={{
@@ -219,13 +261,11 @@ export default function ArticlePage() {
             {t('signature')}
           </Button>
         )}
-        <Button
-          type='link'
-          icon={<ShareAltOutlined />}
-          onClick={() => handleArticleShare(article, Boolean(mixinEnv), appId)}
-        >
-          {t('share')}
-        </Button>
+        <ArticleShareButton article={article}>
+          <Button type='link' icon={<ShareAltOutlined />}>
+            {t('share')}
+          </Button>
+        </ArticleShareButton>
       </div>
       <div className='mb-6'>
         <UserCardComponent user={article.author} />
