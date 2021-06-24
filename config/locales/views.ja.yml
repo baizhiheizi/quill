@@ -69,10 +69,10 @@ ja:
   search_placeholder: タイトル 前書き 作者 タグ を入力
   users_count: ユーザー
   articles_count: 記事
-  author_revenue_total: 作者収益(現在価格)
-  reader_revenue_total: 読者収益(現在価格)
+  author_revenue_total: 作者収益（現在価格）
+  reader_revenue_total: 読者収益（現在価格）
   platform_revenue: 文商収益
-  revenue_chart: 収益チャート(USD)
+  revenue_chart: 収益チャート（USD）
   transactions: トランザクション
   rules_content: |
     ### 文商の仕組み
@@ -112,8 +112,8 @@ ja:
   comment_deleted: 管理者により削除
   quote: 引用
   from: From
-  desc: 投稿時間(降順)
-  asc: 投稿時間(昇順)
+  desc: 投稿時間（降順）
+  asc: 投稿時間（昇順）
   upvotes: いいね数順
   write_something_first: 何かを書いてみましょう
   confirm_to_submit: 本当に送信しますか？
