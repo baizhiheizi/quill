@@ -191,7 +191,7 @@ export default function PayModalComponent(props: {
                           'polling_payment',
                         )}`
                       : isMobile
-                      ? t('open_mixin')
+                      ? t('pay_in_mixin')
                       : t('pay')}
                   </Button>
                 ) : (

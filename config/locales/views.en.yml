@@ -11,7 +11,7 @@ en:
   cancel: Cancel
   paid: Paid
   delete: Delete
-  open_mixin: Open Mixin Messenger
+  pay_in_mixin: Pay in Mixin
   pay_with_messenger: Please scan the QRCode using Mixin Messenger
   view_with_messenger: Please scan the QRCode using Mixin Messenger
   success_submitted: Submitted

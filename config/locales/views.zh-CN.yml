@@ -11,7 +11,7 @@ zh-CN:
   cancel: 取消
   paid: 支付了
   delete: 删除
-  open_mixin: 打开 Mixin Messenger
+  pay_in_mixin: Mixin 支付
   pay_with_messenger: 请使用 Mixin Messenger 扫码支付
   view_with_messenger: 请使用 Mixin Messenger 扫码查看
   success_submitted: 成功提交
