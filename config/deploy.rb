@@ -107,8 +107,8 @@ task :deploy do
     invoke :'sidekiq:reload'
     invoke :'sidekiq-2:reload'
     invoke :'bundle:install'
-    invoke :rake_react_on_rails_locale
-    invoke :'rails:assets_precompile'
+    # invoke :rake_react_on_rails_locale
+    # invoke :'rails:assets_precompile'
     invoke :'rails:db_migrate'
     invoke :'deploy:cleanup'
 
