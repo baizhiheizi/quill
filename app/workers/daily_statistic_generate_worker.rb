@@ -5,6 +5,6 @@ class DailyStatisticGenerateWorker
   sidekiq_options queue: :low, retry: false
 
   def perform
-    DailyStatistic.generate Time.current.yesterday
+    DailyStatistic.generate date: Time.current.yesterday
   end
 end

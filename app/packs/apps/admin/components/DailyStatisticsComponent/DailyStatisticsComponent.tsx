@@ -44,14 +44,14 @@ export default function DailyStatisticsComponent() {
       title: 'New Users',
     },
     {
-      dataIndex: 'paidUsersCount',
-      key: 'paidUsersCount',
-      title: 'paid Users(accumulated)',
-    },
-    {
       dataIndex: 'newPayersCount',
       key: 'newPayersCount',
       title: 'Paid Users(new)',
+    },
+    {
+      dataIndex: 'paidUsersCount',
+      key: 'paidUsersCount',
+      title: 'paid Users(accumulated)',
     },
     {
       dataIndex: 'newPaymentsCount',

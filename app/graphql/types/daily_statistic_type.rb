@@ -12,7 +12,7 @@ module Types
     field :new_articles_count, Int, null: true
 
     def date
-      object.datetime.strftime('%Y-%M-%D')
+      object.datetime.strftime('%Y-%m-%d')
     end
   end
 end
