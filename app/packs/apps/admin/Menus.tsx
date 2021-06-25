@@ -2,6 +2,7 @@ import {
   CommentOutlined,
   DashboardOutlined,
   FileTextOutlined,
+  LineChartOutlined,
   LinkOutlined,
   LogoutOutlined,
   MessageOutlined,
@@ -39,7 +40,7 @@ export default function Menus() {
       </Menu.Item>
       <Menu.SubMenu
         key='statistic'
-        icon={<FileTextOutlined />}
+        icon={<LineChartOutlined />}
         title='Statistic'
       >
         <Menu.Item key='daily_statistic'>

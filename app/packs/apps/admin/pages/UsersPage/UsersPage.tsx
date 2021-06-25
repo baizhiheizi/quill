@@ -41,11 +41,11 @@ export default function UsersPage() {
             onChange={(value) => setOrderBy(value)}
           >
             <Select.Option value='default'>Default Order</Select.Option>
+            <Select.Option value='orders_total'>
+              Orders Total DESC
+            </Select.Option>
             <Select.Option value='revenue_total'>
               Revenue Total DESC
-            </Select.Option>
-            <Select.Option value='payment_total'>
-              Payment Total DESC
             </Select.Option>
             <Select.Option value='articles_count'>
               Articles Count DESC
@@ -152,16 +152,30 @@ export function UsersComponent(props: {
       title: 'Comments',
     },
     {
-      dataIndex: 'revenueTotal',
-      key: 'revenueTotal',
-      render: (_, user) => user.statistics.revenueTotalUsd.toFixed(2),
-      title: 'Revenue Total',
+      dataIndex: 'boughtArticlesCount',
+      key: 'boughtArticlesCount',
+      render: (_, user) => user.statistics.boughtArticlesCount,
+      title: 'Bought Articles',
     },
     {
-      dataIndex: 'paymentTotal',
-      key: 'paymentTotal',
-      render: (_, user) => user.statistics.paymentTotalUsd.toFixed(2),
-      title: 'Payment Total',
+      dataIndex: 'revenue',
+      key: 'revenue',
+      render: (_, user) => (
+        <>{`${user.statistics.revenueTotalBtc.toFixed(
+          8,
+        )} ($${user.statistics.revenueTotalUsd.toFixed(2)})`}</>
+      ),
+      title: 'Revenue(BTC/USD)',
+    },
+    {
+      dataIndex: 'payment',
+      key: 'payment',
+      render: (_, user) => (
+        <>{`${user.statistics.paymentTotalBtc.toFixed(
+          8,
+        )} ($${user.statistics.paymentTotalUsd.toFixed(2)})`}</>
+      ),
+      title: 'Payment(BTC/USD)',
     },
     {
       dataIndex: 'bannedAt',

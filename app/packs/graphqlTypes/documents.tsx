@@ -3628,8 +3628,11 @@ export const AdminUserConnectionDocument = gql`
       statistics {
         articlesCount
         commentsCount
+        boughtArticlesCount
         revenueTotalUsd
         paymentTotalUsd
+        revenueTotalBtc
+        paymentTotalBtc
       }
       createdAt
       bannedAt

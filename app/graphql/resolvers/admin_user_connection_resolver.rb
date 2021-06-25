@@ -27,8 +27,8 @@ module Resolvers
       case params[:order_by]
       when 'revenue_total'
         users.order_by_revenue_total
-      when 'payment_total'
-        users.order_by_payment_total
+      when 'orders_total'
+        users.order_by_orders_total
       when 'articles_count'
         users.order_by_articles_count
       when 'comments_count'

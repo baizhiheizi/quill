@@ -20,8 +20,11 @@ query AdminUserConnection(
       statistics {
         articlesCount
         commentsCount
+        boughtArticlesCount
         revenueTotalUsd
         paymentTotalUsd
+        revenueTotalBtc
+        paymentTotalBtc
       }
       createdAt
       bannedAt

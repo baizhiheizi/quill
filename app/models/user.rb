@@ -88,15 +88,15 @@ class User < ApplicationRecord
         SQL
       ).order(revenue_total: :desc)
   }
-  scope :order_by_payment_total, lambda {
-    joins(:payments)
+  scope :order_by_orders_total, lambda {
+    joins(:orders)
       .group(:id)
       .select(
         <<~SQL.squish
           users.*,
-          SUM(payments.amount) AS payment_total
+          SUM(orders.value_btc) AS orders_total
         SQL
-      ).order(payment_total: :desc)
+      ).order(orders_total: :desc)
   }
   scope :order_by_articles_count, lambda {
     joins(:articles)
