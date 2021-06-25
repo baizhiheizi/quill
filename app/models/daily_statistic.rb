@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: statistics
@@ -20,7 +22,7 @@ class DailyStatistic < Statistic
 
   default_scope -> { order(datetime: :asc) }
 
-  def self.generate(date)
+  def self.generate(date: Time.current.yesterday)
     create_with(
       new_users_count: User.where(created_at: date.beginning_of_day...date.end_of_day).count,
       paid_users_count: Payment.completed.where(created_at: ...date.end_of_day).pluck(:opponent_id).uniq.count,
