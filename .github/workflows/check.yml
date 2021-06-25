@@ -4,7 +4,8 @@ on:
   push:
     branches-ignore:
       - 'master'
-      - 'build'
+      - 'build-main'
+      - 'build-ja'
   pull_request:
     branches:
       - 'master'
