@@ -55,5 +55,6 @@ module Types
     field :admin_wallet_balance, resolver: Resolvers::AdminWalletBalanceResolver
     field :admin_prs_account_connection, resolver: Resolvers::AdminPrsAccountConnectionResolver
     field :admin_prs_transaction_connection, resolver: Resolvers::AdminPrsTransactionConnectionResolver
+    field :admin_daily_statistic_connection, resolver: Resolvers::AdminDailyStatisticConnectionResolver
   end
 end

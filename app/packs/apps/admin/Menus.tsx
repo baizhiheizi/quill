@@ -37,6 +37,17 @@ export default function Menus() {
           <span>Dashboard</span>
         </Link>
       </Menu.Item>
+      <Menu.SubMenu
+        key='statistic'
+        icon={<FileTextOutlined />}
+        title='Statistic'
+      >
+        <Menu.Item key='daily_statistic'>
+          <Link to='/daily_statistic'>
+            <span>Daily</span>
+          </Link>
+        </Menu.Item>
+      </Menu.SubMenu>
       <Menu.Item key='users'>
         <Link to='/users'>
           <UserOutlined />

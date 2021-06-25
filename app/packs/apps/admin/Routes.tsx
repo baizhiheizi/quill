@@ -8,6 +8,7 @@ import ArticlesPage from './pages/ArticlesPage/ArticlesPage';
 import BalancePage from './pages/BalancePage/BalancePage';
 import BonusesPage from './pages/BonusesPage/BonusesPage';
 import CommentsPage from './pages/CommentsPage/CommentsPage';
+import DailyStatisticsPage from './pages/DailyStatisticsPage/DailyStatisticsPage';
 import MixinMessagesPage from './pages/MixinMessagesPage/MixinMessagesPage';
 import MixinNetworkSnapshotsPage from './pages/MixinNetworkSnapshotsPage/MixinNetworkSnapshotsPage';
 import OverviewPage from './pages/OverviewPage/OverviewPage';
@@ -24,6 +25,9 @@ export default function Routes() {
     <Switch>
       <Route path='/' exact>
         <OverviewPage />
+      </Route>
+      <Route path='/daily_statistic' exact>
+        <DailyStatisticsPage />
       </Route>
       <Route path='/users' exact>
         <UsersPage />

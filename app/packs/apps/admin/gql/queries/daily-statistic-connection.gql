@@ -1,0 +1,26 @@
+query AdminDailyStatisticConnection(
+  $startDate: String
+  $endDate: String
+  $after: String
+) {
+  adminDailyStatisticConnection(
+    startDate: $startDate
+    endDate: $endDate
+    after: $after
+  ) {
+    nodes {
+      date
+      datetime
+      newUsersCount
+      paidUsersCount
+      newPaymentsCount
+      newPayersCount
+      newArticlesCount
+      createdAt
+    }
+    pageInfo {
+      hasNextPage
+      endCursor
+    }
+  }
+}

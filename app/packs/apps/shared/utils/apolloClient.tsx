@@ -44,6 +44,10 @@ export const apolloClient = (uri: string, csrfToken?: string) => {
             'authorMixinUuid',
           ]),
           adminBonusConnection: customizedConnectionMergeFunction(),
+          adminDailyStatisticConnection: customizedConnectionMergeFunction([
+            'startDate',
+            'endDate',
+          ]),
           adminMixinMessageConnection: customizedConnectionMergeFunction(),
           adminMixinNetworkSnapshotConnection:
             customizedConnectionMergeFunction(['filter', 'userId']),
