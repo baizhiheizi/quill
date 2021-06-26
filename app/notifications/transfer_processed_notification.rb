@@ -28,7 +28,8 @@ class TransferProcessedNotification < ApplicationNotification
       icon_url: params[:transfer].currency.icon_url,
       title: format('%.8f', params[:transfer].amount),
       description: params[:transfer].currency.symbol,
-      action: "mixin://snapshots?trace=#{params[:transfer].trace_id}"
+      action: "mixin://snapshots?trace=#{params[:transfer].trace_id}",
+      shareable: false
     }
   end
 
