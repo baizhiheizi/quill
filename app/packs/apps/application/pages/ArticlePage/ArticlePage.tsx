@@ -107,7 +107,7 @@ export default function ArticlePage() {
       <div className='mb-4 font-sans text-2xl font-semibold'>
         {article.title}
       </div>
-      <div className='flex items-center mb-4 text-gray-500 space-x-2'>
+      <div className='flex flex-wrap items-center mb-4 text-gray-500 space-x-2'>
         <Link
           className='flex items-center space-x-2'
           to={`/users/${article.author.mixinId}`}
