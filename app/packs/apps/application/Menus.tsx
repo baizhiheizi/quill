@@ -1,4 +1,5 @@
 import {
+  ArrowLeftOutlined,
   GithubOutlined,
   GlobalOutlined,
   MenuOutlined,
@@ -14,13 +15,14 @@ import {
 import { useSwitchLocaleMutation } from 'graphqlTypes';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { OPEN_SOURCE_URL } from './shared';
 
 export default function Menus() {
+  const history = useHistory();
   const { currentUser } = useCurrentUser();
-  const { logoFile } = usePrsdigg();
-  const { isMobile } = useUserAgent();
+  const { appName, logoFile } = usePrsdigg();
+  const { mixinEnv, isMobile } = useUserAgent();
   const [drawerVisible, setDrawerVisible] = useState(false);
   const { t, i18n } = useTranslation();
   const [switchLocale] = useSwitchLocaleMutation();
@@ -184,7 +186,7 @@ export default function Menus() {
   return (
     <React.Fragment>
       {isMobile.phone ? (
-        <div>
+        <>
           <Drawer
             bodyStyle={{ padding: 0 }}
             visible={drawerVisible}
@@ -194,22 +196,32 @@ export default function Menus() {
           >
             <MenuConent mode='vertical' />
           </Drawer>
-          <div
-            style={{
-              position: 'fixed',
-              right: '0px',
-              bottom: '100px',
-              zIndex: 11,
-            }}
-          >
-            <Button
-              type='primary'
-              size='large'
-              onClick={() => setDrawerVisible(true)}
-              icon={<MenuOutlined />}
-            />
+          <div className='sticky top-0 z-50 flex items-center justify-between px-2 py-1 bg-white shadow-sm'>
+            <div
+              className='flex items-center'
+              onClick={() => history.replace('/')}
+            >
+              <Avatar size='large' src={imagePath(logoFile)} />
+              <span className='ml-2 text-lg font-semibold'>{appName}</span>
+            </div>
+            <div className='flex items-center'>
+              <Button
+                className='text-gray-500'
+                type='link'
+                size='large'
+                onClick={() => history.goBack()}
+                icon={<ArrowLeftOutlined />}
+              />
+              <Button
+                className={`text-gray-500 ${mixinEnv && 'mr-24'}`}
+                type='link'
+                size='large'
+                onClick={() => setDrawerVisible(true)}
+                icon={<MenuOutlined />}
+              />
+            </div>
           </div>
-        </div>
+        </>
       ) : (
         <Layout.Header
           style={{
