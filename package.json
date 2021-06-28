@@ -46,7 +46,7 @@
     "less": "^4.1.1",
     "less-loader": "^10.0.0",
     "mark.js": "^8.11.1",
-    "mermaid": "^8.10.2",
+    "mermaid": "^8.11.0",
     "mini-css-extract-plugin": "^1.6.1",
     "postcss": "^8.3.5",
     "postcss-import": "^14.0.2",
