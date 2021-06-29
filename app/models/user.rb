@@ -211,7 +211,7 @@ class User < ApplicationRecord
   end
 
   def mixin_id_in_whitelist?
-    mixin_id.in? Settings.whitelist&.mixin_id&.map(&:to_s)
+    mixin_id.in? (Settings.whitelist&.mixin_id || []).map(&:to_s)
   end
 
   def phone_country_code_in_whitelist?

@@ -59,9 +59,7 @@ swapable_assets:
 whitelist:
   enable: false
   phone_country_code: 
-    - 86
   mixin_id:
-    - 1051445
 
 # 4swap
 foxswap:
