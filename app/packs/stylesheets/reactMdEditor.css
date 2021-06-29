@@ -265,6 +265,12 @@
 .wmde-markdown-color code[class*='language-'] .token.string {
   color: #0a53c1;
 }
+
+.wmde-markdown > iframe {
+  max-width: 100%;
+  height: auto;
+}
+
 .w-md-editor-bar {
   position: absolute;
   cursor: s-resize;
