@@ -14,7 +14,13 @@ import {
 } from 'antd';
 import EditableTagsComponent from 'apps/dashboard/components/EditableTagsComponent/EditableTagsComponent';
 import LoadingComponent from 'apps/dashboard/components/LoadingComponent/LoadingComponent';
-import { markdownPlugins, markdownRenderers, uploadCommand } from 'apps/shared';
+import {
+  markdownPlugins,
+  markdownRenderers,
+  markdownTransformLinkUrl,
+  uploadCommand,
+  markdownPreviewOptions,
+} from 'apps/shared';
 import {
   Currency,
   useCreateArticleMutation,
@@ -136,12 +142,9 @@ export default function ArticleNewPage() {
             textareaProps={{
               placeholder: t('article.form.content_place_holder'),
             }}
-            previewOptions={{
-              plugins: markdownPlugins,
-              renderers: markdownRenderers,
-            }}
-            autoFocus={false}
+            previewOptions={{ ...markdownPreviewOptions }}
             preview='edit'
+            autoFocus={false}
             height={500}
             commands={[
               commands.bold,

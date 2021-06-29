@@ -12,7 +12,7 @@ import {
   Space,
 } from 'antd';
 import LoadingComponent from 'apps/dashboard/components/LoadingComponent/LoadingComponent';
-import { markdownPlugins, markdownRenderers, uploadCommand } from 'apps/shared';
+import { markdownPreviewOptions, uploadCommand } from 'apps/shared';
 import { useMyArticleQuery, useUpdateArticleMutation } from 'graphqlTypes';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -138,10 +138,7 @@ export default function ArticleEditPage() {
             textareaProps={{
               placeholder: t('article.form.content_place_holder'),
             }}
-            previewOptions={{
-              plugins: markdownPlugins,
-              renderers: markdownRenderers,
-            }}
+            previewOptions={{ ...markdownPreviewOptions }}
             autoFocus={false}
             preview='edit'
             height={500}
