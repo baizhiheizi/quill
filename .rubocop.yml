@@ -277,3 +277,6 @@ Style/ClassEqualityComparison: # (new in 0.93)
 
 Layout/TrailingWhitespace:
   AllowInHeredoc: true
+
+Naming/InclusiveLanguage:
+  Enabled: false
