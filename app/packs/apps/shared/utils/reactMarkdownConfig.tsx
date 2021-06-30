@@ -83,39 +83,41 @@ export const markdownRenderers: any = {
       </div>
     );
   },
-  code: ({ children, language, value }) => {
-    if (language?.toLocaleLowerCase() === 'mermaid') {
-      try {
-        const Elm = document.createElement('div');
-        Elm.id = 'demo';
-        const svg = mermaid.render('demo', value);
-        return (
-          <pre>
-            <code dangerouslySetInnerHTML={{ __html: svg }} />
-          </pre>
-        );
-      } catch (err) {
-        console.log(err);
-        return children || value;
+  code: ({ inline, children, className, ...props }) => {
+    const txt = children[0] || '';
+    // katex
+    if (inline) {
+      if (typeof txt === 'string' && /^\$\$(.*)\$\$/.test(txt)) {
+        const html = katex.renderToString(txt.replace(/^\$\$(.*)\$\$/, '$1'), {
+          throwOnError: false,
+        });
+        return <code dangerouslySetInnerHTML={{ __html: html }} />;
       }
-    } else if (language?.toLocaleLowerCase() === 'katex') {
-      const html = katex.renderToString(value, {
+      return <code>{children}</code>;
+    }
+    if (
+      typeof txt === 'string' &&
+      typeof className === 'string' &&
+      /^language-katex/.test(className.toLocaleLowerCase())
+    ) {
+      const html = katex.renderToString(txt, {
         throwOnError: false,
       });
-      return (
-        <pre>
-          <code dangerouslySetInnerHTML={{ __html: html }} />
-        </pre>
-      );
+      return <code dangerouslySetInnerHTML={{ __html: html }} />;
     }
-    const props = {
-      className: language ? `language-${language}` : '',
-    };
-    return (
-      <pre {...props}>
-        <code {...props}>{value}</code>
-      </pre>
-    );
+
+    // mermaid
+    if (
+      typeof txt === 'string' &&
+      typeof className === 'string' &&
+      /^language-mermaid/.test(className.toLocaleLowerCase())
+    ) {
+      const Elm = document.createElement('div');
+      Elm.id = 'demo';
+      const svg = mermaid.render('demo', txt);
+      return <code dangerouslySetInnerHTML={{ __html: svg }} />;
+    }
+    return <code className={String(className)}>{children}</code>;
   },
 };
 
