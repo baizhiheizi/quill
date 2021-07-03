@@ -70,7 +70,7 @@ export default function RewardModalComponent(props: {
     }&trace=${traceId}&memo=${encode64(
       JSON.stringify({ t: 'REWARD', a: articleUuid }),
     )}&asset=${assetId}&amount=${amount}`;
-    if (mixinEnv || isMobile) {
+    if (mixinEnv || isMobile.phone) {
       location.replace(url);
     } else {
       setPayUrl(url);
@@ -202,7 +202,7 @@ export default function RewardModalComponent(props: {
             {t('swap_supported_by')}{' '}
             <a
               href={
-                mixinEnv || isMobile
+                mixinEnv || isMobile.phone
                   ? `mixin://users/${FOXSWAP_APP_ID}`
                   : `https://mixin.one/codes/${FOXSWAP_CODE_ID}`
               }
@@ -216,7 +216,7 @@ export default function RewardModalComponent(props: {
       {Boolean(data?.payment?.state) ? (
         <Alert type='success' message={t('success_paid')} />
       ) : (
-        !(mixinEnv || isMobile) && paying && <PayUrlQRCode url={payUrl} />
+        !(mixinEnv || isMobile.phone) && paying && <PayUrlQRCode url={payUrl} />
       )}
     </Modal>
   );

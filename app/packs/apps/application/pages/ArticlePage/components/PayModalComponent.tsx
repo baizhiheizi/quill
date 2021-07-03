@@ -178,7 +178,7 @@ export default function PayModalComponent(props: {
               <Alert message={t('refund_warning')} showIcon type='warning' />
             ) : (
               <div>
-                {mixinEnv || isMobile ? (
+                {mixinEnv || isMobile.phone ? (
                   <Button
                     disabled={preOrderLoading || payment?.state === 'refunded'}
                     loading={paying}
@@ -190,7 +190,7 @@ export default function PayModalComponent(props: {
                       ? `${Math.round(countdown / 1000)} s ${t(
                           'polling_payment',
                         )}`
-                      : isMobile
+                      : isMobile.phone
                       ? t('pay_in_mixin')
                       : t('pay')}
                   </Button>
