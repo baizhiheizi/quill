@@ -145,7 +145,11 @@ class Order < ApplicationRecord
   end
 
   def all_transfers_generated?
-    transfers.sum(:amount).round(8) == total.round(8)
+    transfers.sum(:amount).round(8) == if payment.wallet.present?
+                                         total.round(8)
+                                       else
+                                         (total * (1 - PRSDIGG_RATIO)).round(8)
+                                       end
   end
 
   def complete_payment
