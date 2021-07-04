@@ -68,7 +68,7 @@ class Order < ApplicationRecord
     state :paid, initial: true
     state :completed
 
-    event :complete, guard: :all_transfers_processed? do
+    event :complete, guard: :all_transfers_generated? do
       transitions from: :paid, to: :completed
     end
   end
@@ -140,10 +140,12 @@ class Order < ApplicationRecord
     ).find_or_create_by!(
       trace_id: PrsdiggBot.api.unique_conversation_id(trace_id, item.author.mixin_uuid)
     )
+
+    complete!
   end
 
-  def all_transfers_processed?
-    transfers.unprocessed.blank?
+  def all_transfers_generated?
+    transfers.sum(:amount).round(8) == total.round(8)
   end
 
   def complete_payment
