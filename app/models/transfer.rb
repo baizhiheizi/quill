@@ -146,7 +146,7 @@ class Transfer < ApplicationRecord
     if queue_priority_critical?
       ProcessCriticalTransferWorker.perform_async trace_id
     else
-      ProcessTransferWorker.perform_async trace_id
+      ProcessTransferWorker.perform_in (SecureRandom.random_number * 60).seconds, trace_id
     end
   end
 
