@@ -13,6 +13,9 @@ sync_currency_price_worker:
 daily_statistic_generate_worker:
   cron: '0 0 * * *'
   class: 'DailyStatisticGenerateWorker'
+batch_distribute_order_worker:
+  cron: '*/10 * * * *'
+  class: 'BatchDistributeOrderWorker'
 # prs_transaction_poll_authorizations_worker:
 #   cron: '* * * * *'
 #   class: 'PrsTransactionPollAuthorizationsWorker'

@@ -67,6 +67,7 @@ class Order < ApplicationRecord
   aasm column: :state do
     state :paid, initial: true
     state :completed
+    state :stale
 
     event :complete, guard: :all_transfers_generated? do
       transitions from: :paid, to: :completed
