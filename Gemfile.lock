@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/rails/webpacker.git
-  revision: beb645ecbf707eb4f3311e61b05abb67fe0ca010
+  revision: d5be01ec72597923945f41cdc1af634183cd22c5
   specs:
     webpacker (6.0.0.beta.7)
       activesupport (>= 5.2)
@@ -295,7 +295,7 @@ GEM
       rake (>= 0.13)
       thor (~> 1.0)
     rainbow (3.0.0)
-    rake (13.0.3)
+    rake (13.0.4)
     ransack (2.4.2)
       activerecord (>= 5.2.4)
       activesupport (>= 5.2.4)
