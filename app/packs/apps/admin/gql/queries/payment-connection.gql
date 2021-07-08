@@ -17,7 +17,7 @@ query AdminPaymentConnection(
       payer {
         name
         mixinId
-        avatarUrl
+        avatar
       }
       order {
         orderType

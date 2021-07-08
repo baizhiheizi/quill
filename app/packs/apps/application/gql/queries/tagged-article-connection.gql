@@ -36,7 +36,7 @@ query TaggedArticleConnection(
       }
       author {
         name
-        avatarUrl
+        avatar
         mixinId
         bio
       }

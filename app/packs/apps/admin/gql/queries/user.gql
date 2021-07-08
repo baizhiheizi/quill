@@ -5,7 +5,7 @@ query AdminUser($mixinId: ID!) {
     mixinId
     phone
     mixinUuid
-    avatarUrl
+    avatar
     bio
     walletId
     statistics {

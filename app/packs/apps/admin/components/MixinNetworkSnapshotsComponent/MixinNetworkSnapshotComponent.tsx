@@ -64,7 +64,7 @@ export default function MixinNetworkSnapshotsComponent(props: {
       render: (_, snapshot) =>
         snapshot.opponent ? (
           <Space>
-            <Avatar src={snapshot.opponent.avatarUrl} />
+            <Avatar src={snapshot.opponent.avatar} />
             {snapshot.opponent.name}
             {snapshot.opponent.mixinId}
           </Space>

@@ -56,7 +56,7 @@ export default function CommentsComponent() {
               className='comment-list'
               author={comment.author.name}
               avatar={
-                <Avatar src={comment.author.avatarUrl}>
+                <Avatar src={comment.author.avatar}>
                   {comment.author.name[0]}
                 </Avatar>
               }

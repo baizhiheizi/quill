@@ -31,14 +31,15 @@ query Article($uuid: ID!) {
     }
     author {
       name
-      avatarUrl
+      avatar
+      avatar
       mixinId
       bio
       authoringSubscribed
     }
     randomReaders {
       name
-      avatarUrl
+      avatar
       mixinId
     }
     readers {

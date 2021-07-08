@@ -7,7 +7,7 @@ query MyArticleOrderConnection(
     nodes {
       traceId
       buyer {
-        avatarUrl
+        avatar
         name
       }
       orderType

@@ -56,7 +56,7 @@ export default function OrdersComponent(props: {
       key: 'buyer',
       render: (_, order) => (
         <Space>
-          <Avatar src={order.buyer.avatarUrl} />
+          <Avatar src={order.buyer.avatar} />
           {order.buyer.name}
         </Space>
       ),

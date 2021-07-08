@@ -48,7 +48,7 @@ export default function TransfersComponent(props: {
       render: (_, transfer) =>
         transfer.recipient ? (
           <Space>
-            <Avatar src={transfer.recipient.avatarUrl} />
+            <Avatar src={transfer.recipient.avatar} />
             <span>
               {transfer.recipient.name}({transfer.recipient.mixinId})
             </span>

@@ -18,7 +18,7 @@ query ArticleConnection($filter: String!, $query: String, $after: String) {
       }
       author {
         name
-        avatarUrl
+        avatar
         mixinId
         bio
       }

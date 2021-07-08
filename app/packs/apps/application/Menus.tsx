@@ -51,7 +51,7 @@ export default function Menus() {
         {currentUser && props.mode === 'vertical' ? (
           <div style={{ margin: 15 }}>
             <a href='/dashboard'>
-              <Avatar size='large' src={currentUser.avatarUrl}>
+              <Avatar size='large' src={currentUser.avatar}>
                 {currentUser.name[0]}
               </Avatar>
             </a>

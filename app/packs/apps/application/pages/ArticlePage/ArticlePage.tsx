@@ -112,7 +112,7 @@ export default function ArticlePage() {
           className='flex items-center space-x-2'
           to={`/users/${article.author.mixinId}`}
         >
-          <Avatar size='small' src={article.author.avatarUrl} />
+          <Avatar size='small' src={article.author.avatar} />
           <span>{article.author.name}</span>
         </Link>
         <span>{moment(article.createdAt).format('YYYY/MM/DD HH:mm')}</span>
@@ -410,7 +410,7 @@ export default function ArticlePage() {
                 <Avatar
                   className='m-0.5'
                   key={reader.mixinId}
-                  src={reader.avatarUrl}
+                  src={reader.avatar}
                 >
                   {reader.name[0]}
                 </Avatar>

@@ -4,7 +4,7 @@ query User($mixinId: ID!) {
     name
     mixinId
     mixinUuid
-    avatarUrl
+    avatar
     bio
     authoringSubscribed
     readingSubscribed

@@ -59,7 +59,7 @@ export default function MyAuthoringSubscriptionsComponent() {
                 {user.name}
               </a>
             }
-            avatar={<Avatar src={user.avatarUrl}>{user.name[0]}</Avatar>}
+            avatar={<Avatar src={user.avatar}>{user.name[0]}</Avatar>}
             description={
               <Space split={<Divider type='vertical' />} wrap>
                 {`${t('user.articles_count')}: ${

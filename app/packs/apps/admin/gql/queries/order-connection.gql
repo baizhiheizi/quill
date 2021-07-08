@@ -20,12 +20,12 @@ query AdminOrderConnection(
       total
       seller {
         name
-        avatarUrl
+        avatar
         mixinId
       }
       buyer {
         name
-        avatarUrl
+        avatar
         mixinId
       }
       currency {

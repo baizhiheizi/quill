@@ -142,7 +142,7 @@ export default function UserArticlesComponent(props: {
             <List.Item.Meta
               style={{ marginBottom: 0 }}
               avatar={
-                <Avatar src={article.author.avatarUrl}>
+                <Avatar src={article.author.avatar}>
                   {article.author.name[0]}
                 </Avatar>
               }

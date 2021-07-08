@@ -30,7 +30,7 @@ export default function ArticlePage() {
         <Descriptions.Item label='Title'>{article.title}</Descriptions.Item>
         <Descriptions.Item label='Author'>
           <Space>
-            <Avatar src={article.author.avatarUrl}>
+            <Avatar src={article.author.avatar}>
               {article.author.name[0]}
             </Avatar>
             {article.author.name}

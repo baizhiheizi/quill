@@ -4,7 +4,7 @@ query MyReadingSubscriptionConnection($after: String) {
       id
       mixinId
       name
-      avatarUrl
+      avatar
       bio
       statistics {
         boughtArticlesCount

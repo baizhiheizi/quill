@@ -25,7 +25,7 @@ export default function UserPage() {
       <Descriptions bordered size='small'>
         <Descriptions.Item label='Name'>
           <Space>
-            <Avatar src={user.avatarUrl} />
+            <Avatar src={user.avatar} />
             {user.name}
           </Space>
         </Descriptions.Item>

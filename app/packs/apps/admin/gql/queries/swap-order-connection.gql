@@ -24,7 +24,7 @@ query AdminSwapOrderConnection(
       }
       payer {
         name
-        avatarUrl
+        avatar
         mixinId
       }
       payAsset {

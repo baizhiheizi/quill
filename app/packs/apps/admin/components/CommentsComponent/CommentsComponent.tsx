@@ -61,7 +61,7 @@ export default function CommentsComponent(props: {
       key: 'author',
       render: (_, comment) => (
         <Space>
-          <Avatar src={comment.author.avatarUrl} />
+          <Avatar src={comment.author.avatar} />
           {comment.author.name}
         </Space>
       ),

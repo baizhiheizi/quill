@@ -246,7 +246,7 @@ ${comment.content.replace(/^/gm, '> ')}
                 author={comment.author.name}
                 avatar={
                   <Link to={`/users/${comment.author.mixinId}`}>
-                    <Avatar src={comment.author.avatarUrl}>
+                    <Avatar src={comment.author.avatar}>
                       {comment.author.name[0]}
                     </Avatar>
                   </Link>

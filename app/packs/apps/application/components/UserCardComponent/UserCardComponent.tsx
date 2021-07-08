@@ -6,21 +6,21 @@ import { Link } from 'react-router-dom';
 
 export default function UserCardComponent(props: {
   user: {
-    avatarUrl: string;
+    avatar: string;
     bio?: string;
     name: string;
     mixinId: string;
   };
 }) {
   const {
-    user: { avatarUrl, bio, name, mixinId },
+    user: { avatar, bio, name, mixinId },
   } = props;
   const { currentUser } = useCurrentUser();
   const { t } = useTranslation();
   return (
     <Card>
       <Card.Meta
-        avatar={<Avatar src={avatarUrl} />}
+        avatar={<Avatar src={avatar} />}
         title={
           <Row style={{ alignItems: 'center' }}>
             <Col style={{ flex: 1, marginRight: 10 }}>{name}</Col>

@@ -22,7 +22,7 @@ export default function UserPage() {
     <div>
       <Row justify='center' style={{ marginBottom: '1rem' }}>
         <Col>
-          <Avatar size='large' src={user.avatarUrl} />
+          <Avatar size='large' src={user.avatar} />
         </Col>
       </Row>
       <Row justify='center'>

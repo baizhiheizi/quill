@@ -35,7 +35,7 @@ export default function PaymentsComponent(props: { payerMixinUuid?: string }) {
       key: 'payer',
       render: (_, payment) => (
         <Space>
-          <Avatar src={payment.payer.avatarUrl} />
+          <Avatar src={payment.payer.avatar} />
           <span>
             {payment.payer.name}({payment.payer.mixinId})
           </span>

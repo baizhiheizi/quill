@@ -60,7 +60,7 @@ export default function ArticleOrdersComponent(props: {
         renderItem={(order: Partial<Order>) => (
           <List.Item key={order.traceId}>
             <Space>
-              <Avatar src={order.buyer.avatarUrl}>{order.buyer.name[0]}</Avatar>
+              <Avatar src={order.buyer.avatar}>{order.buyer.name[0]}</Avatar>
               <span>{order.buyer.name}</span>
               <span>
                 {`${t('paid')} ${order.total} ${order.currency.symbol}`}

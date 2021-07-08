@@ -60,7 +60,7 @@ export function ArticlesComponent(props: { authorMixinUuid?: string }) {
       key: 'author',
       render: (_, article) => (
         <Space>
-          <Avatar src={article.author.avatarUrl} />
+          <Avatar src={article.author.avatar} />
           {article.author.name}
         </Space>
       ),

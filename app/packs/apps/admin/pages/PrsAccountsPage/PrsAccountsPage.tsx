@@ -76,7 +76,7 @@ export function PrsAccountsComponent(props: {
       key: 'user',
       render: (_, account) => (
         <Space>
-          <Avatar src={account.user.avatarUrl} />
+          <Avatar src={account.user.avatar} />
           <span>
             {account.user.name}({account.user.mixinId})
           </span>

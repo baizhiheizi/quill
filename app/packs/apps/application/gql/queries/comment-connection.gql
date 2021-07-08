@@ -22,7 +22,7 @@ query CommentConnection(
       downvoted
       author {
         name
-        avatarUrl
+        avatar
         mixinId
         bio
         createdAt

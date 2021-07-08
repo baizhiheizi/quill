@@ -14,7 +14,7 @@ query AdminBonusConnection($after: String) {
       }
       user {
         id
-        avatarUrl
+        avatar
         name
         mixinId
       }

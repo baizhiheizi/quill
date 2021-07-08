@@ -8,7 +8,7 @@ query AdminMixinMessageConnection($after: String) {
       userId
       user {
         name
-        avatarUrl
+        avatar
       }
       createdAt
       processedAt

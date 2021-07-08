@@ -56,7 +56,7 @@ export default function BonusesPage() {
       key: 'user',
       render: (_, bonus) => (
         <Space>
-          <Avatar src={bonus.user.avatarUrl} />
+          <Avatar src={bonus.user.avatar} />
           <span>{bonus.user.name}</span>
         </Space>
       ),

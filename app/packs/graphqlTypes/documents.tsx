@@ -1941,6 +1941,7 @@ export type User = {
   accessable?: Maybe<Scalars['Boolean']>;
   articles: ArticleConnection;
   authoringSubscribed?: Maybe<Scalars['Boolean']>;
+  avatar: Scalars['String'];
   avatarUrl: Scalars['String'];
   bannedAt?: Maybe<Scalars['ISO8601DateTime']>;
   bio?: Maybe<Scalars['String']>;
@@ -2701,7 +2702,7 @@ export const AdminArticleConnectionDocument = gql`
       }
       author {
         name
-        avatarUrl
+        avatar
       }
       currency {
         assetId
@@ -2828,7 +2829,7 @@ export const AdminArticleDocument = gql`
     walletId
     author {
       name
-      avatarUrl
+      avatar
     }
     createdAt
   }
@@ -2879,7 +2880,7 @@ export const AdminBonusConnectionDocument = gql`
       }
       user {
         id
-        avatarUrl
+        avatar
         name
         mixinId
       }
@@ -2940,7 +2941,7 @@ export const AdminCommentConnectionDocument = gql`
       downvoted
       author {
         name
-        avatarUrl
+        avatar
         mixinId
         bio
         createdAt
@@ -3054,7 +3055,7 @@ export const AdminMixinMessageConnectionDocument = gql`
       userId
       user {
         name
-        avatarUrl
+        avatar
       }
       createdAt
       processedAt
@@ -3112,7 +3113,7 @@ export const AdminMixinNetworkSnapshotConnectionDocument = gql`
       opponentId
       opponent {
         name
-        avatarUrl
+        avatar
         mixinId
       }
       article {
@@ -3178,12 +3179,12 @@ export const AdminOrderConnectionDocument = gql`
       total
       seller {
         name
-        avatarUrl
+        avatar
         mixinId
       }
       buyer {
         name
-        avatarUrl
+        avatar
         mixinId
       }
       currency {
@@ -3254,7 +3255,7 @@ export const AdminPaymentConnectionDocument = gql`
       payer {
         name
         mixinId
-        avatarUrl
+        avatar
       }
       order {
         orderType
@@ -3312,7 +3313,7 @@ export const AdminPrsAccountConnectionDocument = gql`
       status
       user {
         name
-        avatarUrl
+        avatar
         mixinId
       }
       createdAt
@@ -3468,7 +3469,7 @@ export const AdminSwapOrderConnectionDocument = gql`
       }
       payer {
         name
-        avatarUrl
+        avatar
         mixinId
       }
       payAsset {
@@ -3541,7 +3542,7 @@ export const AdminTransferConnectionDocument = gql`
       walletId
       recipient {
         name
-        avatarUrl
+        avatar
         mixinId
       }
       currency {
@@ -3638,7 +3639,7 @@ export const AdminUserConnectionDocument = gql`
       mixinId
       phone
       mixinUuid
-      avatarUrl
+      avatar
       statistics {
         articlesCount
         commentsCount
@@ -3697,7 +3698,7 @@ export const AdminUserDocument = gql`
     mixinId
     phone
     mixinUuid
-    avatarUrl
+    avatar
     bio
     walletId
     statistics {
@@ -4121,7 +4122,7 @@ export const ArticleConnectionDocument = gql`
       }
       author {
         name
-        avatarUrl
+        avatar
         mixinId
         bio
       }
@@ -4203,14 +4204,15 @@ export const ArticleDocument = gql`
     }
     author {
       name
-      avatarUrl
+      avatar
+      avatar
       mixinId
       bio
       authoringSubscribed
     }
     randomReaders {
       name
-      avatarUrl
+      avatar
       mixinId
     }
     readers {
@@ -4288,7 +4290,7 @@ export const CommentConnectionDocument = gql`
       downvoted
       author {
         name
-        avatarUrl
+        avatar
         mixinId
         bio
         createdAt
@@ -4535,7 +4537,7 @@ export const TaggedArticleConnectionDocument = gql`
       }
       author {
         name
-        avatarUrl
+        avatar
         mixinId
         bio
       }
@@ -4649,7 +4651,7 @@ export const UserArticleConnectionDocument = gql`
       state
       author {
         name
-        avatarUrl
+        avatar
       }
       createdAt
     }
@@ -4697,7 +4699,7 @@ export const UserDocument = gql`
     name
     mixinId
     mixinUuid
-    avatarUrl
+    avatar
     bio
     authoringSubscribed
     readingSubscribed
@@ -5175,7 +5177,7 @@ export const MyArticleConnectionDocument = gql`
       state
       author {
         name
-        avatarUrl
+        avatar
       }
       createdAt
     }
@@ -5222,7 +5224,7 @@ export const MyArticleOrderConnectionDocument = gql`
     nodes {
       traceId
       buyer {
-        avatarUrl
+        avatar
         name
       }
       orderType
@@ -5356,7 +5358,7 @@ export const MyAuthoringSubscriptionConnectionDocument = gql`
       id
       mixinId
       name
-      avatarUrl
+      avatar
       bio
       statistics {
         articlesCount
@@ -5614,7 +5616,7 @@ export const MyReadingSubscriptionConnectionDocument = gql`
       id
       mixinId
       name
-      avatarUrl
+      avatar
       bio
       statistics {
         boughtArticlesCount

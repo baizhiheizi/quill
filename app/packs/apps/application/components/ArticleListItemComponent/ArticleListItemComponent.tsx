@@ -53,7 +53,7 @@ export default function ArticleListItemComponent(props: {
         style={{ marginBottom: 0 }}
         avatar={
           <Link to={`/users/${article.author.mixinId}`}>
-            <Avatar src={article.author.avatarUrl}>
+            <Avatar src={article.author.avatar}>
               {article.author.name[0]}
             </Avatar>
           </Link>

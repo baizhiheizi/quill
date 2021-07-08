@@ -10,7 +10,7 @@ query AdminPrsAccountConnection(
       status
       user {
         name
-        avatarUrl
+        avatar
         mixinId
       }
       createdAt

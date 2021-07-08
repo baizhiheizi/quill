@@ -13,7 +13,7 @@ query AdminArticle($uuid: ID!) {
     walletId
     author {
       name
-      avatarUrl
+      avatar
     }
     createdAt
   }

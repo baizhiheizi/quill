@@ -16,7 +16,7 @@ query AdminUserConnection(
       mixinId
       phone
       mixinUuid
-      avatarUrl
+      avatar
       statistics {
         articlesCount
         commentsCount

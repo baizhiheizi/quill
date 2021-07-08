@@ -127,7 +127,7 @@ export function UsersComponent(props: {
       key: 'name',
       render: (name, user) => (
         <Space>
-          <Avatar src={user.avatarUrl} />
+          <Avatar src={user.avatar} />
           {name}
         </Space>
       ),

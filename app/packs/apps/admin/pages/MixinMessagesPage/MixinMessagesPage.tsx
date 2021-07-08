@@ -38,7 +38,7 @@ export default function MixinMessagesPage() {
       render: (_, message) =>
         message.user ? (
           <Space>
-            <Avatar src={message.user.avatarUrl} />
+            <Avatar src={message.user.avatar} />
             {message.user.name}
             {message.user.mixinId}
           </Space>

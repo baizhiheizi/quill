@@ -19,7 +19,7 @@ query AdminMixinNetworkSnapshotConnection(
       opponentId
       opponent {
         name
-        avatarUrl
+        avatar
         mixinId
       }
       article {
