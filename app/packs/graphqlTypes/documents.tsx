@@ -1413,6 +1413,7 @@ export type QueryAdminMixinNetworkSnapshotConnectionArgs = {
 export type QueryAdminOrderConnectionArgs = {
   itemId?: Maybe<Scalars['ID']>;
   itemType?: Maybe<Scalars['String']>;
+  state?: Maybe<Scalars['String']>;
   after?: Maybe<Scalars['String']>;
   before?: Maybe<Scalars['String']>;
   first?: Maybe<Scalars['Int']>;
@@ -3160,8 +3161,13 @@ export type AdminMixinNetworkSnapshotConnectionQueryHookResult = ReturnType<type
 export type AdminMixinNetworkSnapshotConnectionLazyQueryHookResult = ReturnType<typeof useAdminMixinNetworkSnapshotConnectionLazyQuery>;
 export type AdminMixinNetworkSnapshotConnectionQueryResult = Apollo.QueryResult<AdminMixinNetworkSnapshotConnectionQuery, AdminMixinNetworkSnapshotConnectionQueryVariables>;
 export const AdminOrderConnectionDocument = gql`
-    query AdminOrderConnection($itemId: ID, $itemType: String, $after: String) {
-  adminOrderConnection(itemId: $itemId, itemType: $itemType, after: $after) {
+    query AdminOrderConnection($itemId: ID, $itemType: String, $state: String, $after: String) {
+  adminOrderConnection(
+    itemId: $itemId
+    itemType: $itemType
+    state: $state
+    after: $after
+  ) {
     nodes {
       id
       traceId
@@ -3186,6 +3192,13 @@ export const AdminOrderConnectionDocument = gql`
         symbol
       }
       createdAt
+      itemType
+      item {
+        ... on Article {
+          title
+          uuid
+        }
+      }
     }
     pageInfo {
       hasNextPage
@@ -3209,6 +3222,7 @@ export const AdminOrderConnectionDocument = gql`
  *   variables: {
  *      itemId: // value for 'itemId'
  *      itemType: // value for 'itemType'
+ *      state: // value for 'state'
  *      after: // value for 'after'
  *   },
  * });

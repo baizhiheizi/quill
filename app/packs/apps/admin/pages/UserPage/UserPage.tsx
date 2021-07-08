@@ -4,7 +4,7 @@ import CommentsComponent from 'apps/admin/components/CommentsComponent/CommentsC
 import LoadingComponent from 'apps/admin/components/LoadingComponent/LoadingComponent';
 import MixinNetworkSnapshotsComponent from 'apps/admin/components/MixinNetworkSnapshotsComponent/MixinNetworkSnapshotComponent';
 import PaymentsComponent from 'apps/admin/components/PaymentsComponent/PaymentsComponent';
-import SwapOrdersComponent from 'apps/admin/components/SwapOrdersComponent/SwapOrdersCompnent';
+import SwapOrdersComponent from 'apps/admin/components/SwapOrdersComponent/SwapOrdersComponent';
 import WalletBalanceComponent from 'apps/admin/components/WalletBalanceComponent/WalletBalanceComponent';
 import { useAdminUserQuery } from 'graphqlTypes';
 import React from 'react';

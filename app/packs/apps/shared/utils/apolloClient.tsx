@@ -52,6 +52,7 @@ export const apolloClient = (uri: string, csrfToken?: string) => {
           adminMixinNetworkSnapshotConnection:
             customizedConnectionMergeFunction(['filter', 'userId']),
           adminOrderConnection: customizedConnectionMergeFunction([
+            'state',
             'itemId',
             'itemType',
           ]),

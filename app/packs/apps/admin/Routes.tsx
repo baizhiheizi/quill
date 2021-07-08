@@ -11,6 +11,7 @@ import CommentsPage from './pages/CommentsPage/CommentsPage';
 import DailyStatisticsPage from './pages/DailyStatisticsPage/DailyStatisticsPage';
 import MixinMessagesPage from './pages/MixinMessagesPage/MixinMessagesPage';
 import MixinNetworkSnapshotsPage from './pages/MixinNetworkSnapshotsPage/MixinNetworkSnapshotsPage';
+import OrdersPage from './pages/OrdersPage/OrdersPage';
 import OverviewPage from './pages/OverviewPage/OverviewPage';
 import PaymentsPage from './pages/PaymentsPage/PaymentsPage';
 import PrsAccountsPage from './pages/PrsAccountsPage/PrsAccountsPage';
@@ -46,6 +47,9 @@ export default function Routes() {
       </Route>
       <Route path='/comments' exact>
         <CommentsPage />
+      </Route>
+      <Route path='/orders' exact>
+        <OrdersPage />
       </Route>
       <Route path='/payments' exact>
         <PaymentsPage />

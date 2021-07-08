@@ -1,5 +1,15 @@
-query AdminOrderConnection($itemId: ID, $itemType: String, $after: String) {
-  adminOrderConnection(itemId: $itemId, itemType: $itemType, after: $after) {
+query AdminOrderConnection(
+  $itemId: ID
+  $itemType: String
+  $state: String
+  $after: String
+) {
+  adminOrderConnection(
+    itemId: $itemId
+    itemType: $itemType
+    state: $state
+    after: $after
+  ) {
     nodes {
       id
       traceId
@@ -24,6 +34,13 @@ query AdminOrderConnection($itemId: ID, $itemType: String, $after: String) {
         symbol
       }
       createdAt
+      itemType
+      item {
+        ... on Article {
+          title
+          uuid
+        }
+      }
     }
     pageInfo {
       hasNextPage

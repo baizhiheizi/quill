@@ -1,17 +1,20 @@
-import { Avatar, Button, Space, Table } from 'antd';
+import { Avatar, Button, Select, Space, Table } from 'antd';
 import { ColumnProps } from 'antd/es/table';
 import LoadingComponent from 'apps/admin/components/LoadingComponent/LoadingComponent';
 import { Order, useAdminOrderConnectionQuery } from 'graphqlTypes';
-import React from 'react';
+import React, { useState } from 'react';
+import { useHistory } from 'react-router-dom';
 
 export default function OrdersComponent(props: {
   itemId?: string;
   itemType?: string;
 }) {
+  const [state, setState] = useState('all');
   const { itemId, itemType } = props;
-  const { loading, data, fetchMore } = useAdminOrderConnectionQuery({
-    variables: { itemId, itemType },
+  const { loading, data, fetchMore, refetch } = useAdminOrderConnectionQuery({
+    variables: { state, itemId, itemType },
   });
+  const history = useHistory();
 
   if (loading) {
     return <LoadingComponent />;
@@ -28,6 +31,20 @@ export default function OrdersComponent(props: {
       dataIndex: 'traceId',
       key: 'traceId',
       title: 'traceId',
+    },
+    {
+      dataIndex: 'item',
+      key: 'item',
+      render: (_, order) =>
+        order.itemType === 'Article' && (
+          <a
+            className='w-full cursor-pointer line-clamp-1'
+            onClick={() => history.push(`/articles/${order.item.uuid}`)}
+          >
+            {order.item.title}
+          </a>
+        ),
+      title: 'Item',
     },
     {
       dataIndex: 'orderType',
@@ -48,6 +65,11 @@ export default function OrdersComponent(props: {
     {
       dataIndex: 'total',
       key: 'total',
+      render: (_, order) => (
+        <span>
+          {order.total} {order.currency.symbol}
+        </span>
+      ),
       title: 'Total',
     },
     {
@@ -64,6 +86,22 @@ export default function OrdersComponent(props: {
 
   return (
     <>
+      <div className='flex justify-between mb-4'>
+        <div className='flex space-x-4'>
+          <Select
+            className='w-48'
+            value={state}
+            onChange={(value) => setState(value)}
+          >
+            <Select.Option value='all'>All</Select.Option>
+            <Select.Option value='paid'>Paid</Select.Option>
+            <Select.Option value='completed'>Completed</Select.Option>
+          </Select>
+        </div>
+        <Button type='primary' onClick={() => refetch()}>
+          Refresh
+        </Button>
+      </div>
       <Table
         scroll={{ x: true }}
         columns={columns}

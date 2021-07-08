@@ -6,6 +6,7 @@ import {
   LinkOutlined,
   LogoutOutlined,
   MessageOutlined,
+  MoneyCollectOutlined,
   NotificationOutlined,
   PayCircleOutlined,
   SwapOutlined,
@@ -89,6 +90,12 @@ export default function Menus() {
         <Link to='/payments'>
           <PayCircleOutlined />
           <span>Payments</span>
+        </Link>
+      </Menu.Item>
+      <Menu.Item key='orders'>
+        <Link to='/orders'>
+          <MoneyCollectOutlined />
+          <span>Orders</span>
         </Link>
       </Menu.Item>
       <Menu.Item key='swap_orders'>
