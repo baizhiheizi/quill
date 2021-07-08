@@ -2,7 +2,7 @@
 
 class TransferProcessedNotification < ApplicationNotification
   deliver_by :database, if: :web_notification_enabled?
-  deliver_by :mixin_bot, class: 'DeliveryMethods::MixinBot', category: 'APP_CARD', if: :should_notify_via_bot?
+  deliver_by :mixin_bot, class: 'DeliveryMethods::MixinBot', category: 'APP_CARD', bot: 'RevenueBot', if: :should_notify_via_bot?
 
   param :transfer
 

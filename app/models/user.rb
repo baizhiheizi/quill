@@ -73,6 +73,7 @@ class User < ApplicationRecord
     create_notification_setting!
     # create_prs_account!
     update_statistics_cache
+    create_bot_contact_conversation_async
   end
 
   default_scope { includes(:mixin_authorization) }
@@ -224,6 +225,15 @@ class User < ApplicationRecord
     else
       true
     end
+  end
+
+  def create_bot_contact_conversation_async
+    UserCreateBotContactConversationWorker.perform_async id
+  end
+
+  def create_bot_contact_conversation
+    PrsdiggBot.api.create_contact_conversation mixin_uuid
+    RevenueBot.api.create_contact_conversation(mixin_uuid) if RevenueBot.api.present?
   end
 
   private
