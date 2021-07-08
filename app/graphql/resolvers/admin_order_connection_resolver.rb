@@ -17,7 +17,7 @@ module Resolvers
           Order.all
         end
 
-      orders = 
+      orders =
         case params[:state]
         when 'paid'
           orders.paid
