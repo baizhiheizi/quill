@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_06_25_002859) do
+ActiveRecord::Schema.define(version: 2021_07_08_072711) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -367,8 +367,10 @@ ActiveRecord::Schema.define(version: 2021_06_25_002859) do
     t.integer "queue_priority", default: 0
     t.json "opponent_multisig", default: {}
     t.index ["asset_id"], name: "index_transfers_on_asset_id"
+    t.index ["opponent_id"], name: "index_transfers_on_opponent_id"
     t.index ["source_type", "source_id"], name: "index_transfers_on_source_type_and_source_id"
     t.index ["trace_id"], name: "index_transfers_on_trace_id", unique: true
+    t.index ["transfer_type"], name: "index_transfers_on_transfer_type"
     t.index ["wallet_id"], name: "index_transfers_on_wallet_id"
   end
 

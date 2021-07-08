@@ -24,8 +24,10 @@
 # Indexes
 #
 #  index_transfers_on_asset_id                   (asset_id)
+#  index_transfers_on_opponent_id                (opponent_id)
 #  index_transfers_on_source_type_and_source_id  (source_type,source_id)
 #  index_transfers_on_trace_id                   (trace_id) UNIQUE
+#  index_transfers_on_transfer_type              (transfer_type)
 #  index_transfers_on_wallet_id                  (wallet_id)
 #
 class Transfer < ApplicationRecord
@@ -174,15 +176,37 @@ class Transfer < ApplicationRecord
   end
 
   def self.author_revenue_total_in_usd
-    prs_amount = author_revenue.only_prs.sum(:amount)
-    btc_amount = author_revenue.only_btc.sum(:amount)
-    prs_amount * Currency.prs.price_usd.to_f + btc_amount * Currency.btc.price_usd.to_f
+    _get_author_revenue_total_in_usd_cache.presence || _set_author_revenue_total_in_usd_cache
   end
 
   def self.reader_revenue_total_in_usd
+    _get_reader_revenue_total_in_usd_cache.presence || _set_reader_revenue_total_in_usd_cache
+  end
+
+  def self._get_author_revenue_total_in_usd_cache
+    Global.redis.get 'author_revenue_total_in_usd'
+  end
+
+  def self._set_author_revenue_total_in_usd_cache
+    prs_amount = author_revenue.only_prs.sum(:amount)
+    btc_amount = author_revenue.only_btc.sum(:amount)
+    res = prs_amount * Currency.prs.price_usd.to_f + btc_amount * Currency.btc.price_usd.to_f
+    Global.redis.set 'author_revenue_total_in_usd', res, ex: 1.minute
+
+    res
+  end
+
+  def self._get_reader_revenue_total_in_usd_cache
+    Global.redis.get 'reader_revenue_total_in_usd'
+  end
+
+  def self._set_reader_revenue_total_in_usd_cache
     prs_amount = reader_revenue.only_prs.sum(:amount)
     btc_amount = reader_revenue.only_btc.sum(:amount)
-    prs_amount * Currency.prs.price_usd.to_f + btc_amount * Currency.btc.price_usd.to_f
+    res = prs_amount * Currency.prs.price_usd.to_f + btc_amount * Currency.btc.price_usd.to_f
+    Global.redis.set 'reader_revenue_total_in_usd', res, ex: 1.minute
+
+    res
   end
 
   private

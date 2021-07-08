@@ -24,8 +24,10 @@
 # Indexes
 #
 #  index_transfers_on_asset_id                   (asset_id)
+#  index_transfers_on_opponent_id                (opponent_id)
 #  index_transfers_on_source_type_and_source_id  (source_type,source_id)
 #  index_transfers_on_trace_id                   (trace_id) UNIQUE
+#  index_transfers_on_transfer_type              (transfer_type)
 #  index_transfers_on_wallet_id                  (wallet_id)
 #
 require 'test_helper'
