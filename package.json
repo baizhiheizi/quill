@@ -22,7 +22,7 @@
     "@types/qrcode.react": "^1.0.1",
     "@types/react": "^17.0.13",
     "@types/react-dom": "^17.0.8",
-    "@types/react-router-dom": "^5.1.7",
+    "@types/react-router-dom": "^5.1.8",
     "@types/recharts": "^2.0.0",
     "@types/uuid": "^8.3.1",
     "@uiw/react-md-editor": "^3.4.7",
