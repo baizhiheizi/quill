@@ -1,5 +1,3 @@
 mutation CreateArticle($input: CreateArticleMutationInput!) {
-  createArticle(input: $input) {
-    error
-  }
+  createArticle(input: $input)
 }

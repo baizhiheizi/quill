@@ -1,4 +1,5 @@
 import Editor, { commands } from '@uiw/react-md-editor';
+import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
 import {
   Avatar,
   Button,
@@ -14,16 +15,11 @@ import {
 } from 'antd';
 import EditableTagsComponent from 'apps/dashboard/components/EditableTagsComponent/EditableTagsComponent';
 import LoadingComponent from 'apps/dashboard/components/LoadingComponent/LoadingComponent';
-import {
-  markdownPlugins,
-  markdownRenderers,
-  markdownTransformLinkUrl,
-  uploadCommand,
-  markdownPreviewOptions,
-} from 'apps/shared';
+import { markdownPreviewOptions, uploadCommand } from 'apps/shared';
 import {
   Currency,
   useCreateArticleMutation,
+  useMyArticleConnectionQuery,
   usePricableCurrenciesQuery,
 } from 'graphqlTypes';
 import React, { useState } from 'react';
@@ -35,6 +31,9 @@ export default function ArticleNewPage() {
   const history = useHistory();
   const [form] = Form.useForm();
   const { t } = useTranslation();
+  const { data: boughtArticlesData } = useMyArticleConnectionQuery({
+    variables: { type: 'reader' },
+  });
   const [tags, setTags] = useState<string[]>([]);
   const [assetId, setAssetId] = useState(
     'c6d0c728-2624-429b-8e0d-d9d19b6592fa',
@@ -42,19 +41,12 @@ export default function ArticleNewPage() {
   const [price, setPrice] = useState(0.000_001);
   const { loading, data } = usePricableCurrenciesQuery();
   const [createArticle, { loading: creating }] = useCreateArticleMutation({
-    update(
-      _,
-      {
-        data: {
-          createArticle: { error },
-        },
-      },
-    ) {
-      if (error) {
-        message.error(error);
-      } else {
+    update(_, { data: { createArticle } }) {
+      if (createArticle) {
         message.success(t('success_submitted'));
         history.replace('/articles');
+      } else {
+        message.error(t('please_retry'));
       }
     },
   });
@@ -63,6 +55,8 @@ export default function ArticleNewPage() {
     return <LoadingComponent />;
   }
   const { pricableCurrencies } = data;
+  const boughtArticles = boughtArticlesData?.myArticleConnection?.nodes || [];
+
   const currency = pricableCurrencies.find(
     (_currency: Currency) => _currency.assetId === assetId,
   );
@@ -109,6 +103,7 @@ export default function ArticleNewPage() {
           if (!title || !content || !price || !intro || !assetId) {
             message.warn(t('article.form.not_finished'));
           } else {
+            console.log(values);
             Modal.confirm({
               title: t('article.form.confirm_to_create'),
               centered: true,
@@ -223,6 +218,72 @@ export default function ArticleNewPage() {
               </Select>
             </Form.Item>
           </Space>
+        </Form.Item>
+        <Form.Item label={t('article.articleReferences')}>
+          <Form.List name='articleReferences'>
+            {(references, { add, remove }) => (
+              <>
+                {references.map((reference, index) => (
+                  <div className='flex items-baseline w-full' key={index}>
+                    <Form.Item
+                      noStyle
+                      shouldUpdate={(prevValues, curValues) =>
+                        prevValues.articleReferences !==
+                        curValues.articleReferences
+                      }
+                    >
+                      <Form.Item
+                        {...reference}
+                        className='flex-1'
+                        fieldKey={[reference.fieldKey, 'referenceId']}
+                        name={[reference.name, 'referenceId']}
+                        label='Reference'
+                        rules={[
+                          { required: true, message: 'Missing revenue id' },
+                        ]}
+                      >
+                        <Select>
+                          {boughtArticles.map((article) => (
+                            <Select.Option
+                              key={article.uuid}
+                              value={article.uuid}
+                            >
+                              {article.author.name}:{article.title}
+                            </Select.Option>
+                          ))}
+                        </Select>
+                      </Form.Item>
+                    </Form.Item>
+                    <Form.Item
+                      className='flex-1'
+                      {...reference}
+                      fieldKey={[reference.fieldKey, 'revenueRatio']}
+                      name={[reference.name, 'revenueRatio']}
+                      rules={[
+                        { required: true, message: 'Missing revenue ratio' },
+                      ]}
+                      label='Revenue Ratio'
+                    >
+                      <InputNumber min={0.01} step='0.01' max={0.5} />
+                    </Form.Item>
+                    <MinusCircleOutlined
+                      onClick={() => remove(reference.name)}
+                    />
+                  </div>
+                ))}
+                <Form.Item>
+                  <Button
+                    type='dashed'
+                    onClick={() => add()}
+                    block
+                    icon={<PlusOutlined />}
+                  >
+                    Add Reference
+                  </Button>
+                </Form.Item>
+              </>
+            )}
+          </Form.List>
         </Form.Item>
         <Form.Item
           label={t('article.state_text')}

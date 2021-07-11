@@ -38,6 +38,7 @@ module Types
     field :payment_trace_id, String, null: true
     field :wallet_id, String, null: true
 
+    field :currency, Types::CurrencyType, null: false
     field :signature_url, String, null: true
 
     field :author, Types::UserType, null: false
@@ -46,13 +47,14 @@ module Types
     field :readers, Types::UserConnectionType, null: false
     field :buyers, Types::UserConnectionType, null: false
     field :rewarders, Types::UserConnectionType, null: false
+
     field :buy_orders, Types::OrderConnectionType, null: false
     field :reward_orders, Types::OrderConnectionType, null: false
     field :comments, Types::CommentConnectionType, null: false
-    field :currency, Types::CurrencyType, null: false
 
     field :random_readers, [UserType], null: false
     field :tags, [Types::TagType], null: false
+    field :references, [Types::ArticleType], null: true
 
     def content
       return unless object.authorized?(context[:current_user])

@@ -2,15 +2,9 @@
 
 module Mutations
   class CreateArticleMutation < Mutations::BaseMutation
-    argument :title, String, required: true
-    argument :intro, String, required: true
-    argument :content, String, required: true
-    argument :price, Float, required: true
-    argument :state, String, required: true
-    argument :asset_id, String, required: true
-    argument :tag_names, [String], required: false
+    input_object_class Types::ArticleInputType
 
-    field :error, String, null: true
+    type Boolean
 
     def resolve(**params)
       article = current_user.articles.new(
@@ -19,17 +13,33 @@ module Mutations
         content: params[:content],
         price: params[:price],
         state: params[:state],
-        asset_id: params[:asset_id]
+        asset_id: params[:asset_id],
       )
 
-      if article.save
-        CreateTag.call(article, params[:tag_names] || [])
-        { error: nil }
-      else
-        {
-          error: article.errors.full_messages.join(';').presence
-        }
+      if params[:article_references].present?
+        references_revenue_ratio = params[:article_references].sum(&:revenue_ratio)&.to_f
+
+        params[:article_references].each do |reference|
+          _ref = current_user.bought_articles.find_by(id: reference.reference_id)
+          _ref ||= current_user.bought_articles.find_by(uuid: reference.reference_id)
+          next if _ref.blank?
+
+          article.article_references.new(
+            reference: _ref,
+            revenue_ratio: reference.revenue_ratio
+          )
+        end
+
+        article.assign_attributes(
+          author_revenue_ratio: Article::AUTHOR_REVENUE_RATIO_DEFAULT - references_revenue_ratio,
+          references_revenue_ratio: references_revenue_ratio,
+        )
       end
+
+      article.save!
+      CreateTag.call(article, params[:tag_names] || [])
+
+      article.id.present?
     end
   end
 end

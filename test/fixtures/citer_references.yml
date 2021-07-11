@@ -1,0 +1,28 @@
+# == Schema Information
+#
+# Table name: citer_references
+#
+#  id             :bigint           not null, primary key
+#  citer_type     :string
+#  reference_type :string
+#  revenue_ratio  :float            not null
+#  created_at     :datetime         not null
+#  updated_at     :datetime         not null
+#  citer_id       :bigint
+#  reference_id   :bigint
+#
+# Indexes
+#
+#  index_citer_references_on_citer      (citer_type,citer_id)
+#  index_citer_references_on_reference  (reference_type,reference_id)
+#
+
+# This model initially had no columns defined. If you add columns to the
+# model remove the '{}' from the fixture names and add the columns immediately
+# below each fixture, per the syntax in the comments below
+#
+one: {}
+# column: value
+#
+two: {}
+# column: value
