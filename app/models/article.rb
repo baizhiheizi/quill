@@ -5,14 +5,18 @@
 # Table name: articles
 #
 #  id                                  :bigint           not null, primary key
+#  author_revenue_ratio                :float            default(0.5)
 #  commenting_subscribers_count        :integer          default(0)
 #  comments_count                      :integer          default(0), not null
 #  content                             :text
 #  downvotes_count                     :integer          default(0)
 #  intro                               :string
 #  orders_count                        :integer          default(0), not null
+#  platform_revenue_ratio              :float            default(0.1)
 #  price                               :decimal(, )      not null
 #  published_at                        :datetime
+#  readers_revenue_ratio               :float            default(0.4)
+#  references_revenue_ratio            :float            default(0.0)
 #  revenue_btc                         :decimal(, )      default(0.0)
 #  revenue_usd                         :decimal(, )      default(0.0)
 #  source                              :string
@@ -36,6 +40,9 @@ class Article < ApplicationRecord
   SUPPORTED_ASSETS = Settings.supported_assets || [Currency::BTC_ASSET_ID]
   MINIMUM_PRICE_PRS = 1
   MINIMUM_PRICE_BTC = 0.000_001
+  AUTHOR_REVENUE_RATIO_DEFAULT = 0.5
+  READERS_REVENUE_RATIO_DEFAULT = 0.4
+  PLATFORM_REVENUE_RATIO_DEFAULT = 0.1
 
   include AASM
 
@@ -62,6 +69,12 @@ class Article < ApplicationRecord
   has_many :snapshots, class_name: 'ArticleSnapshot', primary_key: :uuid, foreign_key: :article_uuid, inverse_of: :article, dependent: :restrict_with_error
   has_many :prs_transactions, through: :snapshots
 
+  has_many :article_references, class_name: 'CiterReference', as: :citer, dependent: :restrict_with_error
+  has_many :references, through: :article_references, source: :reference, source_type: 'Article'
+  has_many :article_citers, class_name: 'CiterReference', as: :reference, dependent: :restrict_with_error
+  has_many :citers, through: :article_citers, source: :citer, source_type: 'Article'
+  accepts_nested_attributes_for :article_references
+
   has_one :wallet, class_name: 'MixinNetworkUser', as: :owner, dependent: :nullify
 
   validates :asset_id, presence: true, inclusion: { in: SUPPORTED_ASSETS }
@@ -69,8 +82,14 @@ class Article < ApplicationRecord
   validates :title, presence: true, length: { maximum: 64 }
   validates :intro, presence: true, length: { maximum: 140 }
   validates :content, presence: true
+  validates :platform_revenue_ratio, presence: true, numericality: { equal_to: 0.1 }
+  validates :readers_revenue_ratio, presence: true, numericality: { greater_than_or_equal_to: 0.4 }
+  validates :author_revenue_ratio, presence: true, numericality: { less_than_or_equal_to: 0.5 }
+  validates :references_revenue_ratio, presence: true, numericality: { greater_than_or_equal_to: 0.0 }
   validate :ensure_author_account_normal
   validate :ensure_price_not_too_low
+  validate :ensure_references_ration_correct
+  validate :ensure_revenue_ratios_sum_to_one
 
   before_validation :setup_attributes, on: :create
   after_create :create_wallet!
@@ -139,9 +158,9 @@ class Article < ApplicationRecord
 
   def share_of(user)
     return if user.blank?
-    return Order::AUTHOR_RATIO if user == author
+    return author_revenue_ratio if user == author
 
-    user.orders.where(item: self).sum(:value_btc) / revenue_btc * (1 - Order::AUTHOR_RATIO - Order::PRSDIGG_RATIO)
+    user.orders.where(item: self).sum(:value_btc) / revenue_btc * readers_revenue_ratio
   end
 
   def notify_authoring_subscribers
@@ -263,6 +282,15 @@ class Article < ApplicationRecord
     snapshots.create raw: as_json
   end
 
+  def revenue_ratios_sum
+    [
+      platform_revenue_ratio,
+      readers_revenue_ratio,
+      author_revenue_ratio,
+      references_revenue_ratio
+    ].sum
+  end
+
   private
 
   def setup_attributes
@@ -289,5 +317,13 @@ class Article < ApplicationRecord
     when Currency::BTC_ASSET_ID
       errors.add(:price, 'at least 0.000001 BTC') if price.to_f < MINIMUM_PRICE_BTC
     end
+  end
+
+  def ensure_revenue_ratios_sum_to_one
+    errors.add(:author_revenue_ratio, ' incorrect') unless (revenue_ratios_sum - 1.0).abs < Float::EPSILON
+  end
+
+  def ensure_references_ration_correct
+    errors.add(:references_revenue_ratio, ' incorrect') unless references_revenue_ratio == article_references.sum(&:revenue_ratio)
   end
 end

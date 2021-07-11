@@ -6,7 +6,7 @@ module Resolvers
 
     def resolve
       Order.group_by_month(:created_at, format: '%Y-%m').sum(:value_usd).map do |key, value|
-        { name: key, value: (value * Order::PRSDIGG_RATIO).to_f }
+        { name: key, value: (value * Order::PLATFORM_RATIO).to_f }
       end.to_json
     end
   end

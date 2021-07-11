@@ -5,14 +5,18 @@
 # Table name: articles
 #
 #  id                                  :bigint           not null, primary key
+#  author_revenue_ratio                :float            default(0.5)
 #  commenting_subscribers_count        :integer          default(0)
 #  comments_count                      :integer          default(0), not null
 #  content                             :text
 #  downvotes_count                     :integer          default(0)
 #  intro                               :string
 #  orders_count                        :integer          default(0), not null
+#  platform_revenue_ratio              :float            default(0.1)
 #  price                               :decimal(, )      not null
 #  published_at                        :datetime
+#  readers_revenue_ratio               :float            default(0.4)
+#  references_revenue_ratio            :float            default(0.0)
 #  revenue_btc                         :decimal(, )      default(0.0)
 #  revenue_usd                         :decimal(, )      default(0.0)
 #  source                              :string

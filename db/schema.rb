@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_07_08_072711) do
+ActiveRecord::Schema.define(version: 2021_07_08_215636) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -123,6 +123,10 @@ ActiveRecord::Schema.define(version: 2021_07_08_072711) do
     t.datetime "published_at"
     t.decimal "revenue_usd", default: "0.0"
     t.decimal "revenue_btc", default: "0.0"
+    t.float "platform_revenue_ratio", default: 0.1
+    t.float "readers_revenue_ratio", default: 0.4
+    t.float "author_revenue_ratio", default: 0.5
+    t.float "references_revenue_ratio", default: 0.0
     t.index ["asset_id"], name: "index_articles_on_asset_id"
     t.index ["author_id"], name: "index_articles_on_author_id"
     t.index ["uuid"], name: "index_articles_on_uuid", unique: true
@@ -140,6 +144,18 @@ ActiveRecord::Schema.define(version: 2021_07_08_072711) do
     t.datetime "updated_at", precision: 6, null: false
     t.index ["trace_id"], name: "index_bonuses_on_trace_id", unique: true
     t.index ["user_id"], name: "index_bonuses_on_user_id"
+  end
+
+  create_table "citer_references", force: :cascade do |t|
+    t.string "citer_type"
+    t.bigint "citer_id"
+    t.string "reference_type"
+    t.bigint "reference_id"
+    t.float "revenue_ratio", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["citer_type", "citer_id"], name: "index_citer_references_on_citer"
+    t.index ["reference_type", "reference_id"], name: "index_citer_references_on_reference"
   end
 
   create_table "comments", force: :cascade do |t|

@@ -27,9 +27,7 @@
 #  index_orders_on_seller_id              (seller_id)
 #
 class Order < ApplicationRecord
-  AUTHOR_RATIO = 0.5
-  READER_RATIO = 0.4
-  PRSDIGG_RATIO = 0.1
+  PLATFORM_RATIO = 0.1
   MINIMUM_AMOUNT = 0.0000_0001
 
   include AASM
@@ -81,7 +79,7 @@ class Order < ApplicationRecord
   # transfer revenue to author and readers
   def distribute!
     # the share for invested readers before
-    amount = total * READER_RATIO
+    amount = total * item.readers_revenue_ratio
 
     # payment maybe swapped
     revenue_asset_id = payment.swap_order&.fill_asset_id || payment.asset_id
@@ -116,7 +114,7 @@ class Order < ApplicationRecord
     end
 
     # create prsdigg transfer
-    _prsdigg_amount = (total * PRSDIGG_RATIO).floor(8)
+    _prsdigg_amount = (total * item.platform_revenue_ratio).floor(8)
     if payment.wallet.present?
       transfers.create_with(
         wallet: payment.wallet,
@@ -149,7 +147,7 @@ class Order < ApplicationRecord
     transfers.sum(:amount).round(8) == if payment.wallet.present?
                                          total.round(8)
                                        else
-                                         (total * (1 - PRSDIGG_RATIO)).round(8)
+                                         (total * (1 - item.platform_revenue_ratio)).round(8)
                                        end
   end
 
