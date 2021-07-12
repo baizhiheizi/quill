@@ -11,6 +11,8 @@ module Types
     field :asset_id, String, null: false
     field :price, Float, null: false
     field :price_usd, Float, null: true
+    field :published_at, GraphQL::Types::ISO8601DateTime, null: false
+
     field :tags_count, Int, null: false
     field :tag_names, [String], null: true
 

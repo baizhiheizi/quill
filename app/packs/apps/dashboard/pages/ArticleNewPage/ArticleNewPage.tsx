@@ -26,13 +26,16 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, useHistory } from 'react-router-dom';
 import UploadComponent from '../../components/UploadComponent/UploadComponent';
+import { useDebounce } from 'ahooks';
 
 export default function ArticleNewPage() {
   const history = useHistory();
   const [form] = Form.useForm();
   const { t } = useTranslation();
+  const [query, setQuery] = useState('');
+  const debouncedQuery = useDebounce(query, { wait: 1000 });
   const { data: boughtArticlesData } = useMyArticleConnectionQuery({
-    variables: { type: 'reader' },
+    variables: { type: 'reader', query: debouncedQuery },
   });
   const [tags, setTags] = useState<string[]>([]);
   const [assetId, setAssetId] = useState(
@@ -219,12 +222,15 @@ export default function ArticleNewPage() {
             </Form.Item>
           </Space>
         </Form.Item>
-        <Form.Item label={t('article.articleReferences')}>
+        <Form.Item label={t('article.form.article_references')}>
           <Form.List name='articleReferences'>
             {(references, { add, remove }) => (
               <>
                 {references.map((reference, index) => (
-                  <div className='flex items-baseline w-full' key={index}>
+                  <div
+                    className='flex items-baseline w-full space-x-2'
+                    key={index}
+                  >
                     <Form.Item
                       noStyle
                       shouldUpdate={(prevValues, curValues) =>
@@ -237,21 +243,24 @@ export default function ArticleNewPage() {
                         className='flex-1'
                         fieldKey={[reference.fieldKey, 'referenceId']}
                         name={[reference.name, 'referenceId']}
-                        label='Reference'
+                        label={t('article.article_text')}
                         rules={[
                           { required: true, message: 'Missing revenue id' },
                         ]}
                       >
-                        <Select>
-                          {boughtArticles.map((article) => (
-                            <Select.Option
-                              key={article.uuid}
-                              value={article.uuid}
-                            >
-                              {article.author.name}:{article.title}
-                            </Select.Option>
-                          ))}
-                        </Select>
+                        <Select
+                          allowClear
+                          showSearch
+                          filterOption={false}
+                          onSearch={(value: string) => setQuery(value)}
+                          onChange={() => setQuery('')}
+                          options={boughtArticles.map((article) => {
+                            return {
+                              label: <span>{article.title}</span>,
+                              value: article.uuid,
+                            };
+                          })}
+                        />
                       </Form.Item>
                     </Form.Item>
                     <Form.Item
@@ -262,7 +271,7 @@ export default function ArticleNewPage() {
                       rules={[
                         { required: true, message: 'Missing revenue ratio' },
                       ]}
-                      label='Revenue Ratio'
+                      label={t('article.form.revenue_ratio')}
                     >
                       <InputNumber min={0.01} step='0.01' max={0.5} />
                     </Form.Item>
@@ -278,7 +287,7 @@ export default function ArticleNewPage() {
                     block
                     icon={<PlusOutlined />}
                   >
-                    Add Reference
+                    {t('article.form.add_reference')}
                   </Button>
                 </Form.Item>
               </>

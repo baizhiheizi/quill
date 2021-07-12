@@ -350,9 +350,11 @@ export type Article = {
   paymentTraceId?: Maybe<Scalars['String']>;
   price: Scalars['Float'];
   priceUsd?: Maybe<Scalars['Float']>;
+  publishedAt: Scalars['ISO8601DateTime'];
   randomReaders: Array<User>;
   readerRevenueUsd: Scalars['Float'];
   readers: UserConnection;
+  references?: Maybe<Array<Article>>;
   revenueBtc: Scalars['Float'];
   revenueUsd: Scalars['Float'];
   rewardOrders: OrderConnection;
@@ -1533,6 +1535,7 @@ export type QueryMyArticleArgs = {
 
 export type QueryMyArticleConnectionArgs = {
   type: Scalars['String'];
+  query?: Maybe<Scalars['String']>;
   state?: Maybe<Scalars['String']>;
   after?: Maybe<Scalars['String']>;
   before?: Maybe<Scalars['String']>;
@@ -4226,7 +4229,17 @@ export const ArticleDocument = gql`
       iconUrl
       priceUsd
     }
+    references {
+      author {
+        mixinUuid
+        name
+        avatar
+      }
+      uuid
+      title
+    }
     createdAt
+    publishedAt
   }
   swappableCurrencies {
     id
@@ -5158,8 +5171,8 @@ export type MyAccessTokenConnectionQueryHookResult = ReturnType<typeof useMyAcce
 export type MyAccessTokenConnectionLazyQueryHookResult = ReturnType<typeof useMyAccessTokenConnectionLazyQuery>;
 export type MyAccessTokenConnectionQueryResult = Apollo.QueryResult<MyAccessTokenConnectionQuery, MyAccessTokenConnectionQueryVariables>;
 export const MyArticleConnectionDocument = gql`
-    query MyArticleConnection($type: String!, $state: String, $after: String) {
-  myArticleConnection(type: $type, state: $state, after: $after) {
+    query MyArticleConnection($type: String!, $query: String, $state: String, $after: String) {
+  myArticleConnection(type: $type, query: $query, state: $state, after: $after) {
     nodes {
       uuid
       title
@@ -5196,6 +5209,7 @@ export const MyArticleConnectionDocument = gql`
  * const { data, loading, error } = useMyArticleConnectionQuery({
  *   variables: {
  *      type: // value for 'type'
+ *      query: // value for 'query'
  *      state: // value for 'state'
  *      after: // value for 'after'
  *   },
@@ -5313,6 +5327,15 @@ export const MyArticleDocument = gql`
       iconUrl
       priceUsd
       priceBtc
+    }
+    references {
+      author {
+        mixinUuid
+        name
+        avatar
+      }
+      uuid
+      title
     }
   }
 }

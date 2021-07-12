@@ -3,24 +3,28 @@
 module Resolvers
   class MyArticleConnectionResolver < MyBaseResolver
     argument :type, String, required: true
+    argument :query, String, required: false
     argument :state, String, required: false
     argument :after, String, required: false
 
     type Types::ArticleConnectionType, null: false
 
     def resolve(params)
-      case params[:type]
-      when 'author'
-        articles =
+      articles =
+        case params[:type]
+        when 'author'
           if params[:state].present?
-            current_user.articles.where(state: params[:state])
+            current_user.articles.where(state: params[:state]).order(created_at: :desc)
           else
-            current_user.articles
+            current_user.articles.order(created_at: :desc)
           end
-        articles.order(created_at: :desc)
-      when 'reader'
-        current_user.bought_articles
-      end
+        when 'reader'
+          current_user.bought_articles
+        end
+
+      q = params[:query].to_s.strip
+      q_ransack = { title_cont: q, intro_cont: q, author_name_cont: q, tags_name_cont: q }
+      articles.ransack(q_ransack.merge(m: 'or')).result
     end
   end
 end

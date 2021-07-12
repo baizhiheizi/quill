@@ -112,6 +112,7 @@ export const apolloClient = (uri: string, csrfToken?: string) => {
           myPaymentConnection: customizedConnectionMergeFunction(),
           myArticleConnection: customizedConnectionMergeFunction([
             'type',
+            'query',
             'state',
           ]),
           userArticleConnection: customizedConnectionMergeFunction([
