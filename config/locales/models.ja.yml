@@ -2,6 +2,7 @@ ja:
   created_at: 投稿日
   updated_at: 更新日
   article:
+    article_text: 記事
     title: タイトル
     content: コンテンツ
     intro: 前書き
@@ -37,6 +38,8 @@ ja:
       title_place_holder: 記事タイトル
       content_place_holder: あなただけの文章を書いてみましょう
       intro_place_holder: より多くの人にあなたの素敵な文章を見て貰えるように記事紹介を書いてみましょう
+      revenue_ratio: 収益率
+      add_reference: 追加参照
   tag:
     articles_count: 記事数
     subscribers_count: フォロワー数

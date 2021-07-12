@@ -2,6 +2,7 @@ en:
   created_at: Created At
   updated_at: Updated At
   article:
+    article_text: Article
     title: Title
     content: Content
     intro: Introduction
@@ -37,6 +38,9 @@ en:
       title_place_holder: Title of article
       content_place_holder: Write something valuable
       intro_place_holder: Please introduce your article and this will be public
+      article_references: References
+      revenue_ratio: Revenue Ratio
+      add_reference: Add Reference
   tag:
     articles_count: Articles
     subscribers_count: Subscribers

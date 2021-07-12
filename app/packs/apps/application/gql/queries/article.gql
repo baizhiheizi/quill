@@ -57,7 +57,17 @@ query Article($uuid: ID!) {
       iconUrl
       priceUsd
     }
+    references {
+      author {
+        mixinUuid
+        name
+        avatar
+      }
+      uuid
+      title
+    }
     createdAt
+    publishedAt
   }
   swappableCurrencies {
     id
