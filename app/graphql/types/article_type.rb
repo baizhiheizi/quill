@@ -56,6 +56,7 @@ module Types
 
     field :random_readers, [UserType], null: false
     field :tags, [Types::TagType], null: false
+    field :citers, [Types::ArticleType], null: true
     field :references, [Types::ArticleType], null: true
     field :article_references, [Types::CiterReferenceType], null: true
 

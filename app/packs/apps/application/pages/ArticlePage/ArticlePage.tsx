@@ -243,41 +243,63 @@ export default function ArticlePage() {
         </ArticleShareButton>
       </div>
 
-      {article.articleReferences.length > 0 && (
+      {(article.articleReferences.length > 0 || article.citers.length > 0) && (
         <div className='mb-6'>
           <Collapse
-            defaultActiveKey='article_references'
+            defaultActiveKey={['article_references', 'article_citers']}
             expandIconPosition='right'
           >
-            <Collapse.Panel
-              key='article_references'
-              header={t('article_references')}
-            >
-              {article.articleReferences.map((articleReference) => (
-                <div
-                  key={articleReference.reference.uuid}
-                  className='flex flex-wrap items-center'
-                >
-                  <Avatar
-                    className='mr-2'
-                    size='small'
-                    src={articleReference.reference.author.avatar}
-                  />
-                  <span className='mr-2'>
-                    {articleReference.reference.author.name}:
-                  </span>
-                  <a
-                    href={`/articles/${articleReference.reference.uuid}`}
-                    target='_blank'
+            {article.articleReferences.length > 0 && (
+              <Collapse.Panel
+                key='article_references'
+                header={t('article_references')}
+              >
+                {article.articleReferences.map((articleReference) => (
+                  <div
+                    key={articleReference.reference.uuid}
+                    className='flex flex-wrap items-center py-1'
                   >
-                    {articleReference.reference.title}
-                  </a>
-                  <div className='ml-auto text-blue-500'>
-                    {articleReference.revenueRatio * 100}%
+                    <Avatar
+                      className='mr-2'
+                      size='small'
+                      src={articleReference.reference.author.avatar}
+                    />
+                    <span className='mr-2'>
+                      {articleReference.reference.author.name}:
+                    </span>
+                    <a
+                      href={`/articles/${articleReference.reference.uuid}`}
+                      target='_blank'
+                    >
+                      {articleReference.reference.title}
+                    </a>
+                    <div className='ml-auto text-blue-500'>
+                      {articleReference.revenueRatio * 100}%
+                    </div>
                   </div>
-                </div>
-              ))}
-            </Collapse.Panel>
+                ))}
+              </Collapse.Panel>
+            )}
+            {article.citers.length > 0 && (
+              <Collapse.Panel key='article_citers' header={t('referenced_by')}>
+                {article.citers.map((citer) => (
+                  <div
+                    key={citer.uuid}
+                    className='flex flex-wrap items-center py-1'
+                  >
+                    <Avatar
+                      className='mr-2'
+                      size='small'
+                      src={citer.author.avatar}
+                    />
+                    <span className='mr-2'>{citer.author.name}:</span>
+                    <a href={`/articles/${citer.uuid}`} target='_blank'>
+                      {citer.title}
+                    </a>
+                  </div>
+                ))}
+              </Collapse.Panel>
+            )}
           </Collapse>
         </div>
       )}
