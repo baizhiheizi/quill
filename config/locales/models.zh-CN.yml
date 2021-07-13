@@ -38,9 +38,10 @@ zh-CN:
       title_place_holder: 文章标题
       content_place_holder: 写点有价值的东西
       intro_place_holder: 请简要介绍一下你的文章，简介内容为公开可见。
-      article_references: 引用
       revenue_ratio: 奖励比例
       add_reference: 添加引用
+      please_select_an_article: 请选择引用的文章
+      please_input_revenue_ratio: 请输入奖励比例
   tag:
     articles_count: 文章数量
     subscribers_count: 订阅人数

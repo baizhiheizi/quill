@@ -43,14 +43,17 @@ query MyArticle($uuid: ID!) {
       priceUsd
       priceBtc
     }
-    references {
-      author {
-        mixinUuid
-        name
-        avatar
+    articleReferences {
+      revenueRatio
+      reference {
+        author {
+          mixinUuid
+          name
+          avatar
+        }
+        uuid
+        title
       }
-      uuid
-      title
     }
   }
 }

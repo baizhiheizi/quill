@@ -17,9 +17,10 @@ module Mutations
       )
 
       if params[:article_references].present?
-        references_revenue_ratio = params[:article_references].sum(&:revenue_ratio)&.to_f
+        article_references = params[:article_references].uniq { |ref| ref.reference_id }
+        references_revenue_ratio = article_references.sum(&:revenue_ratio)&.to_f
 
-        params[:article_references].each do |reference|
+        article_references.each do |reference|
           _ref = current_user.bought_articles.find_by(id: reference.reference_id)
           _ref ||= current_user.bought_articles.find_by(uuid: reference.reference_id)
           next if _ref.blank?

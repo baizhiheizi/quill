@@ -11,6 +11,7 @@ import {
   Button,
   Card,
   Col,
+  Collapse,
   Divider,
   message,
   Progress,
@@ -103,7 +104,7 @@ export default function ArticlePage() {
   document.title = `${article.title} - ${article.author.name}`;
 
   return (
-    <div>
+    <>
       <div className='mb-4 font-sans text-2xl font-semibold'>
         {article.title}
       </div>
@@ -133,48 +134,29 @@ export default function ArticlePage() {
             </Button>
           )}
       </div>
-      <div
-        style={{
-          background: '#f4f4f4',
-          borderLeft: '5px solid #ddd',
-          padding: '0.5rem 0.5rem',
-          marginBottom: '2rem',
-        }}
-      >
+      <div className='p-2 mb-4 bg-gray-100 border-l-4 border-gray-300'>
         {article.intro}
       </div>
       <div style={{ marginBottom: 20 }}>
         {article.authorized ? (
           <MarkdownRendererComponent source={article.content} />
         ) : (
-          <div style={{ textAlign: 'center' }}>
-            <div
-              style={{
-                color: '#aaa',
-                marginBottom: '1rem',
-                textAlign: 'left',
-              }}
-            >
+          <div className='text-center'>
+            <div className='mb-4 text-left text-gray-500'>
               {t('article.words_count')}: {article.wordsCount}
             </div>
             {article.partialContent && (
-              <div style={{ marginBottom: '1rem', textAlign: 'left' }}>
+              <div className='mb-4 text-left'>
                 <MarkdownRendererComponent source={article.partialContent} />
-                <div
-                  style={{
-                    marginTop: '1rem',
-                    textAlign: 'center',
-                    color: 'red',
-                  }}
-                >
+                <div className='mt-4 text-center text-red-500'>
                   - {t('more_to_read')} -
                 </div>
               </div>
             )}
-            <div style={{ marginBottom: '1rem' }}>
+            <div className='mb-4'>
               <div>
                 {t('pay')}{' '}
-                <span style={{ color: 'red' }}>
+                <span className='text-red-500'>
                   {article.price} {article.currency.symbol}
                 </span>
                 {` (≈$${article.priceUsd}) `}
@@ -185,7 +167,7 @@ export default function ArticlePage() {
                 <Link to='/rules'>{t('rules')}</Link>)
               </div>
             </div>
-            <div style={{ marginBottom: '1rem' }}>
+            <div className='mb-4'>
               <Alert type='warning' message={t('pay_warning')} />
             </div>
             <div>
@@ -216,20 +198,12 @@ export default function ArticlePage() {
                       }}
                     />
                   )}
-                  <div
-                    style={{ marginTop: 10, fontSize: '0.8rem', color: '#aaa' }}
-                  >
+                  <div className='mt-4 text-sm text-black text-opacity-30'>
                     {t('already_paid')}? {t('try_to')}{' '}
                     <a onClick={() => refetch()}>{t('refresh')}</a>
                   </div>
                   {article.swappable && (
-                    <div
-                      style={{
-                        marginTop: 5,
-                        fontSize: '0.8rem',
-                        color: '#aaa',
-                      }}
-                    >
+                    <div className='mt-2 text-sm text-black text-opacity-30'>
                       {t('pay_via_swap_tips')}
                     </div>
                   )}
@@ -246,7 +220,8 @@ export default function ArticlePage() {
           </div>
         )}
       </div>
-      <div style={{ marginBottom: 20 }}>
+
+      <div className='mb-6'>
         <ArticleTagsComponent tags={article.tags} />
       </div>
 
@@ -267,10 +242,51 @@ export default function ArticlePage() {
           </Button>
         </ArticleShareButton>
       </div>
+
+      {article.articleReferences.length > 0 && (
+        <div className='mb-6'>
+          <Collapse
+            defaultActiveKey='article_references'
+            expandIconPosition='right'
+          >
+            <Collapse.Panel
+              key='article_references'
+              header={t('article_references')}
+            >
+              {article.articleReferences.map((articleReference) => (
+                <div
+                  key={articleReference.reference.uuid}
+                  className='flex flex-wrap items-center'
+                >
+                  <Avatar
+                    className='mr-2'
+                    size='small'
+                    src={articleReference.reference.author.avatar}
+                  />
+                  <span className='mr-2'>
+                    {articleReference.reference.author.name}:
+                  </span>
+                  <a
+                    href={`/articles/${articleReference.reference.uuid}`}
+                    target='_blank'
+                  >
+                    {articleReference.reference.title}
+                  </a>
+                  <div className='ml-auto text-blue-500'>
+                    {articleReference.revenueRatio * 100}%
+                  </div>
+                </div>
+              ))}
+            </Collapse.Panel>
+          </Collapse>
+        </div>
+      )}
+
       <div className='mb-6'>
         <UserCardComponent user={article.author} />
       </div>
-      <div style={{ marginBottom: '2rem' }}>
+
+      <div className='mb-6'>
         <Row justify='center'>
           <Col>
             {article.authorized &&
@@ -493,6 +509,6 @@ export default function ArticlePage() {
           </div>
         )}
       </div>
-    </div>
+    </>
   );
 }
