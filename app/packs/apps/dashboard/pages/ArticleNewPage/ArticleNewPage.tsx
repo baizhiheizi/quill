@@ -222,7 +222,7 @@ export default function ArticleNewPage() {
             </Form.Item>
           </Space>
         </Form.Item>
-        <Form.Item label={t('article.form.article_references')}>
+        <Form.Item label={t('article_references')}>
           <Form.List name='articleReferences'>
             {(references, { add, remove }) => (
               <>
