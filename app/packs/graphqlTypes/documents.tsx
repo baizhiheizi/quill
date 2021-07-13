@@ -335,6 +335,7 @@ export type Article = {
   authorized?: Maybe<Scalars['Boolean']>;
   buyOrders: OrderConnection;
   buyers: UserConnection;
+  citers?: Maybe<Array<Article>>;
   commentingSubscribed?: Maybe<Scalars['Boolean']>;
   comments: CommentConnection;
   commentsCount: Scalars['Int'];
@@ -4251,6 +4252,15 @@ export const ArticleDocument = gql`
         uuid
         title
       }
+    }
+    citers {
+      author {
+        mixinUuid
+        name
+        avatar
+      }
+      uuid
+      title
     }
     createdAt
     publishedAt

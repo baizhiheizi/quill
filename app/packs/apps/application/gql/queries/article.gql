@@ -69,6 +69,15 @@ query Article($uuid: ID!) {
         title
       }
     }
+    citers {
+      author {
+        mixinUuid
+        name
+        avatar
+      }
+      uuid
+      title
+    }
     createdAt
     publishedAt
   }
