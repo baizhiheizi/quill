@@ -221,13 +221,36 @@ export default function ArticleEditPage() {
             </Form.Item>
           </Space>
         </Form.Item>
+        {myArticle.articleReferences.length > 0 && (
+          <Form.Item label={t('article_references')}>
+            {myArticle.articleReferences.map((articleReference) => (
+              <div
+                key={articleReference.reference.uuid}
+                className='flex flex-wrap items-center'
+              >
+                <Avatar
+                  className='mr-2'
+                  size='small'
+                  src={articleReference.reference.author.avatar}
+                />
+                <span className='mr-2'>
+                  {articleReference.reference.author.name}:
+                </span>
+                <a
+                  href={`/articles/${articleReference.reference.uuid}`}
+                  target='_blank'
+                >
+                  {articleReference.reference.title}
+                </a>
+                <div className='ml-auto text-blue-500'>
+                  {articleReference.revenueRatio * 100}%
+                </div>
+              </div>
+            ))}
+          </Form.Item>
+        )}
         <Form.Item wrapperCol={{ xs: { offset: 0 }, sm: { offset: 2 } }}>
-          <Button
-            size='large'
-            type='primary'
-            htmlType='submit'
-            loading={updating}
-          >
+          <Button type='primary' htmlType='submit' loading={updating}>
             {t('update')}
           </Button>
         </Form.Item>
