@@ -127,6 +127,11 @@ class SwapOrder < ApplicationRecord
         payment: payment,
         order_type: :reward_article
       )
+    when 'CITE'
+      article.orders.find_or_create_by!(
+        payment: payment,
+        order_type: :cite_article
+      )
     end
     order_place!
   rescue ActiveRecord::RecordInvalid => e
