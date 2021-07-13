@@ -57,6 +57,7 @@ module Types
     field :random_readers, [UserType], null: false
     field :tags, [Types::TagType], null: false
     field :references, [Types::ArticleType], null: true
+    field :article_references, [Types::CiterReferenceType], null: true
 
     def content
       return unless object.authorized?(context[:current_user])

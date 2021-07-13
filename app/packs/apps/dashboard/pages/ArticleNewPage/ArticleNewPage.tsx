@@ -245,7 +245,10 @@ export default function ArticleNewPage() {
                         name={[reference.name, 'referenceId']}
                         label={t('article.article_text')}
                         rules={[
-                          { required: true, message: 'Missing revenue id' },
+                          {
+                            required: true,
+                            message: t('please_select_an_article'),
+                          },
                         ]}
                       >
                         <Select
@@ -269,7 +272,10 @@ export default function ArticleNewPage() {
                       fieldKey={[reference.fieldKey, 'revenueRatio']}
                       name={[reference.name, 'revenueRatio']}
                       rules={[
-                        { required: true, message: 'Missing revenue ratio' },
+                        {
+                          required: true,
+                          message: t('please_input_revenue_ratio'),
+                        },
                       ]}
                       label={t('article.form.revenue_ratio')}
                     >

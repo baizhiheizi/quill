@@ -57,14 +57,17 @@ query Article($uuid: ID!) {
       iconUrl
       priceUsd
     }
-    references {
-      author {
-        mixinUuid
-        name
-        avatar
+    articleReferences {
+      revenueRatio
+      reference {
+        author {
+          mixinUuid
+          name
+          avatar
+        }
+        uuid
+        title
       }
-      uuid
-      title
     }
     createdAt
     publishedAt
