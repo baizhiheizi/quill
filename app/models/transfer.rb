@@ -50,7 +50,8 @@ class Transfer < ApplicationRecord
     swap_change: 5,
     swap_refund: 6,
     fox_swap: 7,
-    withdraw_balance: 8
+    withdraw_balance: 8,
+    reference_revenue: 9
   }
 
   validates :trace_id, presence: true, uniqueness: true

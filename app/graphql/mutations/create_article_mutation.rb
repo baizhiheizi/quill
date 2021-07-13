@@ -13,11 +13,11 @@ module Mutations
         content: params[:content],
         price: params[:price],
         state: params[:state],
-        asset_id: params[:asset_id],
+        asset_id: params[:asset_id]
       )
 
       if params[:article_references].present?
-        article_references = params[:article_references].uniq { |ref| ref.reference_id }
+        article_references = params[:article_references].uniq(&:reference_id)
         references_revenue_ratio = article_references.sum(&:revenue_ratio)&.to_f
 
         article_references.each do |reference|
@@ -33,7 +33,7 @@ module Mutations
 
         article.assign_attributes(
           author_revenue_ratio: Article::AUTHOR_REVENUE_RATIO_DEFAULT - references_revenue_ratio,
-          references_revenue_ratio: references_revenue_ratio,
+          references_revenue_ratio: references_revenue_ratio
         )
       end
 

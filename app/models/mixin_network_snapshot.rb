@@ -20,8 +20,9 @@
 #
 # Indexes
 #
-#  index_mixin_network_snapshots_on_trace_id  (trace_id) UNIQUE
-#  index_mixin_network_snapshots_on_user_id   (user_id)
+#  index_mixin_network_snapshots_on_snapshot_id  (snapshot_id) UNIQUE
+#  index_mixin_network_snapshots_on_trace_id     (trace_id)
+#  index_mixin_network_snapshots_on_user_id      (user_id)
 #
 class MixinNetworkSnapshot < ApplicationRecord
   POLLING_INTERVAL = 0.1
@@ -29,6 +30,7 @@ class MixinNetworkSnapshot < ApplicationRecord
 
   belongs_to :wallet, class_name: 'MixinNetworkUser', foreign_key: :user_id, primary_key: :uuid, inverse_of: :snapshots, optional: true
   belongs_to :opponent, class_name: 'User', primary_key: :mixin_uuid, inverse_of: :snapshots, optional: true
+  belongs_to :opponent_wallet, class_name: 'MixinNetworkUser', primary_key: :uuid, foreign_key: :opponent_id, inverse_of: false, optional: true
   belongs_to :currency, primary_key: :asset_id, foreign_key: :asset_id, inverse_of: :orders, optional: true
 
   before_validation :setup_attributes, on: :create
@@ -60,7 +62,7 @@ class MixinNetworkSnapshot < ApplicationRecord
       r['data'].each do |snapshot|
         next if snapshot['user_id'].blank?
 
-        create_with(raw: snapshot).find_or_create_by!(trace_id: snapshot['trace_id'])
+        create_with(raw: snapshot).find_or_create_by!(snapshot_id: snapshot['snapshot_id'])
       end
 
       Global.redis.set 'last_polled_at', r['data'].last['created_at']
@@ -102,10 +104,10 @@ class MixinNetworkSnapshot < ApplicationRecord
   def process!
     return if processed?
 
-    if opponent.present?
-      process_payment_snapshot
-    elsif decrypted_memo['s'].in? %w[4swapTrade 4swapRefund]
+    if decrypted_memo['s'].in? %w[4swapTrade 4swapRefund]
       process_4swap_snapshot
+    elsif amount.positive?
+      process_payment_snapshot
     end
 
     touch_proccessed_at
@@ -113,10 +115,11 @@ class MixinNetworkSnapshot < ApplicationRecord
 
   def process_payment_snapshot
     return if amount.negative?
+    # not valid payment
+    return if opponent.blank? && opponent_wallet.blank?
 
     Currency.find_or_create_by_asset_id asset_id
-    opponent
-      .payments
+    Payment
       .create_with(raw: raw)
       .find_or_create_by!(trace_id: trace_id)
   end
