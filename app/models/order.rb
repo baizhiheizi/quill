@@ -49,7 +49,7 @@ class Order < ApplicationRecord
   validates :trace_id, presence: true, uniqueness: true
   validate :ensure_total_sufficient, on: :create
 
-  enum order_type: { buy_article: 0, reward_article: 1 }
+  enum order_type: { buy_article: 0, reward_article: 1, cite_article: 2 }
 
   delegate :price_tag, to: :payment, prefix: true
   scope :only_prs, -> { where(asset_id: Currency::PRS_ASSET_ID) }
@@ -93,7 +93,7 @@ class Order < ApplicationRecord
     sum = _orders.sum(:value_btc)
 
     # create reader transfer
-    _distributed_amount = 0
+    _readers_amount = 0
     _orders.each do |_order|
       # ignore if amount is less than minium amout for Mixin Network
       _amount = (amount * _order.value_btc.to_f / sum).floor(8)
@@ -110,37 +110,69 @@ class Order < ApplicationRecord
         trace_id: PrsdiggBot.api.unique_conversation_id(trace_id, _order.trace_id)
       )
 
-      _distributed_amount += _amount
+      _readers_amount += _amount
+    end
+
+    # create references revenue payment
+    _references_amount = 0
+    if item.article_references.count.positive?
+      item.article_references.each do |ref|
+        _ref_amount = (total * ref.revenue_ratio).floor(8)
+        next if (_ref_amount - MINIMUM_AMOUNT).negative?
+
+        transfers.create_with(
+          transfer_type: :reference_revenue,
+          wallet: payment.wallet,
+          opponent_id: ref.reference.wallet_id,
+          asset_id: revenue_asset_id,
+          amount: _ref_amount,
+          memo: Base64.encode64({
+            t: 'CITE',
+            a: ref.reference.uuid,
+            p: buyer.mixin_uuid
+          }.to_json)
+        ).find_or_create_by(
+          trace_id: payment.wallet.mixin_api.unique_conversation_id(trace_id, ref.reference.uuid)
+        )
+
+        _references_amount += _ref_amount
+      end
     end
 
     # create prsdigg transfer
     _prsdigg_amount = (total * item.platform_revenue_ratio).floor(8)
-    if payment.wallet.present?
+    if _prsdigg_amount.positive? && payment.wallet.present?
       transfers.create_with(
         wallet: payment.wallet,
         transfer_type: :prsdigg_revenue,
         opponent_id: PrsdiggBot.api.client_id,
         asset_id: revenue_asset_id,
         amount: _prsdigg_amount.to_f.to_s,
-        memo: "article uuid: #{item.uuid}》".truncate(140)
+        memo: "article uuid: #{item.uuid}".truncate(140)
       ).find_or_create_by!(
         trace_id: payment.wallet.mixin_api.unique_conversation_id(trace_id, PrsdiggBot.api.client_id)
       )
     end
 
     # create author transfer
+    author_revenue_transfer_memo =
+      if cite_article?
+        "Reference revenue from #{item.title}"
+      else
+        "#{buyer.name} #{buy_article? ? 'bought' : 'rewarded'} #{item.title}"
+      end
     transfers.create_with(
       wallet: payment.wallet,
       transfer_type: :author_revenue,
       opponent_id: item.author.mixin_uuid,
       asset_id: revenue_asset_id,
-      amount: (total - _distributed_amount - _prsdigg_amount).floor(8),
-      memo: "#{payment.payer.name} #{buy_article? ? 'bought' : 'rewarded'} article #{item.title}".truncate(70)
+      amount: (total - _readers_amount - _prsdigg_amount - _references_amount).floor(8),
+      memo: author_revenue_transfer_memo.truncate(70)
     ).find_or_create_by!(
       trace_id: PrsdiggBot.api.unique_conversation_id(trace_id, item.author.mixin_uuid)
     )
 
-    complete!
+    complete! if paid?
   end
 
   def all_transfers_generated?
@@ -172,7 +204,7 @@ class Order < ApplicationRecord
   end
 
   def notify_buyer
-    OrderCreatedNotification.with(order: self).deliver(buyer)
+    OrderCreatedNotification.with(order: self).deliver(buyer) if order_type.in? %w[buy_article reward_article]
   end
 
   def article

@@ -33,14 +33,17 @@ export default function PaymentsComponent(props: { payerMixinUuid?: string }) {
     {
       dataIndex: 'payer',
       key: 'payer',
-      render: (_, payment) => (
-        <Space>
-          <Avatar src={payment.payer.avatar} />
-          <span>
-            {payment.payer.name}({payment.payer.mixinId})
-          </span>
-        </Space>
-      ),
+      render: (_, payment) =>
+        payment.payer ? (
+          <Space>
+            <Avatar src={payment.payer.avatar} />
+            <span>
+              {payment.payer.name}({payment.payer.mixinId})
+            </span>
+          </Space>
+        ) : (
+          payment.opponentId
+        ),
       title: 'Payer',
     },
     {

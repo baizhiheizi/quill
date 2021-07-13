@@ -13,19 +13,23 @@
 #  updated_at  :datetime         not null
 #  asset_id    :uuid
 #  opponent_id :uuid
+#  payer_id    :uuid
 #  snapshot_id :uuid
 #  trace_id    :uuid
 #
 # Indexes
 #
-#  index_payments_on_asset_id  (asset_id)
-#  index_payments_on_trace_id  (trace_id) UNIQUE
+#  index_payments_on_asset_id     (asset_id)
+#  index_payments_on_opponent_id  (opponent_id)
+#  index_payments_on_payer_id     (payer_id)
+#  index_payments_on_trace_id     (trace_id) UNIQUE
 #
 class Payment < ApplicationRecord
   include AASM
 
-  belongs_to :payer, class_name: 'User', foreign_key: :opponent_id, primary_key: :mixin_uuid, inverse_of: :payments
-  belongs_to :snapshot, class_name: 'MixinNetworkSnapshot', foreign_key: :trace_id, primary_key: :trace_id, optional: true, inverse_of: false
+  belongs_to :payer, class_name: 'User', primary_key: :mixin_uuid, inverse_of: :payments, optional: true
+  belongs_to :payer_wallet, class_name: 'MixinNetworkUser', foreign_key: :opponent_id, primary_key: :uuid, inverse_of: false, optional: true
+  belongs_to :snapshot, -> { where(amount: 0...) }, class_name: 'MixinNetworkSnapshot', foreign_key: :trace_id, primary_key: :trace_id, optional: true, inverse_of: false
   belongs_to :currency, primary_key: :asset_id, foreign_key: :asset_id, inverse_of: :payments, optional: true
 
   has_one :refund_transfer, -> { where(transfer_type: :payment_refund) }, class_name: 'Transfer', as: :source, dependent: :nullify, inverse_of: false
@@ -34,7 +38,7 @@ class Payment < ApplicationRecord
 
   before_validation :setup_attributes, on: :create
 
-  validates :amount, presence: true
+  validates :amount, presence: true, numericality: { greater_than: 0 }
   validates :raw, presence: true
   validates :asset_id, presence: true
   validates :opponent_id, presence: true
@@ -62,9 +66,9 @@ class Payment < ApplicationRecord
   def decrypted_memo
     # memo from PRSDigg user
     # memo = {
-    #  't': BUY|REWARD,
+    #  't': BUY|REWARD|CITE,
     #  'a': article's uuid,
-    #  'p': price as PRS
+    #  'p': payer's uuid
     # }
     #
     @decrypted_memo =
@@ -76,7 +80,7 @@ class Payment < ApplicationRecord
   end
 
   def memo_correct?
-    decrypted_memo.key?('a') && decrypted_memo.key?('t') && decrypted_memo['t'].in?(%w[BUY REWARD])
+    decrypted_memo.key?('a') && decrypted_memo.key?('t') && decrypted_memo['t'].in?(%w[BUY REWARD CITE])
   end
 
   def article
@@ -124,6 +128,11 @@ class Payment < ApplicationRecord
         payment: self,
         order_type: :reward_article
       )
+    when 'CITE'
+      article.orders.find_or_create_by!(
+        payment: self,
+        order_type: :cite_article
+      )
     else
       generate_refund_transfer!
     end
@@ -156,7 +165,7 @@ class Payment < ApplicationRecord
   end
 
   def notify_payer
-    PaymentCreatedNotification.with(payment: self).deliver(payer)
+    PaymentCreatedNotification.with(payment: self).deliver(payer) if decrypted_memo['t'].in? %w[BUY REWARD]
   end
 
   def price_tag
@@ -174,5 +183,7 @@ class Payment < ApplicationRecord
       snapshot_id: raw['snapshot_id'],
       trace_id: raw['trace_id']
     )
+
+    self.payer = User.find_by mixin_uuid: decrypted_memo['p'] || opponent_id
   end
 end

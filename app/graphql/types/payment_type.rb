@@ -3,13 +3,14 @@
 module Types
   class PaymentType < Types::BaseObject
     field :trace_id, ID, null: false
+    field :opponent_id, String, null: false
     field :snapshot_id, String, null: false
     field :amount, Float, null: false
     field :memo, String, null: true
     field :state, String, null: false
     field :asset_id, String, null: false
 
-    field :payer, Types::UserType, null: false
+    field :payer, Types::UserType, null: true
     field :order, Types::OrderType, null: true
     field :currency, Types::CurrencyType, null: true
 

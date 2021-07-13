@@ -813,7 +813,7 @@ export type MixinNetworkUser = {
 };
 
 /** Mixin network user' owner */
-export type MixinNetworkUserOwnerUnion = Article;
+export type MixinNetworkUserOwnerUnion = Article | User;
 
 export type Mutation = {
   __typename?: 'Mutation';
@@ -1166,8 +1166,9 @@ export type Payment = {
   createdAt: Scalars['ISO8601DateTime'];
   currency?: Maybe<Currency>;
   memo?: Maybe<Scalars['String']>;
+  opponentId: Scalars['String'];
   order?: Maybe<Order>;
-  payer: User;
+  payer?: Maybe<User>;
   snapshotId: Scalars['String'];
   state: Scalars['String'];
   traceId: Scalars['ID'];
@@ -3263,6 +3264,7 @@ export const AdminPaymentConnectionDocument = gql`
       amount
       state
       assetId
+      opponentId
       payer {
         name
         mixinId

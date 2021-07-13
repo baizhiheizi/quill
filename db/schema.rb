@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_07_08_215636) do
+ActiveRecord::Schema.define(version: 2021_07_13_084903) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -208,7 +208,8 @@ ActiveRecord::Schema.define(version: 2021_07_08_215636) do
     t.datetime "processed_at"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["trace_id"], name: "index_mixin_network_snapshots_on_trace_id", unique: true
+    t.index ["snapshot_id"], name: "index_mixin_network_snapshots_on_snapshot_id", unique: true
+    t.index ["trace_id"], name: "index_mixin_network_snapshots_on_trace_id"
     t.index ["user_id"], name: "index_mixin_network_snapshots_on_user_id"
   end
 
@@ -285,7 +286,10 @@ ActiveRecord::Schema.define(version: 2021_07_08_215636) do
     t.json "raw"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.uuid "payer_id"
     t.index ["asset_id"], name: "index_payments_on_asset_id"
+    t.index ["opponent_id"], name: "index_payments_on_opponent_id"
+    t.index ["payer_id"], name: "index_payments_on_payer_id"
     t.index ["trace_id"], name: "index_payments_on_trace_id", unique: true
   end
 

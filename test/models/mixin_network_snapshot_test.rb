@@ -20,8 +20,9 @@
 #
 # Indexes
 #
-#  index_mixin_network_snapshots_on_trace_id  (trace_id) UNIQUE
-#  index_mixin_network_snapshots_on_user_id   (user_id)
+#  index_mixin_network_snapshots_on_snapshot_id  (snapshot_id) UNIQUE
+#  index_mixin_network_snapshots_on_trace_id     (trace_id)
+#  index_mixin_network_snapshots_on_user_id      (user_id)
 #
 require 'test_helper'
 
