@@ -5,6 +5,7 @@
 # Table name: orders
 #
 #  id         :bigint           not null, primary key
+#  citer_type :string
 #  item_type  :string
 #  order_type :integer
 #  state      :string
@@ -15,16 +16,18 @@
 #  updated_at :datetime         not null
 #  asset_id   :uuid
 #  buyer_id   :bigint
+#  citer_id   :integer
 #  item_id    :bigint
 #  seller_id  :bigint
 #  trace_id   :uuid
 #
 # Indexes
 #
-#  index_orders_on_asset_id               (asset_id)
-#  index_orders_on_buyer_id               (buyer_id)
-#  index_orders_on_item_type_and_item_id  (item_type,item_id)
-#  index_orders_on_seller_id              (seller_id)
+#  index_orders_on_asset_id                 (asset_id)
+#  index_orders_on_buyer_id                 (buyer_id)
+#  index_orders_on_citer_type_and_citer_id  (citer_type,citer_id)
+#  index_orders_on_item_type_and_item_id    (item_type,item_id)
+#  index_orders_on_seller_id                (seller_id)
 #
 class Order < ApplicationRecord
   PLATFORM_RATIO = 0.1
@@ -34,6 +37,7 @@ class Order < ApplicationRecord
 
   belongs_to :buyer, class_name: 'User'
   belongs_to :seller, class_name: 'User'
+  belongs_to :citer, polymorphic: true, optional: true
   belongs_to :item, polymorphic: true, counter_cache: true
   belongs_to :payment, foreign_key: :trace_id, primary_key: :trace_id, inverse_of: :order
   belongs_to :currency, primary_key: :asset_id, foreign_key: :asset_id, inverse_of: :orders
@@ -129,7 +133,7 @@ class Order < ApplicationRecord
           memo: Base64.encode64({
             t: 'CITE',
             a: ref.reference.uuid,
-            p: buyer.mixin_uuid
+            c: item.uuid
           }.to_json)
         ).find_or_create_by(
           trace_id: payment.wallet.mixin_api.unique_conversation_id(trace_id, ref.reference.uuid)
@@ -148,7 +152,10 @@ class Order < ApplicationRecord
         opponent_id: PrsdiggBot.api.client_id,
         asset_id: revenue_asset_id,
         amount: _prsdigg_amount.to_f.to_s,
-        memo: "article uuid: #{item.uuid}".truncate(140)
+        memo: Base64.encode64({
+          t: 'REVENUE',
+          a: item.uuid
+        }.to_json)
       ).find_or_create_by!(
         trace_id: payment.wallet.mixin_api.unique_conversation_id(trace_id, PrsdiggBot.api.client_id)
       )

@@ -130,7 +130,8 @@ class SwapOrder < ApplicationRecord
     when 'CITE'
       article.orders.find_or_create_by!(
         payment: payment,
-        order_type: :cite_article
+        order_type: :cite_article,
+        citer: payment.citer
       )
     end
     order_place!

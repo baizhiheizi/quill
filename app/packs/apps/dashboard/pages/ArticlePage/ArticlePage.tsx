@@ -121,6 +121,9 @@ export default function ArticlePage() {
           <Tabs.TabPane tab={t('reward_records')} key='rewarders'>
             <ArticleOrdersComponent uuid={uuid} orderType='reward_article' />
           </Tabs.TabPane>
+          <Tabs.TabPane tab={t('cite_records')} key='citers'>
+            <ArticleOrdersComponent uuid={uuid} orderType='cite_article' />
+          </Tabs.TabPane>
           <Tabs.TabPane tab={t('comment_records')} key='comments'>
             <ArticleCommentsComponent articleId={article.id} />
           </Tabs.TabPane>

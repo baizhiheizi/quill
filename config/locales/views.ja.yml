@@ -141,9 +141,11 @@ ja:
   blocked: ブロック中
   buy_records: 購入履歴
   reward_records: リワード履歴
+  cite_records: 引用履歴
   comment_records: コメント履歴
   bought_article: 購入した記事
   rewarded_article: 記事によるリワード
+  cited_article: 記事を引用する
   authoring_subscriptions: 作者
   authoring_subscriptions_tip: フォローした作者の記事投稿通知を受け取ります。
   reading_subscriptions: 読者
@@ -190,5 +192,5 @@ ja:
   mixin_contact: Links
   copy_url: URLコピー
   subscribed: フォロー
-  article_references: 参考
+  article_references: 参考記事
   referenced_by: 関連記事

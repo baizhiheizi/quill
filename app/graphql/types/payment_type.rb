@@ -7,6 +7,7 @@ module Types
     field :snapshot_id, String, null: false
     field :amount, Float, null: false
     field :memo, String, null: true
+    field :decrypted_memo, String, null: true
     field :state, String, null: false
     field :asset_id, String, null: false
 

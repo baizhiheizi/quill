@@ -1107,6 +1107,7 @@ export type NotificationSetting = {
 export type Order = {
   __typename?: 'Order';
   buyer: User;
+  citer?: Maybe<OrderItemUnion>;
   createdAt: Scalars['ISO8601DateTime'];
   currency: Currency;
   id: Scalars['ID'];
@@ -1165,6 +1166,7 @@ export type Payment = {
   assetId: Scalars['String'];
   createdAt: Scalars['ISO8601DateTime'];
   currency?: Maybe<Currency>;
+  decryptedMemo?: Maybe<Scalars['String']>;
   memo?: Maybe<Scalars['String']>;
   opponentId: Scalars['String'];
   order?: Maybe<Order>;
@@ -3265,6 +3267,7 @@ export const AdminPaymentConnectionDocument = gql`
       state
       assetId
       opponentId
+      decryptedMemo
       payer {
         name
         mixinId
@@ -5260,6 +5263,12 @@ export const MyArticleOrderConnectionDocument = gql`
       buyer {
         avatar
         name
+      }
+      citer {
+        ... on Article {
+          uuid
+          title
+        }
       }
       orderType
       state

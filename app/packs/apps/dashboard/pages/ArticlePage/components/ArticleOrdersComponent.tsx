@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next';
 
 export default function ArticleOrdersComponent(props: {
   uuid: string;
-  orderType: 'buy_article' | 'reward_article';
+  orderType: 'buy_article' | 'reward_article' | 'cite_article';
 }) {
   const { uuid, orderType } = props;
   const { t } = useTranslation();
@@ -60,15 +60,29 @@ export default function ArticleOrdersComponent(props: {
         renderItem={(order: Partial<Order>) => (
           <List.Item key={order.traceId}>
             <Space>
-              <Avatar src={order.buyer.avatar}>{order.buyer.name[0]}</Avatar>
-              <span>{order.buyer.name}</span>
+              {order.orderType === 'cite_article' && order.citer ? (
+                <a href={`/articles/${order.citer.uuid}`} target='_blank'>
+                  {order.citer.title}
+                </a>
+              ) : (
+                <>
+                  <Avatar src={order.buyer.avatar}>
+                    {order.buyer.name[0]}
+                  </Avatar>
+                  <span>{order.buyer.name}</span>
+                </>
+              )}
               <span>
                 {`${t('paid')} ${order.total} ${order.currency.symbol}`}
               </span>
               <span>
-                {orderType == 'buy_article'
-                  ? t('bought_article')
-                  : t('rewarded_article')}
+                {
+                  {
+                    buy_article: t('bought_article'),
+                    rewarded_article: t('rewarded_article'),
+                    cite_article: t('cited_article'),
+                  }[order.orderType]
+                }
               </span>
             </Space>
             <div style={{ marginLeft: 'auto', color: '#aaa' }}>

@@ -16,6 +16,8 @@ module Resolvers
         article.buy_orders.order(created_at: :desc)
       when 'reward_article'
         article.reward_orders.order(created_at: :desc)
+      when 'cite_article'
+        article.cite_orders.order(created_at: :desc)
       end
     end
   end

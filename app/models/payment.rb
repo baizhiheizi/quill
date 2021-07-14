@@ -66,9 +66,9 @@ class Payment < ApplicationRecord
   def decrypted_memo
     # memo from PRSDigg user
     # memo = {
-    #  't': BUY|REWARD|CITE,
+    #  't': BUY|REWARD|CITE|REVENUE,
     #  'a': article's uuid,
-    #  'p': payer's uuid
+    #  'c': citer's uuid
     # }
     #
     @decrypted_memo =
@@ -80,11 +80,17 @@ class Payment < ApplicationRecord
   end
 
   def memo_correct?
-    decrypted_memo.key?('a') && decrypted_memo.key?('t') && decrypted_memo['t'].in?(%w[BUY REWARD CITE])
+    decrypted_memo.key?('a') && decrypted_memo.key?('t') && decrypted_memo['t'].in?(%w[BUY REWARD CITE REVENUE])
   end
 
   def article
     @article = Article.find_by! uuid: decrypted_memo['a']
+  end
+
+  def citer
+    return unless decrypted_memo['t'] == 'CITE'
+
+    @citer = Article.find_by(uuid: decrypted_memo['c'])
   end
 
   def place_order!
@@ -131,8 +137,11 @@ class Payment < ApplicationRecord
     when 'CITE'
       article.orders.find_or_create_by!(
         payment: self,
-        order_type: :cite_article
+        order_type: :cite_article,
+        citer: citer
       )
+    when 'REVENUE'
+      complete!
     else
       generate_refund_transfer!
     end
@@ -183,7 +192,11 @@ class Payment < ApplicationRecord
       snapshot_id: raw['snapshot_id'],
       trace_id: raw['trace_id']
     )
-
-    self.payer = User.find_by mixin_uuid: decrypted_memo['p'] || opponent_id
+    self.payer =
+      if decrypted_memo['t'] == 'CITE'
+        Article.find_by(uuid: decrypted_memo['c']).author
+      else
+        User.find_by mixin_uuid: opponent_id
+      end
   end
 end
