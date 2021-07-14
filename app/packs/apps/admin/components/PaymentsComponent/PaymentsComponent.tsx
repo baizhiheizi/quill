@@ -63,6 +63,11 @@ export default function PaymentsComponent(props: { payerMixinUuid?: string }) {
       title: 'state',
     },
     {
+      dataIndex: 'decryptedMemo',
+      key: 'decryptedMemo',
+      title: 'Decrypted Memo',
+    },
+    {
       dataIndex: 'orderType',
       key: 'orderType',
       render: (_, payment) => (

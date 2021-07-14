@@ -244,10 +244,10 @@ export default function ArticlePage() {
       </div>
 
       {(article.articleReferences.length > 0 || article.citers.length > 0) && (
-        <div className='mb-6'>
+        <div className='mb-6 border rounded'>
           <Collapse
             defaultActiveKey={['article_references', 'article_citers']}
-            expandIconPosition='right'
+            ghost
           >
             {article.articleReferences.length > 0 && (
               <Collapse.Panel

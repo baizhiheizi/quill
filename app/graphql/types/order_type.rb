@@ -13,6 +13,7 @@ module Types
     field :buyer, Types::UserType, null: false
     field :seller, Types::UserType, null: false
     field :item, Types::OrderItemUnion, null: false
+    field :citer, Types::OrderItemUnion, null: true
     field :currency, Types::CurrencyType, null: false
 
     def buyer

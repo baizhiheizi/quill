@@ -150,9 +150,11 @@ zh-CN:
   blocked: 已屏蔽
   buy_records: 购买记录
   reward_records: 赞赏记录
+  cite_records: 引用记录
   comment_records: 评论记录
   bought_article: 购买了文章
   rewarded_article: 赞赏了文章
+  cited_article: 引用了文章
   authoring_subscriptions: 作者
   authoring_subscriptions_tip: 订阅的作者发表新文章时，您将收到通知
   reading_subscriptions: 读者
@@ -199,5 +201,5 @@ zh-CN:
   mixin_contact: Mixin
   copy_url: 复制URL
   subscribed: 已订阅
-  article_references: 引用
-  referenced_by: 被引用
+  article_references: 引用文章
+  referenced_by: 相关文章
