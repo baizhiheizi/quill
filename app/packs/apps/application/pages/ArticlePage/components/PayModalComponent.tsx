@@ -74,7 +74,6 @@ export default function PayModalComponent(props: {
     JSON.stringify({
       t: 'BUY',
       a: articleUuid,
-      p: price,
     }),
   );
   const availbleCurrencies = swappable
