@@ -54,7 +54,8 @@ class User < ApplicationRecord
   has_many :reader_revenue_transfers, -> { where(transfer_type: :reader_revenue) }, class_name: 'Transfer', foreign_key: :opponent_id, primary_key: :mixin_uuid, inverse_of: :recipient, dependent: :nullify
   has_many :revenue_transfers, -> { where(transfer_type: %w[author_revenue reader_revenue]) }, class_name: 'Transfer', foreign_key: :opponent_id, primary_key: :mixin_uuid, inverse_of: :recipient, dependent: :nullify
   has_many :orders, foreign_key: :buyer_id, inverse_of: :buyer, dependent: :nullify
-  has_many :bought_articles, -> { distinct.order(created_at: :desc) }, through: :orders, source: :item, source_type: 'Article'
+  has_many :buy_orders, -> { where(order_type: %w[buy_article]) }, class_name: 'Order', foreign_key: :buyer_id, inverse_of: :buyer, dependent: :nullify
+  has_many :bought_articles, -> { distinct.order(created_at: :desc) }, through: :buy_orders, source: :item, source_type: 'Article'
   has_many :comments, foreign_key: :author_id, inverse_of: :author, dependent: :nullify
   has_many :swap_orders, through: :payments
   has_many :notifications, as: :recipient, dependent: :destroy

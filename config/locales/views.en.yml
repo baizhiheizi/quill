@@ -72,6 +72,9 @@ en:
   author_revenue_total: Author Revenue(Present Value)
   reader_revenue_total: Reader Revenue(Present Value)
   platform_revenue: PRSDigg Revenue
+  readers_revenue: Readers Revenue
+  author_revenue: Author Revenue
+  references_revenue: References Revenue
   revenue_chart: Revenue Chart(USD)
   transactions: Transactions
   rules_content: |
