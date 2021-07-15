@@ -12,6 +12,7 @@ import {
   Radio,
   Select,
   Space,
+  Switch,
 } from 'antd';
 import EditableTagsComponent from 'apps/dashboard/components/EditableTagsComponent/EditableTagsComponent';
 import LoadingComponent from 'apps/dashboard/components/LoadingComponent/LoadingComponent';
@@ -42,6 +43,8 @@ export default function ArticleNewPage() {
     'c6d0c728-2624-429b-8e0d-d9d19b6592fa',
   );
   const [price, setPrice] = useState(0.000_001);
+  const [referencesEnable, setReferencesEnable] = useState(false);
+  const [authorRevenue, setAuthorRevenue] = useState(0.5);
   const { loading, data } = usePricableCurrenciesQuery();
   const [createArticle, { loading: creating }] = useCreateArticleMutation({
     update(_, { data: { createArticle } }) {
@@ -101,12 +104,23 @@ export default function ArticleNewPage() {
         }}
         labelCol={{ span: 2 }}
         wrapperCol={{ span: 22 }}
+        onValuesChange={(_, { articleReferences }) => {
+          if (articleReferences) {
+            const referencesRevenue = articleReferences.reduce((acc, cur) => {
+              return acc + (cur?.revenueRatio || 0);
+            }, 0);
+            if (referencesRevenue < 0.5) {
+              setAuthorRevenue(0.5 - referencesRevenue);
+            } else {
+              setAuthorRevenue(0);
+            }
+          }
+        }}
         onFinish={(values) => {
           const { title, content, price, intro, assetId } = values;
           if (!title || !content || !price || !intro || !assetId) {
             message.warn(t('article.form.not_finished'));
           } else {
-            console.log(values);
             Modal.confirm({
               title: t('article.form.confirm_to_create'),
               centered: true,
@@ -222,83 +236,158 @@ export default function ArticleNewPage() {
             </Form.Item>
           </Space>
         </Form.Item>
-        <Form.Item label={t('article_references')}>
-          <Form.List name='articleReferences'>
-            {(references, { add, remove }) => (
-              <>
-                {references.map((reference, index) => (
-                  <div
-                    className='flex items-baseline w-full space-x-2'
-                    key={index}
-                  >
-                    <Form.Item
-                      noStyle
-                      shouldUpdate={(prevValues, curValues) =>
-                        prevValues.articleReferences !==
-                        curValues.articleReferences
-                      }
-                    >
-                      <Form.Item
-                        {...reference}
-                        className='flex-1'
-                        fieldKey={[reference.fieldKey, 'referenceId']}
-                        name={[reference.name, 'referenceId']}
-                        label={t('article.article_text')}
-                        rules={[
-                          {
-                            required: true,
-                            message: t('please_select_an_article'),
-                          },
-                        ]}
+        <Form.Item
+          label={t('article.form.revenue_distribution')}
+          shouldUpdate={(prevValues, curValues) =>
+            prevValues.articleReferences !== curValues.articleReferences
+          }
+        >
+          <Form.Item label={t('readers_revenue')}>
+            <InputNumber
+              disabled
+              value={0.4}
+              formatter={(value) => `${value * 100}%`}
+            />
+          </Form.Item>
+          <Form.Item label={t('platform_revenue')}>
+            <InputNumber
+              disabled
+              value={0.1}
+              formatter={(value) => `${value * 100}%`}
+            />
+          </Form.Item>
+          <Form.Item label={t('author_revenue')}>
+            <InputNumber
+              disabled
+              value={authorRevenue}
+              formatter={(value) => `${Math.floor(value * 100)}%`}
+            />
+          </Form.Item>
+          <Form.Item label={t('references_revenue')}>
+            <Form.Item>
+              <Switch
+                checked={referencesEnable}
+                onChange={(checked) => {
+                  setReferencesEnable(checked);
+                  if (!checked) {
+                    form.setFieldsValue({ articleReferences: [] });
+                    setAuthorRevenue(0.5);
+                  }
+                }}
+              />
+            </Form.Item>
+            {referencesEnable && (
+              <Form.List name='articleReferences'>
+                {(references, { add, remove }) => (
+                  <>
+                    {references.map((reference, index) => (
+                      <div
+                        className='flex items-baseline w-full space-x-2'
+                        key={index}
                       >
-                        <Select
-                          allowClear
-                          showSearch
-                          filterOption={false}
-                          onSearch={(value: string) => setQuery(value)}
-                          onChange={() => setQuery('')}
-                          options={boughtArticles.map((article) => {
-                            return {
-                              label: <span>{article.title}</span>,
-                              value: article.uuid,
-                            };
-                          })}
+                        <Form.Item noStyle>
+                          <Form.Item
+                            {...reference}
+                            className='flex-1'
+                            fieldKey={[reference.fieldKey, 'referenceId']}
+                            name={[reference.name, 'referenceId']}
+                            label={t('article.article_text')}
+                            rules={[
+                              {
+                                required: true,
+                                message: t(
+                                  'article.form.please_select_an_article',
+                                ),
+                              },
+                            ]}
+                          >
+                            <Select
+                              allowClear
+                              showSearch
+                              filterOption={false}
+                              onSearch={(value: string) => setQuery(value)}
+                              onChange={() => setQuery('')}
+                              options={boughtArticles.map((article) => {
+                                return {
+                                  label: <span>{article.title}</span>,
+                                  value: article.uuid,
+                                };
+                              })}
+                            />
+                          </Form.Item>
+                        </Form.Item>
+                        <Form.Item
+                          className='flex-1'
+                          {...reference}
+                          fieldKey={[reference.fieldKey, 'revenueRatio']}
+                          name={[reference.name, 'revenueRatio']}
+                          rules={[
+                            {
+                              required: true,
+                              message: t(
+                                'article.form.please_input_revenue_ratio',
+                              ),
+                            },
+                            {
+                              validator: () => {
+                                const articleReferences =
+                                  form.getFieldValue('articleReferences');
+                                const referencesRevenue =
+                                  articleReferences?.reduce((acc, cur) => {
+                                    return acc + (cur?.revenueRatio || 0);
+                                  }, 0);
+                                if (
+                                  referencesRevenue &&
+                                  referencesRevenue >= 0.5
+                                ) {
+                                  return Promise.reject(
+                                    new Error(
+                                      t(
+                                        'article.form.references_revenue_cannot_larger_than_50%',
+                                      ),
+                                    ),
+                                  );
+                                } else {
+                                  return Promise.resolve();
+                                }
+                              },
+                            },
+                          ]}
+                          label={t('article.form.revenue_ratio')}
+                        >
+                          <InputNumber
+                            min={0.01}
+                            max={0.49}
+                            step='0.01'
+                            formatter={(value: number) => `${value * 100}%`}
+                            parser={(value) =>
+                              parseInt(value.replace('%', '')) / 100.0
+                            }
+                          />
+                        </Form.Item>
+                        <MinusCircleOutlined
+                          onClick={() => remove(reference.name)}
                         />
-                      </Form.Item>
+                      </div>
+                    ))}
+                    <Form.Item>
+                      <Button
+                        type='dashed'
+                        disabled={references.length >= 10}
+                        onClick={() =>
+                          references.length < 10 && add({ revenueRatio: 0.05 })
+                        }
+                        block
+                        icon={<PlusOutlined />}
+                      >
+                        {t('article.form.add_reference')}
+                      </Button>
                     </Form.Item>
-                    <Form.Item
-                      className='flex-1'
-                      {...reference}
-                      fieldKey={[reference.fieldKey, 'revenueRatio']}
-                      name={[reference.name, 'revenueRatio']}
-                      rules={[
-                        {
-                          required: true,
-                          message: t('please_input_revenue_ratio'),
-                        },
-                      ]}
-                      label={t('article.form.revenue_ratio')}
-                    >
-                      <InputNumber min={0.01} step='0.01' max={0.5} />
-                    </Form.Item>
-                    <MinusCircleOutlined
-                      onClick={() => remove(reference.name)}
-                    />
-                  </div>
-                ))}
-                <Form.Item>
-                  <Button
-                    type='dashed'
-                    onClick={() => add()}
-                    block
-                    icon={<PlusOutlined />}
-                  >
-                    {t('article.form.add_reference')}
-                  </Button>
-                </Form.Item>
-              </>
+                  </>
+                )}
+              </Form.List>
             )}
-          </Form.List>
+          </Form.Item>
         </Form.Item>
         <Form.Item
           label={t('article.state_text')}

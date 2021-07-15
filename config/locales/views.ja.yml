@@ -72,6 +72,9 @@ ja:
   author_revenue_total: 作者収益（現在価格）
   reader_revenue_total: 読者収益（現在価格）
   platform_revenue: 文商収益
+  readers_revenue: 読者収益
+  author_revenue: 作者収益
+  references_revenue: 参照収益
   revenue_chart: 収益チャート（USD）
   transactions: トランザクション
   rules_content: |
