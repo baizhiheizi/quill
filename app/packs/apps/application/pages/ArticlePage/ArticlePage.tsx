@@ -243,63 +243,68 @@ export default function ArticlePage() {
         </ArticleShareButton>
       </div>
 
-      {(article.articleReferences.length > 0 || article.citers.length > 0) && (
-        <div className='mb-6 border rounded'>
+      {article.articleReferences.length > 0 && (
+        <div className='mb-4 border rounded'>
           <Collapse
             defaultActiveKey={['article_references', 'article_citers']}
             ghost
           >
-            {article.articleReferences.length > 0 && (
-              <Collapse.Panel
-                key='article_references'
-                header={t('article_references')}
-              >
-                {article.articleReferences.map((articleReference) => (
-                  <div
-                    key={articleReference.reference.uuid}
-                    className='flex flex-wrap items-center py-1'
+            <Collapse.Panel
+              key='article_references'
+              header={t('article_references')}
+            >
+              {article.articleReferences.map((articleReference) => (
+                <div
+                  key={articleReference.reference.uuid}
+                  className='flex flex-wrap items-center py-1'
+                >
+                  <Avatar
+                    className='mr-2'
+                    size='small'
+                    src={articleReference.reference.author.avatar}
+                  />
+                  <span className='mr-2'>
+                    {articleReference.reference.author.name}:
+                  </span>
+                  <a
+                    href={`/articles/${articleReference.reference.uuid}`}
+                    target='_blank'
                   >
-                    <Avatar
-                      className='mr-2'
-                      size='small'
-                      src={articleReference.reference.author.avatar}
-                    />
-                    <span className='mr-2'>
-                      {articleReference.reference.author.name}:
-                    </span>
-                    <a
-                      href={`/articles/${articleReference.reference.uuid}`}
-                      target='_blank'
-                    >
-                      {articleReference.reference.title}
-                    </a>
-                    <div className='ml-auto text-blue-500'>
-                      {articleReference.revenueRatio * 100}%
-                    </div>
+                    {articleReference.reference.title}
+                  </a>
+                  <div className='ml-auto text-blue-500'>
+                    {articleReference.revenueRatio * 100}%
                   </div>
-                ))}
-              </Collapse.Panel>
-            )}
-            {article.citers.length > 0 && (
-              <Collapse.Panel key='article_citers' header={t('referenced_by')}>
-                {article.citers.map((citer) => (
-                  <div
-                    key={citer.uuid}
-                    className='flex flex-wrap items-center py-1'
-                  >
-                    <Avatar
-                      className='mr-2'
-                      size='small'
-                      src={citer.author.avatar}
-                    />
-                    <span className='mr-2'>{citer.author.name}:</span>
-                    <a href={`/articles/${citer.uuid}`} target='_blank'>
-                      {citer.title}
-                    </a>
-                  </div>
-                ))}
-              </Collapse.Panel>
-            )}
+                </div>
+              ))}
+            </Collapse.Panel>
+          </Collapse>
+        </div>
+      )}
+      {article.citers.length > 0 && (
+        <div className='mb-4 border rounded'>
+          <Collapse
+            defaultActiveKey={['article_references', 'article_citers']}
+            ghost
+          >
+            <Collapse.Panel key='article_citers' header={t('referenced_by')}>
+              {article.citers.map((citer) => (
+                <div
+                  key={citer.uuid}
+                  className='flex flex-wrap items-center py-1'
+                >
+                  <Avatar
+                    className='mr-2'
+                    size='small'
+                    src={citer.author.avatar}
+                  />
+                  <span className='mr-2'>{citer.author.name}:</span>
+                  <a href={`/articles/${citer.uuid}`} target='_blank'>
+                    {citer.title}
+                  </a>
+                </div>
+              ))}
+            </Collapse.Panel>
           </Collapse>
         </div>
       )}

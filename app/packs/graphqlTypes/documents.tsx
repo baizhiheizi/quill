@@ -331,6 +331,7 @@ export type Article = {
   articleReferences?: Maybe<Array<CiterReference>>;
   assetId: Scalars['String'];
   author: User;
+  authorRevenueRatio: Scalars['Float'];
   authorRevenueUsd: Scalars['Float'];
   authorized?: Maybe<Scalars['Boolean']>;
   buyOrders: OrderConnection;
@@ -350,13 +351,16 @@ export type Article = {
   ordersCount: Scalars['Int'];
   partialContent?: Maybe<Scalars['String']>;
   paymentTraceId?: Maybe<Scalars['String']>;
+  platformRevenueRatio: Scalars['Float'];
   price: Scalars['Float'];
   priceUsd?: Maybe<Scalars['Float']>;
   publishedAt: Scalars['ISO8601DateTime'];
   randomReaders: Array<User>;
   readerRevenueUsd: Scalars['Float'];
   readers: UserConnection;
+  readersRevenueRatio: Scalars['Float'];
   references?: Maybe<Array<Article>>;
+  referencesRevenueRatio: Scalars['Float'];
   revenueBtc: Scalars['Float'];
   revenueUsd: Scalars['Float'];
   rewardOrders: OrderConnection;
@@ -5331,6 +5335,10 @@ export const MyArticleDocument = gql`
     ordersCount
     commentsCount
     revenueUsd
+    authorRevenueRatio
+    readersRevenueRatio
+    platformRevenueRatio
+    referencesRevenueRatio
     authorRevenueUsd
     readerRevenueUsd
     commentingSubscribed
