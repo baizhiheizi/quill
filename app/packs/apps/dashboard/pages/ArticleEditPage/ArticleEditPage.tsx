@@ -221,34 +221,56 @@ export default function ArticleEditPage() {
             </Form.Item>
           </Space>
         </Form.Item>
-        {myArticle.articleReferences.length > 0 && (
-          <Form.Item label={t('article_references')}>
-            {myArticle.articleReferences.map((articleReference) => (
-              <div
-                key={articleReference.reference.uuid}
-                className='flex flex-wrap items-center'
-              >
-                <Avatar
-                  className='mr-2'
-                  size='small'
-                  src={articleReference.reference.author.avatar}
-                />
-                <span className='mr-2'>
-                  {articleReference.reference.author.name}:
-                </span>
-                <a
-                  href={`/articles/${articleReference.reference.uuid}`}
-                  target='_blank'
-                >
-                  {articleReference.reference.title}
-                </a>
-                <div className='ml-auto text-blue-500'>
-                  {articleReference.revenueRatio * 100}%
-                </div>
-              </div>
-            ))}
+        <Form.Item label={t('article.form.revenue_distribution')}>
+          <Form.Item label={t('readers_revenue')}>
+            <InputNumber
+              disabled
+              value={myArticle.readersRevenueRatio}
+              formatter={(value) => `${value * 100}%`}
+            />
           </Form.Item>
-        )}
+          <Form.Item label={t('platform_revenue')}>
+            <InputNumber
+              disabled
+              value={myArticle.platformRevenueRatio}
+              formatter={(value) => `${value * 100}%`}
+            />
+          </Form.Item>
+          <Form.Item label={t('author_revenue')}>
+            <InputNumber
+              disabled
+              value={myArticle.authorRevenueRatio}
+              formatter={(value) => `${Math.floor(value * 100)}%`}
+            />
+          </Form.Item>
+          {myArticle.articleReferences.length > 0 && (
+            <Form.Item label={t('article_references')}>
+              {myArticle.articleReferences.map((articleReference) => (
+                <Form.Item key={articleReference.reference.uuid}>
+                  <div className='flex flex-wrap items-center'>
+                    <Avatar
+                      className='mr-2'
+                      size='small'
+                      src={articleReference.reference.author.avatar}
+                    />
+                    <span className='mr-2'>
+                      {articleReference.reference.author.name}:
+                    </span>
+                    <a
+                      href={`/articles/${articleReference.reference.uuid}`}
+                      target='_blank'
+                    >
+                      {articleReference.reference.title}
+                    </a>
+                    <div className='ml-auto text-blue-500'>
+                      {articleReference.revenueRatio * 100}%
+                    </div>
+                  </div>
+                </Form.Item>
+              ))}
+            </Form.Item>
+          )}
+        </Form.Item>
         <Form.Item wrapperCol={{ xs: { offset: 0 }, sm: { offset: 2 } }}>
           <Button type='primary' htmlType='submit' loading={updating}>
             {t('update')}

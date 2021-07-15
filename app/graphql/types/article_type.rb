@@ -16,6 +16,11 @@ module Types
     field :tags_count, Int, null: false
     field :tag_names, [String], null: true
 
+    field :author_revenue_ratio, Float, null: false
+    field :readers_revenue_ratio, Float, null: false
+    field :platform_revenue_ratio, Float, null: false
+    field :references_revenue_ratio, Float, null: false
+
     field :revenue_usd, Float, null: false
     field :revenue_btc, Float, null: false
     field :author_revenue_usd, Float, null: false

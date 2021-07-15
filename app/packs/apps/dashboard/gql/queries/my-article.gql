@@ -11,6 +11,10 @@ query MyArticle($uuid: ID!) {
     ordersCount
     commentsCount
     revenueUsd
+    authorRevenueRatio
+    readersRevenueRatio
+    platformRevenueRatio
+    referencesRevenueRatio
     authorRevenueUsd
     readerRevenueUsd
     commentingSubscribed

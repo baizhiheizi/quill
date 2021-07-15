@@ -1,4 +1,4 @@
-import { Button, Descriptions, PageHeader, Tabs, Tag } from 'antd';
+import { Avatar, Button, Descriptions, PageHeader, Tabs, Tag } from 'antd';
 import LoadingComponent from 'apps/dashboard/components/LoadingComponent/LoadingComponent';
 import { useMyArticleQuery } from 'graphqlTypes';
 import moment from 'moment';
@@ -80,6 +80,18 @@ export default function ArticlePage() {
           <Descriptions.Item label={t('article.price')}>
             {article.price} {article.currency.symbol}
           </Descriptions.Item>
+          <Descriptions.Item label={t('readers_revenue')}>
+            {article.readersRevenueRatio * 100}%
+          </Descriptions.Item>
+          <Descriptions.Item label={t('platform_revenue')}>
+            {article.platformRevenueRatio * 100}%
+          </Descriptions.Item>
+          <Descriptions.Item label={t('author_revenue')}>
+            {article.authorRevenueRatio * 100}%
+          </Descriptions.Item>
+          <Descriptions.Item label={t('references_revenue')}>
+            {article.referencesRevenueRatio * 100}%
+          </Descriptions.Item>
           <Descriptions.Item label={t('article.buy_orders_count')}>
             {article.buyOrders.totalCount}
           </Descriptions.Item>
@@ -108,6 +120,34 @@ export default function ArticlePage() {
             {article.tagNames.length > 0
               ? article.tagNames.map((tagName: string) => (
                   <Tag key={tagName}>#{tagName}</Tag>
+                ))
+              : '-'}
+          </Descriptions.Item>
+          <Descriptions.Item label={t('article_references')}>
+            {article.articleReferences.length > 0
+              ? article.articleReferences.map((articleReference) => (
+                  <div
+                    key={articleReference.reference.uuid}
+                    className='flex flex-wrap items-center py-1'
+                  >
+                    <Avatar
+                      className='mr-2'
+                      size='small'
+                      src={articleReference.reference.author.avatar}
+                    />
+                    <span className='mr-2'>
+                      {articleReference.reference.author.name}:
+                    </span>
+                    <a
+                      href={`/articles/${articleReference.reference.uuid}`}
+                      target='_blank'
+                    >
+                      {articleReference.reference.title}
+                    </a>
+                    <div className='ml-auto text-blue-500'>
+                      {articleReference.revenueRatio * 100}%
+                    </div>
+                  </div>
                 ))
               : '-'}
           </Descriptions.Item>
