@@ -44,6 +44,7 @@ zh-CN:
       please_input_revenue_ratio: 请输入收益比例
       references_revenue_cannot_larger_than_50%: 引用收益不可超过 50%
       revenue_distribution: 收益分配
+      you_will_create_a_free_article: 将创建一篇免费文章
   tag:
     articles_count: 文章数量
     subscribers_count: 订阅人数

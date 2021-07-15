@@ -117,8 +117,8 @@ export default function ArticleNewPage() {
           }
         }}
         onFinish={(values) => {
-          const { title, content, price, intro, assetId } = values;
-          if (!title || !content || !price || !intro || !assetId) {
+          const { title, content, intro, assetId } = values;
+          if (!title || !content || !intro || !assetId) {
             message.warn(t('article.form.not_finished'));
           } else {
             Modal.confirm({
@@ -188,7 +188,11 @@ export default function ArticleNewPage() {
         </Form.Item>
         <Form.Item
           label={t('article.price')}
-          extra={`≈ $${(currency.priceUsd * price).toFixed(4)}`}
+          extra={
+            price > 0
+              ? `≈ $${(currency.priceUsd * price).toFixed(4)}`
+              : t('article.form.you_will_create_a_free_article')
+          }
         >
           <Space>
             <Form.Item
@@ -199,9 +203,10 @@ export default function ArticleNewPage() {
                 { required: true },
                 {
                   validator: (_, value) => {
-                    if (currency.symbol === 'BTC' && value >= 0.000_001) {
-                      return Promise.resolve();
-                    } else if (currency.symbol === 'PRS' && value >= 1) {
+                    if (
+                      currency.symbol === 'BTC' &&
+                      (value === 0.0 || value >= 0.000_001)
+                    ) {
                       return Promise.resolve();
                     } else {
                       return Promise.reject(t('article.form.price_is_too_low'));
@@ -213,7 +218,7 @@ export default function ArticleNewPage() {
               <InputNumber
                 onChange={(value) => setPrice(parseFloat(value.toString()))}
                 style={{ minWidth: 130 }}
-                min={0.000_001}
+                min={0.0}
                 step='0.000001'
                 precision={6}
                 placeholder='0.0'
