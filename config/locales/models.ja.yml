@@ -44,6 +44,7 @@ ja:
       please_input_revenue_ratio: 収益率を入力してください
       references_revenue_cannot_larger_than_50%: 参照収益が50％以上にならない
       revenue_distribution: 収益配分
+      you_will_create_a_free_article: あなたの記事が無料で読めるようになります
   tag:
     articles_count: 記事数
     subscribers_count: フォロワー数

@@ -29,17 +29,17 @@ export default function HomePage() {
       <Tabs.TabPane tab={t('order_by_popularity')} key='popularity'>
         <ArticlesComponent filter='default' />
       </Tabs.TabPane>
+      {currentUser && (
+        <Tabs.TabPane tab={t('subscribed')} key='subscribed'>
+          <ArticlesComponent filter='subscribed' />
+        </Tabs.TabPane>
+      )}
       <Tabs.TabPane tab={t('order_by_lately')} key='lately'>
         <ArticlesComponent filter='lately' />
       </Tabs.TabPane>
       <Tabs.TabPane tab={t('order_by_revenue')} key='revenue'>
         <ArticlesComponent filter='revenue' />
       </Tabs.TabPane>
-      {currentUser && (
-        <Tabs.TabPane tab={t('subscribed')} key='subscribed'>
-          <ArticlesComponent filter='subscribed' />
-        </Tabs.TabPane>
-      )}
       <Tabs.TabPane tab={t('tags')} key='tags'>
         <TagsComponent />
       </Tabs.TabPane>

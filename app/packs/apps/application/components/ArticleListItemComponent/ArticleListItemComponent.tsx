@@ -69,17 +69,27 @@ export default function ArticleListItemComponent(props: {
               </div>
             </div>
             <div className='relative ml-auto'>
-              <Space className='ml-auto'>
-                <Avatar size='small' src={article.currency.iconUrl} />
-                <span>
-                  {article.currency.symbol === 'BTC'
-                    ? article.price.toFixed(6)
-                    : article.price.toFixed(2)}
-                </span>
-              </Space>
-              <div className='absolute right-0 text-xs text-gray-500'>
-                ≈ ${article.priceUsd}
-              </div>
+              {article.price > 0 ? (
+                <>
+                  <Space className='ml-auto'>
+                    <Avatar size='small' src={article.currency.iconUrl} />
+                    <span>
+                      {article.currency.symbol === 'BTC'
+                        ? article.price.toFixed(6)
+                        : article.price.toFixed(2)}
+                    </span>
+                  </Space>
+                  <div className='absolute right-0 text-xs text-gray-500'>
+                    ≈ ${article.priceUsd}
+                  </div>
+                </>
+              ) : (
+                <div className='absolute top-0 right-0 w-20 h-20 overflow-hidden text-xs text-center'>
+                  <div className='relative text-white bg-yellow-500 shadow top-2 -right-6 transform rotate-45'>
+                    FREE
+                  </div>
+                </div>
+              )}
             </div>
           </Row>
         }

@@ -83,6 +83,7 @@ class Article < ApplicationRecord
   validates :title, presence: true, length: { maximum: 64 }
   validates :intro, presence: true, length: { maximum: 140 }
   validates :content, presence: true
+  validates :price, presence: true, numericality: { greater_than_or_equal_to: 0.0 }
   validates :platform_revenue_ratio, presence: true, numericality: { equal_to: 0.1 }
   validates :readers_revenue_ratio, presence: true, numericality: { greater_than_or_equal_to: 0.4 }
   validates :author_revenue_ratio, presence: true, numericality: { less_than_or_equal_to: 0.5 }
@@ -145,7 +146,12 @@ class Article < ApplicationRecord
     end
   end
 
-  def authorized?(user)
+  def free?
+    price.zero?
+  end
+
+  def authorized?(user = nil)
+    return true if free?
     return if user.blank?
     return true if author == user
 
@@ -313,10 +319,8 @@ class Article < ApplicationRecord
 
   def ensure_price_not_too_low
     case asset_id
-    when Currency::PRS_ASSET_ID
-      errors.add(:price, 'at least 1 PRS') if price.to_f < MINIMUM_PRICE_PRS
     when Currency::BTC_ASSET_ID
-      errors.add(:price, 'at least 0.000001 BTC') if price.to_f < MINIMUM_PRICE_BTC
+      errors.add(:price, 'at least 0.000001 BTC') if price.positive? && price.to_f < MINIMUM_PRICE_BTC
     end
   end
 

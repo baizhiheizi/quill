@@ -44,6 +44,7 @@ en:
       please_input_revenue_ratio: Please input revenue ratio
       references_revenue_cannot_larger_than_50%: References revenue cannot larger than 50%
       revenue_distribution: Revenue
+      you_will_create_a_free_article: You will create a free article
   tag:
     articles_count: Articles
     subscribers_count: Subscribers
