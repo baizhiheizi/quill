@@ -102,8 +102,13 @@ export default function ArticleEditPage() {
         wrapperCol={{ span: 22 }}
         onFinish={(values) => {
           const { uuid, title, content, price, intro } = values;
-          if (!title || !content || !price || !intro) {
-            message.warn(t('article.form.warning'));
+          if (
+            !title ||
+            !content ||
+            (price !== myArticle.price && !price) ||
+            !intro
+          ) {
+            message.warn(t('article.form.not_finished'));
           } else {
             Modal.confirm({
               title: t('article.form.confirm_to_update'),
@@ -183,10 +188,7 @@ export default function ArticleEditPage() {
                       value >= 0.000_001
                     ) {
                       return Promise.resolve();
-                    } else if (
-                      myArticle.currency.symbol === 'PRS' &&
-                      value >= 1
-                    ) {
+                    } else if (myArticle.price == value) {
                       return Promise.resolve();
                     } else {
                       return Promise.reject(t('article.form.price_is_too_low'));
@@ -196,6 +198,7 @@ export default function ArticleEditPage() {
               ]}
             >
               <InputNumber
+                disabled={myArticle.price === 0.0}
                 onChange={(value) =>
                   setEditedPrice(parseFloat(value.toString()))
                 }

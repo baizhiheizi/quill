@@ -108,19 +108,20 @@ class Article < ApplicationRecord
   delegate :swappable?, to: :currency
 
   default_scope -> { includes(:currency) }
+  scope :only_free, -> { where(price: 0.0) }
   scope :only_published, -> { where(state: :published) }
   scope :order_by_revenue_usd, -> { order(revenue_usd: :desc) }
   scope :order_by_popularity, lambda {
-    where('orders_count > ?', 0)
+    where('orders_count > ? OR upvotes_count > ?', 0, 10)
       .joins(:orders)
       .group(:id)
       .select(
         <<~SQL.squish
           articles.*, 
-          (((SUM(orders.value_usd) * 10 + articles.upvotes_count - articles.downvotes_count - articles.downvotes_count * AVG(orders.value_usd) * 20 + articles.comments_count) / POW(((EXTRACT(EPOCH FROM (now()-articles.created_at)) / 3600)::integer + 1), 2))) AS popularity
+          (((SUM(orders.value_usd) * 10 + articles.upvotes_count - articles.downvotes_count - articles.downvotes_count * AVG(orders.value_usd) * 20 + articles.comments_count) / POW(((EXTRACT(EPOCH FROM (now()-articles.published_at)) / 3600)::integer + 1), 2))) AS popularity
         SQL
       )
-      .order('popularity DESC, created_at DESC')
+      .order('popularity DESC, published_at DESC')
   }
 
   aasm column: :state do

@@ -15,6 +15,8 @@ module Mutations
       article = current_user.articles.find_by(uuid: params[:uuid])
       return if article.blank?
 
+      params.delete(:price) if article.free? || (!article.free? && params[:price].zero?)
+
       article.assign_attributes(
         ActionController::Parameters.new(params).permit(
           :title,

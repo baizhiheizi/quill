@@ -35,8 +35,8 @@ export default function ArticleNewPage() {
   const { t } = useTranslation();
   const [query, setQuery] = useState('');
   const debouncedQuery = useDebounce(query, { wait: 1000 });
-  const { data: boughtArticlesData } = useMyArticleConnectionQuery({
-    variables: { type: 'reader', query: debouncedQuery },
+  const { data: availableArticlesData } = useMyArticleConnectionQuery({
+    variables: { type: 'available', query: debouncedQuery },
   });
   const [tags, setTags] = useState<string[]>([]);
   const [assetId, setAssetId] = useState(
@@ -61,7 +61,8 @@ export default function ArticleNewPage() {
     return <LoadingComponent />;
   }
   const { pricableCurrencies } = data;
-  const boughtArticles = boughtArticlesData?.myArticleConnection?.nodes || [];
+  const availableArticles =
+    availableArticlesData?.myArticleConnection?.nodes || [];
 
   const currency = pricableCurrencies.find(
     (_currency: Currency) => _currency.assetId === assetId,
@@ -312,9 +313,18 @@ export default function ArticleNewPage() {
                               filterOption={false}
                               onSearch={(value: string) => setQuery(value)}
                               onChange={() => setQuery('')}
-                              options={boughtArticles.map((article) => {
+                              options={availableArticles.map((article) => {
                                 return {
-                                  label: <span>{article.title}</span>,
+                                  label: (
+                                    <div className='flex flex-wrap items-center space-x-2'>
+                                      <img
+                                        className='w-6 h-6 rounded-full'
+                                        src={article.author.avatar}
+                                      />
+                                      <span>{article.author.name}:</span>
+                                      <span>{article.title}</span>
+                                    </div>
+                                  ),
                                   value: article.uuid,
                                 };
                               })}
