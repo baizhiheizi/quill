@@ -19,7 +19,9 @@ module Resolvers
             current_user.articles.order(created_at: :desc)
           end
         when 'reader'
-          current_user.bought_articles
+          current_user.bought_articles.order(published_at: :desc)
+        when 'available'
+          current_user.available_articles
         end
 
       q = params[:query].to_s.strip

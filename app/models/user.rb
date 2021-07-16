@@ -55,7 +55,7 @@ class User < ApplicationRecord
   has_many :revenue_transfers, -> { where(transfer_type: %w[author_revenue reader_revenue]) }, class_name: 'Transfer', foreign_key: :opponent_id, primary_key: :mixin_uuid, inverse_of: :recipient, dependent: :nullify
   has_many :orders, foreign_key: :buyer_id, inverse_of: :buyer, dependent: :nullify
   has_many :buy_orders, -> { where(order_type: %w[buy_article]) }, class_name: 'Order', foreign_key: :buyer_id, inverse_of: :buyer, dependent: :nullify
-  has_many :bought_articles, -> { distinct.order(created_at: :desc) }, through: :buy_orders, source: :item, source_type: 'Article'
+  has_many :bought_articles, -> { order(created_at: :desc) }, through: :buy_orders, source: :item, source_type: 'Article'
   has_many :comments, foreign_key: :author_id, inverse_of: :author, dependent: :nullify
   has_many :swap_orders, through: :payments
   has_many :notifications, as: :recipient, dependent: :destroy
@@ -235,6 +235,13 @@ class User < ApplicationRecord
   def create_bot_contact_conversation
     PrsdiggBot.api.create_contact_conversation mixin_uuid
     RevenueBot.api.create_contact_conversation(mixin_uuid) if RevenueBot.api.present?
+  end
+
+  def available_articles
+    bought_articles.only_published
+                   .or(articles.only_published)
+                   .or(Article.only_free.only_published)
+                   .distinct
   end
 
   private
