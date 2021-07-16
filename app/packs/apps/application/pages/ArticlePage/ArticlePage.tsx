@@ -317,6 +317,7 @@ export default function ArticlePage() {
         <Row justify='center'>
           <Col>
             {article.authorized &&
+            currentUser &&
             currentUser.mixinId !== article.author.mixinId ? (
               <Button
                 type={article.upvoted ? 'primary' : 'default'}
@@ -368,6 +369,7 @@ export default function ArticlePage() {
           </Col>
           <Col>
             {article.authorized &&
+            currentUser &&
             currentUser.mixinId !== article.author.mixinId ? (
               <Button
                 type={article.downvoted ? 'primary' : 'default'}
@@ -395,36 +397,38 @@ export default function ArticlePage() {
           </Col>
         </Row>
       </div>
-      {article.authorized && article.author.mixinId !== currentUser.mixinId && (
-        <div style={{ marginBottom: '1rem' }}>
-          <div style={{ textAlign: 'center' }}>
-            <Button
-              onClick={() => setRewardModalVisible(true)}
-              shape='round'
-              type='primary'
-              size='large'
-              danger
-            >
-              <HeartOutlined /> {t('reward')}
-            </Button>
-            {rewardModalVisible && (
-              <RewardModalComponent
-                visible={rewardModalVisible}
-                articleUuid={uuid}
-                articleAssetId={article.assetId}
-                swappableCurrencies={swappableCurrencies}
-                articleCurrency={article.currency}
-                swappable={article.swappable}
-                onCancel={() => {
-                  setRewardModalVisible(false);
-                  refetch();
-                }}
-                walletId={article.walletId}
-              />
-            )}
+      {article.authorized &&
+        currentUser &&
+        article.author.mixinId !== currentUser.mixinId && (
+          <div style={{ marginBottom: '1rem' }}>
+            <div style={{ textAlign: 'center' }}>
+              <Button
+                onClick={() => setRewardModalVisible(true)}
+                shape='round'
+                type='primary'
+                size='large'
+                danger
+              >
+                <HeartOutlined /> {t('reward')}
+              </Button>
+              {rewardModalVisible && (
+                <RewardModalComponent
+                  visible={rewardModalVisible}
+                  articleUuid={uuid}
+                  articleAssetId={article.assetId}
+                  swappableCurrencies={swappableCurrencies}
+                  articleCurrency={article.currency}
+                  swappable={article.swappable}
+                  onCancel={() => {
+                    setRewardModalVisible(false);
+                    refetch();
+                  }}
+                  walletId={article.walletId}
+                />
+              )}
+            </div>
           </div>
-        </div>
-      )}
+        )}
       {article.readers.totalCount > 0 && (
         <div>
           <Row justify='center'>

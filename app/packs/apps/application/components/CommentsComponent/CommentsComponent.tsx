@@ -117,7 +117,7 @@ export default function CommentsComponent(props: {
         <h3>{t('comments')}</h3>
       </div>
       <div className='flex items-center justify-center mb-2'>
-        {authorized && (
+        {authorized && currentUser && (
           <Button
             type='dashed'
             shape='round'
@@ -187,6 +187,7 @@ export default function CommentsComponent(props: {
                     onClick={() => {
                       if (
                         !authorized ||
+                        !currentUser ||
                         comment.upvoted ||
                         comment.author.mixinId === currentUser.mixinId
                       ) {
@@ -207,6 +208,7 @@ export default function CommentsComponent(props: {
                     onClick={() => {
                       if (
                         !authorized ||
+                        !currentUser ||
                         comment.downvoted ||
                         comment.author.mixinId === currentUser.mixinId
                       ) {
@@ -227,7 +229,7 @@ export default function CommentsComponent(props: {
                   </span>,
                   <span
                     onClick={() => {
-                      if (authorized) {
+                      if (authorized && currentUser) {
                         const content = commentForm.getFieldValue('content');
                         commentForm.setFieldsValue({
                           content: `${content || ''}
@@ -258,7 +260,7 @@ ${comment.content.replace(/^/gm, '> ')}
           </li>
         )}
       />
-      {authorized && (
+      {authorized && currentUser && (
         <Form
           form={commentForm}
           initialValues={{
