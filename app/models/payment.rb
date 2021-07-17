@@ -111,7 +111,7 @@ class Payment < ApplicationRecord
   def place_swap_order!
     create_swap_order!(
       funds: amount,
-      min_amount: decrypted_memo['p'],
+      min_amount: article.price,
       fill_asset_id: article.asset_id,
       pay_asset_id: asset_id,
       trace_id: PrsdiggBot.api.unique_conversation_id(wallet.uuid, trace_id),
