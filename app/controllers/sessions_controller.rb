@@ -6,10 +6,11 @@ class SessionsController < ApplicationController
 
   def new
     redirect_to format(
-      '%<oauth_path>s?client_id=%<client_id>s&scope=%<scope>s',
+      '%<oauth_path>s?client_id=%<client_id>s&scope=%<scope>s&return_to=%<return_to>s',
       oauth_path: Settings.mixin_oauth_path || 'https://mixin-www.zeromesh.net/oauth/authorize',
       client_id: PrsdiggBot.api.client_id,
-      scope: UserAuthorization::MIXIN_AUTHORIZATION_SCOPE
+      scope: UserAuthorization::MIXIN_AUTHORIZATION_SCOPE,
+      return_to: params[:return_to]
     )
   end
 
@@ -17,7 +18,7 @@ class SessionsController < ApplicationController
     user = User.auth_from_mixin params[:code]
     user_sign_in(user) if user
 
-    redirect_to root_path
+    redirect_to params[:return_to].presence || root_path
   end
 
   def delete

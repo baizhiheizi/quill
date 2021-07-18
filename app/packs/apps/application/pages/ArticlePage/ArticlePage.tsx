@@ -14,6 +14,7 @@ import {
   Collapse,
   Divider,
   message,
+  Modal,
   Progress,
   Row,
   Statistic,
@@ -117,18 +118,28 @@ export default function ArticlePage() {
           <span>{article.author.name}</span>
         </Link>
         <span>{moment(article.createdAt).format('YYYY/MM/DD HH:mm')}</span>
-        {currentUser &&
-          currentUser.mixinId !== article.author.mixinId &&
+        {currentUser?.mixinId !== article.author.mixinId &&
           !article.author.authoringSubscribed && (
             <Button
               type='primary'
               shape='round'
               size='small'
-              onClick={() =>
-                toggleAuthoringSubscribeUserAction({
-                  variables: { input: { mixinId: article.author.mixinId } },
-                })
-              }
+              onClick={() => {
+                if (currentUser) {
+                  toggleAuthoringSubscribeUserAction({
+                    variables: { input: { mixinId: article.author.mixinId } },
+                  });
+                } else {
+                  Modal.confirm({
+                    title: t('please_login'),
+                    content: t('login_via_mixin'),
+                    onOk: () =>
+                      location.replace(
+                        `/login?return_to=${encodeURIComponent(location.href)}`,
+                      ),
+                  });
+                }
+              }}
             >
               {t('subscribe')}
             </Button>
@@ -397,47 +408,62 @@ export default function ArticlePage() {
           </Col>
         </Row>
       </div>
-      {article.authorized &&
-        currentUser &&
-        article.author.mixinId !== currentUser.mixinId && (
-          <div style={{ marginBottom: '1rem' }}>
-            <div style={{ textAlign: 'center' }}>
-              <Button
-                onClick={() => setRewardModalVisible(true)}
-                shape='round'
-                type='primary'
-                size='large'
-                danger
-              >
-                <HeartOutlined /> {t('reward')}
-              </Button>
-              {rewardModalVisible && (
-                <RewardModalComponent
-                  visible={rewardModalVisible}
-                  articleUuid={uuid}
-                  articleAssetId={article.assetId}
-                  swappableCurrencies={swappableCurrencies}
-                  articleCurrency={article.currency}
-                  swappable={article.swappable}
-                  onCancel={() => {
-                    setRewardModalVisible(false);
-                    refetch();
-                  }}
-                  walletId={article.walletId}
-                />
-              )}
-            </div>
+      {article.authorized && article.author.mixinId !== currentUser?.mixinId && (
+        <div style={{ marginBottom: '1rem' }}>
+          <div style={{ textAlign: 'center' }}>
+            <Button
+              onClick={() => {
+                if (currentUser) {
+                  setRewardModalVisible(true);
+                } else {
+                  Modal.confirm({
+                    title: t('please_login'),
+                    content: t('login_via_mixin'),
+                    onOk: () =>
+                      location.replace(
+                        `/login?return_to=${encodeURIComponent(location.href)}`,
+                      ),
+                  });
+                }
+              }}
+              shape='round'
+              type='primary'
+              size='large'
+              danger
+            >
+              <HeartOutlined /> {t('reward')}
+            </Button>
+            {rewardModalVisible && (
+              <RewardModalComponent
+                visible={rewardModalVisible}
+                articleUuid={uuid}
+                articleAssetId={article.assetId}
+                swappableCurrencies={swappableCurrencies}
+                articleCurrency={article.currency}
+                swappable={article.swappable}
+                onCancel={() => {
+                  setRewardModalVisible(false);
+                  refetch();
+                }}
+                walletId={article.walletId}
+              />
+            )}
           </div>
-        )}
+        </div>
+      )}
       {article.readers.totalCount > 0 && (
         <div>
           <Row justify='center'>
             <Col>
               <h4>
-                <span className='text-red-500'>
-                  {article.buyOrders.totalCount}
-                </span>{' '}
-                {t('times_bought')},{' '}
+                {article.price > 0 && (
+                  <>
+                    <span className='text-red-500'>
+                      {article.buyOrders.totalCount}
+                    </span>{' '}
+                    {t('times_bought')},{' '}
+                  </>
+                )}
                 <span className='text-red-500'>
                   {article.rewardOrders.totalCount}
                 </span>{' '}

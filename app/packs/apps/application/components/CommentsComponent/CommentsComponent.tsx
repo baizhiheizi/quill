@@ -6,19 +6,15 @@ import {
   LikeOutlined,
 } from '@ant-design/icons';
 import Editor, { commands } from '@uiw/react-md-editor';
-import { Link } from 'react-router-dom';
 import {
   Avatar,
   Button,
-  Col,
   Comment,
   Form,
   Input,
   List,
   message,
   Modal,
-  Popover,
-  Row,
   Select,
 } from 'antd';
 import {
@@ -37,9 +33,9 @@ import {
 import moment from 'moment';
 import React, { createElement, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router-dom';
 import LoadingComponent from '../LoadingComponent/LoadingComponent';
 import LoadMoreComponent from '../LoadMoreComponent/LoadMoreComponent';
-import UserCardComponent from '../UserCardComponent/UserCardComponent';
 
 export default function CommentsComponent(props: {
   commentableType?: 'Article' | string;
@@ -260,7 +256,7 @@ ${comment.content.replace(/^/gm, '> ')}
           </li>
         )}
       />
-      {authorized && currentUser && (
+      {authorized && (
         <Form
           form={commentForm}
           initialValues={{
@@ -269,7 +265,16 @@ ${comment.content.replace(/^/gm, '> ')}
             content: '',
           }}
           onFinish={(values) => {
-            if (!Boolean(values.content)) {
+            if (!currentUser) {
+              Modal.confirm({
+                title: t('please_login'),
+                content: t('login_via_mixin'),
+                onOk: () =>
+                  location.replace(
+                    `/login?return_to=${encodeURIComponent(location.href)}`,
+                  ),
+              });
+            } else if (!Boolean(values.content)) {
               message.warn(t('write_something_first'));
             } else {
               Modal.confirm({
