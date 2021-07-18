@@ -1,54 +1,35 @@
 import {
-  ArrowLeftOutlined,
   GithubOutlined,
   GlobalOutlined,
-  MenuOutlined,
   NotificationOutlined,
 } from '@ant-design/icons';
-import { Avatar, Badge, Button, Col, Drawer, Layout, Menu, Row } from 'antd';
-import {
-  imagePath,
-  useCurrentUser,
-  usePrsdigg,
-  useUserAgent,
-} from 'apps/shared';
-import { useSwitchLocaleMutation } from 'graphqlTypes';
-import React, { useEffect, useState } from 'react';
+import { Avatar, Badge, Button, Col, Menu, Row } from 'antd';
+import { OPEN_SOURCE_URL } from 'apps/application/shared';
+import { imagePath, useCurrentUser, usePrsdigg } from 'apps/shared';
+import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link, useHistory } from 'react-router-dom';
-import { OPEN_SOURCE_URL } from './shared';
+import { Link } from 'react-router-dom';
 
-export default function Menus() {
-  const history = useHistory();
+export default function MenuComponent(props: {
+  mode: 'horizontal' | 'vertical';
+  setDrawerVisible?: (visible: boolean) => void;
+}) {
   const { currentUser } = useCurrentUser();
-  const { appName, logoFile } = usePrsdigg();
-  const { mixinEnv, isMobile } = useUserAgent();
-  const [drawerVisible, setDrawerVisible] = useState(false);
+  const { logoFile } = usePrsdigg();
+  const { mode, setDrawerVisible } = props;
   const { t, i18n } = useTranslation();
-  const [switchLocale] = useSwitchLocaleMutation();
 
-  useEffect(() => {
-    if (!currentUser) {
-      return;
-    }
-    if (currentUser.locale !== i18n.language) {
-      switchLocale({ variables: { input: { locale: i18n.language } } });
-    }
-    i18n.on('languageChanged', (lng: string) => {
-      switchLocale({ variables: { input: { locale: lng } } });
-    });
-  }, []);
-  const MenuConent = (props: { mode: 'horizontal' | 'vertical' }) => (
+  return (
     <Row
       justify='center'
       style={
-        props.mode === 'horizontal'
+        mode === 'horizontal'
           ? { flexWrap: 'nowrap' }
           : { flexDirection: 'column', textAlign: 'center' }
       }
     >
       <Col>
-        {currentUser && props.mode === 'vertical' ? (
+        {currentUser && mode === 'vertical' ? (
           <div style={{ margin: 15 }}>
             <a href='/dashboard'>
               <Avatar size='large' src={currentUser.avatar}>
@@ -65,7 +46,7 @@ export default function Menus() {
         )}
       </Col>
       <Col flex={1}>
-        <Menu theme='light' mode={props.mode} selectable={false}>
+        <Menu theme='light' mode={mode} selectable={false}>
           <Menu.Item key='read' onClick={() => setDrawerVisible(false)}>
             <Link to='/' replace>
               {t('read')}
@@ -107,11 +88,11 @@ export default function Menus() {
       </Col>
       {i18n.languages.length > 1 && (
         <Col>
-          <Menu theme='light' mode={props.mode} selectable={false}>
+          <Menu theme='light' mode={mode} selectable={false}>
             <Menu.SubMenu
               key='global'
               title={
-                props.mode === 'horizontal' ? (
+                mode === 'horizontal' ? (
                   <GlobalOutlined />
                 ) : i18n.language.includes('en') ? (
                   'Language'
@@ -149,14 +130,14 @@ export default function Menus() {
       )}
       {currentUser ? (
         <Col>
-          <Menu mode={props.mode} selectable={false}>
+          <Menu mode={mode} selectable={false}>
             <Menu.Item
               key='notifications'
               onClick={() => setDrawerVisible(false)}
             >
               <Badge dot={currentUser.unreadNotificationsCount > 0}>
                 <a href='/dashboard/notifications'>
-                  {props.mode === 'horizontal' ? (
+                  {mode === 'horizontal' ? (
                     <NotificationOutlined />
                   ) : (
                     t('notifications_manage')
@@ -182,59 +163,5 @@ export default function Menus() {
         </Col>
       )}
     </Row>
-  );
-  return (
-    <React.Fragment>
-      {isMobile.phone ? (
-        <>
-          <Drawer
-            bodyStyle={{ padding: 0 }}
-            visible={drawerVisible}
-            closable={false}
-            onClose={() => setDrawerVisible(false)}
-            placement='right'
-          >
-            <MenuConent mode='vertical' />
-          </Drawer>
-          <div className='sticky top-0 z-50 flex items-center justify-between px-2 py-1 bg-white shadow-sm'>
-            <div
-              className='flex items-center'
-              onClick={() => history.replace('/')}
-            >
-              <Avatar size='large' src={imagePath(logoFile)} />
-              <span className='ml-2 text-lg font-semibold'>{appName}</span>
-            </div>
-            <div className='flex items-center'>
-              <Button
-                className='text-gray-500'
-                type='link'
-                size='large'
-                onClick={() => history.goBack()}
-                icon={<ArrowLeftOutlined />}
-              />
-              <Button
-                className={`text-gray-500 ${mixinEnv && 'mr-24'}`}
-                type='link'
-                size='large'
-                onClick={() => setDrawerVisible(true)}
-                icon={<MenuOutlined />}
-              />
-            </div>
-          </div>
-        </>
-      ) : (
-        <Layout.Header
-          style={{
-            WebkitBoxShadow: '0 2px 8px #f0f1f2',
-            background: '#fff',
-            boxShadow: '0 2px 8px #f0f1f2',
-            padding: 0,
-            zIndex: 10,
-          }}
-        >
-          <MenuConent mode='horizontal' />
-        </Layout.Header>
-      )}
-    </React.Fragment>
   );
 }

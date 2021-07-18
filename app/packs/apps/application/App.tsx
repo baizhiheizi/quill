@@ -6,7 +6,7 @@ import 'core-js/features/promise';
 import { User } from 'graphqlTypes';
 import React from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
-import Menus from './Menus';
+import HeaderComponent from './components/HeaderComponent/HeaderComponent';
 import Routes from './Routes';
 
 export default function App(props: {
@@ -22,7 +22,7 @@ export default function App(props: {
     <AppWrapperComponent {...props}>
       <Router>
         <Layout>
-          <Menus />
+          <HeaderComponent />
           <Layout.Content className='p-4 bg-white'>
             <Row justify='center'>
               <Col flex={1} xs={24} sm={24} md={18} lg={16} xl={14} xxl={12}>

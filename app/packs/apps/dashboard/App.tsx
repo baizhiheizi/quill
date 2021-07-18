@@ -7,7 +7,7 @@ import { User } from 'graphqlTypes';
 import isMobile from 'ismobilejs';
 import React from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
-import Menus from './Menus';
+import HeaderComponent from './components/HeaderComponent/HeaderComponent';
 import Routes from './Routes';
 
 export default function App(props: {
@@ -23,7 +23,7 @@ export default function App(props: {
     <AppWrapperComponent {...props}>
       <Router basename='/dashboard'>
         <Layout style={{ minHeight: '100vh' }}>
-          <Menus />
+          <HeaderComponent />
           <Layout.Content
             style={
               isMobile().phone

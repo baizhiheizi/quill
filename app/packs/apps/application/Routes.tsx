@@ -14,7 +14,7 @@ const TagPage = React.lazy(() => import('./pages/TagPage/TagPage'));
 
 export default function Routes() {
   return (
-    <React.Fragment>
+    <>
       <Suspense fallback={<LoadingComponent />}>
         <Switch>
           <Route path='/' exact>
@@ -43,6 +43,6 @@ export default function Routes() {
           </Route>
         </Switch>
       </Suspense>
-    </React.Fragment>
+    </>
   );
 }
