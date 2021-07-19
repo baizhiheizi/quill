@@ -105,7 +105,7 @@ export default function ArticlePage() {
   document.title = `${article.title} - ${article.author.name}`;
 
   return (
-    <>
+    <div className='max-w-3xl mx-auto'>
       <div className='mb-4 font-sans text-2xl font-semibold'>
         {article.title}
       </div>
@@ -566,6 +566,6 @@ export default function ArticlePage() {
           </div>
         )}
       </div>
-    </>
+    </div>
   );
 }
