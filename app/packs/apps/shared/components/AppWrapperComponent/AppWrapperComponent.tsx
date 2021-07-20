@@ -42,7 +42,7 @@ export function AppWrapperComponent(props: {
 
   const lightbox = new PhotoSwipeLightbox({
     gallerySelector: '.photoswipe-gallery',
-    childSelector: 'a',
+    childSelector: 'a.photoswipe',
     pswpModule: PhotoSwipe,
     mainClass: mixinContext?.immersive ? 'immersive' : '',
   });

@@ -51,8 +51,9 @@ export const markdownTransformLinkUrl = (uri: string) => {
 };
 export const markdownRenderers: any = {
   img: ({ src, alt }) => (
-    <a data-pswp-src={src} target='_blank'>
+    <a className='photoswipe' data-pswp-src={src} target='_blank'>
       <img
+        data-pswp-src={src}
         onLoad={(e: any) => {
           e.target.parentElement.setAttribute(
             'data-pswp-width',
