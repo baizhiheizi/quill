@@ -1,6 +1,5 @@
 import { FileImageOutlined } from '@ant-design/icons';
 import { ICommand } from '@uiw/react-md-editor';
-import { Image } from 'antd';
 import katex from 'katex';
 import 'katex/dist/katex.css';
 import mermaid from 'mermaid';
@@ -51,14 +50,24 @@ export const markdownTransformLinkUrl = (uri: string) => {
   return 'javascript:void(0)';
 };
 export const markdownRenderers: any = {
-  image: ({ src, alt }) => (
-    <Image
-      wrapperClassName='w-full'
-      className='w-auto max-w-full m-auto'
-      preview={false}
-      alt={alt}
-      src={src}
-    />
+  img: ({ src, alt }) => (
+    <a data-pswp-src={src} target='_blank'>
+      <img
+        onLoad={(e: any) => {
+          e.target.parentElement.setAttribute(
+            'data-pswp-width',
+            e.target.naturalWidth,
+          );
+          e.target.parentElement.setAttribute(
+            'data-pswp-height',
+            e.target.naturalHeight,
+          );
+        }}
+        alt={alt}
+        className='w-full'
+        src={`${src}?x-oss-process=image/resize,w_768`}
+      />
+    </a>
   ),
   paragraph: ({ node, ...otherProps }) => (
     <div className='mb-4'>{otherProps.children}</div>

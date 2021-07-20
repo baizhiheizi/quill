@@ -5,6 +5,7 @@ import {
   CurrentUserContext,
   hideLoader,
   mixinContext,
+  PhotoSwipeContext,
   PrsdiggContext,
   UserAgentContext,
 } from 'apps/shared';
@@ -13,6 +14,9 @@ import consumer from 'channels/consumer';
 import 'core-js/features/promise';
 import { User } from 'graphqlTypes';
 import isMobile from 'ismobilejs';
+import PhotoSwipeLightbox from 'photoswipe/dist/photoswipe-lightbox.esm';
+import 'photoswipe/dist/photoswipe.css';
+import PhotoSwipe from 'photoswipe/dist/photoswipe.esm.js';
 import React, { Suspense, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import LoadingComponent from '../LoadingComponent/LoadingComponent';
@@ -35,6 +39,13 @@ export function AppWrapperComponent(props: {
     _currentUser && _currentUser.accessable ? _currentUser : null,
   );
   const { t } = useTranslation();
+
+  const lightbox = new PhotoSwipeLightbox({
+    gallerySelector: '.photoswipe-gallery',
+    childSelector: 'a',
+    pswpModule: PhotoSwipe,
+    mainClass: mixinContext?.immersive ? 'immersive' : '',
+  });
 
   useEffect(() => {
     hideLoader();
@@ -95,7 +106,9 @@ export function AppWrapperComponent(props: {
             <CurrentUserContext.Provider
               value={{ currentUser, setCurrentUser }}
             >
-              {children}
+              <PhotoSwipeContext.Provider value={{ lightbox }}>
+                {children}
+              </PhotoSwipeContext.Provider>
             </CurrentUserContext.Provider>
           </UserAgentContext.Provider>
         </PrsdiggContext.Provider>

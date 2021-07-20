@@ -7,3 +7,7 @@
 .anticon svg {
   display: block;
 }
+
+.immersive .pswp__top-bar {
+  padding-right: 100px !important;
+}
