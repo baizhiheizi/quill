@@ -49,7 +49,7 @@
     "mark.js": "^8.11.1",
     "mermaid": "^8.11.0",
     "mini-css-extract-plugin": "^2.1.0",
-    "photoswipe": "ssh://git@github.com:dimsemenov/Photoswipe#v5-beta",
+    "photoswipe": "https://github.com/dimsemenov/Photoswipe#v5-beta",
     "postcss": "^8.3.5",
     "postcss-import": "^14.0.2",
     "postcss-loader": "^6.1.1",
