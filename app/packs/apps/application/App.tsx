@@ -24,11 +24,11 @@ export default function App(props: {
         <Layout>
           <HeaderComponent />
           <Layout.Content className='p-4 bg-white'>
-            <Row justify='center'>
-              <Col flex={1} xs={24} sm={24} md={18} lg={16} xl={14} xxl={12}>
+            <div className='flex justify-center'>
+              <div className='w-full xl:max-w-5xl'>
                 <Routes />
-              </Col>
-            </Row>
+              </div>
+            </div>
           </Layout.Content>
         </Layout>
       </Router>
