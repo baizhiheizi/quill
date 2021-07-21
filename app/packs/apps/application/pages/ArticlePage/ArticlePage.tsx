@@ -145,7 +145,7 @@ export default function ArticlePage() {
             </Button>
           )}
       </div>
-      <div className='p-2 mb-4 bg-gray-100 border-l-4 border-gray-300'>
+      <div className='p-2 mb-4 truncate bg-gray-100 border-l-4 border-gray-300'>
         {article.intro}
       </div>
       <div style={{ marginBottom: 20 }}>
