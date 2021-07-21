@@ -9,6 +9,8 @@ ruby '~> 3.x'
 gem 'rails', '~> 6'
 # Use pg as the database for Active Record
 gem 'pg'
+# A performance dashboard for Postgres
+gem 'pghero'
 # Use Puma as the app server
 gem 'puma'
 # Use SCSS for stylesheets

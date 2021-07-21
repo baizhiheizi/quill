@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_07_14_065819) do
+ActiveRecord::Schema.define(version: 2021_07_21_101625) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -294,6 +294,17 @@ ActiveRecord::Schema.define(version: 2021_07_14_065819) do
     t.index ["opponent_id"], name: "index_payments_on_opponent_id"
     t.index ["payer_id"], name: "index_payments_on_payer_id"
     t.index ["trace_id"], name: "index_payments_on_trace_id", unique: true
+  end
+
+  create_table "pghero_query_stats", force: :cascade do |t|
+    t.text "database"
+    t.text "user"
+    t.text "query"
+    t.bigint "query_hash"
+    t.float "total_time"
+    t.bigint "calls"
+    t.datetime "captured_at"
+    t.index ["database", "captured_at"], name: "index_pghero_query_stats_on_database_and_captured_at"
   end
 
   create_table "prs_accounts", force: :cascade do |t|

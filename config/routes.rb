@@ -37,6 +37,9 @@ Rails.application.routes.draw do
     # sidekiq
     mount Sidekiq::Web, at: 'sidekiq', constraints: AdminConstraint.new
 
+    # pghero
+    mount PgHero::Engine, at: 'pghero'
+
     root to: 'overview#index'
     get '*path' => 'overview#index'
   end
