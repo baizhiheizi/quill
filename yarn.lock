@@ -2559,10 +2559,10 @@ ansi-styles@^4.0.0, ansi-styles@^4.1.0:
   dependencies:
     color-convert "^2.0.1"
 
-antd@^4.16.7:
-  version "4.16.7"
-  resolved "https://registry.yarnpkg.com/antd/-/antd-4.16.7.tgz#c51fb143288adb8b008a786efe8d5df13320ac4c"
-  integrity sha512-9XQnTpQ21zqnXWAvFvt1mm0j5+r4E7N/eK0kSEBqxuoTCzTrrn5iwhXFEZ2htJx9QJFlihST/T1Wd8JzRf9J3Q==
+antd@^4.16.8:
+  version "4.16.8"
+  resolved "https://registry.yarnpkg.com/antd/-/antd-4.16.8.tgz#0a81f846eb6b356159839d18247b713d04b526d6"
+  integrity sha512-xM1zheIYvS/0x05sM3Yj5cwBu6TjzS7RdwQug1bgbtDAk94dacuFvdLa4PjsvEiG6kz0uNzaaIaDBis7LRH5hA==
   dependencies:
     "@ant-design/colors" "^6.0.0"
     "@ant-design/icons" "^4.6.2"
@@ -4033,10 +4033,10 @@ css-declaration-sorter@^6.0.3:
   dependencies:
     timsort "^0.3.0"
 
-css-loader@^6.1.0:
-  version "6.1.0"
-  resolved "https://registry.yarnpkg.com/css-loader/-/css-loader-6.1.0.tgz#9f49a414103d3a43a7a5a0a0468ac71ab5132788"
-  integrity sha512-AcCb6ire7NgkrxJCtwEDa/y+xxBrPNXYWdlSpXNr+YwW2wTahSowSIxD9cHc9Uvc8Dbq+NQ/NQ6aDvJWik44vg==
+css-loader@^6.2.0:
+  version "6.2.0"
+  resolved "https://registry.yarnpkg.com/css-loader/-/css-loader-6.2.0.tgz#9663d9443841de957a3cb9bcea2eda65b3377071"
+  integrity sha512-/rvHfYRjIpymZblf49w8jYcRo2y9gj6rV8UroHGmBxKrIyGLokpycyKzp9OkitvqT29ZSpzJ0Ic7SpnJX3sC8g==
   dependencies:
     icss-utils "^5.1.0"
     postcss "^8.2.15"
@@ -6374,10 +6374,10 @@ i18next-browser-languagedetector@^6.1.2:
   dependencies:
     "@babel/runtime" "^7.14.6"
 
-i18next@^20.3.3:
-  version "20.3.3"
-  resolved "https://registry.yarnpkg.com/i18next/-/i18next-20.3.3.tgz#e3fdae045f9f0893e74826ce224715e43c62862b"
-  integrity sha512-tx9EUhHeaipvZ5pFLTaN9Xdm5Ssal774MpujaTA1Wv/ST/1My5SnoBmliY1lOpyEP5Z51Dq1gXifk/y4Yt3agQ==
+i18next@^20.3.4:
+  version "20.3.4"
+  resolved "https://registry.yarnpkg.com/i18next/-/i18next-20.3.4.tgz#5e05524a8baa17bbf99b89cdb427d3a68406aa64"
+  integrity sha512-xj3A2tGvwdWI1QBDKKFLOT/n4QImm+tN8QvHBIaTU/zN4YWK1NlpWPZN6mKzd3G1Wd7J1jU5BkFeaKQWHpf05w==
   dependencies:
     "@babel/runtime" "^7.12.0"
 
