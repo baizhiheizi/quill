@@ -1,11 +1,11 @@
 transfer_monitor_worker:
-  cron: '* * * * *'
+  cron: '*/15 * * * *'
   class: 'TransferMonitorWorker'
 mixin_message_monitor_worker:
-  cron: '* * * * *'
+  cron: '*/15 * * * *'
   class: 'MixinMessageMonitorWorker'
 mixin_network_snapshot_monitor_worker:
-  cron: '* * * * *'
+  cron: '*/15 * * * *'
   class: 'MixinNetworkSnapshotMonitorWorker'
 sync_currency_price_worker:
   cron: '*/5 * * * *'
