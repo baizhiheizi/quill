@@ -1,6 +1,6 @@
 import { MenuOutlined } from '@ant-design/icons';
 import { Left as LeftIcon } from '@icon-park/react';
-import { Avatar, Button, Drawer, Layout } from 'antd';
+import { Button, Drawer, Layout } from 'antd';
 import {
   imagePath,
   useCurrentUser,
@@ -20,7 +20,7 @@ export default function HeaderComponent() {
   const [switchLocale] = useSwitchLocaleMutation();
   const history = useHistory();
   const { appName, logoFile } = usePrsdigg();
-  const { mixinEnv, isMobile } = useUserAgent();
+  const { mixinEnv } = useUserAgent();
   const [drawerVisible, setDrawerVisible] = useState(false);
   const [showBack, setShowBack] = useState(location.pathname !== '/');
 
@@ -57,8 +57,8 @@ export default function HeaderComponent() {
           />
         )}
         <div className='flex items-center' onClick={() => history.replace('/')}>
-          <Avatar size='large' src={imagePath(logoFile)} />
-          <span className='ml-2 text-lg font-semibold'>{appName}</span>
+          <img className='w-8 h-8 mx-2' src={imagePath(logoFile)} />
+          <span className='text-lg font-semibold'>{appName}</span>
         </div>
         <Button
           className='ml-auto text-gray-500'
@@ -76,7 +76,9 @@ export default function HeaderComponent() {
         onClose={() => setDrawerVisible(false)}
         placement='right'
       >
-        <MenuComponent mode='vertical' setDrawerVisible={setDrawerVisible} />
+        <div className='mt-12'>
+          <MenuComponent mode='vertical' setDrawerVisible={setDrawerVisible} />
+        </div>
       </Drawer>
       <Layout.Header
         className='hidden md:block'

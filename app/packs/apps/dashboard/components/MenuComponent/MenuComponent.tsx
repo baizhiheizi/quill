@@ -9,18 +9,17 @@ import {
   RiseOutlined,
   SettingOutlined,
 } from '@ant-design/icons';
-import { Avatar, Badge, Menu } from 'antd';
+import { Badge, Menu } from 'antd';
 import { imagePath, useCurrentUser, usePrsdigg } from 'apps/shared';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link, useHistory } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 export default function MenuComponent(props: {
   setDrawerVisible?: (visible: boolean) => void;
 }) {
-  const history = useHistory();
   const { setDrawerVisible } = props;
-  const { appName, logoFile } = usePrsdigg();
+  const { logoFile } = usePrsdigg();
   const { t, i18n } = useTranslation();
   const { currentUser } = useCurrentUser();
 
@@ -42,12 +41,10 @@ export default function MenuComponent(props: {
   });
 
   return (
-    <div>
-      <div style={{ margin: 15, textAlign: 'center' }}>
-        <a href='/'>
-          <Avatar size='large' src={imagePath(logoFile)} />
-        </a>
-      </div>
+    <>
+      <a className='flex items-center justify-center block my-4' href='/'>
+        <img className='w-10 h-10' src={imagePath(logoFile)} />
+      </a>
       <Menu mode='inline' defaultSelectedKeys={[defaultKey]}>
         <Menu.Item key='overview' onClick={() => setDrawerVisible(false)}>
           <Link to='/'>
@@ -93,14 +90,6 @@ export default function MenuComponent(props: {
             <span>{t('orders_manage')}</span>
           </Link>
         </Menu.Item>
-        {
-          // <Menu.Item key='comments' onClick={() => setDrawerVisible(false)}>
-          //   <Link to='/comments'>
-          //     <CommentOutlined />
-          //     <span>{t('comments_manage')}</span>
-          //   </Link>
-          // </Menu.Item>
-        }
         {i18n.languages.length > 1 && (
           <Menu.SubMenu
             key='global'
@@ -143,6 +132,6 @@ export default function MenuComponent(props: {
           </a>
         </Menu.Item>
       </Menu>
-    </div>
+    </>
   );
 }

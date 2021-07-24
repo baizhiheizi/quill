@@ -3,7 +3,7 @@ import {
   GlobalOutlined,
   NotificationOutlined,
 } from '@ant-design/icons';
-import { Avatar, Badge, Col, Menu, Row } from 'antd';
+import { Badge, Col, Menu, Row } from 'antd';
 import { OPEN_SOURCE_URL } from 'apps/application/shared';
 import { imagePath, useCurrentUser, usePrsdigg } from 'apps/shared';
 import React from 'react';
@@ -35,19 +35,20 @@ export default function MenuComponent(props: {
     >
       <Col>
         {currentUser && mode === 'vertical' ? (
-          <div style={{ margin: 15 }}>
-            <a href='/dashboard'>
-              <Avatar size='large' src={currentUser.avatar}>
-                {currentUser.name[0]}
-              </Avatar>
-            </a>
-          </div>
+          <a
+            className='flex items-center justify-center block h-full m-4'
+            href='/dashboard'
+          >
+            <img className='w-10 h-10 rounded-full' src={currentUser.avatar} />
+          </a>
         ) : (
-          <div style={{ margin: '0 15px' }}>
-            <Link to='/' replace>
-              <Avatar size='large' src={imagePath(logoFile)} />
-            </Link>
-          </div>
+          <Link
+            className='flex items-center justify-center h-full mx-4'
+            to='/'
+            replace
+          >
+            <img className='w-10 h-10' src={imagePath(logoFile)} />
+          </Link>
         )}
       </Col>
       <Col flex={1}>

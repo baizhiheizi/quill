@@ -61,7 +61,7 @@ export default function HeaderComponent() {
               className='flex items-center'
               onClick={() => history.replace('/')}
             >
-              <Avatar size='large' src={imagePath(logoFile)} />
+              <img className='w-8 h-8 mx-2' src={imagePath(logoFile)} />
               <span className='ml-2 text-lg font-semibold'>
                 {t('dashboard')}
               </span>
@@ -82,7 +82,9 @@ export default function HeaderComponent() {
             onClose={() => setDrawerVisible(false)}
             placement='right'
           >
-            <MenuComponent setDrawerVisible={setDrawerVisible} />
+            <div className='mt-12'>
+              <MenuComponent setDrawerVisible={setDrawerVisible} />
+            </div>
           </Drawer>
         </>
       ) : (
