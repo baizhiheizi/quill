@@ -9,6 +9,7 @@ import { imagePath, useCurrentUser, usePrsdigg } from 'apps/shared';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
+import LoginModalComponent from '../LoginModalComponent/LoginModalComponent';
 
 export default function MenuComponent(props: {
   mode: 'horizontal' | 'vertical';
@@ -157,7 +158,9 @@ export default function MenuComponent(props: {
             </>
           ) : (
             <Menu.Item key='login' onClick={toggleDrawer}>
-              <a href='/login'>{t('login')}</a>
+              <LoginModalComponent>
+                <a>{t('connect_wallet')}</a>
+              </LoginModalComponent>
             </Menu.Item>
           )}
         </Menu>

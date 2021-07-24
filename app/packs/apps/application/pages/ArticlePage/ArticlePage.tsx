@@ -14,13 +14,13 @@ import {
   Collapse,
   Divider,
   message,
-  Modal,
   Progress,
   Row,
   Statistic,
 } from 'antd';
 import CommentsComponent from 'apps/application/components/CommentsComponent/CommentsComponent';
 import LoadingComponent from 'apps/application/components/LoadingComponent/LoadingComponent';
+import LoginModalComponent from 'apps/application/components/LoginModalComponent/LoginModalComponent';
 import UserCardComponent from 'apps/application/components/UserCardComponent/UserCardComponent';
 import {
   ArticleShareButton,
@@ -119,31 +119,27 @@ export default function ArticlePage() {
         </Link>
         <span>{moment(article.createdAt).format('YYYY/MM/DD HH:mm')}</span>
         {currentUser?.mixinId !== article.author.mixinId &&
-          !article.author.authoringSubscribed && (
+          !article.author.authoringSubscribed &&
+          (currentUser ? (
             <Button
               type='primary'
               shape='round'
               size='small'
               onClick={() => {
-                if (currentUser) {
-                  toggleAuthoringSubscribeUserAction({
-                    variables: { input: { mixinId: article.author.mixinId } },
-                  });
-                } else {
-                  Modal.confirm({
-                    title: t('please_login'),
-                    content: t('login_via_mixin'),
-                    onOk: () =>
-                      location.replace(
-                        `/login?return_to=${encodeURIComponent(location.href)}`,
-                      ),
-                  });
-                }
+                toggleAuthoringSubscribeUserAction({
+                  variables: { input: { mixinId: article.author.mixinId } },
+                });
               }}
             >
               {t('subscribe')}
             </Button>
-          )}
+          ) : (
+            <LoginModalComponent>
+              <Button type='primary' shape='round' size='small'>
+                {t('subscribe')}
+              </Button>
+            </LoginModalComponent>
+          ))}
       </div>
       <div className='p-2 mb-4 overflow-hidden bg-gray-100 border-l-4 border-gray-300 overflow-ellipsis'>
         {article.intro}
@@ -181,53 +177,45 @@ export default function ArticlePage() {
             <div className='mb-4'>
               <Alert type='warning' message={t('pay_warning')} />
             </div>
-            <div>
-              {currentUser ? (
-                <div>
-                  <Button
-                    type='primary'
-                    onClick={() => setPayModalVisible(true)}
-                  >
-                    {article.readers.totalCount === 0
-                      ? t('be_the_first_reader')
-                      : t('pay_to_read')}
-                  </Button>
-                  {payModalVisible && (
-                    <PayModalComponent
-                      visible={payModalVisible}
-                      price={article.price}
-                      walletId={article.walletId}
-                      articleUuid={article.uuid}
-                      articleAssetId={article.assetId}
-                      paymentTraceId={article.paymentTraceId}
-                      swappableCurrencies={swappableCurrencies}
-                      articleCurrency={article.currency}
-                      swappable={article.swappable}
-                      onCancel={() => {
-                        setPayModalVisible(false);
-                        refetch();
-                      }}
-                    />
-                  )}
-                  <div className='mt-4 text-sm text-black text-opacity-30'>
-                    {t('already_paid')}? {t('try_to')}{' '}
-                    <a onClick={() => refetch()}>{t('refresh')}</a>
-                  </div>
-                  {article.swappable && (
-                    <div className='mt-2 text-sm text-black text-opacity-30'>
-                      {t('pay_via_swap_tips')}
-                    </div>
-                  )}
-                </div>
-              ) : (
-                <Button
-                  type='primary'
-                  href={`/login?return_to=${encodeURIComponent(location.href)}`}
-                >
-                  {t('login')}
+            {currentUser ? (
+              <div>
+                <Button type='primary' onClick={() => setPayModalVisible(true)}>
+                  {article.readers.totalCount === 0
+                    ? t('be_the_first_reader')
+                    : t('pay_to_read')}
                 </Button>
-              )}
-            </div>
+                {payModalVisible && (
+                  <PayModalComponent
+                    visible={payModalVisible}
+                    price={article.price}
+                    walletId={article.walletId}
+                    articleUuid={article.uuid}
+                    articleAssetId={article.assetId}
+                    paymentTraceId={article.paymentTraceId}
+                    swappableCurrencies={swappableCurrencies}
+                    articleCurrency={article.currency}
+                    swappable={article.swappable}
+                    onCancel={() => {
+                      setPayModalVisible(false);
+                      refetch();
+                    }}
+                  />
+                )}
+                <div className='mt-4 text-sm text-black text-opacity-30'>
+                  {t('already_paid')}? {t('try_to')}{' '}
+                  <a onClick={() => refetch()}>{t('refresh')}</a>
+                </div>
+                {article.swappable && (
+                  <div className='mt-2 text-sm text-black text-opacity-30'>
+                    {t('pay_via_swap_tips')}
+                  </div>
+                )}
+              </div>
+            ) : (
+              <LoginModalComponent>
+                <Button type='primary'>{t('connect_wallet')}</Button>
+              </LoginModalComponent>
+            )}
           </div>
         )}
       </div>
@@ -411,28 +399,23 @@ export default function ArticlePage() {
       {article.authorized && article.author.mixinId !== currentUser?.mixinId && (
         <div style={{ marginBottom: '1rem' }}>
           <div style={{ textAlign: 'center' }}>
-            <Button
-              onClick={() => {
-                if (currentUser) {
-                  setRewardModalVisible(true);
-                } else {
-                  Modal.confirm({
-                    title: t('please_login'),
-                    content: t('login_via_mixin'),
-                    onOk: () =>
-                      location.replace(
-                        `/login?return_to=${encodeURIComponent(location.href)}`,
-                      ),
-                  });
-                }
-              }}
-              shape='round'
-              type='primary'
-              size='large'
-              danger
-            >
-              <HeartOutlined /> {t('reward')}
-            </Button>
+            {currentUser ? (
+              <Button
+                onClick={() => setRewardModalVisible(true)}
+                shape='round'
+                type='primary'
+                size='large'
+                danger
+              >
+                <HeartOutlined /> {t('reward')}
+              </Button>
+            ) : (
+              <LoginModalComponent>
+                <Button shape='round' type='primary' size='large' danger>
+                  <HeartOutlined /> {t('reward')}
+                </Button>
+              </LoginModalComponent>
+            )}
             {rewardModalVisible && (
               <RewardModalComponent
                 visible={rewardModalVisible}

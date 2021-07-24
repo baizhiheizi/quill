@@ -54,7 +54,8 @@ class ApplicationController < ActionController::Base
         page_title: Settings.page_title,
         attachment_endpoint: Rails.application.credentials.dig(:aliyun, :bucket_endpoint),
         logo_file: Settings.logo_file || 'logo.png',
-        twitter_account: Settings.twitter_account
+        twitter_account: Settings.twitter_account,
+        messenger: Settings.messenger || 'mixin'
       },
       default_locale: I18n.default_locale,
       available_locales: I18n.available_locales

@@ -36,6 +36,7 @@ import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import LoadingComponent from '../LoadingComponent/LoadingComponent';
 import LoadMoreComponent from '../LoadMoreComponent/LoadMoreComponent';
+import LoginModalComponent from '../LoginModalComponent/LoginModalComponent';
 
 export default function CommentsComponent(props: {
   commentableType?: 'Article' | string;
@@ -266,14 +267,7 @@ ${comment.content.replace(/^/gm, '> ')}
           }}
           onFinish={(values) => {
             if (!currentUser) {
-              Modal.confirm({
-                title: t('please_login'),
-                content: t('login_via_mixin'),
-                onOk: () =>
-                  location.replace(
-                    `/login?return_to=${encodeURIComponent(location.href)}`,
-                  ),
-              });
+              return;
             } else if (!Boolean(values.content)) {
               message.warn(t('write_something_first'));
             } else {
@@ -315,9 +309,15 @@ ${comment.content.replace(/^/gm, '> ')}
             />
           </Form.Item>
           <Form.Item style={{ textAlign: 'center' }}>
-            <Button type='primary' htmlType='submit'>
-              {t('submit')}
-            </Button>
+            {currentUser ? (
+              <Button type='primary' htmlType='submit'>
+                {t('submit')}
+              </Button>
+            ) : (
+              <LoginModalComponent>
+                <Button type='primary'>{t('connect_wallet')}</Button>
+              </LoginModalComponent>
+            )}
           </Form.Item>
         </Form>
       )}
