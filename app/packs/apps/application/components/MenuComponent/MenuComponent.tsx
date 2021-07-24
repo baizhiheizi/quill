@@ -137,7 +137,11 @@ export default function MenuComponent(props: {
           )}
           {currentUser ? (
             <>
-              <Menu.Item key='notifications' onClick={toggleDrawer}>
+              <Menu.Item
+                className={i18n.languages.length < 2 && 'ml-auto'}
+                key='notifications'
+                onClick={toggleDrawer}
+              >
                 <Badge dot={currentUser.unreadNotificationsCount > 0}>
                   <a href='/dashboard/notifications'>
                     {mode === 'horizontal' ? (
