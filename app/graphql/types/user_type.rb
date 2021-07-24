@@ -18,6 +18,8 @@ module Types
     field :wallet_id, String, null: true
 
     field :statistics, UserStatisticsType, null: false
+    field :authoring_subscribers_count, Integer, null: false
+    field :reading_subscribers_count, Integer, null: false
 
     field :authoring_subscribed, Boolean, null: true
     field :reading_subscribed, Boolean, null: true

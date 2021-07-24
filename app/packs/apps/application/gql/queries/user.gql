@@ -10,6 +10,7 @@ query User($mixinId: ID!) {
     readingSubscribed
     statistics {
       articlesCount
+      boughtArticlesCount
       authorRevenueTotalUsd
       readerRevenueTotalUsd
     }

@@ -1960,6 +1960,7 @@ export type User = {
   accessable?: Maybe<Scalars['Boolean']>;
   articles: ArticleConnection;
   authoringSubscribed?: Maybe<Scalars['Boolean']>;
+  authoringSubscribersCount: Scalars['Int'];
   avatar: Scalars['String'];
   avatarUrl: Scalars['String'];
   bannedAt?: Maybe<Scalars['ISO8601DateTime']>;
@@ -1975,6 +1976,7 @@ export type User = {
   phone?: Maybe<Scalars['String']>;
   prsAccount?: Maybe<PrsAccount>;
   readingSubscribed?: Maybe<Scalars['Boolean']>;
+  readingSubscribersCount: Scalars['Int'];
   statistics: UserStatistics;
   unreadNotificationsCount: Scalars['Int'];
   updatedAt?: Maybe<Scalars['ISO8601DateTime']>;
@@ -4754,6 +4756,7 @@ export const UserDocument = gql`
     readingSubscribed
     statistics {
       articlesCount
+      boughtArticlesCount
       authorRevenueTotalUsd
       readerRevenueTotalUsd
     }
