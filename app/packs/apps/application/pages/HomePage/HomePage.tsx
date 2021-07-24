@@ -1,4 +1,4 @@
-import { Tabs } from 'antd';
+import { Select, Tabs } from 'antd';
 import { useCurrentUser } from 'apps/shared';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -12,6 +12,7 @@ export default function HomePage() {
   const { currentUser } = useCurrentUser();
   const history = useHistory();
   const location = useLocation<any>();
+  const [timeRange, setTimeRange] = useState('month');
   const [activeTabKey, setActiveTabKey] = useState<
     'popularity' | 'lately' | 'revenue' | 'subscribed' | 'tags' | 'comments'
   >(location.state?.activeTabKey || 'default');
@@ -38,7 +39,19 @@ export default function HomePage() {
         <ArticlesComponent filter='lately' />
       </Tabs.TabPane>
       <Tabs.TabPane tab={t('order_by_revenue')} key='revenue'>
-        <ArticlesComponent filter='revenue' />
+        <div className='flex justify-end'>
+          <Select
+            className='w-28'
+            value={timeRange}
+            onChange={(value) => setTimeRange(value)}
+          >
+            <Select.Option value='week'>{t('in_a_week')}</Select.Option>
+            <Select.Option value='month'>{t('in_a_month')}</Select.Option>
+            <Select.Option value='year'>{t('in_a_year')}</Select.Option>
+            <Select.Option value='all'>{t('all')}</Select.Option>
+          </Select>
+        </div>
+        <ArticlesComponent filter='revenue' timeRange={timeRange} />
       </Tabs.TabPane>
       <Tabs.TabPane tab={t('tags')} key='tags'>
         <TagsComponent />

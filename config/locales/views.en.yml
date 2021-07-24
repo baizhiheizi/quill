@@ -207,3 +207,7 @@ en:
   article_references: References
   referenced_by: Referenced by
   login_via_mixin: Login via Mixin Messenger
+  in_a_week: 1 Week
+  in_a_month: 1 Month
+  in_a_year: 1 Year
+  all: All

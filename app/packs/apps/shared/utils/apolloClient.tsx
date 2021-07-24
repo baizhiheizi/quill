@@ -87,6 +87,7 @@ export const apolloClient = (uri: string, csrfToken?: string) => {
             'tagId',
             'filter',
             'query',
+            'timeRange',
           ]),
           commentConnection: customizedConnectionMergeFunction([
             'commentableId',

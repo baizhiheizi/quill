@@ -207,3 +207,7 @@ zh-CN:
   article_references: 引用文章
   referenced_by: 相关文章
   login_via_mixin: 使用 Mixin Messenger 登录
+  in_a_week: 1 周内
+  in_a_month: 1 月内
+  in_a_year: 1 年内
+  all: 全部

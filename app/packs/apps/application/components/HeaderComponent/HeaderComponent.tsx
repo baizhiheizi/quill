@@ -40,55 +40,46 @@ export default function HeaderComponent() {
     });
   }, []);
 
-  if (isMobile.phone) {
-    return (
-      <>
-        <div className='sticky top-0 z-50 flex items-center px-2 py-1 bg-white shadow-sm'>
-          {showBack && (
-            <LeftIcon
-              className='text-gray-500'
-              size='1.5rem'
-              onClick={() => {
-                if (history.length <= 1) {
-                  history.replace('/');
-                } else {
-                  history.goBack();
-                }
-              }}
-            />
-          )}
-          <div
-            className='flex items-center'
-            onClick={() => history.replace('/')}
-          >
-            <Avatar size='large' src={imagePath(logoFile)} />
-            <span className='ml-2 text-lg font-semibold'>{appName}</span>
-          </div>
-          <Button
-            className='ml-auto text-gray-500'
-            type='link'
-            size='large'
-            onClick={() => setDrawerVisible(true)}
-            icon={<MenuOutlined />}
-          />
-          <div className={mixinEnv && 'w-24'} />
-        </div>
-        <Drawer
-          bodyStyle={{ padding: 0 }}
-          visible={drawerVisible}
-          closable={false}
-          onClose={() => setDrawerVisible(false)}
-          placement='right'
-        >
-          <MenuComponent mode='vertical' setDrawerVisible={setDrawerVisible} />
-        </Drawer>
-      </>
-    );
-  }
-
   return (
     <>
+      <div className='sticky top-0 z-50 flex items-center px-2 py-1 bg-white md:hidden shadow-sm'>
+        {showBack && (
+          <LeftIcon
+            className='text-gray-500'
+            size='1.5rem'
+            onClick={() => {
+              if (history.length <= 1) {
+                history.replace('/');
+              } else {
+                history.goBack();
+              }
+            }}
+          />
+        )}
+        <div className='flex items-center' onClick={() => history.replace('/')}>
+          <Avatar size='large' src={imagePath(logoFile)} />
+          <span className='ml-2 text-lg font-semibold'>{appName}</span>
+        </div>
+        <Button
+          className='ml-auto text-gray-500'
+          type='link'
+          size='large'
+          onClick={() => setDrawerVisible(true)}
+          icon={<MenuOutlined />}
+        />
+        <div className={mixinEnv && 'w-24'} />
+      </div>
+      <Drawer
+        bodyStyle={{ padding: 0 }}
+        visible={drawerVisible}
+        closable={false}
+        onClose={() => setDrawerVisible(false)}
+        placement='right'
+      >
+        <MenuComponent mode='vertical' setDrawerVisible={setDrawerVisible} />
+      </Drawer>
       <Layout.Header
+        className='hidden md:block'
         style={{
           WebkitBoxShadow: '0 2px 8px #f0f1f2',
           background: '#fff',

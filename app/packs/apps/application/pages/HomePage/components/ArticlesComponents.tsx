@@ -11,13 +11,15 @@ import React from 'react';
 
 export default function ArticlesComponent(props: {
   filter: 'default' | 'lately' | 'revenue' | 'subscribed';
+  timeRange?: string;
 }) {
-  const { filter } = props;
+  const { filter, timeRange } = props;
   const { data, loading, fetchMore }: ArticleConnectionQueryHookResult =
     useArticleConnectionQuery({
       notifyOnNetworkStatusChange: true,
       variables: {
         filter,
+        timeRange,
       },
     });
 

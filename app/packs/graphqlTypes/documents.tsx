@@ -1521,6 +1521,7 @@ export type QueryArticleConnectionArgs = {
   tagId?: Maybe<Scalars['ID']>;
   after?: Maybe<Scalars['String']>;
   filter: Scalars['String'];
+  timeRange?: Maybe<Scalars['String']>;
   before?: Maybe<Scalars['String']>;
   first?: Maybe<Scalars['Int']>;
   last?: Maybe<Scalars['Int']>;
@@ -4122,8 +4123,13 @@ export type UpvoteCommentMutationHookResult = ReturnType<typeof useUpvoteComment
 export type UpvoteCommentMutationResult = Apollo.MutationResult<UpvoteCommentMutation>;
 export type UpvoteCommentMutationOptions = Apollo.BaseMutationOptions<UpvoteCommentMutation, UpvoteCommentMutationVariables>;
 export const ArticleConnectionDocument = gql`
-    query ArticleConnection($filter: String!, $query: String, $after: String) {
-  articleConnection(filter: $filter, query: $query, after: $after) {
+    query ArticleConnection($filter: String!, $query: String, $after: String, $timeRange: String) {
+  articleConnection(
+    filter: $filter
+    query: $query
+    after: $after
+    timeRange: $timeRange
+  ) {
     nodes {
       uuid
       title
@@ -4176,6 +4182,7 @@ export const ArticleConnectionDocument = gql`
  *      filter: // value for 'filter'
  *      query: // value for 'query'
  *      after: // value for 'after'
+ *      timeRange: // value for 'timeRange'
  *   },
  * });
  */

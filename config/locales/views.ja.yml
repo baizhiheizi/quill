@@ -198,3 +198,7 @@ ja:
   article_references: 参考記事
   referenced_by: 関連記事
   login_via_mixin: Linksでログイン
+  in_a_week: 1週間以内
+  in_a_month: 1ヶ月以内
+  in_a_year: 1年以内
+  all: すべて
