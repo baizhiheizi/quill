@@ -117,7 +117,7 @@ export default function ArticlePage() {
           <Avatar size='small' src={article.author.avatar} />
           <span>{article.author.name}</span>
         </Link>
-        <span>{moment(article.createdAt).format('YYYY/MM/DD HH:mm')}</span>
+        <span>{moment(article.publishedAt).format('YYYY/MM/DD HH:mm')}</span>
         {currentUser?.mixinId !== article.author.mixinId &&
           !article.author.authoringSubscribed &&
           (currentUser ? (

@@ -65,7 +65,7 @@ export default function ArticleListItemComponent(props: {
                 {article.author.name}
               </Link>
               <div className='text-xs text-gray-500'>
-                {moment(article.createdAt).fromNow()}
+                {moment(article.publishedAt).fromNow()}
               </div>
             </div>
             {article.price > 0 && (

@@ -4160,6 +4160,7 @@ export const ArticleConnectionDocument = gql`
         iconUrl
       }
       createdAt
+      publishedAt
     }
     pageInfo {
       hasNextPage
@@ -4598,6 +4599,7 @@ export const TaggedArticleConnectionDocument = gql`
         iconUrl
       }
       createdAt
+      publishedAt
     }
     pageInfo {
       hasNextPage
@@ -4705,6 +4707,7 @@ export const UserArticleConnectionDocument = gql`
         avatar
       }
       createdAt
+      publishedAt
     }
     pageInfo {
       hasNextPage

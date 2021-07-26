@@ -14,6 +14,7 @@ query UserArticleConnection($mixinId: ID!, $type: String!, $after: String) {
         avatar
       }
       createdAt
+      publishedAt
     }
     pageInfo {
       hasNextPage

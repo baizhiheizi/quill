@@ -151,7 +151,7 @@ export default function UserArticlesComponent(props: {
                   <div>
                     <div>{article.author.name}</div>
                     <div style={{ fontSize: '0.8rem', color: '#aaa' }}>
-                      {moment(article.createdAt).fromNow()}
+                      {moment(article.publishedAt).fromNow()}
                     </div>
                   </div>
                 </Row>

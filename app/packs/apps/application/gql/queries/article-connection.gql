@@ -38,6 +38,7 @@ query ArticleConnection(
         iconUrl
       }
       createdAt
+      publishedAt
     }
     pageInfo {
       hasNextPage

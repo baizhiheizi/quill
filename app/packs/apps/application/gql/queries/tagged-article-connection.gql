@@ -46,6 +46,7 @@ query TaggedArticleConnection(
         iconUrl
       }
       createdAt
+      publishedAt
     }
     pageInfo {
       hasNextPage
