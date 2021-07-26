@@ -308,7 +308,7 @@ GEM
       ffi (~> 1.0)
     rbnacl (7.1.1)
       ffi
-    react_on_rails (12.2.0)
+    react_on_rails (12.3.0)
       addressable
       connection_pool
       execjs (~> 2.5)
@@ -450,7 +450,7 @@ DEPENDENCIES
   rails (~> 6)
   rails-i18n (~> 6.x)
   ransack
-  react_on_rails (~> 12.0)
+  react_on_rails (~> 12.3)
   redis (~> 4.1)
   redis-namespace
   redis-objects
