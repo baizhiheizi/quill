@@ -2,21 +2,49 @@
 
 module Mutations
   class PublishArticleMutation < Mutations::BaseMutation
-    argument :uuid, ID, required: true
+    input_object_class Types::ArticlePublishInputType
 
-    field :error, String, null: true
-    field :success, Boolean, null: true
+    type Boolean
 
-    def resolve(uuid:)
-      current_user.articles.find_by(uuid: uuid)&.publish!
+    def resolve(**params)
+      @article = current_user.articles.find_by(uuid: params[:uuid])
 
-      {
-        success: true
-      }
-    rescue StandardError => e
-      {
-        error: e.to_s
-      }
+      publish_drafted_article params if @article.drfated?
+      @article.publish! 
+
+      @article.reload.published?
+    end
+
+    private
+
+    def publish_drafted_article(params)
+      if params[:article_references].present?
+        article_references = params[:article_references].uniq(&:reference_id)
+        references_revenue_ratio = article_references.sum(&:revenue_ratio)&.to_f
+
+        article_references.each do |reference|
+          _ref = current_user.bought_articles.find_by(id: reference.reference_id)
+          _ref ||= current_user.available_articles.find_by(uuid: reference.reference_id)
+          next if _ref.blank?
+
+          @article.article_references.new(
+            reference: _ref,
+            revenue_ratio: reference.revenue_ratio
+          )
+        end
+      end
+
+      @article.assign_attributes(
+        ActionController::Parameters.new(params).permit(
+          price: params[:price],
+          asset_id: params[:asset_id]
+        ).merge(
+          author_revenue_ratio: Article::AUTHOR_REVENUE_RATIO_DEFAULT - references_revenue_ratio,
+          references_revenue_ratio: references_revenue_ratio
+        )
+      )
+
+      @article.save
     end
   end
 end

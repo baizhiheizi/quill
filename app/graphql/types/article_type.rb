@@ -4,14 +4,14 @@ module Types
   class ArticleType < BaseObject
     field :uuid, ID, null: false
     field :id, ID, null: false
-    field :title, String, null: false
-    field :intro, String, null: false
+    field :title, String, null: true
+    field :intro, String, null: true
     field :content, String, null: true
     field :state, String, null: true
     field :asset_id, String, null: false
     field :price, Float, null: false
     field :price_usd, Float, null: true
-    field :published_at, GraphQL::Types::ISO8601DateTime, null: false
+    field :published_at, GraphQL::Types::ISO8601DateTime, null: true
 
     field :tags_count, Int, null: false
     field :tag_names, [String], null: true
@@ -68,7 +68,7 @@ module Types
     def content
       return unless object.authorized?(context[:current_user])
 
-      object.content.strip
+      object.content.to_s.strip
     end
 
     def authorized

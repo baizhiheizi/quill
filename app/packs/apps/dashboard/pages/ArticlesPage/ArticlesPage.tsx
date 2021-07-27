@@ -1,23 +1,37 @@
 import { Button, PageHeader, Tabs } from 'antd';
+import { useCreateArticleMutation } from 'graphqlTypes';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import MyArticlesComponent from './components/MyArticlesComponent';
 import MyBoughtArticlesComponent from './components/MyBoughtArticlesComponent';
 
 export default function ArticlesPage() {
   const { t } = useTranslation();
+  const history = useHistory();
   const [type, setType] = useState<
     'published' | 'bought' | 'hidden' | 'blocked'
   >('bought');
+  const [createArticle] = useCreateArticleMutation({
+    update: (
+      _,
+      {
+        data: {
+          createArticle: { uuid },
+        },
+      },
+    ) => {
+      history.push(`/articles/${uuid}/edit`);
+    },
+  });
 
   return (
     <div>
       <PageHeader
         title={t('articles_manage')}
         extra={[
-          <Button key='new' type='primary'>
-            <Link to='/articles/new'>{t('new_article')}</Link>
+          <Button key='new' type='primary' onClick={() => createArticle()}>
+            {t('new_article')}
           </Button>,
         ]}
       />

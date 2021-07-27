@@ -1,5 +1,3 @@
 mutation UpdateArticle($input: UpdateArticleMutationInput!) {
-  updateArticle(input: $input) {
-    error
-  }
+  updateArticle(input: $input)
 }
