@@ -1,3 +1,5 @@
-mutation CreateArticle($input: CreateArticleMutationInput!) {
-  createArticle(input: $input)
+mutation CreateArticle {
+  createArticle(input: {}) {
+    uuid
+  }
 }

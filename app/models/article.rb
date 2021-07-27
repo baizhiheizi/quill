@@ -78,31 +78,24 @@ class Article < ApplicationRecord
 
   has_one :wallet, class_name: 'MixinNetworkUser', as: :owner, dependent: :nullify
 
-  validates :asset_id, presence: true, inclusion: { in: SUPPORTED_ASSETS }
+  validates :asset_id, presence: true, inclusion: { in: SUPPORTED_ASSETS }, unless: :drafted?
   validates :uuid, presence: true, uniqueness: true
-  validates :title, presence: true, length: { maximum: 64 }
-  validates :intro, presence: true, length: { maximum: 140 }
-  validates :content, presence: true
-  validates :price, presence: true, numericality: { greater_than_or_equal_to: 0.0 }
-  validates :platform_revenue_ratio, presence: true, numericality: { equal_to: 0.1 }
-  validates :readers_revenue_ratio, presence: true, numericality: { greater_than_or_equal_to: 0.4 }
-  validates :author_revenue_ratio, presence: true, numericality: { less_than_or_equal_to: 0.5 }
-  validates :references_revenue_ratio, presence: true, numericality: { greater_than_or_equal_to: 0.0 }
+  validates :title, presence: true, length: { maximum: 64 }, unless: :drafted?
+  validates :intro, presence: true, length: { maximum: 140 }, unless: :drafted?
+  validates :content, presence: true, unless: :drafted?
+  validates :price, presence: true, numericality: { greater_than_or_equal_to: 0.0 }, unless: :drafted?
+  validates :platform_revenue_ratio, presence: true, numericality: { equal_to: 0.1 }, unless: :drafted?
+  validates :readers_revenue_ratio, presence: true, numericality: { greater_than_or_equal_to: 0.4 }, unless: :drafted?
+  validates :author_revenue_ratio, presence: true, numericality: { less_than_or_equal_to: 0.5 }, unless: :drafted?
+  validates :references_revenue_ratio, presence: true, numericality: { greater_than_or_equal_to: 0.0 }, unless: :drafted?
   validate :ensure_author_account_normal
   validate :ensure_price_not_too_low
   validate :ensure_references_ration_correct
   validate :ensure_revenue_ratios_sum_to_one
 
   before_validation :setup_attributes, on: :create
-  after_create :create_wallet!
   after_save do
     generate_snapshot if should_generate_snapshot?
-  end
-  after_commit on: :create do
-    notify_authoring_subscribers
-    notify_admin
-    subscribe_comments_for_author
-    update_author_statistics_cache
   end
 
   delegate :swappable?, to: :currency
@@ -110,7 +103,9 @@ class Article < ApplicationRecord
   default_scope -> { includes(:currency) }
   scope :without_free, -> { where('price > ?', 0) }
   scope :only_free, -> { where(price: 0.0) }
+  scope :only_drafted, -> { where(state: :drafted) }
   scope :only_published, -> { where(state: :published) }
+  scope :without_drafted, -> { where.not(state: :drafted) }
   scope :order_by_revenue_usd, -> { order(revenue_usd: :desc) }
   scope :order_by_popularity, lambda {
     without_free
@@ -126,7 +121,8 @@ class Article < ApplicationRecord
   }
 
   aasm column: :state do
-    state :published, initial: true
+    state :drafted, initial: true
+    state :published
     state :hidden
     state :blocked
 
@@ -134,16 +130,17 @@ class Article < ApplicationRecord
       transitions from: :published, to: :hidden
     end
 
-    event :publish, after_transaction: :touch_published_at do
+    event :publish, after_transaction: %i[do_first_publish] do
+      transitions from: :drafted, to: :published
       transitions from: :hidden, to: :published
     end
 
-    event :block, after_commit: %i[notify_author_blocked mark_as_removed_on_chain_async] do
+    event :block, after_commit: %i[notify_author_blocked] do
       transitions from: :hidden, to: :blocked
       transitions from: :published, to: :blocked
     end
 
-    event :unblock, after_commit: %i[notify_author_unblocked recover_on_chain] do
+    event :unblock, after_commit: %i[notify_author_unblocked] do
       transitions from: :blocked, to: :hidden
     end
   end
@@ -153,9 +150,8 @@ class Article < ApplicationRecord
   end
 
   def authorized?(user = nil)
-    return true if free?
+    return true if free? || author == user
     return if user.blank?
-    return true if author == user
 
     orders.find_by(buyer: user).present?
   end
@@ -173,8 +169,6 @@ class Article < ApplicationRecord
   end
 
   def notify_authoring_subscribers
-    return if hidden?
-
     ArticlePublishedNotification.with(article: self).deliver(author.authoring_subscribe_by_users)
   end
 
@@ -189,7 +183,7 @@ class Article < ApplicationRecord
   end
 
   def words_count
-    content.gsub("\n", '').size
+    content.to_s.gsub("\n", '').size
   end
 
   def partial_content
@@ -228,7 +222,7 @@ class Article < ApplicationRecord
 
   def update_author_statistics_cache
     author.update(
-      articles_count: author.articles.count
+      articles_count: author.articles.without_drafted.count
     )
   end
 
@@ -240,11 +234,16 @@ class Article < ApplicationRecord
     readers.where(id: readers.ids.sample(limit))
   end
 
-  def touch_published_at
+  def do_first_publish
     return unless published?
     return if published_at.present?
 
     update published_at: Time.current
+    create_wallet!
+    notify_authoring_subscribers
+    notify_admin
+    subscribe_comments_for_author
+    update_author_statistics_cache
   end
 
   def generate_snapshot
@@ -252,6 +251,8 @@ class Article < ApplicationRecord
   end
 
   def should_generate_snapshot?
+    return if drafted?
+
     saved_change_to_content? || saved_change_to_title? || saved_change_to_intro? || saved_change_to_published_at?
   end
 
@@ -287,10 +288,6 @@ class Article < ApplicationRecord
     ArticleMarkAsRemovedOnChainWorker.perform_async id
   end
 
-  def recover_on_chain
-    snapshots.create raw: as_json
-  end
-
   def revenue_ratios_sum
     [
       platform_revenue_ratio,
@@ -310,7 +307,7 @@ class Article < ApplicationRecord
       uuid: SecureRandom.uuid
     )
 
-    self.published_at = Time.current if published?
+    self.asset_id = Currency::BTC_ASSET_ID if asset_id.blank?
   end
 
   def ensure_author_account_normal
@@ -320,6 +317,8 @@ class Article < ApplicationRecord
   end
 
   def ensure_price_not_too_low
+    return if drafted?
+
     case asset_id
     when Currency::BTC_ASSET_ID
       errors.add(:price, 'at least 0.000001 BTC') if price.positive? && price.to_f < MINIMUM_PRICE_BTC

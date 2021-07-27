@@ -2,36 +2,38 @@
 
 module Mutations
   class UpdateArticleMutation < Mutations::BaseMutation
-    argument :uuid, ID, required: true
-    argument :title, String, required: false
-    argument :intro, String, required: false
-    argument :content, String, required: false
-    argument :price, Float, required: false
-    argument :tag_names, [String], required: false
+    input_object_class Types::ArticleUpdateInputType
 
-    field :error, String, null: true
+    type Boolean
 
     def resolve(params)
       article = current_user.articles.find_by(uuid: params[:uuid])
       return if article.blank?
 
-      params.delete(:price) if article.free? || (!article.free? && params[:price].zero?)
-
-      article.assign_attributes(
-        ActionController::Parameters.new(params).permit(
-          :title,
-          :intro,
-          :content,
-          :price
+      if article.drafted?
+        article.assign_attributes(
+          ActionController::Parameters.new(params).permit(
+            :title,
+            :intro,
+            :content
+          )
         )
-      )
-
-      if article.save
-        CreateTag.call(article, params[:tag_names] || [])
-        { error: nil }
       else
-        { error: article.errors.full_messages.join(';').presence }
+        params.delete(:price) if article.free? || (!article.free? && params[:price].zero?)
+        article.assign_attributes(
+          ActionController::Parameters.new(params).permit(
+            :title,
+            :intro,
+            :content,
+            :price
+          )
+        )
       end
+
+      article.save!
+      CreateTag.call(article, params[:tag_names] || [])
+
+      article.errors.blank?
     end
   end
 end
