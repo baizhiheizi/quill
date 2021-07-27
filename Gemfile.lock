@@ -92,7 +92,7 @@ GEM
     batch-loader (2.0.1)
     bcrypt (3.1.16)
     bindex (0.8.1)
-    bootsnap (1.7.5)
+    bootsnap (1.7.6)
       msgpack (~> 1.0)
     builder (3.2.4)
     byebug (11.1.3)
