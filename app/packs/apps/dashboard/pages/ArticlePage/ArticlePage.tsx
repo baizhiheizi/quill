@@ -4,12 +4,13 @@ import { useMyArticleQuery } from 'graphqlTypes';
 import moment from 'moment';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useHistory, useParams } from 'react-router-dom';
 import ArticleCommentsComponent from './components/ArticleCommentsComponent';
 import ArticleOrdersComponent from './components/ArticleOrdersComponent';
 
 export default function ArticlePage() {
   const { t, i18n } = useTranslation();
+  const history = useHistory();
   moment.locale(i18n.language);
   const { uuid } = useParams<{ uuid: string }>();
   const { loading, data } = useMyArticleQuery({
@@ -22,6 +23,11 @@ export default function ArticlePage() {
   }
 
   const { myArticle: article } = data;
+
+  if (article.state === 'drafted') {
+    history.replace(`/articles/${article.uuid}/edit`);
+    return <LoadingComponent />;
+  }
 
   return (
     <div>

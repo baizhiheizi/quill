@@ -4,7 +4,7 @@ module Mutations
   class CreateArticleMutation < Mutations::BaseMutation
     type Types::ArticleType
 
-    def resolve(**params)
+    def resolve(**_params)
       current_user.articles.create!
     end
   end

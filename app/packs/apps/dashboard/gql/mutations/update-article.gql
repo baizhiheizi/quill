@@ -1,3 +1,7 @@
 mutation UpdateArticle($input: UpdateArticleMutationInput!) {
-  updateArticle(input: $input)
+  updateArticle(input: $input) {
+    id
+    uuid
+    updatedAt
+  }
 }

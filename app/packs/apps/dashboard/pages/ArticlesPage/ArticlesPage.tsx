@@ -10,8 +10,8 @@ export default function ArticlesPage() {
   const { t } = useTranslation();
   const history = useHistory();
   const [type, setType] = useState<
-    'published' | 'bought' | 'hidden' | 'blocked'
-  >('bought');
+    'drafted' | 'published' | 'bought' | 'hidden' | 'blocked'
+  >('drafted');
   const [createArticle] = useCreateArticleMutation({
     update: (
       _,
@@ -41,14 +41,17 @@ export default function ArticlesPage() {
           setType(key)
         }
       >
-        <Tabs.TabPane tab={t('bought')} key='bought'>
-          <MyBoughtArticlesComponent />
+        <Tabs.TabPane tab={t('drafted')} key='drafted'>
+          <MyArticlesComponent state='drafted' />
         </Tabs.TabPane>
         <Tabs.TabPane tab={t('published')} key='published'>
           <MyArticlesComponent state='published' />
         </Tabs.TabPane>
         <Tabs.TabPane tab={t('hidden')} key='hidden'>
           <MyArticlesComponent state='hidden' />
+        </Tabs.TabPane>
+        <Tabs.TabPane tab={t('bought')} key='bought'>
+          <MyBoughtArticlesComponent />
         </Tabs.TabPane>
         <Tabs.TabPane tab={t('blocked')} key='blocked'>
           <MyArticlesComponent state='blocked' />

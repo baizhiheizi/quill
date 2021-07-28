@@ -24,6 +24,7 @@ en:
     created_at: Created
     updated_at: Last Edited
     state:
+      drafted: Draft
       published: Published
       blocked: Blocked
       hidden: Hidden
