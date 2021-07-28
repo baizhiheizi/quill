@@ -315,7 +315,7 @@ GEM
       rails (>= 3.2)
       rainbow (~> 3.0)
       webpacker (>= 4.0)
-    redis (4.3.1)
+    redis (4.4.0)
     redis-namespace (1.8.1)
       redis (>= 3.0.4)
     redis-objects (1.5.1)
@@ -451,7 +451,7 @@ DEPENDENCIES
   rails-i18n (~> 6.x)
   ransack
   react_on_rails (~> 12.0)
-  redis (~> 4.1)
+  redis (~> 4.4)
   redis-namespace
   redis-objects
   rubocop
