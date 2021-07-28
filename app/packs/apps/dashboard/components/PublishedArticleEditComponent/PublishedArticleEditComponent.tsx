@@ -7,6 +7,7 @@ import {
   InputNumber,
   message,
   Modal,
+  PageHeader,
   Select,
   Space,
 } from 'antd';
@@ -14,9 +15,10 @@ import { markdownPreviewOptions, uploadCommand } from 'apps/shared';
 import { Article, useUpdateArticleMutation } from 'graphqlTypes';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useHistory } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import EditableTagsComponent from '../../components/EditableTagsComponent/EditableTagsComponent';
 import UploadComponent from '../../components/UploadComponent/UploadComponent';
+import moment from 'moment';
 
 export default function PublishedArticleEditComponent(props: {
   article: Partial<Article>;
@@ -26,7 +28,7 @@ export default function PublishedArticleEditComponent(props: {
   const [editedPrice, setEditedPrice] = useState(0);
   const history = useHistory();
   const { t } = useTranslation();
-  const [tags, setTags] = useState<string[]>([]);
+  const [tags, setTags] = useState<string[]>(article.tagNames || []);
   const [updateArticle, { loading: updating }] = useUpdateArticleMutation({
     update(
       _,
@@ -44,10 +46,32 @@ export default function PublishedArticleEditComponent(props: {
       }
     },
   });
-  setTags(article.tagNames || []);
 
   return (
     <>
+      <PageHeader
+        title={t('edit_article')}
+        breadcrumb={{
+          routes: [
+            { path: '/articles', breadcrumbName: t('articles_manage') },
+            {
+              path: `/articles/${article.uuid}`,
+              breadcrumbName:
+                article.title ||
+                moment(article.createdAt).format('YYYY-MM-DD HH:MM'),
+            },
+            { path: '', breadcrumbName: t('edit_article') },
+          ],
+          itemRender: (route, _params, routes, _paths) => {
+            const last = routes.indexOf(route) === routes.length - 1;
+            return last ? (
+              <span>{route.breadcrumbName}</span>
+            ) : (
+              <Link to={route.path}>{route.breadcrumbName}</Link>
+            );
+          },
+        }}
+      />
       <UploadComponent
         callback={(blob) => {
           form.setFieldsValue({
@@ -67,8 +91,8 @@ export default function PublishedArticleEditComponent(props: {
           price: article.price,
           assetId: article.assetId,
         }}
-        labelCol={{ span: 2 }}
-        wrapperCol={{ span: 22 }}
+        labelCol={{ span: 4 }}
+        wrapperCol={{ span: 20 }}
         onFinish={(values) => {
           const { uuid, title, content, price, intro } = values;
           if (
@@ -193,57 +217,55 @@ export default function PublishedArticleEditComponent(props: {
             </Form.Item>
           </Space>
         </Form.Item>
-        <Form.Item label={t('article.form.revenue_distribution')}>
-          <Form.Item label={t('readers_revenue')}>
-            <InputNumber
-              disabled
-              value={article.readersRevenueRatio}
-              formatter={(value) => `${value * 100}%`}
-            />
-          </Form.Item>
-          <Form.Item label={t('platform_revenue')}>
-            <InputNumber
-              disabled
-              value={article.platformRevenueRatio}
-              formatter={(value) => `${value * 100}%`}
-            />
-          </Form.Item>
-          <Form.Item label={t('author_revenue')}>
-            <InputNumber
-              disabled
-              value={article.authorRevenueRatio}
-              formatter={(value) => `${Math.floor(value * 100)}%`}
-            />
-          </Form.Item>
-          {article.articleReferences.length > 0 && (
-            <Form.Item label={t('article_references')}>
-              {article.articleReferences.map((articleReference) => (
-                <Form.Item key={articleReference.reference.uuid}>
-                  <div className='flex flex-wrap items-center'>
-                    <Avatar
-                      className='mr-2'
-                      size='small'
-                      src={articleReference.reference.author.avatar}
-                    />
-                    <span className='mr-2'>
-                      {articleReference.reference.author.name}:
-                    </span>
-                    <a
-                      href={`/articles/${articleReference.reference.uuid}`}
-                      target='_blank'
-                    >
-                      {articleReference.reference.title}
-                    </a>
-                    <div className='ml-auto text-blue-500'>
-                      {articleReference.revenueRatio * 100}%
-                    </div>
-                  </div>
-                </Form.Item>
-              ))}
-            </Form.Item>
-          )}
+        <Form.Item label={t('readers_revenue')}>
+          <InputNumber
+            disabled
+            value={article.readersRevenueRatio}
+            formatter={(value) => `${value * 100}%`}
+          />
         </Form.Item>
-        <Form.Item wrapperCol={{ xs: { offset: 0 }, sm: { offset: 2 } }}>
+        <Form.Item label={t('platform_revenue')}>
+          <InputNumber
+            disabled
+            value={article.platformRevenueRatio}
+            formatter={(value) => `${value * 100}%`}
+          />
+        </Form.Item>
+        <Form.Item label={t('author_revenue')}>
+          <InputNumber
+            disabled
+            value={article.authorRevenueRatio}
+            formatter={(value) => `${Math.floor(value * 100)}%`}
+          />
+        </Form.Item>
+        {article.articleReferences.length > 0 && (
+          <Form.Item label={t('article_references')}>
+            {article.articleReferences.map((articleReference) => (
+              <Form.Item key={articleReference.reference.uuid}>
+                <div className='flex flex-wrap items-center'>
+                  <Avatar
+                    className='mr-2'
+                    size='small'
+                    src={articleReference.reference.author.avatar}
+                  />
+                  <span className='mr-2'>
+                    {articleReference.reference.author.name}:
+                  </span>
+                  <a
+                    href={`/articles/${articleReference.reference.uuid}`}
+                    target='_blank'
+                  >
+                    {articleReference.reference.title}
+                  </a>
+                  <div className='ml-auto text-blue-500'>
+                    {articleReference.revenueRatio * 100}%
+                  </div>
+                </div>
+              </Form.Item>
+            ))}
+          </Form.Item>
+        )}
+        <Form.Item wrapperCol={{ xs: { offset: 0 }, sm: { offset: 4 } }}>
           <Button type='primary' htmlType='submit' loading={updating}>
             {t('update')}
           </Button>

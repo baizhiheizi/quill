@@ -1,6 +1,6 @@
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
 import Editor, { commands } from '@uiw/react-md-editor';
-import { useDebounce } from 'ahooks';
+import { useDebounce, useDebounceFn } from 'ahooks';
 import {
   Avatar,
   Button,
@@ -9,9 +9,11 @@ import {
   InputNumber,
   message,
   Modal,
+  PageHeader,
   Radio,
   Select,
   Space,
+  Spin,
   Switch,
 } from 'antd';
 import EditableTagsComponent from 'apps/dashboard/components/EditableTagsComponent/EditableTagsComponent';
@@ -25,23 +27,82 @@ import {
   usePublishArticleMutation,
   useUpdateArticleMutation,
 } from 'graphqlTypes';
+import moment from 'moment';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useHistory } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import UploadComponent from '../UploadComponent/UploadComponent';
 
 export default function DraftedArticleEditComponent(props: {
   article: Partial<Article>;
 }) {
   const { article } = props;
+  const { t, i18n } = useTranslation();
   const history = useHistory();
   const [form] = Form.useForm();
-  const { t } = useTranslation();
-  const [tags, setTags] = useState<string[]>([]);
-  const [updateArticle] = useUpdateArticleMutation();
+  const [tags, setTags] = useState<string[]>(article.tagNames || []);
+  const [publishModalVisible, setPublishModalVisible] = useState(false);
+  moment.locale(i18n.language);
+
+  const [updateArticle, { loading: updating }] = useUpdateArticleMutation();
+  const { run: debouncedUpdateArticle } = useDebounceFn(
+    () =>
+      updateArticle({
+        variables: {
+          input: {
+            uuid: article.uuid,
+            content: form.getFieldValue('content'),
+            title: form.getFieldValue('title'),
+            intro: form.getFieldValue('intro'),
+            tagNames: tags,
+          },
+        },
+      }),
+    { wait: 1000 },
+  );
 
   return (
     <>
+      <PageHeader
+        title={t('write_article')}
+        subTitle={
+          updating ? (
+            <Spin size='small' />
+          ) : (
+            <span className='p-2 text-xs bg-gray-200 rounded'>{`${moment(
+              article.updatedAt,
+            ).format('HH:MM:SS')} ${t('saved')}`}</span>
+          )
+        }
+        extra={[
+          <Button
+            key='publish'
+            type='primary'
+            onClick={() => {
+              form
+                .validateFields()
+                .then(() => setPublishModalVisible(true))
+                .catch(() => message.warn(t('article.form.not_finished')));
+            }}
+          >
+            {t('publish')}
+          </Button>,
+        ]}
+        breadcrumb={{
+          routes: [
+            { path: '/articles', breadcrumbName: t('articles_manage') },
+            { path: '', breadcrumbName: t('write_article') },
+          ],
+          itemRender: (route, _params, routes, _paths) => {
+            const last = routes.indexOf(route) === routes.length - 1;
+            return last ? (
+              <span>{route.breadcrumbName}</span>
+            ) : (
+              <Link to={route.path}>{route.breadcrumbName}</Link>
+            );
+          },
+        }}
+      />
       <UploadComponent
         callback={(blob) => {
           form.setFieldsValue({
@@ -54,27 +115,13 @@ export default function DraftedArticleEditComponent(props: {
       <Form
         form={form}
         initialValues={{
+          title: article.title,
           content: article.content,
+          intro: article.intro,
         }}
         labelCol={{ span: 2 }}
         wrapperCol={{ span: 22 }}
-        onFinish={(values) => {
-          const { title, content, intro } = values;
-          if (!title || !content || !intro) {
-            message.warn(t('article.form.not_finished'));
-          } else {
-            Modal.confirm({
-              title: t('article.form.confirm_to_create'),
-              centered: true,
-              okText: t('create'),
-              cancelText: t('later'),
-              onOk: () =>
-                updateArticle({
-                  variables: { input: { ...values, tagNames: tags } },
-                }),
-            });
-          }
-        }}
+        onValuesChange={() => debouncedUpdateArticle()}
       >
         <Form.Item
           label={t('article.title')}
@@ -99,7 +146,7 @@ export default function DraftedArticleEditComponent(props: {
             previewOptions={{ ...markdownPreviewOptions }}
             preview='edit'
             autoFocus={false}
-            height={500}
+            height={700}
             commands={[
               commands.bold,
               commands.italic,
@@ -126,9 +173,25 @@ export default function DraftedArticleEditComponent(props: {
           <Input.TextArea placeholder={t('article.form.intro_place_holder')} />
         </Form.Item>
         <Form.Item label={t('article.tags')}>
-          <EditableTagsComponent tags={tags} setTags={setTags} />
+          <EditableTagsComponent
+            tags={tags}
+            setTags={(values) => {
+              setTags(values);
+              debouncedUpdateArticle();
+            }}
+          />
         </Form.Item>
       </Form>
+      <Modal
+        title={t('publish_article')}
+        visible={publishModalVisible}
+        onCancel={() => setPublishModalVisible(false)}
+        width={768}
+        centered
+        footer={null}
+      >
+        <PublishArticleForm article={article} />
+      </Modal>
     </>
   );
 }
@@ -136,6 +199,7 @@ export default function DraftedArticleEditComponent(props: {
 function PublishArticleForm(props: { article: Partial<Article> }) {
   const { article } = props;
   const { t } = useTranslation();
+  const history = useHistory();
   const [form] = Form.useForm();
   const [assetId, setAssetId] = useState(article.assetId);
   const [price, setPrice] = useState(article.price);
@@ -147,7 +211,15 @@ function PublishArticleForm(props: { article: Partial<Article> }) {
   const { data: availableArticlesData } = useMyArticleConnectionQuery({
     variables: { type: 'available', query: debouncedQuery },
   });
-  const [publishArticle, { loading: publishing }] = usePublishArticleMutation();
+  const [publishArticle, { loading: publishing }] = usePublishArticleMutation({
+    update: (_, { data: { publishArticle: res } }) => {
+      if (res) {
+        history.replace(`/articles/${article.uuid}`);
+      } else {
+        message.error(t('failed_to_publish'));
+      }
+    },
+  });
 
   if (loading) {
     return <LoadingComponent />;
@@ -169,8 +241,8 @@ function PublishArticleForm(props: { article: Partial<Article> }) {
           assetId,
           price,
         }}
-        labelCol={{ span: 2 }}
-        wrapperCol={{ span: 22 }}
+        labelCol={{ span: 4 }}
+        wrapperCol={{ span: 20 }}
         onValuesChange={(_, { articleReferences }) => {
           if (articleReferences) {
             const referencesRevenue = articleReferences.reduce((acc, cur) => {
@@ -184,21 +256,16 @@ function PublishArticleForm(props: { article: Partial<Article> }) {
           }
         }}
         onFinish={(values) => {
-          const { title, content, intro, assetId } = values;
-          if (!title || !content || !intro || !assetId) {
-            message.warn(t('article.form.not_finished'));
-          } else {
-            Modal.confirm({
-              title: t('article.form.confirm_to_create'),
-              centered: true,
-              okText: t('create'),
-              cancelText: t('later'),
-              onOk: () =>
-                publishArticle({
-                  variables: { input: { ...values } },
-                }),
-            });
-          }
+          Modal.confirm({
+            title: t('article.form.confirm_to_publish'),
+            centered: true,
+            okText: t('publish'),
+            cancelText: t('later'),
+            onOk: () =>
+              publishArticle({
+                variables: { input: { ...values, uuid: article.uuid } },
+              }),
+          });
         }}
       >
         <Form.Item
@@ -257,7 +324,7 @@ function PublishArticleForm(props: { article: Partial<Article> }) {
           </Space>
         </Form.Item>
         <Form.Item
-          label={t('article.form.revenue_distribution')}
+          noStyle
           shouldUpdate={(prevValues, curValues) =>
             prevValues.articleReferences !== curValues.articleReferences
           }
@@ -302,13 +369,13 @@ function PublishArticleForm(props: { article: Partial<Article> }) {
                   <>
                     {references.map((reference, index) => (
                       <div
-                        className='flex items-baseline w-full space-x-2'
+                        className='flex flex-wrap items-baseline w-full space-x-2'
                         key={index}
                       >
                         <Form.Item noStyle>
                           <Form.Item
                             {...reference}
-                            className='flex-1'
+                            className='flex-1 flex-nowrap'
                             fieldKey={[reference.fieldKey, 'referenceId']}
                             name={[reference.name, 'referenceId']}
                             label={t('article.article_text')}
@@ -330,7 +397,7 @@ function PublishArticleForm(props: { article: Partial<Article> }) {
                               options={availableArticles.map((article) => {
                                 return {
                                   label: (
-                                    <div className='flex flex-wrap items-center space-x-2'>
+                                    <div className='flex items-center truncate flex-nowrap space-x-2'>
                                       <img
                                         className='w-6 h-6 rounded-full'
                                         src={article.author.avatar}
@@ -418,25 +485,8 @@ function PublishArticleForm(props: { article: Partial<Article> }) {
             )}
           </Form.Item>
         </Form.Item>
-        <Form.Item
-          label={t('article.state_text')}
-          name='state'
-          rules={[{ required: true }]}
-        >
-          <Radio.Group
-            options={[
-              { label: t('article.state.published'), value: 'published' },
-              { label: t('article.state.hidden'), value: 'hidden' },
-            ]}
-          />
-        </Form.Item>
-        <Form.Item wrapperCol={{ xs: { offset: 0 }, sm: { offset: 2 } }}>
-          <Button
-            size='large'
-            type='primary'
-            htmlType='submit'
-            loading={publishing}
-          >
+        <Form.Item wrapperCol={{ xs: { offset: 0 }, sm: { offset: 4 } }}>
+          <Button type='primary' htmlType='submit' loading={publishing}>
             {t('create')}
           </Button>
         </Form.Item>

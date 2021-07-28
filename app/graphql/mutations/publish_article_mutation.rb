@@ -9,8 +9,8 @@ module Mutations
     def resolve(**params)
       @article = current_user.articles.find_by(uuid: params[:uuid])
 
-      publish_drafted_article params if @article.drfated?
-      @article.publish! 
+      publish_drafted_article params if @article.drafted?
+      @article.publish!
 
       @article.reload.published?
     end
@@ -18,6 +18,12 @@ module Mutations
     private
 
     def publish_drafted_article(params)
+      attributes =
+        ActionController::Parameters.new(params).permit(
+          price: params[:price],
+          asset_id: params[:asset_id]
+        )
+
       if params[:article_references].present?
         article_references = params[:article_references].uniq(&:reference_id)
         references_revenue_ratio = article_references.sum(&:revenue_ratio)&.to_f
@@ -32,19 +38,14 @@ module Mutations
             revenue_ratio: reference.revenue_ratio
           )
         end
-      end
 
-      @article.assign_attributes(
-        ActionController::Parameters.new(params).permit(
-          price: params[:price],
-          asset_id: params[:asset_id]
-        ).merge(
+        attributes = attributes.merge(
           author_revenue_ratio: Article::AUTHOR_REVENUE_RATIO_DEFAULT - references_revenue_ratio,
           references_revenue_ratio: references_revenue_ratio
         )
-      )
+      end
 
-      @article.save
+      @article.update attributes
     end
   end
 end

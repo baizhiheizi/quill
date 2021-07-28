@@ -16,7 +16,7 @@ import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 
 export default function MyArticlesComponent(props: {
-  state?: 'published' | 'hidden' | 'blocked';
+  state?: 'drafted' | 'published' | 'hidden' | 'blocked';
 }) {
   const { t, i18n } = useTranslation();
   const { isMobile } = useUserAgent();
@@ -102,10 +102,12 @@ export default function MyArticlesComponent(props: {
           actions={
             article.state === 'blocked'
               ? [<Link to={`/articles/${article.uuid}`}>{t('detail')}</Link>]
+              : article.state === 'drafted'
+              ? [<Link to={`/articles/${article.uuid}/edit`}>{t('edit')}</Link>]
               : [
                   <Link to={`/articles/${article.uuid}`}>{t('detail')}</Link>,
                   <span>
-                    {article.state === 'hidden' ? (
+                    {article.state === 'hidden' && (
                       <Popconfirm
                         title={t('confirm_to_publish')}
                         disabled={publishing}
@@ -117,7 +119,8 @@ export default function MyArticlesComponent(props: {
                       >
                         <a>{t('publish')}</a>
                       </Popconfirm>
-                    ) : (
+                    )}
+                    {article.state === 'published' && (
                       <Popconfirm
                         title={t('confirm_to_hide')}
                         disabled={hiding}

@@ -4,7 +4,7 @@ module Mutations
   class UpdateArticleMutation < Mutations::BaseMutation
     input_object_class Types::ArticleUpdateInputType
 
-    type Boolean
+    type Types::ArticleType
 
     def resolve(params)
       article = current_user.articles.find_by(uuid: params[:uuid])
@@ -33,7 +33,7 @@ module Mutations
       article.save!
       CreateTag.call(article, params[:tag_names] || [])
 
-      article.errors.blank?
+      article.reload
     end
   end
 end

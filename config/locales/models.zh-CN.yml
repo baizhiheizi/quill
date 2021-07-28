@@ -24,6 +24,7 @@ zh-CN:
     created_at: 创建时间
     updated_at: 上次编辑
     state:
+      drafted: 草稿
       published: 已发表
       blocked: 已屏蔽
       hidden: 已隐藏

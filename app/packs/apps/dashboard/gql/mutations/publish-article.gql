@@ -1,6 +1,3 @@
 mutation PublishArticle($input: PublishArticleMutationInput!) {
-  publishArticle(input: $input) {
-    error
-    success
-  }
+  publishArticle(input: $input)
 }
