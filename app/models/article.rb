@@ -240,12 +240,14 @@ class Article < ApplicationRecord
     return unless published?
     return if published_at.present?
 
-    update published_at: Time.current
-    create_wallet! if wallet.blank?
-    notify_authoring_subscribers
-    notify_admin
-    subscribe_comments_for_author
-    update_author_statistics_cache
+    ActiveRecord::Base.transaction do
+      update published_at: Time.current
+      create_wallet! if wallet.blank?
+      notify_authoring_subscribers
+      notify_admin
+      subscribe_comments_for_author
+      update_author_statistics_cache
+    end
   end
 
   def generate_snapshot
