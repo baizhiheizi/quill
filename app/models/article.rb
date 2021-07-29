@@ -49,7 +49,7 @@ class Article < ApplicationRecord
   belongs_to :author, class_name: 'User', inverse_of: :articles
   belongs_to :currency, primary_key: :asset_id, foreign_key: :asset_id, inverse_of: :articles
 
-  has_many :orders, as: :item, dependent: :nullify
+  has_many :orders, as: :item, dependent: :restrict_with_error
   has_many :buy_orders, -> { where(order_type: :buy_article) }, class_name: 'Order', as: :item, dependent: :restrict_with_error, inverse_of: false
   has_many :reward_orders, -> { where(order_type: :reward_article) }, class_name: 'Order', as: :item, dependent: :restrict_with_error, inverse_of: false
   has_many :cite_orders, -> { where(order_type: :cite_article) }, class_name: 'Order', as: :item, dependent: :restrict_with_error, inverse_of: false
@@ -58,7 +58,7 @@ class Article < ApplicationRecord
   has_many :buyers, -> { distinct }, through: :buy_orders, source: :buyer
   has_many :rewarders, -> { distinct }, through: :reward_orders, source: :buyer
 
-  has_many :transfers, through: :orders, dependent: :nullify
+  has_many :transfers, through: :orders, dependent: :restrict_with_error
   has_many :author_transfers, -> { where(transfer_type: :author_revenue) }, through: :orders, source: :transfers, dependent: :restrict_with_error
   has_many :reader_transfers, -> { where(transfer_type: :reader_revenue) }, through: :orders, source: :transfers, dependent: :restrict_with_error
 
@@ -241,7 +241,7 @@ class Article < ApplicationRecord
     return if published_at.present?
 
     update published_at: Time.current
-    create_wallet!
+    create_wallet! if wallet.blank?
     notify_authoring_subscribers
     notify_admin
     subscribe_comments_for_author

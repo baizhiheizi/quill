@@ -140,6 +140,7 @@ ja:
   read_all: 既読
   confirm_to_publish: この記事を公開しますか？
   confirm_to_hide: この記事を非公開にしますか？早期読者には影響ありません。
+  confirm_to_delete: この記事のドラフトを削除してよろしいですか？
   publish: 公開
   hide: 非公開にする
   hidden: 非公開

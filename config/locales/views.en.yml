@@ -149,6 +149,7 @@ en:
   read_all: Read All
   confirm_to_publish: Are you sure to publish this article?
   confirm_to_hide: Are you sure to hide this article? Early readers not affected.
+  confirm_to_delete: Are you sure to delete this article draft?
   publish: Publish
   hide: Hide
   hidden: Hidden
