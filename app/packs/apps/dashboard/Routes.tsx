@@ -43,9 +43,6 @@ export default function Routes() {
           <Route path='/articles' exact>
             <ArticlesPage />
           </Route>
-          <Route path='/articles/new' exact>
-            <ArticleNewPage />
-          </Route>
           <Route path='/articles/:uuid' exact>
             <ArticlePage />
           </Route>
