@@ -67,7 +67,7 @@ class Article < ApplicationRecord
   has_many :taggings, dependent: :nullify
   has_many :tags, through: :taggings, dependent: :restrict_with_error
 
-  has_many :snapshots, class_name: 'ArticleSnapshot', primary_key: :uuid, foreign_key: :article_uuid, inverse_of: :article, dependent: :restrict_with_error
+  has_many :snapshots, class_name: 'ArticleSnapshot', primary_key: :uuid, foreign_key: :article_uuid, inverse_of: :article, dependent: :destroy
   has_many :prs_transactions, through: :snapshots
 
   has_many :article_references, class_name: 'CiterReference', as: :citer, dependent: :restrict_with_error
