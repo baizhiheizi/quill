@@ -31,7 +31,9 @@ ja:
     form:
       not_finished: まずは記事を完成させてください
       title_is_required: 記事のタイトルを入力してください
+      title_is_too_long: 記事のタイトルが長すぎる
       intro_is_required: 記事の導入を入力してください
+      intro_is_too_long: 記事のあらすじが長すぎる
       content_is_required: 記事の本文を入力してください
       price_is_too_low: 価格が低すぎます
       confirm_to_create: 本当に記事を作成しますか？
