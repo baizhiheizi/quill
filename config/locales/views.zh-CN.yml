@@ -62,6 +62,7 @@ zh-CN:
   later: 再想想
   times_bought: 次购买
   times_reward: 次赞赏
+  drafted: 草稿
   published: 已发表
   bought: 已购买
   commented: 已评论
@@ -143,9 +144,10 @@ zh-CN:
   article_detail: 文章详情
   new_article: 创建文章
   edit_article: 文章编辑
+  publish_article: 发表文章
   clear_all: 清空
   read_all: 已读
-  confirm_to_publish: 确定要将文章公开吗？
+  confirm_to_publish: 确定要将文章公开发表吗？
   confirm_to_hide: 确定要将文章隐藏吗？已购读者将不受影响。
   publish: 公开
   hide: 隐藏
@@ -213,3 +215,5 @@ zh-CN:
   all: 全部
   connect_wallet: 连接钱包
   author: 作者
+  saved: 已保存
+  untitled: 无标题

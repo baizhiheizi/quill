@@ -6,6 +6,7 @@ import {
 import { Badge, Col, Menu, Row } from 'antd';
 import { OPEN_SOURCE_URL } from 'apps/application/shared';
 import { imagePath, useCurrentUser, usePrsdigg } from 'apps/shared';
+import { useCreateArticleMutation } from 'graphqlTypes';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
@@ -19,6 +20,19 @@ export default function MenuComponent(props: {
   const { logoFile } = usePrsdigg();
   const { mode, setDrawerVisible } = props;
   const { t, i18n } = useTranslation();
+
+  const [createArticle] = useCreateArticleMutation({
+    update: (
+      _,
+      {
+        data: {
+          createArticle: { uuid },
+        },
+      },
+    ) => {
+      location.replace(`/dashboard/articles/${uuid}/edit`);
+    },
+  });
 
   const toggleDrawer = () => {
     setDrawerVisible && setDrawerVisible(false);
@@ -60,13 +74,11 @@ export default function MenuComponent(props: {
           </Menu.Item>
           <Menu.Item key='write' onClick={toggleDrawer}>
             {currentUser ? (
-              <a href='/dashboard/articles/new' target='_blank'>
-                {t('write')}
-              </a>
+              <a onClick={() => createArticle()}>{t('write')}</a>
             ) : (
-              <a href={`/login?return_to=${encodeURIComponent(location.href)}`}>
-                {t('write')}
-              </a>
+              <LoginModalComponent>
+                <a>{t('write')}</a>
+              </LoginModalComponent>
             )}
           </Menu.Item>
           <Menu.Item key='search' onClick={toggleDrawer}>

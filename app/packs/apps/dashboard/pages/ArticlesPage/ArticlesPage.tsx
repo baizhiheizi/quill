@@ -31,7 +31,7 @@ export default function ArticlesPage() {
         title={t('articles_manage')}
         extra={[
           <Button key='new' type='primary' onClick={() => createArticle()}>
-            {t('new_article')}
+            {t('write')}
           </Button>,
         ]}
       />

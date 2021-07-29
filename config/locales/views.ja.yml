@@ -62,6 +62,7 @@ ja:
   later: 後ほど
   times_bought: 購入回数
   times_reward: リワード回数
+  drafted: ドラフト
   published: 公開済み
   bought: 購入済み
   commented: コメント
@@ -134,6 +135,7 @@ ja:
   article_detail: 記事詳細
   new_article: 新しい記事
   edit_article: 記事を編集
+  publish_article: 公開記事
   clear_all: 削除
   read_all: 既読
   confirm_to_publish: この記事を公開しますか？
@@ -204,3 +206,5 @@ ja:
   all: すべて
   connect_wallet: コネクトウォレット
   author: 作者
+  saved: 保存
+  untitled: 無題

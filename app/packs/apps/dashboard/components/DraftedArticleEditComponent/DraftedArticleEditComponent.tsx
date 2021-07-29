@@ -10,7 +10,6 @@ import {
   message,
   Modal,
   PageHeader,
-  Radio,
   Select,
   Space,
   Spin,
@@ -64,14 +63,14 @@ export default function DraftedArticleEditComponent(props: {
   return (
     <>
       <PageHeader
-        title={t('write_article')}
+        title={t('write')}
         subTitle={
           updating ? (
             <Spin size='small' />
           ) : (
             <span className='p-2 text-xs bg-gray-200 rounded'>{`${moment(
               article.updatedAt,
-            ).format('HH:MM:SS')} ${t('saved')}`}</span>
+            ).format('HH:MM:ss')} ${t('saved')}`}</span>
           )
         }
         extra={[
@@ -91,7 +90,7 @@ export default function DraftedArticleEditComponent(props: {
         breadcrumb={{
           routes: [
             { path: '/articles', breadcrumbName: t('articles_manage') },
-            { path: '', breadcrumbName: t('write_article') },
+            { path: '', breadcrumbName: t('write') },
           ],
           itemRender: (route, _params, routes, _paths) => {
             const last = routes.indexOf(route) === routes.length - 1;
@@ -257,7 +256,7 @@ function PublishArticleForm(props: { article: Partial<Article> }) {
         }}
         onFinish={(values) => {
           Modal.confirm({
-            title: t('article.form.confirm_to_publish'),
+            title: t('article.confirm_to_publish'),
             centered: true,
             okText: t('publish'),
             cancelText: t('later'),
