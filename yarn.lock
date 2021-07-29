@@ -10571,10 +10571,10 @@ react-markdown@6.0.2:
     unist-util-visit "^2.0.0"
     vfile "^4.0.0"
 
-react-on-rails@12.2.0:
-  version "12.2.0"
-  resolved "https://registry.yarnpkg.com/react-on-rails/-/react-on-rails-12.2.0.tgz#289d3752f695be7a9e71c8075a2601029e1ac71e"
-  integrity sha512-ev51+38S/CcivIE9PU7kGPkt/ckVaIbZbUKqfXR7BcM5V45vl0NUs1O0tjfT/XVggz7MWV2DA+My2lRjAPIeJA==
+react-on-rails@12.3.0:
+  version "12.3.0"
+  resolved "https://registry.yarnpkg.com/react-on-rails/-/react-on-rails-12.3.0.tgz#efc8c7ad1be8ba51be61565f33f695d299c4567d"
+  integrity sha512-VtX9UNpOgCJGxVjaObWCeg3Tr18d2lm2W3x4GXxZsKfxhJmwCJyOEXJJGRTyKE6t78mK6SIMzW+St9sYGKvJow==
   dependencies:
     "@babel/runtime-corejs3" "^7.12.5"
     concurrently "^5.1.0"
