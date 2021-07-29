@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 set :stages, %w[main ja]
-set :default_stage, 'main'
+set :default_stage, 'ja'
 
 require 'mina/bundler'
 require 'mina/rails'
