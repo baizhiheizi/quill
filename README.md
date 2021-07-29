@@ -12,7 +12,7 @@
 
 ---
 
-PRSDigg is a Dapp built on [PRESSONE](https://press.one/) and [Mixin Network](https://mixin.one/). All articles published on PRSDigg will be signed up at [PRESSONE](https:/press.one/) and all payments and transfers will be completed through  [Mixin Network](https://mixin.one/). 
+PRSDigg is a Dapp built on [Mixin Network](https://mixin.one/). All payments and transfers will be completed through  [Mixin Network](https://mixin.one/) with **ZERO** gas. 
 
 ## Rules
 
@@ -30,21 +30,21 @@ The specific rules are as follows,
 
 For example: 
 
-User A published an article X pricing 10 PRS on the platform. 
+User A published an article X pricing 100 Satoshi on the platform. 
 
-User B paid 10 PRS for article X and got the right to read the article. 
+User B paid 100 Satoshi for article X and got the right to read the article. 
 
-Therefore, article X earned 10 PRS, because B is the first reader and there is no earlier reader, so there is no early reader bonus; 1 PRS(10%) is used as the platform's handling fee; The remaining 9 PRS are all taken as author revenue and transferred to the account of author A.
+Therefore, article X earned 100 Satoshi, because B is the first reader and there is no earlier reader, so there is no early reader bonus; 10 Satoshi(10%) is used as the platform's handling fee; The remaining 90 Satoshi are all taken as author revenue and transferred to the account of author A.
 
-User C paid 10 PRS for article x after B. As a result, Article X earns another 10 PRS.
+User C paid 100 Satoshi for article x after B. As a result, Article X earns another 100 Satoshi.
 
-Among them, 4 PRS(40%) will be used as an early reader bonus. At this time, there is only one early reader,  user B, so B monopolizes this 40% reward; The platform also receives 1 PRS(10%) as a handling fee; The remaining 5 PRS is the author's income. 
+Among them, 40 Satoshi(40%) will be used as an early reader bonus. At this time, there is only one early reader,  user B, so B monopolizes this 40% reward; The platform also receives 10 Satoshi(10%) as a handling fee; The remaining 5 Satoshi is the author's income. 
 
-After C, user D also paid 10 PRS for article X.
+After C, user D also paid 100 Satoshi for article X.
 
-Similarly, 4 PRS(40%) will be rewarded as early readers bonus. At this time, there are two early readers, namely B and C, who paid 10 PRS for article X before, so both B and C will be rewarded with `4 * 10/(10+10) = 2` PRS respectively. 
+Similarly, 4 Satoshi(40%) will be rewarded as early readers bonus. At this time, there are two early readers, namely B and C, who paid 100 Satoshi for article X before, so both B and C will be rewarded with `40 * 100/(100+100) = 2` Satoshi respectively. 
 
-The platform also charges 1 PRS(10%) as a handling fee; The remaining 5 PRS is the author's income. 
+The platform also charges 10 Satoshi(10%) as a handling fee; The remaining 50 Satoshi is the author's income. 
 
 And so on. 
 
