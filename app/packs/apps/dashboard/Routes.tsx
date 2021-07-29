@@ -13,9 +13,6 @@ const ArticlesPage = React.lazy(
 );
 const RevenuePage = React.lazy(() => import('./pages/RevenuePage/RevenuePage'));
 const OrdersPage = React.lazy(() => import('./pages/OrdersPage/OrdersPage'));
-const ArticleNewPage = React.lazy(
-  () => import('./pages/ArticleNewPage/ArticleNewPage'),
-);
 const ArticleEditPage = React.lazy(
   () => import('./pages/ArticleEditPage/ArticleEditPage'),
 );

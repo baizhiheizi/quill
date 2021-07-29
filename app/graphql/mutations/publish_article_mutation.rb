@@ -18,11 +18,10 @@ module Mutations
     private
 
     def publish_drafted_article(params)
-      attributes =
-        ActionController::Parameters.new(params).permit(
-          price: params[:price],
-          asset_id: params[:asset_id]
-        )
+      attributes = {
+        price: params[:price],
+        asset_id: params[:asset_id]
+      }
 
       if params[:article_references].present?
         article_references = params[:article_references].uniq(&:reference_id)

@@ -262,7 +262,7 @@ function PublishArticleForm(props: { article: Partial<Article> }) {
         }}
         onFinish={(values) => {
           Modal.confirm({
-            title: t('article.confirm_to_publish'),
+            title: t('confirm_to_publish'),
             centered: true,
             okText: t('publish'),
             cancelText: t('later'),
