@@ -108,11 +108,12 @@ class Article < ApplicationRecord
   delegate :swappable?, to: :currency
 
   default_scope -> { includes(:currency) }
+  scope :without_free, -> { where('price > ?', 0) }
   scope :only_free, -> { where(price: 0.0) }
   scope :only_published, -> { where(state: :published) }
   scope :order_by_revenue_usd, -> { order(revenue_usd: :desc) }
   scope :order_by_popularity, lambda {
-    where('orders_count > ? OR upvotes_count > ?', 0, 10)
+    without_free
       .joins(:orders)
       .group(:id)
       .select(
