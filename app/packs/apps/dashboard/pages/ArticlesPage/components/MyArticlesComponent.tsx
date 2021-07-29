@@ -13,12 +13,13 @@ import {
 import moment from 'moment';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 
 export default function MyArticlesComponent(props: {
   state?: 'drafted' | 'published' | 'hidden' | 'blocked';
 }) {
   const { t, i18n } = useTranslation();
+  const history = useHistory();
   const { isMobile } = useUserAgent();
   moment.locale(i18n.language);
   const {
@@ -27,6 +28,7 @@ export default function MyArticlesComponent(props: {
     fetchMore,
     refetch,
   }: MyArticleConnectionQueryHookResult = useMyArticleConnectionQuery({
+    fetchPolicy: 'cache-and-network',
     variables: { type: 'author', state: props.state || 'published' },
   });
   const [hideArticle, { loading: hiding }]: HideArticleMutationHookResult =
@@ -141,7 +143,17 @@ export default function MyArticlesComponent(props: {
           }
         >
           <List.Item.Meta
-            title={article.title}
+            title={
+              <a
+                onClick={() => {
+                  if (article.state === 'drafted') {
+                    history.push(`/articles/${article.uuid}/edit`);
+                  }
+                }}
+              >
+                {article.title || 'untitled'}
+              </a>
+            }
             description={moment(article.createdAt).format(
               'YYYY-MM-DD HH:mm:ss',
             )}

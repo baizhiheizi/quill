@@ -78,16 +78,18 @@ class Article < ApplicationRecord
 
   has_one :wallet, class_name: 'MixinNetworkUser', as: :owner, dependent: :nullify
 
-  validates :asset_id, presence: true, inclusion: { in: SUPPORTED_ASSETS }, unless: :drafted?
+  validates :asset_id, presence: true, inclusion: { in: SUPPORTED_ASSETS }
   validates :uuid, presence: true, uniqueness: true
-  validates :title, presence: true, length: { maximum: 64 }, unless: :drafted?
-  validates :intro, presence: true, length: { maximum: 140 }, unless: :drafted?
+  validates :title, length: { maximum: 64 }
+  validates :intro, length: { maximum: 140 }
+  validates :title, presence: true, unless: :drafted?
+  validates :intro, presence: true, unless: :drafted?
   validates :content, presence: true, unless: :drafted?
-  validates :price, presence: true, numericality: { greater_than_or_equal_to: 0.0 }, unless: :drafted?
-  validates :platform_revenue_ratio, presence: true, numericality: { equal_to: 0.1 }, unless: :drafted?
-  validates :readers_revenue_ratio, presence: true, numericality: { greater_than_or_equal_to: 0.4 }, unless: :drafted?
-  validates :author_revenue_ratio, presence: true, numericality: { less_than_or_equal_to: 0.5 }, unless: :drafted?
-  validates :references_revenue_ratio, presence: true, numericality: { greater_than_or_equal_to: 0.0 }, unless: :drafted?
+  validates :price, presence: true, numericality: { greater_than_or_equal_to: 0.0 }
+  validates :platform_revenue_ratio, presence: true, numericality: { equal_to: 0.1 }
+  validates :readers_revenue_ratio, presence: true, numericality: { greater_than_or_equal_to: 0.4 }
+  validates :author_revenue_ratio, presence: true, numericality: { less_than_or_equal_to: 0.5 }
+  validates :references_revenue_ratio, presence: true, numericality: { greater_than_or_equal_to: 0.0 }
   validate :ensure_author_account_normal
   validate :ensure_price_not_too_low
   validate :ensure_references_ration_correct
@@ -303,11 +305,11 @@ class Article < ApplicationRecord
     return unless new_record?
 
     assign_attributes(
-      price: price.to_f.round(8),
       uuid: SecureRandom.uuid
     )
 
     self.asset_id = Currency::BTC_ASSET_ID if asset_id.blank?
+    self.price = MINIMUM_PRICE_BTC if price.blank?
   end
 
   def ensure_author_account_normal

@@ -62,6 +62,7 @@ en:
   later: Later
   times_bought: times bought
   times_reward: times reward
+  drafted: Draft
   published: Published
   bought: Bought
   commented: Commented
@@ -143,6 +144,7 @@ en:
   article_detail: Article Detail
   new_article: New Article
   edit_article: Edite Article
+  publish_article: Publish Article
   clear_all: Clear All
   read_all: Read All
   confirm_to_publish: Are you sure to publish this article?
@@ -213,3 +215,5 @@ en:
   all: All
   connect_wallet: Connect Wallet
   author: author
+  saved: saved
+  untitled: Untitled
