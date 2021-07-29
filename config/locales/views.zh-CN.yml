@@ -149,6 +149,7 @@ zh-CN:
   read_all: 已读
   confirm_to_publish: 确定要将文章公开发表吗？
   confirm_to_hide: 确定要将文章隐藏吗？已购读者将不受影响。
+  confirm_to_delete: 确定要删除这篇草稿吗?
   publish: 公开
   hide: 隐藏
   hidden: 已隐藏

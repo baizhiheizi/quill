@@ -3,6 +3,7 @@
 module Types
   class MutationType < Types::BaseObject
     field :create_article, mutation: Mutations::CreateArticleMutation
+    field :delete_article, mutation: Mutations::DeleteArticleMutation
     field :update_article, mutation: Mutations::UpdateArticleMutation
     field :hide_article, mutation: Mutations::HideArticleMutation
     field :publish_article, mutation: Mutations::PublishArticleMutation

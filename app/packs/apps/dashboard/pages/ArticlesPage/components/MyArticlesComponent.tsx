@@ -6,6 +6,7 @@ import {
   HideArticleMutationHookResult,
   MyArticleConnectionQueryHookResult,
   PublishArticleMutationHookResult,
+  useDeleteArticleMutation,
   useHideArticleMutation,
   useMyArticleConnectionQuery,
   usePublishArticleMutation,
@@ -54,6 +55,9 @@ export default function MyArticlesComponent(props: {
         refetch();
       }
     },
+  });
+  const [deleteArticle] = useDeleteArticleMutation({
+    update: () => refetch(),
   });
 
   if (loading) {
@@ -105,7 +109,21 @@ export default function MyArticlesComponent(props: {
             article.state === 'blocked'
               ? [<Link to={`/articles/${article.uuid}`}>{t('detail')}</Link>]
               : article.state === 'drafted'
-              ? [<Link to={`/articles/${article.uuid}/edit`}>{t('edit')}</Link>]
+              ? [
+                  <Link to={`/articles/${article.uuid}/edit`}>
+                    {t('edit')}
+                  </Link>,
+                  <Popconfirm
+                    title={t('confirm_to_delete')}
+                    onConfirm={() =>
+                      deleteArticle({
+                        variables: { input: { uuid: article.uuid } },
+                      })
+                    }
+                  >
+                    <a>{t('delete')}</a>
+                  </Popconfirm>,
+                ]
               : [
                   <Link to={`/articles/${article.uuid}`}>{t('detail')}</Link>,
                   <span>
