@@ -31,7 +31,9 @@ en:
     form:
       not_finished: Pleash finish your article first
       title_is_required: Please input your article's title
+      title_is_too_long: Title is too long
       intro_is_required: Please input your article's introduction
+      intro_is_too_long: Introduction is too long
       content_is_required: Please input your artilce's content
       price_is_too_low: Price is too low
       confirm_to_create: Are you sure to create?

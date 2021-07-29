@@ -23,6 +23,7 @@ zh-CN:
   success_copied: 成功复制
   success_deleted: 成功删除
   success_paid: 支付成功，感谢支持！
+  failed_to_save: 保存失败
   read: 读文章
   write: 写文章
   search: 搜索

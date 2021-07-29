@@ -23,6 +23,7 @@ en:
   success_copied: Successfully copied
   success_deleted: Successfully deleted
   success_paid: Payment received.
+  failed_to_save: Failed to save
   read: Read
   write: Write
   search: Search

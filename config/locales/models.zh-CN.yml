@@ -31,7 +31,9 @@ zh-CN:
     form:
       not_finished: 请先完成你的文章
       title_is_required: 请输入文章标题
+      title_is_too_long: 文章标题太长了
       intro_is_required: 请输入文章的介绍
+      intro_is_too_long: 文章介绍太长了
       content_is_required: 请输入文章的正文
       price_is_too_low: 价格太低了
       confirm_to_create: 确定要创建文章吗？

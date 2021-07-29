@@ -43,7 +43,11 @@ export default function DraftedArticleEditComponent(props: {
   const [publishModalVisible, setPublishModalVisible] = useState(false);
   moment.locale(i18n.language);
 
-  const [updateArticle, { loading: updating }] = useUpdateArticleMutation();
+  const [updateArticle, { loading: updating }] = useUpdateArticleMutation({
+    onError: () => {
+      message.error(t('failed_to_save'));
+    },
+  });
   const { run: debouncedUpdateArticle } = useDebounceFn(
     () =>
       updateArticle({
@@ -127,6 +131,7 @@ export default function DraftedArticleEditComponent(props: {
           name='title'
           rules={[
             { required: true, message: t('article.form.title_is_required') },
+            { max: 64, message: t('article.form.title_is_too_long') },
           ]}
         >
           <Input placeholder={t('article.form.title_place_holder')} />
@@ -167,6 +172,7 @@ export default function DraftedArticleEditComponent(props: {
           name='intro'
           rules={[
             { required: true, message: t('article.form.intro_is_required') },
+            { max: 140, message: t('article.form.intro_is_too_long') },
           ]}
         >
           <Input.TextArea placeholder={t('article.form.intro_place_holder')} />
