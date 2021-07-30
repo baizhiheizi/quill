@@ -7,7 +7,6 @@ import {
 } from '@ant-design/icons';
 import {
   Alert,
-  Avatar,
   Button,
   Card,
   Col,
@@ -114,7 +113,7 @@ export default function ArticlePage() {
           className='flex items-center space-x-2'
           to={`/users/${article.author.mixinId}`}
         >
-          <Avatar size='small' src={article.author.avatar} />
+          <img className='w-6 h-6 rounded-full' src={article.author.avatar} />
           <span>{article.author.name}</span>
         </Link>
         <span>{moment(article.publishedAt).format('YYYY/MM/DD HH:mm')}</span>
@@ -257,9 +256,8 @@ export default function ArticlePage() {
                   key={articleReference.reference.uuid}
                   className='flex flex-wrap items-center py-1'
                 >
-                  <Avatar
-                    className='mr-2'
-                    size='small'
+                  <img
+                    className='w-6 h-6 mr-2 rounded-full'
                     src={articleReference.reference.author.avatar}
                   />
                   <span className='mr-2'>
@@ -292,9 +290,8 @@ export default function ArticlePage() {
                   key={citer.uuid}
                   className='flex flex-wrap items-center py-1'
                 >
-                  <Avatar
-                    className='mr-2'
-                    size='small'
+                  <img
+                    className='w-6 h-6 mr-2 rounded-full'
                     src={citer.author.avatar}
                   />
                   <span className='mr-2'>{citer.author.name}:</span>
@@ -463,13 +460,11 @@ export default function ArticlePage() {
               }`}
             >
               {article.randomReaders.map((reader: Partial<User>) => (
-                <Avatar
-                  className='m-0.5'
+                <img
+                  className='w-8  h-8 rounded-full m-0.5'
                   key={reader.mixinId}
                   src={reader.avatar}
-                >
-                  {reader.name[0]}
-                </Avatar>
+                />
               ))}
             </div>
           </div>
@@ -520,7 +515,12 @@ export default function ArticlePage() {
           <div className='mb-6'>
             <Card>
               <Card.Meta
-                avatar={<Avatar src={CHINESE_MIXIN_GROUP_AVATAR_URL} />}
+                avatar={
+                  <img
+                    className='w-8 h-8 rounded-full'
+                    src={CHINESE_MIXIN_GROUP_AVATAR_URL}
+                  />
+                }
                 title={
                   <Row style={{ alignItems: 'center' }}>
                     <Col style={{ flex: 1, marginRight: 10 }}>
