@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/rails/webpacker.git
-  revision: beb645ecbf707eb4f3311e61b05abb67fe0ca010
+  revision: 5dae8b51956e9cd739bdfae44f8214fa1e0f49b2
   specs:
     webpacker (6.0.0.beta.7)
       activesupport (>= 5.2)
@@ -92,7 +92,7 @@ GEM
     batch-loader (2.0.1)
     bcrypt (3.1.16)
     bindex (0.8.1)
-    bootsnap (1.7.5)
+    bootsnap (1.7.6)
       msgpack (~> 1.0)
     builder (3.2.4)
     byebug (11.1.3)
@@ -165,8 +165,8 @@ GEM
     fugit (1.5.0)
       et-orbi (~> 1.1, >= 1.1.8)
       raabro (~> 1.4)
-    globalid (0.4.2)
-      activesupport (>= 4.2.0)
+    globalid (0.5.1)
+      activesupport (>= 5.0)
     graphiql-rails (1.7.0)
       railties
       sprockets-rails
@@ -255,7 +255,7 @@ GEM
     pghero (2.8.1)
       activerecord (>= 5)
     public_suffix (4.0.6)
-    puma (5.3.2)
+    puma (5.4.0)
       nio4r (~> 2.0)
     raabro (1.4.0)
     racc (1.5.2)
@@ -308,7 +308,7 @@ GEM
       ffi (~> 1.0)
     rbnacl (7.1.1)
       ffi
-    react_on_rails (12.2.0)
+    react_on_rails (12.3.0)
       addressable
       connection_pool
       execjs (~> 2.5)
