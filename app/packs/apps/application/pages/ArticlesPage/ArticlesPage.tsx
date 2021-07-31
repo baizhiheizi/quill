@@ -20,12 +20,15 @@ export default function ArticlesPage() {
   const { t } = useTranslation();
   const { appId, pageTitle } = usePrsdigg();
   const { mixinEnv } = useUserAgent();
-  const { loading, data, fetchMore } = useTaggedArticleConnectionQuery({
-    variables: { tag: tagParam, filter: 'lately' },
-  });
+  const { loading, data, fetchMore, refetch } = useTaggedArticleConnectionQuery(
+    {
+      variables: { tag: tagParam, filter: 'lately' },
+    },
+  );
   const [toggleSubscribeTagAction] = useToggleSubscribeTagActionMutation();
 
   useEffect(() => {
+    refetch();
     return () => (document.title = pageTitle);
   }, [tagParam]);
 
