@@ -11,7 +11,7 @@ module Resolvers
       if params[:id].present?
         Tag.find_by id: params[:id]
       else
-        Tag.find_by(name: params[:tag]) ||
+        Tag.find_by(name: params[:name]) ||
           Tag.ransack(name_i_cont: params[:name].to_s.strip).result.first
       end
     end
