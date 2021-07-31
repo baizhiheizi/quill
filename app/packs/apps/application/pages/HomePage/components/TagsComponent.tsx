@@ -1,4 +1,4 @@
-import { Button, Card, Col, Row, Tag, Tooltip, Typography } from 'antd';
+import { Button, Card, Col, Row, Tag, Typography } from 'antd';
 import LoadingComponent from 'apps/application/components/LoadingComponent/LoadingComponent';
 import { Tag as ITag, useTagConnectionQuery } from 'graphqlTypes';
 import React from 'react';
@@ -38,18 +38,16 @@ export default function TagsComponent() {
               }}
             >
               <div>
-                <Tooltip title={tag.name}>
-                  <Tag
-                    style={{
-                      maxWidth: '100%',
-                      overflow: 'hidden',
-                      textOverflow: 'ellipsis',
-                    }}
-                    color={tag.color}
-                  >
-                    #{tag.name}
-                  </Tag>
-                </Tooltip>
+                <Tag
+                  style={{
+                    maxWidth: '100%',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                  }}
+                  color={tag.color}
+                >
+                  #{tag.name}
+                </Tag>
               </div>
               <div>
                 <Typography.Text type='secondary'>
