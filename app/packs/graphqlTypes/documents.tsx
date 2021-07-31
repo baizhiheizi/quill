@@ -1519,6 +1519,7 @@ export type QueryArticleConnectionArgs = {
   after?: Maybe<Scalars['String']>;
   filter: Scalars['String'];
   timeRange?: Maybe<Scalars['String']>;
+  tag?: Maybe<Scalars['String']>;
   before?: Maybe<Scalars['String']>;
   first?: Maybe<Scalars['Int']>;
   last?: Maybe<Scalars['Int']>;
@@ -1650,7 +1651,8 @@ export type QuerySwapPreOrderArgs = {
 
 
 export type QueryTagArgs = {
-  id: Scalars['ID'];
+  id?: Maybe<Scalars['ID']>;
+  name?: Maybe<Scalars['String']>;
 };
 
 
@@ -4548,16 +4550,15 @@ export type TagConnectionQueryHookResult = ReturnType<typeof useTagConnectionQue
 export type TagConnectionLazyQueryHookResult = ReturnType<typeof useTagConnectionLazyQuery>;
 export type TagConnectionQueryResult = Apollo.QueryResult<TagConnectionQuery, TagConnectionQueryVariables>;
 export const TaggedArticleConnectionDocument = gql`
-    query TaggedArticleConnection($tagId: ID!, $filter: String!, $query: String, $after: String) {
-  tag(id: $tagId) {
-    id
+    query TaggedArticleConnection($tagId: ID, $tag: String, $filter: String!, $query: String, $after: String) {
+  tag(id: $tagId, name: $tag) {
     name
     color
     articlesCount
     subscribersCount
     subscribed
   }
-  articleConnection(filter: $filter, query: $query, tagId: $tagId, after: $after) {
+  articleConnection(filter: $filter, query: $query, tag: $tag, after: $after) {
     nodes {
       uuid
       title
@@ -4609,6 +4610,7 @@ export const TaggedArticleConnectionDocument = gql`
  * const { data, loading, error } = useTaggedArticleConnectionQuery({
  *   variables: {
  *      tagId: // value for 'tagId'
+ *      tag: // value for 'tag'
  *      filter: // value for 'filter'
  *      query: // value for 'query'
  *      after: // value for 'after'

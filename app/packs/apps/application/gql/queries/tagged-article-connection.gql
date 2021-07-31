@@ -1,23 +1,18 @@
 query TaggedArticleConnection(
-  $tagId: ID!
+  $tagId: ID
+  $tag: String
   $filter: String!
   $query: String
   $after: String
 ) {
-  tag(id: $tagId) {
-    id
+  tag(id: $tagId, name: $tag) {
     name
     color
     articlesCount
     subscribersCount
     subscribed
   }
-  articleConnection(
-    filter: $filter
-    query: $query
-    tagId: $tagId
-    after: $after
-  ) {
+  articleConnection(filter: $filter, query: $query, tag: $tag, after: $after) {
     nodes {
       uuid
       title

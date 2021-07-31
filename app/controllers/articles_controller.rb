@@ -4,6 +4,7 @@ class ArticlesController < ApplicationController
   def index
     @articles = Article.only_published.order(created_at: :desc).first(20)
     respond_to do |format|
+      format.html
       format.rss do
         render layout: false
       end

@@ -29,7 +29,7 @@ export default function TagsComponent() {
             <Card
               size='small'
               hoverable
-              onClick={() => history.push(`/tags/${tag.id}`)}
+              onClick={() => history.push(`/articles?tag=${tag.name}`)}
               style={{
                 borderTop: `3px solid ${tag.color}`,
                 borderTopLeftRadius: 10,

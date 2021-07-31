@@ -10,7 +10,7 @@ export default function ArticleTagsComponent(props: { tags: TagType[] }) {
       {tags.map((tag: TagType) => (
         <Col key={tag.id}>
           <Tooltip title={tag.name}>
-            <Link to={`/tags/${tag.id}`}>
+            <Link to={`/articles?tag=${tag.name}`}>
               <Tag
                 color={tag.color}
                 style={{

@@ -2,12 +2,18 @@
 
 module Resolvers
   class TagResolver < BaseResolver
-    argument :id, ID, required: true
+    argument :id, ID, required: false
+    argument :name, String, required: false
 
     type Types::TagType, null: true
 
-    def resolve(id:)
-      Tag.find_by(id: id)
+    def resolve(**params)
+      if params[:id].present?
+        Tag.find_by id: params[:id]
+      else
+        Tag.find_by(name: params[:tag]) ||
+          Tag.ransack(name_i_cont: params[:name].to_s.strip).result.first
+      end
     end
   end
 end

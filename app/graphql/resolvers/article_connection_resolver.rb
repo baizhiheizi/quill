@@ -7,15 +7,26 @@ module Resolvers
     argument :after, String, required: false
     argument :filter, String, required: true
     argument :time_range, String, required: false
+    argument :tag, String, required: false
 
     type Types::ArticleConnectionType, null: false
 
     def resolve(params)
-      articles = Tag.find_by(id: params[:tag_id])&.articles if params[:tag_id].present?
-      articles ||= Article.all
+      articles =
+        if params[:tag_id].present?
+          Tag.find_by(id: params[:tag_id])&.articles
+        else
+          Article.all
+        end
 
-      q = params[:query].to_s.strip
-      q_ransack = { title_cont: q, intro_cont: q, author_name_cont: q, tags_name_cont: q }
+      q_ransack =
+        if params[:tag].present?
+          q = params[:tag].to_s.strip
+          { tags_name_i_cont_all: q }
+        else
+          q = params[:query].to_s.strip
+          { title_i_cont: q, intro_i_cont: q, author_name_i_cont: q, tags_name_i_cont: q }
+        end
       articles = articles.ransack(q_ransack.merge(m: 'or')).result.only_published
 
       articles =
