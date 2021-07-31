@@ -12,9 +12,10 @@ import {
 } from 'graphqlTypes';
 import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 
 export default function ArticlesPage() {
+  const location = useLocation();
   const history = useHistory();
   const tagParam = new URLSearchParams(history.location.search).get('tag');
   const { t } = useTranslation();
@@ -28,9 +29,10 @@ export default function ArticlesPage() {
   const [toggleSubscribeTagAction] = useToggleSubscribeTagActionMutation();
 
   useEffect(() => {
-    refetch();
+    const _tagParam = new URLSearchParams(location.search).get('tag');
+    refetch({ variables: { tag: _tagParam, filter: 'lately' } });
     return () => (document.title = pageTitle);
-  }, [tagParam]);
+  }, [location]);
 
   if (loading) {
     return <LoadingComponent />;
