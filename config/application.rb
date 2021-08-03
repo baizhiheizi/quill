@@ -30,5 +30,9 @@ module Prsdigg
 
     # https://github.com/exAspArk/batch-loader#caching
     config.middleware.use BatchLoader::Middleware
+
+    config.middleware.use ExceptionNotification::Rack, mixin_bot: {
+      conversation_id: Rails.application.credentials.dig(:admin, :group_conversation_id)
+    }
   end
 end

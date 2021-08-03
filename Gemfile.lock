@@ -153,6 +153,9 @@ GEM
     et-orbi (1.2.4)
       tzinfo
     eventmachine (1.2.7)
+    exception_notification (4.4.3)
+      actionmailer (>= 4.0, < 7)
+      activesupport (>= 4.0, < 7)
     execjs (2.8.1)
     faye-websocket (0.11.1)
       eventmachine (>= 0.12.0)
@@ -186,6 +189,9 @@ GEM
     http-form_data (2.3.0)
     http-parser (1.2.3)
       ffi-compiler (>= 1.0, < 2.0)
+    httparty (0.18.1)
+      mime-types (~> 3.0)
+      multi_xml (>= 0.5.2)
     i18n (1.8.10)
       concurrent-ruby (~> 1.0)
     image_processing (1.12.1)
@@ -235,6 +241,7 @@ GEM
       sha3 (~> 1.0)
       thor (~> 1.0)
     msgpack (1.4.2)
+    multi_xml (0.6.0)
     netrc (0.11.0)
     nio4r (2.5.7)
     nokogiri (1.11.7-x86_64-darwin)
@@ -427,10 +434,12 @@ DEPENDENCIES
   byebug
   capybara (>= 2.15)
   config
+  exception_notification
   fnv
   graphiql-rails
   graphql
   groupdate
+  httparty
   image_processing (~> 1.2)
   jbuilder (~> 2.7)
   listen (~> 3.4)

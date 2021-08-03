@@ -83,6 +83,10 @@ gem 'schmooze'
 gem 'fnv'
 # Config helps you easily manage environment specific settings in an easy and usable manner.
 gem 'config'
+# Exception Notifier Plugin for Rails
+gem 'exception_notification'
+# Makes http fun again!
+gem 'httparty'
 
 # deploy
 gem 'mina', '~> 1.2.2', require: false
