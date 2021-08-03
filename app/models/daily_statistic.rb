@@ -20,12 +20,12 @@ class DailyStatistic < Statistic
     new_articles_count
   ]
 
+  before_validation :setup_attributes, on: :create
+
   default_scope -> { order(datetime: :asc) }
 
   def self.generate(date: Time.current.yesterday)
-    create_with(
-      data_attributes(date)
-    ).find_or_create_by(
+    find_or_create_by(
       datetime: date
     )
   end
@@ -42,5 +42,9 @@ class DailyStatistic < Statistic
       new_payers_count: Order.completed.where(order_type: %i[buy_article reward_article], created_at: date.beginning_of_day...date.end_of_day).pluck(:buyer_id).uniq.count,
       new_articles_count: Article.where(published_at: date.beginning_of_day...date.end_of_day).count
     }
+  end
+
+  def setup_attributes
+    assign_attributes data_attributes(datetime)
   end
 end
