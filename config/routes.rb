@@ -40,6 +40,9 @@ Rails.application.routes.draw do
     # pghero
     mount PgHero::Engine, at: 'pghero'
 
+    # exception
+    mount ExceptionTrack::Engine => '/exception-track'
+
     root to: 'overview#index'
     get '*path' => 'overview#index'
   end

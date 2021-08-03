@@ -87,6 +87,8 @@ gem 'config'
 gem 'exception_notification'
 # Makes http fun again!
 gem 'httparty'
+# Tracking ⚠️ exceptions for Rails application and store them in database.
+gem 'exception-track'
 
 # deploy
 gem 'mina', '~> 1.2.2', require: false
