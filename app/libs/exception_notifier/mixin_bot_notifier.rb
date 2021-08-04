@@ -5,7 +5,8 @@ module ExceptionNotifier
     def initialize(options)
       super
 
-      @conversation_id = options[:conversation_id]
+      @recipient_id = options[:recipient_id]
+      @conversation_id = options[:conversation_id] || PrsdiggBot.api.unique_uuid(@recipient_id)
     end
 
     def call(exception, _options = {})
