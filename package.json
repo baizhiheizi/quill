@@ -66,7 +66,7 @@
     "react-share": "^4.4.0",
     "react_ujs": "^2.6.1",
     "recharts": "^2.0.10",
-    "remark-footnotes": "^3.0.0",
+    "remark-footnotes": "^4.0.0",
     "style-loader": "^3.2.1",
     "tailwindcss": "^2.2.7",
     "turbolinks": "^5.2.0",
