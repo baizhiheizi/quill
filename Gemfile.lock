@@ -79,8 +79,9 @@ GEM
       zeitwerk (~> 2.3)
     addressable (2.8.0)
       public_suffix (>= 2.0.2, < 5.0)
-    after_commit_everywhere (1.0.0)
+    after_commit_everywhere (1.1.0)
       activerecord (>= 4.2)
+      activesupport
     aliyun-sdk (0.8.0)
       nokogiri (~> 1.6)
       rest-client (~> 2.0)
