@@ -9329,8 +9329,9 @@ performance-now@^2.1.0:
   integrity sha1-Ywn04OX6kT7BxpMHrjZLSzd8nns=
 
 "photoswipe@https://github.com/dimsemenov/Photoswipe#v5-beta":
-  version "5.1.1"
-  resolved "https://github.com/dimsemenov/Photoswipe#f88404c3152819b24cf1a36777db0d1ed374dc08"
+  version "5.1.2"
+  uid afc1683f316107c9d10927e60679934d51fca5b0
+  resolved "https://github.com/dimsemenov/Photoswipe#afc1683f316107c9d10927e60679934d51fca5b0"
 
 picomatch@^2.0.4, picomatch@^2.2.1, picomatch@^2.2.3:
   version "2.2.3"
