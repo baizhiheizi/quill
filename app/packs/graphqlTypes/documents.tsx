@@ -4552,6 +4552,7 @@ export type TagConnectionQueryResult = Apollo.QueryResult<TagConnectionQuery, Ta
 export const TaggedArticleConnectionDocument = gql`
     query TaggedArticleConnection($tagId: ID, $tag: String, $filter: String!, $query: String, $after: String) {
   tag(id: $tagId, name: $tag) {
+    id
     name
     color
     articlesCount

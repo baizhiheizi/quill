@@ -25,6 +25,8 @@ class Tagging < ApplicationRecord
   after_create_commit :notify_subscribers
 
   def notify_subscribers
+    return unless article.published?
+
     TaggingCreatedNotification.with(tagging: self).deliver(tag.subscribe_by_users)
   end
 

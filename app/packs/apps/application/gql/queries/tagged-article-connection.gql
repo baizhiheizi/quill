@@ -6,6 +6,7 @@ query TaggedArticleConnection(
   $after: String
 ) {
   tag(id: $tagId, name: $tag) {
+    id
     name
     color
     articlesCount
