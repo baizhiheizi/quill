@@ -30,9 +30,7 @@ module Mutations
         )
       end
 
-      if article.save
-        CreateTag.call(article, params[:tag_names] || [])
-      end
+      CreateTag.call(article, params[:tag_names] || []) if article.save
 
       article.reload
     end
