@@ -30,7 +30,6 @@ import moment from 'moment';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, useHistory } from 'react-router-dom';
-import UploadComponent from '../UploadComponent/UploadComponent';
 
 export default function DraftedArticleEditComponent(props: {
   article: Partial<Article>;
@@ -104,15 +103,6 @@ export default function DraftedArticleEditComponent(props: {
               <Link to={route.path}>{route.breadcrumbName}</Link>
             );
           },
-        }}
-      />
-      <UploadComponent
-        callback={(blob) => {
-          form.setFieldsValue({
-            content: `${form.getFieldValue('content')}\n![${blob.filename}](${
-              blob.url
-            })\n`,
-          });
         }}
       />
       <Form

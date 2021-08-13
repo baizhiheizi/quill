@@ -13,12 +13,11 @@ import {
 } from 'antd';
 import { markdownPreviewOptions, uploadCommand } from 'apps/shared';
 import { Article, useUpdateArticleMutation } from 'graphqlTypes';
+import moment from 'moment';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, useHistory } from 'react-router-dom';
 import EditableTagsComponent from '../../components/EditableTagsComponent/EditableTagsComponent';
-import UploadComponent from '../../components/UploadComponent/UploadComponent';
-import moment from 'moment';
 
 export default function PublishedArticleEditComponent(props: {
   article: Partial<Article>;
@@ -70,15 +69,6 @@ export default function PublishedArticleEditComponent(props: {
               <Link to={route.path}>{route.breadcrumbName}</Link>
             );
           },
-        }}
-      />
-      <UploadComponent
-        callback={(blob) => {
-          form.setFieldsValue({
-            content: `${form.getFieldValue('content')}\n![${blob.filename}](${
-              blob.url
-            })\n`,
-          });
         }}
       />
       <Form

@@ -1,10 +1,13 @@
 import { FileImageOutlined } from '@ant-design/icons';
-import { ICommand } from '@uiw/react-md-editor';
+import { ICommand, TextAreaTextApi, TextState } from '@uiw/react-md-editor';
+import { message } from 'antd';
+import { upload } from 'apps/shared';
 import katex from 'katex';
 import 'katex/dist/katex.css';
 import mermaid from 'mermaid';
 import React from 'react';
 import footnotes from 'remark-footnotes';
+import { ATTACHMENT_ENDPOINT } from '../constants';
 
 export const markdownPlugins: any = [[footnotes, { inlineNotes: true }]];
 export const markdownTransformLinkUrl = (uri: string) => {
@@ -157,7 +160,23 @@ export const uploadCommand: ICommand = {
   keyCommand: 'upload',
   buttonProps: { 'aria-label': 'Upload Image' },
   icon: <FileImageOutlined />,
-  execute: () => {
-    document.getElementById('upload-image-input').click();
+  execute: (state: TextState, api: TextAreaTextApi) => {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = 'image/*';
+    input.multiple = true;
+    input.onchange = (event: any) => {
+      Array.from(event.target.files).forEach((file) => {
+        message.loading('...');
+        upload(file, (blob) => {
+          blob.url = `${ATTACHMENT_ENDPOINT}/${blob.key}`;
+          api.replaceSelection(
+            `${state.selectedText}\n![${blob.filename}](${blob.url})\n\n`,
+          );
+          message.destroy();
+        });
+      });
+    };
+    input.click();
   },
 };
