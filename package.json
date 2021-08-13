@@ -26,7 +26,7 @@
     "@types/react-router-dom": "^5.1.8",
     "@types/recharts": "^2.0.0",
     "@types/uuid": "^8.3.1",
-    "@uiw/react-md-editor": "^3.4.11",
+    "@uiw/react-md-editor": "^3.4.12",
     "ahooks": "^2.10.9",
     "antd": "^4.16.11",
     "autoprefixer": "^10.3.1",
