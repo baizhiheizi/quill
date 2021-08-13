@@ -21,7 +21,7 @@
     "@types/mark.js": "^8.11.6",
     "@types/mermaid": "^8.2.7",
     "@types/qrcode.react": "^1.0.2",
-    "@types/react": "^17.0.16",
+    "@types/react": "^17.0.17",
     "@types/react-dom": "^17.0.9",
     "@types/react-router-dom": "^5.1.8",
     "@types/recharts": "^2.0.0",
