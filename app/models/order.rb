@@ -199,7 +199,7 @@ class Order < ApplicationRecord
   end
 
   def ensure_total_sufficient
-    errors.add(:total, 'insufficient') if buy_article? && (total - item.price).abs < Float::EPSLON
+    errors.add(:total, 'insufficient') if buy_article? && (total - item.price).abs < Float::EPSILON
   end
 
   def notify_reading_subscribers
