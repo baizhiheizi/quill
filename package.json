@@ -83,7 +83,7 @@
     "@graphql-codegen/introspection": "2.0.0",
     "@graphql-codegen/typescript": "2.0.0",
     "@graphql-codegen/typescript-react-apollo": "3.0.0",
-    "@webpack-cli/serve": "^1.5.1",
+    "@webpack-cli/serve": "^1.5.2",
     "negotiator": "^0.6.2",
     "node-fetch": "^2.6.1",
     "prettier": "^2.3.2",
