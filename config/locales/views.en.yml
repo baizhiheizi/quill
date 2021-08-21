@@ -176,7 +176,7 @@ en:
   payments: Payments
   swap_orders: Swap Orders
   access_token: Access Token
-  tips_of_general_notifications: You can customized your notification via Web, Mixin Bot and Webhook(on development).
+  tips_of_general_notifications: You can customize your notification via Web, Mixin Bot and Webhook(on development).
   tips_of_article_published_notifications: When your subscribed authors publish a new article, you will be notified.
   tips_of_article_bought_notifications: When your subscribed readers buy a new article, you will be notified.
   tips_of_article_rewarded_notifications: When your subscribed readers reward a new article, you will be notified.
