@@ -28,14 +28,14 @@ en:
   write: Write
   search: Search
   rules: Rules
-  fair: Fair
+  fair: Stats
   community: Community
   open_source: Open Source
   dashboard: Dashboard
   login: Login
   logout: Logout
-  order_by_popularity: Popularity
-  order_by_lately: Lately
+  order_by_popularity: Popular
+  order_by_lately: Latest
   order_by_revenue: Revenue
   tags: Tags
   comments_zone: Comments
@@ -98,25 +98,25 @@ en:
 
     5. **Readers** can also increase the amount they pay for an article by means of a reward in order to increase their share of the bonus.
 
-    For example: 
+    For example:
 
-    User A published an article X pricing 100 Satoshi on the platform. 
+    User A published an article X pricing 100 Satoshi on the platform.
 
-    User B paid 100 Satoshi for article X and got the right to read the article. 
+    User B paid 100 Satoshi for article X and got the right to read the article.
 
     Therefore, article X earned 100 Satoshi, because B is the first reader and there is no earlier reader, so there is no early reader bonus; 10 Satoshi(10%) is used as the platform's handling fee; The remaining 90 Satoshi are all taken as author revenue and transferred to the account of author A.
 
     User C paid 100 Satoshi for article x after B. As a result, Article X earns another 100 Satoshi.
 
-    Among them, 40 Satoshi(40%) will be used as an early reader bonus. At this time, there is only one early reader,  user B, so B monopolizes this 40% reward; The platform also receives 10 Satoshi(10%) as a handling fee; The remaining 50 Satoshi is the author's income. 
+    Among them, 40 Satoshi(40%) will be used as an early reader bonus. At this time, there is only one early reader,  user B, so B monopolizes this 40% reward; The platform also receives 10 Satoshi(10%) as a handling fee; The remaining 50 Satoshi is the author's income.
 
     After C, user D also paid 100 Satoshi for article X.
 
-    Similarly, 40 Satoshi(40%) will be rewarded as early readers bonus. At this time, there are two early readers, namely B and C, who paid 100 Satoshi for article X before, so both B and C will be rewarded with `40 * 100/(100+100) = 20` Satoshi respectively. 
+    Similarly, 40 Satoshi(40%) will be rewarded as early readers bonus. At this time, there are two early readers, namely B and C, who paid 100 Satoshi for article X before, so both B and C will be rewarded with `40 * 100/(100+100) = 20` Satoshi respectively.
 
-    The platform also charges 10 Satoshi(10%) as a handling fee; The remaining 50 Satoshi is the author's income. 
+    The platform also charges 10 Satoshi(10%) as a handling fee; The remaining 50 Satoshi is the author's income.
 
-    And so on. 
+    And so on.
 
     It is worth reminding that besides the payment for articles, the income from other payment behaviors (such as reward) will also be included in the distribution ratio of early readers' bonus.
   mixin_group: Mixin Group
@@ -136,7 +136,7 @@ en:
   overview: Overview
   notifications_manage: Notifications
   settings: Settings
-  articles_manage: Artciels Manage
+  articles_manage: Article Management
   subscriptions_manage: Subscriptions
   revenue_manage: Revenue Manage
   orders_manage: Orders Manage
@@ -200,7 +200,7 @@ en:
   mixin_bot: Mixin Bot
   comming_soon: Comming Soon
   you_will_get_1000_satoshi_airdrop_once_we_launched: |
-    🎉 You'll get 1000 Satoshi airdrop 
+    🎉 You'll get 1000 Satoshi airdrop
     once we launched soon.
   login_to_earn_btc: Login To Earn BTC
   login_right_now_to_earn_btc_airdrop: Login right now, you'll receive BTC airdrop once we launched soon.
