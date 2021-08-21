@@ -67,7 +67,7 @@ en:
       completed: Completed
       refunded: Refunded
   user:
-    default_bio: Didn't left anything
+    default_bio: Didn't leave anything
     author_revenue_total: Author Revenue(USD)
     reader_revenue_total: Reader Revenue(USD)
     payment_total_usd: Paid(USD)
