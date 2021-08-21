@@ -55,7 +55,7 @@ en:
     state:
       paid: Paid
       refunded: Refunded
-      completed: Compelted
+      completed: Completed
     snapshot: Snapshot
   swap_order:
     state:
