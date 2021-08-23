@@ -169,7 +169,7 @@ export const uploadCommand: ICommand = {
       Array.from(event.target.files).forEach((file) => {
         message.loading('...');
         upload(file, (blob) => {
-          blob.url = `${ATTACHMENT_ENDPOINT}/${blob.key}`;
+          blob.url = `${ATTACHMENT_ENDPOINT()}/${blob.key}`;
           api.replaceSelection(
             `${state.selectedText}\n![${blob.filename}](${blob.url})\n\n`,
           );
