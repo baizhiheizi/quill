@@ -11579,29 +11579,10 @@ recharts-scale@^0.4.4:
   dependencies:
     decimal.js-light "^2.4.1"
 
-recharts@*:
-  version "2.0.9"
-  resolved "https://registry.yarnpkg.com/recharts/-/recharts-2.0.9.tgz#048068eb01383291104548388712026948275f70"
-  integrity sha512-JNsXE80PuF3hugUCE7JqDOMSvu5xQLxtjOaqFKKZI2pCJ1PVJzhwDv4TWk0nO4AvADbeWzYEHbg8C5Hcrh42UA==
-  dependencies:
-    "@types/d3-scale" "^3.0.0"
-    "@types/d3-shape" "^2.0.0"
-    classnames "^2.2.5"
-    d3-interpolate "^2.0.1"
-    d3-scale "^3.2.3"
-    d3-shape "^2.0.0"
-    eventemitter3 "^4.0.1"
-    lodash "^4.17.19"
-    react-is "16.10.2"
-    react-resize-detector "^6.6.3"
-    react-smooth "^2.0.0"
-    recharts-scale "^0.4.4"
-    reduce-css-calc "^2.1.8"
-
-recharts@^2.1.1:
-  version "2.1.1"
-  resolved "https://registry.yarnpkg.com/recharts/-/recharts-2.1.1.tgz#704f89a7aa7772ba522d0713b17d1275b8965d4a"
-  integrity sha512-slV1RDbLPxyA3/63bjvtdrTXOuFnO6cdh/XlEu1XaM/PigPwBK2NZrVarjcirlAd7fkUzFIgKQjCxC+Hk1ymGQ==
+recharts@*, recharts@^2.1.2:
+  version "2.1.2"
+  resolved "https://registry.yarnpkg.com/recharts/-/recharts-2.1.2.tgz#ceeb01e53fb46da0d946a1e0f82d783ddf5b9d06"
+  integrity sha512-rwFQT6T4imhLzD1kYtg9ql8YOesbFRdSwZi95KWgi5udbBdLGRCR4SgaPO8kf0URHcC23mdRbLLTMYCnXng7zQ==
   dependencies:
     "@types/d3-scale" "^3.0.0"
     "@types/d3-shape" "^2.0.0"
