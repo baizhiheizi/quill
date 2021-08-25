@@ -1,8 +1,8 @@
 GIT
   remote: https://github.com/rails/webpacker.git
-  revision: f0a29a589e36421980213350c304f69d631e6561
+  revision: cb079f55837e10ce7b09383172dcb64d15a8d459
   specs:
-    webpacker (6.0.0.rc.1)
+    webpacker (6.0.0.rc.2)
       activesupport (>= 5.2)
       rack-proxy (>= 0.6.1)
       railties (>= 5.2)
@@ -310,7 +310,7 @@ GEM
     rails-dom-testing (2.0.3)
       activesupport (>= 4.2.0)
       nokogiri (>= 1.6)
-    rails-html-sanitizer (1.4.1)
+    rails-html-sanitizer (1.4.2)
       loofah (~> 2.3)
     rails-i18n (6.0.0)
       i18n (>= 0.7, < 2)
