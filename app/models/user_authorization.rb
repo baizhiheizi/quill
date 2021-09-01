@@ -19,7 +19,7 @@
 #  index_user_authorizations_on_user_id           (user_id)
 #
 class UserAuthorization < ApplicationRecord
-  MIXIN_AUTHORIZATION_SCOPE = "PROFILE:READ#{Settings.whitelist&.enable&.presence && '+PHONE:READ'}"
+  MIXIN_AUTHORIZATION_SCOPE = "PROFILE:READ#{Settings.whitelist&.enable&.presence && '+PHONE:READ'}".freeze
 
   store_accessor :raw, :phone
 
