@@ -37,13 +37,14 @@ export const handleTagShare = (
   tag: Partial<Tag>,
   mixinEnv: boolean,
   appId: string,
+  description?: string,
   logoFile?: string,
 ) => {
-  const tagUrl = `${location.origin}/tags/${tag.id}`;
+  const tagUrl = `${location.origin}/articles?tag=${tag.name}`;
   const data = {
     action: tagUrl,
     app_id: appId,
-    description: `x ${tag.articlesCount}`,
+    description: description || `x ${tag.articlesCount}`,
     icon_url: `${imagePath(logoFile || 'logo.png')}`,
     title: `#${tag.name}`,
   };

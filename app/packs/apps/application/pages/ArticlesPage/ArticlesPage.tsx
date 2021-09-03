@@ -19,7 +19,7 @@ export default function ArticlesPage() {
   const history = useHistory();
   const tagParam = new URLSearchParams(history.location.search).get('tag');
   const { t } = useTranslation();
-  const { appId, pageTitle } = usePrsdigg();
+  const { appId, pageTitle, logoFile } = usePrsdigg();
   const { mixinEnv } = useUserAgent();
   const { loading, data, fetchMore, refetch } = useTaggedArticleConnectionQuery(
     {
@@ -85,7 +85,15 @@ export default function ArticlesPage() {
               {tag.subscribed ? t('unsubscribe') : t('subscribe')}
             </Button>
             <Button
-              onClick={() => handleTagShare(tag, mixinEnv, appId)}
+              onClick={() =>
+                handleTagShare(
+                  tag,
+                  mixinEnv,
+                  appId,
+                  `${t('articles_count')}: ${tag.articlesCount}`,
+                  logoFile,
+                )
+              }
               type='link'
               size='small'
               icon={<ShareAltOutlined />}
