@@ -165,7 +165,7 @@ export const uploadCommand: ICommand = {
     input.type = 'file';
     input.accept = 'image/*';
     input.multiple = true;
-    input.onchange = (event: any) => {
+    input.addEventListener('change', (event: any) => {
       Array.from(event.target.files).forEach((file) => {
         message.loading('...');
         upload(file, (blob) => {
@@ -176,7 +176,9 @@ export const uploadCommand: ICommand = {
           message.destroy();
         });
       });
-    };
+      document.body.removeChild(input);
+    });
+    document.body.appendChild(input);
     input.click();
   },
 };
