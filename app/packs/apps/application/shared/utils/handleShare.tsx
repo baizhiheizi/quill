@@ -40,7 +40,9 @@ export const handleTagShare = (
   description?: string,
   logoFile?: string,
 ) => {
-  const tagUrl = `${location.origin}/articles?tag=${encodeURIComponent(tag.name)}`;
+  const tagUrl = `${location.origin}/articles?tag=${encodeURIComponent(
+    tag.name,
+  )}`;
   const data = {
     action: tagUrl,
     app_id: appId,
