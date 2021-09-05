@@ -20,7 +20,7 @@ export const handleArticleShare = (
 ) => {
   const articleUrl = `${location.origin}/articles/${article.uuid}`;
   const data = {
-    action: articleUrl,
+    action: encodeURIComponent(articleUrl),
     app_id: appId,
     description: `${article.author.name}`,
     icon_url: `${imagePath(logoFile || 'logo.png')}`,
@@ -42,7 +42,7 @@ export const handleTagShare = (
 ) => {
   const tagUrl = `${location.origin}/articles?tag=${tag.name}`;
   const data = {
-    action: tagUrl,
+    action: encodeURIComponent(tagUrl),
     app_id: appId,
     description: description || `x ${tag.articlesCount}`,
     icon_url: `${imagePath(logoFile || 'logo.png')}`,
