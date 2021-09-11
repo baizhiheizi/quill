@@ -85,6 +85,7 @@ export const apolloClient = (uri: string, csrfToken?: string) => {
           ]),
           articleConnection: customizedConnectionMergeFunction([
             'tagId',
+            'tag',
             'filter',
             'query',
             'timeRange',
