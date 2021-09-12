@@ -42,7 +42,7 @@ class User < ApplicationRecord
     cached_at
   ]
 
-  has_one :mixin_authorization, -> { where(provider: :mixin) }, class_name: 'UserAuthorization', inverse_of: :user
+  has_one :mixin_authorization, -> { where(provider: :mixin) }, class_name: 'UserAuthorization', inverse_of: :user, dependent: :restrict_with_error
   has_one :prs_account, dependent: :restrict_with_error
   has_many :access_tokens, dependent: :destroy
 
