@@ -50,7 +50,7 @@
     "less-loader": "^10.0.1",
     "mark.js": "^8.11.1",
     "mermaid": "8.11.5",
-    "mini-css-extract-plugin": "^2.2.2",
+    "mini-css-extract-plugin": "^2.3.0",
     "node-polyfill-webpack-plugin": "^1.1.4",
     "photoswipe": "https://github.com/dimsemenov/Photoswipe#v5-beta",
     "postcss": "^8.3.6",
@@ -80,7 +80,7 @@
   "devDependencies": {
     "@graphql-codegen/cli": "2.2.0",
     "@graphql-codegen/introspection": "2.1.0",
-    "@graphql-codegen/typescript": "2.1.2",
+    "@graphql-codegen/typescript": "2.2.2",
     "@graphql-codegen/typescript-react-apollo": "3.1.4",
     "@webpack-cli/serve": "^1.5.2",
     "negotiator": "^0.6.2",
