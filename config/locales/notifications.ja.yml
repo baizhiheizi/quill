@@ -35,10 +35,8 @@ ja:
       bonus: ボーナス
       swap_change: スワップ変動
       swap_refund: スワップ後の払い戻し
-    authoring_subscribe_action_created_notification:
+    subscribe_user_action_created_notification:
       subscribed: 新しく投稿した記事がフォローされました
-    reading_subscribe_action_created_notification:
-      subscribed: 新しく購入した記事がフォローされました
     user_banned_notification:
       banned: あなたのアカウントは運営により凍結されています。記事の作成やコメントの投稿はできません。
     user_unbanned_notification:

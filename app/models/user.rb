@@ -125,12 +125,8 @@ class User < ApplicationRecord
 
   delegate :phone, to: :mixin_authorization
 
-  # follow user
+  # subscribe user
   action_store :subscribe, :user, counter_cache: 'subscribers_count', user_counter_cache: 'subscribing_count'
-  # subscribe user for new articles
-  action_store :authoring_subscribe, :user, counter_cache: 'authoring_subscribers_count'
-  # subscribe user for buying or rewarding articles
-  action_store :reading_subscribe, :user, counter_cache: 'reading_subscribers_count'
   # subscribe for article's comment
   action_store :commenting_subscribe, :article, counter_cache: 'commenting_subscribers_count'
   # upvote article

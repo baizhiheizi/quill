@@ -24,8 +24,8 @@ class Action < ApplicationRecord
   belongs_to :target, polymorphic: true, optional: true
   belongs_to :user, polymorphic: true, optional: true
 
+  after_create :notify_target
   before_destroy :destroy_notifications
-  after_commit :notify_target, on: :create
 
   def destroy_notifications
     notifications.destroy_all
@@ -37,10 +37,8 @@ class Action < ApplicationRecord
 
   def notify_target
     case action_type.to_sym
-    when :authoring_subscribe
-      AuthoringSubscribeActionCreatedNotification.with(action: self).deliver(target)
-    when :reading_subscribe
-      ReadingSubscribeActionCreatedNotification.with(action: self).deliver(target)
+    when :subscribe
+      SubscribeUserActionCreatedNotification.with(action: self).deliver(target)
     end
   end
 end

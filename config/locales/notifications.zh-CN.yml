@@ -35,10 +35,8 @@ zh-CN:
       bonus: 奖励
       swap_change: 兑换找零
       swap_refund: 兑换后购买失败退款
-    authoring_subscribe_action_created_notification:
-      subscribed: 订阅了您新发表的文章
-    reading_subscribe_action_created_notification:
-      subscribed: 订阅了您新购买的文章
+    subscribe_user_action_created_notification:
+      subscribed: 订阅了您的动态
     user_banned_notification:
       banned: 你的帐号被管理员限制，不能发表文章或者评论。
     user_unbanned_notification:
