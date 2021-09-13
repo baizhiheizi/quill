@@ -4,7 +4,7 @@ module Mutations
   class ToggleSubscribeUserActionMutation < Mutations::BaseMutation
     argument :mixin_id, String, required: true
 
-    type Boolean 
+    type Boolean
 
     def resolve(params)
       user = User.find_by(mixin_id: params[:mixin_id])
