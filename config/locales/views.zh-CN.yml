@@ -166,11 +166,14 @@ zh-CN:
   authoring_subscriptions_tip: 订阅的作者发表新文章时，您将收到通知
   reading_subscriptions: 读者
   reading_subscriptions_tip: 订阅的读者购买新文章时，您将收到通知
+  subscribers: 订阅者
+  subscribing: 正在订阅
   commenting_subscriptions: 评论
   commenting_subscriptions_tip: 订阅的文章有新评论时，您将收到通知
   tag_subscriptions: 话题
   tag_subscriptions_tip: 该话题下有新文章时，你将收到通知
   confirm_to_unsubscribe: 确定要取消订阅吗？
+  confirm_unsubscribe: 确定要订阅吗？
   author_transfers: 作者收益
   reader_transfers: 读者收益
   payments: 支付记录

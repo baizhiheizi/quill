@@ -39,7 +39,7 @@ import {
   useArticleQuery,
   useDownvoteArticleMutation,
   User,
-  useToggleAuthoringSubscribeUserActionMutation,
+  useToggleSubscribeUserActionMutation,
   useUpvoteArticleMutation,
 } from 'graphqlTypes';
 import moment from 'moment';
@@ -64,28 +64,18 @@ export default function ArticlePage() {
   });
   const [upvoteArticle] = useUpvoteArticleMutation();
   const [downvoteArticle] = useDownvoteArticleMutation();
-  const [toggleAuthoringSubscribeUserAction] =
-    useToggleAuthoringSubscribeUserActionMutation({
-      update(
-        _,
-        {
-          data: {
-            toggleAuthoringSubscribeUserAction: { error },
-          },
-        },
-      ) {
-        if (error) {
-          message.error(error);
-        } else {
-          message.success(
-            article.author.authoringSubscribed
-              ? t('success_unsubscribed')
-              : t('success_subscribed'),
-          );
-          refetch();
-        }
-      },
-    });
+  const [toggleSubscribeUserAction] = useToggleSubscribeUserActionMutation({
+    update(_, { data: { toggleSubscribeUserAction: success } }) {
+      if (success) {
+        message.success(
+          article.author.subscribed
+            ? t('success_unsubscribed')
+            : t('success_subscribed'),
+        );
+        refetch();
+      }
+    },
+  });
 
   useEffect(() => {
     return () => (document.title = pageTitle);
@@ -118,14 +108,14 @@ export default function ArticlePage() {
         </Link>
         <span>{moment(article.publishedAt).format('YYYY/MM/DD HH:mm')}</span>
         {currentUser?.mixinId !== article.author.mixinId &&
-          !article.author.authoringSubscribed &&
+          !article.author.subscribed &&
           (currentUser ? (
             <Button
               type='primary'
               shape='round'
               size='small'
               onClick={() => {
-                toggleAuthoringSubscribeUserAction({
+                toggleSubscribeUserAction({
                   variables: { input: { mixinId: article.author.mixinId } },
                 });
               }}

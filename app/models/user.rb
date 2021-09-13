@@ -13,6 +13,8 @@
 #  name                        :string
 #  reading_subscribers_count   :integer          default(0)
 #  statistics                  :jsonb
+#  subscribers_count           :integer          default(0)
+#  subscribing_count           :integer          default(0)
 #  created_at                  :datetime         not null
 #  updated_at                  :datetime         not null
 #  mixin_id                    :string
@@ -123,6 +125,8 @@ class User < ApplicationRecord
 
   delegate :phone, to: :mixin_authorization
 
+  # follow user
+  action_store :subscribe, :user, counter_cache: 'subscribers_count', user_counter_cache: 'subscribing_count'
   # subscribe user for new articles
   action_store :authoring_subscribe, :user, counter_cache: 'authoring_subscribers_count'
   # subscribe user for buying or rewarding articles

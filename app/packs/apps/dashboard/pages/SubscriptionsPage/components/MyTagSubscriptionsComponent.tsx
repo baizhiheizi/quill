@@ -12,7 +12,9 @@ import { useTranslation } from 'react-i18next';
 export default function MyTagSubscriptionsComponent() {
   const { t } = useTranslation();
   const { loading, data, fetchMore, refetch } =
-    useMyTagSubscriptionConnectionQuery();
+    useMyTagSubscriptionConnectionQuery({
+      fetchPolicy: 'cache-and-network',
+    });
 
   const [toggleTagSubscribeUserAction] = useToggleSubscribeTagActionMutation({
     update() {

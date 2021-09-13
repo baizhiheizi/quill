@@ -170,8 +170,8 @@ class Article < ApplicationRecord
     user.orders.where(item: self).sum(:value_btc) / revenue_btc * readers_revenue_ratio
   end
 
-  def notify_authoring_subscribers
-    ArticlePublishedNotification.with(article: self).deliver(author.authoring_subscribe_by_users)
+  def notify_subscribers
+    ArticlePublishedNotification.with(article: self).deliver(author.subscribe_by_users)
   end
 
   def notify_admin
@@ -243,7 +243,7 @@ class Article < ApplicationRecord
     ActiveRecord::Base.transaction do
       update published_at: Time.current
       create_wallet! if wallet.blank?
-      notify_authoring_subscribers
+      notify_subscribers
       taggings.map(&:notify_subscribers)
       notify_admin
       subscribe_comments_for_author

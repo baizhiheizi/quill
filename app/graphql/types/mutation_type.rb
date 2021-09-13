@@ -8,8 +8,7 @@ module Types
     field :hide_article, mutation: Mutations::HideArticleMutation
     field :publish_article, mutation: Mutations::PublishArticleMutation
     field :create_comment, mutation: Mutations::CreateCommentMutation
-    field :toggle_authoring_subscribe_user_action, mutation: Mutations::ToggleAuthoringSubscribeUserActionMutation
-    field :toggle_reading_subscribe_user_action, mutation: Mutations::ToggleReadingSubscribeUserActionMutation
+    field :toggle_subscribe_user_action, mutation: Mutations::ToggleSubscribeUserActionMutation
     field :toggle_commenting_subscribe_article_action, mutation: Mutations::ToggleCommentingSubscribeArticleActionMutation
     field :toggle_subscribe_tag_action, mutation: Mutations::ToggleSubscribeTagActionMutation
     field :upvote_article, mutation: Mutations::UpvoteArticleMutation

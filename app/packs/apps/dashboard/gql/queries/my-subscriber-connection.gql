@@ -1,0 +1,16 @@
+query MySubscriberConnection($after: String) {
+  mySubscriberConnection(after: $after) {
+    nodes {
+      id
+      mixinId
+      name
+      avatar
+      bio
+      subscribed
+    }
+    pageInfo {
+      hasNextPage
+      endCursor
+    }
+  }
+}

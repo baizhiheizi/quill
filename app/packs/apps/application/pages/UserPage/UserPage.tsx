@@ -1,14 +1,17 @@
+import { AlertOutlined, ShakeOutlined } from '@ant-design/icons';
 import { Button, Col, Row, Statistic, Tabs } from 'antd';
-import { encode as encode64 } from 'js-base64';
-import { ShakeOutlined } from '@ant-design/icons';
 import LoadingComponent from 'apps/application/components/LoadingComponent/LoadingComponent';
-import { useUserQuery } from 'graphqlTypes';
+import { imagePath, usePrsdigg, useUserAgent } from 'apps/shared';
+import {
+  useToggleSubscribeUserActionMutation,
+  useUserQuery,
+} from 'graphqlTypes';
+import { encode as encode64 } from 'js-base64';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import UserArticlesComponent from './components/UserArticlesComponent';
 import UserCommentsComponent from './components/UserCommentsComponent';
-import { imagePath, usePrsdigg, useUserAgent } from 'apps/shared';
 
 export default function UserPage() {
   const { mixinId } = useParams<{ mixinId: string }>();
@@ -16,6 +19,13 @@ export default function UserPage() {
   const { appId, appName, logoFile } = usePrsdigg();
   const { mixinEnv } = useUserAgent();
   const { loading, data, refetch } = useUserQuery({ variables: { mixinId } });
+  const [toggleSubscribeUserAction] = useToggleSubscribeUserActionMutation({
+    update(_, { data: { toggleSubscribeUserAction: success } }) {
+      if (success) {
+        refetch();
+      }
+    },
+  });
 
   if (loading) {
     return <LoadingComponent />;
@@ -31,30 +41,47 @@ export default function UserPage() {
           src={user.avatar}
         />
         <div className='mb-2'>{user.name}</div>
-        {mixinEnv && (
+        <div className='flex items-center justify-center space-x-2'>
           <Button
             type='primary'
+            ghost
+            danger={user?.subscribed}
             shape='round'
-            icon={<ShakeOutlined />}
+            icon={<AlertOutlined />}
             onClick={() =>
-              location.replace(
-                `mixin://send?category=app_card&data=${encodeURIComponent(
-                  encode64(
-                    JSON.stringify({
-                      action: location.href,
-                      app_id: appId,
-                      description: `${appName} ${t('author')}`,
-                      icon_url: `${imagePath(logoFile || 'logo.png')}`,
-                      title: user.name,
-                    }),
-                  ),
-                )}`,
-              )
+              toggleSubscribeUserAction({
+                variables: { input: { mixinId } },
+              })
             }
           >
-            {t('share')}
+            {user?.subscribed ? t('unsubscribe') : t('subscribe')}
           </Button>
-        )}
+          {mixinEnv && (
+            <Button
+              type='primary'
+              ghost
+              shape='round'
+              icon={<ShakeOutlined />}
+              onClick={() =>
+                location.replace(
+                  `mixin://send?category=app_card&data=${encodeURIComponent(
+                    encode64(
+                      JSON.stringify({
+                        action: location.href,
+                        app_id: appId,
+                        description: `${appName} ${t('author')}`,
+                        icon_url: `${imagePath(logoFile || 'logo.png')}`,
+                        title: user.name,
+                      }),
+                    ),
+                  )}`,
+                )
+              }
+            >
+              {t('share')}
+            </Button>
+          )}
+        </div>
       </div>
       <Row gutter={16} style={{ textAlign: 'center' }}>
         <Col xs={12} sm={6}>
@@ -84,20 +111,10 @@ export default function UserPage() {
       </Row>
       <Tabs defaultActiveKey='author'>
         <Tabs.TabPane tab={t('published')} key='author'>
-          <UserArticlesComponent
-            mixinId={user.mixinId}
-            authoringSubscribed={user.authoringSubscribed}
-            refetchUser={refetch}
-            type='author'
-          />
+          <UserArticlesComponent mixinId={user.mixinId} type='author' />
         </Tabs.TabPane>
         <Tabs.TabPane tab={t('bought')} key='reader'>
-          <UserArticlesComponent
-            mixinId={user.mixinId}
-            readingSubscribed={user.readingSubscribed}
-            refetchUser={refetch}
-            type='reader'
-          />
+          <UserArticlesComponent mixinId={user.mixinId} type='reader' />
         </Tabs.TabPane>
         <Tabs.TabPane tab={t('commented')} key='comments'>
           <UserCommentsComponent authorMixinId={user.mixinId} />

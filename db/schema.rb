@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_08_03_053812) do
+ActiveRecord::Schema.define(version: 2021_09_12_012928) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -440,6 +440,8 @@ ActiveRecord::Schema.define(version: 2021_08_03_053812) do
     t.datetime "banned_at"
     t.jsonb "statistics", default: "{}"
     t.integer "locale"
+    t.integer "subscribers_count", default: 0
+    t.integer "subscribing_count", default: 0
     t.index ["mixin_id"], name: "index_users_on_mixin_id", unique: true
     t.index ["mixin_uuid"], name: "index_users_on_mixin_uuid", unique: true
     t.index ["statistics"], name: "index_users_on_statistics", using: :gin

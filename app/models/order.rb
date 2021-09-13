@@ -62,7 +62,7 @@ class Order < ApplicationRecord
   after_create :complete_payment, :update_item_revenue, :update_buyer_statistics_cache
   before_destroy :destroy_notifications
   after_commit :distribute_async,
-               :notify_reading_subscribers,
+               :notify_subscribers,
                :notify_buyer,
                on: :create
 
@@ -202,11 +202,11 @@ class Order < ApplicationRecord
     errors.add(:total, 'insufficient') if buy_article? && total.floor(8) < item.price.floor(8)
   end
 
-  def notify_reading_subscribers
+  def notify_subscribers
     if reward_article?
-      ArticleRewardedNotification.with(order: self).deliver(buyer.reading_subscribe_by_users)
+      ArticleRewardedNotification.with(order: self).deliver(buyer.subscribe_by_users)
     elsif buy_article?
-      ArticleBoughtNotification.with(order: self).deliver(buyer.reading_subscribe_by_users)
+      ArticleBoughtNotification.with(order: self).deliver(buyer.subscribe_by_users)
     end
   end
 

@@ -1,33 +1,31 @@
 import { Alert, PageHeader, Tabs } from 'antd';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import MyAuthoringSubscriptionsComponent from './components/MyAuthoringSubscriptionsComponent';
 import MyCommentingSubscriptionsComponent from './components/MyCommentingSubscriptionsComponent';
-import MyReadingSubscriptionsComponent from './components/MyReadingSubscriptionsComponent';
+import MySubscribersComponent from './components/MySubscribersComponent';
+import MySubscribingsComponent from './components/MySubscribingsComponent';
 import MyTagSubscriptionsComponent from './components/MyTagSubscriptionsComponent';
 
 export default function SubscriptionsPage() {
   const { t } = useTranslation();
-  const [type, setType] = useState<'authoring' | 'reading' | 'commenting'>(
-    'authoring',
-  );
+  const [type, setType] = useState<
+    'subscribers' | 'subscribing' | 'commenting'
+  >('subscribing');
 
   return (
     <div>
       <PageHeader title={t('subscriptions_manage')} />
       <Tabs
         activeKey={type}
-        onChange={(key: 'authoring' | 'reading' | 'commenting') => setType(key)}
+        onChange={(key: 'subscribers' | 'subscribing' | 'commenting') =>
+          setType(key)
+        }
       >
-        <Tabs.TabPane key='authoring' tab={t('authoring_subscriptions')}>
-          <Alert message={t('authoring_subscriptions_tip')} />
-          <br />
-          <MyAuthoringSubscriptionsComponent />
+        <Tabs.TabPane key='subscribing' tab={t('subscribing')}>
+          <MySubscribingsComponent />
         </Tabs.TabPane>
-        <Tabs.TabPane key='readering' tab={t('reading_subscriptions')}>
-          <Alert message={t('reading_subscriptions_tip')} />
-          <br />
-          <MyReadingSubscriptionsComponent />
+        <Tabs.TabPane key='subscribers' tab={t('subscribers')}>
+          <MySubscribersComponent />
         </Tabs.TabPane>
         <Tabs.TabPane key='commenting' tab={t('commenting_subscriptions')}>
           <Alert message={t('commenting_subscriptions_tip')} />

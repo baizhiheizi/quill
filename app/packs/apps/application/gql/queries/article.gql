@@ -35,7 +35,7 @@ query Article($uuid: ID!) {
       avatar
       mixinId
       bio
-      authoringSubscribed
+      subscribed
     }
     randomReaders {
       name

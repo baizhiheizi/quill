@@ -97,9 +97,8 @@ export const apolloClient = (uri: string, csrfToken?: string) => {
             'orderBy',
           ]),
           myAccessTokenConnection: customizedConnectionMergeFunction(),
-          myAuthoringSubscriptionConnection:
-            customizedConnectionMergeFunction(),
-          myReadingSubscriptionConnection: customizedConnectionMergeFunction(),
+          mySubscriberConnection: customizedConnectionMergeFunction(),
+          mySubscribingConnection: customizedConnectionMergeFunction(),
           myCommentingSubscriptionConnection:
             customizedConnectionMergeFunction(),
           myNotificationConnection: customizedConnectionMergeFunction(),

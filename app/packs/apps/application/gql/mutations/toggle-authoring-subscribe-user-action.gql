@@ -1,7 +1,0 @@
-mutation ToggleAuthoringSubscribeUserAction(
-  $input: ToggleAuthoringSubscribeUserActionMutationInput!
-) {
-  toggleAuthoringSubscribeUserAction(input: $input) {
-    error
-  }
-}

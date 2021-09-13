@@ -25,8 +25,8 @@ module Types
     field :my_article, resolver: Resolvers::MyArticleResolver
     field :my_article_order_connection, resolver: Resolvers::MyArticleOrderConnectionResolver
     field :my_article_connection, resolver: Resolvers::MyArticleConnectionResolver
-    field :my_authoring_subscription_connection, resolver: Resolvers::MyAuthoringSubscriptionConnectionResolver
-    field :my_reading_subscription_connection, resolver: Resolvers::MyReadingSubscriptionConnectionResolver
+    field :my_subscriber_connection, resolver: Resolvers::MySubscriberConnectionResolver
+    field :my_subscribing_connection, resolver: Resolvers::MySubscribingConnectionResolver
     field :my_commenting_subscription_connection, resolver: Resolvers::MyCommentingSubscriptionConnectionResolver
     field :my_tag_subscription_connection, resolver: Resolvers::MyTagSubscriptionConnectionResolver
     field :my_payment_connection, resolver: Resolvers::MyPaymentConnectionResolver

@@ -18,11 +18,10 @@ module Types
     field :wallet_id, String, null: true
 
     field :statistics, UserStatisticsType, null: false
-    field :authoring_subscribers_count, Integer, null: false
-    field :reading_subscribers_count, Integer, null: false
+    field :subscribers_count, Integer, null: false
+    field :subscribing_count, Integer, null: false
 
-    field :authoring_subscribed, Boolean, null: true
-    field :reading_subscribed, Boolean, null: true
+    field :subscribed, Boolean, null: true
 
     field :accessable, Boolean, null: true
     field :mixin_authorization_valid, Boolean, null: true
@@ -31,12 +30,8 @@ module Types
     field :articles, Types::ArticleConnectionType, null: false
     field :comments, Types::CommentConnectionType, null: false
 
-    def authoring_subscribed
-      context[:current_user]&.authoring_subscribe_user?(object)
-    end
-
-    def reading_subscribed
-      context[:current_user]&.reading_subscribe_user?(object)
+    def subscribed
+      context[:current_user]&.subscribe_user?(object)
     end
 
     def accessable

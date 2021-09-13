@@ -11,6 +11,8 @@
 #  name                        :string
 #  reading_subscribers_count   :integer          default(0)
 #  statistics                  :jsonb
+#  subscribers_count           :integer          default(0)
+#  subscribing_count           :integer          default(0)
 #  created_at                  :datetime         not null
 #  updated_at                  :datetime         not null
 #  mixin_id                    :string

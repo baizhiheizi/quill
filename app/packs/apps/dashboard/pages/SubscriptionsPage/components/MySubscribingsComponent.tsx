@@ -1,33 +1,33 @@
-import { Avatar, Button, Divider, List, Popconfirm, Space } from 'antd';
+import { Avatar, Button, List, Popconfirm } from 'antd';
 import ListComponent from 'apps/dashboard/components/ListComponent/ListComponent';
 import LoadingComponent from 'apps/dashboard/components/LoadingComponent/LoadingComponent';
 import {
-  useMyReadingSubscriptionConnectionQuery,
+  useMySubscribingConnectionQuery,
   User,
-  useToggleReadingSubscribeUserActionMutation,
+  useToggleSubscribeUserActionMutation,
 } from 'graphqlTypes';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-export default function MyReadingSubscriptionsComponent() {
+export default function MySubscribingsComponent() {
   const { t } = useTranslation();
-  const { loading, data, fetchMore, refetch } =
-    useMyReadingSubscriptionConnectionQuery();
+  const { loading, data, fetchMore, refetch } = useMySubscribingConnectionQuery(
+    { fetchPolicy: 'cache-and-network' },
+  );
 
-  const [toggleReadingSubscribeUserAction] =
-    useToggleReadingSubscribeUserActionMutation({
-      update() {
-        refetch();
-      },
-    });
+  const [toggleSubscribeUserAction] = useToggleSubscribeUserActionMutation({
+    update() {
+      refetch();
+    },
+  });
 
   if (loading) {
     return <LoadingComponent />;
   }
 
   const {
-    myReadingSubscriptionConnection: {
-      nodes: readingSubscriptions,
+    mySubscribingConnection: {
+      nodes: subscribings,
       pageInfo: { hasNextPage, endCursor },
     },
   } = data;
@@ -37,7 +37,7 @@ export default function MyReadingSubscriptionsComponent() {
       loading={loading}
       hasNextPage={hasNextPage}
       fetchMore={() => fetchMore({ variables: { after: endCursor } })}
-      dataSource={readingSubscriptions}
+      dataSource={subscribings}
       renderItem={(user: Partial<User>) => (
         <List.Item
           key={user.id}
@@ -45,7 +45,7 @@ export default function MyReadingSubscriptionsComponent() {
             <Popconfirm
               title={t('confirm_to_unsubscribe')}
               onConfirm={() =>
-                toggleReadingSubscribeUserAction({
+                toggleSubscribeUserAction({
                   variables: { input: { mixinId: user.mixinId } },
                 })
               }
@@ -61,16 +61,6 @@ export default function MyReadingSubscriptionsComponent() {
               </a>
             }
             avatar={<Avatar src={user.avatar}>{user.name[0]}</Avatar>}
-            description={
-              <Space split={<Divider type='vertical' />} wrap>
-                {`${t('user.bought_articles_count')}: ${
-                  user.statistics.boughtArticlesCount
-                }`}
-                {`${t(
-                  'user.reader_revenue_total',
-                )}: ${user.statistics.readerRevenueTotalUsd.toFixed(2)}`}
-              </Space>
-            }
           />
         </List.Item>
       )}

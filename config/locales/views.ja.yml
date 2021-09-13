@@ -157,11 +157,14 @@ ja:
   authoring_subscriptions_tip: フォローした作者の記事投稿通知を受け取ります。
   reading_subscriptions: 読者
   reading_subscriptions_tip: フォローした読者の記事購入通知を受け取ります。
+  subscribers: 購読者
+  subscribing: 購読する
   commenting_subscriptions: コメント欄
   commenting_subscriptions_tip: フォローしたコメント欄の通知を受け取ります。
   tag_subscriptions: タグ
   tag_subscriptions_tip: フォローしたタグで新しい記事が作成されたとき、通知を受け取ります。
   confirm_to_unsubscribe: フォロー解除しますか？
+  confirm_to_subscribe: フォローしますか？
   author_transfers: 作者収益
   reader_transfers: 読者収益
   payments: 決済

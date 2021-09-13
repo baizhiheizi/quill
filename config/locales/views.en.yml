@@ -166,11 +166,14 @@ en:
   authoring_subscriptions_tip: You will be notified when authors publish new articles
   reading_subscriptions: Readers
   reading_subscriptions_tip: You will be notified when readers buy new articles
+  subscribers: Subscribers
+  subscribing: Subscribing
   commenting_subscriptions: Comments
   commenting_subscriptions_tip: You will be notified when articles receive new comments
   tag_subscriptions: Tags
   tag_subscriptions_tip: You will be notified when tagged articles created
   confirm_to_unsubscribe: Are you sure to unsubscribe?
+  confirm_to_subscribe: Are you sure to subscribe?
   author_transfers: Author Revenue
   reader_transfers: Reader Revenue
   payments: Payments

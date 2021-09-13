@@ -12,7 +12,9 @@ import { useTranslation } from 'react-i18next';
 export default function MyCommentingSubscriptionsComponent() {
   const { t } = useTranslation();
   const { loading, data, fetchMore, refetch } =
-    useMyCommentingSubscriptionConnectionQuery();
+    useMyCommentingSubscriptionConnectionQuery({
+      fetchPolicy: 'cache-and-network',
+    });
 
   const [toggleCommentingSubscribeArticleAction] =
     useToggleCommentingSubscribeArticleActionMutation({
