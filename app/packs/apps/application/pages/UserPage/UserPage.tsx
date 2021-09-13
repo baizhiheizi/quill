@@ -1,7 +1,13 @@
 import { AlertOutlined, ShakeOutlined } from '@ant-design/icons';
 import { Button, Col, Row, Statistic, Tabs } from 'antd';
 import LoadingComponent from 'apps/application/components/LoadingComponent/LoadingComponent';
-import { imagePath, usePrsdigg, useUserAgent } from 'apps/shared';
+import LoginModalComponent from 'apps/application/components/LoginModalComponent/LoginModalComponent';
+import {
+  imagePath,
+  useCurrentUser,
+  usePrsdigg,
+  useUserAgent,
+} from 'apps/shared';
 import {
   useToggleSubscribeUserActionMutation,
   useUserQuery,
@@ -16,6 +22,7 @@ import UserCommentsComponent from './components/UserCommentsComponent';
 export default function UserPage() {
   const { mixinId } = useParams<{ mixinId: string }>();
   const { t } = useTranslation();
+  const { currentUser } = useCurrentUser();
   const { appId, appName, logoFile } = usePrsdigg();
   const { mixinEnv } = useUserAgent();
   const { loading, data, refetch } = useUserQuery({ variables: { mixinId } });
@@ -42,20 +49,33 @@ export default function UserPage() {
         />
         <div className='mb-2'>{user.name}</div>
         <div className='flex items-center justify-center space-x-2'>
-          <Button
-            type='primary'
-            ghost
-            danger={user?.subscribed}
-            shape='round'
-            icon={<AlertOutlined />}
-            onClick={() =>
-              toggleSubscribeUserAction({
-                variables: { input: { mixinId } },
-              })
-            }
-          >
-            {user?.subscribed ? t('unsubscribe') : t('subscribe')}
-          </Button>
+          {currentUser ? (
+            <Button
+              type='primary'
+              ghost
+              danger={user?.subscribed}
+              shape='round'
+              icon={<AlertOutlined />}
+              onClick={() =>
+                toggleSubscribeUserAction({
+                  variables: { input: { mixinId } },
+                })
+              }
+            >
+              {user?.subscribed ? t('unsubscribe') : t('subscribe')}
+            </Button>
+          ) : (
+            <LoginModalComponent>
+              <Button
+                type='primary'
+                ghost
+                shape='round'
+                icon={<AlertOutlined />}
+              >
+                {t('subscribe')}
+              </Button>
+            </LoginModalComponent>
+          )}
           {mixinEnv && (
             <Button
               type='primary'
