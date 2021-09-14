@@ -59,12 +59,9 @@ class Order < ApplicationRecord
   scope :only_prs, -> { where(asset_id: Currency::PRS_ASSET_ID) }
   scope :only_btc, -> { where(asset_id: Currency::BTC_ASSET_ID) }
 
-  after_create :complete_payment, :update_item_revenue, :update_buyer_statistics_cache
+  after_create :complete_payment, :update_item_revenue, :update_buyer_statistics_cache, :notify_subscribers, notify_buyer
   before_destroy :destroy_notifications
-  after_commit :distribute_async,
-               :notify_subscribers,
-               :notify_buyer,
-               on: :create
+  after_commit :distribute_async, on: :create
 
   aasm column: :state do
     state :paid, initial: true
