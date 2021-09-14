@@ -50,7 +50,7 @@ export default function TransfersComponent(props: {
           <Space>
             <Avatar src={transfer.recipient.avatar} />
             <span>
-              {transfer.recipient.name}({transfer.recipient.uid})
+              {transfer.recipient.name}({transfer.recipient.mixinId})
             </span>
           </Space>
         ) : transfer.opponentId === appId ? (

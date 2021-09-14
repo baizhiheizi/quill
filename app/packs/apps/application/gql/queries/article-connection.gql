@@ -30,6 +30,7 @@ query ArticleConnection(
         name
         avatar
         uid
+        mixinId
         bio
       }
       currency {

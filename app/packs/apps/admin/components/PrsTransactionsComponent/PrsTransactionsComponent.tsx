@@ -50,7 +50,7 @@ export function PrsTransactionsComponent() {
           {transaction.prsAccount ? (
             <span>
               {transaction.prsAccount.user.name}(
-              {transaction.prsAccount.user.uid})
+              {transaction.prsAccount.user.mixinId})
             </span>
           ) : (
             '-'

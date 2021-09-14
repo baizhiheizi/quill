@@ -3,6 +3,7 @@ query MySubscribingConnection($after: String) {
     nodes {
       id
       uid
+      mixinId
       name
       avatar
       bio

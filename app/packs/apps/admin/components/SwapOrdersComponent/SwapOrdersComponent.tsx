@@ -32,7 +32,7 @@ export default function SwapOrdersComponent(props: {
         <Space>
           <Avatar src={swapOrder.payer.avatar} />
           <span>{swapOrder.payer.name}</span>
-          <span>({swapOrder.payer.uid})</span>
+          <span>({swapOrder.payer.mixinId})</span>
         </Space>
       ),
       title: 'Payer',

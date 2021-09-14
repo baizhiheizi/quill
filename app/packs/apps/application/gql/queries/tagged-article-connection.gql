@@ -34,6 +34,7 @@ query TaggedArticleConnection(
         name
         avatar
         uid
+        mixinId
         bio
       }
       currency {

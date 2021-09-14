@@ -34,6 +34,7 @@ query Article($uuid: ID!) {
       avatar
       avatar
       uid
+      mixinId
       bio
       subscribed
     }
@@ -41,6 +42,7 @@ query Article($uuid: ID!) {
       name
       avatar
       uid
+      mixinId
     }
     readers {
       totalCount
