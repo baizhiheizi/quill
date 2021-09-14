@@ -22,7 +22,7 @@
 #
 # Indexes
 #
-#  index_users_on_mixin_id    (mixin_id) UNIQUE
+#  index_users_on_mixin_id    (mixin_id)
 #  index_users_on_mixin_uuid  (mixin_uuid) UNIQUE
 #  index_users_on_statistics  (statistics) USING gin
 #  index_users_on_uid         (uid) UNIQUE
