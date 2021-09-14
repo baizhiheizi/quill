@@ -21,7 +21,7 @@ module Resolvers
         end
 
       q = params[:query].to_s.strip
-      q_ransack = { name_cont: q, mixin_id_cont: q }
+      q_ransack = { name_cont: q, mixin_id_cont: q, uid_cont: q }
       users = users.ransack(q_ransack.merge(m: 'or')).result
 
       case params[:order_by]

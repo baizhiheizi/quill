@@ -24,6 +24,7 @@ query CommentConnection(
         name
         avatar
         uid
+        mixinId
         bio
         createdAt
       }

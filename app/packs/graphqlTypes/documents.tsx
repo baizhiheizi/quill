@@ -2885,6 +2885,7 @@ export const AdminBonusConnectionDocument = gql`
         id
         avatar
         name
+        mixinId
         uid
       }
       transfer {
@@ -4110,6 +4111,7 @@ export const ArticleConnectionDocument = gql`
         name
         avatar
         uid
+        mixinId
         bio
       }
       currency {
@@ -4195,6 +4197,7 @@ export const ArticleDocument = gql`
       avatar
       avatar
       uid
+      mixinId
       bio
       subscribed
     }
@@ -4202,6 +4205,7 @@ export const ArticleDocument = gql`
       name
       avatar
       uid
+      mixinId
     }
     readers {
       totalCount
@@ -4302,6 +4306,7 @@ export const CommentConnectionDocument = gql`
         name
         avatar
         uid
+        mixinId
         bio
         createdAt
       }
@@ -4549,6 +4554,7 @@ export const TaggedArticleConnectionDocument = gql`
         name
         avatar
         uid
+        mixinId
         bio
       }
       currency {
@@ -5780,6 +5786,7 @@ export const MySubscriberConnectionDocument = gql`
     nodes {
       id
       uid
+      mixinId
       name
       avatar
       bio
@@ -5826,6 +5833,7 @@ export const MySubscribingConnectionDocument = gql`
     nodes {
       id
       uid
+      mixinId
       name
       avatar
       bio
