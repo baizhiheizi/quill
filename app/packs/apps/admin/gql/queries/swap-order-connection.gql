@@ -26,6 +26,7 @@ query AdminSwapOrderConnection(
         name
         avatar
         mixinId
+        uid
       }
       payAsset {
         assetId

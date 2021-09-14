@@ -9,11 +9,11 @@ export default function UserCardComponent(props: {
     avatar: string;
     bio?: string;
     name: string;
-    mixinId: string;
+    uid: string;
   };
 }) {
   const {
-    user: { avatar, bio, name, mixinId },
+    user: { avatar, bio, name, uid },
   } = props;
   const { currentUser } = useCurrentUser();
   const { t } = useTranslation();
@@ -24,10 +24,10 @@ export default function UserCardComponent(props: {
         title={
           <Row style={{ alignItems: 'center' }}>
             <Col style={{ flex: 1, marginRight: 10 }}>{name}</Col>
-            {mixinId && (!currentUser || currentUser.mixinId !== mixinId) && (
+            {uid && (!currentUser || currentUser.uid !== uid) && (
               <Col>
                 <Button type='primary' shape='round' size='small'>
-                  <Link to={`/users/${mixinId}`}>{t('detail')}</Link>
+                  <Link to={`/users/${uid}`}>{t('detail')}</Link>
                 </Button>
               </Col>
             )}

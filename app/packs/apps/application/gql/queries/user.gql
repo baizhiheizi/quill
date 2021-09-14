@@ -1,8 +1,8 @@
-query User($mixinId: ID!) {
-  user(mixinId: $mixinId) {
+query User($uid: ID!) {
+  user(uid: $uid) {
     id
     name
-    mixinId
+    uid
     mixinUuid
     avatar
     bio

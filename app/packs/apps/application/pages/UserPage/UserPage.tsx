@@ -20,12 +20,12 @@ import UserArticlesComponent from './components/UserArticlesComponent';
 import UserCommentsComponent from './components/UserCommentsComponent';
 
 export default function UserPage() {
-  const { mixinId } = useParams<{ mixinId: string }>();
+  const { uid } = useParams<{ uid: string }>();
   const { t } = useTranslation();
   const { currentUser } = useCurrentUser();
   const { appId, appName, logoFile } = usePrsdigg();
   const { mixinEnv } = useUserAgent();
-  const { loading, data, refetch } = useUserQuery({ variables: { mixinId } });
+  const { loading, data, refetch } = useUserQuery({ variables: { uid } });
   const [toggleSubscribeUserAction] = useToggleSubscribeUserActionMutation({
     update(_, { data: { toggleSubscribeUserAction: success } }) {
       if (success) {
@@ -58,7 +58,7 @@ export default function UserPage() {
               icon={<AlertOutlined />}
               onClick={() =>
                 toggleSubscribeUserAction({
-                  variables: { input: { mixinId } },
+                  variables: { input: { uid } },
                 })
               }
             >
@@ -131,13 +131,13 @@ export default function UserPage() {
       </Row>
       <Tabs defaultActiveKey='author'>
         <Tabs.TabPane tab={t('published')} key='author'>
-          <UserArticlesComponent mixinId={user.mixinId} type='author' />
+          <UserArticlesComponent uid={user.uid} type='author' />
         </Tabs.TabPane>
         <Tabs.TabPane tab={t('bought')} key='reader'>
-          <UserArticlesComponent mixinId={user.mixinId} type='reader' />
+          <UserArticlesComponent uid={user.uid} type='reader' />
         </Tabs.TabPane>
         <Tabs.TabPane tab={t('commented')} key='comments'>
-          <UserCommentsComponent authorMixinId={user.mixinId} />
+          <UserCommentsComponent authorMixinId={user.uid} />
         </Tabs.TabPane>
       </Tabs>
     </>

@@ -20,6 +20,7 @@ query AdminPaymentConnection(
         name
         mixinId
         avatar
+        uid
       }
       order {
         orderType

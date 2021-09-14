@@ -22,11 +22,13 @@ query AdminOrderConnection(
         name
         avatar
         mixinId
+        uid
       }
       buyer {
         name
         avatar
         mixinId
+        uid
       }
       currency {
         assetId

@@ -52,7 +52,7 @@ export default function ArticleListItemComponent(props: {
       <List.Item.Meta
         style={{ marginBottom: 0 }}
         avatar={
-          <Link to={`/users/${article.author.mixinId}`}>
+          <Link to={`/users/${article.author.uid}`}>
             <Avatar src={article.author.avatar}>
               {article.author.name[0]}
             </Avatar>
@@ -61,7 +61,7 @@ export default function ArticleListItemComponent(props: {
         title={
           <Row>
             <div>
-              <Link to={`/users/${article.author.mixinId}`}>
+              <Link to={`/users/${article.author.uid}`}>
                 {article.author.name}
               </Link>
               <div className='text-xs text-gray-500'>

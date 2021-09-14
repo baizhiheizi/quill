@@ -1,7 +1,8 @@
-query AdminUser($mixinId: ID!) {
-  adminUser(mixinId: $mixinId) {
+query AdminUser($uid: ID!) {
+  adminUser(uid: $uid) {
     id
     name
+    uid
     mixinId
     phone
     mixinUuid

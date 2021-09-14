@@ -118,7 +118,7 @@ export const apolloClient = (uri: string, csrfToken?: string) => {
           ]),
           userArticleConnection: customizedConnectionMergeFunction([
             'type',
-            'mixinId',
+            'uid',
           ]),
           tagConnection: customizedConnectionMergeFunction(),
           transferConnection: customizedConnectionMergeFunction(),

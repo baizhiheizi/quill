@@ -1,0 +1,11 @@
+query CurrentUser {
+  currentUser {
+    id
+    name
+    uid
+    mixinId
+    mixinUuid
+    avatar
+    bio
+  }
+}

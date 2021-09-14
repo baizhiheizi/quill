@@ -33,7 +33,7 @@ query TaggedArticleConnection(
       author {
         name
         avatar
-        mixinId
+        uid
         bio
       }
       currency {

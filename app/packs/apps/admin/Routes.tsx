@@ -33,7 +33,7 @@ export default function Routes() {
       <Route path='/users' exact>
         <UsersPage />
       </Route>
-      <Route path='/users/:mixinId' exact>
+      <Route path='/users/:uid' exact>
         <UserPage />
       </Route>
       <Route path='/articles' exact>

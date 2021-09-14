@@ -46,7 +46,7 @@ export default function MySubscribingsComponent() {
               title={t('confirm_to_unsubscribe')}
               onConfirm={() =>
                 toggleSubscribeUserAction({
-                  variables: { input: { mixinId: user.mixinId } },
+                  variables: { input: { uid: user.uid } },
                 })
               }
             >
@@ -56,7 +56,7 @@ export default function MySubscribingsComponent() {
         >
           <List.Item.Meta
             title={
-              <a href={`/users/${user.mixinId}`} target='_blank'>
+              <a href={`/users/${user.uid}`} target='_blank'>
                 {user.name}
               </a>
             }

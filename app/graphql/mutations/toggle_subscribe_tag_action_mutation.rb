@@ -8,7 +8,7 @@ module Mutations
 
     def resolve(params)
       tag = Tag.find_by(id: params[:id])
-      return { error: '找不到话题' } if tag.blank?
+      return { error: 'Not found' } if tag.blank?
 
       if current_user.subscribe_tag?(tag)
         current_user.destroy_action(:subscribe, target: tag)

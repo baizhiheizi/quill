@@ -26,6 +26,7 @@ query AdminTransferConnection(
       recipient {
         name
         avatar
+        uid
         mixinId
       }
       currency {

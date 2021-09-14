@@ -28,6 +28,7 @@ query AdminArticleConnection(
       author {
         name
         avatar
+        uid
       }
       currency {
         assetId

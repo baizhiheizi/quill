@@ -2,7 +2,7 @@ query MySubscriberConnection($after: String) {
   mySubscriberConnection(after: $after) {
     nodes {
       id
-      mixinId
+      uid
       name
       avatar
       bio

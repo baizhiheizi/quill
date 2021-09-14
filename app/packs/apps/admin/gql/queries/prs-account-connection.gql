@@ -12,6 +12,7 @@ query AdminPrsAccountConnection(
         name
         avatar
         mixinId
+        uid
       }
       createdAt
     }

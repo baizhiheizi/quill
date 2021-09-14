@@ -49,7 +49,7 @@ export default function MySubscribersComponent() {
                   return;
                 }
                 toggleSubscribeUserAction({
-                  variables: { input: { mixinId: user.mixinId } },
+                  variables: { input: { uid: user.uid } },
                 });
               }}
             >
@@ -61,7 +61,7 @@ export default function MySubscribersComponent() {
         >
           <List.Item.Meta
             title={
-              <a href={`/users/${user.mixinId}`} target='_blank'>
+              <a href={`/users/${user.uid}`} target='_blank'>
                 {user.name}
               </a>
             }
