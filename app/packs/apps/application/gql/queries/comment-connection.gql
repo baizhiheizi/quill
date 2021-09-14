@@ -1,14 +1,14 @@
 query CommentConnection(
   $commentableType: String
   $commentableId: ID
-  $authorMixinId: String
+  $uid: String
   $orderBy: String
   $after: String
 ) {
   commentConnection(
     commentableType: $commentableType
     commentableId: $commentableId
-    authorMixinId: $authorMixinId
+    uid: $uid
     orderBy: $orderBy
     after: $after
   ) {

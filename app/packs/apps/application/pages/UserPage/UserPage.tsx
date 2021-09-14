@@ -50,20 +50,22 @@ export default function UserPage() {
         <div className='mb-2'>{user.name}</div>
         <div className='flex items-center justify-center space-x-2'>
           {currentUser ? (
-            <Button
-              type='primary'
-              ghost
-              danger={user?.subscribed}
-              shape='round'
-              icon={<AlertOutlined />}
-              onClick={() =>
-                toggleSubscribeUserAction({
-                  variables: { input: { uid } },
-                })
-              }
-            >
-              {user?.subscribed ? t('unsubscribe') : t('subscribe')}
-            </Button>
+            currentUser.uid !== user.uid && (
+              <Button
+                type='primary'
+                ghost
+                danger={user?.subscribed}
+                shape='round'
+                icon={<AlertOutlined />}
+                onClick={() =>
+                  toggleSubscribeUserAction({
+                    variables: { input: { uid } },
+                  })
+                }
+              >
+                {user?.subscribed ? t('unsubscribe') : t('subscribe')}
+              </Button>
+            )
           ) : (
             <LoginModalComponent>
               <Button
@@ -137,7 +139,7 @@ export default function UserPage() {
           <UserArticlesComponent uid={user.uid} type='reader' />
         </Tabs.TabPane>
         <Tabs.TabPane tab={t('commented')} key='comments'>
-          <UserCommentsComponent authorMixinId={user.uid} />
+          <UserCommentsComponent uid={user.uid} />
         </Tabs.TabPane>
       </Tabs>
     </>

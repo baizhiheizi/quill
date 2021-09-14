@@ -12,16 +12,14 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 
-export default function UserCommentsComponent(props: {
-  authorMixinId: string;
-}) {
-  const { authorMixinId } = props;
+export default function UserCommentsComponent(props: { uid: string }) {
+  const { uid } = props;
   const { t, i18n } = useTranslation();
   const { isMobile } = useUserAgent();
   moment.locale(i18n.language);
   const { data, loading, fetchMore }: CommentConnectionQueryHookResult =
     useCommentConnectionQuery({
-      variables: { authorMixinId },
+      variables: { uid },
     });
 
   if (loading) {

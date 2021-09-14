@@ -4,7 +4,7 @@ module Resolvers
   class CommentConnectionResolver < BaseResolver
     argument :commentable_type, String, required: false
     argument :commentable_id, ID, required: false
-    argument :author_mixin_id, String, required: false
+    argument :uid, String, required: false
     argument :order_by, String, required: false
     argument :after, String, required: false
 
@@ -17,8 +17,8 @@ module Resolvers
           raise 'Commentable Not Found!' if commentable.blank?
 
           commentable.comments
-        elsif params[:author_mixin_id].present?
-          author = User.find_by(mixin_id: params[:author_mixin_id])
+        elsif params[:uid].present?
+          author = User.find_by(uid: params[:uid])
           return if author.blank?
 
           author.comments
