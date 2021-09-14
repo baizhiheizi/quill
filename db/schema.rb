@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_09_12_012928) do
+ActiveRecord::Schema.define(version: 2021_09_13_122313) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -442,9 +442,11 @@ ActiveRecord::Schema.define(version: 2021_09_12_012928) do
     t.integer "locale"
     t.integer "subscribers_count", default: 0
     t.integer "subscribing_count", default: 0
+    t.string "uid"
     t.index ["mixin_id"], name: "index_users_on_mixin_id", unique: true
     t.index ["mixin_uuid"], name: "index_users_on_mixin_uuid", unique: true
     t.index ["statistics"], name: "index_users_on_statistics", using: :gin
+    t.index ["uid"], name: "index_users_on_uid", unique: true
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"

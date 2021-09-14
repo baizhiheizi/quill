@@ -4,6 +4,7 @@ module Types
   class UserType < Types::BaseObject
     field :id, ID, null: false
     field :name, String, null: false
+    field :uid, ID, null: false
     field :mixin_id, ID, null: false
     field :mixin_uuid, String, null: false
     field :phone, String, null: true

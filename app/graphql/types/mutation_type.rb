@@ -22,6 +22,8 @@ module Types
     field :update_notification_setting, mutation: Mutations::UpdateNotificationSettingMutation
     field :create_access_token, mutation: Mutations::CreateAccessTokenMutation
     field :delete_access_token, mutation: Mutations::DeleteAccessTokenMutation
+    field :update_user_profile, mutation: Mutations::UpdateUserProfileMutation
+    field :sync_user_profile, mutation: Mutations::SyncUserProfileMutation
 
     # admin
     field :admin_login, mutation: Mutations::AdminLoginMutation

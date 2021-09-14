@@ -2,12 +2,12 @@
 
 module Mutations
   class ToggleSubscribeUserActionMutation < Mutations::BaseMutation
-    argument :mixin_id, String, required: true
+    argument :uid, String, required: true
 
     type Boolean
 
     def resolve(params)
-      user = User.find_by(mixin_id: params[:mixin_id])
+      user = User.find_by(uid: params[:uid])
       return if user.blank? || current_user == user
 
       if current_user.subscribe_user?(user)

@@ -23,7 +23,7 @@ query CommentConnection(
       author {
         name
         avatar
-        mixinId
+        uid
         bio
         createdAt
       }

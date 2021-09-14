@@ -47,7 +47,7 @@ export default function MyTagSubscriptionsComponent() {
               title={t('confirm_to_unsubscribe')}
               onConfirm={() =>
                 toggleTagSubscribeUserAction({
-                  variables: { input: { mixinId: tag.id } },
+                  variables: { input: { id: tag.id } },
                 })
               }
             >

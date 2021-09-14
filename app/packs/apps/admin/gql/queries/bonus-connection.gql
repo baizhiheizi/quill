@@ -16,7 +16,7 @@ query AdminBonusConnection($after: String) {
         id
         avatar
         name
-        mixinId
+        uid
       }
       transfer {
         snapshotId

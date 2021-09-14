@@ -11,8 +11,8 @@ import React from 'react';
 import { useParams } from 'react-router-dom';
 
 export default function UserPage() {
-  const { mixinId } = useParams<{ mixinId: string }>();
-  const { loading, data } = useAdminUserQuery({ variables: { mixinId } });
+  const { uid } = useParams<{ uid: string }>();
+  const { loading, data } = useAdminUserQuery({ variables: { uid } });
 
   if (loading) {
     return <LoadingComponent />;
@@ -30,6 +30,7 @@ export default function UserPage() {
           </Space>
         </Descriptions.Item>
         <Descriptions.Item label='MixinId'>{user.mixinId}</Descriptions.Item>
+        <Descriptions.Item label='UID'>{user.uid}</Descriptions.Item>
         <Descriptions.Item label='Articles Count'>
           {user.statistics.articlesCount}
         </Descriptions.Item>

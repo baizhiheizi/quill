@@ -15,6 +15,7 @@
 #  statistics                  :jsonb
 #  subscribers_count           :integer          default(0)
 #  subscribing_count           :integer          default(0)
+#  uid                         :string
 #  created_at                  :datetime         not null
 #  updated_at                  :datetime         not null
 #  mixin_id                    :string
@@ -24,6 +25,7 @@
 #  index_users_on_mixin_id    (mixin_id) UNIQUE
 #  index_users_on_mixin_uuid  (mixin_uuid) UNIQUE
 #  index_users_on_statistics  (statistics) USING gin
+#  index_users_on_uid         (uid) UNIQUE
 #
 class User < ApplicationRecord
   include Authenticatable
@@ -69,6 +71,8 @@ class User < ApplicationRecord
   before_validation :setup_attributes
 
   validates :name, presence: true
+  validates :uid, presence: true, uniqueness: true
+
   enum locale: I18n.available_locales
 
   after_commit on: :create do
@@ -184,7 +188,7 @@ class User < ApplicationRecord
     }
   end
 
-  def update_profile(profile = {})
+  def update_profile(profile = nil)
     profile ||= mixin_authorization.raw
     return if profile.blank?
 

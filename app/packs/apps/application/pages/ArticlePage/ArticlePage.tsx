@@ -101,13 +101,13 @@ export default function ArticlePage() {
       <div className='flex flex-wrap items-center mb-4 text-gray-500 space-x-2'>
         <Link
           className='flex items-center space-x-2'
-          to={`/users/${article.author.mixinId}`}
+          to={`/users/${article.author.uid}`}
         >
           <img className='w-6 h-6 rounded-full' src={article.author.avatar} />
           <span>{article.author.name}</span>
         </Link>
         <span>{moment(article.publishedAt).format('YYYY/MM/DD HH:mm')}</span>
-        {currentUser?.mixinId !== article.author.mixinId &&
+        {currentUser?.uid !== article.author.uid &&
           !article.author.subscribed &&
           (currentUser ? (
             <Button
@@ -116,7 +116,7 @@ export default function ArticlePage() {
               size='small'
               onClick={() => {
                 toggleSubscribeUserAction({
-                  variables: { input: { mixinId: article.author.mixinId } },
+                  variables: { input: { uid: article.author.uid } },
                 });
               }}
             >
@@ -304,7 +304,7 @@ export default function ArticlePage() {
           <Col>
             {article.authorized &&
             currentUser &&
-            currentUser.mixinId !== article.author.mixinId ? (
+            currentUser.uid !== article.author.uid ? (
               <Button
                 type={article.upvoted ? 'primary' : 'default'}
                 size='large'
@@ -356,7 +356,7 @@ export default function ArticlePage() {
           <Col>
             {article.authorized &&
             currentUser &&
-            currentUser.mixinId !== article.author.mixinId ? (
+            currentUser.uid !== article.author.uid ? (
               <Button
                 type={article.downvoted ? 'primary' : 'default'}
                 danger={article.downvoted}
@@ -383,7 +383,7 @@ export default function ArticlePage() {
           </Col>
         </Row>
       </div>
-      {article.authorized && article.author.mixinId !== currentUser?.mixinId && (
+      {article.authorized && article.author.uid !== currentUser?.uid && (
         <div style={{ marginBottom: '1rem' }}>
           <div style={{ textAlign: 'center' }}>
             {currentUser ? (
@@ -452,7 +452,7 @@ export default function ArticlePage() {
               {article.randomReaders.map((reader: Partial<User>) => (
                 <img
                   className='w-8  h-8 rounded-full m-0.5'
-                  key={reader.mixinId}
+                  key={reader.uid}
                   src={reader.avatar}
                 />
               ))}

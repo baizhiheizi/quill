@@ -186,7 +186,7 @@ export default function CommentsComponent(props: {
                         !authorized ||
                         !currentUser ||
                         comment.upvoted ||
-                        comment.author.mixinId === currentUser.mixinId
+                        comment.author.uid === currentUser.uid
                       ) {
                         return;
                       } else {
@@ -207,7 +207,7 @@ export default function CommentsComponent(props: {
                         !authorized ||
                         !currentUser ||
                         comment.downvoted ||
-                        comment.author.mixinId === currentUser.mixinId
+                        comment.author.uid === currentUser.uid
                       ) {
                         return;
                       } else {
@@ -244,7 +244,7 @@ ${comment.content.replace(/^/gm, '> ')}
                 ]}
                 author={comment.author.name}
                 avatar={
-                  <Link to={`/users/${comment.author.mixinId}`}>
+                  <Link to={`/users/${comment.author.uid}`}>
                     <Avatar src={comment.author.avatar}>
                       {comment.author.name[0]}
                     </Avatar>

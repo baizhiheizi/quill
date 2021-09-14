@@ -33,14 +33,14 @@ query Article($uuid: ID!) {
       name
       avatar
       avatar
-      mixinId
+      uid
       bio
       subscribed
     }
     randomReaders {
       name
       avatar
-      mixinId
+      uid
     }
     readers {
       totalCount

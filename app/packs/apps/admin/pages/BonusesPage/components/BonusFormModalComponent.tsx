@@ -112,7 +112,7 @@ export default function BonusesFormModalComponent(props: {
         <Form.Item name='userId' label='User' rules={[{ required: true }]}>
           <Select
             showSearch
-            placeholder='Search user name/mixinId'
+            placeholder='Search user name/uid'
             filterOption={false}
             notFoundContent={loading ? <Spin size='small' /> : null}
             onSearch={(value) => setQuery(value)}
@@ -121,7 +121,7 @@ export default function BonusesFormModalComponent(props: {
               <Select.Option key={user.id} value={user.id}>
                 <Space>
                   <span>{user.name}</span>
-                  <span>{user.mixinId}</span>
+                  <span>{user.uid}</span>
                 </Space>
               </Select.Option>
             ))}

@@ -123,6 +123,11 @@ export function UsersComponent(props: {
       title: 'Mixin ID',
     },
     {
+      dataIndex: 'uid',
+      key: 'uid',
+      title: 'UID',
+    },
+    {
       dataIndex: 'name',
       key: 'name',
       render: (name, user) => (

@@ -22,6 +22,7 @@ query AdminCommentConnection(
         name
         avatar
         mixinId
+        uid
         bio
         createdAt
       }

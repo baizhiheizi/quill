@@ -2,12 +2,12 @@
 
 module Resolvers
   class UserResolver < BaseResolver
-    argument :mixin_id, ID, required: true
+    argument :uid, ID, required: true
 
     type Types::UserType, null: true
 
-    def resolve(mixin_id:)
-      User.find_by mixin_id: mixin_id
+    def resolve(uid:)
+      User.find_by uid: uid
     end
   end
 end

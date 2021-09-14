@@ -1,0 +1,8 @@
+mutation SyncUserProfile($input: SyncUserProfileMutationInput!) {
+  syncUserProfile(input: $input) {
+    id
+    name
+    avatar
+    bio
+  }
+}

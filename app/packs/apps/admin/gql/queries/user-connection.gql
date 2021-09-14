@@ -13,6 +13,7 @@ query AdminUserConnection(
     nodes {
       id
       name
+      uid
       mixinId
       phone
       mixinUuid

@@ -1,5 +1,5 @@
-query UserArticleConnection($mixinId: ID!, $type: String!, $after: String) {
-  userArticleConnection(mixinId: $mixinId, type: $type, after: $after) {
+query UserArticleConnection($uid: ID!, $type: String!, $after: String) {
+  userArticleConnection(uid: $uid, type: $type, after: $after) {
     nodes {
       uuid
       title

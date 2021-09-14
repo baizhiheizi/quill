@@ -10,14 +10,14 @@ import { Link } from 'react-router-dom';
 
 export default function UserArticlesComponent(props: {
   type: 'author' | 'reader';
-  mixinId: string;
+  uid: string;
 }) {
-  const { type, mixinId } = props;
+  const { type, uid } = props;
   const { t, i18n } = useTranslation();
   moment.locale(i18n.language);
   const { currentUser } = useCurrentUser();
   const { data, loading, fetchMore } = useUserArticleConnectionQuery({
-    variables: { type, mixinId },
+    variables: { type, uid },
   });
 
   if (loading) {

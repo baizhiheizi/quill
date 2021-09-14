@@ -21,6 +21,7 @@ query AdminMixinNetworkSnapshotConnection(
         name
         avatar
         mixinId
+        uid
       }
       article {
         id

@@ -4,13 +4,14 @@ import { useTranslation } from 'react-i18next';
 import { useHistory, useLocation } from 'react-router-dom';
 import AccessTokensComponent from './components/AccessTokensComponent';
 import NotificationSettingComponent from './components/NotificationSettingComponent';
+import ProfileComponent from './components/ProfileCompnent';
 
 export default function SettingsPage() {
   const location = useLocation<{ activeKey: string }>();
   const history = useHistory();
   const { t } = useTranslation();
   const [activeKey, setActiveKey] = useState(
-    location.state?.activeKey || 'notification',
+    location.state?.activeKey || 'profile',
   );
 
   return (
@@ -29,6 +30,9 @@ export default function SettingsPage() {
           });
         }}
       >
+        <Tabs.TabPane key='profile' tab={t('profile')}>
+          <ProfileComponent />
+        </Tabs.TabPane>
         <Tabs.TabPane key='notification' tab={t('notification')}>
           <NotificationSettingComponent />
         </Tabs.TabPane>

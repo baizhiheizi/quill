@@ -2,14 +2,14 @@
 
 module Resolvers
   class UserArticleConnectionResolver < BaseResolver
-    argument :mixin_id, ID, required: true
+    argument :uid, ID, required: true
     argument :type, String, required: true
     argument :after, String, required: false
 
     type Types::ArticleConnectionType, null: false
 
     def resolve(params)
-      user = User.find_by mixin_id: params[:mixin_id]
+      user = User.find_by uid: params[:uid]
       case params[:type]
       when 'author'
         user.articles.only_published.order(created_at: :desc)
