@@ -11,14 +11,10 @@ import { useTranslation } from 'react-i18next';
 
 export default function MySubscribersComponent() {
   const { t } = useTranslation();
-  const { loading, data, fetchMore, refetch } = useMySubscriberConnectionQuery({
+  const { loading, data, fetchMore } = useMySubscriberConnectionQuery({
     fetchPolicy: 'cache-and-network',
   });
-  const [toggleSubscribeUserAction] = useToggleSubscribeUserActionMutation({
-    update() {
-      refetch();
-    },
-  });
+  const [toggleSubscribeUserAction] = useToggleSubscribeUserActionMutation();
 
   if (loading) {
     return <LoadingComponent />;

@@ -853,7 +853,7 @@ export type Mutation = {
   syncUserProfile?: Maybe<User>;
   toggleCommentingSubscribeArticleAction?: Maybe<Article>;
   toggleSubscribeTagAction?: Maybe<Tag>;
-  toggleSubscribeUserAction?: Maybe<Scalars['Boolean']>;
+  toggleSubscribeUserAction?: Maybe<User>;
   updateArticle?: Maybe<Article>;
   updateNotificationSetting?: Maybe<NotificationSetting>;
   updateUserProfile?: Maybe<Scalars['Boolean']>;
@@ -1345,6 +1345,8 @@ export type Query = {
   user?: Maybe<User>;
   userArticleConnection: ArticleConnection;
   userChart: Scalars['String'];
+  userSubscriberConnection: UserConnection;
+  userSubscribingConnection: UserConnection;
 };
 
 
@@ -1689,6 +1691,24 @@ export type QueryUserArticleConnectionArgs = {
   first?: Maybe<Scalars['Int']>;
   last?: Maybe<Scalars['Int']>;
   type: Scalars['String'];
+  uid: Scalars['ID'];
+};
+
+
+export type QueryUserSubscriberConnectionArgs = {
+  after?: Maybe<Scalars['String']>;
+  before?: Maybe<Scalars['String']>;
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  uid: Scalars['ID'];
+};
+
+
+export type QueryUserSubscribingConnectionArgs = {
+  after?: Maybe<Scalars['String']>;
+  before?: Maybe<Scalars['String']>;
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
   uid: Scalars['ID'];
 };
 
@@ -3979,7 +3999,10 @@ export type ToggleSubscribeTagActionMutationResult = Apollo.MutationResult<Toggl
 export type ToggleSubscribeTagActionMutationOptions = Apollo.BaseMutationOptions<ToggleSubscribeTagActionMutation, ToggleSubscribeTagActionMutationVariables>;
 export const ToggleSubscribeUserActionDocument = gql`
     mutation ToggleSubscribeUserAction($input: ToggleSubscribeUserActionMutationInput!) {
-  toggleSubscribeUserAction(input: $input)
+  toggleSubscribeUserAction(input: $input) {
+    id
+    subscribed
+  }
 }
     `;
 export type ToggleSubscribeUserActionMutationFn = Apollo.MutationFunction<ToggleSubscribeUserActionMutation, ToggleSubscribeUserActionMutationVariables>;
@@ -4711,6 +4734,102 @@ export function useUserArticleConnectionLazyQuery(baseOptions?: Apollo.LazyQuery
 export type UserArticleConnectionQueryHookResult = ReturnType<typeof useUserArticleConnectionQuery>;
 export type UserArticleConnectionLazyQueryHookResult = ReturnType<typeof useUserArticleConnectionLazyQuery>;
 export type UserArticleConnectionQueryResult = Apollo.QueryResult<UserArticleConnectionQuery, UserArticleConnectionQueryVariables>;
+export const UserSubscriberConnectionDocument = gql`
+    query UserSubscriberConnection($uid: ID!, $after: String) {
+  userSubscriberConnection(uid: $uid, after: $after) {
+    nodes {
+      id
+      uid
+      mixinId
+      name
+      avatar
+      bio
+      subscribed
+    }
+    pageInfo {
+      hasNextPage
+      endCursor
+    }
+  }
+}
+    `;
+
+/**
+ * __useUserSubscriberConnectionQuery__
+ *
+ * To run a query within a React component, call `useUserSubscriberConnectionQuery` and pass it any options that fit your needs.
+ * When your component renders, `useUserSubscriberConnectionQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useUserSubscriberConnectionQuery({
+ *   variables: {
+ *      uid: // value for 'uid'
+ *      after: // value for 'after'
+ *   },
+ * });
+ */
+export function useUserSubscriberConnectionQuery(baseOptions: Apollo.QueryHookOptions<UserSubscriberConnectionQuery, UserSubscriberConnectionQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<UserSubscriberConnectionQuery, UserSubscriberConnectionQueryVariables>(UserSubscriberConnectionDocument, options);
+      }
+export function useUserSubscriberConnectionLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UserSubscriberConnectionQuery, UserSubscriberConnectionQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<UserSubscriberConnectionQuery, UserSubscriberConnectionQueryVariables>(UserSubscriberConnectionDocument, options);
+        }
+export type UserSubscriberConnectionQueryHookResult = ReturnType<typeof useUserSubscriberConnectionQuery>;
+export type UserSubscriberConnectionLazyQueryHookResult = ReturnType<typeof useUserSubscriberConnectionLazyQuery>;
+export type UserSubscriberConnectionQueryResult = Apollo.QueryResult<UserSubscriberConnectionQuery, UserSubscriberConnectionQueryVariables>;
+export const UserSubscribingConnectionDocument = gql`
+    query UserSubscribingConnection($uid: ID!, $after: String) {
+  userSubscribingConnection(uid: $uid, after: $after) {
+    nodes {
+      id
+      uid
+      mixinId
+      name
+      avatar
+      bio
+      subscribed
+    }
+    pageInfo {
+      hasNextPage
+      endCursor
+    }
+  }
+}
+    `;
+
+/**
+ * __useUserSubscribingConnectionQuery__
+ *
+ * To run a query within a React component, call `useUserSubscribingConnectionQuery` and pass it any options that fit your needs.
+ * When your component renders, `useUserSubscribingConnectionQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useUserSubscribingConnectionQuery({
+ *   variables: {
+ *      uid: // value for 'uid'
+ *      after: // value for 'after'
+ *   },
+ * });
+ */
+export function useUserSubscribingConnectionQuery(baseOptions: Apollo.QueryHookOptions<UserSubscribingConnectionQuery, UserSubscribingConnectionQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<UserSubscribingConnectionQuery, UserSubscribingConnectionQueryVariables>(UserSubscribingConnectionDocument, options);
+      }
+export function useUserSubscribingConnectionLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UserSubscribingConnectionQuery, UserSubscribingConnectionQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<UserSubscribingConnectionQuery, UserSubscribingConnectionQueryVariables>(UserSubscribingConnectionDocument, options);
+        }
+export type UserSubscribingConnectionQueryHookResult = ReturnType<typeof useUserSubscribingConnectionQuery>;
+export type UserSubscribingConnectionLazyQueryHookResult = ReturnType<typeof useUserSubscribingConnectionLazyQuery>;
+export type UserSubscribingConnectionQueryResult = Apollo.QueryResult<UserSubscribingConnectionQuery, UserSubscribingConnectionQueryVariables>;
 export const UserDocument = gql`
     query User($uid: ID!) {
   user(uid: $uid) {

@@ -1,5 +1,8 @@
 mutation ToggleSubscribeUserAction(
   $input: ToggleSubscribeUserActionMutationInput!
 ) {
-  toggleSubscribeUserAction(input: $input)
+  toggleSubscribeUserAction(input: $input) {
+    id
+    subscribed
+  }
 }

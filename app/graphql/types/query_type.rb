@@ -16,6 +16,8 @@ module Types
 
     field :user, resolver: Resolvers::UserResolver
     field :user_article_connection, resolver: Resolvers::UserArticleConnectionResolver
+    field :user_subscriber_connection, resolver: Resolvers::UserSubscriberConnectionResolver
+    field :user_subscribing_connection, resolver: Resolvers::UserSubscribingConnectionResolver
 
     field :swappable_currencies, resolver: Resolvers::SwappableCurrenciesResolver
     field :pricable_currencies, resolver: Resolvers::PricableCurrenciesResolver

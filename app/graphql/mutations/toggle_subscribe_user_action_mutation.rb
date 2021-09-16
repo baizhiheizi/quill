@@ -4,7 +4,7 @@ module Mutations
   class ToggleSubscribeUserActionMutation < Mutations::BaseMutation
     argument :uid, String, required: true
 
-    type Boolean
+    type Types::UserType
 
     def resolve(params)
       user = User.find_by(uid: params[:uid])
@@ -15,6 +15,8 @@ module Mutations
       else
         current_user.create_action(:subscribe, target: user)
       end
+
+      user.reload
     end
   end
 end

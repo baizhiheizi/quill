@@ -22,11 +22,11 @@ module Types
     field :payment_total_usd, Float, null: true
 
     def author_revenue_total_usd
-      object['author_revenue_total_prs'].to_f * Currency.prs.price_usd.to_f + object['author_revenue_total_btc'].to_f * Currency.btc.price_usd.to_f
+      (object['author_revenue_total_prs'].to_f * Currency.prs.price_usd.to_f) + (object['author_revenue_total_btc'].to_f * Currency.btc.price_usd.to_f)
     end
 
     def reader_revenue_total_usd
-      object['reader_revenue_total_prs'].to_f * Currency.prs.price_usd.to_f + object['reader_revenue_total_btc'].to_f * Currency.btc.price_usd.to_f.to_f
+      (object['reader_revenue_total_prs'].to_f * Currency.prs.price_usd.to_f) + (object['reader_revenue_total_btc'].to_f * Currency.btc.price_usd.to_f.to_f)
     end
 
     def revenue_total_usd

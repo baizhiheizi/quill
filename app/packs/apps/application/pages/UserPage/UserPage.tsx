@@ -18,6 +18,8 @@ import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import UserArticlesComponent from './components/UserArticlesComponent';
 import UserCommentsComponent from './components/UserCommentsComponent';
+import UserSubscribersComponent from './components/UserSubscribersComponent';
+import UserSubscribingsComponent from './components/UserSubscribingsComponent';
 
 export default function UserPage() {
   const { uid } = useParams<{ uid: string }>();
@@ -134,6 +136,12 @@ export default function UserPage() {
       <Tabs defaultActiveKey='author'>
         <Tabs.TabPane tab={t('published')} key='author'>
           <UserArticlesComponent uid={user.uid} type='author' />
+        </Tabs.TabPane>
+        <Tabs.TabPane tab={t('subscribing')} key='subscribing'>
+          <UserSubscribingsComponent uid={user.uid} />
+        </Tabs.TabPane>
+        <Tabs.TabPane tab={t('subscribers')} key='subscribers'>
+          <UserSubscribersComponent uid={user.uid} />
         </Tabs.TabPane>
         <Tabs.TabPane tab={t('bought')} key='reader'>
           <UserArticlesComponent uid={user.uid} type='reader' />

@@ -191,7 +191,7 @@ class Transfer < ApplicationRecord
   def self._set_author_revenue_total_in_usd_cache
     prs_amount = author_revenue.only_prs.sum(:amount)
     btc_amount = author_revenue.only_btc.sum(:amount)
-    res = prs_amount * Currency.prs.price_usd.to_f + btc_amount * Currency.btc.price_usd.to_f
+    res = (prs_amount * Currency.prs.price_usd.to_f) + (btc_amount * Currency.btc.price_usd.to_f)
     Global.redis.set 'author_revenue_total_in_usd', res, ex: 1.minute
 
     res
@@ -204,7 +204,7 @@ class Transfer < ApplicationRecord
   def self._set_reader_revenue_total_in_usd_cache
     prs_amount = reader_revenue.only_prs.sum(:amount)
     btc_amount = reader_revenue.only_btc.sum(:amount)
-    res = prs_amount * Currency.prs.price_usd.to_f + btc_amount * Currency.btc.price_usd.to_f
+    res = (prs_amount * Currency.prs.price_usd.to_f) + (btc_amount * Currency.btc.price_usd.to_f)
     Global.redis.set 'reader_revenue_total_in_usd', res, ex: 1.minute
 
     res

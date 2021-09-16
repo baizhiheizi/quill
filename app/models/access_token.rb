@@ -35,6 +35,6 @@ class AccessToken < ApplicationRecord
   default_scope { where(deleted_at: nil) }
 
   def desensitized_value
-    value.first(4) + '*' * 6 + value.last(4)
+    value.first(4) + ('*' * 6) + value.last(4)
   end
 end
