@@ -36,6 +36,8 @@ class Action < ApplicationRecord
   end
 
   def notify_target
+    return unless target.is_a?(User)
+
     case action_type.to_sym
     when :subscribe
       SubscribeUserActionCreatedNotification.with(action: self).deliver(target)
