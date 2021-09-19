@@ -18,15 +18,18 @@ module Authenticatable
       )
       raw = (auth.raw.presence || {}).merge(res['data'])
       auth.raw = raw
-      if auth.raw_changed?
-        auth.update! raw: raw
-        auth.user.update_profile raw
-      end
+      auth.update! raw: raw if auth.raw_changed?
 
       if auth.user.present?
         user = auth.user
+        user.update_profile raw
       else
-        user = create mixin_authorization: auth
+        user = create!(
+          avatar_url: raw['avatar_url'],
+          name: raw['full_name'],
+          mixin_id: raw['identity_number'],
+          mixin_uuid: raw['user_id']
+        )
         auth.update user: user
       end
 

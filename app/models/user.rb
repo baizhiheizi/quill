@@ -68,9 +68,11 @@ class User < ApplicationRecord
   has_one :wallet, class_name: 'MixinNetworkUser', as: :owner, dependent: :nullify
   has_one :notification_setting, dependent: :destroy
 
-  before_validation :setup_attributes
+  before_validation :setup_attributes, on: :create
 
   validates :name, presence: true
+  validates :mixin_id, presence: true
+  validates :mixin_uuid, presence: true
   validates :uid, presence: true, uniqueness: true
 
   enum locale: I18n.available_locales
@@ -251,13 +253,11 @@ class User < ApplicationRecord
   private
 
   def setup_attributes
-    return if mixin_authorization.blank?
-
-    assign_attributes(
-      avatar_url: mixin_authorization.raw['avatar_url'],
-      name: mixin_authorization.raw['full_name'],
-      mixin_id: mixin_authorization.raw['identity_number'],
-      mixin_uuid: mixin_authorization.raw['user_id']
-    )
+    self.uid =
+      if mixin_id == '0'
+        SecureRandom.alphanumeric 10
+      else
+        mixin_id
+      end
   end
 end
