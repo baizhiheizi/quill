@@ -70,7 +70,7 @@ export default function UserSubscribingsComponent(props: { uid: string }) {
                   }}
                 >
                   <Button size='small' disabled={user.subscribed}>
-                    {user.subscribed ? 'subscribed' : t('subscribe')}
+                    {user.subscribed ? t('subscribed') : t('subscribe')}
                   </Button>
                 </Popconfirm>
               )}
