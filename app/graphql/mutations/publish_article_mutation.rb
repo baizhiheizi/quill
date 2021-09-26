@@ -29,7 +29,8 @@ module Mutations
 
         article_references.each do |reference|
           _ref = current_user.bought_articles.find_by(uuid: reference.reference_id)
-          _ref ||= current_user.available_articles.find_by(uuid: reference.reference_id)
+          _ref ||= current_user.articles.only_published.find_by(uuid: reference.reference_id)
+          _ref ||= Article.only_free.only_published.find_by(uuid: reference.reference_id)
           next if _ref.blank?
 
           @article.article_references.new(
