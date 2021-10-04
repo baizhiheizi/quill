@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/rails/webpacker.git
-  revision: 540b04de8ae7ddeefe82a19c704e10cdbf9d772e
+  revision: c039a661ba59f51d47508d25c49655973a472a96
   specs:
     webpacker (6.0.0.rc.5)
       activesupport (>= 5.2)
@@ -259,9 +259,9 @@ GEM
     multi_xml (0.6.0)
     netrc (0.11.0)
     nio4r (2.5.8)
-    nokogiri (1.12.4-x86_64-darwin)
+    nokogiri (1.12.5-x86_64-darwin)
       racc (~> 1.4)
-    nokogiri (1.12.4-x86_64-linux)
+    nokogiri (1.12.5-x86_64-linux)
       racc (~> 1.4)
     noticed (1.4.1)
       http (>= 4.0.0)
