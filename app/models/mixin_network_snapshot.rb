@@ -138,7 +138,7 @@ class MixinNetworkSnapshot < ApplicationRecord
         swap_order.place_payment_order!
       end
     when '4swapRefund'
-      swap_order.reject!
+      swap_order.reject! if swap_order.may_reject?
     end
   end
 
