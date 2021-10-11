@@ -39,7 +39,7 @@
     "css-loader": "^6.3.0",
     "css-minimizer-webpack-plugin": "^3.1.1",
     "d3-array": "3.1.1",
-    "esbuild-loader": "^2.15.1",
+    "esbuild-loader": "^2.16.0",
     "graphql": "^15.6.1",
     "i18next": "^21.2.4",
     "i18next-browser-languagedetector": "^6.1.2",
