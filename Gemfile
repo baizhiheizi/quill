@@ -22,7 +22,7 @@ gem 'turbolinks', '~> 5'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jbuilder', '~> 2.7'
 # Use Redis adapter to run Action Cable in production
-gem 'redis', '~> 4.1'
+gem 'redis', '~> 4.5'
 # Map Redis types directly to Ruby objects
 gem 'redis-objects'
 # This gem adds a Redis::Namespace class which can be used to namespace Redis keys. http://redis.io
