@@ -48,7 +48,7 @@
     "js-yaml": "^4.1.0",
     "katex": "^0.13.18",
     "less": "^4.1.2",
-    "less-loader": "^10.1.0",
+    "less-loader": "^10.2.0",
     "mark.js": "^8.11.1",
     "mermaid": "8.11.5",
     "mini-css-extract-plugin": "^2.4.2",
