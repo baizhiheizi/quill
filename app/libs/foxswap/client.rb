@@ -6,7 +6,7 @@ module Foxswap
 
     attr_reader :host
 
-    def initialize(host = 'f1-mtgswap-api.firesbox.com')
+    def initialize(host = 'api.4swap.org')
       @host = host
     end
 
