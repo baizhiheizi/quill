@@ -150,6 +150,33 @@ export default function RewardModalComponent(props: {
                   value: '0.005',
                 },
               ]
+            : currency.symbol === 'JPYC'
+            ? [
+                {
+                  label: '10',
+                  value: '10',
+                },
+                {
+                  label: '50',
+                  value: '50',
+                },
+                {
+                  label: '100',
+                  value: '100',
+                },
+                {
+                  label: '1000',
+                  value: '1000',
+                },
+                {
+                  label: '10000',
+                  value: '10000',
+                },
+                {
+                  label: '50000',
+                  value: '50000',
+                },
+              ]
             : [
                 {
                   label: (priceBaseUsd / currency.priceUsd).toFixed(6),

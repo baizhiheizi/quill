@@ -40,6 +40,7 @@ class Article < ApplicationRecord
   SUPPORTED_ASSETS = Settings.supported_assets || [Currency::BTC_ASSET_ID]
   MINIMUM_PRICE_PRS = 1
   MINIMUM_PRICE_BTC = 0.000_001
+  MINIMUM_PRICE_JPYC = 10
   AUTHOR_REVENUE_RATIO_DEFAULT = 0.5
   READERS_REVENUE_RATIO_DEFAULT = 0.4
   PLATFORM_REVENUE_RATIO_DEFAULT = 0.1
@@ -327,6 +328,8 @@ class Article < ApplicationRecord
     case asset_id
     when Currency::BTC_ASSET_ID
       errors.add(:price, 'at least 0.000001 BTC') if price.positive? && price.to_f < MINIMUM_PRICE_BTC
+    when Currency::JPYC_ASSET_ID
+      errors.add(:price, 'at least 100 BTC') if price.positive? && price.to_f < MINIMUM_PRICE_BTC
     end
   end
 

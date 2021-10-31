@@ -36,7 +36,6 @@ export default function DraftedArticleEditComponent(props: {
 }) {
   const { article } = props;
   const { t, i18n } = useTranslation();
-  const history = useHistory();
   const [form] = Form.useForm();
   const [tags, setTags] = useState<string[]>(article.tagNames || []);
   const [publishModalVisible, setPublishModalVisible] = useState(false);
@@ -285,6 +284,11 @@ function PublishArticleForm(props: { article: Partial<Article> }) {
                       (value === 0.0 || value >= 0.000_001)
                     ) {
                       return Promise.resolve();
+                    } else if (
+                      currency.symbol === 'JPYC' &&
+                      (value === 0.0 || value >= 10)
+                    ) {
+                      return Promise.resolve();
                     } else {
                       return Promise.reject(t('article.form.price_is_too_low'));
                     }
@@ -296,7 +300,13 @@ function PublishArticleForm(props: { article: Partial<Article> }) {
                 onChange={(value) => setPrice(parseFloat(value.toString()))}
                 style={{ minWidth: 130 }}
                 min={0.0}
-                step='0.000001'
+                step={
+                  currency.symbol === 'BTC'
+                    ? '0.000001'
+                    : currency.symbol === 'JPYC'
+                    ? '1'
+                    : '0.1'
+                }
                 precision={6}
                 placeholder='0.0'
               />

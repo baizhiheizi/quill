@@ -171,6 +171,11 @@ export default function PublishedArticleEditComponent(props: {
                       value >= 0.000_001
                     ) {
                       return Promise.resolve();
+                    } else if (
+                      article.currency.symbol === 'JPYC' &&
+                      value >= 10
+                    ) {
+                      return Promise.resolve();
                     } else if (article.price == value) {
                       return Promise.resolve();
                     } else {
@@ -186,8 +191,20 @@ export default function PublishedArticleEditComponent(props: {
                   setEditedPrice(parseFloat(value.toString()))
                 }
                 style={{ minWidth: 130 }}
-                min={0.000_001}
-                step='0.000001'
+                min={
+                  article.currency.symbol === 'BTC'
+                    ? 0.000001
+                    : article.currency.symbol === 'JPYC'
+                    ? 10
+                    : 1
+                }
+                step={
+                  article.currency.symbol === 'BTC'
+                    ? '0.000001'
+                    : article.currency.symbol === 'JPYC'
+                    ? '1'
+                    : '0.1'
+                }
                 precision={6}
                 placeholder='0.0'
               />
