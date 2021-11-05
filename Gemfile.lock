@@ -167,7 +167,7 @@ GEM
     graphiql-rails (1.8.0)
       railties
       sprockets-rails
-    graphql (1.12.17)
+    graphql (1.12.18)
     groupdate (5.2.2)
       activesupport (>= 5)
     hamster (3.0.0)
@@ -186,7 +186,7 @@ GEM
     httparty (0.20.0)
       mime-types (~> 3.0)
       multi_xml (>= 0.5.2)
-    i18n (1.8.10)
+    i18n (1.8.11)
       concurrent-ruby (~> 1.0)
     image_processing (1.12.1)
       mini_magick (>= 4.9.5, < 5)
@@ -236,7 +236,7 @@ GEM
     mini_racer (0.4.0)
       libv8-node (~> 15.14.0.0)
     minitest (5.14.4)
-    mixin_bot (0.6.5)
+    mixin_bot (0.6.8)
       activesupport (>= 5)
       awesome_print (~> 1.8)
       bcrypt (~> 3.1)
