@@ -69,7 +69,11 @@ export const markdownRenderers: any = {
         }}
         alt={alt}
         className='w-full'
-        src={`${src}?x-oss-process=image/resize,w_768`}
+        src={
+          src.match(/oss-accelerate.aliyuncs.com/)
+            ? `${src}?x-oss-process=image/resize,w_768`
+            : src
+        }
       />
     </a>
   ),
