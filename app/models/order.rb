@@ -255,11 +255,11 @@ class Order < ApplicationRecord
         end
       end
 
-    if cite_article?
-      self.currency = payment.currency
-    else
-      self.currency = item.currency
-    end
+    self.currency = if cite_article?
+                      payment.currency
+                    else
+                      item.currency
+                    end
     assign_attributes(
       buyer: payment.payer,
       seller: item.author,
