@@ -96,7 +96,9 @@ class Payment < ApplicationRecord
   def place_order!
     return unless memo_correct?
 
-    if asset_id == article.asset_id
+    if decrypted_memo['t'] == 'REVENUE'
+      complete!
+    elsif asset_id == article.asset_id || decrypted_memo['t'] == 'CITE'
       place_article_order!
     elsif swappable?
       place_swap_order!

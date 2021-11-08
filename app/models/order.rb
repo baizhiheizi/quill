@@ -245,7 +245,7 @@ class Order < ApplicationRecord
 
   def setup_attributes
     amount =
-      if payment.asset_id == item.asset_id
+      if payment.asset_id == item.asset_id || cite_article?
         payment.amount.round(8)
       elsif payment.swap_order&.swapped? || payment.swap_order&.completed?
         if buy_article?
@@ -255,7 +255,11 @@ class Order < ApplicationRecord
         end
       end
 
-    self.currency = item.currency
+    if cite_article?
+      self.currency = payment.currency
+    else
+      self.currency = item.currency
+    end
     assign_attributes(
       buyer: payment.payer,
       seller: item.author,
