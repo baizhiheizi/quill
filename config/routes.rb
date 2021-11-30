@@ -21,8 +21,11 @@ Rails.application.routes.draw do
 
   get 'landing', to: 'landing#index', as: :landing
 
-  resources :articles, only: %i[show index], param: :uuid
+  resources :view_modals, only: %i[create]
+  resources :articles, param: :uuid
+  resources :notifications
   resources :tags, only: :show
+  resources :users, only: :show
 
   root to: 'home#index'
 

@@ -3,5 +3,17 @@
 
 import { application } from "./application"
 
-import HelloController from "./hello_controller"
+import DropdownController from "./dropdown_controller.js"
+application.register("dropdown", DropdownController)
+
+import FlashController from "./flash_controller.js"
+application.register("flash", FlashController)
+
+import HelloController from "./hello_controller.js"
 application.register("hello", HelloController)
+
+import ModalController from "./modal_controller.js"
+application.register("modal", ModalController)
+
+import NotificationController from "./notification_controller.js"
+application.register("notification", NotificationController)

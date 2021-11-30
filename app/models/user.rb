@@ -150,6 +150,10 @@ class User < ApplicationRecord
     notifications.unread.count
   end
 
+  def has_unread_notification?
+    notifications.unread.present?
+  end
+
   def bio
     mixin_authorization&.raw&.[]('biography')
   end

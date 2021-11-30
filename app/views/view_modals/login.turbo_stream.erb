@@ -1,0 +1,19 @@
+<%= turbo_stream.update "modal-slot" do %>
+  <div 
+    data-controller="modal" 
+    data-modal-initial-state="show">
+    <div data-modal-target="modal" class="fixed inset-0 z-50 flex items-start justify-center w-full overflow-y-auto">
+      <button data-action="modal#hide" class="fixed top-0 left-0 w-screen h-full bg-black opacity-30"></button>
+      <div class='relative w-10/12 max-w-2xl max-h-screen mt-48 bg-white border rounded shadow'>
+        <div class="p-4 text-xl font-medium text-center border-b">Connect Wallet</div>
+        <div class="flex justify-center p-6">
+          <%= link_to login_path(return_to: params[:return_to]), class: "px-6 py-2 text-white bg-blue-500 rounded flex items-center space-x-2" do %>
+            <img class="w-auto h-4" src=<%= asset_path('mixin-logo-light.png') %> />
+            <span>Mixin</span>
+            <span>Messenger</span>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>
