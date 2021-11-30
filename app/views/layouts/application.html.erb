@@ -25,13 +25,12 @@
     <meta name='keywords' content='<%= Settings.page_keywords %>' />
     <meta name='description' content='<%= @page_description.presence || Settings.page_description %>' />
 
-    <%= javascript_pack_tag 'application', defer: true %>
-    <%= stylesheet_pack_tag 'application', defer: true %>
     <%= favicon_pack_tag "#{Settings.favicon_file || 'favicon.png'}" %>
+    <%= javascript_include_tag "application", "data-turbo-track": "reload", defer: true %>
+    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
   </head>
 
   <body>
-    <%= render'shared/loader' %>
     <%= yield %>
   </body>
 </html>
