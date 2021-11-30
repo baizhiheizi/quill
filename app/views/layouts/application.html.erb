@@ -25,12 +25,25 @@
     <meta name='keywords' content='<%= Settings.page_keywords %>' />
     <meta name='description' content='<%= @page_description.presence || Settings.page_description %>' />
 
-    <%= favicon_pack_tag "#{Settings.favicon_file || 'favicon.png'}" %>
+    <%= favicon_link_tag "#{Settings.favicon_file || 'favicon.png'}" %>
     <%= javascript_include_tag "application", "data-turbo-track": "reload", defer: true %>
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
   </head>
 
   <body>
-    <%= yield %>
+    <%= render "shared/nav" %>
+    <main class="bg-white">
+      <div class="max-w-2xl px-6 pt-4 pb-8 mx-auto sm:p-6 lg:max-w-7xl lg:px-8">
+        <% flash.each do |type, message| %>
+          <%= render partial: "shared/flash", locals: { type: type, message: message } %>
+        <% end %>
+        <%= yield %>
+      </div>
+      <div style="height:env(safe-area-inset-bottom)" />
+    </main>
+    <div class="absolute bottom-0" id="modal-slot"></div>
+    <div class="fixed top-8 h-0 w-full px-4" id="notifications">
+      <%= turbo_stream_from "user_#{current_user.id}_notifications" if current_user.present? %>
+    </div>
   </body>
 </html>
