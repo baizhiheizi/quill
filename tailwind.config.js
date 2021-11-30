@@ -1,6 +1,13 @@
 module.exports = {
-  purge: ['./app/packs/apps/**/*.tsx', './app/views/**/*.html.erb'],
-  darkMode: 'media', // or false or 'class'
+  mode: "jit",
+  purge: [
+    './app/packs/apps/**/*.tsx',
+    "./app/views/**/*.html.erb",
+    "./app/views/**/*.turbo_stream.erb",
+    "./app/helpers/**/*.rb",
+    "./app/javascript/**/*.js",
+  ],
+  darkMode: 'class',
   theme: {
     minHeight: {
       'screen-1/2': '50vh',
@@ -50,5 +57,6 @@ module.exports = {
   plugins: [
     require('@tailwindcss/typography'),
     require('@tailwindcss/line-clamp'),
+    require("@tailwindcss/forms"),
   ],
 };

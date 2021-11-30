@@ -9,7 +9,7 @@
     "module": "esnext",
     "moduleResolution": "node",
     "sourceMap": true,
-    "target": "es5",
+    "target": "esnext",
     "jsx": "react",
     "noEmit": true,
     "baseUrl": ".",
