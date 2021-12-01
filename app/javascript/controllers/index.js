@@ -3,14 +3,17 @@
 
 import { application } from "./application"
 
+import ArticleFormController from "./article_form_controller.js"
+application.register("article-form", ArticleFormController)
+
+import AutosaveController from "./autosave_controller.js"
+application.register("autosave", AutosaveController)
+
 import DropdownController from "./dropdown_controller.js"
 application.register("dropdown", DropdownController)
 
 import FlashController from "./flash_controller.js"
 application.register("flash", FlashController)
-
-import HelloController from "./hello_controller.js"
-application.register("hello", HelloController)
 
 import ModalController from "./modal_controller.js"
 application.register("modal", ModalController)

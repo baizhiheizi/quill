@@ -79,6 +79,8 @@ class Article < ApplicationRecord
 
   has_one :wallet, class_name: 'MixinNetworkUser', as: :owner, dependent: :nullify
 
+  has_rich_text :rich_content
+
   validates :asset_id, presence: true, inclusion: { in: SUPPORTED_ASSETS }
   validates :uuid, presence: true, uniqueness: true
   validates :title, length: { maximum: 64 }
@@ -99,6 +101,9 @@ class Article < ApplicationRecord
   before_validation :setup_attributes, on: :create
   after_save do
     generate_snapshot if should_generate_snapshot?
+  end
+  after_update_commit do
+    broadcast_update_later_to self, target: "article_#{id}_updated_at", partial: 'articles/updated_at', locals: { article_: self }
   end
 
   delegate :swappable?, to: :currency
@@ -301,6 +306,10 @@ class Article < ApplicationRecord
       author_revenue_ratio,
       references_revenue_ratio
     ].sum
+  end
+
+  def to_param
+    uuid
   end
 
   private
