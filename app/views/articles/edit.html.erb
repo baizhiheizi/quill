@@ -1,0 +1,8 @@
+<div class="flex mb-4 justify-end">
+  <%= link_to t("publish_article"), view_modals_path(type: :publish_article), class: "px-4 py-2 rounded bg-blue-500 text-white" %>
+</div>
+
+<%= turbo_stream_from @article %>
+
+<%= render partial: "articles/form", locals: { article: @article } %>
+
