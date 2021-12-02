@@ -11,7 +11,19 @@
       <%= time_ago_in_words @article.published_at %>
     </div>
   </div>
-  <% if @article.authorized? current_user %> <%= render partial: "articles/full_content", locals: { article: @article } %>
+  <div class="py-2 px-4 mb-8 bg-gray-100 rounded">
+    <%= @article.intro %>
+  </div>
+  <div class="flex items-center space-x-2 mb-4 text-sm xl:text-base text-gray-500">
+    <span>
+      <%= t("article.words_count") %>:
+    </span>
+    <span>
+      <%= @article.words_count %>
+    </span>
+  </div>
+  <% if @article.authorized? current_user %> 
+    <%= render partial: "articles/full_content", locals: { article: @article } %>
   <% else %>
     <%= render partial: "articles/partial_content", locals: { article: @article } %>
   <% end %>

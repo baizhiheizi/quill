@@ -64,6 +64,4 @@ Rails.application.routes.draw do
   namespace :widget do
     resources :articles, only: :index
   end
-
-  get '*path' => 'home#index'
 end
