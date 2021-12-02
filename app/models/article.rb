@@ -312,6 +312,15 @@ class Article < ApplicationRecord
     uuid
   end
 
+  def content_as_html
+    Redcarpet::Markdown.new(
+      Redcarpet::Render::HTML,
+      autolink: true,
+      tables: true,
+      fenced_code_blocks: true
+    ).render content.to_s
+  end
+
   private
 
   def setup_attributes

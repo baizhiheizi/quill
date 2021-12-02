@@ -1,1 +1,4 @@
-<%= react_component('ApplicationApp', props: { csrf_token: form_authenticity_token }.merge(base_props), prerender: false) %>
+<div class="prose prose-sm sm:prose lg:prose-lg xl:prose-xl 3xl:prose-2xl mx-auto">
+  <%# <%= @article.content_as_html.html_safe %>
+  <%= @article.rich_content %>
+</div>

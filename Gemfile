@@ -137,6 +137,9 @@ gem 'httparty'
 # Tracking ⚠️ exceptions for Rails application and store them in database.
 gem 'exception-track'
 
+# The safe Markdown parser, reloaded.
+gem 'redcarpet'
+
 # deploy
 gem 'mina', '~> 1.2.2', require: false
 gem 'mina-logs', '~> 1.1.0', require: false

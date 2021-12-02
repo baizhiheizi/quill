@@ -22,11 +22,11 @@ class ArticlesController < ApplicationController
   end
 
   def show
-    article = Article.only_published.find_by uuid: params[:uuid]
-    return if article.blank?
+    @article = Article.only_published.find_by uuid: params[:uuid]
+    return if @article.blank?
 
-    @page_title = "#{article.title} - #{article.author.name}"
-    @page_description = article.intro
+    @page_title = "#{@article.title} - #{@article.author.name}"
+    @page_description = @article.intro
   end
 
   def create
