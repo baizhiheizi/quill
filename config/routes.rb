@@ -22,7 +22,11 @@ Rails.application.routes.draw do
   get 'landing', to: 'landing#index', as: :landing
 
   resources :view_modals, only: %i[create]
+
   resources :articles, param: :uuid
+  get '/articles/:uuid/publish', to: 'articles#publish', as: :publish_article
+  resources :published_articles, param: :uuid, only: %i[update destroy]
+
   resources :notifications
   resources :tags, only: :show
   resources :users, only: :show
