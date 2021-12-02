@@ -1,0 +1,7 @@
+<div class="py-2 px-4 mb-8 bg-gray-100 rounded">
+  <%= article.intro %>
+</div>
+<%= simple_format article.partial_rich_content || MarkdownRenderService.new.call(article.partial_content).html_safe %>
+<div class="flex justify-center">
+  <%= link_to t('pay_to_read'), view_modals_path(type: :pay, uuid: article.uuid), class: "rounded bg-blue-500 text-white px-4 py-2 no-underline" %>
+</div>

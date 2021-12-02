@@ -1,7 +1,3 @@
 <div class="flex mb-4 justify-end">
   <%= link_to t("publish_article"), publish_article_path(@article.uuid), class: "px-4 py-2 rounded bg-blue-500 text-white" %>
 </div>
-
-<%= turbo_stream_from @article %>
-
-<%= render partial: "articles/form", locals: { article: @article } %>

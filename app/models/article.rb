@@ -200,6 +200,12 @@ class Article < ApplicationRecord
     content.truncate((words_count * 0.1).to_i).gsub(/!\[.+(\]\(.+\))?\z/, '')
   end
 
+  def partial_rich_content
+    return if rich_content.to_plain_text.size < 300
+
+    rich_content.to_plain_text.truncate 300
+  end
+
   def wallet_id
     @wallet_id = wallet&.uuid
   end
@@ -313,12 +319,11 @@ class Article < ApplicationRecord
   end
 
   def content_as_html
-    Redcarpet::Markdown.new(
-      Redcarpet::Render::HTML,
-      autolink: true,
-      tables: true,
-      fenced_code_blocks: true
-    ).render content.to_s
+    MarkdownRenderService.new.call content
+  end
+
+  def default_intro
+    rich_content.to_plain_text.truncate(140).strip.gsub("\n", '')
   end
 
   private
