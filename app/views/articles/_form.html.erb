@@ -25,6 +25,7 @@
     <%= form.rich_text_area :rich_content, 
       placeholder: t("article.form.content_place_holder"), 
       class: "focus:outline-none", 
+      value: article.rich_content.presence || article.content_as_html,
       data: { 
         article_form_target: 'richText',
         action: "keyup->autosave#save"
