@@ -5,7 +5,8 @@ class ArticlesController < ApplicationController
   before_action :load_article, only: %i[edit update publish]
 
   def index
-    @articles = Article.only_published.order(created_at: :desc).first(20)
+    @pagy, @articles = pagy Article.only_published.order(created_at: :desc)
+
     respond_to do |format|
       format.html
       format.rss do
@@ -24,7 +25,7 @@ class ArticlesController < ApplicationController
   def show
     @article = Article.only_published.find_by uuid: params[:uuid]
     if @article.blank?
-      redirect_to root_path, alert: t('article_not_found')
+      redirect_back fallback_location: root_path, alert: t('article_not_found')
     else
       @page_title = "#{@article.title} - #{@article.author.name}"
       @page_description = @article.intro
@@ -56,5 +57,6 @@ class ArticlesController < ApplicationController
 
   def load_article
     @article = current_user.articles.find_by uuid: params[:uuid]
+    redirect_back fallback_location: roo_path if @article.blank?
   end
 end

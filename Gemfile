@@ -140,6 +140,9 @@ gem 'exception-track'
 # The safe Markdown parser, reloaded.
 gem 'redcarpet'
 
+# Easily include static pages in your Rails app.
+gem 'high_voltage'
+
 # deploy
 gem 'mina', '~> 1.2.2', require: false
 gem 'mina-logs', '~> 1.1.0', require: false

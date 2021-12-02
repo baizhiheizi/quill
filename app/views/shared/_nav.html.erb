@@ -15,6 +15,9 @@
             <%= link_to t("write"), view_modals_path(type: :login), method: :post, class: "px-3 py-2 text-base font-medium hover:bg-blue-50 hover:text-blue-500 rounded-md" %>
           <% end %>
         </div>
+        <div class="flex items-baseline ml-10 space-x-4">
+          <%= link_to t("rules"), page_path('rules'), class: "px-3 py-2 text-base font-medium hover:bg-blue-50 hover:text-blue-500 rounded-md" %>
+        </div>
       </div>
       <div class="flex items-center ml-4 md:ml-6">
         <% if current_user.present? %>
@@ -61,7 +64,7 @@
               </div>
             </div>
           <% else %>
-            <%= link_to 'Connect Wallet', view_modals_path(type: :login), method: :post, class: "hover:text-blue-500 hover:bg-blue-50 px-3 py-2 rounded" %>
+            <%= link_to 'Connect Wallet', view_modals_path(type: :login), method: :post, class: "hover:bg-blue-600 bg-blue-500 text-white px-3 py-2 rounded" %>
           <% end %>
         </div>
     </div>
@@ -96,11 +99,14 @@
           <%= link_to t("write"), view_modals_path(type: :login), method: :post, class: "block px-3 py-2 text-base font-medium focus:bg-blue-50 focus:text-blue-500 rounded-md" %>
         <% end %>
       </div>
-      <div class="pt-4 pb-3 border-t">
+      <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+        <%= link_to t("rules"), page_path('rules'), class: "block px-3 py-2 text-base font-medium focus:bg-blue-50 focus:text-blue-500 rounded-md" %>
+      </div>
+      <div class="pt-4 pb-3">
         <% if current_user.present? %>
           <div class="flex items-center px-5">
             <div class="flex-shrink-0">
-              <img class="w-10 h-10 rounded-full" src=<%= current_user.avatar %> alt="">
+              <img class="w-10 h-10 rounded-full" src=<%= current_user.avatar %> alt="user avatar">
             </div>
             <div class="ml-3">
               <div class="text-base font-medium leading-none text-white"><%= current_user.name %></div>
@@ -123,8 +129,8 @@
             <%= link_to t("logout"), logout_path, class: "block px-3 py-2 text-base font-medium focus:bg-blue-50 focus:text-blue-500 rounded-md" %>
           </div>
         <% else %>
-          <div class="px-2 sm:px-3">
-            <%= link_to 'Connect Wallet', view_modals_path(type: :login), method: :post, class: "block px-3 py-2 text-base font-medium focus:bg-blue-50 focus:text-blue-500 rounded-md" %>
+          <div class="px-2 sm:px-3 flex">
+            <%= link_to 'Connect Wallet', view_modals_path(type: :login), method: :post, class: "block px-3 py-2 text-base font-medium text-white bg-blue-500 focus:bg-blue-600 rounded-md" %>
           </div>
         <% end %>
       </div>

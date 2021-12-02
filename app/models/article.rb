@@ -191,7 +191,7 @@ class Article < ApplicationRecord
   end
 
   def words_count
-    content.to_s.gsub("\n", '').size
+    rich_content.present? ? rich_content.to_plain_text.gsub("\n", '').size : content.to_s.gsub("\n", '').size
   end
 
   def partial_content
@@ -201,9 +201,9 @@ class Article < ApplicationRecord
   end
 
   def partial_rich_content
-    return if rich_content.to_plain_text.size < 300
+    return if rich_content.blank? || words_count < 300
 
-    rich_content.to_plain_text.truncate 300
+    rich_content.to_plain_text.truncate (words_count * 0.1).to_i
   end
 
   def wallet_id
@@ -238,6 +238,10 @@ class Article < ApplicationRecord
     author.update(
       articles_count: author.articles.without_drafted.count
     )
+  end
+
+  def price_tag
+    "#{format('%.8f', price).gsub(/0+\z/, '0')} #{currency.symbol}"
   end
 
   def price_usd
@@ -324,6 +328,12 @@ class Article < ApplicationRecord
 
   def default_intro
     rich_content.to_plain_text.truncate(140).strip.gsub("\n", '')
+  end
+
+  def upvote_ratio
+    return if upvotes_count.zero? && downvotes_count.zero?
+
+    "#{format('%.0f', upvotes_count.to_f * 100 / (upvotes_count + downvotes_count))} %"
   end
 
   private
