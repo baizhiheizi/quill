@@ -47,6 +47,7 @@ class ArticlesController < ApplicationController
   end
 
   def publish
+    redirect_to edit_article_path(@article), alert: t("write_something_first") unless @article.may_publish?
   end
 
   private

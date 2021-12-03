@@ -138,7 +138,7 @@ class Article < ApplicationRecord
       transitions from: :published, to: :hidden
     end
 
-    event :publish, after_transaction: %i[do_first_publish] do
+    event :publish, guards: :ensure_content_valid, after_transaction: %i[do_first_publish] do
       transitions from: :drafted, to: :published
       transitions from: :hidden, to: :published
     end
@@ -334,6 +334,10 @@ class Article < ApplicationRecord
     return if upvotes_count.zero? && downvotes_count.zero?
 
     "#{format('%.0f', upvotes_count.to_f * 100 / (upvotes_count + downvotes_count))} %"
+  end
+
+  def ensure_content_valid
+    title.present? && (content.present? || rich_content.body.present?)
   end
 
   private
