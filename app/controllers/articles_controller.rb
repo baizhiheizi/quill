@@ -3,6 +3,7 @@
 class ArticlesController < ApplicationController
   before_action :authenticate_user!, only: %i[edit update publish]
   before_action :load_article, only: %i[edit update publish]
+  layout 'editor', only: %i[new edit]
 
   def index
     @pagy, @articles = pagy Article.only_published.order(created_at: :desc)
@@ -47,13 +48,17 @@ class ArticlesController < ApplicationController
   end
 
   def publish
-    redirect_to edit_article_path(@article), alert: t("write_something_first") unless @article.may_publish?
+    redirect_to edit_article_path(@article), alert: t('write_something_first') unless @article.may_publish?
+  end
+
+  def preview
+    render json: { html: MarkdownRenderService.new.call(params[:content]) }
   end
 
   private
 
   def article_params
-    params.require(:article).permit(:title, :rich_content)
+    params.require(:article).permit(:title, :content)
   end
 
   def load_article
