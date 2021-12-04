@@ -3,6 +3,7 @@ import { debounce } from 'lodash';
 import * as Rails from '@rails/ujs';
 
 export default class extends Controller {
+  static targets = ["form"];
   static values = {
     delay: Number
   }
@@ -20,6 +21,6 @@ export default class extends Controller {
   save () {
     if (!window._rails_loaded) return
 
-    Rails.fire(this.element, 'submit')
+    Rails.fire(this.formTarget, 'submit')
   }
 }

@@ -1,3 +1,3 @@
 <div id="<%= dom_id article %>_updated_at" class="text-right text-sm text-gray-500">
-  <%= t("updated_at") %>: <%= time_ago_in_words article.updated_at %>
+  <%= t("saved_at") %>: <span class=""><%= article.updated_at.strftime('%H:%M') %></span>
 </div>

@@ -23,8 +23,9 @@ Rails.application.routes.draw do
 
   resources :view_modals, only: %i[create]
 
-  resources :articles, param: :uuid
+  resources :articles, except: %i[destroy], param: :uuid
   get '/articles/:uuid/publish', to: 'articles#publish', as: :publish_article
+  post '/articles/preview', to: 'articles#preview', as: :preview_article
   resources :published_articles, param: :uuid, only: %i[update destroy]
 
   resources :notifications
