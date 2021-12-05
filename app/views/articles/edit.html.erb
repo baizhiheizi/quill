@@ -15,12 +15,15 @@
       <%= t('preview') %>
     </div>
   </div>
-  <div class="flex-1 overflow-y-scroll bg-white border relative pb-4 prose lg:prose-lg xl:prose-xl">
+  <div class="flex-1 overflow-y-scroll bg-white border relative pb-4 prose lg:prose-lg 2xl:prose-xl w-full">
     <%= render partial: "articles/form", locals: { article: @article } %>
     <%= render partial: "articles/preview" %>
   </div>
-  <div class="py-2 px-4 sm:py-4 sm:px-0 flex space-x-4">
-    <%= link_to t("publish_article"), publish_article_path(@article.uuid), class: "px-4 py-2 text-sm sm:text-base rounded bg-blue-500 text-white" %>
-    <div class="cursor-pointer px-4 py-2 text-sm sm:text-base rounded bg-blue-500 text-white" data-action="click->autosave#save"><%= t('save') %></div>
+  <div class="py-2 px-4 sm:py-4 sm:px-0 flex justify-between">
+    <div class="flex space-x-4">
+      <%= link_to t("publish_article"), publish_article_path(@article.uuid), class: "px-4 py-2 text-sm sm:text-base rounded bg-blue-500 text-white" %>
+      <div class="cursor-pointer px-4 py-2 text-sm sm:text-base rounded bg-blue-500 text-white" data-action="click->autosave#save"><%= t('save') %></div>
+    </div>
+    <%= link_to t('back'), :back, class: "py-2" %>
   </div>
 </div>
