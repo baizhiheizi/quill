@@ -1,64 +1,10 @@
-<div class="flex">
-  <div class="w-full lg:w-4/6">
-    <% @articles.each do |article| %>
-      <div class="py-4 border-b">
-        <div class="flex justify-between mb-4">
-          <div class="flex items-center space-x-4">
-            <img class="w-10 h-10 rounded-full" src="<%= article.author.avatar  %>" />
-            <div>
-              <div><%= article.author.name %></div>
-              <div class="text-xs sm:text-sm text-gray-500"><%= time_ago_in_words article.published_at %></div>
-            </div>
-          </div>
-          <div class="text-right">
-            <div class="flex itemx-center space-x-2">
-              <img class="w-6 h-6 rounded-full" src="<%= article.currency.icon_url %>" />
-              <span><%= article.price_tag %>
-            </div>
-            <div class="text-xs sm:text-sm text-gray-500">≈$<%= article.price_usd %></div>
-          </div>
-        </div>
-        <%= link_to article_path(article), class: "mb-4 block" do %>
-          <div class="font-bold text-xl lg:text-2xl 2xl:text-3xl mb-4">
-            <%= article.title %>
-          </div>
-          <div>
-            <%= article.intro %>
-          </div>
-        <% end %>
-        <div class="flex items-center space-x-8 text-gray-500">
-          <div class="flex items-center space-x-2">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 lg:h-6 lg:w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
-            <span class="lg:text-lg"><%= article.revenue_usd %></span>
-          </div>
-          <div class="flex items-center space-x-2">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 lg:h-6 lg:w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-            </svg>
-            <span class="lg:text-lg"><%= article.comments_count %></span>
-          </div>
-          <% if article.upvote_ratio.present? %>
-            <div class="flex items-center space-x-2">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 lg:h-6 lg:w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5" />
-              </svg>
-              <span class="lg:text-lg"><%= article.upvote_ratio %></span>
-            </div>
-          <% end %>
-          <div>
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 lg:h-6 lg:w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
-            </svg>
-          </div>
-        </div>
-      </div>
-    <% end %>
+<div class="lg:grid lg:grid-cols-3 lg:gap-x-6">
+  <div class="w-full lg:col-span-2">
+    <%= render partial: "articles/article_card", collection: @articles, as: :article %>
   </div>
-  <div class="w-2/6 hidden lg:block">
-    <div class="border-b p-4 ml-8">
+  <aside class="lg:col-span-1">
+    <div class="p-4 lg:p-6 bg-white lg:rounded">
       Trending
     </div>
-  </div>
+  </aside>
 </div>

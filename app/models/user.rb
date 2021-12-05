@@ -155,7 +155,7 @@ class User < ApplicationRecord
   end
 
   def bio
-    mixin_authorization&.raw&.[]('biography')
+    mixin_authorization&.raw&.[]('biography') || t('user.default_bio')
   end
 
   def banned?
@@ -252,6 +252,10 @@ class User < ApplicationRecord
                    .or(articles.only_published)
                    .or(Article.only_free.only_published)
                    .distinct
+  end
+
+  def to_param
+    uid
   end
 
   private

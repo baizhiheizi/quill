@@ -1,0 +1,20 @@
+<div class="bg-white p-4 sm:p-6 sm:border sm:rounded-lg">
+  <div class="relative flex items-center space-x-2 mb-4">
+    <img class="w-12 h-12 rounded-full" src="<%= author.avatar %>" />
+    <div>
+      <div class="text-xl font-bold"><%= author.name %></div>
+      <div class="text-base text-gray-500">@<%= author.uid %></div>
+    </div>
+    <%= link_to user_path(author) do %>
+      <span aria-hidden="true" class="absolute inset-0"></span>
+    <% end %>
+  </div>
+  <div class="mb-4">
+    <%= author.bio %>
+  </div>
+  <% if current_user.blank? %>
+    <%= link_to t('subscribe'), view_modals_path(type: :login), method: :post, class: "" %>
+  <% elsif !current_user.subscribe_user? author %>
+    <%= link_to t('subscribe'), view_modals_path(type: :login), method: :post, class: "block bg-blue-600 rounded text-white text-center py-2" %>
+  <% end %>
+</div>
