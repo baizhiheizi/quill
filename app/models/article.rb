@@ -338,6 +338,6 @@ class Article < ApplicationRecord
   end
 
   def ensure_references_ration_correct
-    errors.add(:references_revenue_ratio, ' incorrect') unless references_revenue_ratio == article_references.sum(&:revenue_ratio)
+    errors.add(:references_revenue_ratio, ' incorrect') unless references_revenue_ratio.to_d == article_references.sum(&:revenue_ratio).to_d
   end
 end
