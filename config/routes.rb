@@ -30,13 +30,13 @@ Rails.application.routes.draw do
 
   resources :notifications
   resources :tags, only: :show
-  resources :users, only: :show
+  resources :users, only: :show, param: :uid
 
   root to: 'home#index'
 
   namespace :dashboard do
-    root to: 'overview#index'
-    get '*path' => 'overview#index'
+    resources :articles, only: %i[index], param: :uuid
+    root to: 'home#index'
   end
 
   namespace :admin do
