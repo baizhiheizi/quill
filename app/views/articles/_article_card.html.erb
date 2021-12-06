@@ -32,6 +32,13 @@
       <%= article.intro %>
     </div>
   <% end %>
+  <div class="flex overflow-x-scroll items-center space-x-4 mb-4">
+    <% article.tag_names.each do |tag_name| %>
+      <%= link_to articles_path(tag: tag_name), class: "px-2 py-1 text-sm bg-gray-200 font-bold" do %>
+        <%= tag_name %>
+      <% end %>
+    <% end %>
+  </div>
   <div class="flex items-center space-x-8 text-gray-500">
     <div class="flex items-center space-x-2">
       <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 lg:h-6 lg:w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
