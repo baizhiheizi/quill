@@ -1,4 +1,4 @@
-<%= simple_format article.partial_rich_content || MarkdownRenderService.new.call(article.partial_content).html_safe %>
+<%= MarkdownRenderService.new.call(article.partial_content).html_safe %>
 <div class="flex justify-center text-yellow-500 font-semibold">
   - <%= t('more_to_read') %> -
 </div>

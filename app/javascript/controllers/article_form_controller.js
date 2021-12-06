@@ -1,4 +1,5 @@
 import { Controller } from "@hotwired/stimulus";
+import * as Rails from '@rails/ujs';
 import EasyMDE from 'easymde';
 
 export default class extends Controller {
@@ -7,11 +8,14 @@ export default class extends Controller {
   }
   static targets = [
     "form", 
+    "contentFields", 
+    "optionFields", 
     "title",
     "content", 
     "preview", 
     "editButton", 
-    "previewButton"
+    "previewButton",
+    "optionsButton"
   ]
 
   connect() {
@@ -37,12 +41,14 @@ export default class extends Controller {
     );
   }
 
+  save() {
+    Rails.fire(this.formTarget, 'submit');
+  }
+
   edit() {
-    this.previewTarget.classList.add("hidden");
-    this.formTarget.classList.remove("hidden");
-    this.previewTarget.classList.innerHTML = "";
-    this.editButtonTarget.classList.add("border-b-2");
-    this.previewButtonTarget.classList.remove("border-b-2");
+    this.activeContentForm();
+    this.hidePreview();
+    this.hideSettingsForm();
   }
 
   preview() {
@@ -60,10 +66,46 @@ export default class extends Controller {
     .then(response => response.json())
     .then(data => {
       this.previewTarget.innerHTML = data.html;
-      this.formTarget.classList.add("hidden");
-      this.previewTarget.classList.remove("hidden");
-      this.editButtonTarget.classList.remove("border-b-2");
-      this.previewButtonTarget.classList.add("border-b-2");
+      this.activePreview();
+      this.hideContentForm();
+      this.hideSettingsForm();
     });
+  }
+
+  options() {
+    this.activeSettingsForm();
+    this.hideContentForm();
+    this.hidePreview();
+  }
+
+  activeContentForm() {
+    this.contentFieldsTarget.classList.remove("hidden");
+    this.editButtonTarget.classList.add("border-b-2");
+  }
+
+  hideContentForm() {
+    this.contentFieldsTarget.classList.add("hidden");
+    this.editButtonTarget.classList.remove("border-b-2");
+  }
+
+  activeSettingsForm() {
+    this.optionFieldsTarget.classList.remove("hidden");
+    this.optionsButtonTarget.classList.add("border-b-2");
+  }
+
+  hideSettingsForm() {
+    this.optionFieldsTarget.classList.add("hidden");
+    this.optionsButtonTarget.classList.remove("border-b-2");
+  }
+
+  activePreview() {
+    this.previewButtonTarget.classList.add("border-b-2");
+    this.previewTarget.classList.remove("hidden");
+  }
+
+  hidePreview() {
+    this.previewButtonTarget.classList.remove("border-b-2");
+    this.previewTarget.classList.add("hidden");
+    this.previewTarget.classList.innerHTML = "";
   }
 }

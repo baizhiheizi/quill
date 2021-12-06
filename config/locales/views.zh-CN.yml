@@ -6,10 +6,13 @@ zh-CN:
   share: 分享
   detail: 详情
   edit: 编辑
+  preview: 预览
+  options: 选项
   create: 创建
   update: 更新
   view: 查看
   cancel: 取消
+  save: 保存
   paid: 支付了
   delete: 删除
   pay_in_mixin: Mixin 支付
@@ -136,7 +139,7 @@ zh-CN:
   markdown_supported: 支持 Markdown 格式
   overview: 总览
   notifications_manage: 消息通知
-  settings: 个人设置
+  settings: 设置
   articles_manage: 文章管理
   subscriptions_manage: 订阅管理
   revenue_manage: 收益管理
