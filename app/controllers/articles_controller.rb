@@ -44,6 +44,7 @@ class ArticlesController < ApplicationController
   end
 
   def update
+    CreateTag.call(@article, params[:article][:tag_names] || [])
     @article.update article_params
   end
 

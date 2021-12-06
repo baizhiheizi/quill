@@ -29,7 +29,7 @@ Rails.application.routes.draw do
   resources :published_articles, param: :uuid, only: %i[update destroy]
 
   resources :notifications
-  resources :tags, only: :show
+  resources :tags, only: %i[index show]
   resources :users, only: :show, param: :uid
 
   root to: 'home#index'

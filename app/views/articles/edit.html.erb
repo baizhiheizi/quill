@@ -21,15 +21,15 @@
       <%= t('preview') %>
     </div>
   </div>
-  <% if @article.persisted? %>
-    <div class="mb-2 px-4 sm:px-0">
-      <%= render partial: "articles/updated_at", locals: { article: @article } %>
-    </div>
-  <% end %>
   <div class="flex-1 overflow-y-scroll bg-white border-t border-b  sm:border relative pb-4 prose xl:prose-lg 2xl:prose-xl max-w-full">
     <%= render partial: "articles/form", locals: { article: @article } %>
     <%= render partial: "articles/preview" %>
   </div>
+  <% if @article.persisted? %>
+    <div class="px-4 sm:px-0">
+      <%= render partial: "articles/updated_at", locals: { article: @article } %>
+    </div>
+  <% end %>
   <div class="py-2 px-4 sm:py-4 sm:px-0 flex justify-between">
     <div class="flex space-x-4">
       <%= link_to t("publish_article"), publish_article_path(@article.uuid), class: "px-4 py-2 text-sm sm:text-base rounded bg-blue-500 text-white" unless @article.published? %>

@@ -2671,6 +2671,11 @@
     widest-line "^3.1.0"
     wrap-ansi "^4.0.0"
 
+"@orchidjs/sifter@^0.9.0":
+  version "0.9.0"
+  resolved "https://registry.yarnpkg.com/@orchidjs/sifter/-/sifter-0.9.0.tgz#07eab78de2ac1799d2c169bf1f2e3e746d86c32c"
+  integrity sha512-NDYPhjdydJNbwDRvMFyUFFeImj1a+CJAwpjh/goKmvTHi726DPAJ1nW0X05p/GsorQgXHwhgDPyu6WaYqd4cRA==
+
 "@percy/config@^1.0.0-beta.36":
   version "1.0.0-beta.67"
   resolved "https://registry.yarnpkg.com/@percy/config/-/config-1.0.0-beta.67.tgz#51e59af55b50a100bc0f0de43e351a209d102c47"
@@ -14545,6 +14550,13 @@ token-types@^2.0.0:
   dependencies:
     "@tokenizer/token" "^0.1.1"
     ieee754 "^1.2.1"
+
+tom-select@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/tom-select/-/tom-select-2.0.0.tgz#751ac1087cce29bd40e09f1a604e9ad69451fc86"
+  integrity sha512-ArECm8bNnv8GMTpvSQawesKX6IDv32cylqivjbghwCddYwfngmz+nOtEhQZkEye7BY415eutqhb4XYim2EL8Hg==
+  dependencies:
+    "@orchidjs/sifter" "^0.9.0"
 
 tough-cookie@~2.5.0:
   version "2.5.0"

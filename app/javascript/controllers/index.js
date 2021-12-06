@@ -20,3 +20,6 @@ application.register("modal", ModalController)
 
 import NotificationController from "./notification_controller.js"
 application.register("notification", NotificationController)
+
+import TagsSelectController from "./tags_select_controller.js"
+application.register("tags-select", TagsSelectController)
