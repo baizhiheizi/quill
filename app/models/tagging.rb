@@ -18,7 +18,7 @@
 #
 class Tagging < ApplicationRecord
   belongs_to :tag, counter_cache: :articles_count, touch: true
-  belongs_to :article, counter_cache: :tags_count
+  belongs_to :article, counter_cache: :tags_count, touch: true
 
   before_destroy :destroy_notifications
 

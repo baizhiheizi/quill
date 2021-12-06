@@ -1,4 +1,17 @@
 <div data-article-form-target="optionFields" class="hidden px-4 py-5 bg-white space-y-6 sm:p-6">
+  <div class="sm:pb-6 sm:border-b">
+    <%= form.select :tag_names, 
+      Tag.all.first(20).pluck(:name), 
+      {}, 
+      multiple: true,
+      placeholder: "Some tags",
+      data: {
+        controller: "tags-select",
+        tags_select_items_value: article.tag_names,
+      }, 
+      class: "focus:ring-blue-500 focus:border-blue-500 flex-1 block w-full rounded sm:text-sm border-gray-300" 
+    %>
+  </div>
   <div class="sm:pb-6 sm:border-b grid grid-cols-3 gap-3">
     <%= form.label :intro, class: "col-span-3 sm:col-span-1 block text-sm font-medium text-gray-700" %>
     <div class="col-span-3 sm:col-span-2">

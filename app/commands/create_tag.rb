@@ -15,10 +15,13 @@ class CreateTag
   def call
     return if tag_names.blank?
 
+    tag_names.reject! { |x| x.blank? }
+
     new_tags = tag_names.map { |x| Tag.find_or_create_by(name: x.strip) }
     old_tags = article.tags.to_a
     add_tags = (new_tags - old_tags)
     remove_tags = (old_tags - new_tags)
+
     add_tags.each { |x| article.taggings.create(tag: x) }
     article.taggings.where(tag: remove_tags).destroy_all if with_remove
     article.tags.reload

@@ -66,7 +66,7 @@ class Article < ApplicationRecord
   has_many :comments, as: :commentable, dependent: :restrict_with_error
 
   has_many :taggings, dependent: :nullify
-  has_many :tags, through: :taggings, dependent: :restrict_with_error
+  has_many :tags, through: :taggings, dependent: :restrict_with_error, counter_cache: true
 
   has_many :snapshots, class_name: 'ArticleSnapshot', primary_key: :uuid, foreign_key: :article_uuid, inverse_of: :article, dependent: :destroy
   has_many :prs_transactions, through: :snapshots
