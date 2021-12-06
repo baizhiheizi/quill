@@ -79,8 +79,6 @@ class Article < ApplicationRecord
 
   has_one :wallet, class_name: 'MixinNetworkUser', as: :owner, dependent: :nullify
 
-  has_rich_text :rich_content
-
   validates :asset_id, presence: true, inclusion: { in: SUPPORTED_ASSETS }
   validates :uuid, presence: true, uniqueness: true
   validates :title, length: { maximum: 64 }
@@ -191,19 +189,13 @@ class Article < ApplicationRecord
   end
 
   def words_count
-    rich_content.present? ? rich_content.to_plain_text.gsub("\n", '').size : content.to_s.gsub("\n", '').size
+    content.to_s.gsub("\n", '').size
   end
 
   def partial_content
     return if words_count < 300
 
     content.truncate((words_count * 0.1).to_i).gsub(/!\[.+(\]\(.+\))?\z/, '')
-  end
-
-  def partial_rich_content
-    return if rich_content.blank? || words_count < 300
-
-    rich_content.to_plain_text.truncate (words_count * 0.1).to_i
   end
 
   def wallet_id
@@ -327,7 +319,7 @@ class Article < ApplicationRecord
   end
 
   def default_intro
-    rich_content.to_plain_text.truncate(140).strip.gsub("\n", '')
+    content.strip.gsub("\n", '')
   end
 
   def upvote_ratio
@@ -337,7 +329,7 @@ class Article < ApplicationRecord
   end
 
   def ensure_content_valid
-    title.present? && (content.present? || rich_content.body.present?)
+    title.present? && content.present?
   end
 
   private

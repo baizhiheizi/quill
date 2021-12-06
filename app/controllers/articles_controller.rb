@@ -3,7 +3,7 @@
 class ArticlesController < ApplicationController
   before_action :authenticate_user!, only: %i[edit update publish]
   before_action :load_article, only: %i[edit update publish]
-  layout 'editor', only: %i[new edit]
+  layout 'editor', only: %i[new edit publish]
 
   def index
     @pagy, @articles = pagy Article.only_published.order(created_at: :desc)
@@ -58,7 +58,7 @@ class ArticlesController < ApplicationController
   private
 
   def article_params
-    params.require(:article).permit(:title, :content)
+    params.require(:article).permit(:title, :content, :price, :asset_id, :intro)
   end
 
   def load_article

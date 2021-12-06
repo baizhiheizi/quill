@@ -6,10 +6,13 @@ ja:
   share: シェア
   detail: 詳細
   edit: 編集
+  preview: プレビュー
+  options: オプション
   create: 作成
   update: 更新
   view: 一覧
   cancel: キャンセル
+  save: 保存
   paid: 支払い済み
   delete: 削除
   pay_in_mixin: Linksで支払う

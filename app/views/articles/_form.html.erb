@@ -1,32 +1,25 @@
 <%= form_for article, 
   html: { class: "text-base" },
   data: { 
+    constroller: "autosave",
     article_form_target: "form" ,
     article_form_autosave_value: !article.persisted? ,
     autosave_delay_value: "1000", 
     autosave_target: "form"
   } do |form| %>
-  <%= form.text_field :title, 
-    class: "w-full p-4 lg:pt-8 lg:px-8 text-2xl sm:text-3xl font-semibold border-t-0 border-l-0 border-r-0 border-b-0 focus:ring-0", 
-    placeholder: t("article.form.title_place_holder"), 
-    data: { 
-      article_form_target: "title"
-    } 
-  %>
-  <div class="flex items-center justify-between p-4 lg:px-8">
-    <div class="flex items-center space-x-2">
-      <img class="my-0 w-8 h-8 rounded-full" src="<%= article.author.avatar %>" />
-      <span class="text-sm sm:text-lg"><%= article.author.name %></span>
+    <%= form.text_field :title, 
+      class: "w-full p-4 lg:pt-8 lg:px-8 text-2xl sm:text-3xl font-semibold border-t-0 border-l-0 border-r-0 border-b-0 focus:ring-0", 
+      placeholder: t("article.form.title_place_holder"), 
+      data: { 
+        article_form_target: "title"
+      } 
+    %>
+    <div class="flex items-center justify-between p-4 lg:px-8">
+      <div class="flex items-center space-x-2">
+        <img class="my-0 w-8 h-8 rounded-full" src="<%= article.author.avatar %>" />
+        <span class="text-sm sm:text-lg"><%= article.author.name %></span>
+      </div>
     </div>
-    <% if article.persisted? %>
-      <%= render partial: "articles/updated_at", locals: { article: @article } %>
-    <% end %>
-  </div>
-  <%= form.text_area :content, 
-    class: "w-full p-0 h-full border-t-0 border-l-0 border-r-0 border-b-0 focus:ring-0", 
-    placeholder: t("article.form.content_place_holder"), 
-    data: { 
-      article_form_target: "content"
-    } 
-  %>
+    <%= render partial: "articles/content_fields", locals: { article: article, form: form } %>
+    <%= render partial: "articles/option_fields", locals: { article: article, form: form } %>
 <% end %>

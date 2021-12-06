@@ -4,12 +4,7 @@ class PublishedArticlesController < ApplicationController
   before_action :load_article
 
   def update
-    if @article.published_at?
-      @article.publish! if @article.may_publish?
-
-      redirect_to @article, notice: t('success_published_article')
-    elsif @article.published_at.blank?
-      @article.update article_params
+    if @article.may_publish?
       @article.publish! if @article.may_publish?
 
       redirect_to @article, notice: t('success_published_article')
@@ -23,10 +18,6 @@ class PublishedArticlesController < ApplicationController
   end
 
   private
-
-  def article_params
-    params.require(:article).permit(:price, :asset_id, :intro)
-  end
 
   def load_article
     @article = current_user.articles.find_by uuid: params[:uuid]

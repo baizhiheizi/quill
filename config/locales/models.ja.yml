@@ -1,82 +1,85 @@
 ja:
   created_at: 投稿日
   updated_at: 更新日
-  article:
-    article_text: 記事
-    title: タイトル
-    content: コンテンツ
-    intro: 前書き
-    currency: 通貨
-    words_count: 文字数
-    price: 価格
-    upvotes_count: Good数
-    downvotes_count: Bad数
-    comments_count: コメント数
-    orders_count: 支払い回数
-    buy_orders_count: 購入された回数
-    reward_orders_count: リワード回数
-    revenue: 収益
-    author_revenue_total: 作者収益
-    reader_tevenue_total: 読者収益
-    my_share: 自分の割合（%）
-    state_text: 状態
-    tags: タグ
-    created_at: 作成日
-    updated_at: 最終更新日
-    state:
-      drafted: ドラフト
-      published: 公開
-      blocked: ブロック済み
-      hidden: 非公開
-    form:
-      not_finished: まずは記事を完成させてください
-      title_is_required: 記事のタイトルを入力してください
-      title_is_too_long: 記事のタイトルが長すぎる
-      intro_is_required: 記事の導入を入力してください
-      intro_is_too_long: 記事のあらすじが長すぎる
-      content_is_required: 記事の本文を入力してください
-      price_is_too_low: 価格が低すぎます
-      confirm_to_create: 本当に記事を作成しますか？
-      confirm_to_update: 本当に記事を更新しますか？
-      title_place_holder: 記事タイトル
-      content_place_holder: あなただけの文章を書いてみましょう
-      intro_place_holder: より多くの人にあなたの素敵な文章を見て貰えるように記事紹介を書いてみましょう
-      revenue_ratio: 収益率
-      add_reference: 追加参照
-      please_select_an_article: 記事を選択してください
-      please_input_revenue_ratio: 収益率を入力してください
-      references_revenue_cannot_larger_than_50%: 参照収益が50％以上にならない
-      revenue_distribution: 収益配分
-      you_will_create_a_free_article: あなたの記事が無料で読めるようになります
-  tag:
-    articles_count: 記事数
-    subscribers_count: フォロワー数
-  payment:
-    state:
-      paid: 支払い済み
-      refunded: 返金済み
-      completed: 完了
-    snapshot: スナップショット
-  swap_order:
-    state:
-      paid: 支払い済み
-      swapping: 交換中
-      rejected: 拒否されました
-      swapped: 交換済み
-      order_placed: 購入中
-      completed: 完了
-      refunded: 返金済み
-  user:
-    default_bio: 何も記入されていません
-    author_revenue_total: 作者収益（USD）
-    reader_revenue_total: 読者収益（USD）
-    payment_total_usd: 支払い済み（USD）
-    articles_count: 公開中
-    bought_articles_count: 購入済み
-  transfer:
-    transfer_type:
-      payment_refund: 返金
-      author_revenue: 作者
-      reader_revenue: 読者
-    snapshot: スナップショット
-    processing: 処理中
+  activerecord:
+    models:
+      article: 記事
+    attributes:
+      article:
+        title: タイトル
+        content: コンテンツ
+        intro: 前書き
+        currency: 通貨
+        words_count: 文字数
+        price: 価格
+        upvotes_count: Good数
+        downvotes_count: Bad数
+        comments_count: コメント数
+        orders_count: 支払い回数
+        buy_orders_count: 購入された回数
+        reward_orders_count: リワード回数
+        revenue: 収益
+        author_revenue_total: 作者収益
+        reader_tevenue_total: 読者収益
+        my_share: 自分の割合（%）
+        state_text: 状態
+        tags: タグ
+        created_at: 作成日
+        updated_at: 最終更新日
+        state:
+          drafted: ドラフト
+          published: 公開
+          blocked: ブロック済み
+          hidden: 非公開
+        form:
+          not_finished: まずは記事を完成させてください
+          title_is_required: 記事のタイトルを入力してください
+          title_is_too_long: 記事のタイトルが長すぎる
+          intro_is_required: 記事の導入を入力してください
+          intro_is_too_long: 記事のあらすじが長すぎる
+          content_is_required: 記事の本文を入力してください
+          price_is_too_low: 価格が低すぎます
+          confirm_to_create: 本当に記事を作成しますか？
+          confirm_to_update: 本当に記事を更新しますか？
+          title_place_holder: 記事タイトル
+          content_place_holder: あなただけの文章を書いてみましょう
+          intro_place_holder: より多くの人にあなたの素敵な文章を見て貰えるように記事紹介を書いてみましょう
+          revenue_ratio: 収益率
+          add_reference: 追加参照
+          please_select_an_article: 記事を選択してください
+          please_input_revenue_ratio: 収益率を入力してください
+          references_revenue_cannot_larger_than_50%: 参照収益が50％以上にならない
+          revenue_distribution: 収益配分
+          you_will_create_a_free_article: あなたの記事が無料で読めるようになります
+      tag:
+        articles_count: 記事数
+        subscribers_count: フォロワー数
+      payment:
+        state:
+          paid: 支払い済み
+          refunded: 返金済み
+          completed: 完了
+        snapshot: スナップショット
+      swap_order:
+        state:
+          paid: 支払い済み
+          swapping: 交換中
+          rejected: 拒否されました
+          swapped: 交換済み
+          order_placed: 購入中
+          completed: 完了
+          refunded: 返金済み
+      user:
+        default_bio: 何も記入されていません
+        author_revenue_total: 作者収益（USD）
+        reader_revenue_total: 読者収益（USD）
+        payment_total_usd: 支払い済み（USD）
+        articles_count: 公開中
+        bought_articles_count: 購入済み
+      transfer:
+        transfer_type:
+          payment_refund: 返金
+          author_revenue: 作者
+          reader_revenue: 読者
+        snapshot: スナップショット
+        processing: 処理中

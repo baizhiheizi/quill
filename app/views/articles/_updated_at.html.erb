@@ -1,3 +1,10 @@
 <div id="<%= dom_id article %>_updated_at" class="text-right text-sm text-gray-500">
-  <%= t("saved_at") %>: <span class=""><%= article.updated_at.strftime('%H:%M') %></span>
+  <%= t("saved_at") %>: 
+  <span class="">
+    <% if article.updated_at > Time.current.beginning_of_day %>
+      <%= article.updated_at.strftime('%H:%M') %>
+    <% else %>
+      <%= article.updated_at.strftime('%Y-%m-%d %H:%M') %>
+    <% end %>
+  </span>
 </div>

@@ -6,10 +6,13 @@ en:
   share: Share
   detail: Detail
   edit: Edit
+  preview: Preview
+  options: Options
   create: Create
   update: Update
   view: View
   cancel: Cancel
+  save: Save
   paid: Paid
   delete: Delete
   pay_in_mixin: Pay in Mixin
