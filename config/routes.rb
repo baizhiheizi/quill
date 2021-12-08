@@ -27,6 +27,7 @@ Rails.application.routes.draw do
   get '/articles/:uuid/publish', to: 'articles#publish', as: :publish_article
   post '/articles/preview', to: 'articles#preview', as: :preview_article
   resources :published_articles, param: :uuid, only: %i[update destroy]
+  resources :article_references, only: %i[index], default: { format: :json }
 
   resources :notifications
   resources :tags, only: %i[index show]

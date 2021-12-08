@@ -1,6 +1,6 @@
 <%= turbo_stream_from @article %>
 
-<div data-controller="article-form" class="h-screen flex flex-col">
+<div data-controller="article-form" data-article-form-active-tab-value="edit" class="h-screen flex flex-col">
   <div class="py-2 px-4 sm:py-4 sm:px-0 flex space-x-4">
     <div 
       data-action="click->article-form#edit" 
@@ -26,7 +26,7 @@
     <%= render partial: "articles/preview" %>
   </div>
   <% if @article.persisted? %>
-    <div class="px-4 sm:px-0">
+    <div class="px-4 sm:px-0 pt-2">
       <%= render partial: "articles/updated_at", locals: { article: @article } %>
     </div>
   <% end %>

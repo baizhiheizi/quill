@@ -75,7 +75,7 @@ class Article < ApplicationRecord
   has_many :references, through: :article_references, source: :reference, source_type: 'Article'
   has_many :article_citers, class_name: 'CiterReference', as: :reference, dependent: :restrict_with_error
   has_many :citers, through: :article_citers, source: :citer, source_type: 'Article'
-  accepts_nested_attributes_for :article_references
+  accepts_nested_attributes_for :article_references, reject_if: proc { |attributes| attributes['reference_id'].blank? || attributes['revenue_ratio'].blank? }, allow_destroy: true
 
   has_one :wallet, class_name: 'MixinNetworkUser', as: :owner, dependent: :nullify
 
@@ -93,15 +93,12 @@ class Article < ApplicationRecord
   validates :references_revenue_ratio, presence: true, numericality: { greater_than_or_equal_to: 0.0 }
   validate :ensure_author_account_normal
   validate :ensure_price_not_too_low
-  validate :ensure_references_ration_correct
+  validate :ensure_references_ratios_correct
   validate :ensure_revenue_ratios_sum_to_one
 
   before_validation :setup_attributes, on: :create
   after_save do
     generate_snapshot if should_generate_snapshot?
-  end
-  after_update_commit do
-    broadcast_update_later_to self, target: "article_#{id}_updated_at", partial: 'articles/updated_at', locals: { article_: self }
   end
 
   delegate :swappable?, to: :currency
@@ -366,7 +363,7 @@ class Article < ApplicationRecord
     errors.add(:author_revenue_ratio, ' incorrect') unless (revenue_ratios_sum - 1.0).abs < Float::EPSILON
   end
 
-  def ensure_references_ration_correct
-    errors.add(:references_revenue_ratio, ' incorrect') unless references_revenue_ratio.to_d == article_references.sum(&:revenue_ratio).to_d
+  def ensure_references_ratios_correct
+    errors.add(:references_revenue_ratio, ' incorrect') unless references_revenue_ratio.to_d == article_references.reject(&:_destroy).sum(&:revenue_ratio).to_d
   end
 end
