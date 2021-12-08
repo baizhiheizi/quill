@@ -31,26 +31,13 @@ ja:
           published: 公開
           blocked: ブロック済み
           hidden: 非公開
-        form:
-          not_finished: まずは記事を完成させてください
-          title_is_required: 記事のタイトルを入力してください
-          title_is_too_long: 記事のタイトルが長すぎる
-          intro_is_required: 記事の導入を入力してください
-          intro_is_too_long: 記事のあらすじが長すぎる
-          content_is_required: 記事の本文を入力してください
-          price_is_too_low: 価格が低すぎます
-          confirm_to_create: 本当に記事を作成しますか？
-          confirm_to_update: 本当に記事を更新しますか？
-          title_place_holder: 記事タイトル
-          content_place_holder: あなただけの文章を書いてみましょう
-          intro_place_holder: より多くの人にあなたの素敵な文章を見て貰えるように記事紹介を書いてみましょう
-          revenue_ratio: 収益率
-          add_reference: 追加参照
-          please_select_an_article: 記事を選択してください
-          please_input_revenue_ratio: 収益率を入力してください
-          references_revenue_cannot_larger_than_50%: 参照収益が50％以上にならない
-          revenue_distribution: 収益配分
-          you_will_create_a_free_article: あなたの記事が無料で読めるようになります
+        platform_revenue_ratio: 文商収益
+        readers_revenue_ratio: 読者収益
+        author_revenue_ratio: 作者収益
+        references_revenue_ratio: 参照収益
+        article_references: 参照
+      citer_reference:
+        reference: 参照
       tag:
         articles_count: 記事数
         subscribers_count: フォロワー数

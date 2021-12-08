@@ -19,7 +19,7 @@
 #  index_citer_references_on_reference  (reference_type,reference_id)
 #
 class CiterReference < ApplicationRecord
-  belongs_to :citer, polymorphic: true
+  belongs_to :citer, polymorphic: true, autosave: true
   belongs_to :reference, polymorphic: true
 
   validates :reference_id, uniqueness: { scope: %i[citer_id citer_type reference_type] }

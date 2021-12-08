@@ -1,10 +1,10 @@
 import { Controller } from "@hotwired/stimulus";
-import * as Rails from '@rails/ujs';
 import EasyMDE from 'easymde';
 
 export default class extends Controller {
   static values = {
-    autosave: Boolean
+    autosave: Boolean,
+    activeTab: String,
   }
   static targets = [
     "form", 
@@ -15,15 +15,32 @@ export default class extends Controller {
     "preview", 
     "editButton", 
     "previewButton",
-    "optionsButton"
+    "optionsButton",
+    "authorRevenueRatio",
+    "referenceRevenueRatio",
+    "articleReferenceRevenueRatio"
   ]
 
   connect() {
-    this.initMdEditor();
     if (this.autosave) {
       this.editor.codemirror.on("change", () => {
-        Rails.fire(this.formTarget, 'submit')
+        this.formTarget.requestSubmit();
       });
+    }
+  }
+
+  formTargetConnected() {
+    this.initMdEditor();
+    switch(this.activeTabValue) {
+      case 'edit':
+        this.edit();
+        break;
+      case 'preview':
+        this.preview();
+        break;
+      case 'options':
+        this.options();
+        break;
     }
   }
 
@@ -42,13 +59,56 @@ export default class extends Controller {
   }
 
   save() {
-    Rails.fire(this.formTarget, 'submit');
+    this.formTarget.requestSubmit();
+  }
+
+  formatReferenceRatio(e) {
+    let ratio = 0.05;
+
+    if (e.target.value) {
+      ratio = parseFloat(e.target.value);
+    }
+
+    if (ratio < 0 || ratio > 0.5) {
+      ratio = 0.05
+    }
+
+    e.target.value = ratio.toFixed(2);
+    this.calReferenceRatio();
+  }
+
+  calReferenceRatio() {
+    const referenceRevenueRatio = 
+      this.articleReferenceRevenueRatioTargets
+        .filter(
+          target => window.getComputedStyle(target.closest('.nested-form-wrapper')).display !== "none" 
+        ).map(
+          target => { 
+            return parseFloat(target.value)
+          }
+        ).reduce(
+          (prev, cur) => {
+            return prev + cur;
+          }, 0)
+    if (referenceRevenueRatio <= 0.5) {
+      this.referenceRevenueRatioTarget.value = parseFloat(referenceRevenueRatio.toFixed(2));
+      this.authorRevenueRatioTarget.value = parseFloat((0.5 - referenceRevenueRatio).toFixed(2));
+    }
+  }
+
+  articleReferenceRevenueRatioTargetConnected() {
+    this.calReferenceRatio();
+  }
+
+  articleReferenceRevenueRatioTargetDisconnected() {
+    this.calReferenceRatio();
   }
 
   edit() {
     this.activeContentForm();
     this.hidePreview();
     this.hideSettingsForm();
+    this.activeTabValue = 'edit';
   }
 
   preview() {
@@ -69,6 +129,7 @@ export default class extends Controller {
       this.activePreview();
       this.hideContentForm();
       this.hideSettingsForm();
+      this.activeTabValue = 'preview';
     });
   }
 
@@ -76,6 +137,7 @@ export default class extends Controller {
     this.activeSettingsForm();
     this.hideContentForm();
     this.hidePreview();
+      this.activeTabValue = 'options';
   }
 
   activeContentForm() {

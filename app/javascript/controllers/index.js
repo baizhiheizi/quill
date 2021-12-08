@@ -18,8 +18,14 @@ application.register("flash", FlashController)
 import ModalController from "./modal_controller.js"
 application.register("modal", ModalController)
 
+import NestedFormController from "./nested_form_controller.js"
+application.register("nested-form", NestedFormController)
+
 import NotificationController from "./notification_controller.js"
 application.register("notification", NotificationController)
+
+import ReferencesSelectController from "./references_select_controller.js"
+application.register("references-select", ReferencesSelectController)
 
 import TagsSelectController from "./tags_select_controller.js"
 application.register("tags-select", TagsSelectController)

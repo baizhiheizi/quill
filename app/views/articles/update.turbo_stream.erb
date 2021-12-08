@@ -1,0 +1,13 @@
+<%= turbo_stream.replace "edit_article_#{@article.id}" do %>
+  <%= render partial: "articles/form", locals: { article: @article } %>
+<% end %>
+<%= turbo_stream.replace "#{dom_id @article}_updated_at" do %>
+  <%= render partial: "articles/updated_at", locals: { article: @article } %>
+<% end %>
+<%= turbo_stream.update "notifications" do %>
+  <% if @article.errors.present? %>
+    <%= render partial: "shared/notification", locals: { type: 'error', message: @article.errors.full_messages } %>
+  <% else %>
+    <%= render partial: "shared/notification", locals: { type: 'success', message: t('success_updated') } %>
+  <% end %>
+<% end %>

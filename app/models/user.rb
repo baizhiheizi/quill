@@ -248,10 +248,10 @@ class User < ApplicationRecord
   end
 
   def available_articles
-    bought_articles.only_published
-                   .or(articles.only_published)
-                   .or(Article.only_free.only_published)
-                   .distinct
+    (
+      bought_articles.only_published.to_a +
+        articles.only_published.or(Article.only_free.only_published).to_a
+    ).uniq
   end
 
   def to_param

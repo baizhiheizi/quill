@@ -30,10 +30,12 @@ export default class extends Controller {
           'X-CSRF-Token': (document.querySelector("meta[name='csrf-token']") || {}).content,
           'Content-Type': 'application/json',
         },
-      })
-        .then(response => response.json())
-        .then(options => callback(
-          options.map(option => { return { text: option, value: option } }))
+      }).then(response => response.json())
+        .then(
+          options => callback(
+            options.map(option => { return { text: option, value: option } })
+          )
         )
         .catch(() => callback())
+  }
 }

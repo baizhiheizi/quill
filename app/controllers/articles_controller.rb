@@ -59,7 +59,24 @@ class ArticlesController < ApplicationController
   private
 
   def article_params
-    params.require(:article).permit(:title, :content, :price, :asset_id, :intro)
+    params
+      .require(:article)
+      .permit(
+        :title,
+        :content,
+        :price,
+        :asset_id,
+        :intro,
+        :author_revenue_ratio,
+        :references_revenue_ratio,
+        article_references_attributes: %i[
+          id
+          reference_type
+          reference_id
+          revenue_ratio
+          _destroy
+        ]
+      )
   end
 
   def load_article
