@@ -1,6 +1,8 @@
-<%= turbo_stream_from @article %>
-
-<div data-controller="article-form" data-article-form-active-tab-value="edit" class="h-screen flex flex-col">
+<div 
+  data-controller="article-form" 
+  data-article-form-new-record-value="false" 
+  data-article-form-active-tab-value="edit" 
+  class="h-screen flex flex-col">
   <div class="py-2 px-4 sm:py-4 sm:px-0 flex space-x-4">
     <div 
       data-action="click->article-form#edit" 
@@ -32,8 +34,8 @@
   <% end %>
   <div class="py-2 px-4 sm:py-4 sm:px-0 flex justify-between">
     <div class="flex space-x-4">
-      <%= link_to t("publish_article"), view_modals_path(type: :publish_article, uuid: @article.uuid), method: :post, class: "px-4 py-2 text-sm sm:text-base rounded bg-blue-500 text-white" unless @article.published? %>
-      <div class="cursor-pointer px-4 py-2 text-sm sm:text-base rounded bg-blue-500 text-white" data-action="click->article-form#save">
+      <%= link_to t("publish_article"), view_modals_path(type: :publish_article, uuid: @article.uuid), method: :post, class: "px-4 py-2 text-sm sm:text-base rounded bg-blue-600 hover:bg-blue-500 active:bg-blue-500 text-white" unless @article.published? %>
+    <div class="cursor-pointer px-4 py-2 text-sm sm:text-base rounded bg-blue-600 hover:bg-blue-500 active:bg-blue-500 text-white" data-action="click->article-form#save">
         <%= t('save') %>
       </div>
     </div>
