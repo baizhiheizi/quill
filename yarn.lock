@@ -14324,6 +14324,11 @@ table@^6.7.1:
     string-width "^4.2.0"
     strip-ansi "^6.0.0"
 
+tailwind-scrollbar-hide@^1.1.6:
+  version "1.1.6"
+  resolved "https://registry.yarnpkg.com/tailwind-scrollbar-hide/-/tailwind-scrollbar-hide-1.1.6.tgz#9b9affcd5b0faba87148528891aa2168bc7c4dc5"
+  integrity sha512-WDF6t3YZbHpte7gwz6h4hwRl0unkC+exVz4ucAuDOtFwkOs8Pc77Bd6HBm//PMXVa6a6uQfDBsv8AiSa6GJq7A==
+
 tailwindcss@^2.2.19:
   version "2.2.19"
   resolved "https://registry.yarnpkg.com/tailwindcss/-/tailwindcss-2.2.19.tgz#540e464832cd462bb9649c1484b0a38315c2653c"
