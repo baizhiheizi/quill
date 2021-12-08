@@ -316,7 +316,7 @@ class Article < ApplicationRecord
   end
 
   def default_intro
-    content.strip.gsub("\n", '')
+    content.to_s.strip.gsub("\n", '')
   end
 
   def upvote_ratio

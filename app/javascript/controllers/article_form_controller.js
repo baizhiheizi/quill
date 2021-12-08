@@ -4,6 +4,7 @@ import EasyMDE from 'easymde';
 export default class extends Controller {
   static values = {
     autosave: Boolean,
+    newRecord: Boolean,
     activeTab: String,
   }
   static targets = [
@@ -22,9 +23,9 @@ export default class extends Controller {
   ]
 
   connect() {
-    if (this.autosave) {
+    if (this.autosaveValue) {
       this.editor.codemirror.on("change", () => {
-        this.formTarget.requestSubmit();
+        this.save();
       });
     }
   }
@@ -59,7 +60,11 @@ export default class extends Controller {
   }
 
   save() {
-    this.formTarget.requestSubmit();
+    if (this.newRecordValue) {
+      this.formTarget.submit();
+    } else {
+      this.formTarget.requestSubmit();
+    }
   }
 
   formatReferenceRatio(e) {
@@ -137,7 +142,7 @@ export default class extends Controller {
     this.activeSettingsForm();
     this.hideContentForm();
     this.hidePreview();
-      this.activeTabValue = 'options';
+    this.activeTabValue = 'options';
   }
 
   activeContentForm() {
@@ -151,13 +156,17 @@ export default class extends Controller {
   }
 
   activeSettingsForm() {
-    this.optionFieldsTarget.classList.remove("hidden");
-    this.optionsButtonTarget.classList.add("border-b-2");
+    if (this.hasOptionFieldsTarget && this.hasOptionsButtonTarget) {
+      this.optionFieldsTarget.classList.remove("hidden");
+      this.optionsButtonTarget.classList.add("border-b-2");
+    }
   }
 
   hideSettingsForm() {
-    this.optionFieldsTarget.classList.add("hidden");
-    this.optionsButtonTarget.classList.remove("border-b-2");
+    if (this.hasOptionFieldsTarget && this.hasOptionsButtonTarget) {
+      this.optionFieldsTarget.classList.add("hidden");
+      this.optionsButtonTarget.classList.remove("border-b-2");
+     }
   }
 
   activePreview() {
