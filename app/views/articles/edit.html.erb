@@ -23,7 +23,7 @@
       <%= t('preview') %>
     </div>
   </div>
-  <div class="flex-1 overflow-y-scroll bg-white border-t border-b  sm:border relative pb-4 prose xl:prose-lg 2xl:prose-xl max-w-full">
+  <div class="flex-1 overflow-y-scroll bg-white border-t border-b sm:rounded-lg sm:scrollbar-hide sm:border relative pb-4 prose xl:prose-lg 2xl:prose-xl max-w-full">
     <%= render partial: "articles/form", locals: { article: @article } %>
     <%= render partial: "articles/preview" %>
   </div>

@@ -80,6 +80,7 @@
     "remark-footnotes": "^4.0.1",
     "stimulus-use": "^0.50.0-2",
     "style-loader": "^3.3.1",
+    "tailwind-scrollbar-hide": "^1.1.6",
     "tailwindcss": "^2.2.19",
     "tom-select": "^2.0.0",
     "trix": "^1.2.0",
