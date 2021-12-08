@@ -1,0 +1,34 @@
+<%= turbo_stream.update "modal-slot" do %>
+  <div 
+    data-controller="modal" 
+    data-modal-initial-state="show">
+    <div data-modal-target="modal" class="fixed inset-0 z-50 flex items-start justify-center w-full overflow-y-auto">
+      <button data-action="modal#hide" class="fixed top-0 left-0 w-screen h-full bg-black opacity-30"></button>
+      <div class='relative w-10/12 max-w-2xl max-h-screen mt-48 bg-white border rounded shadow'>
+        <div class="p-4 text-xl font-medium text-center border-b"><%= t('publish_article') %></div>
+        <div class="p-6">
+          <div class="mb-2 text-xl sm:text-2xl font-bold text-center">
+            <%= @article.title %>
+          </div>
+          <div class="mb-4 text-center text-yellow-600 font-bold">
+            <%= @article.price_tag %>
+          </div>
+          <% if @article.references.present? %>
+            <div class="mb-4">
+              <div class="text-gray-500 mb-2 text-center text-sm"><%= t("article_references") %></div>
+              <% @article.references.each do |reference| %>
+                <div class="flex font-sm items-center justify-center space-x-2 text-sm text-gray-500">
+                  <img class="w-4 h-4 rounded-full" src="<%= reference.author.avatar %>" />
+                  <span><%= reference.title %></span>
+                </div>
+              <% end %>
+            </div>
+          <% end %>
+          <%= form_for @article, url: published_article_path(@article) do |form| %>
+            <%= form.submit t('publish'), class: "cursor-pointer block w-full bg-blue-500 text-white rounded py-2 text-center" %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>

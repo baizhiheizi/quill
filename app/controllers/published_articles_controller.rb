@@ -10,7 +10,7 @@ class PublishedArticlesController < ApplicationController
       redirect_to @article, notice: t('success_published_article')
     else
       flash.now.alert = t('failed_to_save')
-      render 'articles/publish', status: :unprocessable_entity
+      render 'articles/edit', status: :unprocessable_entity
     end
   end
 

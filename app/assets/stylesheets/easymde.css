@@ -443,7 +443,7 @@ span.CodeMirror-selectedtext {
     /* position: relative; */
     position: sticky;
     top: 0;
-    z-index: 9999;
+    z-index: 10;
     background: rgba(249, 250, 251, var(--tw-bg-opacity));
     -webkit-user-select: none;
     -moz-user-select: none;

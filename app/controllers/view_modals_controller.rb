@@ -12,6 +12,9 @@ class ViewModalsController < ApplicationController
     case type
     when 'login'
       render :login
+    when 'publish_article'
+      @article = current_user.articles.find_by uuid: params[:uuid]
+      render :publish_article
     end
   end
 end

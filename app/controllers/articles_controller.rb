@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
 class ArticlesController < ApplicationController
-  before_action :authenticate_user!, only: %i[edit update publish]
-  before_action :load_article, only: %i[edit update publish]
-  layout 'editor', only: %i[new edit publish]
+  before_action :authenticate_user!, only: %i[edit update]
+  before_action :load_article, only: %i[edit update]
+  layout 'editor', only: %i[new edit]
 
   def index
     @pagy, @articles = pagy Article.only_published.order(created_at: :desc)
@@ -46,10 +46,6 @@ class ArticlesController < ApplicationController
   def update
     CreateTag.call(@article, params[:article][:tag_names] || [])
     @article.update article_params
-  end
-
-  def publish
-    redirect_to edit_article_path(@article), alert: t('write_something_first') unless @article.may_publish?
   end
 
   def preview
