@@ -83,21 +83,23 @@ export default class extends Controller {
   }
 
   calReferenceRatio() {
-    const referenceRevenueRatio = 
-      this.articleReferenceRevenueRatioTargets
-        .filter(
-          target => window.getComputedStyle(target.closest('.nested-form-wrapper')).display !== "none" 
-        ).map(
-          target => { 
-            return parseFloat(target.value)
-          }
-        ).reduce(
-          (prev, cur) => {
-            return prev + cur;
-          }, 0)
-    if (referenceRevenueRatio <= 0.5) {
-      this.referenceRevenueRatioTarget.value = parseFloat(referenceRevenueRatio.toFixed(2));
-      this.authorRevenueRatioTarget.value = parseFloat((0.5 - referenceRevenueRatio).toFixed(2));
+    if (this.hasArticleReferenceRevenueRatioTargets && this.hasReferenceRevenueRatioTarget) {
+      const referenceRevenueRatio = 
+        this.articleReferenceRevenueRatioTargets
+          .filter(
+            target => window.getComputedStyle(target.closest('.nested-form-wrapper')).display !== "none" 
+          ).map(
+            target => { 
+              return parseFloat(target.value)
+            }
+          ).reduce(
+            (prev, cur) => {
+              return prev + cur;
+            }, 0)
+      if (referenceRevenueRatio <= 0.5) {
+        this.referenceRevenueRatioTarget.value = parseFloat(referenceRevenueRatio.toFixed(2));
+        this.authorRevenueRatioTarget.value = parseFloat((0.5 - referenceRevenueRatio).toFixed(2));
+      }
     }
   }
 
