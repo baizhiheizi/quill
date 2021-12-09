@@ -46,6 +46,9 @@ class Payment < ApplicationRecord
   validates :trace_id, presence: true, uniqueness: true
 
   after_commit :place_order!, :notify_payer, on: :create
+  after_create_commit do
+    broadcast_update_later_to "user_#{payer.mixin_uuid}", target: "payment_#{trace_id}", partial: 'shared/loading', locals: { payment: self }
+  end
 
   delegate :swappable?, to: :currency
 
@@ -84,7 +87,7 @@ class Payment < ApplicationRecord
   end
 
   def article
-    @article = Article.find_by! uuid: decrypted_memo['a']
+    @article = Article.find_by uuid: decrypted_memo['a']
   end
 
   def citer
@@ -94,6 +97,7 @@ class Payment < ApplicationRecord
   end
 
   def place_order!
+    return if article.blank?
     return unless memo_correct?
 
     if decrypted_memo['t'] == 'REVENUE'
@@ -111,6 +115,8 @@ class Payment < ApplicationRecord
   end
 
   def place_swap_order!
+    return if article.blank?
+
     create_swap_order!(
       funds: amount,
       min_amount: decrypted_memo['t'] == 'BUY' ? article.price : nil,

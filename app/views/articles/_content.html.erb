@@ -1,0 +1,7 @@
+<div id="article_<%= article.uuid %>_content">
+  <% if article.authorized? user %> 
+    <%= render partial: "articles/full_content", locals: { article: article } %>
+  <% else %>
+    <%= render partial: "articles/partial_content", locals: { article: article } %>
+  <% end %>
+</div>

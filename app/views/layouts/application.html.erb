@@ -42,8 +42,7 @@
       <div style="height:env(safe-area-inset-bottom)" />
     </main>
     <div class="absolute bottom-0" id="modal-slot"></div>
-    <div class="fixed top-8 h-0 w-full px-4" id="notifications">
-      <%= turbo_stream_from "user_#{current_user.mixin_uuid}_notifications" if current_user.present? %>
-    </div>
+    <div class="fixed top-8 h-0 w-full px-4" id="notifications"></div>
+    <%= turbo_stream_from "user_#{current_user.mixin_uuid}" if current_user.present? %>
   </body>
 </html>

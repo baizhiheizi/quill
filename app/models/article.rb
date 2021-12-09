@@ -349,8 +349,9 @@ class Article < ApplicationRecord
     return if amount.blank?
 
     format(
-      'mixin://pay?recipient=%<recipient>s&memo=%<memo>s&asset=%<asset>s&amount=%<amount>s',
+      'mixin://pay?recipient=%<recipient>s&trace=%<trace>s&memo=%<memo>s&asset=%<asset>s&amount=%<amount>s',
       recipient: user&.wallet_id || wallet_id,
+      trace: payment_trace_id(user),
       memo: buy_payment_memo,
       asset: pay_asset_id,
       amount: amount.to_r.to_f
