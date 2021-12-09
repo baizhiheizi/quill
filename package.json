@@ -19,7 +19,6 @@
     "@rails/actiontext": "^6.1.4-1",
     "@rails/activestorage": "^6.1.4",
     "@rails/request.js": "^0.0.5",
-    "@rails/ujs": "^6.1.4",
     "@rails/webpacker": "6.0.0-rc.5",
     "@tailwindcss/forms": "^0.3.4",
     "@tailwindcss/line-clamp": "^0.2.2",

@@ -1,6 +1,5 @@
 import { Controller } from '@hotwired/stimulus';
 import { debounce } from 'lodash';
-import * as Rails from '@rails/ujs';
 
 export default class extends Controller {
   static targets = ["form"];
@@ -21,6 +20,6 @@ export default class extends Controller {
   save () {
     if (!window._rails_loaded) return
 
-    Rails.fire(this.formTarget, 'submit')
+    this.formTarget.requestSubmit();
   }
 }

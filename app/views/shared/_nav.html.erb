@@ -12,7 +12,7 @@
           <% if current_user.present? %>
             <%= link_to t("write"), new_article_path, class: "px-3 py-2 text-base font-medium hover:bg-blue-50 hover:text-blue-500 rounded-md" %>
           <% else %>
-            <%= link_to t("write"), view_modals_path(type: :login), method: :post, class: "px-3 py-2 text-base font-medium hover:bg-blue-50 hover:text-blue-500 rounded-md" %>
+            <%= link_to t("write"), view_modals_path(type: :login), data: { turbo_method: :post }, class: "px-3 py-2 text-base font-medium hover:bg-blue-50 hover:text-blue-500 rounded-md" %>
           <% end %>
         </div>
         <div class="flex items-baseline ml-10 space-x-4">
@@ -64,7 +64,7 @@
               </div>
             </div>
           <% else %>
-            <%= link_to 'Connect Wallet', view_modals_path(type: :login), method: :post, class: "hover:bg-blue-600 bg-blue-500 text-white px-3 py-2 rounded" %>
+            <%= link_to 'Connect Wallet', view_modals_path(type: :login), data: { turbo_method: :post }, class: "hover:bg-blue-600 bg-blue-500 text-white px-3 py-2 rounded" %>
           <% end %>
         </div>
     </div>
@@ -96,7 +96,7 @@
         <% if current_user.present? %>
           <%= link_to t("write"), new_article_path, class: "block px-3 py-2 text-base font-medium focus:bg-blue-50 focus:text-blue-500 rounded-md" %>
         <% else %>
-          <%= link_to t("write"), view_modals_path(type: :login), method: :post, class: "block px-3 py-2 text-base font-medium focus:bg-blue-50 focus:text-blue-500 rounded-md" %>
+          <%= link_to t("write"), view_modals_path(type: :login), data: { turbo_method: :post }, class: "block px-3 py-2 text-base font-medium focus:bg-blue-50 focus:text-blue-500 rounded-md" %>
         <% end %>
       </div>
       <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
@@ -130,7 +130,7 @@
           </div>
         <% else %>
           <div class="px-2 sm:px-3 flex">
-            <%= link_to 'Connect Wallet', view_modals_path(type: :login), method: :post, class: "block px-3 py-2 text-base font-medium text-white bg-blue-500 focus:bg-blue-600 rounded-md" %>
+            <%= link_to 'Connect Wallet', view_modals_path(type: :login), data: { turbo_method: :post }, class: "block px-3 py-2 text-base font-medium text-white bg-blue-500 focus:bg-blue-600 rounded-md" %>
           </div>
         <% end %>
       </div>

@@ -2731,11 +2731,6 @@
   resolved "https://registry.yarnpkg.com/@rails/request.js/-/request.js-0.0.5.tgz#5ea896085f1c82bacca0e32aa918c8cd003a3d30"
   integrity sha512-EDw3d5oCSPFn/os7C41+61urT5J5n+bMXK2NTQVhJI8VCPAIVbvFGjZIQI0a9zJ9KuaWKHM6IjXTRakKemlzoA==
 
-"@rails/ujs@^6.1.4":
-  version "6.1.4"
-  resolved "https://registry.yarnpkg.com/@rails/ujs/-/ujs-6.1.4.tgz#093d5341595a02089ed309dec40f3c37da7b1b10"
-  integrity sha512-O3lEzL5DYbxppMdsFSw36e4BHIlfz/xusynwXGv3l2lhSlvah41qviRpsoAlKXxl37nZAqK+UUF5cnGGK45Mfw==
-
 "@rails/webpacker@6.0.0-rc.5":
   version "6.0.0-rc.5"
   resolved "https://registry.yarnpkg.com/@rails/webpacker/-/webpacker-6.0.0-rc.5.tgz#496466b331f3673cf73149d1e3bbc39dce3e1020"
