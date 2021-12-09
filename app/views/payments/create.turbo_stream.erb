@@ -1,0 +1,3 @@
+<%= turbo_stream.update "article_#{@article.uuid}_buy_payment_box" do %>
+  <%= render partial: "articles/buy_payment_box", locals: { article: @article, pay_asset_id: @currency.asset_id } %>
+<% end %>

@@ -37,6 +37,8 @@ class Currency < ApplicationRecord
   scope :btc, -> { find_by(asset_id: BTC_ASSET_ID) }
 
   def self.find_or_create_by_asset_id(_asset_id)
+    return if _asset_id.blank?
+
     currency = find_by(asset_id: _asset_id)
     return currency if currency.present?
 

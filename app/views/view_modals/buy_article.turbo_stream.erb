@@ -1,0 +1,13 @@
+<%= turbo_stream.update "modal-slot" do %>
+  <div 
+    data-controller="modal" 
+    data-modal-initial-state="show">
+    <div data-modal-target="modal" class="fixed inset-0 z-50 flex items-start justify-center w-full overflow-y-auto">
+      <button data-action="modal#hide" class="fixed top-0 left-0 w-screen h-full bg-black opacity-30"></button>
+      <div class='relative w-10/12 max-w-2xl max-h-screen mt-24 bg-white border rounded shadow'>
+        <div class="p-4 text-xl font-medium text-center border-b"><%= t('buy_article') %></div>
+        <%= render partial: "articles/buy_payment_modal", locals: { article: @article } %>
+      </div>
+    </div>
+  </div>
+<% end %>

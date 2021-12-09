@@ -1,20 +1,23 @@
 <%= MarkdownRenderService.new.call(article.partial_content).html_safe %>
-<div class="flex justify-center text-yellow-500 font-semibold">
-  - <%= t('more_to_read') %> -
-</div>
-<div class="flex justify-center">
-  <%= t('pay') %>
-  <span class="font-bold mx-2 text-yellow-500"><%= article.price_tag %></span>
-  <span class="mr-2">(≈$<%= article.price_usd %>)</span>
-  <span><%= t('to_continue_reading') %></span>
-</div>
-<div class="flex justify-center mb-6">
-  <span><%= t('and_receive_early_reader_revenue') %></span>
-  (<%= link_to t('rules'), page_path('rules') %>)
-</div>
-<div class="mb-4 rounded-lg border border-2 border-yellow-500 bg-yellow-50 text-yellow-500 font-semibold p-4">
-  <%= t('pay_warning') %>
-</div>
-<div class="flex justify-center">
-  <%= link_to t('pay_to_read'), view_modals_path(type: :pay, uuid: article.uuid), class: "rounded bg-blue-500 text-white px-4 py-2 no-underline" %>
+
+<div class="mb-6">
+  <div class="flex justify-center text-yellow-500 font-semibold">
+    - <%= t('more_to_read') %> -
+  </div>
+  <div class="flex justify-center">
+    <%= t('pay') %>
+    <span class="font-bold mx-2 text-yellow-500"><%= article.price_tag %></span>
+    <span class="mr-2">(≈$<%= article.price_usd %>)</span>
+    <span><%= t('to_continue_reading') %></span>
+  </div>
+  <div class="flex justify-center mb-6">
+    <span><%= t('and_receive_early_reader_revenue') %></span>
+    (<%= link_to t('rules'), page_path('rules') %>)
+  </div>
+  <div class="text-base mb-4 rounded-lg border border-yellow-500 bg-yellow-50 text-yellow-500 font-semibold p-4">
+    <%= t('pay_warning') %>
+  </div>
+  <div class="flex justify-center">
+    <%= link_to t('pay_to_read'), view_modals_path(type: :buy_article, uuid: article.uuid), method: :post, class: "text-base rounded bg-blue-600 hover:bg-blue-500 active:bg-blue-500 text-white px-4 py-2 no-underline" %>
+  </div>
 </div>

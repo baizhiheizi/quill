@@ -345,6 +345,8 @@ GEM
     redis-objects (1.5.1)
       redis (~> 4.2)
     regexp_parser (2.1.1)
+    requestjs-rails (0.0.5)
+      rails (>= 6.0.0)
     rest-client (2.1.0)
       http-accept (>= 1.7.0, < 2.0)
       http-cookie (>= 1.0.2, < 2.0)
@@ -493,6 +495,7 @@ DEPENDENCIES
   redis (~> 4.1)
   redis-namespace
   redis-objects
+  requestjs-rails
   rubocop
   rubocop-rails
   sass-rails (>= 6)

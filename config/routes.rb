@@ -27,6 +27,7 @@ Rails.application.routes.draw do
   post '/articles/preview', to: 'articles#preview', as: :preview_article
   resources :published_articles, param: :uuid, only: %i[update destroy]
   resources :article_references, only: %i[index], default: { format: :json }
+  resources :payments, only: %i[create]
 
   resources :notifications
   resources :tags, only: %i[index show]
