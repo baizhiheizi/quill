@@ -329,6 +329,55 @@ class Article < ApplicationRecord
     title.present? && content.present?
   end
 
+  def payment_trace_id(user)
+    return if user.blank?
+
+    # generate a unique trace ID for paying
+    # avoid duplicate payment
+    candidate = PrsdiggBot.api.unique_conversation_id(uuid, user.mixin_uuid)
+    loop do
+      break unless Payment.exists?(trace_id: candidate, state: %i[refunded completed])
+
+      candidate = PrsdiggBot.api.unique_conversation_id(uuid, candidate)
+    end
+
+    candidate
+  end
+
+  def pay_url(user = nil, pay_asset_id = asset_id)
+    amount = buy_payment_amount(pay_asset_id)
+    return if amount.blank?
+
+    format(
+      'mixin://pay?recipient=%<recipient>s&memo=%<memo>s&asset=%<asset>s&amount=%<amount>s',
+      recipient: user&.wallet_id || wallet_id,
+      memo: buy_payment_memo,
+      asset: pay_asset_id,
+      amount: amount.to_r.to_f
+    )
+  end
+
+  def buy_payment_amount(pay_asset_id)
+    case pay_asset_id
+    when asset_id
+      price
+    else
+      begin
+        Foxswap.api.pre_order(
+          pay_asset_id: pay_asset_id,
+          fill_asset_id: asset_id,
+          amount: (price * 1.01).round(8).to_r.to_f
+        )['data']['funds']
+      rescue StandardError
+        nil
+      end
+    end
+  end
+
+  def buy_payment_memo
+    Base64.encode64({ t: 'BUY', a: uuid }.to_json)
+  end
+
   private
 
   def setup_attributes

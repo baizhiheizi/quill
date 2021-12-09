@@ -1,0 +1,36 @@
+<div 
+  data-controller="buy-article-payment" 
+  data-buy-article-payment-article-uuid-value="<%= article.uuid %>"
+  data-buy-article-payment-selected-currency-value="<%= article.currency.asset_id %>"
+  class="max-w-xs m-auto p-4">
+  <div class="mb-4 grid grid-cols-3 gap-4">
+    <div 
+      data-buy-article-payment-target="currency"
+      data-asset-id="<%= article.currency.asset_id %>"
+      data-action="click->buy-article-payment#select"
+      class="cursor-pointer flex items-center space-x-2 justify-center border p-1">
+      <img class="my-0 w-6 h-6 rounded-full" src="<%= article.currency.icon_url %>" />
+      <span class="text-sm sm:text-base"><%= article.currency.symbol %></span>
+    </div>
+    <% Currency.swappable.each do |currency| %>
+      <% unless currency == article.currency %>
+        <div 
+          data-buy-article-payment-target="currency"
+          data-asset-id="<%= currency.asset_id %>"
+          data-action="click->buy-article-payment#select"
+          class="cursor-pointer flex items-center space-x-2 justify-center border p-1">
+          <img class="my-0 w-6 h-6 rounded-full" src="<%= currency.icon_url %>" />
+          <span class="text-sm sm:text-base"><%= currency.symbol %></span>
+        </div>
+      <% end %>
+    <% end %>
+  </div>
+  <template data-buy-article-payment-target="loading">
+    <div class="flex justify-center">
+      <img class="w-12 h-12 my-0" src="<%= image_path 'loading.svg' %>" />
+    </div>
+  </template>
+  <div data-buy-article-payment-target="payBox" id="article_<%= article.uuid %>_buy_payment_box">
+    <%= render partial: "articles/buy_payment_box", locals: { article: article, pay_asset_id: article.asset_id } %>
+  </div>
+</div>

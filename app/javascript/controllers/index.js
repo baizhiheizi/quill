@@ -9,6 +9,9 @@ application.register("article-form", ArticleFormController)
 import AutosaveController from "./autosave_controller.js"
 application.register("autosave", AutosaveController)
 
+import BuyArticlePaymentController from "./buy_article_payment_controller.js"
+application.register("buy-article-payment", BuyArticlePaymentController)
+
 import DropdownController from "./dropdown_controller.js"
 application.register("dropdown", DropdownController)
 
@@ -23,6 +26,9 @@ application.register("nested-form", NestedFormController)
 
 import NotificationController from "./notification_controller.js"
 application.register("notification", NotificationController)
+
+import QrcodeController from "./qrcode_controller.js"
+application.register("qrcode", QrcodeController)
 
 import ReferencesSelectController from "./references_select_controller.js"
 application.register("references-select", ReferencesSelectController)

@@ -7,6 +7,7 @@ class ApplicationController < ActionController::Base
 
   helper_method :current_user
   helper_method :base_props
+  helper_method :from_mixin_messenger?
   around_action :with_locale
 
   private
@@ -67,5 +68,9 @@ class ApplicationController < ActionController::Base
   def with_locale(&action)
     locale = current_user&.locale || I18n.default_locale
     I18n.with_locale(locale, &action)
+  end
+
+  def from_mixin_messenger?
+    request&.user_agent&.include?('Mixin')
   end
 end

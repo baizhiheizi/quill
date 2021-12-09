@@ -29,6 +29,9 @@ gem 'jsbundling-rails'
 # Use Hotwire in your Ruby on Rails app  [https://hotwired.dev]
 gem 'hotwire-rails'
 
+# Rails Request.JS encapsulates the logic to send by default some headers that are required by rails applications like the X-CSRF-Token
+gem 'requestjs-rails'
+
 # Bundle and process CSS [https://github.com/rails/cssbundling-rails]
 gem 'cssbundling-rails'
 

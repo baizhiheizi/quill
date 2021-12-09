@@ -14,7 +14,14 @@ class ViewModalsController < ApplicationController
       render :login
     when 'publish_article'
       @article = current_user.articles.find_by uuid: params[:uuid]
+      return if @article.blank?
+
       render :publish_article
+    when 'buy_article'
+      @article = Article.published.find_by uuid: params[:uuid]
+      return if @article.blank?
+
+      render :buy_article
     end
   end
 end
