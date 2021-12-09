@@ -18,7 +18,7 @@
     <%= t('pay_warning') %>
   </div>
   <div class="flex justify-center mb-4">
-    <%= link_to t('pay_to_read'), view_modals_path(type: :buy_article, uuid: article.uuid), method: :post, class: "text-base rounded bg-blue-600 hover:bg-blue-500 active:bg-blue-500 text-white px-4 py-2 no-underline" %>
+    <%= link_to t('pay_to_read'), view_modals_path(type: :buy_article, uuid: article.uuid), data: { turbo_method: :post }, class: "text-base rounded bg-blue-600 hover:bg-blue-500 active:bg-blue-500 text-white px-4 py-2 no-underline" %>
   </div>
   <div class='text-sm text-gray-500 text-center'>
     <%= t('already_paid') %>? <%= t('try_to') %>
