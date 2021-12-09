@@ -19,7 +19,7 @@ class ViewModalsController < ApplicationController
       render :publish_article
     when 'buy_article'
       @article = Article.published.find_by uuid: params[:uuid]
-      return if @article.blank?
+      return if @article.blank? || @article.authorized?(current_user)
 
       render :buy_article
     end

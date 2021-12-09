@@ -28,11 +28,7 @@
         <%= @article.words_count %>
       </span>
     </div>
-    <% if @article.authorized? current_user %> 
-      <%= render partial: "articles/full_content", locals: { article: @article } %>
-    <% else %>
-      <%= render partial: "articles/partial_content", locals: { article: @article } %>
-    <% end %>
+    <%= render partial: "articles/content", locals: { article: @article, user: current_user } %>
   </article>
   <aside class="lg:col-span-1">
     <div class="lg:sticky lg:top-20">

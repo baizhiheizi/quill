@@ -1,17 +1,23 @@
-<div data-article-paymnent-target="price" class="text-center text-yellow-500 font-bold text-base">
-  <%= "#{format('%.8f', article.buy_payment_amount(pay_asset_id))}" %>
+<div id="payment_<%= article.payment_trace_id current_user %>">
+  <% if Payment.find_by(trace_id: article.payment_trace_id(current_user)) %>
+    <%= render partial: "shared/loading" %>
+  <% else %>
+    <div data-article-paymnent-target="price" class="text-center text-yellow-500 font-bold text-base">
+      <%= "#{format('%.8f', article.buy_payment_amount(pay_asset_id))}" %>
+    </div>
+    <% unless from_mixin_messenger? %>
+      <div data-controller="qrcode" 
+          data-qrcode-url-value="<%= article.pay_url(current_user, pay_asset_id) %>">
+          <div data-qrcode-target="placeholder" class="flex justify-center"></div>
+          <div class="text-center py-2 text-gray-500 text-sm">
+            <%= t("pay_with_messenger") %>
+          </div>
+      </div>
+    <% end %>
+    <a data-article-payment-target="payLink"
+      href="<%= article.pay_url(current_user, pay_asset_id) %>"
+      class="w-full my-4 text-center no-underline cursor-pointer py-2 block bg-blue-600 hover:bg-blue-500 active:bg-blue-500 text-white rounded">
+      <%= t('pay_in_mixin') %>
+    </a>
+  <% end %>
 </div>
-<% unless from_mixin_messenger? %>
-  <div data-controller="qrcode" 
-       data-qrcode-url-value="<%= article.pay_url(current_user, pay_asset_id) %>">
-       <div data-qrcode-target="placeholder" class="flex justify-center"></div>
-       <div class="text-center py-2 text-gray-500 text-sm">
-         <%= t("pay_with_messenger") %>
-       </div>
-  </div>
-<% end %>
-<a data-article-payment-target="payLink"
-  href="<%= article.pay_url(current_user, pay_asset_id) %>"
-  class="w-full my-4 text-center no-underline cursor-pointer py-1 block bg-blue-600 hover:bg-blue-500 active:bg-blue-500 text-white rounded">
-  <%= t('pay_in_mixin') %>
-</a>
