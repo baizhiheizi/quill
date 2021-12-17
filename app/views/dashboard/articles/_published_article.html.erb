@@ -1,0 +1,34 @@
+<div class="border-b p-4 sm:px-6">
+  <div class="relative">
+    <%= link_to article_path(article.uuid) do %>
+      <span aria-hidden="true" class="absolute inset-0"></span>
+    <% end %>
+    <div class="text-sm text-gray-500 text-right">
+      <%= article.published_at.strftime("%Y-%m-%d %H:%M") %>
+    </div>
+    <div class="text-xl font-bold mb-2">
+      <%= article.title %>
+    </div>
+    <div class="grid grid-cols-3 sm:flex sm:items-center sm:space-x-4 text-sm text-gray-500 mb-2">
+      <div class="col-span-1">
+        $<%= article.revenue_usd.round(4) %>
+      </div>
+      <div class="col-span-1">
+        <%= article.orders_count %> <%= t('bought') %>
+      </div>
+      <div class="col-span-1">
+        <%= article.comments_count %> <%= t('commented') %>
+      </div>
+      <div class="col-span-1">
+        <%= article.upvotes_count %> <%= t('upvoted') %>
+      </div>
+      <div class="col-span-1">
+        <%= article.downvotes_count %> <%= t('downvoted') %>
+      </div>
+    </div>
+  </div>
+  <div class="text-blue-500 flex items-center space-x-4 sm:justify-end">
+    <%= link_to t('edit'), edit_article_path(article.uuid) %>
+    <%= link_to t('hide'), edit_article_path(article.uuid) %>
+  </div>
+</div>

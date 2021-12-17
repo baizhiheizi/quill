@@ -119,7 +119,7 @@ export default function PublishedArticleEditComponent(props: {
           <Input />
         </Form.Item>
         <Form.Item label={t('article.title')} name='title'>
-          <Input placeholder={t('article.form.title_place_holder')} />
+          <Input placeholder={t('article.form.title_placeholder')} />
         </Form.Item>
         <Form.Item label={t('article.content')} name='content'>
           <Editor

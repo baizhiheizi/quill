@@ -237,7 +237,7 @@ zh-CN:
     price_is_too_low: 价格太低了
     confirm_to_create: 确定要创建文章吗？
     confirm_to_update: 确定要修改你的文章吗？
-    title_place_holder: 这里输入文章标题
+    title_placeholder: 这里输入文章标题
     content_place_holder: 写点有价值的东西
     intro_place_holder: 请简要介绍一下你的文章，简介内容为公开可见。
     revenue_ratio: 收益比例

@@ -237,7 +237,7 @@ en:
     price_is_too_low: Price is too low
     confirm_to_create: Are you sure to create?
     confirm_to_update: Are you sure to update your article?
-    title_place_holder: Title of article
+    title_placeholder: Title of article
     content_place_holder: Write something valuable
     intro_place_holder: Please introduce your article and this will be public
     revenue_ratio: Revenue Ratio

@@ -59,7 +59,7 @@
                 aria-orientation="vertical" 
                 aria-labelledby="user-menu-button" 
                 tabindex="-1">
-                <%= link_to t("dashboard"), user_path(current_user), class: "block px-4 py-2 text-sm text-gray-700 active:bg-gray-100", role: "menuitem", tabindex: "-1" %>
+                <%= link_to t("dashboard"), dashboard_root_path, class: "block px-4 py-2 text-sm text-gray-700 active:bg-gray-100", role: "menuitem", tabindex: "-1" %>
                 <%= link_to t("logout"), logout_path, class: "block px-4 py-2 text-sm text-gray-700 active:bg-gray-100", role: "menuitem", tabindex: "-1" %>
               </div>
             </div>
@@ -123,7 +123,7 @@
             <% end %>
           </div>
           <div class="px-2 mt-3 space-y-1">
-            <%= link_to t("dashboard"), user_path(current_user), class: "block px-3 py-2 text-base font-medium focus:bg-blue-50 focus:text-blue-500 rounded-md" %>
+            <%= link_to t("dashboard"), dashboard_root_path, class: "block px-3 py-2 text-base font-medium focus:bg-blue-50 focus:text-blue-500 rounded-md" %>
           </div>
           <div class="px-2 mt-3 space-y-1">
             <%= link_to t("logout"), logout_path, class: "block px-3 py-2 text-base font-medium focus:bg-blue-50 focus:text-blue-500 rounded-md" %>

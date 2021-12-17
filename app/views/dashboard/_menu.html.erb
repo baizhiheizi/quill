@@ -1,0 +1,54 @@
+<div data-controller="tabs" 
+     data-tabs-active-tab-value="<%= request.path.split('/').last %>" 
+     data-tabs-active-class-value="text-blue-500" 
+     class="flex flex-col space-y-2 text-right font-bold text-gray-600">
+  <%= link_to t('overview'),
+    dashboard_root_path, 
+    data: {
+      tabs_target: "tab",
+      tabs_tabname_param: "dashboard",
+    },
+    class: "block py-2 px-4 rounded hover:text-blue-500" %>
+  <%= link_to t('articles_manage'),
+    dashboard_articles_path, 
+    data: {
+      tabs_target: "tab",
+      tabs_tabname_param: "articles",
+    },
+    class: "block py-2 px-4 rounded hover:text-blue-500" %>
+  <%= link_to t('comments_manage'),
+    dashboard_comments_path, 
+    data: {
+      tabs_target: "tab",
+      tabs_tabname_param: "comments_manage",
+    },
+    class: "block py-2 px-4 rounded hover:text-blue-500" %>
+  <%= link_to t('subscriptions_manage'),
+    dashboard_subscriptions_path, 
+    data: {
+      tabs_target: "tab",
+      tabs_tabname_param: "subscriptions_manage",
+    },
+    class: "block py-2 px-4 rounded hover:text-blue-500" %>
+  <%= link_to t('revenue_manage'),
+    dashboard_transfers_path, 
+    data: {
+      tabs_target: "tab",
+      tabs_tabname_param: "revenue_manage",
+    },
+    class: "block py-2 px-4 rounded hover:text-blue-500" %>
+  <%= link_to t('orders_manage'),
+    dashboard_orders_path, 
+    data: {
+      tabs_target: "tab",
+      tabs_tabname_param: "orders_manage",
+    },
+    class: "block py-2 px-4 rounded hover:text-blue-500" %>
+  <%= link_to t('settings'),
+    dashboard_settings_path, 
+    data: {
+      tabs_target: "tab",
+      tabs_tabname_param: "settings",
+    },
+    class: "block py-2 px-4 rounded hover:text-blue-500" %>
+</div>

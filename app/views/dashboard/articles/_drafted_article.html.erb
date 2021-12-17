@@ -1,0 +1,8 @@
+<div class="relative border-b py-2 px-4">
+  <div class="text-xl font-bold">
+    <%= article.title.presence || t('articles.title_placeholder') %>
+  </div>
+  <%= link_to edit_article_path(article.uuid) do %>
+    <span aria-hidden="true" class="absolute inset-0"></span>
+  <% end %>
+</div>
