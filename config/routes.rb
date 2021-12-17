@@ -36,7 +36,18 @@ Rails.application.routes.draw do
   root to: 'home#index'
 
   namespace :dashboard do
-    resources :articles, only: %i[index], param: :uuid
+    resources :settings, only: %i[index]
+    resources :articles, only: %i[index]
+    resources :comments, only: %i[index]
+    resources :subscriptions, only: %i[index]
+    resources :subscribe_users, only: %i[index]
+    resources :subscribe_by_users, only: %i[index]
+    resources :subscribe_articles, only: %i[index]
+    resources :subscribe_tags, only: %i[index]
+    resources :transfers, only: %i[index]
+    resources :orders, only: %i[index]
+    resources :payments, only: %i[index]
+    resources :swap_orders, only: %i[index]
     root to: 'home#index'
   end
 

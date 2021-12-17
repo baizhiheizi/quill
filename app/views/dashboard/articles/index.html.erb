@@ -1,0 +1,42 @@
+<div class="pt-4"
+  data-controller="tabs"
+  data-tabs-active-tab-value="<%= @tab %>"
+  data-tabs-active-class-value="border-b-2">
+  <div class="w-full flex overflow-auto flex-nowrap scrollbar-hide items-center flex border-b px-4 mb-4">
+    <%= link_to t('published'), 
+      dashboard_articles_path(tab: :published),
+      class: "cursor-pointer py-1 px-4 border-blue-500 textrgray-600",
+      data: {
+        tabs_target: "tab",
+        tabs_tabname_param: "published" 
+      } %>
+    <%= link_to t('drafted'), 
+      dashboard_articles_path(tab: :drafted),
+      class: "cursor-pointer py-1 px-4 border-blue-500 textrgray-600",
+      data: {
+        tabs_target: "tab",
+        tabs_tabname_param: "drafted" 
+      } %>
+    <%= link_to t('hidden'), 
+      dashboard_articles_path(tab: :hidden),
+      class: "cursor-pointer py-1 px-4 border-blue-500 textrgray-600",
+      data: {
+        tabs_target: "tab",
+        tabs_tabname_param: "hidden" 
+      } %>
+    <%= link_to t('blocked'), 
+      dashboard_articles_path(tab: :blocked),
+      class: "cursor-pointer py-1 px-4 border-blue-500 textrgray-600",
+      data: {
+        tabs_target: "tab",
+        tabs_tabname_param: "blocked" 
+      } %>
+  </div>
+</div>
+
+<% case @tab %>
+<% when 'published' %>
+  <%= render partial: "dashboard/articles/published_article", collection: @articles, as: :article %>
+<% when 'drafted' %>
+  <%= render partial: "dashboard/articles/drafted_article", collection: @articles, as: :article %>
+<% end %>

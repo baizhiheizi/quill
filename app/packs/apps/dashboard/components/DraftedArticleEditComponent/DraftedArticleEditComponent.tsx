@@ -123,7 +123,7 @@ export default function DraftedArticleEditComponent(props: {
             { max: 64, message: t('article.form.title_is_too_long') },
           ]}
         >
-          <Input placeholder={t('article.form.title_place_holder')} />
+          <Input placeholder={t('article.form.title_placeholder')} />
         </Form.Item>
         <Form.Item
           label={t('article.content')}

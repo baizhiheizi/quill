@@ -228,7 +228,7 @@ ja:
     price_is_too_low: 価格が低すぎます
     confirm_to_create: 本当に記事を作成しますか？
     confirm_to_update: 本当に記事を更新しますか？
-    title_place_holder: 記事タイトル
+    title_placeholder: 記事タイトル
     content_place_holder: あなただけの文章を書いてみましょう
     intro_place_holder: より多くの人にあなたの素敵な文章を見て貰えるように記事紹介を書いてみましょう
     revenue_ratio: 収益率

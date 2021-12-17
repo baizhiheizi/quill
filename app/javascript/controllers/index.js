@@ -33,5 +33,8 @@ application.register("qrcode", QrcodeController)
 import ReferencesSelectController from "./references_select_controller.js"
 application.register("references-select", ReferencesSelectController)
 
+import TabsController from "./tabs_controller.js"
+application.register("tabs", TabsController)
+
 import TagsSelectController from "./tags_select_controller.js"
 application.register("tags-select", TagsSelectController)

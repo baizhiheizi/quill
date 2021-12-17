@@ -1,5 +1,5 @@
 # frozen_string_literal: true
 
-class Dashboard::OverviewController < Dashboard::BaseController
+class Dashboard::HomeController < Dashboard::BaseController
   def index; end
 end

@@ -17,7 +17,7 @@
         function gtag(){dataLayer.push(arguments);}
         gtag('js', new Date());
 
-        gtag('config', '<%= Rails.application.credentials.dig(:ga_id) %>');
+        gtag('config', '<%= Rails.application.credentials[:ga_id].to_s %>');
       </script>
     <% end %>
 
@@ -25,13 +25,34 @@
     <meta name='keywords' content='<%= Settings.page_keywords %>' />
     <meta name='description' content='<%= @page_description.presence || Settings.page_description %>' />
 
-    <%= javascript_pack_tag 'dashboard', defer: true %>
-    <%= stylesheet_pack_tag 'dashboard', defer: true %>
-    <%= favicon_pack_tag "#{Settings.favicon_file || 'favicon.png'}" %>
+    <%= favicon_link_tag "#{Settings.favicon_file || 'favicon.png'}" %>
+    <%= javascript_include_tag "application", "data-turbo-track": "reload", defer: true %>
+    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
   </head>
 
-  <body>
-    <%= render'shared/loader' %>
-    <%= yield %>
+  <body class="min-h-screen flex flex-col">
+    <%= render "shared/nav" %>
+    <main class="bg-gray-100 relative mt-12 sm:mt-16 flex-1">
+      <div class="max-w-3xl sm:pt-4 pb-8 mx-auto sm:px-6 lg:max-w-7xl lg:px-8">
+        <% flash.each do |type, message| %>
+          <%= render partial: "shared/flash", locals: { type: type, message: message } %>
+        <% end %>
+        <div class="px-4 pt-4 sm:pl-12 sm:p-0 text-lg sm:text-xl font-bold mb-4">
+          <%= t('dashboard') %>
+        </div>
+        <div class="lg:grid lg:grid-cols-5 lg:gap-x-3">
+          <div class="lg:col-span-1">
+            <%= render "dashboard/menu" %>
+          </div>
+          <div class="bg-white sm:rounded-lg w-full grid-span-1 lg:col-span-4">
+            <%= yield %>
+          </div>
+        </div>
+      </div>
+      <div style="height:env(safe-area-inset-bottom)" />
+    </main>
+    <div class="absolute bottom-0" id="modal-slot"></div>
+    <div class="fixed top-8 h-0 w-full px-4" id="notifications"></div>
+    <%= turbo_stream_from "user_#{current_user.mixin_uuid}" if current_user.present? %>
   </body>
 </html>
