@@ -12,15 +12,13 @@ class PublishedArticlesController < ApplicationController
         flash.alert = t('failed_to_save')
       end
       redirect_to dashboard_articles_path(tab: :hidden)
-    else
-      if @article.may_publish?
-        @article.publish!
+    elsif @article.may_publish?
+      @article.publish!
 
-        redirect_to @article, notice: t('success_published_article')
-      else
-        flash.now.alert = t('failed_to_save')
-        render 'articles/edit', status: :unprocessable_entity
-      end
+      redirect_to @article, notice: t('success_published_article')
+    else
+      flash.now.alert = t('failed_to_save')
+      render 'articles/edit', status: :unprocessable_entity
     end
   end
 
