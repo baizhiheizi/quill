@@ -27,6 +27,8 @@ Rails.application.routes.draw do
     resources :comments, only: %i[index]
   end
   resources :comments, only: %i[create]
+  resources :upvoted_comments, only: %i[update destroy]
+  resources :downvoted_comments, only: %i[update destroy]
   post '/articles/preview', to: 'articles#preview', as: :preview_article
   resources :published_articles, param: :uuid, only: %i[update destroy]
   resources :article_references, only: %i[index], default: { format: :json }

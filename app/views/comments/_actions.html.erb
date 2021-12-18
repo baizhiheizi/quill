@@ -1,0 +1,10 @@
+<div id="<%= dom_id comment %>_actions" class="flex items-center space-x-4 opacity-70 text-sm">
+  <%= button_to upvoted_comment_path(comment), method: :put, class: "flex items-center space-x-2" do %>
+    <span><%= render partial: "shared/icons/thumb_up", locals: { html_class: "w-4 h-4" } %></span>
+    <span><%= comment.upvotes_count %></span>
+  <% end %>
+  <%= button_to downvoted_comment_path(comment), method: :put, class: "flex items-center space-x-2" do %>
+    <span><%= render partial: "shared/icons/thumb_down", locals: { html_class: "w-4 h-4" } %></span>
+    <span><%= comment.downvotes_count %></span>
+  <% end %>
+</div>

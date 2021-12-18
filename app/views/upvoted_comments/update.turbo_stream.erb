@@ -1,0 +1,3 @@
+<%= turbo_stream.replace "#{dom_id @comment.reload}_actions" do %>
+  <%= render partial: "comments/actions", locals: { comment: @comment.reload } %>
+<% end %>
