@@ -39,4 +39,6 @@
   <%= render partial: "dashboard/articles/published_article", collection: @articles, as: :article %>
 <% when 'drafted' %>
   <%= render partial: "dashboard/articles/drafted_article", collection: @articles, as: :article %>
+<% when 'hidden' %>
+  <%= render partial: "dashboard/articles/hidden_article", collection: @articles, as: :article %>
 <% end %>

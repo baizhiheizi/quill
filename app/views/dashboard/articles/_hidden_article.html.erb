@@ -29,6 +29,6 @@
   </div>
   <div class="text-blue-500 flex items-center space-x-4 sm:justify-end">
     <%= link_to t('edit'), edit_article_path(article.uuid) %>
-    <%= link_to t('hide'), published_article_path(article.uuid),  data: { turbo_method: :delete,  turbo_confirm: t('confirm_to_hide') }  %>
+    <%= link_to t('publish'), published_article_path(article.uuid),  data: { turbo_method: :put,  turbo_confirm: t('confirm_to_publish') }  %>
   </div>
 </div>
