@@ -83,7 +83,7 @@ export default class extends Controller {
   }
 
   calReferenceRatio() {
-    if (this.hasArticleReferenceRevenueRatioTargets && this.hasReferenceRevenueRatioTarget) {
+    if (this.hasReferenceRevenueRatioTarget) {
       const referenceRevenueRatio = 
         this.articleReferenceRevenueRatioTargets
           .filter(
