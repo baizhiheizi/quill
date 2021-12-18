@@ -31,7 +31,10 @@ Rails.application.routes.draw do
 
   resources :notifications
   resources :tags, only: %i[index show]
-  resources :users, only: :show, param: :uid
+  resources :users, only: :show, param: :uid do
+    resources :subscribe_users, only: %i[index]
+    resources :subscribe_by_users, only: %i[index]
+  end
 
   root to: 'home#index'
 

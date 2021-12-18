@@ -18,4 +18,10 @@ class Dashboard::ArticlesController < Dashboard::BaseController
 
     @pagy, @articles = pagy articles.order(updated_at: :desc)
   end
+
+  def hide
+  end
+
+  def publish
+  end
 end
