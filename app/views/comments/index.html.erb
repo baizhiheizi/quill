@@ -1,0 +1,5 @@
+<% if @article.present? %>
+  <%= turbo_frame_tag "#{dom_id @article}_comments" do %>
+    <%= render partial: "comments/article_comment", collection: @comments, as: :comment %>
+  <% end %>
+<% end %>

@@ -52,6 +52,10 @@ class Comment < ApplicationRecord
     )
   end
 
+  def content_as_html
+    MarkdownRenderService.new.call content
+  end
+
   private
 
   def ensure_author_account_normal

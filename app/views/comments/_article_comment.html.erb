@@ -1,0 +1,12 @@
+<div id="<%= dom_id comment %>" class="flex space-x-2 sm:space-x-4 items-start py-2">
+  <img src="<%= comment.author.avatar %>" class="w-6 h-6 sm:w-8 sm:h-8 rounded-full" />
+  <div class="flex-1">
+    <div class="flex items-center space-x-2 mb-2 text-sm">
+      <span><%= comment.author.name %></span>
+      <span class="opacity-50"><%= time_ago_in_words comment.created_at %></span>
+    </div>
+    <div class="prose prose-sm xl:prose">
+      <%= comment.content_as_html.html_safe %>
+    </div>
+  </div>
+</div>
