@@ -1,35 +1,51 @@
 <div class="lg:grid lg:grid-cols-3 lg:gap-x-6">
-  <article class="bg-white p-4 max-w-full lg:col-span-2 sm:p-6 sm:border sm:rounded-lg prose xl:prose-lg 2xl:prose-xl mb-4">
-    <div class="flex items-center space-x-4 mb-6">
-      <div class="relative flex items-center space-x-2">
-        <img class="w-10 h-10 my-0 rounded-full" src="<%= @article.author.avatar %>">
-        <div class="leading-4">
-          <span class="text-base font-semibold"><%= @article.author.name %></span>
-          <div class="text-sm sm:text-base text-gray-500 font-light">
-            <%= @article.published_at.strftime("%Y-%m-%d %H:%M") %>
+  <article class="max-w-full lg:col-span-2 mb-4">
+    <div class="bg-white p-4 w-full sm:p-6 sm:border sm:rounded-lg mb-4">
+      <div class="flex items-center space-x-4 mb-6">
+        <div class="relative flex items-center space-x-2">
+          <img class="w-10 h-10 my-0 rounded-full" src="<%= @article.author.avatar %>">
+          <div class="leading-4">
+            <span class="text-base font-semibold"><%= @article.author.name %></span>
+            <div class="text-sm sm:text-base text-gray-500 font-light">
+              <%= @article.published_at.strftime("%Y-%m-%d %H:%M") %>
+            </div>
           </div>
+          <%= link_to user_path(@article.author) do %>
+            <span aria-hidden="true" class="absolute inset-0"></span>
+          <% end %>
         </div>
-        <%= link_to user_path(@article.author) do %>
-          <span aria-hidden="true" class="absolute inset-0"></span>
-        <% end %>
+      </div>
+      <div class="font-semibold text-xl lg:text-3xl 3xl:text-4xl mb-6">
+        <%= @article.title %>
+      </div>
+      <div class="py-2 px-4 mb-8 bg-gray-100 rounded">
+        <%= @article.intro %>
+      </div>
+      <div class="flex items-center space-x-2 mb-4 text-sm xl:text-base text-gray-500">
+        <span>
+          <%= t("article.words_count") %>:
+        </span>
+        <span>
+          <%= @article.words_count %>
+        </span>
+      </div>
+
+      <div class="mb-8">
+        <%= render partial: "articles/content", locals: { article: @article, user: current_user } %>
       </div>
     </div>
-    <div class="font-semibold text-xl lg:text-3xl 3xl:text-4xl mb-6">
-      <%= @article.title %>
+
+    <div class="bg-white p-4 w-full sm:p-6 sm:border sm:rounded-lg mb-4">
+      <div class="text-center mb-4 font-bold opacity-70">
+        <%= t('comments') %>
+      </div>
+      <%= render partial: "comments/form", locals: { commentable: @article } %>
+      <%= turbo_frame_tag "#{dom_id @article}_comments", src: article_comments_path(@article.uuid) do %>
+        <%= render "shared/loading" %>
+      <% end %>
     </div>
-    <div class="py-2 px-4 mb-8 bg-gray-100 rounded">
-      <%= @article.intro %>
-    </div>
-    <div class="flex items-center space-x-2 mb-4 text-sm xl:text-base text-gray-500">
-      <span>
-        <%= t("article.words_count") %>:
-      </span>
-      <span>
-        <%= @article.words_count %>
-      </span>
-    </div>
-    <%= render partial: "articles/content", locals: { article: @article, user: current_user } %>
   </article>
+
   <aside class="lg:col-span-1">
     <div class="lg:sticky lg:top-20">
       <div class="p-4 flex items-center space-x-4 justify-end">

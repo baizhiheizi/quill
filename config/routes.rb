@@ -23,7 +23,10 @@ Rails.application.routes.draw do
 
   resources :view_modals, only: %i[create]
 
-  resources :articles, except: %i[destroy], param: :uuid
+  resources :articles, except: %i[destroy], param: :uuid do
+    resources :comments, only: %i[index]
+  end
+  resources :comments, only: %i[create]
   post '/articles/preview', to: 'articles#preview', as: :preview_article
   resources :published_articles, param: :uuid, only: %i[update destroy]
   resources :article_references, only: %i[index], default: { format: :json }

@@ -1,0 +1,18 @@
+<%= form_for commentable.comments.new, 
+  data: { 
+    turbo_confirm: t('confirm_to_submit')
+  }, 
+  html: { class: 'mb-4' } do |form| %>
+  <%= form.hidden_field :commentable_id, value: commentable.id %>
+  <%= form.hidden_field :commentable_type, value: commentable.class.name %>
+  <%= form.text_area :content, 
+    class: "w-full py-2 rounded focus:ring-0 mb-4", 
+    placeholder: t("markdown_supported"), 
+    data: { 
+      article_form_target: "content"
+    } 
+  %>
+  <div class="flex justify-end">
+    <%= form.submit t('submit'), class: "cursor-pointer bg-blue-500 text-white px-4 py-1 rounded" %>
+  </div>
+<% end %>
