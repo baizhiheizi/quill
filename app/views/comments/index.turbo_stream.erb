@@ -1,0 +1,9 @@
+<% if @article.present? %>
+  <%= turbo_stream.append "#{dom_id @article}_comments_list" do %>
+    <%= render partial: "comments/article_comment", collection: @comments, as: :comment %>
+  <% end %>
+
+  <%= turbo_stream.update 'pagination' do %>
+    <%= render partial: "shared/pagination", locals: { pagy: @pagy } %>
+  <% end %>
+<% end %>

@@ -18,6 +18,9 @@ application.register("dropdown", DropdownController)
 import FlashController from "./flash_controller.js"
 application.register("flash", FlashController)
 
+import InfiniteScrollController from "./infinite_scroll_controller.js"
+application.register("infinite-scroll", InfiniteScrollController)
+
 import ModalController from "./modal_controller.js"
 application.register("modal", ModalController)
 

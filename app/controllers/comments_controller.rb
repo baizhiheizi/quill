@@ -12,9 +12,9 @@ class CommentsController < ApplicationController
         Comment.all
       end
 
-    @tab = params[:tab] || 'upvotes'
+    @order_by = params[:order_by] || 'upvotes'
     comments =
-      case @tab
+      case @order_by
       when 'upvotes'
         comments.order(upvotes_count: :desc, downvotes_count: :asc)
       when 'asc'
@@ -23,7 +23,7 @@ class CommentsController < ApplicationController
         comments.order(created_at: :desc)
       end
 
-    @page, @comments = pagy comments
+    @pagy, @comments = pagy comments.includes(:author)
   end
 
   def create
