@@ -189,6 +189,13 @@ class Payment < ApplicationRecord
     [format('%.8f', amount), currency&.symbol].join(' ')
   end
 
+  def snapshot_url
+    [
+      'https://mixin.one/snapshots/',
+      snapshot_id
+    ].join
+  end
+
   private
 
   def setup_attributes

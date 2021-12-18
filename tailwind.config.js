@@ -8,7 +8,7 @@ module.exports = {
     "./app/javascript/**/*.js",
   ],
   darkMode: 'class',
-  important: true,
+  // important: true,
   theme: {
     minHeight: {
       'screen-1/2': '50vh',

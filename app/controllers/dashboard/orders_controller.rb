@@ -2,5 +2,6 @@
 
 class Dashboard::OrdersController < Dashboard::BaseController
   def index
+    @tab = params[:tab] || 'payments'
   end
 end
