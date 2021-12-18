@@ -34,11 +34,17 @@
   </div>
 </div>
 
-<% case @tab %>
-<% when 'published' %>
-  <%= render partial: "dashboard/articles/published_article", collection: @articles, as: :article %>
-<% when 'drafted' %>
-  <%= render partial: "dashboard/articles/drafted_article", collection: @articles, as: :article %>
-<% when 'hidden' %>
-  <%= render partial: "dashboard/articles/hidden_article", collection: @articles, as: :article %>
+<% if @articles.blank? %>
+  <%= render 'shared/empty' %>
+<% else %>
+  <% case @tab %>
+  <% when 'published' %>
+    <%= render partial: "dashboard/articles/published_article", collection: @articles, as: :article %>
+  <% when 'drafted' %>
+    <%= render partial: "dashboard/articles/drafted_article", collection: @articles, as: :article %>
+  <% when 'hidden' %>
+    <%= render partial: "dashboard/articles/hidden_article", collection: @articles, as: :article %>
+  <% when 'blocked' %>
+    <%= render partial: "dashboard/articles/blocked_article", collection: @articles, as: :article %>
+  <% end %>
 <% end %>
