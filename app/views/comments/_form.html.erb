@@ -1,5 +1,6 @@
 <%= form_for commentable.comments.new, 
   data: { 
+    comment_form_target: "form",
     turbo_confirm: t('confirm_to_submit')
   }, 
   html: { class: 'mb-4' } do |form| %>
@@ -9,7 +10,7 @@
     class: "w-full py-2 rounded focus:ring-0 mb-4", 
     placeholder: t("markdown_supported"), 
     data: { 
-      article_form_target: "content"
+      comment_form_target: "content"
     } 
   %>
   <div class="flex justify-end">

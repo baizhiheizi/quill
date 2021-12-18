@@ -39,10 +39,12 @@
       <div class="text-center mb-4 font-bold opacity-70">
         <%= t('comments') %>
       </div>
-      <%= render partial: "comments/form", locals: { commentable: @article } %>
-      <%= turbo_frame_tag "#{dom_id @article}_comments", src: article_comments_path(@article.uuid) do %>
-        <%= render "shared/loading" %>
-      <% end %>
+      <div data-controller="comment-form">
+        <%= render partial: "comments/form", locals: { commentable: @article } %>
+        <%= turbo_frame_tag "#{dom_id @article}_comments", src: article_comments_path(@article.uuid) do %>
+          <%= render "shared/loading" %>
+        <% end %>
+      </div>
     </div>
   </article>
 
