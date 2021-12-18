@@ -7,4 +7,11 @@
     <span><%= render partial: "shared/icons/thumb_down", locals: { html_class: "w-4 h-4" } %></span>
     <span><%= comment.downvotes_count %></span>
   <% end %>
+  <div class="cursor-pointer" 
+    data-comment-form-content-param="<%= comment.content %>"
+    data-comment-form-author-param="<%= comment.author.name %>"
+    data-comment-form-id-param="<%= comment.id %>"
+    data-action="click->comment-form#quote">
+    <%= render partial: "shared/icons/reply", locals: { html_class: "w-4 h-4" } %>
+  </div>
 </div>
