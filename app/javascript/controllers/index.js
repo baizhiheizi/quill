@@ -47,3 +47,6 @@ application.register("tabs", TabsController)
 
 import TagsSelectController from "./tags_select_controller.js"
 application.register("tags-select", TagsSelectController)
+
+import TextareaAutogrowController from "./textarea_autogrow_controller.js"
+application.register("textarea-autogrow", TextareaAutogrowController)
