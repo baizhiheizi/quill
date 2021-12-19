@@ -1,0 +1,11 @@
+<div class="flex justify-center space-x-2 mb-2">
+  <span class="text-red-500"><%= article.buy_orders.count %></span>
+  <span><%= t('times_bought') %>,</span> 
+  <span class="text-red-500"><%= article.reward_orders.count %></span>
+  <span><%= t('times_reward') %></span>
+</div>
+<div class="m-auto w-72 grid grid-cols-8 gap-0.5">
+  <% article.readers.sample(24).each do |reader| %>
+    <img src="<%= reader.avatar %>" class="w-8 h-8 rounded-full" loading="lazy" />
+  <% end %>
+</div>

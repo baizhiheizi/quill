@@ -33,6 +33,10 @@
       <div class="mb-8">
         <%= render partial: "articles/content", locals: { article: @article, user: current_user } %>
       </div>
+
+      <div class="mb-8">
+        <%= render partial: "articles/buyers", locals: { article: @article, user: current_user } %>
+      </div>
     </div>
 
     <div class="bg-white p-4 w-full sm:p-6 sm:border sm:rounded-lg mb-4">
@@ -40,7 +44,9 @@
         <%= t('comments') %>
       </div>
       <div data-controller="comment-form">
-        <%= render partial: "comments/form", locals: { commentable: @article } %>
+        <% if @article.authorized? current_user %>
+          <%= render partial: "comments/form", locals: { commentable: @article } %>
+        <% end %>
         <%= turbo_frame_tag "#{dom_id @article}_comments", src: article_comments_path(@article.uuid) do %>
           <%= render "shared/loading" %>
         <% end %>

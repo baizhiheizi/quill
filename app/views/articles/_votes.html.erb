@@ -1,5 +1,9 @@
 <div id="<%= dom_id article %>_votes" class="flex justify-center items-center">
-  <% if user.upvote_article? article %>
+  <% if !article.authorized? user %>
+    <div class="border rounded-full p-2 bg-blue-500 text-white">
+      <%= render "shared/icons/thumb_up" %>
+    </div>
+  <% elsif user&.upvote_article? article %>
     <%= button_to upvoted_article_path(article), method: :delete, class: "border rounded-full p-2 bg-blue-500 text-white" do %>
       <%= render "shared/icons/thumb_up" %>
     <% end %>
@@ -16,7 +20,11 @@
       <%= article.upvotes_count %>:<%= article.downvotes_count %>
     </div>
   </div>
-  <% if user.downvote_article? article %>
+  <% if !article.authorized? user %>
+    <div class="border rounded-full p-2 bg-red-500 text-white">
+      <%= render "shared/icons/thumb_down" %>
+    </div>
+  <% elsif user&.downvote_article? article %>
     <%= button_to upvoted_article_path(article), method: :delete, class: "border rounded-full p-2 bg-red-500 text-white" do %>
       <%= render "shared/icons/thumb_down" %>
     <% end %>
