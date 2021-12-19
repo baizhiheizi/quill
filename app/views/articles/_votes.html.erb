@@ -1,0 +1,28 @@
+<div id="<%= dom_id article %>_votes" class="flex justify-center items-center">
+  <% if user.upvote_article? article %>
+    <%= button_to upvoted_article_path(article), method: :delete, class: "border rounded-full p-2 bg-blue-500 text-white" do %>
+      <%= render "shared/icons/thumb_up" %>
+    <% end %>
+  <% else %>
+    <%= button_to upvoted_article_path(article), method: :put, class: "border rounded-full p-2" do %>
+      <%= render "shared/icons/thumb_up" %>
+    <% end %>
+  <% end %>
+  <div class="mx-4 w-16 mt-4">
+    <div class="bg-red-500 rounded h-2">
+      <div class="rounded h-2 bg-blue-500" style="width: <%= article.upvote_ratio %>"></div>
+    </div>
+    <div class="text-center text-sm">
+      <%= article.upvotes_count %>:<%= article.downvotes_count %>
+    </div>
+  </div>
+  <% if user.downvote_article? article %>
+    <%= button_to upvoted_article_path(article), method: :delete, class: "border rounded-full p-2 bg-red-500 text-white" do %>
+      <%= render "shared/icons/thumb_down" %>
+    <% end %>
+  <% else %>
+    <%= button_to downvoted_article_path(article), method: :put, class: "border rounded-full p-2" do %>
+      <%= render "shared/icons/thumb_down" %>
+    <% end %>
+  <% end %>
+</div>

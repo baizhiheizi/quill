@@ -26,6 +26,8 @@ Rails.application.routes.draw do
   resources :articles, except: %i[destroy], param: :uuid do
     resources :comments, only: %i[index]
   end
+  resources :upvoted_articles, only: %i[update destroy], param: :uuid
+  resources :downvoted_articles, only: %i[update destroy], param: :uuid
   resources :comments, only: %i[create]
   resources :upvoted_comments, only: %i[update destroy]
   resources :downvoted_comments, only: %i[update destroy]
