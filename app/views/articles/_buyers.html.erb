@@ -1,11 +1,49 @@
-<div class="flex justify-center space-x-2 mb-2">
+<div class="flex justify-center space-x-2 mb-2 text-sm">
   <span class="text-red-500"><%= article.buy_orders.count %></span>
   <span><%= t('times_bought') %>,</span> 
   <span class="text-red-500"><%= article.reward_orders.count %></span>
   <span><%= t('times_reward') %></span>
 </div>
-<div class="m-auto w-72 grid grid-cols-8 gap-0.5">
+
+<div class="mx-auto w-72 grid grid-cols-8 gap-0.5 mb-6">
   <% article.readers.sample(24).each do |reader| %>
     <img src="<%= reader.avatar %>" class="w-8 h-8 rounded-full" loading="lazy" />
   <% end %>
 </div>
+
+<% if article.authorized? current_user %>
+  <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+    <div class="col-span-1">
+      <div class="text-center text-sm opacity-80 mb-2">
+        <%= t('activerecord.attributes.article.price') %>(<%= article.currency.symbol %>)
+      </div>
+      <div class="text-center text-2xl">
+        <%= article.price %>
+      </div>
+    </div>
+    <div class="col-span-1">
+      <div class="text-center text-sm opacity-80 mb-2">
+        <%= t('activerecord.attributes.article.orders_count') %>
+      </div>
+      <div class="text-center text-2xl">
+        <%= article.orders_count %>
+      </div>
+    </div>
+    <div class="col-span-1">
+      <div class="text-center text-sm opacity-80 mb-2">
+        <%= t('activerecord.attributes.article.revenue') %>(USD)
+      </div>
+      <div class="text-center text-2xl">
+        <%= article.revenue_usd.presence&.round(4) || 0.0 %>
+      </div>
+    </div>
+    <div class="col-span-1">
+      <div class="text-center text-sm opacity-80 mb-2">
+        <%= t('activerecord.attributes.article.my_share') %>
+      </div>
+      <div class="text-center text-2xl">
+        <%= (article.share_of(current_user).to_f * 100).round(3) %>
+      </div>
+    </div>
+  </div>
+<% end %>
