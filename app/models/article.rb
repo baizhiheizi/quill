@@ -312,7 +312,7 @@ class Article < ApplicationRecord
   end
 
   def content_as_html
-    MarkdownRenderService.new.call content
+    MarkdownRenderService.new.call content, type: :article
   end
 
   def default_intro

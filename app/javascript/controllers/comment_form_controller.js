@@ -10,7 +10,7 @@ export default class extends Controller {
     const { content, author, id } = event.params;
     const original_content = this.contentTarget.value;
 
-    this.contentTarget.value = `> @${author}([#${id}](/comments/${id})):
+    this.contentTarget.value = `> @${author}([#${id}](#comment_${id})):
 ${content.replace(/^/gm, '> ')}
 
 ${original_content || ''}`
