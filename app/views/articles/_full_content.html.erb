@@ -1,1 +1,5 @@
-<%= article.content_as_html.html_safe %>
+<div class="mb-4">
+  <%= article.content_as_html.html_safe %>
+</div>
+
+<%= render partial: "articles/votes", locals: { article: article, user: current_user } %>

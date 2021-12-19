@@ -322,7 +322,7 @@ class Article < ApplicationRecord
   def upvote_ratio
     return if upvotes_count.zero? && downvotes_count.zero?
 
-    "#{format('%.0f', upvotes_count.to_f * 100 / (upvotes_count + downvotes_count))} %"
+    "#{format('%.0f', upvotes_count.to_f * 100 / (upvotes_count + downvotes_count))}%"
   end
 
   def ensure_content_valid
