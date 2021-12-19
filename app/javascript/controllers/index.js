@@ -39,6 +39,9 @@ application.register("qrcode", QrcodeController)
 import ReferencesSelectController from "./references_select_controller.js"
 application.register("references-select", ReferencesSelectController)
 
+import ScrollToController from "./scroll_to_controller.js"
+application.register("scroll-to", ScrollToController)
+
 import SelectMenuController from "./select_menu_controller.js"
 application.register("select-menu", SelectMenuController)
 
