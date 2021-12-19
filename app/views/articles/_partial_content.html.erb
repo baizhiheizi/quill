@@ -1,6 +1,6 @@
 <%= MarkdownRenderService.new.call(article.partial_content).html_safe %>
 
-<div class="mb-6">
+<div class="mb-8">
   <div class="flex justify-center text-yellow-500 font-semibold">
     - <%= t('more_to_read') %> -
   </div>
@@ -18,7 +18,7 @@
     <%= t('pay_warning') %>
   </div>
   <div class="flex justify-center mb-4">
-    <%= link_to t('pay_to_read'), view_modals_path(type: :buy_article, uuid: article.uuid), data: { turbo_method: :post }, class: "text-base rounded bg-blue-600 hover:bg-blue-500 active:bg-blue-500 text-white px-4 py-2 no-underline" %>
+    <%= button_to t('pay_to_read'), view_modals_path(type: :buy_article, uuid: article.uuid), class: "cursor-pointer text-base rounded bg-blue-600 hover:bg-blue-500 active:bg-blue-500 text-white px-4 py-2 no-underline" %>
   </div>
   <div class='text-sm text-gray-500 text-center'>
     <%= t('already_paid') %>? <%= t('try_to') %>
@@ -29,4 +29,8 @@
       <%= t('pay_via_swap_tips') %>
     </div>
   <% end %>
+</div>
+
+<div class="mb-8">
+  <%= render partial: "articles/votes", locals: { article: @article, user: current_user } %>
 </div>

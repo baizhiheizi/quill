@@ -24,7 +24,7 @@ class ApplicationController < ActionController::Base
   end
 
   def authenticate_user!
-    redirect_to login_path unless current_user
+    render 'view_modals/login' if current_user.blank?
   end
 
   def current_user

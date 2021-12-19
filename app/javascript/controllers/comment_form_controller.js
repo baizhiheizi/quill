@@ -3,9 +3,6 @@ import { Controller } from '@hotwired/stimulus';
 export default class extends Controller {
   static targets = ["form", "content"];
 
-  connect() {
-  }
-
   quote(event) {
     const { content, author, id } = event.params;
     const original_content = this.contentTarget.value;
