@@ -2,12 +2,12 @@ import { Controller } from '@hotwired/stimulus';
 import { useTransition } from 'stimulus-use';
 
 export default class extends Controller {
-  connect () {
+  connect() {
     useTransition(this);
     this.enter();
   }
 
-  async hide () {
+  async hide() {
     await this.leave();
     this.element.remove();
   }
