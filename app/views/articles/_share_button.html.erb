@@ -1,0 +1,12 @@
+<% button_class ||= "w-4 h-4 lg:w-6 lg:h-6" %>
+
+<div class="relative" data-controller="dropdown">
+  <button data-action="dropdown#toggle click@window->dropdown#hide"
+    type="button"
+    aria-expanded="false"
+    aria-haspopup="true"
+    class="p-2 hover:scale-105">
+    <%= render "shared/icons/share", html_class: button_class %>
+  </button>
+  <%= render partial: "articles/share_menu", locals: { article: article } %>
+</div>

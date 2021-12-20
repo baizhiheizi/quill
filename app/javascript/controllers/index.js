@@ -12,6 +12,9 @@ application.register("autosave", AutosaveController)
 import BuyArticlePaymentController from "./buy_article_payment_controller.js"
 application.register("buy-article-payment", BuyArticlePaymentController)
 
+import ClipboardController from "./clipboard_controller.js"
+application.register("clipboard", ClipboardController)
+
 import CommentFormController from "./comment_form_controller.js"
 application.register("comment-form", CommentFormController)
 

@@ -1,0 +1,45 @@
+<div data-dropdown-target="menu" 
+  data-transition-enter-active="transition ease-out duration-100"
+  data-transition-enter-from="transform opacity-0 scale-95"
+  data-transition-enter-to="transform opacity-100 scale-100"
+  data-transition-leave-active="transition ease-in duration-75"
+  data-transition-leave-from="transform opacity-100 scale-100"
+  data-transition-leave-to="transform opacity-0 scale-95"
+  class="absolute z-10 right-0 hidden w-52 mt-2 bg-white shadow-lg origin-top-right rounded-md ring-1 ring-black ring-opacity-5 focus:outline-none" 
+  role="menu" 
+  aria-orientation="vertical" 
+  aria-labelledby="user-menu-button" 
+  tabindex="-1">
+  <button class="block w-full 
+                 flex items-center space-x-4 
+                 px-4 py-2 
+                 border-b text-gray-700 
+                  hover:bg-gray-100 active:bg-gray-100"
+    data-controller="clipboard"
+    data-clipboard-text-value="<%= article_url article %>"
+    data-clipboard-success-tip-value="URL copied"
+    data-action="clipboard#copy">
+    <%= render "shared/icons/copy" %>
+    <span data-clipboard-target="button"class="text-base">Copy URL</span>
+  </button>
+  <% if from_mixin_messenger? %>
+    <a class="block flex items-center space-x-4 px-4 py-2 border-b text-gray-700 hover:bg-gray-100 active:bg-gray-100"
+      target="_blank"
+      href="<%= share_to_mixin article_url(article), title: article.title, description: article.intro, icon_url: article.author.avatar %>">
+      <%= image_tag 'mixin-logo.png', class: "w-6 h-6" %>
+      <span class="text-base">Share to Mixin</span>
+    </a>
+  <% end %>
+  <a class="block flex items-center space-x-4 px-4 py-2 border-b text-gray-700 hover:bg-gray-100 active:bg-gray-100"
+      target="_blank"
+      href="<%= share_to_twitter article_url(article), article.title %>">
+    <%= render "shared/icons/twitter" %>
+    <span class="text-base">Share to Twitter</span>
+  </a>
+  <a class="block flex items-center space-x-4 px-4 py-2 border-b text-gray-700 hover:bg-gray-100 active:bg-gray-100"
+      target="_blank"
+      href="<%= share_to_facebook article_url(article) %>">
+    <%= render "shared/icons/facebook" %>
+    <span class="text-base">Share to Facebook</span>
+  </a>
+</div>
