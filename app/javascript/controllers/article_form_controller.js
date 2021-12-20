@@ -1,4 +1,4 @@
-import { Controller } from "@hotwired/stimulus";
+import { Controller } from '@hotwired/stimulus';
 import EasyMDE from 'easymde';
 
 export default class extends Controller {
@@ -6,25 +6,25 @@ export default class extends Controller {
     autosave: Boolean,
     newRecord: Boolean,
     activeTab: String,
-  }
+  };
   static targets = [
-    "form", 
-    "contentFields", 
-    "optionFields", 
-    "title",
-    "content", 
-    "preview", 
-    "editButton", 
-    "previewButton",
-    "optionsButton",
-    "authorRevenueRatio",
-    "referenceRevenueRatio",
-    "articleReferenceRevenueRatio"
-  ]
+    'form',
+    'contentFields',
+    'optionFields',
+    'title',
+    'content',
+    'preview',
+    'editButton',
+    'previewButton',
+    'optionsButton',
+    'authorRevenueRatio',
+    'referenceRevenueRatio',
+    'articleReferenceRevenueRatio',
+  ];
 
   connect() {
     if (this.autosaveValue) {
-      this.editor.codemirror.on("change", () => {
+      this.editor.codemirror.on('change', () => {
         this.save();
       });
     }
@@ -32,7 +32,7 @@ export default class extends Controller {
 
   formTargetConnected() {
     this.initMdEditor();
-    switch(this.activeTabValue) {
+    switch (this.activeTabValue) {
       case 'edit':
         this.edit();
         break;
@@ -46,17 +46,28 @@ export default class extends Controller {
   }
 
   initMdEditor() {
-    this.editor = new EasyMDE(
-      {
-        element: this.contentTarget,
-        placeholder: this.contentTarget.placeholder,
-        status: false,
-        spellChecker: false,
-        sideBySideFullscreen: false,
-        syncSideBySidePreviewScroll: false,
-        toolbar: ["bold", "italic", "heading-2", "heading-3", "|" , "code", "quote", "|", "link", "image", "|", "guide"],
-      }
-    );
+    this.editor = new EasyMDE({
+      element: this.contentTarget,
+      placeholder: this.contentTarget.placeholder,
+      status: false,
+      spellChecker: false,
+      sideBySideFullscreen: false,
+      syncSideBySidePreviewScroll: false,
+      toolbar: [
+        'bold',
+        'italic',
+        'heading-2',
+        'heading-3',
+        '|',
+        'code',
+        'quote',
+        '|',
+        'link',
+        'image',
+        '|',
+        'guide',
+      ],
+    });
   }
 
   save() {
@@ -75,7 +86,7 @@ export default class extends Controller {
     }
 
     if (ratio < 0 || ratio > 0.5) {
-      ratio = 0.05
+      ratio = 0.05;
     }
 
     e.target.value = ratio.toFixed(2);
@@ -84,21 +95,25 @@ export default class extends Controller {
 
   calReferenceRatio() {
     if (this.hasReferenceRevenueRatioTarget) {
-      const referenceRevenueRatio = 
-        this.articleReferenceRevenueRatioTargets
-          .filter(
-            target => window.getComputedStyle(target.closest('.nested-form-wrapper')).display !== "none" 
-          ).map(
-            target => { 
-              return parseFloat(target.value)
-            }
-          ).reduce(
-            (prev, cur) => {
-              return prev + cur;
-            }, 0)
+      const referenceRevenueRatio = this.articleReferenceRevenueRatioTargets
+        .filter(
+          (target) =>
+            window.getComputedStyle(target.closest('.nested-form-wrapper'))
+              .display !== 'none',
+        )
+        .map((target) => {
+          return parseFloat(target.value);
+        })
+        .reduce((prev, cur) => {
+          return prev + cur;
+        }, 0);
       if (referenceRevenueRatio <= 0.5) {
-        this.referenceRevenueRatioTarget.value = parseFloat(referenceRevenueRatio.toFixed(2));
-        this.authorRevenueRatioTarget.value = parseFloat((0.5 - referenceRevenueRatio).toFixed(2));
+        this.referenceRevenueRatioTarget.value = parseFloat(
+          referenceRevenueRatio.toFixed(2),
+        );
+        this.authorRevenueRatioTarget.value = parseFloat(
+          (0.5 - referenceRevenueRatio).toFixed(2),
+        );
       }
     }
   }
@@ -120,24 +135,26 @@ export default class extends Controller {
 
   preview() {
     const content = this.editor.value();
-    fetch("/articles/preview", {
+    fetch('/articles/preview', {
       body: JSON.stringify({ content }),
       credentials: 'same-origin',
       headers: {
         Accept: 'application/json',
-        'X-CSRF-Token': (document.querySelector("meta[name='csrf-token']") || {}).content,
+        'X-CSRF-Token': (
+          document.querySelector("meta[name='csrf-token']") || {}
+        ).content,
         'Content-Type': 'application/json',
       },
-      method: "POST",
+      method: 'POST',
     })
-    .then(response => response.json())
-    .then(data => {
-      this.previewTarget.innerHTML = data.html;
-      this.activePreview();
-      this.hideContentForm();
-      this.hideSettingsForm();
-      this.activeTabValue = 'preview';
-    });
+      .then((response) => response.json())
+      .then((data) => {
+        this.previewTarget.innerHTML = data.html;
+        this.activePreview();
+        this.hideContentForm();
+        this.hideSettingsForm();
+        this.activeTabValue = 'preview';
+      });
   }
 
   options() {
@@ -148,37 +165,37 @@ export default class extends Controller {
   }
 
   activeContentForm() {
-    this.contentFieldsTarget.classList.remove("hidden");
-    this.editButtonTarget.classList.add("border-b-2");
+    this.contentFieldsTarget.classList.remove('hidden');
+    this.editButtonTarget.classList.add('border-b-2');
   }
 
   hideContentForm() {
-    this.contentFieldsTarget.classList.add("hidden");
-    this.editButtonTarget.classList.remove("border-b-2");
+    this.contentFieldsTarget.classList.add('hidden');
+    this.editButtonTarget.classList.remove('border-b-2');
   }
 
   activeSettingsForm() {
     if (this.hasOptionFieldsTarget && this.hasOptionsButtonTarget) {
-      this.optionFieldsTarget.classList.remove("hidden");
-      this.optionsButtonTarget.classList.add("border-b-2");
+      this.optionFieldsTarget.classList.remove('hidden');
+      this.optionsButtonTarget.classList.add('border-b-2');
     }
   }
 
   hideSettingsForm() {
     if (this.hasOptionFieldsTarget && this.hasOptionsButtonTarget) {
-      this.optionFieldsTarget.classList.add("hidden");
-      this.optionsButtonTarget.classList.remove("border-b-2");
-     }
+      this.optionFieldsTarget.classList.add('hidden');
+      this.optionsButtonTarget.classList.remove('border-b-2');
+    }
   }
 
   activePreview() {
-    this.previewButtonTarget.classList.add("border-b-2");
-    this.previewTarget.classList.remove("hidden");
+    this.previewButtonTarget.classList.add('border-b-2');
+    this.previewTarget.classList.remove('hidden');
   }
 
   hidePreview() {
-    this.previewButtonTarget.classList.remove("border-b-2");
-    this.previewTarget.classList.add("hidden");
-    this.previewTarget.classList.innerHTML = "";
+    this.previewButtonTarget.classList.remove('border-b-2');
+    this.previewTarget.classList.add('hidden');
+    this.previewTarget.classList.innerHTML = '';
   }
 }
