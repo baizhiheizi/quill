@@ -1,5 +1,10 @@
-<div>
-  <% @comments.each do |comment| %>
-    <div><%= comment.content %></div>
-  <% end %>
+<div class="p-4">
+  <div data-controller="infinite-scroll">
+    <div id="<%= dom_id current_user %>_comments_list">
+      <%= render partial: "dashboard/comments/comment", collection: @comments, as: :comment %>
+    </div>
+    <div data-infinite-scroll-target='scrollArea'></div>
+
+    <%= render partial: "shared/pagination", locals: { pagy: @pagy } %>
+  </div>
 </div>
