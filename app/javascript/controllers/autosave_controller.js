@@ -2,23 +2,23 @@ import { Controller } from '@hotwired/stimulus';
 import { debounce } from 'lodash';
 
 export default class extends Controller {
-  static targets = ["form"];
+  static targets = ['form'];
   static values = {
-    delay: Number
+    delay: Number,
+  };
+
+  initialize() {
+    this.save = this.save.bind(this);
   }
 
-  initialize () {
-    this.save = this.save.bind(this)
-  }
-
-  connect () {
+  connect() {
     if (this.delayValue > 0) {
-      this.save = debounce(this.save, this.delayValue)
+      this.save = debounce(this.save, this.delayValue);
     }
   }
 
-  save () {
-    if (!window._rails_loaded) return
+  save() {
+    if (!window._rails_loaded) return;
 
     this.formTarget.requestSubmit();
   }

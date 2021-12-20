@@ -4,12 +4,11 @@ export default class extends Controller {
   static values = {
     activeTab: String,
     activeClass: String,
-  }
+  };
 
-  static targets = ["tab", "content"]
+  static targets = ['tab', 'content'];
 
-  connect() {
-  }
+  connect() {}
 
   active(event) {
     event.preventDefault();
@@ -18,20 +17,20 @@ export default class extends Controller {
   }
 
   activeTabValueChanged() {
-    this.tabTargets.forEach(tab => {
+    this.tabTargets.forEach((tab) => {
       if (this.activeTabValue === tab.dataset.tabsTabnameParam) {
-        tab.classList.add(...this.activeClassValue.split(" "));
+        tab.classList.add(...this.activeClassValue.split(' '));
       } else {
-        tab.classList.remove(...this.activeClassValue.split(" "));
+        tab.classList.remove(...this.activeClassValue.split(' '));
       }
-    })
+    });
 
-    this.contentTargets.forEach(content => {
+    this.contentTargets.forEach((content) => {
       if (this.activeTabValue === content.dataset.tabsContentParam) {
-        content.classList.remove("hidden");
+        content.classList.remove('hidden');
       } else {
-        content.classList.add("hidden");
+        content.classList.add('hidden');
       }
-    })
+    });
   }
 }

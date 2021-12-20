@@ -1,8 +1,7 @@
 import { Controller } from '@hotwired/stimulus';
 
 export default class extends Controller {
-  connect() {
-  }
+  connect() {}
 
   selected(e) {
     const path = e.target.value;

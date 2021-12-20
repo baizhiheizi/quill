@@ -5,29 +5,32 @@ export default class extends Controller {
   static values = {
     wrapperSelector: {
       type: String,
-      default: '.nested-form-wrapper'
-    }
+      default: '.nested-form-wrapper',
+    },
   };
 
   add(e) {
-    e.preventDefault()
+    e.preventDefault();
 
-    const content = this.templateTarget.innerHTML.replace(/NEW_RECORD/g, new Date().getTime().toString())
-    this.targetTarget.insertAdjacentHTML('beforebegin', content)
+    const content = this.templateTarget.innerHTML.replace(
+      /NEW_RECORD/g,
+      new Date().getTime().toString(),
+    );
+    this.targetTarget.insertAdjacentHTML('beforebegin', content);
   }
 
   remove(e) {
-    e.preventDefault()
+    e.preventDefault();
 
-    const wrapper = e.target.closest(this.wrapperSelectorValue)
+    const wrapper = e.target.closest(this.wrapperSelectorValue);
 
     if (wrapper.dataset.newRecord === 'true') {
-      wrapper.remove()
+      wrapper.remove();
     } else {
-      wrapper.style.display = 'none'
+      wrapper.style.display = 'none';
 
-      const input = wrapper.querySelector("input[name*='_destroy']")
-      input.value = '1'
+      const input = wrapper.querySelector("input[name*='_destroy']");
+      input.value = '1';
     }
   }
 }

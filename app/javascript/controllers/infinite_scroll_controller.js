@@ -32,9 +32,9 @@ export default class extends Controller {
 
     if (next?.href) {
       get(next.href, {
-        contentType: "application/json",
-        responseKind: "turbo-stream"
-      })
+        contentType: 'application/json',
+        responseKind: 'turbo-stream',
+      });
     }
   }
 }

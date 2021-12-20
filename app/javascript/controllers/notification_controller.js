@@ -3,19 +3,18 @@ import { useTransition } from 'stimulus-use';
 
 export default class extends Controller {
   static values = {
-    delay: Number
-  }
+    delay: Number,
+  };
 
-  initialize () {
-  }
+  initialize() {}
 
-  connect () {
+  connect() {
     useTransition(this);
     this.enter();
     this.timeout = setTimeout(() => this.hide(), this.delayValue || 3000);
   }
 
-  async hide () {
+  async hide() {
     if (this.timeout) {
       clearTimeout(this.timeout);
     }

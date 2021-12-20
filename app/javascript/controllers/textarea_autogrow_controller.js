@@ -3,8 +3,8 @@ import { debounce } from 'lodash';
 
 export default class extends Controller {
   static values = {
-    resizeDebounceDelay: Number
-  }
+    resizeDebounceDelay: Number,
+  };
 
   initialize() {
     this.autogrow = this.autogrow.bind(this);
@@ -23,11 +23,11 @@ export default class extends Controller {
   }
 
   disconnect() {
-    window.removeEventListener('resize', this.onResize)
+    window.removeEventListener('resize', this.onResize);
   }
 
   autogrow() {
-    this.element.style.height = 'auto' // Force re-print before calculating the scrollHeight value.
-    this.element.style.height = `${this.element.scrollHeight}px`
+    this.element.style.height = 'auto'; // Force re-print before calculating the scrollHeight value.
+    this.element.style.height = `${this.element.scrollHeight}px`;
   }
 }

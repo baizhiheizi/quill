@@ -1,18 +1,17 @@
 import { Controller } from '@hotwired/stimulus';
-import { post } from '@rails/request.js'
+import { post } from '@rails/request.js';
 
 export default class extends Controller {
   static values = {
     articleUuid: String,
-    selectedCurrency: String
-  }
-  static targets = ["currency", "payBox", "loading", "price", "payLink"]
+    selectedCurrency: String,
+  };
+  static targets = ['currency', 'payBox', 'loading', 'price', 'payLink'];
 
-  connect() {
-  }
+  connect() {}
 
   select(e) {
-    const selected = e.currentTarget.dataset.assetId
+    const selected = e.currentTarget.dataset.assetId;
     this.selectedCurrencyValue = selected;
     this.fetchPreOrder();
   }
@@ -20,23 +19,23 @@ export default class extends Controller {
   selectedCurrencyValueChanged() {
     this.currencyTargets.forEach((target) => {
       if (target.dataset.assetId === this.selectedCurrencyValue) {
-        target.classList.add("border-blue-500", "text-blue-500");
+        target.classList.add('border-blue-500', 'text-blue-500');
       } else {
-        target.classList.remove("border-blue-500", "text-blue-500");
+        target.classList.remove('border-blue-500', 'text-blue-500');
       }
-    })
+    });
   }
 
   fetchPreOrder() {
     this.payBoxTarget.innerHTML = this.loadingTarget.innerHTML;
-    post("/payments", {
-      body: { 
+    post('/payments', {
+      body: {
         type: 'buy_article',
-        uuid: this.articleUuidValue, 
-        asset_id: this.selectedCurrencyValue
+        uuid: this.articleUuidValue,
+        asset_id: this.selectedCurrencyValue,
       },
-      contentType: "application/json",
-      responseKind: "turbo-stream"
-    })
+      contentType: 'application/json',
+      responseKind: 'turbo-stream',
+    });
   }
 }
