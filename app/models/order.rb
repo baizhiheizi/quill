@@ -64,8 +64,10 @@ class Order < ApplicationRecord
 
   after_commit :distribute_async, on: :create
   after_create_commit do
-    broadcast_replace_later_to "user_#{buyer.mixin_uuid}", target: "article_#{article.uuid}_content", partial: 'articles/content', locals: { article: article, user: buyer }
-    broadcast_remove_to "user_#{buyer.mixin_uuid}", target: "article_#{article.uuid}_buy_payment_modal"
+    broadcast_replace_later_to "user_#{buyer.mixin_uuid}", target: "article_#{article.uuid}_content", partial: 'articles/content', locals: { article: article, user: buyer } if buy_article?
+
+    broadcast_replace_later_to "user_#{buyer.mixin_uuid}", target: "article_#{article.uuid}_buyers", partial: 'articles/buyers', locals: { article: article, user: buyer }
+    broadcast_remove_to "user_#{buyer.mixin_uuid}", target: "article_#{article.uuid}_payment_modal"
   end
 
   aasm column: :state do

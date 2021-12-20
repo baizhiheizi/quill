@@ -36,6 +36,10 @@ class Currency < ApplicationRecord
   scope :prs, -> { find_by(asset_id: PRS_ASSET_ID) }
   scope :btc, -> { find_by(asset_id: BTC_ASSET_ID) }
 
+  def minimal_reward_amount
+    BigDecimal(0.5 / price_usd.to_f, 1).to_f
+  end
+
   def self.find_or_create_by_asset_id(_asset_id)
     return if _asset_id.blank?
 

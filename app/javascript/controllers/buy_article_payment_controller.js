@@ -31,6 +31,7 @@ export default class extends Controller {
     this.payBoxTarget.innerHTML = this.loadingTarget.innerHTML;
     post("/payments", {
       body: { 
+        type: 'buy_article',
         uuid: this.articleUuidValue, 
         asset_id: this.selectedCurrencyValue
       },

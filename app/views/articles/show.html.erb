@@ -34,7 +34,7 @@
         <%= render partial: "articles/content", locals: { article: @article, user: current_user } %>
       </div>
 
-      <div class="mb-8">
+      <div id="article_<%= @article.uuid %>_buyers" class="mb-8">
         <%= render partial: "articles/buyers", locals: { article: @article, user: current_user } %>
       </div>
     </div>

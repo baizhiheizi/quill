@@ -39,6 +39,9 @@ application.register("qrcode", QrcodeController)
 import ReferencesSelectController from "./references_select_controller.js"
 application.register("references-select", ReferencesSelectController)
 
+import RewardArticlePaymentController from "./reward_article_payment_controller.js"
+application.register("reward-article-payment", RewardArticlePaymentController)
+
 import ScrollToController from "./scroll_to_controller.js"
 application.register("scroll-to", ScrollToController)
 
