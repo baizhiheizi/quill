@@ -194,6 +194,22 @@ class User < ApplicationRecord
     }
   end
 
+  def author_revenue_total_usd
+    (statistics['author_revenue_total_prs'].to_f * Currency.prs.price_usd.to_f) + (statistics['author_revenue_total_btc'].to_f * Currency.btc.price_usd.to_f)
+  end
+
+  def reader_revenue_total_usd
+    (statistics['reader_revenue_total_prs'].to_f * Currency.prs.price_usd.to_f) + (statistics['reader_revenue_total_btc'].to_f * Currency.btc.price_usd.to_f.to_f)
+  end
+
+  def revenue_total_usd
+    author_revenue_total_usd + reader_revenue_total_usd
+  end
+
+  def payment_total_usd
+    statistics['payment_total_usd'] || 0.0
+  end
+
   def update_profile(profile = nil)
     profile ||= mixin_authorization.raw
     return if profile.blank?

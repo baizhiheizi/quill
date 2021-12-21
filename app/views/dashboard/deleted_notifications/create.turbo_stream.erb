@@ -1,7 +1,7 @@
 <%= turbo_stream.update "#{dom_id current_user}_notifications_list" do %>
   <% if @notifications.blank? %>
     <div class="text-center py-2 opacity-50">
-      <%= t("no_notifications") %>
+      <%= t("no_record") %>
     </div>
   <% else %>
     <%= render partial: "dashboard/notifications/notification", collection: @notifications, as: :notification %>

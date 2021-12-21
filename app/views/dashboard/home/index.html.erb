@@ -1,3 +1,46 @@
-<div class="bg-white sm:rounded-lg p-4 w-full grid-span-1 lg:col-span-4">
-  Developing
+<div class="p-4">
+  <div class="sm:grid sm:grid-cols-3 gap-4">
+    <div class="text-center p-2">
+      <div class="opacity-70">
+        <%= t('activerecord.attributes.user.articles_count') %>
+      </div>
+      <div class="text-xl font-bold">
+        <%= current_user.articles_count %>
+      </div>
+    </div>
+    <div class="text-center p-2">
+      <div class="opacity-70">
+        <%= t('activerecord.attributes.user.bought_articles_count') %>
+      </div>
+      <div class="text-xl font-bold">
+        <%= current_user.bought_articles_count %>
+      </div>
+    </div>
+  </div>
+  <div class="sm:grid sm:grid-cols-3 gap-4">
+    <div class="text-center p-2">
+      <div class="opacity-70">
+        <%= t('activerecord.attributes.user.author_revenue_total') %>
+      </div>
+      <div class="text-xl font-bold">
+        $<%= current_user.author_revenue_total_usd.round(4) %>
+      </div>
+    </div>
+    <div class="text-center p-2">
+      <div class="opacity-70">
+        <%= t('activerecord.attributes.user.reader_revenue_total') %>
+      </div>
+      <div class="text-xl font-bold">
+        $<%= current_user.reader_revenue_total_usd.round(4) %>
+      </div>
+    </div>
+    <div class="text-center p-2">
+      <div class="opacity-70">
+        <%= t('activerecord.attributes.user.payment_total_usd') %>
+      </div>
+      <div class="text-xl font-bold">
+        $<%= current_user.payment_total_usd.round(4) %>
+      </div>
+    </div>
+  </div>
 </div>
