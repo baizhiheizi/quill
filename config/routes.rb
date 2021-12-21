@@ -39,7 +39,6 @@ Rails.application.routes.draw do
   resources :subscribe_articles, only: %i[create destroy], param: :uuid
   resources :subscribe_tags, only: %i[create destroy]
 
-  resources :notifications
   resources :tags, only: %i[index show]
   resources :users, only: :show, param: :uid do
     resources :subscribe_users, only: %i[index]
@@ -61,6 +60,9 @@ Rails.application.routes.draw do
     resources :orders, only: %i[index]
     resources :payments, only: %i[index]
     resources :swap_orders, only: %i[index]
+    resources :notifications, only: %i[index]
+    resources :read_notifications, only: %i[create update]
+    resources :deleted_notifications, only: %i[create]
     root to: 'home#index'
   end
 

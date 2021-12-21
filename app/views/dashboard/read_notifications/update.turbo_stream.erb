@@ -1,0 +1,5 @@
+<%= turbo_stream.replace dom_id(@notification) do %>
+  <div id="<%= dom_id @notification %>" class="truncate opacity-70 %>">
+    <%= @notification.message %>
+  </div>
+<% end %>
