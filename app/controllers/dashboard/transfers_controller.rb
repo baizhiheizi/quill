@@ -2,5 +2,16 @@
 
 class Dashboard::TransfersController < Dashboard::BaseController
   def index
+    @tab = params[:tab] || 'author'
+
+    transfers =
+      case @tab
+      when 'author'
+        current_user.author_revenue_transfers
+      when 'reader'
+        current_user.reader_revenue_transfers
+      end
+
+    @pagy, @transfers = pagy transfers.order(created_at: :desc)
   end
 end

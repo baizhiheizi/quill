@@ -1,0 +1,35 @@
+<div class="pt-4"
+  data-controller="tabs"
+  data-tabs-active-tab-value="<%= @tab %>"
+  data-tabs-active-class-value="border-b-2">
+  <div class="w-full flex overflow-auto flex-nowrap scrollbar-hide items-center flex border-b px-4 mb-4">
+    <%= link_to t('author_revenue'), 
+      dashboard_transfers_path(tab: :author),
+      class: "cursor-pointer py-1 px-4 border-blue-500 textrgray-600",
+      data: {
+        tabs_target: "tab",
+        tabs_tabname_param: "author" 
+      } %>
+    <%= link_to t('readers_revenue'), 
+      dashboard_transfers_path(tab: :reader),
+      class: "cursor-pointer py-1 px-4 border-blue-500 textrgray-600",
+      data: {
+        tabs_target: "tab",
+        tabs_tabname_param: "reader" 
+      } %>
+  </div>
+</div>
+
+<div data-controller="infinite-scroll">
+  <div id="<%= dom_id current_user %>_transfers_list">
+    <% if @transfers.blank? %>
+      <div class="text-center py-2 opacity-50">
+        <%= t("no_record") %>
+      </div>
+    <% else %>
+      <%= render partial: "dashboard/transfers/transfer", collection: @transfers, as: :transfer %>
+    <% end %>
+  </div>
+  <div data-infinite-scroll-target='scrollArea'></div>
+  <%= render partial: "shared/pagination", locals: { pagy: @pagy } %>
+</div>

@@ -71,6 +71,13 @@ class Transfer < ApplicationRecord
     snapshot&.[]('snapshot_id')
   end
 
+  def snapshot_url
+    [
+      'https://mixin.one/snapshots/',
+      snapshot_id
+    ].join
+  end
+
   def processed?
     processed_at?
   end
