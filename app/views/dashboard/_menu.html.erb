@@ -11,6 +11,13 @@
       tabs_tabname_param: "dashboard",
     },
     class: "block py-2 px-4 rounded hover:text-blue-500" %>
+  <%= link_to t('notifications_manage'),
+    dashboard_notifications_path, 
+    data: {
+      tabs_target: "tab",
+      tabs_tabname_param: "notifications",
+    },
+    class: "block py-2 px-4 rounded hover:text-blue-500" %>
   <%= link_to t('articles_manage'),
     dashboard_articles_path, 
     data: {
@@ -62,6 +69,10 @@
     data-action="change->select-menu#selected">
     <option value="<%= dashboard_root_path %>" <%= active == 'overview' && 'selected' %>>
       <%= t('overview') %>
+    </option>
+    <option value="<%= dashboard_notifications_path %>" 
+            <%= active == 'notifications' && 'selected' %>>
+      <%= t('notifications_manage') %>
     </option>
     <option value="<%= dashboard_articles_path %>" 
             <%= active == 'articles' && 'selected' %>>

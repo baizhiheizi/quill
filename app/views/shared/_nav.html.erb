@@ -21,7 +21,7 @@
       </div>
       <div class="flex items-center ml-4 md:ml-6">
         <% if current_user.present? %>
-          <%= link_to notifications_path, class: "p-1 relative rounded-full hover:text-blue-500 hover:bg-blue-50" do %>
+          <%= link_to dashboard_notifications_path, class: "p-1 relative rounded-full hover:text-blue-500 hover:bg-blue-50" do %>
             <span class="sr-only">View notifications</span>
             <!-- Heroicon name: outline/bell -->
             <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
@@ -111,7 +111,7 @@
             <div class="ml-3">
               <div class="text-base font-medium leading-none text-white"><%= current_user.name %></div>
             </div>
-            <%= link_to notifications_path, class: "relative flex-shrink-0 p-1 ml-auto rounded-full focus:bg-blue-50 focus:text-blue-500" do %>
+            <%= link_to dashboard_notifications_path, class: "relative flex-shrink-0 p-1 ml-auto rounded-full focus:bg-blue-50 focus:text-blue-500" do %>
               <span class="sr-only">View notifications</span>
               <!-- Heroicon name: outline/bell -->
               <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
