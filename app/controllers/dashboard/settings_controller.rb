@@ -2,5 +2,6 @@
 
 class Dashboard::SettingsController < Dashboard::BaseController
   def index
+    @tab = params[:tab] || 'profile'
   end
 end
