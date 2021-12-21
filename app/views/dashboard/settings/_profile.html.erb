@@ -1,0 +1,26 @@
+<div class="p-4">
+  <div class="sm:grid sm:grid-cols-5 sm:gap-4 py-2">
+    <div class="sm:col-span-1 sm:text-right opacity-70 text-sm">
+      <%= t('name') %>:
+    </div>
+    <div class="sm:col-span-4">
+      <%= current_user.name %>
+    </div>
+  </div>
+  <div class="sm:grid sm:grid-cols-5 sm:gap-3 py-2">
+    <div class="sm:col-span-1 sm:text-right opacity-70 text-sm">
+      <%= t('avatar') %>:
+    </div>
+    <div class="sm:col-span-4">
+      <%= image_tag current_user.avatar, class: "w-10 h-10 rounded-full", loading: :lazy %>
+    </div>
+  </div>
+  <div class="sm:grid sm:grid-cols-5 sm:gap-3 py-2">
+    <div class="sm:col-span-1 sm:text-right opacity-70 text-sm">
+      <%= t('bio') %>:
+    </div>
+    <div class="sm:col-span-4">
+      <%= simple_format current_user.bio %>
+    </div>
+  </div>
+</div>

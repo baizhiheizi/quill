@@ -63,6 +63,7 @@ Rails.application.routes.draw do
     resources :notifications, only: %i[index]
     resources :read_notifications, only: %i[create update]
     resources :deleted_notifications, only: %i[create]
+    resources :notification_settings, only: %i[update]
     root to: 'home#index'
   end
 
