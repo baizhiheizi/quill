@@ -29,7 +29,13 @@
   </div>
   <div data-controller="infinite-scroll">
     <div id="<%= dom_id article %>_comments_list">
-      <%= render partial: "comments/article_comment", collection: comments, as: :comment %>
+      <% if comments.blank? %>
+        <div class="text-center py-2 opacity-50">
+          <%= t("no_comments") %>
+        </div>
+      <% else %>
+        <%= render partial: "comments/article_comment", collection: comments, as: :comment %>
+      <% end %>
     </div>
     <div data-infinite-scroll-target='scrollArea'></div>
 

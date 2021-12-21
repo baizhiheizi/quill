@@ -12,9 +12,5 @@
   <div class="mb-4">
     <%= author.bio %>
   </div>
-  <% if current_user.blank? %>
-    <%= link_to t('subscribe'), view_modals_path(type: :login), data: { turbo_method: :post }, class: "block bg-blue-600 rounded text-white text-center py-2" %>
-  <% elsif !current_user.subscribe_user? author %>
-    <%= link_to t('subscribe'), view_modals_path(type: :login), data: { turbo_method: :post }, class: "block bg-blue-600 rounded text-white text-center py-2" %>
-  <% end %>
+  <%= render "subscribe_users/subscribe_button", user: author %>
 </div>

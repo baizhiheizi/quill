@@ -1,0 +1,4 @@
+<%= turbo_stream.replace "#{dom_id @tag}_subscribe_button" do %>
+  <%= render "subscribe_tags/subscribe_button", tag: @tag %>
+<% end %>
+<%= turbo_stream.remove "subscribe_tag_#{dom_id @tag}" %>

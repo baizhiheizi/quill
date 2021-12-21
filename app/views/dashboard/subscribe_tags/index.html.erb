@@ -1,16 +1,16 @@
-<div class="p-4">
+<%= turbo_frame_tag "#{dom_id current_user}_subscribe_tags" do %>
   <div data-controller="infinite-scroll">
-    <div id="<%= dom_id current_user %>_comments_list">
-      <% if @comments.blank? %>
+    <div id="<%= dom_id current_user %>_subscribe_tags_list">
+      <% if @tags.blank? %>
         <div class="text-center py-2 opacity-50">
-          <%= t("no_comments") %>
+          <%= t("no_record") %>
         </div>
       <% else %>
-        <%= render partial: "dashboard/comments/comment", collection: @comments, as: :comment %>
+        <%= render partial: "dashboard/subscribe_tags/tag", collection: @tags, as: :tag %>
       <% end %>
     </div>
     <div data-infinite-scroll-target='scrollArea'></div>
 
     <%= render partial: "shared/pagination", locals: { pagy: @pagy } %>
   </div>
-</div>
+<% end %>

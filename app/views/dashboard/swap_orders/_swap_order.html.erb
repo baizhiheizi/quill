@@ -1,0 +1,15 @@
+<div class="grid grid-cols-3 lg:grid-cols-6 gap-2 border-b py-2 px-4">
+  <div class="flex items-center space-x-2 col-span-1">
+    <%= t("activerecord.attributes.swap_order.state.#{swap_order.state}") %>
+  </div>
+  <div class="flex items-center justify-center space-x-2 col-span-4">
+    <img src="<%= swap_order.pay_asset.icon_url %>" class="w-8 h-8 rounded-full" />
+    <span><%= swap_order.funds %></span>
+    <span>=></span>
+    <img src="<%= swap_order.fill_asset.icon_url %>" class="w-8 h-8 rounded-full" />
+    <span><%= swap_order.amount %></span>
+  </div>
+  <div class="flex items-center justify-center col-span-1">
+    <%= swap_order.created_at.strftime("%Y-%m-%d %H:%M") %>
+  </div>
+</div>

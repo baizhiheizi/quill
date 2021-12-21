@@ -126,7 +126,7 @@ en:
   mixin_group: Mixin Group
   comments: Comments
   subscribe_comments: Subscribe
-  no_comments: No Comments
+  no_comments: No comments yet
   comment_deleted: Deleted by the Administrator
   quote: Quote
   from: From
@@ -227,6 +227,7 @@ en:
   avatar: Avatar
   bio: Bio
   sync: Sync
+  no_record: No record
   articles:
     not_finished: Pleash finish your article first
     title_is_required: Please input your article's title
