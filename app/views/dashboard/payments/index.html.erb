@@ -1,24 +1,15 @@
 <%= turbo_frame_tag "#{dom_id current_user}_payments" do %>
-  <% @payments.each do |payment| %>
-    <div class="border-b py-2 px-4">
-      <div class="grid grid-cols-3 md:grid-cols-6 gap-2">
-        <div class="flex items-center text-gray-500 col-span-2 md:col-span-1">
-          <%= link_to payment.article.title, article_path(payment.article.uuid), class: "truncate", data: { turbo_frame: "_top" } %>
+  <div data-controller="infinite-scroll">
+    <div id="<%= dom_id current_user %>_payments_list">
+      <% if @payments.blank? %>
+        <div class="text-center py-2 opacity-50">
+          <%= t("no_record") %>
         </div>
-        <div class="flex items-center space-x-2 col-span-1 justify-center">
-          <%= t("activerecord.attributes.payment.state.#{payment.state}") %>
-        </div>
-        <div class="flex items-center space-x-2 col-span-2">
-          <img src="<%= payment.currency.icon_url %>" class="w-8 h-8 rounded-full" />
-          <span><%= payment.price_tag %></span>
-        </div>
-        <div class="hidden md:flex items-center col-span-1">
-          <a href="<%= payment.snapshot_url %>" target="_blank"><%= t('activerecord.attributes.payment.snapshot') %></a>
-        </div>
-        <div class="flex items-center justify-center col-span-1">
-          <%= payment.created_at.strftime("%Y-%m-%d %H:%M") %>
-        </div>
-      </div>
+      <% else %>
+        <%= render partial: "dashboard/payments/payment", collection: @payments, as: :payment %>
+      <% end %>
     </div>
-  <% end %>
+    <div data-infinite-scroll-target='scrollArea'></div>
+    <%= render partial: "shared/pagination", locals: { pagy: @pagy } %>
+  </div>
 <% end %>>

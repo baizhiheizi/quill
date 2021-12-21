@@ -35,6 +35,9 @@ Rails.application.routes.draw do
   resources :published_articles, param: :uuid, only: %i[update destroy]
   resources :article_references, only: %i[index], default: { format: :json }
   resources :payments, only: %i[create]
+  resources :subscribe_users, only: %i[create destroy], param: :uid
+  resources :subscribe_articles, only: %i[create destroy], param: :uuid
+  resources :subscribe_tags, only: %i[create destroy]
 
   resources :notifications
   resources :tags, only: %i[index show]

@@ -227,6 +227,7 @@ zh-CN:
   avatar: 头像
   bio: 简介
   sync: 同步
+  no_record: 没有记录
   articles:
     not_finished: 请先完成你的文章
     title_is_required: 请输入文章标题

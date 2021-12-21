@@ -34,17 +34,25 @@
   </div>
 </div>
 
-<% if @articles.blank? %>
-  <%= render 'shared/empty' %>
-<% else %>
-  <% case @tab %>
-  <% when 'published' %>
-    <%= render partial: "dashboard/articles/published_article", collection: @articles, as: :article %>
-  <% when 'drafted' %>
-    <%= render partial: "dashboard/articles/drafted_article", collection: @articles, as: :article %>
-  <% when 'hidden' %>
-    <%= render partial: "dashboard/articles/hidden_article", collection: @articles, as: :article %>
-  <% when 'blocked' %>
-    <%= render partial: "dashboard/articles/blocked_article", collection: @articles, as: :article %>
-  <% end %>
-<% end %>
+<div data-controller="infinite-scroll">
+  <div id="<%= dom_id current_user %>_articles_list">
+    <% if @articles.blank? %>
+      <div class="text-center py-2 opacity-50">
+        <%= t("no_record") %>
+      </div>
+    <% else %>
+      <% case @tab %>
+      <% when 'published' %>
+        <%= render partial: "dashboard/articles/published_article", collection: @articles, as: :article %>
+      <% when 'drafted' %>
+        <%= render partial: "dashboard/articles/drafted_article", collection: @articles, as: :article %>
+      <% when 'hidden' %>
+        <%= render partial: "dashboard/articles/hidden_article", collection: @articles, as: :article %>
+      <% when 'blocked' %>
+        <%= render partial: "dashboard/articles/blocked_article", collection: @articles, as: :article %>
+      <% end %>
+    <% end %>
+  </div>
+  <div data-infinite-scroll-target='scrollArea'></div>
+  <%= render partial: "shared/pagination", locals: { pagy: @pagy } %>
+</div>
