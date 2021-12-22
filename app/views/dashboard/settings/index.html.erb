@@ -42,9 +42,17 @@
   </div>
 
   <div class="hidden pb-4"
-    data-tabs-content-param="swap_orders"
+    data-tabs-content-param="access_token"
     data-tabs-target="content">
-    <%= turbo_frame_tag "#{dom_id current_user}_swap_orders", src: dashboard_swap_orders_path, loading: :lazy do %>
+    <div class="px-4 mb-4 flex justify-end">
+      <%= link_to t('generate_new_token'), 
+        view_modals_path(type: :generate_access_token), 
+        data: { 
+          turbo_method: :post 
+        }, 
+        class: "px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded" %>
+    </div>
+    <%= turbo_frame_tag "#{dom_id current_user}_access_tokens", src: dashboard_access_tokens_path, loading: :lazy do %>
       <%= render "shared/loading" %>
     <% end %>
   </div>

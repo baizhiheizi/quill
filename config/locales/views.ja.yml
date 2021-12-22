@@ -179,7 +179,7 @@ ja:
   tips_of_transfer_processed_notifications: 記事からのリワードや返金を含む送金を受け取ったとき通知を受け取ります。
   confirm_to_generate_token: サードパーティ製アプリケーションにアクセストークンを提供して、記事を管理できます。新しいアクセストークンを生成しますか?
   generate_new_token: 新しいアクセストークンを生成する
-  token_memo_placeholader: アクセストークンのメモ
+  token_memo_placeholder: アクセストークンのメモ
   token_generated_tips: 新しいアクセストークンを生成しました！
   token_security_tips: アクセストークンを安全に保管してください。一度閉じると、トークンは表示されません。トークンが失われた場合は、新しいトークンを生成します。
   confirm_to_delete_token: アクセストークンを削除しますか？

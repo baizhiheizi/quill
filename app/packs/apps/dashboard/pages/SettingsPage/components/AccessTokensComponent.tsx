@@ -117,7 +117,7 @@ export default function AccessTokensComponent() {
         >
           <Input
             value={memo}
-            placeholder={t('token_memo_placeholader')}
+            placeholder={t('token_memo_placeholder')}
             onChange={(e) => setMemo(e.currentTarget.value)}
           />
         </Modal>

@@ -1,0 +1,15 @@
+<%= turbo_frame_tag "#{dom_id current_user}_access_tokens" do %>
+  <div data-controller="infinite-scroll">
+    <div id="<%= dom_id current_user %>_access_tokens_list">
+      <% if @access_tokens.blank? %>
+        <div class="text-center py-2 opacity-50">
+          <%= t("no_record") %>
+        </div>
+      <% else %>
+        <%= render partial: "dashboard/access_tokens/access_token", collection: @access_tokens, as: :access_token %>
+      <% end %>
+    </div>
+    <div data-infinite-scroll-target='scrollArea'></div>
+    <%= render partial: "shared/pagination", locals: { pagy: @pagy } %>
+  </div>
+<% end %>

@@ -188,7 +188,7 @@ en:
   tips_of_transfer_processed_notifications: When new transfers(including revenue from articles and refunding) received, you will be notified.
   confirm_to_generate_token: You can provide an Access Token to a third-party application to manage your articles. Are you sure to generate a new Access Token？
   generate_new_token: Generate New Token
-  token_memo_placeholader: Memo for the Access Token
+  token_memo_placeholder: Memo for the Access Token
   token_generated_tips: A new Access Token generated!
   token_security_tips: Please keep your Access Token safe. The token will not display once close. Generate a new one if you lose it.
   confirm_to_delete_token: Are you sure to DELETE the Access Token?

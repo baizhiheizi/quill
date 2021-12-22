@@ -188,7 +188,7 @@ zh-CN:
   tips_of_transfer_processed_notifications: 有新的转账（包括文章收益、退款等）时，您将收到通知。
   confirm_to_generate_token: Access Token 可提供给第三方应用以管理您的文章，确定需要生成新的 Token 吗？
   generate_new_token: 生成新 Token
-  token_memo_placeholader: 备注一下 Token
+  token_memo_placeholder: 备注一下 Token
   token_generated_tips: 新 Access Token 已经生成
   token_security_tips: 请妥善保管您的 Access Token，关闭后将不再显示。如果丢失请重新生成。
   confirm_to_delete_token: 确认要删除 Access Token 吗？
