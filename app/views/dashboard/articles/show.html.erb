@@ -8,7 +8,169 @@
   <%= link_to t('edit'), edit_article_path(@article.uuid), class: "rounded bg-blue-500 hover:bg-blue-600 text-white px-4 py-1" %>
 </div>
 
-<div class=""
+<div class="px-4 mb-4">
+  <div class="sm:grid sm:grid-cols-4 gap-4">
+    <div class="text-center p-2">
+      <div class="text-sm opacity-70">
+        <%= t('activerecord.attributes.article.price') %>
+      </div>
+      <div class="font-bold">
+        <%= @article.price %>
+        <%= @article.currency.symbol %>
+      </div>
+    </div>
+    <div class="text-center p-2">
+      <div class="text-sm opacity-70">
+        <%= t('activerecord.attributes.article.buy_orders_count') %>
+      </div>
+      <div class="font-bold">
+        <%= @article.buy_orders.count %>
+      </div>
+    </div>
+    <div class="text-center p-2">
+      <div class="text-sm opacity-70">
+        <%= t('activerecord.attributes.article.created_at') %>
+      </div>
+      <div class="font-bold">
+        <%= @article.created_at.strftime("%Y-%m-%d %H:%M") %>
+      </div>
+    </div>
+    <div class="text-center p-2">
+      <div class="text-sm opacity-70">
+        <%= t('activerecord.attributes.article.updated_at') %>
+      </div>
+      <div class="font-bold">
+        <%= @article.updated_at.strftime("%Y-%m-%d %H:%M") %>
+      </div>
+    </div>
+  </div>
+  <div class="sm:grid sm:grid-cols-4 gap-4">
+    <div class="text-center p-2">
+      <div class="text-sm opacity-70">
+        <%= t('activerecord.attributes.article.revenue') %>
+      </div>
+      <div class="font-bold">
+        $<%= @article.revenue_usd.round(4) %>
+      </div>
+    </div>
+    <div class="text-center p-2">
+      <div class="text-sm opacity-70">
+        <%= t('activerecord.attributes.article.author_revenue_total') %>
+      </div>
+      <div class="font-bold">
+        $<%= @article.author_revenue_usd.round(4) %>
+      </div>
+    </div>
+    <div class="text-center p-2">
+      <div class="text-sm opacity-70">
+        <%= t('activerecord.attributes.article.reader_revenue_total') %>
+      </div>
+      <div class="font-bold">
+        $<%= @article.reader_revenue_usd.round(4) %>
+      </div>
+    </div>
+  </div>
+  <div class="sm:grid sm:grid-cols-4 gap-4">
+    <div class="text-center p-2">
+      <div class="text-sm opacity-70">
+        <%= t('activerecord.attributes.article.reward_orders_count') %>
+      </div>
+      <div class="font-bold">
+        <%= @article.reward_orders.count %>
+      </div>
+    </div>
+    <div class="text-center p-2">
+      <div class="text-sm opacity-70">
+        <%= t('activerecord.attributes.article.comments_count') %>
+      </div>
+      <div class="font-bold">
+        <%= @article.comments.count %>
+      </div>
+    </div>
+    <div class="text-center p-2">
+      <div class="text-sm opacity-70">
+        <%= t('activerecord.attributes.article.upvotes_count') %>
+      </div>
+      <div class="font-bold">
+        <%= @article.upvotes_count %>
+      </div>
+    </div>
+    <div class="text-center p-2">
+      <div class="text-sm opacity-70">
+        <%= t('activerecord.attributes.article.downvotes_count') %>
+      </div>
+      <div class="font-bold">
+        <%= @article.downvotes_count %>
+      </div>
+    </div>
+  </div>
+  <div class="sm:grid sm:grid-cols-4 gap-4">
+    <div class="text-center p-2">
+      <div class="text-sm opacity-70">
+        <%= t('readers_revenue') %>
+      </div>
+      <div class="font-bold">
+        <%= @article.readers_revenue_ratio * 100 %>%
+      </div>
+    </div>
+    <div class="text-center p-2">
+      <div class="text-sm opacity-70">
+        <%= t('platform_revenue') %>
+      </div>
+      <div class="font-bold">
+        <%= @article.platform_revenue_ratio * 100 %>%
+      </div>
+    </div>
+    <div class="text-center p-2">
+      <div class="text-sm opacity-70">
+        <%= t('author_revenue') %>
+      </div>
+      <div class="font-bold">
+        <%= @article.author_revenue_ratio * 100 %>%
+      </div>
+    </div>
+    <div class="text-center p-2">
+      <div class="text-sm opacity-70">
+        <%= t('references_revenue') %>
+      </div>
+      <div class="font-bold">
+        <%= @article.references_revenue_ratio * 100 %>%
+      </div>
+    </div>
+  </div>
+  <div class="sm:grid sm:grid-cols-4 gap-4">
+    <div class="text-center p-2">
+      <div class="text-sm opacity-70">
+        <%= t('activerecord.attributes.article.tags') %>
+      </div>
+      <div class="font-bold flex items-center flex-wrap justify-center space-x-2">
+        <% if @article.tag_names.blank? %>
+          -
+        <% else %>
+          <% @article.tag_names.each do |tag_name| %>
+            <div class="p-1 bg-gray-100 text-sm">#<%= tag_name %></div>
+          <% end %>
+        <% end %>
+      </div>
+    </div>
+    <div class="text-center p-2">
+      <div class="text-sm opacity-70">
+        <%= t('article_references') %>
+      </div>
+      <div class="font-bold">
+        <% if @article.references.blank? %>
+          -
+        <% else %>
+          <% @article.references.each do |reference| %>
+            <%= link_to reference.title, article_path(reference.uuid), class: "mb-2 text-sm" %>
+          <% end %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="mb-4"
   data-controller="tabs"
   data-tabs-active-tab-value="<%= @tab %>"
   data-tabs-active-class-value="border-b-2">
