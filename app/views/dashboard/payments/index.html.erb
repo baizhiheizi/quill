@@ -10,6 +10,6 @@
       <% end %>
     </div>
     <div data-infinite-scroll-target='scrollArea'></div>
-    <%= render partial: "shared/pagination", locals: { pagy: @pagy } %>
+    <%= render partial: "shared/pagination", locals: { pagy: @pagy, id: "#{dom_id current_user}_payments_pagination" } %>
   </div>
 <% end %>

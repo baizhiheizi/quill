@@ -2,6 +2,6 @@
   <%= render partial: "dashboard/swap_orders/swap_order", collection: @swap_orders, as: :swap_order %>
 <% end %>
 
-<%= turbo_stream.update 'pagination' do %>
-  <%= render partial: "shared/pagination", locals: { pagy: @pagy } %>
+<%= turbo_stream.update "#{dom_id current_user}_swap_orders_pagination" do %>
+  <%= render partial: "shared/pagination", locals: { pagy: @pagy, id: "#{dom_id current_user}_swap_orders_pagination" } %>
 <% end %>
