@@ -1,4 +1,6 @@
-<div data-infinite-scroll-target='pagination' id='pagination' class='flex justify-center'>
+<% id ||= 'pagination' %>
+
+<div data-infinite-scroll-target='pagination' id="<%= id %>" class='flex justify-center'>
   <% if pagy&.next&.present? %>
     <%= render "shared/loading" %>
     <%= link_to 'Load More', pagy_url_for(pagy, pagy.next), class: 'hidden' %>

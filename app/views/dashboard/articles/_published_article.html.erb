@@ -19,15 +19,16 @@
       <div class="col-span-1">
         <%= article.comments_count %> <%= t('commented') %>
       </div>
-      <div class="col-span-1">
-        <%= article.upvotes_count %> <%= t('upvoted') %>
+      <div class="col-span-1 flex items-center">
+        <%= article.upvotes_count %> <%= render "shared/icons/thumb_up", html_class: "w-4 h-4" %>
       </div>
-      <div class="col-span-1">
-        <%= article.downvotes_count %> <%= t('downvoted') %>
+      <div class="col-span-1 flex items-center">
+        <%= article.downvotes_count %> <%= render "shared/icons/thumb_down", html_class: "w-4 h-4" %>
       </div>
     </div>
   </div>
   <div class="text-blue-500 flex items-center space-x-4 sm:justify-end">
+    <%= link_to t('detail'), dashboard_article_path(article.uuid) %>
     <%= link_to t('edit'), edit_article_path(article.uuid) %>
     <%= link_to t('hide'), published_article_path(article.uuid),  data: { turbo_method: :delete,  turbo_confirm: t('confirm_to_hide') }  %>
   </div>

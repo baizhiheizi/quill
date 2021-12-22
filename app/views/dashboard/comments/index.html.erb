@@ -1,16 +1,22 @@
 <div class="p-4">
-  <div data-controller="infinite-scroll">
-    <div id="<%= dom_id current_user %>_comments_list">
-      <% if @comments.blank? %>
-        <div class="text-center py-2 opacity-50">
-          <%= t("no_comments") %>
+  <% if @article.present? %>
+    <%= render "dashboard/comments/article_comments", article: @article, comments: @comments, pagy: @pagy %>
+  <% else %>
+    <%= turbo_frame_tag "#{dom_id current_user}_comments" do %>
+      <div data-controller="infinite-scroll">
+        <div id="<%= dom_id current_user %>_comments_list">
+          <% if @comments.blank? %>
+            <div class="text-center py-2 opacity-50">
+              <%= t("no_comments") %>
+            </div>
+          <% else %>
+            <%= render partial: "dashboard/comments/comment", collection: @comments, as: :comment %>
+          <% end %>
         </div>
-      <% else %>
-        <%= render partial: "dashboard/comments/comment", collection: @comments, as: :comment %>
-      <% end %>
-    </div>
-    <div data-infinite-scroll-target='scrollArea'></div>
+        <div data-infinite-scroll-target='scrollArea'></div>
 
-    <%= render partial: "shared/pagination", locals: { pagy: @pagy } %>
-  </div>
+        <%= render partial: "shared/pagination", locals: { pagy: @pagy, id: "#{dom_id current_user}_comments_pagination" } %>
+      </div>
+    <% end %>
+  <% end %>
 </div>

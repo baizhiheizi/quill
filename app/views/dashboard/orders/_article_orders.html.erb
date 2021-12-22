@@ -1,0 +1,15 @@
+<%= turbo_frame_tag "#{dom_id @article}_orders" do %>
+  <div data-controller="infinite-scroll">
+    <div id="<%= dom_id @article %>_orders_list">
+      <% if @orders.blank? %>
+        <div class="text-center py-2 opacity-50">
+          <%= t("no_record") %>
+        </div>
+      <% else %>
+        <%= render partial: "dashboard/orders/article_order", collection: @orders, as: :order, locals: { article: @article } %>
+      <% end %>
+    </div>
+    <div data-infinite-scroll-target='scrollArea'></div>
+    <%= render partial: "shared/pagination", locals: { pagy: @pagy, id: "#{dom_id @article}_orders_pagination" } %>
+  </div>
+<% end %>

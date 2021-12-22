@@ -19,6 +19,11 @@ class Dashboard::ArticlesController < Dashboard::BaseController
     @pagy, @articles = pagy articles.order(updated_at: :desc)
   end
 
+  def show
+    @tab = params[:tab] || 'buy_records'
+    @article = current_user.articles.find_by uuid: params[:uuid]
+  end
+
   def destroy
     @article = current_user.articles.drafted.find_by uuid: params[:uuid]
     return if @article.blank?
