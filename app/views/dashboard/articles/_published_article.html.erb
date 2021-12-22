@@ -9,7 +9,7 @@
     <div class="text-xl font-bold mb-2">
       <%= article.title %>
     </div>
-    <div class="grid grid-cols-3 sm:flex sm:items-center sm:space-x-4 text-sm text-gray-500 mb-2">
+    <div class="flex items-center space-x-4 text-sm text-gray-500 mb-2">
       <div class="col-span-1">
         $<%= article.revenue_usd.round(4) %>
       </div>
@@ -30,6 +30,20 @@
   <div class="text-blue-500 flex items-center space-x-4 sm:justify-end">
     <%= link_to t('detail'), dashboard_article_path(article.uuid) %>
     <%= link_to t('edit'), edit_article_path(article.uuid) %>
-    <%= link_to t('hide'), published_article_path(article.uuid),  data: { turbo_method: :delete,  turbo_confirm: t('confirm_to_hide') }  %>
+    <%= button_to t('hide'), 
+      published_article_path(article.uuid),  
+      method: :delete,
+      form: {
+        data: { 
+          controller: "confirm",
+          confirm_target: "form",
+          confirm_identifier_value: SecureRandom.uuid,
+          confirm_content_value: t("confirm_to_hide") 
+        }
+      },
+      data: { 
+        action: "confirm#invoke",
+      },
+      class: "bg-transparent cursor-pointer" %>
   </div>
 </div>

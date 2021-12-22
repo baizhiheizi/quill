@@ -29,6 +29,8 @@ class ViewModalsController < ApplicationController
       render :reward_article
     when 'generate_access_token'
       render :generate_access_token
+    when 'confirm'
+      render :confirm
     end
   end
 end
