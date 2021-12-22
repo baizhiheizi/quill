@@ -19,9 +19,10 @@ class Dashboard::ArticlesController < Dashboard::BaseController
     @pagy, @articles = pagy articles.order(updated_at: :desc)
   end
 
-  def hide
-  end
+  def destroy
+    @article = current_user.articles.drafted.find_by uuid: params[:uuid]
+    return if @article.blank?
 
-  def publish
+    @article.destroy
   end
 end

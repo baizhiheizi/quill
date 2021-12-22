@@ -49,7 +49,7 @@ Rails.application.routes.draw do
 
   namespace :dashboard do
     resources :settings, only: %i[index]
-    resources :articles, only: %i[index]
+    resources :articles, only: %i[index destroy], param: :uuid
     resources :comments, only: %i[index]
     resources :subscriptions, only: %i[index]
     resources :subscribe_users, only: %i[index]
