@@ -1,0 +1,11 @@
+<%= form_for [:dashboard, current_user.access_tokens.new], 
+  data: {
+    turbo_confirm: t('confirm_to_generate_token'), 
+  } do |form| %>
+  <div class="flex justify-center">
+    <%= form.text_field :memo, placeholder: t('token_memo_placeholder'), class: "w-full py-2 rounded focus:ring-0 mb-4" %>
+  </div>
+  <div class="flex justify-center">
+    <%= form.submit t('submit'), class: "cursor-pointer rounded bg-blue-500 hover:bg-blue-600 text-white px-4 py-2" %>
+  </div>
+<% end %>

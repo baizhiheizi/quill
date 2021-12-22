@@ -27,6 +27,8 @@ class ViewModalsController < ApplicationController
       return unless @article&.authorized?(current_user)
 
       render :reward_article
+    when 'generate_access_token'
+      render :generate_access_token
     end
   end
 end

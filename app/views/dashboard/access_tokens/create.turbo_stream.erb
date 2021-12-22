@@ -1,0 +1,22 @@
+<%= turbo_stream.prepend "#{dom_id current_user}_access_tokens_list" do %>
+  <div id="<%= dom_id @access_token %>" class="border-b py-2 px-4">
+    <div class="flex items-center space-x-4">
+      <div class=""><%= @access_token.memo %></div>
+      <div class="flex-1 flex justify-center">
+        <div class="p-1 text-sm bg-gray-100"><%= @access_token.value %></div>
+      </div>
+      <div class="">
+        <%= link_to t('delete'), 
+          dashboard_access_token_path(@access_token), 
+          data: { 
+            turbo_confirm: t('confirm_to_delete'), 
+            turbo_method: :delete 
+          }, 
+          class: "px-2 py-1 text-red-500" %>
+      </div>
+    </div>
+  </div>
+<% end %>
+
+<%= turbo_stream.update "modal-slot" do %>
+<% end %>
