@@ -1,0 +1,9 @@
+<% if @article.present? %>
+  <%= turbo_stream.append "#{dom_id @article}_orders_list" do %>
+    <%= render partial: "dashboard/orders/article_order", collection: @orders, as: :order, locals: { article: @article } %>
+  <% end %>
+
+  <%= turbo_stream.update "#{dom_id @article}_orders_pagination" do %>
+    <%= render partial: "shared/pagination", locals: { pagy: @pagy, id: "#{dom_id @article}_orders_pagination" } %>
+  <% end %>
+<% end %>

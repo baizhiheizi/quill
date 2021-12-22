@@ -1,7 +1,16 @@
-<%= turbo_stream.append "#{dom_id current_user}_comments_list" do %>
-  <%= render partial: "dashboard/comments/comment", collection: @comments, as: :comment %>
+<% if @article.present? %>
+  <%= turbo_stream.append "#{dom_id @article}_comments_list" do %>
+    <%= render partial: "dashboard/comments/article_comment", collection: @comments, as: :comment, locals: { article: @article } %>
+  <% end %>
+  <%= turbo_stream.update "#{dom_id @article}_comments_pagination" do %>
+    <%= render partial: "shared/pagination", locals: { pagy: @pagy, id: "#{dom_id @article}_comments_pagination" } %>
+  <% end %>
+<% else %>
+  <%= turbo_stream.append "#{dom_id current_user}_comments_list" do %>
+    <%= render partial: "dashboard/comments/comment", collection: @comments, as: :comment %>
+  <% end %>
+  <%= turbo_stream.update "#{dom_id current_user}_comments_pagination" do %>
+    <%= render partial: "shared/pagination", locals: { pagy: @pagy, id: "#{dom_id current_user}_comments_pagination" } %>
+  <% end %>
 <% end %>
 
-<%= turbo_stream.update 'pagination' do %>
-  <%= render partial: "shared/pagination", locals: { pagy: @pagy } %>
-<% end %>

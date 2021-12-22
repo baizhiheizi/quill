@@ -1,0 +1,22 @@
+<div class="px-4 py-2 border-b flex items-center space-x-4">
+  <div>
+    <% if order.order_type == 'cite_article' %>
+      <%= link_to order.citer.title, article_path(order.citer.uuid) %>
+    <% else %>
+      <img src="<%= order.buyer.avatar %>" class="w-8 h-8 rounded-full" />
+    <% end %>
+  </div>
+  <div>
+    <%= t('paid') %> <%= order.total %> <%= order.currency.symbol %>
+  </div>
+  <div>
+    <%= {
+      buy_article: t('bought_article'),
+      reward_article: t('rewarded_article'),
+      cite_article: t('cited_article')
+    }[order.order_type.to_sym] %>
+  </div>
+  <div class="opacity-70 flex-1 text-right">
+    <%= order.created_at.strftime('%Y-%m-%d %H:%M') %>
+  </div>
+</div>
