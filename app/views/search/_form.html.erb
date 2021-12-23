@@ -1,0 +1,27 @@
+<%= form_tag articles_path, 
+  method: :get, 
+  data: { 
+    controller: "search",
+    search_target: "form"
+  },
+  class: "relative max-w-2xl" do %>
+  <div class="absolute inset-y-0 left-0 flex items-center pl-2">
+    <%= render "shared/icons/search", html_class: "w-6 h-6 opacity-50" %>
+  </div>
+  <%= text_field_tag :query, 
+    query, 
+    placeholder: "Search", 
+    data: { 
+      search_target: "input",
+      action: "input->search#submit",
+    },
+    class: "w-full px-10 rounded-lg border-gray-200" %>
+  <div class="absolute inset-y-0 right-0 flex items-center pr-2">
+    <button class="hidden" data-search-target="clearButton" data-action="search#clear">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+      </svg>
+    </button>
+  </div>
+  <div id="search_result_list"></div>
+<% end %>

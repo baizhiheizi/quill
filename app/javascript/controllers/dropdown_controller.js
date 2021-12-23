@@ -3,11 +3,15 @@ import { useTransition } from 'stimulus-use';
 
 export default class extends Controller {
   static targets = ['menu'];
+  static values = { initialState: String };
 
   connect() {
     useTransition(this, {
       element: this.menuTarget,
     });
+    if (this.initialStateValue) {
+      this.enter();
+    }
   }
 
   toggle() {

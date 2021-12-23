@@ -1,0 +1,42 @@
+<%= turbo_stream.replace "search_result_list" do %>
+  <div id="search_result_list"
+    data-controller="dropdown"
+    data-dropdown-target="menu"
+    data-dropdown-initial-state-value="show"
+    data-action="click@window->dropdown#hide"
+    data-transition-enter-active="transition ease-out duration-100"
+    data-transition-enter-from="transform opacity-0 scale-95"
+    data-transition-enter-to="transform opacity-100 scale-100"
+    data-transition-leave-active="transition ease-in duration-75"
+    data-transition-leave-from="transform opacity-100 scale-100"
+    data-transition-leave-to="transform opacity-0 scale-95"
+    class="hidden 
+            bg-white 
+            shadow-lg
+            border
+            rounded-lg 
+            w-full 
+            absolute 
+            left-0 
+            origin-top-left 
+            z-10">
+    <div class="py-2 px-4 border-b text-gray-500 text-sm"><%= t('tag') %></div>
+    <% @tags.each do |tag| %>
+      <%= link_to tag_path(tag.name), class: "cursor-pointer flex items-center space-x-4 py-2 px-4 border-b hover:rounded-lg hover:scale-105 hover:bg-gray-50" do %>
+        <div class="px-2 py-1 bg-gray-200 font-bold">
+          <%= tag.name %>
+        </div>
+      <% end %>
+    <% end %>
+
+    <div class="py-2 px-4 border-b text-gray-500 text-sm"><%= t('author') %></div>
+    <% @users.each do |user| %>
+      <%= link_to user_path(user), class: "cursor-pointer flex items-center space-x-4 py-2 px-4 border-b hover:rounded-lg hover:scale-105 hover:bg-gray-50" do %>
+        <img src="<%= user.avatar %>" class="rounded-lg w-6 h-6" />
+        <span><%= user.name %></span>
+      <% end %>
+    <% end %>
+
+    <%= link_to "Press Enter to search all articles", articles_path(query: @query), class: "block py-2 px-4 text-gray-500 text-sm hover:rounded-lg hover:scale-105 hover:bg-gray-100"  %>
+  </div>
+<% end %>
