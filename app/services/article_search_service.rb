@@ -1,17 +1,18 @@
 # frozen_string_literal: true
 
 class ArticleSearchService
-  def initialize(params)
+  def initialize(params, current_user = nil)
     @query = params[:query]
     @tag = params[:tag]
-    @filter = params[:filter]
+    @order_by = params[:order_by]
     @time_range = params[:time_range]
+    @current_user = current_user
     @articles = Article.published
   end
 
   def call
     query
-      .filter
+      .sort
       .select_in_time_range
 
     @articles
@@ -32,15 +33,15 @@ class ArticleSearchService
     self
   end
 
-  def filter
+  def sort
     @articles =
-      case @filter
+      case @order_by
       when 'lately'
         @articles.order(published_at: :desc)
       when 'revenue'
         @articles.order_by_revenue_usd
       when 'subscribed'
-        @articles.where(author_id: current_user&.subscribe_user_ids).order(published_at: :desc)
+        @articles.where(author_id: @current_user&.subscribe_user_ids).order(published_at: :desc)
       else
         @articles.order_by_popularity
       end
