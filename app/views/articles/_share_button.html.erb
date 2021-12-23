@@ -1,7 +1,7 @@
 <% button_class ||= "w-4 h-4 lg:w-6 lg:h-6" %>
 
-<div class="relative">
-  <%= button_to view_modals_path(type: :share_article, uuid: article.uuid), class: "p-2 hover:scale-105" do %>
-    <%= render "shared/icons/share", html_class: button_class %>
-  <% end %>
-</div>
+<%= button_to view_modals_path(type: :share_article, uuid: article.uuid), 
+  form: { class: "flex" },
+  class: "m-auto hover:scale-105" do %>
+  <%= render "shared/icons/share", html_class: button_class %>
+<% end %>
