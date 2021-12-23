@@ -7,11 +7,13 @@ class ArticlesController < ApplicationController
 
   def index
     @query = params[:query]
+    articles = ArticleSearchService.new(params).call
 
-    @pagy, @articles = pagy Article.only_published.order(created_at: :desc)
+    @pagy, @articles = pagy_countless articles
 
     respond_to do |format|
       format.html
+      format.turbo_stream
       format.rss do
         render layout: false
       end
