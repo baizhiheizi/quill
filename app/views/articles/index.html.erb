@@ -4,16 +4,18 @@
     <%= render "articles/articles_list", articles: @articles, pagy: @pagy %>
   </div>
   <aside class="lg:col-span-1">
-    <% if @tag.present? %>
+    <div class="lg:sticky lg:top-20">
+      <% if @tag.present? %>
+        <div class="mb-4">
+          <%= render "tags/tag_card", tag: @tag %>
+        </div>
+      <% end %>
       <div class="mb-4">
-        <%= render "tags/tag_card", tag: @tag %>
+        <%= render "shared/hot_tags_card" %>
       </div>
-    <% end %>
-    <div class="mb-4">
-      <%= render "shared/hot_tags_card" %>
-    </div>
-    <div class="mb-4">
-      <%= render "shared/active_authors_card" %>
+      <div class="mb-4">
+        <%= render "shared/active_authors_card" %>
+      </div>
     </div>
   </aside>
 </div>
