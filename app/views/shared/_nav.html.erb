@@ -123,6 +123,9 @@
       <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
         <%= link_to t("rules"), page_path('rules'), class: "block px-3 py-2 text-base font-medium focus:bg-blue-50 focus:text-blue-500 rounded-md" %>
       </div>
+      <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+        <%= render "search/form", query: @query %>
+      </div>
       <div class="pt-4 pb-3">
         <% if current_user.present? %>
           <div class="flex items-center px-5">
