@@ -3,10 +3,24 @@
     <%= link_to t('subscribe'), view_modals_path(type: :login), data: { turbo_method: :post }, class: "block bg-blue-600 rounded text-white text-center py-2" %>
   <% elsif current_user == user %>
   <% elsif current_user.subscribe_user? user %>
-    <div class="w-full bg-white text-red-500 text-center py-2">
-    <%= link_to t('unsubscribe'), subscribe_user_path(user.uid), data: { turbo_method: :delete, turbo_confirm: t("confirm_to_unsubscribe") }, class: "text-red-500" %>
+    <div class="w-full bg-white text-center py-1">
+      <%= button_to t('unsubscribe'), 
+        subscribe_user_path(user.uid), 
+        method: :delete,
+        form: {
+          data: { 
+            controller: "confirm",
+            confirm_target: "form",
+            confirm_identifier_value: SecureRandom.uuid,
+            confirm_content_value: t("confirm_to_unsubscribe") 
+          }
+        },
+        data: { 
+          action: "confirm#invoke",
+        }, 
+        class: "cursor-pointer bg-transparent opacity-70" %>
     </div>
   <% else current_user.subscribe_user? user%>
-    <%= button_to t('subscribe'), subscribe_users_path(uid: user.uid), class: "block w-full cursor-pointer bg-blue-500 hover:bg-blue-600 rounded text-white text-center py-2 px-4" %>
+    <%= button_to t('subscribe'), subscribe_users_path(uid: user.uid), class: "block w-full cursor-pointer bg-blue-500 hover:bg-blue-600 rounded text-white text-center py-1 px-4" %>
   <% end %>
 </div>

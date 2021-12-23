@@ -24,7 +24,7 @@
               <% end %>
             </div>
           <% end %>
-          <%= form_for @article, url: published_article_path(@article) do |form| %>
+          <%= form_for @article, url: dashboard_published_article_path(@article) do |form| %>
             <%= form.submit t('publish'), class: "cursor-pointer block w-full bg-blue-500 text-white rounded py-2 text-center" %>
           <% end %>
         </div>

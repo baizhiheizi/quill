@@ -1,7 +1,35 @@
 <div class="p-4">
   <div class="flex items-center space-x-4  justify-end mb-4">
-    <%= link_to t("read_all"), dashboard_read_notifications_path, data: { turbo_method: :post, turbo_confirm: t("confirm_to_submit") }, class: "bg-blue-500 hover:bg-blue-600 rounded px-4 py-1 text-white" %>
-    <%= link_to t("clear_all"), dashboard_deleted_notifications_path, data: { turbo_method: :post, turbo_confirm: t("confirm_to_submit") }, class: "bg-blue-500 hover:bg-blue-600 rounded px-4 py-1 text-white" %>
+    <%= button_to t("read_all"), 
+      dashboard_read_notifications_path, 
+      method: :post,
+      form: {
+        data: { 
+          controller: "confirm",
+          confirm_target: "form",
+          confirm_identifier_value: SecureRandom.uuid,
+          confirm_content_value: t("confirm_to_submit") 
+        }
+      },
+      data: { 
+        action: "confirm#invoke",
+      }, 
+      class: "cursor-pointer bg-blue-500 hover:bg-blue-600 rounded px-4 py-1 text-white" %>
+    <%= button_to t("clear_all"), 
+      dashboard_deleted_notifications_path, 
+      method: :post,
+      form: {
+        data: { 
+          controller: "confirm",
+          confirm_target: "form",
+          confirm_identifier_value: SecureRandom.uuid,
+          confirm_content_value: t("confirm_to_submit") 
+        }
+      },
+      data: { 
+        action: "confirm#invoke",
+      }, 
+      class: "cursor-pointer bg-blue-500 hover:bg-blue-600 rounded px-4 py-1 text-white" %>
   </div>
   <div data-controller="infinite-scroll">
     <div id="<%= dom_id current_user %>_notifications_list">
