@@ -7,7 +7,11 @@ class ArticlesController < ApplicationController
 
   def index
     @query = params[:query]
-    articles = ArticleSearchService.new(params).call
+    @order_by = params[:order_by] || 'default'
+    @time_range = params[:time_range]
+    @time_range ||= 'month' if @order_by == 'revenue'
+
+    articles = ArticleSearchService.new(params, current_user).call
 
     @pagy, @articles = pagy_countless articles
 

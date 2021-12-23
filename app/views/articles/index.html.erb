@@ -1,19 +1,7 @@
 <div class="lg:grid lg:grid-cols-3 lg:gap-x-6">
   <div class="w-full lg:col-span-2">
-    <div data-controller="infinite-scroll">
-      <div id="articles_list">
-        <% if @articles.blank? %>
-          <div class="text-center py-2 opacity-50">
-            <%= t("no_record") %>
-          </div>
-        <% else %>
-          <%= render partial: "articles/article_card", collection: @articles, as: :article %>
-        <% end %>
-      </div>
-      <div data-infinite-scroll-target='scrollArea'></div>
-
-      <%= render partial: "shared/pagination", locals: { pagy: @pagy, id: "articles_pagination" } %>
-    </div>
+    <%= render "articles/filter_bar", order_by: @order_by, time_range: @time_range %>
+    <%= render "articles/articles_list", articles: @articles, pagy: @pagy %>
   </div>
   <aside class="lg:col-span-1">
     <div class="p-4 lg:p-6 bg-white lg:rounded">
