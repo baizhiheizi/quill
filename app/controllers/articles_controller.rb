@@ -6,6 +6,8 @@ class ArticlesController < ApplicationController
   layout 'editor', only: %i[new edit]
 
   def index
+    @query = params[:query]
+
     @pagy, @articles = pagy Article.only_published.order(created_at: :desc)
 
     respond_to do |format|
