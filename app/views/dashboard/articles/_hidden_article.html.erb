@@ -1,4 +1,4 @@
-<div class="border-b p-4 sm:px-6">
+<div id="<%= dom_id article %>_hidden" class="border-b p-4 sm:px-6">
   <div class="relative">
     <%= link_to article_path(article.uuid) do %>
       <span aria-hidden="true" class="absolute inset-0"></span>
@@ -29,6 +29,20 @@
   </div>
   <div class="text-blue-500 flex items-center space-x-4 sm:justify-end">
     <%= link_to t('edit'), edit_article_path(article.uuid) %>
-    <%= link_to t('publish'), published_article_path(article.uuid),  data: { turbo_method: :put,  turbo_confirm: t('confirm_to_publish') }  %>
+    <%= button_to t('publish'), 
+      dashboard_published_article_path(article.uuid), 
+      form: {
+        data: { 
+          controller: "confirm",
+          confirm_target: "form",
+          confirm_identifier_value: SecureRandom.uuid,
+          confirm_content_value: t("confirm_to_publish") 
+        }
+      },
+      method: :put,
+      data: { 
+        action: "confirm#invoke",
+      }, 
+      class: "bg-transparent cursor-pointer" %>
   </div>
 </div>

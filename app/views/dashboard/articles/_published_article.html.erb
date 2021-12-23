@@ -1,4 +1,4 @@
-<div class="border-b p-4 sm:px-6">
+<div id="<%= dom_id article %>_published" class="border-b p-4 sm:px-6">
   <div class="relative">
     <%= link_to article_path(article.uuid) do %>
       <span aria-hidden="true" class="absolute inset-0"></span>
@@ -31,7 +31,7 @@
     <%= link_to t('detail'), dashboard_article_path(article.uuid) %>
     <%= link_to t('edit'), edit_article_path(article.uuid) %>
     <%= button_to t('hide'), 
-      published_article_path(article.uuid),  
+      dashboard_published_article_path(article.uuid),  
       method: :delete,
       form: {
         data: { 

@@ -45,10 +45,19 @@
     data-tabs-content-param="access_token"
     data-tabs-target="content">
     <div class="px-4 mb-4 flex justify-end">
-      <%= link_to t('generate_new_token'), 
+      <%= button_to t('generate_new_token'), 
         view_modals_path(type: :generate_access_token), 
+        form: {
+          data: {
+            controller: "confirm",
+            confirm_target: "form",
+            confirm_identifier_value: SecureRandom.uuid,
+            confirm_content_value: t('confirm_to_generate_token'), 
+          }
+        },
         data: { 
-          turbo_method: :post 
+          turbo_method: :post,
+          action: "confirm#invoke"
         }, 
         class: "px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded" %>
     </div>

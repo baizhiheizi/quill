@@ -1,18 +1,19 @@
-<div id="<%= dom_id article %>_draft" class="border-b p-4 sm:px-6">
-  <div class="text-sm text-gray-500 text-right flex justify-end space-x-4">
-    <%= link_to t('delete'), 
-      dashboard_article_path(article), 
-      class: "px-4 text-red-500",
-      data: { 
-        turbo_method: :delete, 
-        turbo_confirm: t('confirm_to_delete') 
-      } %>
-    <span><%= article.updated_at.strftime("%Y-%m-%d %H:%M") %></span>
-  </div>
-  <div class="relative text-xl font-bold">
-    <%= article.title.presence || t('articles.title_placeholder') %>
-    <%= link_to edit_article_path(article.uuid) do %>
-      <span aria-hidden="true" class="absolute inset-0"></span>
-    <% end %>
-  </div>
+<div id="<%= dom_id article %>_draft" class="border-b px-4 py-2 flex items-center space-x-4">
+  <%= link_to article.title.presence || t('articles.title_placeholder'), edit_article_path(article.uuid), class: "relative text-xl font-bold truncate" %>
+  <div class="flex-1 text-sm opacity-70"><%= article.updated_at.strftime("%Y-%m-%d %H:%M") %></div>
+  <%= button_to t('delete'), 
+    dashboard_article_path(article), 
+    form: {
+      data: {
+        controller: "confirm",
+        confirm_target: "form",
+        confirm_identifier_value: SecureRandom.uuid,
+        confirm_content_value: t("confirm_to_delete") 
+      },
+    },
+    method: :delete,
+    data: { 
+      action: "confirm#invoke"
+    },
+    class: "px-4 text-red-500 bg-transparent cursor-pointer" %>
 </div>

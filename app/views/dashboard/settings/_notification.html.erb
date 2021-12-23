@@ -1,5 +1,5 @@
 <div id="<%= dom_id current_user %>_notification_setting" class="px-4">
-  <%= form_for [:dashboard, current_user.notification_setting], data: { turbo_confirm: t('confirm_to_submit') } do |form| %>
+  <%= form_for [:dashboard, current_user.notification_setting] do |form| %>
     <div class="py-4 border-b">
       <div class="opacity-70 mb-2">
         <%= t('tips_of_article_published_notifications') %>

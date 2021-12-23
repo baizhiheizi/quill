@@ -32,7 +32,6 @@ Rails.application.routes.draw do
   resources :upvoted_comments, only: %i[update destroy]
   resources :downvoted_comments, only: %i[update destroy]
   post '/articles/preview', to: 'articles#preview', as: :preview_article
-  resources :published_articles, param: :uuid, only: %i[update destroy]
   resources :article_references, only: %i[index], default: { format: :json }
   resources :payments, only: %i[create]
   resources :subscribe_users, only: %i[create destroy], param: :uid
@@ -50,6 +49,7 @@ Rails.application.routes.draw do
   namespace :dashboard do
     resources :settings, only: %i[index]
     resources :articles, only: %i[index show destroy], param: :uuid
+    resources :published_articles, param: :uuid, only: %i[update destroy]
     resources :comments, only: %i[index]
     resources :subscriptions, only: %i[index]
     resources :subscribe_users, only: %i[index]

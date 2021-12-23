@@ -1,7 +1,10 @@
 <%= form_for commentable.comments.new, 
   data: { 
     comment_form_target: "form",
-    turbo_confirm: t('confirm_to_submit')
+    controller: "confirm",
+    confirm_target: "form",
+    confirm_identifier_value: SecureRandom.uuid,
+    confirm_content_value: t("confirm_to_submit") 
   }, 
   html: { class: 'mb-4' } do |form| %>
   <%= form.hidden_field :commentable_id, value: commentable.id %>
@@ -15,6 +18,10 @@
     } 
   %>
   <div class="flex justify-end">
-    <%= form.submit t('submit'), class: "cursor-pointer bg-blue-500 text-white px-4 py-1 rounded" %>
+    <%= form.submit t('submit'), 
+      data: {
+        action: "confirm#invoke",
+      }, 
+      class: "cursor-pointer bg-blue-500 text-white px-4 py-1 rounded" %>
   </div>
 <% end %>

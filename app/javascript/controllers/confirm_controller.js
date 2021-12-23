@@ -36,7 +36,11 @@ export default class extends Controller {
   ok(event) {
     const identifier = event.detail?.identifier;
     if (identifier === this.identifierValue) {
-      this.formTarget.submit();
+      if (this.formTarget.requestSubmit) {
+        this.formTarget.requestSubmit();
+       } else {
+        this.formTarget.submit();
+       }
       document.removeEventListener("modal:ok", this.ok);
     }
   }
