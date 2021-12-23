@@ -31,6 +31,9 @@ class ViewModalsController < ApplicationController
       render :generate_access_token
     when 'confirm'
       render :confirm
+    when 'share_article'
+      @article = Article.published.find_by uuid: params[:uuid]
+      render :share_article
     end
   end
 end
