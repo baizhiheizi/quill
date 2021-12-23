@@ -2,7 +2,7 @@
   <% if current_user.blank? %>
     <%= link_to t('subscribe'), view_modals_path(type: :login), data: { turbo_method: :post }, class: "block bg-blue-600 rounded text-white text-center py-1" %>
   <% elsif current_user.commenting_subscribe_article? article %>
-    <div class="w-full bg-white text-red-500 text-center py-1">
+    <div class="w-full bg-white text-center py-1">
       <%= button_to t('unsubscribe'), 
         subscribe_article_path(article.uuid), 
         form: {
@@ -17,9 +17,11 @@
         data: { 
           action: "confirm#invoke"
         }, 
-        class: "bg-transparent cursor-pointer text-red-500" %>
+        class: "bg-transparent cursor-pointer opacity-50" %>
     </div>
   <% else %>
-    <%= button_to t('subscribe'), subscribe_articles_path(uuid: article.uuid), class: "block w-full cursor-pointer bg-blue-500 hover:bg-blue-600 rounded text-white text-center py-1 px-4" %>
+    <%= button_to t('subscribe'), 
+      subscribe_articles_path(uuid: article.uuid), 
+      class: "block w-full cursor-pointer bg-blue-500 hover:bg-blue-600 rounded text-white text-center py-1 px-4" %>
   <% end %>
 </div>

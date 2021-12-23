@@ -1,10 +1,10 @@
-<div class="bg-white mb-2 p-4 sm:p-6 sm:rounded-lg sm:shadow hover:ring-2">
+<div class="bg-white mb-2 sm:mb-4 py-4 px-6 sm:rounded-lg sm:shadow">
   <div class="flex justify-between mb-4">
     <div class="relative flex items-center space-x-2">
       <img class="w-10 h-10 rounded-full" src="<%= article.author.avatar  %>" />
       <div>
         <div class="text-base font-bold"><%= article.author.name %></div>
-        <div class="text-xs sm:text-sm text-gray-500">
+        <div class="text-xs sm:text-sm opacity-50">
           <% if (Time.current - article.published_at) < 24.hours %>
             <%= time_ago_in_words article.published_at %>
           <% else %>
@@ -21,38 +21,38 @@
         <img class="w-6 h-6 rounded-full" src="<%= article.currency.icon_url %>" />
         <span><%= article.price_tag %>
       </div>
-      <div class="text-xs sm:text-sm text-gray-500">≈$<%= article.price_usd %></div>
+      <div class="text-xs sm:text-sm opacity-50">≈$<%= article.price_usd %></div>
     </div>
   </div>
   <%= link_to article_path(article), class: "mb-4 block" do %>
-    <div class="font-bold text-xl lg:text-2xl 2xl:text-3xl mb-4">
+    <div class="font-bold text-xl lg:text-2xl 2xl:text-3xl mb-2">
       <%= article.title %>
     </div>
     <div>
       <%= article.intro %>
     </div>
   <% end %>
-  <div class="flex overflow-x-scroll items-center space-x-4 mb-4">
+  <div class="flex overflow-x-scroll scrollbar-hide items-center space-x-4 mb-2">
     <% article.tag_names.each do |tag_name| %>
       <%= link_to articles_path(tag: tag_name), class: "px-2 py-1 text-sm bg-gray-200 font-bold" do %>
         <%= tag_name %>
       <% end %>
     <% end %>
   </div>
-  <div class="flex items-center space-x-4 lg:space-x-8 justify-end text-gray-500">
-    <div class="flex items-center space-x-2">
+  <div class="flex items-center space-x-3 lg:space-x-8 justify-end opacity-70">
+    <%= link_to article_path(article), class: "flex items-center space-x-1" do %>
       <%= render "shared/icons/dollar", html_class: "w-4 h-4 lg:w-5 lg:h-5" %>
-      <span class="lg:text-lg"><%= article.revenue_usd.round(4) %></span>
-    </div>
-    <div class="flex items-center space-x-2">
+      <span class="lg:text-base"><%= article.revenue_usd.round(4) %></span>
+    <% end %>
+    <%= link_to article_path(article), class: "flex items-center space-x-1" do %>
       <%= render "shared/icons/chat", html_class: "w-4 h-4 lg:w-5 lg:h-5" %>
-      <span class="lg:text-lg"><%= article.comments_count %></span>
-    </div>
+      <span class="lg:text-base"><%= article.comments_count %></span>
+    <% end %>
     <% if article.upvote_ratio.present? %>
-      <div class="flex items-center space-x-2">
+      <%= link_to article_path(article), class: "flex items-center space-x-1" do %>
         <%= render "shared/icons/thumb_up", html_class: "w-4 h-4 lg:w-5 lg:h-5" %>
-        <span class="lg:text-lg"><%= article.upvote_ratio %></span>
-      </div>
+        <span class="lg:text-base"><%= article.upvote_ratio %></span>
+      <% end %>
     <% end %>
     <%= render "articles/share_button", article: article, button_class: "w-4 h-4 lg:w-5 lg:h-5" %>
   </div>

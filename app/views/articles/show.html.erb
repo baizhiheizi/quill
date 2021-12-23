@@ -1,7 +1,7 @@
 <div class="lg:grid lg:grid-cols-3 lg:gap-x-6">
   <article class="max-w-full lg:col-span-2 mb-4">
     <div class="bg-white p-4 w-full sm:p-6 sm:border sm:rounded-lg mb-4">
-      <div class="flex items-center justify-between mb-6">
+      <div class="flex items-start justify-between mb-6">
         <div class="relative flex items-center space-x-2">
           <img class="w-10 h-10 my-0 rounded-full" src="<%= @article.author.avatar %>">
           <div class="leading-4">
@@ -14,8 +14,8 @@
             <span aria-hidden="true" class="absolute inset-0"></span>
           <% end %>
         </div>
-        <div class="flex justify-end mb-6">
-          <%= render "articles/share_button", article: @article %>
+        <div class="flex justify-end">
+          <%= render "articles/share_button", article: @article, button_class: "w-5 h-5 lg:w-6 lg:h-6" %>
         </div>
       </div>
       <div class="font-semibold text-xl lg:text-3xl 3xl:text-4xl mb-6">
