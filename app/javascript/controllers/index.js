@@ -51,6 +51,9 @@ application.register("reward-article-payment", RewardArticlePaymentController)
 import ScrollToController from "./scroll_to_controller.js"
 application.register("scroll-to", ScrollToController)
 
+import SearchController from "./search_controller.js"
+application.register("search", SearchController)
+
 import SelectMenuController from "./select_menu_controller.js"
 application.register("select-menu", SelectMenuController)
 
