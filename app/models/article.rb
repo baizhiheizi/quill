@@ -66,7 +66,7 @@ class Article < ApplicationRecord
   has_many :comments, as: :commentable, dependent: :restrict_with_error
 
   has_many :taggings, dependent: :nullify
-  has_many :tags, through: :taggings, dependent: :restrict_with_error, counter_cache: true
+  has_many :tags, through: :taggings, dependent: :restrict_with_error
 
   has_many :snapshots, class_name: 'ArticleSnapshot', primary_key: :uuid, foreign_key: :article_uuid, inverse_of: :article, dependent: :destroy
   has_many :prs_transactions, through: :snapshots
@@ -391,6 +391,26 @@ class Article < ApplicationRecord
 
   def reward_payment_memo
     Base64.urlsafe_encode64({ t: 'REWARD', a: uuid }.to_json)
+  end
+
+  def related_articles
+    @related_articles ||=
+      if tags.present?
+        Article
+          .includes(:tags)
+          .published
+          .where.not(id: id)
+          .where(tags: { name: tag_names })
+          .order(published_at: :desc)
+          .limit(10)
+      else
+        author
+          .articles
+          .published
+          .where.not(id: id)
+          .order(published_at: :desc)
+          .limit(10)
+      end
   end
 
   private

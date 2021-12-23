@@ -228,6 +228,7 @@ en:
   bio: Bio
   sync: Sync
   no_record: No record
+  active_authors: Active Authors
   articles:
     not_finished: Pleash finish your article first
     title_is_required: Please input your article's title

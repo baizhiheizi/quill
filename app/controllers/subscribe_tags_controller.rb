@@ -6,10 +6,12 @@ class SubscribeTagsController < ApplicationController
 
   def create
     current_user.create_action :subscribe, target: @tag
+    @tag.reload
   end
 
   def destroy
     current_user.destroy_action :subscribe, target: @tag
+    @tag.reload
   end
 
   private

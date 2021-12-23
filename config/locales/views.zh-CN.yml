@@ -228,6 +228,7 @@ zh-CN:
   bio: 简介
   sync: 同步
   no_record: 没有记录
+  active_authors: 活跃作者
   articles:
     not_finished: 请先完成你的文章
     title_is_required: 请输入文章标题
