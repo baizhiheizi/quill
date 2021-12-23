@@ -31,7 +31,7 @@ module ShareHelper
 
     [
       'mixin://send?category=app_card&data=',
-      Base64.urlsafe_encode64(data.to_json)
+      Base64.encode64(data.to_json)
     ].join
   end
 end
