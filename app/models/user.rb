@@ -86,6 +86,12 @@ class User < ApplicationRecord
   end
 
   default_scope { includes(:mixin_authorization) }
+  scope :active, lambda {
+    order_by_articles_count
+      .where(
+        articles: { created_at: (Time.current - 1.month)..., orders_count: 1... }
+      )
+  }
   scope :only_banned, -> { where.not(banned_at: nil) }
   scope :without_banned, -> { where(banned_at: nil) }
   scope :order_by_revenue_total, lambda {

@@ -62,7 +62,17 @@
 
   <aside class="lg:col-span-1">
     <div class="lg:sticky lg:top-20">
-      <%= render partial: "articles/author_card", locals: { author: @article.author } %>
+      <div class="mb-4">
+        <%= render partial: "articles/author_card", locals: { author: @article.author } %>
+      </div>
+      <% if @article.related_articles.present? %>
+        <div class="mb-4">
+          <%= render partial: "articles/related_articles_card", locals: { articles: @article.related_articles } %>
+        </div>
+      <% end %>
+      <div class="mb-4">
+        <%= render "shared/hot_tags_card" %>
+      </div>
     </div>
   <aside>
 </div>

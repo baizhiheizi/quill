@@ -1,11 +1,19 @@
 <div class="lg:grid lg:grid-cols-3 lg:gap-x-6">
-  <div class="w-full lg:col-span-2">
+  <div class="w-full lg:col-span-2 mb-2">
     <%= render "articles/filter_bar", order_by: @order_by, time_range: @time_range %>
     <%= render "articles/articles_list", articles: @articles, pagy: @pagy %>
   </div>
   <aside class="lg:col-span-1">
-    <div class="p-4 lg:p-6 bg-white lg:rounded">
-      Trending
+    <% if @tag.present? %>
+      <div class="mb-4">
+        <%= render "tags/tag_card", tag: @tag %>
+      </div>
+    <% end %>
+    <div class="mb-4">
+      <%= render "shared/hot_tags_card" %>
+    </div>
+    <div class="mb-4">
+      <%= render "shared/active_authors_card" %>
     </div>
   </aside>
 </div>

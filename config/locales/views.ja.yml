@@ -219,6 +219,7 @@ ja:
   bio: はじめに
   sync: シンク
   no_record: 記録なし
+  active_authors: アクティブな作家陣
   articles:
     not_finished: まずは記事を完成させてください
     title_is_required: 記事のタイトルを入力してください

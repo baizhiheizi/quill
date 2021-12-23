@@ -1,10 +1,10 @@
-<div id="<%= dom_id tag %>_subscribe_button" >
+<div class="<%= dom_id tag %>_subscribe_button" >
   <% if current_user.blank? %>
-    <%= link_to t('subscribe'), view_modals_path(type: :login), data: { turbo_method: :post }, class: "block bg-blue-600 rounded text-white text-center py-1" %>
+    <%= link_to t('subscribe'), view_modals_path(type: :login), data: { turbo_method: :post }, class: "block bg-blue-600 rounded text-white text-center py-1 mb-2" %>
   <% elsif current_user.subscribe_tag? tag %>
-    <div class="w-full bg-white text-red-500 text-center py-1">
+    <div class="w-full bg-white text-center py-1 mb-2">
       <%= button_to t('unsubscribe'), 
-        subscribe_tag_path(tag.uuid), 
+        subscribe_tag_path(tag.id), 
         method: :delete,
         form: {
           data: { 
@@ -17,9 +17,9 @@
         data: { 
           action: "confirm#invoke",
         }, 
-        class: "bg-transparent cursor-pointer text-red-500" %>
+        class: "bg-transparent cursor-pointer opacity-70" %>
     </div>
   <% else %>
-    <%= button_to t('subscribe'), subscribe_tags_path(tag), class: "block w-full cursor-pointer bg-blue-500 hover:bg-blue-600 rounded text-white text-center py-1 px-4" %>
+    <%= button_to t('subscribe'), subscribe_tags_path(id: tag.id), class: "block w-full cursor-pointer bg-blue-500 hover:bg-blue-600 rounded text-white text-center py-1 px-4 mb-2" %>
   <% end %>
 </div>

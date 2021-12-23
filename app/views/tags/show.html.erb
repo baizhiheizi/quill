@@ -1,1 +1,3 @@
-<%= react_component('ApplicationApp', props: { csrf_token: form_authenticity_token }.merge(base_props), prerender: false) %>
+<div>
+  <%= render "articles/articles_list", articles: @articles, pagy: @pagy %>
+</div>
