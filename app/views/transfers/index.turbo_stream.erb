@@ -1,0 +1,7 @@
+<%= turbo_stream.append "transfers" do %>
+  <%= render partial: "transfers/transfer", collection: @transfers, as: :transfer %>
+<% end %>
+
+<%= turbo_stream.update 'pagination' do %>
+  <%= render partial: "shared/pagination", locals: { pagy: @pagy } %>
+<% end %>

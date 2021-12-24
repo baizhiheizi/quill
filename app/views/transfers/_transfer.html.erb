@@ -1,0 +1,21 @@
+<div class="border-b py-2 px-4">
+  <div class="grid grid-cols-3 md:grid-cols-6 gap-2">
+    <div class="flex items-center space-x-2 col-span-2">
+      <img src="<%= transfer.currency.icon_url %>" class="w-8 h-8 rounded-full" />
+      <span><%= transfer.price_tag %></span>
+    </div>
+    <div class="flex items-center justify-center justify-center col-span-1">
+      <% if transfer.processed? %>
+        <a href="<%= transfer.snapshot_url %>" target="_blank"><%= t('activerecord.attributes.transfer.snapshot') %></a>
+      <% else %>
+        <%= t('activerecord.attributes.transfer.processing') %>
+      <% end %>
+    </div>
+    <div class="flex items-center sm:justify-center text-gray-500 col-span-2">
+      <%= link_to transfer.source.article.title, article_path(transfer.source.article.uuid), class: "truncate", data: { turbo_frame: "_top" } %>
+    </div>
+    <div class="flex items-center sm:justify-center col-span-1">
+      <%= transfer.created_at.strftime("%Y-%m-%d %H:%M") %>
+    </div>
+  </div>
+</div>
