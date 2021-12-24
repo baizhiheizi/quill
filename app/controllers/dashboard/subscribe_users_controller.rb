@@ -2,7 +2,7 @@
 
 class Dashboard::SubscribeUsersController < Dashboard::BaseController
   def index
-    @users = current_user.subscribe_users
+    @pagy, @users = pagy current_user.subscribe_users.order('actions.created_at DESC')
   end
 
   def create

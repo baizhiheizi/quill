@@ -40,7 +40,10 @@ Rails.application.routes.draw do
   resources :subscribe_tags, only: %i[create destroy]
 
   resources :tags, only: %i[index]
-  resources :users, only: :show, param: :uid do
+  resources :users, only: :show, param: :uid
+  resources :users, only: [], module: 'users', param: :uid do
+    resources :articles, only: %i[index]
+    resources :comments, only: %i[index]
     resources :subscribe_users, only: %i[index]
     resources :subscribe_by_users, only: %i[index]
   end

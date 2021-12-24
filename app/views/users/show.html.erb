@@ -1,0 +1,94 @@
+<div class="mb-4 sm:mb-8">
+  <div class="flex justify-center pt-8 mb-2">
+    <%= image_tag @user.avatar, class: "rounded-full w-16 h-16 ring-4 ring-white" %>
+  </div>
+  <div class="flex justify-center font-bold mb-2">
+    <%= @user.name %>
+  </div>
+  <div class="flex justify-center">
+    <%= render "subscribe_users/subscribe_button", user: @user %>
+  </div>
+</div>
+
+<div class="mx-auto max-w-3xl"
+  data-controller="tabs"
+  data-tabs-active-tab-value="<%= @tab %>"
+  data-tabs-active-class-value="border-b-2">
+  <div class="w-full flex space-x-2 sm:space-x-4 py-2 sm:justify-center overflow-auto flex-nowrap scrollbar-hide items-center flex border-b px-2 sm:px-4 mb-4 bg-white sm:rounded-lg">
+    <%= link_to t('published'), 
+      user_path(@user, tab: :published),
+      class: "cursor-pointer py-1 border-blue-500 textrgray-600",
+      data: {
+        tabs_target: "tab",
+        tabs_tabname_param: "published",
+        action: "tabs#active"
+      } %>
+    <%= link_to t('bought'), 
+      user_path(@user, tab: :published),
+      class: "cursor-pointer py-1 border-blue-500 textrgray-600",
+      data: {
+        tabs_target: "tab",
+        tabs_tabname_param: "bought",
+        action: "tabs#active"
+      } %>
+    <%= link_to t('subscribing'), 
+      user_subscribe_users_path(@user),
+      class: "cursor-pointer py-1 border-blue-500 textrgray-600",
+      data: {
+        tabs_target: "tab",
+        tabs_tabname_param: "subscribing",
+        action: "tabs#active"
+      } %>
+    <%= link_to t('subscribers'), 
+      user_subscribe_by_users_path(@user),
+      class: "cursor-pointer py-1 border-blue-500 textrgray-600",
+      data: {
+        tabs_target: "tab",
+        tabs_tabname_param: "subscribers",
+        action: "tabs#active"
+      } %>
+    <%= link_to t('commented'), 
+      user_comments_path(@user),
+      class: "cursor-pointer py-1 border-blue-500 textrgray-600",
+      data: {
+        tabs_target: "tab",
+        tabs_tabname_param: "commented",
+        action: "tabs#active"
+      } %>
+  </div>
+  <div class="hidden pb-4"
+    data-tabs-content-param="published"
+    data-tabs-target="content">
+    <%= turbo_frame_tag "#{dom_id @user}_articles_published", src: user_articles_path(@user, tab: :published), target: '_top', loading: :lazy do %>
+      <%= render "shared/loading" %>
+    <% end %>
+  </div> 
+  <div class="hidden pb-4"
+    data-tabs-content-param="bought"
+    data-tabs-target="content">
+    <%= turbo_frame_tag "#{dom_id @user}_articles_bought", src: user_articles_path(@user, tab: :bought), target: '_top', loading: :lazy do %>
+      <%= render "shared/loading" %>
+    <% end %>
+  </div> 
+  <div class="hidden pb-4"
+    data-tabs-content-param="subscribing"
+    data-tabs-target="content">
+    <%= turbo_frame_tag "#{dom_id @user}_subscribings", src: user_subscribe_users_path(@user), target: '_top', loading: :lazy do %>
+      <%= render "shared/loading" %>
+    <% end %>
+  </div> 
+  <div class="hidden pb-4"
+    data-tabs-content-param="subscribers"
+    data-tabs-target="content">
+    <%= turbo_frame_tag "#{dom_id @user}_subscribers", src: user_subscribe_by_users_path(@user), target: '_top', loading: :lazy do %>
+      <%= render "shared/loading" %>
+    <% end %>
+  </div> 
+  <div class="hidden pb-4"
+    data-tabs-content-param="commented"
+    data-tabs-target="content">
+    <%= turbo_frame_tag "#{dom_id @user}_comments", src: user_comments_path(@user), target: '_top', loading: :lazy do %>
+      <%= render "shared/loading" %>
+    <% end %>
+  </div> 
+</div>
