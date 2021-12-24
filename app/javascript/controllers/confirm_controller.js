@@ -2,7 +2,7 @@ import { Controller } from '@hotwired/stimulus';
 import { post } from '@rails/request.js';
 
 export default class extends Controller {
-  static targets = ["form"];
+  static targets = ['form'];
   static values = {
     content: String,
     identifier: String,
@@ -12,8 +12,7 @@ export default class extends Controller {
     this.ok = this.ok.bind(this);
   }
 
-  connect() {
-  }
+  connect() {}
 
   invoke(event) {
     event.preventDefault();
@@ -21,16 +20,16 @@ export default class extends Controller {
   }
 
   show() {
-    document.addEventListener("modal:ok", this.ok);
+    document.addEventListener('modal:ok', this.ok);
     post('/view_modals', {
       body: {
         type: 'confirm',
         content: this.contentValue,
-        identifier: this.identifierValue
+        identifier: this.identifierValue,
       },
       contentType: 'application/json',
       responseKind: 'turbo-stream',
-    })
+    });
   }
 
   ok(event) {
@@ -38,10 +37,10 @@ export default class extends Controller {
     if (identifier === this.identifierValue) {
       if (this.formTarget.requestSubmit) {
         this.formTarget.requestSubmit();
-       } else {
+      } else {
         this.formTarget.submit();
-       }
-      document.removeEventListener("modal:ok", this.ok);
+      }
+      document.removeEventListener('modal:ok', this.ok);
     }
   }
 }
