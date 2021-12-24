@@ -14,12 +14,14 @@ export default class extends Controller {
   }
 
   ok(event) {
-    this.dispatch("ok", { detail: { identifier: event.params.identifier }});
+    this.dispatch('ok', { detail: { identifier: event.params.identifier } });
     this.hide();
   }
 
   cancel(event) {
-    this.dispatch("cancel", { detail: { identifier: event.params.identifier }});
+    this.dispatch('cancel', {
+      detail: { identifier: event.params.identifier },
+    });
     this.hide();
   }
 
