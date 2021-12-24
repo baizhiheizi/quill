@@ -65,6 +65,11 @@
       <div class="mb-4">
         <%= render partial: "articles/author_card", locals: { author: @article.author } %>
       </div>
+      <% if @article.article_references.present? %>
+        <div class="mb-4">
+          <%= render partial: "articles/references_card", locals: { references: @article.article_references } %>
+        </div>
+      <% end %>
       <% if @article.related_articles.present? %>
         <div class="mb-4">
           <%= render partial: "articles/related_articles_card", locals: { articles: @article.related_articles } %>
