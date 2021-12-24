@@ -22,6 +22,8 @@ Rails.application.routes.draw do
   get 'landing', to: 'landing#index', as: :landing
   get 'search', to: 'search#index', as: :search
 
+  root to: 'home#index'
+
   resources :view_modals, only: %i[create]
 
   resources :articles, except: %i[destroy], param: :uuid do
@@ -47,8 +49,7 @@ Rails.application.routes.draw do
     resources :subscribe_users, only: %i[index]
     resources :subscribe_by_users, only: %i[index]
   end
-
-  root to: 'home#index'
+  resources :transfers, only: %i[index]
 
   namespace :dashboard do
     resources :settings, only: %i[index]
