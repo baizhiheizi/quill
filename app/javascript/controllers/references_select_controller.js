@@ -1,5 +1,6 @@
 import { Controller } from '@hotwired/stimulus';
 import { debounce } from 'lodash';
+import { get } from '@rails/request.js';
 import TomSelect from 'tom-select';
 
 export default class extends Controller {
@@ -20,15 +21,15 @@ export default class extends Controller {
       render: {
         option: (option, escape) => {
           return `<div class="flex items-center space-x-2">
-              <img src="${option.author.avatar}" class="h-6 w-6 rounded-full my-0" />
+              <img src="${option.author.avatar}" class="h-6 w-6 rounded-full my-0" style="margin: 0" />
               <span>${option.title}</span>
             </div>
             `;
         },
         item: (item, escape) => {
-          return `<div class="flex items-center space-x-2">
-              <img src="${item.author.avatar}" class="h-6 w-6 rounded-full my-0" />
-              <span>${item.title}</span>
+          return `<div class="flex items-center space-x-2 w-full">
+              <img src="${item.author.avatar}" class="inline-block h-6 w-6 rounded-full my-0" style="margin: 0" />
+              <span class="inline-block">${item.title}</span>
             </div>
             `;
         },
@@ -37,15 +38,9 @@ export default class extends Controller {
   }
 
   loadReferenceOptions(query, callback) {
-    fetch('/article_references?query=' + encodeURIComponent(query), {
-      credentials: 'same-origin',
-      headers: {
-        Accept: 'application/json',
-        'X-CSRF-Token': (
-          document.querySelector("meta[name='csrf-token']") || {}
-        ).content,
-        'Content-Type': 'application/json',
-      },
+    get('/article_references?query=' + encodeURIComponent(query), {
+      contentType: 'application/json',
+      responseKind: 'json',
     })
       .then((response) => response.json())
       .then((options) => callback(options))
