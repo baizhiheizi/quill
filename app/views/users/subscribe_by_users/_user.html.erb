@@ -1,0 +1,9 @@
+<div id="<%= dom_id @user %>_subscribe_by_user_<%= dom_id user %>" class="bg-white rounded-lg relative flex items-center px-4 py-2 justify-between mb-4">
+  <%= link_to user_path(user), class: "flex items-center space-x-2", data: { turbo_frame: "_top" } do %>
+    <img src="<%= user.avatar %>" class="w-10 h-10 rounded-full" />
+    <span class=""><%= user.name %></span>
+  <% end %>
+  <div class="">
+    <%= render "subscribe_users/subscribe_button", user: user %>
+  </div>
+</div>

@@ -17,9 +17,9 @@
       <% end %>
     </div>
     <div class="text-right">
-      <div class="flex itemx-center space-x-2">
-        <img class="w-6 h-6 rounded-full" src="<%= article.currency.icon_url %>" />
-        <span><%= article.price_tag %>
+      <div class="flex items-center space-x-2">
+        <img class="w-4 h-4 sm:w-6 sm:h-6 rounded-full" src="<%= article.currency.icon_url %>" />
+        <span class="text-sm sm:text-base"><%= article.price_tag %>
       </div>
       <div class="text-xs sm:text-sm opacity-50">≈$<%= article.price_usd %></div>
     </div>

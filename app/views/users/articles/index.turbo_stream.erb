@@ -1,0 +1,7 @@
+<%= turbo_stream.append "#{dom_id @user}_articles_#{@tab}_list" do %>
+  <%= render partial: "articles/article_card", collection: @articles, as: :article %>
+<% end %>
+
+<%= turbo_stream.update "#{dom_id @user}_articles_#{@tab}_pagination" do %>
+  <%= render partial: "shared/pagination", locals: { pagy: @pagy, id: "#{dom_id @user}_articles_#{@tab}_pagination" } %>
+<% end %>

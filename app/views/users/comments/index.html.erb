@@ -1,0 +1,17 @@
+<%= turbo_frame_tag "#{dom_id @user}_comments" do %>
+  <div data-controller="infinite-scroll">
+    <div id="<%= dom_id @user %>_comments_list">
+      <% if @comments.blank? %>
+        <div class="text-center py-2 opacity-50">
+          <%= t("no_comments") %>
+        </div>
+      <% else %>
+        <%= render partial: "users/comments/comment", collection: @comments, as: :comment %>
+      <% end %>
+    </div>
+    <div data-infinite-scroll-target='scrollArea'></div>
+
+    <%= render partial: "shared/pagination", locals: { pagy: @pagy, id: "#{dom_id @user}_comments_pagination" } %>
+  </div>
+<% end %>
+
