@@ -394,23 +394,28 @@ class Article < ApplicationRecord
   end
 
   def related_articles
-    @related_articles ||=
-      if tags.present?
-        Article
-          .includes(:tags)
-          .published
-          .where.not(id: id)
-          .where(tags: { name: tag_names })
-          .order(published_at: :desc)
-          .limit(10)
-      else
-        author
-          .articles
-          .published
-          .where.not(id: id)
-          .order(published_at: :desc)
-          .limit(10)
-      end
+    @related_articles ||= citers.presence || tag_related_articles.presence || author_other_articles
+  end
+
+  def tag_related_articles
+    @tag_related_articles ||=
+      Article
+      .includes(:tags)
+      .published
+      .where.not(id: id)
+      .where(tags: { name: tag_names })
+      .order(published_at: :desc)
+      .limit(5)
+  end
+
+  def author_other_articles
+    @author_other_articles ||=
+      author
+      .articles
+      .published
+      .where.not(id: id)
+      .order(published_at: :desc)
+      .limit(5)
   end
 
   private
