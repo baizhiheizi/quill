@@ -3,9 +3,9 @@
     <span class="px-2 py-1 font-bold"><%= t('related_articles') %></span>
   </div>
   <% articles.each do |article| %>
-    <%= link_to article_path(article), class: "flex flex-wrap items-center space-x-2 mb-2" do %>
+    <%= link_to article_path(article), class: "flex items-center space-x-2 mb-2" do %>
       <%= image_tag article.author.avatar, class: "w-6 h-6 rounded-full" %>
-      <span class=""><%= article.title %></span>
+      <span class="truncate"><%= article.title %></span>
     <% end %>
   <% end %>
 </div>
