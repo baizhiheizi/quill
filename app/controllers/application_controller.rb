@@ -66,11 +66,19 @@ class ApplicationController < ActionController::Base
   end
 
   def with_locale(&action)
+    current_user.update(locale: browser_locale) if current_user && browser_locale && current_user.locale != browser_locale
     locale = current_user&.locale || I18n.default_locale
     I18n.with_locale(locale, &action)
   end
 
   def from_mixin_messenger?
     request&.user_agent&.include?('Mixin')
+  end
+
+  def browser_locale
+    locales = request.env['HTTP_ACCEPT_LANGUAGE'] || ''
+    locales.scan(/[a-z]{2}-?[A-Z]{2}?/).find do |locale|
+      I18n.available_locales.include?(locale.to_sym)
+    end
   end
 end
