@@ -77,7 +77,7 @@ export default class extends Controller {
               [
                 '/rails/active_storage/blobs',
                 blob.signed_id,
-                blob.filename,
+                blob.filename.split('.')[0],
               ].join('/'),
             );
           }
