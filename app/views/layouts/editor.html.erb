@@ -1,4 +1,9 @@
 <!DOCTYPE html>
+<% @page_title = @page_title.present? ? format('%<title>s | %<default>s', title: @page_title, default: Settings.page_title) : Settings.page_title %>
+<% @page_description ||= Settings.page_description %>
+<% @page_keywords ||= Settings.page_keywords %>
+<% @page_image ||= asset_url(Settings.logo_file) %>
+
 <html>
   <head>
     <title><%= @page_title.presence || Settings.page_title %></title>
@@ -6,6 +11,19 @@
       name='viewport'
       content='minimum-scale=1, initial-scale=1, width=device-width, user-scalable=no, shrink-to-fit=no'
     />
+
+    <meta name='title' content="<%= @page_title %>">
+    <meta name='keywords' content="<%= @page_keywords %>">
+    <meta name='description' content="<%= @page_description %>">
+
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:site" content="@prsdigg" />
+    <meta name="twitter:creator" content="@prsdigg" />
+    <meta property="og:url" content="<%= request.original_url %>" />
+    <meta property="og:title" content="<%= @page_title %>" />
+    <meta property="og:description" content="<%= @page_description %>" />
+    <meta property="og:image" content="<%= @page_image %>" />
+
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
@@ -21,15 +39,9 @@
       </script>
     <% end %>
 
-    <meta name='title' content='<%= @page_title.presence || Settings.page_title %>' />
-    <meta name='keywords' content='<%= Settings.page_keywords %>' />
-    <meta name='description' content='<%= @page_description.presence || Settings.page_description %>' />
-
     <%= favicon_link_tag "#{Settings.favicon_file || 'favicon.png'}" %>
     <%= javascript_include_tag "application", "data-turbo-track": "reload", defer: true %>
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
-    <%= stylesheet_link_tag "easymde", "data-turbo-track": "reload" %>
-    <%= stylesheet_link_tag "tom-select", "data-turbo-track": "reload" %>
   </head>
 
   <body>
