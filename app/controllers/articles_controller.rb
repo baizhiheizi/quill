@@ -39,6 +39,7 @@ class ArticlesController < ApplicationController
     else
       @page_title = "#{@article.title} - #{@article.author.name}"
       @page_description = @article.intro
+      @page_image = @article.images.first&.url
     end
   end
 
