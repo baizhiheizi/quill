@@ -60,6 +60,11 @@ export default class extends Controller {
       syncSideBySidePreviewScroll: false,
       uploadImage: true,
       imageUploadFunction: (file, onSuccess, onError) => {
+        if (file.size > 1024 * 1024 * 5) {
+          onError('Image must not larger than 5M');
+          return;
+        }
+
         const upload = new DirectUpload(file, this.directUploadUrl);
         this.showLoading();
         upload.create((error, blob) => {
