@@ -59,6 +59,7 @@ export default class extends Controller {
       sideBySideFullscreen: false,
       syncSideBySidePreviewScroll: false,
       uploadImage: true,
+      imageAccept: 'image/png,image/jpeg,image/webp,image/svg',
       imageUploadFunction: (file, onSuccess, onError) => {
         if (file.size > 1024 * 1024 * 5) {
           onError('Image must not larger than 5M');
