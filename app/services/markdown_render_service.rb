@@ -23,12 +23,25 @@ class MarkdownRenderService
       add_scroll_to_comment_attributes
     end
 
+    add_attributes_to_images
+
     @html
   end
 
   private
 
   def parse_mention_user
+  end
+
+  def add_attributes_to_images
+    doc = Nokogiri::HTML.fragment(@html)
+    doc.css('img').each do |img|
+      img['class'] = 'max-w-full mx-auto'
+      img['loading'] = 'lazy'
+    end
+    @html = doc.to_html
+
+    self
   end
 
   def add_scroll_to_comment_attributes
@@ -41,5 +54,7 @@ class MarkdownRenderService
       end
     end
     @html = doc.to_html
+
+    self
   end
 end

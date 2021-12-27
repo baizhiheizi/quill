@@ -65,3 +65,6 @@ application.register('tags-select', TagsSelectController);
 
 import TextareaAutogrowController from './textarea_autogrow_controller.js';
 application.register('textarea-autogrow', TextareaAutogrowController);
+
+import ToastController from './toast_controller.js';
+application.register('toast', ToastController);

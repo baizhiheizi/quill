@@ -75,6 +75,9 @@ class Article < ApplicationRecord
   has_many :references, through: :article_references, source: :reference, source_type: 'Article'
   has_many :article_citers, class_name: 'CiterReference', as: :reference, dependent: :restrict_with_error
   has_many :citers, through: :article_citers, source: :citer, source_type: 'Article'
+
+  has_many_attached :images
+
   accepts_nested_attributes_for :article_references, reject_if: proc { |attributes| attributes['reference_id'].blank? || attributes['revenue_ratio'].blank? }, allow_destroy: true
 
   has_one :wallet, class_name: 'MixinNetworkUser', as: :owner, dependent: :nullify
@@ -99,6 +102,7 @@ class Article < ApplicationRecord
   before_validation :setup_attributes, on: :create
   after_save do
     generate_snapshot if should_generate_snapshot?
+    attach_images_from_content_async if saved_change_to_content
   end
 
   delegate :swappable?, to: :currency
@@ -416,6 +420,19 @@ class Article < ApplicationRecord
       .where.not(id: id)
       .order(published_at: :desc)
       .limit(5)
+  end
+
+  def attach_images_from_content_async
+    ArticleAttachImagesFromContentWorker.perform_async uuid
+  end
+
+  def attach_images_from_content
+    signed_ids = []
+    content.scan(%r{/rails/active_storage/blobs/\S+}).each do |url|
+      signed_ids.push url.split('/')[4]
+    end
+
+    images.attach signed_ids
   end
 
   private

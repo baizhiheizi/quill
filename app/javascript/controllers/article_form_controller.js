@@ -1,4 +1,5 @@
 import { Controller } from '@hotwired/stimulus';
+import { DirectUpload } from '@rails/activestorage';
 import EasyMDE from 'easymde';
 
 export default class extends Controller {
@@ -13,6 +14,7 @@ export default class extends Controller {
     'optionFields',
     'title',
     'content',
+    'images',
     'preview',
     'editButton',
     'previewButton',
@@ -27,6 +29,9 @@ export default class extends Controller {
       this.editor.codemirror.on('change', () => {
         this.save();
       });
+    }
+    if (this.hasImagesTarget) {
+      this.directUploadUrl = this.imagesTarget.dataset.directUploadUrl;
     }
   }
 
@@ -53,6 +58,25 @@ export default class extends Controller {
       spellChecker: false,
       sideBySideFullscreen: false,
       syncSideBySidePreviewScroll: false,
+      uploadImage: true,
+      imageUploadFunction: (file, onSuccess, onError) => {
+        const upload = new DirectUpload(file, this.directUploadUrl);
+        this.showLoading();
+        upload.create((error, blob) => {
+          this.hideLoading();
+          if (error) {
+            onError(error);
+          } else {
+            onSuccess(
+              [
+                '/rails/active_storage/blobs',
+                blob.signed_id,
+                blob.filename,
+              ].join('/'),
+            );
+          }
+        });
+      },
       toolbar: [
         'bold',
         'italic',
@@ -63,7 +87,7 @@ export default class extends Controller {
         'quote',
         '|',
         'link',
-        'image',
+        'upload-image',
         '|',
         'guide',
       ],
@@ -197,5 +221,13 @@ export default class extends Controller {
     this.previewButtonTarget.classList.remove('border-b-2');
     this.previewTarget.classList.add('hidden');
     this.previewTarget.classList.innerHTML = '';
+  }
+
+  showLoading() {
+    document.querySelector('#loading-toast').classList.remove('hidden');
+  }
+
+  hideLoading() {
+    document.querySelector('#loading-toast').classList.add('hidden');
   }
 }
