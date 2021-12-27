@@ -43,4 +43,8 @@ export default class extends Controller {
       document.removeEventListener('modal:ok', this.ok);
     }
   }
+
+  disconnect() {
+    document.removeEventListener('modal:ok', this.ok);
+  }
 }

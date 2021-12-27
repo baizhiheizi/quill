@@ -23,6 +23,9 @@ module Prsdigg
     config.i18n.available_locales = Settings.available_locales || %i[en]
     config.i18n.default_locale = Settings.default_locale || :en
 
+    # custom error pages
+    config.exceptions_app = routes
+
     # reference:
     # https://stackoverflow.com/questions/49233769/is-there-a-way-to-prevent-safari-on-ios-from-clearing-the-cookies-for-a-website
     # https://developer.mozilla.org/en-US/docs/Web/API/Document/cookie#Example_4_Reset_the_previous_cookie

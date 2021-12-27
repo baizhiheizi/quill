@@ -22,6 +22,12 @@ Rails.application.routes.draw do
   get 'landing', to: 'landing#index', as: :landing
   get 'search', to: 'search#index', as: :search
 
+  # error pages
+  get '/404', to: 'errors#not_found'
+  get '/406', to: 'errors#not_acceptable'
+  get '/422', to: 'errors#unprocessable_entity'
+  get '/500', to: 'errors#internal_server_error'
+
   root to: 'home#index'
 
   resources :view_modals, only: %i[create]
