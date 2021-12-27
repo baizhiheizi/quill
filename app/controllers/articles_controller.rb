@@ -35,7 +35,7 @@ class ArticlesController < ApplicationController
   def show
     @article = Article.only_published.find_by uuid: params[:uuid]
     if @article.blank?
-      redirect_back fallback_location: root_path, alert: t('article_not_found')
+      redirect_back fallback_location: root_path
     else
       @page_title = "#{@article.title} - #{@article.author.name}"
       @page_description = @article.intro
