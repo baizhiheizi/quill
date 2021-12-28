@@ -7,7 +7,7 @@
       <span><%= comment.author.name %></span>
       <span class="opacity-50"><%= time_ago_in_words comment.created_at %></span>
     </div>
-    <div class="prose prose-sm xl:prose mb-2">
+    <div class="prose prose-sm mb-2 dark:prose-invert">
       <%= comment.content_as_html.html_safe %>
     </div>
     <%= render partial: "comments/actions", locals: { comment: comment } %>

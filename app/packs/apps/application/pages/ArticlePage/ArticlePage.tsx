@@ -130,7 +130,7 @@ export default function ArticlePage() {
             </LoginModalComponent>
           ))}
       </div>
-      <div className='p-2 mb-4 overflow-hidden bg-gray-100 border-l-4 border-gray-300 overflow-ellipsis'>
+      <div className='p-2 mb-4 overflow-hidden bg-zinc-100 border-l-4 border-zinc-300 overflow-ellipsis'>
         {article.intro}
       </div>
       <div style={{ marginBottom: 20 }}>

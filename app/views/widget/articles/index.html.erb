@@ -1,4 +1,4 @@
-<div class='px-2 py-4 space-y-4 dark:bg-gray-800'>
+<div class='px-2 py-4 space-y-4 dark:bg-zinc-800'>
   <div class='flex flex-wrap items-center mb-4 mark-keywords' data-keywords=<%= @query.to_json %>>
     <% @query.each do |q| %>
       <div class='p-2 mr-2 text-white bg-blue-500 rounded'><%= q %></div>
@@ -30,7 +30,7 @@
           </div>
           <div class='flex flex-wrap'>
             <% article.tag_names.each do |tag_name| %>
-              <div class='px-1 m-1 text-xs text-gray-500 border-gray-500 border-solid bg-gray-50 dark:bg-gray-800 border-1 line-clamp-1'>
+              <div class='px-1 m-1 text-xs text-gray-500 border-zinc-500 border-solid bg-zinc-50 dark:bg-zinc-800 border-1 line-clamp-1'>
                 <%= format('#%<name>s', name: tag_name) %>
               </div>
             <% end %>

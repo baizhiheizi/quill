@@ -173,7 +173,8 @@
 
 .ts-control,
 .ts-wrapper.single.input-active .ts-control {
-  background: #fff;
+  /* background: #fff; */
+  background: inherit;
   cursor: text;
 }
 
@@ -194,7 +195,9 @@
   padding: calc( 8px - 2px - 0) 8px calc( 8px - 2px - 3px - 0);
 }
 .full .ts-control {
-  background-color: #fff;
+  /* background-color: #fff; */
+  background-color: inherit;
+  color: inherit;
 }
 .disabled .ts-control, .disabled .ts-control * {
   cursor: default !important;

@@ -1,4 +1,4 @@
-<div class="bg-white mb-2 sm:mb-4 py-4 px-6 sm:rounded-lg sm:shadow">
+<div class="bg-white dark:bg-zinc-900 mb-2 sm:mb-4 py-4 px-6 sm:rounded-lg sm:shadow">
   <div class="flex justify-between mb-4">
     <div class="relative flex items-center space-x-2">
       <img class="w-10 h-10 rounded-full" src="<%= article.author.avatar  %>" />
@@ -34,7 +34,7 @@
   <% end %>
   <div class="flex overflow-x-scroll scrollbar-hide items-center space-x-4 mb-2">
     <% article.tag_names.each do |tag_name| %>
-      <%= link_to articles_path(tag: tag_name), class: "px-2 py-1 text-sm bg-gray-200 font-bold" do %>
+      <%= link_to articles_path(tag: tag_name), class: "px-2 py-1 text-sm bg-zinc-200 dark:bg-zinc-700 font-bold" do %>
         <%= tag_name %>
       <% end %>
     <% end %>

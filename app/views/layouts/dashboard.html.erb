@@ -44,9 +44,9 @@
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
   </head>
 
-  <body class="min-h-screen flex flex-col">
+  <body class="min-h-screen flex flex-col dark:text-zinc-50">
     <%= render "shared/nav" %>
-    <main class="bg-gray-100 relative mt-12 sm:mt-16 flex-1">
+    <main class="bg-zinc-100 dark:bg-zinc-800 relative mt-12 sm:mt-16 flex-1">
       <div class="max-w-3xl sm:pt-4 pb-8 mx-auto sm:px-6 lg:max-w-6xl lg:px-8">
         <% flash.each do |type, message| %>
           <%= render partial: "shared/flash", locals: { type: type, message: message } %>
@@ -58,7 +58,7 @@
           <div class="lg:col-span-1">
             <%= render "dashboard/menu" %>
           </div>
-          <div class="bg-white sm:rounded-lg w-full grid-span-1 lg:col-span-4">
+          <div class="bg-white dark:bg-zinc-900 dark:border-zinc-800 sm:rounded-lg w-full grid-span-1 lg:col-span-4">
             <%= yield %>
           </div>
         </div>

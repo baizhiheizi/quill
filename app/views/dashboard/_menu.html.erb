@@ -2,8 +2,8 @@
 
 <div data-controller="tabs" 
      data-tabs-active-tab-value="<%= active %>" 
-     data-tabs-active-class-value="text-blue-500 bg-blue-50" 
-     class="hidden lg:flex flex-col space-y-2 text-right font-bold text-gray-600">
+     data-tabs-active-class-value="text-blue-500 bg-blue-50 dark:bg-zinc-800" 
+     class="hidden lg:flex flex-col space-y-2 text-right font-bold opacity-70">
   <%= link_to t('overview'),
     dashboard_root_path, 
     data: {
@@ -65,7 +65,7 @@
 <div class="lg:hidden mb-4 px-4 sm:px-0"
   data-controller="select-menu">
   <select 
-    class="flex-1 block w-full rounded sm:text-sm border-gray-300"
+    class="flex-1 block w-full rounded sm:text-sm border-zinc-300"
     data-action="change->select-menu#selected">
     <option value="<%= dashboard_root_path %>" <%= active == 'overview' && 'selected' %>>
       <%= t('overview') %>

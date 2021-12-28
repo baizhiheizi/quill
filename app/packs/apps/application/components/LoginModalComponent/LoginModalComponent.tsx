@@ -26,7 +26,7 @@ export default function LoginModalComponent(props: { children: JSX.Element }) {
       >
         <Spin spinning={loading}>
           <div
-            className='flex items-center justify-center w-full py-2 text-lg bg-gray-100 cursor-pointer rounded-md space-x-2'
+            className='flex items-center justify-center w-full py-2 text-lg bg-zinc-100 cursor-pointer rounded-md space-x-2'
             onClick={() => {
               setLoading(true);
               location.replace(

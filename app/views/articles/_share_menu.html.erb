@@ -1,9 +1,5 @@
-<div class="w-64 bg-white rounded-lg">
-  <button class="block w-full 
-                 flex items-center space-x-4 
-                 p-4 
-                 border-b text-gray-700 
-                 hover:bg-gray-100 active:bg-gray-100"
+<div class="w-64 bg-white dark:bg-zinc-900 rounded-lg">
+  <button class="block w-full flex items-center space-x-4 p-4 border-b opacity-70 hover:bg-zinc-100 dark:hover:bg-zinc-800 active:bg-zinc-100 dark:active:bg-zinc-800"
     data-controller="clipboard"
     data-clipboard-text-value="<%= article_url article %>"
     data-clipboard-success-tip-value="URL copied"
@@ -12,7 +8,7 @@
     <span data-clipboard-target="button"class="text-base">Copy URL</span>
   </button>
   <% if from_mixin_messenger? %>
-    <a class="block flex items-center space-x-4 p-4 border-b text-gray-700 hover:bg-gray-100 active:bg-gray-100"
+    <a class="block flex items-center space-x-4 p-4 border-b opacity-70 hover:bg-zinc-100 dark:hover:bg-zinc-800 active:bg-zinc-100 dark:active:bg-zinc-800"
       target="_blank"
       data-action="modal#hide"
       href="<%= share_to_mixin article_url(article), title: article.title, description: article.intro, icon_url: article.author.avatar %>">
@@ -20,14 +16,14 @@
       <span class="text-base">Share to Mixin</span>
     </a>
   <% end %>
-  <a class="block flex items-center space-x-4 p-4 border-b text-gray-700 hover:bg-gray-100 active:bg-gray-100"
+  <a class="block flex items-center space-x-4 p-4 border-b opacity-70 hover:bg-zinc-100 dark:hover:bg-zinc-800 active:bg-zinc-100 dark:active:bg-zinc-800"
       target="_blank"
       data-action="modal#hide"
       href="<%= share_to_twitter article_url(article), article.title %>">
     <%= render "shared/icons/twitter" %>
     <span class="text-base">Share to Twitter</span>
   </a>
-  <a class="block flex items-center space-x-4 p-4 border-b text-gray-700 hover:bg-gray-100 active:bg-gray-100 rounded-b-lg"
+  <a class="block flex items-center space-x-4 p-4 border-b opacity-70 hover:bg-zinc-100 dark:hover:bg-zinc-800 active:bg-zinc-100 dark:active:bg-zinc-800 rounded-b-lg"
       target="_blank"
       data-action="modal#hide"
       href="<%= share_to_facebook article_url(article) %>">

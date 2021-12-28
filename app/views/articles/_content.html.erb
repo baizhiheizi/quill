@@ -1,4 +1,4 @@
-<div class="prose xl:prose-lg mx-auto" id="article_<%= article.uuid %>_content">
+<div class="prose dark:prose-invert prose-img:rounded-lg prose-img:shadow-md xl:prose-lg mx-auto" id="article_<%= article.uuid %>_content">
   <% if article.authorized? user %> 
     <%= render partial: "articles/full_content", locals: { article: article } %>
   <% else %>
