@@ -11,6 +11,7 @@
       name='viewport'
       content='minimum-scale=1, initial-scale=1, width=device-width, user-scalable=no, shrink-to-fit=no'
     />
+    <meta name="theme-color" content="#fff" />
 
     <meta name='title' content="<%= @page_title %>">
     <meta name='keywords' content="<%= @page_keywords %>">
@@ -73,5 +74,6 @@
       </div>
     </div>
     <%= turbo_stream_from "user_#{current_user.mixin_uuid}" if current_user.present? %>
+    <div data-controller="darkmode" class="hidden"></div>
   </body>
 </html>

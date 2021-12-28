@@ -21,6 +21,9 @@ application.register('comment-form', CommentFormController);
 import ConfirmController from './confirm_controller.js';
 application.register('confirm', ConfirmController);
 
+import DarkmodeController from './darkmode_controller.js';
+application.register('darkmode', DarkmodeController);
+
 import DropdownController from './dropdown_controller.js';
 application.register('dropdown', DropdownController);
 
