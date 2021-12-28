@@ -70,7 +70,7 @@ export default function DraftedArticleEditComponent(props: {
           updating ? (
             <Spin size='small' />
           ) : (
-            <span className='p-2 text-xs bg-gray-200 rounded'>{`${moment(
+            <span className='p-2 text-xs bg-zinc-200 rounded'>{`${moment(
               article.updatedAt,
             ).format('HH:MM:ss')} ${t('saved')}`}</span>
           )

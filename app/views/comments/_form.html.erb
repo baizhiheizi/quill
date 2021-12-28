@@ -10,7 +10,7 @@
   <%= form.hidden_field :commentable_id, value: commentable.id %>
   <%= form.hidden_field :commentable_type, value: commentable.class.name %>
   <%= form.text_area :content, 
-    class: "w-full py-2 rounded focus:ring-0 mb-4", 
+    class: "w-full py-2 rounded focus:ring-0 mb-4 dark:bg-zinc-800", 
     placeholder: t("markdown_supported"), 
     data: { 
       controller: "textarea-autogrow",

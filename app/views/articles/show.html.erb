@@ -1,6 +1,6 @@
 <div class="lg:grid lg:grid-cols-3 lg:gap-x-6">
   <article class="max-w-full lg:col-span-2 mb-4">
-    <div class="bg-white p-4 w-full sm:p-6 sm:border sm:rounded-lg mb-4">
+    <div class="bg-white dark:bg-zinc-900 dark:border-zinc-800 p-4 w-full sm:p-6 sm:border sm:rounded-lg mb-4">
       <div class="flex items-start justify-between mb-6">
         <div class="relative flex items-center space-x-2">
           <img class="w-10 h-10 my-0 rounded-full" src="<%= @article.author.avatar %>">
@@ -21,7 +21,7 @@
       <div class="font-semibold text-xl lg:text-3xl 3xl:text-4xl mb-6">
         <%= @article.title %>
       </div>
-      <div class="py-2 px-4 mb-8 bg-gray-100 rounded">
+      <div class="py-2 px-4 mb-8 bg-zinc-100 dark:bg-zinc-800 rounded">
         <%= @article.intro %>
       </div>
       <div class="flex items-center space-x-2 mb-4 text-sm xl:text-base text-gray-500">
@@ -42,7 +42,7 @@
       </div>
     </div>
 
-    <div class="bg-white p-4 w-full sm:p-6 sm:border sm:rounded-lg mb-4">
+    <div class="bg-white dark:bg-zinc-900 dark:border-zinc-800 p-4 w-full sm:p-6 sm:border sm:rounded-lg mb-4">
       <div class="text-center mb-4 font-bold text-lg opacity-70">
         <%= t('comments') %>
       </div>

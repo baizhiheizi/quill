@@ -14,13 +14,13 @@ a {
 .pagy-nav.pagination,
 .pagy-nav-js.pagination,
 .pagy-combo-nav-js.pagination {
-  @apply border border-gray-600 rounded-sm;
+  @apply border border-zinc-600 rounded-sm;
 }
 .pagy-nav .page,
 .pagy-nav-js .page,
 .pagy-combo-nav-js .page,
 .pagy-combo-nav-js .pagy-combo-input {
-  @apply px-3 py-2 text-sm font-medium leading-tight text-gray-700 border-r border-gray-600;
+  @apply px-3 py-2 text-sm font-medium leading-tight text-gray-700 border-r border-zinc-600;
 }
 .pagy-nav .page:hover,
 .pagy-nav-js .page:hover {

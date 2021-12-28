@@ -9,6 +9,8 @@
     height: 300px;
     color: #000;
     direction: ltr;
+    background: inherit !important;
+    color: inherit;
 }
 .CodeMirror-lines {
     padding: 4px 0;
@@ -48,7 +50,7 @@
 .cm-fat-cursor .CodeMirror-cursor {
     width: auto;
     border: 0!important;
-    background: #7e7;
+    /* background: #7e7; */
 }
 .cm-fat-cursor div.CodeMirror-cursors {
     z-index: 1;
@@ -353,9 +355,11 @@ div.CodeMirror-dragcursors {
 }
 .CodeMirror-selected {
     background: #d9d9d9;
+    color: black;
 }
 .CodeMirror-focused .CodeMirror-selected {
     background: #d7d4f0;
+    color: black;
 }
 .CodeMirror-crosshair {
     cursor: crosshair;
@@ -381,6 +385,7 @@ div.CodeMirror-dragcursors {
     content: ''}
 span.CodeMirror-selectedtext {
     background: 0 0;
+    color: black;
 }
 .EasyMDEContainer {
     display: block;
@@ -438,13 +443,15 @@ span.CodeMirror-selectedtext {
 }
 .EasyMDEContainer .CodeMirror-focused .CodeMirror-selected {
     background: #d9d9d9;
+    color: black;
 }
 .editor-toolbar {
     /* position: relative; */
     position: sticky;
     top: 0;
     z-index: 10;
-    background: rgba(249, 250, 251, var(--tw-bg-opacity));
+    /* background: rgba(249, 250, 251, var(--tw-bg-opacity)); */
+    background: inherit;
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;

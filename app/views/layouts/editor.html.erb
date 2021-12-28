@@ -47,7 +47,7 @@
   </head>
 
   <body>
-    <main class="bg-gray-50">
+    <main class="bg-zinc-50 dark:bg-zinc-800 dark:text-zinc-50">
       <div class="max-w-xl lg:max-w-2xl 2xl:max-w-3xl mx-auto">
         <% flash.each do |type, message| %>
           <%= render partial: "shared/flash", locals: { type: type, message: message } %>

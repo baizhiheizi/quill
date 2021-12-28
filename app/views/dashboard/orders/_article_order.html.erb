@@ -1,4 +1,4 @@
-<div class="px-4 py-2 border-b flex items-center space-x-4">
+<div class="px-4 py-2 border-b dark:border-zinc-800 flex items-center space-x-4">
   <div>
     <% if order.order_type == 'cite_article' %>
       <%= link_to order.citer.title, article_path(order.citer.uuid) %>

@@ -6,7 +6,7 @@ module.exports = {
     "./app/helpers/**/*.rb",
     "./app/javascript/**/*.js",
   ],
-  darkMode: 'class',
+  // darkMode: 'class',
   // important: true,
   theme: {
     minHeight: {

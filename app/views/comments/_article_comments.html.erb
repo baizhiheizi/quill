@@ -3,7 +3,7 @@
     data-controller="tabs"
     data-tabs-active-tab-value="<%= order_by %>"
     data-tabs-active-class-value="border-b-2">
-    <div class="w-full flex overflow-auto flex-nowrap scrollbar-hide items-center flex border-b px-4 mb-4">
+    <div class="w-full flex overflow-auto flex-nowrap scrollbar-hide items-center flex border-b dark:border-zinc-800 px-4 mb-4">
       <%= link_to t('upvotes'), 
         article_comments_path(article, order_by: :upvotes),
         class: "cursor-pointer py-1 px-4 border-blue-500 textrgray-600",
