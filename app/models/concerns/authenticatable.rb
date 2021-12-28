@@ -4,14 +4,14 @@ module Authenticatable
   extend ActiveSupport::Concern
 
   class_methods do
-    def auth_from_mixin(code)
-      access_token = PrsdiggBot.api.oauth_token(code)
-      res = PrsdiggBot.api.read_me access_token: access_token
+    def auth_from_mixin(token: nil, code: nil)
+      token ||= PrsdiggBot.api.oauth_token(code)
+      res = PrsdiggBot.api.read_me access_token: token
       raise res.inspect if res['error'].present?
 
       auth = UserAuthorization.create_with(
         raw: res['data'],
-        access_token: access_token
+        access_token: token
       ).find_or_create_by!(
         uid: res['data'].fetch('user_id'),
         provider: :mixin

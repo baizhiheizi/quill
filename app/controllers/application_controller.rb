@@ -67,7 +67,7 @@ class ApplicationController < ActionController::Base
 
   def with_locale(&action)
     current_user.update(locale: browser_locale) if current_user && browser_locale && current_user.locale != browser_locale
-    locale = current_user&.locale || I18n.default_locale
+    locale = current_user&.locale || browser_locale || I18n.default_locale
     I18n.with_locale(locale, &action)
   end
 

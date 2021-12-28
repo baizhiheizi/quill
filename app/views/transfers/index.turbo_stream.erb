@@ -1,4 +1,4 @@
-<%= turbo_stream.append "transfers" do %>
+<%= turbo_stream.append "transfers_list" do %>
   <%= render partial: "transfers/transfer", collection: @transfers, as: :transfer %>
 <% end %>
 

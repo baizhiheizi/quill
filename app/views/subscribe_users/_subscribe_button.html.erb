@@ -1,6 +1,6 @@
 <div id="<%= dom_id user %>_subscribe_button" >
   <% if current_user.blank? %>
-    <%= link_to t('subscribe'), view_modals_path(type: :login), data: { turbo_method: :post }, class: "block bg-blue-600 rounded text-white text-center py-2" %>
+    <%= link_to t('subscribe'), view_modals_path(type: :login), data: { turbo_method: :post }, class: "block w-full cursor-pointer bg-blue-500 hover:bg-blue-600 rounded text-white text-center py-1 px-4" %>
   <% elsif current_user == user %>
   <% elsif current_user.subscribe_user? user %>
     <div class="w-full text-center py-1">

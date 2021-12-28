@@ -1,6 +1,5 @@
 module.exports = {
-  mode: "jit",
-  purge: [
+  content: [
     './app/packs/apps/**/*.tsx',
     "./app/views/**/*.html.erb",
     "./app/views/**/*.turbo_stream.erb",
@@ -50,9 +49,6 @@ module.exports = {
       ...theme('colors'),
       dark: '#1b1c1e',
     }),
-    extend: {},
-  },
-  variants: {
     extend: {},
   },
   plugins: [

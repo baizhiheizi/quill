@@ -25,4 +25,10 @@ class Notification < ApplicationRecord
 
   delegate :message, to: :to_notification
   delegate :url, to: :to_notification
+
+  after_create_commit { broadcast_as_flash }
+
+  def broadcast_as_flash
+    broadcast_append_later_to "user_#{recipient.mixin_uuid}", target: 'notifications', partial: 'shared/notification', locals: { message: to_notification.message, type: 'notice' }
+  end
 end

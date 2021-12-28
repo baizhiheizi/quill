@@ -19,7 +19,7 @@
     </div>
   </div>
   <div class="flex-1 overflow-y-scroll bg-white border-t border-b sm:rounded-lg sm:scrollbar-hide sm:border relative pb-4 prose xl:prose-lg max-w-full">
-    <%= render partial: "articles/form", locals: { article: @article } %>
+    <%= render partial: "articles/form", locals: { article: current_user.articles.new } %>
     <%= render partial: "articles/preview" %>
   </div>
   <div class="py-2 px-4 sm:py-4 sm:px-0 flex justify-between">
