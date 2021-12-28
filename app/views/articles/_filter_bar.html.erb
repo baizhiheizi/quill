@@ -16,7 +16,7 @@
       data: {
         tabs_target: "tab",
         tabs_tabname_param: "subscribed",
-      } if current_user.present? %>
+      } if current_user.present? && current_user.subscribe_users.present? %>
     <%= link_to t('order_by_lately'), 
       articles_path(order_by: :lately),
       class: "cursor-pointer px-2 opacity-70 truncate",

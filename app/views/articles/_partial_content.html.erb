@@ -1,12 +1,12 @@
 <%= MarkdownRenderService.new.call(article.partial_content).html_safe %>
 
 <div class="mb-8">
-  <div class="flex justify-center text-yellow-500 font-semibold">
+  <div class="flex justify-center text-red-500">
     - <%= t('more_to_read') %> -
   </div>
   <div class="flex justify-center">
     <%= t('pay') %>
-    <span class="font-bold mx-2 text-yellow-500"><%= article.price_tag %></span>
+    <span class="mx-2 text-red-500"><%= article.price_tag %></span>
     <span class="mr-2">(≈$<%= article.price_usd %>)</span>
     <span><%= t('to_continue_reading') %></span>
   </div>
@@ -14,7 +14,7 @@
     <span><%= t('and_receive_early_reader_revenue') %></span>
     (<%= link_to t('rules'), page_path('rules') %>)
   </div>
-  <div class="text-base mb-4 rounded-lg border border-yellow-500 bg-yellow-50 text-yellow-500 font-semibold p-4">
+  <div class="text-base mb-4 rounded-lg border border-amber-500 bg-amber-50 px-4 py-2">
     <%= t('pay_warning') %>
   </div>
   <div class="flex justify-center mb-4">
