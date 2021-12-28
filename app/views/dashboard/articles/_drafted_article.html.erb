@@ -1,6 +1,6 @@
 <div id="<%= dom_id article %>_draft" class="border-b px-4 py-2 flex items-center space-x-4">
   <%= link_to article.title.presence || t('articles.title_placeholder'), edit_article_path(article.uuid), class: "relative text-xl font-bold truncate" %>
-  <div class="flex-1 text-sm opacity-70"><%= article.updated_at.strftime("%Y-%m-%d %H:%M") %></div>
+  <div class="flex-1 text-sm opacity-70 truncate"><%= article.updated_at.strftime("%Y-%m-%d %H:%M") %></div>
   <%= button_to t('delete'), 
     dashboard_article_path(article), 
     form: {
