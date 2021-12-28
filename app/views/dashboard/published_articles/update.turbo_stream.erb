@@ -1,1 +1,9 @@
-<%= turbo_stream.remove "#{dom_id @article}_hidden" %>
+<% if @article.published? %>
+  <%= turbo_stream.remove "#{dom_id @article}_hidden" %>
+<% else %>
+  <%= turbo_stream.update "modal-slot" do %>
+  <% end %>
+  <%= turbo_stream.append "notifications" do %>
+    <%= render "shared/notification", message: t('write_something_first'), type: :alert %>
+  <% end %>
+<% end %>

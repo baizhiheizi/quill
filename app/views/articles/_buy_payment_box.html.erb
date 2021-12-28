@@ -6,8 +6,9 @@
   <% if Payment.find_by(trace_id: payment_trace_id) %>
     <%= render partial: "shared/loading" %>
   <% else %>
-    <div data-article-paymnent-target="price" class="text-center text-yellow-500 font-bold text-base">
-      <%= "#{format('%.8f', payment_amount)}" %>
+    <div data-article-paymnent-target="price" class="flex items-center justify-center space-x-2 text-base">
+      <span class="text-red-500 font-bold "><%= "#{format('%.8f', payment_amount)}" %></span>
+      <span><%= currency_symbol %></span>
     </div>
     <% unless from_mixin_messenger? || current_user.fennec? %>
       <div data-controller="qrcode" 

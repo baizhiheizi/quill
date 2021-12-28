@@ -1,7 +1,7 @@
 <% case params[:type] %>
   <% when 'buy_article' %>
   <%= turbo_stream.update "article_#{@article.uuid}_buy_payment_box" do %>
-    <%= render partial: "articles/buy_payment_box", locals: { article: @article, pay_asset_id: @currency.asset_id } %>
+    <%= render partial: "articles/buy_payment_box", locals: { article: @article, pay_asset_id: @currency.asset_id, currency_symbol: @currency.symbol } %>
   <% end %>
   <% when 'reward_article' %>
   <%= turbo_stream.update "article_#{@article.uuid}_reward_payment_box" do %>

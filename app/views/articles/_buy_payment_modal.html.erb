@@ -2,6 +2,7 @@
   data-controller="buy-article-payment" 
   data-buy-article-payment-article-uuid-value="<%= article.uuid %>"
   data-buy-article-payment-selected-currency-value="<%= article.currency.asset_id %>"
+  data-buy-article-payment-selected-currency-symbol-value="<%= article.currency.asset_id %>"
   class="max-w-xs m-auto p-4">
   <div class="mb-4 grid grid-cols-3 gap-4">
     <div 
@@ -31,6 +32,6 @@
     </div>
   </template>
   <div data-buy-article-payment-target="payBox" id="article_<%= article.uuid %>_buy_payment_box">
-    <%= render partial: "articles/buy_payment_box", locals: { article: article, pay_asset_id: article.asset_id } %>
+    <%= render partial: "articles/buy_payment_box", locals: { article: article, pay_asset_id: article.asset_id, currency_symbol: article.currency.symbol } %>
   </div>
 </div>
