@@ -13,17 +13,17 @@
       <div class="col-span-1">
         $<%= article.revenue_usd.round(4) %>
       </div>
-      <div class="col-span-1">
-        <%= article.orders_count %> <%= t('bought') %>
+      <div class="col-span-1 flex items-center">
+        <%= article.orders_count %> <%= render "shared/icons/cash", html_class: "w-4 h-4" %>
       </div>
-      <div class="col-span-1">
-        <%= article.comments_count %> <%= t('commented') %>
+      <div class="col-span-1 flex items-center">
+        <%= article.comments_count %> <%= render "shared/icons/reply", html_class: "w-4 h-4" %>
       </div>
-      <div class="col-span-1">
-        <%= article.upvotes_count %> <%= t('upvoted') %>
+      <div class="col-span-1 flex items-center">
+        <%= article.upvotes_count %> <%= render "shared/icons/thumb_up", html_class: "w-4 h-4" %>
       </div>
-      <div class="col-span-1">
-        <%= article.downvotes_count %> <%= t('downvoted') %>
+      <div class="col-span-1 flex items-center">
+        <%= article.downvotes_count %> <%= render "shared/icons/thumb_down", html_class: "w-4 h-4" %>
       </div>
     </div>
   </div>
