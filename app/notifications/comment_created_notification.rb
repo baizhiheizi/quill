@@ -2,7 +2,7 @@
 
 class CommentCreatedNotification < ApplicationNotification
   deliver_by :database, if: :web_notification_enabled?
-  deliver_by :mixin_bot, class: 'DeliveryMethods::MixinBot', category: 'APP_CARD', if: :mixin_bot_notification_enabled?
+  deliver_by :mixin_bot, class: 'DeliveryMethods::MixinBot', category: 'APP_CARD', if: :may_notify_via_mixin_bot?
 
   param :comment
 
@@ -29,7 +29,7 @@ class CommentCreatedNotification < ApplicationNotification
 
   def url
     format(
-      '%<host>s/articles/%<article_uuid>s#comment-%<comment_id>s',
+      '%<host>s/articles/%<article_uuid>s#comment_%<comment_id>s',
       host: Settings.host,
       article_uuid: comment.commentable.uuid,
       comment_id: comment.id

@@ -15,7 +15,7 @@ class SessionsController < ApplicationController
   end
 
   def create
-    user = User.auth_from_mixin params[:code]
+    user = User.auth_from_mixin token: params[:token], code: params[:code]
     user_sign_in(user) if user
 
     redirect_to params[:return_to].presence || root_path

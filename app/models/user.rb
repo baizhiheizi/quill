@@ -280,6 +280,14 @@ class User < ApplicationRecord
     uid
   end
 
+  def fennec?
+    mixin_id == '0'
+  end
+
+  def messenger?
+    mixin_id.match? /^[^0]\d+/
+  end
+
   private
 
   def setup_attributes

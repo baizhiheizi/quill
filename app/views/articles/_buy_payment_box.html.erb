@@ -1,23 +1,43 @@
-<div id="payment_<%= article.payment_trace_id current_user %>">
-  <% if Payment.find_by(trace_id: article.payment_trace_id(current_user)) %>
+<% payment_trace_id ||= article.payment_trace_id current_user %>
+<% payment_amount ||= article.buy_payment_amount pay_asset_id %>
+<% payment_url ||= article.buy_url(current_user, pay_asset_id) %>
+
+<div id="payment_<%= payment_trace_id %>">
+  <% if Payment.find_by(trace_id: payment_trace_id) %>
     <%= render partial: "shared/loading" %>
   <% else %>
     <div data-article-paymnent-target="price" class="text-center text-yellow-500 font-bold text-base">
-      <%= "#{format('%.8f', article.buy_payment_amount(pay_asset_id))}" %>
+      <%= "#{format('%.8f', payment_amount)}" %>
     </div>
-    <% unless from_mixin_messenger? %>
+    <% unless from_mixin_messenger? || current_user.fennec? %>
       <div data-controller="qrcode" 
-          data-qrcode-url-value="<%= article.buy_url(current_user, pay_asset_id) %>">
+          data-qrcode-url-value="<%= payment_url %>">
           <div data-qrcode-target="placeholder" class="flex justify-center"></div>
           <div class="text-center py-2 text-gray-500 text-sm">
             <%= t("pay_with_messenger") %>
           </div>
       </div>
     <% end %>
-    <a data-article-payment-target="payLink"
-      href="<%= article.buy_url(current_user, pay_asset_id) %>"
-      class="w-full my-4 text-center no-underline cursor-pointer py-2 block bg-blue-600 hover:bg-blue-500 active:bg-blue-500 text-white rounded">
-      <%= t('pay_in_mixin') %>
-    </a>
+    <% if current_user.fennec? %>
+      <a data-article-payment-target="payLink"
+        data-controller="fennec"
+        data-action="fennec#pay"
+        data-fennec-trace-id-param="<%= payment_trace_id %>"
+        data-fennec-asset-id-param="<%= pay_asset_id %>"
+        data-fennec-amount-param="<%= payment_amount %>"
+        data-fennec-memo-param="<%= article.buy_payment_memo %>"
+        data-fennec-opponent-id-param="<%= current_user&.wallet_id || article.wallet_id %>"
+        href="<%= payment_url %>"
+        class="flex justify-center items-center space-x-2 w-full my-4 text-center no-underline cursor-pointer py-2 block bg-amber-600 hover:bg-amber-700 active:bg-blue-500 text-white rounded">
+        <%= image_tag 'fennec-logo.png', class: 'h-6 w-auto' %>
+        <%= t('pay_in_fennec') %>
+      </a>
+    <% else %>
+      <a data-article-payment-target="payLink"
+        href="<%= payment_url %>"
+        class="w-full my-4 text-center no-underline cursor-pointer py-2 block bg-blue-500 hover:bg-blue-600 active:bg-blue-500 text-white rounded">
+        <%= t('pay_in_mixin') %>
+      </a>
+    <% end %>
   <% end %>
 </div>

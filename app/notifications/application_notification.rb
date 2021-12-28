@@ -7,6 +7,8 @@ class ApplicationNotification < Noticed::Base
 
   PRSDIGG_ICON_URL = 'https://mixin-images.zeromesh.net/L0egX-GZxT0Yh-dd04WKeAqVNRzgzuj_Je_-yKf8aQTZo-xihd-LogbrIEr-WyG9WbJKGFvt2YYx-UIUa1qQMRla=s256'
 
+  delegate :messenger?, to: :recipient, prefix: true
+
   private
 
   def message
@@ -30,5 +32,9 @@ class ApplicationNotification < Noticed::Base
   def with_locale(&action)
     locale = recipient&.locale || I18n.default_locale
     I18n.with_locale(locale, &action)
+  end
+
+  def may_notify_via_mixin_bot?
+    recipient_messenger? && mixin_bot_notification_enabled?
   end
 end

@@ -24,6 +24,9 @@ application.register('confirm', ConfirmController);
 import DropdownController from './dropdown_controller.js';
 application.register('dropdown', DropdownController);
 
+import FennecController from './fennec_controller.js';
+application.register('fennec', FennecController);
+
 import FlashController from './flash_controller.js';
 application.register('flash', FlashController);
 

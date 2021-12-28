@@ -3,7 +3,7 @@
 </div>
 
 <div class="mb-8">
-  <%= render partial: "articles/votes", locals: { article: @article, user: current_user } %>
+  <%= render partial: "articles/votes", locals: { article: article, user: current_user } %>
 </div>
 
 <% unless article.author == current_user %>

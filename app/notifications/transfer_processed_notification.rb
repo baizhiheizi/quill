@@ -2,7 +2,7 @@
 
 class TransferProcessedNotification < ApplicationNotification
   deliver_by :database, if: :web_notification_enabled?
-  deliver_by :mixin_bot, class: 'DeliveryMethods::MixinBot', category: 'APP_CARD', bot: 'RevenueBot', if: :should_notify_via_bot?
+  deliver_by :mixin_bot, class: 'DeliveryMethods::MixinBot', category: 'APP_CARD', bot: 'RevenueBot', if: :may_notify_via_mixin_bot?
 
   param :transfer
 
@@ -57,7 +57,7 @@ class TransferProcessedNotification < ApplicationNotification
     params[:transfer].wallet.blank?
   end
 
-  def should_notify_via_bot?
-    mixin_bot_notification_enabled? && !from_prsdigg_bot?
+  def may_notify_via_mixin_bot?
+    recipient_messenger? && mixin_bot_notification_enabled? && !from_prsdigg_bot?
   end
 end

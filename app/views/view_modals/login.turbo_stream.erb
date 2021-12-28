@@ -5,13 +5,25 @@
     <div data-modal-target="modal" class="fixed inset-0 z-50 flex items-start justify-center w-full overflow-y-auto">
       <button data-action="modal#hide" class="fixed top-0 left-0 w-screen h-full bg-black opacity-30"></button>
       <div class='relative w-10/12 max-w-2xl max-h-screen mt-48 bg-white border rounded shadow'>
-        <div class="p-4 text-xl font-medium text-center border-b">Connect Wallet</div>
-        <div class="flex justify-center p-6">
-          <%= link_to login_path(return_to: params[:return_to]), class: "px-6 py-2 text-white bg-blue-500 rounded flex items-center space-x-2" do %>
-            <img class="w-auto h-4" src=<%= asset_path('mixin-logo-light.png') %> />
+        <div class="p-4 text-xl font-medium text-center border-b mb-6">Connect Wallet</div>
+        <div class="flex justify-center px-4 mb-4">
+        <%= link_to login_path(return_to: params[:return_to]), 
+          class: "py-2 text-white bg-blue-500 hover:bg-blue-600 rounded flex items-center justify-center space-x-2 text-lg w-64" do %>
+            <%= image_tag 'mixin-logo-light.png', class: 'h-4 w-auto' %>
             <span>Mixin</span>
             <span>Messenger</span>
           <% end %>
+        </div>
+        <div class="flex justify-center px-4 mb-6">
+          <a data-controller="fennec"
+            data-fennec-target="loginButton" 
+            data-action="fennec#login" 
+            href="https://github.com/fox-one/fennec"
+            target="_blank"
+            class="cursor-pointer py-2 text-white bg-amber-600 hover:bg-amber-700 rounded flex items-center justify-center space-x-2 text-lg w-64 block">
+            <%= image_tag 'fennec-logo.png', class: 'h-6 w-auto' %>
+            <span>Fennec</span>
+          </a>
         </div>
       </div>
     </div>
