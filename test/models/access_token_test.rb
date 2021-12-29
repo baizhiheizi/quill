@@ -4,20 +4,21 @@
 #
 # Table name: access_tokens
 #
-#  id           :bigint           not null, primary key
-#  deleted_at   :datetime
-#  last_request :jsonb
-#  memo         :string
+#  id           :integer          not null, primary key
+#  user_id      :integer
 #  value        :uuid
+#  memo         :string
+#  last_request :jsonb
+#  deleted_at   :datetime
 #  created_at   :datetime         not null
 #  updated_at   :datetime         not null
-#  user_id      :bigint
 #
 # Indexes
 #
 #  index_access_tokens_on_user_id  (user_id)
 #  index_access_tokens_on_value    (value) UNIQUE
 #
+
 require 'test_helper'
 
 class AccessTokenTest < ActiveSupport::TestCase

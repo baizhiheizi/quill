@@ -4,13 +4,14 @@
 #
 # Table name: statistics
 #
-#  id         :bigint           not null, primary key
-#  data       :jsonb
-#  datetime   :datetime
+#  id         :integer          not null, primary key
 #  type       :string
+#  datetime   :datetime
+#  data       :jsonb
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #
+
 class DailyStatistic < Statistic
   store :data, accessors: %i[
     new_users_count

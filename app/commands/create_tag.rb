@@ -15,7 +15,7 @@ class CreateTag
   def call
     return if tag_names.blank?
 
-    tag_names.reject!(&:blank?)
+    tag_names.compact_blank!
 
     new_tags = tag_names.map { |x| Tag.find_or_create_by(name: x.strip) }
     old_tags = article.tags.to_a

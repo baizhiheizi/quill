@@ -2,22 +2,23 @@
 #
 # Table name: comments
 #
-#  id               :bigint           not null, primary key
+#  id               :integer          not null, primary key
+#  author_id        :integer
 #  commentable_type :string
+#  commentable_id   :integer
 #  content          :string
 #  deleted_at       :datetime
-#  downvotes_count  :integer          default(0)
-#  upvotes_count    :integer          default(0)
 #  created_at       :datetime         not null
 #  updated_at       :datetime         not null
-#  author_id        :bigint
-#  commentable_id   :bigint
+#  upvotes_count    :integer          default("0")
+#  downvotes_count  :integer          default("0")
 #
 # Indexes
 #
 #  index_comments_on_author_id                            (author_id)
 #  index_comments_on_commentable_type_and_commentable_id  (commentable_type,commentable_id)
 #
+
 one: {}
 # column: value
 #

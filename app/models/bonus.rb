@@ -4,22 +4,23 @@
 #
 # Table name: bonuses
 #
-#  id          :bigint           not null, primary key
-#  amount      :decimal(, )
+#  id          :integer          not null, primary key
+#  user_id     :integer
+#  title       :string
 #  description :text
 #  state       :string
-#  title       :string
+#  asset_id    :string
+#  amount      :decimal(, )
+#  trace_id    :uuid
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
-#  asset_id    :string
-#  trace_id    :uuid
-#  user_id     :bigint
 #
 # Indexes
 #
 #  index_bonuses_on_trace_id  (trace_id) UNIQUE
 #  index_bonuses_on_user_id   (user_id)
 #
+
 class Bonus < ApplicationRecord
   include AASM
 
@@ -31,7 +32,6 @@ class Bonus < ApplicationRecord
   before_validation :setup_attributes
 
   validates :title, presence: true
-  validates :asset_id, presence: true
   validates :trace_id, presence: true
   validates :amount, numericality: { greater_than: 0.000_000_01 }
 

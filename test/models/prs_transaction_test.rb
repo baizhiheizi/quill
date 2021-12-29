@@ -4,19 +4,19 @@
 #
 # Table name: prs_transactions
 #
-#  id               :bigint           not null, primary key
-#  block_num        :integer
-#  block_type       :string
-#  hash_str         :string
-#  processed_at     :datetime
-#  raw              :jsonb
-#  signature        :string
-#  type(STI)        :string
-#  user_address     :string
-#  created_at       :datetime         not null
-#  updated_at       :datetime         not null
-#  transaction_id   :string
-#  tx_id            :string
+#  id             :integer          not null, primary key
+#  type           :string
+#  tx_id          :string
+#  block_type     :string
+#  hash_str       :string
+#  signature      :string
+#  block_num      :integer
+#  transaction_id :string
+#  user_address   :string
+#  raw            :jsonb
+#  processed_at   :datetime
+#  created_at     :datetime         not null
+#  updated_at     :datetime         not null
 #
 # Indexes
 #
@@ -24,6 +24,7 @@
 #  index_prs_transactions_on_transaction_id  (transaction_id) UNIQUE
 #  index_prs_transactions_on_tx_id           (tx_id) UNIQUE
 #
+
 require 'test_helper'
 
 class PrsTransactionTest < ActiveSupport::TestCase

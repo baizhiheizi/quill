@@ -4,22 +4,22 @@
 #
 # Table name: orders
 #
-#  id         :bigint           not null, primary key
-#  citer_type :string
+#  id         :integer          not null, primary key
+#  seller_id  :integer
+#  buyer_id   :integer
 #  item_type  :string
-#  order_type :integer
+#  item_id    :integer
+#  trace_id   :uuid
 #  state      :string
+#  order_type :integer
 #  total      :decimal(, )
-#  value_btc  :decimal(, )
-#  value_usd  :decimal(, )
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #  asset_id   :uuid
-#  buyer_id   :bigint
+#  value_btc  :decimal(, )
+#  value_usd  :decimal(, )
 #  citer_id   :integer
-#  item_id    :bigint
-#  seller_id  :bigint
-#  trace_id   :uuid
+#  citer_type :string
 #
 # Indexes
 #
@@ -29,6 +29,7 @@
 #  index_orders_on_item_type_and_item_id    (item_type,item_id)
 #  index_orders_on_seller_id                (seller_id)
 #
+
 require 'test_helper'
 
 class OrderTest < ActiveSupport::TestCase

@@ -4,19 +4,19 @@
 #
 # Table name: swap_orders
 #
-#  id                                 :bigint           not null, primary key
-#  amount(swapped amount)             :decimal(, )
-#  funds(paid amount)                 :decimal(, )
-#  min_amount(minimum swapped amount) :decimal(, )
-#  raw(raw order response)            :json
-#  state                              :string
-#  created_at                         :datetime         not null
-#  updated_at                         :datetime         not null
-#  fill_asset_id(swapped asset)       :uuid
-#  pay_asset_id(paid asset)           :uuid
-#  payment_id                         :bigint
-#  trace_id                           :uuid
-#  user_id                            :uuid
+#  id            :integer          not null, primary key
+#  payment_id    :integer
+#  trace_id      :uuid
+#  user_id       :uuid
+#  state         :string
+#  pay_asset_id  :uuid
+#  fill_asset_id :uuid
+#  funds         :decimal(, )
+#  amount        :decimal(, )
+#  min_amount    :decimal(, )
+#  raw           :json
+#  created_at    :datetime         not null
+#  updated_at    :datetime         not null
 #
 # Indexes
 #
@@ -24,6 +24,7 @@
 #  index_swap_orders_on_trace_id    (trace_id) UNIQUE
 #  index_swap_orders_on_user_id     (user_id)
 #
+
 class SwapOrder < ApplicationRecord
   FOXSWAP_ENABLE = Settings.swapable
   SWAPABLE_ASSETS = FOXSWAP_ENABLE ? (Article::SUPPORTED_ASSETS + Settings.swapable_assets).uniq : Article::SUPPORTED_ASSETS
@@ -41,8 +42,6 @@ class SwapOrder < ApplicationRecord
   has_many :transfers, as: :source, dependent: :nullify
 
   validates :trace_id, presence: true
-  validates :fill_asset_id, presence: true
-  validates :pay_asset_id, presence: true
 
   after_create :create_fox_swap_transfer!
 

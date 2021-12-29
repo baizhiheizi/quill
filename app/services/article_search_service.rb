@@ -53,7 +53,7 @@ class ArticleSearchService
     @articles =
       case @time_range
       when 'week'
-        @articles.where(published_at: (Time.current - 1.week)...)
+        @articles.where(published_at: (1.week.ago)...)
       when 'month'
         @articles.where(published_at: (Time.current - 1.month)...)
       when 'year'

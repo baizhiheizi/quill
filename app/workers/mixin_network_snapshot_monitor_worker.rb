@@ -5,7 +5,7 @@ class MixinNetworkSnapshotMonitorWorker
   sidekiq_options queue: :low, retry: false
 
   def perform
-    count = MixinNetworkSnapshot.unprocessed.where(created_at: ...(Time.current - 1.minute)).count
+    count = MixinNetworkSnapshot.unprocessed.where(created_at: ...(1.minute.ago)).count
     return unless count.positive?
 
     AdminNotificationService.new.text(

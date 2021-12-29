@@ -4,13 +4,14 @@
 #
 # Table name: statistics
 #
-#  id         :bigint           not null, primary key
-#  data       :jsonb
-#  datetime   :datetime
+#  id         :integer          not null, primary key
 #  type       :string
+#  datetime   :datetime
+#  data       :jsonb
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #
+
 require 'test_helper'
 
 class StatisticTest < ActiveSupport::TestCase

@@ -2,29 +2,30 @@
 #
 # Table name: users
 #
-#  id                          :bigint           not null, primary key
-#  authoring_subscribers_count :integer          default(0)
-#  avatar_url                  :string
-#  banned_at                   :datetime
-#  locale                      :integer
-#  mixin_uuid                  :uuid
+#  id                          :integer          not null, primary key
 #  name                        :string
-#  reading_subscribers_count   :integer          default(0)
-#  statistics                  :jsonb
-#  subscribers_count           :integer          default(0)
-#  subscribing_count           :integer          default(0)
-#  uid                         :string
+#  avatar_url                  :string
+#  mixin_id                    :string
+#  mixin_uuid                  :uuid
 #  created_at                  :datetime         not null
 #  updated_at                  :datetime         not null
-#  mixin_id                    :string
+#  authoring_subscribers_count :integer          default("0")
+#  reading_subscribers_count   :integer          default("0")
+#  banned_at                   :datetime
+#  statistics                  :jsonb            default("\"{}\"")
+#  locale                      :integer
+#  subscribers_count           :integer          default("0")
+#  subscribing_count           :integer          default("0")
+#  uid                         :string
 #
 # Indexes
 #
 #  index_users_on_mixin_id    (mixin_id)
 #  index_users_on_mixin_uuid  (mixin_uuid) UNIQUE
-#  index_users_on_statistics  (statistics) USING gin
+#  index_users_on_statistics  (statistics)
 #  index_users_on_uid         (uid) UNIQUE
 #
+
 one: {}
 # column: value
 #

@@ -4,22 +4,22 @@
 #
 # Table name: transfers
 #
-#  id                :bigint           not null, primary key
-#  amount            :decimal(, )
-#  memo              :string
-#  opponent_multisig :json
-#  processed_at      :datetime
-#  queue_priority    :integer          default("default")
-#  snapshot          :json
+#  id                :integer          not null, primary key
 #  source_type       :string
+#  source_id         :integer
 #  transfer_type     :integer
-#  created_at        :datetime         not null
-#  updated_at        :datetime         not null
+#  amount            :decimal(, )
+#  trace_id          :uuid
 #  asset_id          :uuid
 #  opponent_id       :uuid
-#  source_id         :bigint
-#  trace_id          :uuid
+#  memo              :string
+#  processed_at      :datetime
+#  snapshot          :json
+#  created_at        :datetime         not null
+#  updated_at        :datetime         not null
 #  wallet_id         :uuid
+#  queue_priority    :integer          default("0")
+#  opponent_multisig :json             default("{}")
 #
 # Indexes
 #
@@ -30,6 +30,7 @@
 #  index_transfers_on_transfer_type              (transfer_type)
 #  index_transfers_on_wallet_id                  (wallet_id)
 #
+
 require 'test_helper'
 
 class TransferTest < ActiveSupport::TestCase

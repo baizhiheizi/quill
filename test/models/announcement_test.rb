@@ -4,14 +4,15 @@
 #
 # Table name: announcements
 #
-#  id           :bigint           not null, primary key
-#  content      :text
-#  delivered_at :datetime
+#  id           :integer          not null, primary key
 #  message_type :string
+#  content      :text
 #  state        :string
+#  delivered_at :datetime
 #  created_at   :datetime         not null
 #  updated_at   :datetime         not null
 #
+
 require 'test_helper'
 
 class AnnouncementTest < ActiveSupport::TestCase

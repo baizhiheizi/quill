@@ -4,22 +4,22 @@
 #
 # Table name: orders
 #
-#  id         :bigint           not null, primary key
-#  citer_type :string
+#  id         :integer          not null, primary key
+#  seller_id  :integer
+#  buyer_id   :integer
 #  item_type  :string
-#  order_type :integer
+#  item_id    :integer
+#  trace_id   :uuid
 #  state      :string
+#  order_type :integer
 #  total      :decimal(, )
-#  value_btc  :decimal(, )
-#  value_usd  :decimal(, )
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #  asset_id   :uuid
-#  buyer_id   :bigint
+#  value_btc  :decimal(, )
+#  value_usd  :decimal(, )
 #  citer_id   :integer
-#  item_id    :bigint
-#  seller_id  :bigint
-#  trace_id   :uuid
+#  citer_type :string
 #
 # Indexes
 #
@@ -29,6 +29,7 @@
 #  index_orders_on_item_type_and_item_id    (item_type,item_id)
 #  index_orders_on_seller_id                (seller_id)
 #
+
 class Order < ApplicationRecord
   PLATFORM_RATIO = 0.1
   MINIMUM_AMOUNT = 0.0000_0001
@@ -48,9 +49,8 @@ class Order < ApplicationRecord
 
   # prevent duplicated buy order
   validates :order_type, uniqueness: { scope: %i[order_type buyer_id item_id item_type], if: -> { buy_article? } }
-  validates :asset_id, presence: true
   validates :total, presence: true
-  validates :trace_id, presence: true, uniqueness: true
+  validates :trace_id, uniqueness: true
   validate :ensure_total_sufficient, on: :create
 
   enum order_type: { buy_article: 0, reward_article: 1, cite_article: 2 }

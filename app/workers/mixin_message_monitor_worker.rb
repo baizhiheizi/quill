@@ -5,7 +5,7 @@ class MixinMessageMonitorWorker
   sidekiq_options queue: :low, retry: false
 
   def perform
-    count = MixinMessage.unprocessed.where(created_at: ...(Time.current - 1.minute)).count
+    count = MixinMessage.unprocessed.where(created_at: ...(1.minute.ago)).count
     return unless count.positive?
 
     AdminNotificationService.new.text(

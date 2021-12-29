@@ -4,7 +4,7 @@
 #
 # Table name: administrators
 #
-#  id              :bigint           not null, primary key
+#  id              :integer          not null, primary key
 #  name            :string           not null
 #  password_digest :string           not null
 #  created_at      :datetime         not null
@@ -14,6 +14,7 @@
 #
 #  index_administrators_on_name  (name) UNIQUE
 #
+
 class Administrator < ApplicationRecord
   validates :name, presence: true, uniqueness: true
 
