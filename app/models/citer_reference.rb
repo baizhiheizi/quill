@@ -4,20 +4,21 @@
 #
 # Table name: citer_references
 #
-#  id             :bigint           not null, primary key
+#  id             :integer          not null, primary key
 #  citer_type     :string
+#  citer_id       :integer
 #  reference_type :string
+#  reference_id   :integer
 #  revenue_ratio  :float            not null
 #  created_at     :datetime         not null
 #  updated_at     :datetime         not null
-#  citer_id       :bigint
-#  reference_id   :bigint
 #
 # Indexes
 #
 #  index_citer_references_on_citer      (citer_type,citer_id)
 #  index_citer_references_on_reference  (reference_type,reference_id)
 #
+
 class CiterReference < ApplicationRecord
   belongs_to :citer, polymorphic: true, autosave: true
   belongs_to :reference, polymorphic: true

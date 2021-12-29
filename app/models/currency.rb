@@ -4,16 +4,17 @@
 #
 # Table name: currencies
 #
-#  id         :bigint           not null, primary key
+#  id         :integer          not null, primary key
+#  asset_id   :uuid
 #  raw        :jsonb
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
-#  asset_id   :uuid
 #
 # Indexes
 #
 #  index_currencies_on_asset_id  (asset_id) UNIQUE
 #
+
 class Currency < ApplicationRecord
   PRS_ASSET_ID = '3edb734c-6d6f-32ff-ab03-4eb43640c758'
   BTC_ASSET_ID = 'c6d0c728-2624-429b-8e0d-d9d19b6592fa'

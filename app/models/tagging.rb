@@ -4,11 +4,11 @@
 #
 # Table name: taggings
 #
-#  id         :bigint           not null, primary key
+#  id         :integer          not null, primary key
+#  tag_id     :integer
+#  article_id :integer
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
-#  article_id :bigint
-#  tag_id     :bigint
 #
 # Indexes
 #
@@ -16,6 +16,7 @@
 #  index_taggings_on_tag_id                 (tag_id)
 #  index_taggings_on_tag_id_and_article_id  (tag_id,article_id) UNIQUE
 #
+
 class Tagging < ApplicationRecord
   belongs_to :tag, counter_cache: :articles_count, touch: true
   belongs_to :article, counter_cache: :tags_count, touch: true

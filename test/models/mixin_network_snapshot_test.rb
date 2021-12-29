@@ -4,19 +4,19 @@
 #
 # Table name: mixin_network_snapshots
 #
-#  id             :bigint           not null, primary key
-#  amount         :decimal(, )
+#  id             :integer          not null, primary key
+#  user_id        :uuid
+#  trace_id       :uuid
+#  opponent_id    :uuid
 #  data           :string
-#  processed_at   :datetime
-#  raw            :json
+#  snapshot_id    :uuid
+#  amount         :decimal(, )
+#  asset_id       :uuid
 #  transferred_at :datetime
+#  raw            :json
+#  processed_at   :datetime
 #  created_at     :datetime         not null
 #  updated_at     :datetime         not null
-#  asset_id       :uuid
-#  opponent_id    :uuid
-#  snapshot_id    :uuid
-#  trace_id       :uuid
-#  user_id        :uuid
 #
 # Indexes
 #
@@ -24,6 +24,7 @@
 #  index_mixin_network_snapshots_on_trace_id     (trace_id)
 #  index_mixin_network_snapshots_on_user_id      (user_id)
 #
+
 require 'test_helper'
 
 class MixinNetworkSnapshotTest < ActiveSupport::TestCase

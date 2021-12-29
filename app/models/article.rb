@@ -4,31 +4,31 @@
 #
 # Table name: articles
 #
-#  id                                  :bigint           not null, primary key
-#  author_revenue_ratio                :float            default(0.5)
-#  commenting_subscribers_count        :integer          default(0)
-#  comments_count                      :integer          default(0), not null
-#  content                             :text
-#  downvotes_count                     :integer          default(0)
-#  intro                               :string
-#  orders_count                        :integer          default(0), not null
-#  platform_revenue_ratio              :float            default(0.1)
-#  price                               :decimal(, )      not null
-#  published_at                        :datetime
-#  readers_revenue_ratio               :float            default(0.4)
-#  references_revenue_ratio            :float            default(0.0)
-#  revenue_btc                         :decimal(, )      default(0.0)
-#  revenue_usd                         :decimal(, )      default(0.0)
-#  source                              :string
-#  state                               :string
-#  tags_count                          :integer          default(0)
-#  title                               :string
-#  upvotes_count                       :integer          default(0)
-#  uuid                                :uuid
-#  created_at                          :datetime         not null
-#  updated_at                          :datetime         not null
-#  asset_id(asset_id in Mixin Network) :uuid
-#  author_id                           :bigint
+#  id                           :integer          not null, primary key
+#  uuid                         :uuid
+#  author_id                    :integer
+#  title                        :string
+#  intro                        :string
+#  content                      :text
+#  asset_id                     :uuid
+#  price                        :decimal(, )      not null
+#  orders_count                 :integer          default("0"), not null
+#  comments_count               :integer          default("0"), not null
+#  state                        :string
+#  created_at                   :datetime         not null
+#  updated_at                   :datetime         not null
+#  commenting_subscribers_count :integer          default("0")
+#  upvotes_count                :integer          default("0")
+#  downvotes_count              :integer          default("0")
+#  tags_count                   :integer          default("0")
+#  source                       :string
+#  published_at                 :datetime
+#  revenue_usd                  :decimal(, )      default("0.0")
+#  revenue_btc                  :decimal(, )      default("0.0")
+#  platform_revenue_ratio       :float            default("0.1")
+#  readers_revenue_ratio        :float            default("0.4")
+#  author_revenue_ratio         :float            default("0.5")
+#  references_revenue_ratio     :float            default("0.0")
 #
 # Indexes
 #
@@ -36,6 +36,7 @@
 #  index_articles_on_author_id  (author_id)
 #  index_articles_on_uuid       (uuid) UNIQUE
 #
+
 class Article < ApplicationRecord
   SUPPORTED_ASSETS = Settings.supported_assets || [Currency::BTC_ASSET_ID]
   MINIMUM_PRICE_PRS = 1
@@ -82,7 +83,7 @@ class Article < ApplicationRecord
 
   has_one :wallet, class_name: 'MixinNetworkUser', as: :owner, dependent: :nullify
 
-  validates :asset_id, presence: true, inclusion: { in: SUPPORTED_ASSETS }
+  validates :asset_id, inclusion: { in: SUPPORTED_ASSETS }
   validates :uuid, presence: true, uniqueness: true
   validates :title, length: { maximum: 64 }
   validates :intro, length: { maximum: 140 }

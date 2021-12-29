@@ -4,15 +4,15 @@
 #
 # Table name: actions
 #
-#  id            :bigint           not null, primary key
-#  action_option :string
+#  id            :integer          not null, primary key
 #  action_type   :string           not null
+#  action_option :string
 #  target_type   :string
+#  target_id     :integer
 #  user_type     :string
+#  user_id       :integer
 #  created_at    :datetime         not null
 #  updated_at    :datetime         not null
-#  target_id     :bigint
-#  user_id       :bigint
 #
 # Indexes
 #
@@ -20,7 +20,8 @@
 #  index_actions_on_user_type_and_user_id_and_action_type      (user_type,user_id,action_type)
 #  uk_action_target_user                                       (action_type,target_type,target_id,user_type,user_id) UNIQUE
 #
-class Action < ActiveRecord::Base
+
+class Action < ApplicationRecord
   belongs_to :target, polymorphic: true, optional: true
   belongs_to :user, polymorphic: true, optional: true
 
