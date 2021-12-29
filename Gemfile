@@ -6,7 +6,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 ruby '~> 3.x'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '~> 6'
+gem 'rails', '~> 7'
 
 # Use pg as the database for Active Record
 gem 'pg'
@@ -21,7 +21,7 @@ gem 'puma'
 gem 'sass-rails', '>= 6'
 
 # Transpile app-like JavaScript. Read more: https://github.com/rails/webpacker
-gem 'webpacker', '6.0.0.rc.5'
+gem 'webpacker', '~> 6.0.0.rc.6'
 
 # Bundle and transpile JavaScript [https://github.com/rails/jsbundling-rails]
 gem 'jsbundling-rails'
@@ -36,7 +36,7 @@ gem 'requestjs-rails'
 gem 'cssbundling-rails'
 
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
-gem 'jbuilder', '~> 2.7'
+gem 'jbuilder'
 
 # Use Redis adapter to run Action Cable in production
 gem 'redis', '~> 4.1'
@@ -69,7 +69,7 @@ gem 'sidekiq-limit_fetch'
 gem 'image_processing', '~> 1.2'
 
 # Reduces boot times through caching; required in config/boot.rb
-gem 'bootsnap', '>= 1.4.2', require: false
+gem 'bootsnap', '>= 1.4.4', require: false
 
 # Integration of React + Webpack + Rails + rails/webpacker including server-side rendering of React, enabling a better developer experience and faster client performance.
 gem 'react_on_rails', '~> 12.0'
@@ -108,7 +108,7 @@ gem 'simple_command'
 gem 'noticed'
 
 # Centralization of locale data collection for Ruby on Rails.
-gem 'rails-i18n', '~> 6.x'
+gem 'rails-i18n'
 
 # Add arbitrary ordering to ActiveRecord queries.
 gem 'order_as_specified'
@@ -132,7 +132,7 @@ gem 'fnv'
 gem 'config'
 
 # Exception Notifier Plugin for Rails
-gem 'exception_notification'
+# gem 'exception_notificatio'
 
 # Makes http fun again!
 gem 'httparty'
@@ -152,8 +152,8 @@ gem 'mina-logs', '~> 1.1.0', require: false
 gem 'mina-multistage', '~> 1.0.3', require: false
 
 group :development, :test do
-  # Call 'byebug' anywhere in the code to stop execution and get a debugger console
-  gem 'byebug', platforms: %i[mri mingw x64_mingw]
+  # Start debugger with binding.b [https://github.com/ruby/debug]
+  gem 'debug', '>= 1.0.0', platforms: %i[mri mingw x64_mingw]
 end
 
 group :development do

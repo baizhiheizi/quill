@@ -20,7 +20,7 @@
 #  index_actions_on_user_type_and_user_id_and_action_type      (user_type,user_id,action_type)
 #  uk_action_target_user                                       (action_type,target_type,target_id,user_type,user_id) UNIQUE
 #
-class Action < ApplicationRecord
+class Action < ActiveRecord::Base
   belongs_to :target, polymorphic: true, optional: true
   belongs_to :user, polymorphic: true, optional: true
 
