@@ -47,7 +47,6 @@
 yarn-debug.log*
 .yarn-integrity
 
-config/settings.yml
 config/settings.local.yml
 
 /app/assets/builds/*
