@@ -32,6 +32,9 @@ export default class extends Controller {
     }
     if (this.hasImagesTarget) {
       this.directUploadUrl = this.imagesTarget.dataset.directUploadUrl;
+      this.directUploadToken = this.imagesTarget.dataset.directUploadToken;
+      this.directUploadAttachmentName =
+        this.imagesTarget.dataset.directUploadAttachmentName;
     }
   }
 
@@ -66,7 +69,12 @@ export default class extends Controller {
           return;
         }
 
-        const upload = new DirectUpload(file, this.directUploadUrl);
+        const upload = new DirectUpload(
+          file,
+          this.directUploadUrl,
+          this.directUploadToken,
+          this.directUploadAttachmentName,
+        );
         this.showLoading();
         upload.create((error, blob) => {
           this.hideLoading();

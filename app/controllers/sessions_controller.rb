@@ -11,7 +11,7 @@ class SessionsController < ApplicationController
       client_id: PrsdiggBot.api.client_id,
       scope: UserAuthorization::MIXIN_AUTHORIZATION_SCOPE,
       return_to: params[:return_to]
-    )
+    ), allow_other_host: true
   end
 
   def create
