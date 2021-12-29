@@ -7,7 +7,8 @@ class EncryptionService
   #   )
   # )
   KEY = ActiveSupport::KeyGenerator.new(
-    Rails.application.secret_key_base
+    Rails.application.secret_key_base,
+    hash_digest_class: OpenSSL::Digest::SHA1
   ).generate_key(
     Base64.decode64(Rails.application.credentials[:encryption_salt]),
     ActiveSupport::MessageEncryptor.key_len

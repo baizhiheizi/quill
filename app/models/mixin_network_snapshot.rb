@@ -30,7 +30,7 @@ class MixinNetworkSnapshot < ApplicationRecord
   POLLING_LIMIT = 500
 
   belongs_to :wallet, class_name: 'MixinNetworkUser', foreign_key: :user_id, primary_key: :uuid, inverse_of: :snapshots, optional: true
-  belongs_to :opponent, class_name: 'User', primary_key: :mixin_uuid, inverse_of: :snapshots, optional: true
+  belongs_to :opponent, class_name: 'User', primary_key: :mixin_uuid, optional: true
   belongs_to :opponent_wallet, class_name: 'MixinNetworkUser', primary_key: :uuid, foreign_key: :opponent_id, inverse_of: false, optional: true
   belongs_to :currency, primary_key: :asset_id, foreign_key: :asset_id, inverse_of: :orders, optional: true
 
