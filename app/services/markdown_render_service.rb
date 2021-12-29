@@ -36,7 +36,8 @@ class MarkdownRenderService
   def add_attributes_to_images
     doc = Nokogiri::HTML.fragment(@html)
     doc.css('img').each do |img|
-      img['src'] = img.attr('src').gsub(/\.\S+\z/, '')
+      src = img.attr('src')
+      img['src'] = src.gsub(/\.\S+\z/, '') if src.match?(%r{/rails/active_storage/blobs/\S+})
       img['class'] = 'max-w-full mx-auto'
       img['loading'] = 'lazy'
     end
