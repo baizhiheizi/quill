@@ -21,7 +21,9 @@
 #  uk_action_target_user                                       (action_type,target_type,target_id,user_type,user_id) UNIQUE
 #
 
+# rubocop:disable Rails/ApplicationRecord
 class Action < ActiveRecord::Base
+  # rubocop:enable Rails/ApplicationRecord
   belongs_to :target, polymorphic: true, optional: true
   belongs_to :user, polymorphic: true, optional: true
 

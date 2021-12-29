@@ -56,6 +56,9 @@ gem 'mixin_bot'
 # Wraps the Aliyun OSS as an Active Storage service.
 gem 'activestorage-aliyun'
 
+# S3 active storage service
+gem 'aws-sdk-s3', require: false
+
 # Simple, efficient background processing for Ruby http://sidekiq.org
 gem 'sidekiq', '~> 6.0'
 
