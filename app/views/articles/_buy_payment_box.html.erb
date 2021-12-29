@@ -31,7 +31,7 @@
         href="<%= payment_url %>"
         class="flex justify-center items-center space-x-2 w-full my-4 text-center no-underline cursor-pointer py-2 block bg-amber-600 hover:bg-amber-700 active:bg-blue-500 text-white rounded">
         <%= image_tag 'fennec-logo.png', class: 'h-6 w-auto' %>
-        <%= t('pay_in_fennec') %>
+        <span><%= t('pay_in_fennec') %></span>
       </a>
     <% else %>
       <a data-article-payment-target="payLink"
