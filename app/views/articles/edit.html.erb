@@ -25,7 +25,9 @@
   </div>
   <div class="flex-1 overflow-y-scroll bg-white dark:bg-zinc-900 border-t border-b sm:rounded-lg sm:scrollbar-hide sm:border dark:border-zinc-800 relative pb-4 max-w-full">
     <%= render partial: "articles/form", locals: { article: @article } %>
-    <%= render partial: "articles/preview", locals: { content: @article.content } %>
+    <div data-article-form-target="preview" id="article-preview" class="hidden">
+      <%= render partial: "articles/preview", locals: { content: @article.content } %>
+    </div>
   </div>
   <% if @article.persisted? %>
     <div class="px-4 sm:px-0 pt-2">

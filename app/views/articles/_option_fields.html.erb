@@ -16,10 +16,10 @@
     <%= form.label :intro, class: "col-span-3 sm:col-span-1 block text-sm font-medium opacity-70" %>
     <div class="col-span-3 sm:col-span-2">
       <div class="rounded-md shadow-sm">
-        <%= form.text_area :intro, value: article.intro.presence || article.default_intro, rows: 3, class: "focus:ring-blue-500 focus:border-blue-500 flex-1 block w-full rounded sm:text-sm border-zinc-300 dark:bg-zinc-900", placeholder: "Describe your item in short." %>
+        <%= form.text_area :intro, value: article.intro.presence || article.default_intro, rows: 3, class: "focus:ring-blue-500 focus:border-blue-500 flex-1 block w-full rounded sm:text-sm border-zinc-300 dark:bg-zinc-900" %>
       </div>
       <% if article.errors.where(:intro).present? %>
-        <div class="py-2 text-red-700 font-sm"><%= item.errors.where(:intro).map(&:full_message).join(';') %></div>
+        <div class="py-2 text-red-700 font-sm"><%= article.errors.where(:intro).map(&:full_message).join(';') %></div>
       <% end %>
     </div>
   </div>
