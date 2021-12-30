@@ -1,7 +1,11 @@
 <div class="border-b dark:border-zinc-800 py-2 px-4">
   <div class="grid grid-cols-3 md:grid-cols-6 gap-2">
     <div class="flex items-center opacity-70 col-span-2 md:col-span-1">
-      <%= link_to payment.article.title, article_path(payment.article.uuid), class: "truncate", data: { turbo_frame: "_top" } %>
+      <% if payment.article.present? %>
+        <%= link_to payment.article.title, article_path(payment.article.uuid), class: "truncate", data: { turbo_frame: "_top" } %>
+      <% else %>
+        <span>-</span>
+      <% end %>
     </div>
     <div class="flex items-center space-x-2 col-span-1 justify-center">
       <%= t("activerecord.attributes.payment.state.#{payment.state}") %>
