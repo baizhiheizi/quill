@@ -1,4 +1,6 @@
-<div class="prose dark:prose-invert prose-img:rounded-lg prose-img:shadow-md xl:prose-lg mx-auto" id="article_<%= article.uuid %>_content">
+<div class="prose dark:prose-invert prose-img:rounded-lg prose-img:shadow-md prose-pre:bg-zinc-100 prose-pre:text-black dark:prose-pre:bg-zinc-800 dark:prose-pre:text-zinc-100 xl:prose-lg mx-auto" 
+     id="article_<%= article.uuid %>_content"
+     data-controller="hljs">
   <% if article.authorized? user %> 
     <%= render partial: "articles/full_content", locals: { article: article } %>
   <% else %>

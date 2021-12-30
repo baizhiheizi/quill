@@ -5,7 +5,7 @@
   <span><%= t('times_reward') %></span>
 </div>
 
-<div class="mx-auto w-72 grid grid-cols-8 gap-0.5 mb-6">
+<div class="mx-auto w-72 mb-6 <%= article.readers.count > 8 ? 'grid grid-cols-8 gap-0.5' : 'flex items-center justify-center space-x-2' %>">
   <% article.readers.sample(24).each do |reader| %>
     <img src="<%= reader.avatar %>" class="w-8 h-8 rounded-full" loading="lazy" />
   <% end %>

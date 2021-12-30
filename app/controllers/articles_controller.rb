@@ -58,7 +58,6 @@ class ArticlesController < ApplicationController
   end
 
   def preview
-    render json: { html: MarkdownRenderService.new.call(params[:content]) }
   end
 
   private

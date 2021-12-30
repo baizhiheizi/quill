@@ -1,4 +1,4 @@
-<div data-article-form-target="contentFields">
+<div data-article-form-target="contentFields" class="bg-white dark:bg-zinc-900">
   <%= form.file_field :images, 
     multiple: true, 
     direct_upload: true, 
@@ -7,7 +7,7 @@
     },
     class: "hidden" %>
   <%= form.text_area :content, 
-    class: "w-full p-0 h-full border-t-0 border-l-0 border-r-0 border-b-0 focus:ring-0 dark:bg-zinc-900", 
+    class: "w-full p-0 h-full border-t-0 border-l-0 border-r-0 border-b-0 focus:ring-0", 
     placeholder: t("articles.content_place_holder"), 
     data: { 
       article_form_target: "content"
