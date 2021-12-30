@@ -1,0 +1,72 @@
+host:
+mixin_oauth_path: 'https://mixin-www.zeromesh.net/oauth/authorize'
+
+# lauch time
+launch_time:
+
+# ws blaze
+blaze_enable: true
+
+# page
+app_name: 顶瓜瓜
+twitter_account: prsdigg
+page_title: 顶瓜瓜 PRSDigg | 重新发现读者的价值，打造作者与读者共赢的写作平台
+page_keywords: PRSDigg, 顶瓜瓜, 写作平台, 区块链, 共赢, 读者, 作者, 早期读者奖励, PRESSOne, Mixin Network, Mixin Messenger
+page_description: 独创股权式的早期读者奖励机制，重新发现读者的价值，打造作者与读者共赢的写作平台
+ga_id: UA-125806918-1
+messenger: mixin
+
+# app/packs/images/*
+logo_file: logo.png
+favicon_file: favicon.png
+
+# locale
+time_zone: Asia/Shanghai
+default_locale: zh-CN
+available_locales:
+  - zh-CN
+  - en
+
+# assets
+supported_assets:
+  # BTC
+  - c6d0c728-2624-429b-8e0d-d9d19b6592fa
+swapable: true
+swapable_assets:
+  # BTC
+  - c6d0c728-2624-429b-8e0d-d9d19b6592fa
+  # ETH
+  - 43d61dcd-e413-450d-80b8-101d5e903357
+  # EOS
+  - 6cfe566e-4aad-470b-8c9a-2fd35b49c68d
+  # MOB
+  - eea900a8-b327-488c-8d8d-1428702fe240
+  # BOX
+  - f5ef6b5d-cc5a-3d90-b2c0-a2fd386e7a3c
+  # USDT
+  - 4d8c508b-91c5-375b-92b0-ee702ed2dac5
+  # pUSD
+  - 31d2ea9c-95eb-3355-b65b-ba096853bc18
+  # USDC
+  - 9b180ab6-6abe-3dc0-a13f-04169eb34bfa
+  # XIN
+  - c94ac88f-4671-3976-b60a-09064f1811e8
+
+# whitelist
+whitelist:
+  enable: false
+  phone_country_code: 
+  mixin_id:
+
+# 4swap
+foxswap:
+  authorization:
+  app_id: a753e0eb-3010-4c4a-a7b2-a7bda4063f62
+  mtg_members:
+    - a753e0eb-3010-4c4a-a7b2-a7bda4063f62
+    - 099627f8-4031-42e3-a846-006ee598c56e
+    - aefbfd62-727d-4424-89db-ae41f75d2e04
+    - d68ca71f-0e2c-458a-bb9c-1d6c2eed2497
+    - e4bc0740-f8fe-418c-ae1b-32d9926f5863
+  mtg_threshold: 3
+  mtg_public_Key: dt351xp3KjNlVCMqBYUeUSF45upCEiReSZAqcjcP/Lc=
