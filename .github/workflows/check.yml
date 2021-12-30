@@ -1,11 +1,6 @@
 name: Check
 
 on:
-  push:
-    branches-ignore:
-      - 'main'
-      - 'build-main'
-      - 'build-ja'
   pull_request:
     branches:
       - 'main'
