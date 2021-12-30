@@ -33,7 +33,7 @@ export default class extends Controller {
   }
 
   ok(event) {
-    const identifier = event.detail?.identifier;
+    const identifier = event.detail.identifier;
     if (identifier === this.identifierValue) {
       if (this.formTarget.requestSubmit) {
         this.formTarget.requestSubmit();

@@ -5,7 +5,7 @@ export default class extends Controller {
   static targets = ['loginButton'];
 
   connect() {
-    this.ext = window.__MIXIN__?.mixin_ext;
+    this.ext = window.__MIXIN__ && window.__MIXIN__.mixin_ext;
   }
 
   async initFennec() {

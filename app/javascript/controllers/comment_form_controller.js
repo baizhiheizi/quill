@@ -19,6 +19,8 @@ ${original_content || ''}`;
         this.contentTarget,
         'textarea-autogrow',
       );
-    textareaAutogrowController?.autogrow();
+    if (textareaAutogrowController) {
+      textareaAutogrowController.autogrow();
+    }
   }
 }

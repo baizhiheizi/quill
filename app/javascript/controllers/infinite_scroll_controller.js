@@ -30,7 +30,7 @@ export default class extends Controller {
   loadMore() {
     const next = this.paginationTarget.querySelector('a');
 
-    if (next?.href) {
+    if (next && next.href) {
       get(next.href, {
         contentType: 'application/json',
         responseKind: 'turbo-stream',
