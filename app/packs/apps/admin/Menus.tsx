@@ -68,18 +68,6 @@ export default function Menus() {
           </Link>
         </Menu.Item>
       </Menu.SubMenu>
-      <Menu.SubMenu key='pressone' icon={<LinkOutlined />} title='PRESSOne'>
-        <Menu.Item key='prs_accounts'>
-          <Link to='/prs_accounts'>
-            <span>Accounts</span>
-          </Link>
-        </Menu.Item>
-        <Menu.Item key='prs_transactions'>
-          <Link to='/prs_transactions'>
-            <span>Transactions</span>
-          </Link>
-        </Menu.Item>
-      </Menu.SubMenu>
       <Menu.Item key='comments'>
         <Link to='/comments'>
           <CommentOutlined />
