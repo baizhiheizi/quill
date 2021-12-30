@@ -12,7 +12,6 @@ class AdminConstraint
 end
 
 Rails.application.routes.draw do
-  mount GraphiQL::Rails::Engine, at: '/graphiql', graphql_path: '/graphql' if Rails.env.development?
   post '/graphql', to: 'graphql#execute'
 
   get 'login', to: 'sessions#new', as: :login
@@ -21,6 +20,9 @@ Rails.application.routes.draw do
 
   get 'landing', to: 'landing#index', as: :landing
   get 'search', to: 'search#index', as: :search
+
+  # health check for render.com
+  get 'healthz', to: 'healthz#index', as: :healthz
 
   # error pages
   get '/404', to: 'errors#not_found'

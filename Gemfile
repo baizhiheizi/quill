@@ -18,7 +18,10 @@ gem 'pghero'
 gem 'puma'
 
 # Use SCSS for stylesheets
-gem 'sass-rails', '>= 6'
+# gem 'sass-rails', '>= 6'
+
+# Deliver assets for Rails
+gem 'propshaft'
 
 # Transpile app-like JavaScript. Read more: https://github.com/rails/webpacker
 gem 'webpacker', '~> 6.0.0.rc.6'
@@ -81,7 +84,7 @@ gem 'react_on_rails', '~> 12.0'
 gem 'graphql', '1.12.18'
 
 # Mount the GraphiQL query editor in a Rails app
-gem 'graphiql-rails'
+# gem 'graphiql-rails'
 
 # Powerful tool for avoiding N+1 DB or HTTP queries
 gem 'batch-loader'
