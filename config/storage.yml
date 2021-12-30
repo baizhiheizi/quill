@@ -2,7 +2,7 @@ test:
   service: Disk
   root: <%= Rails.root.join("tmp/storage") %>
 
-local:
+linode:
   service: S3
   access_key_id: <%= Rails.application.credentials.dig(:linode, :access_key_id) %>
   secret_access_key: <%= Rails.application.credentials.dig(:linode, :secret_access_key) %>
@@ -11,9 +11,9 @@ local:
   region: default
 
 production:
-  service: S3
-  access_key_id: <%= Rails.application.credentials.dig(:linode, :access_key_id) %>
-  secret_access_key: <%= Rails.application.credentials.dig(:linode, :secret_access_key) %>
-  bucket: <%= Rails.application.credentials.dig(:linode, :bucket) %>
-  endpoint: <%= Rails.application.credentials.dig(:linode, :endpoint) %>
-  region: default
+  service: Aliyun
+  access_key_id: <%= Rails.application.credentials.dig(:aliyun, :access_key_id) %>
+  access_key_secret: <%= Rails.application.credentials.dig(:aliyun, :access_key_secret) %>
+  bucket: <%= Rails.application.credentials.dig(:aliyun, :bucket) %>
+  endpoint: <%= Rails.application.credentials.dig(:aliyun, :endpoint) %>
+  public: true
