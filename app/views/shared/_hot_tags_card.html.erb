@@ -2,7 +2,7 @@
   <div class="flex mb-4">
     <span class="font-bold"><%= t('hot_tags') %></span>
   </div>
-  <% Tag.hot.limit(10).each do |tag| %>
+  <% Tag.hot.limit(5).each do |tag| %>
     <div class="flex items-center justify-between mb-2">
       <%= link_to articles_path(tag: tag.name, order_by: @order_by || 'lately'), class: "flex items-center space-x-2" do %>
         <span class="px-2 py-1 bg-zinc-100 dark:bg-zinc-800 font-bold truncate">#<%= tag.name %></span>
