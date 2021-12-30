@@ -1,9 +1,0 @@
-mutation ToggleSubscribeTagAction(
-  $input: ToggleSubscribeTagActionMutationInput!
-) {
-  toggleSubscribeTagAction(input: $input) {
-    id
-    subscribed
-    subscribersCount
-  }
-}

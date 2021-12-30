@@ -1,9 +1,0 @@
-mutation DownvoteComment($input: DownvoteCommentMutationInput!) {
-  downvoteComment(input: $input) {
-    id
-    upvoted
-    downvoted
-    upvotesCount
-    downvotesCount
-  }
-}

@@ -1,5 +1,0 @@
-mutation CreateArticle {
-  createArticle(input: {}) {
-    uuid
-  }
-}

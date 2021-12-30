@@ -1,3 +1,0 @@
-mutation ClearNotifications($input: ClearNotificationsMutationInput!) {
-  clearNotifications(input: $input)
-}
