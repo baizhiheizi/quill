@@ -2,7 +2,7 @@
 
 class Dashboard::ArticlesController < Dashboard::BaseController
   def index
-    @tab = params[:tab] || 'published'
+    @tab = params[:tab] || 'bought'
 
     articles =
       case @tab
@@ -12,8 +12,10 @@ class Dashboard::ArticlesController < Dashboard::BaseController
         current_user.articles.hidden
       when 'blocked'
         current_user.articles.blocked
-      else
+      when 'published'
         current_user.articles.published
+      when 'bought'
+        current_user.bought_articles
       end
 
     @pagy, @articles = pagy articles.order(updated_at: :desc)

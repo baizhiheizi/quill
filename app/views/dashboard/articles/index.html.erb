@@ -3,6 +3,13 @@
   data-tabs-active-tab-value="<%= @tab %>"
   data-tabs-active-class-value="border-b-2">
   <div class="w-full flex overflow-auto flex-nowrap scrollbar-hide items-center flex border-b dark:border-zinc-800 px-4 mb-4">
+    <%= link_to t('bought'), 
+      dashboard_articles_path(tab: :bought),
+      class: "cursor-pointer py-1 px-4 border-blue-500 textrgray-600",
+      data: {
+        tabs_target: "tab",
+        tabs_tabname_param: "bought" 
+      } %>
     <%= link_to t('published'), 
       dashboard_articles_path(tab: :published),
       class: "cursor-pointer py-1 px-4 border-blue-500 textrgray-600",
@@ -42,6 +49,8 @@
       </div>
     <% else %>
       <% case @tab %>
+      <% when 'bought' %>
+        <%= render partial: "dashboard/articles/bought_article", collection: @articles, as: :article %>
       <% when 'published' %>
         <%= render partial: "dashboard/articles/published_article", collection: @articles, as: :article %>
       <% when 'drafted' %>
