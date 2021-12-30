@@ -282,11 +282,11 @@ class User < ApplicationRecord
   end
 
   def fennec?
-    mixin_id == '0'
+    mixin_id == '0' || mixin_id.match?(/^7000\d{6}/)
   end
 
   def messenger?
-    mixin_id.match? /^[^0]\d+/
+    !fennec?
   end
 
   private
