@@ -1,5 +1,7 @@
 <%= turbo_stream.append "#{dom_id current_user}_articles_list" do %>
   <% case @tab %>
+  <% when 'bought' %>
+    <%= render partial: "dashboard/articles/bought_article", collection: @articles, as: :article %>
   <% when 'published' %>
     <%= render partial: "dashboard/articles/published_article", collection: @articles, as: :article %>
   <% when 'drafted' %>
