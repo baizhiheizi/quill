@@ -78,7 +78,7 @@ gem 'bootsnap', '>= 1.4.4', require: false
 gem 'react_on_rails', '~> 12.0'
 
 # Ruby implementation of GraphQL http://graphql-ruby.org
-gem 'graphql', '1.12.18'
+gem 'graphql', '1.13.2'
 
 # Mount the GraphiQL query editor in a Rails app
 gem 'graphiql-rails'
