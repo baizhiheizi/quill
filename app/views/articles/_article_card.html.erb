@@ -34,7 +34,7 @@
   <% end %>
   <div class="flex overflow-x-scroll scrollbar-hide items-center space-x-4 mb-2">
     <% article.tag_names.each do |tag_name| %>
-      <%= link_to articles_path(tag: tag_name), class: "px-2 py-1 text-sm bg-zinc-200 dark:bg-zinc-700 font-bold" do %>
+      <%= link_to articles_path(tag: tag_name), class: "px-2 py-1 text-sm bg-zinc-200 dark:bg-zinc-700 font-bold", style: "word-break:keep-all;" do %>
         <%= tag_name %>
       <% end %>
     <% end %>
