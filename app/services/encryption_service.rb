@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
 class EncryptionService
-  encryption_salt = Base64.encode64(
-    SecureRandom.random_bytes(
-      ActiveSupport::MessageEncryptor.key_len
-    )
-  )
+  # encryption_salt = Base64.encode64(
+  #   SecureRandom.random_bytes(
+  #     ActiveSupport::MessageEncryptor.key_len
+  #   )
+  # )
   KEY = ActiveSupport::KeyGenerator.new(
     Rails.application.secret_key_base,
     hash_digest_class: OpenSSL::Digest::SHA1
