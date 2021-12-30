@@ -14,7 +14,7 @@
   data-controller="tabs"
   data-tabs-active-tab-value="<%= @tab %>"
   data-tabs-active-class-value="border-b-2">
-  <div class="w-full flex space-x-2 sm:space-x-4 py-2 sm:justify-center overflow-auto flex-nowrap scrollbar-hide items-center flex border-b px-2 sm:px-4 mb-4 bg-white sm:rounded-lg">
+  <div class="w-full flex space-x-2 sm:space-x-4 py-2 sm:justify-center overflow-auto flex-nowrap scrollbar-hide items-center flex border-b px-2 sm:px-4 mb-4 bg-white sm:rounded-lg dark:bg-zinc-900">
     <%= link_to t('published'), 
       user_path(@user, tab: :published),
       class: "cursor-pointer py-1 border-blue-500 textrgray-600",
