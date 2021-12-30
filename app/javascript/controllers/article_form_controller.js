@@ -1,5 +1,6 @@
 import { Controller } from '@hotwired/stimulus';
 import { DirectUpload } from '@rails/activestorage';
+import { post } from '@rails/request.js';
 import EasyMDE from 'easymde';
 
 export default class extends Controller {
@@ -173,26 +174,16 @@ export default class extends Controller {
 
   preview() {
     const content = this.editor.value();
-    fetch('/articles/preview', {
+    post('/articles/preview', {
       body: JSON.stringify({ content }),
-      credentials: 'same-origin',
-      headers: {
-        Accept: 'application/json',
-        'X-CSRF-Token': (
-          document.querySelector("meta[name='csrf-token']") || {}
-        ).content,
-        'Content-Type': 'application/json',
-      },
-      method: 'POST',
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        this.previewTarget.innerHTML = data.html;
-        this.activePreview();
-        this.hideContentForm();
-        this.hideSettingsForm();
-        this.activeTabValue = 'preview';
-      });
+      contentType: 'application/json',
+      responseKind: 'turbo-stream',
+    }).then(() => {
+      this.activePreview();
+      this.hideContentForm();
+      this.hideSettingsForm();
+      this.activeTabValue = 'preview';
+    });
   }
 
   options() {
