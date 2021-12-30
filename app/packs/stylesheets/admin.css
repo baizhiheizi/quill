@@ -5,3 +5,7 @@
 .anticon svg {
   display: block;
 }
+
+.ant-btn-primary {
+  background: #1890ff;
+}

@@ -1,9 +1,0 @@
-mutation ToggleCommentingSubscribeArticleAction(
-  $input: ToggleCommentingSubscribeArticleActionMutationInput!
-) {
-  toggleCommentingSubscribeArticleAction(input: $input) {
-    id
-    uuid
-    commentingSubscribed
-  }
-}

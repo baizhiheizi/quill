@@ -1,9 +1,0 @@
-mutation CreateComment($input: CreateCommentMutationInput!) {
-  createComment(input: $input) {
-    error
-    commentable {
-      id
-      commentingSubscribed
-    }
-  }
-}
