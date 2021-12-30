@@ -4,7 +4,7 @@
     data-modal-initial-state="show">
     <div data-modal-target="modal" class="fixed inset-0 z-50 flex items-start justify-center w-full overflow-y-auto">
       <button data-action="modal#hide" class="fixed top-0 left-0 w-screen h-full bg-black opacity-30 dark:bg-zinc-100"></button>
-      <div class='relative min-w-max max-w-3xl max-h-screen mt-48 bg-white rounded-lg shadow-lg'>
+      <div class='relative min-w-max max-w-3xl max-h-screen mt-48 bg-white dark:bg-zinc-900 dark:border-zinc-800 rounded-lg shadow-lg'>
         <%= render "articles/share_menu", article: @article %>
       </div>
     </div>
