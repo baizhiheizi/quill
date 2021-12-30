@@ -140,7 +140,7 @@ class ArticleSnapshot < ApplicationRecord
     assign_attributes(
       raw: article.as_json,
       file_content: generate_file_content,
-      file_hash: Prs.api.hash(generate_file_content)
+      file_hash: SHA3::Digest::SHA256.hexdigest(generate_file_content)
     )
   end
 
