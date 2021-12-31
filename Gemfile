@@ -138,7 +138,7 @@ gem 'fnv'
 gem 'config'
 
 # Exception Notifier Plugin for Rails
-# gem 'exception_notificatio'
+# gem 'exception_notification'
 
 # Makes http fun again!
 gem 'httparty'

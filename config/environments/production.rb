@@ -104,6 +104,7 @@ Rails.application.configure do
   config.active_record.dump_schema_after_migration = false
 
   config.middleware.use ExceptionNotification::Rack, mixin_bot: {
-    recipient_id: Rails.application.credentials.dig(:admin, :uuid)
+    recipient_id: Rails.application.credentials.dig(:admin, :uuid),
+    bot: 'PrsdiggBot'
   }
 end

@@ -74,6 +74,7 @@ Rails.application.configure do
   # config.action_cable.disable_request_forgery_protection = true
 
   config.middleware.use ExceptionNotification::Rack, mixin_bot: {
-    recipient_id: Rails.application.credentials.dig(:admin, :uuid)
+    recipient_id: Rails.application.credentials.dig(:admin, :uuid),
+    bot: 'PrsdiggBot'
   }
 end
