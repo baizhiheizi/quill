@@ -22,7 +22,7 @@
         <%= @article.title %>
       </div>
       <% if @article.tags.present? %>
-        <div class="flex items-center space-x-1 flex-wrap mb-4">
+        <div class="flex items-center flex-wrap mb-4">
           <% @article.tags.each do |tag| %>
             <%= link_to articles_path(tag: tag.name), class: "px-2 py-1 text-sm hover:bg-zinc-200 dark:hover:bg-zinc-700 font-bold" do %>
               <span style="color:<%= tag.color %>">#</span><%= tag.name %>

@@ -15,7 +15,7 @@ export default class extends Controller {
       },
       items: this.itemsValue,
       load: (query, callback) => this.loadTagOptions(query, callback),
-      maxItems: 4,
+      maxItems: 10,
     });
   }
 
