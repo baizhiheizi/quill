@@ -78,7 +78,7 @@ class ArticlesController < ApplicationController
         _destroy
       ] }
     ]
-    permitted.push(:price) unless @article.free? || (!@article.free? && params[:article]&.[](:price).to_d.zero?)
+    permitted.push(:price) unless @article&.free? || (!@article&.free? && params[:article]&.[](:price).to_d.zero?)
     params
       .require(:article)
       .permit(permitted)
