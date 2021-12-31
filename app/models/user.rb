@@ -78,13 +78,7 @@ class User < ApplicationRecord
 
   enum locale: I18n.available_locales
 
-  after_commit on: :create do
-    create_wallet!
-    create_notification_setting!
-    # create_prs_account!
-    update_statistics_cache
-    create_bot_contact_conversation_async
-  end
+  after_create :prepare_async
 
   default_scope { includes(:mixin_authorization) }
   scope :active, lambda {
@@ -261,8 +255,15 @@ class User < ApplicationRecord
     end
   end
 
-  def create_bot_contact_conversation_async
-    UserCreateBotContactConversationWorker.perform_async id
+  def prepare
+    create_wallet! if wallet.blank?
+    create_notification_setting! if notification_setting.blank?
+    update_statistics_cache
+    create_bot_contact_conversation
+  end
+
+  def prepare_async
+    UserPrepareWorker.perform_async id
   end
 
   def create_bot_contact_conversation
