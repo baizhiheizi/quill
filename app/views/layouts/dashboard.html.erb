@@ -74,6 +74,5 @@
       </div>
     </div>
     <%= turbo_stream_from "user_#{current_user.mixin_uuid}" if current_user.present? %>
-    <div data-controller="darkmode" class="hidden"></div>
   </body>
 </html>

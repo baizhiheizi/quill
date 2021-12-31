@@ -56,7 +56,7 @@
         <% end %>
         <%= yield %>
       </div>
-      <div style="height:env(safe-area-inset-bottom)" />
+      <div style="height:env(safe-area-inset-bottom)" class="dark:bg-zinc-800" />
     </main>
     <div class="absolute bottom-0" id="modal-slot"></div>
     <div class="fixed top-8 h-0 w-full px-4 z-50" id="notifications"></div>
@@ -66,6 +66,5 @@
       </div>
     </div>
     <%= turbo_stream_from "user_#{current_user.mixin_uuid}" if current_user.present? %>
-    <div data-controller="darkmode" class="hidden"></div>
   </body>
 </html>

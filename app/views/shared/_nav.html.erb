@@ -26,6 +26,15 @@
         </div>
       </div>
       <div class="flex items-center ml-4 md:ml-6">
+        <div class="" data-controller="darkmode">
+          <a class="hidden block mr-3 cursor-pointer" data-darkmode-target="lightButton" data-action="darkmode#toggle">
+            <%= render 'shared/icons/sun', html_class: "text-blue-500 w-6 h-6" %>
+          </a>
+          <a class="hidden block mr-3 cursor-pointer" data-darkmode-target="darkButton" data-action="darkmode#toggle">
+            <%= render 'shared/icons/moon', html_class: "text-zinc-100 w-6 h-6" %>
+          </a>
+        </div>
+
         <% if current_user.present? %>
           <%= link_to dashboard_notifications_path, class: "p-1 relative rounded-full hover:text-blue-500 hover:bg-blue-50 dark:hover:bg-gray-800" do %>
             <span class="sr-only">View notifications</span>
@@ -64,6 +73,8 @@
                 aria-labelledby="user-menu-button" 
                 tabindex="-1">
                 <%= link_to t("dashboard"), dashboard_root_path, class: "block px-4 py-2 text-sm opacity-70 hover:bg-zinc-100 dark:hover:bg-zinc-800", role: "menuitem", tabindex: "-1" %>
+                <%= link_to t("fair"), page_path('fair'), class: "block px-4 py-2 text-sm opacity-70 hover:bg-zinc-100 dark:hover:bg-zinc-800" %>
+                <%= link_to t("rules"), page_path('rules'), class: "block px-4 py-2 text-sm opacity-70 hover:bg-zinc-100 dark:hover:bg-zinc-800" %>
                 <%= link_to t("logout"), logout_path, class: "block px-4 py-2 text-sm opacity-70 hover:bg-zinc-100 dark:hover:bg-zinc-800", role: "menuitem", tabindex: "-1" %>
               </div>
             </div>
@@ -133,7 +144,15 @@
             <div class="ml-3">
               <div class="text-base font-medium leading-none text-white"><%= current_user.name %></div>
             </div>
-            <%= link_to dashboard_notifications_path, class: "relative flex-shrink-0 p-1 ml-auto rounded-full focus:bg-blue-50 focus:text-blue-500" do %>
+            <div class="ml-auto" data-controller="darkmode">
+              <a class="hidden block mr-3 cursor-pointer" data-darkmode-target="lightButton" data-action="darkmode#toggle">
+                <%= render 'shared/icons/sun', html_class: "text-blue-500 w-6 h-6" %>
+              </a>
+              <a class="hidden block mr-3 cursor-pointer" data-darkmode-target="darkButton" data-action="darkmode#toggle">
+                <%= render 'shared/icons/moon', html_class: "text-zinc-100 w-6 h-6" %>
+              </a>
+            </div>
+            <%= link_to dashboard_notifications_path, class: "relative flex-shrink-0 p-1 ml-3 rounded-full focus:bg-blue-50 focus:text-blue-500" do %>
               <span class="sr-only">View notifications</span>
               <!-- Heroicon name: outline/bell -->
               <%= render 'shared/icons/bell' %>
