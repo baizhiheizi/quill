@@ -202,10 +202,6 @@ class Order < ApplicationRecord
     item.update_revenue
   end
 
-  def ensure_total_sufficient
-    errors.add(:total, 'insufficient') if buy_article? && total.floor(8) < item.price.floor(8)
-  end
-
   def notify_subscribers
     if reward_article?
       ArticleRewardedNotification.with(order: self).deliver(buyer.subscribe_by_users)
@@ -274,5 +270,9 @@ class Order < ApplicationRecord
       value_btc: currency.price_btc.to_f * amount,
       value_usd: currency.price_usd.to_f * amount
     )
+  end
+
+  def ensure_total_sufficient
+    errors.add(:total, 'insufficient') if buy_article? && total.floor(8) < item.price.floor(8)
   end
 end
