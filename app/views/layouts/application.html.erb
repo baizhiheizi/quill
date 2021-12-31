@@ -44,6 +44,7 @@
     <%= favicon_link_tag "#{Settings.favicon_file || 'favicon.png'}" %>
     <%= javascript_include_tag "application", "data-turbo-track": "reload", defer: true %>
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+    <%= stylesheet_link_tag "photoswipe" %>
   </head>
 
   <body class="min-h-screen flex flex-col dark:text-zinc-50">

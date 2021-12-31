@@ -56,6 +56,7 @@
     "mark.js": "^8.11.1",
     "mermaid": "8.13.8",
     "mini-css-extract-plugin": "^2.4.5",
+    "mixin-messenger-utils": "^0.1.5",
     "node-polyfill-webpack-plugin": "^1.1.4",
     "photoswipe": "https://github.com/dimsemenov/Photoswipe#v5-beta",
     "postcss": "^8.4.5",

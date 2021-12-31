@@ -49,6 +49,9 @@ application.register('nested-form', NestedFormController);
 import NotificationController from './notification_controller.js';
 application.register('notification', NotificationController);
 
+import PhotoswipeController from './photoswipe_controller.js';
+application.register('photoswipe', PhotoswipeController);
+
 import QrcodeController from './qrcode_controller.js';
 application.register('qrcode', QrcodeController);
 

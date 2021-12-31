@@ -2,3 +2,4 @@
 //= link_tree ../builds
 //= link easymde
 //= link tom-select
+//= link photoswipe

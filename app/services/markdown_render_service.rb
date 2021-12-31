@@ -40,6 +40,7 @@ class MarkdownRenderService
       img['src'] = src.gsub(/\.\S+\z/, '') if src.match?(%r{/rails/active_storage/blobs/\S+})
       img['class'] = 'max-w-full mx-auto'
       img['loading'] = 'lazy'
+      img.wrap("<a class='photoswipe' data-pswp-src='#{img['src']}' href='#{img['src']}' target='_blank'>")
     end
     @html = doc.to_html
 
