@@ -63,24 +63,25 @@ class ArticlesController < ApplicationController
   private
 
   def article_params
+    permitted = [
+      :title,
+      :content,
+      :asset_id,
+      :intro,
+      :author_revenue_ratio,
+      :references_revenue_ratio,
+      { article_references_attributes: %i[
+        id
+        reference_type
+        reference_id
+        revenue_ratio
+        _destroy
+      ] }
+    ]
+    permitted.push(:price) unless @article.free? || (!@article.free? && params[:article]&.[](:price).to_d.zero?)
     params
       .require(:article)
-      .permit(
-        :title,
-        :content,
-        :price,
-        :asset_id,
-        :intro,
-        :author_revenue_ratio,
-        :references_revenue_ratio,
-        article_references_attributes: %i[
-          id
-          reference_type
-          reference_id
-          revenue_ratio
-          _destroy
-        ]
-      )
+      .permit(permitted)
   end
 
   def load_article
