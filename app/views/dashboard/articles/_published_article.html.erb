@@ -27,7 +27,7 @@
   </div>
   <div class="text-blue-500 flex items-center space-x-4 sm:justify-end">
     <%= link_to t('detail'), dashboard_article_path(article.uuid) %>
-    <%= link_to t('edit'), edit_article_path(article.uuid) %>
+    <%= link_to t('edit'), edit_article_path(article.uuid), data: { turbo_action: :replace } %>
     <%= button_to t('hide'), 
       dashboard_published_article_path(article.uuid),  
       method: :delete,

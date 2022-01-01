@@ -43,7 +43,7 @@ class ArticlesController < ApplicationController
   end
 
   def create
-    article = current_user.articles.new article_params
+    article = current_user.articles.new create_article_params
 
     if article.save
       redirect_to edit_article_path(article.uuid)
@@ -54,7 +54,7 @@ class ArticlesController < ApplicationController
 
   def update
     CreateTag.call(@article, params[:article][:tag_names] || [])
-    @article.update article_params
+    @article.update update_article_params
   end
 
   def preview
@@ -62,7 +62,28 @@ class ArticlesController < ApplicationController
 
   private
 
-  def article_params
+  def create_article_params
+    params
+      .require(:article)
+      .permit(
+        :title,
+        :content,
+        :asset_id,
+        :intro,
+        :author_revenue_ratio,
+        :references_revenue_ratio,
+        :price,
+        article_references_attributes: %i[
+          id
+          reference_type
+          reference_id
+          revenue_ratio
+          _destroy
+        ]
+      )
+  end
+
+  def update_article_params
     permitted = [
       :title,
       :content,
@@ -78,7 +99,7 @@ class ArticlesController < ApplicationController
         _destroy
       ] }
     ]
-    permitted.push(:price) unless @article&.free? || (!@article&.free? && params[:article]&.[](:price).to_d.zero?)
+    permitted.push(:price) if !@article.published_at? || (!@article.free? && params[:article][:price].to_d.positive?)
     params
       .require(:article)
       .permit(permitted)
