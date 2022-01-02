@@ -2,7 +2,7 @@
   <div class="flex mb-4">
     <span class="font-bold"><%= t('active_authors') %></span>
   </div>
-  <% User.active.limit(50).sample(5).each do |user| %>
+  <% User.active.limit(20).sample(5).each do |user| %>
     <div class="flex items-center justify-between mb-2">
       <%= link_to user_path(user), class: "flex items-center space-x-2" do %>
         <%= image_tag user.avatar, class: "w-10 h-10 rounded-full" %>
