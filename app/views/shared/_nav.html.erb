@@ -28,10 +28,10 @@
       <div class="flex items-center ml-4 md:ml-6">
         <div class="" data-controller="darkmode">
           <a class="hidden block mr-3 cursor-pointer" data-darkmode-target="lightButton" data-action="darkmode#toggle">
-            <%= render 'shared/icons/sun', html_class: "text-blue-500 w-6 h-6" %>
+            <%= render 'shared/icons/moon', html_class: "w-6 h-6" %>
           </a>
           <a class="hidden block mr-3 cursor-pointer" data-darkmode-target="darkButton" data-action="darkmode#toggle">
-            <%= render 'shared/icons/moon', html_class: "text-zinc-100 w-6 h-6" %>
+            <%= render 'shared/icons/sun', html_class: "text-zinc-100 w-6 h-6" %>
           </a>
         </div>
 
@@ -146,10 +146,10 @@
             </div>
             <div class="ml-auto" data-controller="darkmode">
               <a class="hidden block mr-3 cursor-pointer" data-darkmode-target="lightButton" data-action="darkmode#toggle">
-                <%= render 'shared/icons/sun', html_class: "text-blue-500 w-6 h-6" %>
+                <%= render 'shared/icons/moon', html_class: "w-6 h-6" %>
               </a>
               <a class="hidden block mr-3 cursor-pointer" data-darkmode-target="darkButton" data-action="darkmode#toggle">
-                <%= render 'shared/icons/moon', html_class: "text-zinc-100 w-6 h-6" %>
+                <%= render 'shared/icons/sun', html_class: "text-zinc-100 w-6 h-6" %>
               </a>
             </div>
             <%= link_to dashboard_notifications_path, class: "relative flex-shrink-0 p-1 ml-3 rounded-full focus:bg-blue-50 focus:text-blue-500" do %>
