@@ -41,7 +41,7 @@
     <% end %>
 
     <%= favicon_link_tag "#{Settings.favicon_file || 'favicon.png'}" %>
-    <%= javascript_include_tag "application", "data-turbo-track": "reload", defer: true %>
+    <%= javascript_include_tag "application", "data-turbo-track": "reload" %>
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
   </head>
 
