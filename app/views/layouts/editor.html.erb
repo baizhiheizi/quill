@@ -30,21 +30,9 @@
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
-    <!-- Global site tag (gtag.js) - Google Analytics -->
-    <% if Rails.env.production? && Settings.ga_id.present? %>
-      <script async src="<%= 'https://www.googletagmanager.com/gtag/js?id=' + Settings.ga_id.to_s %>" ></script>
-      <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-
-        gtag('config', '<%= Rails.application.credentials[:ga_id].to_s %>');
-      </script>
-    <% end %>
-
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.3.1/styles/github.min.css" defer="defer">
     <%= favicon_link_tag "#{Settings.favicon_file || 'favicon.png'}" %>
-    <%= javascript_include_tag "application", "data-turbo-track": "reload", defer: true %>
+    <%= javascript_include_tag "application", "data-turbo-track": "reload" %>
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
     <%= stylesheet_link_tag "easymde", "data-turbo-track": "reload" %>
     <%= stylesheet_link_tag "tom-select", "data-turbo-track": "reload" %>
