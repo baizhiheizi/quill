@@ -18,11 +18,16 @@
             <%= link_to t("write"), view_modals_path(type: :login), data: { turbo_method: :post }, class: "px-3 py-2 text-base font-medium hover:bg-blue-50 hover:text-blue-500 dark:hover:bg-gray-800 rounded-md" %>
           <% end %>
         </div>
-        <div class="hidden md:flex items-baseline space-x-4">
+        <div class="hidden md:block">
           <%= link_to t("fair"), page_path('fair'), class: "px-3 py-2 text-base font-medium hover:bg-blue-50 hover:text-blue-500 dark:hover:bg-gray-800 rounded-md" %>
         </div>
-        <div class="hidden md:flex items-baseline space-x-4">
+        <div class="hidden md:block">
           <%= link_to t("rules"), page_path('rules'), class: "px-3 py-2 text-base font-medium hover:bg-blue-50 hover:text-blue-500 dark:hover:bg-gray-800 rounded-md" %>
+        </div>
+        <div class="hidden md:block">
+          <a href="https://github.com/baizhiheizi/prsdigg" target="_blank" class="hover:bg-blue-50 hover:text-blue-500 dark:hover:bg-gray-800 rounded-md">
+            <%= render "shared/icons/github" %>
+          </a>
         </div>
       </div>
       <div class="flex items-center ml-4 md:ml-6">
