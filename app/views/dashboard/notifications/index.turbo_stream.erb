@@ -1,4 +1,4 @@
-<%= turbo_stream.prepend "#{dom_id current_user}_notifications_list" do %>
+<%= turbo_stream.append "#{dom_id current_user}_notifications_list" do %>
   <%= render partial: "dashboard/notifications/notification", collection: @notifications, as: :notification %>
 <% end %>
 
