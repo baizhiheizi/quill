@@ -166,14 +166,12 @@ class User < ApplicationRecord
   def ban!
     update banned_at: Time.current
 
-    prs_account.deny_on_chain_async
     UserBannedNotification.with(user: self).deliver(self)
   end
 
   def unban!
     update banned_at: nil
 
-    prs_account.allow_on_chain_async
     UserUnbannedNotification.with(user: self).deliver(self)
   end
 

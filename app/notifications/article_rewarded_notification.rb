@@ -42,4 +42,8 @@ class ArticleRewardedNotification < ApplicationNotification
   def mixin_bot_notification_enabled?
     recipient.notification_setting.article_rewarded_mixin_bot
   end
+
+  def may_notify_via_mixin_bot?
+    recipient_messenger? && mixin_bot_notification_enabled?
+  end
 end

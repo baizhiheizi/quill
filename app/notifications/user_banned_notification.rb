@@ -16,4 +16,8 @@ class UserBannedNotification < ApplicationNotification
 
   def url
   end
+
+  def may_notify_via_mixin_bot?
+    recipient_messenger?
+  end
 end

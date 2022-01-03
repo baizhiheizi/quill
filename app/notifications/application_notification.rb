@@ -21,20 +21,8 @@ class ApplicationNotification < Noticed::Base
     message
   end
 
-  def web_notification_enabled?
-    true
-  end
-
-  def mixin_bot_notification_enabled?
-    true
-  end
-
   def with_locale(&action)
     locale = recipient&.locale || I18n.default_locale
     I18n.with_locale(locale, &action)
-  end
-
-  def may_notify_via_mixin_bot?
-    recipient_messenger? && mixin_bot_notification_enabled?
   end
 end

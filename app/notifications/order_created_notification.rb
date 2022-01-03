@@ -30,4 +30,8 @@ class OrderCreatedNotification < ApplicationNotification
       article_uuid: params[:order].article.uuid
     )
   end
+
+  def may_notify_via_mixin_bot?
+    recipient_messenger?
+  end
 end

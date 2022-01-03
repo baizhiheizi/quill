@@ -21,4 +21,8 @@ class PaymentCreatedNotification < ApplicationNotification
       snapshot_id: params[:payment].snapshot_id
     )
   end
+
+  def may_notify_via_mixin_bot?
+    recipient_messenger?
+  end
 end

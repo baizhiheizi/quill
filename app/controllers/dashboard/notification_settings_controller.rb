@@ -6,6 +6,8 @@ class Dashboard::NotificationSettingsController < Dashboard::BaseController
     current_user.notification_setting.reload
   end
 
+  private
+
   def setting_params
     params
       .require(:notification_setting)

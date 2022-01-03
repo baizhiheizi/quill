@@ -22,4 +22,8 @@ class CommentDeletedNotification < ApplicationNotification
       comment_id: params[:comment].id
     )
   end
+
+  def may_notify_via_mixin_bot?
+    recipient_messenger?
+  end
 end

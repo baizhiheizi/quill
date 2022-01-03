@@ -40,4 +40,8 @@ class SwapOrderFinishedNotification < ApplicationNotification
       host: Settings.host
     )
   end
+
+  def may_notify_via_mixin_bot?
+    recipient_messenger?
+  end
 end
