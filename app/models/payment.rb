@@ -46,9 +46,10 @@ class Payment < ApplicationRecord
   validates :snapshot_id, presence: true, uniqueness: true
   validates :trace_id, presence: true, uniqueness: true
 
-  after_commit :place_order!, :notify_payer, on: :create
+  after_create :place_order!
   after_create_commit do
-    broadcast_update_later_to "user_#{payer.mixin_uuid}", target: "payment_#{trace_id}", partial: 'shared/loading', locals: { payment: self }
+    notify_payer
+    broadcast_update_to "user_#{payer.mixin_uuid}", target: "payment_#{trace_id}", partial: 'shared/loading', locals: { payment: self }
   end
 
   delegate :swappable?, to: :currency
