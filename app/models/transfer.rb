@@ -24,6 +24,7 @@
 # Indexes
 #
 #  index_transfers_on_asset_id                   (asset_id)
+#  index_transfers_on_created_at                 (created_at)
 #  index_transfers_on_opponent_id                (opponent_id)
 #  index_transfers_on_source_type_and_source_id  (source_type,source_id)
 #  index_transfers_on_trace_id                   (trace_id) UNIQUE
@@ -38,8 +39,6 @@ class Transfer < ApplicationRecord
   belongs_to :wallet, class_name: 'MixinNetworkUser', primary_key: :uuid, inverse_of: :transfers, optional: true
   belongs_to :recipient, class_name: 'User', primary_key: :mixin_uuid, foreign_key: :opponent_id, inverse_of: :transfers, optional: true
   belongs_to :currency, primary_key: :asset_id, foreign_key: :asset_id, inverse_of: :transfers, optional: true
-
-  has_one :article, class_name: 'Article', through: :source, source: :item
 
   enum queue_priority: { default: 0, critical: 1, high: 2, low: 3 }, _prefix: true
   enum transfer_type: {

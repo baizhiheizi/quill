@@ -58,6 +58,7 @@ Rails.application.routes.draw do
     resources :subscribe_by_users, only: %i[index]
   end
   resources :transfers, only: %i[index]
+  get '/transfers/stats', to: 'transfers#stats'
 
   namespace :dashboard do
     resources :settings, only: %i[index]

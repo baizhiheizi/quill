@@ -79,6 +79,8 @@ en:
   author_revenue_total: Author Revenue(Present Value)
   reader_revenue_total: Reader Revenue(Present Value)
   platform_revenue: PRSDigg Revenue
+  platform_revenue_last_month: PRSDigg Revenue(last month)
+  platform_revenue_this_month: PRSDigg Revenue(this month)
   readers_revenue: Readers Revenue
   author_revenue: Author Revenue
   references_revenue: References Revenue

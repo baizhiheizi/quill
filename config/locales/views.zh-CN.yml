@@ -79,6 +79,8 @@ zh-CN:
   author_revenue_total: 作者收益(现价)
   reader_revenue_total: 读者收益(现价)
   platform_revenue: 平台收益
+  platform_revenue_last_month: 平台收益(上月)
+  platform_revenue_this_month: 平台收益(本月)
   author_revenue: 作者收益
   readers_revenue: 读者收益
   references_revenue: 引用收益
