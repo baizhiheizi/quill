@@ -25,7 +25,7 @@
         tabs_tabname_param: "lately",
       } %>
     <%= link_to t('order_by_revenue'), 
-      articles_path(order_by: :revenue),
+      articles_path(order_by: :revenue, time_range: :month),
       class: "cursor-pointer px-2 opacity-70 truncate",
       data: {
         tabs_target: "tab",
