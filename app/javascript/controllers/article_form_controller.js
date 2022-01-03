@@ -58,6 +58,7 @@ export default class extends Controller {
     this.editor = new EasyMDE({
       element: this.contentTarget,
       placeholder: this.contentTarget.placeholder,
+      initialValue: this.contentTarget.textContent,
       status: false,
       spellChecker: false,
       sideBySideFullscreen: false,

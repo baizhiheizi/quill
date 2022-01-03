@@ -1,7 +1,7 @@
 <div data-article-form-target="optionFields" class="hidden px-4 py-5 bg-white dark:bg-zinc-900 space-y-6 sm:p-6">
   <div class="sm:pb-6 sm:border-b">
     <%= form.select :tag_names, 
-      Tag.all.first(20).pluck(:name), 
+      article.tag_names.presence || Tag.all.first(10).pluck(:name), 
       {}, 
       multiple: true,
       placeholder: t("articles.add_some_tags"),
