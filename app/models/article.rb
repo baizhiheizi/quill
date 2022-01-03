@@ -138,7 +138,7 @@ class Article < ApplicationRecord
       transitions from: :published, to: :hidden
     end
 
-    event :publish, guards: :ensure_content_valid, after: %i[touch_published_at do_first_publish] do
+    event :publish, guards: :ensure_content_valid, after: %i[do_first_publish] do
       transitions from: :drafted, to: :published
       transitions from: :hidden, to: :published
     end
@@ -250,14 +250,14 @@ class Article < ApplicationRecord
     update published_at: Time.current if published_at.blank?
   end
 
-  def notify
+  def notify_for_first_published
     notify_subscribers
     taggings.map(&:notify_subscribers)
     notify_admin
   end
 
-  def notify_async
-    ArticleNotifyWorker.perform_async id
+  def notify_for_first_published_async
+    ArticleNotifyForFirstPublishedWorker.perform_async id
   end
 
   def create_wallet_async
@@ -268,8 +268,9 @@ class Article < ApplicationRecord
     return unless published?
     return if published_at.present?
 
+    touch_published_at
     create_wallet_async
-    notify_async
+    notify_for_first_published_async
     subscribe_comments_for_author
     update_author_statistics_cache
   end
