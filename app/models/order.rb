@@ -59,14 +59,15 @@ class Order < ApplicationRecord
   scope :only_prs, -> { where(asset_id: Currency::PRS_ASSET_ID) }
   scope :only_btc, -> { where(asset_id: Currency::BTC_ASSET_ID) }
 
-  after_create :complete_payment, :update_item_revenue, :update_buyer_statistics_cache, :notify_subscribers, :notify_buyer
+  after_create :complete_payment_async, :update_cache_async, :notify_async
+  after_create_commit :distribute_async, :broadcast_to_views
+
   before_destroy :destroy_notifications
 
-  after_commit :distribute_async, on: :create
-  after_create_commit do
-    broadcast_replace_later_to "user_#{buyer.mixin_uuid}", target: "article_#{article.uuid}_content", partial: 'articles/content', locals: { article: article, user: buyer } if buy_article?
+  def broadcast_to_views
+    broadcast_replace_to "user_#{buyer.mixin_uuid}", target: "article_#{article.uuid}_content", partial: 'articles/content', locals: { article: article, user: buyer } if buy_article?
 
-    broadcast_replace_later_to "user_#{buyer.mixin_uuid}", target: "article_#{article.uuid}_buyers", partial: 'articles/buyers', locals: { article: article, user: buyer }
+    broadcast_replace_to "user_#{buyer.mixin_uuid}", target: "article_#{article.uuid}_buyers", partial: 'articles/buyers', locals: { article: article, user: buyer }
     broadcast_remove_to "user_#{buyer.mixin_uuid}", target: "article_#{article.uuid}_payment_modal"
   end
 
@@ -198,8 +199,17 @@ class Order < ApplicationRecord
     payment.complete! if payment.paid?
   end
 
-  def update_item_revenue
-    item.update_revenue
+  def complete_payment_async
+    OrderCompletePaymentWorker.perform_async id
+  end
+
+  def notify
+    notify_subscribers
+    notify_buyer
+  end
+
+  def notify_async
+    OrderNotifyWorker.perform_async id
   end
 
   def notify_subscribers
@@ -216,6 +226,19 @@ class Order < ApplicationRecord
 
   def article
     item if item.is_a? Article
+  end
+
+  def update_cache_async
+    OrderUpdateCacheWorker.perform_async id
+  end
+
+  def update_cache
+    update_item_revenue
+    update_buyer_statistics_cache
+  end
+
+  def update_item_revenue
+    item.update_revenue
   end
 
   def update_buyer_statistics_cache

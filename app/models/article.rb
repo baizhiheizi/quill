@@ -138,7 +138,7 @@ class Article < ApplicationRecord
       transitions from: :published, to: :hidden
     end
 
-    event :publish, guards: :ensure_content_valid, after_transaction: %i[do_first_publish] do
+    event :publish, guards: :ensure_content_valid, after: %i[touch_published_at do_first_publish] do
       transitions from: :drafted, to: :published
       transitions from: :hidden, to: :published
     end
@@ -246,19 +246,32 @@ class Article < ApplicationRecord
     readers.where(id: readers.ids.sample(limit))
   end
 
+  def touch_published_at
+    update published_at: Time.current if published_at.blank?
+  end
+
+  def notify
+    notify_subscribers
+    taggings.map(&:notify_subscribers)
+    notify_admin
+  end
+
+  def notify_async
+    ArticleNotifyWorker.perform_async id
+  end
+
+  def create_wallet_async
+    ArticleCreateWalletWorker.perform_async id
+  end
+
   def do_first_publish
     return unless published?
     return if published_at.present?
 
-    ActiveRecord::Base.transaction do
-      update published_at: Time.current
-      create_wallet! if wallet.blank?
-      notify_subscribers
-      taggings.map(&:notify_subscribers)
-      notify_admin
-      subscribe_comments_for_author
-      update_author_statistics_cache
-    end
+    create_wallet_async
+    notify_async
+    subscribe_comments_for_author
+    update_author_statistics_cache
   end
 
   def generate_snapshot
@@ -456,13 +469,11 @@ class Article < ApplicationRecord
   end
 
   def ensure_price_not_too_low
-    return if drafted?
-
     case asset_id
     when Currency::BTC_ASSET_ID
-      errors.add(:price, 'at least 0.000001 BTC') if price.positive? && price.to_f < MINIMUM_PRICE_BTC
+      errors.add(:price, 'at least 0.000001 BTC') if price.positive? && price < MINIMUM_PRICE_BTC.to_d
     when Currency::JPYC_ASSET_ID
-      errors.add(:price, 'at least 100 BTC') if price.positive? && price.to_f < MINIMUM_PRICE_BTC
+      errors.add(:price, 'at least 100 JPYC') if price.positive? && price < MINIMUM_PRICE_BTC.to_d
     end
   end
 
