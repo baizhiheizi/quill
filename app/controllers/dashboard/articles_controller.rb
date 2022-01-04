@@ -2,7 +2,7 @@
 
 class Dashboard::ArticlesController < Dashboard::BaseController
   def index
-    @tab = params[:tab] || 'bought'
+    @tab = params[:tab] || 'drafted'
 
     articles =
       case @tab
