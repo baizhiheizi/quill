@@ -64,7 +64,7 @@ class MarkdownRenderService
     self
   end
 
-  def excape_iframes
+  def escape_iframes
     doc = Nokogiri::HTML.fragment(@html)
     doc.css('iframe').each do |iframe|
       iframe['class'] = 'w-full h-auto'
