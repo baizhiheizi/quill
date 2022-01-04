@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class MarkdownRenderService
+  IFRAME_SRC_WHITE_LIST_REGEX = [%r{\Ahttps://(www.)?youtube\.com/\S+\z}].freeze
+
   def call(content, type: :default)
     @html = Redcarpet::Markdown.new(
       Redcarpet::Render::HTML,
@@ -24,6 +26,7 @@ class MarkdownRenderService
     end
 
     add_attributes_to_images
+    escape_iframes
 
     @html
   end
@@ -55,6 +58,17 @@ class MarkdownRenderService
         link['data-controller'] = 'scroll-to'
         link['href'] = href.underscore
       end
+    end
+    @html = doc.to_html
+
+    self
+  end
+
+  def excape_iframes
+    doc = Nokogiri::HTML.fragment(@html)
+    doc.css('iframe').each do |iframe|
+      iframe['class'] = 'w-full h-auto'
+      iframe.remove unless iframe['src'].match?(Regexp.union(IFRAME_SRC_WHITE_LIST_REGEX))
     end
     @html = doc.to_html
 
