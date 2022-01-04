@@ -107,6 +107,6 @@ class ArticlesController < ApplicationController
 
   def load_article
     @article = current_user.articles.find_by uuid: params[:uuid]
-    redirect_back fallback_location: roo_path if @article.blank?
+    redirect_back fallback_location: root_path if @article.blank?
   end
 end
