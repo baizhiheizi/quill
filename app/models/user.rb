@@ -78,7 +78,7 @@ class User < ApplicationRecord
 
   enum locale: I18n.available_locales
 
-  after_create :prepare_async
+  after_commit :prepare_async, on: :create
 
   default_scope { includes(:mixin_authorization) }
   scope :active, lambda {
