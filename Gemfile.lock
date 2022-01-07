@@ -187,7 +187,7 @@ GEM
       raabro (~> 1.4)
     globalid (1.0.0)
       activesupport (>= 5.0)
-    graphql (1.12.18)
+    graphql (1.13.4)
     groupdate (5.2.4)
       activesupport (>= 5)
     hamster (3.0.0)
@@ -490,7 +490,7 @@ DEPENDENCIES
   debug (>= 1.0.0)
   exception-track
   fnv
-  graphql (= 1.12.18)
+  graphql (= 1.13.4)
   groupdate
   high_voltage
   hotwire-rails
