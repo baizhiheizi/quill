@@ -158,7 +158,7 @@ class Article < ApplicationRecord
   end
 
   def authorized?(user = nil)
-    return true if free? || author == user
+    return true if (published? && free?) || author == user
     return if user.blank?
 
     orders.find_by(buyer: user).present?

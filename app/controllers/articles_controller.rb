@@ -32,13 +32,14 @@ class ArticlesController < ApplicationController
   end
 
   def show
-    @article = Article.only_published.find_by uuid: params[:uuid]
-    if @article.blank?
-      redirect_back fallback_location: root_path
-    else
+    @article = Article.without_drafted.find_by uuid: params[:uuid]
+
+    if @article&.published? || @article&.authorized?(current_user)
       @page_title = "#{@article.title} - #{@article.author.name}"
       @page_description = @article.intro
       @page_image = @article.images.first&.url
+    else
+      redirect_back fallback_location: root_path
     end
   end
 
