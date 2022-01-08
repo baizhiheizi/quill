@@ -37,7 +37,7 @@ class ArticlesController < ApplicationController
     if @article&.published? || @article&.authorized?(current_user)
       @page_title = "#{@article.title} - #{@article.author.name}"
       @page_description = @article.intro
-      @page_image = @article.images.first&.url
+      @page_image = @article.author.avatar
     else
       redirect_back fallback_location: root_path
     end
