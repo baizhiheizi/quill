@@ -1,0 +1,65 @@
+<div class="flex items-center space-x-4 mb-4">
+  <%= link_to 'Home', admin_root_path %>
+  <span>/</span>
+  <%= link_to 'Orders', admin_orders_path %>
+  <span>/</span>
+  <span><%= @order.id %></span>
+</div>
+
+<div class="bg-white roundedlg p-4">
+  <div class="flex items-center space-x-2 mb-4">
+    <%= image_tag @order.currency.icon_url, class: "w-10 h-10 rounded" %>
+    <div>
+      <div><%= @order.price_tag %></div>
+      <div class="text-sm opacity-70"><%= @order.trace_id %></div>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-8">
+    <div class="col-span-1 flex space-x-2">
+      <span class="font-bold">ID:</span> 
+      <span><%= @order.id %></span>
+    </div>
+    <div class="col-span-1 flex space-x-2">
+      <span class="font-bold">TraceID:</span> 
+      <span><%= @order.trace_id %></span>
+    </div>
+    <div class="col-span-1 flex space-x-2">
+      <span class="font-bold">Buyer:</span> 
+      <span>
+        <% if @order.buyer.present? %>
+          <%= render 'admin/users/field', user: @order.buyer, tab: :orders %>
+        <% else %>
+          <%= @order.buyer_id %>
+        <% end %>
+      </span>
+    </div>
+    <div class="col-span-1 flex space-x-2">
+      <span class="font-bold">Total:</span> 
+      <span><%= @order.price_tag %></span>
+    </div>
+    <div class="col-span-1 flex space-x-2">
+      <span class="font-bold">Payment:</span> 
+      <span><%= link_to @order.payment.trace_id, admin_payment_path(@order.payment) %></span>
+    </div>
+    <div class="col-span-1 flex space-x-2">
+      <span class="font-bold">State:</span> 
+      <div class="">
+        <span class="px-2 py-1 rounded text-white
+          <%=
+            {
+              paid: 'bg-blue-500',
+              completed: 'bg-green-500',
+              refunded: 'bg-indigo-500'
+            }[@order.state.to_sym]
+            %>">
+          <%= @order.state %>
+        </span>
+      </div>
+    </div>
+    <div class="col-span-1 flex space-x-2">
+      <span class="font-bold">Created:</span> 
+      <span><%= @order.created_at %></span>
+    </div>
+  </div>
+</div>

@@ -83,19 +83,26 @@ Rails.application.routes.draw do
   end
 
   namespace :admin do
-    get 'logout', to: 'sessions#delete', as: :logout
-
     # sidekiq
     mount Sidekiq::Web, at: 'sidekiq', constraints: AdminConstraint.new
-
     # pghero
     mount PgHero::Engine, at: 'pghero'
-
     # exception
     mount ExceptionTrack::Engine => '/exception-track'
 
     root to: 'overview#index'
-    get '*path' => 'overview#index'
+
+    get 'login', to: 'sessions#new', as: :login
+    post 'login', to: 'sessions#create'
+    get 'logout', to: 'sessions#delete', as: :logout
+
+    resources :users, only: %i[index show], param: :uid
+    resources :articles, only: %i[index show], param: :uuid
+    resources :orders, only: %i[index show]
+    resources :swap_orders, only: %i[index show]
+    resources :payments, only: %i[index show]
+    resources :transfers, only: %i[index show]
+    resources :mixin_snapshots, only: %i[index show]
   end
 
   namespace :api, defaults: { format: :json } do

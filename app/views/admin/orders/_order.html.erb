@@ -1,0 +1,51 @@
+<tr class="hover:bg-zinc-50 border-b">
+  <td class="p-4">
+    <%= order.id %>
+  </td>
+  <td class="p-4">
+    <%= order.trace_id %>
+  </td>
+  <td class="p-4">
+    <% if order.article.present? %>
+      <%= render "admin/articles/field", article: order.article %>
+    <% else %>
+      -
+    <% end %>
+  </td>
+  <td class="p-4">
+    <% if order.buyer.present? %>
+      <%= render 'admin/users/field', user: order.buyer, tab: :orders %>
+    <% else %>
+      <%= order.buyer_id %>
+    <% end %>
+  </td>
+  <td class="p-4">
+    <div class="flex items-center space-x-2">
+      <%= image_tag order.currency.icon_url, class: "w-10 h-10 rounded" %>
+      <span><%= order.price_tag %></span>
+    </div>
+  </td>
+  <td class="p-4">
+    <div class="flex justify-center">
+      <span class="px-2 py-1 rounded text-white
+        <%=
+          {
+            paid: 'bg-blue-500',
+            completed: 'bg-green-500',
+            stale: 'bg-zinc-500'
+          }[order.state.to_sym]
+          %>">
+        <%= order.state %>
+      </span>
+    </div>
+  </td>
+  <td class="p-4">
+    <%= order.order_type %>
+  </td>
+  <td class="p-4">
+    <%= order.created_at %>
+  </td>
+  <td class="p-4">
+    <%= link_to 'Detail', admin_order_path(order), class: "bg-blue-500 hover:bg-blue-600 rounded text-white px-4 py-2", data: { turbo_frame: "_top" } %>
+  </td>
+</tr>

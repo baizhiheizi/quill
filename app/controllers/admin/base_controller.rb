@@ -1,9 +1,13 @@
 # frozen_string_literal: true
 
 class Admin::BaseController < ActionController::Base
+  include Pagy::Backend
+
+  before_action :authenticate_admin!
+
   layout 'admin'
 
-  helper_method :base_props
+  helper_method :current_admin
 
   private
 
@@ -17,7 +21,7 @@ class Admin::BaseController < ActionController::Base
   end
 
   def authenticate_admin!
-    redirect_to root_path unless current_admin
+    redirect_to admin_login_path if current_admin.blank?
   end
 
   def current_admin

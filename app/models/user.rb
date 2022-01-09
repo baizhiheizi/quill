@@ -81,6 +81,9 @@ class User < ApplicationRecord
   after_commit :prepare_async, on: :create
 
   default_scope { includes(:mixin_authorization) }
+  scope :only_mixin_messenger, -> { where('mixin_id ~* ?', '\A(?!7000)\d{5,}\Z') }
+  scope :only_fennec, -> { where(mixin_id: 0).or(where('mixin_id ~* ?', '\A(7000)\d{6}\Z')) }
+
   scope :active, lambda {
     order_by_articles_count
       .where(

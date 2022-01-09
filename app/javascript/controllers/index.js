@@ -2,82 +2,85 @@
 // Run that command whenever you add a new controller or create them with
 // ./bin/rails generate stimulus controllerName
 
-import { application } from './application';
+import { application } from "./application"
 
-import ArticleFormController from './article_form_controller.js';
-application.register('article-form', ArticleFormController);
+import ArticleFormController from "./article_form_controller.js"
+application.register("article-form", ArticleFormController)
 
-import AutosaveController from './autosave_controller.js';
-application.register('autosave', AutosaveController);
+import AutosaveController from "./autosave_controller.js"
+application.register("autosave", AutosaveController)
 
-import BuyArticlePaymentController from './buy_article_payment_controller.js';
-application.register('buy-article-payment', BuyArticlePaymentController);
+import BuyArticlePaymentController from "./buy_article_payment_controller.js"
+application.register("buy-article-payment", BuyArticlePaymentController)
 
-import ClipboardController from './clipboard_controller.js';
-application.register('clipboard', ClipboardController);
+import ClipboardController from "./clipboard_controller.js"
+application.register("clipboard", ClipboardController)
 
-import CommentFormController from './comment_form_controller.js';
-application.register('comment-form', CommentFormController);
+import CommentFormController from "./comment_form_controller.js"
+application.register("comment-form", CommentFormController)
 
-import ConfirmController from './confirm_controller.js';
-application.register('confirm', ConfirmController);
+import ConfirmController from "./confirm_controller.js"
+application.register("confirm", ConfirmController)
 
-import DarkmodeController from './darkmode_controller.js';
-application.register('darkmode', DarkmodeController);
+import DarkmodeController from "./darkmode_controller.js"
+application.register("darkmode", DarkmodeController)
 
-import DropdownController from './dropdown_controller.js';
-application.register('dropdown', DropdownController);
+import DropdownController from "./dropdown_controller.js"
+application.register("dropdown", DropdownController)
 
-import FennecController from './fennec_controller.js';
-application.register('fennec', FennecController);
+import FennecController from "./fennec_controller.js"
+application.register("fennec", FennecController)
 
-import FlashController from './flash_controller.js';
-application.register('flash', FlashController);
+import FlashController from "./flash_controller.js"
+application.register("flash", FlashController)
 
-import HljsController from './hljs_controller.js';
-application.register('hljs', HljsController);
+import HljsController from "./hljs_controller.js"
+application.register("hljs", HljsController)
 
-import InfiniteScrollController from './infinite_scroll_controller.js';
-application.register('infinite-scroll', InfiniteScrollController);
+import InfiniteScrollController from "./infinite_scroll_controller.js"
+application.register("infinite-scroll", InfiniteScrollController)
 
-import ModalController from './modal_controller.js';
-application.register('modal', ModalController);
+import ModalController from "./modal_controller.js"
+application.register("modal", ModalController)
 
-import NestedFormController from './nested_form_controller.js';
-application.register('nested-form', NestedFormController);
+import NestedFormController from "./nested_form_controller.js"
+application.register("nested-form", NestedFormController)
 
-import NotificationController from './notification_controller.js';
-application.register('notification', NotificationController);
+import NotificationController from "./notification_controller.js"
+application.register("notification", NotificationController)
 
-import PhotoswipeController from './photoswipe_controller.js';
-application.register('photoswipe', PhotoswipeController);
+import PhotoswipeController from "./photoswipe_controller.js"
+application.register("photoswipe", PhotoswipeController)
 
-import QrcodeController from './qrcode_controller.js';
-application.register('qrcode', QrcodeController);
+import QrcodeController from "./qrcode_controller.js"
+application.register("qrcode", QrcodeController)
 
-import ReferencesSelectController from './references_select_controller.js';
-application.register('references-select', ReferencesSelectController);
+import ReferencesSelectController from "./references_select_controller.js"
+application.register("references-select", ReferencesSelectController)
 
-import RewardArticlePaymentController from './reward_article_payment_controller.js';
-application.register('reward-article-payment', RewardArticlePaymentController);
+import RewardArticlePaymentController from "./reward_article_payment_controller.js"
+application.register("reward-article-payment", RewardArticlePaymentController)
 
-import ScrollToController from './scroll_to_controller.js';
-application.register('scroll-to', ScrollToController);
+import ScrollToController from "./scroll_to_controller.js"
+application.register("scroll-to", ScrollToController)
 
-import SearchController from './search_controller.js';
-application.register('search', SearchController);
+import SearchController from "./search_controller.js"
+application.register("search", SearchController)
 
-import SelectMenuController from './select_menu_controller.js';
-application.register('select-menu', SelectMenuController);
+import SelectMenuController from "./select_menu_controller.js"
+application.register("select-menu", SelectMenuController)
 
-import TabsController from './tabs_controller.js';
-application.register('tabs', TabsController);
+import SidebarController from "./sidebar_controller.js"
+application.register("sidebar", SidebarController)
 
-import TagsSelectController from './tags_select_controller.js';
-application.register('tags-select', TagsSelectController);
+import TabsController from "./tabs_controller.js"
+application.register("tabs", TabsController)
 
-import TextareaAutogrowController from './textarea_autogrow_controller.js';
-application.register('textarea-autogrow', TextareaAutogrowController);
+import TagsSelectController from "./tags_select_controller.js"
+application.register("tags-select", TagsSelectController)
 
-import ToastController from './toast_controller.js';
-application.register('toast', ToastController);
+import TextareaAutogrowController from "./textarea_autogrow_controller.js"
+application.register("textarea-autogrow", TextareaAutogrowController)
+
+import ToastController from "./toast_controller.js"
+application.register("toast", ToastController)

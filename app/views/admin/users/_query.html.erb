@@ -1,0 +1,24 @@
+<%= form_with url: admin_users_path, method: :get, class: "flex items-center flex-wrap" do |form| %>
+  <%= form.select :filter, 
+    [
+      ['All', 'all'], 
+      ['Mixin', 'mixin'],
+      ['Fennec', 'fennec'],
+      ['Banned', 'only_banned']
+    ], 
+    { selected: @filter }, 
+    class: "rounded-lg m-1" %>
+  <%= form.select :order_by, 
+    [
+      ['Created DESC', 'created_at_desc'], 
+      ['Created ASC', 'created_at_asc'], 
+      ['Revenue', 'revenue_total'], 
+      ['Orders', 'orders_total'], 
+      ['Articles Count', 'articles_count'], 
+      ['Comments Count', 'comments_count'], 
+    ], 
+    { selected: @order_by }, 
+    class: "rounded-lg m-1" %>
+  <%= form.text_field :query, value: @query, placeholder: "Search", class: "rounded-lg m-1" %>
+  <%= form.submit :Query, class: "cursor-pointer rounded bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 m-1" %>
+<% end %>

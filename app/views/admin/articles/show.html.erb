@@ -1,0 +1,126 @@
+<div class="flex items-center space-x-4 mb-4">
+  <%= link_to 'Home', admin_root_path %>
+  <span>/</span>
+  <%= link_to 'Articles', admin_articles_path %>
+  <span>/</span>
+  <span><%= @article.title %></span>
+</div>
+
+<div class="bg-white roundedlg p-4">
+  <div class="flex space-x-2 mb-4">
+    <div>
+      <div><%= @article.title %></div>
+      <div class="text-sm opacity-70"><%= @article.uuid %></div>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-8">
+    <div class="col-span-1 flex space-x-2">
+      <span class="font-bold">ID:</span> 
+      <span><%= @article.id %></span>
+    </div>
+    <div class="col-span-1 flex space-x-2">
+      <span class="font-bold">UUID:</span> 
+      <span><%= @article.uuid %></span>
+    </div>
+    <div class="col-span-1 flex space-x-2">
+      <span class="font-bold">Intro:</span> 
+      <span><%= @article.intro %></span>
+    </div>
+    <div class="col-span-1 flex space-x-2">
+      <span class="font-bold">Tags:</span> 
+      <span><%= @article.tag_names.presence || '-' %></span>
+    </div>
+    <div class="col-span-1 flex space-x-2">
+      <span class="font-bold">Price:</span> 
+      <span><%= @article.price_tag %></span>
+    </div>
+    <div class="col-span-1 flex space-x-2">
+      <span class="font-bold">Orders Count:</span> 
+      <span><%= @article.orders_count %></span>
+    </div>
+    <div class="col-span-1 flex space-x-2">
+      <span class="font-bold">Buy Orders:</span> 
+      <span><%= @article.buy_orders.count %></span>
+    </div>
+    <div class="col-span-1 flex space-x-2">
+      <span class="font-bold">Reward Orders:</span> 
+      <span><%= @article.reward_orders.count %></span>
+    </div>
+    <div class="col-span-1 flex space-x-2">
+      <span class="font-bold">Comments Count:</span> 
+      <span><%= @article.comments_count %></span>
+    </div>
+    <div class="col-span-1 flex space-x-2">
+      <span class="font-bold">Upvotes Count:</span> 
+      <span><%= @article.upvotes_count %></span>
+    </div>
+    <div class="col-span-1 flex space-x-2">
+      <span class="font-bold">Downvote Count:</span> 
+      <span><%= @article.downvotes_count %></span>
+    </div>
+    <div class="col-span-1 flex space-x-2">
+      <span class="font-bold">Author revenue ratio:</span> 
+      <span><%= @article.author_revenue_ratio %></span>
+    </div>
+    <div class="col-span-1 flex space-x-2">
+      <span class="font-bold">References revenue ratio:</span> 
+      <span><%= @article.references_revenue_ratio %></span>
+    </div>
+    <div class="col-span-1 flex space-x-2">
+      <span class="font-bold">Readers revenue ratio:</span> 
+      <span><%= @article.readers_revenue_ratio %></span>
+    </div>
+    <div class="col-span-1 flex space-x-2">
+      <span class="font-bold">Plafform revenue ratio:</span> 
+      <span><%= @article.platform_revenue_ratio %></span>
+    </div>
+    <div class="col-span-1 flex space-x-2">
+      <span class="font-bold">Revenue:</span> 
+      <span>$<%= @article.revenue_usd.round(4) %>(<%= @article.revenue_btc %> BTC)</span>
+    </div>
+    <div class="col-span-1 flex space-x-2">
+      <span class="font-bold">Created:</span> 
+      <span><%= @article.created_at %></span>
+    </div>
+    <div class="col-span-1 flex space-x-2">
+      <span class="font-bold">Published:</span> 
+      <span><%= @article.published_at.presence || '-' %></span>
+    </div>
+    <div class="col-span-1 flex space-x-2">
+      <span class="font-bold">References:</span> 
+      <div class="flex m-1 items-center flex-wrap">
+        <% if @article.references.present? %>
+          <% @article.references.each do |reference| %>
+            <%= render "admin/articles/field", article: reference %>
+          <% end %>
+        <% else %>
+          -
+        <% end %>
+      </div>
+    </div>
+  </div>
+
+  <div class=""
+    data-controller="tabs"
+    data-tabs-active-tab-value="<%= @tab %>"
+    data-tabs-active-class-value="border-b-2">
+    <div class="flex overflow-auto flex-nowrap scrollbar-hide items-center mb-4 border-b lg:border-none space-x-2">
+      <%= link_to admin_articles_path(@article, tab: :orders), 
+        class: "cursor-pointer py-1 px-4 border-blue-500 font-bold text-zinc-600",
+        data: {
+          tabs_target: "tab",
+          tabs_tabname_param: "orders",
+        } do %>
+        Orders
+      <% end %>
+    </div>
+    <div class="hidden"
+        data-tabs-content-param="articles"
+        data-tabs-target="content">
+      <%= turbo_frame_tag 'admin_orders', src: admin_orders_path(item: @article) do %>
+        <%= render "shared/loading" %>
+      <% end %>
+    </div>
+  </div>
+</div>

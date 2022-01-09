@@ -1,0 +1,38 @@
+<tr class="hover:bg-zinc-50 border-b">
+  <td class="p-4">
+    <%= user.id %>
+  </td>
+  <td class="p-4">
+    <%= render "admin/users/field", user: user %>
+  </td>
+  <td class="p-4">
+    <%= user.phone.presence || '-' %>
+  </td>
+  <td class="p-4">
+    <%= user.articles_count %>
+  </td>
+  <td class="p-4">
+    <%= user.bought_articles_count %>
+  </td>
+  <td class="p-4">
+    $<%= user.author_revenue_total_usd.to_f.round(4) %>(<%= user.author_revenue_total_btc %> BTC)
+  </td>
+  <td class="p-4">
+    $<%= user.payment_total_usd.to_f.round(4) %>(<%= user.payment_total_btc %> BTC)
+  </td>
+  <td class="p-4">
+    <div class='flex justify-center'>
+      <% if user.banned? %>
+        <span class="px-2 py-1 bg-zinc-300">Banned</span>
+      <% else %>
+        <span class="p-1 bg-green-500 ring-green-100 ring-2 rounded-full"></span>
+      <% end %>
+    </div>
+  </td>
+  <td class="p-4">
+    <%= user.created_at %>
+  </td>
+  <td class="p-4">
+    <%= link_to 'Detail', admin_user_path(user), class: "bg-blue-500 hover:bg-blue-600 rounded text-white px-4 py-2", data: { turbo_frame: "_top" } %>
+  </td>
+</tr>

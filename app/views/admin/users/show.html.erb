@@ -1,0 +1,136 @@
+<div class="flex items-center space-x-4 mb-4">
+  <%= link_to 'Home', admin_root_path %>
+  <span>/</span>
+  <%= link_to 'Users', admin_users_path %>
+  <span>/</span>
+  <span><%= @user.name %></span>
+</div>
+
+<div class="bg-white roundedlg p-4">
+  <div class="flex items-center space-x-2 mb-4">
+    <%= image_tag @user.avatar, class: "w-12 h-12 rounded-full", lazy: true %>
+    <div>
+      <div><%= @user.name %></div>
+      <div class="text-sm opacity-70"><%= @user.uid %></div>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-8">
+    <div class="col-span-1 flex space-x-2">
+      <span class="font-bold">ID:</span> 
+      <span><%= @user.id %></span>
+    </div>
+    <div class="col-span-1 flex space-x-2">
+      <span class="font-bold">UID:</span> 
+      <span><%= @user.uid %></span>
+    </div>
+    <div class="col-span-1 flex space-x-2">
+      <span class="font-bold">Mixin ID:</span> 
+      <span><%= @user.mixin_id %></span>
+    </div>
+    <div class="col-span-1 flex space-x-2">
+      <span class="font-bold">Mixin UUID:</span> 
+      <span><%= @user.mixin_uuid %></span>
+    </div>
+    <div class="col-span-1 flex space-x-2">
+      <span class="font-bold">Phone:</span> 
+      <span><%= @user.phone.presence || '-' %></span>
+    </div>
+    <div class="col-span-1 flex space-x-2">
+      <span class="font-bold">Articles:</span> 
+      <span><%= @user.articles_count %></span>
+    </div>
+    <div class="col-span-1 flex space-x-2">
+      <span class="font-bold">Bought Articles:</span> 
+      <span><%= @user.bought_articles_count %></span>
+    </div>
+    <div class="col-span-1 flex space-x-2">
+      <span class="font-bold">Comments:</span> 
+      <span><%= @user.comments_count %></span>
+    </div>
+    <div class="col-span-1 flex space-x-2">
+      <span class="font-bold">Paid:</span> 
+      <span>$<%= @user.payment_total_usd.round(4) %>(<%= @user.payment_total_btc %> BTC)</span>
+    </div>
+    <div class="col-span-1 flex space-x-2">
+      <span class="font-bold">Earn:</span> 
+      <span>$<%= @user.revenue_total_usd.round(4) %>(<%= @user.revenue_total_btc %> BTC)</span>
+    </div>
+    <div class="col-span-1 flex space-x-2">
+      <span class="font-bold">Created:</span> 
+      <span><%= @user.created_at %></span>
+    </div>
+    <div class="col-span-1 flex space-x-2">
+      <span class="font-bold">Banned:</span> 
+      <span><%= @user.banned_at.presence || '-' %></span>
+    </div>
+  </div>
+
+  <div class=""
+    data-controller="tabs"
+    data-tabs-active-tab-value="<%= @tab %>"
+    data-tabs-active-class-value="border-b-2">
+    <div class="flex overflow-auto flex-nowrap scrollbar-hide items-center mb-4 border-b lg:border-none space-x-2">
+      <%= link_to admin_user_path(@user, tab: :articles), 
+        class: "cursor-pointer py-1 px-4 border-blue-500 font-bold text-zinc-600",
+        data: {
+          tabs_target: "tab",
+          tabs_tabname_param: "articles",
+        } do %>
+        Articles
+      <% end %>
+      <%= link_to admin_user_path(@user, tab: :payments), 
+        class: "cursor-pointer py-1 px-4 border-blue-500 font-bold text-zinc-600",
+        data: {
+          tabs_target: "tab",
+          tabs_tabname_param: "payments",
+        } do %>
+        Payments
+      <% end %>
+      <%= link_to admin_user_path(@user, tab: :orders), 
+        class: "cursor-pointer py-1 px-4 border-blue-500 font-bold text-zinc-600",
+        data: {
+          tabs_target: "tab",
+          tabs_tabname_param: "orders",
+        } do %>
+        Orders
+      <% end %>
+      <%= link_to admin_user_path(@user, tab: :swap_orders), 
+        class: "cursor-pointer py-1 px-4 border-blue-500 font-bold text-zinc-600",
+        data: {
+          tabs_target: "tab",
+          tabs_tabname_param: "swap_orders",
+        } do %>
+        Swap Orders
+      <% end %>
+    </div>
+    <div class="hidden"
+        data-tabs-content-param="articles"
+        data-tabs-target="content">
+      <%= turbo_frame_tag 'admin_articles', src: admin_articles_path(author_id: @user.id) do %>
+        <%= render "shared/loading" %>
+      <% end %>
+    </div>
+    <div class="hidden"
+        data-tabs-content-param="payments"
+        data-tabs-target="content">
+      <%= turbo_frame_tag 'admin_payments', src: admin_payments_path(payer_id: @user.mixin_uuid) do %>
+        <%= render "shared/loading" %>
+      <% end %>
+    </div>
+    <div class="hidden"
+        data-tabs-content-param="orders"
+        data-tabs-target="content">
+      <%= turbo_frame_tag 'admin_orders', src: admin_orders_path(buyer_id: @user.id) do %>
+        <%= render "shared/loading" %>
+      <% end %>
+    </div>
+    <div class="hidden"
+        data-tabs-content-param="swap_orders"
+        data-tabs-target="content">
+      <%= turbo_frame_tag 'admin_swap_orders', src: admin_swap_orders_path(payer_id: @user.mixin_uuid) do %>
+        <%= render "shared/loading" %>
+      <% end %>
+    </div>
+  </div>
+</div>

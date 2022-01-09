@@ -1,0 +1,50 @@
+<tr class="hover:bg-zinc-50 border-b">
+  <td class="p-4">
+    <%= article.id %>
+  </td>
+  <td class="p-4">
+    <%= render "admin/articles/field", article: article %>
+  </td>
+  <td class="p-4">
+    <%= render "admin/users/field", user: article.author %>
+  </td>
+  <td class="p-4">
+    <div class="flex justify-center">
+      <span class="text-white rounded px-2 py-1 
+        <%= 
+          {
+            drafted: 'bg-zinc-300',
+            published: 'bg-green-500',
+            hidden: 'bg-zinc-500',
+            blocked: 'bg-pink-500',
+          }[article.state.to_sym]
+        %>">
+        <%= article.state %>
+      </span>
+    </div>
+  </td>
+  <td class="p-4">
+    <%= article.price_tag %>
+  </td>
+  <td class="p-4">
+    <%= article.orders_count %>
+  </td>
+  <td class="p-4">
+    $<%= article.revenue_usd.to_f.round(4) %>(<%= article.revenue_btc %> BTC)
+  </td>
+  <td class="p-4">
+    <%= article.comments_count %>
+  </td>
+  <td class="p-4">
+    <%= article.upvotes_count %> / <%= article.downvotes_count %>
+  </td>
+  <td class="p-4">
+    <%= article.published_at.presence || '-' %>
+  </td>
+  <td class="p-4">
+    <%= article.created_at %>
+  </td>
+  <td class="p-4">
+    <%= link_to 'Detail', admin_article_path(article), class: "bg-blue-500 hover:bg-blue-600 rounded text-white px-4 py-2", data: { turbo_frame: "_top" } %>
+  </td>
+</tr>

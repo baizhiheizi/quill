@@ -1,0 +1,21 @@
+<%= form_with url: admin_payments_path, method: :get, class: "flex items-center flex-wrap" do |form| %>
+  <%= form.select :state, 
+    [
+      ['All', 'all'], 
+      ['Paid', 'paid'],
+      ['Completed', 'completed'],
+      ['Refunded', 'refunded']
+    ], 
+    { selected: @state }, 
+    class: "rounded-lg m-1" %>
+  <%= form.select :order_by, 
+    [
+      ['Created DESC', 'created_at_desc'], 
+      ['Created ASC', 'created_at_asc'], 
+    ], 
+    { selected: @order_by }, 
+    class: "rounded-lg m-1" %>
+  <%= form.text_field :query, value: @query, placeholder: "Search", class: "rounded-lg m-1" %>
+  <%= form.hidden_field :payer_id, value: params[:payer_id] %>
+  <%= form.submit :Query, class: "cursor-pointer rounded bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 m-1" %>
+<% end %>

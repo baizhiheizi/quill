@@ -1,0 +1,53 @@
+<tr class="hover:bg-zinc-50 bswap_order-b">
+  <td class="p-4">
+    <%= swap_order.id %>
+  </td>
+  <td class="p-4">
+    <%= link_to swap_order.trace_id, admin_payment_path(swap_order.payment), data: { turbo_frame: '_top' } %>
+  </td>
+  <td class="p-4">
+    <% if swap_order.payer.present? %>
+      <%= render 'admin/users/field', user: swap_order.payer, tab: :swap_orders %>
+    <% else %>
+      -
+    <% end %>
+  </td>
+  <td class="p-4">
+    <div class="flex items-center space-x-2">
+      <%= image_tag swap_order.pay_asset.icon_url, class: "w-10 h-10 rounded" %>
+      <span><%= swap_order.funds %></span>
+      <span><%= swap_order.pay_asset.symbol %></span>
+    </div>
+  </td>
+  <td class="p-4">
+    <div class="flex items-center space-x-2">
+      <%= image_tag swap_order.fill_asset.icon_url, class: "w-10 h-10 rounded" %>
+      <span><%= swap_order.amount || '-' %></span>
+      <span><%= swap_order.fill_asset.symbol %></span>
+    </div>
+  </td>
+  <td class="p-4">
+    <div class="flex justify-center">
+      <span class="px-2 py-1 rounded text-white
+        <%=
+          {
+            paid: 'bg-zinc-500',
+            swapping: 'bg-blue-300',
+            rejected: 'bg-red-500',
+            swapped: 'bg-blue-500',
+            order_placed: 'bg-green-700',
+            completed: 'bg-green-500',
+            refunded: 'bg-indigo-500',
+          }[swap_order.state.to_sym]
+          %>">
+        <%= swap_order.state %>
+      </span>
+    </div>
+  </td>
+  <td class="p-4">
+    <%= swap_order.created_at %>
+  </td>
+  <td class="p-4">
+    <%= link_to 'Detail', admin_swap_order_path(swap_order), class: "bg-blue-500 hover:bg-blue-600 rounded text-white px-4 py-2", data: { turbo_frame: "_top" } %>
+  </td>
+</tr>

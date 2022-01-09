@@ -1,1 +1,25 @@
-<%= react_component('AdminApp', props: { csrf_token: form_authenticity_token }.merge(base_props), prerender: false) %>
+<div class="p-4 bg-white dark:bg-zinc-900 rounded-lg mb-4">
+  <div class="sm:grid sm:grid-cols-2 gap-4">
+    <div class="text-center p-2">
+      <div class="opacity-70 mb-2">
+        <%= t('users_count') %>
+      </div>
+      <div class="text-2xl font-bold">
+        <%= User.count %>
+      </div>
+    </div>
+    <div class="text-center p-2">
+      <div class="opacity-70 mb-2">
+        <%= t('articles_count') %>
+      </div>
+      <div class="text-2xl font-bold">
+        <%= Article.count %>
+      </div>
+    </div>
+  </div>
+  <%= turbo_frame_tag 'transfers_stats', src: 'transfers/stats', class: "sm:grid sm:grid-cols-2 gap-4" do %>
+    <div class="flex justify-center col-span-2">
+      <%= render 'shared/loading' %>
+    </div>
+  <% end %>
+</div>

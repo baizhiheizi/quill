@@ -10,12 +10,26 @@
     <%= csp_meta_tag %>
     <meta name="viewport" content="user-scalable=no,initial-scale=1"/>
 
-    <%= javascript_pack_tag 'admin' %>
-    <%= stylesheet_pack_tag 'admin' %>
-    <%= favicon_pack_tag "#{Settings.favicon_file || 'favicon.png'}" %>
+    <%= javascript_include_tag "application", "data-turbo-track": "reload" %>
+    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+    <%= favicon_link_tag "#{Settings.favicon_file || 'favicon.png'}" %>
   </head>
 
-  <body>
-    <%= yield %>
+  <body class="">
+    <%= render "admin/nav" %>
+    <div class="flex bg-zinc-100 h-screen pt-12 sm:pt-16 relative">
+      <%= render "admin/aside" %>
+      <main class="flex-1 overflow-y-scroll">
+        <div class="p-4 flex flex-col space-y-2">
+          <% flash.each do |type, message| %>
+            <%= render partial: "shared/flash", locals: { type: type, message: message } %>
+          <% end %>
+          <div class="w-full">
+            <%= yield %>
+          </div>
+        </div>
+        <div style="height:env(safe-area-inset-bottom)" />
+      </main>
+    </div>
   </body>
 </html>

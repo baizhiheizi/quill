@@ -1,0 +1,53 @@
+<aside data-controller="sidebar" 
+       data-sidebar-open-class-value="<%= %w[w-64].to_json %>" 
+       data-sidebar-collapse-class-value="<%= %w[w-0 sm:w-16].to_json %>" 
+       class="sticky top-0 overflow-y-scroll scrollbar-hide flex items-center">
+  <div data-sidebar-target="sidebar" 
+       data-action="hover->sidebar#open" 
+       class="h-full bg-white w-0 sm:w-16 2xl:w-64 flex flex-col space-y-2 p-0 sm:p-4 overflow-x-hidden transition-transform">
+    <%= link_to admin_root_path, class: "flex items-center space-x-4 hover:bg-zinc-100 p-2 rounded-lg truncate" do %>
+      <span>
+      <%= render "shared/icons/chart", html_class: "opacity-60 w-6 h-6" %>
+      </span>
+      <span>Dashboard</span>
+    <% end %>
+    <%= link_to admin_users_path, class: "flex items-center space-x-4 hover:bg-zinc-100 p-2 rounded-lg truncate" do %>
+      <span>
+      <%= render "shared/icons/users", html_class: "opacity-60 w-6 h-6" %>
+      </span>
+      <span>Users</span>
+    <% end %>
+    <%= link_to admin_articles_path, class: "flex items-center space-x-4 hover:bg-zinc-100 p-2 rounded-lg truncate" do %>
+      <span>
+      <%= render "shared/icons/book_open", html_class: "opacity-60 w-6 h-6" %>
+      </span>
+      <span>Articles</span>
+    <% end %>
+    <%= link_to admin_payments_path, class: "flex items-center space-x-4 hover:bg-zinc-100 p-2 rounded-lg truncate" do %>
+      <span>
+      <%= render "shared/icons/credit_card_solid", html_class: "opacity-60 w-6 h-6" %>
+      </span>
+      <span>Payments</span>
+    <% end %>
+    <%= link_to admin_orders_path, class: "flex items-center space-x-4 hover:bg-zinc-100 p-2 rounded-lg truncate" do %>
+      <span>
+      <%= render "shared/icons/shopping_cart", html_class: "opacity-60 w-6 h-6" %>
+      </span>
+      <span>Orders</span>
+    <% end %>
+    <%= link_to admin_swap_orders_path, class: "flex items-center space-x-4 hover:bg-zinc-100 p-2 rounded-lg truncate" do %>
+      <span>
+      <%= render "shared/icons/switch", html_class: "opacity-60 w-6 h-6" %>
+      </span>
+      <span>Swap Orders</span>
+    <% end %>
+  </div>
+  <div class="relative w-0 h-0">
+  <button data-sidebar-target="openButton" data-action="sidebar#open" class="fixed py-4 px-1 rounded-r-lg bg-white sm:hidden">
+    <%= render "shared/icons/chevron_right", html_class: "w-5 h-5 opacity-60" %>
+  </button>
+  <button data-sidebar-target="collapseButton" data-action="sidebar#collapse click@window->sidebar#hide" class="fixed hidden py-4 px-1 rounded-r-lg bg-white sm:hidden">
+    <%= render "shared/icons/chevron_left", html_class: "w-5 h-5 opacity-60" %>
+  </button>
+  </div>
+</aside>

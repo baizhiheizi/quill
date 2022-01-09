@@ -1,0 +1,29 @@
+<%= form_with url: admin_articles_path, method: :get, class: "flex items-center flex-wrap" do |form| %>
+  <%= form.select :state, 
+    [
+      ['All', 'all'], 
+      ['Drafted', 'drafted'],
+      ['Published', 'published'],
+      ['Hidden', 'hidden'],
+      ['Blocked', 'blocked'],
+    ], 
+    { selected: @state }, 
+    class: "rounded-lg m-1" %>
+  <%= form.select :order_by, 
+    [
+      ['Published DESC', 'published_at_desc'], 
+      ['Published ASC', 'published_at_asc'], 
+      ['Created DESC', 'created_at_desc'], 
+      ['Created ASC', 'created_at_asc'], 
+      ['Revenue', 'revenue_usd'], 
+      ['Orders', 'orders_count'], 
+      ['Comments Count', 'comments_count'], 
+      ['Upvotes Count', 'upvotes_count'], 
+      ['Downvotes Count', 'downvotes_count'], 
+    ], 
+    { selected: @order_by }, 
+    class: "rounded-lg m-1" %>
+  <%= form.text_field :query, value: @query, placeholder: "Search", class: "rounded-lg m-1" %>
+  <%= form.hidden_field :author_id, value: params[:author_id] %>
+  <%= form.submit :Query, class: "cursor-pointer rounded bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 m-1" %>
+<% end %>

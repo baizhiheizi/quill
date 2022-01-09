@@ -1,0 +1,73 @@
+<div class="flex items-center space-x-4 mb-4">
+  <%= link_to 'Home', admin_root_path %>
+  <span>/</span>
+  <%= link_to 'Swap Orders', admin_swap_orders_path %>
+  <span>/</span>
+  <span><%= @swap_order.id %></span>
+</div>
+
+<div class="bg-white roundedlg p-4">
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-8">
+    <div class="col-span-1 flex space-x-2">
+      <span class="font-bold">ID:</span> 
+      <span><%= @swap_order.id %></span>
+    </div>
+    <div class="col-span-1 flex space-x-2">
+      <span class="font-bold">TraceID:</span> 
+      <span><%= @swap_order.trace_id %></span>
+    </div>
+    <div class="col-span-1 flex space-x-2">
+      <span class="font-bold">State:</span> 
+      <div class="">
+        <span class="px-2 py-1 rounded text-white
+          <%=
+            {
+            paid: 'bg-zinc-500',
+            swapping: 'bg-blue-300',
+            rejected: 'bg-red-500',
+            swapped: 'bg-blue-500',
+            order_placed: 'bg-green-700',
+            completed: 'bg-green-500',
+            refunded: 'bg-indigo-500',
+            }[@swap_order.state.to_sym]
+            %>">
+          <%= @swap_order.state %>
+        </span>
+      </div>
+    </div>
+    <div class="col-span-1 flex space-x-2">
+      <span class="font-bold">Payer:</span> 
+      <span>
+        <% if @swap_order.payer.present? %>
+          <%= render 'admin/users/field', user: @swap_order.payer, tab: :swap_orders %>
+        <% else %>
+          -
+        <% end %>
+      </span>
+    </div>
+    <div class="col-span-1 flex space-x-2">
+      <span class="font-bold">From:</span> 
+      <div class="flex items-center space-x-2">
+        <%= image_tag @swap_order.pay_asset.icon_url, class: "w-10 h-10 rounded" %>
+        <span><%= @swap_order.funds %></span>
+        <span><%= @swap_order.pay_asset.symbol %></span>
+      </div>
+    </div>
+    <div class="col-span-1 flex space-x-2">
+      <span class="font-bold">To:</span> 
+      <div class="flex items-center space-x-2">
+        <%= image_tag @swap_order.fill_asset.icon_url, class: "w-10 h-10 rounded" %>
+        <span><%= @swap_order.amount %></span>
+        <span><%= @swap_order.fill_asset.symbol %></span>
+      </div>
+    </div>
+    <div class="col-span-1 flex space-x-2">
+      <span class="font-bold">Payment:</span> 
+      <%= link_to @swap_order.trace_id, admin_payment_path(@swap_order.payment), data: { turbo_frame: '_top' } %>
+    </div>
+    <div class="col-span-1 flex space-x-2">
+      <span class="font-bold">Created:</span> 
+      <span><%= @swap_order.created_at %></span>
+    </div>
+  </div>
+</div>

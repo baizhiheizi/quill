@@ -1,0 +1,10 @@
+<% tab ||= 'orders' %>
+
+<%= link_to admin_article_path(article, tab: tab), 
+  class: "flex items-center space-x-2", 
+  data: { turbo_frame: "_top" } do %>
+  <div>
+    <div><%= article.title %></div>
+    <div class="text-sm opacity-70"><%= article.uuid %></div>
+  </div>
+<% end %>

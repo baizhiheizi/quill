@@ -1,0 +1,33 @@
+<nav class="hidden bg-white dark:bg-zinc-900 sm:block border-b dark:border-zinc-800 fixed top-0 w-full z-50">
+  <div class="px-4 px-8 mx-auto max-w-6xl">
+    <div class="flex items-center justify-between h-16">
+      <div class="flex items-center flex-1 space-x-10">
+        <%= link_to admin_root_path, class: 'flex items-center space-x-2 flex-shrink-0' do %>
+          <img class="w-10 h-10" src=<%= asset_path('logo.png') %> alt="Logo">
+        <% end %>
+      </div>
+
+      <div class="flex items-center ml-4 md:ml-6">
+        <div class="" data-controller="darkmode">
+          <a class="hidden block mr-3 cursor-pointer" data-darkmode-target="lightButton" data-action="darkmode#toggle">
+            <%= render 'shared/icons/moon', html_class: "w-6 h-6" %>
+          </a>
+          <a class="hidden block mr-3 cursor-pointer" data-darkmode-target="darkButton" data-action="darkmode#toggle">
+            <%= render 'shared/icons/sun', html_class: "text-zinc-100 w-6 h-6" %>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<nav class="bg-white dark:bg-zinc-900 sm:hidden border-b dark:border-zinc-800 w-full fixed top-0 z-50" data-controller="dropdown">
+  <div class="relative px-4 px-6 mx-auto max-h-screen">
+    <div class="relative flex items-center justify-center h-12">
+      <%= link_to admin_root_path, class: "flex items-center flex-shrink-0 space-x-2" do %>
+        <img class="w-8 h-8" src=<%= asset_path('logo.png') %> alt="Logo">
+        <span class='text-xl font-medium'>Admin</span>
+      <% end %>
+    </div>
+  </div>
+</nav>

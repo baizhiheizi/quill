@@ -267,6 +267,10 @@ class Order < ApplicationRecord
     CacheOrderHistoryTickerWorker.perform_async id
   end
 
+  def price_tag
+    [format('%.8f', total), currency&.symbol].join(' ')
+  end
+
   private
 
   def setup_attributes
