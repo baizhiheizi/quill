@@ -1,2 +1,29 @@
-<div>
-</div>
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Admin</title>
+    <meta
+      name="viewport"
+      content="minimum-scale=1, initial-scale=1, width=device-width, user-scalable=no, shrink-to-fit=no"
+    />
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    <meta name="viewport" content="user-scalable=no,initial-scale=1"/>
+
+    <%= javascript_include_tag "application", "data-turbo-track": "reload" %>
+    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+    <%= favicon_link_tag "#{Settings.favicon_file || 'favicon.png'}" %>
+  </head>
+
+  <body class="">
+    <main class="h-screen flex">
+      <div class="m-auto max-w-xl">
+        <%= form_with url: '/admin/login', method: :post, class: "flex flex-col space-y-2" do |form| %>
+          <%= form.text_field :name, placeholder: "name", required: true, class: "rounded-lg" %>
+          <%= form.password_field :password, placeholder: "password", required: true, class: "rounded-lg" %>
+          <%= form.submit "Login", class: "bg-blue-500 hover:bg-blue-600 rounded text-white py-2 cursor-pointer" %>
+        <% end %>
+      </div>
+    </main>
+  </body>
+</html>
