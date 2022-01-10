@@ -39,6 +39,7 @@ module Admin
     end
 
     def show
+      @tab = params[:tab] || 'transfers'
       @swap_order = SwapOrder.find params[:id]
     end
   end

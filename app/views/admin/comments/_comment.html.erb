@@ -1,0 +1,61 @@
+<tr id="<%= dom_id comment %>" class="hover:bg-zinc-50 border-b">
+  <td class="p-4">
+    <%= comment.id %>
+  </td>
+  <td class="p-4">
+    <%= render "admin/users/field", user: comment.author, tab: :comments %>
+  </td>
+  <td class="p-4">
+    <%= render "admin/articles/field", article: comment.commentable, tab: :comments if comment.commentable.is_a?(Article) %>
+  </td>
+  <td class="p-4">
+    <div class="flex">
+      <% if comment.deleted? %>
+        <span class="px-2 py-1 text-white bg-red-500 rounded">Deleted</div>
+      <% else %>
+        <span class="rounded-full p-1 bg-green-500 ring-2 ring-green-100"></div>
+      <% end %>
+    </div>
+  </td>
+  <td class="p-4">
+    <div class="w-64 break-words">
+      <%= comment.content %>
+    </div>
+  </td>
+  <td class="p-4">
+    <%= comment.upvotes_count %> / <%= comment.downvotes_count %>
+  </td>
+  <td class="p-4">
+    <%= comment.created_at %>
+  </td>
+  <td class="p-4">
+    <div class="flex items-center space-x-2">
+      <%= button_to 'Recover', admin_comment_undelete_path(comment),
+        form: {
+          data: { 
+            controller: "confirm",
+            confirm_target: "form",
+            confirm_identifier_value: SecureRandom.uuid,
+            confirm_content_value: 'Sure to recover?' 
+          }
+        },
+        data: { 
+          action: "confirm#invoke",
+        },
+        class: "bg-indigo-500 hover:bg-indigo-600 rounded text-white px-4 py-2" if comment.deleted? %>
+      <%= button_to 'Delete', admin_comment_delete_path(comment),
+        form: {
+          data: { 
+            controller: "confirm",
+            confirm_target: "form",
+            confirm_identifier_value: SecureRandom.uuid,
+            confirm_content_value: 'Sure to delete?' 
+          }
+        },
+        data: { 
+          action: "confirm#invoke",
+        },
+        class: "bg-red-500 hover:bg-red-600 rounded text-white px-4 py-2" unless comment.deleted? %>
+    </div>
+  </td>
+</tr>

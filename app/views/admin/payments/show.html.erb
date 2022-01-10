@@ -70,6 +70,30 @@
       <span><%= @payment.decrypted_memo %></span>
     </div>
     <div class="col-span-1 flex space-x-2">
+      <span class="font-bold">Order:</span> 
+      <span>
+        <% if @payment.order.present? %>
+          <%= link_to @payment.order.trace_id, admin_order_path(@payment.order), data: { turbo_frame: '_top' } %>
+        <% else %>
+          -
+        <% end %>
+      </span>
+    </div>
+    <div class="col-span-1 flex space-x-2">
+      <span class="font-bold">Swap Order:</span> 
+      <span>
+        <% if @payment.swap_order.present? %>
+          <%= link_to @payment.swap_order.trace_id, admin_swap_order_path(@payment.swap_order), data: { turbo_frame: '_top' } %>
+        <% else %>
+          -
+        <% end %>
+      </span>
+    </div>
+    <div class="col-span-1 flex space-x-2">
+      <span class="font-bold">Raw:</span> 
+      <span class="break-all"><%= @payment.raw %></span>
+    </div>
+    <div class="col-span-1 flex space-x-2">
       <span class="font-bold">Created:</span> 
       <span><%= @payment.created_at %></span>
     </div>

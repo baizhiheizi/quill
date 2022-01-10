@@ -7,9 +7,9 @@ class CommentsController < ApplicationController
   def index
     comments =
       if @article.present?
-        @article.comments
+        @article.comments.without_deleted
       else
-        Comment.all
+        Comment.without_deleted
       end
 
     @order_by = params[:order_by] || 'upvotes'

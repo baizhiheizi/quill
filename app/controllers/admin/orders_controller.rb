@@ -4,7 +4,9 @@ module Admin
   class OrdersController < Admin::BaseController
     def index
       orders = Order.all
+
       orders = orders.where(buyer_id: params[:buyer_id]) if params[:buyer_id].present?
+      orders = orders.where(item_id: params[:item_id], item_type: params[:item_type]) if params[:item_id].present? && params[:item_type].present?
 
       @state = params[:state] || 'all'
       orders =

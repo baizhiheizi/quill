@@ -33,5 +33,7 @@
     class: "rounded-lg m-1" %>
   <%= form.text_field :query, value: @query, placeholder: "Search", class: "rounded-lg m-1" %>
   <%= form.hidden_field :opponent_id, value: params[:opponent_id] %>
+  <%= form.hidden_field :source_id, value: params[:source_id] %>
+  <%= form.hidden_field :source_type, value: params[:source_type] %>
   <%= form.submit :Query, class: "cursor-pointer rounded bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 m-1" %>
 <% end %>

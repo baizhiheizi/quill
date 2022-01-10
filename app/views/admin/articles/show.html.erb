@@ -116,7 +116,7 @@
     data-tabs-active-tab-value="<%= @tab %>"
     data-tabs-active-class-value="border-b-2">
     <div class="flex overflow-auto flex-nowrap scrollbar-hide items-center mb-4 border-b lg:border-none space-x-2">
-      <%= link_to admin_articles_path(@article, tab: :orders), 
+      <%= link_to admin_article_path(@article, tab: :orders), 
         class: "cursor-pointer py-1 px-4 border-blue-500 font-bold text-zinc-600",
         data: {
           tabs_target: "tab",
@@ -124,11 +124,26 @@
         } do %>
         Orders
       <% end %>
+      <%= link_to admin_article_path(@article, tab: :comments), 
+        class: "cursor-pointer py-1 px-4 border-blue-500 font-bold text-zinc-600",
+        data: {
+          tabs_target: "tab",
+          tabs_tabname_param: "comments",
+        } do %>
+        Comments
+      <% end %>
     </div>
     <div class="hidden"
-        data-tabs-content-param="articles"
+        data-tabs-content-param="orders"
         data-tabs-target="content">
-      <%= turbo_frame_tag 'admin_orders', src: admin_orders_path(item: @article) do %>
+      <%= turbo_frame_tag 'admin_orders', src: admin_orders_path(item_id: @article.id, item_type: 'Article') do %>
+        <%= render "shared/loading" %>
+      <% end %>
+    </div>
+    <div class="hidden"
+        data-tabs-content-param="comments"
+        data-tabs-target="content">
+      <%= turbo_frame_tag 'admin_comments', src: admin_comments_path(commentable_id: @article.id, commentable_type: 'Article') do %>
         <%= render "shared/loading" %>
       <% end %>
     </div>

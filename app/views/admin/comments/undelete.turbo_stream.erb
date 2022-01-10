@@ -1,0 +1,3 @@
+<%= turbo_stream.replace dom_id(@comment) do %>
+  <%= render 'admin/comments/comment', comment: @comment.reload %>
+<% end %>

@@ -5,6 +5,7 @@ module Admin
     def index
       transfers = Transfer.all
       transfers = transfers.where(opponent_id: params[:opponent_id]) if params[:opponent_id].present?
+      transfers = transfers.where(source_id: params[:source_id], source_type: params[:source_type]) if params[:source_id].present? && params[:source_type].present?
 
       @state = params[:state] || 'all'
       transfers =

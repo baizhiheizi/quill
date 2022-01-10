@@ -10,12 +10,11 @@
     "moduleResolution": "node",
     "sourceMap": true,
     "target": "esnext",
-    "jsx": "react",
     "noEmit": true,
     "baseUrl": ".",
     "resolveJsonModule": true,
     "paths": {
-      "*": ["node_modules/*", "app/packs/*"]
+      "*": ["node_modules/*"]
     }
   },
   "exclude": ["**/*.spec.ts", "node_modules", "vendor", "public"],

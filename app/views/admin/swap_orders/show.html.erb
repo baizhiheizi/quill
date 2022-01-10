@@ -66,8 +66,40 @@
       <%= link_to @swap_order.trace_id, admin_payment_path(@swap_order.payment), data: { turbo_frame: '_top' } %>
     </div>
     <div class="col-span-1 flex space-x-2">
+      <span class="font-bold">Min Amount:</span> 
+      <span><%= @swap_order.min_amount || '-' %></span>
+    </div>
+    <div class="col-span-1 flex space-x-2">
+      <span class="font-bold">raw:</span> 
+      <span class="break-all"><%= @swap_order.raw %></span>
+    </div>
+    <div class="col-span-1 flex space-x-2">
       <span class="font-bold">Created:</span> 
       <span><%= @swap_order.created_at %></span>
     </div>
   </div>
+
+  <div class=""
+    data-controller="tabs"
+    data-tabs-active-tab-value="<%= @tab %>"
+    data-tabs-active-class-value="border-b-2">
+    <div class="flex overflow-auto flex-nowrap scrollbar-hide items-center mb-4 border-b lg:border-none space-x-2">
+      <%= link_to admin_swap_order_path(@swap_order, tab: :transfers), 
+        class: "cursor-pointer py-1 px-4 border-blue-500 font-bold text-zinc-600",
+        data: {
+          tabs_target: "tab",
+          tabs_tabname_param: "transfers",
+        } do %>
+        Transfers
+      <% end %>
+    </div>
+    <div class="hidden"
+        data-tabs-content-param="transfers"
+        data-tabs-target="content">
+      <%= turbo_frame_tag 'admin_transfers', src: admin_transfers_path(source_id: @swap_order.id, source_type: 'SwapOrder') do %>
+        <%= render "shared/loading" %>
+      <% end %>
+    </div>
+  </div>
+</div>
 </div>

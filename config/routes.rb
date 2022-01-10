@@ -104,6 +104,10 @@ Rails.application.routes.draw do
       post :block
       post :unblock
     end
+    resources :comments, only: %i[index] do
+      post :delete
+      post :undelete
+    end
     resources :orders, only: %i[index show]
     resources :swap_orders, only: %i[index show]
     resources :payments, only: %i[index show]
