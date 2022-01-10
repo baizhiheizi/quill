@@ -2,10 +2,13 @@ import { Controller } from '@hotwired/stimulus';
 import { DirectUpload } from '@rails/activestorage';
 import { post } from '@rails/request.js';
 import EasyMDE from 'easymde';
+import { debounce } from 'lodash';
+import { put } from '@rails/request.js';
 
 export default class extends Controller {
   static values = {
-    autosave: Boolean,
+    autosaveUrl: String,
+    articleUuid: String,
     newRecord: Boolean,
     activeTab: String,
   };
@@ -26,10 +29,11 @@ export default class extends Controller {
   ];
 
   connect() {
-    if (this.autosaveValue) {
-      this.editor.codemirror.on('change', () => {
-        this.save();
-      });
+    if (this.autosaveUrlValue) {
+      this.editor.codemirror.on(
+        'change',
+        debounce(() => this.autosave(), 1000),
+      );
     }
     if (this.hasImagesTarget) {
       this.directUploadUrl = this.imagesTarget.dataset.directUploadUrl;
@@ -235,5 +239,18 @@ export default class extends Controller {
 
   hideLoading() {
     document.querySelector('#loading-toast').classList.add('hidden');
+  }
+
+  autosave() {
+    const title = this.element.querySelector('#article_title').value;
+
+    put(this.autosaveUrlValue, {
+      body: {
+        title,
+        content: this.editor.value(),
+      },
+      contentType: 'application/json',
+      responseKind: 'turbo-stream',
+    });
   }
 }

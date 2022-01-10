@@ -35,6 +35,7 @@ Rails.application.routes.draw do
   resources :view_modals, only: %i[create]
 
   resources :articles, except: %i[destroy], param: :uuid do
+    put :update_content
     resources :comments, only: %i[index]
   end
   resources :upvoted_articles, only: %i[update destroy], param: :uuid

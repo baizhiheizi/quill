@@ -58,6 +58,11 @@ class ArticlesController < ApplicationController
     @article.update update_article_params
   end
 
+  def update_content
+    @article = current_user.articles.find_by uuid: params[:article_uuid]
+    @article.update params.require(:article).permit(:title, :content)
+  end
+
   def preview
   end
 
