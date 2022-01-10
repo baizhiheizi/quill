@@ -4,7 +4,7 @@
   "scripts": {
     "lint": "prettier --write app/**/*.{tsx,ts,js,gql}",
     "lint-check": "prettier --check app/**/*.{tsx,ts,js,gql}",
-    "build": "esbuild app/javascript/*.* --bundle --sourcemap --outdir=app/assets/builds",
+    "build": "esbuild app/javascript/*.* --bundle --sourcemap --outdir=app/assets/builds --target=chrome58",
     "build:css": "tailwindcss -i ./app/assets/stylesheets/application.tailwind.css -o ./app/assets/builds/application.css"
   },
   "dependencies": {
