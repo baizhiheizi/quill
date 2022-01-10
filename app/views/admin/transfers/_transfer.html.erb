@@ -10,7 +10,7 @@
   </td>
   <td class="p-4">
     <% if transfer.wallet.present? %>
-      <%= link_to transfer.wallet_id, admin_mixin_network_user_path(transfer.wallet_id), data: { turbo_frame: "_top" } %>
+      <%= render 'admin/mixin_network_users/field', mixin_network_user: transfer.wallet %>
     <% else %>
       <%= transfer.wallet_id || '-' %>
     <% end %>

@@ -24,6 +24,16 @@
       <span><%= @article.uuid %></span>
     </div>
     <div class="col-span-1 flex space-x-2">
+      <span class="font-bold">Wallet:</span> 
+      <span>
+        <% if @article.wallet.present? %>
+          <%= render 'admin/mixin_network_users/field', mixin_network_user: @article.wallet %>
+        <% else %>
+          -
+        <% end %>
+      </span>
+    </div>
+    <div class="col-span-1 flex space-x-2">
       <span class="font-bold">Intro:</span> 
       <span><%= @article.intro %></span>
     </div>

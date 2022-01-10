@@ -1,0 +1,90 @@
+<div class="flex items-center space-x-4 mb-4">
+  <%= link_to 'Home', admin_root_path %>
+  <span>/</span>
+  <%= link_to 'Wallets', admin_mixin_network_users_path %>
+  <span>/</span>
+  <span><%= @mixin_network_user.uuid %></span>
+</div>
+
+<div class="bg-white roundedlg p-4">
+  <div class="flex items-center space-x-2 mb-4">
+    <%= image_tag @mixin_network_user.avatar, class: "w-12 h-12 rounded-full", lazy: true %>
+    <div>
+      <div><%= @mixin_network_user.name %></div>
+      <div class="text-sm opacity-70"><%= @mixin_network_user.uuid %></div>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-8">
+    <div class="col-span-1 flex space-x-2">
+      <span class="font-bold">ID:</span> 
+      <span><%= @mixin_network_user.id %></span>
+    </div>
+    <div class="col-span-1 flex space-x-2">
+      <span class="font-bold">UUID:</span> 
+      <span><%= @mixin_network_user.uuid %></span>
+    </div>
+    <div class="col-span-1 flex space-x-2">
+      <span class="font-bold">Owner:</span> 
+      <span>
+        <% if @mixin_network_user.owner.is_a? Article %>
+          <%= render "admin/articles/field", article: @mixin_network_user.owner %>
+        <% elsif @mixin_network_user.owner.is_a? User %>
+          <%= render "admin/users/field", user: @mixin_network_user.owner %>
+        <% end %>
+      </span>
+    </div>
+    <div class="col-span-1 flex space-x-2">
+      <span class="font-bold">Created:</span> 
+      <span><%= @mixin_network_user.created_at %></span>
+    </div>
+    <div class="col-span-1 flex space-x-2">
+      <span class="font-bold">State:</span> 
+      <span class="flex m-auto">
+        <% if @mixin_network_user.ready? %>
+          <span class="p-1 bg-green-500 ring-green-100 ring-2 rounded-full"></span>
+        <% else %>
+          <span class="px-2 py-1 bg-zinc-300">Unready</span>
+        <% end %>
+      </span>
+    </div>
+  </div>
+
+  <div class=""
+    data-controller="tabs"
+    data-tabs-active-tab-value="<%= @tab %>"
+    data-tabs-active-class-value="border-b-2">
+    <div class="flex overflow-auto flex-nowrap scrollbar-hide items-center mb-4 border-b lg:border-none space-x-2">
+      <%= link_to admin_mixin_network_user_path(@mixin_network_user, tab: :assets), 
+        class: "cursor-pointer py-1 px-4 border-blue-500 font-bold text-zinc-600",
+        data: {
+          tabs_target: "tab",
+          tabs_tabname_param: "assets",
+        } do %>
+        Assets
+      <% end %>
+      <%= link_to admin_mixin_network_user_path(@mixin_network_user, tab: :snapshots), 
+        class: "cursor-pointer py-1 px-4 border-blue-500 font-bold text-zinc-600",
+        data: {
+          tabs_target: "tab",
+          tabs_tabname_param: "snapshots",
+        } do %>
+        Snapshots
+      <% end %>
+    </div>
+    <div class="hidden"
+        data-tabs-content-param="assets"
+        data-tabs-target="content">
+      <%= turbo_frame_tag 'admin_wallet_assets', src: admin_wallet_assets_path(@mixin_network_user.uuid) do %>
+        <%= render "shared/loading" %>
+      <% end %>
+    </div>
+    <div class="hidden"
+        data-tabs-content-param="snapshots"
+        data-tabs-target="content">
+      <%= turbo_frame_tag 'admin_wallet_snapshots', src: admin_wallet_snapshots_path(@mixin_network_user.uuid) do %>
+        <%= render "shared/loading" %>
+      <% end %>
+    </div>
+  </div>
+</div>

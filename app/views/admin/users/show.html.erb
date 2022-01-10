@@ -33,6 +33,16 @@
       <span><%= @user.mixin_uuid %></span>
     </div>
     <div class="col-span-1 flex space-x-2">
+      <span class="font-bold">Wallet:</span> 
+      <span>
+        <% if @user.wallet.present? %>
+          <%= render 'admin/mixin_network_users/field', mixin_network_user: @user.wallet %>
+        <% else %>
+          -
+        <% end %>
+      </span>
+    </div>
+    <div class="col-span-1 flex space-x-2">
       <span class="font-bold">Phone:</span> 
       <span><%= @user.phone.presence || '-' %></span>
     </div>
@@ -111,6 +121,14 @@
         } do %>
         Transfers
       <% end %>
+      <%= link_to admin_user_path(@user, tab: :mixin_network_snapshots), 
+        class: "cursor-pointer py-1 px-4 border-blue-500 font-bold text-zinc-600",
+        data: {
+          tabs_target: "tab",
+          tabs_tabname_param: "mixin_network_snapshots",
+        } do %>
+        Snapshots
+      <% end %>
     </div>
     <div class="hidden"
         data-tabs-content-param="articles"
@@ -144,6 +162,13 @@
         data-tabs-content-param="transfers"
         data-tabs-target="content">
       <%= turbo_frame_tag 'admin_transfers', src: admin_transfers_path(opponent_id: @user.mixin_uuid) do %>
+        <%= render "shared/loading" %>
+      <% end %>
+    </div>
+    <div class="hidden"
+        data-tabs-content-param="mixin_network_snapshots"
+        data-tabs-target="content">
+      <%= turbo_frame_tag 'admin_mixin_network_snapshots', src: admin_mixin_network_snapshots_path(opponent_id: @user.mixin_uuid) do %>
         <%= render "shared/loading" %>
       <% end %>
     </div>

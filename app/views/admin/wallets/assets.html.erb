@@ -1,0 +1,19 @@
+<%= turbo_frame_tag 'admin_wallet_assets' do %>
+  <div data-controller="infinite-scroll" class="w-full overflow-x-scroll scrollbar-hide">
+    <table class='w-full table-auto min-w-max '>
+      <thead>
+        <tr class="bg-zinc-100">
+          <th class="p-4">Name</th>
+          <th class="p-4">ID</th>
+          <th class="p-4">Balance</th>
+          <th class="p-4">Value</th>
+        </tr>
+      </thead>
+      <tbody id="admin_wallet_assets_list">
+        <%= render partial: 'admin/wallets/asset', collection: @assets, as: :asset %>
+      </tbody>
+    </table>
+    <div data-infinite-scroll-target='scrollArea'></div>
+    <%= render partial: "shared/pagination", locals: { pagy: @pagy } %>
+  </div>
+<% end %>

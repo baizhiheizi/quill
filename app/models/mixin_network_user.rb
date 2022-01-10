@@ -43,6 +43,9 @@ class MixinNetworkUser < ApplicationRecord
 
   after_commit :initialize_pin_async, :update_avatar_async, on: :create
 
+  scope :ready, -> { where.not(encrypted_pin: nil) }
+  scope :unready, -> { where(encrypted_pin: nil) }
+
   attr_encrypted :pin
 
   def mixin_api
@@ -106,6 +109,18 @@ class MixinNetworkUser < ApplicationRecord
 
   def default_name
     Settings.broker_name || 'PRSDigg Broker'
+  end
+
+  def avatar
+    raw['avatar_url'].presence || generated_avatar_url
+  end
+
+  def generated_avatar_url
+    format('https://api.multiavatar.com/%<mixin_uuid>s.svg', mixin_uuid: uuid)
+  end
+
+  def ready?
+    encrypted_pin.present?
   end
 
   private

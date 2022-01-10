@@ -1,0 +1,30 @@
+<tr class="hover:bg-zinc-50 border-b">
+  <td class="p-4">
+    <%= snapshot['type'] %>
+  </td>
+  <td class="p-4">
+    <% asset = Currency.find_by(asset_id: snapshot['asset_id']) %>
+    <div class="flex items-center space-x-2">
+      <%= image_tag asset.icon_url, class: "w-10 w-10 rounded-full" %>
+      <span><%= snapshot['amount'] %></span>
+      <span><%= asset.symbol %></span>
+    </div>
+  </td>
+  <td class="p-4">
+    <%= snapshot['opponent_id'] || '-' %>
+  </td>
+  <td class="p-4">
+    <div class="w-64 break-words">
+      <%= snapshot['memo'] %>
+    </div>
+  </td>
+  <td class="p-4">
+    <%= snapshot['created_at'] || '-' %>
+  </td>
+  <td class="p-4">
+    <%= snapshot['snapshot_id'] %>
+  </td>
+  <td class="p-4">
+    <%= snapshot['trace_id'] || '-' %>
+  </td>
+</tr>

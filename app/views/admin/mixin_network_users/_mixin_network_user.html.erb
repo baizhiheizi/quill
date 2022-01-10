@@ -1,0 +1,30 @@
+<tr class="hover:bg-zinc-50 border-b">
+  <td class="p-4">
+    <%= mixin_network_user.id %>
+  </td>
+  <td class="p-4">
+    <%= render "admin/mixin_network_users/field", mixin_network_user: mixin_network_user %>
+  </td>
+  <td class="p-4">
+    <% if mixin_network_user.owner.is_a? Article %>
+      <%= render "admin/articles/field", article: mixin_network_user.owner %>
+    <% elsif mixin_network_user.owner.is_a? User %>
+      <%= render "admin/users/field", user: mixin_network_user.owner %>
+    <% end %>
+  </td>
+  <td class="p-4">
+    <div class='flex justify-center'>
+      <% if mixin_network_user.ready? %>
+        <span class="p-1 bg-green-500 ring-green-100 ring-2 rounded-full"></span>
+      <% else %>
+        <span class="px-2 py-1 bg-zinc-300">Unready</span>
+      <% end %>
+    </div>
+  </td>
+  <td class="p-4">
+    <%= mixin_network_user.created_at %>
+  </td>
+  <td class="p-4">
+    <%= link_to 'Detail', admin_mixin_network_user_path(mixin_network_user), class: "bg-blue-500 hover:bg-blue-600 rounded text-white px-4 py-2", data: { turbo_frame: "_top" } %>
+  </td>
+</tr>

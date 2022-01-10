@@ -1,0 +1,22 @@
+<%= turbo_frame_tag 'admin_wallet_snapshots' do %>
+  <div data-controller="infinite-scroll" class="w-full overflow-x-scroll scrollbar-hide">
+    <table class='w-full table-auto min-w-max '>
+      <thead>
+        <tr class="bg-zinc-100">
+          <th class="p-4">Type</th>
+          <th class="p-4">Amount</th>
+          <th class="p-4">Opponent</th>
+          <th class="p-4">Memo</th>
+          <th class="p-4">Created</th>
+          <th class="p-4">Snapshot ID</th>
+          <th class="p-4">Trace ID</th>
+        </tr>
+      </thead>
+      <tbody id="admin_wallet_snapshots_list">
+        <%= render partial: 'admin/wallets/snapshot', collection: @snapshots, as: :snapshot %>
+      </tbody>
+    </table>
+    <div data-infinite-scroll-target='scrollArea'></div>
+    <%= render partial: "admin/wallets/pagination", locals: { has_next: @has_next, next_url: admin_wallet_snapshots_path(offset: @snapshots.last&.[]('created_at')) } %>
+  </div>
+<% end %>

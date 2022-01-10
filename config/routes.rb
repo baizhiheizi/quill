@@ -105,6 +105,10 @@ Rails.application.routes.draw do
     resources :mixin_network_snapshots, only: %i[index show]
     resources :mixin_network_users, only: %i[index show]
     resources :bonuses, only: %i[index]
+    resources :wallets do
+      get 'assets', to: 'wallets#assets', as: :assets
+      get 'snapshots', to: 'wallets#snapshots', as: :snapshots
+    end
   end
 
   namespace :api, defaults: { format: :json } do

@@ -23,3 +23,8 @@
     </div>
   <% end %>
 </div>
+<div class="p-4 bg-white dark:bg-zinc-900 rounded-lg mb-4">
+  <%= turbo_frame_tag 'admin_wallet_assets', src: admin_wallet_assets_path(PrsdiggBot.api.client_id) do %>
+    <%= render "shared/loading" %>
+  <% end %>
+</div>

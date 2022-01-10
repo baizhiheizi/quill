@@ -1,0 +1,7 @@
+<%= turbo_stream.append 'admin_mixin_network_users_list' do %>
+  <%= render partial: 'admin/mixin_network_users/mixin_network_user', collection: @mixin_network_users, as: :mixin_network_user %>
+<% end %>
+
+<%= turbo_stream.update 'pagination' do %>
+  <%= render partial: "shared/pagination", locals: { pagy: @pagy } %>
+<% end %>

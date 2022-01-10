@@ -7,7 +7,7 @@
   </td>
   <td class="p-4">
     <% if mixin_network_snapshot.wallet.present? %>
-      <%= link_to mixin_network_snapshot.user_id, admin_mixin_network_user_path(mixin_network_snapshot.user_id), data: { turbo_frame: "_top" } %>
+      <%= render 'admin/mixin_network_users/field', mixin_network_user: mixin_network_snapshot.wallet %>
     <% elsif mixin_network_snapshot.user_id == PrsdiggBot.api.client_id %>
       PRSDigg Bot
     <% else %>
@@ -18,7 +18,7 @@
     <% if mixin_network_snapshot.opponent.present? %>
       <%= render "admin/users/field", user: mixin_network_snapshot.opponent, tab: :mixin_network_snapshots %>
     <% elsif mixin_network_snapshot.opponent_wallet.present? %>
-      <%= link_to mixin_network_snapshot.opponent_id, admin_mixin_network_user_path(mixin_network_snapshot.opponent_id), data: { turbo_frame: "_top" } %>
+      <%= render 'admin/mixin_network_users/field', mixin_network_user: mixin_network_snapshot.opponent_wallet %>
     <% elsif mixin_network_snapshot.opponent_id == PrsdiggBot.api.client_id %>
       PRSDigg Bot
     <% else %>

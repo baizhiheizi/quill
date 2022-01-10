@@ -1,0 +1,27 @@
+<%= form_with url: admin_mixin_network_users_path, method: :get, class: "flex items-center flex-wrap" do |form| %>
+  <%= form.select :state, 
+    [
+      ['All States', 'all'], 
+      ['Ready', 'ready'],
+      ['Unready', 'unready'],
+    ], 
+    { selected: @state }, 
+    class: "rounded-lg m-1" %>
+  <%= form.select :owner_type, 
+    [
+      ['All Owners', 'all'], 
+      ['Article', 'Article'],
+      ['User', 'User'],
+    ], 
+    { selected: @owner_type }, 
+    class: "rounded-lg m-1" %>
+  <%= form.select :order_by, 
+    [
+      ['Created DESC', 'created_at_desc'], 
+      ['Created ASC', 'created_at_asc'], 
+    ], 
+    { selected: @order_by }, 
+    class: "rounded-lg m-1" %>
+  <%= form.text_field :query, value: @query, placeholder: "Search", class: "rounded-lg m-1" %>
+  <%= form.submit :Query, class: "cursor-pointer rounded bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 m-1" %>
+<% end %>
