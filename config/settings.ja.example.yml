@@ -17,7 +17,7 @@ ga_id:
 broker_name: 文商ブローカー
 messenger: links
 
-# app/packs/images/*
+# app/assets/images/*
 logo_file: logo-bunshow.png
 favicon_file: favicon-bunshow.png
 

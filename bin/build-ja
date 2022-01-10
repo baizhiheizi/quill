@@ -18,9 +18,8 @@ mv .git .git.bak
 # remove credentials file
 rm config/credentials.yml.enc
 
-# make public/assets & public/packs/ in git
+# make public/assets in git
 sed -i 's+/public/assets+# /public/assets+g' .gitignore
-sed -i 's+/public/packs+# /public/packs+g' .gitignore
 
 # push compiled assets to release branch
 remote_repo="https://${GITHUB_ACTOR}:${GIHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" && \
@@ -36,4 +35,3 @@ git push --force $remote_repo master:build-ja
 rm -rf .git
 mv .git.bak .git
 sed -i 's+/# public/assets+/public/assets+g' .gitignore
-sed -i 's+/# public/packs+/public/packs+g' .gitignore
