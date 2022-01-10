@@ -41,6 +41,12 @@
       </span>
       <span>Swap Orders</span>
     <% end %>
+    <%= link_to admin_transfers_path, class: "flex items-center space-x-4 hover:bg-zinc-100 p-2 rounded-lg truncate" do %>
+      <span>
+      <%= render "shared/icons/lighting_bolt", html_class: "opacity-60 w-6 h-6" %>
+      </span>
+      <span>Transfers</span>
+    <% end %>
   </div>
   <div class="relative w-0 h-0">
   <button data-sidebar-target="openButton" data-action="sidebar#open" class="fixed py-4 px-1 rounded-r-lg bg-white sm:hidden">

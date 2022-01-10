@@ -1,0 +1,88 @@
+<div class="flex items-center space-x-4 mb-4">
+  <%= link_to 'Home', admin_root_path %>
+  <span>/</span>
+  <%= link_to 'Transfers', admin_transfers_path %>
+  <span>/</span>
+  <span><%= @transfer.id %></span>
+</div>
+
+<div class="bg-white roundedlg p-4">
+  <div class="flex items-center space-x-2 mb-4">
+    <%= image_tag @transfer.currency.icon_url, class: "w-10 h-10 rounded" %>
+    <div>
+      <div><%= @transfer.price_tag %></div>
+      <div class="text-sm opacity-70"><%= @transfer.trace_id %></div>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-8">
+    <div class="col-span-1 flex space-x-2">
+      <span class="font-bold">ID:</span> 
+      <span><%= @transfer.id %></span>
+    </div>
+    <div class="col-span-1 flex space-x-2">
+      <span class="font-bold">TraceID:</span> 
+      <span><%= @transfer.trace_id %></span>
+    </div>
+    <div class="col-span-1 flex space-x-2">
+      <span class="font-bold">Type:</span> 
+      <span><%= @transfer.transfer_type %></span>
+    </div>
+    <div class="col-span-1 flex space-x-2">
+      <span class="font-bold">Receipient:</span> 
+      <span>
+        <% if @transfer.recipient.present? %>
+          <%= render 'admin/users/field', user: @transfer.recipient, tab: :transfers %>
+        <% elsif @transfer.opponent_multisig.present? %>
+          <%= @transfer.opponent_multisig %>
+        <% else %>
+          <%= @transfer.opponent_id %>
+        <% end %>
+      </span>
+    </div>
+    <div class="col-span-1 flex space-x-2">
+      <span class="font-bold">Wallet:</span> 
+      <span>
+        <% if @transfer.wallet.present? %>
+          <%= link_to @transfer.wallet_id, admin_mixin_network_user_path(@transfer.wallet_id), data: { turbo_frame: "_top" } %>
+        <% else %>
+          <%= @transfer.wallet_id || '-' %>
+        <% end %>
+      </span>
+    </div>
+    <div class="col-span-1 flex space-x-2">
+      <span class="font-bold">Amount:</span> 
+      <span><%= @transfer.price_tag %></span>
+    </div>
+    <div class="col-span-1 flex space-x-2">
+      <span class="font-bold">Snapshot:</span> 
+      <a href="<%= @transfer.snapshot_url %>" target="_blank"><%= @transfer.snapshot_id %></a>
+    </div>
+    <div class="col-span-1 flex space-x-2">
+      <span class="font-bold">State:</span> 
+      <div class="">
+        <% if @transfer.processed? %>
+          <span class="px-2 py-1 rounded text-white bg-green-500">
+            Processed
+          </span>
+        <% else %>
+          <span class="px-2 py-1 rounded text-white bg-zinc-300">
+            Unprocessed
+          </span>
+        <% end %>
+      </div>
+    </div>
+    <div class="col-span-1 flex space-x-2">
+      <span class="font-bold">Memo</span> 
+      <span class="break-all"><%= @transfer.memo || '-' %></span>
+    </div>
+    <div class="col-span-1 flex space-x-2">
+      <span class="font-bold">Processed:</span> 
+      <span><%= @transfer.processed_at %></span>
+    </div>
+    <div class="col-span-1 flex space-x-2">
+      <span class="font-bold">Created:</span> 
+      <span><%= @transfer.created_at %></span>
+    </div>
+  </div>
+</div>

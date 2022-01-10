@@ -1,0 +1,36 @@
+<div class="flex items-center space-x-4 mb-4">
+  <%= link_to 'Home', admin_root_path %>
+  <span>/</span>
+  <span>Transfers</span>
+</div>
+
+<div class="p-4 bg-white rounded-lg shadow">
+  <%= turbo_frame_tag 'admin_transfers' do %>
+    <div class="mb-4">
+      <%= render 'admin/transfers/query' %>
+    </div>
+    <div data-controller="infinite-scroll" class="w-full overflow-x-scroll scrollbar-hide">
+      <table class='w-full table-auto min-w-max '>
+        <thead>
+          <tr class="bg-zinc-100">
+            <th class="p-4">ID</th>
+            <th class="p-4">TraceID</th>
+            <th class="p-4">Transfer Type</th>
+            <th class="p-4">Wallet</th>
+            <th class="p-4">Receipient</th>
+            <th class="p-4">Amount</th>
+            <th class="p-4">State</th>
+            <th class="p-4">Processed</th>
+            <th class="p-4">Created</th>
+            <th class="p-4"></th>
+          </tr>
+        </thead>
+        <tbody id="admin_transfers_list">
+          <%= render partial: 'admin/transfers/transfer', collection: @transfers, as: :transfer %>
+        </tbody>
+      </table>
+      <div data-infinite-scroll-target='scrollArea'></div>
+      <%= render partial: "shared/pagination", locals: { pagy: @pagy } %>
+    </div>
+  <% end %>
+</div>

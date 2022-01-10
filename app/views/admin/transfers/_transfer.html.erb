@@ -1,0 +1,55 @@
+<tr class="hover:bg-zinc-50 border-b">
+  <td class="p-4">
+    <%= transfer.id %>
+  </td>
+  <td class="p-4">
+    <%= transfer.trace_id %>
+  </td>
+  <td class="p-4">
+    <%= transfer.transfer_type %>
+  </td>
+  <td class="p-4">
+    <% if transfer.wallet.present? %>
+      <%= link_to transfer.wallet_id, admin_mixin_network_user_path(transfer.wallet_id), data: { turbo_frame: "_top" } %>
+    <% else %>
+      <%= transfer.wallet_id || '-' %>
+    <% end %>
+  </td>
+  <td class="p-4">
+    <% if transfer.recipient.present? %>
+      <%= render "admin/users/field", user: transfer.recipient %>
+    <% elsif transfer.opponent_multisig.present? %>
+      MTG(<%= transfer.opponent_multisig['threshold'] %>/<%= transfer.opponent_multisig['receivers'].size %>)
+    <% else %>
+      <%= transfer.opponent_id %>
+    <% end %>
+  </td>
+  <td class="p-4">
+    <div class="flex items-center space-x-2">
+      <%= image_tag transfer.currency.icon_url, class: "w-10 h-10 rounded" %>
+      <span><%= transfer.price_tag %></span>
+    </div>
+  </td>
+  <td class="p-4">
+    <div class="flex justify-center">
+      <% if transfer.processed? %>
+        <span class="px-2 py-1 rounded text-white bg-green-500">
+          Processed
+        </span>
+      <% else %>
+        <span class="px-2 py-1 rounded text-white bg-zinc-300">
+          Unprocessed
+        </span>
+      <% end %>
+    </div>
+  </td>
+  <td class="p-4">
+    <%= transfer.processed_at %>
+  </td>
+  <td class="p-4">
+    <%= transfer.created_at %>
+  </td>
+  <td class="p-4">
+    <%= link_to 'Detail', admin_transfer_path(transfer), class: "bg-blue-500 hover:bg-blue-600 rounded text-white px-4 py-2", data: { turbo_frame: "_top" } %>
+  </td>
+</tr>

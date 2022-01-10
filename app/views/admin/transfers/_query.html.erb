@@ -1,0 +1,37 @@
+<%= form_with url: admin_transfers_path, method: :get, class: "flex items-center flex-wrap" do |form| %>
+  <%= form.select :state, 
+    [
+      ['All State', 'all'], 
+      ['Processed', 'processed'],
+      ['Unprocessed', 'unprocessed']
+    ], 
+    { selected: @state }, 
+    class: "rounded-lg m-1" %>
+  <%= form.select :transfer_type, 
+    [
+      ['All Types', 'all'], 
+      ['Author Revenue', 'author_revenue'],
+      ['Reader Revenue', 'reader_revenue'],
+      ['PRSDigg Revenue', 'prsdigg_revenue'],
+      ['Reference Revenue', 'reference_revenue'],
+      ['Payment Refund', 'payment_refund'],
+      ['Bonus', 'bonus'],
+      ['Swap Change', 'swap_change'],
+      ['Swap Refund', 'swap_refund'],
+      ['Swap', 'fox_swap'],
+      ['Withdraw Balance', 'withdraw_balance'],
+    ], 
+    { selected: @transfer_type }, 
+    class: "rounded-lg m-1" %>
+  <%= form.select :order_by, 
+    [
+      ['Processed DESC', 'processed_at_desc'], 
+      ['Created DESC', 'created_at_desc'], 
+      ['Created ASC', 'created_at_asc'], 
+    ], 
+    { selected: @order_by }, 
+    class: "rounded-lg m-1" %>
+  <%= form.text_field :query, value: @query, placeholder: "Search", class: "rounded-lg m-1" %>
+  <%= form.hidden_field :payer_id, value: params[:payer_id] %>
+  <%= form.submit :Query, class: "cursor-pointer rounded bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 m-1" %>
+<% end %>
