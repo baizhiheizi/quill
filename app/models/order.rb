@@ -68,6 +68,7 @@ class Order < ApplicationRecord
     broadcast_replace_to "user_#{buyer.mixin_uuid}", target: "article_#{article.uuid}_content", partial: 'articles/content', locals: { article: article, user: buyer } if buy_article?
 
     broadcast_replace_to "user_#{buyer.mixin_uuid}", target: "article_#{article.uuid}_buyers", partial: 'articles/buyers', locals: { article: article, user: buyer }
+    broadcast_replace_to "user_#{buyer.mixin_uuid}", target: "article_#{article.uuid}_comments_card", partial: 'articles/comments_card', locals: { article: article, user: buyer }
     broadcast_remove_to "user_#{buyer.mixin_uuid}", target: "article_#{article.uuid}_payment_modal"
   end
 

@@ -51,22 +51,7 @@
       </div>
     </div>
 
-    <div class="bg-white dark:bg-zinc-900 dark:border-zinc-800 p-4 w-full sm:p-6 sm:border sm:rounded-lg mb-4">
-      <div class="text-center mb-4 font-bold text-lg opacity-70">
-        <%= t('comments') %>
-      </div>
-      <div data-controller="comment-form">
-        <% if @article.authorized? current_user %>
-          <div class="mb-4 flex justify-center">
-            <%= render partial: "subscribe_articles/subscribe_button", locals: { article: @article } %>
-          </div>
-          <%= render partial: "comments/form", locals: { commentable: @article } %>
-        <% end %>
-        <%= turbo_frame_tag "#{dom_id @article}_comments", src: article_comments_path(@article.uuid) do %>
-          <%= render "shared/loading" %>
-        <% end %>
-      </div>
-    </div>
+    <%= render partial: "articles/comments_card", locals: { article: @article, user: current_user } %>
   </article>
 
   <aside class="lg:col-span-1">
