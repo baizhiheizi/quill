@@ -93,7 +93,7 @@ class MixinNetworkUser < ApplicationRecord
     )
     update raw: r['data'] if r['data'].present?
   ensure
-    img.close
+    img&.close
   end
 
   def update_name
