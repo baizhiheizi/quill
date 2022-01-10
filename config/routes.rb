@@ -102,7 +102,7 @@ Rails.application.routes.draw do
     resources :swap_orders, only: %i[index show]
     resources :payments, only: %i[index show]
     resources :transfers, only: %i[index show]
-    resources :mixin_snapshots, only: %i[index show]
+    resources :mixin_network_snapshots, only: %i[index show]
     resources :mixin_network_users, only: %i[index show]
     resources :bonuses, only: %i[index]
   end

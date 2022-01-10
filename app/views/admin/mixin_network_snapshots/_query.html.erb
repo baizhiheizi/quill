@@ -1,27 +1,27 @@
-<%= form_with url: admin_transfers_path, method: :get, class: "flex items-center flex-wrap" do |form| %>
+<%= form_with url: admin_mixin_network_snapshots_path, method: :get, class: "flex items-center flex-wrap" do |form| %>
   <%= form.select :state, 
     [
-      ['All State', 'all'], 
+      ['All States', 'all'], 
       ['Processed', 'processed'],
-      ['Unprocessed', 'unprocessed']
+      ['Unprocessed', 'unprocessed'],
     ], 
     { selected: @state }, 
     class: "rounded-lg m-1" %>
-  <%= form.select :transfer_type, 
+  <%= form.select :opponent, 
     [
-      ['All Types', 'all'], 
-      ['Author Revenue', 'author_revenue'],
-      ['Reader Revenue', 'reader_revenue'],
-      ['PRSDigg Revenue', 'prsdigg_revenue'],
-      ['Reference Revenue', 'reference_revenue'],
-      ['Payment Refund', 'payment_refund'],
-      ['Bonus', 'bonus'],
-      ['Swap Change', 'swap_change'],
-      ['Swap Refund', 'swap_refund'],
-      ['Swap', 'fox_swap'],
-      ['Withdraw Balance', 'withdraw_balance'],
+      ['All Opponents', 'all'], 
+      ['PRSDigg', 'prsdigg'], 
+      ['MTG', 'mtg']
     ], 
-    { selected: @transfer_type }, 
+    { selected: @opponent }, 
+    class: "rounded-lg m-1" %>
+  <%= form.select :direction, 
+    [
+      ['Both Directions', 'all'], 
+      ['Input', 'input'], 
+      ['Output', 'output']
+    ], 
+    { selected: @direction }, 
     class: "rounded-lg m-1" %>
   <%= form.select :order_by, 
     [
@@ -32,6 +32,7 @@
     { selected: @order_by }, 
     class: "rounded-lg m-1" %>
   <%= form.text_field :query, value: @query, placeholder: "Search", class: "rounded-lg m-1" %>
+  <%= form.hidden_field :user_id, value: params[:user_id] %>
   <%= form.hidden_field :opponent_id, value: params[:opponent_id] %>
   <%= form.submit :Query, class: "cursor-pointer rounded bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 m-1" %>
 <% end %>

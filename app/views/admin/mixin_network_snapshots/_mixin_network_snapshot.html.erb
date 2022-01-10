@@ -1,0 +1,59 @@
+<tr class="hover:bg-zinc-50 border-b">
+  <td class="p-4">
+    <%= mixin_network_snapshot.id %>
+  </td>
+  <td class="p-4">
+    <%= mixin_network_snapshot.trace_id %>
+  </td>
+  <td class="p-4">
+    <% if mixin_network_snapshot.wallet.present? %>
+      <%= link_to mixin_network_snapshot.user_id, admin_mixin_network_user_path(mixin_network_snapshot.user_id), data: { turbo_frame: "_top" } %>
+    <% elsif mixin_network_snapshot.user_id == PrsdiggBot.api.client_id %>
+      PRSDigg Bot
+    <% else %>
+      <%= mixin_network_snapshot.user_id %>
+    <% end %>
+  </td>
+  <td class="p-4">
+    <% if mixin_network_snapshot.opponent.present? %>
+      <%= render "admin/users/field", user: mixin_network_snapshot.opponent, tab: :mixin_network_snapshots %>
+    <% elsif mixin_network_snapshot.opponent_wallet.present? %>
+      <%= link_to mixin_network_snapshot.opponent_id, admin_mixin_network_user_path(mixin_network_snapshot.opponent_id), data: { turbo_frame: "_top" } %>
+    <% elsif mixin_network_snapshot.opponent_id == PrsdiggBot.api.client_id %>
+      PRSDigg Bot
+    <% else %>
+      <%= mixin_network_snapshot.opponent_id || '-' %>
+    <% end %>
+  </td>
+  <td class="p-4">
+    <div class="flex items-center space-x-2">
+      <%= image_tag mixin_network_snapshot.currency.icon_url, class: "w-10 h-10 rounded" %>
+      <span><%= mixin_network_snapshot.price_tag %></span>
+    </div>
+  </td>
+  <td class="p-4">
+    <div class="flex justify-center">
+      <% if mixin_network_snapshot.processed? %>
+        <span class="px-2 py-1 rounded text-white bg-green-500">
+          Processed
+        </span>
+      <% else %>
+        <span class="px-2 py-1 rounded text-white bg-zinc-300">
+          Unprocessed
+        </span>
+      <% end %>
+    </div>
+  </td>
+  <td class="p-4">
+    <%= mixin_network_snapshot.decrypted_memo.presence || mixin_network_snapshot.data %>
+  </td>
+  <td class="p-4">
+    <%= mixin_network_snapshot.processed_at %>
+  </td>
+  <td class="p-4">
+    <%= mixin_network_snapshot.created_at %>
+  </td>
+  <td class="p-4">
+    <%= link_to 'Detail', admin_mixin_network_snapshot_path(mixin_network_snapshot), class: "bg-blue-500 hover:bg-blue-600 rounded text-white px-4 py-2", data: { turbo_frame: "_top" } %>
+  </td>
+</tr>

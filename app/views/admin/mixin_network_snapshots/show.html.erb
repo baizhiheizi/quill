@@ -1,0 +1,90 @@
+<div class="flex items-center space-x-4 mb-4">
+  <%= link_to 'Home', admin_root_path %>
+  <span>/</span>
+  <%= link_to 'Mixin Network Snapshots', admin_mixin_network_snapshots_path %>
+  <span>/</span>
+  <span><%= @mixin_network_snapshot.id %></span>
+</div>
+
+<div class="bg-white roundedlg p-4">
+  <div class="flex items-center space-x-2 mb-4">
+    <%= image_tag @mixin_network_snapshot.currency.icon_url, class: "w-10 h-10 rounded" %>
+    <div>
+      <div><%= @mixin_network_snapshot.price_tag %></div>
+      <div class="text-sm opacity-70"><%= @mixin_network_snapshot.trace_id %></div>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-8">
+    <div class="col-span-1 flex space-x-2">
+      <span class="font-bold">ID:</span> 
+      <span><%= @mixin_network_snapshot.id %></span>
+    </div>
+    <div class="col-span-1 flex space-x-2">
+      <span class="font-bold">TraceID:</span> 
+      <span><%= @mixin_network_snapshot.trace_id %></span>
+    </div>
+    <div class="col-span-1 flex space-x-2">
+      <span class="font-bold">User:</span> 
+        <% if @mixin_network_snapshot.wallet.present? %>
+          <%= link_to @mixin_network_snapshot.user_id, admin_mixin_network_user_path(@mixin_network_snapshot.user_id), data: { turbo_frame: "_top" } %>
+        <% elsif @mixin_network_snapshot.user_id == PrsdiggBot.api.client_id %>
+          PRSDigg Bot
+        <% else %>
+          <%= @mixin_network_snapshot.user_id %>
+        <% end %>
+      <span>
+      </span>
+    </div>
+    <div class="col-span-1 flex space-x-2">
+      <span class="font-bold">Opponent:</span> 
+      <span>
+        <% if @mixin_network_snapshot.opponent.present? %>
+          <%= render "admin/users/field", user: @mixin_network_snapshot.opponent, tab: :mixin_network_snapshots %>
+        <% elsif @mixin_network_snapshot.opponent_wallet.present? %>
+          <%= link_to @mixin_network_snapshot.opponent_id, admin_mixin_network_user_path(@mixin_network_snapshot.opponent_id), data: { turbo_frame: "_top" } %>
+        <% elsif @mixin_network_snapshot.opponent_id == PrsdiggBot.api.client_id %>
+          PRSDigg Bot
+        <% else %>
+          <%= @mixin_network_snapshot.opponent_id || '-' %>
+        <% end %>
+      </span>
+    </div>
+    <div class="col-span-1 flex space-x-2">
+      <span class="font-bold">Amount:</span> 
+      <span><%= @mixin_network_snapshot.price_tag %></span>
+    </div>
+    <div class="col-span-1 flex space-x-2">
+      <span class="font-bold">Snapshot:</span> 
+      <a href="<%= @mixin_network_snapshot.snapshot_url %>" target="_blank"><%= @mixin_network_snapshot.snapshot_id %></a>
+    </div>
+    <div class="col-span-1 flex space-x-2">
+      <span class="font-bold">State:</span> 
+      <div class="">
+        <% if @mixin_network_snapshot.processed? %>
+          <span class="px-2 py-1 rounded text-white bg-green-500">
+            Processed
+          </span>
+        <% else %>
+          <span class="px-2 py-1 rounded text-white bg-zinc-300">
+            Unprocessed
+          </span>
+        <% end %>
+      </div>
+    </div>
+    <div class="col-span-1 flex space-x-2">
+      <span class="font-bold">Memo</span> 
+      <span class="break-all">
+        <%= @mixin_network_snapshot.decrypted_memo.presence || @mixin_network_snapshot.data %>
+      </span>
+    </div>
+    <div class="col-span-1 flex space-x-2">
+      <span class="font-bold">Processed:</span> 
+      <span><%= @mixin_network_snapshot.processed_at %></span>
+    </div>
+    <div class="col-span-1 flex space-x-2">
+      <span class="font-bold">Created:</span> 
+      <span><%= @mixin_network_snapshot.created_at %></span>
+    </div>
+  </div>
+</div>

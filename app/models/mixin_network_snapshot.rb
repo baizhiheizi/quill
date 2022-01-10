@@ -44,6 +44,7 @@ class MixinNetworkSnapshot < ApplicationRecord
 
   after_commit :process_async, on: :create
 
+  scope :processed, -> { where.not(processed_at: nil) }
   scope :unprocessed, -> { where(processed_at: nil) }
   scope :only_input, -> { where(amount: 0...) }
   scope :only_output, -> { where(amount: ...0) }
@@ -153,6 +154,14 @@ class MixinNetworkSnapshot < ApplicationRecord
     else
       ProcessMixinNetworkSnapshotWorker.perform_async id
     end
+  end
+
+  def price_tag
+    [format('%.8f', amount), currency.symbol].join(' ')
+  end
+
+  def snapshot_url
+    format('https://mixin.one/%<snapshot_id>s', snapshot_id: snapshot_id)
   end
 
   private

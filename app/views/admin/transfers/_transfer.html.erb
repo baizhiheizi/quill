@@ -17,7 +17,7 @@
   </td>
   <td class="p-4">
     <% if transfer.recipient.present? %>
-      <%= render "admin/users/field", user: transfer.recipient %>
+      <%= render "admin/users/field", user: transfer.recipient, tab: :transfers %>
     <% elsif transfer.opponent_multisig.present? %>
       MTG(<%= transfer.opponent_multisig['threshold'] %>/<%= transfer.opponent_multisig['receivers'].size %>)
     <% else %>
