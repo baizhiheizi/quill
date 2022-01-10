@@ -77,6 +77,12 @@
       </span>
       <span>Bonus</span>
     <% end %>
+    <%= link_to admin_logout_path, class: "flex items-center space-x-4 hover:bg-zinc-100 dark:hover:bg-zinc-800 p-2 rounded-lg truncate" do %>
+      <span>
+      <%= render "shared/icons/logout", html_class: "opacity-60 w-6 h-6" %>
+      </span>
+      <span>Logout</span>
+    <% end %>
   </div>
   <div class="relative w-0 h-0">
   <button data-sidebar-target="openButton" data-action="sidebar#open" class="fixed py-6 rounded-r-lg bg-white shadow sm:hidden">
