@@ -1,0 +1,12 @@
+<%= turbo_stream.update "notifications" do %>
+  <% if @bonus.errors.present? %>
+    <%= render partial: "notifications/notification", locals: { type: :danger, message: @bonus.errors.full_messages.join(';') } %>
+  <% else %>
+    <%= render partial: "notifications/notification", locals: { type: :success, message: 'Created' } %>
+  <% end %>
+<% end %>
+
+<% if @bonus.errors.blank? %>
+  <%= turbo_stream.update "modal-slot" do %>
+  <% end %>
+<% end %>

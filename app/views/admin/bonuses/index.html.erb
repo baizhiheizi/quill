@@ -1,0 +1,36 @@
+<div class="flex items-center space-x-4 mb-4">
+  <%= link_to 'Home', admin_root_path %>
+  <span>/</span>
+  <span>Bonus</span>
+  <%= button_to 'New', admin_view_modals_path(type: :create_bonus), class: "text-white rounded cursor-pointer bg-blue-500 hover:bg-blue-600 px-4 py-1" %>
+</div>
+
+<div class="p-4 bg-white rounded-lg shadow">
+  <%= turbo_frame_tag 'admin_bonuses' do %>
+    <div class="mb-4">
+      <%= render 'admin/bonuses/query' %>
+    </div>
+    <div data-controller="infinite-scroll" class="w-full overflow-x-scroll scrollbar-hide">
+      <table class='w-full table-auto min-w-max '>
+        <thead>
+          <tr class="bg-zinc-100">
+            <th class="p-4">ID</th>
+            <th class="p-4">User</th>
+            <th class="p-4">State</th>
+            <th class="p-4">Price</th>
+            <th class="p-4">Title</th>
+            <th class="p-4">Description</th>
+            <th class="p-4">Transfer</th>
+            <th class="p-4">Created</th>
+            <th class="p-4"></th>
+          </tr>
+        </thead>
+        <tbody id="admin_bonuses_list">
+          <%= render partial: 'admin/bonuses/bonus', collection: @bonuses, as: :bonus %>
+        </tbody>
+      </table>
+      <div data-infinite-scroll-target='scrollArea'></div>
+      <%= render partial: "shared/pagination", locals: { pagy: @pagy } %>
+    </div>
+  <% end %>
+</div>

@@ -1,0 +1,56 @@
+<tr class="hover:bg-zinc-50 border-b">
+  <td class="p-4">
+    <%= bonus.id %>
+  </td>
+
+  <td class="p-4">
+    <%= render "admin/users/field", user: bonus.user %>
+  </td>
+
+  <td class="p-4">
+    <div class="flex justify-center">
+      <span class="text-white rounded px-2 py-1 
+        <%= 
+          {
+            drafted: 'bg-zinc-300',
+            delivering: 'bg-blue-500',
+            completed: 'bg-green-500',
+          }[bonus.state.to_sym]
+        %>">
+        <%= bonus.state %>
+      </span>
+    </div>
+  </td>
+
+  <td class="p-4">
+    <%= bonus.price_tag %>
+  </td>
+
+  <td class="p-4">
+    <%= bonus.title %>
+  </td>
+
+  <td class="p-4">
+    <div class="max-w-64 break-words">
+      <%= bonus.description %>
+    </div>
+  </td>
+
+  <td class="p-4">
+    <div class="max-w-64 break-words">
+      <% if bonus.transfer.present? %>
+        <%= link_to bonus.trace_id, admin_transfer_path(bonus.transfer), data: { turbo_frame: "_top" } %>
+      <% else %>
+        <%= bonus.trace_id %>
+      <% end %>
+    </div>
+  </td>
+
+  <td class="p-4">
+    <%= bonus.created_at %>
+  </td>
+
+  <td class="p-4">
+    <%= button_to 'Deliver', admin_bonus_deliver_path(bonus), class: "cursor-pointer" if bonus.may_deliver? %>
+  </td>
+</tr>

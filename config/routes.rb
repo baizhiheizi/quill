@@ -104,11 +104,14 @@ Rails.application.routes.draw do
     resources :transfers, only: %i[index show]
     resources :mixin_network_snapshots, only: %i[index show]
     resources :mixin_network_users, only: %i[index show]
-    resources :bonuses, only: %i[index]
+    resources :bonuses, only: %i[index create] do
+      post 'deliver', to: 'bonuses#deliver', as: :deliver
+    end
     resources :wallets do
       get 'assets', to: 'wallets#assets', as: :assets
       get 'snapshots', to: 'wallets#snapshots', as: :snapshots
     end
+    resources :view_modals, only: %i[create]
   end
 
   namespace :api, defaults: { format: :json } do

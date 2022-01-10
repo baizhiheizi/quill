@@ -33,7 +33,7 @@ class Bonus < ApplicationRecord
 
   validates :title, presence: true
   validates :trace_id, presence: true
-  validates :amount, numericality: { greater_than: 0.000_000_01 }
+  validates :amount, numericality: { greater_than_or_equal_to: 0.000_000_01 }
 
   aasm column: :state do
     state :drafted, initial: true
@@ -59,6 +59,10 @@ class Bonus < ApplicationRecord
         trace_id: trace_id,
         memo: "Bonus(#{title})"
       )
+  end
+
+  def price_tag
+    [format('%.8f', amount), currency.symbol].join(' ')
   end
 
   private
