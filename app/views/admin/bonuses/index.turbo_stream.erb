@@ -1,5 +1,5 @@
-<%= turbo_stream.append 'admin_articles_list' do %>
-  <%= render partial: 'admin/articles/article', collection: @articles, as: :article %>
+<%= turbo_stream.append 'admin_bonuses_list' do %>
+  <%= render partial: 'admin/bonuses/bonus', collection: @bonuses, as: :bonus %>
 <% end %>
 
 <%= turbo_stream.update 'pagination' do %>

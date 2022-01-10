@@ -45,8 +45,7 @@ module Admin
 
     def deliver
       @bonus = Bonus.find_by id: params[:bonus_id]
-      @bonus.deliver! if @bonus&.may_deliver?
-      redirect_to admin_bonuses_path
+      @bonus.deliver! if @bonus&.drafted?
     end
 
     private

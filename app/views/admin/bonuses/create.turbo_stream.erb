@@ -9,4 +9,8 @@
 <% if @bonus.errors.blank? %>
   <%= turbo_stream.update "modal-slot" do %>
   <% end %>
+
+  <%= turbo_stream.prepend "admin_bonuses_list" do %>
+    <%= render 'admin/bonuses/bonus', bonus: @bonus %>
+  <% end %>
 <% end %>

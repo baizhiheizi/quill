@@ -1,0 +1,7 @@
+<%= turbo_stream.append 'admin_statistics_list' do %>
+  <%= render partial: 'admin/statistics/statistic', collection: @statistics, as: :statistic %>
+<% end %>
+
+<%= turbo_stream.update 'pagination' do %>
+  <%= render partial: "shared/pagination", locals: { pagy: @pagy } %>
+<% end %>

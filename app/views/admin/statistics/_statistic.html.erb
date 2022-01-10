@@ -1,0 +1,26 @@
+<tr id="<%= dom_id statistic %>" class="hover:bg-zinc-50 border-b">
+  <td class="p-4">
+    <%= statistic.id %>
+  </td>
+  <td class="p-4">
+    <%= statistic.type %>
+  </td>
+  <td class="p-4">
+    <%= statistic.datetime.strftime('%D') %>
+  </td>
+  <td class="p-4">
+    <%= statistic.new_users_count %>
+  </td>
+  <td class="p-4">
+    <%= statistic.new_payers_count %>
+  </td>
+  <td class="p-4">
+    <%= statistic.paid_users_count %>
+  </td>
+  <td class="p-4">
+    <%= statistic.new_payments_count %>
+  </td>
+  <td class="p-4">
+    <%= statistic.new_articles_count %>
+  </td>
+</tr>

@@ -1,10 +1,10 @@
-<tr class="hover:bg-zinc-50 border-b">
+<tr id="<%= dom_id bonus %>" class="hover:bg-zinc-50 border-b">
   <td class="p-4">
     <%= bonus.id %>
   </td>
 
   <td class="p-4">
-    <%= render "admin/users/field", user: bonus.user %>
+    <%= render "admin/users/field", user: bonus.user, tab: :bonuses %>
   </td>
 
   <td class="p-4">
@@ -51,6 +51,6 @@
   </td>
 
   <td class="p-4">
-    <%= button_to 'Deliver', admin_bonus_deliver_path(bonus), class: "cursor-pointer" if bonus.may_deliver? %>
+    <%= button_to 'Deliver', admin_bonus_deliver_path(bonus), class: "cursor-pointer" if bonus.drafted? %>
   </td>
 </tr>

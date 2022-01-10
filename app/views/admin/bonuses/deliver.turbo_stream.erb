@@ -1,0 +1,3 @@
+<%= turbo_stream.replace dom_id(@bonus) do %>
+  <%= render 'admin/bonuses/bonus', bonus: @bonus.reload %>
+<% end %>

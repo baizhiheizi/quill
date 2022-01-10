@@ -129,6 +129,14 @@
         } do %>
         Snapshots
       <% end %>
+      <%= link_to admin_user_path(@user, tab: :bonuses), 
+        class: "cursor-pointer py-1 px-4 border-blue-500 font-bold text-zinc-600",
+        data: {
+          tabs_target: "tab",
+          tabs_tabname_param: "bonuses",
+        } do %>
+        Bonus
+      <% end %>
     </div>
     <div class="hidden"
         data-tabs-content-param="articles"
@@ -169,6 +177,13 @@
         data-tabs-content-param="mixin_network_snapshots"
         data-tabs-target="content">
       <%= turbo_frame_tag 'admin_mixin_network_snapshots', src: admin_mixin_network_snapshots_path(opponent_id: @user.mixin_uuid) do %>
+        <%= render "shared/loading" %>
+      <% end %>
+    </div>
+    <div class="hidden"
+        data-tabs-content-param="bonuses"
+        data-tabs-target="content">
+      <%= turbo_frame_tag 'admin_bonuses', src: admin_bonuses_path(user_id: @user.id) do %>
         <%= render "shared/loading" %>
       <% end %>
     </div>

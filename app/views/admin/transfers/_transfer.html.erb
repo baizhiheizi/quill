@@ -12,7 +12,7 @@
     <% if transfer.wallet.present? %>
       <%= render 'admin/mixin_network_users/field', mixin_network_user: transfer.wallet %>
     <% else %>
-      <%= transfer.wallet_id || '-' %>
+      <%= transfer.wallet_id || 'PRSDigg Bot' %>
     <% end %>
   </td>
   <td class="p-4">
@@ -44,7 +44,7 @@
     </div>
   </td>
   <td class="p-4">
-    <%= transfer.processed_at %>
+    <%= transfer.processed_at || '-' %>
   </td>
   <td class="p-4">
     <%= transfer.created_at %>

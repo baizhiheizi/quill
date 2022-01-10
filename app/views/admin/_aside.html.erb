@@ -11,6 +11,12 @@
       </span>
       <span>Dashboard</span>
     <% end %>
+    <%= link_to admin_statistics_path, class: "flex items-center space-x-4 hover:bg-zinc-100 p-2 rounded-lg truncate" do %>
+      <span>
+      <%= render "shared/icons/chart_bar", html_class: "opacity-60 w-6 h-6" %>
+      </span>
+      <span>Stats</span>
+    <% end %>
     <%= link_to admin_users_path, class: "flex items-center space-x-4 hover:bg-zinc-100 p-2 rounded-lg truncate" do %>
       <span>
       <%= render "shared/icons/users", html_class: "opacity-60 w-6 h-6" %>

@@ -104,6 +104,7 @@ Rails.application.routes.draw do
     resources :transfers, only: %i[index show]
     resources :mixin_network_snapshots, only: %i[index show]
     resources :mixin_network_users, only: %i[index show]
+    resources :statistics, only: %i[index]
     resources :bonuses, only: %i[index create] do
       post 'deliver', to: 'bonuses#deliver', as: :deliver
     end
