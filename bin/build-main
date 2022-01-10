@@ -14,7 +14,6 @@ bundle install
 yarn build
 yarn build:css
 bundle exec bin/rails assets:precompile
-bundle exec bin/rails webpacker:compile
 
 # clean assets
 bundle exec bin/rails assets:clean

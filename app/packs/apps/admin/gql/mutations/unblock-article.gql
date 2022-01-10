@@ -1,7 +1,0 @@
-mutation AdminUnblockArticle($input: AdminUnblockArticleMutationInput!) {
-  adminUnblockArticle(input: $input) {
-    id
-    uuid
-    state
-  }
-}

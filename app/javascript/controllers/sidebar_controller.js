@@ -4,11 +4,11 @@ import { useHover } from 'stimulus-use';
 export default class extends Controller {
   static values = {
     openClass: Array,
-    collapseClass: Array
-  }
-  static targets = ["sidebar", "openButton", "collapseButton"];
+    collapseClass: Array,
+  };
+  static targets = ['sidebar', 'openButton', 'collapseButton'];
 
-  connect () {
+  connect() {
     useHover(this);
   }
 
@@ -21,23 +21,21 @@ export default class extends Controller {
   }
 
   collapse() {
-    this.sidebarTarget.classList.add(...this.collapseClassValue)
-    this.sidebarTarget.classList.remove(...this.openClassValue)
+    this.sidebarTarget.classList.add(...this.collapseClassValue);
+    this.sidebarTarget.classList.remove(...this.openClassValue);
     this.openButtonTarget.classList.remove('hidden');
     this.collapseButtonTarget.classList.add('hidden');
   }
 
   open() {
-    this.sidebarTarget.classList.add(...this.openClassValue)
-    this.sidebarTarget.classList.remove(...this.collapseClassValue)
+    this.sidebarTarget.classList.add(...this.openClassValue);
+    this.sidebarTarget.classList.remove(...this.collapseClassValue);
     this.openButtonTarget.classList.add('hidden');
     this.collapseButtonTarget.classList.remove('hidden');
   }
 
   hide(event) {
-    if (
-      !this.element.contains(event.target)
-    ) {
+    if (!this.element.contains(event.target)) {
       this.collapse();
     }
   }

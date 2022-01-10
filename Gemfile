@@ -23,9 +23,6 @@ gem 'puma'
 # Deliver assets for Rails
 gem 'propshaft'
 
-# Transpile app-like JavaScript. Read more: https://github.com/rails/webpacker
-gem 'webpacker', '~> 6.0.0.rc.6'
-
 # Bundle and transpile JavaScript [https://github.com/rails/jsbundling-rails]
 gem 'jsbundling-rails'
 
@@ -76,15 +73,6 @@ gem 'image_processing', '~> 1.2'
 
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', '>= 1.4.4', require: false
-
-# Integration of React + Webpack + Rails + rails/webpacker including server-side rendering of React, enabling a better developer experience and faster client performance.
-gem 'react_on_rails', '~> 12.0'
-
-# Ruby implementation of GraphQL http://graphql-ruby.org
-gem 'graphql', '1.12.18'
-
-# Mount the GraphiQL query editor in a Rails app
-# gem 'graphiql-rails'
 
 # Powerful tool for avoiding N+1 DB or HTTP queries
 gem 'batch-loader'

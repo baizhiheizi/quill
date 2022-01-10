@@ -1,5 +1,0 @@
-mutation AdminCreateBonus($input: AdminCreateBonusMutationInput!) {
-  adminCreateBonus(input: $input) {
-    error
-  }
-}

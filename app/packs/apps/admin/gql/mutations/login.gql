@@ -1,6 +1,0 @@
-mutation AdminLogin($input: AdminLoginMutationInput!) {
-  adminLogin(input: $input) {
-    error
-    success
-  }
-}

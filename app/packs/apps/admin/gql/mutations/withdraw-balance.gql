@@ -1,3 +1,0 @@
-mutation AdminWithdrawBalance($input: AdminWithdrawBalanceMutationInput!) {
-  adminWithdrawBalance(input: $input)
-}

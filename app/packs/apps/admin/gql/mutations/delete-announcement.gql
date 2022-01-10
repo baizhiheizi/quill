@@ -1,6 +1,0 @@
-mutation AdminDeleteAnouncement($input: AdminDeleteAnnouncementMutationInput!) {
-  adminDeleteAnnouncement(input: $input) {
-    error
-    success
-  }
-}

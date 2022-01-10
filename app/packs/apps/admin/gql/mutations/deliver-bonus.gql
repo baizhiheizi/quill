@@ -1,6 +1,0 @@
-mutation AdminDeliverBonus($input: AdminDeliverBonusMutationInput!) {
-  adminDeliverBonus(input: $input) {
-    id
-    state
-  }
-}

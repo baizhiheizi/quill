@@ -11,15 +11,6 @@ class Admin::BaseController < ActionController::Base
 
   private
 
-  def base_props
-    {
-      current_admin: current_admin&.as_json(only: %i[name]),
-      prsdigg: {
-        app_id: PrsdiggBot.api.client_id
-      }
-    }.deep_transform_keys! { |key| key.to_s.camelize(:lower) }
-  end
-
   def authenticate_admin!
     redirect_to admin_login_path if current_admin.blank?
   end

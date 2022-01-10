@@ -1,6 +1,0 @@
-mutation AdminDeleteComment($input: AdminDeleteCommentMutationInput!) {
-  adminDeleteComment(input: $input) {
-    error
-    success
-  }
-}

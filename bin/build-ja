@@ -6,9 +6,6 @@ set -e
 # use main credentials
 cp config/credentials/ja.yml.enc config/credentials.yml.enc
 
-# generate locale file for FE
-bundle exec rake react_on_rails:locale
-
 # compile assets
 bundle exec rake assets:precompile
 
