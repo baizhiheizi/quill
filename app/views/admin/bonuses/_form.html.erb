@@ -1,18 +1,18 @@
 <%= form_for Bonus.new, url: admin_bonuses_path do |form| %>
   <div class="mb-4">
-    <%= form.select :asset_id, Currency.all.collect { |currency| [currency.symbol, currency.asset_id] }, { selected: Currency::BTC_ASSET_ID }, class: "w-full rounded-lg" %>
+    <%= form.select :asset_id, Currency.all.collect { |currency| [currency.symbol, currency.asset_id] }, { selected: Currency::BTC_ASSET_ID }, class: "w-full rounded-lg dark:bg-zinc-900" %>
   </div>
   <div class="mb-4">
-    <%= form.number_field :amount, required: true, placeholder: 'Amount', step: "0.00000001", class: "rounded-lg" %>
+    <%= form.number_field :amount, required: true, placeholder: 'Amount', step: "0.00000001", class: "rounded-lg dark:bg-zinc-900" %>
   </div>
   <div class="mb-4">
-    <%= form.text_field :title, required: true, placeholder: 'Title', class: "rounded-lg" %>
+    <%= form.text_field :title, required: true, placeholder: 'Title', class: "rounded-lg dark:bg-zinc-900" %>
   </div>
   <div class="mb-4">
-    <%= form.text_field :description, required: true, placeholder: 'Description', class: "rounded-lg" %>
+    <%= form.text_field :description, required: true, placeholder: 'Description', class: "rounded-lg dark:bg-zinc-900" %>
   </div>
   <div class="mb-4">
-    <%= form.text_field :user_id, required: true, placeholder: 'User ID', class: "rounded-lg" %>
+    <%= form.text_field :user_id, required: true, placeholder: 'User ID', class: "rounded-lg dark:bg-zinc-900" %>
   </div>
   <div class="flex justify-center">
     <%= form.submit 'Create', class: "cursor-pointer bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 block w-full rounded" %>

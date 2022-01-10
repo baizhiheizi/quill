@@ -7,15 +7,15 @@
       ['Delivering', 'delivering'],
     ], 
     { selected: @state }, 
-    class: "rounded-lg m-1" %>
+    class: "rounded-lg m-1 dark:bg-zinc-900" %>
   <%= form.select :order_by, 
     [
       ['Created DESC', 'created_at_desc'], 
       ['Created ASC', 'created_at_asc'], 
     ], 
     { selected: @order_by }, 
-    class: "rounded-lg m-1" %>
-  <%= form.text_field :query, value: @query, placeholder: "Search", class: "rounded-lg m-1" %>
+    class: "rounded-lg m-1 dark:bg-zinc-900" %>
+  <%= form.text_field :query, value: @query, placeholder: "Search", class: "rounded-lg m-1 dark:bg-zinc-900" %>
   <%= form.hidden_field :user_id, value: params[:user_id] %>
   <%= form.submit :Query, class: "cursor-pointer rounded bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 m-1" %>
 <% end %>

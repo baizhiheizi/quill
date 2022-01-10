@@ -5,7 +5,7 @@
   <%= button_to 'New', admin_view_modals_path(type: :create_bonus), class: "text-white rounded cursor-pointer bg-blue-500 hover:bg-blue-600 px-4 py-1" %>
 </div>
 
-<div class="p-4 bg-white rounded-lg shadow">
+<div class="p-4 bg-white dark:bg-zinc-900 rounded-lg shadow">
   <%= turbo_frame_tag 'admin_bonuses' do %>
     <div class="mb-4">
       <%= render 'admin/bonuses/query' %>
@@ -13,7 +13,7 @@
     <div data-controller="infinite-scroll" class="w-full overflow-x-scroll scrollbar-hide">
       <table class='w-full table-auto min-w-max '>
         <thead>
-          <tr class="bg-zinc-100">
+          <tr class="bg-zinc-100 dark:bg-zinc-800">
             <th class="p-4">ID</th>
             <th class="p-4">User</th>
             <th class="p-4">State</th>

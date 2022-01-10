@@ -6,7 +6,7 @@
       ['Unprocessed', 'unprocessed']
     ], 
     { selected: @state }, 
-    class: "rounded-lg m-1" %>
+    class: "rounded-lg m-1 dark:bg-zinc-900" %>
   <%= form.select :transfer_type, 
     [
       ['All Types', 'all'], 
@@ -22,7 +22,7 @@
       ['Withdraw Balance', 'withdraw_balance'],
     ], 
     { selected: @transfer_type }, 
-    class: "rounded-lg m-1" %>
+    class: "rounded-lg m-1 dark:bg-zinc-900" %>
   <%= form.select :order_by, 
     [
       ['Processed DESC', 'processed_at_desc'], 
@@ -30,8 +30,8 @@
       ['Created ASC', 'created_at_asc'], 
     ], 
     { selected: @order_by }, 
-    class: "rounded-lg m-1" %>
-  <%= form.text_field :query, value: @query, placeholder: "Search", class: "rounded-lg m-1" %>
+    class: "rounded-lg m-1 dark:bg-zinc-900" %>
+  <%= form.text_field :query, value: @query, placeholder: "Search", class: "rounded-lg m-1 dark:bg-zinc-900" %>
   <%= form.hidden_field :opponent_id, value: params[:opponent_id] %>
   <%= form.hidden_field :source_id, value: params[:source_id] %>
   <%= form.hidden_field :source_type, value: params[:source_type] %>

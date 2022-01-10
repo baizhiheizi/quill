@@ -6,7 +6,7 @@
       ['Public', 'without_deleted'],
     ], 
     { selected: @state }, 
-    class: "rounded-lg m-1" %>
+    class: "rounded-lg m-1 dark:bg-zinc-900" %>
   <%= form.select :order_by, 
     [
       ['Created DESC', 'created_at_desc'], 
@@ -15,8 +15,8 @@
       ['Downvotes Count', 'downvotes_count'], 
     ], 
     { selected: @order_by }, 
-    class: "rounded-lg m-1" %>
-  <%= form.text_field :query, value: @query, placeholder: "Search", class: "rounded-lg m-1" %>
+    class: "rounded-lg m-1 dark:bg-zinc-900" %>
+  <%= form.text_field :query, value: @query, placeholder: "Search", class: "rounded-lg m-1 dark:bg-zinc-900" %>
   <%= form.hidden_field :author_id, value: params[:author_id] %>
   <%= form.hidden_field :commentable_id, value: params[:commentable_id] %>
   <%= form.hidden_field :commentable_type, value: params[:commentable_type] %>
