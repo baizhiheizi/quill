@@ -96,8 +96,14 @@ Rails.application.routes.draw do
     post 'login', to: 'sessions#create'
     get 'logout', to: 'sessions#delete', as: :logout
 
-    resources :users, only: %i[index show], param: :uid
-    resources :articles, only: %i[index show], param: :uuid
+    resources :users, only: %i[index show], param: :uid do
+      post :ban
+      post :unban
+    end
+    resources :articles, only: %i[index show], param: :uuid do
+      post :block
+      post :unblock
+    end
     resources :orders, only: %i[index show]
     resources :swap_orders, only: %i[index show]
     resources :payments, only: %i[index show]
@@ -106,11 +112,11 @@ Rails.application.routes.draw do
     resources :mixin_network_users, only: %i[index show]
     resources :statistics, only: %i[index]
     resources :bonuses, only: %i[index create] do
-      post 'deliver', to: 'bonuses#deliver', as: :deliver
+      post :deliver
     end
     resources :wallets do
-      get 'assets', to: 'wallets#assets', as: :assets
-      get 'snapshots', to: 'wallets#snapshots', as: :snapshots
+      get :assets
+      get :snapshots
     end
     resources :view_modals, only: %i[create]
   end

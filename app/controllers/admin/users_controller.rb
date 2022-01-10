@@ -53,5 +53,17 @@ module Admin
       @tab = params[:tab] || 'articles'
       @user = User.find_by uid: params[:uid]
     end
+
+    def ban
+      @user = User.find_by uid: params[:user_uid]
+      return if @user.blank?
+
+      @user.ban! unless @user.banned?
+    end
+
+    def unban
+      @user = User.find_by uid: params[:user_uid]
+      @user.unban! if @user&.banned?
+    end
   end
 end
