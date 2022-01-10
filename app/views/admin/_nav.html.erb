@@ -21,12 +21,12 @@
   </div>
 </nav>
 
-<nav class="bg-white dark:bg-zinc-900 sm:hidden border-b dark:border-zinc-800 w-full fixed top-0 z-50" data-controller="dropdown">
+<nav class="bg-white dark:bg-zinc-900 sm:hidden border-b dark:border-zinc-800 w-full fixed top-0 z-50">
   <div class="relative px-4 max-h-screen">
     <div class="relative flex items-center justify-center h-12">
       <%= link_to admin_root_path, class: "flex items-center flex-shrink-0 space-x-2" do %>
         <img class="w-8 h-8" src=<%= asset_path('logo.png') %> alt="Logo">
-        <span class='text-xl font-medium'>Admin</span>
+        <span class='text-xl font-medium dark:text-zinc-50'>Admin</span>
       <% end %>
     </div>
   </div>

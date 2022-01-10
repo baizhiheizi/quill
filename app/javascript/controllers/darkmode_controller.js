@@ -48,7 +48,7 @@ export default class extends Controller {
     document.documentElement.classList.remove('dark');
     document
       .querySelector('meta[name="theme-color"]')
-      .setAttribute('content', '#fff');
+      ?.setAttribute('content', '#fff');
     reloadTheme();
   }
 
@@ -62,7 +62,7 @@ export default class extends Controller {
     document.documentElement.classList.add('dark');
     document
       .querySelector('meta[name="theme-color"]')
-      .setAttribute('content', '#18181b');
+      ?.setAttribute('content', '#18181b');
     reloadTheme();
   }
 }
