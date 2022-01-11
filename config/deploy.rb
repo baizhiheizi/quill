@@ -88,6 +88,12 @@ task :link_credentials_file do
   command %(cp "./config/credentials/#{fetch(:stage)}.yml.enc" "./config/credentials.yml.enc")
 end
 
+desc 'build assets'
+task :build_assets do
+  command %(yarn build)
+  command %(yarn build:css)
+end
+
 desc 'Deploys the current version to the server.'
 task :deploy do
   command %(echo "-----> Server: #{fetch(:domain)}")
@@ -101,6 +107,7 @@ task :deploy do
     invoke :'sidekiq:reload'
     invoke :'sidekiq-2:reload'
     invoke :'bundle:install'
+    invoke :'build_assets'
     invoke :'rails:assets_precompile'
     invoke :'rails:db_migrate'
     invoke :'deploy:cleanup'
