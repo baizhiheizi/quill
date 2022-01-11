@@ -460,7 +460,8 @@ class Article < ApplicationRecord
     )
 
     self.asset_id = Currency::BTC_ASSET_ID if asset_id.blank?
-    self.price = MINIMUM_PRICE_BTC if price.blank?
+    self.price = MINIMUM_PRICE_BTC if price.blank? && asset_id == Currency::BTC_ASSET_ID
+    self.price = MINIMUM_PRICE_JPYC if price.blank? && asset_id == Currency::JPYC_ASSET_ID
   end
 
   def ensure_author_account_normal
