@@ -4,7 +4,7 @@
   data-buy-article-payment-selected-currency-value="<%= article.currency.asset_id %>"
   data-buy-article-payment-selected-currency-symbol-value="<%= article.currency.asset_id %>"
   class="max-w-xs m-auto p-4">
-  <div class="mb-4 grid grid-cols-3 gap-4">
+  <div class="mb-4 <%= Currency.swappable.size > 2 ? 'grid grid-cols-3 gap-4' : 'flex justify-center items-center' %>">
     <div 
       data-buy-article-payment-target="currency"
       data-asset-id="<%= article.currency.asset_id %>"
@@ -14,7 +14,7 @@
       <span class="text-sm sm:text-base"><%= article.currency.symbol %></span>
     </div>
     <% Currency.swappable.each do |currency| %>
-      <% unless currency == article.currency %>
+      <% if currency != article.currency %>
         <div 
           data-buy-article-payment-target="currency"
           data-asset-id="<%= currency.asset_id %>"

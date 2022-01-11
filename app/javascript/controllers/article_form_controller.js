@@ -29,12 +29,6 @@ export default class extends Controller {
   ];
 
   connect() {
-    if (this.autosaveUrlValue) {
-      this.editor.codemirror.on(
-        'change',
-        debounce(() => this.autosave(), 1000),
-      );
-    }
     if (this.hasImagesTarget) {
       this.directUploadUrl = this.imagesTarget.dataset.directUploadUrl;
       this.directUploadToken = this.imagesTarget.dataset.directUploadToken;
@@ -55,6 +49,12 @@ export default class extends Controller {
       case 'options':
         this.options();
         break;
+    }
+    if (this.autosaveUrlValue) {
+      this.editor.codemirror.on(
+        'change',
+        debounce(() => this.autosave(), 1000),
+      );
     }
   }
 
