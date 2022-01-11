@@ -107,7 +107,7 @@ task :deploy do
     invoke :'sidekiq:reload'
     invoke :'sidekiq-2:reload'
     invoke :'bundle:install'
-    invoke :'build_assets'
+    invoke :build_assets
     invoke :'rails:assets_precompile'
     invoke :'rails:db_migrate'
     invoke :'deploy:cleanup'
