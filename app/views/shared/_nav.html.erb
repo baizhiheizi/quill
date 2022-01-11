@@ -3,7 +3,7 @@
     <div class="flex items-center justify-between h-16">
       <div class="flex items-center flex-1 space-x-10">
         <%= link_to root_path, class: 'flex items-center space-x-2 flex-shrink-0' do %>
-          <img class="w-10 h-10" src=<%= asset_path('logo.png') %> alt="Logo">
+          <img class="w-10 h-10" src=<%= asset_path(Settings.logo_file || 'logo.png') %> alt="Logo">
         <% end %>
         <div class="flex-1">
           <%= render "search/form", query: @query %>
