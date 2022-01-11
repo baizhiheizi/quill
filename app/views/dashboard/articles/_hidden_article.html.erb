@@ -5,7 +5,7 @@
     <% end %>
     <div class="flex space-x-2 items-center justify-between">
       <span class="text-xl font-bold mb-2 truncate"><%= article.title %></span>
-      <span class="text-sm text-gray-500 text-right truncate"><%= article.published_at.strftime("%Y-%m-%d %H:%M") %></span>
+      <span class="text-sm text-gray-500 text-right truncate"><%= article.published_at&.strftime("%Y-%m-%d %H:%M") || '-' %></span>
     </div>
     <div class="flex items-center space-x-4 text-sm text-gray-500 mb-2">
       <div class="col-span-1">
