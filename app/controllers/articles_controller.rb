@@ -44,12 +44,13 @@ class ArticlesController < ApplicationController
   end
 
   def create
-    article = current_user.articles.new create_article_params
+    @article = current_user.articles.new create_article_params
 
-    if article.save
-      redirect_to edit_article_path(article.uuid)
+    if @article.save
+      redirect_to edit_article_path(@article.uuid)
     else
-      render :new
+      flash.now.alert = @article.errors.full_messages.join(';') || ':('
+      render :new, status: :unprocessable_entity, layout: 'editor'
     end
   end
 
