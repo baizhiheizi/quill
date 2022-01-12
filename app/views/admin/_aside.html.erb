@@ -3,8 +3,8 @@
        data-sidebar-collapse-class-value="<%= %w[w-0 sm:w-16].to_json %>" 
        class="sticky top-0 overflow-y-scroll scrollbar-hide flex items-center">
   <div data-sidebar-target="sidebar" 
-       data-action="hover->sidebar#open" 
-       class="h-full bg-white dark:bg-zinc-900 w-0 sm:w-16 2xl:w-64 flex flex-col space-y-2 p-0 sm:p-4 overflow-x-hidden transition-transform">
+      data-action="hover->sidebar#open" 
+      class="h-full bg-white dark:bg-zinc-900 w-0 sm:w-16 2xl:w-64 flex flex-col space-y-2 p-0 sm:p-4 overflow-x-hidden transition-transform">
     <%= link_to admin_root_path, class: "flex items-center space-x-4 hover:bg-zinc-100 dark:hover:bg-zinc-800 p-2 rounded-lg truncate" do %>
       <span>
       <%= render "shared/icons/chart", html_class: "opacity-60 w-6 h-6" %>
@@ -84,12 +84,12 @@
       <span>Logout</span>
     <% end %>
   </div>
-  <div class="relative w-0 h-0">
-  <button data-sidebar-target="openButton" data-action="sidebar#open" class="fixed py-6 rounded-r-lg bg-white shadow sm:hidden">
-    <%= render "shared/icons/chevron_right", html_class: "w-5 h-5 opacity-60" %>
-  </button>
-  <button data-sidebar-target="collapseButton" data-action="sidebar#collapse" class="fixed hidden py-6 rounded-r-lg bg-white shadow sm:hidden">
-    <%= render "shared/icons/chevron_left", html_class: "w-5 h-5 opacity-60" %>
-  </button>
+  <div class="flex items-center flex-col 2xl:hidden">
+    <button data-sidebar-target="openButton" data-action="sidebar#open" class="fixed top-1/2 left-0 sm:left-16 py-8 rounded-r-lg bg-white shadow">
+      <%= render "shared/icons/chevron_right", html_class: "w-4 h-4 opacity-60" %>
+    </button>
+    <button data-sidebar-target="collapseButton" data-action="sidebar#collapse" class="fixed top-1/2 left-64 hidden py-8 rounded-r-lg bg-white shadow">
+      <%= render "shared/icons/chevron_left", html_class: "w-4 h-4 opacity-60" %>
+    </button>
   </div>
 </aside>

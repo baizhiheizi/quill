@@ -12,13 +12,13 @@ export default class extends Controller {
     useHover(this);
   }
 
-  mouseEnter() {
-    this.open();
-  }
-
-  mouseLeave() {
-    this.collapse();
-  }
+  // mouseEnter() {
+  //   this.open();
+  // }
+  //
+  // mouseLeave() {
+  //   this.collapse();
+  // }
 
   collapse() {
     this.sidebarTarget.classList.add(...this.collapseClassValue);
