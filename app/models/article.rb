@@ -42,6 +42,7 @@ class Article < ApplicationRecord
   MINIMUM_PRICE_PRS = 1
   MINIMUM_PRICE_BTC = 0.000_001
   MINIMUM_PRICE_JPYC = 100
+  MINIMUM_PRICE_PUSD = 0.1
   AUTHOR_REVENUE_RATIO_DEFAULT = 0.5
   READERS_REVENUE_RATIO_DEFAULT = 0.4
   PLATFORM_REVENUE_RATIO_DEFAULT = 0.1
@@ -462,6 +463,7 @@ class Article < ApplicationRecord
     self.asset_id = Currency::BTC_ASSET_ID if asset_id.blank?
     self.price = MINIMUM_PRICE_BTC if price.blank? && asset_id == Currency::BTC_ASSET_ID
     self.price = MINIMUM_PRICE_JPYC if price.blank? && asset_id == Currency::JPYC_ASSET_ID
+    self.price = MINIMUM_PRICE_PUSD if price.blank? && asset_id == Currency::PUSD_ASSET_ID
   end
 
   def ensure_author_account_normal
@@ -473,9 +475,11 @@ class Article < ApplicationRecord
   def ensure_price_not_too_low
     case asset_id
     when Currency::BTC_ASSET_ID
-      errors.add(:price, 'at least 0.000001 BTC') if price.positive? && price < MINIMUM_PRICE_BTC.to_d
+      errors.add(:price, ['>=', MINIMUM_PRICE_BTC, 'BTC'].join(' ')) if price.positive? && price < MINIMUM_PRICE_BTC.to_d
     when Currency::JPYC_ASSET_ID
-      errors.add(:price, 'at least 100 JPYC') if price.positive? && price < MINIMUM_PRICE_JPYC.to_d
+      errors.add(:price, ['>=', MINIMUM_PRICE_JPYC, 'JPYC'].join(' ')) if price.positive? && price < MINIMUM_PRICE_JPYC.to_d
+    when Currency::PUSD_ASSET_ID
+      errors.add(:price, ['>=', MINIMUM_PRICE_PUSD, 'pUSD'].join(' ')) if price.positive? && price < MINIMUM_PRICE_PUSD.to_d
     end
   end
 

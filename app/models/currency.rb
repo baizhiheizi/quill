@@ -19,6 +19,7 @@ class Currency < ApplicationRecord
   PRS_ASSET_ID = '3edb734c-6d6f-32ff-ab03-4eb43640c758'
   BTC_ASSET_ID = 'c6d0c728-2624-429b-8e0d-d9d19b6592fa'
   JPYC_ASSET_ID = '0ff3f325-4f34-334d-b6c0-a3bd8850fc06'
+  PUSD_ASSET_ID = '31d2ea9c-95eb-3355-b65b-ba096853bc18'
 
   extend OrderAsSpecified
 
