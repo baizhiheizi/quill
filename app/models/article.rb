@@ -158,6 +158,13 @@ class Article < ApplicationRecord
     price.zero?
   end
 
+  def may_buy_by?(user = nil)
+    return false if author.block_user?(user)
+    return false if user&.block_user?(author)
+
+    published?
+  end
+
   def authorized?(user = nil)
     return true if (published? && free?) || author == user
     return if user.blank?

@@ -6,7 +6,7 @@
     <%= button_to t('unblock'), 
       block_user_path(user.uid), 
       method: :delete,
-      class: "cursor-pointer bg-transparent opacity-70" %>
+      class: "cursor-pointer bg-transparent opacity-70 text-red-500 hover:font-bold" %>
   <% else %>
     <div class="flex items-center space-x-2">
       <%= render "users/actions_menu", user: user %>

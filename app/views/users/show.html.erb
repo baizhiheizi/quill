@@ -10,7 +10,7 @@
   </div>
 </div>
 
-<% unless @user.block_user?(current_user) %>
+<% unless @user.block_user?(current_user) || current_user.block_user?(@user) %>
   <div class="mx-auto max-w-3xl"
     data-controller="tabs"
     data-tabs-active-tab-value="<%= @tab %>"
