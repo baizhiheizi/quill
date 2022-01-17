@@ -71,5 +71,10 @@ module Admin
     def show
       @mixin_network_snapshot = MixinNetworkSnapshot.find params[:id]
     end
+
+    def process_now
+      @mixin_network_snapshot = MixinNetworkSnapshot.find params[:mixin_network_snapshot_id]
+      @mixin_network_snapshot.process!
+    end
   end
 end

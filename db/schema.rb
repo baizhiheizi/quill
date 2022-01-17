@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_01_17_000957) do
+ActiveRecord::Schema.define(version: 2022_01_17_061233) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -216,6 +216,8 @@ ActiveRecord::Schema.define(version: 2022_01_17_000957) do
     t.datetime "processed_at"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.index ["created_at"], name: "index_mixin_network_snapshots_on_created_at"
+    t.index ["processed_at"], name: "index_mixin_network_snapshots_on_processed_at"
     t.index ["snapshot_id"], name: "index_mixin_network_snapshots_on_snapshot_id", unique: true
     t.index ["trace_id"], name: "index_mixin_network_snapshots_on_trace_id"
     t.index ["user_id"], name: "index_mixin_network_snapshots_on_user_id"

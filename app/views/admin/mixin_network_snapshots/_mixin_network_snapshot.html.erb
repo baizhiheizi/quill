@@ -1,4 +1,4 @@
-<tr class="hover:bg-zinc-50 dark:hover:bg-zinc-800 border-b">
+<tr id="<%= dom_id mixin_network_snapshot %>" class="hover:bg-zinc-50 dark:hover:bg-zinc-800 border-b">
   <td class="p-4">
     <%= mixin_network_snapshot.id %>
   </td>
@@ -44,7 +44,7 @@
       <% end %>
     </div>
   </td>
-  <td class="p-4">
+  <td class="p-4 w-64">
     <%= mixin_network_snapshot.decrypted_memo.presence || mixin_network_snapshot.data %>
   </td>
   <td class="p-4">
@@ -53,7 +53,8 @@
   <td class="p-4">
     <%= mixin_network_snapshot.created_at %>
   </td>
-  <td class="p-4">
+  <td class="flex items-center space-x-2 p-4">
     <%= link_to 'Detail', admin_mixin_network_snapshot_path(mixin_network_snapshot), class: "bg-blue-500 hover:bg-blue-600 rounded text-white px-4 py-2", data: { turbo_frame: "_top" } %>
+    <%= button_to 'Process', admin_mixin_network_snapshot_process_now_path(mixin_network_snapshot.id), class: "bg-red-500 hover:bg-red-600 rounded text-white px-4 py-2 cursor-pointer" unless mixin_network_snapshot.processed? %>
   </td>
 </tr>
