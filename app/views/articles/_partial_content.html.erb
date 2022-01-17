@@ -4,15 +4,15 @@
   <div class="flex justify-center text-red-500">
     - <%= t('more_to_read') %> -
   </div>
-  <div class="flex justify-center">
-    <%= t('pay') %>
-    <span class="mx-2 text-red-500"><%= article.price_tag %></span>
-    <span class="mr-2">(≈$<%= article.price_usd %>)</span>
-    <span><%= t('to_continue_reading') %></span>
+  <div class="flex justify-center flex-wrap">
+    <span class="min-w-fit"><%= t('pay') %></span>
+    <span class="mx-2 text-red-500 min-w-fit"><%= article.price_tag %></span>
+    <span class="mr-2 min-w-fit">(≈$<%= article.price_usd %>)</span>
+    <span class="min-w-fit"><%= t('to_continue_reading') %></span>
   </div>
-  <div class="flex justify-center mb-6">
+  <div class="flex justify-center flex-wrap mb-6">
     <span><%= t('and_receive_early_reader_revenue') %></span>
-    (<%= link_to t('rules'), page_path('rules') %>)
+    (<%= link_to t('rules'), page_path('rules'), class: "min-w-fit" %>)
   </div>
   <div class="text-base mb-4 rounded-lg border border-amber-500 bg-amber-50 dark:bg-amber-800 dark:border-amber-900 px-4 py-2">
     <%= t('pay_warning') %>
@@ -22,7 +22,11 @@
   </div>
   <div class='text-sm text-gray-500 text-center'>
     <%= t('already_paid') %>? <%= t('try_to') %>
-    <%= link_to t('refresh'), article_path(article), data: { turbo: false } %>
+    <% if current_user.present? %>
+      <%= link_to t('refresh'), article_path(article), data: { turbo: false } %>
+    <% else %>
+      <%= button_to t('login'), view_modals_path(type: :login) %>
+    <% end %>
   </div>
   <% if article.swappable? %>
     <div class='text-sm text-gray-500 text-center'>

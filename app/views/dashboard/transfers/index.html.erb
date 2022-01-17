@@ -5,14 +5,14 @@
   <div class="w-full flex overflow-auto flex-nowrap scrollbar-hide items-center flex border-b dark:border-zinc-800 px-4 mb-4">
     <%= link_to t('author_revenue'), 
       dashboard_transfers_path(tab: :author),
-      class: "cursor-pointer py-1 px-4 border-blue-500 textrgray-600",
+      class: "cursor-pointer py-1 px-4 border-blue-500 text-zinc-600 min-w-fit",
       data: {
         tabs_target: "tab",
         tabs_tabname_param: "author" 
       } %>
     <%= link_to t('readers_revenue'), 
       dashboard_transfers_path(tab: :reader),
-      class: "cursor-pointer py-1 px-4 border-blue-500 textrgray-600",
+      class: "cursor-pointer py-1 px-4 border-blue-500 text-zinc-600 min-w-fit",
       data: {
         tabs_target: "tab",
         tabs_tabname_param: "reader" 
