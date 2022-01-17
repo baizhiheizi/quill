@@ -1,0 +1,9 @@
+<div id="block_user_<%= dom_id user %>" class="relative flex items-center px-4 py-2 border-b dark:border-zinc-800 justify-between">
+  <%= link_to user_path(user), class: "flex items-center space-x-2", data: { turbo_frame: "_top" } do %>
+    <img src="<%= user.avatar %>" class="w-10 h-10 rounded-full" />
+    <span class=""><%= user.name %></span>
+  <% end %>
+  <div class="">
+    <%= render "users/action_buttons", user: user %>
+  </div>
+</div>

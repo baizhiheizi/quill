@@ -1,8 +1,5 @@
 <div id="<%= dom_id user %>_subscribe_button" >
-  <% if current_user.blank? %>
-    <%= link_to t('subscribe'), view_modals_path(type: :login), data: { turbo_method: :post }, class: "block w-full cursor-pointer bg-blue-500 hover:bg-blue-600 rounded text-white text-center py-1 px-4" %>
-  <% elsif current_user == user %>
-  <% elsif current_user.subscribe_user? user %>
+  <% if current_user.subscribe_user? user %>
     <div class="w-full text-center py-1">
       <%= button_to t('unsubscribe'), 
         subscribe_user_path(user.uid), 
@@ -21,6 +18,6 @@
         class: "cursor-pointer bg-transparent opacity-70" %>
     </div>
   <% else current_user.subscribe_user? user%>
-    <%= button_to t('subscribe'), subscribe_users_path(uid: user.uid), class: "block w-full cursor-pointer bg-blue-500 hover:bg-blue-600 rounded text-white text-center py-1 px-4" %>
+    <%= button_to t('subscribe'), subscribe_users_path(uid: user.uid), class: "block w-full cursor-pointer bg-blue-500 hover:bg-blue-600 rounded-full text-white text-center py-1 px-4" %>
   <% end %>
 </div>

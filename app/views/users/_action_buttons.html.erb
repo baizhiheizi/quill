@@ -1,0 +1,16 @@
+<div id="<%= dom_id user %>_action_buttons" >
+  <% if current_user.blank? %>
+    <%= link_to t('subscribe'), view_modals_path(type: :login), data: { turbo_method: :post }, class: "block w-full cursor-pointer bg-blue-500 hover:bg-blue-600 rounded text-white text-center py-1 px-4" %>
+  <% elsif current_user == user %>
+  <% elsif current_user.block_user?(user) %>
+    <%= button_to t('unblock'), 
+      block_user_path(user.uid), 
+      method: :delete,
+      class: "cursor-pointer bg-transparent opacity-70" %>
+  <% else %>
+    <div class="flex items-center space-x-2">
+      <%= render "users/actions_menu", user: user %>
+      <%= render "subscribe_users/subscribe_button", user: user %>
+    </div>
+  <% end %>
+</div>

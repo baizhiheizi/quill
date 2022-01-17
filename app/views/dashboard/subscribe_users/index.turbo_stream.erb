@@ -1,4 +1,4 @@
-<%= turbo_stream.append "#{dom_id current_user}_subscribings_list" do %>
+<%= turbo_stream.append "#{dom_id current_user}_subscribing_list" do %>
   <%= render partial: "dashboard/subscribe_users/user", collection: @users, as: :user %>
 <% end %>
 

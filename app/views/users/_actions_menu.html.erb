@@ -1,0 +1,50 @@
+<div data-controller="dropdown" class="flex items-center relative">
+  <button data-action="dropdown#toggle click@window->dropdown#hide"
+    type="button" 
+    class="bg-white hover:bg-zinc-300 dark:bg-zinc-900 dark:hover:bg-zinc-500 p-2 rounded-full shadow-lg">
+    <span class="sr-only">Open More Actions Menu</span>
+    <%= render "shared/icons/dot_horizontal", html_class: 'w-4 h-4' %>
+  </button>
+  <div data-dropdown-target="menu" 
+      data-transition-enter-active="transition ease-out duration-100"
+      data-transition-enter-from="transform opacity-0 scale-95"
+      data-transition-enter-to="transform opacity-100 scale-100"
+      data-transition-leave-active="transition ease-in duration-75"
+      data-transition-leave-from="transform opacity-100 scale-100"
+      data-transition-leave-to="transform opacity-0 scale-95"
+      class="absolute right-0 top-4 hidden w-48 mt-2 bg-white dark:bg-zinc-900 shadow-lg origin-top-right rounded-md ring-1 ring-black ring-opacity-5 focus:outline-none" 
+      role="menu" 
+      aria-orientation="vertical" 
+      aria-labelledby="user-menu-button" 
+      tabindex="-1">
+    <% if current_user.block_user?(user) %>
+      <%= button_to block_user_path(user.uid), 
+        method: :delete,
+        class: "flex items-center cursor-pointer w-full block px-4 py-2 text-sm opacity-70 hover:bg-zinc-100 dark:hover:bg-zinc-800" do %>
+        <%= render "shared/icons/ban", html_class: "w-6 h-6 opacity-70" %>
+        <div class="flex-1 text-center">
+          <%= t('unblock_user') %>
+        </div>
+      <% end %>
+    <% else %>
+      <%= button_to block_users_path(uid: user.uid), 
+        form: {
+          data: { 
+            controller: "confirm",
+            confirm_target: "form",
+            confirm_identifier_value: SecureRandom.uuid,
+            confirm_content_value: t("confirm_to_block") 
+          }
+        },
+        data: { 
+          action: "confirm#invoke",
+        }, 
+        class: "flex items-center cursor-pointer w-full block px-4 py-2 text-sm opacity-70 hover:bg-zinc-100 dark:hover:bg-zinc-800" do %>
+        <%= render "shared/icons/ban", html_class: "w-6 h-6 opacity-70" %>
+        <div class="flex-1 text-center">
+          <%= t('block_user') %>
+        </div>
+      <% end %>
+    <% end %>
+  </div>
+</div>

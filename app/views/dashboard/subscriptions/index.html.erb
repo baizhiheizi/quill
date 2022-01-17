@@ -4,11 +4,11 @@
   data-tabs-active-class-value="border-b-2">
   <div class="w-full flex overflow-auto flex-nowrap scrollbar-hide items-center flex border-b dark:border-zinc-800 px-4 mb-4">
     <%= link_to t('subscribing'), 
-      dashboard_subscriptions_path(tab: :subscribings),
+      dashboard_subscriptions_path(tab: :subscribing),
       class: "cursor-pointer py-1 px-4 border-blue-500 textrgray-600",
       data: {
         tabs_target: "tab",
-        tabs_tabname_param: "subscribings", 
+        tabs_tabname_param: "subscribing", 
         action: "tabs#active"
       } %>
     <%= link_to t('subscribers'), 
@@ -17,6 +17,14 @@
       data: {
         tabs_target: "tab",
         tabs_tabname_param: "subscribers",
+        action: "tabs#active"
+      } %>
+    <%= link_to t('blocking'), 
+      dashboard_subscriptions_path(tab: :blocking),
+      class: "cursor-pointer py-1 px-4 border-blue-500 textrgray-600",
+      data: {
+        tabs_target: "tab",
+        tabs_tabname_param: "blocking",
         action: "tabs#active"
       } %>
     <%= link_to t('commenting_subscriptions'), 
@@ -38,9 +46,9 @@
   </div>
 
   <div class="hidden pb-4"
-    data-tabs-content-param="subscribings"
+    data-tabs-content-param="subscribing"
     data-tabs-target="content">
-    <%= turbo_frame_tag "#{dom_id current_user}_subscribings", src: dashboard_subscribe_users_path, loading: :lazy do %>
+    <%= turbo_frame_tag "#{dom_id current_user}_subscribing", src: dashboard_subscribe_users_path, loading: :lazy do %>
       <%= render "shared/loading" %>
     <% end %>
   </div>
@@ -48,6 +56,13 @@
     data-tabs-content-param="subscribers"
     data-tabs-target="content">
     <%= turbo_frame_tag "#{dom_id current_user}_subscribers", src: dashboard_subscribe_by_users_path, loading: :lazy do %>
+      <%= render "shared/loading" %>
+    <% end %>
+  </div>
+  <div class="hidden pb-4"
+    data-tabs-content-param="blocking"
+    data-tabs-target="content">
+    <%= turbo_frame_tag "#{dom_id current_user}_blocking", src: dashboard_block_users_path, loading: :lazy do %>
       <%= render "shared/loading" %>
     <% end %>
   </div>

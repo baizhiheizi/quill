@@ -1,4 +1,4 @@
-<%= turbo_frame_tag "#{dom_id current_user}_subscribing" do %>
+<%= turbo_frame_tag "#{dom_id current_user}_blocking" do %>
   <div data-controller="infinite-scroll">
     <div id="<%= dom_id current_user %>_subscribing_list">
       <% if @users.blank? %>
@@ -6,7 +6,7 @@
           <%= t("no_record") %>
         </div>
       <% else %>
-        <%= render partial: "dashboard/subscribe_users/user", collection: @users, as: :user %>
+        <%= render partial: "dashboard/block_users/user", collection: @users, as: :user %>
       <% end %>
     </div>
     <div data-infinite-scroll-target='scrollArea'></div>

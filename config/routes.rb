@@ -46,6 +46,8 @@ Rails.application.routes.draw do
   post '/articles/preview', to: 'articles#preview', as: :preview_article
   resources :article_references, only: %i[index], default: { format: :json }
   resources :payments, only: %i[create]
+
+  resources :block_users, only: %i[create destroy], param: :uid
   resources :subscribe_users, only: %i[create destroy], param: :uid
   resources :subscribe_articles, only: %i[create destroy], param: :uuid
   resources :subscribe_tags, only: %i[create destroy]
@@ -57,8 +59,6 @@ Rails.application.routes.draw do
     resources :comments, only: %i[index]
     resources :subscribe_users, only: %i[index]
     resources :subscribe_by_users, only: %i[index]
-    post :block
-    post :unblock
   end
   resources :transfers, only: %i[index]
   get '/transfers/stats', to: 'transfers#stats'
@@ -69,6 +69,7 @@ Rails.application.routes.draw do
     resources :published_articles, param: :uuid, only: %i[update destroy]
     resources :comments, only: %i[index]
     resources :subscriptions, only: %i[index]
+    resources :block_users, only: %i[index]
     resources :subscribe_users, only: %i[index]
     resources :subscribe_by_users, only: %i[index]
     resources :subscribe_articles, only: %i[index]
