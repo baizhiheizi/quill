@@ -202,14 +202,18 @@ class Article < ApplicationRecord
     author.create_action :commenting_subscribe, target: self
   end
 
+  def plain_text
+    @plain_text ||= ActionController::Base.helpers.strip_tags(content_as_html)
+  end
+
   def words_count
-    content.to_s.gsub("\n", '').size
+    @words_count ||= plain_text.scan(/[\u00ff-\uffff]|\S+/).size
   end
 
   def partial_content
     return if words_count < 300
 
-    content.truncate((words_count * 0.1).to_i).gsub(/!\[.+(\]\(.+\))?\z/, '')
+    plain_text.truncate((words_count * 0.1).to_i)
   end
 
   def wallet_id
