@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_01_17_061233) do
+ActiveRecord::Schema.define(version: 2022_01_17_072657) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -413,6 +413,7 @@ ActiveRecord::Schema.define(version: 2022_01_17_061233) do
     t.index ["asset_id"], name: "index_transfers_on_asset_id"
     t.index ["created_at"], name: "index_transfers_on_created_at"
     t.index ["opponent_id"], name: "index_transfers_on_opponent_id"
+    t.index ["processed_at"], name: "index_transfers_on_processed_at"
     t.index ["source_type", "source_id"], name: "index_transfers_on_source_type_and_source_id"
     t.index ["trace_id"], name: "index_transfers_on_trace_id", unique: true
     t.index ["transfer_type"], name: "index_transfers_on_transfer_type"
