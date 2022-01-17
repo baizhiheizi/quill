@@ -105,8 +105,8 @@ GEM
     batch-loader (2.0.1)
     bcrypt (3.1.16)
     bindex (0.8.1)
-    bootsnap (1.9.4)
-      msgpack (~> 1.0)
+    bootsnap (1.10.1)
+      msgpack (~> 1.2)
     builder (3.2.4)
     capybara (3.36.0)
       addressable
