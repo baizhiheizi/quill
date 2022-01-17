@@ -1,10 +1,10 @@
 <aside data-controller="sidebar" 
        data-sidebar-open-class-value="<%= %w[w-64].to_json %>" 
-       data-sidebar-collapse-class-value="<%= %w[w-0 sm:w-16].to_json %>" 
+       data-sidebar-collapse-class-value="<%= %w[w-10 sm:w-16].to_json %>" 
        class="sticky top-0 overflow-y-scroll scrollbar-hide flex items-center">
   <div data-sidebar-target="sidebar" 
       data-action="hover->sidebar#open" 
-      class="h-full bg-white dark:bg-zinc-900 w-0 sm:w-16 flex flex-col p-0 sm:p-4 overflow-x-hidden transition-transform">
+      class="h-full bg-white dark:bg-zinc-900 w-10 sm:w-16 flex flex-col p-0 sm:p-4 overflow-x-hidden transition-transform">
     <div class="flex flex-col space-y-2">
       <%= link_to admin_root_path, class: "flex items-center space-x-4 hover:bg-zinc-100 dark:hover:bg-zinc-800 p-2 rounded-lg truncate" do %>
         <span>
