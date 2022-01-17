@@ -115,7 +115,9 @@ Rails.application.routes.draw do
     resources :orders, only: %i[index show]
     resources :swap_orders, only: %i[index show]
     resources :payments, only: %i[index show]
-    resources :transfers, only: %i[index show]
+    resources :transfers, only: %i[index show] do
+      post :process_now
+    end
     resources :mixin_network_snapshots, only: %i[index show] do
       post :process_now
     end

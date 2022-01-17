@@ -55,5 +55,10 @@ module Admin
     def show
       @transfer = Transfer.find params[:id]
     end
+
+    def process_now
+      @transfer = Transfer.find params[:transfer_id]
+      @transfer.process!
+    end
   end
 end
