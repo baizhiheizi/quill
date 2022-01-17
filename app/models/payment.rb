@@ -102,6 +102,8 @@ class Payment < ApplicationRecord
     return if article.blank?
     return unless memo_correct?
 
+    raise 'blocked by author' if article.author.block_user?(payer)
+
     if decrypted_memo['t'] == 'REVENUE'
       complete!
     elsif asset_id == article.asset_id || decrypted_memo['t'] == 'CITE'
@@ -112,8 +114,9 @@ class Payment < ApplicationRecord
       generate_refund_transfer!
     end
   rescue RuntimeError, ActiveRecord::RecordInvalid, ActiveRecord::RecordNotFound => e
+    Rails.logger.error e
     reload.generate_refund_transfer!
-    raise e if Rails.env.development?
+    # raise e if Rails.env.development?
   end
 
   def place_swap_order!

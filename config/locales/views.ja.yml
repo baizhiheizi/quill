@@ -225,6 +225,9 @@ ja:
   sync: シンク
   no_record: 記録なし
   active_authors: アクティブな作家陣
+  block_user: さんをブロック
+  unblock_user: さんのブロックを解除
+  confirm_to_block: ブロックすると、その人はあなたに関するメッセージを受け取ったり、あなたの投稿を見たり買ったりすることができなくなり、あなたはその人の投稿を見ることができなくなります。
   articles:
     not_finished: まずは記事を完成させてください
     title_is_required: 記事のタイトルを入力してください

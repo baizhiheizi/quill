@@ -28,7 +28,11 @@ class Tagging < ApplicationRecord
   def notify_subscribers
     return unless article.published?
 
-    TaggingCreatedNotification.with(tagging: self).deliver(tag.subscribe_by_users)
+    TaggingCreatedNotification
+      .with(tagging: self)
+      .deliver(
+        User.where(id: (tag.subscribe_by_user_ids - article.author.block_user_ids))
+      )
   end
 
   def notifications

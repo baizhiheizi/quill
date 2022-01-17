@@ -9,11 +9,7 @@
         <div><%= user.name %></div>
       <% end %>
       <div class="text-sm">
-        <% if current_user.present? %>
-          <%= link_to t('subscribe'), view_modals_path(type: :login), data: { turbo_method: :post }, class: "block w-full cursor-pointer bg-blue-500 hover:bg-blue-600 rounded text-white text-center py-1 px-4" %>
-        <% else %>
-          <%= render "users/action_buttons", user: user %>
-        <% end %>
+        <%= render "users/action_buttons", user: user %>
       </div>
     </div>
   <% end %>

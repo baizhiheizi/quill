@@ -6,6 +6,7 @@ class SubscribeUsersController < ApplicationController
 
   def create
     return if current_user == @user
+    return if @user.block_user? current_user
 
     current_user.create_action :subscribe, target: @user
   end

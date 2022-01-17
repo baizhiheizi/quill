@@ -7,7 +7,11 @@ class BlockUsersController < ApplicationController
   def create
     return if current_user == @user
 
-    current_user.create_action :block, target: @user
+    Action.transaction do
+      current_user.create_action :block, target: @user
+      current_user.destroy_action :subscribe, target: @user
+      @user.destroy_action :subscribe, target: current_user
+    end
   end
 
   def destroy

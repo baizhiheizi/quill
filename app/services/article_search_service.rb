@@ -12,6 +12,8 @@ class ArticleSearchService
 
   def call
     query
+      .filter_block_authors
+      .filter_block_by_authors
       .sort
       .select_in_time_range
 
@@ -61,6 +63,18 @@ class ArticleSearchService
       else
         @articles
       end
+
+    self
+  end
+
+  def filter_block_by_authors
+    @articles = @articles.where.not(author_id: @current_user.block_by_user_ids) if @current_user.present?
+
+    self
+  end
+
+  def filter_block_authors
+    @articles = @articles.where.not(author_id: @current_user.block_user_ids) if @current_user.present?
 
     self
   end

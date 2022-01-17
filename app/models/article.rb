@@ -178,7 +178,11 @@ class Article < ApplicationRecord
   end
 
   def notify_subscribers
-    ArticlePublishedNotification.with(article: self).deliver(author.subscribe_by_users)
+    ArticlePublishedNotification
+      .with(article: self)
+      .deliver(
+        User.where(id: (author.subscribe_by_user_ids - author.block_user_ids))
+      )
   end
 
   def notify_admin

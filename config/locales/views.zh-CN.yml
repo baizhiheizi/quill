@@ -234,6 +234,9 @@ zh-CN:
   sync: 同步
   no_record: 没有记录
   active_authors: 活跃作者
+  block_user: 屏蔽用户
+  unblock_user: 解除屏蔽
+  confirm_to_block: 屏蔽之后，他/她将无法收到关于你的消息，无法看见或者购买你的文章，你也将无法看到他/她的任何文章。
   articles:
     not_finished: 请先完成你的文章
     title_is_required: 请输入文章标题
