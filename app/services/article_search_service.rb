@@ -55,9 +55,9 @@ class ArticleSearchService
       when 'week'
         @articles.where(published_at: (1.week.ago)...)
       when 'month'
-        @articles.where(published_at: (Time.current - 1.month)...)
+        @articles.where(published_at: (1.month.ago)...)
       when 'year'
-        @articles.where(published_at: (Time.current - 1.year)...)
+        @articles.where(published_at: (1.year.ago)...)
       else
         @articles
       end

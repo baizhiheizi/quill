@@ -19,6 +19,8 @@
 #  subscribers_count           :integer          default("0")
 #  subscribing_count           :integer          default("0")
 #  uid                         :string
+#  blocks_count                :integer          default("0")
+#  blocking_count              :integer          default("0")
 #
 # Indexes
 #

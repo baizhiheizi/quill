@@ -57,6 +57,8 @@ Rails.application.routes.draw do
     resources :comments, only: %i[index]
     resources :subscribe_users, only: %i[index]
     resources :subscribe_by_users, only: %i[index]
+    post :block
+    post :unblock
   end
   resources :transfers, only: %i[index]
   get '/transfers/stats', to: 'transfers#stats'

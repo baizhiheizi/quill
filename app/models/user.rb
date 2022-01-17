@@ -19,6 +19,8 @@
 #  subscribers_count           :integer          default("0")
 #  subscribing_count           :integer          default("0")
 #  uid                         :string
+#  blocks_count                :integer          default("0")
+#  blocking_count              :integer          default("0")
 #
 # Indexes
 #
@@ -87,7 +89,7 @@ class User < ApplicationRecord
   scope :active, lambda {
     order_by_articles_count
       .where(
-        articles: { created_at: (Time.current - 1.month)..., orders_count: 1... }
+        articles: { created_at: (1.month.ago)..., orders_count: 1... }
       )
   }
   scope :only_banned, -> { where.not(banned_at: nil) }
@@ -149,6 +151,8 @@ class User < ApplicationRecord
   action_store :downvote, :comment, counter_cache: true
   # subscribe for tag's articles
   action_store :subscribe, :tag, counter_cache: 'subscribers_count'
+  # block user
+  action_store :block, :user, counter_cache: true, user_counter_cache: 'blocking_count'
 
   def unread_notifications_count
     notifications.unread.count
