@@ -186,7 +186,7 @@ GEM
       raabro (~> 1.4)
     globalid (1.0.0)
       activesupport (>= 5.0)
-    groupdate (6.0.0)
+    groupdate (6.0.1)
       activesupport (>= 5.2)
     hamster (3.0.0)
       concurrent-ruby (~> 1.0)
