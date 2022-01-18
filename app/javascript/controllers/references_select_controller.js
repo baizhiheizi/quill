@@ -42,7 +42,7 @@ export default class extends Controller {
       contentType: 'application/json',
       responseKind: 'json',
     })
-      .then((response) => response.json())
+      .then((req) => req.response.json())
       .then((options) => callback(options))
       .catch(() => callback());
   }

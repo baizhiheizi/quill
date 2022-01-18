@@ -1,5 +1,6 @@
 import { Controller } from '@hotwired/stimulus';
 import { debounce } from 'lodash';
+import { get } from '@rails/request.js';
 import TomSelect from 'tom-select';
 
 export default class extends Controller {
@@ -20,17 +21,11 @@ export default class extends Controller {
   }
 
   loadTagOptions(query, callback) {
-    fetch('/tags?query=' + encodeURIComponent(query), {
-      credentials: 'same-origin',
-      headers: {
-        Accept: 'application/json',
-        'X-CSRF-Token': (
-          document.querySelector("meta[name='csrf-token']") || {}
-        ).content,
-        'Content-Type': 'application/json',
-      },
+    get('/tags?query=' + encodeURIComponent(query), {
+      contentType: 'application/json',
+      responseKind: 'json',
     })
-      .then((response) => response.json())
+      .then((req) => req.response.json())
       .then((options) =>
         callback(
           options.map((option) => {
