@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module ShareHelper
-  def share_to_twitter(url, text, via = 'prsdigg')
+  def share_to_twitter(url, text, via = Settings.twitter_account)
     [
       'https://twitter.com/intent/tweet?',
       'text=',

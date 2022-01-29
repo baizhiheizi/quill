@@ -9,9 +9,8 @@
         <div class="flex justify-center px-4 mb-4">
         <%= link_to login_path(return_to: params[:return_to]), 
           class: "py-2 text-white bg-blue-500 hover:bg-blue-600 rounded flex items-center justify-center space-x-2 text-lg w-64" do %>
-            <%= image_tag 'mixin-logo-light.png', class: 'h-4 w-auto' %>
-            <span>Mixin</span>
-            <span>Messenger</span>
+            <%= image_tag (Settings.mixin_logo_light_file || 'mixin-logo-light.png'), class: 'h-6 w-auto' %>
+            <span><%= Settings.messenger %></span>
           <% end %>
         </div>
         <div class="flex justify-center px-4 mb-6">
