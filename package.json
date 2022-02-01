@@ -37,7 +37,7 @@
     "mark.js": "^8.11.1",
     "mixin-messenger-utils": "^0.1.5",
     "photoswipe": "https://github.com/dimsemenov/Photoswipe#v5-beta",
-    "postcss": "^8.4.5",
+    "postcss": "^8.4.6",
     "postcss-import": "^14.0.2",
     "qrcode": "^1.5.0",
     "stimulus-use": "^0.50.0-2",
