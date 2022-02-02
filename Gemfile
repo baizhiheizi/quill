@@ -111,7 +111,7 @@ gem 'order_as_specified'
 gem 'rack-attack'
 
 # The ultimate pagination ruby gem
-gem 'pagy', '< 5.9.2'
+gem 'pagy'
 
 # Rack Middleware for handling Cross-Origin Resource Sharing (CORS), which makes cross-origin AJAX possible.
 gem 'rack-cors'
