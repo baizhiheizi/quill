@@ -370,7 +370,7 @@ GEM
     rbnacl (7.1.1)
       ffi
     redcarpet (3.5.1)
-    redis (4.5.1)
+    redis (4.6.0)
     redis-namespace (1.8.1)
       redis (>= 3.0.4)
     redis-objects (1.5.1)
@@ -500,7 +500,7 @@ DEPENDENCIES
   rails-i18n
   ransack
   redcarpet
-  redis (~> 4.1)
+  redis (~> 4.6)
   redis-namespace
   redis-objects
   requestjs-rails

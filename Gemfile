@@ -39,7 +39,7 @@ gem 'cssbundling-rails'
 gem 'jbuilder'
 
 # Use Redis adapter to run Action Cable in production
-gem 'redis', '~> 4.1'
+gem 'redis', '~> 4.6'
 
 # Map Redis types directly to Ruby objects
 gem 'redis-objects'
