@@ -30,7 +30,7 @@ class ArticleSearchService
         { title_i_cont: q, intro_i_cont: q, author_name_i_cont: q, tags_name_i_cont: q }
       end
 
-    @articles = @articles.ransack(q_ransack.merge(m: 'or')).result
+    @articles = @articles.ransack(q_ransack.merge(m: 'or')).result(distinct: true)
 
     self
   end
