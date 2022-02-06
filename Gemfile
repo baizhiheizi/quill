@@ -23,17 +23,20 @@ gem 'puma'
 # Deliver assets for Rails
 gem 'propshaft'
 
+# Use Turbo in your Ruby on Rails app
+gem 'turbo-rails'
+
+# Use Stimulus in your Ruby on Rails app
+gem 'stimulus-rails'
+
 # Bundle and transpile JavaScript [https://github.com/rails/jsbundling-rails]
 gem 'jsbundling-rails'
 
-# Use Hotwire in your Ruby on Rails app  [https://hotwired.dev]
-gem 'hotwire-rails'
+# Bundle and process CSS [https://github.com/rails/cssbundling-rails]
+gem 'cssbundling-rails'
 
 # Rails Request.JS encapsulates the logic to send by default some headers that are required by rails applications like the X-CSRF-Token
 gem 'requestjs-rails'
-
-# Bundle and process CSS [https://github.com/rails/cssbundling-rails]
-gem 'cssbundling-rails'
 
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jbuilder'
@@ -73,9 +76,6 @@ gem 'image_processing', '~> 1.2'
 
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', '>= 1.4.4', require: false
-
-# Powerful tool for avoiding N+1 DB or HTTP queries
-gem 'batch-loader'
 
 # AASM - State machines for Ruby classes (plain Ruby, ActiveRecord, Mongoid)
 gem 'aasm'
