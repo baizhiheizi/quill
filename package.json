@@ -17,7 +17,7 @@
     "@tailwindcss/aspect-ratio": "^0.4.0",
     "@tailwindcss/forms": "^0.4.0",
     "@tailwindcss/line-clamp": "^0.3.1",
-    "@tailwindcss/typography": "^0.5.1",
+    "@tailwindcss/typography": "^0.5.2",
     "@types/mark.js": "^8.11.7",
     "@types/mermaid": "^8.2.7",
     "@types/uuid": "^8.3.4",
