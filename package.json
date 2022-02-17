@@ -29,7 +29,7 @@
     "crypto": "^1.0.1",
     "css-loader": "^6.6.0",
     "easymde": "^2.16.1",
-    "esbuild": "^0.14.21",
+    "esbuild": "^0.14.22",
     "highlight.js": "^11.4.0",
     "ismobilejs": "^1.1.1",
     "js-base64": "^3.7.2",
