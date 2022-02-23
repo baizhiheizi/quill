@@ -15,10 +15,9 @@ ja:
   save: 保存
   paid: 支払い済み
   delete: 削除
-  pay_in_mixin: Linksで支払う
-  pay_in_fennec: Fennecで支払う
-  pay_with_messenger: LinksでQRコードを読み取ってください
-  view_with_messenger: LinksでQRコードを読み取ってください
+  pay_with_mixin: Linksで支払う
+  pay_with_fennec: Fennecで支払う
+  scan_with_mixin: LinksでQRコードを読み取ってください
   success_submitted: 送信しました
   success_subscribed: フォローしました
   success_unsubscribed: フォローを解除しました

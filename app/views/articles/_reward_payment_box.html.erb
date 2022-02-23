@@ -7,7 +7,7 @@
           data-qrcode-url-value="<%= article.reward_url(current_user, pay_asset_id, amount, trace_id) %>">
           <div data-qrcode-target="placeholder" class="flex justify-center"></div>
           <div class="text-center py-2 text-gray-500 text-sm">
-            <%= t("pay_with_messenger") %>
+            <%= t("scan_with_mixin") %>
           </div>
       </div>
     <% end %>
@@ -22,13 +22,13 @@
         data-fennec-opponent-id-param="<%= current_user&.wallet_id || article.wallet_id %>"
         class="flex justify-center items-center space-x-2 w-full my-4 text-center no-underline cursor-pointer py-2 block bg-amber-600 hover:bg-amber-700 active:bg-blue-500 text-white rounded">
         <%= image_tag 'fennec-logo.png', class: 'h-6 w-auto' %>
-        <span><%= t('pay_in_fennec') %></span>
+        <span><%= t('pay_with_fennec') %></span>
       </a>
     <% else %>
       <a data-article-payment-target="payLink"
         href="<%= article.reward_url(current_user, pay_asset_id, amount, trace_id) %>"
         class="w-full my-4 text-center no-underline cursor-pointer py-2 block bg-blue-600 hover:bg-blue-500 active:bg-blue-500 text-white rounded">
-        <%= t('pay_in_mixin') %>
+        <%= t('pay_with_mixin') %>
       </a>
     <% end %>
   <% end %>

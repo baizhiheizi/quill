@@ -15,10 +15,9 @@ zh-CN:
   save: 保存
   paid: 支付了
   delete: 删除
-  pay_in_mixin: Mixin 支付
-  pay_in_fennec: Fennec 支付
-  pay_with_messenger: 请使用 Mixin Messenger 扫码支付
-  view_with_messenger: 请使用 Mixin Messenger 扫码查看
+  pay_with_mixin: Mixin 支付
+  pay_with_fennec: Fennec 支付
+  scan_with_mixin: 请使用 Mixin Messenger 扫码支付
   success_submitted: 成功提交
   success_subscribed: 成功订阅
   success_unsubscribed: 已取消订阅

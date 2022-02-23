@@ -15,10 +15,9 @@ en:
   save: Save
   paid: Paid
   delete: Delete
-  pay_in_mixin: Pay in Mixin
-  pay_in_fennec: Pay in Fennec
-  pay_with_messenger: Please scan the QRCode using Mixin Messenger
-  view_with_messenger: Please scan the QRCode using Mixin Messenger
+  pay_with_mixin: Pay with Mixin
+  pay_with_fennec: Pay with Fennec
+  scan_with_mixin: Please scan the QRCode using Mixin Messenger
   success_submitted: Submitted
   success_subscribed: Subscribed
   success_unsubscribed: Unsubscribed
