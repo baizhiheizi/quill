@@ -219,7 +219,7 @@ GEM
     jmespath (1.6.0)
     jose (1.1.3)
       hamster
-    jsbundling-rails (1.0.1)
+    jsbundling-rails (1.0.2)
       railties (>= 6.0.0)
     kaminari (1.2.2)
       activesupport (>= 4.1.0)
