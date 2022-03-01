@@ -9,7 +9,7 @@ class MarkdownRenderService
     end
 
     def paragraph(content)
-      return unless ['[TOC]', '{:toc}'].include?(content)
+      return content unless ['[TOC]', '{:toc}'].include?(content)
 
       toc_render = Redcarpet::Render::HTML_TOC.new(nesting_level: 4)
       parser     = Redcarpet::Markdown.new(toc_render)
