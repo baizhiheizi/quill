@@ -9,12 +9,12 @@ class MarkdownRenderService
     end
 
     def paragraph(content)
-      if ['[TOC]', '{:toc}'].include?(content)
-        toc_render = Redcarpet::Render::HTML_TOC.new(nesting_level: 4)
-        parser     = Redcarpet::Markdown.new(toc_render)
+      return unless ['[TOC]', '{:toc}'].include?(content)
 
-        return parser.render(@document)
-      end
+      toc_render = Redcarpet::Render::HTML_TOC.new(nesting_level: 4)
+      parser     = Redcarpet::Markdown.new(toc_render)
+
+      parser.render(@document)
     end
   end
 
