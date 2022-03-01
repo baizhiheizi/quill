@@ -3,9 +3,31 @@
 class MarkdownRenderService
   IFRAME_SRC_WHITE_LIST_REGEX = [%r{\Ahttps://(www.)?youtube\.com/\S+\z}].freeze
 
+  class HTMLWithTocRender < Redcarpet::Render::HTML
+    def preprocess(document)
+      @document = document
+    end
+
+    def paragraph(content)
+      if ['[TOC]', '{:toc}'].include?(content)
+        toc_render = Redcarpet::Render::HTML_TOC.new(nesting_level: 4)
+        parser     = Redcarpet::Markdown.new(toc_render)
+        parser.render @document
+      else
+        render = Redcarpet::Render::HTML.new(
+          with_toc_data: true,
+          hard_wrap: true,
+          prettify: true
+        )
+        parser = Redcarpet::Markdown.new render
+        parser.render content
+      end
+    end
+  end
+
   def call(content, type: :default)
     @html = Redcarpet::Markdown.new(
-      Redcarpet::Render::HTML.new(
+      HTMLWithTocRender.new(
         with_toc_data: true,
         hard_wrap: true,
         prettify: true
