@@ -59,7 +59,7 @@ class Order < ApplicationRecord
   scope :only_prs, -> { where(asset_id: Currency::PRS_ASSET_ID) }
   scope :only_btc, -> { where(asset_id: Currency::BTC_ASSET_ID) }
 
-  after_create :complete_payment_async, :update_cache_async, :notify_async
+  after_create :complete_payment_async, :update_cache_async, :notify_async, :subscribe_comments_for_buyer
   after_create_commit :distribute_async, :broadcast_to_views
 
   before_destroy :destroy_notifications
@@ -242,6 +242,10 @@ class Order < ApplicationRecord
 
   def notify_buyer
     OrderCreatedNotification.with(order: self).deliver(buyer) if order_type.in? %w[buy_article reward_article]
+  end
+
+  def subscribe_comments_for_buyer
+    buyer.create_action :commenting_subscribe, target: article
   end
 
   def article
