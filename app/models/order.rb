@@ -86,6 +86,25 @@ class Order < ApplicationRecord
     DistributeOrderWorker.perform_async trace_id
   end
 
+  def early_orders
+    @early_orders ||=
+      item.orders.where('id < ? and created_at < ?', id, created_at).order(created_at: :desc)
+  end
+
+  def early_orders_total
+    @early_orders_total ||= early_orders.sum(:value_btc)
+  end
+
+  def collect_early_readers
+    readers = {}
+    early_orders.each do |_order|
+      readers[_order.buyer.mixin_uuid] ||= []
+      readers[_order.buyer.mixin_uuid].push _order.trace_id
+    end
+
+    readers
+  end
+
   # transfer revenue to author and readers
   def distribute!
     # the share for invested readers before
@@ -95,29 +114,29 @@ class Order < ApplicationRecord
     revenue_asset_id = payment.swap_order&.fill_asset_id || payment.asset_id
 
     # the present orders
-    _orders =
-      item.orders
-          .where('id < ? and created_at < ?', id, created_at)
+    _orders = early_orders
 
     # total investment
     sum = _orders.sum(:value_btc)
 
     # create reader transfer
     _readers_amount = 0
-    _orders.each do |_order|
+    collect_early_readers.each do |reader_id, order_ids|
+      share = early_orders.where(trace_id: order_ids).sum(:value_btc)
       # ignore if amount is less than minium amout for Mixin Network
-      _amount = (amount * _order.value_btc.to_f / sum).floor(8)
+      _amount = (amount * share.to_f / sum).floor(8)
       next if (_amount - MINIMUM_AMOUNT).negative?
 
+      salt = order_ids.push trace_id
       transfers.create_with(
         wallet: payment.wallet,
         transfer_type: :reader_revenue,
-        opponent_id: _order.buyer.mixin_uuid,
+        opponent_id: reader_id,
         asset_id: revenue_asset_id,
         amount: _amount.to_f.to_s,
         memo: "Reader revenue from #{item.title}".truncate(70)
       ).find_or_create_by!(
-        trace_id: PrsdiggBot.api.unique_conversation_id(trace_id, _order.trace_id)
+        trace_id: MixinBot::Utils.unique_uuid(*salt)
       )
 
       _readers_amount += _amount
