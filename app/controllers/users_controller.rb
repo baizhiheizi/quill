@@ -15,5 +15,6 @@ class UsersController < ApplicationController
 
   def load_user
     @user = User.find_by uid: params[:uid] || params[:user_uid]
+    redirect_back fallback_location: root_path if @user.blank?
   end
 end
