@@ -59,8 +59,8 @@ class Order < ApplicationRecord
   scope :only_prs, -> { where(asset_id: Currency::PRS_ASSET_ID) }
   scope :only_btc, -> { where(asset_id: Currency::BTC_ASSET_ID) }
 
-  after_create :complete_payment_async, :update_cache_async, :notify_async, :subscribe_comments_for_buyer
-  after_create_commit :distribute_async, :broadcast_to_views
+  after_create :complete_payment_async, :update_cache_async, :notify_async
+  after_create_commit :distribute_async, :broadcast_to_views, :subscribe_comments_for_buyer
 
   before_destroy :destroy_notifications
 
