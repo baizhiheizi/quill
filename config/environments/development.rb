@@ -26,7 +26,7 @@ Rails.application.configure do
     config.action_controller.enable_fragment_cache_logging = true
 
     config.cache_store = :redis_cache_store, {
-      url: ENV['REDIS_URL'] || 'redis://127.0.0.1:6379/1',
+      url: ENV.fetch('REDIS_URL', 'redis://127.0.0.1:6379/1'),
       namespace: 'prsdigg'
     }
     config.public_file_server.headers = {

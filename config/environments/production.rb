@@ -63,7 +63,7 @@ Rails.application.configure do
   # config.cache_store = :mem_cache_store
   config.cache_store = if ENV['REDIS_URL'].present?
                          [:redis_cache_store, {
-                           url: ENV['REDIS_URL'],
+                           url: ENV.fetch('REDIS_URL', nil),
                            namespace: 'prsdigg'
                          }]
                        else
