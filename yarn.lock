@@ -1253,10 +1253,10 @@ toggle-selection@^1.0.6:
   resolved "https://registry.yarnpkg.com/toggle-selection/-/toggle-selection-1.0.6.tgz#6e45b1263f2017fa0acc7d89d78b15b8bf77da32"
   integrity sha1-bkWxJj8gF/oKzH2J14sVuL932jI=
 
-tom-select@^2.0.1:
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/tom-select/-/tom-select-2.0.1.tgz#e3a6e6de61070274f746543f177107970a36b878"
-  integrity sha512-HTFf0OTwA2k8YCUqIZOenvr+ZrV4LMOUjCn3n5XS8wIpigcxKVvs5XRhBSGedhRJ8s+VmemIqy6rnabgBYX+6w==
+tom-select@^2.0.2:
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/tom-select/-/tom-select-2.0.2.tgz#c2829cd17d996694aa3bc9e43a046c4951bd01d1"
+  integrity sha512-C78Ckq+r9B6lbIYSwV3R+6FPDCjRs49Wam+eaARnPxcekJI4SR78KKpb4QSg62y5mWYpKkxjKVZhslxZWIw6aQ==
   dependencies:
     "@orchidjs/sifter" "^0.9.1"
 
