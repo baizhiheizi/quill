@@ -51,7 +51,7 @@ gem 'redis-objects'
 gem 'redis-namespace'
 
 # Use Active Model has_secure_password
-gem 'bcrypt', '~> 3.1.7'
+gem 'bcrypt', '~> 3.1.18'
 
 # A simple API wrapper for Mixin Network in Ruby
 gem 'mixin_bot'
