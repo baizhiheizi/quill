@@ -9,6 +9,7 @@ linode:
   bucket: <%= Rails.application.credentials.dig(:linode, :bucket) %>
   endpoint: <%= Rails.application.credentials.dig(:linode, :endpoint) %>
   region: default
+  public: true
 
 production:
   service: Aliyun

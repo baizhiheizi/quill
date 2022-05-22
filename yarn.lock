@@ -22,25 +22,25 @@
   integrity sha512-hsEnFemeiW4D08A5gUAZxLBTXpZ39P+a+DGDsHw1yxqyQ/jzFEnxf5uTEGp+3bzAbNOxU1paTgYS4ECU/IgfDw==
 
 "@babel/highlight@^7.16.7":
-  version "7.17.9"
-  resolved "https://registry.yarnpkg.com/@babel/highlight/-/highlight-7.17.9.tgz#61b2ee7f32ea0454612def4fccdae0de232b73e3"
-  integrity sha512-J9PfEKCbFIv2X5bjTMiZu6Vf341N05QIY+d6FvVKynkG1S7G0j3I0QoRtWIrXhZ+/Nlb5Q0MzqL7TokEJ5BNHg==
+  version "7.17.12"
+  resolved "https://registry.yarnpkg.com/@babel/highlight/-/highlight-7.17.12.tgz#257de56ee5afbd20451ac0a75686b6b404257351"
+  integrity sha512-7yykMVF3hfZY2jsHZEEgLc+3x4o1O+fYyULu11GynEUQNwB6lua+IIQn1FiJxNucd5UlyJryrwsOh8PL9Sn8Qg==
   dependencies:
     "@babel/helper-validator-identifier" "^7.16.7"
     chalk "^2.0.0"
     js-tokens "^4.0.0"
 
 "@babel/runtime@^7.12.5":
-  version "7.17.9"
-  resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.17.9.tgz#d19fbf802d01a8cb6cf053a64e472d42c434ba72"
-  integrity sha512-lSiBBvodq29uShpWGNbgFdKYNiFDo5/HIYsaCEY9ff4sb10x9jizo2+pRrSyF4jKZCXqgzuqBOQKbUm90gQwJg==
+  version "7.18.0"
+  resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.18.0.tgz#6d77142a19cb6088f0af662af1ada37a604d34ae"
+  integrity sha512-YMQvx/6nKEaucl0MY56mwIG483xk8SDNdlUwb2Ts6FUpr7fm85DxEmsY18LXBNhcTz6tO6JwZV8w1W06v8UKeg==
   dependencies:
     regenerator-runtime "^0.13.4"
 
 "@babel/types@^7.16.7":
-  version "7.17.10"
-  resolved "https://registry.yarnpkg.com/@babel/types/-/types-7.17.10.tgz#d35d7b4467e439fcf06d195f8100e0fea7fc82c4"
-  integrity sha512-9O26jG0mBYfGkUYCYZRnBwbVLd1UZOICEr2Em6InB6jVfsAv1GKgwXHmrSg+WFWDmeKTA6vyTZiN8tCSM5Oo3A==
+  version "7.18.0"
+  resolved "https://registry.yarnpkg.com/@babel/types/-/types-7.18.0.tgz#ef523ea349722849cb4bf806e9342ede4d071553"
+  integrity sha512-vhAmLPAiC8j9K2GnsnLPCIH5wCrPpYIVBCWRBFDCB7Y/BXLqi/O+1RSTTM2bsmg6U/551+FCf9PNPxjABmxHTw==
   dependencies:
     "@babel/helper-validator-identifier" "^7.16.7"
     to-fast-properties "^2.0.0"
@@ -50,10 +50,10 @@
   resolved "https://registry.yarnpkg.com/@hotwired/stimulus/-/stimulus-3.0.1.tgz#141f15645acaa3b133b7c247cad58ae252ffae85"
   integrity sha512-oHsJhgY2cip+K2ED7vKUNd2P+BEswVhrCYcJ802DSsblJFv7mPFVk3cQKvm2vHgHeDVdnj7oOKrBbzp1u8D+KA==
 
-"@hotwired/turbo-rails@^7.1.1":
-  version "7.1.1"
-  resolved "https://registry.yarnpkg.com/@hotwired/turbo-rails/-/turbo-rails-7.1.1.tgz#35c03b92b5c86f0137ed08bef843d955ec9bbe83"
-  integrity sha512-ZXpxUjCfkdbuXfoGrsFK80qsVzACs8xCfie9rt2jMTSN6o1olXVA0Nrk8u02yNEwSiVJm/4QSOa8cUcMj6VQjg==
+"@hotwired/turbo-rails@^7.1.2":
+  version "7.1.2"
+  resolved "https://registry.yarnpkg.com/@hotwired/turbo-rails/-/turbo-rails-7.1.2.tgz#018ff65fdee4561e0c3ae407aa3f8eb0db7f6b88"
+  integrity sha512-rGz5RRkZu2vW5v3GnsgGRqkfhTxnX2b0IMbsX5VRX3b03ynt+Xn5yRsDVuEes1PXlnjgkkOPadf7NEEl7OdR3Q==
   dependencies:
     "@hotwired/turbo" "^7.1.0"
     "@rails/actioncable" "^7.0"
@@ -123,10 +123,10 @@
   resolved "https://registry.yarnpkg.com/@tailwindcss/aspect-ratio/-/aspect-ratio-0.4.0.tgz#c635dd7331cbcc1b111cebdc2647dd3493ebdd3e"
   integrity sha512-WJu0I4PpqNPuutpaA9zDUq2JXR+lorZ7PbLcKNLmb6GL9/HLfC7w3CRsMhJF4BbYd/lkY6CfXOvkYpuGnZfkpQ==
 
-"@tailwindcss/forms@^0.5.1":
-  version "0.5.1"
-  resolved "https://registry.yarnpkg.com/@tailwindcss/forms/-/forms-0.5.1.tgz#7fe86b9b67e6d91cb902e2d3f4ebe561cc057a13"
-  integrity sha512-QSwsFORnC2BAP0lRzQkz1pw+EzIiiPdk4e27vGQjyXkwJPeC7iLIRVndJzf9CJVbcrrIcirb/TfxF3gRTyFEVA==
+"@tailwindcss/forms@^0.5.2":
+  version "0.5.2"
+  resolved "https://registry.yarnpkg.com/@tailwindcss/forms/-/forms-0.5.2.tgz#4ef45f9916dcb37838cbe7fecdcc4ba7a7c2ab59"
+  integrity sha512-pSrFeJB6Bg1Mrg9CdQW3+hqZXAKsBrSG9MAfFLKy1pVA4Mb4W7C0k7mEhlmS2Dfo/otxrQOET7NJiJ9RrS563w==
   dependencies:
     mini-svg-data-uri "^1.2.3"
 
@@ -325,9 +325,9 @@ camelcase@^5.0.0:
   integrity sha512-L28STB170nwWS63UjtlEOE3dldQApaJXZkOI1uMFfzf3rRuPegHaHesyee+YxQ+W6SvRDQV6UrdOdRiR153wJg==
 
 caniuse-lite@^1.0.30001332, caniuse-lite@^1.0.30001335:
-  version "1.0.30001340"
-  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001340.tgz#029a2f8bfc025d4820fafbfaa6259fd7778340c7"
-  integrity sha512-jUNz+a9blQTQVu4uFcn17uAD8IDizPzQkIKh3LCJfg9BkyIqExYYdyc/ZSlWUSKb8iYiXxKsxbv4zYSvkqjrxw==
+  version "1.0.30001342"
+  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001342.tgz#87152b1e3b950d1fbf0093e23f00b6c8e8f1da96"
+  integrity sha512-bn6sOCu7L7jcbBbyNhLg0qzXdJ/PMbybZTH/BA6Roet9wxYRm6Tr9D0s0uhLkOZ6MSG+QU6txUgdpr3MXIVqjA==
 
 chalk@^2.0.0:
   version "2.4.2"
@@ -370,9 +370,9 @@ codemirror-spell-checker@1.1.2:
     typo-js "*"
 
 codemirror@^5.63.1:
-  version "5.65.3"
-  resolved "https://registry.yarnpkg.com/codemirror/-/codemirror-5.65.3.tgz#2d029930d5a293bc5fb96ceea64654803c0d4ac7"
-  integrity sha512-kCC0iwGZOVZXHEKW3NDTObvM7pTIyowjty4BUqeREROc/3I6bWbgZDA3fGDwlA+rbgRjvnRnfqs9SfXynel1AQ==
+  version "5.65.4"
+  resolved "https://registry.yarnpkg.com/codemirror/-/codemirror-5.65.4.tgz#384c257f27d1d06f44311722c98ad802cce3984e"
+  integrity sha512-tytrSm5Rh52b6j36cbDXN+FHwHCl9aroY4BrDZB2NFFL3Wjfq9nuYVLFFhaOYOczKAg3JXTr8BuT8LcE5QY4Iw==
 
 color-convert@^1.9.0:
   version "1.9.3"
@@ -728,9 +728,9 @@ highlight.js@^11.5.1:
   integrity sha512-LKzHqnxr4CrD2YsNoIf/o5nJ09j4yi/GcH5BnYz9UnVpZdS4ucMgvP61TDty5xJcFGRjnH4DpujkS9bHT3hq0Q==
 
 hotkeys-js@>=3:
-  version "3.9.3"
-  resolved "https://registry.yarnpkg.com/hotkeys-js/-/hotkeys-js-3.9.3.tgz#4b755cc695b388d7f93a83aff4b0c2a45719996c"
-  integrity sha512-s+f0xyvDmf6+DyrFQ2SY+eA7lbvMbjqkqi0I0SpMgnN5tZx7DeH8nsWhkJR4KEq3pxDPHJppDUhdt1rZFW5LeQ==
+  version "3.9.4"
+  resolved "https://registry.yarnpkg.com/hotkeys-js/-/hotkeys-js-3.9.4.tgz#ce1aa4c3a132b6a63a9dd5644fc92b8a9b9cbfb9"
+  integrity sha512-2zuLt85Ta+gIyvs4N88pCYskNrxf1TFv3LR9t5mdAZIX8BcgQQ48F2opUptvHa6m8zsy5v/a0i9mWzTrlNWU0Q==
 
 icss-utils@^5.0.0, icss-utils@^5.1.0:
   version "5.1.0"
@@ -856,9 +856,9 @@ mark.js@^8.11.1:
   integrity sha1-GA8fnr74sOY45BZq1S24eb6y/8U=
 
 marked@^4.0.10:
-  version "4.0.15"
-  resolved "https://registry.yarnpkg.com/marked/-/marked-4.0.15.tgz#0216b7c9d5fcf6ac5042343c41d81a8b1b5e1b4a"
-  integrity sha512-esX5lPdTfG4p8LDkv+obbRCyOKzB+820ZZyMOXJZygZBHrH9b3xXR64X4kT3sPe9Nx8qQXbmcz6kFSMt4Nfk6Q==
+  version "4.0.16"
+  resolved "https://registry.yarnpkg.com/marked/-/marked-4.0.16.tgz#9ec18fc1a723032eb28666100344d9428cf7a264"
+  integrity sha512-wahonIQ5Jnyatt2fn8KqF/nIqZM8mh3oRu2+l5EANGMhu6RFjiSG52QNE2eWzFMI94HqYSgN184NurgNG6CztA==
 
 merge2@^1.3.0:
   version "1.4.1"
@@ -891,7 +891,7 @@ mixin-messenger-utils@^0.1.5:
     copy-to-clipboard "^3.3.1"
     js-base64 "^3.6.0"
 
-nanoid@^3.3.3:
+nanoid@^3.3.4:
   version "3.3.4"
   resolved "https://registry.yarnpkg.com/nanoid/-/nanoid-3.3.4.tgz#730b67e3cd09e2deacf03c027c81c9d9dbc5e8ab"
   integrity sha512-MqBkQh/OHTS2egovRtLk45wEyNXwF+cokD+1YPf9u5VfJiRdAiRwB2froX5Co9Rh20xs4siNPm8naNotSD6RBw==
@@ -1063,12 +1063,12 @@ postcss-value-parser@^4.0.0, postcss-value-parser@^4.1.0, postcss-value-parser@^
   resolved "https://registry.yarnpkg.com/postcss-value-parser/-/postcss-value-parser-4.2.0.tgz#723c09920836ba6d3e5af019f92bc0971c02e514"
   integrity sha512-1NNCs6uurfkVbeXG4S8JFT9t19m45ICnif8zWLd5oPSZ50QnwMfK+H3jv408d4jw/7Bttv5axS5IiHoLaVNHeQ==
 
-postcss@^8.4.12, postcss@^8.4.13, postcss@^8.4.7:
-  version "8.4.13"
-  resolved "https://registry.yarnpkg.com/postcss/-/postcss-8.4.13.tgz#7c87bc268e79f7f86524235821dfdf9f73e5d575"
-  integrity sha512-jtL6eTBrza5MPzy8oJLFuUscHDXTV5KcLlqAWHl5q5WYRfnNRGSmOZmOZ1T6Gy7A99mOZfqungmZMpMmCVJ8ZA==
+postcss@^8.4.12, postcss@^8.4.14, postcss@^8.4.7:
+  version "8.4.14"
+  resolved "https://registry.yarnpkg.com/postcss/-/postcss-8.4.14.tgz#ee9274d5622b4858c1007a74d76e42e56fd21caf"
+  integrity sha512-E398TUmfAYFPBSdzgeieK2Y1+1cpdxJx8yXbK/m57nRhKSmk1GB2tO4lbLBtlkfPQTDKfe4Xqv1ASWPpayPEig==
   dependencies:
-    nanoid "^3.3.3"
+    nanoid "^3.3.4"
     picocolors "^1.0.0"
     source-map-js "^1.0.2"
 
@@ -1258,10 +1258,10 @@ toggle-selection@^1.0.6:
   resolved "https://registry.yarnpkg.com/toggle-selection/-/toggle-selection-1.0.6.tgz#6e45b1263f2017fa0acc7d89d78b15b8bf77da32"
   integrity sha1-bkWxJj8gF/oKzH2J14sVuL932jI=
 
-tom-select@^2.0.2:
-  version "2.0.2"
-  resolved "https://registry.yarnpkg.com/tom-select/-/tom-select-2.0.2.tgz#c2829cd17d996694aa3bc9e43a046c4951bd01d1"
-  integrity sha512-C78Ckq+r9B6lbIYSwV3R+6FPDCjRs49Wam+eaARnPxcekJI4SR78KKpb4QSg62y5mWYpKkxjKVZhslxZWIw6aQ==
+tom-select@^2.0.3:
+  version "2.0.3"
+  resolved "https://registry.yarnpkg.com/tom-select/-/tom-select-2.0.3.tgz#3fe57cf5da82be94b4083fb44c9edda5f198cc6e"
+  integrity sha512-IHcVHVb4/+I+4pAuXjEFVoH97mOvjp8CQ45PemnapcoRY46LqmH07hBwvRIIEznsXqBlFgZH7Uw7Cjh45mNlTA==
   dependencies:
     "@orchidjs/sifter" "^0.9.1"
 
