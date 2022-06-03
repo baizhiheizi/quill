@@ -1,5 +1,4 @@
 import { Controller } from '@hotwired/stimulus';
-import { useTransition } from 'stimulus-use';
 import * as QRCode from 'qrcode';
 
 export default class extends Controller {

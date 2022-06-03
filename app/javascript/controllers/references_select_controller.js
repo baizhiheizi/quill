@@ -1,5 +1,4 @@
 import { Controller } from '@hotwired/stimulus';
-import { debounce } from 'lodash';
 import { get } from '@rails/request.js';
 import TomSelect from 'tom-select';
 

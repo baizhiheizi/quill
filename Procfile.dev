@@ -2,5 +2,5 @@
 web: rails s -p 3000 -b 0.0.0.0
 mixin_blaze: bin/mixin_blaze
 sidekiq: bundle exec sidekiq
-js: yarn build --watch
+# js: yarn build --watch
 css: yarn build:css --watch

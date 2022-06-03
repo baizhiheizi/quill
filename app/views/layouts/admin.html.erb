@@ -10,7 +10,7 @@
     <%= csp_meta_tag %>
     <meta name="viewport" content="user-scalable=no,initial-scale=1"/>
 
-    <%= javascript_include_tag "application", "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
     <%= favicon_link_tag "#{Settings.favicon_file || 'favicon.png'}" %>
   </head>
