@@ -41,8 +41,8 @@
     <% end %>
 
     <%= favicon_link_tag "#{Settings.favicon_file || 'favicon.png'}" %>
-    <%= javascript_include_tag "application", "data-turbo-track": "reload" %>
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
   </head>
 
   <body class="min-h-screen flex flex-col dark:text-zinc-50">

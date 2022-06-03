@@ -90,7 +90,6 @@ end
 
 desc 'build assets'
 task :build_assets do
-  command %(yarn build)
   command %(yarn build:css)
 end
 

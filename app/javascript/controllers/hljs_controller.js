@@ -1,5 +1,5 @@
 import { Controller } from '@hotwired/stimulus';
-import * as hljs from 'highlight.js';
+import hljs from 'highlight.js';
 
 export default class extends Controller {
   connect() {

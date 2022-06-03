@@ -25,9 +25,9 @@
     <meta name='keywords' content='<%= Settings.page_keywords %>' />
     <meta name='description' content='<%= @page_description.presence || Settings.page_description %>' />
 
-    <%= javascript_pack_tag 'landing', 'data-turbolinks-track': 'reload' %>
     <%= stylesheet_pack_tag 'landing' %>
     <%= favicon_pack_tag "#{Settings.favicon_file || 'favicon.png'}" %>
+    <%= javascript_importmap_tags %>
   </head>
 
   <body>

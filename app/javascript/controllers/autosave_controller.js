@@ -1,5 +1,5 @@
 import { Controller } from '@hotwired/stimulus';
-import { debounce } from 'lodash';
+import lodash from 'lodash';
 
 export default class extends Controller {
   static targets = ['form'];
@@ -13,7 +13,7 @@ export default class extends Controller {
 
   connect() {
     if (this.delayValue > 0) {
-      this.save = debounce(this.save, this.delayValue);
+      this.save = lodash.debounce(this.save, this.delayValue);
     }
   }
 
