@@ -230,8 +230,15 @@ class User < ApplicationRecord
     @wallet_id = (wallet.presence || create_wallet)&.uuid
   end
 
-  def avatar
-    avatar_url.presence || generated_avatar_url
+  def avatar(original: false)
+    @avatar =
+      if avatar_url.blank?
+        generated_avatar_url
+      elsif original
+        avatar_url
+      else
+        avatar_url.presence&.gsub(/s256\Z/, 's64')
+      end
   end
 
   def generated_avatar_url
