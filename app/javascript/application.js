@@ -4,7 +4,7 @@ import '@hotwired/turbo-rails';
 import { hideLoading, showLoading } from './utils';
 import 'controllers';
 
-import * as ActiveStorage from "@rails/activestorage";
+import * as ActiveStorage from '@rails/activestorage';
 ActiveStorage.start();
 
 addEventListener('turbo:submit-start', ({ target }) => {
