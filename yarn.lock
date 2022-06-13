@@ -486,9 +486,9 @@ easymde@^2.16.1:
     marked "^4.0.10"
 
 electron-to-chromium@^1.4.147:
-  version "1.4.151"
-  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.4.151.tgz#d1c09dd3a06cb81ef03a3bbbff6905827c33ab4b"
-  integrity sha512-XaG2LpZi9fdiWYOqJh0dJy4SlVywCvpgYXhzOlZTp4JqSKqxn5URqOjbm9OMYB3aInA2GuHQiem1QUOc1yT0Pw==
+  version "1.4.153"
+  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.4.153.tgz#7ed324c039745629041169221ba8dec653146f37"
+  integrity sha512-57AV9DNW1R52HjOqnGOCCTLHMHItLTGu/WjB1KYIa4BQ7p0u8J0j8N78akPcOBStKE801xcMjTpmbAylflfIYQ==
 
 emoji-regex@^8.0.0:
   version "8.0.0"
@@ -856,9 +856,9 @@ mark.js@^8.11.1:
   integrity sha512-1I+1qpDt4idfgLQG+BNWmrqku+7/2bi5nLf4YwF8y8zXvmfiTBY3PV3ZibfrjBueCByROpuBjLLFCajqkgYoLQ==
 
 marked@^4.0.10:
-  version "4.0.16"
-  resolved "https://registry.yarnpkg.com/marked/-/marked-4.0.16.tgz#9ec18fc1a723032eb28666100344d9428cf7a264"
-  integrity sha512-wahonIQ5Jnyatt2fn8KqF/nIqZM8mh3oRu2+l5EANGMhu6RFjiSG52QNE2eWzFMI94HqYSgN184NurgNG6CztA==
+  version "4.0.17"
+  resolved "https://registry.yarnpkg.com/marked/-/marked-4.0.17.tgz#1186193d85bb7882159cdcfc57d1dfccaffb3fe9"
+  integrity sha512-Wfk0ATOK5iPxM4ptrORkFemqroz0ZDxp5MWfYA7H/F+wO17NRWV5Ypxi6p3g2Xmw2bKeiYOl6oVnLHKxBA0VhA==
 
 merge2@^1.3.0:
   version "1.4.1"
@@ -1214,10 +1214,10 @@ tailwind-scrollbar-hide@^1.1.7:
   resolved "https://registry.yarnpkg.com/tailwind-scrollbar-hide/-/tailwind-scrollbar-hide-1.1.7.tgz#90b481fb2e204030e3919427416650c54f56f847"
   integrity sha512-X324n9OtpTmOMqEgDUEA/RgLrNfBF/jwJdctaPZDzB3mppxJk7TLIDmOreEDm1Bq4R9LSPu4Epf8VSdovNU+iA==
 
-tailwindcss@^3.1.1:
-  version "3.1.1"
-  resolved "https://registry.yarnpkg.com/tailwindcss/-/tailwindcss-3.1.1.tgz#58102595ddd5406c5015d831a344370be0995cda"
-  integrity sha512-F5VFj5FiS4QZqdXPE6T6RJFqbsmISQ2KBUp9bOQyws9TleGToHsa54X8kwXwVdHMQhNeXOlxI47lrRICEVuOvg==
+tailwindcss@^3.1.2:
+  version "3.1.2"
+  resolved "https://registry.yarnpkg.com/tailwindcss/-/tailwindcss-3.1.2.tgz#b5607d17adb6cbb11a13738cc5fdf3e5527dcd7a"
+  integrity sha512-yJ6L5s1U5AeS5g7HHy212zdQfjwD426FBfm59pet/JsyneuZuD4C2W7PpJEg4ppisiB21uLqtNagv8KXury3+Q==
   dependencies:
     arg "^5.0.1"
     chokidar "^3.5.3"
@@ -1279,7 +1279,7 @@ typo-js@*:
 util-deprecate@^1.0.2:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/util-deprecate/-/util-deprecate-1.0.2.tgz#450d4dc9fa70de732762fbd2d4a28981419a0ccf"
-  integrity sha1-RQ1Nyfpw3nMnYvvS1KKJgUGaDM8=
+  integrity sha512-EPD5q1uXyFxJpCrLnCc1nHnq3gOa6DZBocAIiI2TaSCA7VCJ1UJDMagCzIkXNsUYfD1daK//LTEQ8xiIbrHtcw==
 
 uuid@^8.3.2:
   version "8.3.2"
@@ -1289,7 +1289,7 @@ uuid@^8.3.2:
 which-module@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/which-module/-/which-module-2.0.0.tgz#d9ef07dce77b9902b8a3a8fa4b31c3e3f7e6e87a"
-  integrity sha1-2e8H3Od7mQK4o6j6SzHD4/fm6Ho=
+  integrity sha512-B+enWhmw6cjfVC7kS8Pj9pCrKSc5txArRyaYGe088shv/FGWH+0Rjx/xPgtsWfsUtS27FkP697E4DDhgrgoc0Q==
 
 wrap-ansi@^6.2.0:
   version "6.2.0"
