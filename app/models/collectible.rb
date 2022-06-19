@@ -23,4 +23,20 @@
 #  index_collectibles_on_token_id                      (token_id) UNIQUE
 #
 class Collectible < ApplicationRecord
+  include AASM
+
+  belongs_to :collection
+
+  validates :name, presence: true
+  validates :description, presence: true
+  validates :metahash, presence: true
+
+  aasm column: :state do
+    state :pending, initial: true
+    state :minted
+
+    event :mint do
+      transitions from: :pending, to: :completed
+    end
+  end
 end
