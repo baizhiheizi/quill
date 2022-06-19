@@ -60,7 +60,7 @@ class Transfer < ApplicationRecord
   validates :amount, numericality: { greater_than_or_equal_to: MINIMUM_AMOUNT }
   validate :ensure_opponent_presence
 
-  after_commit :process_async, :update_recipient_statistics_cache_async, on: :create
+  after_commit :process_async, on: :create
 
   scope :unprocessed, -> { where(processed_at: nil) }
   scope :processed, -> { where.not(processed_at: nil) }

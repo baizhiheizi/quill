@@ -5,6 +5,6 @@ class UpdateTransferRecipientStatisticsWorker
   sidekiq_options queue: :low, retry: false
 
   def perform(trace_id)
-    Transfer.find_by(trace_id: trace_id)&.update_recipient_statistics_cache
+    # Transfer.find_by(trace_id: trace_id)&.update_recipient_statistics_cache
   end
 end
