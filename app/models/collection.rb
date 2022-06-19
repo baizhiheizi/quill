@@ -21,4 +21,5 @@
 #  index_collections_on_uuid        (uuid) UNIQUE
 #
 class Collection < ApplicationRecord
+  belongs_to :author
 end
