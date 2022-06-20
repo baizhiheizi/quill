@@ -71,6 +71,9 @@ gem 'sidekiq-cron'
 # Sidekiq strategy to support an advanced queue control – limiting, pausing, blocking, querying
 gem 'sidekiq-limit_fetch'
 
+# Concurrency and threshold throttling for Sidekiq.
+gem 'sidekiq-throttled'
+
 # Use Active Storage variant
 gem 'image_processing', '~> 1.2'
 

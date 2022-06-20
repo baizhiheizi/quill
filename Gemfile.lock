@@ -368,6 +368,7 @@ GEM
       redis (>= 3.0.4)
     redis-objects (1.5.1)
       redis (~> 4.2)
+    redis-prescription (1.0.0)
     regexp_parser (2.5.0)
     reline (0.3.1)
       io-console (~> 0.5)
@@ -415,6 +416,10 @@ GEM
     sidekiq-limit_fetch (4.2.0)
       redis (>= 4.6.0)
       sidekiq (>= 4)
+    sidekiq-throttled (0.16.1)
+      concurrent-ruby
+      redis-prescription
+      sidekiq
     simple_command (1.0.1)
     spring (2.1.1)
     spring-watcher-listen (2.0.1)
@@ -506,6 +511,7 @@ DEPENDENCIES
   sidekiq (~> 6.0)
   sidekiq-cron
   sidekiq-limit_fetch
+  sidekiq-throttled
   simple_command
   spring
   spring-watcher-listen (~> 2.0.0)
