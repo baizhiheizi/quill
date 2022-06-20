@@ -75,7 +75,7 @@ GEM
       tzinfo (~> 2.0)
     addressable (2.8.0)
       public_suffix (>= 2.0.2, < 5.0)
-    after_commit_everywhere (1.2.1)
+    after_commit_everywhere (1.2.2)
       activerecord (>= 4.2)
       activesupport
     aliyun-sdk (0.8.0)
