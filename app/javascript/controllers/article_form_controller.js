@@ -1,9 +1,9 @@
 import { Controller } from '@hotwired/stimulus';
 import { DirectUpload } from '@rails/activestorage';
-import { post } from '@rails/request.js';
+import { post, put } from '@rails/request.js';
 import EasyMDE from 'easymde';
 import { debounce } from 'lodash';
-import { put } from '@rails/request.js';
+import { showLoading, hideLoading } from '../utils';
 
 export default class extends Controller {
   static values = {
@@ -81,9 +81,9 @@ export default class extends Controller {
           this.directUploadToken,
           this.directUploadAttachmentName,
         );
-        this.showLoading();
+        showLoading();
         upload.create((error, blob) => {
-          this.hideLoading();
+          hideLoading();
           if (error) {
             onError(error);
           } else {
@@ -231,14 +231,6 @@ export default class extends Controller {
     this.previewButtonTarget.classList.remove('border-b-2');
     this.previewTarget.classList.add('hidden');
     this.previewTarget.classList.innerHTML = '';
-  }
-
-  showLoading() {
-    document.querySelector('#loading-toast').classList.remove('hidden');
-  }
-
-  hideLoading() {
-    document.querySelector('#loading-toast').classList.add('hidden');
   }
 
   autosave() {
