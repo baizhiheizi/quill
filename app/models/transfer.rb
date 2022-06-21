@@ -163,13 +163,13 @@ class Transfer < ApplicationRecord
 
   def self.author_revenue_total_in_usd
     Rails.cache.fetch('author_revenue_total_in_usd', expires_in: 1.minute) do
-      joins(:currency).sum('amount * currencies.price_usd')
+      joins(:currency).where(transfer_type: :author_revenue).sum('amount * currencies.price_usd')
     end
   end
 
   def self.reader_revenue_total_in_usd
     Rails.cache.fetch('reader_revenue_total_in_usd', expires_in: 1.minute) do
-      joins(:currency).sum('amount * currencies.price_usd')
+      joins(:currency).where(transfer_type: :reader_revenue).sum('amount * currencies.price_usd')
     end
   end
 
