@@ -40,6 +40,15 @@
       </script>
     <% end %>
 
+    <% if Rails.env.development? %>
+      <script src="https://unpkg.com/vconsole@latest/dist/vconsole.min.js"></script>
+      <script>
+        // VConsole will be exported to `window.VConsole` by default.
+        var vConsole = new window.VConsole();
+      </script>
+    <% end %>
+
+
     <%= javascript_importmap_tags %>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.3.1/styles/github.min.css" defer="defer">
     <%= favicon_link_tag "#{Settings.favicon_file || 'favicon.png'}" %>

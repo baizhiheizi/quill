@@ -51,6 +51,8 @@ class MarkdownRenderService
       add_scroll_to_comment_attributes
     end
 
+    parse_link
+    parse_paragraph
     parse_table
     add_attributes_to_images
     escape_iframes
@@ -61,6 +63,26 @@ class MarkdownRenderService
   private
 
   def parse_mention_user
+  end
+
+  def parse_link
+    doc = Nokogiri::HTML.fragment(@html)
+    doc.css('a').each do |a|
+      a['target'] = '_blank'
+    end
+    @html = doc.to_html
+
+    self
+  end
+
+  def parse_paragraph
+    doc = Nokogiri::HTML.fragment(@html)
+    doc.css('p').each do |p|
+      p['class'] = 'text-ellipsis overflow-x-hidden'
+    end
+    @html = doc.to_html
+
+    self
   end
 
   def parse_table
