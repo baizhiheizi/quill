@@ -30,7 +30,7 @@ gem 'stimulus-rails'
 gem 'cssbundling-rails'
 
 # Use ESM with importmap to manage modern JavaScript in Rails without transpiling or bundling.
-gem 'importmap-rails', '1.1.1'
+gem 'importmap-rails', '1.1.2'
 
 # Rails Request.JS encapsulates the logic to send by default some headers that are required by rails applications like the X-CSRF-Token
 gem 'requestjs-rails'
