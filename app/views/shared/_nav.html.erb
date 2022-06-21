@@ -12,10 +12,12 @@
 
       <div class="flex items-center space-x-2 ml-4 md:ml-6">
         <div class="flex items-baseline space-x-4">
-          <% if current_user.present? %>
-            <%= link_to t("write"), new_article_path, class: "px-3 py-2 text-base font-medium hover:bg-blue-50 hover:text-blue-500 dark:hover:bg-gray-800 rounded-md" %>
-          <% else %>
+          <% if current_user.blank? %>
             <%= link_to t("write"), view_modals_path(type: :login), data: { turbo_method: :post }, class: "px-3 py-2 text-base font-medium hover:bg-blue-50 hover:text-blue-500 dark:hover:bg-gray-800 rounded-md" %>
+          <% elsif current_user.articles.drafted.present? %>
+            <%= link_to t("write"), dashboard_articles_path(tab: :drafted), class: "px-3 py-2 text-base font-medium hover:bg-blue-50 hover:text-blue-500 dark:hover:bg-gray-800 rounded-md" %>
+          <% else %>
+            <%= link_to t("write"), new_article_path, class: "px-3 py-2 text-base font-medium hover:bg-blue-50 hover:text-blue-500 dark:hover:bg-gray-800 rounded-md" %>
           <% end %>
         </div>
         <div class="hidden md:block">
