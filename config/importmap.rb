@@ -15,6 +15,9 @@ pin 'hotkeys-js', to: 'https://ga.jspm.io/npm:hotkeys-js@3.9.4/dist/hotkeys.esm.
 pin 'flatpickr', to: 'https://ga.jspm.io/npm:flatpickr@4.6.13/dist/esm/index.js'
 pin 'stimulus-flatpickr', to: 'https://ga.jspm.io/npm:stimulus-flatpickr@3.0.0-0/dist/index.m.js'
 
+pin 'photoswipe', to: 'https://unpkg.com/photoswipe/dist/photoswipe.esm.js'
+pin 'photoswipe-lightbox', to: 'https://unpkg.com/photoswipe/dist/photoswipe-lightbox.esm.js'
+
 pin 'codemirror', to: 'https://ga.jspm.io/npm:codemirror@5.65.5/lib/codemirror.js'
 pin 'codemirror-spell-checker', to: 'https://ga.jspm.io/npm:codemirror-spell-checker@1.1.2/src/js/spell-checker.js'
 pin 'codemirror/addon/display/autorefresh.js', to: 'https://ga.jspm.io/npm:codemirror@5.65.5/addon/display/autorefresh.js'
@@ -39,8 +42,6 @@ pin 'copy-to-clipboard', to: 'https://ga.jspm.io/npm:copy-to-clipboard@3.3.1/ind
 pin 'js-base64', to: 'https://ga.jspm.io/npm:js-base64@3.7.2/base64.js'
 pin 'toggle-selection', to: 'https://ga.jspm.io/npm:toggle-selection@1.0.6/index.js'
 pin 'highlight.js', to: 'https://ga.jspm.io/npm:highlight.js@11.5.1/es/index.js'
-pin 'photoswipe', to: 'https://ga.jspm.io/npm:photoswipe@5.2.7/dist/photoswipe.esm.js'
-pin 'photoswipe-lightbox', to: 'https://unpkg.com/photoswipe/dist/photoswipe-lightbox.esm.js'
 pin 'qrcode', to: 'https://ga.jspm.io/npm:qrcode@1.5.0/lib/browser.js'
 pin 'dijkstrajs', to: 'https://ga.jspm.io/npm:dijkstrajs@1.0.2/dijkstra.js'
 pin 'encode-utf8', to: 'https://ga.jspm.io/npm:encode-utf8@2.0.0/index.js'

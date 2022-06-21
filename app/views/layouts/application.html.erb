@@ -48,14 +48,10 @@
       </script>
     <% end %>
 
-
-    <%= javascript_importmap_tags %>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.3.1/styles/github.min.css" defer="defer">
     <%= favicon_link_tag "#{Settings.favicon_file || 'favicon.png'}" %>
-    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
-    <%= stylesheet_link_tag "photoswipe", defer: true %>
-    <%= stylesheet_link_tag "easymde", defer: true %>
-    <%= stylesheet_link_tag "tom-select", defer: true  %>
+    <%= stylesheet_link_tag "application", "photoswipe", "easymde", "tom-select", media: "all", "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
   </head>
 
   <body class="min-h-screen flex flex-col dark:text-zinc-50">
