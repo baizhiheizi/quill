@@ -4,11 +4,13 @@
 #
 # Table name: currencies
 #
-#  id         :integer          not null, primary key
-#  asset_id   :uuid
+#  id         :bigint           not null, primary key
+#  price_btc  :decimal(, )
+#  price_usd  :decimal(, )
 #  raw        :jsonb
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
+#  asset_id   :uuid
 #
 # Indexes
 #
@@ -23,7 +25,9 @@ class Currency < ApplicationRecord
 
   extend OrderAsSpecified
 
-  store :raw, accessors: %i[name symbol chain_id icon_url price_btc price_usd]
+  store :raw, accessors: %i[name symbol chain_id icon_url]
+
+  before_validation :set_defaults
 
   validates :raw, presence: true
   validates :asset_id, presence: true, uniqueness: true
@@ -59,5 +63,14 @@ class Currency < ApplicationRecord
   def sync!
     r = PrsdiggBot.api.asset asset_id
     update! raw: r['data']
+  end
+
+  private
+
+  def set_defaults
+    assign_attributes(
+      price_usd: raw['price_usd'],
+      price_btc: raw['price_btc']
+    )
   end
 end

@@ -4,17 +4,17 @@
 #
 # Table name: article_snapshots
 #
-#  id           :integer          not null, primary key
+#  id           :bigint           not null, primary key
 #  article_uuid :uuid
-#  raw          :json
-#  file_hash    :string
-#  tx_id        :string
 #  file_content :text
-#  state        :string
+#  file_hash    :string
+#  raw          :json
 #  requested_at :datetime
 #  signed_at    :datetime
+#  state        :string
 #  created_at   :datetime         not null
 #  updated_at   :datetime         not null
+#  tx_id        :string
 #
 # Indexes
 #

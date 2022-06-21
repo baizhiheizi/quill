@@ -4,14 +4,14 @@
 #
 # Table name: citer_references
 #
-#  id             :integer          not null, primary key
+#  id             :bigint           not null, primary key
 #  citer_type     :string
-#  citer_id       :integer
 #  reference_type :string
-#  reference_id   :integer
 #  revenue_ratio  :float            not null
 #  created_at     :datetime         not null
 #  updated_at     :datetime         not null
+#  citer_id       :bigint
+#  reference_id   :bigint
 #
 # Indexes
 #

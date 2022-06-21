@@ -2,22 +2,22 @@
 #
 # Table name: orders
 #
-#  id         :integer          not null, primary key
-#  seller_id  :integer
-#  buyer_id   :integer
+#  id         :bigint           not null, primary key
+#  citer_type :string
 #  item_type  :string
-#  item_id    :integer
-#  trace_id   :uuid
-#  state      :string
 #  order_type :integer
+#  state      :string
 #  total      :decimal(, )
+#  value_btc  :decimal(, )
+#  value_usd  :decimal(, )
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #  asset_id   :uuid
-#  value_btc  :decimal(, )
-#  value_usd  :decimal(, )
+#  buyer_id   :bigint
 #  citer_id   :integer
-#  citer_type :string
+#  item_id    :bigint
+#  seller_id  :bigint
+#  trace_id   :uuid
 #
 # Indexes
 #

@@ -4,22 +4,22 @@
 #
 # Table name: transfers
 #
-#  id                :integer          not null, primary key
-#  source_type       :string
-#  source_id         :integer
-#  transfer_type     :integer
+#  id                :bigint           not null, primary key
 #  amount            :decimal(, )
-#  trace_id          :uuid
-#  asset_id          :uuid
-#  opponent_id       :uuid
 #  memo              :string
+#  opponent_multisig :json
 #  processed_at      :datetime
+#  queue_priority    :integer          default("default")
 #  snapshot          :json
+#  source_type       :string
+#  transfer_type     :integer
 #  created_at        :datetime         not null
 #  updated_at        :datetime         not null
+#  asset_id          :uuid
+#  opponent_id       :uuid
+#  source_id         :bigint
+#  trace_id          :uuid
 #  wallet_id         :uuid
-#  queue_priority    :integer          default("0")
-#  opponent_multisig :json             default("{}")
 #
 # Indexes
 #
@@ -161,61 +161,16 @@ class Transfer < ApplicationRecord
     end
   end
 
-  def update_recipient_statistics_cache_async
-    UpdateTransferRecipientStatisticsWorker.perform_async trace_id
-  end
-
-  def update_recipient_statistics_cache
-    return if recipient.blank?
-
-    case asset_id
-    when Currency::PRS_ASSET_ID
-      recipient.update(
-        author_revenue_total_prs: recipient.author_revenue_transfers.only_prs.sum(:amount).to_f,
-        reader_revenue_total_prs: recipient.reader_revenue_transfers.only_prs.sum(:amount).to_f,
-        revenue_total_prs: recipient.revenue_transfers.only_prs.sum(:amount).to_f
-      )
-    when Currency::BTC_ASSET_ID
-      recipient.update(
-        author_revenue_total_btc: recipient.author_revenue_transfers.only_btc.sum(:amount).to_f,
-        reader_revenue_total_btc: recipient.reader_revenue_transfers.only_btc.sum(:amount).to_f,
-        revenue_total_btc: recipient.revenue_transfers.only_btc.sum(:amount).to_f
-      )
+  def self.author_revenue_total_in_usd
+    Rails.cache.fetch('author_revenue_total_in_usd', expires_in: 1.minute) do
+      joins(:currency).sum('amount * currencies.price_usd')
     end
   end
 
-  def self.author_revenue_total_in_usd
-    _get_author_revenue_total_in_usd_cache.presence || _set_author_revenue_total_in_usd_cache
-  end
-
   def self.reader_revenue_total_in_usd
-    _get_reader_revenue_total_in_usd_cache.presence || _set_reader_revenue_total_in_usd_cache
-  end
-
-  def self._get_author_revenue_total_in_usd_cache
-    Global.redis.get 'author_revenue_total_in_usd'
-  end
-
-  def self._set_author_revenue_total_in_usd_cache
-    prs_amount = author_revenue.only_prs.sum(:amount)
-    btc_amount = author_revenue.only_btc.sum(:amount)
-    res = (prs_amount * Currency.prs.price_usd.to_f) + (btc_amount * Currency.btc.price_usd.to_f)
-    Global.redis.set 'author_revenue_total_in_usd', res, ex: 1.minute
-
-    res
-  end
-
-  def self._get_reader_revenue_total_in_usd_cache
-    Global.redis.get 'reader_revenue_total_in_usd'
-  end
-
-  def self._set_reader_revenue_total_in_usd_cache
-    prs_amount = reader_revenue.only_prs.sum(:amount)
-    btc_amount = reader_revenue.only_btc.sum(:amount)
-    res = (prs_amount * Currency.prs.price_usd.to_f) + (btc_amount * Currency.btc.price_usd.to_f)
-    Global.redis.set 'reader_revenue_total_in_usd', res, ex: 1.minute
-
-    res
+    Rails.cache.fetch('reader_revenue_total_in_usd', expires_in: 1.minute) do
+      joins(:currency).sum('amount * currencies.price_usd')
+    end
   end
 
   private

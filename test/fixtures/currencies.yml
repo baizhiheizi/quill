@@ -2,11 +2,13 @@
 #
 # Table name: currencies
 #
-#  id         :integer          not null, primary key
-#  asset_id   :uuid
+#  id         :bigint           not null, primary key
+#  price_btc  :decimal(, )
+#  price_usd  :decimal(, )
 #  raw        :jsonb
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
+#  asset_id   :uuid
 #
 # Indexes
 #

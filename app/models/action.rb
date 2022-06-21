@@ -4,15 +4,15 @@
 #
 # Table name: actions
 #
-#  id            :integer          not null, primary key
-#  action_type   :string           not null
+#  id            :bigint           not null, primary key
 #  action_option :string
+#  action_type   :string           not null
 #  target_type   :string
-#  target_id     :integer
 #  user_type     :string
-#  user_id       :integer
 #  created_at    :datetime         not null
 #  updated_at    :datetime         not null
+#  target_id     :bigint
+#  user_id       :bigint
 #
 # Indexes
 #

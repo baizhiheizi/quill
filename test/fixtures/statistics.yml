@@ -2,10 +2,10 @@
 #
 # Table name: statistics
 #
-#  id         :integer          not null, primary key
-#  type       :string
-#  datetime   :datetime
+#  id         :bigint           not null, primary key
 #  data       :jsonb
+#  datetime   :datetime
+#  type       :string
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #

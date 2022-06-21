@@ -4,11 +4,11 @@
 #
 # Table name: taggings
 #
-#  id         :integer          not null, primary key
-#  tag_id     :integer
-#  article_id :integer
+#  id         :bigint           not null, primary key
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
+#  article_id :bigint
+#  tag_id     :bigint
 #
 # Indexes
 #

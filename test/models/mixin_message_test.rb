@@ -4,18 +4,18 @@
 #
 # Table name: mixin_messages
 #
-#  id              :integer          not null, primary key
-#  action          :string
-#  category        :string
-#  user_id         :uuid
-#  conversation_id :uuid
-#  message_id      :uuid
-#  content         :string
-#  raw             :json
-#  processed_at    :datetime
-#  state           :string
-#  created_at      :datetime         not null
-#  updated_at      :datetime         not null
+#  id                      :bigint           not null, primary key
+#  action                  :string
+#  category                :string
+#  content(decrepted data) :string
+#  processed_at            :datetime
+#  raw                     :json
+#  state                   :string
+#  created_at              :datetime         not null
+#  updated_at              :datetime         not null
+#  conversation_id         :uuid
+#  message_id              :uuid
+#  user_id                 :uuid
 #
 # Indexes
 #

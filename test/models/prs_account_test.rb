@@ -4,17 +4,17 @@
 #
 # Table name: prs_accounts
 #
-#  id                    :integer          not null, primary key
-#  user_id               :integer
+#  id                    :bigint           not null, primary key
 #  account               :string
-#  status                :string
-#  public_key            :string
 #  encrypted_private_key :string
 #  keystore              :jsonb
-#  created_at            :datetime         not null
-#  updated_at            :datetime         not null
+#  public_key            :string
 #  request_allow_at      :datetime
 #  request_denny_at      :datetime
+#  status                :string
+#  created_at            :datetime         not null
+#  updated_at            :datetime         not null
+#  user_id               :bigint
 #
 # Indexes
 #

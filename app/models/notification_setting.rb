@@ -4,17 +4,17 @@
 #
 # Table name: notification_settings
 #
-#  id                 :integer          not null, primary key
-#  user_id            :integer
-#  webhook            :jsonb            default("\"{}\"")
-#  article_published  :jsonb            default("\"{}\"")
-#  article_bought     :jsonb            default("\"{}\"")
-#  article_rewarded   :jsonb            default("\"{}\"")
-#  comment_created    :jsonb            default("\"{}\"")
-#  tagging_created    :jsonb            default("\"{}\"")
-#  transfer_processed :jsonb            default("\"{}\"")
+#  id                 :bigint           not null, primary key
+#  article_bought     :jsonb
+#  article_published  :jsonb
+#  article_rewarded   :jsonb
+#  comment_created    :jsonb
+#  tagging_created    :jsonb
+#  transfer_processed :jsonb
+#  webhook            :jsonb
 #  created_at         :datetime         not null
 #  updated_at         :datetime         not null
+#  user_id            :bigint
 #
 # Indexes
 #

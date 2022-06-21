@@ -4,19 +4,19 @@
 #
 # Table name: swap_orders
 #
-#  id            :integer          not null, primary key
-#  payment_id    :integer
-#  trace_id      :uuid
-#  user_id       :uuid
-#  state         :string
-#  pay_asset_id  :uuid
-#  fill_asset_id :uuid
-#  funds         :decimal(, )
-#  amount        :decimal(, )
-#  min_amount    :decimal(, )
-#  raw           :json
-#  created_at    :datetime         not null
-#  updated_at    :datetime         not null
+#  id                                 :bigint           not null, primary key
+#  amount(swapped amount)             :decimal(, )
+#  funds(paid amount)                 :decimal(, )
+#  min_amount(minimum swapped amount) :decimal(, )
+#  raw(raw order response)            :json
+#  state                              :string
+#  created_at                         :datetime         not null
+#  updated_at                         :datetime         not null
+#  fill_asset_id(swapped asset)       :uuid
+#  pay_asset_id(paid asset)           :uuid
+#  payment_id                         :bigint
+#  trace_id                           :uuid
+#  user_id                            :uuid
 #
 # Indexes
 #

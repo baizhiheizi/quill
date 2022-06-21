@@ -4,22 +4,22 @@
 #
 # Table name: orders
 #
-#  id         :integer          not null, primary key
-#  seller_id  :integer
-#  buyer_id   :integer
+#  id         :bigint           not null, primary key
+#  citer_type :string
 #  item_type  :string
-#  item_id    :integer
-#  trace_id   :uuid
-#  state      :string
 #  order_type :integer
+#  state      :string
 #  total      :decimal(, )
+#  value_btc  :decimal(, )
+#  value_usd  :decimal(, )
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #  asset_id   :uuid
-#  value_btc  :decimal(, )
-#  value_usd  :decimal(, )
+#  buyer_id   :bigint
 #  citer_id   :integer
-#  citer_type :string
+#  item_id    :bigint
+#  seller_id  :bigint
+#  trace_id   :uuid
 #
 # Indexes
 #
@@ -257,21 +257,7 @@ class Order < ApplicationRecord
   end
 
   def update_cache
-    update_item_revenue
-    update_buyer_statistics_cache
-  end
-
-  def update_item_revenue
     item.update_revenue
-  end
-
-  def update_buyer_statistics_cache
-    buyer.update(
-      bought_articles_count: buyer.bought_articles.count,
-      payment_total_prs: buyer.orders.only_prs.sum(:total).to_f,
-      payment_total_btc: buyer.orders.only_btc.sum(:total).to_f,
-      payment_total_usd: buyer.orders.sum(:value_usd).to_f
-    )
   end
 
   def notifications

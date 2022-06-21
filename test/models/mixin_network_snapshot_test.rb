@@ -4,19 +4,19 @@
 #
 # Table name: mixin_network_snapshots
 #
-#  id             :integer          not null, primary key
-#  user_id        :uuid
-#  trace_id       :uuid
-#  opponent_id    :uuid
-#  data           :string
-#  snapshot_id    :uuid
+#  id             :bigint           not null, primary key
 #  amount         :decimal(, )
-#  asset_id       :uuid
-#  transferred_at :datetime
-#  raw            :json
+#  data           :string
 #  processed_at   :datetime
+#  raw            :json
+#  transferred_at :datetime
 #  created_at     :datetime         not null
 #  updated_at     :datetime         not null
+#  asset_id       :uuid
+#  opponent_id    :uuid
+#  snapshot_id    :uuid
+#  trace_id       :uuid
+#  user_id        :uuid
 #
 # Indexes
 #

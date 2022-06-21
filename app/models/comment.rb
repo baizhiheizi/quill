@@ -4,16 +4,16 @@
 #
 # Table name: comments
 #
-#  id               :integer          not null, primary key
-#  author_id        :integer
+#  id               :bigint           not null, primary key
 #  commentable_type :string
-#  commentable_id   :integer
 #  content          :string
 #  deleted_at       :datetime
+#  downvotes_count  :integer          default(0)
+#  upvotes_count    :integer          default(0)
 #  created_at       :datetime         not null
 #  updated_at       :datetime         not null
-#  upvotes_count    :integer          default("0")
-#  downvotes_count  :integer          default("0")
+#  author_id        :bigint
+#  commentable_id   :bigint
 #
 # Indexes
 #
@@ -32,7 +32,6 @@ class Comment < ApplicationRecord
 
   after_commit :notify_subscribers_async,
                :subscribe_for_author,
-               :update_author_statistics_cache,
                on: :create
 
   def subscribers
@@ -45,12 +44,6 @@ class Comment < ApplicationRecord
 
   def subscribe_for_author
     author.create_action :commenting_subscribe, target: commentable
-  end
-
-  def update_author_statistics_cache
-    author.update(
-      comments_count: author.comments.count
-    )
   end
 
   def content_as_html

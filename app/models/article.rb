@@ -4,37 +4,39 @@
 #
 # Table name: articles
 #
-#  id                           :integer          not null, primary key
-#  uuid                         :uuid
-#  author_id                    :integer
-#  title                        :string
-#  intro                        :string
-#  content                      :text
-#  asset_id                     :uuid
-#  price                        :decimal(, )      not null
-#  orders_count                 :integer          default("0"), not null
-#  comments_count               :integer          default("0"), not null
-#  state                        :string
-#  created_at                   :datetime         not null
-#  updated_at                   :datetime         not null
-#  commenting_subscribers_count :integer          default("0")
-#  upvotes_count                :integer          default("0")
-#  downvotes_count              :integer          default("0")
-#  tags_count                   :integer          default("0")
-#  source                       :string
-#  published_at                 :datetime
-#  revenue_usd                  :decimal(, )      default("0.0")
-#  revenue_btc                  :decimal(, )      default("0.0")
-#  platform_revenue_ratio       :float            default("0.1")
-#  readers_revenue_ratio        :float            default("0.4")
-#  author_revenue_ratio         :float            default("0.5")
-#  references_revenue_ratio     :float            default("0.0")
+#  id                                  :bigint           not null, primary key
+#  author_revenue_ratio                :float            default(0.5)
+#  commenting_subscribers_count        :integer          default(0)
+#  comments_count                      :integer          default(0), not null
+#  content                             :text
+#  downvotes_count                     :integer          default(0)
+#  intro                               :string
+#  orders_count                        :integer          default(0), not null
+#  platform_revenue_ratio              :float            default(0.1)
+#  price                               :decimal(, )      not null
+#  published_at                        :datetime
+#  readers_revenue_ratio               :float            default(0.4)
+#  references_revenue_ratio            :float            default(0.0)
+#  revenue_btc                         :decimal(, )      default(0.0)
+#  revenue_usd                         :decimal(, )      default(0.0)
+#  source                              :string
+#  state                               :string
+#  tags_count                          :integer          default(0)
+#  title                               :string
+#  upvotes_count                       :integer          default(0)
+#  uuid                                :uuid
+#  created_at                          :datetime         not null
+#  updated_at                          :datetime         not null
+#  asset_id(asset_id in Mixin Network) :uuid
+#  author_id                           :bigint
+#  collection_id                       :bigint
 #
 # Indexes
 #
-#  index_articles_on_asset_id   (asset_id)
-#  index_articles_on_author_id  (author_id)
-#  index_articles_on_uuid       (uuid) UNIQUE
+#  index_articles_on_asset_id       (asset_id)
+#  index_articles_on_author_id      (author_id)
+#  index_articles_on_collection_id  (collection_id)
+#  index_articles_on_uuid           (uuid) UNIQUE
 #
 
 class Article < ApplicationRecord
@@ -173,8 +175,7 @@ class Article < ApplicationRecord
   end
 
   def update_revenue
-    update revenue_usd: orders.sum(:value_usd)
-    update revenue_btc: orders.sum(:value_btc)
+    update revenue_usd: orders.sum(:value_usd), revenue_btc: orders.sum(:value_btc)
   end
 
   def share_of(user)
@@ -229,25 +230,15 @@ class Article < ApplicationRecord
   end
 
   def author_revenue_usd
-    author_transfers.includes(:currency).map do |transfer|
-      transfer.amount * transfer.currency.price_usd.to_f
-    end.sum
+    @author_revenue_usd ||= author_transfers.includes(:currency).sum('amount * currencies.price_usd')
   end
 
   def reader_revenue_usd
-    reader_transfers.includes(:currency).map do |transfer|
-      transfer.amount * transfer.currency.price_usd.to_f
-    end.sum
+    @reader_revenue_usd ||= reader_transfers.includes(:currency).sum('amount * currencies.price_usd')
   end
 
   def tag_names
     @tag_names ||= tags.pluck(:name)
-  end
-
-  def update_author_statistics_cache
-    author.update(
-      articles_count: author.articles.without_drafted.count
-    )
   end
 
   def price_tag
@@ -288,7 +279,6 @@ class Article < ApplicationRecord
     create_wallet_async
     notify_for_first_published_async
     subscribe_comments_for_author
-    update_author_statistics_cache
   end
 
   def generate_snapshot

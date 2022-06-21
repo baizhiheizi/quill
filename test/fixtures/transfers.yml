@@ -2,22 +2,22 @@
 #
 # Table name: transfers
 #
-#  id                :integer          not null, primary key
-#  source_type       :string
-#  source_id         :integer
-#  transfer_type     :integer
+#  id                :bigint           not null, primary key
 #  amount            :decimal(, )
-#  trace_id          :uuid
-#  asset_id          :uuid
-#  opponent_id       :uuid
 #  memo              :string
+#  opponent_multisig :json
 #  processed_at      :datetime
+#  queue_priority    :integer          default("default")
 #  snapshot          :json
+#  source_type       :string
+#  transfer_type     :integer
 #  created_at        :datetime         not null
 #  updated_at        :datetime         not null
+#  asset_id          :uuid
+#  opponent_id       :uuid
+#  source_id         :bigint
+#  trace_id          :uuid
 #  wallet_id         :uuid
-#  queue_priority    :integer          default("0")
-#  opponent_multisig :json             default("{}")
 #
 # Indexes
 #

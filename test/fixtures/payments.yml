@@ -2,18 +2,18 @@
 #
 # Table name: payments
 #
-#  id          :integer          not null, primary key
-#  opponent_id :uuid
-#  trace_id    :uuid
-#  snapshot_id :uuid
-#  asset_id    :uuid
+#  id          :bigint           not null, primary key
 #  amount      :decimal(, )
 #  memo        :string
-#  state       :string
 #  raw         :json
+#  state       :string
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
+#  asset_id    :uuid
+#  opponent_id :uuid
 #  payer_id    :uuid
+#  snapshot_id :uuid
+#  trace_id    :uuid
 #
 # Indexes
 #

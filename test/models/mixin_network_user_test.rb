@@ -4,18 +4,18 @@
 #
 # Table name: mixin_network_users
 #
-#  id            :integer          not null, primary key
-#  owner_type    :string
-#  owner_id      :integer
-#  uuid          :uuid
-#  name          :string
-#  session_id    :uuid
-#  pin_token     :string
-#  raw           :json
-#  private_key   :string
+#  id            :bigint           not null, primary key
 #  encrypted_pin :string
+#  name          :string
+#  owner_type    :string
+#  pin_token     :string
+#  private_key   :string
+#  raw           :json
+#  uuid          :uuid
 #  created_at    :datetime         not null
 #  updated_at    :datetime         not null
+#  owner_id      :bigint
+#  session_id    :uuid
 #
 # Indexes
 #
