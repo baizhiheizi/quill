@@ -414,8 +414,6 @@ GEM
     sidekiq-cron (1.5.1)
       fugit (~> 1)
       sidekiq (>= 4.2.1)
-    sidekiq-limit_fetch (3.4.0)
-      sidekiq (>= 4)
     sidekiq-throttled (0.16.1)
       concurrent-ruby
       redis-prescription
@@ -510,7 +508,6 @@ DEPENDENCIES
   selenium-webdriver
   sidekiq (~> 6.0)
   sidekiq-cron
-  sidekiq-limit_fetch
   sidekiq-throttled
   simple_command
   spring
