@@ -15,10 +15,14 @@ class SessionsController < ApplicationController
   end
 
   def create
-    user = User.auth_from_mixin token: params[:token], code: params[:code]
-    user_sign_in(user) if user
+    if params[:code].present? || params[:token].present?
+      user = User.auth_from_mixin token: params[:token], code: params[:code]
+      user_sign_in(user) if user
 
-    redirect_to params[:return_to].presence || root_path
+      redirect_to params[:return_to].presence || root_path
+    else
+      redirect_to root_path
+    end
   end
 
   def delete
