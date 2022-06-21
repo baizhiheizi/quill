@@ -51,6 +51,7 @@ class MarkdownRenderService
       add_scroll_to_comment_attributes
     end
 
+    parse_table
     add_attributes_to_images
     escape_iframes
 
@@ -60,6 +61,17 @@ class MarkdownRenderService
   private
 
   def parse_mention_user
+  end
+
+  def parse_table
+    doc = Nokogiri::HTML.fragment(@html)
+    doc.css('table').each do |table|
+      table['class'] = 'min-width-max'
+      table.wrap('<div class="overflow-x-scroll"></div>')
+    end
+    @html = doc.to_html
+
+    self
   end
 
   def add_attributes_to_images
