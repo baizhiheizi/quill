@@ -17,9 +17,6 @@ gem 'pghero'
 # Use Puma as the app server
 gem 'puma'
 
-# Use SCSS for stylesheets
-# gem 'sass-rails', '>= 6'
-
 # Deliver assets for Rails
 gem 'propshaft'
 
@@ -28,9 +25,6 @@ gem 'turbo-rails'
 
 # Use Stimulus in your Ruby on Rails app
 gem 'stimulus-rails'
-
-# Bundle and transpile JavaScript [https://github.com/rails/jsbundling-rails]
-# gem 'jsbundling-rails'
 
 # Bundle and process CSS [https://github.com/rails/cssbundling-rails]
 gem 'cssbundling-rails'
