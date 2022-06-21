@@ -126,10 +126,12 @@
         <%= link_to t("read"), articles_path, class: "block px-3 py-2 text-base font-medium focus:bg-blue-50 focus:text-blue-500 rounded-md" %>
       </div>
       <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-        <% if current_user.present? %>
-          <%= link_to t("write"), new_article_path, class: "block px-3 py-2 text-base font-medium focus:bg-blue-50 focus:text-blue-500 rounded-md" %>
-        <% else %>
+        <% if current_user.blank? %>
           <%= link_to t("write"), view_modals_path(type: :login), data: { turbo_method: :post }, class: "block px-3 py-2 text-base font-medium focus:bg-blue-50 focus:text-blue-500 rounded-md" %>
+        <% elsif current_user.articles.drafted.present? %>
+          <%= link_to t("write"), dashboard_articles_path(tab: :drafted), class: "px-3 py-2 text-base font-medium hover:bg-blue-50 hover:text-blue-500 dark:hover:bg-gray-800 rounded-md" %>
+        <% else %>
+          <%= link_to t("write"), new_article_path, class: "block px-3 py-2 text-base font-medium focus:bg-blue-50 focus:text-blue-500 rounded-md" %>
         <% end %>
       </div>
       <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
