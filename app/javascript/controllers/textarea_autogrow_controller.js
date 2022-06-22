@@ -4,6 +4,7 @@ import lodash from 'lodash';
 export default class extends Controller {
   static values = {
     resizeDebounceDelay: Number,
+    maxHeight: 300,
   };
 
   initialize() {
@@ -29,6 +30,10 @@ export default class extends Controller {
 
   autogrow() {
     this.element.style.height = 'auto'; // Force re-print before calculating the scrollHeight value.
-    this.element.style.height = `${this.element.scrollHeight}px`;
+    if (this.element.scrollHeight <= this.maxHeightValue) {
+      this.element.style.height = `${this.element.scrollHeight}px`;
+    } else {
+      this.element.style.height = `${this.maxHeightValue}px`;
+    }
   }
 }

@@ -34,7 +34,7 @@
           <%= t("no_comments") %>
         </div>
       <% else %>
-        <%= render partial: "comments/article_comment", collection: comments, as: :comment %>
+        <%= render partial: "comments/comment", collection: comments, as: :comment %>
       <% end %>
     </div>
     <div data-infinite-scroll-target='scrollArea'></div>

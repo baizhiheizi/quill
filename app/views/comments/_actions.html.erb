@@ -16,13 +16,11 @@
     <span><%= comment.downvotes_count %></span>
   <% end %>
   <% if comment.commentable.authorized? current_user %>
-    <div class="cursor-pointer" 
-      data-comment-form-content-param="<%= comment.content %>"
-      data-comment-form-author-param="<%= comment.author.name %>"
-      data-comment-form-id-param="<%= comment.id %>"
-      data-action="click->comment-form#quote">
+    <%= button_to view_modals_path(
+      type: :comment_form, 
+      quote_comment_id: comment.id) do %>
       <%= render partial: "shared/icons/reply", locals: { html_class: "w-4 h-4" } %>
-    </div>
+    <% end %>
   <% elsif current_user.blank? %>
     <%= button_to view_modals_path(type: :login, return_to: article_path(comment.commentable)) do %>
       <%= render partial: "shared/icons/reply", locals: { html_class: "w-4 h-4" } %>

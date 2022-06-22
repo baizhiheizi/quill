@@ -38,12 +38,9 @@ export default class extends Controller {
   }
 
   backdropClicked() {
-    if (this.backdropValue === 'static') {
-      this.modalTarget.classList.add('scale-105');
-      setTimeout(() => this.modalTarget.classList.remove('scale-105'), 150);
-    } else {
-      this.hide();
-    }
+    if (this.backdropValue === 'static') return;
+
+    this.hide();
   }
 
   show() {
