@@ -12,8 +12,7 @@
       </div>
     <% end %>
     <% if current_user.fennec? %>
-      <a data-article-payment-target="payLink"
-        data-controller="fennec"
+      <a data-controller="fennec"
         data-action="fennec#pay"
         data-fennec-trace-id-param="<%= trace_id %>"
         data-fennec-asset-id-param="<%= pay_asset_id %>"
@@ -25,9 +24,8 @@
         <span><%= t('pay_with_fennec') %></span>
       </a>
     <% else %>
-      <a data-article-payment-target="payLink"
-        href="<%= article.reward_url(current_user, pay_asset_id, amount, trace_id) %>"
-        class="w-full my-4 text-center no-underline cursor-pointer py-2 block bg-blue-600 hover:bg-blue-500 active:bg-blue-500 text-white rounded">
+      <a href="<%= article.reward_url(current_user, pay_asset_id, amount, trace_id) %>"
+        class="w-full my-4 text-center no-underline cursor-pointer py-2 block bg-blue-600 hover:bg-blue-500 active:bg-blue-500 text-white rounded md:hidden">
         <%= t('pay_with_mixin') %>
       </a>
     <% end %>

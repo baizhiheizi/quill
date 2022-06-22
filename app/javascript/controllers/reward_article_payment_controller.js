@@ -17,7 +17,6 @@ export default class extends Controller {
     'payBox',
     'loading',
     'price',
-    'payLink',
   ];
 
   connect() {}
