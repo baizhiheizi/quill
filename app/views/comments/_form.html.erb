@@ -37,7 +37,6 @@
 
 <%= form_for commentable.comments.new, 
   data: { 
-    comment_form_target: "form",
     controller: "confirm",
     confirm_target: "form",
     confirm_identifier_value: SecureRandom.uuid,
@@ -52,7 +51,6 @@
     placeholder: t("markdown_supported"), 
     data: { 
       controller: "textarea-autogrow",
-      comment_form_target: "content"
     } 
   %>
   <div class="flex justify-end">
