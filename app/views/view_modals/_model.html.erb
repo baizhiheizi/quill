@@ -9,15 +9,15 @@
   data-modal-initial-state-value="show">
   <div data-modal-target="wrapper" class="fixed inset-0 z-50 flex items-start justify-center w-full">
     <button data-modal-target="backdrop" data-action="modal#backdropClicked" class="fixed top-0 left-0 w-screen h-full bg-black dark:bg-white opacity-30"></button>
-    <div data-modal-target="modal" class="<%= html_class %> relative w-full sm:w-11/12 max-w-2xl sm:h-auto sm:max-h-full mx-auto mt-auto sm:my-auto bg-white dark:bg-zinc-900 rounded-t-xl sm:rounded-xl shadow overflow-y-auto sm:scrollbar-hide">
-      <div data-modal-target="title" class="absolute w-full top-0 flex items-center px-4 h-12 sm:h-14 text-base font-bold border-b space-x-4 bg-white dark:bg-zinc-900 dark:border-zinc-800 z-10 rounded-t-xl">
+    <div data-modal-target="modal" class="<%= html_class %> relative w-full sm:w-11/12 max-w-2xl sm:h-auto sm:max-h-full mx-auto mt-auto sm:my-auto bg-white dark:bg-zinc-900 rounded-t-xl sm:rounded-xl shadow overflow-y-auto sm:scrollbar-hide max-h-[70%]">
+      <div data-modal-target="title" class="sticky w-full top-0 flex items-center px-4 h-12 sm:h-14 text-base font-bold border-b space-x-4 bg-white dark:bg-zinc-900 dark:border-zinc-800 z-10 rounded-t-xl">
         <button data-action="modal#hide">
           <%= render "shared/icons/close" %>
         </button>
         <span><%= content_for :modal_title %></span>
       </div>
 
-      <div data-modal-target="content" class="pt-16 sm:pt-20 px-4 pb-8 sm:px-6 overflow-y-scroll sm:scrollbar-hide">
+      <div data-modal-target="content" class="px-4 pb-8 sm:px-6">
         <%= content_for :modal_content %>
         <div style="height:env(safe-area-inset-bottom)"></div>
       </div>

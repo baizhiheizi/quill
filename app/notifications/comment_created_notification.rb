@@ -10,6 +10,8 @@ class CommentCreatedNotification < ApplicationNotification
     params[:comment]
   end
 
+  delegate :commentable, to: :comment
+
   def data
     {
       icon_url: comment.author.avatar,
@@ -24,14 +26,14 @@ class CommentCreatedNotification < ApplicationNotification
   end
 
   def message
-    [comment.author.name, t('.commented'), comment.commentable.title].join(' ')
+    [comment.author.name, t('.commented'), commentable.title].join(' ')
   end
 
   def url
     format(
       '%<host>s/articles/%<article_uuid>s#comment_%<comment_id>s',
       host: Settings.host,
-      article_uuid: comment.commentable.uuid,
+      article_uuid: commentable.uuid,
       comment_id: comment.id
     )
   end

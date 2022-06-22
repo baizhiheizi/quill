@@ -6,6 +6,7 @@
 #
 #  id               :bigint           not null, primary key
 #  commentable_type :string
+#  comments_count   :integer          default(0)
 #  content          :string
 #  deleted_at       :datetime
 #  downvotes_count  :integer          default(0)
@@ -14,11 +15,13 @@
 #  updated_at       :datetime         not null
 #  author_id        :bigint
 #  commentable_id   :bigint
+#  quote_comment_id :bigint
 #
 # Indexes
 #
 #  index_comments_on_author_id                            (author_id)
 #  index_comments_on_commentable_type_and_commentable_id  (commentable_type,commentable_id)
+#  index_comments_on_quote_comment_id                     (quote_comment_id)
 #
 
 class Comment < ApplicationRecord
@@ -26,6 +29,9 @@ class Comment < ApplicationRecord
 
   belongs_to :author, class_name: 'User', inverse_of: :comments
   belongs_to :commentable, polymorphic: true, counter_cache: true
+  belongs_to :quote_comment, class_name: 'Comment', inverse_of: :comments, counter_cache: true, optional: true
+
+  has_many :comments, class_name: 'Comment', foreign_key: :quote_comment_id, inverse_of: :quote_comment, dependent: :nullify
 
   validates :content, presence: true, length: { maximum: 1000 }
   validate :ensure_author_account_normal
@@ -35,7 +41,13 @@ class Comment < ApplicationRecord
                on: :create
 
   def subscribers
-    @subscribers = commentable.commenting_subscribe_by_users.where.not(mixin_uuid: author.mixin_uuid)
+    @subscribers =
+      case commentable
+      when Article
+        commentable.commenting_subscribe_by_users.where.not(mixin_uuid: author.mixin_uuid)
+      when Comment
+        commentable.author
+      end
   end
 
   def notify_subscribers_async
@@ -43,7 +55,7 @@ class Comment < ApplicationRecord
   end
 
   def subscribe_for_author
-    author.create_action :commenting_subscribe, target: commentable
+    author.create_action :commenting_subscribe, target: commentable if commentable.is_a?(Article)
   end
 
   def content_as_html

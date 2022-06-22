@@ -7,23 +7,23 @@ class CommentsController < ApplicationController
   def index
     comments =
       if @article.present?
-        @article.comments.without_deleted
+        @article.comments
       else
-        Comment.without_deleted
+        Comment.none
       end
 
     @order_by = params[:order_by] || 'upvotes'
     comments =
       case @order_by
       when 'upvotes'
-        comments.order(upvotes_count: :desc, downvotes_count: :asc)
+        comments.order(upvotes_count: :desc, downvotes_count: :asc, created_at: :desc)
       when 'asc'
         comments.order(created_at: :asc)
       else
         comments.order(created_at: :desc)
       end
 
-    @pagy, @comments = pagy comments.includes(:author)
+    @pagy, @comments = pagy comments.without_deleted.includes(:author)
   end
 
   def create
@@ -33,10 +33,10 @@ class CommentsController < ApplicationController
   private
 
   def load_article
-    @article = Article.only_published.find_by uuid: params[:article_uuid]
+    @article = Article.only_published.find_by uuid: params[:article_uuid] if params[:article_uuid].present?
   end
 
   def comment_params
-    params.require(:comment).permit(:commentable_id, :commentable_type, :content)
+    params.require(:comment).permit(:commentable_id, :commentable_type, :content, :quote_comment_id)
   end
 end

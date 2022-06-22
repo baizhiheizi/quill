@@ -1,6 +1,6 @@
 <div id="<%= dom_id article %>_subscribe_button" >
   <% if current_user.blank? %>
-    <%= link_to t('subscribe'), view_modals_path(type: :login), data: { turbo_method: :post }, class: "block w-full cursor-pointer bg-blue-500 hover:bg-blue-600 rounded text-white text-center py-1 px-4" %>
+    <%= link_to t('subscribe'), view_modals_path(type: :login), data: { turbo_method: :post }, class: "block w-full cursor-pointer hover:text-blue-600 rounded text-blue-500 text-center py-1 px-4" %>
   <% elsif current_user.commenting_subscribe_article? article %>
     <div class="w-full bg-transparent text-center py-1">
       <%= button_to t('unsubscribe'), 
@@ -22,6 +22,6 @@
   <% else %>
     <%= button_to t('subscribe'), 
       subscribe_articles_path(uuid: article.uuid), 
-      class: "block w-full cursor-pointer bg-blue-500 hover:bg-blue-600 rounded text-white text-center py-1 px-4" %>
+      class: "block w-full cursor-pointer text-blue-500 hover:text-blue-600 rounded text-center py-1 px-4" %>
   <% end %>
 </div>

@@ -6,6 +6,7 @@
 #
 #  id               :bigint           not null, primary key
 #  commentable_type :string
+#  comments_count   :integer          default(0)
 #  content          :string
 #  deleted_at       :datetime
 #  downvotes_count  :integer          default(0)
@@ -14,11 +15,13 @@
 #  updated_at       :datetime         not null
 #  author_id        :bigint
 #  commentable_id   :bigint
+#  quote_comment_id :bigint
 #
 # Indexes
 #
 #  index_comments_on_author_id                            (author_id)
 #  index_comments_on_commentable_type_and_commentable_id  (commentable_type,commentable_id)
+#  index_comments_on_quote_comment_id                     (quote_comment_id)
 #
 
 require 'test_helper'

@@ -68,7 +68,7 @@ class MarkdownRenderService
   def parse_link
     doc = Nokogiri::HTML.fragment(@html)
     doc.css('a').each do |a|
-      a['target'] = '_blank'
+      a['target'] = '_blank' if a['data-turbo-method'].blank?
     end
     @html = doc.to_html
 
@@ -115,8 +115,8 @@ class MarkdownRenderService
     doc.css('a').each do |link|
       href = link.attr('href')
       if href.match?(/\A#comment/)
-        link['data-controller'] = 'scroll-to'
-        link['href'] = href.underscore
+        link['data-turbo-method'] = 'post'
+        link['href'] = "/view_modals?type=comment_form&quote_comment_id=#{href.underscore.split('_').last}"
       end
     end
     @html = doc.to_html

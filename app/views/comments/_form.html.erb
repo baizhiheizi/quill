@@ -1,3 +1,40 @@
+<% quote_comment ||= nil %>
+
+<% if quote_comment.present? %>
+  <div class="my-4 py-2 px-4 rounded-lg bg-zinc-50 max-h-96 overflow-y-scroll scrollbar-hide dark:bg-zinc-800">
+    <div class="flex space-x-2 sm:space-x-4 items-start py-2 w-full">
+      <img src="<%= quote_comment.author.avatar %>" class="w-6 h-6 sm:w-8 sm:h-8 rounded-full" />
+      <div class="overflow-x-hidden">
+        <div class="flex items-center space-x-2 mb-2 text-sm">
+          <span><%= quote_comment.author.name %></span>
+          <span class="opacity-50"><%= time_ago_in_words quote_comment.created_at %></span>
+        </div>
+        <div class=" prose prose-sm prose-h1:text-base prose-h1:m-0 prose-h2:text-base prose-h2:m-0 prose-h3:text-base prose-h3:m-0 prose-h4:m-0 mb-2 dark:prose-invert">
+          <% if quote_comment.quote_comment.present? %>
+            <div class="max-h-48 overflow-y-scroll scrollbar-hide">
+              <blockquote>
+                <div>
+                  <%= link_to "@#{quote_comment.quote_comment.author.name}", user_path(quote_comment.quote_comment.author), data: { turbo_frame: "_top" }, class: "no-underline italic" %>
+                  :(
+                  <%= link_to "##{quote_comment.quote_comment.id}", 
+                    view_modals_path(type: :comment_form, quote_comment_id: quote_comment.quote_comment_id),
+                    class: "italic",
+                    data: {
+                      turbo_method: 'post'
+                  } %>
+                  )
+                </div>
+              <%= quote_comment.quote_comment.content_as_html.html_safe %>
+              </blockquote>
+            </div>
+          <% end %>
+          <%= quote_comment.content_as_html.html_safe %>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>
+
 <%= form_for commentable.comments.new, 
   data: { 
     comment_form_target: "form",
@@ -9,8 +46,9 @@
   html: { class: 'mb-4' } do |form| %>
   <%= form.hidden_field :commentable_id, value: commentable.id %>
   <%= form.hidden_field :commentable_type, value: commentable.class.name %>
+  <%= form.hidden_field :quote_comment_id, value: quote_comment&.id %>
   <%= form.text_area :content, 
-    class: "w-full py-2 rounded focus:ring-0 mb-4 dark:bg-zinc-800", 
+    class: "w-full min-h-48 py-2 rounded focus:ring-offset-0 focus:border-[#6b7280] focus:ring-0 mb-4 dark:bg-zinc-800", 
     placeholder: t("markdown_supported"), 
     data: { 
       controller: "textarea-autogrow",

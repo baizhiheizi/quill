@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_06_21_005224) do
+ActiveRecord::Schema[7.0].define(version: 2022_06_22_022657) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
   enable_extension "pgcrypto"
@@ -200,8 +200,11 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_21_005224) do
     t.datetime "updated_at", null: false
     t.integer "upvotes_count", default: 0
     t.integer "downvotes_count", default: 0
+    t.integer "comments_count", default: 0
+    t.bigint "quote_comment_id"
     t.index ["author_id"], name: "index_comments_on_author_id"
     t.index ["commentable_type", "commentable_id"], name: "index_comments_on_commentable_type_and_commentable_id"
+    t.index ["quote_comment_id"], name: "index_comments_on_quote_comment_id"
   end
 
   create_table "currencies", force: :cascade do |t|
