@@ -13,7 +13,7 @@ class ProcessThrottleTransferWorker
   sidekiq_retry_in do |count, exception|
     case exception
     when MixinBot::InsufficientPoolError, MixinBot::PinError
-      SecureRandom.random_number(300) if count < 10
+      SecureRandom.random_number(600) if count < 10
     end
   end
 

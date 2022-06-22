@@ -157,7 +157,7 @@ class Transfer < ApplicationRecord
     if queue_priority_critical?
       ProcessCriticalTransferWorker.perform_async trace_id
     else
-      ProcessThrottleTransferWorker.perform_async trace_id, wallet_id
+      ProcessThrottleTransferWorker.perform_in SecureRandom.random_number(600).seconds, trace_id, wallet_id
     end
   end
 
