@@ -7,7 +7,7 @@ class ProcessCriticalTransferWorker
   sidekiq_retry_in do |count, exception|
     case exception
     when MixinBot::InsufficientPoolError, MixinBot::PinError
-      SecureRandom.random_number(60) if count < 10
+      1 if count < 10
     end
   end
 
