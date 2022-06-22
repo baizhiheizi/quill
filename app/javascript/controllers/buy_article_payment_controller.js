@@ -6,7 +6,7 @@ export default class extends Controller {
     articleUuid: String,
     selectedCurrency: String,
   };
-  static targets = ['currency', 'payBox', 'loading', 'price', 'payLink'];
+  static targets = ['currency', 'payBox', 'loading', 'price'];
 
   connect() {}
 
