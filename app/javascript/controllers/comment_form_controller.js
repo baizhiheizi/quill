@@ -1,26 +1,24 @@
 import { Controller } from '@hotwired/stimulus';
+import { post } from '@rails/request.js';
 
 export default class extends Controller {
-  static targets = ['form', 'content'];
+  connect() {
+    if (!location.hash) return;
 
-  quote(event) {
-    const { content, author, id } = event.params;
-    const original_content = this.contentTarget.value;
-
-    this.contentTarget.value = `> @${author}([#${id}](#comment_${id})):
-${content.replace(/^/gm, '> ')}
-
-${original_content || ''}`;
-    this.contentTarget.scrollIntoView(false);
-    this.contentTarget.focus();
-
-    const textareaAutogrowController =
-      this.application.getControllerForElementAndIdentifier(
-        this.contentTarget,
-        'textarea-autogrow',
-      );
-    if (textareaAutogrowController) {
-      textareaAutogrowController.autogrow();
+    if (location.hash.match(/#comment_\d+/)) {
+      const commentId = location.hash.split('_')[1];
+      this.showCommentFormModal(commentId);
     }
+  }
+
+  showCommentFormModal(commentId) {
+    post('/view_modals', {
+      body: {
+        type: 'comment_form',
+        quote_comment_id: commentId,
+      },
+      contentType: 'application/json',
+      responseKind: 'turbo-stream',
+    });
   }
 }

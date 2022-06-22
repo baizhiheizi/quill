@@ -31,6 +31,6 @@ class ViewModalsController < ApplicationController
       return if @commentable.blank?
     end
 
-    render params[:type]
+    render type
   end
 end
