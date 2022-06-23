@@ -27,7 +27,7 @@
         } %>
     </div>
   </div>
-  <div data-controller="infinite-scroll">
+  <div>
     <div id="<%= dom_id article %>_comments_list">
       <% if comments.blank? %>
         <div class="text-center py-2 opacity-50">
@@ -37,9 +37,8 @@
         <%= render partial: "comments/comment", collection: comments, as: :comment %>
       <% end %>
     </div>
-    <div data-infinite-scroll-target='scrollArea'></div>
 
-    <%= render partial: "shared/pagination", locals: { pagy: pagy } %>
+    <%= render "shared/load_more", pagy: pagy %>
   </div>
 <% end %>
 

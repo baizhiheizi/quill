@@ -1,0 +1,11 @@
+<div id="load_more" 
+     class="flex justify-center my-4"
+     data-controller='load-more'>
+  <% if pagy&.next&.present? %>
+    <button class="text-sm px-4 py-2 rounded border border-zinc-300 opacity-70 block w-full max-w-sm" 
+            data-action="load-more#fetch"
+            data-load-more-link-param="<%= pagy_url_for(pagy, pagy.next) %>">
+      <%= t('load_more') %>
+    </button>
+  <% end %>
+</div>

@@ -3,8 +3,8 @@
     <%= render partial: "comments/comment", collection: @comments, as: :comment %>
   <% end %>
 
-  <%= turbo_stream.update 'pagination' do %>
-    <%= render partial: "shared/pagination", locals: { pagy: @pagy } %>
+  <%= turbo_stream.update 'load_more' do %>
+    <%= render partial: "shared/load_more", locals: { pagy: @pagy } %>
   <% end %>
 <% elsif @parent_comment.present? %>
   <%= turbo_stream.append "#{dom_id @parent_comment}_comments_list" do %>
