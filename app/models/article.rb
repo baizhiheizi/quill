@@ -209,7 +209,7 @@ class Article < ApplicationRecord
   end
 
   def words_count
-    @words_count ||= plain_text.scan(/[\u00ff-\uffff]|\S+/).size
+    @words_count ||= plain_text.scan(/[a-zA-Z]+|\S/).size
   end
 
   def partial_content
