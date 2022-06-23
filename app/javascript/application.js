@@ -14,7 +14,10 @@ addEventListener('turbo:submit-start', ({ target }) => {
   showLoading();
 });
 
-addEventListener('turbo:submit-end', () => {
+addEventListener('turbo:submit-end', ({ target }) => {
+  for (const field of target.elements) {
+    field.disabled = false;
+  }
   hideLoading();
 });
 

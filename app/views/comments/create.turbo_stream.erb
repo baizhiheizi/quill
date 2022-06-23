@@ -1,12 +1,21 @@
+<% if @comment.persisted? %>
+  <% if @comment.commentable.is_a?(Article) %>
+    <%= turbo_stream.prepend "#{dom_id @comment.commentable}_comments_list" do %>
+      <%= render partial: "comments/comment", locals: { comment: @comment } %>
+    <% end %>
+  <% end %>
+
+  <%= turbo_stream.update "modal-slot" do %>
+  <% end %>
+<% else %>
+  <% @comment.errors.full_messages.each do |message| %>
+    <%= turbo_stream.append "notifications" do %>
+      <%= render "notifications/notification", type: :danger, message: message %>
+    <% end %>
+  <% end %>
+<% end %>
+
 <%= turbo_stream.replace "new_comment" do %>
   <%= render partial: "comments/form", locals: { commentable: @comment.commentable } %>
 <% end %>
 
-<% if @comment.commentable.is_a?(Article) %>
-  <%= turbo_stream.prepend "#{dom_id @comment.commentable}_comments_list" do %>
-    <%= render partial: "comments/comment", locals: { comment: @comment } %>
-  <% end %>
-<% end %>
-
-<%= turbo_stream.update "modal-slot" do %>
-<% end %>
