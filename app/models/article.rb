@@ -104,6 +104,7 @@ class Article < ApplicationRecord
   validate :ensure_revenue_ratios_sum_to_one
 
   before_validation :setup_attributes, on: :create
+  before_validation :set_default_intro
   after_save do
     generate_snapshot if should_generate_snapshot?
     attach_images_from_content_async if saved_change_to_content
@@ -469,6 +470,10 @@ class Article < ApplicationRecord
     self.price = MINIMUM_PRICE_BTC if price.blank? && asset_id == Currency::BTC_ASSET_ID
     self.price = MINIMUM_PRICE_JPYC if price.blank? && asset_id == Currency::JPYC_ASSET_ID
     self.price = MINIMUM_PRICE_PUSD if price.blank? && asset_id == Currency::PUSD_ASSET_ID
+  end
+
+  def set_default_intro
+    self.intro = default_intro if intro.blank?
   end
 
   def ensure_author_account_normal

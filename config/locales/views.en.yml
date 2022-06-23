@@ -135,7 +135,7 @@ en:
   desc: DESC
   asc: ASC
   upvotes: Upvotes
-  write_something_first: Write something first.
+  article_not_completed: Article not completed yet. Please check the errors the Edit/Options.
   confirm_to_submit: Are you sure to submit?
   submit: Submit
   markdown_supported: Markdown supported

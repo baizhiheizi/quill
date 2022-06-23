@@ -41,13 +41,7 @@ class Comment < ApplicationRecord
                on: :create
 
   def subscribers
-    @subscribers =
-      case commentable
-      when Article
-        commentable.commenting_subscribe_by_users.where.not(mixin_uuid: author.mixin_uuid)
-      when Comment
-        commentable.author
-      end
+    @subscribers ||= commentable.commenting_subscribe_by_users.where.not(mixin_uuid: author.mixin_uuid) if commentable.is_a?(Article)
   end
 
   def notify_subscribers_async

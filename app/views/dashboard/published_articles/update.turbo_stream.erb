@@ -4,6 +4,9 @@
   <%= turbo_stream.update "modal-slot" do %>
   <% end %>
   <%= turbo_stream.prepend "notifications" do %>
-    <%= render "notifications/notification", message: t('write_something_first'), type: :warning %>
+    <%= render "notifications/notification", message: t('article_not_completed'), type: :warning %>
+  <% end %>
+  <%= turbo_stream.replace "edit_article_#{@article.id}" do %>
+    <%= render partial: "articles/form", locals: { article: @article } %>
   <% end %>
 <% end %>

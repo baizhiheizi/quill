@@ -135,7 +135,7 @@ zh-CN:
   desc: 时间倒序
   asc: 时间正序
   upvotes: 点赞最多
-  write_something_first: 先写点什么
+  article_not_completed: 文章未完成，请检查编辑/选项表单中的错误
   confirm_to_submit: 确定要提交吗？
   submit: 提交
   markdown_supported: 支持 Markdown 格式

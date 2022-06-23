@@ -126,7 +126,7 @@ ja:
   desc: 投稿時間（降順）
   asc: 投稿時間（昇順）
   upvotes: いいね数順
-  write_something_first: 何かを書いてみましょう
+  article_not_completed: 記事がまだ完成していません。編集/オプションでエラーを確認してください。
   confirm_to_submit: 本当に送信しますか？
   submit: 送信
   markdown_supported: マークダウン法で記入できます。
