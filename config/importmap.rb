@@ -18,7 +18,7 @@ pin 'stimulus-flatpickr', to: 'https://ga.jspm.io/npm:stimulus-flatpickr@3.0.0-0
 pin 'photoswipe', to: 'https://unpkg.com/photoswipe/dist/photoswipe.esm.js'
 pin 'photoswipe-lightbox', to: 'https://unpkg.com/photoswipe/dist/photoswipe-lightbox.esm.js'
 
-pin 'codemirror', to: 'https://ga.jspm.io/npm:codemirror@5.65.5/lib/codemirror.js'
+pin 'codemirror', to: 'https://ga.jspm.io/npm:codemirror@5.65.6/lib/codemirror.js'
 pin 'codemirror-spell-checker', to: 'https://ga.jspm.io/npm:codemirror-spell-checker@1.1.2/src/js/spell-checker.js'
 pin 'codemirror/addon/display/autorefresh.js', to: 'https://ga.jspm.io/npm:codemirror@5.65.5/addon/display/autorefresh.js'
 pin 'codemirror/addon/display/fullscreen.js', to: 'https://ga.jspm.io/npm:codemirror@5.65.5/addon/display/fullscreen.js'
@@ -31,7 +31,7 @@ pin 'codemirror/mode/gfm/gfm.js', to: 'https://ga.jspm.io/npm:codemirror@5.65.5/
 pin 'codemirror/mode/markdown/markdown.js', to: 'https://ga.jspm.io/npm:codemirror@5.65.5/mode/markdown/markdown.js'
 pin 'codemirror/mode/xml/xml.js', to: 'https://ga.jspm.io/npm:codemirror@5.65.5/mode/xml/xml.js'
 pin 'fs', to: 'https://ga.jspm.io/npm:@jspm/core@2.0.0-beta.24/nodelibs/browser/fs.js'
-pin 'marked', to: 'https://ga.jspm.io/npm:marked@4.0.16/lib/marked.cjs'
+pin 'marked', to: 'https://ga.jspm.io/npm:marked@4.0.17/lib/marked.esm.js'
 pin 'typo-js', to: 'https://ga.jspm.io/npm:typo-js@1.2.1/typo.js'
 pin 'easymde', to: 'https://ga.jspm.io/npm:easymde@2.16.1/src/js/easymde.js'
 
