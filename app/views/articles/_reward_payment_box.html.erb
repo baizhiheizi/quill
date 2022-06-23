@@ -1,33 +1,44 @@
+<% payment = Payment.find_by(trace_id: trace_id) %>
+
 <div id="payment_<%= trace_id %>">
-  <% if Payment.find_by(trace_id: trace_id) %>
+  <div data-reward-article-payment-target="state" 
+       class="mb-4 <%= payment.blank? ? 'hidden' : '' %>">
     <%= render partial: "shared/loading" %>
+    <div class="text-center opacity-70">
+      <%= payment.blank? ? t('waiting_for_payment') : t('processing_your_payment') %>
+    </div>
+  </div>
+
+  <% if current_user.fennec? %>
+    <a data-controller="fennec"
+      data-action="fennec#pay"
+      data-fennec-trace-id-param="<%= trace_id %>"
+      data-fennec-asset-id-param="<%= pay_asset_id %>"
+      data-fennec-amount-param="<%= amount %>"
+      data-fennec-memo-param="<%= article.reward_payment_memo %>"
+      data-fennec-opponent-id-param="<%= current_user&.wallet_id || article.wallet_id %>"
+      class="flex justify-center items-center space-x-2 w-full my-4 text-center no-underline cursor-pointer py-2 block bg-amber-600 hover:bg-amber-700 active:bg-blue-500 text-white rounded">
+      <%= image_tag 'fennec-logo.png', class: 'h-6 w-auto' %>
+      <span><%= t('pay_with_fennec') %></span>
+    </a>
   <% else %>
-    <% unless from_mixin_messenger? || current_user.fennec? %>
+    <% unless from_mixin_messenger? %>
       <div data-controller="qrcode" 
           data-qrcode-url-value="<%= article.reward_url(current_user, pay_asset_id, amount, trace_id) %>">
-          <div data-qrcode-target="placeholder" class="flex justify-center"></div>
-          <div class="text-center py-2 text-gray-500 text-sm">
-            <%= t("scan_with_mixin") %>
-          </div>
+        <div data-qrcode-target="placeholder" class="flex justify-center">
+          <%= render partial: "shared/loading" %>
+        </div>
+        <div class="text-center py-2 text-gray-500 text-sm">
+          <%= t("scan_with_mixin") %>
+        </div>
       </div>
     <% end %>
-    <% if current_user.fennec? %>
-      <a data-controller="fennec"
-        data-action="fennec#pay"
-        data-fennec-trace-id-param="<%= trace_id %>"
-        data-fennec-asset-id-param="<%= pay_asset_id %>"
-        data-fennec-amount-param="<%= amount %>"
-        data-fennec-memo-param="<%= article.reward_payment_memo %>"
-        data-fennec-opponent-id-param="<%= current_user&.wallet_id || article.wallet_id %>"
-        class="flex justify-center items-center space-x-2 w-full my-4 text-center no-underline cursor-pointer py-2 block bg-amber-600 hover:bg-amber-700 active:bg-blue-500 text-white rounded">
-        <%= image_tag 'fennec-logo.png', class: 'h-6 w-auto' %>
-        <span><%= t('pay_with_fennec') %></span>
-      </a>
-    <% else %>
-      <a href="<%= article.reward_url(current_user, pay_asset_id, amount, trace_id) %>"
-        class="w-full my-4 text-center no-underline cursor-pointer py-2 block bg-blue-600 hover:bg-blue-500 active:bg-blue-500 text-white rounded md:hidden">
-        <%= t('pay_with_mixin') %>
-      </a>
-    <% end %>
+
+    <a href="<%= article.reward_url(current_user, pay_asset_id, amount, trace_id) %>"
+      data-reward-article-payment-target="payButton"
+      data-action="click->reward-article-payment#invokePayment"
+      class="w-full my-4 text-center no-underline cursor-pointer py-2 block bg-blue-600 hover:bg-blue-500 active:bg-blue-500 text-white rounded md:hidden">
+      <%= t('pay_with_mixin') %>
+    </a>
   <% end %>
 </div>

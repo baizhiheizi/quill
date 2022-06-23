@@ -17,9 +17,16 @@ export default class extends Controller {
     'payBox',
     'loading',
     'price',
+    'state',
+    'payButton',
   ];
 
   connect() {}
+
+  invokePayment() {
+    if (!this.hasStateTarget) return;
+    this.stateTarget.classList.remove('hidden');
+  }
 
   selectCurrency(event) {
     this.selectedCurrencyValue = event.target.value;

@@ -17,6 +17,8 @@ ja:
   delete: 削除
   pay_with_mixin: Linksで支払う
   pay_with_fennec: Fennecで支払う
+  waiting_for_payment: 支払い待ち
+  processing_payment: 入金、処理中
   scan_with_mixin: LinksでQRコードを読み取ってください
   success_submitted: 送信しました
   success_subscribed: フォローしました

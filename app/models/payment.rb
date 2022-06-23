@@ -49,7 +49,7 @@ class Payment < ApplicationRecord
   after_create :place_order!
   after_create_commit do
     notify_payer
-    broadcast_update_to "user_#{payer.mixin_uuid}", target: "payment_#{trace_id}", partial: 'shared/loading', locals: { payment: self } if payer.present?
+    broadcast_update_to "user_#{payer.mixin_uuid}", target: "payment_#{trace_id}", partial: 'payments/processing', locals: { payment: self } if payer.present?
   end
 
   delegate :swappable?, to: :currency

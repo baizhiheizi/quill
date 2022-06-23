@@ -17,6 +17,8 @@ en:
   delete: Delete
   pay_with_mixin: Pay with Mixin
   pay_with_fennec: Pay with Fennec
+  waiting_for_payment: Waiting for payment
+  processing_payment: Payment recevied, processing
   scan_with_mixin: Please scan the QRCode using Mixin Messenger
   success_submitted: Submitted
   success_subscribed: Subscribed

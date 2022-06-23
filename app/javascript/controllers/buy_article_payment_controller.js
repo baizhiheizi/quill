@@ -6,9 +6,21 @@ export default class extends Controller {
     articleUuid: String,
     selectedCurrency: String,
   };
-  static targets = ['currency', 'payBox', 'loading', 'price'];
+  static targets = [
+    'currency',
+    'payBox',
+    'loading',
+    'price',
+    'state',
+    'payButton',
+  ];
 
   connect() {}
+
+  invokePayment() {
+    if (!this.hasStateTarget) return;
+    this.stateTarget.classList.remove('hidden');
+  }
 
   select(e) {
     const selected = e.currentTarget.dataset.assetId;
