@@ -18,7 +18,7 @@
           <%= render "articles/share_button", article: @article, button_class: "w-5 h-5 lg:w-6 lg:h-6" %>
         </div>
       </div>
-      <div class="font-semibold text-xl lg:text-3xl 3xl:text-4xl mb-6">
+      <div class="font-semibold text-xl lg:text-3xl 3xl:text-4xl mb-6 text-ellipsis overflow-hidden">
         <%= @article.title %>
       </div>
       <% if @article.tags.present? %>

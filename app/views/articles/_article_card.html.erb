@@ -25,10 +25,10 @@
     </div>
   </div>
   <%= link_to article_path(article), class: "mb-4 block" do %>
-    <div class="font-bold text-xl lg:text-2xl 2xl:text-3xl mb-2">
+    <div class="font-bold text-xl lg:text-2xl 2xl:text-3xl mb-2 break-words text-ellipsis overflow-hidden">
       <%= article.title %>
     </div>
-    <div class="break-words">
+    <div class="break-words text-ellipsis overflow-hidden">
       <%= article.intro %>
     </div>
   <% end %>
