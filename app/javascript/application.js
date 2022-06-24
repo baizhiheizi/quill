@@ -8,7 +8,7 @@ import * as ActiveStorage from '@rails/activestorage';
 ActiveStorage.start();
 
 addEventListener('turbo:submit-start', ({ target }) => {
-  if (target?.elements) {
+  if (target && target.elements) {
     for (const field of target.elements) {
       field.disabled = true;
     }
@@ -17,7 +17,7 @@ addEventListener('turbo:submit-start', ({ target }) => {
 });
 
 addEventListener('turbo:submit-end', ({ target }) => {
-  if (target?.elements) {
+  if (target && target.elements) {
     for (const field of target.elements) {
       field.disabled = false;
     }
