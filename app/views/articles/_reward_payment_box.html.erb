@@ -21,6 +21,18 @@
       <%= image_tag 'fennec-logo.png', class: 'h-6 w-auto' %>
       <span><%= t('pay_with_fennec') %></span>
     </a>
+  <% elsif current_user.mvm_eth? %>
+    <a data-controller="metamask"
+      data-action="metamask#pay"
+      data-metamask-trace-id-param="<%= trace_id %>"
+      data-metamask-asset-id-param="<%= pay_asset_id %>"
+      data-metamask-amount-param="<%= amount %>"
+      data-metamask-memo-param="<%= article.reward_payment_memo %>"
+      data-metamask-opponent-id-param="<%= current_user&.wallet_id || article.wallet_id %>"
+      class="flex justify-center items-center space-x-2 w-full my-4 text-center no-underline cursor-pointer py-2 block bg-stone-600 hover:bg-stone-700 active:bg-blue-500 text-white rounded">
+      <%= image_tag 'https://docs.metamask.io/metamask-fox.svg', class: 'h-6 w-auto' %>
+      <span><%= t('pay_with_metamask') %></span>
+    </a>
   <% else %>
     <% unless from_mixin_messenger? %>
       <div data-controller="qrcode" 
