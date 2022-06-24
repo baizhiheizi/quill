@@ -46,9 +46,8 @@ export default class extends Controller {
       this.darkButtonTarget.classList.add('hidden');
     }
     document.documentElement.classList.remove('dark');
-    document
-      .querySelector('meta[name="theme-color"]')
-      ?.setAttribute('content', '#fff');
+    const themeColor = document.querySelector('meta[name="theme-color"]');
+    themeColor && themeColor.setAttribute('content', '#fff');
     reloadTheme();
   }
 
@@ -60,9 +59,8 @@ export default class extends Controller {
       this.darkButtonTarget.classList.remove('hidden');
     }
     document.documentElement.classList.add('dark');
-    document
-      .querySelector('meta[name="theme-color"]')
-      ?.setAttribute('content', '#18181b');
+    const themeColor = document.querySelector('meta[name="theme-color"]');
+    themeColor && themeColor.setAttribute('content', '#18181b');
     reloadTheme();
   }
 }

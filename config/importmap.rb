@@ -48,6 +48,6 @@ pin 'encode-utf8', to: 'https://ga.jspm.io/npm:encode-utf8@2.0.0/index.js'
 pin 'tom-select', to: 'https://ga.jspm.io/npm:tom-select@2.0.3/dist/js/tom-select.complete.js'
 pin 'abortcontroller-polyfill', to: 'https://ga.jspm.io/npm:abortcontroller-polyfill@1.7.3/dist/umd-polyfill.js'
 
-pin_all_from 'app/javascript/controllers', under: 'controllers', preload: true
-pin_all_from 'app/javascript/utils', under: 'utils', preload: true
+pin_all_from 'app/javascript/controllers', under: 'controllers'
+pin_all_from 'app/javascript/utils', under: 'utils'
 pin 'application'

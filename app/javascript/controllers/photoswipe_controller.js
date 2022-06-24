@@ -14,7 +14,7 @@ export default class extends Controller {
       gallerySelector: '.photoswipe-gallery',
       childSelector: 'a.photoswipe',
       pswpModule: PhotoSwipe,
-      mainClass: mixinContext?.immersive ? 'immersive' : '',
+      mainClass: mixinContext && mixinContext.immersive ? 'immersive' : '',
     });
     this.lightbox.init();
   }
