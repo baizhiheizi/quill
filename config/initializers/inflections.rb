@@ -20,4 +20,5 @@
 ActiveSupport::Inflector.inflections(:en) do |inflect|
   inflect.irregular 'bonus', 'bonuses'
   inflect.acronym 'API'
+  inflect.acronym 'MVM'
 end

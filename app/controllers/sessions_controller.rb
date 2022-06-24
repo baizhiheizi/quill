@@ -14,15 +14,34 @@ class SessionsController < ApplicationController
     ), allow_other_host: true
   end
 
-  def create
-    if params[:code].present? || params[:token].present?
-      user = User.auth_from_mixin token: params[:token], code: params[:code]
-      user_sign_in(user) if user
+  def mixin
+    user = User.auth_from_mixin code: params[:code]
+    user_sign_in(user) if user
 
-      redirect_to params[:return_to].presence || root_path
-    else
-      redirect_to root_path
-    end
+    redirect_to params[:return_to].presence || root_path
+  end
+
+  def fennec
+    user = User.auth_from_fennec token: params[:token]
+    user_sign_in(user) if user
+
+    redirect_to params[:return_to].presence || root_path
+  end
+
+  def mvm
+    user = User.auth_from_mvm_eth params[:public_key], params[:signature]
+    user_sign_in(user) if user
+
+    redirect_to params[:return_to].presence || root_path
+  end
+
+  def nounce
+    return if params[:public_key].blank?
+
+    nounce = SecureRandom.random_number 1_000_000
+    Global.redis.set params[:public_key], { nounce: nounce }.to_json, ex: 5.minutes
+
+    render json: { nounce: nounce }
   end
 
   def delete

@@ -26,7 +26,7 @@ class UserAuthorization < ApplicationRecord
 
   belongs_to :user, optional: true
 
-  enum provider: { mixin: 0 }
+  enum provider: { mixin: 0, fennec: 1, mvm_eth: 2 }
 
   validates :provider, presence: true
   validates :raw, presence: true
