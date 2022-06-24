@@ -13,7 +13,7 @@
       <div class="flex items-center space-x-2 ml-4 md:ml-6">
         <div class="flex items-baseline space-x-4">
           <% if current_user.blank? %>
-            <%= link_to t("write"), view_modals_path(type: :login), data: { turbo_method: :post }, class: "px-3 py-2 text-base font-medium hover:bg-blue-50 hover:text-blue-500 dark:hover:bg-gray-800 rounded-md" %>
+            <%= link_to t("write"), view_modals_path(type: :login, return_to: new_article_url), data: { turbo_method: :post }, class: "px-3 py-2 text-base font-medium hover:bg-blue-50 hover:text-blue-500 dark:hover:bg-gray-800 rounded-md" %>
           <% elsif current_user.articles.drafted.present? %>
             <%= link_to t("write"), dashboard_articles_path(tab: :drafted), class: "px-3 py-2 text-base font-medium hover:bg-blue-50 hover:text-blue-500 dark:hover:bg-gray-800 rounded-md" %>
           <% else %>
@@ -127,7 +127,7 @@
       </div>
       <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
         <% if current_user.blank? %>
-          <%= link_to t("write"), view_modals_path(type: :login), data: { turbo_method: :post }, class: "block px-3 py-2 text-base font-medium focus:bg-blue-50 focus:text-blue-500 rounded-md" %>
+          <%= link_to t("write"), view_modals_path(type: :login, return_to: new_article_url), data: { turbo_method: :post }, class: "block px-3 py-2 text-base font-medium focus:bg-blue-50 focus:text-blue-500 rounded-md" %>
         <% elsif current_user.articles.drafted.present? %>
           <%= link_to t("write"), dashboard_articles_path(tab: :drafted), class: "px-3 py-2 text-base font-medium hover:bg-blue-50 hover:text-blue-500 dark:hover:bg-gray-800 rounded-md" %>
         <% else %>
