@@ -2,7 +2,7 @@
 
 class SessionsController < ApplicationController
   skip_before_action :ensure_launched!
-  skip_before_action :verify_authenticity_token, only: :create
+  skip_before_action :verify_authenticity_token, only: %i[mixin fennec mvm]
 
   def new
     redirect_to format(
@@ -15,14 +15,14 @@ class SessionsController < ApplicationController
   end
 
   def mixin
-    user = User.auth_from_mixin code: params[:code]
+    user = User.auth_from_mixin params[:code]
     user_sign_in(user) if user
 
     redirect_to params[:return_to].presence || root_path
   end
 
   def fennec
-    user = User.auth_from_fennec token: params[:token]
+    user = User.auth_from_fennec params[:token]
     user_sign_in(user) if user
 
     redirect_to params[:return_to].presence || root_path

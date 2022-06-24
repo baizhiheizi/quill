@@ -78,4 +78,8 @@ export default class extends Controller {
       ],
     });
   }
+
+  pay(event) {
+    event.preventDefault();
+  }
 }

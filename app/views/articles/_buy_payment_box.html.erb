@@ -25,10 +25,21 @@
       data-fennec-amount-param="<%= payment_amount %>"
       data-fennec-memo-param="<%= article.buy_payment_memo %>"
       data-fennec-opponent-id-param="<%= current_user&.wallet_id || article.wallet_id %>"
-      href="<%= payment_url %>"
       class="flex justify-center items-center space-x-2 w-full my-4 text-center no-underline cursor-pointer py-2 block bg-amber-600 hover:bg-amber-700 active:bg-blue-500 text-white rounded">
       <%= image_tag 'fennec-logo.png', class: 'h-6 w-auto' %>
       <span><%= t('pay_with_fennec') %></span>
+    </a>
+  <% elsif current_user.mvm_eth? %>
+    <a data-controller="metamask"
+      data-action="metamask#pay"
+      data-metamask-trace-id-param="<%= payment_trace_id %>"
+      data-metamask-asset-id-param="<%= pay_asset_id %>"
+      data-metamask-amount-param="<%= payment_amount %>"
+      data-metamask-memo-param="<%= article.buy_payment_memo %>"
+      data-metamask-opponent-id-param="<%= current_user&.wallet_id || article.wallet_id %>"
+      class="flex justify-center items-center space-x-2 w-full my-4 text-center no-underline cursor-pointer py-2 block bg-stone-600 hover:bg-stone-700 active:bg-blue-500 text-white rounded">
+      <%= image_tag 'https://docs.metamask.io/metamask-fox.svg', class: 'h-6 w-auto' %>
+      <span><%= t('pay_with_metamask') %></span>
     </a>
   <% else %>
     <% unless from_mixin_messenger? %>

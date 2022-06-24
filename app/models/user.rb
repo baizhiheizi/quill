@@ -31,7 +31,7 @@
 class User < ApplicationRecord
   include Authenticatable
 
-  has_one :mixin_authorization, -> { where(provider: :mixin) }, class_name: 'UserAuthorization', inverse_of: :user, dependent: :restrict_with_error
+  has_one :authorization, class_name: 'UserAuthorization', inverse_of: :user, dependent: :restrict_with_error
   has_one :prs_account, dependent: :restrict_with_error
   has_many :access_tokens, dependent: :destroy
 
@@ -64,9 +64,9 @@ class User < ApplicationRecord
 
   after_commit :prepare_async, on: :create
 
-  default_scope { includes(:mixin_authorization) }
-  scope :only_mixin_messenger, -> { where('mixin_id ~* ?', '\A(?!7000)\d{5,}\Z') }
-  scope :only_fennec, -> { where(mixin_id: 0).or(where('mixin_id ~* ?', '\A(7000)\d{6}\Z')) }
+  default_scope { includes(:authorization) }
+  scope :only_mixin_messenger, -> { where(authorization: { provider: :mixin }) }
+  scope :only_fennec, -> { where(authorization: { provider: :fennec }) }
 
   scope :active, lambda {
     order_by_articles_count
@@ -117,7 +117,7 @@ class User < ApplicationRecord
       ).order(comments_count: :desc)
   }
 
-  delegate :phone, to: :mixin_authorization
+  delegate :phone, to: :authorization
 
   # subscribe user
   action_store :subscribe, :user, counter_cache: 'subscribers_count', user_counter_cache: 'subscribing_count'
@@ -145,7 +145,7 @@ class User < ApplicationRecord
   end
 
   def bio
-    mixin_authorization&.raw&.[]('biography') || t('user.default_bio')
+    authorization&.raw&.[]('biography') || t('user.default_bio')
   end
 
   def banned?
@@ -193,7 +193,7 @@ class User < ApplicationRecord
   end
 
   def update_profile(profile = nil)
-    profile ||= mixin_authorization.raw
+    profile ||= authorization.raw
     return if profile.blank?
 
     update(
@@ -272,11 +272,15 @@ class User < ApplicationRecord
   end
 
   def fennec?
-    mixin_id == '0' || mixin_id.match?(/^7000\d{6}/)
+    authorization.provider == 'fennec'
   end
 
   def messenger?
-    !fennec?
+    authorization.provider == 'mixin'
+  end
+
+  def mvm_eth?
+    authorization.provider == 'mvm_eth'
   end
 
   private
