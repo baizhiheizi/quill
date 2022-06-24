@@ -28,7 +28,7 @@ export default class extends Controller {
     const token = await this.fennec.wallet.signToken({
       payload: { from: location.host },
     });
-    post('/auth/mixin/callback', {
+    post('/auth/fennec/callback', {
       contentType: 'application/json',
       body: {
         token: token,

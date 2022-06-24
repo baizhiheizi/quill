@@ -1,0 +1,32 @@
+<div class="mt-6">
+  <div class="flex justify-center px-4 mb-4">
+    <%= link_to login_path(return_to: params[:return_to] || request.referer), 
+      class: "py-2 text-white bg-blue-500 hover:bg-blue-600 rounded flex items-center justify-center space-x-2 text-lg w-64" do %>
+      <%= image_tag (Settings.mixin_logo_light_file || 'mixin-logo-light.png'), class: 'h-4 w-auto' %>
+      <span><%= Settings.messenger %></span>
+    <% end %>
+  </div>
+
+  <div data-controller="fennec" class="flex justify-center px-4 mb-4">
+    <a data-controller="fennec"
+      data-fennec-target="loginButton" 
+      data-action="fennec#login" 
+      href="https://pando.im/fennec"
+      target="_blank"
+      class="cursor-pointer py-2 text-white bg-amber-600 hover:bg-amber-700 rounded flex items-center justify-center space-x-2 text-lg w-64 block">
+      <%= image_tag 'fennec-logo.png', class: 'h-6 w-auto' %>
+      <span>Fennec</span>
+    </a>
+  </div>
+
+  <div data-controller="metamask" class="flex justify-center px-4 mb-4">
+    <a data-metamask-target="loginButton" 
+      data-action="metamask#login" 
+      href="https://metamask.io"
+      target="_blank"
+      class="cursor-pointer py-2 text-white bg-stone-600 hover:bg-stone-700 rounded flex items-center justify-center space-x-2 text-lg w-64 block">
+      <%= image_tag 'https://docs.metamask.io/metamask-fox.svg', class: 'h-6 w-auto' %>
+      <span>MetaMask</span>
+    </a>
+  </div>
+</div>

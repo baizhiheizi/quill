@@ -137,6 +137,9 @@ gem 'redcarpet'
 # Easily include static pages in your Rails app.
 gem 'high_voltage'
 
+# a straightforward library to build, sign, and broadcast ethereum transactions anywhere you can run ruby.
+gem 'eth'
+
 # deploy
 gem 'mina', '~> 1.2.2', require: false
 gem 'mina-logs', '~> 1.1.0', require: false
