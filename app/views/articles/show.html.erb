@@ -2,9 +2,9 @@
   <article class="max-w-full lg:col-span-2 mb-4">
     <div class="bg-white dark:bg-zinc-900 dark:border-zinc-800 p-4 w-full sm:p-6 sm:border sm:rounded-lg mb-4">
       <div class="flex items-center justify-between mb-6">
-        <div class="relative flex items-center space-x-2">
+        <div class="relative flex items-center space-x-2 truncate">
           <img class="w-10 h-10 my-0 rounded-full" src="<%= @article.author.avatar %>">
-          <div class="leading-4">
+          <div class="leading-4 truncate">
             <span class="text-base font-semibold"><%= @article.author.name %></span>
             <div class="text-sm sm:text-base text-gray-500 font-light">
               <%= @article.published_at.strftime("%Y-%m-%d %H:%M") %>

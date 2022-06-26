@@ -22,7 +22,7 @@
 class UserAuthorization < ApplicationRecord
   MIXIN_AUTHORIZATION_SCOPE = "PROFILE:READ#{Settings.whitelist&.enable&.presence && '+PHONE:READ'}".freeze
 
-  store_accessor :raw, :phone
+  store_accessor :raw, %i[phone key contract]
 
   belongs_to :user, optional: true
 
@@ -31,4 +31,15 @@ class UserAuthorization < ApplicationRecord
   validates :provider, presence: true
   validates :raw, presence: true
   validates :uid, presence: true, uniqueness: { scope: :provider }
+
+  def mixin_api
+    return unless provider == 'mvm_eth'
+    return if key.blank?
+
+    @mixin_api ||= MixinBot::API.new(
+      client_id: key['client_id'],
+      private_key: key['private_key'],
+      session_id: key['session_id']
+    )
+  end
 end

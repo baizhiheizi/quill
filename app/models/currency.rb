@@ -11,6 +11,7 @@
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #  asset_id   :uuid
+#  chain_id   :uuid
 #
 # Indexes
 #
@@ -22,10 +23,12 @@ class Currency < ApplicationRecord
   BTC_ASSET_ID = 'c6d0c728-2624-429b-8e0d-d9d19b6592fa'
   JPYC_ASSET_ID = '0ff3f325-4f34-334d-b6c0-a3bd8850fc06'
   PUSD_ASSET_ID = '31d2ea9c-95eb-3355-b65b-ba096853bc18'
+  XIN_ASSET_ID = 'c94ac88f-4671-3976-b60a-09064f1811e8'
+  ETH_ASSET_ID = '43d61dcd-e413-450d-80b8-101d5e903357'
 
   extend OrderAsSpecified
 
-  store :raw, accessors: %i[name symbol chain_id icon_url]
+  store :raw, accessors: %i[name symbol icon_url]
 
   before_validation :set_defaults
 
@@ -36,6 +39,8 @@ class Currency < ApplicationRecord
   has_many :orders, primary_key: :asset_id, foreign_key: :asset_id, dependent: :restrict_with_exception, inverse_of: :currency
   has_many :payments, primary_key: :asset_id, foreign_key: :asset_id, dependent: :restrict_with_exception, inverse_of: :currency
   has_many :transfers, primary_key: :asset_id, foreign_key: :asset_id, dependent: :restrict_with_exception, inverse_of: :currency
+
+  belongs_to :chain, class_name: 'Currency', primary_key: :asset_id, optional: true, inverse_of: false
 
   scope :swappable, -> { where(asset_id: SwapOrder::SWAPABLE_ASSETS).order_as_specified(asset_id: SwapOrder::SWAPABLE_ASSETS) }
   scope :pricable, -> { where(asset_id: Article::SUPPORTED_ASSETS) }

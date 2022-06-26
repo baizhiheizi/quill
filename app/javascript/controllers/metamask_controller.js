@@ -1,7 +1,7 @@
 import { Controller } from '@hotwired/stimulus';
 import { post } from '@rails/request.js';
 import detectEthereumProvider from '@metamask/detect-provider';
-import Web3 from 'web3';
+import 'web3';
 
 const provider = await detectEthereumProvider();
 const MVM_CHAIN_ID = '0x120c7';
@@ -79,7 +79,47 @@ export default class extends Controller {
     });
   }
 
-  pay(event) {
+  async pay(event) {
     event.preventDefault();
+    const { assetId, amount, opponentId, memo, traceId, contract } =
+      event.params;
+    if (!contract) return;
+
+    await this.ensureEthAccountExist();
+    if (!this.account) return;
+
+    const res = await post('/mvm/extras', {
+      body: {
+        receivers: [opponentId],
+        threshold: 1,
+        extra: memo,
+      },
+    });
+    const { extra } = await res.json;
+
+    let abi = [
+      {
+        type: 'function',
+        stateMutability: 'nonpayable',
+        outputs: [{ type: 'bool', name: '', internalType: 'bool' }],
+        name: 'transferWithExtra',
+        inputs: [
+          { type: 'address', name: 'to', internalType: 'address' },
+          { type: 'uint256', name: 'value', internalType: 'uint256' },
+          { type: 'bytes', name: 'extra', internalType: 'bytes' },
+        ],
+      },
+    ];
+    let Contract = new this.web3.eth.Contract(
+      abi,
+      '0xa8090F6f19295321968B2f3BcDB44d20bB15742e',
+    ); // calculate ERC20 token amount
+    let value = parseInt(parseFloat(amount) * 1e8);
+    Contract.methods
+      .transferWithExtra(contract, value, `0x${extra}`)
+      .send({ from: this.account })
+      .on('transactionHash', function (hash) {
+        console.log(hash);
+      });
   }
 }

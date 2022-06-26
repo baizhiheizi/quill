@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_06_24_145008) do
+ActiveRecord::Schema[7.0].define(version: 2022_06_25_034041) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
   enable_extension "pgcrypto"
@@ -214,6 +214,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_24_145008) do
     t.datetime "updated_at", null: false
     t.decimal "price_usd"
     t.decimal "price_btc"
+    t.uuid "chain_id"
     t.index ["asset_id"], name: "index_currencies_on_asset_id", unique: true
   end
 

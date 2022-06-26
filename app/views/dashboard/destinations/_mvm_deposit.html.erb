@@ -1,0 +1,39 @@
+<% selected ||= Currency.swappable.find_by(asset_id: Currency::ETH_ASSET_ID) || Currency.swappable.first %>
+
+<div class="p-4" data-controller="mvm-deposit">
+  <div class="mb-4">
+    <select class="focus:ring-blue-500 focus:border-blue-500 flex-1 block w-full rounded sm:text-sm border-zinc-300 dark:bg-zinc-900" 
+      data-action="change->mvm-deposit#selectCurrency">
+      <% Currency.swappable.each do |currency| %>
+        <option value="<%= currency.asset_id %>" 
+          <%= currency.asset_id == selected.asset_id ? 'selected' : '' %>
+          data-mvm-deposit-target="currency"
+          data-currency-icon-url="<%= currency.icon_url %>">
+          <span><%= currency.symbol %></span>
+        </option>
+      <% end %>
+    </select>
+  </div>
+  <div data-controller="tabs" data-tabs-active-tab-value="address" data-tabs-active-class-value="text-bold border-b-2 border-blue-500">
+    <div class="w-full flex items-center mb-4">
+      <a class="flex-1 text-center cursor-pointer py-1 border-b" data-tabs-target="tab" data-tabs-tabname-param='address' data-action="click->tabs#active">
+        <%= t('address') %>
+      </a>
+      <a class="flex-1 text-center cursor-pointer py-1 border-b" data-tabs-target="tab" data-tabs-tabname-param='mixin' data-action="click->tabs#active">
+        <%= t('mixin') %>
+      </a>
+    </div>
+    <div class="hidden" data-tabs-target="content" data-tabs-content-param="address">
+      <%= render "dashboard/destinations/deposit_qrcode", asset_id: selected.asset_id %>
+    </div>
+    <div class="hidden" data-tabs-target="content" data-tabs-content-param="mixin">
+      <div data-controller="qrcode" 
+          data-qrcode-url-value="<%= current_user.mixin_deposit_url %>">
+          <div data-qrcode-target="placeholder" class="flex justify-center h-48"></div>
+          <div class="text-center py-2 text-gray-500 text-sm">
+            <%= t("scan_with_mixin") %>
+          </div>
+      </div>
+    </div>
+  </div>
+</div>

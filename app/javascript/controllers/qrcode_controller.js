@@ -7,7 +7,9 @@ export default class extends Controller {
   };
   static targets = ['placeholder'];
 
-  connect() {
+  connect() {}
+
+  urlValueChanged() {
     this.replacePlaceHolder();
   }
 

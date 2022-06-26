@@ -145,7 +145,7 @@ class User < ApplicationRecord
   end
 
   def bio
-    authorization&.raw&.[]('biography') || t('user.default_bio')
+    authorization&.raw&.[]('biography') || I18n.t('user.default_bio')
   end
 
   def banned?
@@ -281,6 +281,20 @@ class User < ApplicationRecord
 
   def mvm_eth?
     authorization.provider == 'mvm_eth'
+  end
+
+  def mixin_deposit_url
+    "mixin://transfer/#{mixin_uuid}"
+  end
+
+  def mvm_deposit_address(asset_id)
+    return unless mvm_eth?
+    return if asset_id.blank?
+
+    r = authorization.mixin_api.asset asset_id
+    r['deposit_entries'].first
+  rescue MixinBot::Errors
+    {}
   end
 
   private

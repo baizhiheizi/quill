@@ -11,6 +11,7 @@
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #  asset_id   :uuid
+#  chain_id   :uuid
 #
 # Indexes
 #

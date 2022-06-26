@@ -86,6 +86,7 @@ Rails.application.routes.draw do
     resources :deleted_notifications, only: %i[create]
     resources :notification_settings, only: %i[update]
     resources :access_tokens, only: %i[index create destroy]
+    resource :destination, only: %i[show]
     root to: 'home#index'
   end
 
@@ -145,5 +146,9 @@ Rails.application.routes.draw do
 
   namespace :widget do
     resources :articles, only: :index
+  end
+
+  namespace :mvm do
+    resources :extras, only: :create
   end
 end
