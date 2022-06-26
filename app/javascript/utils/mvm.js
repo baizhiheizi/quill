@@ -1,0 +1,37 @@
+import detectEthereumProvider from '@metamask/detect-provider';
+import 'web3';
+
+export const provider = await detectEthereumProvider();
+export const MVM_CHAIN_ID = '0x120c7';
+
+export async function ensureEthAccountExist() {
+  if (provider !== window.ethereum) return;
+  await addMvmChain();
+  if (ethereum.chainId !== MVM_CHAIN_ID) return;
+
+  const web3 = new Web3(ethereum);
+  const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
+  return {
+    account: accounts[0],
+    web3,
+  };
+}
+
+export async function addMvmChain() {
+  ethereum.request({
+    method: 'wallet_addEthereumChain',
+    params: [
+      {
+        chainId: MVM_CHAIN_ID,
+        chainName: 'Mixin Virtual Machine',
+        nativeCurrency: {
+          name: 'Mixin',
+          symbol: 'XIN',
+          decimals: 18,
+        },
+        rpcUrls: ['https://geth.mvm.dev'],
+        blockExplorerUrls: ['https://scan.mvm.dev/'],
+      },
+    ],
+  });
+}
