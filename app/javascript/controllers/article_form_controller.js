@@ -1,9 +1,9 @@
 import { Controller } from '@hotwired/stimulus';
 import { DirectUpload } from '@rails/activestorage';
 import { post, put } from '@rails/request.js';
-import EasyMDE from 'easymde';
+import 'easymde';
 import { showLoading, hideLoading } from 'utils';
-import lodash from 'lodash';
+import debounce from 'lodash/debounce';
 
 export default class extends Controller {
   static values = {
@@ -53,7 +53,7 @@ export default class extends Controller {
     if (this.autosaveUrlValue) {
       this.editor.codemirror.on(
         'change',
-        lodash.debounce(() => this.autosave(), 1000),
+        debounce(() => this.autosave(), 1000),
       );
     }
   }

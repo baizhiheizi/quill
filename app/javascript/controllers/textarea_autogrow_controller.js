@@ -1,5 +1,5 @@
 import { Controller } from '@hotwired/stimulus';
-import lodash from 'lodash';
+import debounce from 'lodash/debounce';
 
 export default class extends Controller {
   static values = {
@@ -15,8 +15,7 @@ export default class extends Controller {
     this.element.style.overflow = 'hidden';
     const delay = this.resizeDebounceDelayValue || 100;
 
-    this.onResize =
-      delay > 0 ? lodash.debounce(this.autogrow, delay) : this.autogrow;
+    this.onResize = delay > 0 ? debounce(this.autogrow, delay) : this.autogrow;
 
     this.autogrow();
 

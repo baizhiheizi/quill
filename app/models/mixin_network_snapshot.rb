@@ -144,6 +144,7 @@ class MixinNetworkSnapshot < ApplicationRecord
     when '4swapRefund'
       swap_order.reject! if swap_order.may_reject?
     end
+    # TODO: raise if still swapping/swapped
   end
 
   def touch_proccessed_at

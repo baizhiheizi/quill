@@ -261,3 +261,7 @@ zh-CN:
     revenue_distribution: 收益分配
     you_will_create_a_free_article: 将创建一篇免费文章
     add_some_tags: 添加话题
+  this_address_supports: 该地址仅支持
+  this_address_supports_erc20: 该地址支持所有 ERC20 代币，例如 ETH、USDT、XIN 等
+  first_deposit_tips: 向新地址第一次充值时，请少量尝试！
+  deposit_receive_tips: 所有充值到帐需要至少 16 个区块确认

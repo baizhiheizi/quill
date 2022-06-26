@@ -17,5 +17,19 @@ module MVM
 
       client.post path, json: payload
     end
+
+    def extra(receivers: [], threshold: 1, extra: '')
+      return if receivers.blank?
+
+      path = '/extra'
+
+      payload = {
+        receivers: receivers,
+        threshold: threshold,
+        extra: extra
+      }
+
+      client.post path, json: payload
+    end
   end
 end

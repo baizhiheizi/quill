@@ -1,0 +1,10 @@
+<% content_for :modal_title do %>
+  <%= t('deposit_to_MVM') %>
+<% end %>
+<% content_for :modal_content do %>
+  <%= render "dashboard/destinations/mvm_deposit" %>
+<% end %>
+
+<%= turbo_stream.append "modal-slot" do %>
+  <%= render "view_modals/model", backdrop: 'static' %>
+<% end %>

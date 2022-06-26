@@ -1,5 +1,5 @@
 import { Controller } from '@hotwired/stimulus';
-import lodash from 'lodash';
+import debounce from 'lodash/debounce';
 import { get } from '@rails/request.js';
 
 export default class extends Controller {
@@ -10,7 +10,7 @@ export default class extends Controller {
   }
 
   connect() {
-    this.search = lodash.debounce(this.search, 300);
+    this.search = debounce(this.search, 300);
   }
 
   submit() {
