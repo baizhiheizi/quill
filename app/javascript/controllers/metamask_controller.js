@@ -1,15 +1,20 @@
 import { Controller } from '@hotwired/stimulus';
 import { post } from '@rails/request.js';
-import detectEthereumProvider from '@metamask/detect-provider';
-import { ensureEthAccountExist, ERC20ABI, fetchAssetContract } from 'utils';
-
-const provider = await detectEthereumProvider();
+import {
+  ensureEthAccountExist,
+  ERC20ABI,
+  BridgeContract,
+  fetchAssetContract,
+  notify,
+  showLoading,
+  hideLoading,
+} from 'utils';
+const XIN_ASSET_ID = 'c94ac88f-4671-3976-b60a-09064f1811e8';
 
 export default class extends Controller {
-  static targets = ['loginButton'];
+  static targets = ['loginButton', 'waiting'];
 
   async connect() {
-    if (provider !== window.ethereum) return;
     const { account, web3 } = await ensureEthAccountExist();
     this.account = account;
     this.web3 = web3;
@@ -55,11 +60,13 @@ export default class extends Controller {
   async pay(event) {
     event.preventDefault();
 
-    const { assetId, amount, opponentId, memo, traceId, contract } =
+    const { assetId, symbol, amount, opponentId, memo, contract } =
       event.params;
 
     if (!contract) return;
     if (!this.account) return;
+
+    const assetContractAddress = await fetchAssetContract(assetId);
 
     const res = await post('/mvm/extras', {
       body: {
@@ -69,15 +76,72 @@ export default class extends Controller {
       },
     });
     const { extra } = await res.json;
-    const assetContractAddress = await fetchAssetContract(assetId);
+
+    if (assetId === XIN_ASSET_ID) {
+      this.payXIN({ assetContractAddress, symbol, amount, contract, extra });
+    } else {
+      this.payERC20({ assetContractAddress, symbol, amount, contract, extra });
+    }
+  }
+
+  async payERC20(params) {
+    const { assetContractAddress, symbol, amount, contract, extra } = params;
+
+    if (
+      !assetContractAddress ||
+      !parseInt(assetContractAddress.replaceAll('-', ''))
+    ) {
+      notify('Desposit some asset first', 'warning');
+      return;
+    }
 
     let Contract = new this.web3.eth.Contract(ERC20ABI, assetContractAddress);
     let value = parseInt(parseFloat(amount) * 1e8);
     Contract.methods
       .transferWithExtra(contract, value, `0x${extra}`)
       .send({ from: this.account })
-      .on('transactionHash', function (hash) {
-        console.log(hash);
+      .on('sending', () => {
+        notify(`Invoking MetaMask to pay ${amount} ${symbol}`, 'info');
+      })
+      .on('sent', () => {
+        notify('Invoking MetaMask', 'info');
+        showLoading();
+        this.element.setAttribute('disabled', true);
+      })
+      .on('transactionHash', () => {
+        hideLoading();
+        notify('Already paid', 'success');
+        this.element.outerHTML = this.waitingTarget.innerHTML;
+      })
+      .on('error', (error) => {
+        hideLoading();
+        this.element.removeAttribute('disabled');
+        notify(error.message, 'danger');
+      });
+  }
+
+  async payXIN(params) {
+    const { symbol, amount, contract, extra } = params;
+    BridgeContract.methods
+      .release(contract, `0x${extra}`)
+      .send({ from: this.account, value: parseInt(parseFloat(amount) * 1e18) })
+      .on('sending', () => {
+        notify(`Invoking MetaMask to pay ${amount} ${symbol}`, 'info');
+      })
+      .on('sent', () => {
+        notify('Invoking MetaMask', 'info');
+        showLoading();
+        this.element.setAttribute('disabled', true);
+      })
+      .on('transactionHash', () => {
+        hideLoading();
+        notify('Already paid', 'success');
+        this.element.outerHTML = this.waitingTarget.innerHTML;
+      })
+      .on('error', (error) => {
+        hideLoading();
+        this.element.removeAttribute('disabled');
+        notify(error.message, 'danger');
       });
   }
 }
