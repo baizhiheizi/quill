@@ -2,6 +2,7 @@
 <% payment_amount ||= article.buy_payment_amount pay_asset_id %>
 <% payment_url ||= article.buy_url(current_user, pay_asset_id) %>
 <% payment = Payment.find_by(trace_id: payment_trace_id) %>
+<% currency = Currency.find_by(asset_id: pay_asset_id) %>
 
 <div id="payment_<%= payment_trace_id %>">
   <div data-article-paymnent-target="price" class="flex items-center justify-center space-x-2 text-base">
@@ -35,6 +36,8 @@
       data-metamask-contract-param="<%= current_user.authorization.contract %>"
       data-metamask-trace-id-param="<%= payment_trace_id %>"
       data-metamask-asset-id-param="<%= pay_asset_id %>"
+      data-metamask-symbol-param="<%= currency.symbol %>"
+      data-metamask-icon-url-param="<%= currency.icon_url %>"
       data-metamask-amount-param="<%= payment_amount %>"
       data-metamask-memo-param="<%= article.buy_payment_memo %>"
       data-metamask-opponent-id-param="<%= current_user&.wallet_id || article.wallet_id %>"
