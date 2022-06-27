@@ -13,14 +13,19 @@
       <img class="my-0 w-6 h-6 rounded-full" src="<%= article.currency.icon_url %>" />
       <span class="text-sm sm:text-base"><%= article.currency.symbol %></span>
     </div>
-    <% Currency.swappable.each do |currency| %>
+    <% Currency.swappable.includes(:chain).each do |currency| %>
       <% if currency != article.currency %>
         <div 
           data-buy-article-payment-target="currency"
           data-asset-id="<%= currency.asset_id %>"
           data-action="click->buy-article-payment#select"
           class="cursor-pointer flex items-center space-x-2 justify-center border p-1">
-          <img class="my-0 w-6 h-6 rounded-full" src="<%= currency.icon_url %>" />
+          <div class="relative">
+            <img class="my-0 w-6 h-6 rounded-full" src="<%= currency.icon_url %>" />
+            <% if currency.chain.present? %>
+              <img class="my-0 w-3 h-3 rounded-full absolute bottom-0" src="<%= currency.chain.icon_url %>" />
+            <% end %>
+          </div>
           <span class="text-sm sm:text-base"><%= currency.symbol %></span>
         </div>
       <% end %>
