@@ -7,6 +7,7 @@ export const MVM_CHAIN_ID = '0x120c7';
 export async function ensureEthAccountExist() {
   if (provider !== window.ethereum) return;
   await addMvmChain();
+
   if (ethereum.chainId !== MVM_CHAIN_ID) return;
 
   const web3 = new Web3(ethereum);

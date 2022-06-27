@@ -49,7 +49,7 @@ class Payment < ApplicationRecord
   after_create :place_order!
   after_create_commit do
     notify_payer
-    broadcast_update_to "user_#{payer.mixin_uuid}", target: "payment_#{trace_id}", partial: 'payments/processing', locals: { payment: self } if payer.present?
+    broadcast_state
   end
 
   delegate :swappable?, to: :currency
@@ -199,6 +199,18 @@ class Payment < ApplicationRecord
       'https://mixin.one/snapshots/',
       snapshot_id
     ].join
+  end
+
+  def broadcast_state
+    return if article.blank?
+    return if payer.blank?
+
+    case decrypted_memo['t']
+    when 'BUY'
+      broadcast_update_to "user_#{payer.mixin_uuid}", target: "article_#{article.uuid}_buy_payment_box", partial: 'payments/processing', locals: { payment: self } if payer.present?
+    when 'REWARD'
+      broadcast_update_to "user_#{payer.mixin_uuid}", target: "article_#{article.uuid}_reward_payment_box", partial: 'payments/processing', locals: { payment: self } if payer.present?
+    end
   end
 
   private

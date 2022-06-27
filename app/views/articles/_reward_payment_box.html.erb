@@ -1,4 +1,5 @@
 <% payment = Payment.find_by(trace_id: trace_id) %>
+<% currency = Currency.find_by(asset_id: pay_asset_id) %>
 
 <div id="payment_<%= trace_id %>">
   <div data-reward-article-payment-target="state" 
@@ -22,17 +23,29 @@
       <span><%= t('pay_with_fennec') %></span>
     </a>
   <% elsif current_user.mvm_eth? %>
-    <a data-controller="metamask"
+    <button data-controller="metamask"
       data-action="metamask#pay"
+      data-metamask-contract-param="<%= current_user.authorization.contract %>"
       data-metamask-trace-id-param="<%= trace_id %>"
       data-metamask-asset-id-param="<%= pay_asset_id %>"
+      data-metamask-symbol-param="<%= currency.symbol %>"
+      data-metamask-icon-url-param="<%= currency.icon_url %>"
       data-metamask-amount-param="<%= amount %>"
       data-metamask-memo-param="<%= article.reward_payment_memo %>"
       data-metamask-opponent-id-param="<%= current_user&.wallet_id || article.wallet_id %>"
       class="flex justify-center items-center space-x-2 w-full my-4 text-center no-underline cursor-pointer py-2 block bg-stone-600 hover:bg-stone-700 active:bg-blue-500 text-white rounded">
       <%= image_tag 'https://docs.metamask.io/metamask-fox.svg', class: 'h-6 w-auto' %>
+      <template data-metamask-target="waiting">
+        <div>
+          <%= render partial: "shared/loading" %>
+          <div class="text-sm text-center opacity-70">
+            <%= t('waiting_for_payment') %>
+          </div>
+        </div>
+      </template>
       <span><%= t('pay_with_metamask') %></span>
-    </a>
+    </button>
+    <%= button_to t('deposit_to_mvm'), view_modals_path(type: :mvm_deposit), class: "text-sm mb-4 py-2 block w-full text-center cursor-pointer text-sky-600" %>
   <% else %>
     <% unless from_mixin_messenger? %>
       <div data-controller="qrcode" 

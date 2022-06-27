@@ -256,3 +256,4 @@ ja:
   this_address_supports_erc20: This address supports all ERC20 tokens, such as ETH、USDT、XIN.
   first_deposit_tips: For first deposit to new address, please try a small amount! 
   deposit_receive_tips: Deposit will receive after at least 16 blocks confirmation.
+  deposit_to_mvm: Desposit to MVM
