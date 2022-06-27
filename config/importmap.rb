@@ -26,11 +26,9 @@ pin 'buffer', to: 'https://ga.jspm.io/npm:@jspm/core@2.0.0-beta.24/nodelibs/brow
 pin 'copy-to-clipboard', to: 'https://ga.jspm.io/npm:copy-to-clipboard@3.3.1/index.js'
 pin 'js-base64', to: 'https://ga.jspm.io/npm:js-base64@3.7.2/base64.js'
 pin 'toggle-selection', to: 'https://ga.jspm.io/npm:toggle-selection@1.0.6/index.js'
-pin 'highlight.js', to: 'https://ga.jspm.io/npm:highlight.js@11.5.1/es/index.js'
+pin 'highlight.js', to: 'https://unpkg.com/@highlightjs/cdn-assets@11.5.1/highlight.min.js'
 
-pin 'qrcode', to: 'https://ga.jspm.io/npm:qrcode@1.5.0/lib/browser.js'
-pin 'dijkstrajs', to: 'https://ga.jspm.io/npm:dijkstrajs@1.0.2/dijkstra.js'
-pin 'encode-utf8', to: 'https://ga.jspm.io/npm:encode-utf8@2.0.0/index.js'
+pin 'qrcode', to: 'https://unpkg.com/qrcode@1.5.0/build/qrcode.js'
 
 pin 'tom-select', to: 'https://ga.jspm.io/npm:tom-select@2.0.3/dist/js/tom-select.complete.js'
 pin 'abortcontroller-polyfill', to: 'https://ga.jspm.io/npm:abortcontroller-polyfill@1.7.3/dist/umd-polyfill.js'

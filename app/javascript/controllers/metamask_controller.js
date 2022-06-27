@@ -67,6 +67,7 @@ export default class extends Controller {
     if (!contract) return;
     if (!this.account) return;
 
+    showLoading();
     const res = await post('/mvm/extras', {
       body: {
         receivers: [opponentId],
@@ -92,6 +93,7 @@ export default class extends Controller {
       !assetContractAddress ||
       !parseInt(assetContractAddress.replaceAll('-', ''))
     ) {
+      hideLoading();
       notify('Desposit some asset first', 'warning');
       return;
     }
@@ -103,7 +105,6 @@ export default class extends Controller {
       .send({ from: this.account })
       .on('sent', () => {
         notify(`Invoking MetaMask to pay ${amount} ${symbol}`, 'info');
-        showLoading();
         this.element.setAttribute('disabled', true);
       })
       .on('transactionHash', () => {
@@ -127,7 +128,6 @@ export default class extends Controller {
       .send({ from: this.account, value: parseInt(parseFloat(amount) * 1e18) })
       .on('sent', () => {
         notify(`Invoking MetaMask to pay ${amount} ${symbol}`, 'info');
-        showLoading();
         this.element.setAttribute('disabled', true);
       })
       .on('transactionHash', () => {
