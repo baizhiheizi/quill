@@ -3,8 +3,9 @@ import { post } from '@rails/request.js';
 import {
   ensureEthAccountExist,
   ERC20ABI,
-  BridgeContract,
-  fetchAssetContract,
+  BridgeAddress,
+  BridgeABI,
+  RegistryContract,
   notify,
   showLoading,
   hideLoading,
@@ -66,8 +67,6 @@ export default class extends Controller {
     if (!contract) return;
     if (!this.account) return;
 
-    const assetContractAddress = await fetchAssetContract(assetId);
-
     const res = await post('/mvm/extras', {
       body: {
         receivers: [opponentId],
@@ -78,15 +77,17 @@ export default class extends Controller {
     const { extra } = await res.json;
 
     if (assetId === XIN_ASSET_ID) {
-      this.payXIN({ assetContractAddress, symbol, amount, contract, extra });
+      this.payXIN({ symbol, amount, contract, extra });
     } else {
-      this.payERC20({ assetContractAddress, symbol, amount, contract, extra });
+      this.payERC20({ assetId, symbol, amount, contract, extra });
     }
   }
 
   async payERC20(params) {
-    const { assetContractAddress, symbol, amount, contract, extra } = params;
+    const { assetId, symbol, amount, contract, extra } = params;
 
+    const registry = new RegistryContract();
+    const assetContractAddress = await registry.fetchAssetContract(assetId);
     if (
       !assetContractAddress ||
       !parseInt(assetContractAddress.replaceAll('-', ''))
@@ -95,16 +96,13 @@ export default class extends Controller {
       return;
     }
 
-    let Contract = new this.web3.eth.Contract(ERC20ABI, assetContractAddress);
+    let IERC20 = new this.web3.eth.Contract(ERC20ABI, assetContractAddress);
     let value = parseInt(parseFloat(amount) * 1e8);
-    Contract.methods
+    IERC20.methods
       .transferWithExtra(contract, value, `0x${extra}`)
       .send({ from: this.account })
-      .on('sending', () => {
-        notify(`Invoking MetaMask to pay ${amount} ${symbol}`, 'info');
-      })
       .on('sent', () => {
-        notify('Invoking MetaMask', 'info');
+        notify(`Invoking MetaMask to pay ${amount} ${symbol}`, 'info');
         showLoading();
         this.element.setAttribute('disabled', true);
       })
@@ -122,14 +120,13 @@ export default class extends Controller {
 
   async payXIN(params) {
     const { symbol, amount, contract, extra } = params;
+
+    const BridgeContract = new this.web3.eth.Contract(BridgeABI, BridgeAddress);
     BridgeContract.methods
       .release(contract, `0x${extra}`)
       .send({ from: this.account, value: parseInt(parseFloat(amount) * 1e18) })
-      .on('sending', () => {
-        notify(`Invoking MetaMask to pay ${amount} ${symbol}`, 'info');
-      })
       .on('sent', () => {
-        notify('Invoking MetaMask', 'info');
+        notify(`Invoking MetaMask to pay ${amount} ${symbol}`, 'info');
         showLoading();
         this.element.setAttribute('disabled', true);
       })
