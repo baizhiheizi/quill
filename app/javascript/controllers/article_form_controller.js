@@ -3,7 +3,7 @@ import { DirectUpload } from '@rails/activestorage';
 import { post, put } from '@rails/request.js';
 import 'easymde';
 import { showLoading, hideLoading } from 'utils';
-import debounce from 'lodash/debounce';
+import debounce from 'debounce';
 
 export default class extends Controller {
   static values = {

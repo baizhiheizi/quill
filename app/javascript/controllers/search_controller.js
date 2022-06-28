@@ -1,5 +1,5 @@
 import { Controller } from '@hotwired/stimulus';
-import debounce from 'lodash/debounce';
+import debounce from 'debounce';
 import { get } from '@rails/request.js';
 
 export default class extends Controller {
