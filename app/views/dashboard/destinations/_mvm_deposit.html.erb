@@ -1,19 +1,27 @@
 <% selected ||= Currency.swappable.find_by(asset_id: Currency::ETH_ASSET_ID) || Currency.swappable.first %>
+<% identifier = SecureRandom.uuid %>
 
-<div class="p-4" data-controller="mvm-deposit">
-  <div class="mb-4">
-    <select class="focus:ring-blue-500 focus:border-blue-500 flex-1 block w-full rounded sm:text-sm border-zinc-300 dark:bg-zinc-900" 
-      data-action="change->mvm-deposit#selectCurrency">
-      <% Currency.swappable.each do |currency| %>
-        <option value="<%= currency.asset_id %>" 
-          <%= currency.asset_id == selected.asset_id ? 'selected' : '' %>
-          data-mvm-deposit-target="currency"
-          data-currency-icon-url="<%= currency.icon_url %>">
-          <span><%= currency.symbol %></span>
-        </option>
-      <% end %>
-    </select>
-  </div>
+<div class="p-4" 
+     data-controller="mvm-deposit" 
+     data-mvm-deposit-asset-id-value="<%= selected.asset_id %>"
+     data-mvm-deposit-identifier-value="<%= identifier %>">
+  <%= button_to view_modals_path(type: :swappable_currencies, identifier: identifier), class: "block w-full mb-4 flex items-center justify-between py-2 px-4 bg-zinc-100 rounded-lg" do %>
+    <div id="<%= dom_id selected %>" class="flex items-center space-x-4">
+      <div class='relative'>
+        <%= image_tag selected.icon_url, 
+          data: { mvm_deposit_target: 'currencyIcon' }, 
+          class: 'w-8 h-8 rounded-full' %>
+        <%= image_tag selected.icon_url, 
+          data: { mvm_deposit_target: 'currencyChainIcon' }, 
+          class: 'absolute bottom-0 w-3 h-3 rounded-full' %>
+      </div>
+      <div class="text-lg" data-mvm-deposit-target="currencySymbol">
+        <%= selected.symbol %>
+      </div>
+    </div>
+    <%= render 'shared/icons/chevron_right', html_class: 'w-6 h-6 font-bold' %>
+  <% end %>
+
   <div data-controller="tabs" data-tabs-active-tab-value="address" data-tabs-active-class-value="text-bold border-b-2 border-blue-500">
     <div class="w-full flex items-center mb-4">
       <a class="flex-1 text-center cursor-pointer py-1 border-b" data-tabs-target="tab" data-tabs-tabname-param='address' data-action="click->tabs#active">

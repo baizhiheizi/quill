@@ -16,7 +16,7 @@
       data-transition-leave-active="transition ease-in duration-75"
       data-transition-leave-from="transform opacity-100 scale-300"
       data-transition-leave-to="transform opacity-0 scale-95"
-      class="<%= html_class %> relative w-full sm:w-11/12 max-w-2xl sm:h-auto sm:max-h-full mx-auto mt-auto sm:my-auto bg-white dark:bg-zinc-900 rounded-t-xl sm:rounded-xl shadow overflow-y-auto sm:scrollbar-hide max-h-[70%]">
+      class="<%= html_class %> relative w-full sm:w-11/12 max-w-2xl min-h-screen-1/3 sm:h-auto max-h-screen-3/4 mx-auto mt-auto sm:my-auto bg-white dark:bg-zinc-900 rounded-t-xl sm:rounded-xl shadow overflow-y-auto sm:scrollbar-hide">
       <div data-modal-target="title" class="sticky w-full top-0 flex items-center px-4 h-12 sm:h-14 text-base font-bold border-b space-x-4 bg-white dark:bg-zinc-900 dark:border-zinc-800 z-10 rounded-t-xl">
         <button data-action="modal#hide">
           <%= render "shared/icons/close" %>
@@ -24,7 +24,7 @@
         <span><%= content_for :modal_title %></span>
       </div>
 
-      <div data-modal-target="content" class="px-4 pb-8 sm:px-6">
+      <div data-modal-target="content" class="px-4 pt-4 pb-8 sm:px-6">
         <%= content_for :modal_content %>
         <div style="height:env(safe-area-inset-bottom)"></div>
       </div>

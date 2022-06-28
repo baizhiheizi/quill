@@ -6,12 +6,15 @@ export default class extends Controller {
     traceId: String,
     articleUuid: String,
     selectedCurrency: String,
+    identifier: String,
     minimalRewardAmount: Number,
     selectedAmountShare: Number,
   };
   static targets = [
     'currency',
     'currencyIcon',
+    'currencyChainIcon',
+    'currencySymbol',
     'amountShare',
     'amount',
     'payBox',
@@ -21,7 +24,22 @@ export default class extends Controller {
     'payButton',
   ];
 
-  connect() {}
+  connect() {
+    document.addEventListener('modal:ok', (event) => {
+      const identifier = event.detail.identifier;
+
+      if (identifier === this.identifierValue) {
+        this.minimalRewardAmountValue = event.detail.minimalRewardAmount;
+        this.selectedCurrencyValue = event.detail.assetId;
+        this.currencyIconTarget.src = event.detail.iconUrl;
+        this.currencyChainIconTarget.src = event.detail.chainIconUrl;
+
+        this.currencySymbolTargets.forEach((target) => {
+          target.innerText = event.detail.symbol;
+        });
+      }
+    });
+  }
 
   invokePayment() {
     if (!this.hasStateTarget) return;
@@ -37,12 +55,6 @@ export default class extends Controller {
   }
 
   selectedCurrencyValueChanged() {
-    this.currencyTargets.forEach((target) => {
-      if (target.value === this.selectedCurrencyValue) {
-        this.minimalRewardAmountValue = target.dataset.minimalAmount;
-        this.currencyIconTarget.src = target.dataset.currencyIconUrl;
-      }
-    });
     this.fetchPreOrder();
   }
 

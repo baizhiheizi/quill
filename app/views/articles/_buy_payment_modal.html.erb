@@ -1,36 +1,28 @@
+<% identifier = SecureRandom.uuid %>
+
 <div 
   data-controller="buy-article-payment" 
   data-buy-article-payment-article-uuid-value="<%= article.uuid %>"
   data-buy-article-payment-selected-currency-value="<%= article.currency.asset_id %>"
-  data-buy-article-payment-selected-currency-symbol-value="<%= article.currency.asset_id %>"
+  data-buy-article-payment-identifier-value="<%= identifier %>"
   class="max-w-xs m-auto p-4">
-  <div class="mb-4 <%= Currency.swappable.size > 2 ? 'grid grid-cols-3 gap-4' : 'flex justify-center items-center' %>">
-    <div 
-      data-buy-article-payment-target="currency"
-      data-asset-id="<%= article.currency.asset_id %>"
-      data-action="click->buy-article-payment#select"
-      class="cursor-pointer flex items-center space-x-2 justify-center border p-1">
-      <img class="my-0 w-6 h-6 rounded-full" src="<%= article.currency.icon_url %>" />
-      <span class="text-sm sm:text-base"><%= article.currency.symbol %></span>
+  <%= button_to view_modals_path(type: :swappable_currencies, identifier: identifier), class: "block w-full mb-4 flex items-center justify-between py-2 px-4 bg-zinc-100 rounded-lg" do %>
+    <div id="<%= dom_id article.currency %>" class="flex items-center space-x-4">
+      <div class='relative'>
+        <%= image_tag article.currency.icon_url, 
+          data: { buy_article_payment_target: 'currencyIcon' }, 
+          class: 'w-8 h-8 rounded-full' %>
+        <%= image_tag article.currency.icon_url, 
+          data: { buy_article_payment_target: 'currencyChainIcon' }, 
+          class: 'absolute bottom-0 w-3 h-3 rounded-full' %>
+      </div>
+      <div class="text-lg" data-buy-article-payment-target="currencySymbol">
+        <%= article.currency.symbol %>
+      </div>
     </div>
-    <% Currency.swappable.includes(:chain).each do |currency| %>
-      <% if currency != article.currency %>
-        <div 
-          data-buy-article-payment-target="currency"
-          data-asset-id="<%= currency.asset_id %>"
-          data-action="click->buy-article-payment#select"
-          class="cursor-pointer flex items-center space-x-2 justify-center border p-1">
-          <div class="relative">
-            <img class="my-0 w-6 h-6 rounded-full" src="<%= currency.icon_url %>" />
-            <% if currency.chain.present? %>
-              <img class="my-0 w-3 h-3 rounded-full absolute bottom-0" src="<%= currency.chain.icon_url %>" />
-            <% end %>
-          </div>
-          <span class="text-sm sm:text-base"><%= currency.symbol %></span>
-        </div>
-      <% end %>
-    <% end %>
-  </div>
+    <%= render 'shared/icons/chevron_right', html_class: 'w-6 h-6 font-bold' %>
+  <% end %>
+
   <template data-buy-article-payment-target="loading">
     <div class="flex justify-center">
       <img class="w-12 h-12 my-0" src="<%= image_path 'loading.svg' %>" />

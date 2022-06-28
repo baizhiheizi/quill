@@ -1,4 +1,4 @@
-<% currency = Currency.find_or_create_by_asset_id asset_id %>
+<% currency = Currency.find_or_create_by asset_id: asset_id %>
 <% deposit_entry = current_user.mvm_deposit_address(asset_id) %>
 
 <div id="<%= dom_id current_user %>_deposit_qrcode" 
