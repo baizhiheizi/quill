@@ -20,13 +20,12 @@ pin 'photoswipe-lightbox', to: 'https://unpkg.com/photoswipe/dist/photoswipe-lig
 
 pin 'easymde', to: 'https://unpkg.com/easymde/dist/easymde.min.js'
 
-pin 'lodash/debounce', to: 'https://ga.jspm.io/npm:lodash@4.17.21/debounce.js'
+pin 'debounce', to: 'https://ga.jspm.io/npm:underscore@1.13.4/modules/debounce.js'
 pin 'mixin-messenger-utils', to: 'https://ga.jspm.io/npm:mixin-messenger-utils@0.1.5/dist/index.js'
 pin 'buffer', to: 'https://ga.jspm.io/npm:@jspm/core@2.0.0-beta.24/nodelibs/browser/buffer.js'
 pin 'copy-to-clipboard', to: 'https://ga.jspm.io/npm:copy-to-clipboard@3.3.1/index.js'
 pin 'js-base64', to: 'https://ga.jspm.io/npm:js-base64@3.7.2/base64.js'
 pin 'toggle-selection', to: 'https://ga.jspm.io/npm:toggle-selection@1.0.6/index.js'
-pin 'highlight.js', to: 'https://ga.jspm.io/npm:highlight.js@11.5.1/es/index.js'
 
 pin 'qrcode', to: 'https://ga.jspm.io/npm:qrcode@1.5.0/lib/browser.js'
 pin 'dijkstrajs', to: 'https://ga.jspm.io/npm:dijkstrajs@1.0.2/dijkstra.js'

@@ -25,11 +25,15 @@ addEventListener('turbo:submit-end', ({ target }) => {
   hideLoading();
 });
 
+addEventListener('turbo:load', () => {
+  hideLoading();
+});
+
 addEventListener('turbo:click', () => {
   showLoading();
 });
 
-addEventListener('turbo:before-render', () => {
+addEventListener('turbo:render', () => {
   hideLoading();
 });
 
