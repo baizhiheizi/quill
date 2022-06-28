@@ -5,7 +5,7 @@ class PaymentsController < ApplicationController
 
   def create
     @article = Article.find_by uuid: params[:uuid]
-    @currency = Currency.find_or_create_by_asset_id params[:asset_id]
+    @currency = Currency.find_or_create_by asset_id: params[:asset_id]
     return if @article.blank? || @currency.blank?
   end
 end

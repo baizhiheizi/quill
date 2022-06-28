@@ -66,6 +66,8 @@ Rails.application.routes.draw do
   resources :transfers, only: %i[index]
   get '/transfers/stats', to: 'transfers#stats'
 
+  resources :currencies, only: %i[index]
+
   namespace :dashboard do
     resources :settings, only: %i[index]
     resources :articles, only: %i[index show destroy], param: :uuid

@@ -1,6 +1,9 @@
+<% identifier = SecureRandom.uuid %>
+
 <div 
   data-controller="reward-article-payment" 
   data-reward-article-payment-trace-id-value="<%= trace_id %>"
+  data-reward-article-payment-identifier-value="<%= identifier %>"
   data-reward-article-payment-article-uuid-value="<%= article.uuid %>"
   data-reward-article-payment-selected-currency-value="<%= article.currency.asset_id %>"
   data-reward-article-payment-minimal-reward-amount-value="<%= article.currency.minimal_reward_amount %>"
@@ -17,30 +20,32 @@
       </div>
     <% end %>
   </div>
-  <div class="mb-4">
-    <select class="focus:ring-blue-500 focus:border-blue-500 flex-1 block w-full rounded sm:text-sm border-zinc-300 dark:bg-zinc-900"
-      data-action="change->reward-article-payment#selectCurrency">
-      <option value="<%= article.currency.asset_id %>" 
-        data-reward-article-payment-target="currency"
-        data-currency-icon-url="<%= article.currency.icon_url %>"
-        data-minimal-amount="<%= article.currency.minimal_reward_amount %>">
-        <span><%= article.currency.symbol %></span>
-      </option>
-      <% Currency.swappable.each do |currency| %>
-        <% unless currency == article.currency %>
-          <option value="<%= currency.asset_id %>" 
-            data-reward-article-payment-target="currency"
-            data-currency-icon-url="<%= currency.icon_url %>"
-            data-minimal-amount="<%= currency.minimal_reward_amount %>">
-            <span><%= currency.symbol %></span>
-          </option>
-        <% end %>
-      <% end %>
-    </select>
-  </div>
+
+  <%= button_to view_modals_path(type: :swappable_currencies, identifier: identifier), 
+    class: "block w-full mb-4 flex items-center justify-between py-2 px-4 bg-zinc-100 rounded-lg" do %>
+    <div id="<%= dom_id article.currency %>" class="flex items-center space-x-4">
+      <div class='relative'>
+        <%= image_tag article.currency.icon_url, 
+          data: { reward_article_payment_target: 'currencyIcon' }, 
+          class: 'w-8 h-8 rounded-full' %>
+        <%= image_tag article.currency.icon_url, 
+          data: { reward_article_payment_target: 'currencyChainIcon' }, 
+          class: 'absolute bottom-0 w-3 h-3 rounded-full' %>
+      </div>
+      <div class="text-lg" data-reward-article-payment-target="currencySymbol">
+        <%= article.currency.symbol %>
+      </div>
+    </div>
+    <%= render 'shared/icons/chevron_right', html_class: 'w-6 h-6 font-bold' %>
+  <% end %>
+
   <div class="flex items-center justify-center space-x-2 font-bold">
-    <img data-reward-article-payment-target="currencyIcon" src="<%= article.currency.icon_url %>" class="w-8 h-8 rounded-full" />
-    <span data-reward-article-payment-target="amount"><%= format('%.8f', article.currency.minimal_reward_amount).gsub(/0+\z/, '') %></span>
+    <span data-reward-article-payment-target="amount">
+      <%= format('%.8f', article.currency.minimal_reward_amount).gsub(/0+\z/, '') %>
+    </span>
+    <span data-reward-article-payment-target="currencySymbol">
+      <%= article.currency.symbol %>
+    </span>
   </div>
   <template data-reward-article-payment-target="loading">
     <div class="flex justify-center">

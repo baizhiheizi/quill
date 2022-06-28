@@ -5,9 +5,12 @@ export default class extends Controller {
   static values = {
     articleUuid: String,
     selectedCurrency: String,
+    identifier: String,
   };
   static targets = [
-    'currency',
+    'currencyIcon',
+    'currencyChainIcon',
+    'currencySymbol',
     'payBox',
     'loading',
     'price',
@@ -15,27 +18,27 @@ export default class extends Controller {
     'payButton',
   ];
 
-  connect() {}
+  connect() {
+    document.addEventListener('modal:ok', (event) => {
+      const identifier = event.detail.identifier;
+
+      if (identifier === this.identifierValue) {
+        this.selectedCurrencyValue = event.detail.assetId;
+        this.currencyIconTarget.src = event.detail.iconUrl;
+        this.currencyChainIconTarget.src = event.detail.chainIconUrl;
+        this.currencySymbolTarget.innerText = event.detail.symbol;
+      }
+    });
+  }
 
   invokePayment() {
     if (!this.hasStateTarget) return;
     this.stateTarget.classList.remove('hidden');
   }
 
-  select(e) {
-    const selected = e.currentTarget.dataset.assetId;
-    this.selectedCurrencyValue = selected;
-    this.fetchPreOrder();
-  }
-
   selectedCurrencyValueChanged() {
-    this.currencyTargets.forEach((target) => {
-      if (target.dataset.assetId === this.selectedCurrencyValue) {
-        target.classList.add('border-blue-500', 'text-blue-500');
-      } else {
-        target.classList.remove('border-blue-500', 'text-blue-500');
-      }
-    });
+    if (!this.selectedCurrencyValue) return;
+    this.fetchPreOrder();
   }
 
   fetchPreOrder() {

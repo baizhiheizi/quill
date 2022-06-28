@@ -21,6 +21,19 @@ module Foxswap
       client.post path, json: payload, headers: { Authorization: Rails.application.credentials.dig(:foxswap, :authorization) }
     end
 
+    def pairs
+      path = '/api/pairs'
+      client.get path
+    end
+
+    def swappable_asset_ids
+      Rails.cache.fetch('swappable_asset_ids', expires_in: 1.day) do
+        pairs['data']['pairs'].filter(&->(p) { (p['base_value'].to_f + p['quote_value'].to_f > 50_000) || p['swap_method'] == 'curve' }).map do |p|
+          [p['base_asset_id'], p['quote_asset_id']]
+        end.flatten.uniq
+      end
+    end
+
     def order(order_id, authorization:)
       path = "/api/orders/#{order_id}"
       client.get path, headers: { Authorization: authorization }

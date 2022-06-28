@@ -35,30 +35,20 @@ class Currency < ApplicationRecord
   validates :raw, presence: true
   validates :asset_id, presence: true, uniqueness: true
 
-  has_many :articles, primary_key: :asset_id, foreign_key: :asset_id, dependent: :restrict_with_exception, inverse_of: :currency
-  has_many :orders, primary_key: :asset_id, foreign_key: :asset_id, dependent: :restrict_with_exception, inverse_of: :currency
-  has_many :payments, primary_key: :asset_id, foreign_key: :asset_id, dependent: :restrict_with_exception, inverse_of: :currency
-  has_many :transfers, primary_key: :asset_id, foreign_key: :asset_id, dependent: :restrict_with_exception, inverse_of: :currency
+  has_many :articles, primary_key: :asset_id, foreign_key: :asset_id, dependent: :nullify, inverse_of: :currency
+  has_many :orders, primary_key: :asset_id, foreign_key: :asset_id, dependent: :nullify, inverse_of: :currency
+  has_many :payments, primary_key: :asset_id, foreign_key: :asset_id, dependent: :nullify, inverse_of: :currency
+  has_many :transfers, primary_key: :asset_id, foreign_key: :asset_id, dependent: :nullify, inverse_of: :currency
 
   belongs_to :chain, class_name: 'Currency', primary_key: :asset_id, optional: true, inverse_of: false
 
-  scope :swappable, -> { where(asset_id: SwapOrder::SWAPABLE_ASSETS).order_as_specified(asset_id: SwapOrder::SWAPABLE_ASSETS) }
+  scope :swappable, -> { where(asset_id: SwapOrder::SWAPABLE_ASSETS) }
   scope :pricable, -> { where(asset_id: Article::SUPPORTED_ASSETS) }
   scope :prs, -> { find_by(asset_id: PRS_ASSET_ID) }
   scope :btc, -> { find_by(asset_id: BTC_ASSET_ID) }
 
   def minimal_reward_amount
     BigDecimal(0.5 / price_usd.to_f, 1).to_f
-  end
-
-  def self.find_or_create_by_asset_id(_asset_id)
-    return if _asset_id.blank?
-
-    currency = find_by(asset_id: _asset_id)
-    return currency if currency.present?
-
-    r = PrsdiggBot.api.read_asset(_asset_id)
-    create_with(raw: r['data']).find_or_create_by(asset_id: r['data']&.[]('asset_id'))
   end
 
   def swappable?
@@ -73,7 +63,18 @@ class Currency < ApplicationRecord
   private
 
   def set_defaults
+    if raw.blank? && asset_id.present?
+      self.raw =
+        begin
+          PrsdiggBot.api.asset(asset_id)['data']
+        rescue MixinBot::Error
+          {}
+        end
+    end
+
     assign_attributes(
+      chain_id: raw['chain_id'],
+      asset_id: raw['asset_id'],
       price_usd: raw['price_usd'],
       price_btc: raw['price_btc']
     )

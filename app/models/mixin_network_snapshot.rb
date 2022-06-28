@@ -122,7 +122,7 @@ class MixinNetworkSnapshot < ApplicationRecord
     # not valid payment
     return if opponent.blank? && opponent_wallet.blank?
 
-    Currency.find_or_create_by_asset_id asset_id
+    Currency.find_or_create_by asset_id: asset_id
     Payment
       .create_with(raw: raw)
       .find_or_create_by!(trace_id: trace_id)

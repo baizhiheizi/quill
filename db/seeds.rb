@@ -11,9 +11,9 @@ if Rails.env.development?
 end
 
 (SwapOrder::SWAPABLE_ASSETS || []).each do |asset|
-  Currency.find_or_create_by_asset_id asset
+  Currency.find_or_create_by asset_id: asset
 end
 
 Article::SUPPORTED_ASSETS.each do |asset|
-  Currency.find_or_create_by_asset_id asset
+  Currency.find_or_create_by asset_id: asset
 end
