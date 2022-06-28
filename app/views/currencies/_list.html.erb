@@ -1,14 +1,19 @@
 <div data-controller="select-currency" class="w-full">
   <div class="mb-4">
-    <input data-select-currency-target="seachInput" class="w-full py-2 px-4 bg-zinc-100 rounded" placeholder="symbol" />
+    <input 
+      data-select-currency-target="seachInput" 
+      data-action="select-currency#search"
+      class="w-full py-2 px-4 bg-zinc-100 rounded" placeholder="symbol" />
   </div>
   <div class="grid gap-4 grid-cols-3 sm:grid-cols-4">
     <% currencies.each do |currency| %>
       <div class="flex items-center py-2 hover:bg-zinc-20 cursor-pointer rounded bg-zinc-50 p-2"
+           data-select-currency-target="currencyOption"
            data-modal-identifier-param="<%= identifier %>"
            data-modal-asset-id-param="<%= currency.asset_id %>"
            data-modal-icon-url-param="<%= currency.icon_url %>"
            data-modal-chain-icon-url-param="<%= currency.chain&.icon_url %>"
+           data-modal-symbol-param="<%= currency.symbol %>"
            data-modal-symbol-param="<%= currency.symbol %>"
            data-modal-minimal-reward-amount-param="<%= currency.minimal_reward_amount %>"
           data-action="click->modal#ok">
