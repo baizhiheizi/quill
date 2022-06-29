@@ -8,6 +8,7 @@
 #  price_btc  :decimal(, )
 #  price_usd  :decimal(, )
 #  raw        :jsonb
+#  symbol     :string
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #  asset_id   :uuid
@@ -26,9 +27,7 @@ class Currency < ApplicationRecord
   XIN_ASSET_ID = 'c94ac88f-4671-3976-b60a-09064f1811e8'
   ETH_ASSET_ID = '43d61dcd-e413-450d-80b8-101d5e903357'
 
-  extend OrderAsSpecified
-
-  store :raw, accessors: %i[name symbol icon_url]
+  store :raw, accessors: %i[name icon_url]
 
   before_validation :set_defaults
 
@@ -42,7 +41,7 @@ class Currency < ApplicationRecord
 
   belongs_to :chain, class_name: 'Currency', primary_key: :asset_id, optional: true, inverse_of: false
 
-  scope :swappable, -> { where(asset_id: SwapOrder::SWAPABLE_ASSETS) }
+  scope :swappable, -> { where(asset_id: SwapOrder::SWAPABLE_ASSETS).order(symbol: :asc) }
   scope :pricable, -> { where(asset_id: Article::SUPPORTED_ASSETS) }
   scope :prs, -> { find_by(asset_id: PRS_ASSET_ID) }
   scope :btc, -> { find_by(asset_id: BTC_ASSET_ID) }
@@ -73,6 +72,7 @@ class Currency < ApplicationRecord
     end
 
     assign_attributes(
+      symbol: raw['symbol'],
       chain_id: raw['chain_id'],
       asset_id: raw['asset_id'],
       price_usd: raw['price_usd'],

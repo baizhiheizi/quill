@@ -215,6 +215,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_25_034041) do
     t.decimal "price_usd"
     t.decimal "price_btc"
     t.uuid "chain_id"
+    t.string "symbol"
     t.index ["asset_id"], name: "index_currencies_on_asset_id", unique: true
   end
 

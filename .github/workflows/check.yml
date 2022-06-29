@@ -73,8 +73,7 @@ jobs:
         env:
           RAILS_ENV: test
         run: |
-          bundle exec rails db:create
-          bundle exec rails db:migrate
+          bundle exec rails db:setup
           bundle exec rails test
 
       - name: Build
