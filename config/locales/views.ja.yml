@@ -57,6 +57,8 @@ ja:
   refresh: してみてください
   pay_via_swap_tips:
   please_login: ログインしてください
+  failed_to_connect: 接続に失敗しました
+  connected: が正常に接続されました。ようこそ!
   love_thie_article: 記事にいいねする
   share: シェア
   signature: 署名

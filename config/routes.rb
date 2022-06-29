@@ -15,9 +15,9 @@ Rails.application.routes.draw do
   post '/graphql', to: 'graphql#execute'
 
   get 'login', to: 'sessions#new', as: :login
-  post '/auth/mixin/callback', to: 'sessions#mixin'
-  post '/auth/fennec/callback', to: 'sessions#fennec'
-  post '/auth/mvm/callback', to: 'sessions#mvm'
+  get '/auth/mixin/callback', to: 'sessions#mixin'
+  get '/auth/fennec/callback', to: 'sessions#fennec'
+  get '/auth/mvm/callback', to: 'sessions#mvm'
   get 'logout', to: 'sessions#delete', as: :logout
   post 'nounce', to: 'sessions#nounce'
 

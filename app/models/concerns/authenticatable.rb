@@ -42,9 +42,11 @@ module Authenticatable
     end
 
     def auth_from_mvm_eth(public_key, signature)
-      return unless Eth::Signature.verify Global.redis.get(public_key), signature, public_key
-
+      msg = Global.redis.get public_key
       Global.redis.del public_key
+
+      return if msg.blank?
+      return unless Eth::Signature.verify msg, signature, public_key
 
       res = MVM.api.user public_key
       return if res.blank?

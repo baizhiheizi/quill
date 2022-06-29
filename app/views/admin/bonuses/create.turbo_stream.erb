@@ -1,8 +1,8 @@
-<%= turbo_stream.update "notifications" do %>
+<%= turbo_stream.append "flashes" do %>
   <% if @bonus.errors.present? %>
-    <%= render partial: "notifications/notification", locals: { type: :danger, message: @bonus.errors.full_messages.join(';') } %>
+    <%= render partial: "flashes/flash", locals: { type: :danger, message: @bonus.errors.full_messages.join(';') } %>
   <% else %>
-    <%= render partial: "notifications/notification", locals: { type: :success, message: 'Created' } %>
+    <%= render partial: "flashes/flash", locals: { type: :success, message: 'Created' } %>
   <% end %>
 <% end %>
 

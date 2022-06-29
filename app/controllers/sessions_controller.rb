@@ -15,24 +15,51 @@ class SessionsController < ApplicationController
   end
 
   def mixin
-    user = User.auth_from_mixin params[:code]
-    user_sign_in(user) if user
+    user =
+      begin
+        User.auth_from_mixin params[:code]
+      rescue MixinBot::Error
+        nil
+      end
 
-    redirect_to params[:return_to].presence || root_path
+    if user.present?
+      user_sign_in(user)
+      redirect_to (params[:return_to].presence || root_path), success: t('connected')
+    else
+      redirect_to (params[:return_to].presence || root_path), alert: t('failed_to_connect')
+    end
   end
 
   def fennec
-    user = User.auth_from_fennec params[:token]
-    user_sign_in(user) if user
+    user =
+      begin
+        User.auth_from_fennec params[:token]
+      rescue MixinBot::Error
+        nil
+      end
 
-    redirect_to params[:return_to].presence || root_path
+    if user.present?
+      user_sign_in user
+      redirect_to (params[:return_to].presence || root_path), success: t('connected')
+    else
+      redirect_to (params[:return_to].presence || root_path), alert: t('failed_to_connect')
+    end
   end
 
   def mvm
-    user = User.auth_from_mvm_eth params[:public_key], params[:signature]
-    user_sign_in(user) if user
+    user =
+      begin
+        User.auth_from_mvm_eth params[:public_key], params[:signature]
+      rescue MVM::Error
+        nil
+      end
 
-    redirect_to params[:return_to].presence || root_path
+    if user.present?
+      user_sign_in(user)
+      redirect_to (params[:return_to].presence || root_path), success: t('connected')
+    else
+      redirect_to (params[:return_to].presence || root_path), alert: t('failed_to_connect')
+    end
   end
 
   def nounce
