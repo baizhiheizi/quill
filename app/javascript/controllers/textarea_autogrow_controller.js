@@ -1,5 +1,5 @@
 import { Controller } from '@hotwired/stimulus';
-import debounce from 'debounce';
+import { debounce } from 'underscore';
 
 export default class extends Controller {
   static values = {

@@ -1,9 +1,9 @@
 import { Controller } from '@hotwired/stimulus';
 import { DirectUpload } from '@rails/activestorage';
 import { post, put } from '@rails/request.js';
-import 'easymde';
-import { showLoading, hideLoading } from 'utils';
-import debounce from 'debounce';
+import EasyMDE from 'easymde';
+import { showLoading, hideLoading } from '../utils';
+import { debounce } from 'underscore';
 
 export default class extends Controller {
   static values = {

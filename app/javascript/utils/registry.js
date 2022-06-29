@@ -1,5 +1,5 @@
-import 'web3';
-import { RegistryABI } from 'utils/abis';
+import Web3 from 'web3/dist/web3.min.js';
+import { RegistryABI } from './abis';
 
 export const RegisterAddress = '0x3c84B6C98FBeB813e05a7A7813F0442883450B1F';
 
