@@ -2,8 +2,8 @@
   <div class="flex justify-center pt-8 mb-2">
     <%= image_tag @user.avatar(original: true), class: "rounded-full w-16 h-16 ring-4 ring-white" %>
   </div>
-  <div class="flex justify-center font-bold mb-2">
-    <%= @user.name %>
+  <div class="flex justify-center font-bold mb-2 px-4 max-w-full">
+    <span class="truncate"><%= @user.name %></span>
   </div>
   <div class="flex justify-center">
     <%= render "users/action_buttons", user: @user %>
