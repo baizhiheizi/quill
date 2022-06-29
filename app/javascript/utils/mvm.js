@@ -11,8 +11,11 @@ export async function ensureEthAccountExist() {
   await addMvmChain();
   if (ethereum.chainId !== MVM_CHAIN_ID) return;
 
+  await ethereum.request({ method: 'eth_requestAccounts' });
+
   const web3 = new Web3(ethereum);
   const accounts = await web3.eth.getAccounts();
+
   return {
     account: accounts[0],
     web3,

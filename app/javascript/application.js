@@ -21,7 +21,6 @@ addEventListener('turbo:submit-end', ({ target }) => {
       field.disabled = false;
     }
   }
-  hideLoading();
 });
 
 addEventListener('turbo:load', () => {
