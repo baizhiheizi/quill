@@ -18,21 +18,23 @@ export default class extends Controller {
   ];
 
   connect() {
-    document.addEventListener('modal:ok', (event) => {
-      const identifier = event.detail.identifier;
+    document
+      .querySelector('#modal-slot')
+      .addEventListener('modal:ok', (event) => {
+        const identifier = event.detail.identifier;
 
-      if (identifier === this.identifierValue) {
-        this.assetIdValue = event.detail.assetId;
-        this.assetSymbolValue = event.detail.symbol;
-        this.assetIconUrlValue = event.detail.iconUrl;
+        if (identifier === this.identifierValue) {
+          this.assetIdValue = event.detail.assetId;
+          this.assetSymbolValue = event.detail.symbol;
+          this.assetIconUrlValue = event.detail.iconUrl;
 
-        this.currencyIconTargets.forEach((icon) => {
-          icon.src = event.detail.iconUrl;
-        });
-        this.currencyChainIconTarget.src = event.detail.chainIconUrl;
-        this.currencySymbolTarget.innerText = event.detail.symbol;
-      }
-    });
+          this.currencyIconTargets.forEach((icon) => {
+            icon.src = event.detail.iconUrl;
+          });
+          this.currencyChainIconTarget.src = event.detail.chainIconUrl;
+          this.currencySymbolTarget.innerText = event.detail.symbol;
+        }
+      });
   }
 
   async addToken() {
