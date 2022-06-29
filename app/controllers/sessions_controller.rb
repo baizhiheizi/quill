@@ -24,6 +24,7 @@ class SessionsController < ApplicationController
 
     if user.present?
       user_sign_in(user)
+      user.notify_for_login
       redirect_to (params[:return_to].presence || root_path), success: t('connected')
     else
       redirect_to (params[:return_to].presence || root_path), alert: t('failed_to_connect')

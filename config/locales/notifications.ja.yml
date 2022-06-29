@@ -41,3 +41,5 @@ ja:
       banned: あなたのアカウントは運営により凍結されています。記事の作成やコメントの投稿はできません。
     user_unbanned_notification:
       unbanned: あなたのアカウントの凍結が解除されました。記事の作成やコメントの投稿が可能です。
+    user_connected_notification:
+      message: 歓迎！

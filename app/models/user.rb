@@ -297,6 +297,10 @@ class User < ApplicationRecord
     {}
   end
 
+  def notify_for_login
+    UserConnectedNotification.with(user: self).deliver(self)
+  end
+
   private
 
   def setup_attributes

@@ -41,3 +41,5 @@ zh-CN:
       banned: 你的帐号被管理员限制，不能发表文章或者评论。
     user_unbanned_notification:
       unbanned: 你的帐号限制已解除。
+    user_connected_notification:
+      message: 欢迎来到顶瓜瓜！您也可以浏览网站 prsdigg.com 使用顶瓜瓜的服务，有任何问题可以直接给机器人留言，或者加入 @7000103074 参与讨论。

@@ -41,3 +41,5 @@ en:
       banned: Your account has been banned by admin. You cannot publish articles nor comment.
     user_unbanned_notification:
       unbanned: Your account has recovered to normal. You can publish articles and comment.
+    user_connected_notification:
+      message: Welcome! You may leave messages here if you have any questions.
