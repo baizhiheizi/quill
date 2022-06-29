@@ -29,7 +29,7 @@ class PrsTransaction < ApplicationRecord
   POLLING_INTERVAL = 0.1
   POLLING_START_TIME = Time.new(2021, 1, 1).rfc3339
 
-  belongs_to :prs_account, primary_key: :account, foreign_key: :user_address,\
+  belongs_to :prs_account, primary_key: :account, foreign_key: :user_address, \
                            inverse_of: :transactions, optional: true
 
   store_accessor :raw, :updated_at, prefix: true

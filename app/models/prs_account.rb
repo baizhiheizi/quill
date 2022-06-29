@@ -30,8 +30,8 @@ class PrsAccount < ApplicationRecord
 
   belongs_to :user
 
-  has_many :transactions, class_name: 'PrsTransaction', primary_key: :account,\
-                          foreign_key: :user_address, inverse_of: :prs_account,\
+  has_many :transactions, class_name: 'PrsTransaction', primary_key: :account, \
+                          foreign_key: :user_address, inverse_of: :prs_account, \
                           dependent: :restrict_with_error
 
   validates :keystore, presence: true
