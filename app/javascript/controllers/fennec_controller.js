@@ -1,5 +1,4 @@
 import { Controller } from '@hotwired/stimulus';
-import { post } from '@rails/request.js';
 
 export default class extends Controller {
   static targets = ['loginButton'];
@@ -28,15 +27,12 @@ export default class extends Controller {
     const token = await this.fennec.wallet.signToken({
       payload: { from: location.host },
     });
-    post('/auth/fennec/callback', {
-      contentType: 'application/json',
-      body: {
-        token: token,
-        return_to: location.pathname,
-      },
-    }).then(() => {
-      Turbo.visit(location.pathname);
-    });
+
+    Turbo.visit(
+      `/auth/fennec/callback?token=${token}&return_to=${encodeURIComponent(
+        location.href,
+      )}`,
+    );
   }
 
   async pay(event) {

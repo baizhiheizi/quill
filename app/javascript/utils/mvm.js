@@ -6,12 +6,12 @@ export const MVM_CHAIN_ID = '0x120c7';
 
 export async function ensureEthAccountExist() {
   if (provider !== window.ethereum) return;
-  await addMvmChain();
 
+  await addMvmChain();
   if (ethereum.chainId !== MVM_CHAIN_ID) return;
 
   const web3 = new Web3(ethereum);
-  const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
+  const accounts = await web3.eth.getAccounts();
   return {
     account: accounts[0],
     web3,

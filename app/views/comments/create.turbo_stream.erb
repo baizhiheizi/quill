@@ -9,8 +9,8 @@
   <% end %>
 <% else %>
   <% @comment.errors.full_messages.each do |message| %>
-    <%= turbo_stream.append "notifications" do %>
-      <%= render "notifications/notification", type: :danger, message: message %>
+    <%= turbo_stream.append "flashes" do %>
+      <%= render "flashes/flash", type: :danger, message: message %>
     <% end %>
   <% end %>
 <% end %>

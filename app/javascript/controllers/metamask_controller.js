@@ -15,14 +15,14 @@ const XIN_ASSET_ID = 'c94ac88f-4671-3976-b60a-09064f1811e8';
 export default class extends Controller {
   static targets = ['loginButton', 'waiting'];
 
-  async connect() {
-    const { account, web3 } = await ensureEthAccountExist();
-    this.account = account;
-    this.web3 = web3;
-  }
+  async connect() {}
 
   async login(event) {
     event.preventDefault();
+
+    const { account, web3 } = await ensureEthAccountExist();
+    this.account = account;
+    this.web3 = web3;
 
     if (!this.account) return;
     await this.requestLogin();
@@ -35,16 +35,11 @@ export default class extends Controller {
       this.account,
     );
 
-    post('/auth/mvm/callback', {
-      body: {
-        signature,
-        public_key: this.account,
-        return_to: location.href,
-      },
-      contentType: 'application/json',
-    }).then(() => {
-      Turbo.visit(location.pathname);
-    });
+    Turbo.visit(
+      `/auth/mvm/callback?signature=${signature}&public_key=${
+        this.account
+      }&return_to=${encodeURIComponent(location.href)}`,
+    );
   }
 
   async getNounce() {

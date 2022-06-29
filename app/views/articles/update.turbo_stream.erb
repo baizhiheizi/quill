@@ -4,10 +4,10 @@
 <%= turbo_stream.replace "#{dom_id @article}_updated_at" do %>
   <%= render partial: "articles/updated_at", locals: { article: @article } %>
 <% end %>
-<%= turbo_stream.update "notifications" do %>
+<%= turbo_stream.update "flashes" do %>
   <% if @article.errors.present? %>
-    <%= render partial: "notifications/notification", locals: { type: :danger, message: @article.errors.full_messages.join(';') } %>
+    <%= render partial: "flashes/flash", locals: { type: :danger, message: @article.errors.full_messages.join(';') } %>
   <% else %>
-    <%= render partial: "notifications/notification", locals: { type: :success, message: t('success_updated') } %>
+    <%= render partial: "flashes/flash", locals: { type: :success, message: t('success_updated') } %>
   <% end %>
 <% end %>

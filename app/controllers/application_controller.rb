@@ -9,6 +9,8 @@ class ApplicationController < ActionController::Base
   helper_method :from_mixin_messenger?
   around_action :with_locale
 
+  add_flash_types :success, :warning, :danger, :info
+
   private
 
   def ensure_launched!

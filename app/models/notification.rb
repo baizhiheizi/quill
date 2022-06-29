@@ -30,6 +30,18 @@ class Notification < ApplicationRecord
   after_create_commit { broadcast_as_flash }
 
   def broadcast_as_flash
-    broadcast_prepend_later_to "user_#{recipient.mixin_uuid}", target: 'notifications', partial: 'notifications/notification', locals: { message: to_notification.message, type: :info }
+    broadcast_prepend_later_to "user_#{recipient.mixin_uuid}", target: 'flashes', partial: 'flashes/flash', locals: { message: message, type: :info }
+  end
+
+  def message
+    @message ||= to_notification.message
+  rescue StandardError
+    ''
+  end
+
+  def url
+    @url ||= to_notification.url
+  rescue StandardError
+    ''
   end
 end

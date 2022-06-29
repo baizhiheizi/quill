@@ -57,6 +57,8 @@ zh-CN:
   refresh: 刷新
   pay_via_swap_tips: 您也可以用其他主流币支付
   please_login: 请先登录
+  failed_to_connect: 连接失败，请重试
+  connected: 成功连接，欢迎！
   love_thie_article: 大爱此文
   share: 分享
   signature: 签名

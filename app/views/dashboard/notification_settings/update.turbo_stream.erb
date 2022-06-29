@@ -1,6 +1,6 @@
 <%= turbo_stream.replace "#{dom_id current_user}_notification_setting" do %>
   <%= render "dashboard/settings/notification" %>
 <% end %>
-<%= turbo_stream.append "notifications" do %>
-  <%= render "notifications/notification", message: t('success_updated'), type: :success %>
+<%= turbo_stream.append "flashes" do %>
+  <%= render "flashes/flash", message: t('success_updated'), type: :success %>
 <% end %>

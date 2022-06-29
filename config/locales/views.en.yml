@@ -57,6 +57,8 @@ en:
   refresh: Refresh
   pay_via_swap_tips: You can pay with other token!
   please_login: Please Login
+  failed_to_connect: Failed to connect
+  connected: You've connected. Welcome!
   love_thie_article: Love this Article
   share: Share
   signature: Signature
