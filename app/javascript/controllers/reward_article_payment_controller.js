@@ -25,20 +25,22 @@ export default class extends Controller {
   ];
 
   connect() {
-    document.addEventListener('modal:ok', (event) => {
-      const identifier = event.detail.identifier;
+    document
+      .querySelector('#modal-slot')
+      .addEventListener('modal:ok', (event) => {
+        const identifier = event.detail.identifier;
 
-      if (identifier === this.identifierValue) {
-        this.minimalRewardAmountValue = event.detail.minimalRewardAmount;
-        this.selectedCurrencyValue = event.detail.assetId;
-        this.currencyIconTarget.src = event.detail.iconUrl;
-        this.currencyChainIconTarget.src = event.detail.chainIconUrl;
+        if (identifier === this.identifierValue) {
+          this.minimalRewardAmountValue = event.detail.minimalRewardAmount;
+          this.selectedCurrencyValue = event.detail.assetId;
+          this.currencyIconTarget.src = event.detail.iconUrl;
+          this.currencyChainIconTarget.src = event.detail.chainIconUrl;
 
-        this.currencySymbolTargets.forEach((target) => {
-          target.innerText = event.detail.symbol;
-        });
-      }
-    });
+          this.currencySymbolTargets.forEach((target) => {
+            target.innerText = event.detail.symbol;
+          });
+        }
+      });
   }
 
   invokePayment() {

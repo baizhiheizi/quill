@@ -53,6 +53,7 @@
       </template>
       <span><%= t('pay_with_metamask') %></span>
     </button>
+
     <%= button_to view_modals_path(type: :mvm_deposit), 
       class: "flex justify-center items-center space-x-2 w-full mt-4 mb-2 text-center no-underline cursor-pointer py-2 block bg-indigo-900 hover:bg-indigo-800 active:bg-indigo-700 text-white rounded" do %>
       <%= image_tag 'https://mvm.dev/logo.svg', class: 'h-6 w-auto' %>
