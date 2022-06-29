@@ -10,10 +10,12 @@ if Rails.env.development?
   Administrator.create name: 'admin', password: 'admin'
 end
 
-(SwapOrder::SWAPABLE_ASSETS || []).each do |asset|
-  Currency.find_or_create_by asset_id: asset
-end
+unless Rails.env.test?
+  (SwapOrder::SWAPABLE_ASSETS || []).each do |asset|
+    Currency.find_or_create_by asset_id: asset
+  end
 
-Article::SUPPORTED_ASSETS.each do |asset|
-  Currency.find_or_create_by asset_id: asset
+  Article::SUPPORTED_ASSETS.each do |asset|
+    Currency.find_or_create_by asset_id: asset
+  end
 end
