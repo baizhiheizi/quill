@@ -29,8 +29,8 @@ class ArticleSnapshot < ApplicationRecord
 
   belongs_to :article, primary_key: :uuid, foreign_key: :article_uuid, inverse_of: :snapshots
 
-  has_one :prs_transaction, class_name: 'ArticleSnapshotPrsTransaction', primary_key: :tx_id,\
-                            foreign_key: :tx_id, inverse_of: :article_snapshot,\
+  has_one :prs_transaction, class_name: 'ArticleSnapshotPrsTransaction', primary_key: :tx_id, \
+                            foreign_key: :tx_id, inverse_of: :article_snapshot, \
                             dependent: :restrict_with_error
 
   before_validation :set_defaults, on: :create
