@@ -82,6 +82,7 @@ export default class extends Controller {
     } else {
       this.payERC20({ assetId, symbol, amount, contract, extra });
     }
+    hideLoading();
   }
 
   async payERC20(params) {
@@ -89,31 +90,33 @@ export default class extends Controller {
 
     const registry = new RegistryContract();
     const assetContractAddress = await registry.fetchAssetContract(assetId);
-    if (
-      !assetContractAddress ||
-      !parseInt(assetContractAddress.replaceAll('-', ''))
-    ) {
-      hideLoading();
+    if (!assetContractAddress || !parseInt(assetContractAddress)) {
       notify('Desposit some asset first', 'warning');
       return;
     }
 
     let IERC20 = new this.web3.eth.Contract(ERC20ABI, assetContractAddress);
-    let value = parseInt(parseFloat(amount) * 1e8);
+
+    let payAmount = parseInt(parseFloat(amount) * 1e8);
+    const balance = await IERC20.methods.balanceOf(this.account).call();
+    console.log(balance);
+    if (balance < payAmount) {
+      notify('Insufficient balance', 'warning');
+      return;
+    }
+
     IERC20.methods
-      .transferWithExtra(contract, value, `0x${extra}`)
+      .transferWithExtra(contract, payAmount, `0x${extra}`)
       .send({ from: this.account })
       .on('sent', () => {
         notify(`Invoking MetaMask to pay ${amount} ${symbol}`, 'info');
         this.element.setAttribute('disabled', true);
       })
       .on('transactionHash', () => {
-        hideLoading();
         notify('Already paid', 'success');
         this.element.outerHTML = this.waitingTarget.innerHTML;
       })
       .on('error', (error) => {
-        hideLoading();
         this.element.removeAttribute('disabled');
         notify(error.message, 'danger');
       });
@@ -131,12 +134,10 @@ export default class extends Controller {
         this.element.setAttribute('disabled', true);
       })
       .on('transactionHash', () => {
-        hideLoading();
         notify('Already paid', 'success');
         this.element.outerHTML = this.waitingTarget.innerHTML;
       })
       .on('error', (error) => {
-        hideLoading();
         this.element.removeAttribute('disabled');
         notify(error.message, 'danger');
       });
