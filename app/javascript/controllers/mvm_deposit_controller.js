@@ -47,8 +47,6 @@ export default class extends Controller {
         this.assetIdValue,
       );
 
-      console.log(assetContractAddress);
-
       if (!assetContractAddress || !parseInt(assetContractAddress)) {
         notify(`Desposit some ${this.assetSymbolValue} first`, 'warning');
         return;

@@ -41,7 +41,6 @@ export default class extends Controller {
     }
     event.preventDefault();
     const { assetId, amount, opponentId, memo, traceId } = event.params;
-    console.log(event.params);
 
     await this.initFennec();
     this.fennec.wallet.transfer({
