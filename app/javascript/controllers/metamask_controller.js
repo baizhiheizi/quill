@@ -16,11 +16,10 @@ export default class extends Controller {
   static targets = ['loginButton', 'waiting'];
 
   async login(event) {
-    event.preventDefault();
-
     const { account, web3 } = await ensureEthAccountExist();
     if (!account) return;
 
+    event.preventDefault();
     this.lockButton();
     try {
       const nounce = await this.getNounce(account);
