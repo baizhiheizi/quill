@@ -1,23 +1,24 @@
 <div id="<%= dom_id comment %>" class="flex space-x-2 sm:space-x-4 items-start py-2 w-full">
   <img src="<%= comment.author.avatar %>" class="w-6 h-6 sm:w-8 sm:h-8 rounded-full" />
   <div class="overflow-x-hidden w-full">
-    <div class="flex items-center space-x-2 mb-2 text-sm">
-      <span><%= comment.author.name %></span>
+    <div class="flex items-center space-x-2 mb-2 text-sm truncate">
+      <span class="truncate"><%= comment.author.name %></span>
       <span class="opacity-50"><%= time_ago_in_words comment.created_at %></span>
     </div>
     <div class="prose prose-sm prose-h1:text-base prose-h1:m-0 prose-h2:text-base prose-h2:m-0 prose-h3:text-base prose-h3:m-0 prose-h4:m-0 mb-2 dark:prose-invert">
       <% if comment.quote_comment.present? %>
         <div class="max-h-48 sm:max-h-full overflow-y-scroll scrollbar-hide">
           <blockquote>
-            <div>
-              <%= link_to "@#{comment.quote_comment.author.name}", user_path(comment.quote_comment.author), data: { turbo_frame: "_top" }, class: "no-underline italic" %>
+            <div class="truncate flex items-center">
+              <%= link_to "@#{comment.quote_comment.author.name}", 
+                user_path(comment.quote_comment.author), 
+                data: { turbo_frame: "_top" }, 
+                class: "truncate no-underline italic" %>
               :(
               <%= link_to "##{comment.quote_comment.id}", 
                 view_modals_path(type: :comment_form, quote_comment_id: comment.quote_comment_id),
                 class: "italic",
-                data: {
-                  turbo_method: 'post'
-              } %>
+                data: { turbo_method: 'post' } %>
               )
             </div>
           <%= comment.quote_comment.content_as_html.html_safe %>

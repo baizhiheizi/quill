@@ -61,11 +61,11 @@ const notificationTpl = (type, message) => {
 };
 
 export const notify = (message, type = 'info') => {
-  const slot = document.querySelector('#notifications');
+  const slot = document.querySelector('#flashes');
 
   slot.innerHTML = `
 <div
-  data-controller="notification"
+  data-controller="flash"
   data-notification-delay-value="3000"
   data-transition-enter-from="opacity-0 translate-x-6"
   data-transition-enter-to="opacity-100 translate-x-0"

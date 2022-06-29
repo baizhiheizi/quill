@@ -5,8 +5,8 @@
     <div class="flex space-x-2 sm:space-x-4 items-start py-2 w-full">
       <img src="<%= quote_comment.author.avatar %>" class="w-6 h-6 sm:w-8 sm:h-8 rounded-full" />
       <div class="overflow-x-hidden">
-        <div class="flex items-center space-x-2 mb-2 text-sm">
-          <span><%= quote_comment.author.name %></span>
+        <div class="flex items-center space-x-2 mb-2 text-sm truncate">
+          <span class="truncate"><%= quote_comment.author.name %></span>
           <span class="opacity-50"><%= time_ago_in_words quote_comment.created_at %></span>
         </div>
         <div class=" prose prose-sm prose-h1:text-base prose-h1:m-0 prose-h2:text-base prose-h2:m-0 prose-h3:text-base prose-h3:m-0 prose-h4:m-0 mb-2 dark:prose-invert">

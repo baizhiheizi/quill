@@ -1,7 +1,7 @@
 // Entry point for the build script in your package.json
 import 'abortcontroller-polyfill';
 import '@hotwired/turbo-rails';
-import { hideLoading, showLoading } from 'utils';
+import { hideLoading } from 'utils';
 import 'controllers';
 
 import * as ActiveStorage from '@rails/activestorage';
@@ -13,7 +13,6 @@ addEventListener('turbo:submit-start', ({ target }) => {
       field.disabled = true;
     }
   }
-  showLoading();
 });
 
 addEventListener('turbo:submit-end', ({ target }) => {
@@ -27,10 +26,6 @@ addEventListener('turbo:submit-end', ({ target }) => {
 
 addEventListener('turbo:load', () => {
   hideLoading();
-});
-
-addEventListener('turbo:click', () => {
-  showLoading();
 });
 
 addEventListener('turbo:render', () => {
