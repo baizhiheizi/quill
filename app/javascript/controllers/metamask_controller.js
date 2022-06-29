@@ -1,5 +1,6 @@
 import { Controller } from '@hotwired/stimulus';
 import { post } from '@rails/request.js';
+import detectEthereumProvider from '@metamask/detect-provider';
 import {
   ensureEthAccountExist,
   ERC20ABI,
@@ -9,17 +10,20 @@ import {
   notify,
   showLoading,
   hideLoading,
-} from 'utils';
+} from '../utils';
 const XIN_ASSET_ID = 'c94ac88f-4671-3976-b60a-09064f1811e8';
 
 export default class extends Controller {
   static targets = ['loginButton', 'waiting'];
 
   async login(event) {
+    const provider = await detectEthereumProvider();
+    if (provider !== window.ethereum) return;
+
+    event.preventDefault();
     const { account, web3 } = await ensureEthAccountExist();
     if (!account) return;
 
-    event.preventDefault();
     this.lockButton();
     try {
       const nounce = await this.getNounce(account);

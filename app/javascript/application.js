@@ -1,8 +1,8 @@
 // Entry point for the build script in your package.json
-import 'abortcontroller-polyfill';
+import 'abortcontroller-polyfill/dist/polyfill-patch-fetch';
 import '@hotwired/turbo-rails';
-import { hideLoading } from 'utils';
-import 'controllers';
+import { hideLoading } from './utils';
+import './controllers';
 
 import * as ActiveStorage from '@rails/activestorage';
 ActiveStorage.start();

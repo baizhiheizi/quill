@@ -42,7 +42,7 @@
 
     <%= favicon_link_tag "#{Settings.favicon_file || 'favicon.png'}" %>
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
-    <%= javascript_importmap_tags %>
+    <%= javascript_include_tag "application", "data-turbo-track": "reload", defer: true %>
   </head>
 
   <body class="min-h-screen flex flex-col dark:text-zinc-50">
@@ -69,7 +69,7 @@
       <% end %>
     </div>
     <div class="absolute bottom-0" id="toast-slot">
-      <div id="loading-toast" class="hidden fixed inset-0 z-50 flex items-center justify-center w-full bg-black opacity-60">
+      <div id="loading-toast" class="fixed inset-0 z-50 flex items-center justify-center w-full bg-black opacity-60">
         <%= render "shared/loading" %>
       </div>
     </div>

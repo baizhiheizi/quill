@@ -1,11 +1,11 @@
 import detectEthereumProvider from '@metamask/detect-provider';
-import 'web3';
-import { hideLoading } from 'utils/toast';
+import Web3 from 'web3/dist/web3.min.js';
+import { hideLoading } from './toast';
 
-export const provider = await detectEthereumProvider();
 export const MVM_CHAIN_ID = '0x120c7';
 
 export async function ensureEthAccountExist() {
+  const provider = await detectEthereumProvider();
   if (provider !== window.ethereum) return;
 
   await addMvmChain();
