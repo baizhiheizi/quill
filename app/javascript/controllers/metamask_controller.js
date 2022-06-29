@@ -11,6 +11,7 @@ import {
   showLoading,
   hideLoading,
 } from '../utils';
+import BigNumber from 'bignumber.js';
 const XIN_ASSET_ID = 'c94ac88f-4671-3976-b60a-09064f1811e8';
 
 export default class extends Controller {
@@ -80,16 +81,17 @@ export default class extends Controller {
 
     let IERC20 = new web3.eth.Contract(ERC20ABI, assetContractAddress);
 
-    let payAmount = parseInt(parseFloat(amount) * 1e8);
+    let payAmount = BigNumber(amount).multipliedBy(BigNumber(1e8));
+
     const balance = await IERC20.methods.balanceOf(account).call();
-    if (balance < payAmount) {
+    if (BigNumber(balance).isLessThan(payAmount)) {
       notify('Insufficient balance', 'warning');
       this.unlockButton();
       return;
     }
 
     IERC20.methods
-      .transferWithExtra(contract, payAmount, `0x${extra}`)
+      .transferWithExtra(contract, payAmount.toString(), `0x${extra}`)
       .send({ from: account })
       .on('sent', () => {
         notify(`Invoking MetaMask to pay ${amount} ${symbol}`, 'info');
@@ -112,9 +114,10 @@ export default class extends Controller {
 
     this.lockButton();
 
+    const payAmount = BigNumber(amount).multipliedBy(BigNumber(1e18));
     BridgeContract.methods
       .release(contract, `0x${extra}`)
-      .send({ from: account, value: parseInt(parseFloat(amount) * 1e18) })
+      .send({ from: account, value: payAmount.toString() })
       .on('sent', () => {
         notify(`Invoking MetaMask to pay ${amount} ${symbol}`, 'info');
       })
