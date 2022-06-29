@@ -10,7 +10,7 @@
     <%= csp_meta_tag %>
     <meta name="viewport" content="user-scalable=no,initial-scale=1"/>
 
-    <%= javascript_importmap_tags %>
+    <%= javascript_include_tag "application", "data-turbo-track": "reload", defer: true %>
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
     <%= favicon_link_tag "#{Settings.favicon_file || 'favicon.png'}" %>
   </head>
@@ -32,7 +32,7 @@
       <% end %>
     </div>
     <div class="absolute bottom-0" id="toast-slot">
-      <div id="loading-toast" class="fixed inset-0 z-50 flex items-center justify-center w-full bg-black opacity-30">
+      <div id="loading-toast" class="fixed inset-0 z-50 flex items-center justify-center w-full bg-black/30">
         <%= render "shared/loading" %>
       </div>
     </div>

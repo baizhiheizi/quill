@@ -27,7 +27,7 @@
 
     <%= stylesheet_pack_tag 'landing' %>
     <%= favicon_pack_tag "#{Settings.favicon_file || 'favicon.png'}" %>
-    <%= javascript_importmap_tags %>
+    <%= javascript_include_tag "application", "data-turbo-track": "reload", defer: true %>
   </head>
 
   <body>
