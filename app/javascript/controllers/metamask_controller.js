@@ -17,6 +17,10 @@ const XIN_ASSET_ID = 'c94ac88f-4671-3976-b60a-09064f1811e8';
 export default class extends Controller {
   static targets = ['loginButton', 'waiting'];
 
+  connect() {
+    this.registry = new RegistryContract();
+  }
+
   async login(event) {
     const provider = await detectEthereumProvider();
     if (provider !== window.ethereum) return;
@@ -48,9 +52,16 @@ export default class extends Controller {
     event.preventDefault();
 
     try {
-      const { assetId, symbol, amount, opponentId, memo, contract } =
+      const { assetId, symbol, amount, opponentId, memo, mixinUuid } =
         event.params;
-      if (!contract) return;
+      const contract = await this.registry.fetchUsersContract([mixinUuid], 1);
+      if (!contract || !parseInt(contract)) {
+        notify(
+          'User contract empty, please deposit some asset to first.',
+          'danger',
+        );
+        return;
+      }
 
       const { extra } = await this.fetchExtra(opponentId, memo);
 
@@ -71,8 +82,9 @@ export default class extends Controller {
 
     this.lockButton();
 
-    const registry = new RegistryContract();
-    const assetContractAddress = await registry.fetchAssetContract(assetId);
+    const assetContractAddress = await this.registry.fetchAssetContract(
+      assetId,
+    );
     if (!assetContractAddress || !parseInt(assetContractAddress)) {
       notify('Desposit some asset first', 'warning');
       this.unlockButton();

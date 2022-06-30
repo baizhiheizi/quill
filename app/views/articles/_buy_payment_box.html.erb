@@ -33,7 +33,7 @@
   <% elsif current_user.mvm_eth? %>
     <button data-controller="metamask"
       data-action="metamask#pay"
-      data-metamask-contract-param="<%= current_user.authorization.contract %>"
+      data-metamask-mixin-uuid-param="<%= current_user.mixin_uuid %>"
       data-metamask-trace-id-param="<%= payment_trace_id %>"
       data-metamask-asset-id-param="<%= pay_asset_id %>"
       data-metamask-symbol-param="<%= currency.symbol %>"
