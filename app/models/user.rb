@@ -145,7 +145,7 @@ class User < ApplicationRecord
   end
 
   def bio
-    authorization&.raw&.[]('biography') || I18n.t('user.default_bio')
+    authorization&.raw&.[]('biography') || I18n.t('activerecord.attributes.user.default_bio')
   end
 
   def banned?
