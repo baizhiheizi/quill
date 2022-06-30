@@ -1,5 +1,5 @@
 <div id="<%= dom_id comment %>" class="flex space-x-2 sm:space-x-4 items-start py-2 w-full">
-  <%= link_to user_path(comment.author), class: "w-6 sm:w-8 block", data: { turbo_frame: "_top" } do %>
+  <%= link_to user_path(comment.author), class: "min-w-fit block", data: { turbo_frame: "_top" } do %>
     <img src="<%= comment.author.avatar %>" class="w-6 h-6 sm:w-8 sm:h-8 rounded-full" />
   <% end %>
   <div class="overflow-x-hidden w-full">
