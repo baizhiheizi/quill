@@ -50,12 +50,14 @@ export default class extends Controller {
         this.options();
         break;
     }
-    if (this.autosaveUrlValue) {
-      this.editor.codemirror.on(
-        'change',
-        debounce(() => this.autosave(), 1000),
-      );
+
+    if (this.newRecordValue) {
+      this.recoverDraft();
     }
+    this.editor.codemirror.on(
+      'change',
+      debounce(() => this.autosave(), 1000),
+    );
   }
 
   initMdEditor() {
@@ -117,6 +119,7 @@ export default class extends Controller {
   save() {
     if (this.newRecordValue) {
       this.formTarget.submit();
+      this.clearDraft();
     } else {
       this.formTarget.requestSubmit();
     }
@@ -235,14 +238,36 @@ export default class extends Controller {
 
   autosave() {
     const title = this.element.querySelector('#article_title').value;
+    const content = this.editor.value();
 
-    put(this.autosaveUrlValue, {
-      body: {
-        title,
-        content: this.editor.value(),
-      },
-      contentType: 'application/json',
-      responseKind: 'turbo-stream',
-    });
+    if (this.autosaveUrlValue) {
+      put(this.autosaveUrlValue, {
+        body: {
+          title,
+          content,
+        },
+        contentType: 'application/json',
+        responseKind: 'turbo-stream',
+      });
+    } else {
+      localStorage.setItem(this.draftKey, JSON.stringify({ title, content }));
+    }
+  }
+
+  recoverDraft() {
+    const draft = localStorage.getItem(this.draftKey);
+    if (!draft) return;
+
+    const { title, content } = JSON.parse(draft);
+    this.element.querySelector('#article_title').value = title;
+    this.editor.value(content);
+  }
+
+  clearDraft() {
+    localStorage.removeItem(this.draftKey);
+  }
+
+  get draftKey() {
+    return 'prsdigg_article_draft';
   }
 }
