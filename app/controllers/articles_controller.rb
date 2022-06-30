@@ -7,9 +7,9 @@ class ArticlesController < ApplicationController
 
   def index
     @query = params[:query]
-    @order_by = params[:order_by] || 'default'
+    @filter = params[:filter] || 'default'
     @time_range = params[:time_range]
-    @time_range ||= 'month' if @order_by == 'revenue'
+    @time_range ||= 'month' if @filter == 'revenue'
     @tag = Tag.find_by name: params[:tag].to_s.strip
 
     articles = ArticleSearchService.new(params, current_user).call

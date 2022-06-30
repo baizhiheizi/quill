@@ -1,6 +1,6 @@
 <div class="lg:grid lg:grid-cols-3 lg:gap-x-6">
   <div class="w-full lg:col-span-2 mb-2">
-    <%= render "articles/filter_bar", order_by: @order_by, time_range: @time_range %>
+    <%= render "articles/filter_bar", filter: @filter, time_range: @time_range %>
     <%= render "articles/articles_list", articles: @articles, pagy: @pagy %>
   </div>
   <aside class="lg:col-span-1">

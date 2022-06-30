@@ -4,7 +4,7 @@ class ArticleSearchService
   def initialize(params, current_user = nil)
     @query = params[:query]
     @tag = params[:tag]
-    @order_by = params[:order_by]
+    @filter = params[:filter]
     @time_range = params[:time_range]
     @current_user = current_user
     @articles = Article.published
@@ -14,7 +14,7 @@ class ArticleSearchService
     query
       .filter_block_authors
       .filter_block_by_authors
-      .sort
+      .filter
       .select_in_time_range
 
     @articles
@@ -35,15 +35,17 @@ class ArticleSearchService
     self
   end
 
-  def sort
+  def filter
     @articles =
-      case @order_by
+      case @filter
       when 'lately'
         @articles.order(published_at: :desc)
       when 'revenue'
         @articles.order_by_revenue_usd
       when 'subscribed'
         @articles.where(author_id: @current_user&.subscribe_user_ids).order(published_at: :desc)
+      when 'bought'
+        @articles.where(id: @current_user&.bought_articles.ids).order(published_at: :desc)
       else
         @articles.order_by_popularity
       end

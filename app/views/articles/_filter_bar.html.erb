@@ -1,31 +1,38 @@
 <div class="mb-2 pt-4 sm:pt-0"
   data-controller="tabs"
-  data-tabs-active-tab-value="<%= order_by %>"
+  data-tabs-active-tab-value="<%= filter %>"
   data-tabs-active-class-value="font-bold">
   <div class="w-full flex overflow-auto flex-nowrap scrollbar-hide items-center flex px-2 sm:px-0">
     <%= link_to t('order_by_popularity'), 
-      articles_path(order_by: :default),
+      articles_path(filter: :default),
       class: "cursor-pointer px-2 opacity-70 truncate",
       data: {
         tabs_target: "tab",
         tabs_tabname_param: "default",
       } %>
     <%= link_to t('subscribed'), 
-      articles_path(order_by: :subscribed),
+      articles_path(filter: :subscribed),
       class: "cursor-pointer px-2 opacity-70 truncate",
       data: {
         tabs_target: "tab",
         tabs_tabname_param: "subscribed",
       } if current_user.present? && current_user.subscribe_users.present? %>
+    <%= link_to t('bought'), 
+      articles_path(filter: :bought),
+      class: "cursor-pointer px-2 opacity-70 truncate",
+      data: {
+        tabs_target: "tab",
+        tabs_tabname_param: "bought",
+      } if current_user.present? && current_user.bought_articles_count > 0 %>
     <%= link_to t('order_by_lately'), 
-      articles_path(order_by: :lately),
+      articles_path(filter: :lately),
       class: "cursor-pointer px-2 opacity-70 truncate",
       data: {
         tabs_target: "tab",
         tabs_tabname_param: "lately",
       } %>
     <%= link_to t('order_by_revenue'), 
-      articles_path(order_by: :revenue, time_range: :month),
+      articles_path(filter: :revenue, time_range: :month),
       class: "cursor-pointer px-2 opacity-70 truncate",
       data: {
         tabs_target: "tab",
@@ -33,35 +40,35 @@
       } %>
   </div>
 </div>
-<% if order_by == 'revenue' %>
+<% if filter == 'revenue' %>
   <div class="mb-2 sm:pt-0 text-sm"
     data-controller="tabs"
     data-tabs-active-tab-value="<%= time_range %>"
     data-tabs-active-class-value="font-bold">
     <div class="w-full flex overflow-auto flex-nowrap scrollbar-hide items-center flex px-2 sm:px-0">
       <%= link_to t('in_a_week'), 
-        articles_path(order_by: :revenue, time_range: :week),
+        articles_path(filter: :revenue, time_range: :week),
         class: "cursor-pointer px-2 opacity-70 truncate",
         data: {
           tabs_target: "tab",
           tabs_tabname_param: "week",
         } %>
       <%= link_to t('in_a_month'), 
-        articles_path(order_by: :revenue, time_range: :month),
+        articles_path(filter: :revenue, time_range: :month),
         class: "cursor-pointer px-2 opacity-70 truncate",
         data: {
           tabs_target: "tab",
           tabs_tabname_param: "month",
         } %>
       <%= link_to t('in_a_year'), 
-        articles_path(order_by: :revenue, time_range: :year),
+        articles_path(filter: :revenue, time_range: :year),
         class: "cursor-pointer px-2 opacity-70 truncate",
         data: {
           tabs_target: "tab",
           tabs_tabname_param: "year",
         } %>
       <%= link_to t('all'), 
-        articles_path(order_by: :revenue, time_range: :all),
+        articles_path(filter: :revenue, time_range: :all),
         class: "cursor-pointer px-2 opacity-70 truncate",
         data: {
           tabs_target: "tab",
