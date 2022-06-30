@@ -8,9 +8,9 @@ class API::ValidUsersController < API::BaseController
       if user.blank?
         false
       elsif params[:type] == 'recent'
-        user.payments.completed.where(created_at: 1.week.ago...).sum(:amount).positive? || user.articles.only_published.where(published_at: 1.week.ago...).count.positive?
+        user.payments.where(state: %i[paid completed], created_at: 1.week.ago...).sum(:amount).positive? || user.articles.only_published.where(published_at: 1.week.ago...).count.positive?
       else
-        user.payments.completed.sum(:amount).positive? || user.articles.only_published.count.positive?
+        user.payments.where(state: %i[paid completed]).sum(:amount).positive? || user.articles.only_published.count.positive?
       end
 
     render json: {

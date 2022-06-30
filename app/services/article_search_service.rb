@@ -45,7 +45,7 @@ class ArticleSearchService
       when 'subscribed'
         @articles.where(author_id: @current_user&.subscribe_user_ids).order(published_at: :desc)
       when 'bought'
-        @articles.where(id: @current_user&.bought_articles.ids).order(published_at: :desc)
+        @articles.where(id: @current_user&.bought_articles&.ids).order(published_at: :desc)
       else
         @articles.order_by_popularity
       end
