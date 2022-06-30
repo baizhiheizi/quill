@@ -2,8 +2,8 @@
   "name": "prsdigg",
   "private": true,
   "scripts": {
-    "lint": "prettier --write app/**/*.{tsx,ts,js,gql}",
-    "lint-check": "prettier --check app/**/*.{tsx,ts,js,gql}",
+    "lint": "prettier --write app/javascript/**/*.{tsx,ts,js,gql}",
+    "lint-check": "prettier --check app/javascript/**/*.{tsx,ts,js,gql}",
     "build:css": "tailwindcss -i ./app/assets/stylesheets/application.tailwind.css -o ./app/assets/builds/application.css",
     "build": "esbuild app/javascript/*.* --bundle --sourcemap --outdir=app/assets/builds --public-path=assets --target=chrome58"
   },

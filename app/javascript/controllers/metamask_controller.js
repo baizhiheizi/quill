@@ -57,7 +57,7 @@ export default class extends Controller {
       const contract = await this.registry.fetchUsersContract([mixinUuid], 1);
       if (!contract || !parseInt(contract)) {
         notify(
-          'User contract empty, please deposit some asset to first.',
+          'User contract empty, please deposit some asset first.',
           'danger',
         );
         return;

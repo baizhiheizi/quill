@@ -22,7 +22,6 @@ export class RegistryContract {
     const bufThres = Buffer.alloc(2);
     bufThres.writeUInt16BE(threshold);
     const ids = userIds.join('').replaceAll('-', '');
-    console.log(ids);
     const identity = `0x${bufLen.toString('hex')}${ids}${bufThres.toString(
       'hex',
     )}`;
