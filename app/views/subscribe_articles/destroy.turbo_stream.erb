@@ -1,4 +1,4 @@
-<%= turbo_stream.replace "#{dom_id @article}_subscribe_button" do %>
+<%= turbo_stream.replace_all ".#{dom_id @article}_subscribe_button" do %>
   <%= render "subscribe_articles/subscribe_button", article: @article %>
 <% end %>
 <%= turbo_stream.remove "subscribe_article_#{dom_id @article}" %>

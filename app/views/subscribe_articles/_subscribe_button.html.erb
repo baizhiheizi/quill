@@ -1,4 +1,4 @@
-<div id="<%= dom_id article %>_subscribe_button" >
+<div class="<%= dom_id article %>_subscribe_button" >
   <% if current_user.blank? %>
     <%= link_to t('subscribe'), view_modals_path(type: :login, return_to: article_url(article.uuid)), data: { turbo_method: :post }, class: "block w-full cursor-pointer hover:text-blue-600 rounded text-blue-500 text-center py-1 px-4" %>
   <% elsif current_user.commenting_subscribe_article? article %>

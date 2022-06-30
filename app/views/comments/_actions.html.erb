@@ -1,4 +1,4 @@
-<div id="<%= dom_id comment %>_actions" class="flex items-center space-x-4 opacity-70 text-sm">
+<div class="<%= dom_id comment %>_actions flex items-center space-x-4 opacity-70 text-sm">
   <%= button_to upvoted_comment_path(comment), method: :put, class: "flex items-center space-x-2" do %>
     <% if current_user&.upvote_comment? comment %>
       <span><%= render partial: "shared/icons/thumb_up_solid", locals: { html_class: "w-4 h-4" } %></span>

@@ -3,8 +3,11 @@
 <% end %>
 <% content_for :modal_content do %>
   <%= render partial: "comments/form", locals: { commentable: @commentable, quote_comment: @quote_comment } %>
+  <div class="flex justify-center">
+    <%= render partial: "subscribe_articles/subscribe_button", locals: { article: @commentable } %>
+  </div>
 <% end %>
 
-<%= turbo_stream.append "modal-slot" do %>
+<%= turbo_stream.update "modal-slot" do %>
   <%= render "view_modals/modal", backdrop: 'static' %>
 <% end %>
