@@ -21,7 +21,7 @@ gem 'puma'
 gem 'propshaft'
 
 # Use Turbo in your Ruby on Rails app
-gem 'turbo-rails', github: 'hotwired/turbo-rails'
+gem 'turbo-rails'
 
 # Use Stimulus in your Ruby on Rails app
 gem 'stimulus-rails'

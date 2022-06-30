@@ -1,12 +1,3 @@
-GIT
-  remote: https://github.com/hotwired/turbo-rails.git
-  revision: 3355f2fae0a2bd3653ccccc62d9395b677c4ee1f
-  specs:
-    turbo-rails (1.1.1)
-      actionpack (>= 6.0.0)
-      activejob (>= 6.0.0)
-      railties (>= 6.0.0)
-
 GEM
   remote: https://rubygems.org/
   specs:
@@ -96,7 +87,7 @@ GEM
     ast (2.4.2)
     awesome_print (1.9.2)
     aws-eventstream (1.2.0)
-    aws-partitions (1.601.0)
+    aws-partitions (1.602.0)
     aws-sdk-core (3.131.2)
       aws-eventstream (~> 1, >= 1.0.2)
       aws-partitions (~> 1, >= 1.525.0)
@@ -455,6 +446,10 @@ GEM
     strscan (3.0.3)
     thor (1.2.1)
     timeout (0.3.0)
+    turbo-rails (1.1.1)
+      actionpack (>= 6.0.0)
+      activejob (>= 6.0.0)
+      railties (>= 6.0.0)
     tzinfo (2.0.4)
       concurrent-ruby (~> 1.0)
     unf (0.1.4)
@@ -537,7 +532,7 @@ DEPENDENCIES
   spring
   spring-watcher-listen (~> 2.0.0)
   stimulus-rails
-  turbo-rails!
+  turbo-rails
   tzinfo-data
   web-console (>= 3.3.0)
   webdrivers
