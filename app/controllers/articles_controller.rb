@@ -49,7 +49,6 @@ class ArticlesController < ApplicationController
     if @article.save
       redirect_to edit_article_path(@article.uuid)
     else
-      flash.now.alert = @article.errors.full_messages.join(';') || ':('
       render :new, status: :unprocessable_entity, layout: 'editor'
     end
   end

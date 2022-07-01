@@ -4,6 +4,7 @@ import { post, put } from '@rails/request.js';
 import EasyMDE from 'easymde';
 import { showLoading, hideLoading } from '../utils';
 import { debounce } from 'underscore';
+import { clearCache } from '@hotwired/turbo';
 
 export default class extends Controller {
   static values = {
@@ -28,6 +29,11 @@ export default class extends Controller {
     'articleReferenceRevenueRatio',
   ];
 
+  initialize() {
+    this.autosave = this.autosave.bind(this);
+    this.submit = this.submit.bind(this);
+  }
+
   connect() {
     if (this.hasImagesTarget) {
       this.directUploadUrl = this.imagesTarget.dataset.directUploadUrl;
@@ -35,6 +41,10 @@ export default class extends Controller {
       this.directUploadAttachmentName =
         this.imagesTarget.dataset.directUploadAttachmentName;
     }
+
+    this.autosave = debounce(this.autosave, 1000);
+    this.submit = debounce(this.submit, 1000);
+    clearCache();
   }
 
   formTargetConnected() {
@@ -54,10 +64,7 @@ export default class extends Controller {
     if (this.newRecordValue) {
       this.recoverDraft();
     }
-    this.editor.codemirror.on(
-      'change',
-      debounce(() => this.autosave(), 1000),
-    );
+    this.editor.codemirror.on('change', this.autosave);
   }
 
   initMdEditor() {
@@ -116,13 +123,14 @@ export default class extends Controller {
     });
   }
 
-  save() {
+  submit() {
     if (this.newRecordValue) {
       this.formTarget.submit();
       this.clearDraft();
     } else {
       this.formTarget.requestSubmit();
     }
+    clearCache();
   }
 
   formatReferenceRatio(e) {
@@ -138,6 +146,7 @@ export default class extends Controller {
 
     e.target.value = ratio.toFixed(2);
     this.calReferenceRatio();
+    this.submit();
   }
 
   calReferenceRatio() {
