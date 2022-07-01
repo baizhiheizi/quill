@@ -379,7 +379,7 @@ GEM
       pkg-config (~> 1.4)
       rubyzip (~> 2.3)
     redcarpet (3.5.1)
-    redis (4.7.0)
+    redis (4.7.1)
     redis-namespace (1.8.2)
       redis (>= 3.0.4)
     redis-objects (1.7.0)
@@ -517,7 +517,7 @@ DEPENDENCIES
   rails-i18n
   ransack
   redcarpet
-  redis (~> 4.1)
+  redis (~> 4.7)
   redis-namespace
   redis-objects
   requestjs-rails
