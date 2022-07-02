@@ -1,6 +1,12 @@
 import { Controller } from '@hotwired/stimulus';
 import { get } from '@rails/request.js';
-import { RegistryContract, notify, showLoading, hideLoading } from '../utils';
+import {
+  RegistryContract,
+  notify,
+  showLoading,
+  hideLoading,
+  XIN_ASSET_ID,
+} from '../utils';
 
 export default class extends Controller {
   static values = {
@@ -15,6 +21,7 @@ export default class extends Controller {
     'currencyIcon',
     'currencyChainIcon',
     'currencySymbol',
+    'addTokenButton',
   ];
 
   connect() {
@@ -39,6 +46,7 @@ export default class extends Controller {
 
   async addToken() {
     if (!this.assetIdValue) return;
+    if (this.assetIdValue == XIN_ASSET_ID) return;
 
     showLoading();
     try {
@@ -89,8 +97,14 @@ export default class extends Controller {
 
   assetIdValueChanged() {
     if (!this.assetIdValue) return;
-
     this.fetchDesination();
+
+    if (!this.hasAddTokenButtonTarget) return;
+    if (this.assetIdValue == XIN_ASSET_ID) {
+      this.addTokenButtonTarget.classList.add('hidden');
+    } else {
+      this.addTokenButtonTarget.classList.remove('hidden');
+    }
   }
 
   fetchDesination() {

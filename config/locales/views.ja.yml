@@ -46,6 +46,7 @@ ja:
   order_by_revenue: 収益
   tags: タグ
   comments_zone: コメント
+  comment: コメント
   more_to_read: 内容はまだ続きます
   pay: 続きを読むためには
   to_continue_reading: が必要です
@@ -260,3 +261,6 @@ ja:
   first_deposit_tips: For first deposit to new address, please try a small amount! 
   deposit_receive_tips: Deposit will receive after at least 16 blocks confirmation.
   deposit_to_mvm: Desposit to MVM
+  add: 追加
+  to: への
+  you_need_some_xin_as_gas_to_use_mvm: You need some XIN as gas to use MVM. After deposit, you may get some from faucet(comming soon).

@@ -46,6 +46,7 @@ zh-CN:
   order_by_revenue: 营收最多
   tags: 话题
   comments_zone: 评论区
+  comment: 评论
   more_to_read: 以下还有 90% 内容
   pay: 支付
   to_continue_reading: 继续阅读
@@ -269,3 +270,6 @@ zh-CN:
   first_deposit_tips: 向新地址第一次充值时，请少量尝试！
   deposit_receive_tips: 所有充值到帐需要至少 16 个区块确认
   deposit_to_mvm: 充值至 MVM
+  add: 添加
+  to: 至
+  you_need_some_xin_as_gas_to_use_mvm: 使用 MVM 转账需要一点点 XIN 作为燃料费(Gas)。充值资产后，您可以免费领取一些 XIN（即将上线）。
