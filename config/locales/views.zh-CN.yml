@@ -15,6 +15,7 @@ zh-CN:
   save: 保存
   paid: 支付了
   delete: 删除
+  pay: 支付
   pay_with_mixin: Mixin 支付
   pay_with_fennec: Fennec 支付
   pay_with_metamask: MetaMask 支付

@@ -1,0 +1,10 @@
+<% content_for :modal_title do %>
+  <%= t('connect_wallet') %>
+<% end %>
+<% content_for :modal_content do %>
+  <%= render "sessions/walletconnect" %>
+<% end %>
+
+<%= turbo_stream.update "modal-slot" do %>
+  <%= render "view_modals/modal", backdrop: 'static' %>
+<% end %>
