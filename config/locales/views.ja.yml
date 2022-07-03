@@ -15,6 +15,7 @@ ja:
   save: 保存
   paid: 支払い済み
   delete: 削除
+  pay: 支払う
   pay_with_mixin: Linksで支払う
   pay_with_fennec: Fennecで支払う
   pay_with_metamask: MetaMaskで支払う

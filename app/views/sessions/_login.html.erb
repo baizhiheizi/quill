@@ -1,6 +1,6 @@
 <div class="flex justify-center px-4 mb-2">
   <%= link_to login_path(return_to: params[:return_to] || request.referer), 
-    class: "p-4 bg-stone-100 hover:bg-stone-200 rounded-lg flex items-center justify-between text-lg w-72 border border-stone-300" do %>
+    class: "p-4 bg-stone-100 hover:bg-stone-200 rounded-lg flex items-center justify-between text-lg w-96 border border-stone-300" do %>
     <div class="w-8 h-8 flex">
       <%= image_tag (Settings.mixin_logo_file || 'mixin-logo.png'), class: 'w-full h-auto' %>
     </div>
@@ -14,7 +14,7 @@
     data-action="fennec#login" 
     href="https://pando.im/fennec"
     target="_blank"
-    class="p-4 bg-stone-100 hover:bg-stone-200 rounded-lg flex items-center justify-between text-lg w-72 border border-stone-300">
+    class="p-4 bg-stone-100 hover:bg-stone-200 rounded-lg flex items-center justify-between text-lg w-96 border border-stone-300">
     <div class="w-8 h-8 flex">
       <%= image_tag 'fennec-logo.png', class: 'w-full h-auto' %>
     </div>
@@ -27,7 +27,7 @@
     data-action="metamask#login" 
     href="https://metamask.io"
     target="_blank"
-    class="p-4 bg-stone-100 hover:bg-stone-200 rounded-lg flex items-center justify-between text-lg w-72 border border-stone-300">
+    class="p-4 bg-stone-100 hover:bg-stone-200 rounded-lg flex items-center justify-between text-lg w-96 border border-stone-300">
     <div class="w-8 h-8 flex">
       <%= image_tag 'https://docs.metamask.io/metamask-fox.svg', class: 'w-full h-auto' %>
     </div>
@@ -35,15 +35,12 @@
   </a>
 </div>
 
-<div data-controller="wallet-connect" class="flex justify-center px-4 mb-2">
-  <a data-metamask-target="loginButton" 
-    data-action="wallet-connect#login" 
-    href="https://walletconnect.com"
-    target="_blank"
-    class="p-4 bg-stone-100 hover:bg-stone-200 rounded-lg flex items-center justify-between text-lg w-72 border border-stone-300">
+<div class="flex justify-center px-4 mb-2">
+  <%= button_to view_modals_path(type: :walletconnect), 
+    class: "p-4 bg-stone-100 hover:bg-stone-200 rounded-lg flex items-center justify-between text-lg w-96 border border-stone-300" do %>
     <div class="w-8 h-8 flex">
       <%= image_tag 'https://docs.walletconnect.com/img/walletconnect-logo.svg', class: 'w-full h-auto' %>
     </div>
     <span>WalletConnect</span>
-  </a>
+  <% end %>
 </div>

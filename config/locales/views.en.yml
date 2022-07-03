@@ -15,6 +15,7 @@ en:
   save: Save
   paid: Paid
   delete: Delete
+  pay: Pay
   pay_with_mixin: Pay with Mixin
   pay_with_fennec: Pay with Fennec
   pay_with_metamask: Pay with MetaMask
