@@ -1,25 +1,21 @@
 import { Controller } from '@hotwired/stimulus';
 import {
-  RegistryContract,
   notify,
   showLoading,
   hideLoading,
-  initMetaMask,
+  initWalletConnect,
   authorize,
+  payWithMVM,
 } from '../utils';
-import { payWithMVM } from '../utils/pay';
 
 export default class extends Controller {
-  static targets = ['loginButton', 'waiting'];
-
-  connect() {
-    this.registry = new RegistryContract();
-  }
+  connect() {}
 
   async login(event) {
     event.preventDefault();
 
-    await initMetaMask();
+    await initWalletConnect();
+
     this.lockButton();
     try {
       await authorize();
@@ -35,10 +31,10 @@ export default class extends Controller {
     const { assetId, symbol, amount, opponentId, memo, mixinUuid } =
       event.params;
 
-    await initMetaMask();
+    await initWalletConnect();
     this.lockButton();
     try {
-      notify(`Invoking MetaMask to pay ${amount} ${symbol}`, 'info');
+      notify(`Invoking WalletConnect to pay ${amount} ${symbol}`, 'info');
       await payWithMVM(
         { assetId, symbol, amount, opponentId, memo, mixinUuid },
         () => {

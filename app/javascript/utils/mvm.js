@@ -1,10 +1,11 @@
 import detectEthereumProvider from '@metamask/detect-provider';
 import Web3 from 'web3/dist/web3.min.js';
+import WalletConnectProvider from '@walletconnect/web3-provider/dist/umd/index.min.js';
 import { hideLoading } from './toast';
 
 export const MVM_CHAIN_ID = '0x120c7';
 
-export async function ensureEthAccountExist() {
+export async function initMetaMask() {
   const provider = await detectEthereumProvider();
   if (provider !== window.ethereum) return;
 
@@ -13,13 +14,20 @@ export async function ensureEthAccountExist() {
 
   await ethereum.request({ method: 'eth_requestAccounts' });
 
-  const web3 = new Web3(ethereum);
-  const accounts = await web3.eth.getAccounts();
+  window.w3 = new Web3(ethereum);
+}
 
-  return {
-    account: accounts[0],
-    web3,
-  };
+export async function initWalletConnect() {
+  const provider = new WalletConnectProvider({
+    rpc: {
+      73927: 'https://geth.mvm.dev',
+    },
+    chainId: 73927,
+    supportedChainIds: [73927],
+  });
+
+  await provider.enable();
+  window.w3 = new Web3(provider);
 }
 
 export async function addMvmChain() {
