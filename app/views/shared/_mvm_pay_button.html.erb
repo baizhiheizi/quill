@@ -1,0 +1,37 @@
+<button data-controller="mvm-pay"
+  data-action="mvm-pay#pay"
+  data-mvm-pay-mixin-uuid-param="<%= mixin_uuid %>"
+  data-mvm-pay-trace-id-param="<%= trace_id %>"
+  data-mvm-pay-asset-id-param="<%= asset_id %>"
+  data-mvm-pay-symbol-param="<%= symbol %>"
+  data-mvm-pay-icon-url-param="<%= icon_url %>"
+  data-mvm-pay-amount-param="<%= amount %>"
+  data-mvm-pay-memo-param="<%= memo %>"
+  data-mvm-pay-opponent-id-param="<%= opponent_id %>"
+  class="flex justify-center space-x-4 items-center w-72 max-w-full my-4 text-center no-underline cursor-pointer py-2 block bg-blue-600 hover:bg-blue-700 active:bg-blue-700 text-white rounded-full">
+
+  <div class="w-8 h-8 flex">
+    <%= image_tag 'https://docs.metamask.io/metamask-fox.svg',
+      data: {
+        mvm_pay_target: 'metaMaskIcon'
+      },
+      class: 'hidden w-full h-auto' %>
+
+    <%= image_tag 'https://docs.walletconnect.com/img/walletconnect-logo.svg', 
+      data: {
+        mvm_pay_target: 'walletConnectIcon'
+      },
+      class: 'hidden w-full h-auto' %>
+  </div>
+
+  <span class="text-lg"><%= t('pay') %></span>
+
+  <template data-mvm-pay-target="waiting">
+    <div class="w-full">
+      <%= render partial: "shared/loading" %>
+      <div class="text-sm text-center opacity-70">
+        <%= t('waiting_for_payment') %>
+      </div>
+    </div>
+  </template>
+</button>

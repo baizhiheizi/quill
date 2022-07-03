@@ -31,34 +31,17 @@
       <span><%= t('pay_with_fennec') %></span>
     </a>
   <% elsif current_user.mvm_eth? %>
-    <button data-controller="metamask"
-      data-action="metamask#pay"
-      data-metamask-mixin-uuid-param="<%= current_user.mixin_uuid %>"
-      data-metamask-trace-id-param="<%= payment_trace_id %>"
-      data-metamask-asset-id-param="<%= pay_asset_id %>"
-      data-metamask-symbol-param="<%= currency.symbol %>"
-      data-metamask-icon-url-param="<%= currency.icon_url %>"
-      data-metamask-amount-param="<%= payment_amount %>"
-      data-metamask-memo-param="<%= article.buy_payment_memo %>"
-      data-metamask-opponent-id-param="<%= current_user&.wallet_id || article.wallet_id %>"
-      class="flex justify-center items-center space-x-2 w-full mt-4 mb-2 text-center no-underline cursor-pointer py-2 block bg-stone-600 hover:bg-stone-700 active:bg-stone-500 text-white rounded">
-      <%= image_tag 'https://docs.metamask.io/metamask-fox.svg', class: 'h-6 w-auto' %>
-      <template data-metamask-target="waiting">
-        <div>
-          <%= render partial: "shared/loading" %>
-          <div class="text-sm text-center opacity-70">
-            <%= t('waiting_for_payment') %>
-          </div>
-        </div>
-      </template>
-      <span><%= t('pay_with_metamask') %></span>
-    </button>
+    <%= render "shared/mvm_pay_button", 
+      mixin_uuid: current_user.mixin_uuid, 
+      trace_id: payment_trace_id, 
+      asset_id: pay_asset_id, 
+      symbol: currency.symbol, 
+      icon_url: currency.icon_url, 
+      amount: payment_amount, 
+      memo: article.buy_payment_memo, 
+      opponent_id: (current_user&.wallet_id || article.wallet_id) %>
 
-    <%= button_to view_modals_path(type: :mvm_deposit), 
-      class: "flex justify-center items-center space-x-2 w-full mt-4 mb-2 text-center no-underline cursor-pointer py-2 block bg-violet-900 hover:bg-violet-800 active:bg-violet-700 text-white rounded" do %>
-      <%= image_tag 'https://mvm.dev/logo.svg', class: 'h-6 w-auto' %>
-      <div><%= t('deposit_to_mvm') %></div>
-    <% end %>
+    <%= render "shared/mvm_deposit_button" %>
   <% else %>
     <% unless from_mixin_messenger? %>
       <div data-controller="qrcode" 

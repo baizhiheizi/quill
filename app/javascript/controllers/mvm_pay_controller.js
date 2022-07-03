@@ -1,32 +1,30 @@
 import { Controller } from '@hotwired/stimulus';
 import {
-  RegistryContract,
   notify,
   showLoading,
   hideLoading,
   initMetaMask,
-  authorize,
+  initWalletConnect,
 } from '../utils';
 import { payWithMVM } from '../utils/pay';
 
 export default class extends Controller {
-  static targets = ['loginButton', 'waiting'];
+  static targets = ['metaMaskIcon', 'walletConnectIcon', 'waiting'];
 
-  connect() {
-    this.registry = new RegistryContract();
+  initialize() {
+    const walletConnect = localStorage.getItem('walletconnect');
+    this.walletConnect = walletConnect && JSON.parse(walletConnect);
   }
 
-  async login(event) {
-    event.preventDefault();
+  metaMaskIconTargetConnected() {
+    !this.walletConnect &&
+      ethereum.isMetaMask &&
+      this.metaMaskIconTarget.classList.remove('hidden');
+  }
 
-    await initMetaMask();
-    this.lockButton();
-    try {
-      await authorize();
-    } catch (error) {
-      notify(error.message, 'danger');
-      this.unlockButton();
-    }
+  walletConnectIconTargetConnected() {
+    this.walletConnect &&
+      this.walletConnectIconTarget.classList.remove('hidden');
   }
 
   async pay(event) {
@@ -35,10 +33,25 @@ export default class extends Controller {
     const { assetId, symbol, amount, opponentId, memo, mixinUuid } =
       event.params;
 
-    await initMetaMask();
+    if (this.walletConnect && this.walletConnect.connected) {
+      await initWalletConnect();
+    } else if (ethereum && ethereum.isConnected()) {
+      await initMetaMask();
+    } else {
+      notify('No wallet connected', 'danger');
+      return;
+    }
+
     this.lockButton();
     try {
-      notify(`Invoking MetaMask to pay ${amount} ${symbol}`, 'info');
+      notify(
+        `Invoking ${
+          w3.currentProvider.isMetaMask
+            ? 'MetaMask'
+            : this.walletConnect.peerMeta.name
+        } to pay ${amount} ${symbol}`,
+        'info',
+      );
       await payWithMVM(
         { assetId, symbol, amount, opponentId, memo, mixinUuid },
         () => {

@@ -25,6 +25,9 @@ application.register('confirm', ConfirmController);
 import DarkmodeController from './darkmode_controller.js';
 application.register('darkmode', DarkmodeController);
 
+import DisconnectController from './disconnect_controller.js';
+application.register('disconnect', DisconnectController);
+
 import DropdownController from './dropdown_controller.js';
 application.register('dropdown', DropdownController);
 
@@ -51,6 +54,9 @@ application.register('modal', ModalController);
 
 import MvmDepositController from './mvm_deposit_controller.js';
 application.register('mvm-deposit', MvmDepositController);
+
+import MvmPayController from './mvm_pay_controller.js';
+application.register('mvm-pay', MvmPayController);
 
 import NestedFormController from './nested_form_controller.js';
 application.register('nested-form', NestedFormController);
@@ -93,3 +99,6 @@ application.register('textarea-autogrow', TextareaAutogrowController);
 
 import ToastController from './toast_controller.js';
 application.register('toast', ToastController);
+
+import WalletConnectController from './wallet_connect_controller.js';
+application.register('wallet-connect', WalletConnectController);
