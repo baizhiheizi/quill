@@ -9,7 +9,8 @@
      data-mvm-deposit-identifier-value="<%= identifier %>">
 
   <div class="p-4 rounded bg-blue-100 text-blue-500 font-bold mb-4">
-    <%= t('you_need_some_xin_as_gas_to_use_mvm') %>
+    <p><%= t('you_need_some_xin_as_gas_to_use_mvm') %></p>
+    <p><%= t('you_may_get_some_from_faucet') %></p>
   </div>
 
   <%= button_to view_modals_path(type: :swappable_currencies, identifier: identifier), 
@@ -36,7 +37,7 @@
         <%= t('address') %>
       </a>
       <a class="flex-1 text-center cursor-pointer py-1 border-b" data-tabs-target="tab" data-tabs-tabname-param='mixin' data-action="click->tabs#active">
-        <%= t('mixin') %>
+        <%= t('mixin_contact') %>
       </a>
     </div>
     <div class="hidden" data-tabs-target="content" data-tabs-content-param="address">

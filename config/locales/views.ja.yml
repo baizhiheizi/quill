@@ -265,4 +265,6 @@ ja:
   deposit_to_mvm: Desposit to MVM
   add: 追加
   to: への
-  you_need_some_xin_as_gas_to_use_mvm: You need some XIN as gas to use MVM. After deposit, you may get some from faucet(comming soon).
+  you_need_some_xin_as_gas_to_use_mvm: You need some XIN as gas to use MVM.
+  you_may_get_some_from_faucet: After deposit, you may get some from faucet(comming soon).
+  address: アドレス

@@ -274,4 +274,6 @@ zh-CN:
   deposit_to_mvm: 充值至 MVM
   add: 添加
   to: 至
-  you_need_some_xin_as_gas_to_use_mvm: 使用 MVM 转账需要一点点 XIN 作为燃料费(Gas)。充值资产后，您可以免费领取一些 XIN（即将上线）。
+  you_need_some_xin_as_gas_to_use_mvm: 使用 MVM 转账需要一点点 XIN 作为燃料费(Gas)。
+  you_may_get_some_from_faucet: 充值资产后，您可以免费领取一些 XIN（即将上线）。
+  address: 地址

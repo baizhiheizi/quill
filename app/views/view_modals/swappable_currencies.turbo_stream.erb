@@ -2,7 +2,7 @@
   <%= t('select_asset') %>
 <% end %>
 <% content_for :modal_content do %>
-  <%= render "currencies/list", currencies: SwapOrder::FOXSWAP_ENABLE ? Currency.swappable : Currency.pricable, identifier: params[:identifier] %>
+  <%= render "currencies/list", currencies: Currency.swappable, identifier: params[:identifier] %>
 <% end %>
 
 <%= turbo_stream.append "modal-slot" do %>

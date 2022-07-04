@@ -48,7 +48,7 @@ class ApplicationController < ActionController::Base
   end
 
   def from_mixin_messenger?
-    request&.user_agent&.include?('Mixin')
+    request&.user_agent&.match?(/Mixin|Links/)
   end
 
   def browser_locale

@@ -51,7 +51,7 @@ class Currency < ApplicationRecord
   end
 
   def swappable?
-    SwapOrder::FOXSWAP_ENABLE && asset_id.in?(SwapOrder::SWAPABLE_ASSETS)
+    asset_id.in? SwapOrder::SWAPABLE_ASSETS
   end
 
   def sync!

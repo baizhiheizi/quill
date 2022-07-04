@@ -34,3 +34,4 @@ addEventListener('turbo:render', () => {
 addEventListener('turbo:frame-render', () => {
   hideLoading();
 });
+
