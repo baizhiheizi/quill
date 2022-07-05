@@ -23,6 +23,9 @@
       <div class="col-span-1 flex items-center">
         <%= article.downvotes_count %> <%= render "shared/icons/thumb_down", html_class: "w-4 h-4" %>
       </div>
+      <div class="col-span-1 flex items-center">
+        <%= article.price %> <%= image_tag article.currency.icon_url, class: "w-4 h-4" %>
+      </div>
     </div>
   </div>
   <div class="text-blue-500 flex items-center space-x-4 sm:justify-end">
