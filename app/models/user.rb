@@ -301,12 +301,18 @@ class User < ApplicationRecord
     UserConnectedNotification.with(user: self).deliver(self)
   end
 
+  def display_uid
+    return uid if messenger?
+
+    "#{uid.first(6)}...#{uid.last(4)}"
+  end
+
   private
 
   def setup_attributes
     self.uid =
       if mixin_id == '0'
-        SecureRandom.alphanumeric 10
+        authorization.uid.gsub('-', '')
       else
         mixin_id
       end

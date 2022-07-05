@@ -3,7 +3,7 @@
     <img class="w-12 h-12 rounded-full" src="<%= author.avatar %>" />
     <div class="truncate">
       <div class="text-xl font-bold truncate"><%= author.name %></div>
-      <div class="text-base text-gray-500">@<%= author.uid %></div>
+      <div class="text-base text-gray-500 truncate">@<%= author.display_uid %></div>
     </div>
     <%= link_to user_path(author) do %>
       <span aria-hidden="true" class="absolute inset-0"></span>
