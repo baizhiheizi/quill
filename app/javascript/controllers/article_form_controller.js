@@ -4,7 +4,6 @@ import { post, put } from '@rails/request.js';
 import EasyMDE from 'easymde';
 import { showLoading, hideLoading } from '../utils';
 import { debounce } from 'underscore';
-import { clearCache } from '@hotwired/turbo';
 
 export default class extends Controller {
   static values = {
@@ -12,6 +11,7 @@ export default class extends Controller {
     articleUuid: String,
     newRecord: Boolean,
     activeTab: String,
+    articlePublished: Boolean,
   };
   static targets = [
     'form',
@@ -27,6 +27,9 @@ export default class extends Controller {
     'authorRevenueRatio',
     'referenceRevenueRatio',
     'articleReferenceRevenueRatio',
+    'currencyIcon',
+    'currencyChainIcon',
+    'currencySymbol',
   ];
 
   initialize() {
@@ -44,7 +47,30 @@ export default class extends Controller {
 
     this.autosave = debounce(this.autosave, 1000);
     this.submit = debounce(this.submit, 1000);
-    clearCache();
+
+    if (!this.articlePublishedValue) {
+      document
+        .querySelector('#modal-slot')
+        .addEventListener('modal:ok', (event) => {
+          const identifier = event.detail.identifier;
+
+          if (identifier === this.articleUuidValue) {
+            Array.from(
+              this.element.querySelector('#article_asset_id').children,
+            ).forEach((option) => {
+              if (option.value === event.detail.assetId) {
+                option.selected = true;
+              } else {
+                option.selected = false;
+              }
+            });
+            this.currencyIconTarget.src = event.detail.iconUrl;
+            this.currencyChainIconTarget.src = event.detail.chainIconUrl;
+            this.currencySymbolTarget.innerText = event.detail.symbol;
+            this.submit();
+          }
+        });
+    }
   }
 
   formTargetConnected() {
@@ -124,13 +150,13 @@ export default class extends Controller {
   }
 
   submit() {
+    showLoading();
     if (this.newRecordValue) {
       this.formTarget.submit();
       this.clearDraft();
     } else {
       this.formTarget.requestSubmit();
     }
-    clearCache();
   }
 
   formatReferenceRatio(e) {

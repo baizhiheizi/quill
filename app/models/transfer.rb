@@ -65,8 +65,6 @@ class Transfer < ApplicationRecord
   scope :unprocessed, -> { where(processed_at: nil) }
   scope :processed, -> { where.not(processed_at: nil) }
   scope :only_user_revenue, -> { where(transfer_type: %i[author_revenue reader_revenue]) }
-  scope :only_prs, -> { where(asset_id: Currency::PRS_ASSET_ID) }
-  scope :only_btc, -> { where(asset_id: Currency::BTC_ASSET_ID) }
 
   def snapshot_id
     snapshot&.[]('snapshot_id')

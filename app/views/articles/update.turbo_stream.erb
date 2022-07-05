@@ -1,9 +1,11 @@
 <%= turbo_stream.replace "edit_article_#{@article.id}" do %>
-  <%= render partial: "articles/form", locals: { article: @article } %>
+  <%= render "articles/form", article: @article %>
 <% end %>
+
 <%= turbo_stream.replace "#{dom_id @article}_updated_at" do %>
-  <%= render partial: "articles/updated_at", locals: { article: @article } %>
+  <%= render "articles/updated_at", article: @article %>
 <% end %>
+
 <%= turbo_stream.update "flashes" do %>
   <% if @article.errors.present? %>
     <%= render partial: "flashes/flash", locals: { type: :danger, message: @article.errors.full_messages.join(';') } %>

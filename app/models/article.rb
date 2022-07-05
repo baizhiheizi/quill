@@ -41,10 +41,6 @@
 
 class Article < ApplicationRecord
   SUPPORTED_ASSETS = Settings.supported_assets || [Currency::BTC_ASSET_ID]
-  MINIMUM_PRICE_PRS = 1
-  MINIMUM_PRICE_BTC = 0.000_001
-  MINIMUM_PRICE_JPYC = 100
-  MINIMUM_PRICE_PUSD = 0.1
   AUTHOR_REVENUE_RATIO_DEFAULT = 0.5
   READERS_REVENUE_RATIO_DEFAULT = 0.4
   PLATFORM_REVENUE_RATIO_DEFAULT = 0.1
@@ -102,6 +98,7 @@ class Article < ApplicationRecord
   validate :ensure_price_not_too_low
   validate :ensure_references_ratios_correct
   validate :ensure_revenue_ratios_sum_to_one
+  validate :can_not_change_currency_after_published
 
   before_validation :setup_attributes, on: :create
   before_validation :set_default_intro
@@ -467,13 +464,17 @@ class Article < ApplicationRecord
     )
 
     self.asset_id = Currency::BTC_ASSET_ID if asset_id.blank?
-    self.price = MINIMUM_PRICE_BTC if price.blank? && asset_id == Currency::BTC_ASSET_ID
-    self.price = MINIMUM_PRICE_JPYC if price.blank? && asset_id == Currency::JPYC_ASSET_ID
-    self.price = MINIMUM_PRICE_PUSD if price.blank? && asset_id == Currency::PUSD_ASSET_ID
+    self.price = currency.minimal_price_amount if price.blank?
   end
 
   def set_default_intro
     self.intro = default_intro if intro.blank?
+  end
+
+  def can_not_change_currency_after_published
+    return if published_at.blank?
+
+    errors.add(:asset_id, 'cannot change') if asset_id_changed?
   end
 
   def ensure_author_account_normal
@@ -483,14 +484,7 @@ class Article < ApplicationRecord
   end
 
   def ensure_price_not_too_low
-    case asset_id
-    when Currency::BTC_ASSET_ID
-      errors.add(:price, ['>=', MINIMUM_PRICE_BTC, 'BTC'].join(' ')) if price.positive? && price < MINIMUM_PRICE_BTC.to_d
-    when Currency::JPYC_ASSET_ID
-      errors.add(:price, ['>=', MINIMUM_PRICE_JPYC, 'JPYC'].join(' ')) if price.positive? && price < MINIMUM_PRICE_JPYC.to_d
-    when Currency::PUSD_ASSET_ID
-      errors.add(:price, ['>=', MINIMUM_PRICE_PUSD, 'pUSD'].join(' ')) if price.positive? && price < MINIMUM_PRICE_PUSD.to_d
-    end
+    errors.add(:price, 'too low') if price.positive? && price < currency.minimal_price_amount
   end
 
   def ensure_revenue_ratios_sum_to_one

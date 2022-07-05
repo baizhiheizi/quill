@@ -56,8 +56,6 @@ class Order < ApplicationRecord
   enum order_type: { buy_article: 0, reward_article: 1, cite_article: 2 }
 
   delegate :price_tag, to: :payment, prefix: true
-  scope :only_prs, -> { where(asset_id: Currency::PRS_ASSET_ID) }
-  scope :only_btc, -> { where(asset_id: Currency::BTC_ASSET_ID) }
 
   after_create :subscribe_comments_for_buyer, :broadcast_to_views
   after_create_commit :complete_payment_async, :update_cache_async, :notify_async, :distribute_async
@@ -91,8 +89,9 @@ class Order < ApplicationRecord
       item.orders.where('id < ? and created_at < ?', id, created_at).order(created_at: :desc)
   end
 
-  def early_orders_total
-    @early_orders_total ||= early_orders.sum(:value_btc)
+  def early_orders_with_the_same_currency
+    @early_orders_with_the_same_currency ||=
+      early_orders.where.not(asset_id: asset_id).blank?
   end
 
   def collect_early_readers
@@ -113,16 +112,24 @@ class Order < ApplicationRecord
     # payment maybe swapped
     revenue_asset_id = payment.swap_order&.fill_asset_id || payment.asset_id
 
-    # the present orders
-    _orders = early_orders
-
     # total investment
-    sum = _orders.sum(:value_btc)
+    sum =
+      if early_orders_with_the_same_currency
+        early_orders.sum(:total)
+      else
+        early_orders.sum(:value_btc)
+      end
 
     # create reader transfer
     _readers_amount = 0
     collect_early_readers.each do |reader_id, order_ids|
-      share = early_orders.where(trace_id: order_ids).sum(:value_btc)
+      share =
+        if early_orders_with_the_same_currency
+          early_orders.where(trace_id: order_ids).sum(:total)
+        else
+          early_orders.where(trace_id: order_ids).sum(:value_btc)
+        end
+
       # ignore if amount is less than minium amout for Mixin Network
       _amount = (amount * share.to_f / sum).floor(8)
       next if (_amount - MINIMUM_AMOUNT).negative?

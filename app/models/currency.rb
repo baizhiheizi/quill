@@ -20,7 +20,6 @@
 #
 
 class Currency < ApplicationRecord
-  PRS_ASSET_ID = '3edb734c-6d6f-32ff-ab03-4eb43640c758'
   BTC_ASSET_ID = 'c6d0c728-2624-429b-8e0d-d9d19b6592fa'
   JPYC_ASSET_ID = '0ff3f325-4f34-334d-b6c0-a3bd8850fc06'
   PUSD_ASSET_ID = '31d2ea9c-95eb-3355-b65b-ba096853bc18'
@@ -43,15 +42,22 @@ class Currency < ApplicationRecord
 
   scope :swappable, -> { where(asset_id: SwapOrder::SWAPABLE_ASSETS).order(symbol: :asc) }
   scope :pricable, -> { where(asset_id: Article::SUPPORTED_ASSETS) }
-  scope :prs, -> { find_by(asset_id: PRS_ASSET_ID) }
   scope :btc, -> { find_by(asset_id: BTC_ASSET_ID) }
 
   def minimal_reward_amount
     BigDecimal(0.5 / price_usd.to_f, 1).to_f
   end
 
+  def minimal_price_amount
+    BigDecimal(0.1 / price_usd.to_f, 1).to_f
+  end
+
   def swappable?
     asset_id.in? SwapOrder::SWAPABLE_ASSETS
+  end
+
+  def pricable?
+    asset_id.in? Article::SUPPORTED_ASSETS
   end
 
   def sync!

@@ -15,11 +15,22 @@ addEventListener('turbo:submit-start', ({ target }) => {
   }
 });
 
-addEventListener('turbo:submit-end', ({ target }) => {
+const FetchMethod = { get: 0 };
+addEventListener('turbo:submit-end', async ({ target, detail }) => {
   if (target && target.elements) {
     for (const field of target.elements) {
       field.disabled = false;
     }
+  }
+  hideLoading();
+
+  const nonGetFetch =
+    detail.formSubmission.fetchRequest.method !== FetchMethod.get;
+  const responseHTML = await detail.fetchResponse.responseHTML;
+  if (detail.success && nonGetFetch && responseHTML) {
+    setTimeout(() => {
+      Turbo.clearCache();
+    }, '1000');
   }
 });
 
@@ -34,4 +45,3 @@ addEventListener('turbo:render', () => {
 addEventListener('turbo:frame-render', () => {
   hideLoading();
 });
-

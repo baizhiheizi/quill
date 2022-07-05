@@ -3,6 +3,8 @@
   data-article-form-new-record-value="false" 
   data-article-form-autosave-url-value="<%= article_update_content_path(@article) %>" 
   data-article-form-active-tab-value="edit" 
+  data-article-form-article-uuid-value="<%= @article.uuid %>" 
+  data-article-form-article-published-value="<%= @article.published_at? %>" 
   class="h-screen flex flex-col">
   <div class="py-2 px-4 sm:py-4 sm:px-0 flex space-x-4">
     <div 
@@ -25,14 +27,15 @@
     </div>
   </div>
   <div class="flex-1 overflow-y-scroll bg-white dark:bg-zinc-900 border-t border-b sm:rounded-lg sm:scrollbar-hide sm:border dark:border-zinc-800 relative pb-4 max-w-full">
-    <%= render partial: "articles/form", locals: { article: @article } %>
+    <%= render "articles/form", article: @article %>
+
     <div data-article-form-target="preview" id="article-preview" class="hidden">
-      <%= render partial: "articles/preview", locals: { content: @article.content } %>
+      <%= render "articles/preview", content: @article.content %>
     </div>
   </div>
   <% if @article.persisted? %>
     <div class="px-4 sm:px-0 pt-2">
-      <%= render partial: "articles/updated_at", locals: { article: @article } %>
+      <%= render "articles/updated_at", article: @article %>
     </div>
   <% end %>
   <div class="py-2 px-4 sm:py-4 sm:px-0 flex justify-between">

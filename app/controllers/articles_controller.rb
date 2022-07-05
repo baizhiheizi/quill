@@ -90,22 +90,28 @@ class ArticlesController < ApplicationController
   end
 
   def update_article_params
-    permitted = [
-      :title,
-      :content,
-      :asset_id,
-      :intro,
-      :author_revenue_ratio,
-      :references_revenue_ratio,
-      { article_references_attributes: %i[
-        id
-        reference_type
-        reference_id
-        revenue_ratio
-        _destroy
-      ] }
+    permitted = %i[
+      title
+      content
+      intro
     ]
+
     permitted.push(:price) if !@article.published_at? || (!@article.free? && params[:article][:price].to_d.positive?)
+    unless @article.published_at?
+      permitted.push(
+        :author_revenue_ratio,
+        :references_revenue_ratio,
+        :asset_id,
+        { article_references_attributes: %i[
+          id
+          reference_type
+          reference_id
+          revenue_ratio
+          _destroy
+        ] }
+      )
+    end
+
     params
       .require(:article)
       .permit(permitted)

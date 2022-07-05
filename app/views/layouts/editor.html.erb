@@ -11,7 +11,7 @@
       name='viewport'
       content='minimum-scale=1, initial-scale=1, width=device-width, user-scalable=no, shrink-to-fit=no'
     />
-    <meta name="turbo-cache-control" content="reload">
+    <meta name="turbo-visit-control" content="reload">
 
     <meta name="theme-color" content="#fff" />
 
@@ -49,7 +49,7 @@
       <% end %>
     </div>
     <div class="absolute bottom-0" id="toast-slot">
-      <div id="loading-toast" class="fixed inset-0 z-50 flex items-center justify-center w-full bg-black/30">
+      <div id="loading-toast" class="hidden fixed inset-0 z-50 flex items-center justify-center w-full bg-black/30">
         <%= render "shared/loading" %>
       </div>
     </div>
