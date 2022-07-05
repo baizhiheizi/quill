@@ -90,6 +90,11 @@
           },
           class: "focus:ring-blue-500 focus:border-blue-500 flex-1 block w-full rounded sm:text-sm border-zinc-300 dark:bg-zinc-900", placeholder: "Input price" %>
       </div>
+      <% if form.object.currency.present? %>
+        <div class="py-2 font-sm opacity-70 text-right">
+          ≈ $<%= (form.object.price * form.object.currency.price_usd).floor(2) %>
+        </div>
+      <% end %>
       <% if form.object.errors.where(:price).present? %>
         <div class="py-2 text-red-700 font-sm"><%= form.object.errors.where(:price).map(&:full_message).join(';') %></div>
       <% end %>
