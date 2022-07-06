@@ -9,7 +9,7 @@ module Users
         when 'published'
           @user.articles.published
         when 'bought'
-          @user.bought_articles
+          @user.bought_articles.published
         end
 
       @pagy, @articles = pagy_countless articles.order(published_at: :desc)
