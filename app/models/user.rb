@@ -53,8 +53,6 @@ class User < ApplicationRecord
   has_one :wallet, class_name: 'MixinNetworkUser', as: :owner, dependent: :nullify
   has_one :notification_setting, dependent: :destroy
 
-  before_validation :setup_attributes, on: :create
-
   validates :name, presence: true
   validates :mixin_id, presence: true
   validates :mixin_uuid, presence: true
@@ -305,16 +303,5 @@ class User < ApplicationRecord
     return uid if messenger?
 
     "#{uid.first(6)}...#{uid.last(4)}"
-  end
-
-  private
-
-  def setup_attributes
-    self.uid =
-      if mixin_id == '0'
-        authorization.uid.gsub('-', '')
-      else
-        mixin_id
-      end
   end
 end

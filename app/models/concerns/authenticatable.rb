@@ -74,7 +74,8 @@ module Authenticatable
           avatar_url: auth.raw['avatar_url'],
           name: auth.raw['full_name'],
           mixin_id: auth.raw['identity_number'] || '0',
-          mixin_uuid: auth.raw['user_id']
+          mixin_uuid: auth.raw['user_id'],
+          uid: auth.mixin? ? auth.raw['identity_number'] : auth.uid.gsub('-', '')
         )
         auth.update user: user
       end
