@@ -23,8 +23,12 @@ class Tag < ApplicationRecord
   scope :recommended, -> { order(articles_count: :desc, created_at: :desc) }
   scope :hot, lambda {
     joins(:articles)
-      .where(articles: { created_at: (1.month.ago)... })
-      .group(:id)
+      .where(
+        articles: {
+          state: :published,
+          created_at: (1.month.ago)...
+        }
+      ).group(:id)
       .select(
         <<~SQL.squish
           tags.*,
