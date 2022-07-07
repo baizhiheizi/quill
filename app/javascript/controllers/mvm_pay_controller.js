@@ -5,9 +5,9 @@ import { payWithMVM } from '../utils/pay';
 export default class extends Controller {
   static targets = ['metaMaskIcon', 'walletConnectIcon', 'waiting'];
 
-  initialize() {
+  async initialize() {
     try {
-      initWallet();
+      await initWallet();
     } catch (error) {
       notify(error.message, 'danger');
     }
@@ -37,7 +37,7 @@ export default class extends Controller {
         `Invoking ${
           w3.currentProvider.isMetaMask
             ? 'MetaMask'
-            : this.walletConnect.peerMeta.name
+            : w3.currentProvider.wc.peerMeta.name
         } to pay ${amount} ${symbol}`,
         'info',
       );
