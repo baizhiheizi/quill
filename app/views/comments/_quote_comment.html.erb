@@ -5,7 +5,7 @@
     <% end %>
     <div class="overflow-x-hidden">
       <%= link_to user_path(quote_comment.author), class: "flex no-underline items-center space-x-2 mb-2 text-sm truncate", data: { turbo_frame: "_top" } do %>
-        <span class="truncate"><%= quote_comment.author.name %></span>
+        <span class="truncate"><%= quote_comment.author.short_name %></span>
         <span class="opacity-50"><%= time_ago_in_words quote_comment.created_at %></span>
       <% end %>
       <div class=" prose prose-sm prose-h1:text-base prose-h1:m-0 prose-h2:text-base prose-h2:m-0 prose-h3:text-base prose-h3:m-0 prose-h4:m-0 mb-2 dark:prose-invert">
@@ -13,7 +13,7 @@
           <div class="max-h-48 overflow-y-scroll scrollbar-hide">
             <blockquote>
               <div>
-                <%= link_to "@#{quote_comment.quote_comment.author.name}", user_path(quote_comment.quote_comment.author), data: { turbo_frame: "_top" }, class: "no-underline italic" %>
+                <%= link_to "@#{quote_comment.quote_comment.author.short_name}", user_path(quote_comment.quote_comment.author), data: { turbo_frame: "_top" }, class: "no-underline italic" %>
                 :(
                 <%= link_to "##{quote_comment.quote_comment.id}", 
                   view_modals_path(type: :comment_form, quote_comment_id: quote_comment.quote_comment_id),

@@ -3,7 +3,7 @@
     <div class="relative flex items-center space-x-2 truncate">
       <img class="w-10 h-10 rounded-full" src="<%= article.author.avatar  %>" />
       <div class="truncate">
-        <div class="text-base font-bold truncate"><%= article.author.name %></div>
+        <div class="text-base font-bold truncate"><%= article.author.short_name %></div>
         <div class="text-xs sm:text-sm opacity-50">
           <% if (Time.current - article.published_at) < 24.hours %>
             <%= time_ago_in_words article.published_at %>

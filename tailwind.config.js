@@ -12,6 +12,22 @@ module.exports = {
       dark: '#1b1c1e',
     }),
     extend: {
+      minWidth: {
+        1: '0.25rem',
+        2: '0.5rem',
+        4: '1rem',
+        8: '2rem',
+        16: '4rem',
+        32: '8rem',
+        64: '16rem',
+        72: '18rem',
+        80: '20rem',
+        96: '24rem',
+        md: '28rem',
+        lg: '32rem',
+        xl: '36rem',
+        '2xl': '42rem',
+      },
       minHeight: {
         'screen-1/2': '50vh',
         'screen-1/3': '33vh',

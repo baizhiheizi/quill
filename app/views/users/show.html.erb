@@ -2,8 +2,18 @@
   <div class="flex justify-center pt-8 mb-2">
     <%= image_tag @user.avatar(original: true), class: "rounded-full w-16 h-16 ring-4 ring-white" %>
   </div>
-  <div class="flex justify-center font-bold mb-2 px-4 max-w-full">
-    <span class="truncate"><%= @user.name %></span>
+  <div class="mb-2 px-4 max-w-full">
+    <% if @user.mvm_eth? %>
+      <div class="flex justify-center mb-2 px-4">
+        <%= link_to @user.mvm_address_url, 
+          target: "_blank",
+          class: "flex items-center space-x-2 rounded bg-zinc-200 py-1 px-2 opacity-70 hover:bg-zinc-300 hover:opacity-100 text-sm" do %>
+          <div><%= @user.short_uid %></div>
+          <%= render "shared/icons/external_link", html_class: "w-4 h-4 font-bold" %>
+        <% end %>
+      </div>
+    <% end %>
+    <div class="font-bold text-center truncate"><%= @user.name %></div>
   </div>
   <div class="flex justify-center">
     <%= render "users/action_buttons", user: @user %>

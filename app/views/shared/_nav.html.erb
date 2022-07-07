@@ -32,6 +32,7 @@
           </a>
         </div>
       </div>
+
       <div class="flex items-center ml-4 md:ml-6">
         <div class="" data-controller="darkmode">
           <a class="hidden block mr-3 cursor-pointer" data-darkmode-target="lightButton" data-action="darkmode#toggle">
@@ -56,7 +57,7 @@
         <!-- Profile dropdown -->
         <% if current_user.present? %>
           <div data-controller="dropdown" class="relative ml-3">
-            <div>
+            <div class="">
               <button data-action="dropdown#toggle click@window->dropdown#hide" 
                 type="button" 
                 class="flex items-center max-w-xs text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-blue-500 focus:ring-white" 
@@ -66,6 +67,7 @@
                 <img class="w-8 h-8 rounded-full" src=<%= current_user.avatar %> alt="">
               </button>
             </div>
+
             <div data-dropdown-target="menu" 
                 data-transition-enter-active="transition ease-out duration-100"
                 data-transition-enter-from="transform opacity-0 scale-95"
@@ -78,24 +80,49 @@
                 aria-orientation="vertical" 
                 aria-labelledby="user-menu-button" 
                 tabindex="-1">
-                <%= link_to t("dashboard"), dashboard_root_path, class: "block px-4 py-2 text-sm opacity-70 hover:bg-zinc-100 dark:hover:bg-zinc-800", role: "menuitem", tabindex: "-1" %>
-                <%= link_to t("fair"), page_path('fair'), class: "block px-4 py-2 text-sm opacity-70 hover:bg-zinc-100 dark:hover:bg-zinc-800" %>
-                <%= link_to t("rules"), page_path('rules'), class: "block px-4 py-2 text-sm opacity-70 hover:bg-zinc-100 dark:hover:bg-zinc-800" %>
-                <%= link_to t("disconnect"), 
-                  logout_path, 
-                  data: {
-                    controller: 'disconnect',
-                    action: 'disconnect#clearWalletCache'
-                  },
-                  class: "block px-4 py-2 text-sm opacity-70 hover:bg-zinc-100 dark:hover:bg-zinc-800", 
-                  role: "menuitem", 
-                  tabindex: "-1" %>
-              </div>
+              <%= link_to t("dashboard"), 
+                dashboard_root_path, 
+                class: "block px-4 py-2 text-sm opacity-70 hover:bg-zinc-100 dark:hover:bg-zinc-800", 
+                role: "menuitem", 
+                tabindex: "-1" %>
+              <%= link_to t("fair"), 
+                page_path('fair'), 
+                class: "block px-4 py-2 text-sm opacity-70 hover:bg-zinc-100 dark:hover:bg-zinc-800" %>
+              <%= link_to t("rules"), 
+                page_path('rules'), 
+                class: "block px-4 py-2 text-sm opacity-70 hover:bg-zinc-100 dark:hover:bg-zinc-800" %>
+              <%= link_to t("desposit"), 
+                view_modals_path(type: :mvm_deposit), 
+                data: { turbo_method: :post },
+                class: "block px-4 py-2 text-sm opacity-70 hover:bg-zinc-100 dark:hover:bg-zinc-800" if current_user.mvm_eth? %>
+              <%= link_to t("disconnect"), 
+                logout_path, 
+                data: {
+                  controller: 'disconnect',
+                  action: 'disconnect#clearWalletCache'
+                },
+                class: "block px-4 py-2 text-sm opacity-70 hover:bg-zinc-100 dark:hover:bg-zinc-800", 
+                role: "menuitem", 
+                tabindex: "-1" %>
             </div>
-          <% else %>
-            <%= link_to 'Connect Wallet', view_modals_path(type: :login), data: { turbo_method: :post }, class: "hover:bg-blue-600 bg-blue-500 text-white px-3 py-2 rounded" %>
+          </div>
+          <% if current_user.mvm_eth? %>
+            <div class="ml-2">
+              <%= link_to current_user.mvm_address_url, 
+                target: "_blank",
+                class: "flex items-center text-sm rounded bg-zinc-100 px-2 py-1 opacity-70 hover:bg-zinc-200 hover:opacity-100" do %>
+                <div><%= current_user.short_uid %></div>
+                <%= render "shared/icons/external_link", html_class: "w-4 h-4 font-bold" %>
+              <% end %>
+            </div>
           <% end %>
-        </div>
+        <% else %>
+          <%= link_to t('connect_wallet'), 
+            view_modals_path(type: :login), 
+            data: { turbo_method: :post }, 
+            class: "hover:bg-blue-600 bg-blue-500 text-white px-3 py-2 rounded" %>
+        <% end %>
+      </div>
     </div>
   </div>
 </nav>

@@ -295,13 +295,29 @@ class User < ApplicationRecord
     {}
   end
 
+  def mvm_address_url
+    return unless mvm_eth?
+
+    Addressable::URI.new(
+      scheme: 'https',
+      host: 'scan.mvm.dev',
+      path: "address/#{uid}"
+    ).to_s
+  end
+
   def notify_for_login
     UserConnectedNotification.with(user: self).deliver(self)
   end
 
-  def display_uid
+  def short_uid
     return uid if messenger?
 
-    "#{uid.first(6)}...#{uid.last(4)}"
+    uid.first(6)
+  end
+
+  def short_name
+    return name unless mvm_eth?
+
+    "#{name.first(6)}...#{name.last(4)}"
   end
 end

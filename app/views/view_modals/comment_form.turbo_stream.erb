@@ -3,7 +3,7 @@
 <% end %>
 <% content_for :modal_content do %>
   <%= render partial: "comments/form", locals: { commentable: @commentable, quote_comment: @quote_comment } %>
-  <div class="flex justify-center">
+  <div class="flex justify-center sm:hidden">
     <%= render partial: "subscribe_articles/subscribe_button", locals: { article: @commentable } %>
   </div>
 <% end %>
