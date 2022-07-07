@@ -18,6 +18,7 @@ export default class extends Controller {
 
   metaMaskIconTargetConnected() {
     !this.walletConnect &&
+      window.ethereum &&
       ethereum.isMetaMask &&
       this.metaMaskIconTarget.classList.remove('hidden');
   }
@@ -35,7 +36,7 @@ export default class extends Controller {
 
     if (this.walletConnect && this.walletConnect.connected) {
       await initWalletConnect();
-    } else if (ethereum && ethereum.isConnected()) {
+    } else if (window.ethereum && ethereum.isConnected()) {
       await initMetaMask();
     } else {
       notify('No wallet connected', 'danger');

@@ -5,7 +5,6 @@ import {
   hideLoading,
   initWalletConnect,
   authorize,
-  payWithMVM,
 } from '../utils';
 
 export default class extends Controller {
@@ -19,34 +18,6 @@ export default class extends Controller {
     this.lockButton();
     try {
       await authorize();
-    } catch (error) {
-      notify(error.message, 'danger');
-      this.unlockButton();
-    }
-  }
-
-  async pay(event) {
-    event.preventDefault();
-
-    const { assetId, symbol, amount, opponentId, memo, mixinUuid } =
-      event.params;
-
-    await initWalletConnect();
-    this.lockButton();
-    try {
-      notify(`Invoking WalletConnect to pay ${amount} ${symbol}`, 'info');
-      await payWithMVM(
-        { assetId, symbol, amount, opponentId, memo, mixinUuid },
-        () => {
-          notify('Successfully paid', 'success');
-          this.unlockButton();
-          this.element.outerHTML = this.waitingTarget.innerHTML;
-        },
-        (error) => {
-          notify(error.message, 'danger');
-          this.unlockButton();
-        },
-      );
     } catch (error) {
       notify(error.message, 'danger');
       this.unlockButton();
