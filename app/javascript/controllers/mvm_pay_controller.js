@@ -1,30 +1,27 @@
 import { Controller } from '@hotwired/stimulus';
-import {
-  notify,
-  showLoading,
-  hideLoading,
-  initMetaMask,
-  initWalletConnect,
-} from '../utils';
+import { notify, showLoading, hideLoading, initWallet } from '../utils';
 import { payWithMVM } from '../utils/pay';
 
 export default class extends Controller {
   static targets = ['metaMaskIcon', 'walletConnectIcon', 'waiting'];
 
   initialize() {
-    const walletConnect = localStorage.getItem('walletconnect');
-    this.walletConnect = walletConnect && JSON.parse(walletConnect);
+    try {
+      initWallet();
+    } catch (error) {
+      notify(error.message, 'danger');
+    }
   }
 
   metaMaskIconTargetConnected() {
-    !this.walletConnect &&
-      window.ethereum &&
-      ethereum.isMetaMask &&
+    window.w3 &&
+      w3.currentProvider.isMetaMask &&
       this.metaMaskIconTarget.classList.remove('hidden');
   }
 
   walletConnectIconTargetConnected() {
-    this.walletConnect &&
+    window.w3 &&
+      w3.currentProvider.wc &&
       this.walletConnectIconTarget.classList.remove('hidden');
   }
 
@@ -33,15 +30,6 @@ export default class extends Controller {
 
     const { assetId, symbol, amount, opponentId, memo, mixinUuid } =
       event.params;
-
-    if (this.walletConnect && this.walletConnect.connected) {
-      await initWalletConnect();
-    } else if (window.ethereum && ethereum.isConnected()) {
-      await initMetaMask();
-    } else {
-      notify('No wallet connected', 'danger');
-      return;
-    }
 
     this.lockButton();
     try {

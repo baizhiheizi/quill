@@ -5,6 +5,21 @@ import { hideLoading } from './toast';
 
 export const MVM_CHAIN_ID = '0x120c7';
 
+export async function initWallet() {
+  if (window.w3) return;
+
+  let walletConnect = localStorage.getItem('walletconnect');
+  walletConnect = walletConnect && JSON.parse(walletConnect);
+
+  if (this.walletConnect && this.walletConnect.connected) {
+    await initWalletConnect();
+  } else if (window.ethereum && ethereum.isConnected()) {
+    await initMetaMask();
+  } else {
+    throw new Error('No wallet connected');
+  }
+}
+
 export async function initMetaMask() {
   const provider = await detectEthereumProvider();
   if (provider !== window.ethereum) return;
