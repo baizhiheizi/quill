@@ -5,7 +5,7 @@
   <div class="w-full flex overflow-auto flex-nowrap scrollbar-hide items-center flex border-b dark:border-zinc-800 px-4 mb-4">
     <%= link_to t('subscribing'), 
       dashboard_subscriptions_path(tab: :subscribing),
-      class: "cursor-pointer py-1 px-4 border-blue-500 text-zinc-600 min-w-fit",
+      class: "cursor-pointer py-1 px-4 border-blue-500 opacity-70 min-w-fit",
       data: {
         tabs_target: "tab",
         tabs_tabname_param: "subscribing", 
@@ -13,7 +13,7 @@
       } %>
     <%= link_to t('subscribers'), 
       dashboard_subscriptions_path(tab: :subscribers),
-      class: "cursor-pointer py-1 px-4 border-blue-500 text-zinc-600 min-w-fit",
+      class: "cursor-pointer py-1 px-4 border-blue-500 opacity-70 min-w-fit",
       data: {
         tabs_target: "tab",
         tabs_tabname_param: "subscribers",
@@ -21,7 +21,7 @@
       } %>
     <%= link_to t('blocking'), 
       dashboard_subscriptions_path(tab: :blocking),
-      class: "cursor-pointer py-1 px-4 border-blue-500 text-zinc-600 min-w-fit",
+      class: "cursor-pointer py-1 px-4 border-blue-500 opacity-70 min-w-fit",
       data: {
         tabs_target: "tab",
         tabs_tabname_param: "blocking",
@@ -29,7 +29,7 @@
       } %>
     <%= link_to t('commenting_subscriptions'), 
       dashboard_subscriptions_path(tab: :comments),
-      class: "cursor-pointer py-1 px-4 border-blue-500 text-zinc-600 min-w-fit",
+      class: "cursor-pointer py-1 px-4 border-blue-500 opacity-70 min-w-fit",
       data: {
         tabs_target: "tab",
         tabs_tabname_param: "comments",
@@ -37,7 +37,7 @@
       } %>
     <%= link_to t('tag_subscriptions'), 
       dashboard_subscriptions_path(tab: :tags),
-      class: "cursor-pointer py-1 px-4 border-blue-500 text-zinc-600 min-w-fit",
+      class: "cursor-pointer py-1 px-4 border-blue-500 opacity-70 min-w-fit",
       data: {
         tabs_target: "tab",
         tabs_tabname_param: "tags",

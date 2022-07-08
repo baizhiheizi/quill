@@ -110,7 +110,7 @@
             <div class="ml-2">
               <%= link_to current_user.mvm_address_url, 
                 target: "_blank",
-                class: "flex items-center text-sm rounded bg-zinc-100 px-2 py-1 opacity-70 hover:bg-zinc-200 hover:opacity-100" do %>
+                class: "flex items-center text-sm rounded bg-zinc-100 px-2 py-1 opacity-70 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700" do %>
                 <div><%= current_user.short_uid %></div>
                 <%= render "shared/icons/external_link", html_class: "w-4 h-4 font-bold" %>
               <% end %>

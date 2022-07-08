@@ -5,7 +5,7 @@
   <div class="w-full flex overflow-auto flex-nowrap scrollbar-hide items-center flex border-b dark:border-zinc-800 px-4 mb-4">
     <%= link_to t('payments'), 
       dashboard_orders_path(tab: :payments),
-      class: "cursor-pointer py-1 px-4 border-blue-500 text-zinc-600 min-w-fit",
+      class: "cursor-pointer py-1 px-4 border-blue-500 opacity-70 min-w-fit",
       data: {
         tabs_target: "tab",
         tabs_tabname_param: "payments",
@@ -13,7 +13,7 @@
       } %>
     <%= link_to t('swap_orders'), 
       dashboard_orders_path(tab: :swap_orders),
-      class: "cursor-pointer py-1 px-4 border-blue-500 text-zinc-600 min-w-fit",
+      class: "cursor-pointer py-1 px-4 border-blue-500 opacity-70 min-w-fit",
       data: {
         tabs_target: "tab",
         tabs_tabname_param: "swap_orders",
