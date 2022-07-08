@@ -5,7 +5,7 @@
     data-controller="qrcode" 
     data-qrcode-url-value="<%= deposit_entry['destination'] %>">
     <div data-qrcode-target="placeholder" class="flex justify-center h-48"></div>
-    <div class="flex justify-center mb-2">
+    <div class="flex justify-center my-2">
         <div class="relative">
             <%= image_tag currency.icon_url, class: "w-6 h-6" %>
             <% if currency.chain.present? %>

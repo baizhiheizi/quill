@@ -55,9 +55,8 @@
   </div>
 
   <% unless selected.asset_id == Currency::XIN_ASSET_ID %>
-    <div class="max-w-xs mx-auto">
+    <div class="max-w-xs mx-auto" data-mvm-deposit-target="addTokenButton">
       <button 
-        data-mvm-deposit-target='addTokenButton'
         data-action="mvm-deposit#addToken" 
         class="flex justify-center items-center space-x-2 w-full mt-4 mb-2 text-center no-underline cursor-pointer py-2 block bg-stone-600 hover:bg-stone-700 active:bg-stone-500 text-white rounded">
         <span><%= t('add') %></span>

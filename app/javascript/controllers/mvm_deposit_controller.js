@@ -100,10 +100,14 @@ export default class extends Controller {
     this.fetchDesination();
 
     if (!this.hasAddTokenButtonTarget) return;
-    if (this.assetIdValue == XIN_ASSET_ID) {
-      this.addTokenButtonTarget.classList.add('hidden');
-    } else {
+    if (
+      window.ethereum &&
+      window.ethereum.isMetaMask &&
+      this.assetIdValue !== XIN_ASSET_ID
+    ) {
       this.addTokenButtonTarget.classList.remove('hidden');
+    } else {
+      this.addTokenButtonTarget.classList.add('hidden');
     }
   }
 

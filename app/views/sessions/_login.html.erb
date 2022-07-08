@@ -1,3 +1,45 @@
+<% unless from_mixin_messenger? %>
+  <div data-controller="metamask" class="flex justify-center px-4 mb-2">
+    <a data-metamask-target="loginButton" 
+      data-action="metamask#login" 
+      href="https://metamask.io"
+      target="_blank"
+      class="p-4 bg-stone-100 hover:bg-stone-200 dark:bg-stone-800 dark:hover:bg-stone-700 rounded-lg flex items-center justify-between text-lg w-96 border border-stone-300 dark:border-stone-900">
+      <div class="w-8 h-8 flex">
+        <%= image_tag 'https://docs.metamask.io/metamask-fox.svg', class: 'w-full h-auto' %>
+      </div>
+      <span>MetaMask</span>
+    </a>
+  </div>
+
+  <div class="flex justify-center px-4 mb-2">
+    <%= link_to view_modals_path(type: :walletconnect), 
+      data: {
+        turbo_method: :post
+      },
+      class: "p-4 bg-stone-100 hover:bg-stone-200 dark:bg-stone-800 dark:hover:bg-stone-700 rounded-lg flex items-center justify-between text-lg w-96 border border-stone-300 dark:border-stone-900" do %>
+      <div class="w-8 h-8 flex">
+        <%= image_tag 'https://docs.walletconnect.com/img/walletconnect-logo.svg', class: 'w-full h-auto' %>
+      </div>
+      <span>WalletConnect</span>
+    <% end %>
+  </div>
+
+  <div data-controller="fennec" class="flex justify-center px-4 mb-2">
+    <a data-controller="fennec"
+      data-fennec-target="loginButton" 
+      data-action="fennec#login" 
+      href="https://pando.im/fennec"
+      target="_blank"
+      class="p-4 bg-stone-100 hover:bg-stone-200 dark:bg-stone-800 dark:hover:bg-stone-700 rounded-lg flex items-center justify-between text-lg w-96 border border-stone-300 dark:border-stone-900">
+      <div class="w-8 h-8 flex">
+        <%= image_tag 'fennec-logo.png', class: 'w-full h-auto' %>
+      </div>
+      <span>Fennec</span>
+    </a>
+  </div>
+<% end %>
+
 <div class="flex justify-center px-4 mb-2">
   <%= link_to login_path(return_to: params[:return_to] || request.referer), 
     class: "p-4 bg-stone-100 hover:bg-stone-200 dark:bg-stone-800 dark:hover:bg-stone-700 rounded-lg flex items-center justify-between text-lg w-96 border border-stone-300 dark:border-stone-900" do %>
@@ -5,45 +47,5 @@
       <%= image_tag (Settings.mixin_logo_file || 'mixin-logo.png'), class: 'w-full h-auto' %>
     </div>
     <span><%= Settings.messenger %></span>
-  <% end %>
-</div>
-
-<div data-controller="fennec" class="flex justify-center px-4 mb-2">
-  <a data-controller="fennec"
-    data-fennec-target="loginButton" 
-    data-action="fennec#login" 
-    href="https://pando.im/fennec"
-    target="_blank"
-    class="p-4 bg-stone-100 hover:bg-stone-200 dark:bg-stone-800 dark:hover:bg-stone-700 rounded-lg flex items-center justify-between text-lg w-96 border border-stone-300 dark:border-stone-900">
-    <div class="w-8 h-8 flex">
-      <%= image_tag 'fennec-logo.png', class: 'w-full h-auto' %>
-    </div>
-    <span>Fennec</span>
-  </a>
-</div>
-
-<div data-controller="metamask" class="flex justify-center px-4 mb-2">
-  <a data-metamask-target="loginButton" 
-    data-action="metamask#login" 
-    href="https://metamask.io"
-    target="_blank"
-    class="p-4 bg-stone-100 hover:bg-stone-200 dark:bg-stone-800 dark:hover:bg-stone-700 rounded-lg flex items-center justify-between text-lg w-96 border border-stone-300 dark:border-stone-900">
-    <div class="w-8 h-8 flex">
-      <%= image_tag 'https://docs.metamask.io/metamask-fox.svg', class: 'w-full h-auto' %>
-    </div>
-    <span>MetaMask</span>
-  </a>
-</div>
-
-<div class="flex justify-center px-4 mb-2">
-  <%= link_to view_modals_path(type: :walletconnect), 
-    data: {
-      turbo_method: :post
-    },
-    class: "p-4 bg-stone-100 hover:bg-stone-200 dark:bg-stone-800 dark:hover:bg-stone-700 rounded-lg flex items-center justify-between text-lg w-96 border border-stone-300 dark:border-stone-900" do %>
-    <div class="w-8 h-8 flex">
-      <%= image_tag 'https://docs.walletconnect.com/img/walletconnect-logo.svg', class: 'w-full h-auto' %>
-    </div>
-    <span>WalletConnect</span>
   <% end %>
 </div>
