@@ -4,11 +4,11 @@ class SendMixinMessageWorker
   include Sidekiq::Worker
   sidekiq_options queue: :default, retry: true
 
-  def perform(message, bot = 'PrsdiggBot')
+  def perform(message, bot = 'BatataBot')
     if bot == 'RevenueBot'
       RevenueBot.api.send_message message
     else
-      PrsdiggBot.api.send_message message
+      BatataBot.api.send_message message
     end
   rescue MixinBot::ForbiddenError, MixinBot::UnauthorizedError => e
     Rails.logger.error e.inspect

@@ -12,8 +12,6 @@ class AdminConstraint
 end
 
 Rails.application.routes.draw do
-  post '/graphql', to: 'graphql#execute'
-
   get 'login', to: 'sessions#new', as: :login
   get '/auth/mixin/callback', to: 'sessions#mixin'
   get '/auth/fennec/callback', to: 'sessions#fennec'

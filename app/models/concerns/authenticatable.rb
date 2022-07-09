@@ -5,8 +5,8 @@ module Authenticatable
 
   class_methods do
     def auth_from_mixin(code)
-      token = PrsdiggBot.api.oauth_token code
-      res = PrsdiggBot.api.read_me access_token: token
+      token = BatataBot.api.oauth_token code
+      res = BatataBot.api.read_me access_token: token
       raise res.inspect if res['error'].present?
 
       auth = UserAuthorization.create_with(
@@ -24,7 +24,7 @@ module Authenticatable
     end
 
     def auth_from_fennec(token)
-      res = PrsdiggBot.api.read_me access_token: token
+      res = BatataBot.api.read_me access_token: token
       raise res.inspect if res['error'].present?
 
       auth = UserAuthorization.create_with(

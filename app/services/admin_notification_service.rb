@@ -4,7 +4,7 @@ class AdminNotificationService
   def text(text)
     return if Rails.application.credentials.dig(:admin, :group_conversation_id).blank?
 
-    message = PrsdiggBot.api.plain_text(
+    message = BatataBot.api.plain_text(
       conversation_id: Rails.application.credentials.dig(:admin, :group_conversation_id),
       data: text
     )
@@ -12,7 +12,7 @@ class AdminNotificationService
   end
 
   def post(post)
-    message = PrsdiggBot.api.plain_post(
+    message = BatataBot.api.plain_post(
       conversation_id: Rails.application.credentials.dig(:admin, :group_conversation_id),
       data: post
     )

@@ -16,8 +16,6 @@ messenger: Mixin Messenger
 twitter_account: batata_web3
 
 # app/assets/images/*
-logo_file: logo.png
-favicon_file: favicon.png
 mixin_logo_file: mixin-logo.png
 mixin_logo_light_file: mixin-logo-light.png
 

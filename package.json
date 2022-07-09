@@ -1,5 +1,5 @@
 {
-  "name": "prsdigg",
+  "name": "batata",
   "private": true,
   "scripts": {
     "lint": "prettier --write app/javascript/**/*.{tsx,ts,js,gql}",

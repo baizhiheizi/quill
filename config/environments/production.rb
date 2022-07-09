@@ -72,7 +72,7 @@ Rails.application.configure do
 
   # Use a real queuing backend for Active Job (and separate queues per environment).
   # config.active_job.queue_adapter     = :resque
-  # config.active_job.queue_name_prefix = "prsdigg_production"
+  # config.active_job.queue_name_prefix = "batata_production"
 
   config.action_mailer.perform_caching = false
 
@@ -105,6 +105,6 @@ Rails.application.configure do
 
   config.middleware.use ExceptionNotification::Rack, mixin_bot: {
     recipient_id: Rails.application.credentials.dig(:admin, :uuid),
-    bot: 'PrsdiggBot'
+    bot: 'BatataBot'
   }
 end

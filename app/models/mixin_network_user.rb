@@ -24,7 +24,7 @@
 #
 
 class MixinNetworkUser < ApplicationRecord
-  DEFAULT_AVATAR_FILE = Rails.application.root.join("app/assets/images/#{Settings.logo_file || 'logo.png'}")
+  DEFAULT_AVATAR_FILE = Rails.application.root.join('app/assets/images/logo.png')
 
   include Encryptable
 
@@ -128,7 +128,7 @@ class MixinNetworkUser < ApplicationRecord
   def setup_attributes
     return unless new_record?
 
-    r = PrsdiggBot.api.create_user(name || default_name, key_type: 'Ed25519')
+    r = BatataBot.api.create_user(name || default_name, key_type: 'Ed25519')
     raise r.inspect if r['error'].present?
 
     self.raw = r['data']

@@ -1,6 +1,6 @@
 # 顶瓜瓜
 
-![Check](https://github.com/baizhiheizi/prsdigg/workflows/Check/badge.svg) ![CI](https://github.com/baizhiheizi/prsdigg/workflows/CI/badge.svg) ![Uptime 100.00%](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fbaizhiheizi%2Fupptime%2Fmaster%2Fapi%2Fprs-digg%2Fuptime.json) ![Response Time](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fbaizhiheizi%2Fupptime%2Fmaster%2Fapi%2Fprs-digg%2Fresponse-time.json)
+![Check](https://github.com/baizhiheizi/batata/workflows/Check/badge.svg) ![CI](https://github.com/baizhiheizi/batata/workflows/CI/badge.svg) ![Uptime 100.00%](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fbaizhiheizi%2Fupptime%2Fmaster%2Fapi%2Fprs-digg%2Fuptime.json) ![Response Time](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fbaizhiheizi%2Fupptime%2Fmaster%2Fapi%2Fprs-digg%2Fresponse-time.json)
 
 [English](README.md)
 
@@ -24,7 +24,7 @@
 
 1. 用户可以在**平台**上发布文章，成为**作者**；
 
-2. 所有文章均为付费文章，使用*PressOne Token* 或者 *Bitcoin* 计价；
+2. 所有文章均为付费文章，使用*PressOne Token* 或者 _Bitcoin_ 计价；
 
 3. 用户可以付费购买文章，即成为文章的**读者**；
 
@@ -46,7 +46,7 @@
 
 在 C 之后，用户 D 同样付费 100 聪 购买了文章 X。
 
-同样地，有 40 聪（40%）将作为早期读者奖励，这时的早期读者有两人，即 B 和 C，二人此前为文章 X 各自付费了 100 聪，因此 B 和 C 都将分别得到 \`4 * 100 / (100 + 100) = 2\` 聪 的奖励。
+同样地，有 40 聪（40%）将作为早期读者奖励，这时的早期读者有两人，即 B 和 C，二人此前为文章 X 各自付费了 100 聪，因此 B 和 C 都将分别得到 \`4 \* 100 / (100 + 100) = 2\` 聪 的奖励。
 
 平台同样收取 10 聪（10%）作为手续费；剩余 50 聪 作为作者收益。
 
@@ -58,4 +58,4 @@
 
 目前 顶瓜瓜 仅支持 [Mixin Messenger](https://mixin.one/messenger) 登录以及完成支付，体验前先下载安装。
 
-浏览 [prsdigg.com](https://prsdigg.com) ，或者在 [Mixin Messenger](https://mixin.one/messenger) 中搜索 7000101549 即可体验。
+浏览 [batata.im](https://batata.im) ，或者在 [Mixin Messenger](https://mixin.one/messenger) 中搜索 7000101549 即可体验。

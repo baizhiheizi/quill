@@ -3,7 +3,7 @@
     <div class="flex items-center justify-between h-16">
       <div class="flex items-center flex-1 space-x-10">
         <%= link_to root_path, class: 'flex items-center space-x-2 flex-shrink-0' do %>
-          <img class="w-10 h-10" src=<%= asset_path(Settings.logo_file || 'logo.png') %> alt="Logo">
+          <%= image_tag 'logo.png', class: 'w-10 h-10', alt: "Logo" %>
         <% end %>
         <div class="flex-1">
           <%= render "search/form", query: @query %>
@@ -27,7 +27,7 @@
           <%= link_to t("rules"), page_path('rules'), class: "px-3 py-2 text-base font-medium hover:bg-blue-50 hover:text-blue-500 dark:hover:bg-gray-800 rounded-md" %>
         </div>
         <div class="hidden md:block">
-          <a href="https://github.com/baizhiheizi/prsdigg" target="_blank" class="hover:bg-blue-50 hover:text-blue-500 dark:hover:bg-gray-800 rounded-md">
+          <a href="https://github.com/baizhiheizi/batata" target="_blank" class="hover:bg-blue-50 hover:text-blue-500 dark:hover:bg-gray-800 rounded-md">
             <%= render "shared/icons/github" %>
           </a>
         </div>
@@ -137,7 +137,7 @@
         </button>
       </div>
       <%= link_to root_path, class: "flex items-center flex-shrink-0 space-x-2" do %>
-        <img class="w-8 h-8" src=<%= asset_path(Settings.logo_file || 'logo.png') %> alt="Logo">
+        <%= image_tag 'logo.png', class: 'w-8 h-8', alt: "Logo" %>
         <span class='text-xl font-medium'><%= t("app_name") %></span>
       <% end %>
     </div>
@@ -152,7 +152,7 @@
             </button>
           </div>
           <%= link_to root_path, class: "flex items-center flex-shrink-0 space-x-2" do %>
-            <img class="w-8 h-8" src=<%= asset_path(Settings.logo_file || 'logo.png') %> alt="Logo">
+            <%= image_tag 'logo.png', class: 'w-8 h-8', alt: "Logo" %>
             <span class='text-xl font-medium'><%= t("app_name") %></span>
           <% end %>
         </div>

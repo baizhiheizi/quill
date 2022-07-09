@@ -18,8 +18,6 @@ messenger: links
 twitter_account: LinksBTC
 
 # app/assets/images/*
-logo_file: logo-bunshow.png
-favicon_file: favicon-bunshow.png
 mixin_logo_file: links-logo.jpg
 mixin_logo_light_file: links-logo-light.svg
 

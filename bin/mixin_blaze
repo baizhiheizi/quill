@@ -6,17 +6,17 @@ require File.expand_path('../config/environment', __dir__)
 
 EM.run {
   if Settings.blaze_enable
-    PrsdiggBot.api.start_blaze_connect do
+    BatataBot.api.start_blaze_connect do
       def on_open(ws, _event)
-        p ['PRSDigg', Time.current, :open]
-        ws.send PrsdiggBot.api.list_pending_message
+        p ['Batata', Time.current, :open]
+        ws.send BatataBot.api.list_pending_message
       end
 
       def on_message(ws, event)
-        raw = JSON.parse PrsdiggBot.api.read_ws_message(event.data)
+        raw = JSON.parse BatataBot.api.read_ws_message(event.data)
         return if raw&.[]('action') == 'ACKNOWLEDGE_MESSAGE_RECEIPT'
 
-        p ['PRSDigg', Time.current, :message, raw&.[]('action')]
+        p ['Batata', Time.current, :message, raw&.[]('action')]
         data = raw['data']
         return if data.blank?
 
@@ -24,7 +24,7 @@ EM.run {
         MixinMessage.create_with(raw: raw).find_or_create_by(message_id: data['message_id'])
 
         # ack
-        ws.send PrsdiggBot.api.acknowledge_message_receipt(data['message_id']) if data&.[]('message_id').present?
+        ws.send BatataBot.api.acknowledge_message_receipt(data['message_id']) if data&.[]('message_id').present?
       end
     end
   end

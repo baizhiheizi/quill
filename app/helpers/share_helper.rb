@@ -23,7 +23,7 @@ module ShareHelper
   def share_to_mixin(url, title:, description:, icon_url:)
     data = {
       action: url,
-      app_id: PrsdiggBot.api.client_id,
+      app_id: BatataBot.api.client_id,
       title: title.truncate(36),
       description: description.truncate(128),
       icon_url: icon_url
