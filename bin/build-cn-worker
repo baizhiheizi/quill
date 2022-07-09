@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+# throw error when failed
+set -e
+
+# use cn credentials
+cp config/credentials/cn.yml.enc config/credentials.yml.enc
+cp config/settings.cn.example.yml config/settings.yml
+
+bundle install
