@@ -108,7 +108,7 @@ class MixinNetworkUser < ApplicationRecord
   end
 
   def default_name
-    Settings.broker_name || 'PRSDigg Broker'
+    Settings.broker_name || 'Batata'
   end
 
   def avatar

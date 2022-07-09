@@ -9,18 +9,6 @@
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
-    <!-- Global site tag (gtag.js) - Google Analytics -->
-    <% if Rails.env.production? && Settings.ga_id.present? %>
-      <script async src="<%= 'https://www.googletagmanager.com/gtag/js?id=' + Settings.ga_id.to_s %>" ></script>
-      <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-
-        gtag('config', '<%= Rails.application.credentials.dig(:ga_id) %>');
-      </script>
-    <% end %>
-
     <meta name='title' content='<%= @page_title.presence || Settings.page_title %>' />
     <meta name='keywords' content='<%= Settings.page_keywords %>' />
     <meta name='description' content='<%= @page_description.presence || Settings.page_description %>' />

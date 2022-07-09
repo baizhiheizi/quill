@@ -1,4 +1,4 @@
-host: 'https://batata.im'
+host: 'https://cn.batata.im'
 mixin_oauth_path: 'https://mixin-www.zeromesh.net/oauth/authorize'
 
 # lauch time
@@ -8,12 +8,12 @@ launch_time:
 blaze_enable: false
 
 # page
-app_name: Batata
-page_title: Batata: write and read in the Web3 way
-page_keywords: Batata, Web3, Write, Read, platform, Blockchain, Bitcoin, BTC, Mixin Network, Mixin Messenger
-page_description: Batata
-messenger: Mixin Messenger
-twitter_account: batata_web3
+app_name: 顶瓜瓜
+page_title: 顶瓜瓜 BATATA | 重新发现读者的价值，打造作者与读者共赢的写作平台
+page_keywords: 顶瓜瓜, Batata, Web3, 写作平台, 区块链, 共赢, 读者, 作者, 早期读者奖励, Mixin Network, Mixin Messenger
+page_description: 独创股权式的早期读者奖励机制，重新发现读者的价值，打造作者与读者共赢的写作平台
+messenger: Mixin
+twitter_account: prsdigg
 
 # app/assets/images/*
 logo_file: logo.png
@@ -23,14 +23,19 @@ mixin_logo_light_file: mixin-logo-light.png
 
 # locale
 time_zone: Asia/Shanghai
-default_locale: en
+default_locale: zh-CN
 available_locales:
+  - zh-CN
   - en
 
 # assets
 supported_assets:
   # BTC
   - c6d0c728-2624-429b-8e0d-d9d19b6592fa
+  # pUSD
+  - 31d2ea9c-95eb-3355-b65b-ba096853bc18
+  # XIN
+  - c94ac88f-4671-3976-b60a-09064f1811e8
   # ETH
   - 43d61dcd-e413-450d-80b8-101d5e903357
 swapable: true

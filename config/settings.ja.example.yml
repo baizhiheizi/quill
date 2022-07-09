@@ -1,5 +1,5 @@
 # urls
-host: 'https://bunshow.prsdigg.com'
+host: 'https://jp.batata.im'
 mixin_oauth_path: 'https://oauth.getlinks.jp'
 
 # lauch time
@@ -13,7 +13,6 @@ app_name: 文商
 page_title: 文商Bunshow
 page_keywords: 文商, bunshow
 page_description: 文商, bunshow
-ga_id:
 broker_name: 文商ブローカー
 messenger: links
 twitter_account: LinksBTC
@@ -56,8 +55,3 @@ foxswap:
     - e4bc0740-f8fe-418c-ae1b-32d9926f5863
   mtg_threshold: 3
   mtg_public_Key: dt351xp3KjNlVCMqBYUeUSF45upCEiReSZAqcjcP/Lc=
-
-# pressone
-prs:
-  # switch to sign article automatically
-  auto_sign: false

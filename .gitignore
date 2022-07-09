@@ -53,3 +53,5 @@ config/settings.local.yml
 
 /app/assets/builds/*
 !/app/assets/builds/.keep
+
+/config/credentials/main.key
