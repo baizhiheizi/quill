@@ -42,7 +42,7 @@ class ArticleSnapshot < ApplicationRecord
       transitions from: :drafted, to: :signing
     end
 
-    event :sign, after_commit: :touch_signed_at do
+    event :sign do
       transitions from: :signing, to: :signed
     end
   end
@@ -51,16 +51,8 @@ class ArticleSnapshot < ApplicationRecord
     update requested_at: Time.current
   end
 
-  def touch_signed_at
-    update signed_at: prs_transaction&.raw_updated_at
-  end
-
   def fresh?
     article.snapshots.where('created_at > ?', created_at).blank?
-  end
-
-  def previous_signed_snapshot
-    article.snapshots.signed.where('created_at < ?', created_at).order(created_at: :desc).first
   end
 
   private

@@ -32,7 +32,6 @@ class User < ApplicationRecord
   include Authenticatable
 
   has_one :authorization, class_name: 'UserAuthorization', inverse_of: :user, dependent: :restrict_with_error
-  has_one :prs_account, dependent: :restrict_with_error
   has_many :access_tokens, dependent: :destroy
 
   has_many :articles, foreign_key: :author_id, inverse_of: :author, dependent: :nullify
@@ -48,7 +47,6 @@ class User < ApplicationRecord
   has_many :comments, foreign_key: :author_id, inverse_of: :author, dependent: :nullify
   has_many :swap_orders, through: :payments
   has_many :notifications, as: :recipient, dependent: :destroy
-  has_many :prs_transactions, through: :prs_account, source: :transactions
   has_many :bonuses, dependent: :restrict_with_exception
 
   has_one :wallet, class_name: 'MixinNetworkUser', as: :owner, dependent: :nullify

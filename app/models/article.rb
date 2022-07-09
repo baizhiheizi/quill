@@ -69,7 +69,6 @@ class Article < ApplicationRecord
   has_many :tags, through: :taggings, dependent: :restrict_with_error
 
   has_many :snapshots, class_name: 'ArticleSnapshot', primary_key: :uuid, foreign_key: :article_uuid, inverse_of: :article, dependent: :destroy
-  has_many :prs_transactions, through: :snapshots
 
   has_many :article_references, class_name: 'CiterReference', as: :citer, dependent: :restrict_with_error
   has_many :references, through: :article_references, source: :reference, source_type: 'Article'
@@ -287,38 +286,6 @@ class Article < ApplicationRecord
     return if drafted?
 
     saved_change_to_content? || saved_change_to_title? || saved_change_to_intro? || saved_change_to_published_at?
-  end
-
-  def current_prs_transaction
-    prs_transactions.order(created_at: :desc).first
-  end
-
-  def signature_url
-    current_prs_transaction&.block_url
-  end
-
-  def mark_as_removed_on_chain!
-    return if current_prs_transaction.blank?
-
-    Prs.api.sign(
-      {
-        type: 'PIP:2001',
-        meta: {},
-        data: {
-          file_hash: Prs.api.hash(''),
-          topic: Rails.application.credentials.dig(:prs, :account),
-          updated_tx_id: current_prs_transaction.tx_id
-        }
-      },
-      {
-        account: author.prs_account.account,
-        private_key: author.prs_account.private_key
-      }
-    )
-  end
-
-  def mark_as_removed_on_chain_async
-    ArticleMarkAsRemovedOnChainWorker.perform_async id
   end
 
   def revenue_ratios_sum
