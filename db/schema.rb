@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_06_25_034041) do
+ActiveRecord::Schema[7.0].define(version: 2022_07_09_022843) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
   enable_extension "pgcrypto"
@@ -364,39 +364,6 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_25_034041) do
     t.bigint "calls"
     t.datetime "captured_at", precision: nil
     t.index ["database", "captured_at"], name: "index_pghero_query_stats_on_database_and_captured_at"
-  end
-
-  create_table "prs_accounts", force: :cascade do |t|
-    t.bigint "user_id"
-    t.string "account"
-    t.string "status"
-    t.string "public_key"
-    t.string "encrypted_private_key"
-    t.jsonb "keystore"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.datetime "request_allow_at", precision: nil
-    t.datetime "request_denny_at", precision: nil
-    t.index ["account"], name: "index_prs_accounts_on_account", unique: true
-    t.index ["user_id"], name: "index_prs_accounts_on_user_id"
-  end
-
-  create_table "prs_transactions", force: :cascade do |t|
-    t.string "type", comment: "STI"
-    t.string "tx_id"
-    t.string "block_type"
-    t.string "hash_str"
-    t.string "signature"
-    t.integer "block_num"
-    t.string "transaction_id"
-    t.string "user_address"
-    t.jsonb "raw"
-    t.datetime "processed_at", precision: nil
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["block_num"], name: "index_prs_transactions_on_block_num"
-    t.index ["transaction_id"], name: "index_prs_transactions_on_transaction_id", unique: true
-    t.index ["tx_id"], name: "index_prs_transactions_on_tx_id", unique: true
   end
 
   create_table "statistics", force: :cascade do |t|
