@@ -1,22 +1,23 @@
 import detectEthereumProvider from '@metamask/detect-provider';
 import Web3 from 'web3/dist/web3.min.js';
 import WalletConnectProvider from '@walletconnect/web3-provider/dist/umd/index.min.js';
-import { hideLoading } from './toast';
 
 export const MVM_CHAIN_ID = '0x120c7';
 
 export async function initWallet() {
-  if (window.w3) return;
+  if (!window.w3) {
+    let walletConnect = localStorage.getItem('walletconnect');
+    walletConnect = walletConnect && JSON.parse(walletConnect);
 
-  let walletConnect = localStorage.getItem('walletconnect');
-  walletConnect = walletConnect && JSON.parse(walletConnect);
-
-  if (walletConnect && walletConnect.connected) {
-    await initWalletConnect();
-  } else if (window.ethereum && ethereum.isConnected()) {
-    await initMetaMask();
-  } else {
-    throw new Error('No wallet connected');
+    if (walletConnect && walletConnect.connected) {
+      await initWalletConnect();
+    } else if (window.ethereum && ethereum.isConnected()) {
+      await initMetaMask();
+    } else {
+      throw new Error('No wallet connected');
+    }
+  } else if (w3.currentProvider.isMetaMask) {
+    await addMvmChain();
   }
 }
 
@@ -24,8 +25,9 @@ export async function initMetaMask() {
   const provider = await detectEthereumProvider();
   if (provider !== window.ethereum) return;
 
-  await addMvmChain();
-  if (ethereum.chainId !== MVM_CHAIN_ID) return;
+  if (ethereum.chainId !== MVM_CHAIN_ID) {
+    await addMvmChain();
+  }
 
   await ethereum.request({ method: 'eth_requestAccounts' });
 
@@ -46,22 +48,20 @@ export async function initWalletConnect() {
 }
 
 export async function addMvmChain() {
-  ethereum
-    .request({
-      method: 'wallet_addEthereumChain',
-      params: [
-        {
-          chainId: MVM_CHAIN_ID,
-          chainName: 'Mixin Virtual Machine',
-          nativeCurrency: {
-            name: 'Mixin',
-            symbol: 'XIN',
-            decimals: 18,
-          },
-          rpcUrls: ['https://geth.mvm.dev'],
-          blockExplorerUrls: ['https://scan.mvm.dev/'],
+  ethereum.request({
+    method: 'wallet_addEthereumChain',
+    params: [
+      {
+        chainId: MVM_CHAIN_ID,
+        chainName: 'Mixin Virtual Machine',
+        nativeCurrency: {
+          name: 'Mixin',
+          symbol: 'XIN',
+          decimals: 18,
         },
-      ],
-    })
-    .finally(hideLoading);
+        rpcUrls: ['https://geth.mvm.dev'],
+        blockExplorerUrls: ['https://scan.mvm.dev/'],
+      },
+    ],
+  });
 }
