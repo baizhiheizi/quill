@@ -12,6 +12,11 @@ class AdminConstraint
 end
 
 Rails.application.routes.draw do
+  draw :admin
+  draw :dashboard
+  draw :api
+  draw :mvm
+
   get 'login', to: 'sessions#new', as: :login
   get '/auth/mixin/callback', to: 'sessions#mixin'
   get '/auth/fennec/callback', to: 'sessions#fennec'
@@ -54,6 +59,14 @@ Rails.application.routes.draw do
   resources :subscribe_tags, only: %i[create destroy]
 
   resources :tags, only: %i[index]
+  resources :transfers, only: %i[index]
+  get '/transfers/stats', to: 'transfers#stats'
+
+  resources :currencies, only: %i[index]
+
+  get '/fair' => 'high_voltage/pages#show', id: 'fair', as: :fair_page
+  get '/rules' => 'high_voltage/pages#show', id: 'rules', as: :rules_page
+  get '/:uid', to: 'users#show', as: 'user'
   resources :users, only: :show, param: :uid
   resources :users, only: [], module: 'users', param: :uid do
     resources :articles, only: %i[index]
@@ -61,9 +74,8 @@ Rails.application.routes.draw do
     resources :subscribe_users, only: %i[index]
     resources :subscribe_by_users, only: %i[index]
   end
-  resources :transfers, only: %i[index]
-  get '/transfers/stats', to: 'transfers#stats'
 
+<<<<<<< HEAD
   resources :currencies, only: %i[index]
 
   namespace :dashboard do
@@ -153,4 +165,6 @@ Rails.application.routes.draw do
     resource :faucet, only: :create
     resource :swap, only: :create
   end
+
+  get '/:uid/:uuid', to: 'articles#show', as: 'user_article'
 end

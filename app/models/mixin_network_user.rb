@@ -29,9 +29,9 @@ class MixinNetworkUser < ApplicationRecord
   include Encryptable
 
   belongs_to :owner, optional: true, inverse_of: false, polymorphic: true
-  has_many :snapshots, class_name: 'MixinNetworkSnapshot', foreign_key: :user_id, primary_key: :uuid, dependent: :nullify, inverse_of: :wallet
-  has_many :swap_orders, foreign_key: :user_id, primary_key: :uuid, dependent: :nullify, inverse_of: :wallet
-  has_many :transfers, foreign_key: :wallet_id, primary_key: :uuid, dependent: :nullify, inverse_of: :wallet
+  has_many :snapshots, class_name: 'MixinNetworkSnapshot', foreign_key: :user_id, primary_key: :uuid, dependent: :restrict_with_exception, inverse_of: :wallet
+  has_many :swap_orders, foreign_key: :user_id, primary_key: :uuid, dependent: :restrict_with_exception, inverse_of: :wallet
+  has_many :transfers, foreign_key: :wallet_id, primary_key: :uuid, dependent: :restrict_with_exception, inverse_of: :wallet
 
   validates :name, presence: true
   validates :pin_token, presence: true

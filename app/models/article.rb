@@ -79,7 +79,7 @@ class Article < ApplicationRecord
 
   accepts_nested_attributes_for :article_references, reject_if: proc { |attributes| attributes['reference_id'].blank? || attributes['revenue_ratio'].blank? }, allow_destroy: true
 
-  has_one :wallet, class_name: 'MixinNetworkUser', as: :owner, dependent: :nullify
+  has_one :wallet, class_name: 'MixinNetworkUser', as: :owner, dependent: :restrict_with_exception
 
   validates :asset_id, inclusion: { in: SUPPORTED_ASSETS }
   validates :uuid, presence: true, uniqueness: true

@@ -24,7 +24,7 @@
       <div class="text-xs sm:text-sm opacity-50">≈$<%= article.price_usd %></div>
     </div>
   </div>
-  <%= link_to article_path(article), class: "mb-4 block" do %>
+  <%= link_to user_article_path(article.author.uid, article), class: "mb-4 block" do %>
     <div class="font-bold text-xl lg:text-2xl 2xl:text-3xl mb-2 break-words text-ellipsis overflow-hidden">
       <%= article.title %>
     </div>

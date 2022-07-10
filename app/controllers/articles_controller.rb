@@ -32,12 +32,20 @@ class ArticlesController < ApplicationController
   end
 
   def show
-    @article = Article.without_drafted.find_by uuid: params[:uuid]
+    @article =
+      if params[:uid].present?
+        @user = User.find_by uid: params[:uid]
+        @user&.articles&.without_drafted&.find_by uuid: params[:uuid]
+      else
+        Article.without_drafted.find_by uuid: params[:uuid]
+      end
 
     if @article&.may_buy_by?(current_user) || @article&.authorized?(current_user)
       @page_title = "#{@article.title} - #{@article.author.name}"
       @page_description = @article.intro
       @page_image = @article.author.avatar
+    elsif @user.present?
+      redirect_back fallback_location: user_path(@user)
     else
       redirect_back fallback_location: root_path
     end

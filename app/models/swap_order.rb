@@ -39,7 +39,7 @@ class SwapOrder < ApplicationRecord
   belongs_to :pay_asset, class_name: 'Currency', primary_key: :asset_id
   belongs_to :fill_asset, class_name: 'Currency', primary_key: :asset_id
 
-  has_many :transfers, as: :source, dependent: :nullify
+  has_many :transfers, as: :source, dependent: :restrict_with_exception
 
   validates :trace_id, presence: true
 

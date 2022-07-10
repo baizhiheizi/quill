@@ -16,7 +16,7 @@ class Tag < ApplicationRecord
   COLORS = %w[gray magenta red orange gold lime green cyan blue purple].freeze
 
   has_many :taggings, dependent: :nullify
-  has_many :articles, through: :taggings, dependent: :nullify
+  has_many :articles, through: :taggings
 
   validates :name, uniqueness: true, allow_blank: false
 

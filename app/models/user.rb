@@ -34,22 +34,22 @@ class User < ApplicationRecord
   has_one :authorization, class_name: 'UserAuthorization', inverse_of: :user, dependent: :restrict_with_error
   has_many :access_tokens, dependent: :destroy
 
-  has_many :articles, foreign_key: :author_id, inverse_of: :author, dependent: :nullify
-  has_many :payments, foreign_key: :opponent_id, primary_key: :mixin_uuid, inverse_of: :payer, dependent: :nullify
-  has_many :transfers, foreign_key: :opponent_id, primary_key: :mixin_uuid, inverse_of: :recipient, dependent: :nullify
-  has_many :snapshots, foreign_key: :opponent_id, primary_key: :mixin_uuid, inverse_of: :opponent, dependent: :nullify
-  has_many :author_revenue_transfers, -> { where(transfer_type: :author_revenue) }, class_name: 'Transfer', foreign_key: :opponent_id, primary_key: :mixin_uuid, inverse_of: :recipient, dependent: :nullify
-  has_many :reader_revenue_transfers, -> { where(transfer_type: :reader_revenue) }, class_name: 'Transfer', foreign_key: :opponent_id, primary_key: :mixin_uuid, inverse_of: :recipient, dependent: :nullify
-  has_many :revenue_transfers, -> { where(transfer_type: %w[author_revenue reader_revenue]) }, class_name: 'Transfer', foreign_key: :opponent_id, primary_key: :mixin_uuid, inverse_of: :recipient, dependent: :nullify
-  has_many :orders, foreign_key: :buyer_id, inverse_of: :buyer, dependent: :nullify
-  has_many :buy_orders, -> { where(order_type: %w[buy_article]) }, class_name: 'Order', foreign_key: :buyer_id, inverse_of: :buyer, dependent: :nullify
+  has_many :articles, foreign_key: :author_id, inverse_of: :author, dependent: :restrict_with_exception
+  has_many :payments, foreign_key: :opponent_id, primary_key: :mixin_uuid, inverse_of: :payer, dependent: :restrict_with_exception
+  has_many :transfers, foreign_key: :opponent_id, primary_key: :mixin_uuid, inverse_of: :recipient, dependent: :restrict_with_exception
+  has_many :snapshots, foreign_key: :opponent_id, primary_key: :mixin_uuid, inverse_of: :opponent, dependent: :restrict_with_exception
+  has_many :author_revenue_transfers, -> { where(transfer_type: :author_revenue) }, class_name: 'Transfer', foreign_key: :opponent_id, primary_key: :mixin_uuid, inverse_of: :recipient, dependent: :restrict_with_exception
+  has_many :reader_revenue_transfers, -> { where(transfer_type: :reader_revenue) }, class_name: 'Transfer', foreign_key: :opponent_id, primary_key: :mixin_uuid, inverse_of: :recipient, dependent: :restrict_with_exception
+  has_many :revenue_transfers, -> { where(transfer_type: %w[author_revenue reader_revenue]) }, class_name: 'Transfer', foreign_key: :opponent_id, primary_key: :mixin_uuid, inverse_of: :recipient, dependent: :restrict_with_exception
+  has_many :orders, foreign_key: :buyer_id, inverse_of: :buyer, dependent: :restrict_with_exception
+  has_many :buy_orders, -> { where(order_type: %w[buy_article]) }, class_name: 'Order', foreign_key: :buyer_id, inverse_of: :buyer, dependent: :restrict_with_exception
   has_many :bought_articles, -> { order(created_at: :desc) }, through: :buy_orders, source: :item, source_type: 'Article'
-  has_many :comments, foreign_key: :author_id, inverse_of: :author, dependent: :nullify
+  has_many :comments, foreign_key: :author_id, inverse_of: :author, dependent: :restrict_with_exception
   has_many :swap_orders, through: :payments
   has_many :notifications, as: :recipient, dependent: :destroy
   has_many :bonuses, dependent: :restrict_with_exception
 
-  has_one :wallet, class_name: 'MixinNetworkUser', as: :owner, dependent: :nullify
+  has_one :wallet, class_name: 'MixinNetworkUser', as: :owner, dependent: :restrict_with_exception
   has_one :notification_setting, dependent: :destroy
 
   validates :name, presence: true
