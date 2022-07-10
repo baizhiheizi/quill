@@ -4,7 +4,7 @@
   <img src="<%= comment.author.avatar %>" class="w-6 h-6 sm:w-8 sm:h-8 rounded-full" />
   <div class="flex-1">
     <div class="flex items-center space-x-2 mb-2 text-sm">
-      <span><%= comment.author.name %></span>
+      <span><%= comment.author.short_name %></span>
       <span class="opacity-50"><%= time_ago_in_words comment.created_at %></span>
     </div>
     <div class="prose prose-sm xl:prose prose-h1:text-base prose-h1:m-0 prose-h2:text-base prose-h2:m-0 prose-h3:text-base prose-h3:m-0 prose-h4:m-0 dark:prose-invert mb-2">
