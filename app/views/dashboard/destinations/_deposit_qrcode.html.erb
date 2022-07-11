@@ -1,40 +1,41 @@
 <% currency = Currency.find_or_create_by asset_id: asset_id %>
 <% deposit_entry = current_user.mvm_deposit_address(asset_id) %>
 
-<div id="<%= dom_id current_user %>_deposit_qrcode" 
-    data-controller="qrcode" 
-    data-qrcode-url-value="<%= deposit_entry['destination'] %>">
-    <div data-qrcode-target="placeholder" class="flex justify-center h-48"></div>
-    <div class="flex justify-center my-2">
-        <div class="relative">
-            <%= image_tag currency.icon_url, class: "w-6 h-6" %>
-            <% if currency.chain.present? %>
-              <img class="w-3 h-3 rounded-full absolute bottom-0" src="<%= currency.chain.icon_url %>" />
-            <% end %>
+<div id="<%= dom_id current_user %>_deposit_qrcode">
+  <div class="flex items-start">
+    <div class="flex-1" data-controller="qrcode" data-qrcode-url-value="<%= deposit_entry['destination'] %>">
+      <div data-qrcode-target="placeholder" class="flex justify-center h-48 mb-2"></div>
+      <div class="flex justify-center">
+        <span class="rounded text-sm px-2 py-1 opacity-70 bg-zinc-100 dark:bg-zinc-800">Address</span>
+      </div>
+      <div class="text-center break-all">
+        <span class="font-black"><%= deposit_entry['destination'] %></span>
+      </div>
+    </div>
+
+    <% if deposit_entry['tag'].present? %>
+      <div class="flex-1" data-controller="qrcode" data-qrcode-url-value="<%= deposit_entry['tag'] %>">
+        <div data-qrcode-target="placeholder" class="flex justify-center h-48 mb-2"></div>
+      <div class="flex justify-center">
+        <span class="rounded text-sm px-2 py-1 opacity-70 bg-zinc-100 dark:bg-zinc-800">Tag</span>
+      </div>
+        <div class="text-center break-all">
+          <span class="font-black"><%= deposit_entry['tag'] %></span>
         </div>
-    </div>
-    <div class="flex items-center justify-center mb-2">
-        <div>
-            <div class="text-center font-black break-all">
-                <%= deposit_entry['destination'] %>
-            </div>
-            <div class="text-center font-black break-all">
-                <% if deposit_entry['tag'].present? %>
-                    TAG: <%= deposit_entry['tag'] %>
-                <% end %>
-            </div>
-        </div>
-    </div>
-    <div class="text-center py-2 text-gray-500 text-sm">
-        <p>
-            <% if currency.chain_id == Currency::ETH_ASSET_ID %>
-                <%= t("this_address_supports_erc20") %>
-            <% else %>
-                <%= t("this_address_supports") %>
-                <%= currency.chain&.name %>
-            <% end %>
-        </p>
-        <p><%= t("first_deposit_tips") %></p>
-        <p><%= t("deposit_receive_tips") %></p>
-    </div>
+      </div>
+    <% end %>
+  </div>
+
+  <div class="text-center py-2 text-gray-500 text-sm">
+    <p>
+      <% if currency.chain_id == Currency::ETH_ASSET_ID %>
+        <%= t("this_address_supports_erc20") %>
+      <% else %>
+        <%= t("this_address_supports") %>
+        <%= currency.chain&.name %>
+      <% end %>
+    </p>
+    <p><%= t("first_deposit_tips") %></p>
+    <p><%= t("deposit_receive_tips") %></p>
+  </div>
 </div>
