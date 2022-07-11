@@ -272,8 +272,7 @@ zh-CN:
   first_deposit_tips: 向新地址第一次充值时，请少量尝试！
   deposit_receive_tips: 所有充值到帐需要至少 16 个区块确认
   deposit_to_mvm: 充值至 MVM
-  add: 添加
-  to: 至
-  you_need_some_xin_as_gas_to_use_mvm: 使用 MVM 转账需要一点点 XIN 作为燃料费(Gas)。
-  you_may_get_some_from_faucet: 充值资产后，您可以免费领取一些 XIN（即将上线）。
+  add_to_metamask: 添加至MetaMask
+  you_may_claim_some_xin_as_gas_after_your_first_deposit: 首次充值成功后，您可以免费领取一点 XIN 作为 MVM 燃料费。
   address: 地址
+  claim_gas: 领取燃料

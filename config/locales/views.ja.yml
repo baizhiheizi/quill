@@ -263,8 +263,7 @@ ja:
   first_deposit_tips: For first deposit to new address, please try a small amount! 
   deposit_receive_tips: Deposit will receive after at least 16 blocks confirmation.
   deposit_to_mvm: Desposit to MVM
-  add: 追加
-  to: への
-  you_need_some_xin_as_gas_to_use_mvm: You need some XIN as gas to use MVM.
-  you_may_get_some_from_faucet: After deposit, you may get some from faucet(comming soon).
+  add_to_metamask: 追加へのMetaMask
+  you_may_claim_some_xin_as_gas_after_your_first_deposit: You may claim some XIN as gas after your first deposit.
   address: アドレス
+  claim_gas: Claim Gas

@@ -1,8 +1,9 @@
 import { Controller } from '@hotwired/stimulus';
-import { get } from '@rails/request.js';
+import { get, post } from '@rails/request.js';
 import { RegistryContract } from '../registry';
 import { notify, showLoading, hideLoading } from '../../utils';
 import { XIN_ASSET_ID } from '../constants';
+import { initWallet } from '../wallet';
 
 export default class extends Controller {
   static values = {
@@ -20,7 +21,7 @@ export default class extends Controller {
     'addTokenButton',
   ];
 
-  connect() {
+  async connect() {
     document
       .querySelector('#modal-slot')
       .addEventListener('modal:ok', (event) => {
@@ -38,6 +39,8 @@ export default class extends Controller {
           this.currencySymbolTarget.innerText = event.detail.symbol;
         }
       });
+
+    await initWallet();
   }
 
   async addToken() {
@@ -79,8 +82,27 @@ export default class extends Controller {
     } catch (error) {
       notify(error, 'danger');
     }
-
     hideLoading();
+  }
+
+  async claimGas(event) {
+    const { sitekey } = event.params;
+    const accounts = await w3.eth.getAccounts();
+    grecaptcha.ready(() => {
+      grecaptcha.execute(sitekey, { action: 'submit' }).then((token) => {
+        showLoading();
+        post(`https://catkin-api.pando.im/api/faucets/mvm/${accounts[0]}`, {
+          body: {
+            'g-recaptcha-response': token,
+          },
+        })
+          .then((res) => res.json)
+          .then(({ data }) => {
+            notify(data.msg);
+          })
+          .finally(() => hideLoading());
+      });
+    });
   }
 
   selectCurrency(event) {
