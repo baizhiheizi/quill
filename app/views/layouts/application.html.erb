@@ -49,7 +49,7 @@
     <% end %>
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.3.1/styles/github.min.css" defer="defer">
-    <script src=https://www.google.com/recaptcha/api.js?render=<%= Settings.pando.catkin_reCAPTCHA_site_key %>></script>
+    <script async src=https://www.google.com/recaptcha/api.js?render=<%= Rails.application.credentials.dig(:pando, :catkin_reCAPTCHA_site_key) %>></script>
 
     <%= favicon_link_tag "#{Settings.favicon_file || 'favicon.png'}" %>
     <%= stylesheet_link_tag "application", "photoswipe", "easymde", "tom-select", media: "all", "data-turbo-track": "reload" %>
