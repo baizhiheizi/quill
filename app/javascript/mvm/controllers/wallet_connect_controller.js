@@ -1,21 +1,16 @@
 import { Controller } from '@hotwired/stimulus';
-import {
-  notify,
-  showLoading,
-  hideLoading,
-  initMetaMask,
-  authorize,
-} from '../utils';
+import { authorize } from '../auth';
+import { initWalletConnect } from '../wallet';
+import { notify, showLoading, hideLoading } from '../../utils';
 
 export default class extends Controller {
-  static targets = ['loginButton', 'waiting'];
-
   connect() {}
 
   async login(event) {
     event.preventDefault();
 
-    await initMetaMask();
+    await initWalletConnect();
+
     this.lockButton();
     try {
       await authorize();

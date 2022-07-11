@@ -1,8 +1,7 @@
 import Web3 from 'web3/dist/web3.min.js';
 import { RegistryABI } from './abis';
+import { RegisterAddress } from './constants';
 import { Buffer } from 'buffer';
-
-export const RegisterAddress = '0x3c84B6C98FBeB813e05a7A7813F0442883450B1F';
 
 export class RegistryContract {
   constructor() {

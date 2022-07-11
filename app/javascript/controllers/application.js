@@ -1,9 +1,9 @@
 import { Application } from '@hotwired/stimulus';
 
-const application = Application.start();
+if (!window.Stimulus) {
+  const application = Application.start();
+  window.Stimulus = application;
+}
 
-// Configure Stimulus development experience
-// application.debug = true;
-window.Stimulus = application;
-
+const application = window.Stimulus;
 export { application };

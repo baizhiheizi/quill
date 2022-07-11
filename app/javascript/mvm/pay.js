@@ -1,7 +1,6 @@
 import { post } from '@rails/request.js';
-import { XIN_ASSET_ID } from './index';
 import { BridgeABI, ERC20ABI } from './abis';
-import { BridgeAddress } from './bridge';
+import { BridgeAddress, XIN_ASSET_ID } from './constants';
 import { RegistryContract } from './registry';
 import BigNumber from 'bignumber.js';
 

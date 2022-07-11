@@ -1,6 +1,7 @@
 import { Controller } from '@hotwired/stimulus';
-import { notify, showLoading, hideLoading, initWallet } from '../utils';
-import { payWithMVM } from '../utils/pay';
+import { notify, showLoading, hideLoading } from '../../utils';
+import { initWallet } from '../wallet';
+import { payWithMVM } from '../pay';
 
 export default class extends Controller {
   static targets = ['metaMaskIcon', 'walletConnectIcon', 'waiting'];
