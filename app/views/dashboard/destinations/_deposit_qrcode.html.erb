@@ -2,7 +2,7 @@
 <% deposit_entry = current_user.mvm_deposit_address(asset_id) %>
 
 <div id="<%= dom_id current_user %>_deposit_qrcode">
-  <div class="flex items-start">
+  <div class="sm:flex items-start">
     <div class="flex-1" data-controller="qrcode" data-qrcode-url-value="<%= deposit_entry['destination'] %>">
       <div data-qrcode-target="placeholder" class="flex justify-center h-48 mb-2"></div>
       <div class="flex justify-center">
@@ -36,6 +36,6 @@
       <% end %>
     </p>
     <p><%= t("first_deposit_tips") %></p>
-    <p><%= t("deposit_receive_tips") %></p>
+    <p><%= format(t("deposit_receive_tips"), confirmations: currency.raw['confirmations']) %></p>
   </div>
 </div>

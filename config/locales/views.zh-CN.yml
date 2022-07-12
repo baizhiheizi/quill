@@ -270,7 +270,7 @@ zh-CN:
   this_address_supports: 该地址仅支持
   this_address_supports_erc20: 该地址支持所有 ERC20 代币，例如 ETH、USDT、XIN 等
   first_deposit_tips: 向新地址第一次充值时，请少量尝试！
-  deposit_receive_tips: 所有充值到帐需要至少 16 个区块确认
+  deposit_receive_tips: "所有充值到帐需要至少 %<confirmations>s 个区块确认"
   deposit_to_mvm: 充值至 MVM
   add_to_metamask: 添加至MetaMask
   you_may_claim_some_xin_as_gas_after_your_first_deposit: 首次充值成功后，您可以免费领取一点 XIN 作为 MVM 燃料费。
