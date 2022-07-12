@@ -1,0 +1,45 @@
+<div class="w-96 max-w-full mx-auto mb-4">
+  <div class="py-1 px-2 text-xs opacity-70">
+    To
+  </div>
+  <div class="flex items-center rounded-full border mx-auto w-full">
+    <div class="flex items-center justify-between px-4 py-2 bg-zinc-100 dark:bg-zinc-800 rounded-l-full">
+      <div class="flex items-center space-x-4">
+        <div class='relative w-8'>
+          <%= image_tag fill_asset.icon_url, 
+            data: { swap_target: 'currencyIcon' }, 
+            class: 'w-8 h-8 rounded-full' %>
+          <%= image_tag fill_asset.icon_url, 
+            data: { swap_target: 'currencyChainIcon' }, 
+            class: 'absolute bottom-0 w-3 h-3 rounded-full' %>
+        </div>
+        <div class="text-lg" data-swap-target="currencySymbol">
+          <%= fill_asset.symbol %>
+        </div>
+      </div>
+      <%= render 'shared/icons/chevron_down', html_class: 'w-4 h-4 mx-2' %>
+    </div>
+    <div class="flex-1 px-8">
+      <input disabled value="<%= pay_asset.swap(fill_asset.asset_id, pay_amount) %>" class="w-full py-2 text-xl text-right focus-visible:outline-none" placeholder="To" />
+    </div>
+  </div>
+</div>
+
+<div class="flex justify-center">
+  <%= render "shared/mvm_pay_button", 
+    after_submit_action: 'finish',
+    mixin_uuid: current_user.mixin_uuid, 
+    trace_id: follow_id, 
+    asset_id: pay_asset.asset_id, 
+    symbol: pay_asset.symbol, 
+    icon_url: pay_asset.icon_url, 
+    amount: pay_amount, 
+    memo: Foxswap.api.actions(
+            user_id: current_user.mixin_uuid,
+            follow_id: follow_id,
+            asset_id: fill_asset.asset_id,
+          )['data']['action'], 
+    opponent_ids: SwapOrder::FSWAP_MTG_MEMBERS,
+    threshold: SwapOrder::FSWAP_MTG_THRESHOLD
+  %>
+</div>

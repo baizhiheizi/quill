@@ -4,7 +4,18 @@ import { initWallet } from '../wallet';
 import { payWithMVM } from '../pay';
 
 export default class extends Controller {
-  static targets = ['metaMaskIcon', 'walletConnectIcon', 'waiting'];
+  static targets = [
+    'button',
+    'metaMaskIcon',
+    'walletConnectIcon',
+    'wait',
+    'finish',
+    'scanTransactionLink',
+  ];
+
+  static values = {
+    afterSubmitAction: String,
+  };
 
   async initialize() {
     try {
@@ -12,6 +23,14 @@ export default class extends Controller {
     } catch (error) {
       notify(error.message, 'danger');
     }
+  }
+
+  connect() {
+    console.log(this.afterSubmitActionValue);
+  }
+
+  afterSubmitActionValueChanged() {
+    console.log(this.afterSubmitActionValue);
   }
 
   metaMaskIconTargetConnected() {
@@ -29,7 +48,7 @@ export default class extends Controller {
   async pay(event) {
     event.preventDefault();
 
-    const { assetId, symbol, amount, opponentId, memo, mixinUuid } =
+    const { assetId, symbol, amount, opponentIds, threshold, memo, mixinUuid } =
       event.params;
 
     this.lockButton();
@@ -43,11 +62,25 @@ export default class extends Controller {
         'info',
       );
       await payWithMVM(
-        { assetId, symbol, amount, opponentId, memo, mixinUuid },
-        () => {
-          notify('Successfully paid', 'success');
+        { assetId, symbol, amount, opponentIds, threshold, memo, mixinUuid },
+        (hash) => {
+          notify('Transaction submitted', 'success');
+          this.buttonTarget.classList.add('hidden');
+
+          if (this.afterSubmitActionValue === 'wait' && this.hasWaitTarget) {
+            this.waitTarget.classList.remove('hidden');
+          } else if (
+            this.afterSubmitActionValue === 'finish' &&
+            this.hasFinishTarget
+          ) {
+            this.finishTarget.classList.remove('hidden');
+          }
+
+          this.scanTransactionLinkTargets.forEach((target) => {
+            target.href = `https://scan.mvm.dev/tx/${hash}`;
+            target.classList.remove('hidden');
+          });
           this.unlockButton();
-          this.element.outerHTML = this.waitingTarget.innerHTML;
         },
         (error) => {
           notify(error.message, 'danger');

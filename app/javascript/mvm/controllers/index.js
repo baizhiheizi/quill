@@ -14,5 +14,8 @@ Stimulus.register('mvm-deposit', MvmDepositController);
 import MvmPayController from './mvm_pay_controller.js';
 Stimulus.register('mvm-pay', MvmPayController);
 
+import SwapController from './swap_controller.js';
+Stimulus.register('swap', SwapController);
+
 import WalletConnectController from './wallet_connect_controller.js';
 Stimulus.register('wallet-connect', WalletConnectController);

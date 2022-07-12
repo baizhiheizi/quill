@@ -1,0 +1,7 @@
+<%= turbo_stream.update 'swap_fill_asset' do %>
+  <%= render "mvm/swaps/fill_asset", 
+    fill_asset: @fill_asset, 
+    pay_asset: @pay_asset, 
+    pay_amount: params[:pay_amount], 
+    follow_id: SecureRandom.uuid %>
+<% end %>

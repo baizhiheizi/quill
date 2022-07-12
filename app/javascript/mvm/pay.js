@@ -9,7 +9,12 @@ export async function payWithMVM(params, success, fail) {
     throw new Error('Web3 provider not ready');
   }
 
-  const { assetId, symbol, amount, opponentId, memo, mixinUuid } = params;
+  const { assetId, symbol, amount, opponentIds, threshold, memo, mixinUuid } =
+    params;
+
+  if (memo.length > 200) {
+    throw new Error('Memo too long!');
+  }
 
   const registry = new RegistryContract();
   const contract = await registry.fetchUsersContract([mixinUuid], 1);
@@ -17,7 +22,7 @@ export async function payWithMVM(params, success, fail) {
     throw new Error('User contract empty, please deposit some asset first.');
   }
   const accounts = await w3.eth.getAccounts();
-  const { extra } = await fetchExtra(opponentId, memo);
+  const { extra } = await fetchExtra(opponentIds, threshold, memo);
 
   if (assetId === XIN_ASSET_ID) {
     await payXIN(
@@ -84,11 +89,11 @@ export async function payXIN(params, success, fail) {
     .on('error', fail);
 }
 
-export async function fetchExtra(opponentId, memo) {
+export async function fetchExtra(opponentIds, threshold, memo) {
   const res = await post('/mvm/extras', {
     body: {
-      receivers: [opponentId],
-      threshold: 1,
+      receivers: opponentIds,
+      threshold: threshold,
       extra: memo,
     },
   });

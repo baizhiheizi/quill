@@ -152,5 +152,7 @@ Rails.application.routes.draw do
 
   namespace :mvm do
     resources :extras, only: :create
+    resource :faucet, only: :create
+    resource :swap, only: :create
   end
 end

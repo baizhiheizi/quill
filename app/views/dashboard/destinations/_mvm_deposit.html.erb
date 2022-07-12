@@ -48,20 +48,8 @@
 
     <div class="hidden" data-tabs-target="content" data-tabs-content-param="address">
       <%= render "dashboard/destinations/deposit_qrcode", asset_id: selected.asset_id %>
-      <div class="max-w-xs mx-auto mb-2" data-mvm-deposit-target="claimGasButton">
-        <button 
-          data-action="mvm-deposit#claimGas" 
-          data-mvm-deposit-sitekey-param="<%= Rails.application.credentials.dig(:pando, :catkin_reCAPTCHA_site_key) %>"
-          class="flex justify-center items-center space-x-2 w-96 max-w-full mt-4 mb-2 text-center no-underline cursor-pointer py-2 block bg-stone-600 hover:bg-stone-700 active:bg-stone-500 text-white rounded-full">
-          <%= image_tag Currency.find_by(symbol: 'XIN').icon_url, class: 'h-8 w-8 rounded-full' %>
-          <span><%= t('claim_gas') %></span>
-        </button>
-        <div class="text-center text-sm opacity-60 inline">
-          <span><%= t('you_may_claim_some_xin_as_gas_after_your_first_deposit') %></span>
-          <%= link_to "https://catkin.pando.im/faucet/mvm/", class: 'inline', target: "_blank" do %>
-            <%= render "shared/icons/question_mark_circle", html_class: "w-4 h-4 inline" %>
-          <% end %>
-        </div>
+      <div class="max-w-xs mx-auto mb-2">
+        <%= render "mvm/faucets/claim_button" %>
       </div>
     </div>
 

@@ -49,6 +49,7 @@ class User < ApplicationRecord
   has_many :swap_orders, through: :payments
   has_many :notifications, as: :recipient, dependent: :destroy
   has_many :prs_transactions, through: :prs_account, source: :transactions
+  has_many :bonuses, dependent: :restrict_with_exception
 
   has_one :wallet, class_name: 'MixinNetworkUser', as: :owner, dependent: :nullify
   has_one :notification_setting, dependent: :destroy
@@ -291,7 +292,7 @@ class User < ApplicationRecord
 
     r = authorization.mixin_api.asset asset_id
     r['deposit_entries'].first
-  rescue MixinBot::Errors
+  rescue MixinBot::Error
     {}
   end
 
@@ -319,5 +320,32 @@ class User < ApplicationRecord
     return name unless mvm_eth?
 
     "#{name.first(6)}...#{name.last(4)}"
+  end
+
+  def may_claim_faucet?
+    return unless mvm_eth?
+
+    faucet_bonus.blank?
+  end
+
+  def claim_faucet!
+    return unless may_claim_faucet?
+
+    deposit = authorization.mixin_api.snapshots['data'].find(&->(snapshot) { snapshot['type'] == 'deposit' })
+    return if deposit.blank?
+
+    deposit_asset = Currency.find_or_create_by asset_id: deposit['asset_id']
+    bonus =
+      bonuses.create!(
+        asset_id: Currency::XIN_ASSET_ID,
+        title: 'Faucet',
+        description: "Desposited #{deposit['amount']} #{deposit_asset.symbol}",
+        amount: Bonus::XIN_FAUCET_AMOUNT
+      )
+    bonus.deliver!
+  end
+
+  def faucet_bonus
+    @faucet_bonus = bonuses.find_by(asset_id: Currency::XIN_ASSET_ID, title: 'Faucet')
   end
 end

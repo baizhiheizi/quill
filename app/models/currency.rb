@@ -65,6 +65,14 @@ class Currency < ApplicationRecord
     update! raw: r['data']
   end
 
+  def swap(fill_asset_id, amount)
+    Foxswap.api.pre_order(
+      pay_asset_id: asset_id,
+      fill_asset_id: fill_asset_id,
+      funds: (amount * 1.01).round(8).to_r.to_f
+    )['data']['amount']
+  end
+
   private
 
   def set_defaults

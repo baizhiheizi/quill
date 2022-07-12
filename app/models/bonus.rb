@@ -22,6 +22,8 @@
 #
 
 class Bonus < ApplicationRecord
+  XIN_FAUCET_AMOUNT = 0.001
+
   include AASM
 
   belongs_to :user
@@ -57,7 +59,7 @@ class Bonus < ApplicationRecord
         amount: amount,
         asset_id: asset_id,
         trace_id: trace_id,
-        memo: "Bonus(#{title})"
+        memo: title
       )
   end
 

@@ -85,26 +85,6 @@ export default class extends Controller {
     hideLoading();
   }
 
-  async claimGas(event) {
-    const { sitekey } = event.params;
-    const accounts = await w3.eth.getAccounts();
-    grecaptcha.ready(() => {
-      grecaptcha.execute(sitekey, { action: 'submit' }).then((token) => {
-        showLoading();
-        post(`https://catkin-api.pando.im/api/faucets/mvm/${accounts[0]}`, {
-          body: {
-            'g-recaptcha-response': token,
-          },
-        })
-          .then((res) => res.json)
-          .then(({ data }) => {
-            notify(data.msg);
-          })
-          .finally(() => hideLoading());
-      });
-    });
-  }
-
   selectCurrency(event) {
     const asset_id = event.target.value;
     get(`/dashboard/destination?asset_id=${asset_id}`, {

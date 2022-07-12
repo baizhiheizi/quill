@@ -31,7 +31,8 @@
       icon_url: currency.icon_url, 
       amount: amount, 
       memo: article.reward_payment_memo, 
-      opponent_id: (current_user&.wallet_id || article.wallet_id) %>
+      threshold: 1, 
+      opponent_ids: [current_user&.wallet_id || article.wallet_id] %>
 
     <%= render "shared/mvm_deposit_button" %>
   <% else %>

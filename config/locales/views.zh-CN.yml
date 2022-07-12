@@ -276,3 +276,8 @@ zh-CN:
   you_may_claim_some_xin_as_gas_after_your_first_deposit: 首次充值成功后，您可以免费领取一点 XIN 作为 MVM 燃料费。
   address: 地址
   claim_gas: 领取燃料
+  you_have_successfully_claimed_please_check_your_wallet_later: 成功领取免费 XIN，请稍候在您的钱包查收。
+  transaction_submitted: 交易已提交
+  get_more_xin: 获取更多XIN 
+  you_may_write_a_good_article_and_sell_it_for_xin: 您可以写一篇好文章出售，赚取 XIN。
+  you_need_to_deposit_first: 您需要先充值资产
