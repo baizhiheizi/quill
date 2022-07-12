@@ -10,7 +10,7 @@
         </div>
       </div>
 
-      <div class="flex items-center space-x-2 ml-4 md:ml-6">
+      <div class="flex items-center space-x-2 ml-4">
         <div class="flex items-baseline space-x-4">
           <% if current_user.blank? %>
             <%= link_to t("write"), view_modals_path(type: :login, return_to: new_article_url), data: { turbo_method: :post }, class: "px-3 py-2 text-base font-medium hover:bg-blue-50 hover:text-blue-500 dark:hover:bg-gray-800 rounded-md" %>
@@ -33,8 +33,44 @@
         </div>
       </div>
 
-      <div class="flex items-center ml-4 md:ml-6">
-        <div class="" data-controller="darkmode">
+      <div class="flex items-center ml-3">
+        <div data-controller="dropdown" class="relative mr-3">
+          <button data-action="dropdown#toggle click@window->dropdown#hide" class="block">
+            <%= render "shared/icons/global_alt", html_class: 'w-6 h-6' %>
+          </button>
+          <div data-dropdown-target="menu" 
+              data-transition-enter-active="transition ease-out duration-100"
+              data-transition-enter-from="transform opacity-0 scale-95"
+              data-transition-enter-to="transform opacity-100 scale-100"
+              data-transition-leave-active="transition ease-in duration-75"
+              data-transition-leave-from="transform opacity-100 scale-100"
+              data-transition-leave-to="transform opacity-0 scale-95"
+              class="absolute right-0 hidden w-48 py-1 mt-2 bg-white dark:bg-zinc-900 shadow-lg origin-top-right rounded-md ring-1 ring-black ring-opacity-5 focus:outline-none" 
+              role="menu" 
+              aria-orientation="vertical" 
+              tabindex="-1">
+            <%= link_to 'English', 
+              'https://batata.im', 
+              class: "block px-4 py-2 text-sm opacity-70 hover:bg-zinc-100 dark:hover:bg-zinc-800", 
+              role: "menuitem", 
+              target: "_blank",
+              tabindex: "-1" unless I18n.default_locale == :en %>
+            <%= link_to '中文', 
+              'https://cn.batata.im', 
+              class: "block px-4 py-2 text-sm opacity-70 hover:bg-zinc-100 dark:hover:bg-zinc-800", 
+              role: "menuitem", 
+              target: "_blank",
+              tabindex: "-1" unless I18n.default_locale == :'zh-CN' %>
+            <%= link_to '日本语', 
+              'https://ja.batata.im', 
+              class: "block px-4 py-2 text-sm opacity-70 hover:bg-zinc-100 dark:hover:bg-zinc-800", 
+              role: "menuitem", 
+              target: "_blank",
+              tabindex: "-1" unless I18n.default_locale == :ja %>
+          </div>
+        </div>
+        
+        <div class="hidden md:block" data-controller="darkmode">
           <a class="hidden block mr-3 cursor-pointer" data-darkmode-target="lightButton" data-action="darkmode#toggle">
             <%= render 'shared/icons/moon', html_class: "w-6 h-6" %>
           </a>
@@ -44,10 +80,10 @@
         </div>
 
         <% if current_user.present? %>
-          <%= link_to dashboard_notifications_path, class: "p-1 relative rounded-full hover:text-blue-500 hover:bg-blue-50 dark:hover:bg-gray-800" do %>
+          <%= link_to dashboard_notifications_path, class: "relative rounded-full hover:text-blue-500 hover:bg-blue-50 dark:hover:bg-gray-800" do %>
             <span class="sr-only">View notifications</span>
             <!-- Heroicon name: outline/bell -->
-            <%= render 'shared/icons/bell' %>
+            <%= render 'shared/icons/bell', html_class: 'w-6 h-6' %>
             <% if current_user.has_unread_notification? %>
               <span class="absolute top-0 right-0 rounded-full bg-red-500 w-2 h-2"></span>
             <% end %>
@@ -215,6 +251,21 @@
         <% else %>
           <div class="px-2 sm:px-3 flex">
             <%= link_to 'Connect Wallet', view_modals_path(type: :login), data: { turbo_method: :post }, class: "block px-3 py-2 text-base font-medium text-white bg-blue-500 focus:bg-blue-600 rounded-md" %>
+          </div>
+        <% end %>
+        <% unless I18n.default_locale == :en %>
+          <div class="px-2 mt-3 space-y-1">
+            <%= link_to 'English', 'https://batata.im', target: '_blank', class: "block px-3 py-2 text-base font-medium focus:bg-blue-50 focus:text-blue-500 rounded-md" %>
+          </div>
+        <% end %>
+        <% unless I18n.default_locale == :'zh-CN' %>
+          <div class="px-2 mt-3 space-y-1">
+            <%= link_to '中文', 'https://cn.batata.im', target: '_blank', class: "block px-3 py-2 text-base font-medium focus:bg-blue-50 focus:text-blue-500 rounded-md" %>
+          </div>
+        <% end %>
+        <% unless I18n.default_locale == :ja %>
+          <div class="px-2 mt-3 space-y-1">
+            <%= link_to '日本语', 'https://ja.batata.im', target: '_blank', class: "block px-3 py-2 text-base font-medium focus:bg-blue-50 focus:text-blue-500 rounded-md" %>
           </div>
         <% end %>
       </div>
