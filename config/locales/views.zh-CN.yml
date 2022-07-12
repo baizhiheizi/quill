@@ -275,7 +275,7 @@ zh-CN:
   add_to_metamask: 添加至MetaMask
   you_may_claim_some_xin_as_gas_after_your_first_deposit: 首次充值成功后，您可以免费领取一点 XIN 作为 MVM 燃料费。
   address: 地址
-  claim_gas: 领取燃料
+  claim_free_xin: 领取免费XIN
   you_have_successfully_claimed_please_check_your_wallet_later: 成功领取免费 XIN，请稍候在您的钱包查收。
   transaction_submitted: 交易已提交
   get_more_xin: 获取更多XIN 

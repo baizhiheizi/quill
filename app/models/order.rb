@@ -136,6 +136,7 @@ class Order < ApplicationRecord
 
       salt = order_ids.push trace_id
       transfers.create_with(
+        queue_priority: :low,
         wallet: payment.wallet,
         transfer_type: :reader_revenue,
         opponent_id: reader_id,
@@ -157,6 +158,7 @@ class Order < ApplicationRecord
         next if (_ref_amount - MINIMUM_AMOUNT).negative?
 
         transfers.create_with(
+          queue_priority: :low,
           transfer_type: :reference_revenue,
           wallet: payment.wallet,
           opponent_id: ref.reference.wallet_id,
@@ -179,6 +181,7 @@ class Order < ApplicationRecord
     _prsdigg_amount = (total * item.platform_revenue_ratio).floor(8)
     if _prsdigg_amount.positive? && payment.wallet.present?
       transfers.create_with(
+        queue_priority: :low,
         wallet: payment.wallet,
         transfer_type: :prsdigg_revenue,
         opponent_id: PrsdiggBot.api.client_id,
@@ -201,6 +204,7 @@ class Order < ApplicationRecord
         "#{buyer.name} #{buy_article? ? 'bought' : 'rewarded'} #{item.title}"
       end
     transfers.create_with(
+      queue_priority: :low,
       wallet: payment.wallet,
       transfer_type: :author_revenue,
       opponent_id: item.author.mixin_uuid,

@@ -3,12 +3,12 @@
 class ProcessTransferWorker
   include Sidekiq::Worker
 
-  sidekiq_options queue: :low, retry: true
+  sidekiq_options queue: :default, retry: true
 
   sidekiq_retry_in do |count, exception|
     case exception
     when MixinBot::InsufficientPoolError, MixinBot::PinError
-      SecureRandom.random_number(300) if count < 10
+      SecureRandom.random_number(120) if count < 10
     end
   end
 
