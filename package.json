@@ -26,7 +26,7 @@
     "buffer": "^6.0.3",
     "easymde": "^2.16.1",
     "esbuild": "^0.14.47",
-    "highlight.js": "^11.5.1",
+    "highlight.js": "^11.6.0",
     "mixin-messenger-utils": "^0.1.5",
     "photoswipe": "^5.2.8",
     "postcss": "^8.4.14",
