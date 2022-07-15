@@ -1,6 +1,6 @@
 import { Controller } from '@hotwired/stimulus';
 import { notify, showLoading, hideLoading } from '../../utils';
-import { initWallet } from '../wallet';
+import { balanceOf, initWallet } from '../wallet';
 import { payWithMVM } from '../pay';
 
 export default class extends Controller {
@@ -11,9 +11,14 @@ export default class extends Controller {
     'wait',
     'finish',
     'scanTransactionLink',
+    'balance',
+    'balanceValue',
+    'balanceLink',
   ];
 
   static values = {
+    assetId: String,
+    assetSymbol: String,
     afterSubmitAction: String,
   };
 
@@ -25,12 +30,17 @@ export default class extends Controller {
     }
   }
 
-  connect() {
-    console.log(this.afterSubmitActionValue);
-  }
+  async assetIdValueChanged() {
+    if (!this.assetIdValue) return;
+    if (!window.w3) {
+      await initWallet();
+    }
 
-  afterSubmitActionValueChanged() {
-    console.log(this.afterSubmitActionValue);
+    const accounts = await w3.eth.getAccounts();
+    const balance = await balanceOf(this.assetIdValue, accounts[0]);
+    this.balanceValueTarget.innerText = `${balance} ${this.assetSymbolValue}`;
+    this.balanceTarget.classList.remove('hidden');
+    this.balanceLinkTarget.href = `https://scan.mvm.dev/address/${accounts[0]}/tokens#address-tabs`;
   }
 
   metaMaskIconTargetConnected() {

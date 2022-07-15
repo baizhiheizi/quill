@@ -1,34 +1,48 @@
 <% after_submit_action ||= 'wait' %>
 
-<div data-controller="mvm-pay" data-mvm-pay-after-submit-action-value="<%= after_submit_action %>">
-  <button data-mvm-pay-target="button"
-    data-action="mvm-pay#pay"
-    data-mvm-pay-mixin-uuid-param="<%= mixin_uuid %>"
-    data-mvm-pay-trace-id-param="<%= trace_id %>"
-    data-mvm-pay-asset-id-param="<%= asset_id %>"
-    data-mvm-pay-symbol-param="<%= symbol %>"
-    data-mvm-pay-icon-url-param="<%= icon_url %>"
-    data-mvm-pay-amount-param="<%= amount %>"
-    data-mvm-pay-memo-param="<%= memo %>"
-    data-mvm-pay-opponent-ids-param="<%= opponent_ids %>"
-    data-mvm-pay-threshold-param="<%= threshold %>"
-    class="flex justify-center space-x-4 items-center w-96 max-w-full my-4 text-center no-underline cursor-pointer py-2 block bg-blue-600 hover:bg-blue-700 active:bg-blue-700 text-white rounded-full">
-    <div class="w-8 h-8 flex">
-      <%= image_tag 'https://docs.metamask.io/metamask-fox.svg',
-        data: {
-          mvm_pay_target: 'metaMaskIcon'
-        },
-        class: 'hidden w-full h-auto' %>
+<div data-controller="mvm-pay" 
+  data-mvm-pay-after-submit-action-value="<%= after_submit_action %>"
+  data-mvm-pay-asset-symbol-value="<%= symbol %>"
+  data-mvm-pay-asset-id-value="<%= asset_id %>">
+  <div class="my-4">
+    <button data-mvm-pay-target="button"
+      data-action="mvm-pay#pay"
+      data-mvm-pay-mixin-uuid-param="<%= mixin_uuid %>"
+      data-mvm-pay-trace-id-param="<%= trace_id %>"
+      data-mvm-pay-asset-id-param="<%= asset_id %>"
+      data-mvm-pay-symbol-param="<%= symbol %>"
+      data-mvm-pay-icon-url-param="<%= icon_url %>"
+      data-mvm-pay-amount-param="<%= amount %>"
+      data-mvm-pay-memo-param="<%= memo %>"
+      data-mvm-pay-opponent-ids-param="<%= opponent_ids %>"
+      data-mvm-pay-threshold-param="<%= threshold %>"
+      class="flex justify-center space-x-4 items-center w-96 max-w-full text-center no-underline cursor-pointer py-2 block bg-blue-600 hover:bg-blue-700 active:bg-blue-700 text-white rounded-full">
+      <div class="w-8 h-8 flex">
+        <%= image_tag 'https://docs.metamask.io/metamask-fox.svg',
+          data: {
+            mvm_pay_target: 'metaMaskIcon'
+          },
+          class: 'hidden w-full h-auto' %>
 
-      <%= image_tag 'https://docs.walletconnect.com/img/walletconnect-logo.svg', 
-        data: {
-          mvm_pay_target: 'walletConnectIcon'
-        },
-        class: 'hidden w-full h-auto' %>
+        <%= image_tag 'https://docs.walletconnect.com/img/walletconnect-logo.svg', 
+          data: {
+            mvm_pay_target: 'walletConnectIcon'
+          },
+          class: 'hidden w-full h-auto' %>
+      </div>
+
+      <span class="text-lg"><%= t('pay') %></span>
+    </button>
+    <div data-mvm-pay-target="balance" class="py-1 px-2 text-sm opacity-75 text-right">
+      <span><%= t('balance') %>:</span>
+      <span data-mvm-pay-target="balanceValue">
+        0 <%= symbol %>
+      </span>
+      <%= link_to "", data: { mvm_pay_target: 'balanceLink' }, target: "_blank", class: "inline-block align-middle" do %> 
+        <%= render "shared/icons/external_link", html_class: 'w-3 h-3' %>
+      <% end %>
     </div>
-
-    <span class="text-lg"><%= t('pay') %></span>
-  </button>
+  </div>
 
   <div class="w-full hidden" data-mvm-pay-target="wait">
     <%= render partial: "shared/loading" %>

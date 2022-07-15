@@ -1,6 +1,10 @@
 import detectEthereumProvider from '@metamask/detect-provider';
 import Web3 from 'web3/dist/web3.min.js';
 import WalletConnectProvider from '@walletconnect/web3-provider/dist/umd/index.min.js';
+import { ERC20ABI } from './abis';
+import { RegistryContract } from './registry';
+import { XIN_ASSET_ID } from './constants';
+import BigNumber from 'bignumber.js';
 
 export const MVM_CHAIN_ID = '0x120c7';
 
@@ -64,4 +68,32 @@ export async function addMvmChain() {
       },
     ],
   });
+}
+
+export async function balanceOf(assetId, account) {
+  await initWallet();
+
+  if (!account) {
+    const accounts = await w3.eth.getAccounts();
+    account = accounts[0];
+  }
+  const registry = new RegistryContract();
+  let balance = 0;
+
+  if (assetId == XIN_ASSET_ID) {
+    balance = await w3.eth.getBalance(account);
+    balance = BigNumber(balance).dividedBy(1e18);
+  } else {
+    try {
+      const assetContractAddress = await registry.fetchAssetContract(assetId);
+      let IERC20 = new w3.eth.Contract(ERC20ABI, assetContractAddress);
+
+      balance = await IERC20.methods.balanceOf(account).call();
+      balance = BigNumber(balance).dividedBy(1e8);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  return balance.toString();
 }

@@ -6,7 +6,7 @@
 
 <div id="payment_<%= payment_trace_id %>">
   <div data-article-paymnent-target="price" class="flex items-center justify-center space-x-2 text-base">
-    <span class="text-red-500 font-bold "><%= "#{format('%.8f', payment_amount)}" %></span>
+    <span class="text-red-500 font-bold "><%= "#{format('%.8f', payment_amount.to_f)}" %></span>
     <span><%= currency_symbol %></span>
   </div>
 

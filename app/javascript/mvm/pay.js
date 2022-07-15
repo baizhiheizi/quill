@@ -3,6 +3,7 @@ import { BridgeABI, ERC20ABI } from './abis';
 import { BridgeAddress, XIN_ASSET_ID } from './constants';
 import { RegistryContract } from './registry';
 import BigNumber from 'bignumber.js';
+import { balanceOf } from './wallet';
 
 export async function payWithMVM(params, success, fail) {
   if (!w3) {
@@ -59,16 +60,16 @@ export async function payWithMVM(params, success, fail) {
 }
 
 export async function payERC20(params, success, fail) {
-  const { assetContractAddress, amount, contract, extra, account } = params;
+  const { assetId, assetContractAddress, amount, contract, extra, account } =
+    params;
 
   let IERC20 = new w3.eth.Contract(ERC20ABI, assetContractAddress);
 
-  let payAmount = BigNumber(amount).multipliedBy(BigNumber(1e8));
-
-  const balance = await IERC20.methods.balanceOf(account).call();
-  if (BigNumber(balance).isLessThan(payAmount)) {
+  const balance = await balanceOf(assetId, account);
+  if (BigNumber(balance).isLessThan(BigNumber(amount))) {
     throw new Error('Insufficient balance');
   }
+  let payAmount = BigNumber(amount).multipliedBy(BigNumber(1e8));
 
   IERC20.methods
     .transferWithExtra(contract, payAmount.toString(), `0x${extra}`)
@@ -81,7 +82,12 @@ export async function payXIN(params, success, fail) {
   const { amount, contract, extra, account } = params;
   const BridgeContract = new w3.eth.Contract(BridgeABI, BridgeAddress);
 
+  const balance = await balanceOf(assetId, account);
+  if (BigNumber(balance).isLessThan(BigNumber(amount))) {
+    throw new Error('Insufficient balance');
+  }
   const payAmount = BigNumber(amount).multipliedBy(BigNumber(1e18));
+
   BridgeContract.methods
     .release(contract, `0x${extra}`)
     .send({ from: account, value: payAmount.toString() })
