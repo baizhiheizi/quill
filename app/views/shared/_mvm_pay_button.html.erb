@@ -36,7 +36,7 @@
     <div data-mvm-pay-target="balance" class="py-1 px-2 text-sm opacity-75 text-right">
       <span><%= t('balance') %>:</span>
       <span data-mvm-pay-target="balanceValue">
-        0 <%= symbol %>
+        <%= image_tag 'loading.svg', class: 'w-4 h-4 inline-block' %>
       </span>
       <%= link_to "", data: { mvm_pay_target: 'balanceLink' }, target: "_blank", class: "inline-block align-middle" do %> 
         <%= render "shared/icons/external_link", html_class: 'w-3 h-3' %>

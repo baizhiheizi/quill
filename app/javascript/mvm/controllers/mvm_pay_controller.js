@@ -39,7 +39,6 @@ export default class extends Controller {
     const accounts = await w3.eth.getAccounts();
     const balance = await balanceOf(this.assetIdValue, accounts[0]);
     this.balanceValueTarget.innerText = `${balance} ${this.assetSymbolValue}`;
-    this.balanceTarget.classList.remove('hidden');
     this.balanceLinkTarget.href = `https://scan.mvm.dev/address/${accounts[0]}/tokens#address-tabs`;
   }
 
