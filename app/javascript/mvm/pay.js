@@ -28,6 +28,7 @@ export async function payWithMVM(params, success, fail) {
   if (assetId === XIN_ASSET_ID) {
     await payXIN(
       {
+        assetId,
         symbol,
         amount,
         contract,
@@ -79,7 +80,7 @@ export async function payERC20(params, success, fail) {
 }
 
 export async function payXIN(params, success, fail) {
-  const { amount, contract, extra, account } = params;
+  const { assetId, amount, contract, extra, account } = params;
   const BridgeContract = new w3.eth.Contract(BridgeABI, BridgeAddress);
 
   const balance = await balanceOf(assetId, account);
