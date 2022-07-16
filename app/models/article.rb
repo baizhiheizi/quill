@@ -192,7 +192,7 @@ class Article < ApplicationRecord
 
   def notify_admin
     AdminNotificationService.new.text(
-      "#{author.name} 创建了新文章 《#{title}》"
+      "#{author.name} published new article #{title}"
     )
   end
 
