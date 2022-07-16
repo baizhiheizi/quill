@@ -4,9 +4,8 @@
   data-mvm-pay-after-submit-action-value="<%= after_submit_action %>"
   data-mvm-pay-asset-symbol-value="<%= symbol %>"
   data-mvm-pay-asset-id-value="<%= asset_id %>">
-  <div class="my-4">
-    <button data-mvm-pay-target="button"
-      data-action="mvm-pay#pay"
+  <div data-mvm-pay-target="button" class="my-4">
+    <button data-action="mvm-pay#pay"
       data-mvm-pay-mixin-uuid-param="<%= mixin_uuid %>"
       data-mvm-pay-trace-id-param="<%= trace_id %>"
       data-mvm-pay-asset-id-param="<%= asset_id %>"
