@@ -8,8 +8,8 @@ launch_time:
 blaze_enable: false
 
 # page
-page_title: 'Batata: write and read in the Web3 way'
-page_keywords: Batata, Web3, Write, Read, platform, Blockchain, Bitcoin, BTC, Mixin Network, Mixin Messenger
+page_title: 'Batata: Write and read in the Web3 way'
+page_keywords: Batata, Web3, Write, Read, platform, Article, Blockchain, Bitcoin, BTC, ETH, Mixin Network, Mixin Messenger, MVM
 page_description: I'm Batata. Write and read in the Web3 way
 messenger: Mixin Messenger
 twitter_account: batata_web3
@@ -42,7 +42,7 @@ whitelist:
 
 # 4swap
 foxswap:
-  authorization: eyJhbGciOiJSUzUxMiJ9.eyJ1aWQiOiI2ZDhmZDI1YS0xZWIxLTRhZmItYjJhNi1kMzQ5OTE5NTliNzYiLCJzaWQiOiI4Nzc4NjNkYS0xZWM5LTQ1ZGYtOTFjZi02OTg1ZjUwZTE2NDkiLCJpYXQiOjE2MDY3MTQ1NjMsImV4cCI6MjIzNzg1MzYwMywianRpIjoiYmU1ZTllOWMtOWVjNi00NjI1LTljMTUtMmI0ZjBjNWI3ZWFiIiwic2lnIjoiNWU2YjU4ZmZhMTBiM2JjNTE3MjRmZjBiYmQyYWZiOTFjNDc3MWVlMzQwZjVkNjg1MzQwZGZhNGM4NTRiYWZiYSIsInNjcCI6IkZVTEwifQ.SuGrLktXkt-31oZRqgN8ujaTKvzpt6FMk6ad4dJJN-4veneyK_9EEmpDys7haODVaEe0GqTawlxT6tUaxhqCS4jhikbzCLWmL3jPB8yRWReUZuMiHYFNLWxYD27BJNRSG8f8fKLNikrfjHePlJ2RUDjJ8aNpnqmMN8H6zoshuNg
+  authorization: 
   app_id: a753e0eb-3010-4c4a-a7b2-a7bda4063f62
   mtg_members:
     - a753e0eb-3010-4c4a-a7b2-a7bda4063f62
