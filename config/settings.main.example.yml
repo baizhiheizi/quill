@@ -8,7 +8,7 @@ launch_time:
 blaze_enable: false
 
 # page
-page_title: Batata: write and read in the Web3 way
+page_title: 'Batata: write and read in the Web3 way'
 page_keywords: Batata, Web3, Write, Read, platform, Blockchain, Bitcoin, BTC, Mixin Network, Mixin Messenger
 page_description: I'm Batata. Write and read in the Web3 way
 messenger: Mixin Messenger
@@ -30,6 +30,8 @@ supported_assets:
   - c6d0c728-2624-429b-8e0d-d9d19b6592fa
   # ETH
   - 43d61dcd-e413-450d-80b8-101d5e903357
+  # XIN
+  - c94ac88f-4671-3976-b60a-09064f1811e8
 swapable: true
 
 # whitelist
