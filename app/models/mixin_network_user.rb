@@ -24,7 +24,7 @@
 #
 
 class MixinNetworkUser < ApplicationRecord
-  DEFAULT_AVATAR_FILE = Rails.application.root.join('app/assets/images/logo.png')
+  DEFAULT_AVATAR_FILE = Rails.application.root.join('app/assets/images/broker-avatar.png')
 
   include Encryptable
 
@@ -108,7 +108,7 @@ class MixinNetworkUser < ApplicationRecord
   end
 
   def default_name
-    Settings.broker_name || 'Batata'
+    'Batata'
   end
 
   def avatar

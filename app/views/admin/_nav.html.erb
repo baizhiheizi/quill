@@ -3,7 +3,7 @@
     <div class="flex items-center justify-between h-16">
       <div class="flex items-center flex-1 space-x-10">
         <%= link_to admin_root_path, class: 'flex items-center space-x-2 flex-shrink-0' do %>
-          <img class="w-10 h-10" src=<%= asset_path('logo.png') %> alt="Logo">
+          <img class="w-auto h-10" src=<%= asset_path('logo.svg') %> alt="Logo">
         <% end %>
       </div>
 
@@ -25,7 +25,7 @@
   <div class="relative px-4 max-h-screen">
     <div class="relative flex items-center justify-center h-12">
       <%= link_to admin_root_path, class: "flex items-center flex-shrink-0 space-x-2" do %>
-        <img class="w-8 h-8" src=<%= asset_path('logo.png') %> alt="Logo">
+        <img class="w-auto h-8" src=<%= asset_path('logo.svg') %> alt="Logo">
         <span class='text-xl font-medium dark:text-zinc-50'>Admin</span>
       <% end %>
     </div>

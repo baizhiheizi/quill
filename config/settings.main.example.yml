@@ -8,10 +8,9 @@ launch_time:
 blaze_enable: false
 
 # page
-app_name: Batata
 page_title: Batata: write and read in the Web3 way
 page_keywords: Batata, Web3, Write, Read, platform, Blockchain, Bitcoin, BTC, Mixin Network, Mixin Messenger
-page_description: Batata
+page_description: I'm Batata. Write and read in the Web3 way
 messenger: Mixin Messenger
 twitter_account: batata_web3
 
@@ -20,7 +19,7 @@ mixin_logo_file: mixin-logo.png
 mixin_logo_light_file: mixin-logo-light.png
 
 # locale
-time_zone: Asia/Shanghai
+time_zone: UTC
 default_locale: en
 available_locales:
   - en

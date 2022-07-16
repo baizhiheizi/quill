@@ -9,11 +9,9 @@ launch_time: '2021-06-16T12:00:00+09:00'
 blaze_enable: false
 
 # page
-app_name: 文商
 page_title: 文商Bunshow
 page_keywords: 文商, bunshow
 page_description: 文商, bunshow
-broker_name: 文商ブローカー
 messenger: links
 twitter_account: LinksBTC
 
@@ -31,6 +29,8 @@ available_locales:
 supported_assets:
   # BTC
   - c6d0c728-2624-429b-8e0d-d9d19b6592fa
+  # JPYC
+  - 0ff3f325-4f34-334d-b6c0-a3bd8850fc06
 swapable: false
 
 # whitelist
