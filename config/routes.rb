@@ -54,7 +54,7 @@ Rails.application.routes.draw do
   resources :currencies, only: %i[index]
 
   get '/fair' => 'high_voltage/pages#show', id: 'fair', as: :fair_page
-  get '/rules' => 'high_voltage/pages#show', id: 'rules', as: :rules_page
+  get '/rules', to: redirect('https://docs.batata.im', status: 302), as: :rules_page
   get '/:uid', to: 'users#show', as: 'user'
   resources :users, only: :show, param: :uid
   resources :users, only: [], module: 'users', param: :uid do

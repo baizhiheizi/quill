@@ -3,14 +3,14 @@
     <a class="rounded-t-lg block flex items-center space-x-4 p-4 border-b hover:bg-zinc-100 dark:hover:bg-zinc-800 active:bg-zinc-100 dark:active:bg-zinc-800"
       target="_blank"
       data-action="modal#hide"
-      href="<%= share_to_mixin article_url(article), title: article.title, description: article.intro, icon_url: article.author.avatar %>">
+      href="<%= share_to_mixin user_article_url(article.author, article), title: article.title, description: article.intro, icon_url: article.author.avatar %>">
       <%= image_tag Settings.mixin_logo_file || 'mixin-logo.png', class: "w-auto h-6" %>
       <span class="text-base"><%= Settings.messenger %></span>
     </a>
   <% end %>
   <button class="block w-full flex items-center space-x-4 p-4 border-b opacity-70 hover:bg-zinc-100 dark:hover:bg-zinc-800 active:bg-zinc-100 dark:active:bg-zinc-800"
     data-controller="clipboard"
-    data-clipboard-text-value="<%= article_url article %>"
+    data-clipboard-text-value="<%= user_article_url article.author, article %>"
     data-clipboard-success-tip-value="URL copied"
     data-action="clipboard#copy modal#hide">
     <%= render "shared/icons/copy" %>
@@ -19,14 +19,14 @@
   <a class="block flex items-center space-x-4 p-4 border-b opacity-70 hover:bg-zinc-100 dark:hover:bg-zinc-800 active:bg-zinc-100 dark:active:bg-zinc-800"
       target="_blank"
       data-action="modal#hide"
-      href="<%= share_to_twitter article_url(article), article.title %>">
+      href="<%= share_to_twitter user_article_url(article.author, article), article.title %>">
     <%= render "shared/icons/twitter" %>
     <span class="text-base">Twitter</span>
   </a>
   <a class="block flex items-center space-x-4 p-4 border-b opacity-70 hover:bg-zinc-100 dark:hover:bg-zinc-800 active:bg-zinc-100 dark:active:bg-zinc-800 rounded-b-lg"
       target="_blank"
       data-action="modal#hide"
-      href="<%= share_to_facebook article_url(article) %>">
+      href="<%= share_to_facebook user_article_url(article.author, article) %>">
     <%= render "shared/icons/facebook" %>
     <span class="text-base">Facebook</span>
   </a>

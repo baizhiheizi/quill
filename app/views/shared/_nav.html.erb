@@ -25,12 +25,7 @@
           <%= link_to t("fair"), fair_page_path, class: "px-3 py-2 text-base font-medium hover:bg-blue-50 hover:text-blue-500 dark:hover:bg-gray-800 rounded-md" %>
         </div>
         <div class="hidden md:block">
-          <%= link_to t("rules"), rules_page_path, class: "px-3 py-2 text-base font-medium hover:bg-blue-50 hover:text-blue-500 dark:hover:bg-gray-800 rounded-md" %>
-        </div>
-        <div class="hidden md:block">
-          <a href="https://github.com/baizhiheizi/batata" target="_blank" class="hover:bg-blue-50 hover:text-blue-500 dark:hover:bg-gray-800 rounded-md">
-            <%= render "shared/icons/github" %>
-          </a>
+          <%= link_to t("rules"), rules_page_path, target: "_blank", class: "px-3 py-2 text-base font-medium hover:bg-blue-50 hover:text-blue-500 dark:hover:bg-gray-800 rounded-md" %>
         </div>
       </div>
 
