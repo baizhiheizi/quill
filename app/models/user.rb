@@ -337,7 +337,7 @@ class User < ApplicationRecord
       bonuses.create!(
         asset_id: Currency::XIN_ASSET_ID,
         title: 'Faucet',
-        description: "Desposited #{deposit['amount']} #{deposit_asset.symbol}",
+        description: "Deposited #{deposit['amount']} #{deposit_asset.symbol}",
         amount: Bonus::XIN_FAUCET_AMOUNT
       )
     bonus.deliver!
