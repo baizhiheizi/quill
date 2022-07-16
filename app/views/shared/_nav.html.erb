@@ -174,7 +174,8 @@
         </button>
       </div>
       <%= link_to root_path, class: "flex items-center" do %>
-        <%= image_tag 'logo.svg', class: 'w-auto h-8', alt: "Logo" %>
+        <%= image_tag 'logo.svg', class: 'w-auto h-8 dark:hidden', alt: "Logo" %>
+        <%= image_tag 'logo-light.svg', class: 'w-auto h-8 hidden dark:block', alt: "Logo" %>
       <% end %>
     </div>
     <!-- Mobile menu, show/hide based on menu state. -->
@@ -188,7 +189,8 @@
             </button>
           </div>
           <%= link_to root_path, class: "flex items-center" do %>
-            <%= image_tag 'logo.svg', class: 'w-auto h-8', alt: "Logo" %>
+            <%= image_tag 'logo.svg', class: 'w-auto h-8 dark:hidden', alt: "Logo" %>
+            <%= image_tag 'logo-light.svg', class: 'w-auto h-8 hidden dark:block', alt: "Logo" %>
           <% end %>
         </div>
       </div>
