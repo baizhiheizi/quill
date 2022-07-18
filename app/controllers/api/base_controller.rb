@@ -3,7 +3,6 @@
 class API::BaseController < ActionController::API
   include API::RenderingHelper
 
-  around_action :with_locale
   after_action :store_access_token_request
   helper_method :current_user
 
@@ -45,9 +44,5 @@ class API::BaseController < ActionController::API
 
   def current_user
     @_current_user = current_access_token&.user
-  end
-
-  def with_locale(&action)
-    I18n.with_locale(:en, &action)
   end
 end

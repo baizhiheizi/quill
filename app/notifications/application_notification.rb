@@ -3,8 +3,6 @@
 class ApplicationNotification < Noticed::Base
   deliver_by :action_cable, format: :format_for_action_cable
 
-  around_action_cable :with_locale
-
   BATATA_ICON_URL = ActionController::Base.helpers.asset_url('batata.svg', host: Settings.host)
 
   delegate :messenger?, to: :recipient, prefix: true
@@ -19,10 +17,5 @@ class ApplicationNotification < Noticed::Base
 
   def format_for_action_cable
     message
-  end
-
-  def with_locale(&action)
-    locale = recipient&.locale || I18n.default_locale
-    I18n.with_locale(locale, &action)
   end
 end

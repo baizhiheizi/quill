@@ -7,7 +7,6 @@ class ApplicationController < ActionController::Base
 
   helper_method :current_user
   helper_method :from_mixin_messenger?
-  around_action :with_locale
 
   add_flash_types :success, :warning, :danger, :info
 
@@ -41,20 +40,7 @@ class ApplicationController < ActionController::Base
     @current_user = nil
   end
 
-  def with_locale(&action)
-    current_user.update(locale: browser_locale) if current_user && browser_locale && current_user.locale != browser_locale
-    locale = current_user&.locale || browser_locale || I18n.default_locale
-    I18n.with_locale(locale, &action)
-  end
-
   def from_mixin_messenger?
     request&.user_agent&.match?(/Mixin|Links/)
-  end
-
-  def browser_locale
-    locales = request.env['HTTP_ACCEPT_LANGUAGE'] || ''
-    locales.scan(/[a-z]{2}-?[A-Z]{2}?/).find do |locale|
-      I18n.available_locales.include?(locale.to_sym)
-    end
   end
 end

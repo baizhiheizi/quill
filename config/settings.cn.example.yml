@@ -23,7 +23,6 @@ time_zone: Asia/Shanghai
 default_locale: zh-CN
 available_locales:
   - zh-CN
-  - en
 
 # assets
 supported_assets:

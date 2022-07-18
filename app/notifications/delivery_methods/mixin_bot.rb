@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 class DeliveryMethods::MixinBot < Noticed::DeliveryMethods::Base
-  around_deliver :with_locale
-
   def deliver
     SendMixinMessageWorker.perform_async format, bot
   end
@@ -45,10 +43,5 @@ class DeliveryMethods::MixinBot < Noticed::DeliveryMethods::Base
         data: data
       }
     )
-  end
-
-  def with_locale(&action)
-    locale = recipient&.locale || I18n.default_locale
-    I18n.with_locale(locale, &action)
   end
 end
