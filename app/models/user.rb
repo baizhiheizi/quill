@@ -57,8 +57,6 @@ class User < ApplicationRecord
   validates :mixin_uuid, presence: true
   validates :uid, presence: true, uniqueness: true
 
-  enum locale: I18n.available_locales
-
   after_commit :prepare_async, on: :create
 
   default_scope { includes(:authorization) }
