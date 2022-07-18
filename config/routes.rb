@@ -25,7 +25,7 @@ Rails.application.routes.draw do
   get '/422', to: 'errors#unprocessable_entity'
   get '/500', to: 'errors#internal_server_error'
 
-  root to: 'home#index'
+  root to: 'articles#index'
 
   resources :view_modals, only: %i[create]
 
