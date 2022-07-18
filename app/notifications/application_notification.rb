@@ -5,7 +5,7 @@ class ApplicationNotification < Noticed::Base
 
   around_action_cable :with_locale
 
-  BATATA_ICON_URL = 'https://mixin-images.zeromesh.net/L0egX-GZxT0Yh-dd04WKeAqVNRzgzuj_Je_-yKf8aQTZo-xihd-LogbrIEr-WyG9WbJKGFvt2YYx-UIUa1qQMRla=s256'
+  BATATA_ICON_URL = ActionController::Base.helpers.asset_url('batata.svg', host: Settings.host)
 
   delegate :messenger?, to: :recipient, prefix: true
 
