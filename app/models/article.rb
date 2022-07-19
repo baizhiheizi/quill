@@ -500,7 +500,9 @@ class Article < ApplicationRecord
   end
 
   def ensure_price_not_too_low
-    errors.add(:price, 'too low, >= $1') if price.positive? && price < currency.minimal_price_amount
+    return unless price_changed?
+
+    errors.add(:price, '< $0.1') if price.positive? && price < currency.minimal_price_amount
   end
 
   def ensure_revenue_ratios_sum_to_one
