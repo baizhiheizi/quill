@@ -122,13 +122,7 @@ export default class extends Controller {
           if (error) {
             onError(error);
           } else {
-            onSuccess(
-              [
-                '/rails/active_storage/blobs',
-                blob.signed_id,
-                blob.filename,
-              ].join('/'),
-            );
+            onSuccess(`blob://${blob.key}/${blob.filename}`);
           }
         });
       },

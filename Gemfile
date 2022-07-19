@@ -140,6 +140,9 @@ gem 'high_voltage'
 # a straightforward library to build, sign, and broadcast ethereum transactions anywhere you can run ruby.
 gem 'eth'
 
+# FastImage finds the size or type of an image given its uri by fetching as little as needed
+gem 'fastimage'
+
 # deploy
 gem 'mina', '~> 1.2.2', require: false
 gem 'mina-logs', '~> 1.1.0', require: false

@@ -414,11 +414,27 @@ class Article < ApplicationRecord
 
   def attach_images_from_content
     signed_ids = []
-    content.scan(%r{/rails/active_storage/blobs/\S+}).each do |url|
-      signed_ids.push url.split('/')[4]
+    content.scan(%r{blob://\S+}).each do |url|
+      key = url.gsub('blob://', '').split('/').first
+      blob = ActiveStorage::Blob.find_by key: key
+      next if blob.blank?
+
+      signed_ids.push blob.signed_id
     end
 
     images.attach signed_ids
+  end
+
+  def update_attached_image_url_in_content
+    content.scan(%r{\(/rails/active_storage/blobs/.+\)}).each_with_index do |url, index|
+      image = ActiveStorage::Blob.find_signed url.split('/')[4]
+      image ||= images.blobs.order(created_at: :asc)&.[](index)
+      next if image.blank?
+
+      content.gsub! url, "(#{image.url})"
+    end
+
+    save
   end
 
   private

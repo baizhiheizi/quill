@@ -178,6 +178,7 @@ GEM
     exception-track (1.3.0)
       kaminari (>= 0.15)
       rails (>= 5.2)
+    fastimage (2.2.6)
     faye-websocket (0.11.1)
       eventmachine (>= 0.12.0)
       websocket-driver (>= 0.5.1)
@@ -491,6 +492,7 @@ DEPENDENCIES
   debug (>= 1.0.0)
   eth
   exception-track
+  fastimage
   fnv
   groupdate
   high_voltage
