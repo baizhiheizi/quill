@@ -107,7 +107,7 @@ class MarkdownRenderService
       when %r{blob://\S+}
         key = src.gsub('blob://', '').split('/').first
         blob = ActiveStorage::Blob.find_by key: key
-        img['src'] = blob.url
+        img['src'] = blob.url if blob.present?
       end
 
       size = FastImage.size(img['src']) || []
