@@ -21,6 +21,10 @@ export default class extends Controller {
 
   wrapImgs() {
     this.element.querySelectorAll('img').forEach((img) => {
+      if (img.parentElement.dataset.pswpWidth && img.parentElement.dataset.pswpHeight) {
+        return;
+      }
+
       img.parentElement.setAttribute('data-pswp-width', img.naturalWidth);
       img.parentElement.setAttribute('data-pswp-height', img.naturalHeight);
 

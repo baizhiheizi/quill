@@ -38,7 +38,9 @@
           <%= t("article.words_count") %>:
         </span>
         <span>
-          <%= @article.words_count %>
+          <% cache @article do %>
+            <%= @article.words_count %>
+          <% end %>
         </span>
       </div>
 

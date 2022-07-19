@@ -100,10 +100,20 @@ class MarkdownRenderService
     doc = Nokogiri::HTML.fragment(@html)
     doc.css('img').each do |img|
       src = img.attr('src')
-      img['src'] = src.gsub(/\.\S+\z/, '') if src.match?(%r{/rails/active_storage/blobs/\S+})
+
+      case src
+      when %r{/rails/active_storage/blobs/\S+}
+        img['src'] = src.gsub(/\.\S+\z/, '')
+      when %r{blob://\S+}
+        key = src.gsub('blob://', '').split('/').first
+        blob = ActiveStorage::Blob.find_by key: key
+        img['src'] = blob.url
+      end
+
+      size = FastImage.size(img['src']) || []
+      img.wrap("<a class='photoswipe' data-pswp-src='#{img['src']}' data-pswp-width='#{size.first}' data-pswp-height='#{size.last}' href='#{img['src']}' target='_blank'>")
       img['class'] = 'max-w-full mx-auto'
       img['loading'] = 'lazy'
-      img.wrap("<a class='photoswipe' data-pswp-src='#{img['src']}' href='#{img['src']}' target='_blank'>")
     end
     @html = doc.to_html
 

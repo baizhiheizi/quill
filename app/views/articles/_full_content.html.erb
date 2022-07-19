@@ -1,7 +1,9 @@
 <% user ||= current_user %>
 
 <div class="mb-8">
-  <%= article.content_as_html.html_safe %>
+  <% cache article do %>
+    <%= article.content_as_html.html_safe %>
+  <% end %>
 </div>
 
 <div class="mb-8">
