@@ -1,4 +1,4 @@
-host: 'https://batata.im'
+host: 'https://quill.im'
 mixin_oauth_path: 'https://mixin-www.zeromesh.net/oauth/authorize'
 
 # lauch time
@@ -8,11 +8,11 @@ launch_time:
 blaze_enable: false
 
 # page
-page_title: 'Batata: Write and read in the Web3 way'
-page_keywords: Batata, Web3, Write, Read, platform, Article, Blockchain, Bitcoin, BTC, ETH, Mixin Network, Mixin Messenger, MVM
-page_description: I'm Batata. Write and read in the Web3 way
+page_title: 'Quill: hand with a quill pen in Web3'
+page_keywords: Quill, Web3, Write, Read, platform, Article, Blockchain, Bitcoin, BTC, ETH
+page_description: I'm Quill. Write and read in the Web3 way
 messenger: Mixin Messenger
-twitter_account: batata_web3
+twitter_account: QuillWeb3
 
 # app/assets/images/*
 mixin_logo_file: mixin-logo.png

@@ -10,7 +10,7 @@ There are 3 groups of files in this folder, they are:
 
 in which, the '\*' indicates the locale name.
 
-At present, Batata supports three locale name, they are `en` (English, default), `zh-CN`, and `ja`.
+At present, Quill supports three locale name, they are `en` (English, default), `zh-CN`, and `ja`.
 
 If you want to participate in the translation, simply fork this repo and modify the files.
 
@@ -38,4 +38,3 @@ en:
 ```
 
 Most words, sentences and text in the file are arrange as `Key: Value` format. Please translate the text before ":" symbol.
-

@@ -3,7 +3,7 @@
 class ApplicationNotification < Noticed::Base
   deliver_by :action_cable, format: :format_for_action_cable
 
-  BATATA_ICON_URL = ActionController::Base.helpers.asset_url('batata.svg', host: Settings.host)
+  QUILL_ICON_URL = ActionController::Base.helpers.asset_url('quill.svg', host: Settings.host)
 
   delegate :messenger?, to: :recipient, prefix: true
 

@@ -64,7 +64,7 @@ Rails.application.configure do
   config.cache_store = if ENV['REDIS_URL'].present?
                          [:redis_cache_store, {
                            url: ENV.fetch('REDIS_URL', nil),
-                           namespace: 'batata'
+                           namespace: 'quill'
                          }]
                        else
                          :memory_store
@@ -72,7 +72,7 @@ Rails.application.configure do
 
   # Use a real queuing backend for Active Job (and separate queues per environment).
   # config.active_job.queue_adapter     = :resque
-  # config.active_job.queue_name_prefix = "batata_production"
+  # config.active_job.queue_name_prefix = "quill_production"
 
   config.action_mailer.perform_caching = false
 
@@ -105,6 +105,6 @@ Rails.application.configure do
 
   config.middleware.use ExceptionNotification::Rack, mixin_bot: {
     recipient_id: Rails.application.credentials.dig(:admin, :uuid),
-    bot: 'BatataBot'
+    bot: 'QuillBot'
   }
 end

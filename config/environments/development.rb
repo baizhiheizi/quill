@@ -27,7 +27,7 @@ Rails.application.configure do
 
     config.cache_store = :redis_cache_store, {
       url: ENV.fetch('REDIS_URL', 'redis://127.0.0.1:6379/1'),
-      namespace: 'batata'
+      namespace: 'quill'
     }
     config.public_file_server.headers = {
       'Cache-Control' => "public, max-age=#{2.days.to_i}"
@@ -75,6 +75,6 @@ Rails.application.configure do
 
   config.middleware.use ExceptionNotification::Rack, mixin_bot: {
     recipient_id: Rails.application.credentials.dig(:admin, :uuid),
-    bot: 'BatataBot'
+    bot: 'QuillBot'
   }
 end

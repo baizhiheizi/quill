@@ -24,7 +24,7 @@
   <% end %>
 </div>
 <div class="p-4 bg-white dark:bg-zinc-900 rounded-lg mb-4">
-  <%= turbo_frame_tag 'admin_wallet_assets', src: admin_wallet_assets_path(BatataBot.api.client_id) do %>
+  <%= turbo_frame_tag 'admin_wallet_assets', src: admin_wallet_assets_path(QuillBot.api.client_id) do %>
     <%= render "shared/loading" %>
   <% end %>
 </div>

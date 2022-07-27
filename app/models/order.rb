@@ -177,22 +177,22 @@ class Order < ApplicationRecord
       end
     end
 
-    # create batata transfer
-    _batata_amount = (total * item.platform_revenue_ratio).floor(8)
-    if _batata_amount.positive? && payment.wallet.present?
+    # create quill transfer
+    _quill_amount = (total * item.platform_revenue_ratio).floor(8)
+    if _quill_amount.positive? && payment.wallet.present?
       transfers.create_with(
         queue_priority: :low,
         wallet: payment.wallet,
-        transfer_type: :batata_revenue,
-        opponent_id: BatataBot.api.client_id,
+        transfer_type: :quill_revenue,
+        opponent_id: QuillBot.api.client_id,
         asset_id: revenue_asset_id,
-        amount: _batata_amount.to_f.to_s,
+        amount: _quill_amount.to_f.to_s,
         memo: Base64.encode64({
           t: 'REVENUE',
           a: item.uuid
         }.to_json)
       ).find_or_create_by!(
-        trace_id: payment.wallet.mixin_api.unique_conversation_id(trace_id, BatataBot.api.client_id)
+        trace_id: payment.wallet.mixin_api.unique_conversation_id(trace_id, QuillBot.api.client_id)
       )
     end
 
@@ -209,10 +209,10 @@ class Order < ApplicationRecord
       transfer_type: :author_revenue,
       opponent_id: item.author.mixin_uuid,
       asset_id: revenue_asset_id,
-      amount: (total - _readers_amount - _batata_amount - _references_amount).floor(8),
+      amount: (total - _readers_amount - _quill_amount - _references_amount).floor(8),
       memo: author_revenue_transfer_memo.truncate(70)
     ).find_or_create_by!(
-      trace_id: BatataBot.api.unique_conversation_id(trace_id, item.author.mixin_uuid)
+      trace_id: QuillBot.api.unique_conversation_id(trace_id, item.author.mixin_uuid)
     )
 
     complete! if paid?
@@ -280,7 +280,7 @@ class Order < ApplicationRecord
   end
 
   def cache_history_ticker
-    r = BatataBot.api.ticker asset_id, created_at.utc.rfc3339
+    r = QuillBot.api.ticker asset_id, created_at.utc.rfc3339
     update value_btc: r['price_btc'].to_f * total, value_usd: r['price_usd'].to_f * total
   end
 

@@ -2,7 +2,7 @@
 <% @page_title = @page_title.present? ? format('%<title>s | %<default>s', title: @page_title, default: Settings.page_title) : Settings.page_title %>
 <% @page_description ||= Settings.page_description %>
 <% @page_keywords ||= Settings.page_keywords %>
-<% @page_image ||= asset_url('batata.svg') %>
+<% @page_image ||= asset_url('quill.svg') %>
 
 <html>
   <head>
@@ -20,8 +20,8 @@
     <meta name='description' content="<%= @page_description %>">
 
     <meta name="twitter:card" content="summary">
-    <meta name="twitter:site" content="@batata" />
-    <meta name="twitter:creator" content="@batata" />
+    <meta name="twitter:site" content="@quill" />
+    <meta name="twitter:creator" content="@quill" />
     <meta property="og:url" content="<%= request.original_url %>" />
     <meta property="og:title" content="<%= @page_title %>" />
     <meta property="og:description" content="<%= @page_description %>" />

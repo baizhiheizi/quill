@@ -1,5 +1,5 @@
 # urls
-host: 'https://jp.batata.im'
+host: 'https://jp.quill.im'
 mixin_oauth_path: 'https://oauth.getlinks.jp'
 
 # lauch time

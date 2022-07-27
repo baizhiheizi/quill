@@ -8,7 +8,7 @@ class TaggingCreatedNotification < ApplicationNotification
 
   def data
     {
-      icon_url: BATATA_ICON_URL,
+      icon_url: QUILL_ICON_URL,
       title: params[:tagging].article.title.truncate(36),
       description: description,
       action: url

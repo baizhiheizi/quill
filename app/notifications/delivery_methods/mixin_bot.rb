@@ -9,7 +9,7 @@ class DeliveryMethods::MixinBot < Noticed::DeliveryMethods::Base
     if options[:bot] == 'RevenueBot' && RevenueBot.api.present?
       'RevenueBot'
     else
-      'BatataBot'
+      'QuillBot'
     end
   end
 
@@ -18,7 +18,7 @@ class DeliveryMethods::MixinBot < Noticed::DeliveryMethods::Base
     when 'RevenueBot'
       RevenueBot.api
     else
-      BatataBot.api
+      QuillBot.api
     end
   end
 

@@ -1,5 +1,5 @@
 {
-  "name": "batata",
+  "name": "quill",
   "private": true,
   "scripts": {
     "lint": "prettier --write app/javascript/**/*.{tsx,ts,js,gql}",

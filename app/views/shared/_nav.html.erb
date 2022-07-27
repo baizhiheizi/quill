@@ -46,19 +46,19 @@
               aria-orientation="vertical" 
               tabindex="-1">
             <%= link_to 'English', 
-              'https://batata.im', 
+              'https://quill.im', 
               class: "block px-4 py-2 text-sm opacity-70 hover:bg-zinc-100 dark:hover:bg-zinc-800", 
               role: "menuitem", 
               target: "_blank",
               tabindex: "-1" unless I18n.default_locale == :en %>
             <%= link_to '中文', 
-              'https://cn.batata.im', 
+              'https://cn.quill.im', 
               class: "block px-4 py-2 text-sm opacity-70 hover:bg-zinc-100 dark:hover:bg-zinc-800", 
               role: "menuitem", 
               target: "_blank",
               tabindex: "-1" unless I18n.default_locale == :'zh-CN' %>
             <%= link_to '日本语', 
-              'https://ja.batata.im', 
+              'https://ja.quill.im', 
               class: "block px-4 py-2 text-sm opacity-70 hover:bg-zinc-100 dark:hover:bg-zinc-800", 
               role: "menuitem", 
               target: "_blank",
@@ -251,17 +251,17 @@
         <% end %>
         <% unless I18n.default_locale == :en %>
           <div class="px-2 mt-3 space-y-1">
-            <%= link_to 'English', from_mixin_messenger? ? 'mixin://apps/1cec9be1-fcf2-4277-84bf-6040a08f2579?action=open' : 'https://batata.im', target: '_blank', class: "block px-3 py-2 text-base font-medium focus:bg-blue-50 focus:text-blue-500 rounded-md" %>
+            <%= link_to 'English', from_mixin_messenger? ? 'mixin://apps/1cec9be1-fcf2-4277-84bf-6040a08f2579?action=open' : 'https://quill.im', target: '_blank', class: "block px-3 py-2 text-base font-medium focus:bg-blue-50 focus:text-blue-500 rounded-md" %>
           </div>
         <% end %>
         <% unless I18n.default_locale == :'zh-CN' %>
           <div class="px-2 mt-3 space-y-1">
-            <%= link_to '中文', from_mixin_messenger? ? 'mixin://apps/6d8fd25a-1eb1-4afb-b2a6-d34991959b76?action=open' : 'https://cn.batata.im', target: '_blank', class: "block px-3 py-2 text-base font-medium focus:bg-blue-50 focus:text-blue-500 rounded-md" %>
+            <%= link_to '中文', from_mixin_messenger? ? 'mixin://apps/6d8fd25a-1eb1-4afb-b2a6-d34991959b76?action=open' : 'https://cn.quill.im', target: '_blank', class: "block px-3 py-2 text-base font-medium focus:bg-blue-50 focus:text-blue-500 rounded-md" %>
           </div>
         <% end %>
         <% unless I18n.default_locale == :ja %>
           <div class="px-2 mt-3 space-y-1">
-            <%= link_to '日本语', from_mixin_messenger? ? 'mixin://apps/4c6d5096-e3de-4499-b1b2-6b43aab7e216?action=open' : 'https://ja.batata.im', target: '_blank', class: "block px-3 py-2 text-base font-medium focus:bg-blue-50 focus:text-blue-500 rounded-md" %>
+            <%= link_to '日本语', from_mixin_messenger? ? 'mixin://apps/4c6d5096-e3de-4499-b1b2-6b43aab7e216?action=open' : 'https://ja.quill.im', target: '_blank', class: "block px-3 py-2 text-base font-medium focus:bg-blue-50 focus:text-blue-500 rounded-md" %>
           </div>
         <% end %>
       </div>

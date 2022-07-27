@@ -324,11 +324,11 @@ class Article < ApplicationRecord
 
     # generate a unique trace ID for paying
     # avoid duplicate payment
-    candidate = BatataBot.api.unique_conversation_id(uuid, user.mixin_uuid)
+    candidate = QuillBot.api.unique_conversation_id(uuid, user.mixin_uuid)
     loop do
       break unless Payment.exists?(trace_id: candidate, state: %i[refunded completed])
 
-      candidate = BatataBot.api.unique_conversation_id(uuid, candidate)
+      candidate = QuillBot.api.unique_conversation_id(uuid, candidate)
     end
 
     candidate

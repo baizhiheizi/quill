@@ -69,7 +69,7 @@ class Payment < ApplicationRecord
   end
 
   def decrypted_memo
-    # memo from Batata user
+    # memo from Quill user
     # memo = {
     #  't': BUY|REWARD|CITE|REVENUE,
     #  'a': article's uuid,
@@ -127,7 +127,7 @@ class Payment < ApplicationRecord
       min_amount: decrypted_memo['t'] == 'BUY' ? article.price : nil,
       fill_asset_id: article.asset_id,
       pay_asset_id: asset_id,
-      trace_id: BatataBot.api.unique_conversation_id(wallet.uuid, trace_id),
+      trace_id: QuillBot.api.unique_conversation_id(wallet.uuid, trace_id),
       wallet: wallet
     )
   rescue ActiveRecord::RecordInvalid => e
@@ -173,7 +173,7 @@ class Payment < ApplicationRecord
       opponent_id: opponent_id,
       amount: amount,
       asset_id: asset_id,
-      trace_id: BatataBot.api.unique_conversation_id(trace_id, opponent_id),
+      trace_id: QuillBot.api.unique_conversation_id(trace_id, opponent_id),
       memo: 'REDUND'
     )
   end

@@ -8,8 +8,8 @@
   <td class="p-4">
     <% if mixin_network_snapshot.wallet.present? %>
       <%= render 'admin/mixin_network_users/field', mixin_network_user: mixin_network_snapshot.wallet %>
-    <% elsif mixin_network_snapshot.user_id == BatataBot.api.client_id %>
-      Batata Bot
+    <% elsif mixin_network_snapshot.user_id == QuillBot.api.client_id %>
+      Quill Bot
     <% else %>
       <%= mixin_network_snapshot.user_id %>
     <% end %>
@@ -19,8 +19,8 @@
       <%= render "admin/users/field", user: mixin_network_snapshot.opponent, tab: :mixin_network_snapshots %>
     <% elsif mixin_network_snapshot.opponent_wallet.present? %>
       <%= render 'admin/mixin_network_users/field', mixin_network_user: mixin_network_snapshot.opponent_wallet %>
-    <% elsif mixin_network_snapshot.opponent_id == BatataBot.api.client_id %>
-      Batata Bot
+    <% elsif mixin_network_snapshot.opponent_id == QuillBot.api.client_id %>
+      Quill Bot
     <% else %>
       <%= mixin_network_snapshot.opponent_id || '-' %>
     <% end %>

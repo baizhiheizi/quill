@@ -18,8 +18,8 @@ module Admin
 
     def load_wallet
       @wallet =
-        if params[:wallet_id] == BatataBot.api.client_id
-          BatataBot.api
+        if params[:wallet_id] == QuillBot.api.client_id
+          QuillBot.api
         elsif MixinNetworkUser.find_by(uuid: params[:wallet_id])
           MixinNetworkUser.find_by(uuid: params[:wallet_id]).mixin_api
         end

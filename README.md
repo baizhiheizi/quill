@@ -1,6 +1,6 @@
-# Batata
+# Quill
 
-![Check](https://github.com/baizhiheizi/batata/workflows/Check/badge.svg) ![CI](https://github.com/baizhiheizi/batata/workflows/CI/badge.svg) ![Uptime 100.00%](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fbaizhiheizi%2Fupptime%2Fmaster%2Fapi%2Fprs-digg%2Fuptime.json) ![Response Time](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fbaizhiheizi%2Fupptime%2Fmaster%2Fapi%2Fprs-digg%2Fresponse-time.json)
+![Check](https://github.com/baizhiheizi/quill/workflows/Check/badge.svg) ![CI](https://github.com/baizhiheizi/quill/workflows/CI/badge.svg) ![Uptime 100.00%](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fbaizhiheizi%2Fupptime%2Fmaster%2Fapi%2Fprs-digg%2Fuptime.json) ![Response Time](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fbaizhiheizi%2Fupptime%2Fmaster%2Fapi%2Fprs-digg%2Fresponse-time.json)
 
 [中文](README-CN.md)
 
@@ -12,13 +12,13 @@
 
 ---
 
-Batata is a Dapp built on [Mixin Network](https://mixin.one/). All payments and transfers will be completed through [Mixin Network](https://mixin.one/) with **ZERO** gas.
+Quill is a Dapp built on [Mixin Network](https://mixin.one/). All payments and transfers will be completed through [Mixin Network](https://mixin.one/) with **ZERO** gas.
 
 ## Rules
 
-Batata tries to build a win-win **platform** for both **authors** and **readers**.
+Quill tries to build a win-win **platform** for both **authors** and **readers**.
 
-We believe that the value of an article is composed of both the author and the reader, but the actual situation is that the reader's contribution, especially the early readers' contribution,is not well represented. Therefore, the biggest difference between Batata and other platforms is that Batata introduces an **early reader rewards** mechanism.
+We believe that the value of an article is composed of both the author and the reader, but the actual situation is that the reader's contribution, especially the early readers' contribution,is not well represented. Therefore, the biggest difference between Quill and other platforms is that Quill introduces an **early reader rewards** mechanism.
 
 The specific rules are as follows,
 
@@ -52,17 +52,17 @@ It is worth reminding that besides the payment for articles, the income from oth
 
 ## Experience
 
-At present, Batata only supports [Mixin Messenger](https://mixin.one/messenger) login and payment. Please download and install it before experiencing Batata.
+At present, Quill only supports [Mixin Messenger](https://mixin.one/messenger) login and payment. Please download and install it before experiencing Quill.
 
-Browse [batata.im](https://batata.im/), or search for Bot 7000101549 in [mixin messenger](https://mixin.one/messenger).
+Browse [quill.im](https://quill.im/), or search for Bot 7000101549 in [mixin messenger](https://mixin.one/messenger).
 
 ## API
 
-User can generate access token in [dashboard settings](https://batata.im/dashboard/settings).
+User can generate access token in [dashboard settings](https://quill.im/dashboard/settings).
 
 Use access token in a HTTP Header named `X-Access-Token`.
 
-API Endpoint is `https://batata.im/api`
+API Endpoint is `https://quill.im/api`
 
 `GET | /articles`
 
@@ -70,7 +70,7 @@ When access token or `author_id` provided, it returns user's articles, otherwise
 
 Available params: `author_id`, `offset`, `order`, `limit`, `query`.
 
-Example: [https://batata.im/api/articles?limit=5&order=asc&offset=2021-01-18T07:41:36.624Z&query=BTC,Xin](https://batata.im/api/articles?limit=5&order=asc&offset=2021-01-18T07:41:36.624Z&query=BTC,Xin)
+Example: [https://quill.im/api/articles?limit=5&order=asc&offset=2021-01-18T07:41:36.624Z&query=BTC,Xin](https://quill.im/api/articles?limit=5&order=asc&offset=2021-01-18T07:41:36.624Z&query=BTC,Xin)
 
 `GET | /article/:uuid`
 

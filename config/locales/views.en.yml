@@ -51,7 +51,7 @@ en:
   pay: Pay
   to_continue_reading: to continue reading
   and_receive_early_reader_revenue: and receive early reader revenue
-  pay_warning: This post is a virtural product selling on Batata, IT WILL NOT REFUND once paid. Please pay with caution.
+  pay_warning: This post is a virtural product selling on Quill, IT WILL NOT REFUND once paid. Please pay with caution.
   be_the_first_reader: Be the FIRST reader
   pay_to_read: Pay to Read
   already_paid: Already paid
@@ -83,20 +83,20 @@ en:
   articles_count: Posts
   author_revenue_total: Author Revenue(Present Value)
   reader_revenue_total: Reader Revenue(Present Value)
-  platform_revenue: Batata Revenue
-  platform_revenue_last_month: Batata Revenue(last month)
-  platform_revenue_this_month: Batata Revenue(this month)
+  platform_revenue: Quill Revenue
+  platform_revenue_last_month: Quill Revenue(last month)
+  platform_revenue_this_month: Quill Revenue(this month)
   readers_revenue: Readers Revenue
   author_revenue: Author Revenue
   references_revenue: References Revenue
   revenue_chart: Revenue Chart(USD)
   transactions: Transactions
   rules_content: |
-    ### Rules of Batata
+    ### Rules of Quill
 
-    Batata tries to build a win-win **platform** for both **authors** and **readers**.
+    Quill tries to build a win-win **platform** for both **authors** and **readers**.
 
-    We believe that the value of an article is composed of both the author and the reader, but the actual situation is that the reader's contribution, especially the early readers' contribution,is not well represented. Therefore, the biggest difference between Batata and other platforms is that Batata introduces an **early reader rewards** mechanism.
+    We believe that the value of an article is composed of both the author and the reader, but the actual situation is that the reader's contribution, especially the early readers' contribution,is not well represented. Therefore, the biggest difference between Quill and other platforms is that Quill introduces an **early reader rewards** mechanism.
 
     The specific rules are as follows,
 

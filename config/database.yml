@@ -12,7 +12,7 @@ test:
   adapter:  postgresql
   host:     localhost
   encoding: unicode
-  database: batata_test
+  database: quill_test
   pool:     5
   username: postgres
   password: postgres

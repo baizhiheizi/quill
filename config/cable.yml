@@ -1,7 +1,7 @@
 development:
   adapter: redis
   url: <%= ENV.fetch("REDIS_URL") { "redis://localhost:6379/1" } %>
-  channel_prefix: <%= Rails.application.credentials.dig(:action_cable, :namespace) || 'batata_cable' %>
+  channel_prefix: <%= Rails.application.credentials.dig(:action_cable, :namespace) || 'quill_cable' %>
 
 test:
   adapter: test

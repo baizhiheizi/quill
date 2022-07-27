@@ -108,7 +108,7 @@ class MixinNetworkUser < ApplicationRecord
   end
 
   def default_name
-    'Batata'
+    'Quill'
   end
 
   def avatar
@@ -128,7 +128,7 @@ class MixinNetworkUser < ApplicationRecord
   def setup_attributes
     return unless new_record?
 
-    r = BatataBot.api.create_user(name || default_name, key_type: 'Ed25519')
+    r = QuillBot.api.create_user(name || default_name, key_type: 'Ed25519')
     raise r.inspect if r['error'].present?
 
     self.raw = r['data']

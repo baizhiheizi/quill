@@ -23,8 +23,8 @@ module Admin
       @opponent = params[:opponent] || 'all'
       mixin_network_snapshots =
         case @opponent
-        when 'batata'
-          mixin_network_snapshots.where(opponent_id: BatataBot.api.client_id)
+        when 'quill'
+          mixin_network_snapshots.where(opponent_id: QuillBot.api.client_id)
         when 'mtg'
           mixin_network_snapshots.where(opponent_id: nil)
         else
