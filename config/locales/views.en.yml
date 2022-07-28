@@ -25,8 +25,8 @@ en:
   success_submitted: Submitted
   success_subscribed: Subscribed
   success_unsubscribed: Unsubscribed
-  success_hidden_article: Article hidden
-  success_published_article: Article published
+  success_hidden_article: Post hidden
+  success_published_article: Post published
   success_updated: Successfully updated
   success_copied: Successfully copied
   success_deleted: Successfully deleted
@@ -52,7 +52,7 @@ en:
   pay: Pay
   to_continue_reading: to continue reading
   and_receive_early_reader_revenue: and receive early reader revenue
-  pay_warning: This article is a virtural product selling on PRSDigg, IT WILL NOT REFUND once paid. Please pay with caution.
+  pay_warning: This post is a virtural product selling on PRSDigg, IT WILL NOT REFUND once paid. Please pay with caution.
   be_the_first_reader: Be the FIRST reader
   pay_to_read: Pay to Read
   already_paid: Already paid
@@ -62,13 +62,13 @@ en:
   please_login: Please Login
   failed_to_connect: Failed to connect
   connected: You've connected. Welcome!
-  love_thie_article: Love this Article
+  love_thie_article: Love this Post
   share: Share
   signature: Signature
   swap_supported_by: Swap supported by
   polling_payment: Checking Payment Status
   refund_warning: Payment has been refunded. Please try again.
-  buy_article: Buy Article
+  buy_article: Buy Post
   reward: Reward
   finish: Finish
   later: Later
@@ -81,7 +81,7 @@ en:
   search: Search
   search_placeholder: Input title/introduction/author/tag
   users_count: Users
-  articles_count: Articles
+  articles_count: Posts
   author_revenue_total: Author Revenue(Present Value)
   reader_revenue_total: Reader Revenue(Present Value)
   platform_revenue: PRSDigg Revenue
@@ -97,41 +97,41 @@ en:
 
     PRSDigg tries to build a win-win **platform** for both **authors** and **readers**.
 
-    We believe that the value of an article is composed of both the author and the reader, but the actual situation is that the reader's contribution, especially the early readers' contribution,is not well represented. Therefore, the biggest difference between PRSDigg and other platforms is that PRSDigg introduces an **early reader rewards** mechanism.
+    We believe that the value of an post is composed of both the author and the reader, but the actual situation is that the reader's contribution, especially the early readers' contribution,is not well represented. Therefore, the biggest difference between PRSDigg and other platforms is that PRSDigg introduces an **early reader rewards** mechanism.
 
     The specific rules are as follows,
 
-    1. Users can publish articles on the **platform** and become **authors**.
+    1. Users can publish posts on the **platform** and become **authors**.
 
-    2. Articles can be paid or free, paid articles are priced by *Bitcoin*.
+    2. Posts can be paid or free, paid posts are priced by *Bitcoin*.
 
-    3. Users can pay for the articles(buy or reward), i.e. become a **reader** of a article.
+    3. Users can pay for the posts(buy or reward), i.e. become a **reader** of a post.
 
-    4. For every new income from an article, 40% will be allocated to each **early reader** on a pro-rata basis as **Early Reader Bonus** , 10% will be a handling fee for the **platform**, and the rest will be revenue for the **author**.
+    4. For every new income from an post, 40% will be allocated to each **early reader** on a pro-rata basis as **Early Reader Bonus** , 10% will be a handling fee for the **platform**, and the rest will be revenue for the **author**.
 
-    5. **Readers** can also increase the amount they pay for an article by means of a reward in order to increase their share of the bonus.
+    5. **Readers** can also increase the amount they pay for an post by means of a reward in order to increase their share of the bonus.
 
     For example:
 
-    User A published an article X pricing 100 Satoshi on the platform.
+    User A published an post X pricing 100 Satoshi on the platform.
 
-    User B paid 100 Satoshi for article X and got the right to read the article.
+    User B paid 100 Satoshi for post X and got the right to read the post.
 
-    Therefore, article X earned 100 Satoshi, because B is the first reader and there is no earlier reader, so there is no early reader bonus; 10 Satoshi(10%) is used as the platform's handling fee; The remaining 90 Satoshi are all taken as author revenue and transferred to the account of author A.
+    Therefore, post X earned 100 Satoshi, because B is the first reader and there is no earlier reader, so there is no early reader bonus; 10 Satoshi(10%) is used as the platform's handling fee; The remaining 90 Satoshi are all taken as author revenue and transferred to the account of author A.
 
-    User C paid 100 Satoshi for article x after B. As a result, Article X earns another 100 Satoshi.
+    User C paid 100 Satoshi for post x after B. As a result, Post X earns another 100 Satoshi.
 
     Among them, 40 Satoshi(40%) will be used as an early reader bonus. At this time, there is only one early reader,  user B, so B monopolizes this 40% reward; The platform also receives 10 Satoshi(10%) as a handling fee; The remaining 50 Satoshi is the author's income.
 
-    After C, user D also paid 100 Satoshi for article X.
+    After C, user D also paid 100 Satoshi for post X.
 
-    Similarly, 40 Satoshi(40%) will be rewarded as early readers bonus. At this time, there are two early readers, namely B and C, who paid 100 Satoshi for article X before, so both B and C will be rewarded with `40 * 100/(100+100) = 20` Satoshi respectively.
+    Similarly, 40 Satoshi(40%) will be rewarded as early readers bonus. At this time, there are two early readers, namely B and C, who paid 100 Satoshi for post X before, so both B and C will be rewarded with `40 * 100/(100+100) = 20` Satoshi respectively.
 
     The platform also charges 10 Satoshi(10%) as a handling fee; The remaining 50 Satoshi is the author's income.
 
     And so on.
 
-    It is worth reminding that besides the payment for articles, the income from other payment behaviors (such as reward) will also be included in the distribution ratio of early readers' bonus.
+    It is worth reminding that besides the payment for posts, the income from other payment behaviors (such as reward) will also be included in the distribution ratio of early readers' bonus.
   mixin_group: Mixin Group
   comments: Comments
   subscribe_comments: Subscribe
@@ -142,28 +142,28 @@ en:
   desc: DESC
   asc: ASC
   upvotes: Upvotes
-  article_not_completed: Article not completed yet. Please check the errors the Edit/Options.
+  article_not_completed: Post not completed yet. Please check the errors the Edit/Options.
   confirm_to_submit: Are you sure to submit?
   submit: Submit
   markdown_supported: Markdown supported
   overview: Overview
   notifications_manage: Notifications
   settings: Settings
-  articles_manage: Article Management
+  articles_manage: Posts
   subscriptions_manage: Subscriptions
-  revenue_manage: Revenue Manage
-  orders_manage: Orders Manage
-  comments_manage: Comments Manage
+  revenue_manage: Revenue
+  orders_manage: Orders
+  comments_manage: Comments
   back: Go Back
-  article_detail: Article Detail
-  new_article: New Article
-  edit_article: Edite Article
-  publish_article: Publish Article
+  article_detail: Post Detail
+  new_article: New Post
+  edit_article: Edite Post
+  publish_article: Publish Post
   clear_all: Clear All
   read_all: Read All
-  confirm_to_publish: Are you sure to publish this article?
-  confirm_to_hide: Are you sure to hide this article? Early readers not affected.
-  confirm_to_delete: Are you sure to delete this article draft?
+  confirm_to_publish: Are you sure to publish this post?
+  confirm_to_hide: Are you sure to hide this post? Early readers not affected.
+  confirm_to_delete: Are you sure to delete this post draft?
   publish: Publish
   hide: Hide
   hidden: Hidden
@@ -172,15 +172,15 @@ en:
   reward_records: Reward Records
   cite_records: Cite Records
   comment_records: Comments
-  bought_article: bought this article
-  rewarded_article: rewarded this article
-  cited_article: cited this article
+  bought_article: bought this post
+  rewarded_article: rewarded this post
+  cited_article: cited this post
   subscribers: Subscribers
   subscribing: Subscribing
   commenting_subscriptions: Comments
-  commenting_subscriptions_tip: You will be notified when articles receive new comments
+  commenting_subscriptions_tip: You will be notified when posts receive new comments
   tag_subscriptions: Tags
-  tag_subscriptions_tip: You will be notified when tagged articles created
+  tag_subscriptions_tip: You will be notified when tagged posts created
   confirm_to_unsubscribe: Are you sure to unsubscribe?
   confirm_to_subscribe: Are you sure to subscribe?
   author_transfers: Author Revenue
@@ -189,13 +189,13 @@ en:
   swap_orders: Swap Orders
   access_token: Access Token
   tips_of_general_notifications: You can customize your notification via Web, Mixin Bot and Webhook(on development).
-  tips_of_article_published_notifications: When your subscribed authors publish a new article, you will be notified.
-  tips_of_article_bought_notifications: When your subscribed readers buy a new article, you will be notified.
-  tips_of_article_rewarded_notifications: When your subscribed readers reward a new article, you will be notified.
-  tips_of_tagging_created_notifications: When new article tagged by your subscribed tags, you will be notified.
-  tips_of_comment_created_notifications: When your subscribed article are commented, you will be notified.
-  tips_of_transfer_processed_notifications: When new transfers(including revenue from articles and refunding) received, you will be notified.
-  confirm_to_generate_token: You can provide an Access Token to a third-party application to manage your articles. Are you sure to generate a new Access Token？
+  tips_of_article_published_notifications: When your subscribed authors publish a new post, you will be notified.
+  tips_of_article_bought_notifications: When your subscribed readers buy a new post, you will be notified.
+  tips_of_article_rewarded_notifications: When your subscribed readers reward a new post, you will be notified.
+  tips_of_tagging_created_notifications: When new post tagged by your subscribed tags, you will be notified.
+  tips_of_comment_created_notifications: When your subscribed post are commented, you will be notified.
+  tips_of_transfer_processed_notifications: When new transfers(including revenue from posts and refunding) received, you will be notified.
+  confirm_to_generate_token: You can provide an Access Token to a third-party application to manage your posts. Are you sure to generate a new Access Token？
   generate_new_token: Generate New Token
   token_memo_placeholder: Memo for the Access Token
   token_generated_tips: A new Access Token generated!
@@ -222,7 +222,7 @@ en:
   subscribed: Subscribed
   article_references: References
   referenced_by: Referenced by
-  related_articles: Related Articles
+  related_articles: Related Posts
   hot_tags: Hot Tags
   login_via_mixin: Login via Mixin Messenger
   in_a_week: 1 Week
@@ -244,28 +244,28 @@ en:
   blocking: Blocking
   block_user: Block User
   unblock_user: Unblock User
-  confirm_to_block: Block means cannot subscribe you nor see/buy your articles and you will no longer see his/her articles.
+  confirm_to_block: Block means cannot subscribe you nor see/buy your posts and you will no longer see his/her posts.
   articles:
-    not_finished: Pleash finish your article first
-    title_is_required: Please input your article's title
+    not_finished: Pleash finish your post first
+    title_is_required: Please input your post's title
     title_is_too_long: Title is too long
-    intro_is_required: Please input your article's introduction
+    intro_is_required: Please input your post's introduction
     intro_is_too_long: Introduction is too long
     content_is_required: Please input your artilce's content
     price_is_too_low: Price is too low
     confirm_to_create: Are you sure to create?
-    confirm_to_update: Are you sure to update your article?
-    title_placeholder: Title of article
+    confirm_to_update: Are you sure to update your post?
+    title_placeholder: Title of post
     content_place_holder: Write something valuable
-    intro_place_holder: Please introduce your article and this will be public
+    intro_place_holder: Please introduce your post and this will be public
     revenue_ratio: Revenue Ratio
     add_reference: Add Reference
     remove_reference: Remove Reference
-    please_select_an_article: Please select an article
+    please_select_an_article: Please select an post
     please_input_revenue_ratio: Please input revenue ratio
     references_revenue_cannot_larger_than_50%: References revenue cannot be larger than 50%
     revenue_distribution: Revenue
-    you_will_create_a_free_article: You will create a free article
+    you_will_create_a_free_article: You will create a free post
     add_some_tags: Add some tags
   this_address_supports: This address supports
   this_address_supports_erc20: This address supports all ERC20 tokens, such as ETH、USDT、XIN.
@@ -279,6 +279,8 @@ en:
   you_have_successfully_claimed_please_check_your_wallet_later: You have successfully claimed free XIN! Please check your wallet later.
   transaction_submitted: Transaction submitted
   get_more_xin: Get more XIN 
-  you_may_write_a_good_article_and_sell_it_for_xin: You may write a good article and sell it for XIN!
+  you_may_write_a_good_article_and_sell_it_for_xin: You may write a good post and sell it for XIN!
   you_need_to_deposit_first: You need to deposit first.
   balance: Balance
+  words_count: Words count
+  deposit: Desposit

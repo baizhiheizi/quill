@@ -91,7 +91,7 @@
               <%= link_to t("rules"), 
                 page_path('rules'), 
                 class: "block px-4 py-2 text-sm opacity-70 hover:bg-zinc-100 dark:hover:bg-zinc-800" %>
-              <%= link_to t("desposit"), 
+              <%= link_to t("deposit"), 
                 view_modals_path(type: :mvm_deposit), 
                 data: { turbo_method: :post },
                 class: "block px-4 py-2 text-sm opacity-70 hover:bg-zinc-100 dark:hover:bg-zinc-800" if current_user.mvm_eth? %>
