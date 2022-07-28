@@ -120,13 +120,12 @@ class Article < ApplicationRecord
   scope :without_drafted, -> { where.not(state: :drafted) }
   scope :order_by_revenue_usd, -> { order(revenue_usd: :desc) }
   scope :order_by_popularity, lambda {
-    without_free
-      .joins(:orders)
+    joins(:orders)
       .group(:id)
       .select(
         <<~SQL.squish
           articles.*, 
-          (((SUM(orders.value_usd) * 10 + articles.upvotes_count - articles.downvotes_count - articles.downvotes_count * AVG(orders.value_usd) * 20 + articles.comments_count) / POW(((EXTRACT(EPOCH FROM (now()-articles.published_at)) / 3600)::integer + 1), 2))) AS popularity
+          (((SUM(orders.value_usd) * 10 + articles.upvotes_count * AVG(orders.value_usd) * 10 - articles.downvotes_count * AVG(orders.value_usd) * 20 + articles.comments_count) / POW(((EXTRACT(EPOCH FROM (now()-articles.published_at)) / 3600)::integer + 1), 2))) AS popularity
         SQL
       )
       .order('popularity DESC, published_at DESC')
