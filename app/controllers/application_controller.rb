@@ -2,6 +2,7 @@
 
 class ApplicationController < ActionController::Base
   include Pagy::Backend
+  include Localizable
 
   before_action :ensure_launched!
 
@@ -53,6 +54,6 @@ class ApplicationController < ActionController::Base
   end
 
   def current_locale
-    @current_locale ||= (session[:current_locale] || current_user&.locale || I18n.default_locale)
+    @current_locale ||= (session[:current_locale] || current_user&.locale || browser_locale || I18n.default_locale)
   end
 end
