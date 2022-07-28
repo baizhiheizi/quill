@@ -47,7 +47,7 @@ class ArticleSearchService
   end
 
   def localize
-    @articles = @articles.where('locale like ?', "%#{@locale.split('-').first}%") if @filter != 'bought'
+    @articles = @articles.where('locale like ?', "%#{@locale.to_s.split('-').first}%") if @filter != 'bought'
 
     self
   end
