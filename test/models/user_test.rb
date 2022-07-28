@@ -10,7 +10,7 @@
 #  banned_at                   :datetime
 #  blocking_count              :integer          default(0)
 #  blocks_count                :integer          default(0)
-#  locale                      :integer
+#  locale                      :string
 #  mixin_uuid                  :uuid
 #  name                        :string
 #  reading_subscribers_count   :integer          default(0)

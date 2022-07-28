@@ -1,19 +1,25 @@
 # frozen_string_literal: true
 
 class ArticleSearchService
-  def initialize(params, current_user = nil)
+  def initialize(params, current_user = nil, locale = nil)
     @query = params[:query]
     @tag = params[:tag]
     @filter = params[:filter]
     @time_range = params[:time_range]
     @current_user = current_user
     @articles = Article.published
+    @locale = locale || current_user&.locale || I18n.default_locale
+  end
+
+  def self.call(*args)
+    new(*args).call
   end
 
   def call
     query
       .filter_block_authors
       .filter_block_by_authors
+      .localize
       .filter
       .select_in_time_range
 
@@ -27,10 +33,21 @@ class ArticleSearchService
         { tags_name_i_cont_all: q }
       else
         q = @query.to_s.strip
-        { title_i_cont: q, intro_i_cont: q, author_name_i_cont: q, tags_name_i_cont: q }
+        {
+          title_i_cont: q,
+          intro_i_cont: q,
+          author_name_i_cont: q,
+          tags_name_i_cont: q
+        }
       end
 
     @articles = @articles.ransack(q_ransack.merge(m: 'or')).result(distinct: true)
+
+    self
+  end
+
+  def localize
+    @articles = @articles.where('locale like ?', "%#{@locale.split('-').first}%") if @filter != 'bought'
 
     self
   end

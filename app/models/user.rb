@@ -10,7 +10,7 @@
 #  banned_at                   :datetime
 #  blocking_count              :integer          default(0)
 #  blocks_count                :integer          default(0)
-#  locale                      :integer
+#  locale                      :string
 #  mixin_uuid                  :uuid
 #  name                        :string
 #  reading_subscribers_count   :integer          default(0)
@@ -30,6 +30,7 @@
 
 class User < ApplicationRecord
   include Authenticatable
+  extend Enumerize
 
   has_one :authorization, class_name: 'UserAuthorization', inverse_of: :user, dependent: :restrict_with_error
   has_many :access_tokens, dependent: :destroy
@@ -57,7 +58,7 @@ class User < ApplicationRecord
   validates :mixin_uuid, presence: true
   validates :uid, presence: true, uniqueness: true
 
-  enum locale: I18n.available_locales
+  enumerize :locale, in: I18n.available_locales, default: I18n.default_locale
 
   after_commit :prepare_async, on: :create
 

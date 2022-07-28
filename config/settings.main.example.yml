@@ -23,11 +23,12 @@ mixin_logo_file: mixin-logo.png
 mixin_logo_light_file: mixin-logo-light.png
 
 # locale
-time_zone: Asia/Shanghai
+time_zone: UTC
 default_locale: zh-CN
 available_locales:
-  - zh-CN
   - en
+  - zh-CN
+  - ja
 
 # assets
 supported_assets:

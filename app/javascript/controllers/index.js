@@ -4,89 +4,92 @@
 
 import { application } from './application';
 
-import ArticleFormController from './article_form_controller.js';
+import ArticleFormController from './article_form_controller';
 application.register('article-form', ArticleFormController);
 
-import AutosaveController from './autosave_controller.js';
+import AutosaveController from './autosave_controller';
 application.register('autosave', AutosaveController);
 
-import BuyArticlePaymentController from './buy_article_payment_controller.js';
+import BuyArticlePaymentController from './buy_article_payment_controller';
 application.register('buy-article-payment', BuyArticlePaymentController);
 
-import ClipboardController from './clipboard_controller.js';
+import ClipboardController from './clipboard_controller';
 application.register('clipboard', ClipboardController);
 
-import CommentFormController from './comment_form_controller.js';
+import CommentFormController from './comment_form_controller';
 application.register('comment-form', CommentFormController);
 
-import ConfirmController from './confirm_controller.js';
+import ConfirmController from './confirm_controller';
 application.register('confirm', ConfirmController);
 
-import DarkmodeController from './darkmode_controller.js';
+import DarkmodeController from './darkmode_controller';
 application.register('darkmode', DarkmodeController);
 
-import DisconnectController from './disconnect_controller.js';
+import DisconnectController from './disconnect_controller';
 application.register('disconnect', DisconnectController);
 
-import DropdownController from './dropdown_controller.js';
+import DropdownController from './dropdown_controller';
 application.register('dropdown', DropdownController);
 
-import FennecController from './fennec_controller.js';
+import FennecController from './fennec_controller';
 application.register('fennec', FennecController);
 
-import FlashController from './flash_controller.js';
+import FlashController from './flash_controller';
 application.register('flash', FlashController);
 
-import HljsController from './hljs_controller.js';
+import HljsController from './hljs_controller';
 application.register('hljs', HljsController);
 
-import InfiniteScrollController from './infinite_scroll_controller.js';
+import InfiniteScrollController from './infinite_scroll_controller';
 application.register('infinite-scroll', InfiniteScrollController);
 
-import LoadMoreController from './load_more_controller.js';
+import LoadMoreController from './load_more_controller';
 application.register('load-more', LoadMoreController);
 
-import ModalController from './modal_controller.js';
+import ModalController from './modal_controller';
 application.register('modal', ModalController);
 
-import NestedFormController from './nested_form_controller.js';
+import NestedFormController from './nested_form_controller';
 application.register('nested-form', NestedFormController);
 
-import PhotoswipeController from './photoswipe_controller.js';
+import PhotoswipeController from './photoswipe_controller';
 application.register('photoswipe', PhotoswipeController);
 
-import QrcodeController from './qrcode_controller.js';
+import QrcodeController from './qrcode_controller';
 application.register('qrcode', QrcodeController);
 
-import ReferencesSelectController from './references_select_controller.js';
+import ReferencesSelectController from './references_select_controller';
 application.register('references-select', ReferencesSelectController);
 
-import RewardArticlePaymentController from './reward_article_payment_controller.js';
+import RewardArticlePaymentController from './reward_article_payment_controller';
 application.register('reward-article-payment', RewardArticlePaymentController);
 
-import ScrollToController from './scroll_to_controller.js';
+import ScrollToController from './scroll_to_controller';
 application.register('scroll-to', ScrollToController);
 
-import SearchController from './search_controller.js';
+import SearchController from './search_controller';
 application.register('search', SearchController);
 
-import SelectCurrencyController from './select_currency_controller.js';
+import SelectCurrencyController from './select_currency_controller';
 application.register('select-currency', SelectCurrencyController);
 
-import SelectMenuController from './select_menu_controller.js';
+import SelectMenuController from './select_menu_controller';
 application.register('select-menu', SelectMenuController);
 
-import SidebarController from './sidebar_controller.js';
+import SidebarController from './sidebar_controller';
 application.register('sidebar', SidebarController);
 
-import TabsController from './tabs_controller.js';
+import SwitchLocaleController from './switch_locale_controller';
+application.register('switch-locale', SwitchLocaleController);
+
+import TabsController from './tabs_controller';
 application.register('tabs', TabsController);
 
-import TagsSelectController from './tags_select_controller.js';
+import TagsSelectController from './tags_select_controller';
 application.register('tags-select', TagsSelectController);
 
-import TextareaAutogrowController from './textarea_autogrow_controller.js';
+import TextareaAutogrowController from './textarea_autogrow_controller';
 application.register('textarea-autogrow', TextareaAutogrowController);
 
-import ToastController from './toast_controller.js';
+import ToastController from './toast_controller';
 application.register('toast', ToastController);

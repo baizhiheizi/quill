@@ -6,6 +6,9 @@
     <%= render "admin/users/field", user: user %>
   </td>
   <td class="p-4">
+    <%= user.locale.presence || '-' %>
+  </td>
+  <td class="p-4">
     <%= user.phone.presence || '-' %>
   </td>
   <td class="p-4">

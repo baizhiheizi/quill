@@ -205,11 +205,13 @@ class Payment < ApplicationRecord
     return if article.blank?
     return if payer.blank?
 
-    case decrypted_memo['t']
-    when 'BUY'
-      broadcast_update_to "user_#{payer.mixin_uuid}", target: "article_#{article.uuid}_buy_payment_box", partial: 'payments/processing', locals: { payment: self } if payer.present?
-    when 'REWARD'
-      broadcast_update_to "user_#{payer.mixin_uuid}", target: "article_#{article.uuid}_reward_payment_box", partial: 'payments/processing', locals: { payment: self } if payer.present?
+    I18n.with_locale payer.locale do
+      case decrypted_memo['t']
+      when 'BUY'
+        broadcast_update_to "user_#{payer.mixin_uuid}", target: "article_#{article.uuid}_buy_payment_box", partial: 'payments/processing', locals: { payment: self } if payer.present?
+      when 'REWARD'
+        broadcast_update_to "user_#{payer.mixin_uuid}", target: "article_#{article.uuid}_reward_payment_box", partial: 'payments/processing', locals: { payment: self } if payer.present?
+      end
     end
   end
 

@@ -143,6 +143,9 @@ gem 'fastimage'
 # compact language detection in ruby
 gem 'cld'
 
+# Enumerated attributes with I18n and ActiveRecord/Mongoid support
+gem 'enumerize'
+
 # deploy
 gem 'mina', '~> 1.2.2', require: false
 gem 'mina-logs', '~> 1.1.0', require: false

@@ -63,11 +63,13 @@ class Order < ApplicationRecord
   before_destroy :destroy_notifications
 
   def broadcast_to_views
-    broadcast_replace_to "user_#{buyer.mixin_uuid}", target: "article_#{article.uuid}_content", partial: 'articles/content', locals: { article: article, user: buyer } if buy_article?
+    I18n.with_locale buyer.locale do
+      broadcast_replace_to "user_#{buyer.mixin_uuid}", target: "article_#{article.uuid}_content", partial: 'articles/content', locals: { article: article, user: buyer } if buy_article?
 
-    broadcast_replace_later_to "user_#{buyer.mixin_uuid}", target: "article_#{article.uuid}_buyers", partial: 'articles/buyers', locals: { article: article, user: buyer }
-    broadcast_replace_to "user_#{buyer.mixin_uuid}", target: "article_#{article.uuid}_comments_card", partial: 'articles/comments_card', locals: { article: article, user: buyer }
-    broadcast_remove_to "user_#{buyer.mixin_uuid}", target: "article_#{article.uuid}_payment_modal"
+      broadcast_replace_later_to "user_#{buyer.mixin_uuid}", target: "article_#{article.uuid}_buyers", partial: 'articles/buyers', locals: { article: article, user: buyer }
+      broadcast_replace_to "user_#{buyer.mixin_uuid}", target: "article_#{article.uuid}_comments_card", partial: 'articles/comments_card', locals: { article: article, user: buyer }
+      broadcast_remove_to "user_#{buyer.mixin_uuid}", target: "article_#{article.uuid}_payment_modal"
+    end
   end
 
   aasm column: :state do

@@ -6,6 +6,7 @@ class ApplicationController < ActionController::Base
   before_action :ensure_launched!
 
   helper_method :current_user
+  helper_method :current_locale
   helper_method :from_mixin_messenger?
   around_action :with_locale
 
@@ -42,8 +43,8 @@ class ApplicationController < ActionController::Base
   end
 
   def with_locale(&action)
-    current_user.update(locale: browser_locale) if current_user && browser_locale && current_user.locale != browser_locale
-    locale = current_user&.locale || browser_locale || I18n.default_locale
+    current_user.update(locale: current_locale) if current_user && current_locale && current_user.locale != current_locale
+    locale = current_user&.locale || current_locale&.to_sym || I18n.default_locale
     I18n.with_locale(locale, &action)
   end
 
@@ -51,10 +52,7 @@ class ApplicationController < ActionController::Base
     request&.user_agent&.match?(/Mixin|Links/)
   end
 
-  def browser_locale
-    locales = request.env['HTTP_ACCEPT_LANGUAGE'] || ''
-    locales.scan(/[a-z]{2}-?[A-Z]{2}?/).find do |locale|
-      I18n.available_locales.include?(locale.to_sym)
-    end
+  def current_locale
+    @current_locale ||= (session[:current_locale] || current_user&.locale || I18n.default_locale)
   end
 end

@@ -29,6 +29,8 @@ time_zone: Asia/Tokyo
 default_locale: ja
 available_locales:
   - ja
+  - en
+  - zh-CN
 
 # assets
 supported_assets:

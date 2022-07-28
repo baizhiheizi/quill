@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_07_28_013706) do
+ActiveRecord::Schema[7.0].define(version: 2022_07_28_033442) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
   enable_extension "pgcrypto"
@@ -459,12 +459,12 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_28_013706) do
     t.integer "authoring_subscribers_count", default: 0
     t.integer "reading_subscribers_count", default: 0
     t.datetime "banned_at", precision: nil
-    t.integer "locale"
     t.integer "subscribers_count", default: 0
     t.integer "subscribing_count", default: 0
     t.string "uid"
     t.integer "blocks_count", default: 0
     t.integer "blocking_count", default: 0
+    t.string "locale"
     t.index ["mixin_id"], name: "index_users_on_mixin_id"
     t.index ["mixin_uuid"], name: "index_users_on_mixin_uuid", unique: true
     t.index ["uid"], name: "index_users_on_uid", unique: true

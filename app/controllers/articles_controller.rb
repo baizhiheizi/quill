@@ -12,7 +12,7 @@ class ArticlesController < ApplicationController
     @time_range ||= 'month' if @filter == 'revenue'
     @tag = Tag.find_by name: params[:tag].to_s.strip
 
-    articles = ArticleSearchService.new(params, current_user).call
+    articles = ArticleSearchService.call(params, current_user, current_locale)
 
     @pagy, @articles = pagy_countless articles
 
