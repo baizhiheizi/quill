@@ -416,7 +416,6 @@ GEM
     ruby-vips (2.1.4)
       ffi (~> 1.12)
     rubyzip (2.3.2)
-    schmooze (0.2.0)
     scrypt (3.0.7)
       ffi-compiler (>= 1.0, < 2.0)
     selenium-webdriver (4.3.0)
@@ -524,7 +523,6 @@ DEPENDENCIES
   requestjs-rails
   rubocop
   rubocop-rails
-  schmooze
   selenium-webdriver
   sidekiq (~> 6.0)
   sidekiq-cron

@@ -16,9 +16,3 @@ daily_statistic_generate_worker:
 batch_distribute_order_worker:
   cron: '*/10 * * * *'
   class: 'BatchDistributeOrderWorker'
-# prs_transaction_poll_authorizations_worker:
-#   cron: '* * * * *'
-#   class: 'PrsTransactionPollAuthorizationsWorker'
-# prs_transaction_poll_posts_worker:
-#   cron: '* * * * *'
-#   class: 'PrsTransactionPollPostsWorker'

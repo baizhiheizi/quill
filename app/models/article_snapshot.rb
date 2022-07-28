@@ -29,10 +29,6 @@ class ArticleSnapshot < ApplicationRecord
 
   belongs_to :article, primary_key: :uuid, foreign_key: :article_uuid, inverse_of: :snapshots
 
-  has_one :prs_transaction, class_name: 'ArticleSnapshotPrsTransaction', primary_key: :tx_id, \
-                            foreign_key: :tx_id, inverse_of: :article_snapshot, \
-                            dependent: :restrict_with_error
-
   before_validation :set_defaults, on: :create
 
   after_commit on: :create do
@@ -60,7 +56,6 @@ class ArticleSnapshot < ApplicationRecord
   end
 
   def touch_signed_at
-    update signed_at: prs_transaction&.raw_updated_at
   end
 
   def fresh?
@@ -72,44 +67,6 @@ class ArticleSnapshot < ApplicationRecord
   end
 
   def sign_on_chain!
-    return unless drafted?
-    return unless fresh?
-    return unless author.prs_account&.allowed?
-    return if author.banned?
-    return if prs_transaction.present?
-
-    upload_encrypted_file_content unless file.attached?
-
-    r =
-      Prs.api.sign(
-        {
-          type: 'PIP:2001',
-          meta: {
-            uris: [
-              # hosted by cloud service
-              file.url,
-              # self-hosted
-              format('%<host>s/api/files/%<file_hash>s', host: Settings.host, file_hash: file_hash)
-            ],
-            mime: 'text/markdown;charset=UTF-8',
-            encryption: 'aes-256-cbc',
-            payment_url: "mixin://transfer/#{article.wallet.uuid}"
-          },
-          data: {
-            file_hash: file_hash,
-            topic: Rails.application.credentials.dig(:prs, :account),
-            updated_tx_id: previous_signed_snapshot&.prs_transaction&.tx_id
-          }
-        },
-        {
-          account: author.prs_account.account,
-          private_key: author.prs_account.private_key
-        }
-      )
-
-    block = r['processed']['action_traces'][0]['act']['data']
-    update tx_id: block['id']
-    request_sign!
   end
 
   def sign_on_chain_async
@@ -117,7 +74,6 @@ class ArticleSnapshot < ApplicationRecord
   end
 
   def encrypted_file_content
-    Prs.api.pip2001_encrypt file_content, article_uuid
   end
 
   def upload_encrypted_file_content
@@ -129,7 +85,6 @@ class ArticleSnapshot < ApplicationRecord
   end
 
   def signature_url
-    prs_transaction&.block_url
   end
 
   private

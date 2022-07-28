@@ -113,9 +113,6 @@ gem 'pagy'
 # Rack Middleware for handling Cross-Origin Resource Sharing (CORS), which makes cross-origin AJAX possible.
 gem 'rack-cors'
 
-# Schmooze lets Ruby and Node.js work together intimately.
-gem 'schmooze'
-
 # fnv1 and fnv1a hash functions in ruby
 gem 'fnv'
 
