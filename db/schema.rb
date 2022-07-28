@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_07_28_001519) do
+ActiveRecord::Schema[7.0].define(version: 2022_07_28_013706) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
   enable_extension "pgcrypto"
@@ -128,6 +128,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_28_001519) do
     t.float "author_revenue_ratio", default: 0.5
     t.float "references_revenue_ratio", default: 0.0
     t.bigint "collection_id"
+    t.string "locale"
     t.index ["asset_id"], name: "index_articles_on_asset_id"
     t.index ["author_id"], name: "index_articles_on_author_id"
     t.index ["collection_id"], name: "index_articles_on_collection_id"

@@ -11,6 +11,7 @@
 #  content                             :text
 #  downvotes_count                     :integer          default(0)
 #  intro                               :string
+#  locale                              :string
 #  orders_count                        :integer          default(0), not null
 #  platform_revenue_ratio              :float            default(0.1)
 #  price                               :decimal(, )      not null
@@ -103,7 +104,10 @@ class Article < ApplicationRecord
   before_validation :set_default_intro
   after_save do
     generate_snapshot if should_generate_snapshot?
-    attach_images_from_content_async if saved_change_to_content
+    if saved_change_to_content
+      attach_images_from_content_async
+      detect_locale_async
+    end
   end
 
   delegate :swappable?, to: :currency
@@ -435,6 +439,14 @@ class Article < ApplicationRecord
     end
 
     save
+  end
+
+  def detect_locale
+    update locale: CLD.detect_language(plain_text)[:code]
+  end
+
+  def detect_locale_async
+    ArticleDetectLocaleWorker.perform_async uuid
   end
 
   private

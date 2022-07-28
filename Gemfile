@@ -140,6 +140,9 @@ gem 'eth'
 # FastImage finds the size or type of an image given its uri by fetching as little as needed
 gem 'fastimage'
 
+# compact language detection in ruby
+gem 'cld'
+
 # deploy
 gem 'mina', '~> 1.2.2', require: false
 gem 'mina-logs', '~> 1.1.0', require: false
