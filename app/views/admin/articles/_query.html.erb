@@ -1,4 +1,14 @@
 <%= form_with url: admin_articles_path, method: :get, class: "flex items-center flex-wrap" do |form| %>
+  <%= form.select :locale, 
+    [
+      ['All', 'all'], 
+      ['EN', 'en'],
+      ['ZH', 'zh'],
+      ['JA', 'ja'],
+      ['Others', 'others'], 
+    ], 
+    { selected: @locale }, 
+    class: "rounded-lg m-1 dark:bg-zinc-900" %>
   <%= form.select :state, 
     [
       ['All', 'all'], 

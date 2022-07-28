@@ -7,6 +7,17 @@ module Admin
 
       articles = articles.where(author_id: params[:author_id]) if params[:author_id].present?
 
+      @locale = params[:locale] || 'all'
+      articles =
+        case @locale
+        when 'all'
+          articles
+        when 'others'
+          articles.where.not(locale: %i[en zh ja])
+        else
+          articles.where(locale: @locale)
+        end
+
       @state = params[:state] || 'all'
       articles =
         case @state
