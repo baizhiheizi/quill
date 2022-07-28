@@ -21,10 +21,10 @@
           <% end %>
         </div>
         <div class="hidden md:block">
-          <%= link_to t("fair"), page_path('fair'), class: "px-3 py-2 text-base font-medium hover:bg-blue-50 hover:text-blue-500 dark:hover:bg-gray-800 rounded-md" %>
+          <%= link_to t("fair"), fair_page_path, class: "px-3 py-2 text-base font-medium hover:bg-blue-50 hover:text-blue-500 dark:hover:bg-gray-800 rounded-md" %>
         </div>
         <div class="hidden md:block">
-          <%= link_to t("rules"), page_path('rules'), class: "px-3 py-2 text-base font-medium hover:bg-blue-50 hover:text-blue-500 dark:hover:bg-gray-800 rounded-md" %>
+          <%= link_to t("rules"), rules_page_path, class: "px-3 py-2 text-base font-medium hover:bg-blue-50 hover:text-blue-500 dark:hover:bg-gray-800 rounded-md" %>
         </div>
         <div class="hidden md:block">
           <div data-controller="dropdown" class="relative ml-3">
@@ -140,10 +140,10 @@
                 role: "menuitem", 
                 tabindex: "-1" %>
               <%= link_to t("fair"), 
-                page_path('fair'), 
+                fair_page_path, 
                 class: "block px-4 py-2 text-sm opacity-70 hover:bg-zinc-100 dark:hover:bg-zinc-800" %>
               <%= link_to t("rules"), 
-                page_path('rules'), 
+                rules_page_path, 
                 class: "block px-4 py-2 text-sm opacity-70 hover:bg-zinc-100 dark:hover:bg-zinc-800" %>
               <%= link_to t("deposit"), 
                 view_modals_path(type: :mvm_deposit), 
@@ -224,10 +224,10 @@
         <% end %>
       </div>
       <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-        <%= link_to t("fair"), page_path('fair'), class: "block px-2 py-2 text-base font-medium focus:bg-blue-50 focus:text-blue-500 rounded-md" %>
+        <%= link_to t("fair"), fair_page_path, class: "block px-2 py-2 text-base font-medium focus:bg-blue-50 focus:text-blue-500 rounded-md" %>
       </div>
       <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-        <%= link_to t("rules"), page_path('rules'), class: "block px-2 py-2 text-base font-medium focus:bg-blue-50 focus:text-blue-500 rounded-md" %>
+        <%= link_to t("rules"), rules_page_path, class: "block px-2 py-2 text-base font-medium focus:bg-blue-50 focus:text-blue-500 rounded-md" %>
       </div>
       <div class="pt-4 pb-3">
         <% if current_user.present? %>

@@ -49,6 +49,8 @@ Rails.application.routes.draw do
 
   resources :tags, only: %i[index]
 
+  get '/fair' => 'high_voltage/pages#show', id: 'fair', as: :fair_page
+  get '/rules' => 'high_voltage/pages#show', id: 'rules', as: :rules_page
   get '/:uid', to: 'users#show', as: 'user'
   resources :users, only: :show, param: :uid
   resources :users, only: [], module: 'users', param: :uid do
