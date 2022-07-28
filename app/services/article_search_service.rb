@@ -8,7 +8,7 @@ class ArticleSearchService
     @time_range = params[:time_range]
     @current_user = current_user
     @articles = Article.published
-    @locale = locale || current_user&.locale || I18n.default_locale
+    @locale = @query.to_s.strip.present? ? nil : locale || current_user&.locale || I18n.default_locale
   end
 
   def self.call(*args)
@@ -31,7 +31,7 @@ class ArticleSearchService
       if @tag.present?
         q = @tag.to_s.strip
         { tags_name_i_cont_all: q }
-      else
+      elsif @query.to_s.strip.present?
         q = @query.to_s.strip
         {
           title_i_cont: q,
@@ -41,13 +41,13 @@ class ArticleSearchService
         }
       end
 
-    @articles = @articles.ransack(q_ransack.merge(m: 'or')).result(distinct: true)
+    @articles = @articles.ransack(q_ransack.merge(m: 'or')).result(distinct: true) if q_ransack.present?
 
     self
   end
 
   def localize
-    @articles = @articles.where('locale like ?', "%#{@locale.to_s.split('-').first}%") if @filter != 'bought'
+    @articles = @articles.where(locale: @locale.to_s.split('-').first) if @locale.present? && @filter != 'bought'
 
     self
   end

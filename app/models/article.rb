@@ -442,7 +442,17 @@ class Article < ApplicationRecord
   end
 
   def detect_locale
-    update locale: CLD.detect_language(plain_text)[:code]
+    if content.size > 140
+      locales = [CLD.detect_language(intro)[:code], CLD.detect_language(content)[:code]].uniq
+
+      if locales.size == 1
+        update locale: locales.first
+      else
+        update locale: locales.reject(&->(l) { l == 'en' }).last
+      end
+    else
+      update locale: 'un'
+    end
   end
 
   def detect_locale_async
