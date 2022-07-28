@@ -24,7 +24,7 @@ mixin_logo_light_file: mixin-logo-light.png
 
 # locale
 time_zone: UTC
-default_locale: zh-CN
+default_locale: en
 available_locales:
   - en
   - zh-CN
