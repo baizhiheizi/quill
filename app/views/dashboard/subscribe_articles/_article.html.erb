@@ -1,5 +1,5 @@
 <div id="subscribe_article_<%= dom_id article %>" class="relative flex items-center space-x-4 px-4 py-2 border-b dark:border-zinc-800">
-  <%= link_to article_path(article), class: "flex flex-1 items-center space-x-2", data: { turbo_frame: "_top" } do %>
+  <%= link_to user_article_path(article.author, article), class: "flex flex-1 items-center space-x-2", data: { turbo_frame: "_top" } do %>
     <img src="<%= article.author.avatar %>" class="w-10 h-10 rounded-full" />
     <span class="truncate"><%= article.title %></span>
   <% end %>

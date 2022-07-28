@@ -23,7 +23,7 @@
   <div class='text-sm text-gray-500 text-center'>
     <%= t('already_paid') %>? <%= t('try_to') %>
     <% if current_user.present? %>
-      <%= link_to t('refresh'), article_path(article), data: { turbo: false } %>
+      <%= link_to t('refresh'), user_article_path(article.author, article), data: { turbo: false } %>
     <% else %>
       <%= button_to t('login'), view_modals_path(type: :login, return_to: article_url(article.uuid)) %>
     <% end %>

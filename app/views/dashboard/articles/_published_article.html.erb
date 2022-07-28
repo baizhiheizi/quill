@@ -1,6 +1,6 @@
 <div id="<%= dom_id article %>_published" class="border-b dark:border-zinc-800 p-4 sm:px-6">
   <div class="relative">
-    <%= link_to article_path(article.uuid) do %>
+    <%= link_to user_article_path(article.author, article.uuid) do %>
       <span aria-hidden="true" class="absolute inset-0"></span>
     <% end %>
     <div class="flex space-x-2 items-center justify-between">

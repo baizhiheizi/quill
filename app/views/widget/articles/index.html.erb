@@ -12,7 +12,7 @@
   <% else %>
     <div class='mark-context space-y-4'>
       <% @articles.each do |article| %>
-        <%= link_to article_path(article.uuid), class: 'block p-4 text-gray-900 no-underline shadow-md space-y-2' do %>
+        <%= link_to user_article_path(article.author, article.uuid), class: 'block p-4 text-gray-900 no-underline shadow-md space-y-2' do %>
           <div class='flex items-start'>
             <img class='w-8 h-8 mr-2 rounded-full' src='<%= article.author.avatar %>' />
             <div class='flex-1'>

@@ -162,7 +162,7 @@
           -
         <% else %>
           <% @article.references.each do |reference| %>
-            <%= link_to reference.title, article_path(reference.uuid), class: "mb-2 text-sm" %>
+            <%= link_to reference.title, user_article_path(reference.author, reference.uuid), class: "mb-2 text-sm" %>
           <% end %>
         <% end %>
       </div>

@@ -24,7 +24,7 @@
       <div class="text-xs sm:text-sm opacity-50">≈$<%= article.price_usd %></div>
     </div>
   </div>
-  <%= link_to article_path(article), class: "mb-4 block" do %>
+  <%= link_to user_article_path(article.author, article), class: "mb-4 block" do %>
     <div class="font-bold text-xl lg:text-2xl 2xl:text-3xl mb-2 break-words text-ellipsis overflow-hidden">
       <%= article.title %>
     </div>
@@ -40,16 +40,16 @@
     <% end %>
   </div>
   <div class="flex items-center space-x-3 lg:space-x-8 justify-end opacity-70">
-    <%= link_to article_path(article), class: "flex items-center space-x-1" do %>
+    <%= link_to user_article_path(article.author, article), class: "flex items-center space-x-1" do %>
       <%= render "shared/icons/dollar", html_class: "w-4 h-4 lg:w-5 lg:h-5" %>
       <span class="lg:text-base"><%= article.revenue_usd.round(4) %></span>
     <% end %>
-    <%= link_to article_path(article), class: "flex items-center space-x-1" do %>
+    <%= link_to user_article_path(article.author, article), class: "flex items-center space-x-1" do %>
       <%= render "shared/icons/chat", html_class: "w-4 h-4 lg:w-5 lg:h-5" %>
       <span class="lg:text-base"><%= article.comments_count %></span>
     <% end %>
     <% if article.upvote_ratio.present? %>
-      <%= link_to article_path(article), class: "flex items-center space-x-1" do %>
+      <%= link_to user_article_path(article.author, article), class: "flex items-center space-x-1" do %>
         <%= render "shared/icons/thumb_up", html_class: "w-4 h-4 lg:w-5 lg:h-5" %>
         <span class="lg:text-base"><%= article.upvote_ratio %></span>
       <% end %>

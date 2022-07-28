@@ -2,7 +2,7 @@
   <div class="grid grid-cols-3 md:grid-cols-6 gap-2">
     <div class="flex items-center opacity-70 col-span-2 md:col-span-1">
       <% if payment.article.present? %>
-        <%= link_to payment.article.title, article_path(payment.article.uuid), class: "truncate", data: { turbo_frame: "_top" } %>
+        <%= link_to payment.article.title, user_article_path(payment.article.author, payment.article.uuid), class: "truncate", data: { turbo_frame: "_top" } %>
       <% else %>
         <span>-</span>
       <% end %>

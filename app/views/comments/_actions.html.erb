@@ -22,7 +22,7 @@
       <%= render partial: "shared/icons/reply", locals: { html_class: "w-4 h-4" } %>
     <% end %>
   <% elsif current_user.blank? %>
-    <%= button_to view_modals_path(type: :login, return_to: article_path(comment.commentable)) do %>
+    <%= button_to view_modals_path(type: :login, return_to: user_article_path(comment.commentable.author, comment.commentable)) do %>
       <%= render partial: "shared/icons/reply", locals: { html_class: "w-4 h-4" } %>
     <% end %>
   <% end %>
