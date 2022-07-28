@@ -181,6 +181,7 @@ class Article < ApplicationRecord
   def share_of(user)
     return if user.blank?
     return author_revenue_ratio if user == author
+    return if revenue_btc.to_f.zero?
 
     user.orders.where(item: self).sum(:value_btc) / revenue_btc * readers_revenue_ratio
   end
