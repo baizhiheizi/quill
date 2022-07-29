@@ -2,7 +2,7 @@ import { Controller } from '@hotwired/stimulus';
 import { get, post } from '@rails/request.js';
 import { RegistryContract } from '../registry';
 import { notify, showLoading, hideLoading } from '../../utils';
-import { XIN_ASSET_ID } from '../constants';
+import { NativeAssetId } from '../constants';
 import { initWallet } from '../wallet';
 
 export default class extends Controller {
@@ -45,7 +45,7 @@ export default class extends Controller {
 
   async addToken() {
     if (!this.assetIdValue) return;
-    if (this.assetIdValue == XIN_ASSET_ID) return;
+    if (this.assetIdValue == NativeAssetId) return;
 
     showLoading();
     try {
@@ -101,7 +101,7 @@ export default class extends Controller {
     if (
       window.ethereum &&
       window.ethereum.isMetaMask &&
-      this.assetIdValue !== XIN_ASSET_ID
+      this.assetIdValue !== NativeAssetId
     ) {
       this.addTokenButtonTarget.classList.remove('hidden');
     } else {

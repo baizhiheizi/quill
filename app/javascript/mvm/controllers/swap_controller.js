@@ -1,7 +1,7 @@
 import { Controller } from '@hotwired/stimulus';
 import { post } from '@rails/request.js';
 import { debounce } from 'underscore';
-import { XIN_ASSET_ID } from '../constants';
+import { NativeAssetId } from '../constants';
 
 export default class extends Controller {
   static values = {
@@ -32,7 +32,7 @@ export default class extends Controller {
 
         if (
           identifier === this.identifierValue &&
-          event.detail.assetId !== XIN_ASSET_ID
+          event.detail.assetId !== NativeAssetId
         ) {
           this.payAssetIdValue = event.detail.assetId;
           this.currencyIconTarget.src = event.detail.iconUrl;

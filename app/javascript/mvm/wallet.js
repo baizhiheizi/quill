@@ -3,7 +3,7 @@ import Web3 from 'web3/dist/web3.min.js';
 import WalletConnectProvider from '@walletconnect/web3-provider/dist/umd/index.min.js';
 import { ERC20ABI } from './abis';
 import { RegistryContract } from './registry';
-import { XIN_ASSET_ID } from './constants';
+import { NativeAssetId } from './constants';
 import BigNumber from 'bignumber.js';
 
 export const MVM_CHAIN_ID = '0x120c7';
@@ -80,7 +80,7 @@ export async function balanceOf(assetId, account) {
   const registry = new RegistryContract();
   let balance = 0;
 
-  if (assetId == XIN_ASSET_ID) {
+  if (assetId == NativeAssetId) {
     balance = await w3.eth.getBalance(account);
     balance = BigNumber(balance).dividedBy(1e18);
   } else {

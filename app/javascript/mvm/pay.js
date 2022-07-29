@@ -1,6 +1,6 @@
 import { post } from '@rails/request.js';
 import { BridgeABI, ERC20ABI } from './abis';
-import { BridgeAddress, XIN_ASSET_ID } from './constants';
+import { BridgeAddress, NativeAssetId } from './constants';
 import { RegistryContract } from './registry';
 import BigNumber from 'bignumber.js';
 import { balanceOf } from './wallet';
@@ -25,8 +25,8 @@ export async function payWithMVM(params, success, fail) {
   const accounts = await w3.eth.getAccounts();
   const { extra } = await fetchExtra(opponentIds, threshold, memo);
 
-  if (assetId === XIN_ASSET_ID) {
-    await payXIN(
+  if (assetId === NativeAssetId) {
+    await panNative(
       {
         assetId,
         symbol,
@@ -79,7 +79,7 @@ export async function payERC20(params, success, fail) {
     .on('error', fail);
 }
 
-export async function payXIN(params, success, fail) {
+export async function panNative(params, success, fail) {
   const { assetId, amount, contract, extra, account } = params;
   const BridgeContract = new w3.eth.Contract(BridgeABI, BridgeAddress);
 
