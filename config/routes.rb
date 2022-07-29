@@ -49,10 +49,8 @@ Rails.application.routes.draw do
 
   resources :tags, only: %i[index]
 
-  get '/fair' => 'high_voltage/pages#show', id: 'fair', as: :fair_page
-  get '/rules' => 'high_voltage/pages#show', id: 'rules', as: :rules_page
-  get '/:uid', to: 'users#show', as: 'user'
-  resources :users, only: :show, param: :uid
+  resources :currencies, only: %i[index]
+  resources :users, only: :show, param: :uid, as: :full_user
   resources :users, only: [], module: 'users', param: :uid do
     resources :articles, only: %i[index]
     resources :comments, only: %i[index]
@@ -63,7 +61,9 @@ Rails.application.routes.draw do
   resources :transfers, only: %i[index]
   get '/transfers/stats', to: 'transfers#stats'
 
-  resources :currencies, only: %i[index]
+  get '/fair' => 'high_voltage/pages#show', id: 'fair', as: :fair_page
+  get '/rules' => 'high_voltage/pages#show', id: 'rules', as: :rules_page
 
-  get '/:uid/:uuid', to: 'articles#show', as: 'user_article'
+  get '/:uid', to: 'users#show', as: :user
+  get '/:uid/:uuid', to: 'articles#show', as: :user_article
 end
