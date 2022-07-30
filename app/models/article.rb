@@ -125,7 +125,7 @@ class Article < ApplicationRecord
       .select(
         <<~SQL.squish
           articles.*, 
-          (((SUM(orders.value_usd) * 10 + articles.upvotes_count * AVG(orders.value_usd) * 10 - articles.downvotes_count * AVG(orders.value_usd) * 20 + articles.comments_count) / POW(((EXTRACT(EPOCH FROM (now()-articles.published_at)) / 3600)::integer + 1), 2))) AS popularity
+          (((SUM(orders.value_usd) * 10 + articles.upvotes_count - articles.downvotes_count - articles.downvotes_count * AVG(orders.value_usd) * 20 + articles.comments_count) / POW(((EXTRACT(EPOCH FROM (now()-articles.published_at)) / 3600)::integer + 1), 2))) AS popularity
         SQL
       )
       .order('popularity DESC, published_at DESC')
