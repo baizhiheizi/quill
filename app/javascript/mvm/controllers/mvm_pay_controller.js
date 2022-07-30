@@ -1,6 +1,11 @@
 import { Controller } from '@hotwired/stimulus';
 import { notify, showLoading, hideLoading } from '../../utils';
-import { balanceOf, initWallet } from '../wallet';
+import {
+  balanceOf,
+  initWallet,
+  MVM_CHAIN_ID,
+  switchMetaMaskToMVM,
+} from '../wallet';
 import { payWithMVM } from '../pay';
 
 export default class extends Controller {
@@ -21,14 +26,6 @@ export default class extends Controller {
     assetSymbol: String,
     afterSubmitAction: String,
   };
-
-  async initialize() {
-    try {
-      await initWallet();
-    } catch (error) {
-      notify(error.message, 'danger');
-    }
-  }
 
   async assetIdValueChanged() {
     if (!this.assetIdValue) return;
@@ -56,6 +53,13 @@ export default class extends Controller {
 
   async pay(event) {
     event.preventDefault();
+
+    await initWallet();
+    await switchMetaMaskToMVM();
+    if (w3.currentProvider.chainId !== MVM_CHAIN_ID) {
+      notify('Switch to MVM Chain before paying', 'danger');
+      return;
+    }
 
     const { assetId, symbol, amount, opponentIds, threshold, memo, mixinUuid } =
       event.params;

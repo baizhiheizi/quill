@@ -20,18 +20,12 @@ export async function initWallet() {
     } else {
       throw new Error('No wallet connected');
     }
-  } else if (w3.currentProvider.isMetaMask) {
-    await addMvmChain();
   }
 }
 
 export async function initMetaMask() {
   const provider = await detectEthereumProvider();
   if (provider !== window.ethereum) return;
-
-  if (ethereum.chainId !== MVM_CHAIN_ID) {
-    await addMvmChain();
-  }
 
   await ethereum.request({ method: 'eth_requestAccounts' });
 
@@ -51,7 +45,10 @@ export async function initWalletConnect() {
   window.w3 = new Web3(provider);
 }
 
-export async function addMvmChain() {
+export async function switchMetaMaskToMVM() {
+  if (!window.w3) initMetaMask();
+  if (!w3.currentProvider.isMetaMask) return;
+
   ethereum.request({
     method: 'wallet_addEthereumChain',
     params: [
