@@ -13,7 +13,16 @@
       <div class="flex items-center space-x-2 ml-4 md:ml-6">
         <div class="flex items-baseline space-x-4">
           <% if current_user.blank? %>
-            <%= link_to t("write"), view_modals_path(type: :login, return_to: new_article_url), data: { turbo_method: :post }, class: "px-3 py-2 text-base font-medium hover:bg-blue-50 hover:text-blue-500 dark:hover:bg-gray-800 rounded-md" %>
+            <% if from_mixin_messenger? %>
+              <%= link_to t("write"), 
+                login_path(return_to: new_article_url), 
+                class: "px-3 py-2 text-base font-medium hover:bg-blue-50 hover:text-blue-500 dark:hover:bg-gray-800 rounded-md" %>
+            <% else %>
+              <%= link_to t("write"), 
+                view_modals_path(type: :login, return_to: new_article_url), 
+                data: { turbo_method: :post }, 
+                class: "px-3 py-2 text-base font-medium hover:bg-blue-50 hover:text-blue-500 dark:hover:bg-gray-800 rounded-md" %>
+            <% end %>
           <% elsif current_user.articles.drafted.present? %>
             <%= link_to t("write"), dashboard_articles_path(tab: :drafted), class: "px-3 py-2 text-base font-medium hover:bg-blue-50 hover:text-blue-500 dark:hover:bg-gray-800 rounded-md" %>
           <% else %>
@@ -171,10 +180,16 @@
             </div>
           <% end %>
         <% else %>
-          <%= link_to t('connect_wallet'), 
-            view_modals_path(type: :login), 
-            data: { turbo_method: :post }, 
-            class: "hover:bg-blue-600 bg-blue-500 text-white px-3 py-2 rounded" %>
+          <% if from_mixin_messenger? %>
+            <%= link_to t('connect_wallet'), 
+              login_path(return_to: request.referer), 
+              class: "hover:bg-blue-600 bg-blue-500 text-white px-3 py-2 rounded" %>
+          <% else %>
+            <%= link_to t('connect_wallet'), 
+              view_modals_path(type: :login), 
+              data: { turbo_method: :post }, 
+              class: "hover:bg-blue-600 bg-blue-500 text-white px-3 py-2 rounded" %>
+          <% end %>
         <% end %>
       </div>
     </div>
@@ -216,7 +231,16 @@
       </div>
       <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
         <% if current_user.blank? %>
-          <%= link_to t("write"), view_modals_path(type: :login, return_to: new_article_url), data: { turbo_method: :post }, class: "block px-3 py-2 text-base font-medium focus:bg-blue-50 focus:text-blue-500 rounded-md" %>
+          <% if from_mixin_messenger? %>
+            <%= link_to t("write"), 
+              login_path(return_to: new_article_url), 
+              data: { turbo_method: :post }, 
+              class: "block px-3 py-2 text-base font-medium focus:bg-blue-50 focus:text-blue-500 rounded-md" %>
+          <% else %>
+            <%= link_to t("write"), 
+              view_modals_path(type: :login, return_to: new_article_url), 
+              data: { turbo_method: :post }, class: "block px-3 py-2 text-base font-medium focus:bg-blue-50 focus:text-blue-500 rounded-md" %>
+          <% end %>
         <% elsif current_user.articles.drafted.present? %>
           <%= link_to t("write"), dashboard_articles_path(tab: :drafted), class: "px-2 py-2 text-base font-medium hover:bg-blue-50 hover:text-blue-500 dark:hover:bg-gray-800 rounded-md" %>
         <% else %>
@@ -300,7 +324,16 @@
           </div>
         <% else %>
           <div class="px-2 sm:px-3 flex">
-            <%= link_to 'Connect Wallet', view_modals_path(type: :login), data: { turbo_method: :post }, class: "block px-3 py-2 text-base font-medium text-white bg-blue-500 focus:bg-blue-600 rounded-md" %>
+            <% if from_mixin_messenger? %>
+              <%= link_to 'Connect Wallet', 
+                login_path(return_to: request.referer), 
+                class: "block px-3 py-2 text-base font-medium text-white bg-blue-500 focus:bg-blue-600 rounded-md" %>
+              <% else %>
+              <%= link_to 'Connect Wallet', 
+                view_modals_path(type: :login), 
+                data: { turbo_method: :post }, 
+                class: "block px-3 py-2 text-base font-medium text-white bg-blue-500 focus:bg-blue-600 rounded-md" %>
+            <% end %>
           </div>
         <% end %>
       </div>
