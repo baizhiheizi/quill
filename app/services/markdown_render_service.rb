@@ -132,7 +132,7 @@ class MarkdownRenderService
     doc = Nokogiri::HTML.fragment(@html)
     doc.css('a').each do |link|
       href = link.attr('href')
-      if href.match?(/\A#comment/)
+      if href&.match?(/\A#comment/)
         link['data-turbo-method'] = 'post'
         link['href'] = "/view_modals?type=comment_form&quote_comment_id=#{href.underscore.split('_').last}"
       end
@@ -146,7 +146,7 @@ class MarkdownRenderService
     doc = Nokogiri::HTML.fragment(@html)
     doc.css('iframe').each do |iframe|
       iframe['class'] = 'w-full h-auto'
-      iframe.remove unless iframe['src'].match?(Regexp.union(IFRAME_SRC_WHITE_LIST_REGEX))
+      iframe.remove unless iframe['src']&.match?(Regexp.union(IFRAME_SRC_WHITE_LIST_REGEX))
     end
     @html = doc.to_html
 
