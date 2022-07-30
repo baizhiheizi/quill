@@ -51,7 +51,7 @@
     "prettier": "^2.7.1"
   },
   "browserslist": [
-    "chrome58"
+    "defaults"
   ],
   "browser": {},
   "engines": {
