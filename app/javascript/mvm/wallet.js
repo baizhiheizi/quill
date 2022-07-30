@@ -31,7 +31,7 @@ export async function initWallet() {
 
 export async function initCoinBase() {
   const coinbaseWallet = new CoinbaseWalletSDK({
-    appName: 'Quill',
+    appName: 'prsdigg',
     appLogoUrl: '/logo.svg',
   });
   const provider = coinbaseWallet.makeWeb3Provider(MVM_RPC_URL, MVM_CHAIN_ID);
