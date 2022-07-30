@@ -275,3 +275,5 @@ ja:
   balance: 残高
   words_count: Words count
   deposit: Desposit
+  using_eth_wallet: Using ETH wallet
+  using_mixin_wallet: Using Mixin wallet

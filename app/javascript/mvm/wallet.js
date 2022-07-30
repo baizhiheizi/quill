@@ -1,5 +1,6 @@
 import detectEthereumProvider from '@metamask/detect-provider';
 import Web3 from 'web3/dist/web3.min.js';
+import CoinbaseWalletSDK from '@coinbase/wallet-sdk';
 import WalletConnectProvider from '@walletconnect/web3-provider/dist/umd/index.min.js';
 import { ERC20ABI } from './abis';
 import { RegistryContract } from './registry';
@@ -7,20 +8,39 @@ import { NativeAssetId } from './constants';
 import BigNumber from 'bignumber.js';
 
 export const MVM_CHAIN_ID = '0x120c7';
+export const MVM_RPC_URL = 'https://geth.mvm.dev';
 
 export async function initWallet() {
   if (!window.w3) {
     let walletConnect = localStorage.getItem('walletconnect');
     walletConnect = walletConnect && JSON.parse(walletConnect);
 
+    let isCoinbaseWallet = localStorage.getItem('isCoinbaseWallet');
+
     if (walletConnect && walletConnect.connected) {
       await initWalletConnect();
+    } else if (isCoinbaseWallet) {
+      await initCoinBase();
     } else if (window.ethereum && ethereum.isConnected()) {
       await initMetaMask();
     } else {
       throw new Error('No wallet connected');
     }
   }
+}
+
+export async function initCoinBase() {
+  const coinbaseWallet = new CoinbaseWalletSDK({
+    appName: 'Quill',
+    appLogoUrl: '/logo.svg',
+  });
+  const provider = coinbaseWallet.makeWeb3Provider(MVM_RPC_URL, MVM_CHAIN_ID);
+
+  window.w3 = new Web3(provider);
+
+  const addresses = await w3.currentProvider.enable();
+  console.log(addresses);
+  localStorage.setItem('isCoinbaseWallet', addresses);
 }
 
 export async function initMetaMask() {
@@ -45,9 +65,15 @@ export async function initWalletConnect() {
   window.w3 = new Web3(provider);
 }
 
-export async function switchMetaMaskToMVM() {
-  if (!window.w3) initMetaMask();
-  if (!w3.currentProvider.isMetaMask) return;
+export async function swtichCoinbaseBrowserToMVM() {
+  if (!window.w3) initCoinBase();
+  if (!w3.currentProvider.isCoin) return;
+}
+
+export async function switchToMVM() {
+  if (!window.w3) initWallet();
+  if (!w3.currentProvider.isMetaMask && !w3.currentProvider.isCoinbaseWallet)
+    return;
 
   ethereum.request({
     method: 'wallet_addEthereumChain',
@@ -56,8 +82,8 @@ export async function switchMetaMaskToMVM() {
         chainId: MVM_CHAIN_ID,
         chainName: 'Mixin Virtual Machine',
         nativeCurrency: {
-          name: 'Mixin',
-          symbol: 'XIN',
+          name: 'ETH',
+          symbol: 'ETH',
           decimals: 18,
         },
         rpcUrls: ['https://geth.mvm.dev'],

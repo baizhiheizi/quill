@@ -284,3 +284,5 @@ zh-CN:
   balance: 余额
   words_count: 字数
   deposit: 充值
+  using_eth_wallet: 使用 ETH 钱包
+  using_mixin_wallet: 使用 Mixin 钱包

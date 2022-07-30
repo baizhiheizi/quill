@@ -46,6 +46,9 @@ application.register('infinite-scroll', InfiniteScrollController);
 import LoadMoreController from './load_more_controller';
 application.register('load-more', LoadMoreController);
 
+import LoginController from './login_controller';
+application.register('login', LoginController);
+
 import ModalController from './modal_controller';
 application.register('modal', ModalController);
 

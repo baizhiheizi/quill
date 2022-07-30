@@ -5,6 +5,9 @@ if (!window.Stimulus) {
   window.Stimulus = application;
 }
 
+import CoinbaseController from './coinbase_controller.js';
+Stimulus.register('coinbase', CoinbaseController);
+
 import MetamaskController from './metamask_controller.js';
 Stimulus.register('metamask', MetamaskController);
 

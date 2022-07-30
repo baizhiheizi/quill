@@ -7,5 +7,6 @@ export default class extends Controller {
 
   clearWalletCache() {
     localStorage.clear('walletconnect');
+    localStorage.clear('isCoinbaseWallet');
   }
 }
