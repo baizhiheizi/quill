@@ -1,11 +1,6 @@
 import { Controller } from '@hotwired/stimulus';
 import { notify, showLoading, hideLoading } from '../../utils';
-import {
-  balanceOf,
-  initWallet,
-  MVM_CHAIN_ID,
-  switchMetaMaskToMVM,
-} from '../wallet';
+import { balanceOf, initWallet, MVM_CHAIN_ID, switchToMVM } from '../wallet';
 import { payWithMVM } from '../pay';
 
 export default class extends Controller {
@@ -55,7 +50,7 @@ export default class extends Controller {
     event.preventDefault();
 
     await initWallet();
-    await switchMetaMaskToMVM();
+    await switchToMVM();
     if (w3.currentProvider.chainId !== MVM_CHAIN_ID) {
       notify('Switch to MVM Chain before paying', 'danger');
       return;
@@ -66,14 +61,16 @@ export default class extends Controller {
 
     this.lockButton();
     try {
-      notify(
-        `Invoking ${
-          w3.currentProvider.isMetaMask
-            ? 'MetaMask'
-            : w3.currentProvider.wc.peerMeta.name
-        } to pay ${amount} ${symbol}`,
-        'info',
-      );
+      let provider;
+      if (w3.currentProvider.isMetaMask) {
+        provider = 'MetaMask';
+      } else if (w3.currentProvider.wc) {
+        provider = w3.currentProvider.wc.peerMeta.name;
+      } else if (w3.currentProvider.isCoinbaseWallet) {
+        provider = 'Coinbase Wallet';
+      }
+      notify(`Invoking ${provider} to pay ${amount} ${symbol}`, 'info');
+
       await payWithMVM(
         { assetId, symbol, amount, opponentIds, threshold, memo, mixinUuid },
         (hash) => {
