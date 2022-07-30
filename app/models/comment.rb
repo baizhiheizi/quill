@@ -53,7 +53,7 @@ class Comment < ApplicationRecord
   end
 
   def content_as_html
-    MarkdownRenderService.new.call content, type: :comment
+    MarkdownRenderService.call content, type: :full
   end
 
   private

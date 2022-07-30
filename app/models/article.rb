@@ -205,7 +205,7 @@ class Article < ApplicationRecord
   end
 
   def plain_text
-    @plain_text ||= ActionController::Base.helpers.strip_tags(content_as_html)
+    @plain_text ||= ActionController::Base.helpers.strip_tags(MarkdownRenderService.call(content))
   end
 
   def words_count
@@ -306,7 +306,7 @@ class Article < ApplicationRecord
   end
 
   def content_as_html
-    MarkdownRenderService.new.call content, type: :article
+    MarkdownRenderService.call content, type: :full
   end
 
   def default_intro

@@ -25,7 +25,16 @@ class MarkdownRenderService
     end
   end
 
-  def call(content, type: :default)
+  def initialize(content, **kargs)
+    @content = content
+    @type = kargs[:type] || :default
+  end
+
+  def self.call(*args, **kargs)
+    new(*args, **kargs).call
+  end
+
+  def call
     @html = Redcarpet::Markdown.new(
       HTMLWithTocRender.new(
         with_toc_data: true,
@@ -42,27 +51,26 @@ class MarkdownRenderService
       highlight: true,
       footnotes: true,
       strikethrough: true
-    ).render content.to_s
+    ).render @content.to_s
 
-    case type
-    when :article
-      parse_mention_user
-    when :comment
-      add_scroll_to_comment_attributes
+    case @type
+    when :default
+      escape_iframes
+    when :full
+      parse_paragraph
+        .parse_link
+        .parse_table
+        .add_attributes_to_images
+        .parse_mention_user
+        .add_scroll_to_comment_attributes
+        .escape_iframes
     end
-
-    parse_link
-    parse_paragraph
-    parse_table
-    add_attributes_to_images
-    escape_iframes
 
     @html
   end
 
-  private
-
   def parse_mention_user
+    self
   end
 
   def parse_link
