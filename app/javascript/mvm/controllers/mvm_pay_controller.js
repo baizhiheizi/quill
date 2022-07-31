@@ -8,6 +8,7 @@ export default class extends Controller {
     'button',
     'metaMaskIcon',
     'walletConnectIcon',
+    'coinbaseIcon',
     'wait',
     'finish',
     'scanTransactionLink',
@@ -44,6 +45,12 @@ export default class extends Controller {
     window.w3 &&
       w3.currentProvider.wc &&
       this.walletConnectIconTarget.classList.remove('hidden');
+  }
+
+  coinbaseIconTargetConnected() {
+    window.w3 &&
+      w3.currentProvider.isCoinbaseWallet &&
+      this.coinbaseIconTarget.classList.remove('hidden');
   }
 
   async pay(event) {

@@ -17,15 +17,21 @@
       data-mvm-pay-threshold-param="<%= threshold %>"
       class="flex justify-center space-x-4 items-center w-96 max-w-full text-center no-underline cursor-pointer py-2 block bg-blue-600 hover:bg-blue-700 active:bg-blue-700 text-white rounded-full">
       <div class="w-8 h-8 flex">
-        <%= image_tag 'https://docs.metamask.io/metamask-fox.svg',
+        <%= image_tag 'metamask.svg',
           data: {
             mvm_pay_target: 'metaMaskIcon'
           },
           class: 'hidden w-full h-auto' %>
 
-        <%= image_tag 'https://docs.walletconnect.com/img/walletconnect-logo.svg', 
+        <%= image_tag 'walletconnect.svg', 
           data: {
             mvm_pay_target: 'walletConnectIcon'
+          },
+          class: 'hidden w-full h-auto' %>
+
+        <%= image_tag 'coinbase.svg', 
+          data: {
+            mvm_pay_target: 'coinbaseIcon'
           },
           class: 'hidden w-full h-auto' %>
       </div>
