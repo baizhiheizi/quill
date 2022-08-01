@@ -45,7 +45,7 @@
     "tom-select": "^2.1.0",
     "typescript": "^4.7.4",
     "underscore": "^1.13.4",
-    "web3": "^1.7.4"
+    "web3": "^1.7.5"
   },
   "devDependencies": {
     "prettier": "^2.7.1"
