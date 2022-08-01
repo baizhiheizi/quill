@@ -40,7 +40,7 @@
       </script>
     <% end %>
 
-    <%= favicon_link_tag "#{Settings.favicon_file || 'favicon.png'}" %>
+    <%= favicon_link_tag "#{Settings.favicon_file || 'favicon.svg'}" %>
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
     <%= javascript_include_tag "application", "data-turbo-track": "reload" %>
     <%= javascript_include_tag "mvm", "data-turbo-track": "reload", defer: true %>
