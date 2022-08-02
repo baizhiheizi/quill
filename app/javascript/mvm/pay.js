@@ -1,6 +1,6 @@
 import { post } from '@rails/request.js';
 import { BridgeABI, ERC20ABI } from './abis';
-import { BridgeAddress, NativeAssetId } from './constants';
+import { BridgeAddress, GasPrice, NativeAssetId } from './constants';
 import { RegistryContract } from './registry';
 import BigNumber from 'bignumber.js';
 import { balanceOf } from './wallet';
@@ -65,6 +65,7 @@ export async function payERC20(params, success, fail) {
     params;
 
   let IERC20 = new w3.eth.Contract(ERC20ABI, assetContractAddress);
+  IERC20.options.gasPrice = GasPrice;
 
   const balance = await balanceOf(assetId, account);
   if (BigNumber(balance).isLessThan(BigNumber(amount))) {
@@ -82,6 +83,7 @@ export async function payERC20(params, success, fail) {
 export async function panNative(params, success, fail) {
   const { assetId, amount, contract, extra, account } = params;
   const BridgeContract = new w3.eth.Contract(BridgeABI, BridgeAddress);
+  BridgeContract.options.gasPrice = GasPrice;
 
   const balance = await balanceOf(assetId, account);
   if (BigNumber(balance).isLessThan(BigNumber(amount))) {
