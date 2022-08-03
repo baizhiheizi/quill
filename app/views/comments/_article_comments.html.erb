@@ -3,24 +3,24 @@
     data-controller="tabs"
     data-tabs-active-tab-value="<%= order_by %>"
     data-tabs-active-class-value="border-b-2">
-    <div class="w-full flex overflow-auto flex-nowrap scrollbar-hide items-center flex border-b dark:border-zinc-800 px-4 mb-4">
+    <div class="w-full flex overflow-auto flex-nowrap scrollbar-hide items-center flex px-4 mb-4">
       <%= link_to t('upvotes'), 
         article_comments_path(article, order_by: :upvotes),
-        class: "cursor-pointer py-1 px-4 border-blue-500 opacity-70 min-w-fit",
+        class: "cursor-pointer py-1 px-4 border-primary opacity-70 min-w-fit",
         data: {
           tabs_target: "tab",
           tabs_tabname_param: "upvotes" 
         } %>
       <%= link_to t('desc'), 
         article_comments_path(article, order_by: :desc),
-        class: "cursor-pointer py-1 px-4 border-blue-500 opacity-70 min-w-fit",
+        class: "cursor-pointer py-1 px-4 border-primary opacity-70 min-w-fit",
         data: {
           tabs_target: "tab",
           tabs_tabname_param: "desc" 
         } %>
       <%= link_to t('asc'), 
         article_comments_path(article, order_by: :asc),
-        class: "cursor-pointer py-1 px-4 border-blue-500 opacity-70 min-w-fit",
+        class: "cursor-pointer py-1 px-4 border-primary opacity-70 min-w-fit",
         data: {
           tabs_target: "tab",
           tabs_tabname_param: "asc" 

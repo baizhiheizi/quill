@@ -1,6 +1,6 @@
 <div id="<%= dom_id current_user %>_notification_setting" class="px-4">
   <%= form_for [:dashboard, current_user.notification_setting] do |form| %>
-    <div class="py-4 border-b dark:border-zinc-800">
+    <div class="py-4">
       <div class="opacity-70 mb-2">
         <%= t('tips_of_article_published_notifications') %>
       </div>
@@ -15,7 +15,7 @@
         </div>
       </div>
     </div>
-    <div class="py-4 border-b dark:border-zinc-800">
+    <div class="py-4">
       <div class="opacity-70 mb-2">
         <%= t('tips_of_article_bought_notifications') %>
       </div>
@@ -30,7 +30,7 @@
         </div>
       </div>
     </div>
-    <div class="py-4 border-b dark:border-zinc-800">
+    <div class="py-4">
       <div class="opacity-70 mb-2">
         <%= t('tips_of_article_rewarded_notifications') %>
       </div>
@@ -45,7 +45,7 @@
         </div>
       </div>
     </div>
-    <div class="py-4 border-b dark:border-zinc-800">
+    <div class="py-4">
       <div class="opacity-70 mb-2">
         <%= t('tips_of_tagging_created_notifications') %>
       </div>
@@ -60,7 +60,7 @@
         </div>
       </div>
     </div>
-    <div class="py-4 border-b dark:border-zinc-800">
+    <div class="py-4">
       <div class="opacity-70 mb-2">
         <%= t('tips_of_comment_created_notifications') %>
       </div>
@@ -75,7 +75,7 @@
         </div>
       </div>
     </div>
-    <div class="py-4 border-b dark:border-zinc-800">
+    <div class="py-4">
       <div class="opacity-70 mb-2">
         <%= t('tips_of_transfer_processed_notifications') %>
       </div>
@@ -91,7 +91,7 @@
       </div>
     </div>
     <div class="py-4 flex justify-center">
-      <%= form.submit t('save'), class: "cursor-pointer rounded bg-blue-500 text-white px-4 py-1"  %>
+      <%= form.submit t('save'), class: "cursor-pointer rounded bg-primary text-white px-4 py-1"  %>
     </div>
   <% end %>
 </div>

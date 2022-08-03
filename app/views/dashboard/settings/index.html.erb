@@ -2,10 +2,10 @@
   data-controller="tabs"
   data-tabs-active-tab-value="<%= @tab %>"
   data-tabs-active-class-value="border-b-2">
-  <div class="w-full flex overflow-auto flex-nowrap scrollbar-hide items-center flex border-b dark:border-zinc-800 px-4 mb-4">
+  <div class="w-full flex overflow-auto flex-nowrap scrollbar-hide items-center flex px-4 mb-4">
     <%= link_to t('profile'), 
       dashboard_settings_path(tab: :profile),
-      class: "cursor-pointer py-1 px-4 border-blue-500 textrgray-600",
+      class: "cursor-pointer py-1 px-4 border-primary textrgray-600",
       data: {
         tabs_target: "tab",
         tabs_tabname_param: "profile",
@@ -13,7 +13,7 @@
       } %>
     <%= link_to t('notification'), 
       dashboard_settings_path(tab: :notification),
-      class: "cursor-pointer py-1 px-4 border-blue-500 textrgray-600",
+      class: "cursor-pointer py-1 px-4 border-primary textrgray-600",
       data: {
         tabs_target: "tab",
         tabs_tabname_param: "notification",
@@ -21,7 +21,7 @@
       } %>
     <%= link_to t('access_token'), 
       dashboard_settings_path(tab: :access_token),
-      class: "cursor-pointer py-1 px-4 border-blue-500 textrgray-600",
+      class: "cursor-pointer py-1 px-4 border-primary textrgray-600",
       data: {
         tabs_target: "tab",
         tabs_tabname_param: "access_token",
@@ -59,7 +59,7 @@
           turbo_method: :post,
           action: "confirm#invoke"
         }, 
-        class: "px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded" %>
+        class: "px-4 py-2 bg-primary hover:scale-105 text-white rounded" %>
     </div>
     <%= turbo_frame_tag "#{dom_id current_user}_access_tokens", src: dashboard_access_tokens_path, loading: :lazy do %>
       <%= render "shared/loading" %>

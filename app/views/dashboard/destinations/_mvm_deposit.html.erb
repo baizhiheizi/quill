@@ -36,12 +36,12 @@
     </div>
   <% end %>
 
-  <div data-controller="tabs" data-tabs-active-tab-value="address" data-tabs-active-class-value="text-bold border-b-2 border-blue-500">
+  <div data-controller="tabs" data-tabs-active-tab-value="address" data-tabs-active-class-value="text-bold border-b-2 !border-primary">
     <div class="w-full flex items-center mb-4">
-      <a class="flex-1 text-center cursor-pointer py-1 border-b" data-tabs-target="tab" data-tabs-tabname-param='address' data-action="click->tabs#active">
+      <a class="flex-1 text-center cursor-pointer py-1 border-b border-zinc-50" data-tabs-target="tab" data-tabs-tabname-param='address' data-action="click->tabs#active">
         <%= t('address') %>
       </a>
-      <a class="flex-1 text-center cursor-pointer py-1 border-b" data-tabs-target="tab" data-tabs-tabname-param='mixin' data-action="click->tabs#active">
+      <a class="flex-1 text-center cursor-pointer py-1 border-b border-zinc-50" data-tabs-target="tab" data-tabs-tabname-param='mixin' data-action="click->tabs#active">
         <%= t('mixin_contact') %>
       </a>
     </div>

@@ -2,38 +2,38 @@
   data-controller="tabs"
   data-tabs-active-tab-value="<%= @tab %>"
   data-tabs-active-class-value="border-b-2">
-  <div class="w-full flex overflow-auto flex-nowrap scrollbar-hide items-center flex border-b dark:border-zinc-800 px-4 mb-4">
+  <div class="w-full flex overflow-auto flex-nowrap scrollbar-hide items-center flex px-4 mb-4">
     <%= link_to t('drafted'), 
       dashboard_articles_path(tab: :drafted),
-      class: "cursor-pointer py-1 px-4 border-blue-500 opacity-70 min-w-fit",
+      class: "cursor-pointer py-1 px-4 border-primary opacity-70 min-w-fit",
       data: {
         tabs_target: "tab",
         tabs_tabname_param: "drafted" 
       } %>
     <%= link_to t('published'), 
       dashboard_articles_path(tab: :published),
-      class: "cursor-pointer py-1 px-4 border-blue-500 opacity-70 min-w-fit",
+      class: "cursor-pointer py-1 px-4 border-primary opacity-70 min-w-fit",
       data: {
         tabs_target: "tab",
         tabs_tabname_param: "published" 
       } %>
     <%= link_to t('bought'), 
       dashboard_articles_path(tab: :bought),
-      class: "cursor-pointer py-1 px-4 border-blue-500 opacity-70 min-w-fit",
+      class: "cursor-pointer py-1 px-4 border-primary opacity-70 min-w-fit",
       data: {
         tabs_target: "tab",
         tabs_tabname_param: "bought" 
       } %>
     <%= link_to t('hidden'), 
       dashboard_articles_path(tab: :hidden),
-      class: "cursor-pointer py-1 px-4 border-blue-500 opacity-70 min-w-fit",
+      class: "cursor-pointer py-1 px-4 border-primary opacity-70 min-w-fit",
       data: {
         tabs_target: "tab",
         tabs_tabname_param: "hidden" 
       } %>
     <%= link_to t('blocked'), 
       dashboard_articles_path(tab: :blocked),
-      class: "cursor-pointer py-1 px-4 border-blue-500 opacity-70 min-w-fit",
+      class: "cursor-pointer py-1 px-4 border-primary opacity-70 min-w-fit",
       data: {
         tabs_target: "tab",
         tabs_tabname_param: "blocked" 
@@ -52,7 +52,7 @@
       <% when 'drafted' %>
         <%= render partial: "dashboard/articles/drafted_article", collection: @articles, as: :article %>
         <div class="flex justify-center p-4">
-          <%= link_to t('write'), new_article_path, class: "px-4 py-2 bg-blue-500 hover:bg-blue-600 rounded text-white text-lg font-bold" %>
+          <%= link_to t('write'), new_article_path, class: "px-4 py-2 bg-primary hover:scale-105 rounded text-white text-lg font-bold" %>
         </div>
       <% when 'published' %>
         <%= render partial: "dashboard/articles/published_article", collection: @articles, as: :article %>
