@@ -58,4 +58,4 @@ Quill 尝试建立一个**作者**与**读者**共赢的**平台**。
 
 目前 Quill 仅支持 [Mixin Messenger](https://mixin.one/messenger) 登录以及完成支付，体验前先下载安装。
 
-浏览 [prsdigg.com](https://prsdigg.com) ，或者在 [Mixin Messenger](https://mixin.one/messenger) 中搜索 7000101549 即可体验。
+浏览 [quill.im](https://quill.im) ，或者在 [Mixin Messenger](https://mixin.one/messenger) 中搜索 7000101549 即可体验。

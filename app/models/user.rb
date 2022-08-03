@@ -254,7 +254,7 @@ class User < ApplicationRecord
   def create_bot_contact_conversation
     return unless messenger?
 
-    PrsdiggBot.api.create_contact_conversation mixin_uuid
+    QuillBot.api.create_contact_conversation mixin_uuid
     RevenueBot.api.create_contact_conversation(mixin_uuid) if RevenueBot.api.present?
   end
 

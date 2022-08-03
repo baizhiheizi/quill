@@ -61,7 +61,7 @@ class Currency < ApplicationRecord
   end
 
   def sync!
-    r = PrsdiggBot.api.asset asset_id
+    r = QuillBot.api.asset asset_id
     update! raw: r['data']
   end
 
@@ -79,7 +79,7 @@ class Currency < ApplicationRecord
     if raw.blank? && asset_id.present?
       self.raw =
         begin
-          PrsdiggBot.api.asset(asset_id)['data']
+          QuillBot.api.asset(asset_id)['data']
         rescue MixinBot::Error
           {}
         end

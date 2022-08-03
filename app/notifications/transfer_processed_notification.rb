@@ -53,11 +53,11 @@ class TransferProcessedNotification < ApplicationNotification
     recipient.notification_setting.transfer_processed_mixin_bot
   end
 
-  def from_prsdigg_bot?
+  def from_quill_bot?
     params[:transfer].wallet.blank?
   end
 
   def may_notify_via_mixin_bot?
-    recipient_messenger? && mixin_bot_notification_enabled? && !from_prsdigg_bot?
+    recipient_messenger? && mixin_bot_notification_enabled? && !from_quill_bot?
   end
 end

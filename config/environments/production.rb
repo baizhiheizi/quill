@@ -105,6 +105,6 @@ Rails.application.configure do
 
   config.middleware.use ExceptionNotification::Rack, mixin_bot: {
     recipient_id: Rails.application.credentials.dig(:admin, :uuid),
-    bot: 'PrsdiggBot'
+    bot: 'QuillBot'
   }
 end
