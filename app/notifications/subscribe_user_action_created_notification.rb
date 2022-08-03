@@ -15,11 +15,7 @@ class SubscribeUserActionCreatedNotification < ApplicationNotification
   end
 
   def url
-    format(
-      '%<host>s/users/%<mixin_id>s',
-      host: Settings.host,
-      mixin_id: params[:action].user.mixin_id
-    )
+    user_url params[:action].user.uid
   end
 
   def may_notify_via_mixin_bot?

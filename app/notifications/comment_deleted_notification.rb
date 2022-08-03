@@ -6,6 +6,8 @@ class CommentDeletedNotification < ApplicationNotification
 
   param :comment
 
+  delegate :commentable, to: :comment
+
   def data
     message
   end
@@ -15,12 +17,7 @@ class CommentDeletedNotification < ApplicationNotification
   end
 
   def url
-    format(
-      '%<host>s/articles/%<article_uuid>s#comment-%<comment_id>s',
-      host: Settings.host,
-      article_uuid: params[:comment].commentable.uuid,
-      comment_id: params[:comment].id
-    )
+    user_article_url commentable.author, commentable.uuid, anchor: "comment_#{comment.id}"
   end
 
   def may_notify_via_mixin_bot?

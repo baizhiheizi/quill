@@ -20,10 +20,7 @@ class SwapOrderSwappingNotification < ApplicationNotification
   end
 
   def url
-    format(
-      '%<host>s/dashboard/orders',
-      host: Settings.host
-    )
+    dashboard_orders_url
   end
 
   def may_notify_via_mixin_bot?
