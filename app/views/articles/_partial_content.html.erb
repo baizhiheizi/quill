@@ -18,7 +18,7 @@
     <%= t('pay_warning') %>
   </div>
   <div class="flex justify-center mb-4">
-    <%= button_to t('pay_to_read'), view_modals_path(type: :buy_article, uuid: article.uuid), class: "cursor-pointer text-base rounded bg-blue-600 hover:bg-blue-500 active:bg-blue-500 text-white px-4 py-2 no-underline" %>
+    <%= button_to t('pay_to_read'), view_modals_path(type: :buy_article, uuid: article.uuid), class: "cursor-pointer text-base rounded bg-primary hover:scale-105 text-white px-4 py-2 no-underline" %>
   </div>
   <div class='text-sm text-gray-500 text-center'>
     <%= t('already_paid') %>? <%= t('try_to') %>

@@ -1,4 +1,4 @@
-<nav class="hidden bg-white dark:bg-zinc-900 sm:block border-b dark:border-zinc-800 fixed top-0 w-full z-50">
+<nav class="hidden bg-white dark:bg-zinc-900 sm:block fixed top-0 w-full z-50">
   <div class="px-4 px-8 mx-auto max-w-6xl">
     <div class="flex items-center justify-between h-16">
       <div class="flex items-center flex-1 space-x-10">
@@ -16,24 +16,24 @@
             <% if from_mixin_messenger? %>
               <%= link_to t("write"), 
                 login_path(return_to: new_article_url), 
-                class: "px-3 py-2 text-base font-medium hover:bg-blue-50 hover:text-blue-500 dark:hover:bg-gray-800 rounded-md" %>
+                class: "px-3 py-2 text-base font-medium hover:bg-blue-50 hover:text-primary dark:hover:bg-gray-800 rounded-md" %>
             <% else %>
               <%= link_to t("write"), 
                 view_modals_path(type: :login, return_to: new_article_url), 
                 data: { turbo_method: :post }, 
-                class: "px-3 py-2 text-base font-medium hover:bg-blue-50 hover:text-blue-500 dark:hover:bg-gray-800 rounded-md" %>
+                class: "px-3 py-2 text-base font-medium hover:bg-blue-50 hover:text-primary dark:hover:bg-gray-800 rounded-md" %>
             <% end %>
           <% elsif current_user.articles.drafted.present? %>
-            <%= link_to t("write"), dashboard_articles_path(tab: :drafted), class: "px-3 py-2 text-base font-medium hover:bg-blue-50 hover:text-blue-500 dark:hover:bg-gray-800 rounded-md" %>
+            <%= link_to t("write"), dashboard_articles_path(tab: :drafted), class: "px-3 py-2 text-base font-medium hover:bg-blue-50 hover:text-primary dark:hover:bg-gray-800 rounded-md" %>
           <% else %>
-            <%= link_to t("write"), new_article_path, class: "px-3 py-2 text-base font-medium hover:bg-blue-50 hover:text-blue-500 dark:hover:bg-gray-800 rounded-md" %>
+            <%= link_to t("write"), new_article_path, class: "px-3 py-2 text-base font-medium hover:bg-blue-50 hover:text-primary dark:hover:bg-gray-800 rounded-md" %>
           <% end %>
         </div>
         <div class="hidden md:block">
-          <%= link_to t("fair"), fair_page_path, class: "px-3 py-2 text-base font-medium hover:bg-blue-50 hover:text-blue-500 dark:hover:bg-gray-800 rounded-md" %>
+          <%= link_to t("fair"), fair_page_path, class: "px-3 py-2 text-base font-medium hover:bg-blue-50 hover:text-primary dark:hover:bg-gray-800 rounded-md" %>
         </div>
         <div class="hidden md:block">
-          <%= link_to t("rules"), rules_page_path, class: "px-3 py-2 text-base font-medium hover:bg-blue-50 hover:text-blue-500 dark:hover:bg-gray-800 rounded-md" %>
+          <%= link_to t("rules"), rules_page_path, class: "px-3 py-2 text-base font-medium hover:bg-blue-50 hover:text-primary dark:hover:bg-gray-800 rounded-md" %>
         </div>
         <div class="hidden md:block">
           <div data-controller="dropdown" class="relative ml-3">
@@ -107,7 +107,7 @@
         </div>
 
         <% if current_user.present? %>
-          <%= link_to dashboard_notifications_path, class: "p-1 relative rounded-full hover:text-blue-500 hover:bg-blue-50 dark:hover:bg-gray-800" do %>
+          <%= link_to dashboard_notifications_path, class: "p-1 relative rounded-full hover:text-primary hover:bg-blue-50 dark:hover:bg-gray-800" do %>
             <span class="sr-only">View notifications</span>
             <!-- Heroicon name: outline/bell -->
             <%= render 'shared/icons/bell' %>
@@ -183,12 +183,12 @@
           <% if from_mixin_messenger? %>
             <%= link_to t('connect_wallet'), 
               login_path(return_to: request.referer), 
-              class: "hover:bg-blue-600 bg-blue-500 text-white px-3 py-2 rounded" %>
+              class: "hover:scale-105 bg-primary text-white px-3 py-1 rounded" %>
           <% else %>
             <%= link_to t('connect_wallet'), 
               view_modals_path(type: :login), 
               data: { turbo_method: :post }, 
-              class: "hover:bg-blue-600 bg-blue-500 text-white px-3 py-2 rounded" %>
+              class: "hover:scale-105 bg-primary text-white px-3 py-1 rounded" %>
           <% end %>
         <% end %>
       </div>
@@ -196,11 +196,11 @@
   </div>
 </nav>
 
-<nav class="bg-white dark:bg-zinc-900 sm:hidden border-b dark:border-zinc-800 w-full fixed top-0 z-50" data-controller="dropdown">
+<nav class="bg-white dark:bg-zinc-900 sm:hidden w-full fixed top-0 z-50" data-controller="dropdown">
   <div class="relative px-4 px-6 mx-auto max-h-screen">
     <div class="relative flex items-center justify-center h-12">
       <div class="absolute left-0">
-        <button data-action="dropdown#toggle click@window->dropdown#hide" type="button" class="inline-flex items-center justify-center p-2 rounded-md hover:text-blue-500 hover:bg-blue-50 focus:bg-blue-50 focus:text-blue-500" aria-controls="mobile-menu" aria-expanded="false">
+        <button data-action="dropdown#toggle click@window->dropdown#hide" type="button" class="inline-flex items-center justify-center p-2 rounded-md hover:text-primary hover:bg-blue-50 focus:bg-blue-50 focus:text-primary" aria-controls="mobile-menu" aria-expanded="false">
           <span class="sr-only">Open main menu</span>
           <%= render "shared/icons/menu" %>
         </button>
@@ -214,7 +214,7 @@
       <div class="px-4">
         <div class="relative flex items-center justify-center h-12">
           <div class="absolute left-0">
-            <button data-action="dropdown#toggle click@window->dropdown#hide" type="button" class="inline-flex items-center justify-center p-2 rounded-md text-blue-500 bg-blue-50 dark:bg-zinc-800" aria-controls="mobile-menu" aria-expanded="false">
+            <button data-action="dropdown#toggle click@window->dropdown#hide" type="button" class="inline-flex items-center justify-center p-2 rounded-md text-primary bg-blue-50 dark:bg-zinc-800" aria-controls="mobile-menu" aria-expanded="false">
               <span class="sr-only">Close main menu</span>
               <%= render "shared/icons/close" %>
             </button>
@@ -225,7 +225,7 @@
         </div>
       </div>
       <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-        <%= link_to t("read"), articles_path, class: "block px-2 py-2 text-base font-medium focus:bg-blue-50 focus:text-blue-500 rounded-md" %>
+        <%= link_to t("read"), articles_path, class: "block px-2 py-2 text-base font-medium focus:bg-blue-50 focus:text-primary rounded-md" %>
       </div>
       <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
         <% if current_user.blank? %>
@@ -233,23 +233,23 @@
             <%= link_to t("write"), 
               login_path(return_to: new_article_url), 
               data: { turbo_method: :post }, 
-              class: "block px-3 py-2 text-base font-medium focus:bg-blue-50 focus:text-blue-500 rounded-md" %>
+              class: "block px-3 py-2 text-base font-medium focus:bg-blue-50 focus:text-primary rounded-md" %>
           <% else %>
             <%= link_to t("write"), 
               view_modals_path(type: :login, return_to: new_article_url), 
-              data: { turbo_method: :post }, class: "block px-3 py-2 text-base font-medium focus:bg-blue-50 focus:text-blue-500 rounded-md" %>
+              data: { turbo_method: :post }, class: "block px-3 py-2 text-base font-medium focus:bg-blue-50 focus:text-primary rounded-md" %>
           <% end %>
         <% elsif current_user.articles.drafted.present? %>
-          <%= link_to t("write"), dashboard_articles_path(tab: :drafted), class: "px-2 py-2 text-base font-medium hover:bg-blue-50 hover:text-blue-500 dark:hover:bg-gray-800 rounded-md" %>
+          <%= link_to t("write"), dashboard_articles_path(tab: :drafted), class: "px-2 py-2 text-base font-medium hover:bg-blue-50 hover:text-primary dark:hover:bg-gray-800 rounded-md" %>
         <% else %>
-          <%= link_to t("write"), new_article_path, class: "block px-2 py-2 text-base font-medium focus:bg-blue-50 focus:text-blue-500 rounded-md" %>
+          <%= link_to t("write"), new_article_path, class: "block px-2 py-2 text-base font-medium focus:bg-blue-50 focus:text-primary rounded-md" %>
         <% end %>
       </div>
       <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-        <%= link_to t("fair"), fair_page_path, class: "block px-2 py-2 text-base font-medium focus:bg-blue-50 focus:text-blue-500 rounded-md" %>
+        <%= link_to t("fair"), fair_page_path, class: "block px-2 py-2 text-base font-medium focus:bg-blue-50 focus:text-primary rounded-md" %>
       </div>
       <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-        <%= link_to t("rules"), rules_page_path, class: "block px-2 py-2 text-base font-medium focus:bg-blue-50 focus:text-blue-500 rounded-md" %>
+        <%= link_to t("rules"), rules_page_path, class: "block px-2 py-2 text-base font-medium focus:bg-blue-50 focus:text-primary rounded-md" %>
       </div>
       <div class="pt-4 pb-3">
         <% if current_user.present? %>
@@ -268,7 +268,7 @@
                 <%= render 'shared/icons/sun', html_class: "text-zinc-100 w-6 h-6" %>
               </a>
             </div>
-            <%= link_to dashboard_notifications_path, class: "relative flex-shrink-0 p-1 ml-3 rounded-full focus:bg-blue-50 focus:text-blue-500" do %>
+            <%= link_to dashboard_notifications_path, class: "relative flex-shrink-0 p-1 ml-3 rounded-full focus:bg-blue-50 focus:text-primary" do %>
               <span class="sr-only">View notifications</span>
               <%= render 'shared/icons/bell' %>
               <% if current_user.has_unread_notification? %>
@@ -277,7 +277,7 @@
             <% end %>
           </div>
           <div class="px-2 mt-3 space-y-1">
-            <%= link_to t("dashboard"), dashboard_root_path, class: "block px-3 py-2 text-base font-medium focus:bg-blue-50 focus:text-blue-500 rounded-md" %>
+            <%= link_to t("dashboard"), dashboard_root_path, class: "block px-3 py-2 text-base font-medium focus:bg-blue-50 focus:text-primary rounded-md" %>
           </div>
           <div class="px-2 my-3 space-y-1">
             <%= link_to t("disconnect"),
@@ -286,12 +286,12 @@
                 controller: 'disconnect',
                 action: 'disconnect#clearWalletCache'
               },
-              class: "block px-3 py-2 text-base font-medium focus:bg-blue-50 focus:text-blue-500 rounded-md" %>
+              class: "block px-3 py-2 text-base font-medium focus:bg-blue-50 focus:text-primary rounded-md" %>
           </div>
           <div class="px-2 pt-3 border-t space-y-1" data-controller="switch-locale">
             <%= link_to 'English', 
               locales_path(locale: :en, return_to: request.path), 
-              class: "block px-3 py-2 text-base font-medium focus:bg-blue-50 focus:text-blue-500 rounded-md #{current_locale == 'en' ? 'font-bold' : ''}", 
+              class: "block px-3 py-2 text-base font-medium focus:bg-blue-50 focus:text-primary rounded-md #{current_locale == 'en' ? 'font-bold' : ''}", 
               data: { 
                 turbo_method: :post,
                 switch_locale_locale_param: :en,
@@ -301,7 +301,7 @@
               tabindex: "-1" %>
             <%= link_to '中文', 
               locales_path(locale: :'zh-CN', return_to: request.path), 
-              class: "block px-3 py-2 text-base font-medium focus:bg-blue-50 focus:text-blue-500 rounded-md #{current_locale == 'zh-CN' ? 'font-bold' : ''}", 
+              class: "block px-3 py-2 text-base font-medium focus:bg-blue-50 focus:text-primary rounded-md #{current_locale == 'zh-CN' ? 'font-bold' : ''}", 
               data: { 
                 turbo_method: :post,
                 switch_locale_locale_param: :'zh-CN',
@@ -311,7 +311,7 @@
               tabindex: "-1" %>
             <%= link_to '日本语', 
               locales_path(locale: :ja, return_to: request.path), 
-              class: "block px-3 py-2 text-base font-medium focus:bg-blue-50 focus:text-blue-500 rounded-md #{current_locale == 'ja' ? 'font-bold' : ''}", 
+              class: "block px-3 py-2 text-base font-medium focus:bg-blue-50 focus:text-primary rounded-md #{current_locale == 'ja' ? 'font-bold' : ''}", 
               data: { 
                 turbo_method: :post,
                 switch_locale_locale_param: :'ja',
@@ -323,14 +323,14 @@
         <% else %>
           <div class="px-2 sm:px-3 flex">
             <% if from_mixin_messenger? %>
-              <%= link_to 'Connect Wallet', 
+              <%= link_to t('connect_wallet'), 
                 login_path(return_to: request.referer), 
-                class: "block px-3 py-2 text-base font-medium text-white bg-blue-500 focus:bg-blue-600 rounded-md" %>
+                class: "block px-3 py-1 text-base font-medium text-white bg-primary hover:scale-105 rounded-md" %>
               <% else %>
-              <%= link_to 'Connect Wallet', 
+              <%= link_to t('connect_wallet'), 
                 view_modals_path(type: :login), 
                 data: { turbo_method: :post }, 
-                class: "block px-3 py-2 text-base font-medium text-white bg-blue-500 focus:bg-blue-600 rounded-md" %>
+                class: "block px-3 py-1 text-base font-medium text-white bg-primary hover:scale-105 rounded-md" %>
             <% end %>
           </div>
         <% end %>

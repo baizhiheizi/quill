@@ -1,6 +1,6 @@
 <div data-article-form-target="optionFields" 
   class="hidden px-4 py-5 bg-white dark:bg-zinc-900 space-y-6 sm:p-6">
-  <div class="sm:pb-6 sm:border-b">
+  <div class="sm:pb-6 sm:border-b border-zinc-50">
     <%= form.select :tag_names, 
       form.object.tag_names.presence || Tag.all.first(10).pluck(:name), 
       {}, 
@@ -15,7 +15,7 @@
     %>
   </div>
 
-  <div class="sm:pb-6 sm:border-b grid grid-cols-3 gap-3">
+  <div class="sm:pb-6 sm:border-b border-zinc-50 grid grid-cols-3 gap-3">
     <%= form.label :intro, class: "col-span-3 sm:col-span-1 block text-sm font-medium opacity-70" %>
     <div class="col-span-3 sm:col-span-2">
       <div class="rounded-md shadow-sm">
@@ -33,7 +33,7 @@
     </div>
   </div>
 
-  <div class="sm:pb-6 sm:border-b grid grid-cols-3 gap-3">
+  <div class="sm:pb-6 sm:border-b border-zinc-50 grid grid-cols-3 gap-3">
     <%= form.label :currency, required: true, class: "col-span-3 sm:col-span-1 block text-sm font-medium opacity-70" %>
     <div class="col-span-3 sm:col-span-2">
       <div class="<%= form.object.published_at? ? '' : 'hidden' %>">
@@ -77,7 +77,7 @@
     </div>
   </div>
 
-  <div class="sm:pb-6 sm:border-b grid grid-cols-3 gap-3">
+  <div class="sm:pb-6 sm:border-b border-zinc-50 grid grid-cols-3 gap-3">
     <%= form.label :price, required: true, class: "col-span-3 sm:col-span-1 block text-sm font-medium opacity-70" %>
     <div class="col-span-3 sm:col-span-2">
       <div class="rounded-md shadow-sm">
@@ -101,7 +101,7 @@
     </div>
   </div>
 
-  <div class="sm:pb-6 sm:border-b grid grid-cols-3 gap-3">
+  <div class="sm:pb-6 sm:border-b border-zinc-50 grid grid-cols-3 gap-3">
     <%= form.label :readers_revenue_ratio, class: "col-span-3 sm:col-span-1 block text-sm font-medium opacity-70" %>
     <div class="col-span-3 sm:col-span-2">
       <div class="rounded-md shadow-sm">
@@ -114,7 +114,7 @@
     </div>
   </div>
 
-  <div class="sm:pb-6 sm:border-b grid grid-cols-3 gap-3">
+  <div class="sm:pb-6 sm:border-b border-zinc-50 grid grid-cols-3 gap-3">
     <%= form.label :platform_revenue_ratio, class: "col-span-3 sm:col-span-1 block text-sm font-medium opacity-70" %>
     <div class="col-span-3 sm:col-span-2">
       <div class="rounded-md shadow-sm">
@@ -127,7 +127,7 @@
     </div>
   </div>
 
-  <div class="sm:pb-6 sm:border-b grid grid-cols-3 gap-3">
+  <div class="sm:pb-6 sm:border-b border-zinc-50 grid grid-cols-3 gap-3">
     <%= form.label :author_revenue_ratio, class: "col-span-3 sm:col-span-1 block text-sm font-medium opacity-70" %>
     <div class="col-span-3 sm:col-span-2">
       <div class="rounded-md shadow-sm">
@@ -149,7 +149,7 @@
     </div>
   </div>
 
-  <div class="sm:pb-6 sm:border-b grid grid-cols-3 gap-3">
+  <div class="sm:pb-6 sm:border-b border-zinc-50 grid grid-cols-3 gap-3">
     <%= form.label :references_revenue_ratio, class: "col-span-3 sm:col-span-1 block text-sm font-medium opacity-70" %>
     <div class="col-span-3 sm:col-span-2">
       <div class="rounded-md shadow-sm">
@@ -182,7 +182,7 @@
     <div data-nested-form-target="target"></div>
     <div 
       data-action="click->nested-form#add click->article-form#calReferenceRatio"
-      class="cursor-pointer w-full block px-4 py-1 text-center border border-blue-500 text-blue-500">
+      class="cursor-pointer w-full block px-4 py-1 text-center border border-primary text-primary">
       <%= t('articles.add_reference') %>
     </div>
   <% end %>

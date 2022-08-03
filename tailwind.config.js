@@ -10,6 +10,15 @@ module.exports = {
     backgroundColor: (theme) => ({
       ...theme('colors'),
       dark: '#1b1c1e',
+      primary: '#5C6BEF',
+    }),
+    textColor: (theme) => ({
+      ...theme('colors'),
+      primary: '#5C6BEF',
+    }),
+    borderColor: (theme) => ({
+      ...theme('colors'),
+      primary: '#5C6BEF',
     }),
     extend: {
       minWidth: {

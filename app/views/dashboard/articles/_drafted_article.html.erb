@@ -1,4 +1,4 @@
-<div id="<%= dom_id article %>_draft" class="border-b dark:border-zinc-800 px-4 py-2 flex items-center space-x-4">
+<div id="<%= dom_id article %>_draft" class="border-b border-zinc-50 dark:border-zinc-800 px-4 py-2 flex items-center space-x-4">
   <%= link_to article.title.presence || t('articles.title_placeholder'), edit_article_path(article.uuid), data: { turbo_action: :replace }, class: "relative text-xl font-bold truncate" %>
   <div class="flex-1 text-sm opacity-70 truncate"><%= article.updated_at.strftime("%Y-%m-%d %H:%M") %></div>
   <%= button_to t('delete'), 

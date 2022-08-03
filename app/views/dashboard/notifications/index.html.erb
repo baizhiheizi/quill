@@ -14,7 +14,7 @@
       data: { 
         action: "confirm#invoke",
       }, 
-      class: "cursor-pointer bg-blue-500 hover:bg-blue-600 rounded px-4 py-1 text-white" %>
+      class: "cursor-pointer bg-primary hover:scale-105 rounded px-4 py-1 text-white" %>
     <%= button_to t("clear_all"), 
       dashboard_deleted_notifications_path, 
       method: :post,
@@ -29,7 +29,7 @@
       data: { 
         action: "confirm#invoke",
       }, 
-      class: "cursor-pointer bg-blue-500 hover:bg-blue-600 rounded px-4 py-1 text-white" %>
+      class: "cursor-pointer bg-primary hover:scale-105 rounded px-4 py-1 text-white" %>
   </div>
   <div data-controller="infinite-scroll">
     <div id="<%= dom_id current_user %>_notifications_list">

@@ -1,6 +1,6 @@
 <div id="<%= dom_id user %>_action_buttons" >
   <% if current_user.blank? %>
-    <%= link_to t('subscribe'), view_modals_path(type: :login, return_to: user_url(user)), data: { turbo_method: :post }, class: "block w-full cursor-pointer bg-blue-500 hover:bg-blue-600 rounded text-white text-center py-1 px-4" %>
+    <%= link_to t('subscribe'), view_modals_path(type: :login, return_to: user_url(user)), data: { turbo_method: :post }, class: "block w-full cursor-pointer bg-primary hover:scale-105 rounded text-white text-center py-1 px-4" %>
   <% elsif current_user == user %>
   <% elsif current_user.block_user?(user) %>
     <%= button_to t('unblock'), 

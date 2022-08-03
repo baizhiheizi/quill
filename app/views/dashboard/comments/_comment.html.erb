@@ -1,4 +1,4 @@
-<div class="sm:grid sm:grid-cols-4 gap-3 py-2 border-b dark:border-zinc-800">
+<div class="sm:grid sm:grid-cols-4 gap-3 py-2">
   <div class="text-sm opacity-70 truncate">
     <%= link_to comment.commentable.title, user_article_path(comment.commentable.author, comment.commentable.uuid), class: "truncate", data: { turbo_frame: "_top" } %>
   </div>

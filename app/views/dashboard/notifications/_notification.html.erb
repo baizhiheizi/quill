@@ -1,10 +1,10 @@
 <div class="flex flex-wrap sm:flex-nowrap items-center space-x-4 py-2">
-  <div id="<%= dom_id notification %>" class="truncate <%= notification.read? ? 'opacity-70' : 'text-blue-500' %>">
+  <div id="<%= dom_id notification %>" class="truncate <%= notification.read? ? 'opacity-70' : 'text-primary' %>">
     <%= link_to notification.message, dashboard_read_notification_path(notification), class: "truncate", data: { turbo_frame: "_top", turbo_method: :put } %>
   </div>
   <div class="text-sm">
     <% if notification.url.present? %>
-      <%= link_to notification.url, class: "cursor-pointer bg-white text-blue-500", target: "_blank", data: { turbo_frame: "_top" } do %>
+      <%= link_to notification.url, class: "cursor-pointer bg-white text-primary", target: "_blank", data: { turbo_frame: "_top" } do %>
         <%= render "shared/icons/link", html_class: "w-4 h-4" %>
       <% end %>
     <% end %>
