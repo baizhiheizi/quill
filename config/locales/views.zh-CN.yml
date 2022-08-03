@@ -1,5 +1,5 @@
 zh-CN:
-  app_name: 顶瓜瓜
+  app_name: Quill
   load_more: 加载更多
   subscribe: 订阅
   unsubscribe: 取消订阅
@@ -52,7 +52,7 @@ zh-CN:
   pay: 支付
   to_continue_reading: 继续阅读
   and_receive_early_reader_revenue: 并享受早期读者奖励
-  pay_warning: 文章为作者在顶瓜瓜平台出售的虚拟商品，一经付款，概不退还。谨慎付款，以防被骗。
+  pay_warning: 文章为作者在Quill平台出售的虚拟商品，一经付款，概不退还。谨慎付款，以防被骗。
   be_the_first_reader: 成为第一位读者
   pay_to_read: 付费阅读
   already_paid: 已经支付
@@ -93,11 +93,11 @@ zh-CN:
   revenue_chart: 平台收益曲线(USD)
   transactions: 转账记录
   rules_content: |
-    ### 顶瓜瓜 规则介绍
+    ### Quill 规则介绍
 
-    顶瓜瓜 尝试建立一个**作者**与**读者**共赢的**平台**。
+    Quill 为作者与读者打造一个 **Web3 的价值网络**。
 
-    我们认为，一篇文章产生的价值是由作者和读者共同构成的，但是实际情况是，读者的付出并没有得到很好体现，尤其是**早期读者**。因此，与其他平台最大的不同是，顶瓜瓜 引入**早期读者奖励**的机制。
+    我们认为，一篇文章产生的价值是由作者和读者共同构成的，但是实际情况是，读者的付出并没有得到很好体现，尤其是**早期读者**。因此，与其他平台最大的不同是，Quill 引入**早期读者奖励**的机制。
 
     具体的规则如下：
 
@@ -132,7 +132,7 @@ zh-CN:
     以此类推。
 
     值得提醒的是，除了购买文章的付费，其他付费行为（例如打赏）的付费，也会计入早期读者奖励的分配比例。
-  mixin_group: 顶瓜瓜中文社区
+  mixin_group: Quill 中文社区
   comments: 读者评论
   subscribe_comments: 订阅新评论
   no_comments: 暂无评论

@@ -81,16 +81,6 @@
                 },
                 role: "menuitem", 
                 tabindex: "-1" %>
-              <%= link_to '日本语', 
-                locales_path(locale: :ja, return_to: request.path), 
-                class: "block w-full px-4 py-2 text-sm opacity-70 hover:bg-zinc-100 dark:hover:bg-zinc-800 #{current_locale == 'ja' ? 'font-bold' : ''}", 
-                data: { 
-                  turbo_method: :post,
-                  switch_locale_locale_param: :'ja',
-                  action: "switch-locale#switch"
-                },
-                role: "menuitem", 
-                tabindex: "-1" %>
             </div>
           </div>
         </div>
@@ -288,7 +278,7 @@
               },
               class: "block px-3 py-2 text-base font-medium focus:bg-blue-50 focus:text-primary rounded-md" %>
           </div>
-          <div class="px-2 pt-3 border-t space-y-1" data-controller="switch-locale">
+          <div class="px-2 pt-3 border-t border-zinc-50 dark:border-zinc-800 space-y-1" data-controller="switch-locale">
             <%= link_to 'English', 
               locales_path(locale: :en, return_to: request.path), 
               class: "block px-3 py-2 text-base font-medium focus:bg-blue-50 focus:text-primary rounded-md #{current_locale == 'en' ? 'font-bold' : ''}", 
@@ -305,16 +295,6 @@
               data: { 
                 turbo_method: :post,
                 switch_locale_locale_param: :'zh-CN',
-                action: "switch-locale#switch"
-              },
-              role: "menuitem", 
-              tabindex: "-1" %>
-            <%= link_to '日本语', 
-              locales_path(locale: :ja, return_to: request.path), 
-              class: "block px-3 py-2 text-base font-medium focus:bg-blue-50 focus:text-primary rounded-md #{current_locale == 'ja' ? 'font-bold' : ''}", 
-              data: { 
-                turbo_method: :post,
-                switch_locale_locale_param: :'ja',
                 action: "switch-locale#switch"
               },
               role: "menuitem", 
