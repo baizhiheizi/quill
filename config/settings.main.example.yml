@@ -12,15 +12,12 @@ app_name: Quill
 page_title: 'Quill: hand with a quill pen on Web3'
 page_keywords: Quill, Write, Read, Web3, Blockchain, Bitcoin, ETH
 page_description: Write and read in the Web3 way. 
-ga_id: UA-125806918-1
 messenger: Mixin
 twitter_account: prsdigg
 
 # app/assets/images/*
 logo_file: logo.svg
 favicon_file: favicon.svg
-mixin_logo_file: mixin-logo.png
-mixin_logo_light_file: mixin-logo-light.png
 
 # locale
 time_zone: UTC
@@ -59,8 +56,3 @@ foxswap:
     - e4bc0740-f8fe-418c-ae1b-32d9926f5863
   mtg_threshold: 3
   mtg_public_Key: dt351xp3KjNlVCMqBYUeUSF45upCEiReSZAqcjcP/Lc=
-
-# pressone
-prs:
-  # switch to sign article automatically
-  auto_sign: false
