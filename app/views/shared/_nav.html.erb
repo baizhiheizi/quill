@@ -223,11 +223,11 @@
             <%= link_to t("write"), 
               login_path(return_to: new_article_url), 
               data: { turbo_method: :post }, 
-              class: "block px-3 py-2 text-base font-medium focus:bg-blue-50 focus:text-primary rounded-md" %>
+              class: "block px-2 py-2 text-base font-medium focus:bg-blue-50 focus:text-primary rounded-md" %>
           <% else %>
             <%= link_to t("write"), 
               view_modals_path(type: :login, return_to: new_article_url), 
-              data: { turbo_method: :post }, class: "block px-3 py-2 text-base font-medium focus:bg-blue-50 focus:text-primary rounded-md" %>
+              data: { turbo_method: :post }, class: "block px-2 py-2 text-base font-medium focus:bg-blue-50 focus:text-primary rounded-md" %>
           <% end %>
         <% elsif current_user.articles.drafted.present? %>
           <%= link_to t("write"), dashboard_articles_path(tab: :drafted), class: "px-2 py-2 text-base font-medium hover:bg-blue-50 hover:text-primary dark:hover:bg-gray-800 rounded-md" %>
