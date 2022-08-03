@@ -9,11 +9,11 @@ blaze_enable: false
 
 # page
 app_name: Quill
-page_title: 'Quill: hand with a quill pen on Web3'
+page_title: 'Quill: Build your value net on Web3 with Quill'
 page_keywords: Quill, Write, Read, Web3, Blockchain, Bitcoin, ETH
 page_description: Build your value net on Web3 with Quill 
 messenger: Mixin
-twitter_account: prsdigg
+twitter_account: with_quill
 
 # app/assets/images/*
 logo_file: logo.svg
