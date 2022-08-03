@@ -15,7 +15,7 @@
         data-reward-article-payment-target="amountShare"
         data-amount-share="<%= number %>"
         data-action="click->reward-article-payment#selectAmountShare"
-        class="cursor-pointer flex items-center space-x-2 justify-center border p-1">
+        class="cursor-pointer flex items-center space-x-2 justify-center border border-zinc-50 dark:border-zinc-800 p-1">
         <span class="text-sm sm:text-base"><%= format('%.8f', article.currency.minimal_reward_amount * number).gsub(/0+\z/, '') %></span>
       </div>
     <% end %>

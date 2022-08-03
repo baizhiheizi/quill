@@ -42,9 +42,9 @@
     <div class="flex space-x-4">
       <%= button_to t("publish_article"), 
         view_modals_path(type: :publish_article, uuid: @article.uuid), 
-        class: "cursor-pointer px-4 py-2 text-sm sm:text-base rounded bg-primary hover:scale-150 text-white" unless @article.published? %>
+        class: "cursor-pointer px-4 py-2 text-sm sm:text-base rounded bg-primary hover:scale-105 text-white" unless @article.published? %>
 
-    <div class="cursor-pointer px-4 py-2 text-sm sm:text-base rounded bg-primary hover:scale-150 text-white" data-action="click->article-form#submit">
+    <div class="cursor-pointer px-4 py-2 text-sm sm:text-base rounded bg-primary hover:scale-105 text-white" data-action="click->article-form#submit">
         <%= t('save') %>
       </div>
     </div>

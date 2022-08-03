@@ -5,7 +5,7 @@
         <div class="relative flex items-center space-x-2 truncate">
           <img class="w-10 h-10 my-0 rounded-full" src="<%= @article.author.avatar %>">
           <div class="leading-4 truncate">
-            <span class="text-base font-semibold"><%= @article.author.name %></span>
+            <span class="text-base font-semibold"><%= @article.author.short_name %></span>
             <div class="text-sm sm:text-base text-gray-500 font-light">
               <%= @article.published_at.strftime("%Y-%m-%d %H:%M") %>
             </div>
