@@ -16,7 +16,7 @@ Quill is a Dapp built on [Mixin Network](https://mixin.one/). All payments and t
 
 ## Rules
 
-Quill tries to build a win-win **platform** for both **authors** and **readers**.
+Quill is building a **value net** on the Web3 for both authors and readers.
 
 We believe that the value of an article is composed of both the author and the reader, but the actual situation is that the reader's contribution, especially the early readers' contribution,is not well represented. Therefore, the biggest difference between Quill and other platforms is that Quill introduces an **early reader rewards** mechanism.
 
