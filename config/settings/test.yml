@@ -8,24 +8,23 @@ launch_time:
 blaze_enable: true
 
 # page
-app_name: 顶瓜瓜
-twitter_account: prsdigg
-page_title: 顶瓜瓜 PRSDigg | 重新发现读者的价值，打造作者与读者共赢的写作平台
-page_keywords: PRSDigg, 顶瓜瓜, 写作平台, 区块链, 共赢, 读者, 作者, 早期读者奖励, PRESSOne, Mixin Network, Mixin Messenger
-page_description: 独创股权式的早期读者奖励机制，重新发现读者的价值，打造作者与读者共赢的写作平台
-ga_id: UA-125806918-1
+app_name: Quill
+page_title: 'Quill: hand with a quill pen on Web3'
+page_keywords: Quill, Write, Read, Web3, Blockchain, Bitcoin, ETH
+page_description: Write and read in the Web3 way. 
 messenger: mixin
+twitter_account: prsdigg
 
 # app/assets/images/*
-logo_file: logo.png
-favicon_file: favicon.png
+logo_file: logo.svg
+favicon_file: favicon.svg
 
 # locale
-time_zone: Asia/Shanghai
-default_locale: zh-CN
+time_zone: UTC
+default_locale: en
 available_locales:
-  - zh-CN
   - en
+  - zh-CN
 
 # assets
 supported_assets:
