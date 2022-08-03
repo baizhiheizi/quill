@@ -1,14 +1,14 @@
 <div id="<%= dom_id article %>_votes" class="flex justify-center items-center">
   <% if !article.authorized? user %>
-    <div class="border dark:border-zinc-800 rounded-full p-2 bg-primary text-white">
+    <div class="border border-zinc-100 dark:border-zinc-800 rounded-full p-2 bg-primary text-white">
       <%= render "shared/icons/thumb_up" %>
     </div>
   <% elsif user&.upvote_article? article %>
-    <%= button_to upvoted_article_path(article), method: :delete, class: "border dark:border-zinc-800 rounded-full p-2 bg-primary text-white" do %>
+    <%= button_to upvoted_article_path(article), method: :delete, class: "border border-zinc-100 dark:border-zinc-800 rounded-full p-2 bg-primary text-white" do %>
       <%= render "shared/icons/thumb_up" %>
     <% end %>
   <% else %>
-    <%= button_to upvoted_article_path(article), method: :put, class: "border dark:border-zinc-800 rounded-full p-2" do %>
+    <%= button_to upvoted_article_path(article), method: :put, class: "border border-zinc-100 dark:border-zinc-800 rounded-full p-2" do %>
       <%= render "shared/icons/thumb_up" %>
     <% end %>
   <% end %>
@@ -21,15 +21,15 @@
     </div>
   </div>
   <% if !article.authorized? user %>
-    <div class="border dark:border-zinc-800 rounded-full p-2 bg-red-500 text-white">
+    <div class="border border-zinc-50 dark:border-zinc-800 rounded-full p-2 bg-red-500 text-white">
       <%= render "shared/icons/thumb_down" %>
     </div>
   <% elsif user&.downvote_article? article %>
-    <%= button_to upvoted_article_path(article), method: :delete, class: "border dark:border-zinc-800 rounded-full p-2 bg-red-500 text-white" do %>
+    <%= button_to upvoted_article_path(article), method: :delete, class: "border border-zinc-100 dark:border-zinc-800 rounded-full p-2 bg-red-500 text-white" do %>
       <%= render "shared/icons/thumb_down" %>
     <% end %>
   <% else %>
-    <%= button_to downvoted_article_path(article), method: :put, class: "border dark:border-zinc-800 rounded-full p-2" do %>
+    <%= button_to downvoted_article_path(article), method: :put, class: "border border-zinc-100 dark:border-zinc-800 rounded-full p-2" do %>
       <%= render "shared/icons/thumb_down" %>
     <% end %>
   <% end %>
