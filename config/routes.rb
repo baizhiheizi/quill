@@ -1,6 +1,12 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
+  get '/(*path)', to: redirect { |path_params, _request|
+                        "https://quill.im/#{path_params[:path]}"
+                      },
+                  status: 301,
+                  constraints: { domain: 'prsdigg.com' }
+
   draw :admin
   draw :dashboard
   draw :mvm
