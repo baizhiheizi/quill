@@ -42,6 +42,7 @@ class MarkdownRenderService
         prettify: true
       ),
       autolink: true,
+      disable_indented_code_blocks: true,
       tables: true,
       fenced_code_blocks: true,
       space_after_headers: true,
