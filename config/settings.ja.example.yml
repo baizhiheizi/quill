@@ -13,7 +13,6 @@ app_name: 文商
 page_title: 文商Bunshow
 page_keywords: 文商, bunshow
 page_description: 文商, bunshow
-ga_id:
 broker_name: 文商ブローカー
 messenger: links
 twitter_account: LinksBTC
@@ -22,7 +21,6 @@ twitter_account: LinksBTC
 logo_file: logo-bunshow.png
 favicon_file: favicon-bunshow.png
 mixin_logo_file: links-logo.jpg
-mixin_logo_light_file: links-logo-light.svg
 
 # locale
 time_zone: Asia/Tokyo

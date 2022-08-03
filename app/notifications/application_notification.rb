@@ -5,7 +5,7 @@ class ApplicationNotification < Noticed::Base
 
   around_action_cable :with_locale
 
-  QUILL_ICON_URL = ActionController::Base.helpers.asset_path('logo.png')
+  QUILL_ICON_URL = ActionController::Base.helpers.asset_path(Settings.logo_file || 'logo.png')
 
   delegate :messenger?, to: :recipient, prefix: true
 
