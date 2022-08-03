@@ -216,7 +216,7 @@ class User < ApplicationRecord
   end
 
   def generated_avatar_url
-    format('https://api.multiavatar.com/%<mixin_uuid>s.svg', mixin_uuid: mixin_uuid)
+    format('https://avatars.dicebear.com/api/bottts/%<mixin_uuid>s.png', mixin_uuid: mixin_uuid)
   end
 
   def accessable?
