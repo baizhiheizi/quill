@@ -1,4 +1,4 @@
-host: 'https://prsdigg.com'
+host: 'https://quill.im'
 mixin_oauth_path: 'https://mixin-www.zeromesh.net/oauth/authorize'
 
 # lauch time
