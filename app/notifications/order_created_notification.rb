@@ -6,6 +6,12 @@ class OrderCreatedNotification < ApplicationNotification
 
   param :order
 
+  delegate :article, to: :order
+
+  def order
+    params[:order]
+  end
+
   def action_name
     case params[:order].order_type.to_sym
     when :buy_article
@@ -20,15 +26,11 @@ class OrderCreatedNotification < ApplicationNotification
   end
 
   def message
-    [action_name, params[:order].article.title].join(' ')
+    [action_name, article.title].join(' ')
   end
 
   def url
-    format(
-      '%<host>s/articles/%<article_uuid>s',
-      host: Settings.host,
-      article_uuid: params[:order].article.uuid
-    )
+    user_article_url article.author, article.uuid
   end
 
   def may_notify_via_mixin_bot?

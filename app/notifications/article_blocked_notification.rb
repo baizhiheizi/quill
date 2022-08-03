@@ -15,11 +15,7 @@ class ArticleBlockedNotification < ApplicationNotification
   end
 
   def url
-    format(
-      '%<host>s/articles/%<article_uuid>s',
-      host: Settings.host,
-      article_uuid: params[:article].uuid
-    )
+    user_article_url article.author, article.uuid
   end
 
   def may_notify_via_mixin_bot?

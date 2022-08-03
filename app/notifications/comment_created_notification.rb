@@ -30,12 +30,7 @@ class CommentCreatedNotification < ApplicationNotification
   end
 
   def url
-    format(
-      '%<host>s/articles/%<article_uuid>s#comment_%<comment_id>s',
-      host: Settings.host,
-      article_uuid: commentable.uuid,
-      comment_id: comment.id
-    )
+    user_article_url commentable.author, commentable.uuid, anchor: "comment_#{comment.id}"
   end
 
   def web_notification_enabled?

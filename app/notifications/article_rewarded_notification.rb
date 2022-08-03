@@ -6,6 +6,8 @@ class ArticleRewardedNotification < ApplicationNotification
 
   param :order
 
+  delegate :article, to: :order
+
   def order
     params[:order]
   end
@@ -28,11 +30,7 @@ class ArticleRewardedNotification < ApplicationNotification
   end
 
   def url
-    format(
-      '%<host>s/articles/%<article_uuid>s',
-      host: Settings.host,
-      article_uuid: order.article.uuid
-    )
+    user_article_url article.author, article.uuid
   end
 
   def web_notification_enabled?
