@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module PrsdiggBot
+module QuillBot
   def self.api
     @api ||= MixinBot::API.new(
       client_id: Rails.application.credentials.dig(:prsdigg_bot, :client_id),

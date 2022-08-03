@@ -28,8 +28,8 @@
       <span class="font-bold">User:</span> 
         <% if @mixin_network_snapshot.wallet.present? %>
           <%= link_to @mixin_network_snapshot.user_id, admin_mixin_network_user_path(@mixin_network_snapshot.user_id), data: { turbo_frame: "_top" } %>
-        <% elsif @mixin_network_snapshot.user_id == PrsdiggBot.api.client_id %>
-          PRSDigg Bot
+        <% elsif @mixin_network_snapshot.user_id == QuillBot.api.client_id %>
+          Quill Bot
         <% else %>
           <%= @mixin_network_snapshot.user_id %>
         <% end %>
@@ -43,8 +43,8 @@
           <%= render "admin/users/field", user: @mixin_network_snapshot.opponent, tab: :mixin_network_snapshots %>
         <% elsif @mixin_network_snapshot.opponent_wallet.present? %>
           <%= link_to @mixin_network_snapshot.opponent_id, admin_mixin_network_user_path(@mixin_network_snapshot.opponent_id), data: { turbo_frame: "_top" } %>
-        <% elsif @mixin_network_snapshot.opponent_id == PrsdiggBot.api.client_id %>
-          PRSDigg Bot
+        <% elsif @mixin_network_snapshot.opponent_id == QuillBot.api.client_id %>
+          Quill Bot
         <% else %>
           <%= @mixin_network_snapshot.opponent_id || '-' %>
         <% end %>

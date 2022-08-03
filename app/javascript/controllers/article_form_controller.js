@@ -297,6 +297,6 @@ export default class extends Controller {
   }
 
   get draftKey() {
-    return 'prsdigg_article_draft';
+    return 'quill_article_draft';
   }
 }

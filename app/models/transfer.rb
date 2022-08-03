@@ -46,7 +46,7 @@ class Transfer < ApplicationRecord
     author_revenue: 0,
     reader_revenue: 1,
     payment_refund: 2,
-    prsdigg_revenue: 3,
+    quill_revenue: 3,
     bonus: 4,
     swap_change: 5,
     swap_refund: 6,
@@ -86,7 +86,7 @@ class Transfer < ApplicationRecord
 
     r =
       if wallet.blank?
-        PrsdiggBot.api.create_transfer(
+        QuillBot.api.create_transfer(
           Rails.application.credentials.dig(:prsdigg_bot, :pin_code),
           {
             asset_id: asset_id,
