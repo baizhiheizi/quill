@@ -87,7 +87,7 @@ class Transfer < ApplicationRecord
     r =
       if wallet.blank?
         QuillBot.api.create_transfer(
-          Rails.application.credentials.dig(:prsdigg_bot, :pin_code),
+          Rails.application.credentials.dig(:quill_bot, :pin_code),
           {
             asset_id: asset_id,
             opponent_id: opponent_id,
