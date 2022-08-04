@@ -6,7 +6,7 @@
           <img class="w-auto h-10" src=<%= asset_path(Settings.logo_file || 'logo.svg') %> alt="Logo">
         <% end %>
         <div class="flex-1">
-          <%= render "search/form", query: @query %>
+          <%= render "search/form", query: params[:query] %>
         </div>
       </div>
 

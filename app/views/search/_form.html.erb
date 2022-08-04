@@ -10,7 +10,8 @@
     <%= render "shared/icons/search", html_class: "w-6 h-6 opacity-50" %>
   </div>
   <%= form.text_field :query, 
-    placeholder: "Search", 
+    placeholder: t('search'), 
+    value: query,
     data: { 
       search_target: "input",
       action: "input->search#submit",
