@@ -24,7 +24,7 @@
 #
 
 class MixinNetworkUser < ApplicationRecord
-  DEFAULT_AVATAR_FILE = Rails.application.root.join("app/assets/images/#{Settings.logo_file || 'logo.png'}")
+  DEFAULT_AVATAR_FILE = Rails.application.root.join("app/assets/images/#{Settings.icon_file || 'icon.png'}")
 
   include Encryptable
 

@@ -2,7 +2,7 @@
 <% @page_title = @page_title.present? ? format('%<title>s | %<default>s', title: @page_title, default: Settings.page_title) : Settings.page_title %>
 <% @page_description ||= Settings.page_description %>
 <% @page_keywords ||= Settings.page_keywords %>
-<% @page_image ||= asset_url(Settings.logo_file) %>
+<% @page_image ||= asset_url(Settings.icon_file || 'icon.png') %>
 
 <html>
   <head>

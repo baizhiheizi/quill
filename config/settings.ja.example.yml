@@ -21,6 +21,7 @@ twitter_account: LinksBTC
 logo_file: logo-bunshow.png
 favicon_file: favicon-bunshow.png
 mixin_logo_file: links-logo.jpg
+icon_file: logo-bunshow.png
 
 # locale
 time_zone: Asia/Tokyo

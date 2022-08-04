@@ -18,6 +18,7 @@ twitter_account: with_quill
 # app/assets/images/*
 logo_file: logo.svg
 favicon_file: favicon.svg
+icon_file: icon.png
 
 # locale
 time_zone: UTC
