@@ -1,4 +1,4 @@
-<% hot_tags = Tag.hot.where(locale: current_locale.split('-').first).limit(50).sample(5) %>
+<% hot_tags = Tag.hot.where(locale: current_locale.to_s.split('-').first).limit(50).sample(5) %>
 
 <% if hot_tags.present? %>
   <div class="bg-white dark:bg-zinc-900 dark:border-zinc-800 p-4 sm:p-6 sm:border border-zinc-50 sm:rounded-lg">
