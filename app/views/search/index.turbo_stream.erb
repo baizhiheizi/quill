@@ -14,25 +14,24 @@
             bg-white 
             dark:bg-zinc-900
             shadow-lg
-            border
             rounded-lg 
             w-full 
             absolute 
             left-0 
             origin-top-left 
             z-10">
-    <div class="py-2 px-4 border-b opacity-70 text-sm"><%= t('tag') %></div>
+    <div class="py-2 px-4 border-b border-zinc-50 dark:border-zinc-800 opacity-70 text-sm"><%= t('tag') %></div>
     <% @tags.each do |tag| %>
-      <%= link_to articles_path(tag: tag.name), class: "cursor-pointer flex items-center space-x-4 py-2 px-4 border-b dark:border-zinc-500 hover:rounded-lg hover:scale-105 hover:bg-zinc-50 dark:hover:bg-zinc-700" do %>
+      <%= link_to articles_path(tag: tag.name), class: "cursor-pointer flex items-center space-x-4 py-2 px-4 border-b border-zinc-50 dark:border-zinc-800 hover:rounded-lg hover:scale-105 hover:bg-zinc-50 dark:hover:bg-zinc-700" do %>
         <div class="px-2 py-1 bg-zinc-200 dark:bg-zinc-800 font-bold">
           <%= tag.name %>
         </div>
       <% end %>
     <% end %>
 
-    <div class="py-2 px-4 border-b opacity-70 text-sm"><%= t('author') %></div>
+    <div class="py-2 px-4 border-b border-zinc-50 dark:border-zinc-800 opacity-70 text-sm"><%= t('author') %></div>
     <% @users.each do |user| %>
-      <%= link_to user_path(user), class: "cursor-pointer flex items-center space-x-4 py-2 px-4 border-b hover:rounded-lg hover:scale-105 hover:bg-zinc-50 dark:hover:bg-zinc-700" do %>
+      <%= link_to user_path(user), class: "cursor-pointer flex items-center space-x-4 py-2 px-4 border-b border-zinc-50 dark:border-zinc-800 hover:rounded-lg hover:scale-105 hover:bg-zinc-50 dark:hover:bg-zinc-700" do %>
         <img src="<%= user.avatar %>" class="rounded-lg w-6 h-6" />
         <span><%= user.name %></span>
       <% end %>

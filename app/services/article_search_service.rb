@@ -35,10 +35,10 @@ class ArticleSearchService
 
   def query
     q_ransack = {
-      title_i_cont: q,
-      intro_i_cont: q,
-      author_name_i_cont: q,
-      tags_name_i_cont: q
+      title_i_cont: @query,
+      intro_i_cont: @query,
+      author_name_i_cont: @query,
+      tags_name_i_cont: @query
     }
 
     @articles = @articles.ransack(q_ransack.merge(m: 'or')).result(distinct: true) if @query.present?
