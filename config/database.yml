@@ -22,5 +22,4 @@ production:
   adapter:  postgresql
   encoding: unicode
   pool:     <%= ENV.fetch("RAILS_MAX_THREADS", 16) %>
-  reaping_frequency: 10
   template: template0
