@@ -2,8 +2,8 @@
 
 class ArticleSearchService
   def initialize(params, current_user = nil, locale = nil)
-    @query = params[:query]
-    @tag = params[:tag]
+    @query = params[:query].to_s.strip
+    @tag = params[:tag].to_s.strip
     @filter = params[:filter]
     @time_range = params[:time_range]
     @current_user = current_user
@@ -17,37 +17,42 @@ class ArticleSearchService
 
   def call
     query
+      .tagging
       .filter_block_authors
       .filter_block_by_authors
-      .localize
       .filter
       .select_in_time_range
+      .localize
 
     @articles
   end
 
-  def query
-    q_ransack =
-      if @tag.present?
-        q = @tag.to_s.strip
-        { tags_name_i_cont_all: q }
-      elsif @query.to_s.strip.present?
-        q = @query.to_s.strip
-        {
-          title_i_cont: q,
-          intro_i_cont: q,
-          author_name_i_cont: q,
-          tags_name_i_cont: q
-        }
-      end
+  def tagging
+    @articles = @articles.ransack({ tags_name_i_cont_all: @tag }).result if @tag.present?
 
-    @articles = @articles.ransack(q_ransack.merge(m: 'or')).result(distinct: true) if q_ransack.present?
+    self
+  end
+
+  def query
+    q_ransack = {
+      title_i_cont: q,
+      intro_i_cont: q,
+      author_name_i_cont: q,
+      tags_name_i_cont: q
+    }
+
+    @articles = @articles.ransack(q_ransack.merge(m: 'or')).result(distinct: true) if @query.present?
 
     self
   end
 
   def localize
-    @articles = @articles.where(locale: @locale.to_s.split('-').first) unless @locale.blank? || @filter.in?(%w[subscribed bought])
+    return self if @query.present?
+    return self if @tag.present?
+    return self if @locale.blank?
+    return self if @filter.in? %w[subscribed bought]
+
+    @articles = @articles.where(locale: @locale.to_s.split('-').first)
 
     self
   end
