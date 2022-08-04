@@ -122,11 +122,13 @@ class MarkdownRenderService
       size = Rails.cache.fetch(img['src']) do
         FastImage.size img['src']
       end
+      Rails.cache.delete(img['src']) if size.blank?
 
       size ||= []
 
       img.wrap("<a class='photoswipe' data-pswp-src='#{img['src']}' data-pswp-width='#{size.first}' data-pswp-height='#{size.last}' href='#{img['src']}' target='_blank'>")
       img['class'] = 'max-w-full mx-auto'
+      img['class'] += " aspect-[#{size.first}/#{size.last}]" if size.first.present? && size.last.present?
       img['loading'] = 'lazy'
     end
     @html = doc.to_html
