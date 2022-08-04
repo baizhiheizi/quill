@@ -4,7 +4,7 @@
       <%= t('author_revenue_total') %>
     </div>
     <div class="text-2xl font-bold">
-      $<%= Transfer.author_revenue_total_in_usd.to_f.round(4) %>
+      $<%= Transfer.stats['author_revenue_total_in_usd'] %>
     </div>
   </div>
   <div class="text-center p-2">
@@ -12,7 +12,7 @@
       <%= t('reader_revenue_total') %>
     </div>
     <div class="text-2xl font-bold">
-      $<%= Transfer.reader_revenue_total_in_usd.to_f.round(4) %>
+      $<%= Transfer.stats['reader_revenue_total_in_usd'] %>
     </div>
   </div>
   <div class="text-center p-2">
@@ -20,7 +20,7 @@
       <%= t('platform_revenue_last_month') %>
     </div>
     <div class="text-2xl font-bold">
-      $<%= (Order.where(created_at: Time.current.last_month.beginning_of_month...Time.current.last_month.end_of_month).sum(:value_usd) * Order::PLATFORM_RATIO).round(4) %>
+      $<%= Transfer.stats['platform_revenue_last_month'] %>
     </div>
   </div>
   <div class="text-center p-2">
@@ -28,7 +28,7 @@
       <%= t('platform_revenue_this_month') %>
     </div>
     <div class="text-2xl font-bold">
-      $<%= (Order.where(created_at: Time.current.beginning_of_month...).sum(:value_usd) * Order::PLATFORM_RATIO).round(4) %>
+      $<%= Transfer.stats['platform_revenue_this_month'] %>
     </div>
   </div>
 <% end %>

@@ -163,14 +163,33 @@ class Transfer < ApplicationRecord
 
   def self.author_revenue_total_in_usd
     Rails.cache.fetch('author_revenue_total_in_usd', expires_in: 1.minute) do
-      joins(:currency).where(transfer_type: :author_revenue).sum('amount * currencies.price_usd')
+      joins(:currency).where(transfer_type: :author_revenue).sum('amount * currencies.price_usd').to_f.round(4)
     end
   end
 
   def self.reader_revenue_total_in_usd
     Rails.cache.fetch('reader_revenue_total_in_usd', expires_in: 1.minute) do
-      joins(:currency).where(transfer_type: :reader_revenue).sum('amount * currencies.price_usd')
+      joins(:currency).where(transfer_type: :reader_revenue).sum('amount * currencies.price_usd').to_f.round(4)
     end
+  end
+
+  def self.stats
+    Rails.cache.fetch('transfer_stats', expires_in: 10.minutes) do
+      cal_stats
+    end
+  end
+
+  def self.write_stats
+    Rails.cache.write 'transfer_stats', cal_stats
+  end
+
+  def self.cal_stats
+    {
+      author_revenue_total_in_usd: Transfer.author_revenue_total_in_usd,
+      reader_revenue_total_in_usd: Transfer.reader_revenue_total_in_usd,
+      platform_revenue_last_month: (Order.where(created_at: Time.current.last_month.beginning_of_month...Time.current.last_month.end_of_month).sum(:value_usd) * Order::PLATFORM_RATIO).round(4),
+      platform_revenue_this_month: (Order.where(created_at: Time.current.beginning_of_month...).sum(:value_usd) * Order::PLATFORM_RATIO).round(4)
+    }.stringify_keys
   end
 
   private

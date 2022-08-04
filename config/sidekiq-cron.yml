@@ -10,6 +10,9 @@ mixin_network_snapshot_monitor_worker:
 sync_currency_price_worker:
   cron: '*/5 * * * *'
   class: 'SyncCurrencyPriceWorker'
+transfer_stats_cache_worker:
+  cron: '*/3 * * * *'
+  class: 'TransferStatsCacheWorker'
 daily_statistic_generate_worker:
   cron: '0 0 * * *'
   class: 'DailyStatisticGenerateWorker'
