@@ -10,6 +10,7 @@ Rails.application.routes.draw do
   draw :admin
   draw :dashboard
   draw :mvm
+  draw :api
 
   get 'login', to: 'sessions#new', as: :login
   get '/auth/mixin/callback', to: 'sessions#mixin'
