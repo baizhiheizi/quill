@@ -20,10 +20,7 @@ test:
 
 production:
   adapter:  postgresql
-  host:     <%= Rails.application.credentials.dig :postgres, :host %>
   encoding: unicode
-  database: <%= Rails.application.credentials.dig :postgres, :database %>
-  pool:     <%= ENV.fetch("RAILS_MAX_THREADS") { 16 } %>
-  username: <%= Rails.application.credentials.dig :postgres, :username %>
-  password: <%= Rails.application.credentials.dig :postgres, :password %>
+  pool:     <%= ENV.fetch("RAILS_MAX_THREADS", 16) %>
+  reaping_frequency: 10
   template: template0
