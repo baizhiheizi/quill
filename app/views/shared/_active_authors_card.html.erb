@@ -2,7 +2,7 @@
   <div class="flex mb-4">
     <span class="font-bold"><%= t('active_authors') %></span>
   </div>
-  <% User.active.where.not(id: current_user&.block_user_ids, locale: current_locale).limit(20).sample(5).each do |user| %>
+  <% User.active.where.not(id: current_user&.block_user_ids).where(locale: current_locale).limit(20).sample(5).each do |user| %>
     <div class="flex items-center justify-between mb-2 truncate">
       <%= link_to user_path(user), class: "flex items-center space-x-2 truncate" do %>
         <%= image_tag user.avatar, class: "w-10 h-10 rounded-full" %>
