@@ -73,9 +73,13 @@ class MixinNetworkSnapshot < ApplicationRecord
 
       sleep 0.5 if r['data'].length < POLLING_LIMIT
       sleep POLLING_INTERVAL
-    rescue StandardError => e
+    rescue MixinBot::HttpError, MixinBot::RequestError => e
       p e.inspect
-      Rails.logger.error e.inspect
+      sleep POLLING_INTERVAL * 10
+    rescue StandardError => e
+      p "#{e.inspect}\n#{e.backtrace.join("\n")}"
+      ExceptionNotifier.notify_exception e
+      sleep POLLING_INTERVAL * 10
     end
   end
 
