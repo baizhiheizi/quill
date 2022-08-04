@@ -119,7 +119,12 @@ class MarkdownRenderService
         img['src'] = blob.url if blob.present?
       end
 
-      size = FastImage.size(img['src']) || []
+      size = Rails.cache.fetch(img['src']) do
+        FastImage.size img['src']
+      end
+
+      size ||= []
+
       img.wrap("<a class='photoswipe' data-pswp-src='#{img['src']}' data-pswp-width='#{size.first}' data-pswp-height='#{size.last}' href='#{img['src']}' target='_blank'>")
       img['class'] = 'max-w-full mx-auto'
       img['loading'] = 'lazy'
