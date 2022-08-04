@@ -29,7 +29,5 @@ EM.run {
     end
   end
 
-  Thread.new {
-    MixinNetworkSnapshot.poll
-  }
+  MixinNetworkSnapshot.poll
 }
