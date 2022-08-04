@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_07_28_033442) do
+ActiveRecord::Schema[7.0].define(version: 2022_08_04_030543) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
   enable_extension "pgcrypto"
@@ -409,6 +409,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_28_033442) do
     t.datetime "updated_at", null: false
     t.integer "articles_count", default: 0
     t.integer "subscribers_count", default: 0
+    t.string "locale"
   end
 
   create_table "transfers", force: :cascade do |t|

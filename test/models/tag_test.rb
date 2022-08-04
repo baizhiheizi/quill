@@ -6,6 +6,7 @@
 #
 #  id                :bigint           not null, primary key
 #  articles_count    :integer          default(0)
+#  locale            :string
 #  name              :string
 #  subscribers_count :integer          default(0)
 #  created_at        :datetime         not null
