@@ -73,7 +73,7 @@ class MixinNetworkSnapshot < ApplicationRecord
 
       sleep 0.5 if r['data'].length < POLLING_LIMIT
       sleep POLLING_INTERVAL
-    rescue MixinBot::HttpError, MixinBot::RequestError => e
+    rescue MixinBot::HttpError, MixinBot::RequestError, OpenSSL::SSL::SSLError => e
       p e.inspect
       sleep POLLING_INTERVAL * 10
     rescue StandardError => e
