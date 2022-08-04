@@ -172,7 +172,7 @@
         <% else %>
           <% if from_mixin_messenger? %>
             <%= link_to t('connect_wallet'), 
-              login_path(return_to: request.referer), 
+              login_path(return_to: request.original_url), 
               class: "hover:scale-105 bg-primary text-white px-3 py-1 rounded" %>
           <% else %>
             <%= link_to t('connect_wallet'), 
@@ -304,7 +304,7 @@
           <div class="px-2 sm:px-3 flex">
             <% if from_mixin_messenger? %>
               <%= link_to t('connect_wallet'), 
-                login_path(return_to: request.referer), 
+                login_path(return_to: request.original_url), 
                 class: "block px-3 py-1 text-base font-medium text-white bg-primary hover:scale-105 rounded-md" %>
               <% else %>
               <%= link_to t('connect_wallet'), 

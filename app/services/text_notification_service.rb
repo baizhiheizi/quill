@@ -7,6 +7,6 @@ class TextNotificationService
       data: text
     )
 
-    SendMixinMessageWorker.perform_async message
+    SendMixinMessageWorker.perform_async message.stringify_keys
   end
 end

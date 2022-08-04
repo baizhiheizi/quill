@@ -14,3 +14,4 @@ Sidekiq.configure_client do |config|
 end
 
 Sidekiq::Throttled.setup!
+Sidekiq.strict_args!

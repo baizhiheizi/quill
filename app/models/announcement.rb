@@ -64,7 +64,7 @@ class Announcement < ApplicationRecord
         conversation_id: QuillBot.api.unique_conversation_id(uuid),
         recipient_id: uuid,
         data: content
-      )
+      ).stringify_keys
     end
 
     messages.each do |message|
@@ -78,7 +78,7 @@ class Announcement < ApplicationRecord
         conversation_id: QuillBot.api.unique_conversation_id(uuid),
         recipient_id: uuid,
         data: content
-      )
+      ).stringify_keys
     end
 
     messages.in_groups_of(100, false).each do |message|
