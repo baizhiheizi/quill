@@ -352,14 +352,18 @@ class Article < ApplicationRecord
   end
 
   def pay_url(user, pay_asset_id, amount, memo, trace_id)
-    format(
-      'mixin://pay?recipient=%<recipient>s&trace=%<trace>s&memo=%<memo>s&asset=%<asset>s&amount=%<amount>s',
-      recipient: user&.wallet_id || wallet_id,
-      trace: trace_id,
-      memo: memo,
-      asset: pay_asset_id,
-      amount: amount.to_r.to_f
-    )
+    Addressable::URI.new(
+      scheme: 'mixin',
+      host: 'pay',
+      path: '',
+      query_values: [
+        ['recipient', user&.wallet_id || wallet_id],
+        ['trace', trace_id],
+        ['memo', memo],
+        ['asset', pay_asset_id],
+        ['amount', amount.to_r.to_f],
+      ]
+    ).to_s
   end
 
   def buy_payment_amount(pay_asset_id)
