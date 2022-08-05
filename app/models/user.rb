@@ -49,6 +49,7 @@ class User < ApplicationRecord
   has_many :swap_orders, through: :payments
   has_many :notifications, as: :recipient, dependent: :destroy
   has_many :bonuses, dependent: :restrict_with_exception
+  has_many :pre_orders, primary_key: :mixin_uuid, foreign_key: :payer_id, dependent: :restrict_with_exception, inverse_of: :payer
 
   has_one :wallet, class_name: 'MixinNetworkUser', as: :owner, dependent: :nullify
   has_one :notification_setting, dependent: :destroy

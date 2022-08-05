@@ -2,7 +2,8 @@
   <%= t('buy_article') %>
 <% end %>
 <% content_for :modal_content do %>
-  <%= render partial: "articles/buy_payment_modal", locals: { article: @article } %>
+  <%# <%= render partial: "articles/buy_payment_modal", locals: { article: @article } %>
+  <%= render "pre_orders/buy_article", article: @article %>
 <% end %>
 
 <%= turbo_stream.append "modal-slot" do %>

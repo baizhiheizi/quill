@@ -15,8 +15,8 @@
       data-mvm-pay-memo-param="<%= memo %>"
       data-mvm-pay-opponent-ids-param="<%= opponent_ids %>"
       data-mvm-pay-threshold-param="<%= threshold %>"
-      class="flex justify-center space-x-4 items-center w-96 max-w-full text-center no-underline cursor-pointer py-2 block bg-blue-600 hover:bg-blue-700 active:bg-blue-700 text-white rounded-full">
-      <div class="w-8 h-8 flex">
+      class="relative flex justify-center space-x-4 items-center w-full text-center no-underline cursor-pointer py-3 block bg-blue-600 hover:bg-blue-700 active:bg-blue-700 text-white rounded-lg">
+      <div class="w-8 h-8 flex absolute left-4">
         <%= image_tag 'metamask.svg',
           data: {
             mvm_pay_target: 'metaMaskIcon'
@@ -36,7 +36,7 @@
           class: 'hidden w-full h-auto' %>
       </div>
 
-      <span class="text-lg"><%= t('pay') %></span>
+      <span class="text-lg"><%= t('confirm_to_pay') %></span>
     </button>
     <div data-mvm-pay-target="balance" class="py-1 px-2 text-sm opacity-75 text-right">
       <span><%= t('balance') %>:</span>
