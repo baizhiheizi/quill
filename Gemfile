@@ -60,7 +60,7 @@ gem 'activestorage-aliyun'
 gem 'aws-sdk-s3', require: false
 
 # Simple, efficient background processing for Ruby http://sidekiq.org
-gem 'sidekiq', '~> 6.0'
+gem 'sidekiq', '~> 6.5'
 
 # Scheduler / Cron for Sidekiq jobs
 gem 'sidekiq-cron'

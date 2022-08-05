@@ -428,10 +428,10 @@ GEM
       rubyzip (>= 1.2.2, < 3.0)
       websocket (~> 1.0)
     sha3 (1.0.4)
-    sidekiq (6.5.1)
+    sidekiq (6.5.3)
       connection_pool (>= 2.2.2)
       rack (~> 2.0)
-      redis (>= 4.2.0)
+      redis (>= 4.5.0)
     sidekiq-cron (1.7.0)
       fugit (~> 1)
       sidekiq (>= 4.2.1)
@@ -530,7 +530,7 @@ DEPENDENCIES
   rubocop
   rubocop-rails
   selenium-webdriver
-  sidekiq (~> 6.0)
+  sidekiq (~> 6.5)
   sidekiq-cron
   sidekiq-throttled
   simple_command
