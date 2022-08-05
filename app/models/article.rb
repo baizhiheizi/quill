@@ -361,7 +361,7 @@ class Article < ApplicationRecord
         ['trace', trace_id],
         ['memo', memo],
         ['asset', pay_asset_id],
-        ['amount', amount.to_r.to_f],
+        ['amount', amount.to_r.to_f]
       ]
     ).to_s
   end

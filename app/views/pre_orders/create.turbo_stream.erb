@@ -1,0 +1,17 @@
+<% if @pre_order.errors.present? %>
+  <% @pre_order.errors.full_messages.each do |message| %>
+    <%= turbo_stream.append "flashes" do %>
+      <%= render "flashes/flash", type: :danger, message: message %>
+    <% end %>
+  <% end %>
+<% else %>
+  <% content_for :modal_title do %>
+    <%= t('paying') %>
+  <% end %>
+  <% content_for :modal_content do %>
+    <%= render "pre_orders/pre_order", pre_order: @pre_order %>
+  <% end %>
+  <%= turbo_stream.update "modal-slot" do %>
+    <%= render "view_modals/modal", backdrop: 'static' %>
+  <% end %>
+<% end %>

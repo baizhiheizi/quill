@@ -65,6 +65,9 @@ Rails.application.routes.draw do
     resources :subscribe_by_users, only: %i[index]
   end
 
+  resources :pre_orders, only: %i[create show new]
+  resource :mixpay_pre_order, only: %i[show]
+
   resources :transfers, only: %i[index]
   get '/transfers/stats', to: 'transfers#stats'
 

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_08_04_030543) do
+ActiveRecord::Schema[7.0].define(version: 2022_08_05_032553) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
   enable_extension "pgcrypto"
@@ -365,6 +365,26 @@ ActiveRecord::Schema[7.0].define(version: 2022_08_04_030543) do
     t.bigint "calls"
     t.datetime "captured_at", precision: nil
     t.index ["database", "captured_at"], name: "index_pghero_query_stats_on_database_and_captured_at"
+  end
+
+  create_table "pre_orders", force: :cascade do |t|
+    t.string "item_type"
+    t.bigint "item_id"
+    t.uuid "payer_id"
+    t.uuid "payee_id"
+    t.string "type"
+    t.string "order_type"
+    t.decimal "amount"
+    t.uuid "asset_id"
+    t.uuid "trace_id"
+    t.string "state"
+    t.string "memo"
+    t.json "result"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["item_type", "item_id"], name: "index_pre_orders_on_item"
+    t.index ["payee_id"], name: "index_pre_orders_on_payee_id"
+    t.index ["payer_id"], name: "index_pre_orders_on_payer_id"
   end
 
   create_table "statistics", force: :cascade do |t|
