@@ -174,7 +174,7 @@ class Transfer < ApplicationRecord
   end
 
   def self.stats
-    Rails.cache.fetch('transfer_stats', expires_in: 10.minutes) do
+    Rails.cache.fetch('transfer_stats', expires_in: 15.minutes) do
       cal_stats
     end
   end
