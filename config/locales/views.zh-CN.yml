@@ -287,3 +287,6 @@ zh-CN:
   using_eth_wallet: 使用 ETH 钱包
   using_mixin_wallet: 使用 Mixin 钱包
   continue: 继续
+  confirm_to_pay: 确认支付
+  payment_crypto: 选择支付币种
+  payment_method: 支付方式

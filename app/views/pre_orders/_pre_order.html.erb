@@ -2,6 +2,7 @@
 <% pay_asset ||= pre_order.currency %>
 
 <div 
+  class="w-96 max-w-full mx-auto"
   data-controller="pre-order" 
   data-pre-order-id-value="<%= pre_order.id %>"
   data-pre-order-identifier-value="<%= identifier %>"
@@ -9,7 +10,7 @@
   id="<%= dom_id pre_order %>">
   <div class="mb-4">
     <div class="flex items-center">
-      <span class="text-2xl font-serif font-black"><%= pre_order.item.price_tag %></span>
+      <span class="text-2xl font-serif font-black"><%= pre_order.amount_tag %></span>
     </div>
     <div id="<%= dom_id pre_order %>_pay_amount" class="flex items-center">
       <% if pay_asset != pre_order.currency %>
@@ -21,7 +22,7 @@
   </div>
 
   <div class="mb-2">
-    <span class="text-mono opacity-75"><%= t('payment_crypto') %></span>
+    <span class="text-mono text-sm opacity-75"><%= t('payment_crypto') %></span>
   </div>
   <div class="mb-8">
     <%= button_to view_modals_path(type: :swappable_currencies, identifier: identifier), 

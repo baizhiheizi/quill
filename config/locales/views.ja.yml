@@ -278,3 +278,6 @@ ja:
   using_eth_wallet: Using ETH wallet
   using_mixin_wallet: Using Mixin wallet
   continue: Continue
+  confirm_to_pay: Confirm to Pay
+  payment_crypto: Payment crypto
+  payment_method: Payment method
