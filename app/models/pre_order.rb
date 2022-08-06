@@ -53,21 +53,26 @@ class PreOrder < ApplicationRecord
     end
   end
 
-  def pay_amount(pay_asset_id)
-    case pay_asset_id
-    when asset_id
-      amount
-    else
-      begin
-        Foxswap.api.pre_order(
-          pay_asset_id: pay_asset_id,
-          fill_asset_id: asset_id,
-          amount: (amount * 1.01).round(8).to_r.to_f
-        )['data']['funds']
-      rescue StandardError
-        nil
+  def amount_tag
+    "#{format('%.8f', amount).gsub(/0+\z/, '0')} #{currency.symbol}"
+  end
+
+  def pay_amount(pay_asset_id = nil)
+    @pay_amount ||=
+      case pay_asset_id
+      when asset_id
+        amount
+      else
+        begin
+          Foxswap.api.pre_order(
+            pay_asset_id: pay_asset_id,
+            fill_asset_id: asset_id,
+            amount: (amount * 1.01).round(8).to_r.to_f
+          )['data']['funds']
+        rescue StandardError
+          nil
+        end
       end
-    end
   end
 
   private

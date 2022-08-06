@@ -1,5 +1,6 @@
 import { Controller } from '@hotwired/stimulus';
 import { get } from '@rails/request.js';
+import { hideLoading, showLoading } from '../utils';
 
 export default class extends Controller {
   static values = {
@@ -26,13 +27,16 @@ export default class extends Controller {
   }
 
   payAssetIdValueChanged() {
+    if (!this.payAssetIdValue) return;
+
     this.updatePreOrder();
   }
 
   updatePreOrder() {
+    showLoading();
     get(`/pre_orders/${this.idValue}?pay_asset_id=${this.payAssetIdValue}`, {
       contentType: 'application/json',
       responseKind: 'turbo-stream',
-    });
+    }).then(() => hideLoading());
   }
 }

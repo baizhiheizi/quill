@@ -1,4 +1,13 @@
-<div>
+<div 
+  class="w-96 max-w-full mx-auto"
+  data-controller="pre-order-form" 
+  data-pre-order-form-asset-id-value="<%= article.currency.asset_id %>"
+  data-pre-order-form-order-type-value="buy_article"
+  data-pre-order-form-item-id-value="<%= article.id %>"
+  data-pre-order-form-item-type-value="Article"
+  data-pre-order-form-amount-value="<%= article.price %>"
+  data-pre-order-form-price-usd-value="<%= article.currency.price_usd %>"
+  data-pre-order-form-type-value="MixpayPreOrder">
   <div class="bg-zinc-50 px-4 py-2 rounded mb-4">
     <div class="flex items-center space-x-2 mb-1">
       <%= image_tag article.author.avatar, class: "w-6 h-6 rounded-full", lazy: true %>
@@ -15,82 +24,93 @@
       <span class="text-2xl font-serif font-black"><%= article.price_tag %></span>
     </div>
     <div class="flex items-center justify-end space-x-2">
-      <span class="text-sm align-bottom">≈$<%= article.price_usd %></span>
+      <span class="text-sm align-bottom">
+        ≈$
+        <span data-pre-order-form-target="amountUsdTag"><%= article.price_usd %></span>
+      </span>
     </div>
   </div>
 
   <div class="mb-2">
     <span class="text-mono"><%= t('payment') %></span>
   </div>
-  <div data-controller="pre-order-form" data-pre-order-form-type-value="MixpayPreOrder">
-    <div class="grid gap-4 sm:grid-cols-2 mb-8">
-      <div 
+  <div class="grid gap-4 sm:grid-cols-2 mb-8">
+    <div 
+      data-pre-order-form-target="type" 
+      data-pre-order-form-type-param="MixpayPreOrder" 
+      data-action="click->pre-order-form#select"
+      class="relative rounded-lg border border-zinc-200 p-4 flex items-center justify-center cursor-pointer">
+      <%= image_tag 'mixpay.png', class: "h-8 w-auto absolute left-4 rounded-lg" %>
+      <span class="text-lg"><%= t("mixpay") %></span>
+      <%= render "shared/icons/check_circle_solid", html_class: "w-6 h-6 text-primary absolute right-1 top-1 checkmark hidden" %>
+    </div>
+    <% if current_user.messenger? %>
+      <div
         data-pre-order-form-target="type" 
-        data-pre-order-form-type-param="MixpayPreOrder" 
+        data-pre-order-form-type-param="MixinPreOrder" 
         data-action="click->pre-order-form#select"
         class="relative rounded-lg border border-zinc-200 p-4 flex items-center justify-center cursor-pointer">
-        <%= image_tag 'mixpay.png', class: "h-8 w-auto absolute left-4 rounded-lg" %>
-        <span class="text-lg"><%= t("mixpay") %></span>
+        <%= image_tag 'mixin-logo.png', class: "h-8 w-auto absolute left-4 rounded-lg" %>
+        <span class="text-lg"><%= t("mixin") %></span>
         <%= render "shared/icons/check_circle_solid", html_class: "w-6 h-6 text-primary absolute right-1 top-1 checkmark hidden" %>
       </div>
-      <% if current_user.messenger? %>
-        <div
-          data-pre-order-form-target="type" 
-          data-pre-order-form-type-param="MixinPreOrder" 
-          data-action="click->pre-order-form#select"
-          class="relative rounded-lg border border-zinc-200 p-4 flex items-center justify-center cursor-pointer">
-          <%= image_tag 'mixin-logo.png', class: "h-8 w-auto absolute left-4 rounded-lg" %>
-          <span class="text-lg"><%= t("mixin") %></span>
-          <%= render "shared/icons/check_circle_solid", html_class: "w-6 h-6 text-primary absolute right-1 top-1 checkmark hidden" %>
-        </div>
-      <% elsif current_user.fennec? %>
-        <div
-          data-pre-order-form-target="type" 
-          data-pre-order-form-type-param="FennecPreOrder" 
-          data-action="click->pre-order-form#select"
-          class="relative rounded-lg border border-zinc-200 p-4 flex items-center justify-center cursor-pointer">
-          <%= image_tag 'fennec-logo.png', class: "h-8 w-auto absolute left-4 rounded-lg" %>
-          <span class="text-lg"><%= t("fennec") %></span>
-          <%= render "shared/icons/check_circle_solid", html_class: "w-6 h-6 text-primary absolute right-1 top-1 checkmark hidden" %>
-        </div>
-      <% elsif current_user.mvm_eth? %>
-        <div
-          data-pre-order-form-target="type" 
-          data-pre-order-form-type-param="MVMPreOrder" 
-          data-action="click->pre-order-form#select"
-          class="relative rounded-lg border border-zinc-200 p-4 flex items-center justify-center cursor-pointer">
-          <%= image_tag 'mvm.svg', class: "h-8 w-auto absolute left-4 rounded-lg" %>
-          <span class="text-lg"><%= t("mvm") %></span>
-          <%= render "shared/icons/check_circle_solid", html_class: "w-6 h-6 text-primary absolute right-1 top-1 checkmark hidden" %>
-        </div>
-      <% end %>
-    </div>
-
-    <div class="mb-4">
-      <%= link_to t('continue'),
-        mixpay_pre_order_path(
-          order_type: :buy_article,
-          item_id: article.id,
-          item_type: 'Article',
-          asset_id: article.asset_id,
-          amount: article.price
-        ),
-        data: {
-          pre_order_form_target: 'mixpaySubmitButton',
-          turbo_frame: '_top'
-        }, 
-        class: "cursor-pointer block w-full text-center rounded-lg bg-primary text-white p-4 text-xl hover:font-black" %>
-
-    <%= form_for PreOrder.new, data: { pre_order_form_target: 'submitButton' }, class: "hidden" do |form| %>
-      <%= form.hidden_field :order_type, value: :buy_article %>
-      <%= form.hidden_field :item_id, value: article.id %>
-      <%= form.hidden_field :item_type, value: 'Article' %>
-      <%= form.hidden_field :asset_id, value: article.asset_id %>
-      <%= form.hidden_field :amount, value: article.price %>
-      <%= form.hidden_field :type, value: 'MixinPreOrder', data: { pre_order_form_target: 'typeInput' } %>
-
-        <%= form.submit t('continue'), class: "cursor-pointer block w-full rounded-lg bg-primary text-white p-4 text-xl hover:font-black" %>
+    <% elsif current_user.fennec? %>
+      <div
+        data-pre-order-form-target="type" 
+        data-pre-order-form-type-param="FennecPreOrder" 
+        data-action="click->pre-order-form#select"
+        class="relative rounded-lg border border-zinc-200 p-4 flex items-center justify-center cursor-pointer">
+        <%= image_tag 'fennec-logo.png', class: "h-8 w-auto absolute left-4 rounded-lg" %>
+        <span class="text-lg"><%= t("fennec") %></span>
+        <%= render "shared/icons/check_circle_solid", html_class: "w-6 h-6 text-primary absolute right-1 top-1 checkmark hidden" %>
+      </div>
+    <% elsif current_user.mvm_eth? %>
+      <div
+        data-pre-order-form-target="type" 
+        data-pre-order-form-type-param="MVMPreOrder" 
+        data-action="click->pre-order-form#select"
+        class="relative rounded-lg border border-zinc-200 p-4 flex items-center justify-center cursor-pointer">
+        <%= image_tag 'mvm.svg', class: "h-8 w-auto absolute left-4 rounded-lg" %>
+        <span class="text-lg"><%= t("mvm") %></span>
+        <%= render "shared/icons/check_circle_solid", html_class: "w-6 h-6 text-primary absolute right-1 top-1 checkmark hidden" %>
       </div>
     <% end %>
   </div>
+
+  <div class="mb-4">
+    <%= link_to t('continue'),
+      mixpay_pre_order_path(
+        order_type: :buy_article,
+        item_id: article.id,
+        item_type: 'Article',
+        asset_id: article.asset_id,
+        amount: article.price
+      ),
+      data: {
+        pre_order_form_target: 'mixpaySubmitButton',
+        turbo_frame: '_top'
+      }, 
+      class: "cursor-pointer block w-full text-center rounded-lg bg-primary text-white p-4 text-xl hover:font-black" %>
+
+  <%= form_for PreOrder.new, data: { pre_order_form_target: 'submitButton' }, class: "hidden" do |form| %>
+    <%= form.hidden_field :order_type, value: :buy_article %>
+    <%= form.hidden_field :item_id, value: article.id %>
+    <%= form.hidden_field :item_type, value: 'Article' %>
+    <%= form.hidden_field :asset_id, value: article.asset_id %>
+    <%= form.hidden_field :amount, 
+      value: article.price,
+      data: { 
+        pre_order_form_target: 'amountInput'
+      } 
+    %>
+    <%= form.hidden_field :type, 
+      value: 'MixinPreOrder', 
+      data: { 
+        pre_order_form_target: 'typeInput' 
+      } 
+    %>
+
+    <%= form.submit t('continue'), class: "cursor-pointer block w-full rounded-lg bg-primary text-white p-4 text-xl hover:font-black" %>
+    </div>
+  <% end %>
 </div>
