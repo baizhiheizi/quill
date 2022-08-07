@@ -330,7 +330,7 @@ class Article < ApplicationRecord
     # avoid duplicate payment
     candidate = QuillBot.api.unique_uuid(uuid, user.mixin_uuid)
     loop do
-      break unless Payment.exists?(trace_id: candidate, state: %i[refunded completed])
+      break unless Payment.exists?(trace_id: candidate)
 
       candidate = QuillBot.api.unique_uuid(uuid, candidate)
     end
