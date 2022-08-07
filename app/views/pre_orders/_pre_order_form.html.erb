@@ -4,13 +4,14 @@
   class="w-96 max-w-full mx-auto"
   data-controller="pre-order-form" 
   data-pre-order-form-asset-id-value="<%= article.currency.asset_id %>"
-  data-pre-order-form-order-type-value="buy_article"
+  data-pre-order-form-order-type-value="<%= order_type %>"
   data-pre-order-form-item-id-value="<%= article.id %>"
   data-pre-order-form-item-type-value="Article"
   data-pre-order-form-amount-value="<%= price %>"
   data-pre-order-form-price-usd-value="<%= article.currency.price_usd %>"
   data-pre-order-form-type-value="<%= article.mixpay_supported? ? 'MixpayPreOrder' : current_user.default_payment %>">
-  <div class="bg-zinc-50 px-4 py-2 rounded mb-4 dark:bg-zinc-800">
+
+  <div class="bg-zinc-50 px-4 py-2 rounded mb-4 dark:bg-zinc-800 hidden sm:block">
     <div class="flex items-center space-x-2 mb-1">
       <%= image_tag article.author.avatar, class: "w-6 h-6 rounded-full", lazy: true %>
       <span class="text-sm"><%= article.author.short_name %></span>
