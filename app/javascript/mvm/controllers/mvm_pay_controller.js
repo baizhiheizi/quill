@@ -58,7 +58,7 @@ export default class extends Controller {
 
     await initWallet();
     await switchToMVM();
-    if (w3.currentProvider.chainId !== MVM_CHAIN_ID) {
+    if (parseInt(w3.currentProvider.chainId) !== parseInt(MVM_CHAIN_ID)) {
       notify('Switch to MVM Chain before paying', 'danger');
       return;
     }

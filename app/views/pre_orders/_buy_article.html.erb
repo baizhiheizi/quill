@@ -39,7 +39,7 @@
       data-pre-order-form-target="type" 
       data-pre-order-form-type-param="MixpayPreOrder" 
       data-action="click->pre-order-form#select"
-      class="relative rounded-lg border border-zinc-200 p-4 flex items-center justify-center cursor-pointer <%= article.mixpay_supported? ? '' : 'cursor-not-allowed' %>">
+      class="relative rounded-lg border border-zinc-200 p-4 flex items-center justify-center cursor-pointer">
       <%= image_tag 'mixpay.png', class: "h-8 w-auto absolute left-4 rounded-lg" %>
       <span class="text-lg"><%= t("mixpay") %></span>
       <%= render "shared/icons/check_circle_solid", html_class: "w-6 h-6 text-primary absolute right-1 top-1 checkmark hidden" %>
@@ -94,30 +94,36 @@
         }, 
         class: "hidden cursor-pointer block w-full text-center rounded-lg bg-primary text-white p-4 text-xl hover:font-black" %>
     <% else %>
-      <button disabled data-pre-order-form-target="mixpaySubmitButton" class="hidden block w-full text-center rounded-lg bg-zinc-300  p-4 text-xl">
+      <button disabled data-pre-order-form-target="mixpaySubmitButton" class="hidden block w-full text-center rounded-lg bg-zinc-300  p-4 text-xl opacity-50">
         <%= t('not_supported_yet') %>
       </button>
     <% end %>
 
-  <%= form_for PreOrder.new, data: { pre_order_form_target: 'submitButton' }, class: "hidden" do |form| %>
-    <%= form.hidden_field :order_type, value: :buy_article %>
-    <%= form.hidden_field :item_id, value: article.id %>
-    <%= form.hidden_field :item_type, value: 'Article' %>
-    <%= form.hidden_field :asset_id, value: article.asset_id %>
-    <%= form.hidden_field :amount, 
-      value: article.price,
-      data: { 
-        pre_order_form_target: 'amountInput'
-      } 
-    %>
-    <%= form.hidden_field :type, 
-      value: 'MixinPreOrder', 
-      data: { 
-        pre_order_form_target: 'typeInput' 
-      } 
-    %>
+    <%= form_for PreOrder.new, data: { pre_order_form_target: 'submitButton' }, class: "hidden" do |form| %>
+      <%= form.hidden_field :order_type, value: :buy_article %>
+      <%= form.hidden_field :item_id, value: article.id %>
+      <%= form.hidden_field :item_type, value: 'Article' %>
+      <%= form.hidden_field :asset_id, value: article.asset_id %>
+      <%= form.hidden_field :amount, 
+        value: article.price,
+        data: { 
+          pre_order_form_target: 'amountInput'
+        } 
+      %>
+      <%= form.hidden_field :type, 
+        value: 'MixinPreOrder', 
+        data: { 
+          pre_order_form_target: 'typeInput' 
+        } 
+      %>
 
-    <%= form.submit t('continue'), class: "cursor-pointer block w-full rounded-lg bg-primary text-white p-4 text-xl hover:font-black" %>
+      <%= form.submit t('continue'), class: "cursor-pointer block w-full rounded-lg bg-primary text-white p-4 text-xl hover:font-black" %>
+    <% end %>
+    <div data-pre-order-form-target="mvmTips" class="hidden text-red-500 text-sm py-1">
+      <%= link_to 'https://docs.quill.im', target: "_blank", class: "flex items-center space-x-2" do %> 
+        <span><%= t('you_need_to_switch_network_to_mvm') %></span>
+        <%= render "shared/icons/question_mark_circle", html_class: 'w-4 h-4' %>
+      <% end %>
     </div>
-  <% end %>
+  </div>
 </div>

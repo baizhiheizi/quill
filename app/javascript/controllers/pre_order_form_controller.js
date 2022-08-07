@@ -1,4 +1,5 @@
 import { Controller } from '@hotwired/stimulus';
+import { initWallet, MVM_CHAIN_ID, switchToMVM } from '../mvm/wallet';
 
 export default class extends Controller {
   static values = {
@@ -20,9 +21,8 @@ export default class extends Controller {
     'amountUsdTag',
     'mixpaySubmitButton',
     'submitButton',
+    'mvmTips',
   ];
-
-  connect() {}
 
   typeValueChanged() {
     this.typeInputTargets.forEach((target) => {
@@ -48,6 +48,33 @@ export default class extends Controller {
     } else {
       this.mixpaySubmitButtonTarget.classList.add('hidden');
       this.submitButtonTarget.classList.remove('hidden');
+    }
+
+    this.checkMVM();
+  }
+
+  async checkMVM() {
+    if (this.typeValue === 'MVMPreOrder') {
+      await initWallet();
+      if (!w3) return;
+      await switchToMVM();
+
+      if (parseInt(w3.currentProvider.chainId) !== parseInt(MVM_CHAIN_ID)) {
+        let input = this.submitButtonTarget.querySelector('input[type=submit]');
+        if (!input) return;
+
+        this.mvmTipsTarget.classList.remove('hidden');
+        input.classList.remove(
+          'bg-primary',
+          'text-white',
+          'hover:font-black',
+          'cursor-pointer',
+        );
+        input.classList.add('bg-zinc-300', 'opacity-50');
+        input.disabled = true;
+      }
+    } else {
+      this.mvmTipsTarget.classList.add('hidden');
     }
   }
 
@@ -75,7 +102,13 @@ export default class extends Controller {
         target.querySelector('.checkmark').classList.add('hidden');
       }
     });
-    this.mixpaySubmitButtonTarget.href = `/mixpay_pre_order?amount=${this.amountValue}&asset_id=${this.assetIdValue}&item_id=${this.itemIdValue}&item_type=${this.itemTypeValue}&order_type=${this.orderTypeValue}`;
+
+    this.mixpaySubmitButtonTarget.href =
+      `/mixpay_pre_order?amount=${this.amountValue}` +
+      `&asset_id=${this.assetIdValue}` +
+      `&item_id=${this.itemIdValue}` +
+      `&item_type=${this.itemTypeValue}` +
+      `&order_type=${this.orderTypeValue}`;
   }
 
   select(event) {
