@@ -6,6 +6,7 @@ import { ERC20ABI } from './abis';
 import { RegistryContract } from './registry';
 import { NativeAssetId } from './constants';
 import BigNumber from 'bignumber.js';
+import { notify } from '../utils';
 
 export const MVM_CHAIN_ID = '0x120c7';
 export const MVM_RPC_URL = 'https://geth.mvm.dev';
@@ -27,6 +28,11 @@ export async function initWallet() {
       throw new Error('No wallet connected');
     }
   }
+
+  w3.currentProvider.on('networkChanged', () => {
+    notify('Network changed');
+    Turbo.visit(location.pathname);
+  });
 }
 
 export async function initCoinBase() {
@@ -39,7 +45,6 @@ export async function initCoinBase() {
   window.w3 = new Web3(provider);
 
   const addresses = await w3.currentProvider.enable();
-  console.log(addresses);
   localStorage.setItem('isCoinbaseWallet', addresses);
 }
 
@@ -55,19 +60,18 @@ export async function initMetaMask() {
 export async function initWalletConnect() {
   const provider = new WalletConnectProvider({
     rpc: {
+      1: 'https://cloudflare-eth.com',
+      10: 'https://mainnet.optimism.io',
+      56: 'https://bsc-dataseed.binance.org',
+      137: 'https://polygon-rpc.com',
+      42161: 'https://arb1.arbitrum.io/rpc',
       73927: 'https://geth.mvm.dev',
     },
-    chainId: 73927,
-    supportedChainIds: [73927],
+    supportedChainIds: [1, 10, 56, 137, 42161, 73927],
   });
 
   await provider.enable();
   window.w3 = new Web3(provider);
-}
-
-export async function swtichCoinbaseBrowserToMVM() {
-  if (!window.w3) initCoinBase();
-  if (!w3.currentProvider.isCoin) return;
 }
 
 export async function switchToMVM() {

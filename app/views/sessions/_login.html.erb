@@ -24,17 +24,17 @@
       </button>
     </div>
 
-    <div class="flex justify-center mb-2">
-      <%= link_to view_modals_path(type: :walletconnect), 
-        data: {
-          turbo_method: :post
-        },
-        class: "relative px-2 py-3 bg-stone-100 hover:bg-stone-200 dark:bg-stone-800 dark:hover:bg-stone-700 rounded-lg flex items-center justify-center text-lg w-96 hover:scale-105" do %>
+    <div data-controller="wallet-connect" class="flex justify-center mb-2">
+      <a data-metamask-target="loginButton" 
+        data-action="wallet-connect#login" 
+        href="https://walletconnect.com"
+        target="_blank"
+        class="relative px-2 py-3 bg-stone-100 hover:bg-stone-200 dark:bg-stone-800 dark:hover:bg-stone-700 rounded-lg flex items-center justify-center text-lg w-96 hover:scale-105">
         <div class="w-8 h-8 flex absolute left-4">
           <%= image_tag 'walletconnect.svg', class: 'w-full h-auto' %>
         </div>
-        <span>WalletConnect</span>
-      <% end %>
+        <span>Wallet Connect</span>
+      </a>
     </div>
 
     <div data-action="click->login#showMixin" class="w-96 mx-auto text-sm text-center py-2 underline cursor-pointer">
