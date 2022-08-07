@@ -9,12 +9,12 @@
 #  item_type  :string
 #  memo       :string
 #  order_type :string
-#  result     :json
 #  state      :string
 #  type       :string
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #  asset_id   :uuid
+#  follow_id  :uuid
 #  item_id    :bigint
 #  payee_id   :uuid
 #  payer_id   :uuid

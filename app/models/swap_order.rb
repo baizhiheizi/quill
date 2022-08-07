@@ -114,8 +114,8 @@ class SwapOrder < ApplicationRecord
   def place_payment_order!
     return if order_placed?
 
-    article = Article.find_by uuid: payment.decrypted_memo['a']
-    case payment.decrypted_memo['t']
+    article = Article.find_by uuid: payment.decoded_memo['a']
+    case payment.decoded_memo['t']
     when 'BUY'
       article.orders.find_or_create_by!(
         payment: payment,

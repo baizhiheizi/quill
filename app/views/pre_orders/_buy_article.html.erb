@@ -7,8 +7,8 @@
   data-pre-order-form-item-type-value="Article"
   data-pre-order-form-amount-value="<%= article.price %>"
   data-pre-order-form-price-usd-value="<%= article.currency.price_usd %>"
-  data-pre-order-form-type-value="MixpayPreOrder">
-  <div class="bg-zinc-50 px-4 py-2 rounded mb-4">
+  data-pre-order-form-type-value="<%= article.mixpay_supported? ? 'MixpayPreOrder' : current_user.default_payment %>">
+  <div class="bg-zinc-50 px-4 py-2 rounded mb-4 dark:bg-zinc-800">
     <div class="flex items-center space-x-2 mb-1">
       <%= image_tag article.author.avatar, class: "w-6 h-6 rounded-full", lazy: true %>
       <span class="text-sm"><%= article.author.short_name %></span>
@@ -39,11 +39,12 @@
       data-pre-order-form-target="type" 
       data-pre-order-form-type-param="MixpayPreOrder" 
       data-action="click->pre-order-form#select"
-      class="relative rounded-lg border border-zinc-200 p-4 flex items-center justify-center cursor-pointer">
+      class="relative rounded-lg border border-zinc-200 p-4 flex items-center justify-center cursor-pointer <%= article.mixpay_supported? ? '' : 'cursor-not-allowed' %>">
       <%= image_tag 'mixpay.png', class: "h-8 w-auto absolute left-4 rounded-lg" %>
       <span class="text-lg"><%= t("mixpay") %></span>
       <%= render "shared/icons/check_circle_solid", html_class: "w-6 h-6 text-primary absolute right-1 top-1 checkmark hidden" %>
     </div>
+
     <% if current_user.messenger? %>
       <div
         data-pre-order-form-target="type" 
@@ -78,19 +79,25 @@
   </div>
 
   <div class="mb-4">
-    <%= link_to t('continue'),
-      mixpay_pre_order_path(
-        order_type: :buy_article,
-        item_id: article.id,
-        item_type: 'Article',
-        asset_id: article.asset_id,
-        amount: article.price
-      ),
-      data: {
-        pre_order_form_target: 'mixpaySubmitButton',
-        turbo_frame: '_top'
-      }, 
-      class: "cursor-pointer block w-full text-center rounded-lg bg-primary text-white p-4 text-xl hover:font-black" %>
+    <% if article.mixpay_supported? %>
+      <%= link_to t('continue'),
+        mixpay_pre_order_path(
+          order_type: :buy_article,
+          item_id: article.id,
+          item_type: 'Article',
+          asset_id: article.asset_id,
+          amount: article.price
+        ),
+        data: {
+          pre_order_form_target: 'mixpaySubmitButton',
+          turbo_frame: '_top'
+        }, 
+        class: "hidden cursor-pointer block w-full text-center rounded-lg bg-primary text-white p-4 text-xl hover:font-black" %>
+    <% else %>
+      <button disabled data-pre-order-form-target="mixpaySubmitButton" class="hidden block w-full text-center rounded-lg bg-zinc-300  p-4 text-xl">
+        <%= t('not_supported_yet') %>
+      </button>
+    <% end %>
 
   <%= form_for PreOrder.new, data: { pre_order_form_target: 'submitButton' }, class: "hidden" do |form| %>
     <%= form.hidden_field :order_type, value: :buy_article %>

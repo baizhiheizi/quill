@@ -9,12 +9,12 @@
 #  item_type  :string
 #  memo       :string
 #  order_type :string
-#  result     :json
 #  state      :string
 #  type       :string
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #  asset_id   :uuid
+#  follow_id  :uuid
 #  item_id    :bigint
 #  payee_id   :uuid
 #  payer_id   :uuid
@@ -27,6 +27,8 @@
 #  index_pre_orders_on_payer_id  (payer_id)
 #
 class MixpayPreOrder < PreOrder
+  validate :ensure_mixpay_supported
+
   def pay_url
     Addressable::URI.new(
       scheme: 'https',
@@ -39,8 +41,14 @@ class MixpayPreOrder < PreOrder
         ['quoteAmount', amount],
         ['traceId', trace_id],
         ['settlementMemo', memo],
-        ['returnTo', pre_order_url(id)]
+        ['returnTo', pre_order_url(follow_id)]
       ]
     ).to_s
+  end
+
+  private
+
+  def ensure_mixpay_supported
+    errors.add(:item, 'not supported') unless item.mixpay_supported?
   end
 end

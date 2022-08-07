@@ -9,12 +9,12 @@
 #  item_type  :string
 #  memo       :string
 #  order_type :string
-#  result     :json
 #  state      :string
 #  type       :string
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #  asset_id   :uuid
+#  follow_id  :uuid
 #  item_id    :bigint
 #  payee_id   :uuid
 #  payer_id   :uuid
@@ -48,7 +48,7 @@ class PreOrder < ApplicationRecord
     state :drafted, initial: true
     state :paid
 
-    event :pay do
+    event :pay, after_commit: :broadcast_to_views do
       transitions from: :drafted, to: :paid
     end
   end
@@ -75,16 +75,25 @@ class PreOrder < ApplicationRecord
       end
   end
 
+  def broadcast_to_views
+    broadcast_update_to "user_#{payer_id}", target: "#{type.underscore}_#{id}_state", partial: 'pre_orders/state', locals: { pre_order: self }
+  end
+
+  def to_param
+    follow_id
+  end
+
   private
 
   def setup_attributes
     self.trace_id = item.payment_trace_id payer
+    self.follow_id = SecureRandom.uuid
     self.memo =
       case order_type
       when 'buy_article'
-        Base64.urlsafe_encode64({ t: 'BUY', a: item.uuid, c: payer.mixin_uuid }.to_json)
+        Base64.urlsafe_encode64({ t: 'BUY', a: item.uuid, f: follow_id }.to_json)
       when 'reward_article'
-        Base64.urlsafe_encode64({ t: 'REWARD', a: item.uuid, c: payer.mixin_uuid }.to_json)
+        Base64.urlsafe_encode64({ t: 'REWARD', a: item.uuid, f: follow_id }.to_json)
       end
     self.payee_id = payer.wallet_id || item.wallet_id || QuillBot.api.client_id
     self.asset_id = item.asset_id if asset_id.blank?

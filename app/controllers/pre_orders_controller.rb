@@ -10,8 +10,8 @@ class PreOrdersController < ApplicationController
   end
 
   def show
-    @pre_order = current_user.pre_orders.find params[:id]
-    redirect_to user_artilce_path(@pre_order.item.author, @pre_order.item) if @pre_order.paid?
+    @pre_order = current_user.pre_orders.find_by follow_id: params[:follow_id]
+    redirect_to user_article_path(@pre_order.item.author, @pre_order.item) if @pre_order.item.authorized?(current_user)
   end
 
   def new
@@ -21,5 +21,9 @@ class PreOrdersController < ApplicationController
 
   def pre_order_params
     params.require(:pre_order).permit(:item_id, :item_type, :type, :order_type, :asset_id, :amount)
+  end
+
+  def should_redirect?
+    return true if @pre_order.order_type.reward_article?
   end
 end

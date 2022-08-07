@@ -2,103 +2,106 @@
 // Run that command whenever you add a new controller or create them with
 // ./bin/rails generate stimulus controllerName
 
-import { application } from "./application"
+import { application } from './application';
 
-import ArticleFormController from "./article_form_controller"
-application.register("article-form", ArticleFormController)
+import ArticleFormController from './article_form_controller';
+application.register('article-form', ArticleFormController);
 
-import AutosaveController from "./autosave_controller"
-application.register("autosave", AutosaveController)
+import AutoRefreshController from './auto_refresh_controller';
+application.register('auto-refresh', AutoRefreshController);
 
-import BuyArticlePaymentController from "./buy_article_payment_controller"
-application.register("buy-article-payment", BuyArticlePaymentController)
+import AutosaveController from './autosave_controller';
+application.register('autosave', AutosaveController);
 
-import ClipboardController from "./clipboard_controller"
-application.register("clipboard", ClipboardController)
+import BuyArticlePaymentController from './buy_article_payment_controller';
+application.register('buy-article-payment', BuyArticlePaymentController);
 
-import CommentFormController from "./comment_form_controller"
-application.register("comment-form", CommentFormController)
+import ClipboardController from './clipboard_controller';
+application.register('clipboard', ClipboardController);
 
-import ConfirmController from "./confirm_controller"
-application.register("confirm", ConfirmController)
+import CommentFormController from './comment_form_controller';
+application.register('comment-form', CommentFormController);
 
-import DarkmodeController from "./darkmode_controller"
-application.register("darkmode", DarkmodeController)
+import ConfirmController from './confirm_controller';
+application.register('confirm', ConfirmController);
 
-import DisconnectController from "./disconnect_controller"
-application.register("disconnect", DisconnectController)
+import DarkmodeController from './darkmode_controller';
+application.register('darkmode', DarkmodeController);
 
-import DropdownController from "./dropdown_controller"
-application.register("dropdown", DropdownController)
+import DisconnectController from './disconnect_controller';
+application.register('disconnect', DisconnectController);
 
-import FennecController from "./fennec_controller"
-application.register("fennec", FennecController)
+import DropdownController from './dropdown_controller';
+application.register('dropdown', DropdownController);
 
-import FlashController from "./flash_controller"
-application.register("flash", FlashController)
+import FennecController from './fennec_controller';
+application.register('fennec', FennecController);
 
-import HljsController from "./hljs_controller"
-application.register("hljs", HljsController)
+import FlashController from './flash_controller';
+application.register('flash', FlashController);
 
-import InfiniteScrollController from "./infinite_scroll_controller"
-application.register("infinite-scroll", InfiniteScrollController)
+import HljsController from './hljs_controller';
+application.register('hljs', HljsController);
 
-import LoadMoreController from "./load_more_controller"
-application.register("load-more", LoadMoreController)
+import InfiniteScrollController from './infinite_scroll_controller';
+application.register('infinite-scroll', InfiniteScrollController);
 
-import LoginController from "./login_controller"
-application.register("login", LoginController)
+import LoadMoreController from './load_more_controller';
+application.register('load-more', LoadMoreController);
 
-import ModalController from "./modal_controller"
-application.register("modal", ModalController)
+import LoginController from './login_controller';
+application.register('login', LoginController);
 
-import NestedFormController from "./nested_form_controller"
-application.register("nested-form", NestedFormController)
+import ModalController from './modal_controller';
+application.register('modal', ModalController);
 
-import PhotoswipeController from "./photoswipe_controller"
-application.register("photoswipe", PhotoswipeController)
+import NestedFormController from './nested_form_controller';
+application.register('nested-form', NestedFormController);
 
-import PreOrderController from "./pre_order_controller"
-application.register("pre-order", PreOrderController)
+import PhotoswipeController from './photoswipe_controller';
+application.register('photoswipe', PhotoswipeController);
 
-import PreOrderFormController from "./pre_order_form_controller"
-application.register("pre-order-form", PreOrderFormController)
+import PreOrderController from './pre_order_controller';
+application.register('pre-order', PreOrderController);
 
-import QrcodeController from "./qrcode_controller"
-application.register("qrcode", QrcodeController)
+import PreOrderFormController from './pre_order_form_controller';
+application.register('pre-order-form', PreOrderFormController);
 
-import ReferencesSelectController from "./references_select_controller"
-application.register("references-select", ReferencesSelectController)
+import QrcodeController from './qrcode_controller';
+application.register('qrcode', QrcodeController);
 
-import RewardArticlePaymentController from "./reward_article_payment_controller"
-application.register("reward-article-payment", RewardArticlePaymentController)
+import ReferencesSelectController from './references_select_controller';
+application.register('references-select', ReferencesSelectController);
 
-import ScrollToController from "./scroll_to_controller"
-application.register("scroll-to", ScrollToController)
+import RewardArticlePaymentController from './reward_article_payment_controller';
+application.register('reward-article-payment', RewardArticlePaymentController);
 
-import SearchController from "./search_controller"
-application.register("search", SearchController)
+import ScrollToController from './scroll_to_controller';
+application.register('scroll-to', ScrollToController);
 
-import SelectCurrencyController from "./select_currency_controller"
-application.register("select-currency", SelectCurrencyController)
+import SearchController from './search_controller';
+application.register('search', SearchController);
 
-import SelectMenuController from "./select_menu_controller"
-application.register("select-menu", SelectMenuController)
+import SelectCurrencyController from './select_currency_controller';
+application.register('select-currency', SelectCurrencyController);
 
-import SidebarController from "./sidebar_controller"
-application.register("sidebar", SidebarController)
+import SelectMenuController from './select_menu_controller';
+application.register('select-menu', SelectMenuController);
 
-import SwitchLocaleController from "./switch_locale_controller"
-application.register("switch-locale", SwitchLocaleController)
+import SidebarController from './sidebar_controller';
+application.register('sidebar', SidebarController);
 
-import TabsController from "./tabs_controller"
-application.register("tabs", TabsController)
+import SwitchLocaleController from './switch_locale_controller';
+application.register('switch-locale', SwitchLocaleController);
 
-import TagsSelectController from "./tags_select_controller"
-application.register("tags-select", TagsSelectController)
+import TabsController from './tabs_controller';
+application.register('tabs', TabsController);
 
-import TextareaAutogrowController from "./textarea_autogrow_controller"
-application.register("textarea-autogrow", TextareaAutogrowController)
+import TagsSelectController from './tags_select_controller';
+application.register('tags-select', TagsSelectController);
 
-import ToastController from "./toast_controller"
-application.register("toast", ToastController)
+import TextareaAutogrowController from './textarea_autogrow_controller';
+application.register('textarea-autogrow', TextareaAutogrowController);
+
+import ToastController from './toast_controller';
+application.register('toast', ToastController);

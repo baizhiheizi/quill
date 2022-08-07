@@ -348,4 +348,14 @@ class User < ApplicationRecord
   def faucet_bonus
     @faucet_bonus = bonuses.find_by(asset_id: Currency::XIN_ASSET_ID, title: 'Faucet')
   end
+
+  def default_payment
+    if messenger?
+      'MixinPreOrder'
+    elsif fennec?
+      'FennecPreOrder'
+    elsif mvm_eth?
+      'MVMPreOrder'
+    end
+  end
 end

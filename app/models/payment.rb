@@ -46,10 +46,9 @@ class Payment < ApplicationRecord
   validates :snapshot_id, presence: true, uniqueness: true
   validates :trace_id, presence: true, uniqueness: true
 
-  after_create :place_order!
+  after_create :place_order!, :pay_pre_order!
   after_create_commit do
     notify_payer
-    broadcast_state
   end
 
   delegate :swappable?, to: :currency
@@ -68,15 +67,16 @@ class Payment < ApplicationRecord
     end
   end
 
-  def decrypted_memo
+  def decoded_memo
     # memo from Quill user
     # memo = {
     #  't': BUY|REWARD|CITE|REVENUE,
     #  'a': article's uuid,
-    #  'c': citer's uuid
+    #  'c': citer's uuid,
+    #  'p': pre order trace ID
     # }
     #
-    @decrypted_memo =
+    @decoded_memo =
       begin
         JSON.parse Base64.decode64(memo.to_s)
       rescue JSON::ParserError
@@ -85,17 +85,27 @@ class Payment < ApplicationRecord
   end
 
   def memo_correct?
-    decrypted_memo.key?('a') && decrypted_memo.key?('t') && decrypted_memo['t'].in?(%w[BUY REWARD CITE REVENUE])
+    decoded_memo.key?('a') && decoded_memo.key?('t') && decoded_memo['t'].in?(%w[BUY REWARD CITE REVENUE])
   end
 
   def article
-    @article = Article.find_by uuid: decrypted_memo['a']
+    @article = Article.find_by uuid: decoded_memo['a']
   end
 
   def citer
-    return unless decrypted_memo['t'] == 'CITE'
+    return unless decoded_memo['t'] == 'CITE'
 
-    @citer = Article.find_by(uuid: decrypted_memo['c'])
+    @citer = Article.find_by(uuid: decoded_memo['c'])
+  end
+
+  def pre_order
+    return if decoded_memo['f'].blank?
+
+    @pre_order ||= PreOrder.find_by follow_id: decoded_memo['f']
+  end
+
+  def pay_pre_order!
+    pre_order&.pay!
   end
 
   def place_order!
@@ -104,9 +114,9 @@ class Payment < ApplicationRecord
 
     raise 'blocked by author' if article.author.block_user?(payer)
 
-    if decrypted_memo['t'] == 'REVENUE'
+    if decoded_memo['t'] == 'REVENUE'
       complete!
-    elsif asset_id == article.asset_id || decrypted_memo['t'] == 'CITE'
+    elsif asset_id == article.asset_id || decoded_memo['t'] == 'CITE'
       place_article_order!
     elsif swappable?
       place_swap_order!
@@ -124,7 +134,7 @@ class Payment < ApplicationRecord
 
     create_swap_order!(
       funds: amount,
-      min_amount: decrypted_memo['t'] == 'BUY' ? article.price : nil,
+      min_amount: decoded_memo['t'] == 'BUY' ? article.price : nil,
       fill_asset_id: article.asset_id,
       pay_asset_id: asset_id,
       trace_id: QuillBot.api.unique_conversation_id(wallet.uuid, trace_id),
@@ -136,23 +146,26 @@ class Payment < ApplicationRecord
   end
 
   def place_article_order!
-    case decrypted_memo['t']
+    case decoded_memo['t']
     when 'BUY'
       article.orders.find_or_create_by!(
         payment: self,
         order_type: :buy_article
       )
+      complete!
     when 'REWARD'
       article.orders.find_or_create_by!(
         payment: self,
         order_type: :reward_article
       )
+      complete!
     when 'CITE'
       article.orders.find_or_create_by!(
         payment: self,
         order_type: :cite_article,
         citer: citer
       )
+      complete!
     when 'REVENUE'
       complete!
     else
@@ -187,7 +200,7 @@ class Payment < ApplicationRecord
   end
 
   def notify_payer
-    PaymentCreatedNotification.with(payment: self).deliver(payer) if decrypted_memo['t'].in? %w[BUY REWARD]
+    PaymentCreatedNotification.with(payment: self).deliver(payer) if decoded_memo['t'].in? %w[BUY REWARD]
   end
 
   def price_tag
@@ -206,7 +219,7 @@ class Payment < ApplicationRecord
     return if payer.blank?
 
     I18n.with_locale payer.locale do
-      case decrypted_memo['t']
+      case decoded_memo['t']
       when 'BUY'
         broadcast_update_to "user_#{payer.mixin_uuid}", target: "article_#{article.uuid}_buy_payment_box", partial: 'payments/processing', locals: { payment: self } if payer.present?
       when 'REWARD'
@@ -227,8 +240,10 @@ class Payment < ApplicationRecord
       trace_id: raw['trace_id']
     )
     self.payer =
-      if decrypted_memo['t'] == 'CITE'
-        Article.find_by(uuid: decrypted_memo['c']).author
+      if decoded_memo['t'] == 'CITE'
+        Article.find_by(uuid: decoded_memo['c']).author
+      elsif pre_order.present?
+        pre_order.payer
       else
         User.find_by mixin_uuid: opponent_id
       end

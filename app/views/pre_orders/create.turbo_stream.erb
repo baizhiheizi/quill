@@ -12,6 +12,6 @@
     <%= render "pre_orders/pre_order", pre_order: @pre_order %>
   <% end %>
   <%= turbo_stream.update "modal-slot" do %>
-    <%= render "view_modals/modal", backdrop: 'static' %>
+    <%= render "view_modals/modal", backdrop: 'static', html_id: "#{@pre_order.item.uuid}_pre_order_modal" %>
   <% end %>
 <% end %>

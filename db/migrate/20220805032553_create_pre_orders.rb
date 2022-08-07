@@ -9,9 +9,9 @@ class CreatePreOrders < ActiveRecord::Migration[7.0]
       t.decimal :amount
       t.uuid :asset_id
       t.uuid :trace_id
+      t.uuid :follow_id
       t.string :state
       t.string :memo
-      t.json :result
 
       t.timestamps
     end
