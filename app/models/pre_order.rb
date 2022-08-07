@@ -76,7 +76,9 @@ class PreOrder < ApplicationRecord
   end
 
   def broadcast_to_views
-    broadcast_update_to "user_#{payer_id}", target: "#{type.underscore}_#{id}_state", partial: 'pre_orders/state', locals: { pre_order: self }
+    I18n.with_locale payer.locale do
+      broadcast_update_to "user_#{payer_id}", target: "#{type.underscore}_#{id}_state", partial: 'pre_orders/state', locals: { pre_order: self }
+    end
   end
 
   def to_param
