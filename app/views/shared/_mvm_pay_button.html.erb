@@ -38,13 +38,20 @@
 
       <span class="text-lg"><%= t('confirm_to_pay') %></span>
     </button>
-    <div data-mvm-pay-target="balance" class="py-1 px-2 text-sm opacity-75 text-right">
-      <span><%= t('balance') %>:</span>
-      <span data-mvm-pay-target="balanceValue">
-        <%= image_tag 'loading.svg', class: 'w-4 h-4 inline-block' %>
-      </span>
-      <%= link_to "", data: { mvm_pay_target: 'balanceLink' }, target: "_blank", class: "inline-block align-middle" do %> 
-        <%= render "shared/icons/external_link", html_class: 'w-3 h-3' %>
+    <div class="flex justify-between py-1 px-2">
+      <div data-mvm-pay-target="balance" class="text-sm opacity-75">
+        <span><%= t('balance') %>:</span>
+        <span data-mvm-pay-target="balanceValue">
+          <%= image_tag 'loading.svg', class: 'w-4 h-4 inline-block' %>
+        </span>
+        <%= link_to "", data: { mvm_pay_target: 'balanceLink' }, target: "_blank", class: "inline-block align-middle" do %> 
+          <%= render "shared/icons/external_link", html_class: 'w-4 h-4' %>
+        <% end %>
+      </div>
+
+      <%= button_to view_modals_path(type: :mvm_deposit), class: "block text-sm opacity-75 flex items-center" do %>
+        <span><%= t('deposit') %></span>
+        <%= render "shared/icons/chevron_right", html_class: 'w-4 h-4' %>
       <% end %>
     </div>
   </div>

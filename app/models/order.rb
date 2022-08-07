@@ -58,7 +58,7 @@ class Order < ApplicationRecord
   delegate :price_tag, to: :payment, prefix: true
 
   after_create :subscribe_comments_for_buyer, :broadcast_to_views
-  after_create_commit :complete_payment_async, :update_cache_async, :notify_async, :distribute_async
+  after_create_commit :update_cache_async, :notify_async, :distribute_async
 
   before_destroy :destroy_notifications
 
@@ -68,7 +68,7 @@ class Order < ApplicationRecord
 
       broadcast_replace_later_to "user_#{buyer.mixin_uuid}", target: "article_#{article.uuid}_buyers", partial: 'articles/buyers', locals: { article: article, user: buyer }
       broadcast_replace_to "user_#{buyer.mixin_uuid}", target: "article_#{article.uuid}_comments_card", partial: 'articles/comments_card', locals: { article: article, user: buyer }
-      broadcast_remove_to "user_#{buyer.mixin_uuid}", target: "article_#{article.uuid}_payment_modal"
+      broadcast_remove_to "user_#{buyer.mixin_uuid}", target: "#{article.uuid}_pre_order_modal"
     end
   end
 
@@ -226,14 +226,6 @@ class Order < ApplicationRecord
                                        else
                                          (total * (1 - item.platform_revenue_ratio)).round(8)
                                        end
-  end
-
-  def complete_payment
-    payment.complete! if payment.paid?
-  end
-
-  def complete_payment_async
-    OrderCompletePaymentWorker.perform_async id
   end
 
   def notify

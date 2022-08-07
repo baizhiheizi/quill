@@ -65,7 +65,7 @@ Rails.application.routes.draw do
     resources :subscribe_by_users, only: %i[index]
   end
 
-  resources :pre_orders, only: %i[create show new]
+  resources :pre_orders, only: %i[create show new], param: :follow_id
   resource :mixpay_pre_order, only: %i[show]
 
   resources :transfers, only: %i[index]

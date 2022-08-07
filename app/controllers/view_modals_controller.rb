@@ -29,6 +29,9 @@ class ViewModalsController < ApplicationController
         @commentable = Article.find_by id: params[:commentable_id]
       end
       return if @commentable.blank?
+    when 'pre_order'
+      @pre_order = current_user.pre_orders.find_by follow_id: params[:follow_id]
+      return if @pre_order.blank?
     end
 
     render type

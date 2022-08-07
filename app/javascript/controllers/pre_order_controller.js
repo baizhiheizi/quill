@@ -4,12 +4,20 @@ import { hideLoading, showLoading } from '../utils';
 
 export default class extends Controller {
   static values = {
+    followId: String,
     identifier: String,
     payAssetId: String,
-    id: String,
+    type: String,
   };
 
-  static targets = ['currencyIcon', 'currencyChainIcon', 'currencySymbol'];
+  static targets = [
+    'selectCurrencyButton',
+    'currencyIcon',
+    'currencyChainIcon',
+    'currencySymbol',
+    'payButton',
+    'state',
+  ];
 
   connect() {
     document
@@ -34,9 +42,19 @@ export default class extends Controller {
 
   updatePreOrder() {
     showLoading();
-    get(`/pre_orders/${this.idValue}?pay_asset_id=${this.payAssetIdValue}`, {
-      contentType: 'application/json',
-      responseKind: 'turbo-stream',
-    }).then(() => hideLoading());
+    get(
+      `/pre_orders/${this.followIdValue}?pay_asset_id=${this.payAssetIdValue}`,
+      {
+        contentType: 'application/json',
+        responseKind: 'turbo-stream',
+      },
+    ).then(() => hideLoading());
+  }
+
+  pay() {
+    this.selectCurrencyButtonTarget.disabled = true;
+    if (this.typeValue !== 'MVMPreOrder') {
+      this.stateTarget.classList.remove('hidden');
+    }
   }
 }

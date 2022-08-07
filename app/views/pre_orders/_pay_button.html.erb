@@ -10,6 +10,7 @@
     data-fennec-amount-param="<%= pay_amount %>"
     data-fennec-memo-param="<%= pre_order.memo %>"
     data-fennec-opponent-id-param="<%= pre_order.payee_id %>"
+    data-action="click->pre-order#pay"
     class="relative flex items-center justify-center w-full my-4 text-center no-underline cursor-pointer py-3 block bg-primary hover:font-bold text-white rounded-lg">
     <%= image_tag 'fennec-logo.png', class: 'h-8 w-auto absolute left-4' %>
     <span class="text-lg"><%= t('confirm_to_pay') %></span>
@@ -37,8 +38,7 @@
   <% end %>
 
   <a href="<%= pre_order.pay_url(pay_asset.asset_id) %>"
-    data-buy-article-payment-target="payButton"
-    data-action="click->buy-article-payment#invokePayment"
+    data-action="click->pre-order#pay"
     class="relative flex items-center justify-center w-full my-4 text-center no-underline cursor-pointer py-3 block bg-primary hover:font-bold text-white rounded-lg md:hidden">
     <%= image_tag 'mixin-logo-light.png', class: "h-6 w-auto absolute left-4" %>
     <span class="text-lg"><%= t('confirm_to_pay') %></span>

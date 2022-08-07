@@ -93,18 +93,22 @@ class MixinNetworkSnapshot < ApplicationRecord
     @article = owner.is_a?(Article) && owner
   end
 
-  def decrypted_memo
+  def decoded_memo
     # memo from 4swap
     # memo = {
     #   s: '4swapTrade|4swapRefund',
     #   t: 'trace_id'
     # }
-    @decrypted_memo =
+    @decoded_memo =
       begin
         JSON.parse Base64.decode64(data.to_s)
       rescue JSON::ParserError
         {}
       end
+  end
+
+  def payment_memo_correct?
+    decoded_memo.key?('a') && decoded_memo.key?('t') && decoded_memo['t'].in?(%w[BUY REWARD CITE REVENUE])
   end
 
   def processed?
@@ -114,7 +118,7 @@ class MixinNetworkSnapshot < ApplicationRecord
   def process!
     return if processed?
 
-    if decrypted_memo['s'].in? %w[4swapTrade 4swapRefund]
+    if decoded_memo['s'].in? %w[4swapTrade 4swapRefund]
       process_4swap_snapshot
     elsif amount.positive?
       process_payment_snapshot
@@ -126,7 +130,7 @@ class MixinNetworkSnapshot < ApplicationRecord
   def process_payment_snapshot
     return if amount.negative?
     # not valid payment
-    return if opponent.blank? && opponent_wallet.blank?
+    return unless payment_memo_correct?
 
     Currency.find_or_create_by asset_id: asset_id
     Payment
@@ -137,9 +141,9 @@ class MixinNetworkSnapshot < ApplicationRecord
   def process_4swap_snapshot
     return if amount.negative?
 
-    swap_order = SwapOrder.find_by trace_id: decrypted_memo['t']
+    swap_order = SwapOrder.find_by trace_id: decoded_memo['t']
 
-    case decrypted_memo['s']
+    case decoded_memo['s']
     when '4swapTrade'
       swap_order.update! amount: amount
       if swap_order.swapping?

@@ -328,11 +328,11 @@ class Article < ApplicationRecord
 
     # generate a unique trace ID for paying
     # avoid duplicate payment
-    candidate = QuillBot.api.unique_conversation_id(uuid, user.mixin_uuid)
+    candidate = QuillBot.api.unique_uuid(uuid, user.mixin_uuid)
     loop do
       break unless Payment.exists?(trace_id: candidate, state: %i[refunded completed])
 
-      candidate = QuillBot.api.unique_conversation_id(uuid, candidate)
+      candidate = QuillBot.api.unique_uuid(uuid, candidate)
     end
 
     candidate
@@ -461,6 +461,10 @@ class Article < ApplicationRecord
 
   def detect_locale_async
     ArticleDetectLocaleWorker.perform_async uuid
+  end
+
+  def mixpay_supported?
+    asset_id.in? (Mixpay.api.settlement_asset_ids + Mixpay.api.quote_asset_ids).uniq
   end
 
   private
