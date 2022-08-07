@@ -1,8 +1,8 @@
 <% content_for :modal_title do %>
-  <%= t('reward') %>
+  <%= t('buy_article') %>
 <% end %>
 <% content_for :modal_content do %>
-  <%= render "pre_orders/pre_order_form", article: @article, order_type: :reward_article %>
+  <%= render "pre_orders/pre_order_form", article: @article, order_type: params[:order_type] %>
 <% end %>
 
 <%= turbo_stream.append "modal-slot" do %>
