@@ -67,6 +67,9 @@ application.register('pre-order', PreOrderController);
 import PreOrderFormController from './pre_order_form_controller';
 application.register('pre-order-form', PreOrderFormController);
 
+import PreOrderStateController from './pre_order_state_controller';
+application.register('pre-order-state', PreOrderStateController);
+
 import QrcodeController from './qrcode_controller';
 application.register('qrcode', QrcodeController);
 
