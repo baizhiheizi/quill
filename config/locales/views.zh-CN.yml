@@ -292,3 +292,4 @@ zh-CN:
   payment_method: 支付方式
   not_supported_yet: 暂不支持
   you_need_to_switch_network_to_mvm: 请先切换至 MVM 网络
+  waiting_for_mixpay: 等待 MixPay 完成支付

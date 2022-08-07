@@ -476,8 +476,8 @@ class Article < ApplicationRecord
       uuid: SecureRandom.uuid
     )
 
-    self.asset_id = Currency::BTC_ASSET_ID if asset_id.blank?
-    self.price = currency.minimal_price_amount if price.blank?
+    self.asset_id = Currency::BTC_ASSET_ID
+    self.price = currency.minimal_price_amount
   end
 
   def set_default_intro
