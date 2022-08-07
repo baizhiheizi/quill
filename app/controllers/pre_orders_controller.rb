@@ -18,9 +18,9 @@ class PreOrdersController < ApplicationController
           redirect_to root_path
         elsif @pre_order.item.authorized?(current_user)
           redirect_to user_article_path(@pre_order.item.author, @pre_order.item)
+        else
+          render :show
         end
-
-        render :show
       end
 
       format.turbo_stream do
