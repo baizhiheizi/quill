@@ -2,8 +2,7 @@
   <%= t('reward') %>
 <% end %>
 <% content_for :modal_content do %>
-  <%# <%= render "articles/reward_payment_modal", article: @article, trace_id: SecureRandom.uuid %>
-  <%= render "pre_orders/reward_article", article: @article %>
+  <%= render "pre_orders/pre_order_form", article: @article, order_type: :reward_article %>
 <% end %>
 
 <%= turbo_stream.append "modal-slot" do %>

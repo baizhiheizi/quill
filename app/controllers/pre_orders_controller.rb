@@ -12,10 +12,20 @@ class PreOrdersController < ApplicationController
   def show
     @pre_order = current_user.pre_orders.find_by follow_id: params[:follow_id]
 
-    if @pre_order.blank?
-      redirect_to root_path
-    elsif @pre_order.item.authorized?(current_user)
-      redirect_to user_article_path(@pre_order.item.author, @pre_order.item)
+    respond_to do |format|
+      format.html do
+        if @pre_order.blank?
+          redirect_to root_path
+        elsif @pre_order.item.authorized?(current_user)
+          redirect_to user_article_path(@pre_order.item.author, @pre_order.item)
+        end
+
+        render :show
+      end
+
+      format.turbo_stream do
+        render :show
+      end
     end
   end
 

@@ -86,8 +86,14 @@ class PreOrder < ApplicationRecord
   private
 
   def setup_attributes
-    self.trace_id = item.payment_trace_id payer
     self.follow_id = SecureRandom.uuid
+    self.trace_id =
+      case order_type
+      when 'reward_article'
+        SecureRandom.uuid
+      when 'buy_article'
+        item.payment_trace_id payer
+      end
     self.memo =
       case order_type
       when 'buy_article'
