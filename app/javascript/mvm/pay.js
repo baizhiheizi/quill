@@ -26,7 +26,7 @@ export async function payWithMVM(params, success, fail) {
   const { extra } = await fetchExtra(opponentIds, threshold, memo);
 
   if (assetId === NativeAssetId) {
-    await panNative(
+    await payNative(
       {
         assetId,
         symbol,
@@ -80,7 +80,7 @@ export async function payERC20(params, success, fail) {
     .on('error', fail);
 }
 
-export async function panNative(params, success, fail) {
+export async function payNative(params, success, fail) {
   const { assetId, amount, contract, extra, account } = params;
   const BridgeContract = new w3.eth.Contract(BridgeABI, BridgeAddress);
   BridgeContract.options.gasPrice = GasPrice;
