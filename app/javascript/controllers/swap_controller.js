@@ -1,7 +1,7 @@
 import { Controller } from '@hotwired/stimulus';
 import { post } from '@rails/request.js';
 import { debounce } from 'underscore';
-import { NativeAssetId } from '../constants';
+import { NativeAssetId } from '../mvm/constants';
 
 export default class extends Controller {
   static values = {

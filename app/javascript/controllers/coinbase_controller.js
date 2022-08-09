@@ -1,7 +1,7 @@
 import { Controller } from '@hotwired/stimulus';
-import { initCoinBase } from '../wallet';
-import { authorize } from '../auth';
-import { notify, showLoading, hideLoading } from '../../utils';
+import { initCoinBase } from '../mvm/wallet';
+import { authorize } from '../mvm/auth';
+import { notify, showLoading, hideLoading } from '../utils';
 
 export default class extends Controller {
   static targets = ['loginButton', 'waiting'];

@@ -19,6 +19,9 @@ application.register('buy-article-payment', BuyArticlePaymentController);
 import ClipboardController from './clipboard_controller';
 application.register('clipboard', ClipboardController);
 
+import CoinbaseController from './coinbase_controller';
+application.register('coinbase', CoinbaseController);
+
 import CommentFormController from './comment_form_controller';
 application.register('comment-form', CommentFormController);
 
@@ -49,8 +52,17 @@ application.register('load-more', LoadMoreController);
 import LoginController from './login_controller';
 application.register('login', LoginController);
 
+import MetamaskController from './metamask_controller';
+application.register('metamask', MetamaskController);
+
 import ModalController from './modal_controller';
 application.register('modal', ModalController);
+
+import MvmDepositController from './mvm_deposit_controller';
+application.register('mvm-deposit', MvmDepositController);
+
+import MvmPayController from './mvm_pay_controller';
+application.register('mvm-pay', MvmPayController);
 
 import NestedFormController from './nested_form_controller';
 application.register('nested-form', NestedFormController);
@@ -94,6 +106,9 @@ application.register('session', SessionController);
 import SidebarController from './sidebar_controller';
 application.register('sidebar', SidebarController);
 
+import SwapController from './swap_controller';
+application.register('swap', SwapController);
+
 import SwitchLocaleController from './switch_locale_controller';
 application.register('switch-locale', SwitchLocaleController);
 
@@ -108,3 +123,6 @@ application.register('textarea-autogrow', TextareaAutogrowController);
 
 import ToastController from './toast_controller';
 application.register('toast', ToastController);
+
+import WalletConnectController from './wallet_connect_controller';
+application.register('wallet-connect', WalletConnectController);

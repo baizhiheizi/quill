@@ -1,7 +1,7 @@
 import { Controller } from '@hotwired/stimulus';
-import { notify, showLoading, hideLoading } from '../../utils';
-import { balanceOf, MVM_CHAIN_ID, switchToMVM } from '../wallet';
-import { payWithMVM } from '../pay';
+import { notify, showLoading, hideLoading } from '../utils';
+import { balanceOf, MVM_CHAIN_ID, switchToMVM } from '../mvm/wallet';
+import { payWithMVM } from '../mvm/pay';
 
 export default class extends Controller {
   static targets = [

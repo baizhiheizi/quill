@@ -1,8 +1,8 @@
 import { Controller } from '@hotwired/stimulus';
 import { get, post } from '@rails/request.js';
-import { RegistryContract } from '../registry';
-import { notify, showLoading, hideLoading } from '../../utils';
-import { NativeAssetId } from '../constants';
+import { RegistryContract } from '../mvm/registry';
+import { notify, showLoading, hideLoading } from '../utils';
+import { NativeAssetId } from '../mvm/constants';
 
 export default class extends Controller {
   static values = {
