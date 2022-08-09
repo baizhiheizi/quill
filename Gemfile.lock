@@ -1,3 +1,11 @@
+GIT
+  remote: https://github.com/baizhiheizi/arweave-ruby.git
+  revision: 61d60e083902d7b49f3c43461b41e6adaadfbf98
+  specs:
+    arweave (1.1.0)
+      httparty (>= 0.18)
+      json-jwt (>= 1.13)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -75,6 +83,7 @@ GEM
       tzinfo (~> 2.0)
     addressable (2.8.1)
       public_suffix (>= 2.0.2, < 6.0)
+    aes_key_wrap (1.1.0)
     after_commit_everywhere (1.2.2)
       activerecord (>= 4.2)
       activesupport
@@ -103,6 +112,7 @@ GEM
     aws-sigv4 (1.5.1)
       aws-eventstream (~> 1, >= 1.0.2)
     bcrypt (3.1.18)
+    bindata (2.4.10)
     bindex (0.8.1)
     bootsnap (1.13.0)
       msgpack (~> 1.2)
@@ -215,6 +225,7 @@ GEM
     httparty (0.20.0)
       mime-types (~> 3.0)
       multi_xml (>= 0.5.2)
+    httpclient (2.8.3)
     i18n (1.12.0)
       concurrent-ruby (~> 1.0)
     image_processing (1.12.2)
@@ -232,6 +243,11 @@ GEM
     jsbundling-rails (1.0.3)
       railties (>= 6.0.0)
     json (2.6.2)
+    json-jwt (1.15.3)
+      activesupport (>= 4.2)
+      aes_key_wrap
+      bindata
+      httpclient
     kaminari (1.2.2)
       activesupport (>= 4.1.0)
       kaminari-actionview (= 1.2.2)
@@ -490,6 +506,7 @@ DEPENDENCIES
   activestorage-aliyun
   after_commit_everywhere
   annotate
+  arweave!
   aws-sdk-s3
   bcrypt (~> 3.1.7)
   bootsnap (>= 1.4.4)
