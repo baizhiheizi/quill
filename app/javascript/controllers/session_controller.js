@@ -9,12 +9,43 @@ export default class extends Controller {
     session: String,
   };
 
-  providerValueChanged() {
-    this.initWallet();
+  async providerValueChanged() {
+    if (!this.providerValue) return;
+    await this.initWallet();
+
+    w3.provider = this.providerValue;
+
+    w3.currentProvider.on('chainChanged', (chainId) => {
+      console.warn(`Chain changed to ${chainId}`);
+      notify(`Network changed to ${chainId}`);
+      Turbo.visit(location.pathname);
+    });
+
+    w3.currentProvider.on('disconnect', () => {
+      console.warn('Disconnect');
+      Turbo.visit('/logout');
+    });
+  }
+
+  async addressValueChanged() {
+    if (!this.addressValue) return;
+    if (!w3) {
+      await this.initWallet();
+    }
+
+    w3.currentProvider.on('accountsChanged', (accounts) => {
+      notify('Account changed');
+
+      if (accounts[0].toLowerCase() !== this.addressValue.toLowerCase()) {
+        this.destroy();
+        Turbo.visit('/logout');
+      }
+    });
   }
 
   async initWallet() {
     if (!this.providerValue) return;
+    if (window.w3) return;
 
     switch (this.providerValue) {
       case 'MetaMask':
@@ -32,32 +63,7 @@ export default class extends Controller {
 
     if (!window.w3) {
       console.warn('Failed to init wallet');
-      return;
     }
-
-    w3.provider = this.providerValue;
-
-    w3.currentProvider.on('chainChanged', (chainId) => {
-      if (parseInt(w3.currentProvider.chainId) === parseInt(chainId)) return;
-
-      console.warn(`Chain changed to ${chainId}`);
-      notify(`Network changed to ${chainId}`);
-      Turbo.visit(location.pathname);
-    });
-
-    w3.currentProvider.on('accountsChanged', (accounts) => {
-      console.warn(`Account changed to ${accounts[0]}`);
-      notify('Account changed');
-
-      if (accounts[0].toLowerCase() !== this.addressValue.toLowerCase()) {
-        this.destroy();
-        Turbo.visit('/logout');
-      }
-    });
-
-    w3.currentProvider.on('disconnect', () => {
-      Turbo.visit('/logout');
-    });
   }
 
   destroy() {

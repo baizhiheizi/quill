@@ -24,6 +24,10 @@ class Session < ApplicationRecord
   validates :uuid, presence: true
   validates :info, presence: true
 
+  def provider
+    @provider ||= info&.[]('provider')
+  end
+
   private
 
   def setup_attributes
