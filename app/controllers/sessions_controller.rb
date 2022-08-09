@@ -48,7 +48,7 @@ class SessionsController < ApplicationController
   end
 
   def mvm
-    user =
+    user, session_id =
       begin
         User.auth_from_mvm_eth(
           params[:public_key],
@@ -59,7 +59,7 @@ class SessionsController < ApplicationController
       end
 
     if user.present?
-      user_session = user.sessions.create(info: { request: request_info, provider: params[:provider] })
+      user_session = user.sessions.create(uuid: session_id, info: { request: request_info, provider: params[:provider] })
       user_sign_in user_session
       redirect_to (params[:return_to].presence || root_path), success: t('connected')
     else

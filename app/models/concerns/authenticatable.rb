@@ -60,7 +60,10 @@ module Authenticatable
       auth.raw = res['user']
       auth.update! raw: res['user'] if auth.raw_changed?
 
-      find_or_create_user_by_auth auth
+      user = find_or_create_user_by_auth auth
+      session_id = JSON.parse(msg)['session']
+
+      [user, session_id]
     end
 
     private
