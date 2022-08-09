@@ -82,7 +82,7 @@ class Article < ApplicationRecord
 
   has_one :wallet, class_name: 'MixinNetworkUser', as: :owner, dependent: :nullify
 
-  validates :asset_id, inclusion: { in: SUPPORTED_ASSETS }
+  validates :asset_id, inclusion: { in: SUPPORTED_ASSETS }, if: :new_record?
   validates :uuid, presence: true, uniqueness: true
   validates :title, length: { maximum: 64 }
   validates :intro, length: { maximum: 140 }
