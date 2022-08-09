@@ -11,7 +11,9 @@ export default class extends Controller {
 
   async providerValueChanged() {
     if (!this.providerValue) return;
+
     await this.initWallet();
+    if (!w3) return;
 
     w3.provider = this.providerValue;
 
@@ -29,9 +31,9 @@ export default class extends Controller {
 
   async addressValueChanged() {
     if (!this.addressValue) return;
-    if (!w3) {
-      await this.initWallet();
-    }
+
+    await this.initWallet();
+    if (!w3) return;
 
     w3.currentProvider.on('accountsChanged', (accounts) => {
       notify('Account changed');
