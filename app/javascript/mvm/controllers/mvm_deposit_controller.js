@@ -3,7 +3,6 @@ import { get, post } from '@rails/request.js';
 import { RegistryContract } from '../registry';
 import { notify, showLoading, hideLoading } from '../../utils';
 import { NativeAssetId } from '../constants';
-import { initWallet } from '../wallet';
 
 export default class extends Controller {
   static values = {
@@ -39,8 +38,6 @@ export default class extends Controller {
           this.currencySymbolTarget.innerText = event.detail.symbol;
         }
       });
-
-    await initWallet();
   }
 
   async addToken() {

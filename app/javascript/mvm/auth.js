@@ -20,8 +20,8 @@ export async function authorize() {
   const signature = await w3.eth.personal.sign(JSON.stringify(nounce), account);
 
   Turbo.visit(
-    `/auth/mvm/callback?signature=${signature}&public_key=${account}&return_to=${encodeURIComponent(
-      location.href,
-    )}`,
+    `/auth/mvm/callback?signature=${signature}&public_key=${account}&provider=${
+      w3.provider
+    }&return_to=${encodeURIComponent(location.href)}`,
   );
 }

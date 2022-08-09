@@ -6,6 +6,7 @@ class ApplicationController < ActionController::Base
 
   before_action :ensure_launched!
 
+  helper_method :current_session
   helper_method :current_user
   helper_method :current_locale
   helper_method :from_mixin_messenger?
@@ -27,20 +28,25 @@ class ApplicationController < ActionController::Base
   end
 
   def authenticate_user!
-    render 'view_modals/login' if current_user.blank?
+    return root_path if current_user.blank?
   end
 
   def current_user
-    @current_user ||= User.find_by(id: session[:current_user_id])
+    @current_user ||= current_session&.user
   end
 
-  def user_sign_in(user)
-    session[:current_user_id] = user.id
+  def current_session
+    @current_session ||= Session.find_by(uuid: session[:current_session_id])
+  end
+
+  def user_sign_in(user_session)
+    session[:current_session_id] = user_session.uuid
   end
 
   def user_sign_out
-    session[:current_user_id] = nil
+    session[:current_session_id] = nil
     @current_user = nil
+    @current_session = nil
   end
 
   def with_locale(&action)

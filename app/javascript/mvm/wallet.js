@@ -6,34 +6,9 @@ import { ERC20ABI } from './abis';
 import { RegistryContract } from './registry';
 import { NativeAssetId } from './constants';
 import BigNumber from 'bignumber.js';
-import { notify } from '../utils';
 
 export const MVM_CHAIN_ID = '0x120c7';
 export const MVM_RPC_URL = 'https://geth.mvm.dev';
-
-export async function initWallet() {
-  if (!window.w3) {
-    let walletConnect = localStorage.getItem('walletconnect');
-    walletConnect = walletConnect && JSON.parse(walletConnect);
-
-    let isCoinbaseWallet = localStorage.getItem('isCoinbaseWallet');
-
-    if (walletConnect && walletConnect.connected) {
-      await initWalletConnect();
-    } else if (isCoinbaseWallet) {
-      await initCoinBase();
-    } else if (window.ethereum && ethereum.isConnected()) {
-      await initMetaMask();
-    } else {
-      throw new Error('No wallet connected');
-    }
-  }
-
-  w3.currentProvider.on('networkChanged', () => {
-    notify('Network changed');
-    Turbo.visit(location.pathname);
-  });
-}
 
 export async function initCoinBase() {
   const coinbaseWallet = new CoinbaseWalletSDK({
@@ -46,6 +21,7 @@ export async function initCoinBase() {
 
   const addresses = await w3.currentProvider.enable();
   localStorage.setItem('isCoinbaseWallet', addresses);
+  w3.provider = 'Coinbase';
 }
 
 export async function initMetaMask() {
@@ -55,6 +31,7 @@ export async function initMetaMask() {
   await ethereum.request({ method: 'eth_requestAccounts' });
 
   window.w3 = new Web3(ethereum);
+  w3.provider = 'MetaMask';
 }
 
 export async function initWalletConnect() {
@@ -72,10 +49,10 @@ export async function initWalletConnect() {
 
   await provider.enable();
   window.w3 = new Web3(provider);
+  w3.provider = 'WalletConnect';
 }
 
 export async function switchToMVM() {
-  if (!window.w3) initWallet();
   if (!w3.currentProvider.isMetaMask && !w3.currentProvider.isCoinbaseWallet)
     return;
 
@@ -98,8 +75,6 @@ export async function switchToMVM() {
 }
 
 export async function balanceOf(assetId, account) {
-  await initWallet();
-
   if (!account) {
     const accounts = await w3.eth.getAccounts();
     account = accounts[0];

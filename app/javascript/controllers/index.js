@@ -28,9 +28,6 @@ application.register('confirm', ConfirmController);
 import DarkmodeController from './darkmode_controller';
 application.register('darkmode', DarkmodeController);
 
-import DisconnectController from './disconnect_controller';
-application.register('disconnect', DisconnectController);
-
 import DropdownController from './dropdown_controller';
 application.register('dropdown', DropdownController);
 
@@ -90,6 +87,9 @@ application.register('select-currency', SelectCurrencyController);
 
 import SelectMenuController from './select_menu_controller';
 application.register('select-menu', SelectMenuController);
+
+import SessionController from './session_controller';
+application.register('session', SessionController);
 
 import SidebarController from './sidebar_controller';
 application.register('sidebar', SidebarController);

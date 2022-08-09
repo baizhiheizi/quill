@@ -1,5 +1,5 @@
 import { Controller } from '@hotwired/stimulus';
-import { initWallet, MVM_CHAIN_ID, switchToMVM } from '../mvm/wallet';
+import { MVM_CHAIN_ID, switchToMVM } from '../mvm/wallet';
 
 export default class extends Controller {
   static values = {
@@ -55,7 +55,6 @@ export default class extends Controller {
 
   async checkMVM() {
     if (this.typeValue === 'MVMPreOrder') {
-      await initWallet();
       if (!w3) return;
       await switchToMVM();
 

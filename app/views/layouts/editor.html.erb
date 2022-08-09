@@ -37,7 +37,10 @@
     <%= javascript_include_tag "mvm", "data-turbo-track": "reload", defer: true %>
   </head>
 
-  <body>
+  <body data-controller='session'
+        data-session-provider-value="<%= current_session&.info&.[]('provider') %>"
+        data-session-address-value="<%= current_session&.user&.uid %>"
+        data-session-uuid-value="<%= current_session&.uuid %>">
     <main class="bg-zinc-50 dark:bg-zinc-800 dark:text-zinc-50">
       <div class="max-w-xl lg:max-w-2xl 2xl:max-w-3xl mx-auto">
         <%= yield %>

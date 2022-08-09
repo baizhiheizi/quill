@@ -151,8 +151,7 @@
               <%= link_to t("disconnect"), 
                 logout_path, 
                 data: {
-                  controller: 'disconnect',
-                  action: 'disconnect#clearWalletCache'
+                  action: 'session#destroy'
                 },
                 class: "block px-4 py-2 text-sm opacity-70 hover:bg-zinc-100 dark:hover:bg-zinc-800", 
                 role: "menuitem", 
@@ -273,8 +272,7 @@
             <%= link_to t("disconnect"),
               logout_path, 
               data: {
-                controller: 'disconnect',
-                action: 'disconnect#clearWalletCache'
+                action: 'session#destroy'
               },
               class: "block px-3 py-2 text-base font-medium focus:bg-blue-50 focus:text-primary rounded-md" %>
           </div>

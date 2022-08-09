@@ -23,7 +23,7 @@ class SessionsController < ApplicationController
       end
 
     if user.present?
-      user_sign_in(user)
+      user_sign_in user.sessions.create!(info: { request: request_info })
       user.notify_for_login
       redirect_to (params[:return_to].presence || root_path), success: t('connected')
     else
@@ -40,7 +40,7 @@ class SessionsController < ApplicationController
       end
 
     if user.present?
-      user_sign_in user
+      user_sign_in user.sessions.create! info: { request: request_info }
       redirect_to (params[:return_to].presence || root_path), success: t('connected')
     else
       redirect_to (params[:return_to].presence || root_path), alert: t('failed_to_connect')
@@ -50,13 +50,17 @@ class SessionsController < ApplicationController
   def mvm
     user =
       begin
-        User.auth_from_mvm_eth params[:public_key], params[:signature]
+        User.auth_from_mvm_eth(
+          params[:public_key],
+          params[:signature]
+        )
       rescue MVM::Error
         nil
       end
 
     if user.present?
-      user_sign_in(user)
+      user_session = user.sessions.create(info: { request: request_info, provider: params[:provider] })
+      user_sign_in user_session
       redirect_to (params[:return_to].presence || root_path), success: t('connected')
     else
       redirect_to (params[:return_to].presence || root_path), alert: t('failed_to_connect')
@@ -66,15 +70,24 @@ class SessionsController < ApplicationController
   def nounce
     return if params[:public_key].blank?
 
-    nounce = SecureRandom.random_number 1_000_000
-    Global.redis.set params[:public_key], { nounce: nounce }.to_json, ex: 5.minutes
+    session_id = SecureRandom.uuid
+    Global.redis.set params[:public_key], { session: session_id }.to_json, ex: 5.minutes
 
-    render json: { nounce: nounce }
+    render json: { session: session_id }
   end
 
   def delete
     user_sign_out
 
     redirect_to root_path
+  end
+
+  private
+
+  def request_info
+    {
+      ip: request.ip,
+      user_agent: request.user_agent
+    }
   end
 end

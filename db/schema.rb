@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_08_05_032553) do
+ActiveRecord::Schema[7.0].define(version: 2022_08_09_030453) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
   enable_extension "pgcrypto"
@@ -385,6 +385,16 @@ ActiveRecord::Schema[7.0].define(version: 2022_08_05_032553) do
     t.index ["item_type", "item_id"], name: "index_pre_orders_on_item"
     t.index ["payee_id"], name: "index_pre_orders_on_payee_id"
     t.index ["payer_id"], name: "index_pre_orders_on_payer_id"
+  end
+
+  create_table "sessions", force: :cascade do |t|
+    t.bigint "user_id"
+    t.uuid "uuid"
+    t.json "info"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_sessions_on_user_id"
+    t.index ["uuid"], name: "index_sessions_on_uuid", unique: true
   end
 
   create_table "statistics", force: :cascade do |t|

@@ -1,6 +1,6 @@
 import { Controller } from '@hotwired/stimulus';
 import { notify, showLoading, hideLoading } from '../../utils';
-import { balanceOf, initWallet, MVM_CHAIN_ID, switchToMVM } from '../wallet';
+import { balanceOf, MVM_CHAIN_ID, switchToMVM } from '../wallet';
 import { payWithMVM } from '../pay';
 
 export default class extends Controller {
@@ -25,9 +25,7 @@ export default class extends Controller {
 
   async assetIdValueChanged() {
     if (!this.assetIdValue) return;
-    if (!window.w3) {
-      await initWallet();
-    }
+    if (!window.w3) return;
 
     const accounts = await w3.eth.getAccounts();
     const balance = await balanceOf(this.assetIdValue, accounts[0]);
@@ -36,27 +34,26 @@ export default class extends Controller {
   }
 
   metaMaskIconTargetConnected() {
-    window.w3 &&
-      w3.currentProvider.isMetaMask &&
+    if (w3.provider === 'MetaMask') {
       this.metaMaskIconTarget.classList.remove('hidden');
+    }
   }
 
   walletConnectIconTargetConnected() {
-    window.w3 &&
-      w3.currentProvider.wc &&
+    if (w3.provider === 'WalletConnect') {
       this.walletConnectIconTarget.classList.remove('hidden');
+    }
   }
 
   coinbaseIconTargetConnected() {
-    window.w3 &&
-      w3.currentProvider.isCoinbaseWallet &&
+    if (w3.provider === 'Coinbase') {
       this.coinbaseIconTarget.classList.remove('hidden');
+    }
   }
 
   async pay(event) {
     event.preventDefault();
 
-    await initWallet();
     await switchToMVM();
     if (parseInt(w3.currentProvider.chainId) !== parseInt(MVM_CHAIN_ID)) {
       notify('Switch to MVM Chain before paying', 'danger');
@@ -68,15 +65,7 @@ export default class extends Controller {
 
     this.lockButton();
     try {
-      let provider;
-      if (w3.currentProvider.isMetaMask) {
-        provider = 'MetaMask';
-      } else if (w3.currentProvider.wc) {
-        provider = w3.currentProvider.wc.peerMeta.name;
-      } else if (w3.currentProvider.isCoinbaseWallet) {
-        provider = 'Coinbase Wallet';
-      }
-      notify(`Invoking ${provider} to pay ${amount} ${symbol}`, 'info');
+      notify(`Invoking ${w3.provider} to pay ${amount} ${symbol}`, 'info');
 
       await payWithMVM(
         { assetId, symbol, amount, opponentIds, threshold, memo, mixinUuid },
