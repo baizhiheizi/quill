@@ -20,7 +20,6 @@ export default class extends Controller {
     w3.currentProvider.on('chainChanged', (chainId) => {
       console.warn(`Chain changed to ${chainId}`);
       notify(`Network changed to ${chainId}`);
-      Turbo.visit(location.pathname);
     });
 
     w3.currentProvider.on('disconnect', () => {
