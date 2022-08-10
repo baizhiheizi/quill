@@ -28,7 +28,7 @@ class ApplicationController < ActionController::Base
   end
 
   def authenticate_user!
-    return root_path if current_user.blank?
+    redirect_to root_path if current_user.blank?
   end
 
   def current_user
