@@ -55,6 +55,8 @@ class User < ApplicationRecord
   has_many :pre_orders, primary_key: :mixin_uuid, foreign_key: :payer_id, dependent: :restrict_with_exception, inverse_of: :payer
   has_many :sessions, dependent: :restrict_with_exception
 
+  has_many :arweave_transactions, primary_key: :mixin_uuid, foreign_key: :signer_id, dependent: :restrict_with_exception, inverse_of: :signer
+
   has_one :wallet, class_name: 'MixinNetworkUser', as: :owner, dependent: :nullify
   has_one :notification_setting, dependent: :destroy
 

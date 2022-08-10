@@ -150,7 +150,7 @@ gem 'enumerize'
 # A framework for building reusable, testable & encapsulated view components in Ruby on Rails.
 gem 'view_component'
 
-# Saves your data permanent and let your customers own their data. 
+# Saves your data permanent and let your customers own their data.
 gem 'arweave', github: 'baizhiheizi/arweave-ruby'
 
 # deploy
