@@ -27,7 +27,7 @@
     "bignumber.js": "^9.1.0",
     "buffer": "^6.0.3",
     "easymde": "^2.16.1",
-    "esbuild": "^0.14.54",
+    "esbuild": "^0.15.0",
     "highlight.js": "^11.6.0",
     "json-rpc-engine": "^6.1.0",
     "mixin-messenger-utils": "^0.1.5",
