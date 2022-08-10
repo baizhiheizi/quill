@@ -1,8 +1,7 @@
 import { Controller } from '@hotwired/stimulus';
-import { get, post } from '@rails/request.js';
-import { RegistryContract } from '../mvm/registry';
-import { notify, showLoading, hideLoading } from '../utils';
+import { get } from '@rails/request.js';
 import { NativeAssetId } from '../mvm/constants';
+import { addTokenToMetaMask } from '../mvm/wallet';
 
 export default class extends Controller {
   static values = {
@@ -40,46 +39,15 @@ export default class extends Controller {
       });
   }
 
-  async addToken() {
+  addToken() {
     if (!this.assetIdValue) return;
     if (this.assetIdValue == NativeAssetId) return;
 
-    showLoading();
-    try {
-      const registry = new RegistryContract();
-      const assetContractAddress = await registry.fetchAssetContract(
-        this.assetIdValue,
-      );
-
-      if (!assetContractAddress || !parseInt(assetContractAddress)) {
-        notify(`Desposit some ${this.assetSymbolValue} first`, 'warning');
-        return;
-      }
-
-      await ethereum
-        .request({
-          method: 'wallet_watchAsset',
-          params: {
-            type: 'ERC20',
-            options: {
-              address: assetContractAddress,
-              symbol: this.assetSymbolValue,
-              decimals: 8,
-              image: this.assetIconUrlValue,
-            },
-          },
-        })
-        .then((success) => {
-          if (success) {
-            notify(`Successfully add ${this.assetSymbolValue}`, 'success');
-          } else {
-            notify(`Failed to add ${this.assetSymbolValue}`, 'warning');
-          }
-        });
-    } catch (error) {
-      notify(error, 'danger');
-    }
-    hideLoading();
+    addTokenToMetaMask(
+      this.assetIdValue,
+      this.assetSymbolValue,
+      this.assetIconUrlValue,
+    );
   }
 
   selectCurrency(event) {

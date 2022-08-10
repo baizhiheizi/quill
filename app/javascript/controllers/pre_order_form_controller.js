@@ -1,5 +1,5 @@
 import { Controller } from '@hotwired/stimulus';
-import { MVM_CHAIN_ID, switchToMVM } from '../mvm/wallet';
+import { isCurrentNetworkMvm, switchToMVM } from '../mvm/wallet';
 
 export default class extends Controller {
   static values = {
@@ -55,10 +55,9 @@ export default class extends Controller {
 
   async checkMVM() {
     if (this.typeValue === 'MVMPreOrder') {
-      if (!w3) return;
       await switchToMVM();
 
-      if (parseInt(w3.currentProvider.chainId) !== parseInt(MVM_CHAIN_ID)) {
+      if (!isCurrentNetworkMvm()) {
         let input = this.submitButtonTarget.querySelector('input[type=submit]');
         if (!input) return;
 

@@ -1,6 +1,11 @@
 import { Controller } from '@hotwired/stimulus';
 import { notify, showLoading, hideLoading } from '../utils';
-import { balanceOf, MVM_CHAIN_ID, switchToMVM } from '../mvm/wallet';
+import {
+  balanceOf,
+  currentAccount,
+  isCurrentNetworkMvm,
+  switchToMVM,
+} from '../mvm/wallet';
 import { payWithMVM } from '../mvm/pay';
 
 export default class extends Controller {
@@ -25,12 +30,13 @@ export default class extends Controller {
 
   async assetIdValueChanged() {
     if (!this.assetIdValue) return;
-    if (!window.w3) return;
 
-    const accounts = await w3.eth.getAccounts();
-    const balance = await balanceOf(this.assetIdValue, accounts[0]);
+    const account = await currentAccount();
+    if (!account) return;
+
+    const balance = await balanceOf(this.assetIdValue, account);
     this.balanceValueTarget.innerText = `${balance} ${this.assetSymbolValue}`;
-    this.balanceLinkTarget.href = `https://scan.mvm.dev/address/${accounts[0]}/tokens#address-tabs`;
+    this.balanceLinkTarget.href = `https://scan.mvm.dev/address/${account}/tokens#address-tabs`;
   }
 
   metaMaskIconTargetConnected() {
@@ -55,7 +61,7 @@ export default class extends Controller {
     event.preventDefault();
 
     await switchToMVM();
-    if (parseInt(w3.currentProvider.chainId) !== parseInt(MVM_CHAIN_ID)) {
+    if (!isCurrentNetworkMvm()) {
       notify('Switch to MVM Chain before paying', 'danger');
       return;
     }

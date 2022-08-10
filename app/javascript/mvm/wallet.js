@@ -99,3 +99,56 @@ export async function balanceOf(assetId, account) {
 
   return balance.toString();
 }
+
+export async function addTokenToMetaMask(assetId, assetSymbol, assetIconUrl) {
+  if (!w3) return;
+  if (w3.provider !== 'MetaMask') return;
+  if (assetId === NativeAssetId) return;
+
+  try {
+    const registry = new RegistryContract();
+    const assetContractAddress = await registry.fetchAssetContract(assetId);
+
+    if (!assetContractAddress || !parseInt(assetContractAddress)) {
+      notify(`Asset ${assetSymbol} not registered yet`, 'warning');
+      return;
+    }
+
+    await ethereum
+      .request({
+        method: 'wallet_watchAsset',
+        params: {
+          type: 'ERC20',
+          options: {
+            address: assetContractAddress,
+            symbol: assetSymbol,
+            decimals: 8,
+            image: assetIconUrl,
+          },
+        },
+      })
+      .then((success) => {
+        if (success) {
+          notify(`Successfully add ${assetSymbol}`, 'success');
+        } else {
+          notify(`Failed to add ${assetSymbol}`, 'warning');
+        }
+      });
+  } catch (error) {
+    notify(error, 'danger');
+  }
+}
+
+export function isCurrentNetworkMvm() {
+  if (w3) {
+    return parseInt(w3.currentProvider.chainId) === parseInt(MVM_CHAIN_ID);
+  } else {
+    return false;
+  }
+}
+
+export async function currentAccount() {
+  if (!w3) return;
+  const accounts = await w3.eth.getAccounts();
+  return accounts[0];
+}
