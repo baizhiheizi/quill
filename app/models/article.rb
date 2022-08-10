@@ -76,6 +76,8 @@ class Article < ApplicationRecord
   has_many :article_citers, class_name: 'CiterReference', as: :reference, dependent: :restrict_with_error
   has_many :citers, through: :article_citers, source: :citer, source_type: 'Article'
 
+  has_many :arweave_transactions, dependent: :restrict_with_error
+
   has_many_attached :images
 
   accepts_nested_attributes_for :article_references, reject_if: proc { |attributes| attributes['reference_id'].blank? || attributes['revenue_ratio'].blank? }, allow_destroy: true
@@ -272,6 +274,12 @@ class Article < ApplicationRecord
     create_wallet_async
     notify_for_first_published_async
     subscribe_comments_for_author
+  end
+
+  def sign_on_arweave_as_author
+    arweave_transactions.create(
+      signer: author
+    )
   end
 
   def generate_snapshot
