@@ -1,8 +1,9 @@
 <div data-controller="login" class="">
   <div data-login-target="eth">
-    <div data-controller="metamask" class="flex justify-center mb-2">
-      <a data-metamask-target="loginButton" 
-        data-action="metamask#login" 
+    <div data-controller="eth-wallet" class="flex justify-center mb-2">
+      <a data-eth-wallet-target="loginButton" 
+        data-action="eth-wallet#login" 
+        data-eth-wallet-provier-param="MetaMask"
         href="https://metamask.io"
         target="_blank"
         class="relative px-2 py-3 bg-stone-100 hover:bg-stone-200 dark:bg-stone-800 dark:hover:bg-stone-700 rounded-lg flex items-center justify-center text-lg w-96 hover:scale-105">
@@ -13,9 +14,10 @@
       </a>
     </div>
 
-    <div data-controller="coinbase" class="flex justify-center mb-2">
-      <button data-coinbase-target="loginButton" 
-        data-action="coinbase#login" 
+    <div data-controller="eth-wallet" class="flex justify-center mb-2">
+      <button data-eth-wallet-target="loginButton" 
+        data-action="eth-wallet#login" 
+        data-eth-wallet-provier-param="Coinbase"
         class="relative block px-2 py-3 bg-stone-100 hover:bg-stone-200 dark:bg-stone-800 dark:hover:bg-stone-700 rounded-lg flex items-center justify-center text-lg w-96 hover:scale-105">
         <div class="w-8 h-8 flex absolute left-4">
           <%= image_tag 'coinbase.svg', class: 'w-full h-auto' %>
@@ -24,9 +26,10 @@
       </button>
     </div>
 
-    <div data-controller="wallet-connect" class="flex justify-center mb-2">
+    <div data-controller="eth-wallet" class="flex justify-center mb-2">
       <a data-metamask-target="loginButton" 
-        data-action="wallet-connect#login" 
+        data-action="eth-wallet#login" 
+        data-eth-wallet-provier-param="WalletConnect"
         href="https://walletconnect.com"
         target="_blank"
         class="relative px-2 py-3 bg-stone-100 hover:bg-stone-200 dark:bg-stone-800 dark:hover:bg-stone-700 rounded-lg flex items-center justify-center text-lg w-96 hover:scale-105">

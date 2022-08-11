@@ -1,24 +1,23 @@
-import Web3 from 'web3/dist/web3.min.js';
 import { RegistryABI } from './abis';
 import { RegisterAddress } from './constants';
 import { Buffer } from 'buffer';
 
 export class RegistryContract {
-  constructor() {
-    if (!window.w3) {
-      throw new Error('No wallet provider found');
-    }
+  private web3: any;
+  public Contract: any;
 
-    this.Contract = new window.w3.eth.Contract(RegistryABI, RegisterAddress);
+  constructor(web3: any) {
+    this.web3 = web3;
+    this.Contract = new web3.eth.Contract(RegistryABI, RegisterAddress);
   }
 
-  fetchAssetContract(assetId) {
+  fetchAssetContract(assetId: string) {
     return this.Contract.methods
       .contracts(`0x${assetId.replaceAll('-', '')}`)
       .call();
   }
 
-  fetchUsersContract(userIds, threshold = 1) {
+  fetchUsersContract(userIds: string[], threshold = 1) {
     const bufLen = Buffer.alloc(2);
     bufLen.writeUInt16BE(userIds.length);
     const bufThres = Buffer.alloc(2);
@@ -28,7 +27,7 @@ export class RegistryContract {
       'hex',
     )}`;
     return this.Contract.methods
-      .contracts(Web3.utils.keccak256(identity))
+      .contracts(this.web3.utils.keccak256(identity))
       .call();
   }
 }

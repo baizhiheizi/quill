@@ -1,7 +1,6 @@
 import { Controller } from '@hotwired/stimulus';
 import { get } from '@rails/request.js';
 import { NativeAssetId } from '../mvm/constants';
-import { addTokenToMetaMask } from '../mvm/wallet';
 
 export default class extends Controller {
   static values = {
@@ -41,9 +40,8 @@ export default class extends Controller {
 
   addToken() {
     if (!this.assetIdValue) return;
-    if (this.assetIdValue == NativeAssetId) return;
 
-    addTokenToMetaMask(
+    Wallet.addTokenToMetaMask(
       this.assetIdValue,
       this.assetSymbolValue,
       this.assetIconUrlValue,

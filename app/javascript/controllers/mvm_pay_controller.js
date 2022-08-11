@@ -1,12 +1,5 @@
 import { Controller } from '@hotwired/stimulus';
 import { notify, showLoading, hideLoading } from '../utils';
-import {
-  balanceOf,
-  currentAccount,
-  isCurrentNetworkMvm,
-  switchToMVM,
-} from '../mvm/wallet';
-import { payWithMVM } from '../mvm/pay';
 
 export default class extends Controller {
   static targets = [
@@ -31,28 +24,28 @@ export default class extends Controller {
   async assetIdValueChanged() {
     if (!this.assetIdValue) return;
 
-    const account = await currentAccount();
+    const account = await Wallet.account;
     if (!account) return;
 
-    const balance = await balanceOf(this.assetIdValue, account);
+    const balance = await Wallet.balanceOf(this.assetIdValue, account);
     this.balanceValueTarget.innerText = `${balance} ${this.assetSymbolValue}`;
     this.balanceLinkTarget.href = `https://scan.mvm.dev/address/${account}/tokens#address-tabs`;
   }
 
   metaMaskIconTargetConnected() {
-    if (w3.provider === 'MetaMask') {
+    if (Wallet.provider === 'MetaMask') {
       this.metaMaskIconTarget.classList.remove('hidden');
     }
   }
 
   walletConnectIconTargetConnected() {
-    if (w3.provider === 'WalletConnect') {
+    if (Wallet.provider === 'WalletConnect') {
       this.walletConnectIconTarget.classList.remove('hidden');
     }
   }
 
   coinbaseIconTargetConnected() {
-    if (w3.provider === 'Coinbase') {
+    if (Wallet.provider === 'Coinbase') {
       this.coinbaseIconTarget.classList.remove('hidden');
     }
   }
@@ -60,8 +53,8 @@ export default class extends Controller {
   async pay(event) {
     event.preventDefault();
 
-    await switchToMVM();
-    if (!isCurrentNetworkMvm()) {
+    await Wallet.switchToMVM();
+    if (!Wallet.isCurrentNetworkMvm()) {
       notify('Switch to MVM Chain before paying', 'danger');
       return;
     }
@@ -71,9 +64,9 @@ export default class extends Controller {
 
     this.lockButton();
     try {
-      notify(`Invoking ${w3.provider} to pay ${amount} ${symbol}`, 'info');
+      notify(`Invoking ${Wallet.provider} to pay ${amount} ${symbol}`, 'info');
 
-      await payWithMVM(
+      await Wallet.payWithMVM(
         { assetId, symbol, amount, opponentIds, threshold, memo, mixinUuid },
         (hash) => {
           notify('Transaction submitted', 'success');

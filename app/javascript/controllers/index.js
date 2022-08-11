@@ -19,9 +19,6 @@ application.register('buy-article-payment', BuyArticlePaymentController);
 import ClipboardController from './clipboard_controller';
 application.register('clipboard', ClipboardController);
 
-import CoinbaseController from './coinbase_controller';
-application.register('coinbase', CoinbaseController);
-
 import CommentFormController from './comment_form_controller';
 application.register('comment-form', CommentFormController);
 
@@ -33,6 +30,9 @@ application.register('darkmode', DarkmodeController);
 
 import DropdownController from './dropdown_controller';
 application.register('dropdown', DropdownController);
+
+import EthWalletController from './eth_wallet_controller';
+application.register('eth-wallet', EthWalletController);
 
 import FennecController from './fennec_controller';
 application.register('fennec', FennecController);
@@ -51,9 +51,6 @@ application.register('load-more', LoadMoreController);
 
 import LoginController from './login_controller';
 application.register('login', LoginController);
-
-import MetamaskController from './metamask_controller';
-application.register('metamask', MetamaskController);
 
 import ModalController from './modal_controller';
 application.register('modal', ModalController);
@@ -123,6 +120,3 @@ application.register('textarea-autogrow', TextareaAutogrowController);
 
 import ToastController from './toast_controller';
 application.register('toast', ToastController);
-
-import WalletConnectController from './wallet_connect_controller';
-application.register('wallet-connect', WalletConnectController);

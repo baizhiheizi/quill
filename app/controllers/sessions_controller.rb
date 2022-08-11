@@ -54,7 +54,9 @@ class SessionsController < ApplicationController
           params[:public_key],
           params[:signature]
         )
-      rescue MVM::Error
+      rescue MVM::Error => e
+        raise e if Rails.env.development?
+
         nil
       end
 

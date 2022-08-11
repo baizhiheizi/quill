@@ -1,5 +1,5 @@
 import { Controller } from '@hotwired/stimulus';
-import { initCoinBase, initMetaMask, initWalletConnect } from '../mvm/wallet';
+import { EthWallet } from '../mvm/eth_wallet';
 import { notify } from '../utils';
 
 export default class extends Controller {
@@ -13,16 +13,14 @@ export default class extends Controller {
     if (!this.providerValue) return;
 
     await this.initWallet();
-    if (!w3) return;
+    if (!window.Wallet) return;
 
-    w3.provider = this.providerValue;
-
-    w3.currentProvider.on('chainChanged', (chainId) => {
+    Wallet.web3.currentProvider.on('chainChanged', (chainId) => {
       console.warn(`Chain changed to ${chainId}`);
       notify(`Network changed to ${chainId}`);
     });
 
-    w3.currentProvider.on('disconnect', () => {
+    Wallet.web3.currentProvider.on('disconnect', () => {
       console.warn('Disconnect');
       Turbo.visit('/logout');
     });
@@ -32,9 +30,9 @@ export default class extends Controller {
     if (!this.addressValue) return;
 
     await this.initWallet();
-    if (!w3) return;
+    if (!window.Wallet) return;
 
-    w3.currentProvider.on('accountsChanged', (accounts) => {
+    Wallet.web3.currentProvider.on('accountsChanged', (accounts) => {
       notify('Account changed');
 
       if (accounts[0].toLowerCase() !== this.addressValue.toLowerCase()) {
@@ -46,30 +44,28 @@ export default class extends Controller {
 
   async initWallet() {
     if (!this.providerValue) return;
-    if (window.w3) return;
+    if (window.Wallet) return;
 
-    switch (this.providerValue) {
-      case 'MetaMask':
-        await initMetaMask();
-        break;
-      case 'WalletConnect':
-        await initWalletConnect();
-        break;
-      case 'Coinbase':
-        await initCoinBase();
-        break;
-      default:
-        break;
-    }
+    window.Wallet = new EthWallet(this.providerValue, {
+      name: 'Quill',
+      logoUrl: `${location.host}/logo.svg`,
+    });
+    await Wallet.init();
 
-    if (!window.w3) {
+    if (!window.Wallet) {
       console.warn('Failed to init wallet');
     }
   }
 
   destroy() {
-    if (!w3 || !w3.currentProvider || !w3.currentProvider.disconnect) return;
+    if (
+      !window.Wallet ||
+      !window.Wallet.web3 ||
+      !window.Wallet.web3.currentProvider ||
+      !window.Wallet.web3.currentProvider.disconnect
+    )
+      return;
 
-    w3.currentProvider.disconnect();
+    Wallet.web3.currentProvider.disconnect();
   }
 }
