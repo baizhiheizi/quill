@@ -69,6 +69,7 @@ zh-CN:
   polling_payment: 支付结果查询中
   refund_warning: 支付失败，已原路退款。请重新支付。
   buy_article: 购买文章
+  reward_article: 赞赏
   reward: 赞赏
   finish: 完成
   later: 再想想

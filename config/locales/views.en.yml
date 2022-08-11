@@ -69,6 +69,7 @@ en:
   polling_payment: Checking Payment Status
   refund_warning: Payment has been refunded. Please try again.
   buy_article: Buy Post
+  reward_article: Reward Post
   reward: Reward
   finish: Finish
   later: Later
