@@ -4,7 +4,7 @@ import { get } from '@rails/request.js';
 export default class extends Controller {
   static values = {
     followId: String,
-    interval: 3000,
+    interval: 2000,
   };
 
   connect() {

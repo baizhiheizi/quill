@@ -1,4 +1,6 @@
-<div id="<%= dom_id pre_order %>_state" class="">
+<div id="<%= dom_id pre_order %>_state" 
+  data-controller="pre-order-state" 
+  data-pre-order-state-follow-id-value="<%= pre_order.follow_id %>">
   <%= render partial: "shared/loading" %>
   <div class="text-sm text-center opacity-75">
     <% if pre_order.drafted? %>

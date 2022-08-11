@@ -37,7 +37,7 @@ class PreOrdersController < ApplicationController
     redirect_url =
       if @pre_order.blank?
         root_path
-      elsif @pre_order.item.authorized?(current_user)
+      elsif @pre_order.paid?
         user_article_path @pre_order.item.author, @pre_order.item
       end
 
