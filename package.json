@@ -24,7 +24,6 @@
     "autoprefixer": "^10.4.8",
     "babel-plugin-import": "^1.13.5",
     "babel-plugin-macros": "^3.1.0",
-    "bignumber.js": "^9.1.0",
     "buffer": "^6.0.3",
     "easymde": "^2.16.1",
     "esbuild": "^0.14.54",

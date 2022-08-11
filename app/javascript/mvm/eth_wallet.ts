@@ -8,10 +8,10 @@ import {
   MVM_CHAIN_ID,
   MVM_RPC_URL,
   RPC_LIST,
+  RegisterAddress,
+  MVM_CONFIG,
 } from './constants';
-import { RegistryContract } from './registry';
-import { BridgeABI, ERC20ABI } from './abis';
-import BigNumber from 'bignumber.js';
+import { BridgeABI, ERC20ABI, RegistryABI } from './abis';
 import WalletConnectProvider from '@walletconnect/web3-provider/dist/umd/index.min.js';
 import Web3 from 'web3/dist/web3.min.js';
 
@@ -25,7 +25,7 @@ export class EthWallet {
   public web3: any;
   public account: string;
   public app: AppType;
-  public Registry: RegistryContract;
+  public Registry: any;
 
   constructor(
     provider: 'MetaMask' | 'Coinbase' | 'WalletConnect',
@@ -54,9 +54,7 @@ export class EthWallet {
     const accounts = await this.web3.eth.getAccounts();
     this.account = accounts[0];
 
-    this.Registry = new RegistryContract(this.web3);
-
-    return this.web3;
+    this.Registry = new this.web3.eth.Contract(RegistryABI, RegisterAddress);
   }
 
   async initMetaMask() {
@@ -106,17 +104,18 @@ export class EthWallet {
       fail(new Error('Memo too long!'));
       return;
     }
-    const contract = await this.Registry.fetchUsersContract([mixinUuid], 1);
+
+    const contract = await this.fetchUsersContract([mixinUuid], 1);
     if (!contract || !parseInt(contract)) {
       fail(new Error('User contract empty, please deposit some asset first.'));
       return;
     }
+
     const { extra } = await this.fetchExtra(opponentIds, threshold, memo);
 
     if (assetId === NativeAssetId) {
       return this.payNative(
         {
-          assetId,
           symbol,
           amount,
           contract,
@@ -152,24 +151,22 @@ export class EthWallet {
     fail: (error: Error) => void,
   ) {
     const { assetId, symbol, amount, contract, extra } = params;
-    const assetContractAddress = await this.Registry.fetchAssetContract(
-      assetId,
-    );
+    const assetContractAddress = await this.fetchAssetContract(assetId);
     if (!assetContractAddress || !parseInt(assetContractAddress)) {
       fail(new Error(`${symbol} not registered yet`));
       return;
     }
 
     const IERC20 = new this.web3.eth.Contract(ERC20ABI, assetContractAddress);
-    IERC20.options.gasPrice = GasPrice;
 
-    const balance = await this.balanceOf(assetId, this.account);
-    if (BigNumber(balance).isLessThan(BigNumber(amount))) {
+    const balance = await IERC20.methods.balanceOf(this.account).call();
+    const payAmount = this.web3.utils.BN(parseFloat(amount) * 1e8);
+    if (this.web3.utils.BN(balance).lt(payAmount)) {
       fail(new Error('Insufficient balance'));
       return;
     }
-    let payAmount = BigNumber(amount).multipliedBy(BigNumber(1e8));
 
+    IERC20.options.gasPrice = GasPrice;
     IERC20.methods
       .transferWithExtra(contract, payAmount.toString(), `0x${extra}`)
       .send({ from: this.account })
@@ -179,7 +176,6 @@ export class EthWallet {
 
   async payNative(
     params: {
-      assetId: string;
       symbol: string;
       amount: string;
       contract: string;
@@ -188,16 +184,16 @@ export class EthWallet {
     success: () => void,
     fail: (error: Error) => void,
   ) {
-    const { assetId, amount, contract, extra } = params;
+    const { amount, contract, extra } = params;
     const BridgeContract = new this.web3.eth.Contract(BridgeABI, BridgeAddress);
     BridgeContract.options.gasPrice = GasPrice;
 
-    const balance = await this.balanceOf(assetId, this.account);
-    if (BigNumber(balance).isLessThan(BigNumber(amount))) {
+    const balance = await this.web3.eth.getBalance(this.account);
+    const payAmount = this.web3.utils.BN(parseFloat(amount) * 1e18);
+    if (this.web3.utils.BN(balance).lt(payAmount)) {
       fail(new Error('Insufficient balance'));
       return;
     }
-    const payAmount = BigNumber(amount).multipliedBy(BigNumber(1e18));
 
     BridgeContract.methods
       .release(contract, `0x${extra}`)
@@ -231,19 +227,7 @@ export class EthWallet {
 
     this.web3.currentProvider.request({
       method: 'wallet_addEthereumChain',
-      params: [
-        {
-          chainId: MVM_CHAIN_ID,
-          chainName: 'Mixin Virtual Machine',
-          nativeCurrency: {
-            name: 'ETH',
-            symbol: 'ETH',
-            decimals: 18,
-          },
-          rpcUrls: ['https://geth.mvm.dev'],
-          blockExplorerUrls: ['https://scan.mvm.dev/'],
-        },
-      ],
+      params: [MVM_CONFIG],
     });
   }
 
@@ -257,9 +241,7 @@ export class EthWallet {
     if (!this.web3.currentProvider.isMetaMask) return;
     if (assetId === NativeAssetId) return;
 
-    const assetContractAddress = await this.Registry.fetchAssetContract(
-      assetId,
-    );
+    const assetContractAddress = await this.fetchAssetContract(assetId);
     if (!assetContractAddress || !parseInt(assetContractAddress)) {
       fail(new Error(`Asset ${assetSymbol} not registered yet`));
       return;
@@ -291,25 +273,41 @@ export class EthWallet {
       account = this.account;
     }
 
-    const registry = new RegistryContract(this.web3);
-    let balance: number | BigNumber = 0;
-
     if (assetId == NativeAssetId) {
-      balance = await this.web3.eth.getBalance(account);
-      balance = BigNumber(balance).dividedBy(1e18);
+      const balance = await this.web3.eth.getBalance(account);
+      return ((balance * 1.0) / 1e18).toString();
     } else {
       try {
-        const assetContractAddress = await registry.fetchAssetContract(assetId);
+        const assetContractAddress = await this.fetchAssetContract(assetId);
         let IERC20 = new this.web3.eth.Contract(ERC20ABI, assetContractAddress);
 
-        balance = await IERC20.methods.balanceOf(account).call();
-        balance = BigNumber(balance).dividedBy(1e8);
+        const balance = await IERC20.methods.balanceOf(account).call();
+        return ((balance * 1.0) / 1e8).toString();
       } catch (error) {
         console.error(error);
+        return '0';
       }
     }
+  }
 
-    return balance.toString();
+  fetchAssetContract(assetId: string) {
+    return this.Registry.methods
+      .contracts(`0x${assetId.replaceAll('-', '')}`)
+      .call();
+  }
+
+  fetchUsersContract(userIds: string[], threshold = 1) {
+    const bufLen = Buffer.alloc(2);
+    bufLen.writeUInt16BE(userIds.length);
+    const bufThres = Buffer.alloc(2);
+    bufThres.writeUInt16BE(threshold);
+    const ids = userIds.join('').replaceAll('-', '');
+    const identity = `0x${bufLen.toString('hex')}${ids}${bufThres.toString(
+      'hex',
+    )}`;
+    return this.Registry.methods
+      .contracts(this.web3.utils.keccak256(identity))
+      .call();
   }
 
   isCurrentNetworkMvm() {

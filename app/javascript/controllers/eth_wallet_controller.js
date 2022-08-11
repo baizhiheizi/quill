@@ -6,8 +6,6 @@ import { EthWallet } from '../mvm/eth_wallet';
 export default class extends Controller {
   static targets = ['loginButton', 'waiting'];
 
-  connect() {}
-
   async login(event) {
     event.preventDefault();
 

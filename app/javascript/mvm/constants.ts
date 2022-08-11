@@ -6,6 +6,18 @@ export const NativeAssetId: string = '43d61dcd-e413-450d-80b8-101d5e903357';
 export const GasPrice: string = '10000000';
 export const MVM_CHAIN_ID: string = '0x120c7';
 export const MVM_RPC_URL: string = 'https://geth.mvm.dev';
+export const MVM_EXPLORER_URL: string = 'https://scan.mvm.dev/';
+export const MVM_CONFIG = {
+  chainId: MVM_CHAIN_ID,
+  chainName: 'Mixin Virtual Machine',
+  nativeCurrency: {
+    name: 'ETH',
+    symbol: 'ETH',
+    decimals: 18,
+  },
+  rpcUrls: [MVM_RPC_URL],
+  blockExplorerUrls: [MVM_EXPLORER_URL],
+};
 export const RPC_LIST = {
   1: 'https://cloudflare-eth.com',
   10: 'https://mainnet.optimism.io',
