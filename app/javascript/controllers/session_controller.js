@@ -21,6 +21,8 @@ export default class extends Controller {
     });
 
     Wallet.web3.currentProvider.on('disconnect', () => {
+      if (Wallet.provider === 'MetaMask') return;
+
       console.warn('Disconnect');
       Turbo.visit('/logout');
     });
