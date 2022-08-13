@@ -11,7 +11,9 @@ import {
   RegisterAddress,
   MVM_CONFIG,
 } from './constants';
-import { BridgeABI, ERC20ABI, RegistryABI } from './abis';
+import BridgeABI from './abis/bridge.json' assert { type: 'json' };
+import ERC20ABI from './abis/erc20.json' assert { type: 'json' };
+import RegistryABI from './abis/registry.json' assert { type: 'json' };
 import WalletConnectProvider from '@walletconnect/web3-provider/dist/umd/index.min.js';
 import Web3 from 'web3/dist/web3.min.js';
 
