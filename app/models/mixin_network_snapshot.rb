@@ -76,6 +76,9 @@ class MixinNetworkSnapshot < ApplicationRecord
     rescue MixinBot::HttpError, MixinBot::RequestError, OpenSSL::SSL::SSLError => e
       p e.inspect
       sleep POLLING_INTERVAL * 10
+    rescue ActiveRecord::StatementInvalid => e
+      p e.inspect
+      connection.reconnect!
     rescue StandardError => e
       p "#{e.inspect}\n#{e.backtrace.join("\n")}"
       ExceptionNotifier.notify_exception e
