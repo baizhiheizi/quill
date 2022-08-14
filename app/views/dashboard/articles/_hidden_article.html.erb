@@ -27,20 +27,9 @@
   </div>
   <div class="text-blue-500 flex items-center space-x-4 sm:justify-end">
     <%= link_to t('edit'), edit_article_path(article.uuid), data: { turbo_action: :replace } %>
-    <%= button_to t('publish'), 
-      dashboard_published_article_path(article.uuid), 
-      form: {
-        data: { 
-          controller: "confirm",
-          confirm_target: "form",
-          confirm_identifier_value: SecureRandom.uuid,
-          confirm_content_value: t("confirm_to_publish") 
-        }
-      },
-      method: :put,
-      data: { 
-        action: "confirm#invoke",
-      }, 
+    <%= link_to t('publish'), 
+      new_dashboard_published_article_path(uuid: article.uuid), 
+      data: { turbo_frame: :modal },
       class: "bg-transparent cursor-pointer" %>
   </div>
 </div>

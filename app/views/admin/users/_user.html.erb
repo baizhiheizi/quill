@@ -41,27 +41,15 @@
       <%= button_to 'Unban', admin_user_unban_path(user),
         form: {
           data: { 
-            controller: "confirm",
-            confirm_target: "form",
-            confirm_identifier_value: SecureRandom.uuid,
-            confirm_content_value: 'Sure to unban?' 
+            turbo_confirm: "Sure to unban?",
           }
-        },
-        data: { 
-          action: "confirm#invoke",
         },
         class: "bg-indigo-500 hover:bg-indigo-600 rounded text-white px-4 py-2" if user.banned? %>
       <%= button_to 'Ban', admin_user_ban_path(user),
         form: {
           data: { 
-            controller: "confirm",
-            confirm_target: "form",
-            confirm_identifier_value: SecureRandom.uuid,
-            confirm_content_value: 'Sure to ban?' 
+            turbo_confirm: "Sure to ban?",
           }
-        },
-        data: { 
-          action: "confirm#invoke",
         },
         class: "bg-red-500 hover:bg-red-600 rounded text-white px-4 py-2" unless user.banned? %>
     </di>

@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 
 class Dashboard::ReadNotificationsController < Dashboard::BaseController
+  def new
+  end
+
   def create
     current_user.notifications.map(&:mark_as_read!)
 

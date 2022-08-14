@@ -4,6 +4,9 @@ class SubscribeTagsController < ApplicationController
   before_action :authenticate_user!
   before_action :load_tag
 
+  def new
+  end
+
   def create
     current_user.create_action :subscribe, target: @tag
     @tag.reload

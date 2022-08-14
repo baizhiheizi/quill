@@ -33,27 +33,15 @@
       <%= button_to 'Recover', admin_comment_undelete_path(comment),
         form: {
           data: { 
-            controller: "confirm",
-            confirm_target: "form",
-            confirm_identifier_value: SecureRandom.uuid,
-            confirm_content_value: 'Sure to recover?' 
+            turbo_confirm: "Sure to recover",
           }
-        },
-        data: { 
-          action: "confirm#invoke",
         },
         class: "bg-indigo-500 hover:bg-indigo-600 rounded text-white px-4 py-2" if comment.deleted? %>
       <%= button_to 'Delete', admin_comment_delete_path(comment),
         form: {
           data: { 
-            controller: "confirm",
-            confirm_target: "form",
-            confirm_identifier_value: SecureRandom.uuid,
-            confirm_content_value: 'Sure to delete?' 
+            turbo_confirm: "Sure to delete",
           }
-        },
-        data: { 
-          action: "confirm#invoke",
         },
         class: "bg-red-500 hover:bg-red-600 rounded text-white px-4 py-2" unless comment.deleted? %>
     </div>

@@ -4,6 +4,9 @@ class SubscribeArticlesController < ApplicationController
   before_action :authenticate_user!
   before_action :load_article
 
+  def new
+  end
+
   def create
     current_user.create_action :commenting_subscribe, target: @article
   end

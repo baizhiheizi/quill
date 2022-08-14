@@ -1,0 +1,14 @@
+<%= turbo_frame_tag 'modal' do %>
+  <%= render ModalComponent.new title: t('delete_article') do %>
+    <div class="w-96 max-w-full mx-auto">
+      <div class="mb-6">
+        <%= t('confirm_to_delete') %>
+      </div>
+      <%= button_to t('delete'), 
+        dashboard_deleted_article_path(@article), 
+        method: :put,
+        class: "block w-full rounded-lg text-white bg-red-500 py-2 text-lg"
+      %>
+    </div>
+  <% end %>
+<% end %>

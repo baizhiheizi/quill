@@ -50,10 +50,11 @@ Rails.application.routes.draw do
   post '/articles/preview', to: 'articles#preview', as: :preview_article
   resources :article_references, only: %i[index], default: { format: :json }
 
-  resources :block_users, only: %i[create destroy], param: :uid
-  resources :subscribe_users, only: %i[create destroy], param: :uid
-  resources :subscribe_articles, only: %i[create destroy], param: :uuid
-  resources :subscribe_tags, only: %i[create destroy]
+  resources :block_users, only: %i[create destroy new], param: :uid
+
+  resources :subscribe_users, only: %i[new create destroy], param: :uid
+  resources :subscribe_articles, only: %i[new create destroy], param: :uuid
+  resources :subscribe_tags, only: %i[new create destroy]
 
   resources :tags, only: %i[index]
 

@@ -18,7 +18,7 @@
       aria-labelledby="user-menu-button" 
       tabindex="-1">
     <% if current_user.block_user?(user) %>
-      <%= button_to block_user_path(user.uid), 
+      <%= link_to block_user_path(user.uid), 
         method: :delete,
         class: "flex items-center cursor-pointer w-full block px-4 py-2 text-sm opacity-70 hover:bg-zinc-100 dark:hover:bg-zinc-800" do %>
         <%= render "shared/icons/ban", html_class: "w-6 h-6 opacity-70" %>
@@ -27,17 +27,9 @@
         </div>
       <% end %>
     <% else %>
-      <%= button_to block_users_path(uid: user.uid), 
-        form: {
-          data: { 
-            controller: "confirm",
-            confirm_target: "form",
-            confirm_identifier_value: SecureRandom.uuid,
-            confirm_content_value: t("confirm_to_block") 
-          }
-        },
+      <%= link_to new_block_user_path(uid: user.uid), 
         data: { 
-          action: "confirm#invoke",
+          turbo_frame: :modal,
         }, 
         class: "flex items-center cursor-pointer w-full block px-4 py-2 text-sm opacity-70 hover:bg-zinc-100 dark:hover:bg-zinc-800" do %>
         <%= render "shared/icons/ban", html_class: "w-6 h-6 opacity-70" %>

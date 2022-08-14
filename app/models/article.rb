@@ -71,7 +71,7 @@ class Article < ApplicationRecord
 
   has_many :snapshots, class_name: 'ArticleSnapshot', primary_key: :uuid, foreign_key: :article_uuid, inverse_of: :article, dependent: :destroy
 
-  has_many :article_references, class_name: 'CiterReference', as: :citer, dependent: :restrict_with_error
+  has_many :article_references, class_name: 'CiterReference', as: :citer, dependent: :destroy
   has_many :references, through: :article_references, source: :reference, source_type: 'Article'
   has_many :article_citers, class_name: 'CiterReference', as: :reference, dependent: :restrict_with_error
   has_many :citers, through: :article_citers, source: :citer, source_type: 'Article'

@@ -25,11 +25,4 @@ class Dashboard::ArticlesController < Dashboard::BaseController
     @tab = params[:tab] || 'buy_records'
     @article = current_user.articles.find_by uuid: params[:uuid]
   end
-
-  def destroy
-    @article = current_user.articles.drafted.find_by uuid: params[:uuid]
-    return if @article.blank?
-
-    @article.destroy
-  end
 end

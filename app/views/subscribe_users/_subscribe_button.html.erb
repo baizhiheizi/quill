@@ -7,19 +7,10 @@
       }, class: "block w-full cursor-pointer bg-primary hover:scale-105 rounded text-white text-center py-1 px-4" %>
   <% elsif current_user.subscribe_user? user %>
     <div class="w-full text-center py-1">
-      <%= button_to t('unsubscribe'), 
-        subscribe_user_path(user.uid), 
-        method: :delete,
-        form: {
-          data: { 
-            controller: "confirm",
-            confirm_target: "form",
-            confirm_identifier_value: SecureRandom.uuid,
-            confirm_content_value: t("confirm_to_unsubscribe") 
-          }
-        },
+      <%= link_to t('unsubscribe'), 
+        new_subscribe_user_path(uid: user.uid), 
         data: { 
-          action: "confirm#invoke",
+          turbo_frame: :modal,
         }, 
         class: "cursor-pointer bg-transparent opacity-70" %>
     </div>

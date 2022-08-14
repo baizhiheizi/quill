@@ -1,0 +1,13 @@
+<%= turbo_frame_tag 'modal' do %>
+  <%= render ModalComponent.new title: t('clear_all') do %>
+    <div class="w-96 max-w-full mx-auto">
+      <div class="mb-6">
+        <%= t('confirm_to_submit') %>
+      </div>
+      <%= button_to t('clear_all'), 
+        dashboard_deleted_notifications_path, 
+        class: "block w-full rounded-lg text-white bg-red-500 py-2 text-lg"
+      %>
+    </div>
+  <% end %>
+<% end %>

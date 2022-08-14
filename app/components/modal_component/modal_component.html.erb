@@ -1,6 +1,7 @@
 <div 
   class="modal"
   data-controller="modal-component" 
+  data-action="turbo:submit-end->modal-component#submitEnd"
   data-modal-component-backdrop-value="<%= @backdrop %>"
   data-modal-component-initial-state-value="show">
   <div data-modal-component-target="wrapper" class="fixed inset-0 z-50 flex items-start justify-center w-full">

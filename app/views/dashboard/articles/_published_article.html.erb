@@ -34,17 +34,6 @@
     <%= button_to t('hide'), 
       dashboard_published_article_path(article.uuid),  
       method: :delete,
-      form: {
-        data: { 
-          controller: "confirm",
-          confirm_target: "form",
-          confirm_identifier_value: SecureRandom.uuid,
-          confirm_content_value: t("confirm_to_hide") 
-        }
-      },
-      data: { 
-        action: "confirm#invoke",
-      },
       class: "bg-transparent cursor-pointer" %>
   </div>
 </div>

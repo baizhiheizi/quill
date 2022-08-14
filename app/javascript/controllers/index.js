@@ -19,9 +19,6 @@ application.register('clipboard', ClipboardController);
 import CommentFormController from './comment_form_controller';
 application.register('comment-form', CommentFormController);
 
-import ConfirmController from './confirm_controller';
-application.register('confirm', ConfirmController);
-
 import DarkmodeController from './darkmode_controller';
 application.register('darkmode', DarkmodeController);
 

@@ -2,8 +2,11 @@
 
 namespace :dashboard do
   resources :settings, only: %i[index]
-  resources :articles, only: %i[index show destroy], param: :uuid
+
+  resources :articles, only: %i[index show], param: :uuid
   resources :published_articles, param: :uuid, only: %i[new update destroy]
+  resources :deleted_articles, param: :uuid, only: %i[new update]
+
   resources :comments, only: %i[index]
   resources :subscriptions, only: %i[index]
   resources :block_users, only: %i[index]
@@ -16,9 +19,11 @@ namespace :dashboard do
   resources :payments, only: %i[index]
   resources :swap_orders, only: %i[index]
   resources :notifications, only: %i[index]
-  resources :read_notifications, only: %i[create update]
-  resources :deleted_notifications, only: %i[create]
+
+  resources :read_notifications, only: %i[new create update]
+  resources :deleted_notifications, only: %i[new create]
   resources :notification_settings, only: %i[update]
+
   resources :access_tokens, only: %i[index create destroy]
   resource :destination, only: %i[show] do
     get :deposit

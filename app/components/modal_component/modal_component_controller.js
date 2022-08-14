@@ -54,6 +54,12 @@ export default class extends Controller {
     this.element.remove();
   }
 
+  submitEnd(event) {
+    if (event.detail.success) {
+      this.hide();
+    }
+  }
+
   disconnect() {
     this.unLockBodyScroll();
     this.leave();

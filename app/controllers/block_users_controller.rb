@@ -4,6 +4,9 @@ class BlockUsersController < ApplicationController
   before_action :authenticate_user!
   before_action :load_user
 
+  def new
+  end
+
   def create
     return if current_user == @user
 

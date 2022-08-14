@@ -53,27 +53,15 @@
       <%= button_to 'Unblock', admin_article_unblock_path(article),
         form: {
           data: { 
-            controller: "confirm",
-            confirm_target: "form",
-            confirm_identifier_value: SecureRandom.uuid,
-            confirm_content_value: 'Sure to unblock?' 
+            turbo_confirm: "Sure to unblock",
           }
-        },
-        data: { 
-          action: "confirm#invoke",
         },
         class: "bg-indigo-500 hover:bg-indigo-600 rounded text-white px-4 py-2" if article.blocked? %>
       <%= button_to 'Block', admin_article_block_path(article),
         form: {
           data: { 
-            controller: "confirm",
-            confirm_target: "form",
-            confirm_identifier_value: SecureRandom.uuid,
-            confirm_content_value: 'Sure to block?' 
+            turbo_confirm: "Sure to block",
           }
-        },
-        data: { 
-          action: "confirm#invoke",
         },
         class: "bg-red-500 hover:bg-red-600 rounded text-white px-4 py-2" if article.published? %>
     </div>
