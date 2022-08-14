@@ -9,7 +9,6 @@
       data: {
         controller: "tags-select",
         tags_select_items_value: form.object.tag_names,
-        action: "change->article-form#submit"
       }, 
       class: "focus:ring-blue-500 focus:border-blue-500 flex-1 block w-full rounded sm:text-sm border-zinc-300 dark:bg-zinc-900" 
     %>
@@ -22,9 +21,6 @@
         <%= form.text_area :intro, 
           value: form.object.intro, 
           rows: 3, 
-          data: {
-            action: "change->article-form#submit"
-          },
           class: "focus:ring-blue-500 focus:border-blue-500 flex-1 block w-full rounded sm:text-sm border-zinc-300 dark:bg-zinc-900" %>
       </div>
       <% if form.object.errors.where(:intro).present? %>
@@ -41,11 +37,7 @@
           Currency.pricable, 
           :asset_id, 
           :symbol, 
-          {
-            data: {
-              action: "change->article-form#submit"
-            },
-          }, 
+          {}, 
           disabled: form.object.published_at?,
           class: "focus:ring-blue-500 focus:border-blue-500 flex-1 block w-full rounded sm:text-sm border-zinc-300 dark:bg-zinc-900" %>
       </div>
@@ -85,9 +77,6 @@
           required: true, 
           step: '0.0000001', 
           min: '0', 
-          data: {
-            action: "change->article-form#submit"
-          },
           class: "focus:ring-blue-500 focus:border-blue-500 flex-1 block w-full rounded sm:text-sm border-zinc-300 dark:bg-zinc-900", placeholder: "Input price" %>
       </div>
       <% if form.object.currency.present? %>

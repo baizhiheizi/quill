@@ -45,8 +45,8 @@ export default class extends Controller {
         this.imagesTarget.dataset.directUploadAttachmentName;
     }
 
-    this.autosave = debounce(this.autosave, 1000);
-    this.submit = debounce(this.submit, 1000);
+    this.autosave = debounce(this.autosave, 1500);
+    this.submit = debounce(this.submit, 1500);
 
     if (!this.articlePublishedValue) {
       document

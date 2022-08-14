@@ -497,7 +497,7 @@ class Article < ApplicationRecord
   end
 
   def ensure_price_not_too_low
-    return unless price_changed?
+    return unless price_changed? || asset_id_changed?
 
     errors.add(:price, '< $0.1') if price.positive? && price < currency.minimal_price_amount
   end
