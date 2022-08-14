@@ -1,0 +1,46 @@
+<%= render ModalComponent.new title: t('share') do %>
+  <div class="flex items-center bg-white dark:bg-zinc-900 rounded-lg">
+    <% if from_mixin_messenger? %>
+      <a class="flex-1 rounded-t-lg block p-4 hover:bg-zinc-100 dark:hover:bg-zinc-800 active:bg-zinc-100 dark:active:bg-zinc-800 rounded-t-lg"
+        target="_blank"
+        data-action="modal#hide"
+        href="<%= share_to_mixin article_url(@article), title: @article.title, description: @article.intro, icon_url: @article.author.avatar %>">
+        <div class="flex mb-2">
+          <%= image_tag 'mixin-logo.png', class: "w-auto h-8 mx-auto" %>
+        </div>
+        <div class="text-base text-center">Mixin</div>
+      </a>
+    <% end %>
+
+    <a class="flex-1 block p-4 opacity-70 hover:bg-zinc-100 dark:hover:bg-zinc-800 active:bg-zinc-100 dark:active:bg-zinc-800"
+        target="_blank"
+        data-action="modal#hide"
+        href="<%= share_to_twitter article_url(@article), @article.title %>">
+      <div class="flex mb-2">
+        <%= render "shared/icons/twitter", html_class: "w-8 h-8 mx-auto" %>
+      </div>
+      <div class="text-base text-center">Twitter</div>
+    </a>
+
+    <a class="flex-1 block p-4 opacity-70 hover:bg-zinc-100 dark:hover:bg-zinc-800 active:bg-zinc-100 dark:active:bg-zinc-800 rounded-b-lg"
+        target="_blank"
+        data-action="modal#hide"
+        href="<%= share_to_facebook article_url(@article) %>">
+      <div class="flex mb-2">
+        <%= render "shared/icons/facebook", html_class: "w-8 h-8 mx-auto" %>
+      </div>
+      <div class="text-base text-center">Facebook</div>
+    </a>
+
+    <button class="flex-1 block w-full p-4 opacity-70 hover:bg-zinc-100 dark:hover:bg-zinc-800 active:bg-zinc-100 dark:active:bg-zinc-800 rounded-t-lg"
+      data-controller="clipboard"
+      data-clipboard-text-value="<%= article_url @article %>"
+      data-clipboard-success-tip-value="URL copied"
+      data-action="clipboard#copy modal#hide">
+      <div class="flex mb-2">
+        <%= render "shared/icons/copy", html_class: "w-8 h-8 mx-auto" %>
+      </div>
+      <div data-clipboard-target="button"class="text-base text-center">URL</div>
+    </button>
+  </div>
+<% end %>

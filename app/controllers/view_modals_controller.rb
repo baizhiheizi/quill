@@ -8,8 +8,6 @@ class ViewModalsController < ApplicationController
     when 'publish_article'
       @article = current_user.articles.find_by uuid: params[:uuid]
       return if @article.blank?
-    when 'share_article'
-      @article = Article.published.find_by uuid: params[:uuid]
     when 'comment_form'
       if params[:quote_comment_id].present?
         @quote_comment = Comment.find_by id: params[:quote_comment_id]

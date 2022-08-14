@@ -63,6 +63,10 @@ class ArticlesController < ApplicationController
     @article.update params.require(:article).permit(:title, :content)
   end
 
+  def share
+    @article = Article.published.find_by uuid: params[:article_uuid]
+  end
+
   def preview
   end
 

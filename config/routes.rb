@@ -41,6 +41,7 @@ Rails.application.routes.draw do
 
   resources :articles, except: %i[destroy], param: :uuid do
     put :update_content
+    get :share
     resources :comments, only: %i[index]
   end
   resources :upvoted_articles, only: %i[update destroy], param: :uuid
