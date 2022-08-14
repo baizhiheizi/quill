@@ -1,0 +1,8 @@
+<%= turbo_stream.update 'modal' do %>
+  <%= render ModalComponent.new title: t('comment') do %>
+    <%= render partial: "comments/form", locals: { commentable: @commentable, quote_comment: @quote_comment } %>
+    <div class="flex justify-center sm:hidden">
+      <%= render "subscribe_articles/subscribe_button", article: @commentable %>
+    </div>
+  <% end %>
+<% end %>

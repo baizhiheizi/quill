@@ -16,10 +16,10 @@
                 <%= link_to "@#{quote_comment.quote_comment.author.short_name}", user_path(quote_comment.quote_comment.author), data: { turbo_frame: "_top" }, class: "no-underline italic" %>
                 :(
                 <%= link_to "##{quote_comment.quote_comment.id}", 
-                  view_modals_path(type: :comment_form, quote_comment_id: quote_comment.quote_comment_id),
+                  new_comment_path(quote_comment_id: quote_comment.quote_comment_id),
                   class: "italic",
                   data: {
-                    turbo_method: 'post'
+                    turbo_frame: :modal
                 } %>
                 )
               </div>

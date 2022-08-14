@@ -30,6 +30,16 @@ class CommentsController < ApplicationController
     @comment = current_user.comments.create comment_params
   end
 
+  def new
+    if params[:quote_comment_id].present?
+      @quote_comment = Comment.find_by id: params[:quote_comment_id]
+      @commentable = @quote_comment&.commentable
+    elsif params[:commentable_type] == 'Article'
+      @commentable = Article.find_by id: params[:commentable_id]
+    end
+    return if @commentable.blank?
+  end
+
   private
 
   def load_article

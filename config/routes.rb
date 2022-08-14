@@ -46,7 +46,7 @@ Rails.application.routes.draw do
   end
   resources :upvoted_articles, only: %i[update destroy], param: :uuid
   resources :downvoted_articles, only: %i[update destroy], param: :uuid
-  resources :comments, only: %i[create]
+  resources :comments, only: %i[create new]
   resources :upvoted_comments, only: %i[update destroy]
   resources :downvoted_comments, only: %i[update destroy]
   post '/articles/preview', to: 'articles#preview', as: :preview_article

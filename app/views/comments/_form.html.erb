@@ -3,12 +3,6 @@
 <%= render "comments/quote_comment", quote_comment: quote_comment if quote_comment.present? %>
 
 <%= form_for commentable.comments.new, 
-  data: { 
-    controller: "confirm",
-    confirm_target: "form",
-    confirm_identifier_value: SecureRandom.uuid,
-    confirm_content_value: t("confirm_to_submit") 
-  }, 
   html: { class: 'mb-4' } do |form| %>
   <%= form.hidden_field :commentable_id, value: commentable.id %>
   <%= form.hidden_field :commentable_type, value: commentable.class.name %>

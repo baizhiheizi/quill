@@ -1,5 +1,5 @@
 import { Controller } from '@hotwired/stimulus';
-import { post } from '@rails/request.js';
+import { get } from '@rails/request.js';
 
 export default class extends Controller {
   connect() {
@@ -12,12 +12,7 @@ export default class extends Controller {
   }
 
   showCommentFormModal(commentId) {
-    post('/view_modals', {
-      body: {
-        type: 'comment_form',
-        quote_comment_id: commentId,
-      },
-      contentType: 'application/json',
+    get(`/comments/new?quote_comment_id=${commentId}`, {
       responseKind: 'turbo-stream',
     });
   }

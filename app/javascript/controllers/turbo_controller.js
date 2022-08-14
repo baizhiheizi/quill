@@ -10,7 +10,7 @@ export default class extends Controller {
     event.preventDefault();
     this.url = this.element.getAttribute('href');
     get(this.url, {
-      responseKind: 'turbo_stream',
+      responseKind: 'turbo-stream',
     });
   }
 }

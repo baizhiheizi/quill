@@ -16,9 +16,10 @@
     <span><%= comment.downvotes_count %></span>
   <% end %>
   <% if comment.commentable.authorized? current_user %>
-    <%= button_to view_modals_path(
-      type: :comment_form, 
-      quote_comment_id: comment.id) do %>
+    <%= link_to new_comment_path(quote_comment_id: comment.id), 
+      data: {
+        turbo_frame: :modal
+      } do %>
       <%= render partial: "shared/icons/reply", locals: { html_class: "w-4 h-4" } %>
     <% end %>
   <% elsif current_user.blank? %>
