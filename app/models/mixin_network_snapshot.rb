@@ -78,7 +78,6 @@ class MixinNetworkSnapshot < ApplicationRecord
       sleep POLLING_INTERVAL * 10
     rescue ActiveRecord::StatementInvalid => e
       p e.inspect
-      ExceptionNotifier.notify_exception e
       connection.reconnect!
     rescue StandardError => e
       p "#{e.inspect}\n#{e.backtrace.join("\n")}"
