@@ -48,12 +48,11 @@ namespace :admin do
   end
   resources :mixin_network_users, only: %i[index show]
   resources :statistics, only: %i[index]
-  resources :bonuses, only: %i[index create] do
+  resources :bonuses, only: %i[index create new] do
     post :deliver
   end
   resources :wallets do
     get :assets
     get :snapshots
   end
-  resources :view_modals, only: %i[create]
 end

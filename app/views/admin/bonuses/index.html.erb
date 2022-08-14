@@ -2,7 +2,9 @@
   <%= link_to 'Home', admin_root_path %>
   <span>/</span>
   <span>Bonus</span>
-  <%= button_to 'New', admin_view_modals_path(type: :create_bonus), class: "text-white rounded cursor-pointer bg-blue-500 hover:bg-blue-600 px-4 py-1" %>
+  <%= link_to 'New', new_admin_bonus_path, 
+    data: { turbo_frame: :modal },
+    class: "text-white rounded cursor-pointer bg-blue-500 hover:bg-blue-600 px-4 py-1" %>
 </div>
 
 <div class="p-4 bg-white dark:bg-zinc-900 rounded-lg shadow">

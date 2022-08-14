@@ -20,6 +20,8 @@ namespace :dashboard do
   resources :deleted_notifications, only: %i[create]
   resources :notification_settings, only: %i[update]
   resources :access_tokens, only: %i[index create destroy]
-  resource :destination, only: %i[show]
+  resource :destination, only: %i[show] do
+    get :deposit
+  end
   root to: 'home#index'
 end

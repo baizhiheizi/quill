@@ -36,7 +36,6 @@ Rails.application.routes.draw do
 
   root to: 'articles#index'
 
-  resources :view_modals, only: %i[create]
   resources :locales, only: %i[create]
 
   resources :articles, except: %i[destroy], param: :uuid do

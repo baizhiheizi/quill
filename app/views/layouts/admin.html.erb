@@ -25,6 +25,8 @@
         </div>
       </main>
     </div>
+
+    <%= turbo_frame_tag 'modal' %>
     <div class="absolute bottom-0" id="modal-slot"></div>
     <div class="fixed bottom-24 h-0 w-full px-4 z-50 flex flex-col justify-end" id="flashes">
       <% flash.each do |type, message| %>
