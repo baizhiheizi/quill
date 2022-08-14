@@ -120,3 +120,6 @@ application.register('textarea-autogrow', TextareaAutogrowController);
 
 import ToastController from './toast_controller';
 application.register('toast', ToastController);
+
+import TurboController from './turbo_controller';
+application.register('turbo', TurboController);

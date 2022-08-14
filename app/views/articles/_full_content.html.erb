@@ -10,7 +10,11 @@
 
 <% unless article.author == user %>
   <div class="flex justify-center">
-    <%= button_to  view_modals_path(type: :pre_order_form, order_type: :reward_article, uuid: article.uuid), class: "rounded-full px-4 py-1 text-white bg-red-500 cursor-pointer flex items-center space-x-2" do %>
+    <%= link_to new_pre_order_path(order_type: :reward_article, article_uuid: article.uuid), 
+      data: {
+        turbo_frame: :modal
+      },
+      class: "no-underline rounded-full px-4 py-1 text-white bg-red-500 cursor-pointer flex items-center space-x-2" do %>
       <%= render "shared/icons/heart", html_class: "w-5 h-5" %>
       <span><%= t('reward') %></span>
     <% end %>

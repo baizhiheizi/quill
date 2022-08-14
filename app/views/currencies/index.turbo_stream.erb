@@ -1,0 +1,5 @@
+<%= turbo_stream.append 'modal' do %>
+  <%= render ModalComponent.new title: t('select_asset') do %>
+    <%= render 'currencies/list', currencies: @currencies, identifier: params[:identifier] || SecureRandom.uuid %>
+  <% end %>
+<% end %>

@@ -16,12 +16,6 @@ class ViewModalsController < ApplicationController
         @commentable = Article.find_by id: params[:commentable_id]
       end
       return if @commentable.blank?
-    when 'pre_order_form'
-      @article = Article.published.find_by uuid: params[:uuid]
-
-      return if @article.blank?
-      return if params[:order_type] == 'buy_article' && @article.authorized?(current_user)
-      return if params[:order_type] == 'reward_article' && !@article.authorized?(current_user)
     when 'pre_order'
       @pre_order = current_user.pre_orders.find_by follow_id: params[:follow_id]
       return if @pre_order.blank?

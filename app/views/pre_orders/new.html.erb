@@ -1,0 +1,5 @@
+<%= turbo_frame_tag 'modal' do %>
+  <%= render ModalComponent.new title: t(params[:order_type]), backdrop: 'static' do %>
+    <%= render 'pre_orders/pre_order_form', pre_order: @pre_order %>
+  <% end %>
+<% end %>

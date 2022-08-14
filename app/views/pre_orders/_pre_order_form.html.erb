@@ -1,10 +1,18 @@
-<% price = order_type == 'reward_article' ? article.currency.minimal_reward_amount : article.price %>
+<% article = pre_order.item %>
+
+<% price = %>
+<% case pre_order.order_type %>
+<% when 'reward_article' %>
+  <% pre_order.item.currency.minimal_reward_amount %>
+<% when 'buy_article' %>
+  <% pre_order.item.price %>
+<% end %>
 
 <div 
   class="w-96 max-w-full mx-auto"
   data-controller="pre-order-form" 
   data-pre-order-form-asset-id-value="<%= article.currency.asset_id %>"
-  data-pre-order-form-order-type-value="<%= order_type %>"
+  data-pre-order-form-order-type-value="<%= pre_order.order_type %>"
   data-pre-order-form-item-id-value="<%= article.id %>"
   data-pre-order-form-item-type-value="Article"
   data-pre-order-form-amount-value="<%= price %>"
@@ -21,7 +29,7 @@
     </div>
   </div>
 
-  <% if order_type == 'reward_article' %>
+  <% if pre_order.order_type == 'reward_article' %>
     <div class="mb-4 grid grid-cols-3 gap-4">
       <% [1, 4, 8, 32, 256, 1024].each do |number| %>
         <div 
@@ -107,7 +115,7 @@
     <% if article.mixpay_supported? %>
       <%= link_to t('continue'),
         mixpay_pre_order_path(
-          order_type: order_type,
+          order_type: pre_order.order_type,
           item_id: article.id,
           item_type: 'Article',
           asset_id: article.asset_id,
@@ -125,7 +133,7 @@
     <% end %>
 
     <%= form_for PreOrder.new, data: { pre_order_form_target: 'submitButton' }, class: "hidden" do |form| %>
-      <%= form.hidden_field :order_type, value: order_type %>
+      <%= form.hidden_field :order_type, value: pre_order.order_type %>
       <%= form.hidden_field :item_id, value: article.id %>
       <%= form.hidden_field :item_type, value: 'Article' %>
       <%= form.hidden_field :asset_id, value: article.asset_id %>

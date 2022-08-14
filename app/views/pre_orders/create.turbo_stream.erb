@@ -5,13 +5,9 @@
     <% end %>
   <% end %>
 <% else %>
-  <% content_for :modal_title do %>
-    <%= t('paying') %>
-  <% end %>
-  <% content_for :modal_content do %>
-    <%= render "pre_orders/pre_order", pre_order: @pre_order %>
-  <% end %>
-  <%= turbo_stream.update "modal-slot" do %>
-    <%= render "view_modals/modal", backdrop: 'static', html_id: "#{@pre_order.item.uuid}_pre_order_modal" %>
+  <%= turbo_stream.update "modal" do %>
+    <%= render ModalComponent.new title: t('paying'), backdrop: 'static' do %>
+      <%= render "pre_orders/pre_order", pre_order: @pre_order %>
+    <% end %>
   <% end %>
 <% end %>

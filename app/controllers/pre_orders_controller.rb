@@ -30,6 +30,13 @@ class PreOrdersController < ApplicationController
   end
 
   def new
+    article = Article.published.find_by uuid: params[:article_uuid]
+
+    return if article.blank?
+    return if params[:order_type] == 'buy_article' && article.authorized?(current_user)
+    return if params[:order_type] == 'reward_article' && !article.authorized?(current_user)
+
+    @pre_order = current_user.pre_orders.new item: article, order_type: params[:order_type]
   end
 
   def state

@@ -2,6 +2,11 @@
 
 class CurrenciesController < ApplicationController
   def index
-    @currencies = Currency.swappable
+    @currencies =
+      if params[:type] == 'swappable'
+        Currency.swappable
+      else
+        Currency.pricable
+      end
   end
 end

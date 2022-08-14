@@ -9,14 +9,14 @@
     <% currencies.each do |currency| %>
       <div class="flex items-center py-2 hover:bg-zinc-20 cursor-pointer rounded bg-zinc-50 dark:bg-zinc-800 p-2"
            data-select-currency-target="currencyOption"
-           data-modal-identifier-param="<%= identifier %>"
-           data-modal-asset-id-param="<%= currency.asset_id %>"
-           data-modal-icon-url-param="<%= currency.icon_url %>"
-           data-modal-chain-icon-url-param="<%= currency.chain&.icon_url %>"
-           data-modal-symbol-param="<%= currency.symbol %>"
-           data-modal-symbol-param="<%= currency.symbol %>"
-           data-modal-minimal-reward-amount-param="<%= currency.minimal_reward_amount %>"
-          data-action="click->modal#ok">
+           data-modal-component-identifier-param="<%= identifier %>"
+           data-modal-component-asset-id-param="<%= currency.asset_id %>"
+           data-modal-component-icon-url-param="<%= currency.icon_url %>"
+           data-modal-component-chain-icon-url-param="<%= currency.chain&.icon_url %>"
+           data-modal-component-symbol-param="<%= currency.symbol %>"
+           data-modal-component-symbol-param="<%= currency.symbol %>"
+           data-modal-component-minimal-reward-amount-param="<%= currency.minimal_reward_amount %>"
+          data-action="click->modal-component#ok">
         <div class='relative mr-2'>
           <%= image_tag currency.icon_url, class: 'w-6 h-6 rounded-full' %>
           <%= image_tag currency.chain.icon_url, class: 'absolute bottom-0 w-3 h-3 rounded-full' if currency.chain.present? %>

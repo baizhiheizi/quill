@@ -21,8 +21,8 @@ export default class extends Controller {
 
   connect() {
     document
-      .querySelector('#modal-slot')
-      .addEventListener('modal:ok', (event) => {
+      .querySelector('#modal')
+      .addEventListener('modal-component:ok', (event) => {
         const identifier = event.detail.identifier;
 
         if (identifier === this.identifierValue) {

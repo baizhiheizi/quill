@@ -51,8 +51,8 @@
       </div>
 
       <% if form.object.currency.present? && !form.object.published_at? %>
-        <%= link_to view_modals_path(type: :pricable_currencies, identifier: form.object.uuid), 
-          data: { turbo_method: :post },
+        <%= link_to currencies_path(identifier: form.object.uuid), 
+          data: { controller: :turbo },
           class: "block w-full mb-4 flex items-center justify-between py-2 px-4 bg-zinc-100 dark:bg-zinc-800 rounded-lg" do %>
           <div id="<%= dom_id form.object.currency %>" class="flex items-center space-x-4">
             <div class='relative'>
