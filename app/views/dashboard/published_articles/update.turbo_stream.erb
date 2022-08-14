@@ -1,7 +1,7 @@
 <% if @article.published? %>
   <%= turbo_stream.remove "#{dom_id @article}_hidden" %>
 <% else %>
-  <%= turbo_stream.update "modal-slot" do %>
+  <%= turbo_stream.update "modal" do %>
   <% end %>
   <%= turbo_stream.prepend "flashes" do %>
     <%= render "flashes/flash", message: t('article_not_completed'), type: :warning %>

@@ -7,7 +7,7 @@
 <% end %>
 
 <% if @bonus.errors.blank? %>
-  <%= turbo_stream.update "modal-slot" do %>
+  <%= turbo_stream.update "modal" do %>
   <% end %>
 
   <%= turbo_stream.prepend "admin_bonuses_list" do %>

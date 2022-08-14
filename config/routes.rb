@@ -20,7 +20,6 @@ Rails.application.routes.draw do
   get 'logout', to: 'sessions#delete', as: :logout
   post 'nounce', to: 'sessions#nounce'
 
-  get 'landing', to: 'landing#index', as: :landing
   get 'search', to: 'search#index', as: :search
 
   # health check for render.com
@@ -50,7 +49,6 @@ Rails.application.routes.draw do
   resources :downvoted_comments, only: %i[update destroy]
   post '/articles/preview', to: 'articles#preview', as: :preview_article
   resources :article_references, only: %i[index], default: { format: :json }
-  resources :payments, only: %i[create]
 
   resources :block_users, only: %i[create destroy], param: :uid
   resources :subscribe_users, only: %i[create destroy], param: :uid

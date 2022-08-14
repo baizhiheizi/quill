@@ -13,9 +13,6 @@ application.register('auto-refresh', AutoRefreshController);
 import AutosaveController from './autosave_controller';
 application.register('autosave', AutosaveController);
 
-import BuyArticlePaymentController from './buy_article_payment_controller';
-application.register('buy-article-payment', BuyArticlePaymentController);
-
 import ClipboardController from './clipboard_controller';
 application.register('clipboard', ClipboardController);
 
@@ -82,9 +79,6 @@ application.register('qrcode', QrcodeController);
 import ReferencesSelectController from './references_select_controller';
 application.register('references-select', ReferencesSelectController);
 
-import RewardArticlePaymentController from './reward_article_payment_controller';
-application.register('reward-article-payment', RewardArticlePaymentController);
-
 import ScrollToController from './scroll_to_controller';
 application.register('scroll-to', ScrollToController);
 
@@ -102,9 +96,6 @@ application.register('session', SessionController);
 
 import SidebarController from './sidebar_controller';
 application.register('sidebar', SidebarController);
-
-import SwapController from './swap_controller';
-application.register('swap', SwapController);
 
 import SwitchLocaleController from './switch_locale_controller';
 application.register('switch-locale', SwitchLocaleController);
