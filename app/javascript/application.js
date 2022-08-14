@@ -3,6 +3,7 @@ import 'abortcontroller-polyfill/dist/polyfill-patch-fetch';
 import '@hotwired/turbo-rails';
 import { hideLoading } from './utils';
 import './controllers';
+import '../components';
 
 import * as ActiveStorage from '@rails/activestorage';
 ActiveStorage.start();

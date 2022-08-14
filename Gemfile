@@ -146,6 +146,9 @@ gem 'cld'
 # Enumerated attributes with I18n and ActiveRecord/Mongoid support
 gem 'enumerize'
 
+# A framework for building reusable, testable & encapsulated view components in Ruby on Rails.
+gem 'view_component'
+
 # deploy
 gem 'mina', '~> 1.2.2', require: false
 gem 'mina-logs', '~> 1.1.0', require: false

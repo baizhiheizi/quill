@@ -61,6 +61,7 @@
       <% end %>
     </div>
 
+    <%= turbo_frame_tag 'modal' %>
     <div class="absolute bottom-0" id="toast-slot">
       <div id="loading-toast" class="hidden fixed inset-0 z-50 flex items-center justify-center w-full bg-black/30">
         <%= render "shared/loading" %>

@@ -2,12 +2,7 @@
 
 class ViewModalsController < ApplicationController
   def create
-    type =
-      if current_user.blank? && !params[:type].in?(%w[login walletconnect])
-        'login'
-      else
-        params[:type]
-      end
+    type = params[:type]
 
     case type
     when 'publish_article'

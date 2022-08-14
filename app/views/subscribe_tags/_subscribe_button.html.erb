@@ -1,6 +1,10 @@
 <div class="<%= dom_id tag %>_subscribe_button" >
   <% if current_user.blank? %>
-    <%= link_to t('subscribe'), view_modals_path(type: :login), data: { turbo_method: :post }, class: "block w-full cursor-pointer bg-primary hover:scale-105 rounded text-white text-center py-1 px-4" %>
+    <%= link_to t('subscribe'), 
+      login_path(type: :login), 
+      data: { 
+        turbo_frame: :modal 
+      }, class: "block w-full cursor-pointer bg-primary hover:scale-105 rounded text-white text-center py-1 px-4" %>
   <% elsif current_user.subscribe_tag? tag %>
     <div class="w-full bg-transparent text-center py-1">
       <%= button_to t('unsubscribe'), 

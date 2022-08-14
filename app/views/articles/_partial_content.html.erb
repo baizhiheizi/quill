@@ -21,9 +21,14 @@
     <% if current_user.present? %>
       <%= button_to t('pay_to_read'), view_modals_path(type: :pre_order_form, order_type: :buy_article, uuid: article.uuid), class: "cursor-pointer text-base rounded bg-primary hover:scale-105 text-white px-4 py-2 no-underline" %>
     <% elsif from_mixin_messenger? %>
-      <%= link_to t('pay_to_read'), login_path(return_to: article_url(article.uuid)), class: "cursor-pointer text-base rounded bg-primary hover:scale-105 text-white px-4 py-2 no-underline" %>
+      <%= link_to t('pay_to_read'), 
+        login_path(return_to: article_url(article.uuid)), 
+        class: "cursor-pointer text-base rounded bg-primary hover:scale-105 text-white px-4 py-2 no-underline" %>
     <% else %>
-      <%= button_to t('pay_to_read'), view_modals_path(type: :login, return_to: article_url(article.uuid)), class: "cursor-pointer text-base rounded bg-primary hover:scale-105 text-white px-4 py-2 no-underline" %>
+      <%= link_to t('pay_to_read'), 
+        login_path(return_to: article_url(article.uuid)), 
+        data: { turbo_frame: :modal }, 
+        class: "cursor-pointer text-base rounded bg-primary hover:scale-105 text-white px-4 py-2 no-underline" %>
     <% end %>
   </div>
   <div class='text-sm text-gray-500 text-center'>
@@ -33,7 +38,7 @@
     <% elsif from_mixin_messenger? %>
       <%= link_to t('login'), login_path(return_to: article_url(article.uuid)) %>
     <% else %>
-      <%= button_to t('login'), view_modals_path(type: :login, return_to: article_url(article.uuid)) %>
+      <%= link_to t('login'), login_path(return_to: article_url(article.uuid)), data: { turbo_frame: :modal } %>
     <% end %>
   </div>
   <% if article.swappable? %>

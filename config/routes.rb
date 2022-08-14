@@ -13,6 +13,7 @@ Rails.application.routes.draw do
   draw :api
 
   get 'login', to: 'sessions#new', as: :login
+  get 'mixin_login', to: 'sessions#mixin_login', as: :mixin_login
   get '/auth/mixin/callback', to: 'sessions#mixin'
   get '/auth/fennec/callback', to: 'sessions#fennec'
   get '/auth/mvm/callback', to: 'sessions#mvm'
