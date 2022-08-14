@@ -3,7 +3,7 @@
 namespace :dashboard do
   resources :settings, only: %i[index]
   resources :articles, only: %i[index show destroy], param: :uuid
-  resources :published_articles, param: :uuid, only: %i[update destroy]
+  resources :published_articles, param: :uuid, only: %i[new update destroy]
   resources :comments, only: %i[index]
   resources :subscriptions, only: %i[index]
   resources :block_users, only: %i[index]

@@ -1,0 +1,5 @@
+<%= turbo_frame_tag 'modal' do %>
+  <%= render ModalComponent.new title: t('publish_article') do %>
+    <%= render 'dashboard/published_articles/form', article: @article %>
+  <% end %>
+<% end %>

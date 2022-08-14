@@ -15,6 +15,9 @@ class Dashboard::PublishedArticlesController < Dashboard::BaseController
     @article.hide! if @article.may_hide?
   end
 
+  def new
+  end
+
   private
 
   def load_article

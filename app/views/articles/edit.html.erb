@@ -40,8 +40,9 @@
   <% end %>
   <div class="py-2 px-4 sm:py-4 sm:px-0 flex justify-between">
     <div class="flex space-x-4">
-      <%= button_to t("publish_article"), 
-        view_modals_path(type: :publish_article, uuid: @article.uuid), 
+      <%= link_to t("publish_article"), 
+        new_dashboard_published_article_path(uuid: @article.uuid), 
+        data: { turbo_frame: :modal },
         class: "cursor-pointer px-4 py-2 text-sm sm:text-base rounded bg-primary hover:scale-105 text-white" unless @article.published? %>
 
     <div class="cursor-pointer px-4 py-2 text-sm sm:text-base rounded bg-primary hover:scale-105 text-white" data-action="click->article-form#submit">

@@ -19,7 +19,7 @@
   <%= form_for article, url: dashboard_published_article_path(article), html: { class: 'mb-4' } do |form| %>
     <%= form.submit t('publish'), class: "cursor-pointer block w-64 mx-auto bg-blue-500 text-white rounded py-2 text-center" %>
   <% end %>
-  <button data-action="modal#cancel" class="cursor-pointer block w-64 mx-auto border rounded py-2 text-center">
+  <button data-action="modal-component#cancel" class="cursor-pointer block w-64 mx-auto border rounded py-2 text-center">
     <%= t('cancel') %>
   </button>
 </div>
