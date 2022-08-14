@@ -47,6 +47,9 @@
       <div class="text-center py-2 opacity-50">
         <%= t("no_record") %>
       </div>
+      <div class="flex justify-center p-4">
+        <%= link_to t('write'), new_article_path, class: "px-4 py-2 bg-primary hover:scale-105 rounded text-white text-lg font-bold" %>
+      </div>
     <% else %>
       <% case @tab %>
       <% when 'drafted' %>

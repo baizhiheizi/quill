@@ -6,23 +6,27 @@ class TaggingCreatedNotification < ApplicationNotification
 
   param :tagging
 
+  def tagging
+    params[:tagging]
+  end
+
   delegate :article, to: :tagging
 
   def data
     {
       icon_url: QUILL_ICON_URL,
-      title: params[:tagging].article.title.truncate(36),
+      title: tagging.article.title.truncate(36),
       description: description,
       action: url
     }
   end
 
   def description
-    ["##{params[:tagging].tag.name}", t('.has_new_article')].join(' ')
+    ["##{tagging.tag.name}", t('.has_new_article')].join(' ')
   end
 
   def message
-    ["##{params[:tagging].tag.name}", t('.has_new_article'), params[:tagging].article.title].join(' ')
+    ["##{tagging.tag.name}", t('.has_new_article'), params[:tagging].article.title].join(' ')
   end
 
   def url
