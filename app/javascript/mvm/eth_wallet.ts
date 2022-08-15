@@ -51,7 +51,6 @@ export class EthWallet {
       default:
         throw new Error('provider not supported!');
     }
-    await this.web3.currentProvider.enable();
 
     const accounts = await this.web3.eth.getAccounts();
     this.account = accounts[0];
@@ -64,6 +63,7 @@ export class EthWallet {
     if (provider !== window.ethereum) return;
 
     this.web3 = new Web3(window.ethereum);
+    this.web3.currentProvider.request({ method: 'eth_requestAccounts' });
   }
 
   async initCoinBase() {
@@ -77,6 +77,7 @@ export class EthWallet {
     );
 
     this.web3 = new Web3(provider);
+    this.web3.currentProvider.enable();
   }
 
   async initWalletConnect() {
@@ -85,6 +86,7 @@ export class EthWallet {
       supportedChainIds: Object.keys(RPC_LIST),
     });
     this.web3 = new Web3(provider);
+    this.web3.currentProvider.enable();
   }
 
   async payWithMVM(
