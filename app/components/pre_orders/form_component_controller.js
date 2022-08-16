@@ -29,7 +29,7 @@ export default class extends Controller {
     });
 
     this.typeTargets.forEach((target) => {
-      const type = target.dataset.preOrderFormTypeParam;
+      const type = target.dataset.preOrdersFormComponentTypeParam;
       if (type === this.typeValue) {
         target.classList.add('border-2', 'border-primary');
         target.classList.remove('border-zinc-200');
@@ -88,7 +88,7 @@ export default class extends Controller {
       ).toFixed(4);
     }
     this.amountOptionTargets.forEach((target) => {
-      const amount = target.dataset.preOrderFormAmountParam;
+      const amount = target.dataset.preOrdersFormComponentAmountParam;
       if (amount == this.amountValue) {
         target.classList.add('border-2', 'border-primary');
         target.classList.remove('border-zinc-200');

@@ -7,7 +7,7 @@
 <% else %>
   <%= turbo_stream.update "modal" do %>
     <%= render ModalComponent.new title: t('paying'), backdrop: 'static' do %>
-      <%= render "pre_orders/pre_order", pre_order: @pre_order %>
+      <%= render PreOrders::PaymentComponent.new pre_order: @pre_order %>
     <% end %>
   <% end %>
 <% end %>

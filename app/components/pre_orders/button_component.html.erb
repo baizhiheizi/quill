@@ -1,0 +1,41 @@
+<% case @pre_order %>
+<% when FennecPreOrder %>
+  <a data-controller="fennec"
+    data-action="fennec#pay"
+    data-fennec-trace-id-param="<%= @pre_order.trace_id %>"
+    data-fennec-asset-id-param="<%= @pay_asset.asset_id %>"
+    data-fennec-amount-param="<%= @pay_amount %>"
+    data-fennec-memo-param="<%= @pre_order.memo %>"
+    data-fennec-opponent-id-param="<%= @pre_order.payee_id %>"
+    data-action="click->pre-order#pay"
+    class="relative flex items-center justify-center w-full my-4 text-center no-underline cursor-pointer py-3 block bg-primary hover:font-bold text-white rounded-lg">
+    <%= image_tag 'fennec-logo.png', class: 'h-8 w-auto absolute left-4' %>
+    <span class="text-lg"><%= t('confirm_to_pay') %></span>
+  </a>
+<% when MVMPreOrder %>
+  <%= render "shared/mvm_pay_button", 
+    mixin_uuid: @pre_order.payer.mixin_uuid, 
+    trace_id: @pre_order.trace_id, 
+    asset_id: @pay_asset.asset_id, 
+    symbol: @pay_asset.symbol, 
+    icon_url: @pay_asset.icon_url, 
+    amount: @pay_amount, 
+    memo: @pre_order.memo, 
+    threshold: 1,
+    opponent_ids: [@pre_order.payee_id] %>
+<% when MixinPreOrder %>
+  <div data-controller="qrcode" 
+      data-qrcode-url-value="<%= @pre_order.pay_url(@pay_asset.asset_id) %>">
+      <div data-qrcode-target="placeholder" class="flex justify-center"></div>
+      <div class="text-center py-2 opacity-75 text-sm">
+        <%= t("scan_with_mixin") %>
+      </div>
+  </div>
+
+  <a href="<%= @pre_order.pay_url(@pay_asset.asset_id) %>"
+    data-action="click->pre-order#pay"
+    class="relative flex items-center justify-center w-full my-4 text-center no-underline cursor-pointer py-3 block bg-primary hover:font-bold text-white rounded-lg md:hidden">
+    <%= image_tag 'mixin-logo-light.png', class: "h-4 w-auto absolute left-4" %>
+    <span class="text-lg"><%= t('confirm_to_pay') %></span>
+  </a>
+<% end %>

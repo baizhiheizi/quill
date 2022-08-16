@@ -1,0 +1,59 @@
+<div 
+  class="w-96 max-w-full mx-auto"
+  data-controller="pre-orders-payment-component" 
+  data-pre-orders-payment-component-type-value="<%= @pre_order.type %>"
+  data-pre-orders-payment-component-follow-id-value="<%= @pre_order.follow_id %>"
+  data-pre-orders-payment-component-identifier-value="<%= @identifier %>"
+  data-pre-orders-payment-component-pay-asset-id="<%= @pay_asset.asset_id %>"
+  id="<%= dom_id @pre_order %>">
+  <div class="mb-4">
+    <div class="flex items-center">
+      <span class="text-2xl font-serif font-black"><%= @pre_order.amount_tag %></span>
+    </div>
+    <div id="<%= dom_id @pre_order %>_pay_amount" class="flex items-center">
+      <% if @pay_asset != @pre_order.currency %>
+        <span class="text-sm">
+          ≈ <%= @pre_order.pay_amount(@pay_asset.asset_id) %> <%= @pay_asset.symbol %>
+        </span>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="mb-2">
+    <span class="text-mono text-sm opacity-75"><%= t('payment_crypto') %></span>
+  </div>
+  <div class="mb-8">
+    <%= link_to currencies_path(type: :swappable, identifier: @identifier), 
+      disabled: (!SwapOrder::FOXSWAP_ENABLE),
+      data: {
+        controller: 'turbo',
+        pre_orders_payment_component_target: 'selectCurrencyButton'
+      },
+      class: "block w-full mb-4 flex items-center justify-between py-2 px-4 bg-zinc-100 dark:bg-zinc-800 rounded-lg" do %>
+      <div id="<%= dom_id @pay_asset %>" class="flex items-center space-x-4">
+        <div class='relative'>
+          <%= image_tag @pay_asset.icon_url, 
+            data: { pre_orders_payment_component_target: 'currencyIcon' }, 
+            class: 'w-8 h-8 rounded-full' %>
+          <%= image_tag @pay_asset.icon_url, 
+            data: { pre_orders_payment_component_target: 'currencyChainIcon' }, 
+            class: 'absolute bottom-0 w-3 h-3 rounded-full' %>
+        </div>
+        <div class="text-lg" data-pre-orders-payment-component-target="currencySymbol">
+          <%= @pay_asset.symbol %>
+        </div>
+      </div>
+      <%= render 'shared/icons/chevron_right', html_class: 'w-6 h-6 font-bold' %>
+    <% end %>
+  </div>
+
+  <div data-pre-orders-payment-component-target="state" class="hidden mb-8">
+    <%= render "pre_orders/state", pre_order: @pre_order %>
+  </div>
+
+  <div id="<%= dom_id @pre_order %>_pay_button" 
+      class="mb-4" 
+      data-pre-orders-payment-component-target="payButton">
+    <%= render PreOrders::ButtonComponent.new pre_order: @pre_order, pay_asset: @pay_asset %>
+  </div>
+</div>
