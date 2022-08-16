@@ -1,4 +1,4 @@
-import { post } from '@rails/request.js';
+import axios from 'axios';
 import detectEthereumProvider from '@metamask/detect-provider';
 import CoinbaseWalletSDK from '@coinbase/wallet-sdk';
 import {
@@ -19,6 +19,7 @@ import ERC721ABI from './abis/erc721.json' assert { type: 'json' };
 import MirrorABI from './abis/mirror.json' assert { type: 'json' };
 import WalletConnectProvider from '@walletconnect/web3-provider/dist/umd/index.min.js';
 import Web3 from 'web3/dist/web3.min.js';
+import BigNumber from 'bignumber.js';
 
 interface AppType {
   name: string;
@@ -119,7 +120,7 @@ export class EthWallet {
       return;
     }
 
-    const { extra } = await this.fetchExtra(opponentIds, threshold, memo);
+    const extra = await this.fetchExtra(opponentIds, threshold, memo);
 
     if (assetId === NativeAssetId) {
       return this.payNative(
@@ -166,13 +167,10 @@ export class EthWallet {
     }
 
     const IERC20 = new this.web3.eth.Contract(ERC20ABI, assetContractAddress);
-    const utils = this.web3.utils;
 
     const balance = await IERC20.methods.balanceOf(this.account).call();
-    const payAmount = utils
-      .BN(utils.toWei(amount))
-      .div(utils.BN(10_000_000_000));
-    if (utils.BN(balance).lt(payAmount)) {
+    const payAmount = BigNumber(amount).multipliedBy(1e8);
+    if (BigNumber(balance).isLessThan(payAmount)) {
       fail(new Error('Insufficient balance'));
       return;
     }
@@ -200,8 +198,8 @@ export class EthWallet {
     BridgeContract.options.gasPrice = GasPrice;
 
     const balance = await this.web3.eth.getBalance(this.account);
-    const payAmount = this.web3.utils.toWei(amount);
-    if (this.web3.utils.BN(balance).lt(payAmount)) {
+    const payAmount = BigNumber(amount).multipliedBy(1e18);
+    if (BigNumber(balance).isLessThan(payAmount)) {
       fail(new Error('Insufficient balance'));
       return;
     }
@@ -244,7 +242,7 @@ export class EthWallet {
       return;
     }
 
-    const { extra } = await this.fetchExtra(opponentIds, threshold, memo);
+    const extra = await this.fetchExtra(opponentIds, threshold, memo);
     const contract = await this.fetchUsersContract([mixinUuid], 1);
     ERC721.options.gasPrice = GasPrice;
     ERC721.methods
@@ -259,14 +257,14 @@ export class EthWallet {
     threshold: number,
     memo: string,
   ): Promise<any> {
-    const res = await post('/mvm/extras', {
+    const res = await axios.post('https://bridge.mvm.dev/extra', {
       body: {
         receivers: opponentIds,
         threshold,
         extra: memo,
       },
     });
-    return await res.json;
+    return res.data.extra;
   }
 
   switchToMVM() {
@@ -327,14 +325,14 @@ export class EthWallet {
 
     if (assetId == NativeAssetId) {
       const balance = await this.web3.eth.getBalance(account);
-      return ((balance * 1.0) / 1e18).toString();
+      return BigNumber(balance).dividedBy(1e18).toFixed(8);
     } else {
       try {
         const assetContractAddress = await this.fetchAssetContract(assetId);
         let IERC20 = new this.web3.eth.Contract(ERC20ABI, assetContractAddress);
 
         const balance = await IERC20.methods.balanceOf(account).call();
-        return ((balance * 1.0) / 1e8).toString();
+        return BigNumber(balance).dividedBy(1e8).toString();
       } catch (error) {
         console.error(error);
         return '0';
