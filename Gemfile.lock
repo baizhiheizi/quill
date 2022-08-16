@@ -270,7 +270,7 @@ GEM
     mini_magick (4.11.0)
     mini_mime (1.1.2)
     mini_portile2 (2.8.0)
-    mini_racer (0.6.2)
+    mini_racer (0.6.3)
       libv8-node (~> 16.10.0.0)
     minitest (5.16.2)
     mixin_bot (0.10.0)
