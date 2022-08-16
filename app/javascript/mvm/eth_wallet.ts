@@ -10,10 +10,13 @@ import {
   RPC_LIST,
   RegisterAddress,
   MVM_CONFIG,
+  MirrorAddress,
 } from './constants';
+import RegistryABI from './abis/registry.json' assert { type: 'json' };
 import BridgeABI from './abis/bridge.json' assert { type: 'json' };
 import ERC20ABI from './abis/erc20.json' assert { type: 'json' };
-import RegistryABI from './abis/registry.json' assert { type: 'json' };
+import ERC721ABI from './abis/erc721.json' assert { type: 'json' };
+import MirrorABI from './abis/mirror.json' assert { type: 'json' };
 import WalletConnectProvider from '@walletconnect/web3-provider/dist/umd/index.min.js';
 import Web3 from 'web3/dist/web3.min.js';
 
@@ -28,6 +31,7 @@ export class EthWallet {
   public account: string;
   public app: AppType;
   public Registry: any;
+  public Mirror: any;
 
   constructor(
     provider: 'MetaMask' | 'Coinbase' | 'WalletConnect',
@@ -162,10 +166,13 @@ export class EthWallet {
     }
 
     const IERC20 = new this.web3.eth.Contract(ERC20ABI, assetContractAddress);
+    const utils = this.web3.utils;
 
     const balance = await IERC20.methods.balanceOf(this.account).call();
-    const payAmount = this.web3.utils.BN(parseFloat(amount) * 1e8);
-    if (this.web3.utils.BN(balance).lt(payAmount)) {
+    const payAmount = utils
+      .BN(utils.toWei(amount))
+      .div(utils.BN(10_000_000_000));
+    if (utils.BN(balance).lt(payAmount)) {
       fail(new Error('Insufficient balance'));
       return;
     }
@@ -193,7 +200,7 @@ export class EthWallet {
     BridgeContract.options.gasPrice = GasPrice;
 
     const balance = await this.web3.eth.getBalance(this.account);
-    const payAmount = this.web3.utils.BN(parseFloat(amount) * 1e18);
+    const payAmount = this.web3.utils.toWei(amount);
     if (this.web3.utils.BN(balance).lt(payAmount)) {
       fail(new Error('Insufficient balance'));
       return;
@@ -206,6 +213,47 @@ export class EthWallet {
       .on('error', fail);
   }
 
+  async transferNFT(
+    params: {
+      collectionId: string;
+      tokenId: number;
+      opponentIds: string[];
+      threshold: number;
+      memo: string;
+      mixinUuid: string;
+    },
+    success: (hash?: string) => void,
+    fail: (error: Error) => void,
+  ) {
+    const { collectionId, tokenId, opponentIds, threshold, memo, mixinUuid } =
+      params;
+    const Mirror = new this.web3.eth.Contract(MirrorABI, MirrorAddress);
+    const tokenContract = await Mirror.methods
+      .contracts(
+        this.web3.utils.hexToNumberString(
+          '0x' + collectionId.replaceAll('-', ''),
+        ),
+      )
+      .call();
+
+    const ERC721 = new this.web3.eth.Contract(ERC721ABI, tokenContract);
+    const owner = await ERC721.methods.ownerOf(tokenId).call();
+
+    if (this.web3.utils.toChecksumAddress(owner) !== this.account) {
+      fail(new Error('Unauthorized'));
+      return;
+    }
+
+    const { extra } = await this.fetchExtra(opponentIds, threshold, memo);
+    const contract = await this.fetchUsersContract([mixinUuid], 1);
+    ERC721.options.gasPrice = GasPrice;
+    ERC721.methods
+      .safeTransferFrom(this.account, MirrorAddress, tokenId, contract + extra)
+      .send({ from: this.account })
+      .on('transactionHash', success)
+      .on('error', fail);
+  }
+
   async fetchExtra(
     opponentIds: string[],
     threshold: number,
@@ -214,7 +262,7 @@ export class EthWallet {
     const res = await post('/mvm/extras', {
       body: {
         receivers: opponentIds,
-        threshold: threshold,
+        threshold,
         extra: memo,
       },
     });
