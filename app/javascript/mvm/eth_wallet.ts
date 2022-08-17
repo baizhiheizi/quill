@@ -1,4 +1,3 @@
-import axios from 'axios';
 import detectEthereumProvider from '@metamask/detect-provider';
 import CoinbaseWalletSDK from '@coinbase/wallet-sdk';
 import {
@@ -11,6 +10,8 @@ import {
   RegisterAddress,
   MVM_CONFIG,
   MirrorAddress,
+  RegistryID,
+  StorageAddress,
 } from './constants';
 import RegistryABI from './abis/registry.json' assert { type: 'json' };
 import BridgeABI from './abis/bridge.json' assert { type: 'json' };
@@ -252,19 +253,6 @@ export class EthWallet {
       .on('error', fail);
   }
 
-  async fetchExtra(
-    receivers: string[],
-    threshold: number,
-    memo: string,
-  ): Promise<any> {
-    const res = await axios.post('https://bridge.mvm.dev/extra', {
-      receivers,
-      threshold,
-      extra: memo,
-    });
-    return res.data.extra;
-  }
-
   switchToMVM() {
     if (
       !this.web3.currentProvider.isMetaMask &&
@@ -356,6 +344,26 @@ export class EthWallet {
     return this.Registry.methods
       .contracts(this.web3.utils.keccak256(identity))
       .call();
+  }
+
+  fetchExtra(receivers: string[], threshold: number, memo: string): string {
+    const action = {
+      receivers,
+      threshold,
+      extra: memo,
+    };
+    const extra =
+      RegistryID.replaceAll('-', '') +
+      StorageAddress.slice(2).toLowerCase() +
+      this.web3.utils.sha3(JSON.stringify(action)).slice(2) +
+      JSON.stringify(action)
+        .split('')
+        .map((v) => {
+          return v.charCodeAt(0).toString(16);
+        })
+        .join('');
+
+    return extra;
   }
 
   isCurrentNetworkMvm() {
