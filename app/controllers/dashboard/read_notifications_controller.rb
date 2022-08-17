@@ -5,7 +5,7 @@ class Dashboard::ReadNotificationsController < Dashboard::BaseController
   end
 
   def create
-    current_user.notifications.map(&:mark_as_read!)
+    current_user.notifications.unread.map(&:mark_as_read!)
 
     @pagy, @notifications = pagy current_user.notifications.order(created_at: :desc)
   end
