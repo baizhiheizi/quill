@@ -121,7 +121,7 @@ export class EthWallet {
       return;
     }
 
-    const extra = await this.fetchExtra(receivers, threshold, memo);
+    const extra = this.fetchExtra(receivers, threshold, memo);
 
     if (assetId === NativeAssetId) {
       return this.payNative(
@@ -243,7 +243,7 @@ export class EthWallet {
       return;
     }
 
-    const extra = await this.fetchExtra(receivers, threshold, memo);
+    const extra = this.fetchExtra(receivers, threshold, memo);
     const contract = await this.fetchUsersContract([payerId], 1);
     ERC721.options.gasPrice = GasPrice;
     ERC721.methods
