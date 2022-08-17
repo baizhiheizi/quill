@@ -6,7 +6,7 @@
   data-mvm-pay-button-component-asset-id-value="<%= @currency.asset_id %>">
 
   <div data-mvm-pay-button-component-target="button" class="my-4">
-    <button data-action="mvm-pay-button-component#pay pre-orders-payment-component#hideOtherPayments"
+    <button data-action="click->mvm-pay-button-component#pay"
       data-mvm-pay-button-component-payer-id-param="<%= @payer.mixin_uuid %>"
       data-mvm-pay-button-component-trace-id-param="<%= @trace_id %>"
       data-mvm-pay-button-component-asset-id-param="<%= @currency.asset_id %>"

@@ -4,6 +4,7 @@ import { hideLoading, showLoading } from '../../javascript/utils';
 
 export default class extends Controller {
   static values = {
+    type: String,
     followId: String,
     identifier: String,
     payAssetId: String,
@@ -50,13 +51,10 @@ export default class extends Controller {
     ).then(() => hideLoading());
   }
 
-  showState() {
-    if (this.hasStateTarget) {
+  pay() {
+    if (this.hasStateTarget && this.typeValue !== 'MVMPreOrder') {
       this.stateTarget.classList.remove('hidden');
     }
-  }
-
-  hideOtherPayments() {
     if (this.hasOtherPaymentsTarget) {
       this.otherPaymentsTarget.classList.add('hidden');
     }

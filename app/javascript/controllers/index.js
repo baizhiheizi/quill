@@ -58,9 +58,6 @@ application.register('nested-form', NestedFormController);
 import PhotoswipeController from './photoswipe_controller';
 application.register('photoswipe', PhotoswipeController);
 
-import PreOrderStateController from './pre_order_state_controller';
-application.register('pre-order-state', PreOrderStateController);
-
 import ReferencesSelectController from './references_select_controller';
 application.register('references-select', ReferencesSelectController);
 

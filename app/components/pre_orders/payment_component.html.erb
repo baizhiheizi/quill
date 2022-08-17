@@ -24,7 +24,7 @@
   <div class="mb-2">
     <span class="text-mono text-sm opacity-75"><%= t('payment_crypto') %></span>
   </div>
-  <div class="mb-8">
+  <div class="mb-6">
     <%= link_to currencies_path(type: :swappable, identifier: @identifier), 
       disabled: (!SwapOrder::FOXSWAP_ENABLE),
       data: {
@@ -49,12 +49,14 @@
     <% end %>
   </div>
 
-  <div data-pre-orders-payment-component-target="state" class="hidden mb-8">
-    <%= render "pre_orders/state", pre_order: @pre_order %>
+  <div id="<%= dom_id @pre_order %>_pay_button" 
+       class="mb-4"
+       data-action="click->pre-orders-payment-component#pay">
+    <%= render PreOrders::PayButtonComponent.new pre_order: @pre_order, pay_asset: @pay_asset %>
   </div>
 
-  <div id="<%= dom_id @pre_order %>_pay_button" class="mb-8">
-    <%= render PreOrders::PayButtonComponent.new pre_order: @pre_order, pay_asset: @pay_asset %>
+  <div data-pre-orders-payment-component-target="state" class="hidden mb-8">
+    <%= render PreOrders::StateComponent.new pre_order: @pre_order %>
   </div>
 
   <% if @pre_order.mixpay_supported? %>

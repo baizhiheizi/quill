@@ -18,5 +18,8 @@ application.register('pre-orders-payment-component', PreOrdersPaymentComponentCo
 import PreOrdersPayButtonComponentController from './pre_orders/pay_button_component_controller';
 application.register('pre-orders-pay-button-component', PreOrdersPayButtonComponentController);
 
+import PreOrdersStateComponentController from './pre_orders/state_component_controller';
+application.register('pre-orders-state-component', PreOrdersStateComponentController);
+
 import MvmPayButtonComponentController from './mvm_pay_button_component_controller';
 application.register('mvm-pay-button-component', MvmPayButtonComponentController);

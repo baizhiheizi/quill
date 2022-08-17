@@ -1,5 +1,5 @@
 <div class="w-96 max-w-full mx-auto px-4">
-  <%= render "pre_orders/state", pre_order: @pre_order %>
+  <%= render PreOrders::StateComponent.new pre_order: @pre_order %>
 
   <%= link_to t('back'), user_article_path(@pre_order.item.author, @pre_order.item), class: "block mt-8 rounded-lg bg-primary text-white text-center py-3 text-lg" %>
 </div>
