@@ -6,7 +6,7 @@
   data-mvm-pay-button-component-asset-id-value="<%= @currency.asset_id %>">
 
   <div data-mvm-pay-button-component-target="button" class="my-4">
-    <button data-action="mvm-pay-button-component#pay"
+    <button data-action="mvm-pay-button-component#pay pre-orders-payment-component#hideOtherPayments"
       data-mvm-pay-button-component-payer-id-param="<%= @payer.mixin_uuid %>"
       data-mvm-pay-button-component-trace-id-param="<%= @trace_id %>"
       data-mvm-pay-button-component-asset-id-param="<%= @currency.asset_id %>"
@@ -71,15 +71,6 @@
 
   <div class="w-full hidden" data-mvm-pay-button-component-target="wait">
     <%= render partial: "shared/loading" %>
-    <div class="text-sm text-center opacity-70">
-      <%= t('transaction_submitted') %>
-    </div>
-  </div>
-
-  <div class="w-full hidden" data-mvm-pay-button-component-target="finish">
-    <button data-action="modal#ok" class="py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-full block cursor-pointer w-96 max-w-full my-4 text-center mx-auto text-lg font-bold">
-      <%= t('finish') %>
-    </button>
     <div class="text-sm text-center opacity-70">
       <%= t('transaction_submitted') %>
     </div>

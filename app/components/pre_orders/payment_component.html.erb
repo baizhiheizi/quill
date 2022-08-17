@@ -53,14 +53,12 @@
     <%= render "pre_orders/state", pre_order: @pre_order %>
   </div>
 
-  <div id="<%= dom_id @pre_order %>_pay_button" 
-      class="mb-4" 
-      data-action="click->pre-orders-payment-component#pay">
+  <div id="<%= dom_id @pre_order %>_pay_button" class="mb-8">
     <%= render PreOrders::PayButtonComponent.new pre_order: @pre_order, pay_asset: @pay_asset %>
   </div>
 
   <% if @pre_order.mixpay_supported? %>
-    <div data-pre-orders-payment-component-target="otherPayments" class="pt-4 border-t-2 border-dashed border-zinc-200 my-4">
+    <div data-pre-orders-payment-component-target="otherPayments" class="pt-4 border-t-2 border-dashed border-zinc-200 dark:border-zinc-800 mb-4">
       <div class="mb-2 text-mono text-sm opacity-75">
         <%= t('choose_other_payment') %>
       </div>

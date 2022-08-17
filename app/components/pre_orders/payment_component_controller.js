@@ -50,11 +50,13 @@ export default class extends Controller {
     ).then(() => hideLoading());
   }
 
-  pay() {
-    if (this.hasCurrencyButtonTarget) {
-      this.selectCurrencyButtonTarget.disabled = true;
+  showState() {
+    if (this.hasStateTarget) {
+      this.stateTarget.classList.remove('hidden');
     }
+  }
 
+  hideOtherPayments() {
     if (this.hasOtherPaymentsTarget) {
       this.otherPaymentsTarget.classList.add('hidden');
     }
