@@ -5,6 +5,8 @@
       data: { 
         turbo_frame: :modal 
       }, class: "block w-full cursor-pointer bg-primary hover:scale-105 rounded text-white text-center py-1 px-4" %>
+  <% elsif current_user == user %>
+    <span></span>
   <% elsif current_user.subscribe_user? user %>
     <div class="w-full text-center py-1">
       <%= link_to t('unsubscribe'), 
