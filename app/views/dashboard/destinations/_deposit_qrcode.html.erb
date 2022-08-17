@@ -3,25 +3,28 @@
 
 <div id="<%= dom_id current_user %>_deposit_qrcode">
   <div class="sm:flex items-start">
-    <div class="flex-1" data-controller="qrcode" data-qrcode-url-value="<%= deposit_entry['destination'] %>">
-      <div data-qrcode-target="placeholder" class="flex justify-center h-48 mb-2"></div>
-      <div class="flex justify-center">
-        <span class="rounded text-sm px-2 py-1 opacity-70 bg-zinc-100 dark:bg-zinc-800">Address</span>
-      </div>
-      <div class="text-center break-all">
-        <span class="font-black"><%= deposit_entry['destination'] %></span>
-      </div>
+    <div class="flex-1">
+      <%= render QrcodeComponent.new url: deposit_entry['destination'], image_classes: 'h-48' do %>
+        <div class="flex justify-center">
+          <span class="rounded text-sm px-2 py-1 opacity-70 bg-zinc-100 dark:bg-zinc-800">Address</span>
+        </div>
+        <div class="text-center break-all">
+          <span class="font-black"><%= deposit_entry['destination'] %></span>
+        </div>
+      <% end %>
     </div>
 
     <% if deposit_entry['tag'].present? %>
-      <div class="flex-1" data-controller="qrcode" data-qrcode-url-value="<%= deposit_entry['tag'] %>">
-        <div data-qrcode-target="placeholder" class="flex justify-center h-48 mb-2"></div>
-      <div class="flex justify-center">
-        <span class="rounded text-sm px-2 py-1 opacity-70 bg-zinc-100 dark:bg-zinc-800">Tag</span>
-      </div>
-        <div class="text-center break-all">
-          <span class="font-black"><%= deposit_entry['tag'] %></span>
-        </div>
+      <div class="flex-1">
+        <%= render QrcodeComponent.new url: deposit_entry['destination'], image_classes: 'h-48' do %>
+          <div class="flex justify-center">
+            <span class="rounded text-sm px-2 py-1 opacity-70 bg-zinc-100 dark:bg-zinc-800">Tag</span>
+          </div>
+            <div class="text-center break-all">
+              <span class="font-black"><%= deposit_entry['tag'] %></span>
+            </div>
+          </div>
+        <% end %>
       </div>
     <% end %>
   </div>

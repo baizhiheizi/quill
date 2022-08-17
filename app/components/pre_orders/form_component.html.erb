@@ -28,7 +28,7 @@
           data-action="click->pre-orders-form-component#updateAmount"
           class="relative cursor-pointer flex items-center space-x-2 justify-center border border-zinc-200 p-1 rounded">
           <span class="text-sm sm:text-base">
-            <%= sprintf('%.8f', @article.currency.minimal_reward_amount * number) %>
+            <%= sprintf('%.8f', @article.currency.minimal_reward_amount * number).gsub(/0+\z/, '0') %>
           </span>
           <%= render "shared/icons/check_circle_solid", html_class: "w-4 h-4 text-primary absolute right-1 top-1 checkmark hidden" %>
         </div>

@@ -54,13 +54,11 @@
         </div>
 
         <div class="hidden" data-tabs-target="content" data-tabs-content-param="mixin">
-          <div data-controller="qrcode" 
-              data-qrcode-url-value="<%= current_user.mixin_deposit_url %>">
-              <div data-qrcode-target="placeholder" class="flex justify-center h-48"></div>
-              <div class="text-center py-2 text-gray-500 text-sm">
-                <%= t("scan_with_mixin") %>
-              </div>
-          </div>
+          <%= render QrcodeComponent.new url: current_user.mixin_deposit_url, image_classes: 'h-48' do %>
+            <div class="text-center py-2 text-gray-500 text-sm">
+              <%= t("scan_with_mixin") %>
+            </div>
+          <% end %>
         </div>
       </div>
     </div>
