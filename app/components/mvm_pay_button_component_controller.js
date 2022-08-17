@@ -13,6 +13,7 @@ export default class extends Controller {
     'balance',
     'balanceValue',
     'balanceLink',
+    'mvmTips',
   ];
 
   static values = {
@@ -21,8 +22,34 @@ export default class extends Controller {
     afterSubmitAction: String,
   };
 
+  connect() {
+    this.checkMVM();
+  }
+
+  async checkMVM() {
+    await Wallet.switchToMVM();
+
+    if (!Wallet.isCurrentNetworkMvm()) {
+      let input = this.buttonTarget.querySelector('button');
+      if (!input) return;
+
+      this.mvmTipsTarget.classList.remove('hidden');
+      input.classList.remove(
+        'bg-primary',
+        'text-white',
+        'hover:font-black',
+        'cursor-pointer',
+      );
+      input.classList.add('bg-zinc-300', 'opacity-50');
+      input.disabled = true;
+    } else {
+      this.balanceTarget.classList.remove('hidden');
+    }
+  }
+
   async assetIdValueChanged() {
     if (!this.assetIdValue) return;
+    if (!Wallet.isCurrentNetworkMvm()) return;
 
     const account = await Wallet.account;
     if (!account) return;

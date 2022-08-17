@@ -21,29 +21,6 @@ export default class extends Controller {
     'mvmTips',
   ];
 
-  async checkMVM() {
-    if (this.typeValue === 'MVMPreOrder') {
-      await Wallet.switchToMVM();
-
-      if (!Wallet.isCurrentNetworkMvm()) {
-        let input = this.submitButtonTarget.querySelector('input[type=submit]');
-        if (!input) return;
-
-        this.mvmTipsTarget.classList.remove('hidden');
-        input.classList.remove(
-          'bg-primary',
-          'text-white',
-          'hover:font-black',
-          'cursor-pointer',
-        );
-        input.classList.add('bg-zinc-300', 'opacity-50');
-        input.disabled = true;
-      }
-    } else {
-      this.mvmTipsTarget.classList.add('hidden');
-    }
-  }
-
   amountValueChanged() {
     this.amountInputTargets.forEach((target) => {
       target.value = this.amountValue;

@@ -7,7 +7,7 @@
 
   <div data-mvm-pay-button-component-target="button" class="my-4">
     <button data-action="mvm-pay-button-component#pay"
-      data-mvm-pay-button-component-payer-id-param="<%= @payer.mixin_uuid %>"
+      data-mvm-pay-button-component-mixin-uuid-param="<%= @payer.mixin_uuid %>"
       data-mvm-pay-button-component-trace-id-param="<%= @trace_id %>"
       data-mvm-pay-button-component-asset-id-param="<%= @currency.asset_id %>"
       data-mvm-pay-button-component-symbol-param="<%= @currency.symbol %>"
@@ -40,8 +40,8 @@
       <span class="text-lg"><%= t('confirm_to_pay') %></span>
     </button>
 
-    <div class="flex justify-between py-1 px-2">
-      <div data-mvm-pay-button-component-target="balance" class="text-sm opacity-75">
+    <div data-mvm-pay-button-component-target="balance" class="hidden flex justify-between py-1 px-2">
+      <div class="text-sm opacity-75">
         <span><%= t('balance') %>:</span>
         <span data-mvm-pay-button-component-target="balanceValue">
           <%= image_tag 'loading.svg', class: 'w-4 h-4 inline-block' %>

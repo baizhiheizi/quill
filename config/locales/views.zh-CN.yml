@@ -295,3 +295,4 @@ zh-CN:
   you_need_to_switch_network_to_mvm: 请先切换至 MVM 网络
   waiting_for_mixpay: 等待 MixPay 完成支付
   paying: 正在支付
+  choose_other_payment: 其他支付方式

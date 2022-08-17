@@ -62,7 +62,7 @@
   <% if @pre_order.mixpay_supported? %>
     <div data-pre-orders-payment-component-target="otherPayments" class="pt-4 border-t-2 border-dashed border-zinc-200 my-4">
       <div class="mb-2 text-mono text-sm opacity-75">
-        <%= t('other_payment') %>
+        <%= t('choose_other_payment') %>
       </div>
       <%= render PreOrders::MixpayButtonComponent.new pre_order: @pre_order %>
     </div>
