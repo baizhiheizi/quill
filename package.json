@@ -28,7 +28,7 @@
     "buffer": "^6.0.3",
     "dayjs": "^1.11.5",
     "easymde": "^2.16.1",
-    "esbuild": "^0.15.1",
+    "esbuild": "^0.15.5",
     "highlight.js": "^11.6.0",
     "json-rpc-engine": "^6.1.0",
     "mixin-messenger-utils": "^0.1.5",
