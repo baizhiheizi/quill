@@ -1,0 +1,25 @@
+<div data-controller="pre-orders-mixpay-button-component">
+  <% if @pre_order.item.mixpay_supported? %>
+    <%= link_to mixpay_pre_order_path(
+        order_type: @pre_order.order_type,
+        item_id: @pre_order.item.id,
+        item_type: @pre_order.item.class.name,
+        asset_id: @pre_order.item.asset_id,
+        amount: @pre_order.amount
+      ),
+      data: {
+        turbo_frame: '_top'
+      }, 
+      class: "relative cursor-pointer block w-96 max-w-full text-center rounded-lg border border-2 border-primary text-primary px-4 py-3 text-xl hover:font-black" do %>
+      <%= image_tag 'mixpay.png', class: "h-8 w-auto absolute left-4 rounded-lg" %>
+      <span class="text-lg">MixPay</span>
+    <% end %>
+  <% else %>
+    <button disabled class="relative block w-96 max-w-full text-center rounded-lg bg-zinc-300  p-4 opacity-50">
+      <%= image_tag 'mixpay.png', class: "h-8 w-auto absolute left-4 rounded-lg" %>
+      <span class="text-lg">
+        <%= t('not_supported_yet') %>
+      </span>
+    </button>
+  <% end %>
+</div>

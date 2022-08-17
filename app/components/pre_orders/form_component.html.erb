@@ -6,8 +6,7 @@
   data-pre-orders-form-component-item-id-value="<%= @article.id %>"
   data-pre-orders-form-component-item-type-value="Article"
   data-pre-orders-form-component-amount-value="<%= @price %>"
-  data-pre-orders-form-component-price-usd-value="<%= @article.currency.price_usd %>"
-  data-pre-orders-form-component-type-value="<%= @article.mixpay_supported? ? 'MixpayPreOrder' : @payer.default_payment %>">
+  data-pre-orders-form-component-price-usd-value="<%= @article.currency.price_usd %>">
 
   <div class="bg-zinc-50 px-4 py-2 rounded mb-4 dark:bg-zinc-800 hidden sm:block">
     <div class="flex items-center space-x-2 mb-1">
@@ -20,6 +19,9 @@
   </div>
 
   <% if @pre_order.order_type == 'reward_article' %>
+    <div class="mb-2">
+      <span class="text-mono text-sm opacity-75"><%= t('choose_reward_amount') %></span>
+    </div>
     <div class="mb-4 grid grid-cols-3 gap-4">
       <% [1, 4, 8, 32, 256, 1024].each do |number| %>
         <div 
@@ -54,75 +56,8 @@
     </div>
   </div>
 
-  <div class="mb-2">
-    <span class="text-mono"><%= t('payment_method') %></span>
-  </div>
-  <div class="grid gap-4 sm:grid-cols-2 mb-8">
-    <div 
-      data-pre-orders-form-component-target="type" 
-      data-pre-orders-form-component-type-param="MixpayPreOrder" 
-      data-action="click->pre-orders-form-component#select"
-      class="relative rounded-lg border border-zinc-200 p-4 flex items-center justify-center cursor-pointer">
-      <%= image_tag 'mixpay.png', class: "h-8 w-auto absolute left-4 rounded-lg" %>
-      <span class="text-lg">MixPay</span>
-      <%= render "shared/icons/check_circle_solid", html_class: "w-6 h-6 text-primary absolute right-1 top-1 checkmark hidden" %>
-    </div>
-
-    <% if @payer.messenger? %>
-      <div
-        data-pre-orders-form-component-target="type" 
-        data-pre-orders-form-component-type-param="MixinPreOrder" 
-        data-action="click->pre-orders-form-component#select"
-        class="relative rounded-lg border border-zinc-200 p-4 flex items-center justify-center cursor-pointer">
-        <%= image_tag 'mixin-logo.png', class: "h-8 w-auto absolute left-4 rounded-lg" %>
-        <span class="text-lg"><%= t("mixin") %></span>
-        <%= render "shared/icons/check_circle_solid", html_class: "w-6 h-6 text-primary absolute right-1 top-1 checkmark hidden" %>
-      </div>
-    <% elsif @payer.fennec? %>
-      <div
-        data-pre-orders-form-component-target="type" 
-        data-pre-orders-form-component-type-param="FennecPreOrder" 
-        data-action="click->pre-orders-form-component#select"
-        class="relative rounded-lg border border-zinc-200 p-4 flex items-center justify-center cursor-pointer">
-        <%= image_tag 'fennec-logo.png', class: "h-8 w-auto absolute left-4 rounded-lg" %>
-        <span class="text-lg"><%= t("fennec") %></span>
-        <%= render "shared/icons/check_circle_solid", html_class: "w-6 h-6 text-primary absolute right-1 top-1 checkmark hidden" %>
-      </div>
-    <% elsif @payer.mvm_eth? %>
-      <div
-        data-pre-orders-form-component-target="type" 
-        data-pre-orders-form-component-type-param="MVMPreOrder" 
-        data-action="click->pre-orders-form-component#select"
-        class="relative rounded-lg border border-zinc-200 p-4 flex items-center justify-center cursor-pointer">
-        <%= image_tag 'mvm.svg', class: "h-8 w-auto absolute left-4 rounded-lg" %>
-        <span class="text-lg"><%= t("mvm") %></span>
-        <%= render "shared/icons/check_circle_solid", html_class: "w-6 h-6 text-primary absolute right-1 top-1 checkmark hidden" %>
-      </div>
-    <% end %>
-  </div>
-
   <div class="mb-4">
-    <% if @article.mixpay_supported? %>
-      <%= link_to t('continue'),
-        mixpay_pre_order_path(
-          order_type: @pre_order.order_type,
-          item_id: @article.id,
-          item_type: 'Article',
-          asset_id: @article.asset_id,
-          amount: @price
-        ),
-        data: {
-          pre_orders_form_component_target: 'mixpaySubmitButton',
-          turbo_frame: '_top'
-        }, 
-        class: "hidden cursor-pointer block w-full text-center rounded-lg bg-primary text-white p-4 text-xl hover:font-black" %>
-    <% else %>
-      <button disabled data-pre-orders-form-component-target="mixpaySubmitButton" class="hidden block w-full text-center rounded-lg bg-zinc-300  p-4 text-xl opacity-50">
-        <%= t('not_supported_yet') %>
-      </button>
-    <% end %>
-
-    <%= form_for PreOrder.new, data: { pre_orders_form_component_target: 'submitButton' }, class: "hidden" do |form| %>
+    <%= form_for PreOrder.new do |form| %>
       <%= form.hidden_field :order_type, value: @pre_order.order_type %>
       <%= form.hidden_field :item_id, value: @article.id %>
       <%= form.hidden_field :item_type, value: 'Article' %>
@@ -133,20 +68,9 @@
           pre_orders_form_component_target: 'amountInput'
         } 
       %>
-      <%= form.hidden_field :type, 
-        value: 'MixinPreOrder', 
-        data: { 
-          pre_orders_form_component_target: 'typeInput' 
-        } 
-      %>
+      <%= form.hidden_field :type, value: @payer.default_payment %>
 
       <%= form.submit t('continue'), class: "cursor-pointer block w-full rounded-lg bg-primary text-white p-4 text-xl hover:font-black" %>
     <% end %>
-    <div data-pre-orders-form-component-target="mvmTips" class="hidden text-red-500 text-sm py-1">
-      <%= link_to 'https://docs.quill.im/category/swich-to-mvm', target: "_blank", class: "flex items-center space-x-2" do %> 
-        <span><%= t('you_need_to_switch_network_to_mvm') %></span>
-        <%= render "shared/icons/question_mark_circle", html_class: 'w-4 h-4' %>
-      <% end %>
-    </div>
   </div>
 </div>

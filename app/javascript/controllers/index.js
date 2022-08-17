@@ -52,9 +52,6 @@ application.register('modal', ModalController);
 import MvmDepositController from './mvm_deposit_controller';
 application.register('mvm-deposit', MvmDepositController);
 
-import MvmPayController from './mvm_pay_controller';
-application.register('mvm-pay', MvmPayController);
-
 import NestedFormController from './nested_form_controller';
 application.register('nested-form', NestedFormController);
 

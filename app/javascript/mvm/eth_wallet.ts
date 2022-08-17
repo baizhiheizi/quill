@@ -99,28 +99,28 @@ export class EthWallet {
       assetId: string;
       symbol: string;
       amount: string;
-      opponentIds: string[];
+      receivers: string[];
       threshold: number;
       memo: string;
-      mixinUuid: string;
+      payerId: string;
     },
     success: (hash?: string) => void,
     fail: (error?: Error) => void,
   ) {
-    const { assetId, symbol, amount, opponentIds, threshold, memo, mixinUuid } =
+    const { assetId, symbol, amount, receivers, threshold, memo, payerId } =
       params;
     if (memo.length > 200) {
       fail(new Error('Memo too long!'));
       return;
     }
 
-    const contract = await this.fetchUsersContract([mixinUuid], 1);
+    const contract = await this.fetchUsersContract([payerId], 1);
     if (!contract || !parseInt(contract)) {
       fail(new Error('User contract empty, please deposit some asset first.'));
       return;
     }
 
-    const extra = await this.fetchExtra(opponentIds, threshold, memo);
+    const extra = await this.fetchExtra(receivers, threshold, memo);
 
     if (assetId === NativeAssetId) {
       return this.payNative(
@@ -215,15 +215,15 @@ export class EthWallet {
     params: {
       collectionId: string;
       tokenId: number;
-      opponentIds: string[];
+      receivers: string[];
       threshold: number;
       memo: string;
-      mixinUuid: string;
+      payerId: string;
     },
     success: (hash?: string) => void,
     fail: (error: Error) => void,
   ) {
-    const { collectionId, tokenId, opponentIds, threshold, memo, mixinUuid } =
+    const { collectionId, tokenId, receivers, threshold, memo, payerId } =
       params;
     const Mirror = new this.web3.eth.Contract(MirrorABI, MirrorAddress);
     const tokenContract = await Mirror.methods
@@ -242,8 +242,8 @@ export class EthWallet {
       return;
     }
 
-    const extra = await this.fetchExtra(opponentIds, threshold, memo);
-    const contract = await this.fetchUsersContract([mixinUuid], 1);
+    const extra = await this.fetchExtra(receivers, threshold, memo);
+    const contract = await this.fetchUsersContract([payerId], 1);
     ERC721.options.gasPrice = GasPrice;
     ERC721.methods
       .safeTransferFrom(this.account, MirrorAddress, tokenId, contract + extra)
@@ -253,16 +253,14 @@ export class EthWallet {
   }
 
   async fetchExtra(
-    opponentIds: string[],
+    receivers: string[],
     threshold: number,
     memo: string,
   ): Promise<any> {
     const res = await axios.post('https://bridge.mvm.dev/extra', {
-      body: {
-        receivers: opponentIds,
-        threshold,
-        extra: memo,
-      },
+      receivers,
+      threshold,
+      extra: memo,
     });
     return res.data.extra;
   }

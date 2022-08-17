@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class PreOrders::ButtonComponent < ApplicationComponent
+class PreOrders::PayButtonComponent < ApplicationComponent
   def initialize(pre_order:, pay_asset:)
     super
 

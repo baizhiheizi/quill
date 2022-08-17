@@ -7,7 +7,6 @@ export default class extends Controller {
     followId: String,
     identifier: String,
     payAssetId: String,
-    type: String,
   };
 
   static targets = [
@@ -15,8 +14,8 @@ export default class extends Controller {
     'currencyIcon',
     'currencyChainIcon',
     'currencySymbol',
-    'payButton',
     'state',
+    'otherPayments',
   ];
 
   connect() {
@@ -52,9 +51,12 @@ export default class extends Controller {
   }
 
   pay() {
-    this.selectCurrencyButtonTarget.disabled = true;
-    if (this.typeValue !== 'MVMPreOrder') {
-      this.stateTarget.classList.remove('hidden');
+    if (this.hasCurrencyButtonTarget) {
+      this.selectCurrencyButtonTarget.disabled = true;
+    }
+
+    if (this.hasOtherPaymentsTarget) {
+      this.otherPaymentsTarget.classList.add('hidden');
     }
   }
 }

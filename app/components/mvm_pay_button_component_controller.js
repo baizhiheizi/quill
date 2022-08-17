@@ -1,5 +1,5 @@
 import { Controller } from '@hotwired/stimulus';
-import { notify, showLoading, hideLoading } from '../utils';
+import { notify, showLoading, hideLoading } from '../javascript/utils';
 
 export default class extends Controller {
   static targets = [
@@ -59,7 +59,7 @@ export default class extends Controller {
       return;
     }
 
-    const { assetId, symbol, amount, opponentIds, threshold, memo, mixinUuid } =
+    const { assetId, symbol, amount, receivers, threshold, memo, payerId } =
       event.params;
 
     this.lockButton();
@@ -67,7 +67,7 @@ export default class extends Controller {
       notify(`Invoking ${Wallet.provider} to pay ${amount} ${symbol}`, 'info');
 
       await Wallet.payWithMVM(
-        { assetId, symbol, amount, opponentIds, threshold, memo, mixinUuid },
+        { assetId, symbol, amount, receivers, threshold, memo, payerId },
         (hash) => {
           notify('Transaction submitted', 'success');
           this.buttonTarget.classList.add('hidden');

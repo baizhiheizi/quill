@@ -6,15 +6,17 @@
   data-pre-orders-payment-component-identifier-value="<%= @identifier %>"
   data-pre-orders-payment-component-pay-asset-id="<%= @pay_asset.asset_id %>"
   id="<%= dom_id @pre_order %>">
+
   <div class="mb-4">
-    <div class="flex items-center">
+    <div class="flex items-center space-x-2">
+      <%= image_tag @pre_order.currency.icon_url, class: "w-6 h-6 rounded-full", lazy: true %>
       <span class="text-2xl font-serif font-black"><%= @pre_order.amount_tag %></span>
     </div>
-    <div id="<%= dom_id @pre_order %>_pay_amount" class="flex items-center">
-      <% if @pay_asset != @pre_order.currency %>
-        <span class="text-sm">
-          ≈ <%= @pre_order.pay_amount(@pay_asset.asset_id) %> <%= @pay_asset.symbol %>
-        </span>
+    <div id="<%= dom_id @pre_order %>_pay_amount" class="text-sm">
+      <% if @pay_asset == @pre_order.currency %>
+        ≈$ <%= sprintf('%.4f', @pre_order.currency.price_usd * @pre_order.amount) %>
+      <% else %>
+        ≈ <%= @pre_order.pay_amount(@pay_asset.asset_id) %> <%= @pay_asset.symbol %>
       <% end %>
     </div>
   </div>
@@ -53,7 +55,16 @@
 
   <div id="<%= dom_id @pre_order %>_pay_button" 
       class="mb-4" 
-      data-pre-orders-payment-component-target="payButton">
-    <%= render PreOrders::ButtonComponent.new pre_order: @pre_order, pay_asset: @pay_asset %>
+      data-action="click->pre-orders-payment-component#pay">
+    <%= render PreOrders::PayButtonComponent.new pre_order: @pre_order, pay_asset: @pay_asset %>
   </div>
+
+  <% if @pre_order.mixpay_supported? %>
+    <div data-pre-orders-payment-component-target="otherPayments" class="pt-4 border-t-2 border-dashed border-zinc-200 my-4">
+      <div class="mb-2 text-mono text-sm opacity-75">
+        <%= t('other_payment') %>
+      </div>
+      <%= render PreOrders::MixpayButtonComponent.new pre_order: @pre_order %>
+    </div>
+  <% end %>
 </div>

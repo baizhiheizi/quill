@@ -75,6 +75,10 @@ class PreOrder < ApplicationRecord
       end
   end
 
+  def mixpay_supported?
+    asset_id.in? (Mixpay.api.settlement_asset_ids + Mixpay.api.quote_asset_ids).uniq
+  end
+
   def broadcast_to_views
     I18n.with_locale payer.locale do
       broadcast_update_to "user_#{payer_id}", target: "#{type.underscore}_#{id}_state", partial: 'pre_orders/state', locals: { pre_order: self }
@@ -99,9 +103,9 @@ class PreOrder < ApplicationRecord
     self.memo =
       case order_type
       when 'buy_article'
-        Base64.urlsafe_encode64({ t: 'BUY', a: item.uuid, f: follow_id }.to_json)
+        Base64.urlsafe_encode64({ t: 'BUY', a: item.uuid, f: follow_id }.to_json, padding: false)
       when 'reward_article'
-        Base64.urlsafe_encode64({ t: 'REWARD', a: item.uuid, f: follow_id }.to_json)
+        Base64.urlsafe_encode64({ t: 'REWARD', a: item.uuid, f: follow_id }.to_json, padding: false)
       end
     self.payee_id = payer.wallet_id || item.wallet_id || QuillBot.api.client_id
     self.asset_id = item.asset_id if asset_id.blank?
