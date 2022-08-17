@@ -50,7 +50,7 @@
   </div>
 
   <div id="<%= dom_id @pre_order %>_pay_button" 
-       class="mb-4"
+       class="mb-8"
        data-action="click->pre-orders-payment-component#pay">
     <%= render PreOrders::PayButtonComponent.new pre_order: @pre_order, pay_asset: @pay_asset %>
   </div>
