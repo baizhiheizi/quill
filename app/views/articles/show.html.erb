@@ -7,7 +7,9 @@
           <div class="leading-4 truncate">
             <span class="text-base font-semibold"><%= @article.author.short_name %></span>
             <div class="text-sm sm:text-base text-gray-500 font-light">
-              <%= @article.published_at&.strftime("%Y-%m-%d %H:%M") %>
+              <%= render TimeFormatComponent.new datetime: @article.published_at.utc.rfc3339 do %>
+                <%= @article.published_at&.strftime("%Y-%m-%d %H:%M") %>
+              <% end %>
             </div>
           </div>
           <%= link_to user_path(@article.author) do %>
