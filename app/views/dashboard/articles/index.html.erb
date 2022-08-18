@@ -31,13 +31,6 @@
         tabs_target: "tab",
         tabs_tabname_param: "hidden" 
       } %>
-    <%= link_to t('blocked'), 
-      dashboard_articles_path(tab: :blocked),
-      class: "cursor-pointer py-1 px-4 border-primary opacity-70 min-w-fit",
-      data: {
-        tabs_target: "tab",
-        tabs_tabname_param: "blocked" 
-      } %>
   </div>
 </div>
 
@@ -63,8 +56,6 @@
         <%= render partial: "dashboard/articles/bought_article", collection: @articles, as: :article %>
       <% when 'hidden' %>
         <%= render partial: "dashboard/articles/hidden_article", collection: @articles, as: :article %>
-      <% when 'blocked' %>
-        <%= render partial: "dashboard/articles/blocked_article", collection: @articles, as: :article %>
       <% end %>
     <% end %>
   </div>

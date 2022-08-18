@@ -7,10 +7,6 @@ zh-CN:
       bought: 购买了文章
     article_rewarded_notification:
       rewarded: 赞赏了文章
-    article_blocked_notification:
-      blocked: '您的文章已被管理员屏蔽:'
-    article_unblocked_notification:
-      unblocked: '您的文章屏蔽已经解除:'
     comment_created_notification:
       commented: 发表了新评论
     comment_deleted_notification:
@@ -37,9 +33,5 @@ zh-CN:
       swap_refund: 兑换后购买失败退款
     subscribe_user_action_created_notification:
       subscribed: 订阅了您的动态
-    user_banned_notification:
-      banned: 你的帐号被管理员限制，不能发表文章或者评论。
-    user_unbanned_notification:
-      unbanned: 你的帐号限制已解除。
     user_connected_notification:
       message: 欢迎来到Quill！您也可以浏览网站 quill.im 使用Quill的服务，有任何问题可以直接给机器人留言，或者加入 @7000103074 参与讨论。

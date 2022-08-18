@@ -10,8 +10,6 @@ class Dashboard::ArticlesController < Dashboard::BaseController
         current_user.articles.drafted
       when 'hidden'
         current_user.articles.hidden
-      when 'blocked'
-        current_user.articles.blocked
       when 'published'
         current_user.articles.published
       when 'bought'

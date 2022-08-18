@@ -27,7 +27,6 @@ zh-CN:
         state:
           drafted: 草稿
           published: 已发表
-          blocked: 已屏蔽
           hidden: 已隐藏
         platform_revenue_ratio: 平台收益
         author_revenue_ratio: 作者收益

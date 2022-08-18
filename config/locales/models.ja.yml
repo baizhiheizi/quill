@@ -29,7 +29,6 @@ ja:
         state:
           drafted: ドラフト
           published: 公開
-          blocked: ブロック済み
           hidden: 非公開
         platform_revenue_ratio: 文商収益
         readers_revenue_ratio: 読者収益

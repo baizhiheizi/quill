@@ -29,10 +29,7 @@ namespace :admin do
     post :ban
     post :unban
   end
-  resources :articles, only: %i[index show], param: :uuid do
-    post :block
-    post :unblock
-  end
+  resources :articles, only: %i[index show], param: :uuid
   resources :comments, only: %i[index] do
     post :delete
     post :undelete

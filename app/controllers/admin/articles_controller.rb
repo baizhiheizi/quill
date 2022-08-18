@@ -69,15 +69,5 @@ module Admin
       @tab = params[:tab] || 'orders'
       @article = Article.find_by uuid: params[:uuid]
     end
-
-    def block
-      @article = Article.find_by(uuid: params[:article_uuid])
-      @article.block! if @article.may_block?
-    end
-
-    def unblock
-      @article = Article.find_by(uuid: params[:article_uuid])
-      @article.unblock! if @article.may_unblock?
-    end
   end
 end

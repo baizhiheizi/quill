@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_08_09_030453) do
+ActiveRecord::Schema[7.0].define(version: 2022_08_18_011748) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
   enable_extension "pgcrypto"
@@ -133,6 +133,23 @@ ActiveRecord::Schema[7.0].define(version: 2022_08_09_030453) do
     t.index ["author_id"], name: "index_articles_on_author_id"
     t.index ["collection_id"], name: "index_articles_on_collection_id"
     t.index ["uuid"], name: "index_articles_on_uuid", unique: true
+  end
+
+  create_table "arweave_transactions", force: :cascade do |t|
+    t.bigint "article_snapshot_id"
+    t.bigint "order_id"
+    t.uuid "article_uuid"
+    t.uuid "signer_id"
+    t.string "tx_id"
+    t.string "state"
+    t.json "raw"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["article_snapshot_id"], name: "index_arweave_transactions_on_article_snapshot_id"
+    t.index ["article_uuid"], name: "index_arweave_transactions_on_article_uuid"
+    t.index ["order_id"], name: "index_arweave_transactions_on_order_id"
+    t.index ["signer_id"], name: "index_arweave_transactions_on_signer_id"
+    t.index ["tx_id"], name: "index_arweave_transactions_on_tx_id"
   end
 
   create_table "bonuses", force: :cascade do |t|

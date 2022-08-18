@@ -152,18 +152,6 @@ class User < ApplicationRecord
     banned_at?
   end
 
-  def ban!
-    update banned_at: Time.current
-
-    UserBannedNotification.with(user: self).deliver(self)
-  end
-
-  def unban!
-    update banned_at: nil
-
-    UserUnbannedNotification.with(user: self).deliver(self)
-  end
-
   def articles_count
     @articles_count ||= articles.count
   end

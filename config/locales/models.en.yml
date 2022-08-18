@@ -27,7 +27,6 @@ en:
         state:
           drafted: Draft
           published: Published
-          blocked: Blocked
           hidden: Hidden
         platform_revenue_ratio: Quill Revenue
         readers_revenue_ratio: Readers Revenue

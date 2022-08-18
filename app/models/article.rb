@@ -145,15 +145,6 @@ class Article < ApplicationRecord
       transitions from: :drafted, to: :published
       transitions from: :hidden, to: :published
     end
-
-    event :block, after_commit: %i[notify_author_blocked] do
-      transitions from: :hidden, to: :blocked
-      transitions from: :published, to: :blocked
-    end
-
-    event :unblock, after_commit: %i[notify_author_unblocked] do
-      transitions from: :blocked, to: :hidden
-    end
   end
 
   def free?
@@ -220,14 +211,6 @@ class Article < ApplicationRecord
 
   def wallet_id
     @wallet_id = wallet&.uuid
-  end
-
-  def notify_author_blocked
-    ArticleBlockedNotification.with(article: self).deliver(author)
-  end
-
-  def notify_author_unblocked
-    ArticleUnblockedNotification.with(article: self).deliver(author)
   end
 
   def author_revenue_usd

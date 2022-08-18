@@ -7,10 +7,6 @@ ja:
       bought: 記事が購入されました
     article_rewarded_notification:
       rewarded: リワードが付与されました
-    article_blocked_notification:
-      blocked: 'あなたの記事は運営によってブロックされました:'
-    article_unblocked_notification:
-      unblocked: 'あなたの記事のブロックが解除されました:'
     comment_created_notification:
       commented: コメントされました
     comment_deleted_notification:
@@ -37,9 +33,5 @@ ja:
       swap_refund: スワップ後の払い戻し
     subscribe_user_action_created_notification:
       subscribed: 新しく投稿した記事がフォローされました
-    user_banned_notification:
-      banned: あなたのアカウントは運営により凍結されています。記事の作成やコメントの投稿はできません。
-    user_unbanned_notification:
-      unbanned: あなたのアカウントの凍結が解除されました。記事の作成やコメントの投稿が可能です。
     user_connected_notification:
       message: 歓迎！
