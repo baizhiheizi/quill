@@ -34,6 +34,7 @@ class Comment < ApplicationRecord
   has_many :comments, class_name: 'Comment', foreign_key: :quote_comment_id, inverse_of: :quote_comment, dependent: :nullify
 
   validates :content, presence: true, length: { maximum: 1000 }
+  validate :ensure_author_not_blocked, on: :create
 
   after_commit :notify_subscribers_async,
                :subscribe_for_author,
@@ -53,5 +54,13 @@ class Comment < ApplicationRecord
 
   def content_as_html
     MarkdownRenderService.call content, type: :full
+  end
+
+  private
+
+  def ensure_author_not_blocked
+    return unless new_record?
+
+    errors.add(:author, 'blocked') if commentable&.author&.block_user? author
   end
 end
