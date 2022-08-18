@@ -30,6 +30,9 @@
 
 class User < ApplicationRecord
   include Authenticatable
+  include Users::Scopable
+  include Users::Statable
+
   extend Enumerize
 
   has_one :authorization, class_name: 'UserAuthorization', inverse_of: :user, dependent: :restrict_with_error
@@ -64,59 +67,6 @@ class User < ApplicationRecord
 
   after_commit :prepare_async, on: :create
 
-  default_scope { includes(:authorization) }
-  scope :only_mixin_messenger, -> { where(authorization: { provider: :mixin }) }
-  scope :only_fennec, -> { where(authorization: { provider: :fennec }) }
-  scope :only_mvm, -> { where(authorization: { provider: :mvm_eth }) }
-
-  scope :active, lambda {
-    order_by_articles_count
-      .where(
-        articles: { created_at: (1.month.ago)..., orders_count: 1... }
-      )
-  }
-  scope :only_validated, -> { where.not(validated_at: nil) }
-  scope :order_by_revenue_total, lambda {
-    joins(:revenue_transfers)
-      .group(:id)
-      .select(
-        <<~SQL.squish
-          users.*,
-          SUM(transfers.amount) AS revenue_total
-        SQL
-      ).order(revenue_total: :desc)
-  }
-  scope :order_by_orders_total, lambda {
-    joins(:orders)
-      .group(:id)
-      .select(
-        <<~SQL.squish
-          users.*,
-          SUM(orders.value_btc) AS orders_total
-        SQL
-      ).order(orders_total: :desc)
-  }
-  scope :order_by_articles_count, lambda {
-    joins(:articles)
-      .group(:id)
-      .select(
-        <<~SQL.squish
-          users.*,
-          COUNT(articles.id) AS articles_count
-        SQL
-      ).order(articles_count: :desc)
-  }
-  scope :order_by_comments_count, lambda {
-    joins(:comments)
-      .group(:id)
-      .select(
-        <<~SQL.squish
-          users.*,
-          COUNT(comments.id) AS comments_count
-        SQL
-      ).order(comments_count: :desc)
-  }
-
   delegate :phone, to: :authorization
 
   # subscribe user
@@ -136,44 +86,8 @@ class User < ApplicationRecord
   # block user
   action_store :block, :user, counter_cache: true, user_counter_cache: 'blocking_count'
 
-  def unread_notifications_count
-    notifications.unread.count
-  end
-
-  def has_unread_notification?
-    notifications.unread.present?
-  end
-
   def bio
     authorization&.raw&.[]('biography') || I18n.t('activerecord.attributes.user.default_bio')
-  end
-
-  def articles_count
-    @articles_count ||= articles.count
-  end
-
-  def bought_articles_count
-    @bought_articles_count ||= bought_articles.count
-  end
-
-  def comments_count
-    @comments_count ||= comments.count
-  end
-
-  def payment_total_usd
-    @payment_total_usd ||= orders.sum(:value_usd).to_f
-  end
-
-  def author_revenue_total_usd
-    @author_revenue_total_usd ||= transfers.joins(:currency).where(transfer_type: :author_revenue).sum('amount * currencies.price_usd').to_f
-  end
-
-  def reader_revenue_total_usd
-    @reader_revenue_total_usd ||= transfers.joins(:currency).where(transfer_type: :reader_revenue).sum('amount * currencies.price_usd').to_f
-  end
-
-  def revenue_total_usd
-    @revenue_total_usd ||= transfers.joins(:currency).where(transfer_type: %i[author_revenue reader_revenue]).sum('amount * currencies.price_usd').to_f
   end
 
   def update_profile(profile = nil)
@@ -203,20 +117,6 @@ class User < ApplicationRecord
 
   def generated_avatar_url
     format('https://api.multiavatar.com/%<mixin_uuid>s.png', mixin_uuid: mixin_uuid)
-  end
-
-  def accessable?
-    return true unless Settings.whitelist&.enable
-
-    mixin_id_in_whitelist? || phone_country_code_in_whitelist?
-  end
-
-  def mixin_id_in_whitelist?
-    mixin_id.in? (Settings.whitelist&.mixin_id || []).map(&:to_s)
-  end
-
-  def phone_country_code_in_whitelist?
-    Regexp.new("^\\+?(#{Settings.whitelist&.phone_country_code&.join('|')})\\d+").match? phone
   end
 
   def mixin_authorization_valid?
@@ -253,30 +153,6 @@ class User < ApplicationRecord
 
   def to_param
     uid
-  end
-
-  def validated?
-    validated_at?
-  end
-
-  def validate!
-    update validated_at: Time.current
-  end
-
-  def unvalidate!
-    update validated_at: nil
-  end
-
-  def fennec?
-    authorization.provider == 'fennec'
-  end
-
-  def messenger?
-    authorization.provider == 'mixin'
-  end
-
-  def mvm_eth?
-    authorization.provider == 'mvm_eth'
   end
 
   def mixin_deposit_url
@@ -317,33 +193,6 @@ class User < ApplicationRecord
     return name unless mvm_eth?
 
     "#{name.first(6)}...#{name.last(4)}"
-  end
-
-  def may_claim_faucet?
-    return unless mvm_eth?
-
-    faucet_bonus.blank?
-  end
-
-  def claim_faucet!
-    return unless may_claim_faucet?
-
-    deposit = authorization.mixin_api.snapshots['data'].find(&->(snapshot) { snapshot['type'] == 'deposit' })
-    return if deposit.blank?
-
-    deposit_asset = Currency.find_or_create_by asset_id: deposit['asset_id']
-    bonus =
-      bonuses.create!(
-        asset_id: Currency::XIN_ASSET_ID,
-        title: 'Faucet',
-        description: "Desposited #{deposit['amount']} #{deposit_asset.symbol}",
-        amount: Bonus::XIN_FAUCET_AMOUNT
-      )
-    bonus.deliver!
-  end
-
-  def faucet_bonus
-    @faucet_bonus = bonuses.find_by(asset_id: Currency::XIN_ASSET_ID, title: 'Faucet')
   end
 
   def default_payment
