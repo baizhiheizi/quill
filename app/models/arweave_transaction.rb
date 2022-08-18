@@ -32,6 +32,7 @@ class ArweaveTransaction < ApplicationRecord
   belongs_to :article_snapshot
 
   before_validation :setup_attributes
+  validate :ensure_arweave_wallet_valid
   validate :ensuere_user_encryptable
 
   aasm column: :state do
@@ -59,7 +60,7 @@ class ArweaveTransaction < ApplicationRecord
     status.accepted?
   end
 
-  def tx
+  def artx
     Arweave::Transaction.new raw
   end
 
@@ -84,7 +85,10 @@ class ArweaveTransaction < ApplicationRecord
     {
       title: article.title,
       intro: article.intro,
-      conent: article_snapshot.raw['content'],
+      content: {
+        cipher: article_snapshot.raw['content'],
+        digest: article_snapshot.raw['content']
+      },
       author: article.author.uid,
       version: article_snapshot.created_at.to_i
     }
@@ -102,13 +106,16 @@ class ArweaveTransaction < ApplicationRecord
 
   def setup_attributes
     tx = Arweave::Transaction.new data: original_data.to_json
-    tx.sign ArweaveTransaction.wallet
     tags.each do |tag|
       tx.add_tag name: tag[:name], value: tag[:value]
     end
-    tx.commit
+    tx.sign ArweaveTransaction.wallet
     self.raw = tx.attributes
     self.tx_id = tx.attributes[:id]
+  end
+
+  def ensure_arweave_wallet_valid
+    errors.add
   end
 
   def ensuere_user_encryptable
