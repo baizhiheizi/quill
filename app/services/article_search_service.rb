@@ -92,7 +92,7 @@ class ArticleSearchService
   end
 
   def filter_block_by_authors
-    return self if @filter ==  'bought'
+    return self if @filter == 'bought'
 
     @articles = @articles.where.not(author_id: @current_user.block_by_user_ids) if @current_user.present?
 
@@ -100,7 +100,7 @@ class ArticleSearchService
   end
 
   def filter_block_authors
-    return self if @filter ==  'bought'
+    return self if @filter == 'bought'
 
     @articles = @articles.where.not(author_id: @current_user.block_user_ids) if @current_user.present?
 
