@@ -119,8 +119,9 @@ class Article < ApplicationRecord
   scope :without_drafted, -> { where.not(state: :drafted) }
   scope :order_by_revenue_usd, -> { order(revenue_usd: :desc) }
   scope :order_by_popularity, lambda {
-    joins(:orders)
+    joins(:orders, :author)
       .group(:id)
+      .where.not(users: { validated_at: nil })
       .select(
         <<~SQL.squish
           articles.*, 
