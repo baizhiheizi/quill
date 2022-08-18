@@ -16,8 +16,8 @@ export default class extends Controller {
     if (!window.Wallet) return;
 
     Wallet.web3.currentProvider.on('chainChanged', (chainId) => {
-      console.warn(`Chain changed to ${chainId}`);
-      notify(`Network changed to ${chainId}`);
+      console.warn(`Chain changed to ${parseInt(chainId)}`);
+      notify(`Network changed to ${parseInt(chainId)}`);
     });
 
     Wallet.web3.currentProvider.on('disconnect', () => {
