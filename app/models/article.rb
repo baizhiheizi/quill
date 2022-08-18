@@ -94,7 +94,6 @@ class Article < ApplicationRecord
   validates :readers_revenue_ratio, presence: true, numericality: { greater_than_or_equal_to: 0.4 }
   validates :author_revenue_ratio, presence: true, numericality: { less_than_or_equal_to: 0.5 }
   validates :references_revenue_ratio, presence: true, numericality: { greater_than_or_equal_to: 0.0 }
-  validate :ensure_author_account_normal
   validate :ensure_price_not_too_low
   validate :ensure_references_ratios_correct
   validate :ensure_revenue_ratios_sum_to_one
@@ -471,12 +470,6 @@ class Article < ApplicationRecord
     return if published_at.blank?
 
     errors.add(:asset_id, 'cannot change') if asset_id_changed?
-  end
-
-  def ensure_author_account_normal
-    return unless new_record?
-
-    errors.add(:author, 'is banned') if author&.banned?
   end
 
   def ensure_price_not_too_low

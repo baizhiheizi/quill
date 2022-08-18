@@ -3,7 +3,7 @@
     <div class="flex items-center justify-between h-16">
       <div class="flex items-center flex-1 space-x-10">
         <%= link_to admin_root_path, class: 'flex items-center space-x-2 flex-shrink-0' do %>
-          <img class="w-10 h-10" src=<%= asset_path(Settings.logo_file || 'logo.svg') %> alt="Logo">
+          <img class="w-auto h-10" src=<%= asset_path(Settings.logo_file || 'logo.svg') %> alt="Logo">
         <% end %>
       </div>
 

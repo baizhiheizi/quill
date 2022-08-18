@@ -25,10 +25,10 @@
   </td>
   <td class="p-4">
     <div class='flex justify-center'>
-      <% if user.banned? %>
-        <span class="px-2 py-1 bg-zinc-500 text-white rounded">Banned</span>
+      <% if user.validated? %>
+        <span class="px-2 py-1 bg-green-500 text-white rounded">Validated</span>
       <% else %>
-        <span class="p-1 bg-green-500 ring-green-100 ring-2 rounded-full"></span>
+        <span class="p-1 bg-blue-500 ring-blue-100 ring-2 rounded-full"></span>
       <% end %>
     </div>
   </td>
@@ -38,20 +38,20 @@
   <td class="p-4">
     <div class="flex items-center space-x-2">
       <%= link_to 'Detail', admin_user_path(user), class: "bg-blue-500 hover:bg-blue-600 rounded text-white px-4 py-2", data: { turbo_frame: "_top" } %>
-      <%= button_to 'Unban', admin_user_unban_path(user),
+      <%= button_to 'Unvalidate', admin_user_unvalidate_path(user),
         form: {
           data: { 
-            turbo_confirm: "Sure to unban?",
+            turbo_confirm: "Sure to unvalidate?",
           }
         },
-        class: "bg-indigo-500 hover:bg-indigo-600 rounded text-white px-4 py-2" if user.banned? %>
-      <%= button_to 'Ban', admin_user_ban_path(user),
+        class: "bg-red-500 hover:bg-red-600 rounded text-white px-4 py-2" if user.validated? %>
+      <%= button_to 'Validate', admin_user_validate_path(user),
         form: {
           data: { 
-            turbo_confirm: "Sure to ban?",
+            turbo_confirm: "Sure to validate?",
           }
         },
-        class: "bg-red-500 hover:bg-red-600 rounded text-white px-4 py-2" unless user.banned? %>
+        class: "bg-indigo-500 hover:bg-indigo-600 rounded text-white px-4 py-2" unless user.validated? %>
     </di>
   </td>
 </tr>

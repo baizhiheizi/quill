@@ -7,7 +7,6 @@
 #  id                          :bigint           not null, primary key
 #  authoring_subscribers_count :integer          default(0)
 #  avatar_url                  :string
-#  banned_at                   :datetime
 #  blocking_count              :integer          default(0)
 #  blocks_count                :integer          default(0)
 #  locale                      :string
@@ -17,6 +16,7 @@
 #  subscribers_count           :integer          default(0)
 #  subscribing_count           :integer          default(0)
 #  uid                         :string
+#  validated_at                :datetime
 #  created_at                  :datetime         not null
 #  updated_at                  :datetime         not null
 #  mixin_id                    :string
@@ -67,6 +67,7 @@ class User < ApplicationRecord
   default_scope { includes(:authorization) }
   scope :only_mixin_messenger, -> { where(authorization: { provider: :mixin }) }
   scope :only_fennec, -> { where(authorization: { provider: :fennec }) }
+  scope :only_mvm, -> { where(authorization: { provider: :mvm_eth }) }
 
   scope :active, lambda {
     order_by_articles_count
@@ -74,8 +75,7 @@ class User < ApplicationRecord
         articles: { created_at: (1.month.ago)..., orders_count: 1... }
       )
   }
-  scope :only_banned, -> { where.not(banned_at: nil) }
-  scope :without_banned, -> { where(banned_at: nil) }
+  scope :only_validated, -> { where.not(validated_at: nil) }
   scope :order_by_revenue_total, lambda {
     joins(:revenue_transfers)
       .group(:id)
@@ -146,10 +146,6 @@ class User < ApplicationRecord
 
   def bio
     authorization&.raw&.[]('biography') || I18n.t('activerecord.attributes.user.default_bio')
-  end
-
-  def banned?
-    banned_at?
   end
 
   def articles_count
@@ -257,6 +253,18 @@ class User < ApplicationRecord
 
   def to_param
     uid
+  end
+
+  def validated?
+    validated_at?
+  end
+
+  def validate!
+    update validated_at: Time.current
+  end
+
+  def unvalidate!
+    update validated_at: nil
   end
 
   def fennec?

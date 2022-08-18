@@ -34,7 +34,6 @@ class Comment < ApplicationRecord
   has_many :comments, class_name: 'Comment', foreign_key: :quote_comment_id, inverse_of: :quote_comment, dependent: :nullify
 
   validates :content, presence: true, length: { maximum: 1000 }
-  validate :ensure_author_account_normal
 
   after_commit :notify_subscribers_async,
                :subscribe_for_author,
@@ -54,13 +53,5 @@ class Comment < ApplicationRecord
 
   def content_as_html
     MarkdownRenderService.call content, type: :full
-  end
-
-  private
-
-  def ensure_author_account_normal
-    return unless new_record?
-
-    errors.add(:author, 'account is banned!') if author&.banned?
   end
 end

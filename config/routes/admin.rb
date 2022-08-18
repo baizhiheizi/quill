@@ -26,8 +26,8 @@ namespace :admin do
   get 'logout', to: 'sessions#delete', as: :logout
 
   resources :users, only: %i[index show], param: :uid do
-    post :ban
-    post :unban
+    post :validate
+    post :unvalidate
   end
   resources :articles, only: %i[index show], param: :uuid
   resources :comments, only: %i[index] do

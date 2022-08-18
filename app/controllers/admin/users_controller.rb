@@ -12,8 +12,10 @@ module Admin
           users.only_mixin_messenger
         when 'fennec'
           users.only_fennec
-        when 'only_banned'
-          users.only_banned
+        when 'mvm'
+          users.only_mvm
+        when 'only_validated'
+          users.only_validated
         when 'all'
           users
         end
@@ -54,16 +56,16 @@ module Admin
       @user = User.find_by uid: params[:uid]
     end
 
-    def ban
+    def validate
       @user = User.find_by uid: params[:user_uid]
       return if @user.blank?
 
-      @user.ban! unless @user.banned?
+      @user.validate! unless @user.validated?
     end
 
-    def unban
+    def unvalidate
       @user = User.find_by uid: params[:user_uid]
-      @user.unban! if @user&.banned?
+      @user.unvalidate! if @user&.validated?
     end
   end
 end

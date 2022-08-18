@@ -5,7 +5,6 @@
 #  id                          :bigint           not null, primary key
 #  authoring_subscribers_count :integer          default(0)
 #  avatar_url                  :string
-#  banned_at                   :datetime
 #  blocking_count              :integer          default(0)
 #  blocks_count                :integer          default(0)
 #  locale                      :string
@@ -15,6 +14,7 @@
 #  subscribers_count           :integer          default(0)
 #  subscribing_count           :integer          default(0)
 #  uid                         :string
+#  validated_at                :datetime
 #  created_at                  :datetime         not null
 #  updated_at                  :datetime         not null
 #  mixin_id                    :string

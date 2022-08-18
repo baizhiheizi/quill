@@ -2,7 +2,7 @@
 
 class API::ValidUsersController < API::BaseController
   def filter
-    user = User.without_banned.find_by mixin_uuid: params[:user_id]
+    user = User.find_by mixin_uuid: params[:user_id]
 
     approved =
       if user.blank?
