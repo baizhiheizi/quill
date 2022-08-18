@@ -39,7 +39,8 @@ zh-CN:
   fair: 公示
   community: 社区
   open_source: 开源
-  dashboard: 个人中心
+  dashboard: 管理中心
+  profile_page: 个人主页
   login: 登录
   logout: 登出
   order_by_popularity: 综合排序

@@ -143,6 +143,11 @@
                 aria-orientation="vertical" 
                 aria-labelledby="user-menu-button" 
                 tabindex="-1">
+              <%= link_to t("profile_page"), 
+                user_path(current_user), 
+                class: "block px-4 py-2 text-sm opacity-70 hover:bg-zinc-100 dark:hover:bg-zinc-800", 
+                role: "menuitem", 
+                tabindex: "-1" %>
               <%= link_to t("dashboard"), 
                 dashboard_root_path, 
                 class: "block px-4 py-2 text-sm opacity-70 hover:bg-zinc-100 dark:hover:bg-zinc-800", 
@@ -284,6 +289,9 @@
                 <span class="absolute top-0 right-0 rounded-full bg-red-500 w-2 h-2"></span>
               <% end %>
             <% end %>
+          </div>
+          <div class="px-2 mt-3 space-y-1">
+            <%= link_to t("profile_page"), user_path(current_user), class: "block px-3 py-2 text-base font-medium focus:bg-blue-50 focus:text-primary rounded-md" %>
           </div>
           <div class="px-2 mt-3 space-y-1">
             <%= link_to t("dashboard"), dashboard_root_path, class: "block px-3 py-2 text-base font-medium focus:bg-blue-50 focus:text-primary rounded-md" %>
