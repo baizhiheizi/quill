@@ -12,5 +12,23 @@
   <div class="mb-4 break-words">
     <%= author.bio %>
   </div>
+  <div class="mb-4 text-sm">
+    <div class="grid grid-cols-2 gap-4 mb-1">
+      <%= link_to user_path(author.uid, tab: :published), class:"flex items:center space-x-1" do %>
+        <span class="opacity-75"><%= t('published') %>:</span> 
+        <span class="text-mono"><%= author.articles_count %></span>
+      <% end %>
+      <%= link_to user_path(author.uid, tab: :bought), class:"flex items:center space-x-1" do %>
+        <span class="opacity-75"><%= t('bought') %>:</span> 
+        <span class="text-mono"><%= author.bought_articles_count %></span>
+      <% end %>
+    </div>
+    <div class="flex items-center space-x-1">
+      <span class="opacity-75"><%= t('joined_at') %>:</span> 
+      <%= render TimeFormatComponent.new datetime: author.created_at.rfc3339 do %>
+        <span class="text-mono"><%= author.created_at %></span>
+      <% end %>
+    </div>
+  </div>
   <%= render "subscribe_users/subscribe_button", user: author %>
 </div>
