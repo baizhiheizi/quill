@@ -76,7 +76,7 @@ class Article < ApplicationRecord
   has_many :article_citers, class_name: 'CiterReference', as: :reference, dependent: :restrict_with_error
   has_many :citers, through: :article_citers, source: :citer, source_type: 'Article'
 
-  has_many :arweave_transactions, dependent: :restrict_with_error
+  has_many :arweave_transactions, primary_key: :uuid, foreign_key: :article_uuid, dependent: :restrict_with_error, inverse_of: :article
 
   has_many_attached :images
 
@@ -278,7 +278,8 @@ class Article < ApplicationRecord
 
   def sign_on_arweave_as_author
     arweave_transactions.create(
-      signer: author
+      signer: author,
+      article_snapshot: snapshots.order(created_at: :desc).first
     )
   end
 
