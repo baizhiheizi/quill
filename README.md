@@ -1,16 +1,12 @@
 # Quill
 
-![Check](https://github.com/baizhiheizi/prsdigg/workflows/Check/badge.svg) ![CI](https://github.com/baizhiheizi/prsdigg/workflows/CI/badge.svg) ![Uptime 100.00%](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fbaizhiheizi%2Fupptime%2Fmaster%2Fapi%2Fprs-digg%2Fuptime.json) ![Response Time](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fbaizhiheizi%2Fupptime%2Fmaster%2Fapi%2Fprs-digg%2Fresponse-time.json)
+![Check](https://github.com/baizhiheizi/quill/workflows/Check/badge.svg) ![CI](https://github.com/baizhiheizi/quill/workflows/CI/badge.svg) ![Uptime 100.00%](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fbaizhiheizi%2Fupptime%2Fmaster%2Fapi%2Fprs-digg%2Fuptime.json) ![Response Time](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fbaizhiheizi%2Fupptime%2Fmaster%2Fapi%2Fprs-digg%2Fresponse-time.json)
 
 [中文](README-CN.md)
 
 ---
 
-## Snapshot
-
-![snapshot](snapshot.png)
-
----
+![banner](./public/banner.png)
 
 Quill is a Dapp built on [Mixin Network](https://mixin.one/). All payments and transfers will be completed through [Mixin Network](https://mixin.one/) with **ZERO** gas.
 
@@ -52,17 +48,15 @@ It is worth reminding that besides the payment for articles, the income from oth
 
 ## Experience
 
-At present, Quill only supports [Mixin Messenger](https://mixin.one/messenger) login and payment. Please download and install it before experiencing Quill.
-
-Browse [prsdigg.com](https://prsdigg.com/), or search for Bot 7000101549 in [mixin messenger](https://mixin.one/messenger).
+Open [quill.im](https://quill.im/), connect your wallet via MetaMask, Coinbase or WalletConnect.
 
 ## API
 
-User can generate access token in [dashboard settings](https://prsdigg.com/dashboard/settings).
+User can generate access token in [dashboard settings](https://quill.im/dashboard/settings).
 
 Use access token in a HTTP Header named `X-Access-Token`.
 
-API Endpoint is `https://prsdigg.com/api`
+API Endpoint is `https://quill.im/api`
 
 `GET | /articles`
 
@@ -70,7 +64,7 @@ When access token or `author_id` provided, it returns user's articles, otherwise
 
 Available params: `author_id`, `offset`, `order`, `limit`, `query`.
 
-Example: [https://prsdigg.com/api/articles?limit=5&order=asc&offset=2021-01-18T07:41:36.624Z&query=BTC,Xin](https://prsdigg.com/api/articles?limit=5&order=asc&offset=2021-01-18T07:41:36.624Z&query=BTC,Xin)
+Example: [https://quill.im/api/articles?limit=5&order=asc&offset=2021-01-18T07:41:36.624Z&query=BTC,Xin](https://quill.im/api/articles?limit=5&order=asc&offset=2021-01-18T07:41:36.624Z&query=BTC,Xin)
 
 `GET | /article/:uuid`
 
