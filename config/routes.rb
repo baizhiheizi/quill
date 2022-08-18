@@ -78,6 +78,18 @@ Rails.application.routes.draw do
   get '/fair' => 'high_voltage/pages#show', id: 'fair', as: :fair_page
   get '/rules' => 'high_voltage/pages#show', id: 'rules', as: :rules_page
 
-  get '/:uid', to: 'users#show', as: :user
-  get '/:uid/:uuid', to: 'articles#show', as: :user_article
+  get '/:uid',
+      to: 'users#show',
+      constraints: {
+        uid: /(\d+|[0-9a-fA-F]{8}-?[0-9a-fA-F]{4}-?[0-9a-fA-F]{4}-?[0-9a-fA-F]{4}-?[0-9a-fA-F]{12}|0x[0-9a-zA-Z]{40})/
+      },
+      as: :user
+
+  get '/:uid/:uuid',
+      to: 'articles#show',
+      constraints: {
+        uid: /(\d+|[0-9a-fA-F]{8}-?[0-9a-fA-F]{4}-?[0-9a-fA-F]{4}-?[0-9a-fA-F]{4}-?[0-9a-fA-F]{12}|0x[0-9a-zA-Z]{40})/,
+        uuid: /[0-9a-fA-F]{8}-?[0-9a-fA-F]{4}-?[0-9a-fA-F]{4}-?[0-9a-fA-F]{4}-?[0-9a-fA-F]{12}/
+      },
+      as: :user_article
 end
