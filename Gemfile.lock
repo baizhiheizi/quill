@@ -200,6 +200,7 @@ GEM
     hamster (3.0.0)
       concurrent-ruby (~> 1.0)
     high_voltage (3.1.2)
+    hiredis (0.6.3)
     http (4.4.1)
       addressable (~> 2.3)
       http-cookie (~> 1.0)
@@ -504,6 +505,7 @@ DEPENDENCIES
   fnv
   groupdate
   high_voltage
+  hiredis
   httparty
   image_processing (~> 1.2)
   jbuilder
@@ -527,7 +529,7 @@ DEPENDENCIES
   rails-i18n
   ransack
   redcarpet
-  redis (~> 4.1)
+  redis
   redis-namespace
   redis-objects
   requestjs-rails

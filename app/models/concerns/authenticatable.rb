@@ -42,8 +42,8 @@ module Authenticatable
     end
 
     def auth_from_mvm_eth(public_key, signature)
-      msg = Global.redis.get public_key
-      Global.redis.del public_key
+      msg = Rails.cache.read public_key
+      Rails.cache.delete public_key
 
       return if msg.blank?
       return unless Eth::Signature.verify msg, signature, public_key

@@ -77,7 +77,7 @@ class SessionsController < ApplicationController
     return if params[:public_key].blank?
 
     session_id = SecureRandom.uuid
-    Global.redis.set params[:public_key], { session: session_id }.to_json, ex: 5.minutes
+    Rails.cache.write params[:public_key], { session: session_id }.to_json, ex: 5.minutes
 
     render json: { session: session_id }
   end

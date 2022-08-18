@@ -57,8 +57,7 @@ class MixinNetworkSnapshot < ApplicationRecord
   # should be called in a event machine
   def self.poll
     loop do
-      offset = Global.redis.get('last_polled_at')
-      offset = MixinNetworkSnapshot.order(transferred_at: :desc).first&.transferred_at&.utc&.rfc3339 || Time.current.utc.rfc3339 if offset.blank?
+      offset = last_polled_at
 
       r = QuillBot.api.read_network_snapshots(offset: offset, limit: POLLING_LIMIT, order: 'ASC')
       p "polled #{r['data'].length} mixin network snapshots, since #{offset}"
@@ -69,7 +68,7 @@ class MixinNetworkSnapshot < ApplicationRecord
         create_with(raw: snapshot).find_or_create_by!(snapshot_id: snapshot['snapshot_id'])
       end
 
-      Global.redis.set 'last_polled_at', r['data'].last['created_at']
+      Rails.cache.write 'last_polled_at', r['data'].last['created_at']
 
       sleep 0.5 if r['data'].length < POLLING_LIMIT
       sleep POLLING_INTERVAL
@@ -85,6 +84,12 @@ class MixinNetworkSnapshot < ApplicationRecord
       raise e if Rails.env.production?
 
       sleep POLLING_INTERVAL * 10
+    end
+  end
+
+  def self.last_polled_at
+    Rails.cache.fetch('last_polled_at') do
+      MixinNetworkSnapshot.order(transferred_at: :desc).first&.transferred_at&.utc&.rfc3339 || Time.current.utc.rfc3339
     end
   end
 

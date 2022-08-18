@@ -64,7 +64,8 @@ Rails.application.configure do
   config.cache_store = if ENV['REDIS_URL'].present?
                          [:redis_cache_store, {
                            url: ENV.fetch('REDIS_URL', nil),
-                           namespace: Rails.application.credentials.dig(:redis, :namespace) || 'quill'
+                           namespace: Rails.application.credentials.dig(:redis, :namespace) || 'quill',
+                           reconnect_attempts: 1
                          }]
                        else
                          :memory_store
