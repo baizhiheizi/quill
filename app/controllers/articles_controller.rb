@@ -34,7 +34,7 @@ class ArticlesController < ApplicationController
   def show
     @article = Article.without_drafted.find_by uuid: params[:uuid]
 
-    if @article&.may_buy_by?(current_user) || @article&.authorized?(current_user)
+    if @article&.authorized?(current_user) || @article&.may_buy_by?(current_user)
       @page_title = "#{@article.title} - #{@article.author.name}"
       @page_description = @article.intro
       @page_image = @article.author.avatar

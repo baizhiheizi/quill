@@ -29,7 +29,10 @@ namespace :admin do
     post :validate
     post :unvalidate
   end
-  resources :articles, only: %i[index show], param: :uuid
+  resources :articles, only: %i[index show], param: :uuid do
+    post :block
+    post :unblock
+  end
   resources :comments, only: %i[index] do
     post :delete
     post :undelete

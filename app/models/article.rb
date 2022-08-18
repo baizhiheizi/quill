@@ -112,6 +112,7 @@ class Article < ApplicationRecord
   delegate :swappable?, to: :currency
 
   default_scope -> { includes(:currency) }
+  scope :without_blocked, -> { where.not(state: :blocked) }
   scope :without_free, -> { where('price > ?', 0) }
   scope :only_free, -> { where(price: 0.0) }
   scope :only_drafted, -> { where(state: :drafted) }
@@ -119,9 +120,8 @@ class Article < ApplicationRecord
   scope :without_drafted, -> { where.not(state: :drafted) }
   scope :order_by_revenue_usd, -> { order(revenue_usd: :desc) }
   scope :order_by_popularity, lambda {
-    joins(:orders, :author)
+    joins(:orders)
       .group(:id)
-      .where.not(users: { validated_at: nil })
       .select(
         <<~SQL.squish
           articles.*, 
@@ -144,6 +144,15 @@ class Article < ApplicationRecord
     event :publish, guards: :ensure_content_valid, after: %i[do_first_publish] do
       transitions from: :drafted, to: :published
       transitions from: :hidden, to: :published
+    end
+
+    event :block do
+      transitions from: :published, to: :blocked
+      transitions from: :hidden, to: :blocked
+    end
+
+    event :unblock do
+      transitions from: :blocked, to: :hidden
     end
   end
 

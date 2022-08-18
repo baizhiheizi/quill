@@ -7,7 +7,7 @@ class ArticleSearchService
     @filter = params[:filter]
     @time_range = params[:time_range]
     @current_user = current_user
-    @articles = Article.published
+    @articles = Article.without_drafted
     @locale = @query.to_s.strip.present? ? nil : locale || current_user&.locale || I18n.default_locale
   end
 
@@ -18,9 +18,9 @@ class ArticleSearchService
   def call
     query
       .tagging
+      .filter
       .filter_block_authors
       .filter_block_by_authors
-      .filter
       .select_in_time_range
       .localize
 
@@ -61,15 +61,15 @@ class ArticleSearchService
     @articles =
       case @filter
       when 'lately'
-        @articles.order(published_at: :desc)
+        @articles.published.order(published_at: :desc)
       when 'revenue'
-        @articles.order_by_revenue_usd
+        @articles.published.order_by_revenue_usd
       when 'subscribed'
-        @articles.where(author_id: @current_user&.subscribe_user_ids).order(published_at: :desc)
+        @articles.published.where(author_id: @current_user&.subscribe_user_ids).order(published_at: :desc)
       when 'bought'
         @articles.where(id: @current_user&.bought_articles&.ids).order(published_at: :desc)
       else
-        @articles.order_by_popularity
+        @articles.published.order_by_popularity
       end
 
     self
