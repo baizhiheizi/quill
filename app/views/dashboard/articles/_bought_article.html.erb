@@ -8,7 +8,11 @@
         <%= image_tag article.author.avatar, class: "w-6 h-6 rounded-full" %>
         <span class="text-xl font-bold truncate"><%= article.title %></span>
       </div>
-      <span class="text-sm text-gray-500 text-right truncate"><%= article.published_at.strftime("%Y-%m-%d %H:%M") %></span>
+      <span class="text-sm text-gray-500 text-right truncate">
+        <%= render TimeFormatComponent.new datetime: article.published_at.rfc3339 do %>
+          <%= article.published_at.strftime("%Y-%m-%d %H:%M") %>
+        <% end %>
+      </span>
     </div>
     <div class="flex items-center space-x-4 text-sm text-gray-500 mb-2">
       <div class="col-span-1">

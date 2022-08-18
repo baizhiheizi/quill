@@ -6,7 +6,9 @@
         <%= comment.author.name %>
       </div>
       <div class="opacity-70">
-        <%= comment.created_at.strftime("%Y-%m-%d %H:%M") %>
+        <%= render TimeFormatComponent.new datetime: comment.created_at.rfc3339 do %>
+          <%= comment.created_at.strftime("%Y-%m-%d %H:%M") %>
+        <% end %>
       </div>
     </div>
     <div class="prose prose-sm dark:prose-invert">

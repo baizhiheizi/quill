@@ -17,6 +17,8 @@
     }[order.order_type.to_sym] %>
   </div>
   <div class="opacity-70 flex-1 text-right">
-    <%= order.created_at.strftime('%Y-%m-%d %H:%M') %>
+    <%= render TimeFormatComponent.new datetime: order.created_at.rfc3339 do %>
+      <%= order.created_at.strftime("%Y-%m-%d %H:%M") %>
+    <% end %>
   </div>
 </div>

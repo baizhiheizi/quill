@@ -10,6 +10,8 @@
     <% end %>
   </div>
   <div class="flex-1 text-right text-sm opacity-70">
-    <%= notification.created_at.strftime("%Y-%m-%d %H:%M") %>
+    <%= render TimeFormatComponent.new datetime: notification.created_at.rfc3339 do %>
+      <%= notification.created_at.strftime("%Y-%m-%d %H:%M") %>
+    <% end %>
   </div>
 </div>

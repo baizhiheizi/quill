@@ -3,7 +3,9 @@
     <%= link_to comment.commentable.title, user_article_path(comment.commentable.author, comment.commentable.uuid), class: "truncate", data: { turbo_frame: "_top" } %>
   </div>
   <div class="text-sm opacity-70">
-    <%= comment.created_at.strftime("%Y-%m-%d %H:%M") %>
+    <%= render TimeFormatComponent.new datetime: comment.created_at.rfc3339 do %>
+      <%= comment.created_at.strftime("%Y-%m-%d %H:%M") %>
+    <% end %>
   </div>
   <div class="col-span-2 prose prose-sm prose-h1:text-base prose-h1:m-0 prose-h2:text-base prose-h2:m-0 prose-h3:text-base prose-h3:m-0 prose-h4:m-0 dark:prose-invert dark:bg-zinc-900 rounded p-2 bg-zinc-50">
     <%= comment.content_as_html.html_safe %>
