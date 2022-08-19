@@ -5,6 +5,7 @@
 #  id                                  :bigint           not null, primary key
 #  access_token                        :string
 #  provider(third party auth provider) :integer
+#  public_key                          :string
 #  raw(third pary user info)           :json
 #  uid(third party user id)            :string
 #  created_at                          :datetime         not null

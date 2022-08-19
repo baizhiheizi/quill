@@ -55,7 +55,7 @@ class SessionsController < ApplicationController
     user, session_id =
       begin
         User.auth_from_mvm_eth(
-          params[:public_key],
+          params[:address],
           params[:signature]
         )
       rescue MVM::Error => e
@@ -74,10 +74,10 @@ class SessionsController < ApplicationController
   end
 
   def nounce
-    return if params[:public_key].blank?
+    return if params[:address].blank?
 
     session_id = SecureRandom.uuid
-    Rails.cache.write params[:public_key], { session: session_id }.to_json, ex: 5.minutes
+    Rails.cache.write params[:address], { session: session_id }.to_json, ex: 5.minutes
 
     render json: { session: session_id }
   end

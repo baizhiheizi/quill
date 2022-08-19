@@ -35,10 +35,10 @@ export default class extends Controller {
     hideLoading();
   }
 
-  async getNounce(account) {
+  async getNounce(address) {
     const res = await post('/nounce', {
       body: {
-        public_key: account,
+        address,
       },
       contentType: 'application/json',
     });
@@ -56,7 +56,7 @@ export default class extends Controller {
     );
 
     location.replace(
-      `/auth/mvm/callback?signature=${signature}&public_key=${
+      `/auth/mvm/callback?signature=${signature}&address=${
         Wallet.account
       }&provider=${Wallet.provider}&return_to=${encodeURIComponent(
         location.href,

@@ -41,24 +41,26 @@ module Authenticatable
       find_or_create_user_by_auth auth
     end
 
-    def auth_from_mvm_eth(public_key, signature)
-      msg = Rails.cache.read public_key
-      Rails.cache.delete public_key
+    def auth_from_mvm_eth(address, signature)
+      msg = Rails.cache.read address
+      Rails.cache.delete address
 
       return if msg.blank?
-      return unless Eth::Signature.verify msg, signature, public_key
+      return unless Eth::Signature.verify msg, signature, address
 
-      res = MVM.api.user public_key
+      public_key = Eth::Signature.personal_recover msg, signature
+
+      res = MVM.api.user address
       return if res.blank?
 
       auth = UserAuthorization.create_with(
-        raw: res['user']
+        raw: res['user'],
+        public_key: public_key
       ).find_or_create_by!(
-        uid: public_key,
+        uid: address,
         provider: :mvm_eth
       )
-      auth.raw = res['user']
-      auth.update! raw: res['user'] if auth.raw_changed?
+      auth.update! raw: res['user'], public_key: public_key
 
       user = find_or_create_user_by_auth auth
       session_id = JSON.parse(msg)['session']
