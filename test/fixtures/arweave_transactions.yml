@@ -10,7 +10,7 @@
 #  updated_at          :datetime         not null
 #  article_snapshot_id :bigint
 #  order_id            :bigint
-#  signer_id           :uuid
+#  owner_id            :uuid
 #  tx_id               :string
 #
 # Indexes
@@ -18,7 +18,7 @@
 #  index_arweave_transactions_on_article_snapshot_id  (article_snapshot_id)
 #  index_arweave_transactions_on_article_uuid         (article_uuid)
 #  index_arweave_transactions_on_order_id             (order_id)
-#  index_arweave_transactions_on_signer_id            (signer_id)
+#  index_arweave_transactions_on_owner_id             (owner_id)
 #  index_arweave_transactions_on_tx_id                (tx_id)
 #
 

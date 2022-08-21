@@ -139,7 +139,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_08_19_093249) do
     t.bigint "article_snapshot_id"
     t.bigint "order_id"
     t.uuid "article_uuid"
-    t.uuid "signer_id"
+    t.uuid "owner_id"
     t.string "tx_id"
     t.string "state"
     t.json "raw"
@@ -148,7 +148,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_08_19_093249) do
     t.index ["article_snapshot_id"], name: "index_arweave_transactions_on_article_snapshot_id"
     t.index ["article_uuid"], name: "index_arweave_transactions_on_article_uuid"
     t.index ["order_id"], name: "index_arweave_transactions_on_order_id"
-    t.index ["signer_id"], name: "index_arweave_transactions_on_signer_id"
+    t.index ["owner_id"], name: "index_arweave_transactions_on_owner_id"
     t.index ["tx_id"], name: "index_arweave_transactions_on_tx_id"
   end
 
