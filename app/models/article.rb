@@ -276,9 +276,9 @@ class Article < ApplicationRecord
     subscribe_comments_for_author
   end
 
-  def sign_on_arweave_as_author
+  def upload_to_arweave_as_author
     arweave_transactions.create(
-      signer: author,
+      owner: author,
       article_snapshot: snapshots.order(created_at: :desc).first
     )
   end
