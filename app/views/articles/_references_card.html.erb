@@ -3,7 +3,7 @@
     <span class="px-2 py-1 font-bold"><%= t('article_references') %></span>
   </div>
   <% references.each do |reference| %>
-    <%= link_to user_article_path(reference.reference.author, reference.reference), class: "flex items-center mb-2" do %>
+    <%= link_to user_article_path(reference.reference.author, reference.reference), data: { controller: 'prefetch' }, class: "flex items-center mb-2" do %>
       <div class="flex flex-1 items-center space-x-2 truncate">
         <%= image_tag reference.reference.author.avatar, class: "w-6 h-6 rounded-full" %>
         <span class="truncate"><%= reference.reference.title %></span>

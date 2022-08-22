@@ -12,7 +12,7 @@
               <% end %>
             </div>
           </div>
-          <%= link_to user_path(@article.author) do %>
+          <%= link_to user_path(@article.author), data: { controller: 'prefetch' } do %>
             <span aria-hidden="true" class="absolute inset-0"></span>
           <% end %>
         </div>
@@ -26,7 +26,7 @@
       <% if @article.tags.present? %>
         <div class="flex items-center flex-wrap mb-4">
           <% @article.tags.each do |tag| %>
-            <%= link_to articles_path(tag: tag.name), class: "px-2 py-1 text-sm hover:bg-zinc-200 dark:hover:bg-zinc-700 font-bold" do %>
+            <%= link_to articles_path(tag: tag.name), data: { controller: 'prefetch' }, class: "px-2 py-1 text-sm hover:bg-zinc-200 dark:hover:bg-zinc-700 font-bold" do %>
               <span style="color:<%= tag.color %>">#</span><%= tag.name %>
             <% end %>
           <% end %>

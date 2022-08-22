@@ -26,7 +26,7 @@
           <% elsif current_user.articles.drafted.present? %>
             <%= link_to t("write"), dashboard_articles_path(tab: :drafted), data: { controller: 'prefetch' }, class: "px-3 py-2 text-base font-medium hover:bg-blue-50 hover:text-primary dark:hover:bg-gray-800 rounded-md" %>
           <% else %>
-            <%= link_to t("write"), new_article_path, class: "px-3 py-2 text-base font-medium hover:bg-blue-50 hover:text-primary dark:hover:bg-gray-800 rounded-md" %>
+            <%= link_to t("write"), new_article_path, data: { controller: 'prefetch' }, class: "px-3 py-2 text-base font-medium hover:bg-blue-50 hover:text-primary dark:hover:bg-gray-800 rounded-md" %>
           <% end %>
         </div>
         <div class="hidden md:block">
@@ -221,7 +221,7 @@
           <%= render "shared/icons/menu" %>
         </button>
       </div>
-      <%= link_to root_path, class: "flex items-center flex-shrink-0 space-x-2" do %>
+      <%= link_to root_path, data: { controller: 'prefetch' }, class: "flex items-center flex-shrink-0 space-x-2" do %>
         <img class="w-auto h-8" src=<%= asset_path(Settings.logo_file || 'logo.svg') %> alt="Logo">
       <% end %>
     </div>
@@ -235,13 +235,13 @@
               <%= render "shared/icons/close" %>
             </button>
           </div>
-          <%= link_to root_path, class: "flex items-center flex-shrink-0 space-x-2" do %>
+          <%= link_to root_path, data: { controller: 'prefetch' }, class: "flex items-center flex-shrink-0 space-x-2" do %>
             <img class="w-auto h-8" src=<%= asset_path(Settings.logo_file || 'logo.svg') %> alt="Logo">
           <% end %>
         </div>
       </div>
       <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-        <%= link_to t("read"), articles_path, class: "block px-2 py-2 text-base font-medium focus:bg-blue-50 focus:text-primary rounded-md" %>
+        <%= link_to t("read"), articles_path, data: { controller: 'prefetch' }, class: "block px-2 py-2 text-base font-medium focus:bg-blue-50 focus:text-primary rounded-md" %>
       </div>
       <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
         <% if current_user.blank? %>
@@ -256,16 +256,16 @@
               class: "block px-2 py-2 text-base font-medium focus:bg-blue-50 focus:text-primary rounded-md" %>
           <% end %>
         <% elsif current_user.articles.drafted.present? %>
-          <%= link_to t("write"), dashboard_articles_path(tab: :drafted), class: "px-2 py-2 text-base font-medium hover:bg-blue-50 hover:text-primary dark:hover:bg-gray-800 rounded-md" %>
+          <%= link_to t("write"), dashboard_articles_path(tab: :drafted), data: { controller: 'prefetch' }, class: "px-2 py-2 text-base font-medium hover:bg-blue-50 hover:text-primary dark:hover:bg-gray-800 rounded-md" %>
         <% else %>
-          <%= link_to t("write"), new_article_path, class: "block px-2 py-2 text-base font-medium focus:bg-blue-50 focus:text-primary rounded-md" %>
+          <%= link_to t("write"), new_article_path, data: { controller: 'prefetch' }, class: "block px-2 py-2 text-base font-medium focus:bg-blue-50 focus:text-primary rounded-md" %>
         <% end %>
       </div>
       <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-        <%= link_to t("fair"), fair_page_path, class: "block px-2 py-2 text-base font-medium focus:bg-blue-50 focus:text-primary rounded-md" %>
+        <%= link_to t("fair"), fair_page_path, data: { controller: 'prefetch' }, class: "block px-2 py-2 text-base font-medium focus:bg-blue-50 focus:text-primary rounded-md" %>
       </div>
       <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-        <%= link_to t("rules"), rules_page_path, class: "block px-2 py-2 text-base font-medium focus:bg-blue-50 focus:text-primary rounded-md" %>
+        <%= link_to t("rules"), rules_page_path, data: { controller: 'prefetch' }, class: "block px-2 py-2 text-base font-medium focus:bg-blue-50 focus:text-primary rounded-md" %>
       </div>
       <div class="pt-4 pb-3">
         <% if current_user.present? %>
@@ -294,7 +294,7 @@
                 <%= render 'shared/icons/sun', html_class: "text-zinc-100 w-6 h-6" %>
               </a>
             </div>
-            <%= link_to dashboard_notifications_path, class: "relative flex-shrink-0 p-1 ml-3 rounded-full focus:bg-blue-50 focus:text-primary" do %>
+            <%= link_to dashboard_notifications_path, data: { controller: 'prefetch' }, class: "relative flex-shrink-0 p-1 ml-3 rounded-full focus:bg-blue-50 focus:text-primary" do %>
               <span class="sr-only">View notifications</span>
               <%= render 'shared/icons/bell' %>
               <% if current_user.has_unread_notification? %>
@@ -303,10 +303,10 @@
             <% end %>
           </div>
           <div class="px-2 mt-3 space-y-1">
-            <%= link_to t("profile_page"), user_path(current_user), class: "block px-3 py-2 text-base font-medium focus:bg-blue-50 focus:text-primary rounded-md" %>
+            <%= link_to t("profile_page"), user_path(current_user), data: { controller: 'prefetch' }, class: "block px-3 py-2 text-base font-medium focus:bg-blue-50 focus:text-primary rounded-md" %>
           </div>
           <div class="px-2 mt-3 space-y-1">
-            <%= link_to t("dashboard"), dashboard_root_path, class: "block px-3 py-2 text-base font-medium focus:bg-blue-50 focus:text-primary rounded-md" %>
+            <%= link_to t("dashboard"), dashboard_root_path, data: { controller: 'prefetch' }, class: "block px-3 py-2 text-base font-medium focus:bg-blue-50 focus:text-primary rounded-md" %>
           </div>
           <div class="px-2 my-3 space-y-1">
             <%= link_to t("disconnect"),

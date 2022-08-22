@@ -3,7 +3,7 @@
     <span class="px-2 py-1 font-bold"><%= t('related_articles') %></span>
   </div>
   <% articles.each do |article| %>
-    <%= link_to user_article_path(article.author, article), class: "flex items-center space-x-2 mb-2" do %>
+    <%= link_to user_article_path(article.author, article), data: { controller: 'prefetch' }, class: "flex items-center space-x-2 mb-2" do %>
       <%= image_tag article.author.avatar, class: "w-6 h-6 rounded-full" %>
       <span class="truncate"><%= article.title %></span>
     <% end %>
