@@ -63,7 +63,7 @@ class ArweaveTransaction < ApplicationRecord
   def data
     @data ||=
       begin
-        JSON.parse Arweave::Transaction.data tx_id
+        JSON.parse Arweave::Transaction.data(tx_id)
       rescue ParseError
         {}
       end
