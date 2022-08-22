@@ -1,5 +1,5 @@
 <div id="<%= dom_id @user %>_subscribe_by_user_<%= dom_id user %>" class="bg-white dark:bg-zinc-900 sm:rounded-lg relative flex items-center px-4 py-2 justify-between mb-4">
-  <%= link_to user_path(user), class: "flex items-center space-x-2 truncate", data: { turbo_frame: "_top" } do %>
+  <%= link_to user_path(user), class: "flex items-center space-x-2 truncate", data: { controller: 'prefetch', turbo_frame: "_top" } do %>
     <img src="<%= user.avatar %>" class="w-10 h-10 rounded-full" />
     <span class="truncate"><%= user.name %></span>
   <% end %>

@@ -14,7 +14,7 @@
           <% end %>
         </div>
       </div>
-      <%= link_to user_path(article.author) do %>
+      <%= link_to user_path(article.author), data: { controller: 'prefetch' } do %>
         <span aria-hidden="true" class="absolute inset-0"></span>
       <% end %>
     </div>
@@ -32,7 +32,7 @@
       <% end %>
     </div>
   </div>
-  <%= link_to user_article_path(article.author, article), class: "mb-4 block" do %>
+  <%= link_to user_article_path(article.author, article), data: { controller: 'prefetch' }, class: "mb-4 block" do %>
     <div class="font-bold text-xl lg:text-2xl 2xl:text-3xl mb-2 break-words text-ellipsis overflow-hidden">
       <%= article.title %>
     </div>
@@ -42,22 +42,22 @@
   <% end %>
   <div class="flex overflow-x-scroll scrollbar-hide items-center space-x-4 mb-2">
     <% article.tag_names.each do |tag_name| %>
-      <%= link_to articles_path(tag: tag_name), class: "px-2 py-1 text-sm bg-zinc-200 dark:bg-zinc-700 font-bold min-w-max", style: "word-break:keep-all;" do %>
+      <%= link_to articles_path(tag: tag_name), data: { controller: 'prefetch' }, class: "px-2 py-1 text-sm bg-zinc-200 dark:bg-zinc-700 font-bold min-w-max", style: "word-break:keep-all;" do %>
         <%= tag_name %>
       <% end %>
     <% end %>
   </div>
   <div class="flex items-center space-x-3 lg:space-x-8 justify-end opacity-70">
-    <%= link_to user_article_path(article.author, article), class: "flex items-center space-x-1" do %>
+    <%= link_to user_article_path(article.author, article), data: { controller: 'prefetch' }, class: "flex items-center space-x-1" do %>
       <%= render "shared/icons/dollar", html_class: "w-4 h-4 lg:w-5 lg:h-5" %>
       <span class="lg:text-base"><%= article.revenue_usd.round(4) %></span>
     <% end %>
-    <%= link_to user_article_path(article.author, article), class: "flex items-center space-x-1" do %>
+    <%= link_to user_article_path(article.author, article), data: { controller: 'prefetch' }, class: "flex items-center space-x-1" do %>
       <%= render "shared/icons/chat", html_class: "w-4 h-4 lg:w-5 lg:h-5" %>
       <span class="lg:text-base"><%= article.comments_count %></span>
     <% end %>
     <% if article.upvote_ratio.present? %>
-      <%= link_to user_article_path(article.author, article), class: "flex items-center space-x-1" do %>
+      <%= link_to user_article_path(article.author, article), data: { controller: 'prefetch' }, class: "flex items-center space-x-1" do %>
         <%= render "shared/icons/thumb_up", html_class: "w-4 h-4 lg:w-5 lg:h-5" %>
         <span class="lg:text-base"><%= article.upvote_ratio %></span>
       <% end %>

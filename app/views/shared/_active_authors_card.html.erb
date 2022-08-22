@@ -4,7 +4,7 @@
   </div>
   <% User.only_validated.active.where.not(id: current_user&.block_user_ids).where(locale: current_locale).limit(20).sample(5).each do |user| %>
     <div class="flex items-center justify-between mb-2 truncate">
-      <%= link_to user_path(user), class: "flex items-center space-x-2 truncate" do %>
+      <%= link_to user_path(user), data: { controller: 'prefetch' }, class: "flex items-center space-x-2 truncate" do %>
         <%= image_tag user.avatar, class: "w-10 h-10 rounded-full" %>
         <div class="truncate"><%= user.short_name %></div>
       <% end %>

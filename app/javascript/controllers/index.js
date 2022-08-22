@@ -58,6 +58,9 @@ application.register('nested-form', NestedFormController);
 import PhotoswipeController from './photoswipe_controller';
 application.register('photoswipe', PhotoswipeController);
 
+import PrefetchController from './prefetch_controller';
+application.register('prefetch', PrefetchController);
+
 import ReferencesSelectController from './references_select_controller';
 application.register('references-select', ReferencesSelectController);
 

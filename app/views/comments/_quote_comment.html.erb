@@ -1,10 +1,10 @@
 <div class="my-4 py-2 px-4 rounded-lg bg-zinc-50 max-h-96 overflow-y-scroll scrollbar-hide dark:bg-zinc-800">
   <div class="flex space-x-2 sm:space-x-4 items-start py-2 w-full">
-    <%= link_to user_path(quote_comment.author), class: "min-w-fit block", data: { turbo_frame: "_top" } do %>
+    <%= link_to user_path(quote_comment.author), class: "min-w-fit block", data: { controller: 'prefetch', turbo_frame: "_top" } do %>
       <img src="<%= quote_comment.author.avatar %>" class="w-6 h-6 sm:w-8 sm:h-8 rounded-full" />
     <% end %>
     <div class="overflow-x-hidden">
-      <%= link_to user_path(quote_comment.author), class: "flex no-underline items-center space-x-2 mb-2 text-sm truncate", data: { turbo_frame: "_top" } do %>
+      <%= link_to user_path(quote_comment.author), class: "flex no-underline items-center space-x-2 mb-2 text-sm truncate", data: { controller: 'prefetch', turbo_frame: "_top" } do %>
         <span class="truncate"><%= quote_comment.author.short_name %></span>
         <span class="opacity-50"><%= time_ago_in_words quote_comment.created_at %></span>
       <% end %>
@@ -13,12 +13,13 @@
           <div class="max-h-48 overflow-y-scroll scrollbar-hide">
             <blockquote>
               <div>
-                <%= link_to "@#{quote_comment.quote_comment.author.short_name}", user_path(quote_comment.quote_comment.author), data: { turbo_frame: "_top" }, class: "no-underline italic" %>
+                <%= link_to "@#{quote_comment.quote_comment.author.short_name}", user_path(quote_comment.quote_comment.author), data: { controller: 'prefetch', turbo_frame: "_top" }, class: "no-underline italic" %>
                 :(
                 <%= link_to "##{quote_comment.quote_comment.id}", 
                   new_comment_path(quote_comment_id: quote_comment.quote_comment_id),
                   class: "italic",
                   data: {
+                    controller: 'prefetch',
                     turbo_frame: :modal
                 } %>
                 )

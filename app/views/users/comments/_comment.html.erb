@@ -10,6 +10,6 @@
     <div class="prose prose-sm xl:prose prose-h1:text-base prose-h1:m-0 prose-h2:text-base prose-h2:m-0 prose-h3:text-base prose-h3:m-0 prose-h4:m-0 dark:prose-invert mb-2">
       <%= comment.content_as_html.html_safe %>
     </div>
-    <%= link_to comment.commentable.title, user_article_path(comment.commentable.author, comment.commentable), class: "underline text-sm opacity-70 text-right block" %>
+    <%= link_to comment.commentable.title, user_article_path(comment.commentable.author, comment.commentable), data: { controller: 'prefetch' }, class: "underline text-sm opacity-70 text-right block" %>
   </div>
 </div>

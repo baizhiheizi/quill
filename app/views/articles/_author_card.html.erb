@@ -5,7 +5,7 @@
       <div class="text-xl font-bold truncate"><%= author.short_name %></div>
       <div class="text-base text-gray-500 truncate">@<%= author.short_uid %></div>
     </div>
-    <%= link_to user_path(author) do %>
+    <%= link_to user_path(author), data: { controller: 'prefetch' } do %>
       <span aria-hidden="true" class="absolute inset-0"></span>
     <% end %>
   </div>
@@ -14,11 +14,11 @@
   </div>
   <div class="mb-4 text-sm">
     <div class="grid grid-cols-2 gap-4 mb-1">
-      <%= link_to user_path(author.uid, tab: :published), class:"flex items:center space-x-1" do %>
+      <%= link_to user_path(author.uid, tab: :published), data: { controller: 'prefetch' }, class:"flex items:center space-x-1" do %>
         <span class="opacity-75"><%= t('published') %>:</span> 
         <span class="text-mono"><%= author.articles_count %></span>
       <% end %>
-      <%= link_to user_path(author.uid, tab: :bought), class:"flex items:center space-x-1" do %>
+      <%= link_to user_path(author.uid, tab: :bought), data: { controller: 'prefetch' }, class:"flex items:center space-x-1" do %>
         <span class="opacity-75"><%= t('bought') %>:</span> 
         <span class="text-mono"><%= author.bought_articles_count %></span>
       <% end %>

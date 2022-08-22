@@ -24,16 +24,16 @@
                 class: "px-3 py-2 text-base font-medium hover:bg-blue-50 hover:text-primary dark:hover:bg-gray-800 rounded-md" %>
             <% end %>
           <% elsif current_user.articles.drafted.present? %>
-            <%= link_to t("write"), dashboard_articles_path(tab: :drafted), class: "px-3 py-2 text-base font-medium hover:bg-blue-50 hover:text-primary dark:hover:bg-gray-800 rounded-md" %>
+            <%= link_to t("write"), dashboard_articles_path(tab: :drafted), data: { controller: 'prefetch' }, class: "px-3 py-2 text-base font-medium hover:bg-blue-50 hover:text-primary dark:hover:bg-gray-800 rounded-md" %>
           <% else %>
             <%= link_to t("write"), new_article_path, class: "px-3 py-2 text-base font-medium hover:bg-blue-50 hover:text-primary dark:hover:bg-gray-800 rounded-md" %>
           <% end %>
         </div>
         <div class="hidden md:block">
-          <%= link_to t("fair"), fair_page_path, class: "px-3 py-2 text-base font-medium hover:bg-blue-50 hover:text-primary dark:hover:bg-gray-800 rounded-md" %>
+          <%= link_to t("fair"), fair_page_path, data: { controller: 'prefetch' }, class: "px-3 py-2 text-base font-medium hover:bg-blue-50 hover:text-primary dark:hover:bg-gray-800 rounded-md" %>
         </div>
         <div class="hidden md:block">
-          <%= link_to t("rules"), rules_page_path, class: "px-3 py-2 text-base font-medium hover:bg-blue-50 hover:text-primary dark:hover:bg-gray-800 rounded-md" %>
+          <%= link_to t("rules"), rules_page_path, data: { controller: 'prefetch' }, class: "px-3 py-2 text-base font-medium hover:bg-blue-50 hover:text-primary dark:hover:bg-gray-800 rounded-md" %>
         </div>
         <div class="hidden md:block">
           <div data-controller="dropdown" class="relative ml-3">
@@ -97,7 +97,7 @@
         </div>
 
         <% if current_user.present? %>
-          <%= link_to dashboard_notifications_path, class: "p-1 relative rounded-full hover:text-primary hover:bg-blue-50 dark:hover:bg-gray-800" do %>
+          <%= link_to dashboard_notifications_path, data: { controller: 'prefetch' }, class: "p-1 relative rounded-full hover:text-primary hover:bg-blue-50 dark:hover:bg-gray-800" do %>
             <span class="sr-only">View notifications</span>
             <!-- Heroicon name: outline/bell -->
             <%= render 'shared/icons/bell' %>
@@ -145,19 +145,31 @@
                 tabindex="-1">
               <%= link_to t("profile_page"), 
                 user_path(current_user), 
+                data: {
+                  controller: 'prefetch'
+                },
                 class: "block px-4 py-2 text-sm opacity-70 hover:bg-zinc-100 dark:hover:bg-zinc-800", 
                 role: "menuitem", 
                 tabindex: "-1" %>
               <%= link_to t("dashboard"), 
                 dashboard_root_path, 
+                data: {
+                  controller: 'prefetch'
+                },
                 class: "block px-4 py-2 text-sm opacity-70 hover:bg-zinc-100 dark:hover:bg-zinc-800", 
                 role: "menuitem", 
                 tabindex: "-1" %>
               <%= link_to t("fair"), 
                 fair_page_path, 
+                data: {
+                  controller: 'prefetch'
+                },
                 class: "block px-4 py-2 text-sm opacity-70 hover:bg-zinc-100 dark:hover:bg-zinc-800" %>
               <%= link_to t("rules"), 
                 rules_page_path, 
+                data: {
+                  controller: 'prefetch'
+                },
                 class: "block px-4 py-2 text-sm opacity-70 hover:bg-zinc-100 dark:hover:bg-zinc-800" %>
               <%= link_to t("deposit"), 
                 deposit_dashboard_destination_path, 

@@ -39,5 +39,7 @@ module Quill
     config.session_store :cookie_store, expire_after: 7.days, key: '_quill_session'
 
     config.view_component.generate_parent_component = 'ApplicationComponent'
+
+    config.action_view.image_loading = 'lazy'
   end
 end
