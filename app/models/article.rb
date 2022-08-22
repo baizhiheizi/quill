@@ -102,7 +102,7 @@ class Article < ApplicationRecord
   validate :can_not_change_currency_after_published
 
   before_validation :setup_attributes, on: :create
-  before_validation :set_default_intro
+  before_validation :set_defaults
   after_save do
     generate_snapshot if should_generate_snapshot?
     if saved_change_to_content
@@ -446,18 +446,22 @@ class Article < ApplicationRecord
     save
   end
 
-  def detect_locale
+  def detected_locale
     if plain_text.to_s.size > 140
       locales = [CLD.detect_language(intro)[:code], CLD.detect_language(plain_text)[:code]].uniq
 
       if locales.size == 1
-        update locale: locales.first
+        locales.first
       else
-        update locale: locales.reject(&->(l) { l == 'en' }).last
+        locales.reject(&->(l) { l == 'en' }).last
       end
     else
-      update locale: 'un'
+      'un'
     end
+  end
+
+  def detect_locale
+    update locale: detected_locale
   end
 
   def detect_locale_async
@@ -481,8 +485,9 @@ class Article < ApplicationRecord
     self.price = currency.minimal_price_amount
   end
 
-  def set_default_intro
+  def set_defaults
     self.intro = default_intro if intro.blank?
+    self.locale = detected_locale
   end
 
   def can_not_change_currency_after_published
