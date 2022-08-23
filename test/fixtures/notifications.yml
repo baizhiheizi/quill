@@ -19,14 +19,14 @@
 
 one:
   recipient: one
-  recipient_type: Recipient
-  type: 
-  params: 
+  recipient_type: User
+  type: ArticleBoughtNotification
+  params: {}
   read_at: 2021-01-26 10:17:39
 
 two:
   recipient: two
-  recipient_type: Recipient
-  type: 
-  params: 
+  recipient_type: User
+  type: ArticlePublishedNotification
+  params: {}
   read_at: 2021-01-26 10:17:39

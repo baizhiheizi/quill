@@ -38,8 +38,8 @@
 #  index_articles_on_uuid           (uuid) UNIQUE
 #
 
-one: {}
-# column: value
-#
-two: {}
-# column: value
+one:
+  price: 1
+
+two:
+  price: 1.1

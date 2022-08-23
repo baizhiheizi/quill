@@ -13,8 +13,6 @@
 #  index_administrators_on_name  (name) UNIQUE
 #
 
-one: {}
-# column: value
-#
-two: {}
-# column: value
+one: 
+  name: admin
+  password_digest: 123
