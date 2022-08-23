@@ -194,7 +194,7 @@ class User < ApplicationRecord
   def short_name
     return name unless mvm_eth?
 
-    "#{name.first(6)}...#{name.last(4)}"
+    short_uid
   end
 
   def default_payment

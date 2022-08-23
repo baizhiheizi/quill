@@ -2,6 +2,8 @@
 
 require 'sidekiq/throttled'
 
+Redis.sadd_returns_boolean = true
+
 Sidekiq.configure_server do |config|
   config.redis = { namespace: Rails.application.credentials.dig(:sidekiq, :namespace) || 'quill_sidekiq' }
 
