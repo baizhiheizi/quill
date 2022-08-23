@@ -2,7 +2,7 @@
 
 # Quill
 
-![Check](https://github.com/baizhiheizi/quill/workflows/Check/badge.svg) ![CI](https://github.com/baizhiheizi/quill/workflows/CI/badge.svg) ![Uptime 100.00%](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fbaizhiheizi%2Fupptime%2Fmaster%2Fapi%2Fprs-digg%2Fuptime.json) ![Response Time](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fbaizhiheizi%2Fupptime%2Fmaster%2Fapi%2Fprs-digg%2Fresponse-time.json)
+![Check](https://github.com/baizhiheizi/quill/workflows/Check/badge.svg) ![CI](https://github.com/baizhiheizi/quill/workflows/CI/badge.svg) ![Uptime 100.00%](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fbaizhiheizi%2Fupptime%2FHEAD%2Fapi%2Fquill%2Fuptime.json)
 
 [English](README.md)
 
