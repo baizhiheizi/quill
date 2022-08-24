@@ -71,9 +71,7 @@
           <%= render partial: "articles/related_articles_card", locals: { articles: @article.related_articles } %>
         </div>
       <% end %>
-      <div class="mb-4">
-        <%= render "shared/hot_tags_card" %>
-      </div>
+      <%= turbo_frame_tag 'hot_tags', src: '/hot_tags', loading: :lazy %>
     </div>
   <aside>
 </div>

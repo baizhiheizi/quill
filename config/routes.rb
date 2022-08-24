@@ -34,6 +34,8 @@ Rails.application.routes.draw do
   get '/docs', to: redirect('https://docs.quill.im')
 
   root to: 'articles#index'
+  get :hot_tags, to: 'home#hot_tags'
+  get :active_authors, to: 'home#active_authors'
 
   resources :locales, only: %i[create]
 

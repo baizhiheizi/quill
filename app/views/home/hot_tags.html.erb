@@ -1,0 +1,19 @@
+<% if @hot_tags.present? %>
+  <%= turbo_frame_tag 'hot_tags' do %>
+    <div class="mb-4">
+      <div class="bg-white dark:bg-zinc-900 dark:border-zinc-800 p-4 sm:p-6 sm:border border-zinc-50 sm:rounded-lg">
+        <div class="flex mb-4">
+          <span class="font-bold"><%= t('hot_tags') %></span>
+        </div>
+        <% hot_tags.each do |tag| %>
+          <div class="flex items-center space-x-2 justify-between mb-2">
+            <%= link_to "##{tag.name}", articles_path(tag: tag.name, order_by: @order_by || 'lately'), data: { controller: 'prefetch' }, class: "px-2 py-1 bg-zinc-100 dark:bg-zinc-800 font-bold truncate" %>
+            <div class="text-sm min-w-max">
+              <%= render "subscribe_tags/subscribe_button", tag: tag %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+<% end %>

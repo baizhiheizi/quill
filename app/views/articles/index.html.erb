@@ -6,16 +6,15 @@
   <aside class="lg:col-span-1">
     <div class="lg:sticky lg:top-20">
       <% if @tag.present? %>
-        <div class="mb-4">
-          <%= render "tags/tag_card", tag: @tag %>
-        </div>
+        <%= turbo_frame_tag 'selected_tag' do %>
+          <div class="mb-4">
+            <%= render "tags/tag_card", tag: @tag %>
+          </div>
+        <% end %>
       <% end %>
-      <div class="mb-4">
-        <%= render "shared/hot_tags_card" %>
-      </div>
-      <div class="mb-4">
-        <%= render "shared/active_authors_card" %>
-      </div>
+
+      <%= turbo_frame_tag 'hot_tags', src: '/hot_tags', loading: :lazy %>
+      <%= turbo_frame_tag 'active_authors', src: '/active_authors', loading: :lazy %>
     </div>
   </aside>
 </div>
