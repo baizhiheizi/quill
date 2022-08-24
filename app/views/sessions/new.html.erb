@@ -77,6 +77,17 @@
           <%= t('using_eth_wallet') %>
         </div>
       </div>
+
+      <div class="text-center text-sm opacity-75">
+        <%= t('by_connecting_your_wallet_you_agree_to') %>
+      </div>
+      <div class="text-center text-sm opacity-75">
+        <%= link_to t('terms_of_service'), 'https://docs.quill.im/terms-of-service', target: "_blank", class: "font-bold" %>
+        <span class="mx-1">
+          <%= t('and') %>
+        </span>
+        <%= link_to t('privacy_policy'), 'https://docs.quill.im/privacy-policy', target: "_blank", class: "font-bold" %>
+      </div>
     </div>
   <% end %>
 <% end %>
