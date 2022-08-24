@@ -1,47 +1,8 @@
 <div class="lg:grid lg:grid-cols-3 lg:gap-x-6 relative">
   <article class="max-w-full lg:col-span-2 mb-4">
     <div class="bg-white dark:bg-zinc-900 p-4 w-full sm:p-6 sm:rounded-lg mb-4">
-      <div class="flex items-center justify-between mb-6">
-        <div class="relative flex items-center space-x-2 truncate">
-          <img class="w-10 h-10 my-0 rounded-full" src="<%= @article.author.avatar %>">
-          <div class="leading-4 truncate">
-            <span class="text-base font-semibold"><%= @article.author.short_name %></span>
-            <div class="text-sm sm:text-base text-gray-500 font-light">
-              <%= render TimeFormatComponent.new datetime: @article.published_at.utc.rfc3339 do %>
-                <%= @article.published_at&.strftime("%Y-%m-%d %H:%M") %>
-              <% end %>
-            </div>
-          </div>
-          <%= link_to user_path(@article.author), data: { controller: 'prefetch' } do %>
-            <span aria-hidden="true" class="absolute inset-0"></span>
-          <% end %>
-        </div>
-        <div class="flex justify-end">
-          <%= render "articles/share_button", article: @article, button_class: "w-5 h-5 lg:w-6 lg:h-6" %>
-        </div>
-      </div>
-      <div class="font-semibold text-xl lg:text-3xl 3xl:text-4xl mb-6 text-ellipsis overflow-hidden">
-        <%= @article.title %>
-      </div>
-      <% if @article.tags.present? %>
-        <div class="flex items-center flex-wrap mb-4">
-          <% @article.tags.each do |tag| %>
-            <%= link_to articles_path(tag: tag.name), data: { controller: 'prefetch' }, class: "px-2 py-1 text-sm hover:bg-zinc-200 dark:hover:bg-zinc-700 font-bold" do %>
-              <span style="color:<%= tag.color %>">#</span><%= tag.name %>
-            <% end %>
-          <% end %>
-        </div>
-      <% end %>
-      <div class="py-2 px-4 mb-8 bg-zinc-100 dark:bg-zinc-800 rounded break-words">
-        <%= @article.intro %>
-      </div>
-      <div class="flex items-center space-x-2 mb-4 text-sm xl:text-base text-gray-500">
-        <span>
-          <%= t("words_count") %>:
-        </span>
-        <span>
-          <%= @article.words_count %>
-        </span>
+      <div class="mb-8">
+        <%= render partial: "articles/header", locals: { article: @article } %>
       </div>
 
       <div class="mb-8">
