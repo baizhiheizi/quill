@@ -316,28 +316,6 @@
               },
               class: "block px-3 py-2 text-base font-medium focus:bg-blue-50 focus:text-primary rounded-md" %>
           </div>
-          <div class="px-2 pt-3 border-t border-zinc-50 dark:border-zinc-800 space-y-1" data-controller="switch-locale">
-            <%= link_to 'English', 
-              locales_path(locale: :en, return_to: request.path), 
-              class: "block px-3 py-2 text-base font-medium focus:bg-blue-50 focus:text-primary rounded-md #{current_locale == 'en' ? 'font-bold' : ''}", 
-              data: { 
-                turbo_method: :post,
-                switch_locale_locale_param: :en,
-                action: "switch-locale#switch"
-              },
-              role: "menuitem", 
-              tabindex: "-1" %>
-            <%= link_to '中文', 
-              locales_path(locale: :'zh-CN', return_to: request.path), 
-              class: "block px-3 py-2 text-base font-medium focus:bg-blue-50 focus:text-primary rounded-md #{current_locale == 'zh-CN' ? 'font-bold' : ''}", 
-              data: { 
-                turbo_method: :post,
-                switch_locale_locale_param: :'zh-CN',
-                action: "switch-locale#switch"
-              },
-              role: "menuitem", 
-              tabindex: "-1" %>
-          </div>
         <% else %>
           <div class="px-2 sm:px-3 flex">
             <% if from_mixin_messenger? %>
@@ -352,6 +330,28 @@
             <% end %>
           </div>
         <% end %>
+        <div class="px-2 pt-3 border-t border-zinc-50 dark:border-zinc-800 space-y-1" data-controller="switch-locale">
+          <%= link_to 'English', 
+            locales_path(locale: :en, return_to: request.path), 
+            class: "block px-3 py-2 text-base font-medium focus:bg-blue-50 focus:text-primary rounded-md #{current_locale == 'en' ? 'font-bold' : ''}", 
+            data: { 
+              turbo_method: :post,
+              switch_locale_locale_param: :en,
+              action: "switch-locale#switch"
+            },
+            role: "menuitem", 
+            tabindex: "-1" %>
+          <%= link_to '中文', 
+            locales_path(locale: :'zh-CN', return_to: request.path), 
+            class: "block px-3 py-2 text-base font-medium focus:bg-blue-50 focus:text-primary rounded-md #{current_locale == 'zh-CN' ? 'font-bold' : ''}", 
+            data: { 
+              turbo_method: :post,
+              switch_locale_locale_param: :'zh-CN',
+              action: "switch-locale#switch"
+            },
+            role: "menuitem", 
+            tabindex: "-1" %>
+        </div>
       </div>
     </div>
   </div>

@@ -78,15 +78,15 @@
         </div>
       </div>
 
-      <div class="text-center text-sm opacity-75">
-        <%= t('by_connecting_your_wallet_you_agree_to') %>
-      </div>
-      <div class="text-center text-sm opacity-75">
-        <%= link_to t('terms_of_service'), 'https://docs.quill.im/terms-of-service', target: "_blank", class: "font-bold" %>
-        <span class="mx-1">
+      <div class="flex justify-center items-center flex-wrap text-center text-sm opacity-75 sm:w-[70%] mx-auto">
+        <span>
+          <%= t('by_connecting_your_wallet_you_agree_to') %>
+        </span>
+        <%= link_to t('terms_of_service'), 'https://docs.quill.im/terms-of-service', target: "_blank", class: "font-bold mx-0.5" %>
+        <span>
           <%= t('and') %>
         </span>
-        <%= link_to t('privacy_policy'), 'https://docs.quill.im/privacy-policy', target: "_blank", class: "font-bold" %>
+        <%= link_to t('privacy_policy'), 'https://docs.quill.im/privacy-policy', target: "_blank", class: "font-bold mx-0.5" %>
       </div>
     </div>
   <% end %>
