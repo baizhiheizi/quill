@@ -126,9 +126,20 @@ class MarkdownRenderService
 
       size ||= []
 
-      img.wrap("<a class='photoswipe' data-pswp-src='#{img['src']}' data-pswp-width='#{size.first}' data-pswp-height='#{size.last}' href='#{img['src']}' target='_blank'>")
+      img.wrap <<~TAG
+        <a 
+          class='photoswipe' 
+          data-pswp-src='#{img['src']}' 
+          data-pswp-width='#{size.first}' 
+          data-pswp-height='#{size.last}' 
+          href='#{img['src']}' 
+          target='_blank'
+        >
+      TAG
+
       img['class'] = 'max-w-full mx-auto'
-      img['class'] += " aspect-[#{size.first}/#{size.last}]" if size.first.present? && size.last.present?
+      img['width'] = size.first if size.first.present?
+      img['height'] = size.last if size.last.present?
       img['loading'] = 'lazy'
     end
     @html = doc.to_html
