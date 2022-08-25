@@ -350,12 +350,16 @@ class Article < ApplicationRecord
       .limit(5)
   end
 
+  def attach_images_from_content
+    update content: blob_parsed_content
+  end
+
   def attach_images_from_content_async
     ArticleAttachImagesFromContentWorker.perform_async uuid
   end
 
-  def attach_images_from_content
-    urls = content.scan(%r{\(blob://\S+\)})
+  def blob_parsed_content
+    urls = content.scan(%r{\(blob://.+\)})
     temp_content = content.dup
     urls.each do |url|
       key = url.gsub(%r{\(blob://|\)}, '').split('/').first
@@ -365,7 +369,7 @@ class Article < ApplicationRecord
       temp_content = temp_content.gsub(url, "(#{blob.url})") if images.attach(blob.signed_id)
     end
 
-    update content: temp_content
+    temp_content
   end
 
   def update_attached_image_url_in_content
@@ -422,6 +426,7 @@ class Article < ApplicationRecord
   def set_defaults
     self.intro = default_intro if intro.blank?
     self.locale = detected_locale
+    self.content = blob_parsed_content if content_changed?
   end
 
   def can_not_change_currency_after_published

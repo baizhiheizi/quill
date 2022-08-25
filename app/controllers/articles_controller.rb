@@ -61,6 +61,11 @@ class ArticlesController < ApplicationController
   def update_content
     @article = current_user.articles.find_by uuid: params[:article_uuid]
     @article.update params.require(:article).permit(:title, :content)
+
+    render json: {
+      content: @article.reload.content,
+      updated_at: @article.updated_at
+    }
   end
 
   def share

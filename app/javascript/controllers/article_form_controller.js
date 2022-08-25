@@ -276,8 +276,18 @@ export default class extends Controller {
           content,
         },
         contentType: 'application/json',
-        responseKind: 'turbo-stream',
-      });
+      })
+        .then((res) => res.json)
+        .then(({ content, updated_at }) => {
+          if (content !== this.editor.value()) {
+            this.editor.value(content);
+          }
+          const el = this.element.querySelector(
+            'span[data-controller="time-format-component"]',
+          );
+          if (!el) return;
+          el.dataset['timeFormatComponentDatetimeValue'] = updated_at;
+        });
     } else {
       localStorage.setItem(this.draftKey, JSON.stringify({ title, content }));
     }
