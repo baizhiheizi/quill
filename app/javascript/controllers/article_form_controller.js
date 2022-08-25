@@ -35,6 +35,9 @@ export default class extends Controller {
   initialize() {
     this.autosave = this.autosave.bind(this);
     this.submit = this.submit.bind(this);
+
+    this.autosave = debounce(this.autosave, 1500);
+    this.submit = debounce(this.submit, 1500);
   }
 
   connect() {
@@ -44,9 +47,6 @@ export default class extends Controller {
       this.directUploadAttachmentName =
         this.imagesTarget.dataset.directUploadAttachmentName;
     }
-
-    this.autosave = debounce(this.autosave, 1500);
-    this.submit = debounce(this.submit, 1500);
 
     if (!this.articlePublishedValue) {
       document
