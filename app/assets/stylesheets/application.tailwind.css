@@ -1,7 +1,7 @@
-@import 'highlight.js/styles/github';
-@import 'photoswipe/dist/photoswipe';
-@import 'tom-select/dist/css/tom-select';
-@import 'easymde/dist/easymde.min';
+@import 'github';
+@import 'photoswipe';
+@import 'tom-select';
+@import 'easymde.min';
 @import 'easymde-custom';
 
 @tailwind base;
