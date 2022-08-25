@@ -128,7 +128,7 @@ class MarkdownRenderService
 
       img.wrap <<~TAG
         <a 
-          class='photoswipe bg-zinc-50' 
+          class='photoswipe' 
           data-pswp-src='#{img['src']}' 
           data-pswp-width='#{size.first}' 
           data-pswp-height='#{size.last}' 
@@ -137,7 +137,7 @@ class MarkdownRenderService
         >
       TAG
 
-      img['class'] = 'max-w-full mx-auto'
+      img['class'] = 'max-w-full mx-auto bg-zinc-50'
       img['width'] = size.first if size.first.present?
       img['height'] = size.last if size.last.present?
       img['loading'] = 'lazy'
