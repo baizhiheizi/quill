@@ -128,7 +128,7 @@ class MarkdownRenderService
 
       img.wrap <<~TAG
         <a 
-          class='photoswipe' 
+          class='photoswipe bg-zinc-50' 
           data-pswp-src='#{img['src']}' 
           data-pswp-width='#{size.first}' 
           data-pswp-height='#{size.last}' 

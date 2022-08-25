@@ -47,6 +47,7 @@ class Article < ApplicationRecord
   PLATFORM_REVENUE_RATIO_DEFAULT = 0.1
 
   include AASM
+  include Articles::Payable
 
   belongs_to :author, class_name: 'User', inverse_of: :articles
   belongs_to :currency, primary_key: :asset_id, foreign_key: :asset_id, inverse_of: :articles
@@ -105,7 +106,7 @@ class Article < ApplicationRecord
   before_validation :set_defaults
   after_save do
     generate_snapshot if should_generate_snapshot?
-    if saved_change_to_content
+    if saved_change_to_content?
       attach_images_from_content_async
       detect_locale_async
     end
@@ -324,74 +325,6 @@ class Article < ApplicationRecord
     title.present? && content.present?
   end
 
-  def payment_trace_id(user)
-    return if user.blank?
-
-    # generate a unique trace ID for paying
-    # avoid duplicate payment
-    candidate = QuillBot.api.unique_uuid(uuid, user.mixin_uuid)
-    loop do
-      break unless Payment.exists?(trace_id: candidate)
-
-      candidate = QuillBot.api.unique_uuid(uuid, candidate)
-    end
-
-    candidate
-  end
-
-  def buy_url(user, pay_asset_id = asset_id)
-    amount = buy_payment_amount pay_asset_id
-    return if amount.blank?
-
-    trace_id = payment_trace_id user
-
-    pay_url user, pay_asset_id, amount, buy_payment_memo, trace_id
-  end
-
-  def reward_url(user, pay_asset_id, amount, trace_id)
-    pay_url user, pay_asset_id, amount, reward_payment_memo, trace_id
-  end
-
-  def pay_url(user, pay_asset_id, amount, memo, trace_id)
-    Addressable::URI.new(
-      scheme: 'mixin',
-      host: 'pay',
-      path: '',
-      query_values: [
-        ['recipient', user&.wallet_id || wallet_id],
-        ['trace', trace_id],
-        ['memo', memo],
-        ['asset', pay_asset_id],
-        ['amount', amount.to_r.to_f]
-      ]
-    ).to_s
-  end
-
-  def buy_payment_amount(pay_asset_id)
-    case pay_asset_id
-    when asset_id
-      price
-    else
-      begin
-        Foxswap.api.pre_order(
-          pay_asset_id: pay_asset_id,
-          fill_asset_id: asset_id,
-          amount: (price * 1.01).round(8).to_r.to_f
-        )['data']['funds']
-      rescue StandardError
-        nil
-      end
-    end
-  end
-
-  def buy_payment_memo
-    Base64.urlsafe_encode64({ t: 'BUY', a: uuid }.to_json)
-  end
-
-  def reward_payment_memo
-    Base64.urlsafe_encode64({ t: 'REWARD', a: uuid }.to_json)
-  end
-
   def related_articles
     @related_articles ||= citers.presence || tag_related_articles.presence || author_other_articles
   end
@@ -422,16 +355,17 @@ class Article < ApplicationRecord
   end
 
   def attach_images_from_content
-    signed_ids = []
-    content.scan(%r{blob://\S+}).each do |url|
-      key = url.gsub('blob://', '').split('/').first
+    urls = content.scan(%r{\(blob://\S+\)})
+    temp_content = content.dup
+    urls.each do |url|
+      key = url.gsub(%r{\(blob://|\)}, '').split('/').first
       blob = ActiveStorage::Blob.find_by key: key
       next if blob.blank?
 
-      signed_ids.push blob.signed_id
+      temp_content = temp_content.gsub(url, "(#{blob.url})") if images.attach(blob.signed_id)
     end
 
-    images.attach signed_ids
+    update content: temp_content
   end
 
   def update_attached_image_url_in_content
