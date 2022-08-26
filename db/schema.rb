@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_08_22_003643) do
+ActiveRecord::Schema[7.0].define(version: 2022_08_26_110843) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
   enable_extension "pgcrypto"
@@ -90,16 +90,9 @@ ActiveRecord::Schema[7.0].define(version: 2022_08_22_003643) do
   create_table "article_snapshots", force: :cascade do |t|
     t.uuid "article_uuid"
     t.json "raw"
-    t.string "file_hash"
-    t.string "tx_id"
-    t.text "file_content"
-    t.string "state"
-    t.datetime "requested_at", precision: nil
-    t.datetime "signed_at", precision: nil
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["article_uuid"], name: "index_article_snapshots_on_article_uuid"
-    t.index ["tx_id"], name: "index_article_snapshots_on_tx_id", unique: true
   end
 
   create_table "articles", force: :cascade do |t|
