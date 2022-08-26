@@ -5,7 +5,7 @@
     "lint": "prettier --write app/javascript/**/*.{tsx,ts,js,gql}",
     "lint-check": "prettier --check app/javascript/**/*.{tsx,ts,js,gql}",
     "build:css": "tailwindcss -i ./app/assets/stylesheets/application.tailwind.css -o ./app/assets/builds/application.css",
-    "build": "esbuild app/javascript/*.* --bundle --sourcemap --outdir=app/assets/builds --public-path=assets --target=chrome58 --inject:./esbuild.inject.js"
+    "build": "esbuild app/javascript/*.* --bundle --sourcemap --minify --outdir=app/assets/builds --public-path=assets --target=chrome58 --inject:./esbuild.inject.js"
   },
   "version": "0.1.0",
   "dependencies": {
