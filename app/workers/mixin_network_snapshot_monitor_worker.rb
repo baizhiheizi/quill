@@ -5,11 +5,12 @@ class MixinNetworkSnapshotMonitorWorker
   sidekiq_options queue: :low, retry: false
 
   def perform
-    count = MixinNetworkSnapshot.unprocessed.where(created_at: ...(1.minute.ago)).count
-    return unless count.positive?
+    snapshots = MixinNetworkSnapshot.unprocessed.where(created_at: ...(1.minute.ago))
+    return unless snapshots.count.positive?
 
+    snapshots.map(&:process!)
     AdminNotificationService.new.text(
-      "There are #{count} unprocessed snapshots delay longer than 1 minutes"
+      "There are #{snapshots.count} unprocessed snapshots delay longer than 1 minutes"
     )
   end
 end
