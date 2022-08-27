@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class ArticlesController < ApplicationController
-  before_action :authenticate_user!, only: %i[new edit update]
+  before_action :authenticate_user!, only: %i[new edit update update_content]
   before_action :load_article, only: %i[edit update]
   layout 'editor', only: %i[new edit]
 
