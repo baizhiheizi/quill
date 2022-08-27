@@ -18,9 +18,10 @@
 class ArticleSnapshot < ApplicationRecord
   include AASM
 
-  has_one_attached :file
+  store :raw, accessors: %w[content] 
 
   belongs_to :article, primary_key: :uuid, foreign_key: :article_uuid, inverse_of: :snapshots
+  has_one :arweave_transaction, dependent: :restrict_with_exception 
 
   before_validation :set_defaults, on: :create
 
