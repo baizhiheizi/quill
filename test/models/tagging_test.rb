@@ -12,8 +12,6 @@
 #
 # Indexes
 #
-#  index_taggings_on_article_id             (article_id)
-#  index_taggings_on_tag_id                 (tag_id)
 #  index_taggings_on_tag_id_and_article_id  (tag_id,article_id) UNIQUE
 #
 
