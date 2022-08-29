@@ -32,7 +32,7 @@
     "highlight.js": "^11.6.0",
     "json-rpc-engine": "^6.1.0",
     "mixin-messenger-utils": "^0.1.5",
-    "photoswipe": "^5.3.0",
+    "photoswipe": "^5.3.2",
     "postcss": "^8.4.16",
     "postcss-import": "^14.1.0",
     "process": "^0.11.10",
