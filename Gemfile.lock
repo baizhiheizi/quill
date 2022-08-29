@@ -271,6 +271,10 @@ GEM
       nokogiri (>= 1.5.9)
     mail (2.7.1)
       mini_mime (>= 0.1.1)
+    mailjet (1.7.1)
+      activesupport (>= 3.1.0)
+      rack (>= 1.4.0)
+      rest-client (>= 2.0.0)
     marcel (1.0.2)
     matrix (0.4.2)
     method_source (1.0.0)
@@ -528,6 +532,7 @@ DEPENDENCIES
   jbuilder
   jsbundling-rails
   listen (~> 3.4)
+  mailjet
   mina (~> 1.2.2)
   mina-logs (~> 1.1.0)
   mina-multistage (~> 1.0.3)

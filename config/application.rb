@@ -41,5 +41,7 @@ module Quill
     config.view_component.generate_parent_component = 'ApplicationComponent'
 
     config.action_view.image_loading = 'lazy'
+
+    config.action_mailer.delivery_method = :mailjet
   end
 end
