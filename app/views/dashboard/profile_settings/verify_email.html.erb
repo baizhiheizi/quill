@@ -1,0 +1,22 @@
+<div class="m-8">
+  <% if @user.present? %>
+    <div class="mb-2 flex justify-center">
+      <%= render "shared/icons/check_circle_solid", html_class: "w-16 h-16 text-green-500" %>
+    </div>
+    <div class="flex justify-center">
+      You email <span class="font-bold mx-2"><%= @user.email %></span> has been verified!
+    </div>
+  <% else %>
+    <div class="mb-2 flex justify-center">
+      <%= render "shared/icons/exclamation_circle_solid", html_class: "w-16 h-16 text-red-500" %>
+    </div>
+    <div class="flex justify-center">
+      Cannot verify, please re-verify your email in your dashboard.
+    </div>
+  <% end %>
+
+  <div class="my-6 flex justify-center">
+    <%= link_to t('back'), root_path, class: "rounded bg-primary text-white p-2 w-24 text-center" %>
+  </div>
+</div>
+

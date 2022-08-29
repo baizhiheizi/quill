@@ -1,0 +1,23 @@
+<p>
+  Please verify your email address.
+</p>
+
+<p>
+  User the following link to confirm your email address:
+</p>
+
+<p>
+  <%= link_to dashboard_email_verify_url(code: @code), dashboard_email_verify_url(code: @code), target: "_blank" %>
+</p>
+
+<p>
+  If you're not verifying email for your Quill account, please ignore this email.
+</p>
+
+<p>
+  This is an automated message. Please do NOT reply to this email.
+</p>
+
+<p>
+  Thanks!
+</p>

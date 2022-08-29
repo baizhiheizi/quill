@@ -23,6 +23,9 @@ namespace :dashboard do
   resources :read_notifications, only: %i[new create update]
   resources :deleted_notifications, only: %i[new create]
   resources :notification_settings, only: %i[update]
+  resource :profile_setting, only: %i[edit update]
+
+  get 'email_verify', to: 'profile_settings#verify_email'
 
   resources :access_tokens, only: %i[index create destroy]
   resource :destination, only: %i[show] do

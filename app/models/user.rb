@@ -9,6 +9,8 @@
 #  avatar_url                  :string
 #  blocking_count              :integer          default(0)
 #  blocks_count                :integer          default(0)
+#  email                       :string
+#  email_verified_at           :datetime
 #  locale                      :string
 #  mixin_uuid                  :uuid
 #  name                        :string
@@ -23,6 +25,7 @@
 #
 # Indexes
 #
+#  index_users_on_email       (email) UNIQUE
 #  index_users_on_mixin_id    (mixin_id)
 #  index_users_on_mixin_uuid  (mixin_uuid) UNIQUE
 #  index_users_on_uid         (uid) UNIQUE
@@ -30,6 +33,7 @@
 
 class User < ApplicationRecord
   include Authenticatable
+  include Users::EmailVerifiable
   include Users::Scopable
   include Users::Statable
 
@@ -61,6 +65,7 @@ class User < ApplicationRecord
   has_one :notification_setting, dependent: :destroy
 
   validates :name, presence: true
+  validates :email, uniqueness: true, format: /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\z/i, allow_nil: true
   validates :mixin_id, presence: true
   validates :mixin_uuid, presence: true
   validates :uid, presence: true, uniqueness: true

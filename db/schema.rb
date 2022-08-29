@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_08_27_031528) do
+ActiveRecord::Schema[7.0].define(version: 2022_08_29_011150) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
   enable_extension "pgcrypto"
@@ -505,6 +505,9 @@ ActiveRecord::Schema[7.0].define(version: 2022_08_27_031528) do
     t.integer "blocking_count", default: 0
     t.string "locale"
     t.datetime "validated_at"
+    t.string "email"
+    t.datetime "email_verified_at"
+    t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["mixin_id"], name: "index_users_on_mixin_id"
     t.index ["mixin_uuid"], name: "index_users_on_mixin_uuid", unique: true
     t.index ["uid"], name: "index_users_on_uid", unique: true

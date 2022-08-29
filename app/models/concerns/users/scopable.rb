@@ -15,6 +15,7 @@ module Users::Scopable
           articles: { created_at: (1.month.ago)..., orders_count: 1... }
         )
     }
+    scope :only_email_verified, -> { where.not(email_verified_at: nil) }
     scope :only_validated, -> { where.not(validated_at: nil) }
     scope :order_by_revenue_total, lambda {
       joins(:revenue_transfers)

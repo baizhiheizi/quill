@@ -303,3 +303,6 @@ zh-CN:
   terms_of_service: 服务条款
   and: 和
   privacy_policy: 隐私条款
+  verify: 验证
+  reverify: 重新验证
+  veifiy_email_subject: 请验证您 Quill 帐号的 Email 地址

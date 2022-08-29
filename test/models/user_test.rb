@@ -9,6 +9,8 @@
 #  avatar_url                  :string
 #  blocking_count              :integer          default(0)
 #  blocks_count                :integer          default(0)
+#  email                       :string
+#  email_verified_at           :datetime
 #  locale                      :string
 #  mixin_uuid                  :uuid
 #  name                        :string
@@ -23,6 +25,7 @@
 #
 # Indexes
 #
+#  index_users_on_email       (email) UNIQUE
 #  index_users_on_mixin_id    (mixin_id)
 #  index_users_on_mixin_uuid  (mixin_uuid) UNIQUE
 #  index_users_on_uid         (uid) UNIQUE

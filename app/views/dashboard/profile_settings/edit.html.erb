@@ -1,0 +1,14 @@
+<%= turbo_frame_tag 'profile_email_form' do %>
+  <%= form_for current_user, url: dashboard_profile_setting_path, method: :put do |form| %>
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+      <%= form.text_field :email, 
+        placeholder: 'input email', 
+        class: "block py-1 text-primary border-t-0 border-l-0 border-r-0 border-b border-zinc-100 focus:ring-0" %>
+
+      <div>
+        <%= form.submit t('verify'), class: 'cursor-pointer rounded bg-primary text-white px-2 py-1 mx-2' %>
+        <%= link_to t('cancel'), :back, class: 'cursor-pointer rounded border border-zinc-500 text-zinc-500 px-2 py-1' %>
+      </div>
+    </div>
+  <% end %>
+<% end %>

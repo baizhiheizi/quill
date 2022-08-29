@@ -1,0 +1,26 @@
+<div class="mb-2">
+  <span class="<%= current_user.email_vefified? ? 'opacity-100' : 'opacity-50' %>">
+    <%= current_user.email.presence || '-' %>
+  </span>
+
+  <% if current_user.email_vefified? %>
+    <%= render 'shared/icons/check_circle_solid', html_class: 'w-6 h-6 text-green-500 inline' %>
+  <% else %>
+    <%= render 'shared/icons/exclamation_circle_solid', html_class: 'w-6 h-6 text-red-500 inline' %>
+  <% end %>
+
+  <%= link_to current_user.email_vefified? ? t('edit') : t('reverify'),
+    edit_dashboard_profile_setting_path, 
+    data: {
+      turbo_frame: 'profile_email_form'
+    },
+    class: "mx-2 px-2 py-1 bg-primary text-white rounded" %>
+</div>
+
+<% if current_user.email_verifying? %>
+  <div class="">
+    <span class="text-sm text-primary p-1">
+      A verify mail has been sent to your email.
+    </span>
+  </div>
+<% end %>
