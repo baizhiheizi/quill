@@ -40,7 +40,7 @@ gem 'jbuilder'
 
 # Use Redis adapter to run Action Cable in production
 gem 'hiredis'
-gem 'redis'
+gem 'redis', '< 5.0'
 
 # Map Redis types directly to Ruby objects
 gem 'redis-objects'
