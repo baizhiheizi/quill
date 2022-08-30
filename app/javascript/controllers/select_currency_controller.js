@@ -15,7 +15,7 @@ export default class extends Controller {
   search(event) {
     const regex = new RegExp(event.target.value, 'ig');
     this.currencyOptionTargets.forEach((option) => {
-      if (regex.test(option.dataset.modalSymbolParam)) {
+      if (regex.test(option.dataset.modalComponentSymbolParam)) {
         option.classList.remove('hidden');
       } else {
         option.classList.add('hidden');
