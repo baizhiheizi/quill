@@ -4,14 +4,14 @@ import StarterKit from '@tiptap/starter-kit';
 import Image from '@tiptap/extension-image';
 import { createMarkdownEditor } from 'tiptap-markdown';
 import Typography from '@tiptap/extension-typography';
-import Dropcursor from '@tiptap/extension-dropcursor';
 import BubbleMenu from '@tiptap/extension-bubble-menu';
 import FloatingMenu from '@tiptap/extension-floating-menu';
 import Underline from '@tiptap/extension-underline';
-import Gapcursor from '@tiptap/extension-gapcursor';
 import Placeholder from '@tiptap/extension-placeholder';
+import Link from '@tiptap/extension-link';
 import { showLoading, hideLoading } from '../javascript/utils';
 import { Uploader } from '../javascript/utils/uploader';
+import { debounce } from 'underscore';
 
 export default class extends Controller {
   static values = {
@@ -26,9 +26,9 @@ export default class extends Controller {
     'bubbleMenu',
     'floatingMenu',
     'bubbleMenuButton',
-    'italicButton',
-    'strikeButton',
-    'underlineButton',
+    'bubbleMenuButtonGroup',
+    'bubbleMenuLinkSetting',
+    'setLinkInput',
   ];
 
   connect() {}
@@ -94,9 +94,10 @@ export default class extends Controller {
           element: this.floatingMenuTarget,
           tippyOptions: { placement: 'bottom-start' },
         }),
-        Dropcursor,
-        Gapcursor,
         Image.configure({ inline: false }),
+        Link.configure({
+          openOnClick: false,
+        }),
         Placeholder.configure({ placeholder: textarea.placeholder }),
         StarterKit,
         Typography,
@@ -141,6 +142,16 @@ export default class extends Controller {
   }
 
   bubbleMenuTargetConnected() {
+    if (this.editor.isActive('link')) {
+      this.setLinkInputTarget.value =
+        this.editor.getAttributes('link').href || '';
+      this.bubbleMenuLinkSettingTarget.classList.remove('hidden');
+      this.bubbleMenuButtonGroupTarget.classList.add('hidden');
+    } else {
+      this.bubbleMenuLinkSettingTarget.classList.add('hidden');
+      this.bubbleMenuButtonGroupTarget.classList.remove('hidden');
+    }
+
     this.bubbleMenuButtonTargets.forEach((button) => {
       if (this.editor.isActive(button.dataset.buttonType)) {
         button.classList.add('bg-zinc-300');
@@ -168,6 +179,27 @@ export default class extends Controller {
   addHeading(event) {
     const { level } = event.params;
     this.editor.chain().focus().toggleHeading({ level }).run();
+  }
+
+  toggleLink(event) {
+    event.preventDefault();
+    this.setLinkInputTarget.value =
+      this.editor.getAttributes('link').href || '';
+    this.bubbleMenuButtonGroupTarget.classList.add('hidden');
+    this.bubbleMenuLinkSettingTarget.classList.remove('hidden');
+  }
+
+  setLink(event) {
+    event.preventDefault();
+    const href = event.currentTarget.value;
+    this.editor.chain().focus().extendMarkRange('link').setLink({ href }).run();
+  }
+
+  unsetLink(event) {
+    event.preventDefault();
+    this.bubbleMenuButtonGroupTarget.classList.remove('hidden');
+    this.bubbleMenuLinkSettingTarget.classList.add('hidden');
+    this.editor.chain().focus().extendMarkRange('link').unsetLink().run();
   }
 
   uploadImage(event) {
