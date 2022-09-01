@@ -30,6 +30,7 @@ export default class extends Controller {
     'bubbleMenuButtonGroup',
     'bubbleMenuLinkSetting',
     'setLinkInput',
+    'insertMarkdownButton',
   ];
 
   connect() {}
@@ -83,6 +84,9 @@ export default class extends Controller {
         }),
         FloatingMenu.configure({
           element: this.floatingMenuTarget,
+          tippyOptions: {
+            placement: 'bottom-start',
+          },
         }),
         Image.configure({ inline: false }),
         Link.configure({
@@ -222,5 +226,21 @@ export default class extends Controller {
   addCodeBlock(event) {
     event.preventDefault();
     this.editor.chain().focus().toggleCodeBlock().run();
+  }
+
+  floatingMenuTargetConnected() {
+    if (this.editor.getText()) {
+      this.insertMarkdownButtonTarget.classList.add('hidden');
+    } else {
+      this.insertMarkdownButtonTarget.classList.remove('hidden');
+    }
+  }
+
+  async insertMarkdownContent(event) {
+    event.preventDefault();
+    const text = await navigator.clipboard.readText();
+    if (!text) return;
+
+    this.editor.commands.setContent(text);
   }
 }
