@@ -1,16 +1,17 @@
 <div data-article-form-target="contentFields" class="bg-white dark:bg-zinc-900">
-  <%= form.file_field :images, 
-    multiple: true, 
-    direct_upload: true, 
-    data: {
-      article_form_target: "images"
-    },
-    class: "hidden" %>
-  <%= form.text_area :content, 
-    class: "w-full p-0 h-full border-t-0 border-l-0 border-r-0 border-b-0 focus:ring-0", 
-    placeholder: t("articles.content_place_holder"), 
-    data: { 
-      article_form_target: "content"
-    } 
-  %>
+  <%= render EditorComponent.new draft_key: 'quill_article_draft' do %>
+    <%= form.file_field :images, 
+      multiple: true, 
+      direct_upload: true, 
+      class: "hidden" %>
+
+    <%= form.text_area :content, 
+      placeholder: t("articles.content_place_holder"), 
+      data: { 
+        article_form_target: "content",
+        action: "change->article-form#autosave"
+      } 
+    %>
+  <% end %>
+  <div class="w-full mb-6" data-article-form-target="editor"></div>
 </div>

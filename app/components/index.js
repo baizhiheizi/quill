@@ -9,6 +9,9 @@ application.register('qrcode-component', QrcodeComponentController);
 import TimeFormatComponentController from './time_format_component_controller';
 application.register('time-format-component', TimeFormatComponentController);
 
+import EditorComponentController from './editor_component_controller';
+application.register('editor-component', EditorComponentController);
+
 import PreOrdersFormComponentController from './pre_orders/form_component_controller';
 application.register('pre-orders-form-component', PreOrdersFormComponentController);
 

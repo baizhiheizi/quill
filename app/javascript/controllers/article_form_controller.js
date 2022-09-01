@@ -1,12 +1,11 @@
 import { Controller } from '@hotwired/stimulus';
-import { DirectUpload } from '@rails/activestorage';
 import { post, put } from '@rails/request.js';
-import EasyMDE from 'easymde';
-import { showLoading, hideLoading } from '../utils';
+import { showLoading } from '../utils';
 import { debounce } from 'underscore';
 
 export default class extends Controller {
   static values = {
+    draftKey: String,
     autosaveUrl: String,
     articleUuid: String,
     newRecord: Boolean,
@@ -41,13 +40,6 @@ export default class extends Controller {
   }
 
   connect() {
-    if (this.hasImagesTarget) {
-      this.directUploadUrl = this.imagesTarget.dataset.directUploadUrl;
-      this.directUploadToken = this.imagesTarget.dataset.directUploadToken;
-      this.directUploadAttachmentName =
-        this.imagesTarget.dataset.directUploadAttachmentName;
-    }
-
     if (!this.articlePublishedValue) {
       document
         .querySelector('#modal')
@@ -74,7 +66,6 @@ export default class extends Controller {
   }
 
   formTargetConnected() {
-    this.initMdEditor();
     switch (this.activeTabValue) {
       case 'edit':
         this.edit();
@@ -90,57 +81,6 @@ export default class extends Controller {
     if (this.newRecordValue) {
       this.recoverDraft();
     }
-    this.editor.codemirror.on('change', this.autosave);
-  }
-
-  initMdEditor() {
-    this.editor = new EasyMDE({
-      element: this.contentTarget,
-      placeholder: this.contentTarget.placeholder,
-      initialValue: this.contentTarget.textContent,
-      status: false,
-      spellChecker: false,
-      sideBySideFullscreen: false,
-      syncSideBySidePreviewScroll: false,
-      uploadImage: true,
-      imageAccept: 'image/png,image/jpeg,image/webp,image/svg',
-      imageUploadFunction: (file, onSuccess, onError) => {
-        if (file.size > 1024 * 1024 * 5) {
-          onError('Image must not larger than 5M');
-          return;
-        }
-
-        const upload = new DirectUpload(
-          file,
-          this.directUploadUrl,
-          this.directUploadToken,
-          this.directUploadAttachmentName,
-        );
-        showLoading();
-        upload.create((error, blob) => {
-          hideLoading();
-          if (error) {
-            onError(error);
-          } else {
-            onSuccess(`blob://${blob.key}/${blob.filename}`);
-          }
-        });
-      },
-      toolbar: [
-        'bold',
-        'italic',
-        'heading-2',
-        'heading-3',
-        '|',
-        'code',
-        'quote',
-        '|',
-        'link',
-        'upload-image',
-        '|',
-        'guide',
-      ],
-    });
   }
 
   submit() {
@@ -210,7 +150,7 @@ export default class extends Controller {
   }
 
   preview() {
-    const content = this.editor.value();
+    const content = this.contentTarget.textContent;
     post('/articles/preview', {
       body: JSON.stringify({ content }),
       contentType: 'application/json',
@@ -267,7 +207,7 @@ export default class extends Controller {
 
   autosave() {
     const title = this.element.querySelector('#article_title').value;
-    const content = this.editor.value();
+    const content = this.contentTarget.textContent;
 
     if (this.autosaveUrlValue) {
       put(this.autosaveUrlValue, {
@@ -276,37 +216,26 @@ export default class extends Controller {
           content,
         },
         contentType: 'application/json',
-      })
-        .then((res) => res.json)
-        .then(({ content, updated_at }) => {
-          if (content !== this.editor.value()) {
-            this.editor.value(content);
-          }
-          const el = this.element.querySelector(
-            'span[data-controller="time-format-component"]',
-          );
-          if (!el) return;
-          el.dataset['timeFormatComponentDatetimeValue'] = updated_at;
-        });
+        responseKind: 'turbo_stream',
+      });
     } else {
-      localStorage.setItem(this.draftKey, JSON.stringify({ title, content }));
+      localStorage.setItem(
+        this.draftKeyValue,
+        JSON.stringify({ title, content }),
+      );
     }
   }
 
   recoverDraft() {
-    const draft = localStorage.getItem(this.draftKey);
+    const draft = localStorage.getItem(this.draftKeyValue);
     if (!draft) return;
 
     const { title, content } = JSON.parse(draft);
     this.element.querySelector('#article_title').value = title;
-    this.editor.value(content);
+    this.contentTarget.textContent = content;
   }
 
   clearDraft() {
-    localStorage.removeItem(this.draftKey);
-  }
-
-  get draftKey() {
-    return 'quill_article_draft';
+    localStorage.removeItem(this.draftKeyValue);
   }
 }
