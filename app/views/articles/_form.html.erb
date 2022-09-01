@@ -9,7 +9,8 @@
       class: "w-full p-4 lg:pt-8 lg:px-8 text-2xl sm:text-3xl font-semibold border-t-0 border-l-0 border-r-0 border-b-0 focus:ring-0 dark:bg-zinc-900", 
       placeholder: t("articles.title_placeholder"), 
       data: { 
-        article_form_target: "title"
+        article_form_target: "title",
+        action: "change->article-form#autosave"
       } 
     %>
     <div class="flex items-center justify-between p-4 lg:px-8">

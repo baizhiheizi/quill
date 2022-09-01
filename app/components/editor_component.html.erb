@@ -1,0 +1,74 @@
+<div 
+  data-controller="editor-component" 
+  data-editor-component-draft-key-value="<%= @draft_key %>">
+  <div class="hidden" data-editor-component-target="textarea">
+    <%= content %>
+  </div>
+
+  <div data-editor-component-target="editor">
+  </div>
+
+  <div class="flex items-center space-x-1 px-2 py-1 rounded-lg bg-zinc-200" data-editor-component-target="bubbleMenu">
+    <button 
+      class="py-1 px-2 rounded"
+      data-button-type="bold"
+      data-editor-component-target="bubbleMenuButton"
+      data-action="editor-component#toggleBold">
+      Bold
+    </button>
+
+    <button 
+      class="py-1 px-2 rounded"
+      data-button-type="italic"
+      data-editor-component-target="bubbleMenuButton"
+      data-action="editor-component#toggleItalic">
+      Italic
+    </button>
+
+    <button 
+      class="py-1 px-2 rounded"
+      data-button-type="strike"
+      data-editor-component-target="bubbleMenuButton"
+      data-action="editor-component#toggleStrike">
+      Strike
+    </button>
+
+    <button 
+      class="py-1 px-2 rounded"
+      data-button-type="code"
+      data-editor-component-target="bubbleMenuButton"
+      data-action="editor-component#toggleCode">
+      <>
+    </button>
+  </div>
+  <div class="flex items-center space-x-1 px-2 py-1 rounded-lg bg-zinc-200" 
+    data-editor-component-target="floatingMenu">
+    <button 
+      class="py-1 px-2 rounded"
+      data-editor-component-level-param="2"
+      data-action="editor-component#addHeading">
+      H2
+    </button>
+
+    <button 
+      class="py-1 px-2 rounded"
+      data-editor-component-level-param="3"
+      data-action="editor-component#addHeading">
+      H3
+    </button>
+
+    <label>
+      <div class="py-1 px-2 rounded cursor-pointer">
+        UploadImage
+      </div>
+      <input data-action="editor-component#uploadImage" type="file" class="sr-only" />
+    </label>
+
+    <button 
+      class="py-1 px-2 rounded"
+      data-editor-component-level-param="3"
+      data-action="editor-component#addCodeBlock">
+      <>
+    </button>
+  </div>
+</div>
