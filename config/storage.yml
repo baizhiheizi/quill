@@ -4,17 +4,27 @@ test:
 
 linode:
   service: S3
-  access_key_id: <%= Rails.application.credentials.dig(:linode, :access_key_id) %>
-  secret_access_key: <%= Rails.application.credentials.dig(:linode, :secret_access_key) %>
-  bucket: <%= Rails.application.credentials.dig(:linode, :bucket) %>
-  endpoint: <%= Rails.application.credentials.dig(:linode, :endpoint) %>
+  access_key_id: <%= Rails.application.credentials.dig(:storage, :linode, :access_key_id) %>
+  secret_access_key: <%= Rails.application.credentials.dig(:storage, :linode, :secret_access_key) %>
+  bucket: <%= Rails.application.credentials.dig(:storage, :linode, :bucket) %>
+  endpoint: <%= Rails.application.credentials.dig(:storage, :linode, :endpoint) %>
   region: default
   public: true
 
-production:
-  service: Aliyun
-  access_key_id: <%= Rails.application.credentials.dig(:aliyun, :access_key_id) %>
-  access_key_secret: <%= Rails.application.credentials.dig(:aliyun, :access_key_secret) %>
-  bucket: <%= Rails.application.credentials.dig(:aliyun, :bucket) %>
-  endpoint: <%= Rails.application.credentials.dig(:aliyun, :endpoint) %>
+baizhiheizi:
+  service: S3
+  access_key_id: <%= Rails.application.credentials.dig(:storage, :baizhiheizi, :access_key_id) %>
+  secret_access_key: <%= Rails.application.credentials.dig(:storage, :baizhiheizi, :secret_access_key) %>
+  bucket: <%= Rails.application.credentials.dig(:storage, :baizhiheizi, :bucket) %>
+  endpoint: <%= Rails.application.credentials.dig(:storage, :baizhiheizi, :endpoint) %>
+  region: default
+  public: true
+
+quill:
+  service: S3
+  access_key_id: <%= Rails.application.credentials.dig(:storage, :quill, :access_key_id) %>
+  secret_access_key: <%= Rails.application.credentials.dig(:storage, :quill, :secret_access_key) %>
+  bucket: <%= Rails.application.credentials.dig(:storage, :quill, :bucket) %>
+  endpoint: <%= Rails.application.credentials.dig(:storage, :quill, :endpoint) %>
+  region: default
   public: true
