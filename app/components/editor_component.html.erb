@@ -95,5 +95,12 @@
       data-action="editor-component#addCodeBlock">
       <%= inline_svg_tag 'icons/code.svg', class: 'w-6 h-6' %>
     </button>
+
+    <button 
+      data-editor-component-target="insertMarkdownButton"
+      data-action="click->editor-component#insertMarkdownContent"
+      class="hidden py-1 px-2 rounded cursor-pointer">
+      <%= inline_svg_tag 'icons/markdown.svg', class: 'w-6 h-6' %>
+    </button>
   </div>
 </div>
