@@ -425,6 +425,7 @@ class Article < ApplicationRecord
 
   def set_defaults
     self.intro = default_intro if intro.blank?
+    self.intro = intro.truncate(140)
     self.locale = detected_locale
     self.content = blob_parsed_content if content_changed?
   end

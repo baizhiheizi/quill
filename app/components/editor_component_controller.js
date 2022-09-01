@@ -1,5 +1,5 @@
 import { Controller } from '@hotwired/stimulus';
-import { Editor, isTextSelection } from '@tiptap/core';
+import { Editor } from '@tiptap/core';
 import StarterKit from '@tiptap/starter-kit';
 import Image from '@tiptap/extension-image';
 import { createMarkdownEditor } from 'tiptap-markdown';
@@ -9,9 +9,10 @@ import FloatingMenu from '@tiptap/extension-floating-menu';
 import Underline from '@tiptap/extension-underline';
 import Placeholder from '@tiptap/extension-placeholder';
 import Link from '@tiptap/extension-link';
+import CodeBlockLowlight from '@tiptap/extension-code-block-lowlight';
+import { lowlight } from 'lowlight';
 import { showLoading, hideLoading } from '../javascript/utils';
 import { Uploader } from '../javascript/utils/uploader';
-import { debounce } from 'underscore';
 
 export default class extends Controller {
   static values = {
@@ -76,23 +77,12 @@ export default class extends Controller {
       extensions: [
         BubbleMenu.configure({
           element: this.bubbleMenuTarget,
-          shouldShow: ({ editor, view, state, from, to }) => {
-            const { doc, selection } = state;
-            const { empty } = selection;
-            const isEmptyTextBlock =
-              !doc.textBetween(from, to).length &&
-              isTextSelection(state.selection);
-
-            if (!view.hasFocus() || empty || isEmptyTextBlock) {
-              return false;
-            }
-
-            return !editor.isActive('image');
-          },
+        }),
+        CodeBlockLowlight.configure({
+          lowlight,
         }),
         FloatingMenu.configure({
           element: this.floatingMenuTarget,
-          tippyOptions: { placement: 'bottom-start' },
         }),
         Image.configure({ inline: false }),
         Link.configure({
@@ -142,6 +132,12 @@ export default class extends Controller {
   }
 
   bubbleMenuTargetConnected() {
+    if (this.editor.isActive('image') || this.editor.isActive('codeBlock')) {
+      this.bubbleMenuTarget.classList.add('hidden');
+    } else {
+      this.bubbleMenuTarget.classList.remove('hidden');
+    }
+
     if (this.editor.isActive('link')) {
       this.setLinkInputTarget.value =
         this.editor.getAttributes('link').href || '';
