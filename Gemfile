@@ -156,6 +156,8 @@ gem 'arweave', github: 'baizhiheizi/arweave-ruby'
 # Mailjet official Ruby GEM#
 gem 'mailjet'
 
+gem 'inline_svg'
+
 # deploy
 gem 'mina', '~> 1.2.2', require: false
 gem 'mina-logs', '~> 1.1.0', require: false
