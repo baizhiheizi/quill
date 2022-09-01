@@ -1,4 +1,3 @@
-import { DirectUpload } from '@rails/activestorage';
 import { Controller } from '@hotwired/stimulus';
 import { Editor, isTextSelection } from '@tiptap/core';
 import StarterKit from '@tiptap/starter-kit';
@@ -12,9 +11,11 @@ import Underline from '@tiptap/extension-underline';
 import Gapcursor from '@tiptap/extension-gapcursor';
 import Placeholder from '@tiptap/extension-placeholder';
 import { showLoading, hideLoading } from '../javascript/utils';
+import { Uploader } from '../javascript/utils/uploader';
 
 export default class extends Controller {
   static values = {
+    storageEndpoint: String,
     newRecord: Boolean,
     draftKey: String,
   };
@@ -33,25 +34,30 @@ export default class extends Controller {
   connect() {}
 
   editorTargetConnected() {
-    this.initMdEditor();
+    this.prepareUploader();
+    this.initEditor();
   }
 
-  initMdEditor() {
-    const textarea = this.textareaTarget.querySelector('textarea');
-    if (!textarea) return;
-
+  prepareUploader() {
     const imageInput = this.textareaTarget.querySelector(
       'input[data-direct-upload-url]',
     );
     if (imageInput) {
-      this.directUploadUrl = imageInput.dataset.directUploadUrl;
-      this.directUploadToken = imageInput.dataset.directUploadToken;
-      this.directUploadAttachmentName =
-        imageInput.dataset.directUploadAttachmentName;
+      const { directUploadUrl, directUploadToken, directUploadAttachmentName } =
+        imageInput.dataset;
+      this.uploader = new Uploader(
+        directUploadUrl,
+        directUploadToken,
+        directUploadAttachmentName,
+      );
     }
+  }
+
+  initEditor() {
+    const textarea = this.textareaTarget.querySelector('textarea');
+    if (!textarea) return;
 
     const draft = localStorage.getItem(this.draftKeyValue);
-
     let content;
     if (this.newRecordValue && draft) {
       content = JSON.parse(draft);
@@ -112,10 +118,10 @@ export default class extends Controller {
             if (!image) return;
 
             event.preventDefault();
-            const { src, alt } = await this.upload(image);
+            const { key, filename } = await this.uploader.upload(image);
             const node = schema.nodes.image.create({
-              src,
-              alt,
+              src: `${this.storageEndpointValue}/${key}`,
+              alt: filename,
             });
 
             const transaction = view.state.tr.replaceSelectionWith(node);
@@ -167,13 +173,19 @@ export default class extends Controller {
   uploadImage(event) {
     event.preventDefault();
     Array.from(event.currentTarget.files).forEach(async (file) => {
-      const { src, alt } = await this.upload(file);
+      if (!file.type.match(/^image/)) return;
+
+      showLoading();
+      const { key, filename } = await this.uploader.upload(file);
+      hideLoading();
+      if (!key) return;
+
       this.editor
         .chain()
         .focus()
         .setImage({
-          src,
-          alt,
+          src: `${this.storageEndpointValue}/${key}`,
+          alt: filename,
         })
         .run();
     });
@@ -182,32 +194,5 @@ export default class extends Controller {
   addCodeBlock(event) {
     event.preventDefault();
     this.editor.chain().focus().toggleCodeBlock().run();
-  }
-
-  upload(file) {
-    if (!file.type.match(/^image/)) return;
-
-    const uploader = new DirectUpload(
-      file,
-      this.directUploadUrl,
-      this.directUploadToken,
-      this.directUploadAttachmentName,
-    );
-
-    showLoading();
-    return new Promise((resolve, reject) => {
-      uploader.create((error, blob) => {
-        hideLoading();
-        if (error) {
-          console.error(error);
-          reject(error);
-        } else {
-          resolve({
-            src: `https://dev.ap-south-1.linodeobjects.com/${blob.key}`,
-            alt: blob.filename,
-          });
-        }
-      });
-    });
   }
 }

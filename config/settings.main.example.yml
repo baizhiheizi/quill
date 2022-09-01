@@ -57,3 +57,6 @@ foxswap:
     - e4bc0740-f8fe-418c-ae1b-32d9926f5863
   mtg_threshold: 3
   mtg_public_Key: dt351xp3KjNlVCMqBYUeUSF45upCEiReSZAqcjcP/Lc=
+
+storage:
+  endpoint: https://static.baizhiheizi.com
