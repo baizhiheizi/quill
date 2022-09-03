@@ -3,33 +3,40 @@
   data-article-form-draft-key-value="quill_article_draft" 
   data-article-form-new-record-value="true" 
   data-article-form-active-tab-value="edit" 
-  data-article-form-autosave-value="false" 
-  class="h-screen flex flex-col">
-  <div class="py-2 px-4 sm:py-4 sm:px-0 flex space-x-4">
-    <div 
-      data-action="click->article-form#edit" 
-      data-article-form-target="editButton"
-      class="cursor-pointer py-1 border-b-2 border-primary">
-      <%= t('edit') %>
-    </div>
-    <div 
-      data-action="click->article-form#preview" 
-      data-article-form-target="previewButton"
-      class="cursor-pointer py-1 border-primary">
-      <%= t('preview') %>
+  data-article-form-autosave-value="false">
+
+  <div class="w-full fixed left-0 top-0 z-50">
+    <div class="max-w-xl lg:max-w-2xl 2xl:max-w-3xl mx-auto px-4 sm:py-4 sm:px-0 flex items-center bg-white/90">
+
+      <%= link_to root_path, class: 'mr-4' do %>
+        <%= image_tag "logo.svg", class: 'w-auto h-10' %>
+      <% end %>
+
+      <div 
+        data-action="click->article-form#edit" 
+        data-article-form-target="editButton"
+        class="cursor-pointer py-1 border-b-2 border-primary mx-2 hidden">
+        <%= t('edit') %>
+      </div>
+
+      <div class="ml-auto cursor-pointer px-4 py-1 text-sm sm:text-base rounded bg-primary hover:scale-105 text-white mr-2" 
+        data-action="click->article-form#submit">
+        <%= t('save_draft') %>
+      </div>
+      
+      <%= link_to dashboard_articles_path, 
+        data: {
+          controller: 'prefetch'
+        },
+        class: "mx-2", 
+        role: "menuitem", 
+        tabindex: "-1" do %>
+        <img class="w-8 h-8 rounded-full mx-2" src="<%= current_user.avatar %>" />
+      <% end %>
     </div>
   </div>
-  <div class="flex-1 overflow-y-scroll bg-white dark:bg-zinc-900 sm:rounded-lg sm:scrollbar-hide relative pb-4 prose dark:prose-invert xl:prose-lg max-w-full">
+
+  <div class="w-full max-w-prose mx-auto relative my-24">
     <%= render partial: "articles/form", locals: { article: @article ||= current_user.articles.new } %>
-    <div data-article-form-target="preview" id="article-preview" class="hidden">
-      <%= render partial: "articles/preview", locals: { content: '' } %>
-    </div>
   </div>
-  <div class="py-2 px-4 sm:py-4 sm:px-0 flex justify-between">
-    <div class="cursor-pointer px-4 py-2 text-sm sm:text-base rounded bg-primary hover:scale-105 text-white" data-action="click->article-form#submit">
-      <%= t('save') %>
-    </div>
-    <%= link_to t('back'), dashboard_articles_path, class: "py-2" %>
-  </div>
-  <div style="height:env(safe-area-inset-bottom)" />
 </div>

@@ -1,5 +1,5 @@
 import { Controller } from '@hotwired/stimulus';
-import { post, put } from '@rails/request.js';
+import { put } from '@rails/request.js';
 import { showLoading } from '../utils';
 import { debounce } from 'underscore';
 
@@ -19,9 +19,7 @@ export default class extends Controller {
     'title',
     'content',
     'images',
-    'preview',
     'editButton',
-    'previewButton',
     'optionsButton',
     'authorRevenueRatio',
     'referenceRevenueRatio',
@@ -69,9 +67,6 @@ export default class extends Controller {
     switch (this.activeTabValue) {
       case 'edit':
         this.edit();
-        break;
-      case 'preview':
-        this.preview();
         break;
       case 'options':
         this.options();
@@ -144,65 +139,42 @@ export default class extends Controller {
 
   edit() {
     this.activeContentForm();
-    this.hidePreview();
     this.hideSettingsForm();
     this.activeTabValue = 'edit';
-  }
-
-  preview() {
-    const content = this.contentTarget.textContent;
-    post('/articles/preview', {
-      body: JSON.stringify({ content }),
-      contentType: 'application/json',
-      responseKind: 'turbo-stream',
-    }).then(() => {
-      this.activePreview();
-      this.hideContentForm();
-      this.hideSettingsForm();
-      this.activeTabValue = 'preview';
-    });
   }
 
   options() {
     this.activeSettingsForm();
     this.hideContentForm();
-    this.hidePreview();
     this.activeTabValue = 'options';
   }
 
   activeContentForm() {
     this.contentFieldsTarget.classList.remove('hidden');
-    this.editButtonTarget.classList.add('border-b-2');
+    this.editButtonTarget.classList.add('border-primary');
+    this.editButtonTarget.classList.remove('border-white');
   }
 
   hideContentForm() {
     this.contentFieldsTarget.classList.add('hidden');
-    this.editButtonTarget.classList.remove('border-b-2');
+    this.editButtonTarget.classList.remove('border-primary');
+    this.editButtonTarget.classList.add('border-white');
   }
 
   activeSettingsForm() {
     if (this.hasOptionFieldsTarget && this.hasOptionsButtonTarget) {
       this.optionFieldsTarget.classList.remove('hidden');
-      this.optionsButtonTarget.classList.add('border-b-2');
+      this.optionsButtonTarget.classList.add('border-primary');
+      this.optionsButtonTarget.classList.remove('border-white');
     }
   }
 
   hideSettingsForm() {
     if (this.hasOptionFieldsTarget && this.hasOptionsButtonTarget) {
       this.optionFieldsTarget.classList.add('hidden');
-      this.optionsButtonTarget.classList.remove('border-b-2');
+      this.optionsButtonTarget.classList.remove('border-primary');
+      this.optionsButtonTarget.classList.add('border-white');
     }
-  }
-
-  activePreview() {
-    this.previewButtonTarget.classList.add('border-b-2');
-    this.previewTarget.classList.remove('hidden');
-  }
-
-  hidePreview() {
-    this.previewButtonTarget.classList.remove('border-b-2');
-    this.previewTarget.classList.add('hidden');
-    this.previewTarget.classList.innerHTML = '';
   }
 
   autosave() {
