@@ -223,6 +223,11 @@ export default class extends Controller {
     });
   }
 
+  addBlockquote(event) {
+    event.preventDefault();
+    this.editor.chain().focus().toggleBlockquote().run();
+  }
+
   addCodeBlock(event) {
     event.preventDefault();
     this.editor.chain().focus().toggleCodeBlock().run();

@@ -1,8 +1,3 @@
-<div id="<%= dom_id article %>_updated_at" class="text-right text-sm text-gray-500">
-  <%= t("saved_at") %>: 
-  <span class="">
-    <%= render TimeFormatComponent.new datetime: article.updated_at.rfc3339 do %>
-      <%= article.updated_at.strftime('%Y-%m-%d %H:%M') %>
-    <% end %>
-  </span>
+<div id="<%= dom_id article %>_updated_at" class="text-sm text-gray-500" data-controller="auto-hide">
+  <%= t("saved") %>
 </div>

@@ -7,6 +7,9 @@ import { application } from './application';
 import ArticleFormController from './article_form_controller';
 application.register('article-form', ArticleFormController);
 
+import AutoHideController from './auto_hide_controller';
+application.register('auto-hide', AutoHideController);
+
 import AutoRefreshController from './auto_refresh_controller';
 application.register('auto-refresh', AutoRefreshController);
 

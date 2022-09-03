@@ -1,24 +1,18 @@
 <%= form_for article, 
-  html: { class: "text-base sm:rounded-lg", autocomplete: 'off' },
+  html: { class: "text-base", autocomplete: 'off' },
   data: { 
     controller: "nested-form",
     nested_form_wrapper_selector_value: '.nested-form-wrapper',
     article_form_target: "form",
   } do |form| %>
     <%= form.text_field :title, 
-      class: "w-full p-4 lg:pt-8 lg:px-8 text-2xl sm:text-3xl font-semibold border-t-0 border-l-0 border-r-0 border-b-0 focus:ring-0 dark:bg-zinc-900", 
+      class: "w-full px-0 py-4 mb-6 text-2xl sm:text-3xl font-semibold border-t-0 border-l-0 border-r-0 border-b-0 focus:ring-0 dark:bg-zinc-900", 
       placeholder: t("articles.title_placeholder"), 
       data: { 
         article_form_target: "title",
         action: "change->article-form#autosave"
       } 
     %>
-    <div class="flex items-center justify-between p-4 lg:px-8">
-      <div class="flex items-center space-x-2">
-        <img class="my-0 w-8 h-8 rounded-full" style="margin:0 auto !important;" src="<%= article.author.avatar %>" />
-        <span class="text-sm sm:text-lg"><%= article.author.name %></span>
-      </div>
-    </div>
     <%= render "articles/content_fields", form: form %>
     <%= render "articles/option_fields", form: form %>
 <% end %>

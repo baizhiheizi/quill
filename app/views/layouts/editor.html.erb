@@ -39,9 +39,25 @@
         data-session-provider-value="<%= current_session&.info&.[]('provider') %>"
         data-session-address-value="<%= current_session&.user&.uid %>"
         data-session-uuid-value="<%= current_session&.uuid %>">
-    <main class="bg-zinc-50 dark:bg-zinc-800 dark:text-zinc-50">
-      <div class="max-w-xl lg:max-w-2xl 2xl:max-w-3xl mx-auto">
+    <main class="bg-white dark:bg-zinc-900">
+      <div class="hidden sm:block max-w-xl lg:max-w-2xl 2xl:max-w-3xl mx-auto">
         <%= yield %>
+      </div>
+      <div class="sm:hidden h-screen flex">
+        <div class="m-auto">
+          <div class="flex justify-center mb-8">
+            <%= image_tag 'logo.svg', class: 'h-12 w-auto' %>
+          </div>
+          <div class="text-xl mb-4">
+            <%= t('start_writing_in_desktop') %>
+          </div>
+          <div class="mb-4 text-primary text-center">
+            https://quill.im
+          </div>
+          <div class="flex justify-center">
+            <%= link_to t('back'), dashboard_articles_path, class: "bg-primary py-2 px-4 rounded text-white mx-auto" %>
+          </div>
+        </div>
       </div>
     </main>
 
