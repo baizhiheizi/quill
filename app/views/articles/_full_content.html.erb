@@ -1,6 +1,6 @@
 <% user ||= current_user %>
 
-<div class="mb-8">
+<div class="mb-8 prose-article">
   <%= article.content_as_html.html_safe %>
 </div>
 
@@ -14,7 +14,7 @@
       data: {
         turbo_frame: :modal
       },
-      class: "no-underline rounded-full px-4 py-1 text-white bg-red-500 cursor-pointer flex items-center space-x-2" do %>
+      class: "no-underline rounded-full px-4 py-2 text-white bg-red-500 cursor-pointer flex items-center space-x-2" do %>
       <%= render "shared/icons/heart", html_class: "w-5 h-5" %>
       <span><%= t('reward') %></span>
     <% end %>
