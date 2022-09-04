@@ -1,3 +1,11 @@
+const round = (num) =>
+  num
+    .toFixed(7)
+    .replace(/(\.[0-9]+?)0+$/, '$1')
+    .replace(/\.0$/, '');
+const rem = (px) => `${round(px / 16)}rem`;
+const em = (px, base) => `${round(px / base)}em`;
+
 module.exports = {
   content: [
     './app/views/**/*.html.erb',
@@ -64,6 +72,48 @@ module.exports = {
         'screen-1/4': '25vh',
         'screen-3/4': '75vh',
         screen: '100vh',
+      },
+      typography: {
+        DEFAULT: {
+          css: {
+            a: {
+              color: '#5C6BEF',
+            },
+            blockquote: {
+              quotes: '',
+            },
+            'blockquote p:first-of-type::before': {
+              content: 'none',
+            },
+            'blockquote p:last-of-type::after': {
+              content: 'none',
+            },
+            code: {
+              color: 'inherit',
+              backgroundColor: 'var(--tw-prose-pre-code)',
+              fontWeight: '600',
+              borderRadius: rem(6),
+              paddingTop: rem(0.8),
+              paddingRight: rem(4.8),
+              paddingBottom: rem(0.8),
+              paddingLeft: rem(4.8),
+            },
+            'code::before': {
+              content: 'none',
+            },
+            'code::after': {
+              content: 'none',
+            },
+          },
+        },
+        invert: {
+          css: {
+            code: {
+              color: 'inherit',
+              backgroundColor: 'var(--tw-prose-pre-code)',
+            }
+          }
+        }
       },
     },
   },

@@ -99,8 +99,7 @@ export default class extends Controller {
       ],
       editorProps: {
         attributes: {
-          class:
-            'prose dark:prose-invert prose-img:rounded-lg prose-img:shadow-md prose-img:mx-auto prose-pre:bg-zinc-100 prose-pre:text-black dark:prose-pre:bg-zinc-800 dark:prose-pre:text-zinc-100 xl:prose-lg mx-auto break-words focus:outline-none',
+          class: 'prose-article focus:outline-none',
         },
         handlePaste: (view, event) => {
           const items = (

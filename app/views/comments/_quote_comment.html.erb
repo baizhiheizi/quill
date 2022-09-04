@@ -8,7 +8,7 @@
         <span class="truncate"><%= quote_comment.author.short_name %></span>
         <span class="opacity-50"><%= time_ago_in_words quote_comment.created_at %></span>
       <% end %>
-      <div class=" prose prose-sm prose-h1:text-base prose-h1:m-0 prose-h2:text-base prose-h2:m-0 prose-h3:text-base prose-h3:m-0 prose-h4:m-0 mb-2 dark:prose-invert">
+      <div class="prose-comment">
         <% if quote_comment.quote_comment.present? %>
           <div class="max-h-48 overflow-y-scroll scrollbar-hide">
             <blockquote>

@@ -39,10 +39,11 @@
         data-session-provider-value="<%= current_session&.info&.[]('provider') %>"
         data-session-address-value="<%= current_session&.user&.uid %>"
         data-session-uuid-value="<%= current_session&.uuid %>">
-    <main class="bg-white dark:bg-zinc-900">
+    <main class="bg-white dark:bg-zinc-900 dark:text-zinc-50 min-h-screen">
       <div class="hidden sm:block max-w-xl lg:max-w-2xl 2xl:max-w-3xl mx-auto">
         <%= yield %>
       </div>
+
       <div class="sm:hidden h-screen flex">
         <div class="m-auto">
           <div class="flex justify-center mb-8">

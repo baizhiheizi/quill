@@ -152,20 +152,26 @@ export default class extends Controller {
   activeContentForm() {
     this.contentFieldsTarget.classList.remove('hidden');
     this.editButtonTarget.classList.add('border-primary');
-    this.editButtonTarget.classList.remove('border-white');
+    this.editButtonTarget.classList.remove(
+      'border-white',
+      'dark:border-zinc-900',
+    );
   }
 
   hideContentForm() {
     this.contentFieldsTarget.classList.add('hidden');
     this.editButtonTarget.classList.remove('border-primary');
-    this.editButtonTarget.classList.add('border-white');
+    this.editButtonTarget.classList.add('border-white', 'dark:border-zinc-900');
   }
 
   activeSettingsForm() {
     if (this.hasOptionFieldsTarget && this.hasOptionsButtonTarget) {
       this.optionFieldsTarget.classList.remove('hidden');
       this.optionsButtonTarget.classList.add('border-primary');
-      this.optionsButtonTarget.classList.remove('border-white');
+      this.optionsButtonTarget.classList.remove(
+        'border-white',
+        'dark:border-zinc-900',
+      );
     }
   }
 
@@ -173,7 +179,10 @@ export default class extends Controller {
     if (this.hasOptionFieldsTarget && this.hasOptionsButtonTarget) {
       this.optionFieldsTarget.classList.add('hidden');
       this.optionsButtonTarget.classList.remove('border-primary');
-      this.optionsButtonTarget.classList.add('border-white');
+      this.optionsButtonTarget.classList.add(
+        'border-white',
+        'dark:border-zinc-900',
+      );
     }
   }
 
