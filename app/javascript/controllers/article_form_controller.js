@@ -33,8 +33,8 @@ export default class extends Controller {
     this.autosave = this.autosave.bind(this);
     this.submit = this.submit.bind(this);
 
-    this.autosave = debounce(this.autosave, 1500);
-    this.submit = debounce(this.submit, 1500);
+    this.autosave = debounce(this.autosave, 1000);
+    this.submit = debounce(this.submit, 1000);
   }
 
   connect() {
@@ -183,6 +183,14 @@ export default class extends Controller {
         'border-white',
         'dark:border-zinc-900',
       );
+    }
+  }
+
+  save() {
+    if (this.activeTabValue === 'edit') {
+      this.autosave();
+    } else {
+      this.submit();
     }
   }
 
