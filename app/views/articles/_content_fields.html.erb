@@ -9,7 +9,7 @@
       placeholder: t("articles.content_place_holder"), 
       data: { 
         article_form_target: "content",
-        action: "change->article-form#autosave"
+        action: form.object.published? ? '' : "change->article-form#autosave"
       } 
     %>
   <% end %>

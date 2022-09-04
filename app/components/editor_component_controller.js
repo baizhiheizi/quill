@@ -1,9 +1,9 @@
 import { Controller } from '@hotwired/stimulus';
-import { Editor, Extension, generateJSON } from '@tiptap/core';
+import { Editor, Extension } from '@tiptap/core';
 import { Plugin, PluginKey } from 'prosemirror-state';
 import StarterKit from '@tiptap/starter-kit';
 import Image from '@tiptap/extension-image';
-import { createMarkdownEditor, parse } from 'tiptap-markdown';
+import { createMarkdownEditor } from 'tiptap-markdown';
 import Typography from '@tiptap/extension-typography';
 import BubbleMenu from '@tiptap/extension-bubble-menu';
 import FloatingMenu from '@tiptap/extension-floating-menu';
@@ -14,7 +14,6 @@ import CodeBlockLowlight from '@tiptap/extension-code-block-lowlight';
 import { lowlight } from 'lowlight';
 import { showLoading, hideLoading } from '../javascript/utils';
 import { Uploader } from '../javascript/utils/uploader';
-import MarkdownIt from 'markdown-it';
 
 export default class extends Controller {
   static values = {
@@ -32,7 +31,6 @@ export default class extends Controller {
     'bubbleMenuButtonGroup',
     'bubbleMenuLinkSetting',
     'setLinkInput',
-    'insertMarkdownButton',
   ];
 
   connect() {}
@@ -96,7 +94,9 @@ export default class extends Controller {
         }),
         MarkdownPaste,
         Placeholder.configure({ placeholder: textarea.placeholder }),
-        StarterKit,
+        StarterKit.configure({
+          codeBlock: false,
+        }),
         Typography,
         Underline,
       ],
@@ -233,14 +233,6 @@ export default class extends Controller {
   addCodeBlock(event) {
     event.preventDefault();
     this.editor.chain().focus().toggleCodeBlock().run();
-  }
-
-  floatingMenuTargetConnected() {
-    if (this.editor.getText()) {
-      this.insertMarkdownButtonTarget.classList.add('hidden');
-    } else {
-      this.insertMarkdownButtonTarget.classList.remove('hidden');
-    }
   }
 }
 

@@ -10,7 +10,7 @@
       placeholder: t("articles.title_placeholder"), 
       data: { 
         article_form_target: "title",
-        action: "change->article-form#autosave"
+        action: form.object.published? ? '' : "change->article-form#autosave"
       } 
     %>
     <%= render "articles/content_fields", form: form %>
