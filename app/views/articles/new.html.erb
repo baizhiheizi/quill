@@ -5,8 +5,8 @@
   data-article-form-active-tab-value="edit" 
   data-article-form-autosave-value="false">
 
-  <div class="w-full fixed left-0 top-0 z-50">
-    <div class="max-w-xl lg:max-w-2xl 2xl:max-w-3xl mx-auto px-4 sm:py-4 sm:px-0 flex items-center bg-white/90">
+  <div class="w-full fixed left-0 top-0 z-50 dark:bg-zinc-900">
+    <div class="max-w-xl lg:max-w-2xl 2xl:max-w-3xl mx-auto px-4 sm:py-4 sm:px-0 flex items-center bg-white/90 dark:bg-zinc-900/90">
 
       <%= link_to root_path, class: 'mr-4' do %>
         <%= image_tag "logo.svg", class: 'w-auto h-10' %>
@@ -36,7 +36,7 @@
     </div>
   </div>
 
-  <div class="w-full max-w-prose mx-auto relative my-24">
+  <div class="w-full max-w-prose mx-auto relative py-24">
     <%= render partial: "articles/form", locals: { article: @article ||= current_user.articles.new } %>
   </div>
 </div>

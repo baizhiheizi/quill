@@ -6,6 +6,15 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer utilities {
+  .prose-article {
+    @apply prose dark:prose-invert prose-blockquote:border-primary prose-img:rounded-lg prose-img:shadow-md prose-img:mx-auto prose-pre:bg-zinc-100 prose-pre:text-black dark:prose-pre:bg-zinc-800 dark:prose-pre:text-zinc-100 dark:prose-code:bg-zinc-800 xl:prose-lg mx-auto break-words;
+  }
+  .prose-comment {
+    @apply prose prose-sm prose-h1:text-base prose-h1:m-0 prose-h2:text-base prose-h2:m-0 prose-h3:text-base prose-h3:m-0 prose-h4:m-0 mb-2 dark:prose-invert;
+  }
+}
+
 .ProseMirror p.is-editor-empty:first-child:before {
   color: #adb5bd;
   content: attr(data-placeholder);
