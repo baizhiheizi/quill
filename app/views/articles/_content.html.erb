@@ -1,6 +1,6 @@
 <% user ||= current_user %>
 
-<div class="photoswipe-gallery prose-article" 
+<div class="photoswipe-gallery" 
      id="article_<%= article.uuid %>_content"
      data-controller="hljs photoswipe">
   <% if article.authorized? user %> 

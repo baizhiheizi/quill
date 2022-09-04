@@ -76,9 +76,6 @@ module.exports = {
       typography: {
         DEFAULT: {
           css: {
-            a: {
-              color: '#5C6BEF',
-            },
             blockquote: {
               quotes: '',
             },

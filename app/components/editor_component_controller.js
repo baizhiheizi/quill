@@ -1,8 +1,9 @@
 import { Controller } from '@hotwired/stimulus';
-import { Editor } from '@tiptap/core';
+import { Editor, Extension, generateJSON } from '@tiptap/core';
+import { Plugin, PluginKey } from 'prosemirror-state';
 import StarterKit from '@tiptap/starter-kit';
 import Image from '@tiptap/extension-image';
-import { createMarkdownEditor } from 'tiptap-markdown';
+import { createMarkdownEditor, parse } from 'tiptap-markdown';
 import Typography from '@tiptap/extension-typography';
 import BubbleMenu from '@tiptap/extension-bubble-menu';
 import FloatingMenu from '@tiptap/extension-floating-menu';
@@ -13,6 +14,7 @@ import CodeBlockLowlight from '@tiptap/extension-code-block-lowlight';
 import { lowlight } from 'lowlight';
 import { showLoading, hideLoading } from '../javascript/utils';
 import { Uploader } from '../javascript/utils/uploader';
+import MarkdownIt from 'markdown-it';
 
 export default class extends Controller {
   static values = {
@@ -92,6 +94,7 @@ export default class extends Controller {
         Link.configure({
           openOnClick: false,
         }),
+        MarkdownPaste,
         Placeholder.configure({ placeholder: textarea.placeholder }),
         StarterKit,
         Typography,
@@ -239,12 +242,38 @@ export default class extends Controller {
       this.insertMarkdownButtonTarget.classList.remove('hidden');
     }
   }
-
-  async insertMarkdownContent(event) {
-    event.preventDefault();
-    const text = await navigator.clipboard.readText();
-    if (!text) return;
-
-    this.editor.commands.setContent(text);
-  }
 }
+
+const MarkdownPaste = Extension.create({
+  name: 'markdown-paste',
+
+  addProseMirrorPlugins() {
+    const { editor } = this;
+
+    return [
+      new Plugin({
+        key: new PluginKey('markdown-paste'),
+        props: {
+          handlePaste(view, event) {
+            if (view.props.editable && !view.props.editable(view.state)) {
+              return false;
+            }
+            if (!event.clipboardData) return false;
+
+            const text = event.clipboardData.getData('text/plain');
+            const html = event.clipboardData.getData('text/html');
+            if (text.length === 0 || html.length !== 0) return false;
+
+            if (editor.getText()) {
+              editor.commands.insertContentAt(view.state.selection, text);
+            } else {
+              editor.commands.setContent(text);
+            }
+
+            return true;
+          },
+        },
+      }),
+    ];
+  },
+});
