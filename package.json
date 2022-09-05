@@ -25,6 +25,7 @@
     "@tiptap/extension-dropcursor": "^2.0.0-beta.29",
     "@tiptap/extension-floating-menu": "^2.0.0-beta.56",
     "@tiptap/extension-gapcursor": "^2.0.0-beta.39",
+    "@tiptap/extension-highlight": "^2.0.0-beta.35",
     "@tiptap/extension-image": "^2.0.0-beta.30",
     "@tiptap/extension-link": "^2.0.0-beta.43",
     "@tiptap/extension-placeholder": "^2.0.0-beta.53",
