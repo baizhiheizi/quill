@@ -1,4 +1,6 @@
-<%= MarkdownRenderService.call(article.partial_content).html_safe %>
+<div class="mb-8 prose-article">
+  <%= MarkdownRenderService.call(article.partial_content).html_safe %>
+</div>
 
 <div class="mb-8">
   <div class="flex justify-center text-red-500">
