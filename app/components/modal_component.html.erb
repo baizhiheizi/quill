@@ -12,9 +12,10 @@
       data-transition-leave-from="opacity-100"
       data-transition-leave-to="opacity-0 transition-y-0"
       class="<%= @classes %> relative w-full sm:w-auto sm:min-w-lg max-w-2xl min-h-screen-1/3 sm:min-h-4 sm:h-auto max-h-screen-3/4 mx-auto mt-auto sm:my-auto bg-white dark:bg-zinc-900 rounded-t-xl sm:rounded-xl shadow overflow-y-auto sm:scrollbar-hide">
-      <div data-modal-component-target="title" class="sticky w-full top-0 flex items-center px-4 h-12 sm:h-14 text-base font-bold space-x-4 bg-white dark:bg-zinc-900 z-10 rounded-t-xl">
+      <div data-modal-component-target="title" 
+        class="sticky w-full top-0 flex items-center px-4 h-12 sm:h-14 text-base font-bold space-x-4 bg-white dark:bg-zinc-900 dark:text-zinc-50 z-10 rounded-t-xl">
         <button data-action="modal-component#hide">
-          <%= render "shared/icons/close" %>
+          <%= inline_svg_tag "icons/close.svg", class: "w-6 h-6" %>
         </button>
         <span><%= @title %></span>
       </div>

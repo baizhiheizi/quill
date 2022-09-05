@@ -33,15 +33,15 @@
       <% end %>
 
       <div 
-        class="cursor-pointer px-4 py-1 text-sm sm:text-base rounded bg-primary hover:scale-105 text-white ml-auto mr-2" 
+        class="cursor-pointer px-4 py-1 text-sm sm:text-base rounded-full bg-primary hover:scale-105 text-white ml-auto mr-2" 
         data-action="click->article-form#save">
         <%= t('save') %>
       </div>
 
-      <%= link_to t("publish_article"), 
+      <%= link_to t("publish"), 
         new_dashboard_published_article_path(uuid: @article.uuid), 
         data: { turbo_frame: :modal },
-        class: "cursor-pointer px-4 py-1 text-sm sm:text-base rounded bg-primary hover:scale-105 text-white mx-2" unless @article.published? %>
+        class: "cursor-pointer px-4 py-1 text-sm sm:text-base rounded-full bg-primary hover:scale-105 text-white mx-2" unless @article.published? %>
       
       <%= link_to dashboard_articles_path, 
         data: {
