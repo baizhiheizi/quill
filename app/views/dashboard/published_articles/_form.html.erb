@@ -1,29 +1,35 @@
 <div class="h-full my-auto">
-  <div class="mb-2 text-xl sm:text-2xl font-bold text-center dark:text-zinc-50">
-    <%= article.title %>
-  </div>
-  <div class="mb-4 text-center text-yellow-600 font-bold">
-    <%= article.price_tag %>
-  </div>
-  <% if article.references.present? %>
-    <div class="mb-4">
-      <div class="text-gray-500 mb-2 text-center text-sm"><%= t("article_references") %></div>
-      <% article.references.each do |reference| %>
-        <div class="flex font-sm items-center justify-center space-x-2 text-sm text-gray-500">
-          <img class="w-4 h-4 rounded-full" src="<%= reference.author.avatar %>" />
-          <span><%= reference.title %></span>
-        </div>
-      <% end %>
+  <div class="mb-6">
+    <div class="mb-2 text-xl sm:text-2xl font-bold text-center dark:text-zinc-50">
+      <%= article.title %>
     </div>
-  <% end %>
-  <%= button_to t('publish'),
-    dashboard_published_article_path(article), 
-    method: :put,
-    data: { 
-      turbo_frame: "_top"
-    },
-    class: "block mb-4 cursor-pointer block w-64 mx-auto bg-blue-500 text-white rounded py-2 text-center" %>
-  <button data-action="modal-component#cancel" class="cursor-pointer block w-64 mx-auto border rounded py-2 text-center">
-    <%= t('cancel') %>
-  </button>
+    <div class="mb-4 text-center text-yellow-600 font-bold">
+      <%= article.price_tag %>
+    </div>
+
+    <% if article.references.present? %>
+      <div class="mb-4">
+        <div class="text-gray-500 mb-2 text-center text-sm"><%= t("article_references") %></div>
+        <% article.references.each do |reference| %>
+          <div class="flex font-sm items-center justify-center space-x-2 text-sm text-gray-500">
+            <img class="w-4 h-4 rounded-full" src="<%= reference.author.avatar %>" />
+            <span><%= reference.title %></span>
+          </div>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+
+  <div class="flex items-center justify-center space-x-6">
+    <button data-action="modal-component#cancel" class="cursor-pointer w-24 border rounded-full py-2 text-center dark:text-zinc-50 dark:border-zinc-50">
+      <%= t('cancel') %>
+    </button>
+    <%= button_to t('publish'),
+      dashboard_published_article_path(article), 
+      method: :put,
+      data: { 
+        turbo_frame: "_top"
+      },
+      class: "cursor-pointer w-24 bg-primary border border-primary text-white rounded-full py-2 text-center" %>
+  </div>
 </div>
