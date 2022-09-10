@@ -103,7 +103,7 @@ class ArweaveTransaction < ApplicationRecord
         alg: {
           name: 'aes-256-cfb',
           iv: Base64.urlsafe_encode64(iv, padding: false),
-          public_key: ec.public_key.to_bn.to_s(16).downcase
+          public_key: ec.public_key.to_bn.to_fs(16).downcase
         }
       },
       author: article.author.uid,

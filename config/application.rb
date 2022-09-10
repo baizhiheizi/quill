@@ -43,5 +43,7 @@ module Quill
     config.action_view.image_loading = 'lazy'
 
     config.action_mailer.delivery_method = :mailjet
+
+    config.active_record.yaml_column_permitted_classes = [ActiveSupport::HashWithIndifferentAccess]
   end
 end
