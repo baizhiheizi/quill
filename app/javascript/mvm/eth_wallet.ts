@@ -68,7 +68,12 @@ export class EthWallet {
     const provider = await detectEthereumProvider();
     if (provider !== window.ethereum) return;
 
-    this.web3 = new Web3(window.ethereum);
+    if (window.ethereum.providers) {
+      const provider = window.ethereum.providers.find((el) => el.isMetaMask);
+      this.web3 = new Web3(provider);
+    } else {
+      this.web3 = new Web3(window.ethereum);
+    }
     this.web3.currentProvider.request({ method: 'eth_requestAccounts' });
   }
 
