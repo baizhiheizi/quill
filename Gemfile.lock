@@ -459,10 +459,10 @@ GEM
     sidekiq-cron (1.7.0)
       fugit (~> 1)
       sidekiq (>= 4.2.1)
-    sidekiq-throttled (0.16.2)
+    sidekiq-throttled (0.17.0)
       concurrent-ruby
       redis-prescription
-      sidekiq
+      sidekiq (>= 6.4)
     simple_command (1.0.1)
     spring (2.1.1)
     spring-watcher-listen (2.0.1)
