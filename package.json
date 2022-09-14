@@ -31,7 +31,7 @@
     "@tiptap/extension-placeholder": "^2.0.0-beta.53",
     "@tiptap/extension-typography": "^2.0.0-beta.22",
     "@tiptap/extension-underline": "^2.0.0-beta.25",
-    "@tiptap/starter-kit": "^2.0.0-beta.192",
+    "@tiptap/starter-kit": "^2.0.0-beta.195",
     "@walletconnect/web3-provider": "^1.8.0",
     "abortcontroller-polyfill": "^1.7.3",
     "autoprefixer": "^10.4.8",
