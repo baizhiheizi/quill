@@ -410,6 +410,10 @@ class Article < ApplicationRecord
     asset_id.in? (Mixpay.api.settlement_asset_ids + Mixpay.api.quote_asset_ids).uniq
   end
 
+  def cover_url
+    @cover_url ||= Nokogiri::HTML.fragment(content_as_html).css('img').first&.attr('src')
+  end
+
   private
 
   def setup_attributes

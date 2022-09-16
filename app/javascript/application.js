@@ -4,6 +4,7 @@ import '@hotwired/turbo-rails';
 import { hideLoading } from './utils';
 import './controllers';
 import '../components';
+import tippy from 'tippy.js';
 
 import * as ActiveStorage from '@rails/activestorage';
 ActiveStorage.start();
@@ -41,8 +42,10 @@ addEventListener('turbo:load', () => {
 
 addEventListener('turbo:render', () => {
   hideLoading();
+  tippy('[data-tippy-content]');
 });
 
 addEventListener('turbo:frame-render', () => {
   hideLoading();
+  tippy('[data-tippy-content]');
 });

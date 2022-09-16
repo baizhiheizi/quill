@@ -1,3 +1,5 @@
+const defaultTheme = require('tailwindcss/defaultTheme');
+
 const round = (num) =>
   num
     .toFixed(7)
@@ -17,20 +19,24 @@ module.exports = {
   ],
   darkMode: 'class',
   theme: {
-    backgroundColor: (theme) => ({
-      ...theme('colors'),
-      dark: '#1b1c1e',
-      primary: '#5C6BEF',
-    }),
-    textColor: (theme) => ({
-      ...theme('colors'),
-      primary: '#5C6BEF',
-    }),
-    borderColor: (theme) => ({
-      ...theme('colors'),
-      primary: '#5C6BEF',
-    }),
     extend: {
+      backgroundColor: (theme) => ({
+        ...theme('colors'),
+        dark: '#1b1c1e',
+        primary: '#5C6BEF',
+      }),
+      textColor: (theme) => ({
+        ...theme('colors'),
+        primary: '#5C6BEF',
+      }),
+      borderColor: (theme) => ({
+        ...theme('colors'),
+        primary: '#5C6BEF',
+      }),
+      fontFamily: {
+        serif: ['Roboto Serif', ...defaultTheme.fontFamily.serif],
+        mono: ['Roboto Mono', ...defaultTheme.fontFamily.mono],
+      },
       minWidth: {
         1: '0.25rem',
         2: '0.5rem',
@@ -108,9 +114,9 @@ module.exports = {
             code: {
               color: 'inherit',
               backgroundColor: 'var(--tw-prose-pre-code)',
-            }
-          }
-        }
+            },
+          },
+        },
       },
     },
   },

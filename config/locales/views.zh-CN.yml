@@ -37,6 +37,8 @@ zh-CN:
   search: 搜索
   rules: 规则
   fair: 公示
+  twitter: 推特
+  help: 帮助
   community: 社区
   open_source: 开源
   dashboard: 管理中心
@@ -308,3 +310,4 @@ zh-CN:
   verify_email_subject: 请验证您 Quill 帐号的 Email 地址
   start_writing_in_desktop: 请在桌面端开始您的写作
   save_draft: 保存草稿
+  start_reading: 开始阅读

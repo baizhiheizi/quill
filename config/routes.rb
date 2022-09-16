@@ -33,11 +33,17 @@ Rails.application.routes.draw do
 
   get '/docs', to: redirect('https://docs.quill.im')
 
-  root to: 'articles#index'
+  root to: 'home#index'
   get :hot_tags, to: 'home#hot_tags'
   get :active_authors, to: 'home#active_authors'
+  get :selected_articles, to: 'home#selected_articles'
 
   resources :locales, only: %i[create]
+  get '/:locale',
+      to: 'locales#show',
+      constraints: {
+        locale: I18n.available_locales.map(&:to_s)
+      }
 
   resources :articles, except: %i[destroy], param: :uuid do
     put :update_content

@@ -3,6 +3,9 @@ import { application } from '../javascript/controllers/application';
 import ModalComponentController from './modal_component_controller';
 application.register('modal-component', ModalComponentController);
 
+import DropdownComponentController from './dropdown_component_controller';
+application.register('dropdown-component', DropdownComponentController);
+
 import QrcodeComponentController from './qrcode_component_controller';
 application.register('qrcode-component', QrcodeComponentController);
 
