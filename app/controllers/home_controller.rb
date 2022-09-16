@@ -1,7 +1,14 @@
 # frozen_string_literal: true
 
 class HomeController < ApplicationController
+  layout 'homepage', only: :index
+
   def index
+    redirect_to articles_path if current_user.present?
+  end
+
+  def selected_articles
+    @articles = ArticleSearchService.call(filter: 'revenue', locale: current_locale).limit(6)
   end
 
   def hot_tags

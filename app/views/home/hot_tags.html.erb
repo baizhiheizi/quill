@@ -1,10 +1,25 @@
 <% if @hot_tags.present? %>
   <%= turbo_frame_tag 'hot_tags' do %>
-    <div class="mb-4">
-      <div class="bg-white dark:bg-zinc-900 dark:border-zinc-800 p-4 sm:p-6 sm:border border-zinc-50 sm:rounded-lg">
-        <div class="flex mb-4">
-          <span class="font-bold"><%= t('hot_tags') %></span>
+    <div class="mb-8">
+      <div class="flex mb-4">
+        <span class="font-bold"><%= t('hot_tags') %></span>
+      </div>
+      <% if current_user.blank? %>
+        <div class="flex space-x-4 space-y-4">
+          <% @hot_tags.each do |tag| %>
+            <%= link_to tag.name, 
+              articles_path(tag: tag.name, order_by: @order_by || 'lately'), 
+              data: { 
+                tippy_content: tag.name,
+                controller: 'prefetch', 
+                turbo_frame: '_top' 
+              }, 
+              style: "word-break:keep-all;color:#{tag.color};background-color:#{tag.bg_color};",
+              class: "px-2 py-1 bg-zinc-100 dark:bg-zinc-800 font-bold truncate max-w-[6rem] truncate" 
+            %>
+          <% end %>
         </div>
+      <% else %>
         <% @hot_tags.each do |tag| %>
           <div class="flex items-center space-x-2 justify-between mb-2">
             <%= link_to "##{tag.name}", articles_path(tag: tag.name, order_by: @order_by || 'lately'), data: { controller: 'prefetch', turbo_frame: '_top' }, class: "px-2 py-1 bg-zinc-100 dark:bg-zinc-800 font-bold truncate" %>
@@ -13,7 +28,7 @@
             </div>
           </div>
         <% end %>
-      </div>
+      <% end %>
     </div>
   <% end %>
 <% end %>

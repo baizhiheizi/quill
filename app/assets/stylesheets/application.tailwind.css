@@ -1,6 +1,7 @@
 @import 'highlight.js/styles/github';
 @import 'photoswipe';
 @import 'tom-select/dist/css/tom-select';
+@import 'tippy.js/dist/tippy.css';
 
 @tailwind base;
 @tailwind components;
