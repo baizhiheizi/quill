@@ -1,0 +1,15 @@
+<aside class="hidden xl:block w-96 p-8 border-l min-h-screen">
+  <div class="sticky top-0">
+    <% if @tag.present? %>
+      <%= turbo_frame_tag 'selected_tag' do %>
+        <div class="mb-4">
+          <%= render "tags/tag_card", tag: @tag %>
+        </div>
+      <% end %>
+    <% end %>
+
+    <%= turbo_frame_tag 'hot_tags', src: '/hot_tags', loading: :lazy %>
+    <%= turbo_frame_tag 'active_authors', src: '/active_authors', loading: :lazy %>
+    <%= render "shared/foot" %>
+  </div>
+</aside>

@@ -8,7 +8,7 @@
             data-eth-wallet-provier-param="MetaMask"
             href="https://metamask.io"
             target="_blank"
-            class="relative px-2 py-3 bg-stone-100 hover:bg-stone-200 dark:bg-stone-800 dark:hover:bg-stone-700 rounded-lg flex items-center justify-center text-lg w-96 hover:scale-105">
+            class="relative px-2 py-3 bg-stone-100 hover:bg-stone-200 dark:bg-stone-800 dark:hover:bg-stone-700 rounded-lg flex items-center justify-center text-lg w-full">
             <div class="w-8 h-8 flex absolute left-4">
               <%= image_tag 'metamask.svg', class: 'w-full h-auto' %>
             </div>
@@ -20,7 +20,7 @@
           <button data-eth-wallet-target="loginButton" 
             data-action="eth-wallet#login" 
             data-eth-wallet-provier-param="Coinbase"
-            class="relative block px-2 py-3 bg-stone-100 hover:bg-stone-200 dark:bg-stone-800 dark:hover:bg-stone-700 rounded-lg flex items-center justify-center text-lg w-96 hover:scale-105">
+            class="relative block px-2 py-3 bg-stone-100 hover:bg-stone-200 dark:bg-stone-800 dark:hover:bg-stone-700 rounded-lg flex items-center justify-center text-lg w-full">
             <div class="w-8 h-8 flex absolute left-4">
               <%= image_tag 'coinbase.svg', class: 'w-full h-auto' %>
             </div>
@@ -34,7 +34,7 @@
             data-eth-wallet-provier-param="WalletConnect"
             href="https://walletconnect.com"
             target="_blank"
-            class="relative px-2 py-3 bg-stone-100 hover:bg-stone-200 dark:bg-stone-800 dark:hover:bg-stone-700 rounded-lg flex items-center justify-center text-lg w-96 hover:scale-105">
+            class="relative px-2 py-3 bg-stone-100 hover:bg-stone-200 dark:bg-stone-800 dark:hover:bg-stone-700 rounded-lg flex items-center justify-center text-lg w-full">
             <div class="w-8 h-8 flex absolute left-4">
               <%= image_tag 'walletconnect.svg', class: 'w-full h-auto' %>
             </div>
@@ -42,7 +42,7 @@
           </a>
         </div>
 
-        <div data-action="click->login#showMixin" class="w-96 mx-auto text-sm text-center py-2 underline cursor-pointer">
+        <div data-action="click->login#showMixin" class="w-full mx-auto text-sm text-primary text-center py-6 underline cursor-pointer">
           <%= t('using_mixin_wallet') %>
         </div>
       </div>
@@ -51,7 +51,7 @@
         <div class="flex justify-center mb-2">
           <%= link_to mixin_login_path(return_to: params[:return_to] || request.referer), 
             data: { turbo_frame: '_top' },
-            class: "relative px-2 py-3 bg-stone-100 hover:bg-stone-200 dark:bg-stone-800 dark:hover:bg-stone-700 rounded-lg flex items-center justify-center text-lg w-96 hover:scale-105" do %>
+            class: "relative px-2 py-3 bg-stone-100 hover:bg-stone-200 dark:bg-stone-800 dark:hover:bg-stone-700 rounded-lg flex items-center justify-center text-lg w-full" do %>
             <div class="w-8 h-8 flex absolute left-4">
               <%= image_tag ('mixin-logo.png'), class: 'w-full h-auto' %>
             </div>
@@ -65,7 +65,7 @@
             data-action="fennec#login" 
             href="https://pando.im/fennec"
             target="_blank"
-            class="relative px-2 py-3 bg-stone-100 hover:bg-stone-200 dark:bg-stone-800 dark:hover:bg-stone-700 rounded-lg flex items-center justify-center text-lg w-96 hover:scale-105">
+            class="relative px-2 py-3 bg-stone-100 hover:bg-stone-200 dark:bg-stone-800 dark:hover:bg-stone-700 rounded-lg flex items-center justify-center text-lg w-full">
             <div class="w-8 h-8 flex absolute left-4">
               <%= image_tag 'fennec-logo.png', class: 'w-full h-auto' %>
             </div>
@@ -73,7 +73,7 @@
           </a>
         </div>
 
-        <div data-action="click->login#showEth" class="w-96 mx-auto text-sm text-center py-2 underline cursor-pointer">
+        <div data-action="click->login#showEth" class="w-full mx-auto text-sm text-primary text-center py-6 underline cursor-pointer">
           <%= t('using_eth_wallet') %>
         </div>
       </div>

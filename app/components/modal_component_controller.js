@@ -45,7 +45,7 @@ export default class extends Controller {
 
   show() {
     this.enter();
-    this.lockBodyScroll();
+    // this.lockBodyScroll();
   }
 
   hide() {

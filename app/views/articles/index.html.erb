@@ -1,20 +1,16 @@
-<div class="lg:grid lg:grid-cols-3 lg:gap-x-6">
-  <div class="w-full lg:col-span-2 mb-2">
-    <%= render "articles/filter_bar", filter: @filter, time_range: @time_range %>
-    <%= render Articles::ListComponent.new articles: @articles, pagy: @pagy %>
-  </div>
-  <aside class="lg:col-span-1">
-    <div class="lg:sticky lg:top-20">
-      <% if @tag.present? %>
-        <%= turbo_frame_tag 'selected_tag' do %>
-          <div class="mb-4">
-            <%= render "tags/tag_card", tag: @tag %>
-          </div>
-        <% end %>
-      <% end %>
+<%= render "articles/filter_bar", filter: @filter, time_range: @time_range %>
+<%= render Articles::ListComponent.new articles: @articles, pagy: @pagy %>
 
-      <%= turbo_frame_tag 'hot_tags', src: '/hot_tags', loading: :lazy %>
-      <%= turbo_frame_tag 'active_authors', src: '/active_authors', loading: :lazy %>
-    </div>
-  </aside>
-</div>
+<%= content_for :sidebar do %>
+  <% if @tag.present? %>
+    <%= turbo_frame_tag 'selected_tag' do %>
+      <div class="mb-4">
+        <%= render "tags/tag_card", tag: @tag %>
+      </div>
+    <% end %>
+  <% end %>
+
+  <%= turbo_frame_tag 'hot_tags', src: '/hot_tags', loading: :lazy %>
+  <%= turbo_frame_tag 'active_authors', src: '/active_authors', loading: :lazy %>
+  <%= render "shared/footer" %>
+<% end %>
