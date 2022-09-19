@@ -1,358 +1,64 @@
-<nav class="hidden bg-white dark:bg-zinc-900 sm:block fixed top-0 w-full z-50">
-  <div class="px-4 px-8 mx-auto max-w-6xl">
-    <div class="flex items-center justify-between h-16">
-      <div class="flex items-center flex-1 space-x-10">
-        <%= link_to root_path, class: 'flex items-center space-x-2 flex-shrink-0' do %>
-          <img class="w-auto h-10" src=<%= asset_path(Settings.logo_file || 'logo.svg') %> alt="Logo">
+<div class="lg:min-h-screen lg:border-r">
+  <nav class="hidden lg:block h-full w-28">
+    <div class="sticky top-0 h-screen flex flex-col justify-between">
+      <%= link_to root_path, class: 'py-8' do %>
+        <%= image_tag 'logo.svg', class: "w-20 h-auto mx-auto" %>
+      <% end %>
+
+      <div class="mb-8">
+        <%= link_to articles_path, class: "block py-4" do %>
+          <%= inline_svg_tag 'icons/home.svg', class: "w-6 h-6 mx-auto" %>
         <% end %>
-        <div class="flex-1">
-          <%= render "search/form", query: params[:query] %>
-        </div>
+
+        <% if current_user.present? %>
+          <%= link_to dashboard_notifications_path, class: "block py-6" do %>
+            <%= inline_svg_tag 'icons/bell.svg', class: "w-6 h-6 mx-auto" %>
+          <% end %>
+          <%= link_to dashboard_articles_path, class: "block py-6" do %>
+            <%= inline_svg_tag 'icons/article.svg', class: "w-6 h-6 mx-auto" %>
+          <% end %>
+          <%= link_to new_article_path, class: "block py-6" do %>
+            <%= inline_svg_tag 'icons/write.svg', class: "w-6 h-6 mx-auto" %>
+          <% end %>
+        <% else %>
+          <%= link_to login_path, data: { turbo_frame: :modal }, class: "block py-6" do %>
+            <%= inline_svg_tag 'icons/write.svg', class: "w-6 h-6 mx-auto" %>
+          <% end %>
+        <% end %>
       </div>
 
-      <div class="flex items-center space-x-2 ml-4 md:ml-6">
-        <div class="flex items-baseline space-x-4">
-          <% if current_user.blank? %>
-            <% if from_mixin_messenger? %>
-              <%= link_to t("write"), 
-                login_path(return_to: new_article_url), 
-                class: "px-3 py-2 text-base font-medium hover:bg-blue-50 hover:text-primary dark:hover:bg-gray-800 rounded-md" %>
-            <% else %>
-              <%= link_to t("write"), 
-                login_path(return_to: new_article_url), 
-                data: { turbo_frame: :modal }, 
-                class: "px-3 py-2 text-base font-medium hover:bg-blue-50 hover:text-primary dark:hover:bg-gray-800 rounded-md" %>
-            <% end %>
-          <% elsif current_user.articles.drafted.present? %>
-            <%= link_to t("write"), dashboard_articles_path(tab: :drafted), data: { controller: 'prefetch' }, class: "px-3 py-2 text-base font-medium hover:bg-blue-50 hover:text-primary dark:hover:bg-gray-800 rounded-md" %>
-          <% else %>
-            <%= link_to t("write"), new_article_path, data: { controller: 'prefetch' }, class: "px-3 py-2 text-base font-medium hover:bg-blue-50 hover:text-primary dark:hover:bg-gray-800 rounded-md" %>
+      <div class="">
+        <%= render DropdownComponent.new class: 'flex justify-center' do |c| %>
+          <% c.with_button do %>
+            <%= inline_svg_tag 'icons/global.svg', class: "w-6 h-6 mx-auto" %>
           <% end %>
-        </div>
-        <div class="hidden md:block">
-          <%= link_to t("fair"), fair_page_path, data: { controller: 'prefetch' }, class: "px-3 py-2 text-base font-medium hover:bg-blue-50 hover:text-primary dark:hover:bg-gray-800 rounded-md" %>
-        </div>
-        <div class="hidden md:block">
-          <%= link_to t("rules"), rules_page_path, data: { controller: 'prefetch' }, class: "px-3 py-2 text-base font-medium hover:bg-blue-50 hover:text-primary dark:hover:bg-gray-800 rounded-md" %>
-        </div>
-        <div class="hidden md:block">
-          <div data-controller="dropdown" class="relative ml-3">
-            <div class="">
-              <button data-action="click->dropdown#toggle hover->dropdown#toggle click@window->dropdown#hide" 
-                type="button" 
-                class="flex items-center max-w-xs text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-blue-500 focus:ring-white" 
-                aria-expanded="false" 
-                aria-haspopup="true">
-                <span class="sr-only">Global</span>
-                <%= render "shared/icons/global" %>
-              </button>
-            </div>
-
-            <div data-dropdown-target="menu" 
-                data-controller="switch-locale"
-                data-transition-enter-active="transition ease-out duration-100"
-                data-transition-enter-from="transform opacity-0 scale-95"
-                data-transition-enter-to="transform opacity-100 scale-100"
-                data-transition-leave-active="transition ease-in duration-75"
-                data-transition-leave-from="transform opacity-100 scale-100"
-                data-transition-leave-to="transform opacity-0 scale-95"
-                class="absolute right-0 hidden w-48 py-1 mt-2 bg-white dark:bg-zinc-900 shadow-lg origin-top-right rounded-md ring-1 ring-black ring-opacity-5 focus:outline-none" 
-                role="menu" 
-                aria-orientation="vertical" 
-                aria-labelledby="user-menu-button" 
-                tabindex="-1">
-              <%= link_to 'English', 
-                locales_path(locale: :en, return_to: request.path), 
-                class: "block w-full px-4 py-2 text-sm opacity-70 hover:bg-zinc-100 dark:hover:bg-zinc-800 #{current_locale == 'en' ? 'font-bold' : ''}", 
-                data: { 
-                  turbo_method: :post,
-                  switch_locale_locale_param: :en,
-                  action: "switch-locale#switch"
-                },
-                role: "menuitem", 
-                tabindex: "-1" %>
-              <%= link_to '中文', 
-                locales_path(locale: :'zh-CN', return_to: request.path), 
-                class: "block w-full px-4 py-2 text-sm opacity-70 hover:bg-zinc-100 dark:hover:bg-zinc-800 #{current_locale == 'zh-CN' ? 'font-bold' : ''}", 
-                data: { 
-                  turbo_method: :post,
-                  switch_locale_locale_param: :'zh-CN',
-                  action: "switch-locale#switch"
-                },
-                role: "menuitem", 
-                tabindex: "-1" %>
-            </div>
+          <div class="block">
+            <%= link_to 'English', '/en', class: "block py-2 px-4" %>
+            <%= link_to '中文', '/zh-CN', class: "block py-2 px-4" %>
           </div>
-        </div>
+        <% end %>
       </div>
 
-      <div class="flex items-center ml-4 md:ml-6">
-        <div class="" data-controller="darkmode">
-          <a class="hidden block mr-3 cursor-pointer" data-darkmode-target="lightButton" data-action="darkmode#toggle">
-            <%= render 'shared/icons/moon', html_class: "w-6 h-6" %>
-          </a>
-          <a class="hidden block mr-3 cursor-pointer" data-darkmode-target="darkButton" data-action="darkmode#toggle">
-            <%= render 'shared/icons/sun', html_class: "text-zinc-100 w-6 h-6" %>
-          </a>
-        </div>
-
+      <div class="h-28 flex justify-center">
         <% if current_user.present? %>
-          <%= link_to dashboard_notifications_path, data: { controller: 'prefetch' }, class: "p-1 relative rounded-full hover:text-primary hover:bg-blue-50 dark:hover:bg-gray-800" do %>
-            <span class="sr-only">View notifications</span>
-            <!-- Heroicon name: outline/bell -->
-            <%= render 'shared/icons/bell' %>
-            <% if current_user.has_unread_notification? %>
-              <span class="absolute top-0 right-0 rounded-full bg-red-500 w-2 h-2"></span>
+          <%= render DropdownComponent.new class: 'block' do |c| %>
+            <% c.with_button do %>
+              <%= image_tag current_user.avatar, class: "w-10 h-10 rounded-full" %>
             <% end %>
-          <% end %>
-        <% end %>
-
-        <!-- Profile dropdown -->
-        <% if current_user.present? %>
-          <div data-controller="dropdown" class="relative ml-3">
-            <div class="">
-              <button data-action="dropdown#toggle click@window->dropdown#hide" 
-                type="button" 
-                class="flex items-center max-w-xs text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-blue-500 focus:ring-white" 
-                aria-expanded="false" 
-                aria-haspopup="true">
-                <span class="sr-only">Open user menu</span>
-                <div class="w-8 h-8 relative">
-                  <img class="w-8 h-8 rounded-full" src=<%= current_user.avatar %> alt="">
-                  <% case current_session&.provider %>
-                  <% when 'MetaMask' %>
-                    <%= image_tag 'metamask.svg', class: "absolute w-4 h-4 bottom-0 -right-1" %>
-                  <% when 'Coinbase' %>
-                    <%= image_tag 'coinbase.svg', class: "absolute w-4 h-4 bottom-0 -right-1" %>
-                  <% when 'WalletConnect' %>
-                    <%= image_tag 'walletconnect.svg', class: "absolute w-4 h-4 bottom-0 -right-1" %>
-                  <% end %>
-                </div>
-              </button>
-            </div>
-
-            <div data-dropdown-target="menu" 
-                data-transition-enter-active="transition ease-out duration-100"
-                data-transition-enter-from="transform opacity-0 scale-95"
-                data-transition-enter-to="transform opacity-100 scale-100"
-                data-transition-leave-active="transition ease-in duration-75"
-                data-transition-leave-from="transform opacity-100 scale-100"
-                data-transition-leave-to="transform opacity-0 scale-95"
-                class="absolute right-0 hidden w-48 py-1 mt-2 bg-white dark:bg-zinc-900 shadow-lg origin-top-right rounded-md ring-1 ring-black ring-opacity-5 focus:outline-none" 
-                role="menu" 
-                aria-orientation="vertical" 
-                aria-labelledby="user-menu-button" 
-                tabindex="-1">
-              <%= link_to t("profile_page"), 
-                user_path(current_user), 
-                data: {
-                  controller: 'prefetch'
-                },
-                class: "block px-4 py-2 text-sm opacity-70 hover:bg-zinc-100 dark:hover:bg-zinc-800", 
-                role: "menuitem", 
-                tabindex: "-1" %>
-              <%= link_to t("dashboard"), 
-                dashboard_root_path, 
-                data: {
-                  controller: 'prefetch'
-                },
-                class: "block px-4 py-2 text-sm opacity-70 hover:bg-zinc-100 dark:hover:bg-zinc-800", 
-                role: "menuitem", 
-                tabindex: "-1" %>
-              <%= link_to t("fair"), 
-                fair_page_path, 
-                data: {
-                  controller: 'prefetch'
-                },
-                class: "block px-4 py-2 text-sm opacity-70 hover:bg-zinc-100 dark:hover:bg-zinc-800" %>
-              <%= link_to t("rules"), 
-                rules_page_path, 
-                data: {
-                  controller: 'prefetch'
-                },
-                class: "block px-4 py-2 text-sm opacity-70 hover:bg-zinc-100 dark:hover:bg-zinc-800" %>
-              <%= link_to t("deposit"), 
-                deposit_dashboard_destination_path, 
-                data: { turbo_frame: :modal },
-                class: "block px-4 py-2 text-sm opacity-70 hover:bg-zinc-100 dark:hover:bg-zinc-800" if current_user.mvm_eth? %>
-              <%= link_to t("disconnect"), 
+            <div class="block">
+              <%= link_to t('disconnect'), 
                 logout_path, 
                 data: {
-                  action: 'session#destroy'
-                },
-                class: "block px-4 py-2 text-sm opacity-70 hover:bg-zinc-100 dark:hover:bg-zinc-800", 
-                role: "menuitem", 
-                tabindex: "-1" %>
+                    action: 'session#destroy'
+                  },
+                class: "block py-2 px-4" %>
             </div>
-          </div>
-          <% if current_user.mvm_eth? %>
-            <div class="ml-2">
-              <%= link_to current_user.mvm_address_url, 
-                target: "_blank",
-                class: "flex items-center text-sm rounded bg-zinc-100 px-2 py-1 opacity-70 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700" do %>
-                <div><%= current_user.short_uid %></div>
-                <%= render "shared/icons/external_link", html_class: "w-4 h-4 font-bold" %>
-              <% end %>
-            </div>
-          <% end %>
-        <% else %>
-          <% if from_mixin_messenger? %>
-            <%= link_to t('connect_wallet'), 
-              login_path(return_to: request.original_url), 
-              class: "hover:scale-105 bg-primary text-white px-3 py-1 rounded" %>
-          <% else %>
-            <%= link_to t('connect_wallet'), 
-              login_path, 
-              data: { turbo_frame: :modal }, 
-              class: "hover:scale-105 bg-primary text-white px-3 py-1 rounded" %>
           <% end %>
         <% end %>
       </div>
     </div>
-  </div>
-</nav>
+  </nav>
 
-<nav class="bg-white dark:bg-zinc-900 sm:hidden w-full fixed top-0 z-50" data-controller="dropdown">
-  <div class="relative px-4 px-6 mx-auto max-h-screen">
-    <div class="relative flex items-center justify-center h-12">
-      <div class="absolute left-0">
-        <button data-action="dropdown#toggle click@window->dropdown#hide" type="button" class="inline-flex items-center justify-center p-2 rounded-md hover:text-primary hover:bg-blue-50 focus:bg-blue-50 focus:text-primary" aria-controls="mobile-menu" aria-expanded="false">
-          <span class="sr-only">Open main menu</span>
-          <%= render "shared/icons/menu" %>
-        </button>
-      </div>
-      <%= link_to root_path, data: { controller: 'prefetch' }, class: "flex items-center flex-shrink-0 space-x-2" do %>
-        <img class="w-auto h-8" src=<%= asset_path(Settings.logo_file || 'logo.svg') %> alt="Logo">
-      <% end %>
-    </div>
-    <!-- Mobile menu, show/hide based on menu state. -->
-    <div data-dropdown-target="menu" class="hidden h-screen absolute left-0 top-0 w-full bg-white dark:bg-zinc-900">
-      <div class="px-4">
-        <div class="relative flex items-center justify-center h-12">
-          <div class="absolute left-0">
-            <button data-action="dropdown#toggle click@window->dropdown#hide" type="button" class="inline-flex items-center justify-center p-2 rounded-md text-primary bg-blue-50 dark:bg-zinc-800" aria-controls="mobile-menu" aria-expanded="false">
-              <span class="sr-only">Close main menu</span>
-              <%= render "shared/icons/close" %>
-            </button>
-          </div>
-          <%= link_to root_path, data: { controller: 'prefetch' }, class: "flex items-center flex-shrink-0 space-x-2" do %>
-            <img class="w-auto h-8" src=<%= asset_path(Settings.logo_file || 'logo.svg') %> alt="Logo">
-          <% end %>
-        </div>
-      </div>
-      <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-        <%= link_to t("read"), articles_path, data: { controller: 'prefetch' }, class: "block px-2 py-2 text-base font-medium focus:bg-blue-50 focus:text-primary rounded-md" %>
-      </div>
-      <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-        <% if current_user.blank? %>
-          <% if from_mixin_messenger? %>
-            <%= link_to t("write"), 
-              login_path(return_to: new_article_url), 
-              class: "block px-2 py-2 text-base font-medium focus:bg-blue-50 focus:text-primary rounded-md" %>
-          <% else %>
-            <%= link_to t("write"), 
-              login_path(return_to: new_article_url), 
-              data: { turbo_frame: :modal }, 
-              class: "block px-2 py-2 text-base font-medium focus:bg-blue-50 focus:text-primary rounded-md" %>
-          <% end %>
-        <% elsif current_user.articles.drafted.present? %>
-          <%= link_to t("write"), dashboard_articles_path(tab: :drafted), data: { controller: 'prefetch' }, class: "px-2 py-2 text-base font-medium hover:bg-blue-50 hover:text-primary dark:hover:bg-gray-800 rounded-md" %>
-        <% else %>
-          <%= link_to t("write"), new_article_path, data: { controller: 'prefetch' }, class: "block px-2 py-2 text-base font-medium focus:bg-blue-50 focus:text-primary rounded-md" %>
-        <% end %>
-      </div>
-      <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-        <%= link_to t("fair"), fair_page_path, data: { controller: 'prefetch' }, class: "block px-2 py-2 text-base font-medium focus:bg-blue-50 focus:text-primary rounded-md" %>
-      </div>
-      <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-        <%= link_to t("rules"), rules_page_path, data: { controller: 'prefetch' }, class: "block px-2 py-2 text-base font-medium focus:bg-blue-50 focus:text-primary rounded-md" %>
-      </div>
-      <div class="pt-4 pb-3">
-        <% if current_user.present? %>
-          <div class="flex items-center px-5">
-            <div class="flex-shrink-0">
-              <div class="w-10 h-10 relative">
-                <%= image_tag current_user.avatar, class: "w-10 h-10 rounded-full", alt: "user avatar" %>
-                <% case current_session&.provider %>
-                <% when 'MetaMask' %>
-                  <%= image_tag 'metamask.svg', class: "absolute w-4 h-4 bottom-0 -right-1" %>
-                <% when 'Coinbase' %>
-                  <%= image_tag 'coinbase.svg', class: "absolute w-4 h-4 bottom-0 -right-1" %>
-                <% when 'WalletConnect' %>
-                  <%= image_tag 'walletconnect.svg', class: "absolute w-4 h-4 bottom-0 -right-1" %>
-                <% end %>
-              </div>
-            </div>
-            <div class="ml-3">
-              <div class="text-base font-medium leading-none text-white"><%= current_user.short_name %></div>
-            </div>
-            <div class="ml-auto" data-controller="darkmode">
-              <a class="hidden block mr-3 cursor-pointer" data-darkmode-target="lightButton" data-action="darkmode#toggle">
-                <%= render 'shared/icons/moon', html_class: "w-6 h-6" %>
-              </a>
-              <a class="hidden block mr-3 cursor-pointer" data-darkmode-target="darkButton" data-action="darkmode#toggle">
-                <%= render 'shared/icons/sun', html_class: "text-zinc-100 w-6 h-6" %>
-              </a>
-            </div>
-            <%= link_to dashboard_notifications_path, data: { controller: 'prefetch' }, class: "relative flex-shrink-0 p-1 ml-3 rounded-full focus:bg-blue-50 focus:text-primary" do %>
-              <span class="sr-only">View notifications</span>
-              <%= render 'shared/icons/bell' %>
-              <% if current_user.has_unread_notification? %>
-                <span class="absolute top-0 right-0 rounded-full bg-red-500 w-2 h-2"></span>
-              <% end %>
-            <% end %>
-          </div>
-          <div class="px-2 mt-3 space-y-1">
-            <%= link_to t("profile_page"), user_path(current_user), data: { controller: 'prefetch' }, class: "block px-3 py-2 text-base font-medium focus:bg-blue-50 focus:text-primary rounded-md" %>
-          </div>
-          <div class="px-2 mt-3 space-y-1">
-            <%= link_to t("dashboard"), dashboard_root_path, data: { controller: 'prefetch' }, class: "block px-3 py-2 text-base font-medium focus:bg-blue-50 focus:text-primary rounded-md" %>
-          </div>
-          <div class="px-2 my-3 space-y-1">
-            <%= link_to t("disconnect"),
-              logout_path, 
-              data: {
-                action: 'session#destroy'
-              },
-              class: "block px-3 py-2 text-base font-medium focus:bg-blue-50 focus:text-primary rounded-md" %>
-          </div>
-        <% else %>
-          <div class="px-2 sm:px-3 flex">
-            <% if from_mixin_messenger? %>
-              <%= link_to t('connect_wallet'), 
-                login_path(return_to: request.original_url), 
-                class: "block px-3 py-1 text-base font-medium text-white bg-primary hover:scale-105 rounded-md" %>
-              <% else %>
-              <%= link_to t('connect_wallet'), 
-                login_path, 
-                data: { turbo_frame: :modal }, 
-                class: "block px-3 py-1 text-base font-medium text-white bg-primary hover:scale-105 rounded-md" %>
-            <% end %>
-          </div>
-        <% end %>
-        <div class="px-2 pt-3 border-t border-zinc-50 dark:border-zinc-800 space-y-1" data-controller="switch-locale">
-          <%= link_to 'English', 
-            locales_path(locale: :en, return_to: request.path), 
-            class: "block px-3 py-2 text-base font-medium focus:bg-blue-50 focus:text-primary rounded-md #{current_locale == 'en' ? 'font-bold' : ''}", 
-            data: { 
-              turbo_method: :post,
-              switch_locale_locale_param: :en,
-              action: "switch-locale#switch"
-            },
-            role: "menuitem", 
-            tabindex: "-1" %>
-          <%= link_to '中文', 
-            locales_path(locale: :'zh-CN', return_to: request.path), 
-            class: "block px-3 py-2 text-base font-medium focus:bg-blue-50 focus:text-primary rounded-md #{current_locale == 'zh-CN' ? 'font-bold' : ''}", 
-            data: { 
-              turbo_method: :post,
-              switch_locale_locale_param: :'zh-CN',
-              action: "switch-locale#switch"
-            },
-            role: "menuitem", 
-            tabindex: "-1" %>
-        </div>
-      </div>
-    </div>
-  </div>
-</nav>
+  <nav class="lg:hidden w-full absolute bottom-0 border-t shadow h-16">
+  </nav>
+</div>

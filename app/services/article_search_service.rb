@@ -7,7 +7,7 @@ class ArticleSearchService
     @filter = params[:filter]
     @time_range = params[:time_range]
     @current_user = params[:current_user]
-    @articles = Article.without_drafted
+    @articles = Article.without_drafted.includes(:author, :tags)
     @locale = @query.to_s.strip.present? ? nil : params[:locale] || current_user&.locale || I18n.default_locale
   end
 
