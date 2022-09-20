@@ -2,6 +2,10 @@
   <%= render "subscribe_tags/subscribe_button", tag: @tag %>
 <% end %>
 
+<%= turbo_stream.replace_all ".#{dom_id @tag}_subscribe_button_block" do %>
+  <%= render "subscribe_tags/subscribe_button", tag: @tag, style: 'block' %>
+<% end %>
+
 <%= turbo_stream.replace_all ".#{dom_id @tag}_subscribe_detail" do %>
   <%= render "subscribe_tags/subscribe_detail", tag: @tag %>
 <% end %>

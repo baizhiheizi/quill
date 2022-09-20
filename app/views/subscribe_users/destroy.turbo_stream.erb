@@ -1,5 +1,8 @@
 <%= turbo_stream.replace "#{dom_id @user}_subscribe_button" do %>
   <%= render "subscribe_users/subscribe_button", user: @user %>
 <% end %>
+<%= turbo_stream.replace "#{dom_id @user}_subscribe_button_block" do %>
+  <%= render "subscribe_users/subscribe_button", user: @user, style: 'block' %>
+<% end %>
 
 <%= turbo_stream.remove "subscribe_user_#{dom_id @user}" %>

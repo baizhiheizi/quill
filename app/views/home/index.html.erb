@@ -8,7 +8,7 @@
           <% c.with_button do %>
             <div class='flex items-center space-x-1 cursor-pointer'>
               <span class="text-sm opacity-75">
-                <%= current_locale.split('-').last.upcase %>
+                <%= current_locale.to_s.split('-').last.upcase %>
               </span>
               <%= inline_svg_tag 'icons/chevron-down.svg', class: "w-3 h-3" %>
             </div>
@@ -45,13 +45,13 @@
     <% end %>
   </div>
 
-  <div class="py-8 grid grid-cols-1 sm:grid-cols-3 gap-16">
+  <div class="py-8 grid grid-cols-1 sm:grid-cols-3 gap-16 relative">
     <div class="col-span-2">
       <%= turbo_frame_tag 'articles', src: articles_path do  %>
         <%= render 'shared/loading' %>
       <% end %>
     </div>
-    <div class="col-span-1">
+    <div class="col-span-1 sticky top-8 max-h-screen">
       <%= turbo_frame_tag 'hot_tags', src: hot_tags_path do  %>
         <%= render 'shared/loading' %>
       <% end %>

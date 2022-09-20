@@ -14,7 +14,13 @@
     <% end %>
   </div>
   <div class="flex justify-end">
-    <%= render "articles/share_button", article: article, button_class: "w-5 h-5 lg:w-6 lg:h-6" %>
+    <%= link_to article_share_path(article_uuid: @article.uuid), 
+      data: {
+        turbo_frame: :modal
+      },
+      class: "flex items-center space-x-1" do %>
+      <%= inline_svg_tag 'icons/share-solid.svg', class: 'w-5 h-5 lg:w-6 lg:h-6 text-primary' %>
+    <% end %>
   </div>
 </div>
 

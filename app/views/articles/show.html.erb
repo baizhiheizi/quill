@@ -1,38 +1,34 @@
-<div class="lg:grid lg:grid-cols-3 lg:gap-x-6 relative">
-  <article class="max-w-full lg:col-span-2 mb-4">
-    <div class="bg-white dark:bg-zinc-900 p-4 w-full sm:p-6 sm:rounded-lg mb-4">
-      <div class="mb-8">
-        <%= render partial: "articles/header", locals: { article: @article } %>
-      </div>
-
-      <div class="mb-8">
-        <%= render partial: "articles/content", locals: { article: @article, user: current_user } %>
-      </div>
-
-      <div id="article_<%= @article.uuid %>_buyers" class="mb-8">
-        <%= render partial: "articles/buyers", locals: { article: @article, user: current_user } %>
-      </div>
+<article class="max-w-full lg:col-span-2 mb-4">
+  <div class="mb-4">
+    <div class="mb-8">
+      <%= render partial: "articles/header", locals: { article: @article } %>
     </div>
 
-    <%= render partial: "articles/comments_card", locals: { article: @article, user: current_user } %>
-  </article>
-
-  <aside class="lg:col-span-1">
-    <div class="lg:sticky lg:top-20">
-      <div class="mb-4">
-        <%= render partial: "articles/author_card", locals: { author: @article.author } %>
-      </div>
-      <% if @article.article_references.present? %>
-        <div class="mb-4">
-          <%= render partial: "articles/references_card", locals: { references: @article.article_references } %>
-        </div>
-      <% end %>
-      <% if @article.related_articles.present? %>
-        <div class="mb-4">
-          <%= render partial: "articles/related_articles_card", locals: { articles: @article.related_articles } %>
-        </div>
-      <% end %>
-      <%= turbo_frame_tag 'hot_tags', src: '/hot_tags', loading: :lazy %>
+    <div class="mb-8">
+      <%= render partial: "articles/content", locals: { article: @article, user: current_user } %>
     </div>
-  <aside>
-</div>
+
+    <div id="article_<%= @article.uuid %>_buyers" class="mb-16">
+      <%= render partial: "articles/buyers", locals: { article: @article, user: current_user } %>
+    </div>
+  </div>
+
+  <%= render partial: "articles/comments_card", locals: { article: @article, user: current_user } %>
+</article>
+
+<%= content_for :sidebar do %>
+  <div class="mb-4">
+    <%= render partial: "articles/author_card", locals: { author: @article.author } %>
+  </div>
+  <% if @article.article_references.present? %>
+    <div class="mb-4">
+      <%= render partial: "articles/references_card", locals: { references: @article.article_references } %>
+    </div>
+  <% end %>
+  <% if @article.related_articles.present? %>
+    <div class="mb-4">
+      <%= render partial: "articles/related_articles_card", locals: { articles: @article.related_articles } %>
+    </div>
+  <% end %>
+  <%= turbo_frame_tag 'hot_tags', src: '/hot_tags', loading: :lazy %>
+<% end %>

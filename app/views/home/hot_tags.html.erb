@@ -1,11 +1,11 @@
 <% if @hot_tags.present? %>
   <%= turbo_frame_tag 'hot_tags' do %>
-    <div class="mb-8">
-      <div class="flex mb-4">
+    <div class="mb-16">
+      <div class="mb-6">
         <span class="font-bold"><%= t('hot_tags') %></span>
       </div>
       <% if current_user.blank? %>
-        <div class="flex space-x-4 space-y-4">
+        <div class="flex items-center flex-wrap">
           <% @hot_tags.each do |tag| %>
             <%= link_to tag.name, 
               articles_path(tag: tag.name, order_by: @order_by || 'lately'), 
@@ -15,14 +15,22 @@
                 turbo_frame: '_top' 
               }, 
               style: "word-break:keep-all;color:#{tag.color};background-color:#{tag.bg_color};",
-              class: "px-2 py-1 bg-zinc-100 dark:bg-zinc-800 font-bold truncate max-w-[6rem] truncate" 
+              class: "h-8 my-2 mr-4 px-2 py-1 max-w-[6rem] truncate rounded" 
             %>
           <% end %>
         </div>
       <% else %>
         <% @hot_tags.each do |tag| %>
-          <div class="flex items-center space-x-2 justify-between mb-2">
-            <%= link_to "##{tag.name}", articles_path(tag: tag.name, order_by: @order_by || 'lately'), data: { controller: 'prefetch', turbo_frame: '_top' }, class: "px-2 py-1 bg-zinc-100 dark:bg-zinc-800 font-bold truncate" %>
+          <div class="flex items-center space-x-4 justify-between mb-2">
+            <%= link_to "##{tag.name}", 
+              articles_path(tag: tag.name, order_by: @order_by || 'lately'), 
+              data: { 
+                controller: 'prefetch', 
+                turbo_frame: '_top' 
+              }, 
+              style: "word-break:keep-all;color:#{tag.color};background-color:#{tag.bg_color};",
+              class: "h-8 my-2 mr-4 px-2 py-1 truncate rounded" 
+            %>
             <div class="text-sm min-w-max">
               <%= render "subscribe_tags/subscribe_button", tag: tag %>
             </div>

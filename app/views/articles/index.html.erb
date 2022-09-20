@@ -1,16 +1,17 @@
+<div class="mb-8">
+  <%= render "search/form" %>
+</div>
 <%= render "articles/filter_bar", filter: @filter, time_range: @time_range %>
 <%= render Articles::ListComponent.new articles: @articles, pagy: @pagy %>
 
 <%= content_for :sidebar do %>
   <% if @tag.present? %>
     <%= turbo_frame_tag 'selected_tag' do %>
-      <div class="mb-4">
-        <%= render "tags/tag_card", tag: @tag %>
-      </div>
+      <%= render "tags/tag_card", tag: @tag %>
     <% end %>
   <% end %>
 
-  <%= turbo_frame_tag 'hot_tags', src: '/hot_tags', loading: :lazy %>
   <%= turbo_frame_tag 'active_authors', src: '/active_authors', loading: :lazy %>
+  <%= turbo_frame_tag 'hot_tags', src: '/hot_tags', loading: :lazy %>
   <%= render "shared/footer" %>
 <% end %>

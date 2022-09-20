@@ -1,7 +1,13 @@
-<div class="bg-white dark:bg-zinc-900 p-4 sm:p-6 sm:rounded-lg">
-  <div class="flex mb-4">
-    <span class="px-2 py-1 bg-zinc-100 dark:bg-zinc-800 font-bold text-lg">#<%= tag.name %></span>
+<div class="mb-16">
+  <div class="mb-6">
+    <span
+      style="word-break:keep-all;color:<%= tag.color %>;background-color:<%= tag.bg_color %>;"
+      class="text-lg h-8 my-2 mr-4 px-2 py-1 max-w-[6rem] truncate rounded">
+      <%= tag.name %>
+    </span>
   </div>
-  <%= render "subscribe_tags/subscribe_button", tag: tag %>
+  <div class='mb-2'>
+    <%= render "subscribe_tags/subscribe_button", tag: tag, style: 'block' %>
+  </div>
   <%= render "subscribe_tags/subscribe_detail", tag: tag %>
 </div>
