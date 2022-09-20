@@ -1,29 +1,31 @@
 <%= turbo_frame_tag 'selected_articles' do %>
-<div class="grid gap-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
-  <% @articles.each_with_index do |article, index| %>
-    <%= link_to user_article_path(article.author, article), 
-      data: { 
-        turbo_frame: '_top'
-      },
-      class: "flex space-x-4" do %>
-      <div class="font-mono font-bold text-[3rem] text-[#E7E7F0]">
-        0<%= index + 1 %>
-      </div>
-      <div class="">
-        <div class="mb-2 text-sm opacity-40">
-          <%= render TimeFormatComponent.new datetime: article.published_at.utc.rfc3339 do %>
-            <%= article.published_at&.strftime("%Y-%m-%d %H:%M") %>
+  <div class='py-8 border-b'>
+    <div class="grid gap-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
+      <% @articles.each_with_index do |article, index| %>
+        <%= link_to user_article_path(article.author, article), 
+          data: { 
+            turbo_frame: '_top'
+          },
+          class: "flex space-x-4" do %>
+          <div class="font-mono font-bold text-[3rem] text-[#E7E7F0]">
+            0<%= index + 1 %>
+          </div>
+          <div class="">
+            <div class="mb-2 text-sm opacity-40">
+              <%= render TimeFormatComponent.new datetime: article.published_at.utc.rfc3339 do %>
+                <%= article.published_at&.strftime("%Y-%m-%d %H:%M") %>
+              <% end %>
+            </div>
+            <div class="h-14 opacity-80 font-bold mb-6 w-full overflow-hidden text-ellipsis line-clamp-2 text-lg">
+              <%= article.title %>
+            </div>
+            <div class="flex items-center space-x-4">
+              <%= image_tag article.author.avatar, class: "w-7 h-7 rounded-full" %>
+              <span class="text-sm"><%= article.author.short_name %> </span>
+            </div>
+          </div>
           <% end %>
-        </div>
-        <div class="h-12 opacity-80 font-bold mb-6 w-full overflow-hidden text-ellipsis line-clamp-2 text-[1.125rem]">
-          <%= article.title %>
-        </div>
-        <div class="flex items-center space-x-4">
-          <%= image_tag article.author.avatar, class: "w-6 h-6 rounded-full" %>
-          <span class="text-sm"><%= article.author.short_name %> </span>
-        </div>
-      </div>
       <% end %>
-  <% end %>
-</div>
+    </div>
+  </div>
 <% end %>
