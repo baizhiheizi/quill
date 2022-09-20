@@ -1,20 +1,30 @@
-<div class="<%= dom_id tag %>_subscribe_button" >
+<% style ||= 'default' %>
+
+<div class="<%= dom_id tag %>_subscribe_button<%= style == 'block' ? '_block' : '' %>" >
   <% if current_user.blank? %>
     <%= link_to t('subscribe'), 
       login_path(type: :login), 
       data: { 
         turbo_frame: :modal 
-      }, class: "block w-full cursor-pointer bg-primary hover:scale-105 rounded text-white text-center py-1 px-4" %>
+      }, 
+      class: "block w-full cursor-pointer bg-primary hover:scale-105 rounded text-white text-center py-1 px-4" %>
+    <%= link_to login_path(type: :login), 
+      class: "flex items-center justify-center space-x-1 w-full cursor-pointer text-sm text-primary text-center #{style == 'block' ? 'py-3 border bg-primary !text-white rounded-full' : 'w-24 py-1.5'}" do %>
+      <%= inline_svg_tag 'icons/add.svg', class: 'w-3 h-3' unless style == 'block' %>
+      <span><%= t('subscribe') %></span>
+    <% end %>
   <% elsif current_user.subscribe_tag? tag %>
-    <div class="w-full bg-transparent text-center py-1">
-      <%= link_to t('unsubscribe'), 
-        new_subscribe_tag_path(id: tag.id), 
-        data: { 
-          turbo_frame: :modal,
-        }, 
-        class: "bg-transparent cursor-pointer opacity-70" %>
-    </div>
+    <%= link_to t('subscribed'), 
+      new_subscribe_tag_path(id: tag.id), 
+      data: { 
+        turbo_frame: :modal,
+      }, 
+      class: "flex items-center justify-center space-x-1 w-full cursor-pointer text-sm text-[#B1B6C6] rounded-full text-white text-center #{style == 'block' ? 'py-3 bg-[#F4F4F4] rounded-full' : 'w-24 py-1.5'}" %>
   <% else %>
-    <%= button_to t('subscribe'), subscribe_tags_path(id: tag.id), class: "block w-full cursor-pointer bg-primary hover:scale-105 rounded text-white text-center py-1 px-4" %>
+    <%= button_to subscribe_tags_path(id: tag.id), 
+      class: "flex items-center justify-center space-x-1 w-full cursor-pointer text-sm text-primary text-center #{style == 'block' ? 'py-3 border bg-primary !text-white rounded-full' : 'w-24 py-1.5'}" do %>
+      <%= inline_svg_tag 'icons/add.svg', class: 'w-3 h-3' unless style == 'block' %>
+      <span><%= t('subscribe') %></span>
+    <% end %>
   <% end %>
 </div>

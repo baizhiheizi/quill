@@ -1,10 +1,12 @@
-<div class="bg-white dark:bg-zinc-900 dark:border-zinc-800 p-4 sm:p-6 sm:border border-zinc-50 sm:rounded-lg">
-  <div class="flex mb-4">
-    <span class="px-2 py-1 font-bold"><%= t('related_articles') %></span>
+<div class="mb-16">
+  <div class="mb-6">
+    <span class="font-bold"><%= t('related_articles') %></span>
   </div>
   <% articles.each do |article| %>
-    <%= link_to user_article_path(article.author, article), data: { controller: 'prefetch' }, class: "flex items-center space-x-2 mb-2" do %>
-      <%= image_tag article.author.avatar, class: "w-6 h-6 rounded-full" %>
+    <%= link_to user_article_path(article.author, article), 
+      data: { controller: 'prefetch' }, 
+      class: "flex items-center space-x-2 mb-4" do %>
+      <%= image_tag article.author.avatar, class: "w-9 h-9 rounded-full" %>
       <span class="truncate"><%= article.title %></span>
     <% end %>
   <% end %>

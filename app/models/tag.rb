@@ -29,7 +29,7 @@ class Tag < ApplicationRecord
       .where(
         articles: {
           state: :published,
-          created_at: (1.month.ago)...
+          created_at: (3.months.ago)...
         }
       ).group(:id)
       .select(

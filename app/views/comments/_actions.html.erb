@@ -1,17 +1,26 @@
-<div class="<%= dom_id comment %>_actions flex items-center space-x-4 opacity-70 text-sm">
+<div class="<%= dom_id comment %>_actions flex items-center space-x-4 opacity-75 text-sm">
   <%= button_to upvoted_comment_path(comment), method: :put, class: "flex items-center space-x-2" do %>
     <% if current_user&.upvote_comment? comment %>
-      <span><%= render partial: "shared/icons/thumb_up_solid", locals: { html_class: "w-4 h-4" } %></span>
+      <span>
+        <%= inline_svg_tag 'icons/like-solid.svg', class: 'w-4 h-4 text-primary' %>
+      </span>
     <% else %>
-      <span><%= render partial: "shared/icons/thumb_up", locals: { html_class: "w-4 h-4" } %></span>
+      <span>
+        <%= inline_svg_tag 'icons/like-solid.svg', class: 'w-4 h-4 text-[#B1B6C6]' %>
+      </span>
     <% end %>
     <span><%= comment.upvotes_count %></span>
   <% end %>
+
   <%= button_to downvoted_comment_path(comment), method: :put, class: "flex items-center space-x-2" do %>
     <% if current_user&.downvote_comment? comment %>
-      <span><%= render partial: "shared/icons/thumb_down_solid", locals: { html_class: "w-4 h-4" } %></span>
+      <span>
+        <%= inline_svg_tag 'icons/dislike-solid.svg', class: 'w-4 h-4 text-red-500' %>
+      </span>
     <% else %>
-      <span><%= render partial: "shared/icons/thumb_down", locals: { html_class: "w-4 h-4" } %></span>
+      <span>
+        <%= inline_svg_tag 'icons/dislike-solid.svg', class: 'w-4 h-4 text-[#B1B6C6]' %>
+      </span>
     <% end %>
     <span><%= comment.downvotes_count %></span>
   <% end %>
@@ -20,11 +29,11 @@
       data: {
         turbo_frame: :modal
       } do %>
-      <%= render partial: "shared/icons/reply", locals: { html_class: "w-4 h-4" } %>
+      <%= inline_svg_tag 'icons/reply-solid.svg', class: 'w-4 h-4 text-[#B1B6C6]' %>
     <% end %>
   <% elsif current_user.blank? %>
     <%= link_to login_path(return_to: user_article_path(comment.commentable.author, comment.commentable)), data: { turbo_frame: :modal } do %>
-      <%= render partial: "shared/icons/reply", locals: { html_class: "w-4 h-4" } %>
+      <%= inline_svg_tag 'icons/reply-solid.svg', class: 'w-4 h-4 text-[#B1B6C6]' %>
     <% end %>
   <% end %>
 </div>

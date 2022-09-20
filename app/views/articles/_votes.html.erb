@@ -12,12 +12,12 @@
       <%= render "shared/icons/thumb_up" %>
     <% end %>
   <% end %>
-  <div class="mx-4 w-16 mt-4">
-    <div class="bg-red-500 rounded h-2">
+  <div class="mx-4 w-16 mt-2">
+    <div class="bg-red-500 rounded h-2 mb-2">
       <div class="rounded h-2 bg-primary" style="width: <%= article.upvote_ratio %>"></div>
     </div>
     <div class="text-center text-sm">
-      <%= article.upvotes_count %>:<%= article.downvotes_count %>
+      <%= article.upvotes_count %> : <%= article.downvotes_count %>
     </div>
   </div>
   <% if !article.authorized? user %>

@@ -1,22 +1,29 @@
-<div id="<%= dom_id user %>_subscribe_button" >
+<% style ||= 'default' %>
+
+<div id="<%= dom_id user %>_subscribe_button<%= style == 'block' ? '_block' : '' %>" >
   <% if current_user.blank? %>
-    <%= link_to t('subscribe'), 
-      login_path(return_to: user_url(user)), 
+    <%= link_to login_path(return_to: user_url(user)), 
       data: { 
         turbo_frame: :modal 
-      }, class: "block w-full cursor-pointer bg-primary hover:scale-105 rounded text-white text-center py-1 px-4" %>
+      }, 
+      class: "flex items-center space-x-1 w-full cursor-pointer text-sm bg-primary rounded-full text-white text-center py-1.5 px-4" do %>
+      <%= inline_svg_tag 'icons/add.svg', class: 'w-3 h-3' unless style == 'block' %>
+      <span><%= t('subscribe') %></span>
+    <% end %>
   <% elsif current_user == user %>
     <span></span>
   <% elsif current_user.subscribe_user? user %>
-    <div class="w-full text-center py-1">
-      <%= link_to t('unsubscribe'), 
-        new_subscribe_user_path(uid: user.uid), 
-        data: { 
-          turbo_frame: :modal,
-        }, 
-        class: "cursor-pointer bg-transparent opacity-70" %>
-    </div>
-  <% else current_user.subscribe_user? user%>
-    <%= button_to t('subscribe'), subscribe_users_path(uid: user.uid), class: "block w-full cursor-pointer bg-primary hover:scale-105 rounded-full text-white text-center py-1 px-4" %>
+    <%= link_to t('subscribed'), 
+      new_subscribe_user_path(uid: user.uid), 
+      data: { 
+        turbo_frame: :modal,
+      }, 
+      class: "flex items-center justify-center space-x-1 w-full cursor-pointer text-sm bg-[#F4F4F4] text-[#B1B6C6] rounded-full text-white text-center #{style == 'block' ? 'py-3' : 'w-24 py-1.5'}" %>
+<% else%>
+    <%= button_to subscribe_users_path(uid: user.uid), 
+      class: "flex items-center justify-center space-x-1 w-full cursor-pointer text-sm bg-primary rounded-full text-white text-center #{style == 'block' ? 'py-3' : 'w-24 py-1.5'}" do %>
+      <%= inline_svg_tag 'icons/add.svg', class: 'w-3 h-3' unless style == 'block' %>
+      <span><%= t('subscribe') %></span>
+    <% end %>
   <% end %>
 </div>

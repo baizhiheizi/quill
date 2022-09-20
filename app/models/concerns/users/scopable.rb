@@ -12,7 +12,7 @@ module Users::Scopable
     scope :active, lambda {
       order_by_articles_count
         .where(
-          articles: { created_at: (1.month.ago)..., orders_count: 1... }
+          articles: { created_at: (3.months.ago)..., orders_count: 1... }
         )
     }
     scope :only_email_verified, -> { where.not(email_verified_at: nil) }

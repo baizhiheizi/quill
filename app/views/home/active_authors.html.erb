@@ -1,22 +1,20 @@
 <% if @users.present? %>
   <%= turbo_frame_tag 'active_authors' do %>
-    <div class="mb-4">
-      <div class="bg-white dark:bg-zinc-900 dark:border-zinc-800 p-4 sm:p-6 sm:border border-zinc-50 sm:rounded-lg">
-        <div class="flex mb-4">
-          <span class="font-bold"><%= t('active_authors') %></span>
-        </div>
-        <% @users.each do |user| %>
-          <div class="flex items-center justify-between mb-2 truncate">
-            <%= link_to user_path(user), data: { controller: 'prefetch', turbo_frame: '_top' }, class: "flex items-center space-x-2 truncate" do %>
-              <%= image_tag user.avatar, class: "w-10 h-10 rounded-full" %>
-              <div class="truncate"><%= user.short_name %></div>
-            <% end %>
-            <div class="text-sm">
-              <%= render "subscribe_users/subscribe_button", user: user %>
-            </div>
-          </div>
-        <% end %>
+    <div class="mb-16">
+      <div class="mb-6">
+        <span class="font-bold"><%= t('active_authors') %></span>
       </div>
+      <% @users.each do |user| %>
+        <div class="flex items-center justify-between mb-4 truncate">
+          <%= link_to user_path(user), data: { controller: 'prefetch', turbo_frame: '_top' }, class: "flex items-center space-x-2 truncate" do %>
+            <%= image_tag user.avatar, class: "w-10 h-10 rounded-full" %>
+            <div class="truncate"><%= user.short_name %></div>
+          <% end %>
+          <div class="text-sm">
+            <%= render "subscribe_users/subscribe_button", user: user %>
+          </div>
+        </div>
+      <% end %>
     </div>
   <% end %>
 <% end %>
