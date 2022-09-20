@@ -34,16 +34,11 @@
         <%= link_to t('connect_wallet'), login_path, data: { turbo_frame: :modal }, class: "rounded-full py-3 bg-primary text-center px-6" %>
       <% end %>
     </div>
-
   </div>
 </div>
 
 <div class="max-w-5xl mx-auto px-4 lg:px-8">
-  <div class="py-8 border-b">
-    <%= turbo_frame_tag 'selected_articles', src: selected_articles_path do  %>
-      <%= render 'shared/loading' %>
-    <% end %>
-  </div>
+  <%= turbo_frame_tag 'selected_articles', src: selected_articles_path  %>
 
   <div class="py-8 grid grid-cols-1 sm:grid-cols-3 gap-16 relative">
     <div class="col-span-2">
@@ -52,9 +47,8 @@
       <% end %>
     </div>
     <div class="col-span-1 sticky top-8 max-h-screen">
-      <%= turbo_frame_tag 'hot_tags', src: hot_tags_path do  %>
-        <%= render 'shared/loading' %>
-      <% end %>
+      <%= turbo_frame_tag 'active_authors', src: active_authors_path, loading: :lazy %>
+      <%= turbo_frame_tag 'hot_tags', src: hot_tags_path, loading: :lazy  %>
       <div class="py-8">
         <%= render 'shared/footer' %>
       </div>
