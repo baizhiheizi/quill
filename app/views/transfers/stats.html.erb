@@ -1,34 +1,57 @@
 <%= turbo_frame_tag 'transfers_stats' do %>
-  <div class="text-center p-2">
-    <div class="opacity-70 mb-2">
-      <%= t('author_revenue_total') %>
+  <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
+    <div class="text-center p-4 bg-[#F4F4F4] rounded mb-2">
+      <div class="text-2xl font-bold mb-2">
+        <%= User.count %>
+      </div>
+      <div class="opacity-70 text-sm">
+        <%= t('users_count') %>
+      </div>
     </div>
-    <div class="text-2xl font-bold">
-      $<%= Transfer.stats['author_revenue_total_in_usd'] %>
+
+    <div class="text-center p-4 bg-[#F4F4F4] rounded mb-2">
+      <div class="text-2xl font-bold mb-2">
+        <%= Article.count %>
+      </div>
+      <div class="opacity-70 text-sm">
+        <%= t('articles_count') %>
+      </div>
     </div>
-  </div>
-  <div class="text-center p-2">
-    <div class="opacity-70 mb-2">
-      <%= t('reader_revenue_total') %>
+
+    <div class="text-center p-4 bg-[#F4F4F4] rounded mb-2">
+      <div class="text-2xl font-bold mb-2">
+        $<%= Transfer.stats['author_revenue_total_in_usd'] %>
+      </div>
+      <div class="opacity-70 text-sm">
+        <%= t('author_revenue_total') %>
+      </div>
     </div>
-    <div class="text-2xl font-bold">
-      $<%= Transfer.stats['reader_revenue_total_in_usd'] %>
+
+    <div class="text-center p-4 bg-[#F4F4F4] rounded mb-2">
+      <div class="text-2xl font-bold mb-2">
+        $<%= Transfer.stats['reader_revenue_total_in_usd'] %>
+      </div>
+      <div class="opacity-70 text-sm">
+        <%= t('reader_revenue_total') %>
+      </div>
     </div>
-  </div>
-  <div class="text-center p-2">
-    <div class="opacity-70 mb-2">
-      <%= t('platform_revenue_last_month') %>
+
+    <div class="text-center p-4 bg-[#F4F4F4] rounded mb-2">
+      <div class="text-2xl font-bold mb-2">
+        $<%= Transfer.stats['platform_revenue_last_month'] %>
+      </div>
+      <div class="opacity-70 text-sm">
+        <%= t('platform_revenue_last_month') %>
+      </div>
     </div>
-    <div class="text-2xl font-bold">
-      $<%= Transfer.stats['platform_revenue_last_month'] %>
-    </div>
-  </div>
-  <div class="text-center p-2">
-    <div class="opacity-70 mb-2">
-      <%= t('platform_revenue_this_month') %>
-    </div>
-    <div class="text-2xl font-bold">
-      $<%= Transfer.stats['platform_revenue_this_month'] %>
+
+    <div class="text-center p-4 bg-[#F4F4F4] rounded mb-2">
+      <div class="text-2xl font-bold mb-2">
+        $<%= Transfer.stats['platform_revenue_this_month'] %>
+      </div>
+      <div class="opacity-70 text-sm">
+        <%= t('platform_revenue_this_month') %>
+      </div>
     </div>
   </div>
 <% end %>

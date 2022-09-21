@@ -1,14 +1,18 @@
 <%= turbo_frame_tag "transfers" do %>
   <div data-controller="infinite-scroll">
-    <div id="transfers_list">
-      <% if @transfers.blank? %>
-        <div class="text-center py-2 opacity-50">
-          <%= t("no_record") %>
+    <% if @transfers.blank? %>
+      <div class="text-center py-2 opacity-50">
+        <%= t("no_record") %>
+      </div>
+    <% else %>
+      <div class="overflow-x-auto">
+        <div class="table table-auto w-full">
+          <div id="transfers_list" class="table-row-group">
+            <%= render partial: "transfers/transfer", collection: @transfers, as: :transfer %>
+          </div>
         </div>
-      <% else %>
-        <%= render partial: "transfers/transfer", collection: @transfers, as: :transfer %>
-      <% end %>
-    </div>
+      </div>
+    <% end %>
     <div data-infinite-scroll-target='scrollArea'></div>
 
     <%= render partial: "shared/pagination", locals: { pagy: @pagy } %>
