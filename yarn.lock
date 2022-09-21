@@ -482,10 +482,10 @@
     lodash.merge "^4.6.2"
     postcss-selector-parser "6.0.10"
 
-"@tiptap/core@^2.0.0-beta.195":
-  version "2.0.0-beta.195"
-  resolved "https://registry.yarnpkg.com/@tiptap/core/-/core-2.0.0-beta.195.tgz#a64480e4dca1a9bc7aea3be4acccc71e535da4fe"
-  integrity sha512-swKhXpNrvAAg3FphmUb5mR4Dz96cuTlv0HArAB+xB2m0FzLxy3QBPgLQyju4me6IJOrqJtBZ57trgF6JP+ZW0g==
+"@tiptap/core@^2.0.0-beta.195", "@tiptap/core@^2.0.0-beta.196":
+  version "2.0.0-beta.196"
+  resolved "https://registry.yarnpkg.com/@tiptap/core/-/core-2.0.0-beta.196.tgz#d87e27494b021235736382c388b5e3ad20a4a7dc"
+  integrity sha512-OMpWex+xDsBgVjyq1j2HJqi/fdvO05xOJhPX7MlPp3SKsP12VLsSFJlVjW5doMrYuFSj31JdEqBQ8ERyEjVbGA==
   dependencies:
     prosemirror-commands "1.3.0"
     prosemirror-keymap "1.2.0"
