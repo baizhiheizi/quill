@@ -1,3 +1,9 @@
-<div class="max-w-4xl prose dark:prose-invert xl:prose-lg mx-auto bg-white dark:bg-zinc-900 p-4 sm:p-6 sm:rounded">
+<div class="prose-article">
   <%= MarkdownRenderService.call(t('rules_content'), type: :full).html_safe %>
 </div>
+
+<%= content_for :sidebar do %>
+  <%= turbo_frame_tag 'active_authors', src: '/active_authors', loading: :lazy %>
+  <%= turbo_frame_tag 'hot_tags', src: '/hot_tags', loading: :lazy %>
+  <%= render "shared/footer" %>
+<% end %>
