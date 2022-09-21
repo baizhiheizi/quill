@@ -2,4 +2,5 @@
 
 class ApplicationComponent < ViewComponent::Base
   include Turbo::FramesHelper
+  include Pagy::Frontend
 end

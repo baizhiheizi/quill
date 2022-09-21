@@ -2,7 +2,9 @@
   <%= render "search/form" %>
 </div>
 <%= render "articles/filter_bar", filter: @filter, time_range: @time_range %>
-<%= render Articles::ListComponent.new articles: @articles, pagy: @pagy %>
+<%= turbo_frame_tag "articles" do %>
+  <%= render Articles::ListComponent.new articles: @articles, pagy: @pagy %>
+<% end %>
 
 <%= content_for :sidebar do %>
   <% if @tag.present? %>

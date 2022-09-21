@@ -1,16 +1,14 @@
-<%= turbo_frame_tag 'articles' do %>
-  <div data-controller="infinite-scroll">
-    <div id="articles_list">
-      <% if @articles.blank? %>
-        <div class="text-center py-2 opacity-50">
-          <%= t("no_record") %>
-        </div>
-      <% else %>
-        <%= render Articles::CardComponent.with_collection(@articles) %>
-      <% end %>
-    </div>
-    <div data-infinite-scroll-target='scrollArea'></div>
-
-    <%= render partial: "shared/pagination", locals: { pagy: @pagy, id: "articles_pagination" } %>
+<div data-controller="infinite-scroll">
+  <div id="articles_list">
+    <% if @articles.blank? %>
+      <div class="text-center py-2 opacity-50">
+        <%= t("no_record") %>
+      </div>
+    <% else %>
+      <%= render Articles::CardComponent.with_collection(@articles) %>
+    <% end %>
   </div>
-<% end %>
+  <div data-infinite-scroll-target='scrollArea'></div>
+
+  <%= render "shared/pagination", pagy: @pagy, id: @pagy_id %>
+</div>

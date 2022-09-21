@@ -1,6 +1,6 @@
 <%= turbo_stream.append "articles_list" do %>
-  <%= render partial: "articles/article_card", collection: @articles, as: :article %>
+  <%= render Articles::CardComponent.with_collection(@articles) %>
 <% end %>
 <%= turbo_stream.update "articles_pagination" do %>
-  <%= render partial: "shared/pagination", locals: { pagy: @pagy, id: "articles_pagination" } %>
+  <%= render "shared/pagination", pagy: @pagy, id: "articles_pagination" %>
 <% end %>

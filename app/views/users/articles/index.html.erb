@@ -1,15 +1,3 @@
 <%= turbo_frame_tag "#{dom_id @user}_articles_#{@tab}", target: "_top" do %>
-  <div data-controller="infinite-scroll">
-    <div id="<%= dom_id @user %>_articles_<%= @tab %>_list">
-      <% if @articles.blank? %>
-        <div class="text-center py-2 opacity-50">
-          <%= t("no_record") %>
-        </div>
-      <% else %>
-        <%= render partial: "articles/article_card", collection: @articles, as: :article %>
-      <% end %>
-    </div>
-    <div data-infinite-scroll-target='scrollArea'></div>
-    <%= render partial: "shared/pagination", locals: { pagy: @pagy, id: "#{dom_id @user}_articles_#{@tab}_pagination" } %>
-  </div>
+  <%= render Articles::ListComponent.new articles: @articles, pagy: @pagy, pagy_id: "#{dom_id @user}_articles_#{@tab}_pagination" %>
 <% end %>
