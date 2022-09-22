@@ -1,4 +1,4 @@
-<div class="lg:min-h-screen lg:border-r">
+<div class="lg:min-h-screen lg:border-r dark:border-white dark:border-opacity-5">
   <nav class="hidden lg:block h-full w-28">
     <div class="sticky top-0 h-screen flex flex-col justify-between">
       <%= link_to root_path, class: 'py-8' do %>
@@ -7,36 +7,45 @@
 
       <div class="mb-8">
         <%= link_to articles_path, class: "block py-4" do %>
-          <%= inline_svg_tag 'icons/home.svg', class: "w-6 h-6 mx-auto" %>
+          <%= inline_svg_tag 'icons/home.svg', class: "w-6 h-6 mx-auto text-opacity-60 text-[#222222] dark:text-[#80808E]" %>
         <% end %>
 
         <% if current_user.present? %>
           <%= link_to dashboard_notifications_path, class: "block py-6" do %>
-            <%= inline_svg_tag 'icons/bell.svg', class: "w-6 h-6 mx-auto" %>
+            <%= inline_svg_tag 'icons/bell.svg', class: "w-6 h-6 mx-auto text-opacity-60 text-[#222222] dark:text-[#80808E]" %>
           <% end %>
           <%= link_to dashboard_articles_path, class: "block py-6" do %>
-            <%= inline_svg_tag 'icons/article.svg', class: "w-6 h-6 mx-auto" %>
+            <%= inline_svg_tag 'icons/article.svg', class: "w-6 h-6 mx-auto text-opacity-60 text-[#222222] dark:text-[#80808E]" %>
           <% end %>
           <%= link_to new_article_path, class: "block py-6" do %>
-            <%= inline_svg_tag 'icons/write.svg', class: "w-6 h-6 mx-auto" %>
+            <%= inline_svg_tag 'icons/write.svg', class: "w-6 h-6 mx-auto text-opacity-60 text-[#222222] dark:text-[#80808E]" %>
           <% end %>
         <% else %>
           <%= link_to login_path, data: { turbo_frame: :modal }, class: "block py-6" do %>
-            <%= inline_svg_tag 'icons/write.svg', class: "w-6 h-6 mx-auto" %>
+            <%= inline_svg_tag 'icons/write.svg', class: "w-6 h-6 mx-auto text-opacity-60 text-[#222222] dark:text-[#80808E]" %>
           <% end %>
         <% end %>
       </div>
 
       <div class="">
-        <%= render DropdownComponent.new class: 'flex justify-center' do |c| %>
+        <%= render DropdownComponent.new class: 'flex justify-center py-6' do |c| %>
           <% c.with_button do %>
-            <%= inline_svg_tag 'icons/global.svg', class: "w-6 h-6 mx-auto" %>
+            <%= inline_svg_tag 'icons/global.svg', class: "w-6 h-6 mx-auto text-opacity-60 text-[#222222] dark:text-[#80808E]" %>
           <% end %>
           <div class="block">
             <%= link_to 'English', '/en', class: "block py-2 px-4" %>
             <%= link_to '中文', '/zh-CN', class: "block py-2 px-4" %>
           </div>
         <% end %>
+
+        <div class="flex justify-center" data-controller="darkmode">
+          <a class="hidden py-6 block cursor-pointer" data-darkmode-target="lightButton" data-action="darkmode#toggle">
+            <%= inline_svg_tag 'icons/moon.svg', class: "w-6 h-6 text-opacity-60 text-[#222222] dark:text-[#80808E]" %>
+          </a>
+          <a class="hidden py-6 block cursor-pointer" data-darkmode-target="darkButton" data-action="darkmode#toggle">
+            <%= inline_svg_tag 'icons/sun.svg', class: "w-6 h-6 text-opacity-60 text-[#222222] dark:text-[#80808E]" %>
+          </a>
+        </div>
       </div>
 
       <div class="h-28 flex justify-center">

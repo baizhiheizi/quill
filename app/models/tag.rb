@@ -14,9 +14,6 @@
 #
 
 class Tag < ApplicationRecord
-  COLORS = %w[#CC6767 #8686BF #E19B64 #5CADD1 #B688C6 #71A6E8].freeze
-  BG_COLORS = %w[#FFE9E9 #EFEFFF #FFF1E6 #EEF7FB #F7ECFB #E4F1FF].freeze
-
   has_many :taggings, dependent: :nullify
   has_many :articles, through: :taggings, dependent: :nullify
 
@@ -39,14 +36,6 @@ class Tag < ApplicationRecord
         SQL
       ).order(lately_article_count: :desc, created_at: :desc)
   }
-
-  def color
-    @color ||= COLORS[id % COLORS.size]
-  end
-
-  def bg_color
-    @bg_color ||= BG_COLORS[id % BG_COLORS.size]
-  end
 
   def update_locale
     update locale: detect_locale

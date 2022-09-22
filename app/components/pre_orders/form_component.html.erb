@@ -8,7 +8,7 @@
   data-pre-orders-form-component-amount-value="<%= @price %>"
   data-pre-orders-form-component-price-usd-value="<%= @article.currency.price_usd %>">
 
-  <div class="bg-zinc-50 px-4 py-2 rounded mb-4 dark:bg-zinc-800 hidden sm:block">
+  <div class="bg-zinc-50 px-4 py-2 rounded mb-4 dark:bg-[#333444] hidden sm:block">
     <div class="flex items-center space-x-2 mb-1">
       <%= image_tag @article.author.avatar, class: "w-6 h-6 rounded-full", lazy: true %>
       <span class="text-sm"><%= @article.author.short_name %></span>
@@ -28,7 +28,7 @@
           data-pre-orders-form-component-target="amountOption"
           data-pre-orders-form-component-amount-param="<%= number * @article.currency.minimal_reward_amount %>"
           data-action="click->pre-orders-form-component#updateAmount"
-          class="relative cursor-pointer flex items-center space-x-2 justify-center border border-zinc-200 p-1 rounded">
+          class="relative cursor-pointer flex items-center space-x-2 justify-center border border-zinc-200 dark:border-zinc-600 p-1 rounded">
           <span class="text-sm sm:text-base">
             <%= sprintf('%.8f', @article.currency.minimal_reward_amount * number).gsub(/0+\z/, '0') %>
           </span>

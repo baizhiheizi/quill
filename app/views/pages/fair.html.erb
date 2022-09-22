@@ -1,3 +1,7 @@
+<div class="mb-12 hidden sm:block">
+  <%= render "search/form" %>
+</div>
+
 <div class="mb-12">
   <%= turbo_frame_tag 'transfers_stats', src: 'transfers/stats' do %>
     <%= render 'shared/loading' %>

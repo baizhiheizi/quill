@@ -2,17 +2,43 @@
 @import 'photoswipe';
 @import 'tom-select/dist/css/tom-select';
 @import 'tippy.js/dist/tippy.css';
+@import 'tippy.js/themes/light.css';
+@import 'tippy.js/themes/light-border.css';
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer utilities {
+  .tag-style-0 {
+    @apply text-[#CC6767] bg-[#FFE9E9] dark:bg-[#372A2A] rounded;
+  }
+
+  .tag-style-1 {
+    @apply text-[#8686BF] bg-[#EFEFFF] dark:bg-[#363644] rounded;
+  }
+
+  .tag-style-2 {
+    @apply text-[#E19B64] bg-[#FFF1E6] dark:bg-[#433C37] rounded;
+  }
+
+  .tag-style-3 {
+    @apply text-[#5CADD1] bg-[#EEF7FB] dark:bg-[#2F3639] rounded;
+  }
+
+  .tag-style-4 {
+    @apply text-[#B688C6] bg-[#F7ECFB] dark:bg-[#3B353D] rounded;
+  }
+
+  .tag-style-5 {
+    @apply text-[#71A6E8] bg-[#E4F1FF] dark:bg-[#2B333C] rounded;
+  }
+
   .prose-article {
     @apply prose dark:prose-invert prose-blockquote:border-primary prose-img:rounded-lg prose-img:shadow-md prose-img:mx-auto prose-pre:bg-zinc-100 prose-pre:text-black dark:prose-pre:bg-zinc-800 dark:prose-pre:text-zinc-100 dark:prose-code:bg-zinc-800 xl:prose-lg mx-auto break-words max-w-none;
   }
   .prose-comment {
-    @apply prose prose-sm prose-h1:text-base prose-h1:m-0 prose-h2:text-base prose-h2:m-0 prose-h3:text-base prose-h3:m-0 prose-h4:m-0 prose-blockquote:border-[#B1B6C6] prose-blockquote:pl-2 prose-blockquote:my-4 mb-2 dark:prose-invert max-w-none;
+    @apply prose prose-sm prose-h1:text-base prose-h1:m-0 prose-h2:text-base prose-h2:m-0 prose-h3:text-base prose-h3:m-0 prose-h4:m-0 prose-blockquote:border-[#B1B6C6] prose-blockquote:dark:border-[#80808E] prose-blockquote:pl-2 prose-blockquote:my-4 mb-2 dark:prose-invert max-w-none;
   }
 }
 

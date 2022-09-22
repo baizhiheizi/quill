@@ -1,8 +1,8 @@
 <div class="mb-16">
   <div class="mb-6">
     <span
-      style="word-break:keep-all;color:<%= tag.color %>;background-color:<%= tag.bg_color %>;"
-      class="text-lg h-8 my-2 mr-4 px-2 py-1 max-w-[6rem] truncate rounded">
+      style="word-break:keep-all"
+      class="text-lg h-8 my-2 mr-4 px-2 py-1 max-w-[6rem] truncate rounded tag-style-<%= tag.id % 6 %>">
       <%= tag.name %>
     </span>
   </div>

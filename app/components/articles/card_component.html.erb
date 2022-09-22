@@ -1,4 +1,4 @@
-<div class="pt-8 pb-4 border-b">
+<div class="pt-8 pb-4 border-b dark:border-white dark:border-opacity-10">
   <div class="flex items-center justify-between mb-4">
     <div class="flex items-center space-x-2">
       <%= image_tag @article.author.avatar, class: 'w-7 h-7 rounded-full' %>
@@ -54,8 +54,8 @@
             controller: 'prefetch',
           turbo_frame: "_top"
           }, 
-          class: "px-2 py-1 text-sm min-w-max rounded", 
-          style: "word-break:keep-all;color:#{tag.color};background-color:#{tag.bg_color};" do %>
+          class: "px-2 py-1 text-sm min-w-max rounded tag-style-#{tag.id % 6}", 
+          style: "word-break:keep-all;" do %>
           <%= tag.name %>
         <% end %>
       <% end %>
