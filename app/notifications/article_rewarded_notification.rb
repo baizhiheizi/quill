@@ -14,7 +14,7 @@ class ArticleRewardedNotification < ApplicationNotification
 
   def data
     {
-      icon_url: order.buyer.avatar,
+      icon_url: icon_url,
       title: order.article.title.truncate(36),
       description: description,
       action: url
@@ -31,6 +31,10 @@ class ArticleRewardedNotification < ApplicationNotification
 
   def url
     user_article_url article.author, article.uuid
+  end
+
+  def icon_url
+    order.buyer.avatar
   end
 
   def web_notification_enabled?

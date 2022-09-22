@@ -25,9 +25,6 @@
             <%= inline_svg_tag 'icons/write.svg', class: "w-6 h-6 mx-auto text-opacity-60 text-[#222222] dark:text-[#80808E]" %>
           <% end %>
         <% end %>
-      </div>
-
-      <div class="">
         <%= render DropdownComponent.new class: 'flex justify-center py-6' do |c| %>
           <% c.with_button do %>
             <%= inline_svg_tag 'icons/global.svg', class: "w-6 h-6 mx-auto text-opacity-60 text-[#222222] dark:text-[#80808E]" %>
@@ -62,6 +59,10 @@
                   },
                 class: "block py-2 px-4" %>
             </div>
+          <% end %>
+        <% else %>
+          <%= link_to login_path, data: { turbo_frame: :modal }, class: "block py-6" do %>
+            <%= inline_svg_tag 'icons/user.svg', class: "w-6 h-6 mx-auto text-opacity-60 text-[#222222] dark:text-[#80808E]" %>
           <% end %>
         <% end %>
       </div>

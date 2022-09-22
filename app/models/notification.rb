@@ -44,4 +44,10 @@ class Notification < ApplicationRecord
   rescue StandardError
     ''
   end
+
+  def icon_url
+    @icon_url ||= to_notification.icon_url
+  rescue StandardError
+    ''
+  end
 end

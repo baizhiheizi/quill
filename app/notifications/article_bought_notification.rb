@@ -14,7 +14,7 @@ class ArticleBoughtNotification < ApplicationNotification
 
   def data
     {
-      icon_url: order.buyer.avatar,
+      icon_url: icon_url,
       title: order.article.title.truncate(36),
       description: description,
       action: url
@@ -26,7 +26,11 @@ class ArticleBoughtNotification < ApplicationNotification
   end
 
   def message
-    [order.buyer.name, t('.bought'), order.article.title].join(' ')
+    [order.buyer.name, t('.bought'), ':', order.article.title].join(' ')
+  end
+
+  def icon_url
+    order.buyer.avatar
   end
 
   def url

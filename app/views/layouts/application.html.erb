@@ -58,7 +58,13 @@
 
         <aside class="relative hidden xl:block w-96 p-8 border-l min-h-screen dark:border-white dark:border-opacity-10">
           <div class="sticky top-8">
-            <%= yield :sidebar %>
+            <% if content_for? :sidebar %>
+              <%= yield :sidebar %>
+            <% else %>
+              <%= turbo_frame_tag 'active_authors', src: '/active_authors', loading: :lazy %>
+              <%= turbo_frame_tag 'hot_tags', src: '/hot_tags', loading: :lazy %>
+              <%= render "shared/footer" %>
+            <% end %>
           </div>
         </aside>
       </main>

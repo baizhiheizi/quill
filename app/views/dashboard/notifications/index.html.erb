@@ -1,32 +1,35 @@
-<div class="p-4">
-  <div class="flex items-center space-x-4  justify-end mb-4">
+<div class="flex items-center justify-between mb-8">
+  <div class="text-xl font-bold">
+    <%= t('notification') %>
+  </div>
+
+  <div class="flex items-center space-x-4 justify-end">
     <%= link_to t("read_all"), 
       new_dashboard_read_notification_path, 
       data: { 
         turbo_frame: :modal,
       }, 
-      class: "cursor-pointer bg-primary hover:scale-105 rounded px-4 py-1 text-white" %>
+      class: "cursor-pointer rounded-full px-4 py-1 text-primary hover:bg-primary hover:text-white" %>
 
     <%= link_to t("clear_all"), 
       new_dashboard_deleted_notification_path, 
       data: { 
         turbo_frame: :modal,
       }, 
-      class: "cursor-pointer bg-primary hover:scale-105 rounded px-4 py-1 text-white" %>
-
+      class: "cursor-pointer rounded-full px-4 py-1 text-primary hover:bg-primary hover:text-white" %>
   </div>
-  <div data-controller="infinite-scroll">
-    <div id="<%= dom_id current_user %>_notifications_list">
-      <% if @notifications.blank? %>
-        <div class="text-center py-2 opacity-50">
-          <%= t("no_record") %>
-        </div>
-      <% else %>
-        <%= render partial: "dashboard/notifications/notification", collection: @notifications, as: :notification %>
-      <% end %>
-    </div>
-    <div data-infinite-scroll-target='scrollArea'></div>
-
-    <%= render partial: "shared/pagination", locals: { pagy: @pagy } %>
+</div>
+<div data-controller="infinite-scroll">
+  <div id="<%= dom_id current_user %>_notifications_list">
+    <% if @notifications.blank? %>
+      <div class="text-center py-2 opacity-50">
+        <%= t("no_record") %>
+      </div>
+    <% else %>
+      <%= render partial: "dashboard/notifications/notification", collection: @notifications, as: :notification %>
+    <% end %>
   </div>
+  <div data-infinite-scroll-target='scrollArea'></div>
+
+  <%= render partial: "shared/pagination", locals: { pagy: @pagy } %>
 </div>

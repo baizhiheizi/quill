@@ -18,7 +18,7 @@ namespace :dashboard do
   resources :orders, only: %i[index]
   resources :payments, only: %i[index]
   resources :swap_orders, only: %i[index]
-  resources :notifications, only: %i[index]
+  resources :notifications, only: %i[index show]
 
   resources :read_notifications, only: %i[new create update]
   resources :deleted_notifications, only: %i[new create]
