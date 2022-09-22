@@ -25,7 +25,7 @@ class TransferProcessedNotification < ApplicationNotification
 
   def data
     {
-      icon_url: params[:transfer].currency.icon_url,
+      icon_url: icon_url,
       title: format('%.8f', params[:transfer].amount),
       description: params[:transfer].currency.symbol,
       action: "mixin://snapshots?trace=#{params[:transfer].trace_id}",
@@ -35,6 +35,10 @@ class TransferProcessedNotification < ApplicationNotification
 
   def message
     [t('.received'), params[:transfer].price_tag, transfer_type].join(' ')
+  end
+
+  def icon_url
+    params[:transfer].currency.icon_url
   end
 
   def url

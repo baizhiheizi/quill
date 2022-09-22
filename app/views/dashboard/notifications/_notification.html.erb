@@ -1,17 +1,24 @@
-<div class="flex flex-wrap sm:flex-nowrap items-center space-x-4 py-2">
-  <div id="<%= dom_id notification %>" class="truncate <%= notification.read? ? 'opacity-70' : 'text-primary' %>">
-    <%= link_to notification.message, dashboard_read_notification_path(notification), class: "truncate", data: { turbo_frame: "_top", turbo_method: :put } %>
+<% if notification.message.present? %>
+  <div id="<%= dom_id notification %>" class="flex items-center space-x-4">
+    <div class="w-2 h-2 rounded-full <%= notification.read? ? '' : 'bg-primary' %>">
+    </div>
+
+    <div class="flex-1 flex items-center py-4 border-b overflow-x-scroll scrollbar-hide">
+      <div class="flex itemx-center space-x-2 truncate">
+        <%= image_tag notification.icon_url, class: "w-6 h-6 rounded-full" if notification.icon_url.present? %>
+        <%= link_to notification.message, 
+          dashboard_notification_path(notification), 
+          class: "truncate", 
+          data: { 
+            turbo_frame: "_top"
+          } %>
+      </div>
+
+      <div class="flex-1 text-right text-sm opacity-70 ml-4 min-w-max">
+        <%= render TimeFormatComponent.new datetime: notification.created_at.rfc3339 do %>
+          <%= notification.created_at.strftime("%Y-%m-%d %H:%M") %>
+        <% end %>
+      </div>
+    </div>
   </div>
-  <div class="text-sm">
-    <% if notification.url.present? %>
-      <%= link_to notification.url, class: "cursor-pointer bg-white text-primary", target: "_blank", data: { turbo_frame: "_top" } do %>
-        <%= render "shared/icons/link", html_class: "w-4 h-4" %>
-      <% end %>
-    <% end %>
-  </div>
-  <div class="flex-1 text-right text-sm opacity-70">
-    <%= render TimeFormatComponent.new datetime: notification.created_at.rfc3339 do %>
-      <%= notification.created_at.strftime("%Y-%m-%d %H:%M") %>
-    <% end %>
-  </div>
-</div>
+<% end %>

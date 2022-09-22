@@ -12,7 +12,7 @@ class ArticlePublishedNotification < ApplicationNotification
 
   def data
     {
-      icon_url: article.author.avatar,
+      icon_url: icon_url,
       title: article.title.truncate(36),
       description: description,
       action: url
@@ -24,11 +24,15 @@ class ArticlePublishedNotification < ApplicationNotification
   end
 
   def message
-    [article.author.name, t('.published'), params[:article].title].join(' ')
+    [article.author.name, t('.published'), ':', params[:article].title].join(' ')
   end
 
   def url
     user_article_url article.author, article.uuid
+  end
+
+  def icon_url
+    article.author.avatar
   end
 
   def web_notification_enabled?

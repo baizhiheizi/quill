@@ -14,7 +14,7 @@ class CommentCreatedNotification < ApplicationNotification
 
   def data
     {
-      icon_url: comment.author.avatar,
+      icon_url: icon_url,
       title: comment.content.gsub(/^(>\s)+(.)*$/, '').strip.truncate(36),
       description: description.truncate(25),
       action: url
@@ -27,6 +27,10 @@ class CommentCreatedNotification < ApplicationNotification
 
   def message
     [comment.author.name, t('.commented'), commentable.title].join(' ')
+  end
+
+  def icon_url
+    comment.author.avatar
   end
 
   def url

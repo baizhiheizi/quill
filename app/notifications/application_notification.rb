@@ -17,6 +17,9 @@ class ApplicationNotification < Noticed::Base
   def url
   end
 
+  def icon_url
+  end
+
   def format_for_action_cable
     message
   end
