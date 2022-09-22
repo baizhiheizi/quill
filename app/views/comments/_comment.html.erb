@@ -19,7 +19,7 @@
       <% if comment.quote_comment.present? %>
         <div class="max-h-48 sm:max-h-full overflow-y-scroll scrollbar-hide">
           <blockquote>
-            <div class="bg-[#F4F4F4] px-4 py-3 rounded">
+            <div class="bg-[#F4F4F4] dark:bg-[#333444] px-4 py-3 rounded">
               <div class="truncate flex items-center">
                 <%= link_to "@#{comment.quote_comment.author.short_name}", 
                   user_path(comment.quote_comment.author), 

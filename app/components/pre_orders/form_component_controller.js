@@ -36,12 +36,10 @@ export default class extends Controller {
     this.amountOptionTargets.forEach((target) => {
       const amount = target.dataset.preOrdersFormComponentAmountParam;
       if (amount == this.amountValue) {
-        target.classList.add('border-2', 'border-primary');
-        target.classList.remove('border-zinc-200');
+        target.classList.add('border-2', '!border-primary');
         target.querySelector('.checkmark').classList.remove('hidden');
       } else {
-        target.classList.remove('border-2', 'border-primary');
-        target.classList.add('border-zinc-200');
+        target.classList.remove('border-2', '!border-primary');
         target.querySelector('.checkmark').classList.add('hidden');
       }
     });

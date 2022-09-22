@@ -29,10 +29,14 @@
 </div>
 
 <% if article.tags.present? %>
-  <div class="flex items-center flex-wrap mb-4">
+  <div class="flex items-center flex-wrap space-x-4 mb-4">
     <% article.tags.each do |tag| %>
-      <%= link_to articles_path(tag: tag.name), data: { controller: 'prefetch' }, class: "px-2 py-1 text-sm hover:bg-zinc-200 dark:hover:bg-zinc-700 font-bold" do %>
-        <span style="color:<%= tag.color %>">#</span><%= tag.name %>
+      <%= link_to articles_path(tag: tag.name), 
+        data: { 
+          controller: 'prefetch' 
+        }, 
+        class: "px-2 py-1 text-sm tag-style-#{tag.id % 6}" do %>
+        <%= tag.name %>
       <% end %>
     <% end %>
   </div>
@@ -47,6 +51,6 @@
   </span>
 </div>
 
-<div class="py-2 px-4 bg-zinc-100 dark:bg-zinc-800 rounded break-words">
+<div class="py-2 px-4 bg-zinc-100 dark:bg-[#444655] rounded break-words">
   <%= article.intro %>
 </div>

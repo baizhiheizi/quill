@@ -6,6 +6,7 @@ export default class extends Controller {
 
   connect() {
     tippy(this.buttonTarget, {
+      theme: 'light-border',
       content: this.contentTarget.innerHTML,
       trigger: 'click',
       allowHTML: true,

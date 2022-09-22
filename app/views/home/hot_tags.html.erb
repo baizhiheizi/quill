@@ -14,8 +14,8 @@
                 controller: 'prefetch', 
                 turbo_frame: '_top' 
               }, 
-              style: "word-break:keep-all;color:#{tag.color};background-color:#{tag.bg_color};",
-              class: "h-8 my-2 mr-4 px-2 py-1 max-w-[6rem] truncate rounded" 
+              style: "word-break:keep-all",
+              class: "h-8 my-2 mr-4 px-2 py-1 max-w-[6rem] truncate rounded tag-style-#{tag.id % 6}" 
             %>
           <% end %>
         </div>
@@ -28,8 +28,8 @@
                 controller: 'prefetch', 
                 turbo_frame: '_top' 
               }, 
-              style: "word-break:keep-all;color:#{tag.color};background-color:#{tag.bg_color};",
-              class: "h-8 my-2 mr-4 px-2 py-1 truncate rounded" 
+              style: "word-break:keep-all",
+              class: "h-8 my-2 mr-4 px-2 py-1 truncate rounded tag-style-#{tag.id % 6}" 
             %>
             <div class="text-sm min-w-max">
               <%= render "subscribe_tags/subscribe_button", tag: tag %>
@@ -38,5 +38,9 @@
         <% end %>
       <% end %>
     </div>
+    <template>
+      <div class="hidden tag-style-0 tag-style-1 tag-style-2 tag-style-3 tag-style-4 tag-style-5">
+      </div>
+    </template>
   <% end %>
 <% end %>

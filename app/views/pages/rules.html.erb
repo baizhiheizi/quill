@@ -1,3 +1,7 @@
+<div class="mb-12 hidden sm:block">
+  <%= render "search/form" %>
+</div>
+
 <div class="prose-article">
   <%= MarkdownRenderService.call(t('rules_content'), type: :full).html_safe %>
 </div>

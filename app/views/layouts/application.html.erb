@@ -45,7 +45,7 @@
         data-session-provider-value="<%= current_session&.info&.[]('provider') %>"
         data-session-address-value="<%= current_session&.user&.uid %>"
         data-session-uuid-value="<%= current_session&.uuid %>" 
-        class="min-h-screen flex justify-center bg-white dark:bg-zinc-900 dark:text-zinc-50">
+        class="min-h-screen flex justify-center bg-white dark:bg-[#1D1E2B] dark:text-[white]">
     <div class="w-full max-w-full lg:w-auto lg:flex">
       <%= render 'shared/nav' %>
 
@@ -56,7 +56,7 @@
           </div>
         </div>
 
-        <aside class="relative hidden xl:block w-96 p-8 border-l min-h-screen">
+        <aside class="relative hidden xl:block w-96 p-8 border-l min-h-screen dark:border-white dark:border-opacity-10">
           <div class="sticky top-8">
             <%= yield :sidebar %>
           </div>
