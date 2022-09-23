@@ -1,7 +1,10 @@
 # frozen_string_literal: true
 
 namespace :dashboard do
-  resources :settings, only: %i[index]
+  root to: 'home#index'
+  get :settings, to: 'home#settings'
+  get :readings, to: 'home#readings'
+  get :authorings, to: 'home#authorings'
 
   resources :articles, only: %i[index show], param: :uuid
   resources :published_articles, param: :uuid, only: %i[new update destroy]
@@ -31,5 +34,4 @@ namespace :dashboard do
   resource :destination, only: %i[show] do
     get :deposit
   end
-  root to: 'home#index'
 end

@@ -41,7 +41,14 @@ zh-CN:
   help: 帮助
   community: 社区
   open_source: 开源
+  language: 语言
+  dark_mode: 暗黑模式
+  light_mode: 明亮模式
   dashboard: 管理中心
+  my_reading: 我的阅读
+  my_authoring: 我的写作
+  my_comments: 我的评论
+  my_orders: 我的订单
   profile_page: 个人主页
   login: 登录
   logout: 登出

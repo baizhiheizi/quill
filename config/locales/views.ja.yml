@@ -41,7 +41,14 @@ ja:
   twitter: Twitter
   community: コミュニティ
   open_source: オープンソース
+  language: Language
+  dark_mode: Dark Mode
+  light_mode: Light Mode
   dashboard: ダッシュボード
+  my_reading: My Reading
+  my_authoring: My Reading
+  my_comments: My Comments
+  my_orders: My Orders
   profile_page: Profile
   login: ログイン
   logout: ログアウト

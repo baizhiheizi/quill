@@ -43,7 +43,8 @@ class CommentsController < ApplicationController
   private
 
   def load_article
-    @article = Article.only_published.find_by uuid: params[:article_uuid] if params[:article_uuid].present?
+    article = Article.without_drafted.find_by uuid: params[:article_uuid]
+    @article = article if article&.published? || article&.authorized?(current_user)
   end
 
   def comment_params

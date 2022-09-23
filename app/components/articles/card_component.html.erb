@@ -34,8 +34,8 @@
       turbo_frame: "_top"
     },
     class: "flex items-start max-h-28 space-x-4 mb-6" do %>
-    <div class="flex-1 h-full">
-      <div class="truncate font-bold text-xl mb-3">
+    <div class="flex-1 h-ful max-w-full">
+      <div class="truncate overflow-hidden font-bold text-xl mb-3">
         <%= @article.title %>
       </div>
       <div class="text-base break-words text-ellipsis overflow-hidden line-clamp-3 text-[#222222] text-opacity-80"> <%= @article.intro %>

@@ -1,15 +1,17 @@
 <%= turbo_frame_tag "#{dom_id current_user}_swap_orders" do %>
   <div data-controller="infinite-scroll">
-    <div id="<%= dom_id current_user %>_swap_orders_list">
-      <% if @swap_orders.blank? %>
-        <div class="text-center py-2 opacity-50">
-          <%= t("no_record") %>
+    <% if @swap_orders.blank? %>
+      <%= render EmptyComponent.new text: t('no_record') %>
+    <% else %>
+      <div class="overflow-x-auto">
+        <div class="table table-auto w-full">
+          <div id="<%= dom_id current_user %>_swap_orders_list" class="table-row-group">
+            <%= render partial: "dashboard/swap_orders/swap_order", collection: @swap_orders, as: :swap_order %>
+          </div>
         </div>
-      <% else %>
-        <%= render partial: "dashboard/swap_orders/swap_order", collection: @swap_orders, as: :swap_order %>
-      <% end %>
-    </div>
-    <div data-infinite-scroll-target='scrollArea'></div>
-    <%= render partial: "shared/pagination", locals: { pagy: @pagy, id: "#{dom_id current_user}_swap_orders_pagination" } %>
+      </div>
+      <div data-infinite-scroll-target='scrollArea'></div>
+      <%= render partial: "shared/pagination", locals: { pagy: @pagy, id: "#{dom_id current_user}_swap_orders_pagination" } %>
+    <% end %>
   </div>
-<% end %>>
+<% end %>

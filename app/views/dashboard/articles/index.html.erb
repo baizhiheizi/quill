@@ -1,64 +1,30 @@
-<div class="pt-4"
-  data-controller="tabs"
-  data-tabs-active-tab-value="<%= @tab %>"
-  data-tabs-active-class-value="border-b-2">
-  <div class="w-full flex overflow-auto flex-nowrap scrollbar-hide items-center flex px-4 mb-4">
-    <%= link_to t('drafted'), 
-      dashboard_articles_path(tab: :drafted),
-      class: "cursor-pointer py-1 px-4 border-primary opacity-70 min-w-fit",
-      data: {
-        tabs_target: "tab",
-        tabs_tabname_param: "drafted" 
-      } %>
-    <%= link_to t('published'), 
-      dashboard_articles_path(tab: :published),
-      class: "cursor-pointer py-1 px-4 border-primary opacity-70 min-w-fit",
-      data: {
-        tabs_target: "tab",
-        tabs_tabname_param: "published" 
-      } %>
-    <%= link_to t('bought'), 
-      dashboard_articles_path(tab: :bought),
-      class: "cursor-pointer py-1 px-4 border-primary opacity-70 min-w-fit",
-      data: {
-        tabs_target: "tab",
-        tabs_tabname_param: "bought" 
-      } %>
-    <%= link_to t('hidden'), 
-      dashboard_articles_path(tab: :hidden),
-      class: "cursor-pointer py-1 px-4 border-primary opacity-70 min-w-fit",
-      data: {
-        tabs_target: "tab",
-        tabs_tabname_param: "hidden" 
-      } %>
-  </div>
-</div>
-
-<div data-controller="infinite-scroll">
-  <div id="<%= dom_id current_user %>_articles_list">
-    <% if @articles.blank? %>
-      <div class="text-center py-2 opacity-50">
-        <%= t("no_record") %>
-      </div>
-      <div class="flex justify-center p-4">
-        <%= link_to t('write'), new_article_path, class: "px-4 py-2 bg-primary hover:scale-105 rounded text-white text-lg font-bold" %>
-      </div>
-    <% else %>
-      <% case @tab %>
-      <% when 'drafted' %>
-        <%= render partial: "dashboard/articles/drafted_article", collection: @articles, as: :article %>
-        <div class="flex justify-center p-4">
-          <%= link_to t('write'), new_article_path, class: "px-4 py-2 bg-primary hover:scale-105 rounded text-white text-lg font-bold" %>
+<%= turbo_frame_tag "my_#{@tab}_articles" do %>
+  <div data-controller="infinite-scroll">
+    <div id="my_<%= @tab %>_articles_list">
+      <% if @articles.blank? %>
+        <div class="text-center py-2 opacity-50">
+          <%= t("no_record") %>
         </div>
-      <% when 'published' %>
-        <%= render partial: "dashboard/articles/published_article", collection: @articles, as: :article %>
-      <% when 'bought' %>
-        <%= render partial: "dashboard/articles/bought_article", collection: @articles, as: :article %>
-      <% when 'hidden' %>
-        <%= render partial: "dashboard/articles/hidden_article", collection: @articles, as: :article %>
+        <div class="flex justify-center p-4">
+          <%= link_to t('write'), new_article_path, class: "px-4 py-2 bg-primary rounded-full text-white text-lg font-bold" %>
+        </div>
+      <% else %>
+        <% case @tab %>
+        <% when 'drafted' %>
+          <%= render partial: "dashboard/articles/drafted_article", collection: @articles, as: :article %>
+          <div class="flex justify-center p-4">
+            <%= link_to t('write'), new_article_path, class: "px-4 py-2 bg-primary rounded-full text-white text-lg font-bold" %>
+          </div>
+        <% when 'published' %>
+          <%= render partial: "dashboard/articles/published_article", collection: @articles, as: :article %>
+        <% when 'hidden' %>
+          <%= render partial: "dashboard/articles/hidden_article", collection: @articles, as: :article %>
+        <% when 'bought' %>
+          <%= render Articles::CardComponent.with_collection(@articles) %>
+        <% end %>
       <% end %>
-    <% end %>
+    </div>
+    <div data-infinite-scroll-target='scrollArea'></div>
+    <%= render "shared/pagination", pagy: @pagy, id: "my_#{@tab}_articles_pagination" %>
   </div>
-  <div data-infinite-scroll-target='scrollArea'></div>
-  <%= render partial: "shared/pagination", locals: { pagy: @pagy } %>
-</div>
+<% end %>

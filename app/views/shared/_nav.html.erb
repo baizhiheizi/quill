@@ -7,27 +7,63 @@
 
       <div class="mb-8">
         <%= link_to articles_path, class: "block py-4" do %>
-          <%= inline_svg_tag 'icons/home.svg', class: "w-6 h-6 mx-auto text-opacity-60 text-[#222222] dark:text-[#80808E]" %>
+          <%= inline_svg_tag 'icons/home.svg', 
+            class: "w-6 h-6 mx-auto text-opacity-60 text-[#222222] dark:text-[#80808E]",
+            data: { 
+              tippy_content: 'Quill', 
+              tippy_placement: 'right' 
+            } %>
         <% end %>
 
         <% if current_user.present? %>
           <%= link_to dashboard_notifications_path, class: "block py-6" do %>
-            <%= inline_svg_tag 'icons/bell.svg', class: "w-6 h-6 mx-auto text-opacity-60 text-[#222222] dark:text-[#80808E]" %>
+            <%= inline_svg_tag 'icons/bell.svg', 
+              class: "w-6 h-6 mx-auto text-opacity-60 text-[#222222] dark:text-[#80808E]", 
+              data: { 
+                tippy_content: t('notification'), 
+                tippy_placement: 'right' 
+              } %>
           <% end %>
-          <%= link_to dashboard_articles_path, class: "block py-6" do %>
-            <%= inline_svg_tag 'icons/article.svg', class: "w-6 h-6 mx-auto text-opacity-60 text-[#222222] dark:text-[#80808E]" %>
+          <%= link_to dashboard_readings_path, class: "block py-6" do %>
+            <%= inline_svg_tag 'icons/glasses.svg', 
+              class: "w-6 h-6 mx-auto text-opacity-60 text-[#222222] dark:text-[#80808E]",
+              data: { 
+                tippy_content: t('my_reading'), 
+                tippy_placement: 'right' 
+              } %>
+          <% end %>
+          <%= link_to dashboard_authorings_path, class: "block py-6" do %>
+            <%= inline_svg_tag 'icons/article.svg', 
+              class: "w-6 h-6 mx-auto text-opacity-60 text-[#222222] dark:text-[#80808E]",
+              data: { 
+                tippy_content: t('my_authoring'), 
+                tippy_placement: 'right' 
+              } %>
           <% end %>
           <%= link_to new_article_path, class: "block py-6" do %>
-            <%= inline_svg_tag 'icons/write.svg', class: "w-6 h-6 mx-auto text-opacity-60 text-[#222222] dark:text-[#80808E]" %>
+            <%= inline_svg_tag 'icons/write.svg', 
+              class: "w-6 h-6 mx-auto text-opacity-60 text-[#222222] dark:text-[#80808E]",
+              data: { 
+                tippy_content: t('write'), 
+                tippy_placement: 'right' 
+              } %>
           <% end %>
         <% else %>
           <%= link_to login_path, data: { turbo_frame: :modal }, class: "block py-6" do %>
             <%= inline_svg_tag 'icons/write.svg', class: "w-6 h-6 mx-auto text-opacity-60 text-[#222222] dark:text-[#80808E]" %>
           <% end %>
         <% end %>
+      </div>
+
+      <div class="">
         <%= render DropdownComponent.new class: 'flex justify-center py-6' do |c| %>
           <% c.with_button do %>
-            <%= inline_svg_tag 'icons/global.svg', class: "w-6 h-6 mx-auto text-opacity-60 text-[#222222] dark:text-[#80808E]" %>
+            <%= inline_svg_tag 'icons/global.svg', 
+              class: "w-6 h-6 mx-auto text-opacity-60 text-[#222222] dark:text-[#80808E]",
+              data: { 
+                tippy_content: t('language'), 
+                tippy_placement: 'right' 
+              } %>
           <% end %>
           <div class="block">
             <%= link_to 'English', '/en', class: "block py-2 px-4" %>
@@ -37,10 +73,20 @@
 
         <div class="flex justify-center" data-controller="darkmode">
           <a class="hidden py-6 block cursor-pointer" data-darkmode-target="lightButton" data-action="darkmode#toggle">
-            <%= inline_svg_tag 'icons/moon.svg', class: "w-6 h-6 text-opacity-60 text-[#222222] dark:text-[#80808E]" %>
+            <%= inline_svg_tag 'icons/moon.svg', 
+              class: "w-6 h-6 text-opacity-60 text-[#222222] dark:text-[#80808E]",
+              data: { 
+                tippy_content: t('dark_mode'), 
+                tippy_placement: 'right' 
+              } %>
           </a>
           <a class="hidden py-6 block cursor-pointer" data-darkmode-target="darkButton" data-action="darkmode#toggle">
-            <%= inline_svg_tag 'icons/sun.svg', class: "w-6 h-6 text-opacity-60 text-[#222222] dark:text-[#80808E]" %>
+            <%= inline_svg_tag 'icons/sun.svg', 
+              class: "w-6 h-6 text-opacity-60 text-[#222222] dark:text-[#80808E]",
+              data: { 
+                tippy_content: t('light_mode'), 
+                tippy_placement: 'right' 
+              } %>
           </a>
         </div>
       </div>
@@ -52,11 +98,14 @@
               <%= image_tag current_user.avatar, class: "w-10 h-10 rounded-full" %>
             <% end %>
             <div class="block">
+              <%= link_to t('settings'), 
+                dashboard_settings_path, 
+                class: "block py-2 px-4" %>
               <%= link_to t('disconnect'), 
                 logout_path, 
                 data: {
-                    action: 'session#destroy'
-                  },
+                  action: 'session#destroy',
+                },
                 class: "block py-2 px-4" %>
             </div>
           <% end %>

@@ -43,7 +43,7 @@
         data: { turbo_frame: :modal },
         class: "cursor-pointer px-4 py-1 text-sm sm:text-base rounded-full bg-primary hover:scale-105 text-white mx-2" unless @article.published? %>
       
-      <%= link_to dashboard_articles_path, 
+      <%= link_to dashboard_authorings_path, 
         data: {
           controller: 'prefetch'
         },

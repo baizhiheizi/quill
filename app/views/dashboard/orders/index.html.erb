@@ -1,5 +1,7 @@
 <% if @article.present? %>
   <%= render "dashboard/orders/article_orders", article: @article, orders: @orders, pagy: @pagy, order_type: @order_type %>
 <% else %>
-  <%= render "dashboard/orders/user_orders", tab: @tab %>
+  <%= turbo_frame_tag 'my_orders' do %>
+    <%= render "dashboard/orders/user_orders", tab: @tab %>
+  <% end %>
 <% end %>
