@@ -1,15 +1,17 @@
 <%= turbo_frame_tag "#{dom_id current_user}_payments" do %>
   <div data-controller="infinite-scroll">
-    <div id="<%= dom_id current_user %>_payments_list">
-      <% if @payments.blank? %>
-        <div class="text-center py-2 opacity-50">
-          <%= t("no_record") %>
+    <% if @payments.blank? %>
+      <%= render EmptyComponent.new text: t('no_record') %>
+    <% else %>
+      <div class="overflow-x-auto">
+        <div class="table table-auto w-full">
+          <div id="<%= dom_id current_user %>_payments_list" class="table-row-group">
+            <%= render partial: "dashboard/payments/payment", collection: @payments, as: :payment %>
+          </div>
         </div>
-      <% else %>
-        <%= render partial: "dashboard/payments/payment", collection: @payments, as: :payment %>
-      <% end %>
-    </div>
-    <div data-infinite-scroll-target='scrollArea'></div>
-    <%= render partial: "shared/pagination", locals: { pagy: @pagy, id: "#{dom_id current_user}_payments_pagination" } %>
+      </div>
+      <div data-infinite-scroll-target='scrollArea'></div>
+      <%= render partial: "shared/pagination", locals: { pagy: @pagy, id: "#{dom_id current_user}_payments_pagination" } %>
+    <% end %>
   </div>
 <% end %>

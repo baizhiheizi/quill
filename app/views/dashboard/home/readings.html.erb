@@ -1,0 +1,89 @@
+<div class="mb-8">
+  <div class="text-xl font-bold mb-8">
+    <%= t('my_reading') %>
+  </div>
+</div>
+
+<div class="mb-8"
+  data-controller="tabs"
+  data-tabs-active-tab-value="<%= @tab %>"
+  data-tabs-active-class-value="font-bold text-primary !border-primary">
+  <div class="w-full flex overflow-auto flex-nowrap scrollbar-hide items-center flex mb-4">
+    <%= link_to dashboard_readings_path(tab: :bought),
+      class: "cursor-pointer py-1 pr-8 border-transparent",
+      data: {
+        tabs_target: "tab",
+        tabs_tabname_param: "bought" 
+      } do %>
+      <div class="min-w-fit">
+        <%= t('bought') %>
+      </div>
+      <div class="h-2 border-b-2 border-inherit mx-2"></div>
+    <% end %>
+    <%= link_to dashboard_readings_path(tab: :comments),
+      class: "cursor-pointer py-1 pr-8 border-transparent",
+      data: {
+        tabs_target: "tab",
+        tabs_tabname_param: "comments" 
+      } do %>
+      <div class="min-w-fit">
+        <%= t('my_comments') %>
+      </div>
+      <div class="h-2 border-b-2 border-inherit mx-2"></div>
+    <% end %>
+    <%= link_to dashboard_readings_path(tab: :orders),
+      class: "cursor-pointer py-1 pr-8 border-transparent",
+      data: {
+        tabs_target: "tab",
+        tabs_tabname_param: "orders" 
+      } do %>
+      <div class="min-w-fit">
+        <%= t('my_orders') %>
+      </div>
+      <div class="h-2 border-b-2 border-inherit mx-2"></div>
+    <% end %>
+    <%= link_to dashboard_readings_path(tab: :transfers),
+      class: "cursor-pointer py-1 pr-8 border-transparent",
+      data: {
+        tabs_target: "tab",
+        tabs_tabname_param: "transfers" 
+      } do %>
+      <div class="min-w-fit">
+        <%= t('readers_revenue') %>
+      </div>
+      <div class="h-2 border-b-2 border-inherit mx-2"></div>
+    <% end %>
+  </div>
+
+  <div class="hidden pb-4"
+    data-tabs-content-param="bought"
+    data-tabs-target="content">
+    <%= turbo_frame_tag "my_bought_articles", src: dashboard_articles_path(tab: :bought), loading: :lazy do %>
+      <%= render "shared/loading" %>
+    <% end %>
+  </div>
+
+  <div class="hidden pb-4"
+    data-tabs-content-param="orders"
+    data-tabs-target="content">
+    <%= turbo_frame_tag "my_orders", src: dashboard_orders_path, loading: :lazy do %>
+      <%= render "shared/loading" %>
+    <% end %>
+  </div>
+
+  <div class="hidden pb-4"
+    data-tabs-content-param="comments"
+    data-tabs-target="content">
+    <%= turbo_frame_tag "my_comments", src: dashboard_comments_path, loading: :lazy do %>
+      <%= render "shared/loading" %>
+    <% end %>
+  </div>
+
+  <div class="hidden pb-4"
+    data-tabs-content-param="transfers"
+    data-tabs-target="content">
+    <%= turbo_frame_tag "my_transfers", src: dashboard_transfers_path(tab: :reader), loading: :lazy do %>
+      <%= render "shared/loading" %>
+    <% end %>
+  </div>
+</div>

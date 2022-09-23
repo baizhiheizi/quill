@@ -41,7 +41,14 @@ en:
   help: Help
   community: Community
   open_source: Open Source
+  dark_mode: Dark Mode
+  light_mode: Light Mode
+  language: Language
   dashboard: Dashboard
+  my_reading: My Reading
+  my_authoring: My Reading
+  my_comments: My Comments
+  my_orders: My Orders
   profile_page: Profile
   login: Login
   logout: Logout

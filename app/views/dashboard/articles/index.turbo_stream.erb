@@ -1,4 +1,4 @@
-<%= turbo_stream.append "#{dom_id current_user}_articles_list" do %>
+<%= turbo_stream.append "my_#{@tab}_articles_list" do %>
   <% case @tab %>
   <% when 'bought' %>
     <%= render partial: "dashboard/articles/bought_article", collection: @articles, as: :article %>
@@ -11,6 +11,6 @@
   <% end %>
 <% end %>
 
-<%= turbo_stream.update 'pagination' do %>
-  <%= render partial: "shared/pagination", locals: { pagy: @pagy } %>
+<%= turbo_stream.update "my_#{@tab}_articles_pagination" do %>
+  <%= render "shared/pagination", pagy: @pagy, id: "my_#{@tab}_articles_pagination" %>
 <% end %>
