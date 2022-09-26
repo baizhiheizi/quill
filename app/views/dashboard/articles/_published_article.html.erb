@@ -1,46 +1,96 @@
-<div id="<%= dom_id article %>_published" class="border-b border-zinc-50 dark:border-zinc-800 py-4">
-  <div class="relative">
-    <%= link_to user_article_path(article.author, article.uuid),
-      data: {
-        turbo_frame: '_top'
-      } do %>
-      <span aria-hidden="true" class="absolute inset-0"></span>
-    <% end %>
-    <div class="flex space-x-2 items-center justify-between">
-      <span class="text-xl font-bold mb-2 truncate"><%= article.title %></span>
-      <span class="text-sm text-gray-500 text-right truncate">
-        <%= render TimeFormatComponent.new datetime: article.published_at&.rfc3339 do %>
-          <%= article.published_at&.strftime("%Y-%m-%d %H:%M") || '-' %>
+<div id="<%= dom_id article %>_published" class="pt-8 pb-4 border-b dark:border-white dark:border-opacity-10">
+  <div class="flex items-center justify-between mb-4">
+    <div class="flex items-center">
+      <span class="text-sm opacity-60">
+        <%= render TimeFormatComponent.new datetime: article.published_at.rfc3339 do %>
+          <%= article.published_at.strftime("%Y-%m-%d %H:%M") %>
         <% end %>
       </span>
     </div>
-    <div class="flex items-center space-x-4 text-sm text-gray-500 mb-2">
-      <div class="col-span-1">
-        $<%= article.revenue_usd.round(4) %>
-      </div>
-      <div class="col-span-1 flex items-center">
-        <%= article.orders_count %> <%= render "shared/icons/cash", html_class: "w-4 h-4" %>
-      </div>
-      <div class="col-span-1 flex items-center">
-        <%= article.comments_count %> <%= render "shared/icons/reply", html_class: "w-4 h-4" %>
-      </div>
-      <div class="col-span-1 flex items-center">
-        <%= article.upvotes_count %> <%= render "shared/icons/thumb_up", html_class: "w-4 h-4" %>
-      </div>
-      <div class="col-span-1 flex items-center">
-        <%= article.downvotes_count %> <%= render "shared/icons/thumb_down", html_class: "w-4 h-4" %>
-      </div>
-      <div class="col-span-1 flex items-center">
-        <%= article.price %> <%= image_tag article.currency.icon_url, class: "w-4 h-4" %>
-      </div>
+    <div class="flex items-center space-x-2">
+      <% if article.free? %>
+        <div class="text-sm px-2 bg-green-500 text-white rounded">
+          FREE
+        </div>
+      <% else %>
+        <span class="text-sm">
+          <%= article.price_tag %>
+        </span>
+        <span class="text-sm opacity-60">
+          ≈$<%= article.price_usd %>
+        </span>
+        <%= image_tag article.currency.icon_url, class: "w-6 h-6 rounded-full" %>
+      <% end %>
     </div>
   </div>
-  <div class="text-blue-500 flex items-center space-x-4 sm:justify-end">
-    <%= link_to t('detail'), dashboard_article_path(article.uuid) %>
-    <%= link_to t('edit'), edit_article_path(article.uuid) %>
-    <%= button_to t('hide'), 
-      dashboard_published_article_path(article.uuid),  
-      method: :delete,
-      class: "bg-transparent cursor-pointer" %>
+
+  <%= link_to user_article_path(article.author, article),
+    data: {
+      controller: "prefetch",
+      turbo_frame: "_top"
+    },
+    class: "flex items-start max-h-28 space-x-4 mb-6" do %>
+    <div class="flex-1 h-ful max-w-full">
+      <div class="truncate overflow-hidden font-bold text-xl mb-3">
+        <%= article.title %>
+      </div>
+      <div class="text-base break-words text-ellipsis overflow-hidden line-clamp-3 text-[#222222] text-opacity-80"> 
+        <%= article.intro %>
+      </div>
+    </div>
+    <% if article.cover_url.present? %>
+      <%= image_tag article.cover_url, class: "w-28 h-28 rounded object-center" %>
+    <% end %>
+  <% end %>
+
+  <div class="flex items-center space-x-4 justify-between">
+    <div class="text-primary flex items-center space-x-4">
+      <%= link_to t('detail'), 
+        dashboard_article_path(article.uuid),
+        data: {
+          controller: 'prefetch',
+          turbo_frame: '_top'
+        } %>
+      <%= link_to t('edit'), 
+        edit_article_path(article.uuid),
+        data: {
+          controller: 'prefetch',
+          turbo_frame: '_top'
+        } %>
+      <%= button_to t('hide'), 
+        dashboard_published_article_path(article.uuid),  
+        method: :delete,
+        class: "bg-transparent cursor-pointer" %>
+    </div>
+
+    <div class="flex items-center space-x-4 ml-4 text-[#B1B6C6]">
+      <div class="flex items-center space-x-1">
+        <%= inline_svg_tag 'icons/income-solid.svg', class: 'w-4 h-4' %>
+        <span class="text-sm">
+          <%= article.revenue_usd.round(4) %>
+        </span>
+      </div>
+
+      <div class="flex items-center space-x-1">
+        <%= inline_svg_tag 'icons/comment-solid.svg', class: 'w-4 h-4' %>
+        <span class="text-sm">
+          <%= article.comments_count %>
+        </span>
+      </div>
+
+      <div class="flex items-center space-x-1">
+        <%= inline_svg_tag 'icons/like-solid.svg', class: 'w-4 h-4' %>
+        <span class="text-sm">
+          <%= article.upvotes_count %>
+        </span>
+      </div>
+
+      <div class="flex items-center space-x-1">
+        <%= inline_svg_tag 'icons/dislike-solid.svg', class: 'w-4 h-4' %>
+        <span class="text-sm">
+          <%= article.downvotes_count %>
+        </span>
+      </div>
+    </div>
   </div>
 </div>

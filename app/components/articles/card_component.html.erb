@@ -38,7 +38,8 @@
       <div class="truncate overflow-hidden font-bold text-xl mb-3">
         <%= @article.title %>
       </div>
-      <div class="text-base break-words text-ellipsis overflow-hidden line-clamp-3 text-[#222222] text-opacity-80"> <%= @article.intro %>
+      <div class="text-base break-words text-ellipsis overflow-hidden line-clamp-3 text-[#222222] text-opacity-80"> 
+        <%= @article.intro %>
       </div>
     </div>
     <% if @article.cover_url.present? %>
