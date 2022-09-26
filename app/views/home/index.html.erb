@@ -1,5 +1,5 @@
-<div class="h-[32rem] 2xl:h-[36rem] bg-[url('/hero-bg.webp')] bg-cover bg-center bg-[#111134] text-white">
-  <div class="max-w-5xl mx-auto px-4 lg:px-8 py-8">
+<div class="h-screen sm:h-[32rem] 2xl:h-[36rem] bg-[url('/hero-bg.webp')] bg-cover bg-center bg-[#111134] text-white">
+  <div class="h-full flex flex-col justify-between max-w-5xl mx-auto px-4 lg:px-8 py-8">
     <div class="flex items-center justify-between mb-20 sm:mb-24">
       <%= image_tag 'logo-light.svg', class: 'h-12 w-auto block' %>
       <div class="flex items-center space-x-4">
@@ -22,12 +22,12 @@
     </div>
 
     <div class="mb-16">
-      <div class="text-5xl sm:w-1/2 font-serif font-medium leading-snug">
+      <div class="text-5xl md:w-2/3 lg:w-1/2 font-serif font-medium leading-snug">
         Build your value on Web3 with Quill
       </div>
     </div>
 
-    <div class="mb-16">
+    <div class="mb-16 flex justify-center sm:justify-start">
       <% if from_mixin_messenger? %>
         <%= link_to t('connect_wallet'), mixin_login_path, class: "rounded-full py-3 bg-primary text-center px-6" %>
       <% else %>
@@ -41,7 +41,7 @@
   <%= turbo_frame_tag 'selected_articles', src: selected_articles_path  %>
 
   <div class="py-8 grid grid-cols-1 sm:grid-cols-3 gap-16 relative">
-    <div class="col-span-2">
+    <div class="sm:col-span-2">
       <%= turbo_frame_tag 'articles', src: articles_path do  %>
         <%= render 'shared/loading' %>
       <% end %>
