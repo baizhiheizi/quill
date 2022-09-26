@@ -1,32 +1,32 @@
-<div class="pt-4"
+<div class="mb-8"
   data-controller="tabs"
   data-tabs-active-tab-value="<%= @tab %>"
-  data-tabs-active-class-value="border-b-2">
-  <div class="w-full flex overflow-auto flex-nowrap scrollbar-hide items-center flex px-4 mb-4">
-    <%= link_to t('profile'), 
-      dashboard_settings_path(tab: :profile),
-      class: "cursor-pointer py-1 px-4 border-primary textrgray-600",
+  data-tabs-active-class-value="font-bold text-primary !border-primary">
+  <div class="w-full flex overflow-auto flex-nowrap scrollbar-hide items-center flex mb-8">
+    <%= link_to dashboard_settings_path(tab: :profile),
+      class: "cursor-pointer py-1 pr-8 border-transparent",
       data: {
         tabs_target: "tab",
         tabs_tabname_param: "profile",
         action: "tabs#active"
-      } %>
-    <%= link_to t('notification'), 
-      dashboard_settings_path(tab: :notification),
-      class: "cursor-pointer py-1 px-4 border-primary textrgray-600",
+      } do %>
+      <div class="min-w-fit">
+        <%= t('profile') %>
+      </div>
+      <div class="h-2 border-b-2 border-inherit mx-auto w-5"></div>
+    <% end %>
+    <%= link_to dashboard_settings_path(tab: :notification),
+      class: "cursor-pointer py-1 pr-8 border-transparent",
       data: {
         tabs_target: "tab",
         tabs_tabname_param: "notification",
         action: "tabs#active"
-      } %>
-    <%= link_to t('access_token'), 
-      dashboard_settings_path(tab: :access_token),
-      class: "cursor-pointer py-1 px-4 border-primary textrgray-600",
-      data: {
-        tabs_target: "tab",
-        tabs_tabname_param: "access_token",
-        action: "tabs#active"
-      } %>
+      } do %>
+      <div class="min-w-fit">
+        <%= t('notification') %>
+      </div>
+      <div class="h-2 border-b-2 border-inherit mx-auto w-5"></div>
+    <% end %>
   </div>
 
   <div class="hidden pb-4"
@@ -39,13 +39,5 @@
     data-tabs-content-param="notification"
     data-tabs-target="content">
     <%= render "dashboard/settings/notification" %>
-  </div>
-
-  <div class="hidden pb-4"
-    data-tabs-content-param="access_token"
-    data-tabs-target="content">
-    <%= turbo_frame_tag "#{dom_id current_user}_access_tokens", src: dashboard_access_tokens_path, loading: :lazy do %>
-      <%= render "shared/loading" %>
-    <% end %>
   </div>
 </div>

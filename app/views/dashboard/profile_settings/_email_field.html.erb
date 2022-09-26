@@ -1,3 +1,16 @@
+<div class="mb-4 flex items-center justify-between">
+  <span class="text-lg font-bold">
+    <%= t('email') %>
+  </span>
+
+  <%= link_to current_user.email_vefified? ? t('edit') : t('reverify'),
+    edit_dashboard_profile_setting_path, 
+    data: {
+      turbo_frame: 'profile_email_form'
+    },
+    class: "px-4 py-1 bg-primary text-white rounded-full" %>
+</div>
+
 <div class="mb-2">
   <span class="<%= current_user.email_vefified? ? 'opacity-100' : 'opacity-50' %>">
     <%= current_user.email.presence || '-' %>
@@ -8,13 +21,6 @@
   <% else %>
     <%= render 'shared/icons/exclamation_circle_solid', html_class: 'w-6 h-6 text-red-500 inline' %>
   <% end %>
-
-  <%= link_to current_user.email_vefified? ? t('edit') : t('reverify'),
-    edit_dashboard_profile_setting_path, 
-    data: {
-      turbo_frame: 'profile_email_form'
-    },
-    class: "mx-2 px-2 py-1 bg-primary text-white rounded" %>
 </div>
 
 <% if current_user.email_verifying? %>
