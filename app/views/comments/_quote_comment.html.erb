@@ -1,13 +1,20 @@
-<div class="my-4 py-2 px-4 rounded-lg bg-zinc-50 max-h-96 overflow-y-scroll scrollbar-hide dark:bg-zinc-800">
-  <div class="flex space-x-2 sm:space-x-4 items-start py-2 w-full">
-    <%= link_to user_path(quote_comment.author), class: "min-w-fit block", data: { controller: 'prefetch', turbo_frame: "_top" } do %>
-      <img src="<%= quote_comment.author.avatar %>" class="w-6 h-6 sm:w-8 sm:h-8 rounded-full" />
+<div class="mb-6 p-4 rounded bg-[#F4F4F4] max-h-96 overflow-y-scroll scrollbar-hide dark:bg-[#333444]">
+  <div class="flex space-x-2 sm:space-x-4 items-center">
+    <%= link_to user_path(quote_comment.author), 
+      class: "min-w-fit block", 
+      data: { 
+        controller: 'prefetch', 
+        turbo_frame: "_top" 
+      } do %>
+      <img src="<%= quote_comment.author.avatar %>" class="w-6 h-6 sm:w-9 sm:h-9 rounded-full" />
     <% end %>
+    <div class="">
+      <div class="truncate"><%= quote_comment.author.short_name %></div>
+      <div class="text-sm opacity-50"><%= time_ago_in_words quote_comment.created_at %></div>
+    </div>
+  </div>
+
     <div class="overflow-x-hidden">
-      <%= link_to user_path(quote_comment.author), class: "flex no-underline items-center space-x-2 mb-2 text-sm truncate", data: { controller: 'prefetch', turbo_frame: "_top" } do %>
-        <span class="truncate"><%= quote_comment.author.short_name %></span>
-        <span class="opacity-50"><%= time_ago_in_words quote_comment.created_at %></span>
-      <% end %>
       <div class="prose-comment">
         <% if quote_comment.quote_comment.present? %>
           <div class="max-h-48 overflow-y-scroll scrollbar-hide">
@@ -30,7 +37,6 @@
         <% end %>
         <%= quote_comment.content_as_html.html_safe %>
       </div>
-      <%= render partial: "comments/actions", locals: { comment: quote_comment } %>
+      <%= render "comments/actions", comment: quote_comment %>
     </div>
-  </div>
 </div>

@@ -8,7 +8,7 @@
   <%= form.hidden_field :commentable_type, value: commentable.class.name %>
   <%= form.hidden_field :quote_comment_id, value: quote_comment&.id %>
   <%= form.text_area :content, 
-    class: "w-full min-h-48 py-2 rounded focus:ring-offset-0 focus:border-zinc-200 border-zinc-200 dark:border-white dark:border-opacity-10 focus:ring-0 mb-4 dark:bg-[#333444]", 
+    class: "w-full min-h-48 py-2 rounded focus:ring-offset-0 focus:border-zinc-200 border-zinc-200 dark:border-white dark:border-opacity-10 focus:ring-0 mb-4 dark:bg-transparent", 
     placeholder: t("markdown_supported"), 
     data: { 
       controller: "textarea-autogrow",

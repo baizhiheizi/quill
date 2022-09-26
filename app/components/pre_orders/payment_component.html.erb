@@ -1,5 +1,5 @@
 <div 
-  class="w-96 max-w-full mx-auto"
+  class="max-w-full mx-auto"
   data-controller="pre-orders-payment-component" 
   data-pre-orders-payment-component-type-value="<%= @pre_order.type %>"
   data-pre-orders-payment-component-follow-id-value="<%= @pre_order.follow_id %>"
@@ -31,7 +31,7 @@
         controller: 'turbo',
         pre_orders_payment_component_target: 'selectCurrencyButton'
       },
-      class: "block w-full mb-4 flex items-center justify-between py-2 px-4 bg-zinc-100 dark:bg-[333444] rounded-lg" do %>
+      class: "block w-full mb-4 flex items-center justify-between py-2 px-4 bg-[#F4F4F4] dark:bg-[#333444] rounded-lg" do %>
       <div id="<%= dom_id @pay_asset %>" class="flex items-center space-x-4">
         <div class='relative'>
           <%= image_tag @pay_asset.icon_url, 
