@@ -1,9 +1,10 @@
 # frozen_string_literal: true
 
 class TimeFormatComponent < ApplicationComponent
-  def initialize(datetime:)
+  def initialize(params = {})
     super
 
-    @datetime = datetime
+    @datetime = params[:datetime]
+    @class = params[:class]
   end
 end

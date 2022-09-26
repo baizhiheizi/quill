@@ -1,19 +1,24 @@
-<div id="<%= dom_id article %>_draft" class="border-b border-zinc-50 dark:border-zinc-800 py-2 flex items-center space-x-4">
+<div id="<%= dom_id article %>_draft" class="border-b dark:border-white dark:border-opacity-5 py-4 flex items-center justify-between space-x-4">
   <%= link_to article.title.presence || t('articles.title_placeholder'), 
     edit_article_path(article.uuid), 
     data: { 
       turbo_frame: '_top'
     }, 
-    class: "relative text-xl font-bold truncate" %>
-  <div class="flex-1 text-sm opacity-70 truncate">
-    <%= render TimeFormatComponent.new datetime: article.updated_at.rfc3339 do %>
+    class: "relative text-lg font-bold truncate" %>
+  <div class="flex items-center space-x-2">
+    <%= render TimeFormatComponent.new datetime: article.updated_at.rfc3339, class: "opacity-80" do %>
       <%= article.updated_at.strftime("%Y-%m-%d %H:%M") %>
     <% end %>
+    <%= render DropdownComponent.new do |c| %>
+      <% c.with_button do %>
+        <%= inline_svg_tag "icons/chevron-down.svg", class: 'w-4 h-4 opacity-60' %>
+      <% end %>
+      <%= link_to t('delete'), 
+        new_dashboard_deleted_article_path(uuid: article), 
+        data: {
+          turbo_frame: :modal
+        },
+        class: "px-4 text-red-500 bg-transparent cursor-pointer" %>
+    <% end %>
   </div>
-  <%= link_to t('delete'), 
-    new_dashboard_deleted_article_path(uuid: article), 
-    data: {
-      turbo_frame: :modal
-    },
-    class: "px-4 text-red-500 bg-transparent cursor-pointer" %>
 </div>

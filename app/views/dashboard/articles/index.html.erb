@@ -1,20 +1,12 @@
 <%= turbo_frame_tag "my_#{@tab}_articles" do %>
   <div data-controller="infinite-scroll">
-    <div id="my_<%= @tab %>_articles_list">
-      <% if @articles.blank? %>
-        <div class="text-center py-2 opacity-50">
-          <%= t("no_record") %>
-        </div>
-        <div class="flex justify-center p-4">
-          <%= link_to t('write'), new_article_path, class: "px-4 py-2 bg-primary rounded-full text-white text-lg font-bold" %>
-        </div>
-      <% else %>
+    <% if @articles.blank? %>
+      <%= render EmptyComponent.new text: t('no_record') %>
+    <% else %>
+      <div id="my_<%= @tab %>_articles_list" class="mb-10">
         <% case @tab %>
         <% when 'drafted' %>
           <%= render partial: "dashboard/articles/drafted_article", collection: @articles, as: :article %>
-          <div class="flex justify-center p-4">
-            <%= link_to t('write'), new_article_path, class: "px-4 py-2 bg-primary rounded-full text-white text-lg font-bold" %>
-          </div>
         <% when 'published' %>
           <%= render partial: "dashboard/articles/published_article", collection: @articles, as: :article %>
         <% when 'hidden' %>
@@ -22,9 +14,16 @@
         <% when 'bought' %>
           <%= render Articles::CardComponent.with_collection(@articles) %>
         <% end %>
-      <% end %>
-    </div>
-    <div data-infinite-scroll-target='scrollArea'></div>
-    <%= render "shared/pagination", pagy: @pagy, id: "my_#{@tab}_articles_pagination" %>
+      </div>
+
+      <div class="flex justify-center">
+        <%= link_to t('write'), 
+          new_article_path, 
+          class: "px-4 py-1 bg-primary rounded-full text-white text-lg" unless @tab == 'bought' %>
+      </div>
+
+      <div data-infinite-scroll-target='scrollArea'></div>
+      <%= render "shared/pagination", pagy: @pagy, id: "my_#{@tab}_articles_pagination" %>
+    <% end %>
   </div>
 <% end %>
