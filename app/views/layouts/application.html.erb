@@ -45,7 +45,7 @@
         data-session-provider-value="<%= current_session&.info&.[]('provider') %>"
         data-session-address-value="<%= current_session&.user&.uid %>"
         data-session-uuid-value="<%= current_session&.uuid %>" 
-        class="min-h-screen flex justify-center bg-white dark:bg-[#1D1E2B] text-[#222222] dark:text-[white]">
+        class="min-h-screen overflow-x-hidden flex justify-center bg-white dark:bg-[#1D1E2B] text-[#222222] dark:text-[white]">
     <div class="w-full max-w-full lg:w-auto lg:flex">
       <%= render 'shared/nav' %>
 

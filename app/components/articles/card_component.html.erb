@@ -1,29 +1,37 @@
-<div class="pt-8 pb-4 border-b dark:border-white dark:border-opacity-10">
-  <div class="flex items-center justify-between mb-4">
+<div class="max-w-full pt-8 pb-4 border-b dark:border-white dark:border-opacity-10">
+  <div class="w-full flex items-center justify-between mb-4">
     <div class="flex items-center space-x-2">
-      <%= image_tag @article.author.avatar, class: 'w-7 h-7 rounded-full' %>
-      <span class="text-sm">
-        <%= @article.author.short_name %>
-      </span>
-      <span class="text-sm opacity-60">
-        <%= render TimeFormatComponent.new datetime: @article.published_at.rfc3339 do %>
-          <%= @article.published_at.strftime("%Y-%m-%d %H:%M") %>
-        <% end %>
-      </span>
+      <%= image_tag @article.author.avatar, class: 'w-7 h-7 rounded-full block' %>
+
+      <div class="sm:flex sm:items-center sm:space-x-2">
+        <div class="text-sm">
+          <%= @article.author.short_name %>
+        </div>
+        <div class="text-xs sm:text-sm opacity-60">
+          <%= render TimeFormatComponent.new datetime: @article.published_at.rfc3339 do %>
+            <%= @article.published_at.strftime("%Y-%m-%d %H:%M") %>
+          <% end %>
+        </div>
+      </div>
     </div>
-    <div class="flex items-center space-x-2">
+    <div class="">
       <% if @article.free? %>
         <div class="text-sm px-2 bg-green-500 text-white rounded">
           FREE
         </div>
       <% else %>
-        <span class="text-sm">
-          <%= @article.price_tag %>
-        </span>
-        <span class="text-sm opacity-60">
+        <div class="flex items-center space-x-2">
+          <span class="text-sm">
+            <%= @article.price_tag %>
+          </span>
+          <span class="hidden sm:block text-sm opacity-60">
+            ≈$<%= @article.price_usd %>
+          </span>
+          <%= image_tag @article.currency.icon_url, class: "w-4 h-4 sm:w-5 sm:h-5 rounded-full" %>
+        </div>
+        <div class="text-xs opacity-60 text-right mt-1 sm:hidden">
           ≈$<%= @article.price_usd %>
-        </span>
-        <%= image_tag @article.currency.icon_url, class: "w-6 h-6 rounded-full" %>
+        </div>
       <% end %>
     </div>
   </div>
@@ -34,8 +42,8 @@
       turbo_frame: "_top"
     },
     class: "flex items-start max-h-28 space-x-4 mb-6" do %>
-    <div class="flex-1 h-ful max-w-full">
-      <div class="truncate overflow-hidden font-bold text-xl mb-3">
+    <div class="flex-1 h-ful">
+      <div class="overflow-hidden text-ellipsis line-clamp-1 font-bold text-xl mb-3">
         <%= @article.title %>
       </div>
       <div class="text-base break-words text-ellipsis overflow-hidden line-clamp-3 text-[#222222] text-opacity-80"> 
@@ -47,7 +55,7 @@
     <% end %>
   <% end %>
 
-  <div class="flex items-center justify-between">
+  <div class="sm:flex sm:items-center sm:justify-between sm:space-x-4">
     <div class="flex-1 flex overflow-x-scroll scrollbar-hide items-center space-x-4">
       <% @article.tags.each do |tag| %>
         <%= link_to articles_path(tag: tag.name), 
@@ -55,13 +63,14 @@
             controller: 'prefetch',
           turbo_frame: "_top"
           }, 
-          class: "px-2 py-1 text-sm min-w-max rounded tag-style-#{tag.id % 6}", 
+          class: "mb-4 sm:mb-0 px-2 py-1 text-xs sm:text-sm min-w-max rounded tag-style-#{tag.id % 6}", 
           style: "word-break:keep-all;" do %>
           <%= tag.name %>
         <% end %>
       <% end %>
     </div>
-    <div class="flex items-center space-x-4 ml-4 text-[#B1B6C6]">
+
+    <div class="flex items-center justify-end space-x-6 text-[#B1B6C6]">
       <div class="flex items-center space-x-1">
         <%= inline_svg_tag 'icons/income-solid.svg', class: 'w-4 h-4' %>
         <span class="text-sm">
