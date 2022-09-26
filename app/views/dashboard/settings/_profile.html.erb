@@ -1,39 +1,38 @@
-<div class="p-4">
-  <div class="sm:grid sm:grid-cols-5 sm:gap-4 py-2">
-    <div class="sm:col-span-1 sm:text-right opacity-70">
-      <%= t('name') %>:
-    </div>
-    <div class="sm:col-span-4">
-      <%= current_user.name %>
-    </div>
+<div class="mb-8">
+  <div class="mb-4">
+    <span class="text-lg font-bold">
+      <%= t('avatar') %>
+    </span>
   </div>
+  <div class="">
+    <%= image_tag current_user.avatar, class: "w-16 h-16 rounded-full", loading: :lazy %>
+  </div>
+</div>
 
-  <div class="sm:grid sm:grid-cols-5 sm:gap-3 py-2">
-    <div class="sm:col-span-1 sm:text-right opacity-70">
-      <%= t('avatar') %>:
-    </div>
-    <div class="sm:col-span-4">
-      <%= image_tag current_user.avatar, class: "w-10 h-10 rounded-full", loading: :lazy %>
-    </div>
+<div class="mb-8">
+  <div class="mb-4">
+    <span class="text-lg font-bold">
+      <%= t('name') %>
+    </span>
   </div>
+  <div class="overflow-x-scroll scrollbar-hide py-2 border-b dark:border-white dark:border-opacity-5">
+    <%= current_user.name %>
+  </div>
+</div>
 
-  <div class="sm:grid sm:grid-cols-5 sm:gap-3 py-2">
-    <div class="sm:col-span-1 sm:text-right opacity-70">
-      <%= t('bio') %>:
-    </div>
-    <div class="sm:col-span-4">
-      <%= simple_format current_user.bio %>
-    </div>
+<div class="mb-8">
+  <div class="mb-4">
+    <span class="text-lg font-bold">
+      <%= t('bio') %>
+    </span>
   </div>
+  <div class="py-2 border-b dark:border-white dark:border-opacity-5">
+    <%= simple_format current_user.bio %>
+  </div>
+</div>
 
-  <div class="sm:grid sm:grid-cols-5 sm:gap-3 py-2">
-    <div class="sm:col-span-1 sm:text-right opacity-70">
-      <%= t('email') %>:
-    </div>
-    <div class="sm:col-span-4">
-      <%= turbo_frame_tag 'profile_email_form' do %>
-        <%= render 'dashboard/profile_settings/email_field' %>
-      <% end %>
-    </div>
-  </div>
+<div class="mb-8">
+  <%= turbo_frame_tag 'profile_email_form' do %>
+    <%= render 'dashboard/profile_settings/email_field' %>
+  <% end %>
 </div>
