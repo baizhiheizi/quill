@@ -1,3 +1,27 @@
 <% if @article.present? %>
-  <%= render "comments/article_comments", article: @article, comments: @comments, order_by: @order_by, pagy: @pagy %>
+  <% if requesting_modal? %>
+    <%= turbo_frame_tag 'modal' do %>
+      <%= render ModalComponent.new backdrop: 'static' do |c| %>
+        <% c.with_header do %>
+          <div class="flex-1 flex items-center justify-between">
+            <div class="font-bold">
+              <%= t('comments') %>
+            </div>
+            <%= render "subscribe_articles/subscribe_button", article: @article %>
+          </div>
+        <% end %>
+
+        <div data-controller="comment-form">
+          <% if @article.authorized? current_user %>
+            <div class="mb-6">
+              <%= render "comments/form", commentable: @article %>
+            </div>
+          <% end %>
+          <%= render "comments/article_comments", article: @article, comments: @comments, order_by: @order_by, pagy: @pagy %>
+        </div>
+      <% end %>
+    <% end %>
+  <% else %>
+    <%= render "comments/article_comments", article: @article, comments: @comments, order_by: @order_by, pagy: @pagy %>
+<% end %>
 <% end %>

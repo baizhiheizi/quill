@@ -1,33 +1,37 @@
 <article class="max-w-full lg:col-span-2 mb-4">
   <div class="mb-4">
     <div class="mb-8">
-      <%= render partial: "articles/header", locals: { article: @article } %>
+      <%= render "articles/header", article: @article %>
     </div>
 
     <div class="mb-8">
-      <%= render partial: "articles/content", locals: { article: @article, user: current_user } %>
+      <%= render "articles/content", article: @article, user: current_user %>
     </div>
 
     <div id="article_<%= @article.uuid %>_buyers" class="mb-16">
-      <%= render partial: "articles/buyers", locals: { article: @article, user: current_user } %>
+      <%= render "articles/buyers", article: @article, user: current_user %>
     </div>
   </div>
 
-  <%= render partial: "articles/comments_card", locals: { article: @article, user: current_user } %>
+  <% if browser.device.mobile? %>
+    <%= render "articles/floating_bar", article: @article, user: current_user %>
+  <% else %>
+    <%= render "articles/comments_card", article: @article, user: current_user %>
+  <% end %>
 </article>
 
 <%= content_for :sidebar do %>
   <div class="mb-4">
-    <%= render partial: "articles/author_card", locals: { author: @article.author } %>
+    <%= render "articles/author_card", author: @article.author %>
   </div>
   <% if @article.article_references.present? %>
     <div class="mb-4">
-      <%= render partial: "articles/references_card", locals: { references: @article.article_references } %>
+      <%= render "articles/references_card", references: @article.article_references %>
     </div>
   <% end %>
   <% if @article.related_articles.present? %>
     <div class="mb-4">
-      <%= render partial: "articles/related_articles_card", locals: { articles: @article.related_articles } %>
+      <%= render "articles/related_articles_card", articles: @article.related_articles %>
     </div>
   <% end %>
   <%= turbo_frame_tag 'hot_tags', src: '/hot_tags', loading: :lazy %>

@@ -5,8 +5,13 @@
     <div data-controller="infinite-scroll">
       <div id="my_comments_list">
         <% if @comments.blank? %>
-          <div class="text-center py-2 opacity-50">
-            <%= t("no_comments") %>
+          <div class="py-4">
+            <div class="flex justify-center mb-4">
+              <%= image_tag "empty-comment.svg", class: "w-40 h-auto" %>
+            </div>
+            <div class="text-center text-xs opacity-40">
+              <%= t("no_comments") %>
+            </div>
           </div>
         <% else %>
           <%= render partial: "dashboard/comments/comment", collection: @comments, as: :comment %>

@@ -41,9 +41,9 @@ zh-CN:
   help: 帮助
   community: 社区
   open_source: 开源
-  language: 语言
-  dark_mode: 暗黑模式
-  light_mode: 明亮模式
+  language: 切换语言
+  dark_mode: 深色模式
+  light_mode: 浅色模式
   dashboard: 管理中心
   my_reading: 我的阅读
   my_authoring: 我的写作
@@ -159,7 +159,7 @@ zh-CN:
   markdown_supported: 支持 Markdown 格式
   overview: 总览
   notifications_manage: 消息通知
-  settings: 设置
+  settings: 个人设置
   articles_manage: 文章管理
   subscriptions_manage: 订阅管理
   revenue_manage: 收益管理

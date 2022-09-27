@@ -158,6 +158,9 @@ gem 'mailjet'
 
 gem 'inline_svg'
 
+# Do some browser detection with Ruby. Includes ActionController integration.
+gem 'browser'
+
 # deploy
 gem 'mina', '~> 1.2.2', require: false
 gem 'mina-logs', '~> 1.1.0', require: false

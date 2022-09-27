@@ -1,14 +1,17 @@
-<div id="article_<%= article.uuid %>_comments_card" class="bg-white dark:bg-[#1D1E2B] dark:border-white dark:border-opacity-5 w-full px-8 py-10 border sm:rounded-lg mb-4">
+<div id="article_<%= article.uuid %>_comments_card" class="hidden sm:block bg-white dark:bg-[#1D1E2B] dark:border-white dark:border-opacity-5 w-full sm:px-8 sm:py-10 sm:border sm:rounded-lg mb-4">
+  <div class="mb-4 items-center flex justify-between">
+    <div class="text-lg font-bold">
+      <%= t('comments') %>
+    </div>
+    <%= render partial: "subscribe_articles/subscribe_button", locals: { article: article } %>
+  </div>
   <div data-controller="comment-form">
     <% if article.authorized? user %>
-      <div class="mb-4 flex justify-end">
-        <%= render partial: "subscribe_articles/subscribe_button", locals: { article: article } %>
-      </div>
       <div class="mb-8">
         <%= render partial: "comments/form", locals: { commentable: article } %>
       </div>
     <% end %>
-    <%= turbo_frame_tag "#{dom_id article}_comments", src: article_comments_path(article.uuid) do %>
+    <%= turbo_frame_tag "#{dom_id article}_comments", src: article_comments_path(article.uuid), lazy: true do %>
       <%= render "shared/loading" %>
     <% end %>
   </div>

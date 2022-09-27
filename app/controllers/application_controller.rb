@@ -10,6 +10,7 @@ class ApplicationController < ActionController::Base
   helper_method :current_user
   helper_method :current_locale
   helper_method :from_mixin_messenger?
+  helper_method :requesting_modal?
   around_action :with_locale
 
   add_flash_types :success, :warning, :danger, :info
@@ -61,5 +62,9 @@ class ApplicationController < ActionController::Base
 
   def current_locale
     @current_locale ||= (session[:current_locale].presence || current_user&.locale.presence || browser_locale.presence || I18n.default_locale)
+  end
+
+  def requesting_modal?
+    request.headers['Turbo-Frame'] == 'modal'
   end
 end

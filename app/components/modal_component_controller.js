@@ -55,6 +55,8 @@ export default class extends Controller {
   }
 
   submitEnd(event) {
+    if (this.backdropValue === 'static') return;
+
     if (event.detail.success) {
       this.hide();
     }
