@@ -7,13 +7,16 @@ class Dashboard::HomeController < Dashboard::BaseController
 
   def readings
     @tab = params[:tab] || 'bought'
+    @active_page = 'readings'
   end
 
   def authorings
     @tab = params[:tab] || 'drafted'
+    @active_page = 'authorings'
   end
 
   def settings
     @tab = params[:tab] || 'profile'
+    @active_page = 'settings'
   end
 end

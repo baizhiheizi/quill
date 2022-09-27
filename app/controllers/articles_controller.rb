@@ -15,6 +15,7 @@ class ArticlesController < ApplicationController
     articles = ArticleSearchService.call(params.merge(current_user: current_user, locale: current_locale))
 
     @pagy, @articles = pagy_countless articles
+    @active_page = 'home'
 
     respond_to do |format|
       format.html
