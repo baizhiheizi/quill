@@ -1,6 +1,6 @@
 <div class="flex items-center justify-between mb-8">
-  <div class="text-xl font-bold">
-    <%= t('notification') %>
+  <div class="">
+    <span class="hidden sm:block text-xl font-bold"><%= t('notification') %></span>
   </div>
 
   <div class="flex items-center space-x-4 justify-end">
@@ -31,3 +31,14 @@
     <%= render partial: "shared/pagination", locals: { pagy: @pagy } %>
   <% end %>
 </div>
+
+<% content_for :topbar do %>
+  <div class="flex items-center px-4 h-12">
+    <%= link_to :back, class: "px-2" do %>
+      <%= inline_svg_tag "icons/chevron-left.svg", class: "w-5 h-5 font-bold" %>
+    <% end %>
+    <span class="font-bold text-lg">
+      <%= t('notification') %>
+    </span>
+  </div>
+<% end %>

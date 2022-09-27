@@ -1,29 +1,26 @@
 <%= turbo_frame_tag "#{dom_id article}_comments" do %>
-  <div class="w-full flex items-center justify-between mb-6"
+  <div class="w-full flex items-center mb-6"
     data-controller="tabs"
     data-tabs-active-tab-value="<%= order_by %>"
     data-tabs-active-class-value="text-primary">
-    <div class="font-bold">
-      <%= t('comments') %>
-    </div>
     <div class="flex overflow-auto flex-nowrap scrollbar-hide items-center">
       <%= link_to t('upvotes'), 
         article_comments_path(article, order_by: :upvotes),
-        class: "cursor-pointer px-2 min-w-fit",
+        class: "cursor-pointer pr-4 min-w-fit",
         data: {
           tabs_target: "tab",
           tabs_tabname_param: "upvotes" 
         } %>
       <%= link_to t('desc'), 
         article_comments_path(article, order_by: :desc),
-        class: "cursor-pointer px-2 min-w-fit",
+        class: "cursor-pointer pr-4 min-w-fit",
         data: {
           tabs_target: "tab",
           tabs_tabname_param: "desc" 
         } %>
       <%= link_to t('asc'), 
         article_comments_path(article, order_by: :asc),
-        class: "cursor-pointer px-2 min-w-fit",
+        class: "cursor-pointer pr-4 min-w-fit",
         data: {
           tabs_target: "tab",
           tabs_tabname_param: "asc" 
@@ -31,10 +28,15 @@
     </div>
   </div>
   <div>
-    <div id="<%= dom_id article %>_comments_list">
+    <div class="<%= dom_id article %>_comments_list">
       <% if comments.blank? %>
-        <div class="text-center py-2 opacity-50">
-          <%= t("no_comments") %>
+        <div class="py-4">
+          <div class="flex justify-center mb-4">
+            <%= image_tag "empty-comment.svg", class: "w-40 h-auto" %>
+          </div>
+          <div class="text-center text-xs opacity-40">
+            <%= t("no_comments") %>
+          </div>
         </div>
       <% else %>
         <%= render partial: "comments/comment", collection: comments, as: :comment %>

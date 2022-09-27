@@ -6,11 +6,15 @@
         controller: 'prefetch', 
         turbo_frame: "_top" 
       } do %>
-      <img src="<%= comment.author.avatar %>" class="w-6 h-6 sm:w-9 sm:h-9 rounded-full" />
+      <%= image_tag comment.author.avatar, class: "w-9 h-9 rounded-full" %>
     <% end %>
     <div class="">
       <div class="truncate"><%= comment.author.short_name %></div>
-      <div class="text-sm opacity-50"><%= time_ago_in_words comment.created_at %></div>
+      <div class="text-sm opacity-50">
+        <%= render TimeFormatComponent.new datetime: comment.created_at.rfc3339 do %>
+          <%= time_ago_in_words comment.created_at %>
+        <% end %>
+      </div>
     </div>
   </div>
 

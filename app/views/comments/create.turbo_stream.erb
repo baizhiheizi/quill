@@ -1,11 +1,11 @@
 <% if @comment.persisted? %>
   <% if @comment.commentable.is_a?(Article) %>
     <%= turbo_stream.prepend "#{dom_id @comment.commentable}_comments_list" do %>
-      <%= render partial: "comments/comment", locals: { comment: @comment } %>
+      <%= render "comments/comment", comment: @comment %>
     <% end %>
-  <% end %>
-
-  <%= turbo_stream.update "modal" do %>
+    <%= turbo_stream.replace "#{dom_id @comment.commentable}_floating_bar" do %>
+      <%= render "articles/floating_bar", article: @comment.commentable, user: current_user %>
+    <% end %>
   <% end %>
 <% else %>
   <% @comment.errors.full_messages.each do |message| %>
@@ -16,6 +16,6 @@
 <% end %>
 
 <%= turbo_stream.replace "new_comment" do %>
-  <%= render partial: "comments/form", locals: { commentable: @comment.commentable } %>
+  <%= render "comments/form", commentable: @comment.commentable %>
 <% end %>
 
