@@ -1,5 +1,5 @@
 <div class="mb-4 sm:mb-8">
-  <div class="flex justify-center pt-8 mb-4">
+  <div class="flex justify-center pt-6 sm:pt-8 mb-4">
     <%= image_tag @user.avatar(original: true), class: "rounded-full w-16 h-16 ring-4 ring-white" %>
   </div>
   <div class="mb-2 px-4 max-w-full">
@@ -24,48 +24,72 @@
   <div class="mx-auto max-w-3xl"
     data-controller="tabs"
     data-tabs-active-tab-value="<%= @tab %>"
-    data-tabs-active-class-value="border-b-2">
-    <div class="w-full flex space-x-2 sm:space-x-4 py-2 sm:justify-center overflow-auto flex-nowrap scrollbar-hide items-center flex px-2 sm:px-4 mb-4 bg-white sm:rounded-lg dark:bg-zinc-900">
-      <%= link_to t('published'), 
-        user_path(@user, tab: :published),
-        class: "cursor-pointer py-1 border-primary",
+    data-tabs-active-class-value="font-bold text-primary !border-primary">
+    <div class="w-full flex overflow-auto flex-nowrap scrollbar-hide items-center flex mb-4">
+      <%= link_to user_path(@user, tab: :published),
+        class: "cursor-pointer py-1 pr-8 border-transparent min-w-fit",
         data: {
           tabs_target: "tab",
           tabs_tabname_param: "published",
           action: "tabs#active"
-        } %>
-      <%= link_to t('bought'), 
-        user_path(@user, tab: :published),
-        class: "cursor-pointer py-1 border-primary",
+        } do %>
+        <div class="min-w-fit">
+          <%= t('published') %>
+        </div>
+        <div class="h-2 border-b-2 border-inherit w-4 mx-auto"></div>
+      <% end %>
+
+      <%= link_to user_path(@user, tab: :published),
+        class: "cursor-pointer py-1 pr-8 border-transparent min-w-fit",
         data: {
           tabs_target: "tab",
           tabs_tabname_param: "bought",
           action: "tabs#active"
-        } %>
-      <%= link_to t('subscribing'), 
-        user_subscribe_users_path(@user),
-        class: "cursor-pointer py-1 border-primary",
+        } do %>
+        <div class="min-w-fit">
+          <%= t('bought') %>
+        </div>
+        <div class="h-2 border-b-2 border-inherit w-4 mx-auto"></div>
+      <% end %>
+
+      <%= link_to user_subscribe_users_path(@user),
+        class: "cursor-pointer py-1 pr-8 border-transparent min-w-fit",
         data: {
           tabs_target: "tab",
           tabs_tabname_param: "subscribing",
           action: "tabs#active"
-        } %>
-      <%= link_to t('subscribers'), 
-        user_subscribe_by_users_path(@user),
-        class: "cursor-pointer py-1 border-primary",
+        } do %>
+        <div class="min-w-fit">
+          <%= t('subscribing') %>
+        </div>
+        <div class="h-2 border-b-2 border-inherit w-4 mx-auto"></div>
+      <% end %>
+
+      <%= link_to user_subscribe_by_users_path(@user),
+        class: "cursor-pointer py-1 pr-8 border-transparent min-w-fit",
         data: {
           tabs_target: "tab",
           tabs_tabname_param: "subscribers",
           action: "tabs#active"
-        } %>
-      <%= link_to t('commented'), 
-        user_comments_path(@user),
-        class: "cursor-pointer py-1 border-primary",
+        } do %>
+        <div class="min-w-fit">
+          <%= t('subscribers') %>
+        </div>
+        <div class="h-2 border-b-2 border-inherit w-4 mx-auto"></div>
+      <% end %>
+
+      <%= link_to user_comments_path(@user),
+        class: "cursor-pointer py-1 pr-8 border-transparent min-w-fit",
         data: {
           tabs_target: "tab",
           tabs_tabname_param: "commented",
           action: "tabs#active"
-        } %>
+        } do %>
+        <div class="min-w-fit">
+          <%= t('commented') %>
+        </div>
+        <div class="h-2 border-b-2 border-inherit w-4 mx-auto"></div>
+      <% end %>
     </div>
     <div class="hidden pb-4"
       data-tabs-content-param="published"

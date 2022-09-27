@@ -1,7 +1,9 @@
 # frozen_string_literal: true
 
 class Dashboard::HomeController < Dashboard::BaseController
-  def index; end
+  def index
+    redirect_to dashboard_readings_path
+  end
 
   def readings
     @tab = params[:tab] || 'bought'

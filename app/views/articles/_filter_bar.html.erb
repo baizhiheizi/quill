@@ -1,50 +1,79 @@
-<div class="mb-2 pt-4 sm:pt-0"
+<div class=""
   data-controller="tabs"
   data-tabs-active-tab-value="<%= filter %>"
-  data-tabs-active-class-value="font-bold text-primary">
+  data-tabs-active-class-value="text-primary !border-primary">
   <div class="w-full flex overflow-auto flex-nowrap scrollbar-hide items-center flex">
-    <%= link_to t('order_by_popularity'), 
-      articles_path(filter: :default),
-      class: "cursor-pointer px-2 opacity-70 min-w-fit",
+    <%= link_to articles_path(filter: :default),
+      class: "cursor-pointer py-1 pr-8 border-transparent min-w-fit",
       data: {
         controller: 'prefetch',
         tabs_target: "tab",
         tabs_tabname_param: "default",
-      } %>
-    <%= link_to t('subscribed'), 
-      articles_path(filter: :subscribed),
-      class: "cursor-pointer px-2 opacity-70 min-w-fit",
-      data: {
-        controller: 'prefetch',
-        tabs_target: "tab",
-        tabs_tabname_param: "subscribed",
-      } if current_user.present? && current_user.subscribe_users.present? %>
-    <%= link_to t('bought'), 
-      articles_path(filter: :bought),
-      class: "cursor-pointer px-2 opacity-70 min-w-fit",
-      data: {
-        controller: 'prefetch',
-        tabs_target: "tab",
-        tabs_tabname_param: "bought",
-      } if current_user.present? && current_user.bought_articles_count > 0 %>
-    <%= link_to t('order_by_lately'), 
-      articles_path(filter: :lately),
-      class: "cursor-pointer px-2 opacity-70 min-w-fit",
+      } do %>
+      <div class="min-w-fit">
+        <%= t('order_by_popularity') %>
+      </div>
+      <div class="h-2 border-b-2 border-inherit w-4 mx-auto"></div>
+    <% end %>
+
+    <% if current_user.present? && current_user.subscribe_users.present? %>
+      <%= link_to articles_path(filter: :subscribed),
+        class: "cursor-pointer py-1 pr-8 border-transparent min-w-fit",
+        data: {
+          controller: 'prefetch',
+          tabs_target: "tab",
+          tabs_tabname_param: "subscribed",
+        } do %>
+      <div class="min-w-fit">
+        <%= t('subscribed') %>
+      </div>
+      <div class="h-2 border-b-2 border-inherit w-4 mx-auto"></div>
+      <% end %>
+    <% end %>
+
+    <% if current_user.present? && current_user.bought_articles_count > 0 %>
+      <%= link_to articles_path(filter: :bought),
+        class: "cursor-pointer py-1 pr-8 border-transparent min-w-fit",
+        data: {
+          controller: 'prefetch',
+          tabs_target: "tab",
+          tabs_tabname_param: "bought",
+        } do %>
+        <div class="min-w-fit">
+          <%= t('bought') %>
+        </div>
+        <div class="h-2 border-b-2 border-inherit w-4 mx-auto"></div>
+      <% end %>
+    <% end %>
+
+    <%= link_to articles_path(filter: :lately),
+      class: "cursor-pointer py-1 pr-8 border-transparent min-w-fit",
       data: {
         controller: 'prefetch',
         tabs_target: "tab",
         tabs_tabname_param: "lately",
-      } %>
-    <%= link_to t('order_by_revenue'), 
-      articles_path(filter: :revenue, time_range: :month),
-      class: "cursor-pointer px-2 opacity-70 min-w-fit",
+      } do %>
+      <div class="min-w-fit">
+        <%= t('order_by_lately') %>
+      </div>
+      <div class="h-2 border-b-2 border-inherit w-4 mx-auto"></div>
+    <% end %>
+
+    <%= link_to articles_path(filter: :revenue, time_range: :month),
+      class: "cursor-pointer py-1 pr-8 border-transparent min-w-fit",
       data: {
         controller: 'prefetch',
         tabs_target: "tab",
         tabs_tabname_param: "revenue",
-      } %>
+      } do %>
+      <div class="min-w-fit">
+        <%= t('order_by_revenue') %>
+      </div>
+      <div class="h-2 border-b-2 border-inherit w-4 mx-auto"></div>
+    <% end %>
   </div>
 </div>
+
 <% if filter == 'revenue' %>
   <div class="mb-2 sm:pt-0 text-sm"
     data-controller="tabs"

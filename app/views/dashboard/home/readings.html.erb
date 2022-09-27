@@ -10,7 +10,7 @@
   data-tabs-active-class-value="font-bold text-primary !border-primary">
   <div class="w-full flex overflow-auto flex-nowrap scrollbar-hide items-center flex mb-4">
     <%= link_to dashboard_readings_path(tab: :bought),
-      class: "cursor-pointer py-1 pr-8 border-transparent",
+      class: "cursor-pointer py-1 pr-8 border-transparent min-w-fit",
       data: {
         tabs_target: "tab",
         tabs_tabname_param: "bought" 
@@ -18,10 +18,10 @@
       <div class="min-w-fit">
         <%= t('bought') %>
       </div>
-      <div class="h-2 border-b-2 border-inherit mx-2"></div>
+      <div class="h-2 border-b-2 border-inherit w-4 mx-auto"></div>
     <% end %>
     <%= link_to dashboard_readings_path(tab: :comments),
-      class: "cursor-pointer py-1 pr-8 border-transparent",
+      class: "cursor-pointer py-1 pr-8 border-transparent min-w-fit",
       data: {
         tabs_target: "tab",
         tabs_tabname_param: "comments" 
@@ -29,10 +29,10 @@
       <div class="min-w-fit">
         <%= t('my_comments') %>
       </div>
-      <div class="h-2 border-b-2 border-inherit mx-2"></div>
+      <div class="h-2 border-b-2 border-inherit w-4 mx-auto"></div>
     <% end %>
     <%= link_to dashboard_readings_path(tab: :orders),
-      class: "cursor-pointer py-1 pr-8 border-transparent",
+      class: "cursor-pointer py-1 pr-8 border-transparent min-w-fit",
       data: {
         tabs_target: "tab",
         tabs_tabname_param: "orders" 
@@ -40,10 +40,10 @@
       <div class="min-w-fit">
         <%= t('my_orders') %>
       </div>
-      <div class="h-2 border-b-2 border-inherit mx-2"></div>
+      <div class="h-2 border-b-2 border-inherit w-4 mx-auto"></div>
     <% end %>
     <%= link_to dashboard_readings_path(tab: :transfers),
-      class: "cursor-pointer py-1 pr-8 border-transparent",
+      class: "cursor-pointer py-1 pr-8 border-transparent min-w-fit",
       data: {
         tabs_target: "tab",
         tabs_tabname_param: "transfers" 
@@ -51,7 +51,7 @@
       <div class="min-w-fit">
         <%= t('readers_revenue') %>
       </div>
-      <div class="h-2 border-b-2 border-inherit mx-2"></div>
+      <div class="h-2 border-b-2 border-inherit w-4 mx-auto"></div>
     <% end %>
   </div>
 
