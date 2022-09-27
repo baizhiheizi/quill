@@ -91,3 +91,18 @@
     </div>
   <% end %>
 <% end %>
+
+<div class="flex my-16 items-center justify-center">
+  <% if from_mixin_messenger? %>
+    <%= link_to t('connect_wallet'), 
+      mixin_login_path, 
+      class: "rounded-full py-3 text-white bg-primary text-center px-6" %>
+  <% else %>
+    <%= link_to t('connect_wallet'), 
+      login_path, 
+      data: { 
+        turbo_frame: :modal 
+      }, 
+      class: "rounded-full py-3 text-white bg-primary text-center px-6" %>
+  <% end %>
+</div>
