@@ -1,5 +1,5 @@
-<% if @hot_tags.present? %>
-  <%= turbo_frame_tag 'hot_tags' do %>
+<%= turbo_frame_tag 'hot_tags' do %>
+  <% if @hot_tags.present? %>
     <div class="mb-16">
       <div class="mb-6">
         <span class="font-bold"><%= t('hot_tags') %></span>
