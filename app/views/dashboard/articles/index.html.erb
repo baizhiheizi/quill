@@ -15,10 +15,10 @@
           <%= render Articles::CardComponent.with_collection(@articles) %>
         <% end %>
       </div>
-
-      <div data-infinite-scroll-target='scrollArea'></div>
-      <%= render "shared/pagination", pagy: @pagy, id: "my_#{@tab}_articles_pagination" %>
     <% end %>
+
+    <div data-infinite-scroll-target='scrollArea'></div>
+    <%= render "shared/pagination", pagy: @pagy, id: "my_#{@tab}_articles_pagination" %>
 
     <div class="my-8 flex justify-center">
       <%= link_to t('write'), 
