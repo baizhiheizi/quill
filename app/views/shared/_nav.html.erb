@@ -97,7 +97,10 @@
             <% c.with_button do %>
               <%= image_tag current_user.avatar, class: "w-10 h-10 rounded-full" %>
             <% end %>
-            <div class="block">
+            <div class="block text-[#222222] dark:text-white dark:text-opacity-80">
+              <%= link_to t('profile_page'), 
+                user_path(current_user), 
+                class: "block py-2 px-4" %>
               <%= link_to t('settings'), 
                 dashboard_settings_path, 
                 class: "block py-2 px-4" %>
@@ -127,7 +130,7 @@
           <%= image_tag 'logo.svg', class: "w-auto h-8" %>
         <% end %>
         <% if current_user.present? %>
-          <%= link_to dashboard_notifications_path, class: "block px-6 py-3 #{from_mixin_messenger? ? 'mr-16' : ''}" do %>
+          <%= link_to dashboard_notifications_path, class: "block px-6 py-3 #{from_mixin_messenger? ? 'mr-24' : ''}" do %>
             <div class="w-6 h-6 mx-auto relative">
               <%= inline_svg_tag 'icons/bell.svg', 
                 class: "w-6 h-6 mx-auto text-opacity-60 text-[#222222] dark:text-white dark:text-opacity-80", 
@@ -144,14 +147,14 @@
       </div>
     <% end %>
   </nav>
-  <nav class="lg:hidden w-full fixed bottom-0 shadow bg-white dark:bg-[#1D1E2B] z-50 border-t dark:border-white dark:border-opacity-5">
+  <nav class="lg:hidden w-full fixed bottom-0 shadow bg-white dark:bg-[#333444] z-50 border-t dark:border-white dark:border-opacity-5">
     <div class="grid grid-cols-4">
       <%= link_to articles_path, class: "block py-[1.125rem]" do %>
         <%= inline_svg_tag (@active_page == 'home' ? 'icons/home-solid.svg' : 'icons/home.svg'), 
           class: "w-6 h-6 mx-auto text-opacity-60 text-[#222222] dark:text-white dark:text-opacity-80",
           data: { 
             tippy_content: 'Quill', 
-            tippy_placement: 'right' 
+            tippy_placement: 'top' 
           } %>
       <% end %>
 
@@ -160,7 +163,7 @@
           class: "w-6 h-6 mx-auto text-opacity-60 text-[#222222] dark:text-white dark:text-opacity-80",
           data: { 
             tippy_content: t('my_reading'), 
-            tippy_placement: 'right' 
+            tippy_placement: 'top' 
           } %>
       <% end %>
 
@@ -169,7 +172,7 @@
           class: "w-6 h-6 mx-auto text-opacity-60 text-[#222222] dark:text-white dark:text-opacity-80",
           data: { 
             tippy_content: t('my_authoring'), 
-            tippy_placement: 'right' 
+            tippy_placement: 'top' 
           } %>
       <% end %>
 
@@ -178,7 +181,11 @@
           <% c.with_button do %>
             <%= image_tag current_user.avatar, class: "w-7 h-7 rounded-full" %>
           <% end %>
-          <div class="block">
+          <div class="block text-[#222222] dark:text-white dark:text-opacity-80">
+            <%= link_to t('profile_page'), 
+              user_path(current_user), 
+              class: "block py-2 px-4" %>
+
             <%= link_to t('notification'), 
               dashboard_notifications_path, 
               class: "block py-2 px-4" %>
@@ -220,5 +227,6 @@
         <% end %>
       <% end %>
     </div>
+    <div style="height:env(safe-area-inset-bottom)"></div>
   </nav>
 </div>

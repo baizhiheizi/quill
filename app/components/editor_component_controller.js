@@ -78,6 +78,11 @@ export default class extends Controller {
       },
       extensions: [
         BubbleMenu.configure({
+          tippyOptions: {
+            theme: 'light-border',
+            arrow: false,
+            placement: 'top-start',
+          },
           element: this.bubbleMenuTarget,
         }),
         CodeBlockLowlight.configure({
@@ -86,6 +91,8 @@ export default class extends Controller {
         FloatingMenu.configure({
           element: this.floatingMenuTarget,
           tippyOptions: {
+            theme: 'light-border',
+            arrow: false,
             placement: 'bottom-start',
           },
         }),
@@ -158,9 +165,9 @@ export default class extends Controller {
 
     this.bubbleMenuButtonTargets.forEach((button) => {
       if (this.editor.isActive(button.dataset.buttonType)) {
-        button.classList.add('bg-zinc-300');
+        button.classList.add('bg-[#333444]');
       } else {
-        button.classList.remove('bg-zinc-300');
+        button.classList.remove('bg-[#333444]');
       }
     });
   }

@@ -1,3 +1,3 @@
-<%= turbo_stream.replace "#{dom_id @user}_action_buttons" do %>
-  <%= render "users/action_buttons", user: @user %>
+<%= turbo_stream.replace_all ".#{dom_id @user}_card" do %>
+  <%= render "users/user_card", user: @user %>
 <% end %>

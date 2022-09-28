@@ -1,0 +1,64 @@
+<div class="<%= dom_id user %>_card mb-8 xl:mb-16">
+  <div class="flex items-center justify-between mb-4">
+    <div class="relative flex items-center justify-between space-x-2">
+      <img class="w-12 h-12 rounded-full" src="<%= user.avatar %>" />
+      <div class="truncate">
+        <div class="text-lg font-bold truncate"><%= user.short_name %></div>
+        <div class="text-sm text-gray-500 truncate">@<%= user.short_uid %></div>
+      </div>
+      <%= link_to user_path(user), data: { controller: 'prefetch' } do %>
+        <span aria-hidden="true" class="absolute inset-0"></span>
+      <% end %>
+    </div>
+    <% if current_user.present? && current_user != user %>
+      <%= render DropdownComponent.new do |c| %>
+        <% c.with_button do %>
+          <%= render "shared/icons/dot_horizontal", html_class: 'w-4 h-4' %>
+        <% end %>
+
+        <% if current_user.block_user?(user) %>
+          <%= link_to block_user_path(user.uid), 
+            data: {
+              turbo_method: :delete
+            },
+            class: "cursor-pointer w-full block px-4 py-2 text-sm opacity-70" do %>
+            <%= t('unblock_user') %>
+          <% end %>
+        <% else %>
+          <%= link_to new_block_user_path(uid: user.uid), 
+            data: { 
+              turbo_frame: :modal,
+            }, 
+            class: "cursor-pointer w-full block px-4 py-2 text-sm opacity-70" do %>
+            <%= t('block_user') %>
+          <% end %>
+        <% end %>
+      <% end %>
+    <% end %>
+  </div>
+  <div class="mb-4 break-words">
+    <%= user.bio %>
+  </div>
+  <div class="mb-6 text-sm">
+    <div class="grid grid-cols-2 xl:grid-cols-3 gap-4 mb-1">
+      <%= link_to user_path(user.uid, tab: :published), data: { controller: 'prefetch' }, class:"flex items:center space-x-1" do %>
+        <span class="opacity-75"><%= t('published') %>:</span> 
+        <span class="text-mono"><%= user.articles_count %></span>
+      <% end %>
+
+      <%= link_to user_path(user.uid, tab: :bought), data: { controller: 'prefetch' }, class:"flex items:center space-x-1" do %>
+        <span class="opacity-75"><%= t('bought') %>:</span> 
+        <span class="text-mono"><%= user.bought_articles_count %></span>
+      <% end %>
+
+      <div class="col-span-2 flex items-center space-x-1">
+        <span class="opacity-75"><%= t('joined_at') %>:</span> 
+        <%= render TimeFormatComponent.new datetime: user.created_at.rfc3339 do %>
+          <span class="text-mono"><%= user.created_at %></span>
+        <% end %>
+      </div>
+    </div>
+  </div>
+
+  <%= render "subscribe_users/subscribe_button", user: user, style: 'block' %>
+</div>

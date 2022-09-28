@@ -1,14 +1,14 @@
 # frozen_string_literal: true
 
 class ArticleSearchService
-  def initialize(params)
+  def initialize(params = {})
     @query = params[:query].to_s.strip
     @tag = params[:tag].to_s.strip
     @filter = params[:filter]
     @time_range = params[:time_range]
     @current_user = params[:current_user]
     @articles = Article.without_drafted.includes(:author, :tags)
-    @locale = @query.to_s.strip.present? ? nil : params[:locale] || current_user&.locale || I18n.default_locale
+    @locale = @query.to_s.strip.present? ? nil : params[:locale] || @current_user&.locale || I18n.default_locale
   end
 
   def self.call(*args)

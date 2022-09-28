@@ -4,7 +4,7 @@ class HomeController < ApplicationController
   layout 'homepage', only: :index
 
   def index
-    redirect_to articles_path if current_user.present?
+    redirect_to articles_path if current_user.present? || browser.device.mobile?
   end
 
   def selected_articles

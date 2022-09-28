@@ -21,18 +21,14 @@
 </article>
 
 <%= content_for :sidebar do %>
-  <div class="mb-4">
-    <%= render "articles/author_card", author: @article.author %>
-  </div>
+  <%= render "users/user_card", user: @article.author %>
   <% if @article.article_references.present? %>
     <div class="mb-4">
       <%= render "articles/references_card", references: @article.article_references %>
     </div>
   <% end %>
   <% if @article.related_articles.present? %>
-    <div class="mb-4">
-      <%= render "articles/related_articles_card", articles: @article.related_articles %>
-    </div>
+    <%= render "articles/related_articles_card", articles: @article.related_articles %>
   <% end %>
   <%= turbo_frame_tag 'hot_tags', src: '/hot_tags', loading: :lazy %>
 <% end %>

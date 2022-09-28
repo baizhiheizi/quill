@@ -19,7 +19,7 @@
       data: { 
         turbo_frame: :modal,
       }, 
-      class: "flex items-center justify-center space-x-1 w-full cursor-pointer text-sm text-[#B1B6C6] rounded-full text-white text-center #{style == 'block' ? 'py-3 bg-[#F4F4F4] dark:bg-[#444655] rounded-full' : 'w-24 py-1.5'}" %>
+      class: "flex items-center justify-center space-x-1 w-full cursor-pointer text-sm text-[#B1B6C6] rounded-full text-center #{style == 'block' ? 'py-3 bg-[#F4F4F4] dark:bg-[#444655] rounded-full' : 'w-24 py-1.5'}" %>
   <% else %>
     <%= button_to subscribe_tags_path(id: tag.id), 
       class: "flex items-center justify-center space-x-1 w-full cursor-pointer text-sm text-primary text-center #{style == 'block' ? 'py-3 bg-primary !text-white rounded-full' : 'w-24 py-1.5'}" do %>

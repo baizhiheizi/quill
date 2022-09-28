@@ -5,6 +5,18 @@
 @import 'tippy.js/themes/light.css';
 @import 'tippy.js/themes/light-border.css';
 
+.dark .tippy-box[data-theme~='light-border'] {
+  background-color: #444655;
+}
+.dark .tippy-box[data-theme~='light-border'] > .tippy-backdrop {
+  background-color: #444655;
+}
+.dark
+  .tippy-box[data-theme~='light-border'][data-placement^='top']
+  > .tippy-arrow:before {
+  border-top-color: #444655;
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

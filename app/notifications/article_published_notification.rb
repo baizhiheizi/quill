@@ -20,11 +20,11 @@ class ArticlePublishedNotification < ApplicationNotification
   end
 
   def description
-    [article.author.name, t('.published')].join(' ')
+    [article.author.short_name, t('.published')].join(' ')
   end
 
   def message
-    [article.author.name, t('.published'), ':', params[:article].title].join(' ')
+    [article.author.short_name, t('.published'), ':', params[:article].title].join(' ')
   end
 
   def url

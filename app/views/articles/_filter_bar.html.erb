@@ -79,10 +79,10 @@
     data-controller="tabs"
     data-tabs-active-tab-value="<%= time_range %>"
     data-tabs-active-class-value="font-bold text-primary">
-    <div class="w-full flex overflow-auto flex-nowrap scrollbar-hide items-center flex px-2 sm:px-0">
+    <div class="w-full flex overflow-auto flex-nowrap scrollbar-hide items-center flex px-0">
       <%= link_to t('in_a_week'), 
         articles_path(filter: :revenue, time_range: :week),
-        class: "cursor-pointer px-2 opacity-70 min-w-fit",
+        class: "cursor-pointer pr-4 opacity-70 min-w-fit",
         data: {
           controller: 'prefetch',
           tabs_target: "tab",
@@ -90,7 +90,7 @@
         } %>
       <%= link_to t('in_a_month'), 
         articles_path(filter: :revenue, time_range: :month),
-        class: "cursor-pointer px-2 opacity-70 min-w-fit",
+        class: "cursor-pointer pr-4 opacity-70 min-w-fit",
         data: {
           controller: 'prefetch',
           tabs_target: "tab",
@@ -98,7 +98,7 @@
         } %>
       <%= link_to t('in_a_year'), 
         articles_path(filter: :revenue, time_range: :year),
-        class: "cursor-pointer px-2 opacity-70 min-w-fit",
+        class: "cursor-pointer pr-4 opacity-70 min-w-fit",
         data: {
           controller: 'prefetch',
           tabs_target: "tab",
@@ -106,7 +106,7 @@
         } %>
       <%= link_to t('all'), 
         articles_path(filter: :revenue, time_range: :all),
-        class: "cursor-pointer px-2 opacity-70 min-w-fit",
+        class: "cursor-pointer pr-4 opacity-70 min-w-fit",
         data: {
           controller: 'prefetch',
           tabs_target: "tab",

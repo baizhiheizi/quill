@@ -60,7 +60,7 @@ export default class extends Controller {
     }
     document.documentElement.classList.add('dark');
     const themeColor = document.querySelector('meta[name="theme-color"]');
-    themeColor && themeColor.setAttribute('content', '#18181b');
+    themeColor && themeColor.setAttribute('content', '#1D1E2B');
     reloadTheme();
   }
 }

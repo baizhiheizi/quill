@@ -37,6 +37,8 @@ class ApplicationController < ActionController::Base
   end
 
   def current_session
+    return if session[:current_session_id].blank?
+
     @current_session ||= Session.find_by(uuid: session[:current_session_id])
   end
 
