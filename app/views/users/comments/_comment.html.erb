@@ -1,15 +1,18 @@
-<div id="<%= dom_id comment %>" 
-  class="flex space-x-2 sm:space-x-4 items-start py-2 bg-white dark:bg-zinc-900 px-4 sm:rounded-lg mb-4"
->
-  <img src="<%= comment.author.avatar %>" class="w-6 h-6 sm:w-8 sm:h-8 rounded-full" />
-  <div class="flex-1">
-    <div class="flex items-center space-x-2 mb-2 text-sm">
-      <span><%= comment.author.short_name %></span>
-      <span class="opacity-50"><%= time_ago_in_words comment.created_at %></span>
-    </div>
-    <div class="prose prose-sm xl:prose prose-h1:text-base prose-h1:m-0 prose-h2:text-base prose-h2:m-0 prose-h3:text-base prose-h3:m-0 prose-h4:m-0 dark:prose-invert mb-2">
-      <%= comment.content_as_html.html_safe %>
-    </div>
-    <%= link_to comment.commentable.title, user_article_path(comment.commentable.author, comment.commentable), data: { controller: 'prefetch' }, class: "underline text-sm opacity-70 text-right block" %>
+<div class="py-4 border-b dark:border-opacity-5 dark:border-white">
+  <div class="flex items-center justify-between space-x-4">
+    <%= link_to comment.commentable.title, 
+      user_article_path(comment.commentable.author, comment.commentable.uuid), 
+      class: "text-xl font-bold truncate flex-1", 
+      data: { 
+        turbo_frame: "_top" 
+      } %>
+    <%= render TimeFormatComponent.new datetime: comment.created_at.rfc3339 do %>
+      <span class="opacity-80 min-w-fit">
+        <%= comment.created_at.strftime("%Y-%m-%d %H:%M") %>
+      </span>
+    <% end %>
+  </div>
+  <div class="prose-comment">
+    <%= comment.content_as_html.html_safe %>
   </div>
 </div>
