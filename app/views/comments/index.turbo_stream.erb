@@ -1,6 +1,6 @@
 <% if @article.present? %>
   <%= turbo_stream.append "#{dom_id @article}_comments_list" do %>
-    <%= render "comments/comment", collection: @comments, as: :comment %>
+    <%= render partial: "comments/comment", collection: @comments, as: :comment %>
   <% end %>
 
   <%= turbo_stream.update 'load_more' do %>
