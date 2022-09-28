@@ -3,7 +3,7 @@
   <div>
     <div class="flex items-center text-sm space-x-2">
       <div class="">
-        <%= comment.author.name %>
+        <%= comment.author.short_name %>
       </div>
       <div class="opacity-70">
         <%= render TimeFormatComponent.new datetime: comment.created_at.rfc3339 do %>

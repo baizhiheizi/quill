@@ -165,9 +165,9 @@ export default class extends Controller {
 
     this.bubbleMenuButtonTargets.forEach((button) => {
       if (this.editor.isActive(button.dataset.buttonType)) {
-        button.classList.add('bg-[#333444]');
+        button.classList.add('bg-[#F4F4F4]', 'dark:bg-[#333444]');
       } else {
-        button.classList.remove('bg-[#333444]');
+        button.classList.remove('bg-[#F4F4F4]', 'dark:bg-[#333444]');
       }
     });
   }

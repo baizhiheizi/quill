@@ -37,6 +37,9 @@ application.register('fennec', FennecController);
 import FlashController from './flash_controller';
 application.register('flash', FlashController);
 
+import FloatingController from './floating_controller';
+application.register('floating', FloatingController);
+
 import HljsController from './hljs_controller';
 application.register('hljs', HljsController);
 
