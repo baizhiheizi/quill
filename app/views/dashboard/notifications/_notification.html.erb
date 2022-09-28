@@ -3,7 +3,7 @@
     <div class="w-2 h-2 rounded-full <%= notification.read? ? '' : 'bg-primary' %>">
     </div>
 
-    <div class="flex-1 flex items-center py-4 border-b overflow-x-scroll scrollbar-hide">
+    <div class="flex-1 flex items-center py-4 border-b dark:border-white dark:border-opacity-5 overflow-x-scroll scrollbar-hide">
       <div class="flex itemx-center space-x-2 truncate">
         <%= image_tag notification.icon_url, class: "w-6 h-6 rounded-full" if notification.icon_url.present? %>
         <%= link_to notification.message, 

@@ -1,26 +1,16 @@
-<div class="mb-4 sm:mb-8">
-  <div class="flex justify-center pt-6 sm:pt-8 mb-4">
-    <%= image_tag @user.avatar(original: true), class: "rounded-full w-16 h-16 ring-4 ring-white" %>
-  </div>
-  <div class="mb-2 px-4 max-w-full">
-    <% if @user.mvm_eth? %>
-      <div class="flex justify-center mb-2 px-4">
-        <%= link_to @user.mvm_address_url, 
-          target: "_blank",
-          class: "flex items-center space-x-2 rounded bg-zinc-200 py-1 px-2 opacity-70 hover:bg-zinc-300 hover:opacity-100 text-sm dark:bg-zinc-900" do %>
-          <div><%= @user.short_uid %></div>
-          <%= render "shared/icons/external_link", html_class: "w-4 h-4 font-bold" %>
-        <% end %>
-      </div>
-    <% end %>
-    <div class="font-bold text-center truncate"><%= @user.name %></div>
-  </div>
-  <div class="flex justify-center">
-    <%= render "users/action_buttons", user: @user %>
-  </div>
+<div class="hidden sm:block mb-8">
+  <span class="text-xl font-bold">
+    <%= t('profile_page') %>
+  </span>
 </div>
 
-<% unless @user.block_user?(current_user) || current_user&.block_user?(@user) %>
+<div class="xl:hidden">
+  <%= render "users/user_card", user: @user %>
+</div>
+
+<% if @user.block_user?(current_user) || current_user&.block_user?(@user) %>
+  <%= render EmptyComponent.new text: t('blocked') %>
+<% else %>
   <div class="mx-auto max-w-3xl"
     data-controller="tabs"
     data-tabs-active-tab-value="<%= @tab %>"
@@ -126,5 +116,20 @@
         <%= render "shared/loading" %>
       <% end %>
     </div> 
+  </div>
+<% end %>
+
+<%= content_for :sidebar do %>
+  <%= render "users/user_card", user: @user %>
+<% end %>
+
+<% content_for :topbar do %>
+  <div class="flex items-center px-4 h-12">
+    <%= link_to :back, class: "pr-2" do %>
+      <%= inline_svg_tag "icons/chevron-left.svg", class: "w-5 h-5 font-bold" %>
+    <% end %>
+    <span class="font-bold text-lg">
+      <%= t('profile_page') %>
+    </span>
   </div>
 <% end %>

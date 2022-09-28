@@ -22,11 +22,11 @@ class ArticleRewardedNotification < ApplicationNotification
   end
 
   def description
-    [order.buyer.name, t('.rewarded')].join(' ')
+    [order.buyer.short_name, t('.rewarded')].join(' ')
   end
 
   def message
-    [order.buyer.name, t('.rewarded'), order.article.title].join(' ')
+    [order.buyer.short_name, t('.rewarded'), order.article.title].join(' ')
   end
 
   def url

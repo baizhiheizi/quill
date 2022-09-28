@@ -9,7 +9,7 @@
   <div data-editor-component-target="editor">
   </div>
 
-  <div class="px-2 py-1 rounded-lg bg-zinc-200 hidden" data-editor-component-target="bubbleMenu">
+  <div class="rounded-lg hidden" data-editor-component-target="bubbleMenu">
     <div class="flex items-center space-x-1 hidden" data-editor-component-target="bubbleMenuLinkSetting">
       <input 
         class="p-2 border-none focus-visible:border-none focus-visible:outline-0 bg-zinc-200" 
@@ -19,7 +19,7 @@
       <span 
         class="py-1 px-2 rounded cursor-pointer"
         data-action="click->editor-component#unsetLink">
-        <%= inline_svg_tag 'icons/close.svg', class: 'w-6 h-6' %>
+        <%= inline_svg_tag 'icons/close.svg', class: 'w-6 h-6 text-[#222222] dark:text-white dark:text-opacity-80' %>
       </span>
     </div>
 
@@ -29,7 +29,7 @@
         data-button-type="bold"
         data-editor-component-target="bubbleMenuButton"
         data-action="click->editor-component#toggleBold">
-        <%= inline_svg_tag 'icons/text-bold.svg', class: 'w-6 h-6' %>
+        <%= inline_svg_tag 'icons/text-bold.svg', class: 'w-6 h-6 text-[#222222] dark:text-white dark:text-opacity-80' %>
       </span>
 
       <span 
@@ -37,7 +37,7 @@
         data-button-type="italic"
         data-editor-component-target="bubbleMenuButton"
         data-action="click->editor-component#toggleItalic">
-        <%= inline_svg_tag 'icons/text-italic.svg', class: 'w-6 h-6' %>
+        <%= inline_svg_tag 'icons/text-italic.svg', class: 'w-6 h-6 text-[#222222] dark:text-white dark:text-opacity-80' %>
       </span>
 
       <span 
@@ -45,7 +45,7 @@
         data-button-type="strike"
         data-editor-component-target="bubbleMenuButton"
         data-action="click->editor-component#toggleStrike">
-        <%= inline_svg_tag 'icons/strikethrough.svg', class: 'w-6 h-6' %>
+        <%= inline_svg_tag 'icons/strikethrough.svg', class: 'w-6 h-6 text-[#222222] dark:text-white dark:text-opacity-80' %>
       </span>
 
       <span 
@@ -53,7 +53,7 @@
         data-button-type="code"
         data-editor-component-target="bubbleMenuButton"
         data-action="click->editor-component#toggleCode">
-        <%= inline_svg_tag 'icons/code.svg', class: 'w-6 h-6' %>
+        <%= inline_svg_tag 'icons/code.svg', class: 'w-6 h-6 text-[#222222] dark:text-white dark:text-opacity-80' %>
       </span>
 
       <span 
@@ -61,30 +61,30 @@
         data-button-type="link"
         data-editor-component-target="bubbleMenuButton"
         data-action="click->editor-component#toggleLink">
-        <%= inline_svg_tag 'icons/link.svg', class: 'w-6 h-6' %>
+        <%= inline_svg_tag 'icons/link.svg', class: 'w-6 h-6 text-[#222222] dark:text-white dark:text-opacity-80' %>
       </span>
     </div>
   </div>
 
-  <div class="flex items-center space-x-1 px-2 py-1 rounded-lg bg-zinc-200" 
+  <div class="flex items-center space-x-1 rounded-lg" 
     data-editor-component-target="floatingMenu">
     <button 
       class="py-1 px-2 rounded"
       data-editor-component-level-param="2"
       data-action="editor-component#addHeading">
-      <%= inline_svg_tag 'icons/h2.svg', class: 'w-6 h-6' %>
+      <%= inline_svg_tag 'icons/h2.svg', class: 'w-6 h-6 text-[#222222] dark:text-white dark:text-opacity-80' %>
     </button>
 
     <button 
       class="py-1 px-2 rounded"
       data-editor-component-level-param="3"
       data-action="editor-component#addHeading">
-      <%= inline_svg_tag 'icons/h3.svg', class: 'w-6 h-6' %>
+      <%= inline_svg_tag 'icons/h3.svg', class: 'w-6 h-6 text-[#222222] dark:text-white dark:text-opacity-80' %>
     </button>
 
     <label>
       <div class="py-1 px-2 rounded cursor-pointer">
-        <%= inline_svg_tag 'icons/upload-picture.svg', class: 'w-6 h-6' %>
+        <%= inline_svg_tag 'icons/upload-picture.svg', class: 'w-6 h-6 text-[#222222] dark:text-white dark:text-opacity-80' %>
       </div>
       <input data-action="editor-component#uploadImage" type="file" class="sr-only" />
     </label>
@@ -92,14 +92,14 @@
     <button 
       class="py-1 px-2 rounded"
       data-action="editor-component#addBlockquote">
-      <%= inline_svg_tag 'icons/quote.svg', class: 'w-6 h-6' %>
+      <%= inline_svg_tag 'icons/quote.svg', class: 'w-6 h-6 text-[#222222] dark:text-white dark:text-opacity-80' %>
     </button>
 
     <button 
       class="py-1 px-2 rounded"
       data-editor-component-level-param="3"
       data-action="editor-component#addCodeBlock">
-      <%= inline_svg_tag 'icons/code.svg', class: 'w-6 h-6' %>
+      <%= inline_svg_tag 'icons/code.svg', class: 'w-6 h-6 text-[#222222] dark:text-white dark:text-opacity-80' %>
     </button>
   </div>
 </div>

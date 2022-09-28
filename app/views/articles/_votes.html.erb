@@ -1,17 +1,24 @@
 <div id="<%= dom_id article %>_votes" class="flex justify-center items-center">
-  <% if !article.authorized? user %>
-    <div class="border border-zinc-100 dark:border-zinc-800 rounded-full p-2 bg-primary text-white">
-      <%= render "shared/icons/thumb_up" %>
-    </div>
-  <% elsif user&.upvote_article? article %>
-    <%= button_to upvoted_article_path(article), method: :delete, class: "border border-zinc-100 dark:border-zinc-800 rounded-full p-2 bg-primary text-white" do %>
-      <%= render "shared/icons/thumb_up" %>
+  <div class="relative rounded-full p-2 text-white <%= user&.upvote_article?(article) ? 'bg-primary' : 'bg-[#B1B6C6] dark:bg-[#80808E]' %>">
+    <%= inline_svg_tag "icons/like-solid.svg", class: "w-6 h-6" %>
+
+    <% if user.blank? %>
+      <%= link_to '', login_path, data: { turbo_frame: :modal }, class: 'absolute inset-0' %>
+    <% elsif user&.upvote_article? article %>
+      <%= link_to '', upvoted_article_path(article), 
+        data: {
+          turbo_method: :delete
+        },
+        class: "absolute inset-0" %>
+    <% else %>
+      <%= link_to '', upvoted_article_path(article), 
+        data: {
+          turbo_method: :put
+        },
+        class: "absolute inset-0" %>
     <% end %>
-  <% else %>
-    <%= button_to upvoted_article_path(article), method: :put, class: "border border-zinc-100 dark:border-zinc-800 rounded-full p-2" do %>
-      <%= render "shared/icons/thumb_up" %>
-    <% end %>
-  <% end %>
+  </div>
+
   <div class="mx-4 w-16 mt-2">
     <div class="bg-red-500 rounded h-2 mb-2">
       <div class="rounded h-2 bg-primary" style="width: <%= article.upvote_ratio %>"></div>
@@ -20,17 +27,24 @@
       <%= article.upvotes_count %> : <%= article.downvotes_count %>
     </div>
   </div>
-  <% if !article.authorized? user %>
-    <div class="border border-zinc-50 dark:border-zinc-800 rounded-full p-2 bg-red-500 text-white">
-      <%= render "shared/icons/thumb_down" %>
-    </div>
-  <% elsif user&.downvote_article? article %>
-    <%= button_to upvoted_article_path(article), method: :delete, class: "border border-zinc-100 dark:border-zinc-800 rounded-full p-2 bg-red-500 text-white" do %>
-      <%= render "shared/icons/thumb_down" %>
+
+  <div class="relative rounded-full p-2 text-white <%= user&.downvote_article?(article) ? 'bg-[#F3463F]' : 'bg-[#B1B6C6] dark:bg-[#80808E]' %>">
+    <%= inline_svg_tag "icons/dislike-solid.svg", class: "w-6 h-6" %>
+
+    <% if user.blank? %>
+      <%= link_to '', login_path, data: { turbo_frame: :modal }, class: 'absolute inset-0' %>
+    <% elsif user&.downvote_article? article %>
+      <%= link_to '', downvoted_article_path(article), 
+        data: {
+          turbo_method: :delete
+        },
+        class: "absolute inset-0" %>
+    <% else %>
+      <%= link_to '', downvoted_article_path(article), 
+        data: {
+          turbo_method: :put
+        },
+        class: "absolute inset-0" %>
     <% end %>
-  <% else %>
-    <%= button_to downvoted_article_path(article), method: :put, class: "border border-zinc-100 dark:border-zinc-800 rounded-full p-2" do %>
-      <%= render "shared/icons/thumb_down" %>
-    <% end %>
-  <% end %>
+  </div>
 </div>

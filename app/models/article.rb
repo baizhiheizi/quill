@@ -114,7 +114,7 @@ class Article < ApplicationRecord
 
   delegate :swappable?, to: :currency
 
-  default_scope -> { includes(:currency) }
+  default_scope -> { includes(:currency, :tags, :author) }
   scope :without_blocked, -> { where.not(state: :blocked) }
   scope :without_free, -> { where('price > ?', 0) }
   scope :only_free, -> { where(price: 0.0) }

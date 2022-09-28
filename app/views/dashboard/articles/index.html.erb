@@ -16,14 +16,17 @@
         <% end %>
       </div>
 
-      <div class="flex justify-center">
-        <%= link_to t('write'), 
-          new_article_path, 
-          class: "px-4 py-1 bg-primary rounded-full text-white text-lg" unless @tab == 'bought' %>
-      </div>
-
       <div data-infinite-scroll-target='scrollArea'></div>
       <%= render "shared/pagination", pagy: @pagy, id: "my_#{@tab}_articles_pagination" %>
     <% end %>
+
+    <div class="my-8 flex justify-center">
+      <%= link_to t('write'), 
+        new_article_path, 
+        data: {
+          turbo_frame: '_top'
+        },
+        class: "px-4 py-1 bg-primary rounded-full text-white text-lg" unless @tab == 'bought' %>
+    </div>
   </div>
 <% end %>
