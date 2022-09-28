@@ -38,7 +38,7 @@ Rails.application.routes.draw do
   get :active_authors, to: 'home#active_authors'
   get :selected_articles, to: 'home#selected_articles'
 
-  resources :locales, only: %i[create]
+  resource :locale, only: %i[edit create]
   get '/:locale',
       to: 'locales#show',
       constraints: {

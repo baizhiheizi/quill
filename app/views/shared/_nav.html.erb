@@ -56,19 +56,17 @@
       </div>
 
       <div class="">
-        <%= render DropdownComponent.new class: 'flex justify-center py-6' do |c| %>
-          <% c.with_button do %>
-            <%= inline_svg_tag 'icons/global.svg', 
-              class: "w-6 h-6 mx-auto text-opacity-60 text-[#222222] dark:text-white",
-              data: { 
-                tippy_content: t('language'), 
-                tippy_placement: 'right' 
-              } %>
-          <% end %>
-          <div class="block">
-            <%= link_to 'English', '/en', class: "block py-2 px-4" %>
-            <%= link_to '中文', '/zh-CN', class: "block py-2 px-4" %>
-          </div>
+        <%= link_to edit_locale_path, 
+          data: {
+            turbo_frame: :modal
+          },
+          class: "block py-2 px-4" do %>
+          <%= inline_svg_tag 'icons/global.svg', 
+            class: "w-6 h-6 mx-auto text-opacity-60 text-[#222222] dark:text-white",
+            data: { 
+              tippy_content: t('language'), 
+              tippy_placement: 'right' 
+            } %>
         <% end %>
 
         <div class="flex justify-center" data-controller="darkmode">
@@ -194,15 +192,12 @@
               dashboard_settings_path, 
               class: "block py-2 px-4" %>
 
-            <%= render DropdownComponent.new class: 'block py-2 px-4' do |c| %>
-              <% c.with_button do %>
-                <%= t('language') %>
-              <% end %>
-              <div class="block">
-                <%= link_to 'English', '/en', class: "block py-2 px-4" %>
-                <%= link_to '中文', '/zh-CN', class: "block py-2 px-4" %>
-              </div>
-            <% end %>
+            <%= link_to t('language'), 
+              edit_locale_path, 
+              data: {
+                turbo_frame: :modal
+              },
+              class: "block py-2 px-4" %>
 
             <div class="flex justify-center" data-controller="darkmode">
               <a class="hidden py-2 px-4 block cursor-pointer" data-darkmode-target="lightButton" data-action="darkmode#toggle">

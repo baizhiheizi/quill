@@ -5,6 +5,7 @@ namespace :dashboard do
   get :settings, to: 'home#settings'
   get :readings, to: 'home#readings'
   get :authorings, to: 'home#authorings'
+  get :stats, to: 'home#stats'
 
   resources :articles, only: %i[index show], param: :uuid
   resources :published_articles, param: :uuid, only: %i[new update destroy]

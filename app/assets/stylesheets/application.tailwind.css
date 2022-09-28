@@ -16,6 +16,21 @@
   > .tippy-arrow:before {
   border-top-color: #444655;
 }
+.dark
+  .tippy-box[data-theme~='light-border'][data-placement^='bottom']
+  > .tippy-arrow:before {
+  border-bottom-color: #444655;
+}
+.dark
+  .tippy-box[data-theme~='light-border'][data-placement^='left']
+  > .tippy-arrow:before {
+  border-left-color: #444655;
+}
+.dark
+  .tippy-box[data-theme~='light-border'][data-placement^='right']
+  > .tippy-arrow:before {
+  border-right-color: #444655;
+}
 
 @tailwind base;
 @tailwind components;

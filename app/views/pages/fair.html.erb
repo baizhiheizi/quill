@@ -2,13 +2,13 @@
   <%= render "search/form" %>
 </div>
 
-<div class="mb-12">
+<div class="mb-8 sm:mb-12">
   <%= turbo_frame_tag 'transfers_stats', src: 'transfers/stats' do %>
     <%= render 'shared/loading' %>
   <% end %>
 </div>
 
-<div class="sm:border sm:p-4 rounded-lg">
+<div class="sm:border sm:p-4 dark:border-white dark:border-opacity-5 rounded-lg">
   <%= turbo_frame_tag "transfers", src: transfers_path, target: "_top" do %>
     <%= render "shared/loading" %>
   <% end %>
@@ -18,4 +18,15 @@
   <%= turbo_frame_tag 'active_authors', src: '/active_authors', loading: :lazy %>
   <%= turbo_frame_tag 'hot_tags', src: '/hot_tags', loading: :lazy %>
   <%= render "shared/footer" %>
+<% end %>
+
+<% content_for :topbar do %>
+  <div class="flex items-center px-4 h-12">
+    <%= link_to :back, class: "pr-2" do %>
+      <%= inline_svg_tag "icons/chevron-left.svg", class: "w-5 h-5 font-bold" %>
+    <% end %>
+    <span class="font-bold text-lg">
+      <%= t('fair') %>
+    </span>
+  </div>
 <% end %>
