@@ -1,7 +1,7 @@
-<div id="subscribe_user_<%= dom_id user %>" class="relative flex items-center px-4 py-2 justify-between">
-  <%= link_to user_path(user), class: "flex items-center space-x-2", data: { turbo_frame: "_top" } do %>
-    <img src="<%= user.avatar %>" class="w-10 h-10 rounded-full" />
-    <span class=""><%= user.name %></span>
+<div id="subscribe_user_<%= dom_id user %>" class="relative flex items-center py-4 justify-between space-x-4 border-b dark:border-white dark:border-opacity-5">
+  <%= link_to user_path(user), class: "flex items-center space-x-2 truncate", data: { turbo_frame: "_top" } do %>
+    <%= image_tag user.avatar, class: "w-8 h-8 rounded-full" %>
+    <span class="truncate"><%= user.short_name %></span>
   <% end %>
   <div class="">
     <%= render "subscribe_users/subscribe_button", user: user %>

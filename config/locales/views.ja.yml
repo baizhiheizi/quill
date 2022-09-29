@@ -48,6 +48,7 @@ ja:
   my_reading: My Reading
   my_authoring: My Reading
   my_comments: My Comments
+  my_subscriptions: My Subscriptions
   my_orders: My Orders
   profile_page: Profile
   login: ログイン
@@ -234,6 +235,7 @@ ja:
   connect_wallet: コネクトウォレット
   disconnect: Disconnect
   author: 作者
+  authors: 作者
   saved: 保存
   untitled: 無題
   profile: プロフィール

@@ -1,83 +1,70 @@
-<div class="pt-4"
-  data-controller="tabs"
-  data-tabs-active-tab-value="<%= @tab %>"
-  data-tabs-active-class-value="border-b-2">
-  <div class="w-full flex overflow-auto flex-nowrap scrollbar-hide items-center flex px-4 mb-4">
-    <%= link_to t('subscribing'), 
-      dashboard_subscriptions_path(tab: :subscribing),
-      class: "cursor-pointer py-1 px-4 border-primary opacity-70 min-w-fit",
-      data: {
-        tabs_target: "tab",
-        tabs_tabname_param: "subscribing", 
-        action: "tabs#active"
-      } %>
-    <%= link_to t('subscribers'), 
-      dashboard_subscriptions_path(tab: :subscribers),
-      class: "cursor-pointer py-1 px-4 border-primary opacity-70 min-w-fit",
-      data: {
-        tabs_target: "tab",
-        tabs_tabname_param: "subscribers",
-        action: "tabs#active"
-      } %>
-    <%= link_to t('blocking'), 
-      dashboard_subscriptions_path(tab: :blocking),
-      class: "cursor-pointer py-1 px-4 border-primary opacity-70 min-w-fit",
-      data: {
-        tabs_target: "tab",
-        tabs_tabname_param: "blocking",
-        action: "tabs#active"
-      } %>
-    <%= link_to t('commenting_subscriptions'), 
-      dashboard_subscriptions_path(tab: :comments),
-      class: "cursor-pointer py-1 px-4 border-primary opacity-70 min-w-fit",
-      data: {
-        tabs_target: "tab",
-        tabs_tabname_param: "comments",
-        action: "tabs#active"
-      } %>
-    <%= link_to t('tag_subscriptions'), 
-      dashboard_subscriptions_path(tab: :tags),
-      class: "cursor-pointer py-1 px-4 border-primary opacity-70 min-w-fit",
-      data: {
-        tabs_target: "tab",
-        tabs_tabname_param: "tags",
-        action: "tabs#active"
-      } %>
-  </div>
+<%= turbo_frame_tag 'my_subscriptions' do %>
+  <div class=""
+    data-controller="tabs"
+    data-tabs-active-tab-value="<%= @tab %>"
+    data-tabs-active-class-value="bg-[#EFEFFF] dark:bg-[#444655] text-primary">
+    <div class="w-full flex items-center space-x-4 overflow-auto flex-nowrap scrollbar-hide mb-4">
+      <%= link_to t('authors'), 
+        dashboard_subscriptions_path(tab: :subscribing_users),
+        class: "cursor-pointer py-1 px-3 rounded-full min-w-fit capitalize",
+        data: {
+          tabs_target: "tab",
+          tabs_tabname_param: "subscribing_users", 
+          action: "tabs#active"
+        } %>
+      <%= link_to t('commenting_subscriptions'), 
+        dashboard_subscriptions_path(tab: :comments),
+        class: "cursor-pointer py-1 px-3 rounded-full min-w-fit",
+        data: {
+          tabs_target: "tab",
+          tabs_tabname_param: "comments",
+          action: "tabs#active"
+        } %>
+      <%= link_to t('tag_subscriptions'), 
+        dashboard_subscriptions_path(tab: :tags),
+        class: "cursor-pointer py-1 px-3 rounded-full min-w-fit",
+        data: {
+          tabs_target: "tab",
+          tabs_tabname_param: "tags",
+          action: "tabs#active"
+        } %>
+      <%= link_to t('blocking'), 
+        dashboard_subscriptions_path(tab: :blocking),
+        class: "cursor-pointer py-1 px-3 rounded-full min-w-fit",
+        data: {
+          tabs_target: "tab",
+          tabs_tabname_param: "blocking",
+          action: "tabs#active"
+        } %>
+    </div>
 
-  <div class="hidden pb-4"
-    data-tabs-content-param="subscribing"
-    data-tabs-target="content">
-    <%= turbo_frame_tag "#{dom_id current_user}_subscribing", src: dashboard_subscribe_users_path, loading: :lazy do %>
-      <%= render "shared/loading" %>
-    <% end %>
+    <div class="hidden pb-4"
+      data-tabs-content-param="subscribing_users"
+      data-tabs-target="content">
+      <%= turbo_frame_tag "#{dom_id current_user}_subscribing_users", src: dashboard_subscribe_users_path, loading: :lazy do %>
+        <%= render "shared/loading" %>
+      <% end %>
+    </div>
+    <div class="hidden pb-4"
+      data-tabs-content-param="comments"
+      data-tabs-target="content">
+      <%= turbo_frame_tag "#{dom_id current_user}_subscribe_articles", src: dashboard_subscribe_articles_path, loading: :lazy do %>
+        <%= render "shared/loading" %>
+      <% end %>
+    </div>
+    <div class="hidden pb-4"
+      data-tabs-content-param="tags"
+      data-tabs-target="content">
+      <%= turbo_frame_tag "#{dom_id current_user}_subscribe_tags", src: dashboard_subscribe_tags_path, loading: :lazy do %>
+        <%= render "shared/loading" %>
+      <% end %>
+    </div>
+    <div class="hidden pb-4"
+      data-tabs-content-param="blocking"
+      data-tabs-target="content">
+      <%= turbo_frame_tag "#{dom_id current_user}_blocking", src: dashboard_block_users_path, loading: :lazy do %>
+        <%= render "shared/loading" %>
+      <% end %>
+    </div>
   </div>
-  <div class="hidden pb-4"
-    data-tabs-content-param="subscribers"
-    data-tabs-target="content">
-    <%= turbo_frame_tag "#{dom_id current_user}_subscribers", src: dashboard_subscribe_by_users_path, loading: :lazy do %>
-      <%= render "shared/loading" %>
-    <% end %>
-  </div>
-  <div class="hidden pb-4"
-    data-tabs-content-param="blocking"
-    data-tabs-target="content">
-    <%= turbo_frame_tag "#{dom_id current_user}_blocking", src: dashboard_block_users_path, loading: :lazy do %>
-      <%= render "shared/loading" %>
-    <% end %>
-  </div>
-  <div class="hidden pb-4"
-    data-tabs-content-param="comments"
-    data-tabs-target="content">
-    <%= turbo_frame_tag "#{dom_id current_user}_subscribe_articles", src: dashboard_subscribe_articles_path, loading: :lazy do %>
-      <%= render "shared/loading" %>
-    <% end %>
-  </div>
-  <div class="hidden pb-4"
-    data-tabs-content-param="tags"
-    data-tabs-target="content">
-    <%= turbo_frame_tag "#{dom_id current_user}_subscribe_tags", src: dashboard_subscribe_tags_path, loading: :lazy do %>
-      <%= render "shared/loading" %>
-    <% end %>
-  </div>
-</div>
+<% end %>

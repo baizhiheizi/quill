@@ -1,6 +1,6 @@
-<div id="subscribe_article_<%= dom_id article %>" class="relative flex items-center space-x-4 px-4 py-2">
-  <%= link_to user_article_path(article.author, article), class: "flex flex-1 items-center space-x-2", data: { turbo_frame: "_top" } do %>
-    <img src="<%= article.author.avatar %>" class="w-10 h-10 rounded-full" />
+<div id="subscribe_article_<%= dom_id article %>" class="relative flex items-center space-x-4 py-4 border-b dark:border-white dark:border-opacity-5">
+  <%= link_to user_article_path(article.author, article), class: "flex flex-1 items-center space-x-2 truncate", data: { turbo_frame: "_top" } do %>
+    <%= image_tag article.author.avatar, class: "w-8 h-8 rounded-full" %>
     <span class="truncate"><%= article.title %></span>
   <% end %>
   <div class="">
