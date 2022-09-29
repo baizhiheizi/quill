@@ -3,12 +3,12 @@
     <input 
       data-select-currency-target="seachInput" 
       data-action="select-currency#search"
-      class="w-full py-2 px-4 bg-[#F4F4F4] dark:bg-[#333444] rounded" 
+      class="w-full py-2 px-4 focus-visible:outline-0 bg-[#F4F4F4] dark:bg-[#333444] dark:border-white dark:border-opacity-5 dark:text-white dark:text-opacity-80 rounded" 
       placeholder="<%= t('search') %>" />
   </div>
   <div class="grid gap-4 grid-cols-3 sm:grid-cols-4">
     <% currencies.each do |currency| %>
-      <div class="flex items-center py-2 hover:bg-zinc-20 cursor-pointer rounded bg-[#F4F4F4] dark:bg-[#333444] p-2"
+      <div class="flex items-center py-2 hover:bg-zinc-20 cursor-pointer rounded dark:text-white dark:text-opacity-80 bg-[#F4F4F4] dark:bg-[#333444] p-2"
            data-select-currency-target="currencyOption"
            data-modal-component-identifier-param="<%= identifier %>"
            data-modal-component-asset-id-param="<%= currency.asset_id %>"
