@@ -1,4 +1,4 @@
-<div class="nested-form-wrapper sm:border-b border-zinc-50 sm:pb-6" data-new-record="<%= form.object.new_record? %>">
+<div class="nested-form-wrapper sm:border-b dark:border-white dark:border-opacity-5 sm:pb-6" data-new-record="<%= form.object.new_record? %>">
   <div class="grid grid-cols-3 gap-3 mb-4">
     <%= form.label :reference, class: "col-span-3 sm:col-span-1 block text-sm font-medium opacity-70" %>
     <%= form.hidden_field :id %>
@@ -15,9 +15,9 @@
             controller: "references-select",
             references_select_items_value: article.references.pluck(:id),
             references_select_options_value: current_user.available_articles.collect { |a| { id: a.id, title: a.title, author: { name: a.author.name, avatar: a.author.avatar}} }, 
-            action: "change->article-form#submit"
+            action: "change->article-form#touchDirty"
           }, 
-          class: "focus:ring-blue-500 focus:border-blue-500 flex-1 block w-full rounded sm:text-sm border-zinc-300 dark:bg-zinc-900" 
+          class: "focus:ring-blue-500 focus:border-blue-500 flex-1 block w-full rounded sm:text-sm" 
         %>
       </div>
       <div class="rounded-md shadow-sm">

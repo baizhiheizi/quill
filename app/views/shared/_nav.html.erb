@@ -11,7 +11,7 @@
         <% end %>
 
         <% if current_user.present? %>
-          <%= link_to dashboard_notifications_path, class: "block py-6" do %>
+          <div class="relative py-6">
             <div class="w-6 h-6 mx-auto relative">
               <%= inline_svg_tag (@active_page == 'notification' ? 'icons/bell-solid.svg' : 'icons/bell.svg'), 
                 class: "w-6 h-6 mx-auto text-opacity-60 text-[#222222] dark:text-white dark:text-opacity-80", 
@@ -23,51 +23,60 @@
                 <span class="h-2 w-2 absolute top-0 right-0 rounded-full bg-[#F3463F]"></span>
               <% end %>
             </div>
-          <% end %>
-          <%= link_to dashboard_readings_path, class: "block py-6" do %>
+            <%= link_to '', dashboard_notifications_path, class: "absolute inset-0" %>
+          </div>
+
+          <div class="relative py-6">
             <%= inline_svg_tag (@active_page == 'readings' ? 'icons/glasses-solid.svg' : 'icons/glasses.svg'), 
               class: "w-6 h-6 mx-auto text-opacity-60 text-[#222222] dark:text-white dark:text-opacity-80",
               data: { 
                 tippy_content: t('my_reading'), 
                 tippy_placement: 'right' 
               } %>
-          <% end %>
-          <%= link_to dashboard_authorings_path, class: "block py-6" do %>
+            <%= link_to '', dashboard_readings_path, class: "absolute inset-0" %>
+          </div>
+
+          <div class="relative py-6">
             <%= inline_svg_tag @active_page == 'authorings' ? 'icons/article-solid.svg' : 'icons/article.svg', 
               class: "w-6 h-6 mx-auto text-opacity-60 text-[#222222] dark:text-white dark:text-opacity-80",
               data: { 
                 tippy_content: t('my_authoring'), 
                 tippy_placement: 'right' 
               } %>
-          <% end %>
-          <%= link_to new_article_path, class: "block py-6" do %>
+            <%= link_to '', dashboard_authorings_path, class: "absolute inset-0" %>
+          </div>
+
+          <div class="relative py-6">
             <%= inline_svg_tag 'icons/write.svg', 
               class: "w-6 h-6 mx-auto text-opacity-60 text-[#222222] dark:text-white dark:text-opacity-80",
               data: { 
                 tippy_content: t('write'), 
                 tippy_placement: 'right' 
               } %>
-          <% end %>
+            <%= link_to '', new_article_path, class: "absolute inset-0" %>
+          </div>
         <% else %>
-          <%= link_to login_path, data: { turbo_frame: :modal }, class: "block py-6" do %>
+          <div class="relative py-6">
             <%= inline_svg_tag 'icons/write.svg', class: "w-6 h-6 mx-auto text-opacity-60 text-[#222222] dark:text-white dark:text-opacity-80" %>
-          <% end %>
+            <%= link_to '', login_path, data: { turbo_frame: :modal }, class: "absolute inset-0" %>
+          </div>
         <% end %>
       </div>
 
       <div class="">
-        <%= link_to edit_locale_path, 
-          data: {
-            turbo_frame: :modal
-          },
-          class: "block py-2 px-4" do %>
+        <div class="relative py-6">
           <%= inline_svg_tag 'icons/global.svg', 
             class: "w-6 h-6 mx-auto text-opacity-60 text-[#222222] dark:text-white",
             data: { 
               tippy_content: t('language'), 
               tippy_placement: 'right' 
             } %>
-        <% end %>
+          <%= link_to '', edit_locale_path, 
+            data: {
+              turbo_frame: :modal
+            },
+            class: "absolute inset-0" %>
+        </div>
 
         <div class="flex justify-center" data-controller="darkmode">
           <a class="hidden py-6 block cursor-pointer" data-darkmode-target="lightButton" data-action="darkmode#toggle">

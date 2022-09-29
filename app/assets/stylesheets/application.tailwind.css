@@ -38,9 +38,15 @@
   padding: 0.75rem;
 }
 
+.dark .ts-control,
+.ts-wrapper.single.input-active .ts-control {
+  background-color: #333444;
+}
+
 .dark .ts-control {
   background-color: #333444;
   border-color: rgba(255, 255, 255, 0.05);
+  color: rgba(255, 255, 255, 0.8);
 }
 
 .dark .ts-control input {
