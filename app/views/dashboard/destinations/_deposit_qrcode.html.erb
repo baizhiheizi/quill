@@ -5,7 +5,7 @@
   <div class="sm:flex items-start">
     <div class="flex-1">
       <%= render QrcodeComponent.new url: deposit_entry['destination'], image_classes: 'h-48' do %>
-        <div class="flex justify-center">
+        <div class="flex justify-center my-2">
           <span class="rounded text-sm px-2 py-1 opacity-70 bg-zinc-100 dark:bg-zinc-800">Address</span>
         </div>
         <div class="text-center break-all">
@@ -17,8 +17,8 @@
     <% if deposit_entry['tag'].present? %>
       <div class="flex-1">
         <%= render QrcodeComponent.new url: deposit_entry['destination'], image_classes: 'h-48' do %>
-          <div class="flex justify-center">
-            <span class="rounded text-sm px-2 py-1 opacity-70 bg-zinc-100 dark:bg-zinc-800">Tag</span>
+          <div class="flex justify-center my-2">
+            <span class="rounded text-sm px-2 py-1 opacity-70 bg-[#F4F4F4] dark:bg-[#333444]">Tag</span>
           </div>
             <div class="text-center break-all">
               <span class="font-black"><%= deposit_entry['tag'] %></span>
@@ -29,7 +29,7 @@
     <% end %>
   </div>
 
-  <div class="text-center py-2 text-gray-500 text-sm">
+  <div class="text-center py-2 opacity-60 text-sm">
     <p>
       <% if currency.chain_id == Currency::ETH_ASSET_ID %>
         <%= t("this_address_supports_erc20") %>
