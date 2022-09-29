@@ -1,7 +1,7 @@
 <div class="py-4 border-b dark:border-opacity-5 dark:border-white">
   <div class="flex items-center justify-between space-x-4">
     <%= link_to comment.commentable.title, 
-      user_article_path(comment.commentable.author, comment.commentable.uuid), 
+      user_article_path(comment.commentable.author, comment.commentable.uuid, anchor: "comment_#{comment.id}"), 
       class: "text-xl font-bold truncate flex-1", 
       data: { 
         turbo_frame: "_top" 

@@ -21,7 +21,7 @@
             data: {
               turbo_method: :delete
             },
-            class: "cursor-pointer w-full block px-4 py-2 text-sm opacity-70" do %>
+            class: "cursor-pointer w-full block px-4 py-2 text-sm opacity-70 dark:text-white" do %>
             <%= t('unblock_user') %>
           <% end %>
         <% else %>
@@ -29,7 +29,7 @@
             data: { 
               turbo_frame: :modal,
             }, 
-            class: "cursor-pointer w-full block px-4 py-2 text-sm opacity-70" do %>
+            class: "cursor-pointer w-full block px-4 py-2 text-sm opacity-70 text-[#F3463F]" do %>
             <%= t('block_user') %>
           <% end %>
         <% end %>

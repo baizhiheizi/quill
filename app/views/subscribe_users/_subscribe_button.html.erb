@@ -1,6 +1,6 @@
 <% style ||= 'default' %>
 
-<div id="<%= dom_id user %>_subscribe_button<%= style == 'block' ? '_block' : '' %>" >
+<div class="<%= dom_id user %>_subscribe_button<%= style == 'block' ? '_block' : '' %>" >
   <% if current_user.blank? %>
     <%= link_to login_path(return_to: user_url(user)), 
       data: { 
