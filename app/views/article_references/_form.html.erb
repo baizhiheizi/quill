@@ -26,22 +26,24 @@
           disabled: article.published_at.present?,
           data: { 
             article_form_target: "articleReferenceRevenueRatio",
-            action: "article-form#calReferenceRatio blur->article-form#formatReferenceRatio"
+            action: "article-form#calReferenceRatio blur->article-form#formatReferenceRatio article-form#touchDirty"
           }, 
           step: "0.01",
           min: "0.01",
           max: "0.5",
-          class: "focus:ring-blue-500 focus:border-blue-500 flex-1 block w-full rounded sm:text-sm border-zinc-300 dark:bg-zinc-900 #{article.published_at.present? && 'bg-zinc-200 dark:bg-zinc-800'}", 
+          class: "focus:ring-blue-500 focus:border-blue-500 flex-1 block w-full border-[#F4F4F4] dark:border-[white] dark:border-opacity-5 rounded bg-[#F4F4F4] dark:bg-[#333444] #{article.published_at.present? && 'opacity-60'}", 
           placeholder: "Input revenue ratio"
         %>
       </div>
     </div>
   </div>
   <% if article.published_at.blank? %>
-    <div 
-      data-action="click->nested-form#remove click->article-form#calReferenceRatio"
-      class="cursor-pointer w-full block px-4 py-1 text-center border border-dashed border-red-500 text-red-500">
-      <%= t('articles.remove_reference') %>
+    <div class="flex justify-end">
+      <div 
+        data-action="click->nested-form#remove click->article-form#calReferenceRatio click->article-form#touchDirty"
+        class="cursor-pointer px-4 py-2 font-bold text-center border border-dashed border-red-500 text-red-500 rounded-full">
+        <%= t('articles.remove_reference') %>
+      </div>
     </div>
   <% end %>
 </div>

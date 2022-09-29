@@ -32,6 +32,36 @@
   border-right-color: #444655;
 }
 
+.ts-control {
+  background-color: #f4f4f4;
+  border-color: rgba(255, 255, 255, 0.05);
+  padding: 0.75rem;
+}
+
+.dark .ts-control {
+  background-color: #333444;
+  border-color: rgba(255, 255, 255, 0.05);
+}
+
+.dark .ts-control input {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.dark .ts-dropdown input {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.dark .ts-dropdown {
+  background-color: #333444;
+  color: white;
+  border: rgba(255, 255, 255, 0.05);
+}
+
+.dark .ts-dropdown .active {
+  background-color: #444655;
+  color: white;
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
