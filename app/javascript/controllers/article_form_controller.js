@@ -11,6 +11,8 @@ export default class extends Controller {
     newRecord: Boolean,
     activeTab: String,
     articlePublished: Boolean,
+    currencyPriceUsd: Number,
+    dirty: Boolean,
   };
   static targets = [
     'form',
@@ -27,6 +29,8 @@ export default class extends Controller {
     'currencyIcon',
     'currencyChainIcon',
     'currencySymbol',
+    'priceUsd',
+    'publishButton',
   ];
 
   initialize() {
@@ -57,9 +61,20 @@ export default class extends Controller {
             this.currencyIconTarget.src = event.detail.iconUrl;
             this.currencyChainIconTarget.src = event.detail.chainIconUrl;
             this.currencySymbolTarget.innerText = event.detail.symbol;
-            this.submit();
+            this.currencyPriceUsdValue = event.detail.priceUsd;
+            this.touchDirty();
           }
         });
+    }
+  }
+
+  disconnect() {
+    document.removeEventListener('turbo:before-visit', this.confirmLeaving);
+  }
+
+  confirmLeaving(event) {
+    if (confirm('Article is not saved yet. Are you sure to leave?') == false) {
+      event.preventDefault();
     }
   }
 
@@ -78,8 +93,53 @@ export default class extends Controller {
     }
   }
 
+  dirtyValueChanged() {
+    if (!this.hasPublishButtonTarget) return;
+
+    if (this.dirtyValue) {
+      this.publishButtonTarget.disabled = true;
+      this.publishButtonTarget.classList.add(
+        'cursor-not-allowed',
+        'opacity-60',
+      );
+      this.publishButtonTarget.classList.remove('cursor-pointer');
+      document.addEventListener('turbo:before-visit', this.confirmLeaving);
+    } else {
+      this.publishButtonTarget.disabled = false;
+      this.publishButtonTarget.classList.remove(
+        'cursor-not-allowed',
+        'opacity-60',
+      );
+      this.publishButtonTarget.classList.add('cursor-pointer');
+      document.removeEventListener('turbo:before-visit', this.confirmLeaving);
+    }
+  }
+
+  touchDirty() {
+    this.dirtyValue = true;
+  }
+
+  currencyPriceUsdValueChanged() {
+    if (!this.currencyPriceUsdValue) return;
+    this.calPriceUsd();
+  }
+
+  calPriceUsd() {
+    if (!this.currencyPriceUsdValue) return;
+
+    const priceInput = this.element.querySelector(
+      "input[name='article[price]']",
+    );
+    const price = (priceInput && priceInput.value) || 0;
+    this.priceUsdTarget.innerText = (
+      parseFloat(price) * parseFloat(this.currencyPriceUsdValue)
+    ).toFixed(4);
+  }
+
   submit() {
-    showLoading();
+    if (this.formTarget.checkValidity()) {
+      showLoading();
+    }
     if (this.newRecordValue) {
       this.formTarget.submit();
       this.clearDraft();
@@ -101,7 +161,6 @@ export default class extends Controller {
 
     e.target.value = ratio.toFixed(2);
     this.calReferenceRatio();
-    this.submit();
   }
 
   calReferenceRatio() {

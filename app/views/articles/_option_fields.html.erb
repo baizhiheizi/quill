@@ -1,6 +1,6 @@
 <div data-article-form-target="optionFields" 
-  class="hidden px-4 py-5 bg-white dark:bg-zinc-900 space-y-6 sm:p-6">
-  <div class="sm:pb-6 sm:border-b border-zinc-50">
+  class="hidden px-4 py-5 bg-white dark:bg-[#1D1E2B] space-y-6 sm:p-6">
+  <div class="sm:pb-6 sm:border-b dark:border-white dark:border-opacity-5">
     <%= form.select :tag_names, 
       form.object.tag_names.presence || Tag.all.first(10).pluck(:name), 
       {}, 
@@ -10,18 +10,18 @@
         controller: "tags-select",
         tags_select_items_value: form.object.tag_names,
       }, 
-      class: "focus:ring-blue-500 focus:border-blue-500 flex-1 block w-full rounded sm:text-sm border-zinc-300 dark:bg-zinc-900" 
+      class: "focus:ring-blue-500 focus:border-blue-500 flex-1 block w-full rounded sm:text-sm" 
     %>
   </div>
 
-  <div class="sm:pb-6 sm:border-b border-zinc-50 grid grid-cols-3 gap-3">
+  <div class="sm:pb-6 sm:border-b dark:border-white dark:border-opacity-5 grid grid-cols-3 gap-3">
     <%= form.label :intro, class: "col-span-3 sm:col-span-1 block text-sm font-medium opacity-70" %>
     <div class="col-span-3 sm:col-span-2">
       <div class="rounded-md shadow-sm">
         <%= form.text_area :intro, 
           value: form.object.intro, 
           rows: 3, 
-          class: "focus:ring-blue-500 focus:border-blue-500 flex-1 block w-full rounded sm:text-sm border-zinc-300 dark:bg-zinc-900" %>
+          class: "focus:ring-blue-500 focus:border-blue-500 flex-1 block w-full rounded sm:text-sm bg-[#F4F4F4] border-[#F4F4F4] dark:border-white dark:border-opacity-5 dark:bg-[#333444]" %>
       </div>
       <% if form.object.errors.where(:intro).present? %>
         <div class="py-2 text-red-700 font-sm"><%= form.object.errors.where(:intro).map(&:full_message).join(';') %></div>
@@ -29,7 +29,7 @@
     </div>
   </div>
 
-  <div class="sm:pb-6 sm:border-b border-zinc-50 grid grid-cols-3 gap-3">
+  <div class="sm:pb-6 sm:border-b dark:border-white dark:border-opacity-5 grid grid-cols-3 gap-3">
     <%= form.label :currency, required: true, class: "col-span-3 sm:col-span-1 block text-sm font-medium opacity-70" %>
     <div class="col-span-3 sm:col-span-2">
       <div class="<%= form.object.published_at? ? '' : 'hidden' %>">
@@ -39,13 +39,13 @@
           :symbol, 
           {}, 
           disabled: form.object.published_at?,
-          class: "focus:ring-blue-500 focus:border-blue-500 flex-1 block w-full rounded sm:text-sm border-zinc-300 dark:bg-zinc-900" %>
+          class: "focus:ring-blue-500 focus:border-blue-500 flex-1 block w-full rounded sm:text-sm dark:border-white dark:border-opacity-5 dark:bg-[#333444]" %>
       </div>
 
       <% if form.object.currency.present? && !form.object.published_at? %>
         <%= link_to currencies_path(identifier: form.object.uuid), 
           data: { controller: :turbo },
-          class: "block w-full mb-4 flex items-center justify-between py-2 px-4 bg-zinc-100 dark:bg-zinc-800 rounded-lg" do %>
+          class: "block w-full mb-4 flex items-center justify-between py-2 px-4 bg-[#F4F4F4] dark:bg-[#333444] rounded-lg" do %>
           <div id="<%= dom_id form.object.currency %>" class="flex items-center space-x-4">
             <div class='relative'>
               <%= image_tag form.object.currency.icon_url, 
@@ -55,7 +55,7 @@
                 data: { article_form_target: 'currencyChainIcon' }, 
                 class: 'absolute bottom-0 w-3 h-3 rounded-full' %>
             </div>
-            <div class="text-lg" data-article-form-target="currencySymbol">
+            <div class="text-lg font-bold" data-article-form-target="currencySymbol">
               <%= form.object.currency.symbol %>
             </div>
           </div>
@@ -69,54 +69,61 @@
     </div>
   </div>
 
-  <div class="sm:pb-6 sm:border-b border-zinc-50 grid grid-cols-3 gap-3">
-    <%= form.label :price, required: true, class: "col-span-3 sm:col-span-1 block text-sm font-medium opacity-70" %>
+  <div class="sm:pb-6 sm:border-b dark:border-white dark:border-opacity-5 grid grid-cols-3 gap-3">
+    <%= form.label :price, 
+      required: true, 
+      class: "col-span-3 sm:col-span-1 block text-sm font-medium opacity-70" %>
     <div class="col-span-3 sm:col-span-2">
       <div class="rounded-md shadow-sm">
         <%= form.number_field :price, 
           required: true, 
           step: '0.0000001', 
           min: '0', 
-          class: "focus:ring-blue-500 focus:border-blue-500 flex-1 block w-full rounded sm:text-sm border-zinc-300 dark:bg-zinc-900", placeholder: "Input price" %>
+          data: {
+            action: 'change->article-form#calPriceUsd change->article-form#touchDirty',
+          },
+          class: "focus:ring-blue-500 focus:border-blue-500 flex-1 block w-full rounded font-bold bg-[#F4F4F4] border-[#F4F4F4] dark:border-white dark:border-opacity-5 dark:bg-[#333444]", placeholder: "Input price" %>
       </div>
-      <% if form.object.currency.present? %>
-        <div class="py-2 font-sm opacity-70 text-right">
-          ≈ $<%= (form.object.price * form.object.currency.price_usd).floor(2) %>
-        </div>
-      <% end %>
-      <% if form.object.errors.where(:price).present? %>
-        <div class="py-2 text-red-700 font-sm"><%= form.object.errors.where(:price).map(&:full_message).join(';') %></div>
-      <% end %>
+      <div class="flex justify-between items-center">
+        <% if form.object.errors.where(:price).present? %>
+          <div class="py-2 text-red-700 font-sm"><%= form.object.errors.where(:price).map(&:full_message).join(';') %></div>
+        <% end %>
+        <% if form.object.currency.present? %>
+          <div class="py-2 font-sm opacity-70 text-right ml-auto">
+            ≈ $<span data-article-form-target="priceUsd"><%= (form.object.price * form.object.currency.price_usd).floor(2) %></span>
+          </div>
+        <% end %>
+      </div>
     </div>
   </div>
 
-  <div class="sm:pb-6 sm:border-b border-zinc-50 grid grid-cols-3 gap-3">
+  <div class="sm:pb-6 sm:border-b dark:border-white dark:border-opacity-5 grid grid-cols-3 gap-3">
     <%= form.label :readers_revenue_ratio, class: "col-span-3 sm:col-span-1 block text-sm font-medium opacity-70" %>
     <div class="col-span-3 sm:col-span-2">
       <div class="rounded-md shadow-sm">
         <%= form.number_field :readers_revenue_ratio, 
           required: true, 
           disabled: true, 
-          class: "flex-1 block w-full rounded sm:text-sm border-zinc-300 bg-zinc-200 dark:bg-zinc-800"
+          class: "cursor-not-allowed flex-1 block w-full rounded font-bold dark:border-white dark:border-opacity-5 bg-[#F4F4F4] border-[#F4F4F4] dark:bg-[#333444] opacity-60"
         %>
       </div>
     </div>
   </div>
 
-  <div class="sm:pb-6 sm:border-b border-zinc-50 grid grid-cols-3 gap-3">
+  <div class="sm:pb-6 sm:border-b dark:border-white dark:border-opacity-5 grid grid-cols-3 gap-3">
     <%= form.label :platform_revenue_ratio, class: "col-span-3 sm:col-span-1 block text-sm font-medium opacity-70" %>
     <div class="col-span-3 sm:col-span-2">
       <div class="rounded-md shadow-sm">
         <%= form.number_field :platform_revenue_ratio, 
           required: true, 
           disabled: true, 
-          class: "flex-1 block w-full rounded sm:text-sm border-zinc-300 bg-zinc-200 dark:bg-zinc-800"
+          class: "cursor-not-allowed flex-1 block w-full rounded font-bold dark:border-white dark:border-opacity-5 bg-[#F4F4F4] border-[#F4F4F4] dark:bg-[#333444] opacity-60"
         %>
       </div>
     </div>
   </div>
 
-  <div class="sm:pb-6 sm:border-b border-zinc-50 grid grid-cols-3 gap-3">
+  <div class="sm:pb-6 sm:border-b dark:border-white dark:border-opacity-5 grid grid-cols-3 gap-3">
     <%= form.label :author_revenue_ratio, class: "col-span-3 sm:col-span-1 block text-sm font-medium opacity-70" %>
     <div class="col-span-3 sm:col-span-2">
       <div class="rounded-md shadow-sm">
@@ -127,9 +134,10 @@
           max: "0.5",
           step: "0.01",
           data: { 
-            article_form_target: 'authorRevenueRatio'
+            article_form_target: 'authorRevenueRatio',
+            action: 'article-form#touchDirty'
           }, 
-          class: "flex-1 block w-full rounded sm:text-sm border-zinc-300 bg-zinc-200 dark:bg-zinc-800"
+          class: "flex-1 block w-full rounded font-bold dark:border-white dark:border-opacity-5 bg-[#F4F4F4] border-[#F4F4F4] dark:bg-[#333444]"
         %>
       </div>
       <% if form.object.errors.where(:author_revenue_ratio).present? %>
@@ -138,7 +146,7 @@
     </div>
   </div>
 
-  <div class="sm:pb-6 sm:border-b border-zinc-50 grid grid-cols-3 gap-3">
+  <div class="sm:pb-6 sm:border-b dark:border-white dark:border-opacity-5 grid grid-cols-3 gap-3">
     <%= form.label :references_revenue_ratio, class: "col-span-3 sm:col-span-1 block text-sm font-medium opacity-70" %>
     <div class="col-span-3 sm:col-span-2">
       <div class="rounded-md shadow-sm">
@@ -148,8 +156,11 @@
           min: "0",
           max: "0.5",
           step: "0.01",
-          data: { article_form_target: 'referenceRevenueRatio' }, 
-          class: "flex-1 block w-full rounded sm:text-sm border-zinc-300 bg-zinc-200 dark:bg-zinc-800"
+          data: { 
+            article_form_target: 'referenceRevenueRatio',
+            action: 'article-form#touchDirty'
+          }, 
+          class: "flex-1 block w-full rounded font-bold dark:border-white dark:border-opacity-5 bg-[#F4F4F4] border-[#F4F4F4] dark:bg-[#333444]"
         %>
       </div>
       <% if form.object.errors.where(:references_revenue_ratio).present? %>
@@ -170,8 +181,8 @@
   <% if form.object.published_at.blank? %>
     <div data-nested-form-target="target"></div>
     <div 
-      data-action="click->nested-form#add click->article-form#calReferenceRatio"
-      class="cursor-pointer w-full block px-4 py-1 text-center border border-primary text-primary">
+      data-action="click->nested-form#add click->article-form#calReferenceRatio click->article-form#touchDirty"
+      class="cursor-pointer w-full block px-4 py-2 font-bold text-center border border-primary hover:bg-primary hover:text-white text-primary rounded-full">
       <%= t('articles.add_reference') %>
     </div>
   <% end %>

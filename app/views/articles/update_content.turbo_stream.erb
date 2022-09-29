@@ -1,3 +1,3 @@
 <%= turbo_stream.replace "#{dom_id @article}_updated_at" do %>
-  <%= render partial: "articles/updated_at", locals: { article: @article } %>
+  <%= render "articles/updated_at", article: @article %>
 <% end %>
