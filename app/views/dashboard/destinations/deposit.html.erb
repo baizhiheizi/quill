@@ -2,7 +2,7 @@
 <% identifier = SecureRandom.uuid %>
 
 <%= turbo_frame_tag 'modal' do %>
-  <%= render ModalComponent.new title: '' do %>
+  <%= render ModalComponent.new title: t('deposit') do %>
     <div class="p-4" 
         data-controller="mvm-deposit" 
         data-mvm-deposit-asset-id-value="<%= selected.asset_id %>"
@@ -12,7 +12,7 @@
 
       <%= link_to currencies_path(type: :swappable, identifier: identifier), 
         data: { controller: 'turbo' },
-        class: "block w-full mb-4 flex items-center justify-between py-2 px-4 bg-zinc-100 dark:bg-zinc-800 rounded-lg" do %>
+        class: "block w-full mb-4 flex items-center justify-between py-2 px-4 bg-[#F4F4F4] dark:bg-[#333444] rounded-lg" do %>
         <div id="<%= dom_id selected %>" class="flex items-center space-x-4">
           <div class='relative'>
             <%= image_tag selected.icon_url, 
@@ -41,10 +41,10 @@
 
       <div data-controller="tabs" data-tabs-active-tab-value="address" data-tabs-active-class-value="text-bold border-b-2 !border-primary">
         <div class="w-full flex items-center mb-4">
-          <a class="flex-1 text-center cursor-pointer py-1 border-b border-zinc-50" data-tabs-target="tab" data-tabs-tabname-param='address' data-action="click->tabs#active">
+          <a class="flex-1 text-center cursor-pointer py-1 border-b dark:border-white dark:border-opacity-5" data-tabs-target="tab" data-tabs-tabname-param='address' data-action="click->tabs#active">
             <%= t('address') %>
           </a>
-          <a class="flex-1 text-center cursor-pointer py-1 border-b border-zinc-50" data-tabs-target="tab" data-tabs-tabname-param='mixin' data-action="click->tabs#active">
+          <a class="flex-1 text-center cursor-pointer py-1 border-b dark:border-white dark:border-opacity-5" data-tabs-target="tab" data-tabs-tabname-param='mixin' data-action="click->tabs#active">
             <%= t('mixin_contact') %>
           </a>
         </div>
@@ -55,7 +55,7 @@
 
         <div class="hidden" data-tabs-target="content" data-tabs-content-param="mixin">
           <%= render QrcodeComponent.new url: current_user.mixin_deposit_url, image_classes: 'h-48' do %>
-            <div class="text-center py-2 text-gray-500 text-sm">
+            <div class="text-center py-2 opacity-60 text-sm">
               <%= t("scan_with_mixin") %>
             </div>
           <% end %>

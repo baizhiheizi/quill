@@ -111,6 +111,12 @@
               <%= link_to t('settings'), 
                 dashboard_settings_path, 
                 class: "block py-2 px-4" %>
+              <%= link_to t('deposit_to_mvm'),
+                deposit_dashboard_destination_path, 
+                data: {
+                  turbo_frame: :modal
+                },
+                class: "block py-2 px-4 min-w-max" if current_user.mvm_eth? %>
               <%= link_to t('disconnect'), 
                 logout_path, 
                 data: {
@@ -201,6 +207,13 @@
               dashboard_settings_path, 
               class: "block py-2 px-4" %>
 
+            <%= link_to t('deposit_to_mvm'),
+              deposit_dashboard_destination_path, 
+              data: {
+                turbo_frame: :modal
+              },
+              class: "block py-2 px-4 min-w-fit"  if current_user.mvm_eth?%>
+
             <%= link_to t('language'), 
               edit_locale_path, 
               data: {
@@ -208,7 +221,7 @@
               },
               class: "block py-2 px-4" %>
 
-            <div class="flex justify-center" data-controller="darkmode">
+            <div data-controller="darkmode">
               <a class="hidden py-2 px-4 block cursor-pointer" data-darkmode-target="lightButton" data-action="darkmode#toggle">
                 <%= t('dark_mode') %>
               </a>
