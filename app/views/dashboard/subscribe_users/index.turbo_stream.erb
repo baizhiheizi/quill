@@ -2,6 +2,6 @@
   <%= render partial: "dashboard/subscribe_users/user", collection: @users, as: :user %>
 <% end %>
 
-<%= turbo_stream.update 'pagination' do %>
-  <%= render partial: "shared/pagination", locals: { pagy: @pagy } %>
+<%= turbo_stream.update 'subscribing_users_pagination' do %>
+  <%= render "shared/pagination", pagy: @pagy, id: 'subscribing_users_pagination' %>
 <% end %>

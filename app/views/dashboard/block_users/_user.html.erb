@@ -1,9 +1,14 @@
-<div id="block_user_<%= dom_id user %>" class="relative flex items-center px-4 py-2 border-b dark:border-zinc-800 justify-between">
+<div id="block_user_<%= dom_id user %>" class="relative flex items-center py-4 border-b dark:border-white dark:border-opacity-5 justify-between">
   <%= link_to user_path(user), class: "flex items-center space-x-2", data: { turbo_frame: "_top" } do %>
-    <img src="<%= user.avatar %>" class="w-10 h-10 rounded-full" />
-    <span class=""><%= user.name %></span>
+    <%= image_tag user.avatar, class: "w-8 h-8 rounded-full" %>
+    <span class=""><%= user.short_name %></span>
   <% end %>
   <div class="">
-    <%= render "users/action_buttons", user: user %>
+    <% if current_user.block_user?(user) %>
+      <%= button_to t('unblock_user'), 
+        block_user_path(user.uid), 
+        method: :delete,
+        class: "cursor-pointer opacity-75" %>
+    <% end %>
   </div>
 </div>

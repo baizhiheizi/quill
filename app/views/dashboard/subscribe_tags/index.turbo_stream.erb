@@ -1,7 +1,7 @@
-<%= turbo_stream.append "#{dom_id current_user}_subscribe_articles_list" do %>
-  <%= render partial: "dashboard/subscribe_articles/article", collection: @articles, as: :article %>
+<%= turbo_stream.append "#{dom_id current_user}_subscribe_tag_list" do %>
+  <%= render partial: "dashboard/subscribe_tags/tag", collection: @tags, as: :tag %>
 <% end %>
 
-<%= turbo_stream.update 'pagination' do %>
-  <%= render partial: "shared/pagination", locals: { pagy: @pagy } %>
+<%= turbo_stream.update 'subscribe_tags_pagination' do %>
+  <%= render "shared/pagination", pagy: @pagy, id: "subscribe_tags_pagination" %>
 <% end %>

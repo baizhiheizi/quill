@@ -48,6 +48,7 @@ en:
   my_reading: My Reading
   my_authoring: My Reading
   my_comments: My Comments
+  my_subscriptions: My Subscriptions
   my_orders: My Orders
   profile_page: Profile
   login: Login
@@ -243,6 +244,7 @@ en:
   connect_wallet: Connect Wallet
   disconnect: Disconnect
   author: author
+  authors: authors
   saved: saved
   untitled: Untitled
   profile: Profile

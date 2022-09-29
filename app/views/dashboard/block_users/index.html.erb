@@ -1,16 +1,13 @@
 <%= turbo_frame_tag "#{dom_id current_user}_blocking" do %>
   <div data-controller="infinite-scroll">
-    <div id="<%= dom_id current_user %>_subscribing_list">
-      <% if @users.blank? %>
-        <div class="text-center py-2 opacity-50">
-          <%= t("no_record") %>
-        </div>
-      <% else %>
+    <% if @users.blank? %>
+      <%= render EmptyComponent.new text: t('no_record') %>
+    <% else %>
+      <div id="<%= dom_id current_user %>_subscribing_list">
         <%= render partial: "dashboard/block_users/user", collection: @users, as: :user %>
-      <% end %>
-    </div>
-    <div data-infinite-scroll-target='scrollArea'></div>
-
-    <%= render partial: "shared/pagination", locals: { pagy: @pagy } %>
+      </div>
+      <div data-infinite-scroll-target='scrollArea'></div>
+      <%= render "shared/pagination", pagy: @pagy, id: "block_users_pagination" %>
+    <% end %>
   </div>
 <% end %>
