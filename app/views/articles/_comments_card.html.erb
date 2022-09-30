@@ -5,14 +5,13 @@
     </div>
     <%= render "subscribe_articles/subscribe_button", article: article if article.authorized? user %>
   </div>
-  <div data-controller="comment-form">
-    <% if article.authorized? user %>
-      <div class="mb-8">
-        <%= render partial: "comments/form", locals: { commentable: article } %>
-      </div>
-    <% end %>
-    <%= turbo_frame_tag "#{dom_id article}_comments", src: article_comments_path(article.uuid), lazy: true do %>
-      <%= render "shared/loading" %>
-    <% end %>
-  </div>
+
+  <% if article.authorized? user %>
+    <div class="mb-8">
+      <%= render "comments/form", commentable: article %>
+    </div>
+  <% end %>
+  <%= turbo_frame_tag "#{dom_id article}_comments", src: article_comments_path(article.uuid), lazy: true do %>
+    <%= render "shared/loading" %>
+  <% end %>
 </div>

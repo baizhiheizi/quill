@@ -13,11 +13,13 @@
     </div>
   </div>
 
-  <% if browser.device.mobile? %>
-    <%= render "articles/floating_bar", article: @article, user: current_user %>
-  <% else %>
-    <%= render "articles/comments_card", article: @article, user: current_user %>
-  <% end %>
+  <div data-controller="comment-form">
+    <% if browser.device.mobile? %>
+      <%= render "articles/floating_bar", article: @article, user: current_user %>
+    <% else %>
+      <%= render "articles/comments_card", article: @article, user: current_user %>
+    <% end %>
+  </div>
 </article>
 
 <%= content_for :sidebar do %>
