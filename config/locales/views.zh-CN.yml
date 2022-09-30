@@ -94,6 +94,7 @@ zh-CN:
   search_placeholder: 请输入文章标题/简介/作者/话题
   users_count: 用户总量
   articles_count: 文章总数
+  revenue_count: 收益次数
   author_revenue_total: 作者收益(现价)
   reader_revenue_total: 读者收益(现价)
   platform_revenue: 平台收益
