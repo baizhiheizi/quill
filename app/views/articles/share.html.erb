@@ -7,7 +7,7 @@
           data-action="modal#hide"
           href="<%= share_to_mixin article_url(@article), title: @article.title, description: @article.intro, icon_url: @article.author.avatar %>">
           <div class="flex mb-2">
-            <%= image_tag 'mixin-logo.png', class: "w-auto h-8 mx-auto" %>
+            <%= image_tag 'mixin-logo.png', class: "w-12 h-12 mx-auto" %>
           </div>
           <div class="text-base text-center">Mixin</div>
         </a>
@@ -18,7 +18,7 @@
           data-action="modal#hide"
           href="<%= share_to_twitter article_url(@article), @article.title %>">
         <div class="flex mb-2">
-          <%= image_tag "twitter.png", class: "w-16 h-16 mx-auto" %>
+          <%= image_tag "twitter.png", class: "w-12 h-12 mx-auto" %>
         </div>
         <div class="text-base text-center">Twitter</div>
       </a>
@@ -28,7 +28,7 @@
           data-action="modal#hide"
           href="<%= share_to_facebook article_url(@article) %>">
         <div class="flex mb-2">
-          <%= image_tag "facebook.png", class: "w-16 h-16 mx-auto" %>
+          <%= image_tag "facebook.png", class: "w-12 h-12 mx-auto" %>
         </div>
         <div class="text-base text-center">Facebook</div>
       </a>
@@ -39,8 +39,8 @@
         data-clipboard-success-tip-value="Copied"
         data-action="clipboard#copy modal#hide">
         <div class="flex mb-2">
-          <div class="bg-[#B1B6C6] w-16 h-16 mx-auto rounded-full flex items-center justify-center">
-            <%= inline_svg_tag "icons/copy.svg", class: "w-10 h-10 text-white" %>
+          <div class="bg-[#B1B6C6] w-12 h-12 mx-auto rounded-full flex items-center justify-center">
+            <%= inline_svg_tag "icons/copy.svg", class: "w-6 h-6 text-white" %>
           </div>
         </div>
         <div data-clipboard-target="button"class="text-base text-center">URL</div>
