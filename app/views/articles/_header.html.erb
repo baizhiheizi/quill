@@ -13,7 +13,7 @@
       <span aria-hidden="true" class="absolute inset-0"></span>
     <% end %>
   </div>
-  <div class="flex justify-end">
+  <div class="hidden sm:flex justify-end">
     <%= link_to article_share_path(article_uuid: @article.uuid), 
       data: {
         turbo_frame: :modal

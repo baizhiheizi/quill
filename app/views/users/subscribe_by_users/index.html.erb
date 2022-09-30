@@ -1,16 +1,13 @@
 <%= turbo_frame_tag "#{dom_id @user}_subscribers" do %>
   <div data-controller="infinite-scroll">
-    <div id="<%= dom_id @user %>_subscribers_list">
-      <% if @users.blank? %>
-        <div class="text-center py-2 opacity-50">
-          <%= t("no_record") %>
-        </div>
-      <% else %>
+    <% if @users.blank? %>
+      <%= render EmptyComponent.new text: t('no_record') %>
+    <% else %>
+      <div id="<%= dom_id @user %>_subscribers_list">
         <%= render partial: "users/subscribe_by_users/user", collection: @users, as: :user %>
-      <% end %>
-    </div>
-    <div data-infinite-scroll-target='scrollArea'></div>
-
-    <%= render partial: "shared/pagination", locals: { pagy: @pagy, id: "#{dom_id @user}_subscribers_pagination" } %>
+      </div>
+      <div data-infinite-scroll-target='scrollArea'></div>
+      <%= render partial: "shared/pagination", locals: { pagy: @pagy, id: "#{dom_id @user}_subscribers_pagination" } %>
+    <% end %>
   </div>
 <% end %>
