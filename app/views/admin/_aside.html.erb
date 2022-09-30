@@ -7,91 +7,52 @@
       class="h-full bg-white dark:bg-zinc-900 w-10 sm:w-16 flex flex-col p-0 sm:p-4 overflow-x-hidden transition-transform">
     <div class="flex flex-col space-y-2">
       <%= link_to admin_root_path, class: "flex items-center space-x-4 hover:bg-zinc-100 dark:hover:bg-zinc-800 p-2 rounded-lg truncate" do %>
-        <span>
-        <%= render "shared/icons/chart", html_class: "opacity-60 w-6 h-6" %>
-        </span>
         <span>Dashboard</span>
       <% end %>
       <%= link_to admin_statistics_path, class: "flex items-center space-x-4 hover:bg-zinc-100 dark:hover:bg-zinc-800 p-2 rounded-lg truncate" do %>
-        <span>
-        <%= render "shared/icons/chart_bar", html_class: "opacity-60 w-6 h-6" %>
-        </span>
         <span>Stats</span>
       <% end %>
       <%= link_to admin_users_path, class: "flex items-center space-x-4 hover:bg-zinc-100 dark:hover:bg-zinc-800 p-2 rounded-lg truncate" do %>
-        <span>
-        <%= render "shared/icons/users", html_class: "opacity-60 w-6 h-6" %>
-        </span>
         <span>Users</span>
       <% end %>
       <%= link_to admin_articles_path, class: "flex items-center space-x-4 hover:bg-zinc-100 dark:hover:bg-zinc-800 p-2 rounded-lg truncate" do %>
-        <span>
-        <%= render "shared/icons/book_open", html_class: "opacity-60 w-6 h-6" %>
-        </span>
         <span>Articles</span>
       <% end %>
       <%= link_to admin_comments_path, class: "flex items-center space-x-4 hover:bg-zinc-100 dark:hover:bg-zinc-800 p-2 rounded-lg truncate" do %>
-        <span>
-        <%= render "shared/icons/chat_solid", html_class: "opacity-60 w-6 h-6" %>
-        </span>
         <span>Comments</span>
       <% end %>
       <%= link_to admin_payments_path, class: "flex items-center space-x-4 hover:bg-zinc-100 dark:hover:bg-zinc-800 p-2 rounded-lg truncate" do %>
-        <span>
-        <%= render "shared/icons/credit_card_solid", html_class: "opacity-60 w-6 h-6" %>
-        </span>
         <span>Payments</span>
       <% end %>
       <%= link_to admin_orders_path, class: "flex items-center space-x-4 hover:bg-zinc-100 dark:hover:bg-zinc-800 p-2 rounded-lg truncate" do %>
-        <span>
-        <%= render "shared/icons/shopping_cart", html_class: "opacity-60 w-6 h-6" %>
-        </span>
         <span>Orders</span>
       <% end %>
       <%= link_to admin_swap_orders_path, class: "flex items-center space-x-4 hover:bg-zinc-100 dark:hover:bg-zinc-800 p-2 rounded-lg truncate" do %>
-        <span>
-        <%= render "shared/icons/switch", html_class: "opacity-60 w-6 h-6" %>
-        </span>
         <span>Swap Orders</span>
       <% end %>
       <%= link_to admin_transfers_path, class: "flex items-center space-x-4 hover:bg-zinc-100 dark:hover:bg-zinc-800 p-2 rounded-lg truncate" do %>
-        <span>
-        <%= render "shared/icons/lighting_bolt", html_class: "opacity-60 w-6 h-6" %>
-        </span>
         <span>Transfers</span>
       <% end %>
       <%= link_to admin_mixin_network_snapshots_path, class: "flex items-center space-x-4 hover:bg-zinc-100 dark:hover:bg-zinc-800 p-2 rounded-lg truncate" do %>
-        <span>
-        <%= render "shared/icons/finger_print", html_class: "opacity-60 w-6 h-6" %>
-        </span>
         <span>Snapshots</span>
       <% end %>
       <%= link_to admin_mixin_network_users_path, class: "flex items-center space-x-4 hover:bg-zinc-100 dark:hover:bg-zinc-800 p-2 rounded-lg truncate" do %>
-        <span>
-        <%= render "shared/icons/cube", html_class: "opacity-60 w-6 h-6" %>
-        </span>
         <span>Wallets</span>
       <% end %>
       <%= link_to admin_bonuses_path, class: "flex items-center space-x-4 hover:bg-zinc-100 dark:hover:bg-zinc-800 p-2 rounded-lg truncate" do %>
-        <span>
-        <%= render "shared/icons/gift", html_class: "opacity-60 w-6 h-6" %>
-        </span>
         <span>Bonus</span>
       <% end %>
       <%= link_to admin_logout_path, class: "flex items-center space-x-4 hover:bg-zinc-100 dark:hover:bg-zinc-800 p-2 rounded-lg truncate" do %>
-        <span>
-        <%= render "shared/icons/logout", html_class: "opacity-60 w-6 h-6" %>
-        </span>
         <span>Logout</span>
       <% end %>
     </div>
     <div class="mt-auto">
       <button data-sidebar-target="openButton" data-action="sidebar#open" class="flex items-center space-x-4 hover:bg-zinc-100 dark:hover:bg-zinc-800 p-2 rounded-lg truncate">
-        <%= render "shared/icons/chevron_right", html_class: "w-4 h-4 opacity-60" %>
+        <%= inline_svg_tag "icons/chevron-right.svg", class: "w-4 h-4 opacity-60" %>
       </button>
       <button data-sidebar-target="collapseButton" data-action="sidebar#collapse" class="hidden w-full flex items-center space-x-4 hover:bg-zinc-100 dark:hover:bg-zinc-800 p-2 rounded-lg truncate">
         <span>
-          <%= render "shared/icons/chevron_left", html_class: "w-4 h-4 opacity-60" %>
+          <%= inline_svg_tag "icons/chevron-left.svg", class: "w-4 h-4 opacity-60" %>
         </span>
         <span>
           Collapse

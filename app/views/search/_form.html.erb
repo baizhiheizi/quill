@@ -21,7 +21,7 @@
   <%= form.submit 'search', class:"hidden" %>
   <div class="absolute inset-y-0 right-0 flex items-center pr-2">
     <button class="hidden cursor-pointer" data-search-target="clearButton" data-action="search#clear">
-      <%= render "shared/icons/close", html_class: "w-6 h-6 opacity-50" %>
+      <%= inline_svg_tag "icons/close.svg", class: "w-6 h-6 opacity-50" %>
     </button>
   </div>
   <div id="search_result_list"></div>

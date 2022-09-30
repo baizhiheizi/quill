@@ -13,7 +13,7 @@
     <% if current_user.present? && current_user != user %>
       <%= render DropdownComponent.new do |c| %>
         <% c.with_button do %>
-          <%= render "shared/icons/dot_horizontal", html_class: 'w-4 h-4' %>
+          <%= inline_svg_tag "icons/dot-horizontal.svg", class: 'w-4 h-4' %>
         <% end %>
 
         <% if current_user.block_user?(user) %>

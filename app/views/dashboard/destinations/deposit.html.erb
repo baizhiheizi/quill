@@ -26,14 +26,14 @@
             <%= selected.symbol %>
           </div>
         </div>
-        <%= render 'shared/icons/chevron_right', html_class: 'w-6 h-6 font-bold' %>
+        <%= inline_svg_tag 'icons/chevron-right.svg', class: 'w-6 h-6 font-bold' %>
       <% end %>
       <% unless selected.asset_id == Currency::XIN_ASSET_ID %>
         <div class="w-full -mt-2 mb-4 flex justify-end text-sm" data-mvm-deposit-target="addTokenButton">
           <button 
             data-action="mvm-deposit#addToken" 
             class="flex items-center space-x-1 opacity-70">
-            <%= render "shared/icons/plus_circle", html_class: 'w-4 h-4' %>
+            <%= inline_svg_tag "icons/add-solid.svg", class: 'w-4 h-4' %>
             <span><%= t('add_to_metamask') %></span>
           </button>
         </div>

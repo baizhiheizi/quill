@@ -46,8 +46,13 @@
         <span data-mvm-pay-button-component-target="balanceValue">
           <%= image_tag 'loading.svg', class: 'w-4 h-4 inline-block' %>
         </span>
-        <%= link_to "", data: { mvm_pay_button_component_target: 'balanceLink' }, target: "_blank", class: "inline-block align-middle" do %> 
-          <%= render "shared/icons/external_link", html_class: 'w-4 h-4' %>
+        <%= link_to "", 
+          data: { 
+            mvm_pay_button_component_target: 'balanceLink' 
+          }, 
+          target: "_blank", 
+          class: "inline-block align-middle" do %> 
+          <%= inline_svg_tag "icons/external-link.svg", class: 'w-4 h-4' %>
         <% end %>
       </div>
 
@@ -57,14 +62,14 @@
         },
         class: "block text-sm opacity-75 flex items-center" do %>
         <span><%= t('deposit') %></span>
-        <%= render "shared/icons/chevron_right", html_class: 'w-4 h-4' %>
+          <%= inline_svg_tag "icons/chevron-right.svg", class: 'w-4 h-4' %>
       <% end %>
     </div>
 
     <div data-mvm-pay-button-component-target="mvmTips" class="hidden text-red-500 text-sm py-1">
       <%= link_to 'https://docs.quill.im/category/swich-to-mvm', target: "_blank", class: "flex items-center space-x-2" do %> 
         <span><%= t('you_need_to_switch_network_to_mvm') %></span>
-        <%= render "shared/icons/question_mark_circle", html_class: 'w-4 h-4' %>
+        <%= inline_svg_tag "icons/question-mark-circle.svg", class: 'w-4 h-4' %>
       <% end %>
     </div>
   </div>
@@ -77,6 +82,6 @@
   </div>
 
   <%= link_to "", data: { mvm_pay_button_component_target: 'scanTransactionLink' }, target: "_blank", class: "hidden flex my-2 justify-center w-full" do %> 
-    <%= render "shared/icons/external_link", html_class: 'w-4 h-4' %>
+    <%= inline_svg_tag "icons/external-link.svg", class: 'w-4 h-4' %>
   <% end %>
 </div>

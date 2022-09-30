@@ -17,9 +17,9 @@
   </span>
 
   <% if current_user.email_vefified? %>
-    <%= render 'shared/icons/check_circle_solid', html_class: 'w-6 h-6 text-green-500 inline' %>
+    <%= inline_svg_tag 'icons/check-circle-solid.svg', class: 'w-6 h-6 text-green-500 inline' %>
   <% else %>
-    <%= render 'shared/icons/exclamation_circle_solid', html_class: 'w-6 h-6 text-red-500 inline' %>
+    <%= inline_svg_tag 'icons/exclamation-circle-solid.svg', class: 'w-6 h-6 text-red-500 inline' %>
   <% end %>
 </div>
 
