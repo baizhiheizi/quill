@@ -1,0 +1,22 @@
+<nav class="lg:hidden w-full fixed top-0 bg-white dark:bg-[#1D1E2B] z-50">
+  <% if content_for? :topbar %>
+    <%= yield :topbar %>
+  <% else %>
+    <div class="h-12 flex items-center justify-between">
+      <%= link_to root_path, class: "block px-6 py-2" do %>
+        <%= image_tag 'logo.svg', class: "w-auto h-8" %>
+      <% end %>
+      <% if current_user.present? %>
+        <%= link_to dashboard_notifications_path, class: "block px-6 py-3 #{from_mixin_messenger? ? 'mr-24' : ''}" do %>
+          <div class="w-6 h-6 mx-auto relative">
+            <%= inline_svg_tag 'icons/bell.svg', 
+              class: "w-6 h-6 mx-auto text-opacity-60 text-[#222222] dark:text-white dark:text-opacity-80" %>
+            <% if current_user.has_unread_notification? %>
+              <span class="h-2 w-2 absolute top-0 right-0 rounded-full bg-[#F3463F]"></span>
+            <% end %>
+          </div>
+        <% end %>
+      <% end %>
+    </div>
+  <% end %>
+</nav>
