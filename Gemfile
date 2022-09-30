@@ -177,7 +177,7 @@ group :development do
   gem 'web-console', '>= 3.3.0'
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
-  gem 'spring-watcher-listen', '~> 2.0.0'
+  gem 'spring-watcher-listen', '~> 2.1.0'
   # Annotate Rails classes with schema and routes info
   gem 'annotate', require: false
   # A Ruby static code analyzer and formatter

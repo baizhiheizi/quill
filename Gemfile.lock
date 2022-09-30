@@ -96,8 +96,8 @@ GEM
     ast (2.4.2)
     awesome_print (1.9.2)
     aws-eventstream (1.2.0)
-    aws-partitions (1.639.0)
-    aws-sdk-core (3.157.0)
+    aws-partitions (1.640.0)
+    aws-sdk-core (3.158.0)
       aws-eventstream (~> 1, >= 1.0.2)
       aws-partitions (~> 1, >= 1.525.0)
       aws-sigv4 (~> 1.1)
@@ -109,7 +109,7 @@ GEM
       aws-sdk-core (~> 3, >= 3.127.0)
       aws-sdk-kms (~> 1)
       aws-sigv4 (~> 1.4)
-    aws-sigv4 (1.5.1)
+    aws-sigv4 (1.5.2)
       aws-eventstream (~> 1, >= 1.0.2)
     bcrypt (3.1.18)
     bindata (2.4.11)
@@ -458,10 +458,10 @@ GEM
       redis-prescription
       sidekiq (>= 6.4)
     simple_command (1.0.1)
-    spring (2.1.1)
-    spring-watcher-listen (2.0.1)
+    spring (4.1.0)
+    spring-watcher-listen (2.1.0)
       listen (>= 2.7, < 4.0)
-      spring (>= 1.2, < 3.0)
+      spring (>= 4)
     stimulus-rails (1.1.0)
       railties (>= 6.0.0)
     thor (1.2.1)
@@ -561,7 +561,7 @@ DEPENDENCIES
   sidekiq-throttled
   simple_command
   spring
-  spring-watcher-listen (~> 2.0.0)
+  spring-watcher-listen (~> 2.1.0)
   stimulus-rails
   turbo-rails
   tzinfo-data
