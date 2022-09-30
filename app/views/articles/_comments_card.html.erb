@@ -3,7 +3,7 @@
     <div class="text-lg font-bold">
       <%= t('comments') %>
     </div>
-    <%= render partial: "subscribe_articles/subscribe_button", locals: { article: article } %>
+    <%= render "subscribe_articles/subscribe_button", article: article if article.authorized? user %>
   </div>
   <div data-controller="comment-form">
     <% if article.authorized? user %>

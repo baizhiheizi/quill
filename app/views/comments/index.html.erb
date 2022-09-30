@@ -7,7 +7,7 @@
             <div class="font-bold">
               <%= t('comments') %>
             </div>
-            <%= render "subscribe_articles/subscribe_button", article: @article %>
+            <%= render "subscribe_articles/subscribe_button", article: @article if @article.authorized?(current_user) %>
           </div>
         <% end %>
 

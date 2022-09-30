@@ -77,6 +77,7 @@ module.exports = {
         'screen-2/3': '67vh',
         'screen-1/4': '25vh',
         'screen-3/4': '75vh',
+        'screen-5/6': '83.33vh',
         screen: '100vh',
       },
       typography: {

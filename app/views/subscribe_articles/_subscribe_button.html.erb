@@ -1,7 +1,7 @@
 <div class="<%= dom_id article %>_subscribe_button" >
   <% if current_user.blank? %>
     <%= link_to t('subscribe'), 
-      login_path(return_to: article_url(article.uuid)), 
+      login_path(return_to: user_article_url(article_.author, article.uuid)), 
       data: { 
         turbo_frame: :modal 
       }, 
