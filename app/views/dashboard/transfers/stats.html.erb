@@ -1,0 +1,39 @@
+<%= turbo_frame_tag 'my_transfers_stats' do %>
+  <div class="grid grid-cols-2 gap-4">
+    <% if @role == 'author' %>
+      <div class="text-center p-4 bg-[#F4F4F4] dark:bg-[#444655] rounded mb-2">
+        <div class="text-2xl font-bold mb-2">
+          <%= current_user.transfers.where(transfer_type: :author_revenue).count %>
+        </div>
+        <div class="opacity-70 text-sm">
+          <%= t('revenue_count') %>
+        </div>
+      </div>
+      <div class="text-center p-4 bg-[#F4F4F4] dark:bg-[#444655] rounded mb-2">
+        <div class="text-2xl font-bold mb-2">
+          $<%= current_user.author_revenue_total_usd.round(4) %>
+        </div>
+        <div class="opacity-70 text-sm">
+          <%= t('author_revenue_total') %>
+        </div>
+      </div>
+    <% elsif @role == 'reader' %>
+      <div class="text-center p-4 bg-[#F4F4F4] dark:bg-[#444655] rounded mb-2">
+        <div class="text-2xl font-bold mb-2">
+          <%= current_user.transfers.where(transfer_type: :reader_revenue).count %>
+        </div>
+        <div class="opacity-70 text-sm">
+          <%= t('revenue_count') %>
+        </div>
+      </div>
+      <div class="text-center p-4 bg-[#F4F4F4] dark:bg-[#444655] rounded mb-2">
+        <div class="text-2xl font-bold mb-2">
+          $<%= current_user.reader_revenue_total_usd.round(4) %>
+        </div>
+        <div class="opacity-70 text-sm">
+          <%= t('reader_revenue_total') %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+<% end %>

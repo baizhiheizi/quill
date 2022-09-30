@@ -17,11 +17,12 @@ namespace :dashboard do
   resources :subscribe_users, only: %i[index]
   resources :subscribe_articles, only: %i[index]
   resources :subscribe_tags, only: %i[index]
-  resources :transfers, only: %i[index]
   resources :orders, only: %i[index]
   resources :payments, only: %i[index]
   resources :swap_orders, only: %i[index]
   resources :notifications, only: %i[index show]
+  resources :transfers, only: %i[index]
+  get '/transfers/stats', to: 'transfers#stats', as: :transfers_stats
 
   resources :read_notifications, only: %i[new create update]
   resources :deleted_notifications, only: %i[new create]

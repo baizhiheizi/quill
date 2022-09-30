@@ -94,6 +94,7 @@ en:
   search_placeholder: Input title/introduction/author/tag
   users_count: Users
   articles_count: Posts
+  revenue_count: Revenue Count
   author_revenue_total: Author Revenue(Present Value)
   reader_revenue_total: Reader Revenue(Present Value)
   platform_revenue: Quill Revenue

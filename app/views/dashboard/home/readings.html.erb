@@ -101,6 +101,7 @@
   <div class="hidden pb-4"
     data-tabs-content-param="transfers"
     data-tabs-target="content">
+    <%= turbo_frame_tag "my_transfers_stats", src: dashboard_transfers_stats_path(role: :reader) %>
     <%= turbo_frame_tag "my_transfers", src: dashboard_transfers_path(tab: :reader), loading: :lazy do %>
       <%= render "shared/loading" %>
     <% end %>

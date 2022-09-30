@@ -14,4 +14,8 @@ class Dashboard::TransfersController < Dashboard::BaseController
 
     @pagy, @transfers = pagy transfers.order(created_at: :desc)
   end
+
+  def stats
+    @role = params[:role] || 'author'
+  end
 end
