@@ -8,7 +8,7 @@
   data-controller="tabs"
   data-tabs-active-tab-value="<%= @tab %>"
   data-tabs-active-class-value="font-bold text-primary !border-primary">
-  <div class="w-full flex overflow-auto flex-nowrap scrollbar-hide items-center flex mb-4">
+  <div class="w-full flex overflow-auto flex-nowrap scrollbar-hide items-center flex mb-2 sm:mb-4">
     <%= link_to dashboard_readings_path(tab: :bought),
       class: "cursor-pointer py-1 pr-8 border-transparent min-w-fit",
       data: {
