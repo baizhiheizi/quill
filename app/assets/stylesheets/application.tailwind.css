@@ -32,14 +32,18 @@
   border-right-color: #444655;
 }
 
+.full .ts-control,
 .ts-control {
   background-color: #f4f4f4;
   border-color: rgba(255, 255, 255, 0.05);
   padding: 0.75rem;
 }
 
-.dark .ts-control,
 .ts-wrapper.single.input-active .ts-control {
+  background-color: #f4f4f4;
+}
+
+.dark .ts-wrapper.single.input-active .ts-control {
   background-color: #333444;
 }
 
@@ -55,6 +59,10 @@
 
 .dark .ts-dropdown input {
   color: rgba(255, 255, 255, 0.8);
+}
+
+.ts-dropdown {
+  background-color: #f4f4f4;
 }
 
 .dark .ts-dropdown {

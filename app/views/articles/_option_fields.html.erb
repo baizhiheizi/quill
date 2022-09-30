@@ -1,6 +1,6 @@
 <div data-article-form-target="optionFields" 
   class="hidden px-4 py-5 bg-white dark:bg-[#1D1E2B] space-y-6 sm:p-6">
-  <div class="sm:pb-6 sm:border-b dark:border-white dark:border-opacity-5">
+  <div class="mb-4">
     <%= form.select :tag_names, 
       form.object.tag_names.presence || Tag.all.first(10).pluck(:name), 
       {}, 
@@ -10,18 +10,18 @@
         controller: "tags-select",
         tags_select_items_value: form.object.tag_names,
       }, 
-      class: "focus:ring-blue-500 focus:border-blue-500 flex-1 block w-full rounded sm:text-sm" 
+      class: "focus:ring-blue-500 focus:border-blue-500 flex-1 block w-full rounded" 
     %>
   </div>
 
-  <div class="sm:pb-6 sm:border-b dark:border-white dark:border-opacity-5 grid grid-cols-3 gap-3">
+  <div class="grid grid-cols-3 gap-3">
     <%= form.label :intro, class: "col-span-3 sm:col-span-1 block text-sm font-medium opacity-70" %>
     <div class="col-span-3 sm:col-span-2">
       <div class="rounded-md shadow-sm">
         <%= form.text_area :intro, 
           value: form.object.intro, 
-          rows: 3, 
-          class: "focus:ring-blue-500 focus:border-blue-500 flex-1 block w-full rounded sm:text-sm bg-[#F4F4F4] border-[#F4F4F4] dark:border-white dark:border-opacity-5 dark:bg-[#333444]" %>
+          rows: 5, 
+          class: "focus:ring-blue-500 focus:border-blue-500 flex-1 block w-full rounded bg-[#F4F4F4] border-[#F4F4F4] dark:border-white dark:border-opacity-5 dark:bg-[#333444]" %>
       </div>
       <% if form.object.errors.where(:intro).present? %>
         <div class="py-2 text-red-700 font-sm"><%= form.object.errors.where(:intro).map(&:full_message).join(';') %></div>
@@ -29,7 +29,7 @@
     </div>
   </div>
 
-  <div class="sm:pb-6 sm:border-b dark:border-white dark:border-opacity-5 grid grid-cols-3 gap-3">
+  <div class="grid grid-cols-3 gap-3">
     <%= form.label :currency, required: true, class: "col-span-3 sm:col-span-1 block text-sm font-medium opacity-70" %>
     <div class="col-span-3 sm:col-span-2">
       <div class="<%= form.object.published_at? ? '' : 'hidden' %>">
@@ -39,7 +39,7 @@
           :symbol, 
           {}, 
           disabled: form.object.published_at?,
-          class: "focus:ring-blue-500 focus:border-blue-500 flex-1 block w-full rounded sm:text-sm dark:border-white dark:border-opacity-5 dark:bg-[#333444]" %>
+          class: "focus:ring-blue-500 focus:border-blue-500 flex-1 block w-full rounded dark:border-white dark:border-opacity-5 dark:bg-[#333444]" %>
       </div>
 
       <% if form.object.currency.present? && !form.object.published_at? %>
@@ -69,7 +69,7 @@
     </div>
   </div>
 
-  <div class="sm:pb-6 sm:border-b dark:border-white dark:border-opacity-5 grid grid-cols-3 gap-3">
+  <div class="grid grid-cols-3 gap-3">
     <%= form.label :price, 
       required: true, 
       class: "col-span-3 sm:col-span-1 block text-sm font-medium opacity-70" %>
@@ -97,7 +97,7 @@
     </div>
   </div>
 
-  <div class="sm:pb-6 sm:border-b dark:border-white dark:border-opacity-5 grid grid-cols-3 gap-3">
+  <div class="grid grid-cols-3 gap-3">
     <%= form.label :readers_revenue_ratio, class: "col-span-3 sm:col-span-1 block text-sm font-medium opacity-70" %>
     <div class="col-span-3 sm:col-span-2">
       <div class="rounded-md shadow-sm">
@@ -110,7 +110,7 @@
     </div>
   </div>
 
-  <div class="sm:pb-6 sm:border-b dark:border-white dark:border-opacity-5 grid grid-cols-3 gap-3">
+  <div class="grid grid-cols-3 gap-3">
     <%= form.label :platform_revenue_ratio, class: "col-span-3 sm:col-span-1 block text-sm font-medium opacity-70" %>
     <div class="col-span-3 sm:col-span-2">
       <div class="rounded-md shadow-sm">
@@ -123,7 +123,7 @@
     </div>
   </div>
 
-  <div class="sm:pb-6 sm:border-b dark:border-white dark:border-opacity-5 grid grid-cols-3 gap-3">
+  <div class="grid grid-cols-3 gap-3">
     <%= form.label :author_revenue_ratio, class: "col-span-3 sm:col-span-1 block text-sm font-medium opacity-70" %>
     <div class="col-span-3 sm:col-span-2">
       <div class="rounded-md shadow-sm">
@@ -146,7 +146,7 @@
     </div>
   </div>
 
-  <div class="sm:pb-6 sm:border-b dark:border-white dark:border-opacity-5 grid grid-cols-3 gap-3">
+  <div class="grid grid-cols-3 gap-3">
     <%= form.label :references_revenue_ratio, class: "col-span-3 sm:col-span-1 block text-sm font-medium opacity-70" %>
     <div class="col-span-3 sm:col-span-2">
       <div class="rounded-md shadow-sm">

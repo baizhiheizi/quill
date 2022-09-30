@@ -411,7 +411,7 @@ class Article < ApplicationRecord
   end
 
   def cover_url
-    @cover_url ||= Nokogiri::HTML.fragment(content_as_html).css('img').first&.attr('src')
+    # @cover_url ||= Nokogiri::HTML.fragment(content_as_html).css('img').first&.attr('src')
   end
 
   private
