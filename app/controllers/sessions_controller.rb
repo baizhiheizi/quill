@@ -5,7 +5,7 @@ class SessionsController < ApplicationController
   skip_before_action :verify_authenticity_token, only: %i[mixin fennec mvm]
 
   def new
-    redirect_to mixin_login_path if from_mixin_messenger?
+    redirect_to mixin_login_path(return_to: params[:return_to]) if from_mixin_messenger?
   end
 
   def mixin_login

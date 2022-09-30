@@ -44,11 +44,11 @@
       <% end %>
     <% elsif from_mixin_messenger? %>
       <%= link_to t('pay_to_read'), 
-        login_path(return_to: article_url(article.uuid)), 
+        login_path(return_to: user_article_url(article.author, article.uuid)), 
         class: "cursor-pointer text-base rounded-full bg-primary hover:scale-105 text-white px-4 py-2.5 no-underline" %>
     <% else %>
       <%= link_to t('pay_to_read'), 
-        login_path(return_to: article_url(article.uuid)), 
+        login_path(return_to: user_article_url(article.author, article.uuid)), 
         data: { turbo_frame: :modal }, 
         class: "cursor-pointer text-base rounded-full bg-primary hover:scale-105 text-white px-4 py-2.5 no-underline" %>
     <% end %>
