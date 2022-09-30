@@ -1,10 +1,13 @@
 <div class=""
   data-controller="tabs"
   data-tabs-active-tab-value="<%= filter %>"
-  data-tabs-active-class-value="font-bold text-primary !border-primary">
+  data-tabs-active-class-value="font-bold text-primary !border-primary !opacity-100">
   <div class="w-full flex overflow-auto flex-nowrap scrollbar-hide items-center flex">
+    <%= link_to '/more', class: "sm:hidden cursor-pointer pt-1 pr-4 border-transparent min-w-fit pb-3" do %>
+      <%= inline_svg_tag "icons/add-solid.svg", class: "w-6 h-6 text-[#B1B6C6]" %>
+    <% end %>
     <%= link_to articles_path(filter: :default),
-      class: "cursor-pointer py-1 pr-8 border-transparent min-w-fit",
+      class: "cursor-pointer py-1 pr-4 border-transparent min-w-fit opacity-60",
       data: {
         controller: 'prefetch',
         tabs_target: "tab",
@@ -18,7 +21,7 @@
 
     <% if current_user.present? && current_user.subscribe_users.present? %>
       <%= link_to articles_path(filter: :subscribed),
-        class: "cursor-pointer py-1 pr-8 border-transparent min-w-fit",
+        class: "cursor-pointer py-1 pr-4 border-transparent min-w-fit opacity-60",
         data: {
           controller: 'prefetch',
           tabs_target: "tab",
@@ -33,7 +36,7 @@
 
     <% if current_user.present? && current_user.bought_articles_count > 0 %>
       <%= link_to articles_path(filter: :bought),
-        class: "cursor-pointer py-1 pr-8 border-transparent min-w-fit",
+        class: "cursor-pointer py-1 pr-4 border-transparent min-w-fit opacity-60",
         data: {
           controller: 'prefetch',
           tabs_target: "tab",
@@ -47,7 +50,7 @@
     <% end %>
 
     <%= link_to articles_path(filter: :lately),
-      class: "cursor-pointer py-1 pr-8 border-transparent min-w-fit",
+      class: "cursor-pointer py-1 pr-4 border-transparent min-w-fit opacity-60",
       data: {
         controller: 'prefetch',
         tabs_target: "tab",
@@ -60,7 +63,7 @@
     <% end %>
 
     <%= link_to articles_path(filter: :revenue, time_range: :month),
-      class: "cursor-pointer py-1 pr-8 border-transparent min-w-fit",
+      class: "cursor-pointer py-1 pr-4 border-transparent min-w-fit opacity-60",
       data: {
         controller: 'prefetch',
         tabs_target: "tab",

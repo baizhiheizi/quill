@@ -30,4 +30,8 @@ class HomeController < ApplicationController
       .limit(20)
       .sample(5)
   end
+
+  def more
+    redirect_to root_path unless browser.device.mobile?
+  end
 end

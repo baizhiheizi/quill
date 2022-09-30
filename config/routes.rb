@@ -37,6 +37,7 @@ Rails.application.routes.draw do
   get :hot_tags, to: 'home#hot_tags'
   get :active_authors, to: 'home#active_authors'
   get :selected_articles, to: 'home#selected_articles'
+  get :more, to: 'home#more'
 
   resource :locale, only: %i[edit create]
   get '/:locale',
