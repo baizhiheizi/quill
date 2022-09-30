@@ -1,3 +1,11 @@
-<%= turbo_stream.update 'profile_email_form' do %>
-  <%= render 'dashboard/profile_settings/email_field' %>
+<% if current_user.errors.present? %>
+  <% current_user.errors.full_messages.each do |message| %>
+    <%= turbo_stream.prepend "flashes" do %>
+      <%= render "flashes/flash", message: message, type: :danger %>
+    <% end %>
+  <% end %>
+<% else %>
+  <%= turbo_stream.update 'profile_email_form' do %>
+    <%= render 'dashboard/profile_settings/email_field' %>
+  <% end %>
 <% end %>
