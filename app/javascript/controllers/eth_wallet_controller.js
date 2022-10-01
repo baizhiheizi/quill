@@ -36,6 +36,8 @@ export default class extends Controller {
   }
 
   async getNounce(address) {
+    if (!address) return;
+
     const res = await post('/nounce', {
       body: {
         address,
@@ -48,6 +50,7 @@ export default class extends Controller {
 
   async authorize() {
     if (!window.Wallet) return;
+    if (!Wallet.account) return;
 
     const nounce = await this.getNounce(Wallet.account);
     const signature = await Wallet.web3.eth.personal.sign(
