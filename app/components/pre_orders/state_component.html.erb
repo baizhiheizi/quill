@@ -6,7 +6,7 @@
     <% if @pre_order.drafted? %>
       <%= @pre_order.is_a?(MixpayPreOrder) ? t('waiting_for_mixpay') : t('waiting_for_payment') %>
     <% elsif @pre_order.paid? %>
-      <%= t('processing_your_payment') %>
+      <%= t('processing_payment') %>
     <% end %>
   </div>
 </div>
