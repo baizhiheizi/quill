@@ -1,0 +1,45 @@
+<div id="search_result_list"
+  data-controller="dropdown"
+  data-dropdown-target="menu"
+  data-dropdown-initial-state-value="show"
+  data-action="click@window->dropdown#hide"
+  data-transition-enter-active="transition ease-out duration-100"
+  data-transition-enter-from="transform opacity-0 scale-95"
+  data-transition-enter-to="transform opacity-100 scale-100"
+  data-transition-leave-active="transition ease-in duration-75"
+  data-transition-leave-from="transform opacity-100 scale-100"
+  data-transition-leave-to="transform opacity-0 scale-95"
+  class="hidden 
+          bg-white 
+          dark:bg-[#333444]
+          shadow-lg
+          rounded-lg 
+          w-full 
+          absolute 
+          mt-4
+          left-0 
+          origin-top-left 
+          z-10">
+  <div class="py-2 px-4 border-b dark:border-white dark:border-opacity-5 opacity-70 text-sm"><%= t('tags') %></div>
+
+  <% tags.each do |tag| %>
+    <%= link_to articles_path(tag: tag.name), class: "cursor-pointer flex items-center space-x-4 py-2 px-4 border-b dark:border-white dark:border-opacity-5 hover:font-bold" do %>
+      <div class="text-lg h-8 my-2 mr-4 px-2 py-1 max-w-full truncate rounded tag-style-<%= tag.id % 6 %>">
+        <%= tag.name %>
+      </div>
+    <% end %>
+  <% end %>
+
+  <div class="py-2 px-4 border-b dark:border-white dark:border-opacity-5 opacity-70 text-sm"><%= t('author') %></div>
+  <% users.each do |user| %>
+    <%= link_to user_path(user), 
+      class: "cursor-pointer flex items-center space-x-4 py-2 px-4 border-b dark:border-white dark:border-opacity-5 hover:font-bold" do %>
+      <img src="<%= user.avatar %>" class="rounded-lg w-6 h-6" />
+      <span><%= user.name %></span>
+    <% end %>
+  <% end %>
+
+  <%= link_to t("press_enter_to_search_all_articles"), 
+    articles_path(query: query), 
+    class: "cursor-pointer flex items-center space-x-4 py-2 px-4 border-b dark:border-white dark:border-opacity-5 hover:font-bold opacity-70" %>
+</div>
