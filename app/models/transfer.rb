@@ -43,6 +43,7 @@ class Transfer < ApplicationRecord
 
   enum queue_priority: { default: 0, critical: 1, high: 2, low: 3 }, _prefix: true
   enum transfer_type: {
+    default: -1,
     author_revenue: 0,
     reader_revenue: 1,
     payment_refund: 2,

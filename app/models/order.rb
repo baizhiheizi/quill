@@ -126,6 +126,46 @@ class Order < ApplicationRecord
         early_orders.sum(:value_btc)
       end
 
+    wallet_id =
+      if payment.wallet_id == QuillBot.api.client_id
+        buyer.wallet_id
+      else
+        payment.wallet_id
+      end
+
+    # create quill transfer
+    _quill_amount = (total * item.platform_revenue_ratio).floor(8)
+    return unless _quill_amount.positive?
+
+    if payment.wallet_id == QuillBot.api.client_id
+      transfers.create_with(
+        queue_priority: :default,
+        wallet_id: QuillBot.api.client_id,
+        transfer_type: :default,
+        opponent_id: wallet_id,
+        asset_id: revenue_asset_id,
+        amount: (total - _quill_amount).to_f.to_s,
+        memo: "Distribute order #{trace_id}".truncate(70)
+      ).find_or_create_by!(
+        trace_id: MixinBot::Utils.unique_uuid(wallet_id, trace_id)
+      )
+    else
+      transfers.create_with(
+        queue_priority: :low,
+        wallet_id: wallet_id,
+        transfer_type: :quill_revenue,
+        opponent_id: QuillBot.api.client_id,
+        asset_id: revenue_asset_id,
+        amount: _quill_amount.to_f.to_s,
+        memo: Base64.encode64({
+          t: 'REVENUE',
+          a: item.uuid
+        }.to_json)
+      ).find_or_create_by!(
+        trace_id: MixinBot::Utils.unique_uuid(trace_id, QuillBot.api.client_id)
+      )
+    end
+
     # create reader transfer
     _readers_amount = 0
     collect_early_readers.each do |reader_id, order_ids|
@@ -143,7 +183,7 @@ class Order < ApplicationRecord
       salt = order_ids.push trace_id
       transfers.create_with(
         queue_priority: :low,
-        wallet_id: payment.wallet_id,
+        wallet_id: wallet_id,
         transfer_type: :reader_revenue,
         opponent_id: reader_id,
         asset_id: revenue_asset_id,
@@ -166,7 +206,7 @@ class Order < ApplicationRecord
         transfers.create_with(
           queue_priority: :low,
           transfer_type: :reference_revenue,
-          wallet_id: payment.wallet_id,
+          wallet_id: wallet_id,
           opponent_id: ref.reference.wallet_id,
           asset_id: revenue_asset_id,
           amount: _ref_amount,
@@ -183,25 +223,6 @@ class Order < ApplicationRecord
       end
     end
 
-    # create quill transfer
-    _quill_amount = (total * item.platform_revenue_ratio).floor(8)
-    if _quill_amount.positive? && payment.wallet_id != QuillBot.api.client_id
-      transfers.create_with(
-        queue_priority: :low,
-        wallet_id: payment.wallet_id,
-        transfer_type: :quill_revenue,
-        opponent_id: QuillBot.api.client_id,
-        asset_id: revenue_asset_id,
-        amount: _quill_amount.to_f.to_s,
-        memo: Base64.encode64({
-          t: 'REVENUE',
-          a: item.uuid
-        }.to_json)
-      ).find_or_create_by!(
-        trace_id: QuillBot.api.unique_conversation_id(trace_id, QuillBot.api.client_id)
-      )
-    end
-
     # create author transfer
     author_revenue_transfer_memo =
       if cite_article?
@@ -211,7 +232,7 @@ class Order < ApplicationRecord
       end
     transfers.create_with(
       queue_priority: :low,
-      wallet_id: payment.wallet_id,
+      wallet_id: wallet_id,
       transfer_type: :author_revenue,
       opponent_id: item.author.mixin_uuid,
       asset_id: revenue_asset_id,
@@ -225,11 +246,15 @@ class Order < ApplicationRecord
   end
 
   def all_transfers_generated?
-    transfers.sum(:amount).round(8) == if payment.wallet_id == QuillBot.api.client_id
-                                         (total * (1 - item.platform_revenue_ratio)).round(8)
-                                       else
-                                         total.round(8)
-                                       end
+    transfers
+      .where(wallet_id: payment.wallet_id)
+      .sum(:amount)
+      .round(8) ==
+      if payment.wallet_id == QuillBot.api.client_id
+        (total * (1 - item.platform_revenue_ratio)).round(8)
+      else
+        total.round(8)
+      end
   end
 
   def notify
