@@ -2,7 +2,7 @@
   <% case @pre_order %>
   <% when FennecPreOrder %>
     <a data-controller="fennec"
-      data-action="fennec#pay"
+      data-action="fennec#pay click->pre-orders-payment-component#pay"
       data-fennec-trace-id-param="<%= @pre_order.trace_id %>"
       data-fennec-asset-id-param="<%= @pay_asset.asset_id %>"
       data-fennec-amount-param="<%= @pay_amount %>"
@@ -13,18 +13,21 @@
       <span class="text-lg"><%= t('confirm_to_pay') %></span>
     </a>
   <% when MVMPreOrder %>
-    <%= render MVMPayButtonComponent.new(
-      currency: @pay_asset,
-      amount: @pay_amount,
-      payer: @pre_order.payer,
-      receivers: [@pre_order.payee_id],
-      threshold: 1,
-      memo: @pre_order.memo,
-      trace_id: @pre_order.trace_id
-    ) %>
+    <div data-action="click->pre-orders-payment-component#pay">
+      <%= render MVMPayButtonComponent.new(
+        currency: @pay_asset,
+        amount: @pay_amount,
+        payer: @pre_order.payer,
+        receivers: [@pre_order.payee_id],
+        threshold: 1,
+        memo: @pre_order.memo,
+        trace_id: @pre_order.trace_id
+      ) %>
+    </div>
   <% when MixinPreOrder %>
     <a href="<%= @pre_order.pay_url(@pay_asset.asset_id) %>"
        data-turbo-frame="_top"
+       data-action="click->pre-orders-payment-component#pay"
       class="relative flex items-center justify-center w-full my-4 text-center no-underline cursor-pointer py-3 block bg-primary hover:font-bold text-white rounded-lg md:hidden">
       <%= image_tag 'mixin-logo-light.png', class: "h-4 w-auto absolute left-4" %>
       <span class="text-lg"><%= t('confirm_to_pay') %></span>
