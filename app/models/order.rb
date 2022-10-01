@@ -88,7 +88,11 @@ class Order < ApplicationRecord
 
   def early_orders
     @early_orders ||=
-      item.orders.where('id < ? and created_at < ?', id, created_at).order(created_at: :desc)
+      item
+      .orders
+      .where(order_type: %i[buy_article reward_article])
+      .where('id < ? and created_at < ?', id, created_at)
+      .order(created_at: :desc)
   end
 
   def early_orders_with_the_same_currency
@@ -139,7 +143,7 @@ class Order < ApplicationRecord
       salt = order_ids.push trace_id
       transfers.create_with(
         queue_priority: :low,
-        wallet: payment.wallet,
+        wallet_id: payment.wallet_id,
         transfer_type: :reader_revenue,
         opponent_id: reader_id,
         asset_id: revenue_asset_id,
@@ -162,7 +166,7 @@ class Order < ApplicationRecord
         transfers.create_with(
           queue_priority: :low,
           transfer_type: :reference_revenue,
-          wallet: payment.wallet,
+          wallet_id: payment.wallet_id,
           opponent_id: ref.reference.wallet_id,
           asset_id: revenue_asset_id,
           amount: _ref_amount,
@@ -172,7 +176,7 @@ class Order < ApplicationRecord
             c: item.uuid
           }.to_json)
         ).find_or_create_by(
-          trace_id: payment.wallet.mixin_api.unique_conversation_id(trace_id, ref.reference.uuid)
+          trace_id: QuillBot.api.unique_conversation_id(trace_id, ref.reference.uuid)
         )
 
         _references_amount += _ref_amount
@@ -181,10 +185,10 @@ class Order < ApplicationRecord
 
     # create quill transfer
     _quill_amount = (total * item.platform_revenue_ratio).floor(8)
-    if _quill_amount.positive? && payment.wallet.present?
+    if _quill_amount.positive? && payment.wallet_id != QuillBot.api.client_id
       transfers.create_with(
         queue_priority: :low,
-        wallet: payment.wallet,
+        wallet_id: payment.wallet_id,
         transfer_type: :quill_revenue,
         opponent_id: QuillBot.api.client_id,
         asset_id: revenue_asset_id,
@@ -194,7 +198,7 @@ class Order < ApplicationRecord
           a: item.uuid
         }.to_json)
       ).find_or_create_by!(
-        trace_id: payment.wallet.mixin_api.unique_conversation_id(trace_id, QuillBot.api.client_id)
+        trace_id: QuillBot.api.unique_conversation_id(trace_id, QuillBot.api.client_id)
       )
     end
 
@@ -207,7 +211,7 @@ class Order < ApplicationRecord
       end
     transfers.create_with(
       queue_priority: :low,
-      wallet: payment.wallet,
+      wallet_id: payment.wallet_id,
       transfer_type: :author_revenue,
       opponent_id: item.author.mixin_uuid,
       asset_id: revenue_asset_id,
@@ -221,10 +225,10 @@ class Order < ApplicationRecord
   end
 
   def all_transfers_generated?
-    transfers.sum(:amount).round(8) == if payment.wallet.present?
-                                         total.round(8)
-                                       else
+    transfers.sum(:amount).round(8) == if payment.wallet_id == QuillBot.api.client_id
                                          (total * (1 - item.platform_revenue_ratio)).round(8)
+                                       else
+                                         total.round(8)
                                        end
   end
 
