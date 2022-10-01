@@ -34,7 +34,7 @@ class PreOrder < ApplicationRecord
 
   belongs_to :item, polymorphic: true
   belongs_to :payer, class_name: 'User', primary_key: :mixin_uuid
-  belongs_to :payee, class_name: 'MixinNetworkUser', primary_key: :uuid
+  belongs_to :payee, class_name: 'MixinNetworkUser', primary_key: :uuid, optional: true
   belongs_to :currency, class_name: 'Currency', primary_key: :asset_id, foreign_key: :asset_id, inverse_of: false
 
   before_validation :setup_attributes, on: :create
@@ -107,7 +107,15 @@ class PreOrder < ApplicationRecord
       when 'reward_article'
         Base64.urlsafe_encode64({ t: 'REWARD', a: item.uuid, f: follow_id }.to_json, padding: false)
       end
-    self.payee_id = payer.wallet_id || item.wallet_id || QuillBot.api.client_id
+
+    self.payee_id =
+      case type
+      when 'MixpayPreOrder'
+        QuillBot.api.client_id
+      else
+        payer.wallet_id || item.wallet_id
+      end
+
     self.asset_id = item.asset_id if asset_id.blank?
   end
 

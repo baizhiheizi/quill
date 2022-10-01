@@ -137,8 +137,8 @@ class Payment < ApplicationRecord
       min_amount: decoded_memo['t'] == 'BUY' ? article.price : nil,
       fill_asset_id: article.asset_id,
       pay_asset_id: asset_id,
-      trace_id: QuillBot.api.unique_conversation_id(wallet.uuid, trace_id),
-      wallet: wallet
+      trace_id: QuillBot.api.unique_conversation_id(wallet_id, trace_id),
+      user_id: wallet_id
     )
   rescue ActiveRecord::RecordInvalid => e
     reload.generate_refund_transfer!
@@ -181,7 +181,7 @@ class Payment < ApplicationRecord
     return if refund_transfer.present?
 
     create_refund_transfer!(
-      wallet: wallet,
+      wallet_id: wallet_id,
       transfer_type: :payment_refund,
       opponent_id: opponent_id,
       amount: amount,
@@ -191,8 +191,8 @@ class Payment < ApplicationRecord
     )
   end
 
-  def wallet
-    @wallet = snapshot&.wallet
+  def wallet_id
+    @wallet_id = snapshot&.user_id
   end
 
   def ensure_refund_transfer_created

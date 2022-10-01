@@ -35,7 +35,7 @@ class SwapOrder < ApplicationRecord
 
   include AASM
   belongs_to :payment
-  belongs_to :wallet, class_name: 'MixinNetworkUser', foreign_key: :user_id, primary_key: :uuid, inverse_of: :swap_orders
+  belongs_to :wallet, class_name: 'MixinNetworkUser', foreign_key: :user_id, primary_key: :uuid, inverse_of: :swap_orders, optional: true
   belongs_to :pay_asset, class_name: 'Currency', primary_key: :asset_id
   belongs_to :fill_asset, class_name: 'Currency', primary_key: :asset_id
 
@@ -85,7 +85,7 @@ class SwapOrder < ApplicationRecord
 
   def create_fox_swap_transfer!
     transfers.create_with(
-      wallet: wallet,
+      wallet_id: user_id,
       transfer_type: :fox_swap,
       queue_priority: :critical,
       opponent_multisig: {
@@ -102,7 +102,7 @@ class SwapOrder < ApplicationRecord
 
   def fswap_mtg_memo
     r = Foxswap.api.actions(
-      user_id: wallet.uuid,
+      user_id: user_id,
       follow_id: trace_id,
       asset_id: fill_asset_id,
       minimum_fill: min_amount.present? ? format('%.8f', min_amount) : nil
@@ -147,9 +147,9 @@ class SwapOrder < ApplicationRecord
     if min_amount.blank? || (_amount - Transfer::MINIMUM_AMOUNT).negative?
       complete!
     else
-      _trace_id = wallet.mixin_api.unique_conversation_id(trace_id, payment.payer.mixin_uuid)
+      _trace_id = QuillBot.api.unique_conversation_id(trace_id, payment.payer.mixin_uuid)
       transfers.create_with(
-        wallet: wallet,
+        wallet_id: user_id,
         transfer_type: :swap_change,
         opponent_id: payment.payer.mixin_uuid,
         asset_id: fill_asset_id,
@@ -164,9 +164,9 @@ class SwapOrder < ApplicationRecord
   def create_refund_transfer!
     return if refunded?
 
-    _trace_id = wallet.mixin_api.unique_conversation_id(trace_id, payment.payer.mixin_uuid)
+    _trace_id = QuillBot.api.unique_conversation_id(trace_id, payment.payer.mixin_uuid)
     transfers.create_with(
-      wallet: wallet,
+      wallet_id: user_id,
       transfer_type: :swap_refund,
       opponent_id: payment.payer.mixin_uuid,
       asset_id: fill_asset_id,
@@ -194,7 +194,14 @@ class SwapOrder < ApplicationRecord
   end
 
   def sync_order
-    r = Foxswap.api.order(trace_id, authorization: wallet.mixin_api.access_token('GET', '/me'))
+    mixin_api =
+      if wallet.present?
+        wallet.mixin_api
+      else
+        QuillBot.api
+      end
+
+    r = Foxswap.api.order(trace_id, authorization: mixin_api.access_token('GET', '/me'))
     update raw: r['data']
   end
 
