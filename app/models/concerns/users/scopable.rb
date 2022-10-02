@@ -6,12 +6,14 @@ module Users::Scopable
   included do
     default_scope { includes(:authorization) }
     scope :only_blocked, -> { where.not(blocked_at: nil) }
+    scope :without_blocked, -> { where(blocked_at: nil) }
     scope :only_mixin_messenger, -> { where(authorization: { provider: :mixin }) }
     scope :only_fennec, -> { where(authorization: { provider: :fennec }) }
     scope :only_mvm, -> { where(authorization: { provider: :mvm_eth }) }
 
     scope :active, lambda {
-      order_by_articles_count
+      without_blocked
+        .order_by_articles_count
         .where(
           articles: { created_at: (3.months.ago)..., orders_count: 1... }
         )

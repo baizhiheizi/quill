@@ -8,7 +8,7 @@ class HomeController < ApplicationController
   end
 
   def selected_articles
-    @articles = ArticleSearchService.call(filter: 'revenue', locale: current_locale).limit(6)
+    @articles = ArticleSearchService.call(filter: 'revenue', time_range: 'month', locale: current_locale).limit(6)
   end
 
   def hot_tags

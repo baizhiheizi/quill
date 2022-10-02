@@ -9,7 +9,7 @@ class ArticlesController < ApplicationController
     @query = params[:query]
     @filter = params[:filter] || 'default'
     @time_range = params[:time_range]
-    @time_range ||= 'month' if @filter == 'revenue'
+    @time_range ||= 'week' if @filter == 'revenue'
     @tag = Tag.find_by name: params[:tag].to_s.strip
 
     articles = ArticleSearchService.call(params.merge(current_user: current_user, locale: current_locale))
