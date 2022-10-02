@@ -266,9 +266,9 @@ const MarkdownPaste = Extension.create({
             if (text.length === 0 || html.length !== 0) return false;
 
             if (editor.getText()) {
-              editor.commands.insertContentAt(view.state.selection, text);
+              editor.commands.insertContentAt(view.state.selection, text, { updateSelection: true });
             } else {
-              editor.commands.setContent(text);
+              editor.commands.setContent(text, true);
             }
 
             return true;
