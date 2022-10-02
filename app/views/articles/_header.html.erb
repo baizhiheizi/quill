@@ -29,13 +29,13 @@
 </div>
 
 <% if article.tags.present? %>
-  <div class="flex items-center flex-wrap space-x-4 mb-4">
+  <div class="max-w-full flex items-center space-x-4 overflow-x-scroll scrollbar-hide mb-4">
     <% article.tags.each do |tag| %>
       <%= link_to articles_path(tag: tag.name), 
         data: { 
           controller: 'prefetch' 
         }, 
-        class: "px-2 py-1 text-sm tag-style-#{tag.id % 6}" do %>
+        class: "px-2 py-1 text-sm min-w-max tag-style-#{tag.id % 6}" do %>
         <%= tag.name %>
       <% end %>
     <% end %>
