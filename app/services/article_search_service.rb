@@ -35,7 +35,7 @@ class ArticleSearchService
   end
 
   def tagging
-    @articles = @articles.ransack({ tags_name_i_cont_all: @tag }).result if @tag.present?
+    @articles = @articles.joins(:currency, :tags, :author).ransack({ tags_name_i_cont_all: @tag }).result(distinct: true) if @tag.present?
 
     self
   end
@@ -48,7 +48,7 @@ class ArticleSearchService
       tags_name_i_cont: @query
     }
 
-    @articles = @articles.ransack(q_ransack.merge(m: 'or')).result(distinct: true) if @query.present?
+    @articles = @articles.joins(:currency, :tags, :author).ransack(q_ransack.merge(m: 'or')).result(distinct: true) if @query.present?
 
     self
   end
