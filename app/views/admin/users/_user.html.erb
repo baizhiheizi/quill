@@ -27,6 +27,8 @@
     <div class='flex justify-center'>
       <% if user.validated? %>
         <span class="px-2 py-1 bg-green-500 text-white rounded">Validated</span>
+      <% elsif user.blocked? %>
+        <span class="px-2 py-1 bg-zinc-500 text-white rounded">Blocked</span>
       <% else %>
         <span class="p-1 bg-blue-500 ring-blue-100 ring-2 rounded-full"></span>
       <% end %>
@@ -51,7 +53,21 @@
             turbo_confirm: "Sure to validate?",
           }
         },
-        class: "bg-indigo-500 hover:bg-indigo-600 rounded text-white px-4 py-2" unless user.validated? %>
+        class: "bg-indigo-500 hover:bg-indigo-600 rounded text-white px-4 py-2" if !user.validated? && !user.blocked? %>
+      <%= button_to 'UnBlock', admin_user_unblock_path(user),
+        form: {
+          data: { 
+            turbo_confirm: "Sure to unblock?",
+          }
+        },
+        class: "bg-red-500 hover:bg-purple-600 rounded text-white px-4 py-2" if user.blocked? %>
+      <%= button_to 'Block', admin_user_block_path(user),
+        form: {
+          data: { 
+            turbo_confirm: "Sure to block?",
+          }
+        },
+        class: "bg-zinc-500 hover:bg-zinc-800 rounded text-white px-4 py-2" if !user.validated? && !user.blocked? %>
     </di>
   </td>
 </tr>

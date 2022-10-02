@@ -5,6 +5,7 @@ module Users::Scopable
 
   included do
     default_scope { includes(:authorization) }
+    scope :only_blocked, -> { where.not(blocked_at: nil) }
     scope :only_mixin_messenger, -> { where(authorization: { provider: :mixin }) }
     scope :only_fennec, -> { where(authorization: { provider: :fennec }) }
     scope :only_mvm, -> { where(authorization: { provider: :mvm_eth }) }

@@ -44,11 +44,23 @@ module Users::Statable
   end
 
   def validate!
-    update validated_at: Time.current
+    update validated_at: Time.current, blocked_at: nil
   end
 
   def unvalidate!
     update validated_at: nil
+  end
+
+  def blocked?
+    blocked_at?
+  end
+
+  def block!
+    update blocked_at: Time.current, validated_at: nil
+  end
+
+  def unblock!
+    update blocked_at: nil
   end
 
   def fennec?

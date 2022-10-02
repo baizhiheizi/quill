@@ -28,6 +28,8 @@ namespace :admin do
   resources :users, only: %i[index show], param: :uid do
     post :validate
     post :unvalidate
+    post :block
+    post :unblock
   end
   resources :articles, only: %i[index show], param: :uuid do
     post :block

@@ -16,6 +16,8 @@ module Admin
           users.only_mvm
         when 'only_validated'
           users.only_validated
+        when 'only_blocked'
+          users.only_blocked
         when 'all'
           users
         end
@@ -54,6 +56,18 @@ module Admin
     def show
       @tab = params[:tab] || 'articles'
       @user = User.find_by uid: params[:uid]
+    end
+
+    def block
+      @user = User.find_by uid: params[:user_uid]
+      return if @user.blank?
+
+      @user.block! unless @user.blocked?
+    end
+
+    def unblock
+      @user = User.find_by uid: params[:user_uid]
+      @user.unblock! if @user&.blocked?
     end
 
     def validate
