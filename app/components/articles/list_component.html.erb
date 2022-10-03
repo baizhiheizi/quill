@@ -1,14 +1,12 @@
 <div data-controller="infinite-scroll">
-  <div id="articles_list">
-    <% if @articles.blank? %>
-      <div class="text-center py-2 opacity-50">
-        <%= t("no_record") %>
-      </div>
-    <% else %>
+  <% if @articles.blank? %>
+    <%= render EmptyComponent.new text: t('no_record') %>
+  <% else %>
+    <div id="articles_list">
       <%= render Articles::CardComponent.with_collection(@articles) %>
-    <% end %>
-  </div>
-  <div data-infinite-scroll-target='scrollArea'></div>
+    </div>
+    <div data-infinite-scroll-target='scrollArea'></div>
 
-  <%= render "shared/pagination", pagy: @pagy, id: @pagy_id %>
+    <%= render "shared/pagination", pagy: @pagy, id: @pagy_id %>
+  <% end %>
 </div>
