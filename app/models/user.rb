@@ -33,6 +33,8 @@
 #
 
 class User < ApplicationRecord
+  second_level_cache expires_in: 1.week
+
   include Authenticatable
   include Users::EmailVerifiable
   include Users::Scopable

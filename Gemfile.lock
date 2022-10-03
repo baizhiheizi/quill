@@ -440,6 +440,9 @@ GEM
     rubyzip (2.3.2)
     scrypt (3.0.7)
       ffi-compiler (>= 1.0, < 2.0)
+    second_level_cache (2.7.1)
+      activerecord (>= 6.0)
+      activesupport (>= 6.0)
     selenium-webdriver (4.5.0)
       childprocess (>= 0.5, < 5.0)
       rexml (~> 3.2, >= 3.2.5)
@@ -555,6 +558,7 @@ DEPENDENCIES
   requestjs-rails
   rubocop
   rubocop-rails
+  second_level_cache
   selenium-webdriver
   sidekiq (~> 6.0)
   sidekiq-cron

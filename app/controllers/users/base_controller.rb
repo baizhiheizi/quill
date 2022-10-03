@@ -6,7 +6,7 @@ class Users::BaseController < ApplicationController
   private
 
   def load_user!
-    @user = User.find_by uid: params[:user_uid]
+    @user = User.fetch_by_uniq_keys uid: params[:user_uid]
     redirect_to root_path if @user.blank?
   end
 

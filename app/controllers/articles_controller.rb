@@ -33,7 +33,7 @@ class ArticlesController < ApplicationController
   end
 
   def show
-    @article = Article.without_drafted.find_by uuid: params[:uuid]
+    @article = Article.without_drafted.fetch_by_uniq_keys uuid: params[:uuid]
 
     if @article&.authorized?(current_user) || @article&.may_buy_by?(current_user)
       @page_title = "#{@article.title} - #{@article.author.name}"
