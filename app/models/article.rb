@@ -124,7 +124,7 @@ class Article < ApplicationRecord
   scope :order_by_revenue_usd, -> { order(revenue_usd: :desc) }
   scope :order_by_popularity, lambda {
     joins(:orders)
-      .group(:id, 'currencies.id', 'tags.id', 'users.id')
+      .group(:id)
       .select(
         <<~SQL.squish
           articles.*, 

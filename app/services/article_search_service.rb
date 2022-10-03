@@ -11,6 +11,7 @@ class ArticleSearchService
     @articles =
       Article
       .without_drafted
+      .left_joins(:author)
       .where(
         users: {
           blocked_at: nil
@@ -35,7 +36,7 @@ class ArticleSearchService
   end
 
   def tagging
-    @articles = @articles.joins(:currency, :tags, :author).ransack({ tags_name_i_cont_all: @tag }).result(distinct: true) if @tag.present?
+    @articles = @articles.ransack({ tags_name_i_cont_all: @tag }).result(distinct: true) if @tag.present?
 
     self
   end
@@ -48,7 +49,7 @@ class ArticleSearchService
       tags_name_i_cont: @query
     }
 
-    @articles = @articles.joins(:currency, :tags, :author).ransack(q_ransack.merge(m: 'or')).result(distinct: true) if @query.present?
+    @articles = @articles.ransack(q_ransack.merge(m: 'or')).result(distinct: true) if @query.present?
 
     self
   end
