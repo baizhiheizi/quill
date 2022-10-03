@@ -1,19 +1,22 @@
 <nav class="block lg:hidden w-full fixed bottom-0 z-50 shadow bg-white dark:bg-[#333444] border-t dark:border-white dark:border-opacity-5">
   <div class="grid grid-cols-4">
-    <%= link_to articles_path, class: "block py-[1.125rem]" do %>
+    <div class="relative py-[1.125rem]">
       <%= inline_svg_tag (@active_page == 'home' ? 'icons/home-solid.svg' : 'icons/home.svg'), 
         class: "w-6 h-6 mx-auto text-opacity-60 text-[#222222] dark:text-white dark:text-opacity-80" %>
-    <% end %>
+      <%= link_to '', articles_path, class: "absolute inset-0" unless @active_page == 'home' %>
+    </div>
 
-    <%= link_to dashboard_readings_path, class: "block py-[1.125rem]" do %>
+    <div class="relative py-[1.125rem]">
       <%= inline_svg_tag (@active_page == 'readings' ? 'icons/glasses-solid.svg' : 'icons/glasses.svg'), 
         class: "w-6 h-6 mx-auto text-opacity-60 text-[#222222] dark:text-white dark:text-opacity-80" %>
-    <% end %>
+      <%= link_to '', dashboard_readings_path, class: "absolute inset-0" unless @active_page == 'readings' %>
+    </div>
 
-    <%= link_to dashboard_authorings_path, class: "block py-[1.125rem]" do %>
+    <div class="relative py-[1.125rem]">
       <%= inline_svg_tag (@active_page == 'authorings' ? 'icons/article-solid.svg' : 'icons/article.svg'), 
         class: "w-6 h-6 mx-auto text-opacity-60 text-[#222222] dark:text-white dark:text-opacity-80" %>
-    <% end %>
+      <%= link_to '', dashboard_authorings_path, class: "absolute inset-0" unless @active_page == 'authorings' %>
+    </div>
 
     <% if current_user.present? %>
       <%= render DropdownComponent.new class: 'block py-4 flex justify-center' do |c| %>
