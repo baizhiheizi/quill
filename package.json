@@ -12,7 +12,7 @@
     "@coinbase/wallet-sdk": "^3.5.3",
     "@hotwired/stimulus": "^3.1.0",
     "@hotwired/turbo-rails": "^7.2.0",
-    "@metamask/detect-provider": "^1.2.0",
+    "@metamask/detect-provider": "^2.0.0",
     "@rails/activestorage": "^7.0.4",
     "@rails/request.js": "^0.0.6",
     "@tailwindcss/aspect-ratio": "^0.4.2",

@@ -27,12 +27,7 @@
         item: article,
         asset_id: article.asset_id,
         amount: article.price,
-      ), 
-      html: {
-        data: {
-          turbo_frame: :modal
-        }
-      } do |form| %>
+      ) do |form| %>
         <%= form.hidden_field :order_type %>
         <%= form.hidden_field :item_id %>
         <%= form.hidden_field :item_type %>
