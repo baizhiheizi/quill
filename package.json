@@ -49,7 +49,7 @@
     "postcss": "^8.4.17",
     "postcss-import": "^15.0.0",
     "process": "^0.11.10",
-    "prosemirror-markdown": "^1.9.4",
+    "prosemirror-markdown": "^1.10.0",
     "qrcode": "^1.5.1",
     "stimulus-use": "^0.50.0",
     "tailwind-scrollbar-hide": "^1.1.7",
