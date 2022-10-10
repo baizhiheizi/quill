@@ -33,7 +33,7 @@
     "@tiptap/extension-underline": "^2.0.0-beta.199",
     "@tiptap/starter-kit": "^2.0.0-beta.199",
     "@walletconnect/web3-provider": "^1.8.0",
-    "abortcontroller-polyfill": "^1.7.3",
+    "abortcontroller-polyfill": "^1.7.5",
     "autoprefixer": "^10.4.12",
     "axios": "^0.27.2",
     "babel-plugin-import": "^1.13.5",
