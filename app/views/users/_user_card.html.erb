@@ -43,7 +43,7 @@
     <div class="grid grid-cols-2 xl:grid-cols-3 gap-4 mb-1">
       <%= link_to user_path(user.uid, tab: :published), data: { controller: 'prefetch' }, class:"flex items:center space-x-1" do %>
         <span class="opacity-75"><%= t('published') %>:</span> 
-        <span class="text-mono"><%= user.articles_count %></span>
+        <span class="text-mono"><%= user.articles.published.count %></span>
       <% end %>
 
       <%= link_to user_path(user.uid, tab: :bought), data: { controller: 'prefetch' }, class:"flex items:center space-x-1" do %>
