@@ -18,8 +18,8 @@
   <td class="p-4">
     <% if transfer.recipient.present? %>
       <%= render "admin/users/field", user: transfer.recipient, tab: :transfers %>
-    <% elsif transfer.opponent_multisig.present? %>
-      MTG(<%= transfer.opponent_multisig['threshold'] %>/<%= transfer.opponent_multisig['receivers'].size %>)
+    <% elsif transfer.transfer_type == 'fox_swap' && transfer.opponent_multisig.present? %>
+      MTG
     <% else %>
       <%= transfer.opponent_id %>
     <% end %>
