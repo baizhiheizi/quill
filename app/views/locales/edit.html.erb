@@ -1,6 +1,6 @@
 <%= turbo_frame_tag 'modal' do %>
   <%= render ModalComponent.new title: t('language') do %>
-    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
       <%= link_to 'English', 
         '/en', 
         data: { turbo_frame: '_top' }, 
@@ -9,6 +9,10 @@
         '/zh-CN', 
         data: { turbo_frame: '_top' }, 
         class: "text-center py-2 px-4 border border-primary rounded-full #{current_locale == 'zh-CN' ? 'bg-primary text-white' : 'text-primary'}"%>
+      <%= link_to '日本语', 
+        '/ja', 
+        data: { turbo_frame: '_top' }, 
+        class: "text-center py-2 px-4 border border-primary rounded-full #{current_locale == 'ja' ? 'bg-primary text-white' : 'text-primary'}"%>
     </div>
   <% end %>
 <% end %>

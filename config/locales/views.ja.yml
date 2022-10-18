@@ -1,5 +1,5 @@
 ja:
-  app_name: 文商
+  app_name: Quill
   load_more: さらに表示
   subscribe: フォロー
   unsubscribe: フォロー解除
@@ -35,8 +35,8 @@ ja:
   read: 記事を読む
   write: 記事を作成
   search: 検索
-  rules: 文商の仕組み
-  fair: 文商データ
+  rules: Quillの仕組み
+  fair: Quillデータ
   help: Help
   twitter: Twitter
   community: コミュニティ
@@ -63,7 +63,7 @@ ja:
   pay: 続きを読むためには
   to_continue_reading: が必要です
   and_receive_early_reader_revenue: また、早期に購入して頂くことで早期購入特典を受け取ることができます。
-  pay_warning: この記事は文商で販売されているものであり、一度支払われた金額は返金されません。購入は慎重にお願いします。
+  pay_warning: この記事はQuillで販売されているものであり、一度支払われた金額は返金されません。購入は慎重にお願いします。
   be_the_first_reader: 最初の読者になる
   pay_to_read: 記事を購入する
   already_paid: 支払い済みですか?
@@ -97,30 +97,30 @@ ja:
   revenue_count: Revenue Count
   author_revenue_total: 作者収益（現在価格）
   reader_revenue_total: 読者収益（現在価格）
-  platform_revenue: 文商収益
-  platform_revenue_last_month: 文商収益(先月)
-  platform_revenue_this_month: 文商収益(今月)
+  platform_revenue: Quill収益
+  platform_revenue_last_month: Quill収益(先月)
+  platform_revenue_this_month: Quill収益(今月)
   readers_revenue: 読者収益
   author_revenue: 作者収益
   references_revenue: 参照収益
   revenue_chart: 収益チャート（USD）
   transactions: トランザクション
   rules_content: |
-    ### 文商の仕組み
+    ### Quillの仕組み
 
-    文商での売り上げは以下のように3分割されます。
+    Quillでの売り上げは以下のように3分割されます。
 
     50% → 作者
 
     40% → 読者
 
-    10% → 文商
+    10% → Quill
 
     例えば誰かが「100sat」で記事を購入した場合、
 
     「50sat」が作者
 
-    「10sat」が手数料として文商
+    「10sat」が手数料としてQuill
 
     「40sat」がすでに購入した読者群のウォレットに等分で贈られます。
 
@@ -132,7 +132,7 @@ ja:
     
     購入とは別途で、追加のリワード（投げ銭）が発生した場合においても同じ分配システムになっております。
 
-    なぜこのような仕組みになっているかというと、「文商」は作者/読者ともに利益を得ることができるプラットフォームの構築を目指しているからです。
+    なぜこのような仕組みになっているかというと、「Quill」は作者/読者ともに利益を得ることができるプラットフォームの構築を目指しているからです。
 
     私たちは作者だけでなく、読者の購入やフィードバックも「記事の価値」に貢献していると考えています。
     
@@ -214,7 +214,7 @@ ja:
   no_access: アクセス負荷
   sorry_you_are_not_authorized_to_access_this_application: 申し訳ありません。あなたはこのアプリケーションにアクセスする権限がありません。
   mixin_bot: Linksロボ
-  comming_soon: 文商 近日公開
+  comming_soon: Quill 近日公開
   you_will_get_1000_satoshi_airdrop_once_we_launched: |
     事前登録完了です🎉
     正式リリース時に1000satoshi分のビットコインが届きます

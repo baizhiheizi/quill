@@ -210,7 +210,7 @@ class Article < ApplicationRecord
   end
 
   def plain_text
-    @plain_text ||= ActionController::Base.helpers.strip_tags(MarkdownRenderService.call(content.strip))
+    @plain_text ||= ActionController::Base.helpers.strip_tags(MarkdownRenderService.call(content&.strip || ''))
   end
 
   def words_count

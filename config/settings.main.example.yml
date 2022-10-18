@@ -26,6 +26,7 @@ default_locale: en
 available_locales:
   - en
   - zh-CN
+  - ja
 
 # assets
 supported_assets:
