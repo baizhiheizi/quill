@@ -5,7 +5,7 @@ Rails.application.routes.draw do
                         "https://quill.im/#{path_params[:path]}"
                       },
                   status: 301,
-                  constraints: { domain: 'prsdigg.com' }
+                  constraints: { domain: /prsdigg.com|bunshow.jp/ }
 
   draw :admin
   draw :dashboard
