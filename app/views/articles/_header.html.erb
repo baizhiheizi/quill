@@ -4,8 +4,14 @@
     <div class="leading-4 truncate">
       <span class="text-base font-semibold"><%= article.author.short_name %></span>
       <div class="text-sm sm:text-base text-gray-500 font-light">
-        <%= render TimeFormatComponent.new datetime: article.published_at.utc.rfc3339 do %>
-          <%= article.published_at&.strftime("%Y-%m-%d %H:%M") %>
+        <% if article.published_at.present? %>
+          <%= render TimeFormatComponent.new datetime: article.published_at.utc.rfc3339 do %>
+            <%= article.published_at.strftime("%Y-%m-%d %H:%M") %>
+          <% end %>
+        <% else %>
+          <%= render TimeFormatComponent.new datetime: article.updated_at.utc.rfc3339 do %>
+            <%= article.updated_at.strftime("%Y-%m-%d %H:%M") %>
+          <% end %>
         <% end %>
       </div>
     </div>
