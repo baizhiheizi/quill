@@ -26,7 +26,6 @@
   </div>
   <div class="mb-6">
     <%= link_to currencies_path(type: :swappable, identifier: @identifier), 
-      disabled: (!SwapOrder::FOXSWAP_ENABLE),
       data: {
         controller: 'turbo',
         pre_orders_payment_component_target: 'selectCurrencyButton'

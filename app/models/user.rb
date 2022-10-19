@@ -129,14 +129,6 @@ class User < ApplicationRecord
     format('https://api.multiavatar.com/%<mixin_uuid>s.png', mixin_uuid: mixin_uuid)
   end
 
-  def mixin_authorization_valid?
-    if Settings.whitelist&.enable && Settings.whitelist&.phone_country_code.present?
-      phone.present?
-    else
-      true
-    end
-  end
-
   def prepare
     create_wallet! if wallet.blank?
     create_notification_setting! if notification_setting.blank?

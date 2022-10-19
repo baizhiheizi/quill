@@ -3,8 +3,4 @@
 # throw error when failed
 set -e
 
-# use main credentials
-cp config/credentials/main.yml.enc config/credentials.yml.enc
-cp config/settings.main.example.yml config/settings.yml
-
 bundle install

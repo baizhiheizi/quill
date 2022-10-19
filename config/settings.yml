@@ -11,22 +11,8 @@ blaze_enable: false
 app_name: Quill
 page_title: 'Quill: Build your value net on Web3 with Quill'
 page_keywords: Quill, Write, Read, Web3, Blockchain, Bitcoin, ETH
-page_description: Build your value net on Web3 with Quill 
-messenger: Mixin
+page_description: Build your value net on Web3 with Quill  
 twitter_account: with_quill
-
-# app/assets/images/*
-logo_file: logo.svg
-favicon_file: favicon.svg
-icon_file: icon.png
-
-# locale
-time_zone: UTC
-default_locale: en
-available_locales:
-  - en
-  - zh-CN
-  - ja
 
 # assets
 supported_assets:
@@ -38,7 +24,6 @@ supported_assets:
   - 43d61dcd-e413-450d-80b8-101d5e903357
   # pUSD
   - 31d2ea9c-95eb-3355-b65b-ba096853bc18
-swapable: true
 
 # whitelist
 whitelist:
@@ -60,4 +45,4 @@ foxswap:
   mtg_public_Key: dt351xp3KjNlVCMqBYUeUSF45upCEiReSZAqcjcP/Lc=
 
 storage:
-  endpoint: https://assets.quill.im
+  endpoint: https://static.baizhiheizi.com

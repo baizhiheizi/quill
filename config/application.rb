@@ -25,9 +25,9 @@ module Quill
     # config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
 
-    config.time_zone = Settings.time_zone if Settings.time_zone.present?
-    config.i18n.available_locales = Settings.available_locales || %i[en]
-    config.i18n.default_locale = Settings.default_locale || :en
+    config.time_zone = 'UTC'
+    config.i18n.available_locales = %i[en zh-CN ja]
+    config.i18n.default_locale = :en
 
     # custom error pages
     config.exceptions_app = routes
