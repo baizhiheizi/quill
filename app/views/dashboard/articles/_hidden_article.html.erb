@@ -2,8 +2,14 @@
   <div class="flex items-center justify-between mb-4">
     <div class="flex items-center">
       <span class="text-sm opacity-60">
-        <%= render TimeFormatComponent.new datetime: article.published_at.rfc3339 do %>
-          <%= article.published_at.strftime("%Y-%m-%d %H:%M") %>
+        <% if article.published_at.present? %>
+          <%= render TimeFormatComponent.new datetime: article.published_at.rfc3339 do %>
+            <%= article.published_at.strftime("%Y-%m-%d %H:%M") %>
+          <% end %>
+        <% else %>
+          <%= render TimeFormatComponent.new datetime: article.updated_at.rfc3339 do %>
+            <%= article.updated_at.strftime("%Y-%m-%d %H:%M") %>
+          <% end %>
         <% end %>
       </span>
     </div>
