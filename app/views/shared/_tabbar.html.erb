@@ -68,9 +68,14 @@
         </div>
       <% end %>
     <% else %>
-      <%= link_to login_path, data: { turbo_frame: :modal }, class: "block py-[1.125rem]" do %>
+      <div class="block py-[1.125rem] relative">
         <%= inline_svg_tag 'icons/user.svg', class: "w-6 h-6 mx-auto text-opacity-60 text-[#222222] dark:text-white" %>
-      <% end %>
+        <% if from_mixin_messenger? %>
+          <%= link_to '', login_path, class: "absolute inset-0" %>
+        <% else %>
+          <%= link_to '', login_path, data: { turbo_frame: :modal }, class: "absolute inset-0" %>
+        <% end %>
+      </div>
     <% end %>
   </div>
   <div style="height:env(safe-area-inset-bottom)"></div>
