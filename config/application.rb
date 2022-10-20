@@ -36,7 +36,7 @@ module Quill
     # https://stackoverflow.com/questions/49233769/is-there-a-way-to-prevent-safari-on-ios-from-clearing-the-cookies-for-a-website
     # https://developer.mozilla.org/en-US/docs/Web/API/Document/cookie#Example_4_Reset_the_previous_cookie
     # https://api.rubyonrails.org/v5.2.1/classes/ActionDispatch/Session/CookieStore.html
-    config.session_store :cookie_store, expire_after: 7.days, key: '_quill_session', domain: :all
+    config.session_store :cookie_store, expire_after: 7.days, key: '_quill_session'
 
     config.view_component.generate_parent_component = 'ApplicationComponent'
 
