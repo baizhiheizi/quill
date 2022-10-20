@@ -2,7 +2,7 @@
 
 class SubdomainConstraint
   def matches?(request)
-    request.subdomain.present? && request.subdomain != 'www'
+    request.subdomain.present? && request.domain == 'quill.im' && request.subdomain != 'www'
   end
 end
 
