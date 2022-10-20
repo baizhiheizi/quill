@@ -13,8 +13,6 @@ Rails.application.routes.draw do
                   status: 301,
                   constraints: { domain: /prsdigg.com|bunshow.jp/ }
 
-  get '/', to: 'users#show', constraints: SubdomainConstraint.new
-
   draw :admin
   draw :dashboard
   draw :mvm
