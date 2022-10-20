@@ -1,11 +1,19 @@
 # frozen_string_literal: true
 
+class SubdomainConstraint
+  def matches?(request)
+    request.subdomain.present? && request.subdomain != 'www'
+  end
+end
+
 Rails.application.routes.draw do
   get '/(*path)', to: redirect { |path_params, _request|
                         "https://quill.im/#{path_params[:path]}"
                       },
                   status: 301,
                   constraints: { domain: /prsdigg.com|bunshow.jp/ }
+
+  get '/', to: 'users#show', constraints: SubdomainConstraint.new
 
   draw :admin
   draw :dashboard
