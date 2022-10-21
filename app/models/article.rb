@@ -30,7 +30,7 @@
 #  updated_at                          :datetime         not null
 #  asset_id(asset_id in Mixin Network) :uuid
 #  author_id                           :bigint
-#  collection_id                       :bigint
+#  collection_id                       :uuid
 #
 # Indexes
 #

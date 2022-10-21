@@ -54,6 +54,9 @@ gem 'bcrypt', '~> 3.1.7'
 # A simple API wrapper for Mixin Network in Ruby
 gem 'mixin_bot'
 
+# A simple API wrapper for Trident in Ruby
+gem 'trident_assistant', git: 'https://github.com/TheTridentOne/trident_assistant.git'
+
 # Wraps the Aliyun OSS as an Active Storage service.
 gem 'activestorage-aliyun'
 

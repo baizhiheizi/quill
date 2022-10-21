@@ -39,6 +39,7 @@ class User < ApplicationRecord
   include Users::EmailVerifiable
   include Users::Scopable
   include Users::Statable
+  include Users::CollectibleReadable
 
   extend Enumerize
 
@@ -66,6 +67,10 @@ class User < ApplicationRecord
 
   has_one :wallet, class_name: 'MixinNetworkUser', as: :owner, dependent: :nullify
   has_one :notification_setting, dependent: :destroy
+
+  has_many :non_fungible_outputs, primary_key: :mixin_uuid, dependent: :nullify
+  has_many :unspent_non_fungible_outputs, -> { where(state: :unspent) }, class_name: 'NonFungibleOutput', dependent: :restrict_with_exception, inverse_of: :user
+  has_many :collectibles, through: :unspent_non_fungible_outputs
 
   validates :name, presence: true
   validates :email, uniqueness: true, format: /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\z/i, allow_nil: true

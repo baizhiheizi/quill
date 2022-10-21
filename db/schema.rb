@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_10_02_065110) do
+ActiveRecord::Schema[7.0].define(version: 2022_10_21_030747) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
   enable_extension "pgcrypto"
@@ -120,8 +120,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_02_065110) do
     t.float "readers_revenue_ratio", default: 0.4
     t.float "author_revenue_ratio", default: 0.5
     t.float "references_revenue_ratio", default: 0.0
-    t.bigint "collection_id"
     t.string "locale"
+    t.uuid "collection_id"
     t.index ["asset_id"], name: "index_articles_on_asset_id"
     t.index ["author_id"], name: "index_articles_on_author_id"
     t.index ["collection_id"], name: "index_articles_on_collection_id"
@@ -176,7 +176,6 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_02_065110) do
     t.uuid "token_id"
     t.string "identifier"
     t.string "name"
-    t.string "description"
     t.string "state"
     t.string "metahash"
     t.jsonb "metadata"
@@ -187,17 +186,26 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_02_065110) do
     t.index ["token_id"], name: "index_collectibles_on_token_id", unique: true
   end
 
+  create_table "collectings", force: :cascade do |t|
+    t.bigint "collection_id"
+    t.bigint "nft_collection_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["collection_id", "nft_collection_id"], name: "index_collectings_on_collection_id_and_nft_collection_id", unique: true
+  end
+
   create_table "collections", force: :cascade do |t|
-    t.bigint "author_id"
     t.uuid "uuid"
-    t.uuid "creator_id"
     t.string "name"
     t.text "description"
     t.string "state"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.uuid "author_id"
+    t.decimal "price"
+    t.uuid "asset_id"
+    t.uuid "revenue_ratio"
     t.index ["author_id"], name: "index_collections_on_author_id"
-    t.index ["creator_id"], name: "index_collections_on_creator_id"
     t.index ["uuid"], name: "index_collections_on_uuid", unique: true
   end
 
@@ -286,6 +294,15 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_02_065110) do
     t.datetime "updated_at", null: false
     t.index ["owner_type", "owner_id"], name: "index_mixin_network_users_on_owner_type_and_owner_id"
     t.index ["uuid"], name: "index_mixin_network_users_on_uuid", unique: true
+  end
+
+  create_table "nft_collections", force: :cascade do |t|
+    t.uuid "uuid"
+    t.uuid "creator_id"
+    t.jsonb "raw"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["uuid"], name: "index_nft_collections_on_uuid", unique: true
   end
 
   create_table "non_fungible_outputs", force: :cascade do |t|

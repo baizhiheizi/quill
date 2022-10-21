@@ -21,8 +21,6 @@
 #
 
 class UserAuthorization < ApplicationRecord
-  MIXIN_AUTHORIZATION_SCOPE = "PROFILE:READ#{Settings.whitelist&.enable&.presence && '+PHONE:READ'}".freeze
-
   store_accessor :raw, %i[phone key contract]
 
   belongs_to :user, optional: true
