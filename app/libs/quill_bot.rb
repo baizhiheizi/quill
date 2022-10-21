@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'mvm'
+
 module QuillBot
   def self.api
     @api ||= MixinBot::API.new(

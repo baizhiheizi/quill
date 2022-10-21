@@ -1,4 +1,11 @@
 GIT
+  remote: https://github.com/TheTridentOne/trident_assistant.git
+  revision: 17528075e148f49f72bb465de8d2b5aa268f3749
+  specs:
+    trident_assistant (0.1.7)
+      mixin_bot (~> 0.8)
+
+GIT
   remote: https://github.com/baizhiheizi/arweave-ruby.git
   revision: 61d60e083902d7b49f3c43461b41e6adaadfbf98
   specs:
@@ -308,11 +315,12 @@ GEM
     mini_racer (0.6.3)
       libv8-node (~> 16.10.0.0)
     minitest (5.16.3)
-    mixin_bot (0.10.0)
+    mixin_bot (0.11.0)
       activesupport (>= 5)
       awesome_print (~> 1.8)
       bcrypt (~> 3.1)
       cli-ui (~> 1.3)
+      eth (~> 0.5)
       faye-websocket (>= 0.11)
       http (~> 4.1)
       jose (~> 1.1)
@@ -579,6 +587,7 @@ DEPENDENCIES
   spring
   spring-watcher-listen (~> 2.1.0)
   stimulus-rails
+  trident_assistant!
   turbo-rails
   tzinfo-data
   view_component

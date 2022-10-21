@@ -11,9 +11,9 @@ class SessionsController < ApplicationController
   def mixin_login
     redirect_to format(
       '%<oauth_path>s?client_id=%<client_id>s&scope=%<scope>s&return_to=%<return_to>s',
-      oauth_path: Settings.mixin_oauth_path || 'https://mixin-www.zeromesh.net/oauth/authorize',
+      oauth_path: 'https://mixin-www.zeromesh.net/oauth/authorize',
       client_id: QuillBot.api.client_id,
-      scope: UserAuthorization::MIXIN_AUTHORIZATION_SCOPE,
+      scope: 'PROFILE:READ+COLLECTIBLES:READ',
       return_to: params[:return_to]
     ), allow_other_host: true
   end

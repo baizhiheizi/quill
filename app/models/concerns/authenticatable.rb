@@ -17,8 +17,7 @@ module Authenticatable
         provider: :mixin
       )
       raw = (auth.raw.presence || {}).merge(res['data'])
-      auth.raw = raw
-      auth.update! raw: raw if auth.raw_changed?
+      auth.update raw: raw, access_token: token
 
       find_or_create_user_by_auth auth
     end
@@ -50,7 +49,7 @@ module Authenticatable
 
       public_key = Eth::Signature.personal_recover msg, signature
 
-      res = MVM.api.user address
+      res = MVM.bridge.user address
       return if res.blank?
 
       auth = UserAuthorization.create_with(

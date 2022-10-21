@@ -5,7 +5,6 @@
 # Table name: collectibles
 #
 #  id            :bigint           not null, primary key
-#  description   :string
 #  identifier    :string
 #  metadata      :jsonb
 #  metahash      :string
