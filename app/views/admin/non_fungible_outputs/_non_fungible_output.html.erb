@@ -24,7 +24,10 @@
   </td>
   <td class="p-4">
     <% if non_fungible_output.collectible.present? && non_fungible_output.nft_collection.present? %>
-        <%= link_to non_fungible_output.nft_collection.name, non_fungible_output.nft_collection.trident_url, class: "font-serif" %>
+      <%= link_to non_fungible_output.nft_collection.name, 
+        non_fungible_output.nft_collection.trident_url, 
+        target: "_blank",
+        class: "font-serif" %>
       </div>
     <% else %>
       <%= non_fungible_output.collectible&.collection_id || '-' %>
@@ -32,9 +35,10 @@
   </td>
   <td class="p-4">
     <% if non_fungible_output.collectible.present? %>
-      <div class="flex items-center space-x-2">
-        <%= link_to "##{non_fungible_output.collectible.identifier}", non_fungible_output.collectible.trident_url, class: "font-serif font-bold" %>
-      </div>
+      <%= link_to "##{non_fungible_output.collectible.identifier}", 
+        non_fungible_output.collectible.trident_url, 
+        target: "_blank",
+        class: "font-serif font-bold" %>
     <% else %>
       -
     <% end %>
