@@ -27,4 +27,8 @@ class Collection < ApplicationRecord
   has_one :nft_collection, dependent: :restrict_with_exception
   has_many :collectings, dependent: :restrict_with_exception
   has_many :validatable_collections, through: :collectings, source: :nft_collection
+
+  def to_param
+    uuid
+  end
 end

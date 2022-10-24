@@ -1,0 +1,7 @@
+<%= turbo_stream.append 'admin_non_fungible_outputs_list' do %>
+  <%= render partial: 'admin/non_fungible_outputs/non_fungible_output', collection: @non_fungible_outputs, as: :non_fungible_output %>
+<% end %>
+
+<%= turbo_stream.update 'admin_non_fungible_outputs_pagination' do %>
+  <%= render "shared/pagination", pagy: @pagy, id: 'admin_non_fungible_outputs_pagination' %>
+<% end %>

@@ -47,6 +47,14 @@ class Collectible < ApplicationRecord
     collection_id.present? && collection_id != '00000000-0000-0000-0000-000000000000'
   end
 
+  def trident_url
+    Addressable::URI.new(
+      scheme: 'https',
+      host: 'thetrident.one',
+      path: "collectibles/#{metahash}"
+    ).to_s
+  end
+
   private
 
   def setup_default_attributes

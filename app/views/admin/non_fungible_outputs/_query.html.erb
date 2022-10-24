@@ -1,0 +1,20 @@
+<%= form_with url: admin_non_fungible_outputs_path, method: :get, class: "flex items-center flex-wrap" do |form| %>
+  <%= form.select :state, 
+    [
+      ['All', 'all'], 
+      ['Unspent', 'unspent'],
+      ['Spent', 'spent'],
+      ['Signed', 'signed'],
+    ], 
+    { selected: @state }, 
+    class: "rounded-lg m-1 dark:bg-zinc-900" %>
+  <%= form.select :order_by, 
+    [
+      ['DESC', 'updated_at_desc'], 
+      ['ASC', 'updated_at_asc'], 
+    ], 
+    { selected: @order_by }, 
+    class: "rounded-lg m-1 dark:bg-zinc-900" %>
+  <%= form.text_field :query, value: @query, placeholder: "Search", class: "rounded-lg m-1 dark:bg-zinc-900" %>
+  <%= form.submit :Query, class: "cursor-pointer rounded bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 m-1" %>
+<% end %>
