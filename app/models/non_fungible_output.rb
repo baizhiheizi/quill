@@ -21,7 +21,7 @@ class NonFungibleOutput < ApplicationRecord
   store_accessor :raw, %i[output_id]
 
   belongs_to :user, primary_key: :mixin_uuid
-  belongs_to :collectible, primary_key: :token_id, foreign_key: :token_id, inverse_of: :non_fungible_outputs
+  belongs_to :collectible, primary_key: :token_id, foreign_key: :token_id, inverse_of: :non_fungible_outputs, optional: true
 
   before_validation :setup_attributes
 
