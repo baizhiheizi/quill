@@ -31,6 +31,7 @@ module Admin
         non_fungible_outputs.ransack(
           {
             collectible_name_cont_any: @query,
+            collectible_collection_id_eq: @query,
             user_id_eq: @query,
             token_id_eq: @query
           }.merge(m: 'or')
