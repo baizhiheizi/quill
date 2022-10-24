@@ -1,0 +1,34 @@
+<div class="flex items-center space-x-4 mb-4">
+  <%= link_to 'Home', admin_root_path %>
+  <span>/</span>
+  <span>NonFungibleOutputs</span>
+</div>
+
+<div class="p-4 bg-white dark:bg-zinc-900 rounded-lg shadow">
+  <%= turbo_frame_tag 'admin_non_fungible_outputs' do %>
+    <div class="mb-4">
+      <%= render 'admin/non_fungible_outputs/query' %>
+    </div>
+    <div data-controller="infinite-scroll" class="w-full overflow-x-scroll scrollbar-hide">
+      <table class='w-full table-auto min-w-max '>
+        <thead>
+          <tr class="bg-zinc-100 dark:bg-zinc-800">
+            <th class="p-4">ID</th>
+            <th class="p-4">State</th>
+            <th class="p-4">User</th>
+            <th class="p-4">Collection</th>
+            <th class="p-4">Collectible</th>
+            <th class="p-4">Token ID</th>
+            <th class="p-4">Output ID</th>
+            <th class="p-4">Updated At</th>
+          </tr>
+        </thead>
+        <tbody id="admin_non_fungible_outputs_list">
+          <%= render partial: 'admin/non_fungible_outputs/non_fungible_output', collection: @non_fungible_outputs, as: :non_fungible_output %>
+        </tbody>
+      </table>
+      <div data-infinite-scroll-target='scrollArea'></div>
+      <%= render "shared/pagination", pagy: @pagy, id: "admin_non_fungible_outputs_pagination" %>
+    </div>
+  <% end %>
+</div>

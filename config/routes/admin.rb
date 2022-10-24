@@ -31,30 +31,47 @@ namespace :admin do
     post :block
     post :unblock
   end
+
+  resources :collections, only: %i[index show], param: :uuid
+
   resources :articles, only: %i[index show], param: :uuid do
     post :block
     post :unblock
   end
+
   resources :comments, only: %i[index] do
     post :delete
     post :undelete
   end
+
   resources :orders, only: %i[index show]
+
   resources :swap_orders, only: %i[index show]
+
   resources :payments, only: %i[index show]
+
   resources :transfers, only: %i[index show] do
     post :process_now
   end
+
   resources :mixin_network_snapshots, only: %i[index show] do
     post :process_now
   end
+
   resources :mixin_network_users, only: %i[index show]
+
   resources :statistics, only: %i[index]
+
   resources :bonuses, only: %i[index create new] do
     post :deliver
   end
+
   resources :wallets do
     get :assets
     get :snapshots
   end
+
+  resources :non_fungible_outputs, only: %i[index show]
+  resources :collectibles, only: %i[index show], param: :metahash
+  resources :nft_collections, only: %i[index show]
 end

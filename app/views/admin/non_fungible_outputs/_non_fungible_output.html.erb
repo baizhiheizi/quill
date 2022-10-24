@@ -1,0 +1,51 @@
+<tr id="<%= dom_id non_fungible_output %>" class="hover:bg-zinc-50 dark:hover:bg-zinc-800 border-b">
+  <td class="p-4">
+    <%= non_fungible_output.id %>
+  </td>
+  <td class="p-4">
+    <span class="text-white px-2 py-1 rounded
+      <%= case non_fungible_output.state
+        when 'spent'
+          'bg-slate-500'
+        when 'unspent'
+          'bg-green-500'
+        when 'signed'
+          'bg-yellor-500'
+        end %>">
+      <%= non_fungible_output.state %>
+    </span>
+  </td>
+  <td class="p-4">
+    <% if non_fungible_output.user.present? %>
+      <%= render "admin/users/field", user: non_fungible_output.user, tab: :non_fungible_outputs %>
+    <% else %>
+      -
+    <% end %>
+  </td>
+  <td class="p-4">
+    <% if non_fungible_output.collectible.present? && non_fungible_output.nft_collection.present? %>
+        <%= link_to non_fungible_output.nft_collection.name, non_fungible_output.nft_collection.trident_url, class: "font-serif" %>
+      </div>
+    <% else %>
+      <%= non_fungible_output.collectible&.collection_id || '-' %>
+    <% end %>
+  </td>
+  <td class="p-4">
+    <% if non_fungible_output.collectible.present? %>
+      <div class="flex items-center space-x-2">
+        <%= link_to "##{non_fungible_output.collectible.identifier}", non_fungible_output.collectible.trident_url, class: "font-serif font-bold" %>
+      </div>
+    <% else %>
+      -
+    <% end %>
+  </td>
+  <td class="p-4">
+    <%= non_fungible_output.token_id %>
+  </td>
+  <td class="p-4">
+    <%= non_fungible_output.output_id %>
+  </td>
+  <td class="p-4">
+    <%= non_fungible_output.updated_at %>
+  </td>
+</tr>

@@ -37,7 +37,7 @@ class NftCollection < ApplicationRecord
       scheme: 'https',
       host: 'thetrident.one',
       path: "collections/#{uuid}"
-    )
+    ).to_s
   end
 
   def icon_url
@@ -59,6 +59,7 @@ class NftCollection < ApplicationRecord
     return if r['id'].blank?
 
     assign_attributes(
+      raw: r,
       uuid: r['id']
     )
   end
