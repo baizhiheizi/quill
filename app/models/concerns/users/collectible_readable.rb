@@ -31,40 +31,22 @@ module Users::CollectibleReadable
       )
   end
 
-  def sync_collectibles!
-    if mvm_eth?
-      sync_mvm_collectibles!
-    else
-      sync_mixin_collectibles!
+  def owner_of_collection?(collection_id)
+    if messenger?
+      sync_collectibles!
+      collectibles.where(collection_id: collection_id).present?
+    elsif mvm_eth?
+      contract = MVM.nft.contract_from_collection collection_id
+      MVM.scan.tokens(uid, type: 'ERC-721').filter(&->(token) { token['contractAddress'].downcase == contract.downcase }).present?
     end
+  rescue StandardError => e
+    Rails.logger.error e
+    false
   end
 
-  def sync_mvm_collectibles!
-    return unless mvm_eth?
+  def sync_collectibles!(restart: false)
+    return unless messenger?
 
-    collectibles.only_minted.each do |collectible|
-      next if collectible.deposited?
-
-      owner = MVM.nft.owner_of collectible.collection_id, collectible.identifier
-      collectible.update(owner: User.find_by(address: owner)) unless owner == address
-    end
-
-    MVM.scan.tokens(address, type: 'ERC-721').each do |token|
-      collection = MVM.nft.collection_from_contract token['contractAddress']
-      collection ||= '00000000-0000-0000-0000-000000000000'
-
-      token['balance'].to_i.times do |index|
-        token_id = MVM.nft.token_of_owner_by_index token['contractAddress'], address, index
-
-        item = Item.find_by collection_id: collection, identifier: token_id
-        next if item.blank?
-
-        item.update owner: self
-      end
-    end
-  end
-
-  def sync_mixin_collectibles!(restart: false)
     offset =
       if restart
         ''
@@ -79,7 +61,7 @@ module Users::CollectibleReadable
       logger.info "=== found #{r['data'].size} collectibles"
       r['data'].each do |c|
         logger.info "=== processing collectible output_id=#{c['output_id']} token_id=#{c['token_id']}"
-        nfo = NonFungibleOutput.find_by id: c['output_id']
+        nfo = NonFungibleOutput.find_by("raw->>'output_id' = ?", c['output_id'])
         if nfo.present?
           nfo.update! raw: c
         else
