@@ -1,0 +1,92 @@
+    <%= form_for [:dashboard, @collection], 
+      data: { 
+        controller: "collections-form-component",
+        collections_form_component_currencies_value: Currency.pricable.to_json(only: %i[asset_id symbol price_usd]),
+        collections_form_component_selected_asset_value: @collection.asset_id,
+        collections_form_component_current_price_value: @collection.price.to_f,
+        collections_form_component_target: 'form' 
+      } do |form| %>
+  <div class="mb-4">
+    <%= form.label :name, class: "block mb-2" %>
+    <%= form.text_field :name, 
+      class: "focus:ring-blue-500 focus:border-blue-500 flex-1 block w-full rounded bg-[#F4F4F4] border-[#F4F4F4] dark:border-white dark:border-opacity-5 dark:bg-[#333444]" %>
+    <% if form.object.errors.where(:name).present? %>
+      <div class="py-2 text-red-700 text-sm"><%= form.object.errors.where(:name).map(&:full_message).join(';') %></div>
+    <% end %>
+  </div>
+
+  <div class="mb-4">
+    <%= form.label :symbol, class: "block mb-2" %>
+    <%= form.text_field :symbol, 
+      class: "focus:ring-blue-500 focus:border-blue-500 flex-1 block w-full rounded bg-[#F4F4F4] border-[#F4F4F4] dark:border-white dark:border-opacity-5 dark:bg-[#333444]" %>
+    <% if form.object.errors.where(:symbol).present? %>
+      <div class="py-2 text-red-700 text-sm"><%= form.object.errors.where(:symbol).map(&:full_message).join(';') %></div>
+    <% end %>
+  </div>
+
+  <div class="mb-4">
+    <%= form.label :description, class: "block mb-2" %>
+    <%= form.text_area :description, 
+      rows: 3, 
+      class: "focus:ring-blue-500 focus:border-blue-500 flex-1 block w-full rounded bg-[#F4F4F4] border-[#F4F4F4] dark:border-white dark:border-opacity-5 dark:bg-[#333444]" %>
+    <% if form.object.errors.where(:description).present? %>
+      <div class="py-2 text-red-700 text-sm"><%= form.object.errors.where(:description).map(&:full_message).join(';') %></div>
+    <% end %>
+  </div>
+
+  <div class="mb-4">
+    <%= form.label :revenue_ratio, class: "block mb-2" %>
+    <%= form.number_field :revenue_ratio, 
+      step: '0.1',
+      min: '0.0',
+      max: '0.5',
+      class: "focus:ring-blue-500 focus:border-blue-500 flex-1 block w-full rounded bg-[#F4F4F4] border-[#F4F4F4] dark:border-white dark:border-opacity-5 dark:bg-[#333444]" %>
+    <% if form.object.errors.where(:revenue_ratio).present? %>
+      <div class="py-2 text-red-700 text-sm"><%= form.object.errors.where(:revenue_ratio).map(&:full_message).join(';') %></div>
+    <% end %>
+    <div class="py-2 text-blue-700 text-sm">
+      <%= t('collection_revenue_ratio_tips') %>
+    </div>
+  </div>
+
+  <div class="mb-4">
+    <%= form.label :currency, class: "block mb-2" %>
+    <%= form.collection_select :asset_id, 
+      Currency.pricable,
+      :asset_id,
+      :symbol,
+      {
+      },
+      data: {
+        action: "collections-form-component#updateSelectedAsset"
+      },
+      disabled: form.object.uuid.present?,
+      class: "focus:ring-blue-500 focus:border-blue-500 flex-1 block w-full rounded bg-[#F4F4F4] border-[#F4F4F4] dark:border-white dark:border-opacity-5 dark:bg-[#333444]" %>
+    <% if form.object.errors.where(:asset_id).present? %>
+      <div class="py-2 text-red-700 text-sm"><%= form.object.errors.where(:asset_id).map(&:full_message).join(';') %></div>
+    <% end %>
+  </div>
+
+  <div class="mb-4">
+    <%= form.label :price, class: "block mb-2" %>
+    <%= form.number_field :price, 
+      data: {
+        action: "collections-form-component#updateCurrentPrice"
+      },
+      step: '0.0001',
+      min: '0.0',
+      class: "focus:ring-blue-500 focus:border-blue-500 flex-1 block w-full rounded bg-[#F4F4F4] border-[#F4F4F4] dark:border-white dark:border-opacity-5 dark:bg-[#333444]" %>
+    <div class="py-2 font-sm opacity-70 text-right ml-auto">
+      ≈ $<span data-collections-form-component-target="priceUsd">
+        <%= (form.object.price.to_f * form.object.currency&.price_usd.to_f).floor(2) %>
+      </span>
+    </div>
+    <% if form.object.errors.where(:price).present? %>
+      <div class="py-2 text-red-700 text-sm"><%= form.object.errors.where(:price).map(&:full_message).join(';') %></div>
+    <% end %>
+  </div>
+
+  <div class="mt-8 flex items-center space-x-4 justify-end">
+    <%= form.submit t('save'), class: "block py-2 px-4 w-48 rounded-full bg-primary text-white cursor-pointer" %>
+  </div>
+<% end %>

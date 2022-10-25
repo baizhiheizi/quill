@@ -72,6 +72,8 @@ class User < ApplicationRecord
   has_many :unspent_non_fungible_outputs, -> { where(state: :unspent) }, class_name: 'NonFungibleOutput', dependent: :restrict_with_exception, inverse_of: :user
   has_many :collectibles, through: :unspent_non_fungible_outputs
 
+  has_many :collections, primary_key: :mixin_uuid, foreign_key: :author_id, inverse_of: :author, dependent: :restrict_with_exception
+
   validates :name, presence: true
   validates :email, uniqueness: true, format: /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\z/i, allow_nil: true
   validates :mixin_id, presence: true

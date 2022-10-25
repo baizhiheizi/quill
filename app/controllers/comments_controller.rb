@@ -26,10 +26,6 @@ class CommentsController < ApplicationController
     @pagy, @comments = pagy comments.without_deleted.includes(:author)
   end
 
-  def create
-    @comment = current_user.comments.create comment_params
-  end
-
   def new
     if params[:quote_comment_id].present?
       @quote_comment = Comment.find_by id: params[:quote_comment_id]
@@ -38,6 +34,10 @@ class CommentsController < ApplicationController
       @commentable = Article.find_by id: params[:commentable_id]
     end
     return if @commentable.blank?
+  end
+
+  def create
+    @comment = current_user.comments.create comment_params
   end
 
   private

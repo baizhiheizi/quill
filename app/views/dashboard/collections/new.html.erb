@@ -1,0 +1,31 @@
+<div class="hidden sm:block text-xl font-bold mb-8">
+  <%= t('new_collection') %>
+</div>
+
+<% content_for :topbar do %>
+  <div class="flex items-center px-4 h-12">
+    <%= link_to :back, class: "pr-2" do %>
+      <%= inline_svg_tag "icons/chevron-left.svg", class: "w-5 h-5 font-bold" %>
+    <% end %>
+    <span class="font-bold text-lg">
+      <%= t('new_collection') %>
+    </span>
+  </div>
+<% end %>
+
+<%= render Collections::FormComponent.new collection: @collection %>
+
+<% if current_user.collections.listed.blank? %>
+  <%= turbo_frame_tag 'modal' do %>
+    <%= render ModalComponent.new title: t('new_collection') do %>
+      <div class="prose-comment mb-6">
+        <%= MarkdownRenderService.call(t('collection_rule'), type: :full).html_safe %>
+      </div>
+      <div class="flex items-center justify-center">
+        <button data-action="modal-component#cancel" class="py-2 px-4 w-48 rounded-full bg-primary text-white text-center">
+          <%= t('confirm') %>
+        </button>
+      </div>
+    <% end %>
+  <% end %>
+<% end %>

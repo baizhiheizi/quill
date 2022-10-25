@@ -52,6 +52,8 @@ Rails.application.routes.draw do
         locale: I18n.available_locales.map(&:to_s)
       }
 
+  resources :collections, only: %i[index show], param: :uuid
+
   resources :articles, except: %i[destroy], param: :uuid do
     put :update_content
     get :share

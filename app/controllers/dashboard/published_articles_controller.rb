@@ -3,6 +3,9 @@
 class Dashboard::PublishedArticlesController < Dashboard::BaseController
   before_action :load_article
 
+  def new
+  end
+
   def update
     if @article.published_at.present?
       @article.publish! if @article.may_publish?
@@ -13,9 +16,6 @@ class Dashboard::PublishedArticlesController < Dashboard::BaseController
 
   def destroy
     @article.hide! if @article.may_hide?
-  end
-
-  def new
   end
 
   private

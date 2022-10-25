@@ -48,8 +48,8 @@ class Currency < ApplicationRecord
     BigDecimal(0.5 / price_usd.to_f, 1).to_f
   end
 
-  def minimal_price_amount
-    BigDecimal(0.1 / price_usd.to_f, 1).to_f
+  def minimal_price_amount(price = 0.1)
+    BigDecimal(price.to_f / price_usd, 1).to_f
   end
 
   def swappable?

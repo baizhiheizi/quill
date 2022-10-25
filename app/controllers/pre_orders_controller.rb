@@ -3,12 +3,6 @@
 class PreOrdersController < ApplicationController
   before_action :authenticate_user!
 
-  def create
-    @pre_order = current_user.pre_orders.new pre_order_params
-
-    redirect_to @pre_order.pay_url, allow_other_host: true if @pre_order.save && @pre_order.is_a?(MixpayPreOrder)
-  end
-
   def show
     @pre_order = current_user.pre_orders.find_by follow_id: params[:follow_id]
 
@@ -37,6 +31,12 @@ class PreOrdersController < ApplicationController
     return if params[:order_type] == 'reward_article' && !article.authorized?(current_user)
 
     @pre_order = current_user.pre_orders.new item: article, order_type: params[:order_type]
+  end
+
+  def create
+    @pre_order = current_user.pre_orders.new pre_order_params
+
+    redirect_to @pre_order.pay_url, allow_other_host: true if @pre_order.save && @pre_order.is_a?(MixpayPreOrder)
   end
 
   def state
