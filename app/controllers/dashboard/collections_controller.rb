@@ -23,16 +23,25 @@ class Dashboard::CollectionsController < Dashboard::BaseController
     @collection = current_user.collections.new collection_params
 
     if @collection.save
-      redirect_to dashboard_collections_path
+      redirect_to dashboard_authorings_path(tab: :collections), success: t('success_updated')
     else
       render :new, status: :bad_request
     end
   end
 
   def update
+    if @collection.update(collection_params)
+      redirect_to dashboard_authorings_path(tab: :collections), success: t('success_updated')
+    else
+      render :edit, status: :bad_request
+    end
   end
 
   def destroy
+    return unless @collection.may_destroy?
+
+    @collection.destroy
+    redirect_to dashboard_authorings_path(tab: :collections), success: t('success_deleted')
   end
 
   private

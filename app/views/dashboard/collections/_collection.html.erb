@@ -1,5 +1,72 @@
-<div id="<%= dom_id collection %>">
-  <div class="">
-    <%= collection.name %>
+<div id="<%= dom_id collection %>" class="pt-8 pb-4 border-b dark:border-white dark:border-opacity-10">
+  <div class="flex items-center justify-between mb-4">
+    <div class="flex items-center">
+      <span class="mr-2 text-sm px-1 text-white rounded 
+        <%= { 
+          drafted: 'bg-slate-500',
+          listed: 'bg-green-500',
+          hidden: 'bg-slate-200',
+        }[collection.state.to_sym] %>">
+        <%= collection.state %>
+      </span>
+      <span class="text-sm opacity-60">
+        <%= render TimeFormatComponent.new datetime: collection.updated_at.rfc3339 do %>
+          <%= collection.updated_at.strftime("%Y-%m-%d %H:%M") %>
+        <% end %>
+      </span>
+    </div>
+    <div class="flex items-center space-x-2">
+      <span class="text-sm">
+        <%= collection.price_tag %>
+      </span>
+      <span class="text-sm opacity-60">
+        ≈$<%= collection.price_usd %>
+      </span>
+      <%= image_tag collection.currency.icon_url, class: "w-6 h-6 rounded-full" %>
+    </div>
+  </div>
+
+  <div class="relative flex items-start max-h-28 space-x-4 mb-6">
+    <div class="flex-1 h-ful max-w-full">
+      <div class="truncate overflow-hidden font-bold text-xl mb-3">
+        <%= collection.name %>(<%= collection.symbol %>)
+      </div>
+      <div class="text-base break-words text-ellipsis overflow-hidden line-clamp-3 text-[#222222] text-opacity-80"> 
+        <%= collection.description %>
+      </div>
+    </div>
+    <% if collection.cover.attached? %>
+      <%= image_tag collection.cover, class: "w-28 h-28 rounded object-center" %>
+    <% end %>
+    <%= link_to '', collection_path(collection.uuid),
+      data: {
+        controller: "prefetch",
+        turbo_frame: "_top"
+      },
+      class: "absolute inset-0" if collection.uuid.present? %>
+  </div>
+
+  <div class="flex items-center space-x-4 justify-between">
+    <div class="text-primary flex items-center space-x-4">
+      <%= link_to t('detail'), 
+        dashboard_collection_path(collection.id),
+        data: {
+          controller: 'prefetch',
+          turbo_frame: '_top'
+        } %>
+      <%= link_to t('edit'), 
+        edit_dashboard_collection_path(collection),
+        data: {
+          controller: 'prefetch',
+          turbo_frame: '_top'
+        } %>
+      <%= button_to t('delete'), 
+        dashboard_collection_path(collection),  
+        method: :delete,
+        data: {
+          turbo_confirm: 'Are sure to delete?'
+        },
+        class: "bg-transparent cursor-pointer" if collection.may_destroy? %>
+    </div>
   </div>
 </div>

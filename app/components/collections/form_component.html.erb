@@ -9,6 +9,7 @@
   <div class="mb-4">
     <%= form.label :name, class: "block mb-2" %>
     <%= form.text_field :name, 
+      disabled: form.object.listed_on_trident?,
       class: "focus:ring-blue-500 focus:border-blue-500 flex-1 block w-full rounded bg-[#F4F4F4] border-[#F4F4F4] dark:border-white dark:border-opacity-5 dark:bg-[#333444]" %>
     <% if form.object.errors.where(:name).present? %>
       <div class="py-2 text-red-700 text-sm"><%= form.object.errors.where(:name).map(&:full_message).join(';') %></div>
@@ -18,6 +19,7 @@
   <div class="mb-4">
     <%= form.label :symbol, class: "block mb-2" %>
     <%= form.text_field :symbol, 
+      disabled: form.object.listed_on_trident?,
       class: "focus:ring-blue-500 focus:border-blue-500 flex-1 block w-full rounded bg-[#F4F4F4] border-[#F4F4F4] dark:border-white dark:border-opacity-5 dark:bg-[#333444]" %>
     <% if form.object.errors.where(:symbol).present? %>
       <div class="py-2 text-red-700 text-sm"><%= form.object.errors.where(:symbol).map(&:full_message).join(';') %></div>
@@ -40,6 +42,7 @@
       step: '0.1',
       min: '0.0',
       max: '0.5',
+      disabled: form.object.listed_on_trident?,
       class: "focus:ring-blue-500 focus:border-blue-500 flex-1 block w-full rounded bg-[#F4F4F4] border-[#F4F4F4] dark:border-white dark:border-opacity-5 dark:bg-[#333444]" %>
     <% if form.object.errors.where(:revenue_ratio).present? %>
       <div class="py-2 text-red-700 text-sm"><%= form.object.errors.where(:revenue_ratio).map(&:full_message).join(';') %></div>
@@ -76,14 +79,16 @@
       step: '0.0001',
       min: '0.0',
       class: "focus:ring-blue-500 focus:border-blue-500 flex-1 block w-full rounded bg-[#F4F4F4] border-[#F4F4F4] dark:border-white dark:border-opacity-5 dark:bg-[#333444]" %>
-    <div class="py-2 font-sm opacity-70 text-right ml-auto">
-      ≈ $<span data-collections-form-component-target="priceUsd">
-        <%= (form.object.price.to_f * form.object.currency&.price_usd.to_f).floor(2) %>
-      </span>
+    <div class="flex items-center">
+      <% if form.object.errors.where(:price).present? %>
+        <div class="py-2 text-red-700 text-sm"><%= form.object.errors.where(:price).map(&:full_message).join(';') %></div>
+      <% end %>
+      <div class="py-2 font-sm opacity-70 text-right ml-auto">
+        ≈ $<span data-collections-form-component-target="priceUsd">
+          <%= (form.object.price.to_f * form.object.currency&.price_usd.to_f).floor(2) %>
+        </span>
+      </div>
     </div>
-    <% if form.object.errors.where(:price).present? %>
-      <div class="py-2 text-red-700 text-sm"><%= form.object.errors.where(:price).map(&:full_message).join(';') %></div>
-    <% end %>
   </div>
 
   <div class="mt-8 flex items-center space-x-4 justify-end">

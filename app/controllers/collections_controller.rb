@@ -8,6 +8,4 @@ class CollectionsController < ApplicationController
   def show
     @collection = Collection.listed.find_by uuid: params[:uuid]
   end
-
-  private
 end

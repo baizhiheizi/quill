@@ -27,10 +27,13 @@ class Collection < ApplicationRecord
 
   include AASM
 
-  belongs_to :currency, primary_key: :asset_id, foreign_key: :asset_id
+  has_one_attached :cover
+
+  belongs_to :currency, primary_key: :asset_id, foreign_key: :asset_id, inverse_of: false
   belongs_to :author, class_name: 'User', primary_key: :mixin_uuid
 
-  has_one :nft_collection, dependent: :restrict_with_exception
+  has_one :nft_collection, primary_key: :uuid, foreign_key: :uuid, dependent: :restrict_with_exception, inverse_of: :collection
+
   has_many :collectings, dependent: :restrict_with_exception
   has_many :validatable_collections, through: :collectings, source: :nft_collection
 
@@ -58,11 +61,31 @@ class Collection < ApplicationRecord
     end
   end
 
-  def to_param
-    uuid
+  def may_destroy?
+    !listed_on_trident?
+  end
+
+  def listed_on_trident?
+    uuid.present?
+  end
+
+  def price_tag
+    "#{format('%.8f', price).gsub(/0+\z/, '0')} #{currency.symbol}"
+  end
+
+  def price_usd
+    (currency.price_usd.to_f * price).to_f.round(4)
   end
 
   private
+
+  def lock_attributes_once_listed
+    return if uuid.blank?
+
+    errors.add(:name, 'cannot change') if name_changed?
+    errors.add(:symbol, 'cannot change') if symbol_changed?
+    errors.add(:revenue_ratio, 'cannot change') if revenue_ratio_changed?
+  end
 
   def ensure_price_not_too_low
     return unless price_changed? || asset_id_changed?

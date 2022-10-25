@@ -20,6 +20,17 @@
       </div>
       <div class="h-2 border-b-2 border-inherit w-4 mx-auto"></div>
     <% end %>
+    <%= link_to dashboard_authorings_path(tab: :collections),
+      class: "cursor-pointer py-1 pr-8 border-transparent min-w-fit",
+      data: {
+        tabs_target: "tab",
+        tabs_tabname_param: "collections" 
+      } do %>
+      <div class="min-w-fit">
+        <%= t('collections') %>
+      </div>
+      <div class="h-2 border-b-2 border-inherit w-4 mx-auto"></div>
+    <% end %>
     <%= link_to dashboard_authorings_path(tab: :published),
       class: "cursor-pointer py-1 pr-8 border-transparent min-w-fit",
       data: {
@@ -60,6 +71,19 @@
     data-tabs-target="content">
     <%= turbo_frame_tag "my_drafted_articles", 
       src: dashboard_articles_path(tab: :drafted), 
+      data: {
+        turbo_frame: "_top"
+      },
+      loading: :lazy do %>
+      <%= render "shared/loading" %>
+    <% end %>
+  </div>
+
+  <div class="hidden pb-4"
+    data-tabs-content-param="collections"
+    data-tabs-target="content">
+    <%= turbo_frame_tag "my_collections", 
+      src: dashboard_collections_path, 
       data: {
         turbo_frame: "_top"
       },
