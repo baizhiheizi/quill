@@ -1,18 +1,3 @@
-<div class="hidden sm:block text-xl font-bold mb-8">
-  <%= t('my_collections') %>
-</div>
-
-<% content_for :topbar do %>
-  <div class="flex items-center px-4 h-12">
-    <%= link_to :back, class: "pr-2" do %>
-      <%= inline_svg_tag "icons/chevron-left.svg", class: "w-5 h-5 font-bold" %>
-    <% end %>
-    <span class="font-bold text-lg">
-      <%= t('my_collections') %>
-    </span>
-  </div>
-<% end %>
-
-<div class="">
+<%= turbo_frame_tag 'my_collections' do %>
   <%= render partial: 'dashboard/collections/collection', collection: @collections, as: :collection %>
-</div>
+<% end %>
