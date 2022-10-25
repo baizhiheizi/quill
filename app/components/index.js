@@ -29,3 +29,6 @@ application.register('pre-orders-state-component', PreOrdersStateComponentContro
 
 import MvmPayButtonComponentController from './mvm_pay_button_component_controller';
 application.register('mvm-pay-button-component', MvmPayButtonComponentController);
+
+import CollectionsFormComponentController from './collections/form_component_controller';
+application.register('collections-form-component', CollectionsFormComponentController);

@@ -26,12 +26,6 @@ class ArticlesController < ApplicationController
     end
   end
 
-  def new
-  end
-
-  def edit
-  end
-
   def show
     @article = Article.without_drafted.fetch_by_uniq_keys uuid: params[:uuid]
 
@@ -42,6 +36,12 @@ class ArticlesController < ApplicationController
     else
       redirect_back fallback_location: root_path
     end
+  end
+
+  def new
+  end
+
+  def edit
   end
 
   def create

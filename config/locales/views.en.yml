@@ -324,3 +324,9 @@ en:
   select_crypto: Select Crypto
   press_enter_to_search_all_articles: Press Enter to search all articles
   home: Home
+  collection_revenue_ratio_tips: A part of every sell of article in the collection will be split as bonus to the buyers of the collection.
+  collection_rule: |
+    1. You can create a collection and then sell your contents in collection.
+    2. For every sell of the collection, 10% will be charged from Quill and the rest 90% will be author's revenue.
+    3. Every buyer of the collection will receive an NFT as a ticket to access all articles in this collection. (NFT may be sold to others of course) 
+    4. Every article in the collection may also be sold sperately. A part of every sperate sell will split to the collection buyers (even his/her NFT has been sold) as bonus.

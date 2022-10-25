@@ -6,8 +6,9 @@
 #  description   :text
 #  name          :string
 #  price         :decimal(, )
-#  revenue_ratio :uuid
+#  revenue_ratio :float            default(0.2)
 #  state         :string
+#  symbol        :string
 #  uuid          :uuid
 #  created_at    :datetime         not null
 #  updated_at    :datetime         not null

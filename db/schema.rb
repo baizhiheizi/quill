@@ -122,6 +122,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_21_030747) do
     t.float "references_revenue_ratio", default: 0.0
     t.string "locale"
     t.uuid "collection_id"
+    t.float "collection_revenue_ratio", default: 0.0
     t.index ["asset_id"], name: "index_articles_on_asset_id"
     t.index ["author_id"], name: "index_articles_on_author_id"
     t.index ["collection_id"], name: "index_articles_on_collection_id"
@@ -204,7 +205,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_21_030747) do
     t.uuid "author_id"
     t.decimal "price"
     t.uuid "asset_id"
-    t.uuid "revenue_ratio"
+    t.float "revenue_ratio", default: 0.2
+    t.string "symbol"
     t.index ["author_id"], name: "index_collections_on_author_id"
     t.index ["uuid"], name: "index_collections_on_uuid", unique: true
   end
