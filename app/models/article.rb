@@ -83,6 +83,7 @@ class Article < ApplicationRecord
   has_many :arweave_transactions, primary_key: :uuid, foreign_key: :article_uuid, dependent: :restrict_with_error, inverse_of: :article
 
   has_many_attached :images
+  has_one_attached :poster
 
   accepts_nested_attributes_for :article_references, reject_if: proc { |attributes| attributes['reference_id'].blank? || attributes['revenue_ratio'].blank? }, allow_destroy: true
 
@@ -415,6 +416,30 @@ class Article < ApplicationRecord
 
   def cover_url
     # @cover_url ||= Nokogiri::HTML.fragment(content_as_html).css('img').first&.attr('src')
+  end
+
+  def poster_url
+    return unless poster.attached?
+
+    [Settings.storage.endpoint, poster.key].join('/')
+  end
+
+  def generated_poster_url
+    grover_article_poster_url uuid, token: Rails.application.credentials.dig(:grover, :token), format: :png
+  end
+
+  def generate_poster
+    file = URI.parse(generated_poster_url).open
+    poster.attach io: file, filename: "#{title}_poster"
+  end
+
+  def qrcode_base64
+    ['data:image/png;base64, ',
+     Base64.encode64(
+       RQRCode::QRCode.new(
+         user_article_url(author, self)
+       ).as_png(border_modules: 0).to_s
+     )].join
   end
 
   private

@@ -1,0 +1,32 @@
+<div class="bg-white w-[640px] h-[860px] rounded-lg p-4">
+  <div class="bg-[#F3F3F3]">
+    <div class="w-full">
+      <%= image_tag "article-poster-bg.png", class: "w-full h-auto" %>
+    </div>
+    <div class="px-[24px] pb-[48px] -mt-[42px]">
+      <div class="mb-4">
+        <%= image_tag @article.author.avatar, class: "w-[80px] h-[80px] rounded-full border-4 border-white" %>
+      </div>
+      <div class="mb-8 text-2xl font-bold font-mono">
+        <%= @article.author.short_name %>
+      </div>
+      <div class="text-3xl line-clamp-2 h-[72px]">
+        <%= @article.title %>
+      </div>
+    </div>
+  </div>
+  <div class="flex justify-between p-[40px]">
+    <div class="">
+      <img src="<%= @article.qrcode_base64 %>", class="w-[176px] h-[176px]">
+    </div>
+    <div class="">
+      <div class="flex items-center space-x-4 justify-end mb-4">
+        <%= image_tag @article.currency.icon_url, class: "w-[40px] h-[40px]" %>
+        <span class="font-black text-3xl"><%= @article.price_tag %></span>
+      </div>
+      <div class="text-right opacity-60 text-2xl">
+        ≈$<%= @article.price_usd %>
+      </div>
+    </div>
+  </div>
+</div>

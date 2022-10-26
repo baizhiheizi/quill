@@ -167,6 +167,9 @@ gem 'second_level_cache'
 # A Ruby gem to transform HTML into PDFs, PNGs or JPEGs using Google Puppeteer/Chromium
 gem 'grover'
 
+# A Ruby library that encodes QR Codes
+gem 'rqrcode'
+
 # deploy
 gem 'mina', '~> 1.2.2', require: false
 gem 'mina-logs', '~> 1.1.0', require: false

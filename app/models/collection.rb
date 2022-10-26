@@ -83,8 +83,12 @@ class Collection < ApplicationRecord
     [Settings.storage.endpoint, cover.key].join('/')
   end
 
+  def generated_cover_url
+    grover_collection_cover_url id, token: Rails.application.credentials.dig(:grover, :token), format: :png
+  end
+
   def generate_cover
-    file = URI.parse(grover_collection_cover_url(id, format: :png)).open
+    file = URI.parse(generated_cover_url).open
     cover.attach io: file, filename: "#{name}_cover"
   end
 
