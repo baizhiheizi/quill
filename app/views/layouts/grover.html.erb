@@ -1,0 +1,20 @@
+<% @width ||= 512 %>
+<% @height ||= 512 %>
+
+<html>
+  <head>
+     <meta charset="UTF-8">
+    <meta name="grover-viewport-width" content="<%= @width %>" />
+    <meta name="grover-viewport-height" content="<%= @height %>" />
+    <meta
+      name='viewport'
+      content='minimum-scale=1, initial-scale=1, width=device-width, user-scalable=no, shrink-to-fit=no, viewport-fit=cover'
+    />
+
+    <%= stylesheet_link_tag "application", media: "all", "data-turbo-track": "reload" %>
+  </head>
+
+  <body>
+    <%= yield %>
+  </body>
+</html>
