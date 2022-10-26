@@ -77,6 +77,17 @@ class Collection < ApplicationRecord
     (currency.price_usd.to_f * price).to_f.round(4)
   end
 
+  def cover_url
+    return unless cover.attached?
+
+    [Settings.storage.endpoint, cover.key].join('/')
+  end
+
+  def generate_cover
+    file = URI.parse(grover_collection_cover_url(id, format: :png)).open
+    cover.attach io: file, filename: "#{name}_cover"
+  end
+
   private
 
   def lock_attributes_once_listed

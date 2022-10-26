@@ -2,6 +2,7 @@ zh-CN:
   activerecord:
     models:
       article: 文章
+      collection: 合辑
     attributes:
       article:
         title: 标题
@@ -67,3 +68,10 @@ zh-CN:
           reader_revenue: 读者收益
         snapshot: 链上快照
         processing: 等待转账
+      collection:
+        name: 名字
+        symbol: 简称
+        description: 介绍
+        currency: 货币
+        price: 价格
+        revenue_ratio: 收益比例

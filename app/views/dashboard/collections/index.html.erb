@@ -1,3 +1,12 @@
 <%= turbo_frame_tag 'my_collections' do %>
   <%= render partial: 'dashboard/collections/collection', collection: @collections, as: :collection %>
+
+  <div class="my-8 flex justify-center">
+    <%= link_to t('new_collection'), 
+      new_dashboard_collection_path, 
+      data: {
+        turbo_frame: '_top'
+      },
+      class: "px-4 py-1 bg-primary rounded-full text-white text-lg" %>
+  </div>
 <% end %>
