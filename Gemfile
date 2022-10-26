@@ -15,7 +15,7 @@ gem 'pg'
 gem 'pghero'
 
 # Use Puma as the app server
-gem 'puma'
+gem 'puma', '< 6'
 
 # Deliver assets for Rails
 gem 'propshaft'
@@ -163,6 +163,9 @@ gem 'browser'
 
 # Write Through and Read Through caching library inspired by CacheMoney and cache_fu.
 gem 'second_level_cache'
+
+# A Ruby gem to transform HTML into PDFs, PNGs or JPEGs using Google Puppeteer/Chromium
+gem 'grover'
 
 # deploy
 gem 'mina', '~> 1.2.2', require: false

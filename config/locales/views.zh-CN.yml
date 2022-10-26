@@ -324,6 +324,8 @@ zh-CN:
   select_crypto: 选择加密货币
   press_enter_to_search_all_articles: 按回车键确认搜索所有文章
   home: 首页
+  collections: 合辑
+  new_collection: 新建合辑
   collection_revenue_ratio_tips: 合辑内所有文章单独售卖的收入，将有一部分作为合辑购买者的奖励
   collection_rule: |
     How collection works:

@@ -314,6 +314,8 @@ ja:
   select_crypto: Select Crypto
   press_enter_to_search_all_articles: Press Enter to search all articles
   home: Home
+  collections: Collections
+  new_collection: New Collection
   collection_revenue_ratio_tips: A part of every sell of article in the collection will be split as bonus to the buyers of the collection.
   collection_rule: |
     How collection works:

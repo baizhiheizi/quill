@@ -5,6 +5,7 @@ require_relative 'boot'
 require 'rails/all'
 require 'pagy/extras/countless'
 require 'pagy/extras/overflow'
+require 'grover'
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
@@ -45,5 +46,7 @@ module Quill
     config.action_mailer.delivery_method = :mailjet
 
     config.active_record.yaml_column_permitted_classes = [ActiveSupport::HashWithIndifferentAccess]
+
+    config.middleware.use Grover::Middleware
   end
 end

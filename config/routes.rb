@@ -17,6 +17,7 @@ Rails.application.routes.draw do
   draw :dashboard
   draw :mvm
   draw :api
+  draw :grover
 
   get 'login', to: 'sessions#new', as: :login
   get 'mixin_login', to: 'sessions#mixin_login', as: :mixin_login
