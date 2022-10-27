@@ -13,6 +13,8 @@ export default class extends Controller {
     articlePublished: Boolean,
     currencyPriceUsd: Number,
     dirty: Boolean,
+    selectableCollections: Array,
+    selectedCollectionId: String,
   };
   static targets = [
     'form',
@@ -24,6 +26,7 @@ export default class extends Controller {
     'editButton',
     'optionsButton',
     'authorRevenueRatio',
+    'collectionRevenueRatio',
     'referenceRevenueRatio',
     'articleReferenceRevenueRatio',
     'currencyIcon',
@@ -119,6 +122,24 @@ export default class extends Controller {
     this.dirtyValue = true;
   }
 
+  selectCollection(event) {
+    console.log('selected');
+    this.selectedCollectionIdValue = event.currentTarget.value;
+  }
+
+  selectedCollectionIdValueChanged() {
+    const selectedCollection = this.selectableCollectionsValue.find(
+      (c) => c.uuid == this.selectedCollectionIdValue,
+    );
+    if (selectedCollection) {
+      this.collectionRevenueRatioTarget.value =
+        selectedCollection.revenue_ratio;
+    } else {
+      this.collectionRevenueRatioTarget.value = 0.0;
+    }
+    this.calReferenceRatio();
+  }
+
   currencyPriceUsdValueChanged() {
     if (!this.currencyPriceUsdValue) return;
     this.calPriceUsd();
@@ -148,18 +169,18 @@ export default class extends Controller {
     }
   }
 
-  formatReferenceRatio(e) {
+  formatReferenceRatio(event) {
     let ratio = 0.05;
 
-    if (e.target.value) {
-      ratio = parseFloat(e.target.value);
+    if (event.target.value) {
+      ratio = parseFloat(event.target.value);
     }
 
     if (ratio < 0 || ratio > 0.5) {
       ratio = 0.05;
     }
 
-    e.target.value = ratio.toFixed(2);
+    event.target.value = ratio.toFixed(2);
     this.calReferenceRatio();
   }
 
@@ -181,11 +202,19 @@ export default class extends Controller {
         this.referenceRevenueRatioTarget.value = parseFloat(
           referenceRevenueRatio.toFixed(2),
         );
-        this.authorRevenueRatioTarget.value = parseFloat(
-          (0.5 - referenceRevenueRatio).toFixed(2),
-        );
       }
     }
+    this.calAuthorRevenueRatio();
+  }
+
+  calAuthorRevenueRatio() {
+    this.authorRevenueRatioTarget.value = parseFloat(
+      (
+        0.5 -
+        this.referenceRevenueRatioTarget.value -
+        this.collectionRevenueRatioTarget.value
+      ).toFixed(2),
+    );
   }
 
   articleReferenceRevenueRatioTargetConnected() {
