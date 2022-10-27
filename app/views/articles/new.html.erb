@@ -37,6 +37,6 @@
   </div>
 
   <div class="w-full mx-auto relative py-24">
-    <%= render partial: "articles/form", locals: { article: @article ||= current_user.articles.new } %>
+    <%= render "articles/form", article: @article %>
   </div>
 </div>

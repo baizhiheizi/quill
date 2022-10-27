@@ -1,0 +1,13 @@
+<%= turbo_frame_tag 'modal' do %>
+  <%= render ModalComponent.new title: t('hide_collection') do %>
+    <div class="mb-8">
+      <%= t('hide_collection_tips') %>
+    </div>
+    <div class="flex justify-center">
+      <%= button_to t('hide_collection'), 
+        dashboard_hidden_collection_path(@collection), 
+        method: :put,
+        class: "p-2 px-8 rounded-full bg-primary text-white" %>
+    </div>
+  <% end %>
+<% end %>

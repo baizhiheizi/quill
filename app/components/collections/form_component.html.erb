@@ -63,7 +63,6 @@
       data: {
         action: "collections-form-component#updateSelectedAsset"
       },
-      disabled: form.object.uuid.present?,
       class: "focus:ring-blue-500 focus:border-blue-500 flex-1 block w-full rounded bg-[#F4F4F4] border-[#F4F4F4] dark:border-white dark:border-opacity-5 dark:bg-[#333444]" %>
     <% if form.object.errors.where(:asset_id).present? %>
       <div class="py-2 text-red-700 text-sm"><%= form.object.errors.where(:asset_id).map(&:full_message).join(';') %></div>
@@ -92,6 +91,7 @@
   </div>
 
   <div class="mt-8 flex items-center space-x-4 justify-end">
-    <%= form.submit t('save'), class: "block py-2 px-4 w-48 rounded-full bg-primary text-white cursor-pointer" %>
+    <%= link_to t('back'), dashboard_authorings_path(tab: :collections), class: "block py-2 px-8 rounded-full border border-primary text-primary text-center" %>
+    <%= form.submit t('save'), class: "block py-2 px-8 rounded-full bg-primary text-white cursor-pointer" %>
   </div>
 <% end %>

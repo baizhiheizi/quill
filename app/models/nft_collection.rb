@@ -48,7 +48,7 @@ class NftCollection < ApplicationRecord
   private
 
   def setup_default_attributes
-    return if uuid.blank?
+    return if uuid.present? && raw.present?
 
     r =
       begin

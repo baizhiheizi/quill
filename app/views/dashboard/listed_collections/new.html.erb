@@ -1,0 +1,14 @@
+<%= turbo_frame_tag 'modal' do %>
+  <%= render ModalComponent.new title: t('list_collection') do %>
+    <div class="mb-8">
+      <%= t('list_collection_from_drafted_tips') if @collection.drafted? %>
+      <%= t('list_collection_from_hidden_tips') if @collection.hidden? %>
+    </div>
+    <div class="flex justify-center">
+      <%= button_to t('list'), 
+        dashboard_listed_collection_path(@collection), 
+        method: :put,
+        class: "p-2 px-8 rounded-full bg-primary text-white" %>
+    </div>
+  <% end %>
+<% end %>
