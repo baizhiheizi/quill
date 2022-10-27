@@ -106,6 +106,7 @@ class ArticlesController < ApplicationController
     permitted.push(:price) if !@article.published_at? || (!@article.free? && params[:article][:price].to_d.positive?)
     unless @article.published_at?
       permitted.push(
+        :collection_id,
         :author_revenue_ratio,
         :references_revenue_ratio,
         :asset_id,

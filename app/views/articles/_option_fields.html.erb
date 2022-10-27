@@ -15,6 +15,29 @@
   </div>
 
   <div class="grid grid-cols-3 gap-3">
+    <%= form.label :collection, class: "col-span-3 sm:col-span-1 block text-sm font-medium opacity-70" %>
+    <div class="col-span-3 sm:col-span-2">
+      <div class="rounded-md shadow-sm">
+        <%= form.collection_select :collection_id, 
+          current_user.collections.listed,
+          :uuid,
+          :name,
+          {
+            include_blank: 'None',
+          },
+          disabled: form.object.published_at?,
+          data: {
+            action: "article-form#selectCollection"
+          },
+          class: "focus:ring-blue-500 focus:border-blue-500 flex-1 block w-full rounded bg-[#F4F4F4] border-[#F4F4F4] dark:border-white dark:border-opacity-5 dark:bg-[#333444]" %>
+      </div>
+      <% if form.object.errors.where(:intro).present? %>
+        <div class="py-2 text-red-700 font-sm"><%= form.object.errors.where(:intro).map(&:full_message).join(';') %></div>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-3 gap-3">
     <%= form.label :intro, class: "col-span-3 sm:col-span-1 block text-sm font-medium opacity-70" %>
     <div class="col-span-3 sm:col-span-2">
       <div class="rounded-md shadow-sm">
@@ -120,6 +143,24 @@
           class: "cursor-not-allowed flex-1 block w-full rounded font-bold dark:border-white dark:border-opacity-5 bg-[#F4F4F4] border-[#F4F4F4] dark:bg-[#333444] opacity-60"
         %>
       </div>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-3 gap-3">
+    <%= form.label :collection_revenue_ratio, class: "col-span-3 sm:col-span-1 block text-sm font-medium opacity-70" %>
+    <div class="col-span-3 sm:col-span-2">
+      <div class="rounded-md shadow-sm">
+        <%= form.number_field :collection_revenue_ratio, 
+          disabled: true,
+          data: { 
+            article_form_target: 'collectionRevenueRatio'
+          }, 
+          class: "cursor-not-allowed flex-1 block w-full rounded font-bold dark:border-white dark:border-opacity-5 bg-[#F4F4F4] border-[#F4F4F4] dark:bg-[#333444] opacity-60"
+        %>
+      </div>
+      <% if form.object.errors.where(:collection_revenue_ratio).present? %>
+        <div class="py-2 text-red-700 font-sm"><%= form.object.errors.where(:collection_revenue_ratio).map(&:full_message).join(';') %></div>
+      <% end %>
     </div>
   </div>
 

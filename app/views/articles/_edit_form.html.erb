@@ -10,6 +10,8 @@
   data-article-form-active-tab-value="<%= active_tab %>" 
   data-article-form-currency-price-usd-value="<%= article.currency.price_usd %>" 
   data-article-form-article-uuid-value="<%= article.uuid %>" 
+  data-article-form-selected-collection-id-value="<%= article.collection_id %>" 
+  data-article-form-selectable-collections-value="<%= current_user.collections.listed.to_json(only: %i[uuid revenue_ratio]) %>" 
   data-article-form-article-published-value="<%= article.published_at? %>">
 
   <div class="w-full fixed left-0 top-0 z-50 bg-white dark:bg-[#1D1E2B]">

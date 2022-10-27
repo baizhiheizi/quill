@@ -105,7 +105,7 @@ class Article < ApplicationRecord
   validate :ensure_price_not_too_low
   validate :ensure_references_ratios_correct
   validate :ensure_revenue_ratios_sum_to_one
-  validate :can_not_change_currency_after_published
+  validate :cannot_edit_frozen_attributes_once_published
 
   before_validation :setup_attributes, on: :create
   before_validation :set_defaults
@@ -304,6 +304,7 @@ class Article < ApplicationRecord
       platform_revenue_ratio,
       readers_revenue_ratio,
       author_revenue_ratio,
+      collection_revenue_ratio,
       references_revenue_ratio
     ].sum
   end
@@ -461,12 +462,20 @@ class Article < ApplicationRecord
     self.intro = intro.truncate(140)
     self.locale = detected_locale
     self.content = blob_parsed_content if content_changed?
+    self.collection_revenue_ratio =
+      if collection.present?
+        collection.revenue_ratio
+      else
+        0
+      end
   end
 
-  def can_not_change_currency_after_published
+  def cannot_edit_frozen_attributes_once_published
     return if published_at.blank?
 
     errors.add(:asset_id, 'cannot change') if asset_id_changed?
+    errors.add(:collection_id, 'cannot change') if collection_id_changed?
+    errors.add(:collection_revenue_ratio, 'cannot change') if collection_revenue_ratio_changed?
   end
 
   def ensure_price_not_too_low
