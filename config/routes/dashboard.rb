@@ -7,6 +7,8 @@ namespace :dashboard do
   get :authorings, to: 'home#authorings'
   get :stats, to: 'home#stats'
 
+  resources :listed_collections, only: %i[new update]
+  resources :hidden_collections, only: %i[new update]
   resources :collections
   resources :articles, only: %i[index show], param: :uuid
   resources :published_articles, param: :uuid, only: %i[new update destroy]

@@ -334,3 +334,9 @@ zh-CN:
     2. For every sell of the collection, 10% will be charged from Quill and the rest 90% will be author's revenue.
     3. Every buyer of the collection will receive an NFT as a ticket to access all articles in this collection. (NFT may be sold to others of course) 
     4. Every article in the collection may also be sold sperately. A part of every sperate sell will split to the collection buyers (even his/her NFT has been sold) as bonus.
+  list_collection: 上架合辑
+  list: 上架
+  hide_collection: 下架合辑
+  list_collection_from_hidden_tips: 你正在上架合辑，读者们将可以购买该合辑。
+  list_collection_from_drafted_tips: 你正在首次上架合辑，成功后合辑名称、简称和收益比例将不可修改。
+  hide_collection_tips: 你正在下架合辑，读者们将无法购买该合辑。

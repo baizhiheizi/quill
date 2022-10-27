@@ -36,6 +36,7 @@ class Collection < ApplicationRecord
 
   has_many :collectings, dependent: :restrict_with_exception
   has_many :validatable_collections, through: :collectings, source: :nft_collection
+  has_many :articles, primary_key: :uuid, dependent: :restrict_with_exception
 
   validates :name, presence: true
   validates :symbol, presence: true
@@ -46,12 +47,14 @@ class Collection < ApplicationRecord
 
   validate :ensure_price_not_too_low
 
+  delegate :trident_url, to: :nft_collection
+
   aasm column: :state do
     state :drafted, initial: true
     state :listed
     state :hidden
 
-    event :list do
+    event :list, guard: :nft_collection_present? do
       transitions from: :drafted, to: :listed
       transitions from: :hidden, to: :listed
     end
@@ -59,6 +62,30 @@ class Collection < ApplicationRecord
     event :hide do
       transitions from: :listed, to: :hidden
     end
+  end
+
+  delegate :present?, to: :nft_collection, prefix: true
+
+  def list_on_trident!
+    NftCollection.find_or_create_by uuid: uuid if uuid.present?
+    return if nft_collection_present?
+
+    generate_cover if cover_url.blank?
+
+    r = Trident.api.create_collection(
+      name: name,
+      symbol: symbol,
+      description: description,
+      split: 0.1,
+      external_url: 'https://quill.im',
+      icon_url: cover_url
+    )
+
+    update! uuid: r['id']
+    list!
+    NftCollection.create! uuid: r['id'], raw: r
+  rescue StandardError
+    false
   end
 
   def may_destroy?

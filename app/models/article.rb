@@ -54,6 +54,7 @@ class Article < ApplicationRecord
 
   belongs_to :author, class_name: 'User', inverse_of: :articles
   belongs_to :currency, primary_key: :asset_id, foreign_key: :asset_id, inverse_of: :articles
+  belongs_to :collection, primary_key: :uuid, inverse_of: :articles, optional: true
 
   has_many :orders, as: :item, dependent: :restrict_with_error
   has_many :buy_orders, -> { where(order_type: :buy_article) }, class_name: 'Order', as: :item, dependent: :restrict_with_error, inverse_of: false

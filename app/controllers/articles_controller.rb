@@ -39,6 +39,8 @@ class ArticlesController < ApplicationController
   end
 
   def new
+    collection = current_user.collections.find_by uuid: params[:collection_id]
+    @article = current_user.articles.new collection: collection
   end
 
   def edit

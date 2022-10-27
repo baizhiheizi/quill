@@ -26,7 +26,7 @@
     </div>
   </div>
 
-  <div class="relative flex items-start max-h-28 space-x-4 mb-6">
+  <div class="relative flex items-start max-h-28 space-x-4 mb-4">
     <div class="flex-1 h-ful max-w-full">
       <div class="truncate overflow-hidden font-bold text-xl mb-3">
         <%= collection.name %>(<%= collection.symbol %>)
@@ -48,18 +48,30 @@
 
   <div class="flex items-center space-x-4 justify-between">
     <div class="text-primary flex items-center space-x-4">
-      <%= link_to t('detail'), 
-        dashboard_collection_path(collection.id),
+      <%= link_to t('write'), 
+        new_article_path(collection_id: collection.uuid),
         data: {
           controller: 'prefetch',
           turbo_frame: '_top'
-        } %>
+        } if collection.listed_on_trident? %>
       <%= link_to t('edit'), 
         edit_dashboard_collection_path(collection),
         data: {
           controller: 'prefetch',
           turbo_frame: '_top'
         } %>
+      <%= link_to t('list'), 
+        new_dashboard_listed_collection_path(id: collection.id),  
+        data: {
+          turbo_frame: 'modal'
+        },
+        class: "bg-transparent cursor-pointer" unless collection.listed? %>
+      <%= link_to t('hide'), 
+        new_dashboard_hidden_collection_path(id: collection.id),  
+        data: {
+          turbo_frame: 'modal'
+        },
+        class: "bg-transparent cursor-pointer" if collection.may_hide? %>
       <%= button_to t('delete'), 
         dashboard_collection_path(collection),  
         method: :delete,
@@ -67,6 +79,10 @@
           turbo_confirm: 'Are sure to delete?'
         },
         class: "bg-transparent cursor-pointer" if collection.may_destroy? %>
+      <%= link_to 'Trident', 
+        collection.trident_url,  
+        target: "_blank",
+        class: "bg-transparent cursor-pointer" if collection.listed_on_trident? %>
     </div>
   </div>
 </div>
