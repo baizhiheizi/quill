@@ -39,7 +39,7 @@ class Order < ApplicationRecord
   belongs_to :buyer, class_name: 'User'
   belongs_to :seller, class_name: 'User'
   belongs_to :citer, polymorphic: true, optional: true
-  belongs_to :item, polymorphic: true
+  belongs_to :item, polymorphic: true, counter_cache: true
   belongs_to :payment, foreign_key: :trace_id, primary_key: :trace_id, inverse_of: :order
   belongs_to :currency, primary_key: :asset_id, foreign_key: :asset_id, inverse_of: :orders
 
