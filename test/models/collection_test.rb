@@ -7,6 +7,7 @@
 #  id                     :bigint           not null, primary key
 #  description            :text
 #  name                   :string
+#  order_count            :integer          default(0)
 #  platform_revenue_ratio :float            default(0.1)
 #  price                  :decimal(, )
 #  revenue_ratio          :float            default(0.2)
