@@ -8,6 +8,7 @@
   <div class="flex justify-center text-red-500 mb-4 text-sm">
     - <%= t('more_to_read') %> -
   </div>
+
   <div class="flex justify-center flex-wrap mb-4">
     <span class="min-w-fit"><%= t('pay') %></span>
     <span class="mx-2 text-red-500 font-bold min-w-fit"><%= article.price_tag %> (≈$<%= article.price_usd %>)</span>
@@ -20,6 +21,7 @@
   <div class="text-base mb-6 rounded-lg border border-amber-400 bg-amber-50 dark:bg-amber-800 dark:border-amber-900 px-4 py-2">
     <%= t('pay_warning') %>
   </div>
+
   <div class="flex justify-center mb-4">
     <% if current_user.present? %>
       <%= form_for PreOrder.new(
@@ -35,17 +37,17 @@
         <%= form.hidden_field :amount %>
         <%= form.hidden_field :type, value: current_user.default_payment %>
 
-        <%= form.submit t('pay_to_read'), class: "cursor-pointer text-base rounded-full bg-primary hover:scale-105 text-white px-4 py-2.5 no-underline" %>
+        <%= form.submit t('pay_to_read'), class: "cursor-pointer text-base rounded-full bg-primary hover:scale-105 transition ease-in-out text-white px-4 py-2.5 no-underline" %>
       <% end %>
     <% elsif from_mixin_messenger? %>
       <%= link_to t('pay_to_read'), 
         login_path(return_to: user_article_url(article.author, article.uuid)), 
-        class: "cursor-pointer text-base rounded-full bg-primary hover:scale-105 text-white px-4 py-2.5 no-underline" %>
+        class: "cursor-pointer text-base rounded-full bg-primary hover:scale-105 transition ease-in-out text-white px-4 py-2.5 no-underline" %>
     <% else %>
       <%= link_to t('pay_to_read'), 
         login_path(return_to: user_article_url(article.author, article.uuid)), 
         data: { turbo_frame: :modal }, 
-        class: "cursor-pointer text-base rounded-full bg-primary hover:scale-105 text-white px-4 py-2.5 no-underline" %>
+        class: "cursor-pointer text-base rounded-full bg-primary hover:scale-105 transition ease-in-out text-white px-4 py-2.5 no-underline" %>
     <% end %>
   </div>
   <div class='text-sm text-gray-500 text-center'>

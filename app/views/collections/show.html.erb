@@ -1,0 +1,34 @@
+<div class="max-w-full">
+  <div class="lg:grid grid-cols-2 lg:gap-8 mb-12">
+    <div class="w-full mb-8 lg:mb-0">
+      <%= image_tag @collection.cover_url, class: "object-contain object-center w-full rounded-2xl" %>
+    </div>
+    <div class="lg:order-first">
+      <div class="font-semibold text-2xl lg:text-3xl mb-6 text-ellipsis overflow-hidden">
+        <%= @collection.name %>
+      </div>
+
+      <div class="flex items-center space-x-2 w-36 mb-6">
+        <%= image_tag @collection.author.avatar, class: "w-10 h-10 rounded-full" %>
+        <div class="truncate">
+          <div class="text-lg font-bold truncate overflow-hidden">
+            <%= @collection.author.name %>
+          </div>
+          <div class="text-sm opacity-75">
+            @<%= @collection.author.short_uid %>
+          </div>
+        </div>
+      </div>
+
+      <div class="opacity-70 mb-8">
+        <%= @collection.description %>
+      </div>
+
+      <%= render "collections/price", collection: @collection unless @collection.authorized?(current_user) %>
+    </div>
+  </div>
+
+  <%= turbo_frame_tag "articles" do %>
+    <%= render Articles::ListComponent.new articles: @articles, pagy: @pagy %>
+  <% end %>
+</div>

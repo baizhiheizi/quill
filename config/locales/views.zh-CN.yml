@@ -340,3 +340,4 @@ zh-CN:
   list_collection_from_hidden_tips: 你正在上架合辑，读者们将可以购买该合辑。
   list_collection_from_drafted_tips: 你正在首次上架合辑，成功后合辑名称、简称和收益比例将不可修改。
   hide_collection_tips: 你正在下架合辑，读者们将无法购买该合辑。
+  article_collection_introduction: 本文属于以下合辑，购买合辑可以解锁合辑内所有文章并获得合辑收益

@@ -17,6 +17,14 @@
           controller: 'prefetch', 
           turbo_frame: "_top" 
         } %>
+    <% elsif payment.collection.present? %>
+      <%= link_to payment.collection.name, 
+        collection_path(payment.collection.uuid), 
+        class: "truncate w-36 block", 
+        data: { 
+          controller: 'prefetch', 
+          turbo_frame: "_top" 
+        } %>
     <% else %>
       <span>-</span>
     <% end %>

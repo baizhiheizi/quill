@@ -1,4 +1,4 @@
-<article class="max-w-full lg:col-span-2 mb-4">
+<article class="max-w-full mb-4">
   <div class="mb-4">
     <div class="mb-8">
       <%= render "articles/header", article: @article %>
@@ -12,6 +12,8 @@
       <%= render "articles/buyers", article: @article, user: current_user %>
     </div>
   </div>
+
+  <%= render "collections/card", collection: @article.collection if @article.collection.present? %>
 
   <div data-controller="comment-form">
     <% if browser.device.mobile? %>

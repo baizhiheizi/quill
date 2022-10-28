@@ -47,6 +47,8 @@ class SwapOrder < ApplicationRecord
   delegate :owner, to: :wallet
   delegate :payer, to: :payment
   delegate :generate_refund_transfer!, to: :payment, prefix: true
+  delegate :article, to: :payment
+  delegate :collection, to: :payment
 
   aasm column: :state do
     state :paid, initial: true
@@ -113,7 +115,19 @@ class SwapOrder < ApplicationRecord
   def place_payment_order!
     return if order_placed?
 
-    article = Article.find_by uuid: payment.decoded_memo['a']
+    if article.present?
+      place_payment_article_order!
+    elsif collection.present?
+      place_payment_collection_order!
+    end
+
+    order_place!
+  rescue ActiveRecord::RecordInvalid => e
+    create_refund_transfer!
+    raise e if Rails.env.development?
+  end
+
+  def place_payment_article_order!
     case payment.decoded_memo['t']
     when 'BUY'
       article.orders.find_or_create_by!(
@@ -132,10 +146,16 @@ class SwapOrder < ApplicationRecord
         citer: payment.citer
       )
     end
-    order_place!
-  rescue ActiveRecord::RecordInvalid => e
-    create_refund_transfer!
-    raise e if Rails.env.development?
+  end
+
+  def place_payment_collection_order!
+    case payment.decoded_memo['t']
+    when 'BUY'
+      collection.orders.find_or_create_by!(
+        payment: payment,
+        order_type: :buy_collection
+      )
+    end
   end
 
   def create_change_transfer!
@@ -178,10 +198,6 @@ class SwapOrder < ApplicationRecord
 
   def ensure_min_amount_filled
     amount.to_f >= min_amount.to_f
-  end
-
-  def article
-    @article = owner.is_a?(Article) && owner
   end
 
   def payment_complete!

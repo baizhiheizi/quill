@@ -179,7 +179,7 @@ class Article < ApplicationRecord
     return true if (published? && free?) || author == user
     return if user.blank?
 
-    orders.find_by(buyer: user).present?
+    orders.find_by(buyer: user).present? || collection&.authorized?(user)
   end
 
   def update_revenue
@@ -410,10 +410,6 @@ class Article < ApplicationRecord
 
   def detect_locale_async
     ArticleDetectLocaleWorker.perform_async uuid
-  end
-
-  def mixpay_supported?
-    asset_id.in? (Mixpay.api.settlement_asset_ids + Mixpay.api.quote_asset_ids).uniq
   end
 
   def cover_url
