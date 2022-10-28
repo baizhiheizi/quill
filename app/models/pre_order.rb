@@ -30,7 +30,7 @@ class PreOrder < ApplicationRecord
   extend Enumerize
   include AASM
 
-  enumerize :order_type, in: %i[buy_article reward_article]
+  enumerize :order_type, in: %i[buy_article reward_article buy_collection]
 
   belongs_to :item, polymorphic: true
   belongs_to :payer, class_name: 'User', primary_key: :mixin_uuid
@@ -81,7 +81,13 @@ class PreOrder < ApplicationRecord
 
   def broadcast_to_views
     I18n.with_locale payer.locale do
-      broadcast_update_to "user_#{payer_id}", target: "#{type.underscore}_#{id}_state", partial: 'pre_orders/state', locals: { pre_order: self }
+      broadcast_update_to(
+        "user_#{payer_id}",
+        target: "#{type.underscore}_#{id}_state",
+        html: ApplicationController.render(
+          PreOrders::StateComponent.new(pre_order: self)
+        )
+      )
     end
   end
 
@@ -97,7 +103,7 @@ class PreOrder < ApplicationRecord
       case order_type
       when 'reward_article'
         SecureRandom.uuid
-      when 'buy_article'
+      when 'buy_article', 'buy_collection'
         item.payment_trace_id payer
       end
     self.memo =
@@ -106,6 +112,8 @@ class PreOrder < ApplicationRecord
         Base64.urlsafe_encode64({ t: 'BUY', a: item.uuid, f: follow_id }.to_json, padding: false)
       when 'reward_article'
         Base64.urlsafe_encode64({ t: 'REWARD', a: item.uuid, f: follow_id }.to_json, padding: false)
+      when 'buy_collection'
+        Base64.urlsafe_encode64({ t: 'BUY', l: item.uuid, f: follow_id }.to_json, padding: false)
       end
 
     self.payee_id =

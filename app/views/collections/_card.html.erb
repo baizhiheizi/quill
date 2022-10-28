@@ -1,0 +1,27 @@
+<div class="mb-4 text-sm opacity-75">
+  <%= t('article_collection_introduction') %>
+</div>
+<div class="border rounded-lg overflow-hidden mb-8">
+  <div class="relative flex items-start h-28 sm:h-36">
+    <div class="flex-1 h-ful p-4">
+      <div class="w-full line-clamp-1 sm:line-clamp-2 break-words overflow-hidden font-bold text-lg mb-1">
+        <%= collection.name %>
+        <span class="hidden sm:inline">
+          (<%= collection.symbol %>)
+        </span>
+      </div>
+      <div class="w-full line-clamp-2 sm:line-clamp-3 break-words text-ellipsis overflow-hidden text-[#222222] text-opacity-80"> 
+        <%= collection.description %>
+      </div>
+    </div>
+    <% if collection.cover.attached? %>
+      <%= image_tag collection.cover_url, class: "h-full object-squre object-center" %>
+    <% end %>
+    <%= link_to '', collection_path(collection.uuid),
+      data: {
+        controller: "prefetch",
+        turbo_frame: "_top"
+      },
+      class: "absolute inset-0" %>
+  </div>
+</div>

@@ -7,5 +7,6 @@ class CollectionsController < ApplicationController
 
   def show
     @collection = Collection.listed.find_by uuid: params[:uuid]
+    @articles = @collection.articles.published
   end
 end

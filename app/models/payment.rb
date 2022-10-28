@@ -46,7 +46,7 @@ class Payment < ApplicationRecord
   validates :snapshot_id, presence: true, uniqueness: true
   validates :trace_id, presence: true, uniqueness: true
 
-  after_create :place_order!, :pay_pre_order!
+  after_create :generate_order!
   after_create_commit do
     notify_payer
   end
@@ -74,6 +74,7 @@ class Payment < ApplicationRecord
     #  'a': article's uuid,
     #  'c': citer's uuid,
     #  'p': pre order trace ID
+    #  'l': collection's uuid
     # }
     #
     @decoded_memo =
@@ -85,17 +86,27 @@ class Payment < ApplicationRecord
   end
 
   def memo_correct?
-    decoded_memo.key?('a') && decoded_memo.key?('t') && decoded_memo['t'].in?(%w[BUY REWARD CITE REVENUE])
+    decoded_memo.key?('t') &&
+      decoded_memo['t'].in?(%w[BUY REWARD CITE REVENUE]) &&
+      (decoded_memo.key?('a') || decoded_memo.key?('l'))
   end
 
   def article
-    @article = Article.find_by uuid: decoded_memo['a']
+    return if decoded_memo['a'].blank?
+
+    @article ||= Article.find_by uuid: decoded_memo['a']
+  end
+
+  def collection
+    return if decoded_memo['l'].blank?
+
+    @collection ||= Collection.find_by uuid: decoded_memo['l']
   end
 
   def citer
     return unless decoded_memo['t'] == 'CITE'
 
-    @citer = Article.find_by(uuid: decoded_memo['c'])
+    @citer ||= Article.find_by(uuid: decoded_memo['c'])
   end
 
   def pre_order
@@ -104,15 +115,25 @@ class Payment < ApplicationRecord
     @pre_order ||= PreOrder.find_by follow_id: decoded_memo['f']
   end
 
-  def pay_pre_order!
-    pre_order&.pay!
-  end
-
-  def place_order!
-    return if article.blank?
+  def generate_order!
     return unless memo_correct?
 
-    raise 'blocked by author' if article.author.block_user?(payer)
+    if article.present?
+      generate_article_order!
+    elsif collection.present?
+      generate_collection_order!
+    end
+
+    pre_order&.pay! if pre_order&.may_pay?
+  rescue ActiveRecord::RecordInvalid, ActiveRecord::RecordNotFound => e
+    Rails.logger.error e
+    reload.generate_refund_transfer!
+  end
+
+  def generate_article_order!
+    return if article.blank?
+
+    raise ActiveRecord::RecordInvalid, 'blocked by author' if article.author.block_user?(payer)
 
     if decoded_memo['t'] == 'REVENUE'
       complete!
@@ -123,26 +144,42 @@ class Payment < ApplicationRecord
     else
       generate_refund_transfer!
     end
-  rescue RuntimeError, ActiveRecord::RecordInvalid, ActiveRecord::RecordNotFound => e
-    Rails.logger.error e
-    reload.generate_refund_transfer!
-    # raise e if Rails.env.development?
+  end
+
+  def generate_collection_order!
+    return if collection.blank?
+
+    raise ActiveRecord::RecordInvalid, 'blocked by author' if collection.author.block_user?(payer)
+
+    if asset_id == collection.asset_id
+      place_collection_order!
+    elsif swappable?
+      place_swap_order!
+    else
+      generate_refund_transfer!
+    end
   end
 
   def place_swap_order!
-    return if article.blank?
-
-    create_swap_order!(
-      funds: amount,
-      min_amount: decoded_memo['t'] == 'BUY' ? article.price : nil,
-      fill_asset_id: article.asset_id,
-      pay_asset_id: asset_id,
-      trace_id: QuillBot.api.unique_conversation_id(wallet_id, trace_id),
-      user_id: wallet_id
-    )
-  rescue ActiveRecord::RecordInvalid => e
-    reload.generate_refund_transfer!
-    raise e if Rails.env.development?
+    if article.present?
+      create_swap_order!(
+        funds: amount,
+        min_amount: decoded_memo['t'] == 'BUY' ? article.price : nil,
+        fill_asset_id: article.asset_id,
+        pay_asset_id: asset_id,
+        trace_id: QuillBot.api.unique_conversation_id(wallet_id, trace_id),
+        user_id: wallet_id
+      )
+    elsif collection.present?
+      create_swap_order!(
+        funds: amount,
+        min_amount: collection.price,
+        fill_asset_id: collection.asset_id,
+        pay_asset_id: asset_id,
+        trace_id: QuillBot.api.unique_conversation_id(wallet_id, trace_id),
+        user_id: wallet_id
+      )
+    end
   end
 
   def place_article_order!
@@ -171,9 +208,19 @@ class Payment < ApplicationRecord
     else
       generate_refund_transfer!
     end
-  rescue ActiveRecord::RecordInvalid, ActiveRecord::RecordNotFound => e
-    reload.generate_refund_transfer!
-    raise e if Rails.env.development?
+  end
+
+  def place_collection_order!
+    case decoded_memo['t']
+    when 'BUY'
+      collection.orders.find_or_create_by!(
+        payment: self,
+        order_type: :buy_collection
+      )
+      complete!
+    else
+      generate_refund_transfer!
+    end
   end
 
   def generate_refund_transfer!

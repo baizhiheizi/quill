@@ -4,18 +4,19 @@
 #
 # Table name: collections
 #
-#  id            :bigint           not null, primary key
-#  description   :text
-#  name          :string
-#  price         :decimal(, )
-#  revenue_ratio :float            default(0.2)
-#  state         :string
-#  symbol        :string
-#  uuid          :uuid
-#  created_at    :datetime         not null
-#  updated_at    :datetime         not null
-#  asset_id      :uuid
-#  author_id     :uuid
+#  id                     :bigint           not null, primary key
+#  description            :text
+#  name                   :string
+#  platform_revenue_ratio :float            default(0.1)
+#  price                  :decimal(, )
+#  revenue_ratio          :float            default(0.2)
+#  state                  :string
+#  symbol                 :string
+#  uuid                   :uuid
+#  created_at             :datetime         not null
+#  updated_at             :datetime         not null
+#  asset_id               :uuid
+#  author_id              :uuid
 #
 # Indexes
 #
@@ -24,8 +25,10 @@
 #
 class Collection < ApplicationRecord
   SUPPORTED_ASSETS = Settings.supported_assets || [Currency::BTC_ASSET_ID]
+  MINIMUM_PRICE_USD = 0.1
 
   include AASM
+  include Collections::Payable
 
   has_one_attached :cover
 
@@ -37,6 +40,7 @@ class Collection < ApplicationRecord
   has_many :collectings, dependent: :restrict_with_exception
   has_many :validatable_collections, through: :collectings, source: :nft_collection
   has_many :articles, primary_key: :uuid, dependent: :restrict_with_exception
+  has_many :orders, as: :item, dependent: :restrict_with_exception
 
   validates :name, presence: true
   validates :symbol, presence: true
@@ -119,6 +123,17 @@ class Collection < ApplicationRecord
     cover.attach io: file, filename: "#{name}_cover"
   end
 
+  def authorized?(user = nil)
+    return if user.blank?
+    return true if author == user
+
+    user
+      .collectibles
+      .where(
+        collection_id: validatable_collections.pluck(:uuid) + [uuid]
+      ).present?
+  end
+
   private
 
   def lock_attributes_once_listed
@@ -132,6 +147,6 @@ class Collection < ApplicationRecord
   def ensure_price_not_too_low
     return unless price_changed? || asset_id_changed?
 
-    errors.add(:price, '< $6.99') if price.to_f.positive? && price < currency.minimal_price_amount(6.99)
+    errors.add(:price, "< $#{MINIMUM_PRICE_USD}") if price.to_f.positive? && price < currency.minimal_price_amount(MINIMUM_PRICE_USD)
   end
 end

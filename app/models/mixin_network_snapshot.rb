@@ -116,7 +116,9 @@ class MixinNetworkSnapshot < ApplicationRecord
   end
 
   def payment_memo_correct?
-    decoded_memo.key?('a') && decoded_memo.key?('t') && decoded_memo['t'].in?(%w[BUY REWARD CITE REVENUE])
+    decoded_memo.key?('t') &&
+      decoded_memo['t'].in?(%w[BUY REWARD CITE REVENUE]) &&
+      (decoded_memo.key?('a') || decoded_memo.key?('l'))
   end
 
   def processed?

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module Articles::Payable
+module Collections::Payable
   extend ActiveSupport::Concern
 
   def payment_trace_id(user)
@@ -10,7 +10,7 @@ module Articles::Payable
     # avoid duplicate payment
     candidate = QuillBot.api.unique_uuid(uuid, user.mixin_uuid)
     loop do
-      break unless Payment.exists?(trace_id: candidate)
+      break unless MixinNetworkSnapshot.exists?(trace_id: candidate)
 
       candidate = QuillBot.api.unique_uuid(uuid, candidate)
     end
@@ -25,10 +25,6 @@ module Articles::Payable
     trace_id = payment_trace_id user
 
     pay_url user, pay_asset_id, amount, buy_payment_memo, trace_id
-  end
-
-  def reward_url(user, pay_asset_id, amount, trace_id)
-    pay_url user, pay_asset_id, amount, reward_payment_memo, trace_id
   end
 
   def pay_url(user, pay_asset_id, amount, memo, trace_id)
@@ -64,11 +60,7 @@ module Articles::Payable
   end
 
   def buy_payment_memo
-    Base64.urlsafe_encode64({ t: 'BUY', a: uuid }.to_json)
-  end
-
-  def reward_payment_memo
-    Base64.urlsafe_encode64({ t: 'REWARD', a: uuid }.to_json)
+    Base64.urlsafe_encode64({ t: 'BUY', l: uuid }.to_json)
   end
 
   def mixpay_supported?

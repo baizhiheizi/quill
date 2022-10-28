@@ -2,18 +2,19 @@
 #
 # Table name: collections
 #
-#  id            :bigint           not null, primary key
-#  description   :text
-#  name          :string
-#  price         :decimal(, )
-#  revenue_ratio :float            default(0.2)
-#  state         :string
-#  symbol        :string
-#  uuid          :uuid
-#  created_at    :datetime         not null
-#  updated_at    :datetime         not null
-#  asset_id      :uuid
-#  author_id     :uuid
+#  id                     :bigint           not null, primary key
+#  description            :text
+#  name                   :string
+#  platform_revenue_ratio :float            default(0.1)
+#  price                  :decimal(, )
+#  revenue_ratio          :float            default(0.2)
+#  state                  :string
+#  symbol                 :string
+#  uuid                   :uuid
+#  created_at             :datetime         not null
+#  updated_at             :datetime         not null
+#  asset_id               :uuid
+#  author_id              :uuid
 #
 # Indexes
 #
