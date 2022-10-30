@@ -100,7 +100,7 @@ class Order < ApplicationRecord
     transfers
       .where(wallet_id: payment.wallet_id)
       .sum(:amount)
-      .round(8) ==
+      .round(8) >=
       if payment.wallet_id == QuillBot.api.client_id
         (total * (1 - item.platform_revenue_ratio)).round(8)
       else

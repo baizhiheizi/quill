@@ -81,9 +81,10 @@ module Orders::Mintable
       metadata: metadata.json,
       metahash: SHA3::Digest::SHA256.hexdigest(metadata.checksum_content)
     )
-    _collectible.save!
+    ActiveRecord::Base.transaction do
+      _collectible.save!
+      payment.complete! if payment.may_complete?
+    end
     _collectible.mint_async
-
-    payment.pay!
   end
 end

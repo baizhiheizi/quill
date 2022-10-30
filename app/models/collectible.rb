@@ -75,7 +75,7 @@ class Collectible < ApplicationRecord
     Trident.api.upload_metadata metadata: metadata, metahash: metahash
 
     transfers.create_with(
-      wallet: QuillBot.api.client_id,
+      wallet_id: QuillBot.api.client_id,
       transfer_type: :mint_nft,
       queue_priority: :default,
       opponent_multisig: {

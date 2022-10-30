@@ -33,9 +33,10 @@ module Users::CollectibleReadable
 
   def owner_of_collection?(collection_ids)
     collection_ids = [collection_ids] if collection_ids.is_a?(String)
+
     if messenger?
-      collectibles.where(collection_id: collection_ids).present?
       sync_collectibles_async
+      collectibles.where(collection_id: collection_ids).present?
     elsif mvm_eth?
       uuids =
         Rails.cache.fetch "#{uid}_tokens_erc_721", expires_in: 1.minute do

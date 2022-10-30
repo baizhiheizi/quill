@@ -1,5 +1,9 @@
 <div class="mb-4 text-sm opacity-75">
-  <%= t('article_collection_introduction') %>
+  <%= format(
+    t('article_collection_introduction'), 
+    orders_count: collection.orders_count, 
+    revenue_ratio: "#{(collection.revenue_ratio * 100).floor(2)}%"
+  ).html_safe %>
 </div>
 <div class="border rounded-lg overflow-hidden mb-8">
   <div class="relative flex items-start h-28 sm:h-36">

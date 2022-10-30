@@ -103,6 +103,7 @@ en:
   readers_revenue: Readers Revenue
   author_revenue: Author Revenue
   references_revenue: References Revenue
+  collection_revenue: Collection Revenue
   revenue_chart: Revenue Chart(USD)
   transactions: Transactions
   rules_content: |
@@ -338,4 +339,5 @@ en:
   list_collection_from_hidden_tips: You are listing your collection so that readers can buy your it.
   list_collection_from_drafted_tips: You are listing your collection for the first time. Once listed, you may not change your collection's name, symbol and revenue ratio.
   hide_collection_tips: You are hiding your collection. Once hidden, readers may not buy this collection.
-  article_collection_introduction: This article is belong to this collection. You may buy the collection to read all articles in it and receive collection revenue
+  article_collection_introduction: |
+    This article is belong to this collection. You may buy the collection to read all articles in it and receive collection revenue. <span class="font-bold text-red-500 text-lg">%<orders_count>s</span> readers have subscribed this collection, sharing <span class="font-bold text-red-500 text-lg">%<revenue_ratio>s</span> of revenue.

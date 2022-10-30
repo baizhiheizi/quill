@@ -4,8 +4,19 @@
       <%= image_tag @collection.cover_url, class: "object-contain object-center w-full rounded-2xl" %>
     </div>
     <div class="lg:order-first">
-      <div class="font-semibold text-2xl lg:text-3xl mb-6 text-ellipsis overflow-hidden">
-        <%= @collection.name %>
+      <div class="flex items-start space-x-4 justify-between">
+        <div class="font-semibold text-2xl lg:text-3xl mb-6 text-ellipsis overflow-hidden">
+          <%= @collection.name %>
+        </div>
+        <div class="hidden sm:flex justify-end">
+          <%= link_to collection_share_path(@collection.uuid), 
+            data: {
+              turbo_frame: :modal
+            },
+            class: "flex items-center space-x-1" do %>
+            <%= inline_svg_tag 'icons/share-solid.svg', class: 'w-5 h-5 lg:w-6 lg:h-6 text-primary' %>
+          <% end %>
+        </div>
       </div>
 
       <div class="flex items-center space-x-2 w-36 mb-6">
@@ -24,6 +35,25 @@
         <%= @collection.description %>
       </div>
 
+      <div class="grid grid-cols-2 gap-4 mb-8">
+        <div class="bg-[#F4F4F4] dark:bg-[#333444] text-center rounded p-3">
+          <div class="text-2xl font-black mb-2">
+            <%= (@collection.revenue_ratio * 100).floor(2) %>%
+          </div>
+          <div class="text-sm opacity-80">
+            <%= t('collection_revenue') %>
+          </div>
+        </div>
+        <div class="bg-[#F4F4F4] dark:bg-[#333444] text-center rounded p-2">
+          <div class="text-2xl font-black mb-2">
+            <%= @collection.orders_count %>
+          </div>
+          <div class="text-sm opacity-80">
+            <%= t('subscribers') %>
+          </div>
+        </div>
+      </div>
+
       <%= render "collections/price", collection: @collection unless @collection.authorized?(current_user) %>
 
       <%= render "collections/mint", collection: @collection if @collection.mintable_order_from(current_user).present? %>
@@ -34,3 +64,20 @@
     <%= render Articles::ListComponent.new articles: @articles, pagy: @pagy %>
   <% end %>
 </div>
+
+<%= content_for :topbar do %>
+  <div class="h-12 flex items-center justify-between">
+    <%= link_to root_path, class: "block px-6 py-2" do %>
+      <%= image_tag 'logo.svg', class: "w-auto h-8" %>
+    <% end %>
+    <% if current_user.present? %>
+      <%= link_to collection_share_path(@collection.uuid), 
+        data: {
+          turbo_frame: :modal
+        },
+        class: "block px-6 py-3 #{from_mixin_messenger? ? 'mr-24' : ''}" do %>
+        <%= inline_svg_tag 'icons/share-solid.svg', class: 'w-6 h-6 text-primary' %>
+      <% end %>
+    <% end %>
+  </div>
+<% end %>

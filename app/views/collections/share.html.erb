@@ -1,0 +1,50 @@
+<%= turbo_frame_tag 'modal' do %>
+  <%= render ModalComponent.new title: t('share') do %>
+    <div class="flex items-center">
+      <% if from_mixin_messenger? %>
+        <a class="flex-1 rounded-t-lg block p-4 hover:bg-zinc-100 dark:hover:bg-zinc-800 active:bg-zinc-100 dark:active:bg-zinc-800 rounded-lg"
+          target="_blank"
+          data-action="modal#hide"
+          href="<%= share_to_mixin collection_url(@collection.uuid), title: @collection.name, description: @collection.description, icon_url: @collection.cover_url %>">
+          <div class="flex mb-2">
+            <%= image_tag 'mixin-logo.png', class: "w-12 h-auto mx-auto" %>
+          </div>
+          <div class="text-base text-center">Mixin</div>
+        </a>
+      <% end %>
+
+      <a class="flex-1 block p-4 opacity-70 hover:bg-zinc-100 dark:hover:bg-zinc-800 active:bg-zinc-100 dark:active:bg-zinc-800 rounded-lg"
+          target="_blank"
+          data-action="modal#hide"
+          href="<%= share_to_twitter collection_url(@collection.uuid), @collection.name %>">
+        <div class="flex mb-2">
+          <%= image_tag "twitter.png", class: "w-12 h-12 mx-auto" %>
+        </div>
+        <div class="text-base text-center">Twitter</div>
+      </a>
+
+      <a class="flex-1 block p-4 opacity-70 hover:bg-zinc-100 dark:hover:bg-zinc-800 active:bg-zinc-100 dark:active:bg-zinc-800 rounded-lg"
+          target="_blank"
+          data-action="modal#hide"
+          href="<%= share_to_facebook collection_url(@collection.uuid) %>">
+        <div class="flex mb-2">
+          <%= image_tag "facebook.png", class: "w-12 h-12 mx-auto" %>
+        </div>
+        <div class="text-base text-center">Facebook</div>
+      </a>
+
+      <button class="flex-1 block w-full p-4 opacity-70 hover:bg-zinc-100 dark:hover:bg-zinc-800 active:bg-zinc-100 dark:active:bg-zinc-800 rounded-lg"
+        data-controller="clipboard"
+        data-clipboard-text-value="<%= collection_url @collection.uuid %>"
+        data-clipboard-success-tip-value="Copied"
+        data-action="clipboard#copy modal#hide">
+        <div class="flex mb-2">
+          <div class="bg-[#B1B6C6] w-12 h-12 mx-auto rounded-full flex items-center justify-center">
+            <%= inline_svg_tag "icons/copy.svg", class: "w-6 h-6 text-white" %>
+          </div>
+        </div>
+        <div data-clipboard-target="button"class="text-base text-center">URL</div>
+      </button>
+    </div>
+  <% end %>
+<% end %>

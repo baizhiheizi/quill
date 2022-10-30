@@ -197,7 +197,7 @@ module Orders::Distributable
       end
     _collection_avg_amount =
       if _collection_orders_count.positive?
-        (_collection_amount / _collection_orders_count).floor(8)
+        (_collection_sum / _collection_orders_count).floor(8)
       else
         0.0
       end
@@ -215,6 +215,7 @@ module Orders::Distributable
         ).find_or_create_by!(
           trace_id: QuillBot.api.unique_conversation_id(trace_id, _order.trace_id)
         )
+        _collection_amount += _collection_avg_amount
       end
     end
 
