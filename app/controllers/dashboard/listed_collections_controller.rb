@@ -10,7 +10,11 @@ class Dashboard::ListedCollectionsController < Dashboard::BaseController
     @collection.list_on_trident! unless @collection.listed_on_trident?
     @collection.list! if @collection.may_list?
 
-    redirect_to dashboard_authorings_path(tab: :collections)
+    if @collection.listed?
+      redirect_to dashboard_authorings_path(tab: :collections), success: t('success_updated')
+    else
+      redirect_to dashboard_authorings_path(tab: :collections), warning: t('please_retry')
+    end
   end
 
   private

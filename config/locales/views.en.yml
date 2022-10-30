@@ -32,6 +32,7 @@ en:
   success_deleted: Successfully deleted
   success_paid: Payment received.
   failed_to_save: Failed to save
+  please_retry: Please retry
   read: Read
   write: Write
   search: Search

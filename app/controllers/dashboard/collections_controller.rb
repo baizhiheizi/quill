@@ -30,7 +30,20 @@ class Dashboard::CollectionsController < Dashboard::BaseController
   end
 
   def update
-    if @collection.update(collection_params)
+    @collection.assign_attributes collection_params
+
+    unless @collection.drafted?
+      Trident
+        .api
+        .update_collection(
+          @collection.uuid,
+          description: collection_params[:description],
+          external_url: collection_params[:external_url],
+          icon_url: @collection.cover.changed? ? @collection.cover_url : ''
+        )
+    end
+
+    if @collection.save
       redirect_to dashboard_authorings_path(tab: :collections), success: t('success_updated')
     else
       render :edit, status: :bad_request
