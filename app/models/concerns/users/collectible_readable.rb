@@ -20,22 +20,27 @@ module Users::CollectibleReadable
   end
 
   def mixin_api_collectibles(offset: nil)
-    QuillBot
-      .api
-      .collectibles(
-        members: [mixin_uuid],
-        threshold: 1,
-        offset: offset,
-        limit: 500,
-        access_token: mixin_access_token
-      )
+    api =
+      if messenger?
+        QuillBot.api
+      elsif mvm_eth?
+        authorization.mixin_api
+      end
+
+    api.collectibles(
+      members: [mixin_uuid],
+      threshold: 1,
+      offset: offset,
+      limit: 500,
+      access_token: mixin_access_token
+    )
   end
 
   def owner_of_collection?(collection_ids)
+    sync_collectibles_async
     collection_ids = [collection_ids] if collection_ids.is_a?(String)
 
     if messenger?
-      sync_collectibles_async
       collectibles.where(collection_id: collection_ids).present?
     elsif mvm_eth?
       uuids =
@@ -57,7 +62,7 @@ module Users::CollectibleReadable
   end
 
   def should_sync_collectibles?
-    return unless messenger?
+    return unless messenger? || mvm_eth?
 
     last_sync_at = Rails.cache.read("#{mixin_uuid}_last_sync_collectibles_at")
     return true if last_sync_at.blank?
@@ -66,7 +71,7 @@ module Users::CollectibleReadable
   end
 
   def sync_collectibles!(restart: false)
-    return unless messenger?
+    return unless messenger? || mvm_eth?
 
     offset =
       if restart
@@ -91,8 +96,7 @@ module Users::CollectibleReadable
           if collectible.blank?
             Collectible.find_or_create_by! token_id: c['token_id']
           else
-            collectible.update! token_id: c['token_id']
-            collectible.mint! if collectible.pending?
+            collectible.update! token_id: c['token_id'], state: :minted
           end
           non_fungible_outputs.create! raw: c
         end
