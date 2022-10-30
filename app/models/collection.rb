@@ -27,6 +27,7 @@
 class Collection < ApplicationRecord
   SUPPORTED_ASSETS = Settings.supported_assets || [Currency::BTC_ASSET_ID]
   MINIMUM_PRICE_USD = 0.1
+  DEFAULT_SPLIT = '0.1'
 
   include AASM
   include Collections::Payable
@@ -39,6 +40,7 @@ class Collection < ApplicationRecord
   has_one :nft_collection, primary_key: :uuid, foreign_key: :uuid, dependent: :restrict_with_exception, inverse_of: :collection
 
   has_many :collectings, dependent: :restrict_with_exception
+  has_many :collectibles, primary_key: :uuid, dependent: :restrict_with_exception
   has_many :validatable_collections, through: :collectings, source: :nft_collection
   has_many :articles, primary_key: :uuid, dependent: :restrict_with_exception
   has_many :orders, as: :item, dependent: :restrict_with_exception
@@ -81,7 +83,7 @@ class Collection < ApplicationRecord
       name: name,
       symbol: symbol,
       description: description,
-      split: 0.1,
+      split: DEFAULT_SPLIT,
       external_url: 'https://quill.im',
       icon_url: cover_url
     )
@@ -124,15 +126,42 @@ class Collection < ApplicationRecord
     cover.attach io: file, filename: "#{name}_cover"
   end
 
+  def generated_collectible_media_url(identifier)
+    grover_collection_collectible_url(
+      id,
+      identifier: identifier,
+      token: Rails.application.credentials.dig(:grover, :token),
+      format: :png
+    )
+  end
+
+  def qrcode_base64
+    ['data:image/png;base64, ',
+     Base64.encode64(
+       RQRCode::QRCode.new(
+         collection_url(uuid)
+       ).as_png(border_modules: 0).to_s
+     )].join
+  end
+
+  def mintable_order_from(user = nil)
+    return if user.blank?
+
+    order = orders.find_by buyer: user
+    return if order.blank?
+    return if order.collectible.present?
+
+    order
+  end
+
   def authorized?(user = nil)
     return if user.blank?
     return true if author == user
 
-    user
-      .collectibles
-      .where(
-        collection_id: validatable_collections.pluck(:uuid) + [uuid]
-      ).present?
+    order = orders.find_by buyer: user
+    return true if order.present? && (order.collectible.blank? || order.collectible.pending?)
+
+    user.owner_of_collection? validatable_collections.pluck(:uuid) + [uuid]
   end
 
   private

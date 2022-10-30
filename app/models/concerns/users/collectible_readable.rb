@@ -31,17 +31,37 @@ module Users::CollectibleReadable
       )
   end
 
-  def owner_of_collection?(collection_id)
+  def owner_of_collection?(collection_ids)
+    collection_ids = [collection_ids] if collection_ids.is_a?(String)
     if messenger?
-      sync_collectibles!
-      collectibles.where(collection_id: collection_id).present?
+      collectibles.where(collection_id: collection_ids).present?
+      sync_collectibles_async
     elsif mvm_eth?
-      contract = MVM.nft.contract_from_collection collection_id
-      MVM.scan.tokens(uid, type: 'ERC-721').filter(&->(token) { token['contractAddress'].downcase == contract.downcase }).present?
+      uuids =
+        Rails.cache.fetch "#{uid}_tokens_erc_721", expires_in: 1.minute do
+          tokens = MVM.scan.tokens(uid, type: 'ERC-721')
+          tokens.map(&->(token) { MVM.nft.collection_from_contract(token['contractAddress']) })
+        end
+      (uuids & collection_ids).present?
     end
   rescue StandardError => e
     Rails.logger.error e
     false
+  end
+
+  def sync_collectibles_async
+    return unless should_sync_collectibles?
+
+    UserSyncCollectiblesWorker.perform_async id
+  end
+
+  def should_sync_collectibles?
+    return unless messenger?
+
+    last_sync_at = Rails.cache.read("#{mixin_uuid}_last_sync_collectibles_at")
+    return true if last_sync_at.blank?
+
+    last_sync_at < 30.seconds.ago
   end
 
   def sync_collectibles!(restart: false)
@@ -89,5 +109,7 @@ module Users::CollectibleReadable
   rescue ActiveRecord::RecordNotUnique, ActiveRecord::RecordInvalid => e
     Rails.logger.error e
     false
+  ensure
+    Rails.cache.write "#{mixin_uuid}_last_sync_collectibles_at", Time.current
   end
 end

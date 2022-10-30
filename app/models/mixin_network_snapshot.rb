@@ -115,9 +115,17 @@ class MixinNetworkSnapshot < ApplicationRecord
       end
   end
 
+  def collectible
+    return unless (amount.to_f + Collectible::MINT_FEE).zero?
+    return unless asset_id == Collectible::MINT_ASSET_ID
+
+    nfo = MixinBot::Utils::Nfo.new(memo: data.to_s).decode
+    @collectible ||= Collectible.find_by metahash: nfo.extra
+  end
+
   def payment_memo_correct?
     decoded_memo.key?('t') &&
-      decoded_memo['t'].in?(%w[BUY REWARD CITE REVENUE]) &&
+      decoded_memo['t'].in?(%w[BUY REWARD CITE REVENUE MINT]) &&
       (decoded_memo.key?('a') || decoded_memo.key?('l'))
   end
 
@@ -132,6 +140,8 @@ class MixinNetworkSnapshot < ApplicationRecord
       process_4swap_snapshot
     elsif amount.positive?
       process_payment_snapshot
+    elsif collectible.present?
+      collectible.transfer_to_owner_async
     end
 
     touch_proccessed_at
@@ -172,11 +182,7 @@ class MixinNetworkSnapshot < ApplicationRecord
   end
 
   def process_async
-    if amount.negative?
-      touch_proccessed_at
-    else
-      ProcessMixinNetworkSnapshotWorker.perform_async id
-    end
+    ProcessMixinNetworkSnapshotWorker.perform_async id
   end
 
   def price_tag

@@ -1,0 +1,18 @@
+  <div class="w-[640px] h-[640px] bg-primary p-[40px]">
+    <div class="relative w-full h-full bg-[url('collection-nft-frame.svg')] bg-cover p-[44px]">
+      <%= image_tag "collection-nft-banner.png", class: "w-full h-[340px] object-cover block mb-[24px]" %>
+      <div class="flex justify-between">
+        <div class="flex-1">
+          <div class="font-black text-6xl font-sans mb-2">
+            NO.<%= @identifier.to_i < 10000 ? @identifier.to_s.rjust(4, "0") : @identifier %>
+          </div>
+          <div class="line-clamp-1 overflow-hidden opacity-60 text-2xl">
+            <%= @collection.name %>
+          </div>
+        </div>
+        <div class="pl-[50px]">
+          <img src="<%= @collection.qrcode_base64 %>", class="w-[108px] h-[108px] aspect-square">
+        </div>
+      </div>
+    </div>
+  </div>

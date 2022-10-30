@@ -87,7 +87,7 @@ class Payment < ApplicationRecord
 
   def memo_correct?
     decoded_memo.key?('t') &&
-      decoded_memo['t'].in?(%w[BUY REWARD CITE REVENUE]) &&
+      decoded_memo['t'].in?(%w[BUY REWARD CITE REVENUE MINT]) &&
       (decoded_memo.key?('a') || decoded_memo.key?('l'))
   end
 
@@ -151,7 +151,10 @@ class Payment < ApplicationRecord
 
     raise ActiveRecord::RecordInvalid, 'blocked by author' if collection.author.block_user?(payer)
 
-    if asset_id == collection.asset_id
+    if decoded_memo['t'] == 'MINT'
+      _order = collection.mintable_order_from payer
+      _order.mint! if _order&.may_mint?
+    elsif asset_id == collection.asset_id
       place_collection_order!
     elsif swappable?
       place_swap_order!

@@ -53,7 +53,8 @@ class Transfer < ApplicationRecord
     swap_refund: 6,
     fox_swap: 7,
     withdraw_balance: 8,
-    reference_revenue: 9
+    reference_revenue: 9,
+    mint_nft: 10
   }
 
   validates :trace_id, presence: true, uniqueness: true
@@ -86,23 +87,37 @@ class Transfer < ApplicationRecord
     return if processed?
 
     r =
-      if wallet.blank?
-        QuillBot.api.create_transfer(
+      if opponent_id.present?
+        if wallet.blank?
+          QuillBot.api.create_transfer(
+            Rails.application.credentials.dig(:quill_bot, :pin_code),
+            {
+              asset_id: asset_id,
+              opponent_id: opponent_id,
+              amount: amount,
+              trace_id: trace_id,
+              memo: memo
+            }
+          )
+        else
+          wallet.mixin_api.create_transfer(
+            wallet.pin,
+            {
+              asset_id: asset_id,
+              opponent_id: opponent_id,
+              amount: amount,
+              trace_id: trace_id,
+              memo: memo
+            }
+          )
+        end
+      elsif wallet.blank?
+        QuillBot.api.create_multisig_transaction(
           Rails.application.credentials.dig(:quill_bot, :pin_code),
           {
             asset_id: asset_id,
-            opponent_id: opponent_id,
-            amount: amount,
-            trace_id: trace_id,
-            memo: memo
-          }
-        )
-      elsif opponent_id.present?
-        wallet.mixin_api.create_transfer(
-          wallet.pin,
-          {
-            asset_id: asset_id,
-            opponent_id: opponent_id,
+            receivers: opponent_multisig['receivers'],
+            threshold: opponent_multisig['threshold'],
             amount: amount,
             trace_id: trace_id,
             memo: memo

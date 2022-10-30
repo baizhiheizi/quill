@@ -1,0 +1,19 @@
+<% order = collection.mintable_order_from current_user %>
+
+<div class="relative w-full lg:w-48 p-3 text-xl text-center rounded-full text-white bg-primary">
+  <span><%= t('mint_nft') %></span>
+  <%= form_for PreOrder.new(
+    order_type: :mint_collection,
+    item: collection,
+    asset_id: Collectible::MINT_ASSET_ID,
+    amount: Collectible::MINT_FEE
+  ) do |form| %>
+    <%= form.hidden_field :order_type %>
+    <%= form.hidden_field :item_id %>
+    <%= form.hidden_field :item_type %>
+    <%= form.hidden_field :asset_id %>
+    <%= form.hidden_field :amount %>
+    <%= form.hidden_field :type, value: current_user.default_payment %>
+    <%= form.submit '', class: "absolute inset-0 cursor-pointer" %>
+  <% end %>
+</div>

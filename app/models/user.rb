@@ -69,7 +69,7 @@ class User < ApplicationRecord
   has_one :notification_setting, dependent: :destroy
 
   has_many :non_fungible_outputs, primary_key: :mixin_uuid, dependent: :nullify
-  has_many :unspent_non_fungible_outputs, -> { where(state: :unspent) }, class_name: 'NonFungibleOutput', dependent: :restrict_with_exception, inverse_of: :user
+  has_many :unspent_non_fungible_outputs, -> { where(state: :unspent) }, primary_key: :mixin_uuid, class_name: 'NonFungibleOutput', dependent: :restrict_with_exception, inverse_of: :user
   has_many :collectibles, through: :unspent_non_fungible_outputs
 
   has_many :collections, primary_key: :mixin_uuid, foreign_key: :author_id, inverse_of: :author, dependent: :restrict_with_exception

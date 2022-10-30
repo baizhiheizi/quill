@@ -30,7 +30,7 @@ class PreOrder < ApplicationRecord
   extend Enumerize
   include AASM
 
-  enumerize :order_type, in: %i[buy_article reward_article buy_collection]
+  enumerize :order_type, in: %i[buy_article reward_article buy_collection mint_collection]
 
   belongs_to :item, polymorphic: true
   belongs_to :payer, class_name: 'User', primary_key: :mixin_uuid
@@ -103,7 +103,7 @@ class PreOrder < ApplicationRecord
       case order_type
       when 'reward_article'
         SecureRandom.uuid
-      when 'buy_article', 'buy_collection'
+      when 'buy_article', 'buy_collection', 'mint_collection'
         item.payment_trace_id payer
       end
     self.memo =
@@ -114,11 +114,12 @@ class PreOrder < ApplicationRecord
         Base64.urlsafe_encode64({ t: 'REWARD', a: item.uuid, f: follow_id }.to_json, padding: false)
       when 'buy_collection'
         Base64.urlsafe_encode64({ t: 'BUY', l: item.uuid, f: follow_id }.to_json, padding: false)
+      when 'mint_collection'
+        Base64.urlsafe_encode64({ t: 'MINT', l: item.uuid, f: follow_id }.to_json, padding: false)
       end
 
     self.payee_id =
-      case type
-      when 'MixpayPreOrder'
+      if type == 'MixpayPreOrder' || order_type == 'mint_collection'
         QuillBot.api.client_id
       else
         payer.wallet_id || item.wallet_id

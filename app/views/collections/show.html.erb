@@ -25,6 +25,8 @@
       </div>
 
       <%= render "collections/price", collection: @collection unless @collection.authorized?(current_user) %>
+
+      <%= render "collections/mint", collection: @collection if @collection.mintable_order_from(current_user).present? %>
     </div>
   </div>
 
