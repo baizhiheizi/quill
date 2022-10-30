@@ -10,7 +10,7 @@
 
 <div class="relative w-full lg:w-48 p-3 text-xl text-center rounded-full text-white bg-primary">
   <span><%= t('buy_collection') %></span>
-  <% if current_user.present? %>
+  <% if current_user.present? && !current_user.fennec? %>
     <%= form_for PreOrder.new(
       order_type: :buy_collection,
       item: collection,
