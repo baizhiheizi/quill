@@ -4,6 +4,7 @@
 set -e
 
 npm install
+npm install -g puppeteer --unsafe-perm=true --allow-root
 bundle install
 
 # compile assets
@@ -12,4 +13,4 @@ npm run build:css
 bundle exec bin/rails assets:precompile
 
 # clean assets
-bundle exec bin/rails assets:clean
+# bundle exec bin/rails assets:clean
