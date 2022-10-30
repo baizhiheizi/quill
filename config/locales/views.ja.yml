@@ -32,6 +32,7 @@ ja:
   success_deleted: 正常に削除されました
   success_paid: 正常に支払いました、ありがとうございます！
   failed_to_save: 保存に失敗しました
+  please_retry: Please retry
   read: 記事を読む
   write: 記事を作成
   search: 検索
