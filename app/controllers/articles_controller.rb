@@ -32,7 +32,7 @@ class ArticlesController < ApplicationController
     if @article&.authorized?(current_user) || @article&.may_buy_by?(current_user)
       @page_title = "#{@article.title} - #{@article.author.name}"
       @page_description = @article.intro
-      @page_image = @article.author.avatar
+      @page_image = @article.poster_url
     else
       redirect_back fallback_location: root_path
     end

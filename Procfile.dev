@@ -2,5 +2,5 @@
 web: bundle exec rails s -p 3000 -b 0.0.0.0
 mixin_blaze: bin/rails r 'MixinNetworkSnapshot.poll'
 sidekiq: bundle exec sidekiq
-css: npm run build:css:watch
-js: npm run build:watch
+css: yarn build:css:watch
+js: yarn build:watch

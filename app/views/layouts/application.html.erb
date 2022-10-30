@@ -2,7 +2,7 @@
 <% @page_title = @page_title.present? ? format('%<title>s | %<default>s', title: @page_title, default: Settings.page_title) : Settings.page_title %>
 <% @page_description ||= Settings.page_description %>
 <% @page_keywords ||= Settings.page_keywords %>
-<% @page_image ||= asset_url(Settings.icon_file || 'icon.png') %>
+<% @page_image ||= asset_url('article-poster-bg.png') %>
 
 <html>
   <head>
@@ -17,9 +17,13 @@
     <meta name='keywords' content="<%= @page_keywords %>">
     <meta name='description' content="<%= @page_description %>">
 
-    <meta name="twitter:card" content="summary">
+    <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:site" content="@<%= Settings.twitter_account %>" />
     <meta name="twitter:creator" content="@<%= Settings.twitter_account %>" />
+    <meta name="twitter:title" content="<%= @page_title %>">
+    <meta name="twitter:description" content="<%= @page_description %>">
+    <meta name="twitter:image" content="<%= @page_image %>">
+
     <meta property="og:url" content="<%= request.original_url %>" />
     <meta property="og:title" content="<%= @page_title %>" />
     <meta property="og:description" content="<%= @page_description %>" />

@@ -3,13 +3,12 @@
 # throw error when failed
 set -e
 
-npm install
-npm install -g puppeteer --unsafe-perm=true --allow-root
+yarn install
 bundle install
 
 # compile assets
-npm run build
-npm run build:css
+yarn build
+yarn build:css
 bundle exec bin/rails assets:precompile
 
 # clean assets
