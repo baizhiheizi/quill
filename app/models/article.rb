@@ -431,6 +431,10 @@ class Article < ApplicationRecord
     poster.attach io: file, filename: "#{title}_poster"
   end
 
+  def generate_poster_async
+    ArticleGeneratePosterWorker.perform_async id
+  end
+
   def qrcode_base64
     ['data:image/png;base64, ',
      Base64.encode64(
