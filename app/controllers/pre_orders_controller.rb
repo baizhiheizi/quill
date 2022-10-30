@@ -11,7 +11,8 @@ class PreOrdersController < ApplicationController
         if @pre_order.blank?
           redirect_to root_path
         elsif @pre_order.item.authorized?(current_user)
-          redirect_to user_article_path(@pre_order.item.author, @pre_order.item)
+          redirect_to user_article_path(@pre_order.item.author, @pre_order.item) if @pre_order.item.is_a?(Article)
+          redirect_to collection_path(@pre_order.item.uuid) if @pre_order.item.is_a?(Collection)
         else
           render :show
         end
@@ -45,7 +46,8 @@ class PreOrdersController < ApplicationController
       if @pre_order.blank?
         root_path
       elsif @pre_order.paid? && @pre_order.item.authorized?(current_user)
-        user_article_path @pre_order.item.author, @pre_order.item
+        user_article_path @pre_order.item.author, @pre_order.item if @pre_order.item.is_a?(Article)
+        collection_path @pre_order.item.uuid if @pre_order.item.is_a?(Collection)
       end
 
     render json: {

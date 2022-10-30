@@ -29,6 +29,7 @@ class SessionsController < ApplicationController
     if user.present?
       user_sign_in user.sessions.create!(info: { request: request_info })
       user.notify_for_login
+      user.sync_collectibles_async
       redirect_to (params[:return_to].presence || root_path), success: t('connected')
     else
       redirect_to (params[:return_to].presence || root_path), alert: t('failed_to_connect')

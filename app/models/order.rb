@@ -35,6 +35,7 @@ class Order < ApplicationRecord
 
   include AASM
   include Orders::Distributable
+  include Orders::Mintable
 
   belongs_to :buyer, class_name: 'User'
   belongs_to :seller, class_name: 'User'
@@ -43,7 +44,8 @@ class Order < ApplicationRecord
   belongs_to :payment, foreign_key: :trace_id, primary_key: :trace_id, inverse_of: :order
   belongs_to :currency, primary_key: :asset_id, foreign_key: :asset_id, inverse_of: :orders
 
-  has_many :transfers, as: :source, dependent: :nullify
+  has_many :transfers, as: :source, dependent: :restrict_with_exception
+  has_one :collectible, as: :source, dependent: :restrict_with_exception
 
   before_validation :setup_attributes, on: :create
 
