@@ -1,0 +1,39 @@
+<%= form_with model: @collecting, 
+  url: dashboard_collection_collectings_path(@collecting.collection),
+  html: {
+    class: "mb-8"
+  } do |form| %>
+  <div class="mb-4">
+    <div class="text-sm text-primary mb-2">
+      <%= t('collecting_introduction') %>
+    </div>
+    <div class="flex items-center space-x-4">
+      <%= form.text_field :nft_collection_id, placeholder: 'UUID', class: "focus:ring-blue-500 focus:border-blue-500 flex-1 block w-full rounded bg-[#F4F4F4] border-[#F4F4F4] dark:border-white dark:border-opacity-5 dark:bg-[#333444]" %>
+      <%= form.submit t('add'), class: "block p-2 rounded bg-primary text-white cursor-pointer" %>
+    </div>
+  </div>
+<% end %>
+
+<% @collecting.collection.collectings.each do |collecting| %>
+  <% next unless collecting.persisted? %>
+
+  <div class="flex items-center space-x-4 justify-between">
+    <div class="flex items-center space-x-4">
+      <%= image_tag collecting.nft_collection.icon_url, class: "w-12 h-12" %>
+      <div class="">
+        <%= collecting.nft_collection.name %>
+      </div>
+    </div>
+    <div class="flex items-center space-x-4">
+      <%= link_to collecting.nft_collection.trident_url, target: '_blank' do %>
+        <%= inline_svg_tag "icons/external-link.svg", class: "w-6 h-6 text-primary" %>
+      <% end %>
+      <%= link_to dashboard_collection_collecting_path(@collecting.collection, collecting), 
+        data: { 
+          turbo_method: :delete 
+        } do %>
+        <%= inline_svg_tag "icons/delete.svg", class: "w-6 h-6 text-red-500" %>
+      <% end %>
+    </div>
+  </div>
+<% end %>

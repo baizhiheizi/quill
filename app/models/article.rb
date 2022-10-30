@@ -179,7 +179,7 @@ class Article < ApplicationRecord
     return true if (published? && free?) || author == user
     return if user.blank?
 
-    orders.find_by(buyer: user).present? || collection&.authorized?(user)
+    orders.where(order_type: :buy_article).find_by(buyer: user).present? || collection&.authorized?(user)
   end
 
   def update_revenue

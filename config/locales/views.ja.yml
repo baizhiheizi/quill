@@ -15,6 +15,8 @@ ja:
   save: 保存
   paid: 支払い済み
   delete: 削除
+  add: Add
+  remove: Remove
   pay: 支払う
   pay_with_mixin: Linksで支払う
   pay_with_fennec: Fennecで支払う
@@ -334,3 +336,5 @@ ja:
   hide_collection_tips: You are hiding your collection. Once hidden, readers may not buy this collection.
   article_collection_introduction: |
     This article is belong to this collection. You may buy the collection to read all articles in it and receive collection revenue. <span class="font-bold text-red-500 text-lg">%<orders_count>s</span> readers have subscribed this collection, sharing <span class="font-bold text-red-500 text-lg">%<revenue_ratio>s</span> of revenue.
+  collecting_introduction: You can add extra NFT collections to autorize the owners to access your content for free. But they will not share the colletion revenue.
+  validatable_collections_introduction: You are free to access this colletion if your are NFT holder of any colletions below.

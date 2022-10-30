@@ -42,7 +42,7 @@ class NftCollection < ApplicationRecord
   end
 
   def icon_url
-    icon['url']
+    icon['url'] || format('https://api.multiavatar.com/%<uuid>s.png', uuid: uuid)
   end
 
   private
