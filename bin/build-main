@@ -3,12 +3,12 @@
 # throw error when failed
 set -e
 
-yarn install
+npm install
 bundle install
 
 # compile assets
-yarn build
-yarn build:css
+npm run build
+npm run build:css
 bundle exec bin/rails assets:precompile
 
 # clean assets
