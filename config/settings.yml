@@ -27,9 +27,9 @@ supported_assets:
 
 # whitelist
 whitelist:
-  enable: false
-  phone_country_code: 
+  enable: true
   mixin_id:
+    - 7ed9292d-7c95-4333-aa48-a8c640064186
 
 # 4swap
 foxswap:
