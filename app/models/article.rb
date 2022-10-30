@@ -400,7 +400,7 @@ class Article < ApplicationRecord
         locales.reject(&->(l) { l == 'en' }).last
       end
     else
-      'un'
+      author.locale
     end
   end
 
