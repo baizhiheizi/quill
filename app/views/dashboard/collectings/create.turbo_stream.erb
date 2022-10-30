@@ -1,0 +1,3 @@
+<%= turbo_stream.update "#{dom_id @collection}_collectings" do %>
+  <%= render Collectings::FormComponent.new @collection.collectings.new %>
+<% end %>

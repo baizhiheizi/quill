@@ -15,6 +15,8 @@ zh-CN:
   save: 保存
   paid: 支付了
   delete: 删除
+  add: 增加
+  remove: 移除
   pay: 支付
   pay_with_mixin: Mixin 支付
   pay_with_fennec: Fennec 支付
@@ -343,3 +345,5 @@ zh-CN:
   list_collection_from_drafted_tips: 你正在首次上架合辑，成功后合辑名称、简称和收益比例将不可修改。
   hide_collection_tips: 你正在下架合辑，读者们将无法购买该合辑。
   article_collection_introduction: '本文属于以下合辑，购买合辑可以解锁合辑内所有文章并获得合辑收益。<span class="font-bold text-red-500 text-lg">%<orders_count>s</span> 人已经购买，共享 <span class="font-bold text-red-500 text-lg">%<revenue_ratio>s</span> 收益。'
+  collecting_introduction: 你可以添加更多其他任意的 NFT 合辑，以便其持有者可以免费阅读你的文章，但是这些持有者没有合辑收益权。
+  validatable_collections_introduction: 以下 NFT 合辑的持有者可以免费阅读本合辑所有文章

@@ -1,63 +1,78 @@
 <div class="max-w-full">
-  <div class="lg:grid grid-cols-2 lg:gap-8 mb-12">
-    <div class="w-full mb-8 lg:mb-0">
-      <%= image_tag @collection.cover_url, class: "object-contain object-center w-full rounded-2xl" %>
-    </div>
-    <div class="lg:order-first">
-      <div class="flex items-start space-x-4 justify-between">
-        <div class="font-semibold text-2xl lg:text-3xl mb-6 text-ellipsis overflow-hidden">
-          <%= @collection.name %>
+  <div class="mb-12">
+    <div class="lg:grid grid-cols-2 lg:gap-8 mb-4">
+      <div class="w-full mb-8 lg:mb-0">
+        <%= image_tag @collection.cover_url, class: "object-contain object-center w-full rounded-2xl" %>
+      </div>
+      <div class="lg:order-first">
+        <div class="flex items-start space-x-4 justify-between">
+          <div class="font-semibold text-2xl lg:text-3xl mb-6 text-ellipsis overflow-hidden">
+            <%= @collection.name %>
+          </div>
+          <div class="hidden sm:flex justify-end">
+            <%= link_to collection_share_path(@collection.uuid), 
+              data: {
+                turbo_frame: :modal
+              },
+              class: "flex items-center space-x-1" do %>
+              <%= inline_svg_tag 'icons/share-solid.svg', class: 'w-5 h-5 lg:w-6 lg:h-6 text-primary' %>
+            <% end %>
+          </div>
         </div>
-        <div class="hidden sm:flex justify-end">
-          <%= link_to collection_share_path(@collection.uuid), 
-            data: {
-              turbo_frame: :modal
-            },
-            class: "flex items-center space-x-1" do %>
-            <%= inline_svg_tag 'icons/share-solid.svg', class: 'w-5 h-5 lg:w-6 lg:h-6 text-primary' %>
+
+        <div class="flex items-center space-x-2 w-36 mb-6">
+          <%= image_tag @collection.author.avatar, class: "w-10 h-10 rounded-full" %>
+          <div class="truncate">
+            <div class="text-lg font-bold truncate overflow-hidden">
+              <%= @collection.author.name %>
+            </div>
+            <div class="text-sm opacity-75">
+              @<%= @collection.author.short_uid %>
+            </div>
+          </div>
+        </div>
+
+        <div class="opacity-70 mb-8">
+          <%= @collection.description %>
+        </div>
+
+        <div class="grid grid-cols-2 gap-4 mb-8">
+          <div class="bg-[#F4F4F4] dark:bg-[#333444] text-center rounded p-3">
+            <div class="text-2xl font-black mb-2">
+              <%= (@collection.revenue_ratio * 100).floor(2) %>%
+            </div>
+            <div class="text-sm opacity-80">
+              <%= t('collection_revenue') %>
+            </div>
+          </div>
+          <div class="bg-[#F4F4F4] dark:bg-[#333444] text-center rounded p-2">
+            <div class="text-2xl font-black mb-2">
+              <%= @collection.orders_count %>
+            </div>
+            <div class="text-sm opacity-80">
+              <%= t('subscribers') %>
+            </div>
+          </div>
+        </div>
+
+        <%= render "collections/price", collection: @collection unless @collection.authorized?(current_user) %>
+
+        <%= render "collections/mint", collection: @collection if @collection.mintable_order_from(current_user).present? %>
+      </div>
+    </div>
+
+    <% if @collection.validatable_collections.present? %>
+      <div class="mb-2 text-sm opacity-75">
+        <%= t('validatable_collections_introduction') %>
+      </div>
+      <div class="flex items-center space-x-4 overflow-x-scroll scrollbar-hide">
+        <% @collection.validatable_collections.each do |nft_collection| %>
+          <%= link_to nft_collection.trident_url, target: "_blank" do %>
+            <%= image_tag nft_collection.icon_url, class: "w-16 h-16 object-cover rounded shadow" %>
           <% end %>
-        </div>
+        <% end %>
       </div>
-
-      <div class="flex items-center space-x-2 w-36 mb-6">
-        <%= image_tag @collection.author.avatar, class: "w-10 h-10 rounded-full" %>
-        <div class="truncate">
-          <div class="text-lg font-bold truncate overflow-hidden">
-            <%= @collection.author.name %>
-          </div>
-          <div class="text-sm opacity-75">
-            @<%= @collection.author.short_uid %>
-          </div>
-        </div>
-      </div>
-
-      <div class="opacity-70 mb-8">
-        <%= @collection.description %>
-      </div>
-
-      <div class="grid grid-cols-2 gap-4 mb-8">
-        <div class="bg-[#F4F4F4] dark:bg-[#333444] text-center rounded p-3">
-          <div class="text-2xl font-black mb-2">
-            <%= (@collection.revenue_ratio * 100).floor(2) %>%
-          </div>
-          <div class="text-sm opacity-80">
-            <%= t('collection_revenue') %>
-          </div>
-        </div>
-        <div class="bg-[#F4F4F4] dark:bg-[#333444] text-center rounded p-2">
-          <div class="text-2xl font-black mb-2">
-            <%= @collection.orders_count %>
-          </div>
-          <div class="text-sm opacity-80">
-            <%= t('subscribers') %>
-          </div>
-        </div>
-      </div>
-
-      <%= render "collections/price", collection: @collection unless @collection.authorized?(current_user) %>
-
-      <%= render "collections/mint", collection: @collection if @collection.mintable_order_from(current_user).present? %>
-    </div>
+    <% end %>
   </div>
 
   <%= turbo_frame_tag "articles" do %>

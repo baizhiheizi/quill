@@ -1,4 +1,7 @@
     <%= form_for [:dashboard, @collection], 
+      html: {
+        class: "mb-12"
+      },
       data: { 
         controller: "collections-form-component",
         collections_form_component_currencies_value: Currency.pricable.to_json(only: %i[asset_id symbol price_usd]),
@@ -47,7 +50,7 @@
     <% if form.object.errors.where(:revenue_ratio).present? %>
       <div class="py-2 text-red-700 text-sm"><%= form.object.errors.where(:revenue_ratio).map(&:full_message).join(';') %></div>
     <% end %>
-    <div class="py-2 text-blue-700 text-sm">
+    <div class="py-2 text-primary text-sm">
       <%= t('collection_revenue_ratio_tips') %>
     </div>
   </div>
@@ -92,5 +95,11 @@
   <div class="mt-8 flex items-center space-x-4 justify-end">
     <%= link_to t('back'), dashboard_authorings_path(tab: :collections), class: "block py-2 px-8 rounded-full border border-primary text-primary text-center" %>
     <%= form.submit t('save'), class: "block py-2 px-8 rounded-full bg-primary text-white cursor-pointer" %>
+  </div>
+<% end %>
+
+<% if @collection.listed_on_trident? %>
+  <div id="<%= dom_id @collection %>_collectings">
+    <%= render Collectings::FormComponent.new @collection.collectings.new %>
   </div>
 <% end %>
