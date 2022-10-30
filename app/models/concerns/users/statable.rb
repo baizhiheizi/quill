@@ -78,15 +78,7 @@ module Users::Statable
   def accessable?
     return true unless Settings.whitelist&.enable
 
-    mixin_id_in_whitelist? || phone_country_code_in_whitelist?
-  end
-
-  def mixin_id_in_whitelist?
-    mixin_id.in? (Settings.whitelist&.mixin_id || []).map(&:to_s)
-  end
-
-  def phone_country_code_in_whitelist?
-    Regexp.new("^\\+?(#{Settings.whitelist&.phone_country_code&.join('|')})\\d+").match? phone
+    mixin_uuid.in? (Settings.whitelist&.mixin_id || []).map(&:to_s)
   end
 
   def may_claim_faucet?
