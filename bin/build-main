@@ -3,6 +3,10 @@
 # throw error when failed
 set -e
 
+# chinese font support
+sudo apt-get install language-pack-zh*
+sudo apt-get install chinese*
+
 bundle install
 yarn install
 yarn global add puppeteer
