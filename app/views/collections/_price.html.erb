@@ -23,15 +23,15 @@
       <%= form.hidden_field :asset_id %>
       <%= form.hidden_field :amount %>
       <%= form.hidden_field :type, value: current_user.default_payment %>
-      <%= form.submit '', class: "absolute inset-0 cursor-pointer" %>
+      <%= form.submit '', class: "absolute inset-0 cursor-pointer w-full" %>
     <% end %>
   <% elsif from_mixin_messenger? %>
-    <%= link_to '', login_path(return_to: collection_url(collection)), class: "absolute inset-0" %>
+    <%= link_to '', login_path(return_to: collection_url(collection.uuid)), class: "block absolute inset-0" %>
   <% else %>
-    <%= link_to '', login_path(return_to: collection_url(collection)),
+    <%= link_to '', login_path(return_to: collection_url(collection.uuid)),
       data: { 
         turbo_frame: :modal
       },
-    class: "absolute inset-0" %>
+    class: "block absolute inset-0" %>
   <% end %>
 </div>

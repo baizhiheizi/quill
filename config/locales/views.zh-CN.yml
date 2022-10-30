@@ -103,6 +103,7 @@ zh-CN:
   author_revenue: 作者收益
   readers_revenue: 读者收益
   references_revenue: 引用收益
+  collection_revenue: 合辑收益
   revenue_chart: 平台收益曲线(USD)
   transactions: 转账记录
   rules_content: |
@@ -340,4 +341,4 @@ zh-CN:
   list_collection_from_hidden_tips: 你正在上架合辑，读者们将可以购买该合辑。
   list_collection_from_drafted_tips: 你正在首次上架合辑，成功后合辑名称、简称和收益比例将不可修改。
   hide_collection_tips: 你正在下架合辑，读者们将无法购买该合辑。
-  article_collection_introduction: 本文属于以下合辑，购买合辑可以解锁合辑内所有文章并获得合辑收益
+  article_collection_introduction: '本文属于以下合辑，购买合辑可以解锁合辑内所有文章并获得合辑收益。<span class="font-bold text-red-500 text-lg">%<orders_count>s</span> 人已经购买，共享 <span class="font-bold text-red-500 text-lg">%<revenue_ratio>s</span> 收益。'

@@ -46,8 +46,12 @@ class PreOrdersController < ApplicationController
       if @pre_order.blank?
         root_path
       elsif @pre_order.paid? && @pre_order.item.authorized?(current_user)
-        user_article_path @pre_order.item.author, @pre_order.item if @pre_order.item.is_a?(Article)
-        collection_path @pre_order.item.uuid if @pre_order.item.is_a?(Collection)
+        case @pre_order.item
+        when Article
+          user_article_path @pre_order.item.author, @pre_order.item
+        when Collection
+          collection_path @pre_order.item.uuid
+        end
       end
 
     render json: {
