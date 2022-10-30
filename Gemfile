@@ -15,7 +15,7 @@ gem 'pg'
 gem 'pghero'
 
 # Use Puma as the app server
-gem 'puma', '< 6'
+gem 'puma'
 
 # Deliver assets for Rails
 gem 'propshaft'
