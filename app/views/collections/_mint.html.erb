@@ -1,6 +1,6 @@
 <% order = collection.mintable_order_from current_user %>
 
-<div class="relative w-full lg:w-48 p-3 text-xl text-center rounded-full text-white bg-primary">
+<div class="relative w-full lg:w-48 p-3 text-xl text-center rounded-full text-white bg-primary mb-6">
   <span><%= t('mint_nft') %></span>
   <%= form_for PreOrder.new(
     order_type: :mint_collection,

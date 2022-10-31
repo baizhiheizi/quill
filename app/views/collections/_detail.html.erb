@@ -1,0 +1,94 @@
+<div class="flex items-start space-x-4 justify-between">
+  <div class="flex-1 font-semibold text-2xl lg:text-3xl mb-6 text-ellipsis overflow-hidden">
+    <%= collection.name %>
+  </div>
+  <div class="hidden sm:flex justify-end">
+    <%= link_to collection_share_path(collection.uuid), 
+      data: {
+        turbo_frame: :modal
+      },
+      class: "flex items-center space-x-1" do %>
+      <%= inline_svg_tag 'icons/share-solid.svg', class: 'w-5 h-5 lg:w-6 lg:h-6 text-primary' %>
+    <% end %>
+  </div>
+</div>
+
+<div class="flex items-center space-x-2 w-36 mb-6">
+  <%= image_tag collection.author.avatar, class: "w-10 h-10 rounded-full" %>
+  <div class="truncate">
+    <div class="font-bold truncate overflow-hidden">
+      <%= collection.author.name %>
+    </div>
+    <div class="text-xs opacity-75">
+      @<%= collection.author.short_uid %>
+    </div>
+  </div>
+</div>
+
+<div class="mb-6">
+  <div class="flex items-center space-x-2 mb-4">
+    <%= image_tag collection.currency.icon_url, class: "w-6 h-6 rounded-full" %>
+    <div class="">
+      <span class="text-xl font-bold font-serif"><%= collection.price_tag %></span>
+      <span class="text-sm opacity-60">
+        ≈$<%= collection.price_usd %>
+      </span>
+    </div>
+  </div>
+
+  <% if collection.authorized?(current_user) %>
+    <div class="relative flex items-center space-x-1 justify-end">
+      <%= inline_svg_tag "icons/check-circle-solid.svg", class: "w-6 h-6 text-green-500" %>
+      <span class="opacity-75"><%= t('subscribed') %></span>
+    </div>
+  <% else %>
+    <div class="relative w-full lg:w-48 p-3 text-xl text-center rounded-full text-white bg-primary">
+      <span><%= t('buy_collection') %></span>
+      <% if current_user.present? && !current_user.fennec? %>
+        <%= form_for PreOrder.new(
+          order_type: :buy_collection,
+          item: collection,
+          asset_id: collection.asset_id,
+          amount: collection.price
+        ) do |form| %>
+          <%= form.hidden_field :order_type %>
+          <%= form.hidden_field :item_id %>
+          <%= form.hidden_field :item_type %>
+          <%= form.hidden_field :asset_id %>
+          <%= form.hidden_field :amount %>
+          <%= form.hidden_field :type, value: current_user.default_payment %>
+          <%= form.submit '', class: "absolute inset-0 cursor-pointer w-full" %>
+        <% end %>
+      <% elsif from_mixin_messenger? %>
+        <%= link_to '', login_path(return_to: collection_url(collection.uuid)), class: "block absolute inset-0" %>
+      <% else %>
+        <%= link_to '', login_path(return_to: collection_url(collection.uuid)),
+          data: { 
+            turbo_frame: :modal
+          },
+        class: "block absolute inset-0" %>
+      <% end %>
+    </div>
+  <% end %>
+</div>
+
+<%= render "collections/mint", collection: collection if collection.mintable_order_from(current_user).present? %>
+
+<div class="grid grid-cols-2 gap-4">
+  <div class="bg-[#F4F4F4] dark:bg-[#333444] text-center rounded p-3">
+    <div class="text-2xl font-black mb-2">
+      <%= (collection.revenue_ratio * 100).floor(2) %>%
+    </div>
+    <div class="text-sm opacity-80">
+      <%= t('collection_revenue') %>
+    </div>
+  </div>
+  <div class="bg-[#F4F4F4] dark:bg-[#333444] text-center rounded p-3">
+    <div class="text-2xl font-black mb-2">
+      <%= collection.orders_count %>
+    </div>
+    <div class="text-sm opacity-80">
+      <%= t('subscribers') %>
+    </div>
+  </div>
+</div>

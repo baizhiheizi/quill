@@ -347,3 +347,6 @@ zh-CN:
   article_collection_introduction: '本文属于以下合辑，购买合辑可以解锁合辑内所有文章并获得合辑收益。<span class="font-bold text-red-500 text-lg">%<orders_count>s</span> 人已经购买，共享 <span class="font-bold text-red-500 text-lg">%<revenue_ratio>s</span> 收益。'
   collecting_introduction: 你可以添加更多其他任意的 NFT 合辑，以便其持有者可以免费阅读你的文章，但是这些持有者没有合辑收益权。
   validatable_collections_introduction: 以下 NFT 合辑的持有者可以免费阅读本合辑所有文章
+  collection_introduction: 合辑简介
+  buy_collection: 订阅合辑
+  mint_collection: 铸造 NFT

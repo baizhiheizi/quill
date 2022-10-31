@@ -88,9 +88,11 @@ class Collection < ApplicationRecord
       icon_url: cover_url
     )
 
-    update! uuid: r['id']
-    list!
-    NftCollection.create! uuid: r['id'], raw: r
+    ActiveRecord::Base.transaction do
+      update! uuid: r['id']
+      list!
+      NftCollection.create! uuid: r['id'], raw: r
+    end
   end
 
   def may_destroy?
