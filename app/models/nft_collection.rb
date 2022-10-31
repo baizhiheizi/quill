@@ -18,7 +18,7 @@
 class NftCollection < ApplicationRecord
   store_accessor :raw, %i[name description symbol icon]
 
-  belongs_to :collection, primary_key: :uuid, foreign_key: :uuid, inverse_of: :nft_collection
+  belongs_to :collection, primary_key: :uuid, foreign_key: :uuid, inverse_of: :nft_collection, optional: true
   has_many :collectibles, dependent: :restrict_with_exception
 
   before_validation :setup_default_attributes
