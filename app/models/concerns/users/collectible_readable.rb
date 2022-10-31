@@ -63,6 +63,7 @@ module Users::CollectibleReadable
 
   def should_sync_collectibles?
     return unless messenger? || mvm_eth?
+    return unless collectible_readable?
 
     last_sync_at = Rails.cache.read("#{mixin_uuid}_last_sync_collectibles_at")
     return true if last_sync_at.blank?
