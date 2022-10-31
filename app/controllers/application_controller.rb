@@ -3,6 +3,7 @@
 class ApplicationController < ActionController::Base
   include Pagy::Backend
   include Localizable
+  include RenderingHelper
 
   before_action :ensure_launched!
 
