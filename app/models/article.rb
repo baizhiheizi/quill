@@ -417,9 +417,12 @@ class Article < ApplicationRecord
   end
 
   def poster_url
-    return unless poster.attached?
-
-    [Settings.storage.endpoint, poster.key].join('/')
+    if poster.attached?
+      [Settings.storage.endpoint, poster.key].join('/')
+    else
+      generate_poster_async
+      nil
+    end
   end
 
   def generated_poster_url
