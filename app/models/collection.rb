@@ -91,8 +91,6 @@ class Collection < ApplicationRecord
     update! uuid: r['id']
     list!
     NftCollection.create! uuid: r['id'], raw: r
-  rescue StandardError
-    false
   end
 
   def may_destroy?
