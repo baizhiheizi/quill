@@ -4,10 +4,10 @@ module Trident
   def self.api
     TridentAssistant::API.new(
       keystore: {
-        client_id: QuillBot.api.client_id,
-        session_id: QuillBot.api.session_id,
-        pin_token: Base64.strict_encode64(QuillBot.api.pin_token),
-        private_key: Base64.strict_encode64(QuillBot.api.private_key),
+        client_id: Rails.application.credentials.dig(:quill_bot, :client_id),
+        session_id: Rails.application.credentials.dig(:quill_bot, :session_id),
+        pin_token: Rails.application.credentials.dig(:quill_bot, :pin_token),
+        private_key: Rails.application.credentials.dig(:quill_bot, :private_key),
         pin: Rails.application.credentials.dig(:quill_bot, :pin_code)
       }.to_json
     )
