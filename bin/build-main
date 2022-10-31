@@ -5,7 +5,6 @@ set -e
 
 bundle install
 yarn install
-yarn global add puppeteer
 
 # compile assets
 yarn build
