@@ -1,0 +1,15 @@
+<% if collection.nft_collection.present? %>
+  <div class="mb-2 text-sm opacity-75">
+    <%= t('validatable_collections_introduction') %>
+    <% if current_user.messenger? %>
+      (<%= link_to t('click_to_validate'), mixin_login_path(return_to: collection_path(collection.uuid)), class: "text-primary" %>)
+    <% end %>
+  </div>
+  <div class="flex items-center space-x-4 overflow-x-scroll scrollbar-hide">
+    <% NftCollection.where(uuid: [collection.uuid] + collection.validatable_collections.pluck(:uuid) ).each do |nft_collection| %>
+      <%= link_to nft_collection.trident_url, target: "_blank" do %>
+        <%= image_tag nft_collection.icon_url, class: "w-16 h-16 object-cover rounded shadow" %>
+      <% end %>
+    <% end %>
+  </div>
+<% end %>

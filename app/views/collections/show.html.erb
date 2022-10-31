@@ -18,18 +18,7 @@
       </div>
     </div>
 
-    <% if @collection.validatable_collections.present? %>
-      <div class="mb-2 text-sm opacity-75">
-        <%= t('validatable_collections_introduction') %>
-      </div>
-      <div class="flex items-center space-x-4 overflow-x-scroll scrollbar-hide">
-        <% @collection.validatable_collections.each do |nft_collection| %>
-          <%= link_to nft_collection.trident_url, target: "_blank" do %>
-            <%= image_tag nft_collection.icon_url, class: "w-16 h-16 object-cover rounded shadow" %>
-          <% end %>
-        <% end %>
-      </div>
-    <% end %>
+    <%= render "collections/validatable_collections", collection: @collection %>
   </div>
 
   <%= turbo_frame_tag "articles" do %>

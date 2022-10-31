@@ -8,12 +8,19 @@
       <%= render "articles/content", article: @article, user: current_user %>
     </div>
 
-    <div id="article_<%= @article.uuid %>_buyers" class="mb-16">
+    <div id="article_<%= @article.uuid %>_buyers" class="mb-12">
       <%= render "articles/buyers", article: @article, user: current_user %>
     </div>
   </div>
 
-  <%= render "collections/card", collection: @article.collection if @article.collection.present? %>
+  <% if @article.collection.present? %>
+    <div class="mb-12">
+      <div class="bg-[#F4F4F4] dark:bg-[#333444] py-4 px-6 rounded-lg mb-6">
+        <%= render "collections/validatable_collections", collection: @article.collection %>
+      </div>
+      <%= render "collections/card", collection: @article.collection %>
+    </div>
+  <% end %>
 
   <div data-controller="comment-form">
     <% if browser.device.mobile? %>
