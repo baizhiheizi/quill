@@ -1,7 +1,7 @@
 <% if collection.nft_collection.present? %>
   <div class="mb-2 text-sm opacity-75">
     <%= t('validatable_collections_introduction') %>
-    <% if current_user.messenger? %>
+    <% if current_user.blank? || current_user.messenger? %>
       (<%= link_to t('click_to_validate'), mixin_login_path(return_to: collection_path(collection.uuid)), class: "text-primary" %>)
     <% end %>
   </div>
