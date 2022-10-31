@@ -46,6 +46,8 @@ class Collectible < ApplicationRecord
   validates :metahash, presence: true
   validates :collection_id, presence: true
 
+  after_create_commit :mint_async
+
   aasm column: :state do
     state :pending, initial: true
     state :minted
@@ -65,6 +67,8 @@ class Collectible < ApplicationRecord
   end
 
   def mint_async
+    return if collection.blank?
+
     CollectibleMintWorker.perform_async id
   end
 

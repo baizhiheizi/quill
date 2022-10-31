@@ -95,7 +95,7 @@ module Users::CollectibleReadable
           token = QuillBot.api.collectible c['token_id']
           collectible = Collectible.find_by metahash: token.dig('meta', 'hash')
           if collectible.blank?
-            Collectible.find_or_create_by! token_id: c['token_id']
+            Collectible.create_with(state: :minted).find_or_create_by! token_id: c['token_id']
           else
             collectible.update! token_id: c['token_id'], state: :minted
           end
