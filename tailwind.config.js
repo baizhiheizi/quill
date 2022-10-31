@@ -34,6 +34,7 @@ module.exports = {
         primary: '#5C6BEF',
       }),
       fontFamily: {
+        sans: ['Noto Sans SC', ...defaultTheme.fontFamily.sans],
         serif: ['Roboto Serif', ...defaultTheme.fontFamily.serif],
         mono: ['Roboto Mono', ...defaultTheme.fontFamily.mono],
       },
