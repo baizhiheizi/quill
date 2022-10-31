@@ -1,0 +1,51 @@
+<tr id="<%= dom_id collectible %>" class="hover:bg-zinc-50 dark:hover:bg-zinc-800 border-b">
+  <td class="p-4">
+    <%= collectible.id %>
+  </td>
+  <td class="p-4">
+    <span class="text-white px-2 py-1 rounded
+      <%= case collectible.state
+        when 'pending'
+          'bg-slate-500'
+        when 'minted'
+          'bg-green-500'
+        end %>">
+      <%= collectible.state %>
+    </span>
+  </td>
+  <td class="p-4">
+    <% if collectible.source.is_a?(Order) %>
+      <%= link_to collectible.source.trace_id, admin_order_path(collectible.source) %>
+    <% else %>
+      -
+    <% end %>
+  </td>
+  <td class="p-4">
+    <%= collectible.name %>
+  </td>
+  <td class="p-4">
+    <% if collectible.collection.present? %>
+      <%= link_to collectible.collection.name, 
+        admin_collection_path(collectible.collection), 
+        class: "" %>
+      </div>
+    <% elsif collectible.nft_collection.present? %>
+      <%= link_to collectible.nft_collection.name, 
+        collectible.nft_collection.trident_url, 
+        target: "_blank",
+        class: "font-serif underline" %>
+      </div>
+    <% else %>
+      <%= collectible&.collection_id || '-' %>
+    <% end %>
+  </td>
+  <td class="p-4">
+    <%= collectible.identifier %>
+  </td>
+  <td class="p-4">
+    <%= collectible.token_id %>
+  </td>
+  <td class="p-4">
+    <%= collectible.updated_at %>
+  </td>
+</tr>
