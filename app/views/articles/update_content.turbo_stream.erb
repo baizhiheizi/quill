@@ -1,3 +1,6 @@
 <%= turbo_stream.replace "#{dom_id @article}_updated_at" do %>
   <%= render "articles/updated_at", article: @article %>
 <% end %>
+<%= turbo_stream.update "#{dom_id @article}_words_count" do %>
+  <%= t('words_count') %>:<%= @article.words_count %>
+<% end %>

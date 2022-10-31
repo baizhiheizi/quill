@@ -33,8 +33,14 @@
         <%= t('options') %>
       </div>
 
+      <div class="ml-4">
+        <div id="<%= dom_id article %>_words_count" class="text-sm text-gray-500">
+          <%= t('words_count') %>:<%= article.words_count %>
+        </div>
+      </div>
+
       <% if article.persisted? %>
-        <div class="mx-4">
+        <div class="ml-4">
           <div id="<%= dom_id article %>_updated_at" class="text-sm text-gray-500" data-controller="auto-hide"></div>
         </div>
       <% end %>
