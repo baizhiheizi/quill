@@ -112,7 +112,10 @@ module Users::CollectibleReadable
     true
   rescue MixinBot::HttpError
     retry
-  rescue ActiveRecord::RecordNotUnique, ActiveRecord::RecordInvalid => e
+  rescue ActiveRecord::RecordNotUnique,
+         ActiveRecord::RecordInvalid,
+         MixinBot::UnauthorizedError,
+         MixinBot::ForbiddenError => e
     Rails.logger.error e
     false
   ensure
