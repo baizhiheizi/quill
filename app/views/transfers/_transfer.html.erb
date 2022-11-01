@@ -19,13 +19,28 @@
   </div>
 
   <div class="table-cell p-2 text-opacity-80">
-    <%= link_to transfer.source.article.title, 
-      user_article_path(transfer.source.article.author, transfer.source.article.uuid), 
-      class: "truncate w-36 block", 
-      data: { 
-        controller: 'prefetch', 
-        turbo_frame: "_top" 
-      } %>
+    <% if transfer.source.is_a? Order %>
+      <% case transfer.source.item %>
+      <% when Article %>
+        <%= link_to transfer.source.item.title, 
+          user_article_path(transfer.source.item.author, transfer.source.item.uuid), 
+          class: "truncate w-36 block", 
+          data: { 
+            controller: 'prefetch', 
+            turbo_frame: "_top" 
+          } %>
+      <% when Collection %>
+        <%= link_to transfer.source.item.name, 
+          collection_path(transfer.source.item.uuid), 
+          class: "truncate w-36 block", 
+          data: { 
+            controller: 'prefetch', 
+            turbo_frame: "_top" 
+          } %>
+      <% end %>
+    <% else %>
+      -
+    <% end %>
   </div>
 
   <div class="table-cell p-2 text-opacity-80 min-w-max whitespace-nowrap">
