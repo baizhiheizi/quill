@@ -1,0 +1,10 @@
+<% tab ||= 'articles' %>
+
+<%= link_to admin_collection_path(collection, tab: tab), 
+  class: "flex items-center space-x-2", 
+  data: { turbo_frame: "_top" } do %>
+  <div>
+    <div><%= collection.name %></div>
+    <div class="text-sm opacity-70"><%= collection.uuid %></div>
+  </div>
+<% end %>

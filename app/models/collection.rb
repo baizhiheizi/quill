@@ -26,7 +26,7 @@
 #
 class Collection < ApplicationRecord
   SUPPORTED_ASSETS = Settings.supported_assets || [Currency::BTC_ASSET_ID]
-  MINIMUM_PRICE_USD = 0.1
+  MINIMUM_PRICE_USD = 6.99
   DEFAULT_SPLIT = '0.1'
 
   include AASM

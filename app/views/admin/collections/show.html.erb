@@ -1,0 +1,95 @@
+<div class="flex items-center space-x-4 mb-4">
+  <%= link_to 'Home', admin_root_path %>
+  <span>/</span>
+  <%= link_to 'Collections', admin_collections_path %>
+  <span>/</span>
+  <span><%= @collection.name %></span>
+</div>
+
+<div class="bg-white roundedlg p-4">
+  <div class="flex space-x-2 mb-4">
+    <div>
+      <div><%= @collection.name %></div>
+      <div class="text-sm opacity-70"><%= @collection.uuid %></div>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-8">
+    <div class="col-span-1 flex space-x-2">
+      <span class="font-bold">ID:</span> 
+      <span><%= @collection.id %></span>
+    </div>
+    <div class="col-span-1 flex space-x-2">
+      <span class="font-bold">UUID:</span> 
+      <span><%= @collection.uuid %></span>
+    </div>
+    <div class="col-span-1 flex space-x-2">
+      <span class="font-bold">Author:</span> 
+      <span>
+        <%= render "admin/users/field", user: @collection.author, tab: :collections %>
+      </span>
+    </div>
+    <div class="col-span-1 flex space-x-2">
+      <span class="font-bold">Description:</span> 
+      <span><%= @collection.description %></span>
+    </div>
+    <div class="col-span-1 flex space-x-2">
+      <span class="font-bold">Price:</span> 
+      <span><%= @collection.price_tag %></span>
+    </div>
+    <div class="col-span-1 flex space-x-2">
+      <span class="font-bold">Orders Count:</span> 
+      <span><%= @collection.orders_count %></span>
+    </div>
+    <div class="col-span-1 flex space-x-2">
+      <span class="font-bold">Readers revenue ratio:</span> 
+      <span><%= @collection.revenue_ratio %></span>
+    </div>
+    <div class="col-span-1 flex space-x-2">
+      <span class="font-bold">Plafform revenue ratio:</span> 
+      <span><%= @collection.platform_revenue_ratio %></span>
+    </div>
+    <div class="col-span-1 flex space-x-2">
+      <span class="font-bold">Created:</span> 
+      <span><%= @collection.created_at %></span>
+    </div>
+  </div>
+
+  <div class=""
+    data-controller="tabs"
+    data-tabs-active-tab-value="<%= @tab %>"
+    data-tabs-active-class-value="border-b-2">
+    <div class="flex overflow-auto flex-nowrap scrollbar-hide items-center mb-4 border-b lg:border-none space-x-2">
+      <%= link_to admin_collection_path(@collection, tab: :articles), 
+        class: "cursor-pointer py-1 px-4 border-blue-500 font-bold text-zinc-600",
+        data: {
+          tabs_target: "tab",
+          tabs_tabname_param: "articles",
+        } do %>
+        Articles
+      <% end %>
+      <%= link_to admin_collection_path(@collection, tab: :orders), 
+        class: "cursor-pointer py-1 px-4 border-blue-500 font-bold text-zinc-600",
+        data: {
+          tabs_target: "tab",
+          tabs_tabname_param: "orders",
+        } do %>
+        Orders
+      <% end %>
+    </div>
+    <div class="hidden"
+        data-tabs-content-param="articles"
+        data-tabs-target="content">
+      <%= turbo_frame_tag 'admin_articles', src: admin_articles_path(collection_id: @collection.uuid) do %>
+        <%= render "shared/loading" %>
+      <% end %>
+    </div>
+    <div class="hidden"
+        data-tabs-content-param="orders"
+        data-tabs-target="content">
+      <%= turbo_frame_tag 'admin_orders', src: admin_orders_path(item_id: @collection.id, item_type: 'Collection') do %>
+        <%= render "shared/loading" %>
+      <% end %>
+    </div>
+  </div>
+</div>

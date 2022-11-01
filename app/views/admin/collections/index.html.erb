@@ -1,35 +1,35 @@
 <div class="flex items-center space-x-4 mb-4">
   <%= link_to 'Home', admin_root_path %>
   <span>/</span>
-  <span>Orders</span>
+  <span>Collections</span>
 </div>
 
 <div class="p-4 bg-white dark:bg-zinc-900 rounded-lg shadow">
-  <%= turbo_frame_tag 'admin_orders' do %>
+  <%= turbo_frame_tag 'admin_collections' do %>
     <div class="mb-4">
-      <%= render 'admin/orders/query' %>
+      <%= render 'admin/collections/query' %>
     </div>
     <div data-controller="infinite-scroll" class="w-full overflow-x-scroll scrollbar-hide">
       <table class='w-full table-auto min-w-max '>
         <thead>
           <tr class="bg-zinc-100 dark:bg-zinc-800">
             <th class="p-4">ID</th>
-            <th class="p-4">TraceID</th>
-            <th class="p-4">Item</th>
-            <th class="p-4">Buyer</th>
-            <th class="p-4">Total</th>
+            <th class="p-4">Author</th>
+            <th class="p-4">Name</th>
             <th class="p-4">State</th>
-            <th class="p-4">OrderType</th>
-            <th class="p-4">Created</th>
-            <th class="p-4"></th>
+            <th class="p-4">Price</th>
+            <th class="p-4">Revenue</th>
+            <th class="p-4">Articles</th>
+            <th class="p-4">Orders</th>
+            <th class="p-4">Updated At</th>
           </tr>
         </thead>
-        <tbody id="admin_orders_list">
-          <%= render partial: 'admin/orders/order', collection: @orders, as: :order %>
+        <tbody id="admin_collections_list">
+          <%= render partial: 'admin/collections/collection', collection: @collections, as: :collection %>
         </tbody>
       </table>
       <div data-infinite-scroll-target='scrollArea'></div>
-      <%= render partial: "shared/pagination", locals: { pagy: @pagy } %>
+      <%= render "shared/pagination", pagy: @pagy, id: "admin_collections_pagination" %>
     </div>
   <% end %>
 </div>

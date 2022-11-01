@@ -3,7 +3,7 @@
 module Admin
   class CollectiblesController < Admin::BaseController
     def index
-      @state = params[:state] || 'unspent'
+      @state = params[:state] || 'all'
       @source = params[:source] || 'all'
       @order_by = params[:order_by] || 'updated_at_desc'
 

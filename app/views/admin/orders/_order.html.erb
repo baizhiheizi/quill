@@ -6,8 +6,11 @@
     <%= order.trace_id %>
   </td>
   <td class="p-4">
-    <% if order.article.present? %>
-      <%= render "admin/articles/field", article: order.article %>
+    <% case order.item %>
+    <% when Article %>
+      <%= render "admin/articles/field", article: order.item %>
+    <% when Collection %>
+      <%= render "admin/collections/field", collection: order.item %>
     <% else %>
       -
     <% end %>

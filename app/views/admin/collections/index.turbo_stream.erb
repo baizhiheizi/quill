@@ -1,0 +1,7 @@
+<%= turbo_stream.append 'admin_collections_list' do %>
+  <%= render partial: 'admin/collections/collection', collection: @collections, as: :collection %>
+<% end %>
+
+<%= turbo_stream.update 'admin_collections_pagination' do %>
+  <%= render "shared/pagination", pagy: @pagy, id: 'admin_collections_pagination' %>
+<% end %>

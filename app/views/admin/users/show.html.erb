@@ -89,6 +89,14 @@
         } do %>
         Articles
       <% end %>
+      <%= link_to admin_user_path(@user, tab: :collections), 
+        class: "cursor-pointer py-1 px-4 border-blue-500 font-bold text-zinc-600",
+        data: {
+          tabs_target: "tab",
+          tabs_tabname_param: "collections",
+        } do %>
+        Collections
+      <% end %>
       <%= link_to admin_user_path(@user, tab: :comments), 
         class: "cursor-pointer py-1 px-4 border-blue-500 font-bold text-zinc-600",
         data: {
@@ -158,6 +166,13 @@
         data-tabs-content-param="articles"
         data-tabs-target="content">
       <%= turbo_frame_tag 'admin_articles', src: admin_articles_path(author_id: @user.id) do %>
+        <%= render "shared/loading" %>
+      <% end %>
+    </div>
+    <div class="hidden"
+        data-tabs-content-param="collections"
+        data-tabs-target="content">
+      <%= turbo_frame_tag 'admin_collections', src: admin_collections_path(author_id: @user.id) do %>
         <%= render "shared/loading" %>
       <% end %>
     </div>

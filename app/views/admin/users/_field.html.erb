@@ -5,7 +5,7 @@
   data: { turbo_frame: "_top" } do %>
   <%= image_tag user.avatar, class: 'w-10 h-10 rounded-full', loading: 'lazy' %>
   <div>
-    <div><%= user.name %></div>
-    <div class="text-sm opacity-70"><%= user.uid %></div>
+    <div><%= user.short_name %></div>
+    <div class="text-sm opacity-70">@<%= user.short_uid %></div>
   </div>
 <% end %>

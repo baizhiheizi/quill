@@ -6,6 +6,7 @@ module Admin
       articles = Article.all
 
       articles = articles.where(author_id: params[:author_id]) if params[:author_id].present?
+      articles = articles.where(collection_id: params[:collection_id]) if params[:collection_id].present?
 
       @locale = params[:locale] || 'all'
       articles =

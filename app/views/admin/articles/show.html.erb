@@ -24,6 +24,12 @@
       <span><%= @article.uuid %></span>
     </div>
     <div class="col-span-1 flex space-x-2">
+      <span class="font-bold">Author:</span> 
+      <span>
+        <%= render "admin/users/field", user: @article.author, tab: :articles %>
+      </span>
+    </div>
+    <div class="col-span-1 flex space-x-2">
       <span class="font-bold">Wallet:</span> 
       <span>
         <% if @article.wallet.present? %>

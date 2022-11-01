@@ -1,0 +1,39 @@
+<tr id="<%= dom_id collection %>" class="hover:bg-zinc-50 dark:hover:bg-zinc-800 border-b">
+  <td class="p-4">
+    <%= collection.id %>
+  </td>
+  <td class="p-4">
+    <%= render "admin/users/field", user: collection.author, tab: 'collections' %>
+  </td>
+  <td class="p-4">
+    <%= render "admin/collections/field", collection: collection %>
+  </td>
+  <td class="p-4">
+    <span class="text-white px-2 py-1 rounded
+      <%= case collection.state
+        when 'drafted'
+          'bg-slate-500'
+        when 'listed'
+          'bg-green-500'
+        when 'hidden'
+          'bg-yellow-500'
+        end %>">
+      <%= collection.state %>
+    </span>
+  </td>
+  <td class="p-4">
+    <%= collection.price_tag %>
+  </td>
+  <td class="p-4">
+    <%= collection.revenue_ratio %>
+  </td>
+  <td class="p-4">
+    <%= link_to collection.articles.count, admin_collection_path(collection, tab: 'articles') %>
+  </td>
+  <td class="p-4">
+    <%= link_to collection.orders_count, admin_collection_path(collection, tab: 'orders') %>
+  </td>
+  <td class="p-4">
+    <%= collection.updated_at %>
+  </td>
+</tr>

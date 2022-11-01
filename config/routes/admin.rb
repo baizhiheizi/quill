@@ -32,7 +32,7 @@ namespace :admin do
     post :unblock
   end
 
-  resources :collections, only: %i[index show], param: :uuid
+  resources :collections, only: %i[index show]
 
   resources :articles, only: %i[index show], param: :uuid do
     post :block
