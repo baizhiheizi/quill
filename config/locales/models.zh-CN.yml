@@ -29,10 +29,12 @@ zh-CN:
           drafted: 草稿
           published: 已发表
           hidden: 已隐藏
+        collection: 合辑
         platform_revenue_ratio: 平台收益
         author_revenue_ratio: 作者收益
         readers_revenue_ratio: 读者收益
         references_revenue_ratio: 引用收益
+        collection_revenue_ratio: 合辑收益
         article_references: 引用
       citer_reference:
         reference: 引用

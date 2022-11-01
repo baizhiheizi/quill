@@ -28,10 +28,12 @@ en:
           drafted: Draft
           published: Published
           hidden: Hidden
+        collection: Collection
         platform_revenue_ratio: Quill Revenue
         readers_revenue_ratio: Readers Revenue
         author_revenue_ratio: Author Revenue
         references_revenue_ratio: References Revenue
+        collection_revenue_ratio: Collection Revenue
         article_references: References
       citer_reference:
         reference: Reference
