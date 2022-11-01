@@ -29,6 +29,14 @@ class NonFungibleOutput < ApplicationRecord
 
   delegate :collection, :nft_collection, to: :collectible
 
+  after_commit :notify, on: :create
+
+  def notify
+    return unless state == 'unspent'
+
+    NonFungibleOutputFoundNotification.with(non_fungible_output: self).deliver(user)
+  end
+
   private
 
   def setup_attributes

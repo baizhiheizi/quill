@@ -63,6 +63,7 @@ class Collectible < ApplicationRecord
 
   def transfer_to_owner
     Trident.api.transfer collection_id, identifier, source.buyer.mixin_uuid
+
     source.buyer.sync_collectibles!
   end
 

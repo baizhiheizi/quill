@@ -18,6 +18,7 @@ en:
     order_created_notification:
       bought: Successfully bought
       rewarded: Successfully rewarded
+      minting: Requested to mint
     swap_order_swapping_notification:
       swapping: 'Swapping:'
     swap_order_finished_notification:
@@ -35,3 +36,5 @@ en:
       subscribed: subscribed your activities
     user_connected_notification:
       message: Welcome! You may leave messages here if you have any questions.
+    non_fungible_output_found_notification:
+      found: Found

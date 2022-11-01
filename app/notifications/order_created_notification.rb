@@ -6,7 +6,7 @@ class OrderCreatedNotification < ApplicationNotification
 
   param :order
 
-  delegate :article, to: :order
+  delegate :item, to: :order
 
   def order
     params[:order]
@@ -14,7 +14,7 @@ class OrderCreatedNotification < ApplicationNotification
 
   def action_name
     case params[:order].order_type.to_sym
-    when :buy_article
+    when :buy_article, :buy_collection
       t('.bought')
     when :reward_article
       t('.rewarded')
@@ -26,11 +26,21 @@ class OrderCreatedNotification < ApplicationNotification
   end
 
   def message
-    [action_name, article.title].join(' ')
+    case order.item
+    when Article
+      [action_name, item.title].join(' ')
+    when Collection
+      [action_name, item.name].join(' ')
+    end
   end
 
   def url
-    user_article_url article.author, article.uuid
+    case order.item
+    when Article
+      user_article_url item.author, item.uuid
+    when Collection
+      collection_url item.uuid
+    end
   end
 
   def may_notify_via_mixin_bot?

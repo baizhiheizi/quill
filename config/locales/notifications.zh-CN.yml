@@ -35,3 +35,5 @@ zh-CN:
       subscribed: 订阅了您的动态
     user_connected_notification:
       message: 欢迎来到Quill！您也可以浏览网站 quill.im 使用Quill的服务，有任何问题可以直接给机器人留言，或者加入 @7000103074 参与讨论。
+    non_fungible_output_found_notification:
+      found: 找到

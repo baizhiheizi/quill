@@ -16,7 +16,7 @@ class ArticleRewardedNotification < ApplicationNotification
     {
       icon_url: icon_url,
       title: order.article.title.truncate(36),
-      description: description,
+      description: description.truncate(72),
       action: url
     }
   end

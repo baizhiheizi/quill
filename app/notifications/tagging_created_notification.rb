@@ -16,7 +16,7 @@ class TaggingCreatedNotification < ApplicationNotification
     {
       icon_url: QUILL_ICON_URL,
       title: tagging.article.title.truncate(36),
-      description: description,
+      description: description.truncate(72),
       action: url
     }
   end

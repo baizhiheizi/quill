@@ -50,7 +50,7 @@ class Order < ApplicationRecord
   before_validation :setup_attributes, on: :create
 
   # prevent duplicated buy order
-  validates :order_type, uniqueness: { scope: %i[order_type buyer_id item_id item_type], if: -> { buy_article? } }
+  validates :order_type, uniqueness: { scope: %i[order_type buyer_id item_id item_type], if: -> { buy_article? || buy_collection? } }
   validates :total, presence: true
   validates :trace_id, uniqueness: true
   validate :ensure_total_sufficient, on: :create
@@ -126,7 +126,7 @@ class Order < ApplicationRecord
   end
 
   def notify_buyer
-    OrderCreatedNotification.with(order: self).deliver(buyer) if order_type.in? %w[buy_article reward_article]
+    OrderCreatedNotification.with(order: self).deliver(buyer) if order_type.in? %w[buy_article reward_article buy_collection]
   end
 
   def subscribe_comments_for_buyer
