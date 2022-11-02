@@ -5,10 +5,10 @@
         turbo_frame: '_top'
       },
       class: "flex items-center space-x-2" do %>
-      <%= image_tag @article.author.avatar, class: 'w-7 h-7 rounded-full block' %>
+      <%= image_tag @article.author.avatar, class: 'w-7 h-7 sm:w-9 sm:h-9 rounded-full block' %>
 
-      <div class="sm:flex sm:items-center sm:space-x-2">
-        <div class="text-sm">
+      <div class="">
+        <div class="text-sm font-semibold">
           <%= @article.author.short_name %>
         </div>
         <div class="text-xs sm:text-sm opacity-60">
@@ -25,16 +25,13 @@
           FREE
         </div>
       <% else %>
-        <div class="flex items-center space-x-2">
+        <div class="flex items-center space-x-2 mb-1">
           <span class="text-sm">
             <%= @article.price_tag %>
           </span>
-          <span class="hidden sm:block text-sm opacity-60">
-            ≈$<%= @article.price_usd %>
-          </span>
           <%= image_tag @article.currency.icon_url, class: "w-4 h-4 sm:w-5 sm:h-5 rounded-full" %>
         </div>
-        <div class="text-xs opacity-60 text-right mt-1 sm:hidden">
+        <div class="text-xs opacity-60 text-right">
           ≈$<%= @article.price_usd %>
         </div>
       <% end %>
