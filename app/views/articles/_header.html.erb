@@ -57,6 +57,21 @@
   </span>
 </div>
 
-<div class="py-2 px-4 bg-zinc-100 dark:bg-[#333444] rounded break-words">
+<div class="py-2 px-4 bg-zinc-100 dark:bg-[#333444] rounded break-words mb-6">
   <%= article.intro %>
 </div>
+
+<% if article.cover.attached? %>
+  <%= link_to article.cover_url, 
+    class: "photoswipe block", 
+    target: "_blank",
+    width: article.cover.metadata&.[]('width'),
+    height: article.cover.metadata&.[]('height'),
+    data: {
+      pswp_src: article.cover_url,
+      pswp_width: article.cover.metadata&.[]('width'),
+      pswp_height: article.cover.metadata&.[]('height'),
+    } do %>
+    <%= image_tag article.cover_url, class: "w-full" %>
+  <% end %>
+<% end %>

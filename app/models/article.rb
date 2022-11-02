@@ -85,6 +85,7 @@ class Article < ApplicationRecord
 
   has_many_attached :images
   has_one_attached :poster
+  has_one_attached :cover
 
   accepts_nested_attributes_for :article_references, reject_if: proc { |attributes| attributes['reference_id'].blank? || attributes['revenue_ratio'].blank? }, allow_destroy: true
 
@@ -412,8 +413,12 @@ class Article < ApplicationRecord
     ArticleDetectLocaleWorker.perform_async uuid
   end
 
+  def thumb_url
+    @thumb_url ||= cover_url || Nokogiri::HTML.fragment(content_as_html).css('img').first&.attr('src')
+  end
+
   def cover_url
-    # @cover_url ||= Nokogiri::HTML.fragment(content_as_html).css('img').first&.attr('src')
+    [Settings.storage.endpoint, cover.key].join('/') if cover.attached?
   end
 
   def poster_url

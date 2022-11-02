@@ -55,8 +55,8 @@
         <%= @article.intro %>
       </div>
     </div>
-    <% if @article.cover_url.present? %>
-      <%= image_tag @article.cover_url, class: "w-28 h-28 rounded object-center object-cover border-0" %>
+    <% if @article.thumb_url.present? %>
+      <%= image_tag @article.thumb_url, class: "w-28 h-28 rounded object-center object-cover border-0" %>
     <% end %>
   <% end %>
 

@@ -7,7 +7,7 @@
     "build:css": "tailwindcss -i ./app/assets/stylesheets/application.tailwind.css -o ./app/assets/builds/application.css",
     "build": "esbuild app/javascript/*.* --bundle --sourcemap --minify --outdir=app/assets/builds --public-path=assets --target=chrome58 --inject:./esbuild.inject.js",
     "build:css:watch": "tailwindcss -i ./app/assets/stylesheets/application.tailwind.css -o ./app/assets/builds/application.css --watch",
-    "build:watch": "esbuild app/javascript/*.* --bundle --sourcemap --minify --outdir=app/assets/builds --public-path=assets --target=chrome58 --inject:./esbuild.inject.ja --watch"
+    "build:watch": "esbuild app/javascript/*.* --bundle --sourcemap --minify --outdir=app/assets/builds --public-path=assets --target=chrome58 --inject:./esbuild.inject.js --watch"
   },
   "version": "0.1.0",
   "dependencies": {

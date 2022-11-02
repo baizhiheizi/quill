@@ -1,8 +1,8 @@
 <% user ||= current_user %>
 
-<div class="photoswipe-gallery" 
+<div class="" 
      id="article_<%= article.uuid %>_content"
-     data-controller="hljs photoswipe">
+     data-controller="hljs">
   <% if article.authorized? user %> 
     <%= render partial: "articles/full_content", locals: { article: article, user: user } %>
   <% else %>

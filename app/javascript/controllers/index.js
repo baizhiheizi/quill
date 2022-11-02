@@ -67,6 +67,9 @@ application.register('photoswipe', PhotoswipeController);
 import PrefetchController from './prefetch_controller';
 application.register('prefetch', PrefetchController);
 
+import PreviewUploadController from './preview_upload_controller';
+application.register('preview-upload', PreviewUploadController);
+
 import ReferencesSelectController from './references_select_controller';
 application.register('references-select', ReferencesSelectController);
 

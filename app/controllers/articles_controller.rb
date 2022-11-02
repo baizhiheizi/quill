@@ -14,7 +14,7 @@ class ArticlesController < ApplicationController
 
     articles = ArticleSearchService.call(params.merge(current_user: current_user, locale: current_locale))
 
-    @pagy, @articles = pagy_countless articles
+    @pagy, @articles = pagy_countless articles.with_attached_cover
     @active_page = 'home'
 
     respond_to do |format|
@@ -31,6 +31,7 @@ class ArticlesController < ApplicationController
 
     if @article&.authorized?(current_user) || @article&.may_buy_by?(current_user)
       @page_title = "#{@article.title} - #{@article.author.name}"
+      @page_image = @article.thumb_url
       @page_description = @article.intro
     else
       redirect_back fallback_location: root_path
@@ -85,6 +86,7 @@ class ArticlesController < ApplicationController
         :author_revenue_ratio,
         :references_revenue_ratio,
         :price,
+        :cover,
         article_references_attributes: %i[
           id
           reference_type
@@ -100,6 +102,7 @@ class ArticlesController < ApplicationController
       title
       content
       intro
+      cover
     ]
 
     permitted.push(:price) if !@article.published_at? || (!@article.free? && params[:article][:price].to_d.positive?)

@@ -1,5 +1,38 @@
 <div data-article-form-target="optionFields" 
   class="hidden px-4 py-5 bg-white dark:bg-[#1D1E2B] space-y-6 sm:p-6">
+
+  <div class="mb-4">
+    <div class="w-full aspect-square rounded-2xl bg-[#F4F4F4]/90 flex border border-[#F4F4F4] border-dashed">
+      <div data-controller="preview-upload" class="w-full h-full flex justify-center items-center">
+        <%= form.label :cover, 
+          class: "block h-full w-full cursor-pointer" do %>
+          <img data-preview-upload-target="imageTpl" class="hidden w-full h-full object-cover rounded-2xl" />
+          <div data-preview-upload-target="output" class="h-full flex">
+            <% if form.object.cover.attached? %>
+              <img src="<%= form.object.cover.url %>" class="w-full h-full object-cover rounded-2xl" />
+            <% else %>
+              <div class="m-auto">
+                <div class="flex justify-center mb-4">
+                  <%= inline_svg_tag 'icons/upload.svg', class: 'w-12 h-12 opacity-50' %>
+                </div>
+                <div class="text-center opacity-75">
+                  <%= t('upload_cover') %>
+                </div>
+              </div>
+            <% end %>
+          </div>
+          <%= form.file_field :cover, 
+            class: "sr-only", 
+            accept: "image/*", 
+            data: {
+              preview_upload_target: "input",
+              action: "input->preview-upload#preview"
+            },
+            direct_upload: true %>
+        <% end %>
+      </div>
+    </div>
+  </div>
   <div class="mb-4">
     <%= form.select :tag_names, 
       form.object.tag_names.presence || Tag.all.first(10).pluck(:name), 
