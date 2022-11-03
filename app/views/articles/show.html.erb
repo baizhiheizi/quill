@@ -8,7 +8,11 @@
       <%= render "articles/content", article: @article, user: current_user %>
     </div>
 
-    <div id="article_<%= @article.uuid %>_buyers" class="mb-12">
+    <div class="hidden sm:block mb-8">
+      <%= render partial: "articles/votes", locals: { article: @article, user: current_user } %>
+    </div>
+
+    <div id="article_<%= @article.uuid %>_buyers" class="mb-8">
       <%= render "articles/buyers", article: @article, user: current_user %>
     </div>
   </div>

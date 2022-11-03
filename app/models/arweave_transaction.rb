@@ -6,6 +6,7 @@
 #
 #  id                  :bigint           not null, primary key
 #  article_uuid        :uuid
+#  hash                :string
 #  raw                 :json
 #  state               :string
 #  created_at          :datetime         not null
@@ -17,17 +18,17 @@
 #
 # Indexes
 #
-#  index_arweave_transactions_on_article_snapshot_id  (article_snapshot_id)
-#  index_arweave_transactions_on_article_uuid         (article_uuid)
-#  index_arweave_transactions_on_order_id             (order_id)
-#  index_arweave_transactions_on_owner_id             (owner_id)
-#  index_arweave_transactions_on_tx_id                (tx_id)
+#  index_arweave_transactions_on_article_snapshot_id    (article_snapshot_id)
+#  index_arweave_transactions_on_article_uuid_and_hash  (article_uuid,hash) UNIQUE
+#  index_arweave_transactions_on_order_id               (order_id)
+#  index_arweave_transactions_on_owner_id               (owner_id)
+#  index_arweave_transactions_on_tx_id                  (tx_id)
 #
 class ArweaveTransaction < ApplicationRecord
   include AASM
 
   belongs_to :order, optional: true
-  belongs_to :owner, class_name: 'User', primary_key: :mixin_uuid, inverse_of: :arweave_transactions
+  belongs_to :owner, class_name: 'User', primary_key: :mixin_uuid, inverse_of: :arweave_transactions, optional: true
   belongs_to :article, primary_key: :uuid, foreign_key: :article_uuid, inverse_of: :arweave_transactions
   belongs_to :article_snapshot
 
@@ -74,6 +75,24 @@ class ArweaveTransaction < ApplicationRecord
   end
 
   def generated_data
+    if article.free?
+      {
+        content: {
+          title: article_snapshot.raw['title'],
+          intro: article_snapshot.raw['intro'],
+          body: article_snapshot.raw['content']
+        },
+        hash: hash,
+        author: article.author.uid,
+        original_url: user_article_url(article.author, article),
+        timestamp: article_snapshot.created_at.to_i
+      }
+    else
+      encrypted_data
+    end
+  end
+
+  def encrypted_data
     ec = OpenSSL::PKey::EC.new 'secp256k1'
     group = OpenSSL::PKey::EC::Group.new 'secp256k1'
     ec.private_key = OpenSSL::BN.new(Rails.application.credentials.encryption_key.to_i(16))
@@ -92,19 +111,17 @@ class ArweaveTransaction < ApplicationRecord
     encrypter.key = key
     cipher = encrypter.update(article_snapshot.raw['content']) + encrypter.final
 
-    hash = SHA3::Digest::SHA256.hexdigest article_snapshot.raw['content']
-
     {
-      title: article.title,
-      intro: article.intro,
       content: {
-        cipher: Base64.urlsafe_encode64(cipher, padding: false),
-        hash: hash,
-        alg: {
-          name: 'aes-256-cfb',
-          iv: Base64.urlsafe_encode64(iv, padding: false),
-          public_key: ec.public_key.to_bn.to_fs(16).downcase
-        }
+        title: article_snapshot.raw['title'],
+        intro: article_snapshot.raw['intro'],
+        body: Base64.urlsafe_encode64(cipher, padding: false)
+      },
+      hash: hash,
+      alg: {
+        name: 'aes-256-cfb',
+        iv: Base64.urlsafe_encode64(iv, padding: false),
+        public_key: ec.public_key.to_bn.to_fs(16).downcase
       },
       author: article.author.uid,
       owner: owner.uid,
@@ -117,7 +134,7 @@ class ArweaveTransaction < ApplicationRecord
     @snapshot_url ||=
       Addressable::URI.new(
         scheme: 'https',
-        host: 'viewblock.io',
+        host: 'v2.viewblock.io',
         path: "arweave/tx/#{tx_id}"
       ).to_s
   end
@@ -128,22 +145,23 @@ class ArweaveTransaction < ApplicationRecord
     return unless new_record?
     return unless encryptable?
 
+    self.hash = SHA3::Digest::SHA256.hexdigest article_snapshot.raw['content']
     tx = Arweave::Transaction.new data: generated_data.to_json
     tags.each do |tag|
+      next if tag[:value].blank?
+
       tx.add_tag name: tag[:name], value: tag[:value]
     end
     tx.sign self.class.wallet
     tx.commit
     self.raw = tx.attributes
     self.tx_id = tx.attributes[:id]
-
-    tx.status
   end
 
   def encryptable?
     return false if self.class.wallet.blank?
     return false if Rails.application.credentials.encryption_key.blank?
-    return false if owner.public_key.blank?
+    return false if !article.free? && owner&.public_key&.blank?
 
     true
   end
@@ -156,11 +174,27 @@ class ArweaveTransaction < ApplicationRecord
       },
       {
         name: 'App-Name',
-        value: 'Quill.im'
+        value: 'quill.im'
       },
       {
         name: 'Owner',
-        value: owner.uid
+        value: owner&.uid
+      },
+      {
+        name: 'Author',
+        value: article.author.uid
+      },
+      {
+        name: 'Content-Digest',
+        value: hash
+      },
+      {
+        name: 'UUID',
+        value: article.uuid
+      },
+      {
+        name: 'Collection-ID',
+        value: article.collection&.uuid
       }
     ]
   end

@@ -290,6 +290,14 @@ class Article < ApplicationRecord
     )
   end
 
+  def arweave_tx_of(user)
+    owner ||= free? ? author : user
+
+    return unless owner.is_a? User
+
+    arweave_transactions.where(owner: owner).order(created_at: :desc).first
+  end
+
   def generate_snapshot
     snapshots.create raw: as_json
   end

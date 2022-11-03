@@ -1,0 +1,34 @@
+<% if article.collection.present? || article.arweave_tx_of(current_user).present? %>
+  <div class="rounded-lg text-xs font-mono border divide-y text-[#222222] text-opacity-50">
+    <% if article.collection.present? %>
+      <div class="relative p-3 flex justify-between items-center space-x-4 hover:bg-[#F4F4F4]">
+        <div class="min-w-fit font-bold">
+          TRIDENT NFT
+        </div>
+        <div class="truncate">
+          <%= article.collection.uuid %>
+        </div>
+        <%= link_to '', article.collection.trident_url, target: "_blank", class: "absolute inset-0" %>
+      </div>
+    <% end %>
+    <% if article.arweave_tx_of(current_user).present? %>
+      <div class="relative p-3 flex justify-between items-center space-x-4 hover:bg-[#F4F4F4]">
+        <div class="min-w-fit font-bold">
+          ARWEAVE TX
+        </div>
+        <div class="truncate">
+          <%= article.arweave_tx_of(current_user).tx_id %>
+        </div>
+        <%= link_to '', article.arweave_tx_of(current_user).snapshot_url, target: "_blank", class: "absolute inset-0" %>
+      </div>
+      <div class="relative p-3 flex justify-between items-center space-x-4 hover:bg-[#F4F4F4]">
+        <div class="win-w-fit font-bold">
+          Digest
+        </div>
+        <div class="truncate">
+          <%= SHA3::Digest::SHA256.hexdigest article.content %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+<% end %>

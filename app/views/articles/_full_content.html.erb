@@ -1,11 +1,11 @@
 <% user ||= current_user %>
 
-<div class="mb-8 prose-article">
+<div class="mb-12 prose-article">
   <%= article.content_as_html.html_safe %>
 </div>
 
-<div class="hidden sm:block mb-8">
-  <%= render partial: "articles/votes", locals: { article: article, user: user } %>
+<div class="mb-8">
+  <%= render "articles/blockchain_info", article: @article %>
 </div>
 
 <% unless article.author == user %>
