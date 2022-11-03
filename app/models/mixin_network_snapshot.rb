@@ -121,6 +121,8 @@ class MixinNetworkSnapshot < ApplicationRecord
 
     nfo = MixinBot::Utils::Nfo.new(memo: data.to_s).decode
     @collectible ||= Collectible.find_by metahash: nfo.extra
+  rescue ArgumentError
+    nil
   end
 
   def payment_memo_correct?
