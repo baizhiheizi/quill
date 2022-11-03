@@ -1,4 +1,4 @@
-<% if article.collection.present? || article.arweave_tx_of(current_user).present? %>
+<% if article.arweave_tx_of(current_user).present? %>
   <div class="rounded-lg text-xs font-mono border divide-y text-[#222222] text-opacity-50">
     <% if article.collection.present? %>
       <div class="relative p-3 flex justify-between items-center space-x-4 hover:bg-[#F4F4F4]">

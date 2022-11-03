@@ -50,6 +50,7 @@ class Article < ApplicationRecord
   PLATFORM_REVENUE_RATIO_DEFAULT = 0.1
 
   include AASM
+  include Articles::Arweavable
   include Articles::Payable
 
   belongs_to :author, class_name: 'User', inverse_of: :articles
@@ -281,21 +282,6 @@ class Article < ApplicationRecord
     create_wallet_async
     notify_for_first_published_async
     subscribe_comments_for_author
-  end
-
-  def upload_to_arweave_as_author
-    arweave_transactions.create(
-      owner: author,
-      article_snapshot: snapshots.order(created_at: :desc).first
-    )
-  end
-
-  def arweave_tx_of(user)
-    owner ||= free? ? author : user
-
-    return unless owner.is_a? User
-
-    arweave_transactions.where(owner: owner).order(created_at: :desc).first
   end
 
   def generate_snapshot

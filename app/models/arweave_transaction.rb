@@ -93,9 +93,39 @@ class ArweaveTransaction < ApplicationRecord
   end
 
   def encrypted_data
+    if owner&.public_key.present?
+      encrypted_data_for_owner
+    else
+      encrypter = OpenSSL::Cipher.new('aes-256-cfb').encrypt
+      iv = encrypter.random_iv
+      encrypter.iv = iv
+      encrypter.key = Base64.urlsafe_decode64 Rails.application.credentials.dig(:encryption, :aes_key)
+      cipher = encrypter.update(article_snapshot.raw['content']) + encrypter.final
+
+      {
+        content: {
+          title: article_snapshot.raw['title'],
+          intro: article_snapshot.raw['intro'],
+          body: Base64.urlsafe_encode64(cipher, padding: false)
+        },
+        hash: hash,
+        alg: {
+          name: 'aes-256-cfb',
+          iv: Base64.urlsafe_encode64(iv, padding: false)
+        },
+        author: article.author.uid,
+        original_url: user_article_url(article.author, article),
+        timestamp: article_snapshot.created_at.to_i
+      }
+    end
+  end
+
+  def encrypted_data_for_owner
+    return if owner&.public_key.blank?
+
     ec = OpenSSL::PKey::EC.new 'secp256k1'
     group = OpenSSL::PKey::EC::Group.new 'secp256k1'
-    ec.private_key = OpenSSL::BN.new(Rails.application.credentials.encryption_key.to_i(16))
+    ec.private_key = OpenSSL::BN.new(Rails.application.credentials.dig(:encryption, :private_key).to_i(16))
     ec.public_key =  group.generator.mul ec.private_key
 
     owner_public_key =
@@ -160,8 +190,7 @@ class ArweaveTransaction < ApplicationRecord
 
   def encryptable?
     return false if self.class.wallet.blank?
-    return false if Rails.application.credentials.encryption_key.blank?
-    return false if !article.free? && owner&.public_key&.blank?
+    return false if Rails.application.credentials.dig(:encryption, :private_key).blank?
 
     true
   end
@@ -178,7 +207,7 @@ class ArweaveTransaction < ApplicationRecord
       },
       {
         name: 'Owner',
-        value: owner&.uid
+        value: (owner&.public_key.present? ? owner.uid : nil)
       },
       {
         name: 'Author',
