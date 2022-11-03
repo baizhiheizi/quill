@@ -414,7 +414,16 @@ class Article < ApplicationRecord
   end
 
   def thumb_url
-    @thumb_url ||= cover_url || Nokogiri::HTML.fragment(content_as_html).css('img').first&.attr('src')
+    @thumb_url ||=
+      if cover.attached?
+        cover_url
+      else
+        Nokogiri::HTML
+          .fragment(content_as_html)
+          .css('img')
+          .map(&->(img) { img.attr('src') })
+          .find(&->(url) { URI::DEFAULT_PARSER.make_regexp.match?(url) })
+      end
   end
 
   def cover_url
