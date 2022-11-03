@@ -41,7 +41,6 @@ class NonFungibleOutputFoundNotification < ApplicationNotification
   end
 
   def may_notify_via_mixin_bot?
-    collectible_valid?
-    recipient_messenger?
+    collectible_valid? && recipient_messenger?
   end
 end
