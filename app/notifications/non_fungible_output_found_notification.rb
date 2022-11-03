@@ -25,15 +25,15 @@ class NonFungibleOutputFoundNotification < ApplicationNotification
   end
 
   def title
-    [non_fungible_output.collectible.collection.name, "(##{non_fungible_output.collectible.identifier})"].join(' ')
+    [non_fungible_output.collectible&.collection&.name, "(##{non_fungible_output.collectible&.identifier})"].join(' ')
   end
 
   def icon_url
-    non_fungible_output.collectible.media_url
+    non_fungible_output.collectible&.media_url
   end
 
   def url
-    non_fungible_output.collectible.trident_url
+    non_fungible_output.collectible&.trident_url
   end
 
   def collectible_valid?
