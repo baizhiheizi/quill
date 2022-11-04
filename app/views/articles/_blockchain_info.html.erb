@@ -13,7 +13,7 @@
     <% end %>
     <% if article.author.mvm_eth? %>
       <div class="relative p-3 flex justify-between items-center space-x-4 hover:bg-[#F4F4F4]">
-        <div class="win-w-fit font-bold uppercase">
+        <div class="min-w-fit font-bold uppercase">
           Author Address
         </div>
         <div class="truncate">
@@ -33,7 +33,7 @@
         <%= link_to '', article.arweave_tx_of(current_user).snapshot_url, target: "_blank", class: "absolute inset-0" %>
       </div>
       <div class="relative p-3 flex justify-between items-center space-x-4 hover:bg-[#F4F4F4]">
-        <div class="win-w-fit font-bold uppercase">
+        <div class="min-w-fit font-bold uppercase">
           Content Digest
         </div>
         <div class="truncate">
