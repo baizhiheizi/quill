@@ -36,6 +36,8 @@ class ArweaveTransaction < ApplicationRecord
   validates :tx_id, presence: true
   validates :raw, presence: true
 
+  default_scope -> { order(created_at: :desc) }
+
   aasm column: :state do
     state :pending, initial: true
     state :accepted
@@ -62,6 +64,8 @@ class ArweaveTransaction < ApplicationRecord
   end
 
   def data
+    return unless accepted?
+
     @data ||=
       begin
         JSON.parse Arweave::Transaction.data(tx_id)
@@ -83,7 +87,7 @@ class ArweaveTransaction < ApplicationRecord
           body: article_snapshot.raw['content']
         },
         hash: hash,
-        author: article.author.uid,
+        author: (article.author.public_key.presence || article.author.mixin_uuid),
         original_url: user_article_url(article.author, article),
         timestamp: article_snapshot.created_at.to_i
       }
@@ -113,7 +117,7 @@ class ArweaveTransaction < ApplicationRecord
           name: 'aes-256-cfb',
           iv: Base64.urlsafe_encode64(iv, padding: false)
         },
-        author: article.author.uid,
+        author: (article.author.public_key.presence || article.author.mixin_uuid),
         original_url: user_article_url(article.author, article),
         timestamp: article_snapshot.created_at.to_i
       }
@@ -153,8 +157,8 @@ class ArweaveTransaction < ApplicationRecord
         iv: Base64.urlsafe_encode64(iv, padding: false),
         public_key: ec.public_key.to_bn.to_fs(16).downcase
       },
-      author: article.author.uid,
-      owner: owner.uid,
+      author: (article.author.public_key.presence || article.author.mixin_uuid),
+      owner: owner.public_key,
       original_url: user_article_url(article.author, article),
       timestamp: article_snapshot.created_at.to_i
     }
@@ -207,11 +211,11 @@ class ArweaveTransaction < ApplicationRecord
       },
       {
         name: 'Owner',
-        value: (owner&.public_key.present? ? owner.uid : nil)
+        value: owner&.public_key
       },
       {
         name: 'Author',
-        value: article.author.uid
+        value: article.author.public_key || article.author.mixin_uuid
       },
       {
         name: 'Content-Digest',

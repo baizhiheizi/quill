@@ -7,16 +7,15 @@ module Articles::Arweavable
     arweave_transactions.create_with(
       article_snapshot: snapshots.order(created_at: :desc).first
     ).find_or_create_by!(
+      article_uuid: uuid,
       hash: SHA3::Digest::SHA256.hexdigest(content)
     )
   end
 
   def upload_to_arweave_as_author!
-    arweave_transactions.create_with(
+    arweave_transactions.create!(
       owner: author,
       article_snapshot: snapshots.order(created_at: :desc).first
-    ).find_or_create_by!(
-      hash: SHA3::Digest::SHA256.hexdigest(content)
     )
   end
 
@@ -26,7 +25,6 @@ module Articles::Arweavable
 
   def arweave_tx_of(user)
     return default_arweave_tx if user.blank? || !user.is_a?(User)
-
     arweave_transactions.where(owner: user).order(created_at: :desc).first || default_arweave_tx
   end
 end

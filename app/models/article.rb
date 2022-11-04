@@ -82,7 +82,7 @@ class Article < ApplicationRecord
   has_many :article_citers, class_name: 'CiterReference', as: :reference, dependent: :restrict_with_error
   has_many :citers, through: :article_citers, source: :citer, source_type: 'Article'
 
-  has_many :arweave_transactions, primary_key: :uuid, foreign_key: :article_uuid, dependent: :restrict_with_error, inverse_of: :article
+  has_many :arweave_transactions, primary_key: :uuid, foreign_key: :article_uuid, dependent: :restrict_with_exception, inverse_of: :article
 
   has_many_attached :images
   has_one_attached :poster
