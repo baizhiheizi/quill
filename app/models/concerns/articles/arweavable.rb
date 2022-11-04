@@ -7,7 +7,7 @@ module Articles::Arweavable
     arweave_transactions.create_with(
       article_snapshot: snapshots.order(created_at: :desc).first
     ).find_or_create_by!(
-      hash: SHA3::Digest::SHA256.hexdigest(content)
+      digest: SHA3::Digest::SHA256.hexdigest(content)
     )
   end
 
@@ -16,7 +16,7 @@ module Articles::Arweavable
       owner: author,
       article_snapshot: snapshots.order(created_at: :desc).first
     ).find_or_create_by!(
-      hash: SHA3::Digest::SHA256.hexdigest(content)
+      digest: SHA3::Digest::SHA256.hexdigest(content)
     )
   end
 

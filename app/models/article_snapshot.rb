@@ -18,7 +18,7 @@
 class ArticleSnapshot < ApplicationRecord
   include AASM
 
-  store_accessor :raw, %w[content]
+  store_accessor :raw, %w[title intro content]
 
   belongs_to :article, primary_key: :uuid, foreign_key: :article_uuid, inverse_of: :snapshots
   has_one :arweave_transaction, dependent: :restrict_with_exception
@@ -41,7 +41,7 @@ class ArticleSnapshot < ApplicationRecord
     return unless new_record?
 
     assign_attributes(
-      raw: article.as_json
+      raw: article.as_json.merge(digest: SHA3::Digest::SHA256.hexdigest(article.content))
     )
   end
 end

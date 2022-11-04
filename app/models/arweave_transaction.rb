@@ -6,7 +6,7 @@
 #
 #  id                  :bigint           not null, primary key
 #  article_uuid        :uuid
-#  hash                :string
+#  digest              :string
 #  raw                 :json
 #  state               :string
 #  created_at          :datetime         not null
@@ -18,11 +18,11 @@
 #
 # Indexes
 #
-#  index_arweave_transactions_on_article_snapshot_id    (article_snapshot_id)
-#  index_arweave_transactions_on_article_uuid_and_hash  (article_uuid,hash) UNIQUE
-#  index_arweave_transactions_on_order_id               (order_id)
-#  index_arweave_transactions_on_owner_id               (owner_id)
-#  index_arweave_transactions_on_tx_id                  (tx_id)
+#  index_arweave_transactions_on_article_snapshot_id      (article_snapshot_id)
+#  index_arweave_transactions_on_article_uuid_and_digest  (article_uuid,digest) UNIQUE
+#  index_arweave_transactions_on_order_id                 (order_id)
+#  index_arweave_transactions_on_owner_id                 (owner_id)
+#  index_arweave_transactions_on_tx_id                    (tx_id)
 #
 class ArweaveTransaction < ApplicationRecord
   include AASM
@@ -35,6 +35,7 @@ class ArweaveTransaction < ApplicationRecord
   before_validation :setup_attributes, on: :create
   validates :tx_id, presence: true
   validates :raw, presence: true
+  validates :digest, presence: true, uniqueness: { scope: :article_uuid }
 
   default_scope -> { order(created_at: :desc) }
 
@@ -82,12 +83,12 @@ class ArweaveTransaction < ApplicationRecord
     if article.free?
       {
         content: {
-          title: article_snapshot.raw['title'],
-          intro: article_snapshot.raw['intro'],
-          body: article_snapshot.raw['content']
+          title: article_snapshot.title,
+          intro: article_snapshot.intro,
+          body: article_snapshot.content
         },
-        hash: hash,
-        author: (article.author.public_key.presence || article.author.mixin_uuid),
+        digest: digest,
+        author: article.author.uid,
         original_url: user_article_url(article.author, article),
         timestamp: article_snapshot.created_at.to_i
       }
@@ -104,20 +105,20 @@ class ArweaveTransaction < ApplicationRecord
       iv = encrypter.random_iv
       encrypter.iv = iv
       encrypter.key = Base64.urlsafe_decode64 Rails.application.credentials.dig(:encryption, :aes_key)
-      cipher = encrypter.update(article_snapshot.raw['content']) + encrypter.final
+      cipher = encrypter.update(article_snapshot.content) + encrypter.final
 
       {
         content: {
-          title: article_snapshot.raw['title'],
-          intro: article_snapshot.raw['intro'],
+          title: article_snapshot.title,
+          intro: article_snapshot.intro,
           body: Base64.urlsafe_encode64(cipher, padding: false)
         },
-        hash: hash,
+        digest: digest,
         alg: {
           name: 'aes-256-cfb',
           iv: Base64.urlsafe_encode64(iv, padding: false)
         },
-        author: (article.author.public_key.presence || article.author.mixin_uuid),
+        author: article.author.uid,
         original_url: user_article_url(article.author, article),
         timestamp: article_snapshot.created_at.to_i
       }
@@ -143,15 +144,15 @@ class ArweaveTransaction < ApplicationRecord
     iv = encrypter.random_iv
     encrypter.iv = iv
     encrypter.key = key
-    cipher = encrypter.update(article_snapshot.raw['content']) + encrypter.final
+    cipher = encrypter.update(article_snapshot.content) + encrypter.final
 
     {
       content: {
-        title: article_snapshot.raw['title'],
-        intro: article_snapshot.raw['intro'],
+        title: article_snapshot.title,
+        intro: article_snapshot.intro,
         body: Base64.urlsafe_encode64(cipher, padding: false)
       },
-      hash: hash,
+      digest: digest,
       alg: {
         name: 'aes-256-cfb',
         iv: Base64.urlsafe_encode64(iv, padding: false),
@@ -173,25 +174,6 @@ class ArweaveTransaction < ApplicationRecord
       ).to_s
   end
 
-  private
-
-  def setup_attributes
-    return unless new_record?
-    return unless encryptable?
-
-    self.hash = SHA3::Digest::SHA256.hexdigest article_snapshot.raw['content']
-    tx = Arweave::Transaction.new data: generated_data.to_json
-    tags.each do |tag|
-      next if tag[:value].blank?
-
-      tx.add_tag name: tag[:name], value: tag[:value]
-    end
-    tx.sign self.class.wallet
-    tx.commit
-    self.raw = tx.attributes
-    self.tx_id = tx.attributes[:id]
-  end
-
   def encryptable?
     return false if self.class.wallet.blank?
     return false if Rails.application.credentials.dig(:encryption, :private_key).blank?
@@ -211,15 +193,15 @@ class ArweaveTransaction < ApplicationRecord
       },
       {
         name: 'Owner',
-        value: owner&.public_key
+        value: owner&.uid
       },
       {
         name: 'Author',
-        value: article.author.public_key || article.author.mixin_uuid
+        value: article.author&.uid
       },
       {
         name: 'Content-Digest',
-        value: hash
+        value: digest
       },
       {
         name: 'UUID',
@@ -230,5 +212,24 @@ class ArweaveTransaction < ApplicationRecord
         value: article.collection&.uuid
       }
     ]
+  end
+
+  private
+
+  def setup_attributes
+    return unless new_record?
+    return unless encryptable?
+
+    self.digest = SHA3::Digest::SHA256.hexdigest article_snapshot.content
+    tx = Arweave::Transaction.new data: generated_data.to_json
+    tags.each do |tag|
+      next if tag[:value].blank?
+
+      tx.add_tag name: tag[:name], value: tag[:value]
+    end
+    tx.sign self.class.wallet
+    tx.commit
+    self.raw = tx.attributes
+    self.tx_id = tx.attributes[:id]
   end
 end

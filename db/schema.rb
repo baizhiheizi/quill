@@ -139,9 +139,9 @@ ActiveRecord::Schema[7.0].define(version: 2022_11_03_074740) do
     t.json "raw"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "hash"
+    t.string "digest"
     t.index ["article_snapshot_id"], name: "index_arweave_transactions_on_article_snapshot_id"
-    t.index ["article_uuid", "hash"], name: "index_arweave_transactions_on_article_uuid_and_hash", unique: true
+    t.index ["article_uuid", "digest"], name: "index_arweave_transactions_on_article_uuid_and_digest", unique: true
     t.index ["order_id"], name: "index_arweave_transactions_on_order_id"
     t.index ["owner_id"], name: "index_arweave_transactions_on_owner_id"
     t.index ["tx_id"], name: "index_arweave_transactions_on_tx_id"
