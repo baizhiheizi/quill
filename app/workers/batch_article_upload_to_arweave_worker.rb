@@ -5,6 +5,6 @@ class BatchArticleUploadToArweaveWorker
   sidekiq_options queue: :default, retry: true
 
   def perform
-    Article.where(updated_at: 1.hour.ago...).map(&:upload_to_arweave_async)
+    Article.published.where(updated_at: 1.hour.ago...).map(&:upload_to_arweave_async)
   end
 end

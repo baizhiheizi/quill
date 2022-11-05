@@ -83,14 +83,14 @@ class ArweaveTransaction < ApplicationRecord
     if article.free?
       {
         content: {
-          title: article_snapshot.title,
-          intro: article_snapshot.intro,
-          body: article_snapshot.content
+          title: article.title,
+          intro: article.intro,
+          body: article.content
         },
         digest: digest,
         author: article.author.uid,
         original_url: user_article_url(article.author, article),
-        timestamp: article_snapshot.created_at.to_i
+        timestamp: article.updated_at.to_i
       }
     else
       encrypted_data
@@ -105,12 +105,12 @@ class ArweaveTransaction < ApplicationRecord
       iv = encrypter.random_iv
       encrypter.iv = iv
       encrypter.key = Base64.urlsafe_decode64 Rails.application.credentials.dig(:encryption, :aes_key)
-      cipher = encrypter.update(article_snapshot.content) + encrypter.final
+      cipher = encrypter.update(article.content) + encrypter.final
 
       {
         content: {
-          title: article_snapshot.title,
-          intro: article_snapshot.intro,
+          title: article.title,
+          intro: article.intro,
           body: Base64.urlsafe_encode64(cipher, padding: false)
         },
         digest: digest,
@@ -120,7 +120,7 @@ class ArweaveTransaction < ApplicationRecord
         },
         author: article.author.uid,
         original_url: user_article_url(article.author, article),
-        timestamp: article_snapshot.created_at.to_i
+        timestamp: article.updated_at.to_i
       }
     end
   end
@@ -144,12 +144,12 @@ class ArweaveTransaction < ApplicationRecord
     iv = encrypter.random_iv
     encrypter.iv = iv
     encrypter.key = key
-    cipher = encrypter.update(article_snapshot.content) + encrypter.final
+    cipher = encrypter.update(article.content) + encrypter.final
 
     {
       content: {
-        title: article_snapshot.title,
-        intro: article_snapshot.intro,
+        title: article.title,
+        intro: article.intro,
         body: Base64.urlsafe_encode64(cipher, padding: false)
       },
       digest: digest,
@@ -161,7 +161,7 @@ class ArweaveTransaction < ApplicationRecord
       author: (article.author.public_key.presence || article.author.mixin_uuid),
       owner: owner.public_key,
       original_url: user_article_url(article.author, article),
-      timestamp: article_snapshot.created_at.to_i
+      timestamp: article.updated_at.to_i
     }
   end
 
@@ -220,7 +220,7 @@ class ArweaveTransaction < ApplicationRecord
     return unless new_record?
     return unless encryptable?
 
-    self.digest = SHA3::Digest::SHA256.hexdigest article_snapshot.content
+    self.digest = SHA3::Digest::SHA256.hexdigest article.content
     tx = Arweave::Transaction.new data: generated_data.to_json
     tags.each do |tag|
       next if tag[:value].blank?

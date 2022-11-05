@@ -18,7 +18,7 @@
 class ArticleSnapshot < ApplicationRecord
   include AASM
 
-  store_accessor :raw, %w[title intro content]
+  store_accessor :raw, %w[title intro content digest]
 
   belongs_to :article, primary_key: :uuid, foreign_key: :article_uuid, inverse_of: :snapshots
   has_one :arweave_transaction, dependent: :restrict_with_exception

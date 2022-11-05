@@ -37,7 +37,7 @@
           Content Digest
         </div>
         <div class="truncate">
-          <%= SHA3::Digest::SHA256.hexdigest article.content %>
+          <%= article.digest %>
         </div>
       </div>
     <% end %>
