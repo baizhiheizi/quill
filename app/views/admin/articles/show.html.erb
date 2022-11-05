@@ -138,6 +138,14 @@
         } do %>
         Comments
       <% end %>
+      <%= link_to admin_arweave_transactions_path(@article, tab: :arweave_transactions), 
+        class: "cursor-pointer py-1 px-4 border-blue-500 font-bold text-zinc-600",
+        data: {
+          tabs_target: "tab",
+          tabs_tabname_param: "arweave_transactions",
+        } do %>
+        AR Tx
+      <% end %>
     </div>
     <div class="hidden"
         data-tabs-content-param="orders"
@@ -150,6 +158,13 @@
         data-tabs-content-param="comments"
         data-tabs-target="content">
       <%= turbo_frame_tag 'admin_comments', src: admin_comments_path(commentable_id: @article.id, commentable_type: 'Article') do %>
+        <%= render "shared/loading" %>
+      <% end %>
+    </div>
+    <div class="hidden"
+        data-tabs-content-param="arweave_transactions"
+        data-tabs-target="content">
+      <%= turbo_frame_tag 'admin_arweave_transactions', src: admin_arweave_transactions_path(article_uuid: @article.uuid) do %>
         <%= render "shared/loading" %>
       <% end %>
     </div>

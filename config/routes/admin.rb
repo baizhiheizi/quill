@@ -74,4 +74,5 @@ namespace :admin do
   resources :non_fungible_outputs, only: %i[index show]
   resources :collectibles, only: %i[index show], param: :metahash
   resources :nft_collections, only: %i[index show]
+  resources :arweave_transactions, only: %i[index show]
 end

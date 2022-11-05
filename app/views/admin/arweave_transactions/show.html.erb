@@ -1,0 +1,50 @@
+<div class="flex items-center space-x-4 mb-4">
+  <%= link_to 'Home', admin_root_path %>
+  <span>/</span>
+  <%= link_to 'AR Tx', admin_arweave_transactions_path %>
+  <span>/</span>
+  <span><%= @arweave_transaction.id %></span>
+</div>
+
+<div class="bg-white dark:bg-zinc-900 roundedlg p-4">
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-8">
+    <div class="col-span-1 flex space-x-2">
+      <span class="font-bold">ID:</span> 
+      <span><%= @arweave_transaction.id %></span>
+    </div>
+    <div class="col-span-1 flex space-x-2">
+      <span class="font-bold">TxID:</span> 
+      <span><%= link_to @arweave_transaction.tx_id, @arweave_transaction.snapshot_url, target: "_blank" %></span>
+    </div>
+    <div class="col-span-1 flex space-x-2">
+      <span class="font-bold">Article:</span> 
+      <span>
+        <%= render "admin/articles/field", article: @arweave_transaction.article, tab: 'arweave_transactions' %>
+      </span>
+    </div>
+    <div class="col-span-1 flex space-x-2">
+      <span class="font-bold">Owner:</span> 
+      <span>
+        <% if @arweave_transaction.owner.present? %>
+          <%= render "admin/users/field", user: @arweave_transaction.owner, tab: :arweave_transactions %>
+        <% else %>
+          <%= @arweave_transaction.owner_id || '-' %>
+        <% end %>
+      </span>
+    </div>
+    <div class="col-span-1 flex space-x-2">
+      <span class="font-bold">State:</span> 
+      <span class="px-2 py-1 rounded text-white 
+        <%= {
+          pending: 'bg-slate-500',
+          accepted: 'bg-green-500',
+        }[@arweave_transaction.state.to_sym] %>">
+        <%= @arweave_transaction.state %>
+      </span>
+    </div>
+    <div class="col-span-1 flex space-x-2">
+      <span class="font-bold">Created:</span> 
+      <span><%= @arweave_transaction.created_at %></span>
+    </div>
+  </div>
+</div>

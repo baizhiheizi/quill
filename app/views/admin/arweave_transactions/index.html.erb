@@ -1,0 +1,34 @@
+<div class="flex items-center space-x-4 mb-4">
+  <%= link_to 'Home', admin_root_path %>
+  <span>/</span>
+  <span>AR tx</span>
+</div>
+
+<div class="p-4 bg-white dark:bg-zinc-900 rounded-lg shadow">
+  <%= turbo_frame_tag 'admin_arweave_transactions' do %>
+    <div class="mb-4">
+      <%= render 'admin/arweave_transactions/query' %>
+    </div>
+    <div data-controller="infinite-scroll" class="w-full overflow-x-scroll scrollbar-hide">
+      <table class='w-full table-auto min-w-max '>
+        <thead>
+          <tr class="bg-zinc-100 dark:bg-zinc-800">
+            <th class="p-4">ID</th>
+            <th class="p-4">State</th>
+            <th class="p-4">TxID</th>
+            <th class="p-4">Article</th>
+            <th class="p-4">Owner</th>
+            <th class="p-4">Digest</th>
+            <th class="p-4">Created</th>
+            <th class="p-4"></th>
+          </tr>
+        </thead>
+        <tbody id="admin_arweave_transactions_list">
+          <%= render partial: 'admin/arweave_transactions/arweave_transaction', collection: @arweave_transactions, as: :arweave_transaction %>
+        </tbody>
+      </table>
+      <div data-infinite-scroll-target='scrollArea'></div>
+      <%= render partial: "shared/pagination", locals: { pagy: @pagy } %>
+    </div>
+  <% end %>
+</div>

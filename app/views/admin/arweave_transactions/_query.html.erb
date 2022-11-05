@@ -1,0 +1,22 @@
+<%= form_with url: admin_arweave_transactions_path, method: :get, class: "flex items-center flex-wrap" do |form| %>
+  <%= form.select :state, 
+    [
+      ['All States', 'all'], 
+      ['Pending', 'pending'],
+      ['Accepted', 'accepted'],
+    ], 
+    { selected: @state }, 
+    class: "rounded-lg m-1 dark:bg-zinc-900" %>
+  <%= form.select :order_by, 
+    [
+      ['Processed DESC', 'processed_at_desc'], 
+      ['Created DESC', 'created_at_desc'], 
+      ['Created ASC', 'created_at_asc'], 
+    ], 
+    { selected: @order_by }, 
+    class: "rounded-lg m-1 dark:bg-zinc-900" %>
+  <%= form.text_field :query, value: @query, placeholder: "Search", class: "rounded-lg m-1 dark:bg-zinc-900" %>
+  <%= form.hidden_field :owner_id, value: params[:owner_id] %>
+  <%= form.hidden_field :article_uuid, value: params[:article_uuid] %>
+  <%= form.submit :Query, class: "cursor-pointer rounded bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 m-1" %>
+<% end %>
