@@ -5,11 +5,6 @@ class BatchArweaveTxAcceptWorker
   sidekiq_options queue: :default, retry: false
 
   def perform
-    thrs = []
-    ArweaveTransaction.where(state: :pending).each do |tx|
-      thrs << Thread.new { tx.accept! }
-    end
-
-    thrs.join
+    ArweaveTransaction.pending.each.map(&:accept!)
   end
 end
