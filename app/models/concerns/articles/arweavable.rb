@@ -3,11 +3,16 @@
 module Articles::Arweavable
   extend ActiveSupport::Concern
 
+  def upload_to_arweave_async
+    ArticleUploadToArweaveWorker.perform_async id
+  end
+
   def upload_to_arweave!
     arweave_transactions.create_with(
       article_snapshot: snapshots.order(created_at: :desc).first
     ).find_or_create_by!(
-      digest: SHA3::Digest::SHA256.hexdigest(content)
+      owner: nil,
+      digest: digest
     )
   end
 
@@ -16,7 +21,8 @@ module Articles::Arweavable
       owner: author,
       article_snapshot: snapshots.order(created_at: :desc).first
     ).find_or_create_by!(
-      digest: SHA3::Digest::SHA256.hexdigest(content)
+      owner: author,
+      digest: digest
     )
   end
 
@@ -28,5 +34,9 @@ module Articles::Arweavable
     return default_arweave_tx if user.blank? || !user.is_a?(User)
 
     arweave_transactions.where(owner: user).order(created_at: :desc).first || default_arweave_tx
+  end
+
+  def digest
+    @digest ||= SHA3::Digest::SHA256.hexdigest(content)
   end
 end

@@ -18,11 +18,11 @@
 #
 # Indexes
 #
-#  index_arweave_transactions_on_article_snapshot_id      (article_snapshot_id)
-#  index_arweave_transactions_on_article_uuid_and_digest  (article_uuid,digest) UNIQUE
-#  index_arweave_transactions_on_order_id                 (order_id)
-#  index_arweave_transactions_on_owner_id                 (owner_id)
-#  index_arweave_transactions_on_tx_id                    (tx_id)
+#  index_ar_tx_on_article_uuid_and_owner_id_and_digest  (article_uuid,owner_id,digest) UNIQUE
+#  index_arweave_transactions_on_article_snapshot_id    (article_snapshot_id)
+#  index_arweave_transactions_on_order_id               (order_id)
+#  index_arweave_transactions_on_owner_id               (owner_id)
+#  index_arweave_transactions_on_tx_id                  (tx_id)
 #
 class ArweaveTransaction < ApplicationRecord
   include AASM

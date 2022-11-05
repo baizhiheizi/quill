@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_11_03_074740) do
+ActiveRecord::Schema[7.0].define(version: 2022_11_05_021058) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
   enable_extension "pgcrypto"
@@ -141,7 +141,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_11_03_074740) do
     t.datetime "updated_at", null: false
     t.string "digest"
     t.index ["article_snapshot_id"], name: "index_arweave_transactions_on_article_snapshot_id"
-    t.index ["article_uuid", "digest"], name: "index_arweave_transactions_on_article_uuid_and_digest", unique: true
+    t.index ["article_uuid", "owner_id", "digest"], name: "index_ar_tx_on_article_uuid_and_owner_id_and_digest", unique: true
     t.index ["order_id"], name: "index_arweave_transactions_on_order_id"
     t.index ["owner_id"], name: "index_arweave_transactions_on_owner_id"
     t.index ["tx_id"], name: "index_arweave_transactions_on_tx_id"
