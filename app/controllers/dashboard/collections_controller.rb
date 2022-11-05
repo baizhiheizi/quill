@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class Dashboard::CollectionsController < Dashboard::BaseController
-  before_action :authenticate_validated_user!, only: %i[new create]
   before_action :load_collection, only: %i[show edit update destroy]
 
   def index
@@ -67,11 +66,5 @@ class Dashboard::CollectionsController < Dashboard::BaseController
     params
       .require(:collection)
       .permit(:name, :symbol, :description, :asset_id, :price, :revenue_ratio)
-  end
-
-  def authenticate_validated_user!
-    return if current_user&.validated?
-
-    redirect_back fallback_location: root_path
   end
 end

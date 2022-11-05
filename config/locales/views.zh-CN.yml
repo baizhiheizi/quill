@@ -334,10 +334,10 @@ zh-CN:
   collection_rule: |
     How collection works:
 
-    1. You can create a collection and then sell your contents in collection.
-    2. For every sell of the collection, 10% will be charged from Quill and the rest 90% will be author's revenue.
-    3. Every buyer of the collection will receive an NFT as a ticket to access all articles in this collection. (NFT may be sold to others of course) 
-    4. Every article in the collection may also be sold sperately. A part of every sperate sell will split to the collection buyers (even his/her NFT has been sold) as bonus.
+    1. 你可以创建一个合辑，以合辑的形式预售你的文章；
+    2. 合辑出售时，Quill 将收取 10% 作为管理费，其余 90% 为作者收益；
+    3. 合辑的购买者可以铸造一枚 NFT，并以 NFT 作为凭证阅读合辑内所有文章；（NFT 当然也可以出售或者赠送给别人）
+    4. 合辑内的每一篇文章均可以单独出售，单独出售获得的收益有一部分将作为合辑收益，平分给所有合辑购买者（是否持有 NFT 不影响这部分收益）。
   list_collection: 上架合辑
   list: 上架
   hide_collection: 下架合辑
