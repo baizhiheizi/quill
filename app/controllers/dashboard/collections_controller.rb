@@ -70,7 +70,6 @@ class Dashboard::CollectionsController < Dashboard::BaseController
   end
 
   def authenticate_validated_user!
-    return if current_user&.accessable?
     return if current_user&.validated?
 
     redirect_back fallback_location: root_path
