@@ -424,6 +424,8 @@ GEM
       rubyzip (~> 2.3)
     redcarpet (3.5.1)
     redis (4.8.0)
+    redis-client (0.11.1)
+      connection_pool
     redis-namespace (1.9.0)
       redis (>= 4)
     redis-objects (1.7.0)
@@ -477,10 +479,11 @@ GEM
       rubyzip (>= 1.2.2, < 3.0)
       websocket (~> 1.0)
     sha3 (1.0.5)
-    sidekiq (6.5.8)
-      connection_pool (>= 2.2.5, < 3)
-      rack (~> 2.0)
-      redis (>= 4.5.0, < 5)
+    sidekiq (7.0.1)
+      concurrent-ruby (< 2)
+      connection_pool (>= 2.3.0)
+      rack (>= 2.2.4)
+      redis-client (>= 0.9.0)
     sidekiq-cron (1.8.0)
       fugit (~> 1)
       sidekiq (>= 4.2.1)
@@ -590,7 +593,7 @@ DEPENDENCIES
   rubocop-rails
   second_level_cache
   selenium-webdriver
-  sidekiq (~> 6.0)
+  sidekiq (~> 7.0)
   sidekiq-cron
   sidekiq-throttled
   simple_command
