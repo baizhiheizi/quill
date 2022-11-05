@@ -282,6 +282,7 @@ class Article < ApplicationRecord
     create_wallet_async
     notify_for_first_published_async
     subscribe_comments_for_author
+    upload_to_arweave_async
   end
 
   def generate_snapshot

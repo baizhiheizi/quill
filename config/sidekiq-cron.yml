@@ -19,6 +19,9 @@ mixin_network_snapshot_monitor_worker:
 batch_arweave_tx_accept_worker:
   cron: '*/15 * * * *'
   class: 'BatchArweaveTxAcceptWorker'
+batch_article_upload_to_arweave_worker:
+  cron: '0 */1 * * *'
+  class: 'BatchArticleUploadToArweaveWorker'
 daily_statistic_generate_worker:
   cron: '0 0 * * *'
   class: 'DailyStatisticGenerateWorker'
