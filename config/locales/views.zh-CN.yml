@@ -17,6 +17,7 @@ zh-CN:
   delete: 删除
   add: 增加
   remove: 移除
+  confirm: 确认
   pay: 支付
   pay_with_mixin: Mixin 支付
   pay_with_fennec: Fennec 支付
@@ -332,8 +333,7 @@ zh-CN:
   new_collection: 新建合辑
   collection_revenue_ratio_tips: 合辑内所有文章单独售卖的收入，将有一部分作为合辑购买者的奖励
   collection_rule: |
-    How collection works:
-
+    合辑的规则:
     1. 你可以创建一个合辑，以合辑的形式预售你的文章；
     2. 合辑出售时，Quill 将收取 10% 作为管理费，其余 90% 为作者收益；
     3. 合辑的购买者可以铸造一枚 NFT，并以 NFT 作为凭证阅读合辑内所有文章；（NFT 当然也可以出售或者赠送给别人）

@@ -18,8 +18,10 @@
 <% if current_user.collections.listed.blank? %>
   <%= turbo_frame_tag 'modal' do %>
     <%= render ModalComponent.new title: t('new_collection') do %>
-      <div class="prose-comment mb-6">
-        <%= MarkdownRenderService.call(t('collection_rule'), type: :full).html_safe %>
+      <div class="mb-12">
+        <div class="prose">
+          <%= MarkdownRenderService.call(t('collection_rule'), type: :full).html_safe %>
+        </div>
       </div>
       <div class="flex items-center justify-center">
         <button data-action="modal-component#cancel" class="py-2 px-4 w-48 rounded-full bg-primary text-white text-center">
