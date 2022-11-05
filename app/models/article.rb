@@ -412,7 +412,7 @@ class Article < ApplicationRecord
     @thumb_url ||=
       if cover.attached?
         cover_url
-      else
+      elsif free?
         Nokogiri::HTML
           .fragment(content_as_html)
           .css('img')
