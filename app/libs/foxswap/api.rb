@@ -32,6 +32,8 @@ module Foxswap
           [p['base_asset_id'], p['quote_asset_id']]
         end.flatten.uniq
       end
+    rescue StandardError
+      []
     end
 
     def order(order_id, authorization:)
