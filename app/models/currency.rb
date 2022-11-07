@@ -45,11 +45,29 @@ class Currency < ApplicationRecord
   scope :btc, -> { find_by(asset_id: BTC_ASSET_ID) }
 
   def minimal_reward_amount
-    BigDecimal(0.5 / price_usd.to_f, 1).to_f
+    if price_usd.positive?
+      BigDecimal(0.5 / price_usd.to_f, 1).to_f
+    else
+      {
+        pUSD: 0.5,
+        ETH: 0.0005,
+        BTC: 0.00005,
+        XIN: 0.005
+      }[symbol.to_sym]
+    end
   end
 
   def minimal_price_amount(price = 0.1)
-    BigDecimal(price.to_f / price_usd, 1).to_f
+    if price_usd.positive?
+      BigDecimal(price.to_f / price_usd, 1).to_f
+    else
+      {
+        pUSD: 0.1,
+        ETH: 0.0001,
+        BTC: 0.00001,
+        XIN: 0.001
+      }[symbol.to_sym]
+    end
   end
 
   def swappable?
