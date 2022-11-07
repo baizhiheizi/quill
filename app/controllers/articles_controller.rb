@@ -68,6 +68,7 @@ class ArticlesController < ApplicationController
 
   def share
     @article = Article.published.find_by uuid: params[:article_uuid]
+    return if @article.blank?
   end
 
   def preview
