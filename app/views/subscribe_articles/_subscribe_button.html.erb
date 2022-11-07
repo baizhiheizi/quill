@@ -5,7 +5,7 @@
       data: { 
         turbo_frame: :modal 
       }, 
-      class: "block w-full cursor-pointer rounded text-primary text-center py-1 px-4" %>
+      class: "block w-full cursor-pointer rounded text-primary text-center py-1 px-4 min-w-fit" %>
   <% elsif current_user.commenting_subscribe_article? article %>
     <div class="w-full bg-transparent text-center py-1">
       <%= link_to t('unsubscribe'), 
@@ -13,7 +13,7 @@
         data: { 
           turbo_frame: :modal
         }, 
-        class: "bg-transparent cursor-pointer opacity-50" %>
+        class: "bg-transparent cursor-pointer opacity-50 min-w-fit" %>
     </div>
   <% else %>
     <%= button_to t('subscribe'), 
