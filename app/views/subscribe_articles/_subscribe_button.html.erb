@@ -5,16 +5,14 @@
       data: { 
         turbo_frame: :modal 
       }, 
-      class: "block w-full cursor-pointer rounded text-primary text-center py-1 px-4 min-w-fit" %>
+      class: "block w-full cursor-pointer rounded text-primary text-center py-1 px-4 min-w-fit break-keep" %>
   <% elsif current_user.commenting_subscribe_article? article %>
-    <div class="w-full bg-transparent text-center py-1">
-      <%= link_to t('unsubscribe'), 
-        new_subscribe_article_path(uuid: article.uuid), 
-        data: { 
-          turbo_frame: :modal
-        }, 
-        class: "bg-transparent cursor-pointer opacity-50 min-w-fit" %>
-    </div>
+    <%= link_to t('unsubscribe'), 
+      new_subscribe_article_path(uuid: article.uuid), 
+      data: { 
+        turbo_frame: :modal
+      }, 
+      class: "bg-transparent cursor-pointer opacity-50 min-w-fit break-keep" %>
   <% else %>
     <%= button_to t('subscribe'), 
       subscribe_articles_path(uuid: article.uuid), 
