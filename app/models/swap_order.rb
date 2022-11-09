@@ -26,7 +26,6 @@
 #
 
 class SwapOrder < ApplicationRecord
-  SWAPABLE_ASSETS = (Article::SUPPORTED_ASSETS + (Foxswap.api.swappable_asset_ids || [])).uniq
   FOX_SWAP_APP_ID = Settings.foxswap.app_id
   FSWAP_MTG_MEMBERS = Settings.foxswap.mtg_members
   FSWAP_MTG_THRESHOLD = Settings.foxswap.mtg_threshold

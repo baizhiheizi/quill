@@ -40,7 +40,7 @@ class Currency < ApplicationRecord
 
   belongs_to :chain, class_name: 'Currency', primary_key: :asset_id, optional: true, inverse_of: false
 
-  scope :swappable, -> { where(asset_id: SwapOrder::SWAPABLE_ASSETS).order(symbol: :asc) }
+  scope :swappable, -> { where(asset_id: Foxswap.api.swappable_asset_ids).order(symbol: :asc) }
   scope :pricable, -> { where(asset_id: Article::SUPPORTED_ASSETS) }
   scope :btc, -> { find_by(asset_id: BTC_ASSET_ID) }
 
@@ -71,7 +71,7 @@ class Currency < ApplicationRecord
   end
 
   def swappable?
-    asset_id.in? SwapOrder::SWAPABLE_ASSETS
+    asset_id.in? Foxswap.api.swappable_asset_ids
   end
 
   def pricable?

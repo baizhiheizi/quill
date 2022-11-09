@@ -11,7 +11,7 @@ if Rails.env.development?
 end
 
 unless Rails.env.test?
-  (SwapOrder::SWAPABLE_ASSETS || []).each do |asset|
+  Foxswap.api.swappable_asset_ids.each do |asset|
     Currency.find_or_create_by asset_id: asset
   end
 

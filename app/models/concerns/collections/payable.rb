@@ -64,6 +64,6 @@ module Collections::Payable
   end
 
   def mixpay_supported?
-    asset_id.in? (Mixpay.api.settlement_asset_ids + Mixpay.api.quote_asset_ids).uniq
+    asset_id.in?(Mixpay.api.settlement_asset_ids) && asset_id.in?(Mixpay.api.quote_asset_ids)
   end
 end

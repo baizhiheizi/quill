@@ -52,13 +52,13 @@ module Mixpay
     end
 
     def quote_asset_ids
-      Rails.cache.fetch('mixpay_quote_asset_ids', expires_in: 1.day) do
+      Rails.cache.fetch('mixpay_quote_asset_ids', expires_in: 1.hour) do
         quote_assets.map(&->(asset) { asset['assetId'] })
       end
     end
 
     def settlement_asset_ids
-      Rails.cache.fetch('mixpay_settlement_asset_ids', expires_in: 1.day) do
+      Rails.cache.fetch('mixpay_settlement_asset_ids', expires_in: 1.hour) do
         settlement_assets.map(&->(asset) { asset['assetId'] })
       end
     end

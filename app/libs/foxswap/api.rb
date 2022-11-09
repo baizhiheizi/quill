@@ -27,7 +27,7 @@ module Foxswap
     end
 
     def swappable_asset_ids
-      Rails.cache.fetch('swappable_asset_ids', expires_in: 1.day) do
+      Rails.cache.fetch('swappable_asset_ids', expires_in: 1.hour) do
         pairs['data']['pairs'].filter(&->(p) { (p['base_value'].to_f + p['quote_value'].to_f > 50_000) || p['swap_method'] == 'curve' }).map do |p|
           [p['base_asset_id'], p['quote_asset_id']]
         end.flatten.uniq
