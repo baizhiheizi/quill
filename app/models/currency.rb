@@ -46,7 +46,7 @@ class Currency < ApplicationRecord
 
   def minimal_reward_amount
     if price_usd.positive?
-      BigDecimal(0.5 / price_usd.to_f, 1).to_f
+      BigDecimal(0.5 / price_usd.to_f, 1).ceil(8)
     else
       {
         pUSD: 0.5,
@@ -59,7 +59,7 @@ class Currency < ApplicationRecord
 
   def minimal_price_amount(price = 0.1)
     if price_usd.positive?
-      BigDecimal(price.to_f / price_usd, 1).to_f
+      BigDecimal(price.to_f / price_usd, 1).ceil(8)
     else
       {
         pUSD: 0.1,
