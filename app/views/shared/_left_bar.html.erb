@@ -114,18 +114,16 @@
               <%= link_to t('settings'), 
                 dashboard_settings_path, 
                 class: "block py-2 px-4" %>
-              <%= link_to t('deposit_to_mvm'),
-                deposit_dashboard_destination_path, 
-                data: {
-                  turbo_frame: :modal
-                },
-                class: "block py-2 px-4 min-w-max" if current_user.mvm_eth? %>
               <%= link_to t('disconnect'), 
                 logout_path, 
                 data: {
                   action: 'session#destroy',
                 },
                 class: "block py-2 px-4" %>
+              <%= link_to 'MVM Bridge',
+                'https://bridge.mvm.app', 
+                target: '_blank',
+                class: "block py-2 px-4 min-w-max" if current_user.mvm_eth? %>
             </div>
           <% end %>
         <% else %>

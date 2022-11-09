@@ -56,14 +56,11 @@
         <% end %>
       </div>
 
-      <%= link_to deposit_dashboard_destination_path, 
-        data: {
-          turbo_frame: :modal
-        },
-        class: "block text-sm opacity-75 flex items-center" do %>
-        <span><%= t('deposit') %></span>
-          <%= inline_svg_tag "icons/chevron-right.svg", class: 'w-4 h-4' %>
-      <% end %>
+      <div class="relative text-sm opacity-75 flex items-center">
+        <span>MVM Bridge</span>
+        <%= inline_svg_tag "icons/chevron-right.svg", class: 'w-4 h-4' %>
+        <%= link_to '', 'https://bridge.mvm.app', target: "_blank", class: "absolute inset-0" %>
+      </div>
     </div>
 
     <div data-mvm-pay-button-component-target="mvmTips" class="hidden text-red-500 text-sm py-1">
