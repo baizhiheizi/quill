@@ -132,6 +132,9 @@ gem 'exception-track'
 # The safe Markdown parser, reloaded.
 gem 'redcarpet'
 
+# kramdown is a fast, pure Ruby Markdown superset converter, using a strict syntax definition and supporting several common extensions.
+gem 'kramdown'
+
 # Easily include static pages in your Rails app.
 gem 'high_voltage'
 

@@ -26,7 +26,7 @@ class MarkdownRenderService
   end
 
   def initialize(content, **kargs)
-    @content = content
+    @content = content.to_s
     @type = kargs[:type] || :default
   end
 
@@ -35,24 +35,26 @@ class MarkdownRenderService
   end
 
   def call
-    @html = Redcarpet::Markdown.new(
-      HTMLWithTocRender.new(
-        with_toc_data: true,
-        hard_wrap: true,
-        prettify: true
-      ),
-      autolink: true,
-      disable_indented_code_blocks: true,
-      tables: true,
-      fenced_code_blocks: true,
-      space_after_headers: true,
-      lax_spacing: true,
-      quote: true,
-      underline: true,
-      highlight: true,
-      footnotes: true,
-      strikethrough: true
-    ).render @content.to_s
+    # @html = Redcarpet::Markdown.new(
+    #   HTMLWithTocRender.new(
+    #     with_toc_data: true,
+    #     hard_wrap: true,
+    #     prettify: true
+    #   ),
+    #   autolink: true,
+    #   disable_indented_code_blocks: true,
+    #   tables: true,
+    #   fenced_code_blocks: true,
+    #   space_after_headers: true,
+    #   lax_spacing: false,
+    #   quote: true,
+    #   underline: true,
+    #   highlight: true,
+    #   footnotes: true,
+    #   strikethrough: true
+    # ).render @content.to_s
+
+    @html = Kramdown::Document.new(@content).to_html
 
     case @type
     when :default
