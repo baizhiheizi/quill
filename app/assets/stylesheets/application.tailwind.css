@@ -106,10 +106,10 @@
   }
 
   .prose-article {
-    @apply prose dark:prose-invert prose-blockquote:border-primary prose-img:rounded-lg prose-img:shadow-md prose-img:mx-auto prose-pre:bg-zinc-100 prose-pre:text-black dark:prose-pre:bg-zinc-800 dark:prose-pre:text-zinc-100 dark:prose-code:bg-zinc-800 xl:prose-lg mx-auto break-words max-w-none;
+    @apply prose dark:prose-invert prose-blockquote:border-primary prose-blockquote:not-italic prose-img:rounded-md prose-img:shadow-md prose-img:mx-auto prose-pre:bg-[#F4F4F4] prose-pre:text-black dark:prose-pre:bg-[#333444] dark:prose-code:bg-[#333444] xl:prose-lg mx-auto break-words max-w-none;
   }
   .prose-comment {
-    @apply prose prose-h1:text-base prose-h1:m-0 prose-h2:text-base prose-h2:m-0 prose-h3:text-base prose-h3:m-0 prose-h4:m-0 prose-blockquote:border-[#B1B6C6] prose-blockquote:dark:border-[#80808E] prose-blockquote:pl-2 prose-blockquote:my-4 mb-2 dark:prose-invert max-w-none text-opacity-60;
+    @apply prose prose-h1:text-base prose-h1:m-0 prose-h2:text-base prose-h2:m-0 prose-h3:text-base prose-h3:m-0 prose-h4:m-0 prose-blockquote:border-[#B1B6C6] prose-blockquote:dark:border-[#80808E] prose-blockquote:pl-2 prose-blockquote:my-4 prose-blockquote:not-italic mb-2 dark:prose-invert max-w-none text-opacity-60;
   }
 }
 
