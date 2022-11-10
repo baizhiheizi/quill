@@ -1,7 +1,7 @@
 <% if article.arweave_tx_of(current_user).present? %>
-  <div class="rounded-lg text-xs font-mono border divide-y text-[#222222] text-opacity-50">
+  <div class="rounded-lg text-xs font-mono border divide-y text-[#222222] text-opacity-50 dark:border-white dark:border-opacity-5 dark:text-[white]">
     <% if article.collection.present? %>
-      <div class="relative p-3 flex justify-between items-center space-x-4 hover:bg-[#F4F4F4]">
+      <div class="relative p-3 flex justify-between items-center space-x-4 hover:bg-[#F4F4F4] dark:hover:bg-[#333444] dark:border-white dark:border-opacity-5">
         <div class="min-w-fit font-bold uppercase">
           Trident NFT
         </div>
@@ -12,7 +12,7 @@
       </div>
     <% end %>
     <% if article.author.mvm_eth? %>
-      <div class="relative p-3 flex justify-between items-center space-x-4 hover:bg-[#F4F4F4]">
+      <div class="relative p-3 flex justify-between items-center space-x-4 hover:bg-[#F4F4F4] dark:hover:bg-[#333444] dark:border-white dark:border-opacity-5">
         <div class="min-w-fit font-bold uppercase">
           Author Address
         </div>
@@ -23,7 +23,7 @@
       </div>
     <% end %>
     <% if article.arweave_tx_of(current_user).present? %>
-      <div class="relative p-3 flex justify-between items-center space-x-4 hover:bg-[#F4F4F4]">
+      <div class="relative p-3 flex justify-between items-center space-x-4 hover:bg-[#F4F4F4] dark:hover:bg-[#333444] dark:border-white dark:border-opacity-5">
         <div class="min-w-fit font-bold uppercase">
           Arweave TX
         </div>
@@ -32,7 +32,7 @@
         </div>
         <%= link_to '', article.arweave_tx_of(current_user).snapshot_url, target: "_blank", class: "absolute inset-0" %>
       </div>
-      <div class="relative p-3 flex justify-between items-center space-x-4 hover:bg-[#F4F4F4]">
+      <div class="relative p-3 flex justify-between items-center space-x-4 hover:bg-[#F4F4F4] dark:hover:bg-[#333444] dark:border-white dark:border-opacity-5">
         <div class="min-w-fit font-bold uppercase">
           Content Digest
         </div>
