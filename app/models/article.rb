@@ -391,9 +391,9 @@ class Article < ApplicationRecord
       locales = [CLD.detect_language(intro)[:code], CLD.detect_language(plain_text)[:code]].uniq
 
       if locales.size == 1
-        locales.first
+        locales.first.split('-').first
       else
-        locales.reject(&->(l) { l == 'en' }).last
+        locales.reject(&->(l) { l == 'en' }).last.split('-').first
       end
     else
       author.locale.split('-').first
