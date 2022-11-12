@@ -90,8 +90,8 @@ class Collection < ApplicationRecord
 
     ActiveRecord::Base.transaction do
       update! uuid: r['id']
-      list!
       NftCollection.create! uuid: r['id'], raw: r
+      reload.list!
     end
   end
 
