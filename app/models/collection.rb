@@ -87,9 +87,9 @@ class Collection < ApplicationRecord
       external_url: 'https://quill.im',
       icon_url: cover_url
     )
+    update! uuid: r['id'] if r['id'].present?
 
     ActiveRecord::Base.transaction do
-      update! uuid: r['id']
       NftCollection.create! uuid: r['id'], raw: r
       reload.list!
     end
