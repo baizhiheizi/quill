@@ -72,7 +72,7 @@ module Authenticatable
     def find_or_create_user_by_auth(auth)
       if auth.user.present?
         user = auth.user
-        user.update_profile auth.raw
+        user.update_profile auth.raw if user.messenger?
       else
         user = create!(
           avatar_url: auth.raw['avatar_url'],
