@@ -3,7 +3,7 @@
     <div class="relative flex items-center justify-between space-x-2">
       <img class="w-12 h-12 rounded-full" src="<%= user.avatar_thumb %>" />
       <div class="truncate">
-        <div class="text-lg font-bold truncate"><%= user.short_name %></div>
+        <div class="text-lg font-bold truncate max-w-24"><%= user.name %></div>
         <div class="text-sm text-gray-500 truncate">@<%= user.short_uid %></div>
       </div>
       <%= link_to user_path(user), data: { controller: 'prefetch' } do %>

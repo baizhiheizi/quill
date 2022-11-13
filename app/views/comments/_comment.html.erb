@@ -9,7 +9,7 @@
       <%= image_tag comment.author.avatar_thumb, class: "w-9 h-9 rounded-full" %>
     <% end %>
     <div class="">
-      <div class="truncate"><%= comment.author.short_name %></div>
+      <div class="truncate max-w-24"><%= comment.author.name %></div>
       <div class="text-sm opacity-50">
         <%= render TimeFormatComponent.new datetime: comment.created_at.rfc3339 do %>
           <%= time_ago_in_words comment.created_at %>
@@ -25,10 +25,10 @@
           <blockquote>
             <div class="bg-[#F4F4F4] dark:bg-[#333444] px-4 py-3 rounded">
               <div class="truncate flex items-center">
-                <%= link_to "@#{comment.quote_comment.author.short_name}", 
+                <%= link_to "@#{comment.quote_comment.author.name}", 
                   user_path(comment.quote_comment.author), 
                   data: { controller: 'prefetch', turbo_frame: "_top" }, 
-                  class: "truncate no-underline italic" %>
+                  class: "truncate max-w-24 no-underline italic" %>
                 :(
                 <%= link_to "##{comment.quote_comment.id}", 
                   new_comment_path(quote_comment_id: comment.quote_comment_id),

@@ -8,7 +8,7 @@
         <div class="flex items-center justify-between mb-4 truncate">
           <%= link_to user_path(user), data: { controller: 'prefetch', turbo_frame: '_top' }, class: "flex items-center space-x-2 truncate" do %>
             <%= image_tag user.avatar_thumb, class: "w-10 h-10 rounded-full" %>
-            <div class="truncate"><%= user.short_name %></div>
+            <div class="truncate max-w-24"><%= user.name %></div>
           <% end %>
           <div class="text-sm">
             <%= render "subscribe_users/subscribe_button", user: user %>

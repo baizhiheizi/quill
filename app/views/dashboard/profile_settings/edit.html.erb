@@ -1,8 +1,84 @@
+<%= turbo_frame_tag 'profile_avatar_form' do %>
+  <%= form_for current_user, url: dashboard_profile_setting_path, method: :put do |form| %>
+    <div class="mb-4 flex items-center justify-between">
+      <span class="text-lg font-bold">
+        <%= form.label :avatar %>
+      </span>
+      <div class="flex items-center space-x-2">
+        <%= form.submit t('save'), class: 'cursor-pointer rounded-full border border-primary text-primary px-4 py-1' %>
+        <%= link_to t('cancel'), :back, class: 'cursor-pointer rounded-full border dark:border-white dark:border-opacity-5 text-inherit text-opacity-40 px-4 py-1' %>
+      </div>
+    </div>
+
+    <%= form.label :avatar, class: "block cursor-pointer" do %>
+      <div data-controller="preview-upload" class="flex items-center">
+        <img data-preview-upload-target="imageTpl" class="hidden w-16 h-16 rounded-full" %>
+        <div data-preview-upload-target="output" class="w-16 mr-4">
+          <%= image_tag current_user.avatar_url, class: "w-16 h-16 rounded-full", loading: :lazy %>
+        </div>
+        <%= form.file_field :avatar, 
+          placeholder: '', 
+          accept: "image/*", 
+          data: {
+            preview_upload_target: "input",
+            action: "input->preview-upload#preview"
+          },
+          class: "sr-only",
+          direct_upload: true%>
+
+      </div>
+    <% end %>
+  <% end %>
+<% end %>
+
+<%= turbo_frame_tag 'profile_name_form' do %>
+  <%= form_for current_user, url: dashboard_profile_setting_path, method: :put do |form| %>
+    <div class="mb-4 flex items-center justify-between">
+      <span class="text-lg font-bold">
+        <%= form.label :name %>
+      </span>
+      <div class="flex items-center space-x-2">
+        <%= form.submit t('save'), class: 'cursor-pointer rounded-full border border-primary text-primary px-4 py-1' %>
+        <%= link_to t('cancel'), :back, class: 'cursor-pointer rounded-full border dark:border-white dark:border-opacity-5 text-inherit text-opacity-40 px-4 py-1' %>
+      </div>
+    </div>
+
+    <div class="flex items-center">
+      <%= form.text_field :name, 
+        placeholder: 'input name', 
+        class: "flex-1 block py-2 px-0 text-primary border-t-0 border-l-0 border-r-0 border-b border-[#F4F4F4] focus:ring-0" %>
+
+    </div>
+  <% end %>
+<% end %>
+
+<%= turbo_frame_tag 'profile_biography_form' do %>
+  <%= form_for current_user, url: dashboard_profile_setting_path, method: :put do |form| %>
+    <div class="mb-4 flex items-center justify-between">
+      <span class="text-lg font-bold">
+        <%= form.label :biography %>
+      </span>
+      <div class="flex items-center space-x-2">
+        <%= form.submit t('save'), class: 'cursor-pointer rounded-full border border-primary text-primary px-4 py-1' %>
+        <%= link_to t('cancel'), :back, class: 'cursor-pointer rounded-full border dark:border-white dark:border-opacity-5 text-inherit text-opacity-40 px-4 py-1' %>
+      </div>
+    </div>
+
+    <div class="flex items-center">
+      <%= form.text_area :biography, 
+        rows: 3,
+        placeholder: 'input biography', 
+        class: "flex-1 block py-2 px-0 text-primary border-t-0 border-l-0 border-r-0 border-b border-[#F4F4F4] focus:ring-0" %>
+
+    </div>
+  <% end %>
+<% end %>
+
 <%= turbo_frame_tag 'profile_email_form' do %>
   <%= form_for current_user, url: dashboard_profile_setting_path, method: :put do |form| %>
     <div class="mb-4 flex items-center justify-between">
       <span class="text-lg font-bold">
-        <%= t('email') %>
+        <%= form.label :email %>
       </span>
       <div class="flex items-center space-x-2">
         <%= form.submit t('verify'), class: 'cursor-pointer rounded-full border border-primary text-primary px-4 py-1' %>

@@ -9,7 +9,7 @@
       <img src="<%= quote_comment.author.avatar_thumb %>" class="w-6 h-6 sm:w-9 sm:h-9 rounded-full" />
     <% end %>
     <div class="">
-      <div class="truncate"><%= quote_comment.author.short_name %></div>
+      <div class="truncate max-w-24"><%= quote_comment.author.name %></div>
       <div class="text-sm opacity-50"><%= time_ago_in_words quote_comment.created_at %></div>
     </div>
   </div>
@@ -20,7 +20,7 @@
           <div class="max-h-48 overflow-y-scroll scrollbar-hide">
             <blockquote>
               <div>
-                <%= link_to "@#{quote_comment.quote_comment.author.short_name}", user_path(quote_comment.quote_comment.author), data: { controller: 'prefetch', turbo_frame: "_top" }, class: "no-underline italic" %>
+                <%= link_to "@#{quote_comment.quote_comment.author.name}", user_path(quote_comment.quote_comment.author), data: { controller: 'prefetch', turbo_frame: "_top" }, class: "no-underline italic max-w-24 truncate" %>
                 :(
                 <%= link_to "##{quote_comment.quote_comment.id}", 
                   new_comment_path(quote_comment_id: quote_comment.quote_comment_id),

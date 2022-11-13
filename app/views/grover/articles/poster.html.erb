@@ -7,8 +7,8 @@
       <div class="mb-4">
         <%= image_tag @article.author.avatar_url, class: "w-[80px] h-[80px] rounded-full border-4 border-white" %>
       </div>
-      <div class="mb-8 text-2xl font-bold">
-        <%= @article.author.short_name %>
+      <div class="mb-8 text-2xl font-bold max-w-28 truncate">
+        <%= @article.author.name %>
       </div>
       <div class="text-3xl line-clamp-2 h-[72px]">
         <%= @article.title %>

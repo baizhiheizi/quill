@@ -1,34 +1,19 @@
 <div class="mb-8">
-  <div class="mb-4">
-    <span class="text-lg font-bold">
-      <%= t('avatar') %>
-    </span>
-  </div>
-  <div class="">
-    <%= image_tag current_user.avatar_url, class: "w-16 h-16 rounded-full", loading: :lazy %>
-  </div>
+  <%= turbo_frame_tag 'profile_avatar_form' do %>
+    <%= render 'dashboard/profile_settings/avatar_field' %>
+  <% end %>
 </div>
 
 <div class="mb-8">
-  <div class="mb-4">
-    <span class="text-lg font-bold">
-      <%= t('name') %>
-    </span>
-  </div>
-  <div class="overflow-x-scroll scrollbar-hide py-2 border-b dark:border-white dark:border-opacity-5">
-    <%= current_user.name %>
-  </div>
+  <%= turbo_frame_tag 'profile_name_form' do %>
+    <%= render 'dashboard/profile_settings/name_field' %>
+  <% end %>
 </div>
 
 <div class="mb-8">
-  <div class="mb-4">
-    <span class="text-lg font-bold">
-      <%= t('bio') %>
-    </span>
-  </div>
-  <div class="py-2 border-b dark:border-white dark:border-opacity-5">
-    <%= simple_format current_user.bio %>
-  </div>
+  <%= turbo_frame_tag 'profile_biography_form' do %>
+    <%= render 'dashboard/profile_settings/biography_field' %>
+  <% end %>
 </div>
 
 <div class="mb-8">

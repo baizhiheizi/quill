@@ -3,8 +3,8 @@
     <div class="mb-4">
       <%= image_tag @collection.author.avatar_url, class: "mx-auto border-[3px] border-white w-[136px] y-[136px] rounded-full" %>
     </div>
-    <div class="text-center text-2xl text-white font-bold mb-8">
-      <%= @collection.author.short_name %>
+    <div class="text-center text-2xl text-white font-bold mb-8 max-w-24 truncate">
+      <%= @collection.author.name %>
     </div>
     <div class="text-center text-4xl text-white font-black px-12 line-clamp-2">
       <%= @collection.name %>

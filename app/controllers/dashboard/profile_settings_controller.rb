@@ -27,9 +27,14 @@ class Dashboard::ProfileSettingsController < Dashboard::BaseController
   private
 
   def setting_params
+    return {} if params['user'].blank?
+
     params
       .require(:user)
       .permit(
+        :name,
+        :biography,
+        :avatar,
         :email
       )
   end

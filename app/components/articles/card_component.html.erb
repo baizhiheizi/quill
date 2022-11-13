@@ -7,9 +7,9 @@
       class: "flex items-center space-x-2" do %>
       <%= image_tag @article.author.avatar_thumb, class: 'w-7 h-7 sm:w-9 sm:h-9 rounded-full block' %>
 
-      <div class="">
-        <div class="text-sm font-semibold">
-          <%= @article.author.short_name %>
+      <div class="truncate">
+        <div class="text-sm font-semibold max-w-24 sm:max-w-28 truncate">
+          <%= @article.author.name %>
         </div>
         <div class="text-xs sm:text-sm opacity-60">
           <%= render TimeFormatComponent.new datetime: @article.published_at.rfc3339 do %>

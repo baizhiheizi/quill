@@ -1,0 +1,16 @@
+<div class="mb-4 flex items-center justify-between">
+  <span class="text-lg font-bold">
+    <%= t('activerecord.attributes.user.biography') %>
+  </span>
+
+  <%= link_to t('edit'),
+    edit_dashboard_profile_setting_path, 
+    data: {
+      turbo_frame: 'profile_biography_form'
+    },
+    class: "px-4 py-1 bg-primary border border-primary text-white rounded-full" %>
+</div>
+
+<div class="py-2 border-b dark:border-white dark:border-opacity-5">
+  <%= simple_format current_user.biography || '-' %>
+</div>

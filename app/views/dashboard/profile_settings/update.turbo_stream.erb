@@ -5,6 +5,15 @@
     <% end %>
   <% end %>
 <% else %>
+  <%= turbo_stream.update 'profile_avatar_form' do %>
+    <%= render 'dashboard/profile_settings/avatar_field' %>
+  <% end %>
+  <%= turbo_stream.update 'profile_name_form' do %>
+    <%= render 'dashboard/profile_settings/name_field' %>
+  <% end %>
+  <%= turbo_stream.update 'profile_biography_form' do %>
+    <%= render 'dashboard/profile_settings/biography_field' %>
+  <% end %>
   <%= turbo_stream.update 'profile_email_form' do %>
     <%= render 'dashboard/profile_settings/email_field' %>
   <% end %>
