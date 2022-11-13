@@ -3,7 +3,7 @@
     <% if order.order_type == 'cite_article' %>
       <%= link_to order.citer.title, user_article_path(order.citer.author, order.citer.uuid) %>
     <% else %>
-      <img src="<%= order.buyer.avatar %>" class="w-8 h-8 rounded-full" />
+      <img src="<%= order.buyer.avatar_thumb %>" class="w-8 h-8 rounded-full" />
     <% end %>
   </div>
   <div>

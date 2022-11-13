@@ -21,7 +21,7 @@
 #
 
 class UserAuthorization < ApplicationRecord
-  store_accessor :raw, %i[phone key contract]
+  store_accessor :raw, %i[phone key contract avatar_url name biography]
 
   belongs_to :user, optional: true
 

@@ -72,11 +72,17 @@ module Authenticatable
     def find_or_create_user_by_auth(auth)
       if auth.user.present?
         user = auth.user
-        user.update_profile auth.raw if user.messenger?
+        if user.messenger?
+          user.update_profile(
+            name: auth.name,
+            biography: auth.raw['biography']
+          )
+        end
       else
         user = create!(
           avatar_url: auth.raw['avatar_url'],
           name: auth.raw['full_name'],
+          biography: auth.raw['biography'],
           mixin_id: auth.raw['identity_number'] || '0',
           mixin_uuid: auth.raw['user_id'],
           uid: auth.mixin? ? auth.raw['identity_number'] : auth.uid.gsub('-', '')

@@ -5,6 +5,6 @@ json.array! @articles do |article|
   json.title article.title
   json.author do
     json.name article.author.name
-    json.avatar article.author.avatar
+    json.avatar article.author.avatar_thumb
   end
 end

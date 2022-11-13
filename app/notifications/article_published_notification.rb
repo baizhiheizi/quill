@@ -32,7 +32,7 @@ class ArticlePublishedNotification < ApplicationNotification
   end
 
   def icon_url
-    article.author.avatar
+    article.author.avatar_thumb
   end
 
   def web_notification_enabled?

@@ -6,7 +6,7 @@
 #
 #  id                          :bigint           not null, primary key
 #  authoring_subscribers_count :integer          default(0)
-#  avatar_url                  :string
+#  biography                   :text
 #  blocked_at                  :datetime
 #  blocking_count              :integer          default(0)
 #  blocks_count                :integer          default(0)
@@ -74,6 +74,8 @@ class User < ApplicationRecord
 
   has_many :collections, primary_key: :mixin_uuid, foreign_key: :author_id, inverse_of: :author, dependent: :restrict_with_exception
 
+  has_one_attached :avatar
+
   validates :name, presence: true
   validates :email, uniqueness: true, format: /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\z/i, allow_nil: true
   validates :mixin_id, presence: true
@@ -104,7 +106,7 @@ class User < ApplicationRecord
   action_store :block, :user, counter_cache: true, user_counter_cache: 'blocking_count'
 
   def bio
-    authorization&.raw&.[]('biography') || I18n.t('activerecord.attributes.user.default_bio')
+    biography || authorization.biography || I18n.t('activerecord.attributes.user.default_bio')
   end
 
   def update_profile(profile = nil)
@@ -121,14 +123,21 @@ class User < ApplicationRecord
     @wallet_id = (wallet.presence || create_wallet)&.uuid
   end
 
-  def avatar(original: false)
-    @avatar =
-      if avatar_url.blank?
-        generated_avatar_url
-      elsif original
-        avatar_url
+  def avatar_url
+    @avatar_url =
+      if avatar.attached?
+        [Settings.storage.endpoint, avatar.key].join('/')
       else
-        avatar_url.presence&.gsub(/s256\Z/, 's64')
+        authorization.avatar_url || generated_avatar_url
+      end
+  end
+
+  def avatar_thumb
+    @avatar_thumb =
+      if avatar.attached?
+        avatar.representation resize_to_fit: [64, 64]
+      else
+        authorization.avatar_url.presence&.gsub(/s256\Z/, 's64') || generated_avatar_url
       end
   end
 

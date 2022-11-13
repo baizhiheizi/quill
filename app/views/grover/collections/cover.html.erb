@@ -1,7 +1,7 @@
 <div class="w-[640px] h-[640px] relative w-full h-full bg-[url('collection-cover-bg.svg')] bg-cover">
   <div class="absolute top-[252px] z-10 w-full">
     <div class="mb-4">
-      <%= image_tag @collection.author.avatar(original: true), class: "mx-auto border-[3px] border-white w-[136px] y-[136px] rounded-full" %>
+      <%= image_tag @collection.author.avatar_url, class: "mx-auto border-[3px] border-white w-[136px] y-[136px] rounded-full" %>
     </div>
     <div class="text-center text-2xl text-white font-bold mb-8">
       <%= @collection.author.short_name %>

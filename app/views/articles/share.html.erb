@@ -5,7 +5,7 @@
         <a class="flex-1 rounded-t-lg block p-4 hover:bg-zinc-100 dark:hover:bg-zinc-800 active:bg-zinc-100 dark:active:bg-zinc-800 rounded-lg"
           target="_blank"
           data-action="modal#hide"
-          href="<%= share_to_mixin article_url(@article), title: @article.title, description: @article.intro, icon_url: @article.author.avatar %>">
+          href="<%= share_to_mixin article_url(@article), title: @article.title, description: @article.intro, icon_url: @article.author.avatar_thumb %>">
           <div class="flex mb-2">
             <%= image_tag 'mixin-logo.png', class: "w-12 h-auto mx-auto" %>
           </div>

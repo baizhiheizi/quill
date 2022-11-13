@@ -4,7 +4,7 @@
 #
 #  id                          :bigint           not null, primary key
 #  authoring_subscribers_count :integer          default(0)
-#  avatar_url                  :string
+#  biography                   :text
 #  blocked_at                  :datetime
 #  blocking_count              :integer          default(0)
 #  blocks_count                :integer          default(0)
