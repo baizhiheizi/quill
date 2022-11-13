@@ -21,7 +21,7 @@
     <% if current_user.present? %>
       <%= render DropdownComponent.new class: 'block py-4 flex justify-center' do |c| %>
         <% c.with_button do %>
-          <%= image_tag current_user.avatar, class: "w-7 h-7 rounded-full" %>
+          <%= image_tag current_user.avatar_thumb, class: "w-7 h-7 rounded-full" %>
         <% end %>
         <div class="block text-[#222222] dark:text-white dark:text-opacity-80">
           <%= link_to t('profile_page'), 

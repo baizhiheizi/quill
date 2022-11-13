@@ -10,7 +10,7 @@
 
   <div class="bg-zinc-50 px-4 py-2 rounded mb-4 dark:bg-[#333444] hidden sm:block">
     <div class="flex items-center space-x-2 mb-1">
-      <%= image_tag @article.author.avatar, class: "w-6 h-6 rounded-full", lazy: true %>
+      <%= image_tag @article.author.avatar_thumb, class: "w-6 h-6 rounded-full", lazy: true %>
       <span class="text-sm"><%= @article.author.short_name %></span>
     </div>
     <div class="font-bold truncate">

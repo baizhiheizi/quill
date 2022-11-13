@@ -3,7 +3,7 @@
 <%= link_to admin_mixin_network_user_path(mixin_network_user, tab: tab), 
   class: "flex items-center space-x-2", 
   data: { turbo_frame: "_top" } do %>
-  <%= image_tag mixin_network_user.avatar, class: 'w-10 h-10 rounded-full' %>
+  <%= image_tag mixin_network_user.avatar_thumb, class: 'w-10 h-10 rounded-full' %>
   <div>
     <div><%= mixin_network_user.name %></div>
     <div class="text-sm opacity-70"><%= mixin_network_user.uuid %></div>

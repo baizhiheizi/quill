@@ -30,7 +30,7 @@ class ArticleBoughtNotification < ApplicationNotification
   end
 
   def icon_url
-    order.buyer.avatar
+    order.buyer.avatar_thumb
   end
 
   def url

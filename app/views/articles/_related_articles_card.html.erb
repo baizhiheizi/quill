@@ -6,7 +6,7 @@
     <%= link_to user_article_path(article.author, article), 
       data: { controller: 'prefetch' }, 
       class: "flex items-center space-x-2 mb-4" do %>
-      <%= image_tag article.author.avatar, class: "w-9 h-9 rounded-full" %>
+      <%= image_tag article.author.avatar_thumb, class: "w-9 h-9 rounded-full" %>
       <span class="truncate"><%= article.title %></span>
     <% end %>
   <% end %>

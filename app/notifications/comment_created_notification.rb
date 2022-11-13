@@ -30,7 +30,7 @@ class CommentCreatedNotification < ApplicationNotification
   end
 
   def icon_url
-    comment.author.avatar
+    comment.author.avatar_thumb
   end
 
   def url

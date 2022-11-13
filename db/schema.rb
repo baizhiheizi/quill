@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_11_05_021058) do
+ActiveRecord::Schema[7.0].define(version: 2022_11_13_085127) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
   enable_extension "pgcrypto"
@@ -516,7 +516,6 @@ ActiveRecord::Schema[7.0].define(version: 2022_11_05_021058) do
 
   create_table "users", force: :cascade do |t|
     t.string "name"
-    t.string "avatar_url"
     t.string "mixin_id"
     t.uuid "mixin_uuid"
     t.datetime "created_at", null: false
@@ -533,6 +532,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_11_05_021058) do
     t.string "email"
     t.datetime "email_verified_at"
     t.datetime "blocked_at"
+    t.text "biography"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["mixin_id"], name: "index_users_on_mixin_id"
     t.index ["mixin_uuid"], name: "index_users_on_mixin_uuid", unique: true

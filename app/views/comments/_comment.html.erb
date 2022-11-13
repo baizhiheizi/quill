@@ -6,7 +6,7 @@
         controller: 'prefetch', 
         turbo_frame: "_top" 
       } do %>
-      <%= image_tag comment.author.avatar, class: "w-9 h-9 rounded-full" %>
+      <%= image_tag comment.author.avatar_thumb, class: "w-9 h-9 rounded-full" %>
     <% end %>
     <div class="">
       <div class="truncate"><%= comment.author.short_name %></div>
