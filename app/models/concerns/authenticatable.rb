@@ -73,9 +73,9 @@ module Authenticatable
       if auth.user.present?
         user = auth.user
         if user.messenger?
-          user.update_profile(
+          user.update(
             name: auth.name,
-            biography: auth.raw['biography']
+            biography: auth.biography
           )
         end
       else

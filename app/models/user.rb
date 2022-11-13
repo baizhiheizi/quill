@@ -109,16 +109,6 @@ class User < ApplicationRecord
     biography || authorization.biography || I18n.t('activerecord.attributes.user.default_bio')
   end
 
-  def update_profile(profile = nil)
-    profile ||= authorization.raw
-    return if profile.blank?
-
-    update(
-      avatar_url: profile['avatar_url'],
-      name: profile['full_name']
-    )
-  end
-
   def wallet_id
     @wallet_id = (wallet.presence || create_wallet)&.uuid
   end
