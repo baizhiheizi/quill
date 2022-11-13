@@ -57,6 +57,10 @@ zh-CN:
           completed: 已完成
           refunded: 已退款
       user:
+        name: 昵称
+        avatar: 头像
+        biography: 简介
+        email: 邮箱地址
         default_bio: 没有留下任何介绍
         author_revenue_total: 作者收益(USD)
         reader_revenue_total: 读者收益(USD)

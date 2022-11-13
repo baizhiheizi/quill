@@ -1,6 +1,6 @@
 <div class="mb-4 flex items-center justify-between">
   <span class="text-lg font-bold">
-    <%= t('email') %>
+    <%= t('activerecord.attributes.user.email') %>
   </span>
 
   <%= link_to current_user.email_vefified? ? t('edit') : t('reverify'),
@@ -8,7 +8,7 @@
     data: {
       turbo_frame: 'profile_email_form'
     },
-    class: "px-4 py-1 bg-primary text-white rounded-full" %>
+    class: "px-4 py-1 bg-primary border border-primary text-white rounded-full" %>
 </div>
 
 <div class="mb-2">

@@ -1,7 +1,7 @@
 <div id="block_user_<%= dom_id user %>" class="relative flex items-center py-4 border-b dark:border-white dark:border-opacity-5 justify-between">
   <%= link_to user_path(user), class: "flex items-center space-x-2", data: { turbo_frame: "_top" } do %>
     <%= image_tag user.avatar_thumb, class: "w-8 h-8 rounded-full" %>
-    <span class=""><%= user.short_name %></span>
+    <span class="truncate max-w-24"><%= user.name %></span>
   <% end %>
   <div class="">
     <% if current_user.block_user?(user) %>

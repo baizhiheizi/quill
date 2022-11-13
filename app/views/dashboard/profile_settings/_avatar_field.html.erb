@@ -1,0 +1,15 @@
+<div class="mb-4 flex items-center justify-between">
+  <span class="text-lg font-bold">
+    <%= t('activerecord.attributes.user.avatar') %>
+  </span>
+
+  <%= link_to t('edit'),
+    edit_dashboard_profile_setting_path, 
+    data: {
+      turbo_frame: 'profile_avatar_form'
+    },
+    class: "px-4 py-1 bg-primary border border-primary text-white rounded-full" %>
+</div>
+<div class="">
+  <%= image_tag current_user.avatar_url, class: "w-16 h-16 rounded-full", loading: :lazy %>
+</div>

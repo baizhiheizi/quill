@@ -118,7 +118,7 @@ class User < ApplicationRecord
       if avatar.attached?
         [Settings.storage.endpoint, avatar.key].join('/')
       else
-        authorization.avatar_url || generated_avatar_url
+        authorization.avatar_url.presence || generated_avatar_url
       end
   end
 
@@ -127,7 +127,7 @@ class User < ApplicationRecord
       if avatar.attached?
         avatar.representation resize_to_fit: [64, 64]
       else
-        authorization.avatar_url.presence&.gsub(/s256\Z/, 's64') || generated_avatar_url
+        authorization.raw&.[]('avatar_url').presence&.gsub(/s256\Z/, 's64') || generated_avatar_url
       end
   end
 
@@ -195,12 +195,6 @@ class User < ApplicationRecord
     return uid if messenger?
 
     uid.first(6)
-  end
-
-  def short_name
-    return name unless mvm_eth?
-
-    short_uid
   end
 
   def default_payment

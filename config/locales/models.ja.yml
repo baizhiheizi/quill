@@ -58,6 +58,9 @@ ja:
           completed: 完了
           refunded: 返金済み
       user:
+        name: 名称
+        avatar: アバター
+        biography: はじめに
         default_bio: 何も記入されていません
         author_revenue_total: 作者収益（USD）
         reader_revenue_total: 読者収益（USD）
