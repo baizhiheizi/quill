@@ -134,6 +134,7 @@ gem 'redcarpet'
 
 # kramdown is a fast, pure Ruby Markdown superset converter, using a strict syntax definition and supporting several common extensions.
 gem 'kramdown'
+gem 'kramdown-parser-gfm'
 
 # Easily include static pages in your Rails app.
 gem 'high_voltage'

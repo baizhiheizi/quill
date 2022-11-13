@@ -54,7 +54,7 @@ class MarkdownRenderService
     #   strikethrough: true
     # ).render @content.to_s
 
-    @html = Kramdown::Document.new(@content).to_html
+    @html = Kramdown::Document.new(@content, input: 'GFM').to_html
 
     case @type
     when :default

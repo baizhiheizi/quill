@@ -288,6 +288,8 @@ GEM
     konstructor (1.0.2)
     kramdown (2.4.0)
       rexml
+    kramdown-parser-gfm (1.1.0)
+      kramdown (~> 2.0)
     libv8-node (16.10.0.0-x86_64-linux)
     listen (3.7.1)
       rb-fsevent (~> 0.10, >= 0.10.3)
@@ -564,6 +566,7 @@ DEPENDENCIES
   jbuilder
   jsbundling-rails
   kramdown
+  kramdown-parser-gfm
   listen (~> 3.4)
   mailjet
   mina (~> 1.2.2)
