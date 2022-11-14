@@ -1,0 +1,7 @@
+<%= turbo_stream.append 'admin_pre_orders_list' do %>
+  <%= render partial: 'admin/pre_orders/pre_order', collection: @pre_orders, as: :pre_order %>
+<% end %>
+
+<%= turbo_stream.update 'pagination' do %>
+  <%= render partial: "shared/pagination", locals: { pagy: @pagy } %>
+<% end %>

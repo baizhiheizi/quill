@@ -45,6 +45,7 @@ namespace :admin do
   end
 
   resources :orders, only: %i[index show]
+  resources :pre_orders, only: %i[index show], param: :follow_id
 
   resources :swap_orders, only: %i[index show]
 
