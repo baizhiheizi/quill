@@ -80,7 +80,6 @@ module Authenticatable
         end
       else
         user = create!(
-          avatar_url: auth.raw['avatar_url'],
           name: auth.raw['full_name'],
           biography: auth.raw['biography'],
           mixin_id: auth.raw['identity_number'] || '0',
