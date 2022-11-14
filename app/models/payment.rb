@@ -42,7 +42,8 @@ class Payment < ApplicationRecord
   validates :amount, presence: true, numericality: { greater_than: 0 }
   validates :raw, presence: true
   validates :asset_id, presence: true
-  validates :opponent_id, presence: true
+  # validates :opponent_id, presence: true
+  validates :payer_id, presence: true
   validates :snapshot_id, presence: true, uniqueness: true
   validates :trace_id, presence: true, uniqueness: true
 
@@ -85,22 +86,43 @@ class Payment < ApplicationRecord
       end
   end
 
+  def payment_memo
+    @payment_memo ||=
+      if from_foxswap?
+        pre_order&.decoded_memo
+      else
+        decoded_memo
+      end
+  end
+
   def memo_correct?
-    decoded_memo.key?('t') &&
-      decoded_memo['t'].in?(%w[BUY REWARD CITE REVENUE MINT]) &&
-      (decoded_memo.key?('a') || decoded_memo.key?('l'))
+    payment_memo.key?('t') &&
+      payment_memo['t'].in?(%w[BUY REWARD CITE REVENUE MINT]) &&
+      (payment_memo.key?('a') || payment_memo.key?('l'))
+  end
+
+  def from_foxswap?
+    decoded_memo['s'].in? %w[4swapTrade 4swapRefund]
   end
 
   def article
-    return if decoded_memo['a'].blank?
-
-    @article ||= Article.find_by uuid: decoded_memo['a']
+    @article ||=
+      if decoded_memo['a'].present?
+        Article.find_by uuid: decoded_memo['a']
+      elsif pre_order&.item_type == 'Article'
+        pre_order.item
+      end
   end
 
   def collection
     return if decoded_memo['l'].blank?
 
-    @collection ||= Collection.find_by uuid: decoded_memo['l']
+    @collection ||=
+      if decoded_memo['l'].present?
+        Collection.find_by uuid: decoded_memo['l']
+      elsif pre_order&.item_type == 'Collection'
+        pre_order.item
+      end
   end
 
   def citer
@@ -110,9 +132,12 @@ class Payment < ApplicationRecord
   end
 
   def pre_order
-    return if decoded_memo['f'].blank?
-
-    @pre_order ||= PreOrder.find_by follow_id: decoded_memo['f']
+    @pre_order ||=
+      if from_foxswap?
+        PreOrder.find_by follow_id: decoded_memo['t']
+      elsif decoded_memo['f'].present?
+        PreOrder.find_by follow_id: decoded_memo['f']
+      end
   end
 
   def generate_order!
@@ -135,14 +160,14 @@ class Payment < ApplicationRecord
 
     raise ActiveRecord::RecordInvalid, 'blocked by author' if article.author.block_user?(payer)
 
-    if decoded_memo['t'] == 'REVENUE'
+    if decoded_memo['s'] == '4swapRefund'
+      generate_refund_transfer!
+    elsif payment_memo['t'] == 'REVENUE'
       complete!
-    elsif asset_id == article.asset_id || decoded_memo['t'] == 'CITE'
+    elsif asset_id == article.asset_id || payment_memo['t'] == 'CITE'
       place_article_order!
     elsif swappable?
       place_swap_order!
-    else
-      generate_refund_transfer!
     end
   end
 
@@ -151,15 +176,15 @@ class Payment < ApplicationRecord
 
     raise ActiveRecord::RecordInvalid, 'blocked by author' if collection.author.block_user?(payer)
 
-    if decoded_memo['t'] == 'MINT'
+    if decoded_memo['s'] == '4swapRefund'
+      generate_refund_transfer!
+    elsif payment_memo['t'] == 'MINT'
       _order = collection.mintable_order_from payer
       _order.mint! if _order&.may_mint?
     elsif asset_id == collection.asset_id
       place_collection_order!
     elsif swappable?
       place_swap_order!
-    else
-      generate_refund_transfer!
     end
   end
 
@@ -186,7 +211,7 @@ class Payment < ApplicationRecord
   end
 
   def place_article_order!
-    case decoded_memo['t']
+    case payment_memo['t']
     when 'BUY'
       article.orders.find_or_create_by!(
         payment: self,
@@ -214,7 +239,7 @@ class Payment < ApplicationRecord
   end
 
   def place_collection_order!
-    case decoded_memo['t']
+    case payment_memo['t']
     when 'BUY'
       collection.orders.find_or_create_by!(
         payment: self,
@@ -233,7 +258,7 @@ class Payment < ApplicationRecord
     create_refund_transfer!(
       wallet_id: wallet_id,
       transfer_type: :payment_refund,
-      opponent_id: opponent_id,
+      opponent_id: payer_id,
       amount: amount,
       asset_id: asset_id,
       trace_id: QuillBot.api.unique_conversation_id(trace_id, opponent_id),

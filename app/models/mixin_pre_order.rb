@@ -29,21 +29,6 @@
 class MixinPreOrder < PreOrder
   validate :ensure_payer_mixin
 
-  def pay_url(pay_asset_id = asset_id)
-    Addressable::URI.new(
-      scheme: 'mixin',
-      host: 'pay',
-      path: '',
-      query_values: [
-        ['recipient', payee_id],
-        ['trace', trace_id],
-        ['memo', memo],
-        ['asset', pay_asset_id],
-        ['amount', pay_amount(pay_asset_id).to_r.to_f]
-      ]
-    ).to_s
-  end
-
   private
 
   def ensure_payer_mixin

@@ -29,6 +29,7 @@
 class PreOrder < ApplicationRecord
   extend Enumerize
   include AASM
+  include PreOrders::Swappable
 
   enumerize :order_type, in: %i[buy_article reward_article buy_collection mint_collection]
 
@@ -57,24 +58,6 @@ class PreOrder < ApplicationRecord
     "#{format('%.8f', amount).gsub(/0+\z/, '0')} #{currency.symbol}"
   end
 
-  def pay_amount(pay_asset_id = nil)
-    @pay_amount ||=
-      case pay_asset_id
-      when asset_id
-        amount
-      else
-        begin
-          Foxswap.api.pre_order(
-            pay_asset_id: pay_asset_id,
-            fill_asset_id: asset_id,
-            amount: (amount * 1.01).round(8).to_r.to_f
-          )['data']['funds']
-        rescue StandardError
-          nil
-        end
-      end
-  end
-
   def mixpay_supported?
     asset_id.in? (Mixpay.api.settlement_asset_ids + Mixpay.api.quote_asset_ids).uniq
   end
@@ -93,6 +76,10 @@ class PreOrder < ApplicationRecord
 
   def to_param
     follow_id
+  end
+
+  def decoded_memo
+    JSON.parse Base64.decode64(memo)
   end
 
   private
@@ -118,12 +105,7 @@ class PreOrder < ApplicationRecord
         Base64.urlsafe_encode64({ t: 'MINT', l: item.uuid, f: follow_id }.to_json, padding: false)
       end
 
-    self.payee_id =
-      if type == 'MixpayPreOrder' || order_type == 'mint_collection'
-        QuillBot.api.client_id
-      else
-        payer.wallet_id || item.wallet_id
-      end
+    self.payee_id = QuillBot.api.client_id
 
     self.asset_id = item.asset_id if asset_id.blank?
   end

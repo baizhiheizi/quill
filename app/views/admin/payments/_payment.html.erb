@@ -33,10 +33,10 @@
     </div>
   </td>
   <td class="p-4">
-    <%= payment.decoded_memo['t'] || '-' %>
+    <%= payment.payment_memo['t'] || '-' %>
   </td>
   <td class="p-4">
-    <%= link_to payment.decoded_memo['a'], admin_article_path(payment.decoded_memo['a']), data: { turbo_frame: '_top' } if payment.decoded_memo['a'].present? %>
+    <%= link_to payment.payment_memo['a'], admin_article_path(payment.payment_memo['a']), data: { turbo_frame: '_top' } if payment.payment_memo['a'].present? %>
   </td>
   <td class="p-4">
     <%= payment.created_at %>

@@ -40,15 +40,20 @@ export default class extends Controller {
       return;
     }
     event.preventDefault();
-    const { assetId, amount, opponentId, memo, traceId } = event.params;
+    const { assetId, amount, opponentId, memo, traceId, codeId } = event.params;
 
     await this.initFennec();
-    this.fennec.wallet.transfer({
-      asset_id: assetId,
-      amount: amount.toFixed(8),
-      opponent_id: opponentId,
-      memo: memo,
-      trace_id: traceId,
-    });
+
+    if (codeId) {
+      this.fennec.wallet.multisigsPayment({ code: codeId });
+    } else {
+      this.fennec.wallet.transfer({
+        asset_id: assetId,
+        amount: amount.toFixed(8),
+        opponent_id: opponentId,
+        memo: memo,
+        trace_id: traceId,
+      });
+    }
   }
 }
