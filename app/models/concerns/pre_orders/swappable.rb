@@ -66,7 +66,7 @@ module PreOrders::Swappable
           Foxswap.api.pre_order(
             pay_asset_id: pay_asset_id,
             fill_asset_id: asset_id,
-            amount: (amount * 1.001).round(8).to_r.to_f
+            amount: (amount * 1.001).ceil(8).to_f
           )['data']['funds']
         rescue StandardError
           nil
