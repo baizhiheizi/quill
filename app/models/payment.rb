@@ -42,8 +42,6 @@ class Payment < ApplicationRecord
   validates :amount, presence: true, numericality: { greater_than: 0 }
   validates :raw, presence: true
   validates :asset_id, presence: true
-  # validates :opponent_id, presence: true
-  validates :payer_id, presence: true
   validates :snapshot_id, presence: true, uniqueness: true
   validates :trace_id, presence: true, uniqueness: true
 
@@ -253,6 +251,7 @@ class Payment < ApplicationRecord
 
   def generate_refund_transfer!
     return if order&.id.present?
+    return if payer_id.blank?
     return if refund_transfer.present?
 
     create_refund_transfer!(
