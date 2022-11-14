@@ -228,6 +228,24 @@ class Article < ApplicationRecord
     plain_text.truncate((words_count * 0.1).to_i)
   end
 
+  def partial_content_as_html
+    count = 0
+    @partial_content = ''
+
+    Nokogiri::HTML.fragment(content_as_html).children.each do |child|
+      if ((words_count * 0.1) - count - child.text.size).positive?
+        count += child.text.size
+        @partial_content += child.to_s
+      elsif ((words_count * 0.1) - count).positive?
+        child.inner_html = child.text.truncate((words_count * 0.1).to_i - count)
+        count = words_count * 0.1
+        @partial_content += child.to_s
+      end
+    end
+
+    @partial_content
+  end
+
   def wallet_id
     @wallet_id = wallet&.uuid
   end
