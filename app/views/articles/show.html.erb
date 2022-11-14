@@ -60,14 +60,12 @@
     <%= link_to root_path, class: "block px-6 py-2" do %>
       <%= image_tag 'logo.svg', class: "w-auto h-8" %>
     <% end %>
-    <% if current_user.present? %>
-      <%= link_to article_share_path(article_uuid: @article.uuid), 
-        data: {
-          turbo_frame: :modal
-        },
-        class: "block px-6 py-3 #{from_mixin_messenger? ? 'mr-24' : ''}" do %>
-        <%= inline_svg_tag 'icons/share-solid.svg', class: 'w-6 h-6 text-primary' %>
-      <% end %>
+    <%= link_to article_share_path(article_uuid: @article.uuid), 
+      data: {
+        turbo_frame: :modal
+      },
+      class: "block px-6 py-3 #{from_mixin_messenger? ? 'mr-24' : ''}" do %>
+      <%= inline_svg_tag 'icons/share-solid.svg', class: 'w-6 h-6 text-primary' %>
     <% end %>
   </div>
 <% end %>
