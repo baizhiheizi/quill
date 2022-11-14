@@ -164,19 +164,26 @@ class MixinNetworkSnapshot < ApplicationRecord
     return if amount.negative?
 
     swap_order = SwapOrder.find_by trace_id: decoded_memo['t']
+    pre_order = PreOrder.find_by follow_id: decoded_memo['t']
 
-    case decoded_memo['s']
-    when '4swapTrade'
-      swap_order.update! amount: amount
-      if swap_order.swapping?
-        swap_order.swap!
-      elsif swap_order.swapped?
-        swap_order.place_payment_order!
+    if swap_order.present?
+      case decoded_memo['s']
+      when '4swapTrade'
+        swap_order.update! amount: amount
+        if swap_order.swapping?
+          swap_order.swap!
+        elsif swap_order.swapped?
+          swap_order.place_payment_order!
+        end
+      when '4swapRefund'
+        swap_order.reject! if swap_order.may_reject?
       end
-    when '4swapRefund'
-      swap_order.reject! if swap_order.may_reject?
+    elsif pre_order.present?
+      Currency.find_or_create_by asset_id: asset_id
+      Payment
+        .create_with(raw: raw)
+        .find_or_create_by!(trace_id: trace_id)
     end
-    # TODO: raise if still swapping/swapped
   end
 
   def touch_proccessed_at
