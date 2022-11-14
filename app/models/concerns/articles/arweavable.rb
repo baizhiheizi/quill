@@ -9,6 +9,7 @@ module Articles::Arweavable
 
   def upload_to_arweave!
     return unless published?
+    return if ArweaveTransaction.wallet.blank?
 
     arweave_transactions.create_with(
       article_snapshot: snapshots.order(created_at: :desc).first
