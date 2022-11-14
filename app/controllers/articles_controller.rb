@@ -63,7 +63,9 @@ class ArticlesController < ApplicationController
 
   def update_content
     @article = current_user.articles.find_by uuid: params[:article_uuid]
-    @article.update params.require(:article).permit(:title, :content)
+    @article.assign_attributes params.require(:article).permit(:title, :content)
+    @article.content = @article.content.gsub(/!\[[^\]]*\]\((.*?)\s*("(?:.*[^"])")?\s*\)/) { |m| "#{m}\n" }
+    @article.save
   end
 
   def share

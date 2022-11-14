@@ -474,6 +474,10 @@ class Article < ApplicationRecord
      )].join
   end
 
+  def fix_img_tag_in_content
+    content.gsub(/!\[[^\]]*\]\((.*?)\s*("(?:.*[^"])")?\s*\)/) { |m| "#{m}\n" }
+  end
+
   private
 
   def setup_attributes
