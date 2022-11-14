@@ -76,6 +76,14 @@
         } do %>
         Orders
       <% end %>
+      <%= link_to admin_collection_path(@collection, tab: :pre_orders), 
+        class: "cursor-pointer py-1 px-4 border-blue-500 font-bold text-zinc-600",
+        data: {
+          tabs_target: "tab",
+          tabs_tabname_param: "pre_orders",
+        } do %>
+        PreOrders
+      <% end %>
     </div>
     <div class="hidden"
         data-tabs-content-param="articles"
@@ -88,6 +96,13 @@
         data-tabs-content-param="orders"
         data-tabs-target="content">
       <%= turbo_frame_tag 'admin_orders', src: admin_orders_path(item_id: @collection.id, item_type: 'Collection') do %>
+        <%= render "shared/loading" %>
+      <% end %>
+    </div>
+    <div class="hidden"
+        data-tabs-content-param="pre_orders"
+        data-tabs-target="content">
+      <%= turbo_frame_tag 'admin_pre_orders', src: admin_pre_orders_path(item_id: @collection.id, item_type: 'Collection') do %>
         <%= render "shared/loading" %>
       <% end %>
     </div>

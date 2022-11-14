@@ -1,0 +1,56 @@
+<tr class="hover:bg-zinc-50 dark:hover:bg-zinc-800 bpre_order-b">
+  <td class="p-4">
+    <%= pre_order.id %>
+  </td>
+  <td class="p-4">
+    <%= pre_order.trace_id %>
+  </td>
+  <td class="p-4">
+    <%= pre_order.follow_id %>
+  </td>
+  <td class="p-4">
+    <% case pre_order.item %>
+    <% when Article %>
+      <%= render "admin/articles/field", article: pre_order.item, tab: :pre_orders %>
+    <% when Collection %>
+      <%= render "admin/collections/field", collection: pre_order.item, tab: :pre_orders %>
+    <% else %>
+      -
+    <% end %>
+  </td>
+  <td class="p-4">
+    <% if pre_order.payer.present? %>
+      <%= render 'admin/users/field', user: pre_order.payer, tab: :pre_orders %>
+    <% else %>
+      <%= pre_order.payer_id %>
+    <% end %>
+  </td>
+  <td class="p-4">
+    <div class="flex items-center space-x-2">
+      <%= image_tag pre_order.currency.icon_url, class: "w-10 h-10 rounded" %>
+      <span><%= pre_order.amount_tag %></span>
+    </div>
+  </td>
+  <td class="p-4">
+    <div class="flex justify-center">
+      <span class="px-2 py-1 rounded text-white
+        <%=
+          {
+            drafted: 'bg-slate-500',
+            paid: 'bg-green-500',
+          }[pre_order.state.to_sym]
+          %>">
+        <%= pre_order.state %>
+      </span>
+    </div>
+  </td>
+  <td class="p-4">
+    <%= pre_order.order_type %>
+  </td>
+  <td class="p-4">
+    <%= pre_order.created_at %>
+  </td>
+  <td class="p-4">
+    <%= link_to 'Detail', admin_pre_order_path(pre_order), class: "bg-blue-500 hover:bg-blue-600 rounded text-white px-4 py-2", data: { turbo_frame: "_top" } %>
+  </td>
+</tr>

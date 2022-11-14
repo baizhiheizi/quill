@@ -121,6 +121,14 @@
         } do %>
         Orders
       <% end %>
+      <%= link_to admin_user_path(@user, tab: :pre_orders), 
+        class: "cursor-pointer py-1 px-4 border-blue-500 font-bold text-zinc-600",
+        data: {
+          tabs_target: "tab",
+          tabs_tabname_param: "pre_orders",
+        } do %>
+        Pre Orders
+      <% end %>
       <%= link_to admin_user_path(@user, tab: :swap_orders), 
         class: "cursor-pointer py-1 px-4 border-blue-500 font-bold text-zinc-600",
         data: {
@@ -194,6 +202,13 @@
         data-tabs-content-param="orders"
         data-tabs-target="content">
       <%= turbo_frame_tag 'admin_orders', src: admin_orders_path(buyer_id: @user.id) do %>
+        <%= render "shared/loading" %>
+      <% end %>
+    </div>
+    <div class="hidden"
+        data-tabs-content-param="pre_orders"
+        data-tabs-target="content">
+      <%= turbo_frame_tag 'admin_pre_orders', src: admin_pre_orders_path(payer_id: @user.mixin_uuid) do %>
         <%= render "shared/loading" %>
       <% end %>
     </div>
