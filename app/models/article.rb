@@ -229,21 +229,33 @@ class Article < ApplicationRecord
   end
 
   def partial_content_as_html
-    count = 0
-    @partial_content = ''
+    @partial_content_as_html ||= extract_html(content_as_html, (words_count * 0.1).to_i)
+  end
 
-    Nokogiri::HTML.fragment(content_as_html).children.each do |child|
-      if ((words_count * 0.1) - count - child.text.size).positive?
+  def extract_html(text, length)
+    count = 0
+    html = ''
+
+    Nokogiri::HTML.fragment(text).children.each do |child|
+      if (length - count - child.text.size).positive?
         count += child.text.size
-        @partial_content += child.to_s
-      elsif ((words_count * 0.1) - count).positive?
-        child.inner_html = child.text.truncate((words_count * 0.1).to_i - count)
-        count = words_count * 0.1
-        @partial_content += child.to_s
+        html += child.to_s
+      elsif child.to_s.size.zero?
+        html += child.to_s
+      elsif (length - count).positive?
+        case child
+        when Nokogiri::XML::NodeSet
+          child.inner_html = extract_html(child.to_s, length - count)
+        when Nokogiri::XML::Text
+          child.content = child.text.truncate(length - count)
+        end
+
+        count = length
+        html += child.to_s
       end
     end
 
-    @partial_content
+    html
   end
 
   def wallet_id
@@ -328,7 +340,7 @@ class Article < ApplicationRecord
   end
 
   def content_as_html
-    MarkdownRenderService.call content.strip, type: :full
+    MarkdownRenderService.call content.to_s.strip, type: :full
   end
 
   def default_intro
