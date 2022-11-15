@@ -51,6 +51,7 @@ class Article < ApplicationRecord
 
   include AASM
   include Articles::Arweavable
+  include Articles::Importable
   include Articles::Payable
 
   belongs_to :author, class_name: 'User', inverse_of: :articles
@@ -425,7 +426,7 @@ class Article < ApplicationRecord
       else
         locales.reject(&->(l) { l == 'en' }).last.split('-').first
       end
-    else
+    elsif author.present?
       author.locale.split('-').first
     end
   end
@@ -495,10 +496,7 @@ class Article < ApplicationRecord
   def setup_attributes
     return unless new_record?
 
-    assign_attributes(
-      uuid: SecureRandom.uuid
-    )
-
+    self.uuid = SecureRandom.uuid if uuid.blank?
     self.asset_id = Currency::BTC_ASSET_ID
     self.price = currency.minimal_price_amount
   end
