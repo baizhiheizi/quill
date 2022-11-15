@@ -9,7 +9,7 @@ module ArweaveBot
     end
 
     def transaction(id)
-      client.post id
+      client.get id
     end
   end
 end

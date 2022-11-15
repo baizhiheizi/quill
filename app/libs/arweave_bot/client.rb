@@ -37,7 +37,7 @@ module ArweaveBot
       elsif response.status.redirect?
         request :get, response.headers['Location']
       else
-        response
+        response.status.to_s
       end
     end
 
