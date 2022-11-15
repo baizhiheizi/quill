@@ -174,6 +174,9 @@ gem 'grover'
 # A Ruby library that encodes QR Codes
 gem 'rqrcode'
 
+# A Ruby library for declaring, composing and executing GraphQL queries
+gem 'graphql-client'
+
 # deploy
 gem 'mina', '~> 1.2.2', require: false
 gem 'mina-logs', '~> 1.1.0', require: false
