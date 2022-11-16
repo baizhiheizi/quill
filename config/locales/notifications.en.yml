@@ -7,6 +7,8 @@ en:
       bought: bought an article
     article_rewarded_notification:
       rewarded: rewarded an article
+    article_imported_notification:
+      imported: imported a new article
     comment_created_notification:
       commented: commented
     comment_deleted_notification:
