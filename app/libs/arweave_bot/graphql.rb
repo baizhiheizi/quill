@@ -9,16 +9,12 @@ module ArweaveBot
     Client = GraphQL::Client.new(schema: Schema, execute: http)
 
     MirrorTransactionsQuery = Client.parse <<~GRAPHQL
-      query($contributor: String!, $digest: String!, $after: String, $first: Int) {
+      query($contributor: String!, $after: String, $first: Int) {
         transactions(
           tags: [
             { name: "Content-Type", values: "application/json" }
             { name: "App-Name", values: ["MirrorXYZ"] }
             { name: "Contributor", values: [$contributor] }
-            {
-              name: "Original-Content-Digest"
-              values: [$digest]
-            }
           ]
           after: $after
           first: $first
@@ -30,28 +26,38 @@ module ArweaveBot
             cursor
             node {
               id
+              tags {
+                name
+                value
+              }
             }
           }
         }
       }
     GRAPHQL
-    def mirror_transactions(contributor, digest: '', after: '', first: 100)
-      Client.query(MirrorTransactionsQuery, variables: { contributor: contributor, digest: digest, after: after, first: first })
+    def mirror_transactions(contributor, after: '', first: 100)
+      Client.query(MirrorTransactionsQuery, variables: { contributor: contributor, after: after, first: first })
     end
 
     def all_mirror_transactions(contributor)
-      ids = []
+      txs = []
       has_next_page = true
       after = ''
 
       while has_next_page
         r = mirror_transactions(contributor, after: after).data.transactions
-        ids += r.edges.map(&->(tx) { tx.node.id })
+        r.edges.each do |tx|
+          puts tx
+          txs << {
+            id: tx.node.id,
+            digest: tx.node.tags.find(&->(tag) { tag.name == 'Original-Content-Digest' }).value
+          }
+        end
         after = r.edges.last&.cursor
         has_next_page = r.page_info.has_next_page
       end
 
-      ids
+      txs
     end
   end
 end

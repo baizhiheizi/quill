@@ -51,7 +51,6 @@ class Article < ApplicationRecord
 
   include AASM
   include Articles::Arweavable
-  include Articles::Importable
   include Articles::Payable
 
   belongs_to :author, class_name: 'User', inverse_of: :articles
@@ -498,7 +497,7 @@ class Article < ApplicationRecord
 
     self.uuid = SecureRandom.uuid if uuid.blank?
     self.asset_id = Currency::BTC_ASSET_ID
-    self.price = currency.minimal_price_amount
+    self.price = currency.minimal_price_amount if price.blank?
   end
 
   def set_defaults
