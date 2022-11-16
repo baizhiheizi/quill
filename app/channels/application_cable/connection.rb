@@ -11,7 +11,7 @@ module ApplicationCable
     private
 
     def find_verified_user
-      verified_user = User.find_by(id: @request.session[:current_user_id])
+      verified_user = Session.find_by(uuid: @request.session[:current_session_id])&.user
       reject_unauthorized_connection if verified_user.blank?
 
       verified_user
