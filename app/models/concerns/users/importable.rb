@@ -20,11 +20,13 @@ module Users::Importable
       next if Article.exists? uuid: uuid
 
       r = ArweaveBot.api.transaction tx[:id]
-      articles.create_with(
+      article = articles.create_with(
         title: r['content']['title'],
         content: r['content']['body'],
         price: 0
       ).find_or_create_by(uuid: uuid)
+
+      ArticleImportedNotification.with(article: article).deliver(self) if article.persisted?
     end
   ensure
     Rails.cache.delete "_#{uid}_importing_from_mirror_lock"
