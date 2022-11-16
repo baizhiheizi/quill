@@ -42,6 +42,15 @@
       </script>
     <% end %>
 
+    
+    <% if current_user.blank? %>
+      <script>
+        // Ensure to clear session before login;
+        // Avoid stange behavior on Android Mixin Webview
+        document.cookie = "_quill_sessions=; Max-Age=0"
+      </script>
+    <% end %>
+
     <link rel=preconnect"" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Noto Sans SC" rel="stylesheet">
     <%= favicon_link_tag "favicon.svg" %>
