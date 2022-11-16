@@ -1,0 +1,13 @@
+<%= turbo_frame_tag 'modal' do %>
+  <%= render ModalComponent.new title: t('import_from_mirror') do %>
+    <div class="max-w-full mx-auto">
+      <div class="mb-6">
+        <%= t('confirm_to_import_from_mirror') %>
+      </div>
+      <%= button_to t('import'), 
+        dashboard_imported_articles_path(@article), 
+        class: "block w-full rounded-lg text-white bg-primary py-2 text-lg"
+      %>
+    </div>
+  <% end %>
+<% end %>

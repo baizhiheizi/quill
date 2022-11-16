@@ -354,3 +354,7 @@ en:
   click_to_validate: Click To Validate
   mint_nft: Mint NFT
   upload_cover: Upload cover
+  import_from_mirror: Import from Mirror
+  confirm_to_import_from_mirror: Confirm to import posts from mirror.xyz
+  import: Import
+  importing_tips: 'Importing... Please refresh the page later.'

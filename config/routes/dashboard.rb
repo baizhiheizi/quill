@@ -15,6 +15,7 @@ namespace :dashboard do
   resources :articles, only: %i[index show], param: :uuid
   resources :published_articles, param: :uuid, only: %i[new update destroy]
   resources :deleted_articles, param: :uuid, only: %i[new update]
+  resources :imported_articles, only: %i[new create]
 
   resources :comments, only: %i[index]
   resources :subscriptions, only: %i[index]
