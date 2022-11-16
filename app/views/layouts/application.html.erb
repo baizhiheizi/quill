@@ -42,6 +42,14 @@
       </script>
     <% end %>
 
+    <% if current_user.blank? %>
+      <script>
+        // clear cookie in root domain
+        // fix the wrong cookie domain in Android Mixin Messenger webview
+        document.cookie = `_quill_sessions=; expires=${new Date().toUTCString()}; domain=quill.im;`;
+      </script>
+    <% end %>
+
     <link rel=preconnect"" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Noto Sans SC" rel="stylesheet">
     <%= favicon_link_tag "favicon.svg" %>
