@@ -37,6 +37,7 @@ class User < ApplicationRecord
 
   include Authenticatable
   include Users::EmailVerifiable
+  include Users::Importable
   include Users::Scopable
   include Users::Statable
   include Users::CollectibleReadable
