@@ -20,13 +20,25 @@
     <div data-infinite-scroll-target='scrollArea'></div>
     <%= render "shared/pagination", pagy: @pagy, id: "my_#{@tab}_articles_pagination" %>
 
-    <div class="my-8 flex justify-center">
-      <%= link_to t('write'), 
-        new_article_path, 
-        data: {
-          turbo_frame: '_top'
-        },
-        class: "px-4 py-1 bg-primary rounded-full text-white text-lg" unless @tab == 'bought' %>
+    <div class="my-8">
+      <div class="flex justify-center mb-4">
+        <%= link_to t('write'), 
+          new_article_path, 
+          data: {
+            turbo_frame: '_top'
+          },
+          class: "px-4 py-1 bg-primary rounded-full text-white text-lg" unless @tab == 'bought' %>
+      </div>
+      <% if current_user.mvm_eth? %>
+        <div class="flex justify-center">
+          <%= link_to t('import_from_mirror'),
+            new_dashboard_imported_article_path,
+            data: {
+              turbo_frame: :modal
+            },
+            class: "text-primary text-sm" %>
+        </div>
+      <% end %>
     </div>
   </div>
 <% end %>

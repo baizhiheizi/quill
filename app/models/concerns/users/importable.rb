@@ -9,6 +9,9 @@ module Users::Importable
 
   def import_articles_from_mirror
     return unless mvm_eth?
+    return if Rails.cache.fetch "_#{uid}_importing_from_mirror_lock"
+
+    Rails.cache.write "_#{uid}_importing_from_mirror_lock", true, expires_in: 5.minutes
 
     txs = ArweaveBot.graphql.all_mirror_transactions uid
 
@@ -18,11 +21,12 @@ module Users::Importable
 
       r = ArweaveBot.api.transaction tx[:id]
       articles.create_with(
-        author: author,
         title: r['content']['title'],
         content: r['content']['body'],
         price: 0
       ).find_or_create_by(uuid: uuid)
     end
+  ensure
+    Rails.cache.delete "_#{uid}_importing_from_mirror_lock"
   end
 end

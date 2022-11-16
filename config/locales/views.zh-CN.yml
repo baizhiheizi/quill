@@ -353,3 +353,7 @@ zh-CN:
   click_to_validate: 点击验证
   mint_nft: 铸造 NFT
   upload_cover: 上传封面图
+  import_from_mirror: 从 Mirror 导入
+  confirm_to_import_from_mirror: 确定从 Mirror.xyz 导入文章？
+  import: 导入
+  importing_tips: 正在导入，请稍候刷新页面
