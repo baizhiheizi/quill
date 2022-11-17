@@ -54,6 +54,8 @@ zh-CN:
   my_comments: 我的评论
   my_subscriptions: 我的订阅
   my_orders: 我的订单
+  my_wallet: 我的钱包
+  token: 代币
   profile_page: 个人主页
   login: 登录
   logout: 登出

@@ -54,6 +54,8 @@ en:
   my_comments: My Comments
   my_subscriptions: My Subscriptions
   my_orders: My Orders
+  my_wallet: My Wallet
+  token: Token
   profile_page: Profile
   login: Login
   logout: Logout

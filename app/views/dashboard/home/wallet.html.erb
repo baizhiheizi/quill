@@ -1,0 +1,72 @@
+<div class="hidden sm:block mb-8">
+  <span class="text-xl font-bold">
+    <%= t('my_wallet') %>
+  </span>
+</div>
+
+<div class="sm:mb-8"
+  data-controller="tabs"
+  data-tabs-active-tab-value="<%= @tab %>"
+  data-tabs-active-class-value="font-bold text-primary !border-primary">
+  <div class="w-full flex overflow-auto flex-nowrap scrollbar-hide items-center flex mb-2 sm:mb-4">
+    <%= link_to dashboard_wallet_path(tab: :token),
+      class: "cursor-pointer py-1 pr-8 border-transparent min-w-fit",
+      data: {
+        tabs_target: "tab",
+        tabs_tabname_param: "token" 
+      } do %>
+      <div class="min-w-fit">
+        <%= t('token') %>
+      </div>
+      <div class="h-2 border-b-2 border-inherit w-4 mx-auto"></div>
+    <% end %>
+    <%= link_to dashboard_wallet_path(tab: :nft),
+      class: "cursor-pointer py-1 pr-8 border-transparent min-w-fit",
+      data: {
+        tabs_target: "tab",
+        tabs_tabname_param: "nft" 
+      } do %>
+      <div class="min-w-fit">
+        NFT
+      </div>
+      <div class="h-2 border-b-2 border-inherit w-4 mx-auto"></div>
+    <% end %>
+  </div>
+
+  <div class="hidden pb-4"
+    data-tabs-content-param="token"
+    data-tabs-target="content">
+    <%= turbo_frame_tag "my_assets_token", 
+      src: dashboard_assets_path(tab: :token), 
+      data: {
+        turbo_frame: "_top"
+      },
+      loading: :lazy do %>
+      <%= render "shared/loading" %>
+    <% end %>
+  </div>
+
+  <div class="hidden pb-4"
+    data-tabs-content-param="nft"
+    data-tabs-target="content">
+    <%= turbo_frame_tag "my_assets_nft", 
+      src: dashboard_assets_path(tab: :nft), 
+      data: {
+        turbo_frame: "_top"
+      },
+      loading: :lazy do %>
+      <%= render "shared/loading" %>
+    <% end %>
+  </div>
+</div>
+
+<% content_for :topbar do %>
+  <div class="flex items-center px-4 h-12">
+    <%= link_to :back, class: "pr-2" do %>
+      <%= inline_svg_tag "icons/chevron-left.svg", class: "w-5 h-5 font-bold" %>
+    <% end %>
+    <span class="font-bold text-lg">
+      <%= t('my_wallet') %>
+    </span>
+  </div>
+<% end %>

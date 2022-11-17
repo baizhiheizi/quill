@@ -6,6 +6,7 @@ namespace :dashboard do
   get :readings, to: 'home#readings'
   get :authorings, to: 'home#authorings'
   get :stats, to: 'home#stats'
+  get :wallet, to: 'home#wallet'
 
   resources :listed_collections, only: %i[new update]
   resources :hidden_collections, only: %i[new update]
@@ -38,6 +39,8 @@ namespace :dashboard do
   get 'email_verify', to: 'profile_settings#verify_email'
 
   resources :access_tokens, only: %i[index create destroy]
+
+  resources :assets, only: %i[index]
   resource :destination, only: %i[show] do
     get :deposit
   end
