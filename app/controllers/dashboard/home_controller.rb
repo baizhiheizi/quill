@@ -19,4 +19,9 @@ class Dashboard::HomeController < Dashboard::BaseController
     @tab = params[:tab] || 'profile'
     @active_page = 'settings'
   end
+
+  def wallet
+    @tab = params[:tab] || 'token'
+    @active_page = 'wallet'
+  end
 end
