@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<% @page_title = @page_title.present? ? format('%<title>s | %<default>s', title: @page_title, default: Settings.page_title) : Settings.page_title %>
+<% @page_title = @page_title.presence || Settings.page_title %>
 <% @page_description ||= Settings.page_description %>
 <% @page_keywords ||= Settings.page_keywords %>
 <% @page_image ||= asset_url('article-poster-bg.png') %>
 
 <html>
   <head>
-    <title><%= @page_title.presence || Settings.page_title %></title>
+    <title><%= @page_title %></title>
     <meta
       name='viewport'
       content='minimum-scale=1, initial-scale=1, width=device-width, user-scalable=no, shrink-to-fit=no, viewport-fit=cover'
