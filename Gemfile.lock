@@ -1,8 +1,8 @@
 GIT
   remote: https://github.com/TheTridentOne/trident_assistant.git
-  revision: 17528075e148f49f72bb465de8d2b5aa268f3749
+  revision: be37ea899a64f6205f0e8b9e55b7c9f9cc7a5d3b
   specs:
-    trident_assistant (0.1.7)
+    trident_assistant (0.1.8)
       mixin_bot (~> 0.8)
 
 GIT
@@ -103,7 +103,7 @@ GEM
     ast (2.4.2)
     awesome_print (1.9.2)
     aws-eventstream (1.2.0)
-    aws-partitions (1.661.0)
+    aws-partitions (1.662.0)
     aws-sdk-core (3.167.0)
       aws-eventstream (~> 1, >= 1.0.2)
       aws-partitions (~> 1, >= 1.651.0)
@@ -156,7 +156,7 @@ GEM
     deep_merge (1.2.2)
     domain_name (0.5.20190701)
       unf (>= 0.0.5, < 1.0.0)
-    dry-configurable (1.0.0)
+    dry-configurable (1.0.1)
       dry-core (~> 1.0, < 2)
       zeitwerk (~> 2.6)
     dry-core (1.0.0)
@@ -259,7 +259,7 @@ GEM
       activesupport (>= 3.0)
       nokogiri (>= 1.6)
     io-console (0.5.11)
-    irb (1.4.2)
+    irb (1.4.3)
       reline (>= 0.3.0)
     jbuilder (2.11.5)
       actionview (>= 5.0.0)
@@ -326,7 +326,7 @@ GEM
     mini_racer (0.6.3)
       libv8-node (~> 16.10.0.0)
     minitest (5.16.3)
-    mixin_bot (0.11.1)
+    mixin_bot (0.11.2)
       activesupport (>= 5)
       awesome_print (~> 1.8)
       bcrypt (~> 3.1)
@@ -437,7 +437,7 @@ GEM
     redis-objects (1.7.0)
       redis
     redis-prescription (1.0.0)
-    regexp_parser (2.6.0)
+    regexp_parser (2.6.1)
     reline (0.3.1)
       io-console (~> 0.5)
     requestjs-rails (0.0.10)
@@ -515,7 +515,7 @@ GEM
       unf_ext
     unf_ext (0.0.8.2)
     unicode-display_width (2.3.0)
-    view_component (2.75.0)
+    view_component (2.76.0)
       activesupport (>= 5.0.0, < 8.0)
       concurrent-ruby (~> 1.0)
       method_source (~> 1.0)
