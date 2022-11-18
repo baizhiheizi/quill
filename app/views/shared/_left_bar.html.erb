@@ -116,7 +116,7 @@
                 class: "block py-2 px-4" %>
               <%= link_to t('my_wallet'),
                 dashboard_wallet_path, 
-                class: "block py-2 px-4 min-w-max" if current_user.mvm_eth? %>
+                class: "block py-2 px-4 min-w-max" %>
               <%= link_to t('disconnect'), 
                 logout_path, 
                 data: {

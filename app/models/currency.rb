@@ -4,15 +4,16 @@
 #
 # Table name: currencies
 #
-#  id         :bigint           not null, primary key
-#  price_btc  :decimal(, )
-#  price_usd  :decimal(, )
-#  raw        :jsonb
-#  symbol     :string
-#  created_at :datetime         not null
-#  updated_at :datetime         not null
-#  asset_id   :uuid
-#  chain_id   :uuid
+#  id                   :bigint           not null, primary key
+#  mvm_contract_address :string
+#  price_btc            :decimal(, )
+#  price_usd            :decimal(, )
+#  raw                  :jsonb
+#  symbol               :string
+#  created_at           :datetime         not null
+#  updated_at           :datetime         not null
+#  asset_id             :uuid
+#  chain_id             :uuid
 #
 # Indexes
 #
@@ -26,7 +27,7 @@ class Currency < ApplicationRecord
   XIN_ASSET_ID = 'c94ac88f-4671-3976-b60a-09064f1811e8'
   ETH_ASSET_ID = '43d61dcd-e413-450d-80b8-101d5e903357'
 
-  store :raw, accessors: %i[name icon_url]
+  store :raw, accessors: %i[name icon_url change_usd]
 
   before_validation :set_defaults
 
@@ -79,8 +80,7 @@ class Currency < ApplicationRecord
   end
 
   def sync!
-    r = QuillBot.api.asset asset_id
-    update! raw: r['data']
+    update! asset_id: asset_id
   end
 
   def swap(fill_asset_id, amount)
@@ -94,7 +94,16 @@ class Currency < ApplicationRecord
   private
 
   def set_defaults
-    if raw.blank? && asset_id.present?
+    if asset_id.present?
+      self.raw =
+        begin
+          QuillBot.api.asset(asset_id)['data']
+        rescue MixinBot::Error
+          {}
+        end
+      self.mvm_contract_address = MVM.registry.contract_from_asset asset_id
+    elsif mvm_contract_address.present?
+      self.asset_id = MVM.registry.asset_from_contract mvm_contract_address
       self.raw =
         begin
           QuillBot.api.asset(asset_id)['data']

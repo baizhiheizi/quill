@@ -161,7 +161,7 @@ class Collection < ApplicationRecord
     order = orders.find_by buyer: user
     return true if order.present? && (order.collectible.blank? || order.collectible.pending?)
 
-    user.owner_of_collection? validatable_collections.pluck(:uuid) + [uuid]
+    ((validatable_collections.pluck(:uuid) + [uuid]) & user.owning_collection_ids).present?
   end
 
   private

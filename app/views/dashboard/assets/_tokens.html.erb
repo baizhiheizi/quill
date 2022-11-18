@@ -1,3 +1,7 @@
 <%= turbo_frame_tag "my_assets_token" do %>
-  Token
+  <% if @token_assets.blank? %>
+    <%= render EmptyComponent.new text: t('no_record') %>
+  <% else %>
+    <%= render partial: "dashboard/assets/token", collection: @token_assets, as: :token_asset %>
+  <% end %>
 <% end %>

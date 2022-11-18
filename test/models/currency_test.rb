@@ -4,15 +4,16 @@
 #
 # Table name: currencies
 #
-#  id         :bigint           not null, primary key
-#  price_btc  :decimal(, )
-#  price_usd  :decimal(, )
-#  raw        :jsonb
-#  symbol     :string
-#  created_at :datetime         not null
-#  updated_at :datetime         not null
-#  asset_id   :uuid
-#  chain_id   :uuid
+#  id                   :bigint           not null, primary key
+#  mvm_contract_address :string
+#  price_btc            :decimal(, )
+#  price_usd            :decimal(, )
+#  raw                  :jsonb
+#  symbol               :string
+#  created_at           :datetime         not null
+#  updated_at           :datetime         not null
+#  asset_id             :uuid
+#  chain_id             :uuid
 #
 # Indexes
 #

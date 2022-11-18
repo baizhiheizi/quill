@@ -304,7 +304,8 @@ zh-CN:
   you_need_to_deposit_first: 您需要先充值资产
   balance: 余额
   words_count: 字数
-  deposit: 充值
+  deposit: 存入
+  withdraw: 提出
   using_eth_wallet: 使用 ETH 钱包
   using_mixin_wallet: 使用 Mixin 钱包
   continue: 继续
