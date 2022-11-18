@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_11_17_212733) do
+ActiveRecord::Schema[7.0].define(version: 2022_11_18_033727) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
   enable_extension "pgcrypto"
@@ -321,6 +321,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_11_17_212733) do
     t.jsonb "raw"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.uuid "output_id"
     t.index ["token_id"], name: "index_non_fungible_outputs_on_token_id"
     t.index ["user_id"], name: "index_non_fungible_outputs_on_user_id"
   end
