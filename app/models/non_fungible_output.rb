@@ -15,12 +15,11 @@
 #
 # Indexes
 #
-#  index_non_fungible_outputs_on_token_id  (token_id)
-#  index_non_fungible_outputs_on_user_id   (user_id)
+#  index_non_fungible_outputs_on_output_id  (output_id) UNIQUE
+#  index_non_fungible_outputs_on_token_id   (token_id)
+#  index_non_fungible_outputs_on_user_id    (user_id)
 #
 class NonFungibleOutput < ApplicationRecord
-  store_accessor :raw, %i[output_id]
-
   belongs_to :user, primary_key: :mixin_uuid
   belongs_to :collectible, primary_key: :token_id, foreign_key: :token_id, inverse_of: :non_fungible_outputs, optional: true
 
