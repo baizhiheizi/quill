@@ -4,23 +4,49 @@ module Users::CollectibleReadable
   extend ActiveSupport::Concern
 
   def owning_collections
-    @owning_collections = NftCollection.where(uuid: owning_collection_ids)
+    @owning_collections ||= NftCollection.where(uuid: owning_collection_ids)
   end
 
   def owning_collection_ids
     sync_collectibles_async
-    @owning_collection_ids =
+    @owning_collection_ids ||=
       if messenger?
         collectibles.collection_ids.uniq
       elsif mvm_eth?
-        Rails.cache.fetch "#{uid}_tokens_erc_721", expires_in: 3.minutes do
-          tokens = MVM.scan.tokens(uid, type: 'ERC-721')
-          tokens.map(&->(token) { MVM.nft.collection_from_contract(token['contractAddress']) })
-        rescue StandardError => e
-          Rails.logger.error e
-          []
+        Rails.cache.fetch "#{uid}_nft_collections_ids", expires_in: 3.minutes do
+          tokens_erc721.map(&->(token) { MVM.nft.collection_from_contract(token['contractAddress']) })
         end
+      else
+        []
       end
+  rescue StandardError
+    []
+  end
+
+  def owning_collectibles
+    @owning_collectibles ||=
+      if messenger?
+        collectibles
+      elsif mvm_eth?
+        ids =
+          Rails.cache.fetch "#{uid}_collectible_token_ids", expires_in: 3.minutes do
+            token_ids = []
+            tokens_erc721.each do |token|
+              token['balance'].to_i.times do |index|
+                collection_id = MVM.nft.collection_from_contract token['contractAddress']
+                identifier = MVM.nft.token_of_owner_by_index token['contractAddress'], uid, index
+                token_ids << MixinBot::Utils::Nfo.new(collection: collection_id, token: identifier.to_i).unique_token_id
+              end
+            end
+
+            token_ids
+          end
+        Collectible.where(token_id: ids)
+      else
+        []
+      end
+  rescue StandardError
+    Collectible.none
   end
 
   def mixin_access_token

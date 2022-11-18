@@ -111,9 +111,11 @@ class Collectible < ApplicationRecord
   end
 
   def media_url
-    return unless media.attached?
-
-    [Settings.storage.endpoint, media.key].join('/')
+    if media.attached?
+      [Settings.storage.endpoint, media.key].join('/')
+    else
+      metadata&.[]('media_url')
+    end
   end
 
   def mint_memo

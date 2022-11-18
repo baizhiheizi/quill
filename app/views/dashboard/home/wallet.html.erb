@@ -36,13 +36,17 @@
   <div class="hidden pb-4"
     data-tabs-content-param="token"
     data-tabs-target="content">
-    <%= turbo_frame_tag "my_assets_token", 
-      src: dashboard_assets_path(tab: :token), 
-      data: {
-        turbo_frame: "_top"
-      },
-      loading: :lazy do %>
-      <%= render "shared/loading" %>
+    <% if current_user.mvm_eth? %>
+      <%= turbo_frame_tag "my_assets_token", 
+        src: dashboard_assets_path(tab: :token), 
+        data: {
+          turbo_frame: "_top"
+        },
+        loading: :lazy do %>
+        <%= render "shared/loading" %>
+      <% end %>
+    <% else %>
+      <%= render EmptyComponent.new text: t('no_available') %>
     <% end %>
   </div>
 

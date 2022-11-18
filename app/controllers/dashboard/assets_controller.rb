@@ -6,14 +6,14 @@ class Dashboard::AssetsController < Dashboard::BaseController
       if current_user.mvm_eth?
         params[:tab] || 'token'
       else
-        'nft'
+        params[:tab] || 'nft'
       end
 
     case @tab
     when 'token'
       @token_assets = current_user.token_assets
-    when 'NFT'
-      @nft_collections = current_user.owning_collections
+    when 'nft'
+      @collectibles = current_user.owning_collectibles.includes(:nft_collection)
     end
   end
 end

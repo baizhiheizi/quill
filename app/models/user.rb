@@ -38,6 +38,7 @@ class User < ApplicationRecord
   include Authenticatable
   include Users::EmailVerifiable
   include Users::Importable
+  include Users::MVMQueriable
   include Users::Scopable
   include Users::Statable
   include Users::CollectibleReadable
@@ -206,24 +207,5 @@ class User < ApplicationRecord
     elsif mvm_eth?
       'MVMPreOrder'
     end
-  end
-
-  def token_assets
-    return unless mvm_eth?
-
-    tokens = MVM.scan.tokens(uid, type: 'ERC-20')
-    assets =
-      Currency.all.map do |currency|
-        TokenAsset.new(
-          owner: self,
-          currency: currency,
-          token: tokens.find(&->(token) { token['contractAddress'] == currency.mvm_contract_address })
-        )
-      end
-
-    @token_assets ||=
-      assets
-      .filter(&->(asset) { asset.balance.positive? || asset.asset_id.in?(Settings.supported_assets) })
-      .sort_by(&->(asset) { -asset.balance_usd })
   end
 end

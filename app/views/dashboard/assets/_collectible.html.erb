@@ -1,0 +1,17 @@
+<div class="relative w-full rounded-lg border overflow-hidden">
+  <div class="w-full">
+    <%= image_tag (collectible.media_url || 'logo.png'), class: 'aspect-square w-full' %>
+  </div>
+  <div class="p-2">
+    <div class="w-full truncate font-bold">
+      <%= collectible.name %>
+    </div>
+    <div class="w-full truncate text-xs opacity-75">
+      <%= collectible.nft_collection&.name %>
+    </div>
+    <div class="w-full font-bold text-sm opacity-75">
+      #<%= collectible.identifier %>
+    </div>
+  </div>
+  <%= link_to '', collectible.trident_url, target: "_blank", class: 'absolute inset-0' %>
+</div>
