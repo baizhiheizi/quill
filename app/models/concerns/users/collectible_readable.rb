@@ -11,7 +11,7 @@ module Users::CollectibleReadable
     sync_collectibles_async
     @owning_collection_ids ||=
       if messenger?
-        collectibles.collection_ids.uniq
+        collectibles.pluck(:collection_id).uniq
       elsif mvm_eth?
         Rails.cache.fetch "#{uid}_nft_collections_ids", expires_in: 3.minutes do
           tokens_erc721.map(&->(token) { MVM.nft.collection_from_contract(token['contractAddress']) })
@@ -19,7 +19,8 @@ module Users::CollectibleReadable
       else
         []
       end
-  rescue StandardError
+  rescue StandardError => e
+    Rails.logger.error e
     []
   end
 
@@ -45,7 +46,8 @@ module Users::CollectibleReadable
       else
         []
       end
-  rescue StandardError
+  rescue StandardError => e
+    Rails.logger.error e
     Collectible.none
   end
 
