@@ -9,6 +9,7 @@
 #  state      :string
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
+#  output_id  :uuid
 #  token_id   :uuid
 #  user_id    :uuid
 #
@@ -45,7 +46,8 @@ class NonFungibleOutput < ApplicationRecord
 
     assign_attributes(
       state: raw['state'],
-      token_id: raw['token_id']
+      token_id: raw['token_id'],
+      output_id: raw['output_id']
     )
   end
 end
