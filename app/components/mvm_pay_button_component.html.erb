@@ -57,9 +57,9 @@
       </div>
 
       <div class="relative text-sm opacity-75 flex items-center">
-        <span>MVM Bridge</span>
+        <span><%= t('my_wallet') %></span>
         <%= inline_svg_tag "icons/chevron-right.svg", class: 'w-4 h-4' %>
-        <%= link_to '', 'https://bridge.mvm.app', target: "_blank", class: "absolute inset-0" %>
+        <%= link_to '', dashboard_wallet_path, data: { turbo_frame: '_top' }, class: "absolute inset-0" %>
       </div>
     </div>
 
