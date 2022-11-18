@@ -14,6 +14,7 @@ class Dashboard::AssetsController < Dashboard::BaseController
       @token_assets = current_user.token_assets
     when 'nft'
       @collectibles = current_user.owning_collectibles.includes(:nft_collection)
+      current_user.sync_collectibles_async
     end
   end
 end
