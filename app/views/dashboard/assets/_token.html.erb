@@ -1,0 +1,37 @@
+<div class="grid grid-cols-2 lg:grid-cols-3 gap-4 py-2">
+  <div class="flex items-center space-x-2">
+    <div class='relative mr-2'>
+      <%= image_tag token_asset.icon_url, class: 'w-10 h-10 rounded-full' %>
+      <%= image_tag token_asset.chain.icon_url, class: 'absolute bottom-0 w-4 h-4 rounded-full' if token_asset.chain.present? %>
+    </div>
+    <div class="">
+      <div class="font-bold">
+        <%= format('%.8f', token_asset.balance) %>
+      </div>
+      <div class="text-sm opacity-50">
+        $<%= format('%.4f', token_asset.balance * token_asset.price_usd) %>
+      </div>
+    </div>
+  </div>
+
+  <div class="font-mono">
+    <div class="text-sm <%= token_asset.change_usd.to_f.positive? ? 'text-green-500' : 'text-red-500' %>">
+      <%= format('%.2f', (token_asset.change_usd.to_f * 100)) %>%
+    </div>
+    <div class="text-sm">
+      <%= token_asset.price_usd %>
+    </div>
+  </div>
+
+  <div class="flex items-center space-x-4 justify-end">
+    <%= link_to t('deposit'), 
+      deposit_dashboard_destination_path(asset_id: token_asset.asset_id), 
+      data: { 
+        turbo_frame: :modal
+      } %>
+    <%= link_to 'https://bridge.mvm.app', class: "flex items-center space-x-1", target: '_blank' do %>
+      <span><%= t('withdraw') %></span>
+      <%= inline_svg_tag "icons/external-link.svg", class: "w-4 h-4" %>
+    <% end %>
+  </div>
+</div>

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_11_13_085127) do
+ActiveRecord::Schema[7.0].define(version: 2022_11_17_212733) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
   enable_extension "pgcrypto"
@@ -243,6 +243,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_11_13_085127) do
     t.decimal "price_btc"
     t.uuid "chain_id"
     t.string "symbol"
+    t.string "mvm_contract_address"
     t.index ["asset_id"], name: "index_currencies_on_asset_id", unique: true
   end
 

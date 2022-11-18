@@ -142,7 +142,7 @@ class Transfer < ApplicationRecord
 
     case transfer_type.to_sym
     when :payment_refund, :swap_refund
-      source.refund! unless source.refunded?
+      source.refund! if source.may_refund?
     when :bonus, :swap_change
       source.complete! unless source.completed?
     when :fox_swap

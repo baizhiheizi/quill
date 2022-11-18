@@ -3,6 +3,26 @@
 module Users::CollectibleReadable
   extend ActiveSupport::Concern
 
+  def owning_collections
+    @owning_collections = NftCollection.where(uuid: owning_collection_ids)
+  end
+
+  def owning_collection_ids
+    sync_collectibles_async
+    @owning_collection_ids =
+      if messenger?
+        collectibles.collection_ids.uniq
+      elsif mvm_eth?
+        Rails.cache.fetch "#{uid}_tokens_erc_721", expires_in: 3.minutes do
+          tokens = MVM.scan.tokens(uid, type: 'ERC-721')
+          tokens.map(&->(token) { MVM.nft.collection_from_contract(token['contractAddress']) })
+        rescue StandardError => e
+          Rails.logger.error e
+          []
+        end
+      end
+  end
+
   def mixin_access_token
     @mixin_access_token = authorization&.access_token
   end
@@ -34,25 +54,6 @@ module Users::CollectibleReadable
       limit: 500,
       access_token: mixin_access_token
     )
-  end
-
-  def owner_of_collection?(collection_ids)
-    sync_collectibles_async
-    collection_ids = [collection_ids] if collection_ids.is_a?(String)
-
-    if messenger?
-      collectibles.where(collection_id: collection_ids).present?
-    elsif mvm_eth?
-      uuids =
-        Rails.cache.fetch "#{uid}_tokens_erc_721", expires_in: 1.minute do
-          tokens = MVM.scan.tokens(uid, type: 'ERC-721')
-          tokens.map(&->(token) { MVM.nft.collection_from_contract(token['contractAddress']) })
-        end
-      (uuids & collection_ids).present?
-    end
-  rescue StandardError => e
-    Rails.logger.error e
-    false
   end
 
   def sync_collectibles_async

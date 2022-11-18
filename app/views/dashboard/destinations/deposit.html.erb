@@ -1,4 +1,4 @@
-<% selected ||= Currency.pricable.first %>
+<% selected = @selected || Currency.pricable.first %>
 <% identifier = SecureRandom.uuid %>
 
 <%= turbo_frame_tag 'modal' do %>
@@ -39,27 +39,8 @@
         </div>
       <% end %>
 
-      <div data-controller="tabs" data-tabs-active-tab-value="address" data-tabs-active-class-value="text-bold border-b-2 !border-primary">
-        <div class="w-full flex items-center mb-4">
-          <a class="flex-1 text-center cursor-pointer py-1 border-b dark:border-white dark:border-opacity-5" data-tabs-target="tab" data-tabs-tabname-param='address' data-action="click->tabs#active">
-            <%= t('address') %>
-          </a>
-          <a class="flex-1 text-center cursor-pointer py-1 border-b dark:border-white dark:border-opacity-5" data-tabs-target="tab" data-tabs-tabname-param='mixin' data-action="click->tabs#active">
-            <%= t('mixin_contact') %>
-          </a>
-        </div>
-
-        <div class="hidden" data-tabs-target="content" data-tabs-content-param="address">
-          <%= render "dashboard/destinations/deposit_qrcode", asset_id: selected.asset_id %>
-        </div>
-
-        <div class="hidden" data-tabs-target="content" data-tabs-content-param="mixin">
-          <%= render QrcodeComponent.new url: current_user.mixin_deposit_url, image_classes: 'h-48' do %>
-            <div class="text-center py-2 opacity-60 text-sm">
-              <%= t("scan_with_mixin") %>
-            </div>
-          <% end %>
-        </div>
+      <div class="" data-tabs-content-param="address">
+        <%= render "dashboard/destinations/deposit_qrcode", asset_id: selected.asset_id %>
       </div>
     </div>
   <% end %>
