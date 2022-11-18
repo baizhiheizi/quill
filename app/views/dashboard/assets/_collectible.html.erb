@@ -1,6 +1,6 @@
-<div class="relative w-full rounded-lg border overflow-hidden">
+<div class="relative w-full rounded-lg border dark:border-white dark:border-opacity-5 overflow-hidden">
   <div class="w-full">
-    <%= image_tag (collectible.media_url || 'logo.png'), class: 'aspect-square w-full' %>
+    <%= image_tag (collectible.media_url || 'logo.png'), class: 'aspect-square w-full object-cover object-center' %>
   </div>
   <div class="p-2">
     <div class="w-full truncate font-bold">

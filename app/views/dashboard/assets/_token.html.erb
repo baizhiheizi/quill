@@ -1,4 +1,4 @@
-<div class="grid grid-cols-2 lg:grid-cols-3 gap-4 py-2">
+<div class="grid grid-cols-2 lg:grid-cols-3 gap-4 p-2 rounded hover:bg-[#F4F4F4] dark:hover:bg-[#333444]">
   <div class="flex items-center space-x-2">
     <div class='relative mr-2'>
       <%= image_tag token_asset.icon_url, class: 'w-10 h-10 rounded-full' %>
@@ -14,7 +14,7 @@
     </div>
   </div>
 
-  <div class="font-mono">
+  <div class="font-mono hidden sm:block">
     <div class="text-sm <%= token_asset.change_usd.to_f.positive? ? 'text-green-500' : 'text-red-500' %>">
       <%= format('%.2f', (token_asset.change_usd.to_f * 100)) %>%
     </div>
