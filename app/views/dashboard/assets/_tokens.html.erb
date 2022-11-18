@@ -3,5 +3,10 @@
     <%= render EmptyComponent.new text: t('no_record') %>
   <% else %>
     <%= render partial: "dashboard/assets/token", collection: @token_assets, as: :token_asset %>
+
+    <div class="my-8 text-xs text-center opacity-50">
+      <span>Powered by</span>
+      <%= link_to 'MVM', 'https://mvm.app', target: '_blank', class: "underline" %>
+    </div>
   <% end %>
 <% end %>
