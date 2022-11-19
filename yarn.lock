@@ -4329,9 +4329,9 @@ prosemirror-markdown@^1.10.1, prosemirror-markdown@^1.9.3:
     prosemirror-model "^1.0.0"
 
 prosemirror-model@^1.0.0, prosemirror-model@^1.16.0, prosemirror-model@^1.18.1:
-  version "1.18.2"
-  resolved "https://registry.yarnpkg.com/prosemirror-model/-/prosemirror-model-1.18.2.tgz#a85c2dbf66ccc114ab35d8dac39228ed294b9b7a"
-  integrity sha512-uOQorJr20qVvqp2hs2RdWtWoidQxJ1ceE11bSmkf57XS989mdg1zKPJIp5HOHfY8/KjXPn3cLZqUYYwRrfBBPw==
+  version "1.18.3"
+  resolved "https://registry.yarnpkg.com/prosemirror-model/-/prosemirror-model-1.18.3.tgz#d1026a78cff928fd600e90d87cf7d162e0a4e3fd"
+  integrity sha512-yUVejauEY3F1r7PDy4UJKEGeIU+KFc71JQl5sNvG66CLVdKXRjhWpBW6KMeduGsmGOsw85f6EGrs6QxIKOVILA==
   dependencies:
     orderedmap "^2.0.0"
 
@@ -4607,9 +4607,9 @@ readdirp@~3.6.0:
     picomatch "^2.2.1"
 
 regenerator-runtime@^0.13.10:
-  version "0.13.10"
-  resolved "https://registry.yarnpkg.com/regenerator-runtime/-/regenerator-runtime-0.13.10.tgz#ed07b19616bcbec5da6274ebc75ae95634bfc2ee"
-  integrity sha512-KepLsg4dU12hryUO7bp/axHAKvwGOCV0sGloQtpagJ12ai+ojVDqkeGSiRX1zlq+kjIMZ1t7gpze+26QqtdGqw==
+  version "0.13.11"
+  resolved "https://registry.yarnpkg.com/regenerator-runtime/-/regenerator-runtime-0.13.11.tgz#f6dca3e7ceec20590d07ada785636a90cdca17f9"
+  integrity sha512-kY1AZVr2Ra+t+piVaJ4gxaFaReZVH40AKNo7UCX6W+dEwBo/2oZJzqfuN1qLq1oL45o56cPaTXELwrTh8Fpggg==
 
 request@^2.79.0, request@^2.85.0:
   version "2.88.2"
