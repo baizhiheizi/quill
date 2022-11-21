@@ -6,8 +6,14 @@ class Users::BaseController < ApplicationController
   private
 
   def load_user!
-    @user = User.fetch_by_uniq_keys uid: params[:user_uid]
-    redirect_to root_path if @user.blank?
+    @user =
+      if request.subdomain.present?
+        User.fetch_by_uniq_keys subdomain: request.subdomain.strip
+      else
+        User.fetch_by_uniq_keys uid: params[:user_uid]
+      end
+
+    redirect_to root_url(subdomain: ''), allow_other_host: true if @user.blank?
   end
 
   def set_page_meta

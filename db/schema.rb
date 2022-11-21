@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_11_18_073324) do
+ActiveRecord::Schema[7.0].define(version: 2022_11_21_001350) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
   enable_extension "pgcrypto"
@@ -536,9 +536,11 @@ ActiveRecord::Schema[7.0].define(version: 2022_11_18_073324) do
     t.datetime "email_verified_at"
     t.datetime "blocked_at"
     t.text "biography"
+    t.string "subdomain"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["mixin_id"], name: "index_users_on_mixin_id"
     t.index ["mixin_uuid"], name: "index_users_on_mixin_uuid", unique: true
+    t.index ["subdomain"], name: "index_users_on_subdomain", unique: true
     t.index ["uid"], name: "index_users_on_uid", unique: true
   end
 

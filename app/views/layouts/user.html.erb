@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<% @page_title = @page_title.presence || Settings.page_title %>
+<% @page_description ||= Settings.page_description %>
+<% @page_keywords ||= Settings.page_keywords %>
+<% @page_image ||= asset_url('article-poster-bg.png') %>
+
+<html>
+  <head>
+    <title><%= @page_title %></title>
+    <meta
+      name='viewport'
+      content='minimum-scale=1, initial-scale=1, width=device-width, user-scalable=no, shrink-to-fit=no, viewport-fit=cover'
+    />
+    <meta name="theme-color" content="#fff" />
+
+    <meta name='title' content="<%= @page_title %>">
+    <meta name='keywords' content="<%= @page_keywords %>">
+    <meta name='description' content="<%= @page_description %>">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@<%= Settings.twitter_account %>" />
+    <meta name="twitter:creator" content="@<%= Settings.twitter_account %>" />
+    <meta name="twitter:title" content="<%= @page_title %>">
+    <meta name="twitter:description" content="<%= @page_description %>">
+    <meta name="twitter:image" content="<%= @page_image %>">
+
+    <meta property="og:url" content="<%= request.original_url %>" />
+    <meta property="og:title" content="<%= @page_title %>" />
+    <meta property="og:description" content="<%= @page_description %>" />
+    <meta property="og:image" content="<%= @page_image %>" />
+
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <% if Rails.env.development? %>
+      <script src="https://unpkg.com/vconsole@latest/dist/vconsole.min.js"></script>
+      <script>
+        // VConsole will be exported to `window.VConsole` by default.
+        if (window.VConsole) {
+          let vConsole = new window.VConsole();
+        }
+      </script>
+    <% end %>
+
+    
+    <% if current_user.blank? %>
+      <script>
+        // Ensure to clear session before login;
+        // Avoid stange behavior on Android Mixin Webview
+        document.cookie = "_quill_sessions=; Max-Age=0"
+      </script>
+    <% end %>
+
+    <link rel=preconnect"" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Noto Sans SC" rel="stylesheet">
+    <%= favicon_link_tag "favicon.svg" %>
+    <%= stylesheet_link_tag "application", media: "all", "data-turbo-track": "reload" %>
+    <%= javascript_include_tag "application", "data-turbo-track": "reload" %>
+  </head>
+
+  <body data-controller='session'
+        data-session-provider-value="<%= current_session&.info&.[]('provider') %>"
+        data-session-address-value="<%= current_session&.user&.uid %>"
+        data-session-uuid-value="<%= current_session&.uuid %>" 
+        class="min-h-screen overflow-x-hidden flex justify-center bg-white dark:bg-[#1D1E2B] text-[#222222] dark:text-[white]">
+    <%= render 'shared/navbar' if browser.device.mobile? %>
+    <%= render 'shared/tabbar' if browser.device.mobile? && @active_page.in?(%w[home readings authorings]) %>
+    <div class="w-full max-w-full lg:w-auto lg:flex">
+      <%= render 'shared/left_bar' unless browser.device.mobile? %>
+
+      <main class="flex max-w-full 2xl:max-w-screen-2xl pt-12 pb-24 sm:py-0">
+        <div class="w-full lg:w-[48rem] 2xl:w-[64rem]">
+          <div class="w-full md:w-auto md:max-w-screen-md mx-auto py-4 px-6 sm:p-8">
+            <%= yield %>
+          </div>
+        </div>
+
+        <aside class="relative hidden xl:block w-96 p-8 border-l min-h-screen dark:border-white dark:border-opacity-10">
+          <div class="sticky top-8">
+            <% if content_for? :sidebar %>
+              <%= yield :sidebar %>
+            <% else %>
+              <%= turbo_frame_tag 'active_authors', src: '/active_authors', loading: :lazy %>
+              <%= turbo_frame_tag 'hot_tags', src: '/hot_tags', loading: :lazy %>
+              <%= render "shared/footer" %>
+            <% end %>
+          </div>
+        </aside>
+      </main>
+    </div>
+
+    <%= turbo_frame_tag 'modal' %>
+
+    <div data-controller="darkmode">
+    </div>
+
+    <div class="fixed bottom-24 h-0 w-full px-4 z-50 flex flex-col justify-end" id="flashes">
+      <% flash.each do |type, message| %>
+        <%= render "flashes/flash", type: type, message: message %>
+      <% end %>
+    </div>
+
+    <div class="absolute bottom-0" id="toast-slot">
+      <div id="loading-toast" class="hidden fixed inset-0 z-50 flex items-center justify-center w-full bg-black/30">
+        <%= render "shared/loading" %>
+      </div>
+    </div>
+    <%= turbo_stream_from "user_#{current_user.mixin_uuid}" if current_user.present? %>
+  </body>
+</html>

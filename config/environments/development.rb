@@ -78,4 +78,7 @@ Rails.application.configure do
     recipient_id: Rails.application.credentials.dig(:admin, :uuid),
     bot: 'QuillBot'
   }
+
+  config.hosts << 'subdomain.example.com'
+  config.hosts << 'example.com'
 end
