@@ -37,11 +37,6 @@
   </div>
 
   <% if collection.authorized?(current_user) %>
-    <div class="relative flex items-center space-x-1 justify-end">
-      <%= inline_svg_tag "icons/check-circle-solid.svg", class: "w-6 h-6 text-green-500" %>
-      <span class="opacity-75"><%= t('subscribed') %></span>
-    </div>
-  <% else %>
     <div class="relative w-full lg:w-48 p-3 text-xl text-center rounded-full text-white bg-primary">
       <span><%= t('buy_collection') %></span>
       <% if current_user.present? && !current_user.fennec? %>
@@ -69,26 +64,14 @@
         class: "block absolute inset-0" %>
       <% end %>
     </div>
+  <% elsif collection.author != current_user %>
+    <div class="relative flex items-center space-x-1 justify-end">
+      <%= inline_svg_tag "icons/check-circle-solid.svg", class: "w-6 h-6 text-green-500" %>
+      <span class="opacity-75"><%= t('subscribed') %></span>
+    </div>
   <% end %>
 </div>
 
 <%= render "collections/mint", collection: collection if collection.mintable_order_from(current_user).present? %>
 
-<div class="grid grid-cols-2 gap-4">
-  <div class="bg-[#F4F4F4] dark:bg-[#333444] text-center rounded p-3">
-    <div class="text-2xl font-black mb-2">
-      <%= (collection.revenue_ratio * 100).floor(2) %>%
-    </div>
-    <div class="text-sm opacity-80">
-      <%= t('collection_revenue') %>
-    </div>
-  </div>
-  <div class="bg-[#F4F4F4] dark:bg-[#333444] text-center rounded p-3">
-    <div class="text-2xl font-black mb-2">
-      <%= collection.orders_count %>
-    </div>
-    <div class="text-sm opacity-80">
-      <%= t('subscribers') %>
-    </div>
-  </div>
-</div>
+<%= render "collections/stats", collection: collection %>
