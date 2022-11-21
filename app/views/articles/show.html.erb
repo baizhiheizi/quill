@@ -17,26 +17,39 @@
     </div>
   </div>
 
-  <% if @article.collection.present? %>
-    <div class="mb-12">
-      <div class="bg-[#F4F4F4] dark:bg-[#333444] py-4 px-6 rounded-lg mb-6">
-        <%= render "collections/validatable_collections", collection: @article.collection %>
-      </div>
-      <%= render "collections/card", collection: @article.collection %>
-    </div>
-  <% end %>
-
-  <div data-controller="comment-form">
+  <div data-controller="comment-form" class="mb-8">
     <% if browser.device.mobile? %>
       <%= render "articles/floating_bar", article: @article, user: current_user %>
     <% else %>
       <%= render "articles/comments_card", article: @article, user: current_user %>
     <% end %>
   </div>
+
+  <div class="xl:hidden mb-8">
+    <%= render "users/user_card", user: @article.author %>
+    <%= render "collections/card", collection: @article.collection if @article.collection.present? %>
+
+    <% cache @article.article_references, expires_in: 1.day do %>
+      <% if @article.article_references.present? %>
+        <div class="mb-4">
+          <%= render "articles/references_card", references: @article.article_references %>
+        </div>
+      <% end %>
+    <% end %>
+
+    <% cache @article.related_articles, expires_in: 10.minutes do %>
+      <% if @article.related_articles.present? %>
+        <%= render "articles/related_articles_card", articles: @article.related_articles %>
+      <% end %>
+    <% end %>
+
+    <%= turbo_frame_tag 'hot_tags', src: '/hot_tags', loading: :lazy %>
+  </div>
 </article>
 
 <%= content_for :sidebar do %>
   <%= render "users/user_card", user: @article.author %>
+  <%= render "collections/card", collection: @article.collection if @article.collection.present? %>
 
   <% cache @article.article_references, expires_in: 1.day do %>
     <% if @article.article_references.present? %>
