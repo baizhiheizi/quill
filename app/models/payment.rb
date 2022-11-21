@@ -105,28 +105,28 @@ class Payment < ApplicationRecord
 
   def article
     @article ||=
-      if decoded_memo['a'].present?
-        Article.find_by uuid: decoded_memo['a']
+      if payment_memo['a'].present?
+        Article.find_by uuid: payment_memo['a']
       elsif pre_order&.item_type == 'Article'
         pre_order.item
       end
   end
 
   def collection
-    return if decoded_memo['l'].blank?
+    return if payment_memo['l'].blank?
 
     @collection ||=
-      if decoded_memo['l'].present?
-        Collection.find_by uuid: decoded_memo['l']
+      if payment_memo['l'].present?
+        Collection.find_by uuid: payment_memo['l']
       elsif pre_order&.item_type == 'Collection'
         pre_order.item
       end
   end
 
   def citer
-    return unless decoded_memo['t'] == 'CITE'
+    return unless payment_memo['t'] == 'CITE'
 
-    @citer ||= Article.find_by(uuid: decoded_memo['c'])
+    @citer ||= Article.find_by(uuid: payment_memo['c'])
   end
 
   def pre_order
