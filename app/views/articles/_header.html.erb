@@ -1,7 +1,7 @@
 <% if article.collection.present? %>
   <div class="bg-[#EFEFFF] dark:bg-[#363644] py-2 px-4 rounded-lg mb-6 flex items-center text-sm">
     <%= image_tag article.collection.cover_url, class: "w-8 h-8 rounded-full" %>
-    <div class="ml-6 mr-2"><%= t('publisehd_in') %></div>
+    <div class="ml-6 mr-2"><%= t('published_in') %></div>
     <%= link_to article.collection.name, collection_path(article.collection_id), class: "font-bold" %>
   </div>
 <% end %>
