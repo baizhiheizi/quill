@@ -37,7 +37,7 @@
   </div>
 
   <% if collection.authorized?(current_user) %>
-    <div class="relative w-full lg:w-48 p-3 text-xl text-center rounded-full text-white bg-primary">
+    <div class="relative w-full lg:w-48 p-3 text-lg text-center rounded-full text-white bg-primary">
       <span><%= t('buy_collection') %></span>
       <% if current_user.present? && !current_user.fennec? %>
         <%= form_for PreOrder.new(

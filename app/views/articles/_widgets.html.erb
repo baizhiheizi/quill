@@ -1,0 +1,20 @@
+<%= render "users/user_card", user: article.author %>
+<%= render "collections/card", collection: article.collection if article.collection.present? %>
+
+<% cache article.article_references, expires_in: 1.day do %>
+  <% if article.article_references.present? %>
+    <div class="mb-4">
+      <%= render "articles/references_card", references: article.article_references %>
+    </div>
+  <% end %>
+<% end %>
+
+<% cache article.related_articles, expires_in: 10.minutes do %>
+  <% if article.related_articles.present? %>
+    <%= render "articles/related_articles_card", articles: article.related_articles %>
+  <% end %>
+<% end %>
+
+<% cache article.related_articles, expires_in: 5.minutes do %>
+  <%= turbo_frame_tag 'hot_tags', src: '/hot_tags', loading: :lazy %>
+<% end %>
