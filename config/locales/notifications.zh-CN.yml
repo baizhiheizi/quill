@@ -9,6 +9,10 @@ zh-CN:
       rewarded: 赞赏了文章
     article_imported_notification:
       imported: 成功导入新文章
+    collection_listed_notification:
+      listed: 上架了合辑
+    collection_bought_notification:
+      bought: 购买了合辑
     comment_created_notification:
       commented: 发表了新评论
     comment_deleted_notification:

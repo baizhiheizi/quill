@@ -9,6 +9,10 @@ en:
       rewarded: rewarded an article
     article_imported_notification:
       imported: imported a new article
+    collection_listed_notification:
+      listed: listed a collection
+    collection_bought_notification:
+      bought: bought an collection
     comment_created_notification:
       commented: commented
     comment_deleted_notification:
