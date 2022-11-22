@@ -4,11 +4,11 @@ class Dashboard::DeletedNotificationsController < Dashboard::BaseController
   def create
     current_user.notifications.destroy_all
 
-    @pagy, @notifications = pagy current_user.notifications.order(created_at: :desc)
+    redirect_to dashboard_notifications_path
   end
 
   def update
     @notification = current_user.notifications.find(params[:id])
-    @notification.mark_as_read!
+    @notification.destroy
   end
 end

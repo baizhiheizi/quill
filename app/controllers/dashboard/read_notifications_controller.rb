@@ -5,9 +5,13 @@ class Dashboard::ReadNotificationsController < Dashboard::BaseController
   end
 
   def create
-    current_user.notifications.unread.map(&:mark_as_read!)
+    current_user.notifications.unread.each do |notification|
+      notification.mark_as_read!
+    rescue ActiveJob::SerializationError
+      notification.destroy!
+    end
 
-    @pagy, @notifications = pagy current_user.notifications.order(created_at: :desc)
+    redirect_to dashboard_notifications_path
   end
 
   def update
