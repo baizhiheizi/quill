@@ -1,4 +1,4 @@
-<div id="<%= dom_id @user %>_subscribe_user_<%= dom_id user %>" class="bg-white dark:bg-[#1D1E2B] sm:rounded-lg relative flex items-center px-4 py-2 justify-between mb-4">
+<div id="<%= dom_id @user %>_subscribe_user_<%= dom_id user %>" class="bg-white dark:bg-[#1D1E2B] sm:rounded-lg relative flex items-center py-2 justify-between mb-4">
   <%= link_to user_path(user), class: "flex items-center space-x-2 truncate", data: { controller: 'prefetch', turbo_frame: "_top" } do %>
     <img src="<%= user.avatar_thumb %>" class="w-10 h-10 rounded-full" />
     <span class="truncate max-w-24"><%= user.name %></span>
