@@ -61,7 +61,7 @@ class Collection < ApplicationRecord
     state :listed
     state :hidden
 
-    event :list, guard: :nft_collection_present? do
+    event :list, guard: :nft_collection_present?, after_commit: :notify_subscribers_async do
       transitions from: :drafted, to: :listed
       transitions from: :hidden, to: :listed
     end
@@ -162,6 +162,18 @@ class Collection < ApplicationRecord
     return true if order.present? && (order.collectible.blank? || order.collectible.pending?)
 
     ((validatable_collections.pluck(:uuid) + [uuid]) & user.owning_collection_ids).present?
+  end
+
+  def notify_subscribers_async
+    CollectionNotifySubscribersWorker.perform_async id
+  end
+
+  def notify_subscribers
+    CollectionListedNotification
+      .with(collection: self)
+      .deliver(
+        User.where(id: (author.subscribe_by_user_ids - author.block_user_ids))
+      )
   end
 
   private

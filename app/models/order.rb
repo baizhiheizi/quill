@@ -122,6 +122,8 @@ class Order < ApplicationRecord
       ArticleRewardedNotification.with(order: self).deliver(buyer.subscribe_by_users)
     elsif buy_article?
       ArticleBoughtNotification.with(order: self).deliver(buyer.subscribe_by_users)
+    elsif buy_collection?
+      CollectionBoughtNotification.with(order: self).deliver(buyer.subscribe_by_users)
     end
   end
 
