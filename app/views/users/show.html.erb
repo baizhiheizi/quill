@@ -1,6 +1,6 @@
 <div class="hidden sm:block mb-8">
-  <span class="text-xl font-bold">
-    <%= t('profile_page') %>
+  <span class="text-2xl font-bold truncate max-w-full">
+    <%= @user.name %>
   </span>
 </div>
 
@@ -42,32 +42,6 @@
         <div class="h-2 border-b-2 border-inherit w-4 mx-auto"></div>
       <% end %>
 
-      <%= link_to user_subscribe_users_path(@user),
-        class: "cursor-pointer py-1 pr-8 border-transparent min-w-fit",
-        data: {
-          tabs_target: "tab",
-          tabs_tabname_param: "subscribing",
-          action: "tabs#active"
-        } do %>
-        <div class="min-w-fit">
-          <%= t('subscribing') %>
-        </div>
-        <div class="h-2 border-b-2 border-inherit w-4 mx-auto"></div>
-      <% end %>
-
-      <%= link_to user_subscribe_by_users_path(@user),
-        class: "cursor-pointer py-1 pr-8 border-transparent min-w-fit",
-        data: {
-          tabs_target: "tab",
-          tabs_tabname_param: "subscribers",
-          action: "tabs#active"
-        } do %>
-        <div class="min-w-fit">
-          <%= t('subscribers') %>
-        </div>
-        <div class="h-2 border-b-2 border-inherit w-4 mx-auto"></div>
-      <% end %>
-
       <%= link_to user_comments_path(@user),
         class: "cursor-pointer py-1 pr-8 border-transparent min-w-fit",
         data: {
@@ -96,20 +70,6 @@
       <% end %>
     </div> 
     <div class="hidden pb-4"
-      data-tabs-content-param="subscribing"
-      data-tabs-target="content">
-      <%= turbo_frame_tag "#{dom_id @user}_subscribings", src: user_subscribe_users_path(@user), target: '_top', loading: :lazy do %>
-        <%= render "shared/loading" %>
-      <% end %>
-    </div> 
-    <div class="hidden pb-4"
-      data-tabs-content-param="subscribers"
-      data-tabs-target="content">
-      <%= turbo_frame_tag "#{dom_id @user}_subscribers", src: user_subscribe_by_users_path(@user), target: '_top', loading: :lazy do %>
-        <%= render "shared/loading" %>
-      <% end %>
-    </div> 
-    <div class="hidden pb-4"
       data-tabs-content-param="commented"
       data-tabs-target="content">
       <%= turbo_frame_tag "#{dom_id @user}_comments", src: user_comments_path(@user), target: '_top', loading: :lazy do %>
@@ -128,8 +88,8 @@
     <%= link_to :back, class: "pr-2" do %>
       <%= inline_svg_tag "icons/chevron-left.svg", class: "w-5 h-5 font-bold" %>
     <% end %>
-    <span class="font-bold text-lg">
-      <%= t('profile_page') %>
+    <span class="font-bold text-lg truncate">
+      <%= @user.name %>
     </span>
   </div>
 <% end %>

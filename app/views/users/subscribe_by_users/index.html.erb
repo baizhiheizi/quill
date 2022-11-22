@@ -1,13 +1,15 @@
-<%= turbo_frame_tag "#{dom_id @user}_subscribers" do %>
-  <div data-controller="infinite-scroll">
-    <% if @users.blank? %>
-      <%= render EmptyComponent.new text: t('no_record') %>
-    <% else %>
-      <div id="<%= dom_id @user %>_subscribers_list">
-        <%= render partial: "users/subscribe_by_users/user", collection: @users, as: :user %>
-      </div>
-      <div data-infinite-scroll-target='scrollArea'></div>
-      <%= render partial: "shared/pagination", locals: { pagy: @pagy, id: "#{dom_id @user}_subscribers_pagination" } %>
-    <% end %>
-  </div>
+<%= turbo_frame_tag "modal" do %>
+  <%= render ModalComponent.new title: t('subscribers') do %>
+    <div data-controller="infinite-scroll">
+      <% if @users.blank? %>
+        <%= render EmptyComponent.new text: t('no_record') %>
+      <% else %>
+        <div id="<%= dom_id @user %>_subscribers_list">
+          <%= render partial: "users/subscribe_by_users/user", collection: @users, as: :user %>
+        </div>
+        <div data-infinite-scroll-target='scrollArea'></div>
+        <%= render partial: "shared/pagination", locals: { pagy: @pagy, id: "#{dom_id @user}_subscribers_pagination" } %>
+      <% end %>
+    </div>
+  <% end %>
 <% end %>
