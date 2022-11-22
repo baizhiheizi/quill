@@ -50,9 +50,9 @@
           },
           target: '_blank', 
           class: "absolute inset-0" %>
-      <% elsif user.messenger? && from_mixin_messenger? %>
+      <% elsif user.messenger? %>
         @<%= user.uid %>
-        <%= link_to '', "mixin://users/#{user.uid}", target: '_blank', class: "absolute inset-0" %>
+        <%= link_to '', "mixin://users/#{user.uid}", target: '_blank', class: "absolute inset-0" if from_mixin_messenger? %>
       <% else %>
         <div
           data-tippy-content="<%= user.uid %>"
@@ -66,6 +66,7 @@
           </div>
           <div class="w-16 uppercase"><%= user.uid.last(4) %></div>
         </div>
+        <%= link_to '', "mixin://users/#{MixinBot::Utils::UUID.new(hex: user.uid).unpacked}", target: '_blank', class: "absolute inset-0" if from_mixin_messenger? %>
       <% end %>
     </div>
   </div>
