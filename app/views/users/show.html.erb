@@ -1,7 +1,16 @@
-<div class="hidden sm:block mb-8">
-  <span class="text-2xl font-bold truncate max-w-full">
+<div class="hidden sm:flex mb-8 items-center justify-between">
+  <div class="flex-1 text-2xl font-bold truncate">
     <%= @user.name %>
-  </span>
+  </div>
+  <div class="hidden sm:flex justify-end">
+    <%= link_to full_user_share_path(@user), 
+      data: {
+        turbo_frame: :modal
+      },
+      class: "flex items-center space-x-1" do %>
+      <%= inline_svg_tag 'icons/share-solid.svg', class: 'w-5 h-5 lg:w-6 lg:h-6 text-primary' %>
+    <% end %>
+  </div>
 </div>
 
 <div class="xl:hidden">
@@ -81,15 +90,26 @@
 
 <%= content_for :sidebar do %>
   <%= render "users/user_card", user: @user %>
+  <%= render "shared/footer" %>
 <% end %>
 
 <% content_for :topbar do %>
-  <div class="flex items-center px-4 h-12">
-    <%= link_to :back, class: "pr-2" do %>
-      <%= inline_svg_tag "icons/chevron-left.svg", class: "w-5 h-5 font-bold" %>
+  <div class="h-12 flex items-center justify-between">
+    <div class="flex items-center px-4 truncate">
+      <%= link_to :back, class: "pr-2" do %>
+        <%= inline_svg_tag "icons/chevron-left.svg", class: "w-5 h-5 font-bold" %>
+      <% end %>
+      <span class="font-bold text-lg truncate">
+        <%= @user.name %>
+      </span>
+    </div>
+
+    <%= link_to full_user_share_path(@user), 
+      data: {
+        turbo_frame: :modal
+      },
+      class: "block px-6 py-3 #{from_mixin_messenger? ? 'mr-24' : ''}" do %>
+      <%= inline_svg_tag 'icons/share-solid.svg', class: 'w-6 h-6 text-primary' %>
     <% end %>
-    <span class="font-bold text-lg truncate">
-      <%= @user.name %>
-    </span>
   </div>
 <% end %>
