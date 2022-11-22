@@ -11,10 +11,13 @@ class UsersController < ApplicationController
     @page_image = @user&.avatar
   end
 
+  def share
+  end
+
   private
 
   def load_user
-    uid = params[:uid] || params[:user_id] || request.subdomain
+    uid = params[:uid] || params[:user_id] || params[:full_user_uid] || request.subdomain
     @user = User.fetch_by_uniq_keys uid: uid
     redirect_back fallback_location: root_path if @user.blank?
   end
