@@ -15,6 +15,4 @@
   <% end %>
 <% end %>
 
-<% cache article.related_articles, expires_in: 5.minutes do %>
-  <%= turbo_frame_tag 'hot_tags', src: '/hot_tags', loading: :lazy %>
-<% end %>
+<%= turbo_frame_tag 'hot_tags', src: '/hot_tags', loading: :lazy %>

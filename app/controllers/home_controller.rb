@@ -12,12 +12,15 @@ class HomeController < ApplicationController
   end
 
   def hot_tags
-    @hot_tags =
-      Tag
-      .hot
-      .where(locale: current_locale.to_s.split('-').first)
-      .limit(50)
-      .sample(5)
+    hot_tags =
+      Rails.cache.fetch "#{current_locale}_hot_tags", expires_in: 5.minutes do
+        Tag
+          .hot
+          .where(locale: current_locale.to_s.split('-').first)
+          .limit(50)
+      end
+
+    @hot_tags = hot_tags.sample(5)
   end
 
   def active_authors
