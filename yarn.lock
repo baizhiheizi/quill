@@ -4922,10 +4922,10 @@ statuses@2.0.1:
   resolved "https://registry.yarnpkg.com/statuses/-/statuses-2.0.1.tgz#55cb000ccf1d48728bd23c685a063998cf1a1b63"
   integrity sha512-RwNA9Z/7PrK06rYLIzFMlaF+l73iwpzsqRIFgbMLbTcLD6cOao82TaWefPXQvB2fOC4AjuYSEndS7N/mTCbkdQ==
 
-stimulus-use@^0.51.0:
-  version "0.51.0"
-  resolved "https://registry.yarnpkg.com/stimulus-use/-/stimulus-use-0.51.0.tgz#d750137cdc263c13e6f5bc114c3a8d4ea4411901"
-  integrity sha512-LI3jRiN2T9zzP27uZ7Mv8rdzwJqqoyKwmRHSkLnuKw8SrInsj9mw2dzDfuBkmZp8a3B5w0fFY0UXb2C3TzqgRA==
+stimulus-use@^0.51.1:
+  version "0.51.1"
+  resolved "https://registry.yarnpkg.com/stimulus-use/-/stimulus-use-0.51.1.tgz#55e775eee26d583ee4bdb4427d58979885408ebe"
+  integrity sha512-e7yEDHWz1GrDWwTc1y1Nnz62HPjELRAfn5q1JSCpTj1wHCCs4NNRUR14oZ08xxlp/4bjrgApMOKRkMPKA2TmVg==
   dependencies:
     hotkeys-js ">=3"
 
