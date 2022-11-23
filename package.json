@@ -65,7 +65,7 @@
     "web3": "^1.8.1"
   },
   "devDependencies": {
-    "prettier": "^2.7.1"
+    "prettier": "^2.8.0"
   },
   "browserslist": [
     "defaults"
