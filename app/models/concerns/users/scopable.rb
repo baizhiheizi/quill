@@ -21,12 +21,12 @@ module Users::Scopable
     scope :only_email_verified, -> { where.not(email_verified_at: nil) }
     scope :only_validated, -> { where.not(validated_at: nil) }
     scope :order_by_revenue_total, lambda {
-      joins(:revenue_transfers)
+      joins(revenue_transfers: :currency)
         .group(:id)
         .select(
           <<~SQL.squish
             users.*,
-            SUM(transfers.amount) AS revenue_total
+            SUM(transfers.amount * currencies.price_usd) AS revenue_total
           SQL
         ).order(revenue_total: :desc)
     }
@@ -36,7 +36,7 @@ module Users::Scopable
         .select(
           <<~SQL.squish
             users.*,
-            SUM(orders.value_btc) AS orders_total
+            SUM(orders.value_usd) AS orders_total
           SQL
         ).order(orders_total: :desc)
     }
