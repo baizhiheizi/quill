@@ -1,7 +1,7 @@
-<%= turbo_stream.append "#{dom_id @user}_articles_#{@tab}_list" do %>
+<%= turbo_stream.append "#{dom_id @user}_#{@tab}_articles_list" do %>
   <%= render Articles::CardComponent.with_collection(@articles) %>
 <% end %>
 
-<%= turbo_stream.update "#{dom_id @user}_articles_#{@tab}_pagination" do %>
-  <%= render "shared/pagination", pagy: @pagy, id: "#{dom_id @user}_articles_#{@tab}_pagination" %>
+<%= turbo_stream.update "#{dom_id @user}_#{@tab}_articles_pagination" do %>
+  <%= render "shared/pagination", pagy: @pagy, id: "#{dom_id @user}_#{@tab}_articles_pagination" %>
 <% end %>

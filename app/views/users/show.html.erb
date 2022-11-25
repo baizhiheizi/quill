@@ -67,14 +67,14 @@
     <div class="hidden pb-4"
       data-tabs-content-param="published"
       data-tabs-target="content">
-      <%= turbo_frame_tag "#{dom_id @user}_articles_published", src: user_articles_path(@user, tab: :published), target: '_top', loading: :lazy do %>
+      <%= turbo_frame_tag "#{dom_id @user}_published_articles", src: user_articles_path(@user, tab: :published), target: '_top', loading: :lazy do %>
         <%= render "shared/loading" %>
       <% end %>
     </div> 
     <div class="hidden pb-4"
       data-tabs-content-param="bought"
       data-tabs-target="content">
-      <%= turbo_frame_tag "#{dom_id @user}_articles_bought", src: user_articles_path(@user, tab: :bought), target: '_top', loading: :lazy do %>
+      <%= turbo_frame_tag "#{dom_id @user}_bought_articles", src: user_articles_path(@user, tab: :bought), target: '_top', loading: :lazy do %>
         <%= render "shared/loading" %>
       <% end %>
     </div> 

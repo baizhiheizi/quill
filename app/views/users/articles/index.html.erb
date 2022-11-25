@@ -1,3 +1,14 @@
-<%= turbo_frame_tag "#{dom_id @user}_articles_#{@tab}", target: "_top" do %>
-  <%= render Articles::ListComponent.new articles: @articles, pagy: @pagy, pagy_id: "#{dom_id @user}_articles_#{@tab}_pagination" %>
+<%= turbo_frame_tag "#{dom_id @user}_#{@tab}_articles", target: "_top" do %>
+  <div data-controller="infinite-scroll">
+    <% if @articles.blank? %>
+      <%= render EmptyComponent.new text: t('no_record') %>
+    <% else %>
+      <div id="<%= "#{dom_id(@user)}_#{@tab}_articles_list" %>">
+        <%= render Articles::CardComponent.with_collection(@articles) %>
+      </div>
+      <div data-infinite-scroll-target='scrollArea'></div>
+
+      <%= render "shared/pagination", pagy: @pagy, id: "#{dom_id @user}_#{@tab}_articles_pagination" %>
+    <% end %>
+  </div>
 <% end %>
