@@ -572,10 +572,10 @@
   dependencies:
     prosemirror-dropcursor "1.5.0"
 
-"@tiptap/extension-floating-menu@^2.0.0-beta.202":
-  version "2.0.0-beta.202"
-  resolved "https://registry.yarnpkg.com/@tiptap/extension-floating-menu/-/extension-floating-menu-2.0.0-beta.202.tgz#9f895a04cd93cf4b41542ef3b09f3c90bfd0e215"
-  integrity sha512-09liirOFsPDFRLS2FiFdnfzyyOQwwyVXLzI6MzUOw5RZbOsGJ5kB8jZdkXvsAIiOs0YYsH3fyOyWirIwSRhBTQ==
+"@tiptap/extension-floating-menu@^2.0.0-beta.204":
+  version "2.0.0-beta.204"
+  resolved "https://registry.yarnpkg.com/@tiptap/extension-floating-menu/-/extension-floating-menu-2.0.0-beta.204.tgz#45913d5ddd9b01cfd0104e762736e3e175e1a2ad"
+  integrity sha512-8CycAaQd3nNq251YO7kmFXDXTjlga0vU+W42K33VzscaiVzowrdfZZ3IN9Ezn3Q5v25sWbu2b9b+yVv2McNm/A==
   dependencies:
     prosemirror-state "^1.4.1"
     prosemirror-view "^1.28.2"
