@@ -30,7 +30,7 @@
     "@tiptap/extension-highlight": "^2.0.0-beta.202",
     "@tiptap/extension-image": "^2.0.0-beta.202",
     "@tiptap/extension-link": "^2.0.0-beta.202",
-    "@tiptap/extension-placeholder": "^2.0.0-beta.202",
+    "@tiptap/extension-placeholder": "^2.0.0-beta.204",
     "@tiptap/extension-typography": "^2.0.0-beta.202",
     "@tiptap/extension-underline": "^2.0.0-beta.202",
     "@tiptap/starter-kit": "^2.0.0-beta.202",
