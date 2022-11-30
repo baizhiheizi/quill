@@ -501,7 +501,7 @@ GEM
     spring-watcher-listen (2.1.0)
       listen (>= 2.7, < 4.0)
       spring (>= 4)
-    stimulus-rails (1.1.1)
+    stimulus-rails (1.2.1)
       railties (>= 6.0.0)
     thor (1.2.1)
     timeout (0.3.0)
