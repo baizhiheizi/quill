@@ -1,23 +1,27 @@
 <div class="max-w-full py-4 mb-4 border-b dark:border-white dark:border-opacity-10">
   <div class="w-full flex items-center justify-between mb-4">
-    <%= link_to user_path(@article.author), 
-      data: {
-        turbo_frame: '_top'
-      },
-      class: "flex items-center space-x-2" do %>
-      <%= image_tag @article.author.avatar_thumb, class: 'w-7 h-7 sm:w-9 sm:h-9 rounded-full block' %>
+    <div class="relative flex items-center space-x-2">
+      <%= link_to '', user_path(@article.author), 
+        data: {
+          turbo_frame: '_top'
+        },
+        class: "absolute inset-0" %>
+        <%= image_tag @article.author.avatar_thumb, class: 'w-7 h-7 sm:w-9 sm:h-9 rounded-full block' %>
 
-      <div class="truncate">
-        <div class="text-sm font-semibold max-w-24 sm:max-w-28 truncate">
-          <%= @article.author.name %>
+      <div class="">
+        <div class="flex items-center space-x-2 truncate">
+          <div class="text-sm font-semibold max-w-24 sm:max-w-28 truncate">
+            <%= @article.author.name %>
+          </div>
+          <div class="text-xs sm:text-sm opacity-50">
+            <%= render TimeFormatComponent.new datetime: @article.published_at.rfc3339, format: 'short' do %>
+              <%= @article.published_at.strftime("%Y-%m-%d %H:%M") %>
+            <% end %>
+          </div>
         </div>
-        <div class="text-xs sm:text-sm opacity-60">
-          <%= render TimeFormatComponent.new datetime: @article.published_at.rfc3339 do %>
-            <%= @article.published_at.strftime("%Y-%m-%d %H:%M") %>
-          <% end %>
-        </div>
+        <%= render "users/user_uid", user: @article.author %>
       </div>
-    <% end %>
+    </div>
 
     <div class="">
       <% if @article.free? %>

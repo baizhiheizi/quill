@@ -1,0 +1,37 @@
+<div class="relative text-xs sm:text-sm opacity-75 truncate font-mono">
+  <% if user.mvm_eth? %>
+    <div class="flex items-center space-x-1">
+      <div class="">@<%= user.uid.first(4) %></div>
+      <div class="flex items-center space-x-1">
+        <div class="rounded-full w-1 h-1 bg-[#77beff]"></div>
+        <div class="rounded-full w-1 h-1 bg-[#ff51a3]"></div>
+        <div class="rounded-full w-1 h-1 bg-[#ffcf54]"></div>
+      </div>
+      <div class="w-16 uppercase"><%= user.uid.last(4) %></div>
+    </div>
+    <%= link_to '', user.mvm_address_url, 
+      data: {
+        tippy_content: user.uid,
+        tippy_placement: 'bottom-start'
+      },
+      target: '_blank', 
+      class: "absolute inset-0" %>
+  <% elsif user.messenger? %>
+    @<%= user.uid %>
+    <%= link_to '', "mixin://users/#{user.uid}", target: '_blank', class: "absolute inset-0" if from_mixin_messenger? %>
+  <% else %>
+    <div
+      data-tippy-content="<%= user.uid %>"
+      data-tippy-placement="bottom-start"
+      class="flex items-center space-x-1">
+      <div class="">@<%= user.uid.first(4) %></div>
+      <div class="flex items-center space-x-1">
+        <div class="rounded-full w-1 h-1 bg-[#77beff]"></div>
+        <div class="rounded-full w-1 h-1 bg-[#ff51a3]"></div>
+        <div class="rounded-full w-1 h-1 bg-[#ffcf54]"></div>
+      </div>
+      <div class="w-16 uppercase"><%= user.uid.last(4) %></div>
+    </div>
+    <%= link_to '', "mixin://users/#{MixinBot::Utils::UUID.new(hex: user.uid).unpacked}", target: '_blank', class: "absolute inset-0" if from_mixin_messenger? %>
+  <% end %>
+</div>

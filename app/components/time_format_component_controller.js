@@ -10,6 +10,7 @@ dayjs.extend(advancedFormat);
 export default class extends Controller {
   static targets = ['time'];
   static values = {
+    format: String,
     datetime: String,
   };
 
@@ -18,8 +19,9 @@ export default class extends Controller {
       return;
     }
 
-    this.element.innerText = dayjs(this.datetimeValue).format(
-      'YYYY-MM-DD HH:mm',
-    );
+    const format =
+      this.formatValue === 'short' ? 'MMM DD' : 'YYYY-MM-DD HH:mm';
+
+    this.element.innerText = dayjs(this.datetimeValue).format(format);
   }
 }

@@ -19,9 +19,7 @@
     <div class="font-bold truncate overflow-hidden">
       <%= collection.author.name %>
     </div>
-    <div class="text-xs opacity-75">
-      @<%= collection.author.short_uid %>
-    </div>
+    <%= render "users/user_uid", user: collection.author %>
   </div>
 </div>
 
