@@ -6,17 +6,12 @@
           turbo_frame: '_top'
         },
         class: "absolute inset-0" %>
-        <%= image_tag @article.author.avatar_thumb, class: 'w-7 h-7 sm:w-9 sm:h-9 rounded-full block' %>
+        <%= image_tag @article.author.avatar_thumb, class: 'w-9 h-9 sm:w-10 sm:h-10 rounded-full block' %>
 
       <div class="">
-        <div class="flex items-center space-x-2 truncate">
-          <div class="text-sm font-semibold max-w-24 sm:max-w-28 truncate">
+        <div class="flex items-center space-x-4 truncate">
+          <div class="text-sm font-semibold max-w-28 sm:max-w-28 truncate">
             <%= @article.author.name %>
-          </div>
-          <div class="text-xs sm:text-sm opacity-50">
-            <%= render TimeFormatComponent.new datetime: @article.published_at.rfc3339, format: 'short' do %>
-              <%= @article.published_at.strftime("%Y-%m-%d %H:%M") %>
-            <% end %>
           </div>
         </div>
         <%= render "users/user_uid", user: @article.author %>
@@ -49,8 +44,15 @@
     },
     class: "flex items-start max-h-28 space-x-4 mb-6" do %>
     <div class="flex-1 h-ful">
-      <div class="overflow-hidden text-ellipsis line-clamp-1 font-bold text-xl mb-3">
-        <%= @article.title %>
+      <div class="flex items-center space-x-2 mb-3">
+        <div class="overflow-hidden text-ellipsis line-clamp-1 font-bold text-xl">
+          <%= @article.title %>
+        </div>
+        <div class="text-xs sm:text-sm opacity-50 italic">
+          <%= render TimeFormatComponent.new datetime: @article.published_at.rfc3339, format: 'short' do %>
+            <%= @article.published_at.strftime("%Y-%m-%d %H:%M") %>
+          <% end %>
+        </div>
       </div>
       <div class="text-base break-words text-ellipsis overflow-hidden line-clamp-3 text-[#222222] dark:text-white text-opacity-80"> 
         <%= @article.intro %>
@@ -76,7 +78,7 @@
       <% end %>
     </div>
 
-    <div class="flex items-center justify-end space-x-6 text-[#B1B6C6]">
+    <div class="flex items-center justify-end space-x-4 sm:space-x-6 text-[#B1B6C6]">
       <div class="flex items-center space-x-1">
         <%= inline_svg_tag 'icons/income-solid.svg', class: 'w-4 h-4' %>
         <span class="text-sm">
