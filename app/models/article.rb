@@ -197,6 +197,8 @@ class Article < ApplicationRecord
   end
 
   def notify_subscribers
+    return if author.blocked?
+
     ArticlePublishedNotification
       .with(article: self)
       .deliver(
