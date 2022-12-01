@@ -6,7 +6,7 @@
         controller: 'prefetch', 
         turbo_frame: "_top" 
       } do %>
-      <img src="<%= quote_comment.author.avatar_thumb %>" class="w-6 h-6 sm:w-9 sm:h-9 rounded-full" />
+      <%= image_tag quote_comment.author.avatar_thumb, class: "w-6 h-6 sm:w-9 sm:h-9 rounded-full" %>
     <% end %>
     <div class="">
       <div class="truncate max-w-24"><%= quote_comment.author.name %></div>

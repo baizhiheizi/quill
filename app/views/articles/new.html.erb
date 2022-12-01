@@ -31,7 +31,7 @@
         class: "mx-2", 
         role: "menuitem", 
         tabindex: "-1" do %>
-        <img class="w-8 h-8 rounded-full mx-2" src="<%= current_user.avatar_thumb %>" />
+        <%= image_tag current_user.avatar_thumb, class: "w-8 h-8 rounded-full mx-2" %>
       <% end %>
     </div>
   </div>

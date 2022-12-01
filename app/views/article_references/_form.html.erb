@@ -14,7 +14,7 @@
           data: {
             controller: "references-select",
             references_select_items_value: article.references.pluck(:id),
-            references_select_options_value: current_user.available_articles.collect { |a| { id: a.id, title: a.title, author: { name: a.author.name, avatar: a.author.avatar_thumb}} }, 
+            references_select_options_value: current_user.available_articles.collect { |a| { id: a.id, title: a.title, author: { name: a.author.name, avatar: a.author.avatar_url}} }, 
             action: "change->article-form#touchDirty"
           }, 
           class: "focus:ring-blue-500 focus:border-blue-500 flex-1 block w-full rounded" 

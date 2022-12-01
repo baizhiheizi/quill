@@ -127,7 +127,7 @@ class User < ApplicationRecord
   def avatar_thumb
     @avatar_thumb =
       if avatar.attached?
-        avatar.variant(resize_to_fit: [64, 64]).url || [Settings.storage.endpoint, avatar.key].join('/')
+        avatar.variant(resize_to_fit: [64, 64])
       else
         authorization.raw&.[]('avatar_url').presence&.gsub(/s256\Z/, 's64') || generated_avatar_url
       end

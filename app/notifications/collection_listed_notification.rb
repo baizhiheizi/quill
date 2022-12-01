@@ -32,7 +32,7 @@ class CollectionListedNotification < ApplicationNotification
   end
 
   def icon_url
-    collection.author.avatar_thumb
+    collection.author.avatar_url
   end
 
   def web_notification_enabled?

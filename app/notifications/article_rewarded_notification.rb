@@ -34,7 +34,7 @@ class ArticleRewardedNotification < ApplicationNotification
   end
 
   def icon_url
-    order.buyer.avatar_thumb
+    order.buyer.avatar_url
   end
 
   def web_notification_enabled?

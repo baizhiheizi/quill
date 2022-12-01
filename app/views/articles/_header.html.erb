@@ -8,7 +8,7 @@
 
 <div class="flex items-center justify-between mb-6">
   <div class="relative flex items-center space-x-2 truncate">
-    <img class="w-10 h-10 my-0 rounded-full" src="<%= article.author.avatar_thumb %>">
+    <%= image_tag article.author.avatar_thumb, class: "w-10 h-10 my-0 rounded-full" %>
     <div class="leading-4 truncate">
       <span class="text-base font-semibold truncate max-w-24"><%= article.author.name %></span>
       <%= render "users/user_uid", user: article.author %>
