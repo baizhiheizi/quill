@@ -28,11 +28,12 @@
     <% end %>
   </div>
 
-  <div class="truncate mb-2">
+  <div class="relative truncate mb-2">
     <div class="text-lg font-bold truncate mb-1">
       <%= user.name %>
     </div>
     <%= render "users/user_uid", user: user %>
+    <%= link_to '', user_path(user), class: "absolute inset-0" %>
   </div>
 
   <div class="grid grid-cols-2 xl:grid-cols-3 gap-4 mb-4">
