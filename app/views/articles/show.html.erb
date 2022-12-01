@@ -51,12 +51,12 @@
 
 <% if @article.author.blocked? && current_user != @article.author %>
   <%= turbo_frame_tag 'modal' do %>
-    <%= render ModalComponent.new title: t('Attention') do %>
+    <%= render ModalComponent.new do %>
       <div class="mb-4 flex">
         <%= inline_svg_tag "icons/exclamation-circle-solid.svg", class: "w-12 h-12 text-red-500 block mx-auto" %>
       </div>
       <div class="mb-4 flex justify-center">
-        该帐号有造假嫌疑，请谨慎购买。
+        <%= t('alert_for_blocked_user') %>
       </div>
     <% end %>
   <% end %>

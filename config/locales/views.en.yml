@@ -362,3 +362,4 @@ en:
   confirm_to_import_from_mirror: Confirm to import posts from mirror.xyz
   import: Import
   importing_tips: 'Importing... Please refresh the page later.'
+  alert_for_blocked_user: The account is suspected of being fraudulent. Please pay with caution.
