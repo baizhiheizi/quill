@@ -28,20 +28,36 @@
 
   <div class="flex justify-center mb-4">
     <% if current_user.present? %>
-      <%= form_for PreOrder.new(
-        order_type: :buy_article,
-        item: article,
-        asset_id: article.asset_id,
-        amount: article.price,
-      ) do |form| %>
-        <%= form.hidden_field :order_type %>
-        <%= form.hidden_field :item_id %>
-        <%= form.hidden_field :item_type %>
-        <%= form.hidden_field :asset_id %>
-        <%= form.hidden_field :amount %>
-        <%= form.hidden_field :type, value: current_user.default_payment %>
+      <% if current_user.mvm_eth? && article.mixpay_supported? %>
+        <%= link_to mixpay_pre_order_path(
+            order_type: :buy_article,
+            item_id: article.id,
+            item_type: article.class.name,
+            asset_id: article.asset_id,
+            amount: article.price
+          ),
+          data: {
+            turbo_frame: '_top'
+          }, 
+          class: "cursor-pointer text-base rounded-full bg-primary hover:scale-105 transition ease-in-out text-white px-4 py-2.5 no-underline" do %>
+          <%= t('pay_to_read') %>
+        <% end %>
+      <% else %>
+        <%= form_for PreOrder.new(
+          order_type: :buy_article,
+          item: article,
+          asset_id: article.asset_id,
+          amount: article.price,
+        ) do |form| %>
+          <%= form.hidden_field :order_type %>
+          <%= form.hidden_field :item_id %>
+          <%= form.hidden_field :item_type %>
+          <%= form.hidden_field :asset_id %>
+          <%= form.hidden_field :amount %>
+          <%= form.hidden_field :type, value: current_user.default_payment %>
 
-        <%= form.submit t('pay_to_read'), class: "cursor-pointer text-base rounded-full bg-primary hover:scale-105 transition ease-in-out text-white px-4 py-2.5 no-underline" %>
+          <%= form.submit t('pay_to_read'), class: "cursor-pointer text-base rounded-full bg-primary hover:scale-105 transition ease-in-out text-white px-4 py-2.5 no-underline" %>
+        <% end %>
       <% end %>
     <% elsif from_mixin_messenger? %>
       <%= link_to t('pay_to_read'), 

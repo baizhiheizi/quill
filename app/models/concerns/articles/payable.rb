@@ -72,6 +72,8 @@ module Articles::Payable
   end
 
   def mixpay_supported?
-    asset_id.in?(Mixpay.api.settlement_asset_ids) && asset_id.in?(Mixpay.api.quote_asset_ids)
+    return unless asset_id.in?(Mixpay.api.settlement_asset_ids)
+
+    Mixpay.api.quote_assets_cached.find(&->(asset) { asset['assetId'] == asset_id && price >= asset['minQuoteAmount'].to_f && price <= asset['maxQuoteAmount'].to_f }).present?
   end
 end
