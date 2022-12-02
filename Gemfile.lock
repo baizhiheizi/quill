@@ -134,7 +134,6 @@ GEM
       rack-test (>= 0.6.3)
       regexp_parser (>= 1.5, < 3.0)
       xpath (~> 3.2)
-    childprocess (4.1.0)
     chunky_png (1.4.0)
     cld (0.11.0)
       ffi
@@ -479,8 +478,7 @@ GEM
     second_level_cache (2.7.1)
       activerecord (>= 6.0)
       activesupport (>= 6.0)
-    selenium-webdriver (4.6.1)
-      childprocess (>= 0.5, < 5.0)
+    selenium-webdriver (4.7.0)
       rexml (~> 3.2, >= 3.2.5)
       rubyzip (>= 1.2.2, < 3.0)
       websocket (~> 1.0)
