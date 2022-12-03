@@ -113,7 +113,7 @@
                 class: "block py-2 px-4" %>
               <%= link_to t('my_wallet'),
                 dashboard_wallet_path, 
-                class: "block py-2 px-4 min-w-max" %>
+                class: "block py-2 px-4 min-w-max" if current_user.mvm_eth? %>
               <%= link_to t('settings'), 
                 dashboard_settings_path, 
                 class: "block py-2 px-4" %>
