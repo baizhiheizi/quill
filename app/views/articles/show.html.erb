@@ -49,7 +49,7 @@
   </div>
 <% end %>
 
-<% if @article.author.blocked? && current_user != @article.author %>
+<% if @article.author.blocked? && current_user.present? && current_user != @article.author %>
   <%= turbo_frame_tag 'modal' do %>
     <%= render ModalComponent.new title: t('alert') do %>
       <div class="mb-4 flex">
