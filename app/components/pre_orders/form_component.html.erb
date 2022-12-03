@@ -57,20 +57,37 @@
   </div>
 
   <div class="mb-4">
-    <%= form_for PreOrder.new do |form| %>
-      <%= form.hidden_field :order_type, value: @pre_order.order_type %>
-      <%= form.hidden_field :item_id, value: @article.id %>
-      <%= form.hidden_field :item_type, value: 'Article' %>
-      <%= form.hidden_field :asset_id, value: @article.asset_id %>
-      <%= form.hidden_field :amount, 
-        value: @price,
-        data: { 
-          pre_orders_form_component_target: 'amountInput'
-        } 
-      %>
-      <%= form.hidden_field :type, value: @payer.default_payment %>
+    <% if @payer.mvm_eth? && @article.mixpay_supported? %>
+      <%= link_to mixpay_pre_order_path(
+          order_type: @pre_order.order_type,
+          item_id: @article.id,
+          item_type: @article.class.name,
+          asset_id: @article.asset_id,
+          amount: @pre_order.amount
+        ),
+        data: {
+          pre_orders_form_component_target: 'mixpayUrl',
+          turbo_frame: '_top'
+        }, 
+        class: "cursor-pointer block w-full text-center rounded-lg bg-primary text-white p-4 text-xl hover:font-black" do %>
+        <%= t('continue') %>
+      <% end %>
+    <% else %>
+      <%= form_for PreOrder.new do |form| %>
+        <%= form.hidden_field :order_type, value: @pre_order.order_type %>
+        <%= form.hidden_field :item_id, value: @article.id %>
+        <%= form.hidden_field :item_type, value: 'Article' %>
+        <%= form.hidden_field :asset_id, value: @article.asset_id %>
+        <%= form.hidden_field :amount, 
+          value: @price,
+          data: { 
+            pre_orders_form_component_target: 'amountInput'
+          } 
+        %>
+        <%= form.hidden_field :type, value: @payer.default_payment %>
 
-      <%= form.submit t('continue'), class: "cursor-pointer block w-full rounded-lg bg-primary text-white p-4 text-xl hover:font-black" %>
+        <%= form.submit t('continue'), class: "cursor-pointer block w-full rounded-lg bg-primary text-white p-4 text-xl hover:font-black" %>
+      <% end %>
     <% end %>
   </div>
 </div>
