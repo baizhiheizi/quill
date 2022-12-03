@@ -2,7 +2,7 @@
   <%= render ModalComponent.new title: t('connect_wallet') do %>
     <div data-controller="login" class="">
       <div data-login-target="eth">
-        <div data-controller="eth-wallet" class="flex justify-center mb-2">
+        <div data-controller="eth-wallet" class="flex justify-center mb-2 hidden sm:block">
           <a data-eth-wallet-target="loginButton" 
             data-action="eth-wallet#login" 
             data-eth-wallet-provier-param="MetaMask"
@@ -17,18 +17,6 @@
         </div>
 
         <div data-controller="eth-wallet" class="flex justify-center mb-2">
-          <button data-eth-wallet-target="loginButton" 
-            data-action="eth-wallet#login" 
-            data-eth-wallet-provier-param="Coinbase"
-            class="relative px-2 py-3 bg-[#F4F4F4] hover:bg-opacity-80 dark:bg-[#333444] dark:hover:bg-opacity-80 rounded-lg flex items-center justify-center text-lg w-full">
-            <div class="w-8 h-8 flex absolute left-4">
-              <%= image_tag 'coinbase.svg', class: 'w-full h-auto' %>
-            </div>
-            <span class="">Coinbase</span>
-          </button>
-        </div>
-
-        <div data-controller="eth-wallet" class="flex justify-center mb-2">
           <a data-metamask-target="loginButton" 
             data-action="eth-wallet#login" 
             data-eth-wallet-provier-param="WalletConnect"
@@ -40,6 +28,18 @@
             </div>
             <span>Wallet Connect</span>
           </a>
+        </div>
+
+        <div data-controller="eth-wallet" class="flex justify-center mb-2">
+          <button data-eth-wallet-target="loginButton" 
+            data-action="eth-wallet#login" 
+            data-eth-wallet-provier-param="Coinbase"
+            class="relative px-2 py-3 bg-[#F4F4F4] hover:bg-opacity-80 dark:bg-[#333444] dark:hover:bg-opacity-80 rounded-lg flex items-center justify-center text-lg w-full">
+            <div class="w-8 h-8 flex absolute left-4">
+              <%= image_tag 'coinbase.svg', class: 'w-full h-auto' %>
+            </div>
+            <span class="">Coinbase</span>
+          </button>
         </div>
 
         <div data-action="click->login#showMixin" class="w-full mx-auto text-sm text-primary text-center py-6 underline cursor-pointer">
