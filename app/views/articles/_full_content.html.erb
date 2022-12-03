@@ -10,12 +10,6 @@
 
 <% unless article.author == user %>
   <div class="flex justify-center">
-    <%= link_to new_pre_order_path(order_type: :reward_article, article_uuid: article.uuid), 
-      data: {
-        turbo_frame: :modal
-      },
-      class: "no-underline rounded-full px-6 py-2 text-white bg-[#F3463F] cursor-pointer flex items-center space-x-2" do %>
-      <span><%= t('reward') %></span>
-    <% end %>
+    <%= render "articles/reward_article_button", article: article %>
   </div>
 <% end %>

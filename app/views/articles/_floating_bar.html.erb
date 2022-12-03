@@ -1,42 +1,50 @@
-<div data-controller="floating" id="<%= dom_id(article) %>_floating_bar" class="sm:hidden fixed bottom-24 z-10 flex justify-center w-full -mx-6 transition ease-in-out">
-  <div class="h-12 bg-white dark:bg-[#444655] rounded-full shadow-xl px-2 py-3 border grid grid-cols-3 dark:border-white dark:border-opacity-5">
-    <div class="relative px-2 flex items-center space-x-1 border-r border-inherit">
-      <%= inline_svg_tag "icons/like-solid.svg", class: "w-5 h-5 #{user&.upvote_article?(article) ? 'text-primary' : 'text-[#B1B6C6]'}" %>
-      <span>
-        <%= article.upvotes_count %>
-      </span>
-      <% if user.blank? %>
-        <%= link_to '', login_path, data: { turbo_frame: :modal }, class: 'absolute inset-0' %>
-      <% elsif user&.upvote_article? article %>
-        <%= link_to '', upvoted_article_path(article), data: { turbo_method: :delete }, class: 'absolute inset-0' %>
-      <% else %>
-        <%= link_to '', upvoted_article_path(article), data: { turbo_method: :put }, class: 'absolute inset-0' %>
+<div data-controller="floating" id="<%= dom_id(article) %>_floating_bar" class="sm:hidden bg-white dark:bg-[#333444] fixed bottom-0 z-10 w-full -mx-6 transition ease-in-out shadow-xl px-4 py-3 border-t dark:border-white dark:border-opacity-5">
+  <div class="w-full flex items-center justify-between">
+    <div class="grid grid-cols-3">
+      <div class="relative px-2 flex items-center space-x-1 border-inherit">
+        <%= inline_svg_tag "icons/like-solid.svg", class: "w-6 h-6 #{user&.upvote_article?(article) ? 'text-primary' : 'text-[#B1B6C6]'}" %>
+        <span>
+          <%= article.upvotes_count %>
+        </span>
+        <% if user.blank? %>
+          <%= link_to '', login_path, data: { turbo_frame: :modal }, class: 'absolute inset-0' %>
+        <% elsif user&.upvote_article? article %>
+          <%= link_to '', upvoted_article_path(article), data: { turbo_method: :delete }, class: 'absolute inset-0' %>
+        <% else %>
+          <%= link_to '', upvoted_article_path(article), data: { turbo_method: :put }, class: 'absolute inset-0' %>
+        <% end %>
+      </div>
+      <div class="relative px-2 flex items-center space-x-1 border-inherit">
+        <%= inline_svg_tag "icons/dislike-solid.svg", class: "w-6 h-6 #{user&.downvote_article?(article) ? 'text-[#F3463F]' : 'text-[#B1B6C6]'}" %>
+        <span>
+          <%= article.downvotes_count %>
+        </span>
+        <% if user.blank? %>
+          <%= link_to '', login_path, data: { turbo_frame: :modal }, class: 'absolute inset-0' %>
+        <% elsif user&.downvote_article? article %>
+          <%= link_to '', downvoted_article_path(article), data: { turbo_method: :delete }, class: 'absolute inset-0' %>
+        <% else %>
+          <%= link_to '', downvoted_article_path(article), data: { turbo_method: :put }, class: 'absolute inset-0' %>
+        <% end %>
+      </div>
+      <%= link_to article_comments_path(article.uuid),
+        data: {
+          turbo_frame: :modal,
+        },
+        class: "px-2 flex items-center space-x-1" do %>
+        <%= inline_svg_tag "icons/comment-solid.svg", class: "w-6 h-6 text-[#B1B6C6]" %>
+        <span>
+          <%= article.comments.count %>
+        </span>
       <% end %>
     </div>
-    <div class="relative px-2 flex items-center space-x-1 border-r border-inherit">
-      <%= inline_svg_tag "icons/dislike-solid.svg", class: "w-5 h-5 #{user&.downvote_article?(article) ? 'text-[#F3463F]' : 'text-[#B1B6C6]'}" %>
-      <span>
-        <%= article.downvotes_count %>
-      </span>
-      <% if user.blank? %>
-        <%= link_to '', login_path, data: { turbo_frame: :modal }, class: 'absolute inset-0' %>
-      <% elsif user&.downvote_article? article %>
-        <%= link_to '', downvoted_article_path(article), data: { turbo_method: :delete }, class: 'absolute inset-0' %>
-      <% else %>
-        <%= link_to '', downvoted_article_path(article), data: { turbo_method: :put }, class: 'absolute inset-0' %>
-      <% end %>
-    </div>
-    <%= link_to article_comments_path(article.uuid),
-      data: {
-        turbo_frame: :modal,
-      },
-      class: "px-2 flex items-center space-x-1" do %>
-      <%= inline_svg_tag "icons/comment-solid.svg", class: "w-5 h-5 text-[#B1B6C6]" %>
-      <span>
-        <%= article.comments.count %>
-      </span>
+    <% if article.author == current_user %>
+      <%= image_tag current_user.avatar_thumb, class: "w-8 h-8 rounded-full" %>
+    <% elsif article.authorized? current_user %> 
+      <%= render "articles/reward_article_button", article: article, size: 'sm' %>
+    <% else %>
+      <%= render "articles/buy_article_button", article: article, size: 'sm' %>
     <% end %>
   </div>
-  <div style="height:env(safe-area-inset-bottom);"></div>
+  <div style="height:env(safe-area-inset-bottom)"></div>
 </div>
-

@@ -1,0 +1,9 @@
+<% size ||= 'lg' %>
+
+<%= link_to new_pre_order_path(order_type: :reward_article, article_uuid: article.uuid), 
+  data: {
+    turbo_frame: :modal
+  },
+  class: "no-underline rounded-full #{size == 'lg' ? 'px-6 py-2' : 'px-3 py-1.5'} text-white bg-[#F3463F] cursor-pointer flex items-center space-x-2" do %>
+  <span><%= t('reward') %></span>
+<% end %>

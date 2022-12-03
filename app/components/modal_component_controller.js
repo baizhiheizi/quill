@@ -45,7 +45,9 @@ export default class extends Controller {
 
   show() {
     this.enter();
-    // this.lockBodyScroll();
+    if (this.backdropValue === 'static') {
+      this.lockBodyScroll();
+    }
   }
 
   hide() {
