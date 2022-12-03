@@ -37,7 +37,6 @@ module PreOrders::Swappable
 
     QuillBot.api.create_payment(
       asset_id: pay_asset_id,
-      trace_id: trace_id,
       memo: fswap_mtg_memo,
       amount: pay_amount(pay_asset_id),
       receivers: Settings.foxswap.mtg_members,
