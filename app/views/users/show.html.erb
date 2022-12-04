@@ -88,6 +88,10 @@
   </div>
 <% end %>
 
+<div class="xl:hidden mb-8">
+  <%= render "shared/footer" %>
+</div>
+
 <%= content_for :sidebar do %>
   <%= render "users/user_card", user: @user %>
   <%= render "shared/footer" %>

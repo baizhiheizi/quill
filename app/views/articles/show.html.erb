@@ -27,11 +27,13 @@
 
   <div class="xl:hidden mb-8 pt-8 border-t dark:border-white/5">
     <%= render "articles/widgets", article: @article %>
+    <%= render "shared/footer" %>
   </div>
 </article>
 
 <%= content_for :sidebar do %>
   <%= render "articles/widgets", article: @article %>
+  <%= render "shared/footer" %>
 <% end %>
 
 <%= content_for :topbar do %>
