@@ -7,6 +7,8 @@ class CollectionsController < ApplicationController
 
   def show
     @collection = Collection.listed.find_by uuid: params[:uuid]
+    impressionist @collection
+
     @articles = @collection.articles.published
 
     @page_title = "#{@collection.name} - #{@collection.author.name}"
@@ -16,5 +18,6 @@ class CollectionsController < ApplicationController
 
   def share
     @collection = Collection.listed.find_by uuid: params[:collection_uuid]
+    impressionist @collection, 'share'
   end
 end

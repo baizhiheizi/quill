@@ -25,6 +25,8 @@
 #  index_collections_on_uuid       (uuid) UNIQUE
 #
 class Collection < ApplicationRecord
+  is_impressionable
+
   SUPPORTED_ASSETS = Settings.supported_assets || [Currency::BTC_ASSET_ID]
   MINIMUM_PRICE_USD = 6.99
   DEFAULT_SPLIT = '0.1'

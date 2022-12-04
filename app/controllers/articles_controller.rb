@@ -33,6 +33,8 @@ class ArticlesController < ApplicationController
       @page_title = "#{@article.title} - #{@article.author.name}"
       @page_image = @article.thumb_url
       @page_description = @article.intro
+
+      impressionist @article, @article.authorized?(current_user) ? 'full' : 'partial'
     else
       redirect_back fallback_location: root_path
     end
@@ -71,6 +73,8 @@ class ArticlesController < ApplicationController
   def share
     @article = Article.published.find_by uuid: params[:article_uuid]
     return if @article.blank?
+
+    impressionist @article, 'share'
   end
 
   def preview

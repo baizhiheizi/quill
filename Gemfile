@@ -177,10 +177,8 @@ gem 'rqrcode'
 # A Ruby library for declaring, composing and executing GraphQL queries
 gem 'graphql-client'
 
-# deploy
-gem 'mina', '~> 1.2.2', require: false
-gem 'mina-logs', '~> 1.1.0', require: false
-gem 'mina-multistage', '~> 1.0.3', require: false
+# Rails Plugin that tracks impressions and page views
+gem 'impressionist', github: 'charlotte-ruby/impressionist'
 
 group :development, :test do
   # Start debugger with binding.b [https://github.com/ruby/debug]

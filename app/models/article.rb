@@ -43,6 +43,7 @@
 
 class Article < ApplicationRecord
   second_level_cache expires_in: 1.week
+  is_impressionable
 
   SUPPORTED_ASSETS = Settings.supported_assets || [Currency::BTC_ASSET_ID]
   AUTHOR_REVENUE_RATIO_DEFAULT = 0.5

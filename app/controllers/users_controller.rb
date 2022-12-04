@@ -9,9 +9,12 @@ class UsersController < ApplicationController
     @page_title = @user&.name
     @page_description = @user&.bio
     @page_image = @user&.avatar
+
+    impressionist @user
   end
 
   def share
+    impressionist @user, 'share'
   end
 
   private
