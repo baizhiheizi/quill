@@ -20,6 +20,15 @@ module ShareHelper
     ].join
   end
 
+  def share_to_telegram(url, text)
+    [
+      'https://t.me/share/url?url=',
+      url,
+      '&text=',
+      text
+    ].join
+  end
+
   def share_to_mixin(url, title:, description:, icon_url:)
     data = {
       action: url,

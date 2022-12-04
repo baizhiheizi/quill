@@ -26,11 +26,11 @@
       <a class="flex-1 block p-4 opacity-70 hover:bg-zinc-100 dark:hover:bg-zinc-800 active:bg-zinc-100 dark:active:bg-zinc-800 rounded-lg"
           target="_blank"
           data-action="modal#hide"
-          href="<%= share_to_facebook user_url(@user) %>">
+          href="<%= share_to_telegram user_url(@user), @user.name %>">
         <div class="flex mb-2">
-          <%= image_tag "facebook.png", class: "w-12 h-12 mx-auto" %>
+          <%= image_tag "telegram.png", class: "w-12 h-12 mx-auto" %>
         </div>
-        <div class="text-base text-center">Facebook</div>
+        <div class="text-base text-center">Telegram</div>
       </a>
 
       <button class="flex-1 block w-full p-4 opacity-70 hover:bg-zinc-100 dark:hover:bg-zinc-800 active:bg-zinc-100 dark:active:bg-zinc-800 rounded-lg"
