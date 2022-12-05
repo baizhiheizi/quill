@@ -24,11 +24,11 @@ class CollectionBoughtNotification < ApplicationNotification
   end
 
   def description
-    [order.buyer.name, t('.bought')].join(' ')
+    [order.buyer.name.truncate(10), t('.bought')].join(' ')
   end
 
   def message
-    [order.buyer.name, t('.bought'), ':', collection.name].join(' ')
+    [order.buyer.name.truncate(10), t('.bought'), ':', collection.name].join(' ')
   end
 
   def icon_url

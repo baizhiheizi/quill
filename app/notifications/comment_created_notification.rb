@@ -26,7 +26,7 @@ class CommentCreatedNotification < ApplicationNotification
   end
 
   def message
-    [comment.author.name, t('.commented'), commentable.title].join(' ')
+    [comment.author.name.truncate(10), t('.commented'), commentable.title].join(' ')
   end
 
   def icon_url

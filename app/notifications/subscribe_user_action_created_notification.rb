@@ -11,7 +11,7 @@ class SubscribeUserActionCreatedNotification < ApplicationNotification
   end
 
   def message
-    [params[:action].user.name, t('.subscribed')].join(' ')
+    [params[:action].user.name.truncate(10), t('.subscribed')].join(' ')
   end
 
   def url

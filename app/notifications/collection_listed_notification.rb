@@ -20,11 +20,11 @@ class CollectionListedNotification < ApplicationNotification
   end
 
   def description
-    [collection.author.name, t('.listed')].join(' ')
+    [collection.author.name.truncate(10), t('.listed')].join(' ')
   end
 
   def message
-    [collection.author.name, t('.listed'), ':', collection.name].join(' ')
+    [collection.author.name.truncate(10), t('.listed'), ':', collection.name].join(' ')
   end
 
   def url
