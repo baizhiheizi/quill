@@ -670,10 +670,10 @@
   resolved "https://registry.yarnpkg.com/@tiptap/extension-text/-/extension-text-2.0.0-beta.204.tgz#07dc68c02402eac3b3d580bae278d3d3630ad705"
   integrity sha512-YTUlmhdiaTRvsbxTa1VUZ2BNgsaud1OF2nSC6a3kEplREoVzJW+pbJxc1sdM5yhOW3JdXMJVTl56H30Cos4tAA==
 
-"@tiptap/extension-typography@^2.0.0-beta.204":
-  version "2.0.0-beta.204"
-  resolved "https://registry.yarnpkg.com/@tiptap/extension-typography/-/extension-typography-2.0.0-beta.204.tgz#8c472770b678768d64d93acb49a2e091ce45f98e"
-  integrity sha512-MCW4OL4tYSffolB1P4rBN698Zg8rQgS1cS1VPXFoA8YN7xTYF8BMmqtgRkPZlvTKBPzCqF5Ur6auwWYqyuwkxg==
+"@tiptap/extension-typography@^2.0.0-beta.205":
+  version "2.0.0-beta.205"
+  resolved "https://registry.yarnpkg.com/@tiptap/extension-typography/-/extension-typography-2.0.0-beta.205.tgz#81eb2b726c44a0272360e00b302cef6cd8c7429f"
+  integrity sha512-SSfCl0u09hPUOeaAktP93NcFOHVMkqcDO1WhwVESS/RjvTxnWJTG/dtUuGyWwIMO3TNGUZaJ0vi7fJp+F4/LHA==
 
 "@tiptap/extension-underline@^2.0.0-beta.204":
   version "2.0.0-beta.204"
