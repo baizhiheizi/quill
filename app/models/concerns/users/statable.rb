@@ -107,4 +107,16 @@ module Users::Statable
   def faucet_bonus
     @faucet_bonus = bonuses.find_by(asset_id: Currency::XIN_ASSET_ID, title: 'Faucet')
   end
+
+  def twitter_connected?
+    twitter_authorization.present?
+  end
+
+  def twitter_profile_url
+    Addressable::URI.new(
+      scheme: 'https',
+      host: 'twitter.com',
+      path: twitter_authorization&.raw&.[]('username')
+    ).to_s
+  end
 end

@@ -2,7 +2,6 @@
 
 module Foxswap
   class HttpError < StandardError; end
-
   class ResponseError < StandardError; end
 
   def self.api

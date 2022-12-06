@@ -36,17 +36,22 @@
           tippy_content: user.name,
           tippy_interactive: true
         },
-        class: "text-lg sm:text-xl font-bold flex-1 truncate" %>
-      <% if user.mvm_eth? %>
-        <div class="flex items-center space-x-2">
+        class: "text-lg sm:text-xl font-bold truncate" %>
+      <div class="flex items-center space-x-2 min-w-max">
+        <% if user.twitter_connected? %>
+          <%= link_to user.twitter_profile_url, target: "_blank" do %>
+            <%= image_tag 'twitter.ico', class: 'w-4 h-4 rounded-full' %>
+          <% end %>
+        <% end %>
+        <% if user.mvm_eth? %>
           <%= link_to user.ether_address_url, target: "_blank" do %>
             <%= image_tag 'etherscan.ico', class: 'w-4 h-4 rounded-full' %>
           <% end %>
           <%= link_to user.mvm_address_url, target: "_blank" do %>
             <%= image_tag 'mvmscan.ico', class: 'w-4 h-4 rounded-full' %>
           <% end %>
-        </div>
-      <% end %>
+        <% end %>
+      </div>
     </div>
     <%= render "users/user_uid", user: user %>
   </div>

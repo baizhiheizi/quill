@@ -18,6 +18,21 @@ class SessionsController < ApplicationController
     ), allow_other_host: true
   end
 
+  def twitter_auth
+    client = TwitterBot.oauth_client
+    auth_uri =
+      client
+      .authorization_uri(
+        scope: %i[
+          users.read
+          tweet.read
+          offline.access
+        ]
+      )
+    Rails.cache.write client.state, { code_verifier: client.code_verifier, uid: current_user.uid }
+    redirect_to auth_uri, allow_other_host: true
+  end
+
   def mixin
     user =
       begin
@@ -72,6 +87,38 @@ class SessionsController < ApplicationController
     else
       redirect_to (params[:return_to].presence || root_path), alert: t('failed_to_connect')
     end
+  end
+
+  def twitter
+    auth = Rails.cache.read params[:state]
+    redirect_to root_path if auth.blank?
+
+    user = User.find_by uid: auth[:uid]
+    redirect_to root_path if user.blank? || user != current_user
+
+    client = TwitterBot.oauth_client
+    client.code_verifier = auth[:code_verifier]
+    client.authorization_code = params[:code]
+    access_token = client.access_token!
+    puts access_token.access_token
+    res = JSON.parse access_token.get('https://api.twitter.com/2/users/me?user.fields=profile_image_url').body
+    raw = res['data'].merge(access_token: access_token.access_token)
+
+    if current_user.twitter_authorization.present?
+      current_user.twitter_authorization.update(
+        raw: raw,
+        uid: raw['id']
+      )
+    else
+      current_user.user_authorizations.create(
+        provider: :twitter,
+        raw: raw,
+        uid: raw['id']
+      )
+    end
+    redirect_to dashboard_settings_path
+  rescue Rack::OAuth2::Client::Error
+    redirect_to root_path
   end
 
   def nounce

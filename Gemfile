@@ -180,6 +180,9 @@ gem 'graphql-client'
 # Rails Plugin that tracks impressions and page views
 gem 'impressionist', github: 'charlotte-ruby/impressionist'
 
+# Twitter OAuth 2.0 Client Library in Ruby
+gem 'twitter_oauth2'
+
 group :development, :test do
   # Start debugger with binding.b [https://github.com/ruby/debug]
   gem 'debug', '>= 1.0.0', platforms: %i[mri mingw x64_mingw]
