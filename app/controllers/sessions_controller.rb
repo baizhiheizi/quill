@@ -94,7 +94,12 @@ class SessionsController < ApplicationController
     redirect_to root_path if auth.blank?
 
     user = User.find_by uid: auth[:uid]
-    redirect_to root_path if user.blank? || user != current_user
+    redirect_to root_path if user.blank?
+
+    if current_user.blank?
+      user_session = user.sessions.create(info: { request: request_info, provider: params[:provider] })
+      user_sign_in user_session
+    end
 
     client = TwitterBot.oauth_client
     client.code_verifier = auth[:code_verifier]
