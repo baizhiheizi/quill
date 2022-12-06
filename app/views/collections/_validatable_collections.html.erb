@@ -2,7 +2,7 @@
   <div class="mb-2 text-sm opacity-75">
     <%= t('validatable_collections_introduction') %>
     <% if current_user.blank? || current_user.messenger? %>
-      (<%= link_to t('click_to_validate'), mixin_login_path(return_to: collection_path(collection.uuid)), class: "text-primary" %>)
+      (<%= link_to t('click_to_validate'), auth_mixin_path(return_to: collection_path(collection.uuid)), class: "text-primary" %>)
     <% end %>
   </div>
   <div class="flex items-center space-x-4 overflow-x-scroll scrollbar-hide">

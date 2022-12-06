@@ -5,10 +5,10 @@ class SessionsController < ApplicationController
   skip_before_action :verify_authenticity_token, only: %i[mixin fennec mvm]
 
   def new
-    redirect_to mixin_login_path(return_to: params[:return_to]) if from_mixin_messenger?
+    redirect_to auth_mixin_path(return_to: params[:return_to]) if from_mixin_messenger?
   end
 
-  def mixin_login
+  def mixin_auth
     redirect_to format(
       '%<oauth_path>s?client_id=%<client_id>s&scope=%<scope>s&return_to=%<return_to>s',
       oauth_path: 'https://mixin-www.zeromesh.net/oauth/authorize',

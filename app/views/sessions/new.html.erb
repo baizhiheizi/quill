@@ -49,7 +49,7 @@
 
       <div data-login-target="mixin" class="hidden">
         <div class="flex justify-center mb-2">
-          <%= link_to mixin_login_path(return_to: params[:return_to] || request.referer), 
+          <%= link_to auth_mixin_path(return_to: params[:return_to] || request.referer), 
             data: { turbo_frame: '_top' },
             class: "relative px-2 py-3 bg-[#F4F4F4] hover:bg-opacity-80 dark:bg-[#333444] dark:hover:bg-opacity-80 rounded-lg flex items-center justify-center text-lg w-full" do %>
             <div class="w-8 h-8 flex absolute left-4">
@@ -95,7 +95,7 @@
 <div class="flex my-16 items-center justify-center">
   <% if from_mixin_messenger? %>
     <%= link_to t('connect_wallet'), 
-      mixin_login_path, 
+      auth_mixin_path, 
       class: "rounded-full py-3 text-white bg-primary text-center px-6" %>
   <% else %>
     <%= link_to t('connect_wallet'), 
