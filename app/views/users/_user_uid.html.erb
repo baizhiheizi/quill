@@ -22,7 +22,7 @@
       data-tippy-placement="bottom-start"
       data-tippy-interactive="true"
       data-tippy-interactive-border="30"
-      class="flex items-center space-x-1 opacity-75">
+      class="relative flex items-center space-x-1 opacity-75">
       <div class="">@<%= user.uid.first(4) %></div>
       <div class="flex items-center space-x-1">
         <div class="rounded-full w-1 h-1 bg-[#77beff]"></div>
@@ -30,7 +30,7 @@
         <div class="rounded-full w-1 h-1 bg-[#ffcf54]"></div>
       </div>
       <div class="w-16 uppercase"><%= user.uid.last(4) %></div>
+      <%= link_to '', "mixin://users/#{MixinBot::Utils::UUID.new(hex: user.uid).unpacked}", target: '_blank', class: "absolute inset-0" if from_mixin_messenger? %>
     </div>
-    <%= link_to '', "mixin://users/#{MixinBot::Utils::UUID.new(hex: user.uid).unpacked}", target: '_blank', class: "absolute inset-0" if from_mixin_messenger? %>
   <% end %>
 </div>
