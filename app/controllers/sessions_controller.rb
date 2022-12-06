@@ -100,7 +100,6 @@ class SessionsController < ApplicationController
     client.code_verifier = auth[:code_verifier]
     client.authorization_code = params[:code]
     access_token = client.access_token!
-    puts access_token.access_token
     res = JSON.parse access_token.get('https://api.twitter.com/2/users/me?user.fields=profile_image_url').body
     raw = res['data'].merge(access_token: access_token.access_token)
 
