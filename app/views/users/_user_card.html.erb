@@ -28,15 +28,30 @@
     <% end %>
   </div>
 
-  <div class="relative truncate mb-2">
-    <div class="text-lg font-bold truncate mb-1">
-      <%= user.name %>
+  <div class="truncate mb-4">
+    <div class="flex items-center mb-1 space-x-4">
+      <%= link_to user.name, 
+        user_path(user), 
+        data: {
+          tippy_content: user.name,
+          tippy_interactive: true
+        },
+        class: "text-lg sm:text-xl font-bold flex-1 truncate" %>
+      <% if user.mvm_eth? %>
+        <div class="flex items-center space-x-2">
+          <%= link_to user.ether_address_url, target: "_blank" do %>
+            <%= image_tag 'etherscan.ico', class: 'w-4 h-4 rounded-full' %>
+          <% end %>
+          <%= link_to user.mvm_address_url, target: "_blank" do %>
+            <%= image_tag 'mvmscan.ico', class: 'w-4 h-4 rounded-full' %>
+          <% end %>
+        </div>
+      <% end %>
     </div>
     <%= render "users/user_uid", user: user %>
-    <%= link_to '', user_path(user), class: "absolute inset-0" %>
   </div>
 
-  <div class="grid grid-cols-2 xl:grid-cols-3 gap-4 mb-4">
+  <div class="grid grid-cols-2 xl:grid-cols-3 gap-4 mb-4 text-sm">
     <%= link_to user_subscribe_users_path(user), 
       data: { 
         controller: 'prefetch', 

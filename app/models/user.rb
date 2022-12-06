@@ -190,6 +190,16 @@ class User < ApplicationRecord
     ).to_s
   end
 
+  def ether_address_url
+    return unless mvm_eth?
+
+    Addressable::URI.new(
+      scheme: 'https',
+      host: 'etherscan.io',
+      path: "address/#{uid}"
+    ).to_s
+  end
+
   def notify_for_login
     UserConnectedNotification.with(user: self).deliver(self)
   end
