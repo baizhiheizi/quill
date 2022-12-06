@@ -20,7 +20,7 @@ Rails.application.routes.draw do
   draw :grover
 
   get 'login', to: 'sessions#new', as: :login
-  get 'mixin_login', to: 'sessions#mixin_login', as: :mixin_login
+  get 'auth/mixin', to: 'sessions#mixin_auth', as: :auth_mixin
   get 'auth/twitter', to: 'sessions#twitter_auth', as: :auth_twitter
   get 'auth/mixin/callback', to: 'sessions#mixin'
   get 'auth/fennec/callback', to: 'sessions#fennec'

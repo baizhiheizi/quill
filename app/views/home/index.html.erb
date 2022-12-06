@@ -30,7 +30,7 @@
 
     <div class="mb-16 flex justify-center sm:justify-start">
       <% if from_mixin_messenger? %>
-        <%= link_to t('connect_wallet'), mixin_login_path, class: "rounded-full py-3 bg-primary text-center px-6" %>
+        <%= link_to t('connect_wallet'), auth_mixin_path, class: "rounded-full py-3 bg-primary text-center px-6" %>
       <% else %>
         <%= link_to t('connect_wallet'), login_path, data: { turbo_frame: :modal }, class: "rounded-full py-3 bg-primary text-center px-6" %>
       <% end %>
