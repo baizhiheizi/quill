@@ -21,3 +21,30 @@
     <%= render 'dashboard/profile_settings/email_field' %>
   <% end %>
 </div>
+
+<div class="mb-8">
+  <div class="mb-4 flex items-center justify-between">
+    <span class="text-lg font-bold">
+      Twitter
+    </span>
+
+    <%= link_to (current_user.twitter_authorization.present? ? t('reconnect') : t('connect')),
+      auth_twitter_path,
+      class: "px-4 py-1 bg-primary border border-primary text-white rounded-full" %>
+  </div>
+
+  <div class="overflow-x-scroll scrollbar-hide py-2 border-b dark:border-white dark:border-opacity-5">
+    <% if current_user.twitter_authorization.present? %>
+      <span class="">
+        @<%= current_user.twitter_authorization.raw['username'] %>
+      </span>
+      <%= link_to current_user.twitter_profile_url, 
+        class: "ml-2",
+        target: "_blank" do %>
+        <%= inline_svg_tag 'icons/external-link.svg', class: 'w-4 h-4 text-blue-500 inline' %>
+      <% end %>
+    <% else %>
+      -
+    <% end %>
+  </div>
+</div>

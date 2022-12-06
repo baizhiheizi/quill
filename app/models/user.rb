@@ -46,7 +46,10 @@ class User < ApplicationRecord
 
   extend Enumerize
 
-  has_one :authorization, class_name: 'UserAuthorization', inverse_of: :user, dependent: :restrict_with_error
+  has_one :authorization, -> { where(provider: %w[mixin fennec mvm_eth]) }, class_name: 'UserAuthorization', inverse_of: :user, dependent: :restrict_with_exception
+  has_many :user_authorizations, dependent: :restrict_with_exception
+  has_one :twitter_authorization, -> { where(provider: :twitter) }, class_name: 'UserAuthorization', inverse_of: :user, dependent: :restrict_with_exception
+
   has_many :access_tokens, dependent: :destroy
 
   has_many :articles, foreign_key: :author_id, inverse_of: :author, dependent: :nullify

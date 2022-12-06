@@ -21,9 +21,11 @@ Rails.application.routes.draw do
 
   get 'login', to: 'sessions#new', as: :login
   get 'mixin_login', to: 'sessions#mixin_login', as: :mixin_login
-  get '/auth/mixin/callback', to: 'sessions#mixin'
-  get '/auth/fennec/callback', to: 'sessions#fennec'
-  get '/auth/mvm/callback', to: 'sessions#mvm'
+  get 'auth/twitter', to: 'sessions#twitter_auth', as: :auth_twitter
+  get 'auth/mixin/callback', to: 'sessions#mixin'
+  get 'auth/fennec/callback', to: 'sessions#fennec'
+  get 'auth/mvm/callback', to: 'sessions#mvm'
+  get 'auth/twitter/callback', to: 'sessions#twitter'
   get 'logout', to: 'sessions#delete', as: :logout
   post 'nounce', to: 'sessions#nounce'
 
