@@ -17,12 +17,6 @@
 </div>
 
 <div class="mb-8">
-  <%= turbo_frame_tag 'profile_email_form' do %>
-    <%= render 'dashboard/profile_settings/email_field' %>
-  <% end %>
-</div>
-
-<div class="mb-8">
   <div class="mb-4 flex items-center justify-between">
     <span class="text-lg font-bold">
       Twitter
@@ -47,4 +41,10 @@
       -
     <% end %>
   </div>
+</div>
+
+<div class="mb-8">
+  <%= turbo_frame_tag 'profile_email_form' do %>
+    <%= render 'dashboard/profile_settings/email_field' %>
+  <% end %>
 </div>

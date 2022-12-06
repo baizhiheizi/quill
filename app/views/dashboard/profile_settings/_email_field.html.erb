@@ -11,7 +11,7 @@
     class: "px-4 py-1 bg-primary border border-primary text-white rounded-full" %>
 </div>
 
-<div class="mb-2">
+<div class="mb-2 py-2 border-b dark:border-white dark:border-opacity-5">
   <span class="<%= current_user.email_vefified? ? 'opacity-100' : 'opacity-50' %>">
     <%= current_user.email.presence || '-' %>
   </span>
