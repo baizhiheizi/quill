@@ -80,7 +80,9 @@ class User < ApplicationRecord
 
   has_many :collections, primary_key: :mixin_uuid, foreign_key: :author_id, inverse_of: :author, dependent: :restrict_with_exception
 
-  has_one_attached :avatar
+  has_one_attached :avatar do |attachable|
+    attachable.variant :thumb, resize_to_limit: [64, 64]
+  end
 
   validates :name, presence: true
   validates :email, uniqueness: true, format: /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\z/i, allow_nil: true
@@ -131,7 +133,7 @@ class User < ApplicationRecord
   def avatar_thumb
     @avatar_thumb =
       if avatar.attached?
-        avatar.variant(resize_to_fit: [64, 64])
+        [Settings.storage.endpoint, avatar.variant(:thumb).processed.key].join('/')
       else
         authorization.raw&.[]('avatar_url').presence&.gsub(/s256\Z/, 's64') || generated_avatar_url
       end
