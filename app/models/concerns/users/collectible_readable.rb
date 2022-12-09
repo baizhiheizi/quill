@@ -11,10 +11,10 @@ module Users::CollectibleReadable
     sync_collectibles_async
     @owning_collection_ids ||=
       if messenger?
-        collectibles.pluck(:collection_id).uniq
+        collectibles.pluck(:collection_id).uniq.compact
       elsif mvm_eth?
         Rails.cache.fetch "#{uid}_nft_collections_ids", expires_in: 3.minutes do
-          tokens_erc721.map(&->(token) { MVM.nft.collection_from_contract(token['contractAddress']) })
+          tokens_erc721.map(&->(token) { MVM.nft.collection_from_contract(token['contractAddress']) }).compact
         end
       else
         []
