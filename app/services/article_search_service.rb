@@ -78,7 +78,7 @@ class ArticleSearchService
                  .or(
                    @articles
                      .published
-                     .where(collection_id: @current_user&.owning_collection_ids)
+                     .where(collection_id: @current_user&.owning_collection_ids || [])
                  ).order(published_at: :desc)
       when 'bought'
         @articles.where(id: @current_user&.bought_articles&.ids).order(published_at: :desc)
