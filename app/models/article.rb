@@ -509,8 +509,11 @@ class Article < ApplicationRecord
     self.intro = intro.truncate(140)
     self.locale = detected_locale
     self.content = blob_parsed_content if content_changed?
+
+    return if published_at.present?
+
     self.collection_revenue_ratio =
-      if collection.present? && !published?
+      if collection.present?
         collection.revenue_ratio
       else
         0
