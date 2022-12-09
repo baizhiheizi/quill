@@ -73,7 +73,13 @@ class ArticleSearchService
       when 'revenue'
         @articles.published.order_by_revenue_usd
       when 'subscribed'
-        @articles.published.where(author_id: @current_user&.subscribe_user_ids).order(published_at: :desc)
+        @articles.published
+                 .where(author_id: @current_user&.subscribe_user_ids)
+                 .or(
+                   @articles
+                     .published
+                     .where(collection_id: @current_user&.owning_collection_ids)
+                 ).order(published_at: :desc)
       when 'bought'
         @articles.where(id: @current_user&.bought_articles&.ids).order(published_at: :desc)
       else
