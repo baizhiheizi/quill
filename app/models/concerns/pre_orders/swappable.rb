@@ -45,7 +45,7 @@ module PreOrders::Swappable
   end
 
   def fswap_mtg_memo
-    r = Foxswap.api.actions(
+    r = PandoBot::Lake.api.actions(
       user_id: payee_id,
       follow_id: follow_id,
       asset_id: asset_id,
@@ -62,11 +62,16 @@ module PreOrders::Swappable
         amount
       else
         begin
-          Foxswap.api.pre_order(
-            pay_asset_id: pay_asset_id,
-            fill_asset_id: asset_id,
-            amount: (amount * 1.001).ceil(8).to_f
-          )['data']['funds']
+          pairs = Rails.cache.fetch 'pando_lake_routes', expires_in: 5.seconds do
+            PandoBot::Lake.api.pairs['data']['pairs']
+          end
+
+          routes ||= PandoBot::Lake::PairRoutes.new pairs
+          routes.pre_order(
+            input_asset: pay_asset_id,
+            output_asset: asset_id,
+            output_amount: (amount * 1.001).ceil(8).to_f
+          )[:funds]
         rescue StandardError
           nil
         end

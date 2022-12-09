@@ -52,11 +52,16 @@ module Articles::Payable
       price
     else
       begin
-        Foxswap.api.pre_order(
-          pay_asset_id: pay_asset_id,
-          fill_asset_id: asset_id,
-          amount: (price * 1.01).round(8).to_r.to_f
-        )['data']['funds']
+        pairs = Rails.cache.fetch 'pando_lake_routes', expires_in: 5.seconds do
+          PandoBot::Lake.api.pairs['data']['pairs']
+        end
+
+        routes ||= PandoBot::Lake::PairRoutes.new pairs
+        routes.pre_order(
+          input_asset: pay_asset_id,
+          output_asset: asset_id,
+          output_amount: (price * 1.001).ceil(8).to_r.to_f
+        )[:funds]
       rescue StandardError
         nil
       end

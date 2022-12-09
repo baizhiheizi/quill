@@ -101,7 +101,7 @@ class SwapOrder < ApplicationRecord
   end
 
   def fswap_mtg_memo
-    r = Foxswap.api.actions(
+    r = PandoBot::Lake.api.actions(
       user_id: user_id,
       follow_id: trace_id,
       asset_id: fill_asset_id,
@@ -215,7 +215,7 @@ class SwapOrder < ApplicationRecord
         QuillBot.api
       end
 
-    r = Foxswap.api.order(trace_id, authorization: mixin_api.access_token('GET', '/me'))
+    r = PandoBot::Lake.api.order(trace_id, authorization: mixin_api.access_token('GET', '/me'))
     update raw: r['data']
   end
 

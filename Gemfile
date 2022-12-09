@@ -54,6 +54,9 @@ gem 'bcrypt', '~> 3.1.7'
 # A simple API wrapper for Mixin Network in Ruby
 gem 'mixin_bot'
 
+# A simple API wrapper for Pando in Ruby
+gem 'pando_bot'
+
 # A simple API wrapper for Trident in Ruby
 gem 'trident_assistant', git: 'https://github.com/TheTridentOne/trident_assistant.git'
 

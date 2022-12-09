@@ -41,9 +41,26 @@ class Currency < ApplicationRecord
 
   belongs_to :chain, class_name: 'Currency', primary_key: :asset_id, optional: true, inverse_of: false
 
-  scope :swappable, -> { where(asset_id: Foxswap.api.swappable_asset_ids).order(symbol: :asc) }
+  scope :swappable, -> { where(asset_id: swappable_asset_ids).order(symbol: :asc) }
   scope :pricable, -> { where(asset_id: Article::SUPPORTED_ASSETS) }
   scope :btc, -> { find_by(asset_id: BTC_ASSET_ID) }
+
+  def self.pando_lake_pairs
+    Rails.cache.fetch 'pando_lake_routes', expires_in: 5.seconds do
+      PandoBot::Lake.api.pairs['data']['pairs']
+    end
+  end
+
+  def self.swappable_asset_ids
+    Rails.cache.fetch 'swappable_asset_ids', expires_in: 1.hour do
+      pando_lake_pairs
+        .filter(&lambda { |p|
+          (p['base_value'].to_f + p['quote_value'].to_f > 50_000) || p['swap_method'] == 'curve'
+        }).map do |p|
+        [p['base_asset_id'], p['quote_asset_id']]
+      end.flatten.uniq
+    end
+  end
 
   def minimal_reward_amount
     if price_usd.positive?
@@ -72,7 +89,7 @@ class Currency < ApplicationRecord
   end
 
   def swappable?
-    asset_id.in? Foxswap.api.swappable_asset_ids
+    asset_id.in? self.class.swappable_asset_ids
   end
 
   def pricable?
@@ -81,14 +98,6 @@ class Currency < ApplicationRecord
 
   def sync!
     update! asset_id: asset_id
-  end
-
-  def swap(fill_asset_id, amount)
-    Foxswap.api.pre_order(
-      pay_asset_id: asset_id,
-      fill_asset_id: fill_asset_id,
-      funds: (amount * 1.01).round(8).to_r.to_f
-    )['data']['amount']
   end
 
   private
