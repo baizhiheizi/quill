@@ -13,12 +13,16 @@ en:
         upvotes_count: Upvotes
         downvotes_count: Downvotes
         comments_count: Comments Count
+        pre_orders_count: Payment Attempts
         orders_count: Paid Times
         buy_orders_count: Bought Times
         reward_orders_count: Rewarded Times
+        unpaid_views_count: Views Count(unpaid)
+        paid_views_count: Views Count(paid)
+        shares_count: Shares Count
         revenue: Revenue
         author_revenue_total: Author Revenue
-        reader_tevenue_total: Reader Revenue
+        collection_revenue_total: Collection Revenue
         my_share: My Share(%)
         state_text: State
         tags: Tags

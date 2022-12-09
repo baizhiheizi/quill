@@ -1,18 +1,18 @@
-<div class="<%= dom_id comment %>flex items-start space-x-2 px-4 py-2">
-  <%= image_tag comment.author.avatar_thumb, class: "w-8 h-8 rounded-full", loading: :lazy %>
-  <div>
-    <div class="flex items-center text-sm space-x-2">
+<div class="py-4 border-b dark:border-opacity-5 dark:border-white">
+  <div class="flex items-center justify-between space-x-4">
+    <div class="flex items-center space-x-2">
+      <%= image_tag comment.author.avatar_thumb, class: "w-8 h-8 rounded-full", loading: :lazy %>
       <div class="truncate max-w-24">
         <%= comment.author.name %>
       </div>
-      <div class="opacity-70">
-        <%= render TimeFormatComponent.new datetime: comment.created_at.rfc3339 do %>
-          <%= comment.created_at.strftime("%Y-%m-%d %H:%M") %>
-        <% end %>
-      </div>
     </div>
-    <div class="prose prose-sm dark:prose-invert">
-      <%= comment.content_as_html.html_safe %>
-    </div>
+    <%= render TimeFormatComponent.new datetime: comment.created_at.rfc3339 do %>
+      <span class="opacity-80 min-w-fit">
+        <%= comment.created_at.strftime("%Y-%m-%d %H:%M") %>
+      </span>
+    <% end %>
+  </div>
+  <div class="prose-comment">
+    <%= comment.content_as_html.html_safe %>
   </div>
 </div>
