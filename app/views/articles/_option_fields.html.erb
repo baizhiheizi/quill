@@ -58,7 +58,7 @@
           {
             include_blank: 'None',
           },
-          disabled: form.object.published_at?,
+          disabled: (form.object.published_at? && form.object.collection_revenue_ratio.positive?),
           data: {
             action: "article-form#selectCollection"
           },

@@ -48,7 +48,7 @@
         <%= t('activerecord.attributes.article.unpaid_views_count') %>
       </div>
       <div class="font-bold">
-        <%= @article.impressionist_count(message: 'partial') %>
+        <%= @article.impressionist_count(message: 'partial', filter: :session_hash) %>
       </div>
     </div>
     <div class="text-center p-2">
@@ -56,7 +56,7 @@
         <%= t('activerecord.attributes.article.paid_views_count') %>
       </div>
       <div class="font-bold">
-        <%= @article.impressionist_count(message: 'full') %>
+        <%= @article.impressionist_count(message: 'full', filter: :session_hash) %>
       </div>
     </div>
     <div class="text-center p-2">
