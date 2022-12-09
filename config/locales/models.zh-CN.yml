@@ -14,9 +14,13 @@ zh-CN:
         upvotes_count: 喜欢
         downvotes_count: 不喜欢
         comments_count: 评论次数
+        pre_orders_count: 打开付款
         orders_count: 付费次数
         buy_orders_count: 购买次数
         reward_orders_count: 赞赏次数
+        unpaid_views_count: 浏览量(未购买)
+        paid_views_count: 浏览量(已购买)
+        shares_count: 分享次数
         revenue: 总收益
         author_revenue_total: 作者收益
         reader_revenue_total: 读者收益

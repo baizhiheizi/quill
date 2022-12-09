@@ -16,7 +16,9 @@ export default class extends Controller {
         threshold: [0, 1.0],
       },
     );
-    observer.observe(this.scrollAreaTarget);
+    if (this.hasScrollAreaTarget) {
+      observer.observe(this.scrollAreaTarget);
+    }
   }
 
   handleIntersect(entries) {

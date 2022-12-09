@@ -1,22 +1,32 @@
-<div class="px-4 py-2 flex items-center space-x-4">
-  <div>
+<div class="table-row ">
+  <div class="table-cell pr-4 py-4 min-w-max">
     <% if order.order_type == 'cite_article' %>
-      <%= link_to order.citer.title, user_article_path(order.citer.author, order.citer.uuid) %>
+      <%= link_to order.citer.title, user_article_path(order.citer.author, order.citer.uuid), class: 'block' %>
     <% else %>
-      <%= image_tag order.buyer.avatar_thumb, class: "w-8 h-8 rounded-full" %>
+      <div class="flex items-center space-x-2">
+        <div class="w-6">
+          <%= image_tag order.buyer.avatar_thumb, class: "w-6 h-6 rounded-full inline-block" %>
+        </div>
+        <span class="max-w-24 truncate whitespace-nowrap">
+          <%= order.buyer.name %>
+        </span>
+      </div>
     <% end %>
   </div>
-  <div>
+
+  <div class="table-cell pr-4 py-4 text-opacity-80 min-w-max whitespace-nowrap">
     <%= t('paid') %> <%= order.total %> <%= order.currency.symbol %>
   </div>
-  <div>
+
+  <div class="table-cell pr-4 py-4 text-opacity-80 min-w-max whitespace-nowrap">
     <%= {
       buy_article: t('bought_article'),
       reward_article: t('rewarded_article'),
       cite_article: t('cited_article')
     }[order.order_type.to_sym] %>
   </div>
-  <div class="opacity-70 flex-1 text-right">
+
+  <div class="table-cell py-4 min-w-max whitespace-nowrap">
     <%= render TimeFormatComponent.new datetime: order.created_at.rfc3339 do %>
       <%= order.created_at.strftime("%Y-%m-%d %H:%M") %>
     <% end %>

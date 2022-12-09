@@ -59,6 +59,7 @@ class Article < ApplicationRecord
   belongs_to :collection, primary_key: :uuid, inverse_of: :articles, optional: true
 
   has_many :orders, as: :item, dependent: :restrict_with_error
+  has_many :pre_orders, as: :item, dependent: :restrict_with_error
   has_many :buy_orders, -> { where(order_type: :buy_article) }, class_name: 'Order', as: :item, dependent: :restrict_with_error, inverse_of: false
   has_many :reward_orders, -> { where(order_type: :reward_article) }, class_name: 'Order', as: :item, dependent: :restrict_with_error, inverse_of: false
   has_many :cite_orders, -> { where(order_type: :cite_article) }, class_name: 'Order', as: :item, dependent: :restrict_with_error, inverse_of: false
