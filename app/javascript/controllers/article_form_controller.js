@@ -128,10 +128,12 @@ export default class extends Controller {
   }
 
   selectedCollectionIdValueChanged() {
+    if (this.articlePublishedValue) return;
+
     const selectedCollection = this.selectableCollectionsValue.find(
       (c) => c.uuid == this.selectedCollectionIdValue,
     );
-    if (!this.articlePublishedValue && selectedCollection) {
+    if (selectedCollection) {
       this.collectionRevenueRatioTarget.value =
         selectedCollection.revenue_ratio;
     } else {

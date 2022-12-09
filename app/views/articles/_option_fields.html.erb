@@ -60,7 +60,7 @@
           },
           disabled: (form.object.published_at? && form.object.collection_revenue_ratio.positive?),
           data: {
-            action: "article-form#selectCollection"
+            action: "article-form#selectCollection article-form#touchDirty"
           },
           class: "focus:ring-blue-500 focus:border-blue-500 flex-1 block w-full rounded bg-[#F4F4F4] border-[#F4F4F4] dark:border-white dark:border-opacity-5 dark:bg-[#333444]" %>
       </div>
