@@ -123,7 +123,7 @@ export default class extends Controller {
   }
 
   selectCollection(event) {
-    console.log('selected');
+    if (this.articlePublishedValue) return;
     this.selectedCollectionIdValue = event.currentTarget.value;
   }
 
@@ -131,7 +131,7 @@ export default class extends Controller {
     const selectedCollection = this.selectableCollectionsValue.find(
       (c) => c.uuid == this.selectedCollectionIdValue,
     );
-    if (selectedCollection) {
+    if (!this.articlePublishedValue && selectedCollection) {
       this.collectionRevenueRatioTarget.value =
         selectedCollection.revenue_ratio;
     } else {

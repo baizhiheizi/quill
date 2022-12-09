@@ -510,7 +510,7 @@ class Article < ApplicationRecord
     self.locale = detected_locale
     self.content = blob_parsed_content if content_changed?
     self.collection_revenue_ratio =
-      if collection.present?
+      if collection.present? && !published?
         collection.revenue_ratio
       else
         0
@@ -521,7 +521,7 @@ class Article < ApplicationRecord
     return if published_at.blank?
 
     errors.add(:asset_id, 'cannot change') if asset_id_changed?
-    errors.add(:collection_id, 'cannot change') if collection_id_changed?
+    errors.add(:collection_id, 'cannot change') if collection_revenue_ratio.positive? && collection_id_changed?
     errors.add(:collection_revenue_ratio, 'cannot change') if collection_revenue_ratio_changed?
   end
 
