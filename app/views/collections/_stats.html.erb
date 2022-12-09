@@ -7,12 +7,19 @@
       <%= t('collection_revenue') %>
     </div>
   </div>
-  <div class="bg-[#F4F4F4] dark:bg-[#333444] text-center rounded p-3">
+  <div class="relative bg-[#F4F4F4] dark:bg-[#333444] text-center rounded p-3">
     <div class="text-2xl font-black mb-2 font-serif">
       <%= collection.orders_count %>
     </div>
-    <div class="text-sm opacity-80">
+    <div class="relative text-sm opacity-80">
       <%= t('subscribers') %>
     </div>
+    <%= link_to '', 
+      collection_subscribers_path(collection.uuid),
+      data: {
+        turbo_frame: :modal
+      },
+      class: "absolute inset-0"
+    %>
   </div>
 </div>

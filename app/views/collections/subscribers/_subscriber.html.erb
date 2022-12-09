@@ -1,0 +1,9 @@
+<div id="<%= dom_id @collection %>_subscriber_<%= dom_id subscriber %>" class="bg-white dark:bg-[#1D1E2B] sm:rounded-lg relative flex items-center py-2 justify-between mb-4">
+  <%= link_to user_path(subscriber), class: "flex items-center space-x-2 truncate", data: { controller: 'prefetch', turbo_frame: "_top" } do %>
+    <%= image_tag subscriber.avatar_thumb, class: "w-10 h-10 rounded-full" %>
+    <span class="truncate max-w-24"><%= subscriber.name %></span>
+  <% end %>
+  <div class="">
+    <%= render "subscribe_users/subscribe_button", user: subscriber %>
+  </div>
+</div>

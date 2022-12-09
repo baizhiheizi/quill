@@ -58,6 +58,9 @@ Rails.application.routes.draw do
   resources :collections, only: %i[index show], param: :uuid do
     get :share
   end
+  resources :collections, only: [], module: :collections, param: :uuid do
+    resources :subscribers, only: :index
+  end
 
   resources :articles, except: %i[destroy], param: :uuid do
     put :update_content

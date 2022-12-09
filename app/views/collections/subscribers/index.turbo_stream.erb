@@ -1,0 +1,7 @@
+<%= turbo_stream.append "#{dom_id @collection}_subscribers_list" do %>
+  <%= render partial: "collections/subscribers/subscriber", collection: @subscribers, as: :subscriber %>
+<% end %>
+
+<%= turbo_stream.update "#{dom_id @collection}_subscribers_pagination" do %>
+  <%= render partial: "shared/pagination", locals: { pagy: @pagy, id: "#{dom_id @collection}_subscribers_pagination" } %>
+<% end %>

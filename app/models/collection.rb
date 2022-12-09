@@ -46,6 +46,8 @@ class Collection < ApplicationRecord
   has_many :validatable_collections, through: :collectings, source: :nft_collection
   has_many :articles, primary_key: :uuid, dependent: :restrict_with_exception
   has_many :orders, as: :item, dependent: :restrict_with_exception
+  has_many :buy_orders, -> { where(order_type: :buy_collection) }, class_name: 'Order', as: :item, dependent: :restrict_with_exception, inverse_of: :item
+  has_many :subscribers, -> { distinct }, through: :buy_orders, source: :buyer
 
   validates :name, presence: true
   validates :symbol, presence: true
