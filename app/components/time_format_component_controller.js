@@ -19,8 +19,12 @@ export default class extends Controller {
       return;
     }
 
-    const format =
-      this.formatValue === 'short' ? 'MM/DD' : 'YYYY-MM-DD HH:mm';
+    let format = 'YYYY-MM-DD HH:mm';
+    if (this.formatValue === 'date') {
+      format = 'MM/DD';
+    } else if (this.formatValue === 'time') {
+      format = 'HH:mm';
+    }
 
     this.element.innerText = dayjs(this.datetimeValue).format(format);
   }

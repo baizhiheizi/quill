@@ -3,7 +3,8 @@
 <div 
   id="<%= dom_id article %>_edit_form"
   data-controller="article-form" 
-  data-article-form-draft-key-value="quill_article_draft" 
+  data-article-form-draft-key-value="quill_article_draft_<%= article.uuid %>" 
+  data-article-form-updated-at-value="<%= article.updated_at.to_i * 1000 %>" 
   data-article-form-new-record-value="false" 
   data-article-form-dirty-value="<%= article.errors.present? %>" 
   data-article-form-autosave-url-value="<%= article_update_content_path(article) %>" 
@@ -33,15 +34,28 @@
         <%= t('options') %>
       </div>
 
-      <div class="ml-4">
-        <div id="<%= dom_id article %>_words_count" class="text-sm text-gray-500">
+      <div class="ml-4 hidden md:block">
+        <div id="<%= dom_id article %>_words_count" class="text-xs opacity-75">
           <%= t('words_count') %>:<%= article.words_count %>
         </div>
       </div>
 
       <% if article.persisted? %>
-        <div class="ml-4">
-          <div id="<%= dom_id article %>_updated_at" class="text-sm text-gray-500" data-controller="auto-hide"></div>
+        <div class="ml-4 items-center hidden md:flex">
+          <div id="<%= dom_id article %>_updated_at">
+            <div class="flex items-center space-x-1 opacity-75 text-xs">
+              <span class="">
+                <%= t('last_saved') %>:
+              </span>
+              <%= render TimeFormatComponent.new datetime: article.updated_at.rfc3339, format: 'time' do %>
+                <%= article.updated_at.strftime("%H:%M") %>
+              <% end %>
+            </div>
+          </div>
+
+          <div class="flex items-center space-x-2 hidden ml-2" data-article-form-target="notSavedAlert">
+            <%= inline_svg_tag 'icons/exclamation-circle-solid.svg', class: 'w-4 h-4 text-red-500 inline' %>
+          </div>
         </div>
       <% end %>
 

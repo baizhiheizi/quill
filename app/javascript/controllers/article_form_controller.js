@@ -15,6 +15,7 @@ export default class extends Controller {
     dirty: Boolean,
     selectableCollections: Array,
     selectedCollectionId: String,
+    updatedAt: Number,
   };
   static targets = [
     'form',
@@ -34,6 +35,7 @@ export default class extends Controller {
     'currencySymbol',
     'priceUsd',
     'publishButton',
+    'notSavedAlert',
   ];
 
   initialize() {
@@ -91,9 +93,7 @@ export default class extends Controller {
         break;
     }
 
-    if (this.newRecordValue) {
-      this.recoverDraft();
-    }
+    this.recoverDraft();
   }
 
   dirtyValueChanged() {
@@ -296,7 +296,25 @@ export default class extends Controller {
         },
         contentType: 'application/json',
         responseKind: 'turbo_stream',
-      });
+      })
+        .then(() => {
+          if (this.hasNotSavedAlertTarget) {
+            this.notSavedAlertTarget.classList.add('hidden');
+          }
+          this.clearDraft();
+        })
+        .catch(() => {
+          if (this.hasNotSavedAlertTarget) {
+            this.notSavedAlertTarget.classList.remove('hidden');
+          }
+
+          localStorage.setItem(
+            this.draftKeyValue,
+            JSON.stringify({ title, content, updatedAt: Date.now() }),
+          );
+
+          setTimeout(this.autosave(), 2000);
+        });
     } else {
       localStorage.setItem(
         this.draftKeyValue,
@@ -309,9 +327,16 @@ export default class extends Controller {
     const draft = localStorage.getItem(this.draftKeyValue);
     if (!draft) return;
 
-    const { title, content } = JSON.parse(draft);
+    const { title, content, updatedAt } = JSON.parse(draft);
+    if (this.updatedAtValue && this.updatedAtValue > updatedAt) {
+      return;
+    }
+
     this.element.querySelector('#article_title').value = title;
     this.contentTarget.textContent = content;
+    if (this.hasNotSavedAlertTarget) {
+      this.notSavedAlertTarget.classList.remove('hidden');
+    }
   }
 
   clearDraft() {

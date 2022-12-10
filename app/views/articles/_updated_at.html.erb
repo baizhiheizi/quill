@@ -1,3 +1,13 @@
-<div id="<%= dom_id article %>_updated_at" class="text-sm text-gray-500" data-controller="auto-hide">
-  <%= t("saved") %>
+<div id="<%= dom_id article %>_updated_at" class="flex items-center space-x-2">
+  <div class="flex items-center space-x-1 opacity-75 text-xs">
+    <span class="">
+      <%= t('last_saved') %>:
+    </span>
+    <%= render TimeFormatComponent.new datetime: article.updated_at.rfc3339, format: 'time' do %>
+      <%= article.updated_at.strftime("%H:%M") %>
+    <% end %>
+  </div>
+  <div data-controller="auto-hide">
+    <%= inline_svg_tag "icons/check-circle-solid.svg", class: "w-4 h-4 text-green-500" %>
+  </div>
 </div>
