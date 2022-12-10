@@ -21,8 +21,13 @@
     <%= render "collections/validatable_collections", collection: @collection %>
   </div>
 
-  <%= turbo_frame_tag "articles" do %>
-    <%= render Articles::ListComponent.new articles: @articles, pagy: @pagy %>
+  <%= turbo_frame_tag "articles", 
+    src: collection_articles_path(@collection.uuid),
+    data: {
+      turbo_frame: "_top"
+    },
+    loading: :lazy do %>
+    <%= render "shared/loading" %>
   <% end %>
 </div>
 

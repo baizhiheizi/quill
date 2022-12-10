@@ -59,6 +59,7 @@ Rails.application.routes.draw do
     get :share
   end
   resources :collections, only: [], module: :collections, param: :uuid do
+    resources :articles, only: :index
     resources :subscribers, only: :index
   end
 

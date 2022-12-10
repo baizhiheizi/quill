@@ -9,8 +9,6 @@ class CollectionsController < ApplicationController
     @collection = Collection.listed.find_by uuid: params[:uuid]
     impressionist @collection
 
-    @articles = @collection.articles.published
-
     @page_title = "#{@collection.name} - #{@collection.author.name}"
     @page_description = @collection.description
     @page_image = @collection.cover_url

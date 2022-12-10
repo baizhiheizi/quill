@@ -1,0 +1,6 @@
+<%= turbo_stream.append "#{dom_id @collection}_articles_list" do %>
+  <%= render Articles::CardComponent.with_collection(@articles) %>
+<% end %>
+<%= turbo_stream.update "#{dom_id @collection}_articles_pagination" do %>
+  <%= render "shared/pagination", pagy: @pagy, id: "#{dom_id @collection}_articles_pagination" %>
+<% end %>
