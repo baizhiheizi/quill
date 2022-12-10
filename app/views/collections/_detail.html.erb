@@ -37,20 +37,34 @@
   <% if !collection.authorized?(current_user) %>
     <div class="relative w-full lg:w-48 p-3 text-lg text-center rounded-full text-white bg-primary">
       <span><%= t('buy_collection') %></span>
-      <% if current_user.present? && !current_user.fennec? %>
-        <%= form_for PreOrder.new(
-          order_type: :buy_collection,
-          item: collection,
-          asset_id: collection.asset_id,
-          amount: collection.price
-        ) do |form| %>
-          <%= form.hidden_field :order_type %>
-          <%= form.hidden_field :item_id %>
-          <%= form.hidden_field :item_type %>
-          <%= form.hidden_field :asset_id %>
-          <%= form.hidden_field :amount %>
-          <%= form.hidden_field :type, value: current_user.default_payment %>
-          <%= form.submit '', class: "absolute inset-0 cursor-pointer w-full" %>
+      <% if current_user.present? %>
+        <% if current_user.mvm_eth? && collection.mixpay_supported? %>
+          <%= link_to '', mixpay_pre_order_path(
+              order_type: :buy_collection,
+              item_id: collection.id,
+              item_type: collection.class.name,
+              asset_id: collection.asset_id,
+              amount: collection.price
+            ),
+            data: {
+              turbo_frame: '_top'
+            }, 
+            class: "absolute inset-0 cursor-pointer w-full" %>
+        <% else %>
+          <%= form_for PreOrder.new(
+            order_type: :buy_collection,
+            item: collection,
+            asset_id: collection.asset_id,
+            amount: collection.price
+          ) do |form| %>
+            <%= form.hidden_field :order_type %>
+            <%= form.hidden_field :item_id %>
+            <%= form.hidden_field :item_type %>
+            <%= form.hidden_field :asset_id %>
+            <%= form.hidden_field :amount %>
+            <%= form.hidden_field :type, value: current_user.default_payment %>
+            <%= form.submit '', class: "absolute inset-0 cursor-pointer w-full" %>
+          <% end %>
         <% end %>
       <% elsif from_mixin_messenger? %>
         <%= link_to '', login_path(return_to: collection_url(collection.uuid)), class: "block absolute inset-0" %>
@@ -70,6 +84,6 @@
   <% end %>
 </div>
 
-<%= render "collections/mint", collection: collection if collection.mintable_order_from(current_user).present? %>
+<%= render "collections/mint", collection: collection if collection.mintable_order_from(current_user).present? && !current_user.fennec? %>
 
 <%= render "collections/stats", collection: collection %>

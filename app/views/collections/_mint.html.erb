@@ -2,18 +2,32 @@
 
 <div class="relative w-full lg:w-48 p-3 text-xl text-center rounded-full text-white bg-primary mb-6">
   <span><%= t('mint_nft') %></span>
-  <%= form_for PreOrder.new(
-    order_type: :mint_collection,
-    item: collection,
-    asset_id: Collectible::MINT_ASSET_ID,
-    amount: Collectible::MINT_FEE
-  ) do |form| %>
-    <%= form.hidden_field :order_type %>
-    <%= form.hidden_field :item_id %>
-    <%= form.hidden_field :item_type %>
-    <%= form.hidden_field :asset_id %>
-    <%= form.hidden_field :amount %>
-    <%= form.hidden_field :type, value: current_user.default_payment %>
-    <%= form.submit '', class: "absolute inset-0 cursor-pointer w-full" %>
+  <% if current_user.mvm_eth? && collection.mixpay_supported? %>
+    <%= link_to '', mixpay_pre_order_path(
+        order_type: :mint_collection,
+        item_id: collection.id,
+        item_type: collection.class.name,
+        asset_id: Collectible::MINT_ASSET_ID,
+        amount: Collectible::MINT_FEE
+      ),
+      data: {
+        turbo_frame: '_top'
+      }, 
+      class: "absolute inset-0 cursor-pointer w-full" %>
+  <% else %>
+    <%= form_for PreOrder.new(
+      order_type: :mint_collection,
+      item: collection,
+      asset_id: Collectible::MINT_ASSET_ID,
+      amount: Collectible::MINT_FEE
+    ) do |form| %>
+      <%= form.hidden_field :order_type %>
+      <%= form.hidden_field :item_id %>
+      <%= form.hidden_field :item_type %>
+      <%= form.hidden_field :asset_id %>
+      <%= form.hidden_field :amount %>
+      <%= form.hidden_field :type, value: current_user.default_payment %>
+      <%= form.submit '', class: "absolute inset-0 cursor-pointer w-full" %>
+    <% end %>
   <% end %>
 </div>
