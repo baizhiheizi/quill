@@ -45,8 +45,8 @@ class MixinNetworkUser < ApplicationRecord
 
   after_commit :initialize_pin_async, :update_avatar_async, on: :create
 
-  scope :ready, -> { where.not(encrypted_pin: nil) }
-  scope :unready, -> { where(encrypted_pin: nil) }
+  scope :ready, -> { where.not(pin: nil) }
+  scope :unready, -> { where(pin: nil) }
 
   attr_encrypted :pin_code
   encrypts :pin
@@ -61,9 +61,13 @@ class MixinNetworkUser < ApplicationRecord
     )
   end
 
+  def verify_pin
+    mixin_api.verify_pin pin
+  end
+
   def update_pin!
     new_pin = SecureRandom.random_number.to_s.split('.').last.first(6)
-    r = mixin_api.update_pin(old_pin: pin_code, pin: new_pin)
+    r = mixin_api.update_pin(old_pin: pin, pin: new_pin)
 
     raise r.inspect if r['data'].blank?
 
@@ -71,7 +75,7 @@ class MixinNetworkUser < ApplicationRecord
   end
 
   def initialize_pin!
-    return if pin_code.present?
+    return if pin.present?
 
     update_pin!
   end

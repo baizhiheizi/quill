@@ -248,7 +248,7 @@ module Orders::Distributable
   def distributor_wallet_id
     @distributor_wallet_id ||=
       if payment.wallet_id == QuillBot.api.client_id
-        buyer.wallet_id
+        Splitter.ready.pluck(:uuid).sample || buyer.wallet_id
       else
         payment.wallet_id
       end
