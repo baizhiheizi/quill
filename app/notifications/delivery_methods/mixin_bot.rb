@@ -4,7 +4,7 @@ class DeliveryMethods::MixinBot < Noticed::DeliveryMethods::Base
   around_deliver :with_locale
 
   def deliver
-    SendMixinMessageWorker.perform_async format.stringify_keys, bot
+    MixinMessages::SendJob.perform_async format.stringify_keys, bot
   end
 
   def bot

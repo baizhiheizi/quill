@@ -169,7 +169,7 @@ class Collection < ApplicationRecord
   end
 
   def notify_subscribers_async
-    CollectionNotifySubscribersWorker.perform_async id
+    Collections::NotifySubscribersJob.perform_async id
   end
 
   def notify_subscribers
