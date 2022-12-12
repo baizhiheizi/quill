@@ -101,7 +101,7 @@ class Transfer < ApplicationRecord
           )
         else
           wallet.mixin_api.create_transfer(
-            wallet.pin,
+            wallet.pin_code,
             {
               asset_id: asset_id,
               opponent_id: opponent_id,
@@ -125,7 +125,7 @@ class Transfer < ApplicationRecord
         )
       else
         wallet.mixin_api.create_multisig_transaction(
-          wallet.pin,
+          wallet.pin_code,
           {
             asset_id: asset_id,
             receivers: opponent_multisig['receivers'],

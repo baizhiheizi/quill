@@ -10,13 +10,13 @@ module Encryptable
           return if value.nil?
 
           public_send(
-            "encrypted_#{attribute}=".to_sym,
+            "encrypted_#{attribute.to_s.split('_').first}=".to_sym,
             EncryptionService.encrypt(value)
           )
         end
 
         define_method(attribute) do
-          value = public_send("encrypted_#{attribute}".to_sym)
+          value = public_send("encrypted_#{attribute.to_s.split('_').first}".to_sym)
           EncryptionService.decrypt value if value.present?
         end
       end
