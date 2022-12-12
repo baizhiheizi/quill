@@ -67,7 +67,7 @@ class MixinNetworkUser < ApplicationRecord
 
     raise r.inspect if r['data'].blank?
 
-    update! pin_code: new_pin
+    update! pin_code: new_pin, pin: new_pin
   end
 
   def initialize_pin!
