@@ -8,6 +8,7 @@
 #  encrypted_pin :string
 #  name          :string
 #  owner_type    :string
+#  pin           :string
 #  pin_token     :string
 #  private_key   :string
 #  raw           :json
@@ -46,7 +47,7 @@ class MixinNetworkUser < ApplicationRecord
   scope :ready, -> { where.not(encrypted_pin: nil) }
   scope :unready, -> { where(encrypted_pin: nil) }
 
-  attr_encrypted :pin
+  attr_encrypted :pin_code
 
   def mixin_api
     @mixin_api ||= MixinBot::API.new(
@@ -60,7 +61,7 @@ class MixinNetworkUser < ApplicationRecord
 
   def update_pin!
     new_pin = SecureRandom.random_number.to_s.split('.').last.first(6)
-    r = mixin_api.update_pin(old_pin: pin, pin: new_pin)
+    r = mixin_api.update_pin(old_pin: pin_code, pin: new_pin)
 
     raise r.inspect if r['data'].blank?
 
@@ -68,7 +69,7 @@ class MixinNetworkUser < ApplicationRecord
   end
 
   def initialize_pin!
-    return if pin.present?
+    return if pin_code.present?
 
     update_pin!
   end

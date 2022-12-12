@@ -8,6 +8,7 @@
 #  encrypted_pin :string
 #  name          :string
 #  owner_type    :string
+#  pin           :string
 #  pin_token     :string
 #  private_key   :string
 #  raw           :json
