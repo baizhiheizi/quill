@@ -1,5 +1,8 @@
 <tr class="hover:bg-zinc-50 dark:hover:bg-zinc-800 border-b">
   <td class="p-4">
+    <%= mixin_network_user.type || '-' %>
+  </td>
+  <td class="p-4">
     <%= mixin_network_user.id %>
   </td>
   <td class="p-4">
@@ -10,6 +13,8 @@
       <%= render "admin/articles/field", article: mixin_network_user.owner %>
     <% elsif mixin_network_user.owner.is_a? User %>
       <%= render "admin/users/field", user: mixin_network_user.owner %>
+    <% else %>
+      -
     <% end %>
   </td>
   <td class="p-4">

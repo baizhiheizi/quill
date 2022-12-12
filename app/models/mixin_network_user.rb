@@ -12,6 +12,7 @@
 #  pin_token     :string
 #  private_key   :string
 #  raw           :json
+#  type          :string
 #  uuid          :uuid
 #  created_at    :datetime         not null
 #  updated_at    :datetime         not null

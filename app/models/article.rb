@@ -313,7 +313,6 @@ class Article < ApplicationRecord
     return if published_at.present?
 
     touch_published_at
-    create_wallet_async
     notify_for_first_published_async
     subscribe_comments_for_author
     upload_to_arweave_async

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_12_12_025115) do
+ActiveRecord::Schema[7.0].define(version: 2022_12_12_032529) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
   enable_extension "pgcrypto"
@@ -328,6 +328,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_12_025115) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "pin"
+    t.string "type"
     t.index ["owner_type", "owner_id"], name: "index_mixin_network_users_on_owner_type_and_owner_id"
     t.index ["uuid"], name: "index_mixin_network_users_on_uuid", unique: true
   end

@@ -74,7 +74,7 @@ module Orders::Distributable
       amount: (total - quill_amount).floor(8),
       memo: author_revenue_transfer_memo.truncate(70)
     ).find_or_create_by!(
-      trace_id: QuillBot.api.unique_conversation_id(trace_id, item.author.mixin_uuid)
+      trace_id: MixinBot::Utils.unique_uuid(trace_id, item.author.mixin_uuid)
     )
   end
 
