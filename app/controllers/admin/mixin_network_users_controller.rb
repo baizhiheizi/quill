@@ -6,6 +6,15 @@ module Admin
       mixin_network_users = MixinNetworkUser.all
       mixin_network_users = mixin_network_users.where(owner_type: params[:owner_type], owner_id: params[:owner_type]) if params[:owner_id].present? && params[:owner_type].present?
 
+      @type = params[:type] || 'Splitter'
+      mixin_network_users =
+        case @type
+        when 'all'
+          mixin_network_users
+        else
+          mixin_network_users.where(type: @type)
+        end
+
       @state = params[:state] || 'all'
       mixin_network_users =
         case @state

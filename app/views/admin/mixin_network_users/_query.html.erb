@@ -1,4 +1,11 @@
 <%= form_with url: admin_mixin_network_users_path, method: :get, class: "flex items-center flex-wrap" do |form| %>
+  <%= form.select :type, 
+    [
+      ['All Types', 'all'], 
+      ['Splitter', 'Splitter']
+    ], 
+    { selected: @type }, 
+    class: "rounded-lg m-1 dark:bg-zinc-900" %>
   <%= form.select :state, 
     [
       ['All States', 'all'], 
