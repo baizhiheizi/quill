@@ -48,6 +48,7 @@ class MixinNetworkUser < ApplicationRecord
   scope :unready, -> { where(encrypted_pin: nil) }
 
   attr_encrypted :pin_code
+  encrypts :pin
 
   def mixin_api
     @mixin_api ||= MixinBot::API.new(
