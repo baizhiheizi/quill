@@ -169,11 +169,11 @@ class Transfer < ApplicationRecord
 
   def process_async
     if queue_priority_critical?
-      ProcessCriticalTransferWorker.perform_async trace_id
+      Transfers::ProcessCriticalJob.perform_async trace_id
     elsif queue_priority_low?
-      ProcessThrottleTransferWorker.perform_in SecureRandom.random_number(600).seconds, trace_id, wallet_id
+      Transfers::ProcessThrottledJob.perform_in SecureRandom.random_number(600).seconds, trace_id, wallet_id
     else
-      ProcessTransferWorker.perform_async trace_id
+      Transfers::ProcessJob.perform_async trace_id
     end
   end
 

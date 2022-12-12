@@ -87,7 +87,7 @@ module Users::CollectibleReadable
   def sync_collectibles_async
     return unless should_sync_collectibles?
 
-    UserSyncCollectiblesWorker.perform_async id
+    Users::SyncCollectiblesJob.perform_async id
   end
 
   def should_sync_collectibles?

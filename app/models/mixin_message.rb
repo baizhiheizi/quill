@@ -57,7 +57,7 @@ class MixinMessage < ApplicationRecord
 
   def process_async
     if plain?
-      ProcessMixinMessageWorker.perform_async message_id
+      MixinMessages::ProcessJob.perform_async message_id
     else
       touch_proccessed_at
     end

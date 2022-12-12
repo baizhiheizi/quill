@@ -58,7 +58,7 @@ class Collectible < ApplicationRecord
   end
 
   def transfer_to_owner_async
-    CollectibleTransferToOwnerWorker.perform_async id
+    Collectibles::TransferToOwnerJob.perform_async id
   end
 
   def transfer_to_owner
@@ -70,7 +70,7 @@ class Collectible < ApplicationRecord
   def mint_async
     return if collection.blank?
 
-    CollectibleMintWorker.perform_async id
+    Collectibles::MintJob.perform_async id
   end
 
   def do_mint!

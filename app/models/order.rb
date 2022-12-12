@@ -114,7 +114,7 @@ class Order < ApplicationRecord
   end
 
   def notify_async
-    OrderNotifyWorker.perform_async id
+    Orders::NotifyJob.perform_async id
   end
 
   def notify_subscribers
@@ -140,7 +140,7 @@ class Order < ApplicationRecord
   end
 
   def update_cache_async
-    OrderUpdateCacheWorker.perform_async id
+    Orders::UpdateCacheJob.perform_async id
   end
 
   def update_cache
@@ -161,7 +161,7 @@ class Order < ApplicationRecord
   end
 
   def cache_history_ticker_async
-    CacheOrderHistoryTickerWorker.perform_async id
+    Orders::CacheHistoryTickerJob.perform_async id
   end
 
   def price_tag

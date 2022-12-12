@@ -4,7 +4,7 @@ module Orders::Distributable
   MINIMUM_AMOUNT = 0.0000_0001
 
   def distribute_async
-    DistributeOrderWorker.perform_async trace_id
+    Orders::DistributeJob.perform_async trace_id
   end
 
   def early_orders

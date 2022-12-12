@@ -1,27 +1,24 @@
-sync_currency_price_worker:
-  cron: '*/5 * * * *'
-  class: 'SyncCurrencyPriceWorker'
-transfer_stats_cache_worker:
-  cron: '*/10 * * * *'
-  class: 'TransferStatsCacheWorker'
-batch_distribute_order_worker:
-  cron: '*/10 * * * *'
-  class: 'BatchDistributeOrderWorker'
-transfer_monitor_worker:
-  cron: '*/15 * * * *'
-  class: 'TransferMonitorWorker'
-mixin_message_monitor_worker:
-  cron: '*/15 * * * *'
-  class: 'MixinMessageMonitorWorker'
-mixin_network_snapshot_monitor_worker:
-  cron: '*/15 * * * *'
-  class: 'MixinNetworkSnapshotMonitorWorker'
-batch_arweave_tx_accept_worker:
-  cron: '*/15 * * * *'
-  class: 'BatchArweaveTxAcceptWorker'
-batch_article_upload_to_arweave_worker:
+articles_batch_upload_to_arweave_job:
   cron: '0 */1 * * *'
-  class: 'BatchArticleUploadToArweaveWorker'
-daily_statistic_generate_worker:
+  class: 'Articles::BatchUploadToArweaveJob'
+arweave_transactions_batch_accept_job:
+  cron: '*/15 * * * *'
+  class: 'ArweaveTransactions::BatchAcceptJob'
+currencies_sync_job:
+  cron: '*/5 * * * *'
+  class: 'Currencies::SyncJob'
+daily_statistics_generate_job:
   cron: '0 0 * * *'
-  class: 'DailyStatisticGenerateWorker'
+  class: 'DailyStatistics::GenerateJob'
+mixin_network_snapshots_monitor_job:
+  cron: '*/15 * * * *'
+  class: 'MixinNetworkSnapshots::MonitorJob'
+orders_batch_distribute_job:
+  cron: '*/10 * * * *'
+  class: 'Orders::BatchDistributeJob'
+transfers_cache_stats_job:
+  cron: '*/10 * * * *'
+  class: 'Transfers::CacheStatsJob'
+transfers_monitor_job:
+  cron: '*/15 * * * *'
+  class: 'Transfers::MonitorJob'

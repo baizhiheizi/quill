@@ -82,7 +82,7 @@ class MixinNetworkUser < ApplicationRecord
   end
 
   def initialize_pin_async
-    MixinNetworkUserInitializePinWorker.perform_async id
+    MixinNetworkUsers::InitializePinJob.perform_async id
   end
 
   def update_avatar
@@ -104,7 +104,7 @@ class MixinNetworkUser < ApplicationRecord
   end
 
   def update_avatar_async
-    MixinNetworkUserUpdateAvatarWorker.perform_async id
+    MixinNetworkUsers::UpdateAvatarJob.perform_async id
   end
 
   def default_name

@@ -17,7 +17,7 @@ module ExceptionNotifier
         data: build_message(exception, options)
       )
 
-      SendMixinMessageWorker.perform_async msg.stringify_keys
+      MixinMessages::SendJob.perform_async msg.stringify_keys
     end
 
     private
