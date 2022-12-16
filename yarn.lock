@@ -705,10 +705,10 @@
   resolved "https://registry.yarnpkg.com/@tiptap/extension-italic/-/extension-italic-2.0.0-beta.207.tgz#a84fef9a31859ab99051f914dde0dc59da9d7d2c"
   integrity sha512-f9C7XuckHyV+vm6f6u+ZsuSCS0k1foY2+uwuSi3KEuT7j5Jb8RbigaStF2hOpVeVwOCgFpMcxNn2w99s04alqg==
 
-"@tiptap/extension-link@^2.0.0-beta.207":
-  version "2.0.0-beta.207"
-  resolved "https://registry.yarnpkg.com/@tiptap/extension-link/-/extension-link-2.0.0-beta.207.tgz#2bdbc9976f145d82b82ddfde01d2f45f42ae0988"
-  integrity sha512-LKGHf+ij7pJguL5Tdl8pPYZalAC7a0UDWhh2Fc/4WrdD4KC4X8eiW5QEVxO54v1gz8oOfcAtkKgyIIv1CjNgFA==
+"@tiptap/extension-link@^2.0.0-beta.209":
+  version "2.0.0-beta.209"
+  resolved "https://registry.yarnpkg.com/@tiptap/extension-link/-/extension-link-2.0.0-beta.209.tgz#a441f5ead858ea54b88fa7e1a8b5e02e8f671678"
+  integrity sha512-X+iPnKWTb8nuZ7xieemPxZOiCQiaQw4z3RVJ7Hz4/T+ujxfxu7MJhBzjyw9htGPmUijyN4zt0NPjZ089yMzAxQ==
   dependencies:
     linkifyjs "^3.0.5"
 
