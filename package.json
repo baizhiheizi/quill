@@ -32,7 +32,7 @@
     "@tiptap/extension-link": "^2.0.0-beta.207",
     "@tiptap/extension-placeholder": "^2.0.0-beta.207",
     "@tiptap/extension-typography": "^2.0.0-beta.207",
-    "@tiptap/extension-underline": "^2.0.0-beta.207",
+    "@tiptap/extension-underline": "^2.0.0-beta.209",
     "@tiptap/starter-kit": "^2.0.0-beta.207",
     "@walletconnect/web3-provider": "^1.8.0",
     "abortcontroller-polyfill": "^1.7.5",
