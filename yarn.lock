@@ -653,10 +653,10 @@
   resolved "https://registry.yarnpkg.com/@tiptap/extension-document/-/extension-document-2.0.0-beta.207.tgz#46d0ad254299b5ba42b5c996c79a7a5709be3832"
   integrity sha512-FUNcCAJnQWL0VtMOWNEUKU5oJQzEDUrXYoPDqXQHva8BlohNBznPCOEw1F5lh4UlHGClfatbQ1tDjZUL5YgP7A==
 
-"@tiptap/extension-dropcursor@^2.0.0-beta.207":
-  version "2.0.0-beta.207"
-  resolved "https://registry.yarnpkg.com/@tiptap/extension-dropcursor/-/extension-dropcursor-2.0.0-beta.207.tgz#8995924a9dbce8a91f259ede8db38db4b0cd02cf"
-  integrity sha512-r6Pz32JAo//H5TIH0aeoJ/mqFFRTPAivuTZ1aXpmT1FJKYAVSeRYtL1HJS5picPQfz9R/kQEowjqbe2U3BkJtg==
+"@tiptap/extension-dropcursor@^2.0.0-beta.207", "@tiptap/extension-dropcursor@^2.0.0-beta.209":
+  version "2.0.0-beta.209"
+  resolved "https://registry.yarnpkg.com/@tiptap/extension-dropcursor/-/extension-dropcursor-2.0.0-beta.209.tgz#5107e255a4c1c5ca3dae606854019d6ec6051481"
+  integrity sha512-b4RxbZg4hza4p1Lp+m4CWkIIMVgoAKSo49OyvO/Y/igtQ0DcdQutSJDEPeEhuqy+jPdQFaU5GBonSvVi89Loog==
 
 "@tiptap/extension-floating-menu@^2.0.0-beta.207":
   version "2.0.0-beta.207"
