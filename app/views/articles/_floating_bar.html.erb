@@ -7,7 +7,11 @@
           <%= article.upvotes_count %>
         </span>
         <% if user.blank? %>
-          <%= link_to '', login_path, data: { turbo_frame: :modal }, class: 'absolute inset-0' %>
+          <% if from_mixin_messenger? %>
+            <%= link_to '', login_path(return_to: user_article_url(article.author, article.uuid)), class: 'absolute inset-0' %>
+          <% else %>
+            <%= link_to '', login_path(return_to: user_article_url(article.author, article.uuid)), data: { turbo_frame: :modal }, class: 'absolute inset-0' %>
+          <% end %>
         <% elsif user&.upvote_article? article %>
           <%= link_to '', upvoted_article_path(article), data: { turbo_method: :delete }, class: 'absolute inset-0' %>
         <% else %>
@@ -20,7 +24,11 @@
           <%= article.downvotes_count %>
         </span>
         <% if user.blank? %>
-          <%= link_to '', login_path, data: { turbo_frame: :modal }, class: 'absolute inset-0' %>
+          <% if from_mixin_messenger? %>
+            <%= link_to '', login_path(return_to: user_article_url(article.author, article.uuid)), class: 'absolute inset-0' %>
+          <% else %>
+            <%= link_to '', login_path(return_to: user_article_url(article.author, article.uuid)), data: { turbo_frame: :modal }, class: 'absolute inset-0' %>
+          <% end %>
         <% elsif user&.downvote_article? article %>
           <%= link_to '', downvoted_article_path(article), data: { turbo_method: :delete }, class: 'absolute inset-0' %>
         <% else %>
@@ -38,9 +46,9 @@
         </span>
       <% end %>
     </div>
-    <% if article.author == current_user %>
-      <%= image_tag current_user.avatar_thumb, class: "w-8 h-8 rounded-full" %>
-    <% elsif article.authorized? current_user %> 
+    <% if article.author == user %>
+      <%= image_tag user.avatar_thumb, class: "w-8 h-8 rounded-full" %>
+    <% elsif article.authorized? user %> 
       <%= render "articles/reward_article_button", article: article, size: 'sm' %>
     <% else %>
       <%= render "articles/buy_article_button", article: article, size: 'sm' %>
