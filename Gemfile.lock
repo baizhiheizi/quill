@@ -372,8 +372,7 @@ GEM
     openssl (3.0.1)
     order_as_specified (1.7)
       activerecord (>= 5.0.0)
-    pagy (5.10.1)
-      activesupport
+    pagy (6.0.0)
     pando_bot (0.1.0)
       activesupport (>= 5)
       faraday (>= 2)
