@@ -38,7 +38,7 @@
     "abortcontroller-polyfill": "^1.7.5",
     "autoprefixer": "^10.4.13",
     "axios": "^1.2.1",
-    "babel-plugin-import": "^1.13.5",
+    "babel-plugin-import": "^1.13.6",
     "babel-plugin-macros": "^3.1.0",
     "buffer": "^6.0.3",
     "dayjs": "^1.11.7",
