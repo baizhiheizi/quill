@@ -20,7 +20,7 @@
     "@tailwindcss/aspect-ratio": "^0.4.2",
     "@tailwindcss/forms": "^0.5.3",
     "@tailwindcss/line-clamp": "^0.4.2",
-    "@tailwindcss/typography": "^0.5.8",
+    "@tailwindcss/typography": "^0.5.9",
     "@tiptap/core": "^2.0.0-beta.209",
     "@tiptap/extension-bubble-menu": "^2.0.0-beta.209",
     "@tiptap/extension-code-block-lowlight": "^2.0.0-beta.209",
@@ -37,18 +37,18 @@
     "@walletconnect/web3-provider": "^1.8.0",
     "abortcontroller-polyfill": "^1.7.5",
     "autoprefixer": "^10.4.13",
-    "axios": "^1.2.1",
-    "babel-plugin-import": "^1.13.5",
+    "axios": "^1.2.2",
+    "babel-plugin-import": "^1.13.6",
     "babel-plugin-macros": "^3.1.0",
     "buffer": "^6.0.3",
     "dayjs": "^1.11.7",
-    "esbuild": "^0.16.10",
+    "esbuild": "^0.16.16",
     "highlight.js": "^11.7.0",
     "json-rpc-engine": "^6.1.0",
     "lowlight": "^2.8.0",
     "mixin-messenger-utils": "^0.1.5",
     "photoswipe": "^5.3.4",
-    "postcss": "^8.4.20",
+    "postcss": "^8.4.21",
     "postcss-import": "^15.1.0",
     "process": "^0.11.10",
     "prosemirror-commands": "^1.5.0",
@@ -58,7 +58,7 @@
     "prosemirror-keymap": "^1.2.0",
     "prosemirror-markdown": "^1.10.1",
     "prosemirror-schema-list": "^1.2.2",
-    "puppeteer": "^19.4.1",
+    "puppeteer": "^19.5.0",
     "qrcode": "^1.5.1",
     "stimulus-use": "^0.51.1",
     "tailwind-scrollbar-hide": "^1.1.7",
@@ -71,7 +71,7 @@
     "web3": "^1.8.1"
   },
   "devDependencies": {
-    "prettier": "^2.8.1"
+    "prettier": "^2.8.2"
   },
   "browserslist": [
     "defaults"
