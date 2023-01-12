@@ -58,7 +58,7 @@
     "prosemirror-keymap": "^1.2.0",
     "prosemirror-markdown": "^1.10.1",
     "prosemirror-schema-list": "^1.2.2",
-    "puppeteer": "^19.5.0",
+    "puppeteer": "^19.5.2",
     "qrcode": "^1.5.1",
     "stimulus-use": "^0.51.1",
     "tailwind-scrollbar-hide": "^1.1.7",
