@@ -338,7 +338,7 @@ GEM
     mini_racer (0.6.3)
       libv8-node (~> 16.10.0.0)
     minitest (5.17.0)
-    mixin_bot (0.11.3)
+    mixin_bot (0.12.1)
       activesupport (>= 5)
       awesome_print (~> 1.8)
       bcrypt (~> 3.1)
