@@ -367,3 +367,4 @@ zh-CN:
   connect: 连接
   reconnect: 重新连接
   stats: 统计
+  withdraw_tips: 您的资产存放在 MVM 网络，如果您需要提现至您的其他个人钱包，请务必使用跨链桥(https://bridge.mvm.app)进行跨链提现，不要直接使用钱包进行跨链转账，否则可能损失资产。

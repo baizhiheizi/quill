@@ -368,3 +368,4 @@ en:
   connect: Connect
   reconnect: Reconnect
   stats: Stats
+  withdraw_tips: If you need to withdraw your assets to your other personal wallet, please use https://bridge.mvm.app to finish the cross-chain transfer.

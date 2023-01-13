@@ -356,3 +356,4 @@ ja:
   alert_for_blocked_user: The account is suspected of being fraudulent. Please pay with caution.
   alert: Alert
   stats: Stats
+  withdraw_tips: If you need to withdraw your assets to your other personal wallet, please use https://bridge.mvm.app to finish the cross-chain transfer.
