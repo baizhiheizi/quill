@@ -22,6 +22,13 @@ GIT
       nokogiri (~> 1)
       rails (>= 3.2.15)
 
+GIT
+  remote: https://github.com/jtoy/cld.git
+  revision: 965af0c2093ec0bd1707c789a052a56aed760ea6
+  specs:
+    cld (0.11.0)
+      ffi
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -145,8 +152,6 @@ GEM
       regexp_parser (>= 1.5, < 3.0)
       xpath (~> 3.2)
     chunky_png (1.4.0)
-    cld (0.11.0)
-      ffi
     cli-ui (1.5.1)
     combine_pdf (1.0.22)
       matrix
@@ -243,7 +248,7 @@ GEM
       graphql
     groupdate (6.1.0)
       activesupport (>= 5.2)
-    grover (1.1.2)
+    grover (0.12.3)
       combine_pdf (~> 1.0)
       nokogiri (~> 1.0)
     hamster (3.0.0)
@@ -453,7 +458,10 @@ GEM
       pkg-config (~> 1.5)
       rubyzip (~> 2.3)
     redcarpet (3.5.1)
-    redis (4.8.0)
+    redis (5.0.5)
+      redis-client (>= 0.9.0)
+    redis-client (0.12.0)
+      connection_pool
     redis-namespace (1.10.0)
       redis (>= 4)
     redis-objects (1.7.0)
@@ -506,10 +514,10 @@ GEM
       rubyzip (>= 1.2.2, < 3.0)
       websocket (~> 1.0)
     sha3 (1.0.5)
-    sidekiq (6.5.8)
-      connection_pool (>= 2.2.5, < 3)
+    sidekiq (6.5.5)
+      connection_pool (>= 2.2.2)
       rack (~> 2.0)
-      redis (>= 4.5.0, < 5)
+      redis (>= 4.5.0)
     sidekiq-cron (1.9.1)
       fugit (~> 1.8)
       sidekiq (>= 4.2.1)
@@ -574,7 +582,7 @@ DEPENDENCIES
   bootsnap (>= 1.4.4)
   browser
   capybara (>= 2.15)
-  cld
+  cld!
   config
   cssbundling-rails
   debug (>= 1.0.0)
@@ -623,7 +631,7 @@ DEPENDENCIES
   rubocop-rails
   second_level_cache
   selenium-webdriver
-  sidekiq (~> 6.0)
+  sidekiq (< 7)
   sidekiq-cron
   sidekiq-throttled
   simple_command
@@ -639,7 +647,7 @@ DEPENDENCIES
   webdrivers
 
 RUBY VERSION
-   ruby 3.1.0p0
+   ruby 3.2.0p0
 
 BUNDLED WITH
-   2.3.5
+   2.4.3

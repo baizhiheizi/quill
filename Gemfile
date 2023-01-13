@@ -3,7 +3,7 @@
 source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby '~> 3.1'
+ruby '~> 3.2'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 7'
@@ -67,7 +67,7 @@ gem 'activestorage-aliyun'
 gem 'aws-sdk-s3', require: false
 
 # Simple, efficient background processing for Ruby http://sidekiq.org
-gem 'sidekiq', '~> 6.0'
+gem 'sidekiq', '< 7'
 
 # Scheduler / Cron for Sidekiq jobs
 gem 'sidekiq-cron'
@@ -149,7 +149,7 @@ gem 'eth'
 gem 'fastimage'
 
 # compact language detection in ruby
-gem 'cld'
+gem 'cld', github: 'jtoy/cld'
 
 # Enumerated attributes with I18n and ActiveRecord/Mongoid support
 gem 'enumerize'
