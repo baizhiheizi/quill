@@ -244,7 +244,7 @@ class Article < ApplicationRecord
       if (length - count - child.text.size).positive?
         count += child.text.size
         html += child.to_s
-      elsif child.to_s.size.zero?
+      elsif child.to_s.empty?
         html += child.to_s
       elsif (length - count).positive?
         case child
