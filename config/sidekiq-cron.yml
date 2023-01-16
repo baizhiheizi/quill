@@ -11,7 +11,7 @@ daily_statistics_generate_job:
   cron: '0 0 * * *'
   class: 'DailyStatistics::GenerateJob'
 mixin_network_snapshots_monitor_job:
-  cron: '*/15 * * * *'
+  cron: '* * * * *'
   class: 'MixinNetworkSnapshots::MonitorJob'
 orders_batch_distribute_job:
   cron: '*/10 * * * *'
