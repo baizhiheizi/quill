@@ -82,7 +82,7 @@
       <%= link_to 'Trident', 
         collection.trident_url,  
         target: "_blank",
-        class: "bg-transparent cursor-pointer" if collection.listed_on_trident? %>
+        class: "bg-transparent cursor-pointer" if collection.listed_on_trident? && collection.nft_collection_present? %>
     </div>
   </div>
 </div>

@@ -7,11 +7,15 @@ class CollectionsController < ApplicationController
 
   def show
     @collection = Collection.listed.find_by uuid: params[:uuid]
-    impressionist @collection
+    if @collection.blank?
+      redirect_back fallback_location: root_path
+    else
+      impressionist @collection
 
-    @page_title = "#{@collection.name} - #{@collection.author.name}"
-    @page_description = @collection.description
-    @page_image = @collection.cover_url
+      @page_title = "#{@collection.name} - #{@collection.author.name}"
+      @page_description = @collection.description
+      @page_image = @collection.cover_url
+    end
   end
 
   def share
