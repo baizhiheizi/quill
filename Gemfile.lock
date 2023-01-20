@@ -248,7 +248,7 @@ GEM
       graphql
     groupdate (6.1.0)
       activesupport (>= 5.2)
-    grover (0.12.3)
+    grover (1.1.3)
       combine_pdf (~> 1.0)
       nokogiri (~> 1.0)
     hamster (3.0.0)
