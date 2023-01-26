@@ -30,6 +30,7 @@ export default class extends Controller {
     'collectionRevenueRatio',
     'referenceRevenueRatio',
     'articleReferenceRevenueRatio',
+    'introCharacterCounter',
     'currencyIcon',
     'currencyChainIcon',
     'currencySymbol',
@@ -341,5 +342,10 @@ export default class extends Controller {
 
   clearDraft() {
     localStorage.removeItem(this.draftKeyValue);
+  }
+
+  introUpdate(e) {
+    this.introCharacterCounterTarget.innerHTML =
+      140 - e.currentTarget.value.length;
   }
 }

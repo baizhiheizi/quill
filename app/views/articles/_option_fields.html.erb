@@ -77,7 +77,14 @@
         <%= form.text_area :intro, 
           value: form.object.intro, 
           rows: 5, 
+          maxLength: 140,
+          data: {
+            action: 'input->article-form#introUpdate'
+          },
           class: "focus:ring-blue-500 focus:border-blue-500 flex-1 block w-full rounded bg-[#F4F4F4] border-[#F4F4F4] dark:border-white dark:border-opacity-5 dark:bg-[#333444]" %>
+      </div>
+      <div class="py-2 font-sm opacity-70 text-right ml-auto">
+        <span data-article-form-target="introCharacterCounter"><%= 140 - form.object.intro.size %></span>
       </div>
       <% if form.object.errors.where(:intro).present? %>
         <div class="py-2 text-red-700 font-sm"><%= form.object.errors.where(:intro).map(&:full_message).join(';') %></div>
