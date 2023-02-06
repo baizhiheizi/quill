@@ -35,6 +35,10 @@ sudo apt install postgresql postgresql-contrib libpq-dev
 sudo systemctl start postgresql.service
 ```
 
+### Install Redis
+
+Check it up at https://redis.io/docs/getting-started/installation/
+
 ## Clone repo
 
 ```bash
@@ -80,7 +84,7 @@ mv ./config/settings.yml ./config/settings.local.yml
 
 Generally you may just edit the `host` in the `settings.local.yml` to your local development url.
 
-## Boot up
+## Bootup
 
 ```bash
 bin/dev
