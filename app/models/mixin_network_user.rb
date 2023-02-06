@@ -28,8 +28,6 @@
 class MixinNetworkUser < ApplicationRecord
   DEFAULT_AVATAR_FILE = Rails.application.root.join("app/assets/images/#{Settings.icon_file || 'icon.png'}")
 
-  include Encryptable
-
   belongs_to :owner, optional: true, inverse_of: false, polymorphic: true
   has_many :snapshots, class_name: 'MixinNetworkSnapshot', foreign_key: :user_id, primary_key: :uuid, dependent: :nullify, inverse_of: :wallet
   has_many :swap_orders, foreign_key: :user_id, primary_key: :uuid, dependent: :nullify, inverse_of: :wallet
@@ -48,7 +46,6 @@ class MixinNetworkUser < ApplicationRecord
   scope :ready, -> { where.not(pin: nil) }
   scope :unready, -> { where(pin: nil) }
 
-  attr_encrypted :pin_code
   encrypts :pin
 
   def mixin_api
@@ -71,7 +68,7 @@ class MixinNetworkUser < ApplicationRecord
 
     raise r.inspect if r['data'].blank?
 
-    update! pin_code: new_pin, pin: new_pin
+    update! pin: new_pin
   end
 
   def initialize_pin!
@@ -127,7 +124,7 @@ class MixinNetworkUser < ApplicationRecord
   end
 
   def ready?
-    encrypted_pin.present?
+    pin.present?
   end
 
   private
