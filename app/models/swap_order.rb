@@ -29,7 +29,6 @@ class SwapOrder < ApplicationRecord
   FOX_SWAP_APP_ID = Settings.foxswap.app_id
   FSWAP_MTG_MEMBERS = Settings.foxswap.mtg_members
   FSWAP_MTG_THRESHOLD = Settings.foxswap.mtg_threshold
-  FSWAP_MTG_PUBLIC_KEY = Settings.foxswap.mtg_public_key
 
   include AASM
   belongs_to :payment
