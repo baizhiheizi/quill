@@ -2,6 +2,7 @@
 
 - Ruby v3.2
 - Postgresql
+- Redis
 
 ### Install Ruby
 
