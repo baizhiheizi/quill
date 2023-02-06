@@ -84,6 +84,12 @@ mv ./config/settings.yml ./config/settings.local.yml
 
 Generally you may just edit the `host` in the `settings.local.yml` to your local development url.
 
+## Prepare DB
+
+```bash
+bin/rails db:prepare
+```
+
 ## Bootup
 
 ```bash
@@ -93,3 +99,17 @@ bin/dev
 If everything goes well. It'll boot up.
 
 Check it at `http://localhost:3000`
+
+## Others
+
+### admin dashboard
+
+The url is `http://localhost:3000/admin`. You may create an admin account in console.
+
+```bash
+bin/rails c
+```
+
+```ruby
+Administrator.create name: 'admin', password: 'admin'
+```
