@@ -32,7 +32,7 @@ GIT
 GEM
   remote: https://rubygems.org/
   specs:
-    aasm (5.4.0)
+    aasm (5.5.0)
       concurrent-ruby (~> 1.0)
     action-store (1.1.2)
       rails (>= 5.2)
@@ -120,7 +120,7 @@ GEM
     attr_required (1.0.1)
     awesome_print (1.9.2)
     aws-eventstream (1.2.0)
-    aws-partitions (1.701.0)
+    aws-partitions (1.705.0)
     aws-sdk-core (3.170.0)
       aws-eventstream (~> 1, >= 1.0.2)
       aws-partitions (~> 1, >= 1.651.0)
@@ -246,9 +246,9 @@ GEM
     graphql-client (0.18.0)
       activesupport (>= 3.0)
       graphql
-    groupdate (6.1.0)
+    groupdate (6.2.0)
       activesupport (>= 5.2)
-    grover (1.1.3)
+    grover (1.1.4)
       combine_pdf (~> 1.0)
       nokogiri (~> 1.0)
     hamster (3.0.0)
@@ -322,7 +322,7 @@ GEM
     loofah (2.19.1)
       crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
-    mail (2.8.0.1)
+    mail (2.8.1)
       mini_mime (>= 0.1.1)
       net-imap
       net-pop
@@ -369,7 +369,7 @@ GEM
       net-protocol
     netrc (0.11.0)
     nio4r (2.5.8)
-    nokogiri (1.14.0-x86_64-linux)
+    nokogiri (1.14.1-x86_64-linux)
       racc (~> 1.4)
     noticed (1.6.0)
       http (>= 4.0.0)
@@ -457,7 +457,7 @@ GEM
       mini_portile2 (~> 2.8)
       pkg-config (~> 1.5)
       rubyzip (~> 2.3)
-    redcarpet (3.5.1)
+    redcarpet (3.6.0)
     redis (5.0.6)
       redis-client (>= 0.9.0)
     redis-client (0.12.1)
@@ -534,7 +534,7 @@ GEM
       railties (>= 6.0.0)
     thor (1.2.1)
     timeout (0.3.1)
-    turbo-rails (1.3.2)
+    turbo-rails (1.3.3)
       actionpack (>= 6.0.0)
       activejob (>= 6.0.0)
       railties (>= 6.0.0)
