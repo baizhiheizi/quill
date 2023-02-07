@@ -676,10 +676,10 @@
   resolved "https://registry.yarnpkg.com/@tiptap/extension-bullet-list/-/extension-bullet-list-2.0.0-beta.212.tgz#331d5ca389b6934f1ef7b036b584b67e15603e24"
   integrity sha512-owW+SPkeYEB4SKCprp5yt6MRMvB+TOObxauvaiuZ+RPGKX/a6/uXyCfsPJ+Wz85lPn1GYefZwlfANJ6C5HQGkg==
 
-"@tiptap/extension-code-block-lowlight@^2.0.0-beta.212":
-  version "2.0.0-beta.212"
-  resolved "https://registry.yarnpkg.com/@tiptap/extension-code-block-lowlight/-/extension-code-block-lowlight-2.0.0-beta.212.tgz#b34592da590619df302985e6cd7d96fca23affd8"
-  integrity sha512-u1oVuzyBE0a3e/LAl3/vsIJ/TxLT8aX0kULwbGUXJIjgPMiR/aJXrbh3Z1K4oCzI1jrpoyP1YVlQrd3aiRF8qw==
+"@tiptap/extension-code-block-lowlight@^2.0.0-beta.213":
+  version "2.0.0-beta.213"
+  resolved "https://registry.yarnpkg.com/@tiptap/extension-code-block-lowlight/-/extension-code-block-lowlight-2.0.0-beta.213.tgz#77a855cc4722ac9bd3ee4e395ec39fba2f248f8e"
+  integrity sha512-HYStLqy4MZoRoePm+UOsJizxKmbQfW9w7820wEd4liRMcHp8aMT898jmhPZyolyRXP2iJZyjXD4YX5neJIdJnA==
 
 "@tiptap/extension-code-block@^2.0.0-beta.212":
   version "2.0.0-beta.212"
