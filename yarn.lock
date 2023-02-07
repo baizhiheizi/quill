@@ -701,11 +701,12 @@
   resolved "https://registry.yarnpkg.com/@tiptap/extension-dropcursor/-/extension-dropcursor-2.0.0-beta.212.tgz#1422fb9e7dfc84ed3795b34d55fed68128da91c0"
   integrity sha512-DsZeoL0ZCSWxeHTm0eeRzx74kk0bUHRqhwr8kK39hi8lppBrRdHoi4KcjlDXMwgpAoMZEeB8ZX3zFg6TtFMsRg==
 
-"@tiptap/extension-floating-menu@^2.0.0-beta.212":
-  version "2.0.0-beta.212"
-  resolved "https://registry.yarnpkg.com/@tiptap/extension-floating-menu/-/extension-floating-menu-2.0.0-beta.212.tgz#56236907ec09d03c3a529b6176de87584f9594af"
-  integrity sha512-sMTv9jSDbqg59fUkv0y+Yn2ecSxPnbNXoIl+abbE9XhLgeDhZMzOG75ICK9Am5YSiH7fz+DakpPSgt+3KGycAQ==
+"@tiptap/extension-floating-menu@^2.0.0-beta.213":
+  version "2.0.0-beta.213"
+  resolved "https://registry.yarnpkg.com/@tiptap/extension-floating-menu/-/extension-floating-menu-2.0.0-beta.213.tgz#c8c145664e81ec0974934b02da6910501dd8753c"
+  integrity sha512-KL4nLUbtAdCqR2Z1ZpYLDkW9lICEwoLA7YrcUWXkMZ3RPOuk+tb/8SgX99xzrMZRNkW2WkTinALhxHDgsFC1YA==
   dependencies:
+    lodash-es "^4.17.21"
     tippy.js "^6.3.7"
 
 "@tiptap/extension-gapcursor@^2.0.0-beta.212":
@@ -3613,6 +3614,11 @@ locate-path@^5.0.0:
   integrity sha512-t7hw9pI+WvuwNJXwk5zVHpyhIqzg2qTlklJOf0mVxGSbe3Fp2VieZcduNYjaLDoy6p9uGpQEGWG87WpMKlNq8g==
   dependencies:
     p-locate "^4.1.0"
+
+lodash-es@^4.17.21:
+  version "4.17.21"
+  resolved "https://registry.yarnpkg.com/lodash-es/-/lodash-es-4.17.21.tgz#43e626c46e6591b7750beb2b50117390c609e3ee"
+  integrity sha512-mKnC+QJ9pWVzv+C4/U3rRsHapFfHvQFoFB92e52xeyGMcX6/OlIl78je1u8vePzYZSkkogMPJ2yjxxsb89cxyw==
 
 lodash.castarray@^4.4.0:
   version "4.4.0"
