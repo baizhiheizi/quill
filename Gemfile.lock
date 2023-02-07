@@ -24,9 +24,9 @@ GIT
 
 GIT
   remote: https://github.com/jtoy/cld.git
-  revision: 965af0c2093ec0bd1707c789a052a56aed760ea6
+  revision: e45f287b894ee9b481bf6835201fa423f7280708
   specs:
-    cld (0.11.0)
+    cld (0.12.0)
       ffi
 
 GEM
