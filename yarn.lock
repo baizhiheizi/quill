@@ -708,10 +708,10 @@
   dependencies:
     tippy.js "^6.3.7"
 
-"@tiptap/extension-gapcursor@^2.0.0-beta.212":
-  version "2.0.0-beta.212"
-  resolved "https://registry.yarnpkg.com/@tiptap/extension-gapcursor/-/extension-gapcursor-2.0.0-beta.212.tgz#0847f2d13ed87652067a1c592f23242d9e69c7b7"
-  integrity sha512-DIv1K+uOfMVWtfkJqv+fccZ/kxPUU+YgNFPINAFXqBh/rTkXbcXAb96x/g18apwo7WDOQvYwHOjxb1tB3b64ZQ==
+"@tiptap/extension-gapcursor@^2.0.0-beta.212", "@tiptap/extension-gapcursor@^2.0.0-beta.213":
+  version "2.0.0-beta.213"
+  resolved "https://registry.yarnpkg.com/@tiptap/extension-gapcursor/-/extension-gapcursor-2.0.0-beta.213.tgz#6450bfd2cde45f8e1fa529badfe1f8eccf0efad2"
+  integrity sha512-HiVb6tTR7LdL1k7tCJuhqDANk4dQj00OmwX4FnueXU8GWo2l8EvAP2/CdXCouRMnDrInLslK4XCV+/VRQEK3cg==
 
 "@tiptap/extension-hard-break@^2.0.0-beta.212":
   version "2.0.0-beta.212"
