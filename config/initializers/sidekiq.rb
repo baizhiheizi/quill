@@ -1,17 +1,28 @@
 # frozen_string_literal: true
 
-require 'sidekiq/throttled'
+require 'sidekiq-unique-jobs'
 
 Sidekiq.configure_server do |config|
-  config.redis = { namespace: Rails.application.credentials.dig(:sidekiq, :namespace) || 'quill_sidekiq' }
+  config.redis = { url: ENV.fetch('REDIS_URL', nil), driver: :ruby }
 
   cron_file = 'config/sidekiq-cron.yml'
   Sidekiq::Cron::Job.load_from_hash YAML.load_file(cron_file) if File.exist?(cron_file) && Sidekiq.server?
+
+  config.client_middleware do |chain|
+    chain.add SidekiqUniqueJobs::Middleware::Client
+  end
+
+  config.server_middleware do |chain|
+    chain.add SidekiqUniqueJobs::Middleware::Server
+  end
+
+  SidekiqUniqueJobs::Server.configure(config)
 end
 
 Sidekiq.configure_client do |config|
-  config.redis = { namespace: Rails.application.credentials.dig(:sidekiq, :namespace) || 'quill_sidekiq' }
-end
+  config.redis = { url: ENV.fetch('REDIS_URL', nil), driver: :ruby }
 
-Sidekiq::Throttled.setup!
-Sidekiq.strict_args!
+  config.client_middleware do |chain|
+    chain.add SidekiqUniqueJobs::Middleware::Client
+  end
+end

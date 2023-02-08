@@ -2,6 +2,7 @@
 
 require 'sidekiq/web'
 require 'sidekiq/cron/web'
+require 'sidekiq_unique_jobs/web'
 
 class AdminConstraint
   def matches?(request)

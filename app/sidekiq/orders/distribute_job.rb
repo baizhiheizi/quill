@@ -2,13 +2,12 @@
 
 class Orders::DistributeJob
   include Sidekiq::Job
-  include Sidekiq::Throttled::Worker
 
-  sidekiq_options queue: :default, retry: true
+  sidekiq_options queue: :default, retry: true, lock: :while_executing, on_conflict: :reschedule, lock_args_method: :lock_args
 
-  sidekiq_throttle(
-    concurrency: { limit: 1, key_suffix: ->(trace_id) { trace_id } }
-  )
+  def self.lock_args(args)
+    args
+  end
 
   def perform(trace_id)
     order = Order.find_by trace_id: trace_id

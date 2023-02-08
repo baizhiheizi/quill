@@ -2,13 +2,12 @@
 
 class Transfers::ProcessThrottledJob
   include Sidekiq::Job
-  include Sidekiq::Throttled::Worker
 
-  sidekiq_options queue: :low, retry: true
+  sidekiq_options queue: :low, retry: true, lock: :while_executing, on_conflict: :reschedule, lock_args_method: :lock_args
 
-  sidekiq_throttle(
-    concurrency: { limit: 5, key_suffix: ->(_, wallet_id) { wallet_id } }
-  )
+  def self.lock_args(args)
+    [args[1]]
+  end
 
   sidekiq_retry_in do |count, exception|
     case exception
