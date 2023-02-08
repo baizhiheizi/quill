@@ -24,9 +24,9 @@ GIT
 
 GIT
   remote: https://github.com/jtoy/cld.git
-  revision: 965af0c2093ec0bd1707c789a052a56aed760ea6
+  revision: e45f287b894ee9b481bf6835201fa423f7280708
   specs:
-    cld (0.11.0)
+    cld (0.12.0)
       ffi
 
 GEM
@@ -120,7 +120,7 @@ GEM
     attr_required (1.0.1)
     awesome_print (1.9.2)
     aws-eventstream (1.2.0)
-    aws-partitions (1.705.0)
+    aws-partitions (1.707.0)
     aws-sdk-core (3.170.0)
       aws-eventstream (~> 1, >= 1.0.2)
       aws-partitions (~> 1, >= 1.651.0)
@@ -136,7 +136,7 @@ GEM
     aws-sigv4 (1.5.2)
       aws-eventstream (~> 1, >= 1.0.2)
     bcrypt (3.1.18)
-    bindata (2.4.14)
+    bindata (2.4.15)
     bindex (0.8.1)
     bootsnap (1.16.0)
       msgpack (~> 1.2)
