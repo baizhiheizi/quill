@@ -48,9 +48,14 @@ class PreOrder < ApplicationRecord
   aasm column: :state do
     state :drafted, initial: true
     state :paid
+    state :expired
 
     event :pay, after_commit: :broadcast_to_views do
       transitions from: :drafted, to: :paid
+    end
+
+    event :expire do
+      transitions from: :drafted, to: :expired
     end
   end
 
