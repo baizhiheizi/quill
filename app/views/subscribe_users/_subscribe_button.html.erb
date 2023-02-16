@@ -6,7 +6,7 @@
       data: { 
         turbo_frame: :modal 
       }, 
-      class: "flex items-center justify-center space-x-1 w-full cursor-pointer text-sm bg-primary rounded-full text-white text-center #{style == 'block' ? 'py-3' : 'w-24 py-1.5'}" do %>
+      class: "flex items-center justify-center space-x-1 cursor-pointer text-sm bg-primary rounded-full text-white text-center #{style == 'block' ? 'w-full py-3' : 'w-24 py-1.5'}" do %>
       <%= inline_svg_tag 'icons/add.svg', class: 'w-3 h-3' unless style == 'block' %>
       <span><%= t('subscribe') %></span>
     <% end %>
@@ -18,10 +18,10 @@
       data: { 
         turbo_frame: :modal,
       }, 
-      class: "flex items-center justify-center space-x-1 w-full cursor-pointer text-sm bg-[#F4F4F4] text-[#B1B6C6] dark:bg-[#444655] rounded-full text-white text-center #{style == 'block' ? 'py-3' : 'w-24 py-1.5'}" %>
+      class: "flex items-center justify-center space-x-1 cursor-pointer text-sm bg-[#F4F4F4] text-[#B1B6C6] dark:bg-[#444655] rounded-full text-white text-center #{style == 'block' ? 'w-full py-3' : 'w-24 py-1.5'}" %>
 <% else%>
     <%= button_to subscribe_users_path(uid: user.uid), 
-      class: "flex items-center justify-center space-x-1 w-full cursor-pointer text-sm bg-primary rounded-full text-white text-center #{style == 'block' ? 'py-3' : 'w-24 py-1.5'}" do %>
+      class: "flex items-center justify-center space-x-1 cursor-pointer text-sm bg-primary rounded-full text-white text-center #{style == 'block' ? 'w-full py-3' : 'w-24 py-1.5'}" do %>
       <%= inline_svg_tag 'icons/add.svg', class: 'w-3 h-3' unless style == 'block' %>
       <span><%= t('subscribe') %></span>
     <% end %>
