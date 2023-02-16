@@ -49,16 +49,18 @@
     <% end %>
   <% end %>
 
-  <div class="flex items-center space-x-4 justify-between">
-    <div class="text-primary flex items-center space-x-4">
+  <div class="flex items-center space-x-4 justify-between overflow-x-scroll">
+    <div class="text-primary flex items-center space-x-4 min-w-fit">
       <%= link_to t('detail'), 
         dashboard_article_path(article.uuid),
+        class: 'min-w-fit',
         data: {
           controller: 'prefetch',
           turbo_frame: '_top'
         } %>
       <%= link_to t('edit'), 
         edit_article_path(article.uuid),
+        class: 'min-w-fit',
         data: {
           controller: 'prefetch',
           turbo_frame: '_top'
@@ -66,7 +68,7 @@
       <%= link_to t('publish'), 
         new_dashboard_published_article_path(uuid: article.uuid), 
         data: { turbo_frame: :modal },
-        class: "bg-transparent cursor-pointer" %>
+        class: "bg-transparent cursor-pointer min-w-fit" %>
     </div>
 
     <div class="flex items-center space-x-4 ml-4 text-[#B1B6C6]">
