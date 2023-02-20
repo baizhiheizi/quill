@@ -795,10 +795,10 @@
   resolved "https://registry.yarnpkg.com/@tiptap/extension-underline/-/extension-underline-2.0.0-beta.217.tgz#11b986b6a27daa4d0840f1d7dca3678e854de98f"
   integrity sha512-feakmZ8ek1maf4yBVd539AYIjv3hnLK1j/GLyT/SjRlwOryQb23xWIQ8I+nF5UWqXib1MkvfMe6Ff6zK5WqrYQ==
 
-"@tiptap/pm@^2.0.0-beta.217":
-  version "2.0.0-beta.217"
-  resolved "https://registry.yarnpkg.com/@tiptap/pm/-/pm-2.0.0-beta.217.tgz#d944519aa40c74e683402c0d4d39e460d905414e"
-  integrity sha512-krEplJli2BbBB3U2c+cxDPw4mpHsUEwOMJCM3fr1GTVv7qAOvsrWt2ndRPOwraPSvmUF3rw9gvoP86eyK2nDmA==
+"@tiptap/pm@^2.0.0-beta.218":
+  version "2.0.0-beta.218"
+  resolved "https://registry.yarnpkg.com/@tiptap/pm/-/pm-2.0.0-beta.218.tgz#4b737f15444847ff4d60bc8f9d0d23dad432afe9"
+  integrity sha512-mRKHch3BMleLmFJbQcD7Su7oFayHBCl5zzYlQ0ws44dLCR7zlGL85Fxxfk+8wd64dwDjlbdAAZmRLQctq4JgjA==
   dependencies:
     prosemirror-changeset "^2.2.0"
     prosemirror-collab "^1.3.0"
