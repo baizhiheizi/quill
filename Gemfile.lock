@@ -463,7 +463,7 @@ GEM
     redcarpet (3.6.0)
     redis (5.0.6)
       redis-client (>= 0.9.0)
-    redis-client (0.12.1)
+    redis-client (0.12.2)
       connection_pool
     redis-namespace (1.10.0)
       redis (>= 4)
@@ -516,7 +516,7 @@ GEM
       rubyzip (>= 1.2.2, < 3.0)
       websocket (~> 1.0)
     sha3 (1.0.5)
-    sidekiq (7.0.5)
+    sidekiq (7.0.6)
       concurrent-ruby (< 2)
       connection_pool (>= 2.3.0)
       rack (>= 2.2.4)
