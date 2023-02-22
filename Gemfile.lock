@@ -390,7 +390,7 @@ GEM
     parser (3.2.1.0)
       ast (~> 2.4.1)
     pg (1.4.5)
-    pghero (3.1.0)
+    pghero (3.2.0)
       activerecord (>= 6)
     pkg-config (1.5.1)
     propshaft (0.6.4)
