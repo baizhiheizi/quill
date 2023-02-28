@@ -29,7 +29,7 @@
     "@tiptap/extension-gapcursor": "^2.0.0-beta.219",
     "@tiptap/extension-highlight": "^2.0.0-beta.219",
     "@tiptap/extension-image": "^2.0.0-beta.219",
-    "@tiptap/extension-link": "^2.0.0-beta.219",
+    "@tiptap/extension-link": "^2.0.0-beta.220",
     "@tiptap/extension-placeholder": "^2.0.0-beta.219",
     "@tiptap/extension-typography": "^2.0.0-beta.219",
     "@tiptap/extension-underline": "^2.0.0-beta.219",
