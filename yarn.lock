@@ -701,10 +701,10 @@
   resolved "https://registry.yarnpkg.com/@tiptap/extension-dropcursor/-/extension-dropcursor-2.0.0-beta.219.tgz#b81cc807266a68c461954be3cd7e8281b734af93"
   integrity sha512-vfRnMQJOpCAWg1ZaoefTjEvdxdq7V4cIDayjiR6BhJXRiBou870tDHIZQEQceuiMij8qwVa8h647dUwYSPM8FQ==
 
-"@tiptap/extension-floating-menu@^2.0.0-beta.219":
-  version "2.0.0-beta.219"
-  resolved "https://registry.yarnpkg.com/@tiptap/extension-floating-menu/-/extension-floating-menu-2.0.0-beta.219.tgz#30afdc04a7f8de327b4c7dbe085e99df898ed501"
-  integrity sha512-2GdNjy/5HRjfNbN2GN5bpoblyAGhJE3dzPl+g7fJQoFfbJKR8CJqu89ciAF4QZjKHW/bAWqIwsPz2HvaavQc5Q==
+"@tiptap/extension-floating-menu@^2.0.0-beta.220":
+  version "2.0.0-beta.220"
+  resolved "https://registry.yarnpkg.com/@tiptap/extension-floating-menu/-/extension-floating-menu-2.0.0-beta.220.tgz#35eb154227533ada738c922be2f8cf18426fe4bf"
+  integrity sha512-+WfcBEedm82ntaVIEQAGz0Om96Rpav7a+4f7e8N4PrLKm6nZ3gBaEkZVQ6vjJ6S/1htiWCv1XosYIwRboPBG0w==
   dependencies:
     tippy.js "^6.3.7"
 
