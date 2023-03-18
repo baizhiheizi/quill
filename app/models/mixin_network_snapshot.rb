@@ -36,13 +36,12 @@ class MixinNetworkSnapshot < ApplicationRecord
   belongs_to :opponent_wallet, class_name: 'MixinNetworkUser', primary_key: :uuid, foreign_key: :opponent_id, inverse_of: false, optional: true
   belongs_to :currency, primary_key: :asset_id, foreign_key: :asset_id, inverse_of: :orders, optional: true
 
-  before_validation :setup_attributes, on: :create
-
   validates :amount, presence: true
   validates :asset_id, presence: true
   validates :user_id, presence: true
   validates :snapshot_id, presence: true
   validates :trace_id, presence: true
+  validates :transferred_at, presence: true
 
   after_commit :process_async, on: :create
 
@@ -56,6 +55,8 @@ class MixinNetworkSnapshot < ApplicationRecord
   # polling Mixin Network
   # should be called in a event machine
   def self.poll
+    @__retry = 0
+
     loop do
       offset = last_polled_at
 
@@ -65,21 +66,40 @@ class MixinNetworkSnapshot < ApplicationRecord
       r['data'].each do |snapshot|
         next if snapshot['user_id'].blank?
 
-        create_with(raw: snapshot).find_or_create_by!(snapshot_id: snapshot['snapshot_id'])
+        create_with(
+          asset_id: snapshot['asset']['asset_id'],
+          amount: snapshot['amount'],
+          data: snapshot['data'],
+          transferred_at: snapshot['created_at'],
+          user_id: snapshot['user_id'],
+          opponent_id: snapshot['opponent_id'],
+          snapshot_id: snapshot['snapshot_id'],
+          trace_id: snapshot['trace_id']
+        ).find_or_create_by!(
+          snapshot_id: snapshot['snapshot_id']
+        )
       end
 
       Rails.cache.write 'last_polled_at', r['data'].last['created_at']
 
       sleep 0.5 if r['data'].length < POLLING_LIMIT
       sleep POLLING_INTERVAL
+      @__retry = 0
     rescue MixinBot::HttpError, MixinBot::RequestError, OpenSSL::SSL::SSLError => e
-      p e.inspect
+      logger.error e.inspect
+      raise e if @__retry > 10
+
       sleep POLLING_INTERVAL * 10
+      @__retry += 1
+
+      retry
     rescue ActiveRecord::StatementInvalid => e
-      p e.inspect
-      connection.reconnect!
+      logger.error e.inspect
+      ActiveRecord::Base.connection.reconnect!
+
+      retry
     rescue StandardError => e
-      p "#{e.inspect}\n#{e.backtrace.join("\n")}"
+      logger.error "#{e.inspect}\n#{e.backtrace.join("\n")}"
       ExceptionNotifier.notify_exception e
       raise e if Rails.env.production?
 
@@ -200,22 +220,5 @@ class MixinNetworkSnapshot < ApplicationRecord
 
   def snapshot_url
     format('https://mixin.one/%<snapshot_id>s', snapshot_id: snapshot_id)
-  end
-
-  private
-
-  def setup_attributes
-    return unless new_record?
-
-    assign_attributes(
-      asset_id: raw['asset']['asset_id'],
-      amount: raw['amount'],
-      data: raw['data'],
-      transferred_at: raw['created_at'],
-      user_id: raw['user_id'],
-      opponent_id: raw['opponent_id'],
-      snapshot_id: raw['snapshot_id'],
-      trace_id: raw['trace_id']
-    )
   end
 end
