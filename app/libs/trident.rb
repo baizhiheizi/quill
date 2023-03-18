@@ -11,5 +11,8 @@ module Trident
         pin: Rails.application.credentials.dig(:quill_bot, :pin_code)
       }.to_json
     )
+  rescue StandardError => e
+    Rails.logger.error e
+    nil
   end
 end

@@ -9,5 +9,8 @@ module QuillBot
       pin_token: Rails.application.credentials.dig(:quill_bot, :pin_token),
       private_key: Rails.application.credentials.dig(:quill_bot, :private_key)
     )
+  rescue StandardError => e
+    Rails.logger.error e
+    nil
   end
 end

@@ -51,7 +51,7 @@ class ArweaveTransaction < ApplicationRecord
   def self.wallet
     return if ENV['ARWEAVE_KEYSTORE_FILE'].blank?
 
-    @wallet ||= Arweave::Wallet.new JSON.parse File.read(ENV.fetch('ARWEAVE_KEYSTORE_FILE'))
+    @wallet ||= Arweave::Wallet.new JSON.parse(Rails.application.credentials.dig(:arweave, :key) || File.read(ENV.fetch('ARWEAVE_KEYSTORE_FILE')))
   rescue StandardError
     nil
   end

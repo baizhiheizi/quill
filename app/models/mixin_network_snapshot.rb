@@ -176,8 +176,16 @@ class MixinNetworkSnapshot < ApplicationRecord
 
     Currency.find_or_create_by asset_id: asset_id
     Payment
-      .create_with(raw: raw)
-      .find_or_create_by!(trace_id: trace_id)
+      .create_with(
+        raw: {
+          amount: amount,
+          memo: data,
+          asset_id: asset_id,
+          opponent_id: opponent_id,
+          snapshot_id: snapshot_id,
+          trace_id: trace_id
+        }
+      ).find_or_create_by!(trace_id: trace_id)
   end
 
   def process_4swap_snapshot
@@ -201,8 +209,16 @@ class MixinNetworkSnapshot < ApplicationRecord
     elsif pre_order.present?
       Currency.find_or_create_by asset_id: asset_id
       Payment
-        .create_with(raw: raw)
-        .find_or_create_by!(trace_id: trace_id)
+        .create_with(
+          raw: {
+            amount: amount,
+            memo: data,
+            asset_id: asset_id,
+            opponent_id: opponent_id,
+            snapshot_id: snapshot_id,
+            trace_id: trace_id
+          }
+        ).find_or_create_by!(trace_id: trace_id)
     end
   end
 

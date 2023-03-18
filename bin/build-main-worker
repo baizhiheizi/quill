@@ -1,6 +1,0 @@
-#!/usr/bin/env bash
-
-# throw error when failed
-set -e
-
-bundle install
