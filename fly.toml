@@ -22,8 +22,8 @@ primary_region = "hkg"
   protocol = "tcp"
   script_checks = []
   [services.concurrency]
-    hard_limit = 25
-    soft_limit = 20
+    hard_limit = 64 # 4 workers * 8 threads
+    soft_limit = 48
     type = "connections"
 
   [[services.ports]]
