@@ -2,6 +2,15 @@ test:
   service: Disk
   root: <%= Rails.root.join("tmp/storage") %>
 
+linode:
+  service: S3
+  access_key_id: <%= Rails.application.credentials.dig(:storage, :linode, :access_key_id) %>
+  secret_access_key: <%= Rails.application.credentials.dig(:storage, :linode, :secret_access_key) %>
+  bucket: <%= Rails.application.credentials.dig(:storage, :linode, :bucket) %>
+  endpoint: <%= Rails.application.credentials.dig(:storage, :linode, :endpoint) %>
+  region: default
+  public: true
+
 baizhiheizi:
   service: S3
   access_key_id: <%= Rails.application.credentials.dig(:storage, :baizhiheizi, :access_key_id) %>
