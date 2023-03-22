@@ -72,9 +72,11 @@ class ArticlesController < ApplicationController
 
   def share
     @article = Article.published.find_by uuid: params[:article_uuid]
-    return if @article.blank?
-
-    impressionist @article, 'share'
+    if @article.present?
+      impressionist @article, 'share'
+    else
+      redirect_back fallback_location: root_path
+    end
   end
 
   def preview
