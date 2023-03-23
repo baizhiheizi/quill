@@ -45,7 +45,7 @@ module Quill
 
     config.action_mailer.delivery_method = :mailjet
 
-    config.active_record.yaml_column_permitted_classes = [ActiveSupport::HashWithIndifferentAccess]
+    config.active_record.yaml_column_permitted_classes = [ActiveSupport::HashWithIndifferentAccess, Symbol]
 
     config.middleware.use Grover::Middleware
   end
