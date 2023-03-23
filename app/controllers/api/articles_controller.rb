@@ -7,7 +7,7 @@ class API::ArticlesController < API::BaseController
     @articles =
       if params[:author_id].present?
         author = User.find_by(mixin_uuid: params[:author_id])
-        render_not_found('user not found') && return if author.blank?
+        raise ActiveRecord::RecordNotFound && return if author.blank?
 
         author.articles.only_published
       elsif current_user
@@ -56,9 +56,7 @@ class API::ArticlesController < API::BaseController
   def show
     @article = Article.find_by!(uuid: params[:uuid])
 
-    return if @article.published?
-
-    render_not_found unless @article.authorized? current_user
+    raise ActiveRecord::RecordNotFound unless @article.published? || @article.authorized?(current_user)
   end
 
   def create

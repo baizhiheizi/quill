@@ -5,4 +5,7 @@ namespace :api, defaults: { format: :json } do
   resources :files, only: %i[show], param: :hash
 
   get 'valid_user_filter', to: 'valid_users#filter'
+
+  root to: 'home#index'
+  match '*path', to: 'home#index', via: :all
 end

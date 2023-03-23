@@ -62,7 +62,7 @@ Available params: `author_id`, `offset`, `order`, `limit`, `query`.
 
 Example: [https://quill.im/api/articles?limit=5&order=asc&offset=2021-01-18T07:41:36.624Z&query=BTC,Xin](https://quill.im/api/articles?limit=5&order=asc&offset=2021-01-18T07:41:36.624Z&query=BTC,Xin)
 
-`GET | /article/:uuid`
+`GET | /articles/:uuid`
 
 Article content will not provied unless valid access token provided.
 

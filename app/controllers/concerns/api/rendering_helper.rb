@@ -20,7 +20,7 @@ module API::RenderingHelper
   end
 
   def render_unauthorized(message = nil)
-    message ||= 'unauthorized'
+    message ||= 'Unauthorized'
     render json: { message: message }, status: :unauthorized
   end
 
@@ -40,7 +40,7 @@ module API::RenderingHelper
   end
 
   def render_unprocessable_entity(message = nil)
-    message ||= 'Unprocessable_entity'
+    message ||= 'Unprocessable entity'
     render json: { message: message }, status: :unprocessable_entity
   end
 
