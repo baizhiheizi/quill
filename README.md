@@ -78,6 +78,7 @@ Request body example:
   "content": "some article content",
   "intro": "some article introduction",
   "price": 0.000001,
-  "asset_id": "c6d0c728-2624-429b-8e0d-d9d19b6592fa"
+  "asset_id": "c6d0c728-2624-429b-8e0d-d9d19b6592fa",
+  "tag_names": ["BTC", "Blockchain"]
 }
 ```

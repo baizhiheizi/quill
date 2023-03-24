@@ -64,6 +64,7 @@ class API::ArticlesController < API::BaseController
 
     if article.save
       CreateTag.call(article, params[:tag_names] || [])
+      article.publish! if article.may_publish?
       render_created({ uuid: article.uuid })
     else
       render_unprocessable_entity article.errors.full_messages
@@ -73,6 +74,6 @@ class API::ArticlesController < API::BaseController
   private
 
   def article_params
-    params.require(:article).permit(:title, :intro, :content, :price, :asset_id, :state)
+    params.require(:article).permit(:title, :intro, :content, :price, :asset_id)
   end
 end
