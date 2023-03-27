@@ -144,7 +144,7 @@ class Collectible < ApplicationRecord
         begin
           MixinBot::Utils::UUID.new(hex: r['group']).unpacked
         rescue MixinBot::InvalidUuidFormatError
-          ''
+          '00000000-0000-0000-0000-000000000000'
         end
       end
 
