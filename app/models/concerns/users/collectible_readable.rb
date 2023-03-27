@@ -123,7 +123,7 @@ module Users::CollectibleReadable
         else
           token = QuillBot.api.collectible c['token_id']
           # igonore invalid output
-          next if token.dig['meta', 'hash'].blank?
+          next if token.dig('meta', 'hash').blank?
 
           collectible = Collectible.find_by metahash: token.dig('meta', 'hash')
           if collectible.blank?
