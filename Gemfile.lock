@@ -513,7 +513,7 @@ GEM
     second_level_cache (2.7.1)
       activerecord (>= 6.0)
       activesupport (>= 6.0)
-    selenium-webdriver (4.8.1)
+    selenium-webdriver (4.8.3)
       rexml (~> 3.2, >= 3.2.5)
       rubyzip (>= 1.2.2, < 3.0)
       websocket (~> 1.0)
