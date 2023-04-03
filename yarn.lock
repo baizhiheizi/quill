@@ -709,10 +709,10 @@
   resolved "https://registry.yarnpkg.com/@tiptap/extension-document/-/extension-document-2.0.1.tgz#131406894c15920ff387887e3ecbe6ba6dc542cc"
   integrity sha512-9T14qBa6uKieJ+FCGm0nL9o8LTjwqlfc2pYQkkjXXWFivMXoVeL9rVIlarANgbJZKYsZ4L5tkyXcKQ32nZmMjg==
 
-"@tiptap/extension-dropcursor@^2.0.1":
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/@tiptap/extension-dropcursor/-/extension-dropcursor-2.0.1.tgz#2e4b6690418a3020c83fbe45b14a4ef72dc5ed5b"
-  integrity sha512-OuqMhj13hPSdxc6G3xDmGvwe3AfczMQjAoSPakNW9pSSzrjJJa3Tr08kI+TyZDUm3vKM4af+lL/oCeXSupGAbQ==
+"@tiptap/extension-dropcursor@^2.0.1", "@tiptap/extension-dropcursor@^2.0.2":
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/@tiptap/extension-dropcursor/-/extension-dropcursor-2.0.2.tgz#fc821e83a35517fbb04eb5b531f2ece9564a2265"
+  integrity sha512-jHBq5fAlgUeZBHPtdAeS40Xmx+2sUvzTnHonU6cDKOpD3+dzwNHEqVSk/9vcjEIcqeM5w3eOIS/AGvoFq7RCjA==
 
 "@tiptap/extension-floating-menu@^2.0.1":
   version "2.0.1"
