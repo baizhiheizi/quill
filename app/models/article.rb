@@ -103,8 +103,8 @@ class Article < ApplicationRecord
   validates :content, presence: true, unless: :drafted?
   validates :price, presence: true, numericality: { greater_than_or_equal_to: 0.0 }
   validates :platform_revenue_ratio, presence: true, numericality: { equal_to: 0.1 }
-  validates :readers_revenue_ratio, presence: true, numericality: { greater_than_or_equal_to: 0.4 }
-  validates :author_revenue_ratio, presence: true, numericality: { less_than_or_equal_to: 0.5 }
+  validates :readers_revenue_ratio, presence: true, numericality: { greater_than_or_equal_to: 0.1 }
+  validates :author_revenue_ratio, presence: true, numericality: { less_than_or_equal_to: 0.8 }
   validates :references_revenue_ratio, presence: true, numericality: { greater_than_or_equal_to: 0.0 }
   validate :ensure_price_not_too_low
   validate :ensure_references_ratios_correct
