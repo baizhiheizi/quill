@@ -93,6 +93,7 @@ class ArticlesController < ApplicationController
         :asset_id,
         :intro,
         :author_revenue_ratio,
+        :readers_revenue_ratio,
         :references_revenue_ratio,
         :price,
         :cover,
@@ -121,6 +122,7 @@ class ArticlesController < ApplicationController
       permitted.push(
         :collection_id,
         :author_revenue_ratio,
+        :readers_revenue_ratio,
         :references_revenue_ratio,
         :asset_id,
         { article_references_attributes: %i[

@@ -26,6 +26,7 @@ export default class extends Controller {
     'images',
     'editButton',
     'optionsButton',
+    'readersRevenueRatio',
     'authorRevenueRatio',
     'collectionRevenueRatio',
     'referenceRevenueRatio',
@@ -172,6 +173,15 @@ export default class extends Controller {
     }
   }
 
+  updateReadersRevenueRatio(event) {
+    if (parseFloat(event.target.value) < 0.1) {
+      this.readersRevenueRatioTarget.value = 0.1;
+    } else if (parseFloat(event.target.value) > 0.4) {
+      this.readersRevenueRatioTarget.value = 0.4;
+    }
+    this.calReferenceRatio();
+  }
+
   formatReferenceRatio(event) {
     let ratio = 0.05;
 
@@ -179,7 +189,10 @@ export default class extends Controller {
       ratio = parseFloat(event.target.value);
     }
 
-    if (ratio < 0 || ratio > 0.5) {
+    if (
+      ratio < 0 ||
+      ratio > 0.9 - parseFloat(this.readersRevenueRatioTarget.value)
+    ) {
       ratio = 0.05;
     }
 
@@ -201,7 +214,10 @@ export default class extends Controller {
         .reduce((prev, cur) => {
           return prev + cur;
         }, 0);
-      if (referenceRevenueRatio <= 0.5) {
+      if (
+        referenceRevenueRatio <=
+        0.9 - parseFloat(this.readersRevenueRatioTarget.value)
+      ) {
         this.referenceRevenueRatioTarget.value = parseFloat(
           referenceRevenueRatio.toFixed(2),
         );
@@ -213,7 +229,8 @@ export default class extends Controller {
   calAuthorRevenueRatio() {
     this.authorRevenueRatioTarget.value = parseFloat(
       (
-        0.5 -
+        0.9 -
+        this.readersRevenueRatioTarget.value -
         this.referenceRevenueRatioTarget.value -
         this.collectionRevenueRatioTarget.value
       ).toFixed(2),
