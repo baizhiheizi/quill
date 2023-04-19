@@ -220,6 +220,9 @@ module Orders::Distributable
     end
 
     # create author transfer
+    author_revenue_amount = (total - _readers_amount - quill_amount - _references_amount - _collection_amount).floor(8)
+    return if (author_revenue_amount - MINIMUM_AMOUNT).negative?
+
     author_revenue_transfer_memo =
       if cite_article?
         "Reference revenue from #{item.title}"
@@ -232,7 +235,7 @@ module Orders::Distributable
       transfer_type: :author_revenue,
       opponent_id: item.author.mixin_uuid,
       asset_id: revenue_asset_id,
-      amount: (total - _readers_amount - quill_amount - _references_amount - _collection_amount).floor(8),
+      amount: author_revenue_amount,
       memo: author_revenue_transfer_memo.truncate(70)
     ).find_or_create_by!(
       trace_id: QuillBot.api.unique_conversation_id(trace_id, item.author.mixin_uuid)
