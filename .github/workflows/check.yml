@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     services:
       db:
-        image: postgres:11.5
+        image: postgres:15
         ports: ['5432:5432']
         options: >-
           --health-cmd pg_isready
@@ -35,7 +35,7 @@ jobs:
       - name: Setup Nodejs
         uses: actions/setup-node@v1
         with:
-          node-version: '14.x'
+          node-version: '18.x'
 
       - name: Get yarn cache directory path
         id: yarn-cache-dir-path
@@ -76,10 +76,6 @@ jobs:
           bundle exec rails db:setup
           bundle exec rails test
 
-      - name: Build
-        env:
-          RAILS_ENV: production
-          RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
-          GIHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+      - name: Zeitwerk
         run: |
-          bin/build-main
+          bin/rails zeitwork:check
