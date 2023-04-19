@@ -24,6 +24,11 @@
     <button data-action="modal-component#cancel" class="cursor-pointer w-24 border rounded-full py-2 text-center dark:text-zinc-50 dark:border-zinc-50">
       <%= t('cancel') %>
     </button>
+
+    <%= link_to t('options'), 
+      edit_article_path(article, tab: 'options'), 
+      class: "cursor-pointer w-24 border border-primary text-primary rounded-full py-2 text-center" %>
+
     <%= button_to t('publish'),
       dashboard_published_article_path(article), 
       method: :put,
