@@ -176,7 +176,9 @@ export default class extends Controller {
   updateReadersRevenueRatio(event) {
     if (parseFloat(event.target.value) < 0.1) {
       this.readersRevenueRatioTarget.value = 0.1;
-    } else if (parseFloat(event.target.value) > 0.4) {
+    } else if (parseFloat(event.target.value) > 0.9) {
+      this.readersRevenueRatioTarget.value = 0.9;
+    } else if (!event.target.value) {
       this.readersRevenueRatioTarget.value = 0.4;
     }
     this.calReferenceRatio();
