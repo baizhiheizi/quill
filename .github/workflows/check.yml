@@ -79,5 +79,7 @@ jobs:
           bundle exec rails test
 
       - name: Zeitwerk
+        env:
+          RAILS_ENV: test
         run: |
           bin/rails zeitwerk:check
