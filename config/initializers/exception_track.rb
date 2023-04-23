@@ -11,6 +11,7 @@ end
 ExceptionNotification.configure do |config|
   config.ignored_exceptions += %w[
     ActionController::InvalidAuthenticityToken
+    URI::InvalidURIError
   ]
 end
 
