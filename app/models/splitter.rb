@@ -33,7 +33,7 @@ class Splitter < MixinNetworkUser
       next if transfers.unprocessed.where(asset_id: asset['asset_id']).present?
 
       Transfer
-        .create_with(
+        .create(
           transfer_type: :default,
           asset_id: asset['asset_id'],
           amount: asset['balance'],
