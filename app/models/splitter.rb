@@ -26,4 +26,21 @@
 #
 
 class Splitter < MixinNetworkUser
+  def collect_assets
+    assets = mixin_api.assets['data']
+    assets.each do |asset|
+      next if asset['balance'].to_f.zero?
+      next if transfers.unprocessed.where(asset_id: asset['asset_id']).present?
+
+      Transfer
+        .create_with(
+          transfer_type: :default,
+          asset_id: asset['asset_id'],
+          amount: asset['balance'],
+          opponent_id: QuillBot.api.client_id,
+          trace_id: SecureRandom.uuid,
+          memo: 'assets collection'
+        )
+    end
+  end
 end

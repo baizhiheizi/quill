@@ -47,7 +47,7 @@
         <div class="overflow-hidden text-ellipsis line-clamp-1 font-bold text-xl w-full">
           <%= @article.title %>
         </div>
-        <div class="flex-1 ml-2 text-xs sm:text-sm opacity-50 italic">
+        <div class="flex-1 ml-2 text-xs sm:text-sm opacity-50 italic min-w-fit">
           <%= render TimeFormatComponent.new datetime: @article.published_at.rfc3339, format: 'date' do %>
             <%= @article.published_at.strftime("%Y-%m-%d %H:%M") %>
           <% end %>
