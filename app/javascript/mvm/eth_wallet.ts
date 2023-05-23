@@ -34,6 +34,7 @@ export class EthWallet {
   public app: AppType;
   public Registry: any;
   public Mirror: any;
+  public gasPrice: string = GasPrice;
 
   constructor(
     provider: 'MetaMask' | 'Coinbase' | 'WalletConnect',
@@ -62,6 +63,8 @@ export class EthWallet {
     this.account = accounts[0];
 
     this.Registry = new this.web3.eth.Contract(RegistryABI, RegisterAddress);
+
+    this.gasPrice = await this.web3.eth.getGasPrice();
   }
 
   async initMetaMask() {
@@ -181,7 +184,7 @@ export class EthWallet {
       return;
     }
 
-    IERC20.options.gasPrice = GasPrice;
+    IERC20.options.gasPrice = this.gasPrice;
     IERC20.methods
       .transferWithExtra(contract, payAmount.toString(), `0x${extra}`)
       .send({ from: this.account })
@@ -201,7 +204,7 @@ export class EthWallet {
   ) {
     const { amount, contract, extra } = params;
     const BridgeContract = new this.web3.eth.Contract(BridgeABI, BridgeAddress);
-    BridgeContract.options.gasPrice = GasPrice;
+    BridgeContract.options.gasPrice = this.gasPrice;
 
     const balance = await this.web3.eth.getBalance(this.account);
     const payAmount = BigNumber(amount).multipliedBy(1e18);
@@ -250,7 +253,7 @@ export class EthWallet {
 
     const extra = this.fetchExtra(receivers, threshold, memo);
     const contract = await this.fetchUsersContract([payerId], 1);
-    ERC721.options.gasPrice = GasPrice;
+    ERC721.options.gasPrice = this.gasPrice;
     ERC721.methods
       .safeTransferFrom(this.account, MirrorAddress, tokenId, contract + extra)
       .send({ from: this.account })
