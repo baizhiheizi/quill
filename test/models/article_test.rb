@@ -11,6 +11,7 @@
 #  comments_count                      :integer          default(0), not null
 #  content                             :text
 #  downvotes_count                     :integer          default(0)
+#  free_content_ratio                  :float            default(0.1)
 #  intro                               :string
 #  locale                              :string
 #  orders_count                        :integer          default(0), not null

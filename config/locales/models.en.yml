@@ -33,6 +33,7 @@ en:
           published: Published
           hidden: Hidden
         collection: Collection
+        free_content_ratio: Free Content Ratio
         platform_revenue_ratio: Quill Revenue
         readers_revenue_ratio: Readers Revenue
         author_revenue_ratio: Author Revenue

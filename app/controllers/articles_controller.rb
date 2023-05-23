@@ -92,6 +92,7 @@ class ArticlesController < ApplicationController
         :content,
         :asset_id,
         :intro,
+        :free_content_ratio,
         :author_revenue_ratio,
         :readers_revenue_ratio,
         :references_revenue_ratio,
@@ -113,6 +114,7 @@ class ArticlesController < ApplicationController
       content
       intro
       cover
+      free_content_ratio
     ]
 
     permitted.push(:price) if !@article.published_at? || (!@article.free? && params[:article][:price].to_d.positive?)

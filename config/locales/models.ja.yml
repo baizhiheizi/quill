@@ -31,6 +31,7 @@ ja:
           published: 公開
           hidden: 非公開
         collection: Collection
+        free_content_ratio: Free Content Ratio
         platform_revenue_ratio: Quill収益
         readers_revenue_ratio: 読者収益
         author_revenue_ratio: 作者収益

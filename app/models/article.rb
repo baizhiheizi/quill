@@ -11,6 +11,7 @@
 #  comments_count                      :integer          default(0), not null
 #  content                             :text
 #  downvotes_count                     :integer          default(0)
+#  free_content_ratio                  :float            default(0.1)
 #  intro                               :string
 #  locale                              :string
 #  orders_count                        :integer          default(0), not null
@@ -106,6 +107,7 @@ class Article < ApplicationRecord
   validates :readers_revenue_ratio, presence: true, numericality: { greater_than_or_equal_to: 0.1 }
   validates :author_revenue_ratio, presence: true, numericality: { less_than_or_equal_to: 0.8 }
   validates :references_revenue_ratio, presence: true, numericality: { greater_than_or_equal_to: 0.0 }
+  validates :free_content_ratio, presence: true, numericality: { greater_than_or_equal_to: 0.0, less_than_or_equal_to: 0.9 }
   validate :ensure_price_not_too_low
   validate :ensure_references_ratios_correct
   validate :ensure_revenue_ratios_sum_to_one
@@ -228,12 +230,15 @@ class Article < ApplicationRecord
 
   def partial_content
     return if words_count < 300
+    return if free_content_ratio.zero?
 
-    plain_text.truncate((words_count * 0.1).to_i)
+    plain_text.truncate((words_count * free_content_ratio).to_i)
   end
 
   def partial_content_as_html
-    @partial_content_as_html ||= extract_html(content_as_html, (words_count * 0.1).to_i)
+    return if free_content_ratio.zero?
+
+    @partial_content_as_html ||= extract_html(content_as_html, (words_count * free_content_ratio).to_i)
   end
 
   def extract_html(text, length)

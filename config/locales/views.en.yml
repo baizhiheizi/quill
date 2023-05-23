@@ -65,7 +65,7 @@ en:
   tags: Tags
   comments_zone: Comments
   comment: Comment
-  more_to_read: 90% More to go
+  more_to_read: "%{percent} More to go"
   pay: Pay
   to_continue_reading: to continue reading
   and_receive_early_reader_revenue: and receive early reader revenue

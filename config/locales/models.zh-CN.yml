@@ -34,6 +34,7 @@ zh-CN:
           published: 已发表
           hidden: 已隐藏
         collection: 合辑
+        free_content_ratio: 免费比例
         platform_revenue_ratio: 平台收益
         author_revenue_ratio: 作者收益
         readers_revenue_ratio: 读者收益

@@ -65,7 +65,7 @@ zh-CN:
   tags: 话题
   comments_zone: 评论区
   comment: 评论
-  more_to_read: 以下还有 90% 内容
+  more_to_read: "以下还有 %{percent} 内容"
   pay: 支付
   to_continue_reading: 继续阅读
   and_receive_early_reader_revenue: 并享受早期读者奖励
