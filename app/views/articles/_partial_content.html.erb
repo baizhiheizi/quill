@@ -10,7 +10,7 @@
 
 <div class="mb-8">
   <div class="flex justify-center text-red-500 mb-4 text-sm">
-    - <%= t('more_to_read', percent: "#{(1 - article.free_content_ratio) * 100} %") %> -
+    - <%= t('more_to_read', percent: "#{((1 - article.free_content_ratio) * 100).round(1)} %") %> -
   </div>
 
   <div class="flex justify-center flex-wrap mb-4">
