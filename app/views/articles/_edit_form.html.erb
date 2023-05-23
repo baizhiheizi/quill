@@ -17,7 +17,7 @@
 
   <div class="w-full fixed left-0 top-0 z-50 bg-white dark:bg-[#1D1E2B]">
     <div class="max-w-xl lg:max-w-2xl 2xl:max-w-3xl mx-auto px-4 py-3 sm:px-0 flex items-center text-sm sm:text-base">
-      <%= link_to root_path, class: 'mr-4' do %>
+      <%= link_to root_path, class: 'mr-2 sm:mr-4' do %>
         <%= image_tag "logo.svg", class: 'w-auto h-10 hidden sm:block' %>
         <%= image_tag "logo.png", class: 'w-auto h-6 sm:hidden' %>
       <% end %>
@@ -61,7 +61,7 @@
       <% end %>
 
       <div 
-        class="cursor-pointer px-4 py-1 text-sm sm:text-base rounded-full bg-primary hover:scale-105 text-white ml-auto mr-2" 
+        class="cursor-pointer px-2 sm:px-4 py-1 text-sm sm:text-base rounded-full bg-primary hover:scale-105 text-white ml-auto mx-1 sm:mx-2" 
         data-action="click->article-form#save">
         <%= t('save') %>
       </div>
@@ -76,7 +76,7 @@
           turbo_frame: :modal,
           article_form_target: 'publishButton'
         },
-        class: "cursor-pointer px-4 py-1 text-sm sm:text-base rounded-full bg-primary hover:scale-105 text-white mx-2" unless article.published? %>
+        class: "cursor-pointer px-2 sm:px-4 py-1 text-sm sm:text-base rounded-full bg-primary hover:scale-105 text-white mx-1 sm:mx-2" unless article.published? %>
       
       <%= link_to dashboard_authorings_path, 
         data: {
@@ -85,7 +85,7 @@
         class: "mx-2", 
         role: "menuitem", 
         tabindex: "-1" do %>
-        <%= image_tag current_user.avatar_thumb, class: "w-8 h-8 rounded-full mx-2" %>
+        <%= image_tag current_user.avatar_thumb, class: "w-8 h-8 rounded-full mx-1 sm:mx-2 #{from_mixin_messenger? ? 'mr-20' : ''}" %>
       <% end %>
     </div>
   </div>
