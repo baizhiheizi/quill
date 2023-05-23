@@ -1,0 +1,10 @@
+<div 
+  data-controller="milkdown-editor-component" 
+  data-milkdown-editor-component-draft-key-value="<%= @draft_key %>"
+  data-milkdown-editor-component-storage-endpoint-value="<%= @storage_endpoint %>">
+  <div class="hidden" data-milkdown-editor-component-target="textarea">
+    <%= content %>
+  </div>
+  <div data-milkdown-editor-component-target="editor">
+  </div>
+</div>

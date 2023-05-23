@@ -42,25 +42,8 @@
         data-session-address-value="<%= current_session&.user&.uid %>"
         data-session-uuid-value="<%= current_session&.uuid %>">
     <main class="bg-white dark:bg-[#1D1E2B] text-[#222222] dark:text-[white] min-h-screen">
-      <div class="hidden sm:block max-w-xl lg:max-w-2xl 2xl:max-w-3xl mx-auto">
+      <div class="max-w-xl lg:max-w-2xl 2xl:max-w-3xl mx-auto">
         <%= yield %>
-      </div>
-
-      <div class="sm:hidden h-screen flex">
-        <div class="m-auto">
-          <div class="flex justify-center mb-8">
-            <%= image_tag 'logo.svg', class: 'h-12 w-auto' %>
-          </div>
-          <div class="text-xl mb-4">
-            <%= t('start_writing_in_desktop') %>
-          </div>
-          <div class="mb-4 text-primary text-center">
-            https://quill.im
-          </div>
-          <div class="flex justify-center">
-            <%= link_to t('back'), dashboard_authorings_path, class: "bg-primary py-2 px-4 rounded text-white mx-auto" %>
-          </div>
-        </div>
       </div>
     </main>
 

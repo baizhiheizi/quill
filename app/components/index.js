@@ -15,6 +15,9 @@ application.register('time-format-component', TimeFormatComponentController);
 import EditorComponentController from './editor_component_controller';
 application.register('editor-component', EditorComponentController);
 
+import MilkdownEditorComponentController from './milkdown_editor_component_controller';
+application.register('milkdown-editor-component', MilkdownEditorComponentController);
+
 import PreOrdersFormComponentController from './pre_orders/form_component_controller';
 application.register('pre-orders-form-component', PreOrdersFormComponentController);
 
