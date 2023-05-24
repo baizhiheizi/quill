@@ -21,6 +21,9 @@ class ArticlesController < ApplicationController
       format.html
       format.turbo_stream
       format.rss do
+        articles = ArticleSearchService.call(filter: 'lately')
+
+        @pagy, @articles = pagy_countless articles.with_attached_cover
         render layout: false
       end
     end
