@@ -236,7 +236,7 @@ class Article < ApplicationRecord
   end
 
   def partial_content_as_html
-    return if free_content_ratio.zero?
+    return '' if free_content_ratio.zero?
 
     @partial_content_as_html ||= extract_html(content_as_html, (words_count * free_content_ratio).to_i)
   end
