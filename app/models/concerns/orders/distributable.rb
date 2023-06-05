@@ -32,6 +32,8 @@ module Orders::Distributable
   end
 
   def distribute!
+    return if completed?
+
     case item
     when Article
       distribute_article_order!
