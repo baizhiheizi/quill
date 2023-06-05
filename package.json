@@ -32,7 +32,7 @@
     "@milkdown/prose": "^7.2.1",
     "@milkdown/theme-nord": "^7.2.1",
     "@milkdown/transformer": "^7.2.1",
-    "@rails/activestorage": "^7.0.4",
+    "@rails/activestorage": "^7.0.5",
     "@rails/request.js": "^0.0.8",
     "@tailwindcss/aspect-ratio": "^0.4.2",
     "@tailwindcss/forms": "^0.5.3",
