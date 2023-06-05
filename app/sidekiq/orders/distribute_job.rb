@@ -3,7 +3,7 @@
 class Orders::DistributeJob
   include Sidekiq::Job
 
-  sidekiq_options queue: :default, retry: true, lock: :while_executing, on_conflict: :reschedule, lock_args_method: :lock_args
+  sidekiq_options queue: :default, retry: true, lock: :while_executing, on_conflict: :reject, lock_args_method: :lock_args
 
   def self.lock_args(args)
     args
