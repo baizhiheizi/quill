@@ -37,7 +37,7 @@ class NonFungibleOutputFoundNotification < ApplicationNotification
   end
 
   def collectible_valid?
-    non_fungible_output.state == 'unspent' && non_fungible_output.collectible&.collection&.present?
+    non_fungible_output.state == 'unspent' && non_fungible_output.collectible&.collection.present?
   end
 
   def may_notify_via_mixin_bot?

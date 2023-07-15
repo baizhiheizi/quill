@@ -65,6 +65,11 @@ module Authenticatable
       session_id = JSON.parse(msg)['session']
 
       [user, session_id]
+    rescue Eth::Chain::ReplayProtectionError => e
+      Rails.logger.error e
+      raise e if Rails.env.development?
+
+      [nil, nil]
     end
 
     private
