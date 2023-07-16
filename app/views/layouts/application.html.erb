@@ -58,6 +58,16 @@
     <%= javascript_include_tag "application", "data-turbo-track": "reload" %>
   </head>
 
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-TNT4ZMVDL4"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-TNT4ZMVDL4');
+  </script>
+
   <body data-controller='session'
         data-session-provider-value="<%= current_session&.info&.[]('provider') %>"
         data-session-address-value="<%= current_session&.user&.uid %>"
