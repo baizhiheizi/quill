@@ -159,7 +159,7 @@ class Collection < ApplicationRecord
   end
 
   def authorized?(user = nil)
-    return if user.blank?
+    return false if user.blank?
     return true if author == user
 
     order = orders.find_by buyer: user

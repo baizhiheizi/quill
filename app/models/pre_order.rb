@@ -64,7 +64,7 @@ class PreOrder < ApplicationRecord
   end
 
   def mixpay_supported?
-    return unless asset_id.in?(Mixpay.api.settlement_asset_ids)
+    return false unless asset_id.in?(Mixpay.api.settlement_asset_ids)
 
     Mixpay.api.quote_assets_cached.find(&->(asset) { asset['assetId'] == asset_id && amount >= asset['minQuoteAmount'].to_f && amount <= asset['maxQuoteAmount'].to_f }).present?
   end

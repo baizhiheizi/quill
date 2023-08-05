@@ -183,7 +183,7 @@ class Article < ApplicationRecord
 
   def authorized?(user = nil)
     return true if (published? && free?) || author == user
-    return if user.blank?
+    return false if user.blank?
 
     orders.where(order_type: :buy_article).find_by(buyer: user).present? || collection&.authorized?(user)
   end
@@ -328,7 +328,7 @@ class Article < ApplicationRecord
   end
 
   def should_generate_snapshot?
-    return if drafted?
+    return false if drafted?
 
     saved_change_to_content? || saved_change_to_title? || saved_change_to_intro? || saved_change_to_published_at?
   end

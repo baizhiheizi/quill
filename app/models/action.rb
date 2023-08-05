@@ -32,6 +32,8 @@ class Action < ActiveRecord::Base
 
   def destroy_notifications
     notifications.destroy_all
+  rescue StandardError => e
+    Rails.logger.error "Failed to destroy notifications for action #{id}: #{e}"
   end
 
   def notifications

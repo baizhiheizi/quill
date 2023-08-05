@@ -82,7 +82,7 @@ module Users::Statable
   end
 
   def may_claim_faucet?
-    return unless mvm_eth?
+    return false unless mvm_eth?
 
     faucet_bonus.blank?
   end

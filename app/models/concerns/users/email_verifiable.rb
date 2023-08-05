@@ -41,7 +41,7 @@ module Users::EmailVerifiable
   end
 
   def email_verifying?
-    return if email_vefified?
+    return false if email_vefified?
 
     Rails.cache.fetch("#{email}_verifying").present?
   end

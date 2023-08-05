@@ -56,7 +56,7 @@ module Users::CollectibleReadable
   end
 
   def collectible_readable?
-    return if mixin_access_token.blank?
+    return false if mixin_access_token.blank?
 
     r = QuillBot.api.collectibles access_token: mixin_access_token
 
@@ -91,8 +91,8 @@ module Users::CollectibleReadable
   end
 
   def should_sync_collectibles?
-    return unless messenger? || mvm_eth?
-    return unless collectible_readable?
+    return false unless messenger? || mvm_eth?
+    return false unless collectible_readable?
 
     last_sync_at = Rails.cache.read("#{mixin_uuid}_last_sync_collectibles_at")
     return true if last_sync_at.blank?
