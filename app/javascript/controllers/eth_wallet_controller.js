@@ -2,6 +2,7 @@ import { Controller } from '@hotwired/stimulus';
 import { post } from '@rails/request.js';
 import { notify, showLoading, hideLoading } from '../utils';
 import { EthWallet } from '../mvm/eth_wallet';
+import { WALLET_CONNECT_PROJECT_ID } from '../mvm/constants';
 
 export default class extends Controller {
   static targets = ['loginButton', 'waiting'];
@@ -13,6 +14,7 @@ export default class extends Controller {
     window.Wallet = new EthWallet(provier, {
       name: 'Quill',
       logoUrl: `${location.href}/logo.svg`,
+      wcProjectId: WALLET_CONNECT_PROJECT_ID,
     });
     await Wallet.init();
     this.lockButton();
@@ -56,6 +58,7 @@ export default class extends Controller {
     const signature = await Wallet.web3.eth.personal.sign(
       JSON.stringify(nounce),
       Wallet.account,
+      ""
     );
 
     location.replace(

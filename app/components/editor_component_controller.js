@@ -3,7 +3,7 @@ import { Editor, Extension } from '@tiptap/core';
 import { Plugin, PluginKey } from 'prosemirror-state';
 import StarterKit from '@tiptap/starter-kit';
 import Image from '@tiptap/extension-image';
-import { createMarkdownEditor } from 'tiptap-markdown';
+import { Markdown } from 'tiptap-markdown';
 import Typography from '@tiptap/extension-typography';
 import BubbleMenu from '@tiptap/extension-bubble-menu';
 import FloatingMenu from '@tiptap/extension-floating-menu';
@@ -68,7 +68,7 @@ export default class extends Controller {
       content = textarea.textContent;
     }
 
-    const MdEditor = createMarkdownEditor(Editor);
+    const MdEditor = Markdown(Editor);
     this.editor = new MdEditor({
       element: this.editorTarget,
       content,

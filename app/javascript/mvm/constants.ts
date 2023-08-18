@@ -31,3 +31,4 @@ export const RPC_LIST = {
   42161: 'https://arb1.arbitrum.io/rpc',
   73927: 'https://geth.mvm.dev',
 };
+export const WALLET_CONNECT_PROJECT_ID = '00096cce7e98ce338d08a8cd2ac6d948';
