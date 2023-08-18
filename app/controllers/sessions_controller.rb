@@ -125,7 +125,7 @@ class SessionsController < ApplicationController
     redirect_to root_path
   end
 
-  def nounce
+  def nonce
     return if params[:address].blank?
 
     session_id = SecureRandom.uuid
