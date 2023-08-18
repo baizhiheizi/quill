@@ -37,10 +37,10 @@ export default class extends Controller {
     hideLoading();
   }
 
-  async getNounce(address) {
+  async getNonce(address) {
     if (!address) return;
 
-    const res = await post('/nounce', {
+    const res = await post('/nonce', {
       body: {
         address,
       },
@@ -54,9 +54,9 @@ export default class extends Controller {
     if (!window.Wallet) return;
     if (!Wallet.account) return;
 
-    const nounce = await this.getNounce(Wallet.account);
+    const nonce = await this.getNonce(Wallet.account);
     const signature = await Wallet.web3.eth.personal.sign(
-      JSON.stringify(nounce),
+      JSON.stringify(nonce),
       Wallet.account,
       ""
     );
