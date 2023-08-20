@@ -12,10 +12,7 @@
     "target": "esnext",
     "noEmit": true,
     "baseUrl": ".",
-    "resolveJsonModule": true,
-    "paths": {
-      "*": ["node_modules/*"]
-    }
+    "resolveJsonModule": true
   },
   "exclude": ["**/*.spec.ts", "node_modules", "vendor", "public"],
   "compileOnSave": false

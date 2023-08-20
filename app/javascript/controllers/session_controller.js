@@ -1,6 +1,7 @@
 import { Controller } from '@hotwired/stimulus';
 import { EthWallet } from '../mvm/eth_wallet';
 import { notify } from '../utils';
+import { WALLET_CONNECT_PROJECT_ID } from '../mvm/constants';
 
 export default class extends Controller {
   static values = {
@@ -32,7 +33,7 @@ export default class extends Controller {
     if (!this.addressValue) return;
 
     await this.initWallet();
-    if (!window.Wallet) return;
+    if (!window.Wallet?.web3?.currentProvider) return;
 
     Wallet.web3.currentProvider.on('accountsChanged', (accounts) => {
       notify('Account changed');
@@ -51,6 +52,7 @@ export default class extends Controller {
     window.Wallet = new EthWallet(this.providerValue, {
       name: 'Quill',
       logoUrl: `${location.host}/logo.svg`,
+      wcProjectId: WALLET_CONNECT_PROJECT_ID,
     });
     await Wallet.init();
 
