@@ -10,6 +10,12 @@ export default class extends Controller {
   async login(event) {
     event.preventDefault();
 
+    for (let key in localStorage) {
+      if (key.startsWith("wc@2:")) {
+        localStorage.removeItem(key);
+      }
+    }
+
     const { provier } = event.params;
     window.Wallet = new EthWallet(provier, {
       name: 'Quill',

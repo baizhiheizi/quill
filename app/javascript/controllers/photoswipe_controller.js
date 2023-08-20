@@ -1,7 +1,7 @@
 import { Controller } from '@hotwired/stimulus';
 import { mixinContext } from 'mixin-messenger-utils';
-import PhotoSwipeLightbox from 'photoswipe/dist/photoswipe-lightbox.esm';
-import PhotoSwipe from 'photoswipe/dist/photoswipe.esm.js';
+import PhotoSwipeLightbox from 'photoswipe/lightbox';
+import PhotoSwipe from 'photoswipe';
 
 export default class extends Controller {
   connect() {

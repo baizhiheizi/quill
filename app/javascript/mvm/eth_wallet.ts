@@ -19,7 +19,7 @@ import ERC20ABI from './abis/erc20.json' assert { type: 'json' };
 import ERC721ABI from './abis/erc721.json' assert { type: 'json' };
 import MirrorABI from './abis/mirror.json' assert { type: 'json' };
 import { EthereumProvider } from '@walletconnect/ethereum-provider';
-import Web3 from 'web3';
+import { Web3 } from 'web3';
 import BigNumber from 'bignumber.js';
 
 interface AppType {
@@ -133,7 +133,7 @@ export class EthWallet {
       return;
     }
 
-    const extra = this.fetchExtra(receivers, threshold, memo);
+    const extra = this.generateExtra(receivers, threshold, memo);
 
     if (assetId === NativeAssetId) {
       return this.payNative(
@@ -190,7 +190,7 @@ export class EthWallet {
 
     IERC20.options.gasPrice = GasPrice;
     IERC20.methods
-      .transferWithExtra(contract, payAmount.toString(), `0x${extra}`)
+      .transferWithExtra(contract, payAmount.toFixed(), `0x${extra}`)
       .send({ from: this.account })
       .on('transactionHash', success)
       .on('error', fail);
@@ -225,7 +225,7 @@ export class EthWallet {
 
     BridgeContract.methods
       .release(contract, `0x${extra}`)
-      .send({ from: this.account, value: payAmount.toString() })
+      .send({ from: this.account, value: payAmount.toFixed() })
       .on('transactionHash', success)
       .on('error', fail);
   }
@@ -261,7 +261,7 @@ export class EthWallet {
       return;
     }
 
-    const extra = this.fetchExtra(receivers, threshold, memo);
+    const extra = this.generateExtra(receivers, threshold, memo);
     const contract = await this.fetchUsersContract([payerId], 1);
     ERC721.options.gasPrice = GasPrice;
     ERC721.methods
@@ -336,7 +336,7 @@ export class EthWallet {
         let IERC20 = new this.web3.eth.Contract(ERC20ABI, assetContractAddress);
 
         const balance = await IERC20.methods.balanceOf(account).call();
-        return BigNumber(balance).dividedBy(1e8).toString();
+        return BigNumber(balance).dividedBy(1e8).toFixed();
       } catch (error) {
         console.error(error);
         return '0';
@@ -360,28 +360,23 @@ export class EthWallet {
       'hex',
     )}`;
     return this.Registry.methods
-      .contracts(this.web3.utils.keccak256(identity))
+      .contracts(this.web3.utils.sha3(identity))
       .call();
   }
 
-  fetchExtra(receivers: string[], threshold: number, memo: string): string {
-    const action = {
+  generateExtra(receivers: string[], threshold: number, memo: string): string {
+    const action = JSON.stringify({
       receivers,
       threshold,
       extra: memo,
-    };
-    const extra =
+    });
+    const hex = Buffer.from(action).toString('hex');
+    return (
       RegistryID.replaceAll('-', '') +
       StorageAddress.slice(2).toLowerCase() +
-      this.web3.utils.sha3(JSON.stringify(action)).slice(2) +
-      JSON.stringify(action)
-        .split('')
-        .map((v) => {
-          return v.charCodeAt(0).toString(16);
-        })
-        .join('');
-
-    return extra;
+      this.web3.utils.sha3(hex).slice(2) +
+      hex
+    );
   }
 
   isCurrentNetworkMvm() {
