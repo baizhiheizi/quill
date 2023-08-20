@@ -179,7 +179,7 @@ export class EthWallet {
       return;
     }
 
-    const IERC20 = new this.web3.eth.Contract(ERC20ABI, assetContractAddress);
+    const IERC20 = new this.web3.eth.Contract(ERC20ABI, assetContractAddress, this.web3);
 
     const balance = await IERC20.methods.balanceOf(this.account).call();
     const payAmount = BigNumber(amount).multipliedBy(1e8);
@@ -187,8 +187,7 @@ export class EthWallet {
       fail(new Error('Insufficient balance'));
       return;
     }
-
-    IERC20.options.gasPrice = GasPrice;
+    IERC20.options.gasPrice = await this.web3.eth.getGasPrice();
     IERC20.methods
       .transferWithExtra(contract, payAmount.toFixed(), `0x${extra}`)
       .send({ from: this.account })
@@ -212,7 +211,7 @@ export class EthWallet {
       BridgeAddress,
       {
         from: this.account,
-        gasPrice: GasPrice,
+        gasPrice: await this.web3.eth.getGasPrice(),
       },
     );
 
