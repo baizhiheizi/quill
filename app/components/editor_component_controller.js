@@ -68,8 +68,7 @@ export default class extends Controller {
       content = textarea.textContent;
     }
 
-    const MdEditor = Markdown(Editor);
-    this.editor = new MdEditor({
+    this.editor = new Editor({
       element: this.editorTarget,
       content,
       autofocus: true,
@@ -101,6 +100,7 @@ export default class extends Controller {
         Link.configure({
           openOnClick: false,
         }),
+        Markdown,
         MarkdownPaste,
         Placeholder.configure({ placeholder: textarea.placeholder }),
         StarterKit.configure({
@@ -136,7 +136,7 @@ export default class extends Controller {
         },
       },
       onUpdate: ({ editor }) => {
-        textarea.textContent = editor.getMarkdown();
+        textarea.textContent = editor.storage.markdown.getMarkdown();
         textarea.dispatchEvent(new Event('change'));
       },
     });
@@ -266,7 +266,9 @@ const MarkdownPaste = Extension.create({
             if (text.length === 0 || html.length !== 0) return false;
 
             if (editor.getText()) {
-              editor.commands.insertContentAt(view.state.selection, text, { updateSelection: true });
+              editor.commands.insertContentAt(view.state.selection, text, {
+                updateSelection: true,
+              });
             } else {
               editor.commands.setContent(text, true);
             }
