@@ -11,7 +11,7 @@ export default class extends Controller {
     event.preventDefault();
 
     for (let key in localStorage) {
-      if (key.startsWith("wc@2:")) {
+      if (key.startsWith('wc@2:')) {
         localStorage.removeItem(key);
       }
     }
@@ -64,7 +64,7 @@ export default class extends Controller {
     const signature = await Wallet.web3.eth.personal.sign(
       JSON.stringify(nonce),
       Wallet.account,
-      ""
+      '',
     );
 
     location.replace(

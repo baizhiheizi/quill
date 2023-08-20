@@ -179,7 +179,11 @@ export class EthWallet {
       return;
     }
 
-    const IERC20 = new this.web3.eth.Contract(ERC20ABI, assetContractAddress, this.web3);
+    const IERC20 = new this.web3.eth.Contract(
+      ERC20ABI,
+      assetContractAddress,
+      this.web3,
+    );
 
     const balance = await IERC20.methods.balanceOf(this.account).call();
     const payAmount = BigNumber(amount).multipliedBy(1e8);
