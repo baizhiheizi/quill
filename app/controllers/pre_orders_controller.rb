@@ -66,6 +66,6 @@ class PreOrdersController < ApplicationController
   end
 
   def should_redirect?
-    return true if @pre_order.order_type.reward_article?
+    true if @pre_order.order_type.reward_article?
   end
 end
