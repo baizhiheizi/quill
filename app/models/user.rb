@@ -137,6 +137,8 @@ class User < ApplicationRecord
       else
         authorization.raw&.[]('avatar_url').presence&.gsub(/s256\Z/, 's64') || generated_avatar_url
       end
+  rescue StandardError
+    generated_avatar_url
   end
 
   def generated_avatar_url
