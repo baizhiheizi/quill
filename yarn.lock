@@ -491,6 +491,13 @@
   dependencies:
     tslib "^2.5.0"
 
+"@milkdown/exception@7.3.0":
+  version "7.3.0"
+  resolved "https://registry.yarnpkg.com/@milkdown/exception/-/exception-7.3.0.tgz#737048465a4bf0a577057358580d337f99eb1802"
+  integrity sha512-ZqN+3dOfTQ8OafkJz6WqNrNWxg3D6hACMa2XyPul+uVU0MLZXURfijCO26eByNlhG05w0Uo/FJfaapPZO3aE6g==
+  dependencies:
+    tslib "^2.5.0"
+
 "@milkdown/plugin-block@^7.2.4":
   version "7.2.4"
   resolved "https://registry.yarnpkg.com/@milkdown/plugin-block/-/plugin-block-7.2.4.tgz#087b5d8d6b28fc4fe30b2cee08cee5d363dff0be"
@@ -572,13 +579,13 @@
     tippy.js "^6.3.7"
     tslib "^2.5.0"
 
-"@milkdown/plugin-tooltip@^7.2.4":
-  version "7.2.4"
-  resolved "https://registry.yarnpkg.com/@milkdown/plugin-tooltip/-/plugin-tooltip-7.2.4.tgz#14cebec7ef4b072e59ad9feddc5130dd3e615cbf"
-  integrity sha512-evKCSBsTHbzpFvqpKsadtTm2T9cY2FcCSg+pyvYhmhSrzO6WaYHTiryLR2j1PVtps+EKuA2robjfCk6ZUWLblQ==
+"@milkdown/plugin-tooltip@^7.3.0":
+  version "7.3.0"
+  resolved "https://registry.yarnpkg.com/@milkdown/plugin-tooltip/-/plugin-tooltip-7.3.0.tgz#f8513c9ea8d652aa1ff7728e02210a640b85fd67"
+  integrity sha512-8wknnq1wtM4II8R7T5wy1Ak/QtycxhCCnxa568cCyMRhPVKwdXjDaDgIR/NZeIvHi3UIEeXWlQj8b4KuwiiPnA==
   dependencies:
-    "@milkdown/exception" "7.2.4"
-    "@milkdown/utils" "7.2.4"
+    "@milkdown/exception" "7.3.0"
+    "@milkdown/utils" "7.3.0"
     "@types/lodash.debounce" "^4.0.7"
     lodash.debounce "^4.0.8"
     tippy.js "^6.3.7"
@@ -664,6 +671,15 @@
   integrity sha512-vnqeLv6XoaYLaxyrj0XpdpGyMWbKEQ8Hbk4+f7FYZL9TfGlvZuYlcvvAt5BBZnFXnqIimGIJ+T48eb17z7DsrA==
   dependencies:
     "@milkdown/exception" "7.2.4"
+    nanoid "^4.0.0"
+    tslib "^2.5.0"
+
+"@milkdown/utils@7.3.0":
+  version "7.3.0"
+  resolved "https://registry.yarnpkg.com/@milkdown/utils/-/utils-7.3.0.tgz#1420e1d550057f30936a3bc8f3f4bb9e13b9cba6"
+  integrity sha512-hOb6UwRIX2e7lpAn3sjAtsF2idzQN/wQ9MLbjoIevQXjO1EgNYiBTFIfTDnI4ka+VrVScvZtZ2D8cAA+3+ndxw==
+  dependencies:
+    "@milkdown/exception" "7.3.0"
     nanoid "^4.0.0"
     tslib "^2.5.0"
 
