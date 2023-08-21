@@ -44,7 +44,7 @@
     class: "flex items-start max-h-28 space-x-4 mb-6" do %>
     <div class="flex-1 h-ful">
       <div class="flex w-full items-center mb-3">
-        <div class="overflow-hidden text-ellipsis line-clamp-1 font-bold text-xl w-full">
+        <div class="overflow-hidden text-ellipsis line-clamp-1 font-bold text-lg w-full">
           <%= @article.title %>
         </div>
         <div class="flex-1 ml-2 text-xs sm:text-sm opacity-50 italic min-w-fit">
@@ -53,7 +53,7 @@
           <% end %>
         </div>
       </div>
-      <div class="text-base break-words text-ellipsis overflow-hidden line-clamp-3 text-[#222222] dark:text-white text-opacity-80"> 
+      <div class="text-base break-all text-ellipsis overflow-hidden line-clamp-3 text-[#222222] dark:text-white text-opacity-80"> 
         <%= @article.intro %>
       </div>
     </div>
