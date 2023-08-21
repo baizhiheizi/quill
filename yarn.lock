@@ -491,6 +491,13 @@
   dependencies:
     tslib "^2.5.0"
 
+"@milkdown/exception@7.3.0":
+  version "7.3.0"
+  resolved "https://registry.yarnpkg.com/@milkdown/exception/-/exception-7.3.0.tgz#737048465a4bf0a577057358580d337f99eb1802"
+  integrity sha512-ZqN+3dOfTQ8OafkJz6WqNrNWxg3D6hACMa2XyPul+uVU0MLZXURfijCO26eByNlhG05w0Uo/FJfaapPZO3aE6g==
+  dependencies:
+    tslib "^2.5.0"
+
 "@milkdown/plugin-block@^7.2.4":
   version "7.2.4"
   resolved "https://registry.yarnpkg.com/@milkdown/plugin-block/-/plugin-block-7.2.4.tgz#087b5d8d6b28fc4fe30b2cee08cee5d363dff0be"
@@ -542,12 +549,12 @@
     "@milkdown/utils" "7.2.4"
     tslib "^2.5.0"
 
-"@milkdown/plugin-indent@^7.2.4":
-  version "7.2.4"
-  resolved "https://registry.yarnpkg.com/@milkdown/plugin-indent/-/plugin-indent-7.2.4.tgz#c92c7e51b094540587ed6e700c269f11cdf938ec"
-  integrity sha512-Fb44MNRgXdtz6G+1BD7891+RWh9gj1XqHwzBHEMaQPXcHf+UDoEN2DjCxMw+R4Xg1IHPmxkmv70zSPsbq33qKA==
+"@milkdown/plugin-indent@^7.3.0":
+  version "7.3.0"
+  resolved "https://registry.yarnpkg.com/@milkdown/plugin-indent/-/plugin-indent-7.3.0.tgz#aadb5d70ef6194b4895d2e2194bfe7d75a5d3f2c"
+  integrity sha512-KLyNh/6iKGlP3rO7cTua7OuveWsWVfA2fq4x+kYIqD31ImTUpJZnePRtI86OVirxwa1ua/rZcH59BpOX6mSQXg==
   dependencies:
-    "@milkdown/utils" "7.2.4"
+    "@milkdown/utils" "7.3.0"
     tslib "^2.5.0"
 
 "@milkdown/plugin-listener@^7.2.4":
@@ -664,6 +671,15 @@
   integrity sha512-vnqeLv6XoaYLaxyrj0XpdpGyMWbKEQ8Hbk4+f7FYZL9TfGlvZuYlcvvAt5BBZnFXnqIimGIJ+T48eb17z7DsrA==
   dependencies:
     "@milkdown/exception" "7.2.4"
+    nanoid "^4.0.0"
+    tslib "^2.5.0"
+
+"@milkdown/utils@7.3.0":
+  version "7.3.0"
+  resolved "https://registry.yarnpkg.com/@milkdown/utils/-/utils-7.3.0.tgz#1420e1d550057f30936a3bc8f3f4bb9e13b9cba6"
+  integrity sha512-hOb6UwRIX2e7lpAn3sjAtsF2idzQN/wQ9MLbjoIevQXjO1EgNYiBTFIfTDnI4ka+VrVScvZtZ2D8cAA+3+ndxw==
+  dependencies:
+    "@milkdown/exception" "7.3.0"
     nanoid "^4.0.0"
     tslib "^2.5.0"
 
