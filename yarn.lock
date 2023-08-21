@@ -464,13 +464,12 @@
     semver "^7.3.8"
     superstruct "^1.0.3"
 
-"@milkdown/core@^7.2.4":
-  version "7.2.4"
-  resolved "https://registry.yarnpkg.com/@milkdown/core/-/core-7.2.4.tgz#a8db5d7927312ce0aede179ba3f2c2f64810981e"
-  integrity sha512-ztO9DlKNFX7oPCUjUIszoDxTDbqEjHcCeIRlkQy43c1TOcG+87Pw7OP5dphFWBJf6D4lAnGHAU+xTIth0NCXqQ==
+"@milkdown/core@^7.3.0":
+  version "7.3.0"
+  resolved "https://registry.yarnpkg.com/@milkdown/core/-/core-7.3.0.tgz#f4e2ffa07025db4f32b2cab253a40a94f45115e4"
+  integrity sha512-spB2mti5glP/ZJROgNZuaVgDC0djhMEnd9eu5iEmm4qqUj4RabKDZkVox9kZE0ngn6msWtDW/qQwnIFd4iFGdQ==
   dependencies:
-    "@milkdown/exception" "7.2.4"
-    mdast-util-to-markdown "^1.5.0"
+    "@milkdown/exception" "7.3.0"
     remark-parse "^10.0.1"
     remark-stringify "^10.0.2"
     tslib "^2.5.0"
@@ -488,6 +487,13 @@
   version "7.2.4"
   resolved "https://registry.yarnpkg.com/@milkdown/exception/-/exception-7.2.4.tgz#70f8a3be2fa5bde8f47c47bcd3ce5a4b30e3ca01"
   integrity sha512-TpVGz7iNo6wAVcIiJ4KQmp1pfiY4ok3bye6xntbZ0tCIIsRiu5BI3/uO1H/pIv/v7OP+Yp5Q5t0aC67x8sY2rg==
+  dependencies:
+    tslib "^2.5.0"
+
+"@milkdown/exception@7.3.0":
+  version "7.3.0"
+  resolved "https://registry.yarnpkg.com/@milkdown/exception/-/exception-7.3.0.tgz#737048465a4bf0a577057358580d337f99eb1802"
+  integrity sha512-ZqN+3dOfTQ8OafkJz6WqNrNWxg3D6hACMa2XyPul+uVU0MLZXURfijCO26eByNlhG05w0Uo/FJfaapPZO3aE6g==
   dependencies:
     tslib "^2.5.0"
 
@@ -3281,7 +3287,7 @@ mdast-util-phrasing@^3.0.0:
     "@types/mdast" "^3.0.0"
     unist-util-is "^5.0.0"
 
-mdast-util-to-markdown@^1.0.0, mdast-util-to-markdown@^1.3.0, mdast-util-to-markdown@^1.5.0:
+mdast-util-to-markdown@^1.0.0, mdast-util-to-markdown@^1.3.0:
   version "1.5.0"
   resolved "https://registry.yarnpkg.com/mdast-util-to-markdown/-/mdast-util-to-markdown-1.5.0.tgz#c13343cb3fc98621911d33b5cd42e7d0731171c6"
   integrity sha512-bbv7TPv/WC49thZPg3jXuqzuvI45IL2EVAr/KxF0BSdHsU0ceFHOmwQn6evxAh1GaoK/6GQ1wp4R4oW2+LFL/A==
