@@ -21,6 +21,8 @@ en:
       has_new_article: has a new article
     payment_created_notification:
       paid: Successfully paid
+    payment_refunded_notification:
+      refunded: "Order of %{item} failed and your payment is refunded. Please check your balance."
     order_created_notification:
       bought: Successfully bought
       rewarded: Successfully rewarded

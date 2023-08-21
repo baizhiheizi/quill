@@ -21,6 +21,8 @@ ja:
       has_new_article: 新しい記事があります
     payment_created_notification:
       paid: 支払い完了しました
+    payment_refunded_notification:
+      refunded: "Order of %{item} failed and your payment is refunded. Please check your balance."
     order_created_notification:
       bought: 購入完了しました
       rewarded: リワードが付与されました

@@ -60,6 +60,8 @@ class Collection < ApplicationRecord
 
   delegate :trident_url, to: :nft_collection
 
+  alias_attribute :title, :name
+
   aasm column: :state do
     state :drafted, initial: true
     state :listed

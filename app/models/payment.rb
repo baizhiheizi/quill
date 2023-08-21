@@ -61,7 +61,7 @@ class Payment < ApplicationRecord
       transitions from: :paid, to: :completed
     end
 
-    event :refund, guard: :ensure_refund_transfer_created do
+    event :refund, guard: :ensure_refund_transfer_created, after_commit: :notify_payer do
       transitions from: :paid, to: :refunded
     end
   end
@@ -274,7 +274,14 @@ class Payment < ApplicationRecord
   end
 
   def notify_payer
-    PaymentCreatedNotification.with(payment: self).deliver(payer) if decoded_memo['t'].in? %w[BUY REWARD]
+    return unless decoded_memo['t'].in? %w[BUY REWARD]
+
+    case state
+    when 'paid', 'completed'
+      PaymentCreatedNotification.with(payment: self).deliver(payer)
+    when 'refunded'
+      PaymentRefundedNotification.with(payment: self).deliver(payer)
+    end
   end
 
   def price_tag

@@ -21,6 +21,8 @@ zh-CN:
       has_new_article: 有新的文章
     payment_created_notification:
       paid: 成功支付
+    payment_refunded_notification:
+      refunded: "%{item} 购买失败，已退款，请注意检查钱包变化。"
     order_created_notification:
       bought: 成功购买了
       rewarded: 成功赞赏了
