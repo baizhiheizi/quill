@@ -20,7 +20,7 @@
     "@milkdown/plugin-block": "^7.2.4",
     "@milkdown/plugin-clipboard": "^7.2.4",
     "@milkdown/plugin-cursor": "^7.2.4",
-    "@milkdown/plugin-emoji": "^7.2.4",
+    "@milkdown/plugin-emoji": "^7.3.0",
     "@milkdown/plugin-history": "^7.2.4",
     "@milkdown/plugin-indent": "^7.2.4",
     "@milkdown/plugin-listener": "^7.2.4",
