@@ -1093,10 +1093,10 @@
   resolved "https://registry.yarnpkg.com/@tiptap/extension-bold/-/extension-bold-2.1.3.tgz#0b50c484be44d9969022f4c05fe24e928cf66457"
   integrity sha512-Psz0J5Q/fP3M4TI3djGD3e/ffH7hRxq4wFcBdZcwgklqZT6MDx9ZuENbkD5c71z2JS7IlruW/utFScAq1qB6cg==
 
-"@tiptap/extension-bubble-menu@^2.1.3":
-  version "2.1.3"
-  resolved "https://registry.yarnpkg.com/@tiptap/extension-bubble-menu/-/extension-bubble-menu-2.1.3.tgz#51ca1049b2a0a48a75d72616d2e0bc6c29376bef"
-  integrity sha512-Fv6BguXCO0o0ak2HtHh237B20qNFHWRi9567ySPe0nVZ+QBLW46NPrpRudZuLyWw9Iz6ObkgNZZPdWVKQyPyYg==
+"@tiptap/extension-bubble-menu@^2.1.8":
+  version "2.1.8"
+  resolved "https://registry.yarnpkg.com/@tiptap/extension-bubble-menu/-/extension-bubble-menu-2.1.8.tgz#26d5f2ebc198553c5339d9ea6d06fcb02b6a938f"
+  integrity sha512-Na9Maz20jS+3UrHtAGLkfFt3uu+HD9SSK3+3WyNeylkWciJa/qkZKqwhptHrjpin0IHSF2JNche+ZA+hSmnm2Q==
   dependencies:
     tippy.js "^6.3.7"
 
