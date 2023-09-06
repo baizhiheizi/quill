@@ -1,5 +1,5 @@
 host: 'https://quill.im'
-mixin_oauth_path: 'https://mixin-www.zeromesh.net/oauth/authorize'
+mixin_oauth_path: 'https://mixin.one/oauth/authorize'
 
 # lauch time
 launch_time:
