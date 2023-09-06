@@ -1,0 +1,32 @@
+<div class="flex items-center space-x-4 mb-4">
+  <%= link_to 'Home', admin_root_path %>
+  <span>/</span>
+  <span>Sessions</span>
+</div>
+
+<div class="p-4 bg-white dark:bg-zinc-900 rounded-lg shadow">
+  <%= turbo_frame_tag 'admin_sessions' do %>
+    <div class="mb-4">
+      <%= render 'admin/sessions/query' %>
+    </div>
+    <div data-controller="infinite-scroll" class="w-full overflow-x-scroll scrollbar-hide">
+      <table class='w-full table-auto min-w-max '>
+        <thead>
+          <tr class="bg-zinc-100 dark:bg-zinc-800">
+            <th class="p-4">ID</th>
+            <th class="p-4">UUID</th>
+            <th class="p-4">User</th>
+            <th class="p-4">Provider</th>
+            <th class="p-4">Info</th>
+            <th class="p-4">Created</th>
+          </tr>
+        </thead>
+        <tbody id="admin_sessions_list">
+          <%= render partial: 'admin/sessions/session', collection: @sessions, as: :session %>
+        </tbody>
+      </table>
+      <div data-infinite-scroll-target='scrollArea'></div>
+      <%= render partial: "shared/pagination", locals: { pagy: @pagy } %>
+    </div>
+  <% end %>
+</div>

@@ -1,0 +1,20 @@
+<tr id="<%= dom_id session %>" class="hover:bg-zinc-50 dark:hover:bg-zinc-800 border-b">
+  <td class="p-4">
+    <%= session.id %>
+  </td>
+  <td class="p-4">
+    <%= session.uuid %>
+  </td>
+  <td class="p-4">
+    <%= render "admin/users/field", user: session.user, tab: :sessions %>
+  </td>
+  <td class="p-4">
+    <%= session.provider || '-' %>
+  </td>
+  <td class="p-4">
+    <%= session.info || '-' %>
+  </td>
+  <td class="p-4">
+    <%= session.created_at %>
+  </td>
+</tr>

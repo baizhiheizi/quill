@@ -169,6 +169,14 @@
         } do %>
         NFOs
       <% end %>
+      <%= link_to admin_user_path(@user, tab: :sessions), 
+        class: "cursor-pointer py-1 px-4 border-blue-500 font-bold text-zinc-600",
+        data: {
+          tabs_target: "tab",
+          tabs_tabname_param: "sessions",
+        } do %>
+        Sessions
+      <% end %>
     </div>
     <div class="hidden"
         data-tabs-content-param="articles"
@@ -244,6 +252,13 @@
         data-tabs-content-param="non_fungible_outputs"
         data-tabs-target="content">
       <%= turbo_frame_tag 'admin_non_fungible_outputs', src: admin_non_fungible_outputs_path(user_id: @user.mixin_uuid) do %>
+        <%= render "shared/loading" %>
+      <% end %>
+    </div>
+    <div class="hidden"
+        data-tabs-content-param="sessions"
+        data-tabs-target="content">
+      <%= turbo_frame_tag 'admin_sessions', src: admin_sessions_path(user_id: @user.id) do %>
         <%= render "shared/loading" %>
       <% end %>
     </div>
