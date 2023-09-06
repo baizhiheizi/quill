@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Admin::SessionsController < Admin::BaseController
+class Admin::LoginController < Admin::BaseController
   skip_before_action :authenticate_admin!, only: %i[new create]
   layout false
 

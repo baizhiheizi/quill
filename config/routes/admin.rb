@@ -22,10 +22,11 @@ namespace :admin do
 
   root to: 'overview#index'
 
-  get 'login', to: 'sessions#new', as: :login
-  post 'login', to: 'sessions#create'
-  get 'logout', to: 'sessions#delete', as: :logout
+  get 'login', to: 'login#new', as: :login
+  post 'login', to: 'login#create'
+  get 'logout', to: 'login#delete', as: :logout
 
+  resources :sessions, only: %i[index]
   resources :users, only: %i[index show], param: :uid do
     post :validate
     post :unvalidate
