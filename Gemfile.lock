@@ -173,8 +173,8 @@ GEM
       irb (>= 1.5.0)
       reline (>= 0.3.1)
     deep_merge (1.2.2)
-    dockerfile-rails (1.5.2)
-      rails
+    dockerfile-rails (1.5.10)
+      rails (>= 3.0.0)
     domain_name (0.5.20190701)
       unf (>= 0.0.5, < 1.0.0)
     dry-configurable (1.1.0)
@@ -248,8 +248,8 @@ GEM
     fugit (1.8.1)
       et-orbi (~> 1, >= 1.2.7)
       raabro (~> 1.4)
-    globalid (1.1.0)
-      activesupport (>= 5.0)
+    globalid (1.2.1)
+      activesupport (>= 6.1)
     graphql (2.0.26)
     graphql-client (0.18.0)
       activesupport (>= 3.0)
@@ -351,7 +351,7 @@ GEM
     mini_portile2 (2.8.4)
     mini_racer (0.8.0)
       libv8-node (~> 18.16.0.0)
-    minitest (5.19.0)
+    minitest (5.20.0)
     mixin_bot (0.12.1)
       activesupport (>= 5)
       awesome_print (~> 1.8)
@@ -374,7 +374,7 @@ GEM
       net-protocol
     net-protocol (0.2.1)
       timeout
-    net-smtp (0.3.3)
+    net-smtp (0.4.0)
       net-protocol
     netrc (0.11.0)
     nio4r (2.5.9)
