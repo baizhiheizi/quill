@@ -49,6 +49,8 @@ class Currency < ApplicationRecord
     Rails.cache.fetch 'pando_lake_routes', expires_in: 5.seconds do
       PandoBot::Lake.api.pairs['data']['pairs']
     end
+  rescue StandardError
+    []
   end
 
   def self.swappable_asset_ids
