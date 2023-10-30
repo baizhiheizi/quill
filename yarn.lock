@@ -491,6 +491,13 @@
   dependencies:
     tslib "^2.5.0"
 
+"@milkdown/exception@7.3.1":
+  version "7.3.1"
+  resolved "https://registry.yarnpkg.com/@milkdown/exception/-/exception-7.3.1.tgz#4090d652b13d48ae014127396f320354f7c0dc44"
+  integrity sha512-e2x1h/zE8paoF9ygEbUVZZTNpp1acw6azqExSvL+3myoMgwTsmE/G6oK9YpajY1BfSsLM2J3ii9ByIcsRM6+9w==
+  dependencies:
+    tslib "^2.5.0"
+
 "@milkdown/plugin-block@^7.2.4":
   version "7.2.4"
   resolved "https://registry.yarnpkg.com/@milkdown/plugin-block/-/plugin-block-7.2.4.tgz#087b5d8d6b28fc4fe30b2cee08cee5d363dff0be"
@@ -542,12 +549,12 @@
     "@milkdown/utils" "7.2.4"
     tslib "^2.5.0"
 
-"@milkdown/plugin-indent@^7.2.4":
-  version "7.2.4"
-  resolved "https://registry.yarnpkg.com/@milkdown/plugin-indent/-/plugin-indent-7.2.4.tgz#c92c7e51b094540587ed6e700c269f11cdf938ec"
-  integrity sha512-Fb44MNRgXdtz6G+1BD7891+RWh9gj1XqHwzBHEMaQPXcHf+UDoEN2DjCxMw+R4Xg1IHPmxkmv70zSPsbq33qKA==
+"@milkdown/plugin-indent@^7.3.1":
+  version "7.3.1"
+  resolved "https://registry.yarnpkg.com/@milkdown/plugin-indent/-/plugin-indent-7.3.1.tgz#d5dff0bd97d387791b0446b4812208d07f7f307f"
+  integrity sha512-gKxsaysosuxI4I0mgETK2k2KLsKUJTRxlcw/qQFPMCT58nMRtnam7svRWV+R+9Kt7HMDcx3+CQLrsDjm0aXDTA==
   dependencies:
-    "@milkdown/utils" "7.2.4"
+    "@milkdown/utils" "7.3.1"
     tslib "^2.5.0"
 
 "@milkdown/plugin-listener@^7.2.4":
@@ -665,6 +672,15 @@
   dependencies:
     "@milkdown/exception" "7.2.4"
     nanoid "^4.0.0"
+    tslib "^2.5.0"
+
+"@milkdown/utils@7.3.1":
+  version "7.3.1"
+  resolved "https://registry.yarnpkg.com/@milkdown/utils/-/utils-7.3.1.tgz#7741faf74c849b189c3b06ce6607c505760addfd"
+  integrity sha512-GT54XYHwnHjHVmH3vBcCFwlzZhdaM3S+1Zp1+ci5bcfTX0Rmt1KUyzkeBJOcSDS4jCm8eTYd2kBCzodZOHqm9A==
+  dependencies:
+    "@milkdown/exception" "7.3.1"
+    nanoid "^5.0.0"
     tslib "^2.5.0"
 
 "@motionone/animation@^10.15.1":
@@ -3695,6 +3711,11 @@ nanoid@^4.0.0:
   version "4.0.2"
   resolved "https://registry.yarnpkg.com/nanoid/-/nanoid-4.0.2.tgz#140b3c5003959adbebf521c170f282c5e7f9fb9e"
   integrity sha512-7ZtY5KTCNheRGfEFxnedV5zFiORN1+Y1N6zvPTnHQd8ENUvfaDBeuJDZb2bN/oXwXxu3qkTXDzy57W5vAmDTBw==
+
+nanoid@^5.0.0:
+  version "5.0.2"
+  resolved "https://registry.yarnpkg.com/nanoid/-/nanoid-5.0.2.tgz#97588ebc70166d0feaf73ccd2799bb4ceaebf692"
+  integrity sha512-2ustYUX1R2rL/Br5B/FMhi8d5/QzvkJ912rBYxskcpu0myTHzSZfTr1LAS2Sm7jxRUObRrSBFoyzwAhL49aVSg==
 
 netmask@^2.0.2:
   version "2.0.2"
