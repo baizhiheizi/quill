@@ -15,7 +15,7 @@
     "@hotwired/stimulus": "^3.2.2",
     "@hotwired/turbo-rails": "^7.3.0",
     "@metamask/detect-provider": "^2.0.0",
-    "@milkdown/core": "^7.2.4",
+    "@milkdown/core": "^7.3.1",
     "@milkdown/ctx": "^7.2.4",
     "@milkdown/plugin-block": "^7.2.4",
     "@milkdown/plugin-clipboard": "^7.2.4",
