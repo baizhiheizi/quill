@@ -10,18 +10,29 @@ module PreOrders::Swappable
   end
 
   def direct_pay_url
-    Addressable::URI.new(
-      scheme: 'mixin',
-      host: 'pay',
-      path: '',
-      query_values: [
-        ['recipient', payee_id],
-        ['trace', trace_id],
-        ['memo', memo],
-        ['asset', asset_id],
-        ['amount', amount.to_f.round(8)]
-      ]
-    ).to_s
+    if payer.has_safe?
+      QuillBot.api.safe_pay_url(
+        members: [QuillBot.api.client_id],
+        threshold: 1,
+        asset_id: asset_id,
+        amount: amount,
+        trace_id: trace_id,
+        memo: memo
+      )
+    else
+      Addressable::URI.new(
+        scheme: 'mixin',
+        host: 'pay',
+        path: '',
+        query_values: [
+          ['recipient', payee_id],
+          ['trace', trace_id],
+          ['memo', memo],
+          ['asset', asset_id],
+          ['amount', amount.to_f.round(8)]
+        ]
+      ).to_s
+    end
   end
 
   def foxswap_pay_url(pay_asset_id)
