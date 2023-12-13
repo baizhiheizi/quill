@@ -12,7 +12,7 @@ import Placeholder from '@tiptap/extension-placeholder';
 import Link from '@tiptap/extension-link';
 import CodeBlockLowlight from '@tiptap/extension-code-block-lowlight';
 import Highlight from '@tiptap/extension-highlight';
-import { lowlight } from 'lowlight';
+import { createLowlight, common } from 'lowlight';
 import { showLoading, hideLoading } from '../javascript/utils';
 import { Uploader } from '../javascript/utils/uploader';
 
@@ -85,7 +85,7 @@ export default class extends Controller {
           element: this.bubbleMenuTarget,
         }),
         CodeBlockLowlight.configure({
-          lowlight,
+          lowlight: createLowlight(common),
         }),
         FloatingMenu.configure({
           element: this.floatingMenuTarget,
