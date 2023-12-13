@@ -113,6 +113,10 @@ class User < ApplicationRecord
   # block user
   action_store :block, :user, counter_cache: true, user_counter_cache: 'blocking_count'
 
+  def has_safe?
+    authorization&.has_safe?
+  end
+
   def bio
     biography || authorization.biography || I18n.t('activerecord.attributes.user.default_bio')
   end

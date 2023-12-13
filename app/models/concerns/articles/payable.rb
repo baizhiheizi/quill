@@ -32,18 +32,29 @@ module Articles::Payable
   end
 
   def pay_url(user, pay_asset_id, amount, memo, trace_id)
-    Addressable::URI.new(
-      scheme: 'mixin',
-      host: 'pay',
-      path: '',
-      query_values: [
-        ['recipient', user&.wallet_id || wallet_id],
-        ['trace', trace_id],
-        ['memo', memo],
-        ['asset', pay_asset_id],
-        ['amount', amount.to_r.to_f]
-      ]
-    ).to_s
+    if use.has_safe?
+      QuillBot.api.safe_pay_url(
+        members: [QuillBot.api.client_id],
+        threshold: 1,
+        asset_id: pay_asset_id,
+        amount: amount,
+        trace_id: trace_id,
+        memo: memo
+      )
+    else
+      Addressable::URI.new(
+        scheme: 'mixin',
+        host: 'pay',
+        path: '',
+        query_values: [
+          ['recipient', user&.wallet_id || wallet_id],
+          ['trace', trace_id],
+          ['memo', memo],
+          ['asset', pay_asset_id],
+          ['amount', amount.to_r.to_f]
+        ]
+      ).to_s
+    end
   end
 
   def buy_payment_amount(pay_asset_id)

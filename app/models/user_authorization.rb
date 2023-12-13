@@ -31,6 +31,14 @@ class UserAuthorization < ApplicationRecord
   validates :raw, presence: true
   validates :uid, presence: true, uniqueness: { scope: :provider }
 
+  def has_safe?
+    if provider == 'mixin'
+      raw['has_safe'].present?
+    else
+      false
+    end
+  end
+
   def mixin_api
     return unless provider == 'mvm_eth'
     return if key.blank?
