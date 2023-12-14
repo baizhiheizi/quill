@@ -7,7 +7,7 @@ GIT
 
 GIT
   remote: https://github.com/an-lee/mixin_bot.git
-  revision: faa6aa4ad7ce0faaaccdcafbfdc831361b2fcc55
+  revision: 009b25c216f4a9139f7871be236b782e26482e76
   specs:
     mixin_bot (0.12.1)
       activesupport (>= 5)
@@ -149,7 +149,7 @@ GEM
     attr_required (1.0.1)
     awesome_print (1.9.2)
     aws-eventstream (1.3.0)
-    aws-partitions (1.865.0)
+    aws-partitions (1.866.0)
     aws-sdk-core (3.190.0)
       aws-eventstream (~> 1, >= 1.3.0)
       aws-partitions (~> 1, >= 1.651.0)

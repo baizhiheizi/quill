@@ -44,5 +44,7 @@ en:
       subscribed: subscribed your activities
     user_connected_notification:
       message: Welcome! You may leave messages here if you have any questions.
+    user_safe_registration_notification:
+      message: Please update Mixin Messenger to the latest version to ensure you can accept the transfer.
     non_fungible_output_found_notification:
       found: Found

@@ -3,7 +3,7 @@
 module Admin
   class SwapOrdersController < Admin::BaseController
     def index
-      swap_orders = SwapOrder.all.includes(payment: :payer)
+      swap_orders = SwapOrder.includes(payment: :payer)
       swap_orders = swap_orders.where(payments: { payer_id: params[:payer_id] }) if params[:payer_id].present?
 
       @state = params[:state] || 'all'

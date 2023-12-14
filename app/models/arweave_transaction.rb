@@ -158,7 +158,7 @@ class ArweaveTransaction < ApplicationRecord
         iv: Base64.urlsafe_encode64(iv, padding: false),
         public_key: ec.public_key.to_bn.to_fs(16).downcase
       },
-      author: (article.author.public_key.presence || article.author.mixin_uuid),
+      author: article.author.public_key.presence || article.author.mixin_uuid,
       owner: owner.public_key,
       original_url: user_article_url(article.author, article),
       timestamp: article.updated_at.to_i

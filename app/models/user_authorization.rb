@@ -31,12 +31,15 @@ class UserAuthorization < ApplicationRecord
   validates :raw, presence: true
   validates :uid, presence: true, uniqueness: { scope: :provider }
 
+  def refresh!
+    return if provider == 'twitter'
+
+    r = QuillBot.api.read_user raw['user_id']
+    update! raw: raw.merge(has_safe: r['data']['has_safe'])
+  end
+
   def has_safe?
-    if provider == 'mixin'
-      raw['has_safe'].present?
-    else
-      false
-    end
+    raw['has_safe'].present?
   end
 
   def mixin_api

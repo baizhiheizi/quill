@@ -6,7 +6,10 @@ Sidekiq.configure_server do |config|
   config.redis = { url: ENV.fetch('REDIS_URL', nil), driver: :ruby }
 
   cron_file = 'config/sidekiq-cron.yml'
-  Sidekiq::Cron::Job.load_from_hash YAML.load_file(cron_file) if File.exist?(cron_file) && Sidekiq.server?
+  if Sidekiq.server?
+    Sidekiq::Cron::Job.destroy_all!
+    Sidekiq::Cron::Job.load_from_hash YAML.load_file(cron_file) if File.exist?(cron_file) 
+  end
 
   config.client_middleware do |chain|
     chain.add SidekiqUniqueJobs::Middleware::Client

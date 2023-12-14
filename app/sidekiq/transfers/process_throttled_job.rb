@@ -6,7 +6,7 @@ class Transfers::ProcessThrottledJob
   sidekiq_options queue: :low, retry: true, lock: :while_executing, on_conflict: :reschedule, lock_args_method: :lock_args
 
   def self.lock_args(args)
-    [args[1]]
+    [args[0]]
   end
 
   sidekiq_retry_in do |count, exception|

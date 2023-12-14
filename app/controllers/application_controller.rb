@@ -64,7 +64,7 @@ class ApplicationController < ActionController::Base
   end
 
   def current_locale
-    @current_locale ||= (session[:current_locale].presence || current_user&.locale.presence || browser_locale.presence || I18n.default_locale)
+    @current_locale ||= session[:current_locale].presence || current_user&.locale.presence || browser_locale.presence || I18n.default_locale
   end
 
   def requesting_modal?

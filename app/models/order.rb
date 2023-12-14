@@ -43,6 +43,7 @@ class Order < ApplicationRecord
   belongs_to :item, polymorphic: true, counter_cache: true
   belongs_to :payment, foreign_key: :trace_id, primary_key: :trace_id, inverse_of: :order
   belongs_to :currency, primary_key: :asset_id, foreign_key: :asset_id, inverse_of: :orders
+  belongs_to :kernel_output, primary_key: :request_id, foreign_key: :trace_id, inverse_of: false, optional: true
 
   has_many :transfers, as: :source, dependent: :restrict_with_exception
   has_one :collectible, as: :source, dependent: :restrict_with_exception
