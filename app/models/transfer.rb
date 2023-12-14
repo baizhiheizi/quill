@@ -83,49 +83,48 @@ class Transfer < ApplicationRecord
     processed_at?
   end
 
+  def wallet_api
+    @wallet_api ||= wallet&.mixin_api || QuillBot.api
+  end
+
   def process!
+    return if processed?
+
+    if transfer_type == 'mint_nft'
+      process_legacy_transfer!
+    else
+      process_safe_transfer!
+    end
+
+    case source
+    when Payment
+      source.refund! if source.may_refund?
+    when Bonus
+      source.complete! if source.may_complete?
+    end
+
+    notify_recipient if recipient.present?
+  end
+
+  def process_legacy_transfer!
     return if processed?
 
     r =
       if opponent_id.present?
-        if wallet.blank?
-          QuillBot.api.create_transfer(
-            Rails.application.credentials.dig(:quill_bot, :pin_code),
-            {
-              asset_id: asset_id,
-              opponent_id: opponent_id,
-              amount: amount,
-              trace_id: trace_id,
-              memo: memo
-            }
-          )
-        else
-          wallet.mixin_api.create_transfer(
-            wallet.pin,
-            {
-              asset_id: asset_id,
-              opponent_id: opponent_id,
-              amount: amount,
-              trace_id: trace_id,
-              memo: memo
-            }
-          )
-        end
-      elsif wallet.blank?
-        QuillBot.api.create_multisig_transaction(
-          Rails.application.credentials.dig(:quill_bot, :pin_code),
+        wallet_api.create_transfer(
+          wallet_pin,
           {
             asset_id: asset_id,
-            receivers: opponent_multisig['receivers'],
-            threshold: opponent_multisig['threshold'],
+            opponent_id: opponent_id,
             amount: amount,
             trace_id: trace_id,
             memo: memo
           }
         )
       else
-        wallet.mixin_api.create_multisig_transaction(
-          wallet.pin,
+        wallet.blank?
+        wallet_api.create_multisig_transaction(
+          wallet_pin,
           {
             asset_id: asset_id,
             receivers: opponent_multisig['receivers'],
@@ -137,23 +136,77 @@ class Transfer < ApplicationRecord
         )
       end
 
-    raise r['error'].inspect if r['error'].present?
-    return unless r['data']['trace_id'] == trace_id
-
-    case transfer_type.to_sym
-    when :payment_refund, :swap_refund
-      source.refund! if source.may_refund?
-    when :bonus, :swap_change
-      source.complete! unless source.completed?
-    when :fox_swap
-      source.start! unless source.swapping?
-    end
     update!(
       snapshot: r['data'],
       processed_at: Time.current
     )
+  end
 
-    notify_recipient if recipient.present?
+  def safe_receiver
+    @safe_receiver ||=
+      if opponent_id.present?
+        {
+          members: [opponent_id],
+          threshold: 1,
+          amount: amount
+        }
+      else
+        {
+          members: opponent_multisig['receivers'],
+          threshold: opponent_multisig['threshold'],
+          amount: amount
+        }
+      end
+  end
+
+  def process_safe_transfer!
+    # step 0: check if already transfered
+    r = wallet_api.safe_transaction trace_id
+    if r['data'].present?
+      update!(
+        snapshot: r['data'],
+        processed_at: Time.current
+      )
+      return
+    end
+
+    # step 1: select utxos
+    outputs = KernelOutput.select_for(asset_id, amount)
+    utxos = outputs.map(&:raw)
+
+    # step 2: build transaction
+    tx = wallet_api.build_safe_transaction(
+      utxos: utxos,
+      receivers: [safe_receiver],
+      extra: memo
+    )
+    raw = MixinBot::Utils.encode_raw_transaction tx
+
+    # step 3: verify transaction
+    request = wallet_api.create_safe_transaction_request(trace_id, raw)['data']
+
+    # step 4: sign transaction
+    signed_raw = wallet_api.sign_safe_transaction(
+      raw: raw,
+      utxos: utxos,
+      request: request[0]
+    )
+
+    # step 5: submit transaction
+    r = wallet_api.send_safe_transaction(
+      trace_id,
+      signed_raw
+    )
+
+    outputs.each(&:spend!)
+
+    update!(
+      snapshot: r['data'].first,
+      processed_at: Time.current
+    )
+  rescue MixinBot::UserNotFoundError
+    recipient&.notify_for_safe_registration
+    nil
   end
 
   def notify_recipient
@@ -175,6 +228,10 @@ class Transfer < ApplicationRecord
     else
       Transfers::ProcessJob.perform_async trace_id
     end
+  end
+
+  def recipient_has_safe?
+    recipient&.has_safe?
   end
 
   def self.author_revenue_total_in_usd
@@ -212,5 +269,9 @@ class Transfer < ApplicationRecord
 
   def ensure_opponent_presence
     errors.add(:opponent_id, ' must cannot be blank') if opponent_id.blank? && opponent_multisig.blank?
+  end
+
+  def wallet_pin
+    wallet&.pin || Rails.application.credentials.dig(:quill_bot, :pin_code)
   end
 end

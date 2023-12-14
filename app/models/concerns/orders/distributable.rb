@@ -94,35 +94,21 @@ module Orders::Distributable
       end
 
     # create quill transfer
-    if quill_amount.positive?
-      if payment.wallet_id == QuillBot.api.client_id
-        transfers.create_with(
-          queue_priority: :default,
-          wallet_id: QuillBot.api.client_id,
-          transfer_type: :default,
-          opponent_id: distributor_wallet_id,
-          asset_id: revenue_asset_id,
-          amount: (total - quill_amount).to_f.to_s,
-          memo: "Distribute order #{trace_id}".truncate(70)
-        ).find_or_create_by!(
-          trace_id: MixinBot::Utils.unique_uuid(distributor_wallet_id, trace_id)
-        )
-      else
-        transfers.create_with(
-          queue_priority: :low,
-          wallet_id: distributor_wallet_id,
-          transfer_type: :quill_revenue,
-          opponent_id: QuillBot.api.client_id,
-          asset_id: revenue_asset_id,
-          amount: quill_amount.to_s,
-          memo: Base64.encode64({
-            t: 'REVENUE',
-            a: item.uuid
-          }.to_json)
-        ).find_or_create_by!(
-          trace_id: MixinBot::Utils.unique_uuid(trace_id, QuillBot.api.client_id)
-        )
-      end
+    if quill_amount.positive? && payment.wallet_id != QuillBot.api.client_id
+      transfers.create_with(
+        queue_priority: :low,
+        wallet_id: distributor_wallet_id,
+        transfer_type: :quill_revenue,
+        opponent_id: QuillBot.api.client_id,
+        asset_id: revenue_asset_id,
+        amount: quill_amount.to_s,
+        memo: Base64.encode64({
+          t: 'REVENUE',
+          a: item.uuid
+        }.to_json)
+      ).find_or_create_by!(
+        trace_id: MixinBot::Utils.unique_uuid(trace_id, QuillBot.api.client_id)
+      )
     end
 
     # create reader transfer
@@ -175,7 +161,7 @@ module Orders::Distributable
             c: item.uuid
           }.to_json)
         ).find_or_create_by(
-          trace_id: QuillBot.api.unique_conversation_id(trace_id, ref.reference.uuid)
+          trace_id: QuillBot.api.unique_uuid(trace_id, ref.reference.uuid)
         )
 
         _references_amount += _ref_amount
@@ -215,7 +201,7 @@ module Orders::Distributable
           amount: _collection_avg_amount,
           memo: "collection revenue from #{item.title}".truncate(70)
         ).find_or_create_by!(
-          trace_id: QuillBot.api.unique_conversation_id(trace_id, _order.trace_id)
+          trace_id: QuillBot.api.unique_uuid(trace_id, _order.trace_id)
         )
         _collection_amount += _collection_avg_amount
       end
@@ -240,7 +226,7 @@ module Orders::Distributable
       amount: author_revenue_amount,
       memo: author_revenue_transfer_memo.truncate(70)
     ).find_or_create_by!(
-      trace_id: QuillBot.api.unique_conversation_id(trace_id, item.author.mixin_uuid)
+      trace_id: QuillBot.api.unique_uuid(trace_id, item.author.mixin_uuid)
     )
   end
 
@@ -251,12 +237,7 @@ module Orders::Distributable
   end
 
   def distributor_wallet_id
-    @distributor_wallet_id ||=
-      if payment.wallet_id == QuillBot.api.client_id
-        Splitter.ready.pluck(:uuid).sample || buyer.wallet_id
-      else
-        payment.wallet_id
-      end
+    @distributor_wallet_id ||= QuillBot.api.client_id
   end
 
   def revenue_asset_id

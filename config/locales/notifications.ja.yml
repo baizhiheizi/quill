@@ -43,5 +43,7 @@ ja:
       subscribed: 新しく投稿した記事がフォローされました
     user_connected_notification:
       message: 歓迎！
+    user_safe_registration_notification:
+      message: Please update Mixin Messenger to the latest version to ensure you can accept the transfer.
     non_fungible_output_found_notification:
       found: Found

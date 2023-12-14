@@ -32,6 +32,7 @@ class Payment < ApplicationRecord
   belongs_to :payer_wallet, class_name: 'MixinNetworkUser', foreign_key: :opponent_id, primary_key: :uuid, inverse_of: false, optional: true
   belongs_to :snapshot, -> { where(amount: 0...) }, class_name: 'MixinNetworkSnapshot', foreign_key: :trace_id, primary_key: :trace_id, optional: true, inverse_of: false
   belongs_to :currency, primary_key: :asset_id, foreign_key: :asset_id, inverse_of: :payments, optional: true
+  belongs_to :kernel_output, primary_key: :request_id, foreign_key: :trace_id, inverse_of: false, optional: true
 
   has_one :refund_transfer, -> { where(transfer_type: :payment_refund) }, class_name: 'Transfer', as: :source, dependent: :nullify, inverse_of: false
   has_one :order, primary_key: :trace_id, foreign_key: :trace_id, dependent: :restrict_with_exception, inverse_of: :payment
@@ -260,7 +261,7 @@ class Payment < ApplicationRecord
       opponent_id: payer_id,
       amount: amount,
       asset_id: asset_id,
-      trace_id: QuillBot.api.unique_conversation_id(trace_id, opponent_id),
+      trace_id: QuillBot.api.unique_uuid(trace_id, opponent_id),
       memo: 'REDUND'
     )
   end
