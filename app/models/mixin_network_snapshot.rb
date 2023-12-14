@@ -113,6 +113,67 @@ class MixinNetworkSnapshot < ApplicationRecord
     end
   end
 
+  # polling Mixin Safe Network
+  def self.safe_poll
+    @__retry = 0
+
+    loop do
+      offset = last_polled_at
+
+      r = QuillBot.api.safe_snapshots(offset: offset, limit: POLLING_LIMIT, order: 'ASC', app: QuillBot.api.client_id)
+      p "polled #{r['data'].length} mixin safe snapshots, since #{offset}"
+
+      r['data'].each do |snapshot|
+        next if snapshot['user_id'].blank?
+
+        data = 
+          begin
+            [snapshot['memo']].pack('H*')
+          rescue StandardError
+            nil
+          end
+
+        create_with(
+          asset_id: snapshot['asset_id'],
+          amount: snapshot['amount'],
+          data: data,
+          transferred_at: snapshot['created_at'],
+          user_id: snapshot['user_id'],
+          opponent_id: snapshot['opponent_id'],
+          snapshot_id: snapshot['snapshot_id'],
+          trace_id: snapshot['request_id']
+        ).find_or_create_by!(
+          snapshot_id: snapshot['snapshot_id']
+        )
+      end
+
+      Rails.cache.write 'last_polled_at', r['data'].last['created_at']
+
+      sleep 0.5 if r['data'].length < POLLING_LIMIT
+      sleep POLLING_INTERVAL
+      @__retry = 0
+    rescue MixinBot::HttpError, MixinBot::RequestError, OpenSSL::SSL::SSLError => e
+      logger.error e.inspect
+      raise e if @__retry > 10
+
+      sleep POLLING_INTERVAL * 10
+      @__retry += 1
+
+      retry
+    rescue ActiveRecord::StatementInvalid => e
+      logger.error e.inspect
+      ActiveRecord::Base.connection.reconnect!
+
+      retry
+    rescue StandardError => e
+      logger.error "#{e.inspect}\n#{e.backtrace.join("\n")}"
+      ExceptionNotifier.notify_exception e
+      raise e if Rails.env.production?
+
+      sleep POLLING_INTERVAL * 10
+    end
+  end
+
   def owner
     @owner = wallet&.owner
   end

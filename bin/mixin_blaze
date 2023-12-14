@@ -29,5 +29,5 @@ EM.run {
     end
   end
 
-  MixinNetworkSnapshot.poll
+  MixinNetworkSnapshot.safe_poll
 }
