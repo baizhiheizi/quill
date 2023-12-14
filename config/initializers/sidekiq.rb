@@ -8,7 +8,7 @@ Sidekiq.configure_server do |config|
   cron_file = 'config/sidekiq-cron.yml'
   if Sidekiq.server?
     Sidekiq::Cron::Job.destroy_all!
-    Sidekiq::Cron::Job.load_from_hash YAML.load_file(cron_file) if File.exist?(cron_file) 
+    Sidekiq::Cron::Job.load_from_hash YAML.load_file(cron_file) if File.exist?(cron_file)
   end
 
   config.client_middleware do |chain|
