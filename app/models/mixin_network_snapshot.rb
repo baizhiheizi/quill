@@ -148,9 +148,7 @@ class MixinNetworkSnapshot < ApplicationRecord
         )
       end
 
-      if r['data'].length > 0
-        Rails.cache.write 'last_polled_at', r['data'].last['created_at']
-      end
+      Rails.cache.write 'last_polled_at', r['data'].last['created_at'] if r['data'].length.positive?
 
       if r['data'].length < POLLING_LIMIT
         # pull down the kernel outputs
