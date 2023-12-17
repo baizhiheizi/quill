@@ -78,4 +78,8 @@ Rails.application.configure do
     recipient_id: Rails.application.credentials.dig(:admin, :uuid),
     bot: 'QuillBot'
   }
+
+  logger           = ActiveSupport::Logger.new($stdout)
+  logger.formatter = config.log_formatter
+  config.logger    = ActiveSupport::TaggedLogging.new(logger)
 end

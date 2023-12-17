@@ -4,9 +4,11 @@ require 'rubygems'
 require 'bundler/setup'
 require File.expand_path('../config/environment', __dir__)
 
-EM.run {
+EM.run do
+  thrs = []
+
   if Settings.blaze_enable
-    QuillBot.api.start_blaze_connect do
+    thrs << QuillBot.api.start_blaze_connect do
       def on_open(ws, _event)
         p ['Quill', Time.current, :open]
         ws.send QuillBot.api.list_pending_message
@@ -29,5 +31,8 @@ EM.run {
     end
   end
 
-  MixinNetworkSnapshot.safe_poll
-}
+  thrs << Thread.new { Transfer.process_all! }
+  thrs << Thread.new { MixinNetworkSnapshot.safe_poll }
+
+  thrs.join
+end

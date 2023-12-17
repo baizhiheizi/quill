@@ -216,7 +216,6 @@ class User < ApplicationRecord
   end
 
   def notify_for_safe_registration
-    authorization.refresh!
     return if has_safe?
 
     UserSafeRegistrationNotification.with(user: self).deliver(self)

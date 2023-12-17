@@ -10,6 +10,7 @@
 #  opponent_multisig :json
 #  processed_at      :datetime
 #  queue_priority    :integer          default("default")
+#  retry_at          :datetime
 #  snapshot          :json
 #  source_type       :string
 #  transfer_type     :integer
@@ -61,8 +62,6 @@ class Transfer < ApplicationRecord
   validates :asset_id, presence: true
   validates :amount, numericality: { greater_than_or_equal_to: MINIMUM_AMOUNT }
   validate :ensure_opponent_presence
-
-  after_commit :process_async, on: :create
 
   scope :unprocessed, -> { where(processed_at: nil) }
   scope :processed, -> { where.not(processed_at: nil) }
@@ -160,59 +159,34 @@ class Transfer < ApplicationRecord
   end
 
   def process_safe_transfer!
-    # step 0: check if already transfered
-    r =
-      begin
-        wallet_api.safe_transaction trace_id
-      rescue MixinBot::NotFoundError
-        nil
-      end
+    check!
+    return if processed?
 
-    if r.present?
-      update!(
-        snapshot: r['data'],
-        processed_at: Time.current
-      )
-      return
-    end
-
-    # step 1: select utxos
-    outputs = KernelOutput.select_for(asset_id, amount)
-    utxos = outputs.map(&:raw)
-
-    # step 2: build transaction
-    tx = wallet_api.build_safe_transaction(
-      utxos: utxos,
-      receivers: [safe_receiver],
-      extra: memo
+    r = QuillBot.api.create_safe_transfer(
+      members: safe_receiver[:members],
+      threshold: safe_receiver[:threshold],
+      amount: safe_receiver[:amount],
+      asset_id: asset_id,
+      request_id: trace_id,
+      memo: memo,
+      spend_key: Rails.application.credentials.dig(:mixin, :spend_key)
     )
-    raw = MixinBot::Utils.encode_raw_transaction tx
-
-    # step 3: verify transaction
-    request = wallet_api.create_safe_transaction_request(trace_id, raw)['data']
-
-    # step 4: sign transaction
-    signed_raw = wallet_api.sign_safe_transaction(
-      raw: raw,
-      utxos: utxos,
-      request: request[0]
-    )
-
-    # step 5: submit transaction
-    r = wallet_api.send_safe_transaction(
-      trace_id,
-      signed_raw
-    )
-
-    outputs.each(&:spend!)
 
     update!(
-      snapshot: r['data'].first,
+      snapshot: r['data'],
       processed_at: Time.current
     )
-  rescue MixinBot::UserNotFoundError
-    recipient&.notify_for_safe_registration
-    nil
+  end
+
+  def check!
+    r = QuillBot.api.safe_transaction trace_id
+
+    update!(
+      snapshot: r['data'],
+      processed_at: Time.current
+    )
+  rescue MixinBot::NotFoundError
+    false
   end
 
   def notify_recipient
@@ -269,6 +243,45 @@ class Transfer < ApplicationRecord
       platform_revenue_last_month: (Order.where(created_at: Time.current.last_month.beginning_of_month...Time.current.last_month.end_of_month).sum(:value_usd) * Order::PLATFORM_RATIO).round(4),
       platform_revenue_this_month: (Order.where(created_at: Time.current.beginning_of_month...).sum(:value_usd) * Order::PLATFORM_RATIO).round(4)
     }.stringify_keys
+  end
+
+  def self.process_all!
+    @__retry_count = 0
+
+    loop do
+      unprocessed.where('retry_at IS NULL OR retry_at < ?', Time.current).find_each do |transfer|
+        Rails.logger.info "Transfer processing ##{transfer.id} #{Time.current}"
+        transfer.process!
+      rescue MixinBot::UserNotFoundError
+        Rails.logger.warn "Transfer user not found ##{transfer.id} #{Time.current}"
+
+        if transfer.retry_at.blank? || transfer.created_at > 7.days.ago
+          transfer.recipient&.notify_for_safe_registration
+          transfer.update retry_at: 1.day.from_now
+        else
+          transfer.update retry_at: 7.days.from_now
+        end
+
+        next
+      rescue MixinBot::InsufficientBalanceError
+        Rails.logger.warn "Transfer insufficient balance ##{transfer.id} #{Time.current}"
+        next
+      rescue StandardError => e
+        Rails.logger.error e
+        sleep 1
+        next
+      end
+
+      @__retry_count = 0
+      sleep 1
+      Rails.logger.info "Transfer all clear #{Time.current}"
+    rescue StandardError => e
+      Rails.logger.error e
+      raise e if @__retry_count >= 10
+
+      sleep 3
+      @__retry_count += 1
+    end
   end
 
   private
