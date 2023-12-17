@@ -5,12 +5,13 @@ require 'bundler/setup'
 require File.expand_path('../config/environment', __dir__)
 
 EM.run do
+  Thread.abort_on_exception = true
   thrs = []
 
   if Settings.blaze_enable
     thrs << QuillBot.api.start_blaze_connect do
       def on_open(ws, _event)
-        p ['Quill', Time.current, :open]
+        Rails.logger.info ['Quill', Time.current, :open]
         ws.send QuillBot.api.list_pending_message
       end
 
@@ -18,7 +19,7 @@ EM.run do
         raw = JSON.parse QuillBot.api.read_ws_message(event.data)
         return if raw&.[]('action') == 'ACKNOWLEDGE_MESSAGE_RECEIPT'
 
-        p ['Quill', Time.current, :message, raw&.[]('action')]
+        Rails.logger.info ['Quill', Time.current, :message, raw&.[]('action')]
         data = raw['data']
         return if data.blank?
 

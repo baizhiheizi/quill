@@ -49,6 +49,9 @@ class MixinMessage < ApplicationRecord
   end
 
   def process_user_message
+    return if user.blank?
+
+    user.notify_for_login
   end
 
   def touch_proccessed_at
@@ -56,11 +59,9 @@ class MixinMessage < ApplicationRecord
   end
 
   def process_async
-    if plain?
-      MixinMessages::ProcessJob.perform_async message_id
-    else
-      touch_proccessed_at
-    end
+    return if user.blank?
+
+    MixinMessages::ProcessJob.perform_async message_id
   end
 
   private
@@ -75,6 +76,6 @@ class MixinMessage < ApplicationRecord
     self.category          = data['category']
     self.conversation_id   = data['conversation_id']
     self.user_id           = data['user_id']
-    self.content           = Base64.decode64 data['data'].to_s
+    self.content           = data['data']
   end
 end
