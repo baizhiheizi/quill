@@ -161,7 +161,7 @@ class Transfer < ApplicationRecord
 
   def process_safe_transfer!
     # step 0: check if already transfered
-    r = 
+    r =
       begin
         wallet_api.safe_transaction trace_id
       rescue MixinBot::NotFoundError
