@@ -162,6 +162,8 @@ class Transfer < ApplicationRecord
     check!
     return if processed?
 
+    spend_key = Rails.application.credentials.dig(:quill_bot, :spend_key)
+    spend_key = Base64.urlsafe_decode64(spend_key)
     r = QuillBot.api.create_safe_transfer(
       members: safe_receiver[:members],
       threshold: safe_receiver[:threshold],
@@ -169,7 +171,7 @@ class Transfer < ApplicationRecord
       asset_id: asset_id,
       request_id: trace_id,
       memo: memo,
-      spend_key: Rails.application.credentials.dig(:mixin, :spend_key)
+      spend_key: spend_key
     )
 
     update!(
