@@ -32,7 +32,7 @@ module PreOrders::Swappable
       asset_id: pay_asset_id,
       amount: route[:funds],
       trace_id: trace_id,
-      memo: fswap_mtg_memo(route[:routes]),
+      memo: fswap_mtg_memo(route[:routes])
     )
   end
 
