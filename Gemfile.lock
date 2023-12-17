@@ -43,15 +43,6 @@ GIT
       rails (>= 3.2.15)
 
 GIT
-  remote: https://github.com/github/graphql-client.git
-  revision: 27ef61fd5d68055401d5d023e5a0f36a766c2664
-  ref: 27ef61f
-  specs:
-    graphql-client (0.18.0)
-      activesupport (>= 3.0)
-      graphql
-
-GIT
   remote: https://github.com/jtoy/cld.git
   revision: 570789a49822a242cb60553c3d07be4739e238d0
   specs:
@@ -293,8 +284,10 @@ GEM
       raabro (~> 1.4)
     globalid (1.2.1)
       activesupport (>= 6.1)
-    graphql (2.1.7)
-      racc (~> 1.4)
+    graphql (2.0.27)
+    graphql-client (0.18.0)
+      activesupport (>= 3.0)
+      graphql
     groupdate (6.4.0)
       activesupport (>= 6.1)
     grover (1.1.5)
@@ -648,7 +641,8 @@ DEPENDENCIES
   exception-track
   fastimage
   fnv
-  graphql-client!
+  graphql (< 2.1)
+  graphql-client
   groupdate
   grover
   high_voltage
