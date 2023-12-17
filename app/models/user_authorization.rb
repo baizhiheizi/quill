@@ -39,7 +39,10 @@ class UserAuthorization < ApplicationRecord
   end
 
   def has_safe?
-    raw['has_safe'].present?
+    return true if raw['has_safe'].present?
+
+    refresh!
+    raw['has_safe']
   end
 
   def mixin_api

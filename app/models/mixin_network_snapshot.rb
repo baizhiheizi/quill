@@ -152,7 +152,6 @@ class MixinNetworkSnapshot < ApplicationRecord
 
       if r['data'].length < POLLING_LIMIT
         # pull down the kernel outputs
-        KernelOutput.poll
         sleep POLLING_INTERVAL * 10
       else
         sleep POLLING_INTERVAL

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2023_05_23_083009) do
+ActiveRecord::Schema[7.1].define(version: 2023_12_17_072224) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
   enable_extension "pgcrypto"
@@ -523,6 +523,7 @@ ActiveRecord::Schema[7.1].define(version: 2023_05_23_083009) do
     t.uuid "wallet_id"
     t.integer "queue_priority", default: 0
     t.json "opponent_multisig", default: {}
+    t.datetime "retry_at"
     t.index ["asset_id"], name: "index_transfers_on_asset_id"
     t.index ["created_at"], name: "index_transfers_on_created_at"
     t.index ["opponent_id"], name: "index_transfers_on_opponent_id"

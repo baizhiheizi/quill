@@ -10,6 +10,7 @@
 #  opponent_multisig :json
 #  processed_at      :datetime
 #  queue_priority    :integer          default("default")
+#  retry_at          :datetime
 #  snapshot          :json
 #  source_type       :string
 #  transfer_type     :integer
