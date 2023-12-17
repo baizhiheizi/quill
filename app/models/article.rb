@@ -498,6 +498,27 @@ class Article < ApplicationRecord
     content.gsub(/!\[[^\]]*\]\((.*?)\s*("(?:.*[^"])")?\s*\)(\\n)*/) { |m| "#{m.strip}\n" }
   end
 
+  def payment_trace_id(user)
+    return if user.blank?
+
+    # generate a unique trace ID for paying
+    # avoid duplicate payment
+    candidate = QuillBot.api.unique_uuid(uuid, user.mixin_uuid)
+    loop do
+      break unless Payment.exists?(trace_id: candidate) || PreOrder.exists?(trace_id: candidate, state: %i[paid expired])
+
+      candidate = QuillBot.api.unique_uuid(uuid, candidate)
+    end
+
+    candidate
+  end
+
+  def mixpay_supported?
+    return true if free?
+
+    asset_id.in?(Mixpay.api.settlement_asset_ids)
+  end
+
   private
 
   def setup_attributes

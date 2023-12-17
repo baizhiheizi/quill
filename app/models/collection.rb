@@ -32,7 +32,6 @@ class Collection < ApplicationRecord
   DEFAULT_SPLIT = '0.1'
 
   include AASM
-  include Collections::Payable
 
   has_one_attached :cover
 
@@ -180,6 +179,25 @@ class Collection < ApplicationRecord
       .deliver(
         User.where(id: (author.subscribe_by_user_ids - author.block_user_ids))
       )
+  end
+
+  def payment_trace_id(user)
+    return if user.blank?
+
+    # generate a unique trace ID for paying
+    # avoid duplicate payment
+    candidate = QuillBot.api.unique_uuid(uuid, user.mixin_uuid)
+    loop do
+      break unless Payment.exists?(trace_id: candidate) || PreOrder.exists?(trace_id: candidate, state: %i[paid expired])
+
+      candidate = QuillBot.api.unique_uuid(uuid, candidate)
+    end
+
+    candidate
+  end
+
+  def mixpay_supported?
+    asset_id.in?(Mixpay.api.settlement_asset_ids)
   end
 
   private
