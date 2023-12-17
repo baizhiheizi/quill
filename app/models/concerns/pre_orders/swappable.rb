@@ -10,37 +10,30 @@ module PreOrders::Swappable
   end
 
   def direct_pay_url
-    if payer.has_safe?
-      QuillBot.api.safe_pay_url(
-        members: [QuillBot.api.client_id],
-        threshold: 1,
-        asset_id: asset_id,
-        amount: amount,
-        trace_id: trace_id,
-        memo: memo
-      )
-    else
-      Addressable::URI.new(
-        scheme: 'mixin',
-        host: 'pay',
-        path: '',
-        query_values: [
-          ['recipient', payee_id],
-          ['trace', trace_id],
-          ['memo', memo],
-          ['asset', asset_id],
-          ['amount', amount.to_f.round(8)]
-        ]
-      ).to_s
-    end
+    QuillBot.api.safe_pay_url(
+      members: [QuillBot.api.client_id],
+      threshold: 1,
+      asset_id: asset_id,
+      amount: amount,
+      trace_id: trace_id,
+      memo: memo
+    )
   end
 
   def foxswap_pay_url(pay_asset_id)
-    Addressable::URI.new(
-      scheme: 'mixin',
-      host: 'codes',
-      path: fswap_pay_code_id(pay_asset_id)
-    ).to_s
+    return if pay_asset_id == asset_id
+
+    route = fswap_route pay_asset_id
+    return if route.blank?
+
+    QuillBot.api.safe_pay_url(
+      members: Settings.foxswap.mtg_members,
+      threshold: Settings.foxswap.mtg_threshold,
+      asset_id: pay_asset_id,
+      amount: route[:funds],
+      trace_id: trace_id,
+      memo: fswap_mtg_memo(route[:routes]),
+    )
   end
 
   def fswap_pay_code_id(pay_asset_id)
