@@ -53,7 +53,6 @@ class Article < ApplicationRecord
 
   include AASM
   include Articles::Arweavable
-  include Articles::Payable
 
   belongs_to :author, class_name: 'User', inverse_of: :articles
   belongs_to :currency, primary_key: :asset_id, foreign_key: :asset_id, inverse_of: :articles
