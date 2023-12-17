@@ -10,5 +10,8 @@ module ArweaveBot
 
   def self.graphql
     @graphql ||= ArweaveBot::Graphql.new
+  rescue StandardError => e
+    Rails.logger.error e.message
+    nil
   end
 end
