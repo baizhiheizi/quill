@@ -66,7 +66,7 @@ It will promt up a config file for development envrionment. Here's a minimum exa
 quill_bot:
   client_id:
   client_secret:
-  pin_code:
+  pin:
   session_id:
   pin_token:
   private_key:

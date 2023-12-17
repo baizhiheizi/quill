@@ -291,6 +291,6 @@ class Transfer < ApplicationRecord
   end
 
   def wallet_pin
-    wallet&.pin || Rails.application.credentials.dig(:quill_bot, :pin_code)
+    wallet&.pin || Rails.application.credentials.dig(:quill_bot, :pin)
   end
 end
