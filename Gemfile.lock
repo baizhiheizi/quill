@@ -43,6 +43,15 @@ GIT
       rails (>= 3.2.15)
 
 GIT
+  remote: https://github.com/github/graphql-client.git
+  revision: 27ef61fd5d68055401d5d023e5a0f36a766c2664
+  ref: 27ef61f
+  specs:
+    graphql-client (0.18.0)
+      activesupport (>= 3.0)
+      graphql
+
+GIT
   remote: https://github.com/jtoy/cld.git
   revision: 570789a49822a242cb60553c3d07be4739e238d0
   specs:
@@ -149,13 +158,13 @@ GEM
     attr_required (1.0.1)
     awesome_print (1.9.2)
     aws-eventstream (1.3.0)
-    aws-partitions (1.866.0)
+    aws-partitions (1.868.0)
     aws-sdk-core (3.190.0)
       aws-eventstream (~> 1, >= 1.3.0)
       aws-partitions (~> 1, >= 1.651.0)
       aws-sigv4 (~> 1.8)
       jmespath (~> 1, >= 1.6.1)
-    aws-sdk-kms (1.74.0)
+    aws-sdk-kms (1.75.0)
       aws-sdk-core (~> 3, >= 3.188.0)
       aws-sigv4 (~> 1.1)
     aws-sdk-s3 (1.141.0)
@@ -286,9 +295,6 @@ GEM
       activesupport (>= 6.1)
     graphql (2.1.7)
       racc (~> 1.4)
-    graphql-client (0.18.0)
-      activesupport (>= 3.0)
-      graphql
     groupdate (6.4.0)
       activesupport (>= 6.1)
     grover (1.1.5)
@@ -320,7 +326,7 @@ GEM
     inline_svg (1.9.0)
       activesupport (>= 3.0)
       nokogiri (>= 1.6)
-    io-console (0.7.0)
+    io-console (0.7.1)
     irb (1.10.1)
       rdoc
       reline (>= 0.3.8)
@@ -417,7 +423,7 @@ GEM
       faraday (>= 2)
       faraday-retry (>= 2)
       hashids (>= 1)
-    parallel (1.23.0)
+    parallel (1.24.0)
     parser (3.2.2.4)
       ast (~> 2.4.1)
       racc
@@ -502,7 +508,7 @@ GEM
       mini_portile2 (~> 2.8)
       pkg-config (~> 1.5)
       rubyzip (~> 2.3)
-    rdoc (6.6.1)
+    rdoc (6.6.2)
       psych (>= 4.0.0)
     redcarpet (3.6.0)
     redis (5.0.8)
@@ -541,7 +547,7 @@ GEM
       unicode-display_width (>= 2.4.0, < 3.0)
     rubocop-ast (1.30.0)
       parser (>= 3.2.1.0)
-    rubocop-rails (2.22.2)
+    rubocop-rails (2.23.0)
       activesupport (>= 4.2.0)
       rack (>= 1.1)
       rubocop (>= 1.33.0, < 2.0)
@@ -642,7 +648,7 @@ DEPENDENCIES
   exception-track
   fastimage
   fnv
-  graphql-client
+  graphql-client!
   groupdate
   grover
   high_voltage
