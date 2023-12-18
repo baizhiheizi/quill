@@ -205,7 +205,7 @@ GEM
       irb (~> 1.10)
       reline (>= 0.3.8)
     deep_merge (1.2.2)
-    dockerfile-rails (1.5.14)
+    dockerfile-rails (1.6.0)
       rails (>= 3.0.0)
     domain_name (0.6.20231109)
     drb (2.2.0)
