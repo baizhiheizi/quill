@@ -68,13 +68,13 @@ class Transfer < ApplicationRecord
   scope :only_user_revenue, -> { where(transfer_type: %i[author_revenue reader_revenue]) }
 
   def snapshot_id
-    snapshot = snapshot.first if snapshot.is_a?(Array)
-    snapshot&.[]('snapshot_id')
+    _snapshot = snapshot.is_a?(Array) ? snapshot.first : snapshot
+    _snapshot&.[]('snapshot_id')
   end
 
   def transaction_hash
-    snapshot = snapshot.first if snapshot.is_a?(Array)
-    snapshot&.[]('transaction_hash')
+    _snapshot = snapshot.is_a?(Array) ? snapshot.first : snapshot
+    _snapshot&.[]('transaction_hash')
   end
 
   def snapshot_url
@@ -188,7 +188,7 @@ class Transfer < ApplicationRecord
     )
 
     update!(
-      snapshot: r['data'].first,
+      snapshot: r['data'],
       processed_at: Time.current
     )
   end
