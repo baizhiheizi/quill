@@ -72,6 +72,8 @@ class Transfer < ApplicationRecord
   end
 
   def snapshot_url
+    return if snapshot_id.blank?
+
     [
       'https://mixin.one/snapshots/',
       snapshot_id
