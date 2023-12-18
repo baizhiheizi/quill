@@ -68,16 +68,27 @@ class Transfer < ApplicationRecord
   scope :only_user_revenue, -> { where(transfer_type: %i[author_revenue reader_revenue]) }
 
   def snapshot_id
+    snapshot = snapshot.first if snapshot.is_a?(Array)
     snapshot&.[]('snapshot_id')
   end
 
-  def snapshot_url
-    return if snapshot_id.blank?
+  def transaction_hash
+    snapshot = snapshot.first if snapshot.is_a?(Array)
+    snapshot&.[]('transaction_hash')
+  end
 
-    [
-      'https://mixin.one/snapshots/',
-      snapshot_id
-    ].join
+  def snapshot_url
+    if transaction_hash.present?
+      [
+        'https://viewblock.io/mixin/tx/',
+        transaction_hash
+      ].join
+    elsif snapshot_id.present?
+      [
+        'https://mixin.one/snapshots/',
+        snapshot_id
+      ].join
+    end
   end
 
   def processed?
@@ -177,7 +188,7 @@ class Transfer < ApplicationRecord
     )
 
     update!(
-      snapshot: r['data'],
+      snapshot: r['data'].first,
       processed_at: Time.current
     )
   end
