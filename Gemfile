@@ -179,7 +179,7 @@ gem 'rqrcode'
 
 # A Ruby library for declaring, composing and executing GraphQL queries
 gem "graphql-client"
-gem "graphql", "<2.1"
+gem "graphql", "<2.2"
 
 # Rails Plugin that tracks impressions and page views
 gem 'impressionist', github: 'charlotte-ruby/impressionist'
