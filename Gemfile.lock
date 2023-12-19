@@ -284,7 +284,8 @@ GEM
       raabro (~> 1.4)
     globalid (1.2.1)
       activesupport (>= 6.1)
-    graphql (2.0.27)
+    graphql (2.2.0)
+      racc (~> 1.4)
     graphql-client (0.18.0)
       activesupport (>= 3.0)
       graphql
@@ -641,7 +642,7 @@ DEPENDENCIES
   exception-track
   fastimage
   fnv
-  graphql (< 2.1)
+  graphql (< 2.3)
   graphql-client
   groupdate
   grover
