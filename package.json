@@ -52,7 +52,7 @@
     "@tiptap/extension-underline": "^2.1.13",
     "@tiptap/pm": "^2.1.13",
     "@tiptap/starter-kit": "^2.1.13",
-    "@walletconnect/ethereum-provider": "^2.10.6",
+    "@walletconnect/ethereum-provider": "^2.11.0",
     "@walletconnect/modal": "^2.6.2",
     "abortcontroller-polyfill": "^1.7.5",
     "autoprefixer": "^10.4.16",
