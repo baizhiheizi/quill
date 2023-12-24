@@ -1,9 +1,6 @@
 # frozen_string_literal: true
 
-class MixinMessages::SendJob
-  include Sidekiq::Job
-  sidekiq_options queue: :default, retry: true
-
+class MixinMessages::SendJob < ApplicationJob
   def perform(message, bot = 'QuillBot')
     if bot == 'RevenueBot'
       RevenueBot.api.send_message message
