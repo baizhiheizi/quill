@@ -2,7 +2,6 @@
 
 - Ruby v3.2
 - Postgresql
-- Redis
 
 ### Install Ruby
 
@@ -35,10 +34,6 @@ sudo apt update
 sudo apt install postgresql postgresql-contrib libpq-dev
 sudo systemctl start postgresql.service
 ```
-
-### Install Redis
-
-Check it up at https://redis.io/docs/getting-started/installation/
 
 ## Clone repo
 

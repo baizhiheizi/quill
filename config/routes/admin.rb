@@ -1,9 +1,5 @@
 # frozen_string_literal: true
 
-require 'sidekiq/web'
-require 'sidekiq/cron/web'
-require 'sidekiq_unique_jobs/web'
-
 class AdminConstraint
   def matches?(request)
     return false if request.session[:current_admin_id].blank?
@@ -13,8 +9,8 @@ class AdminConstraint
 end
 
 namespace :admin do
-  # sidekiq
-  mount Sidekiq::Web, at: 'sidekiq', constraints: AdminConstraint.new
+  # good_job
+  mount GoodJob::Engine, at: 'good_job', constraints: AdminConstraint.new
   # pghero
   mount PgHero::Engine, at: 'pghero'
   # exception

@@ -38,16 +38,6 @@ gem 'requestjs-rails'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jbuilder'
 
-# Use Redis adapter to run Action Cable in production
-gem 'hiredis'
-gem 'redis'
-
-# Map Redis types directly to Ruby objects
-gem 'redis-objects'
-
-# This gem adds a Redis::Namespace class which can be used to namespace Redis keys. http://redis.io
-gem 'redis-namespace'
-
 # Use Active Model has_secure_password
 gem 'bcrypt', '~> 3.1.7'
 
@@ -65,15 +55,6 @@ gem 'activestorage-aliyun'
 
 # S3 active storage service
 gem 'aws-sdk-s3', require: false
-
-# Simple, efficient background processing for Ruby http://sidekiq.org
-gem 'sidekiq', '< 8'
-
-# Scheduler / Cron for Sidekiq jobs
-gem 'sidekiq-cron'
-
-# Prevents duplicate Sidekiq jobs
-gem 'sidekiq-unique-jobs'
 
 # Use Active Storage variant
 gem 'image_processing', '~> 1.2'
@@ -186,6 +167,10 @@ gem 'impressionist', github: 'charlotte-ruby/impressionist'
 
 # Twitter OAuth 2.0 Client Library in Ruby
 gem 'twitter_oauth2'
+
+gem 'good_job'
+
+gem 'solid_cache'
 
 group :development, :test do
   # Start debugger with binding.b [https://github.com/ruby/debug]

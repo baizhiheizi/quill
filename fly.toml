@@ -17,7 +17,7 @@ kill_timeout = "5s"
 [processes]
   app = "./bin/rails server"
   blaze = "./bin/mixin_blaze"
-  worker = "bundle exec sidekiq"
+  worker = "bundle exec good_job start"
 
 [[services]]
   protocol = "tcp"

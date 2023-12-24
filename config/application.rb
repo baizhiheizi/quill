@@ -16,7 +16,7 @@ module Quill
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 7.1
 
-    config.active_job.queue_adapter = :sidekiq
+    config.active_job.queue_adapter = :good_job
 
     # Configuration for the application, engines, and railties goes here.
     #
