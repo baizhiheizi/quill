@@ -216,13 +216,7 @@ class Transfer < ApplicationRecord
   end
 
   def process_async
-    if queue_priority_critical?
-      Transfers::ProcessCriticalJob.perform_async trace_id
-    elsif queue_priority_low?
-      Transfers::ProcessThrottledJob.perform_in SecureRandom.random_number(600).seconds, trace_id, wallet_id
-    else
-      Transfers::ProcessJob.perform_async trace_id
-    end
+    Transfers::ProcessJob.perform_later trace_id
   end
 
   def recipient_has_safe?

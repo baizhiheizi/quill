@@ -68,7 +68,7 @@ class Announcement < ApplicationRecord
     end
 
     messages.each do |message|
-      MixinMessages::SendJob.perform_async message
+      MixinMessages::SendJob.perform_later message
     end
   end
 
@@ -82,7 +82,7 @@ class Announcement < ApplicationRecord
     end
 
     messages.in_groups_of(100, false).each do |message|
-      MixinMessages::SendJob.perform_async message
+      MixinMessages::SendJob.perform_later message
     end
   end
 

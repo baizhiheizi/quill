@@ -305,11 +305,11 @@ class Article < ApplicationRecord
   end
 
   def notify_for_first_published_async
-    Articles::NotifyForFirstPublishedJob.perform_async id
+    Articles::NotifyForFirstPublishedJob.perform_later id
   end
 
   def create_wallet_async
-    Articles::CreateWalletJob.perform_async id
+    Articles::CreateWalletJob.perform_later id
   end
 
   def do_first_publish
@@ -394,7 +394,7 @@ class Article < ApplicationRecord
   end
 
   def attach_images_from_content_async
-    Articles::AttachImagesFromContentJob.perform_async uuid
+    Articles::AttachImagesFromContentJob.perform_later uuid
   end
 
   def blob_parsed_content
@@ -442,7 +442,7 @@ class Article < ApplicationRecord
   end
 
   def detect_locale_async
-    Articles::DetectLocaleJob.perform_async uuid
+    Articles::DetectLocaleJob.perform_later uuid
   end
 
   def thumb_url
@@ -481,7 +481,7 @@ class Article < ApplicationRecord
   end
 
   def generate_poster_async
-    Articles::GeneratePosterJob.perform_async id
+    Articles::GeneratePosterJob.perform_later id
   end
 
   def qrcode_base64

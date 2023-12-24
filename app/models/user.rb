@@ -156,7 +156,7 @@ class User < ApplicationRecord
   end
 
   def prepare_async
-    Users::PrepareJob.perform_async id
+    Users::PrepareJob.perform_later id
   end
 
   def create_bot_contact_conversation

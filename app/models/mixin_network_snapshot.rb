@@ -292,7 +292,7 @@ class MixinNetworkSnapshot < ApplicationRecord
   end
 
   def process_async
-    MixinNetworkSnapshots::ProcessJob.perform_async id
+    MixinNetworkSnapshots::ProcessJob.perform_later id
   end
 
   def price_tag

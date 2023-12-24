@@ -8,7 +8,7 @@ class AdminNotificationService
       conversation_id: Rails.application.credentials.dig(:admin, :group_conversation_id),
       data: text
     )
-    MixinMessages::SendJob.perform_async message.stringify_keys
+    MixinMessages::SendJob.perform_later message.stringify_keys
   end
 
   def post(post)
@@ -16,6 +16,6 @@ class AdminNotificationService
       conversation_id: Rails.application.credentials.dig(:admin, :group_conversation_id),
       data: post
     )
-    MixinMessages::SendJob.perform_async message.stringify_keys
+    MixinMessages::SendJob.perform_later message.stringify_keys
   end
 end

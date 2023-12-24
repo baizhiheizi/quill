@@ -4,7 +4,7 @@ module Users::Importable
   extend ActiveSupport::Concern
 
   def import_articles_from_mirror_async
-    Users::ImportArticlesFromMirrorJob.perform_async id
+    Users::ImportArticlesFromMirrorJob.perform_later id
   end
 
   def import_articles_from_mirror

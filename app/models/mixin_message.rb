@@ -61,7 +61,7 @@ class MixinMessage < ApplicationRecord
   def process_async
     return if user.blank?
 
-    MixinMessages::ProcessJob.perform_async message_id
+    MixinMessages::ProcessJob.perform_later message_id
   end
 
   private

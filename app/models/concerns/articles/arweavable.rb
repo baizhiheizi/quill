@@ -4,7 +4,7 @@ module Articles::Arweavable
   extend ActiveSupport::Concern
 
   def upload_to_arweave_async
-    Articles::UploadToArweaveJob.perform_async id
+    Articles::UploadToArweaveJob.perform_later id
   end
 
   def upload_to_arweave!
