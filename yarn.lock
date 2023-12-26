@@ -335,6 +335,13 @@
   dependencies:
     tslib "^2.5.0"
 
+"@milkdown/exception@7.3.3":
+  version "7.3.3"
+  resolved "https://registry.yarnpkg.com/@milkdown/exception/-/exception-7.3.3.tgz#84dbcf92d3786fcc371de2bd9bb7671ece6d97b8"
+  integrity sha512-q6S9P5yux23BPy5/GK81OslQuVWD+PrNljb1asv10TTscZAyZmgCMvECQrR3qrwd/Ja5JN5C2CcYLe1JgzI1Fg==
+  dependencies:
+    tslib "^2.5.0"
+
 "@milkdown/plugin-block@^7.3.2":
   version "7.3.2"
   resolved "https://registry.npmjs.org/@milkdown/plugin-block/-/plugin-block-7.3.2.tgz#b3dc5cd20d5400f0b3c6d2fe409bd00706d1e1ef"
@@ -394,12 +401,12 @@
     "@milkdown/utils" "7.3.2"
     tslib "^2.5.0"
 
-"@milkdown/plugin-listener@^7.3.2":
-  version "7.3.2"
-  resolved "https://registry.npmjs.org/@milkdown/plugin-listener/-/plugin-listener-7.3.2.tgz#be07804059b69d58608aae1a2183055c226b72f8"
-  integrity sha512-ipvfIpVflQp1b8ayre1ReSDgL2WJ5eie2nOTNe8i4ZNoLeTMVNn3v+GNvyY59/EC+Rm9Egqu6eGwvi6chYNqpg==
+"@milkdown/plugin-listener@^7.3.3":
+  version "7.3.3"
+  resolved "https://registry.yarnpkg.com/@milkdown/plugin-listener/-/plugin-listener-7.3.3.tgz#8810409de40f06ffb7bc3ef02a0eac3d0f863d9f"
+  integrity sha512-VqDAdOimqCBm46jS/KQG32A1QX2DRfbhIhbnoKIzZzDhnzgQecLJFD9+Nom/j/NVIQQK/5NyRKp4dJzP8Tj7GA==
   dependencies:
-    "@milkdown/utils" "7.3.2"
+    "@milkdown/utils" "7.3.3"
     "@types/lodash.debounce" "^4.0.7"
     lodash.debounce "^4.0.8"
     tslib "^2.5.0"
@@ -506,6 +513,15 @@
   integrity sha512-Dsdfkcs7D/gujERtegsyG+fLa/UbuczSI7+YueXrmyQ7y6LE/Ob8bo/PwSiISFTn4+hzZfchdmcYSmgvlblQNQ==
   dependencies:
     "@milkdown/exception" "7.3.2"
+    nanoid "^5.0.0"
+    tslib "^2.5.0"
+
+"@milkdown/utils@7.3.3":
+  version "7.3.3"
+  resolved "https://registry.yarnpkg.com/@milkdown/utils/-/utils-7.3.3.tgz#a576d3347eb0be83527745c90ebceacbcb1936a8"
+  integrity sha512-PwM43+YLuvS+RUaiFWZPS6vBxGcEp9nUY2U0h00FHRJjbTSriDHcnTgpkRX5u2JKBaWaRCDTFGjVmfJI6q6LGA==
+  dependencies:
+    "@milkdown/exception" "7.3.3"
     nanoid "^5.0.0"
     tslib "^2.5.0"
 

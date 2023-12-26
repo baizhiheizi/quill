@@ -23,7 +23,7 @@
     "@milkdown/plugin-emoji": "^7.3.2",
     "@milkdown/plugin-history": "^7.3.2",
     "@milkdown/plugin-indent": "^7.3.2",
-    "@milkdown/plugin-listener": "^7.3.2",
+    "@milkdown/plugin-listener": "^7.3.3",
     "@milkdown/plugin-slash": "^7.3.2",
     "@milkdown/plugin-tooltip": "^7.3.2",
     "@milkdown/plugin-upload": "^7.3.2",
