@@ -335,6 +335,13 @@
   dependencies:
     tslib "^2.5.0"
 
+"@milkdown/exception@7.3.3":
+  version "7.3.3"
+  resolved "https://registry.yarnpkg.com/@milkdown/exception/-/exception-7.3.3.tgz#84dbcf92d3786fcc371de2bd9bb7671ece6d97b8"
+  integrity sha512-q6S9P5yux23BPy5/GK81OslQuVWD+PrNljb1asv10TTscZAyZmgCMvECQrR3qrwd/Ja5JN5C2CcYLe1JgzI1Fg==
+  dependencies:
+    tslib "^2.5.0"
+
 "@milkdown/plugin-block@^7.3.2":
   version "7.3.2"
   resolved "https://registry.npmjs.org/@milkdown/plugin-block/-/plugin-block-7.3.2.tgz#b3dc5cd20d5400f0b3c6d2fe409bd00706d1e1ef"
@@ -428,13 +435,13 @@
     tippy.js "^6.3.7"
     tslib "^2.5.0"
 
-"@milkdown/plugin-upload@^7.3.2":
-  version "7.3.2"
-  resolved "https://registry.npmjs.org/@milkdown/plugin-upload/-/plugin-upload-7.3.2.tgz#01d47205126226dc1725304da872a875bacef53b"
-  integrity sha512-T6M3cS7Ye23OMs8lGj+mVMmNvOPikwACSQ52UJUI4pnsCaZmWhbmpu0gY6YS17fEzVgtEcUzqEpG/x/5G/Ps8Q==
+"@milkdown/plugin-upload@^7.3.3":
+  version "7.3.3"
+  resolved "https://registry.yarnpkg.com/@milkdown/plugin-upload/-/plugin-upload-7.3.3.tgz#c3a7fba1038b459eb88575ab52bf4293d74ab50f"
+  integrity sha512-EVlXX5IVhrGRsSkzy7HNw6vq+k8mQpz5izKE/yFbciPI98eEi4GjQxZRdXYBruCVHZbMNNR7dx4acs0PBuaRpQ==
   dependencies:
-    "@milkdown/exception" "7.3.2"
-    "@milkdown/utils" "7.3.2"
+    "@milkdown/exception" "7.3.3"
+    "@milkdown/utils" "7.3.3"
     tslib "^2.5.0"
 
 "@milkdown/preset-commonmark@^7.3.2":
@@ -506,6 +513,15 @@
   integrity sha512-Dsdfkcs7D/gujERtegsyG+fLa/UbuczSI7+YueXrmyQ7y6LE/Ob8bo/PwSiISFTn4+hzZfchdmcYSmgvlblQNQ==
   dependencies:
     "@milkdown/exception" "7.3.2"
+    nanoid "^5.0.0"
+    tslib "^2.5.0"
+
+"@milkdown/utils@7.3.3":
+  version "7.3.3"
+  resolved "https://registry.yarnpkg.com/@milkdown/utils/-/utils-7.3.3.tgz#a576d3347eb0be83527745c90ebceacbcb1936a8"
+  integrity sha512-PwM43+YLuvS+RUaiFWZPS6vBxGcEp9nUY2U0h00FHRJjbTSriDHcnTgpkRX5u2JKBaWaRCDTFGjVmfJI6q6LGA==
+  dependencies:
+    "@milkdown/exception" "7.3.3"
     nanoid "^5.0.0"
     tslib "^2.5.0"
 
