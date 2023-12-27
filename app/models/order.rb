@@ -72,6 +72,8 @@ class Order < ApplicationRecord
     when Collection
       broadcast_to_collection_views
     end
+  rescue PG::InvalidParameterValue => e
+    Rails.logger.error e
   end
 
   def broadcast_to_article_views

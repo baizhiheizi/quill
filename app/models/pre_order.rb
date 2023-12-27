@@ -79,6 +79,8 @@ class PreOrder < ApplicationRecord
         )
       )
     end
+  rescue PG::InvalidParameterValue => e
+    Rails.logger.error e
   end
 
   def to_param
