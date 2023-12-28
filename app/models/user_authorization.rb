@@ -34,7 +34,7 @@ class UserAuthorization < ApplicationRecord
   def refresh!
     return if provider == 'twitter'
 
-    r = QuillBot.api.read_user raw['user_id']
+    r = QuillBot.api.user raw['user_id']
     update! raw: raw.merge(has_safe: r['data']['has_safe'])
   end
 
