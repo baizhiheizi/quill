@@ -30,7 +30,7 @@
         <div class="rounded-full w-1 h-1 bg-[#ffcf54]"></div>
       </div>
       <div class="w-16 uppercase"><%= user.uid.last(4) %></div>
-      <%= link_to '', "mixin://users/#{MixinBot::Utils::UUID.new(hex: user.uid).unpacked}", target: '_blank', class: "absolute inset-0" if from_mixin_messenger? %>
+      <%= link_to '', "https://mixin.one/users/#{MixinBot::UUID.new(hex: user.uid).unpacked}", target: '_blank', class: "absolute inset-0" if from_mixin_messenger? %>
     </div>
   <% end %>
 </div>
