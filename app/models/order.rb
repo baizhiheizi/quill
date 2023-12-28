@@ -72,18 +72,19 @@ class Order < ApplicationRecord
     when Collection
       broadcast_to_collection_views
     end
-  rescue PG::InvalidParameterValue => e
-    Rails.logger.error e
   end
 
   def broadcast_to_article_views
     I18n.with_locale buyer.locale do
-      broadcast_replace_to "user_#{buyer.mixin_uuid}", target: "article_#{item.uuid}_content", partial: 'articles/content', locals: { article: item, user: buyer } if buy_article?
+      broadcast_replace_later_to "user_#{buyer.mixin_uuid}", target: "article_#{item.uuid}_content", partial: 'articles/content', locals: { article: item, user: buyer } if buy_article?
 
       broadcast_replace_later_to "user_#{buyer.mixin_uuid}", target: "article_#{item.uuid}_buyers", partial: 'articles/buyers', locals: { article: item, user: buyer }
-      broadcast_replace_to "user_#{buyer.mixin_uuid}", target: "article_#{item.uuid}_comments_card", partial: 'articles/comments_card', locals: { article: item, user: buyer }
+      broadcast_replace_later_to "user_#{buyer.mixin_uuid}", target: "article_#{item.uuid}_comments_card", partial: 'articles/comments_card', locals: { article: item, user: buyer }
       broadcast_remove_to "user_#{buyer.mixin_uuid}", target: "#{item.uuid}_pre_order_modal"
     end
+  rescue PG::InvalidParameterValue => e
+    Rails.logger.error e
+    broadcast_replace_later_to "user_#{buyer.mixin_uuid}", target: 'toast-slot', partial: 'shared/reload'
   end
 
   def broadcast_to_collection_views

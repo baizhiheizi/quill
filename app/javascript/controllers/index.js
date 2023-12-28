@@ -73,6 +73,9 @@ application.register('preview-upload', PreviewUploadController);
 import ReferencesSelectController from './references_select_controller';
 application.register('references-select', ReferencesSelectController);
 
+import ReloadController from './reload_controller';
+application.register('reload', ReloadController);
+
 import ScrollToController from './scroll_to_controller';
 application.register('scroll-to', ScrollToController);
 

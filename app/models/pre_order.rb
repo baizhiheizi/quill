@@ -81,6 +81,7 @@ class PreOrder < ApplicationRecord
     end
   rescue PG::InvalidParameterValue => e
     Rails.logger.error e
+    broadcast_replace_later_to "user_#{payer_id}", target: 'toast-slot', partial: 'shared/reload'
   end
 
   def to_param
