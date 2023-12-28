@@ -1,15 +1,15 @@
 GIT
   remote: https://github.com/TheTridentOne/trident_assistant.git
-  revision: 14539d2068eac7dc2b4509d398a41ab59614dd99
+  revision: 317e5968f466305f401230205bdf0cc213334fbb
   specs:
     trident_assistant (0.1.8)
-      mixin_bot (~> 0.8)
+      mixin_bot (~> 1.0)
 
 GIT
   remote: https://github.com/an-lee/mixin_bot.git
-  revision: 1125bfe83dd14b53324be720717b1d473552db8c
+  revision: ba8a7542651590068c36aef4f9eef33e2dce25a0
   specs:
-    mixin_bot (0.12.1)
+    mixin_bot (1.0.0)
       activesupport (>= 5)
       awesome_print (~> 1.8)
       base58 (~> 0.2)
@@ -17,8 +17,10 @@ GIT
       blake3-rb (~> 1.5)
       cli-ui (~> 2.2)
       eth (~> 0.5)
+      faraday (>= 2)
+      faraday-multipart (>= 1)
+      faraday-retry (>= 2)
       faye-websocket (>= 0.11)
-      http (~> 5.1)
       jose (~> 1.1)
       msgpack (~> 1.3)
       rbnacl (~> 7.1)
@@ -146,10 +148,10 @@ GEM
       activerecord (>= 3.2, < 8.0)
       rake (>= 10.4, < 14.0)
     ast (2.4.2)
-    attr_required (1.0.1)
+    attr_required (1.0.2)
     awesome_print (1.9.2)
     aws-eventstream (1.3.0)
-    aws-partitions (1.873.0)
+    aws-partitions (1.875.0)
     aws-sdk-core (3.190.1)
       aws-eventstream (~> 1, >= 1.3.0)
       aws-partitions (~> 1, >= 1.651.0)
@@ -261,6 +263,8 @@ GEM
       ruby2_keywords (>= 0.0.4)
     faraday-follow_redirects (0.3.0)
       faraday (>= 1, < 3)
+    faraday-multipart (1.0.4)
+      multipart-post (~> 2)
     faraday-net_http (3.0.2)
     faraday-retry (2.2.0)
       faraday (~> 2.0)
@@ -335,7 +339,7 @@ GEM
     jsbundling-rails (1.2.1)
       railties (>= 6.0.0)
     json (2.7.1)
-    json-jwt (1.16.3)
+    json-jwt (1.16.4)
       activesupport (>= 4.2)
       aes_key_wrap
       bindata
@@ -393,6 +397,7 @@ GEM
     minitest (5.20.0)
     msgpack (1.7.2)
     multi_xml (0.6.0)
+    multipart-post (2.3.0)
     mutex_m (0.2.0)
     net-imap (0.4.9)
       date
@@ -405,7 +410,7 @@ GEM
       net-protocol
     netrc (0.11.0)
     nio4r (2.7.0)
-    nokogiri (1.15.5-x86_64-linux)
+    nokogiri (1.16.0-x86_64-linux)
       racc (~> 1.4)
     noticed (1.6.3)
       http (>= 4.0.0)
@@ -535,7 +540,7 @@ GEM
       unicode-display_width (>= 2.4.0, < 3.0)
     rubocop-ast (1.30.0)
       parser (>= 3.2.1.0)
-    rubocop-rails (2.23.0)
+    rubocop-rails (2.23.1)
       activesupport (>= 4.2.0)
       rack (>= 1.1)
       rubocop (>= 1.33.0, < 2.0)

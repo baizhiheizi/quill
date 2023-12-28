@@ -78,7 +78,7 @@ class MixinNetworkUser < ApplicationRecord
   end
 
   def sync_profile!
-    r = mixin_api.read_me
+    r = mixin_api.me
 
     raise r.inspect if r['data'].blank?
 
