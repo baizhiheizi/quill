@@ -125,26 +125,22 @@ class Transfer < ApplicationRecord
       if opponent_id.present?
         wallet_api.create_transfer(
           wallet_pin,
-          {
-            asset_id: asset_id,
-            opponent_id: opponent_id,
-            amount: amount,
-            trace_id: trace_id,
-            memo: memo
-          }
+          asset_id: asset_id,
+          opponent_id: opponent_id,
+          amount: amount,
+          trace_id: trace_id,
+          memo: memo
         )
       else
         wallet.blank?
         wallet_api.create_multisig_transaction(
           wallet_pin,
-          {
-            asset_id: asset_id,
-            receivers: opponent_multisig['receivers'],
-            threshold: opponent_multisig['threshold'],
-            amount: amount,
-            trace_id: trace_id,
-            memo: memo
-          }
+          asset_id: asset_id,
+          receivers: opponent_multisig['receivers'],
+          threshold: opponent_multisig['threshold'],
+          amount: amount,
+          trace_id: trace_id,
+          memo: memo
         )
       end
 
