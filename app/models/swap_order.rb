@@ -26,9 +26,9 @@
 #
 
 class SwapOrder < ApplicationRecord
-  FOX_SWAP_APP_ID = Settings.foxswap.app_id
-  FSWAP_MTG_MEMBERS = Settings.foxswap.mtg_members
-  FSWAP_MTG_THRESHOLD = Settings.foxswap.mtg_threshold
+  FOX_SWAP_APP_ID = Settings.pando.app_id
+  FSWAP_MTG_MEMBERS = Settings.pando.mtg_members
+  FSWAP_MTG_THRESHOLD = Settings.pando.mtg_threshold
 
   include AASM
   belongs_to :payment
@@ -100,7 +100,7 @@ class SwapOrder < ApplicationRecord
   end
 
   def fswap_mtg_memo
-    r = PandoBot::Lake.api.actions(
+    r = PandoLake.api.actions(
       user_id: user_id,
       follow_id: trace_id,
       asset_id: fill_asset_id,
@@ -214,7 +214,7 @@ class SwapOrder < ApplicationRecord
         QuillBot.api
       end
 
-    r = PandoBot::Lake.api.order(trace_id, authorization: mixin_api.access_token('GET', '/me'))
+    r = PandoLake.api.order(trace_id, authorization: mixin_api.access_token('GET', '/me'))
     update raw: r['data']
   end
 

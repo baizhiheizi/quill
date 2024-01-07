@@ -32,15 +32,15 @@ whitelist:
     - 7ed9292d-7c95-4333-aa48-a8c640064186
 
 # 4swap
-foxswap:
+pando:
   mtg_members:
-    - a753e0eb-3010-4c4a-a7b2-a7bda4063f62
-    - 099627f8-4031-42e3-a846-006ee598c56e
-    - aefbfd62-727d-4424-89db-ae41f75d2e04
-    - d68ca71f-0e2c-458a-bb9c-1d6c2eed2497
-    - e4bc0740-f8fe-418c-ae1b-32d9926f5863
-  mtg_threshold: 3
-  mtg_public_Key: dt351xp3KjNlVCMqBYUeUSF45upCEiReSZAqcjcP/Lc=
+    - "44a80608-8512-45e8-8797-e75d801f413d"
+    - "ada07525-558f-494b-a2db-4f5ce53c41a6"
+    - "d68ca71f-0e2c-458a-bb9c-1d6c2eed2497"
+    - "75a8bf37-0134-47b8-9996-a0c6b44b8800"
+    - "d469485e-5812-466d-a156-93bee313b6a1"
+    - "bae087a9-6762-45cc-8f84-ffa9a4985656"
+  mtg_threshold: 4
 
 storage:
   endpoint: https://assets.quill.im

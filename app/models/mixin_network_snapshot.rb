@@ -173,7 +173,9 @@ class MixinNetworkSnapshot < ApplicationRecord
     rescue StandardError => e
       logger.error "#{e.inspect}\n#{e.backtrace.join("\n")}"
       ExceptionNotifier.notify_exception e if Rails.env.production?
-      raise e
+      raise e if Rails.env.production?
+
+      sleep POLLING_INTERVAL * 10
     end
   end
 
