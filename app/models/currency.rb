@@ -47,7 +47,7 @@ class Currency < ApplicationRecord
 
   def self.pando_lake_pairs
     Rails.cache.fetch 'pando_lake_routes', expires_in: 5.seconds do
-      PandoBot::Lake.api.pairs['data']['pairs']
+      PandoLake.api.pairs['data']['pairs']
     end
   rescue StandardError
     []
