@@ -7,7 +7,7 @@ GIT
 
 GIT
   remote: https://github.com/an-lee/mixin_bot.git
-  revision: 1125bfe83dd14b53324be720717b1d473552db8c
+  revision: 6cb4c027479c7c9f2d14e1c69fd39d536ddcc00e
   specs:
     mixin_bot (0.12.1)
       activesupport (>= 5)
