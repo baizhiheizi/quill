@@ -30,8 +30,8 @@
           currency: @pay_asset,
           amount: @pay_amount,
           payer: @pre_order.payer,
-          receivers: Settings.foxswap.mtg_members,
-          threshold: Settings.foxswap.mtg_threshold,
+          receivers: Settings.pando.mtg_members,
+          threshold: Settings.pando.mtg_threshold,
           memo: @pre_order.fswap_mtg_memo,
           trace_id: @pre_order.trace_id
         ) %>

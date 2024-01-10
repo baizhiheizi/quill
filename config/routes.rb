@@ -23,6 +23,7 @@ Rails.application.routes.draw do
   get 'auth/mixin', to: 'sessions#mixin_auth', as: :auth_mixin
   get 'auth/twitter', to: 'sessions#twitter_auth', as: :auth_twitter
   get 'auth/mixin/callback', to: 'sessions#mixin'
+  get 'oauth/mixin/callback', to: 'sessions#mixin'
   get 'auth/fennec/callback', to: 'sessions#fennec'
   get 'auth/mvm/callback', to: 'sessions#mvm'
   get 'auth/twitter/callback', to: 'sessions#twitter'

@@ -125,26 +125,22 @@ class Transfer < ApplicationRecord
       if opponent_id.present?
         wallet_api.create_transfer(
           wallet_pin,
-          {
-            asset_id: asset_id,
-            opponent_id: opponent_id,
-            amount: amount,
-            trace_id: trace_id,
-            memo: memo
-          }
+          asset_id: asset_id,
+          opponent_id: opponent_id,
+          amount: amount,
+          trace_id: trace_id,
+          memo: memo
         )
       else
         wallet.blank?
         wallet_api.create_multisig_transaction(
           wallet_pin,
-          {
-            asset_id: asset_id,
-            receivers: opponent_multisig['receivers'],
-            threshold: opponent_multisig['threshold'],
-            amount: amount,
-            trace_id: trace_id,
-            memo: memo
-          }
+          asset_id: asset_id,
+          receivers: opponent_multisig['receivers'],
+          threshold: opponent_multisig['threshold'],
+          amount: amount,
+          trace_id: trace_id,
+          memo: memo
         )
       end
 
@@ -175,16 +171,13 @@ class Transfer < ApplicationRecord
     check!
     return if processed?
 
-    spend_key = Rails.application.credentials.dig(:quill_bot, :spend_key)
-    spend_key = Base64.urlsafe_decode64(spend_key)
     r = QuillBot.api.create_safe_transfer(
       members: safe_receiver[:members],
       threshold: safe_receiver[:threshold],
       amount: safe_receiver[:amount],
       asset_id: asset_id,
       request_id: trace_id,
-      memo: memo,
-      spend_key: spend_key
+      memo: memo
     )
 
     update!(

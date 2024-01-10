@@ -142,7 +142,7 @@ class Collectible < ApplicationRecord
     group =
       if r['group'].present?
         begin
-          MixinBot::Utils::UUID.new(hex: r['group']).unpacked
+          MixinBot::UUID.new(hex: r['group']).unpacked
         rescue MixinBot::InvalidUuidFormatError
           '00000000-0000-0000-0000-000000000000'
         end
