@@ -335,6 +335,13 @@
   dependencies:
     tslib "^2.5.0"
 
+"@milkdown/exception@7.3.5":
+  version "7.3.5"
+  resolved "https://registry.yarnpkg.com/@milkdown/exception/-/exception-7.3.5.tgz#08049d3a6fbdf9d2335ebf354743004da21e31d0"
+  integrity sha512-wpiVibi6H7zb26rgNSbJvQ9PaLC9665a2UipIaZ2XMrixt6mwoDqoIw4/9CSKGzRvFJDB/uS7IVwO9/2+RcovA==
+  dependencies:
+    tslib "^2.5.0"
+
 "@milkdown/plugin-block@^7.3.2":
   version "7.3.2"
   resolved "https://registry.npmjs.org/@milkdown/plugin-block/-/plugin-block-7.3.2.tgz#b3dc5cd20d5400f0b3c6d2fe409bd00706d1e1ef"
@@ -437,13 +444,13 @@
     "@milkdown/utils" "7.3.2"
     tslib "^2.5.0"
 
-"@milkdown/preset-commonmark@^7.3.2":
-  version "7.3.2"
-  resolved "https://registry.npmjs.org/@milkdown/preset-commonmark/-/preset-commonmark-7.3.2.tgz#63a972a991e2cfeca81430984e67a2a5fe1fcfb0"
-  integrity sha512-gy7Ay1zAHYl07sPraR+tC2bZsw0dyDt+B36QgsIoEpRvKI4LPNSfI+0UuiK0yzKmELsMvMZNu8yxG32q/dtSZA==
+"@milkdown/preset-commonmark@^7.3.5":
+  version "7.3.5"
+  resolved "https://registry.yarnpkg.com/@milkdown/preset-commonmark/-/preset-commonmark-7.3.5.tgz#8321aaa905be78aafe1b6341fa663407b00dd0c0"
+  integrity sha512-oSG/BV3Sv4BRjHczFrZ6zc42amwVoSxY/+GHMImMKBRpqLcBApfizo8sTpyp572wYmpTl/8Ycll2V+8h1gLraA==
   dependencies:
-    "@milkdown/exception" "7.3.2"
-    "@milkdown/utils" "7.3.2"
+    "@milkdown/exception" "7.3.5"
+    "@milkdown/utils" "7.3.5"
     "@sindresorhus/slugify" "^2.2.0"
     remark-inline-links "^7.0.0"
     tslib "^2.5.0"
@@ -506,6 +513,15 @@
   integrity sha512-Dsdfkcs7D/gujERtegsyG+fLa/UbuczSI7+YueXrmyQ7y6LE/Ob8bo/PwSiISFTn4+hzZfchdmcYSmgvlblQNQ==
   dependencies:
     "@milkdown/exception" "7.3.2"
+    nanoid "^5.0.0"
+    tslib "^2.5.0"
+
+"@milkdown/utils@7.3.5":
+  version "7.3.5"
+  resolved "https://registry.yarnpkg.com/@milkdown/utils/-/utils-7.3.5.tgz#8cc5191b2aaaac1e061a5ab976a23d6f7d0011a7"
+  integrity sha512-5PLvFDhhkCDBRMRq98q1JHYkTPL/uVD3oLRPM96dbcprlMoi1jjwZ7wqVDOpcGhxoXYo1umQ5hddWjNysDkSSA==
+  dependencies:
+    "@milkdown/exception" "7.3.5"
     nanoid "^5.0.0"
     tslib "^2.5.0"
 
