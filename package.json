@@ -27,7 +27,7 @@
     "@milkdown/plugin-slash": "^7.3.2",
     "@milkdown/plugin-tooltip": "^7.3.2",
     "@milkdown/plugin-upload": "^7.3.2",
-    "@milkdown/preset-commonmark": "^7.3.2",
+    "@milkdown/preset-commonmark": "^7.3.5",
     "@milkdown/preset-gfm": "^7.3.2",
     "@milkdown/prose": "^7.3.2",
     "@milkdown/theme-nord": "^7.3.2",
