@@ -14,6 +14,12 @@ module Admin
       @has_next = @snapshots.size >= limit
     end
 
+    def safe_outputs
+      limit = 100
+      @safe_outputs = @wallet.safe_outputs(limit: limit, state: :unspent, offset: params[:offset])['data']
+      @has_next = @safe_outputs.size >= limit
+    end
+
     private
 
     def load_wallet

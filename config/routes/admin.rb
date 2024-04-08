@@ -68,6 +68,7 @@ namespace :admin do
   resources :wallets do
     get :assets
     get :snapshots
+    get :safe_outputs
   end
 
   resources :non_fungible_outputs, only: %i[index show]

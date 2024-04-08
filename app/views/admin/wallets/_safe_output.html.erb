@@ -1,0 +1,30 @@
+<tr class="hover:bg-zinc-50 dark:hover:bg-zinc-800 border-b">
+  <td class="p-4">
+    <%= safe_output['type'] %>
+  </td>
+  <td class="p-4">
+    <% asset = Currency.find_by(asset_id: safe_output['asset_id']) %>
+    <div class="flex items-center space-x-2">
+      <%= image_tag asset.icon_url, class: "w-10 w-10 rounded-full" %>
+      <span><%= safe_output['amount'] %></span>
+      <span><%= asset.symbol %></span>
+    </div>
+  </td>
+  <td class="p-4">
+    <%= safe_output['state'] %>
+  </td>
+  <td class="p-4">
+    <div class="w-64 break-words">
+      <%= [safe_output['extra']].pack("H*") %>
+    </div>
+  </td>
+  <td class="p-4">
+    <%= safe_output['created_at'] || '-' %>
+  </td>
+  <td class="p-4">
+    <%= safe_output['sequence'] %>
+  </td>
+  <td class="p-4">
+    <%= safe_output['request_id'] || '-' %>
+  </td>
+</tr>

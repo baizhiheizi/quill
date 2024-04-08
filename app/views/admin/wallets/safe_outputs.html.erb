@@ -1,0 +1,22 @@
+<%= turbo_frame_tag 'admin_wallet_safe_outputs' do %>
+  <div data-controller="infinite-scroll" class="w-full overflow-x-scroll scrollbar-hide">
+    <table class='w-full table-auto min-w-max '>
+      <thead>
+        <tr class="bg-zinc-100 dark:bg-zinc-900">
+          <th class="p-4">Type</th>
+          <th class="p-4">Amount</th>
+          <th class="p-4">State</th>
+          <th class="p-4">Memo</th>
+          <th class="p-4">Created</th>
+          <th class="p-4">Sequence</th>
+          <th class="p-4">Request ID</th>
+        </tr>
+      </thead>
+      <tbody id="admin_wallet_safe_outputs_list">
+        <%= render partial: 'admin/wallets/safe_output', collection: @safe_outputs, as: :safe_output %>
+      </tbody>
+    </table>
+    <div data-infinite-scroll-target='scrollArea'></div>
+    <%= render partial: "admin/wallets/pagination", locals: { has_next: @has_next, next_url: admin_wallet_safe_outputs_path(offset: @safe_outputs.last&.[]('created_at')) } %>
+  </div>
+<% end %>
