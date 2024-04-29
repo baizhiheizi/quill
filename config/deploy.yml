@@ -11,10 +11,10 @@ servers:
       - 172.105.121.9
     options:
       network: 'private'
-    # labels:
-    #   traefik.http.routers.quill.entrypoints: websecure
-    #   traefik.http.routers.quill.rule: Host(`staging.ohmy.xin`)
-    #   traefik.http.routers.quill.tls.certresolver: letsencrypt
+    labels:
+      traefik.http.routers.quill.entrypoints: websecure
+      traefik.http.routers.quill.rule: Host(`quill.im`)
+      traefik.http.routers.quill.tls.certresolver: letsencrypt
 
   blaze:
     hosts:
@@ -44,6 +44,8 @@ registry:
 env:
   clear:
     DATABASE_HOST: 'quill-db'
+    POSTGRES_USER: 'postgres'
+    POSTGRES_DB: 'quill_production'
   secret:
     - RAILS_MASTER_KEY
     - POSTGRES_PASSWORD
@@ -68,8 +70,8 @@ accessories:
         POSTGRES_DB: 'quill_production'
       secret:
         - POSTGRES_PASSWORD
-    # files:
-    #   - db/production.sql:/docker-entrypoint-initdb.d/setup.sql
+    volumes:
+      - db/production.sql:/docker-entrypoint-initdb.d/setup.sql
     directories:
       - data:/var/lib/postgresql/data
     options:
@@ -85,21 +87,21 @@ accessories:
 # Configure custom arguments for Traefik. Be sure to reboot traefik when you modify it.
 traefik:
   options:
-    # publish:
-    #   - "443:443"
-    # volume:
-    #   - "/letsencrypt/acme.json:/letsencrypt/acme.json" # To save the configuration file.
+    publish:
+      - "443:443"
+    volume:
+      - "/letsencrypt/acme.json:/letsencrypt/acme.json" # To save the configuration file.
     network: "private"
-  # args:
-  #   entryPoints.web.address: ":80"
-  #   entryPoints.websecure.address: ":443"
-  #   entryPoints.web.http.redirections.entryPoint.to: websecure # We want to force https
-  #   entryPoints.web.http.redirections.entryPoint.scheme: https
-  #   entryPoints.web.http.redirections.entrypoint.permanent: true
-  #   certificatesResolvers.letsencrypt.acme.email: "an.lee.work@gmail.com"
-  #   certificatesResolvers.letsencrypt.acme.storage: "/letsencrypt/acme.json" # Must match the path in `volume`
-  #   certificatesResolvers.letsencrypt.acme.httpchallenge: true
-  #   certificatesResolvers.letsencrypt.acme.httpchallenge.entrypoint: web # Must match the role in `servers`
+  args:
+    entryPoints.web.address: ":80"
+    entryPoints.websecure.address: ":443"
+    entryPoints.web.http.redirections.entryPoint.to: websecure # We want to force https
+    entryPoints.web.http.redirections.entryPoint.scheme: https
+    entryPoints.web.http.redirections.entrypoint.permanent: true
+    certificatesResolvers.letsencrypt.acme.email: "an.lee.work@gmail.com"
+    certificatesResolvers.letsencrypt.acme.storage: "/letsencrypt/acme.json" # Must match the path in `volume`
+    certificatesResolvers.letsencrypt.acme.httpchallenge: true
+    certificatesResolvers.letsencrypt.acme.httpchallenge.entrypoint: web # Must match the role in `servers`
 
 # Configure a custom healthcheck (default is /up on port 3000)
 # healthcheck:
