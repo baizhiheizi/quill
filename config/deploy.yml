@@ -44,7 +44,6 @@ registry:
 env:
   clear:
     DATABASE_HOST: 'quill-db'
-    REDIS_URL: 'redis://quill-redis:6379/0'
   secret:
     - RAILS_MASTER_KEY
     - POSTGRES_PASSWORD

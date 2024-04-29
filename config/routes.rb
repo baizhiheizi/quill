@@ -31,8 +31,8 @@ Rails.application.routes.draw do
 
   get 'search', to: 'search#index', as: :search
 
-  # health check for render.com
-  get 'healthz', to: 'healthz#index', as: :healthz
+  # health check
+  get 'up', to: 'rails/health#show', as: :rails_health_check
 
   # error pages
   get '/404', to: 'errors#not_found'
