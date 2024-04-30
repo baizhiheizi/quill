@@ -8,7 +8,7 @@ image: anleework/quill
 servers:
   web:
     hosts:
-      - 172.105.121.9
+      - 172.234.89.98
     options:
       network: 'private'
     labels:
@@ -18,13 +18,13 @@ servers:
 
   blaze:
     hosts:
-      - 172.105.121.9
+      - 172.234.89.98
     cmd: bin/mixin_blaze
     options:
       network: 'private'
   job:
     hosts:
-      - 172.105.121.9
+      - 172.234.89.98
     cmd: bundle exec good_job start
     options:
       network: 'private'
@@ -61,8 +61,8 @@ builder:
 # Use accessory services (secrets come from .env).
 accessories:
   db:
-    image: pgvector/pgvector:pg16
-    host: 172.105.121.9
+    image: pgvector/pgvector:pg15
+    host: 172.234.89.98
     port: 5432
     env:
       clear:
@@ -70,7 +70,7 @@ accessories:
         POSTGRES_DB: 'quill_production'
       secret:
         - POSTGRES_PASSWORD
-    volumes:
+    files:
       - db/production.sql:/docker-entrypoint-initdb.d/setup.sql
     directories:
       - data:/var/lib/postgresql/data
@@ -78,7 +78,7 @@ accessories:
       network: 'private'
   # redis:
   #   image: redis:7.0
-  #   host: 172.105.121.9
+  #   host: 172.234.89.98
   #   port: 6379
   #   directories:
   #     - data:/data
