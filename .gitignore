@@ -12,6 +12,7 @@
 /db/*.sqlite3
 /db/*.sqlite3-journal
 /db/*.sqlite3-*
+/db/production.sql
 
 # Ignore all logfiles and tempfiles.
 /log/*
@@ -51,3 +52,7 @@ config/settings.local.yml
 
 /app/assets/builds/*
 !/app/assets/builds/.keep
+
+# Ignore all environment files.
+/.env*
+!/.env.example
