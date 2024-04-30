@@ -6,7 +6,6 @@
 #  amount         :decimal(, )
 #  data           :string
 #  processed_at   :datetime
-#  raw            :json
 #  transferred_at :datetime
 #  created_at     :datetime         not null
 #  updated_at     :datetime         not null
