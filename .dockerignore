@@ -40,3 +40,5 @@
 
 # Ignore settings
 config/settings.local.yml
+
+/db/production.sql
