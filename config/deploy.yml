@@ -76,6 +76,26 @@ accessories:
       - data:/var/lib/postgresql/data
     options:
       network: 'private'
+  db_backup:
+    image: eeshugerman/postgres-backup-s3:16
+    host: 172.233.92.233
+    env:
+      clear:
+        SCHEDULE: '@daily'     # optional
+        BACKUP_KEEP_DAYS: 7     # optional
+        S3_REGION: auto
+        S3_PREFIX: 'quill'
+        POSTGRES_HOST: '172.18.0.1'
+        POSTGRES_DATABASE: quill_production
+        POSTGRES_USER: postgres
+      secret:
+        - S3_ACCESS_KEY_ID
+        - S3_SECRET_ACCESS_KEY
+        - S3_BUCKET
+        - S3_ENDPOINT
+        - POSTGRES_PASSWORD
+    options:
+      network: 'private'
   # redis:
   #   image: redis:7.0
   #   host: 172.233.92.233
@@ -84,6 +104,7 @@ accessories:
   #     - data:/data
   #   options:
   #     network: 'private'
+
 # Configure custom arguments for Traefik. Be sure to reboot traefik when you modify it.
 traefik:
   options:
