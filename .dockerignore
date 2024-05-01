@@ -42,3 +42,4 @@
 config/settings.local.yml
 
 /db/production.sql
+/db/*.dump

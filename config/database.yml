@@ -20,6 +20,10 @@ test:
 
 production:
   adapter:  postgresql
+  host:     <%= ENV['DATABASE_HOST'] %>
   encoding: unicode
+  database: <%= ENV['POSTGRES_DB'] %>
+  username: <%= ENV['POSTGRES_USER'] %>
+  password: <%= ENV['POSTGRES_PASSWORD'] %>
   pool:     <%= ENV.fetch("RAILS_MAX_THREADS", 32) %>
   template: template0
