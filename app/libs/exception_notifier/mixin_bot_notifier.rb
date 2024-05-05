@@ -7,7 +7,7 @@ module ExceptionNotifier
       @bot = options[:bot].constantize
       @recipient_id = options[:recipient_id]
       @conversation_id = options[:conversation_id]
-      @conversation_id ||= @bot.api.unique_uuid(@recipient_id) if @bot.api&.client_id.present?
+      @conversation_id ||= @bot.api.unique_uuid(@recipient_id) if @bot.api.config.app_id.present?
     end
 
     def call(exception, options = {})

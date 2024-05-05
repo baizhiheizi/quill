@@ -59,7 +59,7 @@ class MixinNetworkSnapshot < ApplicationRecord
     loop do
       offset = last_polled_at
 
-      r = QuillBot.api.read_network_snapshots(offset: offset, limit: POLLING_LIMIT, order: 'ASC')
+      r = QuillBot.api.network_snapshots(offset: offset, limit: POLLING_LIMIT, order: 'ASC')
       p "polled #{r['data'].length} mixin network snapshots, since #{offset}"
 
       r['data'].each do |snapshot|
@@ -173,7 +173,9 @@ class MixinNetworkSnapshot < ApplicationRecord
     rescue StandardError => e
       logger.error "#{e.inspect}\n#{e.backtrace.join("\n")}"
       ExceptionNotifier.notify_exception e if Rails.env.production?
-      raise e
+      raise e if Rails.env.production?
+
+      sleep POLLING_INTERVAL * 10
     end
   end
 

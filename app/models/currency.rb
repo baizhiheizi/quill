@@ -47,21 +47,23 @@ class Currency < ApplicationRecord
 
   def self.pando_lake_pairs
     Rails.cache.fetch 'pando_lake_routes', expires_in: 5.seconds do
-      PandoBot::Lake.api.pairs['data']['pairs']
+      PandoLake.api.pairs['data']['pairs']
     end
   rescue StandardError
     []
   end
 
+  # disable swappable for now
   def self.swappable_asset_ids
-    Rails.cache.fetch 'swappable_asset_ids', expires_in: 1.hour do
-      pando_lake_pairs
-        .filter(&lambda { |p|
-          (p['base_value'].to_f + p['quote_value'].to_f > 50_000) || p['swap_method'] == 'curve'
-        }).map do |p|
-        [p['base_asset_id'], p['quote_asset_id']]
-      end.flatten.uniq
-    end
+    []
+    # Rails.cache.fetch 'swappable_asset_ids', expires_in: 1.hour do
+    #   pando_lake_pairs
+    #     .filter(&lambda { |p|
+    #       (p['base_value'].to_f + p['quote_value'].to_f > 50_000) || p['swap_method'] == 'curve'
+    #     }).map do |p|
+    #     [p['base_asset_id'], p['quote_asset_id']]
+    #   end.flatten.uniq
+    # end
   end
 
   def minimal_reward_amount

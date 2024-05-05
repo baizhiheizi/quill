@@ -39,7 +39,7 @@ gem 'requestjs-rails'
 gem 'jbuilder'
 
 # Use Active Model has_secure_password
-gem 'bcrypt', '~> 3.1.7'
+gem 'bcrypt'
 
 # A simple API wrapper for Mixin Network in Ruby
 gem 'mixin_bot', github: 'an-lee/mixin_bot'
@@ -84,7 +84,7 @@ gem 'ransack'
 gem 'simple_command'
 
 # Notifications for Ruby on Rails applications
-gem 'noticed'
+gem 'noticed', '< 2.0'
 
 # Centralization of locale data collection for Ruby on Rails.
 gem 'rails-i18n'
@@ -170,7 +170,7 @@ gem 'twitter_oauth2'
 
 gem 'good_job'
 
-gem 'solid_cache'
+gem 'solid_cache', '< 0.4'
 
 group :development, :test do
   # Start debugger with binding.b [https://github.com/ruby/debug]
