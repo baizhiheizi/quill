@@ -170,7 +170,7 @@ gem 'twitter_oauth2'
 
 gem 'good_job'
 
-gem 'solid_cache', '< 0.4'
+gem 'solid_cache', '< 0.7'
 
 group :development, :test do
   # Start debugger with binding.b [https://github.com/ruby/debug]
