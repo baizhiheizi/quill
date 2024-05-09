@@ -51,7 +51,7 @@
     "@tiptap/extension-typography": "^2.3.1",
     "@tiptap/extension-underline": "^2.3.1",
     "@tiptap/pm": "^2.3.1",
-    "@tiptap/starter-kit": "^2.3.1",
+    "@tiptap/starter-kit": "^2.3.2",
     "@walletconnect/ethereum-provider": "^2.12.2",
     "@walletconnect/modal": "^2.6.2",
     "abortcontroller-polyfill": "^1.7.5",
