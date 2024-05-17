@@ -189,6 +189,7 @@ group :development do
   # A Ruby static code analyzer and formatter
   gem 'rubocop', require: false
   gem 'rubocop-rails', require: false
+  gem 'kamal'
 end
 
 group :test do
