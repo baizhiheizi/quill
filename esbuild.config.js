@@ -12,7 +12,6 @@ require("esbuild")
     outdir: path.join(process.cwd(), "app/assets/builds"),
     absWorkingDir: path.join(process.cwd(), "app/javascript"),
     minify: process.argv.includes("--minify"),
-    target: 'chrome58',
     plugins: [polyfillNode({ polyfills: { inherits: false, fs: true } })],
   })
   .then((context) => {
