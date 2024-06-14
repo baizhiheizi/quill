@@ -36,7 +36,7 @@ module ArweaveBot
       }
     GRAPHQL
     def mirror_transactions(contributor, after: '', first: 100)
-      Client.query(MirrorTransactionsQuery, variables: { contributor: contributor, after: after, first: first })
+      Client.query(MirrorTransactionsQuery, variables: { contributor:, after:, first: })
     end
 
     def all_mirror_transactions(contributor)
@@ -45,7 +45,7 @@ module ArweaveBot
       after = ''
 
       while has_next_page
-        r = mirror_transactions(contributor, after: after).data.transactions
+        r = mirror_transactions(contributor, after:).data.transactions
         r.edges.each do |tx|
           puts tx
           txs << {

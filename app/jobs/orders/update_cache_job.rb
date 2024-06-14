@@ -2,6 +2,6 @@
 
 class Orders::UpdateCacheJob < ApplicationJob
   def perform(id)
-    Order.find_by(id: id)&.update_cache
+    Order.find_by(id:)&.update_cache
   end
 end

@@ -12,7 +12,7 @@ class NonFungibleOutputFoundNotification < ApplicationNotification
 
   def data
     {
-      icon_url: icon_url,
+      icon_url:,
       title: title.truncate(36),
       description: message.truncate(72),
       action: url,

@@ -45,8 +45,8 @@ module Mixpay
       client.post(
         path,
         json: {
-          receivers: receivers,
-          threshold: threshold
+          receivers:,
+          threshold:
         }
       )
     end

@@ -2,6 +2,6 @@
 
 class Users::SyncCollectiblesJob < ApplicationJob
   def perform(id)
-    User.find_by(id: id)&.sync_collectibles!
+    User.find_by(id:)&.sync_collectibles!
   end
 end

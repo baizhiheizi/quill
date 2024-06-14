@@ -95,13 +95,13 @@ class SwapOrder < ApplicationRecord
       amount: funds.to_f,
       memo: fswap_mtg_memo
     ).find_or_create_by!(
-      trace_id: trace_id
+      trace_id:
     )
   end
 
   def fswap_mtg_memo
     r = PandoLake.api.actions(
-      user_id: user_id,
+      user_id:,
       follow_id: trace_id,
       asset_id: fill_asset_id,
       minimum_fill: min_amount.present? ? format('%.8f', min_amount) : nil
@@ -129,17 +129,17 @@ class SwapOrder < ApplicationRecord
     case payment.decoded_memo['t']
     when 'BUY'
       article.orders.find_or_create_by!(
-        payment: payment,
+        payment:,
         order_type: :buy_article
       )
     when 'REWARD'
       article.orders.find_or_create_by!(
-        payment: payment,
+        payment:,
         order_type: :reward_article
       )
     when 'CITE'
       article.orders.find_or_create_by!(
-        payment: payment,
+        payment:,
         order_type: :cite_article,
         citer: payment.citer
       )
@@ -150,7 +150,7 @@ class SwapOrder < ApplicationRecord
     case payment.decoded_memo['t']
     when 'BUY'
       collection.orders.find_or_create_by!(
-        payment: payment,
+        payment:,
         order_type: :buy_collection
       )
     end

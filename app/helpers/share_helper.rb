@@ -35,7 +35,7 @@ module ShareHelper
       app_id: QuillBot.api.client_id,
       title: title.truncate(36),
       description: description.truncate(128),
-      icon_url: icon_url
+      icon_url:
     }
 
     [

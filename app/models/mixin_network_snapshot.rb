@@ -59,7 +59,7 @@ class MixinNetworkSnapshot < ApplicationRecord
     loop do
       offset = last_polled_at
 
-      r = QuillBot.api.network_snapshots(offset: offset, limit: POLLING_LIMIT, order: 'ASC')
+      r = QuillBot.api.network_snapshots(offset:, limit: POLLING_LIMIT, order: 'ASC')
       p "polled #{r['data'].length} mixin network snapshots, since #{offset}"
 
       r['data'].each do |snapshot|
@@ -119,7 +119,7 @@ class MixinNetworkSnapshot < ApplicationRecord
     loop do
       offset = last_polled_at
 
-      r = QuillBot.api.safe_snapshots(offset: offset, limit: POLLING_LIMIT, order: 'ASC', app: QuillBot.api.client_id)
+      r = QuillBot.api.safe_snapshots(offset:, limit: POLLING_LIMIT, order: 'ASC', app: QuillBot.api.client_id)
       p "polled #{r['data'].length} mixin SAFE snapshots, since #{offset}"
 
       r['data'].each do |snapshot|
@@ -136,7 +136,7 @@ class MixinNetworkSnapshot < ApplicationRecord
         create_with(
           asset_id: snapshot['asset_id'],
           amount: snapshot['amount'],
-          data: data,
+          data:,
           transferred_at: snapshot['created_at'],
           user_id: snapshot['user_id'],
           opponent_id: snapshot['opponent_id'],
@@ -240,18 +240,18 @@ class MixinNetworkSnapshot < ApplicationRecord
     # not valid payment
     return unless payment_memo_correct?
 
-    Currency.find_or_create_by asset_id: asset_id
+    Currency.find_or_create_by(asset_id:)
     Payment
       .create_with(
         raw: {
-          amount: amount,
+          amount:,
           memo: data,
-          asset_id: asset_id,
-          opponent_id: opponent_id,
-          snapshot_id: snapshot_id,
-          trace_id: trace_id
+          asset_id:,
+          opponent_id:,
+          snapshot_id:,
+          trace_id:
         }
-      ).find_or_create_by!(trace_id: trace_id)
+      ).find_or_create_by!(trace_id:)
   end
 
   def process_4swap_snapshot
@@ -263,7 +263,7 @@ class MixinNetworkSnapshot < ApplicationRecord
     if swap_order.present?
       case decoded_memo['s']
       when '4swapTrade'
-        swap_order.update! amount: amount
+        swap_order.update!(amount:)
         if swap_order.swapping?
           swap_order.swap!
         elsif swap_order.swapped?
@@ -273,18 +273,18 @@ class MixinNetworkSnapshot < ApplicationRecord
         swap_order.reject! if swap_order.may_reject?
       end
     elsif pre_order.present?
-      Currency.find_or_create_by asset_id: asset_id
+      Currency.find_or_create_by(asset_id:)
       Payment
         .create_with(
           raw: {
-            amount: amount,
+            amount:,
             memo: data,
-            asset_id: asset_id,
-            opponent_id: opponent_id,
-            snapshot_id: snapshot_id,
-            trace_id: trace_id
+            asset_id:,
+            opponent_id:,
+            snapshot_id:,
+            trace_id:
           }
-        ).find_or_create_by!(trace_id: trace_id)
+        ).find_or_create_by!(trace_id:)
     end
   end
 
@@ -301,6 +301,6 @@ class MixinNetworkSnapshot < ApplicationRecord
   end
 
   def snapshot_url
-    format('https://mixin.one/%<snapshot_id>s', snapshot_id: snapshot_id)
+    format('https://mixin.one/%<snapshot_id>s', snapshot_id:)
   end
 end

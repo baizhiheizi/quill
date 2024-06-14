@@ -87,7 +87,7 @@ class ArweaveTransaction < ApplicationRecord
           intro: article.intro,
           body: article.content
         },
-        digest: digest,
+        digest:,
         author: article.author.uid,
         original_url: user_article_url(article.author, article),
         timestamp: article.updated_at.to_i
@@ -113,7 +113,7 @@ class ArweaveTransaction < ApplicationRecord
           intro: article.intro,
           body: Base64.urlsafe_encode64(cipher, padding: false)
         },
-        digest: digest,
+        digest:,
         alg: {
           name: 'aes-256-cfb',
           iv: Base64.urlsafe_encode64(iv, padding: false)
@@ -152,7 +152,7 @@ class ArweaveTransaction < ApplicationRecord
         intro: article.intro,
         body: Base64.urlsafe_encode64(cipher, padding: false)
       },
-      digest: digest,
+      digest:,
       alg: {
         name: 'aes-256-cfb',
         iv: Base64.urlsafe_encode64(iv, padding: false),

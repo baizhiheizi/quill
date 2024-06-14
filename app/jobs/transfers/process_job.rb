@@ -2,6 +2,6 @@
 
 class Transfers::ProcessJob < ApplicationJob
   def perform(trace_id)
-    Transfer.find_by(trace_id: trace_id)&.process!
+    Transfer.find_by(trace_id:)&.process!
   end
 end

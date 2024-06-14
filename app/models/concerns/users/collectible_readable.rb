@@ -78,7 +78,7 @@ module Users::CollectibleReadable
     api.collectibles(
       members: [mixin_uuid],
       threshold: 1,
-      offset: offset,
+      offset:,
       limit: 500,
       access_token: mixin_access_token
     )
@@ -112,7 +112,7 @@ module Users::CollectibleReadable
 
     loop do
       logger.info "=== Syncing #{name}(#{id}) collectibles since #{offset}"
-      r = mixin_api_collectibles offset: offset
+      r = mixin_api_collectibles(offset:)
 
       logger.info "=== found #{r['data'].size} collectibles"
       r['data'].each do |c|

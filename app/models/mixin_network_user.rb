@@ -52,9 +52,9 @@ class MixinNetworkUser < ApplicationRecord
     @mixin_api ||= MixinBot::API.new(
       client_id: uuid,
       client_secret: nil,
-      session_id: session_id,
-      pin_token: pin_token,
-      private_key: private_key
+      session_id:,
+      pin_token:,
+      private_key:
     )
   end
 

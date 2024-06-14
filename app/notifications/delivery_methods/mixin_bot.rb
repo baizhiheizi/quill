@@ -39,16 +39,16 @@ class DeliveryMethods::MixinBot < Noticed::DeliveryMethods::Base
   def format
     bot_api.base_message_params(
       {
-        category: category,
-        conversation_id: conversation_id,
+        category:,
+        conversation_id:,
         recipient_id: recipient.mixin_uuid,
-        data: data
+        data:
       }
     )
   end
 
-  def with_locale(&action)
+  def with_locale(&)
     locale = recipient&.locale || I18n.default_locale
-    I18n.with_locale(locale, &action)
+    I18n.with_locale(locale, &)
   end
 end

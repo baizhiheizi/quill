@@ -373,7 +373,7 @@ class Article < ApplicationRecord
       Article
       .includes(:tags)
       .published
-      .where.not(id: id)
+      .where.not(id:)
       .where(tags: { name: tag_names })
       .order(published_at: :desc)
       .limit(5)
@@ -384,7 +384,7 @@ class Article < ApplicationRecord
       author
       .articles
       .published
-      .where.not(id: id)
+      .where.not(id:)
       .order(published_at: :desc)
       .limit(5)
   end
@@ -402,7 +402,7 @@ class Article < ApplicationRecord
     temp_content = content.dup
     urls.each do |url|
       key = url.gsub(%r{\(blob://|\)}, '').split('/').first
-      blob = ActiveStorage::Blob.find_by key: key
+      blob = ActiveStorage::Blob.find_by(key:)
       next if blob.blank?
 
       temp_content = temp_content.gsub(url, "(#{blob.url})") if images.attach(blob.signed_id)

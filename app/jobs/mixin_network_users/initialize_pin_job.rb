@@ -2,6 +2,6 @@
 
 class MixinNetworkUsers::InitializePinJob < ApplicationJob
   def perform(id)
-    MixinNetworkUser.find_by(id: id)&.initialize_pin!
+    MixinNetworkUser.find_by(id:)&.initialize_pin!
   end
 end

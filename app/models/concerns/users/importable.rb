@@ -24,9 +24,9 @@ module Users::Importable
         title: r['content']['title'],
         content: r['content']['body'],
         price: 0
-      ).find_or_create_by(uuid: uuid)
+      ).find_or_create_by(uuid:)
 
-      ArticleImportedNotification.with(article: article).deliver(self) if article.persisted?
+      ArticleImportedNotification.with(article:).deliver(self) if article.persisted?
     end
   ensure
     Rails.cache.delete "_#{uid}_importing_from_mirror_lock"

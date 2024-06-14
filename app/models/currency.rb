@@ -101,7 +101,7 @@ class Currency < ApplicationRecord
   end
 
   def sync!
-    update! asset_id: asset_id
+    update! asset_id:
   end
 
   private

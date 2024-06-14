@@ -60,7 +60,7 @@ class API::BaseController < ActionController::API
     @current_user ||= current_access_token&.user
   end
 
-  def with_locale(&action)
-    I18n.with_locale(:en, &action)
+  def with_locale(&)
+    I18n.with_locale(:en, &)
   end
 end

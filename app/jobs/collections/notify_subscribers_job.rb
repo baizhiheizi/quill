@@ -2,6 +2,6 @@
 
 class Collections::NotifySubscribersJob < ApplicationJob
   def perform(id)
-    Collection.find_by(id: id)&.notify_subscribers
+    Collection.find_by(id:)&.notify_subscribers
   end
 end

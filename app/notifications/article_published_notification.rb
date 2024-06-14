@@ -12,7 +12,7 @@ class ArticlePublishedNotification < ApplicationNotification
 
   def data
     {
-      icon_url: icon_url,
+      icon_url:,
       title: article.title.truncate(36),
       description: description.truncate(72),
       action: url

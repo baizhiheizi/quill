@@ -2,7 +2,7 @@
 
 class Articles::CreateWalletJob < ApplicationJob
   def perform(id)
-    article = Article.find_by(id: id)
+    article = Article.find_by(id:)
     return if article.blank?
 
     article.create_wallet! if article.wallet.blank?

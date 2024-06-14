@@ -18,7 +18,7 @@ module Orders::Distributable
 
   def early_orders_with_the_same_currency
     @early_orders_with_the_same_currency ||=
-      early_orders.where.not(asset_id: asset_id).blank?
+      early_orders.where.not(asset_id:).blank?
   end
 
   def collect_early_readers

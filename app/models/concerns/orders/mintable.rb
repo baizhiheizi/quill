@@ -76,7 +76,7 @@ module Orders::Mintable
     _collectible.assign_attributes(
       source: self,
       collection_id: item.uuid,
-      identifier: identifier,
+      identifier:,
       name: "##{identifier}",
       metadata: metadata.json,
       metahash: SHA3::Digest::SHA256.hexdigest(metadata.checksum_content)

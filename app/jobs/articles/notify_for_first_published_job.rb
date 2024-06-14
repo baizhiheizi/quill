@@ -2,6 +2,6 @@
 
 class Articles::NotifyForFirstPublishedJob < ApplicationJob
   def perform(id)
-    Article.find_by(id: id)&.notify_for_first_published
+    Article.find_by(id:)&.notify_for_first_published
   end
 end

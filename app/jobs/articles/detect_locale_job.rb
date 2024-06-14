@@ -2,6 +2,6 @@
 
 class Articles::DetectLocaleJob < ApplicationJob
   def perform(uuid)
-    Article.find_by(uuid: uuid)&.detect_locale
+    Article.find_by(uuid:)&.detect_locale
   end
 end

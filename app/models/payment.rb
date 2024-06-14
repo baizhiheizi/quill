@@ -227,7 +227,7 @@ class Payment < ApplicationRecord
       article.orders.find_or_create_by!(
         payment: self,
         order_type: :cite_article,
-        citer: citer
+        citer:
       )
       complete!
     when 'REVENUE'
@@ -256,11 +256,11 @@ class Payment < ApplicationRecord
     return if refund_transfer.present?
 
     create_refund_transfer!(
-      wallet_id: wallet_id,
+      wallet_id:,
       transfer_type: :payment_refund,
       opponent_id: payer_id,
-      amount: amount,
-      asset_id: asset_id,
+      amount:,
+      asset_id:,
       trace_id: QuillBot.api.unique_uuid(trace_id, opponent_id),
       memo: 'REDUND'
     )

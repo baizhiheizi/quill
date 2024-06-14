@@ -12,7 +12,7 @@ class ArticlesController < ApplicationController
     @time_range ||= 'week' if @filter == 'revenue'
     @tag = Tag.find_by name: params[:tag].to_s.strip
 
-    articles = ArticleSearchService.call(params.merge(current_user: current_user, locale: current_locale))
+    articles = ArticleSearchService.call(params.merge(current_user:, locale: current_locale))
 
     @pagy, @articles = pagy_countless articles.with_attached_cover
     @active_page = 'home'
@@ -45,7 +45,7 @@ class ArticlesController < ApplicationController
 
   def new
     collection = current_user.collections.find_by uuid: params[:collection_id]
-    @article = current_user.articles.new collection: collection
+    @article = current_user.articles.new collection:
   end
 
   def edit

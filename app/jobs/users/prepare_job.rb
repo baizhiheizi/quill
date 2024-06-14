@@ -2,6 +2,6 @@
 
 class Users::PrepareJob < ApplicationJob
   def perform(id)
-    User.find_by(id: id)&.prepare
+    User.find_by(id:)&.prepare
   end
 end

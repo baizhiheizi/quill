@@ -85,9 +85,9 @@ class Collection < ApplicationRecord
     generate_cover if cover_url.blank?
 
     r = Trident.api.create_collection(
-      name: name,
-      symbol: symbol,
-      description: description,
+      name:,
+      symbol:,
+      description:,
       split: DEFAULT_SPLIT,
       external_url: 'https://quill.im',
       icon_url: cover_url
@@ -134,7 +134,7 @@ class Collection < ApplicationRecord
   def generated_collectible_media_url(identifier)
     grover_collection_collectible_url(
       id,
-      identifier: identifier,
+      identifier:,
       token: Rails.application.credentials.dig(:grover, :token),
       format: :png
     )
@@ -166,7 +166,7 @@ class Collection < ApplicationRecord
     order = orders.find_by buyer: user
     return true if order.present? && (order.collectible.blank? || order.collectible.pending?)
 
-    ((validatable_collections.pluck(:uuid) + [uuid]) & user.owning_collection_ids).present?
+    (validatable_collections.pluck(:uuid) + [uuid]).intersect?(user.owning_collection_ids)
   end
 
   def notify_subscribers_async

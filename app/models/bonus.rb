@@ -56,9 +56,9 @@ class Bonus < ApplicationRecord
       create_transfer!(
         transfer_type: :bonus,
         opponent_id: user.mixin_uuid,
-        amount: amount,
-        asset_id: asset_id,
-        trace_id: trace_id,
+        amount:,
+        asset_id:,
+        trace_id:,
         memo: title
       )
   end

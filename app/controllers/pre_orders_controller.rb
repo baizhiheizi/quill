@@ -55,7 +55,7 @@ class PreOrdersController < ApplicationController
       end
 
     render json: {
-      redirect_url: redirect_url
+      redirect_url:
     }
   end
 

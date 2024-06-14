@@ -13,10 +13,10 @@ module PreOrders::Swappable
     QuillBot.api.safe_pay_url(
       members: [QuillBot.api.client_id],
       threshold: 1,
-      asset_id: asset_id,
-      amount: amount,
-      trace_id: trace_id,
-      memo: memo
+      asset_id:,
+      amount:,
+      trace_id:,
+      memo:
     )
   end
 
@@ -31,7 +31,7 @@ module PreOrders::Swappable
       threshold: Settings.pando.mtg_threshold,
       asset_id: pay_asset_id,
       amount: route[:funds],
-      trace_id: trace_id,
+      trace_id:,
       memo: fswap_mtg_memo(route[:routes])
     )
   end
@@ -39,9 +39,9 @@ module PreOrders::Swappable
   def fswap_mtg_memo(route_id = nil)
     r = PandoLake.api.actions(
       user_id: payee_id,
-      follow_id: follow_id,
-      asset_id: asset_id,
-      route_id: route_id,
+      follow_id:,
+      asset_id:,
+      route_id:,
       minimum_fill: order_type == 'reward_article' ? nil : amount
     )
 

@@ -12,7 +12,7 @@ class CollectionListedNotification < ApplicationNotification
 
   def data
     {
-      icon_url: icon_url,
+      icon_url:,
       title: collection.name.truncate(36),
       description: description.truncate(72),
       action: url

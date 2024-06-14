@@ -28,7 +28,7 @@ module Users::MVMQueriable
       Currency.all.map do |currency|
         TokenAsset.new(
           owner: self,
-          currency: currency,
+          currency:,
           token: tokens_erc20.find(&->(token) { token['contractAddress'] == currency.mvm_contract_address })
         )
       end

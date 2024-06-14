@@ -77,7 +77,7 @@ class Collectible < ApplicationRecord
     return unless pending?
     return if nfo_existed?
 
-    Trident.api.upload_metadata metadata: metadata, metahash: metahash
+    Trident.api.upload_metadata(metadata:, metahash:)
 
     transfers.create_with(
       wallet_id: QuillBot.api.client_id,

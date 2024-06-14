@@ -14,7 +14,7 @@ class API::ValidUsersController < API::BaseController
       end
 
     render json: {
-      approved: approved
+      approved:
     }
   end
 end

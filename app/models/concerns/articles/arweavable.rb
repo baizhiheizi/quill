@@ -15,7 +15,7 @@ module Articles::Arweavable
       article_snapshot: snapshots.order(created_at: :desc).first
     ).find_or_create_by!(
       owner: nil,
-      digest: digest
+      digest:
     )
   end
 
@@ -27,7 +27,7 @@ module Articles::Arweavable
       article_snapshot: snapshots.order(created_at: :desc).first
     ).find_or_create_by!(
       owner: author,
-      digest: digest
+      digest:
     )
   end
 

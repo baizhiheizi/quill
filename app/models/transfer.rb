@@ -125,22 +125,22 @@ class Transfer < ApplicationRecord
       if opponent_id.present?
         wallet_api.create_transfer(
           wallet_pin,
-          asset_id: asset_id,
-          opponent_id: opponent_id,
-          amount: amount,
-          trace_id: trace_id,
-          memo: memo
+          asset_id:,
+          opponent_id:,
+          amount:,
+          trace_id:,
+          memo:
         )
       else
         wallet.blank?
         wallet_api.create_multisig_transaction(
           wallet_pin,
-          asset_id: asset_id,
+          asset_id:,
           receivers: opponent_multisig['receivers'],
           threshold: opponent_multisig['threshold'],
-          amount: amount,
-          trace_id: trace_id,
-          memo: memo
+          amount:,
+          trace_id:,
+          memo:
         )
       end
 
@@ -156,13 +156,13 @@ class Transfer < ApplicationRecord
         {
           members: [opponent_id],
           threshold: 1,
-          amount: amount
+          amount:
         }
       else
         {
           members: opponent_multisig['receivers'],
           threshold: opponent_multisig['threshold'],
-          amount: amount
+          amount:
         }
       end
   end
@@ -175,9 +175,9 @@ class Transfer < ApplicationRecord
       members: safe_receiver[:members],
       threshold: safe_receiver[:threshold],
       amount: safe_receiver[:amount],
-      asset_id: asset_id,
+      asset_id:,
       request_id: trace_id,
-      memo: memo
+      memo:
     )
 
     update!(

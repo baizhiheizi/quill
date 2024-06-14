@@ -30,7 +30,7 @@ class Notification < ApplicationRecord
   after_create_commit { broadcast_as_flash }
 
   def broadcast_as_flash
-    broadcast_prepend_later_to "user_#{recipient.mixin_uuid}", target: 'flashes', partial: 'flashes/flash', locals: { message: message, type: :info }
+    broadcast_prepend_later_to "user_#{recipient.mixin_uuid}", target: 'flashes', partial: 'flashes/flash', locals: { message:, type: :info }
   end
 
   def message

@@ -30,8 +30,8 @@ class MarkdownRenderService
     @type = kargs[:type] || :default
   end
 
-  def self.call(*args, **kargs)
-    new(*args, **kargs).call
+  def self.call(*, **kargs)
+    new(*, **kargs).call
   end
 
   def call
@@ -117,7 +117,7 @@ class MarkdownRenderService
         img['src'] = src.gsub(/\.\S+\z/, '')
       when %r{blob://\S+}
         key = src.gsub('blob://', '').split('/').first
-        blob = ActiveStorage::Blob.find_by key: key
+        blob = ActiveStorage::Blob.find_by(key:)
         img['src'] = blob.url if blob.present?
       end
 

@@ -110,13 +110,13 @@ class SessionsController < ApplicationController
 
     if current_user.twitter_authorization.present?
       current_user.twitter_authorization.update(
-        raw: raw,
+        raw:,
         uid: raw['id']
       )
     else
       current_user.user_authorizations.create(
         provider: :twitter,
-        raw: raw,
+        raw:,
         uid: raw['id']
       )
     end

@@ -30,7 +30,7 @@ class NftCollection < ApplicationRecord
     raw = Trident.api.collection uuid
     return if raw.blank?
 
-    update! raw: raw
+    update! raw:
   end
 
   def trident_url
@@ -42,7 +42,7 @@ class NftCollection < ApplicationRecord
   end
 
   def icon_url
-    icon['url'] || format('https://api.multiavatar.com/%<uuid>s.png', uuid: uuid)
+    icon['url'] || format('https://api.multiavatar.com/%<uuid>s.png', uuid:)
   end
 
   private

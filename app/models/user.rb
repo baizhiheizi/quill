@@ -146,7 +146,7 @@ class User < ApplicationRecord
   end
 
   def generated_avatar_url
-    format('https://api.multiavatar.com/%<mixin_uuid>s.png', mixin_uuid: mixin_uuid)
+    format('https://api.multiavatar.com/%<mixin_uuid>s.png', mixin_uuid:)
   end
 
   def prepare

@@ -21,7 +21,7 @@ class UsersController < ApplicationController
 
   def load_user
     uid = params[:uid] || params[:user_id] || params[:full_user_uid] || request.subdomain
-    @user = User.fetch_by_uniq_keys uid: uid
+    @user = User.fetch_by_uniq_keys(uid:)
     redirect_back fallback_location: root_path if @user.blank?
   end
 end

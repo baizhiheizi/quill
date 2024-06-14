@@ -54,10 +54,10 @@ class ApplicationController < ActionController::Base
     @current_session = nil
   end
 
-  def with_locale(&action)
+  def with_locale(&)
     current_user.update(locale: current_locale) if current_user && current_locale && current_user.locale != current_locale
     locale = current_user&.locale || current_locale&.to_sym || I18n.default_locale
-    I18n.with_locale(locale, &action)
+    I18n.with_locale(locale, &)
   end
 
   def from_mixin_messenger?
@@ -74,7 +74,7 @@ class ApplicationController < ActionController::Base
 
   def prepare_exception_notifier
     request.env['exception_notifier.exception_data'] = {
-      current_user: current_user
+      current_user:
     }
   end
 end

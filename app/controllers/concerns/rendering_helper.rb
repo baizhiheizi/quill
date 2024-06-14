@@ -10,8 +10,8 @@ module RenderingHelper
       'flashes',
       partial: 'flashes/flash',
       locals: {
-        type: type,
-        message: message
+        type:,
+        message:
       }
     )
   end

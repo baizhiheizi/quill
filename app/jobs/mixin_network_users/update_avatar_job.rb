@@ -2,6 +2,6 @@
 
 class MixinNetworkUsers::UpdateAvatarJob < ApplicationJob
   def perform(id)
-    MixinNetworkUser.find_by(id: id)&.update_avatar
+    MixinNetworkUser.find_by(id:)&.update_avatar
   end
 end

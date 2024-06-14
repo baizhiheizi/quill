@@ -17,7 +17,7 @@ module Authenticatable
         provider: :mixin
       )
       raw = (auth.raw.presence || {}).merge(res['data'])
-      auth.update raw: raw, access_token: token
+      auth.update raw:, access_token: token
 
       find_or_create_user_by_auth auth
     end
@@ -54,12 +54,12 @@ module Authenticatable
 
       auth = UserAuthorization.create_with(
         raw: res['user'],
-        public_key: public_key
+        public_key:
       ).find_or_create_by!(
         uid: address,
         provider: :mvm_eth
       )
-      auth.update! raw: res['user'], public_key: public_key
+      auth.update!(raw: res['user'], public_key:)
 
       user = find_or_create_user_by_auth auth
       session_id = JSON.parse(msg)['session']
@@ -91,7 +91,7 @@ module Authenticatable
           mixin_uuid: auth.raw['user_id'],
           uid: auth.mixin? ? auth.raw['identity_number'] : auth.uid.gsub('-', '')
         )
-        auth.update user: user
+        auth.update user:
       end
 
       user
