@@ -169,7 +169,7 @@ GEM
     base58 (0.2.3)
     base64 (0.2.0)
     bcrypt (3.1.20)
-    bcrypt_pbkdf (1.1.0)
+    bcrypt_pbkdf (1.1.1)
     bigdecimal (3.1.8)
     bindata (2.5.0)
     bindex (0.8.1)
@@ -320,7 +320,7 @@ GEM
       bindata
       faraday (~> 2.0)
       faraday-follow_redirects
-    kamal (1.5.2)
+    kamal (1.6.0)
       activesupport (>= 7.0)
       base64 (~> 0.2)
       bcrypt_pbkdf (~> 1.0)
@@ -328,7 +328,7 @@ GEM
       dotenv (~> 2.8)
       ed25519 (~> 1.2)
       net-ssh (~> 7.0)
-      sshkit (~> 1.21)
+      sshkit (>= 1.22.2, < 2.0)
       thor (~> 1.2)
       zeitwerk (~> 2.5)
     kaminari (1.2.2)
