@@ -559,7 +559,7 @@ GEM
     set (1.1.0)
     sha3 (1.0.5)
     simple_command (1.0.1)
-    solid_cache (0.3.0)
+    solid_cache (0.6.0)
       activejob (>= 7)
       activerecord (>= 7)
       railties (>= 7)
@@ -680,7 +680,7 @@ DEPENDENCIES
   second_level_cache
   selenium-webdriver
   simple_command
-  solid_cache (< 0.4)
+  solid_cache (< 0.7)
   spring
   spring-watcher-listen (~> 2.1.0)
   stimulus-rails
