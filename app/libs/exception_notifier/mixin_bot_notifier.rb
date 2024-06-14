@@ -37,7 +37,7 @@ module ExceptionNotifier
       data_string = data_string.join("\n")
 
       <<~TEXT
-        # #{formatted_message.title}
+        # Quill #{formatted_message.title}
 
         #{formatted_message.subtitle}
 
