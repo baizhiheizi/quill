@@ -5,9 +5,7 @@ module ExceptionNotifier
     def initialize(options)
       super
       @bot = options[:bot].constantize
-      @recipient_id = options[:recipient_id]
       @conversation_id = options[:conversation_id]
-      @conversation_id ||= @bot.api.unique_uuid(@recipient_id) if @bot.api&.config&.app_id.present?
     end
 
     def call(exception, options = {})
@@ -45,9 +43,7 @@ module ExceptionNotifier
 
         ## Request
 
-        #{request_message(env)}
-
-        ## Controller & Action
+        #{formatted_message.request_message}
 
         ```
         #{formatted_message.controller_and_action}
@@ -61,22 +57,6 @@ module ExceptionNotifier
 
         #{formatted_message.backtrace_message}
       TEXT
-    end
-
-    def request_message(env)
-      request = ActionDispatch::Request.new(env) if env
-      return unless request
-
-      [
-        '```',
-        "* url : #{request.original_url}",
-        "* http_method : #{request.method}",
-        "* ip_address : #{request.remote_ip}",
-        "* parameters : #{request.filtered_parameters}",
-        "* user_agent : #{request.user_agent}",
-        "* timestamp : #{Time.current}",
-        '```'
-      ].join("\n")
     end
   end
 end

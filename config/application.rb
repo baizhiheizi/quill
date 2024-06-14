@@ -48,5 +48,10 @@ module Quill
     config.active_record.yaml_column_permitted_classes = [ActiveSupport::HashWithIndifferentAccess, Symbol]
 
     config.middleware.use Grover::Middleware
+
+    config.middleware.use ExceptionNotification::Rack, mixin_bot: {
+      conversation_id: Rails.application.credentials.dig(:mixin_groups, :exception),
+      bot: 'QuillBot'
+    }
   end
 end

@@ -50,6 +50,7 @@ class MixinMessage < ApplicationRecord
 
   def process_user_message
     return if user.blank?
+    return unless conversation_id == QuillBot.api.unique_uuid(user_id)
 
     user.notify_for_login
   end

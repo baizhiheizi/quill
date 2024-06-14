@@ -6,6 +6,7 @@ class ApplicationController < ActionController::Base
   include RenderingHelper
 
   before_action :ensure_launched!
+  before_action :prepare_exception_notifier
 
   helper_method :current_session
   helper_method :current_user
@@ -69,5 +70,11 @@ class ApplicationController < ActionController::Base
 
   def requesting_modal?
     request.headers['Turbo-Frame'] == 'modal'
+  end
+
+  def prepare_exception_notifier
+    request.env['exception_notifier.exception_data'] = {
+      current_user: current_user
+    }
   end
 end

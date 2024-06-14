@@ -187,9 +187,9 @@ group :development do
   # Annotate Rails classes with schema and routes info
   gem 'annotate', require: false
   # A Ruby static code analyzer and formatter
+  gem 'kamal'
   gem 'rubocop', require: false
   gem 'rubocop-rails', require: false
-  gem 'kamal'
 end
 
 group :test do
