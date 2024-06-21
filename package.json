@@ -17,7 +17,7 @@
     "@metamask/detect-provider": "^2.0.0",
     "@milkdown/core": "^7.3.6",
     "@milkdown/ctx": "^7.3.6",
-    "@milkdown/plugin-block": "^7.3.6",
+    "@milkdown/plugin-block": "^7.4.0",
     "@milkdown/plugin-clipboard": "^7.3.6",
     "@milkdown/plugin-cursor": "^7.3.6",
     "@milkdown/plugin-emoji": "^7.3.6",
