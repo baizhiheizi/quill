@@ -132,7 +132,7 @@ class MixinNetworkUser < ApplicationRecord
   def setup_attributes
     return unless new_record?
 
-    r = QuillBot.api.create_user(name || default_name, key_type: 'Ed25519')
+    r = QuillBot.api.create_user(name || default_name)
     raise r.inspect if r['error'].present?
 
     self.raw = r['data']
@@ -142,7 +142,7 @@ class MixinNetworkUser < ApplicationRecord
       name: raw['full_name'],
       pin_token: raw['pin_token'],
       session_id: raw['session_id'],
-      private_key: r[:ed25519_key]&.[](:private_key)
+      private_key: raw[:private_key]
     )
   end
 end
