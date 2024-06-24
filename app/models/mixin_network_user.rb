@@ -142,7 +142,7 @@ class MixinNetworkUser < ApplicationRecord
       name: raw['full_name'],
       pin_token: raw['pin_token'],
       session_id: raw['session_id'],
-      private_key: raw[:private_key]
+      private_key: r[:private_key]
     )
   end
 end
