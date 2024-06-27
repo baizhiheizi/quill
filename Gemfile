@@ -159,7 +159,7 @@ gem 'grover'
 gem 'rqrcode'
 
 # A Ruby library for declaring, composing and executing GraphQL queries
-gem 'graphql', '<2.1'
+gem 'graphql', '<2.4'
 gem 'graphql-client'
 
 # Rails Plugin that tracks impressions and page views
