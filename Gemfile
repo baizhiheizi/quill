@@ -84,7 +84,7 @@ gem 'ransack'
 gem 'simple_command'
 
 # Notifications for Ruby on Rails applications
-gem 'noticed', '< 2.0'
+gem 'noticed', '< 3.0'
 
 # Centralization of locale data collection for Ruby on Rails.
 gem 'rails-i18n'
