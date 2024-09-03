@@ -157,7 +157,7 @@ class MixinNetworkSnapshot < ApplicationRecord
       end
 
       @__retry = 0
-    rescue MixinBot::HttpError, MixinBot::RequestError, OpenSSL::SSL::SSLError => e
+    rescue MixinBot::ResponseError, MixinBot::HttpError, MixinBot::RequestError, OpenSSL::SSL::SSLError => e
       logger.error e.inspect
       raise e if @__retry > 10
 
