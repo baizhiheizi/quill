@@ -9,25 +9,15 @@ servers:
   web:
     hosts:
       - 172.233.92.233
-    options:
-      network: 'private'
-    labels:
-      traefik.http.routers.quill.entrypoints: websecure
-      traefik.http.routers.quill.rule: Host(`quill.im`)
-      traefik.http.routers.quill.tls.certresolver: letsencrypt
 
   blaze:
     hosts:
       - 172.233.92.233
     cmd: bin/mixin_blaze
-    options:
-      network: 'private'
   job:
     hosts:
       - 172.233.92.233
     cmd: bundle exec good_job start
-    options:
-      network: 'private'
 
 # Credentials for your image host.
 registry:
@@ -56,7 +46,7 @@ env:
 
 # Configure builder setup.
 builder:
-  multiarch: false
+  arch: amd64
 
 # Use accessory services (secrets come from .env).
 accessories:
@@ -70,19 +60,17 @@ accessories:
         POSTGRES_DB: 'quill_production'
       secret:
         - POSTGRES_PASSWORD
-    files:
-      - db/production.dump:/backup/production.dump
+    # files:
+    #   - db/production.dump:/backup/production.dump
     directories:
       - data:/var/lib/postgresql/data
-    options:
-      network: 'private'
   db_backup:
     image: eeshugerman/postgres-backup-s3:16
     host: 172.233.92.233
     env:
       clear:
-        SCHEDULE: '@daily'     # optional
-        BACKUP_KEEP_DAYS: 7     # optional
+        SCHEDULE: '@daily' # optional
+        BACKUP_KEEP_DAYS: 7 # optional
         S3_REGION: auto
         S3_PREFIX: 'quill'
         POSTGRES_HOST: '172.18.0.1'
@@ -94,41 +82,11 @@ accessories:
         - S3_BUCKET
         - S3_ENDPOINT
         - POSTGRES_PASSWORD
-    options:
-      network: 'private'
-  # redis:
-  #   image: redis:7.0
-  #   host: 172.233.92.233
-  #   port: 6379
-  #   directories:
-  #     - data:/data
-  #   options:
-  #     network: 'private'
 
-# Configure custom arguments for Traefik. Be sure to reboot traefik when you modify it.
-traefik:
-  options:
-    publish:
-      - "443:443"
-    volume:
-      - "/letsencrypt/acme.json:/letsencrypt/acme.json" # To save the configuration file.
-    network: "private"
-  args:
-    entryPoints.web.address: ":80"
-    entryPoints.websecure.address: ":443"
-    entryPoints.web.http.redirections.entryPoint.to: websecure # We want to force https
-    entryPoints.web.http.redirections.entryPoint.scheme: https
-    entryPoints.web.http.redirections.entrypoint.permanent: true
-    certificatesResolvers.letsencrypt.acme.email: "an.lee.work@gmail.com"
-    certificatesResolvers.letsencrypt.acme.storage: "/letsencrypt/acme.json" # Must match the path in `volume`
-    certificatesResolvers.letsencrypt.acme.httpchallenge: true
-    certificatesResolvers.letsencrypt.acme.httpchallenge.entrypoint: web # Must match the role in `servers`
-
-# Configure a custom healthcheck (default is /up on port 3000)
-# healthcheck:
-#   path: /healthz
-#   port: 4000
-
+proxy:
+  host: quill.im
+  ssl: true
+  app_port: 3000
 # Bridge fingerprinted assets, like JS and CSS, between versions to avoid
 # hitting 404 on in-flight requests. Combines all files from new and old
 # version inside the asset_path.

@@ -57,3 +57,5 @@ config/settings.local.yml
 # Ignore all environment files.
 /.env*
 !/.env.example
+
+.kamal/secrets
