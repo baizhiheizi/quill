@@ -190,7 +190,7 @@ GEM
     combine_pdf (1.0.26)
       matrix
       ruby-rc4 (>= 0.1.5)
-    concurrent-ruby (1.3.3)
+    concurrent-ruby (1.3.4)
     config (5.4.0)
       deep_merge (~> 1.2, >= 1.2.1)
     connection_pool (2.4.1)
@@ -286,7 +286,7 @@ GEM
       mini_mime (>= 1.0.0)
       multi_xml (>= 0.5.2)
     httpclient (2.8.3)
-    i18n (1.14.5)
+    i18n (1.14.6)
       concurrent-ruby (~> 1.0)
     image_processing (1.12.2)
       mini_magick (>= 4.9.5, < 5)
@@ -318,7 +318,7 @@ GEM
       bindata
       faraday (~> 2.0)
       faraday-follow_redirects
-    kamal (1.6.0)
+    kamal (1.9.2)
       activesupport (>= 7.0)
       base64 (~> 0.2)
       bcrypt_pbkdf (~> 1.0)
@@ -326,7 +326,7 @@ GEM
       dotenv (~> 2.8)
       ed25519 (~> 1.2)
       net-ssh (~> 7.0)
-      sshkit (>= 1.22.2, < 2.0)
+      sshkit (>= 1.23.0, < 2.0)
       thor (~> 1.2)
       zeitwerk (~> 2.5)
     kaminari (1.2.2)
@@ -379,12 +379,12 @@ GEM
     mini_portile2 (2.8.6)
     mini_racer (0.12.0)
       libv8-node (~> 21.7.2.0)
-    minitest (5.23.1)
+    minitest (5.25.1)
     msgpack (1.7.2)
     multi_xml (0.7.1)
       bigdecimal (~> 3.1)
     multipart-post (2.4.1)
-    mutex_m (0.2.0)
+    mutex_m (0.3.0)
     net-http (0.4.1)
       uri
     net-imap (0.4.12)
@@ -400,7 +400,7 @@ GEM
       net-ssh (>= 5.0.0, < 8.0.0)
     net-smtp (0.5.0)
       net-protocol
-    net-ssh (7.2.3)
+    net-ssh (7.3.0)
     netrc (0.11.0)
     nio4r (2.7.3)
     nokogiri (1.16.6-x86_64-linux)
@@ -411,6 +411,7 @@ GEM
     openssl (3.2.0)
     order_as_specified (1.7)
       activerecord (>= 5.0.0)
+    ostruct (0.6.1)
     pagy (8.4.0)
     pando_bot (0.1.0)
       activesupport (>= 5)
@@ -568,17 +569,17 @@ GEM
     spring-watcher-listen (2.1.0)
       listen (>= 2.7, < 4.0)
       spring (>= 4)
-    sshkit (1.22.2)
+    sshkit (1.23.2)
       base64
-      mutex_m
       net-scp (>= 1.1.2)
       net-sftp (>= 2.1.2)
       net-ssh (>= 2.8.0)
+      ostruct
     stimulus-rails (1.3.3)
       railties (>= 6.0.0)
     stringio (3.1.1)
     strscan (3.1.0)
-    thor (1.3.1)
+    thor (1.3.2)
     timeout (0.4.1)
     turbo-rails (2.0.5)
       actionpack (>= 6.0.0)
@@ -611,7 +612,7 @@ GEM
     xpath (3.2.0)
       nokogiri (~> 1.8)
     yajl-ruby (1.4.3)
-    zeitwerk (2.6.15)
+    zeitwerk (2.7.1)
 
 PLATFORMS
   x86_64-linux
@@ -650,7 +651,7 @@ DEPENDENCIES
   inline_svg
   jbuilder
   jsbundling-rails
-  kamal
+  kamal (< 2)
   kramdown
   kramdown-parser-gfm
   listen (~> 3.4)
