@@ -185,7 +185,7 @@ group :development do
   gem 'spring'
   gem 'spring-watcher-listen', '~> 2.1.0'
   # Annotate Rails classes with schema and routes info
-  gem 'annotate', require: false
+  gem 'annotaterb', require: false
   # A Ruby static code analyzer and formatter
   gem 'kamal'
   gem 'rubocop', require: false
