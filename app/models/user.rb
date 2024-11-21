@@ -150,7 +150,7 @@ class User < ApplicationRecord
   end
 
   def prepare
-    create_wallet! if wallet.blank?
+    # create_wallet! if wallet.blank?
     create_notification_setting! if notification_setting.blank?
     create_bot_contact_conversation
   end
