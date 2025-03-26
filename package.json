@@ -19,7 +19,7 @@
     "@milkdown/ctx": "^7.3.6",
     "@milkdown/plugin-block": "^7.3.6",
     "@milkdown/plugin-clipboard": "^7.3.6",
-    "@milkdown/plugin-cursor": "^7.3.6",
+    "@milkdown/plugin-cursor": "^7.4.0",
     "@milkdown/plugin-emoji": "^7.3.6",
     "@milkdown/plugin-history": "^7.3.6",
     "@milkdown/plugin-indent": "^7.3.6",
