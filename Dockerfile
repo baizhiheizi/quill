@@ -36,7 +36,7 @@ FROM base as build
 
 # Install packages needed to build gems and node modules
 RUN apt-get update -qq && \
-    apt-get install --no-install-recommends -y build-essential git libpq-dev libvips node-gyp pkg-config python-is-python3 automake libtool libffi-dev libssl-dev libgmp-dev python3-dev libsodium-dev
+    apt-get install --no-install-recommends -y build-essential git libpq-dev libvips node-gyp pkg-config python-is-python3 automake libtool libffi-dev libssl-dev libgmp-dev python3-dev libsodium-dev libyaml-dev
 
 # Install yarn
 ARG YARN_VERSION=1.22.19
@@ -71,7 +71,7 @@ FROM base
 
 # Install packages needed for deployment
 RUN apt-get update -qq && \
-    apt-get install --no-install-recommends -y chromium chromium-sandbox imagemagick libvips postgresql-client libsodium-dev curl && \
+    apt-get install --no-install-recommends -y chromium chromium-sandbox imagemagick libvips postgresql-client libsodium-dev curl libyaml-dev && \
     rm -rf /var/lib/apt/lists /var/cache/apt/archives
 
 # Run and own the application files as a non-root user for security
