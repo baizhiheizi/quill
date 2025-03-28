@@ -8,15 +8,15 @@ image: anleework/quill
 servers:
   web:
     hosts:
-      - 172.233.92.233
+      - 172.235.197.72
 
   blaze:
     hosts:
-      - 172.233.92.233
+      - 172.235.197.72
     cmd: bin/mixin_blaze
   job:
     hosts:
-      - 172.233.92.233
+      - 172.235.197.72
     cmd: bundle exec good_job start
 
 # Credentials for your image host.
@@ -59,7 +59,7 @@ builder:
 accessories:
   db:
     image: pgvector/pgvector:pg16
-    host: 172.233.92.233
+    host: 172.235.197.72
     port: 5432
     env:
       clear:
@@ -73,7 +73,7 @@ accessories:
       - data:/var/lib/postgresql/data
   db_backup:
     image: eeshugerman/postgres-backup-s3:16
-    host: 172.233.92.233
+    host: 172.235.197.72
     env:
       clear:
         SCHEDULE: '@daily' # optional
