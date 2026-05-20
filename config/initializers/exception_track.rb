@@ -8,11 +8,15 @@ ExceptionTrack.configure do
   # self.environments = %i(development production)
 end
 
-ExceptionNotification.configure do |config|
-  config.ignored_exceptions += %w[
-    ActionController::InvalidAuthenticityToken
-    URI::InvalidURIError
-  ]
+begin
+  ExceptionNotification.configure do |config|
+    config.ignored_exceptions += %w[
+      ActionController::InvalidAuthenticityToken
+      URI::InvalidURIError
+    ]
+  end
+rescue ActiveSupport::MessageEncryptor::InvalidMessage
+  # credentials unavailable in this environment
 end
 
 # ExceptionNotification.configure do |config|

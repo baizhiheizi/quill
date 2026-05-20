@@ -3,10 +3,10 @@
 source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby '~> 3.4'
+ruby '~> 4.0'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '~> 7'
+gem 'rails', '~> 8.1'
 
 # Use pg as the database for Active Record
 gem 'pg'
@@ -62,6 +62,12 @@ gem 'image_processing', '~> 1.2'
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', '>= 1.4.4', require: false
 
+# Required on Ruby 4.0+ (no longer default gems)
+gem 'benchmark'
+gem 'cgi'
+gem 'mutex_m'
+gem 'tsort'
+
 # AASM - State machines for Ruby classes (plain Ruby, ActiveRecord, Mongoid)
 gem 'aasm'
 
@@ -84,7 +90,7 @@ gem 'ransack'
 gem 'simple_command'
 
 # Notifications for Ruby on Rails applications
-gem 'noticed', '< 2.0'
+gem 'noticed', '~> 1.6'
 
 # Centralization of locale data collection for Ruby on Rails.
 gem 'rails-i18n'
@@ -136,7 +142,7 @@ gem 'cld', github: 'jtoy/cld'
 gem 'enumerize'
 
 # A framework for building reusable, testable & encapsulated view components in Ruby on Rails.
-gem 'view_component'
+gem 'view_component', '~> 4.0'
 
 # Saves your data permanent and let your customers own their data.
 gem 'arweave', github: 'baizhiheizi/arweave-ruby'
@@ -159,7 +165,7 @@ gem 'grover'
 gem 'rqrcode'
 
 # A Ruby library for declaring, composing and executing GraphQL queries
-gem 'graphql', '<2.1'
+gem 'graphql', '~> 2.0'
 gem 'graphql-client'
 
 # Rails Plugin that tracks impressions and page views
@@ -170,7 +176,7 @@ gem 'twitter_oauth2'
 
 gem 'good_job'
 
-gem 'solid_cache', '< 0.4'
+gem 'solid_cache', '~> 1.0'
 
 group :development, :test do
   # Start debugger with binding.b [https://github.com/ruby/debug]
@@ -181,9 +187,6 @@ group :development do
   # Access an interactive console on exception pages or by calling 'console' anywhere in the code.
   gem 'listen', '~> 3.4'
   gem 'web-console', '>= 3.3.0'
-  # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
-  gem 'spring'
-  gem 'spring-watcher-listen', '~> 2.1.0'
   # Annotate Rails classes with schema and routes info
   gem 'annotaterb', require: false
   # A Ruby static code analyzer and formatter
@@ -193,11 +196,12 @@ group :development do
 end
 
 group :test do
+  # Rails 7.1 test runner is incompatible with minitest 6 (pulled in on Ruby 4)
+  gem 'minitest', '~> 5.25'
+
   # Adds support for Capybara system testing and selenium driver
   gem 'capybara', '>= 2.15'
-  gem 'selenium-webdriver'
-  # Easy installation and use of web drivers to run system tests with browsers
-  gem 'webdrivers'
+  gem 'selenium-webdriver', '>= 4.11'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem

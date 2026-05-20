@@ -12,9 +12,9 @@ module ArweaveBot
       query($contributor: String!, $after: String, $first: Int) {
         transactions(
           tags: [
-            { name: "Content-Type", values: "application/json" }
-            { name: "App-Name", values: ["MirrorXYZ"] }
-            { name: "Contributor", values: [$contributor] }
+            { name: "Content-Type", values: ["application/json"], op: EQ, match: EXACT }
+            { name: "App-Name", values: ["MirrorXYZ"], op: EQ, match: EXACT }
+            { name: "Contributor", values: [$contributor], op: EQ, match: EXACT }
           ]
           after: $after
           first: $first

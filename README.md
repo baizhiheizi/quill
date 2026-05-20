@@ -82,3 +82,17 @@ Request body example:
   "tag_names": ["BTC", "Blockchain"]
 }
 ```
+
+## Development
+
+- Ruby 4.0.5 locally (see `.ruby-version` or `mise.toml`; Docker images use `4.0.4-slim` until `4.0.5-slim` is published)
+- Rails 8.1.3
+- PostgreSQL and Redis for local/CI tests
+- Node.js 20+ and Yarn 1.x for the asset pipeline
+
+```bash
+bundle install
+yarn install
+bin/rails db:setup
+bin/rails test
+```

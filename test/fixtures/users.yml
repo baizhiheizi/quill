@@ -30,8 +30,14 @@
 #  index_users_on_uid         (uid) UNIQUE
 #
 
-one: {}
+one:
+  created_at: <%= 1.day.ago %>
+  updated_at: <%= 1.day.ago %>
+
 # column: value
 #
-two: {}
+two:
+  created_at: <%= 1.day.ago %>
+  updated_at: <%= 1.day.ago %>
+
 # column: value

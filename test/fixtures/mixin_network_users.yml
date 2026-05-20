@@ -23,8 +23,14 @@
 #  index_mixin_network_users_on_uuid                     (uuid) UNIQUE
 #
 
-one: {}
+one:
+  created_at: <%= 1.day.ago %>
+  updated_at: <%= 1.day.ago %>
+
 # column: value
 #
-two: {}
+two:
+  created_at: <%= 1.day.ago %>
+  updated_at: <%= 1.day.ago %>
+
 # column: value

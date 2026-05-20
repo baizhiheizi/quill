@@ -56,7 +56,7 @@ class Order < ApplicationRecord
   validates :trace_id, uniqueness: true
   validate :ensure_total_sufficient, on: :create
 
-  enum order_type: { buy_article: 0, reward_article: 1, cite_article: 2, buy_collection: 3 }
+  enum :order_type, { buy_article: 0, reward_article: 1, cite_article: 2, buy_collection: 3 }
 
   delegate :price_tag, to: :payment, prefix: true
 

@@ -42,8 +42,8 @@ class Transfer < ApplicationRecord
   belongs_to :recipient, class_name: 'User', primary_key: :mixin_uuid, foreign_key: :opponent_id, inverse_of: :transfers, optional: true
   belongs_to :currency, primary_key: :asset_id, foreign_key: :asset_id, inverse_of: :transfers, optional: true
 
-  enum queue_priority: { default: 0, critical: 1, high: 2, low: 3 }, _prefix: true
-  enum transfer_type: {
+  enum :queue_priority, { default: 0, critical: 1, high: 2, low: 3 }, prefix: true
+  enum :transfer_type, {
     default: -1,
     author_revenue: 0,
     reader_revenue: 1,
