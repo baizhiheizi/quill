@@ -21,6 +21,7 @@ end
 %w[
   support/quill_bot_stub.rb
   support/commerce_helpers.rb
+  support/notifier_helpers.rb
   support/integration_test_case.rb
 ].each { |f| require_relative f }
 
@@ -34,6 +35,7 @@ module ActiveSupport
 
     include ActiveJob::TestHelper
     include CommerceHelpers
+    include NotifierHelpers
     include QuillBotStub
 
     setup do

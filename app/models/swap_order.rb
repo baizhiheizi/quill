@@ -219,7 +219,7 @@ class SwapOrder < ApplicationRecord
   end
 
   def notify_payer
-    SwapOrderSwappingNotification.with(swap_order: self).deliver(payer) if swapping?
-    SwapOrderFinishedNotification.with(swap_order: self).deliver(payer) if state.in? %w[completed refunded rejected]
+    SwapOrderSwappingNotifier.with(record: self, swap_order: self).deliver(payer) if swapping?
+    SwapOrderFinishedNotifier.with(record: self, swap_order: self).deliver(payer) if state.in? %w[completed refunded rejected]
   end
 end

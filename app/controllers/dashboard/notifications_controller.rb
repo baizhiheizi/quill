@@ -2,7 +2,8 @@
 
 class Dashboard::NotificationsController < Dashboard::BaseController
   def index
-    @pagy, @notifications = pagy current_user.notifications.order(created_at: :desc), items: 50
+    web_notifications = current_user.notifications.for_web.newest_first.select(&:visible_in_web?)
+    @pagy, @notifications = pagy_array web_notifications, items: 50
     @active_page = "notification"
   end
 

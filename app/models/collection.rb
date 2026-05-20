@@ -174,8 +174,8 @@ class Collection < ApplicationRecord
   end
 
   def notify_subscribers
-    CollectionListedNotification
-      .with(collection: self)
+    CollectionListedNotifier
+      .with(record: self, collection: self)
       .deliver(
         User.where(id: (author.subscribe_by_user_ids - author.block_user_ids))
       )

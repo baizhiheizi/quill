@@ -1,50 +1,69 @@
 en:
   notification: Notification
-  notifications:
-    article_published_notification:
-      published: published an article
-    article_bought_notification:
-      bought: bought an article
-    article_rewarded_notification:
-      rewarded: rewarded an article
-    article_imported_notification:
-      imported: imported a new article
-    collection_listed_notification:
-      listed: listed a collection
-    collection_bought_notification:
-      bought: bought an collection
-    comment_created_notification:
-      commented: commented
-    comment_deleted_notification:
-      deleted: Your comment was deleted by admin
-    tagging_created_notification:
-      has_new_article: has a new article
-    payment_created_notification:
-      paid: Successfully paid
-    payment_refunded_notification:
-      refunded: "Order of %{item} failed and your payment is refunded. Please check your balance."
-    order_created_notification:
-      bought: Successfully bought
-      rewarded: Successfully rewarded
-      minting: Requested to mint
-    swap_order_swapping_notification:
-      swapping: 'Swapping:'
-    swap_order_finished_notification:
-      swapped: 'Successfully swapped:'
-      rejected: Your swap was rejected, you will receive the refund soon.
-    transfer_processed_notification:
-      received: Received
-      author_revenue: author revenue
-      reader_revenue: reader revenue
-      payment_refund: payment refund
-      bonus: bonus
-      swap_change: swap change
-      swap_refund: refund after swapped
-    subscribe_user_action_created_notification:
-      subscribed: subscribed your activities
-    user_connected_notification:
-      message: Welcome! You may leave messages here if you have any questions.
-    user_safe_registration_notification:
-      message: Please update Mixin Messenger to the latest version to ensure you can accept the transfer.
-    non_fungible_output_found_notification:
-      found: Found
+  notifiers:
+    article_published_notifier:
+      notification:
+        published: published an article
+    article_bought_notifier:
+      notification:
+        bought: bought an article
+    article_rewarded_notifier:
+      notification:
+        rewarded: rewarded an article
+    article_imported_notifier:
+      notification:
+        imported: imported a new article
+    collection_listed_notifier:
+      notification:
+        listed: listed a collection
+    collection_bought_notifier:
+      notification:
+        bought: bought an collection
+    comment_created_notifier:
+      notification:
+        commented: commented
+    comment_deleted_notifier:
+      notification:
+        deleted: Your comment was deleted by admin
+    tagging_created_notifier:
+      notification:
+        has_new_article: has a new article
+    payment_created_notifier:
+      notification:
+        paid: Successfully paid
+    payment_refunded_notifier:
+      notification:
+        refunded: "Order of %{item} failed and your payment is refunded. Please check your balance."
+    order_created_notifier:
+      notification:
+        bought: Successfully bought
+        rewarded: Successfully rewarded
+        minting: Requested to mint
+    swap_order_swapping_notifier:
+      notification:
+        swapping: 'Swapping:'
+    swap_order_finished_notifier:
+      notification:
+        swapped: 'Successfully swapped:'
+        rejected: Your swap was rejected, you will receive the refund soon.
+    transfer_processed_notifier:
+      notification:
+        received: Received
+        author_revenue: author revenue
+        reader_revenue: reader revenue
+        payment_refund: payment refund
+        bonus: bonus
+        swap_change: swap change
+        swap_refund: refund after swapped
+    subscribe_user_action_created_notifier:
+      notification:
+        subscribed: subscribed your activities
+    user_connected_notifier:
+      notification:
+        message: Welcome! You may leave messages here if you have any questions.
+    user_safe_registration_notifier:
+      notification:
+        message: Please update Mixin Messenger to the latest version to ensure you can accept the transfer.
+    non_fungible_output_found_notifier:
+      notification:
+        found: Found

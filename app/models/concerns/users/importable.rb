@@ -26,7 +26,7 @@ module Users::Importable
         price: 0
       ).find_or_create_by(uuid:)
 
-      ArticleImportedNotification.with(article:).deliver(self) if article.persisted?
+      ArticleImportedNotifier.with(record: article, article:).deliver(self) if article.persisted?
     end
   ensure
     Rails.cache.delete "_#{uid}_importing_from_mirror_lock"

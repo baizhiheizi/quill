@@ -1,49 +1,68 @@
 ja:
   notification: 通知
-  notifications:
-    article_published_notification:
-      published: 記事が投稿されました
-    article_bought_notification:
-      bought: 記事が購入されました
-    article_rewarded_notification:
-      rewarded: リワードが付与されました
-    article_imported_notification:
-      imported: imported a new article
-    collection_listed_notification:
-      listed: listed a collection
-    collection_bought_notification:
-      bought: bought an collection
-    comment_created_notification:
-      commented: コメントされました
-    comment_deleted_notification:
-      deleted: あなたのコメントは運営によって削除されました
-    tagging_created_notification:
-      has_new_article: 新しい記事があります
-    payment_created_notification:
-      paid: 支払い完了しました
-    payment_refunded_notification:
-      refunded: "Order of %{item} failed and your payment is refunded. Please check your balance."
-    order_created_notification:
-      bought: 購入完了しました
-      rewarded: リワードが付与されました
-    swap_order_swapping_notification:
-      swapping: 'スワップ:'
-    swap_order_finished_notification:
-      swapped: 'スワップ成功:'
-      rejected: スワップが拒否されましたが、すぐに払い戻しされます
-    transfer_processed_notification:
-      received: 受け取り済み
-      author_revenue: 作者収入
-      reader_revenue: 読者収入
-      payment_refund: 払い戻し
-      bonus: ボーナス
-      swap_change: スワップ変動
-      swap_refund: スワップ後の払い戻し
-    subscribe_user_action_created_notification:
-      subscribed: 新しく投稿した記事がフォローされました
-    user_connected_notification:
-      message: 歓迎！
-    user_safe_registration_notification:
-      message: Please update Mixin Messenger to the latest version to ensure you can accept the transfer.
-    non_fungible_output_found_notification:
-      found: Found
+  notifiers:
+    article_published_notifier:
+      notification:
+        published: 記事が投稿されました
+    article_bought_notifier:
+      notification:
+        bought: 記事が購入されました
+    article_rewarded_notifier:
+      notification:
+        rewarded: リワードが付与されました
+    article_imported_notifier:
+      notification:
+        imported: imported a new article
+    collection_listed_notifier:
+      notification:
+        listed: listed a collection
+    collection_bought_notifier:
+      notification:
+        bought: bought an collection
+    comment_created_notifier:
+      notification:
+        commented: コメントされました
+    comment_deleted_notifier:
+      notification:
+        deleted: あなたのコメントは運営によって削除されました
+    tagging_created_notifier:
+      notification:
+        has_new_article: 新しい記事があります
+    payment_created_notifier:
+      notification:
+        paid: 支払い完了しました
+    payment_refunded_notifier:
+      notification:
+        refunded: "Order of %{item} failed and your payment is refunded. Please check your balance."
+    order_created_notifier:
+      notification:
+        bought: 購入完了しました
+        rewarded: リワードが付与されました
+    swap_order_swapping_notifier:
+      notification:
+        swapping: 'スワップ:'
+    swap_order_finished_notifier:
+      notification:
+        swapped: 'スワップ成功:'
+        rejected: スワップが拒否されましたが、すぐに払い戻しされます
+    transfer_processed_notifier:
+      notification:
+        received: 受け取り済み
+        author_revenue: 作者収入
+        reader_revenue: 読者収入
+        payment_refund: 払い戻し
+        bonus: ボーナス
+        swap_change: スワップ変動
+        swap_refund: スワップ後の払い戻し
+    subscribe_user_action_created_notifier:
+      notification:
+        subscribed: 新しく投稿した記事がフォローされました
+    user_connected_notifier:
+      notification:
+        message: 歓迎！
+    user_safe_registration_notifier:
+      notification:
+        message: Please update Mixin Messenger to the latest version to ensure you can accept the transfer.
+    non_fungible_output_found_notifier:
+      notification:
+        found: Found

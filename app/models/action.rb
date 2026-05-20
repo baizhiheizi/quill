@@ -27,17 +27,19 @@ class Action < ActiveRecord::Base
   belongs_to :target, polymorphic: true, optional: true
   belongs_to :user, polymorphic: true, optional: true
 
+  has_many :noticed_events, as: :record, dependent: :destroy, class_name: "Noticed::Event"
+
   after_create :notify_target
   before_destroy :destroy_notifications
 
-  def destroy_notifications
-    notifications.destroy_all
-  rescue StandardError => e
-    Rails.logger.error "Failed to destroy notifications for action #{id}: #{e}"
+  def notifications
+    noticed_events
   end
 
-  def notifications
-    @notifications = Notification.where(params: { action: self })
+  def destroy_notifications
+    noticed_events.destroy_all
+  rescue StandardError => e
+    Rails.logger.error "Failed to destroy notifications for action #{id}: #{e}"
   end
 
   def notify_target
@@ -45,7 +47,7 @@ class Action < ActiveRecord::Base
 
     case action_type.to_sym
     when :subscribe
-      SubscribeUserActionCreatedNotification.with(action: self).deliver(target)
+      SubscribeUserActionCreatedNotifier.with(record: self, action: self).deliver(target)
     end
   end
 end

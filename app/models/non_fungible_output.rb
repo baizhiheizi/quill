@@ -35,7 +35,7 @@ class NonFungibleOutput < ApplicationRecord
     return unless state == "unspent"
     return if collectible&.collection.blank?
 
-    NonFungibleOutputFoundNotification.with(non_fungible_output: self).deliver(user)
+    NonFungibleOutputFoundNotifier.with(record: self, non_fungible_output: self).deliver(user)
   end
 
   private

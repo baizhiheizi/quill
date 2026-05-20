@@ -1,14 +1,14 @@
 # frozen_string_literal: true
 
-class DeliveryMethods::MixinBot < Noticed::DeliveryMethods::Base
-  around_deliver :with_locale
-
+class DeliveryMethods::MixinBot < Noticed::DeliveryMethod
   def deliver
-    MixinMessages::SendJob.perform_later format.stringify_keys, bot
+    I18n.with_locale(recipient&.locale || I18n.default_locale) do
+      MixinMessages::SendJob.perform_later format.stringify_keys, bot
+    end
   end
 
   def bot
-    if options[:bot] == "RevenueBot" && RevenueBot.api.present?
+    if config[:bot] == "RevenueBot" && RevenueBot.api.present?
       "RevenueBot"
     else
       "QuillBot"
@@ -25,11 +25,11 @@ class DeliveryMethods::MixinBot < Noticed::DeliveryMethods::Base
   end
 
   def category
-    options[:category] || "PLAIN_TEXT"
+    config[:category] || "PLAIN_TEXT"
   end
 
   def data
-    options[:data] || notification.data
+    config[:data] || notification.data
   end
 
   def conversation_id
@@ -45,10 +45,5 @@ class DeliveryMethods::MixinBot < Noticed::DeliveryMethods::Base
         data:
       }
     )
-  end
-
-  def with_locale(&)
-    locale = recipient&.locale || I18n.default_locale
-    I18n.with_locale(locale, &)
   end
 end

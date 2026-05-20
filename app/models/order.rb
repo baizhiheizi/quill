@@ -123,16 +123,16 @@ class Order < ApplicationRecord
 
   def notify_subscribers
     if reward_article?
-      ArticleRewardedNotification.with(order: self).deliver(buyer.subscribe_by_users)
+      ArticleRewardedNotifier.with(record: self, order: self).deliver(buyer.subscribe_by_users)
     elsif buy_article?
-      ArticleBoughtNotification.with(order: self).deliver(buyer.subscribe_by_users)
+      ArticleBoughtNotifier.with(record: self, order: self).deliver(buyer.subscribe_by_users)
     elsif buy_collection?
-      CollectionBoughtNotification.with(order: self).deliver(buyer.subscribe_by_users)
+      CollectionBoughtNotifier.with(record: self, order: self).deliver(buyer.subscribe_by_users)
     end
   end
 
   def notify_buyer
-    OrderCreatedNotification.with(order: self).deliver(buyer) if order_type.in? %w[buy_article reward_article buy_collection]
+    OrderCreatedNotifier.with(record: self, order: self).deliver(buyer) if order_type.in? %w[buy_article reward_article buy_collection]
   end
 
   def subscribe_comments_for_buyer
@@ -151,12 +151,10 @@ class Order < ApplicationRecord
     item.update_revenue if item.is_a?(Article)
   end
 
-  def notifications
-    @notifications = Notification.where(params: { order: self })
-  end
+  has_many :noticed_events, as: :record, dependent: :destroy, class_name: "Noticed::Event"
 
   def destroy_notifications
-    notifications.destroy_all
+    noticed_events.destroy_all
   end
 
   def cache_history_ticker

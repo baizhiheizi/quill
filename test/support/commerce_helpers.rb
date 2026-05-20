@@ -7,9 +7,9 @@ module CommerceHelpers
     delivery.define_singleton_method(:deliver_later) { |*_args| true }
 
     notification_classes = [
-      PaymentCreatedNotification,
-      PaymentRefundedNotification,
-      OrderCreatedNotification
+      PaymentCreatedNotifier,
+      PaymentRefundedNotifier,
+      OrderCreatedNotifier
     ]
     originals = notification_classes.to_h { |klass| [ klass, klass.method(:with) ] }
 

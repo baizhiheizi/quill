@@ -26,18 +26,16 @@ class Tagging < ApplicationRecord
   def notify_subscribers
     return unless article.published?
 
-    TaggingCreatedNotification
-      .with(tagging: self)
+    TaggingCreatedNotifier
+      .with(record: self, tagging: self)
       .deliver(
         User.where(id: (tag.subscribe_by_user_ids - article.author.block_user_ids))
       )
   end
 
-  def notifications
-    @notifications ||= Notification.where(params: { tagging: self }).where(type: "TaggingCreatedNotification")
-  end
+  has_many :noticed_events, as: :record, dependent: :destroy, class_name: "Noticed::Event"
 
   def destroy_notifications
-    notifications.destroy_all
+    noticed_events.where(type: "TaggingCreatedNotifier").destroy_all
   end
 end

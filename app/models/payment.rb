@@ -279,9 +279,9 @@ class Payment < ApplicationRecord
 
     case state
     when "paid", "completed"
-      PaymentCreatedNotification.with(payment: self).deliver(payer)
+      PaymentCreatedNotifier.with(record: self, payment: self).deliver(payer)
     when "refunded"
-      PaymentRefundedNotification.with(payment: self).deliver(payer)
+      PaymentRefundedNotifier.with(record: self, payment: self).deliver(payer)
     end
   end
 

@@ -4,11 +4,11 @@ module Users::Statable
   extend ActiveSupport::Concern
 
   def unread_notifications_count
-    notifications.unread.count
+    notifications.unread.for_web.count { |notification| notification.visible_in_web? }
   end
 
   def has_unread_notification?
-    notifications.unread.present?
+    notifications.unread.for_web.any?(&:visible_in_web?)
   end
 
   def articles_count

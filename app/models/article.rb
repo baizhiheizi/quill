@@ -202,8 +202,8 @@ class Article < ApplicationRecord
   def notify_subscribers
     return if author.blocked?
 
-    ArticlePublishedNotification
-      .with(article: self)
+    ArticlePublishedNotifier
+      .with(record: self, article: self)
       .deliver(
         User.where(id: (author.subscribe_by_user_ids - author.block_user_ids))
       )

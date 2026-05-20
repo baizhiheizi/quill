@@ -201,7 +201,7 @@ class Transfer < ApplicationRecord
     return if recipient.blank?
     return if currency.blank?
 
-    TransferProcessedNotification.with(transfer: self).deliver(recipient)
+    TransferProcessedNotifier.with(record: self, transfer: self).deliver(recipient)
   end
 
   def price_tag

@@ -1,49 +1,68 @@
 zh-CN:
   notification: 消息通知
-  notifications:
-    article_published_notification:
-      published: 发表了文章
-    article_bought_notification:
-      bought: 购买了文章
-    article_rewarded_notification:
-      rewarded: 赞赏了文章
-    article_imported_notification:
-      imported: 成功导入新文章
-    collection_listed_notification:
-      listed: 上架了合辑
-    collection_bought_notification:
-      bought: 购买了合辑
-    comment_created_notification:
-      commented: 发表了新评论
-    comment_deleted_notification:
-      deleted: 您的评论被管理员删除 
-    tagging_created_notification:
-      has_new_article: 有新的文章
-    payment_created_notification:
-      paid: 成功支付
-    payment_refunded_notification:
-      refunded: "%{item} 购买失败，已退款，请注意检查钱包变化。"
-    order_created_notification:
-      bought: 成功购买了
-      rewarded: 成功赞赏了
-    swap_order_swapping_notification:
-      swapping: '正在兑换:'
-    swap_order_finished_notification:
-      swapped: '成功兑换:'
-      rejected: 兑换失败，您将收到退款
-    transfer_processed_notification:
-      received: 收到
-      author_revenue: 作者收益
-      reader_revenue: 读者收益
-      payment_refund: 支付退款
-      bonus: 奖励
-      swap_change: 兑换找零
-      swap_refund: 兑换后购买失败退款
-    subscribe_user_action_created_notification:
-      subscribed: 订阅了您的动态
-    user_connected_notification:
-      message: 欢迎来到Quill！您也可以浏览网站 quill.im 使用Quill的服务，有任何问题可以直接给机器人留言，或者加入 @7000103074 参与讨论。
-    user_safe_registration_notification:
-      message: 请将您的 Mixin Messenger 升级到最新版本，以便正常接收 Quill 的收益转账。
-    non_fungible_output_found_notification:
-      found: 找到
+  notifiers:
+    article_published_notifier:
+      notification:
+        published: 发表了文章
+    article_bought_notifier:
+      notification:
+        bought: 购买了文章
+    article_rewarded_notifier:
+      notification:
+        rewarded: 赞赏了文章
+    article_imported_notifier:
+      notification:
+        imported: 成功导入新文章
+    collection_listed_notifier:
+      notification:
+        listed: 上架了合辑
+    collection_bought_notifier:
+      notification:
+        bought: 购买了合辑
+    comment_created_notifier:
+      notification:
+        commented: 发表了新评论
+    comment_deleted_notifier:
+      notification:
+        deleted: 您的评论被管理员删除
+    tagging_created_notifier:
+      notification:
+        has_new_article: 有新的文章
+    payment_created_notifier:
+      notification:
+        paid: 成功支付
+    payment_refunded_notifier:
+      notification:
+        refunded: "%{item} 购买失败，已退款，请注意检查钱包变化。"
+    order_created_notifier:
+      notification:
+        bought: 成功购买了
+        rewarded: 成功赞赏了
+    swap_order_swapping_notifier:
+      notification:
+        swapping: '正在兑换:'
+    swap_order_finished_notifier:
+      notification:
+        swapped: '成功兑换:'
+        rejected: 兑换失败，您将收到退款
+    transfer_processed_notifier:
+      notification:
+        received: 收到
+        author_revenue: 作者收益
+        reader_revenue: 读者收益
+        payment_refund: 支付退款
+        bonus: 奖励
+        swap_change: 兑换找零
+        swap_refund: 兑换后购买失败退款
+    subscribe_user_action_created_notifier:
+      notification:
+        subscribed: 订阅了您的动态
+    user_connected_notifier:
+      notification:
+        message: 欢迎来到Quill！您也可以浏览网站 quill.im 使用Quill的服务，有任何问题可以直接给机器人留言，或者加入 @7000103074 参与讨论。
+    user_safe_registration_notifier:
+      notification:
+        message: 请将您的 Mixin Messenger 升级到最新版本，以便正常接收 Quill 的收益转账。
+    non_fungible_output_found_notifier:
+      notification:
+        found: 找到

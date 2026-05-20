@@ -45,7 +45,7 @@ class Comment < ApplicationRecord
   end
 
   def notify_subscribers_async
-    CommentCreatedNotification.with(comment: self).deliver(subscribers)
+    CommentCreatedNotifier.with(record: self, comment: self).deliver(subscribers)
   end
 
   def subscribe_for_author

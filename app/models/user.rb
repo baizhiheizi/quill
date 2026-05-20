@@ -64,7 +64,7 @@ class User < ApplicationRecord
   has_many :bought_articles, -> { order(created_at: :desc) }, through: :buy_orders, source: :item, source_type: "Article"
   has_many :comments, foreign_key: :author_id, inverse_of: :author, dependent: :nullify
   has_many :swap_orders, through: :payments
-  has_many :notifications, as: :recipient, dependent: :destroy
+  has_many :notifications, as: :recipient, dependent: :destroy, class_name: "Noticed::Notification"
   has_many :bonuses, dependent: :restrict_with_exception
   has_many :pre_orders, primary_key: :mixin_uuid, foreign_key: :payer_id, dependent: :restrict_with_exception, inverse_of: :payer
   has_many :sessions, dependent: :restrict_with_exception
@@ -212,13 +212,13 @@ class User < ApplicationRecord
   end
 
   def notify_for_login
-    UserConnectedNotification.with(user: self).deliver(self)
+    UserConnectedNotifier.with(record: self, user: self).deliver(self)
   end
 
   def notify_for_safe_registration
     return if has_safe?
 
-    UserSafeRegistrationNotification.with(user: self).deliver(self)
+    UserSafeRegistrationNotifier.with(record: self, user: self).deliver(self)
   end
 
   def short_uid

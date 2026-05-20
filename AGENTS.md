@@ -36,7 +36,7 @@ quill/
 │   ├── javascript/      # Stimulus controllers, MVM wallet TS, esbuild entry
 │   ├── jobs/            # Good Job background work (orders, transfers, arweave)
 │   ├── services/        # Query/command objects (e.g. ArticleSearchService)
-│   ├── notifications/   # Noticed notification classes
+│   ├── notifiers/       # Noticed 3 notifier classes + delivery_methods/
 │   └── libs/            # Non-Rails Ruby helpers
 ├── config/
 │   ├── routes/          # Route draws: admin, dashboard, api, mvm, grover
@@ -108,7 +108,7 @@ yarn build:css
 
 ## Testing Conventions
 
-- **Location**: `test/` mirrors `app/` (`test/models/`, `test/controllers/`, `test/jobs/`, `test/components/`)
+- **Location**: `test/` mirrors `app/` (`test/models/`, `test/controllers/`, `test/jobs/`, `test/notifiers/`, `test/components/`)
 - **Naming**: `*_test.rb`; fixtures in `test/fixtures/`
 - **Style**: Minitest; many component tests are placeholder skips
 - **Env**: `RAILS_ENV=test`; CI uses Postgres + Redis service containers
@@ -135,6 +135,15 @@ yarn build:css
 2. Enqueue with `perform_later`; Good Job runs via `bundle exec good_job start` (in `bin/dev`)
 3. Add `test/jobs/..._test.rb`
 
+### Add a notifier (Noticed 3)
+
+1. Create `app/notifiers/<name>_notifier.rb` inheriting `ApplicationNotifier`
+2. Declare `required_param(s)` and wrap UI helpers (`message`, `url`, `icon_url`) in `notification_methods do ... end`
+3. Configure delivery methods with blocks (`deliver_by :mixin_bot do |config| ... end`); database persistence is automatic — do **not** add `deliver_by :database`
+4. Pass `record:` in `.with(record: model, ...)` when the notifier relates to an ActiveRecord object (enables `has_many :noticed_events, as: :record`)
+5. Add translations under `config/locales/notifications.*.yml` at `notifiers.<notifier_name>.notification.*`
+6. Add tests in `test/notifiers/`; use `NotifierHelpers#deliver_notifier!` and assert on `Noticed::Event` / `Noticed::Notification`
+
 ### Database migration
 
 ```bash
@@ -154,3 +163,4 @@ Re-run `annotaterb` in development if model annotations are stale.
 - **ViewComponent 4**: Subclass `initialize` must call `super()`; base accepts and discards args
 - **CONTRIBUTING.md** lists Ruby 3.2; project actually targets Ruby 4.0.5 per README and `.ruby-version`
 - **Deploy**: Production deploy is manual (`gh workflow run Deploy`); uses Kamal + Docker Hub image `anleework/quill`
+- **Noticed 3**: Notifiers live in `app/notifiers/`, inherit `Noticed::Event` via `ApplicationNotifier`; user inbox uses `Noticed::Notification` (`User#notifications`). Web UI filters with `visible_in_web?` / `for_web` because DB records are always created (including Mixin-only delivery). Custom delivery: `DeliveryMethods::MixinBot`, `DeliveryMethods::FlashBroadcast`. Extend gem models in `config/initializers/noticed.rb`.
