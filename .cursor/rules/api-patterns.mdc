@@ -1,0 +1,28 @@
+---
+description: JSON API conventions under /api
+globs: app/controllers/api/**/*.rb
+alwaysApply: false
+---
+
+## Routing
+
+API routes are in `config/routes/api.rb`, drawn as `namespace :api, defaults: { format: :json }`.
+
+## Base controller
+
+All API controllers inherit `API::BaseController`:
+- Auth: `HTTP_X_ACCESS_TOKEN` header → `AccessToken` → `current_user`
+- Call `authenticate_user!` (raises `UnauthorizedError`) for protected endpoints
+- JSON rendering via `API::RenderingHelper`
+- Global `rescue_from` for 404, 422, 500
+
+## Conventions
+
+- Use `param: :uuid` for article resources
+- Locale forced to `:en` in API (`with_locale`)
+- Log last request metadata on access tokens in `after_action`
+
+## Avoid
+
+- Returning full article `content` without authorization (see existing `articles#show` behavior)
+- HTML/session auth patterns from `ApplicationController` in API controllers

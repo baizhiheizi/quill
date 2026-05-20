@@ -1,0 +1,31 @@
+---
+description: Minitest conventions and test layout
+globs: test/**/*
+alwaysApply: false
+---
+
+## Layout
+
+Tests live under `test/` mirroring `app/`:
+- `test/models/`, `test/controllers/`, `test/jobs/`, `test/components/`, `test/integration/`
+- Fixtures: `test/fixtures/*.yml`
+
+## Running
+
+```bash
+bin/rails test
+bin/rails test test/models/article_test.rb   # single file
+```
+
+CI runs full suite after `bin/rails db:setup`.
+
+## Style
+
+- Minitest (`test "description" do` or `def test_...`)
+- Use fixtures; avoid hitting external APIs (Mixin, Arweave) in unit tests
+- Component tests often use placeholder `test_component_renders_something_useful` — add real assertions when changing components
+
+## Avoid
+
+- Upgrading to minitest 6 (incompatible with current Rails test runner on Ruby 4)
+- Tests that depend on production credentials or live blockchain calls

@@ -1,0 +1,29 @@
+---
+description: ActiveRecord models and database migrations
+globs: app/models/**/*.rb,db/**/*
+alwaysApply: false
+---
+
+## Migrations
+
+- Timestamped files in `db/migrate/`
+- Run `bin/rails db:migrate`; use `bin/rails db:prepare` for fresh setups
+- Some migrations are engine-generated (`.active_storage.rb`, `.solid_cache.rb`, etc.) — do not hand-edit those filenames
+
+## Models
+
+- Inherit `ApplicationRecord`
+- UUIDs used for public IDs (`articles.uuid`, etc.) — prefer `param: :uuid` in routes
+- Counter caches and `restrict_with_error` are common — preserve on delete semantics
+- Annotated schema comments at top of model files (maintained by `annotaterb` in development)
+
+## Domain notes
+
+- Payments flow: `PreOrder` → `Order` → `Transfer` / `Payment` / revenue distribution jobs
+- Crypto assets keyed by `asset_id` (Mixin Network UUID)
+- User blocking: `blocked_at` on users; articles filter blocked authors in search
+
+## Avoid
+
+- Destructive data migrations without reversible `down` steps when feasible
+- Changing revenue ratio columns without understanding `Orders::DistributeJob` impact

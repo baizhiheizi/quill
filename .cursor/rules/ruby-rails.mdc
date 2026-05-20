@@ -1,0 +1,28 @@
+---
+description: Ruby and Rails conventions for application code
+globs: app/**/*.rb
+alwaysApply: false
+---
+
+## File header
+
+Start Ruby files with `# frozen_string_literal: true`.
+
+## Style
+
+Follow `rubocop-rails-omakase` (see `.rubocop.yml`). Run `bin/rubocop` before finishing Ruby changes.
+
+## Patterns
+
+- **Controllers**: inherit `ApplicationController` (HTML) or `API::BaseController` (JSON); use existing concerns (`Localizable`, `RenderingHelper`)
+- **Models**: use AASM for state machines; `restrict_with_error` on important associations; keep schema annotations when editing models
+- **Services**: prefer small service classes with `.call` (see `ArticleSearchService`)
+- **Jobs**: inherit `ApplicationJob`; namespace by domain (`Orders::`, `Articles::`, `Transfers::`)
+- **Components**: inherit `ApplicationComponent`; call `super()` in `initialize`
+
+## Avoid
+
+- Inline `require` mid-file
+- Bypassing `authenticate_user!` / API token checks for protected actions
+- Hard-coding revenue ratios when model defaults or `Settings` exist
+- Adding gems without clear need; check `Gemfile` for existing solutions (Pagy, Ransack, Noticed, SimpleCommand)
