@@ -34,7 +34,6 @@
 
 class User < ApplicationRecord
   is_impressionable
-  second_level_cache expires_in: 1.week
 
   include Authenticatable
   include Users::EmailVerifiable

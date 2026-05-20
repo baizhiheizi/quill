@@ -98,7 +98,7 @@ yarn build:css
 
 - **Frozen string**: `# frozen_string_literal: true` at top of Ruby files
 - **Naming**: snake_case files/methods; PascalCase classes; `API::` namespace for API controllers
-- **Models**: schema annotations via `annotaterb`; AASM `state` columns; counter caches; `second_level_cache` on hot reads
+- **Models**: schema annotations via `annotaterb`; AASM `state` columns; counter caches
 - **Services**: class with `.call` factory (see `ArticleSearchService`)
 - **Components**: inherit `ApplicationComponent`; ViewComponent 4 uses explicit `initialize(*_args, **_kwargs)` in base
 - **Controllers**: concerns in `app/controllers/concerns/` (`Localizable`, `RenderingHelper`, `API::RenderingHelper`)

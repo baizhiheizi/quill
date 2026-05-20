@@ -4,20 +4,6 @@ ENV["RAILS_ENV"] ||= "test"
 require_relative "../config/environment"
 require "rails/test_help"
 
-# second_level_cache 2.7.x find_target arity mismatch with Rails 8.1 association reader
-if defined?(SecondLevelCache::ActiveRecord::Associations::BelongsToAssociation)
-  module SecondLevelCacheRails81FindTargetCompat
-    def find_target(_skip_statement_cache = nil)
-      super()
-    end
-  end
-
-  [
-    SecondLevelCache::ActiveRecord::Associations::BelongsToAssociation,
-    SecondLevelCache::ActiveRecord::Associations::HasOneAssociation
-  ].each { |mod| mod.prepend(SecondLevelCacheRails81FindTargetCompat) }
-end
-
 %w[
   support/quill_bot_stub.rb
   support/commerce_helpers.rb

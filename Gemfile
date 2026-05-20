@@ -155,9 +155,6 @@ gem "inline_svg"
 # Do some browser detection with Ruby. Includes ActionController integration.
 gem "browser"
 
-# Write Through and Read Through caching library inspired by CacheMoney and cache_fu.
-gem "second_level_cache"
-
 # A Ruby gem to transform HTML into PDFs, PNGs or JPEGs using Google Puppeteer/Chromium
 gem "grover"
 

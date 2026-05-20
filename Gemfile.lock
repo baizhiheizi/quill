@@ -580,9 +580,6 @@ GEM
     scrypt (3.0.8)
       ffi-compiler (>= 1.0, < 2.0)
       rake (>= 9, < 14)
-    second_level_cache (2.7.1)
-      activerecord (>= 6.0)
-      activesupport (>= 6.0)
     securerandom (0.4.1)
     selenium-webdriver (4.44.0)
       base64 (~> 0.2)
@@ -705,7 +702,6 @@ DEPENDENCIES
   requestjs-rails
   rqrcode
   rubocop-rails-omakase
-  second_level_cache
   selenium-webdriver (>= 4.11)
   simple_command
   solid_cache (~> 1.0)
