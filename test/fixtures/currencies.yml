@@ -2,34 +2,11 @@
 #
 # Table name: currencies
 #
-#  id                   :bigint           not null, primary key
-#  mvm_contract_address :string
-#  price_btc            :decimal(, )
-#  price_usd            :decimal(, )
-#  raw                  :jsonb
-#  symbol               :string
-#  created_at           :datetime         not null
-#  updated_at           :datetime         not null
-#  asset_id             :uuid
-#  chain_id             :uuid
-#
-# Indexes
-#
-#  index_currencies_on_asset_id  (asset_id) UNIQUE
-#
-
-# This model initially had no columns defined. If you add columns to the
-# model remove the '{}' from the fixture names and add the columns immediately
-# below each fixture, per the syntax in the comments below
-#
-one:
-  created_at: <%= 1.day.ago %>
-  updated_at: <%= 1.day.ago %>
-
-# column: value
-#
-two:
-  created_at: <%= 1.day.ago %>
-  updated_at: <%= 1.day.ago %>
-
-# column: value
+btc:
+  asset_id: c6d0c728-2624-429b-8e0d-d9d19b6592fa
+  symbol: BTC
+  price_btc: 1.0
+  price_usd: 50000.0
+  raw:
+    name: Bitcoin
+    icon_url: https://example.com/btc.png

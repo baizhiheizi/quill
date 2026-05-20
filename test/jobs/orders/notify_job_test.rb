@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require "test_helper"
-class Orders::NotifyJobTest < Minitest::Test
+class Orders::NotifyJobTest < JobTestCase
   def test_example
     skip "add some examples to (or delete) #{__FILE__}"
   end

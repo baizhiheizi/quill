@@ -2,46 +2,71 @@
 #
 # Table name: articles
 #
-#  id                                  :bigint           not null, primary key
-#  author_revenue_ratio                :float            default(0.5)
-#  collection_revenue_ratio            :float            default(0.0)
-#  commenting_subscribers_count        :integer          default(0)
-#  comments_count                      :integer          default(0), not null
-#  content                             :text
-#  downvotes_count                     :integer          default(0)
-#  free_content_ratio                  :float            default(0.1)
-#  intro                               :string
-#  locale                              :string
-#  orders_count                        :integer          default(0), not null
-#  platform_revenue_ratio              :float            default(0.1)
-#  price                               :decimal(, )      not null
-#  published_at                        :datetime
-#  readers_revenue_ratio               :float            default(0.4)
-#  references_revenue_ratio            :float            default(0.0)
-#  revenue_btc                         :decimal(, )      default(0.0)
-#  revenue_usd                         :decimal(, )      default(0.0)
-#  source                              :string
-#  state                               :string
-#  tags_count                          :integer          default(0)
-#  title                               :string
-#  upvotes_count                       :integer          default(0)
-#  uuid                                :uuid
-#  created_at                          :datetime         not null
-#  updated_at                          :datetime         not null
-#  asset_id(asset_id in Mixin Network) :uuid
-#  author_id                           :bigint
-#  collection_id                       :uuid
-#
-# Indexes
-#
-#  index_articles_on_asset_id       (asset_id)
-#  index_articles_on_author_id      (author_id)
-#  index_articles_on_collection_id  (collection_id)
-#  index_articles_on_uuid           (uuid) UNIQUE
-#
+published_paid:
+  uuid: f6666666-6666-4666-8666-666666666666
+  title: Paid Article
+  intro: A paid article intro for testing paywall behavior.
+  content: |
+    # Paid Article
 
-one:
-  price: 1
+    This is the full paid content body with enough words to test partial content extraction and paywall rendering in system tests. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+  author: author
+  asset_id: c6d0c728-2624-429b-8e0d-d9d19b6592fa
+  price: 0.0001
+  state: published
+  published_at: <%= 3.days.ago %>
+  locale: en
+  free_content_ratio: 0.1
+  readers_revenue_ratio: 0.4
+  platform_revenue_ratio: 0.1
+  author_revenue_ratio: 0.5
+  references_revenue_ratio: 0.0
+  created_at: <%= 3.days.ago %>
+  updated_at: <%= 3.days.ago %>
 
-two:
-  price: 1.1
+published_free:
+  uuid: aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa
+  title: Free Article
+  intro: A free article intro.
+  content: |
+    # Free Article
+
+    This is free content available to everyone without payment.
+  author: author
+  asset_id: c6d0c728-2624-429b-8e0d-d9d19b6592fa
+  price: 0.0
+  state: published
+  published_at: <%= 2.days.ago %>
+  locale: en
+  free_content_ratio: 0.1
+  created_at: <%= 2.days.ago %>
+  updated_at: <%= 2.days.ago %>
+
+draft:
+  uuid: bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb
+  title: Draft Article
+  intro: Draft intro
+  content: Draft content
+  author: author
+  asset_id: c6d0c728-2624-429b-8e0d-d9d19b6592fa
+  price: 0.0001
+  state: drafted
+  locale: en
+  created_at: <%= 1.day.ago %>
+  updated_at: <%= 1.day.ago %>
+
+high_revenue:
+  uuid: cccccccc-cccc-4ccc-8ccc-cccccccccccc
+  title: High Revenue Article
+  intro: High revenue intro
+  content: High revenue article body for search filter tests.
+  author: author
+  asset_id: c6d0c728-2624-429b-8e0d-d9d19b6592fa
+  price: 0.0002
+  state: published
+  published_at: <%= 1.day.ago %>
+  revenue_usd: 100.0
+  revenue_btc: 0.01
+  locale: en
+  created_at: <%= 1.day.ago %>
+  updated_at: <%= 1.day.ago %>

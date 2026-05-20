@@ -1,51 +1,73 @@
 # frozen_string_literal: true
 
-# == Schema Information
-#
-# Table name: articles
-#
-#  id                                  :bigint           not null, primary key
-#  author_revenue_ratio                :float            default(0.5)
-#  collection_revenue_ratio            :float            default(0.0)
-#  commenting_subscribers_count        :integer          default(0)
-#  comments_count                      :integer          default(0), not null
-#  content                             :text
-#  downvotes_count                     :integer          default(0)
-#  free_content_ratio                  :float            default(0.1)
-#  intro                               :string
-#  locale                              :string
-#  orders_count                        :integer          default(0), not null
-#  platform_revenue_ratio              :float            default(0.1)
-#  price                               :decimal(, )      not null
-#  published_at                        :datetime
-#  readers_revenue_ratio               :float            default(0.4)
-#  references_revenue_ratio            :float            default(0.0)
-#  revenue_btc                         :decimal(, )      default(0.0)
-#  revenue_usd                         :decimal(, )      default(0.0)
-#  source                              :string
-#  state                               :string
-#  tags_count                          :integer          default(0)
-#  title                               :string
-#  upvotes_count                       :integer          default(0)
-#  uuid                                :uuid
-#  created_at                          :datetime         not null
-#  updated_at                          :datetime         not null
-#  asset_id(asset_id in Mixin Network) :uuid
-#  author_id                           :bigint
-#  collection_id                       :uuid
-#
-# Indexes
-#
-#  index_articles_on_asset_id       (asset_id)
-#  index_articles_on_author_id      (author_id)
-#  index_articles_on_collection_id  (collection_id)
-#  index_articles_on_uuid           (uuid) UNIQUE
-#
-
 require "test_helper"
 
 class ArticleTest < ActiveSupport::TestCase
-  # test "the truth" do
-  #   assert true
-  # end
+  test "authorized? allows free published articles for guests" do
+    article = articles(:published_free)
+
+    assert article.authorized?
+    assert article.authorized?(nil)
+  end
+
+  test "authorized? allows author" do
+    article = articles(:published_paid)
+    user = users(:author)
+
+    assert article.authorized?(user)
+  end
+
+  test "authorized? denies strangers on paid articles" do
+    article = articles(:published_paid)
+
+    assert_not article.authorized?(users(:reader_one))
+  end
+
+  test "authorized? allows buyer with buy order" do
+    article = articles(:published_paid)
+    buyer = users(:reader_one)
+
+    with_quill_bot_stub do
+      create_buy_order!(article: article, buyer: buyer)
+    end
+
+    assert article.authorized?(buyer)
+  end
+
+  test "may_buy_by? rejects blocked relationships" do
+    article = articles(:published_paid)
+    author = users(:author)
+    reader = users(:reader_one)
+
+    author.block_user(reader)
+
+    assert_not article.may_buy_by?(reader)
+  end
+
+  test "may_buy_by? rejects unpublished articles" do
+    article = articles(:draft)
+
+    assert_not article.may_buy_by?(users(:reader_one))
+  end
+
+  test "share_of returns author ratio for author" do
+    article = articles(:published_paid)
+
+    assert_in_delta 0.5, article.share_of(users(:author)), 0.001
+  end
+
+  test "ensure_revenue_ratios_sum_to_one rejects invalid ratios" do
+    article = articles(:published_paid)
+    article.author_revenue_ratio = 0.9
+
+    assert_not article.valid?
+    assert_includes article.errors[:author_revenue_ratio], " incorrect"
+  end
+
+  test "partial_content returns nil for short content" do
+    article = articles(:published_free)
+    article.update!(content: "Short")
+
+    assert_nil article.partial_content
+  end
 end

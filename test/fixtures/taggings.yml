@@ -2,29 +2,8 @@
 #
 # Table name: taggings
 #
-#  id         :bigint           not null, primary key
-#  created_at :datetime         not null
-#  updated_at :datetime         not null
-#  article_id :bigint
-#  tag_id     :bigint
-#
-# Indexes
-#
-#  index_taggings_on_tag_id_and_article_id  (tag_id,article_id) UNIQUE
-#
-
-# This model initially had no columns defined. If you add columns to the
-# model remove the '{}' from the fixture names and add the columns immediately
-# below each fixture, per the syntax in the comments below
-#
-one:
-  created_at: <%= 1.day.ago %>
-  updated_at: <%= 1.day.ago %>
-
-# column: value
-#
-two:
-  created_at: <%= 1.day.ago %>
-  updated_at: <%= 1.day.ago %>
-
-# column: value
+published_paid_web3:
+  article: published_paid
+  tag: web3
+  created_at: <%= 2.days.ago %>
+  updated_at: <%= 2.days.ago %>

@@ -2,42 +2,39 @@
 #
 # Table name: users
 #
-#  id                          :bigint           not null, primary key
-#  authoring_subscribers_count :integer          default(0)
-#  biography                   :text
-#  blocked_at                  :datetime
-#  blocking_count              :integer          default(0)
-#  blocks_count                :integer          default(0)
-#  email                       :string
-#  email_verified_at           :datetime
-#  locale                      :string
-#  mixin_uuid                  :uuid
-#  name                        :string
-#  reading_subscribers_count   :integer          default(0)
-#  subscribers_count           :integer          default(0)
-#  subscribing_count           :integer          default(0)
-#  uid                         :string
-#  validated_at                :datetime
-#  created_at                  :datetime         not null
-#  updated_at                  :datetime         not null
-#  mixin_id                    :string
-#
-# Indexes
-#
-#  index_users_on_email       (email) UNIQUE
-#  index_users_on_mixin_id    (mixin_id)
-#  index_users_on_mixin_uuid  (mixin_uuid) UNIQUE
-#  index_users_on_uid         (uid) UNIQUE
-#
+author:
+  uid: "100001"
+  name: Test Author
+  mixin_uuid: a1111111-1111-4111-8111-111111111111
+  mixin_id: "100001"
+  locale: en
+  created_at: <%= 2.days.ago %>
+  updated_at: <%= 2.days.ago %>
 
-one:
-  created_at: <%= 1.day.ago %>
-  updated_at: <%= 1.day.ago %>
+reader_one:
+  uid: "100002"
+  name: Reader One
+  mixin_uuid: b2222222-2222-4222-8222-222222222222
+  mixin_id: "100002"
+  locale: en
+  created_at: <%= 2.days.ago %>
+  updated_at: <%= 2.days.ago %>
 
-# column: value
-#
-two:
-  created_at: <%= 1.day.ago %>
-  updated_at: <%= 1.day.ago %>
+reader_two:
+  uid: "100003"
+  name: Reader Two
+  mixin_uuid: c3333333-3333-4333-8333-333333333333
+  mixin_id: "100003"
+  locale: en
+  created_at: <%= 2.days.ago %>
+  updated_at: <%= 2.days.ago %>
 
-# column: value
+blocked_reader:
+  uid: "100004"
+  name: Blocked Reader
+  mixin_uuid: e4444444-4444-4444-8444-444444444444
+  mixin_id: "100004"
+  locale: en
+  blocked_at: <%= 1.day.ago %>
+  created_at: <%= 2.days.ago %>
+  updated_at: <%= 2.days.ago %>
