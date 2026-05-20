@@ -20,7 +20,7 @@
 #  index_currencies_on_asset_id  (asset_id) UNIQUE
 #
 
-require 'test_helper'
+require "test_helper"
 
 class CurrencyTest < ActiveSupport::TestCase
   # test "the truth" do

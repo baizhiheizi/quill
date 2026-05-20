@@ -15,7 +15,7 @@
 #  index_administrators_on_name  (name) UNIQUE
 #
 
-require 'test_helper'
+require "test_helper"
 
 class AdministratorTest < ActiveSupport::TestCase
   # test "the truth" do

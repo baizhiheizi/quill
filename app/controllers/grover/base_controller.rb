@@ -3,7 +3,7 @@
 class Grover::BaseController < ApplicationController
   before_action :authenticate!
 
-  layout 'grover'
+  layout "grover"
 
   private
 

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 # This migration comes from action_store (originally 20170204035500)
 
 class CreateActions < ActiveRecord::Migration[5.2]
@@ -14,7 +15,7 @@ class CreateActions < ActiveRecord::Migration[5.2]
       t.timestamps
     end
 
-    add_index :actions, [:user_type, :user_id, :action_type]
-    add_index :actions, [:target_type, :target_id, :action_type]
+    add_index :actions, [ :user_type, :user_id, :action_type ]
+    add_index :actions, [ :target_type, :target_id, :action_type ]
   end
 end

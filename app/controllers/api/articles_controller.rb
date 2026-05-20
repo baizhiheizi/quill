@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class API::ArticlesController < API::BaseController
-  before_action :authenticate_user!, only: [:create]
+  before_action :authenticate_user!, only: [ :create ]
 
   def index
     @articles =
@@ -16,7 +16,7 @@ class API::ArticlesController < API::BaseController
         Article.only_published
       end
 
-    query = params[:query]&.split(',')&.map(&:strip) || []
+    query = params[:query]&.split(",")&.map(&:strip) || []
     limit = params[:limit] || 20
     limit = 100 if limit.to_i > 100
     order = params[:order]&.to_sym
@@ -24,7 +24,7 @@ class API::ArticlesController < API::BaseController
 
     @articles =
       @articles
-      .ransack(q_ransack.merge(m: 'or'))
+      .ransack(q_ransack.merge(m: "or"))
       .result(distinct: true)
       .includes(:author, :tags, :currency)
       .limit(limit)

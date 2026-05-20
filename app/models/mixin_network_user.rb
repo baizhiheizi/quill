@@ -29,7 +29,7 @@ class MixinNetworkUser < ApplicationRecord
   DEFAULT_AVATAR_FILE = Rails.application.root.join("app/assets/images/#{Settings.icon_file || 'icon.png'}")
 
   belongs_to :owner, optional: true, inverse_of: false, polymorphic: true
-  has_many :snapshots, class_name: 'MixinNetworkSnapshot', foreign_key: :user_id, primary_key: :uuid, dependent: :nullify, inverse_of: :wallet
+  has_many :snapshots, class_name: "MixinNetworkSnapshot", foreign_key: :user_id, primary_key: :uuid, dependent: :nullify, inverse_of: :wallet
   has_many :swap_orders, foreign_key: :user_id, primary_key: :uuid, dependent: :nullify, inverse_of: :wallet
   has_many :transfers, foreign_key: :wallet_id, primary_key: :uuid, dependent: :nullify, inverse_of: :wallet
 
@@ -63,10 +63,10 @@ class MixinNetworkUser < ApplicationRecord
   end
 
   def update_pin!
-    new_pin = SecureRandom.random_number.to_s.split('.').last.first(6)
+    new_pin = SecureRandom.random_number.to_s.split(".").last.first(6)
     r = mixin_api.update_pin(old_pin: pin, pin: new_pin)
 
-    raise r.inspect if r['data'].blank?
+    raise r.inspect if r["data"].blank?
 
     update! pin: new_pin
   end
@@ -80,9 +80,9 @@ class MixinNetworkUser < ApplicationRecord
   def sync_profile!
     r = mixin_api.me
 
-    raise r.inspect if r['data'].blank?
+    raise r.inspect if r["data"].blank?
 
-    update! raw: r['data']
+    update! raw: r["data"]
   end
 
   def initialize_pin_async
@@ -95,7 +95,7 @@ class MixinNetworkUser < ApplicationRecord
       full_name: default_name,
       avatar_base64: Base64.strict_encode64(img.read)
     )
-    update raw: r['data'] if r['data'].present?
+    update raw: r["data"] if r["data"].present?
   ensure
     img&.close
   end
@@ -104,7 +104,7 @@ class MixinNetworkUser < ApplicationRecord
     r = mixin_api.update_me(
       full_name: default_name
     )
-    update name: r['data']['full_name'], raw: r['data'] if r['data'].present?
+    update name: r["data"]["full_name"], raw: r["data"] if r["data"].present?
   end
 
   def update_avatar_async
@@ -112,15 +112,15 @@ class MixinNetworkUser < ApplicationRecord
   end
 
   def default_name
-    Settings.broker_name || 'Quill'
+    Settings.broker_name || "Quill"
   end
 
   def avatar
-    raw['avatar_url'].presence || generated_avatar_url
+    raw["avatar_url"].presence || generated_avatar_url
   end
 
   def generated_avatar_url
-    format('https://api.multiavatar.com/%<mixin_uuid>s.svg', mixin_uuid: uuid)
+    format("https://api.multiavatar.com/%<mixin_uuid>s.svg", mixin_uuid: uuid)
   end
 
   def ready?
@@ -133,15 +133,15 @@ class MixinNetworkUser < ApplicationRecord
     return unless new_record?
 
     r = QuillBot.api.create_user(name || default_name)
-    raise r.inspect if r['error'].present?
+    raise r.inspect if r["error"].present?
 
-    self.raw = r['data']
+    self.raw = r["data"]
 
     assign_attributes(
-      uuid: raw['user_id'],
-      name: raw['full_name'],
-      pin_token: raw['pin_token'],
-      session_id: raw['session_id'],
+      uuid: raw["user_id"],
+      name: raw["full_name"],
+      pin_token: raw["pin_token"],
+      session_id: raw["session_id"],
       private_key: r[:private_key]
     )
   end

@@ -6,6 +6,6 @@ class TimeFormatComponent < ApplicationComponent
 
     @datetime = datetime
     @class = options[:class]
-    @format = options[:format] || 'long'
+    @format = options[:format] || "long"
   end
 end

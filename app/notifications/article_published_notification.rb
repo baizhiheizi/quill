@@ -2,7 +2,7 @@
 
 class ArticlePublishedNotification < ApplicationNotification
   deliver_by :database, if: :web_notification_enabled?
-  deliver_by :mixin_bot, class: 'DeliveryMethods::MixinBot', category: 'APP_CARD', if: :may_notify_via_mixin_bot?
+  deliver_by :mixin_bot, class: "DeliveryMethods::MixinBot", category: "APP_CARD", if: :may_notify_via_mixin_bot?
 
   param :article
 
@@ -20,11 +20,11 @@ class ArticlePublishedNotification < ApplicationNotification
   end
 
   def description
-    [article.author.name.truncate(10), t('.published')].join(' ')
+    [ article.author.name.truncate(10), t(".published") ].join(" ")
   end
 
   def message
-    [article.author.name.truncate(10), t('.published'), ':', params[:article].title].join(' ')
+    [ article.author.name.truncate(10), t(".published"), ":", params[:article].title ].join(" ")
   end
 
   def url

@@ -6,7 +6,7 @@ class Dashboard::BaseController < ApplicationController
   private
 
   def authenticate_user!
-    redirect_to login_path(return_to: URI.encode_www_form_component('/dashboard')) if current_user.blank?
+    redirect_to login_path(return_to: URI.encode_www_form_component("/dashboard")) if current_user.blank?
   end
 
   def authenticate_user_mvm_eth!

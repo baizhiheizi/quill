@@ -3,8 +3,8 @@
 module Admin
   class NonFungibleOutputsController < Admin::BaseController
     def index
-      @state = params[:state] || 'unspent'
-      @order_by = params[:order_by] || 'updated_at_desc'
+      @state = params[:state] || "unspent"
+      @order_by = params[:order_by] || "updated_at_desc"
 
       non_fungible_outputs = NonFungibleOutput.includes(:user, collectible: :nft_collection)
 
@@ -12,7 +12,7 @@ module Admin
 
       non_fungible_outputs =
         case @state
-        when 'all'
+        when "all"
           non_fungible_outputs
         else
           non_fungible_outputs.where(state: @state)
@@ -20,9 +20,9 @@ module Admin
 
       non_fungible_outputs =
         case @order_by
-        when 'updated_at_desc'
+        when "updated_at_desc"
           non_fungible_outputs.order(updated_at: :desc)
-        when 'updated_at_asc'
+        when "updated_at_asc"
           non_fungible_outputs.order(updated_at: :asc)
         end
 
@@ -34,7 +34,7 @@ module Admin
             collectible_collection_id_eq: @query,
             user_id_eq: @query,
             token_id_eq: @query
-          }.merge(m: 'or')
+          }.merge(m: "or")
         ).result
 
       @pagy, @non_fungible_outputs = pagy_countless non_fungible_outputs

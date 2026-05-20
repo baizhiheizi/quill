@@ -20,6 +20,6 @@ class CollectionsController < ApplicationController
 
   def share
     @collection = Collection.listed.find_by uuid: params[:collection_uuid]
-    impressionist @collection, 'share'
+    impressionist @collection, "share"
   end
 end

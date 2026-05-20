@@ -27,7 +27,7 @@ class Session < ApplicationRecord
   default_scope { includes(:user) }
 
   def provider
-    @provider ||= info&.[]('provider')
+    @provider ||= info&.[]("provider")
   end
 
   private

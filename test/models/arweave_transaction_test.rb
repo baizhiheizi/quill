@@ -24,7 +24,7 @@
 #  index_arweave_transactions_on_owner_id               (owner_id)
 #  index_arweave_transactions_on_tx_id                  (tx_id)
 #
-require 'test_helper'
+require "test_helper"
 
 class ArweaveTransactionTest < ActiveSupport::TestCase
   # test "the truth" do

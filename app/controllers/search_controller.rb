@@ -11,7 +11,7 @@ class SearchController < ApplicationController
         {
           name_i_cont_any: @query,
           mixin_id: @query
-        }.merge(m: 'or')
+        }.merge(m: "or")
       ).result
       .limit(10)
 
@@ -21,7 +21,7 @@ class SearchController < ApplicationController
       .ransack(
         {
           name_i_cont_any: @query
-        }.merge(m: 'or')
+        }.merge(m: "or")
       ).result
       .limit(10)
   end

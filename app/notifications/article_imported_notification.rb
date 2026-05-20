@@ -10,7 +10,7 @@ class ArticleImportedNotification < ApplicationNotification
   end
 
   def message
-    [t('.imported'), ':', params[:article].title].join(' ')
+    [ t(".imported"), ":", params[:article].title ].join(" ")
   end
 
   def url

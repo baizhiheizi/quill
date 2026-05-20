@@ -19,7 +19,7 @@
 #  index_citer_references_on_reference  (reference_type,reference_id)
 #
 
-require 'test_helper'
+require "test_helper"
 
 class CiterReferenceTest < ActiveSupport::TestCase
   # test "the truth" do

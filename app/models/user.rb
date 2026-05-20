@@ -46,9 +46,9 @@ class User < ApplicationRecord
 
   extend Enumerize
 
-  has_one :authorization, -> { where(provider: %w[mixin fennec mvm_eth]) }, class_name: 'UserAuthorization', inverse_of: :user, dependent: :restrict_with_exception
+  has_one :authorization, -> { where(provider: %w[mixin fennec mvm_eth]) }, class_name: "UserAuthorization", inverse_of: :user, dependent: :restrict_with_exception
   has_many :user_authorizations, dependent: :restrict_with_exception
-  has_one :twitter_authorization, -> { where(provider: :twitter) }, class_name: 'UserAuthorization', inverse_of: :user, dependent: :restrict_with_exception
+  has_one :twitter_authorization, -> { where(provider: :twitter) }, class_name: "UserAuthorization", inverse_of: :user, dependent: :restrict_with_exception
 
   has_many :access_tokens, dependent: :destroy
 
@@ -56,12 +56,12 @@ class User < ApplicationRecord
   has_many :payments, foreign_key: :payer_id, primary_key: :mixin_uuid, inverse_of: :payer, dependent: :nullify
   has_many :transfers, foreign_key: :opponent_id, primary_key: :mixin_uuid, inverse_of: :recipient, dependent: :nullify
   has_many :snapshots, foreign_key: :opponent_id, primary_key: :mixin_uuid, inverse_of: :opponent, dependent: :nullify
-  has_many :author_revenue_transfers, -> { where(transfer_type: :author_revenue) }, class_name: 'Transfer', foreign_key: :opponent_id, primary_key: :mixin_uuid, inverse_of: :recipient, dependent: :nullify
-  has_many :reader_revenue_transfers, -> { where(transfer_type: :reader_revenue) }, class_name: 'Transfer', foreign_key: :opponent_id, primary_key: :mixin_uuid, inverse_of: :recipient, dependent: :nullify
-  has_many :revenue_transfers, -> { where(transfer_type: %w[author_revenue reader_revenue]) }, class_name: 'Transfer', foreign_key: :opponent_id, primary_key: :mixin_uuid, inverse_of: :recipient, dependent: :nullify
+  has_many :author_revenue_transfers, -> { where(transfer_type: :author_revenue) }, class_name: "Transfer", foreign_key: :opponent_id, primary_key: :mixin_uuid, inverse_of: :recipient, dependent: :nullify
+  has_many :reader_revenue_transfers, -> { where(transfer_type: :reader_revenue) }, class_name: "Transfer", foreign_key: :opponent_id, primary_key: :mixin_uuid, inverse_of: :recipient, dependent: :nullify
+  has_many :revenue_transfers, -> { where(transfer_type: %w[author_revenue reader_revenue]) }, class_name: "Transfer", foreign_key: :opponent_id, primary_key: :mixin_uuid, inverse_of: :recipient, dependent: :nullify
   has_many :orders, foreign_key: :buyer_id, inverse_of: :buyer, dependent: :nullify
-  has_many :buy_orders, -> { where(order_type: %w[buy_article]) }, class_name: 'Order', foreign_key: :buyer_id, inverse_of: :buyer, dependent: :nullify
-  has_many :bought_articles, -> { order(created_at: :desc) }, through: :buy_orders, source: :item, source_type: 'Article'
+  has_many :buy_orders, -> { where(order_type: %w[buy_article]) }, class_name: "Order", foreign_key: :buyer_id, inverse_of: :buyer, dependent: :nullify
+  has_many :bought_articles, -> { order(created_at: :desc) }, through: :buy_orders, source: :item, source_type: "Article"
   has_many :comments, foreign_key: :author_id, inverse_of: :author, dependent: :nullify
   has_many :swap_orders, through: :payments
   has_many :notifications, as: :recipient, dependent: :destroy
@@ -71,17 +71,17 @@ class User < ApplicationRecord
 
   has_many :arweave_transactions, primary_key: :mixin_uuid, foreign_key: :owner_id, dependent: :restrict_with_exception, inverse_of: :owner
 
-  has_one :wallet, class_name: 'MixinNetworkUser', as: :owner, dependent: :nullify
+  has_one :wallet, class_name: "MixinNetworkUser", as: :owner, dependent: :nullify
   has_one :notification_setting, dependent: :destroy
 
   has_many :non_fungible_outputs, primary_key: :mixin_uuid, dependent: :nullify
-  has_many :unspent_non_fungible_outputs, -> { where(state: :unspent) }, primary_key: :mixin_uuid, class_name: 'NonFungibleOutput', dependent: :restrict_with_exception, inverse_of: :user
+  has_many :unspent_non_fungible_outputs, -> { where(state: :unspent) }, primary_key: :mixin_uuid, class_name: "NonFungibleOutput", dependent: :restrict_with_exception, inverse_of: :user
   has_many :collectibles, through: :unspent_non_fungible_outputs
 
   has_many :collections, primary_key: :mixin_uuid, foreign_key: :author_id, inverse_of: :author, dependent: :restrict_with_exception
 
   has_one_attached :avatar do |attachable|
-    attachable.variant :thumb, resize_to_limit: [64, 64]
+    attachable.variant :thumb, resize_to_limit: [ 64, 64 ]
   end
 
   validates :name, presence: true
@@ -97,9 +97,9 @@ class User < ApplicationRecord
   delegate :phone, :public_key, to: :authorization
 
   # subscribe user
-  action_store :subscribe, :user, counter_cache: 'subscribers_count', user_counter_cache: 'subscribing_count'
+  action_store :subscribe, :user, counter_cache: "subscribers_count", user_counter_cache: "subscribing_count"
   # subscribe for article's comment
-  action_store :commenting_subscribe, :article, counter_cache: 'commenting_subscribers_count'
+  action_store :commenting_subscribe, :article, counter_cache: "commenting_subscribers_count"
   # upvote article
   action_store :upvote, :article, counter_cache: true
   # downvote article
@@ -109,16 +109,16 @@ class User < ApplicationRecord
   # downvote comment
   action_store :downvote, :comment, counter_cache: true
   # subscribe for tag's articles
-  action_store :subscribe, :tag, counter_cache: 'subscribers_count'
+  action_store :subscribe, :tag, counter_cache: "subscribers_count"
   # block user
-  action_store :block, :user, counter_cache: true, user_counter_cache: 'blocking_count'
+  action_store :block, :user, counter_cache: true, user_counter_cache: "blocking_count"
 
   def has_safe?
     authorization&.has_safe?
   end
 
   def bio
-    biography || authorization.biography || I18n.t('activerecord.attributes.user.default_bio')
+    biography || authorization.biography || I18n.t("activerecord.attributes.user.default_bio")
   end
 
   def wallet_id
@@ -128,7 +128,7 @@ class User < ApplicationRecord
   def avatar_url
     @avatar_url =
       if avatar.attached?
-        [Settings.storage.endpoint, avatar.key].join('/')
+        [ Settings.storage.endpoint, avatar.key ].join("/")
       else
         authorization.avatar_url.presence || generated_avatar_url
       end
@@ -137,16 +137,16 @@ class User < ApplicationRecord
   def avatar_thumb
     @avatar_thumb =
       if avatar.attached?
-        [Settings.storage.endpoint, avatar.variant(:thumb).processed.key].join('/')
+        [ Settings.storage.endpoint, avatar.variant(:thumb).processed.key ].join("/")
       else
-        authorization.raw&.[]('avatar_url').presence&.gsub(/s256\Z/, 's64') || generated_avatar_url
+        authorization.raw&.[]("avatar_url").presence&.gsub(/s256\Z/, "s64") || generated_avatar_url
       end
   rescue StandardError
     avatar_url
   end
 
   def generated_avatar_url
-    format('https://api.multiavatar.com/%<mixin_uuid>s.png', mixin_uuid:)
+    format("https://api.multiavatar.com/%<mixin_uuid>s.png", mixin_uuid:)
   end
 
   def prepare
@@ -186,7 +186,7 @@ class User < ApplicationRecord
     return if asset_id.blank?
 
     r = authorization.mixin_api.asset asset_id
-    r['deposit_entries'].first
+    r["deposit_entries"].first
   rescue MixinBot::Error
     {}
   end
@@ -195,8 +195,8 @@ class User < ApplicationRecord
     return unless mvm_eth?
 
     Addressable::URI.new(
-      scheme: 'https',
-      host: 'scan.mvm.dev',
+      scheme: "https",
+      host: "scan.mvm.dev",
       path: "address/#{uid}"
     ).to_s
   end
@@ -205,8 +205,8 @@ class User < ApplicationRecord
     return unless mvm_eth?
 
     Addressable::URI.new(
-      scheme: 'https',
-      host: 'etherscan.io',
+      scheme: "https",
+      host: "etherscan.io",
       path: "address/#{uid}"
     ).to_s
   end
@@ -229,11 +229,11 @@ class User < ApplicationRecord
 
   def default_payment
     if messenger?
-      'MixinPreOrder'
+      "MixinPreOrder"
     elsif fennec?
-      'FennecPreOrder'
+      "FennecPreOrder"
     elsif mvm_eth?
-      'MVMPreOrder'
+      "MVMPreOrder"
     end
   end
 end

@@ -11,6 +11,6 @@
 # end
 
 ActiveSupport::Inflector.inflections(:en) do |inflect|
-  inflect.acronym 'API'
-  inflect.acronym 'MVM'
+  inflect.acronym "API"
+  inflect.acronym "MVM"
 end

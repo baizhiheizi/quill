@@ -8,46 +8,46 @@ module Admin
       articles = articles.where(author_id: params[:author_id]) if params[:author_id].present?
       articles = articles.where(collection_id: params[:collection_id]) if params[:collection_id].present?
 
-      @locale = params[:locale] || 'all'
+      @locale = params[:locale] || "all"
       articles =
         case @locale
-        when 'all'
+        when "all"
           articles
-        when 'others'
+        when "others"
           articles.where.not(locale: %i[en zh ja])
         else
           articles.where(locale: @locale)
         end
 
-      @state = params[:state] || 'all'
+      @state = params[:state] || "all"
       articles =
         case @state
-        when 'all'
+        when "all"
           articles
         else
           articles.where(state: @state)
         end
 
-      @order_by = params[:order_by] || 'created_at_desc'
+      @order_by = params[:order_by] || "created_at_desc"
       articles =
         case @order_by
-        when 'published_at_desc'
+        when "published_at_desc"
           articles.order(published_at: :desc)
-        when 'published_at_asc'
+        when "published_at_asc"
           articles.order(published_at: :asc)
-        when 'created_at_desc'
+        when "created_at_desc"
           articles.order(created_at: :desc)
-        when 'created_at_asc'
+        when "created_at_asc"
           articles.order(updated_at: :desc)
-        when 'revenue_usd'
+        when "revenue_usd"
           articles.order_by_revenue_usd
-        when 'orders_count'
+        when "orders_count"
           articles.order(orders_count: :desc, created_at: :desc)
-        when 'comments_count'
+        when "comments_count"
           articles.order(comments_count: :desc, created_at: :desc)
-        when 'upvotes_count'
+        when "upvotes_count"
           articles.order(upvotes_count: :desc, created_at: :desc)
-        when 'downvotes_count'
+        when "downvotes_count"
           articles.order(downvotes_count: :desc, created_at: :desc)
         end
 
@@ -60,14 +60,14 @@ module Admin
             content_i_cont_all: @query,
             uuid_eq: @query,
             id_eq: @query
-          }.merge(m: 'or')
+          }.merge(m: "or")
         ).result
 
       @pagy, @articles = pagy_countless articles
     end
 
     def show
-      @tab = params[:tab] || 'orders'
+      @tab = params[:tab] || "orders"
       @article = Article.find_by uuid: params[:uuid]
     end
 

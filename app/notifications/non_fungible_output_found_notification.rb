@@ -2,7 +2,7 @@
 
 class NonFungibleOutputFoundNotification < ApplicationNotification
   deliver_by :database, if: :collectible_valid?
-  deliver_by :mixin_bot, class: 'DeliveryMethods::MixinBot', category: 'APP_CARD', if: :may_notify_via_mixin_bot?
+  deliver_by :mixin_bot, class: "DeliveryMethods::MixinBot", category: "APP_CARD", if: :may_notify_via_mixin_bot?
 
   param :non_fungible_output
 
@@ -21,11 +21,11 @@ class NonFungibleOutputFoundNotification < ApplicationNotification
   end
 
   def message
-    [t('.found'), title].join(' ')
+    [ t(".found"), title ].join(" ")
   end
 
   def title
-    [non_fungible_output.collectible&.collection&.name, "(##{non_fungible_output.collectible&.identifier})"].join(' ')
+    [ non_fungible_output.collectible&.collection&.name, "(##{non_fungible_output.collectible&.identifier})" ].join(" ")
   end
 
   def icon_url
@@ -37,7 +37,7 @@ class NonFungibleOutputFoundNotification < ApplicationNotification
   end
 
   def collectible_valid?
-    non_fungible_output.state == 'unspent' && non_fungible_output.collectible&.collection.present?
+    non_fungible_output.state == "unspent" && non_fungible_output.collectible&.collection.present?
   end
 
   def may_notify_via_mixin_bot?

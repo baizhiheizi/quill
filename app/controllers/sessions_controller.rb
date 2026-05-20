@@ -10,10 +10,10 @@ class SessionsController < ApplicationController
 
   def mixin_auth
     redirect_to format(
-      '%<oauth_path>s?client_id=%<client_id>s&scope=%<scope>s&return_to=%<return_to>s',
-      oauth_path: 'https://mixin.one/oauth/authorize',
+      "%<oauth_path>s?client_id=%<client_id>s&scope=%<scope>s&return_to=%<return_to>s",
+      oauth_path: "https://mixin.one/oauth/authorize",
       client_id: QuillBot.api.client_id,
-      scope: 'PROFILE:READ+COLLECTIBLES:READ',
+      scope: "PROFILE:READ+COLLECTIBLES:READ",
       return_to: params[:return_to]
     ), allow_other_host: true
   end
@@ -45,9 +45,9 @@ class SessionsController < ApplicationController
       user_sign_in user.sessions.create!(info: { request: request_info })
       user.notify_for_login
       user.sync_collectibles_async
-      redirect_to (params[:return_to].presence || root_path), success: t('connected')
+      redirect_to (params[:return_to].presence || root_path), success: t("connected")
     else
-      redirect_to (params[:return_to].presence || root_path), alert: t('failed_to_connect')
+      redirect_to (params[:return_to].presence || root_path), alert: t("failed_to_connect")
     end
   end
 
@@ -61,9 +61,9 @@ class SessionsController < ApplicationController
 
     if user.present?
       user_sign_in user.sessions.create! info: { request: request_info }
-      redirect_to (params[:return_to].presence || root_path), success: t('connected')
+      redirect_to (params[:return_to].presence || root_path), success: t("connected")
     else
-      redirect_to (params[:return_to].presence || root_path), alert: t('failed_to_connect')
+      redirect_to (params[:return_to].presence || root_path), alert: t("failed_to_connect")
     end
   end
 
@@ -83,9 +83,9 @@ class SessionsController < ApplicationController
     if user.present?
       user_session = user.sessions.create(uuid: session_id, info: { request: request_info, provider: params[:provider] })
       user_sign_in user_session
-      redirect_to (params[:return_to].presence || root_path), success: t('connected')
+      redirect_to (params[:return_to].presence || root_path), success: t("connected")
     else
-      redirect_to (params[:return_to].presence || root_path), alert: t('failed_to_connect')
+      redirect_to (params[:return_to].presence || root_path), alert: t("failed_to_connect")
     end
   end
 
@@ -105,19 +105,19 @@ class SessionsController < ApplicationController
     client.code_verifier = auth[:code_verifier]
     client.authorization_code = params[:code]
     access_token = client.access_token!
-    res = JSON.parse access_token.get('https://api.twitter.com/2/users/me?user.fields=profile_image_url').body
-    raw = res['data'].merge(access_token: access_token.access_token)
+    res = JSON.parse access_token.get("https://api.twitter.com/2/users/me?user.fields=profile_image_url").body
+    raw = res["data"].merge(access_token: access_token.access_token)
 
     if current_user.twitter_authorization.present?
       current_user.twitter_authorization.update(
         raw:,
-        uid: raw['id']
+        uid: raw["id"]
       )
     else
       current_user.user_authorizations.create(
         provider: :twitter,
         raw:,
-        uid: raw['id']
+        uid: raw["id"]
       )
     end
     redirect_to dashboard_settings_path

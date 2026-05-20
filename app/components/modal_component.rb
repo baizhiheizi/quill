@@ -3,7 +3,7 @@
 class ModalComponent < ApplicationComponent
   renders_one :header
 
-  def initialize(title: '', backdrop: 'default', classes: '')
+  def initialize(title: "", backdrop: "default", classes: "")
     super
 
     @title = title

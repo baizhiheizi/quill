@@ -2,13 +2,13 @@
 
 class Dashboard::TransfersController < Dashboard::BaseController
   def index
-    @tab = params[:tab] || 'author'
+    @tab = params[:tab] || "author"
 
     transfers =
       case @tab
-      when 'author'
+      when "author"
         current_user.author_revenue_transfers
-      when 'reader'
+      when "reader"
         current_user.reader_revenue_transfers
       end
 
@@ -16,6 +16,6 @@ class Dashboard::TransfersController < Dashboard::BaseController
   end
 
   def stats
-    @role = params[:role] || 'author'
+    @role = params[:role] || "author"
   end
 end

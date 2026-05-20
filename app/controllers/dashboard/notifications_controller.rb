@@ -3,7 +3,7 @@
 class Dashboard::NotificationsController < Dashboard::BaseController
   def index
     @pagy, @notifications = pagy current_user.notifications.order(created_at: :desc), items: 50
-    @active_page = 'notification'
+    @active_page = "notification"
   end
 
   def show

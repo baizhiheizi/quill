@@ -2,7 +2,7 @@
 
 class CommentCreatedNotification < ApplicationNotification
   deliver_by :database, if: :may_notify_via_web?
-  deliver_by :mixin_bot, class: 'DeliveryMethods::MixinBot', category: 'APP_CARD', if: :may_notify_via_mixin_bot?
+  deliver_by :mixin_bot, class: "DeliveryMethods::MixinBot", category: "APP_CARD", if: :may_notify_via_mixin_bot?
 
   param :comment
 
@@ -15,7 +15,7 @@ class CommentCreatedNotification < ApplicationNotification
   def data
     {
       icon_url:,
-      title: comment.content.gsub(/^(>\s)+(.)*$/, '').strip.truncate(36),
+      title: comment.content.gsub(/^(>\s)+(.)*$/, "").strip.truncate(36),
       description: description.truncate(72),
       action: url
     }
@@ -26,7 +26,7 @@ class CommentCreatedNotification < ApplicationNotification
   end
 
   def message
-    [comment.author.name.truncate(10), t('.commented'), commentable.title].join(' ')
+    [ comment.author.name.truncate(10), t(".commented"), commentable.title ].join(" ")
   end
 
   def icon_url

@@ -25,7 +25,7 @@
 #  index_swap_orders_on_user_id     (user_id)
 #
 
-require 'test_helper'
+require "test_helper"
 
 class SwapOrderTest < ActiveSupport::TestCase
   # test "the truth" do

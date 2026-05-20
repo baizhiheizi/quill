@@ -18,6 +18,6 @@ class MixpayPreOrdersController < ApplicationController
   def pre_order_params
     params
       .permit(:item_id, :item_type, :type, :order_type, :asset_id, :amount)
-      .merge(type: 'MixpayPreOrder')
+      .merge(type: "MixpayPreOrder")
   end
 end

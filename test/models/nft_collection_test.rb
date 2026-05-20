@@ -15,7 +15,7 @@
 #
 #  index_nft_collections_on_uuid  (uuid) UNIQUE
 #
-require 'test_helper'
+require "test_helper"
 
 class NftCollectionTest < ActiveSupport::TestCase
   # test "the truth" do

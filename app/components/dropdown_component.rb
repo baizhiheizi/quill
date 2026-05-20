@@ -6,6 +6,6 @@ class DropdownComponent < ApplicationComponent
   def initialize(**options)
     super()
 
-    @class = options[:class] || ''
+    @class = options[:class] || ""
   end
 end

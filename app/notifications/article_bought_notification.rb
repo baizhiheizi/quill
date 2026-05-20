@@ -2,7 +2,7 @@
 
 class ArticleBoughtNotification < ApplicationNotification
   deliver_by :database, if: :web_notification_enabled?
-  deliver_by :mixin_bot, class: 'DeliveryMethods::MixinBot', category: 'APP_CARD', if: :may_notify_via_mixin_bot?
+  deliver_by :mixin_bot, class: "DeliveryMethods::MixinBot", category: "APP_CARD", if: :may_notify_via_mixin_bot?
 
   param :order
 
@@ -22,11 +22,11 @@ class ArticleBoughtNotification < ApplicationNotification
   end
 
   def description
-    [order.buyer.name.truncate(10), t('.bought')].join(' ')
+    [ order.buyer.name.truncate(10), t(".bought") ].join(" ")
   end
 
   def message
-    [order.buyer.name.truncate(10), t('.bought'), ':', order.article.title].join(' ')
+    [ order.buyer.name.truncate(10), t(".bought"), ":", order.article.title ].join(" ")
   end
 
   def icon_url

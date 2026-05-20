@@ -22,7 +22,7 @@
 #  index_mixin_messages_on_message_id  (message_id) UNIQUE
 #
 
-require 'test_helper'
+require "test_helper"
 
 class MixinMessageTest < ActiveSupport::TestCase
   # test "the truth" do

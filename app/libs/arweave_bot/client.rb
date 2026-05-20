@@ -2,11 +2,11 @@
 
 module ArweaveBot
   class Client
-    SERVER_SCHEME = 'https'
+    SERVER_SCHEME = "https"
 
     attr_reader :host
 
-    def initialize(host = 'arweave.net')
+    def initialize(host = "arweave.net")
       @host = host
     end
 
@@ -22,7 +22,7 @@ module ArweaveBot
 
     def request(verb, uri, options = {})
       options[:headers] ||= {}
-      options[:headers]['Content-Type'] ||= 'application/json'
+      options[:headers]["Content-Type"] ||= "application/json"
 
       begin
         response = HTTP.timeout(connect: 5, write: 5, read: 5).request(verb, uri, options)
@@ -35,7 +35,7 @@ module ArweaveBot
       if response.status.success?
         JSON.parse(response.body.to_s)
       elsif response.status.redirect?
-        request :get, response.headers['Location']
+        request :get, response.headers["Location"]
       else
         response.status.to_s
       end

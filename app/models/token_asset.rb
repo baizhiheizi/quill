@@ -11,7 +11,7 @@ class TokenAsset
     @token = token
     @balance =
       if token.present?
-        (token['balance'].to_r / (10**token['decimals'].to_i)).to_f.round(8)
+        (token["balance"].to_r / (10**token["decimals"].to_i)).to_f.round(8)
       else
         0
       end

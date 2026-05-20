@@ -2,7 +2,7 @@
 
 class SubscribeUserActionCreatedNotification < ApplicationNotification
   deliver_by :database
-  deliver_by :mixin_bot, class: 'DeliveryMethods::MixinBot', category: 'PLAIN_TEXT', if: :may_notify_via_mixin_bot?
+  deliver_by :mixin_bot, class: "DeliveryMethods::MixinBot", category: "PLAIN_TEXT", if: :may_notify_via_mixin_bot?
 
   param :action
 
@@ -11,7 +11,7 @@ class SubscribeUserActionCreatedNotification < ApplicationNotification
   end
 
   def message
-    [params[:action].user.name.truncate(10), t('.subscribed')].join(' ')
+    [ params[:action].user.name.truncate(10), t(".subscribed") ].join(" ")
   end
 
   def url

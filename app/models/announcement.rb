@@ -32,18 +32,18 @@ class Announcement < ApplicationRecord
     return if Rails.application.credentials.dig(:admin, :group_conversation_id).blank?
 
     case message_type
-    when 'PLAIN_TEXT'
+    when "PLAIN_TEXT"
       preview_as_text
-    when 'PLAIN_POST'
+    when "PLAIN_POST"
       preview_as_post
     end
   end
 
   def deliver_to_users
     case message_type
-    when 'PLAIN_TEXT'
+    when "PLAIN_TEXT"
       deliver_as_text
-    when 'PLAIN_POST'
+    when "PLAIN_POST"
       deliver_as_post
     end
 

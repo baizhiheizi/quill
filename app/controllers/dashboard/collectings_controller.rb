@@ -4,7 +4,7 @@ class Dashboard::CollectingsController < Dashboard::BaseController
   before_action :load_collection
 
   def create
-    uuid = params.require(:collecting).permit(:nft_collection_id)['nft_collection_id']
+    uuid = params.require(:collecting).permit(:nft_collection_id)["nft_collection_id"]
     nft_collection = NftCollection.find_or_create_by!(uuid:)
     @collection.collectings.find_or_create_by! nft_collection:
   rescue ActiveRecord::RecordInvalid => e

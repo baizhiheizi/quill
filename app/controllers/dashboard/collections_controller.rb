@@ -22,7 +22,7 @@ class Dashboard::CollectionsController < Dashboard::BaseController
     @collection = current_user.collections.new collection_params
 
     if @collection.save
-      redirect_to dashboard_authorings_path(tab: :collections), success: t('success_updated')
+      redirect_to dashboard_authorings_path(tab: :collections), success: t("success_updated")
     else
       render :new, status: :bad_request
     end
@@ -38,12 +38,12 @@ class Dashboard::CollectionsController < Dashboard::BaseController
           @collection.uuid,
           description: collection_params[:description],
           external_url: collection_params[:external_url],
-          icon_url: @collection.cover.changed? ? @collection.cover_url : ''
+          icon_url: @collection.cover.changed? ? @collection.cover_url : ""
         )
     end
 
     if @collection.save
-      redirect_to dashboard_authorings_path(tab: :collections), success: t('success_updated')
+      redirect_to dashboard_authorings_path(tab: :collections), success: t("success_updated")
     else
       render :edit, status: :bad_request
     end
@@ -53,7 +53,7 @@ class Dashboard::CollectionsController < Dashboard::BaseController
     return unless @collection.may_destroy?
 
     @collection.destroy
-    redirect_to dashboard_authorings_path(tab: :collections), success: t('success_deleted')
+    redirect_to dashboard_authorings_path(tab: :collections), success: t("success_deleted")
   end
 
   private

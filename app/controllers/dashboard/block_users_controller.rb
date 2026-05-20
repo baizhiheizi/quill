@@ -2,7 +2,7 @@
 
 class Dashboard::BlockUsersController < Dashboard::BaseController
   def index
-    @pagy, @users = pagy current_user.block_users.order('actions.created_at DESC')
+    @pagy, @users = pagy current_user.block_users.order("actions.created_at DESC")
   end
 
   def create

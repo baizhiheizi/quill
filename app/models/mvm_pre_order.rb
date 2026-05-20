@@ -32,6 +32,6 @@ class MVMPreOrder < PreOrder
   private
 
   def ensure_payer_mvm
-    errors.add(:payer, 'must from MVM') unless payer.mvm_eth?
+    errors.add(:payer, "must from MVM") unless payer.mvm_eth?
   end
 end

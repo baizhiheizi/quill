@@ -25,7 +25,7 @@
 #  index_mixin_network_users_on_uuid                     (uuid) UNIQUE
 #
 
-require 'test_helper'
+require "test_helper"
 
 class MixinNetworkUserTest < ActiveSupport::TestCase
   # test "the truth" do

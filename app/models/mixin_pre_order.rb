@@ -32,6 +32,6 @@ class MixinPreOrder < PreOrder
   private
 
   def ensure_payer_mixin
-    errors.add(:payer, 'must from Mixin') unless payer.messenger?
+    errors.add(:payer, "must from Mixin") unless payer.messenger?
   end
 end

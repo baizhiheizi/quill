@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'test_helper'
+require "test_helper"
 class Articles::DetectLocaleJobTest < Minitest::Test
   def test_example
     skip "add some examples to (or delete) #{__FILE__}"

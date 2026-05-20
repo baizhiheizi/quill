@@ -28,11 +28,11 @@ class ArticleSnapshot < ApplicationRecord
   delegate :author, to: :article
 
   def fresh?
-    article.snapshots.where('created_at > ?', created_at).blank?
+    article.snapshots.where("created_at > ?", created_at).blank?
   end
 
   def previous_signed_snapshot
-    article.snapshots.signed.where('created_at < ?', created_at).order(created_at: :desc).first
+    article.snapshots.signed.where("created_at < ?", created_at).order(created_at: :desc).first
   end
 
   private

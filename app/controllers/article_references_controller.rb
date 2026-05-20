@@ -5,7 +5,7 @@ class ArticleReferencesController < ApplicationController
 
   def index
     q = params[:query].to_s.strip
-    q_ransack = { title_cont: q, intro_cont: q, author_name_cont: q, tags_name_cont: q, m: 'or' }
+    q_ransack = { title_cont: q, intro_cont: q, author_name_cont: q, tags_name_cont: q, m: "or" }
 
     @articles =
       if q.blank?

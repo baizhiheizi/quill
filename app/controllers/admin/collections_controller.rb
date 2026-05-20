@@ -3,8 +3,8 @@
 module Admin
   class CollectionsController < Admin::BaseController
     def index
-      @state = params[:state] || 'all'
-      @order_by = params[:order_by] || 'created_at_desc'
+      @state = params[:state] || "all"
+      @order_by = params[:order_by] || "created_at_desc"
 
       collections = Collection.includes(:author, :currency, :nft_collection)
 
@@ -12,7 +12,7 @@ module Admin
 
       collections =
         case @state
-        when 'all'
+        when "all"
           collections
         else
           collections.where(state: @state)
@@ -20,9 +20,9 @@ module Admin
 
       collections =
         case @order_by
-        when 'created_at_desc'
+        when "created_at_desc"
           collections.order(created_at: :desc)
-        when 'created_at_asc'
+        when "created_at_asc"
           collections.order(created_at: :asc)
         end
 
@@ -33,7 +33,7 @@ module Admin
             collection_name_cont_any: @query,
             collection_symbol_eq: @query,
             collection_uuid_eq: @query
-          }.merge(m: 'or')
+          }.merge(m: "or")
         ).result
 
       @pagy, @collections = pagy_countless collections
@@ -41,7 +41,7 @@ module Admin
 
     def show
       @collection = Collection.find params[:id]
-      @tab = params[:tab] || 'orders'
+      @tab = params[:tab] || "orders"
     end
   end
 end

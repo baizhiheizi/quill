@@ -5,21 +5,21 @@ module Admin
     def index
       statistics = Statistic.all
 
-      @type = params[:type] || 'all'
+      @type = params[:type] || "all"
       statistics =
         case @type
-        when 'all'
+        when "all"
           statistics
         else
           statistics.where(type: @type)
         end
 
-      @order_by = params[:order_by] || 'datetime_desc'
+      @order_by = params[:order_by] || "datetime_desc"
       statistics =
         case @order_by
-        when 'datetime_desc'
+        when "datetime_desc"
           statistics.order(datetime: :desc)
-        when 'datetime_asc'
+        when "datetime_asc"
           statistics.order(datetime: :asc)
         end
 
@@ -32,7 +32,7 @@ module Admin
             content_i_cont_all: @query,
             uuid_eq: @query,
             id_eq: @query
-          }.merge(m: 'or')
+          }.merge(m: "or")
         ).result
 
       @pagy, @statistics = pagy_countless statistics

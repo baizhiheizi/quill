@@ -3,7 +3,7 @@
 class Dashboard::ProfileSettingsController < Dashboard::BaseController
   skip_before_action :authenticate_user!, only: :verify_email
 
-  layout 'application', only: :verify_email
+  layout "application", only: :verify_email
 
   def edit
   end
@@ -27,7 +27,7 @@ class Dashboard::ProfileSettingsController < Dashboard::BaseController
   private
 
   def setting_params
-    return {} if params['user'].blank?
+    return {} if params["user"].blank?
 
     params
       .require(:user)

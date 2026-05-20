@@ -3,28 +3,28 @@
 module ShareHelper
   def share_to_twitter(url, text, via = Settings.twitter_account)
     [
-      'https://twitter.com/intent/tweet?',
-      'text=',
+      "https://twitter.com/intent/tweet?",
+      "text=",
       text,
-      '&url=',
+      "&url=",
       url,
-      '&via=',
+      "&via=",
       via
     ].join
   end
 
   def share_to_facebook(url)
     [
-      'https://facebook.com/sharer/sharer.php?u=',
+      "https://facebook.com/sharer/sharer.php?u=",
       url
     ].join
   end
 
   def share_to_telegram(url, text)
     [
-      'https://t.me/share/url?url=',
+      "https://t.me/share/url?url=",
       url,
-      '&text=',
+      "&text=",
       text
     ].join
   end
@@ -39,7 +39,7 @@ module ShareHelper
     }
 
     [
-      'mixin://send?category=app_card&data=',
+      "mixin://send?category=app_card&data=",
       ERB::Util.url_encode(Base64.strict_encode64(data.to_json))
     ].join
   end

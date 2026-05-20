@@ -2,11 +2,11 @@
 
 module Mixpay
   class Client
-    SERVER_SCHEME = 'https'
+    SERVER_SCHEME = "https"
 
     attr_reader :host
 
-    def initialize(host = 'api.mixpay.me')
+    def initialize(host = "api.mixpay.me")
       @host = host
     end
 
@@ -24,7 +24,7 @@ module Mixpay
       uri = uri_for path
 
       options[:headers] ||= {}
-      options[:headers]['Content-Type'] ||= 'application/json'
+      options[:headers]["Content-Type"] ||= "application/json"
 
       begin
         response = HTTP.timeout(connect: 5, write: 5, read: 5).request(verb, uri, options)
@@ -71,13 +71,13 @@ module Mixpay
       end
 
       result = case parse_as
-               when :json
+      when :json
                  JSON.parse(response.body.to_s).with_indifferent_access
-               when :xml
+      when :xml
                  Hash.from_xml(response.body.to_s)
-               else
+      else
                  response.body
-               end
+      end
 
       yield(parse_as, result)
     end

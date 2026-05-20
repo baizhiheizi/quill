@@ -6,21 +6,21 @@ module Admin
       payments = Payment.all
       payments = payments.where(payer_id: params[:payer_id]) if params[:payer_id].present?
 
-      @state = params[:state] || 'all'
+      @state = params[:state] || "all"
       payments =
         case @state
-        when 'all'
+        when "all"
           payments
         else
           payments.where(state: @state)
         end
 
-      @order_by = params[:order_by] || 'created_at_desc'
+      @order_by = params[:order_by] || "created_at_desc"
       payments =
         case @order_by
-        when 'created_at_desc'
+        when "created_at_desc"
           payments.order(created_at: :desc)
-        when 'created_at_asc'
+        when "created_at_asc"
           payments.order(created_at: :asc)
         end
 
@@ -33,7 +33,7 @@ module Admin
             opponent_id_eq: @query,
             trace_id_eq: @query,
             asset_id_eq: @query
-          }.merge(m: 'or')
+          }.merge(m: "or")
         ).result
 
       @pagy, @payments = pagy_countless payments

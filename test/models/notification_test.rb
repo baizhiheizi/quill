@@ -19,7 +19,7 @@
 #  index_notifications_on_recipient  (recipient_type,recipient_id)
 #
 
-require 'test_helper'
+require "test_helper"
 
 class NotificationTest < ActiveSupport::TestCase
   # test "the truth" do

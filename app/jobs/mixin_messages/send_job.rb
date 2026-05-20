@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 class MixinMessages::SendJob < ApplicationJob
-  def perform(message, bot = 'QuillBot')
-    if bot == 'RevenueBot'
+  def perform(message, bot = "QuillBot")
+    if bot == "RevenueBot"
       RevenueBot.api.send_message message
     else
       QuillBot.api.send_message message

@@ -25,7 +25,7 @@
 #  index_collectibles_on_token_id                      (token_id) UNIQUE
 #
 class Collectible < ApplicationRecord
-  MINT_ASSET_ID = 'c94ac88f-4671-3976-b60a-09064f1811e8'
+  MINT_ASSET_ID = "c94ac88f-4671-3976-b60a-09064f1811e8"
   MINT_FEE = 0.001
 
   include AASM
@@ -99,22 +99,22 @@ class Collectible < ApplicationRecord
   end
 
   def collection_id_valid?
-    collection_id != '00000000-0000-0000-0000-000000000000'
+    collection_id != "00000000-0000-0000-0000-000000000000"
   end
 
   def trident_url
     Addressable::URI.new(
-      scheme: 'https',
-      host: 'thetrident.one',
+      scheme: "https",
+      host: "thetrident.one",
       path: "collectibles/#{metahash}"
     ).to_s
   end
 
   def media_url
     if media.attached?
-      [Settings.storage.endpoint, media.key].join('/')
+      [ Settings.storage.endpoint, media.key ].join("/")
     else
-      metadata&.[]('media_url')
+      metadata&.[]("media_url")
     end
   end
 
@@ -140,20 +140,20 @@ class Collectible < ApplicationRecord
 
     r = QuillBot.api.collectible token_id
     group =
-      if r['group'].present?
+      if r["group"].present?
         begin
-          MixinBot::UUID.new(hex: r['group']).unpacked
+          MixinBot::UUID.new(hex: r["group"]).unpacked
         rescue MixinBot::InvalidUuidFormatError
-          '00000000-0000-0000-0000-000000000000'
+          "00000000-0000-0000-0000-000000000000"
         end
       end
 
     assign_attributes(
-      identifier: r['token'],
+      identifier: r["token"],
       collection_id: group,
-      metahash: r['meta']['hash'],
-      name: r['meta']['name'],
-      metadata: r['meta']
+      metahash: r["meta"]["hash"],
+      name: r["meta"]["name"],
+      metadata: r["meta"]
     )
 
     self.nft_collection = NftCollection.find_or_create_by(uuid: collection_id) if collection_id_valid?

@@ -8,30 +8,30 @@ module Admin
       pre_orders = pre_orders.where(payer_id: params[:payer_id]) if params[:payer_id].present?
       pre_orders = pre_orders.where(item_id: params[:item_id], item_type: params[:item_type]) if params[:item_id].present? && params[:item_type].present?
 
-      @state = params[:state] || 'all'
+      @state = params[:state] || "all"
       pre_orders =
         case @state
-        when 'all'
+        when "all"
           pre_orders
         else
           pre_orders.where(state: @state)
         end
 
-      @order_type = params[:order_type] || 'all'
+      @order_type = params[:order_type] || "all"
       pre_orders =
         case @order_type
-        when 'all'
+        when "all"
           pre_orders
         else
           pre_orders.where(order_type: @order_type)
         end
 
-      @order_by = params[:order_by] || 'created_at_desc'
+      @order_by = params[:order_by] || "created_at_desc"
       pre_orders =
         case @order_by
-        when 'created_at_desc'
+        when "created_at_desc"
           pre_orders.order(created_at: :desc)
-        when 'created_at_asc'
+        when "created_at_asc"
           pre_orders.order(created_at: :asc)
         end
 
@@ -43,7 +43,7 @@ module Admin
             buyer_id_eq: @query,
             trace_id_eq: @query,
             asset_id_eq: @query
-          }.merge(m: 'or')
+          }.merge(m: "or")
         ).result
 
       @pagy, @pre_orders = pagy_countless pre_orders

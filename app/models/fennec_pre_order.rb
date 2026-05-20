@@ -32,6 +32,6 @@ class FennecPreOrder < PreOrder
   private
 
   def ensure_payer_fennec
-    errors.add(:payer, 'must from Fennec') unless payer.fennec?
+    errors.add(:payer, "must from Fennec") unless payer.fennec?
   end
 end

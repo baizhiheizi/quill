@@ -14,7 +14,7 @@
 #
 #  index_collectings_on_collection_id_and_nft_collection_id  (collection_id,nft_collection_id) UNIQUE
 #
-require 'test_helper'
+require "test_helper"
 
 class CollectingTest < ActiveSupport::TestCase
   # test "the truth" do

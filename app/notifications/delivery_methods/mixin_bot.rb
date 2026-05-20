@@ -8,16 +8,16 @@ class DeliveryMethods::MixinBot < Noticed::DeliveryMethods::Base
   end
 
   def bot
-    if options[:bot] == 'RevenueBot' && RevenueBot.api.present?
-      'RevenueBot'
+    if options[:bot] == "RevenueBot" && RevenueBot.api.present?
+      "RevenueBot"
     else
-      'QuillBot'
+      "QuillBot"
     end
   end
 
   def bot_api
     case bot
-    when 'RevenueBot'
+    when "RevenueBot"
       RevenueBot.api
     else
       QuillBot.api
@@ -25,7 +25,7 @@ class DeliveryMethods::MixinBot < Noticed::DeliveryMethods::Base
   end
 
   def category
-    options[:category] || 'PLAIN_TEXT'
+    options[:category] || "PLAIN_TEXT"
   end
 
   def data

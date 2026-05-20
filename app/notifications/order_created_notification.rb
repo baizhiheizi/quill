@@ -2,7 +2,7 @@
 
 class OrderCreatedNotification < ApplicationNotification
   deliver_by :database
-  deliver_by :mixin_bot, class: 'DeliveryMethods::MixinBot', category: 'PLAIN_TEXT', if: :may_notify_via_mixin_bot?
+  deliver_by :mixin_bot, class: "DeliveryMethods::MixinBot", category: "PLAIN_TEXT", if: :may_notify_via_mixin_bot?
 
   param :order
 
@@ -15,9 +15,9 @@ class OrderCreatedNotification < ApplicationNotification
   def action_name
     case params[:order].order_type.to_sym
     when :buy_article, :buy_collection
-      t('.bought')
+      t(".bought")
     when :reward_article
-      t('.rewarded')
+      t(".rewarded")
     end
   end
 
@@ -28,9 +28,9 @@ class OrderCreatedNotification < ApplicationNotification
   def message
     case order.item
     when Article
-      [action_name, item.title].join(' ')
+      [ action_name, item.title ].join(" ")
     when Collection
-      [action_name, item.name].join(' ')
+      [ action_name, item.name ].join(" ")
     end
   end
 
