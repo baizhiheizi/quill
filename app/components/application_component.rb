@@ -3,4 +3,9 @@
 class ApplicationComponent < ViewComponent::Base
   include Turbo::FramesHelper
   include Pagy::Frontend
+
+  # ViewComponent 4 removed the catch-all Base#initialize; accept and discard args from subclasses.
+  def initialize(*_args, **_kwargs)
+    super()
+  end
 end

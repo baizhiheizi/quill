@@ -3,9 +3,9 @@
 class DropdownComponent < ApplicationComponent
   renders_one :button
 
-  def initialize(params = {})
-    super
+  def initialize(**options)
+    super()
 
-    @class = params[:class]
+    @class = options[:class] || ''
   end
 end
