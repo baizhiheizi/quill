@@ -38,12 +38,12 @@ class Transfer < ApplicationRecord
   MINIMUM_AMOUNT = 0.000_000_01
 
   belongs_to :source, polymorphic: true, optional: true
-  belongs_to :wallet, class_name: 'MixinNetworkUser', primary_key: :uuid, inverse_of: :transfers, optional: true
-  belongs_to :recipient, class_name: 'User', primary_key: :mixin_uuid, foreign_key: :opponent_id, inverse_of: :transfers, optional: true
+  belongs_to :wallet, class_name: "MixinNetworkUser", primary_key: :uuid, inverse_of: :transfers, optional: true
+  belongs_to :recipient, class_name: "User", primary_key: :mixin_uuid, foreign_key: :opponent_id, inverse_of: :transfers, optional: true
   belongs_to :currency, primary_key: :asset_id, foreign_key: :asset_id, inverse_of: :transfers, optional: true
 
-  enum queue_priority: { default: 0, critical: 1, high: 2, low: 3 }, _prefix: true
-  enum transfer_type: {
+  enum :queue_priority, { default: 0, critical: 1, high: 2, low: 3 }, prefix: true
+  enum :transfer_type, {
     default: -1,
     author_revenue: 0,
     reader_revenue: 1,
@@ -69,23 +69,23 @@ class Transfer < ApplicationRecord
 
   def snapshot_id
     _snapshot = snapshot.is_a?(Array) ? snapshot.first : snapshot
-    _snapshot&.[]('snapshot_id')
+    _snapshot&.[]("snapshot_id")
   end
 
   def transaction_hash
     _snapshot = snapshot.is_a?(Array) ? snapshot.first : snapshot
-    _snapshot&.[]('transaction_hash')
+    _snapshot&.[]("transaction_hash")
   end
 
   def snapshot_url
     if transaction_hash.present?
       [
-        'https://viewblock.io/mixin/tx/',
+        "https://viewblock.io/mixin/tx/",
         transaction_hash
       ].join
     elsif snapshot_id.present?
       [
-        'https://mixin.one/snapshots/',
+        "https://mixin.one/snapshots/",
         snapshot_id
       ].join
     end
@@ -102,7 +102,7 @@ class Transfer < ApplicationRecord
   def process!
     return if processed?
 
-    if transfer_type == 'mint_nft'
+    if transfer_type == "mint_nft"
       process_legacy_transfer!
     else
       process_safe_transfer!
@@ -136,8 +136,8 @@ class Transfer < ApplicationRecord
         wallet_api.create_multisig_transaction(
           wallet_pin,
           asset_id:,
-          receivers: opponent_multisig['receivers'],
-          threshold: opponent_multisig['threshold'],
+          receivers: opponent_multisig["receivers"],
+          threshold: opponent_multisig["threshold"],
           amount:,
           trace_id:,
           memo:
@@ -145,7 +145,7 @@ class Transfer < ApplicationRecord
       end
 
     update!(
-      snapshot: r['data'],
+      snapshot: r["data"],
       processed_at: Time.current
     )
   end
@@ -154,14 +154,14 @@ class Transfer < ApplicationRecord
     @safe_receiver ||=
       if opponent_id.present?
         {
-          members: [opponent_id],
+          members: [ opponent_id ],
           threshold: 1,
           amount:
         }
       else
         {
-          members: opponent_multisig['receivers'],
-          threshold: opponent_multisig['threshold'],
+          members: opponent_multisig["receivers"],
+          threshold: opponent_multisig["threshold"],
           amount:
         }
       end
@@ -181,7 +181,7 @@ class Transfer < ApplicationRecord
     )
 
     update!(
-      snapshot: r['data'],
+      snapshot: r["data"],
       processed_at: Time.current
     )
   end
@@ -190,7 +190,7 @@ class Transfer < ApplicationRecord
     r = QuillBot.api.safe_transaction trace_id
 
     update!(
-      snapshot: r['data'],
+      snapshot: r["data"],
       processed_at: Time.current
     )
   rescue MixinBot::NotFoundError
@@ -205,7 +205,7 @@ class Transfer < ApplicationRecord
   end
 
   def price_tag
-    [format('%.8f', amount), currency.symbol].join(' ')
+    [ format("%.8f", amount), currency.symbol ].join(" ")
   end
 
   def process_async
@@ -217,25 +217,25 @@ class Transfer < ApplicationRecord
   end
 
   def self.author_revenue_total_in_usd
-    Rails.cache.fetch('author_revenue_total_in_usd', expires_in: 1.minute) do
-      joins(:currency).where(transfer_type: :author_revenue).sum('amount * currencies.price_usd').to_f.round(4)
+    Rails.cache.fetch("author_revenue_total_in_usd", expires_in: 1.minute) do
+      joins(:currency).where(transfer_type: :author_revenue).sum("amount * currencies.price_usd").to_f.round(4)
     end
   end
 
   def self.reader_revenue_total_in_usd
-    Rails.cache.fetch('reader_revenue_total_in_usd', expires_in: 1.minute) do
-      joins(:currency).where(transfer_type: :reader_revenue).sum('amount * currencies.price_usd').to_f.round(4)
+    Rails.cache.fetch("reader_revenue_total_in_usd", expires_in: 1.minute) do
+      joins(:currency).where(transfer_type: :reader_revenue).sum("amount * currencies.price_usd").to_f.round(4)
     end
   end
 
   def self.stats
-    Rails.cache.fetch('transfer_stats', expires_in: 15.minutes) do
+    Rails.cache.fetch("transfer_stats", expires_in: 15.minutes) do
       cal_stats
     end
   end
 
   def self.write_stats
-    Rails.cache.write 'transfer_stats', cal_stats
+    Rails.cache.write "transfer_stats", cal_stats
   end
 
   def self.cal_stats
@@ -251,7 +251,7 @@ class Transfer < ApplicationRecord
     @__retry_count = 0
 
     loop do
-      unprocessed.where('retry_at IS NULL OR retry_at < ?', Time.current).find_each do |transfer|
+      unprocessed.where("retry_at IS NULL OR retry_at < ?", Time.current).find_each do |transfer|
         Rails.logger.info "Transfer processing ##{transfer.id} #{Time.current}"
         transfer.process!
       rescue MixinBot::UserNotFoundError
@@ -289,7 +289,7 @@ class Transfer < ApplicationRecord
   private
 
   def ensure_opponent_presence
-    errors.add(:opponent_id, ' must cannot be blank') if opponent_id.blank? && opponent_multisig.blank?
+    errors.add(:opponent_id, " must cannot be blank") if opponent_id.blank? && opponent_multisig.blank?
   end
 
   def wallet_pin

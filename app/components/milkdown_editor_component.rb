@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class MilkdownEditorComponent < ApplicationComponent
-  def initialize(draft_key: '', storage_endpoint: '')
+  def initialize(draft_key: "", storage_endpoint: "")
     super
 
     @draft_key = draft_key

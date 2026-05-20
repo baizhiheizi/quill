@@ -21,8 +21,8 @@ module Users::Importable
 
       r = ArweaveBot.api.transaction tx[:id]
       article = articles.create_with(
-        title: r['content']['title'],
-        content: r['content']['body'],
+        title: r["content"]["title"],
+        content: r["content"]["body"],
         price: 0
       ).find_or_create_by(uuid:)
 

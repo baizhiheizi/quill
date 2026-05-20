@@ -12,12 +12,12 @@ class CommentsController < ApplicationController
         Comment.none
       end
 
-    @order_by = params[:order_by] || 'upvotes'
+    @order_by = params[:order_by] || "upvotes"
     comments =
       case @order_by
-      when 'upvotes'
+      when "upvotes"
         comments.order(upvotes_count: :desc, downvotes_count: :asc, created_at: :desc)
-      when 'asc'
+      when "asc"
         comments.order(created_at: :asc)
       else
         comments.order(created_at: :desc)
@@ -30,7 +30,7 @@ class CommentsController < ApplicationController
     if params[:quote_comment_id].present?
       @quote_comment = Comment.find_by id: params[:quote_comment_id]
       @commentable = @quote_comment&.commentable
-    elsif params[:commentable_type] == 'Article'
+    elsif params[:commentable_type] == "Article"
       @commentable = Article.find_by id: params[:commentable_id]
     end
     nil if @commentable.blank?

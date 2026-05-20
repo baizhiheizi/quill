@@ -12,7 +12,7 @@ module Orders::Distributable
       item
       .orders
       .where(order_type: %i[buy_article reward_article])
-      .where('id < ? and created_at < ?', id, created_at)
+      .where("id < ? and created_at < ?", id, created_at)
       .order(created_at: :desc)
   end
 
@@ -56,7 +56,7 @@ module Orders::Distributable
         asset_id: revenue_asset_id,
         amount: quill_amount.to_s,
         memo: Base64.encode64({
-          t: 'REVENUE',
+          t: "REVENUE",
           a: item.uuid
         }.to_json)
       ).find_or_create_by!(
@@ -103,7 +103,7 @@ module Orders::Distributable
         asset_id: revenue_asset_id,
         amount: quill_amount.to_s,
         memo: Base64.encode64({
-          t: 'REVENUE',
+          t: "REVENUE",
           a: item.uuid
         }.to_json)
       ).find_or_create_by!(
@@ -156,7 +156,7 @@ module Orders::Distributable
           asset_id: revenue_asset_id,
           amount: _ref_amount,
           memo: Base64.encode64({
-            t: 'CITE',
+            t: "CITE",
             a: ref.reference.uuid,
             c: item.uuid
           }.to_json)

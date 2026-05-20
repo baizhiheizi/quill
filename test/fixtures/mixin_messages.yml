@@ -20,8 +20,14 @@
 #  index_mixin_messages_on_message_id  (message_id) UNIQUE
 #
 
-one: {}
+one:
+  created_at: <%= 1.day.ago %>
+  updated_at: <%= 1.day.ago %>
+
 # column: value
 #
-two: {}
+two:
+  created_at: <%= 1.day.ago %>
+  updated_at: <%= 1.day.ago %>
+
 # column: value

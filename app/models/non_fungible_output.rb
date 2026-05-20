@@ -32,7 +32,7 @@ class NonFungibleOutput < ApplicationRecord
   after_commit :notify, on: :create
 
   def notify
-    return unless state == 'unspent'
+    return unless state == "unspent"
     return if collectible&.collection.blank?
 
     NonFungibleOutputFoundNotification.with(non_fungible_output: self).deliver(user)
@@ -44,9 +44,9 @@ class NonFungibleOutput < ApplicationRecord
     return if raw.blank?
 
     assign_attributes(
-      state: raw['state'],
-      token_id: raw['token_id'],
-      output_id: raw['output_id']
+      state: raw["state"],
+      token_id: raw["token_id"],
+      output_id: raw["output_id"]
     )
   end
 end

@@ -18,7 +18,7 @@ module SoftDeletable
 
   def soft_delete!
     r = _run_soft_delete { save! }
-    r || (raise ActiveRecord::RecordNotSaved.new('failed to soft delete the record', self))
+    r || (raise ActiveRecord::RecordNotSaved.new("failed to soft delete the record", self))
   end
 
   def soft_delete
@@ -27,7 +27,7 @@ module SoftDeletable
 
   def soft_undelete!
     r = _run_soft_undelete { save! }
-    r || (raise ActiveRecord::RecordNotSaved.new('failed to soft undelete the record', self))
+    r || (raise ActiveRecord::RecordNotSaved.new("failed to soft undelete the record", self))
   end
 
   def soft_undelete

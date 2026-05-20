@@ -2,7 +2,7 @@
 
 class SwapOrderSwappingNotification < ApplicationNotification
   deliver_by :database
-  deliver_by :mixin_bot, class: 'DeliveryMethods::MixinBot', category: 'PLAIN_TEXT', if: :may_notify_via_mixin_bot?
+  deliver_by :mixin_bot, class: "DeliveryMethods::MixinBot", category: "PLAIN_TEXT", if: :may_notify_via_mixin_bot?
 
   param :swap_order
 
@@ -12,11 +12,11 @@ class SwapOrderSwappingNotification < ApplicationNotification
 
   def message
     [
-      t('.swapping'),
+      t(".swapping"),
       params[:swap_order].pay_asset&.symbol,
-      '->',
+      "->",
       params[:swap_order].fill_asset&.symbol
-    ].join(' ')
+    ].join(" ")
   end
 
   def url

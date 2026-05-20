@@ -4,7 +4,7 @@ class Dashboard::OrdersController < Dashboard::BaseController
   before_action :load_article
 
   def index
-    @tab = params[:tab] || 'payments'
+    @tab = params[:tab] || "payments"
 
     load_article_orders if @article.present?
   end
@@ -19,11 +19,11 @@ class Dashboard::OrdersController < Dashboard::BaseController
     @order_type = params[:order_type]
     orders =
       case @order_type
-      when 'buy_article'
+      when "buy_article"
         @article.orders.where(order_type: :buy_article)
-      when 'reward_article'
+      when "reward_article"
         @article.orders.where(order_type: :reward_article)
-      when 'cite_article'
+      when "cite_article"
         @article.orders.where(order_type: :cite_article)
       else
         @article.orders

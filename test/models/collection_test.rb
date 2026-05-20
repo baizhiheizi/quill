@@ -24,7 +24,7 @@
 #  index_collections_on_author_id  (author_id)
 #  index_collections_on_uuid       (uuid) UNIQUE
 #
-require 'test_helper'
+require "test_helper"
 
 class CollectionTest < ActiveSupport::TestCase
   # test "the truth" do

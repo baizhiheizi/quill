@@ -5,37 +5,37 @@ module Admin
     def index
       users = User.all
 
-      @filter = params[:filter] || 'all'
+      @filter = params[:filter] || "all"
       users =
         case @filter
-        when 'mixin'
+        when "mixin"
           users.only_mixin_messenger
-        when 'fennec'
+        when "fennec"
           users.only_fennec
-        when 'mvm'
+        when "mvm"
           users.only_mvm
-        when 'only_validated'
+        when "only_validated"
           users.only_validated
-        when 'only_blocked'
+        when "only_blocked"
           users.only_blocked
-        when 'all'
+        when "all"
           users
         end
 
-      @order_by = params[:order_by] || 'created_at_desc'
+      @order_by = params[:order_by] || "created_at_desc"
       users =
         case @order_by
-        when 'created_at_desc'
+        when "created_at_desc"
           users.order(created_at: :desc)
-        when 'created_at_asc'
+        when "created_at_asc"
           users.order(created_at: :asc)
-        when 'revenue_total'
+        when "revenue_total"
           users.order_by_revenue_total
-        when 'orders_total'
+        when "orders_total"
           users.order_by_orders_total
-        when 'articles_count'
+        when "articles_count"
           users.order_by_articles_count
-        when 'comments_count'
+        when "comments_count"
           users.order_by_comments_count
         end
 
@@ -47,14 +47,14 @@ module Admin
             mixin_id_cont_all: @query,
             id_eq: @query,
             uid_cont_all: @query
-          }.merge(m: 'or')
+          }.merge(m: "or")
         ).result
 
       @pagy, @users = pagy_countless users
     end
 
     def show
-      @tab = params[:tab] || 'articles'
+      @tab = params[:tab] || "articles"
       @user = User.find_by uid: params[:uid]
     end
 

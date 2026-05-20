@@ -2,17 +2,17 @@
 
 class Dashboard::ArticlesController < Dashboard::BaseController
   def index
-    @tab = params[:tab] || 'drafted'
+    @tab = params[:tab] || "drafted"
 
     articles =
       case @tab
-      when 'drafted'
+      when "drafted"
         current_user.articles.drafted
-      when 'hidden'
+      when "hidden"
         current_user.articles.hidden
-      when 'published'
+      when "published"
         current_user.articles.published
-      when 'bought'
+      when "bought"
         current_user.bought_articles
       end
 
@@ -20,7 +20,7 @@ class Dashboard::ArticlesController < Dashboard::BaseController
   end
 
   def show
-    @tab = params[:tab] || 'buy_records'
+    @tab = params[:tab] || "buy_records"
     @article = current_user.articles.find_by uuid: params[:uuid]
   end
 end

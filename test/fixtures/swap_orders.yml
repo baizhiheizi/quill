@@ -23,8 +23,14 @@
 #  index_swap_orders_on_user_id     (user_id)
 #
 
-one: {}
+one:
+  created_at: <%= 1.day.ago %>
+  updated_at: <%= 1.day.ago %>
+
 # column: value
 #
-two: {}
+two:
+  created_at: <%= 1.day.ago %>
+  updated_at: <%= 1.day.ago %>
+
 # column: value

@@ -25,7 +25,7 @@
 #  index_payments_on_trace_id     (trace_id) UNIQUE
 #
 
-require 'test_helper'
+require "test_helper"
 
 class PaymentTest < ActiveSupport::TestCase
   # test "the truth" do

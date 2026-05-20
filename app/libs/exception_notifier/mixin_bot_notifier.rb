@@ -27,13 +27,13 @@ module ExceptionNotifier
 
       data = if env.nil?
                options[:data] || {}
-             else
-               (env['exception_notifier.exception_data'] || {}).merge(options[:data] || {})
-             end
+      else
+               (env["exception_notifier.exception_data"] || {}).merge(options[:data] || {})
+      end
       data_string = []
-      data_string << '```'
+      data_string << "```"
       data.each { |k, v| data_string << "* #{k}: #{v.inspect}" }
-      data_string << '```'
+      data_string << "```"
       data_string = data_string.join("\n")
 
       <<~TEXT

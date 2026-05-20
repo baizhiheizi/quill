@@ -36,6 +36,7 @@
 # Ignore master key for decrypting credentials and more.
 /config/master.key
 /config/credentials/*.key
+!/config/credentials/test.key
 /config/credentials/development.yml.enc
 
 # generated locale files

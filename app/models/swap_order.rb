@@ -32,9 +32,9 @@ class SwapOrder < ApplicationRecord
 
   include AASM
   belongs_to :payment
-  belongs_to :wallet, class_name: 'MixinNetworkUser', foreign_key: :user_id, primary_key: :uuid, inverse_of: :swap_orders, optional: true
-  belongs_to :pay_asset, class_name: 'Currency', primary_key: :asset_id
-  belongs_to :fill_asset, class_name: 'Currency', primary_key: :asset_id
+  belongs_to :wallet, class_name: "MixinNetworkUser", foreign_key: :user_id, primary_key: :uuid, inverse_of: :swap_orders, optional: true
+  belongs_to :pay_asset, class_name: "Currency", primary_key: :asset_id
+  belongs_to :fill_asset, class_name: "Currency", primary_key: :asset_id
 
   has_many :transfers, as: :source, dependent: :nullify
 
@@ -104,10 +104,10 @@ class SwapOrder < ApplicationRecord
       user_id:,
       follow_id: trace_id,
       asset_id: fill_asset_id,
-      minimum_fill: min_amount.present? ? format('%.8f', min_amount) : nil
+      minimum_fill: min_amount.present? ? format("%.8f", min_amount) : nil
     )
 
-    r['data']['action']
+    r["data"]["action"]
   end
 
   def place_payment_order!
@@ -126,18 +126,18 @@ class SwapOrder < ApplicationRecord
   end
 
   def place_payment_article_order!
-    case payment.decoded_memo['t']
-    when 'BUY'
+    case payment.decoded_memo["t"]
+    when "BUY"
       article.orders.find_or_create_by!(
         payment:,
         order_type: :buy_article
       )
-    when 'REWARD'
+    when "REWARD"
       article.orders.find_or_create_by!(
         payment:,
         order_type: :reward_article
       )
-    when 'CITE'
+    when "CITE"
       article.orders.find_or_create_by!(
         payment:,
         order_type: :cite_article,
@@ -147,8 +147,8 @@ class SwapOrder < ApplicationRecord
   end
 
   def place_payment_collection_order!
-    case payment.decoded_memo['t']
-    when 'BUY'
+    case payment.decoded_memo["t"]
+    when "BUY"
       collection.orders.find_or_create_by!(
         payment:,
         order_type: :buy_collection
@@ -171,7 +171,7 @@ class SwapOrder < ApplicationRecord
         opponent_id: payment.payer.mixin_uuid,
         asset_id: fill_asset_id,
         amount: _amount,
-        memo: 'CHANGE FROM SWAP'
+        memo: "CHANGE FROM SWAP"
       ).find_or_create_by!(
         trace_id: _trace_id
       )
@@ -188,7 +188,7 @@ class SwapOrder < ApplicationRecord
       opponent_id: payment.payer.mixin_uuid,
       asset_id: fill_asset_id,
       amount: amount.to_f,
-      memo: 'REFUND FROM SWAP'
+      memo: "REFUND FROM SWAP"
     ).find_or_create_by!(
       trace_id: _trace_id
     )
@@ -214,8 +214,8 @@ class SwapOrder < ApplicationRecord
         QuillBot.api
       end
 
-    r = PandoLake.api.order(trace_id, authorization: mixin_api.access_token('GET', '/me'))
-    update raw: r['data']
+    r = PandoLake.api.order(trace_id, authorization: mixin_api.access_token("GET", "/me"))
+    update raw: r["data"]
   end
 
   def notify_payer

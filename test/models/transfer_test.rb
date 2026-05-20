@@ -34,7 +34,7 @@
 #  index_transfers_on_wallet_id                  (wallet_id)
 #
 
-require 'test_helper'
+require "test_helper"
 
 class TransferTest < ActiveSupport::TestCase
   # test "the truth" do

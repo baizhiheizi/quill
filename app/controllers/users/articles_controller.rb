@@ -3,12 +3,12 @@
 module Users
   class ArticlesController < Users::BaseController
     def index
-      @tab = params[:tab] || 'published'
+      @tab = params[:tab] || "published"
       articles =
         case @tab
-        when 'published'
+        when "published"
           @user.articles.published
-        when 'bought'
+        when "bought"
           @user.bought_articles.published
         end
 

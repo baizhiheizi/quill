@@ -24,7 +24,7 @@
 #  index_collectibles_on_source_type_and_source_id     (source_type,source_id) UNIQUE
 #  index_collectibles_on_token_id                      (token_id) UNIQUE
 #
-require 'test_helper'
+require "test_helper"
 
 class CollectibleTest < ActiveSupport::TestCase
   # test "the truth" do

@@ -31,17 +31,17 @@ class MixpayPreOrder < PreOrder
 
   def pay_url
     Addressable::URI.new(
-      scheme: 'https',
-      host: 'mixpay.me',
-      path: 'pay',
+      scheme: "https",
+      host: "mixpay.me",
+      path: "pay",
       query_values: [
-        ['payeeId', payee_id],
-        ['settlementAssetId', asset_id],
-        ['quoteAssetId', asset_id],
-        ['quoteAmount', amount],
-        ['traceId', trace_id],
-        ['settlementMemo', memo],
-        ['returnTo', pre_order_url(follow_id)]
+        [ "payeeId", payee_id ],
+        [ "settlementAssetId", asset_id ],
+        [ "quoteAssetId", asset_id ],
+        [ "quoteAmount", amount ],
+        [ "traceId", trace_id ],
+        [ "settlementMemo", memo ],
+        [ "returnTo", pre_order_url(follow_id) ]
       ]
     ).to_s
   end
@@ -49,6 +49,6 @@ class MixpayPreOrder < PreOrder
   private
 
   def ensure_mixpay_supported
-    errors.add(:item, 'not supported') unless item.mixpay_supported?
+    errors.add(:item, "not supported") unless item.mixpay_supported?
   end
 end

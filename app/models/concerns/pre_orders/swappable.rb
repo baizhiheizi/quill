@@ -11,7 +11,7 @@ module PreOrders::Swappable
 
   def direct_pay_url
     QuillBot.api.safe_pay_url(
-      members: [QuillBot.api.client_id],
+      members: [ QuillBot.api.client_id ],
       threshold: 1,
       asset_id:,
       amount:,
@@ -42,10 +42,10 @@ module PreOrders::Swappable
       follow_id:,
       asset_id:,
       route_id:,
-      minimum_fill: order_type == 'reward_article' ? nil : amount
+      minimum_fill: order_type == "reward_article" ? nil : amount
     )
 
-    r['data']['action']
+    r["data"]["action"]
   end
 
   def pay_amount(pay_asset_id = asset_id)
@@ -59,8 +59,8 @@ module PreOrders::Swappable
   def fswap_route(pay_asset_id = nil)
     @fswap_route ||=
       begin
-        pairs = Rails.cache.fetch 'pando_lake_routes', expires_in: 5.seconds do
-          PandoLake.api.pairs['data']['pairs']
+        pairs = Rails.cache.fetch "pando_lake_routes", expires_in: 5.seconds do
+          PandoLake.api.pairs["data"]["pairs"]
         end
 
         routes ||= PandoBot::Lake::PairRoutes.new pairs

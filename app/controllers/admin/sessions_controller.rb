@@ -5,11 +5,11 @@ class Admin::SessionsController < Admin::BaseController
     sessions = Session.all
     sessions = sessions.where(user_id: params[:user_id]) if params[:user_id].present?
 
-    @order_by = params[:order_by] || 'created_at_desc'
+    @order_by = params[:order_by] || "created_at_desc"
     case @order_by
-    when 'created_at_desc'
+    when "created_at_desc"
       sessions.order(created_at: :desc)
-    when 'created_at_asc'
+    when "created_at_asc"
       sessions.order(created_at: :asc)
     end
 

@@ -2,7 +2,7 @@
 
 class CollectionListedNotification < ApplicationNotification
   deliver_by :database, if: :web_notification_enabled?
-  deliver_by :mixin_bot, class: 'DeliveryMethods::MixinBot', category: 'APP_CARD', if: :may_notify_via_mixin_bot?
+  deliver_by :mixin_bot, class: "DeliveryMethods::MixinBot", category: "APP_CARD", if: :may_notify_via_mixin_bot?
 
   param :collection
 
@@ -20,11 +20,11 @@ class CollectionListedNotification < ApplicationNotification
   end
 
   def description
-    [collection.author.name.truncate(10), t('.listed')].join(' ')
+    [ collection.author.name.truncate(10), t(".listed") ].join(" ")
   end
 
   def message
-    [collection.author.name.truncate(10), t('.listed'), ':', collection.name].join(' ')
+    [ collection.author.name.truncate(10), t(".listed"), ":", collection.name ].join(" ")
   end
 
   def url

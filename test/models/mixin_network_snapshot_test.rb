@@ -26,7 +26,7 @@
 #  index_mixin_network_snapshots_on_user_id       (user_id)
 #
 
-require 'test_helper'
+require "test_helper"
 
 class MixinNetworkSnapshotTest < ActiveSupport::TestCase
   # test "the truth" do

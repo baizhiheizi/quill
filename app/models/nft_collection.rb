@@ -35,14 +35,14 @@ class NftCollection < ApplicationRecord
 
   def trident_url
     Addressable::URI.new(
-      scheme: 'https',
-      host: 'thetrident.one',
+      scheme: "https",
+      host: "thetrident.one",
       path: "collections/#{uuid}"
     ).to_s
   end
 
   def icon_url
-    icon['url'] || format('https://api.multiavatar.com/%<uuid>s.png', uuid:)
+    icon["url"] || format("https://api.multiavatar.com/%<uuid>s.png", uuid:)
   end
 
   private
@@ -57,11 +57,11 @@ class NftCollection < ApplicationRecord
         {}
       end
 
-    return if r['id'].blank?
+    return if r["id"].blank?
 
     assign_attributes(
       raw: r,
-      uuid: r['id']
+      uuid: r["id"]
     )
   end
 end

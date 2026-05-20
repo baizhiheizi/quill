@@ -10,17 +10,17 @@ end
 
 namespace :admin do
   # good_job
-  mount GoodJob::Engine, at: 'good_job', constraints: AdminConstraint.new
+  mount GoodJob::Engine, at: "good_job", constraints: AdminConstraint.new
   # pghero
-  mount PgHero::Engine, at: 'pghero'
+  mount PgHero::Engine, at: "pghero"
   # exception
-  mount ExceptionTrack::Engine => '/exception-track'
+  mount ExceptionTrack::Engine => "/exception-track"
 
-  root to: 'overview#index'
+  root to: "overview#index"
 
-  get 'login', to: 'login#new', as: :login
-  post 'login', to: 'login#create'
-  get 'logout', to: 'login#delete', as: :logout
+  get "login", to: "login#new", as: :login
+  post "login", to: "login#create"
+  get "logout", to: "login#delete", as: :logout
 
   resources :sessions, only: %i[index]
   resources :users, only: %i[index show], param: :uid do

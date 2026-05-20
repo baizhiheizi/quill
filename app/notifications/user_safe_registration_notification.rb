@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class UserSafeRegistrationNotification < ApplicationNotification
-  deliver_by :mixin_bot, class: 'DeliveryMethods::MixinBot', category: 'PLAIN_TEXT', if: :may_notify_via_mixin_bot?
+  deliver_by :mixin_bot, class: "DeliveryMethods::MixinBot", category: "PLAIN_TEXT", if: :may_notify_via_mixin_bot?
 
   param :user
 
@@ -10,7 +10,7 @@ class UserSafeRegistrationNotification < ApplicationNotification
   end
 
   def message
-    t('.message')
+    t(".message")
   end
 
   def url

@@ -20,32 +20,32 @@ module API::RenderingHelper
   end
 
   def render_unauthorized(message = nil)
-    message ||= 'Unauthorized'
+    message ||= "Unauthorized"
     render json: { message: }, status: :unauthorized
   end
 
   def render_forbidden(message = nil)
-    message ||= 'Forbidden'
+    message ||= "Forbidden"
     render json: { message: }, status: :forbidden
   end
 
   def render_bad_request(message = nil)
-    message ||= 'Bad request'
+    message ||= "Bad request"
     render json: { message: }, status: :bad_request
   end
 
   def render_not_found(message = nil)
-    message ||= 'Not found'
+    message ||= "Not found"
     render json: { message: }, status: :not_found
   end
 
   def render_unprocessable_entity(message = nil)
-    message ||= 'Unprocessable entity'
+    message ||= "Unprocessable entity"
     render json: { message: }, status: :unprocessable_entity
   end
 
   def render_internal_server_error(message = nil)
-    message ||= 'Internal server error'
+    message ||= "Internal server error"
     render json: { message: }, status: :internal_server_error
   end
 end

@@ -10,7 +10,7 @@ class Dashboard::PublishedArticlesController < Dashboard::BaseController
     if @article.published_at.present?
       @article.publish! if @article.may_publish?
     elsif @article.may_publish?
-      redirect_to @article, notice: t('success_published_article') if @article.publish!
+      redirect_to @article, notice: t("success_published_article") if @article.publish!
     end
   end
 

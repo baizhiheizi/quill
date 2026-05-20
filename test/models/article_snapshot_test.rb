@@ -15,7 +15,7 @@
 #  index_article_snapshots_on_article_uuid  (article_uuid)
 #
 
-require 'test_helper'
+require "test_helper"
 
 class ArticleSnapshotTest < ActiveSupport::TestCase
   # test "the truth" do

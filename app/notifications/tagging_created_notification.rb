@@ -2,7 +2,7 @@
 
 class TaggingCreatedNotification < ApplicationNotification
   deliver_by :database, if: :may_notify_via_web?
-  deliver_by :mixin_bot, class: 'DeliveryMethods::MixinBot', category: 'APP_CARD', if: :may_notify_via_mixin_bot?
+  deliver_by :mixin_bot, class: "DeliveryMethods::MixinBot", category: "APP_CARD", if: :may_notify_via_mixin_bot?
 
   param :tagging
 
@@ -22,11 +22,11 @@ class TaggingCreatedNotification < ApplicationNotification
   end
 
   def description
-    ["##{tagging.tag.name}", t('.has_new_article')].join(' ')
+    [ "##{tagging.tag.name}", t(".has_new_article") ].join(" ")
   end
 
   def message
-    ["##{tagging.tag.name}", t('.has_new_article'), params[:tagging].article.title].join(' ')
+    [ "##{tagging.tag.name}", t(".has_new_article"), params[:tagging].article.title ].join(" ")
   end
 
   def url

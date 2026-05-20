@@ -37,8 +37,8 @@ class Order < ApplicationRecord
   include Orders::Distributable
   include Orders::Mintable
 
-  belongs_to :buyer, class_name: 'User'
-  belongs_to :seller, class_name: 'User'
+  belongs_to :buyer, class_name: "User"
+  belongs_to :seller, class_name: "User"
   belongs_to :citer, polymorphic: true, optional: true
   belongs_to :item, polymorphic: true, counter_cache: true
   belongs_to :payment, foreign_key: :trace_id, primary_key: :trace_id, inverse_of: :order
@@ -56,7 +56,7 @@ class Order < ApplicationRecord
   validates :trace_id, uniqueness: true
   validate :ensure_total_sufficient, on: :create
 
-  enum order_type: { buy_article: 0, reward_article: 1, cite_article: 2, buy_collection: 3 }
+  enum :order_type, { buy_article: 0, reward_article: 1, cite_article: 2, buy_collection: 3 }
 
   delegate :price_tag, to: :payment, prefix: true
 
@@ -76,15 +76,15 @@ class Order < ApplicationRecord
 
   def broadcast_to_article_views
     I18n.with_locale buyer.locale do
-      broadcast_replace_later_to "user_#{buyer.mixin_uuid}", target: "article_#{item.uuid}_content", partial: 'articles/content', locals: { article: item, user: buyer } if buy_article?
+      broadcast_replace_later_to "user_#{buyer.mixin_uuid}", target: "article_#{item.uuid}_content", partial: "articles/content", locals: { article: item, user: buyer } if buy_article?
 
-      broadcast_replace_later_to "user_#{buyer.mixin_uuid}", target: "article_#{item.uuid}_buyers", partial: 'articles/buyers', locals: { article: item, user: buyer }
-      broadcast_replace_later_to "user_#{buyer.mixin_uuid}", target: "article_#{item.uuid}_comments_card", partial: 'articles/comments_card', locals: { article: item, user: buyer }
+      broadcast_replace_later_to "user_#{buyer.mixin_uuid}", target: "article_#{item.uuid}_buyers", partial: "articles/buyers", locals: { article: item, user: buyer }
+      broadcast_replace_later_to "user_#{buyer.mixin_uuid}", target: "article_#{item.uuid}_comments_card", partial: "articles/comments_card", locals: { article: item, user: buyer }
       broadcast_remove_to "user_#{buyer.mixin_uuid}", target: "#{item.uuid}_pre_order_modal"
     end
   rescue PG::InvalidParameterValue => e
     Rails.logger.error e
-    broadcast_replace_later_to "user_#{buyer.mixin_uuid}", target: 'toast-slot', partial: 'shared/reload'
+    broadcast_replace_later_to "user_#{buyer.mixin_uuid}", target: "toast-slot", partial: "shared/reload"
   end
 
   def broadcast_to_collection_views
@@ -161,7 +161,7 @@ class Order < ApplicationRecord
 
   def cache_history_ticker
     r = QuillBot.api.ticker asset_id, created_at.utc.rfc3339
-    update value_btc: r['price_btc'].to_f * total, value_usd: r['price_usd'].to_f * total
+    update value_btc: r["price_btc"].to_f * total, value_usd: r["price_usd"].to_f * total
   end
 
   def cache_history_ticker_async
@@ -169,7 +169,7 @@ class Order < ApplicationRecord
   end
 
   def price_tag
-    [format('%.8f', total), currency&.symbol].join(' ')
+    [ format("%.8f", total), currency&.symbol ].join(" ")
   end
 
   private
@@ -188,9 +188,9 @@ class Order < ApplicationRecord
 
     self.currency = if cite_article?
                       payment.currency
-                    else
+    else
                       item.currency
-                    end
+    end
     assign_attributes(
       buyer: payment.payer,
       seller: item.author,
@@ -201,6 +201,6 @@ class Order < ApplicationRecord
   end
 
   def ensure_total_sufficient
-    errors.add(:total, 'insufficient') if (buy_article? || buy_collection?) && total.floor(8) < item.price.floor(8)
+    errors.add(:total, "insufficient") if (buy_article? || buy_collection?) && total.floor(8) < item.price.floor(8)
   end
 end

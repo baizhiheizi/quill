@@ -15,7 +15,7 @@
 #  index_taggings_on_tag_id_and_article_id  (tag_id,article_id) UNIQUE
 #
 
-require 'test_helper'
+require "test_helper"
 
 class TaggingTest < ActiveSupport::TestCase
   # test "the truth" do

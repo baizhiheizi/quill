@@ -34,9 +34,9 @@ class PreOrder < ApplicationRecord
   enumerize :order_type, in: %i[buy_article reward_article buy_collection mint_collection]
 
   belongs_to :item, polymorphic: true
-  belongs_to :payer, class_name: 'User', primary_key: :mixin_uuid
-  belongs_to :payee, class_name: 'MixinNetworkUser', primary_key: :uuid, optional: true
-  belongs_to :currency, class_name: 'Currency', primary_key: :asset_id, foreign_key: :asset_id, inverse_of: false
+  belongs_to :payer, class_name: "User", primary_key: :mixin_uuid
+  belongs_to :payee, class_name: "MixinNetworkUser", primary_key: :uuid, optional: true
+  belongs_to :currency, class_name: "Currency", primary_key: :asset_id, foreign_key: :asset_id, inverse_of: false
 
   before_validation :setup_attributes, on: :create
 
@@ -66,7 +66,7 @@ class PreOrder < ApplicationRecord
   def mixpay_supported?
     return false unless asset_id.in?(Mixpay.api.settlement_asset_ids)
 
-    Mixpay.api.quote_assets_cached.find(&->(asset) { asset['assetId'] == asset_id && amount >= asset['minQuoteAmount'].to_f && amount <= asset['maxQuoteAmount'].to_f }).present?
+    Mixpay.api.quote_assets_cached.find(&->(asset) { asset["assetId"] == asset_id && amount >= asset["minQuoteAmount"].to_f && amount <= asset["maxQuoteAmount"].to_f }).present?
   end
 
   def broadcast_to_views
@@ -81,7 +81,7 @@ class PreOrder < ApplicationRecord
     end
   rescue PG::InvalidParameterValue => e
     Rails.logger.error e
-    broadcast_replace_later_to "user_#{payer_id}", target: 'toast-slot', partial: 'shared/reload'
+    broadcast_replace_later_to "user_#{payer_id}", target: "toast-slot", partial: "shared/reload"
   end
 
   def to_param
@@ -98,21 +98,21 @@ class PreOrder < ApplicationRecord
     self.follow_id = SecureRandom.uuid
     self.trace_id =
       case order_type
-      when 'reward_article'
+      when "reward_article"
         SecureRandom.uuid
-      when 'buy_article', 'buy_collection', 'mint_collection'
+      when "buy_article", "buy_collection", "mint_collection"
         item.payment_trace_id payer
       end
     self.memo =
       case order_type
-      when 'buy_article'
-        Base64.urlsafe_encode64({ t: 'BUY', a: item.uuid, f: follow_id }.to_json, padding: false)
-      when 'reward_article'
-        Base64.urlsafe_encode64({ t: 'REWARD', a: item.uuid, f: follow_id }.to_json, padding: false)
-      when 'buy_collection'
-        Base64.urlsafe_encode64({ t: 'BUY', l: item.uuid, f: follow_id }.to_json, padding: false)
-      when 'mint_collection'
-        Base64.urlsafe_encode64({ t: 'MINT', l: item.uuid, f: follow_id }.to_json, padding: false)
+      when "buy_article"
+        Base64.urlsafe_encode64({ t: "BUY", a: item.uuid, f: follow_id }.to_json, padding: false)
+      when "reward_article"
+        Base64.urlsafe_encode64({ t: "REWARD", a: item.uuid, f: follow_id }.to_json, padding: false)
+      when "buy_collection"
+        Base64.urlsafe_encode64({ t: "BUY", l: item.uuid, f: follow_id }.to_json, padding: false)
+      when "mint_collection"
+        Base64.urlsafe_encode64({ t: "MINT", l: item.uuid, f: follow_id }.to_json, padding: false)
       end
 
     self.payee_id = QuillBot.api.client_id
@@ -121,6 +121,6 @@ class PreOrder < ApplicationRecord
   end
 
   def ensure_payer_not_author
-    errors.add(:payer, 'cannot be author') if payer == item.author
+    errors.add(:payer, "cannot be author") if payer == item.author
   end
 end

@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
 namespace :dashboard do
-  root to: 'home#index'
-  get :settings, to: 'home#settings'
-  get :readings, to: 'home#readings'
-  get :authorings, to: 'home#authorings'
-  get :stats, to: 'home#stats'
-  get :wallet, to: 'home#wallet'
+  root to: "home#index"
+  get :settings, to: "home#settings"
+  get :readings, to: "home#readings"
+  get :authorings, to: "home#authorings"
+  get :stats, to: "home#stats"
+  get :wallet, to: "home#wallet"
 
   resources :listed_collections, only: %i[new update]
   resources :hidden_collections, only: %i[new update]
@@ -29,14 +29,14 @@ namespace :dashboard do
   resources :swap_orders, only: %i[index]
   resources :notifications, only: %i[index show]
   resources :transfers, only: %i[index]
-  get '/transfers/stats', to: 'transfers#stats', as: :transfers_stats
+  get "/transfers/stats", to: "transfers#stats", as: :transfers_stats
 
   resources :read_notifications, only: %i[new create update]
   resources :deleted_notifications, only: %i[new create]
   resources :notification_settings, only: %i[update]
   resource :profile_setting, only: %i[edit update]
 
-  get 'email_verify', to: 'profile_settings#verify_email'
+  get "email_verify", to: "profile_settings#verify_email"
 
   resources :access_tokens, only: %i[index create destroy]
 

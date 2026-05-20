@@ -2,6 +2,6 @@
 
 module PandoLake
   def self.api
-    @api ||= PandoBot::Lake::API.new 'https://safe-swap-api.pando.im'
+    @api ||= PandoBot::Lake::API.new "https://safe-swap-api.pando.im"
   end
 end

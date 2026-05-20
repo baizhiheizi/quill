@@ -4,7 +4,7 @@ class UsersController < ApplicationController
   before_action :load_user
 
   def show
-    @tab = params[:tab] || 'published'
+    @tab = params[:tab] || "published"
 
     @page_title = @user&.name
     @page_description = @user&.bio
@@ -14,7 +14,7 @@ class UsersController < ApplicationController
   end
 
   def share
-    impressionist @user, 'share'
+    impressionist @user, "share"
   end
 
   private

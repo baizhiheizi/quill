@@ -28,7 +28,7 @@ class ArweaveTransaction < ApplicationRecord
   include AASM
 
   belongs_to :order, optional: true
-  belongs_to :owner, class_name: 'User', primary_key: :mixin_uuid, inverse_of: :arweave_transactions, optional: true
+  belongs_to :owner, class_name: "User", primary_key: :mixin_uuid, inverse_of: :arweave_transactions, optional: true
   belongs_to :article, primary_key: :uuid, foreign_key: :article_uuid, inverse_of: :arweave_transactions
   belongs_to :article_snapshot
 
@@ -101,7 +101,7 @@ class ArweaveTransaction < ApplicationRecord
     if owner&.public_key.present?
       encrypted_data_for_owner
     else
-      encrypter = OpenSSL::Cipher.new('aes-256-cfb').encrypt
+      encrypter = OpenSSL::Cipher.new("aes-256-cfb").encrypt
       iv = encrypter.random_iv
       encrypter.iv = iv
       encrypter.key = Base64.urlsafe_decode64 Rails.application.credentials.dig(:encryption, :aes_key)
@@ -115,7 +115,7 @@ class ArweaveTransaction < ApplicationRecord
         },
         digest:,
         alg: {
-          name: 'aes-256-cfb',
+          name: "aes-256-cfb",
           iv: Base64.urlsafe_encode64(iv, padding: false)
         },
         author: article.author.uid,
@@ -128,8 +128,8 @@ class ArweaveTransaction < ApplicationRecord
   def encrypted_data_for_owner
     return if owner&.public_key.blank?
 
-    ec = OpenSSL::PKey::EC.new 'secp256k1'
-    group = OpenSSL::PKey::EC::Group.new 'secp256k1'
+    ec = OpenSSL::PKey::EC.new "secp256k1"
+    group = OpenSSL::PKey::EC::Group.new "secp256k1"
     ec.private_key = OpenSSL::BN.new(Rails.application.credentials.dig(:encryption, :private_key).to_i(16))
     ec.public_key =  group.generator.mul ec.private_key
 
@@ -139,7 +139,7 @@ class ArweaveTransaction < ApplicationRecord
         OpenSSL::BN.new(owner.public_key.to_i(16))
       )
 
-    encrypter = OpenSSL::Cipher.new('aes-256-cfb').encrypt
+    encrypter = OpenSSL::Cipher.new("aes-256-cfb").encrypt
     key = ec.dh_compute_key owner_public_key
     iv = encrypter.random_iv
     encrypter.iv = iv
@@ -154,7 +154,7 @@ class ArweaveTransaction < ApplicationRecord
       },
       digest:,
       alg: {
-        name: 'aes-256-cfb',
+        name: "aes-256-cfb",
         iv: Base64.urlsafe_encode64(iv, padding: false),
         public_key: ec.public_key.to_bn.to_fs(16).downcase
       },
@@ -168,8 +168,8 @@ class ArweaveTransaction < ApplicationRecord
   def snapshot_url
     @snapshot_url ||=
       Addressable::URI.new(
-        scheme: 'https',
-        host: 'v2.viewblock.io',
+        scheme: "https",
+        host: "v2.viewblock.io",
         path: "arweave/tx/#{tx_id}"
       ).to_s
   end
@@ -184,31 +184,31 @@ class ArweaveTransaction < ApplicationRecord
   def tags
     [
       {
-        name: 'Content-Type',
-        value: 'application/json'
+        name: "Content-Type",
+        value: "application/json"
       },
       {
-        name: 'App-Name',
-        value: 'quill.im'
+        name: "App-Name",
+        value: "quill.im"
       },
       {
-        name: 'Owner',
+        name: "Owner",
         value: owner&.uid
       },
       {
-        name: 'Author',
+        name: "Author",
         value: article.author&.uid
       },
       {
-        name: 'Content-Digest',
+        name: "Content-Digest",
         value: digest
       },
       {
-        name: 'UUID',
+        name: "UUID",
         value: article.uuid
       },
       {
-        name: 'Collection-ID',
+        name: "Collection-ID",
         value: article.collection&.uuid
       }
     ]

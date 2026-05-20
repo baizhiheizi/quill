@@ -16,7 +16,7 @@
 #  index_sessions_on_user_id  (user_id)
 #  index_sessions_on_uuid     (uuid) UNIQUE
 #
-require 'test_helper'
+require "test_helper"
 
 class SessionTest < ActiveSupport::TestCase
   # test "the truth" do

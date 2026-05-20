@@ -34,7 +34,7 @@ class Tagging < ApplicationRecord
   end
 
   def notifications
-    @notifications ||= Notification.where(params: { tagging: self }).where(type: 'TaggingCreatedNotification')
+    @notifications ||= Notification.where(params: { tagging: self }).where(type: "TaggingCreatedNotification")
   end
 
   def destroy_notifications

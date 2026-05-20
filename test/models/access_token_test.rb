@@ -19,7 +19,7 @@
 #  index_access_tokens_on_value    (value) UNIQUE
 #
 
-require 'test_helper'
+require "test_helper"
 
 class AccessTokenTest < ActiveSupport::TestCase
   # test "the truth" do

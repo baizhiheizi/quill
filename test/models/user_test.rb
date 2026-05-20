@@ -32,7 +32,7 @@
 #  index_users_on_uid         (uid) UNIQUE
 #
 
-require 'test_helper'
+require "test_helper"
 
 class UserTest < ActiveSupport::TestCase
   # test "the truth" do

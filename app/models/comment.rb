@@ -27,11 +27,11 @@
 class Comment < ApplicationRecord
   include SoftDeletable
 
-  belongs_to :author, class_name: 'User', inverse_of: :comments
+  belongs_to :author, class_name: "User", inverse_of: :comments
   belongs_to :commentable, polymorphic: true, counter_cache: true
-  belongs_to :quote_comment, class_name: 'Comment', inverse_of: :comments, counter_cache: true, optional: true
+  belongs_to :quote_comment, class_name: "Comment", inverse_of: :comments, counter_cache: true, optional: true
 
-  has_many :comments, class_name: 'Comment', foreign_key: :quote_comment_id, inverse_of: :quote_comment, dependent: :nullify
+  has_many :comments, class_name: "Comment", foreign_key: :quote_comment_id, inverse_of: :quote_comment, dependent: :nullify
 
   validates :content, presence: true, length: { maximum: 1000 }
   validate :ensure_author_not_blocked, on: :create
@@ -61,6 +61,6 @@ class Comment < ApplicationRecord
   def ensure_author_not_blocked
     return unless new_record?
 
-    errors.add(:author, 'blocked') if commentable&.author&.block_user? author
+    errors.add(:author, "blocked") if commentable&.author&.block_user? author
   end
 end

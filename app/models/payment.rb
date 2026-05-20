@@ -28,13 +28,13 @@
 class Payment < ApplicationRecord
   include AASM
 
-  belongs_to :payer, class_name: 'User', primary_key: :mixin_uuid, inverse_of: :payments, optional: true
-  belongs_to :payer_wallet, class_name: 'MixinNetworkUser', foreign_key: :opponent_id, primary_key: :uuid, inverse_of: false, optional: true
-  belongs_to :snapshot, -> { where(amount: 0...) }, class_name: 'MixinNetworkSnapshot', foreign_key: :trace_id, primary_key: :trace_id, optional: true, inverse_of: false
+  belongs_to :payer, class_name: "User", primary_key: :mixin_uuid, inverse_of: :payments, optional: true
+  belongs_to :payer_wallet, class_name: "MixinNetworkUser", foreign_key: :opponent_id, primary_key: :uuid, inverse_of: false, optional: true
+  belongs_to :snapshot, -> { where(amount: 0...) }, class_name: "MixinNetworkSnapshot", foreign_key: :trace_id, primary_key: :trace_id, optional: true, inverse_of: false
   belongs_to :currency, primary_key: :asset_id, foreign_key: :asset_id, inverse_of: :payments, optional: true
   belongs_to :kernel_output, primary_key: :request_id, foreign_key: :trace_id, inverse_of: false, optional: true
 
-  has_one :refund_transfer, -> { where(transfer_type: :payment_refund) }, class_name: 'Transfer', as: :source, dependent: :nullify, inverse_of: false
+  has_one :refund_transfer, -> { where(transfer_type: :payment_refund) }, class_name: "Transfer", as: :source, dependent: :nullify, inverse_of: false
   has_one :order, primary_key: :trace_id, foreign_key: :trace_id, dependent: :restrict_with_exception, inverse_of: :payment
   has_one :swap_order, dependent: :nullify
 
@@ -95,47 +95,47 @@ class Payment < ApplicationRecord
   end
 
   def memo_correct?
-    payment_memo.key?('t') &&
-      payment_memo['t'].in?(%w[BUY REWARD CITE REVENUE MINT]) &&
-      (payment_memo.key?('a') || payment_memo.key?('l'))
+    payment_memo.key?("t") &&
+      payment_memo["t"].in?(%w[BUY REWARD CITE REVENUE MINT]) &&
+      (payment_memo.key?("a") || payment_memo.key?("l"))
   end
 
   def from_foxswap?
-    decoded_memo['s'].in? %w[4swapTrade 4swapRefund]
+    decoded_memo["s"].in? %w[4swapTrade 4swapRefund]
   end
 
   def article
     @article ||=
-      if payment_memo['a'].present?
-        Article.find_by uuid: payment_memo['a']
-      elsif pre_order&.item_type == 'Article'
+      if payment_memo["a"].present?
+        Article.find_by uuid: payment_memo["a"]
+      elsif pre_order&.item_type == "Article"
         pre_order.item
       end
   end
 
   def collection
-    return if payment_memo['l'].blank?
+    return if payment_memo["l"].blank?
 
     @collection ||=
-      if payment_memo['l'].present?
-        Collection.find_by uuid: payment_memo['l']
-      elsif pre_order&.item_type == 'Collection'
+      if payment_memo["l"].present?
+        Collection.find_by uuid: payment_memo["l"]
+      elsif pre_order&.item_type == "Collection"
         pre_order.item
       end
   end
 
   def citer
-    return unless payment_memo['t'] == 'CITE'
+    return unless payment_memo["t"] == "CITE"
 
-    @citer ||= Article.find_by(uuid: payment_memo['c'])
+    @citer ||= Article.find_by(uuid: payment_memo["c"])
   end
 
   def pre_order
     @pre_order ||=
       if from_foxswap?
-        PreOrder.find_by follow_id: decoded_memo['t']
-      elsif decoded_memo['f'].present?
-        PreOrder.find_by follow_id: decoded_memo['f']
+        PreOrder.find_by follow_id: decoded_memo["t"]
+      elsif decoded_memo["f"].present?
+        PreOrder.find_by follow_id: decoded_memo["f"]
       end
   end
 
@@ -157,13 +157,13 @@ class Payment < ApplicationRecord
   def generate_article_order!
     return if article.blank?
 
-    raise ActiveRecord::RecordInvalid, 'blocked by author' if article.author.block_user?(payer)
+    raise ActiveRecord::RecordInvalid, "blocked by author" if article.author.block_user?(payer)
 
-    if decoded_memo['s'] == '4swapRefund'
+    if decoded_memo["s"] == "4swapRefund"
       generate_refund_transfer!
-    elsif payment_memo['t'] == 'REVENUE'
+    elsif payment_memo["t"] == "REVENUE"
       complete!
-    elsif asset_id == article.asset_id || payment_memo['t'] == 'CITE'
+    elsif asset_id == article.asset_id || payment_memo["t"] == "CITE"
       place_article_order!
     elsif swappable?
       place_swap_order!
@@ -173,11 +173,11 @@ class Payment < ApplicationRecord
   def generate_collection_order!
     return if collection.blank?
 
-    raise ActiveRecord::RecordInvalid, 'blocked by author' if collection.author.block_user?(payer)
+    raise ActiveRecord::RecordInvalid, "blocked by author" if collection.author.block_user?(payer)
 
-    if decoded_memo['s'] == '4swapRefund'
+    if decoded_memo["s"] == "4swapRefund"
       generate_refund_transfer!
-    elsif payment_memo['t'] == 'MINT'
+    elsif payment_memo["t"] == "MINT"
       _order = collection.mintable_order_from payer
       _order.mint! if _order&.may_mint?
     elsif asset_id == collection.asset_id
@@ -191,7 +191,7 @@ class Payment < ApplicationRecord
     if article.present?
       create_swap_order!(
         funds: amount,
-        min_amount: decoded_memo['t'] == 'BUY' ? article.price : nil,
+        min_amount: decoded_memo["t"] == "BUY" ? article.price : nil,
         fill_asset_id: article.asset_id,
         pay_asset_id: asset_id,
         trace_id: QuillBot.api.unique_conversation_id(wallet_id, trace_id),
@@ -210,27 +210,27 @@ class Payment < ApplicationRecord
   end
 
   def place_article_order!
-    case payment_memo['t']
-    when 'BUY'
+    case payment_memo["t"]
+    when "BUY"
       article.orders.find_or_create_by!(
         payment: self,
         order_type: :buy_article
       )
       complete!
-    when 'REWARD'
+    when "REWARD"
       article.orders.find_or_create_by!(
         payment: self,
         order_type: :reward_article
       )
       complete!
-    when 'CITE'
+    when "CITE"
       article.orders.find_or_create_by!(
         payment: self,
         order_type: :cite_article,
         citer:
       )
       complete!
-    when 'REVENUE'
+    when "REVENUE"
       complete!
     else
       generate_refund_transfer!
@@ -238,8 +238,8 @@ class Payment < ApplicationRecord
   end
 
   def place_collection_order!
-    case payment_memo['t']
-    when 'BUY'
+    case payment_memo["t"]
+    when "BUY"
       collection.orders.find_or_create_by!(
         payment: self,
         order_type: :buy_collection
@@ -262,7 +262,7 @@ class Payment < ApplicationRecord
       amount:,
       asset_id:,
       trace_id: QuillBot.api.unique_uuid(trace_id, opponent_id),
-      memo: 'REDUND'
+      memo: "REDUND"
     )
   end
 
@@ -275,23 +275,23 @@ class Payment < ApplicationRecord
   end
 
   def notify_payer
-    return unless decoded_memo['t'].in? %w[BUY REWARD]
+    return unless decoded_memo["t"].in? %w[BUY REWARD]
 
     case state
-    when 'paid', 'completed'
+    when "paid", "completed"
       PaymentCreatedNotification.with(payment: self).deliver(payer)
-    when 'refunded'
+    when "refunded"
       PaymentRefundedNotification.with(payment: self).deliver(payer)
     end
   end
 
   def price_tag
-    [format('%.8f', amount), currency&.symbol].join(' ')
+    [ format("%.8f", amount), currency&.symbol ].join(" ")
   end
 
   def snapshot_url
     [
-      'https://mixin.one/snapshots/',
+      "https://mixin.one/snapshots/",
       snapshot_id
     ].join
   end
@@ -300,16 +300,16 @@ class Payment < ApplicationRecord
 
   def setup_attributes
     assign_attributes(
-      amount: raw['amount'].to_f,
-      memo: raw['memo'] || raw['data'],
-      asset_id: raw['asset_id'] || raw['asset']['asset_id'],
-      opponent_id: raw['opponent_id'],
-      snapshot_id: raw['snapshot_id'],
-      trace_id: raw['trace_id']
+      amount: raw["amount"].to_f,
+      memo: raw["memo"] || raw["data"],
+      asset_id: raw["asset_id"] || raw["asset"]["asset_id"],
+      opponent_id: raw["opponent_id"],
+      snapshot_id: raw["snapshot_id"],
+      trace_id: raw["trace_id"]
     )
     self.payer =
-      if decoded_memo['t'] == 'CITE'
-        Article.find_by(uuid: decoded_memo['c']).author
+      if decoded_memo["t"] == "CITE"
+        Article.find_by(uuid: decoded_memo["c"]).author
       elsif pre_order.present?
         pre_order.payer
       else

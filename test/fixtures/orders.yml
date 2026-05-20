@@ -28,8 +28,14 @@
 #  index_orders_on_seller_id                (seller_id)
 #
 
-one: {}
+one:
+  created_at: <%= 1.day.ago %>
+  updated_at: <%= 1.day.ago %>
+
 # column: value
 #
-two: {}
+two:
+  created_at: <%= 1.day.ago %>
+  updated_at: <%= 1.day.ago %>
+
 # column: value

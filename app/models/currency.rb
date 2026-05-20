@@ -21,11 +21,11 @@
 #
 
 class Currency < ApplicationRecord
-  BTC_ASSET_ID = 'c6d0c728-2624-429b-8e0d-d9d19b6592fa'
-  JPYC_ASSET_ID = '0ff3f325-4f34-334d-b6c0-a3bd8850fc06'
-  PUSD_ASSET_ID = '31d2ea9c-95eb-3355-b65b-ba096853bc18'
-  XIN_ASSET_ID = 'c94ac88f-4671-3976-b60a-09064f1811e8'
-  ETH_ASSET_ID = '43d61dcd-e413-450d-80b8-101d5e903357'
+  BTC_ASSET_ID = "c6d0c728-2624-429b-8e0d-d9d19b6592fa"
+  JPYC_ASSET_ID = "0ff3f325-4f34-334d-b6c0-a3bd8850fc06"
+  PUSD_ASSET_ID = "31d2ea9c-95eb-3355-b65b-ba096853bc18"
+  XIN_ASSET_ID = "c94ac88f-4671-3976-b60a-09064f1811e8"
+  ETH_ASSET_ID = "43d61dcd-e413-450d-80b8-101d5e903357"
 
   store :raw, accessors: %i[name icon_url change_usd]
 
@@ -39,15 +39,15 @@ class Currency < ApplicationRecord
   has_many :payments, primary_key: :asset_id, foreign_key: :asset_id, dependent: :nullify, inverse_of: :currency
   has_many :transfers, primary_key: :asset_id, foreign_key: :asset_id, dependent: :nullify, inverse_of: :currency
 
-  belongs_to :chain, class_name: 'Currency', primary_key: :asset_id, optional: true, inverse_of: false
+  belongs_to :chain, class_name: "Currency", primary_key: :asset_id, optional: true, inverse_of: false
 
   scope :swappable, -> { where(asset_id: swappable_asset_ids).order(symbol: :asc) }
   scope :pricable, -> { where(asset_id: Article::SUPPORTED_ASSETS) }
   scope :btc, -> { find_by(asset_id: BTC_ASSET_ID) }
 
   def self.pando_lake_pairs
-    Rails.cache.fetch 'pando_lake_routes', expires_in: 5.seconds do
-      PandoLake.api.pairs['data']['pairs']
+    Rails.cache.fetch "pando_lake_routes", expires_in: 5.seconds do
+      PandoLake.api.pairs["data"]["pairs"]
     end
   rescue StandardError
     []
@@ -110,7 +110,7 @@ class Currency < ApplicationRecord
     if asset_id.present?
       self.raw =
         begin
-          QuillBot.api.asset(asset_id)['data']
+          QuillBot.api.asset(asset_id)["data"]
         rescue MixinBot::Error
           {}
         end
@@ -126,11 +126,11 @@ class Currency < ApplicationRecord
     end
 
     assign_attributes(
-      symbol: raw['symbol'],
-      chain_id: raw['chain_id'],
-      asset_id: raw['asset_id'],
-      price_usd: raw['price_usd'],
-      price_btc: raw['price_btc']
+      symbol: raw["symbol"],
+      chain_id: raw["chain_id"],
+      asset_id: raw["asset_id"],
+      price_usd: raw["price_usd"],
+      price_btc: raw["price_btc"]
     )
   end
 end

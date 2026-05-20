@@ -3,25 +3,25 @@
 class ArticlesController < ApplicationController
   before_action :authenticate_user!, only: %i[new edit update update_content]
   before_action :load_article, only: %i[edit update]
-  layout 'editor', only: %i[new edit]
+  layout "editor", only: %i[new edit]
 
   def index
     @query = params[:query]
-    @filter = params[:filter] || 'default'
+    @filter = params[:filter] || "default"
     @time_range = params[:time_range]
-    @time_range ||= 'week' if @filter == 'revenue'
+    @time_range ||= "week" if @filter == "revenue"
     @tag = Tag.find_by name: params[:tag].to_s.strip
 
     articles = ArticleSearchService.call(params.merge(current_user:, locale: current_locale))
 
     @pagy, @articles = pagy_countless articles.with_attached_cover
-    @active_page = 'home'
+    @active_page = "home"
 
     respond_to do |format|
       format.html
       format.turbo_stream
       format.rss do
-        articles = ArticleSearchService.call(filter: 'lately')
+        articles = ArticleSearchService.call(filter: "lately")
 
         @pagy, @articles = pagy_countless articles.with_attached_cover
         render layout: false
@@ -37,7 +37,7 @@ class ArticlesController < ApplicationController
       @page_image = @article.thumb_url
       @page_description = @article.intro
 
-      impressionist @article, @article.authorized?(current_user) ? 'full' : 'partial'
+      impressionist @article, @article.authorized?(current_user) ? "full" : "partial"
     else
       redirect_back fallback_location: root_path
     end
@@ -57,7 +57,7 @@ class ArticlesController < ApplicationController
     if @article.save
       redirect_to edit_article_path(@article.uuid)
     else
-      render :new, status: :unprocessable_entity, layout: 'editor'
+      render :new, status: :unprocessable_entity, layout: "editor"
     end
   end
 
@@ -76,7 +76,7 @@ class ArticlesController < ApplicationController
   def share
     @article = Article.published.find_by uuid: params[:article_uuid]
     if @article.present?
-      impressionist @article, 'share'
+      impressionist @article, "share"
     else
       redirect_back fallback_location: root_path
     end

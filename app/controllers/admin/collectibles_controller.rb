@@ -3,9 +3,9 @@
 module Admin
   class CollectiblesController < Admin::BaseController
     def index
-      @state = params[:state] || 'all'
-      @source = params[:source] || 'all'
-      @order_by = params[:order_by] || 'updated_at_desc'
+      @state = params[:state] || "all"
+      @source = params[:source] || "all"
+      @order_by = params[:order_by] || "updated_at_desc"
 
       collectibles = Collectible.includes(:collection, :source)
 
@@ -13,7 +13,7 @@ module Admin
 
       collectibles =
         case @state
-        when 'all'
+        when "all"
           collectibles
         else
           collectibles.where(state: @state)
@@ -21,7 +21,7 @@ module Admin
 
       collectibles =
         case @source
-        when 'all'
+        when "all"
           collectibles
         else
           collectibles.where(source_type: @source)
@@ -29,9 +29,9 @@ module Admin
 
       collectibles =
         case @order_by
-        when 'updated_at_desc'
+        when "updated_at_desc"
           collectibles.order(updated_at: :desc)
-        when 'updated_at_asc'
+        when "updated_at_asc"
           collectibles.order(updated_at: :asc)
         end
 
@@ -42,7 +42,7 @@ module Admin
             collectible_name_cont_any: @query,
             collectible_collection_id_eq: @query,
             token_id_eq: @query
-          }.merge(m: 'or')
+          }.merge(m: "or")
         ).result
 
       @pagy, @collectibles = pagy_countless collectibles

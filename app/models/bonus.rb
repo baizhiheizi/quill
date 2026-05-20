@@ -64,7 +64,7 @@ class Bonus < ApplicationRecord
   end
 
   def price_tag
-    [format('%.8f', amount), currency.symbol].join(' ')
+    [ format("%.8f", amount), currency.symbol ].join(" ")
   end
 
   private

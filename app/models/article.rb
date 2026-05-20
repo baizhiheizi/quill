@@ -46,7 +46,7 @@ class Article < ApplicationRecord
   second_level_cache expires_in: 1.week
   is_impressionable
 
-  SUPPORTED_ASSETS = Settings.supported_assets || [Currency::BTC_ASSET_ID]
+  SUPPORTED_ASSETS = Settings.supported_assets || [ Currency::BTC_ASSET_ID ]
   AUTHOR_REVENUE_RATIO_DEFAULT = 0.5
   READERS_REVENUE_RATIO_DEFAULT = 0.4
   PLATFORM_REVENUE_RATIO_DEFAULT = 0.1
@@ -54,15 +54,15 @@ class Article < ApplicationRecord
   include AASM
   include Articles::Arweavable
 
-  belongs_to :author, class_name: 'User', inverse_of: :articles
+  belongs_to :author, class_name: "User", inverse_of: :articles
   belongs_to :currency, primary_key: :asset_id, foreign_key: :asset_id, inverse_of: :articles
   belongs_to :collection, primary_key: :uuid, inverse_of: :articles, optional: true
 
   has_many :orders, as: :item, dependent: :restrict_with_error
   has_many :pre_orders, as: :item, dependent: :restrict_with_error
-  has_many :buy_orders, -> { where(order_type: :buy_article) }, class_name: 'Order', as: :item, dependent: :restrict_with_error, inverse_of: false
-  has_many :reward_orders, -> { where(order_type: :reward_article) }, class_name: 'Order', as: :item, dependent: :restrict_with_error, inverse_of: false
-  has_many :cite_orders, -> { where(order_type: :cite_article) }, class_name: 'Order', as: :item, dependent: :restrict_with_error, inverse_of: false
+  has_many :buy_orders, -> { where(order_type: :buy_article) }, class_name: "Order", as: :item, dependent: :restrict_with_error, inverse_of: false
+  has_many :reward_orders, -> { where(order_type: :reward_article) }, class_name: "Order", as: :item, dependent: :restrict_with_error, inverse_of: false
+  has_many :cite_orders, -> { where(order_type: :cite_article) }, class_name: "Order", as: :item, dependent: :restrict_with_error, inverse_of: false
 
   has_many :readers, -> { distinct }, through: :orders, source: :buyer
   has_many :buyers, -> { distinct }, through: :buy_orders, source: :buyer
@@ -77,12 +77,12 @@ class Article < ApplicationRecord
   has_many :taggings, dependent: :nullify
   has_many :tags, through: :taggings, dependent: :restrict_with_error
 
-  has_many :snapshots, class_name: 'ArticleSnapshot', primary_key: :uuid, foreign_key: :article_uuid, inverse_of: :article, dependent: :destroy
+  has_many :snapshots, class_name: "ArticleSnapshot", primary_key: :uuid, foreign_key: :article_uuid, inverse_of: :article, dependent: :destroy
 
-  has_many :article_references, class_name: 'CiterReference', as: :citer, dependent: :destroy
-  has_many :references, through: :article_references, source: :reference, source_type: 'Article'
-  has_many :article_citers, class_name: 'CiterReference', as: :reference, dependent: :restrict_with_error
-  has_many :citers, through: :article_citers, source: :citer, source_type: 'Article'
+  has_many :article_references, class_name: "CiterReference", as: :citer, dependent: :destroy
+  has_many :references, through: :article_references, source: :reference, source_type: "Article"
+  has_many :article_citers, class_name: "CiterReference", as: :reference, dependent: :restrict_with_error
+  has_many :citers, through: :article_citers, source: :citer, source_type: "Article"
 
   has_many :arweave_transactions, primary_key: :uuid, foreign_key: :article_uuid, dependent: :restrict_with_exception, inverse_of: :article
 
@@ -90,9 +90,9 @@ class Article < ApplicationRecord
   has_one_attached :poster
   has_one_attached :cover
 
-  accepts_nested_attributes_for :article_references, reject_if: proc { |attributes| attributes['reference_id'].blank? || attributes['revenue_ratio'].blank? }, allow_destroy: true
+  accepts_nested_attributes_for :article_references, reject_if: proc { |attributes| attributes["reference_id"].blank? || attributes["revenue_ratio"].blank? }, allow_destroy: true
 
-  has_one :wallet, class_name: 'MixinNetworkUser', as: :owner, dependent: :nullify
+  has_one :wallet, class_name: "MixinNetworkUser", as: :owner, dependent: :nullify
 
   validates :asset_id, inclusion: { in: SUPPORTED_ASSETS }, if: :new_record?
   validates :uuid, presence: true, uniqueness: true
@@ -126,7 +126,7 @@ class Article < ApplicationRecord
 
   default_scope -> { includes(:currency, :tags, :author) }
   scope :without_blocked, -> { where.not(state: :blocked) }
-  scope :without_free, -> { where('price > ?', 0) }
+  scope :without_free, -> { where("price > ?", 0) }
   scope :only_free, -> { where(price: 0.0) }
   scope :only_drafted, -> { where(state: :drafted) }
   scope :only_published, -> { where(state: :published) }
@@ -137,11 +137,11 @@ class Article < ApplicationRecord
       .group(:id)
       .select(
         <<~SQL.squish
-          articles.*, 
+          articles.*,#{' '}
           (((SUM(orders.value_usd) * 10 + (articles.upvotes_count - articles.downvotes_count) * AVG(orders.value_usd) * 20 + articles.comments_count) / POW(((EXTRACT(EPOCH FROM (now()-articles.published_at)) / 3600)::integer + 1), 2))) AS popularity
         SQL
       )
-      .order('popularity DESC, published_at DESC')
+      .order("popularity DESC, published_at DESC")
   }
 
   aasm column: :state do
@@ -220,7 +220,7 @@ class Article < ApplicationRecord
   end
 
   def plain_text
-    @plain_text ||= ActionController::Base.helpers.strip_tags(MarkdownRenderService.call(content&.strip || ''))
+    @plain_text ||= ActionController::Base.helpers.strip_tags(MarkdownRenderService.call(content&.strip || ""))
   end
 
   def words_count
@@ -235,14 +235,14 @@ class Article < ApplicationRecord
   end
 
   def partial_content_as_html
-    return '' if free_content_ratio.zero?
+    return "" if free_content_ratio.zero?
 
     @partial_content_as_html ||= extract_html(content_as_html, (words_count * free_content_ratio).to_i)
   end
 
   def extract_html(text, length)
     count = 0
-    html = ''
+    html = ""
 
     Nokogiri::HTML.fragment(text).children.each do |child|
       if (length - count - child.text.size).positive?
@@ -271,11 +271,11 @@ class Article < ApplicationRecord
   end
 
   def author_revenue_usd
-    @author_revenue_usd ||= author_transfers.includes(:currency).sum('amount * currencies.price_usd')
+    @author_revenue_usd ||= author_transfers.includes(:currency).sum("amount * currencies.price_usd")
   end
 
   def reader_revenue_usd
-    @reader_revenue_usd ||= reader_transfers.includes(:currency).sum('amount * currencies.price_usd')
+    @reader_revenue_usd ||= reader_transfers.includes(:currency).sum("amount * currencies.price_usd")
   end
 
   def tag_names
@@ -401,7 +401,7 @@ class Article < ApplicationRecord
     urls = content.scan(%r{\(blob://.+\)})
     temp_content = content.dup
     urls.each do |url|
-      key = url.gsub(%r{\(blob://|\)}, '').split('/').first
+      key = url.gsub(%r{\(blob://|\)}, "").split("/").first
       blob = ActiveStorage::Blob.find_by(key:)
       next if blob.blank?
 
@@ -413,7 +413,7 @@ class Article < ApplicationRecord
 
   def update_attached_image_url_in_content
     content.scan(%r{\(/rails/active_storage/blobs/.+\)}).each_with_index do |url, index|
-      image = ActiveStorage::Blob.find_signed url.split('/')[4]
+      image = ActiveStorage::Blob.find_signed url.split("/")[4]
       image ||= images.blobs.order(created_at: :asc)&.[](index)
       next if image.blank?
 
@@ -425,15 +425,15 @@ class Article < ApplicationRecord
 
   def detected_locale
     if plain_text.to_s.size > 140
-      locales = [CLD.detect_language(intro)[:code], CLD.detect_language(plain_text)[:code]].uniq
+      locales = [ CLD.detect_language(intro)[:code], CLD.detect_language(plain_text)[:code] ].uniq
 
       if locales.size == 1
-        locales.first.split('-').first
+        locales.first.split("-").first
       else
-        locales.reject(&->(l) { l == 'en' }).last.split('-').first
+        locales.reject(&->(l) { l == "en" }).last.split("-").first
       end
     elsif author.present?
-      author.locale.split('-').first
+      author.locale.split("-").first
     end
   end
 
@@ -452,19 +452,19 @@ class Article < ApplicationRecord
       elsif free?
         Nokogiri::HTML
           .fragment(content_as_html)
-          .css('img')
-          .map(&->(img) { img.attr('src') })
+          .css("img")
+          .map(&->(img) { img.attr("src") })
           .find(&->(url) { URI::DEFAULT_PARSER.make_regexp.match?(url) })
       end
   end
 
   def cover_url
-    [Settings.storage.endpoint, cover.key].join('/') if cover.attached?
+    [ Settings.storage.endpoint, cover.key ].join("/") if cover.attached?
   end
 
   def poster_url
     if poster.attached?
-      [Settings.storage.endpoint, poster.key].join('/')
+      [ Settings.storage.endpoint, poster.key ].join("/")
     else
       generate_poster_async
       nil
@@ -485,12 +485,12 @@ class Article < ApplicationRecord
   end
 
   def qrcode_base64
-    ['data:image/png;base64, ',
+    [ "data:image/png;base64, ",
      Base64.encode64(
        RQRCode::QRCode.new(
          user_article_url(author, self)
        ).as_png(border_modules: 0).to_s
-     )].join
+     ) ].join
   end
 
   def fix_img_tag_in_content
@@ -547,22 +547,22 @@ class Article < ApplicationRecord
   def cannot_edit_frozen_attributes_once_published
     return if published_at.blank?
 
-    errors.add(:asset_id, 'cannot change') if asset_id_changed?
-    errors.add(:collection_id, 'cannot change') if collection_revenue_ratio.positive? && collection_id_changed?
-    errors.add(:collection_revenue_ratio, 'cannot change') if collection_revenue_ratio_changed?
+    errors.add(:asset_id, "cannot change") if asset_id_changed?
+    errors.add(:collection_id, "cannot change") if collection_revenue_ratio.positive? && collection_id_changed?
+    errors.add(:collection_revenue_ratio, "cannot change") if collection_revenue_ratio_changed?
   end
 
   def ensure_price_not_too_low
     return unless price_changed? || asset_id_changed?
 
-    errors.add(:price, '< $0.1') if price.positive? && price < currency.minimal_price_amount
+    errors.add(:price, "< $0.1") if price.positive? && price < currency.minimal_price_amount
   end
 
   def ensure_revenue_ratios_sum_to_one
-    errors.add(:author_revenue_ratio, ' incorrect') unless (revenue_ratios_sum - 1.0).abs < Float::EPSILON
+    errors.add(:author_revenue_ratio, " incorrect") unless (revenue_ratios_sum - 1.0).abs < Float::EPSILON
   end
 
   def ensure_references_ratios_correct
-    errors.add(:references_revenue_ratio, ' incorrect') unless references_revenue_ratio.to_d == article_references.reject(&:_destroy).sum(&:revenue_ratio).to_d
+    errors.add(:references_revenue_ratio, " incorrect") unless references_revenue_ratio.to_d == article_references.reject(&:_destroy).sum(&:revenue_ratio).to_d
   end
 end

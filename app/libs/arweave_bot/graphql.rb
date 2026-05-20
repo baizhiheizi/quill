@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
-require 'graphql/client/http'
+require "graphql/client/http"
 
 module ArweaveBot
   class Graphql
-    http = GraphQL::Client::HTTP.new('https://arweave.net/graphql')
+    http = GraphQL::Client::HTTP.new("https://arweave.net/graphql")
     Schema = GraphQL::Client.load_schema(http)
     Client = GraphQL::Client.new(schema: Schema, execute: http)
 
@@ -12,9 +12,9 @@ module ArweaveBot
       query($contributor: String!, $after: String, $first: Int) {
         transactions(
           tags: [
-            { name: "Content-Type", values: "application/json" }
-            { name: "App-Name", values: ["MirrorXYZ"] }
-            { name: "Contributor", values: [$contributor] }
+            { name: "Content-Type", values: ["application/json"], op: EQ, match: EXACT }
+            { name: "App-Name", values: ["MirrorXYZ"], op: EQ, match: EXACT }
+            { name: "Contributor", values: [$contributor], op: EQ, match: EXACT }
           ]
           after: $after
           first: $first
@@ -35,14 +35,14 @@ module ArweaveBot
         }
       }
     GRAPHQL
-    def mirror_transactions(contributor, after: '', first: 100)
+    def mirror_transactions(contributor, after: "", first: 100)
       Client.query(MirrorTransactionsQuery, variables: { contributor:, after:, first: })
     end
 
     def all_mirror_transactions(contributor)
       txs = []
       has_next_page = true
-      after = ''
+      after = ""
 
       while has_next_page
         r = mirror_transactions(contributor, after:).data.transactions
@@ -50,7 +50,7 @@ module ArweaveBot
           puts tx
           txs << {
             id: tx.node.id,
-            digest: tx.node.tags.find(&->(tag) { tag.name == 'Original-Content-Digest' }).value
+            digest: tx.node.tags.find(&->(tag) { tag.name == "Original-Content-Digest" }).value
           }
         end
         after = r.edges.last&.cursor

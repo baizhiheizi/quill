@@ -27,16 +27,16 @@
 class Collection < ApplicationRecord
   is_impressionable
 
-  SUPPORTED_ASSETS = Settings.supported_assets || [Currency::BTC_ASSET_ID]
+  SUPPORTED_ASSETS = Settings.supported_assets || [ Currency::BTC_ASSET_ID ]
   MINIMUM_PRICE_USD = 6.99
-  DEFAULT_SPLIT = '0.1'
+  DEFAULT_SPLIT = "0.1"
 
   include AASM
 
   has_one_attached :cover
 
   belongs_to :currency, primary_key: :asset_id, foreign_key: :asset_id, inverse_of: false
-  belongs_to :author, class_name: 'User', primary_key: :mixin_uuid
+  belongs_to :author, class_name: "User", primary_key: :mixin_uuid
 
   has_one :nft_collection, primary_key: :uuid, foreign_key: :uuid, dependent: :restrict_with_exception, inverse_of: :collection
 
@@ -45,7 +45,7 @@ class Collection < ApplicationRecord
   has_many :validatable_collections, through: :collectings, source: :nft_collection
   has_many :articles, primary_key: :uuid, dependent: :restrict_with_exception
   has_many :orders, as: :item, dependent: :restrict_with_exception
-  has_many :buy_orders, -> { where(order_type: :buy_collection) }, class_name: 'Order', as: :item, dependent: :restrict_with_exception, inverse_of: :item
+  has_many :buy_orders, -> { where(order_type: :buy_collection) }, class_name: "Order", as: :item, dependent: :restrict_with_exception, inverse_of: :item
   has_many :subscribers, -> { distinct }, through: :buy_orders, source: :buyer
 
   validates :name, presence: true
@@ -89,13 +89,13 @@ class Collection < ApplicationRecord
       symbol:,
       description:,
       split: DEFAULT_SPLIT,
-      external_url: 'https://quill.im',
+      external_url: "https://quill.im",
       icon_url: cover_url
     )
-    update! uuid: r['id'] if r['id'].present?
+    update! uuid: r["id"] if r["id"].present?
 
     ActiveRecord::Base.transaction do
-      NftCollection.create! uuid: r['id'], raw: r
+      NftCollection.create! uuid: r["id"], raw: r
       reload.list!
     end
   end
@@ -119,7 +119,7 @@ class Collection < ApplicationRecord
   def cover_url
     return unless cover.attached?
 
-    [Settings.storage.endpoint, cover.key].join('/')
+    [ Settings.storage.endpoint, cover.key ].join("/")
   end
 
   def generated_cover_url
@@ -141,12 +141,12 @@ class Collection < ApplicationRecord
   end
 
   def qrcode_base64
-    ['data:image/png;base64, ',
+    [ "data:image/png;base64, ",
      Base64.encode64(
        RQRCode::QRCode.new(
          collection_url(uuid)
        ).as_png(border_modules: 0).to_s
-     )].join
+     ) ].join
   end
 
   def mintable_order_from(user = nil)
@@ -166,7 +166,7 @@ class Collection < ApplicationRecord
     order = orders.find_by buyer: user
     return true if order.present? && (order.collectible.blank? || order.collectible.pending?)
 
-    (validatable_collections.pluck(:uuid) + [uuid]).intersect?(user.owning_collection_ids)
+    (validatable_collections.pluck(:uuid) + [ uuid ]).intersect?(user.owning_collection_ids)
   end
 
   def notify_subscribers_async
@@ -205,9 +205,9 @@ class Collection < ApplicationRecord
   def lock_attributes_once_listed
     return if uuid.blank?
 
-    errors.add(:name, 'cannot change') if name_changed?
-    errors.add(:symbol, 'cannot change') if symbol_changed?
-    errors.add(:revenue_ratio, 'cannot change') if revenue_ratio_changed?
+    errors.add(:name, "cannot change") if name_changed?
+    errors.add(:symbol, "cannot change") if symbol_changed?
+    errors.add(:revenue_ratio, "cannot change") if revenue_ratio_changed?
   end
 
   def ensure_price_not_too_low

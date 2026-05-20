@@ -8,7 +8,7 @@ module Users::MVMQueriable
 
     @tokens_erc721 ||=
       Rails.cache.fetch "#{uid}_tokens_erc721", expires_in: 3.minutes do
-        MVM.scan.tokens(uid, type: 'ERC-721')
+        MVM.scan.tokens(uid, type: "ERC-721")
       end
   end
 
@@ -17,7 +17,7 @@ module Users::MVMQueriable
 
     @tokens_erc20 ||=
       Rails.cache.fetch "#{uid}_tokens_erc20", expires_in: 3.minutes do
-        MVM.scan.tokens(uid, type: 'ERC-20')
+        MVM.scan.tokens(uid, type: "ERC-20")
       end
   end
 
@@ -29,7 +29,7 @@ module Users::MVMQueriable
         TokenAsset.new(
           owner: self,
           currency:,
-          token: tokens_erc20.find(&->(token) { token['contractAddress'] == currency.mvm_contract_address })
+          token: tokens_erc20.find(&->(token) { token["contractAddress"] == currency.mvm_contract_address })
         )
       end
 

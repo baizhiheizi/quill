@@ -1,7 +1,8 @@
 # syntax = docker/dockerfile:1
 
 # Make sure RUBY_VERSION matches the Ruby version in .ruby-version and Gemfile
-ARG RUBY_VERSION=3.4.2
+# 4.0.5-slim is not published yet; use latest available patch image
+ARG RUBY_VERSION=4.0.4
 FROM ruby:$RUBY_VERSION-slim as base
 
 LABEL fly_launch_runtime="rails"
@@ -36,7 +37,7 @@ FROM base as build
 
 # Install packages needed to build gems and node modules
 RUN apt-get update -qq && \
-    apt-get install --no-install-recommends -y build-essential git libpq-dev libvips node-gyp pkg-config python-is-python3 automake libtool libffi-dev libssl-dev libgmp-dev python3-dev libsodium-dev libyaml-dev
+    apt-get install --no-install-recommends -y build-essential git libpq-dev libvips node-gyp pkg-config python-is-python3 automake libtool libffi-dev libssl-dev libgmp-dev python3-dev libsodium-dev libyaml-dev rustc cargo clang libclang-dev
 
 # Install yarn
 ARG YARN_VERSION=1.22.19
@@ -62,8 +63,8 @@ COPY --link . .
 # Precompile bootsnap code for faster boot times
 RUN bundle exec bootsnap precompile app/ lib/
 
-# Precompiling assets for production without requiring secret RAILS_MASTER_KEY
-RUN SECRET_KEY_BASE=DUMMY ./bin/rails assets:precompile
+# Precompiling assets for production (test credentials are committed for CI/Docker builds)
+RUN SECRET_KEY_BASE=DUMMY RAILS_ENV=test RAILS_MASTER_KEY="$(cat config/credentials/test.key)" ./bin/rails assets:precompile
 
 
 # Final stage for app image

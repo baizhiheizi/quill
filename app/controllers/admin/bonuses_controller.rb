@@ -7,21 +7,21 @@ module Admin
 
       bonuses = bonuses.where(user_id: params[:user_id]) if params[:user_id].present?
 
-      @state = params[:state] || 'all'
+      @state = params[:state] || "all"
       bonuses =
         case @state
-        when 'all'
+        when "all"
           bonuses
         else
           bonuses.where(state: @state)
         end
 
-      @order_by = params[:order_by] || 'created_at_desc'
+      @order_by = params[:order_by] || "created_at_desc"
       bonuses =
         case @order_by
-        when 'created_at_desc'
+        when "created_at_desc"
           bonuses.order(created_at: :desc)
-        when 'created_at_asc'
+        when "created_at_asc"
           bonuses.order(created_at: :asc)
         end
 
@@ -33,7 +33,7 @@ module Admin
             description_cont_all: @query,
             trace_id_eq: @query,
             asset_id_eq: @query
-          }.merge(m: 'or')
+          }.merge(m: "or")
         ).result
 
       @pagy, @bonuses = pagy_countless bonuses

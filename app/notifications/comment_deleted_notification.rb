@@ -2,7 +2,7 @@
 
 class CommentDeletedNotification < ApplicationNotification
   deliver_by :database
-  deliver_by :mixin_bot, class: 'DeliveryMethods::MixinBot', category: 'PLAIN_TEXT', if: :may_notify_via_mixin_bot?
+  deliver_by :mixin_bot, class: "DeliveryMethods::MixinBot", category: "PLAIN_TEXT", if: :may_notify_via_mixin_bot?
 
   param :comment
 
@@ -13,7 +13,7 @@ class CommentDeletedNotification < ApplicationNotification
   end
 
   def message
-    [params[:comment].commentable.title, t('deleted')].join(' ')
+    [ params[:comment].commentable.title, t("deleted") ].join(" ")
   end
 
   def url

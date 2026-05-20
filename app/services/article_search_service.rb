@@ -49,7 +49,7 @@ class ArticleSearchService
       tags_name_i_cont: @query
     }
 
-    @articles = @articles.ransack(q_ransack.merge(m: 'or')).result(distinct: true) if @query.present?
+    @articles = @articles.ransack(q_ransack.merge(m: "or")).result(distinct: true) if @query.present?
 
     self
   end
@@ -60,7 +60,7 @@ class ArticleSearchService
     return self if @locale.blank?
     return self if @filter.in? %w[subscribed bought]
 
-    @articles = @articles.where(locale: @locale.to_s.split('-').first)
+    @articles = @articles.where(locale: @locale.to_s.split("-").first)
 
     self
   end
@@ -68,11 +68,11 @@ class ArticleSearchService
   def filter
     @articles =
       case @filter
-      when 'lately'
+      when "lately"
         @articles.published.order(published_at: :desc)
-      when 'revenue'
+      when "revenue"
         @articles.published.order_by_revenue_usd
-      when 'subscribed'
+      when "subscribed"
         @articles.published
                  .where(author_id: @current_user&.subscribe_user_ids)
                  .or(
@@ -80,7 +80,7 @@ class ArticleSearchService
                      .published
                      .where(collection_id: @current_user&.owning_collection_ids || [])
                  ).order(published_at: :desc)
-      when 'bought'
+      when "bought"
         @articles.where(id: @current_user&.bought_articles&.ids).order(published_at: :desc)
       else
         @articles.published.order_by_popularity
@@ -92,11 +92,11 @@ class ArticleSearchService
   def select_in_time_range
     @articles =
       case @time_range
-      when 'week'
+      when "week"
         @articles.where(published_at: (1.week.ago)...)
-      when 'month'
+      when "month"
         @articles.where(published_at: (1.month.ago)...)
-      when 'year'
+      when "year"
         @articles.where(published_at: (1.year.ago)...)
       else
         @articles
@@ -106,7 +106,7 @@ class ArticleSearchService
   end
 
   def filter_block_by_authors
-    return self if @filter == 'bought'
+    return self if @filter == "bought"
 
     @articles = @articles.where.not(author_id: @current_user.block_by_user_ids) if @current_user.present?
 
@@ -114,7 +114,7 @@ class ArticleSearchService
   end
 
   def filter_block_authors
-    return self if @filter == 'bought'
+    return self if @filter == "bought"
 
     @articles = @articles.where.not(author_id: @current_user.block_user_ids) if @current_user.present?
 

@@ -42,7 +42,7 @@
 #  index_articles_on_uuid           (uuid) UNIQUE
 #
 
-require 'test_helper'
+require "test_helper"
 
 class ArticleTest < ActiveSupport::TestCase
   # test "the truth" do

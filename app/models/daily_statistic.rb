@@ -44,8 +44,8 @@ class DailyStatistic < Statistic
       new_payments_count: Order.completed.where(order_type: %i[buy_article reward_article buy_collection], created_at: date.beginning_of_day...date.end_of_day).count,
       new_payers_count: Order.completed.where(order_type: %i[buy_article reward_article buy_collection], created_at: date.beginning_of_day...date.end_of_day).pluck(:buyer_id).uniq.count,
       new_articles_count: Article.where(published_at: date.beginning_of_day...date.end_of_day).count,
-      author_revenue_total_in_usd: Transfer.joins(:currency).where(transfer_type: :author_revenue, created_at: date.beginning_of_day...date.end_of_day).sum('amount * currencies.price_usd').to_f.round(4),
-      reader_revenue_total_in_usd: Transfer.joins(:currency).where(transfer_type: :reader_revenue, created_at: date.beginning_of_day...date.end_of_day).sum('amount * currencies.price_usd').to_f.round(4)
+      author_revenue_total_in_usd: Transfer.joins(:currency).where(transfer_type: :author_revenue, created_at: date.beginning_of_day...date.end_of_day).sum("amount * currencies.price_usd").to_f.round(4),
+      reader_revenue_total_in_usd: Transfer.joins(:currency).where(transfer_type: :reader_revenue, created_at: date.beginning_of_day...date.end_of_day).sum("amount * currencies.price_usd").to_f.round(4)
     }
   end
 

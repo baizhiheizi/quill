@@ -20,7 +20,7 @@
 #  index_user_authorizations_on_user_id           (user_id)
 #
 
-require 'test_helper'
+require "test_helper"
 
 class UserAuthorizationTest < ActiveSupport::TestCase
   # test "the truth" do

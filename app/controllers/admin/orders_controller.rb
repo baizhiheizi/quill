@@ -8,21 +8,21 @@ module Admin
       orders = orders.where(buyer_id: params[:buyer_id]) if params[:buyer_id].present?
       orders = orders.where(item_id: params[:item_id], item_type: params[:item_type]) if params[:item_id].present? && params[:item_type].present?
 
-      @state = params[:state] || 'all'
+      @state = params[:state] || "all"
       orders =
         case @state
-        when 'all'
+        when "all"
           orders
         else
           orders.where(state: @state)
         end
 
-      @order_by = params[:order_by] || 'created_at_desc'
+      @order_by = params[:order_by] || "created_at_desc"
       orders =
         case @order_by
-        when 'created_at_desc'
+        when "created_at_desc"
           orders.order(created_at: :desc)
-        when 'created_at_asc'
+        when "created_at_asc"
           orders.order(created_at: :asc)
         end
 
@@ -34,7 +34,7 @@ module Admin
             buyer_id_eq: @query,
             trace_id_eq: @query,
             asset_id_eq: @query
-          }.merge(m: 'or')
+          }.merge(m: "or")
         ).result
 
       @pagy, @orders = pagy_countless orders

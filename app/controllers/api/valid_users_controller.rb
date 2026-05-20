@@ -7,7 +7,7 @@ class API::ValidUsersController < API::BaseController
     approved =
       if user.blank?
         false
-      elsif params[:type] == 'recent'
+      elsif params[:type] == "recent"
         user.payments.where(state: %i[paid completed], created_at: 1.week.ago...).sum(:amount).positive? || user.articles.only_published.where(published_at: 1.week.ago...).count.positive?
       else
         user.payments.where(state: %i[paid completed]).sum(:amount).positive? || user.articles.only_published.count.positive?

@@ -70,13 +70,13 @@ class MixinMessage < ApplicationRecord
   def setup_attributes
     return unless new_record?
 
-    data = raw['data']
+    data = raw["data"]
 
-    self.action            = raw['action']
-    self.message_id        = data['message_id']
-    self.category          = data['category']
-    self.conversation_id   = data['conversation_id']
-    self.user_id           = data['user_id']
-    self.content           = data['data']
+    self.action            = raw["action"]
+    self.message_id        = data["message_id"]
+    self.category          = data["category"]
+    self.conversation_id   = data["conversation_id"]
+    self.user_id           = data["user_id"]
+    self.content           = data["data"]
   end
 end

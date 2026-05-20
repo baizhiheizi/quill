@@ -53,7 +53,7 @@ class API::BaseController < ActionController::API
   end
 
   def current_access_token
-    @current_access_token ||= AccessToken.find_by(value: request.env['HTTP_X_ACCESS_TOKEN'])
+    @current_access_token ||= AccessToken.find_by(value: request.env["HTTP_X_ACCESS_TOKEN"])
   end
 
   def current_user

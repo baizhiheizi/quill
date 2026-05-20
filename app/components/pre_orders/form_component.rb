@@ -9,9 +9,9 @@ class PreOrders::FormComponent < ApplicationComponent
     @article = pre_order.item
     @price =
       case pre_order.order_type
-      when 'reward_article'
+      when "reward_article"
         @article.currency.minimal_reward_amount
-      when 'buy_article'
+      when "buy_article"
         @article.price
       end
   end

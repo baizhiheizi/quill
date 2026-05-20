@@ -19,7 +19,7 @@
 #  index_non_fungible_outputs_on_token_id   (token_id)
 #  index_non_fungible_outputs_on_user_id    (user_id)
 #
-require 'test_helper'
+require "test_helper"
 
 class NonFungibleOutputTest < ActiveSupport::TestCase
   # test "the truth" do

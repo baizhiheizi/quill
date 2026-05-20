@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Orders::Mintable
-  DEFAULT_ROYALTY = '0.05'
+  DEFAULT_ROYALTY = "0.05"
 
   def may_mint?
     return false if collectible.present?
@@ -28,7 +28,7 @@ module Orders::Mintable
       TridentAssistant::Utils::Metadata.new(
         creator: {
           id: QuillBot.api.client_id,
-          name: 'Quill',
+          name: "Quill",
           royalty: DEFAULT_ROYALTY
         },
         collection: {
@@ -58,18 +58,18 @@ module Orders::Mintable
         },
         checksum: {
           fields: [
-            'creator.id',
-            'creator.royalty',
-            'collection.id',
-            'collection.name',
-            'collection.symbol',
-            'collection.split',
-            'token.id',
-            'token.name',
-            'token.media.hash',
-            'token.attributes.author'
+            "creator.id",
+            "creator.royalty",
+            "collection.id",
+            "collection.name",
+            "collection.symbol",
+            "collection.split",
+            "token.id",
+            "token.name",
+            "token.media.hash",
+            "token.attributes.author"
           ],
-          algorithm: 'sha256'
+          algorithm: "sha256"
         }
       )
 

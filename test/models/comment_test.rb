@@ -24,7 +24,7 @@
 #  index_comments_on_quote_comment_id                     (quote_comment_id)
 #
 
-require 'test_helper'
+require "test_helper"
 
 class CommentTest < ActiveSupport::TestCase
   # test "the truth" do

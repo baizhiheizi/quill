@@ -28,15 +28,15 @@ module Users::Statable
   end
 
   def author_revenue_total_usd
-    @author_revenue_total_usd ||= transfers.joins(:currency).where(transfer_type: :author_revenue).sum('amount * currencies.price_usd').to_f
+    @author_revenue_total_usd ||= transfers.joins(:currency).where(transfer_type: :author_revenue).sum("amount * currencies.price_usd").to_f
   end
 
   def reader_revenue_total_usd
-    @reader_revenue_total_usd ||= transfers.joins(:currency).where(transfer_type: :reader_revenue).sum('amount * currencies.price_usd').to_f
+    @reader_revenue_total_usd ||= transfers.joins(:currency).where(transfer_type: :reader_revenue).sum("amount * currencies.price_usd").to_f
   end
 
   def revenue_total_usd
-    @revenue_total_usd ||= transfers.joins(:currency).where(transfer_type: %i[author_revenue reader_revenue]).sum('amount * currencies.price_usd').to_f
+    @revenue_total_usd ||= transfers.joins(:currency).where(transfer_type: %i[author_revenue reader_revenue]).sum("amount * currencies.price_usd").to_f
   end
 
   def validated?
@@ -64,15 +64,15 @@ module Users::Statable
   end
 
   def fennec?
-    authorization.provider == 'fennec'
+    authorization.provider == "fennec"
   end
 
   def messenger?
-    authorization.provider == 'mixin'
+    authorization.provider == "mixin"
   end
 
   def mvm_eth?
-    authorization.provider == 'mvm_eth'
+    authorization.provider == "mvm_eth"
   end
 
   def accessable?
@@ -90,14 +90,14 @@ module Users::Statable
   def claim_faucet!
     return unless may_claim_faucet?
 
-    deposit = authorization.mixin_api.snapshots['data'].find(&->(snapshot) { snapshot['type'] == 'deposit' })
+    deposit = authorization.mixin_api.snapshots["data"].find(&->(snapshot) { snapshot["type"] == "deposit" })
     return if deposit.blank?
 
-    deposit_asset = Currency.find_or_create_by asset_id: deposit['asset_id']
+    deposit_asset = Currency.find_or_create_by asset_id: deposit["asset_id"]
     bonus =
       bonuses.create!(
         asset_id: Currency::XIN_ASSET_ID,
-        title: 'Faucet',
+        title: "Faucet",
         description: "Desposited #{deposit['amount']} #{deposit_asset.symbol}",
         amount: Bonus::XIN_FAUCET_AMOUNT
       )
@@ -105,7 +105,7 @@ module Users::Statable
   end
 
   def faucet_bonus
-    @faucet_bonus = bonuses.find_by(asset_id: Currency::XIN_ASSET_ID, title: 'Faucet')
+    @faucet_bonus = bonuses.find_by(asset_id: Currency::XIN_ASSET_ID, title: "Faucet")
   end
 
   def twitter_connected?
@@ -114,9 +114,9 @@ module Users::Statable
 
   def twitter_profile_url
     Addressable::URI.new(
-      scheme: 'https',
-      host: 'twitter.com',
-      path: twitter_authorization&.raw&.[]('username')
+      scheme: "https",
+      host: "twitter.com",
+      path: twitter_authorization&.raw&.[]("username")
     ).to_s
   end
 end

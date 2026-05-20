@@ -26,60 +26,40 @@ jobs:
         image: redis
         ports: ['6379:6379']
         options: --entrypoint redis-server
+    env:
+      CI: true
+      RAILS_ENV: test
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
       - name: Setup Ruby
         uses: ruby/setup-ruby@v1
         with:
-          bundler-cache: true # runs 'bundle install' and caches installed gems automatically
+          ruby-version: .ruby-version
+          bundler-cache: true
 
-      - name: Setup Nodejs
-        uses: actions/setup-node@v1
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
-          node-version: '18.x'
+          node-version: '20'
+          cache: 'yarn'
 
-      - name: Get yarn cache directory path
-        id: yarn-cache-dir-path
-        run: echo "::set-output name=dir::$(yarn cache dir)"
+      - name: Install system dependencies
+        run: sudo apt-get -yyq install libpq-dev
 
-      - name: Use cached node_modules
-        uses: actions/cache@v1
-        id: yarn-cache # use this to check for `cache-hit` (`steps.yarn-cache.outputs.cache-hit != 'true'`)
-        with:
-          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-yarn-
+      - name: Install JavaScript dependencies
+        run: yarn install --frozen-lockfile
 
-      - name: Increasing the amount of inotify watchers
-        run: echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
+      - name: Lint Ruby
+        run: bin/rubocop
 
-      - name: Install Dependencies
-        run: |
-          sudo apt-get -yyq install libpq-dev
-          bundle config path vendor/bundle
-          gem install bundler
-          bundle install --jobs 4 --retry 3
-          yarn install
-
-      - name: Lint rb
-        run: |
-          bin/rubocop
-
-      - name: Lint js/ts
-        run: |
-          yarn lint-check
+      - name: Lint JavaScript
+        run: yarn lint-check
 
       - name: Test
-        env:
-          RAILS_ENV: test
         run: |
-          bundle exec rails db:setup
-          bundle exec rails test
+          bin/rails db:setup
+          bin/rails test
 
       - name: Zeitwerk
-        env:
-          RAILS_ENV: test
-        run: |
-          bin/rails zeitwerk:check
+        run: bin/rails zeitwerk:check

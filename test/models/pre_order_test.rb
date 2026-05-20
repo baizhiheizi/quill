@@ -26,7 +26,7 @@
 #  index_pre_orders_on_payee_id  (payee_id)
 #  index_pre_orders_on_payer_id  (payer_id)
 #
-require 'test_helper'
+require "test_helper"
 
 class PreOrderTest < ActiveSupport::TestCase
   # test "the truth" do
