@@ -144,7 +144,7 @@ class ArweaveTransaction < ApplicationRecord
     iv = encrypter.random_iv
     encrypter.iv = iv
     encrypter.key = key
-    cipher = encrypter.update(article.content) + encrypter.final
+    cipher = encrypter.update(article.content_body) + encrypter.final
 
     {
       content: {

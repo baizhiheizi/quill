@@ -100,7 +100,6 @@ class Article < ApplicationRecord
   validates :intro, length: { maximum: 140 }
   validates :title, presence: true, unless: :drafted?
   validates :intro, presence: true, unless: :drafted?
-  validates :content, presence: true, unless: :drafted?
   validates :price, presence: true, numericality: { greater_than_or_equal_to: 0.0 }
   validates :platform_revenue_ratio, presence: true, numericality: { equal_to: 0.1 }
   validates :readers_revenue_ratio, presence: true, numericality: { greater_than_or_equal_to: 0.1 }
@@ -470,6 +469,14 @@ class Article < ApplicationRecord
   end
 
   private
+
+  def drafted?
+    state == "drafted"
+  end
+
+  def validate_rich_text_content_presence?
+    !drafted?
+  end
 
   def setup_attributes
     return unless new_record?

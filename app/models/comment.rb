@@ -34,7 +34,6 @@ class Comment < ApplicationRecord
 
   has_many :comments, class_name: "Comment", foreign_key: :quote_comment_id, inverse_of: :quote_comment, dependent: :nullify
 
-  validates :content, presence: true
   validate :ensure_author_not_blocked, on: :create
 
   after_commit :notify_subscribers_async,
