@@ -356,6 +356,14 @@ class Article < ApplicationRecord
     asset_id.in?(Mixpay.api.settlement_asset_ids)
   end
 
+  def self.ransackable_attributes(_auth_object = nil)
+    %w[title intro content uuid id state locale published_at] + _ransackers.keys
+  end
+
+  def self.ransackable_associations(_auth_object = nil)
+    %w[author tags currency]
+  end
+
   private
 
   def drafted?

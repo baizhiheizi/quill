@@ -5,7 +5,7 @@
         <div data-controller="eth-wallet" class="flex justify-center mb-2 hidden sm:block">
           <a data-eth-wallet-target="loginButton" 
             data-action="eth-wallet#login" 
-            data-eth-wallet-provier-param="MetaMask"
+            data-eth-wallet-provider-param="MetaMask"
             href="https://metamask.io"
             target="_blank"
             class="btn btn-soft btn-primary relative w-full justify-center text-lg">
@@ -19,7 +19,7 @@
         <div data-controller="eth-wallet" class="flex justify-center mb-2">
           <a data-metamask-target="loginButton" 
             data-action="eth-wallet#login" 
-            data-eth-wallet-provier-param="WalletConnect"
+            data-eth-wallet-provider-param="WalletConnect"
             href="https://walletconnect.com"
             target="_blank"
             class="btn btn-soft btn-primary relative w-full justify-center text-lg">
@@ -33,7 +33,7 @@
         <div data-controller="eth-wallet" class="flex justify-center mb-2">
           <button data-eth-wallet-target="loginButton" 
             data-action="eth-wallet#login" 
-            data-eth-wallet-provier-param="Coinbase"
+            data-eth-wallet-provider-param="Coinbase"
             class="btn btn-soft btn-primary relative w-full justify-center text-lg">
             <div class="w-8 h-8 flex absolute left-4">
               <%= image_tag 'coinbase.svg', class: 'w-full h-auto' %>

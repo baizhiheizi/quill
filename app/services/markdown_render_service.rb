@@ -3,28 +3,6 @@
 class MarkdownRenderService
   IFRAME_SRC_WHITE_LIST_REGEX = [ %r{\Ahttps://(www.)?youtube\.com/\S+\z} ].freeze
 
-  class HTMLWithTocRender < Redcarpet::Render::HTML
-    def preprocess(document)
-      @document = document
-    end
-
-    def paragraph(content)
-      if [ "[TOC]", "{:toc}" ].include?(content)
-        toc_render = Redcarpet::Render::HTML_TOC.new(nesting_level: 4)
-        parser     = Redcarpet::Markdown.new(toc_render)
-        parser.render @document
-      else
-        render = Redcarpet::Render::HTML.new(
-          with_toc_data: true,
-          hard_wrap: true,
-          prettify: true
-        )
-        parser = Redcarpet::Markdown.new render
-        parser.render content
-      end
-    end
-  end
-
   def initialize(content, **kargs)
     @content = content.to_s
     @type = kargs[:type] || :default
@@ -35,25 +13,6 @@ class MarkdownRenderService
   end
 
   def call
-    # @html = Redcarpet::Markdown.new(
-    #   HTMLWithTocRender.new(
-    #     with_toc_data: true,
-    #     hard_wrap: true,
-    #     prettify: true
-    #   ),
-    #   autolink: true,
-    #   disable_indented_code_blocks: true,
-    #   tables: true,
-    #   fenced_code_blocks: true,
-    #   space_after_headers: true,
-    #   lax_spacing: false,
-    #   quote: true,
-    #   underline: true,
-    #   highlight: true,
-    #   footnotes: true,
-    #   strikethrough: true
-    # ).render @content.to_s
-
     @html = Kramdown::Document.new(@content, input: "GFM").to_html
 
     case @type

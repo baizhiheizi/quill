@@ -23,7 +23,9 @@ module Quill
 
     config.session_store :cookie_store, expire_after: 3.days, key: "_quill_sessions", domain: :all, httponly: true
 
-    config.action_view.image_loading = "lazy"
+    config.action_controller.action_on_path_relative_redirect = :raise
+    config.active_record.raise_on_missing_required_finder_order_columns = true
+    config.action_view.remove_hidden_field_autocomplete = true
 
     config.action_mailer.delivery_method = :mailjet
 

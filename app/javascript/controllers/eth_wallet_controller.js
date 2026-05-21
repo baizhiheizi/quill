@@ -16,8 +16,8 @@ export default class extends Controller {
       }
     }
 
-    const { provier } = event.params;
-    window.Wallet = new EthWallet(provier, {
+    const { provider } = event.params;
+    window.Wallet = new EthWallet(provider, {
       name: 'Quill',
       logoUrl: `${location.href}/logo.svg`,
       wcProjectId: WALLET_CONNECT_PROJECT_ID,

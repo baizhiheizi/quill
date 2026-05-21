@@ -234,4 +234,12 @@ class User < ApplicationRecord
       "MVMPreOrder"
     end
   end
+
+  def self.ransackable_attributes(_auth_object = nil)
+    %w[name mixin_id id uid email locale]
+  end
+
+  def self.ransackable_associations(_auth_object = nil)
+    %w[authorization articles]
+  end
 end
