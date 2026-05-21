@@ -5,7 +5,7 @@
   </div>
 
   <% if @token_assets.blank? %>
-    <%= render EmptyComponent.new text: t('no_record') %>
+    <%= render "shared/empty", text: t('no_record') %>
   <% else %>
     <%= render partial: "dashboard/assets/token", collection: @token_assets, as: :token_asset %>
 

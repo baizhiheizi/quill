@@ -48,11 +48,11 @@
 
 <div class="flex items-center justify-between mb-4 text-sm xl:text-base opacity-75">
   <% if article.published_at.present? %>
-    <%= render TimeFormatComponent.new datetime: article.published_at.utc.rfc3339 do %>
+    <%= render_time_format datetime: article.published_at.utc.rfc3339 do %>
       <%= article.published_at.strftime("%Y-%m-%d %H:%M") %>
     <% end %>
   <% else %>
-    <%= render TimeFormatComponent.new datetime: article.updated_at.utc.rfc3339 do %>
+    <%= render_time_format datetime: article.updated_at.utc.rfc3339 do %>
       <%= article.updated_at.strftime("%Y-%m-%d %H:%M") %>
     <% end %>
   <% end %>

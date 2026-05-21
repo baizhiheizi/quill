@@ -1,0 +1,7 @@
+<% format ||= "long" %>
+<span class="<%= local_assigns[:class] %>" 
+      data-controller="time-format-component"
+      data-time-format-component-format-value="<%= format %>"
+      data-time-format-component-datetime-value="<%= datetime %>">
+  <%= content %>
+</span>

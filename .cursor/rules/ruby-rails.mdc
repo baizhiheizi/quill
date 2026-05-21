@@ -18,7 +18,7 @@ Follow `rubocop-rails-omakase` (see `.rubocop.yml`). Run `bin/rubocop` before fi
 - **Models**: use AASM for state machines; `restrict_with_error` on important associations; keep schema annotations when editing models
 - **Services**: prefer small service classes with `.call` (see `ArticleSearchService`)
 - **Jobs**: inherit `ApplicationJob`; namespace by domain (`Orders::`, `Articles::`, `Transfers::`)
-- **Components**: inherit `ApplicationComponent`; call `super()` in `initialize`
+- **Views**: partials in `app/views/`; shared UI helpers in `UiHelper`
 
 ## Avoid
 

@@ -1,7 +1,7 @@
 <%= turbo_stream.append "my_#{@tab}_articles_list" do %>
   <% case @tab %>
   <% when 'bought' %>
-    <%= render Articles::CardComponent.with_collection(@articles) %>
+    <%= render partial: "articles/card", collection: @articles, as: :article %>
   <% when 'published' %>
     <%= render partial: "dashboard/articles/published_article", collection: @articles, as: :article %>
   <% when 'drafted' %>

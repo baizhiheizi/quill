@@ -4,15 +4,15 @@
       <%= image_tag 'logo-light.svg', class: 'h-12 w-auto block' %>
       <div class="flex items-center space-x-4">
         <%= link_to t('start_reading'), articles_path, class: 'capitalize' %>
-        <%= render DropdownComponent.new class: '' do |c| %>
-          <% c.with_button do %>
-            <div class='flex items-center space-x-1 cursor-pointer'>
-              <span class="text-sm opacity-75">
-                <%= current_locale.to_s.split('-').last.upcase %>
-              </span>
-              <%= inline_svg_tag 'icons/chevron-down.svg', class: "w-3 h-3" %>
-            </div>
-          <% end %>
+        <% dropdown_button = capture do %>
+          <div class='flex items-center space-x-1 cursor-pointer'>
+            <span class="text-sm opacity-75">
+              <%= current_locale.to_s.split('-').last.upcase %>
+            </span>
+            <%= inline_svg_tag 'icons/chevron-down.svg', class: "w-3 h-3" %>
+          </div>
+        <% end %>
+        <%= render_dropdown class: '', button: dropdown_button do %>
           <div class="text-[#222222] dark:text-white dark:text-opacity-80">
             <%= link_to 'English', '/en', class: "block py-2 px-4" %>
             <%= link_to '中文', '/zh-CN', class: "block py-2 px-4" %>

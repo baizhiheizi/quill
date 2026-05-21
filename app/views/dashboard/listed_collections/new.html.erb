@@ -1,5 +1,5 @@
 <%= turbo_frame_tag 'modal' do %>
-  <%= render ModalComponent.new title: t('list_collection') do %>
+  <%= render_modal title: t('list_collection') do %>
     <div class="mb-8">
       <%= t('list_collection_from_drafted_tips') if @collection.drafted? %>
       <%= t('list_collection_from_hidden_tips') if @collection.hidden? %>

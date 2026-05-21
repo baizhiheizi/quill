@@ -21,7 +21,7 @@
 </div>
 <div data-controller="infinite-scroll">
   <% if @notifications.blank? %>
-    <%= render EmptyComponent.new text: t('no_record') %>
+    <%= render "shared/empty", text: t('no_record') %>
   <% else %>
     <div id="<%= dom_id current_user %>_notifications_list">
       <%= render partial: "dashboard/notifications/notification", collection: @notifications, as: :notification %>

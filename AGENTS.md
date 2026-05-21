@@ -4,7 +4,7 @@
 
 ## Project Overview
 
-Quill is a Web3 paid-publishing platform ([quill.im](https://quill.im/)) where authors publish priced articles and readers pay to access them. Its distinguishing feature is **early reader rewards**: a share of each article's new revenue (default 40%) is distributed proportionally to readers who paid earlier. The stack is a Rails monolith with Hotwire (Turbo + Stimulus), ViewComponents, PostgreSQL, Redis, and background jobs via Good Job. Integrations include Mixin Network, MVM (Ethereum L2), MixPay, Arweave permanence, and wallet login (MetaMask, Coinbase, WalletConnect).
+Quill is a Web3 paid-publishing platform ([quill.im](https://quill.im/)) where authors publish priced articles and readers pay to access them. Its distinguishing feature is **early reader rewards**: a share of each article's new revenue (default 40%) is distributed proportionally to readers who paid earlier. The stack is a Rails monolith with Hotwire (Turbo + Stimulus), ERB partials, PostgreSQL, Redis, and background jobs via Good Job. Integrations include Mixin Network, MVM (Ethereum L2), MixPay, Arweave permanence, and wallet login (MetaMask, Coinbase, WalletConnect).
 
 ## Tech Stack
 
@@ -15,7 +15,6 @@ Quill is a Web3 paid-publishing platform ([quill.im](https://quill.im/)) where a
 | Database | PostgreSQL | — |
 | Cache / jobs | Redis, Solid Cache, Good Job | — |
 | Frontend | Turbo, Stimulus, Tailwind, esbuild | Node 20+, Bun 1.x |
-| Components | ViewComponent | 4.x |
 | Testing | Minitest, Capybara | minitest ~> 5.25 (Ruby 4 compat) |
 | Lint | RuboCop (rails-omakase), Prettier | — |
 | Deploy | Kamal, Docker | manual `workflow_dispatch` |
@@ -31,8 +30,8 @@ quill/
 ├── app/
 │   ├── controllers/     # Web, dashboard, admin, api, mvm, grover
 │   ├── models/          # ActiveRecord + concerns (AASM, Arweave, etc.)
-│   ├── components/      # ViewComponent UI (Ruby + optional templates)
-│   ├── views/           # ERB templates
+│   ├── views/           # ERB templates and partials
+│   ├── helpers/         # View helpers (UiHelper for modal/dropdown wrappers)
 │   ├── javascript/      # Stimulus controllers, MVM wallet TS, esbuild entry
 │   ├── jobs/            # Good Job background work (orders, transfers, arweave)
 │   ├── services/        # Query/command objects (e.g. ArticleSearchService)
@@ -43,7 +42,7 @@ quill/
 │   ├── settings/        # Config gem YAML (copy to settings.local.yml)
 │   └── credentials/     # Encrypted secrets (Mixin bot, encryption keys)
 ├── db/migrate/          # Schema migrations
-├── test/                # Minitest (models, controllers, jobs, components)
+├── test/                # Minitest (models, controllers, jobs, notifiers)
 └── .github/workflows/   # check.yml (CI), deploy.yml (Kamal)
 ```
 
@@ -100,7 +99,7 @@ bun run build:css
 - **Naming**: snake_case files/methods; PascalCase classes; `API::` namespace for API controllers
 - **Models**: schema annotations via `annotaterb`; AASM `state` columns; counter caches
 - **Services**: class with `.call` factory (see `ArticleSearchService`)
-- **Components**: inherit `ApplicationComponent`; ViewComponent 4 uses explicit `initialize(*_args, **_kwargs)` in base
+- **Views**: reusable UI in `app/views/**/_*.html.erb` partials; block/slot patterns via `UiHelper` (`render_modal`, `render_dropdown`, etc.)
 - **Controllers**: concerns in `app/controllers/concerns/` (`Localizable`, `RenderingHelper`, `API::RenderingHelper`)
 - **Routes**: partial routes in `config/routes/*.rb`, loaded via `draw :name` in `config/routes.rb`
 - **JS**: Stimulus controllers in `app/javascript/controllers/`; TypeScript in `app/javascript/mvm/`; entry `app/javascript/application.js`
@@ -108,9 +107,9 @@ bun run build:css
 
 ## Testing Conventions
 
-- **Location**: `test/` mirrors `app/` (`test/models/`, `test/controllers/`, `test/jobs/`, `test/notifiers/`, `test/components/`)
+- **Location**: `test/` mirrors `app/` (`test/models/`, `test/controllers/`, `test/jobs/`, `test/notifiers/`)
 - **Naming**: `*_test.rb`; fixtures in `test/fixtures/`
-- **Style**: Minitest; many component tests are placeholder skips
+- **Style**: Minitest
 - **Env**: `RAILS_ENV=test`; CI uses Postgres + Redis service containers
 
 ## Common Tasks
@@ -119,7 +118,7 @@ bun run build:css
 
 1. Add route in `config/routes.rb` or appropriate `config/routes/*.rb` draw file
 2. Implement action in `app/controllers/` (or namespaced submodule)
-3. Add view under `app/views/` or ViewComponent under `app/components/`
+3. Add view or partial under `app/views/`
 4. Add `test/controllers/..._test.rb` when behavior is non-trivial
 
 ### Add an API endpoint
@@ -160,7 +159,6 @@ Re-run `annotaterb` in development if model annotations are stale.
 - **Paid content**: Article body often gated; API `show` omits content without valid access token
 - **Secrets**: Never commit `config/master.key`, `config/settings.local.yml`, or credential values; Mixin bot keys live in encrypted credentials
 - **Ruby 4 / minitest**: Gemfile pins `minitest ~> 5.25` — Rails 8.1 test runner breaks on minitest 6
-- **ViewComponent 4**: Subclass `initialize` must call `super()`; base accepts and discards args
 - **CONTRIBUTING.md** lists Ruby 3.2; project actually targets Ruby 4.0.5 per README and `.ruby-version`
 - **Deploy**: Production deploy is manual (`gh workflow run Deploy`); uses Kamal + Docker Hub image `anleework/quill`
 - **Noticed 3**: Notifiers live in `app/notifiers/`, inherit `Noticed::Event` via `ApplicationNotifier`; user inbox uses `Noticed::Notification` (`User#notifications`). Web UI filters with `visible_in_web?` / `for_web` because DB records are always created (including Mixin-only delivery). Custom delivery: `DeliveryMethods::MixinBot`, `DeliveryMethods::FlashBroadcast`. Extend gem models in `config/initializers/noticed.rb`.

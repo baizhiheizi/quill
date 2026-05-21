@@ -1,5 +1,5 @@
 <%= turbo_stream.append "#{dom_id @user}_#{@tab}_articles_list" do %>
-  <%= render Articles::CardComponent.with_collection(@articles) %>
+  <%= render partial: "articles/card", collection: @articles, as: :article %>
 <% end %>
 
 <%= turbo_stream.update "#{dom_id @user}_#{@tab}_articles_pagination" do %>

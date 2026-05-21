@@ -11,7 +11,7 @@
     <div class="">
       <div class="truncate max-w-24"><%= comment.author.name %></div>
       <div class="text-sm opacity-50">
-        <%= render TimeFormatComponent.new datetime: comment.created_at.rfc3339 do %>
+        <%= render_time_format datetime: comment.created_at.rfc3339 do %>
           <%= time_ago_in_words comment.created_at %>
         <% end %>
       </div>

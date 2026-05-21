@@ -19,14 +19,26 @@ application.register('autosave', AutosaveController);
 import ClipboardController from './clipboard_controller';
 application.register('clipboard', ClipboardController);
 
+import CollectionsFormComponentController from './collections_form_component_controller';
+application.register(
+  'collections-form-component',
+  CollectionsFormComponentController,
+);
+
 import CommentFormController from './comment_form_controller';
 application.register('comment-form', CommentFormController);
 
 import DarkmodeController from './darkmode_controller';
 application.register('darkmode', DarkmodeController);
 
+import DropdownComponentController from './dropdown_component_controller';
+application.register('dropdown-component', DropdownComponentController);
+
 import DropdownController from './dropdown_controller';
 application.register('dropdown', DropdownController);
+
+import EditorComponentController from './editor_component_controller';
+application.register('editor-component', EditorComponentController);
 
 import EthWalletController from './eth_wallet_controller';
 application.register('eth-wallet', EthWalletController);
@@ -52,11 +64,26 @@ application.register('load-more', LoadMoreController);
 import LoginController from './login_controller';
 application.register('login', LoginController);
 
+import MilkdownEditorComponentController from './milkdown_editor_component_controller';
+application.register(
+  'milkdown-editor-component',
+  MilkdownEditorComponentController,
+);
+
+import ModalComponentController from './modal_component_controller';
+application.register('modal-component', ModalComponentController);
+
 import ModalController from './modal_controller';
 application.register('modal', ModalController);
 
 import MvmDepositController from './mvm_deposit_controller';
 application.register('mvm-deposit', MvmDepositController);
+
+import MvmPayButtonComponentController from './mvm_pay_button_component_controller';
+application.register(
+  'mvm-pay-button-component',
+  MvmPayButtonComponentController,
+);
 
 import NestedFormController from './nested_form_controller';
 application.register('nested-form', NestedFormController);
@@ -64,11 +91,44 @@ application.register('nested-form', NestedFormController);
 import PhotoswipeController from './photoswipe_controller';
 application.register('photoswipe', PhotoswipeController);
 
+import PreOrdersFormComponentController from './pre_orders_form_component_controller';
+application.register(
+  'pre-orders-form-component',
+  PreOrdersFormComponentController,
+);
+
+import PreOrdersMixpayButtonComponentController from './pre_orders_mixpay_button_component_controller';
+application.register(
+  'pre-orders-mixpay-button-component',
+  PreOrdersMixpayButtonComponentController,
+);
+
+import PreOrdersPayButtonComponentController from './pre_orders_pay_button_component_controller';
+application.register(
+  'pre-orders-pay-button-component',
+  PreOrdersPayButtonComponentController,
+);
+
+import PreOrdersPaymentComponentController from './pre_orders_payment_component_controller';
+application.register(
+  'pre-orders-payment-component',
+  PreOrdersPaymentComponentController,
+);
+
+import PreOrdersStateComponentController from './pre_orders_state_component_controller';
+application.register(
+  'pre-orders-state-component',
+  PreOrdersStateComponentController,
+);
+
 import PrefetchController from './prefetch_controller';
 application.register('prefetch', PrefetchController);
 
 import PreviewUploadController from './preview_upload_controller';
 application.register('preview-upload', PreviewUploadController);
+
+import QrcodeComponentController from './qrcode_component_controller';
+application.register('qrcode-component', QrcodeComponentController);
 
 import ReferencesSelectController from './references_select_controller';
 application.register('references-select', ReferencesSelectController);
@@ -105,6 +165,9 @@ application.register('tags-select', TagsSelectController);
 
 import TextareaAutogrowController from './textarea_autogrow_controller';
 application.register('textarea-autogrow', TextareaAutogrowController);
+
+import TimeFormatComponentController from './time_format_component_controller';
+application.register('time-format-component', TimeFormatComponentController);
 
 import ToastController from './toast_controller';
 application.register('toast', ToastController);

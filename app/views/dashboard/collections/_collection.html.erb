@@ -10,7 +10,7 @@
         <%= collection.state %>
       </span>
       <span class="text-sm opacity-60">
-        <%= render TimeFormatComponent.new datetime: collection.updated_at.rfc3339 do %>
+        <%= render_time_format datetime: collection.updated_at.rfc3339 do %>
           <%= collection.updated_at.strftime("%Y-%m-%d %H:%M") %>
         <% end %>
       </span>

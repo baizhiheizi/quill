@@ -1,8 +1,8 @@
 <%= turbo_frame_tag 'modal' do %>
-  <%= render ModalComponent.new title: t('subscribing') do %>
+  <%= render_modal title: t('subscribing') do %>
     <div data-controller="infinite-scroll">
       <% if @users.blank? %>
-        <%= render EmptyComponent.new text: t('no_record') %>
+        <%= render "shared/empty", text: t('no_record') %>
       <% else %>
         <div id="<%= dom_id @user %>_subscribings_list">
           <%= render partial: "users/subscribe_users/user", collection: @users, as: :user %>

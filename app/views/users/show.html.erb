@@ -18,7 +18,7 @@
 </div>
 
 <% if @user.block_user?(current_user) || current_user&.block_user?(@user) %>
-  <%= render EmptyComponent.new text: t('blocked') %>
+  <%= render "shared/empty", text: t('blocked') %>
 <% else %>
   <div class="mx-auto max-w-3xl"
     data-controller="tabs"

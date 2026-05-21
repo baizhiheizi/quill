@@ -1,7 +1,7 @@
 <%= turbo_frame_tag "#{dom_id current_user}_payments" do %>
   <div data-controller="infinite-scroll">
     <% if @payments.blank? %>
-      <%= render EmptyComponent.new text: t('no_record') %>
+      <%= render "shared/empty", text: t('no_record') %>
     <% else %>
       <div class="overflow-x-auto">
         <div class="table table-auto w-full">

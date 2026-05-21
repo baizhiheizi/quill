@@ -1,7 +1,7 @@
 <%= turbo_frame_tag "#{dom_id @user}_comments" do %>
   <div data-controller="infinite-scroll">
     <% if @comments.blank? %>
-      <%= render EmptyComponent.new text: t('no_record') %>
+      <%= render "shared/empty", text: t('no_record') %>
     <% else %>
       <div id="<%= dom_id @user %>_comments_list">
         <%= render partial: "users/comments/comment", collection: @comments, as: :comment %>

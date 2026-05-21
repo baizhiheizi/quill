@@ -1,10 +1,10 @@
 <%= turbo_frame_tag "#{dom_id @user}_#{@tab}_articles", target: "_top" do %>
   <div data-controller="infinite-scroll">
     <% if @articles.blank? %>
-      <%= render EmptyComponent.new text: t('no_record') %>
+      <%= render "shared/empty", text: t('no_record') %>
     <% else %>
       <div id="<%= "#{dom_id(@user)}_#{@tab}_articles_list" %>">
-        <%= render Articles::CardComponent.with_collection(@articles) %>
+        <%= render partial: "articles/card", collection: @articles, as: :article %>
       </div>
       <div data-infinite-scroll-target='scrollArea'></div>
 

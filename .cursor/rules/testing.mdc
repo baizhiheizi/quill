@@ -7,7 +7,7 @@ alwaysApply: false
 ## Layout
 
 Tests live under `test/` mirroring `app/`:
-- `test/models/`, `test/controllers/`, `test/jobs/`, `test/components/`, `test/integration/`
+- `test/models/`, `test/controllers/`, `test/jobs/`, `test/integration/`
 - Fixtures: `test/fixtures/*.yml`
 
 ## Running
@@ -23,7 +23,6 @@ CI runs full suite after `bin/rails db:setup`.
 
 - Minitest (`test "description" do` or `def test_...`)
 - Use fixtures; avoid hitting external APIs (Mixin, Arweave) in unit tests
-- Component tests often use placeholder `test_component_renders_something_useful` — add real assertions when changing components
 
 ## Avoid
 
