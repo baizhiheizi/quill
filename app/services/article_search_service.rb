@@ -10,6 +10,7 @@ class ArticleSearchService
     @locale = @query.to_s.strip.present? ? nil : params[:locale] || @current_user&.locale
     @articles =
       Article
+      .with_associations
       .without_drafted
       .left_joins(:author)
       .where(

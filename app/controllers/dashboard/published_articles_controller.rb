@@ -22,5 +22,6 @@ class Dashboard::PublishedArticlesController < Dashboard::BaseController
 
   def load_article
     @article = current_user.articles.find_by uuid: params[:uuid]
+    authorize @article, :update? if @article.present?
   end
 end

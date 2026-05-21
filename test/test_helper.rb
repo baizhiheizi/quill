@@ -15,8 +15,6 @@ Rails.application.routes.default_url_options[:host] = "www.example.com"
 
 module ActiveSupport
   class TestCase
-    parallelize(workers: 1)
-
     fixtures :all
 
     include ActiveJob::TestHelper
@@ -55,4 +53,11 @@ module ActiveSupport
 end
 
 class JobTestCase < ActiveSupport::TestCase
+  def stub_class_method(klass, method_name, implementation)
+    original = klass.method(method_name)
+    klass.define_singleton_method(method_name, &implementation)
+    yield
+  ensure
+    klass.define_singleton_method(method_name, original)
+  end
 end

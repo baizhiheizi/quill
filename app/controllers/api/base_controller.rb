@@ -2,6 +2,7 @@
 
 class API::BaseController < ActionController::API
   include API::RenderingHelper
+  include Pundit::Authorization
 
   around_action :with_locale
   after_action :store_access_token_request
@@ -10,9 +11,14 @@ class API::BaseController < ActionController::API
   class UnauthorizedError < StandardError; end
   class UnprocessableEntityError < StandardError; end
 
+  rescue_from Pundit::NotAuthorizedError do
+    render_forbidden
+  end
+
   rescue_from StandardError do |ex|
     Rails.logger.error ex.inspect
-    render_internal_server_error ex.message
+    message = Rails.env.local? ? ex.message : "Internal server error"
+    render_internal_server_error message
   end
 
   rescue_from UnauthorizedError do
@@ -53,7 +59,7 @@ class API::BaseController < ActionController::API
   end
 
   def current_access_token
-    @current_access_token ||= AccessToken.find_by(value: request.env["HTTP_X_ACCESS_TOKEN"])
+    @current_access_token ||= AccessToken.kept.find_by(value: request.env["HTTP_X_ACCESS_TOKEN"])
   end
 
   def current_user
@@ -62,5 +68,9 @@ class API::BaseController < ActionController::API
 
   def with_locale(&)
     I18n.with_locale(:en, &)
+  end
+
+  def pundit_user
+    current_user
   end
 end

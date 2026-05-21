@@ -7,7 +7,7 @@ class DownvotedArticlesController < ApplicationController
   def update
     return if @article.blank?
     return if @article.author == current_user
-    return unless @article.authorized? current_user
+    authorize @article, :vote?
 
     @article.with_lock do
       current_user.create_action :downvote, target: @article

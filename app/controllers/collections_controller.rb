@@ -2,7 +2,7 @@
 
 class CollectionsController < ApplicationController
   def index
-    @collections = Collection.listed.order(updated: :desc)
+    @collections = Collection.listed.order(updated_at: :desc)
   end
 
   def show

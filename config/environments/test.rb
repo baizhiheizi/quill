@@ -35,6 +35,9 @@ Rails.application.configure do
   # Disable request forgery protection in test environment.
   config.action_controller.allow_forgery_protection = false
 
+  # Omit domain: :all so rack-test integration sessions persist on www.example.com.
+  config.session_store :cookie_store, key: "_quill_sessions", httponly: true
+
   # Store uploaded files on the local file system in a temporary directory.
   config.active_storage.service = :test
 

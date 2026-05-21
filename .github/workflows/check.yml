@@ -42,19 +42,8 @@ jobs:
       - name: Install system dependencies
         run: sudo apt-get -yyq install libpq-dev
 
-      - name: Install JavaScript dependencies
-        run: bun install --frozen-lockfile
-
-      - name: Lint Ruby
-        run: bin/rubocop
-
-      - name: Lint JavaScript
-        run: bun run lint-check
-
-      - name: Test
-        run: |
-          bin/rails db:setup
-          bin/rails test
+      - name: CI
+        run: bin/ci
 
       - name: Zeitwerk
         run: bin/rails zeitwerk:check

@@ -1,8 +1,13 @@
 #!/bin/bash -e
 
-# If running the rails server then create or migrate existing database
-if [ "${*}" == "./bin/rails server" ]; then
+prepare_databases() {
   ./bin/rails db:prepare
+}
+
+if [ "${1}" = "./bin/rails" ] && [ "${2}" = "server" ]; then
+  prepare_databases
+elif [ "${1}" = "bin/jobs" ]; then
+  prepare_databases
 fi
 
 exec "${@}"

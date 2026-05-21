@@ -9,6 +9,7 @@ class Dashboard::DeletedArticlesController < Dashboard::BaseController
   def update
     return if @article.blank?
 
+    authorize @article, :destroy?
     @article.destroy!
   end
 

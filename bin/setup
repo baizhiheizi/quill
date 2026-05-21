@@ -3,6 +3,7 @@ require "fileutils"
 
 APP_ROOT = File.expand_path("..", __dir__)
 APP_NAME = "quill"
+SKIP_SERVER = ARGV.include?("--skip-server")
 
 def system!(*args)
   system(*args, exception: true)
@@ -17,6 +18,9 @@ FileUtils.chdir APP_ROOT do
   system! "gem install bundler --conservative"
   system("bundle check") || system!("bundle install")
 
+  puts "\n== Installing JavaScript dependencies =="
+  system! "bun install --frozen-lockfile"
+
   # puts "\n== Copying sample files =="
   # unless File.exist?("config/database.yml")
   #   FileUtils.cp "config/database.yml.sample", "config/database.yml"
@@ -28,8 +32,10 @@ FileUtils.chdir APP_ROOT do
   puts "\n== Removing old logs and tempfiles =="
   system! "bin/rails log:clear tmp:clear"
 
-  puts "\n== Restarting application server =="
-  system! "bin/rails restart"
+  unless SKIP_SERVER
+    puts "\n== Restarting application server =="
+    system! "bin/rails restart"
+  end
 
   # puts "\n== Configuring puma-dev =="
   # system "ln -nfs #{APP_ROOT} ~/.puma-dev/#{APP_NAME}"

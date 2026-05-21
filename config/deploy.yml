@@ -9,6 +9,8 @@ servers:
   web:
     hosts:
       - 172.235.197.72
+    volumes:
+      - /var/lib/quill/storage:/rails/storage
 
   blaze:
     hosts:
@@ -18,6 +20,8 @@ servers:
     hosts:
       - 172.235.197.72
     cmd: bin/jobs
+    volumes:
+      - /var/lib/quill/storage:/rails/storage
 
 # Credentials for your image host.
 registry:

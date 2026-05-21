@@ -13,7 +13,7 @@ development:
   primary:
     <<: *default
     host: localhost
-    database: prsdigg_development
+    database: quill_development
     username: postgres
     password: postgres
   cache:
@@ -34,7 +34,7 @@ test:
   primary:
     <<: *default
     host: localhost
-    database: prsdigg_test
+    database: quill_test
     username: postgres
     password: postgres
   cache:

@@ -48,7 +48,7 @@ class User < ApplicationRecord
   has_many :user_authorizations, dependent: :restrict_with_exception
   has_one :twitter_authorization, -> { where(provider: :twitter) }, class_name: "UserAuthorization", inverse_of: :user, dependent: :restrict_with_exception
 
-  has_many :access_tokens, dependent: :destroy
+  has_many :access_tokens, -> { kept }, dependent: :destroy
 
   has_many :articles, foreign_key: :author_id, inverse_of: :author, dependent: :nullify
   has_many :payments, foreign_key: :payer_id, primary_key: :mixin_uuid, inverse_of: :payer, dependent: :nullify
@@ -233,5 +233,13 @@ class User < ApplicationRecord
     elsif mvm_eth?
       "MVMPreOrder"
     end
+  end
+
+  def self.ransackable_attributes(_auth_object = nil)
+    %w[name mixin_id id uid email locale]
+  end
+
+  def self.ransackable_associations(_auth_object = nil)
+    %w[authorization articles]
   end
 end

@@ -8,13 +8,13 @@ class SubscribeArticlesController < ApplicationController
   end
 
   def create
-    return unless @article.authorized?(current_user)
+    authorize @article, :subscribe?
 
     current_user.create_action :commenting_subscribe, target: @article
   end
 
   def destroy
-    return unless @article.authorized?(current_user)
+    authorize @article, :subscribe?
 
     current_user.destroy_action :commenting_subscribe, target: @article
   end

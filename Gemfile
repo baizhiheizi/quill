@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 source "https://rubygems.org"
-git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 ruby "~> 4.0"
 
@@ -46,9 +45,6 @@ gem "mixin_bot", "~> 2.0"
 
 # A simple API wrapper for Pando in Ruby
 gem "pando_bot"
-
-# Wraps the Aliyun OSS as an Active Storage service.
-gem "activestorage-aliyun"
 
 # S3 active storage service
 gem "aws-sdk-s3", require: false
@@ -118,9 +114,6 @@ gem "httparty"
 
 # Tracking ⚠️ exceptions for Rails application and store them in database.
 gem "exception-track"
-
-# The safe Markdown parser, reloaded.
-gem "redcarpet"
 
 # kramdown is a fast, pure Ruby Markdown superset converter, using a strict syntax definition and supporting several common extensions.
 gem "kramdown"
@@ -206,3 +199,5 @@ gem "tzinfo-data", platforms: %i[mingw mswin x64_mingw jruby]
 gem "dockerfile-rails", ">= 1.2", group: :development
 
 gem "solid_cable", "~> 3.0"
+
+gem "pundit", "~> 2.5"

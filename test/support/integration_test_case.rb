@@ -15,6 +15,7 @@ class IntegrationTestCase < ActionDispatch::IntegrationTest
     host! "www.example.com"
     get "/up"
     session[:current_session_id] = session_record.uuid
+    get "/up"
     session_record
   end
 end

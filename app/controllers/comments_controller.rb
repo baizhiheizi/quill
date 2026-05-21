@@ -37,10 +37,32 @@ class CommentsController < ApplicationController
   end
 
   def create
-    @comment = current_user.comments.create comment_params
+    commentable = find_commentable
+    return head :forbidden if commentable.blank?
+
+    authorize commentable, :comment?
+
+    @comment = current_user.comments.create(
+      comment_params.except(:commentable_id, :commentable_type).merge(commentable:)
+    )
   end
 
   private
+
+  def find_commentable
+    if params.dig(:comment, :quote_comment_id).present?
+      quote_comment = Comment.find_by(id: params.dig(:comment, :quote_comment_id))
+      commentable = quote_comment&.commentable
+    elsif params.dig(:comment, :commentable_type) == "Article"
+      commentable = Article.without_drafted.find_by(id: params.dig(:comment, :commentable_id))
+    end
+
+    return if commentable.blank?
+    return unless commentable.is_a?(Article)
+    return unless commentable.published? || commentable.authorized?(current_user)
+
+    commentable
+  end
 
   def load_article
     article = Article.without_drafted.find_by uuid: params[:article_uuid]

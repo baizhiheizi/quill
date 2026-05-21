@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class Articles::BatchUploadToArweaveJob < ApplicationJob
+  queue_as :low
   def perform
     Article
       .published

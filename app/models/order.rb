@@ -199,4 +199,12 @@ class Order < ApplicationRecord
   def ensure_total_sufficient
     errors.add(:total, "insufficient") if (buy_article? || buy_collection?) && total.floor(8) < item.price.floor(8)
   end
+
+  def self.ransackable_attributes(_auth_object = nil)
+    %w[id buyer_id trace_id asset_id order_type state created_at]
+  end
+
+  def self.ransackable_associations(_auth_object = nil)
+    %w[buyer item payment]
+  end
 end

@@ -5,8 +5,7 @@ class UpvotedCommentsController < ApplicationController
   before_action :load_comment
 
   def update
-    return if @comment.author == current_user
-    return unless @comment.commentable.authorized? current_user
+    authorize @comment, :vote?
 
     @comment.with_lock do
       current_user.create_action :upvote, target: @comment
