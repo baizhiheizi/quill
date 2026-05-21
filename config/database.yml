@@ -48,4 +48,4 @@ production:
     database: <%= ENV.fetch('POSTGRES_QUEUE_DB', "#{ENV['POSTGRES_DB']}_queue") %>
     username: <%= ENV['POSTGRES_USER'] %>
     password: <%= ENV['POSTGRES_PASSWORD'] %>
-    pool: <%= ENV.fetch("SOLID_QUEUE_POOL", ENV.fetch("SOLID_QUEUE_THREADS", ENV.fetch("RAILS_MAX_THREADS", 32)).to_i * ENV.fetch("JOB_CONCURRENCY", 1).to_i + 2) %>
+    pool: <%= ENV.fetch("SOLID_QUEUE_POOL", ENV.fetch("SOLID_QUEUE_THREADS", 5).to_i * ENV.fetch("JOB_CONCURRENCY", 1).to_i + 2) %>
