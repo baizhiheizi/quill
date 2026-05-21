@@ -8,8 +8,8 @@ ruby "~> 4.0"
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem "rails", "~> 8.1"
 
-# Use pg as the database for Active Record
 gem "pg"
+gem "sqlite3"
 
 # A performance dashboard for Postgres
 gem "pghero"
@@ -168,7 +168,8 @@ gem "impressionist", github: "charlotte-ruby/impressionist"
 # Twitter OAuth 2.0 Client Library in Ruby
 gem "twitter_oauth2"
 
-gem "good_job"
+gem "solid_queue"
+gem "mission_control-jobs"
 
 gem "solid_cache", "~> 1.0"
 

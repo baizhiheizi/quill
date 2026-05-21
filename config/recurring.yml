@@ -1,0 +1,39 @@
+default: &recurring_jobs
+  articles_batch_upload_to_arweave_job:
+    class: Articles::BatchUploadToArweaveJob
+    schedule: "0 */1 * * *"
+  arweave_transactions_batch_accept_job:
+    class: ArweaveTransactions::BatchAcceptJob
+    schedule: "*/15 * * * *"
+  currencies_sync_job:
+    class: Currencies::SyncJob
+    queue: low
+    schedule: "*/5 * * * *"
+  daily_statistics_generate_job:
+    class: DailyStatistics::GenerateJob
+    queue: low
+    schedule: "0 0 * * *"
+  mixin_network_snapshots_monitor_job:
+    class: MixinNetworkSnapshots::MonitorJob
+    queue: low
+    schedule: "* * * * *"
+  orders_batch_distribute_job:
+    class: Orders::BatchDistributeJob
+    queue: low
+    schedule: "*/10 * * * *"
+  transfers_cache_stats_job:
+    class: Transfers::CacheStatsJob
+    schedule: "*/10 * * * *"
+  transfers_monitor_job:
+    class: Transfers::MonitorJob
+    queue: low
+    schedule: "*/15 * * * *"
+  clear_solid_queue_finished_jobs:
+    command: "SolidQueue::Job.clear_finished_in_batches(sleep_between_batches: 0.3)"
+    schedule: every hour at minute 12
+
+development:
+  <<: *recurring_jobs
+
+production:
+  <<: *recurring_jobs

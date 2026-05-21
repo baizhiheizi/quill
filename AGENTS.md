@@ -4,7 +4,7 @@
 
 ## Project Overview
 
-Quill is a Web3 paid-publishing platform ([quill.im](https://quill.im/)) where authors publish priced articles and readers pay to access them. Its distinguishing feature is **early reader rewards**: a share of each article's new revenue (default 40%) is distributed proportionally to readers who paid earlier. The stack is a Rails monolith with Hotwire (Turbo + Stimulus), ERB partials, PostgreSQL, Solid Cable, Solid Cache, and background jobs via Good Job. Integrations include Mixin Network, MVM (Ethereum L2), MixPay, Arweave permanence, and wallet login (MetaMask, Coinbase, WalletConnect).
+Quill is a Web3 paid-publishing platform ([quill.im](https://quill.im/)) where authors publish priced articles and readers pay to access them. Its distinguishing feature is **early reader rewards**: a share of each article's new revenue (default 40%) is distributed proportionally to readers who paid earlier. The stack is a Rails monolith with Hotwire (Turbo + Stimulus), ERB partials, PostgreSQL, Solid Cable, Solid Cache, and background jobs via Solid Queue (separate queue database). Integrations include Mixin Network, MVM (Ethereum L2), MixPay, Arweave permanence, and wallet login (MetaMask, Coinbase, WalletConnect).
 
 ## Tech Stack
 
@@ -14,7 +14,7 @@ Quill is a Web3 paid-publishing platform ([quill.im](https://quill.im/)) where a
 | Framework | Rails | 8.1.x |
 | Database | PostgreSQL | — |
 | Real-time | Solid Cable (separate `*_cable` DB) | — |
-| Cache / jobs | Solid Cache, Good Job | — |
+| Cache / jobs | Solid Cache, Solid Queue | — |
 | Frontend | Turbo, Stimulus, Tailwind, esbuild | Node 20+, Bun 1.x |
 | Testing | Minitest, Capybara | minitest ~> 5.25 (Ruby 4 compat) |
 | Lint | RuboCop (rails-omakase), Prettier | — |
@@ -34,7 +34,7 @@ quill/
 │   ├── views/           # ERB templates and partials
 │   ├── helpers/         # View helpers (UiHelper for modal/dropdown wrappers)
 │   ├── javascript/      # Stimulus controllers, MVM wallet TS, esbuild entry
-│   ├── jobs/            # Good Job background work (orders, transfers, arweave)
+│   ├── jobs/            # Active Job work (orders, transfers, arweave)
 │   ├── services/        # Query/command objects (e.g. ArticleSearchService)
 │   ├── notifiers/       # Noticed 3 notifier classes + delivery_methods/
 │   └── libs/            # Non-Rails Ruby helpers
@@ -64,7 +64,7 @@ Requires PostgreSQL running locally (or via Docker). See `CONTRIBUTING.md` for c
 ### Run
 
 ```bash
-bin/dev   # Procfile.dev: Rails, Good Job, CSS/JS watch, mixin_blaze
+bin/dev   # Procfile.dev: Rails, Solid Queue (bin/jobs), CSS/JS watch, mixin_blaze
 ```
 
 App: `http://localhost:3000`. Admin: `http://localhost:3000/admin` (create `Administrator` in console).
@@ -132,7 +132,7 @@ bun run build:css
 ### Add a background job
 
 1. Create `app/jobs/<namespace>/<name>_job.rb` inheriting `ApplicationJob`
-2. Enqueue with `perform_later`; Good Job runs via `bundle exec good_job start` (in `bin/dev`)
+2. Enqueue with `perform_later`; Solid Queue runs via `bin/jobs` (in `bin/dev` Procfile). Recurring tasks in `config/recurring.yml`; queues in `config/queue.yml`
 3. Add `test/jobs/..._test.rb`
 
 ### Add a notifier (Noticed 3)
@@ -163,3 +163,5 @@ Re-run `annotaterb` in development if model annotations are stale.
 - **CONTRIBUTING.md** lists Ruby 3.2; project actually targets Ruby 4.0.5 per README and `.ruby-version`
 - **Deploy**: Production deploy is manual (`gh workflow run Deploy`); uses Kamal + Docker Hub image `anleework/quill`
 - **Noticed 3**: Notifiers live in `app/notifiers/`, inherit `Noticed::Event` via `ApplicationNotifier`; user inbox uses `Noticed::Notification` (`User#notifications`). Web UI filters with `visible_in_web?` / `for_web` because DB records are always created (including Mixin-only delivery). Custom delivery: `DeliveryMethods::MixinBot`, `DeliveryMethods::FlashBroadcast`. Extend gem models in `config/initializers/noticed.rb`.
+- **Solid Cable**: Real-time WebSocket backend uses a separate `cable` database (`config/database.yml`). Run `bin/rails db:prepare` to create/migrate all databases.
+- **Solid Queue**: Jobs use a separate `queue` database (`config/database.yml`); admin dashboard at `/admin/jobs` (Mission Control). Run `bin/rails db:prepare` to create/migrate all databases.

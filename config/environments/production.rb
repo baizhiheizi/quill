@@ -60,9 +60,10 @@ Rails.application.configure do
   config.log_level = ENV.fetch("RAILS_LOG_LEVEL", "info")
 
   config.cache_store = :solid_cache_store
+  config.solid_cache.connects_to = { database: { writing: :cache } }
 
-  # Use a real queuing backend for Active Job (and separate queues per environment).
-  # config.active_job.queue_adapter = :resque
+  config.active_job.queue_adapter = :solid_queue
+  config.solid_queue.connects_to = { database: { writing: :queue } }
   # config.active_job.queue_name_prefix = "quill_production"
 
   # Disable caching for Action Mailer templates even if Action Controller
