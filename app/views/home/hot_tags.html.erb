@@ -7,16 +7,15 @@
       <% if current_user.blank? %>
         <div class="flex items-center flex-wrap">
           <% @hot_tags.each do |tag| %>
-            <%= link_to tag.name, 
-              articles_path(tag: tag.name, filter: @filter || 'lately'), 
-              data: { 
-                tippy_content: tag.name,
-                controller: 'prefetch', 
-                turbo_frame: '_top' 
-              }, 
+            <%= link_to tag.name,
+              articles_path(tag: tag.name, filter: @filter || 'lately'),
+              data: {
+                controller: 'prefetch',
+                turbo_frame: '_top',
+                tip: tag.name
+              },
               style: "word-break:keep-all",
-              class: "h-8 my-2 mr-4 px-2 py-1 max-w-[6rem] truncate rounded tag-style-#{tag.id % 6}" 
-            %>
+              class: "tooltip my-2 mr-4 h-8 max-w-[6rem] truncate rounded px-2 py-1 tag-style-#{tag.id % 6} [--placement:top]" %>
           <% end %>
         </div>
       <% else %>

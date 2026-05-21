@@ -6,7 +6,7 @@
   <span><%= @transfer.id %></span>
 </div>
 
-<div class="bg-white dark:bg-zinc-900 roundedlg p-4">
+<div class="bg-base-100 rounded-lg p-4 shadow">
   <div class="flex items-center space-x-2 mb-4">
     <%= image_tag @transfer.currency.icon_url, class: "w-10 h-10 rounded" %>
     <div>
@@ -62,11 +62,11 @@
       <span class="font-bold">State:</span> 
       <div class="">
         <% if @transfer.processed? %>
-          <span class="px-2 py-1 rounded text-white bg-green-500">
+          <span class="badge badge-success">
             Processed
           </span>
         <% else %>
-          <span class="px-2 py-1 rounded text-white bg-zinc-300">
+          <span class="badge badge-neutral">
             Unprocessed
           </span>
         <% end %>

@@ -1,18 +1,12 @@
 <%= turbo_frame_tag 'modal' do %>
   <%= render_modal title: t('language') do %>
-    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-      <%= link_to 'English', 
-        '/en', 
-        data: { turbo_frame: '_top' }, 
-        class: "text-center py-2 px-4 border border-primary rounded-full #{current_locale == 'en' ? 'bg-primary text-white' : 'text-primary'}" %>
-      <%= link_to '中文', 
-        '/zh-CN', 
-        data: { turbo_frame: '_top' }, 
-        class: "text-center py-2 px-4 border border-primary rounded-full #{current_locale == 'zh-CN' ? 'bg-primary text-white' : 'text-primary'}"%>
-      <%= link_to '日本語', 
-        '/ja', 
-        data: { turbo_frame: '_top' }, 
-        class: "text-center py-2 px-4 border border-primary rounded-full #{current_locale == 'ja' ? 'bg-primary text-white' : 'text-primary'}"%>
+    <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
+      <% { 'en' => 'English', 'zh-CN' => '中文', 'ja' => '日本語' }.each do |locale, label| %>
+        <%= link_to label,
+          "/#{locale}",
+          data: { turbo_frame: '_top' },
+          class: "btn rounded-full #{current_locale == locale ? 'btn-primary' : 'btn-outline btn-primary'}" %>
+      <% end %>
     </div>
   <% end %>
 <% end %>

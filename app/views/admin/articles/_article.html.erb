@@ -1,4 +1,4 @@
-<tr id="<%= dom_id article %>" class="hover:bg-zinc-50 dark:hover:bg-zinc-800 border-b">
+<tr id="<%= dom_id article %>">
   <td class="p-4">
     <%= article.id %>
   </td>
@@ -13,13 +13,13 @@
   </td>
   <td class="p-4">
     <div class="flex justify-center">
-      <span class="text-white rounded px-2 py-1 
+      <span class="badge 
         <%= 
           {
-            drafted: 'bg-zinc-300',
-            published: 'bg-green-500',
-            hidden: 'bg-zinc-500',
-            blocked: 'bg-pink-500',
+            drafted: 'badge-neutral',
+            published: 'badge-success',
+            hidden: 'badge-neutral',
+            blocked: 'badge-error',
           }[article.state.to_sym]
         %>">
         <%= article.state %>
@@ -49,21 +49,21 @@
   </td>
   <td class="p-4">
     <div class="flex items-center space-x-2">
-      <%= link_to 'Detail', admin_article_path(article), class: "bg-blue-500 hover:bg-blue-600 rounded text-white px-4 py-2", data: { turbo_frame: "_top" } %>
+      <%= link_to 'Detail', admin_article_path(article), class: "btn btn-primary btn-sm", data: { turbo_frame: "_top" } %>
       <%= button_to 'Unblock', admin_article_unblock_path(article),
         form: {
           data: { 
             turbo_confirm: "Sure to unblock",
           }
         },
-        class: "bg-indigo-500 hover:bg-indigo-600 rounded text-white px-4 py-2" if article.blocked? %>
+        class: "btn btn-secondary btn-sm" if article.blocked? %>
       <%= button_to 'Block', admin_article_block_path(article),
         form: {
           data: { 
             turbo_confirm: "Sure to block",
           }
         },
-        class: "bg-red-500 hover:bg-red-600 rounded text-white px-4 py-2" if article.published? %>
+        class: "btn btn-error btn-sm" if article.published? %>
     </div>
   </td>
 </tr>

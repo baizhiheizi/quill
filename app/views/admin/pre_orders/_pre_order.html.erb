@@ -1,4 +1,4 @@
-<tr class="hover:bg-zinc-50 dark:hover:bg-zinc-800 bpre_order-b">
+<tr>
   <td class="p-4">
     <%= pre_order.id %>
   </td>
@@ -33,12 +33,12 @@
   </td>
   <td class="p-4">
     <div class="flex justify-center">
-      <span class="px-2 py-1 rounded text-white
+      <span class="badge
         <%=
           {
-            drafted: 'bg-slate-500',
-            paid: 'bg-green-500',
-            expired: 'bg-red-500'
+            drafted: 'badge-neutral',
+            paid: 'badge-success',
+            expired: 'badge-error'
           }[pre_order.state.to_sym]
           %>">
         <%= pre_order.state %>
@@ -52,6 +52,6 @@
     <%= pre_order.created_at %>
   </td>
   <td class="p-4">
-    <%= link_to 'Detail', admin_pre_order_path(pre_order), class: "bg-blue-500 hover:bg-blue-600 rounded text-white px-4 py-2", data: { turbo_frame: "_top" } %>
+    <%= link_to 'Detail', admin_pre_order_path(pre_order), class: "btn btn-primary btn-sm", data: { turbo_frame: "_top" } %>
   </td>
 </tr>

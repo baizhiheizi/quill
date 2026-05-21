@@ -6,7 +6,7 @@
   <span><%= @collection.name %></span>
 </div>
 
-<div class="bg-white roundedlg p-4">
+<div class="bg-base-100 rounded-lg p-4 shadow">
   <div class="flex space-x-2 mb-4">
     <div>
       <div><%= @collection.name %></div>
@@ -61,7 +61,7 @@
     data-tabs-active-class-value="border-b-2">
     <div class="flex overflow-auto flex-nowrap scrollbar-hide items-center mb-4 border-b lg:border-none space-x-2">
       <%= link_to admin_collection_path(@collection, tab: :articles), 
-        class: "cursor-pointer py-1 px-4 border-blue-500 font-bold text-zinc-600",
+        class: "btn btn-soft btn-sm text-base-content",
         data: {
           tabs_target: "tab",
           tabs_tabname_param: "articles",
@@ -69,7 +69,7 @@
         Articles
       <% end %>
       <%= link_to admin_collection_path(@collection, tab: :orders), 
-        class: "cursor-pointer py-1 px-4 border-blue-500 font-bold text-zinc-600",
+        class: "btn btn-soft btn-sm text-base-content",
         data: {
           tabs_target: "tab",
           tabs_tabname_param: "orders",
@@ -77,7 +77,7 @@
         Orders
       <% end %>
       <%= link_to admin_collection_path(@collection, tab: :pre_orders), 
-        class: "cursor-pointer py-1 px-4 border-blue-500 font-bold text-zinc-600",
+        class: "btn btn-soft btn-sm text-base-content",
         data: {
           tabs_target: "tab",
           tabs_tabname_param: "pre_orders",

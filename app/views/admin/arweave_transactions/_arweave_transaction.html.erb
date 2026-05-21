@@ -1,12 +1,12 @@
-<tr id="<%= dom_id arweave_transaction %>" class="hover:bg-zinc-50 dark:hover:bg-zinc-800 border-b">
+<tr id="<%= dom_id arweave_transaction %>">
   <td class="p-4">
     <%= arweave_transaction.id %>
   </td>
   <td class="p-4">
-    <span class="px-2 py-1 rounded text-white 
+    <span class="badge 
       <%= {
-        pending: 'bg-slate-500',
-        accepted: 'bg-green-500',
+        pending: 'badge-neutral',
+        accepted: 'badge-success',
       }[arweave_transaction.state.to_sym] %>">
       <%= arweave_transaction.state %>
     </span>
@@ -33,6 +33,6 @@
     <%= arweave_transaction.created_at %>
   </td>
   <td class="flex items-center space-x-2 p-4">
-    <%= link_to 'Detail', admin_arweave_transaction_path(arweave_transaction), class: "bg-blue-500 hover:bg-blue-600 rounded text-white px-4 py-2", data: { turbo_frame: "_top" } %>
+    <%= link_to 'Detail', admin_arweave_transaction_path(arweave_transaction), class: "btn btn-primary btn-sm", data: { turbo_frame: "_top" } %>
   </td>
 </tr>

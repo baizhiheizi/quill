@@ -13,7 +13,7 @@
       <div class="mb-2 text-sm opacity-75">
         <%= t('collection_introduction') %>
       </div>
-      <div class="prose max-w-none dark:prose-invert bg-[#F4F4F4] dark:bg-[#333444] p-4 rounded">
+      <div class="prose max-w-none dark:prose-invert bg-base-200 p-4 rounded text-base-content">
         <%= MarkdownRenderService.call(@collection.description).html_safe %>
       </div>
     </div>
@@ -50,11 +50,9 @@
 <% if @collection.author.blocked? && current_user != @collection.author %>
   <%= turbo_frame_tag 'modal' do %>
     <%= render_modal title: t('alert') do %>
-      <div class="mb-4 flex">
-        <%= inline_svg_tag "icons/exclamation-circle-solid.svg", class: "w-12 h-12 text-red-500 block mx-auto" %>
-      </div>
-      <div class="mb-4 flex justify-center">
-        <%= t('alert_for_blocked_user') %>
+      <div class="alert alert-error max-w-md mx-auto">
+        <%= inline_svg_tag "icons/exclamation-circle-solid.svg", class: "w-6 h-6 shrink-0" %>
+        <span><%= t('alert_for_blocked_user') %></span>
       </div>
     <% end %>
   <% end %>

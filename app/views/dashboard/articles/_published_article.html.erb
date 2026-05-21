@@ -1,4 +1,4 @@
-<div id="<%= dom_id article %>_published" class="pt-8 pb-4 border-b dark:border-white dark:border-opacity-10">
+<div id="<%= dom_id article %>_published" class="pt-8 pb-4 border-b border-base-content/10">
   <div class="flex items-center justify-between mb-4">
     <div class="flex items-center">
       <span class="text-sm opacity-60">
@@ -9,7 +9,7 @@
     </div>
     <div class="flex items-center space-x-2">
       <% if article.free? %>
-        <div class="text-sm px-2 bg-green-500 text-white rounded">
+        <div class="badge badge-success badge-sm">
           FREE
         </div>
       <% else %>
@@ -34,7 +34,7 @@
       <div class="truncate overflow-hidden font-bold text-xl mb-3">
         <%= article.title %>
       </div>
-      <div class="text-base break-words text-ellipsis overflow-hidden line-clamp-3 text-[#222222] text-opacity-80"> 
+      <div class="text-base break-words text-ellipsis overflow-hidden line-clamp-3 text-base-content/80"> 
         <%= article.intro %>
       </div>
     </div>
@@ -65,7 +65,7 @@
         class: "bg-transparent cursor-pointer min-w-fit" %>
     </div>
 
-    <div class="flex items-center space-x-4 ml-4 text-[#B1B6C6]">
+    <div class="flex items-center space-x-4 ml-4 text-base-content/50">
       <div class="flex items-center space-x-1">
         <%= inline_svg_tag 'icons/income-solid.svg', class: 'w-4 h-4' %>
         <span class="text-sm">

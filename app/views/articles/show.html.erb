@@ -54,11 +54,11 @@
 <% if @article.author.blocked? && current_user.present? && current_user != @article.author %>
   <%= turbo_frame_tag 'modal' do %>
     <%= render_modal title: t('alert') do %>
-      <div class="mb-4 flex">
-        <%= inline_svg_tag "icons/exclamation-circle-solid.svg", class: "w-12 h-12 text-red-500 block mx-auto" %>
-      </div>
       <div class="mb-4 flex justify-center">
-        <%= t('alert_for_blocked_user') %>
+        <div class="alert alert-error max-w-md">
+          <%= inline_svg_tag "icons/exclamation-circle-solid.svg", class: "w-6 h-6 shrink-0" %>
+          <span><%= t('alert_for_blocked_user') %></span>
+        </div>
       </div>
     <% end %>
   <% end %>

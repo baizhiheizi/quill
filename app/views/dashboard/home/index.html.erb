@@ -1,5 +1,6 @@
-<div class="p-4">
-  <div class="sm:grid sm:grid-cols-3 gap-4">
+<div class="p-4 space-y-4">
+  <div class="card bg-base-100 border border-base-content/10 shadow-sm">
+    <div class="card-body sm:grid sm:grid-cols-3 gap-4 p-4">
     <div class="text-center p-2">
       <div class="opacity-70">
         <%= t('activerecord.attributes.user.articles_count') %>
@@ -16,8 +17,10 @@
         <%= current_user.bought_articles_count %>
       </div>
     </div>
+    </div>
   </div>
-  <div class="sm:grid sm:grid-cols-3 gap-4">
+  <div class="card bg-base-100 border border-base-content/10 shadow-sm">
+    <div class="card-body sm:grid sm:grid-cols-3 gap-4 p-4">
     <div class="text-center p-2">
       <div class="opacity-70">
         <%= t('activerecord.attributes.user.author_revenue_total') %>
@@ -41,6 +44,7 @@
       <div class="text-xl font-bold">
         $<%= current_user.payment_total_usd.round(4) %>
       </div>
+    </div>
     </div>
   </div>
 </div>

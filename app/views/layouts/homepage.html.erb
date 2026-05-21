@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<html>
+<html lang="<%= I18n.locale %>" data-theme="quill">
   <head>
     <title>Quill: Build your value net on Web3</title>
     <meta
@@ -35,11 +35,20 @@
     <link href='https://fonts.googleapis.com/css?family=Roboto Serif' rel='stylesheet'>
     <link href='https://fonts.googleapis.com/css?family=Roboto Mono' rel='stylesheet'>
     <%= favicon_link_tag "favicon.svg" %>
+    <script>
+      (function () {
+        var theme = localStorage.theme;
+        if (theme === 'dark' || (!theme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+          document.documentElement.dataset.theme = 'quill-dark';
+          document.documentElement.classList.add('dark');
+        }
+      })();
+    </script>
     <%= stylesheet_link_tag "application", media: "all", "data-turbo-track": "reload" %>
     <%= javascript_include_tag "application", "data-turbo-track": "reload" %>
   </head>
 
-  <body class="overflow-x-hidden bg-white dark:bg-[#1D1E2B] text-[#222222] dark:text-[white]">
+  <body class="overflow-x-hidden bg-base-100 text-base-content">
     <main class="">
       <%= yield %>
     </main>

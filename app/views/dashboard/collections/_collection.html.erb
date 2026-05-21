@@ -1,11 +1,11 @@
-<div id="<%= dom_id collection %>" class="pt-8 pb-4 border-b dark:border-white dark:border-opacity-10">
+<div id="<%= dom_id collection %>" class="pt-8 pb-4 border-b border-base-content/10">
   <div class="flex items-center justify-between mb-4">
     <div class="flex items-center">
-      <span class="mr-2 text-sm px-1 text-white rounded 
-        <%= { 
-          drafted: 'bg-slate-500',
-          listed: 'bg-green-500',
-          hidden: 'bg-slate-200',
+      <span class="badge badge-sm mr-2 capitalize
+        <%= {
+          drafted: 'badge-neutral',
+          listed: 'badge-success',
+          hidden: 'badge-soft',
         }[collection.state.to_sym] %>">
         <%= collection.state %>
       </span>
@@ -31,7 +31,7 @@
       <div class="truncate overflow-hidden font-bold text-xl mb-3">
         <%= collection.name %>(<%= collection.symbol %>)
       </div>
-      <div class="text-base break-words text-ellipsis overflow-hidden line-clamp-3 text-[#222222] text-opacity-80"> 
+      <div class="text-base break-words text-ellipsis overflow-hidden line-clamp-3 text-base-content/80"> 
         <%= collection.description %>
       </div>
     </div>

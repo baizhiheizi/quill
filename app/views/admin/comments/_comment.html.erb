@@ -1,4 +1,4 @@
-<tr id="<%= dom_id comment %>" class="hover:bg-zinc-50 dark:hover:bg-zinc-800 border-b">
+<tr id="<%= dom_id comment %>">
   <td class="p-4">
     <%= comment.id %>
   </td>
@@ -11,9 +11,9 @@
   <td class="p-4">
     <div class="flex">
       <% if comment.deleted? %>
-        <span class="px-2 py-1 text-white bg-red-500 rounded">Deleted</div>
+        <span class="badge badge-error">Deleted</span>
       <% else %>
-        <span class="rounded-full p-1 bg-green-500 ring-2 ring-green-100"></div>
+        <span class="badge badge-success badge-xs">Active</span>
       <% end %>
     </div>
   </td>
@@ -36,14 +36,14 @@
             turbo_confirm: "Sure to recover",
           }
         },
-        class: "bg-indigo-500 hover:bg-indigo-600 rounded text-white px-4 py-2" if comment.deleted? %>
+        class: "btn btn-secondary btn-sm" if comment.deleted? %>
       <%= button_to 'Delete', admin_comment_delete_path(comment),
         form: {
           data: { 
             turbo_confirm: "Sure to delete",
           }
         },
-        class: "bg-red-500 hover:bg-red-600 rounded text-white px-4 py-2" unless comment.deleted? %>
+        class: "btn btn-error btn-sm" unless comment.deleted? %>
     </div>
   </td>
 </tr>

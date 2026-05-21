@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="<%= I18n.locale %>" data-theme="quill">
   <head>
     <title>Admin</title>
     <meta
@@ -17,7 +17,7 @@
 
   <body class="">
     <%= render "admin/nav" %>
-    <div class="flex bg-zinc-100 dark:bg-zinc-800 dark:text-zinc-50 h-screen pt-12 sm:pt-16 relative">
+    <div class="relative flex h-screen bg-base-200 pt-12 text-base-content sm:pt-16">
       <%= render "admin/aside" %>
       <main class="flex-1 overflow-y-scroll">
         <div class="p-4 w-full">

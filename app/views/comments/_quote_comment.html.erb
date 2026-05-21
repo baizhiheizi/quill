@@ -1,12 +1,14 @@
-<div class="mb-6 p-4 rounded bg-[#F4F4F4] max-h-96 overflow-y-scroll scrollbar-hide dark:bg-[#333444]">
+<div class="mb-6 p-4 rounded bg-base-200 max-h-96 overflow-y-scroll scrollbar-hide text-base-content">
   <div class="flex space-x-2 sm:space-x-4 items-center">
     <%= link_to user_path(quote_comment.author), 
-      class: "min-w-fit block", 
+      class: "avatar min-w-fit", 
       data: { 
         controller: 'prefetch', 
         turbo_frame: "_top" 
       } do %>
-      <%= image_tag quote_comment.author.avatar_thumb, class: "w-6 h-6 sm:w-9 sm:h-9 rounded-full" %>
+      <div class="size-9 rounded-full">
+        <%= image_tag quote_comment.author.avatar_thumb, class: "rounded-full" %>
+      </div>
     <% end %>
     <div class="">
       <div class="truncate max-w-24"><%= quote_comment.author.name %></div>

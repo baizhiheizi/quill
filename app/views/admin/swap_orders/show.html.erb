@@ -6,7 +6,7 @@
   <span><%= @swap_order.id %></span>
 </div>
 
-<div class="bg-white dark:bg-zinc-900 roundedlg p-4">
+<div class="bg-base-100 rounded-lg p-4 shadow">
   <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-8">
     <div class="col-span-1 flex space-x-2">
       <span class="font-bold">ID:</span> 
@@ -19,16 +19,16 @@
     <div class="col-span-1 flex space-x-2">
       <span class="font-bold">State:</span> 
       <div class="">
-        <span class="px-2 py-1 rounded text-white
+        <span class="badge
           <%=
             {
-            paid: 'bg-zinc-500',
-            swapping: 'bg-blue-300',
-            rejected: 'bg-red-500',
-            swapped: 'bg-blue-500',
-            order_placed: 'bg-green-700',
-            completed: 'bg-green-500',
-            refunded: 'bg-indigo-500',
+            paid: 'badge-neutral',
+            swapping: 'badge-info',
+            rejected: 'badge-error',
+            swapped: 'badge-info',
+            order_placed: 'badge-success',
+            completed: 'badge-success',
+            refunded: 'badge-secondary',
             }[@swap_order.state.to_sym]
             %>">
           <%= @swap_order.state %>
@@ -85,7 +85,7 @@
     data-tabs-active-class-value="border-b-2">
     <div class="flex overflow-auto flex-nowrap scrollbar-hide items-center mb-4 border-b lg:border-none space-x-2">
       <%= link_to admin_swap_order_path(@swap_order, tab: :transfers), 
-        class: "cursor-pointer py-1 px-4 border-blue-500 font-bold text-zinc-600",
+        class: "btn btn-soft btn-sm text-base-content",
         data: {
           tabs_target: "tab",
           tabs_tabname_param: "transfers",

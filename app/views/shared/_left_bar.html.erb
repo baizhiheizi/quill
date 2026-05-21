@@ -1,133 +1,93 @@
-<div class="lg:min-h-screen lg:border-r dark:border-white dark:border-opacity-5">
-  <nav class="hidden lg:block h-full w-28">
-    <div class="sticky top-0 h-screen flex flex-col justify-between">
-      <%= link_to root_path, class: 'py-8' do %>
-        <%= image_tag 'logo.svg', class: "w-20 h-auto mx-auto" %>
+<div class="border-base-content/5 lg:min-h-screen lg:border-r">
+  <nav class="hidden h-full w-28 lg:block">
+    <div class="sticky top-0 flex h-screen flex-col items-center justify-between">
+      <%= link_to root_path, class: 'flex w-full justify-center py-8' do %>
+        <%= image_tag 'logo.svg', class: "h-auto w-20" %>
       <% end %>
 
-      <div class="mb-8">
-        <div
-          data-tippy-content="<%= t('home') %>"
-          data-tippy-placement="right"
-          class="relative py-6 w-10 mx-auto">
-          <%= inline_svg_tag (@active_page == 'home' ? 'icons/home-solid.svg' : 'icons/home.svg'), 
-            class: "w-6 h-6 mx-auto text-opacity-60 text-[#222222] dark:text-white dark:text-opacity-80" %>
-          <%= link_to '', articles_path, class: "absolute inset-0" unless @active_page == 'home' %>
-        </div>
+      <div class="flex w-full flex-col items-center">
+        <%= render "shared/nav_icon_link",
+          label: t('home'),
+          path: articles_path,
+          active: @active_page == 'home',
+          icon: 'icons/home.svg',
+          solid_icon: 'icons/home-solid.svg' %>
 
         <% if current_user.present? %>
-          <div
-            data-tippy-content="<%= t('notification') %>"
-            data-tippy-placement="right"
-            class="relative py-6 w-10 mx-auto">
-            <div class="w-6 h-6 mx-auto relative">
-              <%= inline_svg_tag (@active_page == 'notification' ? 'icons/bell-solid.svg' : 'icons/bell.svg'), 
-                class: "w-6 h-6 mx-auto text-opacity-60 text-[#222222] dark:text-white dark:text-opacity-80" %>
-              <% if current_user.has_unread_notification? %>
-                <span class="h-2 w-2 absolute top-0 right-0 rounded-full bg-[#F3463F]"></span>
-              <% end %>
-            </div>
-            <%= link_to '', dashboard_notifications_path, class: "absolute inset-0" unless @active_page == 'notification' %>
-          </div>
+          <%= render "shared/nav_icon_link",
+            label: t('notification'),
+            path: dashboard_notifications_path,
+            active: @active_page == 'notification',
+            icon: 'icons/bell.svg',
+            solid_icon: 'icons/bell-solid.svg',
+            badge: current_user.has_unread_notification? %>
 
-          <div 
-            data-tippy-content="<%= t('my_reading') %>"
-            data-tippy-placement="right"
-            class="relative py-6 w-10 mx-auto">
-            <%= inline_svg_tag (@active_page == 'readings' ? 'icons/glasses-solid.svg' : 'icons/glasses.svg'), 
-              class: "w-6 h-6 mx-auto text-opacity-60 text-[#222222] dark:text-white dark:text-opacity-80" %>
-            <%= link_to '', dashboard_readings_path, class: "absolute inset-0" unless @active_page == 'readings' %>
-          </div>
+          <%= render "shared/nav_icon_link",
+            label: t('my_reading'),
+            path: dashboard_readings_path,
+            active: @active_page == 'readings',
+            icon: 'icons/glasses.svg',
+            solid_icon: 'icons/glasses-solid.svg' %>
 
-          <div
-            data-tippy-content="<%= t('my_authoring') %>"
-            data-tippy-placement="right"
-            class="relative py-6 w-10 mx-auto">
-            <%= inline_svg_tag @active_page == 'authorings' ? 'icons/article-solid.svg' : 'icons/article.svg', 
-              class: "w-6 h-6 mx-auto text-opacity-60 text-[#222222] dark:text-white dark:text-opacity-80" %>
-            <%= link_to '', dashboard_authorings_path, class: "absolute inset-0" unless @active_page == 'authorings' %>
-          </div>
+          <%= render "shared/nav_icon_link",
+            label: t('my_authoring'),
+            path: dashboard_authorings_path,
+            active: @active_page == 'authorings',
+            icon: 'icons/article.svg',
+            solid_icon: 'icons/article-solid.svg' %>
 
-          <div
-            data-tippy-content="<%= t('write') %>"
-            data-tippy-placement="right"
-            class="relative py-6 w-10 mx-auto">
-            <%= inline_svg_tag 'icons/write.svg', 
-              class: "w-6 h-6 mx-auto text-opacity-60 text-[#222222] dark:text-white dark:text-opacity-80" %>
-            <%= link_to '', new_article_path, class: "absolute inset-0" %>
-          </div>
+          <%= render "shared/nav_icon_link",
+            label: t('write'),
+            path: new_article_path,
+            icon: 'icons/write.svg' %>
         <% else %>
-          <div
-            data-tippy-content="<%= t('write') %>"
-            data-tippy-placement="right"
-            class="relative py-6 w-10 mx-auto">
-            <%= inline_svg_tag 'icons/write.svg', class: "w-6 h-6 mx-auto text-opacity-60 text-[#222222] dark:text-white dark:text-opacity-80" %>
-            <%= link_to '', login_path, data: { turbo_frame: :modal }, class: "absolute inset-0" %>
-          </div>
+          <%= render "shared/nav_icon_link",
+            label: t('write'),
+            path: login_path,
+            icon: 'icons/write.svg',
+            turbo_frame: :modal %>
         <% end %>
       </div>
 
-      <div class="">
-        <div
-          data-tippy-content="<%= t('language') %>"
-          data-tippy-placement="right"
-          class="relative py-6 w-10 mx-auto">
-          <%= inline_svg_tag 'icons/global.svg', 
-            class: "w-6 h-6 mx-auto text-opacity-60 text-[#222222] dark:text-white" %>
-          <%= link_to '', edit_locale_path, 
-            data: {
-              turbo_frame: :modal
-            },
-            class: "absolute inset-0" %>
-        </div>
+      <div class="flex w-full flex-col items-center">
+        <%= render "shared/nav_icon_link",
+          label: t('language'),
+          path: edit_locale_path,
+          icon: 'icons/global.svg',
+          turbo_frame: :modal %>
 
-        <div class="flex justify-center" data-controller="darkmode">
-          <a class="hidden py-6 px-2 block cursor-pointer" data-darkmode-target="lightButton" data-action="darkmode#toggle">
-            <%= inline_svg_tag 'icons/moon.svg', 
-              class: "w-6 h-6 text-opacity-60 text-[#222222] dark:text-white",
-              data: { 
-                tippy_content: t('dark_mode'), 
-                tippy_placement: 'right' 
-              } %>
+        <div class="flex w-full flex-col items-center" data-controller="darkmode">
+          <a class="tooltip block hidden py-6 [--placement:right]" data-tip="<%= t('dark_mode') %>" data-darkmode-target="lightButton" data-action="darkmode#toggle">
+            <%= inline_svg_tag 'icons/moon.svg', class: "mx-auto h-6 w-6 text-base-content/60" %>
           </a>
-          <a class="hidden py-6 px-2 block cursor-pointer" data-darkmode-target="darkButton" data-action="darkmode#toggle">
-            <%= inline_svg_tag 'icons/sun.svg', 
-              class: "w-6 h-6 text-opacity-60 text-[#222222] dark:text-white",
-              data: { 
-                tippy_content: t('light_mode'), 
-                tippy_placement: 'right' 
-              } %>
+          <a class="tooltip block hidden py-6 [--placement:right]" data-tip="<%= t('light_mode') %>" data-darkmode-target="darkButton" data-action="darkmode#toggle">
+            <%= inline_svg_tag 'icons/sun.svg', class: "mx-auto h-6 w-6 text-base-content/60" %>
           </a>
         </div>
       </div>
 
-      <div class="h-28 flex justify-center">
+      <div class="flex h-28 w-full flex-col items-center justify-end pb-4">
         <% if current_user.present? %>
           <% dropdown_button = capture do %>
-            <%= image_tag current_user.avatar_thumb, class: "w-10 h-10 rounded-full" %>
-          <% end %>
-          <%= render_dropdown class: 'block', button: dropdown_button do %>
-            <div class="block text-[#222222] dark:text-white dark:text-opacity-80">
-              <%= link_to t('profile_page'), 
-                user_path(current_user), 
-                class: "block py-2 px-4" %>
-              <%= link_to t('my_wallet'),
-                dashboard_wallet_path, 
-                class: "block py-2 px-4 min-w-max" if current_user.mvm_eth? %>
-              <%= link_to t('settings'), 
-                dashboard_settings_path, 
-                class: "block py-2 px-4" %>
-              <%= link_to t('disconnect'), 
-                logout_path, 
-                data: {
-                  action: 'session#destroy',
-                },
-                class: "block py-2 px-4" %>
+            <div class="avatar">
+              <div class="size-10 rounded-full">
+                <%= image_tag current_user.avatar_thumb, class: "rounded-full" %>
+              </div>
             </div>
           <% end %>
+          <%= render_dropdown class: 'flex justify-center', button: dropdown_button do %>
+            <ul class="menu menu-sm w-52 p-2">
+              <li><%= link_to t('profile_page'), user_path(current_user), class: "dropdown-item" %></li>
+              <% if current_user.mvm_eth? %>
+                <li><%= link_to t('my_wallet'), dashboard_wallet_path, class: "dropdown-item" %></li>
+              <% end %>
+              <li><%= link_to t('settings'), dashboard_settings_path, class: "dropdown-item" %></li>
+              <li><%= link_to t('disconnect'), logout_path, data: { action: 'session#destroy' }, class: "dropdown-item" %></li>
+            </ul>
+          <% end %>
         <% else %>
-          <%= link_to login_path, data: { turbo_frame: :modal }, class: "block py-6" do %>
-            <%= inline_svg_tag 'icons/user.svg', class: "w-6 h-6 mx-auto text-opacity-60 text-[#222222] dark:text-white" %>
+          <%= link_to login_path, class: "tooltip block py-6 [--placement:right]", data: { turbo_frame: :modal, tip: t('login', default: 'Login') } do %>
+            <%= inline_svg_tag 'icons/user.svg', class: "mx-auto h-6 w-6 text-base-content/60" %>
           <% end %>
         <% end %>
       </div>

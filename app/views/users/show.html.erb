@@ -20,48 +20,39 @@
 <% if @user.block_user?(current_user) || current_user&.block_user?(@user) %>
   <%= render "shared/empty", text: t('blocked') %>
 <% else %>
-  <div class="mx-auto max-w-3xl"
+  <div class="mx-auto max-w-3xl text-base-content"
     data-controller="tabs"
     data-tabs-active-tab-value="<%= @tab %>"
-    data-tabs-active-class-value="font-bold text-primary !border-primary">
-    <div class="w-full flex overflow-auto flex-nowrap scrollbar-hide items-center flex mb-4">
+    data-tabs-active-class-value="tab-active">
+    <div class="tabs tabs-bordered mb-4 w-full overflow-auto scrollbar-hide">
       <%= link_to user_path(@user, tab: :published),
-        class: "cursor-pointer py-1 pr-8 border-transparent min-w-fit",
+        class: "tab #{'tab-active' if @tab.to_s == 'published'}",
         data: {
           tabs_target: "tab",
           tabs_tabname_param: "published",
           action: "tabs#active"
         } do %>
-        <div class="min-w-fit">
-          <%= t('published') %>
-        </div>
-        <div class="h-2 border-b-2 border-inherit w-4 mx-auto"></div>
+        <%= t('published') %>
       <% end %>
 
-      <%= link_to user_path(@user, tab: :published),
-        class: "cursor-pointer py-1 pr-8 border-transparent min-w-fit",
+      <%= link_to user_path(@user, tab: :bought),
+        class: "tab #{'tab-active' if @tab.to_s == 'bought'}",
         data: {
           tabs_target: "tab",
           tabs_tabname_param: "bought",
           action: "tabs#active"
         } do %>
-        <div class="min-w-fit">
-          <%= t('bought') %>
-        </div>
-        <div class="h-2 border-b-2 border-inherit w-4 mx-auto"></div>
+        <%= t('bought') %>
       <% end %>
 
       <%= link_to user_comments_path(@user),
-        class: "cursor-pointer py-1 pr-8 border-transparent min-w-fit",
+        class: "tab #{'tab-active' if @tab.to_s == 'commented'}",
         data: {
           tabs_target: "tab",
           tabs_tabname_param: "commented",
           action: "tabs#active"
         } do %>
-        <div class="min-w-fit">
-          <%= t('commented') %>
-        </div>
-        <div class="h-2 border-b-2 border-inherit w-4 mx-auto"></div>
+        <%= t('commented') %>
       <% end %>
     </div>
     <div class="hidden pb-4"

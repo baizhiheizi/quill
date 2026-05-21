@@ -8,9 +8,9 @@
   data-controller="tabs"
   data-tabs-active-tab-value="<%= @tab %>"
   data-tabs-active-class-value="font-bold text-primary !border-primary">
-  <div class="w-full flex overflow-auto flex-nowrap scrollbar-hide items-center flex mb-2 sm:mb-4">
+  <div class="mb-2 flex w-full flex-nowrap items-center overflow-auto scrollbar-hide sm:mb-4">
     <%= link_to dashboard_authorings_path(tab: :drafted),
-      class: "cursor-pointer py-1 pr-8 border-transparent min-w-fit",
+      class: "min-w-fit cursor-pointer border-transparent py-1 pr-8",
       data: {
         tabs_target: "tab",
         tabs_tabname_param: "drafted" 
@@ -21,7 +21,7 @@
       <div class="h-2 border-b-2 border-inherit w-4 mx-auto"></div>
     <% end %>
     <%= link_to dashboard_authorings_path(tab: :collections),
-      class: "cursor-pointer py-1 pr-8 border-transparent min-w-fit",
+      class: "min-w-fit cursor-pointer border-transparent py-1 pr-8",
       data: {
         tabs_target: "tab",
         tabs_tabname_param: "collections" 
@@ -32,7 +32,7 @@
       <div class="h-2 border-b-2 border-inherit w-4 mx-auto"></div>
     <% end %>
     <%= link_to dashboard_authorings_path(tab: :published),
-      class: "cursor-pointer py-1 pr-8 border-transparent min-w-fit",
+      class: "min-w-fit cursor-pointer border-transparent py-1 pr-8",
       data: {
         tabs_target: "tab",
         tabs_tabname_param: "published" 
@@ -43,7 +43,7 @@
       <div class="h-2 border-b-2 border-inherit w-4 mx-auto"></div>
     <% end %>
     <%= link_to dashboard_authorings_path(tab: :hidden),
-      class: "cursor-pointer py-1 pr-8 border-transparent min-w-fit",
+      class: "min-w-fit cursor-pointer border-transparent py-1 pr-8",
       data: {
         tabs_target: "tab",
         tabs_tabname_param: "hidden" 
@@ -54,7 +54,7 @@
       <div class="h-2 border-b-2 border-inherit w-4 mx-auto"></div>
     <% end %>
     <%= link_to dashboard_authorings_path(tab: :transfers),
-      class: "cursor-pointer py-1 pr-8 border-transparent min-w-fit",
+      class: "min-w-fit cursor-pointer border-transparent py-1 pr-8",
       data: {
         tabs_target: "tab",
         tabs_tabname_param: "transfers" 

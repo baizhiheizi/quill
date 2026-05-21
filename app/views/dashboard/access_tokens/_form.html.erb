@@ -1,8 +1,8 @@
 <%= form_for [:dashboard, current_user.access_tokens.new] do |form| %>
   <div class="flex justify-center">
-    <%= form.text_field :memo, placeholder: t('token_memo_placeholder'), class: "w-full py-2 rounded dark:bg-zinc-800 focus:ring-0 mb-4" %>
+    <%= form.text_field :memo, placeholder: t('token_memo_placeholder'), class: "input input-bordered w-full mb-4" %>
   </div>
   <div class="flex justify-center">
-    <%= form.submit t('submit'), class: "cursor-pointer rounded bg-primary hover:scale-105 text-white px-4 py-2" %>
+    <%= form.submit t('submit'), class: "btn btn-primary" %>
   </div>
 <% end %>

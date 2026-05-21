@@ -1,8 +1,8 @@
 <div data-article-form-target="optionFields" 
-  class="hidden px-4 py-5 bg-white dark:bg-[#1D1E2B] space-y-6 sm:p-6">
+  class="hidden px-4 py-5 bg-base-100 space-y-6 sm:p-6">
 
   <div class="mb-4">
-    <div class="w-full aspect-square rounded-2xl bg-[#F4F4F4]/90 flex border border-[#F4F4F4] border-dashed">
+    <div class="w-full aspect-square rounded-2xl bg-base-200/90 flex border border-base-content/10 border-dashed">
       <div data-controller="preview-upload" class="w-full h-full flex justify-center items-center">
         <%= form.label :cover, 
           class: "block h-full w-full cursor-pointer" do %>
@@ -43,7 +43,7 @@
         controller: "tags-select",
         tags_select_items_value: form.object.tag_names,
       }, 
-      class: "focus:ring-blue-500 focus:border-blue-500 flex-1 block w-full rounded" 
+      class: "input w-full" 
     %>
   </div>
 
@@ -62,7 +62,7 @@
           data: {
             action: "article-form#selectCollection article-form#touchDirty"
           },
-          class: "focus:ring-blue-500 focus:border-blue-500 flex-1 block w-full rounded bg-[#F4F4F4] border-[#F4F4F4] dark:border-white dark:border-opacity-5 dark:bg-[#333444]" %>
+          class: "input w-full bg-base-200" %>
       </div>
       <% if form.object.errors.where(:intro).present? %>
         <div class="py-2 text-red-700 font-sm"><%= form.object.errors.where(:intro).map(&:full_message).join(';') %></div>
@@ -81,7 +81,7 @@
           data: {
             action: 'input->article-form#introUpdate'
           },
-          class: "focus:ring-blue-500 focus:border-blue-500 flex-1 block w-full rounded bg-[#F4F4F4] border-[#F4F4F4] dark:border-white dark:border-opacity-5 dark:bg-[#333444]" %>
+          class: "input w-full bg-base-200" %>
       </div>
       <div class="py-2 font-sm opacity-70 text-right ml-auto">
         <span data-article-form-target="introCharacterCounter"><%= 140 - form.object.intro.to_s.size %></span>
@@ -102,13 +102,13 @@
           :symbol, 
           {}, 
           disabled: form.object.published_at?,
-          class: "focus:ring-blue-500 focus:border-blue-500 flex-1 block w-full rounded dark:border-white dark:border-opacity-5 dark:bg-[#333444]" %>
+          class: "input w-full bg-base-200" %>
       </div>
 
       <% if form.object.currency.present? && !form.object.published_at? %>
         <%= link_to currencies_path(identifier: form.object.uuid), 
           data: { controller: :turbo },
-          class: "block w-full mb-4 flex items-center justify-between py-2 px-4 bg-[#F4F4F4] dark:bg-[#333444] rounded-lg" do %>
+          class: "btn btn-soft w-full mb-4 flex items-center justify-between py-2 px-4 bg-base-200 rounded-lg" do %>
           <div id="<%= dom_id form.object.currency %>" class="flex items-center space-x-4">
             <div class='relative'>
               <%= image_tag form.object.currency.icon_url, 
@@ -145,7 +145,7 @@
           data: {
             action: 'change->article-form#calPriceUsd change->article-form#touchDirty',
           },
-          class: "focus:ring-blue-500 focus:border-blue-500 flex-1 block w-full rounded font-bold bg-[#F4F4F4] border-[#F4F4F4] dark:border-white dark:border-opacity-5 dark:bg-[#333444]", placeholder: "Input price" %>
+          class: "input w-full font-bold bg-base-200", placeholder: "Input price" %>
       </div>
       <div class="flex justify-between items-center">
         <% if form.object.errors.where(:price).present? %>
@@ -169,7 +169,7 @@
           min: "0.0",
           max: "0.9",
           step: "0.1",
-          class: "flex-1 block w-full rounded font-bold dark:border-white dark:border-opacity-5 bg-[#F4F4F4] border-[#F4F4F4] dark:bg-[#333444]"
+          class: "input w-full font-bold bg-base-200"
         %>
       </div>
     </div>
@@ -189,7 +189,7 @@
             article_form_target: 'readersRevenueRatio',
             action: 'blur->article-form#updateReadersRevenueRatio'
           }, 
-          class: "flex-1 block w-full rounded font-bold dark:border-white dark:border-opacity-5 bg-[#F4F4F4] border-[#F4F4F4] dark:bg-[#333444]"
+          class: "input w-full font-bold bg-base-200"
         %>
       </div>
     </div>
@@ -202,7 +202,7 @@
         <%= form.number_field :platform_revenue_ratio, 
           required: true, 
           disabled: true, 
-          class: "cursor-not-allowed flex-1 block w-full rounded font-bold dark:border-white dark:border-opacity-5 bg-[#F4F4F4] border-[#F4F4F4] dark:bg-[#333444] opacity-60"
+          class: "input w-full font-bold bg-base-200 opacity-60 cursor-not-allowed"
         %>
       </div>
     </div>
@@ -217,7 +217,7 @@
           data: { 
             article_form_target: 'collectionRevenueRatio'
           }, 
-          class: "cursor-not-allowed flex-1 block w-full rounded font-bold dark:border-white dark:border-opacity-5 bg-[#F4F4F4] border-[#F4F4F4] dark:bg-[#333444] opacity-60"
+          class: "input w-full font-bold bg-base-200 opacity-60 cursor-not-allowed"
         %>
       </div>
       <% if form.object.errors.where(:collection_revenue_ratio).present? %>
@@ -240,7 +240,7 @@
             article_form_target: 'authorRevenueRatio',
             action: 'article-form#touchDirty'
           }, 
-          class: "flex-1 block w-full rounded font-bold dark:border-white dark:border-opacity-5 bg-[#F4F4F4] border-[#F4F4F4] dark:bg-[#333444]"
+          class: "input w-full font-bold bg-base-200"
         %>
       </div>
       <% if form.object.errors.where(:author_revenue_ratio).present? %>
@@ -263,7 +263,7 @@
             article_form_target: 'referenceRevenueRatio',
             action: 'article-form#touchDirty'
           }, 
-          class: "flex-1 block w-full rounded font-bold dark:border-white dark:border-opacity-5 bg-[#F4F4F4] border-[#F4F4F4] dark:bg-[#333444]"
+          class: "input w-full font-bold bg-base-200"
         %>
       </div>
       <% if form.object.errors.where(:references_revenue_ratio).present? %>
@@ -285,7 +285,7 @@
     <div data-nested-form-target="target"></div>
     <div 
       data-action="click->nested-form#add click->article-form#calReferenceRatio click->article-form#touchDirty"
-      class="cursor-pointer w-full block px-4 py-2 font-bold text-center border border-primary hover:bg-primary hover:text-white text-primary rounded-full">
+      class="btn btn-outline btn-primary rounded-full w-full">
       <%= t('articles.add_reference') %>
     </div>
   <% end %>

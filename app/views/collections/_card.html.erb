@@ -16,7 +16,7 @@
   </div>
 
   <% if !collection.authorized?(current_user) %>
-    <div class="relative w-full p-3 text-center rounded-full text-white bg-primary">
+    <div class="relative w-full btn btn-primary rounded-full">
       <span><%= t('subscribe') %></span>
       <%= link_to '', collection_path(collection.uuid), data: { controller: "prefetch" }, class: "absolute inset-0" %>
     </div>

@@ -14,7 +14,11 @@
 </div>
 
 <div class="flex items-center space-x-2 w-36 mb-6">
-  <%= image_tag collection.author.avatar_thumb, class: "w-10 h-10 rounded-full" %>
+  <div class="avatar">
+    <div class="size-10 rounded-full">
+      <%= image_tag collection.author.avatar_thumb, class: "rounded-full" %>
+    </div>
+  </div>
   <div class="truncate">
     <div class="font-bold truncate overflow-hidden">
       <%= collection.author.name %>
@@ -35,7 +39,7 @@
   </div>
 
   <% if !collection.authorized?(current_user) %>
-    <div class="relative w-full lg:w-48 p-3 text-lg text-center rounded-full text-white bg-primary">
+    <div class="relative w-full lg:w-48 btn btn-primary btn-lg rounded-full">
       <span><%= t('buy_collection') %></span>
       <% if current_user.present? %>
         <% if current_user.mvm_eth? && collection.mixpay_supported? %>
@@ -78,7 +82,7 @@
     </div>
   <% elsif collection.author != current_user %>
     <div class="relative flex items-center space-x-1 justify-end">
-      <%= inline_svg_tag "icons/check-circle-solid.svg", class: "w-6 h-6 text-green-500" %>
+      <%= inline_svg_tag "icons/check-circle-solid.svg", class: "w-6 h-6 text-success" %>
       <span class="opacity-75"><%= t('subscribed') %></span>
     </div>
   <% end %>

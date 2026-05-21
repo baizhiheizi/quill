@@ -1,0 +1,6 @@
+<div class="form-control w-full <%= wrapper_class %>">
+  <% if label.present? %>
+    <%= form.label field, label, class: "label-text mb-1 block" %>
+  <% end %>
+  <%= form.text_field field, { class: "input w-full" }.merge(options) %>
+</div>

@@ -5,8 +5,8 @@
         <%= form.label :avatar %>
       </span>
       <div class="flex items-center space-x-2">
-        <%= form.submit t('save'), class: 'cursor-pointer rounded-full border border-primary text-primary px-4 py-1' %>
-        <%= link_to t('cancel'), :back, class: 'cursor-pointer rounded-full border dark:border-white dark:border-opacity-5 text-inherit text-opacity-40 px-4 py-1' %>
+        <%= form.submit t('save'), class: 'btn btn-outline btn-primary rounded-full' %>
+        <%= link_to t('cancel'), :back, class: 'btn btn-soft rounded-full opacity-40' %>
       </div>
     </div>
 
@@ -38,15 +38,15 @@
         <%= form.label :name %>
       </span>
       <div class="flex items-center space-x-2">
-        <%= form.submit t('save'), class: 'cursor-pointer rounded-full border border-primary text-primary px-4 py-1' %>
-        <%= link_to t('cancel'), :back, class: 'cursor-pointer rounded-full border dark:border-white dark:border-opacity-5 text-inherit text-opacity-40 px-4 py-1' %>
+        <%= form.submit t('save'), class: 'btn btn-outline btn-primary rounded-full' %>
+        <%= link_to t('cancel'), :back, class: 'btn btn-soft rounded-full opacity-40' %>
       </div>
     </div>
 
     <div class="flex items-center">
       <%= form.text_field :name, 
         placeholder: 'input name', 
-        class: "flex-1 block py-2 px-0 text-primary border-t-0 border-l-0 border-r-0 border-b border-[#F4F4F4] focus:ring-0" %>
+        class: "input flex-1 rounded-none border-0 border-b border-base-content/10 px-0 focus:ring-0" %>
 
     </div>
   <% end %>
@@ -59,8 +59,8 @@
         <%= form.label :biography %>
       </span>
       <div class="flex items-center space-x-2">
-        <%= form.submit t('save'), class: 'cursor-pointer rounded-full border border-primary text-primary px-4 py-1' %>
-        <%= link_to t('cancel'), :back, class: 'cursor-pointer rounded-full border dark:border-white dark:border-opacity-5 text-inherit text-opacity-40 px-4 py-1' %>
+        <%= form.submit t('save'), class: 'btn btn-outline btn-primary rounded-full' %>
+        <%= link_to t('cancel'), :back, class: 'btn btn-soft rounded-full opacity-40' %>
       </div>
     </div>
 
@@ -68,7 +68,7 @@
       <%= form.text_area :biography, 
         rows: 3,
         placeholder: 'input biography', 
-        class: "flex-1 block py-2 px-0 text-primary border-t-0 border-l-0 border-r-0 border-b border-[#F4F4F4] focus:ring-0" %>
+        class: "input flex-1 rounded-none border-0 border-b border-base-content/10 px-0 focus:ring-0" %>
 
     </div>
   <% end %>
@@ -81,15 +81,15 @@
         <%= form.label :email %>
       </span>
       <div class="flex items-center space-x-2">
-        <%= form.submit t('verify'), class: 'cursor-pointer rounded-full border border-primary text-primary px-4 py-1' %>
-        <%= link_to t('cancel'), :back, class: 'cursor-pointer rounded-full border dark:border-white dark:border-opacity-5 text-inherit text-opacity-40 px-4 py-1' %>
+        <%= form.submit t('verify'), class: 'btn btn-outline btn-primary rounded-full' %>
+        <%= link_to t('cancel'), :back, class: 'btn btn-soft rounded-full opacity-40' %>
       </div>
     </div>
 
     <div class="flex items-center">
       <%= form.text_field :email, 
         placeholder: 'input email', 
-        class: "flex-1 block py-2 px-0 text-primary border-t-0 border-l-0 border-r-0 border-b border-zinc-100 focus:ring-0" %>
+        class: "input flex-1 rounded-none border-0 border-b border-base-content/10 px-0 focus:ring-0" %>
 
     </div>
   <% end %>

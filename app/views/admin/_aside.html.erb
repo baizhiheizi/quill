@@ -1,74 +1,43 @@
-<aside data-controller="sidebar" 
-       data-sidebar-open-class-value="<%= %w[w-64].to_json %>" 
-       data-sidebar-collapse-class-value="<%= %w[w-10 sm:w-16].to_json %>" 
-       class="sticky top-0 overflow-y-scroll scrollbar-hide flex items-center">
-  <div data-sidebar-target="sidebar" 
-      data-action="hover->sidebar#open" 
-      class="h-full bg-white dark:bg-zinc-900 w-10 sm:w-16 flex flex-col p-0 sm:p-4 overflow-x-hidden transition-transform">
-    <div class="flex flex-col space-y-2">
-      <%= link_to admin_root_path, class: "flex items-center space-x-4 hover:bg-zinc-100 dark:hover:bg-zinc-800 p-2 rounded-lg truncate" do %>
-        <span>Dashboard</span>
+<aside
+  data-controller="sidebar"
+  data-sidebar-open-class-value="<%= %w[w-64].to_json %>"
+  data-sidebar-collapse-class-value="<%= %w[w-10 sm:w-16].to_json %>"
+  class="sticky top-0 flex items-center overflow-y-scroll scrollbar-hide">
+  <div
+    data-sidebar-target="sidebar"
+    data-action="hover->sidebar#open"
+    class="menu flex h-full w-10 flex-col overflow-x-hidden bg-base-100 p-0 transition-transform sm:w-16 sm:p-4">
+    <ul class="menu menu-sm w-full gap-1">
+      <% [
+        ['Dashboard', admin_root_path],
+        ['Stats', admin_statistics_path],
+        ['Users', admin_users_path],
+        ['Articles', admin_articles_path],
+        ['Comments', admin_comments_path],
+        ['Payments', admin_payments_path],
+        ['Orders', admin_orders_path],
+        ['PreOrders', admin_pre_orders_path],
+        ['Swap Orders', admin_swap_orders_path],
+        ['Transfers', admin_transfers_path],
+        ['Snapshots', admin_mixin_network_snapshots_path],
+        ['Wallets', admin_mixin_network_users_path],
+        ['Collections', admin_collections_path],
+        ['AR Tx', admin_arweave_transactions_path],
+        ['Bonus', admin_bonuses_path],
+        ['Sessions', admin_sessions_path],
+        ['Logout', admin_logout_path]
+      ].each do |label, path| %>
+        <li><%= link_to label, path, class: "rounded-lg hover:bg-base-200" %></li>
       <% end %>
-      <%= link_to admin_statistics_path, class: "flex items-center space-x-4 hover:bg-zinc-100 dark:hover:bg-zinc-800 p-2 rounded-lg truncate" do %>
-        <span>Stats</span>
-      <% end %>
-      <%= link_to admin_users_path, class: "flex items-center space-x-4 hover:bg-zinc-100 dark:hover:bg-zinc-800 p-2 rounded-lg truncate" do %>
-        <span>Users</span>
-      <% end %>
-      <%= link_to admin_articles_path, class: "flex items-center space-x-4 hover:bg-zinc-100 dark:hover:bg-zinc-800 p-2 rounded-lg truncate" do %>
-        <span>Articles</span>
-      <% end %>
-      <%= link_to admin_comments_path, class: "flex items-center space-x-4 hover:bg-zinc-100 dark:hover:bg-zinc-800 p-2 rounded-lg truncate" do %>
-        <span>Comments</span>
-      <% end %>
-      <%= link_to admin_payments_path, class: "flex items-center space-x-4 hover:bg-zinc-100 dark:hover:bg-zinc-800 p-2 rounded-lg truncate" do %>
-        <span>Payments</span>
-      <% end %>
-      <%= link_to admin_orders_path, class: "flex items-center space-x-4 hover:bg-zinc-100 dark:hover:bg-zinc-800 p-2 rounded-lg truncate" do %>
-        <span>Orders</span>
-      <% end %>
-      <%= link_to admin_pre_orders_path, class: "flex items-center space-x-4 hover:bg-zinc-100 dark:hover:bg-zinc-800 p-2 rounded-lg truncate" do %>
-        <span>PreOrders</span>
-      <% end %>
-      <%= link_to admin_swap_orders_path, class: "flex items-center space-x-4 hover:bg-zinc-100 dark:hover:bg-zinc-800 p-2 rounded-lg truncate" do %>
-        <span>Swap Orders</span>
-      <% end %>
-      <%= link_to admin_transfers_path, class: "flex items-center space-x-4 hover:bg-zinc-100 dark:hover:bg-zinc-800 p-2 rounded-lg truncate" do %>
-        <span>Transfers</span>
-      <% end %>
-      <%= link_to admin_mixin_network_snapshots_path, class: "flex items-center space-x-4 hover:bg-zinc-100 dark:hover:bg-zinc-800 p-2 rounded-lg truncate" do %>
-        <span>Snapshots</span>
-      <% end %>
-      <%= link_to admin_mixin_network_users_path, class: "flex items-center space-x-4 hover:bg-zinc-100 dark:hover:bg-zinc-800 p-2 rounded-lg truncate" do %>
-        <span>Wallets</span>
-      <% end %>
-      <%= link_to admin_collections_path, class: "flex items-center space-x-4 hover:bg-zinc-100 dark:hover:bg-zinc-800 p-2 rounded-lg truncate" do %>
-        <span>Collections</span>
-      <% end %>
-      <%= link_to admin_arweave_transactions_path, class: "flex items-center space-x-4 hover:bg-zinc-100 dark:hover:bg-zinc-800 p-2 rounded-lg truncate" do %>
-        <span>AR Tx</span>
-      <% end %>
-      <%= link_to admin_bonuses_path, class: "flex items-center space-x-4 hover:bg-zinc-100 dark:hover:bg-zinc-800 p-2 rounded-lg truncate" do %>
-        <span>Bonus</span>
-      <% end %>
-      <%= link_to admin_sessions_path, class: "flex items-center space-x-4 hover:bg-zinc-100 dark:hover:bg-zinc-800 p-2 rounded-lg truncate" do %>
-        <span>Sessions</span>
-      <% end %>
-      <%= link_to admin_logout_path, class: "flex items-center space-x-4 hover:bg-zinc-100 dark:hover:bg-zinc-800 p-2 rounded-lg truncate" do %>
-        <span>Logout</span>
-      <% end %>
-    </div>
+    </ul>
+
     <div class="mt-auto">
-      <button data-sidebar-target="openButton" data-action="sidebar#open" class="flex items-center space-x-4 hover:bg-zinc-100 dark:hover:bg-zinc-800 p-2 rounded-lg truncate">
-        <%= inline_svg_tag "icons/chevron-right.svg", class: "w-4 h-4 opacity-60" %>
+      <button data-sidebar-target="openButton" data-action="sidebar#open" class="btn btn-soft btn-sm w-full justify-start">
+        <%= inline_svg_tag "icons/chevron-right.svg", class: "h-4 w-4 opacity-60" %>
       </button>
-      <button data-sidebar-target="collapseButton" data-action="sidebar#collapse" class="hidden w-full flex items-center space-x-4 hover:bg-zinc-100 dark:hover:bg-zinc-800 p-2 rounded-lg truncate">
-        <span>
-          <%= inline_svg_tag "icons/chevron-left.svg", class: "w-4 h-4 opacity-60" %>
-        </span>
-        <span>
-          Collapse
-        </span>
+      <button data-sidebar-target="collapseButton" data-action="sidebar#collapse" class="btn btn-soft btn-sm hidden w-full justify-start">
+        <%= inline_svg_tag "icons/chevron-left.svg", class: "h-4 w-4 opacity-60" %>
+        <span>Collapse</span>
       </button>
     </div>
   </div>

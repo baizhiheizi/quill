@@ -1,4 +1,4 @@
-<tr class="hover:bg-zinc-50 dark:hover:bg-zinc-800 border-b">
+<tr>
   <td class="p-4">
     <%= order.id %>
   </td>
@@ -30,12 +30,12 @@
   </td>
   <td class="p-4">
     <div class="flex justify-center">
-      <span class="px-2 py-1 rounded text-white
+      <span class="badge
         <%=
           {
-            paid: 'bg-blue-500',
-            completed: 'bg-green-500',
-            stale: 'bg-zinc-500'
+            paid: 'badge-info',
+            completed: 'badge-success',
+            stale: 'badge-neutral'
           }[order.state.to_sym]
           %>">
         <%= order.state %>
@@ -49,6 +49,6 @@
     <%= order.created_at %>
   </td>
   <td class="p-4">
-    <%= link_to 'Detail', admin_order_path(order), class: "bg-blue-500 hover:bg-blue-600 rounded text-white px-4 py-2", data: { turbo_frame: "_top" } %>
+    <%= link_to 'Detail', admin_order_path(order), class: "btn btn-primary btn-sm", data: { turbo_frame: "_top" } %>
   </td>
 </tr>

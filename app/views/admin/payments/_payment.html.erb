@@ -1,4 +1,4 @@
-<tr class="hover:bg-zinc-50 dark:hover:bg-zinc-800 border-b">
+<tr>
   <td class="p-4">
     <%= payment.id %>
   </td>
@@ -20,12 +20,12 @@
   </td>
   <td class="p-4">
     <div class="flex justify-center">
-      <span class="px-2 py-1 rounded text-white
+      <span class="badge
         <%=
           {
-            paid: 'bg-blue-500',
-            completed: 'bg-green-500',
-            refunded: 'bg-indigo-500'
+            paid: 'badge-info',
+            completed: 'badge-success',
+            refunded: 'badge-secondary'
           }[payment.state.to_sym]
           %>">
         <%= payment.state %>
@@ -42,6 +42,6 @@
     <%= payment.created_at %>
   </td>
   <td class="p-4">
-    <%= link_to 'Detail', admin_payment_path(payment), class: "bg-blue-500 hover:bg-blue-600 rounded text-white px-4 py-2", data: { turbo_frame: "_top" } %>
+    <%= link_to 'Detail', admin_payment_path(payment), class: "btn btn-primary btn-sm", data: { turbo_frame: "_top" } %>
   </td>
 </tr>

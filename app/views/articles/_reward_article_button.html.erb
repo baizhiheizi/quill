@@ -5,16 +5,16 @@
     data: {
       turbo_frame: :modal
     },
-    class: "no-underline rounded-full #{size == 'lg' ? 'px-6 py-2' : 'px-3 py-1.5'} text-white bg-[#F3463F] cursor-pointer flex items-center space-x-2" do %>
+    class: "btn btn-error rounded-full #{size == 'lg' ? 'btn-lg' : 'btn-sm'} no-underline flex items-center space-x-2" do %>
     <span><%= t('reward') %></span>
   <% end %>
 <% elsif from_mixin_messenger? %>
   <%= link_to t('reward'), 
     login_path(return_to: user_article_url(article.author, article.uuid)), 
-    class: "no-underline rounded-full #{size == 'lg' ? 'px-6 py-2' : 'px-3 py-1.5'} text-white bg-[#F3463F] cursor-pointer flex items-center space-x-2" %>
+    class: "btn btn-error rounded-full #{size == 'lg' ? 'btn-lg' : 'btn-sm'} no-underline flex items-center space-x-2" %>
 <% else %>
   <%= link_to t('reward'), 
     login_path(return_to: user_article_url(article.author, article.uuid)), 
     data: { turbo_frame: :modal }, 
-    class: "no-underline rounded-full #{size == 'lg' ? 'px-6 py-2' : 'px-3 py-1.5'} text-white bg-[#F3463F] cursor-pointer flex items-center space-x-2" %>
+    class: "btn btn-error rounded-full #{size == 'lg' ? 'btn-lg' : 'btn-sm'} no-underline flex items-center space-x-2" %>
 <% end %>

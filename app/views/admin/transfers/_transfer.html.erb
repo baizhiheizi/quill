@@ -1,4 +1,4 @@
-<tr id="<%= dom_id transfer %>" class="hover:bg-zinc-50 dark:hover:bg-zinc-800 border-b">
+<tr id="<%= dom_id transfer %>">
   <td class="p-4">
     <%= transfer.id %>
   </td>
@@ -33,11 +33,11 @@
   <td class="p-4">
     <div class="flex justify-center">
       <% if transfer.processed? %>
-        <span class="px-2 py-1 rounded text-white bg-green-500">
+        <span class="badge badge-success">
           Processed
         </span>
       <% else %>
-        <span class="px-2 py-1 rounded text-white bg-zinc-300">
+        <span class="badge badge-neutral">
           Unprocessed
         </span>
       <% end %>
@@ -53,7 +53,7 @@
     <%= transfer.created_at %>
   </td>
   <td class="p-4 flex items-center space-x-4">
-    <%= link_to 'Detail', admin_transfer_path(transfer), class: "bg-blue-500 hover:bg-blue-600 rounded text-white px-4 py-2", data: { turbo_frame: "_top" } %>
-    <%= button_to 'Process', admin_transfer_process_now_path(transfer.id), class: "bg-red-500 hover:bg-red-600 rounded text-white px-4 py-2 cursor-pointer" unless transfer.processed? %>
+    <%= link_to 'Detail', admin_transfer_path(transfer), class: "btn btn-primary btn-sm", data: { turbo_frame: "_top" } %>
+    <%= button_to 'Process', admin_transfer_process_now_path(transfer.id), class: "btn btn-error btn-sm" unless transfer.processed? %>
   </td>
 </tr>

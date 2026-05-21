@@ -1,22 +1,17 @@
-<nav class="hidden bg-white dark:bg-zinc-900 sm:block fixed top-0 w-full z-50">
-  <div class="px-4">
-    <div class="flex items-center justify-between h-16">
-      <div class="flex items-center flex-1 space-x-10">
-        <%= link_to admin_root_path, class: 'flex items-center space-x-2 flex-shrink-0' do %>
-          <%= image_tag 'logo.svg', class: 'w-auto h-10' %>
-        <% end %>
-      </div>
-    </div>
+<nav class="navbar fixed top-0 z-50 hidden w-full bg-base-100 sm:block">
+  <div class="navbar-start px-4">
+    <%= link_to admin_root_path, class: 'flex items-center space-x-2' do %>
+      <%= image_tag 'logo.svg', class: 'h-10 w-auto' %>
+      <span class="text-lg font-semibold text-base-content">Admin</span>
+    <% end %>
   </div>
 </nav>
 
-<nav class="bg-white dark:bg-zinc-900 sm:hidden w-full fixed top-0 z-50">
-  <div class="relative px-4 max-h-screen">
-    <div class="relative flex items-center justify-center h-12">
-      <%= link_to admin_root_path, class: "flex items-center flex-shrink-0 space-x-2" do %>
-        <%= image_tag 'logo.svg', class: 'w-8 h-8' %>
-        <span class='text-xl font-medium dark:text-zinc-50'>Admin</span>
-      <% end %>
-    </div>
+<nav class="navbar fixed top-0 z-50 w-full bg-base-100 sm:hidden">
+  <div class="navbar-center">
+    <%= link_to admin_root_path, class: "flex items-center space-x-2" do %>
+      <%= image_tag 'logo.svg', class: 'h-8 w-8' %>
+      <span class='text-xl font-medium text-base-content'>Admin</span>
+    <% end %>
   </div>
 </nav>

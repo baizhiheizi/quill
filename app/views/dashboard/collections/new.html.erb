@@ -19,12 +19,12 @@
   <%= turbo_frame_tag 'modal' do %>
     <%= render_modal title: t('new_collection') do %>
       <div class="mb-12">
-        <div class="prose dark:text-white">
+        <div class="prose text-base-content">
           <%= MarkdownRenderService.call(t('collection_rule'), type: :full).html_safe %>
         </div>
       </div>
       <div class="flex items-center justify-center">
-        <button data-action="modal-component#cancel" class="py-2 px-4 w-48 rounded-full bg-primary text-white text-center">
+        <button data-action="modal-component#cancel" class="btn btn-primary rounded-full">
           <%= t('confirm') %>
         </button>
       </div>

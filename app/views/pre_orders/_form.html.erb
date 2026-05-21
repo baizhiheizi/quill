@@ -8,9 +8,13 @@
   data-pre-orders-form-component-amount-value="<%= price %>"
   data-pre-orders-form-component-price-usd-value="<%= article.currency.price_usd %>">
 
-  <div class="bg-zinc-50 px-4 py-2 rounded mb-4 dark:bg-[#333444] hidden sm:block">
+  <div class="bg-base-200 px-4 py-2 rounded mb-4 hidden sm:block">
     <div class="flex items-center space-x-2 mb-1">
-      <%= image_tag article.author.avatar_thumb, class: "w-6 h-6 rounded-full", lazy: true %>
+      <div class="avatar">
+        <div class="size-6 rounded-full">
+          <%= image_tag article.author.avatar_thumb, class: "rounded-full", lazy: true %>
+        </div>
+      </div>
       <span class="text-sm max-w-24 truncate"><%= article.author.name %></span>
     </div>
     <div class="font-bold truncate">
@@ -69,7 +73,7 @@
           pre_orders_form_component_target: 'mixpayUrl',
           turbo_frame: '_top'
         }, 
-        class: "cursor-pointer block w-full text-center rounded-lg bg-primary text-white p-4 text-xl hover:font-black" do %>
+        class: "btn btn-primary btn-lg w-full text-xl" do %>
         <%= t('continue') %>
       <% end %>
     <% else %>
@@ -86,7 +90,7 @@
         %>
         <%= form.hidden_field :type, value: payer.default_payment %>
 
-        <%= form.submit t('continue'), class: "cursor-pointer block w-full rounded-lg bg-primary text-white p-4 text-xl hover:font-black" %>
+        <%= form.submit t('continue'), class: "btn btn-primary btn-lg w-full text-xl" %>
       <% end %>
     <% end %>
   </div>
