@@ -1,0 +1,43 @@
+lexxy-editor {
+  display: block;
+  min-block-size: 12rem;
+  border: 1px solid var(--lexxy-color-ink-lighter, #d4d4d4);
+  border-radius: 0.5ch;
+  background-color: var(--lexxy-color-canvas, #fff);
+}
+
+html.dark lexxy-editor,
+.dark lexxy-editor {
+  --lexxy-color-canvas: #333444;
+  --lexxy-color-ink: rgba(255, 255, 255, 0.92);
+  --lexxy-color-ink-medium: rgba(255, 255, 255, 0.72);
+  --lexxy-color-ink-light: rgba(255, 255, 255, 0.56);
+  --lexxy-color-ink-lighter: rgba(255, 255, 255, 0.18);
+  --lexxy-color-ink-lightest: rgba(255, 255, 255, 0.1);
+  --lexxy-color-code-bg: #444655;
+  --lexxy-color-link: #8ab4ff;
+}
+
+.dark lexxy-editor button,
+.dark lexxy-editor summary {
+  background: var(--lexxy-color-canvas);
+  color: var(--lexxy-color-ink);
+}
+
+.lexxy-content img {
+  max-width: 100%;
+  height: auto;
+}
+
+.prose-article.lexxy-content,
+.mb-12.prose-article .lexxy-content {
+  max-width: none;
+}
+
+.article-form--new [data-article-form-target='contentFields'] {
+  display: block !important;
+}
+
+.article-form--new [data-article-form-target='optionFields'] {
+  display: none !important;
+}

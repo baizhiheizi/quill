@@ -2,23 +2,20 @@
 
 <%= render "comments/quote_comment", quote_comment: quote_comment if quote_comment.present? %>
 
-<%= form_for commentable.comments.new, 
-  html: { class: 'mb-4' } do |form| %>
+<%= form_for commentable.comments.new,
+  html: { class: "mb-4" } do |form| %>
   <%= form.hidden_field :commentable_id, value: commentable.id %>
   <%= form.hidden_field :commentable_type, value: commentable.class.name %>
   <%= form.hidden_field :quote_comment_id, value: quote_comment&.id %>
-  <%= form.text_area :content, 
-    class: "w-full min-h-48 py-2 rounded focus:ring-offset-0 focus:border-zinc-200 border-zinc-200 dark:border-white dark:border-opacity-10 focus:ring-0 mb-4 dark:bg-transparent", 
-    placeholder: t("markdown_supported"), 
-    data: { 
-      controller: "textarea-autogrow",
-    } 
-  %>
+  <%= form.rich_text_area :content,
+        rows: 6,
+        placeholder: t("markdown_supported") %>
+  <div class="mb-4"></div>
   <div class="flex justify-end">
-    <%= form.submit t('submit'), 
+    <%= form.submit t("submit"),
       data: {
         action: "confirm#invoke",
-      }, 
+      },
       class: "cursor-pointer bg-primary hover:scale-105 text-white px-4 py-1 rounded-full" %>
   </div>
 <% end %>

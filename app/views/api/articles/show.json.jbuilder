@@ -9,4 +9,4 @@ json.author do
   json.avatar @article.author.avatar_url
 end
 
-json.content @article.content if @article.authorized?(current_user)
+json.content @article.content_body if @article.authorized?(current_user)

@@ -13,10 +13,6 @@ module UiHelper
     render "shared/time_format", datetime:, format:, class:, content: capture(&block)
   end
 
-  def render_editor(draft_key: "", storage_endpoint: Settings.storage.endpoint, &block)
-    render "shared/editor", draft_key:, storage_endpoint:, content: capture(&block)
-  end
-
   def render_qrcode(url:, image_classes: "", &block)
     render "shared/qrcode", url:, image_classes:, content: capture(&block)
   end

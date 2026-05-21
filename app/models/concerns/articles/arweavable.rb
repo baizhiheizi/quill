@@ -42,6 +42,6 @@ module Articles::Arweavable
   end
 
   def digest
-    @digest ||= SHA3::Digest::SHA256.hexdigest(content)
+    @digest ||= SHA3::Digest::SHA256.hexdigest(content_body)
   end
 end

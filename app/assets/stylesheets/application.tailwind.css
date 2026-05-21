@@ -1,4 +1,5 @@
-@import '@milkdown/theme-nord/lib/style.css';
+@import '@37signals/lexxy/dist/stylesheets/lexxy.css';
+@import './lexxy_overrides.css';
 @import 'highlight.js/styles/github';
 @import 'photoswipe/dist/photoswipe.css';
 @import 'tom-select/dist/css/tom-select';
@@ -114,18 +115,6 @@
   }
 }
 
-.ProseMirror p.is-editor-empty:first-child:before {
-  color: #adb5bd;
-  content: attr(data-placeholder);
-  float: left;
-  height: 0;
-  pointer-events: none;
-}
-
 pre code.hljs {
   padding: 0;
-}
-
-.milkdown .ProseMirror {
-  @apply max-w-full focus-visible:outline-none;
 }

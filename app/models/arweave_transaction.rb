@@ -85,7 +85,7 @@ class ArweaveTransaction < ApplicationRecord
         content: {
           title: article.title,
           intro: article.intro,
-          body: article.content
+          body: article.content_body
         },
         digest:,
         author: article.author.uid,
@@ -105,7 +105,7 @@ class ArweaveTransaction < ApplicationRecord
       iv = encrypter.random_iv
       encrypter.iv = iv
       encrypter.key = Base64.urlsafe_decode64 Rails.application.credentials.dig(:encryption, :aes_key)
-      cipher = encrypter.update(article.content) + encrypter.final
+      cipher = encrypter.update(article.content_body) + encrypter.final
 
       {
         content: {
@@ -220,7 +220,7 @@ class ArweaveTransaction < ApplicationRecord
     return unless new_record?
     return unless encryptable?
 
-    self.digest = SHA3::Digest::SHA256.hexdigest article.content
+    self.digest = SHA3::Digest::SHA256.hexdigest article.content_body
     tx = Arweave::Transaction.new data: generated_data.to_json
     tags.each do |tag|
       next if tag[:value].blank?

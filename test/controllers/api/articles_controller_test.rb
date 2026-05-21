@@ -33,6 +33,6 @@ class API::ArticlesControllerTest < IntegrationTestCase
     get api_article_path(article.uuid), headers: api_headers(access_tokens(:reader_token)), as: :json
 
     assert_response :success
-    assert_equal article.content, response.parsed_body["content"]
+    assert_equal article.content_body, response.parsed_body["content"]
   end
 end

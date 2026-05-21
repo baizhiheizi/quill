@@ -49,30 +49,41 @@ export default class extends Controller {
   }
 
   connect() {
-    if (!this.articlePublishedValue) {
-      document
-        .querySelector('#modal')
-        .addEventListener('modal-component:ok', (event) => {
-          const identifier = event.detail.identifier;
-
-          if (identifier === this.articleUuidValue) {
-            Array.from(
-              this.element.querySelector('#article_asset_id').children,
-            ).forEach((option) => {
-              if (option.value === event.detail.assetId) {
-                option.selected = true;
-              } else {
-                option.selected = false;
-              }
-            });
-            this.currencyIconTarget.src = event.detail.iconUrl;
-            this.currencyChainIconTarget.src = event.detail.chainIconUrl;
-            this.currencySymbolTarget.innerText = event.detail.symbol;
-            this.currencyPriceUsdValue = event.detail.priceUsd;
-            this.touchDirty();
-          }
-        });
+    if (this.newRecordValue) {
+      this.showContentForm();
+      this.hideOptionFieldsForNewRecord();
     }
+
+    if (this.articlePublishedValue) return;
+
+    const modal = document.querySelector('#modal');
+    if (!modal) return;
+
+    modal.addEventListener('modal-component:ok', (event) => {
+      const identifier = event.detail.identifier;
+
+      if (identifier !== this.articleUuidValue) return;
+      if (
+        !this.hasCurrencyIconTarget ||
+        !this.hasCurrencyChainIconTarget ||
+        !this.hasCurrencySymbolTarget
+      ) {
+        return;
+      }
+
+      const assetSelect = this.element.querySelector('#article_asset_id');
+      if (assetSelect) {
+        Array.from(assetSelect.children).forEach((option) => {
+          option.selected = option.value === event.detail.assetId;
+        });
+      }
+
+      this.currencyIconTarget.src = event.detail.iconUrl;
+      this.currencyChainIconTarget.src = event.detail.chainIconUrl;
+      this.currencySymbolTarget.innerText = event.detail.symbol;
+      this.currencyPriceUsdValue = event.detail.priceUsd;
+      this.touchDirty();
+    });
   }
 
   disconnect() {
@@ -86,14 +97,21 @@ export default class extends Controller {
   }
 
   formTargetConnected() {
-    switch (this.activeTabValue) {
-      case 'edit':
-        this.edit();
-        break;
-      case 'options':
-        this.options();
-        break;
+    if (this.newRecordValue || this.activeTabValue !== 'options') {
+      this.edit();
+    } else {
+      this.options();
     }
+
+    this.recoverDraftWhenReady();
+  }
+
+  contentTargetConnected() {
+    this.recoverDraftWhenReady();
+  }
+
+  recoverDraftWhenReady() {
+    if (!this.hasContentTarget) return;
 
     this.recoverDraft();
   }
@@ -130,7 +148,8 @@ export default class extends Controller {
   }
 
   selectedCollectionIdValueChanged() {
-    if (this.articlePublishedValue) return;
+    if (this.articlePublishedValue || !this.hasCollectionRevenueRatioTarget)
+      return;
 
     const selectedCollection = this.selectableCollectionsValue.find(
       (c) => c.uuid == this.selectedCollectionIdValue,
@@ -145,12 +164,12 @@ export default class extends Controller {
   }
 
   currencyPriceUsdValueChanged() {
-    if (!this.currencyPriceUsdValue) return;
+    if (!this.currencyPriceUsdValue || !this.hasPriceUsdTarget) return;
     this.calPriceUsd();
   }
 
   calPriceUsd() {
-    if (!this.currencyPriceUsdValue) return;
+    if (!this.currencyPriceUsdValue || !this.hasPriceUsdTarget) return;
 
     const priceInput = this.element.querySelector(
       "input[name='article[price]']",
@@ -174,6 +193,8 @@ export default class extends Controller {
   }
 
   updateReadersRevenueRatio(event) {
+    if (!this.hasReadersRevenueRatioTarget) return;
+
     if (parseFloat(event.target.value) < 0.1) {
       this.readersRevenueRatioTarget.value = 0.1;
     } else if (parseFloat(event.target.value) > 0.9) {
@@ -185,6 +206,8 @@ export default class extends Controller {
   }
 
   formatReferenceRatio(event) {
+    if (!this.hasReadersRevenueRatioTarget) return;
+
     let ratio = 0.05;
 
     if (event.target.value) {
@@ -203,32 +226,46 @@ export default class extends Controller {
   }
 
   calReferenceRatio() {
-    if (this.hasReferenceRevenueRatioTarget) {
-      const referenceRevenueRatio = this.articleReferenceRevenueRatioTargets
-        .filter(
-          (target) =>
-            window.getComputedStyle(target.closest('.nested-form-wrapper'))
-              .display !== 'none',
-        )
-        .map((target) => {
-          return parseFloat(target.value);
-        })
-        .reduce((prev, cur) => {
-          return prev + cur;
-        }, 0);
-      if (
-        referenceRevenueRatio <=
-        0.9 - parseFloat(this.readersRevenueRatioTarget.value)
-      ) {
-        this.referenceRevenueRatioTarget.value = parseFloat(
-          referenceRevenueRatio.toFixed(2),
-        );
-      }
+    if (
+      !this.hasReferenceRevenueRatioTarget ||
+      !this.hasReadersRevenueRatioTarget
+    ) {
+      return;
+    }
+
+    const referenceRevenueRatio = this.articleReferenceRevenueRatioTargets
+      .filter(
+        (target) =>
+          window.getComputedStyle(target.closest('.nested-form-wrapper'))
+            .display !== 'none',
+      )
+      .map((target) => {
+        return parseFloat(target.value);
+      })
+      .reduce((prev, cur) => {
+        return prev + cur;
+      }, 0);
+    if (
+      referenceRevenueRatio <=
+      0.9 - parseFloat(this.readersRevenueRatioTarget.value)
+    ) {
+      this.referenceRevenueRatioTarget.value = parseFloat(
+        referenceRevenueRatio.toFixed(2),
+      );
     }
     this.calAuthorRevenueRatio();
   }
 
   calAuthorRevenueRatio() {
+    if (
+      !this.hasAuthorRevenueRatioTarget ||
+      !this.hasReadersRevenueRatioTarget ||
+      !this.hasReferenceRevenueRatioTarget ||
+      !this.hasCollectionRevenueRatioTarget
+    ) {
+      return;
+    }
+
     this.authorRevenueRatioTarget.value = parseFloat(
       (
         0.9 -
@@ -254,24 +291,41 @@ export default class extends Controller {
   }
 
   options() {
+    if (this.newRecordValue) return;
+
     this.activeSettingsForm();
     this.hideContentForm();
     this.activeTabValue = 'options';
   }
 
   activeContentForm() {
+    this.showContentForm();
+    if (this.hasEditButtonTarget) {
+      this.editButtonTarget.classList.add('border-primary');
+      this.editButtonTarget.classList.remove(
+        'border-white',
+        'dark:border-zinc-900',
+      );
+    }
+  }
+
+  showContentForm() {
+    if (!this.hasContentFieldsTarget) return;
+
     this.contentFieldsTarget.classList.remove('hidden');
-    this.editButtonTarget.classList.add('border-primary');
-    this.editButtonTarget.classList.remove(
-      'border-white',
-      'dark:border-zinc-900',
-    );
   }
 
   hideContentForm() {
+    if (this.newRecordValue || !this.hasContentFieldsTarget) return;
+
     this.contentFieldsTarget.classList.add('hidden');
-    this.editButtonTarget.classList.remove('border-primary');
-    this.editButtonTarget.classList.add('border-white', 'dark:border-zinc-900');
+    if (this.hasEditButtonTarget) {
+      this.editButtonTarget.classList.remove('border-primary');
+      this.editButtonTarget.classList.add(
+        'border-white',
+        'dark:border-zinc-900',
+      );
+    }
   }
 
   activeSettingsForm() {
@@ -296,6 +350,12 @@ export default class extends Controller {
     }
   }
 
+  hideOptionFieldsForNewRecord() {
+    if (!this.hasOptionFieldsTarget) return;
+
+    this.optionFieldsTarget.classList.add('hidden');
+  }
+
   save() {
     if (this.activeTabValue === 'edit') {
       this.autosave();
@@ -306,7 +366,7 @@ export default class extends Controller {
 
   autosave() {
     const title = this.element.querySelector('#article_title').value;
-    const content = this.contentTarget.textContent;
+    const content = this.contentValue;
 
     if (this.autosaveUrlValue) {
       put(this.autosaveUrlValue, {
@@ -353,10 +413,51 @@ export default class extends Controller {
     }
 
     this.element.querySelector('#article_title').value = title;
-    this.contentTarget.textContent = content;
+    this.setContentValue(content);
     if (this.hasNotSavedAlertTarget) {
       this.notSavedAlertTarget.classList.remove('hidden');
     }
+  }
+
+  get contentValue() {
+    if (!this.hasContentTarget) return '';
+
+    const target = this.contentTarget;
+
+    if (target.tagName === 'LEXXY-EDITOR') {
+      return target.value ?? '';
+    }
+
+    if (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA') {
+      return target.value;
+    }
+
+    const hiddenInput = target.querySelector('input[name="article[content]"]');
+    if (hiddenInput) return hiddenInput.value;
+
+    return target.value ?? target.textContent ?? '';
+  }
+
+  setContentValue(content) {
+    if (!this.hasContentTarget) return;
+
+    const target = this.contentTarget;
+    const editor =
+      target.tagName === 'LEXXY-EDITOR'
+        ? target
+        : this.contentFieldsTarget?.querySelector('lexxy-editor');
+
+    if (editor) {
+      editor.value = content;
+      return;
+    }
+
+    const hiddenInput =
+      target.tagName === 'INPUT'
+        ? target
+        : target.querySelector('input[name="article[content]"]');
+
+    if (hiddenInput) hiddenInput.value = content;
   }
 
   clearDraft() {
@@ -364,6 +465,8 @@ export default class extends Controller {
   }
 
   introUpdate(e) {
+    if (!this.hasIntroCharacterCounterTarget) return;
+
     this.introCharacterCounterTarget.innerHTML =
       140 - e.currentTarget.value.length;
   }

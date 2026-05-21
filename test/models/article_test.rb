@@ -66,7 +66,7 @@ class ArticleTest < ActiveSupport::TestCase
 
   test "partial_content returns nil for short content" do
     article = articles(:published_free)
-    article.update!(content: "Short")
+    article.update!(content: "<p>Short</p>")
 
     assert_nil article.partial_content
   end

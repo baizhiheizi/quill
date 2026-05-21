@@ -7,7 +7,7 @@
 #  id               :bigint           not null, primary key
 #  commentable_type :string
 #  comments_count   :integer          default(0)
-#  content          :string
+#  legacy_markdown_content :string
 #  deleted_at       :datetime
 #  downvotes_count  :integer          default(0)
 #  upvotes_count    :integer          default(0)
@@ -26,6 +26,7 @@
 
 class Comment < ApplicationRecord
   include SoftDeletable
+  include RichTextContent
 
   belongs_to :author, class_name: "User", inverse_of: :comments
   belongs_to :commentable, polymorphic: true, counter_cache: true
@@ -33,12 +34,16 @@ class Comment < ApplicationRecord
 
   has_many :comments, class_name: "Comment", foreign_key: :quote_comment_id, inverse_of: :quote_comment, dependent: :nullify
 
-  validates :content, presence: true, length: { maximum: 1000 }
+  validates :content, presence: true
   validate :ensure_author_not_blocked, on: :create
 
   after_commit :notify_subscribers_async,
                :subscribe_for_author,
                on: :create
+
+  def self.content_length_limit
+    1000
+  end
 
   def subscribers
     @subscribers ||= commentable.commenting_subscribe_by_users.where.not(mixin_uuid: author.mixin_uuid) if commentable.is_a?(Article)
@@ -50,10 +55,6 @@ class Comment < ApplicationRecord
 
   def subscribe_for_author
     author.create_action :commenting_subscribe, target: commentable if commentable.is_a?(Article)
-  end
-
-  def content_as_html
-    MarkdownRenderService.call content, type: :full
   end
 
   private
