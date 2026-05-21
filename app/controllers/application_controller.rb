@@ -4,6 +4,7 @@ class ApplicationController < ActionController::Base
   include Pagy::Backend
   include Localizable
   include RenderingHelper
+  include Pundit::Authorization
 
   before_action :ensure_launched!
   before_action :prepare_exception_notifier
@@ -14,6 +15,8 @@ class ApplicationController < ActionController::Base
   helper_method :from_mixin_messenger?
   helper_method :requesting_modal?
   around_action :with_locale
+
+  rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
 
   add_flash_types :success, :warning, :danger, :info
 
@@ -80,5 +83,17 @@ class ApplicationController < ActionController::Base
 
   def safe_return_to(fallback = root_path)
     url_from(params[:return_to]) || fallback
+  end
+
+  def user_not_authorized
+    respond_to do |format|
+      format.html { redirect_to root_path, alert: t("not_authorized", default: "Not authorized") }
+      format.turbo_stream { head :forbidden }
+      format.any { head :forbidden }
+    end
+  end
+
+  def pundit_user
+    current_user
   end
 end

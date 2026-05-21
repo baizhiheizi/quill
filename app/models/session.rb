@@ -24,7 +24,7 @@ class Session < ApplicationRecord
   validates :uuid, presence: true
   validates :info, presence: true
 
-  default_scope { includes(:user) }
+  scope :with_user, -> { includes(:user) }
 
   def provider
     @provider ||= info&.[]("provider")

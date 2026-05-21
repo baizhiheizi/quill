@@ -40,6 +40,8 @@ class CommentsController < ApplicationController
     commentable = find_commentable
     return head :forbidden if commentable.blank?
 
+    authorize commentable, :comment?
+
     @comment = current_user.comments.create(
       comment_params.except(:commentable_id, :commentable_type).merge(commentable:)
     )

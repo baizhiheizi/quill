@@ -63,7 +63,7 @@ class API::ArticlesController < API::BaseController
     article = current_user.articles.new(article_params.merge(source: current_access_token.value))
 
     if article.save
-      CreateTag.call(article, params[:tag_names] || [])
+      CreateTagService.call(article, params[:tag_names] || [])
       article.publish! if article.may_publish?
       render_created({ uuid: article.uuid })
     else

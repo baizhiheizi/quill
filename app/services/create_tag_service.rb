@@ -1,10 +1,9 @@
 # frozen_string_literal: true
 
-class CreateTag
-  prepend SimpleCommand
-  include ActiveModel::Validations
-
-  attr_reader :article, :tag_names, :with_remove
+class CreateTagService
+  def self.call(article, tag_names, with_remove: true)
+    new(article, tag_names, with_remove:).call
+  end
 
   def initialize(article, tag_names, with_remove: true)
     @article = article
@@ -26,4 +25,8 @@ class CreateTag
     article.taggings.where(tag: remove_tags).destroy_all if with_remove
     article.tags.reload
   end
+
+  private
+
+  attr_reader :article, :tag_names, :with_remove
 end

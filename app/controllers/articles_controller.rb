@@ -30,17 +30,16 @@ class ArticlesController < ApplicationController
   end
 
   def show
-    @article = Article.without_drafted.find_by(uuid: params[:uuid])
+    @article = Article.with_associations.without_drafted.find_by(uuid: params[:uuid])
+    return redirect_back fallback_location: root_path if @article.blank?
 
-    if @article&.authorized?(current_user) || @article&.may_buy_by?(current_user)
-      @page_title = "#{@article.title} - #{@article.author.name}"
-      @page_image = @article.thumb_url
-      @page_description = @article.intro
+    authorize @article, :show?
 
-      impressionist @article, @article.authorized?(current_user) ? "full" : "partial"
-    else
-      redirect_back fallback_location: root_path
-    end
+    @page_title = "#{@article.title} - #{@article.author.name}"
+    @page_image = @article.thumb_url
+    @page_description = @article.intro
+
+    impressionist @article, @article.authorized?(current_user) ? "full" : "partial"
   end
 
   def new
@@ -62,8 +61,10 @@ class ArticlesController < ApplicationController
   end
 
   def update
-    CreateTag.call(@article, params[:article][:tag_names] || [])
-    @article.update update_article_params
+    ActiveRecord::Base.transaction do
+      CreateTagService.call(@article, params[:article][:tag_names] || [])
+      @article.update! update_article_params
+    end
   end
 
   def update_content

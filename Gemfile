@@ -206,3 +206,5 @@ gem "tzinfo-data", platforms: %i[mingw mswin x64_mingw jruby]
 gem "dockerfile-rails", ">= 1.2", group: :development
 
 gem "solid_cable", "~> 3.0"
+
+gem "pundit", "~> 2.5"

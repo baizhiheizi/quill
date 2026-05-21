@@ -4,7 +4,7 @@ module Users::Scopable
   extend ActiveSupport::Concern
 
   included do
-    default_scope { includes(:authorization) }
+    scope :with_authorization, -> { includes(:authorization) }
     scope :only_blocked, -> { where.not(blocked_at: nil) }
     scope :without_blocked, -> { where(blocked_at: nil) }
     scope :only_mixin_messenger, -> { where(authorization: { provider: :mixin }) }

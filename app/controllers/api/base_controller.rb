@@ -2,6 +2,7 @@
 
 class API::BaseController < ActionController::API
   include API::RenderingHelper
+  include Pundit::Authorization
 
   around_action :with_locale
   after_action :store_access_token_request
@@ -9,6 +10,10 @@ class API::BaseController < ActionController::API
 
   class UnauthorizedError < StandardError; end
   class UnprocessableEntityError < StandardError; end
+
+  rescue_from Pundit::NotAuthorizedError do
+    render_forbidden
+  end
 
   rescue_from StandardError do |ex|
     Rails.logger.error ex.inspect
@@ -63,5 +68,9 @@ class API::BaseController < ActionController::API
 
   def with_locale(&)
     I18n.with_locale(:en, &)
+  end
+
+  def pundit_user
+    current_user
   end
 end

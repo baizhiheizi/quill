@@ -52,6 +52,9 @@ class Article < ApplicationRecord
 
   include AASM
   include Articles::Arweavable
+  include Articles::ContentPreview
+  include Articles::PosterGenerator
+  include Articles::Purchasable
   include RichTextContent
 
   belongs_to :author, class_name: "User", inverse_of: :articles
@@ -120,7 +123,7 @@ class Article < ApplicationRecord
 
   delegate :swappable?, to: :currency
 
-  default_scope -> { includes(:currency, :tags, :author) }
+  scope :with_associations, -> { includes(:currency, :tags, :author) }
   scope :without_blocked, -> { where.not(state: :blocked) }
   scope :without_free, -> { where("price > ?", 0) }
   scope :only_free, -> { where(price: 0.0) }
@@ -169,20 +172,6 @@ class Article < ApplicationRecord
     price.zero?
   end
 
-  def may_buy_by?(user = nil)
-    return false if author.block_user?(user)
-    return false if user&.block_user?(author)
-
-    published?
-  end
-
-  def authorized?(user = nil)
-    return true if (published? && free?) || author == user
-    return false if user.blank?
-
-    orders.where(order_type: :buy_article).find_by(buyer: user).present? || collection&.authorized?(user)
-  end
-
   def update_revenue
     update revenue_usd: orders.sum(:value_usd), revenue_btc: orders.sum(:value_btc)
   end
@@ -213,49 +202,6 @@ class Article < ApplicationRecord
 
   def subscribe_comments_for_author
     author.create_action :commenting_subscribe, target: self
-  end
-
-  def words_count
-    @words_count ||= plain_text.scan(/[a-zA-Z]+|\S/).size
-  end
-
-  def partial_content
-    return if words_count < 300
-    return if free_content_ratio.zero?
-
-    plain_text.truncate((words_count * free_content_ratio).to_i)
-  end
-
-  def partial_content_as_html
-    return "" if free_content_ratio.zero?
-
-    @partial_content_as_html ||= extract_html(content_as_html, (words_count * free_content_ratio).to_i)
-  end
-
-  def extract_html(text, length)
-    count = 0
-    html = ""
-
-    Nokogiri::HTML.fragment(text).children.each do |child|
-      if (length - count - child.text.size).positive?
-        count += child.text.size
-        html += child.to_s
-      elsif child.to_s.empty?
-        html += child.to_s
-      elsif (length - count).positive?
-        case child
-        when Nokogiri::XML::NodeSet
-          child.inner_html = extract_html(child.to_s, length - count)
-        when Nokogiri::XML::Text
-          child.content = child.text.truncate(length - count)
-        end
-
-        count = length
-        html += child.to_s
-      end
-    end
-
-    html
   end
 
   def wallet_id
@@ -338,16 +284,6 @@ class Article < ApplicationRecord
     uuid
   end
 
-  def default_intro
-    plain_text.truncate(140)
-  end
-
-  def upvote_ratio
-    return if upvotes_count.zero? && downvotes_count.zero?
-
-    "#{format('%.0f', upvotes_count.to_f * 100 / (upvotes_count + downvotes_count))}%"
-  end
-
   def ensure_content_valid
     title.present? && content.present?
   end
@@ -397,54 +333,6 @@ class Article < ApplicationRecord
 
   def detect_locale_async
     Articles::DetectLocaleJob.perform_later uuid
-  end
-
-  def thumb_url
-    @thumb_url ||=
-      if cover.attached?
-        cover_url
-      elsif free?
-        Nokogiri::HTML
-          .fragment(content_as_html)
-          .css("img")
-          .map(&->(img) { img.attr("src") })
-          .find(&->(url) { URI::DEFAULT_PARSER.make_regexp.match?(url) })
-      end
-  end
-
-  def cover_url
-    [ Settings.storage.endpoint, cover.key ].join("/") if cover.attached?
-  end
-
-  def poster_url
-    if poster.attached?
-      [ Settings.storage.endpoint, poster.key ].join("/")
-    else
-      generate_poster_async
-      nil
-    end
-  end
-
-  def generated_poster_url
-    grover_article_poster_url uuid, token: Rails.application.credentials.dig(:grover, :token), format: :png
-  end
-
-  def generate_poster
-    file = URI.parse(generated_poster_url).open
-    poster.attach io: file, filename: "#{title}_poster"
-  end
-
-  def generate_poster_async
-    Articles::GeneratePosterJob.perform_later id
-  end
-
-  def qrcode_base64
-    [ "data:image/png;base64, ",
-     Base64.encode64(
-       RQRCode::QRCode.new(
-         user_article_url(author, self)
-       ).as_png(border_modules: 0).to_s
-     ) ].join
   end
 
   def payment_trace_id(user)
