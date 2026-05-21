@@ -1,7 +1,7 @@
 <%= turbo_frame_tag "my_#{@tab}_articles" do %>
   <div data-controller="infinite-scroll">
     <% if @articles.blank? %>
-      <%= render EmptyComponent.new text: t('no_record') %>
+      <%= render "shared/empty", text: t('no_record') %>
     <% else %>
       <div id="my_<%= @tab %>_articles_list" class="mb-10">
         <% case @tab %>
@@ -12,7 +12,7 @@
         <% when 'hidden' %>
           <%= render partial: "dashboard/articles/hidden_article", collection: @articles, as: :article %>
         <% when 'bought' %>
-          <%= render Articles::CardComponent.with_collection(@articles) %>
+          <%= render partial: "articles/card", collection: @articles, as: :article %>
         <% end %>
       </div>
     <% end %>

@@ -1,0 +1,13 @@
+<div data-controller="infinite-scroll">
+  <% pagy_id ||= "articles_pagination" %>
+  <% if articles.blank? %>
+    <%= render "shared/empty", text: t('no_record') %>
+  <% else %>
+    <div id="articles_list">
+      <%= render partial: "articles/card", collection: articles, as: :article %>
+    </div>
+    <div data-infinite-scroll-target='scrollArea'></div>
+
+    <%= render "shared/pagination", pagy: pagy, id: pagy_id %>
+  <% end %>
+</div>

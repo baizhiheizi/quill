@@ -1,0 +1,93 @@
+<div 
+  class="max-w-full mx-auto"
+  data-controller="pre-orders-form-component" 
+  data-pre-orders-form-component-asset-id-value="<%= article.currency.asset_id %>"
+  data-pre-orders-form-component-order-type-value="<%= pre_order.order_type %>"
+  data-pre-orders-form-component-item-id-value="<%= article.id %>"
+  data-pre-orders-form-component-item-type-value="Article"
+  data-pre-orders-form-component-amount-value="<%= price %>"
+  data-pre-orders-form-component-price-usd-value="<%= article.currency.price_usd %>">
+
+  <div class="bg-zinc-50 px-4 py-2 rounded mb-4 dark:bg-[#333444] hidden sm:block">
+    <div class="flex items-center space-x-2 mb-1">
+      <%= image_tag article.author.avatar_thumb, class: "w-6 h-6 rounded-full", lazy: true %>
+      <span class="text-sm max-w-24 truncate"><%= article.author.name %></span>
+    </div>
+    <div class="font-bold truncate">
+      <%= article.title %>
+    </div>
+  </div>
+
+  <% if pre_order.order_type == 'reward_article' %>
+    <div class="mb-2">
+      <span class="text-mono text-sm opacity-75"><%= t('choose_reward_amount') %></span>
+    </div>
+    <div class="mb-4 grid grid-cols-3 gap-4">
+      <% [1, 4, 8, 32, 256, 1024].each do |number| %>
+        <div 
+          data-pre-orders-form-component-target="amountOption"
+          data-pre-orders-form-component-amount-param="<%= number * article.currency.minimal_reward_amount %>"
+          data-action="click->pre-orders-form-component#updateAmount"
+          class="relative cursor-pointer flex items-center space-x-2 justify-center border border-zinc-200 dark:border-zinc-600 p-1 rounded">
+          <span class="text-sm sm:text-base">
+            <%= sprintf('%.8f', article.currency.minimal_reward_amount * number).gsub(/0+\z/, '0') %>
+          </span>
+          <%= inline_svg_tag "icons/check-circle-solid.svg", class: "w-4 h-4 text-primary absolute right-1 top-1 checkmark hidden" %>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+
+  <div class="mb-4">
+    <div class="flex items-center justify-end space-x-2">
+      <%= image_tag article.currency.icon_url, class: "w-6 h-6 rounded-full", lazy: true %>
+      <span class="text-2xl font-serif font-black" data-pre-orders-form-component-target="amountTag">
+        <%= sprintf('%.8f', price).gsub(/0+\z/, '') %>
+      </span>
+      <span class="text-2xl font-serif font-black">
+        <%= article.currency.symbol %>
+      </span>
+    </div>
+    <div class="flex items-center justify-end space-x-2">
+      <span class="text-sm align-bottom">
+        ≈$
+        <span data-pre-orders-form-component-target="amountUsdTag">0</span>
+      </span>
+    </div>
+  </div>
+
+  <div class="mb-4">
+    <% if payer.mvm_eth? && article.mixpay_supported? %>
+      <%= link_to mixpay_pre_order_path(
+          order_type: pre_order.order_type,
+          item_id: article.id,
+          item_type: article.class.name,
+          asset_id: article.asset_id,
+          amount: pre_order.amount
+        ),
+        data: {
+          pre_orders_form_component_target: 'mixpayUrl',
+          turbo_frame: '_top'
+        }, 
+        class: "cursor-pointer block w-full text-center rounded-lg bg-primary text-white p-4 text-xl hover:font-black" do %>
+        <%= t('continue') %>
+      <% end %>
+    <% else %>
+      <%= form_for PreOrder.new do |form| %>
+        <%= form.hidden_field :order_type, value: pre_order.order_type %>
+        <%= form.hidden_field :item_id, value: article.id %>
+        <%= form.hidden_field :item_type, value: 'Article' %>
+        <%= form.hidden_field :asset_id, value: article.asset_id %>
+        <%= form.hidden_field :amount, 
+          value: price,
+          data: { 
+            pre_orders_form_component_target: 'amountInput'
+          } 
+        %>
+        <%= form.hidden_field :type, value: payer.default_payment %>
+
+        <%= form.submit t('continue'), class: "cursor-pointer block w-full rounded-lg bg-primary text-white p-4 text-xl hover:font-black" %>
+      <% end %>
+    <% end %>
+  </div>
+</div>

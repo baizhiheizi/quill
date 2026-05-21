@@ -1,5 +1,5 @@
 <%= turbo_frame_tag 'modal' do %>
-  <%= render ModalComponent.new title: t('connect_wallet') do %>
+  <%= render_modal title: t('connect_wallet') do %>
     <div data-controller="login" class="">
       <div data-login-target="eth">
         <div data-controller="eth-wallet" class="flex justify-center mb-2 hidden sm:block">

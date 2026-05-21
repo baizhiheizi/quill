@@ -1,0 +1,17 @@
+<div data-controller="pre-orders-mixpay-button-component">
+  <% if pre_order.item.mixpay_supported? %>
+    <%= link_to mixpay_pre_order_path(
+        order_type: pre_order.order_type,
+        item_id: pre_order.item.id,
+        item_type: pre_order.item.class.name,
+        asset_id: pre_order.item.asset_id,
+        amount: pre_order.amount
+      ),
+      data: {
+        turbo_frame: '_top'
+      }, 
+      class: "relative cursor-pointer block max-w-full text-center" do %>
+      <%= image_tag 'mixpay-button.svg', class: "w-[200px] mx-auto" %>
+    <% end %>
+  <% end %>
+</div>

@@ -602,10 +602,6 @@ GEM
     unicode-display_width (2.5.0)
     uri (1.1.1)
     useragent (0.16.11)
-    view_component (4.11.0)
-      actionview (>= 7.1.0)
-      activesupport (>= 7.1.0)
-      concurrent-ruby (~> 1)
     web-console (4.2.1)
       actionview (>= 6.0.0)
       activemodel (>= 6.0.0)
@@ -694,7 +690,6 @@ DEPENDENCIES
   turbo-rails
   twitter_oauth2
   tzinfo-data
-  view_component (~> 4.0)
   web-console (>= 3.3.0)
 
 RUBY VERSION

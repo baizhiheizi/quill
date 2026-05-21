@@ -1,15 +1,15 @@
 <% if @article.present? %>
   <% if requesting_modal? %>
     <%= turbo_frame_tag 'modal' do %>
-      <%= render ModalComponent.new backdrop: 'static' do |c| %>
-        <% c.with_header do %>
+      <% modal_header = capture do %>
           <div class="flex-1 flex items-center justify-between">
             <div class="font-bold">
               <%= t('comments') %>
             </div>
             <%= render "subscribe_articles/subscribe_button", article: @article if @article.authorized?(current_user) %>
           </div>
-        <% end %>
+      <% end %>
+      <%= render_modal backdrop: 'static', header: modal_header do %>
 
         <% if @article.authorized? current_user %>
           <div class="mb-6">

@@ -1,0 +1,9 @@
+<div data-controller="dropdown-component" class="<%= local_assigns[:class] %>">
+  <button class="block" data-dropdown-component-target="button">
+    <%= button %>
+  </button>
+
+  <template data-dropdown-component-target="content">
+    <%= menu %>
+  </template>
+</div>

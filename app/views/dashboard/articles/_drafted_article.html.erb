@@ -6,13 +6,13 @@
     }, 
     class: "relative text-lg font-bold truncate" %>
   <div class="flex items-center space-x-2">
-    <%= render TimeFormatComponent.new datetime: article.updated_at.rfc3339, class: "opacity-80" do %>
+    <%= render_time_format datetime: article.updated_at.rfc3339, class: "opacity-80" do %>
       <%= article.updated_at.strftime("%Y-%m-%d %H:%M") %>
     <% end %>
-    <%= render DropdownComponent.new do |c| %>
-      <% c.with_button do %>
-        <%= inline_svg_tag "icons/chevron-down.svg", class: 'w-4 h-4 opacity-60' %>
-      <% end %>
+    <% dropdown_button = capture do %>
+      <%= inline_svg_tag "icons/chevron-down.svg", class: 'w-4 h-4 opacity-60' %>
+    <% end %>
+    <%= render_dropdown button: dropdown_button do %>
       <%= link_to t('delete'), 
         new_dashboard_deleted_article_path(uuid: article), 
         data: {

@@ -138,9 +138,6 @@ gem "cld", github: "jtoy/cld"
 # Enumerated attributes with I18n and ActiveRecord/Mongoid support
 gem "enumerize"
 
-# A framework for building reusable, testable & encapsulated view components in Ruby on Rails.
-gem "view_component", "~> 4.0"
-
 # Saves your data permanent and let your customers own their data.
 gem "arweave", github: "baizhiheizi/arweave-ruby"
 

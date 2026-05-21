@@ -1,5 +1,5 @@
 <div class="max-w-full mx-auto px-4">
-  <%= render PreOrders::StateComponent.new pre_order: @pre_order %>
+  <%= render "pre_orders/state", pre_order: @pre_order %>
 
   <%= link_to t('back'), 
     user_article_path(@pre_order.item.author, @pre_order.item), 

@@ -6,7 +6,7 @@ alwaysApply: false
 
 ## Stack
 
-- Entry: `app/javascript/application.js` (Turbo, ActiveStorage, Stimulus, components)
+- Entry: `app/javascript/application.js` (Turbo, ActiveStorage, Stimulus)
 - Stimulus controllers: `app/javascript/controllers/*_controller.js`
 - MVM wallet code: TypeScript under `app/javascript/mvm/`
 - Built with esbuild (`esbuild.config.js`); styles via Tailwind (`bun run build:css`)

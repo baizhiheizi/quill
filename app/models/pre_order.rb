@@ -75,7 +75,8 @@ class PreOrder < ApplicationRecord
         "user_#{payer_id}",
         target: "#{type.underscore}_#{id}_state",
         html: ApplicationController.render(
-          PreOrders::StateComponent.new(pre_order: self)
+          partial: "pre_orders/state",
+          locals: { pre_order: self }
         )
       )
     end

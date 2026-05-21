@@ -15,7 +15,7 @@
       <%= render "shared/loading" %>
     <% end %>
   <% else %>
-    <%= render EmptyComponent.new text: t('no_available') %>
+    <%= render "shared/empty", text: t('no_available') %>
   <% end %>
 </div>
 

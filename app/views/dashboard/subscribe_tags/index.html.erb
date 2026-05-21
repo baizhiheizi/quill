@@ -1,7 +1,7 @@
 <%= turbo_frame_tag "#{dom_id current_user}_subscribe_tags" do %>
   <div data-controller="infinite-scroll">
     <% if @tags.blank? %>
-      <%= render EmptyComponent.new text: t('no_record') %>
+      <%= render "shared/empty", text: t('no_record') %>
     <% else %>
       <div id="<%= dom_id current_user %>_subscribe_tags_list">
         <%= render partial: "dashboard/subscribe_tags/tag", collection: @tags, as: :tag %>

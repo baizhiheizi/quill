@@ -1,5 +1,5 @@
 <%= turbo_frame_tag 'modal' do %>
-  <%= render ModalComponent.new title: t('share') do %>
+  <%= render_modal title: t('share') do %>
     <div class="flex items-center">
       <% if from_mixin_messenger? %>
         <a class="flex-1 rounded-t-lg block p-4 hover:bg-zinc-100 dark:hover:bg-zinc-800 active:bg-zinc-100 dark:active:bg-zinc-800 rounded-lg"

@@ -2,7 +2,6 @@
 import '@hotwired/turbo-rails';
 import { hideLoading } from './utils';
 import './controllers';
-import '../components';
 import tippy from 'tippy.js';
 import './polyfill';
 

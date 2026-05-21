@@ -53,7 +53,7 @@
 
 <% if @article.author.blocked? && current_user.present? && current_user != @article.author %>
   <%= turbo_frame_tag 'modal' do %>
-    <%= render ModalComponent.new title: t('alert') do %>
+    <%= render_modal title: t('alert') do %>
       <div class="mb-4 flex">
         <%= inline_svg_tag "icons/exclamation-circle-solid.svg", class: "w-12 h-12 text-red-500 block mx-auto" %>
       </div>

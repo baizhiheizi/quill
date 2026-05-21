@@ -13,7 +13,7 @@
             </div>
             <div class="">
               <div class="mb-2 text-sm opacity-40">
-                <%= render TimeFormatComponent.new datetime: article.published_at.utc.rfc3339 do %>
+                <%= render_time_format datetime: article.published_at.utc.rfc3339 do %>
                   <%= article.published_at&.strftime("%Y-%m-%d %H:%M") %>
                 <% end %>
               </div>

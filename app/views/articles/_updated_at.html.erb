@@ -3,7 +3,7 @@
     <span class="">
       <%= t('last_saved') %>:
     </span>
-    <%= render TimeFormatComponent.new datetime: article.updated_at.rfc3339, format: 'time' do %>
+    <%= render_time_format datetime: article.updated_at.rfc3339, format: 'time' do %>
       <%= article.updated_at.strftime("%H:%M") %>
     <% end %>
   </div>

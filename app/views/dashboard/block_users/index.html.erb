@@ -1,7 +1,7 @@
 <%= turbo_frame_tag "#{dom_id current_user}_blocking" do %>
   <div data-controller="infinite-scroll">
     <% if @users.blank? %>
-      <%= render EmptyComponent.new text: t('no_record') %>
+      <%= render "shared/empty", text: t('no_record') %>
     <% else %>
       <div id="<%= dom_id current_user %>_subscribing_list">
         <%= render partial: "dashboard/block_users/user", collection: @users, as: :user %>
