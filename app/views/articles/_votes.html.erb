@@ -1,42 +1,46 @@
-<div id="<%= dom_id article %>_votes" class="flex items-center justify-center">
-  <div class="relative rounded-full p-2 text-white <%= user&.upvote_article?(article) ? 'bg-primary' : 'bg-base-content/30' %>">
-    <%= inline_svg_tag "icons/like-solid.svg", class: "h-6 w-6" %>
+<div id="<%= dom_id article %>_votes" class="flex flex-col items-center justify-center space-y-4">
+  <div class="flex items-center space-x-6">
+    <!-- Upvote Button -->
+    <div class="relative group">
+      <div class="flex items-center justify-center w-12 h-12 rounded-full cursor-pointer transition-all duration-200 <%= user&.upvote_article?(article) ? 'bg-primary/10 text-primary ring-2 ring-primary/20' : 'bg-base-200 text-base-content/50 hover:bg-base-300 hover:text-base-content' %>">
+        <%= inline_svg_tag "icons/like-solid.svg", class: "h-6 w-6 transition-transform group-hover:scale-110" %>
+      </div>
 
-    <% if user.blank? %>
-      <%= link_to '', login_path, data: { turbo_frame: :modal }, class: 'absolute inset-0' %>
-    <% elsif user&.upvote_article? article %>
-      <%= link_to '', upvoted_article_path(article),
-        data: { turbo_method: :delete },
-        class: "absolute inset-0" %>
-    <% else %>
-      <%= link_to '', upvoted_article_path(article),
-        data: { turbo_method: :put },
-        class: "absolute inset-0" %>
-    <% end %>
-  </div>
-
-  <div class="mx-4 mt-2 w-16">
-    <div class="mb-2 h-2 rounded bg-red-500">
-      <div class="h-2 rounded bg-primary" style="width: <%= article.upvote_ratio %>"></div>
+      <% if user.blank? %>
+        <%= link_to '', login_path, data: { turbo_frame: :modal }, class: 'absolute inset-0 z-10 rounded-full' %>
+      <% elsif user&.upvote_article? article %>
+        <%= link_to '', upvoted_article_path(article), data: { turbo_method: :delete }, class: "absolute inset-0 z-10 rounded-full" %>
+      <% else %>
+        <%= link_to '', upvoted_article_path(article), data: { turbo_method: :put }, class: "absolute inset-0 z-10 rounded-full" %>
+      <% end %>
     </div>
-    <div class="text-center text-sm">
-      <%= article.upvotes_count %> : <%= article.downvotes_count %>
+
+    <!-- Ratio Bar -->
+    <div class="flex flex-col items-center w-24">
+      <div class="flex justify-between w-full text-xs font-medium text-base-content/60 mb-1.5 px-1">
+        <span><%= article.upvotes_count %></span>
+        <span><%= article.downvotes_count %></span>
+      </div>
+      <div class="w-full h-1.5 rounded-full bg-base-300 overflow-hidden flex">
+        <% upvote_ratio = article.upvote_ratio.to_f.nan? ? 50 : article.upvote_ratio.to_i %>
+        <div class="h-full bg-primary transition-all duration-500 ease-out" style="width: <%= upvote_ratio %>%"></div>
+        <div class="h-full bg-base-content/20 transition-all duration-500 ease-out" style="width: <%= 100 - upvote_ratio %>%"></div>
+      </div>
     </div>
-  </div>
 
-  <div class="relative rounded-full p-2 text-white <%= user&.downvote_article?(article) ? 'bg-error' : 'bg-base-content/30' %>">
-    <%= inline_svg_tag "icons/dislike-solid.svg", class: "h-6 w-6" %>
+    <!-- Downvote Button -->
+    <div class="relative group">
+      <div class="flex items-center justify-center w-12 h-12 rounded-full cursor-pointer transition-all duration-200 <%= user&.downvote_article?(article) ? 'bg-error/10 text-error ring-2 ring-error/20' : 'bg-base-200 text-base-content/50 hover:bg-base-300 hover:text-base-content' %>">
+        <%= inline_svg_tag "icons/dislike-solid.svg", class: "h-6 w-6 transition-transform group-hover:scale-110" %>
+      </div>
 
-    <% if user.blank? %>
-      <%= link_to '', login_path, data: { turbo_frame: :modal }, class: 'absolute inset-0' %>
-    <% elsif user&.downvote_article? article %>
-      <%= link_to '', downvoted_article_path(article),
-        data: { turbo_method: :delete },
-        class: "absolute inset-0" %>
-    <% else %>
-      <%= link_to '', downvoted_article_path(article),
-        data: { turbo_method: :put },
-        class: "absolute inset-0" %>
-    <% end %>
+      <% if user.blank? %>
+        <%= link_to '', login_path, data: { turbo_frame: :modal }, class: 'absolute inset-0 z-10 rounded-full' %>
+      <% elsif user&.downvote_article? article %>
+        <%= link_to '', downvoted_article_path(article), data: { turbo_method: :delete }, class: "absolute inset-0 z-10 rounded-full" %>
+      <% else %>
+        <%= link_to '', downvoted_article_path(article), data: { turbo_method: :put }, class: "absolute inset-0 z-10 rounded-full" %>
+      <% end %>
+    </div>
   </div>
 </div>

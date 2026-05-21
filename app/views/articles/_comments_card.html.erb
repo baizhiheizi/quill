@@ -1,17 +1,24 @@
-<div id="article_<%= article.uuid %>_comments_card" class="mb-4 hidden w-full border border-base-content/10 bg-base-200 sm:block sm:rounded-lg sm:px-8 sm:py-10">
-  <div class="mb-4 items-center flex justify-between">
-    <div class="text-lg font-bold">
-      <%= t('comments') %>
+<div id="article_<%= article.uuid %>_comments_card" class="mb-8 hidden w-full sm:block">
+  <div class="flex items-center justify-between mb-8 pb-4 border-b border-base-content/10">
+    <div class="text-2xl font-serif font-bold text-base-content">
+      <%= t('comments') %> <span class="text-base-content/40 text-lg font-sans font-medium ml-2"><%= article.comments_count %></span>
     </div>
-    <%= render "subscribe_articles/subscribe_button", article: article if article.authorized? user %>
+    <% if article.authorized? user %>
+      <div class="flex-shrink-0">
+        <%= render "subscribe_articles/subscribe_button", article: article %>
+      </div>
+    <% end %>
   </div>
 
   <% if article.authorized? user %>
-    <div class="mb-8">
+    <div class="mb-10 bg-base-200/30 rounded-2xl p-4 border border-base-content/5">
       <%= render "comments/form", commentable: article %>
     </div>
   <% end %>
-  <%= turbo_frame_tag "#{dom_id article}_comments", src: article_comments_path(article.uuid), lazy: true do %>
-    <%= render "shared/loading" %>
-  <% end %>
+  
+  <div class="space-y-6">
+    <%= turbo_frame_tag "#{dom_id article}_comments", src: article_comments_path(article.uuid), lazy: true do %>
+      <%= render "shared/loading" %>
+    <% end %>
+  </div>
 </div>
