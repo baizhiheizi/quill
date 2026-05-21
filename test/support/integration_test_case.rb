@@ -17,5 +17,4 @@ class IntegrationTestCase < ActionDispatch::IntegrationTest
     session[:current_session_id] = session_record.uuid
     session_record
   end
-
 end

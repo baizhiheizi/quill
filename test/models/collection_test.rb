@@ -57,7 +57,7 @@ class CollectionTest < ActiveSupport::TestCase
       state: "drafted"
     )
 
-    collection.define_singleton_method(:generate_cover) {}
+    collection.define_singleton_method(:generate_cover) { }
 
     collection.publish!
 
