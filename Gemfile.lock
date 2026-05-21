@@ -223,8 +223,6 @@ GEM
       rake
     fiber-storage (1.0.1)
     fnv (0.2.0)
-    foreman (0.90.0)
-      thor (~> 1.4)
     forwardable (1.4.0)
     friendly_id (5.5.1)
       activerecord (>= 4.0.0)
@@ -665,7 +663,6 @@ DEPENDENCIES
   exception-track
   fastimage
   fnv
-  foreman
   graphql (~> 2.0)
   graphql-client
   groupdate

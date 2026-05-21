@@ -175,7 +175,6 @@ group :development do
   # Access an interactive console on exception pages or by calling 'console' anywhere in the code.
   gem "listen", "~> 3.4"
   gem "web-console", ">= 3.3.0"
-  gem "foreman"
   # Annotate Rails classes with schema and routes info
   gem "annotaterb", require: false
   # A Ruby static code analyzer and formatter
