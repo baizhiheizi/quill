@@ -1,4 +1,6 @@
-@import '../../../node_modules/@37signals/lexxy/dist/stylesheets/lexxy.css';
+@import '../../../node_modules/@37signals/lexxy/dist/stylesheets/lexxy-variables.css';
+@import '../../../node_modules/@37signals/lexxy/dist/stylesheets/lexxy-content.css';
+@import '../../../node_modules/@37signals/lexxy/dist/stylesheets/lexxy-editor.css';
 @import './lexxy_overrides.css';
 @import 'highlight.js/styles/github';
 @import 'photoswipe/dist/photoswipe.css';

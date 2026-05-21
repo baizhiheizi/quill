@@ -1,10 +1,10 @@
 <div class="mb-8"
   data-controller="tabs"
   data-tabs-active-tab-value="<%= @tab %>"
-  data-tabs-active-class-value="tab-active font-bold text-primary !border-primary">
-  <div class="tabs tabs-bordered w-full flex overflow-auto flex-nowrap scrollbar-hide items-center mb-8">
+  data-tabs-active-class-value="font-bold text-primary !border-primary">
+  <div class="mb-8 flex w-full flex-nowrap items-center overflow-auto scrollbar-hide">
     <%= link_to dashboard_settings_path(tab: :profile),
-      class: "tab cursor-pointer py-1 pr-8",
+      class: "cursor-pointer py-1 pr-8",
       data: {
         tabs_target: "tab",
         tabs_tabname_param: "profile",
@@ -16,7 +16,7 @@
       <div class="h-2 border-b-2 border-inherit mx-auto w-5"></div>
     <% end %>
     <%= link_to dashboard_settings_path(tab: :notification),
-      class: "tab cursor-pointer py-1 pr-8",
+      class: "cursor-pointer py-1 pr-8",
       data: {
         tabs_target: "tab",
         tabs_tabname_param: "notification",

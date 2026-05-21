@@ -1,32 +1,28 @@
-<nav class="btm-nav border-base-content/5 fixed bottom-0 z-50 block border-t bg-base-200 lg:hidden">
-  <%= link_to articles_path, class: "btm-nav-item #{'active' if @active_page == 'home'}" do %>
-    <%= inline_svg_tag (@active_page == 'home' ? 'icons/home-solid.svg' : 'icons/home.svg'),
-      class: "h-6 w-6 text-base-content/60" %>
-    <span class="btm-nav-label text-xs"><%= t('home') %></span>
-  <% end %>
+<nav class="fixed bottom-0 z-50 block w-full border-t border-base-content/5 bg-base-200 shadow lg:hidden">
+  <div class="grid grid-cols-4">
+    <div class="relative py-[1.125rem]">
+      <%= inline_svg_tag (@active_page == 'home' ? 'icons/home-solid.svg' : 'icons/home.svg'),
+        class: "mx-auto h-6 w-6 text-base-content/60" %>
+      <%= link_to '', articles_path, class: "absolute inset-0" unless @active_page == 'home' %>
+    </div>
 
-  <%= link_to dashboard_readings_path, class: "btm-nav-item #{'active' if @active_page == 'readings'}" do %>
-    <%= inline_svg_tag (@active_page == 'readings' ? 'icons/glasses-solid.svg' : 'icons/glasses.svg'),
-      class: "h-6 w-6 text-base-content/60" %>
-    <span class="btm-nav-label text-xs"><%= t('my_reading') %></span>
-  <% end %>
+    <div class="relative py-[1.125rem]">
+      <%= inline_svg_tag (@active_page == 'readings' ? 'icons/glasses-solid.svg' : 'icons/glasses.svg'),
+        class: "mx-auto h-6 w-6 text-base-content/60" %>
+      <%= link_to '', dashboard_readings_path, class: "absolute inset-0" unless @active_page == 'readings' %>
+    </div>
 
-  <%= link_to dashboard_authorings_path, class: "btm-nav-item #{'active' if @active_page == 'authorings'}" do %>
-    <%= inline_svg_tag (@active_page == 'authorings' ? 'icons/article-solid.svg' : 'icons/article.svg'),
-      class: "h-6 w-6 text-base-content/60" %>
-    <span class="btm-nav-label text-xs"><%= t('my_authoring') %></span>
-  <% end %>
+    <div class="relative py-[1.125rem]">
+      <%= inline_svg_tag (@active_page == 'authorings' ? 'icons/article-solid.svg' : 'icons/article.svg'),
+        class: "mx-auto h-6 w-6 text-base-content/60" %>
+      <%= link_to '', dashboard_authorings_path, class: "absolute inset-0" unless @active_page == 'authorings' %>
+    </div>
 
-  <% if current_user.present? %>
-    <% dropdown_button = capture do %>
-      <div class="avatar">
-        <div class="size-7 rounded-full">
-          <%= image_tag current_user.avatar_thumb, class: "rounded-full" %>
-        </div>
-      </div>
-    <% end %>
-    <div class="btm-nav-item">
-      <%= render_dropdown class: 'flex justify-center', button: dropdown_button do %>
+    <% if current_user.present? %>
+      <% dropdown_button = capture do %>
+        <%= image_tag current_user.avatar_thumb, class: "h-7 w-7 rounded-full" %>
+      <% end %>
+      <%= render_dropdown class: 'flex justify-center py-4', button: dropdown_button do %>
         <ul class="menu menu-sm w-52 p-2">
           <li><%= link_to t('profile_page'), user_path(current_user), class: "dropdown-item" %></li>
           <% if current_user.mvm_eth? %>
@@ -44,14 +40,14 @@
           <li><%= link_to t('disconnect'), logout_path, data: { action: 'session#destroy' }, class: "dropdown-item" %></li>
         </ul>
       <% end %>
-    </div>
-  <% else %>
-    <% login_link_options = from_mixin_messenger? ? {} : { data: { turbo_frame: :modal } } %>
-    <%= link_to login_path, **login_link_options, class: "btm-nav-item" do %>
-      <%= inline_svg_tag 'icons/user.svg', class: "h-6 w-6 text-base-content/60" %>
-      <span class="btm-nav-label text-xs"><%= t('login', default: 'Login') %></span>
+    <% else %>
+      <% login_link_options = from_mixin_messenger? ? {} : { data: { turbo_frame: :modal } } %>
+      <div class="relative py-[1.125rem]">
+        <%= inline_svg_tag 'icons/user.svg', class: "mx-auto h-6 w-6 text-base-content/60" %>
+        <%= link_to '', login_path, **login_link_options, class: "absolute inset-0" %>
+      </div>
     <% end %>
-  <% end %>
+  </div>
 
   <div style="height:env(safe-area-inset-bottom)"></div>
 </nav>

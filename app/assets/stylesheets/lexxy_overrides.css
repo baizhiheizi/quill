@@ -7,6 +7,33 @@ lexxy-editor {
   color: var(--lexxy-color-ink, inherit);
 }
 
+lexxy-toolbar .lexxy-editor__toolbar-button,
+lexxy-toolbar .lexxy-editor__toolbar-dropdown .lexxy-editor__toolbar-button {
+  appearance: none;
+  background: transparent;
+  box-shadow: none;
+  cursor: pointer;
+  min-height: unset;
+  min-width: unset;
+  padding: 0;
+}
+
+lexxy-toolbar .lexxy-editor__toolbar-button:is(:hover, :focus, :focus-visible) {
+  background-color: var(--lexxy-color-ink-lightest);
+}
+
+lexxy-toolbar .lexxy-editor__toolbar-button:is(:active):not([aria-disabled='true']),
+lexxy-toolbar .lexxy-editor__toolbar-button[aria-pressed='true'],
+lexxy-toolbar .lexxy-editor__toolbar-button[aria-expanded='true'] {
+  background-color: var(--lexxy-color-selected);
+}
+
+lexxy-toolbar .lexxy-editor__toolbar-button:is(:active):not([aria-disabled='true']):hover,
+lexxy-toolbar .lexxy-editor__toolbar-button[aria-pressed='true']:hover,
+lexxy-toolbar .lexxy-editor__toolbar-button[aria-expanded='true']:hover {
+  background-color: var(--lexxy-color-selected-hover);
+}
+
 [data-theme='quill-dark'],
 html.dark,
 .dark {
@@ -33,11 +60,11 @@ html.dark lexxy-editor,
   color: var(--lexxy-color-ink);
 }
 
-[data-theme='quill-dark'] lexxy-editor button,
+[data-theme='quill-dark'] lexxy-editor button:not(.lexxy-editor__toolbar-button),
 [data-theme='quill-dark'] lexxy-editor summary,
-html.dark lexxy-editor button,
+html.dark lexxy-editor button:not(.lexxy-editor__toolbar-button),
 html.dark lexxy-editor summary,
-.dark lexxy-editor button,
+.dark lexxy-editor button:not(.lexxy-editor__toolbar-button),
 .dark lexxy-editor summary {
   background: var(--lexxy-color-canvas);
   color: var(--lexxy-color-ink);
