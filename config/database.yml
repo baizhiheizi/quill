@@ -17,8 +17,7 @@ development:
     database: prsdigg_development_queue
     username: postgres
     password: postgres
-    migrations_paths: db/queue_migrate
-    pool: <%= ENV.fetch("SOLID_QUEUE_POOL", 50) %>
+    pool: <%= ENV.fetch("SOLID_QUEUE_POOL", ENV.fetch("SOLID_QUEUE_THREADS", 5).to_i * ENV.fetch("JOB_CONCURRENCY", 1).to_i + 2) %>
 
 test:
   primary:
@@ -33,7 +32,6 @@ test:
     database: prsdigg_test_queue
     username: postgres
     password: postgres
-    migrations_paths: db/queue_migrate
     pool: 5
 
 production:
@@ -50,5 +48,4 @@ production:
     database: <%= ENV.fetch('POSTGRES_QUEUE_DB', "#{ENV['POSTGRES_DB']}_queue") %>
     username: <%= ENV['POSTGRES_USER'] %>
     password: <%= ENV['POSTGRES_PASSWORD'] %>
-    migrations_paths: db/queue_migrate
-    pool: <%= ENV.fetch("SOLID_QUEUE_POOL", 50) %>
+    pool: <%= ENV.fetch("SOLID_QUEUE_POOL", ENV.fetch("SOLID_QUEUE_THREADS", ENV.fetch("RAILS_MAX_THREADS", 32)).to_i * ENV.fetch("JOB_CONCURRENCY", 1).to_i + 2) %>
