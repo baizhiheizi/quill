@@ -12,7 +12,7 @@ development:
   <<: *default
   workers:
     - queues: [critical, default, low]
-      threads: <%= ENV.fetch("SOLID_QUEUE_THREADS", 5) %>
+      threads: <%= ENV.fetch("SOLID_QUEUE_THREADS", 5).to_i %>
       processes: 1
       polling_interval: 0.1
 
