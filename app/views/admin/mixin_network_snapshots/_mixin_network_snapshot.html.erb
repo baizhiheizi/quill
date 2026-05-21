@@ -1,4 +1,4 @@
-<tr id="<%= dom_id mixin_network_snapshot %>" class="hover:bg-zinc-50 dark:hover:bg-zinc-800 border-b">
+<tr id="<%= dom_id mixin_network_snapshot %>">
   <td class="p-4">
     <%= mixin_network_snapshot.id %>
   </td>
@@ -34,11 +34,11 @@
   <td class="p-4">
     <div class="flex justify-center">
       <% if mixin_network_snapshot.processed? %>
-        <span class="px-2 py-1 rounded text-white bg-green-500">
+        <span class="badge badge-success">
           Processed
         </span>
       <% else %>
-        <span class="px-2 py-1 rounded text-white bg-zinc-300">
+        <span class="badge badge-neutral">
           Unprocessed
         </span>
       <% end %>
@@ -54,7 +54,7 @@
     <%= mixin_network_snapshot.created_at %>
   </td>
   <td class="flex items-center space-x-2 p-4">
-    <%= link_to 'Detail', admin_mixin_network_snapshot_path(mixin_network_snapshot), class: "bg-blue-500 hover:bg-blue-600 rounded text-white px-4 py-2", data: { turbo_frame: "_top" } %>
-    <%= button_to 'Process', admin_mixin_network_snapshot_process_now_path(mixin_network_snapshot.id), class: "bg-red-500 hover:bg-red-600 rounded text-white px-4 py-2 cursor-pointer" unless mixin_network_snapshot.processed? %>
+    <%= link_to 'Detail', admin_mixin_network_snapshot_path(mixin_network_snapshot), class: "btn btn-primary btn-sm", data: { turbo_frame: "_top" } %>
+    <%= button_to 'Process', admin_mixin_network_snapshot_process_now_path(mixin_network_snapshot.id), class: "btn btn-error btn-sm" unless mixin_network_snapshot.processed? %>
   </td>
 </tr>

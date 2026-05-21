@@ -31,7 +31,7 @@
   </div>
 
   <div class="table-cell pr-4 py-4 text-opacity-80 min-w-max whitespace-nowrap">
-    <span class="rounded-full py-1 px-2 text-sm <%= payment.completed? ? 'bg-[#EFEFFF] text-primary' : 'bg-[#FFE9E9] text-[#CC6767]' %>">
+    <span class="badge badge-sm <%= payment.completed? ? 'badge-primary badge-soft' : 'badge-error badge-soft' %>">
       <%= t("activerecord.attributes.payment.state.#{payment.state}") %>
     </span>
   </div>

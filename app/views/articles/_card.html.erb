@@ -1,7 +1,11 @@
-<div class="max-w-full py-4 mb-4 border-b dark:border-white dark:border-opacity-10">
+<div class="max-w-full py-4 mb-4 border-b border-base-content/10">
   <div class="w-full flex items-center justify-between mb-4">
     <div class="relative flex items-center space-x-2">
-      <%= image_tag article.author.avatar_thumb, class: 'w-9 h-9 sm:w-10 sm:h-10 rounded-full block' %>
+      <div class="avatar">
+        <div class="size-9 sm:size-10 rounded-full">
+          <%= image_tag article.author.avatar_thumb, class: 'rounded-full block' %>
+        </div>
+      </div>
 
       <div class="truncate">
         <div class="text-sm font-semibold max-w-28 sm:max-w-32 truncate">
@@ -19,9 +23,7 @@
 
     <div class="">
       <% if article.free? %>
-        <div class="text-sm px-2 bg-green-500 text-white rounded">
-          FREE
-        </div>
+        <%= ui_badge "FREE", variant: :success %>
       <% else %>
         <div class="flex items-center space-x-2 mb-1">
           <span class="text-sm">
@@ -53,7 +55,7 @@
           <% end %>
         </div>
       </div>
-      <div class="text-base break-all text-ellipsis overflow-hidden line-clamp-3 text-[#222222] dark:text-white text-opacity-80"> 
+      <div class="text-base break-all text-ellipsis overflow-hidden line-clamp-3 text-base-content text-opacity-80"> 
         <%= article.intro %>
       </div>
     </div>

@@ -1,37 +1,110 @@
-@import '@37signals/lexxy/dist/stylesheets/lexxy.css';
+@import '../../../node_modules/@37signals/lexxy/dist/stylesheets/lexxy.css';
 @import './lexxy_overrides.css';
 @import 'highlight.js/styles/github';
 @import 'photoswipe/dist/photoswipe.css';
 @import 'tom-select/dist/css/tom-select';
-@import 'tippy.js/dist/tippy.css';
-@import 'tippy.js/themes/light.css';
-@import 'tippy.js/themes/light-border.css';
 
-.dark .tippy-box[data-theme~='light-border'] {
-  background-color: #444655;
+@import 'tailwindcss';
+@plugin 'flyonui' {
+  themes: quill --default, quill-dark;
 }
-.dark .tippy-box[data-theme~='light-border'] > .tippy-backdrop {
-  background-color: #444655;
+@plugin '@tailwindcss/typography';
+@plugin '@iconify/tailwind4';
+
+@import 'flyonui/variants.css';
+
+@source '../../views/**/*.{html,turbo_stream}.erb';
+@source '../../helpers/**/*.rb';
+@source '../../javascript/**/*.js';
+@source '../../../node_modules/flyonui/flyonui.js';
+
+@custom-variant dark (&:where([data-theme=quill-dark], [data-theme=quill-dark] *, .dark, .dark *));
+
+@plugin 'flyonui/theme' {
+  name: 'quill';
+  default: true;
+  prefersdark: false;
+  color-scheme: light;
+
+  --color-base-100: #ffffff;
+  --color-base-200: #f4f4f4;
+  --color-base-300: #e5e7eb;
+  --color-base-content: #222222;
+  --color-primary: #5c6bef;
+  --color-primary-content: #ffffff;
+  --color-secondary: #8686bf;
+  --color-secondary-content: #ffffff;
+  --color-accent: #5c6bef;
+  --color-accent-content: #ffffff;
+  --color-neutral: #444655;
+  --color-neutral-content: #ffffff;
+  --color-info: #5cadd1;
+  --color-info-content: #ffffff;
+  --color-success: #22c55e;
+  --color-success-content: #ffffff;
+  --color-warning: #e19b64;
+  --color-warning-content: #ffffff;
+  --color-error: #f3463f;
+  --color-error-content: #ffffff;
+
+  --radius-selector: 1rem;
+  --radius-field: 0.5rem;
+  --radius-box: 0.75rem;
 }
-.dark
-  .tippy-box[data-theme~='light-border'][data-placement^='top']
-  > .tippy-arrow:before {
-  border-top-color: #444655;
+
+@plugin 'flyonui/theme' {
+  name: 'quill-dark';
+  default: false;
+  prefersdark: false;
+  color-scheme: dark;
+
+  --color-base-100: #1d1e2b;
+  --color-base-200: #333444;
+  --color-base-300: #444655;
+  --color-base-content: #ffffff;
+  --color-primary: #5c6bef;
+  --color-primary-content: #ffffff;
+  --color-secondary: #8686bf;
+  --color-secondary-content: #ffffff;
+  --color-accent: #5c6bef;
+  --color-accent-content: #ffffff;
+  --color-neutral: #333444;
+  --color-neutral-content: #ffffff;
+  --color-info: #5cadd1;
+  --color-info-content: #ffffff;
+  --color-success: #22c55e;
+  --color-success-content: #ffffff;
+  --color-warning: #e19b64;
+  --color-warning-content: #ffffff;
+  --color-error: #f3463f;
+  --color-error-content: #ffffff;
+
+  --radius-selector: 1rem;
+  --radius-field: 0.5rem;
+  --radius-box: 0.75rem;
 }
-.dark
-  .tippy-box[data-theme~='light-border'][data-placement^='bottom']
-  > .tippy-arrow:before {
-  border-bottom-color: #444655;
-}
-.dark
-  .tippy-box[data-theme~='light-border'][data-placement^='left']
-  > .tippy-arrow:before {
-  border-left-color: #444655;
-}
-.dark
-  .tippy-box[data-theme~='light-border'][data-placement^='right']
-  > .tippy-arrow:before {
-  border-right-color: #444655;
+
+@theme {
+  --font-sans: 'Noto Sans SC', ui-sans-serif, system-ui, sans-serif;
+  --font-serif: 'Roboto Serif', ui-serif, Georgia, serif;
+  --font-mono: 'Roboto Mono', ui-monospace, monospace;
+
+  --color-primary: #5c6bef;
+
+  --min-height-screen-1\/2: 50vh;
+  --min-height-screen-1\/3: 33vh;
+  --min-height-screen-2\/3: 67vh;
+  --min-height-screen-1\/4: 25vh;
+  --min-height-screen-3\/4: 75vh;
+  --min-height-screen: 100vh;
+
+  --max-height-screen-1\/2: 50vh;
+  --max-height-screen-1\/3: 33vh;
+  --max-height-screen-2\/3: 67vh;
+  --max-height-screen-1\/4: 25vh;
+  --max-height-screen-3\/4: 75vh;
+  --max-height-screen-5\/6: 83.33vh;
+  --max-height-screen: 100vh;
 }
 
 .full .ts-control,
@@ -45,20 +118,24 @@
   background-color: #f4f4f4;
 }
 
+[data-theme='quill-dark'] .ts-wrapper.single.input-active .ts-control,
 .dark .ts-wrapper.single.input-active .ts-control {
   background-color: #333444;
 }
 
+[data-theme='quill-dark'] .ts-control,
 .dark .ts-control {
   background-color: #333444;
   border-color: rgba(255, 255, 255, 0.05);
   color: rgba(255, 255, 255, 0.8);
 }
 
+[data-theme='quill-dark'] .ts-control input,
 .dark .ts-control input {
   color: rgba(255, 255, 255, 0.8);
 }
 
+[data-theme='quill-dark'] .ts-dropdown input,
 .dark .ts-dropdown input {
   color: rgba(255, 255, 255, 0.8);
 }
@@ -67,52 +144,58 @@
   background-color: #f4f4f4;
 }
 
+[data-theme='quill-dark'] .ts-dropdown,
 .dark .ts-dropdown {
   background-color: #333444;
   color: white;
   border: rgba(255, 255, 255, 0.05);
 }
 
+[data-theme='quill-dark'] .ts-dropdown .active,
 .dark .ts-dropdown .active {
   background-color: #444655;
   color: white;
 }
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@utility scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 
-@layer utilities {
-  .tag-style-0 {
-    @apply text-[#CC6767] bg-[#FFE9E9] dark:bg-[#372A2A] rounded;
+  &::-webkit-scrollbar {
+    display: none;
   }
+}
 
-  .tag-style-1 {
-    @apply text-[#8686BF] bg-[#EFEFFF] dark:bg-[#363644] rounded;
-  }
+@utility tag-style-0 {
+  @apply rounded bg-[#FFE9E9] text-[#CC6767] dark:bg-[#372A2A];
+}
 
-  .tag-style-2 {
-    @apply text-[#E19B64] bg-[#FFF1E6] dark:bg-[#433C37] rounded;
-  }
+@utility tag-style-1 {
+  @apply rounded bg-[#EFEFFF] text-[#8686BF] dark:bg-[#363644];
+}
 
-  .tag-style-3 {
-    @apply text-[#5CADD1] bg-[#EEF7FB] dark:bg-[#2F3639] rounded;
-  }
+@utility tag-style-2 {
+  @apply rounded bg-[#FFF1E6] text-[#E19B64] dark:bg-[#433C37];
+}
 
-  .tag-style-4 {
-    @apply text-[#B688C6] bg-[#F7ECFB] dark:bg-[#3B353D] rounded;
-  }
+@utility tag-style-3 {
+  @apply rounded bg-[#EEF7FB] text-[#5CADD1] dark:bg-[#2F3639];
+}
 
-  .tag-style-5 {
-    @apply text-[#71A6E8] bg-[#E4F1FF] dark:bg-[#2B333C] rounded;
-  }
+@utility tag-style-4 {
+  @apply rounded bg-[#F7ECFB] text-[#B688C6] dark:bg-[#3B353D];
+}
 
-  .prose-article {
-    @apply prose dark:prose-invert prose-blockquote:border-primary prose-blockquote:not-italic prose-img:rounded-md prose-img:shadow-md prose-img:mx-auto prose-pre:bg-[#F4F4F4] prose-pre:text-black dark:prose-pre:bg-[#333444] dark:prose-code:bg-[#333444] xl:prose-lg mx-auto break-words max-w-none;
-  }
-  .prose-comment {
-    @apply prose prose-h1:text-base prose-h1:m-0 prose-h2:text-base prose-h2:m-0 prose-h3:text-base prose-h3:m-0 prose-h4:m-0 prose-blockquote:border-[#B1B6C6] prose-blockquote:dark:border-[#80808E] prose-blockquote:pl-2 prose-blockquote:my-4 prose-blockquote:not-italic mb-2 dark:prose-invert max-w-none text-opacity-60;
-  }
+@utility tag-style-5 {
+  @apply rounded bg-[#E4F1FF] text-[#71A6E8] dark:bg-[#2B333C];
+}
+
+@utility prose-article {
+  @apply prose dark:prose-invert prose-blockquote:not-italic prose-img:mx-auto prose-img:rounded-md prose-img:shadow-md xl:prose-lg mx-auto max-w-none break-words prose-blockquote:border-primary prose-pre:rounded-lg prose-pre:border prose-pre:border-base-content/10 prose-pre:bg-base-200 prose-pre:text-base-content dark:prose-pre:bg-base-200 dark:prose-pre:text-base-content dark:prose-code:bg-base-300 dark:prose-code:text-base-content;
+}
+
+@utility prose-comment {
+  @apply prose prose-h1:m-0 prose-h2:m-0 prose-h3:m-0 prose-h4:m-0 mb-2 max-w-none text-base-content/60 prose-h1:text-base prose-h2:text-base prose-h3:text-base prose-blockquote:not-italic prose-blockquote:my-4 prose-blockquote:pl-2 prose-blockquote:border-[#B1B6C6] dark:prose-invert prose-blockquote:dark:border-[#80808E];
 }
 
 pre code.hljs {

@@ -6,7 +6,7 @@
   <span><%= @mixin_network_user.uuid %></span>
 </div>
 
-<div class="bg-white dark:bg-zinc-900 roundedlg p-4">
+<div class="bg-base-100 rounded-lg p-4 shadow">
   <div class="flex items-center space-x-2 mb-4">
     <%= image_tag @mixin_network_user.avatar, class: "w-12 h-12 rounded-full", lazy: true %>
     <div>
@@ -42,9 +42,9 @@
       <span class="font-bold">State:</span> 
       <span class="flex m-auto">
         <% if @mixin_network_user.ready? %>
-          <span class="p-1 bg-green-500 ring-green-100 ring-2 rounded-full"></span>
+          <span class="badge badge-success badge-xs">Ready</span>
         <% else %>
-          <span class="px-2 py-1 bg-zinc-300">Unready</span>
+          <span class="badge badge-neutral">Unready</span>
         <% end %>
       </span>
     </div>
@@ -56,7 +56,7 @@
     data-tabs-active-class-value="border-b-2">
     <div class="flex overflow-auto flex-nowrap scrollbar-hide items-center mb-4 border-b lg:border-none space-x-2">
       <%= link_to admin_mixin_network_user_path(@mixin_network_user, tab: :assets), 
-        class: "cursor-pointer py-1 px-4 border-blue-500 font-bold text-zinc-600",
+        class: "btn btn-ghost btn-sm text-base-content",
         data: {
           tabs_target: "tab",
           tabs_tabname_param: "assets",
@@ -64,7 +64,7 @@
         Assets
       <% end %>
       <%= link_to admin_mixin_network_user_path(@mixin_network_user, tab: :snapshots), 
-        class: "cursor-pointer py-1 px-4 border-blue-500 font-bold text-zinc-600",
+        class: "btn btn-ghost btn-sm text-base-content",
         data: {
           tabs_target: "tab",
           tabs_tabname_param: "snapshots",

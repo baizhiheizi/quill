@@ -1,28 +1,25 @@
 <% style ||= 'default' %>
+<% block_classes = style == 'block' ? 'btn btn-primary w-full rounded-full py-3' : 'btn btn-outline btn-primary w-24 py-1.5' %>
 
-<div class="<%= dom_id user %>_subscribe_button<%= style == 'block' ? '_block' : '' %>" >
+<div class="<%= dom_id user %>_subscribe_button<%= style == 'block' ? '_block' : '' %>">
   <% if current_user.blank? %>
-    <%= link_to login_path(return_to: user_url(user)), 
-      data: { 
-        turbo_frame: :modal 
-      }, 
-      class: "flex items-center justify-center space-x-1 cursor-pointer text-sm bg-primary rounded-full text-white text-center #{style == 'block' ? 'w-full py-3' : 'w-24 py-1.5'}" do %>
-      <%= inline_svg_tag 'icons/add.svg', class: 'w-3 h-3' unless style == 'block' %>
+    <%= link_to login_path(return_to: user_url(user)),
+      data: { turbo_frame: :modal },
+      class: "flex cursor-pointer items-center justify-center space-x-1 text-center text-sm #{block_classes}" do %>
+      <%= inline_svg_tag 'icons/add.svg', class: 'h-3 w-3' unless style == 'block' %>
       <span><%= t('subscribe') %></span>
     <% end %>
   <% elsif current_user == user %>
     <span></span>
   <% elsif current_user.subscribe_user? user %>
-    <%= link_to t('subscribed'), 
-      new_subscribe_user_path(uid: user.uid), 
-      data: { 
-        turbo_frame: :modal,
-      }, 
-      class: "flex items-center justify-center space-x-1 cursor-pointer text-sm bg-[#F4F4F4] text-[#B1B6C6] dark:bg-[#444655] rounded-full text-white text-center #{style == 'block' ? 'w-full py-3' : 'w-24 py-1.5'}" %>
-<% else%>
-    <%= button_to subscribe_users_path(uid: user.uid), 
-      class: "flex items-center justify-center space-x-1 cursor-pointer text-sm bg-primary rounded-full text-white text-center #{style == 'block' ? 'w-full py-3' : 'w-24 py-1.5'}" do %>
-      <%= inline_svg_tag 'icons/add.svg', class: 'w-3 h-3' unless style == 'block' %>
+    <%= link_to t('subscribed'),
+      new_subscribe_user_path(uid: user.uid),
+      data: { turbo_frame: :modal },
+      class: "flex cursor-pointer items-center justify-center space-x-1 rounded-full bg-base-300 text-center text-sm text-base-content/60 #{style == 'block' ? 'w-full py-3' : 'w-24 py-1.5'}" %>
+  <% else %>
+    <%= button_to subscribe_users_path(uid: user.uid),
+      class: "flex cursor-pointer items-center justify-center space-x-1 text-center text-sm #{block_classes}" do %>
+      <%= inline_svg_tag 'icons/add.svg', class: 'h-3 w-3' unless style == 'block' %>
       <span><%= t('subscribe') %></span>
     <% end %>
   <% end %>

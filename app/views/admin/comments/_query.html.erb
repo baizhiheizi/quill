@@ -6,7 +6,7 @@
       ['Public', 'without_deleted'],
     ], 
     { selected: @state }, 
-    class: "rounded-lg m-1 dark:bg-zinc-900" %>
+    class: "select select-bordered select-sm m-1" %>
   <%= form.select :order_by, 
     [
       ['Created DESC', 'created_at_desc'], 
@@ -15,10 +15,10 @@
       ['Downvotes Count', 'downvotes_count'], 
     ], 
     { selected: @order_by }, 
-    class: "rounded-lg m-1 dark:bg-zinc-900" %>
-  <%= form.text_field :query, value: @query, placeholder: "Search", class: "rounded-lg m-1 dark:bg-zinc-900" %>
+    class: "select select-bordered select-sm m-1" %>
+  <%= form.text_field :query, value: @query, placeholder: "Search", class: "input input-bordered input-sm m-1" %>
   <%= form.hidden_field :author_id, value: params[:author_id] %>
   <%= form.hidden_field :commentable_id, value: params[:commentable_id] %>
   <%= form.hidden_field :commentable_type, value: params[:commentable_type] %>
-  <%= form.submit :Query, class: "cursor-pointer rounded bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 m-1" %>
+  <%= form.submit :Query, class: "btn btn-primary btn-sm m-1" %>
 <% end %>

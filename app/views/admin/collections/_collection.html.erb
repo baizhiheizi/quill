@@ -1,4 +1,4 @@
-<tr id="<%= dom_id collection %>" class="hover:bg-zinc-50 dark:hover:bg-zinc-800 border-b">
+<tr id="<%= dom_id collection %>">
   <td class="p-4">
     <%= collection.id %>
   </td>
@@ -9,14 +9,14 @@
     <%= render "admin/collections/field", collection: collection %>
   </td>
   <td class="p-4">
-    <span class="text-white px-2 py-1 rounded
+    <span class="badge
       <%= case collection.state
         when 'drafted'
-          'bg-slate-500'
+          'badge-neutral'
         when 'listed'
-          'bg-green-500'
+          'badge-success'
         when 'hidden'
-          'bg-yellow-500'
+          'badge-warning'
         end %>">
       <%= collection.state %>
     </span>

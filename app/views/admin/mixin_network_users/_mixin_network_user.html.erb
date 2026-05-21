@@ -1,4 +1,4 @@
-<tr class="hover:bg-zinc-50 dark:hover:bg-zinc-800 border-b">
+<tr>
   <td class="p-4">
     <%= mixin_network_user.type || '-' %>
   </td>
@@ -20,9 +20,9 @@
   <td class="p-4">
     <div class='flex justify-center'>
       <% if mixin_network_user.ready? %>
-        <span class="p-1 bg-green-500 ring-green-100 ring-2 rounded-full"></span>
+        <span class="badge badge-success badge-xs">Ready</span>
       <% else %>
-        <span class="px-2 py-1 bg-zinc-300">Unready</span>
+        <span class="badge badge-neutral">Unready</span>
       <% end %>
     </div>
   </td>
@@ -30,6 +30,6 @@
     <%= mixin_network_user.created_at %>
   </td>
   <td class="p-4">
-    <%= link_to 'Detail', admin_mixin_network_user_path(mixin_network_user), class: "bg-blue-500 hover:bg-blue-600 rounded text-white px-4 py-2", data: { turbo_frame: "_top" } %>
+    <%= link_to 'Detail', admin_mixin_network_user_path(mixin_network_user), class: "btn btn-primary btn-sm", data: { turbo_frame: "_top" } %>
   </td>
 </tr>

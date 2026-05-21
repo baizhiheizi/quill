@@ -8,7 +8,7 @@
   <% end %>
 </div>
 
-<div class="sm:border sm:p-4 dark:border-white dark:border-opacity-5 rounded-lg">
+<div class="sm:border sm:p-4 border-base-content/5 rounded-lg">
   <%= turbo_frame_tag "transfers", src: transfers_path, target: "_top" do %>
     <%= render "shared/loading" %>
   <% end %>

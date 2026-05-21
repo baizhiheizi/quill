@@ -1,9 +1,6 @@
 <div class="mb-16">
-  <div class="mb-6 truncate" data-tippy-content="<%= tag.name %>">
-    <span
-      class="text-lg h-8 my-2 mr-4 px-2 py-1 max-w-[6rem] truncate rounded tag-style-<%= tag.id % 6 %>">
-      <%= tag.name %>
-    </span>
+  <div class="tooltip mb-6 truncate [--placement:top]" data-tip="<%= tag.name %>">
+    <%= ui_badge tag.name, variant: :primary, class: "my-2 mr-4 h-8 max-w-[6rem] truncate px-2 py-1 text-lg tag-style-#{tag.id % 6}" %>
   </div>
   <div class='mb-2'>
     <%= render "subscribe_tags/subscribe_button", tag: tag, style: 'block' %>

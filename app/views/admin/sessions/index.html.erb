@@ -4,15 +4,15 @@
   <span>Sessions</span>
 </div>
 
-<div class="p-4 bg-white dark:bg-zinc-900 rounded-lg shadow">
+<div class="p-4 bg-base-100 rounded-lg shadow">
   <%= turbo_frame_tag 'admin_sessions' do %>
     <div class="mb-4">
       <%= render 'admin/sessions/query' %>
     </div>
     <div data-controller="infinite-scroll" class="w-full overflow-x-scroll scrollbar-hide">
-      <table class='w-full table-auto min-w-max '>
+      <table class='table table-zebra w-full min-w-max'>
         <thead>
-          <tr class="bg-zinc-100 dark:bg-zinc-800">
+          <tr class="bg-base-200">
             <th class="p-4">ID</th>
             <th class="p-4">UUID</th>
             <th class="p-4">User</th>

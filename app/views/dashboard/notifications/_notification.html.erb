@@ -1,9 +1,9 @@
 <% if notification.visible_in_web? && notification.message.present? %>
   <div id="<%= dom_id notification %>" class="flex items-center space-x-4">
-    <div class="w-2 h-2 rounded-full <%= notification.read? ? '' : 'bg-primary' %>">
+    <div class="w-2 h-2 rounded-full <%= notification.read? ? '' : 'bg-primary ring-2 ring-primary/30' %>">
     </div>
 
-    <div class="flex-1 flex items-center py-4 border-b dark:border-white dark:border-opacity-5 overflow-x-scroll scrollbar-hide">
+    <div class="flex-1 flex items-center py-4 border-b border-base-content/10 overflow-x-scroll scrollbar-hide">
       <div class="flex itemx-center space-x-2 truncate">
         <%= image_tag notification.icon_url, class: "w-6 h-6 rounded-full" if notification.icon_url.present? %>
         <%= link_to notification.message, 

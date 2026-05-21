@@ -5,8 +5,12 @@ import '@37signals/lexxy';
 import '@hotwired/turbo-rails';
 import { hideLoading } from './utils';
 import './controllers';
-import tippy from 'tippy.js';
 import './polyfill';
+import 'flyonui/flyonui';
+
+const initFlyonUI = () => {
+  window.HSStaticMethods?.autoInit();
+};
 
 import * as ActiveStorage from '@rails/activestorage';
 ActiveStorage.start();
@@ -40,14 +44,15 @@ addEventListener('turbo:submit-end', async ({ target, detail }) => {
 
 addEventListener('turbo:load', () => {
   hideLoading();
+  initFlyonUI();
 });
 
 addEventListener('turbo:render', () => {
   hideLoading();
-  tippy('[data-tippy-content]');
+  initFlyonUI();
 });
 
 addEventListener('turbo:frame-render', () => {
   hideLoading();
-  tippy('[data-tippy-content]');
+  initFlyonUI();
 });

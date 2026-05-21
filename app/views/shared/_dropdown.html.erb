@@ -1,9 +1,9 @@
-<div data-controller="dropdown-component" class="<%= local_assigns[:class] %>">
-  <button class="block" data-dropdown-component-target="button">
+<div class="dropdown relative inline-flex <%= local_assigns[:class] %>" data-controller="flyonui-dropdown">
+  <button type="button" class="dropdown-toggle block" aria-haspopup="menu" aria-expanded="false">
     <%= button %>
   </button>
 
-  <template data-dropdown-component-target="content">
+  <div class="dropdown-menu dropdown-open:opacity-100 hidden min-w-48" role="menu">
     <%= menu %>
-  </template>
+  </div>
 </div>

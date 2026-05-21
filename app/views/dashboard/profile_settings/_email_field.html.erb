@@ -8,10 +8,10 @@
     data: {
       turbo_frame: 'profile_email_form'
     },
-    class: "px-4 py-1 bg-primary border border-primary text-white rounded-full" %>
+    class: "btn btn-primary rounded-full" %>
 </div>
 
-<div class="mb-2 py-2 border-b dark:border-white dark:border-opacity-5">
+<div class="mb-2 py-2 border-b border-base-content/10">
   <span class="<%= current_user.email_vefified? ? 'opacity-100' : 'opacity-50' %>">
     <%= current_user.email.presence || '-' %>
   </span>

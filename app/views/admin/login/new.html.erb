@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="<%= I18n.locale %>" data-theme="quill">
   <head>
     <title>Admin</title>
     <meta
@@ -15,13 +15,13 @@
     <%= favicon_link_tag "favicon.svg" %>
   </head>
 
-  <body class="">
+  <body class="bg-base-200 text-base-content">
     <main class="h-screen flex">
       <div class="m-auto max-w-xl">
         <%= form_with url: '/admin/login', method: :post, class: "flex flex-col space-y-2" do |form| %>
-          <%= form.text_field :name, placeholder: "name", required: true, class: "rounded-lg" %>
-          <%= form.password_field :password, placeholder: "password", required: true, class: "rounded-lg" %>
-          <%= form.submit "Login", class: "bg-blue-500 hover:bg-blue-600 rounded text-white py-2 cursor-pointer" %>
+          <%= form.text_field :name, placeholder: "name", required: true, class: "input input-bordered w-full" %>
+          <%= form.password_field :password, placeholder: "password", required: true, class: "input input-bordered w-full" %>
+          <%= form.submit "Login", class: "btn btn-primary w-full" %>
         <% end %>
       </div>
     </main>

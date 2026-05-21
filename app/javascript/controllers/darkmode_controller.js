@@ -45,6 +45,7 @@ export default class extends Controller {
     if (this.hasDarkButtonTarget) {
       this.darkButtonTarget.classList.add('hidden');
     }
+    document.documentElement.dataset.theme = 'quill';
     document.documentElement.classList.remove('dark');
     const themeColor = document.querySelector('meta[name="theme-color"]');
     themeColor && themeColor.setAttribute('content', '#fff');
@@ -58,6 +59,7 @@ export default class extends Controller {
     if (this.hasDarkButtonTarget) {
       this.darkButtonTarget.classList.remove('hidden');
     }
+    document.documentElement.dataset.theme = 'quill-dark';
     document.documentElement.classList.add('dark');
     const themeColor = document.querySelector('meta[name="theme-color"]');
     themeColor && themeColor.setAttribute('content', '#1D1E2B');

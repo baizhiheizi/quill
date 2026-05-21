@@ -20,13 +20,13 @@
 <% if @user.block_user?(current_user) || current_user&.block_user?(@user) %>
   <%= render "shared/empty", text: t('blocked') %>
 <% else %>
-  <div class="mx-auto max-w-3xl"
+  <div class="mx-auto max-w-3xl text-base-content"
     data-controller="tabs"
     data-tabs-active-tab-value="<%= @tab %>"
     data-tabs-active-class-value="font-bold text-primary !border-primary">
     <div class="w-full flex overflow-auto flex-nowrap scrollbar-hide items-center flex mb-4">
       <%= link_to user_path(@user, tab: :published),
-        class: "cursor-pointer py-1 pr-8 border-transparent min-w-fit",
+        class: "btn btn-ghost btn-sm border-transparent min-w-fit pr-8",
         data: {
           tabs_target: "tab",
           tabs_tabname_param: "published",
@@ -39,7 +39,7 @@
       <% end %>
 
       <%= link_to user_path(@user, tab: :published),
-        class: "cursor-pointer py-1 pr-8 border-transparent min-w-fit",
+        class: "btn btn-ghost btn-sm border-transparent min-w-fit pr-8",
         data: {
           tabs_target: "tab",
           tabs_tabname_param: "bought",
@@ -52,7 +52,7 @@
       <% end %>
 
       <%= link_to user_comments_path(@user),
-        class: "cursor-pointer py-1 pr-8 border-transparent min-w-fit",
+        class: "btn btn-ghost btn-sm border-transparent min-w-fit pr-8",
         data: {
           tabs_target: "tab",
           tabs_tabname_param: "commented",

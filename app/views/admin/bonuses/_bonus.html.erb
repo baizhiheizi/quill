@@ -1,4 +1,4 @@
-<tr id="<%= dom_id bonus %>" class="hover:bg-zinc-50 dark:hover:bg-zinc-800 border-b">
+<tr id="<%= dom_id bonus %>">
   <td class="p-4">
     <%= bonus.id %>
   </td>
@@ -9,12 +9,12 @@
 
   <td class="p-4">
     <div class="flex justify-center">
-      <span class="text-white rounded px-2 py-1 
+      <span class="badge 
         <%= 
           {
-            drafted: 'bg-zinc-300',
-            delivering: 'bg-blue-500',
-            completed: 'bg-green-500',
+            drafted: 'badge-neutral',
+            delivering: 'badge-info',
+            completed: 'badge-success',
           }[bonus.state.to_sym]
         %>">
         <%= bonus.state %>
@@ -51,6 +51,6 @@
   </td>
 
   <td class="p-4">
-    <%= button_to 'Deliver', admin_bonus_deliver_path(bonus), class: "cursor-pointer" if bonus.drafted? %>
+    <%= button_to 'Deliver', admin_bonus_deliver_path(bonus), class: "btn btn-secondary btn-sm" if bonus.drafted? %>
   </td>
 </tr>

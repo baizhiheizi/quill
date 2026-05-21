@@ -6,7 +6,7 @@
   <span><%= @user.name %></span>
 </div>
 
-<div class="bg-white dark:bg-zinc-900 roundedlg p-4">
+<div class="bg-base-100 rounded-lg p-4 shadow">
   <div class="flex items-center space-x-2 mb-4">
     <%= image_tag @user.avatar_thumb, class: "w-12 h-12 rounded-full", lazy: true %>
     <div>
@@ -82,7 +82,7 @@
     data-tabs-active-class-value="border-b-2">
     <div class="flex overflow-auto flex-nowrap scrollbar-hide items-center mb-4 border-b lg:border-none space-x-2">
       <%= link_to admin_user_path(@user, tab: :articles), 
-        class: "cursor-pointer py-1 px-4 border-blue-500 font-bold text-zinc-600",
+        class: "btn btn-ghost btn-sm text-base-content",
         data: {
           tabs_target: "tab",
           tabs_tabname_param: "articles",
@@ -90,7 +90,7 @@
         Articles
       <% end %>
       <%= link_to admin_user_path(@user, tab: :collections), 
-        class: "cursor-pointer py-1 px-4 border-blue-500 font-bold text-zinc-600",
+        class: "btn btn-ghost btn-sm text-base-content",
         data: {
           tabs_target: "tab",
           tabs_tabname_param: "collections",
@@ -98,7 +98,7 @@
         Collections
       <% end %>
       <%= link_to admin_user_path(@user, tab: :comments), 
-        class: "cursor-pointer py-1 px-4 border-blue-500 font-bold text-zinc-600",
+        class: "btn btn-ghost btn-sm text-base-content",
         data: {
           tabs_target: "tab",
           tabs_tabname_param: "comments",
@@ -106,7 +106,7 @@
         Comments
       <% end %>
       <%= link_to admin_user_path(@user, tab: :payments), 
-        class: "cursor-pointer py-1 px-4 border-blue-500 font-bold text-zinc-600",
+        class: "btn btn-ghost btn-sm text-base-content",
         data: {
           tabs_target: "tab",
           tabs_tabname_param: "payments",
@@ -114,7 +114,7 @@
         Payments
       <% end %>
       <%= link_to admin_user_path(@user, tab: :orders), 
-        class: "cursor-pointer py-1 px-4 border-blue-500 font-bold text-zinc-600",
+        class: "btn btn-ghost btn-sm text-base-content",
         data: {
           tabs_target: "tab",
           tabs_tabname_param: "orders",
@@ -122,7 +122,7 @@
         Orders
       <% end %>
       <%= link_to admin_user_path(@user, tab: :pre_orders), 
-        class: "cursor-pointer py-1 px-4 border-blue-500 font-bold text-zinc-600",
+        class: "btn btn-ghost btn-sm text-base-content",
         data: {
           tabs_target: "tab",
           tabs_tabname_param: "pre_orders",
@@ -130,7 +130,7 @@
         Pre Orders
       <% end %>
       <%= link_to admin_user_path(@user, tab: :swap_orders), 
-        class: "cursor-pointer py-1 px-4 border-blue-500 font-bold text-zinc-600",
+        class: "btn btn-ghost btn-sm text-base-content",
         data: {
           tabs_target: "tab",
           tabs_tabname_param: "swap_orders",
@@ -138,7 +138,7 @@
         Swap Orders
       <% end %>
       <%= link_to admin_user_path(@user, tab: :transfers), 
-        class: "cursor-pointer py-1 px-4 border-blue-500 font-bold text-zinc-600",
+        class: "btn btn-ghost btn-sm text-base-content",
         data: {
           tabs_target: "tab",
           tabs_tabname_param: "transfers",
@@ -146,7 +146,7 @@
         Transfers
       <% end %>
       <%= link_to admin_user_path(@user, tab: :mixin_network_snapshots), 
-        class: "cursor-pointer py-1 px-4 border-blue-500 font-bold text-zinc-600",
+        class: "btn btn-ghost btn-sm text-base-content",
         data: {
           tabs_target: "tab",
           tabs_tabname_param: "mixin_network_snapshots",
@@ -154,7 +154,7 @@
         Snapshots
       <% end %>
       <%= link_to admin_user_path(@user, tab: :bonuses), 
-        class: "cursor-pointer py-1 px-4 border-blue-500 font-bold text-zinc-600",
+        class: "btn btn-ghost btn-sm text-base-content",
         data: {
           tabs_target: "tab",
           tabs_tabname_param: "bonuses",
@@ -162,7 +162,7 @@
         Bonus
       <% end %>
       <%= link_to admin_user_path(@user, tab: :non_fungible_outputs), 
-        class: "cursor-pointer py-1 px-4 border-blue-500 font-bold text-zinc-600",
+        class: "btn btn-ghost btn-sm text-base-content",
         data: {
           tabs_target: "tab",
           tabs_tabname_param: "non_fungible_outputs",
@@ -170,7 +170,7 @@
         NFOs
       <% end %>
       <%= link_to admin_user_path(@user, tab: :sessions), 
-        class: "cursor-pointer py-1 px-4 border-blue-500 font-bold text-zinc-600",
+        class: "btn btn-ghost btn-sm text-base-content",
         data: {
           tabs_target: "tab",
           tabs_tabname_param: "sessions",

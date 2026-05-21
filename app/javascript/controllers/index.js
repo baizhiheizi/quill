@@ -31,8 +31,8 @@ application.register('comment-form', CommentFormController);
 import DarkmodeController from './darkmode_controller';
 application.register('darkmode', DarkmodeController);
 
-import DropdownComponentController from './dropdown_component_controller';
-application.register('dropdown-component', DropdownComponentController);
+import FlyonuiDropdownController from './flyonui_dropdown_controller';
+application.register('flyonui-dropdown', FlyonuiDropdownController);
 
 import DropdownController from './dropdown_controller';
 application.register('dropdown', DropdownController);
@@ -61,8 +61,8 @@ application.register('load-more', LoadMoreController);
 import LoginController from './login_controller';
 application.register('login', LoginController);
 
-import ModalComponentController from './modal_component_controller';
-application.register('modal-component', ModalComponentController);
+import FlyonuiModalController from './flyonui_modal_controller';
+application.register('modal-component', FlyonuiModalController);
 
 import ModalController from './modal_controller';
 application.register('modal', ModalController);

@@ -1,4 +1,4 @@
-<div id="<%= dom_id article %>_draft" class="border-b dark:border-white dark:border-opacity-5 py-4 flex items-center justify-between space-x-4">
+<div id="<%= dom_id article %>_draft" class="border-b border-base-content/10 py-4 flex items-center justify-between space-x-4">
   <%= link_to article.title.presence || t('articles.title_placeholder'), 
     edit_article_path(article.uuid), 
     data: { 
@@ -18,7 +18,7 @@
         data: {
           turbo_frame: :modal
         },
-        class: "px-4 text-red-500 bg-transparent cursor-pointer" %>
+        class: "btn btn-ghost btn-error btn-sm" %>
     <% end %>
   </div>
 </div>

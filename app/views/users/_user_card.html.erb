@@ -1,6 +1,10 @@
 <div class="<%= dom_id user %>_card mb-8 xl:mb-16">
   <div class="flex items-center justify-between mb-4">
-    <img class="w-20 h-20 rounded-full border-2 shadow" src="<%= user.avatar_url %>" />
+    <div class="avatar">
+      <div class="size-20 rounded-full border-2 shadow">
+        <img class="rounded-full" src="<%= user.avatar_url %>" />
+      </div>
+    </div>
     <% if current_user.present? && current_user != user %>
       <% dropdown_button = capture do %>
         <%= inline_svg_tag "icons/dot-horizontal.svg", class: 'w-4 h-4' %>
@@ -30,13 +34,10 @@
 
   <div class="truncate mb-4">
     <div class="flex items-center mb-1 space-x-2">
-      <%= link_to user.name, 
-        user_path(user), 
-        data: {
-          tippy_content: user.name,
-          tippy_interactive: true
-        },
-        class: "text-lg sm:text-xl font-bold truncate" %>
+      <%= link_to user.name,
+        user_path(user),
+        class: "tooltip truncate text-lg font-bold sm:text-xl [--placement:top]",
+        data: { tip: user.name, turbo_frame: "_top" } %>
       <div class="flex items-center space-x-2 min-w-max">
         <% if user.twitter_connected? %>
           <%= link_to user.twitter_profile_url, target: "_blank" do %>

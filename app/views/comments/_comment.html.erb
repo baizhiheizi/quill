@@ -1,12 +1,14 @@
 <div id="<%= dom_id comment %>" class="py-4 w-full">
   <div class="flex space-x-2 sm:space-x-4 items-center">
     <%= link_to user_path(comment.author), 
-      class: "min-w-fit block", 
+      class: "avatar min-w-fit", 
       data: { 
         controller: 'prefetch', 
         turbo_frame: "_top" 
       } do %>
-      <%= image_tag comment.author.avatar_thumb, class: "w-9 h-9 rounded-full" %>
+      <div class="size-9 rounded-full">
+        <%= image_tag comment.author.avatar_thumb, class: "rounded-full" %>
+      </div>
     <% end %>
     <div class="">
       <div class="truncate max-w-24"><%= comment.author.name %></div>
@@ -23,7 +25,7 @@
       <% if comment.quote_comment.present? %>
         <div class="max-h-48 sm:max-h-full overflow-y-scroll scrollbar-hide">
           <blockquote>
-            <div class="bg-[#F4F4F4] dark:bg-[#333444] px-4 py-3 rounded">
+            <div class="bg-base-200 px-4 py-3 rounded text-base-content">
               <div class="truncate flex items-center">
                 <%= link_to "@#{comment.quote_comment.author.name}", 
                   user_path(comment.quote_comment.author), 

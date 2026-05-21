@@ -1,0 +1,10 @@
+<div class="card bg-base-100 shadow-sm <%= classes %>">
+  <% if title.present? %>
+    <div class="card-header border-b border-base-content/10 px-6 py-4">
+      <h3 class="card-title text-base font-semibold"><%= title %></h3>
+    </div>
+  <% end %>
+  <div class="card-body <%= body_class %>">
+    <%= content %>
+  </div>
+</div>

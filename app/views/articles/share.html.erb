@@ -2,7 +2,7 @@
   <%= render_modal title: t('share') do %>
     <div class="flex items-center">
       <% if from_mixin_messenger? %>
-        <a class="flex-1 rounded-t-lg block p-4 hover:bg-zinc-100 dark:hover:bg-zinc-800 active:bg-zinc-100 dark:active:bg-zinc-800 rounded-lg"
+        <a class="btn btn-ghost flex-1 h-auto flex-col p-4 rounded-lg"
           target="_blank"
           data-action="modal#hide"
           href="<%= share_to_mixin article_url(@article), title: @article.title, description: @article.intro, icon_url: @article.author.avatar_url %>">
@@ -13,7 +13,7 @@
         </a>
       <% end %>
 
-      <a class="flex-1 block p-4 opacity-70 hover:bg-zinc-100 dark:hover:bg-zinc-800 active:bg-zinc-100 dark:active:bg-zinc-800 rounded-lg"
+      <a class="btn btn-ghost flex-1 h-auto flex-col p-4 opacity-70 rounded-lg"
           target="_blank"
           data-action="modal#hide"
           href="<%= share_to_twitter article_url(@article), @article.title %>">
@@ -23,7 +23,7 @@
         <div class="text-base text-center">Twitter</div>
       </a>
 
-      <a class="flex-1 block p-4 opacity-70 hover:bg-zinc-100 dark:hover:bg-zinc-800 active:bg-zinc-100 dark:active:bg-zinc-800 rounded-lg"
+      <a class="btn btn-ghost flex-1 h-auto flex-col p-4 opacity-70 rounded-lg"
           target="_blank"
           data-action="modal#hide"
           href="<%= share_to_telegram article_url(@article), @article.title %>">
@@ -33,7 +33,7 @@
         <div class="text-base text-center">Telegram</div>
       </a>
 
-      <button class="flex-1 block w-full p-4 opacity-70 hover:bg-zinc-100 dark:hover:bg-zinc-800 active:bg-zinc-100 dark:active:bg-zinc-800 rounded-lg"
+      <button class="btn btn-ghost flex-1 h-auto w-full flex-col p-4 opacity-70 rounded-lg"
         data-controller="clipboard"
         data-clipboard-text-value="<%= article_url @article %>"
         data-clipboard-success-tip-value="Copied"

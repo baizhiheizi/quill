@@ -1,5 +1,5 @@
 <% if article.collection.present? %>
-  <div class="bg-[#EFEFFF] dark:bg-[#363644] py-2 px-4 rounded-lg mb-6 flex items-center text-sm truncate">
+  <div class="bg-base-200 py-2 px-4 rounded-lg mb-6 flex items-center text-sm truncate">
     <%= image_tag article.collection.cover_url, class: "w-8 h-8 rounded-full" %>
     <div class="ml-4 sm:ml-6 mr-2"><%= t('published_in') %></div>
     <%= link_to article.collection.name, collection_path(article.collection_id), class: "font-bold truncate" %>
@@ -8,7 +8,11 @@
 
 <div class="flex items-center justify-between mb-6">
   <div class="relative flex items-center space-x-2 truncate">
-    <%= image_tag article.author.avatar_thumb, class: "w-10 h-10 my-0 rounded-full" %>
+    <div class="avatar">
+      <div class="size-10 rounded-full">
+        <%= image_tag article.author.avatar_thumb, class: "rounded-full" %>
+      </div>
+    </div>
     <div class="leading-4 truncate">
       <span class="text-base font-semibold truncate max-w-24"><%= article.author.name %></span>
       <%= render "users/user_uid", user: article.author %>
@@ -67,7 +71,7 @@
   </div>
 </div>
 
-<div class="py-2 px-4 bg-zinc-100 dark:bg-[#333444] rounded break-words mb-6">
+<div class="py-2 px-4 bg-base-200 rounded break-words mb-6 text-base-content">
   <%= article.intro %>
 </div>
 

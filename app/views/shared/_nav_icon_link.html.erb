@@ -1,0 +1,24 @@
+<%#
+  locals: label, path:, active: false, icon:, solid_icon: nil, badge: false, turbo_frame: nil, action: nil
+%>
+<% link_path = local_assigns[:path] %>
+<% active = local_assigns.fetch(:active, false) %>
+<% show_badge = local_assigns.fetch(:badge, false) %>
+<% turbo_frame = local_assigns[:turbo_frame] %>
+<% action = local_assigns[:action] %>
+<div class="tooltip relative block w-10 py-6 [--placement:right]" data-tip="<%= label %>">
+  <div class="relative mx-auto h-6 w-6">
+    <%= inline_svg_tag (active ? solid_icon || icon : icon),
+      class: "mx-auto h-6 w-6 text-base-content/60" %>
+    <% if show_badge == true || show_badge.present? %>
+      <span class="absolute top-0 right-0 h-2 w-2 rounded-full bg-error"></span>
+    <% end %>
+  </div>
+
+  <% unless active %>
+    <% link_options = { class: "absolute inset-0" } %>
+    <% link_options[:data] = { turbo_frame: turbo_frame } if turbo_frame.present? %>
+    <% link_options[:data] = { action: action } if action.present? %>
+    <%= link_to "", link_path, **link_options %>
+  <% end %>
+</div>
