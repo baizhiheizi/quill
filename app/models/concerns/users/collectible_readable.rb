@@ -62,8 +62,7 @@ module Users::CollectibleReadable
 
     r["error"].blank?
   rescue MixinBot::UnauthorizedError, MixinBot::ForbiddenError => e
-    raise e if Rails.env.development?
-
+    Rails.logger.warn { "Collectibles API unavailable for user #{id}: #{e.message}" }
     false
   end
 
