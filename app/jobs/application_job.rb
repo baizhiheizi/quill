@@ -1,8 +1,7 @@
 # frozen_string_literal: true
 
 class ApplicationJob < ActiveJob::Base
-  retry_on StandardError, wait: :polynomially_longer, attempts: Float::INFINITY
+  retry_on StandardError, wait: :polynomially_longer, attempts: 5
 
-  # Most jobs are safe to ignore if the underlying records are no longer available
-  # discard_on ActiveJob::DeserializationError
+  discard_on ActiveJob::DeserializationError
 end

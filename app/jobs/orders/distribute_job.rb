@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class Orders::DistributeJob < ApplicationJob
+  queue_as :critical
+
   def perform(trace_id)
     order = Order.find_by(trace_id:)
     return if order.blank?

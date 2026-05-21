@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class Articles::CreateWalletJob < ApplicationJob
+  queue_as :default
   def perform(id)
     article = Article.find_by(id:)
     return if article.blank?
