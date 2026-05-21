@@ -4,7 +4,7 @@
 
 ## Project Overview
 
-Quill is a Web3 paid-publishing platform ([quill.im](https://quill.im/)) where authors publish priced articles and readers pay to access them. Its distinguishing feature is **early reader rewards**: a share of each article's new revenue (default 40%) is distributed proportionally to readers who paid earlier. The stack is a Rails monolith with Hotwire (Turbo + Stimulus), ERB partials, PostgreSQL, Redis, and background jobs via Good Job. Integrations include Mixin Network, MVM (Ethereum L2), MixPay, Arweave permanence, and wallet login (MetaMask, Coinbase, WalletConnect).
+Quill is a Web3 paid-publishing platform ([quill.im](https://quill.im/)) where authors publish priced articles and readers pay to access them. Its distinguishing feature is **early reader rewards**: a share of each article's new revenue (default 40%) is distributed proportionally to readers who paid earlier. The stack is a Rails monolith with Hotwire (Turbo + Stimulus), ERB partials, PostgreSQL, Solid Cable, Solid Cache, and background jobs via Good Job. Integrations include Mixin Network, MVM (Ethereum L2), MixPay, Arweave permanence, and wallet login (MetaMask, Coinbase, WalletConnect).
 
 ## Tech Stack
 
@@ -13,7 +13,8 @@ Quill is a Web3 paid-publishing platform ([quill.im](https://quill.im/)) where a
 | Language | Ruby | 4.0.5 (see `.ruby-version`, `mise.toml`) |
 | Framework | Rails | 8.1.x |
 | Database | PostgreSQL | — |
-| Cache / jobs | Redis, Solid Cache, Good Job | — |
+| Real-time | Solid Cable (separate `*_cable` DB) | — |
+| Cache / jobs | Solid Cache, Good Job | — |
 | Frontend | Turbo, Stimulus, Tailwind, esbuild | Node 20+, Bun 1.x |
 | Testing | Minitest, Capybara | minitest ~> 5.25 (Ruby 4 compat) |
 | Lint | RuboCop (rails-omakase), Prettier | — |
@@ -58,7 +59,7 @@ cp config/settings.yml config/settings.local.yml       # edit host for local URL
 bin/rails db:prepare
 ```
 
-Requires PostgreSQL and Redis running locally (or via Docker). See `CONTRIBUTING.md` for credential field examples (note: README versions are authoritative over CONTRIBUTING's Ruby 3.2 note).
+Requires PostgreSQL running locally (or via Docker). See `CONTRIBUTING.md` for credential field examples (note: README versions are authoritative over CONTRIBUTING's Ruby 3.2 note).
 
 ### Run
 
@@ -110,7 +111,7 @@ bun run build:css
 - **Location**: `test/` mirrors `app/` (`test/models/`, `test/controllers/`, `test/jobs/`, `test/notifiers/`)
 - **Naming**: `*_test.rb`; fixtures in `test/fixtures/`
 - **Style**: Minitest
-- **Env**: `RAILS_ENV=test`; CI uses Postgres + Redis service containers
+- **Env**: `RAILS_ENV=test`; CI uses Postgres service container
 
 ## Common Tasks
 
