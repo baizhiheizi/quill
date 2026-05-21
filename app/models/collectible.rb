@@ -46,8 +46,6 @@ class Collectible < ApplicationRecord
   validates :metahash, presence: true
   validates :collection_id, presence: true
 
-  after_create_commit :mint_async
-
   aasm column: :state do
     state :pending, initial: true
     state :minted
@@ -55,59 +53,6 @@ class Collectible < ApplicationRecord
     event :mint, guards: :nfo_existed? do
       transitions from: :pending, to: :minted
     end
-  end
-
-  def transfer_to_owner_async
-    Collectibles::TransferToOwnerJob.perform_later id
-  end
-
-  def transfer_to_owner
-    Trident.api.transfer collection_id, identifier, source.buyer.mixin_uuid
-
-    source.buyer.sync_collectibles!
-  end
-
-  def mint_async
-    return if collection.blank?
-
-    Collectibles::MintJob.perform_later id
-  end
-
-  def do_mint!
-    return unless pending?
-    return if nfo_existed?
-
-    Trident.api.upload_metadata(metadata:, metahash:)
-
-    transfers.create_with(
-      wallet_id: QuillBot.api.client_id,
-      transfer_type: :mint_nft,
-      queue_priority: :default,
-      opponent_multisig: {
-        receivers: TridentAssistant::Utils::NFO_MTG[:members],
-        threshold: TridentAssistant::Utils::NFO_MTG[:threshold]
-      },
-      asset_id: MINT_ASSET_ID,
-      amount: MINT_FEE,
-      memo: mint_memo
-    ).find_or_create_by!(
-      trace_id: QuillBot.api.unique_uuid(
-        source.trace_id,
-        generated_token_id
-      )
-    )
-  end
-
-  def collection_id_valid?
-    collection_id != "00000000-0000-0000-0000-000000000000"
-  end
-
-  def trident_url
-    Addressable::URI.new(
-      scheme: "https",
-      host: "thetrident.one",
-      path: "collectibles/#{metahash}"
-    ).to_s
   end
 
   def media_url
@@ -118,9 +63,8 @@ class Collectible < ApplicationRecord
     end
   end
 
-  def mint_memo
-    @mint_memo ||=
-      QuillBot.api.nft_memo collection_id, identifier, metahash
+  def collection_id_valid?
+    collection_id != "00000000-0000-0000-0000-000000000000"
   end
 
   def nfo_existed?

@@ -84,6 +84,4 @@
   <% end %>
 </div>
 
-<%= render "collections/mint", collection: collection if collection.mintable_order_from(current_user).present? && !current_user.fennec? %>
-
 <%= render "collections/stats", collection: collection %>

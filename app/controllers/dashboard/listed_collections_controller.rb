@@ -7,8 +7,11 @@ class Dashboard::ListedCollectionsController < Dashboard::BaseController
   end
 
   def update
-    @collection.list_on_trident! unless @collection.listed_on_trident?
-    @collection.list! if @collection.may_list?
+    if @collection.published?
+      @collection.list! if @collection.may_list?
+    else
+      @collection.publish!
+    end
 
     redirect_to dashboard_authorings_path(tab: :collections), success: t("success_updated")
   rescue StandardError => e

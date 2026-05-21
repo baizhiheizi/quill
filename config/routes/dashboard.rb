@@ -10,9 +10,7 @@ namespace :dashboard do
 
   resources :listed_collections, only: %i[new update]
   resources :hidden_collections, only: %i[new update]
-  resources :collections do
-    resources :collectings, only: %i[create destroy]
-  end
+  resources :collections
   resources :articles, only: %i[index show], param: :uuid
   resources :published_articles, param: :uuid, only: %i[new update destroy]
   resources :deleted_articles, param: :uuid, only: %i[new update]

@@ -41,7 +41,6 @@ class User < ApplicationRecord
   include Users::MVMQueriable
   include Users::Scopable
   include Users::Statable
-  include Users::CollectibleReadable
 
   extend Enumerize
 

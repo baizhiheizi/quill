@@ -177,9 +177,6 @@ class Payment < ApplicationRecord
 
     if decoded_memo["s"] == "4swapRefund"
       generate_refund_transfer!
-    elsif payment_memo["t"] == "MINT"
-      _order = collection.mintable_order_from payer
-      _order.mint! if _order&.may_mint?
     elsif asset_id == collection.asset_id
       place_collection_order!
     elsif swappable?

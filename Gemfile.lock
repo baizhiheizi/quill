@@ -1,11 +1,4 @@
 GIT
-  remote: https://github.com/TheTridentOne/trident_assistant.git
-  revision: 0d57bc68b0c8615d3c147100dbdbf202a16dc324
-  specs:
-    trident_assistant (0.2.0)
-      mixin_bot (~> 1.0)
-
-GIT
   remote: https://github.com/an-lee/mixin_bot.git
   revision: d864a19a6d606b7cd083b033791b9e827e966fb3
   specs:
@@ -706,7 +699,6 @@ DEPENDENCIES
   simple_command
   solid_cache (~> 1.0)
   stimulus-rails
-  trident_assistant!
   tsort
   turbo-rails
   twitter_oauth2

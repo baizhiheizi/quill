@@ -35,7 +35,6 @@ class Order < ApplicationRecord
 
   include AASM
   include Orders::Distributable
-  include Orders::Mintable
 
   belongs_to :buyer, class_name: "User"
   belongs_to :seller, class_name: "User"
