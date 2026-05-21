@@ -1,34 +1,38 @@
 <% if article.arweave_tx_of(current_user).present? %>
-  <div class="rounded-lg text-xs font-mono border border-base-content/10 divide-y divide-base-content/10 text-base-content/50">
-    <% if article.author.mvm_eth? %>
-      <div class="relative p-3 flex justify-between items-center space-x-4 hover:bg-base-200 border-base-content/5 text-base-content">
-        <div class="min-w-fit font-bold uppercase">
-          Author Address
+  <div class="bg-base-200/50 rounded-xl p-4 text-xs font-mono border border-base-content/5 mt-8 mb-4">
+    <div class="flex items-center space-x-2 mb-3 text-base-content/40">
+      <%= inline_svg_tag 'icons/link.svg', class: 'w-4 h-4' %>
+      <span class="uppercase tracking-wider font-semibold text-[10px]">Web3 Proof of Publishing</span>
+    </div>
+    <div class="space-y-2">
+      <% if article.author.mvm_eth? %>
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between group">
+          <div class="text-base-content/50 uppercase tracking-widest text-[10px] sm:w-32 mb-1 sm:mb-0">Author Address</div>
+          <div class="flex items-center space-x-2 overflow-hidden flex-1 sm:justify-end">
+            <span class="truncate text-base-content/80 group-hover:text-base-content transition-colors"><%= article.author.uid %></span>
+            <%= link_to article.author.mvm_address_url, target: "_blank", class: "flex-shrink-0 text-primary hover:text-primary-focus transition-colors", title: "View on Explorer" do %>
+              <%= inline_svg_tag 'icons/external-link.svg', class: 'w-3 h-3' %>
+            <% end %>
+          </div>
         </div>
-        <div class="truncate">
-          <%= article.author.uid %>
-        </div>
-        <%= link_to '', article.author.mvm_address_url, target: "_blank", class: "absolute inset-0" %>
-      </div>
-    <% end %>
-    <% if article.arweave_tx_of(current_user).present? %>
-      <div class="relative p-3 flex justify-between items-center space-x-4 hover:bg-base-200 border-base-content/5 text-base-content">
-        <div class="min-w-fit font-bold uppercase">
-          Arweave TX
-        </div>
-        <div class="truncate">
-          <%= article.arweave_tx_of(current_user).tx_id %>
-        </div>
-        <%= link_to '', article.arweave_tx_of(current_user).snapshot_url, target: "_blank", class: "absolute inset-0" %>
-      </div>
-      <div class="relative p-3 flex justify-between items-center space-x-4 hover:bg-base-200 border-base-content/5 text-base-content">
-        <div class="min-w-fit font-bold uppercase">
-          Content Digest
-        </div>
-        <div class="truncate">
-          <%= article.digest %>
+      <% end %>
+      
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between group">
+        <div class="text-base-content/50 uppercase tracking-widest text-[10px] sm:w-32 mb-1 sm:mb-0">Arweave TX</div>
+        <div class="flex items-center space-x-2 overflow-hidden flex-1 sm:justify-end">
+          <span class="truncate text-base-content/80 group-hover:text-base-content transition-colors"><%= article.arweave_tx_of(current_user).tx_id %></span>
+          <%= link_to article.arweave_tx_of(current_user).snapshot_url, target: "_blank", class: "flex-shrink-0 text-primary hover:text-primary-focus transition-colors", title: "View on Arweave" do %>
+            <%= inline_svg_tag 'icons/external-link.svg', class: 'w-3 h-3' %>
+          <% end %>
         </div>
       </div>
-    <% end %>
+      
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between group">
+        <div class="text-base-content/50 uppercase tracking-widest text-[10px] sm:w-32 mb-1 sm:mb-0">Content Digest</div>
+        <div class="flex items-center space-x-2 overflow-hidden flex-1 sm:justify-end">
+          <span class="truncate text-base-content/80 group-hover:text-base-content transition-colors"><%= article.digest %></span>
+        </div>
+      </div>
+    </div>
   </div>
 <% end %>
