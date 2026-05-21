@@ -55,11 +55,12 @@ class API::ArticlesController < API::BaseController
 
   def show
     @article = Article.find_by!(uuid: params[:uuid])
-
-    raise ActiveRecord::RecordNotFound unless @article.published? || @article.authorized?(current_user)
+    raise ActiveRecord::RecordNotFound unless ArticlePolicy.new(current_user, @article).show?
   end
 
   def create
+    authorize Article, :create?
+
     article = current_user.articles.new(article_params.merge(source: current_access_token.value))
 
     if article.save

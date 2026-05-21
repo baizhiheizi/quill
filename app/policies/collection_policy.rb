@@ -8,4 +8,8 @@ class CollectionPolicy < ApplicationPolicy
   def update?
     user.present? && record.author == user
   end
+
+  def purchase?
+    user.present? && !record.authorized?(user)
+  end
 end

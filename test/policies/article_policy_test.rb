@@ -26,4 +26,33 @@ class ArticlePolicyTest < ActiveSupport::TestCase
 
     assert ArticlePolicy.new(reader, article).comment?
   end
+
+  test "purchase? allows readers who have not bought the article" do
+    article = articles(:published_paid)
+    reader = users(:reader_one)
+
+    assert ArticlePolicy.new(reader, article).purchase?
+  end
+
+  test "purchase? denies readers who already bought the article" do
+    article = articles(:published_paid)
+    buyer = users(:reader_one)
+
+    with_quill_bot_stub do
+      create_buy_order!(article: article, buyer: buyer)
+    end
+
+    refute ArticlePolicy.new(buyer, article).purchase?
+  end
+
+  test "reward? allows authorized readers" do
+    article = articles(:published_paid)
+    buyer = users(:reader_one)
+
+    with_quill_bot_stub do
+      create_buy_order!(article: article, buyer: buyer)
+    end
+
+    assert ArticlePolicy.new(buyer, article).reward?
+  end
 end

@@ -24,4 +24,16 @@ class ArticlePolicy < ApplicationPolicy
   def create?
     user.present?
   end
+
+  def purchase?
+    user.present? && record.may_buy_by?(user) && !record.authorized?(user)
+  end
+
+  def reward?
+    user.present? && record.authorized?(user)
+  end
+
+  def destroy?
+    update?
+  end
 end

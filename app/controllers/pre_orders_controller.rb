@@ -28,14 +28,15 @@ class PreOrdersController < ApplicationController
     article = Article.published.find_by uuid: params[:article_uuid]
 
     return if article.blank?
-    return if params[:order_type] == "buy_article" && article.authorized?(current_user)
-    return if params[:order_type] == "reward_article" && !article.authorized?(current_user)
+
+    authorize_pre_order_item!(article, params[:order_type])
 
     @pre_order = current_user.pre_orders.new item: article, order_type: params[:order_type]
   end
 
   def create
     @pre_order = current_user.pre_orders.new pre_order_params
+    authorize_pre_order_item!(@pre_order.item, @pre_order.order_type) if @pre_order.item.present?
 
     redirect_to @pre_order.pay_url, allow_other_host: true if @pre_order.save && @pre_order.is_a?(MixpayPreOrder)
   end
@@ -63,6 +64,17 @@ class PreOrdersController < ApplicationController
 
   def pre_order_params
     params.require(:pre_order).permit(:item_id, :item_type, :type, :order_type, :asset_id, :amount)
+  end
+
+  def authorize_pre_order_item!(item, order_type)
+    case order_type.to_s
+    when "buy_article"
+      authorize item, :purchase?
+    when "reward_article"
+      authorize item, :reward?
+    when "buy_collection"
+      authorize item, :purchase?
+    end
   end
 
   def should_redirect?

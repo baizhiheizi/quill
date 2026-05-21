@@ -33,7 +33,7 @@ class AccessToken < ApplicationRecord
     self.value = SecureRandom.uuid
   end
 
-  default_scope { where(deleted_at: nil) }
+  scope :kept, -> { without_deleted }
 
   def desensitized_value
     value.first(4) + ("*" * 6) + value.last(4)
