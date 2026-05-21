@@ -6,24 +6,24 @@
   data-controller="modal-component"
   data-action="turbo:submit-end->modal-component#submitEnd"
   data-modal-component-backdrop-value="<%= backdrop %>">
-  <div class="modal-dialog w-full max-w-2xl sm:max-w-lg">
+  <div class="modal-dialog <%= local_assigns[:dialog_class] %>">
     <div class="modal-content">
-      <div class="modal-header border-b border-base-content/10">
+      <div class="modal-header">
         <% if header.present? %>
           <%= header %>
         <% else %>
-          <h3 class="modal-title text-base font-bold"><%= title %></h3>
+          <h3 class="modal-title"><%= title %></h3>
         <% end %>
         <button
           type="button"
-          class="btn btn-circle btn-sm btn-text absolute end-3 top-3"
+          class="btn btn-text btn-circle btn-sm absolute end-3 top-3"
           aria-label="<%= t('close', default: 'Close') %>"
           data-action="modal-component#close">
           <span class="icon-[tabler--x] size-4"></span>
         </button>
       </div>
 
-      <div class="modal-body max-h-[75vh] overflow-y-auto scrollbar-hide">
+      <div class="modal-body">
         <%= content %>
         <div style="height:env(safe-area-inset-bottom)"></div>
       </div>

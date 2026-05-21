@@ -3,13 +3,13 @@
     <%= yield :topbar %>
   <% else %>
     <div class="navbar-start">
-      <%= link_to root_path, class: "btn btn-ghost px-6" do %>
+      <%= link_to root_path, class: "btn btn-soft px-6" do %>
         <%= image_tag 'logo.svg', class: "h-8 w-auto" %>
       <% end %>
     </div>
     <% if current_user.present? %>
       <div class="navbar-end <%= from_mixin_messenger? ? 'mr-24' : '' %>">
-        <%= link_to dashboard_notifications_path, class: "btn btn-ghost btn-circle" do %>
+        <%= link_to dashboard_notifications_path, class: "btn btn-soft btn-circle" do %>
           <div class="indicator">
             <%= inline_svg_tag 'icons/bell.svg', class: "h-6 w-6 text-base-content/60" %>
             <% if current_user.has_unread_notification? %>

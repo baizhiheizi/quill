@@ -6,7 +6,7 @@ module UiHelper
     secondary: "btn-secondary",
     soft: "btn-soft btn-primary",
     outline: "btn-outline btn-primary",
-    ghost: "btn-text",
+    ghost: "btn-soft btn-neutral",
     danger: "btn-error",
     success: "btn-success"
   }.freeze
@@ -27,8 +27,8 @@ module UiHelper
     info: "badge-info"
   }.freeze
 
-  def render_modal(title: "", backdrop: "default", classes: "", header: nil, &block)
-    render "shared/modal", title:, backdrop:, classes:, header:, content: capture(&block)
+  def render_modal(title: "", backdrop: "default", classes: "", dialog_class: "", header: nil, &block)
+    render "shared/modal", title:, backdrop:, classes:, dialog_class:, header:, content: capture(&block)
   end
 
   def render_dropdown(class: "", button:, &block)

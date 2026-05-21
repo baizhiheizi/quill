@@ -26,7 +26,7 @@
     data-tabs-active-class-value="font-bold text-primary !border-primary">
     <div class="w-full flex overflow-auto flex-nowrap scrollbar-hide items-center flex mb-4">
       <%= link_to user_path(@user, tab: :published),
-        class: "btn btn-ghost btn-sm border-transparent min-w-fit pr-8",
+        class: "btn btn-soft btn-sm border-transparent min-w-fit pr-8",
         data: {
           tabs_target: "tab",
           tabs_tabname_param: "published",
@@ -39,7 +39,7 @@
       <% end %>
 
       <%= link_to user_path(@user, tab: :published),
-        class: "btn btn-ghost btn-sm border-transparent min-w-fit pr-8",
+        class: "btn btn-soft btn-sm border-transparent min-w-fit pr-8",
         data: {
           tabs_target: "tab",
           tabs_tabname_param: "bought",
@@ -52,7 +52,7 @@
       <% end %>
 
       <%= link_to user_comments_path(@user),
-        class: "btn btn-ghost btn-sm border-transparent min-w-fit pr-8",
+        class: "btn btn-soft btn-sm border-transparent min-w-fit pr-8",
         data: {
           tabs_target: "tab",
           tabs_tabname_param: "commented",

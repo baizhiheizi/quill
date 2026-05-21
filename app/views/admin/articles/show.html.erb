@@ -123,7 +123,7 @@
     data-tabs-active-class-value="border-b-2">
     <div class="flex overflow-auto flex-nowrap scrollbar-hide items-center mb-4 border-b lg:border-none space-x-2">
       <%= link_to admin_article_path(@article, tab: :orders), 
-        class: "btn btn-ghost btn-sm text-base-content",
+        class: "btn btn-soft btn-sm text-base-content",
         data: {
           tabs_target: "tab",
           tabs_tabname_param: "orders",
@@ -131,7 +131,7 @@
         Orders
       <% end %>
       <%= link_to admin_article_path(@article, tab: :pre_orders), 
-        class: "btn btn-ghost btn-sm text-base-content",
+        class: "btn btn-soft btn-sm text-base-content",
         data: {
           tabs_target: "tab",
           tabs_tabname_param: "pre_orders",
@@ -139,7 +139,7 @@
         PreOrders
       <% end %>
       <%= link_to admin_article_path(@article, tab: :comments), 
-        class: "btn btn-ghost btn-sm text-base-content",
+        class: "btn btn-soft btn-sm text-base-content",
         data: {
           tabs_target: "tab",
           tabs_tabname_param: "comments",
@@ -147,7 +147,7 @@
         Comments
       <% end %>
       <%= link_to admin_arweave_transactions_path(@article, tab: :arweave_transactions), 
-        class: "btn btn-ghost btn-sm text-base-content",
+        class: "btn btn-soft btn-sm text-base-content",
         data: {
           tabs_target: "tab",
           tabs_tabname_param: "arweave_transactions",

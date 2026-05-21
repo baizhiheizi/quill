@@ -2,14 +2,12 @@
   <% if requesting_modal? %>
     <%= turbo_frame_tag 'modal' do %>
       <% modal_header = capture do %>
-          <div class="flex-1 flex items-center justify-between">
-            <div class="font-bold">
-              <%= t('comments') %>
-            </div>
-            <%= render "subscribe_articles/subscribe_button", article: @article if @article.authorized?(current_user) %>
-          </div>
+        <div class="flex flex-1 items-center justify-between pe-8">
+          <h3 class="modal-title"><%= t('comments') %></h3>
+          <%= render "subscribe_articles/subscribe_button", article: @article if @article.authorized?(current_user) %>
+        </div>
       <% end %>
-      <%= render_modal backdrop: 'static', header: modal_header do %>
+      <%= render_modal backdrop: 'static', dialog_class: 'modal-dialog-lg', header: modal_header do %>
 
         <% if @article.authorized? current_user %>
           <div class="mb-6">
