@@ -14,7 +14,7 @@ Quill is a Web3 paid-publishing platform ([quill.im](https://quill.im/)) where a
 | Framework | Rails | 8.1.x |
 | Database | PostgreSQL | — |
 | Cache / jobs | Redis, Solid Cache, Good Job | — |
-| Frontend | Turbo, Stimulus, Tailwind, esbuild | Node 20+, Yarn 1.x |
+| Frontend | Turbo, Stimulus, Tailwind, esbuild | Node 20+, Bun 1.x |
 | Components | ViewComponent | 4.x |
 | Testing | Minitest, Capybara | minitest ~> 5.25 (Ruby 4 compat) |
 | Lint | RuboCop (rails-omakase), Prettier | — |
@@ -53,7 +53,7 @@ quill/
 
 ```bash
 bundle install
-yarn install
+bun install
 EDITOR=vim bin/rails credentials:edit --development   # Mixin bot + AR encryption keys
 cp config/settings.yml config/settings.local.yml       # edit host for local URL
 bin/rails db:prepare
@@ -77,21 +77,21 @@ bin/rails test
 bin/rails zeitwerk:check
 ```
 
-CI also runs `bin/rubocop` and `yarn lint-check`.
+CI also runs `bin/rubocop` and `bun run lint-check`.
 
 ### Lint
 
 ```bash
 bin/rubocop
-yarn lint-check          # Prettier check on app/javascript
-yarn lint                # Prettier write
+bun run lint-check          # Prettier check on app/javascript
+bun run lint                # Prettier write
 ```
 
 ### Build assets (without bin/dev)
 
 ```bash
-yarn build
-yarn build:css
+bun run build
+bun run build:css
 ```
 
 ## Code Conventions

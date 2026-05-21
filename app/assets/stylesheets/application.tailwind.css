@@ -1,6 +1,6 @@
 @import '@milkdown/theme-nord/lib/style.css';
 @import 'highlight.js/styles/github';
-@import 'photoswipe';
+@import 'photoswipe/dist/photoswipe.css';
 @import 'tom-select/dist/css/tom-select';
 @import 'tippy.js/dist/tippy.css';
 @import 'tippy.js/themes/light.css';

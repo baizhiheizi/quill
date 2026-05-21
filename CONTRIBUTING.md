@@ -45,7 +45,7 @@ Install dependencies.
 
 ```bash
 bundle install
-yarn install
+bun install
 ```
 
 ## Prepare Config
