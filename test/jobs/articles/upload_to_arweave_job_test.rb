@@ -12,7 +12,7 @@ class Articles::UploadToArweaveJobTest < JobTestCase
     called = false
     article.define_singleton_method(:upload_to_arweave!) { called = true }
 
-    stub_class_method(Article, :find, ->(id) { id == article.id ? article : raise(ActiveRecord::RecordNotFound) }) do
+    stub_class_method(Article, :find_by, ->(id:) { id == article.id ? article : nil }) do
       Articles::UploadToArweaveJob.perform_now(article.id)
     end
 

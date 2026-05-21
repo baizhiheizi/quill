@@ -65,6 +65,8 @@ class ArticlesController < ApplicationController
       CreateTagService.call(@article, params[:article][:tag_names] || [])
       @article.update! update_article_params
     end
+  rescue ActiveRecord::RecordInvalid
+    render status: :unprocessable_entity
   end
 
   def update_content
