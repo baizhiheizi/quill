@@ -1,51 +1,60 @@
-<div class="flex justify-center space-x-2 mb-6 text-sm">
-  <span class="text-red-500 font-bold"><%= article.buy_orders.count %></span>
-  <span><%= t('times_bought') %>,</span> 
-  <span class="text-red-500 font-bold"><%= article.reward_orders.count %></span>
-  <span><%= t('times_reward') %></span>
-</div>
+<div class="flex flex-col items-center justify-center mb-8">
+  <div class="inline-flex items-center justify-center space-x-3 px-4 py-2 rounded-full bg-base-200/50 text-sm border border-base-content/5 mb-6">
+    <div class="flex items-center space-x-1.5">
+      <span class="text-primary font-bold"><%= article.buy_orders.count %></span>
+      <span class="text-base-content/60"><%= t('times_bought') %></span>
+    </div>
+    <span class="text-base-content/20">•</span>
+    <div class="flex items-center space-x-1.5">
+      <span class="text-primary font-bold"><%= article.reward_orders.count %></span>
+      <span class="text-base-content/60"><%= t('times_reward') %></span>
+    </div>
+  </div>
 
-<div class="mx-auto sm:w-96 mb-10 <%= article.readers.count > 8 ? 'grid grid-cols-8 gap-1 sm:gap-2' : 'flex items-center justify-center space-x-2' %>">
-  <% article.readers.sample(24).each do |reader| %>
-    <div class="avatar">
-      <div class="size-9 rounded-full">
-        <%= image_tag reader.avatar_thumb, class: "rounded-full" %>
-      </div>
+  <% if article.readers.any? %>
+    <div class="w-full max-w-sm mb-10 <%= article.readers.count > 8 ? 'grid grid-cols-8 gap-1.5 sm:gap-2' : 'flex items-center justify-center space-x-2' %>">
+      <% article.readers.sample(24).each do |reader| %>
+        <div class="avatar tooltip" data-tip="<%= reader.name %>">
+          <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-full ring-2 ring-base-100 hover:ring-primary transition-all cursor-pointer">
+            <%= image_tag reader.avatar_thumb, class: "rounded-full" %>
+          </div>
+        </div>
+      <% end %>
     </div>
   <% end %>
 </div>
 
 <% if article.authorized? user %>
-  <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
-    <div class="col-span-1 card bg-base-200 rounded-box p-3">
-      <div class="text-center text-2xl font-bold mb-2">
+  <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 mb-8">
+    <div class="col-span-1 flex flex-col items-center justify-center p-4 rounded-2xl bg-base-200/30 border border-base-content/5">
+      <div class="text-2xl font-serif font-bold text-base-content mb-1">
         <%= article.price %>
       </div>
-      <div class="text-center text-sm opacity-80">
+      <div class="text-xs uppercase tracking-wider font-semibold text-base-content/50">
         <%= t('activerecord.attributes.article.price') %>(<%= article.currency.symbol %>)
       </div>
     </div>
-    <div class="col-span-1 card bg-base-200 rounded-box p-3">
-      <div class="text-center text-2xl font-bold mb-2">
+    <div class="col-span-1 flex flex-col items-center justify-center p-4 rounded-2xl bg-base-200/30 border border-base-content/5">
+      <div class="text-2xl font-serif font-bold text-base-content mb-1">
         <%= article.orders_count %>
       </div>
-      <div class="text-center text-sm opacity-80">
+      <div class="text-xs uppercase tracking-wider font-semibold text-base-content/50">
         <%= t('activerecord.attributes.article.orders_count') %>
       </div>
     </div>
-    <div class="col-span-1 card bg-base-200 rounded-box p-3">
-      <div class="text-center text-2xl font-bold mb-2">
-        <%= article.revenue_usd.presence&.round(4) || 0.0 %>
+    <div class="col-span-1 flex flex-col items-center justify-center p-4 rounded-2xl bg-base-200/30 border border-base-content/5">
+      <div class="text-2xl font-serif font-bold text-base-content mb-1">
+        $<%= article.revenue_usd.presence&.round(2) || '0.00' %>
       </div>
-      <div class="text-center text-sm opacity-80">
-        <%= t('activerecord.attributes.article.revenue') %>(USD)
+      <div class="text-xs uppercase tracking-wider font-semibold text-base-content/50">
+        <%= t('activerecord.attributes.article.revenue') %>
       </div>
     </div>
-    <div class="col-span-1 card bg-base-200 rounded-box p-3">
-      <div class="text-center text-2xl font-bold mb-2">
-        <%= (article.share_of(user).to_f * 100).round(3) %>
+    <div class="col-span-1 flex flex-col items-center justify-center p-4 rounded-2xl bg-base-200/30 border border-base-content/5">
+      <div class="text-2xl font-serif font-bold text-base-content mb-1">
+        <%= (article.share_of(user).to_f * 100).round(1) %>%
       </div>
-      <div class="text-center text-sm opacity-80">
+      <div class="text-xs uppercase tracking-wider font-semibold text-base-content/50">
         <%= t('activerecord.attributes.article.my_share') %>
       </div>
     </div>
