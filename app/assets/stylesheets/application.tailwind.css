@@ -1,4 +1,4 @@
-@import '@milkdown/theme-nord/style.css';
+@import '@milkdown/theme-nord/lib/style.css';
 @import 'highlight.js/styles/github';
 @import 'photoswipe/dist/photoswipe.css';
 @import 'tom-select/dist/css/tom-select';
