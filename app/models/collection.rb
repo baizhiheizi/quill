@@ -57,8 +57,6 @@ class Collection < ApplicationRecord
 
   validate :ensure_price_not_too_low
 
-  delegate :trident_url, to: :nft_collection
-
   alias_attribute :title, :name
 
   aasm column: :state do
@@ -78,35 +76,25 @@ class Collection < ApplicationRecord
 
   delegate :present?, to: :nft_collection, prefix: true
 
-  def list_on_trident!
-    NftCollection.find_or_create_by uuid: uuid if uuid.present?
-    return if nft_collection_present?
+  def publish!
+    return if published?
 
+    self.uuid ||= SecureRandom.uuid
     generate_cover if cover_url.blank?
-
-    r = Trident.api.create_collection(
-      name:,
-      symbol:,
-      description:,
-      split: DEFAULT_SPLIT,
-      external_url: "https://quill.im",
-      icon_url: cover_url
-    )
-    update! uuid: r["id"] if r["id"].present?
-
-    ActiveRecord::Base.transaction do
-      NftCollection.create! uuid: r["id"], raw: r
-      reload.list!
-    end
+    save!
+    NftCollection.find_or_create_by!(uuid: uuid) { |nc| nc.raw = { "source" => "quill" } }
+    list! if may_list?
   end
 
   def may_destroy?
-    !listed_on_trident?
+    !published?
   end
 
-  def listed_on_trident?
+  def published?
     uuid.present?
   end
+
+  alias_method :listed_on_trident?, :published?
 
   def price_tag
     "#{format('%.8f', price).gsub(/0+\z/, '0')} #{currency.symbol}"
@@ -131,15 +119,6 @@ class Collection < ApplicationRecord
     cover.attach io: file, filename: "#{name}_cover"
   end
 
-  def generated_collectible_media_url(identifier)
-    grover_collection_collectible_url(
-      id,
-      identifier:,
-      token: Rails.application.credentials.dig(:grover, :token),
-      format: :png
-    )
-  end
-
   def qrcode_base64
     [ "data:image/png;base64, ",
      Base64.encode64(
@@ -149,24 +128,11 @@ class Collection < ApplicationRecord
      ) ].join
   end
 
-  def mintable_order_from(user = nil)
-    return if user.blank?
-
-    order = orders.find_by buyer: user
-    return if order.blank?
-    return if order.collectible.present?
-
-    order
-  end
-
   def authorized?(user = nil)
     return false if user.blank?
     return true if author == user
 
-    order = orders.find_by buyer: user
-    return true if order.present? && (order.collectible.blank? || order.collectible.pending?)
-
-    (validatable_collections.pluck(:uuid) + [ uuid ]).intersect?(user.owning_collection_ids)
+    orders.exists?(buyer: user)
   end
 
   def notify_subscribers_async

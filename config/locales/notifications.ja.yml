@@ -63,6 +63,3 @@ ja:
     user_safe_registration_notifier:
       notification:
         message: Please update Mixin Messenger to the latest version to ensure you can accept the transfer.
-    non_fungible_output_found_notifier:
-      notification:
-        found: Found

@@ -63,6 +63,3 @@ zh-CN:
     user_safe_registration_notifier:
       notification:
         message: 请将您的 Mixin Messenger 升级到最新版本，以便正常接收 Quill 的收益转账。
-    non_fungible_output_found_notifier:
-      notification:
-        found: 找到

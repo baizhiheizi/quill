@@ -47,9 +47,6 @@ gem "mixin_bot", github: "an-lee/mixin_bot"
 # A simple API wrapper for Pando in Ruby
 gem "pando_bot"
 
-# A simple API wrapper for Trident in Ruby
-gem "trident_assistant", git: "https://github.com/TheTridentOne/trident_assistant.git"
-
 # Wraps the Aliyun OSS as an Active Storage service.
 gem "activestorage-aliyun"
 

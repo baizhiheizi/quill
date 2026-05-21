@@ -21,13 +21,6 @@ class Dashboard::HomeController < Dashboard::BaseController
   end
 
   def wallet
-    @tab =
-      if current_user.mvm_eth?
-        params[:tab] || "token"
-      else
-        params[:tab] || "nft"
-      end
-
     @active_page = "wallet"
   end
 end

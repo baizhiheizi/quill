@@ -16,7 +16,6 @@ module NoticedNotificationExtensions
     notifier_class = event.type.constantize
     return false unless notifier_class.persist_web_notification
     return may_notify_via_web? if respond_to?(:may_notify_via_web?, true)
-    return collectible_valid? if respond_to?(:collectible_valid?, true)
     return web_notification_enabled? if respond_to?(:web_notification_enabled?, true)
 
     true

@@ -27,16 +27,7 @@ class NonFungibleOutput < ApplicationRecord
 
   default_scope -> { order(Arel.sql("(raw->>'updated_at')::timestamptz desc")) }
 
-  delegate :collection, :nft_collection, to: :collectible
-
-  after_commit :notify, on: :create
-
-  def notify
-    return unless state == "unspent"
-    return if collectible&.collection.blank?
-
-    NonFungibleOutputFoundNotifier.with(record: self, non_fungible_output: self).deliver(user)
-  end
+  delegate :collection, :nft_collection, to: :collectible, allow_nil: true
 
   private
 

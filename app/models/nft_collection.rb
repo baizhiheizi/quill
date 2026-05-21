@@ -21,47 +21,10 @@ class NftCollection < ApplicationRecord
   belongs_to :collection, primary_key: :uuid, foreign_key: :uuid, inverse_of: :nft_collection, optional: true
   has_many :collectibles, dependent: :restrict_with_exception
 
-  before_validation :setup_default_attributes
-
   validates :uuid, presence: true, uniqueness: true
   validates :raw, presence: true
 
-  def sync!
-    raw = Trident.api.collection uuid
-    return if raw.blank?
-
-    update! raw:
-  end
-
-  def trident_url
-    Addressable::URI.new(
-      scheme: "https",
-      host: "thetrident.one",
-      path: "collections/#{uuid}"
-    ).to_s
-  end
-
   def icon_url
-    icon["url"] || format("https://api.multiavatar.com/%<uuid>s.png", uuid:)
-  end
-
-  private
-
-  def setup_default_attributes
-    return if uuid.present? && raw.present?
-
-    r =
-      begin
-        Trident.api.collection(uuid)
-      rescue TridentAssistant::Client::RequestError
-        {}
-      end
-
-    return if r["id"].blank?
-
-    assign_attributes(
-      raw: r,
-      uuid: r["id"]
-    )
+    icon&.dig("url") || format("https://api.multiavatar.com/%<uuid>s.png", uuid:)
   end
 end

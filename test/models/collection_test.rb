@@ -45,6 +45,27 @@ class CollectionTest < ActiveSupport::TestCase
     end
   end
 
+  test "publish! creates nft_collection and lists drafted collection" do
+    collection = Collection.create!(
+      name: "Publish Collection",
+      symbol: "PC",
+      description: "Publish collection description",
+      author: users(:author),
+      asset_id: Currency::BTC_ASSET_ID,
+      price: 0.001,
+      revenue_ratio: 0.1,
+      state: "drafted"
+    )
+
+    collection.define_singleton_method(:generate_cover) { }
+
+    collection.publish!
+
+    assert collection.published?
+    assert collection.listed?
+    assert collection.nft_collection.present?
+  end
+
   test "authorized? denies strangers" do
     collection = Collection.create!(
       uuid: SecureRandom.uuid,
