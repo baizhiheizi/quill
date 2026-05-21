@@ -25,11 +25,6 @@
 #  index_collectibles_on_token_id                      (token_id) UNIQUE
 #
 class Collectible < ApplicationRecord
-  MINT_ASSET_ID = "c94ac88f-4671-3976-b60a-09064f1811e8"
-  MINT_FEE = 0.001
-
-  include AASM
-
   belongs_to :source, polymorphic: true, optional: true
   belongs_to :collection, primary_key: :uuid, optional: true
   belongs_to :nft_collection, primary_key: :uuid, foreign_key: :collection_id, optional: true, inverse_of: :collectibles
@@ -46,15 +41,6 @@ class Collectible < ApplicationRecord
   validates :metahash, presence: true
   validates :collection_id, presence: true
 
-  aasm column: :state do
-    state :pending, initial: true
-    state :minted
-
-    event :mint, guards: :nfo_existed? do
-      transitions from: :pending, to: :minted
-    end
-  end
-
   def media_url
     if media.attached?
       [ Settings.storage.endpoint, media.key ].join("/")
@@ -65,16 +51,6 @@ class Collectible < ApplicationRecord
 
   def collection_id_valid?
     collection_id != "00000000-0000-0000-0000-000000000000"
-  end
-
-  def nfo_existed?
-    QuillBot.api.collectible generated_token_id
-  rescue MixinBot::NotFoundError
-    false
-  end
-
-  def generated_token_id
-    @generated_token_id ||= MixinBot::Utils::Nfo.new(collection: collection_id, token: identifier).unique_token_id
   end
 
   private

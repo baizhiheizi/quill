@@ -38,7 +38,6 @@ en:
       notification:
         bought: Successfully bought
         rewarded: Successfully rewarded
-        minting: Requested to mint
     swap_order_swapping_notifier:
       notification:
         swapping: 'Swapping:'

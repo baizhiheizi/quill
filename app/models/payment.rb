@@ -96,7 +96,7 @@ class Payment < ApplicationRecord
 
   def memo_correct?
     payment_memo.key?("t") &&
-      payment_memo["t"].in?(%w[BUY REWARD CITE REVENUE MINT]) &&
+      payment_memo["t"].in?(%w[BUY REWARD CITE REVENUE]) &&
       (payment_memo.key?("a") || payment_memo.key?("l"))
   end
 

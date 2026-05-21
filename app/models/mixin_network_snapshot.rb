@@ -51,69 +51,7 @@ class MixinNetworkSnapshot < ApplicationRecord
   scope :only_quill, -> { where(user_id: QuillBot.api.client_id) }
   scope :only_4swap, -> { where(opponent_id: [ SwapOrder::FOX_SWAP_APP_ID, nil ]) }
 
-  # polling Mixin Network
-  # should be called in a event machine
   def self.poll
-    @__retry = 0
-
-    loop do
-      offset = last_polled_at
-
-      r = QuillBot.api.network_snapshots(offset:, limit: POLLING_LIMIT, order: "ASC")
-      p "polled #{r['data'].length} mixin network snapshots, since #{offset}"
-
-      r["data"].each do |snapshot|
-        next if snapshot["user_id"].blank?
-
-        create_with(
-          asset_id: snapshot["asset"]["asset_id"],
-          amount: snapshot["amount"],
-          data: snapshot["data"],
-          transferred_at: snapshot["created_at"],
-          user_id: snapshot["user_id"],
-          opponent_id: snapshot["opponent_id"],
-          snapshot_id: snapshot["snapshot_id"],
-          trace_id: snapshot["trace_id"]
-        ).find_or_create_by!(
-          snapshot_id: snapshot["snapshot_id"]
-        )
-      end
-
-      Rails.cache.write "last_polled_at", r["data"].last["created_at"]
-
-      sleep 0.5 if r["data"].length < POLLING_LIMIT
-      sleep POLLING_INTERVAL
-      @__retry = 0
-    rescue MixinBot::HttpError, MixinBot::RequestError, OpenSSL::SSL::SSLError => e
-      logger.error e.inspect
-      raise e if @__retry > 10
-
-      sleep POLLING_INTERVAL * 10
-      @__retry += 1
-
-      retry
-    rescue ActiveRecord::StatementInvalid => e
-      logger.error e.inspect
-      ActiveRecord::Base.connection.reconnect!
-
-      retry
-    rescue StandardError => e
-      logger.error "#{e.inspect}\n#{e.backtrace.join("\n")}"
-      ExceptionNotifier.notify_exception e
-      raise e if Rails.env.production?
-
-      sleep POLLING_INTERVAL * 10
-    end
-  end
-
-  def self.last_polled_at
-    Rails.cache.fetch("last_polled_at") do
-      MixinNetworkSnapshot.order(transferred_at: :desc).first&.transferred_at&.utc&.rfc3339 || Time.current.utc.rfc3339
-    end
-  end
-
-  # polling Mixin Safe Network
-  def self.safe_poll
     @__retry = 0
 
     loop do
@@ -179,6 +117,12 @@ class MixinNetworkSnapshot < ApplicationRecord
     end
   end
 
+  def self.last_polled_at
+    Rails.cache.fetch("last_polled_at") do
+      MixinNetworkSnapshot.order(transferred_at: :desc).first&.transferred_at&.utc&.rfc3339 || Time.current.utc.rfc3339
+    end
+  end
+
   def owner
     @owner = wallet&.owner
   end
@@ -203,7 +147,7 @@ class MixinNetworkSnapshot < ApplicationRecord
 
   def payment_memo_correct?
     decoded_memo.key?("t") &&
-      decoded_memo["t"].in?(%w[BUY REWARD CITE REVENUE MINT]) &&
+      decoded_memo["t"].in?(%w[BUY REWARD CITE REVENUE]) &&
       (decoded_memo.key?("a") || decoded_memo.key?("l"))
   end
 
