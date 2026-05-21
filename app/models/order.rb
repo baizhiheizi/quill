@@ -45,7 +45,6 @@ class Order < ApplicationRecord
   belongs_to :kernel_output, primary_key: :request_id, foreign_key: :trace_id, inverse_of: false, optional: true
 
   has_many :transfers, as: :source, dependent: :restrict_with_exception
-  has_one :collectible, as: :source, dependent: :restrict_with_exception
 
   before_validation :setup_attributes, on: :create
 

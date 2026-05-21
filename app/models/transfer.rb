@@ -55,7 +55,7 @@ class Transfer < ApplicationRecord
     fox_swap: 7,
     withdraw_balance: 8,
     reference_revenue: 9,
-    mint_nft: 10
+    mint_nft: 10 # historical records only
   }
 
   validates :trace_id, presence: true, uniqueness: true
@@ -95,18 +95,10 @@ class Transfer < ApplicationRecord
     processed_at?
   end
 
-  def wallet_api
-    @wallet_api ||= wallet&.mixin_api || QuillBot.api
-  end
-
   def process!
     return if processed?
 
-    if transfer_type == "mint_nft"
-      process_legacy_transfer!
-    else
-      process_safe_transfer!
-    end
+    process_safe_transfer!
 
     case source
     when Payment
@@ -116,38 +108,6 @@ class Transfer < ApplicationRecord
     end
 
     notify_recipient if recipient.present?
-  end
-
-  def process_legacy_transfer!
-    return if processed?
-
-    r =
-      if opponent_id.present?
-        wallet_api.create_transfer(
-          wallet_pin,
-          asset_id:,
-          opponent_id:,
-          amount:,
-          trace_id:,
-          memo:
-        )
-      else
-        wallet.blank?
-        wallet_api.create_multisig_transaction(
-          wallet_pin,
-          asset_id:,
-          receivers: opponent_multisig["receivers"],
-          threshold: opponent_multisig["threshold"],
-          amount:,
-          trace_id:,
-          memo:
-        )
-      end
-
-    update!(
-      snapshot: r["data"],
-      processed_at: Time.current
-    )
   end
 
   def safe_receiver
@@ -290,9 +250,5 @@ class Transfer < ApplicationRecord
 
   def ensure_opponent_presence
     errors.add(:opponent_id, " must cannot be blank") if opponent_id.blank? && opponent_multisig.blank?
-  end
-
-  def wallet_pin
-    wallet&.pin || Rails.application.credentials.dig(:quill_bot, :pin)
   end
 end

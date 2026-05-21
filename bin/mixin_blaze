@@ -33,7 +33,7 @@ EM.run do
   end
 
   thrs << Thread.new { Transfer.process_all! }
-  thrs << Thread.new { MixinNetworkSnapshot.safe_poll }
+  thrs << Thread.new { MixinNetworkSnapshot.poll }
 
   thrs.join
 end
