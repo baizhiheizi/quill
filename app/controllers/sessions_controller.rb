@@ -44,9 +44,9 @@ class SessionsController < ApplicationController
     if user.present?
       user_sign_in user.sessions.create!(info: { request: request_info })
       user.notify_for_login
-      redirect_to (params[:return_to].presence || root_path), success: t("connected")
+      redirect_to safe_return_to, success: t("connected")
     else
-      redirect_to (params[:return_to].presence || root_path), alert: t("failed_to_connect")
+      redirect_to safe_return_to, alert: t("failed_to_connect")
     end
   end
 
@@ -60,9 +60,9 @@ class SessionsController < ApplicationController
 
     if user.present?
       user_sign_in user.sessions.create! info: { request: request_info }
-      redirect_to (params[:return_to].presence || root_path), success: t("connected")
+      redirect_to safe_return_to, success: t("connected")
     else
-      redirect_to (params[:return_to].presence || root_path), alert: t("failed_to_connect")
+      redirect_to safe_return_to, alert: t("failed_to_connect")
     end
   end
 
@@ -82,9 +82,9 @@ class SessionsController < ApplicationController
     if user.present?
       user_session = user.sessions.create(uuid: session_id, info: { request: request_info, provider: params[:provider] })
       user_sign_in user_session
-      redirect_to (params[:return_to].presence || root_path), success: t("connected")
+      redirect_to safe_return_to, success: t("connected")
     else
-      redirect_to (params[:return_to].presence || root_path), alert: t("failed_to_connect")
+      redirect_to safe_return_to, alert: t("failed_to_connect")
     end
   end
 

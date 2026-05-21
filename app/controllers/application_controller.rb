@@ -77,4 +77,8 @@ class ApplicationController < ActionController::Base
       current_user:
     }
   end
+
+  def safe_return_to(fallback = root_path)
+    url_from(params[:return_to]) || fallback
+  end
 end

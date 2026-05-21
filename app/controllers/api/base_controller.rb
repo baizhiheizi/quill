@@ -12,7 +12,8 @@ class API::BaseController < ActionController::API
 
   rescue_from StandardError do |ex|
     Rails.logger.error ex.inspect
-    render_internal_server_error ex.message
+    message = Rails.env.local? ? ex.message : "Internal server error"
+    render_internal_server_error message
   end
 
   rescue_from UnauthorizedError do
