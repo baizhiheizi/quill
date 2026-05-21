@@ -14,7 +14,7 @@
     "**/app/assets/builds": true,
     "**/public/assets": true,
     "**/.yarn": true,
-    "**/yarn.lock": true
+    "**/bun.lock": true
   },
   "files.associations": {
     "*.js": "javascript",

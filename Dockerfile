@@ -39,12 +39,14 @@ FROM base as build
 RUN apt-get update -qq && \
     apt-get install --no-install-recommends -y build-essential git libpq-dev libvips node-gyp pkg-config python-is-python3 automake libtool libffi-dev libssl-dev libgmp-dev python3-dev libsodium-dev libyaml-dev rustc cargo clang libclang-dev
 
-# Install yarn
-ARG YARN_VERSION=1.22.19
-RUN npm install -g yarn@$YARN_VERSION
+# Install Bun
+ARG BUN_VERSION=1.3.14
+ENV BUN_INSTALL="/usr/local/bun"
+ENV PATH="${BUN_INSTALL}/bin:${PATH}"
+RUN curl -fsSL https://bun.sh/install | bash -s "bun-v${BUN_VERSION}"
 
 # Build options
-ENV PATH="/usr/local/node/bin:$PATH" \
+ENV PATH="/usr/local/node/bin:${BUN_INSTALL}/bin:${PATH}" \
     PUPPETEER_SKIP_CHROMIUM_DOWNLOAD="true"
 
 # Install application gems
@@ -54,8 +56,8 @@ RUN bundle install && \
     rm -rf ~/.bundle/ $BUNDLE_PATH/ruby/*/cache $BUNDLE_PATH/ruby/*/bundler/gems/*/.git
 
 # Install node modules
-COPY --link package.json yarn.lock ./
-RUN yarn install --frozen-lockfile
+COPY --link package.json bun.lock ./
+RUN bun install --frozen-lockfile
 
 # Copy application code
 COPY --link . .

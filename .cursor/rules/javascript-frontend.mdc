@@ -9,14 +9,14 @@ alwaysApply: false
 - Entry: `app/javascript/application.js` (Turbo, ActiveStorage, Stimulus, components)
 - Stimulus controllers: `app/javascript/controllers/*_controller.js`
 - MVM wallet code: TypeScript under `app/javascript/mvm/`
-- Built with esbuild (`esbuild.config.js`); styles via Tailwind (`yarn build:css`)
+- Built with esbuild (`esbuild.config.js`); styles via Tailwind (`bun run build:css`)
 
 ## Conventions
 
 - Register Stimulus controllers in `app/javascript/controllers/index.js`
 - Use `@hotwired/turbo-rails` and `@rails/request.js` for server interactions
 - Prefer existing utilities in `app/javascript/utils/` (toast, notify, uploader)
-- Run `yarn lint-check` (Prettier) on touched `app/javascript/**/*.{tsx,ts,js,gql}` files
+- Run `bun run lint-check` (Prettier) on touched `app/javascript/**/*.{tsx,ts,js,gql}` files
 
 ## Avoid
 

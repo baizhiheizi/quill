@@ -46,9 +46,7 @@
 /public/packs
 /public/packs-test
 /node_modules
-/yarn-error.log
-yarn-debug.log*
-.yarn-integrity
+/bun-debug.log*
 
 config/settings.local.yml
 

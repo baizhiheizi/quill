@@ -8,7 +8,7 @@ Quill is a Rails 8 Web3 paid-publishing platform with early-reader revenue shari
 When making changes, always:
 - Keep diffs focused; match existing Rails patterns (frozen string literal, snake_case, concerns)
 - Do not commit secrets (`master.key`, `settings.local.yml`, credential values)
-- Run `bin/rubocop` for Ruby and `yarn lint-check` for JS when touching those areas
+- Run `bin/rubocop` for Ruby and `bun run lint-check` for JS when touching those areas
 - Prefer extending existing models/jobs/services over parallel implementations
 - Read `AGENTS.md` for setup commands, architecture, and domain gotchas (revenue ratios, launch gate, API auth)
 
