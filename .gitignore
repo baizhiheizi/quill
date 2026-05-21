@@ -58,3 +58,5 @@ config/settings.local.yml
 !/.env.example
 
 .kamal/secrets
+
+__pycache__/
