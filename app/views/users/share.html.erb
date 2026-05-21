@@ -1,50 +1,8 @@
 <%= turbo_frame_tag 'modal' do %>
   <%= render_modal title: t('share') do %>
-    <div class="flex items-center">
-      <% if from_mixin_messenger? %>
-        <a class="btn btn-ghost flex-1 h-auto flex-col p-4 rounded-lg"
-          target="_blank"
-          data-action="modal#hide"
-          href="<%= share_to_mixin user_url(@user), title: @user.name, description: @user.bio, icon_url: @user.avatar_url %>">
-          <div class="flex mb-2">
-            <%= image_tag 'mixin-logo.png', class: "w-12 h-auto mx-auto" %>
-          </div>
-          <div class="text-base text-center">Mixin</div>
-        </a>
-      <% end %>
-
-      <a class="btn btn-ghost flex-1 h-auto flex-col p-4 opacity-70 rounded-lg"
-          target="_blank"
-          data-action="modal#hide"
-          href="<%= share_to_twitter user_url(@user), @user.name %>">
-        <div class="flex mb-2">
-          <%= image_tag "twitter.png", class: "w-12 h-12 mx-auto" %>
-        </div>
-        <div class="text-base text-center">Twitter</div>
-      </a>
-
-      <a class="btn btn-ghost flex-1 h-auto flex-col p-4 opacity-70 rounded-lg"
-          target="_blank"
-          data-action="modal#hide"
-          href="<%= share_to_telegram user_url(@user), @user.name %>">
-        <div class="flex mb-2">
-          <%= image_tag "telegram.png", class: "w-12 h-12 mx-auto" %>
-        </div>
-        <div class="text-base text-center">Telegram</div>
-      </a>
-
-      <button class="btn btn-ghost flex-1 h-auto w-full flex-col p-4 opacity-70 rounded-lg"
-        data-controller="clipboard"
-        data-clipboard-text-value="<%= user_url @user %>"
-        data-clipboard-success-tip-value="Copied"
-        data-action="clipboard#copy modal#hide">
-        <div class="flex mb-2">
-          <div class="bg-[#B1B6C6] w-12 h-12 mx-auto rounded-full flex items-center justify-center">
-            <%= inline_svg_tag "icons/copy.svg", class: "w-6 h-6 text-white" %>
-          </div>
-        </div>
-        <div data-clipboard-target="button"class="text-base text-center">URL</div>
-      </button>
-    </div>
+    <%= render "shared/share_options",
+      share_url: user_url(@user),
+      share_title: @user.name,
+      mixin_href: (from_mixin_messenger? ? share_to_mixin(user_url(@user), title: @user.name, description: @user.bio, icon_url: @user.avatar_url) : nil) %>
   <% end %>
 <% end %>
