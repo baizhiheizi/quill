@@ -6,13 +6,35 @@
     article_form_target: "form",
   } do |form| %>
     <%= form.text_field :title, 
-      class: "input w-full px-0 py-4 sm:mb-6 text-2xl sm:text-3xl font-semibold border-0 border-b border-base-content/10 rounded-none bg-transparent focus:outline-none", 
+      class: "w-full px-0 py-4 text-4xl md:text-5xl font-bold border-0 bg-transparent focus:outline-none focus:ring-0 placeholder:text-base-content/30", 
       placeholder: t("articles.title_placeholder"), 
       data: { 
         article_form_target: "title",
         action: form.object.published? ? '' : "change->article-form#autosave"
       } 
     %>
+    
+    <%= form.text_area :intro, 
+      rows: 1,
+      class: "w-full px-0 py-2 text-xl text-base-content/70 border-0 bg-transparent focus:outline-none focus:ring-0 placeholder:text-base-content/30 resize-none overflow-hidden", 
+      placeholder: "Add a subtitle...",
+      data: {
+        action: form.object.published? ? '' : "change->article-form#autosave"
+      },
+      oninput: "this.style.height = ''; this.style.height = this.scrollHeight + 'px'"
+    %>
+
+    <div class="flex items-center space-x-3 my-6">
+      <div class="avatar">
+        <div class="w-10 h-10 rounded-full">
+          <%= image_tag current_user.avatar_thumb %>
+        </div>
+      </div>
+      <div>
+        <div class="font-medium text-base"><%= current_user.name %></div>
+        <div class="text-xs text-base-content/60"><%= t('draft') %></div>
+      </div>
+    </div>
     <%= render "articles/content_fields", form: form %>
     <%= render "articles/option_fields", form: form %>
 <% end %>

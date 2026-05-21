@@ -68,7 +68,7 @@ class ArticlesController < ApplicationController
 
   def update_content
     @article = current_user.articles.find_by uuid: params[:article_uuid]
-    @article.assign_attributes params.require(:article).permit(:title, :content)
+    @article.assign_attributes params.require(:article).permit(:title, :intro, :content)
     @article.save
   end
 

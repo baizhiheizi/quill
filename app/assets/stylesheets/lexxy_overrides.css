@@ -1,10 +1,14 @@
 lexxy-editor {
   display: block;
   min-block-size: 12rem;
-  border: 1px solid var(--lexxy-color-ink-lighter, #e5e7eb);
-  border-radius: 0.5ch;
-  background-color: var(--lexxy-color-canvas, #fff);
+  border: none;
+  background-color: transparent;
   color: var(--lexxy-color-ink, inherit);
+}
+
+lexxy-editor::part(editor) {
+  padding-left: 0;
+  padding-right: 0;
 }
 
 lexxy-toolbar .lexxy-editor__toolbar-button,
@@ -55,8 +59,8 @@ html.dark,
 [data-theme='quill-dark'] lexxy-editor,
 html.dark lexxy-editor,
 .dark lexxy-editor {
-  border-color: rgba(255, 255, 255, 0.1);
-  background-color: var(--lexxy-color-canvas);
+  border-color: transparent;
+  background-color: transparent;
   color: var(--lexxy-color-ink);
 }
 

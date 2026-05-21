@@ -301,11 +301,8 @@ export default class extends Controller {
   activeContentForm() {
     this.showContentForm();
     if (this.hasEditButtonTarget) {
-      this.editButtonTarget.classList.add('border-primary');
-      this.editButtonTarget.classList.remove(
-        'border-white',
-        'dark:border-zinc-900',
-      );
+      this.editButtonTarget.classList.add('text-primary');
+      this.editButtonTarget.classList.remove('opacity-60');
     }
   }
 
@@ -320,33 +317,24 @@ export default class extends Controller {
 
     this.contentFieldsTarget.classList.add('hidden');
     if (this.hasEditButtonTarget) {
-      this.editButtonTarget.classList.remove('border-primary');
-      this.editButtonTarget.classList.add(
-        'border-white',
-        'dark:border-zinc-900',
-      );
+      this.editButtonTarget.classList.remove('text-primary');
+      this.editButtonTarget.classList.add('opacity-60');
     }
   }
 
   activeSettingsForm() {
     if (this.hasOptionFieldsTarget && this.hasOptionsButtonTarget) {
       this.optionFieldsTarget.classList.remove('hidden');
-      this.optionsButtonTarget.classList.add('border-primary');
-      this.optionsButtonTarget.classList.remove(
-        'border-white',
-        'dark:border-zinc-900',
-      );
+      this.optionsButtonTarget.classList.add('text-primary');
+      this.optionsButtonTarget.classList.remove('opacity-60');
     }
   }
 
   hideSettingsForm() {
     if (this.hasOptionFieldsTarget && this.hasOptionsButtonTarget) {
       this.optionFieldsTarget.classList.add('hidden');
-      this.optionsButtonTarget.classList.remove('border-primary');
-      this.optionsButtonTarget.classList.add(
-        'border-white',
-        'dark:border-zinc-900',
-      );
+      this.optionsButtonTarget.classList.remove('text-primary');
+      this.optionsButtonTarget.classList.add('opacity-60');
     }
   }
 
@@ -366,12 +354,14 @@ export default class extends Controller {
 
   autosave() {
     const title = this.element.querySelector('#article_title').value;
+    const intro = this.element.querySelector('#article_intro')?.value;
     const content = this.contentValue;
 
     if (this.autosaveUrlValue) {
       put(this.autosaveUrlValue, {
         body: {
           title,
+          intro,
           content,
         },
         contentType: 'application/json',
@@ -390,7 +380,7 @@ export default class extends Controller {
 
           localStorage.setItem(
             this.draftKeyValue,
-            JSON.stringify({ title, content, updatedAt: Date.now() }),
+            JSON.stringify({ title, intro, content, updatedAt: Date.now() }),
           );
 
           setTimeout(this.autosave(), 2000);
@@ -398,7 +388,7 @@ export default class extends Controller {
     } else {
       localStorage.setItem(
         this.draftKeyValue,
-        JSON.stringify({ title, content }),
+        JSON.stringify({ title, intro, content }),
       );
     }
   }
@@ -407,12 +397,18 @@ export default class extends Controller {
     const draft = localStorage.getItem(this.draftKeyValue);
     if (!draft) return;
 
-    const { title, content, updatedAt } = JSON.parse(draft);
+    const { title, intro, content, updatedAt } = JSON.parse(draft);
     if (this.updatedAtValue && this.updatedAtValue > updatedAt) {
       return;
     }
 
     this.element.querySelector('#article_title').value = title;
+    const introElement = this.element.querySelector('#article_intro');
+    if (introElement && intro) {
+      introElement.value = intro;
+      introElement.style.height = '';
+      introElement.style.height = introElement.scrollHeight + 'px';
+    }
     this.setContentValue(content);
     if (this.hasNotSavedAlertTarget) {
       this.notSavedAlertTarget.classList.remove('hidden');
