@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_05_20_230806) do
+ActiveRecord::Schema[8.1].define(version: 2026_05_21_055615) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_stat_statements"
@@ -26,6 +26,16 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_20_230806) do
     t.uuid "value"
     t.index ["user_id"], name: "index_access_tokens_on_user_id"
     t.index ["value"], name: "index_access_tokens_on_value", unique: true
+  end
+
+  create_table "action_text_rich_texts", force: :cascade do |t|
+    t.text "body"
+    t.datetime "created_at", null: false
+    t.string "name", null: false
+    t.bigint "record_id", null: false
+    t.string "record_type", null: false
+    t.datetime "updated_at", null: false
+    t.index ["record_type", "record_id", "name"], name: "index_action_text_rich_texts_uniqueness", unique: true
   end
 
   create_table "actions", force: :cascade do |t|
@@ -103,11 +113,11 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_20_230806) do
     t.float "collection_revenue_ratio", default: 0.0
     t.integer "commenting_subscribers_count", default: 0
     t.integer "comments_count", default: 0, null: false
-    t.text "content"
     t.datetime "created_at", null: false
     t.integer "downvotes_count", default: 0
     t.float "free_content_ratio", default: 0.1
     t.string "intro"
+    t.text "legacy_markdown_content"
     t.string "locale"
     t.integer "orders_count", default: 0, null: false
     t.float "platform_revenue_ratio", default: 0.1
@@ -223,10 +233,10 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_20_230806) do
     t.bigint "commentable_id"
     t.string "commentable_type"
     t.integer "comments_count", default: 0
-    t.string "content"
     t.datetime "created_at", null: false
     t.datetime "deleted_at", precision: nil
     t.integer "downvotes_count", default: 0
+    t.string "legacy_markdown_content"
     t.bigint "quote_comment_id"
     t.datetime "updated_at", null: false
     t.integer "upvotes_count", default: 0

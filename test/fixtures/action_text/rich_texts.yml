@@ -1,0 +1,23 @@
+published_paid_content:
+  record: published_paid (Article)
+  name: content
+  body: |
+    <h1>Paid Article</h1>
+    <p>This is the full paid content body with enough words to test partial content extraction and paywall rendering in system tests. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
+
+published_free_content:
+  record: published_free (Article)
+  name: content
+  body: |
+    <h1>Free Article</h1>
+    <p>This is free content available to everyone without payment.</p>
+
+draft_content:
+  record: draft (Article)
+  name: content
+  body: <p>Draft content</p>
+
+high_revenue_content:
+  record: high_revenue (Article)
+  name: content
+  body: <p>High revenue article body for search filter tests.</p>

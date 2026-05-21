@@ -56,6 +56,9 @@ gem "aws-sdk-s3", require: false
 # Use Active Storage variant
 gem "image_processing", "~> 1.2"
 
+# Modern rich text editor for Action Text
+gem "lexxy", "~> 0.1.26.beta"
+
 # Reduces boot times through caching; required in config/boot.rb
 gem "bootsnap", ">= 1.4.4", require: false
 

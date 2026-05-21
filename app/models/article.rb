@@ -52,6 +52,7 @@ class Article < ApplicationRecord
 
   include AASM
   include Articles::Arweavable
+  include RichTextContent
 
   belongs_to :author, class_name: "User", inverse_of: :articles
   belongs_to :currency, primary_key: :asset_id, foreign_key: :asset_id, inverse_of: :articles
@@ -99,7 +100,6 @@ class Article < ApplicationRecord
   validates :intro, length: { maximum: 140 }
   validates :title, presence: true, unless: :drafted?
   validates :intro, presence: true, unless: :drafted?
-  validates :content, presence: true, unless: :drafted?
   validates :price, presence: true, numericality: { greater_than_or_equal_to: 0.0 }
   validates :platform_revenue_ratio, presence: true, numericality: { equal_to: 0.1 }
   validates :readers_revenue_ratio, presence: true, numericality: { greater_than_or_equal_to: 0.1 }
@@ -115,10 +115,7 @@ class Article < ApplicationRecord
   before_validation :set_defaults
   after_save do
     generate_snapshot if should_generate_snapshot?
-    if saved_change_to_content?
-      attach_images_from_content_async
-      detect_locale_async
-    end
+    detect_locale_async if content_changed_since_save?
   end
 
   delegate :swappable?, to: :currency
@@ -216,10 +213,6 @@ class Article < ApplicationRecord
 
   def subscribe_comments_for_author
     author.create_action :commenting_subscribe, target: self
-  end
-
-  def plain_text
-    @plain_text ||= ActionController::Base.helpers.strip_tags(MarkdownRenderService.call(content&.strip || ""))
   end
 
   def words_count
@@ -328,7 +321,7 @@ class Article < ApplicationRecord
   def should_generate_snapshot?
     return false if drafted?
 
-    saved_change_to_content? || saved_change_to_title? || saved_change_to_intro? || saved_change_to_published_at?
+    content_changed_since_save? || saved_change_to_title? || saved_change_to_intro? || saved_change_to_published_at?
   end
 
   def revenue_ratios_sum
@@ -343,10 +336,6 @@ class Article < ApplicationRecord
 
   def to_param
     uuid
-  end
-
-  def content_as_html
-    MarkdownRenderService.call content.to_s.strip, type: :full
   end
 
   def default_intro
@@ -386,40 +375,6 @@ class Article < ApplicationRecord
       .where.not(id:)
       .order(published_at: :desc)
       .limit(5)
-  end
-
-  def attach_images_from_content
-    update content: blob_parsed_content
-  end
-
-  def attach_images_from_content_async
-    Articles::AttachImagesFromContentJob.perform_later uuid
-  end
-
-  def blob_parsed_content
-    urls = content.scan(%r{\(blob://.+\)})
-    temp_content = content.dup
-    urls.each do |url|
-      key = url.gsub(%r{\(blob://|\)}, "").split("/").first
-      blob = ActiveStorage::Blob.find_by(key:)
-      next if blob.blank?
-
-      temp_content = temp_content.gsub(url, "(#{blob.url})") if images.attach(blob.signed_id)
-    end
-
-    temp_content
-  end
-
-  def update_attached_image_url_in_content
-    content.scan(%r{\(/rails/active_storage/blobs/.+\)}).each_with_index do |url, index|
-      image = ActiveStorage::Blob.find_signed url.split("/")[4]
-      image ||= images.blobs.order(created_at: :asc)&.[](index)
-      next if image.blank?
-
-      content.gsub! url, "(#{image.url})"
-    end
-
-    save
   end
 
   def detected_locale
@@ -492,10 +447,6 @@ class Article < ApplicationRecord
      ) ].join
   end
 
-  def fix_img_tag_in_content
-    content.gsub(/!\[[^\]]*\]\((.*?)\s*("(?:.*[^"])")?\s*\)(\\n)*/) { |m| "#{m.strip}\n" }
-  end
-
   def payment_trace_id(user)
     return if user.blank?
 
@@ -519,6 +470,14 @@ class Article < ApplicationRecord
 
   private
 
+  def drafted?
+    state == "drafted"
+  end
+
+  def validate_rich_text_content_presence?
+    !drafted?
+  end
+
   def setup_attributes
     return unless new_record?
 
@@ -531,7 +490,6 @@ class Article < ApplicationRecord
     self.intro = default_intro if intro.blank?
     self.intro = intro.truncate(140)
     self.locale = detected_locale
-    self.content = blob_parsed_content if content_changed?
 
     return if published_at.present?
 

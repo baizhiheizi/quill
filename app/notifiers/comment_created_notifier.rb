@@ -18,7 +18,7 @@ class CommentCreatedNotifier < ApplicationNotifier
     def data
       {
         icon_url:,
-        title: comment.content.gsub(/^(>\s)+(.)*$/, "").strip.truncate(36),
+        title: comment.plain_text.strip.truncate(36),
         description: description.truncate(72),
         action: url
       }

@@ -37,9 +37,6 @@ application.register('dropdown-component', DropdownComponentController);
 import DropdownController from './dropdown_controller';
 application.register('dropdown', DropdownController);
 
-import EditorComponentController from './editor_component_controller';
-application.register('editor-component', EditorComponentController);
-
 import EthWalletController from './eth_wallet_controller';
 application.register('eth-wallet', EthWalletController);
 
@@ -63,12 +60,6 @@ application.register('load-more', LoadMoreController);
 
 import LoginController from './login_controller';
 application.register('login', LoginController);
-
-import MilkdownEditorComponentController from './milkdown_editor_component_controller';
-application.register(
-  'milkdown-editor-component',
-  MilkdownEditorComponentController,
-);
 
 import ModalComponentController from './modal_component_controller';
 application.register('modal-component', ModalComponentController);
@@ -150,6 +141,9 @@ application.register('select-menu', SelectMenuController);
 
 import SessionController from './session_controller';
 application.register('session', SessionController);
+
+import SyntaxHighlightController from './syntax_highlight_controller';
+application.register('syntax-highlight', SyntaxHighlightController);
 
 import SidebarController from './sidebar_controller';
 application.register('sidebar', SidebarController);

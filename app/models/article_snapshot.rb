@@ -41,7 +41,10 @@ class ArticleSnapshot < ApplicationRecord
     return unless new_record?
 
     assign_attributes(
-      raw: article.as_json.merge(digest: SHA3::Digest::SHA256.hexdigest(article.content))
+      raw: article.as_json.merge(
+        "content" => article.content_body,
+        digest: SHA3::Digest::SHA256.hexdigest(article.content_body)
+      )
     )
   end
 end

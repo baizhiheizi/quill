@@ -34,6 +34,20 @@ class ArticlesControllerTest < IntegrationTestCase
     assert_response :success
   end
 
+  test "content fields partial renders lexxy editor" do
+    html = ApplicationController.render(
+      inline: <<~ERB,
+        <%= form_for Article.new, url: '/articles' do |f| %>
+          <%= render partial: 'articles/content_fields', locals: { form: f } %>
+        <% end %>
+      ERB
+      layout: false,
+    )
+
+    assert_includes html, "<lexxy-editor"
+    assert_includes html, "contentFields"
+  end
+
   test "show succeeds for free article without login" do
     article = articles(:published_free)
 
