@@ -4,7 +4,7 @@
 
 ## Project Overview
 
-Quill is a Web3 paid-publishing platform ([quill.im](https://quill.im/)) where authors publish priced articles and readers pay to access them. Its distinguishing feature is **early reader rewards**: a share of each article's new revenue (default 40%) is distributed proportionally to readers who paid earlier. The stack is a Rails monolith with Hotwire (Turbo + Stimulus), ERB partials, PostgreSQL, Redis, Solid Cache, and background jobs via Solid Queue (separate queue database). Integrations include Mixin Network, MVM (Ethereum L2), MixPay, Arweave permanence, and wallet login (MetaMask, Coinbase, WalletConnect).
+Quill is a Web3 paid-publishing platform ([quill.im](https://quill.im/)) where authors publish priced articles and readers pay to access them. Its distinguishing feature is **early reader rewards**: a share of each article's new revenue (default 40%) is distributed proportionally to readers who paid earlier. The stack is a Rails monolith with Hotwire (Turbo + Stimulus), ERB partials, PostgreSQL, Solid Cable, Solid Cache, and background jobs via Solid Queue (separate queue database). Integrations include Mixin Network, MVM (Ethereum L2), MixPay, Arweave permanence, and wallet login (MetaMask, Coinbase, WalletConnect).
 
 ## Tech Stack
 
@@ -13,7 +13,8 @@ Quill is a Web3 paid-publishing platform ([quill.im](https://quill.im/)) where a
 | Language | Ruby | 4.0.5 (see `.ruby-version`, `mise.toml`) |
 | Framework | Rails | 8.1.x |
 | Database | PostgreSQL | — |
-| Cache / jobs | Redis, Solid Cache, Solid Queue | — |
+| Real-time | Solid Cable (separate `*_cable` DB) | — |
+| Cache / jobs | Solid Cache, Solid Queue | — |
 | Frontend | Turbo, Stimulus, Tailwind, esbuild | Node 20+, Bun 1.x |
 | Testing | Minitest, Capybara | minitest ~> 5.25 (Ruby 4 compat) |
 | Lint | RuboCop (rails-omakase), Prettier | — |
@@ -58,7 +59,7 @@ cp config/settings.yml config/settings.local.yml       # edit host for local URL
 bin/rails db:prepare
 ```
 
-Requires PostgreSQL and Redis running locally (or via Docker). See `CONTRIBUTING.md` for credential field examples (note: README versions are authoritative over CONTRIBUTING's Ruby 3.2 note).
+Requires PostgreSQL running locally (or via Docker). See `CONTRIBUTING.md` for credential field examples (note: README versions are authoritative over CONTRIBUTING's Ruby 3.2 note).
 
 ### Run
 
@@ -110,7 +111,7 @@ bun run build:css
 - **Location**: `test/` mirrors `app/` (`test/models/`, `test/controllers/`, `test/jobs/`, `test/notifiers/`)
 - **Naming**: `*_test.rb`; fixtures in `test/fixtures/`
 - **Style**: Minitest
-- **Env**: `RAILS_ENV=test`; CI uses Postgres + Redis service containers
+- **Env**: `RAILS_ENV=test`; CI uses Postgres service container
 
 ## Common Tasks
 
@@ -162,4 +163,5 @@ Re-run `annotaterb` in development if model annotations are stale.
 - **CONTRIBUTING.md** lists Ruby 3.2; project actually targets Ruby 4.0.5 per README and `.ruby-version`
 - **Deploy**: Production deploy is manual (`gh workflow run Deploy`); uses Kamal + Docker Hub image `anleework/quill`
 - **Noticed 3**: Notifiers live in `app/notifiers/`, inherit `Noticed::Event` via `ApplicationNotifier`; user inbox uses `Noticed::Notification` (`User#notifications`). Web UI filters with `visible_in_web?` / `for_web` because DB records are always created (including Mixin-only delivery). Custom delivery: `DeliveryMethods::MixinBot`, `DeliveryMethods::FlashBroadcast`. Extend gem models in `config/initializers/noticed.rb`.
-- **Solid Queue**: Jobs use a separate `queue` database (`config/database.yml`); admin dashboard at `/admin/jobs` (Mission Control). Run `bin/rails db:prepare` to create/migrate both databases.
+- **Solid Cable**: Real-time WebSocket backend uses a separate `cable` database (`config/database.yml`). Run `bin/rails db:prepare` to create/migrate all databases.
+- **Solid Queue**: Jobs use a separate `queue` database (`config/database.yml`); admin dashboard at `/admin/jobs` (Mission Control). Run `bin/rails db:prepare` to create/migrate all databases.

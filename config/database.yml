@@ -11,6 +11,11 @@ development:
     database: prsdigg_development
     username: postgres
     password: postgres
+  cable:
+    <<: *default
+    host: localhost
+    database: prsdigg_development_cable
+    migrations_paths: db/cable_migrate
   queue:
     <<: *default
     host: localhost
@@ -26,6 +31,11 @@ test:
     database: prsdigg_test
     username: postgres
     password: postgres
+  cable:
+    <<: *default
+    host: localhost
+    database: prsdigg_test_cable
+    migrations_paths: db/cable_migrate
   queue:
     <<: *default
     host: localhost
@@ -42,6 +52,13 @@ production:
     username: <%= ENV['POSTGRES_USER'] %>
     password: <%= ENV['POSTGRES_PASSWORD'] %>
     pool: <%= ENV.fetch("RAILS_MAX_THREADS", 32) %>
+  cable:
+    <<: *default
+    host: <%= ENV['DATABASE_HOST'] %>
+    database: <%= ENV.fetch('POSTGRES_CABLE_DB', "#{ENV['POSTGRES_DB']}_cable") %>
+    username: <%= ENV['POSTGRES_USER'] %>
+    password: <%= ENV['POSTGRES_PASSWORD'] %>
+    migrations_paths: db/cable_migrate
   queue:
     <<: *default
     host: <%= ENV['DATABASE_HOST'] %>

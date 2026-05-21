@@ -87,7 +87,7 @@ Request body example:
 
 - Ruby 4.0.5 locally (see `.ruby-version` or `mise.toml`; Docker images use `4.0.4-slim` until `4.0.5-slim` is published)
 - Rails 8.1.3
-- PostgreSQL and Redis for local/CI tests
+- PostgreSQL for local/CI tests
 - Node.js 20+ and Bun 1.x for the asset pipeline
 
 ```bash

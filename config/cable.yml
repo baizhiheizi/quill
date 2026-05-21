@@ -1,10 +1,20 @@
 development:
-  adapter: postgresql
+  adapter: solid_cable
+  connects_to:
+    database:
+      writing: cable
+  polling_interval: 0.1.seconds
+  message_retention: 1.day
   channel_prefix: <%= Rails.application.credentials.dig(:action_cable, :namespace) || 'quill_cable' %>
 
 test:
   adapter: test
 
 production:
-  adapter: postgresql
+  adapter: solid_cable
+  connects_to:
+    database:
+      writing: cable
+  polling_interval: 0.1.seconds
+  message_retention: 1.day
   channel_prefix: <%= Rails.application.credentials.dig(:action_cable, :namespace) || 'quill_cable' %>
