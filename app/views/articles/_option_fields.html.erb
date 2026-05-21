@@ -70,27 +70,6 @@
     </div>
   </div>
 
-  <div class="grid grid-cols-3 gap-3">
-    <%= form.label :intro, class: "col-span-3 sm:col-span-1 block text-sm font-medium opacity-70" %>
-    <div class="col-span-3 sm:col-span-2">
-      <div class="rounded-md shadow-sm">
-        <%= form.text_area :intro, 
-          value: form.object.intro, 
-          rows: 5, 
-          maxLength: 140,
-          data: {
-            action: 'input->article-form#introUpdate'
-          },
-          class: "input w-full bg-base-200" %>
-      </div>
-      <div class="py-2 font-sm opacity-70 text-right ml-auto">
-        <span data-article-form-target="introCharacterCounter"><%= 140 - form.object.intro.to_s.size %></span>
-      </div>
-      <% if form.object.errors.where(:intro).present? %>
-        <div class="py-2 text-red-700 font-sm"><%= form.object.errors.where(:intro).map(&:full_message).join(';') %></div>
-      <% end %>
-    </div>
-  </div>
 
   <div class="grid grid-cols-3 gap-3">
     <%= form.label :currency, required: true, class: "col-span-3 sm:col-span-1 block text-sm font-medium opacity-70" %>

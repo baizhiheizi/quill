@@ -6,39 +6,31 @@
   data-article-form-active-tab-value="edit"
   class="article-form--new">
 
-  <div class="w-full fixed left-0 top-0 z-50 bg-base-100">
-    <div class="max-w-xl lg:max-w-2xl 2xl:max-w-3xl mx-auto px-4 py-3 sm:px-0 flex items-center text-sm sm:text-base">
+  <div class="w-full fixed left-0 top-0 z-50 bg-base-100/90 backdrop-blur-sm">
+    <div class="max-w-xl lg:max-w-2xl 2xl:max-w-3xl mx-auto px-4 py-3 sm:px-0 flex items-center justify-between text-sm sm:text-base">
 
-      <%= link_to root_path, class: 'mr-2 smmr-4' do %>
-        <%= image_tag "logo.svg", class: 'w-auto h-10 hidden sm:block' %>
+      <%= link_to root_path, class: 'mr-2 sm:mr-4' do %>
+        <%= image_tag "logo.svg", class: 'w-auto h-8 hidden sm:block' %>
         <%= image_tag "logo.png", class: 'w-auto h-6 sm:hidden' %>
       <% end %>
 
-      <div 
-        data-action="click->article-form#edit" 
-        data-article-form-target="editButton"
-        class="cursor-pointer py-1 border-b-2 border-primary mx-2 hidden">
-        <%= t('edit') %>
-      </div>
-
-      <div class="ml-auto btn btn-primary btn-sm sm:btn-md rounded-full mr-2" 
-        data-action="click->article-form#submit">
-        <%= t('save_draft') %>
-      </div>
-      
-      <%= link_to dashboard_authorings_path, 
-        data: {
-          controller: 'prefetch'
-        },
-        class: "mx-2", 
-        role: "menuitem", 
-        tabindex: "-1" do %>
-        <div class="avatar mx-2 <%= from_mixin_messenger? ? 'mr-20' : '' %>">
-          <div class="size-8 rounded-full">
-            <%= image_tag current_user.avatar_thumb, class: "rounded-full" %>
-          </div>
+      <div class="flex items-center space-x-3 sm:space-x-4">
+        <div class="btn btn-outline btn-sm rounded-full font-semibold" 
+          data-action="click->article-form#submit">
+          <%= t('save_draft') %>
         </div>
-      <% end %>
+        
+        <%= link_to dashboard_authorings_path, 
+          data: { controller: 'prefetch' },
+          role: "menuitem", 
+          tabindex: "-1" do %>
+          <div class="avatar <%= from_mixin_messenger? ? 'mr-16' : '' %>">
+            <div class="size-8 rounded-full">
+              <%= image_tag current_user.avatar_thumb, class: "rounded-full" %>
+            </div>
+          </div>
+        <% end %>
+      </div>
     </div>
   </div>
 

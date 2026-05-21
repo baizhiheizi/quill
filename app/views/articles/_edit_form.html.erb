@@ -15,82 +15,70 @@
   data-article-form-selectable-collections-value="<%= current_user.collections.listed.to_json(only: %i[uuid revenue_ratio]) %>" 
   data-article-form-article-published-value="<%= article.published_at? %>">
 
-  <div class="w-full fixed left-0 top-0 z-50 bg-base-100">
-    <div class="max-w-xl lg:max-w-2xl 2xl:max-w-3xl mx-auto px-4 py-3 sm:px-0 flex items-center text-sm sm:text-base">
-      <%= link_to root_path, class: 'mr-2 sm:mr-4' do %>
-        <%= image_tag "logo.svg", class: 'w-auto h-10 hidden sm:block' %>
-        <%= image_tag "logo.png", class: 'w-auto h-6 sm:hidden' %>
-      <% end %>
+  <div class="w-full fixed left-0 top-0 z-50 bg-base-100/90 backdrop-blur-sm">
+    <div class="max-w-xl lg:max-w-2xl 2xl:max-w-3xl mx-auto px-4 py-3 sm:px-0 flex items-center justify-between text-sm sm:text-base">
+      <div class="flex items-center">
+        <%= link_to root_path, class: 'mr-4' do %>
+          <%= image_tag "logo.svg", class: 'w-auto h-8 hidden sm:block' %>
+          <%= image_tag "logo.png", class: 'w-auto h-6 sm:hidden' %>
+        <% end %>
 
-      <div 
-        data-action="click->article-form#edit" 
-        data-article-form-target="editButton"
-        class="cursor-pointer py-1 border-b-2 border-primary mx-2">
-        <%= t('edit') %>
-      </div>
-      <div 
-        data-action="click->article-form#options" 
-        data-article-form-target="optionsButton"
-        class="cursor-pointer py-1 border-b-2 mx-2">
-        <%= t('options') %>
-      </div>
-
-      <div class="ml-4 hidden md:block">
-        <div id="<%= dom_id article %>_words_count" class="text-xs opacity-75">
-          <%= t('words_count') %>:<%= article.words_count %>
-        </div>
-      </div>
-
-      <% if article.persisted? %>
-        <div class="ml-4 items-center hidden md:flex">
-          <div id="<%= dom_id article %>_updated_at">
-            <div class="flex items-center space-x-1 opacity-75 text-xs">
-              <span class="">
-                <%= t('last_saved') %>:
-              </span>
+        <div class="hidden md:flex items-center space-x-4 opacity-60 text-xs">
+          <div id="<%= dom_id article %>_words_count">
+            <%= t('words_count') %>:<%= article.words_count %>
+          </div>
+          <% if article.persisted? %>
+            <div id="<%= dom_id article %>_updated_at" class="flex items-center space-x-1">
+              <span><%= t('last_saved') %>:</span>
               <%= render_time_format datetime: article.updated_at.rfc3339, format: 'time' do %>
                 <%= article.updated_at.strftime("%H:%M") %>
               <% end %>
             </div>
-          </div>
-
-          <div class="flex items-center space-x-2 hidden ml-2" data-article-form-target="notSavedAlert">
-            <%= inline_svg_tag 'icons/exclamation-circle-solid.svg', class: 'w-4 h-4 text-red-500 inline' %>
-          </div>
+            <div class="flex items-center space-x-2 hidden" data-article-form-target="notSavedAlert">
+              <%= inline_svg_tag 'icons/exclamation-circle-solid.svg', class: 'w-4 h-4 text-red-500 inline' %>
+            </div>
+          <% end %>
         </div>
-      <% end %>
-
-      <div 
-        class="btn btn-primary btn-sm sm:btn-md rounded-full ml-auto mx-1 sm:mx-2" 
-        data-action="click->article-form#save">
-        <%= t('save') %>
       </div>
 
-      <%= button_to t("publish"), 
-        new_dashboard_published_article_path, 
-        method: :get,
-        params: {
-          uuid: article.uuid
-        },
-        data: { 
-          turbo_frame: :modal,
-          article_form_target: 'publishButton'
-        },
-        class: "btn btn-primary btn-sm sm:btn-md rounded-full mx-1 sm:mx-2" unless article.published? %>
-      
-      <%= link_to dashboard_authorings_path, 
-        data: {
-          controller: 'prefetch'
-        },
-        class: "mx-2", 
-        role: "menuitem", 
-        tabindex: "-1" do %>
-        <div class="avatar mx-1 sm:mx-2 <%= from_mixin_messenger? ? 'mr-20' : '' %>">
-          <div class="size-8 rounded-full">
-            <%= image_tag current_user.avatar_thumb, class: "rounded-full" %>
-          </div>
+      <div class="flex items-center space-x-3 sm:space-x-4">
+        <div 
+          data-action="click->article-form#edit" 
+          data-article-form-target="editButton"
+          class="cursor-pointer text-sm font-medium hover:opacity-100 transition text-primary">
+          <%= t('edit') %>
         </div>
-      <% end %>
+        <div 
+          data-action="click->article-form#options" 
+          data-article-form-target="optionsButton"
+          class="cursor-pointer text-sm font-medium hover:opacity-100 transition opacity-60">
+          <%= t('options') %>
+        </div>
+
+        <div 
+          class="btn btn-outline btn-sm rounded-full font-semibold" 
+          data-action="click->article-form#save">
+          <%= t('save') %>
+        </div>
+
+        <%= button_to t("publish"), 
+          new_dashboard_published_article_path, 
+          method: :get,
+          params: { uuid: article.uuid },
+          data: { turbo_frame: :modal, article_form_target: 'publishButton' },
+          class: "btn btn-primary btn-sm rounded-full font-semibold" unless article.published? %>
+        
+        <%= link_to dashboard_authorings_path, 
+          data: { controller: 'prefetch' },
+          role: "menuitem", 
+          tabindex: "-1" do %>
+          <div class="avatar <%= from_mixin_messenger? ? 'mr-16' : '' %>">
+            <div class="size-8 rounded-full">
+              <%= image_tag current_user.avatar_thumb, class: "rounded-full" %>
+            </div>
+          </div>
+        <% end %>
+      </div>
     </div>
   </div>
 
