@@ -17,7 +17,7 @@ servers:
   job:
     hosts:
       - 172.235.197.72
-    cmd: bundle exec good_job start
+    cmd: bin/jobs
 
 # Credentials for your image host.
 registry:
@@ -36,6 +36,7 @@ env:
     DATABASE_HOST: 'quill-db'
     POSTGRES_USER: 'postgres'
     POSTGRES_DB: 'quill_production'
+    POSTGRES_QUEUE_DB: 'quill_production_queue'
   secret:
     - RAILS_MASTER_KEY
     - POSTGRES_PASSWORD

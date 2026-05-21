@@ -168,7 +168,8 @@ gem "impressionist", github: "charlotte-ruby/impressionist"
 # Twitter OAuth 2.0 Client Library in Ruby
 gem "twitter_oauth2"
 
-gem "good_job"
+gem "solid_queue"
+gem "mission_control-jobs"
 
 gem "solid_cache", "~> 1.0"
 

@@ -12,4 +12,4 @@ When making changes, always:
 - Prefer extending existing models/jobs/services over parallel implementations
 - Read `AGENTS.md` for setup commands, architecture, and domain gotchas (revenue ratios, launch gate, API auth)
 
-Key domains: `Article`, `Order`, `Transfer`, `User`, `Collection`, `PreOrder`, Mixin/MVM payment flows, Arweave uploads, Good Job workers.
+Key domains: `Article`, `Order`, `Transfer`, `User`, `Collection`, `PreOrder`, Mixin/MVM payment flows, Arweave uploads, Solid Queue workers (`bin/jobs`).

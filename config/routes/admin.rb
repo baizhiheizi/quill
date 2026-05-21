@@ -9,8 +9,7 @@ class AdminConstraint
 end
 
 namespace :admin do
-  # good_job
-  mount GoodJob::Engine, at: "good_job", constraints: AdminConstraint.new
+  mount MissionControl::Jobs::Engine, at: "jobs", constraints: AdminConstraint.new
   # pghero
   mount PgHero::Engine, at: "pghero"
   # exception
