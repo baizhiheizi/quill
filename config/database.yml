@@ -4,6 +4,11 @@ default: &default
   template: template0
   pool: <%= ENV.fetch("RAILS_MAX_THREADS", 5) %>
 
+sqlite: &sqlite
+  adapter: sqlite3
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS", 5) %>
+  timeout: 5000
+
 development:
   primary:
     <<: *default
@@ -11,17 +16,18 @@ development:
     database: prsdigg_development
     username: postgres
     password: postgres
+  cache:
+    <<: *sqlite
+    database: storage/development_cache.sqlite3
+    migrations_paths: db/cache_migrate
   cable:
-    <<: *default
-    host: localhost
-    database: prsdigg_development_cable
+    <<: *sqlite
+    database: storage/development_cable.sqlite3
     migrations_paths: db/cable_migrate
   queue:
-    <<: *default
-    host: localhost
-    database: prsdigg_development_queue
-    username: postgres
-    password: postgres
+    <<: *sqlite
+    database: storage/development_queue.sqlite3
+    migrations_paths: db/queue_migrate
     pool: <%= ENV.fetch("SOLID_QUEUE_POOL", ENV.fetch("SOLID_QUEUE_THREADS", 5).to_i * ENV.fetch("JOB_CONCURRENCY", 1).to_i + 2) %>
 
 test:
@@ -31,17 +37,18 @@ test:
     database: prsdigg_test
     username: postgres
     password: postgres
+  cache:
+    <<: *sqlite
+    database: storage/test_cache.sqlite3
+    migrations_paths: db/cache_migrate
   cable:
-    <<: *default
-    host: localhost
-    database: prsdigg_test_cable
+    <<: *sqlite
+    database: storage/test_cable.sqlite3
     migrations_paths: db/cable_migrate
   queue:
-    <<: *default
-    host: localhost
-    database: prsdigg_test_queue
-    username: postgres
-    password: postgres
+    <<: *sqlite
+    database: storage/test_queue.sqlite3
+    migrations_paths: db/queue_migrate
     pool: 5
 
 production:
@@ -52,17 +59,16 @@ production:
     username: <%= ENV['POSTGRES_USER'] %>
     password: <%= ENV['POSTGRES_PASSWORD'] %>
     pool: <%= ENV.fetch("RAILS_MAX_THREADS", 32) %>
+  cache:
+    <<: *sqlite
+    database: storage/production_cache.sqlite3
+    migrations_paths: db/cache_migrate
   cable:
-    <<: *default
-    host: <%= ENV['DATABASE_HOST'] %>
-    database: <%= ENV.fetch('POSTGRES_CABLE_DB', "#{ENV['POSTGRES_DB']}_cable") %>
-    username: <%= ENV['POSTGRES_USER'] %>
-    password: <%= ENV['POSTGRES_PASSWORD'] %>
+    <<: *sqlite
+    database: storage/production_cable.sqlite3
     migrations_paths: db/cable_migrate
   queue:
-    <<: *default
-    host: <%= ENV['DATABASE_HOST'] %>
-    database: <%= ENV.fetch('POSTGRES_QUEUE_DB', "#{ENV['POSTGRES_DB']}_queue") %>
-    username: <%= ENV['POSTGRES_USER'] %>
-    password: <%= ENV['POSTGRES_PASSWORD'] %>
+    <<: *sqlite
+    database: storage/production_queue.sqlite3
+    migrations_paths: db/queue_migrate
     pool: <%= ENV.fetch("SOLID_QUEUE_POOL", ENV.fetch("SOLID_QUEUE_THREADS", 5).to_i * ENV.fetch("JOB_CONCURRENCY", 1).to_i + 2) %>

@@ -36,8 +36,6 @@ env:
     DATABASE_HOST: 'quill-db'
     POSTGRES_USER: 'postgres'
     POSTGRES_DB: 'quill_production'
-    POSTGRES_QUEUE_DB: 'quill_production_queue'
-    POSTGRES_CABLE_DB: 'quill_production_cable'
   secret:
     - RAILS_MASTER_KEY
     - POSTGRES_PASSWORD

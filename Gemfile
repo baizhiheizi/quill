@@ -8,8 +8,8 @@ ruby "~> 4.0"
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem "rails", "~> 8.1"
 
-# Use pg as the database for Active Record
 gem "pg"
+gem "sqlite3"
 
 # A performance dashboard for Postgres
 gem "pghero"
