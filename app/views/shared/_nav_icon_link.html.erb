@@ -6,19 +6,17 @@
 <% show_badge = local_assigns.fetch(:badge, false) %>
 <% turbo_frame = local_assigns[:turbo_frame] %>
 <% action = local_assigns[:action] %>
-<div class="tooltip relative block w-10 py-6 [--placement:right]" data-tip="<%= label %>">
-  <div class="relative mx-auto h-6 w-6">
+<% link_options = { class: "flex items-center space-x-4 w-full px-4 py-3 rounded-full hover:bg-base-content/5 transition-colors #{active ? 'font-bold' : ''}" } %>
+<% link_options[:data] = { turbo_frame: turbo_frame } if turbo_frame.present? %>
+<% link_options[:data] = { action: action } if action.present? %>
+
+<%= link_to link_path, **link_options do %>
+  <div class="relative flex-shrink-0">
     <%= inline_svg_tag (active ? solid_icon || icon : icon),
-      class: "mx-auto h-6 w-6 text-base-content/60" %>
+      class: "h-6 w-6 #{active ? 'text-base-content' : 'text-base-content/70'}" %>
     <% if show_badge == true || show_badge.present? %>
       <span class="absolute top-0 right-0 h-2 w-2 rounded-full bg-error"></span>
     <% end %>
   </div>
-
-  <% unless active %>
-    <% link_options = { class: "absolute inset-0" } %>
-    <% link_options[:data] = { turbo_frame: turbo_frame } if turbo_frame.present? %>
-    <% link_options[:data] = { action: action } if action.present? %>
-    <%= link_to "", link_path, **link_options %>
-  <% end %>
-</div>
+  <span class="text-base <%= active ? 'text-base-content' : 'text-base-content/80' %>"><%= label %></span>
+<% end %>

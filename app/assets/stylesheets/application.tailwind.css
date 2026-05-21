@@ -60,9 +60,9 @@
   prefersdark: false;
   color-scheme: dark;
 
-  --color-base-100: #1d1e2b;
-  --color-base-200: #333444;
-  --color-base-300: #444655;
+  --color-base-100: #121212;
+  --color-base-200: #1a1a1a;
+  --color-base-300: #2a2a2a;
   --color-base-content: #ffffff;
   --color-primary: #5c6bef;
   --color-primary-content: #ffffff;
@@ -70,7 +70,7 @@
   --color-secondary-content: #ffffff;
   --color-accent: #5c6bef;
   --color-accent-content: #ffffff;
-  --color-neutral: #333444;
+  --color-neutral: #1a1a1a;
   --color-neutral-content: #ffffff;
   --color-info: #5cadd1;
   --color-info-content: #ffffff;

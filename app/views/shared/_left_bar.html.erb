@@ -1,93 +1,110 @@
-<div class="border-base-content/5 lg:min-h-screen lg:border-r">
-  <nav class="hidden h-full w-28 lg:block">
-    <div class="sticky top-0 flex h-screen flex-col items-center justify-between">
-      <%= link_to root_path, class: 'flex w-full justify-center py-8' do %>
-        <%= image_tag 'logo.svg', class: "h-auto w-20" %>
-      <% end %>
-
-      <div class="flex w-full flex-col items-center">
-        <%= render "shared/nav_icon_link",
-          label: t('home'),
-          path: articles_path,
-          active: @active_page == 'home',
-          icon: 'icons/home.svg',
-          solid_icon: 'icons/home-solid.svg' %>
-
-        <% if current_user.present? %>
-          <%= render "shared/nav_icon_link",
-            label: t('notification'),
-            path: dashboard_notifications_path,
-            active: @active_page == 'notification',
-            icon: 'icons/bell.svg',
-            solid_icon: 'icons/bell-solid.svg',
-            badge: current_user.has_unread_notification? %>
-
-          <%= render "shared/nav_icon_link",
-            label: t('my_reading'),
-            path: dashboard_readings_path,
-            active: @active_page == 'readings',
-            icon: 'icons/glasses.svg',
-            solid_icon: 'icons/glasses-solid.svg' %>
-
-          <%= render "shared/nav_icon_link",
-            label: t('my_authoring'),
-            path: dashboard_authorings_path,
-            active: @active_page == 'authorings',
-            icon: 'icons/article.svg',
-            solid_icon: 'icons/article-solid.svg' %>
-
-          <%= render "shared/nav_icon_link",
-            label: t('write'),
-            path: new_article_path,
-            icon: 'icons/write.svg' %>
-        <% else %>
-          <%= render "shared/nav_icon_link",
-            label: t('write'),
-            path: login_path,
-            icon: 'icons/write.svg',
-            turbo_frame: :modal %>
+<div class="border-base-content/10 lg:min-h-screen lg:border-r">
+  <nav class="hidden h-full w-64 lg:block">
+    <div class="sticky top-0 flex h-screen flex-col justify-between py-6 px-4">
+      <div class="flex flex-col space-y-6">
+        <%= link_to root_path, class: 'px-4 mb-2' do %>
+          <%= image_tag 'logo.svg', class: "h-auto w-24" %>
         <% end %>
-      </div>
 
-      <div class="flex w-full flex-col items-center">
-        <%= render "shared/nav_icon_link",
-          label: t('language'),
-          path: edit_locale_path,
-          icon: 'icons/global.svg',
-          turbo_frame: :modal %>
+        <div class="flex flex-col space-y-2">
+          <%= render "shared/nav_icon_link",
+            label: t('home'),
+            path: articles_path,
+            active: @active_page == 'home',
+            icon: 'icons/home.svg',
+            solid_icon: 'icons/home-solid.svg' %>
 
-        <div class="flex w-full flex-col items-center" data-controller="darkmode">
-          <a class="tooltip block hidden py-6 [--placement:right]" data-tip="<%= t('dark_mode') %>" data-darkmode-target="lightButton" data-action="darkmode#toggle">
-            <%= inline_svg_tag 'icons/moon.svg', class: "mx-auto h-6 w-6 text-base-content/60" %>
-          </a>
-          <a class="tooltip block hidden py-6 [--placement:right]" data-tip="<%= t('light_mode') %>" data-darkmode-target="darkButton" data-action="darkmode#toggle">
-            <%= inline_svg_tag 'icons/sun.svg', class: "mx-auto h-6 w-6 text-base-content/60" %>
-          </a>
+          <% if current_user.present? %>
+            <%= render "shared/nav_icon_link",
+              label: t('notification'),
+              path: dashboard_notifications_path,
+              active: @active_page == 'notification',
+              icon: 'icons/bell.svg',
+              solid_icon: 'icons/bell-solid.svg',
+              badge: current_user.has_unread_notification? %>
+
+            <%= render "shared/nav_icon_link",
+              label: t('my_reading'),
+              path: dashboard_readings_path,
+              active: @active_page == 'readings',
+              icon: 'icons/glasses.svg',
+              solid_icon: 'icons/glasses-solid.svg' %>
+
+            <%= render "shared/nav_icon_link",
+              label: t('my_authoring'),
+              path: dashboard_authorings_path,
+              active: @active_page == 'authorings',
+              icon: 'icons/article.svg',
+              solid_icon: 'icons/article-solid.svg' %>
+          <% end %>
+        </div>
+
+        <div class="px-2 mt-4">
+          <% if current_user.present? %>
+            <%= link_to new_article_path, class: "btn btn-primary w-full rounded-full text-base font-medium shadow-md shadow-primary/20" do %>
+              <%= inline_svg_tag 'icons/write.svg', class: "h-5 w-5 mr-1" %>
+              <%= t('write') %>
+            <% end %>
+          <% else %>
+            <%= link_to login_path, data: { turbo_frame: :modal }, class: "btn btn-primary w-full rounded-full text-base font-medium shadow-md shadow-primary/20" do %>
+              <%= inline_svg_tag 'icons/write.svg', class: "h-5 w-5 mr-1" %>
+              <%= t('write') %>
+            <% end %>
+          <% end %>
         </div>
       </div>
 
-      <div class="flex h-28 w-full flex-col items-center justify-end pb-4">
+      <div class="flex flex-col w-full space-y-2">
+        <div class="flex items-center justify-between px-4 mb-2">
+          <%= link_to edit_locale_path, data: { turbo_frame: :modal }, class: "text-base-content/60 hover:text-base-content transition-colors flex items-center space-x-2 text-sm" do %>
+            <%= inline_svg_tag 'icons/global.svg', class: "h-5 w-5" %>
+            <span><%= t('language') %></span>
+          <% end %>
+
+          <div data-controller="darkmode" class="flex items-center">
+            <a class="cursor-pointer hidden text-base-content/60 hover:text-base-content transition-colors" data-darkmode-target="lightButton" data-action="darkmode#toggle" title="<%= t('dark_mode') %>">
+              <%= inline_svg_tag 'icons/moon.svg', class: "h-5 w-5" %>
+            </a>
+            <a class="cursor-pointer hidden text-base-content/60 hover:text-base-content transition-colors" data-darkmode-target="darkButton" data-action="darkmode#toggle" title="<%= t('light_mode') %>">
+              <%= inline_svg_tag 'icons/sun.svg', class: "h-5 w-5" %>
+            </a>
+          </div>
+        </div>
+
         <% if current_user.present? %>
           <% dropdown_button = capture do %>
-            <div class="avatar">
-              <div class="size-10 rounded-full">
-                <%= image_tag current_user.avatar_thumb, class: "rounded-full" %>
+            <div class="flex items-center space-x-3 w-full px-4 py-3 rounded-full hover:bg-base-content/5 transition-colors cursor-pointer text-left">
+              <div class="avatar flex-shrink-0">
+                <div class="size-10 rounded-full">
+                  <%= image_tag current_user.avatar_thumb, class: "rounded-full" %>
+                </div>
               </div>
+              <div class="overflow-hidden flex-1">
+                <div class="font-medium text-sm text-base-content truncate"><%= current_user.name %></div>
+                <div class="text-xs text-base-content/60 truncate">
+                  <%= current_user.mixin_uuid.split('-').first %>...
+                </div>
+              </div>
+              <%= inline_svg_tag 'icons/chevron-down.svg', class: "h-4 w-4 text-base-content/50" %>
             </div>
           <% end %>
-          <%= render_dropdown class: 'flex justify-center', button: dropdown_button do %>
-            <ul class="menu menu-sm w-52 p-2">
-              <li><%= link_to t('profile_page'), user_path(current_user), class: "dropdown-item" %></li>
+          <%= render_dropdown class: 'w-full', button: dropdown_button do %>
+            <ul class="menu menu-sm w-56 p-2 rounded-xl border border-base-content/10 shadow-lg bg-base-100 mb-2">
+              <li><%= link_to t('profile_page'), user_path(current_user), class: "dropdown-item rounded-lg py-2" %></li>
               <% if current_user.mvm_eth? %>
-                <li><%= link_to t('my_wallet'), dashboard_wallet_path, class: "dropdown-item" %></li>
+                <li><%= link_to t('my_wallet'), dashboard_wallet_path, class: "dropdown-item rounded-lg py-2" %></li>
               <% end %>
-              <li><%= link_to t('settings'), dashboard_settings_path, class: "dropdown-item" %></li>
-              <li><%= link_to t('disconnect'), logout_path, data: { action: 'session#destroy' }, class: "dropdown-item" %></li>
+              <li><%= link_to t('settings'), dashboard_settings_path, class: "dropdown-item rounded-lg py-2" %></li>
+              <div class="divider my-1"></div>
+              <li><%= link_to t('disconnect'), logout_path, data: { action: 'session#destroy' }, class: "dropdown-item rounded-lg py-2 text-error" %></li>
             </ul>
           <% end %>
         <% else %>
-          <%= link_to login_path, class: "tooltip block py-6 [--placement:right]", data: { turbo_frame: :modal, tip: t('login', default: 'Login') } do %>
-            <%= inline_svg_tag 'icons/user.svg', class: "mx-auto h-6 w-6 text-base-content/60" %>
+          <%= link_to login_path, data: { turbo_frame: :modal, tip: t('login', default: 'Login') }, class: "flex items-center space-x-3 w-full px-4 py-3 rounded-full hover:bg-base-content/5 transition-colors text-left border border-base-content/10" do %>
+            <div class="bg-base-200 rounded-full p-2">
+              <%= inline_svg_tag 'icons/user.svg', class: "h-5 w-5 text-base-content/60" %>
+            </div>
+            <span class="font-medium text-sm text-base-content"><%= t('login', default: 'Login') %></span>
           <% end %>
         <% end %>
       </div>
