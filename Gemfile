@@ -173,7 +173,7 @@ end
 
 group :development do
   # Access an interactive console on exception pages or by calling 'console' anywhere in the code.
-  gem "listen", "~> 3.4"
+  gem "listen", "~> 3.10"
   gem "web-console", ">= 3.3.0"
   # Annotate Rails classes with schema and routes info
   gem "annotaterb", require: false

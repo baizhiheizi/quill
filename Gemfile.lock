@@ -329,7 +329,8 @@ GEM
       rails (>= 8.0.2)
     libv8-node (24.12.0.1-x86_64-linux)
     lint_roller (1.1.0)
-    listen (3.9.0)
+    listen (3.10.0)
+      logger
       rb-fsevent (~> 0.10, >= 0.10.3)
       rb-inotify (~> 0.9, >= 0.9.10)
     logger (1.7.0)
@@ -508,7 +509,7 @@ GEM
       activesupport (>= 6.1.5)
       i18n
     rb-fsevent (0.11.2)
-    rb-inotify (0.10.1)
+    rb-inotify (0.11.1)
       ffi (~> 1.0)
     rbnacl (7.1.2)
       ffi (~> 1)
@@ -678,7 +679,7 @@ DEPENDENCIES
   kramdown
   kramdown-parser-gfm
   lexxy (~> 0.1.26.beta)
-  listen (~> 3.4)
+  listen (~> 3.10)
   mailjet
   mini_racer
   minitest (~> 5.25)
