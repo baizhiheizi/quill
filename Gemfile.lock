@@ -146,7 +146,7 @@ GEM
       h2c (>= 0.2.1, < 0.3)
     bootsnap (1.18.3)
       msgpack (~> 1.2)
-    browser (6.0.0)
+    browser (6.2.0)
     builder (3.3.0)
     capybara (3.40.0)
       addressable
