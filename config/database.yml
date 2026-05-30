@@ -12,7 +12,7 @@ sqlite: &sqlite
 development:
   primary:
     <<: *default
-    host: localhost
+    host: <%= ENV.fetch("DATABASE_HOST", "localhost") %>
     database: quill_development
     username: postgres
     password: postgres
@@ -33,7 +33,7 @@ development:
 test:
   primary:
     <<: *default
-    host: localhost
+    host: <%= ENV.fetch("DATABASE_HOST", "localhost") %>
     database: quill_test
     username: postgres
     password: postgres

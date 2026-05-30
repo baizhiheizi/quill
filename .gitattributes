@@ -1,2 +1,4 @@
 config/credentials/*.yml.enc diff=rails_credentials
 config/credentials.yml.enc diff=rails_credentials
+
+.github/workflows/*.lock.yml linguist-generated=true merge=ours
