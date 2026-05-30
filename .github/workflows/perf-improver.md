@@ -27,6 +27,9 @@ on:
         [[ "$COUNT" -lt "$MAX_OPEN_PRS" ]]
       # exits 0 if not scheduled or <MAX_OPEN_PRS open PRs, 1 if ≥MAX_OPEN_PRS
 
+runs-on: [self-hosted, linux, agentic]
+runs-on-slim: "self-hosted"
+
 imports:
   - shared/runtime.md
   - shared/engine-minimax.md
