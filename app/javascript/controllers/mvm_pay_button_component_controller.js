@@ -1,19 +1,19 @@
-import { Controller } from '@hotwired/stimulus';
-import { notify, showLoading, hideLoading } from '../utils';
+import { Controller } from "@hotwired/stimulus";
+import { notify, showLoading, hideLoading } from "../utils";
 
 export default class extends Controller {
   static targets = [
-    'button',
-    'metaMaskIcon',
-    'walletConnectIcon',
-    'coinbaseIcon',
-    'wait',
-    'finish',
-    'scanTransactionLink',
-    'balance',
-    'balanceValue',
-    'balanceLink',
-    'mvmTips',
+    "button",
+    "metaMaskIcon",
+    "walletConnectIcon",
+    "coinbaseIcon",
+    "wait",
+    "finish",
+    "scanTransactionLink",
+    "balance",
+    "balanceValue",
+    "balanceLink",
+    "mvmTips",
   ];
 
   static values = {
@@ -30,20 +30,20 @@ export default class extends Controller {
     await Wallet.switchToMVM();
 
     if (!Wallet.isCurrentNetworkMvm()) {
-      let input = this.buttonTarget.querySelector('button');
+      let input = this.buttonTarget.querySelector("button");
       if (!input) return;
 
-      this.mvmTipsTarget.classList.remove('hidden');
+      this.mvmTipsTarget.classList.remove("hidden");
       input.classList.remove(
-        'bg-primary',
-        'text-white',
-        'hover:font-black',
-        'cursor-pointer',
+        "bg-primary",
+        "text-white",
+        "hover:font-black",
+        "cursor-pointer",
       );
-      input.classList.add('bg-zinc-300', 'opacity-50');
+      input.classList.add("bg-zinc-300", "opacity-50");
       input.disabled = true;
     } else {
-      this.balanceTarget.classList.remove('hidden');
+      this.balanceTarget.classList.remove("hidden");
     }
   }
 
@@ -60,20 +60,20 @@ export default class extends Controller {
   }
 
   metaMaskIconTargetConnected() {
-    if (Wallet.provider === 'MetaMask') {
-      this.metaMaskIconTarget.classList.remove('hidden');
+    if (Wallet.provider === "MetaMask") {
+      this.metaMaskIconTarget.classList.remove("hidden");
     }
   }
 
   walletConnectIconTargetConnected() {
-    if (Wallet.provider === 'WalletConnect') {
-      this.walletConnectIconTarget.classList.remove('hidden');
+    if (Wallet.provider === "WalletConnect") {
+      this.walletConnectIconTarget.classList.remove("hidden");
     }
   }
 
   coinbaseIconTargetConnected() {
-    if (Wallet.provider === 'Coinbase') {
-      this.coinbaseIconTarget.classList.remove('hidden');
+    if (Wallet.provider === "Coinbase") {
+      this.coinbaseIconTarget.classList.remove("hidden");
     }
   }
 
@@ -82,7 +82,7 @@ export default class extends Controller {
 
     await Wallet.switchToMVM();
     if (!Wallet.isCurrentNetworkMvm()) {
-      notify('Switch to MVM Chain before paying', 'danger');
+      notify("Switch to MVM Chain before paying", "danger");
       return;
     }
 
@@ -91,47 +91,47 @@ export default class extends Controller {
 
     this.lockButton();
     try {
-      notify(`Invoking ${Wallet.provider} to pay ${amount} ${symbol}`, 'info');
+      notify(`Invoking ${Wallet.provider} to pay ${amount} ${symbol}`, "info");
 
       await Wallet.payWithMVM(
         { assetId, symbol, amount, receivers, threshold, memo, payerId },
         (hash) => {
-          notify('Transaction submitted', 'success');
-          this.buttonTarget.classList.add('hidden');
+          notify("Transaction submitted", "success");
+          this.buttonTarget.classList.add("hidden");
 
-          if (this.afterSubmitActionValue === 'wait' && this.hasWaitTarget) {
-            this.waitTarget.classList.remove('hidden');
+          if (this.afterSubmitActionValue === "wait" && this.hasWaitTarget) {
+            this.waitTarget.classList.remove("hidden");
           } else if (
-            this.afterSubmitActionValue === 'finish' &&
+            this.afterSubmitActionValue === "finish" &&
             this.hasFinishTarget
           ) {
-            this.finishTarget.classList.remove('hidden');
+            this.finishTarget.classList.remove("hidden");
           }
 
           this.scanTransactionLinkTargets.forEach((target) => {
             target.href = `https://scan.mvm.dev/tx/${hash}`;
-            target.classList.remove('hidden');
+            target.classList.remove("hidden");
           });
           this.unlockButton();
         },
         (error) => {
-          notify(error.message, 'danger');
+          notify(error.message, "danger");
           this.unlockButton();
         },
       );
     } catch (error) {
-      notify(error.message, 'danger');
+      notify(error.message, "danger");
       this.unlockButton();
     }
   }
 
   lockButton() {
-    this.element.setAttribute('disabled', true);
+    this.element.setAttribute("disabled", true);
     showLoading();
   }
 
   unlockButton() {
-    this.element.removeAttribute('disabled');
+    this.element.removeAttribute("disabled");
     hideLoading();
   }
 }

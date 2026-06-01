@@ -1,4 +1,4 @@
-import { Controller } from '@hotwired/stimulus';
+import { Controller } from "@hotwired/stimulus";
 
 export default class extends Controller {
   static values = {
@@ -11,17 +11,17 @@ export default class extends Controller {
   }
 
   connect() {
-    this.element.addEventListener('click', this.scroll);
+    this.element.addEventListener("click", this.scroll);
   }
 
   disconnect() {
-    this.element.removeEventListener('click', this.scroll);
+    this.element.removeEventListener("click", this.scroll);
   }
 
   scroll(eventt) {
     event.preventDefault();
 
-    const id = this.element.hash.replace(/^#/, '');
+    const id = this.element.hash.replace(/^#/, "");
     const target = document.getElementById(id);
 
     if (!target) {
@@ -54,7 +54,7 @@ export default class extends Controller {
   }
 
   get behavior() {
-    return this.behaviorValue || this.defaultOptions.behavior || 'smooth';
+    return this.behaviorValue || this.defaultOptions.behavior || "smooth";
   }
 
   get defaultOptions() {

@@ -1,5 +1,5 @@
-import { Controller } from '@hotwired/stimulus';
-import { debounce } from 'underscore';
+import { Controller } from "@hotwired/stimulus";
+import { debounce } from "underscore";
 
 export default class extends Controller {
   static values = {
@@ -12,23 +12,23 @@ export default class extends Controller {
   }
 
   connect() {
-    this.element.style.overflow = 'hidden';
+    this.element.style.overflow = "hidden";
     const delay = this.resizeDebounceDelayValue || 100;
 
     this.onResize = delay > 0 ? debounce(this.autogrow, delay) : this.autogrow;
 
     this.autogrow();
 
-    this.element.addEventListener('input', this.autogrow);
-    window.addEventListener('resize', this.onResize);
+    this.element.addEventListener("input", this.autogrow);
+    window.addEventListener("resize", this.onResize);
   }
 
   disconnect() {
-    window.removeEventListener('resize', this.onResize);
+    window.removeEventListener("resize", this.onResize);
   }
 
   autogrow() {
-    this.element.style.height = 'auto'; // Force re-print before calculating the scrollHeight value.
+    this.element.style.height = "auto"; // Force re-print before calculating the scrollHeight value.
     if (this.element.scrollHeight <= this.maxHeightValue) {
       this.element.style.height = `${this.element.scrollHeight}px`;
     } else {

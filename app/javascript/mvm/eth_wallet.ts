@@ -1,5 +1,5 @@
-import detectEthereumProvider from '@metamask/detect-provider';
-import CoinbaseWalletSDK from '@coinbase/wallet-sdk';
+import detectEthereumProvider from "@metamask/detect-provider";
+import CoinbaseWalletSDK from "@coinbase/wallet-sdk";
 import {
   BridgeAddress,
   GasPrice,
@@ -12,15 +12,15 @@ import {
   MirrorAddress,
   RegistryID,
   StorageAddress,
-} from './constants';
-import RegistryABI from './abis/registry.json' assert { type: 'json' };
-import BridgeABI from './abis/bridge.json' assert { type: 'json' };
-import ERC20ABI from './abis/erc20.json' assert { type: 'json' };
-import ERC721ABI from './abis/erc721.json' assert { type: 'json' };
-import MirrorABI from './abis/mirror.json' assert { type: 'json' };
-import { EthereumProvider } from '@walletconnect/ethereum-provider';
-import { Web3 } from 'web3';
-import BigNumber from 'bignumber.js';
+} from "./constants";
+import RegistryABI from "./abis/registry.json" assert { type: "json" };
+import BridgeABI from "./abis/bridge.json" assert { type: "json" };
+import ERC20ABI from "./abis/erc20.json" assert { type: "json" };
+import ERC721ABI from "./abis/erc721.json" assert { type: "json" };
+import MirrorABI from "./abis/mirror.json" assert { type: "json" };
+import { EthereumProvider } from "@walletconnect/ethereum-provider";
+import { Web3 } from "web3";
+import BigNumber from "bignumber.js";
 
 interface AppType {
   name: string;
@@ -37,7 +37,7 @@ export class EthWallet {
   public Mirror: any;
 
   constructor(
-    provider: 'MetaMask' | 'Coinbase' | 'WalletConnect',
+    provider: "MetaMask" | "Coinbase" | "WalletConnect",
     app: AppType,
   ) {
     this.provider = provider;
@@ -46,13 +46,13 @@ export class EthWallet {
 
   async init() {
     switch (this.provider) {
-      case 'MetaMask':
+      case "MetaMask":
         await this.initMetaMask();
         break;
-      case 'Coinbase':
+      case "Coinbase":
         await this.initCoinBase();
         break;
-      case 'WalletConnect':
+      case "WalletConnect":
         await this.initWalletConnect();
         break;
       default:
@@ -75,7 +75,7 @@ export class EthWallet {
     } else {
       this.web3 = new Web3(window.ethereum);
     }
-    this.web3.currentProvider.request({ method: 'eth_requestAccounts' });
+    this.web3.currentProvider.request({ method: "eth_requestAccounts" });
   }
 
   async initCoinBase() {
@@ -123,13 +123,13 @@ export class EthWallet {
     const { assetId, symbol, amount, receivers, threshold, memo, payerId } =
       params;
     if (memo.length > 200) {
-      fail(new Error('Memo too long!'));
+      fail(new Error("Memo too long!"));
       return;
     }
 
     const contract = await this.fetchUsersContract([payerId], 1);
     if (!contract || !parseInt(contract)) {
-      fail(new Error('User contract empty, please deposit some asset first.'));
+      fail(new Error("User contract empty, please deposit some asset first."));
       return;
     }
 
@@ -188,15 +188,15 @@ export class EthWallet {
     const balance = await IERC20.methods.balanceOf(this.account).call();
     const payAmount = BigNumber(amount).multipliedBy(1e8);
     if (BigNumber(balance).isLessThan(payAmount)) {
-      fail(new Error('Insufficient balance'));
+      fail(new Error("Insufficient balance"));
       return;
     }
     IERC20.options.gasPrice = await this.web3.eth.getGasPrice();
     IERC20.methods
       .transferWithExtra(contract, payAmount.toFixed(), `0x${extra}`)
       .send({ from: this.account })
-      .on('transactionHash', success)
-      .on('error', fail);
+      .on("transactionHash", success)
+      .on("error", fail);
   }
 
   async payNative(
@@ -222,15 +222,15 @@ export class EthWallet {
     const balance = await this.web3.eth.getBalance(this.account);
     const payAmount = BigNumber(amount).multipliedBy(1e18);
     if (BigNumber(balance).isLessThan(payAmount)) {
-      fail(new Error('Insufficient balance'));
+      fail(new Error("Insufficient balance"));
       return;
     }
 
     BridgeContract.methods
       .release(contract, `0x${extra}`)
       .send({ from: this.account, value: payAmount.toFixed() })
-      .on('transactionHash', success)
-      .on('error', fail);
+      .on("transactionHash", success)
+      .on("error", fail);
   }
 
   async transferNFT(
@@ -251,7 +251,7 @@ export class EthWallet {
     const tokenContract = await Mirror.methods
       .contracts(
         this.web3.utils.hexToNumberString(
-          '0x' + collectionId.replaceAll('-', ''),
+          "0x" + collectionId.replaceAll("-", ""),
         ),
       )
       .call();
@@ -260,7 +260,7 @@ export class EthWallet {
     const owner = await ERC721.methods.ownerOf(tokenId).call();
 
     if (this.web3.utils.toChecksumAddress(owner) !== this.account) {
-      fail(new Error('Unauthorized'));
+      fail(new Error("Unauthorized"));
       return;
     }
 
@@ -270,8 +270,8 @@ export class EthWallet {
     ERC721.methods
       .safeTransferFrom(this.account, MirrorAddress, tokenId, contract + extra)
       .send({ from: this.account })
-      .on('transactionHash', success)
-      .on('error', fail);
+      .on("transactionHash", success)
+      .on("error", fail);
   }
 
   switchToMVM() {
@@ -283,7 +283,7 @@ export class EthWallet {
     }
 
     this.web3.currentProvider.request({
-      method: 'wallet_addEthereumChain',
+      method: "wallet_addEthereumChain",
       params: [MVM_CONFIG],
     });
   }
@@ -305,9 +305,9 @@ export class EthWallet {
     }
     await this.web3.currentProvider
       .request({
-        method: 'wallet_watchAsset',
+        method: "wallet_watchAsset",
         params: {
-          type: 'ERC20',
+          type: "ERC20",
           options: {
             address: assetContractAddress,
             symbol: assetSymbol,
@@ -320,7 +320,7 @@ export class EthWallet {
         if (res) {
           success();
         } else {
-          fail(new Error('Failed to add token'));
+          fail(new Error("Failed to add token"));
         }
       });
   }
@@ -342,14 +342,14 @@ export class EthWallet {
         return BigNumber(balance).dividedBy(1e8).toFixed();
       } catch (error) {
         console.error(error);
-        return '0';
+        return "0";
       }
     }
   }
 
   fetchAssetContract(assetId: string) {
     return this.Registry.methods
-      .contracts(`0x${assetId.replaceAll('-', '')}`)
+      .contracts(`0x${assetId.replaceAll("-", "")}`)
       .call();
   }
 
@@ -358,9 +358,9 @@ export class EthWallet {
     bufLen.writeUInt16BE(userIds.length);
     const bufThres = Buffer.alloc(2);
     bufThres.writeUInt16BE(threshold);
-    const ids = userIds.join('').replaceAll('-', '');
-    const identity = `0x${bufLen.toString('hex')}${ids}${bufThres.toString(
-      'hex',
+    const ids = userIds.join("").replaceAll("-", "");
+    const identity = `0x${bufLen.toString("hex")}${ids}${bufThres.toString(
+      "hex",
     )}`;
     return this.Registry.methods
       .contracts(this.web3.utils.sha3(identity))
@@ -373,9 +373,9 @@ export class EthWallet {
       threshold,
       extra: memo,
     });
-    const hex = Buffer.from(action).toString('hex');
+    const hex = Buffer.from(action).toString("hex");
     return (
-      RegistryID.replaceAll('-', '') +
+      RegistryID.replaceAll("-", "") +
       StorageAddress.slice(2).toLowerCase() +
       this.web3.utils.sha3(hex).slice(2) +
       hex

@@ -1,7 +1,7 @@
-import { Controller } from '@hotwired/stimulus';
+import { Controller } from "@hotwired/stimulus";
 
 export default class extends Controller {
-  static targets = ['form', 'priceUsd'];
+  static targets = ["form", "priceUsd"];
   static values = {
     selectedAsset: String,
     currentPrice: Number,
@@ -9,7 +9,7 @@ export default class extends Controller {
   };
 
   connect() {
-    console.log('collection component connected');
+    console.log("collection component connected");
   }
 
   currentPriceValueChanged() {

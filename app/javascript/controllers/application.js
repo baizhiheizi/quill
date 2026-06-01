@@ -1,4 +1,4 @@
-import { Application } from '@hotwired/stimulus';
+import { Application } from "@hotwired/stimulus";
 
 if (!window.Stimulus) {
   const application = Application.start();

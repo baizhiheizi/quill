@@ -1,9 +1,9 @@
-import { Controller } from '@hotwired/stimulus';
-import { debounce } from 'underscore';
-import { get } from '@rails/request.js';
+import { Controller } from "@hotwired/stimulus";
+import { debounce } from "underscore";
+import { get } from "@rails/request.js";
 
 export default class extends Controller {
-  static targets = ['form', 'input', 'clearButton'];
+  static targets = ["form", "input", "clearButton"];
 
   initialize() {
     this.search = this.search.bind(this);
@@ -22,8 +22,8 @@ export default class extends Controller {
     if (query) {
       this.showClearButton();
       get(`/search?query=${query}`, {
-        contentType: 'application/json',
-        responseKind: 'turbo-stream',
+        contentType: "application/json",
+        responseKind: "turbo-stream",
       });
     } else {
       this.hideClearButton();
@@ -31,15 +31,15 @@ export default class extends Controller {
   }
 
   showClearButton() {
-    this.clearButtonTarget.classList.remove('hidden');
+    this.clearButtonTarget.classList.remove("hidden");
   }
 
   hideClearButton() {
-    this.clearButtonTarget.classList.add('hidden');
+    this.clearButtonTarget.classList.add("hidden");
   }
 
   clear() {
-    this.inputTarget.value = '';
+    this.inputTarget.value = "";
     this.hideClearButton();
   }
 }

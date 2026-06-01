@@ -1,4 +1,4 @@
-import { Controller } from '@hotwired/stimulus';
+import { Controller } from "@hotwired/stimulus";
 
 export default class extends Controller {
   static values = {
@@ -6,7 +6,7 @@ export default class extends Controller {
     activeClass: String,
   };
 
-  static targets = ['tab', 'content'];
+  static targets = ["tab", "content"];
 
   connect() {}
 
@@ -19,17 +19,17 @@ export default class extends Controller {
   activeTabValueChanged() {
     this.tabTargets.forEach((tab) => {
       if (this.activeTabValue === tab.dataset.tabsTabnameParam) {
-        tab.classList.add(...this.activeClassValue.split(' '));
+        tab.classList.add(...this.activeClassValue.split(" "));
       } else {
-        tab.classList.remove(...this.activeClassValue.split(' '));
+        tab.classList.remove(...this.activeClassValue.split(" "));
       }
     });
 
     this.contentTargets.forEach((content) => {
       if (this.activeTabValue === content.dataset.tabsContentParam) {
-        content.classList.remove('hidden');
+        content.classList.remove("hidden");
       } else {
-        content.classList.add('hidden');
+        content.classList.add("hidden");
       }
     });
   }

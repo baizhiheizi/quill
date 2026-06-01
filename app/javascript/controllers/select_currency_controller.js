@@ -1,8 +1,8 @@
-import { Controller } from '@hotwired/stimulus';
-import { debounce } from 'underscore';
+import { Controller } from "@hotwired/stimulus";
+import { debounce } from "underscore";
 
 export default class extends Controller {
-  static targets = ['seachInput', 'currencyOption'];
+  static targets = ["seachInput", "currencyOption"];
 
   initialize() {
     this.search = this.search.bind(this);
@@ -13,12 +13,12 @@ export default class extends Controller {
   }
 
   search(event) {
-    const regex = new RegExp(event.target.value, 'ig');
+    const regex = new RegExp(event.target.value, "ig");
     this.currencyOptionTargets.forEach((option) => {
       if (regex.test(option.dataset.modalComponentSymbolParam)) {
-        option.classList.remove('hidden');
+        option.classList.remove("hidden");
       } else {
-        option.classList.add('hidden');
+        option.classList.add("hidden");
       }
     });
   }

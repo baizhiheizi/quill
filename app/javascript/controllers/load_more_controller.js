@@ -1,5 +1,5 @@
-import { Controller } from '@hotwired/stimulus';
-import { get } from '@rails/request.js';
+import { Controller } from "@hotwired/stimulus";
+import { get } from "@rails/request.js";
 
 export default class extends Controller {
   connect() {}
@@ -9,8 +9,8 @@ export default class extends Controller {
 
     if (link) {
       get(link, {
-        contentType: 'application/json',
-        responseKind: 'turbo-stream',
+        contentType: "application/json",
+        responseKind: "turbo-stream",
       });
     }
   }

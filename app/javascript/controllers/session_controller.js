@@ -1,7 +1,7 @@
-import { Controller } from '@hotwired/stimulus';
-import { EthWallet } from '../mvm/eth_wallet';
-import { notify } from '../utils';
-import { WALLET_CONNECT_PROJECT_ID } from '../mvm/constants';
+import { Controller } from "@hotwired/stimulus";
+import { EthWallet } from "../mvm/eth_wallet";
+import { notify } from "../utils";
+import { WALLET_CONNECT_PROJECT_ID } from "../mvm/constants";
 
 export default class extends Controller {
   static values = {
@@ -16,16 +16,16 @@ export default class extends Controller {
     await this.initWallet();
     if (!window.Wallet) return;
 
-    Wallet.web3.currentProvider.on('chainChanged', (chainId) => {
+    Wallet.web3.currentProvider.on("chainChanged", (chainId) => {
       console.warn(`Chain changed to ${parseInt(chainId)}`);
       notify(`Network changed to ${parseInt(chainId)}`);
     });
 
-    Wallet.web3.currentProvider.on('disconnect', () => {
-      if (Wallet.provider === 'MetaMask') return;
+    Wallet.web3.currentProvider.on("disconnect", () => {
+      if (Wallet.provider === "MetaMask") return;
 
-      console.warn('Disconnect');
-      Turbo.visit('/logout');
+      console.warn("Disconnect");
+      Turbo.visit("/logout");
     });
   }
 
@@ -35,12 +35,12 @@ export default class extends Controller {
     await this.initWallet();
     if (!window.Wallet?.web3?.currentProvider) return;
 
-    Wallet.web3.currentProvider.on('accountsChanged', (accounts) => {
-      notify('Account changed');
+    Wallet.web3.currentProvider.on("accountsChanged", (accounts) => {
+      notify("Account changed");
 
       if (accounts[0].toLowerCase() !== this.addressValue.toLowerCase()) {
         this.destroy();
-        Turbo.visit('/logout');
+        Turbo.visit("/logout");
       }
     });
   }
@@ -50,14 +50,14 @@ export default class extends Controller {
     if (window.Wallet) return;
 
     window.Wallet = new EthWallet(this.providerValue, {
-      name: 'Quill',
+      name: "Quill",
       logoUrl: `${location.host}/logo.svg`,
       wcProjectId: WALLET_CONNECT_PROJECT_ID,
     });
     await Wallet.init();
 
     if (!window.Wallet) {
-      console.warn('Failed to init wallet');
+      console.warn("Failed to init wallet");
     }
   }
 

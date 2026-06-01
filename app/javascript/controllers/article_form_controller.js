@@ -1,7 +1,7 @@
-import { Controller } from '@hotwired/stimulus';
-import { put } from '@rails/request.js';
-import { showLoading } from '../utils';
-import { debounce } from 'underscore';
+import { Controller } from "@hotwired/stimulus";
+import { put } from "@rails/request.js";
+import { showLoading } from "../utils";
+import { debounce } from "underscore";
 
 export default class extends Controller {
   static values = {
@@ -18,26 +18,26 @@ export default class extends Controller {
     updatedAt: Number,
   };
   static targets = [
-    'form',
-    'contentFields',
-    'optionFields',
-    'title',
-    'content',
-    'images',
-    'editButton',
-    'optionsButton',
-    'readersRevenueRatio',
-    'authorRevenueRatio',
-    'collectionRevenueRatio',
-    'referenceRevenueRatio',
-    'articleReferenceRevenueRatio',
-    'introCharacterCounter',
-    'currencyIcon',
-    'currencyChainIcon',
-    'currencySymbol',
-    'priceUsd',
-    'publishButton',
-    'notSavedAlert',
+    "form",
+    "contentFields",
+    "optionFields",
+    "title",
+    "content",
+    "images",
+    "editButton",
+    "optionsButton",
+    "readersRevenueRatio",
+    "authorRevenueRatio",
+    "collectionRevenueRatio",
+    "referenceRevenueRatio",
+    "articleReferenceRevenueRatio",
+    "introCharacterCounter",
+    "currencyIcon",
+    "currencyChainIcon",
+    "currencySymbol",
+    "priceUsd",
+    "publishButton",
+    "notSavedAlert",
   ];
 
   initialize() {
@@ -56,10 +56,10 @@ export default class extends Controller {
 
     if (this.articlePublishedValue) return;
 
-    const modal = document.querySelector('#modal');
+    const modal = document.querySelector("#modal");
     if (!modal) return;
 
-    modal.addEventListener('modal-component:ok', (event) => {
+    modal.addEventListener("modal-component:ok", (event) => {
       const identifier = event.detail.identifier;
 
       if (identifier !== this.articleUuidValue) return;
@@ -71,7 +71,7 @@ export default class extends Controller {
         return;
       }
 
-      const assetSelect = this.element.querySelector('#article_asset_id');
+      const assetSelect = this.element.querySelector("#article_asset_id");
       if (assetSelect) {
         Array.from(assetSelect.children).forEach((option) => {
           option.selected = option.value === event.detail.assetId;
@@ -87,17 +87,17 @@ export default class extends Controller {
   }
 
   disconnect() {
-    document.removeEventListener('turbo:before-visit', this.confirmLeaving);
+    document.removeEventListener("turbo:before-visit", this.confirmLeaving);
   }
 
   confirmLeaving(event) {
-    if (confirm('Article is not saved yet. Are you sure to leave?') == false) {
+    if (confirm("Article is not saved yet. Are you sure to leave?") == false) {
       event.preventDefault();
     }
   }
 
   formTargetConnected() {
-    if (this.newRecordValue || this.activeTabValue !== 'options') {
+    if (this.newRecordValue || this.activeTabValue !== "options") {
       this.edit();
     } else {
       this.options();
@@ -122,19 +122,19 @@ export default class extends Controller {
     if (this.dirtyValue) {
       this.publishButtonTarget.disabled = true;
       this.publishButtonTarget.classList.add(
-        'cursor-not-allowed',
-        'opacity-60',
+        "cursor-not-allowed",
+        "opacity-60",
       );
-      this.publishButtonTarget.classList.remove('cursor-pointer');
-      document.addEventListener('turbo:before-visit', this.confirmLeaving);
+      this.publishButtonTarget.classList.remove("cursor-pointer");
+      document.addEventListener("turbo:before-visit", this.confirmLeaving);
     } else {
       this.publishButtonTarget.disabled = false;
       this.publishButtonTarget.classList.remove(
-        'cursor-not-allowed',
-        'opacity-60',
+        "cursor-not-allowed",
+        "opacity-60",
       );
-      this.publishButtonTarget.classList.add('cursor-pointer');
-      document.removeEventListener('turbo:before-visit', this.confirmLeaving);
+      this.publishButtonTarget.classList.add("cursor-pointer");
+      document.removeEventListener("turbo:before-visit", this.confirmLeaving);
     }
   }
 
@@ -236,8 +236,8 @@ export default class extends Controller {
     const referenceRevenueRatio = this.articleReferenceRevenueRatioTargets
       .filter(
         (target) =>
-          window.getComputedStyle(target.closest('.nested-form-wrapper'))
-            .display !== 'none',
+          window.getComputedStyle(target.closest(".nested-form-wrapper"))
+            .display !== "none",
       )
       .map((target) => {
         return parseFloat(target.value);
@@ -287,7 +287,7 @@ export default class extends Controller {
   edit() {
     this.activeContentForm();
     this.hideSettingsForm();
-    this.activeTabValue = 'edit';
+    this.activeTabValue = "edit";
   }
 
   options() {
@@ -295,57 +295,57 @@ export default class extends Controller {
 
     this.activeSettingsForm();
     this.hideContentForm();
-    this.activeTabValue = 'options';
+    this.activeTabValue = "options";
   }
 
   activeContentForm() {
     this.showContentForm();
     if (this.hasEditButtonTarget) {
-      this.editButtonTarget.classList.add('text-primary');
-      this.editButtonTarget.classList.remove('opacity-60');
+      this.editButtonTarget.classList.add("text-primary");
+      this.editButtonTarget.classList.remove("opacity-60");
     }
   }
 
   showContentForm() {
     if (!this.hasContentFieldsTarget) return;
 
-    this.contentFieldsTarget.classList.remove('hidden');
+    this.contentFieldsTarget.classList.remove("hidden");
   }
 
   hideContentForm() {
     if (this.newRecordValue || !this.hasContentFieldsTarget) return;
 
-    this.contentFieldsTarget.classList.add('hidden');
+    this.contentFieldsTarget.classList.add("hidden");
     if (this.hasEditButtonTarget) {
-      this.editButtonTarget.classList.remove('text-primary');
-      this.editButtonTarget.classList.add('opacity-60');
+      this.editButtonTarget.classList.remove("text-primary");
+      this.editButtonTarget.classList.add("opacity-60");
     }
   }
 
   activeSettingsForm() {
     if (this.hasOptionFieldsTarget && this.hasOptionsButtonTarget) {
-      this.optionFieldsTarget.classList.remove('hidden');
-      this.optionsButtonTarget.classList.add('text-primary');
-      this.optionsButtonTarget.classList.remove('opacity-60');
+      this.optionFieldsTarget.classList.remove("hidden");
+      this.optionsButtonTarget.classList.add("text-primary");
+      this.optionsButtonTarget.classList.remove("opacity-60");
     }
   }
 
   hideSettingsForm() {
     if (this.hasOptionFieldsTarget && this.hasOptionsButtonTarget) {
-      this.optionFieldsTarget.classList.add('hidden');
-      this.optionsButtonTarget.classList.remove('text-primary');
-      this.optionsButtonTarget.classList.add('opacity-60');
+      this.optionFieldsTarget.classList.add("hidden");
+      this.optionsButtonTarget.classList.remove("text-primary");
+      this.optionsButtonTarget.classList.add("opacity-60");
     }
   }
 
   hideOptionFieldsForNewRecord() {
     if (!this.hasOptionFieldsTarget) return;
 
-    this.optionFieldsTarget.classList.add('hidden');
+    this.optionFieldsTarget.classList.add("hidden");
   }
 
   save() {
-    if (this.activeTabValue === 'edit') {
+    if (this.activeTabValue === "edit") {
       this.autosave();
     } else {
       this.submit();
@@ -353,8 +353,8 @@ export default class extends Controller {
   }
 
   autosave() {
-    const title = this.element.querySelector('#article_title').value;
-    const intro = this.element.querySelector('#article_intro')?.value;
+    const title = this.element.querySelector("#article_title").value;
+    const intro = this.element.querySelector("#article_intro")?.value;
     const content = this.contentValue;
 
     if (this.autosaveUrlValue) {
@@ -364,18 +364,18 @@ export default class extends Controller {
           intro,
           content,
         },
-        contentType: 'application/json',
-        responseKind: 'turbo_stream',
+        contentType: "application/json",
+        responseKind: "turbo_stream",
       })
         .then(() => {
           if (this.hasNotSavedAlertTarget) {
-            this.notSavedAlertTarget.classList.add('hidden');
+            this.notSavedAlertTarget.classList.add("hidden");
           }
           this.clearDraft();
         })
         .catch(() => {
           if (this.hasNotSavedAlertTarget) {
-            this.notSavedAlertTarget.classList.remove('hidden');
+            this.notSavedAlertTarget.classList.remove("hidden");
           }
 
           localStorage.setItem(
@@ -402,36 +402,36 @@ export default class extends Controller {
       return;
     }
 
-    this.element.querySelector('#article_title').value = title;
-    const introElement = this.element.querySelector('#article_intro');
+    this.element.querySelector("#article_title").value = title;
+    const introElement = this.element.querySelector("#article_intro");
     if (introElement && intro) {
       introElement.value = intro;
-      introElement.style.height = '';
-      introElement.style.height = introElement.scrollHeight + 'px';
+      introElement.style.height = "";
+      introElement.style.height = introElement.scrollHeight + "px";
     }
     this.setContentValue(content);
     if (this.hasNotSavedAlertTarget) {
-      this.notSavedAlertTarget.classList.remove('hidden');
+      this.notSavedAlertTarget.classList.remove("hidden");
     }
   }
 
   get contentValue() {
-    if (!this.hasContentTarget) return '';
+    if (!this.hasContentTarget) return "";
 
     const target = this.contentTarget;
 
-    if (target.tagName === 'LEXXY-EDITOR') {
-      return target.value ?? '';
+    if (target.tagName === "LEXXY-EDITOR") {
+      return target.value ?? "";
     }
 
-    if (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA') {
+    if (target.tagName === "INPUT" || target.tagName === "TEXTAREA") {
       return target.value;
     }
 
     const hiddenInput = target.querySelector('input[name="article[content]"]');
     if (hiddenInput) return hiddenInput.value;
 
-    return target.value ?? target.textContent ?? '';
+    return target.value ?? target.textContent ?? "";
   }
 
   setContentValue(content) {
@@ -439,9 +439,9 @@ export default class extends Controller {
 
     const target = this.contentTarget;
     const editor =
-      target.tagName === 'LEXXY-EDITOR'
+      target.tagName === "LEXXY-EDITOR"
         ? target
-        : this.contentFieldsTarget?.querySelector('lexxy-editor');
+        : this.contentFieldsTarget?.querySelector("lexxy-editor");
 
     if (editor) {
       editor.value = content;
@@ -449,7 +449,7 @@ export default class extends Controller {
     }
 
     const hiddenInput =
-      target.tagName === 'INPUT'
+      target.tagName === "INPUT"
         ? target
         : target.querySelector('input[name="article[content]"]');
 

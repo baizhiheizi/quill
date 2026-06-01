@@ -1,5 +1,5 @@
-import { Controller } from '@hotwired/stimulus';
-import { debounce } from 'underscore';
+import { Controller } from "@hotwired/stimulus";
+import { debounce } from "underscore";
 
 export default class extends Controller {
   connect() {
@@ -8,14 +8,14 @@ export default class extends Controller {
 
   listenToScroll() {
     let scrolling;
-    this.element.classList.remove('translate-x-24');
-    document.addEventListener('scroll', () => {
+    this.element.classList.remove("translate-x-24");
+    document.addEventListener("scroll", () => {
       clearTimeout(scrolling);
 
-      debounce(this.element.classList.add('translate-y-24'), 1000);
+      debounce(this.element.classList.add("translate-y-24"), 1000);
 
       scrolling = setTimeout(() => {
-        this.element.classList.remove('translate-y-24');
+        this.element.classList.remove("translate-y-24");
       }, 500);
     });
   }

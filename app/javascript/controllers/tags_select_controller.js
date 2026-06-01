@@ -1,6 +1,6 @@
-import { Controller } from '@hotwired/stimulus';
-import { get } from '@rails/request.js';
-import TomSelect from 'tom-select';
+import { Controller } from "@hotwired/stimulus";
+import { get } from "@rails/request.js";
+import TomSelect from "tom-select";
 
 export default class extends Controller {
   static values = {
@@ -20,9 +20,9 @@ export default class extends Controller {
   }
 
   loadTagOptions(query, callback) {
-    get('/tags?query=' + encodeURIComponent(query), {
-      contentType: 'application/json',
-      responseKind: 'json',
+    get("/tags?query=" + encodeURIComponent(query), {
+      contentType: "application/json",
+      responseKind: "json",
     })
       .then((req) => req.response.json())
       .then((options) =>

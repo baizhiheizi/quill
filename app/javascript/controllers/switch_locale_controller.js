@@ -1,8 +1,8 @@
-import { Controller } from '@hotwired/stimulus';
-import { post } from '@rails/request.js';
+import { Controller } from "@hotwired/stimulus";
+import { post } from "@rails/request.js";
 
 export default class extends Controller {
-  static targets = ['lightButton', 'darkButton'];
+  static targets = ["lightButton", "darkButton"];
 
   connect() {}
 
@@ -10,7 +10,7 @@ export default class extends Controller {
     event.preventDefault();
 
     const { locale } = event.params;
-    post('/locales', {
+    post("/locales", {
       body: {
         locale,
       },

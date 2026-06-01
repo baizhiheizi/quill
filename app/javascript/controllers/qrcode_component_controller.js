@@ -1,11 +1,11 @@
-import { Controller } from '@hotwired/stimulus';
-import * as QRCode from 'qrcode';
+import { Controller } from "@hotwired/stimulus";
+import * as QRCode from "qrcode";
 
 export default class extends Controller {
   static values = {
     url: String,
   };
-  static targets = ['placeholder'];
+  static targets = ["placeholder"];
 
   connect() {}
 

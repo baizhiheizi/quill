@@ -1,8 +1,8 @@
-import { Controller } from '@hotwired/stimulus';
-import { get } from '@rails/request.js';
+import { Controller } from "@hotwired/stimulus";
+import { get } from "@rails/request.js";
 
 export default class extends Controller {
-  static targets = ['scrollArea', 'pagination'];
+  static targets = ["scrollArea", "pagination"];
 
   connect() {
     this.createObserver();
@@ -30,12 +30,12 @@ export default class extends Controller {
   }
 
   loadMore() {
-    const next = this.paginationTarget.querySelector('a');
+    const next = this.paginationTarget.querySelector("a");
 
     if (next && next.href) {
       get(next.href, {
-        contentType: 'application/json',
-        responseKind: 'turbo-stream',
+        contentType: "application/json",
+        responseKind: "turbo-stream",
       });
     }
   }

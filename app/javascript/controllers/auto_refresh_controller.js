@@ -1,5 +1,5 @@
-import { Controller } from '@hotwired/stimulus';
-import { get } from '@rails/request.js';
+import { Controller } from "@hotwired/stimulus";
+import { get } from "@rails/request.js";
 
 export default class extends Controller {
   static values = {
@@ -14,7 +14,7 @@ export default class extends Controller {
   refresh() {
     if (this.turboStreamValue) {
       get(location.pathname, {
-        responseKind: 'turbo-stream',
+        responseKind: "turbo-stream",
       });
     } else {
       Turbo.visit(location.pathname);

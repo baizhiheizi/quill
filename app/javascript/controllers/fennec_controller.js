@@ -1,7 +1,7 @@
-import { Controller } from '@hotwired/stimulus';
+import { Controller } from "@hotwired/stimulus";
 
 export default class extends Controller {
-  static targets = ['loginButton'];
+  static targets = ["loginButton"];
 
   connect() {
     this.ext = window.__MIXIN__ && window.__MIXIN__.mixin_ext;

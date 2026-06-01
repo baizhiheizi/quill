@@ -1,4 +1,4 @@
-import { DirectUpload } from '@rails/activestorage';
+import { DirectUpload } from "@rails/activestorage";
 
 export class Uploader {
   constructor(url, token, name) {

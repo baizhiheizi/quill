@@ -2,169 +2,169 @@
 // Run that command whenever you add a new controller or create them with
 // ./bin/rails generate stimulus controllerName
 
-import { application } from './application';
+import { application } from "./application";
 
-import ArticleFormController from './article_form_controller';
-application.register('article-form', ArticleFormController);
+import ArticleFormController from "./article_form_controller";
+application.register("article-form", ArticleFormController);
 
-import AutoHideController from './auto_hide_controller';
-application.register('auto-hide', AutoHideController);
+import AutoHideController from "./auto_hide_controller";
+application.register("auto-hide", AutoHideController);
 
-import AutoRefreshController from './auto_refresh_controller';
-application.register('auto-refresh', AutoRefreshController);
+import AutoRefreshController from "./auto_refresh_controller";
+application.register("auto-refresh", AutoRefreshController);
 
-import AutosaveController from './autosave_controller';
-application.register('autosave', AutosaveController);
+import AutosaveController from "./autosave_controller";
+application.register("autosave", AutosaveController);
 
-import ClipboardController from './clipboard_controller';
-application.register('clipboard', ClipboardController);
+import ClipboardController from "./clipboard_controller";
+application.register("clipboard", ClipboardController);
 
-import CollectionsFormComponentController from './collections_form_component_controller';
+import CollectionsFormComponentController from "./collections_form_component_controller";
 application.register(
-  'collections-form-component',
+  "collections-form-component",
   CollectionsFormComponentController,
 );
 
-import CommentFormController from './comment_form_controller';
-application.register('comment-form', CommentFormController);
+import CommentFormController from "./comment_form_controller";
+application.register("comment-form", CommentFormController);
 
-import DarkmodeController from './darkmode_controller';
-application.register('darkmode', DarkmodeController);
+import DarkmodeController from "./darkmode_controller";
+application.register("darkmode", DarkmodeController);
 
-import FlyonuiDropdownController from './flyonui_dropdown_controller';
-application.register('flyonui-dropdown', FlyonuiDropdownController);
+import FlyonuiDropdownController from "./flyonui_dropdown_controller";
+application.register("flyonui-dropdown", FlyonuiDropdownController);
 
-import DropdownController from './dropdown_controller';
-application.register('dropdown', DropdownController);
+import DropdownController from "./dropdown_controller";
+application.register("dropdown", DropdownController);
 
-import EthWalletController from './eth_wallet_controller';
-application.register('eth-wallet', EthWalletController);
+import EthWalletController from "./eth_wallet_controller";
+application.register("eth-wallet", EthWalletController);
 
-import FennecController from './fennec_controller';
-application.register('fennec', FennecController);
+import FennecController from "./fennec_controller";
+application.register("fennec", FennecController);
 
-import FlashController from './flash_controller';
-application.register('flash', FlashController);
+import FlashController from "./flash_controller";
+application.register("flash", FlashController);
 
-import FloatingController from './floating_controller';
-application.register('floating', FloatingController);
+import FloatingController from "./floating_controller";
+application.register("floating", FloatingController);
 
-import HljsController from './hljs_controller';
-application.register('hljs', HljsController);
+import HljsController from "./hljs_controller";
+application.register("hljs", HljsController);
 
-import InfiniteScrollController from './infinite_scroll_controller';
-application.register('infinite-scroll', InfiniteScrollController);
+import InfiniteScrollController from "./infinite_scroll_controller";
+application.register("infinite-scroll", InfiniteScrollController);
 
-import LoadMoreController from './load_more_controller';
-application.register('load-more', LoadMoreController);
+import LoadMoreController from "./load_more_controller";
+application.register("load-more", LoadMoreController);
 
-import LoginController from './login_controller';
-application.register('login', LoginController);
+import LoginController from "./login_controller";
+application.register("login", LoginController);
 
-import FlyonuiModalController from './flyonui_modal_controller';
-application.register('modal-component', FlyonuiModalController);
+import FlyonuiModalController from "./flyonui_modal_controller";
+application.register("modal-component", FlyonuiModalController);
 
-import ModalController from './modal_controller';
-application.register('modal', ModalController);
+import ModalController from "./modal_controller";
+application.register("modal", ModalController);
 
-import MvmDepositController from './mvm_deposit_controller';
-application.register('mvm-deposit', MvmDepositController);
+import MvmDepositController from "./mvm_deposit_controller";
+application.register("mvm-deposit", MvmDepositController);
 
-import MvmPayButtonComponentController from './mvm_pay_button_component_controller';
+import MvmPayButtonComponentController from "./mvm_pay_button_component_controller";
 application.register(
-  'mvm-pay-button-component',
+  "mvm-pay-button-component",
   MvmPayButtonComponentController,
 );
 
-import NestedFormController from './nested_form_controller';
-application.register('nested-form', NestedFormController);
+import NestedFormController from "./nested_form_controller";
+application.register("nested-form", NestedFormController);
 
-import PhotoswipeController from './photoswipe_controller';
-application.register('photoswipe', PhotoswipeController);
+import PhotoswipeController from "./photoswipe_controller";
+application.register("photoswipe", PhotoswipeController);
 
-import PreOrdersFormComponentController from './pre_orders_form_component_controller';
+import PreOrdersFormComponentController from "./pre_orders_form_component_controller";
 application.register(
-  'pre-orders-form-component',
+  "pre-orders-form-component",
   PreOrdersFormComponentController,
 );
 
-import PreOrdersMixpayButtonComponentController from './pre_orders_mixpay_button_component_controller';
+import PreOrdersMixpayButtonComponentController from "./pre_orders_mixpay_button_component_controller";
 application.register(
-  'pre-orders-mixpay-button-component',
+  "pre-orders-mixpay-button-component",
   PreOrdersMixpayButtonComponentController,
 );
 
-import PreOrdersPayButtonComponentController from './pre_orders_pay_button_component_controller';
+import PreOrdersPayButtonComponentController from "./pre_orders_pay_button_component_controller";
 application.register(
-  'pre-orders-pay-button-component',
+  "pre-orders-pay-button-component",
   PreOrdersPayButtonComponentController,
 );
 
-import PreOrdersPaymentComponentController from './pre_orders_payment_component_controller';
+import PreOrdersPaymentComponentController from "./pre_orders_payment_component_controller";
 application.register(
-  'pre-orders-payment-component',
+  "pre-orders-payment-component",
   PreOrdersPaymentComponentController,
 );
 
-import PreOrdersStateComponentController from './pre_orders_state_component_controller';
+import PreOrdersStateComponentController from "./pre_orders_state_component_controller";
 application.register(
-  'pre-orders-state-component',
+  "pre-orders-state-component",
   PreOrdersStateComponentController,
 );
 
-import PrefetchController from './prefetch_controller';
-application.register('prefetch', PrefetchController);
+import PrefetchController from "./prefetch_controller";
+application.register("prefetch", PrefetchController);
 
-import PreviewUploadController from './preview_upload_controller';
-application.register('preview-upload', PreviewUploadController);
+import PreviewUploadController from "./preview_upload_controller";
+application.register("preview-upload", PreviewUploadController);
 
-import QrcodeComponentController from './qrcode_component_controller';
-application.register('qrcode-component', QrcodeComponentController);
+import QrcodeComponentController from "./qrcode_component_controller";
+application.register("qrcode-component", QrcodeComponentController);
 
-import ReferencesSelectController from './references_select_controller';
-application.register('references-select', ReferencesSelectController);
+import ReferencesSelectController from "./references_select_controller";
+application.register("references-select", ReferencesSelectController);
 
-import ReloadController from './reload_controller';
-application.register('reload', ReloadController);
+import ReloadController from "./reload_controller";
+application.register("reload", ReloadController);
 
-import ScrollToController from './scroll_to_controller';
-application.register('scroll-to', ScrollToController);
+import ScrollToController from "./scroll_to_controller";
+application.register("scroll-to", ScrollToController);
 
-import SearchController from './search_controller';
-application.register('search', SearchController);
+import SearchController from "./search_controller";
+application.register("search", SearchController);
 
-import SelectCurrencyController from './select_currency_controller';
-application.register('select-currency', SelectCurrencyController);
+import SelectCurrencyController from "./select_currency_controller";
+application.register("select-currency", SelectCurrencyController);
 
-import SelectMenuController from './select_menu_controller';
-application.register('select-menu', SelectMenuController);
+import SelectMenuController from "./select_menu_controller";
+application.register("select-menu", SelectMenuController);
 
-import SessionController from './session_controller';
-application.register('session', SessionController);
+import SessionController from "./session_controller";
+application.register("session", SessionController);
 
-import SyntaxHighlightController from './syntax_highlight_controller';
-application.register('syntax-highlight', SyntaxHighlightController);
+import SyntaxHighlightController from "./syntax_highlight_controller";
+application.register("syntax-highlight", SyntaxHighlightController);
 
-import SidebarController from './sidebar_controller';
-application.register('sidebar', SidebarController);
+import SidebarController from "./sidebar_controller";
+application.register("sidebar", SidebarController);
 
-import SwitchLocaleController from './switch_locale_controller';
-application.register('switch-locale', SwitchLocaleController);
+import SwitchLocaleController from "./switch_locale_controller";
+application.register("switch-locale", SwitchLocaleController);
 
-import TabsController from './tabs_controller';
-application.register('tabs', TabsController);
+import TabsController from "./tabs_controller";
+application.register("tabs", TabsController);
 
-import TagsSelectController from './tags_select_controller';
-application.register('tags-select', TagsSelectController);
+import TagsSelectController from "./tags_select_controller";
+application.register("tags-select", TagsSelectController);
 
-import TextareaAutogrowController from './textarea_autogrow_controller';
-application.register('textarea-autogrow', TextareaAutogrowController);
+import TextareaAutogrowController from "./textarea_autogrow_controller";
+application.register("textarea-autogrow", TextareaAutogrowController);
 
-import TimeFormatComponentController from './time_format_component_controller';
-application.register('time-format-component', TimeFormatComponentController);
+import TimeFormatComponentController from "./time_format_component_controller";
+application.register("time-format-component", TimeFormatComponentController);
 
-import ToastController from './toast_controller';
-application.register('toast', ToastController);
+import ToastController from "./toast_controller";
+application.register("toast", ToastController);
 
-import TurboController from './turbo_controller';
-application.register('turbo', TurboController);
+import TurboController from "./turbo_controller";
+application.register("turbo", TurboController);

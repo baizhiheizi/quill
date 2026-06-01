@@ -1,4 +1,4 @@
-import { Controller } from '@hotwired/stimulus';
+import { Controller } from "@hotwired/stimulus";
 
 export default class extends Controller {
   static values = {
@@ -12,20 +12,20 @@ export default class extends Controller {
   };
 
   static targets = [
-    'type',
-    'typeInput',
-    'amountInput',
-    'amountOption',
-    'amountTag',
-    'amountUsdTag',
-    'mvmTips',
-    'mixpayUrl',
+    "type",
+    "typeInput",
+    "amountInput",
+    "amountOption",
+    "amountTag",
+    "amountUsdTag",
+    "mvmTips",
+    "mixpayUrl",
   ];
 
   amountValueChanged() {
     if (this.hasMixpayUrlTarget) {
       const link = new URL(this.mixpayUrlTarget.href);
-      link.searchParams.set('amount', this.amountValue);
+      link.searchParams.set("amount", this.amountValue);
       this.mixpayUrlTarget.href = link;
     }
     this.amountInputTargets.forEach((target) => {
@@ -42,11 +42,11 @@ export default class extends Controller {
     this.amountOptionTargets.forEach((target) => {
       const amount = target.dataset.preOrdersFormComponentAmountParam;
       if (amount == this.amountValue) {
-        target.classList.add('border-2', '!border-primary');
-        target.querySelector('.checkmark').classList.remove('hidden');
+        target.classList.add("border-2", "!border-primary");
+        target.querySelector(".checkmark").classList.remove("hidden");
       } else {
-        target.classList.remove('border-2', '!border-primary');
-        target.querySelector('.checkmark').classList.add('hidden');
+        target.classList.remove("border-2", "!border-primary");
+        target.querySelector(".checkmark").classList.add("hidden");
       }
     });
   }

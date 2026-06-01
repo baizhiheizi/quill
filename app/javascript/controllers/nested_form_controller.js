@@ -1,11 +1,11 @@
-import { Controller } from '@hotwired/stimulus';
+import { Controller } from "@hotwired/stimulus";
 
 export default class extends Controller {
-  static targets = ['target', 'template'];
+  static targets = ["target", "template"];
   static values = {
     wrapperSelector: {
       type: String,
-      default: '.nested-form-wrapper',
+      default: ".nested-form-wrapper",
     },
   };
 
@@ -16,7 +16,7 @@ export default class extends Controller {
       /NEW_RECORD/g,
       new Date().getTime().toString(),
     );
-    this.targetTarget.insertAdjacentHTML('beforebegin', content);
+    this.targetTarget.insertAdjacentHTML("beforebegin", content);
   }
 
   remove(e) {
@@ -24,13 +24,13 @@ export default class extends Controller {
 
     const wrapper = e.target.closest(this.wrapperSelectorValue);
 
-    if (wrapper.dataset.newRecord === 'true') {
+    if (wrapper.dataset.newRecord === "true") {
       wrapper.remove();
     } else {
-      wrapper.style.display = 'none';
+      wrapper.style.display = "none";
 
       const input = wrapper.querySelector("input[name*='_destroy']");
-      input.value = '1';
+      input.value = "1";
     }
   }
 }

@@ -1,6 +1,6 @@
-import { Controller } from '@hotwired/stimulus';
-import { get } from '@rails/request.js';
-import { hideLoading, showLoading } from '../utils';
+import { Controller } from "@hotwired/stimulus";
+import { get } from "@rails/request.js";
+import { hideLoading, showLoading } from "../utils";
 
 export default class extends Controller {
   static values = {
@@ -11,18 +11,18 @@ export default class extends Controller {
   };
 
   static targets = [
-    'selectCurrencyButton',
-    'currencyIcon',
-    'currencyChainIcon',
-    'currencySymbol',
-    'state',
-    'otherPayments',
+    "selectCurrencyButton",
+    "currencyIcon",
+    "currencyChainIcon",
+    "currencySymbol",
+    "state",
+    "otherPayments",
   ];
 
   connect() {
     document
-      .querySelector('#modal')
-      .addEventListener('modal-component:ok', (event) => {
+      .querySelector("#modal")
+      .addEventListener("modal-component:ok", (event) => {
         const identifier = event.detail.identifier;
 
         if (identifier === this.identifierValue) {
@@ -45,18 +45,18 @@ export default class extends Controller {
     get(
       `/pre_orders/${this.followIdValue}?pay_asset_id=${this.payAssetIdValue}`,
       {
-        contentType: 'application/json',
-        responseKind: 'turbo-stream',
+        contentType: "application/json",
+        responseKind: "turbo-stream",
       },
     ).then(() => hideLoading());
   }
 
   pay() {
-    if (this.hasStateTarget && this.typeValue !== 'MVMPreOrder') {
-      this.stateTarget.classList.remove('hidden');
+    if (this.hasStateTarget && this.typeValue !== "MVMPreOrder") {
+      this.stateTarget.classList.remove("hidden");
     }
     if (this.hasOtherPaymentsTarget) {
-      this.otherPaymentsTarget.classList.add('hidden');
+      this.otherPaymentsTarget.classList.add("hidden");
     }
   }
 }

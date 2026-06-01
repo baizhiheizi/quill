@@ -1,6 +1,6 @@
-import { Controller } from '@hotwired/stimulus';
-import { get } from '@rails/request.js';
-import { NativeAssetId } from '../mvm/constants';
+import { Controller } from "@hotwired/stimulus";
+import { get } from "@rails/request.js";
+import { NativeAssetId } from "../mvm/constants";
 
 export default class extends Controller {
   static values = {
@@ -11,17 +11,17 @@ export default class extends Controller {
   };
 
   static targets = [
-    'qrcode',
-    'currencyIcon',
-    'currencyChainIcon',
-    'currencySymbol',
-    'addTokenButton',
+    "qrcode",
+    "currencyIcon",
+    "currencyChainIcon",
+    "currencySymbol",
+    "addTokenButton",
   ];
 
   async connect() {
     document
-      .querySelector('#modal')
-      .addEventListener('modal-component:ok', (event) => {
+      .querySelector("#modal")
+      .addEventListener("modal-component:ok", (event) => {
         const identifier = event.detail.identifier;
 
         if (identifier === this.identifierValue) {
@@ -51,8 +51,8 @@ export default class extends Controller {
   selectCurrency(event) {
     const asset_id = event.target.value;
     get(`/dashboard/destination?asset_id=${asset_id}`, {
-      contentType: 'application/json',
-      responseKind: 'turbo-stream',
+      contentType: "application/json",
+      responseKind: "turbo-stream",
     });
   }
 
@@ -66,16 +66,16 @@ export default class extends Controller {
       window.ethereum.isMetaMask &&
       this.assetIdValue !== NativeAssetId
     ) {
-      this.addTokenButtonTarget.classList.remove('hidden');
+      this.addTokenButtonTarget.classList.remove("hidden");
     } else {
-      this.addTokenButtonTarget.classList.add('hidden');
+      this.addTokenButtonTarget.classList.add("hidden");
     }
   }
 
   fetchDesination() {
     get(`/dashboard/destination?asset_id=${this.assetIdValue}`, {
-      contentType: 'application/json',
-      responseKind: 'turbo-stream',
+      contentType: "application/json",
+      responseKind: "turbo-stream",
     });
   }
 }

@@ -1,8 +1,8 @@
-import { Controller } from '@hotwired/stimulus';
-import { debounce } from 'underscore';
+import { Controller } from "@hotwired/stimulus";
+import { debounce } from "underscore";
 
 export default class extends Controller {
-  static targets = ['form'];
+  static targets = ["form"];
   static values = {
     delay: Number,
   };

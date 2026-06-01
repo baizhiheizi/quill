@@ -1,6 +1,6 @@
-import { Controller } from '@hotwired/stimulus';
-import { get } from '@rails/request.js';
-import TomSelect from 'tom-select';
+import { Controller } from "@hotwired/stimulus";
+import { get } from "@rails/request.js";
+import TomSelect from "tom-select";
 
 export default class extends Controller {
   static values = {
@@ -12,9 +12,9 @@ export default class extends Controller {
     this.select = new TomSelect(this.element, {
       items: this.itemsValue,
       options: this.optionsValue,
-      valueField: 'id',
-      labelField: 'title',
-      searchField: 'title',
+      valueField: "id",
+      labelField: "title",
+      searchField: "title",
       load: (query, callback) => this.loadReferenceOptions(query, callback),
       maxItems: 1,
       render: {
@@ -37,9 +37,9 @@ export default class extends Controller {
   }
 
   loadReferenceOptions(query, callback) {
-    get('/article_references?query=' + encodeURIComponent(query), {
-      contentType: 'application/json',
-      responseKind: 'json',
+    get("/article_references?query=" + encodeURIComponent(query), {
+      contentType: "application/json",
+      responseKind: "json",
     })
       .then((req) => req.response.json())
       .then((options) => callback(options))
