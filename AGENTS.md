@@ -153,6 +153,10 @@ bin/rails db:migrate
 
 Re-run `annotaterb` in development if model annotations are stale.
 
+### Testing improvements (local Cursor)
+
+Run `/test-assist <instructions>` for focused test work, or `/test-improver` for the full round-robin workflow. State persists in `.cursor/test-improver/memory.md`; see `.cursor/skills/test-improver/SKILL.md`. Requires `gh auth login` for draft PRs and the monthly activity issue.
+
 ## Gotchas
 
 - **Launch gate**: `ApplicationController#ensure_launched!` redirects to landing until `Settings.launch_time` passes (unless user is `accessable?`)
