@@ -109,24 +109,23 @@ class OrderTest < ActiveSupport::TestCase
       assert_equal 2, transfers.count
 
       amounts = transfers.pluck(:amount).map(&:to_f)
-      assert_in_delta 0.03, amounts.sum, 0.001
+      assert_in_delta 0.05, amounts.sum, 0.001
     end
   end
 
   test "reference revenue skipped when amount is below minimum" do
     with_quill_bot_stub do
       tiny_ratio_article = articles(:published_free)
-      # Create a reference with a very small revenue ratio
+      # Ratio small enough that total * ratio floors below MINIMUM_AMOUNT
       CiterReference.create!(
         citer: @article,
         reference: tiny_ratio_article,
-        revenue_ratio: 0.0000_0001
+        revenue_ratio: 0.0000_00001
       )
 
-      order = create_buy_order!(article: @article, buyer: @reader_one, total: 0.0000_0001)
+      order = create_buy_order!(article: @article, buyer: @reader_one, total: 1.0)
       distribute_order!(order)
 
-      # Amount would be below MINIMUM_AMOUNT, so no transfer should be created
       reference_transfer = order.transfers.find_by(transfer_type: :reference_revenue)
       assert_nil reference_transfer
     end

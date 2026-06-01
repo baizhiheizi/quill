@@ -49,7 +49,7 @@ class CiterReferenceTest < ActiveSupport::TestCase
 
     duplicate = CiterReference.new(citer: citer, reference: reference, revenue_ratio: 0.10)
     assert_not duplicate.valid?
-    assert_includes duplicate.errors[:reference_id], "already been taken"
+    assert_includes duplicate.errors[:reference_id], "has already been taken"
   end
 
   test "same citer cannot reference same article with different revenue_ratio if unique constraint is scope-based" do
@@ -64,13 +64,13 @@ class CiterReferenceTest < ActiveSupport::TestCase
     assert_not second_reference.valid?
   end
 
-  test "revenue_ratio is required" do
+  test "revenue_ratio cannot be nil" do
     citer = articles(:published_paid)
     reference = articles(:published_free)
 
-    reference_record = CiterReference.new(citer: citer, reference: reference, revenue_ratio: nil)
-    assert_not reference_record.valid?
-    assert_includes reference_record.errors[:revenue_ratio], "can't be blank"
+    assert_raises(ActiveRecord::NotNullViolation) do
+      CiterReference.create!(citer: citer, reference: reference, revenue_ratio: nil)
+    end
   end
 
   test "citer_type and reference_type are set automatically from polymorphic association" do
