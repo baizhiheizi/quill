@@ -70,4 +70,18 @@ class ArticleTest < ActiveSupport::TestCase
 
     assert_nil article.partial_content
   end
+
+  test "random_readers returns at most limit distinct readers" do
+    article = articles(:published_paid)
+    buyer = users(:reader_one)
+
+    with_quill_bot_stub do
+      create_buy_order!(article: article, buyer: buyer)
+    end
+
+    readers = article.random_readers(1)
+
+    assert_equal 1, readers.size
+    assert_equal buyer, readers.first
+  end
 end
