@@ -32,7 +32,7 @@ runs-on-slim: "self-hosted"
 
 imports:
   - shared/runtime.md
-  - shared/engine-glm.md
+  - shared/engine-minimax.md
 
 if: needs.pre_activation.outputs.check_result == 'success'
 
