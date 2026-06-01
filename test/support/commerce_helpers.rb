@@ -22,21 +22,50 @@ module CommerceHelpers
     originals&.each { |klass, method| klass.define_singleton_method(:with, method) }
   end
 
-  def build_payment_memo(type:, article: nil, collection: nil, follow_id: nil)
+  def build_payment_memo(type:, article: nil, collection: nil, citer: nil, follow_id: nil)
     payload = { "t" => type }
     payload["a"] = article.uuid if article
+    payload["c"] = citer.uuid if citer
     payload["l"] = collection.uuid if collection
     payload["f"] = follow_id if follow_id
     Base64.encode64(payload.to_json)
   end
 
-  def create_payment!(payer:, article: nil, collection: nil, order_type: "BUY", amount: nil, asset_id: nil, follow_id: nil)
+  def create_payment_from_memo!(memo:, payer:, amount:, asset_id:)
+    trace_id = SecureRandom.uuid
+    snapshot_id = SecureRandom.uuid
+
+    raw = {
+      "amount" => amount.to_s,
+      "asset_id" => asset_id,
+      "memo" => memo,
+      "opponent_id" => payer.mixin_uuid,
+      "snapshot_id" => snapshot_id,
+      "trace_id" => trace_id,
+      "data" => memo
+    }
+
+    stub_notifications! do
+      with_quill_bot_stub do
+        Payment.create!(
+          amount: amount,
+          raw: raw,
+          asset_id: asset_id,
+          snapshot_id: snapshot_id,
+          trace_id: trace_id,
+          payer: payer
+        )
+      end
+    end
+  end
+
+  def create_payment!(payer:, article: nil, collection: nil, order_type: "BUY", amount: nil, asset_id: nil, follow_id: nil, citer: nil)
     item = article || collection
     amount ||= item.price
     asset_id ||= item.asset_id
     trace_id = SecureRandom.uuid
     snapshot_id = SecureRandom.uuid
-    memo = build_payment_memo(type: order_type, article: article, collection: collection, follow_id: follow_id)
+    memo = build_payment_memo(type: order_type, article: article, collection: collection, citer: citer, follow_id: follow_id)
 
     raw = {
       "amount" => amount.to_s,
