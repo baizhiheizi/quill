@@ -229,7 +229,9 @@ class Article < ApplicationRecord
   end
 
   def random_readers(limit = 24)
-    readers.where(id: readers.ids.sample(limit))
+    sampled_buyer_ids = orders.select(:buyer_id).group(:buyer_id).order(Arel.sql("RANDOM()")).limit(limit)
+
+    User.where(id: sampled_buyer_ids)
   end
 
   def touch_published_at
