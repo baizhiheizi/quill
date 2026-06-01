@@ -75,4 +75,100 @@ class OrderTest < ActiveSupport::TestCase
       assert order.all_transfers_generated?
     end
   end
+
+  test "article with reference distributes reference revenue" do
+    with_quill_bot_stub do
+      referenced_article = articles(:published_free)
+      CiterReference.create!(
+        citer: @article,
+        reference: referenced_article,
+        revenue_ratio: 0.05
+      )
+
+      order = create_buy_order!(article: @article, buyer: @reader_one, total: 1.0)
+      distribute_order!(order)
+
+      reference_transfer = order.transfers.find_by(transfer_type: :reference_revenue)
+      assert reference_transfer, "Reference revenue transfer should exist"
+      assert_in_delta 0.05, reference_transfer.amount.to_f, 0.001
+    end
+  end
+
+  test "article with multiple references distributes revenue proportionally" do
+    with_quill_bot_stub do
+      ref1 = articles(:published_free)
+      ref2 = articles(:high_revenue)
+
+      CiterReference.create!(citer: @article, reference: ref1, revenue_ratio: 0.03)
+      CiterReference.create!(citer: @article, reference: ref2, revenue_ratio: 0.02)
+
+      order = create_buy_order!(article: @article, buyer: @reader_one, total: 1.0)
+      distribute_order!(order)
+
+      transfers = order.transfers.where(transfer_type: :reference_revenue)
+      assert_equal 2, transfers.count
+
+      amounts = transfers.pluck(:amount).map(&:to_f)
+      assert_in_delta 0.05, amounts.sum, 0.001
+    end
+  end
+
+  test "reference revenue skipped when amount is below minimum" do
+    with_quill_bot_stub do
+      tiny_ratio_article = articles(:published_free)
+      # Ratio small enough that total * ratio floors below MINIMUM_AMOUNT
+      CiterReference.create!(
+        citer: @article,
+        reference: tiny_ratio_article,
+        revenue_ratio: 0.0000_00001
+      )
+
+      order = create_buy_order!(article: @article, buyer: @reader_one, total: 1.0)
+      distribute_order!(order)
+
+      reference_transfer = order.transfers.find_by(transfer_type: :reference_revenue)
+      assert_nil reference_transfer
+    end
+  end
+
+  test "author revenue is reduced by reference and collection amounts" do
+    with_quill_bot_stub do
+      referenced_article = articles(:published_free)
+      CiterReference.create!(
+        citer: @article,
+        reference: referenced_article,
+        revenue_ratio: 0.10
+      )
+
+      order = create_buy_order!(article: @article, buyer: @reader_one, total: 1.0)
+      distribute_order!(order)
+
+      author_transfer = order.transfers.find_by(transfer_type: :author_revenue)
+      assert author_transfer, "Author revenue transfer should exist"
+
+      # Author revenue should be: total - quill - readers - references
+      # 1.0 - 0.1 (quill) - 0 (first buyer, no early readers) - 0.10 (reference) = 0.80
+      assert_in_delta 0.80, author_transfer.amount.to_f, 0.001
+    end
+  end
+
+  test "distribution is idempotent with references" do
+    with_quill_bot_stub do
+      referenced_article = articles(:published_free)
+      CiterReference.create!(
+        citer: @article,
+        reference: referenced_article,
+        revenue_ratio: 0.05
+      )
+
+      order = create_buy_order!(article: @article, buyer: @reader_one, total: 1.0)
+      distribute_order!(order)
+      first_count = order.transfers.count
+
+      distribute_order!(order)
+      second_count = order.transfers.count
+
+      assert_equal first_count, second_count, "Distribution should be idempotent"
+    end
+  end
 end

@@ -13,6 +13,28 @@ article_wallet:
   created_at: <%= 2.days.ago %>
   updated_at: <%= 2.days.ago %>
 
+free_article_wallet:
+  uuid: e6666666-6666-4666-8666-666666666666
+  name: Free Article Wallet
+  pin_token: test-pin-token
+  private_key: test-private-key
+  session_id: f9999999-9999-4999-8999-999999999999
+  owner: published_free (Article)
+  pin: "123456"
+  created_at: <%= 2.days.ago %>
+  updated_at: <%= 2.days.ago %>
+
+high_revenue_wallet:
+  uuid: e7777777-7777-4777-8777-777777777777
+  name: High Revenue Article Wallet
+  pin_token: test-pin-token
+  private_key: test-private-key
+  session_id: faaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa
+  owner: high_revenue (Article)
+  pin: "123456"
+  created_at: <%= 2.days.ago %>
+  updated_at: <%= 2.days.ago %>
+
 quill_wallet:
   uuid: d4444444-4444-4444-8444-444444444444
   name: Quill Bot Wallet
