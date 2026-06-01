@@ -185,7 +185,7 @@ end
 
 group :test do
   # Rails 7.1 test runner is incompatible with minitest 6 (pulled in on Ruby 4)
-  gem "minitest", "~> 5.25"
+  gem "minitest", "~> 6.0"
 
   # Adds support for Capybara system testing and selenium driver
   gem "capybara", ">= 2.15"

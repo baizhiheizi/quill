@@ -358,7 +358,9 @@ GEM
     mini_portile2 (2.8.9)
     mini_racer (0.21.0)
       libv8-node (~> 24.12.0.1)
-    minitest (5.27.0)
+    minitest (6.0.6)
+      drb (~> 2.0)
+      prism (~> 1.5)
     mission_control-jobs (1.1.0)
       actioncable (>= 7.1)
       actionpack (>= 7.1)
@@ -682,7 +684,7 @@ DEPENDENCIES
   listen (~> 3.10)
   mailjet
   mini_racer
-  minitest (~> 5.25)
+  minitest (~> 6.0)
   mission_control-jobs
   mixin_bot (~> 2.0)
   mutex_m
