@@ -157,7 +157,7 @@ class Payment < ApplicationRecord
   def generate_article_order!
     return if article.blank?
 
-    raise ActiveRecord::RecordInvalid, "blocked by author" if article.author.block_user?(payer)
+    raise ActiveRecord::RecordInvalid.new(self), "blocked by author" if article.author.block_user?(payer)
 
     if decoded_memo["s"] == "4swapRefund"
       generate_refund_transfer!
@@ -173,7 +173,7 @@ class Payment < ApplicationRecord
   def generate_collection_order!
     return if collection.blank?
 
-    raise ActiveRecord::RecordInvalid, "blocked by author" if collection.author.block_user?(payer)
+    raise ActiveRecord::RecordInvalid.new(self), "blocked by author" if collection.author.block_user?(payer)
 
     if decoded_memo["s"] == "4swapRefund"
       generate_refund_transfer!

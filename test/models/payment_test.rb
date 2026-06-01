@@ -51,6 +51,77 @@ class PaymentTest < ActiveSupport::TestCase
     end
   end
 
+  test "memo_correct? rejects memos without article or collection id" do
+    payload = Base64.encode64({ "t" => "BUY" }.to_json)
+    payment = Payment.new(memo: payload)
+
+    refute payment.memo_correct?
+  end
+
+  test "memo_correct? rejects unknown transaction types" do
+    memo = build_payment_memo(type: "SWAP", article: @article)
+    payment = Payment.new(memo: memo)
+
+    refute payment.memo_correct?
+  end
+
+  test "CITE payment creates cite_article order with citer" do
+    citer = articles(:high_revenue)
+
+    with_quill_bot_stub do
+      memo = build_payment_memo(type: "CITE", article: @article, citer: citer)
+      payment = create_payment_from_memo!(
+        memo: memo,
+        payer: citer.author,
+        amount: @article.price,
+        asset_id: @article.asset_id
+      )
+
+      assert payment.completed?
+      assert_equal "cite_article", payment.order.order_type
+      assert_equal citer, payment.order.citer
+      assert_equal citer.author, payment.payer
+    end
+  end
+
+  test "collection BUY payment creates buy_collection order" do
+    collection = Collection.create!(
+      uuid: SecureRandom.uuid,
+      name: "Payment Test Collection",
+      symbol: "PTC",
+      description: "Collection for payment tests",
+      author: users(:author),
+      asset_id: Currency::BTC_ASSET_ID,
+      price: 0.001,
+      revenue_ratio: 0.1,
+      state: "listed"
+    )
+
+    with_quill_bot_stub do
+      payment = create_payment!(
+        payer: @payer,
+        collection: collection,
+        order_type: "BUY",
+        amount: collection.price
+      )
+
+      assert payment.completed?
+      assert_equal "buy_collection", payment.order.order_type
+      assert_equal collection, payment.order.item
+    end
+  end
+
+  test "blocked buyer payment triggers refund instead of order" do
+    @article.author.block_user(@payer)
+
+    with_quill_bot_stub do
+      payment = create_payment!(payer: @payer, article: @article, order_type: "BUY", amount: @article.price)
+
+      assert_nil payment.order
+      assert payment.refund_transfer.present?
+    end
+  end
+
   test "invalid memo does not create order" do
     with_quill_bot_stub do
       payment = nil
