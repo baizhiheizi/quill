@@ -50,7 +50,7 @@ gem "pando_bot"
 gem "aws-sdk-s3", require: false
 
 # Use Active Storage variant
-gem "image_processing", "~> 1.2"
+gem "image_processing", "~> 2.0"
 
 # Modern rich text editor for Action Text
 gem "lexxy", "~> 0.1.26.beta"
