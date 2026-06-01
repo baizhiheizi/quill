@@ -8,6 +8,7 @@ runtimes:
 env:
   DATABASE_HOST: host.docker.internal
   REDIS_URL: redis://host.docker.internal:6379/0
+  RAILS_ENV: test
 
 services:
   postgres:
