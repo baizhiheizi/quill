@@ -23,13 +23,16 @@
 #
 
 one:
+  author: author
+  commentable: published_paid (Article)
+  legacy_markdown_content: "This is a test comment"
   created_at: <%= 1.day.ago %>
   updated_at: <%= 1.day.ago %>
 
-# column: value
-#
 two:
+  author: reader_two
+  commentable: published_paid (Article)
+  legacy_markdown_content: "This is another test comment"
+  quote_comment: one
   created_at: <%= 1.day.ago %>
   updated_at: <%= 1.day.ago %>
-
-# column: value
