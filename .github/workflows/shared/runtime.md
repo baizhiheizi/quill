@@ -3,7 +3,7 @@ runtimes:
   ruby:
     version: "4.0.5"
     action-repo: "ruby/setup-ruby"
-    action-version: "v1"
+    action-version: "v1.310.0"
   bun:
     version: "1.3.14"
 
