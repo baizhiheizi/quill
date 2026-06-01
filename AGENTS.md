@@ -155,11 +155,11 @@ Re-run `annotaterb` in development if model annotations are stale.
 
 ### Testing improvements (local Cursor)
 
-Run `/test-assist <instructions>` for focused test work, or `/test-improver` for the full round-robin workflow. State persists in `.cursor/test-improver/memory.md`; see `.cursor/skills/test-improver/SKILL.md`. Requires `gh auth login` for draft PRs and the monthly activity issue.
+Run `/test-assist <instructions>` for focused test work. For a full run, `/test-improver` is self-contained: clean worktree, dedicated branch, round-robin tasks, memory committed in the run draft PR, monthly issue update, then return to your starting branch. State in `.cursor/test-improver/memory.md`; see `.cursor/skills/test-improver/SKILL.md`. Requires `gh auth login`.
 
 ### Performance improvements (local Cursor)
 
-Run `/perf-assist <instructions>` for focused perf work, or `/perf-improver` for the full round-robin workflow. State persists in `.cursor/perf-improver/memory.md`; see `.cursor/skills/perf-improver/SKILL.md`. Requires `gh auth login` for draft PRs and the monthly activity issue.
+Run `/perf-assist <instructions>` for focused perf work. For a full run, `/perf-improver` is self-contained: clean worktree, dedicated branch, round-robin tasks, memory committed in the run draft PR, monthly issue update, then return to your starting branch. State in `.cursor/perf-improver/memory.md`; see `.cursor/skills/perf-improver/SKILL.md`. Requires `gh auth login`.
 
 ## Gotchas
 

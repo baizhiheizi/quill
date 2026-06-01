@@ -22,10 +22,12 @@ Do not proceed without clear instructions unless the user answers.
 3. Follow **Command Mode** in [.cursor/skills/perf-improver/SKILL.md](.cursor/skills/perf-improver/SKILL.md) using the user's instructions.
 4. Apply skill **Guidelines**: measure before/after, run `bin/rubocop` / `bun run lint-check` / tests when changing code, 🤖 disclosure on any `gh` comment or PR.
 5. Use `gh` for draft PRs/issues only when the user's task requires it (title prefix `[perf-improver]`).
-6. **Stop** when instructions are done — do not run Non-Command Mode round-robin or Task 7 unless the user asked for them.
+6. **Memory and PRs:** If you create or update a PR, commit [.cursor/perf-improver/memory.md](.cursor/perf-improver/memory.md) in that same PR. If you only investigate and do not open a PR, you may update memory locally and tell the user it is uncommitted unless they ask to commit it.
+7. **Stop** when instructions are done — do not run Non-Command Mode round-robin, full self-contained lifecycle, or Task 7 unless the user asked for them.
 
 ## Guardrails
 
 - No secrets in commits or memory.
 - Do not edit protected manifest files (see skill) without explicit user approval.
 - Do not fall through to `/perf-improver` workflow in the same run.
+- Do not leave unrelated dirty files; report `git status` if the worktree is not clean when done.

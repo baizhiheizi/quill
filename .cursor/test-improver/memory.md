@@ -2,6 +2,8 @@
 
 > Persistent state for local `/test-assist` and `/test-improver` runs.
 > Do not store secrets. Verify against `gh` and the repo before acting on stale entries.
+>
+> **Full `/test-improver` runs:** memory updates must be committed on the run branch and included in the draft PR for that run (including memory-only runs).
 
 ## build/test/coverage commands
 

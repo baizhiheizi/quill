@@ -67,13 +67,29 @@ gh issue edit <number> --body-file /tmp/activity.md
 
 ---
 
+## Self-contained run contract
+
+Applies to `/perf-improver` (full runs). The command file defines the mandatory step order; this section is the skill-side contract.
+
+1. **Preflight:** `gh auth status`; record `START_BRANCH`; require clean `git status --short` (stop if unrelated changes exist; never auto-stash/reset without user approval); `git fetch origin` when safe; PR cap pre-check.
+2. **Branch:** Reuse branch of an existing `[perf-improver]` PR when maintaining it; else `perf-improver/YYYY-MM-DD-<short-topic>` from default branch, or `perf-assist/<desc>` for a focused Task 3 optimization PR.
+3. **Work:** Round-robin 2–3 tasks + Task 7; update memory during/after work.
+4. **Commit:** Stage only intentional changes; **always commit** [.cursor/perf-improver/memory.md](../../perf-improver/memory.md) on the run branch. Memory-only runs still get a draft PR with memory committed.
+5. **PR before monthly issue:** Push branch; create or update draft PR (`[perf-improver]`, labels `automation`, `performance`). PR body checklist: run summary, tasks completed, issues/comments, memory sections changed, performance evidence, test/lint status, cleanup status.
+6. **Task 7:** Update monthly activity issue **after** the run PR exists; link PR in Run History (`Local Cursor run`).
+7. **Cleanup:** `git status --short`; return to `START_BRANCH` when clean; if dirty, report paths and reasons.
+
+---
+
 ## Command Mode
 
 Triggered by `/perf-assist` with user text after the command.
 
 Take heed of **instructions**: the text the user provided after `/perf-assist`.
 
-If instructions are non-empty, follow them exclusively instead of the round-robin workflow below. Apply all Guidelines (read `AGENTS.md`, run formatters/linters/tests, use AI disclosure, measure performance impact). Skip round-robin tasks and Task 7 unless the user explicitly asked for monthly reporting or GitHub updates.
+If instructions are non-empty, follow them exclusively instead of the round-robin workflow below. Apply all Guidelines (read `AGENTS.md`, run formatters/linters/tests, use AI disclosure, measure performance impact). Skip round-robin tasks, Self-contained run contract, and Task 7 unless the user explicitly asked for a full run or monthly reporting.
+
+**Memory:** If you open a PR, commit memory in that PR. If you only investigate, memory may stay local; tell the user it is uncommitted unless they ask to commit it.
 
 Then **stop** — do not run Non-Command Mode after completing the instructions.
 
@@ -156,10 +172,10 @@ Use **round-robin**: each run, pick 2–3 tasks that have not run longest (per m
 4. Baseline → implement → measure again (same methodology).
 5. Run tests; revert or iterate if no gain; record learnings in memory.
 6. Format/lint (`bin/rubocop`, `bun run lint-check` per Quill); do not commit profiler artifacts.
-7. Draft PR via `gh pr create --draft` with:
+7. Update memory; commit memory with code changes on the run branch (see Self-contained run contract).
+8. Push; draft PR via `gh pr create --draft` (or update existing) with:
    - 🤖 Perf Improver (local Cursor)
-   - Goal, approach, before/after evidence, trade-offs, reproducibility commands, test status
-8. Update memory.
+   - Goal, approach, before/after evidence, trade-offs, reproducibility commands, test status, memory sections changed
 
 ### Task 4: Maintain Perf Improver Pull Requests
 
@@ -190,9 +206,10 @@ Use **round-robin**: each run, pick 2–3 tasks that have not run longest (per m
 
 Maintain one open issue: `[perf-improver] Monthly Activity {YYYY}-{MM}` with label `performance`.
 
-1. Find or create the current month's issue; close outdated month issues.
-2. Read maintainer comments; note instructions in memory.
-3. Use **exactly** this body structure:
+1. **Prerequisite:** The run's draft PR for this session already exists (create/update in Task 3 or end-of-run commit step) so Run History can link to it.
+2. Find or create the current month's issue; close outdated month issues.
+3. Read maintainer comments; note instructions in memory.
+4. Use **exactly** this body structure:
 
 ```markdown
 🤖 *Perf Improver here - I'm an automated AI assistant focused on performance improvements for this repository.*
@@ -236,8 +253,9 @@ Maintain one open issue: `[perf-improver] Monthly Activity {YYYY}-{MM}` with lab
 - 📊 Measured: <brief finding>
 ```
 
-4. **Format rules:** Suggested Actions immediately after month heading; Run History reverse chronological (prepend new run at top); use `* [ ]` only in Suggested Actions; remove completed lines (do not mark `[x]`); for local runs use `Local Cursor run` instead of Actions URLs.
-5. Skip updating the issue if nothing was done this run.
+5. **Format rules:** Suggested Actions immediately after month heading; Run History reverse chronological (prepend new run at top); use `* [ ]` only in Suggested Actions; remove completed lines (do not mark `[x]`); for local runs use `Local Cursor run` and link the run PR when available.
+6. Skip updating the issue if nothing was done this run.
+7. Finish with cleanup per Self-contained run contract.
 
 ---
 
@@ -254,3 +272,4 @@ Maintain one open issue: `[perf-improver] Monthly Activity {YYYY}-{MM}` with lab
 - **AI transparency**: 🤖 disclosure on every comment, PR, and issue.
 - **Anti-spam**: no self-follow-up comments in one run; max limits above.
 - **Quality over quantity**: one well-measured improvement beats many unmeasured tweaks.
+- **Full runs (`/perf-improver`)**: follow Self-contained run contract; memory must land in the run PR; leave a clean worktree or report why not.

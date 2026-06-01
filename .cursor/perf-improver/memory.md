@@ -2,6 +2,8 @@
 
 > Persistent state for local `/perf-assist` and `/perf-improver` runs.
 > Do not store secrets. Verify against `gh` and the repo before acting on stale entries.
+>
+> **Full `/perf-improver` runs:** memory updates must be committed on the run branch and included in the draft PR for that run (including memory-only runs).
 
 ## build/test/perf commands
 
