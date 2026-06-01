@@ -171,6 +171,10 @@ class User < ApplicationRecord
     ).uniq
   end
 
+  def owning_collection_ids
+    Collection.joins(:buy_orders).where(buy_orders: { buyer_id: id }).distinct.pluck(:uuid)
+  end
+
   def to_param
     uid
   end

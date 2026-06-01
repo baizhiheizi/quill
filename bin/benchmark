@@ -1,0 +1,19 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+ENV["RAILS_ENV"] = "test"
+
+require_relative "../config/environment"
+require "active_record/fixtures"
+
+%w[
+  support/quill_bot_stub.rb
+  support/commerce_helpers.rb
+].each { |f| require_relative "../test/#{f}" }
+
+ActiveJob::Base.queue_adapter = :test
+
+require_relative "../test/benchmarks/runner"
+require_relative "../test/benchmarks/hot_paths"
+
+Benchmarks::Runner.run(filter: ARGV.first)

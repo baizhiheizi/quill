@@ -79,6 +79,15 @@ bin/rails zeitwerk:check
 
 CI also runs `bin/rubocop` and `bun run lint-check`.
 
+### Benchmarks
+
+```bash
+bin/benchmark                    # all hot-path scenarios (test fixtures)
+bin/benchmark article_search     # filter by scenario name
+```
+
+See `test/benchmarks/README.md` for env vars and limitations. Stdlib-only; not run in CI.
+
 ### Lint
 
 ```bash
