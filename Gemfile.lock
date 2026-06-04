@@ -169,7 +169,7 @@ GEM
       railties (>= 6.0.0)
     csv (3.3.5)
     date (3.5.1)
-    debug (1.9.2)
+    debug (1.11.1)
       irb (~> 1.10)
       reline (>= 0.3.8)
     deep_merge (1.2.2)
@@ -440,7 +440,7 @@ GEM
       activesupport (>= 7.0.0)
       rack
       railties (>= 7.0.0)
-    psych (5.3.1)
+    psych (5.4.0)
       date
       stringio
     public_suffix (7.0.5)
