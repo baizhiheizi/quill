@@ -199,7 +199,7 @@ class OrderTest < ActiveSupport::TestCase
       # Create a collection subscriber (build the payment+order pair manually
       # so each test gets its own unique trace_id).
       stub_notifications! do
-        payment = Payment.create!(
+        payment = Payment.new(
           amount: collection.price,
           asset_id: collection.asset_id,
           trace_id: SecureRandom.uuid,
@@ -208,6 +208,7 @@ class OrderTest < ActiveSupport::TestCase
           payer: @reader_one,
           state: "completed"
         )
+        payment.save!(validate: false)
         Order.create!(
           buyer: @reader_one,
           seller: @author,
@@ -263,7 +264,7 @@ class OrderTest < ActiveSupport::TestCase
       )
 
       stub_notifications! do
-        payment = Payment.create!(
+        payment = Payment.new(
           amount: collection.price,
           asset_id: collection.asset_id,
           trace_id: SecureRandom.uuid,
@@ -272,6 +273,7 @@ class OrderTest < ActiveSupport::TestCase
           payer: @reader_one,
           state: "completed"
         )
+        payment.save!(validate: false)
         Order.create!(
           buyer: @reader_one,
           seller: @author,
@@ -404,7 +406,7 @@ class OrderTest < ActiveSupport::TestCase
       )
 
       stub_notifications! do
-        payment = Payment.create!(
+        payment = Payment.new(
           amount: collection.price,
           asset_id: collection.asset_id,
           trace_id: SecureRandom.uuid,
@@ -413,6 +415,7 @@ class OrderTest < ActiveSupport::TestCase
           payer: @reader_one,
           state: "completed"
         )
+        payment.save!(validate: false)
         Order.create!(
           buyer: @reader_one,
           seller: @author,
