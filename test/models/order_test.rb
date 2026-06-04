@@ -200,9 +200,11 @@ class OrderTest < ActiveSupport::TestCase
       # Create a collection subscriber (use create_payment! so the Payment's
       # after_create :generate_order! callback creates the buy_collection
       # order through the proper polymorphic association).
-      create_payment!(payer: @reader_one, collection: collection, order_type: "BUY", amount: collection.price)
+      subscriber_payment = create_payment!(payer: @reader_one, collection: collection, order_type: "BUY", amount: collection.price)
+      puts "DEBUG subscriber: payment_id=#{subscriber_payment.id} order=#{subscriber_payment.order.inspect} orders_by_collection=#{Order.where(item_type: 'Collection', item_id: collection.id).pluck(:id, :order_type, :state).inspect}"
 
       order = create_buy_order!(article: @article, buyer: @reader_two, total: 1.0)
+      puts "DEBUG buyer_order: item.collection_id=#{order.item.collection_id} order.item.collection=#{order.item.collection.inspect rescue 'NIL'} order.item.collection&.orders&.count=#{order.item.collection&.orders&.count}"
       distribute_order!(order)
 
       # The only reader_revenue transfer should be the collection revenue to the subscriber
