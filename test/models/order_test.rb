@@ -192,7 +192,7 @@ class OrderTest < ActiveSupport::TestCase
       # Bypass validations on the already-published article — these tests only
       # need the article to be in the right state for distribution logic.
       @article.update_columns(
-        collection: collection,
+        collection_id: collection.id,
         collection_revenue_ratio: collection.revenue_ratio
       )
 
@@ -247,7 +247,7 @@ class OrderTest < ActiveSupport::TestCase
       # For total=1.0 and 1 subscriber, ratio=MINIMUM_AMOUNT yields avg == MINIMUM_AMOUNT,
       # which fails the `.positive?` guard and skips the transfer.
       @article.update_columns(
-        collection: collection,
+        collection_id: collection.id,
         collection_revenue_ratio: Orders::DistributeService::MINIMUM_AMOUNT
       )
 
@@ -278,7 +278,7 @@ class OrderTest < ActiveSupport::TestCase
   test "collection revenue skipped when article has no collection" do
     with_quill_bot_stub do
       # Bypass validations on the already-published article
-      @article.update_columns(collection: nil, collection_revenue_ratio: 0.0)
+      @article.update_columns(collection_id: nil, collection_revenue_ratio: 0.0)
 
       order = create_buy_order!(article: @article, buyer: @reader_one, total: 1.0)
       distribute_order!(order)
@@ -378,7 +378,7 @@ class OrderTest < ActiveSupport::TestCase
       collection.update_column(:uuid, SecureRandom.uuid)
 
       @article.update_columns(
-        collection: collection,
+        collection_id: collection.id,
         collection_revenue_ratio: 0.1
       )
 
