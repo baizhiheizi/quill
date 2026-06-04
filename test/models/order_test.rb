@@ -195,6 +195,7 @@ class OrderTest < ActiveSupport::TestCase
         collection_id: collection.id,
         collection_revenue_ratio: collection.revenue_ratio
       )
+      @article.reload
 
       # Create a collection subscriber (build the payment+order pair manually
       # so each test gets its own unique trace_id).
@@ -262,6 +263,7 @@ class OrderTest < ActiveSupport::TestCase
         collection_id: collection.id,
         collection_revenue_ratio: Orders::DistributeService::MINIMUM_AMOUNT
       )
+      @article.reload
 
       stub_notifications! do
         payment = Payment.new(
@@ -302,6 +304,7 @@ class OrderTest < ActiveSupport::TestCase
     with_quill_bot_stub do
       # Bypass validations on the already-published article
       @article.update_columns(collection_id: nil, collection_revenue_ratio: 0.0)
+      @article.reload
 
       order = create_buy_order!(article: @article, buyer: @reader_one, total: 1.0)
       distribute_order!(order)
@@ -404,6 +407,7 @@ class OrderTest < ActiveSupport::TestCase
         collection_id: collection.id,
         collection_revenue_ratio: 0.1
       )
+      @article.reload
 
       stub_notifications! do
         payment = Payment.new(
