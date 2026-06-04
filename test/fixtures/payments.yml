@@ -34,14 +34,3 @@ two:
   updated_at: <%= 1.day.ago %>
 
 # column: value
-#
-completed:
-  amount: 0.001
-  state: completed
-  asset_id: c6d0c728-2624-429b-8e0d-d9d19b6592fa
-  trace_id: ccccccccc-ccc-4ccc-8ccc-cccccccccccc
-  snapshot_id: dddddddd-dddd-4ddd-8ddd-dddddddddddd
-  opponent_id: b2222222-2222-4222-8222-222222222222
-  payer_id: b2222222-2222-4222-8222-222222222222
-  created_at: <%= 2.days.ago %>
-  updated_at: <%= 2.days.ago %>

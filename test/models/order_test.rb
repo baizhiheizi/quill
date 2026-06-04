@@ -196,22 +196,33 @@ class OrderTest < ActiveSupport::TestCase
         collection_revenue_ratio: collection.revenue_ratio
       )
 
-      # Create a collection subscriber
-      payment = payments(:completed)
-      Order.create!(
-        buyer: @reader_one,
-        seller: @author,
-        item: collection,
-        payment: payment,
-        order_type: :buy_collection,
-        trace_id: payment.trace_id,
-        asset_id: collection.asset_id,
-        total: collection.price,
-        value_btc: 0.00001,
-        value_usd: 1.0,
-        created_at: 2.days.ago,
-        updated_at: 2.days.ago
-      )
+      # Create a collection subscriber (build the payment+order pair manually
+      # so each test gets its own unique trace_id).
+      stub_notifications! do
+        payment = Payment.create!(
+          amount: collection.price,
+          asset_id: collection.asset_id,
+          trace_id: SecureRandom.uuid,
+          snapshot_id: SecureRandom.uuid,
+          opponent_id: @reader_one.mixin_uuid,
+          payer: @reader_one,
+          state: "completed"
+        )
+        Order.create!(
+          buyer: @reader_one,
+          seller: @author,
+          item: collection,
+          payment: payment,
+          order_type: :buy_collection,
+          trace_id: payment.trace_id,
+          asset_id: collection.asset_id,
+          total: collection.price,
+          value_btc: 0.00001,
+          value_usd: 1.0,
+          created_at: 2.days.ago,
+          updated_at: 2.days.ago
+        )
+      end
 
       order = create_buy_order!(article: @article, buyer: @reader_two, total: 1.0)
       distribute_order!(order)
@@ -251,21 +262,31 @@ class OrderTest < ActiveSupport::TestCase
         collection_revenue_ratio: Orders::DistributeService::MINIMUM_AMOUNT
       )
 
-      payment = payments(:completed)
-      Order.create!(
-        buyer: @reader_one,
-        seller: @author,
-        item: collection,
-        payment: payment,
-        order_type: :buy_collection,
-        trace_id: payment.trace_id,
-        asset_id: collection.asset_id,
-        total: collection.price,
-        value_btc: 0.00001,
-        value_usd: 0.01,
-        created_at: 2.days.ago,
-        updated_at: 2.days.ago
-      )
+      stub_notifications! do
+        payment = Payment.create!(
+          amount: collection.price,
+          asset_id: collection.asset_id,
+          trace_id: SecureRandom.uuid,
+          snapshot_id: SecureRandom.uuid,
+          opponent_id: @reader_one.mixin_uuid,
+          payer: @reader_one,
+          state: "completed"
+        )
+        Order.create!(
+          buyer: @reader_one,
+          seller: @author,
+          item: collection,
+          payment: payment,
+          order_type: :buy_collection,
+          trace_id: payment.trace_id,
+          asset_id: collection.asset_id,
+          total: collection.price,
+          value_btc: 0.00001,
+          value_usd: 0.01,
+          created_at: 2.days.ago,
+          updated_at: 2.days.ago
+        )
+      end
 
       order = create_buy_order!(article: @article, buyer: @reader_two, total: 1.0)
       distribute_order!(order)
@@ -382,21 +403,31 @@ class OrderTest < ActiveSupport::TestCase
         collection_revenue_ratio: 0.1
       )
 
-      payment = payments(:completed)
-      Order.create!(
-        buyer: @reader_one,
-        seller: @author,
-        item: collection,
-        payment: payment,
-        order_type: :buy_collection,
-        trace_id: payment.trace_id,
-        asset_id: collection.asset_id,
-        total: collection.price,
-        value_btc: 0.00001,
-        value_usd: 0.01,
-        created_at: 2.days.ago,
-        updated_at: 2.days.ago
-      )
+      stub_notifications! do
+        payment = Payment.create!(
+          amount: collection.price,
+          asset_id: collection.asset_id,
+          trace_id: SecureRandom.uuid,
+          snapshot_id: SecureRandom.uuid,
+          opponent_id: @reader_one.mixin_uuid,
+          payer: @reader_one,
+          state: "completed"
+        )
+        Order.create!(
+          buyer: @reader_one,
+          seller: @author,
+          item: collection,
+          payment: payment,
+          order_type: :buy_collection,
+          trace_id: payment.trace_id,
+          asset_id: collection.asset_id,
+          total: collection.price,
+          value_btc: 0.00001,
+          value_usd: 0.01,
+          created_at: 2.days.ago,
+          updated_at: 2.days.ago
+        )
+      end
 
       order = create_buy_order!(article: @article, buyer: @reader_two, total: 1.0)
       distribute_order!(order)
