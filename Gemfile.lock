@@ -106,7 +106,7 @@ GEM
     addressable (2.9.0)
       public_suffix (>= 2.0.2, < 8.0)
     aes_key_wrap (1.1.0)
-    after_commit_everywhere (1.4.0)
+    after_commit_everywhere (1.6.0)
       activerecord (>= 4.2)
       activesupport
     annotaterb (4.13.0)
