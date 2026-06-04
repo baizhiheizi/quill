@@ -8,7 +8,7 @@ GIT
 
 GIT
   remote: https://github.com/charlotte-ruby/impressionist.git
-  revision: 96e150959b09f01148a83e1478e7ef038dbff825
+  revision: b13ac939863c2fcb46ee63a1362185b60fce7d33
   specs:
     impressionist (2.0.0)
       friendly_id
@@ -224,7 +224,7 @@ GEM
     fiber-storage (1.0.1)
     fnv (0.2.0)
     forwardable (1.4.0)
-    friendly_id (5.5.1)
+    friendly_id (5.7.0)
       activerecord (>= 4.0.0)
     fugit (1.11.1)
       et-orbi (~> 1, >= 1.2.11)
@@ -634,7 +634,7 @@ GEM
     xpath (3.2.0)
       nokogiri (~> 1.8)
     yajl-ruby (1.4.3)
-    zeitwerk (2.8.1)
+    zeitwerk (2.8.2)
 
 PLATFORMS
   x86_64-linux
