@@ -197,34 +197,10 @@ class OrderTest < ActiveSupport::TestCase
       )
       @article.reload
 
-      # Create a collection subscriber (build the payment+order pair manually
-      # so each test gets its own unique trace_id).
-      stub_notifications! do
-        payment = Payment.new(
-          amount: collection.price,
-          asset_id: collection.asset_id,
-          trace_id: SecureRandom.uuid,
-          snapshot_id: SecureRandom.uuid,
-          opponent_id: @reader_one.mixin_uuid,
-          payer: @reader_one,
-          state: "completed"
-        )
-        payment.save!(validate: false)
-        Order.create!(
-          buyer: @reader_one,
-          seller: @author,
-          item: collection,
-          payment: payment,
-          order_type: :buy_collection,
-          trace_id: payment.trace_id,
-          asset_id: collection.asset_id,
-          total: collection.price,
-          value_btc: 0.00001,
-          value_usd: 1.0,
-          created_at: 2.days.ago,
-          updated_at: 2.days.ago
-        )
-      end
+      # Create a collection subscriber (use create_payment! so the Payment's
+      # after_create :generate_order! callback creates the buy_collection
+      # order through the proper polymorphic association).
+      create_payment!(payer: @reader_one, collection: collection, order_type: "BUY", amount: collection.price)
 
       order = create_buy_order!(article: @article, buyer: @reader_two, total: 1.0)
       distribute_order!(order)
@@ -265,32 +241,7 @@ class OrderTest < ActiveSupport::TestCase
       )
       @article.reload
 
-      stub_notifications! do
-        payment = Payment.new(
-          amount: collection.price,
-          asset_id: collection.asset_id,
-          trace_id: SecureRandom.uuid,
-          snapshot_id: SecureRandom.uuid,
-          opponent_id: @reader_one.mixin_uuid,
-          payer: @reader_one,
-          state: "completed"
-        )
-        payment.save!(validate: false)
-        Order.create!(
-          buyer: @reader_one,
-          seller: @author,
-          item: collection,
-          payment: payment,
-          order_type: :buy_collection,
-          trace_id: payment.trace_id,
-          asset_id: collection.asset_id,
-          total: collection.price,
-          value_btc: 0.00001,
-          value_usd: 0.01,
-          created_at: 2.days.ago,
-          updated_at: 2.days.ago
-        )
-      end
+      create_payment!(payer: @reader_one, collection: collection, order_type: "BUY", amount: collection.price)
 
       order = create_buy_order!(article: @article, buyer: @reader_two, total: 1.0)
       distribute_order!(order)
@@ -409,32 +360,7 @@ class OrderTest < ActiveSupport::TestCase
       )
       @article.reload
 
-      stub_notifications! do
-        payment = Payment.new(
-          amount: collection.price,
-          asset_id: collection.asset_id,
-          trace_id: SecureRandom.uuid,
-          snapshot_id: SecureRandom.uuid,
-          opponent_id: @reader_one.mixin_uuid,
-          payer: @reader_one,
-          state: "completed"
-        )
-        payment.save!(validate: false)
-        Order.create!(
-          buyer: @reader_one,
-          seller: @author,
-          item: collection,
-          payment: payment,
-          order_type: :buy_collection,
-          trace_id: payment.trace_id,
-          asset_id: collection.asset_id,
-          total: collection.price,
-          value_btc: 0.00001,
-          value_usd: 0.01,
-          created_at: 2.days.ago,
-          updated_at: 2.days.ago
-        )
-      end
+      create_payment!(payer: @reader_one, collection: collection, order_type: "BUY", amount: collection.price)
 
       order = create_buy_order!(article: @article, buyer: @reader_two, total: 1.0)
       distribute_order!(order)
