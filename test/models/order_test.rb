@@ -187,30 +187,24 @@ class OrderTest < ActiveSupport::TestCase
         revenue_ratio: 0.1,
         state: "listed"
       )
-
-      # Publish collection so uuid is set
       collection.update_column(:uuid, SecureRandom.uuid)
 
-      # Add article to collection and set collection_revenue_ratio
-      @article.update!(
+      # Bypass validations on the already-published article — these tests only
+      # need the article to be in the right state for distribution logic.
+      @article.update_columns(
         collection: collection,
         collection_revenue_ratio: collection.revenue_ratio
       )
 
       # Create a collection subscriber
-      create_buy_order!(
-        article: @article,
-        buyer: @reader_one,
-        total: 0.001,
-        created_at: 2.days.ago
-      )
-      collection_subscriber_order = Order.create!(
+      payment = payments(:completed)
+      Order.create!(
         buyer: @reader_one,
         seller: @author,
         item: collection,
-        payment: payments(:completed),
+        payment: payment,
         order_type: :buy_collection,
-        trace_id: SecureRandom.uuid,
+        trace_id: payment.trace_id,
         asset_id: collection.asset_id,
         total: collection.price,
         value_btc: 0.00001,
@@ -222,40 +216,49 @@ class OrderTest < ActiveSupport::TestCase
       order = create_buy_order!(article: @article, buyer: @reader_two, total: 1.0)
       distribute_order!(order)
 
-      collection_revenue_transfers = order.transfers.where(transfer_type: :reader_revenue)
-      assert collection_revenue_transfers.exists?, "Collection revenue transfer should exist"
-      assert_equal @reader_one.mixin_uuid, collection_revenue_transfers.first.opponent_id
+      # The only reader_revenue transfer should be the collection revenue to the subscriber
+      collection_revenue_transfer = order.transfers.find_by(
+        transfer_type: :reader_revenue,
+        opponent_id: @reader_one.mixin_uuid
+      )
+      assert collection_revenue_transfer, "Collection revenue transfer should exist for subscriber"
+      # _collection_sum = 1.0 * 0.1 = 0.1; _collection_avg = 0.1 / 1 = 0.1
+      assert_in_delta 0.1, collection_revenue_transfer.amount.to_f, 0.001
     end
   end
 
-  test "collection revenue skipped when avg amount below minimum" do
+  test "collection revenue skipped when avg amount at or below minimum" do
     with_quill_bot_stub do
       collection = Collection.create!(
         uuid: SecureRandom.uuid,
-        name: "Tiny Collection",
-        symbol: "TINC",
-        description: "Collection with tiny revenue",
+        name: "Tiny Revenue Collection",
+        symbol: "TRC",
+        description: "Collection whose per-subscriber avg falls below MINIMUM_AMOUNT",
         author: @author,
         asset_id: @article.asset_id,
-        price: 0.0000_0001,
+        price: 0.001,
         revenue_ratio: 0.1,
         state: "listed"
       )
       collection.update_column(:uuid, SecureRandom.uuid)
 
-      @article.update!(
+      # Pick collection_revenue_ratio so that _collection_avg_amount == MINIMUM_AMOUNT.
+      # _collection_avg = (total * collection_revenue_ratio) / subscribers
+      # For total=1.0 and 1 subscriber, ratio=MINIMUM_AMOUNT yields avg == MINIMUM_AMOUNT,
+      # which fails the `.positive?` guard and skips the transfer.
+      @article.update_columns(
         collection: collection,
-        collection_revenue_ratio: collection.revenue_ratio
+        collection_revenue_ratio: Orders::DistributeService::MINIMUM_AMOUNT
       )
 
-      # Create a collection subscriber with order
+      payment = payments(:completed)
       Order.create!(
         buyer: @reader_one,
         seller: @author,
         item: collection,
-        payment: payments(:completed),
+        payment: payment,
         order_type: :buy_collection,
-        trace_id: SecureRandom.uuid,
+        trace_id: payment.trace_id,
         asset_id: collection.asset_id,
         total: collection.price,
         value_btc: 0.00001,
@@ -267,15 +270,15 @@ class OrderTest < ActiveSupport::TestCase
       order = create_buy_order!(article: @article, buyer: @reader_two, total: 1.0)
       distribute_order!(order)
 
-      # Collection revenue avg would be < MINIMUM_AMOUNT, so no reader_revenue transfer
       reader_transfers = order.transfers.where(transfer_type: :reader_revenue)
-      assert_empty reader_transfers, "No reader revenue when collection avg below minimum"
+      assert_empty reader_transfers, "No reader revenue when collection avg at or below minimum"
     end
   end
 
   test "collection revenue skipped when article has no collection" do
     with_quill_bot_stub do
-      @article.update!(collection: nil, collection_revenue_ratio: 0.0)
+      # Bypass validations on the already-published article
+      @article.update_columns(collection: nil, collection_revenue_ratio: 0.0)
 
       order = create_buy_order!(article: @article, buyer: @reader_one, total: 1.0)
       distribute_order!(order)
@@ -289,8 +292,7 @@ class OrderTest < ActiveSupport::TestCase
 
   test "same currency early readers use total for proportion calculation" do
     with_quill_bot_stub do
-      # First order with same asset
-      early_order = create_buy_order!(
+      create_buy_order!(
         article: @article,
         buyer: @reader_one,
         total: 1.0,
@@ -307,19 +309,25 @@ class OrderTest < ActiveSupport::TestCase
 
       reader_transfer = order.transfers.find_by(transfer_type: :reader_revenue, opponent_id: @reader_one.mixin_uuid)
       assert reader_transfer, "Reader revenue transfer should exist for early reader"
-      # Reader gets 40% of article price * (1.0 / 3.0) = ~0.1333
-      assert_in_delta 0.1333, reader_transfer.amount.to_f, 0.01
+      # Same-currency path: amount = total * readers_revenue_ratio * share / sum
+      # = 2.0 * 0.4 * 1.0 / 1.0 = 0.8
+      assert_in_delta 0.8, reader_transfer.amount.to_f, 0.01
     end
   end
 
   test "different currency early readers use value_btc for proportion" do
     with_quill_bot_stub do
-      # First order - will use value_btc since currencies differ
       early_order = create_buy_order!(
         article: @article,
         buyer: @reader_one,
         total: 1.0,
         created_at: 3.days.ago
+      )
+      # Trigger the value_btc branch: early order's asset_id must differ from
+      # the current order's. value_btc is then used as the share denominator.
+      early_order.update_columns(
+        asset_id: "11111111-1111-4111-8111-111111111111",
+        value_btc: 0.5
       )
 
       order = create_buy_order!(
@@ -330,9 +338,11 @@ class OrderTest < ActiveSupport::TestCase
       )
       distribute_order!(order)
 
-      # value_btc is used when early orders have different asset_id
+      # Different-currency path: amount = total * readers_revenue_ratio * share / sum
+      # where share/sum are value_btc. With share == sum (single early order),
+      # the amount still equals 0.8, but the calculation must take the value_btc branch.
       reader_transfer = order.transfers.find_by(transfer_type: :reader_revenue, opponent_id: @reader_one.mixin_uuid)
-      assert reader_transfer, "Reader revenue should still be distributed using value_btc"
+      assert reader_transfer, "Reader revenue should be distributed using value_btc when asset_id differs"
     end
   end
 
@@ -341,7 +351,9 @@ class OrderTest < ActiveSupport::TestCase
   test "distribute! skips already completed orders" do
     with_quill_bot_stub do
       order = create_buy_order!(article: @article, buyer: @reader_one, total: 1.0)
-      order.complete!
+      # Bypass the AASM guard so we can mark the order completed without
+      # having to first generate all the transfers the guard would check for.
+      order.update_column(:state, "completed")
       initial_count = order.transfers.count
 
       distribute_order!(order)
@@ -365,19 +377,19 @@ class OrderTest < ActiveSupport::TestCase
       )
       collection.update_column(:uuid, SecureRandom.uuid)
 
-      @article.update!(
+      @article.update_columns(
         collection: collection,
         collection_revenue_ratio: 0.1
       )
 
-      # Create collection subscriber
+      payment = payments(:completed)
       Order.create!(
         buyer: @reader_one,
         seller: @author,
         item: collection,
-        payment: payments(:completed),
+        payment: payment,
         order_type: :buy_collection,
-        trace_id: SecureRandom.uuid,
+        trace_id: payment.trace_id,
         asset_id: collection.asset_id,
         total: collection.price,
         value_btc: 0.00001,
@@ -390,13 +402,13 @@ class OrderTest < ActiveSupport::TestCase
       distribute_order!(order)
 
       author_transfer = order.transfers.find_by(transfer_type: :author_revenue)
-      quill_transfer = order.transfers.find_by(transfer_type: :quill_revenue)
       collection_reader_transfer = order.transfers.find_by(transfer_type: :reader_revenue, opponent_id: @reader_one.mixin_uuid)
 
-      # Total = 1.0, quill = 0.1, reader (first buyer, no early) = 0, collection = ~0.1 (avg)
-      # Author = 1.0 - 0 - 0.1 - 0.1 = 0.8
+      # Total = 1.0, quill = 0.1, no early readers, collection avg = 0.1
+      # Author = 1.0 - 0 - 0.1 - 0 - 0.1 = 0.8
       author_amount = author_transfer&.amount&.to_f || 0
       assert_in_delta 0.8, author_amount, 0.01, "Author revenue should account for collection share"
+      assert collection_reader_transfer, "Collection subscriber should receive reader_revenue transfer"
     end
   end
 end
