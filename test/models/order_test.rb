@@ -192,7 +192,7 @@ class OrderTest < ActiveSupport::TestCase
       # Bypass validations on the already-published article — these tests only
       # need the article to be in the right state for distribution logic.
       @article.update_columns(
-        collection_id: collection.id,
+        collection_id: collection.uuid,
         collection_revenue_ratio: collection.revenue_ratio
       )
       @article.reload
@@ -200,11 +200,9 @@ class OrderTest < ActiveSupport::TestCase
       # Create a collection subscriber (use create_payment! so the Payment's
       # after_create :generate_order! callback creates the buy_collection
       # order through the proper polymorphic association).
-      subscriber_payment = create_payment!(payer: @reader_one, collection: collection, order_type: "BUY", amount: collection.price)
-      puts "DEBUG subscriber: payment_id=#{subscriber_payment.id} order=#{subscriber_payment.order.inspect} orders_by_collection=#{Order.where(item_type: 'Collection', item_id: collection.id).pluck(:id, :order_type, :state).inspect}"
+      create_payment!(payer: @reader_one, collection: collection, order_type: "BUY", amount: collection.price)
 
       order = create_buy_order!(article: @article, buyer: @reader_two, total: 1.0)
-      puts "DEBUG buyer_order: item.collection_id=#{order.item.collection_id} order.item.collection=#{order.item.collection.inspect rescue 'NIL'} order.item.collection&.orders&.count=#{order.item.collection&.orders&.count}"
       distribute_order!(order)
 
       # The only reader_revenue transfer should be the collection revenue to the subscriber
@@ -238,7 +236,7 @@ class OrderTest < ActiveSupport::TestCase
       # For total=1.0 and 1 subscriber, ratio=MINIMUM_AMOUNT yields avg == MINIMUM_AMOUNT,
       # which fails the `.positive?` guard and skips the transfer.
       @article.update_columns(
-        collection_id: collection.id,
+        collection_id: collection.uuid,
         collection_revenue_ratio: Orders::DistributeService::MINIMUM_AMOUNT
       )
       @article.reload
@@ -357,7 +355,7 @@ class OrderTest < ActiveSupport::TestCase
       collection.update_column(:uuid, SecureRandom.uuid)
 
       @article.update_columns(
-        collection_id: collection.id,
+        collection_id: collection.uuid,
         collection_revenue_ratio: 0.1
       )
       @article.reload
