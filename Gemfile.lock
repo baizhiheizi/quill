@@ -235,7 +235,7 @@ GEM
       base64
       fiber-storage
       logger
-    graphql-client (0.22.0)
+    graphql-client (0.26.0)
       activesupport (>= 3.0)
       graphql (>= 1.13.0)
     groupdate (6.4.0)
