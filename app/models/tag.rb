@@ -3,6 +3,7 @@
 # == Schema Information
 #
 # Table name: tags
+# Database name: primary
 #
 #  id                :bigint           not null, primary key
 #  articles_count    :integer          default(0)

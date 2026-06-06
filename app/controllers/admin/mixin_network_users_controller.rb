@@ -56,7 +56,7 @@ module Admin
           }.merge(m: "or")
         ).result
 
-      @pagy, @mixin_network_users = pagy_countless mixin_network_users
+      @pagy, @mixin_network_users = pagy(:countless, mixin_network_users)
     end
 
     def show

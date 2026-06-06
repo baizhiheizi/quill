@@ -63,7 +63,7 @@ module Admin
           }.merge(m: "or")
         ).result
 
-      @pagy, @articles = pagy_countless articles
+      @pagy, @articles = pagy(:countless, articles)
     end
 
     def show

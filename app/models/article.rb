@@ -3,16 +3,17 @@
 # == Schema Information
 #
 # Table name: articles
+# Database name: primary
 #
 #  id                                  :bigint           not null, primary key
 #  author_revenue_ratio                :float            default(0.5)
 #  collection_revenue_ratio            :float            default(0.0)
 #  commenting_subscribers_count        :integer          default(0)
 #  comments_count                      :integer          default(0), not null
-#  content                             :text
 #  downvotes_count                     :integer          default(0)
 #  free_content_ratio                  :float            default(0.1)
 #  intro                               :string
+#  legacy_markdown_content             :text
 #  locale                              :string
 #  orders_count                        :integer          default(0), not null
 #  platform_revenue_ratio              :float            default(0.1)

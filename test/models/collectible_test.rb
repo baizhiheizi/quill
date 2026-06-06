@@ -3,6 +3,7 @@
 # == Schema Information
 #
 # Table name: collectibles
+# Database name: primary
 #
 #  id            :bigint           not null, primary key
 #  identifier    :string

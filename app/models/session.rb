@@ -3,6 +3,7 @@
 # == Schema Information
 #
 # Table name: sessions
+# Database name: primary
 #
 #  id         :bigint           not null, primary key
 #  info       :json

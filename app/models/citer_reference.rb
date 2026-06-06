@@ -3,6 +3,7 @@
 # == Schema Information
 #
 # Table name: citer_references
+# Database name: primary
 #
 #  id             :bigint           not null, primary key
 #  citer_type     :string

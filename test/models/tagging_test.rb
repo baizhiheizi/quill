@@ -3,6 +3,7 @@
 # == Schema Information
 #
 # Table name: taggings
+# Database name: primary
 #
 #  id         :bigint           not null, primary key
 #  created_at :datetime         not null

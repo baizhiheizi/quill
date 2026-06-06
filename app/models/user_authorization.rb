@@ -3,6 +3,7 @@
 # == Schema Information
 #
 # Table name: user_authorizations
+# Database name: primary
 #
 #  id                                  :bigint           not null, primary key
 #  access_token                        :string

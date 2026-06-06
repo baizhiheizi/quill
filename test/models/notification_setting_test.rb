@@ -3,6 +3,7 @@
 # == Schema Information
 #
 # Table name: notification_settings
+# Database name: primary
 #
 #  id                 :bigint           not null, primary key
 #  article_bought     :jsonb

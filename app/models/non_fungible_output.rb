@@ -3,6 +3,7 @@
 # == Schema Information
 #
 # Table name: non_fungible_outputs
+# Database name: primary
 #
 #  id         :bigint           not null, primary key
 #  raw        :jsonb
