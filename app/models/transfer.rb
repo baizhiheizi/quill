@@ -3,6 +3,7 @@
 # == Schema Information
 #
 # Table name: transfers
+# Database name: primary
 #
 #  id                :bigint           not null, primary key
 #  amount            :decimal(, )

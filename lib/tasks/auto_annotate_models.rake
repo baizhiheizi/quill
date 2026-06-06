@@ -9,58 +9,36 @@ if Rails.env.development?
   rescue LoadError
     # annotaterb is only in the development group
   else
-  task set_annotation_options: :environment do
-    # You can override any of these by setting an environment variable of the
-    # same name.
-    Annotate.set_defaults(
-      "active_admin" => "false",
-      "additional_file_patterns" => [],
-      "routes" => "false",
-      "models" => "true",
-      "position_in_routes" => "before",
-      "position_in_class" => "before",
-      "position_in_test" => "before",
-      "position_in_fixture" => "before",
-      "position_in_factory" => "before",
-      "position_in_serializer" => "before",
-      "show_foreign_keys" => "true",
-      "show_complete_foreign_keys" => "false",
-      "show_indexes" => "true",
-      "simple_indexes" => "false",
-      "model_dir" => "app/models",
-      "root_dir" => "",
-      "include_version" => "false",
-      "require" => "",
-      "exclude_tests" => "false",
-      "exclude_fixtures" => "false",
-      "exclude_factories" => "false",
-      "exclude_serializers" => "false",
-      "exclude_scaffolds" => "true",
-      "exclude_controllers" => "true",
-      "exclude_helpers" => "true",
-      "exclude_sti_subclasses" => "false",
-      "ignore_model_sub_dir" => "false",
-      "ignore_columns" => nil,
-      "ignore_routes" => nil,
-      "ignore_unknown_models" => "false",
-      "hide_limit_column_types" => "integer,bigint,boolean",
-      "hide_default_column_types" => "json,jsonb,hstore",
-      "skip_on_db_migrate" => "false",
-      "format_bare" => "true",
-      "format_rdoc" => "false",
-      "format_yard" => "false",
-      "format_markdown" => "false",
-      "sort" => "false",
-      "force" => "false",
-      "frozen" => "false",
-      "classified_sort" => "true",
-      "trace" => "false",
-      "wrapper_open" => nil,
-      "wrapper_close" => nil,
-      "with_comment" => "true"
-    )
-  end
+    # The set_annotation_options task reads .annotaterb.yml and layers any
+    # matching ENV-var overrides on top, so developers can tweak behavior
+    # per-shell without editing the committed config file.
+    task set_annotation_options: :environment do
+      base_config = AnnotateRb::ConfigLoader.load_config
+      env_overrides = build_env_overrides(base_config)
+      merged = base_config.merge(env_overrides)
 
-  Annotate.load_tasks
+      AnnotateRb::Runner.run([ "models", *env_overrides_argv(env_overrides) ])
+    end
+
+    AnnotateRb::Core.load_rake_tasks
   end
+end
+
+# Reads ENV and returns a hash of overrides for any key that:
+#   1. has a matching ENV variable set (e.g. ENV["force"] for config key :force)
+#   2. exists as a key in `base_config` (so we don't accidentally inject garbage)
+#
+# The returned hash should use the SAME keys (symbols) as base_config, and the
+# values should be coerced from String to the type that base_config expects
+# (Boolean for "true"/"false", Integer for numeric options, Array for
+# comma-separated lists, etc.).
+def build_env_overrides(base_config)
+  # TODO: implement env-var override extraction with type coercion
+  {}
+end
+
+# Turns the env-overrides hash into CLI-style args so AnnotateRb::Runner.run
+# sees them at the same precedence as command-line flags (which override YAML).
+def env_overrides_argv(overrides)
+  overrides.flat_map { |key, value| [ "--#{key}", value.to_s ] }
 end

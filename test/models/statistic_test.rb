@@ -3,6 +3,7 @@
 # == Schema Information
 #
 # Table name: statistics
+# Database name: primary
 #
 #  id         :bigint           not null, primary key
 #  data       :jsonb

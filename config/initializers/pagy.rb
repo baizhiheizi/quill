@@ -1,5 +1,4 @@
 # frozen_string_literal: true
 
-require "pagy/extras/array"
-require "pagy/extras/countless"
-require "pagy/extras/overflow"
+# Pagy 9+ integrated the legacy extras (array, countless, overflow) into core.
+# See https://ddnexus.github.io/pagy/guides/upgrade-guide/

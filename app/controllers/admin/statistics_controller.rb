@@ -35,7 +35,7 @@ module Admin
           }.merge(m: "or")
         ).result
 
-      @pagy, @statistics = pagy_countless statistics
+      @pagy, @statistics = pagy(:countless, statistics)
     end
   end
 end

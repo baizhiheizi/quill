@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Admin::BaseController < ActionController::Base
-  include Pagy::Backend
+  include Pagy::Method
 
   before_action :authenticate_admin!
 

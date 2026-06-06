@@ -3,6 +3,7 @@
 # == Schema Information
 #
 # Table name: mixin_messages
+# Database name: primary
 #
 #  id                      :bigint           not null, primary key
 #  action                  :string

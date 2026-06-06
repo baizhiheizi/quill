@@ -3,6 +3,7 @@
 # == Schema Information
 #
 # Table name: currencies
+# Database name: primary
 #
 #  id                   :bigint           not null, primary key
 #  mvm_contract_address :string
