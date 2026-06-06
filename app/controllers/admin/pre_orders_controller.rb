@@ -46,7 +46,7 @@ module Admin
           }.merge(m: "or")
         ).result
 
-      @pagy, @pre_orders = pagy_countless pre_orders
+      @pagy, @pre_orders = pagy(:countless, pre_orders)
     end
 
     def show

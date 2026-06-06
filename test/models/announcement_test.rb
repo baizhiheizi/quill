@@ -3,6 +3,7 @@
 # == Schema Information
 #
 # Table name: announcements
+# Database name: primary
 #
 #  id           :bigint           not null, primary key
 #  content      :text

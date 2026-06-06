@@ -14,7 +14,7 @@ class ArticlesController < ApplicationController
 
     articles = ArticleSearchService.call(params.merge(current_user:, locale: current_locale))
 
-    @pagy, @articles = pagy_countless articles.with_attached_cover
+    @pagy, @articles = pagy(:countless, articles.with_attached_cover)
     @active_page = "home"
 
     respond_to do |format|
@@ -23,7 +23,7 @@ class ArticlesController < ApplicationController
       format.rss do
         articles = ArticleSearchService.call(filter: "lately")
 
-        @pagy, @articles = pagy_countless articles.with_attached_cover
+        @pagy, @articles = pagy(:countless, articles.with_attached_cover)
         render layout: false
       end
     end

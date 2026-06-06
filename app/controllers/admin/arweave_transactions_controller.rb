@@ -37,7 +37,7 @@ module Admin
           }.merge(m: "or")
         ).result
 
-      @pagy, @arweave_transactions = pagy_countless arweave_transactions
+      @pagy, @arweave_transactions = pagy(:countless, arweave_transactions)
     end
 
     def show

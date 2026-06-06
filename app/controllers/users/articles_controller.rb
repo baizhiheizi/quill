@@ -12,7 +12,7 @@ module Users
           @user.bought_articles.published
         end
 
-      @pagy, @articles = pagy_countless articles.order(published_at: :desc)
+      @pagy, @articles = pagy(:countless, articles.order(published_at: :desc))
     end
   end
 end

@@ -3,6 +3,7 @@
 # == Schema Information
 #
 # Table name: article_snapshots
+# Database name: primary
 #
 #  id           :bigint           not null, primary key
 #  article_uuid :uuid

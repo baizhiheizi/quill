@@ -3,6 +3,7 @@
 # == Schema Information
 #
 # Table name: nft_collections
+# Database name: primary
 #
 #  id         :bigint           not null, primary key
 #  raw        :jsonb

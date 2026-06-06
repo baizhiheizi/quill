@@ -3,6 +3,7 @@
 # == Schema Information
 #
 # Table name: mixin_network_users
+# Database name: primary
 #
 #  id            :bigint           not null, primary key
 #  encrypted_pin :string

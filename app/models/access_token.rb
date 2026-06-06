@@ -3,6 +3,7 @@
 # == Schema Information
 #
 # Table name: access_tokens
+# Database name: primary
 #
 #  id           :bigint           not null, primary key
 #  deleted_at   :datetime
