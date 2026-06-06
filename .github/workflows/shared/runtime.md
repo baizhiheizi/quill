@@ -1,7 +1,7 @@
 ---
 runtimes:
   ruby:
-    version: "4.0.4"
+    version: "4.0.5"
   bun:
     version: "1.3.14"
 

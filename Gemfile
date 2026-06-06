@@ -168,7 +168,7 @@ gem "solid_cache", "~> 1.0"
 
 group :development, :test do
   # Start debugger with binding.b [https://github.com/ruby/debug]
-  gem "debug", ">= 1.0.0", platforms: %i[mri mingw x64_mingw]
+  gem "debug", ">= 1.0.0", platforms: %i[mri windows]
 end
 
 group :development do
@@ -194,7 +194,7 @@ end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem "mini_racer", platforms: :ruby
-gem "tzinfo-data", platforms: %i[mingw mswin x64_mingw jruby]
+gem "tzinfo-data", platforms: %i[windows jruby]
 
 gem "dockerfile-rails", ">= 1.2", group: :development
 
