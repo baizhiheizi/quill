@@ -126,4 +126,17 @@ class ArticleTest < ActiveSupport::TestCase
     assert_equal 1, readers.size
     assert_equal buyer, readers.first
   end
+
+  test "order_by_popularity includes articles with no orders" do
+    # Regression: INNER JOIN against orders excluded articles without any
+    # purchases from the default feed. With LEFT JOIN + COALESCE they
+    # should still appear (popularity = 0 via COALESCE).
+    article = articles(:published_free)
+    assert_equal 0, article.orders.count, "fixture precondition: no orders"
+
+    result = Article.order_by_popularity.where(id: article.id)
+
+    assert_includes result.to_a, article
+    assert_equal 0, result.first.attributes["popularity"]
+  end
 end

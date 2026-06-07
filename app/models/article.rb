@@ -132,13 +132,17 @@ class Article < ApplicationRecord
   scope :only_published, -> { where(state: :published) }
   scope :without_drafted, -> { where.not(state: :drafted) }
   scope :order_by_revenue_usd, -> { order(revenue_usd: :desc) }
+  # Default feed sort. Uses LEFT JOIN so articles with no orders are
+  # still eligible (popularity falls back to 0 via COALESCE) and so
+  # subsequent callers can add their own joins without breaking the
+  # existing ones.
   scope :order_by_popularity, lambda {
-    joins(:orders)
+    left_joins(:orders)
       .group(:id)
       .select(
         <<~SQL.squish
           articles.*,#{' '}
-          (((SUM(orders.value_usd) * 10 + (articles.upvotes_count - articles.downvotes_count) * AVG(orders.value_usd) * 20 + articles.comments_count) / POW(((EXTRACT(EPOCH FROM (now()-articles.published_at)) / 3600)::integer + 1), 2))) AS popularity
+          (((COALESCE(SUM(orders.value_usd), 0) * 10 + (articles.upvotes_count - articles.downvotes_count) * COALESCE(AVG(orders.value_usd), 0) * 20 + articles.comments_count) / POW(((EXTRACT(EPOCH FROM (now()-articles.published_at)) / 3600)::integer + 1), 2))) AS popularity
         SQL
       )
       .order("popularity DESC, published_at DESC")
