@@ -32,31 +32,31 @@
 - **ActiveJob**: Test helper `perform_all_jobs` available
 - **Auth**: `sign_in(user)` helper creates Session for web tests; `api_headers(access_token)` for API tests
 - **Tests cannot run locally** due to Arweave GraphQL API network restrictions in sandbox
+- **MarkdownRenderService / RichTextRenderService**: Pure services (no DB). `FastImage.size` may return nil for unreachable URLs; tests assert on wrapping behavior, not on width/height. iframe-src whitelist = YouTube only.
 
 ## Testing Backlog
 
-1. **[CRITICAL] Order Distribution Revenue Splitting** - `app/services/orders/distribute_service.rb` needs edge case tests
-2. **[CRITICAL] Payment Memo Validation** - `app/models/payment.rb` memo parsing/routing
-3. **[HIGH] Article Authorization** - Access control edge cases
-4. **[HIGH] Early Reader Detection** - `collect_early_readers` grouping logic
-5. **[MEDIUM] Missing Policy Tests** - collection_policy, comment_policy, order_policy
-6. **[MEDIUM] Pre-Order State Machine** - `app/models/pre_order.rb`
-7. **[MEDIUM] Markdown/Rich Text Rendering** - XSS protection
-8. **[LOW] Collection Revenue Distribution** - `distribute_collection_order!`
+1. **[HIGH] Article Authorization** - Access control edge cases (blocked users, self-purchase, mixed free/paid) beyond policy layer
+2. **[HIGH] Early Reader Detection** - `collect_early_readers` grouping with same reader multiple orders and currency mixing
+3. **[MEDIUM] Pre-Order State Machine** - `PreOrder` state transitions and validations (only 3 tests exist)
+4. **[LOW] Collection Revenue Distribution** - `distribute_collection_order!` minimal coverage beyond basic buy flow
 
 ## Work in Progress
 
-- PR created: "Add tests for CiterReference and order distribution with references"
-- Issue created: Monthly Activity 2026-06
+- PR submitted: "Add tests for MarkdownRenderService and RichTextRenderService" (branch `test-assist/markdown-rich-text-render-service-tests`, 38 tests, rubocop clean)
 
 ## Completed Work
 
+### 2026-06-07
+- Added 21 tests for `MarkdownRenderService` (kramdown rendering, iframe whitelist including YouTube www/non-www/javascript:/empty src, link target=_blank, paragraph/table classes, comment-link rewriting, image photoswipe wrapping, blob URL extension stripping)
+- Added 17 tests for `RichTextRenderService` (mirrors markdown suite + ActionText::Content coercion + shared IFRAME_SRC_WHITE_LIST_REGEX constant)
+- Rubocop clean on both new test files
+- Updated Monthly Activity issue for June 2026 with the new run
+
 ### 2026-06-01
-- Added comprehensive tests for CiterReference model (polymorphic associations, uniqueness validation)
-- Added tests for order distribution with references (reference revenue, proportional sharing, minimum threshold, idempotency)
-- Created draft PR with 180+ lines of new tests
-- Created Monthly Activity issue
+- PR #1516 (merged): CiterReference model tests + order distribution with references
+- PR #1519 (merged): Payment memo edge cases + policy tests (Order, Collection, Comment) + blocked-buyer refund fix
 
 ## Last Run
 
-- 2026-06-01 - Initial run complete
+- 2026-06-07 - MarkdownRenderService/RichTextRenderService tests added; PR queued via safeoutputs (awaiting branch push)
