@@ -590,7 +590,7 @@ GEM
       thor (>= 1.3.1)
     sorted_set (1.1.0)
       rbtree
-    sqlite3 (2.9.4-x86_64-linux-gnu)
+    sqlite3 (2.9.5-x86_64-linux-gnu)
     sshkit (1.25.0)
       base64
       logger
