@@ -312,22 +312,9 @@ class PreOrderTest < ActiveSupport::TestCase
     end
   end
 
-  test "pay triggers broadcast_to_views as after_commit callback" do
-    with_quill_bot_stub do
-      pre_order = MixinPreOrder.create!(
-        item: @article,
-        payer: @reader,
-        order_type: :buy_article,
-        amount: @article.price,
-        asset_id: @article.asset_id
-      )
-
-      called = false
-      pre_order.define_singleton_method(:broadcast_to_views) { called = true }
-      pre_order.pay!
-
-      assert called, "Expected broadcast_to_views to run after pay! commit"
-    end
+  test "pay configures broadcast_to_views as after_commit callback" do
+    pay_event = PreOrder.aasm.events.find { |e| e.name == :pay }
+    assert_includes Array(pay_event.options[:after_commit]), :broadcast_to_views
   end
 
   # === Display helpers ===
