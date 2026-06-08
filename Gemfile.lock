@@ -572,7 +572,7 @@ GEM
       websocket (~> 1.0)
     sha3 (1.0.5)
     simple_command (1.0.1)
-    solid_cable (3.0.12)
+    solid_cable (4.0.0)
       actioncable (>= 7.2)
       activejob (>= 7.2)
       activerecord (>= 7.2)
@@ -698,7 +698,7 @@ DEPENDENCIES
   rubocop-rails-omakase
   selenium-webdriver (>= 4.11)
   simple_command
-  solid_cable (~> 3.0)
+  solid_cable (~> 4.0)
   solid_cache (~> 1.0)
   solid_queue
   sqlite3
