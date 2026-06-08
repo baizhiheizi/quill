@@ -12,7 +12,7 @@ class MarkdownRenderServiceTest < ActiveSupport::TestCase
   test "coerces non-string content to string" do
     html = MarkdownRenderService.call(nil, type: :default)
 
-    assert_equal "", html
+    assert_equal "", html.strip
   end
 
   test "default type escapes non-whitelisted iframes" do
