@@ -1,29 +1,36 @@
 ## Requirements
 
-- Ruby v4.0.5 (see `.ruby-version` and `mise.toml`; the Gemfile pins `ruby "~> 4.0"`)
+- Ruby v4.0.5 (see `.ruby-version` and `mise.toml` at the repo root)
 - PostgreSQL
+- Node.js 20+ and Bun 1.x
 
 ### Install Ruby
 
-[rbenv](https://github.com/rbenv/rbenv) is recommended to used for managing Ruby installation.
+`mise` is recommended because the repository ships a `mise.toml` that pins both
+Ruby and Bun.
 
 ```bash
+# Using mise
+mise install
+
+# Or using rbenv
 git clone https://github.com/rbenv/rbenv.git ~/.rbenv
 git clone https://github.com/rbenv/ruby-build.git ~/.rbenv/plugins/ruby-build
 
 echo 'export PATH="$HOME/.rbenv/bin:$PATH"' >> ~/.bashrc
-echo 'eval "$(rbenv init -)"' >> ~/.bashrc
-echo 'source ~/.bashrc' >> ~/.bash_profile
-source ~/.bash_profile
+eval "$(rbenv init -)" >> ~/.bashrc
+source ~/.bashrc
 
 rbenv install 4.0.5
 rbenv global 4.0.5
 rbenv rehash
 
-ruby -v
+ruby -v    # should report 4.0.5
 gem update --system
 gem install bundler
 ```
+
+For a fuller walkthrough see [docs/how-to/local-development.md](docs/how-to/local-development.md).
 
 ### Install Postgresql
 
@@ -109,3 +116,9 @@ bin/rails c
 ```ruby
 Administrator.create name: 'admin', password: 'admin'
 ```
+
+## Documentation
+
+- New to the codebase? Read [docs/explanation/architecture.md](docs/explanation/architecture.md) and [docs/explanation/value-net.md](docs/explanation/value-net.md) before opening a pull request.
+- The full Diátaxis-structured documentation lives under [`docs/`](docs/README.md).
+- For agent-facing context, see [AGENTS.md](AGENTS.md) at the repository root.
