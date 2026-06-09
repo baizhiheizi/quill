@@ -413,7 +413,7 @@ GEM
     order_as_specified (1.7)
       activerecord (>= 5.0.0)
     ostruct (0.6.3)
-    pagy (43.5.5)
+    pagy (43.5.6)
       json
       uri
       yaml
