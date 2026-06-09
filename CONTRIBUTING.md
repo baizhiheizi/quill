@@ -1,7 +1,7 @@
 ## Requirements
 
-- Ruby v3.2
-- Postgresql
+- Ruby v4.0.5 (see `.ruby-version` and `mise.toml`; the Gemfile pins `ruby "~> 4.0"`)
+- PostgreSQL
 
 ### Install Ruby
 
@@ -16,8 +16,8 @@ echo 'eval "$(rbenv init -)"' >> ~/.bashrc
 echo 'source ~/.bashrc' >> ~/.bash_profile
 source ~/.bash_profile
 
-rbenv install 3.2.0
-rbenv global 3.2.0
+rbenv install 4.0.5
+rbenv global 4.0.5
 rbenv rehash
 
 ruby -v

@@ -177,7 +177,7 @@ Run `/perf-assist <instructions>` for focused perf work. For a full run, `/perf-
 - **Paid content**: Article body often gated; API `show` omits content without valid access token
 - **Secrets**: Never commit `config/master.key`, `config/settings.local.yml`, or credential values; Mixin bot keys live in encrypted credentials
 - **Ruby 4 / minitest**: Gemfile pins `minitest ~> 5.25` — Rails 8.1 test runner breaks on minitest 6
-- **CONTRIBUTING.md** lists Ruby 3.2; project actually targets Ruby 4.0.5 per README and `.ruby-version`
+- **CONTRIBUTING.md**: matches the README's Ruby 4.0.5 target; consult `.ruby-version` and `mise.toml` for the authoritative versions of Ruby, Bun, and Node
 - **Deploy**: Production deploy is manual (`gh workflow run Deploy`); uses Kamal + Docker Hub image `anleework/quill`
 - **Noticed 3**: Notifiers live in `app/notifiers/`, inherit `Noticed::Event` via `ApplicationNotifier`; user inbox uses `Noticed::Notification` (`User#notifications`). Web UI filters with `visible_in_web?` / `for_web` because DB records are always created (including Mixin-only delivery). Custom delivery: `DeliveryMethods::MixinBot`, `DeliveryMethods::FlashBroadcast`. Extend gem models in `config/initializers/noticed.rb`.
 - **Solid Cable**: Real-time WebSocket backend uses a separate `cable` database (`config/database.yml`). Run `bin/rails db:prepare` to create/migrate all databases.

@@ -34,7 +34,7 @@ Among them, 40 Satoshi(40%) will be used as an early reader bonus. At this time,
 
 After C, user D also paid 100 Satoshi for article X.
 
-Similarly, 4 Satoshi(40%) will be rewarded as early readers bonus. At this time, there are two early readers, namely B and C, who paid 100 Satoshi for article X before, so both B and C will be rewarded with `40 * 100/(100+100) = 2` Satoshi respectively.
+Similarly, 40 Satoshi (40%) will be rewarded as early readers bonus. At this time, there are two early readers, namely B and C, who paid 100 Satoshi for article X before, so both B and C will be rewarded with `40 * 100 / (100 + 100) = 20` Satoshi respectively.
 
 The platform also charges 10 Satoshi(10%) as a handling fee; The remaining 50 Satoshi is the author's income.
 
@@ -88,7 +88,7 @@ Request body example:
 - Ruby 4.0.5
 - Rails 8.1.3
 - PostgreSQL for local/CI tests
-- Node.js 20+ and Bun 1.x for the asset pipeline
+- Node.js 18+ and Bun 1.x for the asset pipeline (see `.node-version` and `mise.toml`)
 
 ```bash
 bundle install
