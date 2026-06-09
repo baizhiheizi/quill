@@ -92,6 +92,46 @@ class ArticleTest < ActiveSupport::TestCase
     assert_not article.may_buy_by?(users(:reader_one))
   end
 
+  test "may_buy_by? rejects when the reader blocks the author" do
+    article = articles(:published_paid)
+    reader = users(:reader_one)
+    reader.block_user(article.author)
+
+    assert_not article.may_buy_by?(reader)
+  end
+
+  test "may_buy_by? allows the author on their own published article" do
+    article = articles(:published_paid)
+
+    # Note: the policy layer's `purchase?` separately denies this, but the
+    # Purchasable concern's may_buy_by? only checks blocking + state.
+    assert article.may_buy_by?(article.author)
+  end
+
+  test "may_buy_by? returns true for nil user on a published article" do
+    article = articles(:published_paid)
+
+    # `user&.block_user?(author)` short-circuits to nil; `author.block_user?(nil)`
+    # is false. may_buy_by? therefore returns `published?` for unauth callers.
+    # The policy layer's `purchase?` separately requires `user.present?`.
+    assert article.may_buy_by?(nil)
+  end
+
+  test "authorized? denies nil user on a paid article" do
+    article = articles(:published_paid)
+
+    assert_not article.authorized?(nil)
+  end
+
+  test "authorized? denies a free article that is not published" do
+    article = articles(:draft)
+    article.update_columns(price: 0.0)
+    article.reload
+
+    assert_not article.authorized?
+    assert_not article.authorized?(users(:reader_one))
+  end
+
   test "share_of returns author ratio for author" do
     article = articles(:published_paid)
 
