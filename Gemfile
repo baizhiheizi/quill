@@ -53,7 +53,7 @@ gem "aws-sdk-s3", require: false
 gem "image_processing", "~> 2.0"
 
 # Modern rich text editor for Action Text
-gem "lexxy", "~> 0.9.15.alpha"
+gem "lexxy", "~> 0.9.17"
 
 # Reduces boot times through caching; required in config/boot.rb
 gem "bootsnap", ">= 1.4.4", require: false
