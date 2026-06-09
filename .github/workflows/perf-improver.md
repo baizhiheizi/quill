@@ -1,4 +1,62 @@
 ---
+on:
+  permissions:
+    pull-requests: read
+  reaction: eyes
+  schedule: daily
+  slash_command:
+    name: perf-assist
+    strategy: centralized
+  steps:
+  - env:
+      GH_TOKEN: ${{ github.token }}
+    id: check
+    run: |
+      MAX_OPEN_PRS=8
+      if [[ "$GITHUB_EVENT_NAME" != "schedule" ]]; then exit 0; fi
+      COUNT=$(gh pr list --repo ${{ github.repository }} --state open --search 'in:title "[perf-improver]"' --json number --jq 'length' 2>/dev/null || echo 0)
+      [[ "$COUNT" -lt "$MAX_OPEN_PRS" ]]
+  workflow_dispatch: null
+permissions: read-all
+if: needs.pre_activation.outputs.check_result == 'success'
+network:
+  allowed:
+  - defaults
+  - dotnet
+  - node
+  - python
+  - rust
+  - java
+imports:
+- shared/runtime.md
+- shared/engine-minimax.md
+safe-outputs:
+  add-comment:
+    hide-older-comments: true
+    max: 10
+    target: "*"
+  create-issue:
+    labels:
+    - automation
+    - performance
+    max: 4
+    title-prefix: "[perf-improver] "
+  create-pull-request:
+    draft: true
+    labels:
+    - automation
+    - performance
+    max: 4
+    protected-files: fallback-to-issue
+    title-prefix: "[perf-improver] "
+  push-to-pull-request-branch:
+    max: 4
+    required-title-prefix: "[perf-improver] "
+    target: "*"
+  update-issue:
+    max: 1
+    required-title-prefix: "[perf-improver] "
+    target: "*"
 description: |
   A performance-focused repository assistant that runs regularly (daily by default) to identify and implement performance improvements.
   Can also be triggered on-demand via '/perf-assist <instructions>' to perform specific tasks.
@@ -9,83 +67,21 @@ description: |
   - Records performance techniques and learnings in persistent memory
   - Updates a monthly activity summary for maintainer visibility
   Always methodical, measurement-driven, and mindful of trade-offs.
-
-on:
-  schedule: daily
-  workflow_dispatch:
-  slash_command:
-    name: perf-assist
-    strategy: centralized
-  reaction: "eyes"
-  permissions:
-    pull-requests: read
-  steps:
-    - id: check
-      env:
-        GH_TOKEN: ${{ github.token }}
-      run: |
-        MAX_OPEN_PRS=8
-        if [[ "$GITHUB_EVENT_NAME" != "schedule" ]]; then exit 0; fi
-        COUNT=$(gh pr list --repo ${{ github.repository }} --state open --search 'in:title "[perf-improver]"' --json number --jq 'length')
-        [[ "$COUNT" -lt "$MAX_OPEN_PRS" ]]
-      # exits 0 if not scheduled or <MAX_OPEN_PRS open PRs, 1 if ≥MAX_OPEN_PRS
-
-runs-on: [self-hosted, linux, agentic]
-runs-on-slim: "self-hosted"
-
-imports:
-  - shared/runtime.md
-  - shared/engine-minimax.md
-
-if: needs.pre_activation.outputs.check_result == 'success'
-
+runs-on:
+- self-hosted
+- linux
+- agentic
+runs-on-slim: self-hosted
+source: githubnext/agentics/workflows/perf-improver.md@e15e57b40918dbca11b350c55d02ab61934afa75
 timeout-minutes: 60
-
-permissions: read-all
-
-network:
-  allowed:
-  - defaults
-  - dotnet
-  - node
-  - python
-  - rust
-  - java
-
-safe-outputs:
-  add-comment:
-    max: 10
-    target: "*"
-    hide-older-comments: true
-  create-pull-request:
-    draft: true
-    title-prefix: "[perf-improver] "
-    labels: [automation, performance]
-    max: 4
-    protected-files: fallback-to-issue
-  push-to-pull-request-branch:
-    target: "*"
-    required-title-prefix: "[perf-improver] "
-    max: 4
-  create-issue:
-    title-prefix: "[perf-improver] "
-    labels: [automation, performance]
-    max: 4
-  update-issue:
-    target: "*"
-    required-title-prefix: "[perf-improver] "
-    max: 1
-
 tools:
-  web-fetch:
-  github:
-    toolsets: [all]
   bash: true
+  github:
+    toolsets:
+    - all
   repo-memory: true
-
-source: githubnext/agentics/workflows/perf-improver.md@c02eadfca420f2b351f9fcaee883c507a63ca316
+  web-fetch: null
 ---
-
 # Perf Improver
 
 ## Command Mode
@@ -177,23 +173,23 @@ Always do Task 7 (Update Monthly Activity Summary Issue) every run. In all comme
 4. For the selected goal:
 
    a. Create a fresh branch off the default branch: `perf-assist/<desc>`.
-   
+
    b. **Before implementing**: Establish baseline measurements using appropriate methods:
       - Synthetic benchmarks for algorithm changes
       - User journey tests for UX improvements
       - Load tests for scalability work
       - Build time comparisons for developer experience
-   
+
    c. Implement the optimization. Consider approaches like:
       - **Code optimization**: Algorithm improvements, data structure changes, caching
       - **User experience**: Reducing load times, improving responsiveness, optimizing assets
       - **System efficiency**: Resource utilization, concurrency, I/O optimization
       - **Build/test performance**: Faster builds, parallelized tests, reduced CI duration
-   
+
    d. **After implementing**: Measure again with the same methodology. Document both baseline and new measurements.
-   
+
    e. Ensure the code still works - run tests. Add new tests if appropriate.
-   
+
    f. If no improvement: iterate, try a different approach, or revert. Record the attempt in memory as a learning.
 
 5. **Finalize changes**:

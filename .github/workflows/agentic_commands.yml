@@ -1,9 +1,10 @@
-# gh-aw-commands: {"payload_version":"v1","schema_version":"v1","compiler_version":"v0.77.5","commands":["perf-assist","repo-assist","test-assist"],"workflows":["perf-improver","repo-assist","test-improver"]}
+# gh-aw-commands: {"payload_version":"v1","schema_version":"v1","compiler_version":"v0.77.5","commands":["perf-assist","repo-assist","test-assist","unbloat"],"workflows":["perf-improver","repo-assist","test-improver","unbloat-docs"]}
 # Routing summary (sorted):
 #   slash commands:
 #     /perf-assist -> perf-improver [discussion,discussion_comment,issue_comment,issues,pull_request,pull_request_comment,pull_request_review_comment] reaction=eyes
 #     /repo-assist -> repo-assist [discussion,discussion_comment,issue_comment,issues,pull_request,pull_request_comment,pull_request_review_comment] reaction=eyes
 #     /test-assist -> test-improver [discussion,discussion_comment,issue_comment,issues,pull_request,pull_request_comment,pull_request_review_comment] reaction=eyes
+#     /unbloat -> unbloat-docs [pull_request_comment] reaction=eyes
 #   labels:
 #     (none)
 #    ___                   _   _      
@@ -69,7 +70,7 @@ jobs:
       - name: Route slash command
         uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
         env:
-          GH_AW_SLASH_ROUTING: '{"perf-assist":[{"workflow":"perf-improver","events":["discussion","discussion_comment","issue_comment","issues","pull_request","pull_request_comment","pull_request_review_comment"],"ai_reaction":"eyes"}],"repo-assist":[{"workflow":"repo-assist","events":["discussion","discussion_comment","issue_comment","issues","pull_request","pull_request_comment","pull_request_review_comment"],"ai_reaction":"eyes"}],"test-assist":[{"workflow":"test-improver","events":["discussion","discussion_comment","issue_comment","issues","pull_request","pull_request_comment","pull_request_review_comment"],"ai_reaction":"eyes"}]}'
+          GH_AW_SLASH_ROUTING: '{"perf-assist":[{"workflow":"perf-improver","events":["discussion","discussion_comment","issue_comment","issues","pull_request","pull_request_comment","pull_request_review_comment"],"ai_reaction":"eyes"}],"repo-assist":[{"workflow":"repo-assist","events":["discussion","discussion_comment","issue_comment","issues","pull_request","pull_request_comment","pull_request_review_comment"],"ai_reaction":"eyes"}],"test-assist":[{"workflow":"test-improver","events":["discussion","discussion_comment","issue_comment","issues","pull_request","pull_request_comment","pull_request_review_comment"],"ai_reaction":"eyes"}],"unbloat":[{"workflow":"unbloat-docs","events":["pull_request_comment"],"ai_reaction":"eyes"}]}'
           GH_AW_LABEL_ROUTING: '{}'
         with:
           script: |
