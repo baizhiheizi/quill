@@ -2,19 +2,18 @@
 
 ## Repository
 - **Name**: baizhiheizi/quill
-- **Type**: Rails 8.1 monolith (Web3 paid-publishing platform)
-- **Stack**: Ruby 4.0.5, PostgreSQL, Solid Cache/Queue/Cable, Hotwire, esbuild
+- **Type**: Rails8.1 monolith (Web3 paid-publishing platform)
+- **Stack**: Ruby4.0.5, PostgreSQL, Solid Cache/Queue/Cable, Hotwire, esbuild
 
 ## Validated Commands
 
 ### Build/Setup
-- `bundle install --jobs 4 --retry 3` - Install Ruby gems
+- `bundle install --jobs4 --retry3` - Install Ruby gems
 - `bun install --frozen-lockfile` - Install Node modules
-- `bin/dev` - Run full development stack (Rails, Solid Queue, CSS/JS watch)
-- `bun run build` - Build frontend assets
-- `bun run build:css` - Build CSS
+- `bin/dev` - Run full development stack
+- `bun run build` / `bun run build:css` - Build frontend assets
 
-### Test (NOTE: `unset CI` in this workflow env, see Performance Notes)
+### Test (NOTE: `unset CI` in this workflow env)
 - `bin/rails test` - Run all tests
 - `bin/rails zeitwerk:check` - Check Zeitwerk autoload
 - `CI= bin/rails test` - Triggers eager load (DO NOT use — see Performance Notes)
@@ -25,86 +24,58 @@
 - `bun run lint` - Prettier write
 
 ### CI
-- `bin/ci` - Full CI pipeline (setup, rubocop, lint-check, tests, seeds)
+- `bin/ci` - Full CI pipeline
 
 ### Benchmarks
-- `bin/benchmark` - All scenarios
-- `bin/benchmark article_search.popularity` - Popularity feed
-- `bin/benchmark article_search.subscribed` - Subscribed filter
-- **Env note**: in this gh-aw workflow env, must `unset CI` first (see below)
+- `bin/benchmark` - All scenarios; per-scenario via `bin/benchmark article_search.subscribed`
+- **Env note**: must `unset CI` first (see Performance Notes)
 
 ## Performance Opportunities Backlog
-1. **[LOW] `author_revenue_usd` and `reader_revenue_usd`** - Uses `includes(:currency).sum()` with calculation in Ruby, could be optimized to SQL. Memoized with `@author_revenue_usd ||= ...` so only runs once per request. Used in `app/views/dashboard/articles/show.html.erb`.
-2. **[LOW] `filter_block_authors` / `filter_block_by_authors`** - These also call `block_user_ids` / `block_by_user_ids` which materialize ID arrays. Could be subqueries too. (Not yet measured.)
+1. **[LOW] `author_revenue_usd` / `reader_revenue_usd`** - Uses `includes(:currency).sum()` with calculation in Ruby. Memoized with `@author_revenue_usd ||= ...`. Used in `app/views/dashboard/articles/show.html.erb`.
+2. **[LOW] `filter_block_authors` / `filter_block_by_authors`** - These also call `block_user_ids` / `block_by_user_ids` which materialize ID arrays. Could be subqueries too. (Only fires when a user has blocked people.)
 
 ## Work in Progress
-- **Branch**: `perf-assist/subscribed-filter-subqueries` (commit `f3b74af3`) — fix ready locally, awaiting human push.
-- **PR creation limitation**: `safeoutputs create_pull_request` returns success but generates `/tmp/gh-aw/aw-*.patch` + `.bundle` on disk rather than pushing the branch. Patch saved at `/tmp/gh-aw/aw-perf-assist-subscribed-filter-subqueries.patch` (5,498 bytes). Cannot be worked around in this env — must be pushed by a maintainer.
+- **None.** All high-impact items either merged or open as PR awaiting human review.
+- **PR #1546** (`perf-assist/subscribed-filter-subqueries-d00934bea7028f34`) is OPEN, CI passing, both Copilot review threads RESOLVED, awaiting maintainer review/merge.
 
 ## Completed Work
-- Initial repository analysis completed (2026-06-01)
-- Monthly Activity issue updated: `[perf-improver] Monthly Activity 2026-06` (issue #1513) — last updated 2026-06-08
-- Validated build/test commands documentation
-- PR #1518: SQL sampling for `Article#random_readers` — merged
-- PR #1521: `ArticleSearchService#bought` subquery — merged
-- PR #1523: `DailyStatistic` distinct payer counts — merged
-- **PR #1539: `order_by_popularity` LEFT JOIN + COALESCE** — **merged 2026-06-07** (resolves the [HIGH] empty default feed correctness bug)
-- **Local commit `f3b74af3`**: `ArticleSearchService#subscribed` filter refactored to use SQL subqueries (9 → 5 queries per call, O(n) Ruby arrays eliminated)
+- Monthly Activity issue #1513 `[perf-improver] Monthly Activity2026-06` last updated2026-06-09
+- PR #1518 (random_readers SQL sampling) — merged
+- PR #1521 (bought subquery) — merged
+- PR #1523 (DailyStatistic payer counts) — merged
+- **PR #1539** (order_by_popularity LEFT JOIN + COALESCE) — merged2026-06-07 (closed [HIGH] empty default feed correctness bug)
+- **PR #1546** (subscribed filter SQL subqueries) — OPEN2026-06-08:9 →5 queries per call, O(n) Ruby arrays eliminated, guard clause for nil user
 
 ## Performance Notes
-- **Env quirk**: this gh-aw workflow sets `CI=true`, which makes `config.eager_load = true` in `config/environments/test.rb`. Eager load hits `app/libs/arweave_bot/graphql.rb` which does `GraphQL::Client.load_schema(http)` → HTTP 403 on `arweave.net` (firewall). Workaround: **`unset CI` before any `bin/rails test` / `bin/benchmark` invocation**. Without `CI=`, the test env does not eager-load.
-- **Bug discovered & merged**: `Article.order_by_popularity` was using `joins(:orders)` (INNER JOIN), so articles with no orders were excluded from the default feed. **Fixed and merged in PR #1539** (LEFT JOIN + COALESCE).
-- **Action store**: `action_store` gem dynamically generates `subscribe_user_ids`, `subscribe_by_user_ids`, `block_user_ids`, `block_by_user_ids` from the `action_store :verb, :target` declarations. No need to define them in the User model.
-- **PR creation in this env**: `safeoutputs create_pull_request` does not actually push. Generates `/tmp/gh-aw/aw-<branch>.patch` and `.bundle` on disk. Use safeoutputs `push_to_pull_request_branch` if a branch is already on remote.
-- **Benchmarks**: `bin/benchmark` works fine with `unset CI`. Fixture-scale only; ms numbers are not production-representative but useful for relative before/after.
-- **Test DB pollution**: `bin/rails runner` outside of test transactions persists writes to the test DB. Always run `Action.destroy_all` (or similar) before re-running tests after debug sessions in the test env.
-- **Pre-existing test failures**: `markdown_render_service_test.rb` and `rich_text_render_service_test.rb` fail with HTTP 403 to external image hosts. Firewall-blocked; not caused by perf-improver changes. (Verified by stashing and re-running on main: same 1 failure, 2-3 errors.)
-- **subscribed filter SQL**: Old implementation produced `("articles"."author_id" = X OR 1=0)` SQL when one of the two arrays was empty (the `OR 1=0` is generated by Rails for empty `IN` clauses). The new subquery approach produces a clean `IN (SELECT ...)` shape that PostgreSQL handles natively.
+- **Env quirk**: this gh-aw workflow sets `CI=true`, making `config.eager_load = true` in `config/environments/test.rb`. Eager load hits `app/libs/arweave_bot/graphql.rb` (HTTP403 to `arweave.net`). Workaround: **`unset CI` before any `bin/rails test` / `bin/benchmark`**.
+- **Bug discovered & merged**: `Article.order_by_popularity` used `joins(:orders)` (INNER JOIN); articles with no orders were excluded from default feed. Fixed and merged in PR #1539.
+- **Action store**: `action_store` gem dynamically generates `subscribe_user_ids`, `block_user_ids`, etc. from `action_store :verb, :target` declarations. No need to define in User model.
+- **PR creation in this env**: `safeoutputs create_pull_request` DOES create real PRs — PR #1546 was opened successfully2026-06-08. Earlier memory note claiming it didn't push was based on incomplete observation.
+- **Benchmarks**: `bin/benchmark` works with `unset CI`. Fixture-scale only; relative before/after useful.
+- **Test DB pollution**: `bin/rails runner` outside test transactions persists writes. Always clean up after debug.
+- **Pre-existing test failures**: `markdown_render_service_test.rb` / `rich_text_render_service_test.rb` fail with HTTP403 to external image hosts; firewall-blocked, not caused by perf-improver changes.
+- **Copilot PR review false positives**: Copilot reviews on PR #1546 produced2 comments that were resolved without code changes — both flagged issues were already addressed in the original diff (guard clause `return @articles.none if @current_user.blank?`; test asserts on `IN (SELECT...)` pattern count, not alias).
 
-## Run History
-- **2026-06-08 12:50 UTC** - [Run](https://github.com/baizhiheizi/quill/actions/runs/27138209827)
-  - Refactored `ArticleSearchService#subscribed` filter to use SQL subqueries
-  - 9 → 5 queries per call; O(n) Ruby arrays eliminated
-  - Branch `perf-assist/subscribed-filter-subqueries` committed locally (commit `f3b74af3`); could not push
-  - Tests: 7 runs, 21 assertions, 0 failures; Rubocop clean
-  - Confirmed PR #1539 is merged; closed the [HIGH] backlog item
-  - Confirmed `subscribe_user_ids` is gem-generated (not missing from User)
-  - Monthly Activity issue #1513 updated
-
-- **2026-06-07 00:24 UTC** - [Run](https://github.com/baizhiheizi/quill/actions/runs/27059506134)
-  - Re-applied `order_by_popularity` LEFT JOIN + COALESCE fix on fresh branch
-  - Discovered the INNER JOIN causes an **empty default feed** when no orders exist (correctness bug, not just perf)
-  - Tests: 16 runs, 30 assertions, 0 failures; Rubocop clean
-  - `safeoutputs create_pull_request` limitation confirmed (patch/bundle on disk, no actual push)
-  - Monthly Activity issue #1513 updated
-  - Discovered `unset CI` workaround for the Arweave firewall issue
-
-- **2026-06-04 12:00 UTC** - [Run](https://github.com/baizhiheizi/quill/actions/runs/26926616504)
-  - Fixed `order_by_popularity` scope: INNER JOIN → LEFT JOIN, COALESCE wrappers on SUM/AVG
-  - Branch `perf-assist/order-by-popularity-left-join` committed locally — could not push
-  - Tests: 10 runs, 14 assertions, 0 failures; Rubocop clean
-
-- **2026-06-02 12:00 UTC** - Local Cursor run
-  - Created PR #1523: `DailyStatistic` payer counts via SQL
-  - Validated `bin/benchmark` harness on main (4 scenarios)
-
-- **2026-06-01 14:00 UTC** - Local Cursor run
-  - Created PR #1521: `ArticleSearchService#bought` subquery (`.ids` → `select(:id)`)
-  - Created issue #1520: benchmark harness proposal
-  - Measured: SQL verified single-query subquery in test env; eliminates O(n) Ruby ID materialization
-  - Task 5: no user performance issues needing comments
-
-- **2026-06-01 12:00 UTC** - Local Cursor run
-  - Validated build/test/lint commands
-  - Created PR #1518: SQL sampling for `Article#random_readers` — **merged**
-
-- **2026-06-01 08:31 UTC** - [Run](https://github.com/baizhiheizi/quill/actions/runs/26739902209)
-  - Created Monthly Activity issue for June 2026
-  - Identified `random_readers` as easy win
+## Run History (recent)
+- **2026-06-0912:00 UTC** - [Run](https://github.com/baizhiheizi/quill/actions/runs/27202813938)
+ - Confirmed PR #1546 is open, CI passing, review threads resolved (no code changes needed)
+ - Updated Monthly Activity issue #1513 with corrected suggestions (PR #1546 vs stale local-branch ref)
+ - No new code changes; backlog clear of high-impact items
+- **2026-06-0812:50 UTC** - [Run](https://github.com/baizhiheizi/quill/actions/runs/27138209827)
+ - Refactored `ArticleSearchService#subscribed` to SQL subqueries:9 →5 queries, O(n) Ruby arrays eliminated
+ - Branch `perf-assist/subscribed-filter-subqueries-d00934bea7028f34` pushed as PR #1546
+ - Tests:7 runs,21 assertions,0 failures; Rubocop clean
+ - Confirmed PR #1539 merged; closed [HIGH] backlog item
+- **2026-06-0700:24 UTC** - [Run](https://github.com/baizhiheizi/quill/actions/runs/27059506134)
+ - Discovered `unset CI` workaround for Arweave firewall issue
+ - Discovered INNER JOIN causes empty default feed (correctness bug)
+ - `safeoutputs create_pull_request` "no push" observation — later corrected
+- **2026-06-0112:00 UTC** - Created PR #1518 (random_readers SQL sampling) — merged
+- **2026-06-0108:31 UTC** - [Run](https://github.com/baizhiheizi/quill/actions/runs/26739902209) - Created Monthly Activity issue
 
 ## Backlog Cursor
-- **`order_by_popularity` fix** — ✅ MERGED as PR #1539
-- **`ArticleSearchService#subscribed` filter** — Local commit `f3b74af3` on branch `perf-assist/subscribed-filter-subqueries`; awaiting human push
-- **`author_revenue_usd` / `reader_revenue_usd`** — Low impact; deferred
-- **`filter_block_authors` / `filter_block_by_authors`** — Also call `block_user_ids` / `block_by_user_ids`; could be optimized similarly (low priority — only fires when a user has blocked people)
-- **Next**: explore other ArticleSearchService hot paths; consider generalizing the subquery refactor
+- `order_by_popularity` fix — ✅ MERGED (PR #1539)
+- `ArticleSearchService#subscribed` filter — ✅ OPEN (PR #1546, CI passing, awaiting review)
+- `author_revenue_usd` / `reader_revenue_usd` — Low impact; deferred
+- `filter_block_authors` / `filter_block_by_authors` — Low priority; similar pattern to PR #1546
+- **Next**: explore other ArticleSearchService hot paths; look for `.ids` / `.pluck(:id)` materialization patterns elsewhere
