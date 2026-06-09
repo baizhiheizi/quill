@@ -48,4 +48,48 @@ class ArticleSearchServiceTest < ActiveSupport::TestCase
 
     assert_not_includes articles.map(&:author_id), author.id
   end
+
+  test "filter subscribed returns articles from subscribed authors via SQL subquery" do
+    reader = users(:reader_one)
+    author = users(:author)
+    reader.create_action(:subscribe, target: author)
+
+    queries = capture_queries do
+      @articles = ArticleSearchService.call(filter: "subscribed", current_user: reader).to_a
+    end
+
+    assert_includes @articles.map(&:uuid), articles(:published_paid).uuid
+    assert_not_includes @articles.map(&:uuid), articles(:draft).uuid
+    main_article_query = queries.find { |q| q.include?('FROM "articles"') }
+    assert_not_nil main_article_query
+    assert_operator main_article_query.scan(/IN\s*\(SELECT/i).size, :>=, 2,
+      "expected subscribed filter to inline both predicates as SQL subqueries"
+  end
+
+  test "filter subscribed with no subscription returns no rows via subquery" do
+    reader = users(:reader_one)
+
+    queries = capture_queries do
+      @articles = ArticleSearchService.call(filter: "subscribed", current_user: reader).to_a
+    end
+
+    assert_empty @articles
+    # Subquery approach must still issue a single main SELECT (plus eager loads)
+    main_article_selects = queries.count { |q| q.include?('FROM "articles"') }
+    assert_equal 1, main_article_selects,
+      "expected exactly one articles SELECT, got #{main_article_selects}"
+  end
+
+  private
+
+  def capture_queries
+    queries = []
+    sub = ActiveSupport::Notifications.subscribe("sql.active_record") do |_, _, _, _, payload|
+      queries << payload[:sql] unless payload[:name] == "SCHEMA"
+    end
+    yield
+    queries
+  ensure
+    ActiveSupport::Notifications.unsubscribe(sub) if sub
+  end
 end
