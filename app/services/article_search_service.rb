@@ -74,18 +74,20 @@ class ArticleSearchService
       when "revenue"
         @articles.published.order_by_revenue_usd
       when "subscribed"
+        return @articles.none if @current_user.blank?
+
         # Inline as subqueries so we never materialize every subscribed-author
         # ID or owned-collection UUID in Ruby. Matches the pattern used by
         # `bought_articles&.select(:id)` in the filter below.
         subscribed_author_ids =
           Action
-            .where(user_id: @current_user&.id, action_type: "subscribe", target_type: "User")
+            .where(user_id: @current_user.id, action_type: "subscribe", target_type: "User")
             .select(:target_id)
         owned_collection_uuids =
-          Order
-            .where(buyer_id: @current_user&.id, order_type: :buy_collection, item_type: "Collection")
-            .joins("INNER JOIN collections ON collections.id = orders.item_id")
-            .select("collections.uuid")
+          Collection
+            .joins(:buy_orders)
+            .where(buy_orders: { buyer_id: @current_user.id })
+            .select(:uuid)
 
         @articles.published
                  .where(author_id: subscribed_author_ids)

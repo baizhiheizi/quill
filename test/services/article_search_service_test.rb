@@ -60,10 +60,10 @@ class ArticleSearchServiceTest < ActiveSupport::TestCase
 
     assert_includes @articles.map(&:uuid), articles(:published_paid).uuid
     assert_not_includes @articles.map(&:uuid), articles(:draft).uuid
-    # The new implementation inlines both filters as subqueries; the
-    # legacy implementation materialized IDs with two extra SELECTs.
-    refute_includes queries.join("\n"), "buy_orders",
-      "expected owning-collections subquery to avoid a buy_orders ID-load"
+    main_article_query = queries.find { |q| q.include?('FROM "articles"') }
+    assert_not_nil main_article_query
+    assert_operator main_article_query.scan(/IN\s*\(SELECT/i).size, :>=, 2,
+      "expected subscribed filter to inline both predicates as SQL subqueries"
   end
 
   test "filter subscribed with no subscription returns no rows via subquery" do
