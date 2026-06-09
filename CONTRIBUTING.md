@@ -4,9 +4,6 @@
 - PostgreSQL
 - Node.js 20+ and Bun 1.x
 
-> Note: this guide previously documented Ruby 3.2. The pinned version is now
-> 4.0.5 — please prefer `mise` or `rbenv` over a system Ruby.
-
 ### Install Ruby
 
 `mise` is recommended because the repository ships a `mise.toml` that pins both
