@@ -51,7 +51,7 @@ Key terms to look up in the code:
 
 - `Order#order_type` — `:buy_article`, `:reward_article`, `:cite_article`. Only the first two count toward the early-reader pool.
 - `Order#complete!` — marks the order as distributed so it cannot be paid twice.
-- `Order::MINIMUM_AMOUNT` — the smallest payment the service will process.
+- `Orders::DistributeService::MINIMUM_AMOUNT` — the smallest payment the service will process.
 
 ## Further reading
 
