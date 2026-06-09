@@ -13,7 +13,21 @@ jobs:
       startsWith(github.event.comment.body, '/oc') ||
       contains(github.event.comment.body, ' /opencode') ||
       startsWith(github.event.comment.body, '/opencode')
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, linux, agentic]
+    services:
+      db:
+        image: postgres:latest
+        ports: ['5432:5432']
+        env:
+          POSTGRES_HOST_AUTH_METHOD: trust
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    env:
+      CI: true
+      RAILS_ENV: test
     permissions:
       id-token: write
       contents: read
@@ -25,9 +39,14 @@ jobs:
         with:
           persist-credentials: false
 
+      - name: Setup mise
+        uses: jdx/mise-action@v4
+        with:
+          cache: false
+
       - name: Run opencode
         uses: anomalyco/opencode/github@latest
         env:
-          ZHIPU_API_KEY: ${{ secrets.ZHIPU_API_KEY }}
+          MINIMAX_API_KEY: ${{ secrets.MINIMAX_API_KEY }}
         with:
-          model: zai-coding-plan/glm-5.1
+          model: minimax-cn-coding-plan/MiniMax-M3

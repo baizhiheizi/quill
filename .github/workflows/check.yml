@@ -10,7 +10,7 @@ on:
 
 jobs:
   Check:
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, linux]
     services:
       db:
         image: postgres:latest
@@ -26,18 +26,12 @@ jobs:
       CI: true
       RAILS_ENV: test
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
-      - name: Setup Ruby
-        uses: ruby/setup-ruby@v1
+      - name: Setup mise
+        uses: jdx/mise-action@v4
         with:
-          ruby-version: .ruby-version
-          bundler-cache: true
-
-      - name: Setup Bun
-        uses: oven-sh/setup-bun@v2
-        with:
-          bun-version: 1.3.14
+          cache: false
 
       - name: Install system dependencies
         run: sudo apt-get -yyq install libpq-dev
