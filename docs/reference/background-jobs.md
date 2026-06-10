@@ -19,7 +19,7 @@ Adjust lane assignments in `config/queue.yml` (Solid Queue config). The runner i
 | Job | Queue | Purpose |
 |-----|-------|---------|
 | `BatchUploadToArweaveJob` | `low` | Hourly batch that re-uploads recently updated published articles to Arweave |
-| `CreateWalletJob` | `default` | Provisions a Mixin wallet for a newly connected user |
+| `CreateWalletJob` | `default` | Provisions a Mixin wallet for a newly published article |
 | `DetectLocaleJob` | `default` | Auto-detects the locale of an article based on its content |
 | `GeneratePosterJob` | `low` | Renders the social-share poster image for an article |
 | `NotifyForFirstPublishedJob` | `default` | Fires the "first publication" notification to subscribers |
@@ -54,7 +54,6 @@ The `DistributeJob` is the entry point into the value-net pipeline; see [Explana
 | Job | Queue | Purpose |
 |-----|-------|---------|
 | `GenerateJob` | `low` | Rolls up `DailyStatistic` rows for the previous day |
-| `CacheStatsJob` | `low` | Warms the dashboard stats cache |
 
 ### `mixin_messages/`
 
@@ -96,6 +95,7 @@ The `DistributeJob` is the entry point into the value-net pipeline; see [Explana
 |-----|-------|---------|
 | `MonitorJob` | `low` | Polls Mixin for transfer status |
 | `ProcessJob` | `critical` | Applies a confirmed transfer (e.g. marks the corresponding `Order` as paid) |
+| `CacheStatsJob` | `low` | Refreshes per-transfer statistics used by the author dashboard |
 
 ## Adding a new job
 

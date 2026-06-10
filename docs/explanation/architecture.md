@@ -52,14 +52,14 @@ Order (paid)  ──▶  Orders::DistributeJob  ──▶  Orders::DistributeSer
 
 ActiveJob classes live under `app/jobs/`, grouped by domain:
 
-- `articles/` — Arweave uploads, poster generation, locale detection.
+- `articles/` — Arweave uploads, poster generation, locale detection, and article wallet provisioning (`Articles::CreateWalletJob`).
 - `orders/` — per-order and batch distribution.
 - `arweave_transactions/` — Arweave-side acceptance polling.
 - `mixin_messages/` — outbound Mixin bot messages.
 - `mixin_network_snapshots/`, `mixin_network_users/` — Mixin API polling.
 - `currencies/`, `daily_statistics/` — rate snapshots and rollups.
-- `users/` — wallet provisioning (`CreateWalletJob`).
-- `transfers/` — transfer-state polling.
+- `users/` — one-time setup (`PrepareJob`) and mirror imports (`ImportArticlesFromMirrorJob`).
+- `transfers/` — transfer-state polling and stats caching (`Transfers::CacheStatsJob`).
 
 Workers run via **Solid Queue**, which is backed by a separate database. See [Reference → Background jobs](../reference/background-jobs.md).
 
