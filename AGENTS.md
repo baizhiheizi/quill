@@ -16,7 +16,7 @@ Quill is a Web3 paid-publishing platform ([quill.im](https://quill.im/)) where a
 | Real-time | Solid Cable (separate `*_cable` DB) | — |
 | Cache / jobs | Solid Cache, Solid Queue | — |
 | Frontend | Turbo, Stimulus, Tailwind, esbuild | Node 20+, Bun 1.x |
-| Testing | Minitest, Capybara | minitest ~> 5.25 (Ruby 4 compat) |
+| Testing | Minitest, Capybara | minitest ~> 6.0 (locked to 6.0.6) |
 | Lint | RuboCop (rails-omakase), Prettier | — |
 | Deploy | Kamal, Docker | manual `workflow_dispatch` |
 
@@ -176,7 +176,7 @@ Run `/perf-assist <instructions>` for focused perf work. For a full run, `/perf-
 - **Revenue math**: Article defaults — 40% early readers, 10% platform, 50% author (`readers_revenue_ratio`, `platform_revenue_ratio`, `author_revenue_ratio`); changing splits affects `Order` distribution jobs
 - **Paid content**: Article body often gated; API `show` omits content without valid access token
 - **Secrets**: Never commit `config/master.key`, `config/settings.local.yml`, or credential values; Mixin bot keys live in encrypted credentials
-- **Ruby 4 / minitest**: Gemfile pins `minitest ~> 5.25` — Rails 8.1 test runner breaks on minitest 6
+- **Ruby 4 / minitest**: Gemfile pins `minitest ~> 6.0` (locked to `6.0.6`); Rails 8.1 test runner works on minitest 6 in this stack — bump together with Ruby upgrades.
 - **CONTRIBUTING.md**: matches the README's Ruby 4.0.5 target; consult `.ruby-version` and `mise.toml` for the authoritative versions of Ruby, Bun, and Node
 - **Deploy**: Production deploy is manual (`gh workflow run Deploy`); uses Kamal + Docker Hub image `anleework/quill`
 - **Noticed 3**: Notifiers live in `app/notifiers/`, inherit `Noticed::Event` via `ApplicationNotifier`; user inbox uses `Noticed::Notification` (`User#notifications`). Web UI filters with `visible_in_web?` / `for_web` because DB records are always created (including Mixin-only delivery). Custom delivery: `DeliveryMethods::MixinBot`, `DeliveryMethods::FlashBroadcast`. Extend gem models in `config/initializers/noticed.rb`.
