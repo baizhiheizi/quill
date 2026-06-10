@@ -1,0 +1,95 @@
+{
+ "Home": {
+ "sourceFiles": [
+ {"path": "README.md", "hash": "quill-home-readme"},
+ {"path": "AGENTS.md", "hash": "quill-home-agents"}
+ ],
+ "templateHash": "quill-home-tpl",
+ "generatedAt": "2026-06-10T00:00:00Z"
+ },
+ "Architecture": {
+ "sourceFiles": [
+ {"path": "docs/explanation/architecture.md", "hash": "quill-arch-docs"},
+ {"path": "app/controllers/", "hash": "quill-arch-controllers"},
+ {"path": "config/routes/", "hash": "quill-arch-routes"}
+ ],
+ "templateHash": "quill-arch-tpl",
+ "generatedAt": "2026-06-10T00:00:00Z"
+ },
+ "Value-Net": {
+ "sourceFiles": [
+ {"path": "docs/explanation/value-net.md", "hash": "quill-vn-docs"},
+ {"path": "app/services/orders/distribute_service.rb", "hash": "quill-vn-service"}
+ ],
+ "templateHash": "quill-vn-tpl",
+ "generatedAt": "2026-06-10T00:00:00Z"
+ },
+ "Backend": {
+ "sourceFiles": [
+ {"path": "app/", "hash": "quill-backend-app"}
+ ],
+ "templateHash": "quill-backend-tpl",
+ "generatedAt": "2026-06-10T00:00:00Z"
+ },
+ "Background-Jobs": {
+ "sourceFiles": [
+ {"path": "docs/reference/background-jobs.md", "hash": "quill-bj-docs"},
+ {"path": "app/jobs/", "hash": "quill-bj-app"}
+ ],
+ "templateHash": "quill-bj-tpl",
+ "generatedAt": "2026-06-10T00:00:00Z"
+ },
+ "Services": {
+ "sourceFiles": [
+ {"path": "docs/reference/services.md", "hash": "quill-svc-docs"},
+ {"path": "app/services/", "hash": "quill-svc-app"}
+ ],
+ "templateHash": "quill-svc-tpl",
+ "generatedAt": "2026-06-10T00:00:00Z"
+ },
+ "Frontend": {
+ "sourceFiles": [
+ {"path": "app/javascript/", "hash": "quill-fe-js"}
+ ],
+ "templateHash": "quill-fe-tpl",
+ "generatedAt": "2026-06-10T00:00:00Z"
+ },
+ "Stimulus-Controllers": {
+ "sourceFiles": [
+ {"path": "docs/reference/stimulus-controllers.md", "hash": "quill-stim-docs"},
+ {"path": "app/javascript/controllers/index.js", "hash": "quill-stim-index"},
+ {"path": "app/javascript/controllers/floating_controller.js", "hash": "quill-stim-floating"}
+ ],
+ "templateHash": "quill-stim-tpl",
+ "generatedAt": "2026-06-10T00:00:00Z"
+ },
+ "API-Reference": {
+ "sourceFiles": [
+ {"path": "docs/reference/api.md", "hash": "quill-api-docs"}
+ ],
+ "templateHash": "quill-api-tpl",
+ "generatedAt": "2026-06-10T00:00:00Z"
+ },
+ "Getting-Started": {
+ "sourceFiles": [
+ {"path": "docs/how-to/local-development.md", "hash": "quill-gs-docs"}
+ ],
+ "templateHash": "quill-gs-tpl",
+ "generatedAt": "2026-06-10T00:00:00Z"
+ },
+ "For-Agents": {
+ "sourceFiles": [],
+ "templateHash": "quill-fa-tpl",
+ "generatedAt": "2026-06-10T00:00:00Z"
+ },
+ "AGENTS": {
+ "sourceFiles": [],
+ "templateHash": "quill-agents-tpl",
+ "generatedAt": "2026-06-10T00:00:00Z"
+ },
+ "llms": {
+ "sourceFiles": [],
+ "templateHash": "quill-llms-tpl",
+ "generatedAt": "2026-06-10T00:00:00Z"
+ }
+}
