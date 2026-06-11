@@ -15,7 +15,7 @@ We believe that the value of an article is composed of both the author and the r
 The specific rules are as follows,
 
 1. Users can publish articles on the **platform** and become **authors**.
-2. All articles are paid articles, priced by _PressOne Token_ or _Bitcoin_.
+2. All articles are paid articles, priced by one of the supported assets (Bitcoin, _XIN_, _ETH_, or _pUSD_ — see `config/settings.yml` → `supported_assets`).
 3. Users can pay for the articles, i.e. become a **reader** of a article.
 4. For every new income from an article, 40% will be allocated to each **early reader** on a pro-rata basis as **Early Reader Bonus** , 10% will be a handling fee for the **platform**, and the rest will be revenue for the **author**.
 5. **Readers** can also increase the amount they pay for an article by means of a reward in order to increase their share of the bonus.
