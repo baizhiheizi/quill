@@ -117,6 +117,20 @@ bin/dev
 - the CSS and JS watchers (esbuild + Tailwind)
 - the Mixin blaze client (when `blaze_enable: true` in `settings.local.yml`)
 
+`bin/dev` requires either [`overmind`](https://github.com/DarthSim/overmind) (recommended) or [`foreman`](https://github.com/ddollar/foreman) to drive the Procfile. Install one before running `bin/dev`:
+
+```bash
+# macOS
+brew install overmind    # recommended
+
+# or
+gem install foreman
+```
+
+Without either, `bin/dev` exits with `Error: neither 'overmind' nor 'foreman' is installed.`
+
+If you would rather run each process in its own shell, the commands in `Procfile.dev` are also documented in `AGENTS.md` under "Build assets (without bin/dev)".
+
 App: [http://localhost:3000](http://localhost:3000)
 Admin: [http://localhost:3000/admin](http://localhost:3000/admin)
 
