@@ -69,6 +69,4 @@ namespace :admin do
     get :snapshots
     get :safe_outputs
   end
-
-  resources :arweave_transactions, only: %i[index show]
 end

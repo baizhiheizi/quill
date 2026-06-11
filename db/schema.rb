@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_05_21_132240) do
+ActiveRecord::Schema[8.1].define(version: 2026_06_11_052000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_stat_statements"
@@ -138,24 +138,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_21_132240) do
     t.index ["author_id"], name: "index_articles_on_author_id"
     t.index ["collection_id"], name: "index_articles_on_collection_id"
     t.index ["uuid"], name: "index_articles_on_uuid", unique: true
-  end
-
-  create_table "arweave_transactions", force: :cascade do |t|
-    t.bigint "article_snapshot_id"
-    t.uuid "article_uuid"
-    t.datetime "created_at", null: false
-    t.string "digest"
-    t.bigint "order_id"
-    t.uuid "owner_id"
-    t.json "raw"
-    t.string "state"
-    t.string "tx_id"
-    t.datetime "updated_at", null: false
-    t.index ["article_snapshot_id"], name: "index_arweave_transactions_on_article_snapshot_id"
-    t.index ["article_uuid", "owner_id", "digest"], name: "index_ar_tx_on_article_uuid_and_owner_id_and_digest", unique: true
-    t.index ["order_id"], name: "index_arweave_transactions_on_order_id"
-    t.index ["owner_id"], name: "index_arweave_transactions_on_owner_id"
-    t.index ["tx_id"], name: "index_arweave_transactions_on_tx_id"
   end
 
   create_table "bonuses", force: :cascade do |t|

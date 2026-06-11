@@ -29,16 +29,6 @@
           },
           class: "btn btn-primary rounded-full text-lg" unless @tab == 'bought' %>
       </div>
-      <% if current_user.mvm_eth? %>
-        <div class="flex justify-center">
-          <%= link_to t('import_from_mirror'),
-            new_dashboard_imported_article_path,
-            data: {
-              turbo_frame: :modal
-            },
-            class: "text-primary text-sm" %>
-        </div>
-      <% end %>
     </div>
   </div>
 <% end %>

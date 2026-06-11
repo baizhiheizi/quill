@@ -4,7 +4,7 @@
 
 ## Project Overview
 
-Quill is a Web3 paid-publishing platform ([quill.im](https://quill.im/)) where authors publish priced articles and readers pay to access them. Its distinguishing feature is **early reader rewards**: a share of each article's new revenue (default 40%) is distributed proportionally to readers who paid earlier. The stack is a Rails monolith with Hotwire (Turbo + Stimulus), ERB partials, PostgreSQL, Solid Cable, Solid Cache, and background jobs via Solid Queue (separate queue database). Integrations include Mixin Network, MVM (Ethereum L2), MixPay, Arweave permanence, and wallet login (MetaMask, Coinbase, WalletConnect).
+Quill is a Web3 paid-publishing platform ([quill.im](https://quill.im/)) where authors publish priced articles and readers pay to access them. Its distinguishing feature is **early reader rewards**: a share of each article's new revenue (default 40%) is distributed proportionally to readers who paid earlier. The stack is a Rails monolith with Hotwire (Turbo + Stimulus), ERB partials, PostgreSQL, Solid Cable, Solid Cache, and background jobs via Solid Queue (separate queue database). Integrations include Mixin Network, MVM (Ethereum L2), MixPay, and wallet login (MetaMask, Coinbase, WalletConnect).
 
 ## Tech Stack
 
@@ -30,11 +30,11 @@ Classic Rails MVC with namespaced controllers, route draws, service objects, and
 quill/
 ├── app/
 │   ├── controllers/     # Web, dashboard, admin, api, mvm, grover
-│   ├── models/          # ActiveRecord + concerns (AASM, Arweave, etc.)
+│   ├── models/          # ActiveRecord + concerns (AASM, etc.)
 │   ├── views/           # ERB templates and partials
 │   ├── helpers/         # View helpers (UiHelper for modal/dropdown wrappers)
 │   ├── javascript/      # Stimulus controllers, MVM wallet TS, esbuild entry
-│   ├── jobs/            # Active Job work (orders, transfers, arweave)
+│   ├── jobs/            # Active Job work (orders, transfers)
 │   ├── services/        # Query/command objects (e.g. ArticleSearchService)
 │   ├── notifiers/       # Noticed 3 notifier classes + delivery_methods/
 │   └── libs/            # Non-Rails Ruby helpers

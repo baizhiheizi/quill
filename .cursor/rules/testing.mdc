@@ -22,7 +22,7 @@ CI runs full suite after `bin/rails db:setup`.
 ## Style
 
 - Minitest (`test "description" do` or `def test_...`)
-- Use fixtures; avoid hitting external APIs (Mixin, Arweave) in unit tests
+- Use fixtures; avoid hitting external APIs (Mixin) in unit tests
 
 ## Avoid
 
