@@ -46,7 +46,7 @@ Every controller registered in `app/javascript/controllers/index.js`, with its s
 | `pre-orders-pay-button-component` | [`pre_orders_pay_button_component_controller.js`](../../app/javascript/controllers/pre_orders_pay_button_component_controller.js) | Generic "pay" button inside pre-order form |
 | `pre-orders-payment-component` | [`pre_orders_payment_component_controller.js`](../../app/javascript/controllers/pre_orders_payment_component_controller.js) | Pre-order payment summary panel |
 | `pre-orders-state-component` | [`pre_orders_state_component_controller.js`](../../app/javascript/controllers/pre_orders_state_component_controller.js) | Pre-order status pill |
-| `prefetch` | [`prefetch_controller.js`](../../app/javascript/controllers/prefetch_controller.js) | Hover-driven Turbo prefetch |
+| `prefetch` | [`prefetch_controller.js`](../../app/javascript/controllers/prefetch_controller.js) | Hover-driven Turbo prefetch. Values: `debounce-delay` (ms, default `150`). |
 | `preview-upload` | [`preview_upload_controller.js`](../../app/javascript/controllers/preview_upload_controller.js) | Local image preview before upload |
 | `qrcode-component` | [`qrcode_component_controller.js`](../../app/javascript/controllers/qrcode_component_controller.js) | Renders QR codes for deposit addresses |
 | `references-select` | [`references_select_controller.js`](../../app/javascript/controllers/references_select_controller.js) | Cross-article reference picker |
@@ -124,6 +124,8 @@ export default class extends Controller {
 
 Things to notice in the example: `this.boundOnScroll` is a stored reference (inline lambdas cannot be removed); the scroll listener is `{ passive: true }` so Chrome does not stall paint waiting on a `preventDefault`; `show` is wrapped in `debounce(fn, ms)` once in `connect()` — calling `debounce(classList.add(...), 1000)` would not work because `classList.add(...)` runs eagerly and returns `undefined`; `disconnect()` clears both the document listener and the pending hide timer.
 
+The same lifecycle pattern — store a bound handler, add it in `connect()`, remove it in `disconnect()` — also applies to element-scoped listeners, not only `document`/`window`. See [`prefetch_controller.js`](../../app/javascript/controllers/prefetch_controller.js): `this.boundOnMouseover = debounce(this.prefetch, this.debounceDelayValue)` in `connect()`, with the matching `this.element.removeEventListener("mouseover", this.boundOnMouseover)` in `disconnect()`. Because Turbo replaces the body on every navigation, an inline `mouseover` arrow would leak one listener per visit; storing the bound reference is what makes teardown possible.
+
 ### Debouncing DOM writes
 
 Wrap DOM-mutating work in `debounce` so a burst of events collapses into a single write. Reuse `underscore`'s `debounce` (already in the bundle):
@@ -143,6 +145,8 @@ disconnect() {
 ```
 
 For observer-style work that does not need DOM writes, prefer `IntersectionObserver` or `MutationObserver` — see [`infinite_scroll_controller.js`](../../app/javascript/controllers/infinite_scroll_controller.js).
+
+The same pattern is applied to a per-element event listener in [`prefetch_controller.js`](../../app/javascript/controllers/prefetch_controller.js), where the `mouseover` handler is `debounce(this.prefetch, this.debounceDelayValue)` so a brief hover collapses into a single prefetch attempt. The debounce delay is exposed as a Stimulus value (`data-prefetch-debounce-delay-value`, default `150` ms) so views can tune it without forking the controller.
 
 ### Using `stimulus-use`
 
@@ -164,7 +168,7 @@ mouseLeave() { /* … */ }
 1. Run `./bin/rails generate stimulus <name>` (or hand-create `app/javascript/controllers/<name>_controller.js` and add `application.register("<name>", <Name>Controller)` to `index.js`).
 2. Implement `connect()` and `disconnect()`. Tear down everything you set up — listeners, timers, observers, document-level registrations.
 3. For listeners outside `this.element`, store the bound handler on `this` and pass `{ passive: true }` where appropriate.
-4. Wrap DOM-write bursts in `debounce(fn, ms)` and `cancel()` it from `disconnect()` if the controller may be torn down before the debounced call fires.
+4. Wrap DOM-write bursts in `debounce(fn, ms)` and `cancel()` it from `disconnect()` if the controller may be torn down before the debounced call fires. When the delay is meant to be tunable from a view, expose it as a Stimulus value (see `prefetch_controller.js`'s `debounceDelay` value, default `150` ms, consumed via `data-prefetch-debounce-delay-value`).
 5. Add a row to the catalog above.
 6. Run `bun run lint-check` (Prettier) on the touched files before opening a pull request.
 
