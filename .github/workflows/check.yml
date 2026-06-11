@@ -1,12 +1,42 @@
 name: Check
 
 on:
+  workflow_dispatch:
   push:
     branches:
-      - 'main'
+      - main
+    paths: &check_paths
+      - app/**
+      - bin/**
+      - config/**
+      - db/**
+      - lib/**
+      - test/**
+      - vendor/**
+      - public/**
+      - Gemfile
+      - Gemfile.lock
+      - package.json
+      - bun.lock
+      - bun.lockb
+      - config.ru
+      - Rakefile
+      - mise.toml
+      - .ruby-version
+      - .rubocop.yml
+      - .prettierignore
+      - esbuild.config.js
+      - esbuild.inject.js
+      - postcss.config.js
+      - tsconfig.json
+      - tslint.json
+      - Procfile.dev
+      - Procfile.dev-hmr
+      - .github/workflows/check.yml
   pull_request:
     branches:
-      - 'main'
+      - main
+    paths: *check_paths
 
 jobs:
   Check:
