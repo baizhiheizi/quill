@@ -77,7 +77,15 @@ If the article publishes immediately, `article.publish!` is called and the artic
 
 ### `GET /api/files/:hash`
 
-Fetch a file from the asset CDN by its hash.
+> **Deprecated.** The route still resolves, but the lookup is non-functional:
+> `API::FilesController` queries `ArticleSnapshot.find_by(file_hash: params[:hash])`,
+> and the `file_hash` column on `article_snapshots` was dropped in
+> `db/migrate/20220826110843_remove_columns_in_article_snapshots.rb` alongside
+> the Arweave-era `tx_id`, `state`, `file_content`, `requested_at`, and
+> `signed_at` columns. The endpoint therefore always renders a 404 today.
+> It is kept in the route table only to avoid breaking any pre-2022 clients
+> that still issue requests against it. New integrations should not rely on
+> it; an issue or PR that removes the route is welcome.
 
 ### `GET /api/valid_user_filter`
 
