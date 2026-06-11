@@ -45,27 +45,29 @@ Fetch a single article by UUID. Body is only included for authorized readers (se
 
 Create a draft article. **Requires a valid access token.**
 
-Request body:
+The endpoint uses Rails' strong-parameters and expects the article attributes under an `article` key, with `tag_names` passed as a sibling field:
 
 ```json
 {
-  "title": "article title",
-  "content": "some article content",
-  "intro": "some article introduction",
-  "price": 0.000001,
-  "asset_id": "c6d0c728-2624-429b-8e0d-d9d19b6592fa",
+  "article": {
+    "title": "article title",
+    "content": "some article content",
+    "intro": "some article introduction",
+    "price": 0.000001,
+    "asset_id": "c6d0c728-2624-429b-8e0d-d9d19b6592fa"
+  },
   "tag_names": ["BTC", "Blockchain"]
 }
 ```
 
 | Field | Required | Notes |
 |-------|----------|-------|
-| `title` | yes | Plain string |
-| `content` | yes | Markdown body |
-| `intro` | no | Short summary |
-| `price` | yes | Number, in the smallest unit of `asset_id` |
-| `asset_id` | yes | One of the supported asset UUIDs (see `config/settings.yml`) |
-| `tag_names` | no | Array of tag names; missing tags are created automatically |
+| `article[title]` | yes | Plain string |
+| `article[content]` | yes | Markdown body |
+| `article[intro]` | no | Short summary |
+| `article[price]` | yes | Number, in the smallest unit of `asset_id` |
+| `article[asset_id]` | yes | One of the supported asset UUIDs (see `config/settings.yml` → `supported_assets`) |
+| `tag_names` | no | Array of tag names; missing tags are created automatically via `CreateTagService` |
 
 On success, returns the new article's UUID:
 
@@ -73,19 +75,32 @@ On success, returns the new article's UUID:
 { "uuid": "f3a1..." }
 ```
 
-If the article publishes immediately, `article.publish!` is called and the article moves to `published` state before the response is returned.
+If the article is eligible to publish immediately (`may_publish?`), `article.publish!` is called and the article moves to `published` state before the response is returned. Tag reconciliation runs before publishing.
 
 ### `GET /api/files/:hash`
 
-Fetch a file from the asset CDN by its hash.
+Fetch a file from the asset CDN by its hash. Backed by `ArticleSnapshot` (see [`MarkdownRenderService`](./services.md#markdownrenderservice--app servicesmarkdown_render_service-rb)).
 
 ### `GET /api/valid_user_filter`
 
-Returns the validation rules used by the dashboard when inviting new readers. Useful for clients that want to mirror the same checks.
+Check whether a Mixin user is an established participant on Quill — i.e. has either paid for an article or published one. The dashboard uses this to filter who is allowed to receive tips / rewards.
+
+| Param | Type | Notes |
+|-------|------|-------|
+| `user_id` | string (Mixin UUID) | The user to check |
+| `type` | `recent` \| (omitted) | `recent` restricts paid / published activity to the last 7 days; omitting `type` checks lifetime activity |
+
+Response:
+
+```json
+{ "approved": true }
+```
+
+Returns `approved: false` when the user is unknown, or when no qualifying activity is found.
 
 ### Catch-all
 
-Any unmatched path under `/api` falls through to `API::HomeController#index`, which returns service metadata.
+Any unmatched path under `/api` falls through to `API::HomeController#index`, which renders an HTTP `404` (via `render_not_found` in the API base controller). The namespace root (`/api/`) also routes there.
 
 ## Errors
 
