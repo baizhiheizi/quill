@@ -31,7 +31,7 @@ Every controller registered in `app/javascript/controllers/index.js`, with its s
 | `flash` | [`flash_controller.js`](../../app/javascript/controllers/flash_controller.js) | Dismissible flash banners |
 | `floating` | [`floating_controller.js`](../../app/javascript/controllers/floating_controller.js) | Mobile floating action bar that shows on scroll |
 | `flyonui-dropdown` | [`flyonui_dropdown_controller.js`](../../app/javascript/controllers/flyonui_dropdown_controller.js) | FlyonUI-themed dropdown wrapper |
-| `flyonui-modal` | [`flyonui_modal_controller.js`](../../app/javascript/controllers/flyonui_modal_controller.js) | FlyonUI-themed modal wrapper |
+| `modal-component` | [`flyonui_modal_controller.js`](../../app/javascript/controllers/flyonui_modal_controller.js) | FlyonUI-themed modal wrapper. Registered as `modal-component` in the manifest (not `flyonui-modal`); partials use `data-controller="modal-component"`. |
 | `hljs` | [`hljs_controller.js`](../../app/javascript/controllers/hljs_controller.js) | Highlight.js runner triggered on visible code blocks |
 | `infinite-scroll` | [`infinite_scroll_controller.js`](../../app/javascript/controllers/infinite_scroll_controller.js) | Paginates via `IntersectionObserver` |
 | `load-more` | [`load_more_controller.js`](../../app/javascript/controllers/load_more_controller.js) | Click-to-load pagination button |
