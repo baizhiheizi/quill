@@ -1,19 +1,19 @@
 # Stimulus controllers reference
 
-> **30-second summary:** Quill's frontend is wired together by [Stimulus](https://stimulus.hotwired.dev/) controllers that live in [`app/javascript/controllers/`](../../app/javascript/controllers/). Each `*_controller.js` exports a default class that registers a single behaviour; the manifest in [`index.js`](../../app/javascript/controllers/index.js) wires identifiers (`data-controller="…"`) to those classes. When a controller attaches a listener outside of `this.element`, the listener must be removable from `disconnect()` so Turbo navigations do not leak handlers.
+> **30-second summary:** Quill's frontend is wired by [Stimulus](https://stimulus.hotwired.dev/) controllers in [`app/javascript/controllers/`](../../app/javascript/controllers/). Each `*_controller.js` exports a default class for one behaviour; the manifest in [`index.js`](../../app/javascript/controllers/index.js) maps `data-controller="…"` to those classes. Listeners attached outside `this.element` **must** be removable from `disconnect()` so Turbo navigations do not leak handlers.
 
 ## Conventions
 
-- **One controller per file.** Files live in [`app/javascript/controllers/`](../../app/javascript/controllers/) and match the pattern `<snake_case>_controller.js`.
-- **Identifier mapping.** `index.js` maps a `data-controller="floating"` value to `FloatingController` via `application.register("floating", FloatingController)`. Regenerate after adding or renaming a controller with `./bin/rails stimulus:manifest:update`.
-- **Lifecycle hooks.** Implement `initialize()`, `connect()`, and `disconnect()`. Anything that registers an observer, interval, or document-level listener belongs in `connect()` and **must** be torn down in `disconnect()`.
-- **Bound references.** Store event handlers as instance properties (`this.boundOnScroll = …`) so `disconnect()` can pass the **exact same reference** to `removeEventListener`. Anonymous arrow functions registered inline cannot be removed.
-- **Values and targets.** Declare `static values` and `static targets` for declarative HTML API; consume them via `this.<name>Value` and `this.has<Name>Target` / `this.<name>Target`.
-- **Utilities first.** Reuse [`app/javascript/utils/`](../../app/javascript/utils/) (`toast`, `notify`, `uploader`) and [`stimulus-use`](https://github.com/stimulus-use/stimulus-use) mixins (`useHover`, `useTransition`) instead of hand-rolling equivalents.
+- **One controller per file** in [`app/javascript/controllers/`](../../app/javascript/controllers/), named `<snake_case>_controller.js`.
+- **Identifier mapping** lives in `index.js`: `application.register("floating", FloatingController)` binds `data-controller="floating"`. Regenerate after add/rename with `./bin/rails stimulus:manifest:update`.
+- **Lifecycle:** implement `initialize()`, `connect()`, `disconnect()`. Anything registered in `connect()` (observers, intervals, document-level listeners) **must** be torn down in `disconnect()`.
+- **Bound references:** store handlers as instance properties (`this.boundOnScroll = …`) so `disconnect()` can pass the same reference to `removeEventListener`. Inline arrow functions cannot be removed.
+- **Values/targets:** declare `static values` and `static targets`; consume via `this.<name>Value` and `this.has<Name>Target` / `this.<name>Target`.
+- **Reuse utilities** in [`app/javascript/utils/`](../../app/javascript/utils/) (`toast`, `notify`, `uploader`) and [`stimulus-use`](https://github.com/stimulus-use/stimulus-use) mixins (`useHover`, `useTransition`).
 
 ## Catalog
 
-The list below covers every controller registered in `app/javascript/controllers/index.js`. Each row points to the source file and a one-line purpose statement. Read the source for full behaviour — controllers stay short on purpose.
+Every controller registered in `app/javascript/controllers/index.js`, with its source file and a one-line purpose. Read the source for full behaviour — controllers stay short on purpose.
 
 | Identifier | File | Purpose |
 |------------|------|---------|
@@ -70,12 +70,12 @@ The list below covers every controller registered in `app/javascript/controllers
 
 ### Lifecycle and document-level listeners
 
-Turbo replaces the `<body>` on every navigation, which means Stimulus `disconnect()` runs for every controller on every page. Anything you register in `connect()` must be removable in `disconnect()` — especially listeners attached outside of `this.element` (e.g. `document`, `window`).
+Turbo replaces the `<body>` on every navigation, so `disconnect()` runs for every controller on every page. Anything registered in `connect()` must be removable in `disconnect()` — especially listeners outside `this.element` (`document`, `window`).
 
-The two failure modes are:
+Two failure modes:
 
-1. **Listener leaks.** Calling `document.addEventListener("scroll", () => …)` with an inline arrow function each time `connect()` runs creates a new function reference every time. After *N* article views you have *N* listeners, all firing on every scroll event. Always store the bound reference as an instance property so `disconnect()` can pass the same value back to `removeEventListener`.
-2. **Active timers.** `setTimeout` handles returned from `setTimeout` should be cleared in `disconnect()` so a queued hide-after-N-ms callback cannot fire against a controller whose DOM is gone.
+1. **Listener leaks.** `document.addEventListener("scroll", () => …)` with an inline arrow function creates a new reference on every `connect()`. After *N* article views you have *N* listeners firing on every scroll. Store the bound handler as an instance property so `disconnect()` can pass the same reference back to `removeEventListener`.
+2. **Active timers.** Clear `setTimeout` handles in `disconnect()` so a queued callback cannot fire against a controller whose DOM is gone.
 
 The reference example is [`floating_controller.js`](../../app/javascript/controllers/floating_controller.js):
 
@@ -122,16 +122,11 @@ export default class extends Controller {
 }
 ```
 
-Key things to notice:
-
-- `this.boundOnScroll` is a stored reference, not an inline lambda — `removeEventListener` can find the same handler.
-- The scroll listener is registered with `{ passive: true }` so the browser can keep scroll smooth (Chrome otherwise treats every non-passive listener as a potential `preventDefault` site and stalls paint).
-- `show` is wrapped in `debounce(fn, ms)` once, in `connect()`. Calling `debounce(classList.add(...), 1000)` would not work because `classList.add(...)` runs eagerly (its return value is `undefined`, so `debounce` has no function left to call later).
-- `disconnect()` clears both the document listener and the pending hide timer.
+Things to notice in the example: `this.boundOnScroll` is a stored reference (inline lambdas cannot be removed); the scroll listener is `{ passive: true }` so Chrome does not stall paint waiting on a `preventDefault`; `show` is wrapped in `debounce(fn, ms)` once in `connect()` — calling `debounce(classList.add(...), 1000)` would not work because `classList.add(...)` runs eagerly and returns `undefined`; `disconnect()` clears both the document listener and the pending hide timer.
 
 ### Debouncing DOM writes
 
-Wrap DOM-mutating work in `debounce` so a burst of events collapses into a single write. Reuse `underscore`'s `debounce` (already in the bundle) rather than rolling your own:
+Wrap DOM-mutating work in `debounce` so a burst of events collapses into a single write. Reuse `underscore`'s `debounce` (already in the bundle):
 
 ```javascript
 import { debounce } from "underscore";
@@ -147,16 +142,11 @@ disconnect() {
 }
 ```
 
-For pure observer-style work that does not need DOM writes, prefer `IntersectionObserver` or `MutationObserver` — see [`infinite_scroll_controller.js`](../../app/javascript/controllers/infinite_scroll_controller.js) for a worked example.
+For observer-style work that does not need DOM writes, prefer `IntersectionObserver` or `MutationObserver` — see [`infinite_scroll_controller.js`](../../app/javascript/controllers/infinite_scroll_controller.js).
 
 ### Using `stimulus-use`
 
-[`stimulus-use`](https://github.com/stimulus-use/stimulus-use) provides shared mixins. Two used today:
-
-- `useHover` — drives `mouseEnter` / `mouseLeave` lifecycle hooks. Used by [`sidebar_controller.js`](../../app/javascript/controllers/sidebar_controller.js).
-- `useTransition` — drives `enter` / `leave` / `toggle` transitions. Used by [`dropdown_controller.js`](../../app/javascript/controllers/dropdown_controller.js).
-
-Activate them in `connect()`:
+[`stimulus-use`](https://github.com/stimulus-use/stimulus-use) mixins add shared lifecycle hooks. Two in use today: `useHover` (`mouseEnter` / `mouseLeave`, [`sidebar_controller.js`](../../app/javascript/controllers/sidebar_controller.js)) and `useTransition` (`enter` / `leave` / `toggle`, [`dropdown_controller.js`](../../app/javascript/controllers/dropdown_controller.js)). Activate them in `connect()`:
 
 ```javascript
 import { useHover } from "stimulus-use";
@@ -171,16 +161,16 @@ mouseLeave() { /* … */ }
 
 ## Adding a new controller
 
-1. Run `./bin/rails generate stimulus <name>` so the file and the `index.js` registration are created together. Or, if you prefer to do it by hand, create `app/javascript/controllers/<name>_controller.js` and add an `application.register("<name>", <Name>Controller)` line to `index.js`.
-2. Implement `connect()` and `disconnect()`. Anything you set up — listeners, timers, observers, document-level registrations — must be torn down.
-3. If the controller attaches a listener outside of `this.element`, store the bound handler on `this` and pass `{ passive: true }` where appropriate.
-4. For DOM-write bursts, wrap the work in `debounce(fn, ms)`; remember to `cancel()` it from `disconnect()` if your controller might be torn down before the debounced call fires.
-5. Update the catalog table above so the new controller is discoverable.
+1. Run `./bin/rails generate stimulus <name>` (or hand-create `app/javascript/controllers/<name>_controller.js` and add `application.register("<name>", <Name>Controller)` to `index.js`).
+2. Implement `connect()` and `disconnect()`. Tear down everything you set up — listeners, timers, observers, document-level registrations.
+3. For listeners outside `this.element`, store the bound handler on `this` and pass `{ passive: true }` where appropriate.
+4. Wrap DOM-write bursts in `debounce(fn, ms)` and `cancel()` it from `disconnect()` if the controller may be torn down before the debounced call fires.
+5. Add a row to the catalog above.
 6. Run `bun run lint-check` (Prettier) on the touched files before opening a pull request.
 
 ## See also
 
-- [Explanation → Architecture](../explanation/architecture.md) — the broader frontend stack (Hotwire, Tailwind, esbuild, Bun).
-- [How-to → Set up local development](../how-to/local-development.md) — Bun + esbuild tooling.
-- [AGENTS.md](../../AGENTS.md) — agent-facing project context, including the tech-stack table.
-- [`.cursor/rules/javascript-frontend.mdc`](../../.cursor/rules/javascript-frontend.mdc) — agent-side conventions file (Stimulus + esbuild).
+- [Explanation → Architecture](../explanation/architecture.md) — the broader frontend stack (Hotwire, Tailwind, esbuild, Bun)
+- [How-to → Set up local development](../how-to/local-development.md) — Bun + esbuild tooling
+- [AGENTS.md](../../AGENTS.md) — agent-facing project context and tech-stack table
+- [`.cursor/rules/javascript-frontend.mdc`](../../.cursor/rules/javascript-frontend.mdc) — agent-side conventions (Stimulus + esbuild)
