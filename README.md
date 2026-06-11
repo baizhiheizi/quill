@@ -30,7 +30,7 @@ Therefore, article X earned 100 Satoshi, because B is the first reader and there
 
 User C paid 100 Satoshi for article x after B. As a result, Article X earns another 100 Satoshi.
 
-Among them, 40 Satoshi(40%) will be used as an early reader bonus. At this time, there is only one early reader, user B, so B monopolizes this 40% reward; The platform also receives 10 Satoshi(10%) as a handling fee; The remaining 5 Satoshi is the author's income.
+Among them, 40 Satoshi(40%) will be used as an early reader bonus. At this time, there is only one early reader, user B, so B monopolizes this 40% reward; The platform also receives 10 Satoshi(10%) as a handling fee; The remaining 50 Satoshi is the author's income.
 
 After C, user D also paid 100 Satoshi for article X.
 
