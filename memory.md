@@ -9,46 +9,49 @@ metadata:
 
 ## Current state
 
-- **Run of repo-assist workflow on 2026-06-11 (run 27296289408).**
+- **Run of repo-assist workflow on 2026-06-11 (run 27324860546).**
 - Repo is baizhiheizi/quill (Rails 8.1, Ruby 4.0.5).
 - AGENTS.md exists; read before any code PR.
 
 ## Selected tasks for this run
 
-- Task 2 (Issue Investigation and Comment) — done: surveyed 20 open issues, all auto-generated (`[aw]` tracking, quality-improver, repo-assist monthly, monthly activity summaries, repo-assist PR tracking issue). No human-submitted issues to engage on.
-- Task 3 (Issue Investigation and Fix) — not applicable: no `bug`/`help wanted`/`good first issue` labels exist; fell back to Task 2.
-- Task 4 (Engineering Investments) — done: documented the overmind/foreman requirement in `docs/how-to/local-development.md` (Section 5 "Boot the app"). 1 file, +14/-0 lines.
+- Task 2 (Issue Investigation and Comment) — done: surveyed 21 open issues (10 aw-tracking, 1 quality-improver, 1 repo-assist monthly, 1 repo-assist previous run, 3 per-workflow monthlies, 1 update-docs PR description, 1 update-docs PR intent). No human-submitted issues to engage on.
+- Task 9 (Testing Improvements) — done: added 4 tests for `OrderCreatedNotifier` (fill in zero-coverage gap).
+- Task 10 (Take the Repository Forward) — same Task 9 action; testing gap was the highest-value, lowest-risk improvement identified.
 - Task 11 (Update Monthly Activity Summary) — done: appended this run's entry to issue #1564.
 
 ## Completed this run
 
-- Created PR via `safeoutputs create_pull_request` on branch `repo-assist/eng-docs-bin-dev-forego-2026-06-11`:
-  - **Title**: `docs(local-dev): note overmind/foreman requirement for bin/dev`
-  - **Diff**: `docs/how-to/local-development.md` +14 lines. New paragraph + fenced install block under "5. Boot the app" listing `brew install overmind` and `gem install foreman` and pointing to the AGENTS.md "Build assets (without bin/dev)" section as a per-shell fallback.
-  - **Test status**: docs-only; no code, no Gemfile changes.
+- Branch `repo-assist/test-order-created-notifier-2026-06-11`:
+  - Commit `95c233d5 test: add OrderCreatedNotifier tests` — adds `test/notifiers/order_created_notifier_test.rb` (4 tests, 103 lines): buy_article visible web notification, reward_article "rewarded" message, buy_article URL contains UUID, no mixin bot delivery for non-messenger recipients.
+  - `bin/rubocop test/notifiers/order_created_notifier_test.rb` clean (1 file, 0 offenses).
+  - `bin/rails test` not run locally — sandbox lacks PostgreSQL (CI exercises).
+  - PR created via `safeoutputs create_pull_request`. Patch + bundle at `/tmp/gh-aw/aw-repo-assist-test-order-created-notifier-2026-06-11.{patch,bundle}`; PR finalised by workflow runner downstream.
 - Updated issue #1564 `[repo-assist] Monthly Activity 2026-06` with this run's entry.
 
-## Open issue landscape (20 open, all auto-generated)
+## Open issue landscape (21 open, all auto-generated)
 
-- #1573, #1572, #1570, #1569, #1568, #1567, #1566, #1558, #1544, #1543, #1540, #1538, #1537 — `[aw]` workflow failure tracking
-- #1571 — `quality-improver` Payment/Web3 resilience report (recommends 5-cycle cooldown; defer)
-- #1564 — `[repo-assist] Monthly Activity 2026-06` (this run's target)
-- #1563 — `[repo-assist] docs(agents): correct stale minitest pin note in AGENTS.md` (PR fallback-to-issue from previous run; maintainer can click compare link to open PR)
+- #1579 — `update-docs` Stimulus catalog identifier fix PR (open, draft) [doc-fix for `flyonui-modal` → `modal-component` drift]
+- #1577 — `update-docs` PR description (touch protected files, blocked from auto-PR; same drift, fallback-to-issue) — note: PR #1579 is the recovered version
+- #1573, #1572, #1570, #1569, #1568, #1566, #1558, #1544, #1540, #1538, #1537 — `[aw]` workflow failure tracking
+- #1571 — `quality-improver` Payment/Web3 resilience report (5-cycle cooldown — defer)
+- #1564 — `[repo-assist] Monthly Activity 2026-06`
+- #1563 — `[repo-assist] docs(agents): correct stale minitest pin note in AGENTS.md` (PR fallback-to-issue from previous run; protected file)
 - #1561, #1517, #1513 — per-workflow `[efficiency-improver]` / `[test-improver]` / `[perf-improver]` Monthly Activity
 - #1557 — `update-docs` PR description (touch protected files, blocked from auto-PR)
 - **No human-submitted issues to engage on.**
 
 ## Open PRs
 
-- 0 open PRs at start of run.
-- 1 PR created this run (above). The PR itself is created via `safeoutputs` (patch+bundle artefact at `/tmp/gh-aw/aw-repo-assist-eng-docs-bin-dev-forego-2026-06-11.{patch,bundle}`); finalised by workflow runner downstream.
+- #1579 — open, draft, by github-actions: `docs: fix Stimulus catalog identifier for flyonui modal wrapper` (the `flyonui-modal` → `modal-component` drift fix)
+- 1 PR created this run (above OrderCreatedNotifier test). The PR itself is created via `safeoutputs` (patch+bundle artefact at `/tmp/gh-aw/aw-repo-assist-test-order-created-notifier-2026-06-11.{patch,bundle}`); finalised by workflow runner downstream.
 
 ## Backlog / future work
 
 - Re-engage when human issues appear.
 - Watch for first-time contributors; welcome them and point to README/CONTRIBUTING.
-- If AGENTS.md / docs drift reappears, file a follow-up PR.
-- Respect issue #1571's 5-cycle cooldown on the payment/Web3 resilience work — do not touch AASM locks, encryption, Solid Queue topology, error reporting, or Stimulus error states until the quality-improver comes back to verify.
+- 16 notifiers in `app/notifiers/` still lack dedicated tests: `article_imported`, `article_published`, `article_rewarded`, `collection_bought`, `collection_listed`, `comment_deleted`, `order_created` ✅ (done this run), `payment_created`, `payment_refunded`, `subscribe_user_action_created`, `swap_order_finished`, `swap_order_swapping`, `tagging_created`, `transfer_processed`, `user_safe_registration`. Each is a small (~30-line) follow-up if a test-improver run hasn't picked them up.
+- Respect issue #1571's 5-cycle cooldown on payment/Web3 resilience work — do not touch AASM locks, encryption, Solid Queue topology, error reporting, or Stimulus error states until the quality-improver comes back to verify.
 - Defer new engineering work until #1546 (subscribed filter) and test-improver drafts are merged.
 
 ## Notes
@@ -57,4 +60,8 @@ metadata:
 - `safeoutputs` PR creation emits a `.patch` + `.bundle` artefact under `/tmp/gh-aw/`; PR is finalised by the workflow runner downstream.
 - The perf-improver and efficiency-improver workflows cover the perf/efficiency backlog at higher fidelity than repo-assist can match; defer to them.
 - Dependabot alerts API fails with `400 Pagination using the 'page' parameter is not supported` — the integration might be disabled or the MCP wrapper doesn't support it. Not actionable from this run.
-- The previous run's AGENTS.md minitest pin fix is still in issue #1563 (compare link: `repo-assist/eng-docs-minitest-pin-fix-2026-06-10-d49bbe6ac72c165b`); this run added a separate, non-overlapping docs fix in `docs/how-to/local-development.md`.
+- The previous run's AGENTS.md minitest pin fix is still in issue #1563 (compare link: `repo-assist/eng-docs-minitest-pin-fix-2026-06-10-d49bbe6ac72c165b`); AGENTS.md / CONTRIBUTING.md / README.md are all protected files for auto-PR, so further docs-drift fixes have to land via manual compare links from issues.
+- The `local-development.md` "Node.js 20+" → "Node.js 18+" drift was identified in PR #1577 (`origin/docs/fix-documentation-drift-2d9f084a48ba2302`, commit `1a1e784a`), but the protected-file block on README.md is keeping the whole bundle from auto-merging. The fix already exists on that branch and just needs a maintainer compare-link click.
+- The stimulus-controllers catalog had `flyonui-modal` in docs vs `modal-component` in `index.js`; #1579 is the fix (open PR).
+- `OrderCreatedNotifier` tests use a private `create_reward_order!` helper that mirrors `CommerceHelpers#create_buy_order!` (stub `Payment#generate_order!`, save with `validate: false`). Buy_collection case was dropped from the test because no `listed:` Collection fixture exists and the `Collection` validations require name/symbol/description/asset_id — future test could build a Collection inline.
+- Safeoutputs CLI logs were confusing on the create_pull_request call (showed an old `[repo-assist] docs(contributing)` title in stderr) but the patch file at `/tmp/gh-aw/aw-repo-assist-test-order-created-notifier-2026-06-11.patch` has the correct `test: add OrderCreatedNotifier tests` commit subject, confirming the right content was processed.
