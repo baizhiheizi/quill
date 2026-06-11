@@ -43,16 +43,23 @@
 ## Testing Backlog
 
 1. ~~[HIGH] Article Authorization~~ — ✅ Addressed 2026-06-09 (branch `test-assist/article-authorization-edge-cases`).
-2. [HIGH] Early Reader Detection — `collect_early_readers` grouping with same reader multiple orders and currency mixing.
+2. ~~[HIGH] Early Reader Detection~~ — ✅ Addressed 2026-06-11 (branch `test-assist/early-reader-detection`).
 3. ~~[MEDIUM] Pre-Order State Machine~~ — ✅ Addressed 2026-06-08 (PR #1545, merged).
 4. [LOW] Collection Revenue Distribution — `distribute_collection_order!` minimal coverage beyond basic buy flow.
 
 ## Work in Progress
 
-- Branch `test-assist/article-authorization-edge-cases` committed locally (commit `5d1560d`): +23 tests in `test/policies/article_policy_test.rb` + 5 tests in `test/models/article_test.rb`. `bin/rubocop` clean. `bin/rails test` not run locally (Arweave firewall). `safeoutputs create_pull_request` returned patch mode; patch at `/tmp/gh-aw/aw-test-assist-article-authorization-edge-cases.patch` (7,841 bytes). PR may not yet be visible on remote.
-- Monthly Activity issue #1517 updated with this run's entry.
+- Branch `test-assist/early-reader-detection` committed locally (commit `c825d82`): +5 tests in `test/models/order_test.rb` (17 → 22). `bin/rubocop` clean. 22 runs, 51 assertions, 0 failures. `safeoutputs create_pull_request` returned patch mode; patch at `/tmp/gh-aw/aw-test-assist-early-reader-detection.patch` (8,178 bytes). PR may not yet be visible on remote.
+- Monthly Activity issue #1517 updated with this run's entry; backlog updated (Early Reader Detection → done); Suggested Actions cleaned up (removed PreOrder draft, #1516, #1519, #1542 close — all merged/closed); added follow-up note for the article-authorization PR from 2026-06-09.
+- 2026-06-09's `test-assist/article-authorization-edge-cases` PR is still unconfirmed on remote — needs follow-up.
 
 ## Completed Work
+
+### 2026-06-11
+- Added 5 tests to `test/models/order_test.rb` (17 → 22): `collect_early_readers` same-reader fold (reward+buy combined share), same-reader mixed-currency (forces value_btc branch), reward+buy fold verification, multi-reader mixed-currency share math, empty `collect_early_readers` boundary
+- Rubocop clean on the updated file
+- PR opened via safeoutputs patch mode (branch `test-assist/early-reader-detection`, commit `c825d82`)
+- Monthly Activity issue #1517 updated; cleaned up 4 stale suggested actions
 
 ### 2026-06-09
 - Added 23 tests to `test/policies/article_policy_test.rb` (6 → 29): show?/purchase?/vote?/comment?/subscribe?/reward?/update? edge cases — guests, author self-actions, blocking, draft, free vs paid
@@ -78,4 +85,4 @@
 
 ## Last Run
 
-- 2026-06-09 - Article authorization edge case tests added (28 new tests, branch `test-assist/article-authorization-edge-cases`); PR pushed via safeoutputs patch mode; Monthly Activity issue #1517 updated
+- 2026-06-11 - Early reader detection tests added (5 new tests, branch `test-assist/early-reader-detection`); PR pushed via safeoutputs patch mode; Monthly Activity issue #1517 updated; backlog (Early Reader Detection) marked done; 4 stale Suggested Actions cleaned up
