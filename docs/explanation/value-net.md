@@ -43,15 +43,27 @@ A reader who pays more for an article (either through a higher price or a reward
 
 This is the lever that turns passive reading into active stake-holding in the article's success.
 
+## Rules at the edge
+
+The worked example above assumes every order is paid in the same currency. The real implementation has a few extra rules worth knowing:
+
+- **One share per reader, not per order.** A reader who both *bought* and *rewarded* the same article is treated as a single early reader. Their orders are folded together in `Orders::DistributeService#collect_early_readers`, and the service emits a single reader-revenue transfer (keyed on the sorted order trace ids + the new order's trace id).
+- **Mixed currencies fall back to BTC value.** If the early-reader pool and the incoming order are not all in the same `asset_id`, the service stops using the raw `total` and weights every share by `Order#value_btc` instead. This keeps the pro-rata split fair when the article has been paid in BTC, USDT, XIN, and so on. The current order always joins the pool in its own asset — the conversion is applied to the historical weights.
+- **Below the floor, no transfer.** A reader's computed share is skipped when it is below `Orders::DistributeService::MINIMUM_AMOUNT` (`0.00000001`). Those sub-floor amounts are not lost; they are absorbed into the **author revenue** for the order, because the author line is `total − readers − quill − references − collection` and any skipped reader share is therefore implicitly added back to the author. The author transfer is itself skipped if the remainder is sub-floor.
+- **Reference and collection revenue are computed first.** `[Reference]` articles (via `Article#article_references`) and the parent `[Collection]` (via `Collection#collection_revenue_ratio`) are paid out of the order total **before** the 50/40 author/early-reader split, then the author gets whatever is left. A 10% platform cut is always subtracted from the gross `total`.
+- **The paid asset may not be the payout asset.** When the buyer's payment went through Mixin Pay with a swap, the revenue is paid out in `payment.swap_order&.fill_asset_id`; otherwise it is paid in `payment.asset_id`. The early-reader pool's *historical* weights are still denominated in the order's own `total` or `value_btc` — the swap only affects the *output* asset.
+
 ## Where it lives in the codebase
 
 The split is implemented by [`Orders::DistributeService`](../../app/services/orders/distribute_service.rb) and invoked per order via [`Orders::DistributeJob`](../../app/jobs/orders/distribute_job.rb). Batches of pending orders are flushed by [`Orders::BatchDistributeJob`](../../app/jobs/orders/batch_distribute_job.rb).
 
 Key terms to look up in the code:
 
-- `Order#order_type` — `:buy_article`, `:reward_article`, `:cite_article`. Only the first two count toward the early-reader pool.
-- `Order#complete!` — marks the order as distributed so it cannot be paid twice.
-- `Orders::DistributeService::MINIMUM_AMOUNT` — the smallest payment the service will process.
+- `Order#order_type` — `:buy_article`, `:reward_article`, `:cite_article`. Only the first two count toward the early-reader pool. `cite_article` is a *reference* payment to a cited article and never makes the citer an early reader of the cited piece.
+- `Order#value_btc` — the order's BTC-equivalent value at the time of payment. Used to weight shares when the pool spans multiple currencies.
+- `Order#complete!` — marks the order as distributed so it cannot be paid twice. The service is idempotent and short-circuits on `Order#completed?`.
+- `Orders::DistributeService::MINIMUM_AMOUNT` — `0.00000001`. Both the per-reader transfer and the author transfer skip when their amount is below this floor.
+- `Orders::DistributeService#collect_early_readers` — returns `{ mixin_uuid => [trace_id, ...] }`. Iterating this hash, rather than the raw `early_orders`, is what enforces the one-share-per-reader rule.
 
 ## Further reading
 

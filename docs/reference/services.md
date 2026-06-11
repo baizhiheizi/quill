@@ -10,7 +10,25 @@ Each service is listed with its path, what it owns, and what calls it. Where a s
 
 ### `Orders::DistributeService` — [`app/services/orders/distribute_service.rb`](../../app/services/orders/distribute_service.rb)
 
-Owns the value-net split (10 / 50 / 40) for an individual `Order`. Idempotent: returns early if the order is already `completed?`. Branches on `order.item` to handle both `Article` and `Collection` orders.
+Owns the value-net split (10 / 50 / 40) for an individual `Order`. Idempotent: returns early if the order is already `completed?`, and is itself only invoked once per paid order. Branches on `order.item` to handle both `Article` and `Collection` orders. For `Collection` purchases the split is just platform-fee + author-revenue; the early-reader pool is an article-only concept.
+
+For `Article` orders the service does, in order:
+
+1. **Pick the weighting basis.** `early_orders_with_the_same_currency` returns truthy only when every prior `buy_article` / `reward_article` on the article uses the same `asset_id` as the incoming order. When that holds, every per-reader share is weighted by `Order#total`; when it doesn't, the service falls back to `Order#value_btc` so the pro-rata split stays fair across currencies.
+2. **Collect early readers.** `collect_early_readers` groups prior orders by `buyer.mixin_uuid` and returns `{ mixin_uuid => [trace_id, ...] }`. The same reader who both bought and rewarded the article ends up with **one** entry; the service emits exactly one reader-revenue transfer per reader, not one per order.
+3. **Pay the platform fee** (`total * platform_revenue_ratio`, floored to 8 dp) when the buyer's wallet is not already the Quill bot wallet.
+4. **Pay reference revenue.** Each `ArticleReference` linked to the article gets `total * reference.revenue_ratio`, floored, then dropped if it falls below `MINIMUM_AMOUNT`.
+5. **Pay collection revenue.** When the article belongs to a `Collection` with a positive `collection_revenue_ratio`, the article's collection share is split evenly across every prior `buy_collection` order on that collection.
+6. **Pay the author.** The author receives whatever is left of `total` after the four deductions above, again floored and dropped if it would be below `MINIMUM_AMOUNT`.
+
+Key methods and constants:
+
+- `Orders::DistributeService::MINIMUM_AMOUNT = 0.00000001` — floor for every emitted transfer. Sub-floor amounts are not refunded; they stay with the order's author.
+- `#early_orders` — memoised scope: prior `buy_article` / `reward_article` orders on the same item with `id` and `created_at` strictly before the current order.
+- `#early_orders_with_the_same_currency` — predicate that decides between the `total` and `value_btc` weighting bases.
+- `#collect_early_readers` — the folding step described above.
+- `#revenue_asset_id` — `payment.swap_order&.fill_asset_id || payment.asset_id`. The service always pays out in this asset, even when the historical weights are denominated in BTC.
+- `#quill_amount`, `#distributor_wallet_id` — derived from `item.platform_revenue_ratio` and `QuillBot.api.client_id` respectively.
 
 Invoked from:
 
