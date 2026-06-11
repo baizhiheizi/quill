@@ -134,9 +134,6 @@ gem "cld", github: "jtoy/cld"
 # Enumerated attributes with I18n and ActiveRecord/Mongoid support
 gem "enumerize"
 
-# Saves your data permanent and let your customers own their data.
-gem "arweave", github: "baizhiheizi/arweave-ruby"
-
 # Mailjet official Ruby GEM#
 gem "mailjet"
 
@@ -153,7 +150,6 @@ gem "rqrcode"
 
 # A Ruby library for declaring, composing and executing GraphQL queries
 gem "graphql", "~> 2.0"
-gem "graphql-client"
 
 # Rails Plugin that tracks impressions and page views
 gem "impressionist", github: "charlotte-ruby/impressionist"

@@ -1,6 +1,6 @@
 # Architecture
 
-> **30-second summary:** Quill is a Rails 8 monolith that serves four surfaces — public web, author **dashboard**, **admin**, and a JSON **API** — from one set of models. Long-running work (payment settlement, Arweave uploads, Mixin bot messages) is delegated to ActiveJob workers backed by **Solid Queue**. Real-time updates flow over **Solid Cable**. The hot path is `Article → Order → Orders::DistributeService → Order::Transfers`.
+> **30-second summary:** Quill is a Rails 8 monolith that serves four surfaces — public web, author **dashboard**, **admin**, and a JSON **API** — from one set of models. Long-running work (payment settlement, Mixin bot messages) is delegated to ActiveJob workers backed by **Solid Queue**. Real-time updates flow over **Solid Cable**. The hot path is `Article → Order → Orders::DistributeService → Order::Transfers`.
 
 ## Surfaces
 
@@ -22,16 +22,11 @@ All five share the same models (`Article`, `Order`, `User`, `Currency`, …) and
 ```
                   ┌──────────────┐
    draft ────────▶│   publish    │──▶ published
-                  └──────────────┘        │
-                                          ▼
-                       ┌─────────────────────────────────┐
-                       │ upload_to_arweave (background) │
-                       └─────────────────────────────────┘
+                  └──────────────┘
 ```
 
 - **Drafts** stay on the author's dashboard.
 - **Publishing** fires `notify_for_first_published` and triggers poster generation (`Articles::GeneratePosterJob`).
-- **Arweave persistence** is scheduled by `Articles::BatchUploadToArweaveJob` so the canonical content is mirrored to a permanent store shortly after publication.
 
 ### Payment flow
 
@@ -52,13 +47,12 @@ Order (paid)  ──▶  Orders::DistributeJob  ──▶  Orders::DistributeSer
 
 ActiveJob classes live under `app/jobs/`, grouped by domain:
 
-- `articles/` — Arweave uploads, poster generation, locale detection, and article wallet provisioning (`Articles::CreateWalletJob`).
+- `articles/` — poster generation, locale detection, and article wallet provisioning (`Articles::CreateWalletJob`).
 - `orders/` — per-order and batch distribution.
-- `arweave_transactions/` — Arweave-side acceptance polling.
 - `mixin_messages/` — outbound Mixin bot messages.
 - `mixin_network_snapshots/`, `mixin_network_users/` — Mixin API polling.
 - `currencies/`, `daily_statistics/` — rate snapshots and rollups.
-- `users/` — one-time setup (`PrepareJob`) and mirror imports (`ImportArticlesFromMirrorJob`).
+- `users/` — one-time setup (`PrepareJob`).
 - `transfers/` — transfer-state polling and stats caching (`Transfers::CacheStatsJob`).
 
 Workers run via **Solid Queue**, which is backed by a separate database. See [Reference → Background jobs](../reference/background-jobs.md).
@@ -68,7 +62,7 @@ Workers run via **Solid Queue**, which is backed by a separate database. See [Re
 - PostgreSQL holds the application schema.
 - A second PostgreSQL database holds Solid Queue, Solid Cable, and Solid Cache data — see `config/database.yml` for connection names.
 - Article bodies live in ActiveStorage (`active_storage_blobs`, `active_storage_attachments`).
-- Long-form content can also be persisted to **Arweave** for permanence; the on-chain transaction is tracked by `ArweaveTransaction`.
+- `ArticleSnapshot` records capture content history in PostgreSQL JSON.
 
 ### Frontend
 
