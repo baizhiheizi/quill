@@ -405,4 +405,174 @@ class OrderTest < ActiveSupport::TestCase
       assert collection_reader_transfer, "Collection subscriber should receive reader_revenue transfer"
     end
   end
+
+  # === Early reader detection: same reader, multiple orders ===
+
+  test "same reader with two same-currency orders gets a single combined share" do
+    with_quill_bot_stub do
+      # Same reader rewarded once and bought once. Both qualify as
+      # "early" (buy_article + reward_article are both in early_orders).
+      # collect_early_readers should fold both trace_ids into one entry,
+      # so only one reader_revenue transfer is created for that buyer.
+      reward_payment = create_payment!(payer: @reader_one, article: @article, order_type: "REWARD", amount: 1.0)
+      reward_order = reward_payment.order
+      reward_order.update_columns(created_at: 4.days.ago, updated_at: 4.days.ago)
+
+      create_buy_order!(
+        article: @article,
+        buyer: @reader_one,
+        total: 1.0,
+        created_at: 2.days.ago
+      )
+
+      order = create_buy_order!(
+        article: @article,
+        buyer: @reader_two,
+        total: 2.0,
+        created_at: 1.day.ago
+      )
+
+      # Sanity check the early reader grouping
+      readers = order.collect_early_readers
+      assert_equal 1, readers.keys.size, "Two same-reader orders should fold into one group"
+      assert_equal 2, readers[@reader_one.mixin_uuid].size, "Both trace_ids should be present"
+
+      distribute_order!(order)
+
+      reader_transfers = order.transfers.where(transfer_type: :reader_revenue, opponent_id: @reader_one.mixin_uuid)
+      assert_equal 1, reader_transfers.count, "Same reader should receive exactly one reader_revenue transfer"
+
+      # Same-currency: amount = total * readers_revenue_ratio * share / sum
+      # share = sum of reader_one's totals = 2.0; sum = total of all early orders = 2.0
+      # amount = 2.0 * 0.4 * 2.0 / 2.0 = 0.8
+      assert_in_delta 0.8, reader_transfers.first.amount.to_f, 0.01
+    end
+  end
+
+  test "same reader with two mixed-currency orders forces value_btc path" do
+    with_quill_bot_stub do
+      # Two early orders from the same reader, one in a different asset.
+      # The buyer-mixed-currency case forces the value_btc branch via
+      # early_orders_with_the_same_currency.
+      reward_payment = create_payment!(payer: @reader_one, article: @article, order_type: "REWARD", amount: 1.0)
+      reward_order = reward_payment.order
+      reward_order.update_columns(
+        created_at: 4.days.ago,
+        updated_at: 4.days.ago,
+        asset_id: "11111111-1111-4111-8111-111111111111"
+      )
+
+      create_buy_order!(
+        article: @article,
+        buyer: @reader_one,
+        total: 1.0,
+        created_at: 2.days.ago
+      )
+
+      order = create_buy_order!(
+        article: @article,
+        buyer: @reader_two,
+        total: 2.0,
+        created_at: 1.day.ago
+      )
+
+      # Sanity: the same-reader grouping is preserved across currencies.
+      readers = order.collect_early_readers
+      assert_equal 1, readers.keys.size
+      assert_equal 2, readers[@reader_one.mixin_uuid].size
+
+      # Both early orders are in the reader_revenue grouping regardless of currency.
+      refute order.send(:early_orders_with_the_same_currency),
+             "Different-currency early orders should disable the same-currency shortcut"
+
+      distribute_order!(order)
+
+      reader_transfers = order.transfers.where(transfer_type: :reader_revenue, opponent_id: @reader_one.mixin_uuid)
+      assert reader_transfers.exists?, "Reader revenue transfer should exist even with mixed-currency early orders"
+      # Reader revenue should be non-negative and the share should be non-zero.
+      assert reader_transfers.first.amount.to_f.positive?,
+             "Same reader across two currencies should still receive reader revenue"
+    end
+  end
+
+  test "reward and buy from same reader fold into one group" do
+    with_quill_bot_stub do
+      # Reader first rewarded, then bought. Both qualify as "early" (buy_article + reward_article).
+      # They should fold into a single collect_early_readers entry.
+      reward_payment = create_payment!(payer: @reader_one, article: @article, order_type: "REWARD", amount: 0.5)
+      reward_order = reward_payment.order
+      reward_order.update_columns(created_at: 4.days.ago, updated_at: 4.days.ago)
+
+      create_buy_order!(
+        article: @article,
+        buyer: @reader_one,
+        total: 1.0,
+        created_at: 2.days.ago
+      )
+
+      order = create_buy_order!(
+        article: @article,
+        buyer: @reader_two,
+        total: 1.0,
+        created_at: 1.day.ago
+      )
+
+      readers = order.collect_early_readers
+      assert_equal 1, readers.keys.size, "Reward + buy from same reader should fold into one group"
+      assert_equal 2, readers[@reader_one.mixin_uuid].size
+      assert_includes readers[@reader_one.mixin_uuid], reward_order.trace_id
+    end
+  end
+
+  test "multiple early readers with mixed currencies use value_btc share" do
+    with_quill_bot_stub do
+      # Two early readers, each with their own currency. Verifies the
+      # value_btc path works for the multi-reader share calculation.
+      create_buy_order!(
+        article: @article,
+        buyer: @reader_one,
+        total: 1.0,
+        created_at: 4.days.ago
+      )
+      # Use a third reader fixture for the second early order so both can be
+      # independent currencies, and so they don't fold into one group.
+      blocked_reader = users(:blocked_reader)
+      second_early = create_buy_order!(
+        article: @article,
+        buyer: blocked_reader,
+        total: 1.0,
+        created_at: 2.days.ago
+      )
+      # Flip one to a different asset to force the value_btc branch.
+      second_early.update_columns(asset_id: "11111111-1111-4111-8111-111111111111")
+
+      order = create_buy_order!(
+        article: @article,
+        buyer: @reader_two,
+        total: 2.0,
+        created_at: 1.day.ago
+      )
+
+      refute order.send(:early_orders_with_the_same_currency),
+             "Mixed-currency early orders should disable the same-currency shortcut"
+
+      distribute_order!(order)
+
+      # Both early readers should still receive reader revenue.
+      reader_one_transfer = order.transfers.find_by(transfer_type: :reader_revenue, opponent_id: @reader_one.mixin_uuid)
+      blocked_transfer = order.transfers.find_by(transfer_type: :reader_revenue, opponent_id: blocked_reader.mixin_uuid)
+      assert reader_one_transfer, "Same-currency early reader should still receive reader revenue"
+      assert blocked_transfer, "Different-currency early reader should still receive reader revenue"
+      assert reader_one_transfer.amount.to_f.positive?
+      assert blocked_transfer.amount.to_f.positive?
+    end
+  end
+
+  test "collect_early_readers returns empty hash when no prior orders" do
+    with_quill_bot_stub do
+      order = create_buy_order!(article: @article, buyer: @reader_one, total: 1.0)
+
+      assert_equal({}, order.collect_early_readers)
+    end
+  end
 end
