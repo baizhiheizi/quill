@@ -1,10 +1,4 @@
 default: &recurring_jobs
-  articles_batch_upload_to_arweave_job:
-    class: Articles::BatchUploadToArweaveJob
-    schedule: "0 */1 * * *"
-  arweave_transactions_batch_accept_job:
-    class: ArweaveTransactions::BatchAcceptJob
-    schedule: "*/15 * * * *"
   currencies_sync_job:
     class: Currencies::SyncJob
     queue: low

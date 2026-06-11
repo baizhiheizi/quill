@@ -4,10 +4,6 @@
   <%= article.content_as_html.html_safe %>
 </div>
 
-<div class="mb-8">
-  <%= render "articles/blockchain_info", article: article %>
-</div>
-
 <% unless article.author == user %>
   <div class="flex justify-center">
     <%= render "articles/reward_article_button", article: article %>

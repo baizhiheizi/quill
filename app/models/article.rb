@@ -52,7 +52,6 @@ class Article < ApplicationRecord
   PLATFORM_REVENUE_RATIO_DEFAULT = 0.1
 
   include AASM
-  include Articles::Arweavable
   include Articles::ContentPreview
   include Articles::PosterGenerator
   include Articles::Purchasable
@@ -87,8 +86,6 @@ class Article < ApplicationRecord
   has_many :references, through: :article_references, source: :reference, source_type: "Article"
   has_many :article_citers, class_name: "CiterReference", as: :reference, dependent: :restrict_with_error
   has_many :citers, through: :article_citers, source: :citer, source_type: "Article"
-
-  has_many :arweave_transactions, primary_key: :uuid, foreign_key: :article_uuid, dependent: :restrict_with_exception, inverse_of: :article
 
   has_many_attached :images
   has_one_attached :poster
@@ -264,7 +261,6 @@ class Article < ApplicationRecord
     touch_published_at
     notify_for_first_published_async
     subscribe_comments_for_author
-    upload_to_arweave_async
   end
 
   def generate_snapshot

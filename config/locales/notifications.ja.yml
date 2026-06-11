@@ -10,9 +10,6 @@ ja:
     article_rewarded_notifier:
       notification:
         rewarded: リワードが付与されました
-    article_imported_notifier:
-      notification:
-        imported: imported a new article
     collection_listed_notifier:
       notification:
         listed: listed a collection

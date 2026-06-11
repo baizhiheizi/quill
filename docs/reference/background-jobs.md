@@ -6,7 +6,7 @@
 
 | Queue | Used by | Notes |
 |-------|---------|-------|
-| `critical` | Order processing, Mixin and Arweave polling jobs | Touch user-visible money or settlement; small backlogs only |
+| `critical` | Order processing, Mixin polling jobs | Touch user-visible money or settlement; small backlogs only |
 | `default` | One-shot user-facing work (notifications, wallet provisioning) | Default for ad-hoc enqueues |
 | `low` | Batch / cron work (rollups, batch uploads) | Safe to run during quiet periods |
 
@@ -18,12 +18,10 @@ Adjust lane assignments in `config/queue.yml` (Solid Queue config). The runner i
 
 | Job | Queue | Purpose |
 |-----|-------|---------|
-| `BatchUploadToArweaveJob` | `low` | Hourly batch that re-uploads recently updated published articles to Arweave |
 | `CreateWalletJob` | `default` | Provisions a Mixin wallet for a newly published article |
 | `DetectLocaleJob` | `default` | Auto-detects the locale of an article based on its content |
 | `GeneratePosterJob` | `low` | Renders the social-share poster image for an article |
 | `NotifyForFirstPublishedJob` | `default` | Fires the "first publication" notification to subscribers |
-| `UploadToArweaveJob` | `default` | One-shot Arweave upload for a single article |
 
 ### `orders/`
 
@@ -80,14 +78,7 @@ The `DistributeJob` is the entry point into the value-net pipeline; see [Explana
 
 | Job | Queue | Purpose |
 |-----|-------|---------|
-| `ImportArticlesFromMirrorJob` | `default` | Pulls a user's mirrored articles from a configured mirror source |
 | `PrepareJob` | `default` | One-time preparation work after a user signs up |
-
-### `arweave_transactions/`
-
-| Job | Queue | Purpose |
-|-----|-------|---------|
-| `BatchAcceptJob` | `low` | Polls Arweave for accepted transactions and updates `ArweaveTransaction` rows |
 
 ### `transfers/`
 

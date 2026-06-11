@@ -10,9 +10,6 @@ zh-CN:
     article_rewarded_notifier:
       notification:
         rewarded: 赞赏了文章
-    article_imported_notifier:
-      notification:
-        imported: 成功导入新文章
     collection_listed_notifier:
       notification:
         listed: 上架了合辑

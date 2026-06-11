@@ -1,12 +1,4 @@
 GIT
-  remote: https://github.com/baizhiheizi/arweave-ruby.git
-  revision: 61d60e083902d7b49f3c43461b41e6adaadfbf98
-  specs:
-    arweave (1.1.0)
-      httparty (>= 0.18)
-      json-jwt (>= 1.13)
-
-GIT
   remote: https://github.com/charlotte-ruby/impressionist.git
   revision: b13ac939863c2fcb46ee63a1362185b60fce7d33
   specs:
@@ -237,9 +229,6 @@ GEM
       base64
       fiber-storage
       logger
-    graphql-client (0.26.0)
-      activesupport (>= 3.0)
-      graphql (>= 1.13.0)
     groupdate (6.8.0)
       activesupport (>= 7.2)
     grover (1.2.10)
@@ -639,7 +628,6 @@ DEPENDENCIES
   action-store
   after_commit_everywhere
   annotaterb
-  arweave!
   aws-sdk-s3
   bcrypt
   benchmark
@@ -658,7 +646,6 @@ DEPENDENCIES
   fastimage
   fnv
   graphql (~> 2.0)
-  graphql-client
   groupdate
   grover
   high_voltage
