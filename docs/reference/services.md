@@ -1,6 +1,6 @@
 # Services reference
 
-> **30-second summary:** Service objects live under `app/services/`. They are stateless command/query classes invoked as `Foo::Bar.call(*args)` (returning the result) or `instance.call` (mutating state). They wire together ActiveRecord models, Mixin/Arweave integrations, and background jobs so controllers stay thin.
+> **30-second summary:** Service objects live under `app/services/`. They are stateless command/query classes invoked as `Foo::Bar.call(*args)` (returning the result) or `instance.call` (mutating state). They wire together ActiveRecord models, Mixin integrations, and background jobs so controllers stay thin.
 
 ## How to read this page
 

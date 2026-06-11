@@ -33,6 +33,11 @@ jobs:
         with:
           cache: false
 
+      - name: Install dependencies
+        run: |
+          bundle install
+          bun install
+
       - name: Install system dependencies
         run: sudo apt-get -yyq install libpq-dev
 

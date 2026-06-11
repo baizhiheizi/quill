@@ -2,7 +2,7 @@
 
 class ArticlePolicy < ApplicationPolicy
   def show?
-    record.published? && (record.free? || record.author == user) || record.authorized?(user) || record.may_buy_by?(user)
+    record.published? && (record.free? || record.author == user || record.authorized?(user) || record.may_buy_by?(user))
   end
 
   def vote?
@@ -10,7 +10,7 @@ class ArticlePolicy < ApplicationPolicy
   end
 
   def subscribe?
-    user.present? && record.authorized?(user)
+    user.present? && record.author != user && record.authorized?(user)
   end
 
   def comment?

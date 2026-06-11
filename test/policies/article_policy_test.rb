@@ -64,10 +64,10 @@ class ArticlePolicyTest < ActiveSupport::TestCase
     assert ArticlePolicy.new(nil, article).show?
   end
 
-  test "show? denies paid articles for guests" do
+  test "show? allows guests to preview paid published articles" do
     article = articles(:published_paid)
 
-    refute ArticlePolicy.new(nil, article).show?
+    assert ArticlePolicy.new(nil, article).show?
   end
 
   test "show? allows paid articles for buyers" do

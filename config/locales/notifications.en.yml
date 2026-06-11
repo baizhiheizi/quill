@@ -10,9 +10,6 @@ en:
     article_rewarded_notifier:
       notification:
         rewarded: rewarded an article
-    article_imported_notifier:
-      notification:
-        imported: imported a new article
     collection_listed_notifier:
       notification:
         listed: listed a collection
