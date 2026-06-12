@@ -29,7 +29,6 @@ class ArticleSearchService
       .tagging
       .filter
       .filter_block_authors
-      .filter_block_by_authors
       .select_in_time_range
       .localize
 
@@ -121,34 +120,22 @@ class ArticleSearchService
     self
   end
 
-  def filter_block_by_authors
-    return self if @filter == "bought"
-    return self if @current_user.blank?
-
-    # Inline as a subquery so we never materialize the IDs of users who have
-    # blocked @current_user in Ruby. Matches the pattern used by the
-    # `subscribed` filter.
-    blockers_ids =
-      Action
-        .where(target_id: @current_user.id, target_type: "User", user_type: "User", action_type: "block")
-        .select(:user_id)
-    @articles = @articles.where.not(author_id: blockers_ids)
-
-    self
-  end
-
   def filter_block_authors
-    return self if @filter == "bought"
-    return self if @current_user.blank?
+    return self if @filter == "bought" || @current_user.blank?
 
-    # Inline as a subquery so we never materialize the IDs of users
-    # @current_user has blocked in Ruby. Matches the pattern used by the
-    # `subscribed` filter.
+    # Subqueries exclude (a) authors @current_user has blocked and (b) authors
+    # who have blocked @current_user. Matches the `subscribed` filter pattern:
+    # never materialize IDs in Ruby, let SQL handle the predicate.
     blocked_ids =
       Action
         .where(user_id: @current_user.id, action_type: "block", target_type: "User")
         .select(:target_id)
-    @articles = @articles.where.not(author_id: blocked_ids)
+    blockers_ids =
+      Action
+        .where(target_id: @current_user.id, target_type: "User", user_type: "User", action_type: "block")
+        .select(:user_id)
+
+    @articles = @articles.where.not(author_id: blocked_ids).where.not(author_id: blockers_ids)
 
     self
   end
