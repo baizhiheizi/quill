@@ -49,15 +49,17 @@ Article body is included only when a valid access token is supplied.
 
 Create a new article (requires a valid access token).
 
-Request body example:
+Request body example (note: article fields are nested under the `article` key per `params.require(:article).permit(...)`; `tag_names` stays at the top level):
 
 ```json
 {
-  "title": "article title",
-  "content": "some article content",
-  "intro": "some article introduction",
-  "price": 0.000001,
-  "asset_id": "c6d0c728-2624-429b-8e0d-d9d19b6592fa",
+  "article": {
+    "title": "article title",
+    "content": "some article content",
+    "intro": "some article introduction",
+    "price": 0.000001,
+    "asset_id": "c6d0c728-2624-429b-8e0d-d9d19b6592fa"
+  },
   "tag_names": ["BTC", "Blockchain"]
 }
 ```

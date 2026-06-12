@@ -19,7 +19,7 @@ Without a valid token, `GET /articles/:uuid` returns article metadata but **not*
 - All responses are JSON.
 - Timestamps are ISO-8601 strings in UTC.
 - Pagination uses `limit` and `offset`. `limit` is clamped to `100`.
-- Errors return a JSON object with an `error` key and the appropriate HTTP status.
+- Errors return a JSON object with a `message` key and the appropriate HTTP status (see [Errors](#errors)).
 
 ## Endpoints
 
@@ -45,29 +45,33 @@ Fetch a single article by UUID. Body is only included for authorized readers (se
 
 Create a draft article. **Requires a valid access token.**
 
+The request body must be wrapped in an `article` key — the controller calls `params.require(:article).permit(...)`, so a top-level `title` / `content` will be rejected with `400 Bad Request` from `ActionController::ParameterMissing`. `tag_names` lives at the top level because it is not a permitted attribute on the article; the controller forwards it to `CreateTagService` after the article is saved.
+
 Request body:
 
 ```json
 {
-  "title": "article title",
-  "content": "some article content",
-  "intro": "some article introduction",
-  "price": 0.000001,
-  "asset_id": "c6d0c728-2624-429b-8e0d-d9d19b6592fa",
+  "article": {
+    "title": "article title",
+    "content": "some article content",
+    "intro": "some article introduction",
+    "price": 0.000001,
+    "asset_id": "c6d0c728-2624-429b-8e0d-d9d19b6592fa"
+  },
   "tag_names": ["BTC", "Blockchain"]
 }
 ```
 
 | Field | Required | Notes |
 |-------|----------|-------|
-| `title` | yes | Plain string |
-| `content` | yes | Markdown body |
-| `intro` | no | Short summary |
-| `price` | yes | Number, in the smallest unit of `asset_id` |
-| `asset_id` | yes | One of the supported asset UUIDs (see `config/settings.yml`) |
-| `tag_names` | no | Array of tag names; missing tags are created automatically |
+| `article.title` | yes | Plain string |
+| `article.content` | yes | Markdown body |
+| `article.intro` | no | Short summary |
+| `article.price` | yes | Number, in the smallest unit of `asset_id` |
+| `article.asset_id` | yes | One of the supported asset UUIDs (see `config/settings.yml`) |
+| `tag_names` | no | Array of tag names; missing tags are created automatically via `CreateTagService` |
 
-On success, returns the new article's UUID:
+On success, returns the new article's UUID with HTTP `201 Created`:
 
 ```json
 { "uuid": "f3a1..." }
@@ -85,17 +89,20 @@ Returns the validation rules used by the dashboard when inviting new readers. Us
 
 ### Catch-all
 
-Any unmatched path under `/api` falls through to `API::HomeController#index`, which returns service metadata.
+Any unmatched path under `/api` falls through to `API::HomeController#index`, which renders a `404 Not Found` with `{ "message": "Not found" }`. There is no service-metadata landing page.
 
 ## Errors
 
 | Status | Meaning |
 |--------|---------|
-| `401` | Missing or invalid access token (where required) |
-| `403` | Authenticated, but not allowed (e.g. `ArticlePolicy#show?` denies the body) |
-| `404` | Resource not found (record not found, or article not visible to caller) |
-| `422` | Validation error — the response body carries `errors` from the model |
-| `5xx` | Server error — surface the request ID when filing an issue |
+| `400` | Missing required parameter — body is `{ "message": "param is missing or the value is empty: article" }` (raised by `ActionController::ParameterMissing`) |
+| `401` | Missing or invalid access token (where required) — body is `{ "message": "Unauthorized" }` |
+| `403` | Authenticated, but not allowed (e.g. `ArticlePolicy#show?` denies the body) — body is `{ "message": "Forbidden" }` |
+| `404` | Resource not found (record not found, or article not visible to caller) — body is `{ "message": "Not found" }` |
+| `422` | Validation error from the model — body is `{ "message": "Unprocessable entity" }` (in non-local environments the model errors are not echoed; check the server log) |
+| `5xx` | Server error — body is `{ "message": "Internal server error" }` in production; in local environments the original exception message is included |
+
+Every error response is shaped `{ "message": <string> }` by [`API::RenderingHelper`](../../app/controllers/concerns/api/rendering_helper.rb); clients should parse `message` (not `error` or `errors`).
 
 ## See also
 

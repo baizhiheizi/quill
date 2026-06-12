@@ -1,6 +1,6 @@
 # Architecture
 
-> **30-second summary:** Quill is a Rails 8 monolith that serves four surfaces — public web, author **dashboard**, **admin**, and a JSON **API** — from one set of models. Long-running work (payment settlement, Mixin bot messages) is delegated to ActiveJob workers backed by **Solid Queue**. Real-time updates flow over **Solid Cable**. The hot path is `Article → Order → Orders::DistributeService → Order::Transfers`.
+> **30-second summary:** Quill is a Rails 8 monolith that serves four surfaces — public web, author **dashboard**, **admin**, and a JSON **API** — from one set of models. Long-running work (payment settlement, Mixin bot messages) is delegated to ActiveJob workers backed by **Solid Queue**. Real-time updates flow over **Solid Cable**. The hot path is `Article → Order → Orders::DistributeService → Transfer` (one `Transfer` per recipient, linked back to the `Order` through a polymorphic `source` association).
 
 ## Surfaces
 
@@ -37,7 +37,7 @@ Order (paid)  ──▶  Orders::DistributeJob  ──▶  Orders::DistributeSer
                                                        │
                                        ┌───────────────┼───────────────┐
                                        ▼               ▼               ▼
-                                Order::Transfer  Order::Transfer  Order::Transfer
+                                  Transfer        Transfer         Transfer
                                  (platform)       (author)         (early readers)
 ```
 
