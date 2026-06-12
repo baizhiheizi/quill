@@ -10,9 +10,6 @@ application.register("article-form", ArticleFormController);
 import AutoHideController from "./auto_hide_controller";
 application.register("auto-hide", AutoHideController);
 
-import AutoRefreshController from "./auto_refresh_controller";
-application.register("auto-refresh", AutoRefreshController);
-
 import AutosaveController from "./autosave_controller";
 application.register("autosave", AutosaveController);
 
