@@ -10,37 +10,22 @@ Quill is building a **value net** on the Web3 for both authors and readers.
 
 ## Rules
 
-We believe that the value of an article is composed of both the author and the reader, but the actual situation is that the reader's contribution, especially the early readers' contribution,is not well represented. Therefore, the biggest difference between Quill and other platforms is that Quill introduces an **early reader rewards** mechanism.
+Quill's differentiator is the **early reader rewards** mechanism: for every new income from an article, **40%** is split pro-rata among earlier readers, **10%** is the platform fee, and **50%** goes to the author. Tips count toward the early-reader pool the same way article payments do.
 
-The specific rules are as follows,
+| Role | What they do |
+|------|--------------|
+| **Author** | Publishes paid articles priced in Bitcoin, _XIN_, _ETH_, or _pUSD_ (see `config/settings.yml` → `supported_assets`). |
+| **Reader** | Pays to unlock an article. Can tip more to grow their share of future early-reader pools. |
 
-1. Users can publish articles on the **platform** and become **authors**.
-2. All articles are paid articles, priced by one of the supported assets (Bitcoin, _XIN_, _ETH_, or _pUSD_ — see `config/settings.yml` → `supported_assets`).
-3. Users can pay for the articles, i.e. become a **reader** of a article.
-4. For every new income from an article, 40% will be allocated to each **early reader** on a pro-rata basis as **Early Reader Bonus** , 10% will be a handling fee for the **platform**, and the rest will be revenue for the **author**.
-5. **Readers** can also increase the amount they pay for an article by means of a reward in order to increase their share of the bonus.
+### Example
 
-For example:
+Author A prices article X at 100 sats. Readers B, C, and D each pay 100 sats in order:
 
-User A published an article X pricing 100 Satoshi on the platform.
-
-User B paid 100 Satoshi for article X and got the right to read the article.
-
-Therefore, article X earned 100 Satoshi, because B is the first reader and there is no earlier reader, so there is no early reader bonus; 10 Satoshi(10%) is used as the platform's handling fee; The remaining 90 Satoshi are all taken as author revenue and transferred to the account of author A.
-
-User C paid 100 Satoshi for article x after B. As a result, Article X earns another 100 Satoshi.
-
-Among them, 40 Satoshi(40%) will be used as an early reader bonus. At this time, there is only one early reader, user B, so B monopolizes this 40% reward; The platform also receives 10 Satoshi(10%) as a handling fee; The remaining 50 Satoshi is the author's income.
-
-After C, user D also paid 100 Satoshi for article X.
-
-Similarly, 40 Satoshi (40%) will be rewarded as early readers bonus. At this time, there are two early readers, namely B and C, who paid 100 Satoshi for article X before, so both B and C will be rewarded with `40 * 100 / (100 + 100) = 20` Satoshi respectively.
-
-The platform also charges 10 Satoshi(10%) as a handling fee; The remaining 50 Satoshi is the author's income.
-
-And so on.
-
-It is worth reminding that besides the payment for articles, the income from other payment behaviors (such as reward) will also be included in the distribution ratio of early readers' bonus.
+| Reader | Paid | Platform 10% | Author 50% | Early-reader pool 40% | Distribution |
+|--------|-----:|-------------:|-----------:|----------------------:|--------------|
+| B (1st) | 100 | 10 | 90 | 0 | No earlier readers → pool unspent |
+| C (2nd) | 100 | 10 | 45 | 40 | B is the only earlier reader → B gets 40 |
+| D (3rd) | 100 | 10 | 45 | 40 | B and C paid equally → each gets 20 |
 
 ## Experience
 
@@ -48,27 +33,21 @@ Open [quill.im](https://quill.im/), connect your wallet via MetaMask, Coinbase o
 
 ## API
 
-User can generate access token in [dashboard settings](https://quill.im/dashboard/settings).
-
-Use access token in a HTTP Header named `X-Access-Token`.
-
-API Endpoint is `https://quill.im/api`
+Generate an access token in [dashboard settings](https://quill.im/dashboard/settings) and send it as the `X-Access-Token` header. The API root is `https://quill.im/api`.
 
 `GET | /articles`
 
-When access token or `author_id` provided, it returns user's articles, otherwise, it return all published articles.
-
-Available params: `author_id`, `offset`, `order`, `limit`, `query`.
+With an access token or `author_id`, returns the user's articles; otherwise, returns all published articles. Params: `author_id`, `offset`, `order`, `limit`, `query`.
 
 Example: [https://quill.im/api/articles?limit=5&order=asc&offset=2021-01-18T07:41:36.624Z&query=BTC,Xin](https://quill.im/api/articles?limit=5&order=asc&offset=2021-01-18T07:41:36.624Z&query=BTC,Xin)
 
 `GET | /articles/:uuid`
 
-Article content will not provied unless valid access token provided.
+Article body is included only when a valid access token is supplied.
 
 `POST | /articles`
 
-Create a new article with valid access token.
+Create a new article (requires a valid access token).
 
 Request body example:
 
