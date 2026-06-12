@@ -19,7 +19,7 @@ Without a valid token, `GET /articles/:uuid` returns article metadata but **not*
 - All responses are JSON.
 - Timestamps are ISO-8601 strings in UTC.
 - Pagination uses `limit` and `offset`. `limit` is clamped to `100`.
-- Errors return a JSON object with a `message` key and the appropriate HTTP status (see [Errors](#errors)).
+- Errors return a JSON object with an `error` key and the appropriate HTTP status.
 
 ## Endpoints
 
@@ -45,7 +45,7 @@ Fetch a single article by UUID. Body is only included for authorized readers (se
 
 Create a draft article. **Requires a valid access token.**
 
-The request body must be wrapped in an `article` key — the controller calls `params.require(:article).permit(...)`, so a top-level `title` / `content` will be rejected with `400 Bad Request` from `ActionController::ParameterMissing`. `tag_names` lives at the top level because it is not a permitted attribute on the article; the controller forwards it to `CreateTagService` after the article is saved.
+The article fields **must** be nested under an `article` key (see `API::ArticlesController#article_params`). Top-level fields are rejected with `400 Bad Request` from `ActionController::ParameterMissing`. `tag_names` stays at the top level because it is not a permitted attribute on `Article` — the controller forwards it to `CreateTagService` after the article is saved.
 
 Request body:
 
@@ -69,9 +69,9 @@ Request body:
 | `article.intro` | no | Short summary |
 | `article.price` | yes | Number, in the smallest unit of `asset_id` |
 | `article.asset_id` | yes | One of the supported asset UUIDs (see `config/settings.yml`) |
-| `tag_names` | no | Array of tag names; missing tags are created automatically via `CreateTagService` |
+| `tag_names` | no | Array of tag names; missing tags are created automatically |
 
-On success, returns the new article's UUID with HTTP `201 Created`:
+On success, returns the new article's UUID:
 
 ```json
 { "uuid": "f3a1..." }
@@ -89,20 +89,20 @@ Returns the validation rules used by the dashboard when inviting new readers. Us
 
 ### Catch-all
 
-Any unmatched path under `/api` falls through to `API::HomeController#index`, which renders a `404 Not Found` with `{ "message": "Not found" }`. There is no service-metadata landing page.
+Any unmatched path under `/api` falls through to `API::HomeController#index`, which simply renders a 404 (`{"message":"Not found"}`) — there is no service metadata index.
 
 ## Errors
 
-| Status | Meaning |
-|--------|---------|
-| `400` | Missing required parameter — body is `{ "message": "param is missing or the value is empty: article" }` (raised by `ActionController::ParameterMissing`) |
-| `401` | Missing or invalid access token (where required) — body is `{ "message": "Unauthorized" }` |
-| `403` | Authenticated, but not allowed (e.g. `ArticlePolicy#show?` denies the body) — body is `{ "message": "Forbidden" }` |
-| `404` | Resource not found (record not found, or article not visible to caller) — body is `{ "message": "Not found" }` |
-| `422` | Validation error from the model — body is `{ "message": "Unprocessable entity" }` (in non-local environments the model errors are not echoed; check the server log) |
-| `5xx` | Server error — body is `{ "message": "Internal server error" }` in production; in local environments the original exception message is included |
+Every API error returns the same JSON envelope: a single `message` string. This is produced by [`API::RenderingHelper`](../../app/controllers/concerns/api/rendering_helper.rb) — the helper centralises status, body shape, and default copy. `422 Unprocessable Entity` carries `article.errors.full_messages` joined into the message, **not** an `errors` array as some clients expect.
 
-Every error response is shaped `{ "message": <string> }` by [`API::RenderingHelper`](../../app/controllers/concerns/api/rendering_helper.rb); clients should parse `message` (not `error` or `errors`).
+| Status | `message` body | When |
+|--------|---------------|------|
+| `400` | `"Bad request"` | `ActionController::ParameterMissing` (e.g. `POST /api/articles` without the `article` wrapper) |
+| `401` | `"Unauthorized"` | Missing or invalid access token (where required) |
+| `403` | `"Forbidden"` | Authenticated, but not allowed (e.g. `ArticlePolicy#show?` denies the body) |
+| `404` | `"Not found"` | Resource not found, article not visible to caller, or unmatched `/api/*` path |
+| `422` | `"<comma-joined errors.full_messages>"` | Validation error on the model |
+| `5xx` | `"Internal server error"` | Server error — surface the request ID when filing an issue |
 
 ## See also
 

@@ -1,6 +1,6 @@
 # Architecture
 
-> **30-second summary:** Quill is a Rails 8 monolith that serves four surfaces — public web, author **dashboard**, **admin**, and a JSON **API** — from one set of models. Long-running work (payment settlement, Mixin bot messages) is delegated to ActiveJob workers backed by **Solid Queue**. Real-time updates flow over **Solid Cable**. The hot path is `Article → Order → Orders::DistributeService → Order::Transfers`.
+> **30-second summary:** Quill is a Rails 8 monolith that serves four surfaces — public web, author **dashboard**, **admin**, and a JSON **API** — from one set of models. Long-running work (payment settlement, Mixin bot messages) is delegated to ActiveJob workers backed by **Solid Queue**. Real-time updates flow over **Solid Cable**. The hot path is `Article → Order → Orders::DistributeService → Transfer` (one `Transfer` per payout, linked back to the originating `Order` through a polymorphic `source` association).
 
 ## Surfaces
 
@@ -37,11 +37,11 @@ Order (paid)  ──▶  Orders::DistributeJob  ──▶  Orders::DistributeSer
                                                        │
                                        ┌───────────────┼───────────────┐
                                        ▼               ▼               ▼
-                                Order::Transfer  Order::Transfer  Order::Transfer
+                                    Transfer       Transfer         Transfer
                                  (platform)       (author)         (early readers)
 ```
 
-`DistributeService` is the only place that knows the 10/50/40 split. See [Value net](./value-net.md) for the rules.
+Each emitted `Transfer` is a row on the `transfers` table, linked back to the originating `Order` through the polymorphic `source` association (`Order has_many :transfers, as: :source`). `DistributeService` is the only place that knows the 10/50/40 split. See [Value net](./value-net.md) for the rules.
 
 ### Background work
 
@@ -61,8 +61,11 @@ Workers run via **Solid Queue**, which is backed by a separate database. See [Re
 
 - PostgreSQL holds the application schema.
 - A second PostgreSQL database holds Solid Queue, Solid Cable, and Solid Cache data — see `config/database.yml` for connection names.
-- Article bodies live in ActiveStorage (`active_storage_blobs`, `active_storage_attachments`).
+- Article bodies live in ActionText (`action_text_rich_texts`), with a `legacy_markdown_content` `text` fallback on `articles` for pre-migration rows.
+- `active_storage_blobs` holds the per-article `images` (referenced from the rendered body), `poster` (Open Graph image), and `cover`.
 - `ArticleSnapshot` records capture content history in PostgreSQL JSON.
+
+The application is the **sole source of truth** for published article content. There is no upload to an external permanence network on `Article#publish!`, and the previous Arweave / Mirror.xyz integration has been removed. See [Explanation → Content storage](./content-storage.md) for the full contract.
 
 ### Frontend
 
@@ -94,6 +97,7 @@ Local development typically only needs `config/settings.local.yml` plus credenti
 ## Where to look next
 
 - [Value net](./value-net.md) — the rules that drive `DistributeService`.
+- [Content storage](./content-storage.md) — where published article content lives (PostgreSQL + ActiveStorage, post-Arweave).
 - [Reference → Services](../reference/services.md) — the command/query objects that wire subsystems together.
 - [Reference → Background jobs](../reference/background-jobs.md) — every ActiveJob class and its queue.
 - [AGENTS.md](../../AGENTS.md) — agent-oriented context that complements this page.
