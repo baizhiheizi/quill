@@ -80,6 +80,49 @@ class ArticleSearchServiceTest < ActiveSupport::TestCase
       "expected exactly one articles SELECT, got #{main_article_selects}"
   end
 
+  test "filter_block_authors excludes authors @current_user has blocked via SQL subquery" do
+    author = users(:author)
+    reader = users(:reader_one)
+    reader.block_user(author)
+
+    queries = capture_queries do
+      @articles = ArticleSearchService.call(current_user: reader).to_a
+    end
+
+    assert_not_includes @articles.map(&:author_id), author.id
+    main_article_query = queries.find { |q| q.include?('FROM "articles"') }
+    assert_not_nil main_article_query
+    assert_match(/NOT\s+IN\s*\(SELECT/i, main_article_query,
+      "expected filter_block_authors to use a NOT IN (SELECT ...) subquery")
+  end
+
+  test "filter_block_by_authors excludes authors who have blocked @current_user via SQL subquery" do
+    author = users(:author)
+    reader = users(:reader_one)
+    author.block_user(reader)
+
+    queries = capture_queries do
+      @articles = ArticleSearchService.call(current_user: reader).to_a
+    end
+
+    assert_not_includes @articles.map(&:author_id), author.id
+    main_article_query = queries.find { |q| q.include?('FROM "articles"') }
+    assert_not_nil main_article_query
+    assert_match(/NOT\s+IN\s*\(SELECT/i, main_article_query,
+      "expected filter_block_by_authors to use a NOT IN (SELECT ...) subquery")
+  end
+
+  test "block filters do not run SQL when @current_user is blank" do
+    queries = capture_queries do
+      ArticleSearchService.call(current_user: nil).to_a
+    end
+
+    main_article_query = queries.find { |q| q.include?('FROM "articles"') }
+    assert_not_nil main_article_query
+    assert_no_match(/NOT\s+IN\s*\(SELECT/i, main_article_query,
+      "expected no NOT IN subqueries when @current_user is nil")
+  end
+
   private
 
   def capture_queries

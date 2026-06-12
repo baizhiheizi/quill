@@ -123,16 +123,32 @@ class ArticleSearchService
 
   def filter_block_by_authors
     return self if @filter == "bought"
+    return self if @current_user.blank?
 
-    @articles = @articles.where.not(author_id: @current_user.block_by_user_ids) if @current_user.present?
+    # Inline as a subquery so we never materialize the IDs of users who have
+    # blocked @current_user in Ruby. Matches the pattern used by the
+    # `subscribed` filter.
+    blockers_ids =
+      Action
+        .where(target_id: @current_user.id, target_type: "User", user_type: "User", action_type: "block")
+        .select(:user_id)
+    @articles = @articles.where.not(author_id: blockers_ids)
 
     self
   end
 
   def filter_block_authors
     return self if @filter == "bought"
+    return self if @current_user.blank?
 
-    @articles = @articles.where.not(author_id: @current_user.block_user_ids) if @current_user.present?
+    # Inline as a subquery so we never materialize the IDs of users
+    # @current_user has blocked in Ruby. Matches the pattern used by the
+    # `subscribed` filter.
+    blocked_ids =
+      Action
+        .where(user_id: @current_user.id, action_type: "block", target_type: "User")
+        .select(:target_id)
+    @articles = @articles.where.not(author_id: blocked_ids)
 
     self
   end
