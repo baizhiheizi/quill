@@ -76,7 +76,7 @@ Workers run via **Solid Queue**, which is backed by a separate database. See [Re
 - **Authentication** flows through `SessionsController` and supports Mixin OAuth, Fennec, MVM wallet, and Twitter. Access tokens for the API are stored on `AccessToken`.
 - **Authorization** uses Pundit (`app/policies/`).
 - **Internationalization** keys live in `config/locales/`. The user-facing locale is selectable via `LocaleController` and per-request routing.
-- **Notifications** use the [Noticed](https://github.com/excid3/noticed) gem, with delivery methods in `app/notifiers/delivery_methods/`. Admin alerts route through `AdminNotificationService`.
+- **Notifications** use the [Noticed](https://github.com/excid3/noticed) gem, with delivery methods in `app/notifiers/delivery_methods/`. Admin alerts route through `AdminNotificationService`. See [Reference → Notifiers](../reference/notifiers.md) for the full catalog and the delivery-method contract.
 
 ## Configuration surface
 

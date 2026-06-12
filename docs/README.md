@@ -11,6 +11,7 @@ Quill is a Web3 paid-publishing platform that builds a **value net** between aut
 | Set up a local development environment | [How-to → Set up local development](./how-to/local-development.md) |
 | Create or update an article through the API | [Reference → HTTP API](./reference/api.md) |
 | Look up a service object or background job | [Reference → Services](./reference/services.md), [Reference → Background jobs](./reference/background-jobs.md) |
+| Look up a notifier (web flash, ActionCable, Mixin bot) | [Reference → Notifiers](./reference/notifiers.md) |
 | Look up a frontend Stimulus controller | [Reference → Stimulus controllers](./reference/stimulus-controllers.md) |
 
 ## Documentation map
@@ -27,6 +28,7 @@ docs/
 │   ├── api.md                    # HTTP API surface (JSON endpoints)
 │   ├── services.md               # app/services/* command/query objects
 │   ├── background-jobs.md        # app/jobs/* ActiveJob classes
+│   ├── notifiers.md              # app/notifiers/* Noticed event classes + delivery methods
 │   └── stimulus-controllers.md   # app/javascript/controllers/* — catalog + lifecycle patterns
 └── tutorials/                    # Learning-oriented (Diátaxis: tutorials)
     └── (placeholder)             # guided walkthroughs will live here
