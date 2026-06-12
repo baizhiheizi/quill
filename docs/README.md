@@ -9,7 +9,6 @@ Quill is a Web3 paid-publishing platform that builds a **value net** between aut
 | Understand the value net and why Quill exists | [Explanation → Value net](./explanation/value-net.md) |
 | See how the system fits together | [Explanation → Architecture](./explanation/architecture.md) |
 | Set up a local development environment | [How-to → Set up local development](./how-to/local-development.md) |
-| Deploy Quill to production with Kamal | [How-to → Deploy with Kamal](./how-to/deploy-with-kamal.md) |
 | Create or update an article through the API | [Reference → HTTP API](./reference/api.md) |
 | Look up a service object or background job | [Reference → Services](./reference/services.md), [Reference → Background jobs](./reference/background-jobs.md) |
 | Look up a notifier (web flash, ActionCable, Mixin bot) | [Reference → Notifiers](./reference/notifiers.md) |
@@ -24,8 +23,7 @@ docs/
 │   ├── value-net.md              # the early reader rewards mechanism
 │   └── architecture.md           # subsystem overview: web, dashboard, admin, API, jobs
 ├── how-to/                       # Problem-oriented (Diátaxis: how-to guides)
-│   ├── local-development.md      # bootstrap a working dev environment
-│   └── deploy-with-kamal.md      # ship to production via the GitHub Actions + Kamal pipeline
+│   └── local-development.md      # bootstrap a working dev environment
 ├── reference/                    # Information-oriented (Diátaxis: reference)
 │   ├── api.md                    # HTTP API surface (JSON endpoints)
 │   ├── services.md               # app/services/* command/query objects
