@@ -15,16 +15,17 @@
 
 ## Channel enablement
 
-Each user has a `notification_setting` row that drives three independent channels:
+Web visibility is decided by `visible_in_web?` (defined in [`config/initializers/noticed.rb`](../../config/initializers/noticed.rb)): it returns `false` when `persist_web_notification` is `false`; otherwise `may_notify_via_web?` if the notifier defines it, else `web_notification_enabled?` if defined, else `true`. Mixin bot delivery is gated by each notifier's `may_notify_via_mixin_bot?`. Three tiers fall out of that:
 
-| Channel | Predicate | Driver |
-|---------|-----------|--------|
-| Web (inbox + cable + flash) | `may_notify_via_web?` | `should_notify? && web_notification_enabled?` |
-| Mixin bot (messenger `APP_CARD` / `PLAIN_TEXT`) | `may_notify_via_mixin_bot?` | `should_notify?` (if used) AND `recipient_messenger?` AND `mixin_bot_notification_enabled?` |
+| Tier | Web | Mixin bot |
+|------|-----|-----------|
+| **Content (per-recipient settings)** — `ArticleBoughtNotifier`, `ArticlePublishedNotifier`, `ArticleRewardedNotifier`, `CollectionBoughtNotifier`, `CollectionListedNotifier`, `CommentCreatedNotifier`, `TaggingCreatedNotifier`, `TransferProcessedNotifier` | the `<event>_web` flag (plus `should_notify?` for the block-aware ones) | the `<event>_mixin_bot` flag + `recipient_messenger?` |
+| **Transactional (no opt-out)** — `CommentDeletedNotifier`, `OrderCreatedNotifier`, `PaymentCreatedNotifier`, `PaymentRefundedNotifier`, `SubscribeUserActionCreatedNotifier`, `SwapOrderFinishedNotifier`, `SwapOrderSwappingNotifier` | always on — these define neither `web_notification_enabled?` nor `may_notify_via_web?`, and `persist_web_notification` is `true`, so `visible_in_web?` is `true` | `recipient_messenger?` only |
+| **One-time ping (no inbox)** — `UserConnectedNotifier`, `UserSafeRegistrationNotifier` | never — `persist_web_notification = false`, and they are excluded from the inbox by the `MIXIN_ONLY_TYPES` scope | `recipient_messenger?` |
 
-`should_notify?` is **not** defined on the base class. Only the notifiers that need it (`TaggingCreatedNotifier`, `CommentCreatedNotifier`) implement it to honour `recipient.block_user?(author)`. Other notifiers trust the per-channel settings alone.
+Because the transactional tier falls through to `visible_in_web? == true`, those notifiers surface in the web inbox, the action-cable stream, and the flash banner — they are **not** Mixin-bot-only.
 
-The `recipient_messenger?` predicate returns `true` only for users that have a linked Mixin messenger; non-messenger users are silently skipped by the bot delivery.
+`should_notify?` is **not** on the base class; only `TaggingCreatedNotifier` and `CommentCreatedNotifier` define it (to honour `recipient.block_user?(author)`). `recipient_messenger?` is `true` only when the user's authorization provider is `mixin`, so non-messenger users are silently skipped by the bot delivery.
 
 ## Mixin bot category
 
@@ -32,8 +33,8 @@ Every subclass sets `config.category` on its `deliver_by :mixin_bot` block. Two 
 
 | Category | Shape | Used by |
 |----------|-------|---------|
-| `APP_CARD` | `{ icon_url, title, description, action }` | Article- and comment-shaped notifications |
-| `PLAIN_TEXT` | free-form string | Transactional notifications (orders, payments, swaps, follow events) |
+| `APP_CARD` | `{ icon_url, title, description, action }` | Article, collection, comment, tag, and transfer notifications |
+| `PLAIN_TEXT` | free-form string | Transactional notifications (orders, payments, swaps, follows, comment deletions) and one-time pings |
 
 `TransferProcessedNotifier` also sets `config.bot = "RevenueBot"` so revenue notifications route through a separate bot client when `RevenueBot.api` is configured; otherwise `DeliveryMethods::MixinBot` falls back to `QuillBot`.
 
@@ -95,56 +96,49 @@ Sent to the **commentable author** when someone comments on their article or col
 Sent to the **comment author** when their comment is removed by the commentable author.
 
 - Param: `:comment`
-- Channel: Mixin bot only (no web channel); gated by `recipient_messenger?`
-- `PLAIN_TEXT` category
+- Channels: web (always on) + Mixin bot (gated by `recipient_messenger?`); `PLAIN_TEXT`
 
 ### `OrderCreatedNotifier` — [`app/notifiers/order_created_notifier.rb`](../../app/notifiers/order_created_notifier.rb)
 
 Sent to the **order buyer** to confirm a `buy_article`, `buy_collection`, or `reward_article` order was recorded.
 
 - Param: `:order`
-- Channel: Mixin bot only; gated by `recipient_messenger?`
-- `PLAIN_TEXT`; branches on `order.item` for Article vs Collection wording and url
+- Channels: web (always on) + Mixin bot (gated by `recipient_messenger?`); `PLAIN_TEXT`; branches on `order.item` for Article vs Collection wording and url
 
 ### `PaymentCreatedNotifier` — [`app/notifiers/payment_created_notifier.rb`](../../app/notifiers/payment_created_notifier.rb)
 
 Sent to the **payer** when their payment snapshot is observed.
 
 - Param: `:payment`
-- Channel: Mixin bot only; gated by `recipient_messenger?`
-- `PLAIN_TEXT`; links to the Mixin snapshot URL
+- Channels: web (always on) + Mixin bot (gated by `recipient_messenger?`); `PLAIN_TEXT`; links to the Mixin snapshot URL
 
 ### `PaymentRefundedNotifier` — [`app/notifiers/payment_refunded_notifier.rb`](../../app/notifiers/payment_refunded_notifier.rb)
 
 Sent to the **payer** when their payment is refunded.
 
 - Param: `:payment`
-- Channel: Mixin bot only; gated by `recipient_messenger?`
-- `PLAIN_TEXT`; requires `payment.refund_transfer` to build the snapshot url
+- Channels: web (always on) + Mixin bot (gated by `recipient_messenger?`); `PLAIN_TEXT`; requires `payment.refund_transfer` to build the snapshot url
 
 ### `SubscribeUserActionCreatedNotifier` — [`app/notifiers/subscribe_user_action_created_notifier.rb`](../../app/notifiers/subscribe_user_action_created_notifier.rb)
 
 Sent to the **subscribed-to user** when another user follows them.
 
 - Param: `:action` (a `users.subscribe_users` action record)
-- Channel: Mixin bot only; gated by `recipient_messenger?`
-- `PLAIN_TEXT`
+- Channels: web (always on) + Mixin bot (gated by `recipient_messenger?`); `PLAIN_TEXT`
 
 ### `SwapOrderFinishedNotifier` — [`app/notifiers/swap_order_finished_notifier.rb`](../../app/notifiers/swap_order_finished_notifier.rb)
 
 Sent to the **swap initiator** when a swap completes, refunds, or is rejected.
 
 - Param: `:swap_order`
-- Channel: Mixin bot only; gated by `recipient_messenger?`
-- `PLAIN_TEXT`; branches on `swap_order.state` (`:completed`/`:refunded` vs `:rejected`)
+- Channels: web (always on) + Mixin bot (gated by `recipient_messenger?`); `PLAIN_TEXT`; branches on `swap_order.state` (`:completed`/`:refunded` vs `:rejected`)
 
 ### `SwapOrderSwappingNotifier` — [`app/notifiers/swap_order_swapping_notifier.rb`](../../app/notifiers/swap_order_swapping_notifier.rb)
 
 Sent to the **swap initiator** while the swap is in flight.
 
 - Param: `:swap_order`
-- Channel: Mixin bot only; gated by `recipient_messenger?`
-- `PLAIN_TEXT`
+- Channels: web (always on) + Mixin bot (gated by `recipient_messenger?`); `PLAIN_TEXT`
 
 ### `TaggingCreatedNotifier` — [`app/notifiers/tagging_created_notifier.rb`](../../app/notifiers/tagging_created_notifier.rb)
 
@@ -170,18 +164,16 @@ Sent to the **transfer recipient** when a transfer settles.
 One-time Mixin ping when a user connects a wallet.
 
 - Param: `:user`
-- `self.persist_web_notification = false` — never appears in the inbox
-- Channel: Mixin bot only; gated by `recipient_messenger?`
-- `PLAIN_TEXT`
+- `self.persist_web_notification = false` — never appears in the inbox (also excluded by the `MIXIN_ONLY_TYPES` scope in `config/initializers/noticed.rb`)
+- Channels: Mixin bot only (no web); gated by `recipient_messenger?`; `PLAIN_TEXT`
 
 ### `UserSafeRegistrationNotifier` — [`app/notifiers/user_safe_registration_notifier.rb`](../../app/notifiers/user_safe_registration_notifier.rb)
 
 One-time Mixin ping when a user registers a safe (Mixin multisig).
 
 - Param: `:user`
-- `self.persist_web_notification = false` — never appears in the inbox
-- Channel: Mixin bot only; gated by `recipient_messenger?`
-- `PLAIN_TEXT`
+- `self.persist_web_notification = false` — never appears in the inbox (also excluded by the `MIXIN_ONLY_TYPES` scope in `config/initializers/noticed.rb`)
+- Channels: Mixin bot only (no web); gated by `recipient_messenger?`; `PLAIN_TEXT`
 
 ## Delivery methods
 
@@ -199,7 +191,7 @@ Calls `notification.broadcast_as_flash` so the next page load shows the message 
 2. Set `self.persist_web_notification = false` if the event should never appear in the inbox.
 3. Declare the parameter the notification is about with `required_param :foo`.
 4. Wire the Mixin bot channel: `deliver_by :mixin_bot, class: "DeliveryMethods::MixinBot" do |config| ... end`. Pick `APP_CARD` for rich article-shaped cards, `PLAIN_TEXT` for transactional text. Gate with `config.if = -> { may_notify_via_mixin_bot? }`.
-5. Inside `notification_methods do ... end` implement `message`, `description`, `data`, `url`, `icon_url`, plus `web_notification_enabled?`, `mixin_bot_notification_enabled?`, `may_notify_via_web?`, and `may_notify_via_mixin_bot?`. Add `should_notify?` only if the event needs to honour `recipient.block_user?(author)`.
+5. Inside `notification_methods do ... end` implement `message`, `description`, `data`, `url`, `icon_url`, plus `web_notification_enabled?`, `mixin_bot_notification_enabled?`, `may_notify_via_web?`, and `may_notify_via_mixin_bot?`. Add `should_notify?` only if the event needs to honour `recipient.block_user?(author)`. For a transactional notifier with no per-recipient opt-out, you may omit the `*_enabled?` / `may_notify_via_web?` predicates — web then stays always-on (`visible_in_web?` falls through to `true`) and `may_notify_via_mixin_bot?` can be just `recipient_messenger?`.
 6. Add translations under `config/locales/notifications.*.yml` at `notifiers.<notifier_name>.notification.*`.
 7. Add a test under `test/notifiers/<name>_notifier_test.rb`. Mirror the `TaggingCreatedNotifierTest` pattern: one test per behaviour (deliver shape, `url`, `data` payload, `visible_in_web?` when blocked, `visible_in_web?` when disabled, mixin bot enqueue, mixin bot suppression).
 8. Add a row to the catalog above so it is discoverable.
