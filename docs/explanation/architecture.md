@@ -13,7 +13,7 @@
 | MVM | `/mvm` | MVM-specific routing (Mixin Virtual Machine) |
 | Grover | `/grover` | Server-rendered social cards (Open Graph images) |
 
-All six share the same models (`Article`, `Order`, `User`, `Currency`, …) and policies (`app/policies/`) but are kept in separate `app/controllers/<surface>/` directories and route draws (`config/routes/<surface>.rb`).
+All five share the same models (`Article`, `Order`, `User`, `Currency`, …) and policies (`app/policies/`) but are kept in separate `app/controllers/<surface>/` directories and route draws (`config/routes/<surface>.rb`).
 
 ## Subsystems
 

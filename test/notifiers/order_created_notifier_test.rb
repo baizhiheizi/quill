@@ -126,40 +126,30 @@ class OrderCreatedNotifierTest < ActiveSupport::TestCase
     )
   end
 
-  def build_article_order(order_type:)
-    payment = create_payment_for!(payer: @buyer, item: @article, order_type: order_type.to_s.upcase)
+  def build_order(item:, order_type:)
+    payment = create_payment_for!(payer: @buyer, item: item, order_type: order_type.to_s.upcase)
 
     Order.create!(
       buyer: @buyer,
-      seller: @article.author,
-      item: @article,
+      seller: item.author,
+      item: item,
       payment: payment,
       order_type: order_type,
       trace_id: payment.trace_id,
-      asset_id: @article.asset_id,
-      total: @article.price,
+      asset_id: item.asset_id,
+      total: item.price,
       value_btc: 0,
       value_usd: 0,
       state: "completed"
     )
   end
 
-  def build_collection_order(collection:)
-    payment = create_payment_for!(payer: @buyer, item: collection, order_type: "BUY")
+  def build_article_order(order_type:)
+    build_order(item: @article, order_type: order_type)
+  end
 
-    Order.create!(
-      buyer: @buyer,
-      seller: collection.author,
-      item: collection,
-      payment: payment,
-      order_type: :buy_collection,
-      trace_id: payment.trace_id,
-      asset_id: collection.asset_id,
-      total: collection.price,
-      value_btc: 0,
-      value_usd: 0,
-      state: "completed"
-    )
+  def build_collection_order(collection:)
+    build_order(item: collection, order_type: :buy_collection)
   end
 
   def create_payment_for!(payer:, item:, order_type:)

@@ -5,13 +5,11 @@ export default class extends Controller {
   static targets = ["scrollArea", "pagination"];
 
   connect() {
-    this.loading = false;
-    this.lastFetchedHref = null;
     this.createObserver();
   }
 
   createObserver() {
-    this.observer = new IntersectionObserver(
+    const observer = new IntersectionObserver(
       (entries) => this.handleIntersect(entries),
       {
         // https://github.com/w3c/IntersectionObserver/issues/124#issuecomment-476026505
@@ -19,41 +17,26 @@ export default class extends Controller {
       },
     );
     if (this.hasScrollAreaTarget) {
-      this.observer.observe(this.scrollAreaTarget);
-    }
-  }
-
-  disconnect() {
-    if (this.observer) {
-      this.observer.disconnect();
-      this.observer = null;
+      observer.observe(this.scrollAreaTarget);
     }
   }
 
   handleIntersect(entries) {
-    const visible = entries.some((entry) => entry.isIntersecting);
-    if (visible) {
-      this.loadMore();
-    }
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        this.loadMore();
+      }
+    });
   }
 
-  async loadMore() {
-    if (this.loading) return;
-
+  loadMore() {
     const next = this.paginationTarget.querySelector("a");
-    if (!next || !next.href) return;
 
-    if (this.lastFetchedHref === next.href) return;
-
-    this.loading = true;
-    this.lastFetchedHref = next.href;
-    try {
-      await get(next.href, {
+    if (next && next.href) {
+      get(next.href, {
         contentType: "application/json",
         responseKind: "turbo-stream",
       });
-    } finally {
-      this.loading = false;
     }
   }
 }

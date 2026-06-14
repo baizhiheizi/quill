@@ -16,11 +16,10 @@ class OrderCreatedNotifier < ApplicationNotifier
     end
 
     def action_name
-      case params[:order].order_type.to_sym
-      when :buy_article, :buy_collection
-        t(".bought")
-      when :reward_article
+      if order.reward_article?
         t(".rewarded")
+      else
+        t(".bought")
       end
     end
 
