@@ -51,18 +51,25 @@
 3. ~~[MEDIUM] Pre-Order State Machine~~ — ✅ 2026-06-08 (PR #1545, merged).
 4. ~~[LOW] Collection Revenue Distribution~~ — ✅ 2026-06-12 (branch `test-assist/collection-distribution`).
 5. ~~[MEDIUM] Article Distribution Memo + Wallet~~ — ✅ 2026-06-14 (branch `test-assist/article-distribution-memo-and-wallet`).
+6. ✅ **[MEDIUM] SwapOrderFinishedNotifier coverage** — ✅ 2026-06-14 (branch `test-assist/swap-order-finished-notifier`).
 
-All backlog items are now complete. Future runs should look for fresh opportunities.
+All high-priority backlog items are now complete. Future runs should look for fresh opportunities.
 
 ## Work in Progress
 
-- Branch `test-assist/article-distribution-memo-and-wallet` committed locally (commit `3c2a67c`): +11 tests in `test/services/orders/distribute_service_article_test.rb` (332 lines). All paths covered: reader/reference/collection/author memo formats, cite_article and reward_article author memos, wallet-equals-bot skip, multi-subscriber collection revenue distribution, reference opponent_id routing. `bin/rubocop` clean, `bin/rails zeitwerk:check` clean. `safeoutputs create_pull_request` returned patch mode; patch at `/tmp/gh-aw/aw-test-assist-article-distribution-memo-and-wallet.patch` (13,135 bytes, 372 lines).
-- Monthly Activity issue #1517 updated with this run's entry; backlog item 5 (Article Distribution Memo + Wallet) marked done; Suggested Actions refreshed to include this run's PR.
-- Prior runs' branches (`test-assist/article-authorization-edge-cases`, `test-assist/early-reader-detection`, `test-assist/collection-distribution`) remain unconfirmed on remote — they require human maintainer to push the patches or trigger branch push.
+- Branch `test-assist/swap-order-finished-notifier` committed locally (commit `af44efd`): +9 tests in `test/notifiers/swap_order_finished_notifier_test.rb` (223 lines, new file). All paths covered: noticed event + notification records, message branches for `completed` / `refunded` / `rejected`, 8-decimal format for funds/amount, `dashboard_orders_url` routing, `data == message` invariant, mixin bot delivery enqueue for messenger recipients. `bin/rubocop` clean; `bin/rails zeitwerk:check` clean; `ruby -c` syntax check OK. Includes inline `with_pando_lake_stub` helper so `SwapOrder.create!` doesn't reach `PandoLake.api.actions` in `after_create`.
+- Monthly Activity issue #1517 will be updated with this run's entry; backlog item 6 (SwapOrderFinishedNotifier) marked done.
+- Prior runs' branches (`test-assist/article-distribution-memo-and-wallet`, `test-assist/article-authorization-edge-cases`, `test-assist/early-reader-detection`, `test-assist/collection-distribution`) remain unconfirmed on remote — they require human maintainer to push the patches or trigger branch push.
 
 ## Completed Work
 
-### 2026-06-14
+### 2026-06-14 (run 2)
+- Added 9 tests in `test/notifiers/swap_order_finished_notifier_test.rb` (223 lines, new file): `SwapOrderFinishedNotifier` coverage — noticed event + notification records, message branches for `completed` / `refunded` / `rejected` (each branch has its own test), 8-decimal format for funds/amount, `dashboard_orders_url` routing, `data == message` invariant, mixin bot delivery enqueue for messenger recipients
+- Rubocop clean; zeitwerk:check clean; syntax check OK
+- PR opened via safeoutputs patch mode (branch `test-assist/swap-order-finished-notifier`, commit `af44efd`)
+- Monthly Activity issue #1517 updated; backlog (SwapOrderFinishedNotifier) marked done
+
+### 2026-06-14 (run 1)
 - Added 11 tests in `test/services/orders/distribute_service_article_test.rb` (332 lines, new file): `Orders::DistributeService#distribute_article_order!` coverage — reader/reference/collection/author memo formats (incl. 70-char truncation), cite_article and reward_article author memo branches (`"Reference revenue from {title}"` and `"{buyer} rewarded {title}"` respectively), `quill_revenue` skip when `payment.wallet_id == QuillBot.api.client_id` (real `MixinNetworkSnapshot`), multi-subscriber collection revenue distribution (3 subscribers, equal-share math), reference opponent_id routing to reference article's author
 - Rubocop clean on the new file and broader test/services/orders/ directory; zeitwerk:check clean
 - PR opened via safeoutputs patch mode (branch `test-assist/article-distribution-memo-and-wallet`, commit `3c2a67c`)
@@ -104,4 +111,4 @@ All backlog items are now complete. Future runs should look for fresh opportunit
 
 ## Last Run
 
-- 2026-06-14 - Article distribution memo + wallet coverage added (11 new tests, branch `test-assist/article-distribution-memo-and-wallet`); PR pushed via safeoutputs patch mode; Monthly Activity issue #1517 updated; backlog (Article Distribution Memo + Wallet) marked done
+- 2026-06-14 (run 2) - SwapOrderFinishedNotifier coverage added (9 new tests, branch `test-assist/swap-order-finished-notifier`); PR pushed via safeoutputs patch mode; Monthly Activity issue #1517 updated; backlog (SwapOrderFinishedNotifier) marked done
