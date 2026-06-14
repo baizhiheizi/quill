@@ -125,6 +125,78 @@ Things to notice in the example: `this.boundOnScroll` is a stored reference (inl
 
 The same lifecycle pattern — store a bound handler, add it in `connect()`, remove it in `disconnect()` — also applies to element-scoped listeners, not only `document`/`window`. See [`prefetch_controller.js`](../../app/javascript/controllers/prefetch_controller.js): `this.boundOnMouseover = debounce(this.prefetch, this.debounceDelayValue)` in `connect()`, with the matching `this.element.removeEventListener("mouseover", this.boundOnMouseover)` in `disconnect()`. Because Turbo replaces the body on every navigation, an inline `mouseover` arrow would leak one listener per visit; storing the bound reference is what makes teardown possible.
 
+### Observer teardown
+
+`IntersectionObserver` and `MutationObserver` are subject to the same leak as event listeners. The observer itself holds a closure over the controller; if `disconnect()` cannot reach the observer, that closure — and every state inside it — survives every Turbo navigation. Always store the observer as an instance property and call `.disconnect()` on it from `disconnect()`.
+
+The reference example is [`infinite_scroll_controller.js`](../../app/javascript/controllers/infinite_scroll_controller.js):
+
+```javascript
+import { Controller } from "@hotwired/stimulus";
+import { get } from "@rails/request.js";
+
+export default class extends Controller {
+  static targets = ["scrollArea", "pagination"];
+
+  connect() {
+    this.loading = false;
+    this.lastFetchedHref = null;
+    this.createObserver();
+  }
+
+  createObserver() {
+    this.observer = new IntersectionObserver(
+      (entries) => this.handleIntersect(entries),
+      {
+        // https://github.com/w3c/IntersectionObserver/issues/124#issuecomment-476026505
+        threshold: [0, 1.0],
+      },
+    );
+    if (this.hasScrollAreaTarget) {
+      this.observer.observe(this.scrollAreaTarget);
+    }
+  }
+
+  disconnect() {
+    if (this.observer) {
+      this.observer.disconnect();
+      this.observer = null;
+    }
+  }
+
+  handleIntersect(entries) {
+    const visible = entries.some((entry) => entry.isIntersecting);
+    if (visible) {
+      this.loadMore();
+    }
+  }
+
+  async loadMore() {
+    if (this.loading) return;
+
+    const next = this.paginationTarget.querySelector("a");
+    if (!next || !next.href) return;
+
+    if (this.lastFetchedHref === next.href) return;
+
+    this.loading = true;
+    this.lastFetchedHref = next.href;
+    try {
+      await get(next.href, {
+        contentType: "application/json",
+        responseKind: "turbo-stream",
+      });
+    } finally {
+      this.loading = false;
+    }
+  }
+}
+```
+
+Things to notice in the example: `this.observer` is stored on the instance (a local `const observer = new IntersectionObserver(...)` would be unreachable from `disconnect()` and leak the observer for the lifetime of the page); `disconnect()` calls `this.observer.disconnect()` and then nulls the reference; the observer is only created when `hasScrollAreaTarget` is true so a partial that lacks the target still tears down cleanly; `handleIntersect` collapses the per-entry callback into a single "any entry visible" check before firing `loadMore()`.
+
+IntersectionObserver callbacks also fire repeatedly while the trigger stays in view, so any controller that fetches in response to intersection must dedup. The example uses two guards: `this.loading` short-circuits overlapping fetches, and `this.lastFetchedHref` short-circuits repeated viewport hits against the same `next` link after a Turbo-stream append. Both belong in `loadMore()`, not in `handleIntersect()` — the observer may legitimately fire for distinct triggers, but a single trigger should never re-fire the same request.
+
 ### Debouncing DOM writes
 
 Wrap DOM-mutating work in `debounce` so a burst of events collapses into a single write. Reuse `underscore`'s `debounce` (already in the bundle):
@@ -165,7 +237,7 @@ mouseLeave() { /* … */ }
 ## Adding a new controller
 
 1. Run `./bin/rails generate stimulus <name>` (or hand-create `app/javascript/controllers/<name>_controller.js` and add `application.register("<name>", <Name>Controller)` to `index.js`).
-2. Implement `connect()` and `disconnect()`. Tear down everything you set up — listeners, timers, observers, document-level registrations.
+2. Implement `connect()` and `disconnect()`. Tear down everything you set up — listeners, timers, observers, document-level registrations. For observers, store the instance on `this` (e.g. `this.observer = new IntersectionObserver(...)`) and call `this.observer.disconnect()` from `disconnect()`; see [Observer teardown](#observer-teardown) above.
 3. For listeners outside `this.element`, store the bound handler on `this` and pass `{ passive: true }` where appropriate.
 4. Wrap DOM-write bursts in `debounce(fn, ms)` and `cancel()` it from `disconnect()` if the controller may be torn down before the debounced call fires. When the delay is meant to be tunable from a view, expose it as a Stimulus value (see `prefetch_controller.js`'s `debounceDelay` value, default `150` ms, consumed via `data-prefetch-debounce-delay-value`).
 5. Add a row to the catalog above.
