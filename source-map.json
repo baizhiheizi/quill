@@ -56,7 +56,7 @@
   },
   "Frontend": {
     "sourceFiles": [
-      { "path": "app/javascript/controllers/index.js", "hash": "size:6424" },
+      { "path": "app/javascript/controllers/index.js", "hash": "size:6299" },
       { "path": "package.json", "hash": "size:2413" }
     ],
     "templateHash": "size:5212",
@@ -64,12 +64,13 @@
   },
   "Stimulus-Controllers": {
     "sourceFiles": [
-      { "path": "app/javascript/controllers/index.js", "hash": "size:6424" },
+      { "path": "app/javascript/controllers/index.js", "hash": "size:6299" },
       { "path": "app/javascript/controllers/floating_controller.js", "hash": "size:2282" },
-      { "path": "app/javascript/controllers/autosave_controller.js", "hash": "size:471" }
+      { "path": "app/javascript/controllers/autosave_controller.js", "hash": "size:471" },
+      { "path": "app/javascript/controllers/infinite_scroll_controller.js", "hash": "size:953" }
     ],
     "templateHash": "size:5212",
-    "generatedAt": "2026-06-14T00:00:00Z"
+    "generatedAt": "2026-06-14T12:00:00Z"
   },
   "API-Reference": {
     "sourceFiles": [
