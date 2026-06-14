@@ -30,7 +30,7 @@ Adjust lane assignments in `config/queue.yml` (Solid Queue config). The runner i
 | `DistributeJob` | `critical` | Runs `Orders::DistributeService` for a single paid order (by trace id) |
 | `BatchDistributeJob` | `low` | Sweeps `Order.paid` and enqueues per-order workers |
 | `NotifyJob` | `default` | Sends the post-purchase notification |
-| `UpdateCacheJob` | `low` | Refreshes per-author / per-article cached counters |
+| `UpdateCacheJob` | `default` | Refreshes per-author / per-article cached counters |
 | `CacheHistoryTickerJob` | `low` | Maintains the historical ticker shown on article pages |
 
 The `DistributeJob` is the entry point into the value-net pipeline; see [Explanation → Value net](../explanation/value-net.md).
