@@ -48,8 +48,8 @@
 | MEDIUM | Frontend / UI | ~~`prefetch_controller.js` mouseover — DONE (PR #1576, merged 2026-06-11)~~ |
 | MEDIUM | Frontend / UI | ~~`auto_refresh_controller.js` — registered but unused; removed 2026-06-12~~ |
 | LOW | Frontend / UI | `textarea_autogrow_controller.js` — debounce `input` handler with the existing `resizeDebounceDelay` value; also remove the `input` listener in `disconnect()` |
-| LOW | Frontend / UI | `infinite_scroll_controller.js` — store observer as `this.observer`, add `disconnect()` that calls `this.observer.disconnect()` |
-| LOW | Frontend / UI | `infinite_scroll_controller.js#handleIntersect` — debounce / dedupe `loadMore()` calls and track last-fetched URL |
+| ~~LOW~~ | ~~Frontend / UI~~ | ~~`infinite_scroll_controller.js` — store observer as `this.observer`, add `disconnect()` that calls `this.observer.disconnect()`~~ **PR opened this run** (intent: branch `efficiency/infinite-scroll-observer-cleanup`, commit `949a005`) | Observer leak plugged across all 35+ infinite-scroll views |
+| ~~LOW~~ | ~~Frontend / UI~~ | ~~`infinite_scroll_controller.js#handleIntersect` — debounce / dedupe `loadMore()` calls and track last-fetched URL~~ **Combined with the observer-cleanup PR** (same commit `949a005`) | Per-intersection tick: N fetches → 1 fetch; same href no longer re-fires after stream append |
 | LOW | Frontend / UI | `auto_hide_controller.js` — store `setTimeout` handle as `this.timer`, clear in `disconnect()` |
 | LOW | Frontend / UI | `session_controller.js` — store bound `chainChanged` / `disconnect` / `accountsChanged` handlers and remove them in `disconnect()` |
 | LOW | Frontend / UI | No `prefers-reduced-motion` handling anywhere — cross-cutting win (mobile battery + accessibility) |
@@ -59,25 +59,26 @@
 
 ## work in progress
 
-_(none — PR for `auto_refresh_controller.js` removal is awaiting maintainer review via safeoutputs intent; patch at `/tmp/gh-aw/aw-efficiency-remove-dead-auto-refresh-controller.patch`, branch `efficiency/remove-dead-auto-refresh-controller`, commit `ef87da2`)_
+_(none — `infinite_scroll_controller.js` cleanup PR is awaiting maintainer review via safeoutputs intent; patch at `/tmp/gh-aw/aw-efficiency-infinite-scroll-observer-cleanup.patch`, branch `efficiency/infinite-scroll-observer-cleanup`, commit `949a005`)_
 
 ## completed work
 
 - **PR #1560** (2026-06-09, merged 2026-06-10): `app/javascript/controllers/floating_controller.js` — passive listener, correct debounce, `disconnect()` cleanup. Prettier clean; esbuild build clean.
 - **PR #1576** (2026-06-11, merged 2026-06-11): `app/javascript/controllers/prefetch_controller.js` — debounce + `disconnect()` cleanup + remove dead `load()` method. Branch `efficiency/prefetch-controller-debounce-and-cleanup`. Prettier clean; esbuild clean.
-- **PR (this run, 2026-06-12)**: dead-code removal of `app/javascript/controllers/auto_refresh_controller.js` — 33 lines across 3 files. Branch `efficiency/remove-dead-auto-refresh-controller`, commit `ef87da2`. Patch at `/tmp/gh-aw/aw-efficiency-remove-dead-auto-refresh-controller.patch`. Bundle minified 5,235,973 B → 5,235,610 B (−363 B per page load); unminified 10,569,786 B → 10,569,066 B (−720 B). Prettier clean; esbuild build + minify both clean.
+- **PR #1627** (2026-06-12, merged 2026-06-14): dead-code removal of `app/javascript/controllers/auto_refresh_controller.js` — 33 lines across 3 files. Branch `efficiency/remove-dead-auto-refresh-controller`, commit `ef87da2`. Patch at `/tmp/gh-aw/aw-efficiency-remove-dead-auto-refresh-controller.patch`. Bundle minified 5,235,973 B → 5,235,610 B (−363 B per page load); unminified 10,569,786 B → 10,569,066 B (−720 B). Prettier clean; esbuild build + minify both clean.
+- **PR (this run, 2026-06-14)**: `app/javascript/controllers/infinite_scroll_controller.js` IntersectionObserver cleanup + fetch dedup. Branch `efficiency/infinite-scroll-observer-cleanup`, commit `949a005`. Patch at `/tmp/gh-aw/aw-efficiency-infinite-scroll-observer-cleanup.patch` (3296 B, 104 lines). Bundle minified 5,235,973 B → 5,236,254 B (+281 B; the +281 B buys dedup state, a `try/finally`, and a `disconnect()` that prevents the observer leak across Turbo navigations — the avoided duplicate fetches per scroll-tick more than repay the byte cost). Prettier clean; esbuild + minify both clean. Wired into 35+ views.
 
 ## last task runs
 
 | Task | Last run (UTC) |
 |------|----------------|
-|1 |2026-06-1223:30 |
-|2 |2026-06-1223:30 |
-|3 |2026-06-1223:30 |
-|4 |2026-06-1223:30 |
-|5 |2026-06-1223:30 |
-|6 |2026-06-1223:30 |
-|7 |2026-06-1223:30 |
+|1 |2026-06-14 03:30 |
+|2 |2026-06-14 03:30 |
+|3 |2026-06-14 03:30 |
+|4 |2026-06-14 03:30 |
+|5 |2026-06-14 03:30 |
+|6 |2026-06-14 03:30 |
+|7 |2026-06-14 03:30 |
 
 ## monthly summary — checked off by maintainer
 
