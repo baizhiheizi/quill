@@ -19,7 +19,6 @@ Every controller registered in `app/javascript/controllers/index.js`, with its s
 |------------|------|---------|
 | `article-form` | [`article_form_controller.js`](../../app/javascript/controllers/article_form_controller.js) | Article drafting form (markdown editor + price/asset fields) |
 | `auto-hide` | [`auto_hide_controller.js`](../../app/javascript/controllers/auto_hide_controller.js) | Hides an element after a configurable delay |
-| `auto-refresh` | [`auto_refresh_controller.js`](../../app/javascript/controllers/auto_refresh_controller.js) | Triggers a Turbo refresh on a timer |
 | `autosave` | [`autosave_controller.js`](../../app/javascript/controllers/autosave_controller.js) | Persists form drafts while typing |
 | `clipboard` | [`clipboard_controller.js`](../../app/javascript/controllers/clipboard_controller.js) | Copies a target value to the clipboard |
 | `collections-form-component` | [`collections_form_component_controller.js`](../../app/javascript/controllers/collections_form_component_controller.js) | Author-side collection editing UI |
