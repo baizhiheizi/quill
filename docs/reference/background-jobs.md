@@ -12,6 +12,20 @@
 
 Adjust lane assignments in `config/queue.yml` (Solid Queue config). The runner is `bin/jobs`, which `bin/dev` starts for you.
 
+## Recurring schedule
+
+Long-running housekeeping work is scheduled by the Solid Queue recurring executor, not by external cron. The schedule lives in [`config/recurring.yml`](../../config/recurring.yml); every entry maps to a worker class on the `low` queue:
+
+| Job | Schedule | Purpose |
+|-----|----------|---------|
+| `Currencies::SyncJob` | every 5 minutes | Polls the Mixin network for updated asset rates |
+| `DailyStatistics::GenerateJob` | daily at 00:00 UTC | Rolls up `DailyStatistic` rows for the previous day |
+| `MixinNetworkSnapshots::MonitorJob` | every minute | Polls for new network snapshots |
+| `Orders::BatchDistributeJob` | every 10 minutes | Sweeps `Order.paid` rows and enqueues per-order `DistributeJob`s |
+| `Transfers::CacheStatsJob` | every 10 minutes | Refreshes per-transfer statistics used by the author dashboard |
+
+To add a new recurring job: append it to `config/recurring.yml` with its class, queue, and a standard cron expression; the schedule is reloaded on `bin/jobs` restart.
+
 ## Job catalog
 
 ### `articles/`

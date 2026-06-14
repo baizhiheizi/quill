@@ -36,7 +36,7 @@ quill/
 │   ├── javascript/      # Stimulus controllers, MVM wallet TS, esbuild entry
 │   ├── jobs/            # Active Job work (orders, transfers)
 │   ├── services/        # Query/command objects (e.g. ArticleSearchService)
-│   ├── notifiers/       # Noticed 3 notifier classes + delivery_methods/
+│   ├── notifiers/       # Noticed event classes + delivery_methods/
 │   └── libs/            # Non-Rails Ruby helpers
 ├── config/
 │   ├── routes/          # Route draws: admin, dashboard, api, mvm, grover
@@ -144,7 +144,7 @@ bun run build:css
 2. Enqueue with `perform_later`; Solid Queue runs via `bin/jobs` (in `bin/dev` Procfile). Recurring tasks in `config/recurring.yml`; queues in `config/queue.yml`
 3. Add `test/jobs/..._test.rb`
 
-### Add a notifier (Noticed 3)
+### Add a notifier (Noticed)
 
 1. Create `app/notifiers/<name>_notifier.rb` inheriting `ApplicationNotifier`
 2. Declare `required_param(s)` and wrap UI helpers (`message`, `url`, `icon_url`) in `notification_methods do ... end`
@@ -179,6 +179,6 @@ Run `/perf-assist <instructions>` for focused perf work. For a full run, `/perf-
 - **Ruby 4 / minitest**: Gemfile pins `minitest ~> 6.0` (locked to `6.0.6`); Rails 8.1 test runner works on minitest 6 in this stack — bump together with Ruby upgrades.
 - **CONTRIBUTING.md**: matches the README's Ruby 4.0.5 target; consult `.ruby-version` and `mise.toml` for the authoritative versions of Ruby, Bun, and Node
 - **Deploy**: Production deploy is manual (`gh workflow run Deploy`); uses Kamal + Docker Hub image `anleework/quill`
-- **Noticed 3**: Notifiers live in `app/notifiers/`, inherit `Noticed::Event` via `ApplicationNotifier`; user inbox uses `Noticed::Notification` (`User#notifications`). Web UI filters with `visible_in_web?` / `for_web` because DB records are always created (including Mixin-only delivery). Custom delivery: `DeliveryMethods::MixinBot`, `DeliveryMethods::FlashBroadcast`. Extend gem models in `config/initializers/noticed.rb`.
+- **Noticed**: Notifiers live in `app/notifiers/`, inherit `Noticed::Event` via `ApplicationNotifier`; user inbox uses `Noticed::Notification` (`User#notifications`). Web UI filters with `visible_in_web?` / `for_web` because DB records are always created (including Mixin-only delivery). Custom delivery: `DeliveryMethods::MixinBot`, `DeliveryMethods::FlashBroadcast`. Extend gem models in `config/initializers/noticed.rb`. See [Reference → Notifiers](docs/reference/notifiers.md) for the full catalog (18 notifiers covering articles, collections, comments, tags, orders, payments, swap orders, transfers, and account lifecycle events).
 - **Solid Cable**: Real-time WebSocket backend uses a separate `cable` database (`config/database.yml`). Run `bin/rails db:prepare` to create/migrate all databases.
 - **Solid Queue**: Jobs use a separate `queue` database (`config/database.yml`); admin dashboard at `/admin/jobs` (Mission Control). Run `bin/rails db:prepare` to create/migrate all databases.

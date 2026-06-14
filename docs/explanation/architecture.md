@@ -55,7 +55,13 @@ ActiveJob classes live under `app/jobs/`, grouped by domain:
 - `users/` — one-time setup (`PrepareJob`).
 - `transfers/` — transfer-state polling and stats caching (`Transfers::CacheStatsJob`).
 
-Workers run via **Solid Queue**, which is backed by a separate database. See [Reference → Background jobs](../reference/background-jobs.md).
+Workers run via **Solid Queue**, which is backed by a separate database. See [Reference → Background jobs](../reference/background-jobs.md). Long-running housekeeping work (asset rate polling, daily rollups, batch distribution, transfer-stat refreshes) is scheduled by the Solid Queue recurring executor from `config/recurring.yml` rather than external cron.
+
+### Operations
+
+- **Mission Control** — the Solid Queue admin UI is mounted at `/admin/jobs` and surfaces queue depth, recent failures, and per-job timing. See `config/initializers/mission_control.rb` for the mount configuration.
+- **Recurring schedule** — defined in `config/recurring.yml`; reload on `bin/jobs` restart. The catalog is documented under [Reference → Background jobs → Recurring schedule](../reference/background-jobs.md#recurring-schedule).
+- **Queue configuration** — three lanes (`critical`, `default`, `low`) plus Solid Queue workers and dispatchers live in `config/queue.yml`.
 
 ### Persistence
 

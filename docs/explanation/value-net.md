@@ -59,7 +59,7 @@ The split is implemented by [`Orders::DistributeService`](../../app/services/ord
 
 Key terms to look up in the code:
 
-- `Order#order_type` — `:buy_article`, `:reward_article`, `:cite_article`. Only the first two count toward the early-reader pool. `cite_article` is a *reference* payment to a cited article and never makes the citer an early reader of the cited piece.
+- `Order#order_type` — `:buy_article`, `:reward_article`, `:cite_article`, `:buy_collection`. Only `:buy_article` and `:reward_article` count toward the early-reader pool. `:cite_article` is a *reference* payment to a cited article and never makes the citer an early reader of the cited piece. `:buy_collection` is paid against a `Collection` and follows the platform-fee + author-revenue branch of `Orders::DistributeService` — there is no early-reader pool for collections.
 - `Order#value_btc` — the order's BTC-equivalent value at the time of payment. Used to weight shares when the pool spans multiple currencies.
 - `Order#complete!` — marks the order as distributed so it cannot be paid twice. The service is idempotent and short-circuits on `Order#completed?`.
 - `Orders::DistributeService::MINIMUM_AMOUNT` — `0.00000001`. Both the per-reader transfer and the author transfer skip when their amount is below this floor.
