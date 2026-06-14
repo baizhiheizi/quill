@@ -65,7 +65,7 @@ The category matters: `APP_CARD` payloads are rich cards with `icon_url`, `title
 
 | Notifier | Required param | Category | Fires when |
 |----------|----------------|----------|-----------|
-| `OrderCreatedNotifier` | `:order` | `PLAIN_TEXT` | The buyer completes a buy or reward. Sends a confirmation back to the buyer; the verb (`bought` vs `rewarded`) is picked from `order.order_type`. |
+| `OrderCreatedNotifier` | `:order` | `PLAIN_TEXT` | The buyer completes a paid order (`buy_article`, `reward_article`, or `buy_collection`). Sends a confirmation back to the **buyer**; the verb (`bought` for `buy_article`/`buy_collection`, `rewarded` for `reward_article`) is picked from `order.order_type`. Fired from `Order#notify_buyer` (after `notify_subscribers` succeeds) so the author-facing notifiers — `ArticleBoughtNotifier` / `ArticleRewardedNotifier` / `CollectionBoughtNotifier` — always run first. |
 | `PaymentCreatedNotifier` | `:payment` | `PLAIN_TEXT` | A payment snapshot is created (mostly for debugging / Mixin traceability). |
 | `PaymentRefundedNotifier` | `:payment` | `PLAIN_TEXT` | A payment is refunded. The message interpolates the related `pre_order.item.title` so the buyer can identify the original purchase. |
 
@@ -118,6 +118,15 @@ Most notifiers expose three predicates and combine them in the delivery block:
 
 All user-facing strings live in [`config/locales/notifications.<locale>.yml`](../../config/locales/) under `notifiers.<notifier_name>.notification.<key>`. Concrete notifiers call `t(".published")` / `t(".bought")` / etc. so that the locale is resolved per-recipient (see `format_for_action_cable` and the `I18n.with_locale` wrapper inside `DeliveryMethods::MixinBot#deliver`).
 
+### OrderCreatedNotifier shape
+
+`OrderCreatedNotifier` is the buyer-facing complement to the three author-facing notifiers (`ArticleBoughtNotifier`, `ArticleRewardedNotifier`, `CollectionBoughtNotifier`). `Order#notify` calls `notify_subscribers` first and `notify_buyer` second so the author always sees the sale before the buyer sees the receipt. Three behaviours set it apart from the rest of the catalog:
+
+- **Verb is computed, not stored.** The notifier switches on `order.order_type` — `buy_article` and `buy_collection` resolve to `t(".bought")`, `reward_article` resolves to `t(".rewarded")`. The body of the message is the verb joined with `item.title` (for `Article`) or `item.name` (for `Collection`).
+- **URL is item-typed.** `Article` orders anchor on `user_article_url(item.author, item.uuid)`; `Collection` orders anchor on `collection_url(item.uuid)`. This is the same split used by the author-facing notifiers, so author and buyer both deep-link to the same surface.
+- **`data` mirrors `message`.** Unlike the `APP_CARD` notifiers, `OrderCreatedNotifier` does not produce an `{ icon_url, title, description, action }` payload — it sets `data` to `message` directly so the `PLAIN_TEXT` Mixin message is the body the buyer sees. There is no icon and no tappable action button; the URL is informational only and lives in the notification record for the navbar bell.
+- **Mixin predicate has no opt-out toggle.** `may_notify_via_mixin_bot?` is `recipient_messenger?` alone — it does **not** consult `recipient.notification_setting`. Every buyer with a linked Mixin Messenger account gets the receipt, regardless of any per-event setting.
+
 ## Testing
 
 The shared helpers live in [`test/support/notifier_helpers.rb`](../../test/support/notifier_helpers.rb):
@@ -135,6 +144,7 @@ Notifier tests live under [`test/notifiers/`](../../test/notifiers/). The full c
 | `article_published_notifier_test.rb` | `ArticlePublishedNotifier` (web visibility, URL anchor, APP_CARD payload, mixin enqueue + opt-out) |
 | `article_bought_notifier_test.rb` | `ArticleBoughtNotifier` |
 | `article_rewarded_notifier_test.rb` | `ArticleRewardedNotifier` |
+| `order_created_notifier_test.rb` | `OrderCreatedNotifier` (buy / reward / buy_collection message + URL anchoring for `Article` and `Collection` items, data mirrors message, mixin enqueue for messenger recipients) |
 | `comment_created_notifier_test.rb` | `CommentCreatedNotifier` |
 | `comment_deleted_notifier_test.rb` | `CommentDeletedNotifier` |
 | `tagging_created_notifier_test.rb` | `TaggingCreatedNotifier` |
