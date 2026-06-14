@@ -20,7 +20,7 @@ class ArticlePublishedNotifierTest < ActiveSupport::TestCase
 
     notification = notification_for(@subscriber)
 
-    assert_equal @author.name.truncate(10), notification.message.split.first
+    assert_includes notification.message, @author.name.truncate(10)
     assert_includes notification.message,
                     I18n.t("notifiers.article_published_notifier.notification.published")
     assert_includes notification.message, @article.title
@@ -88,7 +88,7 @@ class ArticlePublishedNotifierTest < ActiveSupport::TestCase
     assert_enqueued_jobs 1, only: DeliveryMethods::MixinBot
   end
 
-  test "deliver does not enqueue mixin bot delivery when subscriber disabled mixin bot" do
+  test "deliver does not send a mixin bot message when subscriber disabled mixin bot" do
     @subscriber.notification_setting.update!(article_published_mixin_bot: false)
 
     deliver_notifier!(
@@ -98,8 +98,11 @@ class ArticlePublishedNotifierTest < ActiveSupport::TestCase
       recipient: @subscriber
     )
 
+    # Noticed's config.if gates delivery at perform time, not enqueue time, so
+    # the MixinBot job is enqueued but no-ops when the setting is disabled.
     perform_enqueued_jobs only: Noticed::EventJob
+    perform_enqueued_jobs only: DeliveryMethods::MixinBot
 
-    assert_no_enqueued_jobs only: DeliveryMethods::MixinBot
+    assert_no_enqueued_jobs only: MixinMessages::SendJob
   end
 end

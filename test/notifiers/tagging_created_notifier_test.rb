@@ -101,7 +101,7 @@ class TaggingCreatedNotifierTest < ActiveSupport::TestCase
     assert_enqueued_jobs 1, only: DeliveryMethods::MixinBot
   end
 
-  test "deliver does not enqueue mixin bot delivery when recipient disabled mixin bot" do
+  test "deliver does not send a mixin bot message when recipient disabled mixin bot" do
     @recipient.notification_setting.update!(tagging_created_mixin_bot: false)
 
     deliver_notifier!(
@@ -111,8 +111,11 @@ class TaggingCreatedNotifierTest < ActiveSupport::TestCase
       recipient: @recipient
     )
 
+    # Noticed's config.if gates delivery at perform time, not enqueue time, so
+    # the MixinBot job is enqueued but no-ops when the setting is disabled.
     perform_enqueued_jobs only: Noticed::EventJob
+    perform_enqueued_jobs only: DeliveryMethods::MixinBot
 
-    assert_no_enqueued_jobs only: DeliveryMethods::MixinBot
+    assert_no_enqueued_jobs only: MixinMessages::SendJob
   end
 end

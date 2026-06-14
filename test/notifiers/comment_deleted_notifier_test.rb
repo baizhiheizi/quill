@@ -12,6 +12,10 @@ class CommentDeletedNotifierTest < ActiveSupport::TestCase
       commentable: @article,
       legacy_markdown_content: "Will be deleted"
     )
+
+    # Comment creation fires CommentCreatedNotifier through an after_commit
+    # callback, enqueuing jobs. Clear them so job-count assertions start clean.
+    clear_enqueued_jobs
   end
 
   test "deliver creates a visible web notification with article title and deleted message" do
