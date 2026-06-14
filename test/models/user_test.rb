@@ -124,4 +124,40 @@ class UserTest < ActiveSupport::TestCase
     assert_not new_user.valid?
     assert_includes new_user.errors[:uid], "has already been taken"
   end
+
+  test "order_by_articles_count includes users with zero articles via LEFT JOIN" do
+    # `author` fixture has an article; `reader_one` and `reader_two` do not.
+    # Previously used INNER JOIN, so users with no articles were silently
+    # dropped from the admin user list when sorting by `articles_count`.
+    rows = User.order_by_articles_count.to_a
+
+    assert_includes rows.map(&:id), users(:author).id
+    assert_includes rows.map(&:id), users(:reader_one).id
+    assert_includes rows.map(&:id), users(:reader_two).id
+    assert_equal users(:author).id, rows.first.id
+  end
+
+  test "order_by_comments_count includes users with zero comments via LEFT JOIN" do
+    rows = User.order_by_comments_count.to_a
+
+    assert_includes rows.map(&:id), users(:author).id
+    assert_includes rows.map(&:id), users(:reader_one).id
+    assert_equal 0, rows.find { |u| u.id == users(:reader_one).id }.attributes["comments_count"].to_i
+  end
+
+  test "order_by_orders_total includes users with zero orders via LEFT JOIN" do
+    rows = User.order_by_orders_total.to_a
+
+    assert_includes rows.map(&:id), users(:author).id
+    assert_includes rows.map(&:id), users(:reader_one).id
+    assert_equal 0.0, rows.find { |u| u.id == users(:reader_one).id }.attributes["orders_total"].to_f
+  end
+
+  test "order_by_revenue_total includes users with no transfers via LEFT JOIN" do
+    rows = User.order_by_revenue_total.to_a
+
+    assert_includes rows.map(&:id), users(:author).id
+    assert_includes rows.map(&:id), users(:reader_one).id
+    assert_equal 0.0, rows.find { |u| u.id == users(:reader_one).id }.attributes["revenue_total"].to_f
+  end
 end

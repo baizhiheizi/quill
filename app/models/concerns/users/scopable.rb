@@ -20,28 +20,32 @@ module Users::Scopable
     }
     scope :only_email_verified, -> { where.not(email_verified_at: nil) }
     scope :only_validated, -> { where.not(validated_at: nil) }
+    # All order_by_* scopes use LEFT JOIN so users with no matching rows
+    # (no revenue transfers, no orders, no articles, no comments) are still
+    # included with a 0 value. Same pattern as `Article.order_by_popularity`
+    # (PR #1539) and the `subscribed` / `block` filters.
     scope :order_by_revenue_total, lambda {
-      joins(revenue_transfers: :currency)
+      left_joins(revenue_transfers: :currency)
         .group(:id)
         .select(
           <<~SQL.squish
             users.*,
-            SUM(transfers.amount * currencies.price_usd) AS revenue_total
+            COALESCE(SUM(transfers.amount * currencies.price_usd), 0) AS revenue_total
           SQL
         ).order(revenue_total: :desc)
     }
     scope :order_by_orders_total, lambda {
-      joins(:orders)
+      left_joins(:orders)
         .group(:id)
         .select(
           <<~SQL.squish
             users.*,
-            SUM(orders.value_usd) AS orders_total
+            COALESCE(SUM(orders.value_usd), 0) AS orders_total
           SQL
         ).order(orders_total: :desc)
     }
     scope :order_by_articles_count, lambda {
-      joins(:articles)
+      left_joins(:articles)
         .group(:id)
         .select(
           <<~SQL.squish
@@ -51,7 +55,7 @@ module Users::Scopable
         ).order(articles_count: :desc)
     }
     scope :order_by_comments_count, lambda {
-      joins(:comments)
+      left_joins(:comments)
         .group(:id)
         .select(
           <<~SQL.squish
