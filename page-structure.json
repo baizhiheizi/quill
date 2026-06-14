@@ -1,25 +1,18 @@
 {
- "pages": [
- {"title": "Home", "slug": "Home", "level":1, "parent": null},
- {"title": "Architecture", "slug": "Architecture", "level":1, "parent": null},
- {"title": "Value Net", "slug": "Value-Net", "level":2, "parent": "Architecture"},
- {"title": "Backend", "slug": "Backend", "level":1, "parent": null},
- {"title": "Background Jobs", "slug": "Background-Jobs", "level":2, "parent": "Backend"},
- {"title": "Services", "slug": "Services", "level":2, "parent": "Backend"},
- {"title": "Frontend", "slug": "Frontend", "level":1, "parent": null},
- {"title": "Stimulus Controllers", "slug": "Stimulus-Controllers", "level":2, "parent": "Frontend"},
- {"title": "API Reference", "slug": "API-Reference", "level":1, "parent": null},
- {"title": "Getting Started", "slug": "Getting-Started", "level":1, "parent": null},
- {"title": "For Agents", "slug": "For-Agents", "level":1, "parent": null},
- {"title": "AGENTS", "slug": "AGENTS", "level":2, "parent": "For-Agents"},
- {"title": "llms", "slug": "llms", "level":2, "parent": "For-Agents"}
- ],
- "sidebarSections": [
- {"title": "Conventions", "pageSlug": "Stimulus-Controllers", "sectionSlug": "Conventions", "parentPage": "Stimulus-Controllers"},
- {"title": "Patterns", "pageSlug": "Stimulus-Controllers", "sectionSlug": "Patterns", "parentPage": "Stimulus-Controllers"},
- {"title": "Adding a Controller", "pageSlug": "Stimulus-Controllers", "sectionSlug": "Adding-a-Controller", "parentPage": "Stimulus-Controllers"},
- {"title": "Articles", "pageSlug": "API-Reference", "sectionSlug": "Articles", "parentPage": "API-Reference"},
- {"title": "Prerequisites", "pageSlug": "Getting-Started", "sectionSlug": "Prerequisites", "parentPage": "Getting-Started"},
- {"title": "Configuration", "pageSlug": "Getting-Started", "sectionSlug": "Configuration", "parentPage": "Getting-Started"}
- ]
+  "pages": [
+    { "title": "Home", "slug": "Home", "level": 1, "parent": null },
+    { "title": "Architecture", "slug": "Architecture", "level": 1, "parent": null },
+    { "title": "Value Net", "slug": "Value-Net", "level": 2, "parent": "Architecture" },
+    { "title": "Backend", "slug": "Backend", "level": 1, "parent": null },
+    { "title": "Background Jobs", "slug": "Background-Jobs", "level": 2, "parent": "Backend" },
+    { "title": "Services", "slug": "Services", "level": 2, "parent": "Backend" },
+    { "title": "Frontend", "slug": "Frontend", "level": 1, "parent": null },
+    { "title": "Stimulus Controllers", "slug": "Stimulus-Controllers", "level": 2, "parent": "Frontend" },
+    { "title": "API Reference", "slug": "API-Reference", "level": 1, "parent": null },
+    { "title": "Getting Started", "slug": "Getting-Started", "level": 1, "parent": null },
+    { "title": "For Agents", "slug": "For-Agents", "level": 1, "parent": null },
+    { "title": "AGENTS.md", "slug": "AGENTS", "level": 2, "parent": "For-Agents" },
+    { "title": "llms.txt", "slug": "llms", "level": 2, "parent": "For-Agents" }
+  ],
+  "sidebarSections": []
 }
