@@ -21,6 +21,7 @@ permissions: read-all
 network: defaults
 
 safe-outputs:
+  report-failure-as-issue: false
   create-discussion:
     title-prefix: "[weekly-research] "
     category: "ideas"

@@ -28,6 +28,7 @@ tools:
       - default
 
 safe-outputs:
+  report-failure-as-issue: false
   create-issue:
     expires: 2d
     labels: [quality, automated-analysis]

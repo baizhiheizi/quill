@@ -47,6 +47,7 @@ network:
   - java
 
 safe-outputs:
+  report-failure-as-issue: false
   add-comment:
     max: 10
     target: "*"

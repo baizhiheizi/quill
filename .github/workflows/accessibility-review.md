@@ -22,6 +22,7 @@ permissions: read-all
 network: defaults
 
 safe-outputs:
+  report-failure-as-issue: false
   mentions: false
   allowed-github-references: []
   create-discussion:

@@ -19,6 +19,7 @@ network:
     - defaults
 
 safe-outputs:
+  report-failure-as-issue: false
   create-issue:
     title-prefix: "[task-miner] "
     labels: [automated-analysis]

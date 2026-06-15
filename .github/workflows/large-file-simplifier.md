@@ -23,6 +23,7 @@ imports:
   - shared/reporting.md
 
 safe-outputs:
+  report-failure-as-issue: false
   create-issue:
     expires: 2d
     title-prefix: "[large-file-simplifier] "

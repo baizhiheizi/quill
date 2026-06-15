@@ -28,6 +28,7 @@ imports:
   - shared/reporting.md
 
 safe-outputs:
+  report-failure-as-issue: false
   create-pull-request:
     title-prefix: "[code-simplifier] "
     labels: [refactoring, code-quality, automation]

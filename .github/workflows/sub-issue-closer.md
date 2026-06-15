@@ -24,6 +24,7 @@ tools:
       - issues
 
 safe-outputs:
+  report-failure-as-issue: false
   update-issue:
     status:
     target: "*"

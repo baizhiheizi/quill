@@ -52,6 +52,7 @@ tools:
     toolsets: [default]
 
 safe-outputs:
+  report-failure-as-issue: false
   create-pull-request:
     title-prefix: "[agentic-wiki]"
     labels: [documentation, automated]

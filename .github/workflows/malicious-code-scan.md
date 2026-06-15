@@ -24,6 +24,7 @@ tools:
   bash: true
 
 safe-outputs:
+  report-failure-as-issue: false
   create-code-scanning-alert:
     driver: "Malicious Code Scanner"
   threat-detection: false
