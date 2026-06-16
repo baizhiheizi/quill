@@ -160,4 +160,40 @@ class UserTest < ActiveSupport::TestCase
     assert_includes rows.map(&:id), users(:reader_one).id
     assert_equal 0.0, rows.find { |u| u.id == users(:reader_one).id }.attributes["revenue_total"].to_f
   end
+
+  test "twitter_connected requires a usable username" do
+    user = users(:author)
+    user.user_authorizations.create!(
+      provider: :twitter,
+      uid: "twitter-user-id",
+      raw: { "id" => "twitter-user-id", "name" => "Author" }
+    )
+
+    assert_not user.twitter_connected?
+    assert_nil user.twitter_profile_url
+  end
+
+  test "twitter_profile_url builds a profile link from stored username" do
+    user = users(:reader_one)
+    user.user_authorizations.create!(
+      provider: :twitter,
+      uid: "reader-twitter-id",
+      raw: { "id" => "reader-twitter-id", "username" => "reader_one" }
+    )
+
+    assert user.twitter_connected?
+    assert_equal "https://twitter.com/reader_one", user.twitter_profile_url
+  end
+
+  test "twitter_profile_url ignores malformed username values" do
+    user = users(:reader_two)
+    user.user_authorizations.create!(
+      provider: :twitter,
+      uid: "reader-two-twitter-id",
+      raw: { "id" => "reader-two-twitter-id", "username" => 123 }
+    )
+
+    assert_not user.twitter_connected?
+    assert_nil user.twitter_profile_url
+  end
 end
