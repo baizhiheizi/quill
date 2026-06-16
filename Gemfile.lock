@@ -651,6 +651,7 @@ PLATFORMS
 DEPENDENCIES
   aasm
   action-store
+  addressable
   after_commit_everywhere
   annotaterb
   aws-sdk-s3

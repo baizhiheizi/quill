@@ -55,6 +55,9 @@ gem "image_processing", "~> 2.0"
 # Modern rich text editor for Action Text
 gem "lexxy", "~> 0.9.17"
 
+# URI parsing and normalization (used for profile and payment URLs in production)
+gem "addressable"
+
 # Reduces boot times through caching; required in config/boot.rb
 gem "bootsnap", ">= 1.4.4", require: false
 
