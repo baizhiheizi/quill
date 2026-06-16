@@ -36,7 +36,7 @@ class UserAuthorization < ApplicationRecord
     return if provider == "twitter"
 
     r = QuillBot.api.user raw["user_id"]
-    update! raw: raw.merge(has_safe: r["data"]["has_safe"])
+    update! raw: raw.merge(r["data"])
   end
 
   def has_safe?
