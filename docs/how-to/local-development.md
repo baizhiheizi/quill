@@ -23,7 +23,7 @@ Verify with `ruby -v`. You should see `ruby 4.0.5`.
 
 ### PostgreSQL
 
-PostgreSQL is required for both the primary database and the Solid Queue/Cable/Cache database.
+PostgreSQL is required for the **primary** database. Solid Queue, Solid Cable, and Solid Cache each use their own SQLite file under `storage/` (created and migrated by `bin/rails db:prepare`), so they don't need a separate Postgres connection.
 
 ```bash
 # Ubuntu
