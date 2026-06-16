@@ -60,7 +60,7 @@ Workers run via **Solid Queue**, which is backed by a separate database. See [Re
 ### Persistence
 
 - PostgreSQL holds the application schema.
-- A second PostgreSQL database holds Solid Queue, Solid Cable, and Solid Cache data — see `config/database.yml` for connection names.
+- Solid Queue, Solid Cable, and Solid Cache each use their own SQLite database under `storage/` (e.g. `storage/production_queue.sqlite3`) — see `config/database.yml` for connection names. `bin/rails db:prepare` creates and migrates all of them.
 - Article bodies live in ActionText (`action_text_rich_texts`), with a `legacy_markdown_content` `text` fallback on `articles` for pre-migration rows.
 - `active_storage_blobs` holds the per-article `images` (referenced from the rendered body), `poster` (Open Graph image), and `cover`.
 - `ArticleSnapshot` records capture content history in PostgreSQL JSON.
