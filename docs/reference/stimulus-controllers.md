@@ -60,7 +60,6 @@ Every controller registered in `app/javascript/controllers/index.js`, with its s
 | `syntax-highlight` | [`syntax_highlight_controller.js`](../../app/javascript/controllers/syntax_highlight_controller.js) | Syntax highlighter wrapper |
 | `tabs` | [`tabs_controller.js`](../../app/javascript/controllers/tabs_controller.js) | Tab group state machine |
 | `tags-select` | [`tags_select_controller.js`](../../app/javascript/controllers/tags_select_controller.js) | Tag multi-select combobox |
-| `textarea-autogrow` | [`textarea_autogrow_controller.js`](../../app/javascript/controllers/textarea_autogrow_controller.js) | Auto-growing textarea |
 | `time-format-component` | [`time_format_component_controller.js`](../../app/javascript/controllers/time_format_component_controller.js) | Relative-time renderer |
 | `toast` | [`toast_controller.js`](../../app/javascript/controllers/toast_controller.js) | Stack-managed transient toasts |
 | `turbo` | [`turbo_controller.js`](../../app/javascript/controllers/turbo_controller.js) | Global Turbo event hooks |

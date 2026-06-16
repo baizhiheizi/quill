@@ -154,9 +154,6 @@ application.register("tabs", TabsController);
 import TagsSelectController from "./tags_select_controller";
 application.register("tags-select", TagsSelectController);
 
-import TextareaAutogrowController from "./textarea_autogrow_controller";
-application.register("textarea-autogrow", TextareaAutogrowController);
-
 import TimeFormatComponentController from "./time_format_component_controller";
 application.register("time-format-component", TimeFormatComponentController);
 
