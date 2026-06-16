@@ -39,6 +39,7 @@ env:
     DATABASE_HOST: 'quill-db'
     POSTGRES_USER: 'postgres'
     POSTGRES_DB: 'quill_production'
+    PORT: '80'
   secret:
     - RAILS_MASTER_KEY
     - POSTGRES_PASSWORD
@@ -93,10 +94,15 @@ accessories:
         - S3_ENDPOINT
         - POSTGRES_PASSWORD
 
+# First deploy after long gap runs db:prepare (116 migrations + SQLite DBs) before Puma boots.
+deploy_timeout: 600
+
 proxy:
   host: quill.im
   ssl: true
   app_port: 80
+  healthcheck:
+    path: /up
 # Bridge fingerprinted assets, like JS and CSS, between versions to avoid
 # hitting 404 on in-flight requests. Combines all files from new and old
 # version inside the asset_path.
