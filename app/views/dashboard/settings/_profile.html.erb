@@ -28,11 +28,11 @@
   </div>
 
   <div class="overflow-x-scroll scrollbar-hide py-2 border-b border-base-content/10">
-    <% if current_user.twitter_authorization.present? %>
+    <% if current_user.twitter_connected? %>
       <span class="">
-        @<%= current_user.twitter_authorization.raw['username'] %>
+        @<%= current_user.twitter_username %>
       </span>
-      <%= link_to current_user.twitter_profile_url, 
+      <%= link_to current_user.twitter_profile_url,
         class: "ml-2",
         target: "_blank" do %>
         <%= inline_svg_tag 'icons/external-link.svg', class: 'w-4 h-4 text-blue-500 inline' %>
