@@ -79,10 +79,6 @@ On success, returns the new article's UUID:
 
 If the article publishes immediately, `article.publish!` is called and the article moves to `published` state before the response is returned.
 
-### `GET /api/files/:hash`
-
-Fetch a file from the asset CDN by its hash.
-
 ### `GET /api/valid_user_filter`
 
 Returns the validation rules used by the dashboard when inviting new readers. Useful for clients that want to mirror the same checks.
