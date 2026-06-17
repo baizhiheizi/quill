@@ -22,6 +22,13 @@ class Tag < ApplicationRecord
   before_validation :setup_locale
 
   scope :recommended, -> { order(articles_count: :desc, created_at: :desc) }
+  # `hot` filters to tags that have published articles in the last 3 months,
+  # ordered by how many they have. The previous shape aliased
+  # `COUNT(articles.id) AS lately_article_count` and used it for ordering;
+  # that alias broke `Tag.hot.count` (PG syntax error: ActiveRecord built
+  # `SELECT COUNT(tags.*, COUNT(articles.id) AS ...)`). Nothing reads the
+  # alias outside this scope, so we order directly via `Arel.sql` and drop
+  # the `select` so `count` works again.
   scope :hot, lambda {
     joins(:articles)
       .where(
@@ -30,12 +37,7 @@ class Tag < ApplicationRecord
           created_at: (3.months.ago)...
         }
       ).group(:id)
-      .select(
-        <<~SQL.squish
-          tags.*,
-          COUNT(articles.id) AS lately_article_count
-        SQL
-      ).order(lately_article_count: :desc, created_at: :desc)
+      .order(Arel.sql("COUNT(articles.id) DESC, tags.created_at DESC"))
   }
 
   def update_locale
