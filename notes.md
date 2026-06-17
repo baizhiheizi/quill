@@ -35,9 +35,10 @@
 2. **[POTENTIAL] Admin::UsersController sort N+1** - Each row calls `user.articles_count` / `user.bought_articles_count` / `user.author_revenue_total_usd` / `user.payment_total_usd`. All memoized, so ~4 queries per user × 24 per page ≈ 100 queries/page. Acceptable for now; would benefit from `User.with_aggregates` style pre-aggregation if user base grows.
 
 ## Work in Progress
-- **PR (user scope LEFT JOINs)** (`perf-assist/user-scope-left-joins-d00934bea7028f34`) OPEN — committed 2026-06-14, draft PR opened via `safeoutputs create_pull_request` (bundle on disk: `/tmp/gh-aw/aw-perf-assist-user-scope-left-joins-d00934bea7028f34.bundle`).
+- **PR (tag hot count fix)** (`perf-assist/tag-hot-count-fix-d00934bea7028f34`) committed 2026-06-17, draft PR opened via `safeoutputs create_pull_request` (bundle on disk: `/tmp/gh-aw/aw-perf-assist-tag-hot-count-fix-d00934bea7028f34.bundle`). Fixes `Tag.hot.count` raising `PG::SyntaxError` because `select("COUNT(articles.id) AS lately_article_count")` was unused and broke ActiveRecord's generated count SQL.
 
 ## Completed Work
+- PR #1634 (Users::Scopable LEFT JOINs) — **MERGED 2026-06-14**
 - Monthly Activity issue #1513 `[perf-improver] Monthly Activity 2026-06` last updated 2026-06-14
 - PR #1518 (random_readers SQL sampling) — merged
 - PR #1521 (bought subquery) — merged
@@ -45,12 +46,12 @@
 - PR #1539 (order_by_popularity LEFT JOIN + COALESCE) — merged 2026-06-07
 - PR #1546 (subscribed filter SQL subqueries) — merged 2026-06-09
 - PR #1598 (block filters SQL subqueries) — merged 2026-06-12
-- **PR (user scope LEFT JOINs)** — OPEN 2026-06-14: `Users::Scopable` order_by_revenue_total / orders_total / articles_count / comments_count → LEFT JOIN + COALESCE for SUM, COUNT unchanged. Same pattern as PR #1539; eliminates silent exclusion of users with no matching rows from the admin user list.
 
 ## Performance Notes
 - **Env quirk**: this gh-aw workflow sets `CI=true`, making `config.eager_load = true` in `config/environments/test.rb`. Eager load hits `app/libs/arweave_bot/graphql.rb` (HTTP 403 to `arweave.net`). Workaround: **`unset CI` before any `bin/rails test` / `bin/benchmark`.
 - **Bug discovered & merged**: `Article.order_by_popularity` used `joins(:orders)` (INNER JOIN); articles with no orders were excluded from default feed. Fixed and merged in PR #1539.
-- **Bug discovered & filed (PR open)**: `Users::Scopable` order_by_revenue_total / orders_total / articles_count / comments_count used `joins(...)` (INNER JOIN); users with no matching rows were excluded from the admin user list. Same correctness bug, four more scopes. Fixed in draft PR 2026-06-14.
+- **Bug discovered & merged**: `Users::Scopable` order_by_revenue_total / orders_total / articles_count / comments_count used `joins(...)` (INNER JOIN); users with no matching rows were excluded from the admin user list. Fixed in PR #1634 (merged 2026-06-14).
+- **Bug discovered & filed (PR open)**: `Tag.hot` scope `select("COUNT(articles.id) AS lately_article_count")` was unused outside the scope but broke `Tag.hot.count` (PG::SyntaxError: `SELECT COUNT(tags.*, COUNT(articles.id) AS ...)` is invalid SQL). Fixed in draft PR 2026-06-17 on branch `perf-assist/tag-hot-count-fix-d00934bea7028f34` by dropping the `select` clause and using `Arel.sql` for ordering.
 - **Action store**: `action_store` gem dynamically generates `subscribe_user_ids`, `block_user_ids`, `block_by_user_ids`, etc. from `action_store :verb, :target` declarations. No need to define in User model.
 - **PR creation in this env**: `safeoutputs create_pull_request` returns `{"result":"success", "patch": {...}, "bundle": {...}}` — workflow orchestrator pushes the bundle and opens the actual PR after the agent run completes.
 - **Monthly issue update_issue in this env**: `safeoutputs update_issue` returns `{"result":"success"}` but does NOT actually update the body when the workflow target is `triggering` (push-triggered run has no triggering issue). Workaround: use `safeoutputs add_comment` with `item_number: <issue>` to append a new comment with the latest run summary.
@@ -58,12 +59,22 @@
 - **Test DB pollution**: `bin/rails runner` outside test transactions persists writes. Always clean up after debug.
 - **Pre-existing test failures**: `markdown_render_service_test.rb` / `rich_text_render_service_test.rb` fail with HTTP 403 to external image hosts; firewall-blocked, not caused by perf-improver changes.
 - **Copilot PR review false positives**: Copilot reviews on PR #1546 produced 2 comments that were resolved without code changes — both flagged issues were already addressed in the original diff.
-- **Admin::UsersController sort bug**: `Users::Scopable` `order_by_*` scopes used `joins(...)` (INNER JOIN). The same pattern as the `order_by_popularity` bug from PR #1539, but in 4 user-scope variants. Files: `app/models/concerns/users/scopable.rb`.
+- **Tag.hot count bug**: Any `relation.select("foo AS bar")` that aliases a bare aggregate will break `relation.count` — ActiveRecord generates `SELECT COUNT(<select-clause>)` and PostgreSQL rejects it. Fix: drop the alias if unused, or use `select("foo AS bar").count(:id)` style if you need it. The `Tag.hot` scope had `select("COUNT(articles.id) AS lately_article_count")` with the alias only used in the same scope's `order` — droppable.
+- **`Tag.hot` is the homepage "hot tags" feed**: 5-min Rails cache via `HomeController#hot_tags`. Only caller chains `.where(locale: ...).limit(50).sample(5)` — never reads `lately_article_count`. Good candidate for further optimization later (e.g., counter-cache-based approximation if hot-tags query shows up in slow logs).
 
 ## Run History (recent)
+- **2026-06-17 14:21 UTC** - [Run](https://github.com/baizhiheizi/quill/actions/runs/27688558877)
+  - Discovered `Tag.hot.count` raises `PG::SyntaxError` because the scope's `select("COUNT(articles.id) AS lately_article_count")` alias is unused but breaks ActiveRecord's generated count SQL
+  - Dropped the `select` clause; switched to `Arel.sql("COUNT(articles.id) DESC, tags.created_at DESC")` for ordering
+  - Branch `perf-assist/tag-hot-count-fix-d00934bea7028f34` committed; draft PR opened via `safeoutputs create_pull_request`
+  - Same 3-month recency semantic; only caller (`HomeController#hot_tags`) behavior unchanged
+  - Tests: 12 runs, 23 assertions, 0 failures; Rubocop clean
+  - Memory: PR #1634 (user scope LEFT JOINs) marked MERGED; only `author_revenue_usd` / `reader_revenue_usd` remains in the LOW-priority backlog
+  - Monthly Activity issue #1513 comment posted (update_issue tool didn't work; add_comment used instead)
+
 - **2026-06-14 03:39 UTC** - [Run](https://github.com/baizhiheizi/quill/actions/runs/27464306984)
   - Refactored `Users::Scopable` order_by_revenue_total / orders_total / articles_count / comments_count to LEFT JOIN + COALESCE for SUM
-  - Branch `perf-assist/user-scope-left-joins-d00934bea7028f34` committed; draft PR opened via `safeoutputs create_pull_request`
+  - Branch `perf-assist/user-scope-left-joins-d00934bea7028f34` committed; draft PR opened via `safeoutputs create_pull_request` → became PR #1634 (merged 2026-06-14)
   - Eliminates silent exclusion of users with no matching records from the admin user list (same bug as PR #1539)
   - Tests: 15 runs, 43 assertions, 0 failures; Rubocop clean
   - Verified all 4 stale [aw] Perf Improver failure issues (#1510, #1511, #1538, #1544) are now CLOSED
@@ -99,6 +110,7 @@
 - `order_by_popularity` fix — ✅ MERGED (PR #1539)
 - `ArticleSearchService#subscribed` filter — ✅ MERGED (PR #1546)
 - `ArticleSearchService#filter_block_authors` / `#filter_block_by_authors` — ✅ MERGED (PR #1598)
-- `Users::Scopable` order_by_revenue_total / orders_total / articles_count / comments_count — PR OPEN (CI pending)
+- `Users::Scopable` order_by_revenue_total / orders_total / articles_count / comments_count — ✅ MERGED (PR #1634)
+- `Tag.hot` count syntax bug — PR OPEN (CI pending) on `perf-assist/tag-hot-count-fix-d00934bea7028f34`
 - `author_revenue_usd` / `reader_revenue_usd` — Low impact; deferred
-- **Next**: explore other admin sort scopes with the same INNER JOIN bug (e.g. `tag.rb:26` `joins(:articles)`); look at the Admin::TransfersController/StatisticsController; check if `active` scope (also in `Users::Scopable`) has any similar issue
+- **Next**: look for other `relation.select("aggregate AS alias")` patterns that would silently break `.count`; profile admin/users index sort options at scale; check if any other controller calls `.count` on a custom-select relation
