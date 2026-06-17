@@ -5,27 +5,20 @@ module ShareHelper
     [
       "https://twitter.com/intent/tweet?",
       "text=",
-      text,
+      ERB::Util.url_encode(text),
       "&url=",
-      url,
+      ERB::Util.url_encode(url),
       "&via=",
-      via
-    ].join
-  end
-
-  def share_to_facebook(url)
-    [
-      "https://facebook.com/sharer/sharer.php?u=",
-      url
+      ERB::Util.url_encode(via)
     ].join
   end
 
   def share_to_telegram(url, text)
     [
       "https://t.me/share/url?url=",
-      url,
+      ERB::Util.url_encode(url),
       "&text=",
-      text
+      ERB::Util.url_encode(text)
     ].join
   end
 
