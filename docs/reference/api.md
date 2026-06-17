@@ -12,14 +12,11 @@ Host: quill.im
 X-Access-Token: <your-token>
 ```
 
-Without a valid token, `GET /articles/:uuid` returns article metadata but **not** the body. To read the body you must be the author or a paid reader of that article (enforced by `ArticlePolicy#show?`).
+Without a valid token, `GET /articles/:uuid` returns metadata only; the body is gated by `ArticlePolicy#show?` (author or paid reader only).
 
 ## Conventions
 
-- All responses are JSON.
-- Timestamps are ISO-8601 strings in UTC.
-- Pagination uses `limit` and `offset`. `limit` is clamped to `100`.
-- Errors return a JSON object with an `error` key and the appropriate HTTP status.
+All responses are JSON, timestamps are ISO-8601 UTC, pagination uses `limit` (capped at `100`) and `offset`. Errors return a single `message` key with the appropriate HTTP status — see [Errors](#errors).
 
 ## Endpoints
 
@@ -39,13 +36,13 @@ Example: [https://quill.im/api/articles?limit=5&order=asc&offset=2021-01-18T07:4
 
 ### `GET /api/articles/:uuid`
 
-Fetch a single article by UUID. Body is only included for authorized readers (see [Authentication](#authentication)).
+Fetch a single article by UUID. Body is gated by `ArticlePolicy#show?` (see [Authentication](#authentication)).
 
 ### `POST /api/articles`
 
 Create a draft article. **Requires a valid access token.**
 
-The article fields **must** be nested under an `article` key (see `API::ArticlesController#article_params`). Top-level fields are rejected with `400 Bad Request` from `ActionController::ParameterMissing`. `tag_names` stays at the top level because it is not a permitted attribute on `Article` — the controller forwards it to `CreateTagService` after the article is saved.
+Article fields **must** nest under an `article` key (`API::ArticlesController#article_params`); top-level fields return `400 Bad Request`. `tag_names` stays top-level (not an `Article` attribute) and is forwarded to `CreateTagService` after the save.
 
 Request body:
 
@@ -77,19 +74,19 @@ On success, returns the new article's UUID:
 { "uuid": "f3a1..." }
 ```
 
-If the article publishes immediately, `article.publish!` is called and the article moves to `published` state before the response is returned.
+If the article publishes immediately, `article.publish!` runs before the response.
 
 ### `GET /api/valid_user_filter`
 
-Returns the validation rules used by the dashboard when inviting new readers. Useful for clients that want to mirror the same checks.
+Returns the validation rules the dashboard uses when inviting readers — useful for clients that want to mirror those checks.
 
 ### Catch-all
 
-Any unmatched path under `/api` falls through to `API::HomeController#index`, which simply renders a 404 (`{"message":"Not found"}`) — there is no service metadata index.
+Unmatched paths fall through to `API::HomeController#index`, which returns `{"message":"Not found"}` with `404`. There is no service metadata index.
 
 ## Errors
 
-Every API error returns the same JSON envelope: a single `message` string. This is produced by [`API::RenderingHelper`](../../app/controllers/concerns/api/rendering_helper.rb) — the helper centralises status, body shape, and default copy. `422 Unprocessable Entity` carries `article.errors.full_messages` joined into the message, **not** an `errors` array as some clients expect.
+Every error returns the same envelope — a single `message` string — produced by [`API::RenderingHelper`](../../app/controllers/concerns/api/rendering_helper.rb). On `422`, `article.errors.full_messages` is joined into the message (not an `errors` array).
 
 | Status | `message` body | When |
 |--------|---------------|------|
@@ -98,10 +95,10 @@ Every API error returns the same JSON envelope: a single `message` string. This 
 | `403` | `"Forbidden"` | Authenticated, but not allowed (e.g. `ArticlePolicy#show?` denies the body) |
 | `404` | `"Not found"` | Resource not found, article not visible to caller, or unmatched `/api/*` path |
 | `422` | `"<comma-joined errors.full_messages>"` | Validation error on the model |
-| `5xx` | `"Internal server error"` | Server error — surface the request ID when filing an issue |
+| `5xx` | `"Internal server error"` | Server error — include the request ID when filing an issue |
 
 ## See also
 
 - [Explanation → Architecture](../explanation/architecture.md)
-- [Reference → Services](./services.md) — what runs behind the API endpoints
-- [README → API](../../README.md#api) — the original, terse summary
+- [Reference → Services](./services.md) — what runs behind the endpoints
+- [README → API](../../README.md#api) — the original summary
