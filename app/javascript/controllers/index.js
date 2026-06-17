@@ -7,6 +7,9 @@ import { application } from "./application";
 import ArticleFormController from "./article_form_controller";
 application.register("article-form", ArticleFormController);
 
+import AvatarController from "./avatar_controller";
+application.register("avatar", AvatarController);
+
 import AutoHideController from "./auto_hide_controller";
 application.register("auto-hide", AutoHideController);
 

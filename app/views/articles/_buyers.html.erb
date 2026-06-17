@@ -16,7 +16,7 @@
       <% article.readers.sample(24).each do |reader| %>
         <div class="avatar tooltip" data-tip="<%= reader.name %>">
           <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-full ring-2 ring-base-100 hover:ring-primary transition-all cursor-pointer">
-            <%= image_tag reader.avatar_thumb, class: "rounded-full" %>
+            <%= render "shared/avatar", user: reader, thumb: true, class: "rounded-full" %>
           </div>
         </div>
       <% end %>

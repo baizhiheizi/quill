@@ -117,11 +117,7 @@ class MixinNetworkUser < ApplicationRecord
   end
 
   def avatar
-    raw["avatar_url"].presence || generated_avatar_url
-  end
-
-  def generated_avatar_url
-    format("https://api.multiavatar.com/%<mixin_uuid>s.svg", mixin_uuid: uuid)
+    raw["avatar_url"].presence || User.default_avatar_url
   end
 
   def ready?

@@ -26,7 +26,7 @@
           tabindex: "-1" do %>
           <div class="avatar <%= from_mixin_messenger? ? 'mr-16' : '' %>">
             <div class="size-8 rounded-full">
-              <%= image_tag current_user.avatar_thumb, class: "rounded-full" %>
+              <%= render "shared/avatar", user: current_user, thumb: true, class: "rounded-full" %>
             </div>
           </div>
         <% end %>

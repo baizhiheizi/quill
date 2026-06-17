@@ -16,7 +16,7 @@
 <div class="flex items-center space-x-2 w-36 mb-6">
   <div class="avatar">
     <div class="size-10 rounded-full">
-      <%= image_tag collection.author.avatar_thumb, class: "rounded-full" %>
+      <%= render "shared/avatar", user: collection.author, thumb: true, class: "rounded-full" %>
     </div>
   </div>
   <div class="truncate">

@@ -20,6 +20,8 @@ json.array! @articles do |article|
 
   json.author do
     json.name article.author.name
-    json.avatar article.author.avatar_url
+    json.avatar article.author.avatar_image_url
+    json.avatar_seed article.author.mixin_uuid
+    json.avatar_initials avatar_initials(article.author.name)
   end
 end

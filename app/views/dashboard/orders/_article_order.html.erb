@@ -5,7 +5,7 @@
     <% else %>
       <div class="flex items-center space-x-2">
         <div class="w-6">
-          <%= image_tag order.buyer.avatar_thumb, class: "w-6 h-6 rounded-full inline-block" %>
+          <%= render "shared/avatar", user: order.buyer, thumb: true, class: "w-6 h-6 rounded-full inline-block" %>
         </div>
         <span class="max-w-24 truncate whitespace-nowrap">
           <%= order.buyer.name %>

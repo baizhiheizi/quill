@@ -11,5 +11,5 @@
     class: "btn btn-primary rounded-full" %>
 </div>
 <div class="">
-  <%= image_tag current_user.avatar_url, class: "w-16 h-16 rounded-full", loading: :lazy %>
+  <%= render "shared/avatar", user: current_user, class: "w-16 h-16 rounded-full" %>
 </div>

@@ -1,6 +1,7 @@
 import { Controller } from "@hotwired/stimulus";
 import { get } from "@rails/request.js";
 import TomSelect from "tom-select";
+import { renderAvatarHtml } from "../utils/avatar";
 
 export default class extends Controller {
   static values = {
@@ -20,19 +21,33 @@ export default class extends Controller {
       render: {
         option: (option, escape) => {
           return `<div class="flex items-center space-x-2">
-              <img src="${option.author.avatar}" class="h-6 w-6 rounded-full my-0" style="margin: 0" />
-              <span>${option.title}</span>
+              ${this.authorAvatarMarkup(option.author)}
+              <span>${escape(option.title)}</span>
             </div>
             `;
         },
         item: (item, escape) => {
           return `<div class="flex items-center space-x-2 w-full">
-              <img src="${item.author.avatar}" class="inline-block h-6 w-6 rounded-full my-0" style="margin: 0" />
-              <span class="inline-block">${item.title}</span>
+              ${this.authorAvatarMarkup(item.author)}
+              <span class="inline-block">${escape(item.title)}</span>
             </div>
             `;
         },
       },
+    });
+  }
+
+  authorAvatarMarkup(author) {
+    const className = "h-6 w-6 rounded-full my-0";
+
+    if (author.avatar) {
+      return `<img src="${author.avatar}" class="${className}" style="margin: 0" />`;
+    }
+
+    return renderAvatarHtml({
+      seed: author.avatar_seed,
+      name: author.name,
+      className,
     });
   }
 

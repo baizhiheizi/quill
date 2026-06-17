@@ -10,7 +10,7 @@
   <div class="relative flex items-center space-x-2 truncate">
     <div class="avatar">
       <div class="size-10 rounded-full">
-        <%= image_tag article.author.avatar_thumb, class: "rounded-full" %>
+        <%= render "shared/avatar", user: article.author, thumb: true, class: "rounded-full" %>
       </div>
     </div>
     <div class="leading-4 truncate">
