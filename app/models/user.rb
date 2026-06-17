@@ -137,7 +137,7 @@ class User < ApplicationRecord
       else
         authorization&.raw&.[]("avatar_url").presence&.gsub(/s256\Z/, "s64")
       end
-  rescue StandardError
+  rescue LoadError, StandardError
     avatar_image_url
   end
 

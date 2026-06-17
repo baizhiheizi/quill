@@ -214,4 +214,27 @@ class UserTest < ActiveSupport::TestCase
 
     assert_equal "https://example.com/avatar.png", user.avatar_image_url
   end
+
+  test "avatar_image_thumb returns oauth thumb url when no attached avatar" do
+    user = users(:author)
+    user.user_authorizations.find_by!(provider: :mixin).update!(
+      raw: { "avatar_url" => "https://example.com/avatar_s256" }
+    )
+
+    assert_equal "https://example.com/avatar_s64", user.avatar_image_thumb
+  end
+
+  test "avatar_image_thumb returns variant url when avatar attached" do
+    user = users(:author)
+    user.avatar.attach(
+      io: File.open(Rails.root.join("test/fixtures/files/avatar.png")),
+      filename: "avatar.png",
+      content_type: "image/png"
+    )
+
+    thumb_url = user.avatar_image_thumb
+
+    assert thumb_url.present?
+    assert_includes thumb_url, Settings.storage.endpoint
+  end
 end
