@@ -4,6 +4,8 @@ class API::BaseController < ActionController::API
   include API::RenderingHelper
   include Pundit::Authorization
 
+  helper UserHelper
+
   around_action :with_locale
   after_action :store_access_token_request
   helper_method :current_user
