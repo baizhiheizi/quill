@@ -30,9 +30,13 @@ Hotwire-driven UI on Rails ERB partials: Turbo for navigation and partial update
 
 Reference catalog of every controller registered in `app/javascript/controllers/index.js`, with one-line purpose, the lifecycle / listener-cleanup conventions, and worked patterns (`floating_controller`, debouncing, `disconnect()` discipline).
 
+*{ Provide a reference table of every Stimulus controller currently registered in app/javascript/controllers/index.js (article-form, avatar, auto-hide, autosave, clipboard, collections-form-component, comment-form, darkmode, dropdown, eth-wallet, fennec, flash, floating, flyonui-dropdown, flyonui-modal, hljs, infinite-scroll, load-more, login, modal, mvm-deposit, mvm-pay-button-component, nested-form, photoswipe, pre-orders-form-component, pre-orders-mixpay-button-component, pre-orders-pay-button-component, pre-orders-payment-component, pre-orders-state-component, prefetch, preview-upload, qrcode-component, references-select, reload, scroll-to, search, select-currency, select-menu, session, sidebar, syntax-highlight, switch-locale, tabs, tags-select, time-format-component, toast, turbo), each linked to its source file with a one-line purpose. Note that the avatar controller paints a deterministic background color from a seed value via colorFromSeed, and that the textarea-autogrow controller has been removed. }*
+
 # API Reference
 
-The JSON-only HTTP API mounted at `/api`: authentication via `X-Access-Token` access tokens, the `articles` and `files` endpoints, query parameters, response shapes, and error conventions.
+The JSON-only HTTP API mounted at `/api`: authentication via `X-Access-Token` access tokens, the `articles` endpoint, query parameters, response shapes, and error conventions.
+
+*{ Document the JSON-only HTTP API: authentication via X-Access-Token, the /api/articles endpoints (index, show, create) with their query parameters, the /api/valid_user_filter endpoint, the author response shape (name, avatar, avatar_seed, avatar_initials), and error conventions. }*
 
 # Getting Started
 
