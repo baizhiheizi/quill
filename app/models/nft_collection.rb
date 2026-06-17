@@ -26,6 +26,6 @@ class NftCollection < ApplicationRecord
   validates :raw, presence: true
 
   def icon_url
-    icon&.dig("url") || format("https://api.multiavatar.com/%<uuid>s.png", uuid:)
+    icon&.dig("url") || User.default_avatar_url
   end
 end

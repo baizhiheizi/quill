@@ -196,4 +196,22 @@ class UserTest < ActiveSupport::TestCase
     assert_not user.twitter_connected?
     assert_nil user.twitter_profile_url
   end
+
+  test "avatar_image_url returns nil when user has no real avatar" do
+    user = users(:reader_one)
+
+    assert_nil user.avatar_image_url
+  end
+
+  test "avatar_url falls back to platform icon when user has no real avatar" do
+    user = users(:reader_one)
+
+    assert_equal User.default_avatar_url, user.avatar_url
+  end
+
+  test "avatar_image_url returns oauth avatar when present" do
+    user = users(:author)
+
+    assert_equal "https://example.com/avatar.png", user.avatar_image_url
+  end
 end

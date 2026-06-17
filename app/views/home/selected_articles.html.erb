@@ -23,7 +23,7 @@
               <div class="flex items-center space-x-4">
                 <div class="avatar">
                   <div class="size-7 rounded-full">
-                    <%= image_tag article.author.avatar_thumb, class: "rounded-full" %>
+                    <%= render "shared/avatar", user: article.author, thumb: true, class: "rounded-full" %>
                   </div>
                 </div>
                 <span class="text-sm max-w-24 truncate"><%= article.author.name %> </span>

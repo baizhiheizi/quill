@@ -2,7 +2,7 @@
   <div class="flex items-center justify-between mb-4">
     <div class="avatar">
       <div class="size-20 rounded-full border-2 shadow">
-        <img class="rounded-full" src="<%= user.avatar_url %>" />
+        <%= render "shared/avatar", user:, class: "rounded-full size-full" %>
       </div>
     </div>
     <% if current_user.present? && current_user != user %>

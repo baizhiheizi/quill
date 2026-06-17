@@ -47,7 +47,7 @@
       <% end %>
     </div>
     <% if article.author == user %>
-      <%= image_tag user.avatar_thumb, class: "w-8 h-8 rounded-full" %>
+      <%= render "shared/avatar", user:, thumb: true, class: "w-8 h-8 rounded-full" %>
     <% elsif article.authorized? user %> 
       <%= render "articles/reward_article_button", article: article, size: 'sm' %>
     <% else %>

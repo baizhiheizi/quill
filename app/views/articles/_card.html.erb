@@ -3,7 +3,7 @@
     <div class="flex items-center space-x-2">
       <div class="avatar flex-shrink-0">
         <div class="size-6 rounded-full">
-          <%= image_tag article.author.avatar_thumb, class: 'rounded-full block' %>
+          <%= render "shared/avatar", user: article.author, thumb: true, class: "rounded-full block" %>
         </div>
       </div>
       <div class="flex flex-col sm:flex-row sm:items-center text-sm">

@@ -1,0 +1,13 @@
+<%# locals: (user:, class: nil, thumb: false) %>
+<% image_url = thumb ? user.avatar_image_thumb : user.avatar_image_url %>
+<% css_class = local_assigns[:class].presence || "rounded-full" %>
+<% if image_url.present? %>
+  <%= image_tag image_url, class: css_class, loading: :lazy %>
+<% else %>
+  <div
+    class="<%= css_class %> flex items-center justify-center text-white font-medium select-none avatar-placeholder"
+    data-controller="avatar"
+    data-avatar-seed-value="<%= user.mixin_uuid %>">
+    <%= avatar_initials(user.name) %>
+  </div>
+<% end %>

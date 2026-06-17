@@ -6,7 +6,9 @@ json.currency @article.currency.symbol
 json.original_url format("%<host>s/articles/%<uuid>s", host: Settings.host, uuid: @article.uuid)
 json.author do
   json.name @article.author.name
-  json.avatar @article.author.avatar_url
+  json.avatar @article.author.avatar_image_url
+  json.avatar_seed @article.author.mixin_uuid
+  json.avatar_initials avatar_initials(@article.author.name)
 end
 
 json.content @article.content_body if @article.authorized?(current_user)

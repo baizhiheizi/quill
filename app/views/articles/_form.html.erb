@@ -27,7 +27,7 @@
     <div class="flex items-center space-x-3 my-6">
       <div class="avatar">
         <div class="w-10 h-10 rounded-full">
-          <%= image_tag current_user.avatar_thumb %>
+          <%= render "shared/avatar", user: current_user, thumb: true, class: "rounded-full" %>
         </div>
       </div>
       <div>

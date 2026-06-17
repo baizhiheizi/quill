@@ -121,28 +121,36 @@ class User < ApplicationRecord
     @wallet_id = (wallet.presence || create_wallet)&.uuid
   end
 
-  def avatar_url
-    @avatar_url =
+  def avatar_image_url
+    @avatar_image_url =
       if avatar.attached?
         [ Settings.storage.endpoint, avatar.key ].join("/")
       else
-        authorization.avatar_url.presence || generated_avatar_url
+        authorization&.avatar_url.presence
       end
   end
 
-  def avatar_thumb
-    @avatar_thumb =
+  def avatar_image_thumb
+    @avatar_image_thumb =
       if avatar.attached?
         [ Settings.storage.endpoint, avatar.variant(:thumb).processed.key ].join("/")
       else
-        authorization.raw&.[]("avatar_url").presence&.gsub(/s256\Z/, "s64") || generated_avatar_url
+        authorization&.raw&.[]("avatar_url").presence&.gsub(/s256\Z/, "s64")
       end
   rescue StandardError
-    avatar_url
+    avatar_image_url
   end
 
-  def generated_avatar_url
-    format("https://api.multiavatar.com/%<mixin_uuid>s.png", mixin_uuid:)
+  def avatar_url
+    avatar_image_url || self.class.default_avatar_url
+  end
+
+  def avatar_thumb
+    avatar_image_thumb || self.class.default_avatar_url
+  end
+
+  def self.default_avatar_url
+    ActionController::Base.helpers.asset_url(Settings.icon_file || "icon.png")
   end
 
   def prepare
