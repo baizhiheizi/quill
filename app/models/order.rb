@@ -65,12 +65,7 @@ class Order < ApplicationRecord
   before_destroy :destroy_notifications
 
   def broadcast_to_views
-    case item
-    when Article
-      broadcast_to_article_views
-    when Collection
-      broadcast_to_collection_views
-    end
+    broadcast_to_article_views if item.is_a?(Article)
   end
 
   def broadcast_to_article_views
@@ -84,9 +79,6 @@ class Order < ApplicationRecord
   rescue PG::InvalidParameterValue => e
     Rails.logger.error e
     broadcast_replace_later_to "user_#{buyer.mixin_uuid}", target: "toast-slot", partial: "shared/reload"
-  end
-
-  def broadcast_to_collection_views
   end
 
   aasm column: :state do
