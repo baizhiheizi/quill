@@ -13,9 +13,6 @@ application.register("avatar", AvatarController);
 import AutoHideController from "./auto_hide_controller";
 application.register("auto-hide", AutoHideController);
 
-import AutosaveController from "./autosave_controller";
-application.register("autosave", AutosaveController);
-
 import ClipboardController from "./clipboard_controller";
 application.register("clipboard", ClipboardController);
 
@@ -63,9 +60,6 @@ application.register("login", LoginController);
 
 import FlyonuiModalController from "./flyonui_modal_controller";
 application.register("modal-component", FlyonuiModalController);
-
-import ModalController from "./modal_controller";
-application.register("modal", ModalController);
 
 import MvmDepositController from "./mvm_deposit_controller";
 application.register("mvm-deposit", MvmDepositController);
@@ -124,20 +118,11 @@ application.register("qrcode-component", QrcodeComponentController);
 import ReferencesSelectController from "./references_select_controller";
 application.register("references-select", ReferencesSelectController);
 
-import ReloadController from "./reload_controller";
-application.register("reload", ReloadController);
-
-import ScrollToController from "./scroll_to_controller";
-application.register("scroll-to", ScrollToController);
-
 import SearchController from "./search_controller";
 application.register("search", SearchController);
 
 import SelectCurrencyController from "./select_currency_controller";
 application.register("select-currency", SelectCurrencyController);
-
-import SelectMenuController from "./select_menu_controller";
-application.register("select-menu", SelectMenuController);
 
 import SessionController from "./session_controller";
 application.register("session", SessionController);
@@ -148,9 +133,6 @@ application.register("syntax-highlight", SyntaxHighlightController);
 import SidebarController from "./sidebar_controller";
 application.register("sidebar", SidebarController);
 
-import SwitchLocaleController from "./switch_locale_controller";
-application.register("switch-locale", SwitchLocaleController);
-
 import TabsController from "./tabs_controller";
 application.register("tabs", TabsController);
 
@@ -159,9 +141,6 @@ application.register("tags-select", TagsSelectController);
 
 import TimeFormatComponentController from "./time_format_component_controller";
 application.register("time-format-component", TimeFormatComponentController);
-
-import ToastController from "./toast_controller";
-application.register("toast", ToastController);
 
 import TurboController from "./turbo_controller";
 application.register("turbo", TurboController);
