@@ -1,17 +1,17 @@
-<!-- hash: size:6299 -->
+<!-- hash: size:4576 -->
 # app/javascript/controllers/index.js
 
 Auto-generated Stimulus manifest (`./bin/rails stimulus:manifest:update`).
 Imports each controller and registers it with the Stimulus `application`
 under a kebab-case identifier.
 
-## Registered controllers (46)
+## Registered controllers (40)
 
 | Identifier | File |
 |---|---|
 | article-form | article_form_controller.js |
+| avatar | avatar_controller.js |
 | auto-hide | auto_hide_controller.js |
-| autosave | autosave_controller.js |
 | clipboard | clipboard_controller.js |
 | collections-form-component | collections_form_component_controller.js |
 | comment-form | comment_form_controller.js |
@@ -26,7 +26,6 @@ under a kebab-case identifier.
 | infinite-scroll | infinite_scroll_controller.js |
 | load-more | load_more_controller.js |
 | login | login_controller.js |
-| modal | modal_controller.js |
 | modal-component | flyonui_modal_controller.js |
 | mvm-deposit | mvm_deposit_controller.js |
 | mvm-pay-button-component | mvm_pay_button_component_controller.js |
@@ -41,21 +40,15 @@ under a kebab-case identifier.
 | preview-upload | preview_upload_controller.js |
 | qrcode-component | qrcode_component_controller.js |
 | references-select | references_select_controller.js |
-| reload | reload_controller.js |
-| scroll-to | scroll_to_controller.js |
 | search | search_controller.js |
 | select-currency | select_currency_controller.js |
-| select-menu | select_menu_controller.js |
 | session | session_controller.js |
 | sidebar | sidebar_controller.js |
-| switch-locale | switch_locale_controller.js |
 | syntax-highlight | syntax_highlight_controller.js |
 | tabs | tabs_controller.js |
 | tags-select | tags_select_controller.js |
-| textarea-autogrow | textarea_autogrow_controller.js |
-| time-format-component | time_format_component_controller_controller.js |
-| toast | toast_controller.js |
+| time-format-component | time_format_component_controller.js |
 | turbo | turbo_controller.js |
 
-Note: `auto_refresh_controller.js` was removed (dead code; not referenced in
-any view).
+Removed in PR #1683 (dead code, zero view consumers):
+autosave, modal, reload, scroll-to, select-menu, switch-locale, toast.
