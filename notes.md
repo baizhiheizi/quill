@@ -32,12 +32,14 @@
 
 ## Performance Opportunities Backlog
 1. **[LOW] `author_revenue_usd` / `reader_revenue_usd`** - Ruby-side sum with `includes(:currency)`. Memoized with `@author_revenue_usd ||= ...`. Used in `app/views/dashboard/articles/show.html.erb`. Single-article, very low impact.
-2. **[POTENTIAL] Admin::UsersController sort N+1** - Each row calls `user.articles_count` / `user.bought_articles_count` / `user.author_revenue_total_usd` / `user.payment_total_usd`. All memoized, so ~4 queries per user × 24 per page ≈ 100 queries/page. Acceptable for now; would benefit from `User.with_aggregates` style pre-aggregation if user base grows.
+2. **[POTENTIAL] Admin::UsersController `bought_articles_count` / `author_revenue_total_usd` / `payment_total_usd`** - These still hit the DB per user (joins + sum). ~3 queries per user × 24 per page ≈ 72 queries/page. Counter-cache won't help (through-associations and sums). Could be a `User.with_aggregates` scope or batched query.
+3. **[POTENTIAL] `has_unread_notification?` / `unread_notifications_count` hot path** - `notifications.unread.for_web.any?(&:visible_in_web?)` runs on every page render (navbar + left_bar). `visible_in_web?` is a Ruby method (per-user settings), so it can't be SQL-pushed. A counter cache on users (`unread_web_notifications_count`) maintained by callbacks would eliminate the query. Soft-delete interaction needs care.
 
 ## Work in Progress
-- **PR (tag hot count fix)** (`perf-assist/tag-hot-count-fix-d00934bea7028f34`) committed 2026-06-17, draft PR opened via `safeoutputs create_pull_request` (bundle on disk: `/tmp/gh-aw/aw-perf-assist-tag-hot-count-fix-d00934bea7028f34.bundle`). Fixes `Tag.hot.count` raising `PG::SyntaxError` because `select("COUNT(articles.id) AS lately_article_count")` was unused and broke ActiveRecord's generated count SQL.
+- **PR (user counter caches)** (`perf-assist/user-counter-caches-d00934bea7028f34`) committed 2026-06-18. Adds `users.articles_count` / `users.comments_count` columns; refactors `Users::Scopable#order_by_articles_count` / `#order_by_comments_count` to `ORDER BY column DESC` (was LEFT JOIN + GROUP BY + COUNT); refactors `Users::Statable#articles_count` / `#comments_count` to read the column. Migration includes backfill.
 
 ## Completed Work
+- PR #1678 (Tag.hot count fix) — **MERGED 2026-06-17**
 - PR #1634 (Users::Scopable LEFT JOINs) — **MERGED 2026-06-14**
 - Monthly Activity issue #1513 `[perf-improver] Monthly Activity 2026-06` last updated 2026-06-14
 - PR #1518 (random_readers SQL sampling) — merged
@@ -49,9 +51,11 @@
 
 ## Performance Notes
 - **Env quirk**: this gh-aw workflow sets `CI=true`, making `config.eager_load = true` in `config/environments/test.rb`. Eager load hits `app/libs/arweave_bot/graphql.rb` (HTTP 403 to `arweave.net`). Workaround: **`unset CI` before any `bin/rails test` / `bin/benchmark`.
-- **Bug discovered & merged**: `Article.order_by_popularity` used `joins(:orders)` (INNER JOIN); articles with no orders were excluded from default feed. Fixed and merged in PR #1539.
-- **Bug discovered & merged**: `Users::Scopable` order_by_revenue_total / orders_total / articles_count / comments_count used `joins(...)` (INNER JOIN); users with no matching rows were excluded from the admin user list. Fixed in PR #1634 (merged 2026-06-14).
-- **Bug discovered & filed (PR open)**: `Tag.hot` scope `select("COUNT(articles.id) AS lately_article_count")` was unused outside the scope but broke `Tag.hot.count` (PG::SyntaxError: `SELECT COUNT(tags.*, COUNT(articles.id) AS ...)` is invalid SQL). Fixed in draft PR 2026-06-17 on branch `perf-assist/tag-hot-count-fix-d00934bea7028f34` by dropping the `select` clause and using `Arel.sql` for ordering.
+- **Bug discovered & merged**: `Article.order_by_popularity` used `joins(:orders)` (INNER JOIN); articles with no orders were excluded from default feed. Fixed in PR #1539.
+- **Bug discovered & merged**: `Users::Scopable` order_by_revenue_total / orders_total / articles_count / comments_count used `joins(...)` (INNER JOIN); users with no matching rows were excluded from the admin user list. Fixed in PR #1634.
+- **Bug discovered & merged**: `Tag.hot` scope `select("COUNT(articles.id) AS lately_article_count")` was unused outside the scope but broke `Tag.hot.count` (PG::SyntaxError). Fixed in PR #1678.
+- **Counter cache pattern**: Quill already uses `counter_cache: true` extensively (Tagging→Tag.articles_count, Tagging→Article.tags_count, Comment→Commentable, action_store counters on User, etc.). When adding new counter cache columns, follow the established pattern: migration adds the column, `belongs_to ..., counter_cache: true` on the child model, no need to override anything in the parent.
+- **Counter cache + soft delete**: `Comment` is `SoftDeletable`; `counter_cache: true` only fires on create/destroy, not on `soft_delete!`. The column therefore reflects total ever-made comments, not currently-active ones.
 - **Action store**: `action_store` gem dynamically generates `subscribe_user_ids`, `block_user_ids`, `block_by_user_ids`, etc. from `action_store :verb, :target` declarations. No need to define in User model.
 - **PR creation in this env**: `safeoutputs create_pull_request` returns `{"result":"success", "patch": {...}, "bundle": {...}}` — workflow orchestrator pushes the bundle and opens the actual PR after the agent run completes.
 - **Monthly issue update_issue in this env**: `safeoutputs update_issue` returns `{"result":"success"}` but does NOT actually update the body when the workflow target is `triggering` (push-triggered run has no triggering issue). Workaround: use `safeoutputs add_comment` with `item_number: <issue>` to append a new comment with the latest run summary.
@@ -59,50 +63,19 @@
 - **Test DB pollution**: `bin/rails runner` outside test transactions persists writes. Always clean up after debug.
 - **Pre-existing test failures**: `markdown_render_service_test.rb` / `rich_text_render_service_test.rb` fail with HTTP 403 to external image hosts; firewall-blocked, not caused by perf-improver changes.
 - **Copilot PR review false positives**: Copilot reviews on PR #1546 produced 2 comments that were resolved without code changes — both flagged issues were already addressed in the original diff.
-- **Tag.hot count bug**: Any `relation.select("foo AS bar")` that aliases a bare aggregate will break `relation.count` — ActiveRecord generates `SELECT COUNT(<select-clause>)` and PostgreSQL rejects it. Fix: drop the alias if unused, or use `select("foo AS bar").count(:id)` style if you need it. The `Tag.hot` scope had `select("COUNT(articles.id) AS lately_article_count")` with the alias only used in the same scope's `order` — droppable.
-- **`Tag.hot` is the homepage "hot tags" feed**: 5-min Rails cache via `HomeController#hot_tags`. Only caller chains `.where(locale: ...).limit(50).sample(5)` — never reads `lately_article_count`. Good candidate for further optimization later (e.g., counter-cache-based approximation if hot-tags query shows up in slow logs).
+- **Tag.hot count bug**: Any `relation.select("foo AS bar")` that aliases a bare aggregate will break `relation.count` — ActiveRecord generates `SELECT COUNT(<select-clause>)` and PG rejects it. Fix: drop the alias if unused, or use `select("foo AS bar").count(:id)` style.
+- **`Tag.hot` is the homepage "hot tags" feed**: 5-min Rails cache via `HomeController#hot_tags`. Only caller chains `.where(locale: ...).limit(50).sample(5)`. No `lately_article_count` reads; ordering is via `Arel.sql` since PR #1678.
+- **Fixtures and counter caches**: YAML fixtures set the row directly, so `users.articles_count` defaults to 0 in tests even when the author has articles via fixture rows. The original test for `order_by_articles_count` (PR #1634) passed because the test ran the JOIN + COUNT, not because the column was set. When refactoring order_by_* to use a column, tests need to `update_column` the counter explicitly.
+- **Query counter helper**: no `assert_queries_count` in this repo's test_helper; use `ActiveSupport::Notifications.subscribed(->(*, p) { ... }, "sql.active_record")` with a counter. Skip `payload[:name] == "SCHEMA"`.
 
 ## Run History (recent)
-- **2026-06-17 14:21 UTC** - [Run](https://github.com/baizhiheizi/quill/actions/runs/27688558877)
-  - Discovered `Tag.hot.count` raises `PG::SyntaxError` because the scope's `select("COUNT(articles.id) AS lately_article_count")` alias is unused but breaks ActiveRecord's generated count SQL
-  - Dropped the `select` clause; switched to `Arel.sql("COUNT(articles.id) DESC, tags.created_at DESC")` for ordering
-  - Branch `perf-assist/tag-hot-count-fix-d00934bea7028f34` committed; draft PR opened via `safeoutputs create_pull_request`
-  - Same 3-month recency semantic; only caller (`HomeController#hot_tags`) behavior unchanged
-  - Tests: 12 runs, 23 assertions, 0 failures; Rubocop clean
-  - Memory: PR #1634 (user scope LEFT JOINs) marked MERGED; only `author_revenue_usd` / `reader_revenue_usd` remains in the LOW-priority backlog
-  - Monthly Activity issue #1513 comment posted (update_issue tool didn't work; add_comment used instead)
-
-- **2026-06-14 03:39 UTC** - [Run](https://github.com/baizhiheizi/quill/actions/runs/27464306984)
-  - Refactored `Users::Scopable` order_by_revenue_total / orders_total / articles_count / comments_count to LEFT JOIN + COALESCE for SUM
-  - Branch `perf-assist/user-scope-left-joins-d00934bea7028f34` committed; draft PR opened via `safeoutputs create_pull_request` → became PR #1634 (merged 2026-06-14)
-  - Eliminates silent exclusion of users with no matching records from the admin user list (same bug as PR #1539)
-  - Tests: 15 runs, 43 assertions, 0 failures; Rubocop clean
-  - Verified all 4 stale [aw] Perf Improver failure issues (#1510, #1511, #1538, #1544) are now CLOSED
-  - Verified PR #1598 (block filters subqueries) was MERGED on 2026-06-12 — closed that backlog item
-  - Monthly Activity issue #1513 comment posted (update_issue tool didn't work; add_comment used instead)
-  - Only `author_revenue_usd` / `reader_revenue_usd` remains in the LOW-priority backlog
-
-- **2026-06-11 12:00 UTC** - [Run](https://github.com/baizhiheizi/quill/actions/runs/27346010833)
-  - Refactored `ArticleSearchService#filter_block_authors` and `#filter_block_by_authors` to use SQL subqueries
-  - Branch `perf-assist/block-filters-subqueries-d00934bea7028f34` committed; PR #1598 opened via `safeoutputs create_pull_request`
-  - Eliminates 2 round-trips per call when @current_user has blocked/blocked-by anyone
-  - Tests: 10 runs, 35 assertions, 0 failures; Rubocop clean
-
-- **2026-06-09 12:00 UTC** - [Run](https://github.com/baizhiheizi/quill/actions/runs/27202813938)
-  - Confirmed PR #1546 is open, CI passing, review threads resolved
-  - Updated Monthly Activity issue #1513 with corrected suggestions
-  - No new code changes; backlog clear of high-impact items
-
-- **2026-06-08 12:50 UTC** - [Run](https://github.com/baizhiheizi/quill/actions/runs/27138209827)
-  - Refactored `ArticleSearchService#subscribed` to SQL subqueries: 9 → 5 queries
-  - Branch `perf-assist/subscribed-filter-subqueries-d00934bea7028f34` pushed as PR #1546
-  - Tests: 7 runs, 21 assertions, 0 failures; Rubocop clean
-
-- **2026-06-07 00:24 UTC** - [Run](https://github.com/baizhiheizi/quill/actions/runs/27059506134)
-  - Discovered `unset CI` workaround for Arweave firewall issue
-  - Discovered INNER JOIN causes empty default feed (correctness bug)
-  - `safeoutputs create_pull_request` "no push" observation — later corrected
-
+- **2026-06-18 18:30 UTC** - [Run](https://github.com/baizhiheizi/quill/actions/runs/27757618658) - Added `users.articles_count` / `users.comments_count` counter-cache columns with backfill. `Article#belongs_to :author, counter_cache: true` and `Comment#belongs_to :author, counter_cache: true` maintain them. `Users::Scopable#order_by_articles_count` / `#order_by_comments_count` reduced from `LEFT JOIN + GROUP BY + COUNT` to `ORDER BY column DESC, id ASC`. `Users::Statable#articles_count` / `#comments_count` read the column (O(1)). Tests 159/323, 0 failures. PR open on `perf-assist/user-counter-caches-d00934bea7028f34`.
+- **2026-06-17 14:21 UTC** - [Run](https://github.com/baizhiheizi/quill/actions/runs/27688558877) - Fixed `Tag.hot.count` PG::SyntaxError by dropping unused select alias. PR #1678 (merged 2026-06-17). Tests 12/23, 0 failures.
+- **2026-06-14 03:39 UTC** - [Run](https://github.com/baizhiheizi/quill/actions/runs/27464306984) - `Users::Scopable` to LEFT JOIN + COALESCE for SUM. PR #1634 (merged 2026-06-14). Tests 15/43, 0 failures.
+- **2026-06-11 12:00 UTC** - [Run](https://github.com/baizhiheizi/quill/actions/runs/27346010833) - `ArticleSearchService` block filters → SQL subqueries. PR #1598 (merged 2026-06-12). Tests 10/35, 0 failures.
+- **2026-06-09 12:00 UTC** - [Run](https://github.com/baizhiheizi/quill/actions/runs/27202813938) - Confirmed PR #1546 open/clean; no new code this run.
+- **2026-06-08 12:50 UTC** - [Run](https://github.com/baizhiheizi/quill/actions/runs/27138209827) - `subscribed` filter → SQL subqueries (9 → 5 queries). PR #1546 (merged 2026-06-09). Tests 7/21, 0 failures.
+- **2026-06-07 00:24 UTC** - [Run](https://github.com/baizhiheizi/quill/actions/runs/27059506134) - `unset CI` workaround discovered; INNER JOIN default-feed bug fixed. PR #1539 (merged 2026-06-07). Tests 16/30, 0 failures.
 - **2026-06-01 12:00 UTC** - Created PR #1518 (random_readers SQL sampling) — merged
 - **2026-06-01 08:31 UTC** - [Run](https://github.com/baizhiheizi/quill/actions/runs/26739902209) - Created Monthly Activity issue
 
@@ -111,6 +84,8 @@
 - `ArticleSearchService#subscribed` filter — ✅ MERGED (PR #1546)
 - `ArticleSearchService#filter_block_authors` / `#filter_block_by_authors` — ✅ MERGED (PR #1598)
 - `Users::Scopable` order_by_revenue_total / orders_total / articles_count / comments_count — ✅ MERGED (PR #1634)
-- `Tag.hot` count syntax bug — PR OPEN (CI pending) on `perf-assist/tag-hot-count-fix-d00934bea7028f34`
+- `Tag.hot` count syntax bug — ✅ MERGED (PR #1678)
+- `users.articles_count` / `users.comments_count` counter cache — PR OPEN on `perf-assist/user-counter-caches-d00934bea7028f34` (CI pending)
+- `has_unread_notification?` / `unread_notifications_count` hot path — Next backlog item (counter cache + callbacks)
 - `author_revenue_usd` / `reader_revenue_usd` — Low impact; deferred
-- **Next**: look for other `relation.select("aggregate AS alias")` patterns that would silently break `.count`; profile admin/users index sort options at scale; check if any other controller calls `.count` on a custom-select relation
+- **Next**: look at `notifications.unread.for_web.any?(&:visible_in_web?)` — counter cache opportunity; also check if any other scope emits a SELECT with an alias that would silently break `.count`
