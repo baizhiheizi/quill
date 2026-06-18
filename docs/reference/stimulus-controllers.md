@@ -19,7 +19,6 @@ Every controller registered in `app/javascript/controllers/index.js`, with its s
 |------------|------|---------|
 | `article-form` | [`article_form_controller.js`](../../app/javascript/controllers/article_form_controller.js) | Article drafting form (markdown editor + price/asset fields) |
 | `auto-hide` | [`auto_hide_controller.js`](../../app/javascript/controllers/auto_hide_controller.js) | Hides an element after a configurable delay |
-| `autosave` | [`autosave_controller.js`](../../app/javascript/controllers/autosave_controller.js) | Persists form drafts while typing |
 | `clipboard` | [`clipboard_controller.js`](../../app/javascript/controllers/clipboard_controller.js) | Copies a target value to the clipboard |
 | `collections-form-component` | [`collections_form_component_controller.js`](../../app/javascript/controllers/collections_form_component_controller.js) | Author-side collection editing UI |
 | `comment-form` | [`comment_form_controller.js`](../../app/javascript/controllers/comment_form_controller.js) | Comment composer (inline validation, optimistic render) |
@@ -35,7 +34,6 @@ Every controller registered in `app/javascript/controllers/index.js`, with its s
 | `infinite-scroll` | [`infinite_scroll_controller.js`](../../app/javascript/controllers/infinite_scroll_controller.js) | Paginates via `IntersectionObserver` |
 | `load-more` | [`load_more_controller.js`](../../app/javascript/controllers/load_more_controller.js) | Click-to-load pagination button |
 | `login` | [`login_controller.js`](../../app/javascript/controllers/login_controller.js) | Login form state (provider switching) |
-| `modal` | [`modal_controller.js`](../../app/javascript/controllers/modal_controller.js) | Generic modal show/hide logic |
 | `mvm-deposit` | [`mvm_deposit_controller.js`](../../app/javascript/controllers/mvm_deposit_controller.js) | MVM deposit flow state |
 | `mvm-pay-button-component` | [`mvm_pay_button_component_controller.js`](../../app/javascript/controllers/mvm_pay_button_component_controller.js) | MVM "pay" button subcomponent |
 | `nested-form` | [`nested_form_controller.js`](../../app/javascript/controllers/nested_form_controller.js) | Add/remove nested form rows |
@@ -49,19 +47,14 @@ Every controller registered in `app/javascript/controllers/index.js`, with its s
 | `preview-upload` | [`preview_upload_controller.js`](../../app/javascript/controllers/preview_upload_controller.js) | Local image preview before upload |
 | `qrcode-component` | [`qrcode_component_controller.js`](../../app/javascript/controllers/qrcode_component_controller.js) | Renders QR codes for deposit addresses |
 | `references-select` | [`references_select_controller.js`](../../app/javascript/controllers/references_select_controller.js) | Cross-article reference picker |
-| `reload` | [`reload_controller.js`](../../app/javascript/controllers/reload_controller.js) | One-shot Turbo reload trigger |
-| `scroll-to` | [`scroll_to_controller.js`](../../app/javascript/controllers/scroll_to_controller.js) | Smooth-scroll to a hash target |
 | `search` | [`search_controller.js`](../../app/javascript/controllers/search_controller.js) | Debounced article search box |
 | `select-currency` | [`select_currency_controller.js`](../../app/javascript/controllers/select_currency_controller.js) | Currency picker for pre-orders |
-| `select-menu` | [`select_menu_controller.js`](../../app/javascript/controllers/select_menu_controller.js) | Lightweight select alternative |
 | `session` | [`session_controller.js`](../../app/javascript/controllers/session_controller.js) | Session/keepalive heartbeat |
 | `sidebar` | [`sidebar_controller.js`](../../app/javascript/controllers/sidebar_controller.js) | Hover-driven sidebar expand/collapse |
-| `switch-locale` | [`switch_locale_controller.js`](../../app/javascript/controllers/switch_locale_controller.js) | Locale switcher form submission |
 | `syntax-highlight` | [`syntax_highlight_controller.js`](../../app/javascript/controllers/syntax_highlight_controller.js) | Syntax highlighter wrapper |
 | `tabs` | [`tabs_controller.js`](../../app/javascript/controllers/tabs_controller.js) | Tab group state machine |
 | `tags-select` | [`tags_select_controller.js`](../../app/javascript/controllers/tags_select_controller.js) | Tag multi-select combobox |
 | `time-format-component` | [`time_format_component_controller.js`](../../app/javascript/controllers/time_format_component_controller.js) | Relative-time renderer |
-| `toast` | [`toast_controller.js`](../../app/javascript/controllers/toast_controller.js) | Stack-managed transient toasts |
 | `turbo` | [`turbo_controller.js`](../../app/javascript/controllers/turbo_controller.js) | Global Turbo event hooks |
 
 ## Patterns
