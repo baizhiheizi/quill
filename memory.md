@@ -46,8 +46,9 @@
 | HIGH | Frontend / UI | ~~`floating_controller` scroll listener leak + broken debounce~~ Done (PR #1560, merged 2026-06-10) |
 | MEDIUM | Frontend / UI | ~~`prefetch_controller.js` mouseover — DONE (PR #1576, merged 2026-06-11)~~ |
 | MEDIUM | Frontend / UI | ~~`auto_refresh_controller.js` — registered but unused; removed (PR #1627, merged 2026-06-14)~~ |
-| LOW | Frontend / UI | ~~`textarea_autogrow_controller.js` — registered but unused; removed (PR opened 2026-06-16)~~ |
+| LOW | Frontend / UI | ~~`textarea_autogrow_controller.js` — registered but unused; removed (PR #1669, merged 2026-06-16)~~ |
 | LOW | Frontend / UI | ~~`infinite_scroll_controller.js` — observer leak + per-entry loadMore~~ Done (PR #1632, merged 2026-06-14) |
+| LOW | Frontend / UI | ~~7 more dead controllers (`autosave`, `modal`, `reload`, `scroll-to`, `select-menu`, `switch-locale`, `toast`) — registered but unused; removed (PR opened 2026-06-18)~~ |
 | LOW | Frontend / UI | `auto_hide_controller.js` — store `setTimeout` handle as `this.timer`, clear in `disconnect()` |
 | LOW | Frontend / UI | `session_controller.js` — store bound `chainChanged` / `disconnect` / `accountsChanged` handlers and remove them in `disconnect()` |
 | LOW | Frontend / UI | No `prefers-reduced-motion` handling anywhere — cross-cutting win (mobile battery + accessibility) |
@@ -55,33 +56,34 @@
 | LOW | Code-Level | `Article#author_revenue_usd` / `reader_revenue_usd` — overlaps with perf-improver backlog |
 | LOW | Data | `HomeController#hot_tags` — load up to 50 cached rows then `.sample(5)` in Ruby; sample at SQL level |
 
-**Dead-code sweep heuristic** (now twice-confirmed): a controller is dead iff `grep -rn 'data-controller="<name>"' app/views/ test/` returns zero hits AND the view tree contains no relevant markup element. For Stimulus controllers, also check `grep -rn '<controller-keyword>' app/views/` for the element/component name. The 2026-06-12 run found `auto_refresh_controller` this way (the `setInterval(3000)` was a latent energy cost too), and the 2026-06-16 run found `textarea_autogrow_controller` the same way.
+**Dead-code sweep heuristic** (now quadruple-confirmed, with 9 controllers removed across 3 runs): a Stimulus controller is dead iff **all** of the following return zero hits: (a) `grep -rn 'data-controller="<name>"' app/views/ test/`, (b) `grep -rn 'controller: "<name>"' app/views/`, (c) `grep -rn 'data-<name>-target' app/views/`, (d) `grep -rEn '<name>#' app/views/ app/javascript/`. The `<wrapped-element>` test from prior runs remains a useful fifth check for element-bound controllers. Common false positives to watch for: `belongs_to ... autosave: true` (Rails), `@article.reload` (Rails), `location.reload()` (inside the dead file itself), `data-turbo-track: "reload"` (HTML asset helper), `document.querySelector("#modal")` (DOM id, not controller), `#toast-slot` (DOM id), `app/javascript/utils/toast.js` (separate utility module, not the Stimulus controller).
 
-**Hidden dead code check**: also `grep -rln '<element-name>' app/views/` to detect controllers that auto-grow or wrap a DOM element when the view tree no longer contains any such element. For Quill's article-centric view tree, the absence of `<textarea>` is the smoking gun for `textarea-autogrow`.
+**Sweep methodology (now batch-friendly)**: a Python script that parses `index.js` for both single-line and multi-line `register("…", ClassName)` pairs, then runs the 4-query pattern for each. Yields the full candidate list in seconds. Verify by-hand for each candidate to rule out false positives. The 2026-06-12 run found 1 dead controller (`auto_refresh`), 2026-06-16 found 1 (`textarea_autogrow`), 2026-06-18 found 7 in a single batch.
 
 ## work in progress
 
-_(none — `textarea_autogrow_controller.js` removal PR is awaiting maintainer review; branch `efficiency/remove-dead-textarea-autogrow-controller`, commit `f86b933`, patch at `/tmp/gh-aw/aw-efficiency-remove-dead-textarea-autogrow-controller.patch`, 4893 B)_
+_(none — 2026-06-18 PR `efficiency/remove-dead-stimulus-controllers-batch` (commit `fd5bcee`) is awaiting maintainer review; patch at `/tmp/gh-aw/aw-efficiency-remove-dead-stimulus-controllers-batch.patch`, 17,731 B)_
 
 ## completed work
 
-- **PR #1560** (2026-06-09, merged 2026-06-10): `app/javascript/controllers/floating_controller.js` — passive listener, correct debounce, `disconnect()` cleanup. Prettier clean; esbuild build clean.
-- **PR #1576** (2026-06-11, merged 2026-06-11): `app/javascript/controllers/prefetch_controller.js` — debounce + `disconnect()` cleanup + remove dead `load()` method. Branch `efficiency/prefetch-controller-debounce-and-cleanup`. Prettier clean; esbuild clean.
-- **PR #1627** (2026-06-12, merged 2026-06-14): dead-code removal of `app/javascript/controllers/auto_refresh_controller.js` — 33 lines across 3 files. Branch `efficiency/remove-dead-auto-refresh-controller`, commit `ef87da2`. Bundle minified 5,235,973 B → 5,235,610 B (−363 B per page load, every user, every page); unminified dev build −720 B. Prettier clean; esbuild build + minify both clean.
-- **PR #1632** (2026-06-14, merged 2026-06-14): `app/javascript/controllers/infinite_scroll_controller.js` IntersectionObserver cleanup + fetch dedup. Branch `efficiency/infinite-scroll-observer-cleanup`, commit `949a005`. Bundle minified 5,235,973 B → 5,236,254 B (+281 B; the +281 B buys dedup state, a `try/finally`, and a `disconnect()` that prevents the observer leak across Turbo navigations — the avoided duplicate fetches per scroll-tick more than repay the byte cost). Prettier clean; esbuild + minify both clean. Wired into 35+ views. Follow-up docs PR #1643 (Update Docs agent) documented the `this.observer = ...` + `this.observer.disconnect()` pattern.
-- **PR (2026-06-16 run)**: dead-code removal of `app/javascript/controllers/textarea_autogrow_controller.js` — 42 lines across 3 files. Branch `efficiency/remove-dead-textarea-autogrow-controller`, commit `f86b933`. Bundle minified 5,235,891 B → 5,235,182 B (−709 B per page load, every user, every page); unminified dev build −1,143 B. Prettier clean; esbuild build + minify both clean. Same pattern as PR #1627.
+- **PR #1560** (merged 2026-06-10): `floating_controller.js` — passive listener, correct debounce, `disconnect()` cleanup.
+- **PR #1576** (merged 2026-06-11): `prefetch_controller.js` — debounce + `disconnect()` cleanup + remove dead `load()` method.
+- **PR #1627** (merged 2026-06-14): dead-code removal of `auto_refresh_controller.js` — 33 lines / 3 files. Bundle minified 5,235,973 B → 5,235,610 B (**−363 B / page**); dev −720 B. Branch `efficiency/remove-dead-auto-refresh-controller`, commit `ef87da2`.
+- **PR #1632** (merged 2026-06-14): `infinite_scroll_controller.js` IntersectionObserver cleanup + fetch dedup. Bundle minified +281 B (+0.005%) — repaid many times over by avoided duplicate fetches per scroll-tick. Branch `efficiency/infinite-scroll-observer-cleanup`, commit `949a005`. Wired into 35+ views. Follow-up docs PR #1643 documented the `this.observer = ...` + `this.observer.disconnect()` pattern.
+- **PR #1669** (merged 2026-06-16): dead-code removal of `textarea_autogrow_controller.js` — 42 lines / 3 files. Bundle minified 5,235,891 B → 5,235,182 B (**−709 B / page**); dev −1,143 B. Branch `efficiency/remove-dead-textarea-autogrow-controller`, commit `f86b933`.
+- **PR (2026-06-18 run)**: dead-code removal of **7 Stimulus controllers** (`autosave`, `modal`, `reload`, `scroll-to`, `select-menu`, `switch-locale`, `toast`) — 231 lines / 9 files. Branch `efficiency/remove-dead-stimulus-controllers-batch`, commit `fd5bcee`. Bundle minified 5,236,359 B → 5,233,825 B (**−2,534 B / page**); dev 10,570,645 B → 10,564,287 B (**−6,358 B**). Roughly 3.6× the prior `textarea_autogrow` win.
 
 ## last task runs
 
 | Task | Last run (UTC) |
 |------|----------------|
-| 1 | 2026-06-16 01:16 |
-| 2 | 2026-06-16 01:16 |
-| 3 | 2026-06-16 01:16 |
-| 4 | 2026-06-16 01:16 |
-| 5 | 2026-06-16 01:16 |
-| 6 | 2026-06-16 01:16 |
-| 7 | 2026-06-16 01:16 |
+| 1 | 2026-06-18 00:00 |
+| 2 | 2026-06-18 00:00 |
+| 3 | 2026-06-18 00:00 |
+| 4 | 2026-06-18 00:00 |
+| 5 | 2026-06-18 00:00 |
+| 6 | 2026-06-18 00:00 |
+| 7 | 2026-06-18 00:00 |
 
 ## monthly summary — checked off by maintainer
 
@@ -90,3 +92,4 @@ _(Lines removed from Suggested Actions when maintainer checked them off in the m
 - 2026-06-12: PR #1576 removed from Suggested Actions (merged 2026-06-11).
 - 2026-06-14: PR #1632 removed from Suggested Actions (merged 2026-06-14).
 - 2026-06-14: PR #1627 removed from Suggested Actions (merged 2026-06-14).
+- 2026-06-18: PR #1669 removed from Suggested Actions (merged 2026-06-16 by `an-lee`).
