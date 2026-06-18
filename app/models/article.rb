@@ -57,7 +57,7 @@ class Article < ApplicationRecord
   include Articles::Purchasable
   include RichTextContent
 
-  belongs_to :author, class_name: "User", inverse_of: :articles
+  belongs_to :author, class_name: "User", inverse_of: :articles, counter_cache: true
   belongs_to :currency, primary_key: :asset_id, foreign_key: :asset_id, inverse_of: :articles
   belongs_to :collection, primary_key: :uuid, inverse_of: :articles, optional: true
 

@@ -125,10 +125,14 @@ class UserTest < ActiveSupport::TestCase
     assert_includes new_user.errors[:uid], "has already been taken"
   end
 
-  test "order_by_articles_count includes users with zero articles via LEFT JOIN" do
+  test "order_by_articles_count includes all users and orders by the cached counter column" do
     # `author` fixture has an article; `reader_one` and `reader_two` do not.
-    # Previously used INNER JOIN, so users with no articles were silently
-    # dropped from the admin user list when sorting by `articles_count`.
+    # The scope is now a simple `ORDER BY articles_count DESC, id ASC` over
+    # the `users.articles_count` counter-cache column, so we need to seed
+    # that column to reproduce the old INNER-Join-correctness test.
+    users(:author).update_column(:articles_count, users(:author).articles.count)
+    users(:reader_one).update_column(:articles_count, 0)
+
     rows = User.order_by_articles_count.to_a
 
     assert_includes rows.map(&:id), users(:author).id
@@ -137,12 +141,105 @@ class UserTest < ActiveSupport::TestCase
     assert_equal users(:author).id, rows.first.id
   end
 
-  test "order_by_comments_count includes users with zero comments via LEFT JOIN" do
+  test "order_by_articles_count does not use LEFT JOIN or GROUP BY" do
+    sql = User.order_by_articles_count.to_sql
+
+    assert_not_includes sql, "JOIN", "order_by_articles_count should not need a JOIN — it sorts by users.articles_count"
+    assert_not_includes sql, "GROUP BY"
+  end
+
+  test "order_by_comments_count includes all users and orders by the cached counter column" do
+    users(:author).update_column(:comments_count, users(:author).comments.count)
+    users(:reader_one).update_column(:comments_count, 0)
+
     rows = User.order_by_comments_count.to_a
 
     assert_includes rows.map(&:id), users(:author).id
     assert_includes rows.map(&:id), users(:reader_one).id
-    assert_equal 0, rows.find { |u| u.id == users(:reader_one).id }.attributes["comments_count"].to_i
+    assert_equal users(:author).id, rows.first.id
+  end
+
+  test "order_by_comments_count does not use LEFT JOIN or GROUP BY" do
+    sql = User.order_by_comments_count.to_sql
+
+    assert_not_includes sql, "JOIN", "order_by_comments_count should not need a JOIN — it sorts by users.comments_count"
+    assert_not_includes sql, "GROUP BY"
+  end
+
+  test "article counter cache is maintained on author" do
+    author = users(:author)
+    initial = author.articles_count
+
+    article = Article.new(
+      uuid: SecureRandom.uuid,
+      title: "Counter-cache test",
+      intro: "intro",
+      author: author,
+      asset_id: SecureRandom.uuid,
+      price: 0.0001,
+      state: :published
+    )
+    article.content = "<p>test</p>"
+    article.save!
+
+    assert_equal initial + 1, author.reload.articles_count
+  end
+
+  test "article counter cache is decremented on destroy" do
+    author = users(:author)
+    article = author.articles.first
+    before = author.reload.articles_count
+
+    article.destroy!
+
+    assert_equal before - 1, author.reload.articles_count
+  end
+
+  test "comment counter cache is maintained on author" do
+    author = users(:author)
+    article = author.articles.first
+    initial = author.reload.comments_count
+
+    article.comments.create!(author: author, legacy_markdown_content: "test")
+
+    assert_equal initial + 1, author.reload.comments_count
+  end
+
+  test "comment counter cache is decremented on destroy" do
+    author = users(:author)
+    article = author.articles.first
+    comment = article.comments.create!(author: author, legacy_markdown_content: "test")
+    before = author.reload.comments_count
+
+    comment.destroy!
+
+    assert_equal before - 1, author.reload.comments_count
+  end
+
+  test "statable articles_count reads the column without a SQL query" do
+    author = users(:author)
+    author.update_column(:articles_count, 42)
+
+    sql_counter = 0
+    callback = ->(*, payload) { sql_counter += 1 unless payload[:name] == "SCHEMA" }
+    ActiveSupport::Notifications.subscribed(callback, "sql.active_record") do
+      assert_equal 42, author.articles_count
+    end
+
+    assert_equal 0, sql_counter, "statable#articles_count should not run SQL — it reads the cached column"
+  end
+
+  test "statable comments_count reads the column without a SQL query" do
+    author = users(:author)
+    author.update_column(:comments_count, 7)
+
+    sql_counter = 0
+    callback = ->(*, payload) { sql_counter += 1 unless payload[:name] == "SCHEMA" }
+    ActiveSupport::Notifications.subscribed(callback, "sql.active_record") do
+      assert_equal 7, author.comments_count
+    end
+
+    assert_equal 0, sql_counter, "statable#comments_count should not run SQL — it reads the cached column"
   end
 
   test "order_by_orders_total includes users with zero orders via LEFT JOIN" do
