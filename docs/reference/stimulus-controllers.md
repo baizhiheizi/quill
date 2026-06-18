@@ -29,11 +29,11 @@ Every controller registered in `app/javascript/controllers/index.js`, with its s
 | `flash` | [`flash_controller.js`](../../app/javascript/controllers/flash_controller.js) | Dismissible flash banners |
 | `floating` | [`floating_controller.js`](../../app/javascript/controllers/floating_controller.js) | Mobile floating action bar that shows on scroll |
 | `flyonui-dropdown` | [`flyonui_dropdown_controller.js`](../../app/javascript/controllers/flyonui_dropdown_controller.js) | FlyonUI-themed dropdown wrapper |
-| `modal-component` | [`flyonui_modal_controller.js`](../../app/javascript/controllers/flyonui_modal_controller.js) | FlyonUI-themed modal wrapper. Registered as `modal-component` in the manifest (not `flyonui-modal`); partials use `data-controller="modal-component"`. |
 | `hljs` | [`hljs_controller.js`](../../app/javascript/controllers/hljs_controller.js) | Highlight.js runner triggered on visible code blocks |
 | `infinite-scroll` | [`infinite_scroll_controller.js`](../../app/javascript/controllers/infinite_scroll_controller.js) | Paginates via `IntersectionObserver` |
 | `load-more` | [`load_more_controller.js`](../../app/javascript/controllers/load_more_controller.js) | Click-to-load pagination button |
 | `login` | [`login_controller.js`](../../app/javascript/controllers/login_controller.js) | Login form state (provider switching) |
+| `modal-component` | [`flyonui_modal_controller.js`](../../app/javascript/controllers/flyonui_modal_controller.js) | FlyonUI-themed modal wrapper. Registered as `modal-component` in the manifest (not `flyonui-modal`); partials use `data-controller="modal-component"`. |
 | `mvm-deposit` | [`mvm_deposit_controller.js`](../../app/javascript/controllers/mvm_deposit_controller.js) | MVM deposit flow state |
 | `mvm-pay-button-component` | [`mvm_pay_button_component_controller.js`](../../app/javascript/controllers/mvm_pay_button_component_controller.js) | MVM "pay" button subcomponent |
 | `nested-form` | [`nested_form_controller.js`](../../app/javascript/controllers/nested_form_controller.js) | Add/remove nested form rows |
