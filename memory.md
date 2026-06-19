@@ -43,26 +43,9 @@ metadata:
 
 ## Open PRs
 
+- #1697 (Dependabot, mini_racer 0.21.2 → 0.21.3) — single patch bump; bundling not applicable.
 - #1695 ([perf-improver] SQL EXISTS for unread notification badge) — perf-improver workflow.
-- **1 open Repo Assist PR**: `repo-assist/use-settings-mixin-oauth-path` (this run; PR number assigned by workflow runner; patch `/tmp/gh-aw/aw-repo-assist-use-settings-mixin-oauth-path.patch`).
-
-## Open issue landscape (7 open at run start, all auto-generated)
-
-- #1686 (Authorization Boundary Hygiene deep dive — 2026-06-18)
-- #1636 ([aw] Detection Runs)
-- #1567 ([aw] No-Op Runs)
-- #1564 ([repo-assist] Monthly Activity 2026-06)
-- #1561 ([efficiency-improver] Monthly Activity 2026-06)
-- #1517 ([test-improver] Monthly Activity 2026-06)
-- #1513 ([perf-improver] Monthly Activity 2026-06)
-- #1667 (Authorization Boundary Hygiene broad scan) — closed since prior run.
-- **No human-submitted issues to engage on.**
-
-## Open PRs
-
-- #1687 (Dependabot, kamal 2.11.0 → 2.12.0) — single dev-deps bump; bundling not applicable.
-- #1688 ([perf-improver] Cache users.articles_count and users.comments_count) — perf-improver workflow.
-- **1 open Repo Assist PR**: `repo-assist/move-iframe-regex-to-html-post-processor` (this run; PR number assigned by workflow runner; patch `/tmp/gh-aw/aw-repo-assist-move-iframe-regex-to-html-post-processor.patch`).
+- **2 open Repo Assist PRs**: `repo-assist/use-settings-mixin-oauth-path` (PR #1696 from prior run, awaiting review) and `repo-assist/remove-dead-settings-test-logo-favicon` (this run, PR number assigned by workflow runner; patch `/tmp/gh-aw/aw-repo-assist-remove-dead-settings-test-logo-favicon.patch`, 1297 bytes, 42 lines; bundle `/tmp/gh-aw/aw-repo-assist-remove-dead-settings-test-logo-favicon.bundle`, 943 bytes).
 
 ## Backlog / future work
 
@@ -70,21 +53,24 @@ metadata:
 - Watch for first-time contributors; welcome them and point to README/CONTRIBUTING.
 - 5 notifiers in `app/notifiers/` still lack dedicated tests: `collection_listed`, `payment_refunded`, `subscribe_user_action_created`, `swap_order_finished`, `swap_order_swapping`. Test-improver is the natural owner; defer.
 - **Latent `Currency#store :raw` JSONB bug, confirmed reproducible in prior runs**: calling `currency.name` or `currency.icon_url` on a freshly loaded record raises `TypeError: no implicit conversion of Hash into String`. The fix pattern (manual accessors) exists in memory but the maintainer has not actioned prior attempts; not re-attempted.
-- **Latent settings inconsistency (discovered this run)**: `Settings.icon_file` is referenced in 4 places (`app/views/layouts/editor.html.erb`, `app/notifiers/application_notifier.rb`, `app/models/mixin_network_user.rb`, `app/models/user.rb`) but never defined in either `config/settings.yml` or `config/settings/test.yml` — falls back to the literal `'icon.png'`. Meanwhile `Settings.logo_file` and `Settings.favicon_file` are defined in `config/settings/test.yml` but never referenced anywhere. Resolution requires a maintainer design decision (add `icon_file` to settings vs. consolidate the three naming concepts); not acted on unilaterally.
+- **Settings inconsistency partially resolved this run (2026-06-19 17:30 UTC run)**: deleted dead `logo_file` and `favicon_file` from `config/settings/test.yml`. `Settings.icon_file` (referenced 4 places, all with `|| 'icon.png'` fallback, never defined) remains — still needs maintainer design decision (add `icon_file` to settings vs. consolidate naming).
 - Respect issue #1571's 5-cycle cooldown on payment/Web3 resilience work.
 - The natural notifier-testing / efficiency / perf work is handled by other workflows (test-improver, efficiency-improver, perf-improver) at higher fidelity than repo-assist can match.
-- #1667 + #1686 (Authorization Boundary Hygiene broad scan + deep dive) describe a larger strategic set of auth gaps that the maintainer-led fix did not touch. Not appropriate for repo-assist to act unilaterally on auth/permission refactors — needs a maintainer-led design discussion before further PRs. Issue #1686 enumerates 5 concrete tasks (API/Admin/MVM/Grover auth, `safe_return_to` enforcement, admin audit log); these are not in scope until the maintainer-led policy-scope design discussion lands.
+- #1667 + #1686 (Authorization Boundary Hygiene broad scan + deep dive) describe a larger strategic set of auth gaps that the maintainer-led fix did not touch. Not appropriate for repo-assist to act unilaterally on auth/permission refactors — needs a maintainer-led design discussion before further PRs. Issue #1686 enumerates 5 concrete tasks (API/Admin/MVM/Grover auth, `safe_return_to` enforcement, admin audit log); these are not in scope until the maintainer-led policy-scope design discussion lands. Issue #1694 (NEW 2026-06-19) is in the same auth+Web3 domain as #1686 with 5 more tasks (webhook signatures, OAuth nonces, Mixpay server-side verification, payment replay idempotency) — out of scope for repo-assist without maintainer-led design discussion.
 - The 858b5779 production Solid Cache/Cable/Queue SQLite migration opens up future work to verify there's no SQLITE_BUSY contention with multi-container Kamal deploys, but that's a maintainer-led production hardening question.
 
 ## Notes
 
 - `gh aw compile` is available in this run container (`/usr/bin/gh` 2.94.0 + `gh aw` extension). Compile produces a `.patch` + `.bundle` artefact under `/tmp/gh-aw/`, and the PR is finalised by the workflow runner downstream via `safeoutputs create_pull_request`.
 - `safeoutputs create_pull_request` returns the patch path and bundle size; the actual PR number is assigned by the workflow runner, so PR-intent items in Suggested Actions reference the branch + commit + patch path rather than a PR number.
-- `update_issue` body size limit is 10 KB (10240 bytes). Prior run's body draft was ~11.5 KB on the first attempt — too large. Trimmed to ~9.6 KB and resubmitted; call returned success, but the subsequent `issue_read` showed the **old** body, suggesting the workflow runner queues body updates asynchronously (or `update_issue` from `schedule` / `workflow_dispatch` is silently no-op'ing). The Monthly Activity update is therefore being delivered via `add_comment` (temporary_id `aw_shrt6` earlier, `aw_CEfrvLaP` prior, `aw_reload` earlier, `aw_O11MY6Q4` two runs ago, `aw_OyJtKM5O` this run) for reliability.
+- `update_issue` body size limit is 10 KB (10240 bytes). Prior run's body draft was ~11.5 KB on the first attempt — too large. Trimmed to ~9.6 KB and resubmitted; call returned success, but the subsequent `issue_read` showed the **old** body, suggesting the workflow runner queues body updates asynchronously (or `update_issue` from `schedule` / `workflow_dispatch` is silently no-op'ing). The Monthly Activity update is therefore being delivered via `add_comment` (temporary_id `aw_shrt6` earlier, `aw_CEfrvLaP` prior, `aw_reload` earlier, `aw_O11MY6Q4` two runs ago, `aw_OyJtKM5O` last run, `aw_CpiunIzr` this run) for reliability.
 - `bin/rubocop` and `bin/rails zeitwerk:check` run successfully locally.
-- `bin/rubocop` does **not** lint ERB files (no `erb-lint` configured). When verifying a change that touches only ERB, skip the file from the rubocop invocation — the project's CI uses the same config.
-- All 7 open issues are auto-generated by github-actions[bot] (4 per-workflow Monthly Activity summaries, 2 [aw] detection/no-op trackers, and 1 Authorization Boundary Hygiene deep-dive report).
+- `bin/rubocop` does **not** lint ERB files (no `erb-lint` configured) or YAML files (rubocop parses them as Ruby). When verifying a change that touches only ERB or YAML, skip that file from the rubocop invocation — the project's CI uses the same config.
+- All 8 open issues are auto-generated by github-actions[bot] (4 per-workflow Monthly Activity summaries, 2 [aw] detection/no-op trackers, 1 Authorization Boundary Hygiene deep-dive report, 1 Webhook/Callback/Payment-Replay Integrity report).
 - `ERB::Util.url_decode` does **not** exist in Rails 8.1; use `CGI.unescape` for round-tripping `ERB::Util.url_encode` output in tests. The share helper itself uses `ERB::Util.url_encode` to build query strings (space → `%20`), which is correct.
 - `Settings.twitter_account` is configured in `config/settings/test.yml` as `prsdigg`; tests can assert against this value rather than stubbing (the `Config::Options` class does not support mocha's `.stubs`).
 - The `QuillBotStub#with_quill_bot_stub` helper in `test/support/quill_bot_stub.rb` provides a `FakeApi` with the standard `FAKE_CLIENT_ID` (`d4444444-4444-4444-8444-444444444444`) and is the right way to test code that calls `QuillBot.api.client_id` etc.
 - Module-vs-class constant ownership: when a module is the sole consumer of a constant, prefer `module M; CONST = ...; end` over `module M; CONST = SomeIncluder::CONST; end`. The latter creates a load-order coupling between the module and one specific includer; the former keeps the dependency direction natural and lets includers resolve the constant via the included module.
+- Stimulus controller dead-code detection must scan for both `data-controller="xxx"` and `data-controller='xxx'` (single quotes) and for the `controller: 'xxx'` Rails helper invocation; missing any of these yields false positives in the unused-controller list. Use `re.findall(r'data-controller=["\']([^"\']+)["\']', content)` to cover all three formats.
+- The `bin/ci` script uses `ActiveSupport::ContinuousIntegration` with four steps: `Setup` (`bin/setup --skip-server`), `Style: Ruby` (`bin/rubocop`), `Style: JavaScript` (`bun run lint-check`), `Tests: Rails` (`bin/rails test`), `Tests: Seeds` (`env RAILS_ENV=test bin/rails db:seed:replant`). System tests are commented out. Signoff via `gh signoff` is also commented out.
+- `config/routes.rb` includes a domain redirect for `prsdigg.com|bunshow.jp` → `https://quill.im/$path` at the top. This was added as part of the prsdigg → quill rebrand; preserve when refactoring routes.
