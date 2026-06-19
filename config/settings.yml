@@ -4,6 +4,9 @@ mixin_oauth_path: 'https://mixin.one/oauth/authorize'
 # lauch time
 launch_time:
 
+# assets
+icon_file: icon.png
+
 # ws blaze
 blaze_enable: false
 
