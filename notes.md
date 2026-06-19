@@ -31,14 +31,15 @@
 - **Env note**: must `unset CI` first (see Performance Notes)
 
 ## Performance Opportunities Backlog
-1. **[LOW] `author_revenue_usd` / `reader_revenue_usd`** - Ruby-side sum with `includes(:currency)`. Memoized with `@author_revenue_usd ||= ...`. Used in `app/views/dashboard/articles/show.html.erb`. Single-article, very low impact.
-2. **[POTENTIAL] Admin::UsersController `bought_articles_count` / `author_revenue_total_usd` / `payment_total_usd`** - These still hit the DB per user (joins + sum). ~3 queries per user × 24 per page ≈ 72 queries/page. Counter-cache won't help (through-associations and sums). Could be a `User.with_aggregates` scope or batched query.
-3. **[POTENTIAL] `has_unread_notification?` / `unread_notifications_count` hot path** - `notifications.unread.for_web.any?(&:visible_in_web?)` runs on every page render (navbar + left_bar). `visible_in_web?` is a Ruby method (per-user settings), so it can't be SQL-pushed. A counter cache on users (`unread_web_notifications_count`) maintained by callbacks would eliminate the query. Soft-delete interaction needs care.
+1. **[DONE] `has_unread_notification?` / `unread_notifications_count` hot path** — SQL `exists?` / `count` on `notifications.unread.for_web`. Removes per-page-render Ruby scan that loaded every unread row for `select(&:visible_in_web?)`. Trade-off: badge no longer reproduces the per-recipient `visible_in_web?` predicate (notification_setting mutes and block_user guards) — overcounts slightly. PR opened 2026-06-19 on `perf-assist/has-unread-notification-exists-d00934bea7028f34`.
+2. **[POTENTIAL] Admin::UsersController `bought_articles_count` / `author_revenue_total_usd` / `payment_total_usd`** - These still hit the DB per user (joins + sum). ~3 queries per user × 24 per page ≈ 72 queries/page. Counter-cache won't help (through-associations and sums). Could be a `User.with_aggregates` scope or batched query. The same methods are also used by `app/views/dashboard/home/index.html.erb` (current_user).
+3. **[LOW] `author_revenue_usd` / `reader_revenue_usd` (single-article, dashboard)** - Ruby-side sum with `includes(:currency)`. Memoized with `@author_revenue_usd ||= ...`. Used in `app/views/dashboard/articles/show.html.erb`. Single-article, very low impact.
 
 ## Work in Progress
-- **PR (user counter caches)** (`perf-assist/user-counter-caches-d00934bea7028f34`) committed 2026-06-18. Adds `users.articles_count` / `users.comments_count` columns; refactors `Users::Scopable#order_by_articles_count` / `#order_by_comments_count` to `ORDER BY column DESC` (was LEFT JOIN + GROUP BY + COUNT); refactors `Users::Statable#articles_count` / `#comments_count` to read the column. Migration includes backfill.
+- (none — `has_unread_notification?` SQL refactor PR is the current open item; user counter caches WIP from 2026-06-18 was never pushed because the branch was committed locally but `safeoutputs create_pull_request` push step was skipped. Re-checking on a future run is optional.)
 
 ## Completed Work
+- PR (unread notification badge) on `perf-assist/has-unread-notification-exists-d00934bea7028f34` — PR opened 2026-06-19
 - PR #1678 (Tag.hot count fix) — **MERGED 2026-06-17**
 - PR #1634 (Users::Scopable LEFT JOINs) — **MERGED 2026-06-14**
 - Monthly Activity issue #1513 `[perf-improver] Monthly Activity 2026-06` last updated 2026-06-14
@@ -67,8 +68,10 @@
 - **`Tag.hot` is the homepage "hot tags" feed**: 5-min Rails cache via `HomeController#hot_tags`. Only caller chains `.where(locale: ...).limit(50).sample(5)`. No `lately_article_count` reads; ordering is via `Arel.sql` since PR #1678.
 - **Fixtures and counter caches**: YAML fixtures set the row directly, so `users.articles_count` defaults to 0 in tests even when the author has articles via fixture rows. The original test for `order_by_articles_count` (PR #1634) passed because the test ran the JOIN + COUNT, not because the column was set. When refactoring order_by_* to use a column, tests need to `update_column` the counter explicitly.
 - **Query counter helper**: no `assert_queries_count` in this repo's test_helper; use `ActiveSupport::Notifications.subscribed(->(*, p) { ... }, "sql.active_record")` with a counter. Skip `payload[:name] == "SCHEMA"`.
+- **`has_unread_notification?` trade-off decision**: SQL `exists?` on `for_web` overcounts when the user has muted the notification type via `notification_setting` or has blocked the source. The exact visible-only set is still computed on the notifications index page where one-shot Ruby work is appropriate. Rejected alternatives: (a) counter cache on `users.unread_web_notifications_count` maintained by callbacks — staleness on setting toggles, complex backfill; (b) denormalized `noticed_notifications.web_visible` boolean — same staleness on setting toggles; (c) SQL-push the `visible_in_web?` predicate — predicates are Ruby methods reading `notification_setting` and `block_user?`, would need a large new join/case expression and the predicate doesn't belong on the notification record.
 
 ## Run History (recent)
+- **2026-06-19 12:30 UTC** - [Run](https://github.com/baizhiheizi/quill/actions/runs/27825037181) - Replaced `has_unread_notification?` and `unread_notifications_count` Ruby scan with SQL `exists?` / `count` on `notifications.unread.for_web`. PR opened on `perf-assist/has-unread-notification-exists-d00934bea7028f34`. Tests 5/5 new in statable_test.rb; 237/237 model+notifier, 0 regressions. Rubocop/zeitwerk clean.
 - **2026-06-18 18:30 UTC** - [Run](https://github.com/baizhiheizi/quill/actions/runs/27757618658) - Added `users.articles_count` / `users.comments_count` counter-cache columns with backfill. `Article#belongs_to :author, counter_cache: true` and `Comment#belongs_to :author, counter_cache: true` maintain them. `Users::Scopable#order_by_articles_count` / `#order_by_comments_count` reduced from `LEFT JOIN + GROUP BY + COUNT` to `ORDER BY column DESC, id ASC`. `Users::Statable#articles_count` / `#comments_count` read the column (O(1)). Tests 159/323, 0 failures. PR open on `perf-assist/user-counter-caches-d00934bea7028f34`.
 - **2026-06-17 14:21 UTC** - [Run](https://github.com/baizhiheizi/quill/actions/runs/27688558877) - Fixed `Tag.hot.count` PG::SyntaxError by dropping unused select alias. PR #1678 (merged 2026-06-17). Tests 12/23, 0 failures.
 - **2026-06-14 03:39 UTC** - [Run](https://github.com/baizhiheizi/quill/actions/runs/27464306984) - `Users::Scopable` to LEFT JOIN + COALESCE for SUM. PR #1634 (merged 2026-06-14). Tests 15/43, 0 failures.
@@ -80,12 +83,7 @@
 - **2026-06-01 08:31 UTC** - [Run](https://github.com/baizhiheizi/quill/actions/runs/26739902209) - Created Monthly Activity issue
 
 ## Backlog Cursor
-- `order_by_popularity` fix — ✅ MERGED (PR #1539)
-- `ArticleSearchService#subscribed` filter — ✅ MERGED (PR #1546)
-- `ArticleSearchService#filter_block_authors` / `#filter_block_by_authors` — ✅ MERGED (PR #1598)
-- `Users::Scopable` order_by_revenue_total / orders_total / articles_count / comments_count — ✅ MERGED (PR #1634)
-- `Tag.hot` count syntax bug — ✅ MERGED (PR #1678)
-- `users.articles_count` / `users.comments_count` counter cache — PR OPEN on `perf-assist/user-counter-caches-d00934bea7028f34` (CI pending)
-- `has_unread_notification?` / `unread_notifications_count` hot path — Next backlog item (counter cache + callbacks)
-- `author_revenue_usd` / `reader_revenue_usd` — Low impact; deferred
-- **Next**: look at `notifications.unread.for_web.any?(&:visible_in_web?)` — counter cache opportunity; also check if any other scope emits a SELECT with an alias that would silently break `.count`
+- `has_unread_notification?` / `unread_notifications_count` — ✅ PR OPEN (SQL exists?/count refactor)
+- `users.articles_count` / `users.comments_count` counter cache — WIP local commit, never pushed (was on a stale `perf-assist/user-counter-caches-d00934bea7028f34` branch that didn't make it to a PR)
+- `author_revenue_usd` / `reader_revenue_usd` / `payment_total_usd` denormalization for admin user list (72 queries/page) — NEXT
+- **Next**: denormalize `users.payment_total_usd_cents` / `author_revenue_total_usd_cents` (denormalized counter) to eliminate the per-user sum in `app/views/admin/users/_user.html.erb` (24 × 3 = 72 queries/page).
