@@ -4,7 +4,9 @@
 # MarkdownRenderService and RichTextRenderService. Methods mutate
 # @html in place and return `self` so they can be chained.
 module HtmlPostProcessor
-  IFRAME_SRC_WHITE_LIST_REGEX = MarkdownRenderService::IFRAME_SRC_WHITE_LIST_REGEX
+  # Allow-list of iframe src patterns kept by `escape_iframes`. Only
+  # YouTube is currently trusted; everything else is stripped.
+  IFRAME_SRC_WHITE_LIST_REGEX = [ %r{\Ahttps://(www.)?youtube\.com/\S+\z} ].freeze
 
   def parse_link
     doc = Nokogiri::HTML.fragment(@html)

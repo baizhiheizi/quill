@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 class MarkdownRenderService
-  IFRAME_SRC_WHITE_LIST_REGEX = [ %r{\Ahttps://(www.)?youtube\.com/\S+\z} ].freeze
-
   include HtmlPostProcessor
 
   def initialize(content, **kargs)
