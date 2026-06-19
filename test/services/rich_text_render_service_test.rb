@@ -137,7 +137,9 @@ class RichTextRenderServiceTest < ActiveSupport::TestCase
   end
 
   test "default type applies the same iframe whitelist as markdown service" do
-    assert_equal MarkdownRenderService::IFRAME_SRC_WHITE_LIST_REGEX,
+    assert_equal HtmlPostProcessor::IFRAME_SRC_WHITE_LIST_REGEX,
+                 MarkdownRenderService::IFRAME_SRC_WHITE_LIST_REGEX
+    assert_equal HtmlPostProcessor::IFRAME_SRC_WHITE_LIST_REGEX,
                  RichTextRenderService::IFRAME_SRC_WHITE_LIST_REGEX
   end
 end
