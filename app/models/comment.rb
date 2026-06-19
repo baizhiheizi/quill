@@ -29,7 +29,12 @@ class Comment < ApplicationRecord
   include SoftDeletable
   include RichTextContent
 
-  belongs_to :author, class_name: "User", inverse_of: :comments
+  # `counter_cache: true` maintains `users.comments_count`. Soft-deleted
+  # comments are still counted (the cache is only updated on create/destroy,
+  # not on `soft_delete!`), so the column reflects the user's total comment
+  # activity including later deletions. Acceptable for the admin user list
+  # ranking, where "ever commented" is the natural semantic.
+  belongs_to :author, class_name: "User", inverse_of: :comments, counter_cache: true
   belongs_to :commentable, polymorphic: true, counter_cache: true
   belongs_to :quote_comment, class_name: "Comment", inverse_of: :comments, counter_cache: true, optional: true
 

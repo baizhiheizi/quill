@@ -11,8 +11,12 @@ module Users::Statable
     notifications.unread.for_web.any?(&:visible_in_web?)
   end
 
+  # `articles_count` / `comments_count` are counter-cache columns on `users`
+  # maintained by `Article#belongs_to :author, counter_cache: true` and the
+  # matching declaration on `Comment`. Reads are O(1) — no SQL needed when
+  # the user record is already in memory.
   def articles_count
-    @articles_count ||= articles.count
+    read_attribute(:articles_count)
   end
 
   def bought_articles_count
@@ -20,7 +24,7 @@ module Users::Statable
   end
 
   def comments_count
-    @comments_count ||= comments.count
+    read_attribute(:comments_count)
   end
 
   def payment_total_usd
