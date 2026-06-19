@@ -1,1 +1,15 @@
-[{"t":"Home","s":"Home","l":1},{"t":"Architecture","s":"Architecture","l":1},{"t":"Value Net","s":"Value-Net","l":2,"p":"Architecture"},{"t":"Backend","s":"Backend","l":1},{"t":"Background Jobs","s":"Background-Jobs","l":2,"p":"Backend"},{"t":"Services","s":"Services","l":2,"p":"Backend"},{"t":"Frontend","s":"Frontend","l":1},{"t":"Stimulus Controllers","s":"Stimulus-Controllers","l":2,"p":"Frontend"},{"t":"API Reference","s":"API-Reference","l":1},{"t":"Getting Started","s":"Getting-Started","l":1},{"t":"For Agents","s":"For-Agents","l":1},{"t":"AGENTS.md","s":"AGENTS","l":2,"p":"For-Agents"},{"t":"llms.txt","s":"llms","l":2,"p":"For-Agents"}]
+[
+  {"t": "Home", "s": "Home", "l": 1},
+  {"t": "Architecture", "s": "Architecture", "l": 1},
+  {"t": "Value Net", "s": "Value-Net", "l": 2, "p": "Architecture"},
+  {"t": "Backend", "s": "Backend", "l": 1},
+  {"t": "Background Jobs", "s": "Background-Jobs", "l": 2, "p": "Backend"},
+  {"t": "Services", "s": "Services", "l": 2, "p": "Backend"},
+  {"t": "Frontend", "s": "Frontend", "l": 1},
+  {"t": "Stimulus Controllers", "s": "Stimulus-Controllers", "l": 2, "p": "Frontend"},
+  {"t": "API Reference", "s": "API-Reference", "l": 1},
+  {"t": "Getting Started", "s": "Getting-Started", "l": 1},
+  {"t": "For Agents", "s": "For-Agents", "l": 1},
+  {"t": "AGENTS.md", "s": "AGENTS.md", "l": 2, "p": "For-Agents"},
+  {"t": "llms.txt", "s": "llms.txt", "l": 2, "p": "For-Agents"}
+]
