@@ -15,10 +15,6 @@ page_description: Write and read in the Web3 way.
 messenger: mixin
 twitter_account: prsdigg
 
-# app/assets/images/*
-logo_file: logo.svg
-favicon_file: favicon.svg
-
 # locale
 time_zone: UTC
 default_locale: en
