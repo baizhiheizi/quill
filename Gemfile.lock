@@ -348,7 +348,7 @@ GEM
     matrix (0.4.3)
     mini_mime (1.1.5)
     mini_portile2 (2.8.9)
-    mini_racer (0.21.2)
+    mini_racer (0.21.3)
       libv8-node (~> 24.12.0.1)
     minitest (6.0.6)
       drb (~> 2.0)
@@ -864,7 +864,7 @@ CHECKSUMS
   matrix (0.4.3) sha256=a0d5ab7ddcc1973ff690ab361b67f359acbb16958d1dc072b8b956a286564c5b
   mini_mime (1.1.5) sha256=8681b7e2e4215f2a159f9400b5816d85e9d8c6c6b491e96a12797e798f8bccef
   mini_portile2 (2.8.9) sha256=0cd7c7f824e010c072e33f68bc02d85a00aeb6fce05bb4819c03dfd3c140c289
-  mini_racer (0.21.2) sha256=6b8684717aee0bc78314c0d24491d1c4dfe38d42b9b31d3097b8c6b877b6d614
+  mini_racer (0.21.3) sha256=e2d2e8533739ce1bee2dfa7ce29c2dc322ec865e8850be81b2b0cc89f0371a00
   minitest (6.0.6) sha256=153ea36d1d987a62942382b61075745042a2b3123b1cd48f4c3675af9cc7d6f1
   mission_control-jobs (1.1.0) sha256=b13da9cde3344fec7c744b79d2a34c3ecd454f45d4d593d4c968ba762315e84c
   mixin_bot (2.3.0) sha256=81282f3ca9c2f977affccada20f51e897dbbb07ac0002fae3eead071afb482c4
