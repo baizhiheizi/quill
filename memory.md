@@ -9,10 +9,26 @@ metadata:
 
 ## Current state
 
-- **Run of repo-assist workflow on 2026-06-19 05:42 UTC (run 27807224832).**
+- **Run of repo-assist workflow on 2026-06-19 22:00 UTC (run 27849427694).**
 - Repo is baizhiheizi/quill (Rails 8.1, Ruby 4.0.5).
 - AGENTS.md exists; read before any code PR.
 - **All prior PRs from earlier runs are merged**: `repo-assist/improve-currency-test-coverage` → PR #1682 (merged 2026-06-17), `repo-assist/improve-remove-dead-order-broadcast-and-reload-controller` → PR #1684 (merged 2026-06-18), `repo-assist/refactor-shared-html-post-processor` → PR #1690 (merged 2026-06-18), `repo-assist/improve-share-helper-test-coverage` → PR #1689 (merged 2026-06-18), `fix(auto-hide): store setTimeout handle and clear on disconnect` → PR #1691 (merged 2026-06-19).
+
+## Selected tasks for this run (2026-06-19, run 27849427694)
+
+- Task 5 (Coding Improvements) — `Settings.icon_file` was referenced by 4 callers (`User.default_avatar_url`, `MixinNetworkUser::DEFAULT_AVATAR_FILE`, `ApplicationNotifier::QUILL_ICON_URL`, `editor.html.erb`) with `|| 'icon.png'` fallback, but never defined in `config/settings.yml` or `config/settings/test.yml` (the fallback always fired). Three-line addition to `config/settings.yml` (`icon_file: icon.png` under `# assets`) makes the previously-implicit default explicit and per-environment overridable. Runtime behavior unchanged. Branch: `repo-assist/define-settings-icon-file` (commit 6bfaadd8). Diff: +3 / −0 across 1 file. Zeitwerk clean; rubocop clean; user model tests 31 runs / 72 assertions / 0 failures.
+- Task 6 (Maintain Repo Assist PRs) — both open Repo Assist PRs (#1696, #1698) verified clean: no merge conflicts against `main` (via `git merge-tree`), GitGuardian check passed on both. No CI failures to fix. Ready for maintainer review.
+- Task 9 (Testing Improvements) — added 8 tests for `SubscribeUserActionCreatedNotifier`, closing out one of the 5 notifiers flagged in memory as lacking dedicated coverage. Tests cover event/notification record creation, message composition (truncated subscriber name + translation), name-truncation behavior, URL anchoring, PLAIN_TEXT data payload, mixin bot enqueue for messenger recipients, and mixin bot suppression for non-messenger recipients. The `build_subscribe_action!` helper uses `Action.skip_callback :create, :after, :notify_target` (with `ensure` for restoration) so the production `after_create :notify_target` callback doesn't double every event/job count asserted in the tests. `User#create_action` (action-store gem) returns a boolean, not the Action record, so the helper instantiates `Action` directly with explicit polymorphic `user_type`/`target_type` strings. Branch: `repo-assist/test-subscribe-user-action-notifier` (commit f915ddaf). Diff: +179 / −0 across 1 file. New file test 8 runs / 19 assertions / 0 failures; all notifier tests 81 runs / 258 assertions / 0 failures (1 pre-existing skip); rubocop clean.
+- Task 11 (Update Monthly Activity Summary) — posted run entry on issue #1564 via `safeoutputs add_comment` (temporary_id `aw_cwoV5KvA`).
+
+## Completed this run (run 27849427694)
+
+- Verified no merge conflicts / CI failures on open Repo Assist PRs (Task 6).
+- Committed `6bfaadd8` on `repo-assist/define-settings-icon-file`: 1 file changed, 3 insertions(+).
+- Created draft PR on branch `repo-assist/define-settings-icon-file` (patch `/tmp/gh-aw/aw-repo-assist-define-settings-icon-file.patch`, 1206 bytes, 38 lines) via `safeoutputs create_pull_request`.
+- Committed `f915ddaf` on `repo-assist/test-subscribe-user-action-notifier`: 1 file changed, 179 insertions(+).
+- Created draft PR on branch `repo-assist/test-subscribe-user-action-notifier` (patch `/tmp/gh-aw/aw-repo-assist-test-subscribe-user-action-notifier.patch`, 8083 bytes, 253 lines) via `safeoutputs create_pull_request`.
+- Posted run entry on issue #1564 via `safeoutputs add_comment` (temporary_id `aw_cwoV5KvA`).
 
 ## Selected tasks for this run (2026-06-19, run 27829628350)
 
@@ -43,17 +59,18 @@ metadata:
 
 ## Open PRs
 
+- #1699 ([docs] condense value-net explanation) — Documentation Unbloat workflow.
 - #1697 (Dependabot, mini_racer 0.21.2 → 0.21.3) — single patch bump; bundling not applicable.
 - #1695 ([perf-improver] SQL EXISTS for unread notification badge) — perf-improver workflow.
-- **2 open Repo Assist PRs**: `repo-assist/use-settings-mixin-oauth-path` (PR #1696 from prior run, awaiting review) and `repo-assist/remove-dead-settings-test-logo-favicon` (this run, PR number assigned by workflow runner; patch `/tmp/gh-aw/aw-repo-assist-remove-dead-settings-test-logo-favicon.patch`, 1297 bytes, 42 lines; bundle `/tmp/gh-aw/aw-repo-assist-remove-dead-settings-test-logo-favicon.bundle`, 943 bytes).
+- **4 open Repo Assist PRs**: `repo-assist/use-settings-mixin-oauth-path` (PR #1696 from prior run), `repo-assist/remove-dead-settings-test-logo-favicon` (PR #1698 from prior run), `repo-assist/define-settings-icon-file` (this run; patch `/tmp/gh-aw/aw-repo-assist-define-settings-icon-file.patch`, 1206 bytes, 38 lines; bundle `/tmp/gh-aw/aw-repo-assist-define-settings-icon-file.bundle`, 934 bytes), and `repo-assist/test-subscribe-user-action-notifier` (this run; patch `/tmp/gh-aw/aw-repo-assist-test-subscribe-user-action-notifier.patch`, 8083 bytes, 253 lines; bundle `/tmp/gh-aw/aw-repo-assist-test-subscribe-user-action-notifier.bundle`, 2967 bytes).
 
 ## Backlog / future work
 
 - Re-engage when human issues appear.
 - Watch for first-time contributors; welcome them and point to README/CONTRIBUTING.
-- 5 notifiers in `app/notifiers/` still lack dedicated tests: `collection_listed`, `payment_refunded`, `subscribe_user_action_created`, `swap_order_finished`, `swap_order_swapping`. Test-improver is the natural owner; defer.
+- 4 notifiers in `app/notifiers/` still lack dedicated tests: `collection_listed`, `payment_refunded`, `swap_order_finished`, `swap_order_swapping`. `subscribe_user_action_created` is now covered (this run, branch `repo-assist/test-subscribe-user-action-notifier`). Test-improver is the natural owner; defer.
 - **Latent `Currency#store :raw` JSONB bug, confirmed reproducible in prior runs**: calling `currency.name` or `currency.icon_url` on a freshly loaded record raises `TypeError: no implicit conversion of Hash into String`. The fix pattern (manual accessors) exists in memory but the maintainer has not actioned prior attempts; not re-attempted.
-- **Settings inconsistency partially resolved this run (2026-06-19 17:30 UTC run)**: deleted dead `logo_file` and `favicon_file` from `config/settings/test.yml`. `Settings.icon_file` (referenced 4 places, all with `|| 'icon.png'` fallback, never defined) remains — still needs maintainer design decision (add `icon_file` to settings vs. consolidate naming).
+- **Settings inconsistency fully resolved as of 2026-06-19 22:00 UTC run**: deleted dead `logo_file` and `favicon_file` from `config/settings/test.yml` (PR #1698, prior run); defined `Settings.icon_file` (referenced 4 places, all with `|| 'icon.png'` fallback) in `config/settings.yml` (this run, branch `repo-assist/define-settings-icon-file`). Both directions of the defined-vs-referenced inconsistency are now closed.
 - Respect issue #1571's 5-cycle cooldown on payment/Web3 resilience work.
 - The natural notifier-testing / efficiency / perf work is handled by other workflows (test-improver, efficiency-improver, perf-improver) at higher fidelity than repo-assist can match.
 - #1667 + #1686 (Authorization Boundary Hygiene broad scan + deep dive) describe a larger strategic set of auth gaps that the maintainer-led fix did not touch. Not appropriate for repo-assist to act unilaterally on auth/permission refactors — needs a maintainer-led design discussion before further PRs. Issue #1686 enumerates 5 concrete tasks (API/Admin/MVM/Grover auth, `safe_return_to` enforcement, admin audit log); these are not in scope until the maintainer-led policy-scope design discussion lands. Issue #1694 (NEW 2026-06-19) is in the same auth+Web3 domain as #1686 with 5 more tasks (webhook signatures, OAuth nonces, Mixpay server-side verification, payment replay idempotency) — out of scope for repo-assist without maintainer-led design discussion.
@@ -68,9 +85,12 @@ metadata:
 - `bin/rubocop` does **not** lint ERB files (no `erb-lint` configured) or YAML files (rubocop parses them as Ruby). When verifying a change that touches only ERB or YAML, skip that file from the rubocop invocation — the project's CI uses the same config.
 - All 8 open issues are auto-generated by github-actions[bot] (4 per-workflow Monthly Activity summaries, 2 [aw] detection/no-op trackers, 1 Authorization Boundary Hygiene deep-dive report, 1 Webhook/Callback/Payment-Replay Integrity report).
 - `ERB::Util.url_decode` does **not** exist in Rails 8.1; use `CGI.unescape` for round-tripping `ERB::Util.url_encode` output in tests. The share helper itself uses `ERB::Util.url_encode` to build query strings (space → `%20`), which is correct.
+- `User#create_action` (from the `action-store` gem) returns a boolean, not the `Action` record. To get an Action instance in tests, instantiate `Action.create!(action_type:, user:, target:, user_type: "User", target_type: "User")` directly with explicit polymorphic type strings. `Action#after_create :notify_target` is the production hook that delivers `SubscribeUserActionCreatedNotifier`; in notifier tests that re-deliver manually, wrap the `create!` in `Action.skip_callback :create, :after, :notify_target` … `Action.set_callback …` (with `ensure` for restoration) to avoid doubling every event/job count.
+- Noticed 3 with a `record: <model>` param fails with `NoMethodError: undefined method 'has_query_constraints?' for class TrueClass` if `record` is not a real ActiveRecord instance — e.g., the boolean returned by `action_store`'s `create_action`. Always pass an actual AR record.
 - `Settings.twitter_account` is configured in `config/settings/test.yml` as `prsdigg`; tests can assert against this value rather than stubbing (the `Config::Options` class does not support mocha's `.stubs`).
 - The `QuillBotStub#with_quill_bot_stub` helper in `test/support/quill_bot_stub.rb` provides a `FakeApi` with the standard `FAKE_CLIENT_ID` (`d4444444-4444-4444-8444-444444444444`) and is the right way to test code that calls `QuillBot.api.client_id` etc.
 - Module-vs-class constant ownership: when a module is the sole consumer of a constant, prefer `module M; CONST = ...; end` over `module M; CONST = SomeIncluder::CONST; end`. The latter creates a load-order coupling between the module and one specific includer; the former keeps the dependency direction natural and lets includers resolve the constant via the included module.
 - Stimulus controller dead-code detection must scan for both `data-controller="xxx"` and `data-controller='xxx'` (single quotes) and for the `controller: 'xxx'` Rails helper invocation; missing any of these yields false positives in the unused-controller list. Use `re.findall(r'data-controller=["\']([^"\']+)["\']', content)` to cover all three formats.
 - The `bin/ci` script uses `ActiveSupport::ContinuousIntegration` with four steps: `Setup` (`bin/setup --skip-server`), `Style: Ruby` (`bin/rubocop`), `Style: JavaScript` (`bun run lint-check`), `Tests: Rails` (`bin/rails test`), `Tests: Seeds` (`env RAILS_ENV=test bin/rails db:seed:replant`). System tests are commented out. Signoff via `gh signoff` is also commented out.
+- `Action` model extends `ActiveRecord::Base` directly (not `ApplicationRecord`), uses polymorphic `target`/`user` with `optional: true`, and has `after_create :notify_target` + `before_destroy :destroy_notifications`. The `after_create` callback fires on `Action.create!` and can recursively deliver notifiers — wrap in `skip_callback`/`set_callback` for notifier tests.
 - `config/routes.rb` includes a domain redirect for `prsdigg.com|bunshow.jp` → `https://quill.im/$path` at the top. This was added as part of the prsdigg → quill rebrand; preserve when refactoring routes.
