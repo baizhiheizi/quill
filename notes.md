@@ -31,15 +31,18 @@
 - **Env note**: must `unset CI` first (see Performance Notes)
 
 ## Performance Opportunities Backlog
-1. **[DONE] `has_unread_notification?` / `unread_notifications_count` hot path** — SQL `exists?` / `count` on `notifications.unread.for_web`. Removes per-page-render Ruby scan that loaded every unread row for `select(&:visible_in_web?)`. Trade-off: badge no longer reproduces the per-recipient `visible_in_web?` predicate (notification_setting mutes and block_user guards) — overcounts slightly. PR opened 2026-06-19 on `perf-assist/has-unread-notification-exists-d00934bea7028f34`.
-2. **[POTENTIAL] Admin::UsersController `bought_articles_count` / `author_revenue_total_usd` / `payment_total_usd`** - These still hit the DB per user (joins + sum). ~3 queries per user × 24 per page ≈ 72 queries/page. Counter-cache won't help (through-associations and sums). Could be a `User.with_aggregates` scope or batched query. The same methods are also used by `app/views/dashboard/home/index.html.erb` (current_user).
+1. **[DONE] `has_unread_notification?` / `unread_notifications_count` hot path** — SQL `exists?` / `count` on `notifications.unread.for_web`. PR #1695 — **MERGED 2026-06-19**.
+2. **[DONE] Admin::UsersController `bought_articles_count` / `author_revenue_total_usd` / `payment_total_usd`** — Added `preload_user_aggregates(users)` private helper that runs 3 batched GROUP BY queries and primes the per-user memoization ivars. 72 → 3 queries per admin user list page (96% reduction). Aggregation semantics preserved; no model changes; no counter caches. Draft PR opened 2026-06-20 on `perf-assist/admin-user-aggregates-batch-20260620-104507`.
 3. **[LOW] `author_revenue_usd` / `reader_revenue_usd` (single-article, dashboard)** - Ruby-side sum with `includes(:currency)`. Memoized with `@author_revenue_usd ||= ...`. Used in `app/views/dashboard/articles/show.html.erb`. Single-article, very low impact.
+4. **[LOW] `Admin::UsersController#show` single-user aggregates** — same three methods called once on `@user` (3 queries, single round-trip each). Not worth batching; admin show page is low-traffic.
+5. **[NEW] `Admin::UsersController` paging over large user counts** — current page size is implicit (`pagy(:countless, users)`); verify default and consider whether a `pagy(:offset, users)` (vs `:countless`) is needed for very large `users` tables. (Observation only, no action planned.)
 
 ## Work in Progress
-- (none — `has_unread_notification?` SQL refactor PR is the current open item; user counter caches WIP from 2026-06-18 was never pushed because the branch was committed locally but `safeoutputs create_pull_request` push step was skipped. Re-checking on a future run is optional.)
+- (none — admin user-list aggregate preloader PR is the current open item)
 
 ## Completed Work
-- PR (unread notification badge) on `perf-assist/has-unread-notification-exists-d00934bea7028f34` — PR opened 2026-06-19
+- PR (admin user-list aggregate preloader) on `perf-assist/admin-user-aggregates-batch-20260620-104507` — Draft PR opened 2026-06-20
+- PR #1695 (unread notification SQL EXISTS) — **MERGED 2026-06-19**
 - PR #1678 (Tag.hot count fix) — **MERGED 2026-06-17**
 - PR #1634 (Users::Scopable LEFT JOINs) — **MERGED 2026-06-14**
 - Monthly Activity issue #1513 `[perf-improver] Monthly Activity 2026-06` last updated 2026-06-14
@@ -52,6 +55,10 @@
 
 ## Performance Notes
 - **Env quirk**: this gh-aw workflow sets `CI=true`, making `config.eager_load = true` in `config/environments/test.rb`. Eager load hits `app/libs/arweave_bot/graphql.rb` (HTTP 403 to `arweave.net`). Workaround: **`unset CI` before any `bin/rails test` / `bin/benchmark`.
+- **Memoization short-circuits `||=` in measurement scripts**: when measuring per-user queries in `bin/rails runner`, the instance variables persist across loop iterations in the same Ruby process. To simulate per-request behaviour, reload user instances inside the loop (`users = User.all.to_a` per iteration).
+- **`Order` test fixture complexity**: `Order#setup_attributes` requires a `payment` association, so `Order.create!` in tests needs either a real Payment or an `insert_all` with raw column values. `insert_all` is the cleanest path for benchmark/data-loading tests that don't exercise the Order lifecycle.
+- **`User#short_uid` view-time contract**: `app/views/admin/users/_field.html.erb` calls `messenger?` → `authorization.provider`. The `blocked_reader` fixture has no authorization, so rendering the admin user list in tests raises `undefined method 'provider' for nil`. Use direct controller tests (skip full view render) or filter `@users` to authorized-only records.
+- **`Admin::BaseController` auth gate is `current_admin.blank?` only** — no password check at the controller layer. Setting `@request.session[:current_admin_id] = administrators(:one).id` is sufficient to bypass auth in `ActionController::TestCase`.
 - **Bug discovered & merged**: `Article.order_by_popularity` used `joins(:orders)` (INNER JOIN); articles with no orders were excluded from default feed. Fixed in PR #1539.
 - **Bug discovered & merged**: `Users::Scopable` order_by_revenue_total / orders_total / articles_count / comments_count used `joins(...)` (INNER JOIN); users with no matching rows were excluded from the admin user list. Fixed in PR #1634.
 - **Bug discovered & merged**: `Tag.hot` scope `select("COUNT(articles.id) AS lately_article_count")` was unused outside the scope but broke `Tag.hot.count` (PG::SyntaxError). Fixed in PR #1678.
@@ -71,7 +78,8 @@
 - **`has_unread_notification?` trade-off decision**: SQL `exists?` on `for_web` overcounts when the user has muted the notification type via `notification_setting` or has blocked the source. The exact visible-only set is still computed on the notifications index page where one-shot Ruby work is appropriate. Rejected alternatives: (a) counter cache on `users.unread_web_notifications_count` maintained by callbacks — staleness on setting toggles, complex backfill; (b) denormalized `noticed_notifications.web_visible` boolean — same staleness on setting toggles; (c) SQL-push the `visible_in_web?` predicate — predicates are Ruby methods reading `notification_setting` and `block_user?`, would need a large new join/case expression and the predicate doesn't belong on the notification record.
 
 ## Run History (recent)
-- **2026-06-19 12:30 UTC** - [Run](https://github.com/baizhiheizi/quill/actions/runs/27825037181) - Replaced `has_unread_notification?` and `unread_notifications_count` Ruby scan with SQL `exists?` / `count` on `notifications.unread.for_web`. PR opened on `perf-assist/has-unread-notification-exists-d00934bea7028f34`. Tests 5/5 new in statable_test.rb; 237/237 model+notifier, 0 regressions. Rubocop/zeitwerk clean.
+- **2026-06-20 10:45 UTC** - [Run](https://github.com/baizhiheizi/quill/actions/runs/27868593597) - Added `Admin::UsersController#preload_user_aggregates` to batch 3 GROUP BY queries and prime the per-user memoization ivars in `Users::Statable`. Draft PR opened on `perf-assist/admin-user-aggregates-batch-20260620-104507`. 72 → 3 queries per admin user-list page (96% reduction). Tests 3/3 new, 5/5 statable, 0 regressions. Rubocop/zeitwerk clean.
+- **2026-06-19 12:30 UTC** - [Run](https://github.com/baizhiheizi/quill/actions/runs/27825037181) - Replaced `has_unread_notification?` and `unread_notifications_count` Ruby scan with SQL `exists?` / `count` on `notifications.unread.for_web`. PR #1695 — **MERGED 2026-06-19**. Tests 5/5 new in statable_test.rb; 237/237 model+notifier, 0 regressions. Rubocop/zeitwerk clean.
 - **2026-06-18 18:30 UTC** - [Run](https://github.com/baizhiheizi/quill/actions/runs/27757618658) - Added `users.articles_count` / `users.comments_count` counter-cache columns with backfill. `Article#belongs_to :author, counter_cache: true` and `Comment#belongs_to :author, counter_cache: true` maintain them. `Users::Scopable#order_by_articles_count` / `#order_by_comments_count` reduced from `LEFT JOIN + GROUP BY + COUNT` to `ORDER BY column DESC, id ASC`. `Users::Statable#articles_count` / `#comments_count` read the column (O(1)). Tests 159/323, 0 failures. PR open on `perf-assist/user-counter-caches-d00934bea7028f34`.
 - **2026-06-17 14:21 UTC** - [Run](https://github.com/baizhiheizi/quill/actions/runs/27688558877) - Fixed `Tag.hot.count` PG::SyntaxError by dropping unused select alias. PR #1678 (merged 2026-06-17). Tests 12/23, 0 failures.
 - **2026-06-14 03:39 UTC** - [Run](https://github.com/baizhiheizi/quill/actions/runs/27464306984) - `Users::Scopable` to LEFT JOIN + COALESCE for SUM. PR #1634 (merged 2026-06-14). Tests 15/43, 0 failures.
@@ -83,7 +91,7 @@
 - **2026-06-01 08:31 UTC** - [Run](https://github.com/baizhiheizi/quill/actions/runs/26739902209) - Created Monthly Activity issue
 
 ## Backlog Cursor
-- `has_unread_notification?` / `unread_notifications_count` — ✅ PR OPEN (SQL exists?/count refactor)
-- `users.articles_count` / `users.comments_count` counter cache — WIP local commit, never pushed (was on a stale `perf-assist/user-counter-caches-d00934bea7028f34` branch that didn't make it to a PR)
-- `author_revenue_usd` / `reader_revenue_usd` / `payment_total_usd` denormalization for admin user list (72 queries/page) — NEXT
-- **Next**: denormalize `users.payment_total_usd_cents` / `author_revenue_total_usd_cents` (denormalized counter) to eliminate the per-user sum in `app/views/admin/users/_user.html.erb` (24 × 3 = 72 queries/page).
+- `has_unread_notification?` / `unread_notifications_count` — ✅ **MERGED** as PR #1695
+- `Admin::UsersController#preload_user_aggregates` — ✅ **DRAFT PR** on `perf-assist/admin-user-aggregates-batch-20260620-104507` (72 → 3 queries/page, 96% reduction)
+- `author_revenue_usd` / `reader_revenue_usd` (single-article, dashboard) — LOW priority, not yet measured
+- **Next**: comment on the open draft PR if any review feedback arrives; otherwise pivot to the next round-robin task (likely another scoped optimization or measurement infrastructure).
