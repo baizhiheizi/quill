@@ -10,6 +10,12 @@ export default class extends Controller {
     session: String,
   };
 
+  // Each entry maps a provider event name to the bound handler. Handlers are
+  // registered once and removed in `disconnect()`; Stimulus reconnects this
+  // controller on every Turbo navigation, so without cleanup the singleton
+  // wallet provider accumulates stale listeners that all fire on each event.
+  boundHandlers = new Map();
+
   async providerValueChanged() {
     if (!this.providerValue) return;
 
@@ -18,27 +24,17 @@ export default class extends Controller {
 
     const provider = Wallet.web3.currentProvider;
 
-    // Bind handlers once and keep a reference so disconnect() can remove
-    // them. Stimulus reconnects this controller on every Turbo navigation;
-    // without cleanup the singleton wallet provider accumulates stale
-    // listeners that all fire on each chain/disconnect event.
-    if (!this.boundChainChanged) {
-      this.boundChainChanged = (chainId) => {
-        console.warn(`Chain changed to ${parseInt(chainId)}`);
-        notify(`Network changed to ${parseInt(chainId)}`);
-      };
-      provider.on("chainChanged", this.boundChainChanged);
-    }
+    this.bindWalletListener("chainChanged", provider, (chainId) => {
+      console.warn(`Chain changed to ${parseInt(chainId)}`);
+      notify(`Network changed to ${parseInt(chainId)}`);
+    });
 
-    if (!this.boundDisconnect) {
-      this.boundDisconnect = () => {
-        if (Wallet.provider === "MetaMask") return;
+    this.bindWalletListener("disconnect", provider, () => {
+      if (Wallet.provider === "MetaMask") return;
 
-        console.warn("Disconnect");
-        Turbo.visit("/logout");
-      };
-      provider.on("disconnect", this.boundDisconnect);
-    }
+      console.warn("Disconnect");
+      Turbo.visit("/logout");
+    });
   }
 
   async addressValueChanged() {
@@ -49,32 +45,31 @@ export default class extends Controller {
 
     const provider = Wallet.web3.currentProvider;
 
-    if (!this.boundAccountsChanged) {
-      this.boundAccountsChanged = (accounts) => {
-        notify("Account changed");
+    this.bindWalletListener("accountsChanged", provider, (accounts) => {
+      notify("Account changed");
 
-        if (accounts[0].toLowerCase() !== this.addressValue.toLowerCase()) {
-          this.destroy();
-          Turbo.visit("/logout");
-        }
-      };
-      provider.on("accountsChanged", this.boundAccountsChanged);
-    }
+      if (accounts[0].toLowerCase() !== this.addressValue.toLowerCase()) {
+        this.destroy();
+        Turbo.visit("/logout");
+      }
+    });
   }
 
   disconnect() {
     const provider = window.Wallet?.web3?.currentProvider;
     if (!provider?.removeListener) return;
 
-    if (this.boundChainChanged) {
-      provider.removeListener("chainChanged", this.boundChainChanged);
+    for (const [event, handler] of this.boundHandlers) {
+      provider.removeListener(event, handler);
     }
-    if (this.boundDisconnect) {
-      provider.removeListener("disconnect", this.boundDisconnect);
-    }
-    if (this.boundAccountsChanged) {
-      provider.removeListener("accountsChanged", this.boundAccountsChanged);
-    }
+    this.boundHandlers.clear();
+  }
+
+  bindWalletListener(event, provider, handler) {
+    if (this.boundHandlers.has(event)) return;
+
+    this.boundHandlers.set(event, handler);
+    provider.on(event, handler);
   }
 
   async initWallet() {
