@@ -18,11 +18,10 @@ export default class extends Controller {
             const video = this.videoTplTarget;
             video.src = URL.createObjectURL(file);
             video.classList.remove("hidden");
-            video.dataset["controller"] = "player";
             video.setAttribute("controls", true);
             this.outputTarget.replaceChildren(video);
           } else {
-            this.outputTarget.innerHTML = `<video class="w-full" data-controller="player" data-player-target="media" src=${URL.createObjectURL(
+            this.outputTarget.innerHTML = `<video class="w-full" src=${URL.createObjectURL(
               file,
             )} controls></video>`;
           }
@@ -32,11 +31,10 @@ export default class extends Controller {
             const audio = this.audioTplTarget;
             audio.src = URL.createObjectURL(file);
             audio.classList.remove("hidden");
-            audio.dataset["controller"] = "player";
             audio.setAttribute("controls", true);
             this.outputTarget.replaceChildren(audio);
           } else {
-            this.outputTarget.innerHTML = `<video class="w-full" data-controller="player" data-player-target="media" src=${URL.createObjectURL(
+            this.outputTarget.innerHTML = `<video class="w-full" src=${URL.createObjectURL(
               file,
             )} controls></video>`;
           }
