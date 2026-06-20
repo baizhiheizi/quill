@@ -150,7 +150,7 @@ class User < ApplicationRecord
   end
 
   def self.default_avatar_url
-    ActionController::Base.helpers.asset_url(Settings.icon_file || "icon.png")
+    ActionController::Base.helpers.asset_url(Settings.icon_file)
   end
 
   def prepare

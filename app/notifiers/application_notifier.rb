@@ -12,7 +12,7 @@ class ApplicationNotifier < Noticed::Event
     config.if = -> { visible_in_web? && message.present? }
   end
 
-  QUILL_ICON_URL = ActionController::Base.helpers.asset_path(Settings.icon_file || "icon.png")
+  QUILL_ICON_URL = ActionController::Base.helpers.asset_path(Settings.icon_file)
 
   notification_methods do
     def format_for_action_cable

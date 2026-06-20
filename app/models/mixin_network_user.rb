@@ -27,7 +27,7 @@
 #
 
 class MixinNetworkUser < ApplicationRecord
-  DEFAULT_AVATAR_FILE = Rails.application.root.join("app/assets/images/#{Settings.icon_file || 'icon.png'}")
+  DEFAULT_AVATAR_FILE = Rails.application.root.join("app/assets/images/#{Settings.icon_file}")
 
   belongs_to :owner, optional: true, inverse_of: false, polymorphic: true
   has_many :snapshots, class_name: "MixinNetworkSnapshot", foreign_key: :user_id, primary_key: :uuid, dependent: :nullify, inverse_of: :wallet
