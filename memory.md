@@ -9,39 +9,30 @@ metadata:
 
 ## Current state
 
-- **Run of repo-assist workflow on 2026-06-20 12:09 UTC (run 27870715573).**
+- **Run of repo-assist workflow on 2026-06-21 16:58 UTC (run 27911156543).**
 - Repo is baizhiheizi/quill (Rails 8.1, Ruby 4.0.5).
 - AGENTS.md exists; read before any code PR.
-- **All prior PRs from earlier runs are merged**: PRs #1682, #1684, #1689, #1690, #1691, #1692, #1693, #1695, #1696, #1698, #1699, #1700, #1701, #1702, #1703, #1704.
-- **Open PRs at run start**: #1705 ([repo-assist] drop icon_file fallback in 5 call sites — draft, GitGuardian passed, no real conflicts), #1706 ([code-simplifier] session controller refactor), #1707 ([test-improver] SwapOrderSwappingNotifier), #1708 ([perf-improver] admin user-aggregates batch).
-- **New PR from this run**: `repo-assist/remove-dead-player-controller-refs` (commit `0140ad72`). Patch: `/tmp/gh-aw/aw-repo-assist-remove-dead-player-controller-refs.patch` (2666 bytes, 54 lines). Bundle: `/tmp/gh-aw/aw-repo-assist-remove-dead-player-controller-refs.bundle` (1097 bytes).
+- **All prior PRs from earlier runs are merged**: PRs #1682, #1684, #1689, #1690, #1691, #1692, #1693, #1695, #1696, #1698, #1699, #1700, #1701, #1702, #1703, #1704, #1705, #1707, #1708, #1709, #1710.
+- **Open PRs at run start**: none.
+- **New PR from this run**: `repo-assist/fix-preview-upload-audio-fallback` (commit `25b7d974`). Patch: `/tmp/gh-aw/aw-repo-assist-fix-preview-upload-audio-fallback.patch` (1799 bytes, 44 lines). Bundle: `/tmp/gh-aw/aw-repo-assist-fix-preview-upload-audio-fallback.bundle` (1130 bytes).
 
-## Selected tasks for this run (2026-06-20, run 27870715573)
+## Selected tasks for this run (2026-06-21, run 27911156543)
 
-- **Task 3 (Issue Investigation and Fix)** — not applicable. No `bug`/`help wanted`/`good first issue` issues; latent `Currency#store :raw` JSONB bug still deferred per maintainer signal. Substituted to Task 2.
-- **Task 2 (Issue Investigation and Comment)** — not applicable. All 8 open issues are auto-generated. Substituted to Task 1.
-- **Task 1 (Issue Labelling)** — not applicable. 0 unlabelled at run start. Substituted to Task 2, also not applicable.
-- **Task 4 (Engineering Investments)** — not applicable. Dependabot queue is clean (nokogiri 1.19.4, faraday 2.14.3, mini_racer 0.21.3, kamal 2.12.0 all recently bumped). Specialized `efficiency-improver`/`perf-improver`/`test-improver`/`repository-quality-improver` workflows own the natural work. #1686 / #1694 are maintainer-led design discussions, out of scope.
-- **Task 8 (Performance Improvements)** — not applicable. Perf-improver opened PR #1708 (`[perf-improver] perf(admin): batch user-list aggregate preloader`) the same morning, covering the main hot path (72 → 3 queries on admin user index).
-- **Task 5 (Coding Improvements)** — found a clearly beneficial, low-risk fix: 4 dead `data-controller="player"` / `data-player-target="media"` attribute references in `app/javascript/controllers/preview_upload_controller.js`. No `player_controller.js` exists, no `player` registration in the Stimulus manifest. Same class of fix as PR #1684. **PR opened** (`repo-assist/remove-dead-player-controller-refs`, commit `0140ad72`, 1 file, 2+/4-).
-- **Task 11 (Update Monthly Activity Summary)** — posted run entry on issue #1564 via `safeoutputs add_comment` (temporary_id `aw_run_27870715`).
+- **Task 5 (Coding Improvements)** — found a clearly beneficial, low-risk fix: pre-existing audio-fallback bug in `app/javascript/controllers/preview_upload_controller.js` line 37. The `case "audio":` branch's `innerHTML` fallback emitted a `<video>` element (copy-paste from the branch above). Switched to `<audio>`, matching the matched-target path and case label. Same class of fix as PR #1709. **PR opened** (`repo-assist/fix-preview-upload-audio-fallback`, commit `25b7d974`, 1 file, 2+/2-).
+- **Task 9 (Testing Improvements)** — not applicable. 3 notifiers (`collection_listed`, `payment_refunded`, `swap_order_finished`) still lack dedicated tests. `test-improver` is the natural owner (issue #1517 last updated 2026-06-21) and runs frequently. Deferring to avoid duplicating its work.
+- **Task 4 (Engineering Investments)** — not applicable. Dependabot queue is clean (nokogiri 1.19.4, faraday 2.14.3, mini_racer 0.21.3, kamal 2.12.0 all recently bumped). Specialized `efficiency-improver`/`perf-improver`/`repository-quality-improver` workflows own the natural engineering work.
+- **Task 11 (Update Monthly Activity Summary)** — posted run entry on issue #1564 via `safeoutputs add_comment` (temporary_id `aw_zKWdT2bz`).
 
-## Completed this run (run 27870715573)
+## Completed this run (run 27911156543)
 
-- Posted run entry on issue #1564 via `safeoutputs add_comment` (temporary_id `aw_run_27870715`).
-- Opened draft PR `repo-assist/remove-dead-player-controller-refs` (commit `0140ad72`) for the dead `data-controller="player"` cleanup.
+- Posted run entry on issue #1564 via `safeoutputs add_comment` (temporary_id `aw_zKWdT2bz`).
+- Opened draft PR `repo-assist/fix-preview-upload-audio-fallback` (commit `25b7d974`) for the audio-fallback `<video>` → `<audio>` fix.
 
-## Selected tasks for prior run (2026-06-20 08:42 UTC, run 27865639436)
+## Selected tasks for prior run (2026-06-20, run 27870715573)
 
-- **Task 2 (Issue Investigation and Comment)** — not applicable. All 8 open issues are auto-generated by github-actions[bot]; no human engagement possible.
-- **Task 3 (Issue Investigation and Fix)** — not applicable. No `bug`/`help wanted`/`good first issue` issues. Latent `Currency#store :raw` JSONB bug still untouched per maintainer signal; not re-attempting.
-- **Task 1 (Issue Labelling)** — not applicable. 0 unlabelled at run start. Substituted to Task 2, also not applicable.
-- **Task 11 (Update Monthly Activity Summary)** — posted run entry on issue #1564 via `safeoutputs add_comment` (temporary_id `aw_run_27865639`).
-- **PR verification (ad-hoc)** — verified PR #1705 is clean: GitGuardian check passed; `git merge-tree origin/main origin/repo-assist/drop-icon-file-fallbacks-6e6c8ea5e899305c` reports "merged" (no real conflicts). GitHub "unstable" mergeable state is transient for draft PRs until full CI runs.
-
-## Selected tasks for prior run (2026-06-20 04:46 UTC, run 27860447234)
-
-- **Task 5** — removed dead `|| "icon.png"` fallback at all 5 `Settings.icon_file` consumers (User#default_avatar_url, MixinNetworkUser::DEFAULT_AVATAR_FILE, ApplicationNotifier::QUILL_ICON_URL, og:image, @page_image). Branch `repo-assist/drop-icon-file-fallbacks` (commit 76294846). **PR #1705 still open, GitGuardian passed, no conflicts.**
+- **Task 5 (Coding Improvements)** — 4 dead `data-controller="player"` / `data-player-target="media"` references in `preview_upload_controller.js`. **PR opened** (`repo-assist/remove-dead-player-controller-refs`, commit `0140ad72`). **Merged as PR #1709.**
+- Other tasks not applicable: 8 open issues all auto-generated, 0 unlabelled, Dependabot queue clean, perf-improver own work, latent `Currency` JSONB bug deferred per maintainer signal.
+- Posted run entry on issue #1564 (temporary_id `aw_run_27870715`).
 
 ## Selected tasks for prior run (2026-06-19 22:00 UTC, run 27849427694)
 
@@ -49,20 +40,14 @@ metadata:
 - **Task 6** — verified open Repo Assist PRs clean.
 - **Task 9** — 8 tests for `SubscribeUserActionCreatedNotifier` (PR #1701, merged).
 
-## Open issue landscape (8 open at run start, all auto-generated)
+## Open issue landscape (6 open at run start, all auto-generated)
 
-- #1694 (Webhook, Callback & Payment-Replay Integrity, 2026-06-19) — 5 auth/Web3 tasks; maintainer-led design discussion needed.
-- #1686 (Authorization Boundary Hygiene deep dive, 2026-06-18) — maintainer-led design discussion needed.
 - #1636 ([aw] Detection Runs), #1567 ([aw] No-Op Runs), #1564 ([repo-assist] Monthly Activity 2026-06), #1561 ([efficiency-improver] Monthly Activity 2026-06), #1517 ([test-improver] Monthly Activity 2026-06), #1513 ([perf-improver] Monthly Activity 2026-06)
 - **No human-submitted issues to engage on.**
 
 ## Open PRs
 
-- **#1705** (`[repo-assist] drop dead icon_file fallback in 5 call sites`) — draft, branch `repo-assist/drop-icon-file-fallbacks-6e6c8ea5e899305c`, commit `d9f70b5c`. 5 files, 5+/5-. GitGuardian ✅. No merge conflicts.
-- **#1706** (`[code-simplifier] session controller refactor`) — draft, code-simplifier workflow.
-- **#1707** (`[test-improver] SwapOrderSwappingNotifier`) — draft, test-improver workflow.
-- **#1708** (`[perf-improver] admin user-aggregates batch`) — draft, perf-improver workflow.
-- **NEW this run**: `repo-assist/remove-dead-player-controller-refs` (commit `0140ad72`) — drops 4 dead `data-controller="player"` / `data-player-target="media"` attribute references. Patch: `/tmp/gh-aw/aw-repo-assist-remove-dead-player-controller-refs.patch` (2666 B, 54 lines). Bundle: `/tmp/gh-aw/aw-repo-assist-remove-dead-player-controller-refs.bundle` (1097 B). PR number assigned by workflow runner.
+- **NEW this run**: `repo-assist/fix-preview-upload-audio-fallback` (commit `25b7d974`) — switches the audio-fallback `innerHTML` from `<video>` to `<audio>`. Patch: `/tmp/gh-aw/aw-repo-assist-fix-preview-upload-audio-fallback.patch` (1799 B, 44 lines). Bundle: `/tmp/gh-aw/aw-repo-assist-fix-preview-upload-audio-fallback.bundle` (1130 B). PR number assigned by workflow runner.
 
 ## Backlog / future work
 
@@ -74,7 +59,7 @@ metadata:
 - The natural notifier-testing / efficiency / perf work is handled by other workflows (test-improver, efficiency-improver, perf-improver) at higher fidelity than repo-assist can match.
 - #1667 + #1686 (Authorization Boundary Hygiene) and #1694 (Webhook/Callback/Payment-Replay Integrity) describe maintainer-led design discussions; out of scope for unilateral repo-assist PRs.
 - 858b5779 production Solid Cache/Cable/Queue SQLite migration opens up future work to verify there's no SQLITE_BUSY contention with multi-container Kamal deploys (maintainer-led).
-- **Pre-existing audio-fallback bug** in `preview_upload_controller.js` line 37: the audio-fallback `innerHTML` emits a `<video>` element instead of `<audio>`. Pre-dates the dead-controller cleanup; out of scope for the just-opened PR; flagged for future work.
+- **Pre-existing audio-fallback bug** in `preview_upload_controller.js` line 37: the audio-fallback `innerHTML` emitted a `<video>` element instead of `<audio>`. **Fixed in this run** by PR `repo-assist/fix-preview-upload-audio-fallback` (commit `25b7d974`).
 
 ## Notes
 
