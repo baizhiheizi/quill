@@ -20,9 +20,16 @@ export default class extends Controller {
   ];
 
   connect() {
-    document
-      .querySelector("#modal")
-      .addEventListener("modal-component:ok", (event) => {
+    const modal = document.querySelector("#modal");
+    if (!modal) return;
+
+    // Bind handler once and keep a reference so disconnect() can remove it.
+    // The `#modal` turbo frame is a long-lived singleton in the layout, and
+    // Stimulus reconnects this controller on every Turbo navigation. Without
+    // cleanup, the singleton accumulates stale listeners that all fire on
+    // each `modal-component:ok` event.
+    if (!this.boundModalOk) {
+      this.boundModalOk = (event) => {
         const identifier = event.detail.identifier;
 
         if (identifier === this.identifierValue) {
@@ -31,7 +38,19 @@ export default class extends Controller {
           this.currencyChainIconTarget.src = event.detail.chainIconUrl;
           this.currencySymbolTarget.innerText = event.detail.symbol;
         }
-      });
+      };
+      modal.addEventListener("modal-component:ok", this.boundModalOk);
+    }
+  }
+
+  disconnect() {
+    const modal = document.querySelector("#modal");
+    if (!modal?.removeEventListener) return;
+
+    if (this.boundModalOk) {
+      modal.removeEventListener("modal-component:ok", this.boundModalOk);
+      this.boundModalOk = null;
+    }
   }
 
   payAssetIdValueChanged() {

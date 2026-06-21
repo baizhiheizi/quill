@@ -59,34 +59,51 @@ export default class extends Controller {
     const modal = document.querySelector("#modal");
     if (!modal) return;
 
-    modal.addEventListener("modal-component:ok", (event) => {
-      const identifier = event.detail.identifier;
+    // Bind handler once and keep a reference so disconnect() can remove it.
+    // The `#modal` turbo frame is a long-lived singleton in the layout, and
+    // Stimulus reconnects this controller on every Turbo navigation. Without
+    // cleanup, the singleton accumulates stale listeners that all fire on
+    // each `modal-component:ok` event — and the article-form controller is
+    // expensive to re-fire (it mutates 4 DOM targets, sets a value, and
+    // toggles the `dirty` flag, which itself toggles a `turbo:before-visit`
+    // listener in `dirtyValueChanged`).
+    if (!this.boundModalOk) {
+      this.boundModalOk = (event) => {
+        const identifier = event.detail.identifier;
 
-      if (identifier !== this.articleUuidValue) return;
-      if (
-        !this.hasCurrencyIconTarget ||
-        !this.hasCurrencyChainIconTarget ||
-        !this.hasCurrencySymbolTarget
-      ) {
-        return;
-      }
+        if (identifier !== this.articleUuidValue) return;
+        if (
+          !this.hasCurrencyIconTarget ||
+          !this.hasCurrencyChainIconTarget ||
+          !this.hasCurrencySymbolTarget
+        ) {
+          return;
+        }
 
-      const assetSelect = this.element.querySelector("#article_asset_id");
-      if (assetSelect) {
-        Array.from(assetSelect.children).forEach((option) => {
-          option.selected = option.value === event.detail.assetId;
-        });
-      }
+        const assetSelect = this.element.querySelector("#article_asset_id");
+        if (assetSelect) {
+          Array.from(assetSelect.children).forEach((option) => {
+            option.selected = option.value === event.detail.assetId;
+          });
+        }
 
-      this.currencyIconTarget.src = event.detail.iconUrl;
-      this.currencyChainIconTarget.src = event.detail.chainIconUrl;
-      this.currencySymbolTarget.innerText = event.detail.symbol;
-      this.currencyPriceUsdValue = event.detail.priceUsd;
-      this.touchDirty();
-    });
+        this.currencyIconTarget.src = event.detail.iconUrl;
+        this.currencyChainIconTarget.src = event.detail.chainIconUrl;
+        this.currencySymbolTarget.innerText = event.detail.symbol;
+        this.currencyPriceUsdValue = event.detail.priceUsd;
+        this.touchDirty();
+      };
+      modal.addEventListener("modal-component:ok", this.boundModalOk);
+    }
   }
 
   disconnect() {
+    const modal = document.querySelector("#modal");
+    if (modal?.removeEventListener && this.boundModalOk) {
+      modal.removeEventListener("modal-component:ok", this.boundModalOk);
+      this.boundModalOk = null;
+    }
+
     document.removeEventListener("turbo:before-visit", this.confirmLeaving);
   }
 
