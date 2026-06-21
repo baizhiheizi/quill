@@ -191,19 +191,25 @@ class SwapOrderSwappingNotifierTest < ActiveSupport::TestCase
       trace_id: SecureRandom.uuid
     )
 
+    had_api = false
+    original_api = nil
+
     # Stub PandoLake to avoid the after_create call to fswap_mtg_memo.
-    original_api = PandoLake.instance_variable_get(:@api)
-    PandoLake.define_singleton_method(:api) do
-      api = Object.new
-      api.define_singleton_method(:actions) { |**| { "data" => { "action" => "test_memo" } } }
-      api
-    end
+    stub_api = Object.new
+    stub_api.define_singleton_method(:actions) { |**| { "data" => { "action" => "test_memo" } } }
+
+    had_api = PandoLake.instance_variable_defined?(:@api)
+    original_api = PandoLake.instance_variable_get(:@api) if had_api
+    PandoLake.instance_variable_set(:@api, stub_api)
 
     swap.save!
     swap
   ensure
-    PandoLake.remove_instance_variable(:@api) if PandoLake.instance_variable_defined?(:@api)
-    PandoLake.define_singleton_method(:api) { original_api } if original_api
+    if had_api
+      PandoLake.instance_variable_set(:@api, original_api)
+    elsif PandoLake.instance_variable_defined?(:@api)
+      PandoLake.remove_instance_variable(:@api)
+    end
   end
 
   def create_payment_for!(payer:, asset_id:)
