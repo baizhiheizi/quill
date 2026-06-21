@@ -9,36 +9,28 @@ metadata:
 
 ## Current state
 
-- **Run of repo-assist workflow on 2026-06-21 16:58 UTC (run 27911156543).**
+- **Run of repo-assist workflow on 2026-06-21 21:44 UTC (run 27918345901).**
 - Repo is baizhiheizi/quill (Rails 8.1, Ruby 4.0.5).
 - AGENTS.md exists; read before any code PR.
 - **All prior PRs from earlier runs are merged**: PRs #1682, #1684, #1689, #1690, #1691, #1692, #1693, #1695, #1696, #1698, #1699, #1700, #1701, #1702, #1703, #1704, #1705, #1707, #1708, #1709, #1710.
-- **Open PRs at run start**: none.
-- **New PR from this run**: `repo-assist/fix-preview-upload-audio-fallback` (commit `25b7d974`). Patch: `/tmp/gh-aw/aw-repo-assist-fix-preview-upload-audio-fallback.patch` (1799 bytes, 44 lines). Bundle: `/tmp/gh-aw/aw-repo-assist-fix-preview-upload-audio-fallback.bundle` (1130 bytes).
+- **Open PRs at run start**: #1711 (repo-assist audio-fallback fix), #1712 (docs unbloat).
 
-## Selected tasks for this run (2026-06-21, run 27911156543)
+## Selected tasks for this run (2026-06-21, run 27918345901)
 
-- **Task 5 (Coding Improvements)** — found a clearly beneficial, low-risk fix: pre-existing audio-fallback bug in `app/javascript/controllers/preview_upload_controller.js` line 37. The `case "audio":` branch's `innerHTML` fallback emitted a `<video>` element (copy-paste from the branch above). Switched to `<audio>`, matching the matched-target path and case label. Same class of fix as PR #1709. **PR opened** (`repo-assist/fix-preview-upload-audio-fallback`, commit `25b7d974`, 1 file, 2+/2-).
-- **Task 9 (Testing Improvements)** — not applicable. 3 notifiers (`collection_listed`, `payment_refunded`, `swap_order_finished`) still lack dedicated tests. `test-improver` is the natural owner (issue #1517 last updated 2026-06-21) and runs frequently. Deferring to avoid duplicating its work.
-- **Task 4 (Engineering Investments)** — not applicable. Dependabot queue is clean (nokogiri 1.19.4, faraday 2.14.3, mini_racer 0.21.3, kamal 2.12.0 all recently bumped). Specialized `efficiency-improver`/`perf-improver`/`repository-quality-improver` workflows own the natural engineering work.
-- **Task 11 (Update Monthly Activity Summary)** — posted run entry on issue #1564 via `safeoutputs add_comment` (temporary_id `aw_zKWdT2bz`).
+- **Task 5 (Coding Improvements)** — found `app/javascript/controllers/pre_orders_mixpay_button_component_controller.js` is a 7-line no-op stub (its `connect()` only does `console.log("Hello, Stimulus!", this.element)`) added during PR #1490's ViewComponent-to-partials migration to preserve the Stimulus identifier, but never filled in. The partial `app/views/pre_orders/_mixpay_button.html.erb` wraps content in a `<div data-controller="pre-orders-mixpay-button-component">` for no reason. **PR opened** (`repo-assist/drop-empty-mixpay-button-controller-2026-06-21`, commit `e016d06f`). 4 files, 14+/30-. Patch: `/tmp/gh-aw/aw-repo-assist-drop-empty-mixpay-button-controller-2026-06-21.patch` (6476 B, 133 lines). Bundle: `/tmp/gh-aw/aw-repo-assist-drop-empty-mixpay-button-controller-2026-06-21.bundle` (2033 B).
+- **Task 8 (Performance Improvements)** — not applicable. PR #1708 (perf-improver admin user aggregates batch preloader) and PR #1710 (efficiency-improver modal-listener cleanup) just merged. Specialized workflows own this work.
+- **Task 4 (Engineering Investments)** — not applicable. 0 open Dependabot PRs; `check.yml` uses current action versions; tooling current. Specialized workflows own this work.
+- **Task 11 (Update Monthly Activity Summary)** — posted run entry on issue #1564 via `safeoutputs add_comment` (temporary_id `aw_JxDFmo9s`). Removed stale Currency test PR #1682 line (merged 2026-06-17); added #1711, #1712, and the new PR from this run.
 
-## Completed this run (run 27911156543)
+## Completed this run (run 27918345901)
 
+- Opened draft PR `repo-assist/drop-empty-mixpay-button-controller-2026-06-21` (commit `e016d06f`) — drops the no-op `pre-orders-mixpay-button-component` Stimulus controller, its `<div data-controller="...">` wrapper, the `import`/`register` lines in `index.js`, and the catalog row in `docs/reference/stimulus-controllers.md`.
+- Posted run entry on issue #1564 via `safeoutputs add_comment` (temporary_id `aw_JxDFmo9s`).
+
+## Selected tasks for prior run (2026-06-21 16:58 UTC, run 27911156543)
+
+- **Task 5** — audio-fallback bug in `app/javascript/controllers/preview_upload_controller.js` line 37. The `case "audio":` branch's `innerHTML` fallback emitted a `<video>` element. Switched to `<audio>`. **PR opened** (`repo-assist/fix-preview-upload-audio-fallback`, commit `25b7d974`). **PR #1711.**
 - Posted run entry on issue #1564 via `safeoutputs add_comment` (temporary_id `aw_zKWdT2bz`).
-- Opened draft PR `repo-assist/fix-preview-upload-audio-fallback` (commit `25b7d974`) for the audio-fallback `<video>` → `<audio>` fix.
-
-## Selected tasks for prior run (2026-06-20, run 27870715573)
-
-- **Task 5 (Coding Improvements)** — 4 dead `data-controller="player"` / `data-player-target="media"` references in `preview_upload_controller.js`. **PR opened** (`repo-assist/remove-dead-player-controller-refs`, commit `0140ad72`). **Merged as PR #1709.**
-- Other tasks not applicable: 8 open issues all auto-generated, 0 unlabelled, Dependabot queue clean, perf-improver own work, latent `Currency` JSONB bug deferred per maintainer signal.
-- Posted run entry on issue #1564 (temporary_id `aw_run_27870715`).
-
-## Selected tasks for prior run (2026-06-19 22:00 UTC, run 27849427694)
-
-- **Task 5** — defined `Settings.icon_file` (PR #1700, merged).
-- **Task 6** — verified open Repo Assist PRs clean.
-- **Task 9** — 8 tests for `SubscribeUserActionCreatedNotifier` (PR #1701, merged).
 
 ## Open issue landscape (6 open at run start, all auto-generated)
 
@@ -47,34 +39,36 @@ metadata:
 
 ## Open PRs
 
-- **NEW this run**: `repo-assist/fix-preview-upload-audio-fallback` (commit `25b7d974`) — switches the audio-fallback `innerHTML` from `<video>` to `<audio>`. Patch: `/tmp/gh-aw/aw-repo-assist-fix-preview-upload-audio-fallback.patch` (1799 B, 44 lines). Bundle: `/tmp/gh-aw/aw-repo-assist-fix-preview-upload-audio-fallback.bundle` (1130 B). PR number assigned by workflow runner.
+- **NEW this run**: `repo-assist/drop-empty-mixpay-button-controller-2026-06-21` (commit `e016d06f`). PR number TBD by workflow runner.
+- **#1711** (open) — `repo-assist/fix-preview-upload-audio-fallback` (SHA `65dbc272`).
+- **#1712** (open) — `docs/unbloat-value-net-0e22b87e4c17f2f3`.
 
 ## Backlog / future work
 
 - Re-engage when human issues appear. Watch for first-time contributors; welcome them and point to README/CONTRIBUTING.
-- 3 notifiers in `app/notifiers/` still lack dedicated tests: `collection_listed`, `payment_refunded`, `swap_order_finished`. Test-improver is the natural owner; defer.
-- **Latent `Currency#store :raw` JSONB bug, confirmed reproducible in prior runs**: `currency.name` / `currency.icon_url` raise `TypeError: no implicit conversion of Hash into String` on freshly loaded records. The fix pattern (manual accessors) exists but the maintainer has not actioned prior attempts; not re-attempting.
-- **Settings inconsistency fully resolved**: dead `logo_file` / `favicon_file` removed from `config/settings/test.yml` (PR #1698); `Settings.icon_file` defined in `config/settings.yml` (PR #1700); dead `|| "icon.png"` fallbacks removed at all 5 call sites (PR #1705, still open).
+- 3 notifiers in `app/notifiers/` still lack dedicated tests: `collection_listed`, `payment_refunded`, `swap_order_finished`. Test-improver owns.
+- **Latent `Currency#store :raw` JSONB bug**: `currency.name` / `currency.icon_url` raise `TypeError: no implicit conversion of Hash into String`. Maintainer has not actioned prior attempts; not re-attempting.
+- **Settings inconsistency fully resolved** (PRs #1698, #1700, #1705).
 - Respect issue #1571's 5-cycle cooldown on payment/Web3 resilience work.
-- The natural notifier-testing / efficiency / perf work is handled by other workflows (test-improver, efficiency-improver, perf-improver) at higher fidelity than repo-assist can match.
-- #1667 + #1686 (Authorization Boundary Hygiene) and #1694 (Webhook/Callback/Payment-Replay Integrity) describe maintainer-led design discussions; out of scope for unilateral repo-assist PRs.
-- 858b5779 production Solid Cache/Cable/Queue SQLite migration opens up future work to verify there's no SQLITE_BUSY contention with multi-container Kamal deploys (maintainer-led).
-- **Pre-existing audio-fallback bug** in `preview_upload_controller.js` line 37: the audio-fallback `innerHTML` emitted a `<video>` element instead of `<audio>`. **Fixed in this run** by PR `repo-assist/fix-preview-upload-audio-fallback` (commit `25b7d974`).
+- Specialized workflows (test-improver, efficiency-improver, perf-improver) own the natural notifier-testing/efficiency/perf work.
+- #1667 + #1686 (Authorization Boundary Hygiene) and #1694 (Webhook/Callback/Payment-Replay Integrity) are maintainer-led design discussions; out of scope.
+- 858b5779 production Solid Cache/Cable/Queue SQLite migration opens up future work to verify there's no SQLITE_BUSY contention (maintainer-led).
+- **`modal-component` identifier is intentional**: `app/javascript/controllers/index.js:62` registers `FlyonuiModalController` under `modal-component` (not `flyonui-modal`). NOT dead.
 
 ## Notes
 
-- `gh aw compile` produces a `.patch` + `.bundle` artefact under `/tmp/gh-aw/`; PR finalised by workflow runner via `safeoutputs create_pull_request`. The actual PR number is assigned by the workflow runner, so PR-intent items reference branch + commit + patch path.
-- `update_issue` body size limit is 10 KB; queued body updates from `schedule` / `workflow_dispatch` are unreliable. Monthly Activity update is therefore being delivered via `add_comment` for reliability.
-- `bin/rubocop` and `bin/rails zeitwerk:check` run successfully locally. `bin/rubocop` does **not** lint ERB files (no `erb-lint`) or YAML files. When verifying changes touching only ERB/YAML, skip from rubocop invocation — CI uses the same config.
-- `ERB::Util.url_decode` does **not** exist in Rails 8.1; use `CGI.unescape` for round-tripping `ERB::Util.url_encode` output in tests.
-- `User#create_action` (from the `action-store` gem) returns a boolean, not the `Action` record. To get an Action instance in tests, instantiate `Action.create!(action_type:, user:, target:, user_type: "User", target_type: "User")` directly. `Action#after_create :notify_target` is the production hook; in notifier tests that re-deliver manually, wrap the `create!` in `Action.skip_callback :create, :after, :notify_target` … `Action.set_callback …` (with `ensure`) to avoid doubling every event/job count.
-- Noticed 3 with a `record: <model>` param fails with `NoMethodError: undefined method 'has_query_constraints?' for class TrueClass` if `record` is not a real ActiveRecord instance. Always pass an actual AR record.
-- `Settings.twitter_account` is configured in `config/settings/test.yml` as `prsdigg`; tests assert against this value (the `Config::Options` class does not support mocha's `.stubs`).
-- The `QuillBotStub#with_quill_bot_stub` helper in `test/support/quill_bot_stub.rb` provides a `FakeApi` with the standard `FAKE_CLIENT_ID` (`d4444444-4444-4444-8444-444444444444`).
-- Module-vs-class constant ownership: when a module is the sole consumer of a constant, prefer `module M; CONST = ...; end` over `module M; CONST = SomeIncluder::CONST; end`. The former keeps the dependency direction natural.
-- Stimulus controller dead-code detection must scan for both `data-controller="xxx"` and `data-controller='xxx'` (single quotes), the `controller: 'xxx'` Rails helper invocation, and JS assignments like `element.dataset["controller"] = "xxx"` — they set the same dead attribute programmatically and were missed by view-only grep scans in prior runs. Use `re.findall(r'data-controller=["\']([^"\']+)["\']', content)`.
-- The `bin/ci` script uses `ActiveSupport::ContinuousIntegration` with steps: `Setup`, `Style: Ruby` (rubocop), `Style: JavaScript` (bun lint-check), `Tests: Rails`, `Tests: Seeds`.
-- `Action` model extends `ActiveRecord::Base` directly (not `ApplicationRecord`), uses polymorphic `target`/`user` with `optional: true`, and has `after_create :notify_target` + `before_destroy :destroy_notifications`. Wrap in `skip_callback`/`set_callback` for notifier tests.
+- `gh aw compile` produces `.patch` + `.bundle` artefact under `/tmp/gh-aw/`; PR finalised by workflow runner via `safeoutputs create_pull_request`. The actual PR number is assigned by the workflow runner.
+- `update_issue` body size limit is 10 KB; queued body updates from `schedule`/`workflow_dispatch` are unreliable. Monthly Activity update via `add_comment`.
+- `bin/rubocop` and `bin/rails zeitwerk:check` run locally. RuboCop does NOT lint ERB (no `erb-lint`) or YAML. CI uses the same config.
+- `ERB::Util.url_decode` does not exist in Rails 8.1; use `CGI.unescape`.
+- `User#create_action` (from `action-store`) returns a boolean, not the `Action` record. To get an Action in tests: `Action.create!(action_type:, user:, target:, user_type: "User", target_type: "User")` directly. `Action#after_create :notify_target` is the production hook.
+- Noticed 3 with `record: <model>` fails with `NoMethodError: undefined method 'has_query_constraints?'` if `record` is not a real ActiveRecord instance.
+- `Settings.twitter_account` is `prsdigg` in `config/settings/test.yml`; tests assert against this value (the `Config::Options` class does not support mocha's `.stubs`).
+- `QuillBotStub#with_quill_bot_stub` provides a `FakeApi` with `FAKE_CLIENT_ID` (`d4444444-4444-4444-8444-444444444444`).
+- Stimulus dead-code detection: scan `data-controller="xxx"`, `data-controller='xxx'`, `controller: 'xxx'` Rails helper, and JS assignments like `element.dataset["controller"] = "xxx"`. Use `re.findall(r'data-controller=["\']([^"\']+)["\']', content)`. Cross-check the JS controllers directory — an identifier is "dead" only if (a) no view references it AND (b) the controller file does not exist. If the controller file exists but the identifier is mapped to a different (real) controller in `index.js`, the identifier is intentional.
+- "Empty controller stub" detection: a Stimulus controller with only a `connect()` that does `console.log(...)` and no other behaviour is a stub left from a migration. Check git log to confirm it was created during a structural migration and was never updated. Delete the controller, the wrapping div, the `import`/`register` lines, and the catalog row in `docs/reference/stimulus-controllers.md`.
+- `bin/ci` uses `ActiveSupport::ContinuousIntegration` with: `Setup`, `Style: Ruby` (rubocop), `Style: JavaScript` (bun lint-check), `Tests: Rails`, `Tests: Seeds`.
+- `Action` extends `ActiveRecord::Base` directly (not `ApplicationRecord`), uses polymorphic `target`/`user` with `optional: true`, and has `after_create :notify_target` + `before_destroy :destroy_notifications`.
 - `config/routes.rb` includes a domain redirect for `prsdigg.com|bunshow.jp` → `https://quill.im/$path` at the top; preserve when refactoring routes.
-- GitHub's "unstable" mergeable_state for draft PRs is often transient — full CI hasn't necessarily been run yet on draft PRs. Use `git merge-tree <merge-base> <main> <branch>` locally to confirm there are no real conflicts before treating it as a problem.
-- For JS-only changes, the local-toolchain equivalent of `bun run lint-check` is `node_modules/.bin/prettier --check app/javascript/<changed-file>`; `node esbuild.config.js` produces the same bundle CI builds (and prints one pre-existing `DEP0180` deprecation warning unrelated to changes).
+- For JS-only changes, the local-toolchain equivalent of `bun run lint-check` is `node_modules/.bin/prettier --check app/javascript/<changed-file>`; `node esbuild.config.js` produces the same bundle CI builds (one pre-existing `DEP0180` deprecation warning).
+- GitHub's "unstable" mergeable_state for draft PRs is often transient — use `git merge-tree <merge-base> <main> <branch>` locally to confirm there are no real conflicts.
