@@ -22,7 +22,7 @@
       <span class="text-sm opacity-60">
         ≈$<%= collection.price_usd %>
       </span>
-      <%= image_tag collection.currency.icon_url, class: "w-6 h-6 rounded-full" %>
+      <%= image_tag collection.currency.icon_url, class: "w-6 h-6 rounded-full", lazy: true %>
     </div>
   </div>
 
@@ -36,7 +36,7 @@
       </div>
     </div>
     <% if collection.cover.attached? %>
-      <%= image_tag collection.cover, class: "w-28 h-28 rounded object-center" %>
+      <%= image_tag collection.cover, class: "w-28 h-28 rounded object-center", lazy: true %>
     <% end %>
     <%= link_to '', collection_path(collection.uuid),
       data: {
