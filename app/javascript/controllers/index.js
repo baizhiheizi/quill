@@ -82,12 +82,6 @@ application.register(
   PreOrdersFormComponentController,
 );
 
-import PreOrdersMixpayButtonComponentController from "./pre_orders_mixpay_button_component_controller";
-application.register(
-  "pre-orders-mixpay-button-component",
-  PreOrdersMixpayButtonComponentController,
-);
-
 import PreOrdersPayButtonComponentController from "./pre_orders_pay_button_component_controller";
 application.register(
   "pre-orders-pay-button-component",
