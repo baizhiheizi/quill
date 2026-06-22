@@ -5,7 +5,7 @@
 
     <div class="flex-1 flex items-center py-4 border-b border-base-content/10 overflow-x-scroll scrollbar-hide">
       <div class="flex itemx-center space-x-2 truncate">
-        <%= image_tag notification.icon_url, class: "w-6 h-6 rounded-full" if notification.icon_url.present? %>
+        <%= image_tag notification.icon_url, class: "w-6 h-6 rounded-full", lazy: true if notification.icon_url.present? %>
         <%= link_to notification.message, 
           dashboard_notification_path(notification), 
           class: "truncate", 
