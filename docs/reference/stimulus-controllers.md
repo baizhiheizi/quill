@@ -39,7 +39,6 @@ Every controller registered in `app/javascript/controllers/index.js`, with its s
 | `nested-form` | [`nested_form_controller.js`](../../app/javascript/controllers/nested_form_controller.js) | Add/remove nested form rows |
 | `photoswipe` | [`photoswipe_controller.js`](../../app/javascript/controllers/photoswipe_controller.js) | PhotoSwipe gallery wiring |
 | `pre-orders-form-component` | [`pre_orders_form_component_controller.js`](../../app/javascript/controllers/pre_orders_form_component_controller.js) | Pre-order authoring form |
-| `pre-orders-mixpay-button-component` | [`pre_orders_mixpay_button_component_controller.js`](../../app/javascript/controllers/pre_orders_mixpay_button_component_controller.js) | MixPay button inside pre-order form |
 | `pre-orders-pay-button-component` | [`pre_orders_pay_button_component_controller.js`](../../app/javascript/controllers/pre_orders_pay_button_component_controller.js) | Generic "pay" button inside pre-order form |
 | `pre-orders-payment-component` | [`pre_orders_payment_component_controller.js`](../../app/javascript/controllers/pre_orders_payment_component_controller.js) | Pre-order payment summary panel |
 | `pre-orders-state-component` | [`pre_orders_state_component_controller.js`](../../app/javascript/controllers/pre_orders_state_component_controller.js) | Pre-order status pill |
