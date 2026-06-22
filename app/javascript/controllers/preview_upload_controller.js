@@ -34,9 +34,9 @@ export default class extends Controller {
             audio.setAttribute("controls", true);
             this.outputTarget.replaceChildren(audio);
           } else {
-            this.outputTarget.innerHTML = `<video class="w-full" src=${URL.createObjectURL(
+            this.outputTarget.innerHTML = `<audio class="w-full" src=${URL.createObjectURL(
               file,
-            )} controls></video>`;
+            )} controls></audio>`;
           }
           break;
         case "image":
