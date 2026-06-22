@@ -22,13 +22,14 @@
 
 ## efficiency notes
 
-- **Stimulus `disconnect()` listener leak pattern** (now confirmed across 7 controllers: `floating`, `prefetch`, `auto_hide`, `session`, and 3 modal-listener controllers — `article-form`, `mvm-deposit`, `pre-orders-payment-component`): any `addEventListener` / `setTimeout` / `.on(...)` in `connect()` whose target is global (document, window, singleton wallet, **or the long-lived `#modal` turbo frame**) must store the handle and clear it in `disconnect()`. Turbo frames are long-lived — only contents swap, not the element — so `document.querySelector("#modal").addEventListener(...)` is equivalent to `document.addEventListener(...)` from a leak standpoint.
-- **`#modal` singleton**: `turbo_frame_tag 'modal'` is present in every layout (`application`, `editor`, `homepage`, `admin`). Sweep `document.querySelector("#modal").addEventListener` calls in any controller's `connect()` for missing `disconnect()` cleanup.
+- **Stimulus `disconnect()` listener leak pattern** (now confirmed across 7 controllers): any `addEventListener` / `setTimeout` / `.on(...)` in `connect()` whose target is global (document, window, singleton wallet, **or the long-lived `#modal` turbo frame**) must store the handle and clear it in `disconnect()`. Turbo frames are long-lived — only contents swap, not the element — so `document.querySelector("#modal").addEventListener(...)` is equivalent to `document.addEventListener(...)` from a leak standpoint.
+- **`#modal` singleton**: `turbo_frame_tag 'modal'` is present in every layout. Sweep `document.querySelector("#modal").addEventListener` calls in any controller's `connect()` for missing `disconnect()` cleanup.
 - Old `debounce(classList.add(...),1000)` pattern was a no-op (`classList.add` returns undefined). Always wrap the function in `debounce(fn, ms)`, not its return value.
 - **`safeoutputs update_issue` body limit is 10 KB per call.** Trim by collapsing older Run History entries to one or two short bullet lines. Keep the most recent 1–2 runs in full prose.
 - `safeoutputs create_pull_request` actually creates the PR (intent is real, maintainer reviews/merges later). Patch file persists at `/tmp/gh-aw/aw-efficiency-*.patch`; query GitHub for the actual PR number.
 - `safeoutputs update_issue` rewrites the full monthly activity issue body in one call (`operation: "replace"`). Issue number + body work; everything else preserved.
-- **Lazy-loading sweep pattern** (now confirmed across 10 list/table partials): any `image_tag` that renders inside a repeating list row, table row, or notification stream should pass `lazy: true` (which Rails expands to `loading="lazy" decoding="async"`). Hero/LCP images (article cover_url in show view, brand logos in header) must stay eager. **Remaining non-lazy image_tags are all above-the-fold and intentional.**
+- **`safeoutputs push_repo_memory` total file size limit is 12 KB** (10 KB + 20% overhead). Trim older completed PRs into compact one-liners.
+- **Lazy-loading sweep pattern**: any `image_tag` inside a repeating list row, table row, or notification stream should pass `lazy: true` (Rails emits `loading="lazy" decoding="async"`). Hero/LCP must stay eager. Remaining non-lazy image_tags are all above-the-fold and intentional.
 - **`User#available_articles`** (`app/models/user.rb:168`): Ruby-side `(bought_articles.only_published.to_a + articles.only_published.or(...).to_a).uniq` materializes two AR relations to Ruby arrays before dedup. Could be `Article.published.where(...).union(...)`.
 - **`HomeController#hot_tags`**: 50 cached rows then `.sample(5)` in Ruby. Tiny impact; SQL `ORDER BY RANDOM() LIMIT 5` cleaner but small gain.
 - **`article_form_controller.js:403`** bug: `setTimeout(this.autosave(), 2000);` — calls debounced autosave immediately, then passes `undefined` to setTimeout. Retry never fires. Not a perf issue per se but a logic bug worth flagging.
@@ -36,58 +37,59 @@
 
 ## optimization backlog
 
-| Priority | Focus Area | Item |
-|----------|------------|------|
-| HIGH | Frontend / UI | ~~`floating_controller` scroll listener leak + broken debounce~~ Done (PR #1560, merged 2026-06-10) |
-| MEDIUM | Frontend / UI | ~~`prefetch_controller.js` mouseover listener leak~~ Done (PR #1576, merged 2026-06-11) |
-| MEDIUM | Frontend / UI | ~~`auto_refresh_controller.js` dead code~~ Done (PR #1627, merged 2026-06-14) |
-| LOW | Frontend / UI | ~~`textarea_autogrow_controller.js` dead code~~ Done (PR #1669, merged 2026-06-16) |
-| LOW | Frontend / UI | ~~`infinite_scroll_controller.js` observer leak + dedup~~ Done (PR #1632, merged 2026-06-14) |
-| LOW | Frontend / UI | ~~7 more dead controllers~~ Done (PR #1683, merged 2026-06-18) |
-| LOW | Frontend / UI | ~~`auto_hide_controller.js` setTimeout leak~~ Done (PR #1691 → #1693, merged 2026-06-19 by `an-lee`) |
-| LOW | Frontend / UI | ~~`session_controller.js` wallet listener leak~~ **DONE** (PR #1702, merged 2026-06-20 00:17:33 UTC by `an-lee`) |
-| LOW | Frontend / UI | ~~`#modal` listener leak in 3 controllers~~ **DONE** (PR #1710, merged 2026-06-21 by `an-lee`) |
-| MEDIUM | Frontend / UI | List-view `image_tag` calls without `loading="lazy"` — **PR opened 2026-06-21** (branch `efficiency/list-image-lazy-loading`, commit `a874b3d`). 16 images lazy-loaded across 10 partials. Patch at `/tmp/gh-aw/aw-efficiency-list-image-lazy-loading.patch` (12,258 B). |
-| LOW | Frontend / UI | No `prefers-reduced-motion` handling anywhere — cross-cutting win (mobile battery + accessibility) |
-| LOW | Code-Level | `User#available_articles` Ruby `.uniq` after two `.to_a` — push to SQL `UNION` |
-| LOW | Code-Level | `Article#author_revenue_usd` / `reader_revenue_usd` — overlaps with perf-improver backlog |
-| LOW | Code-Level | `article_form_controller.js:403` `setTimeout(this.autosave(), 2000)` — autosave retry never fires (logic bug, not perf) |
-| LOW | Data | `HomeController#hot_tags` — `.sample(5)` in Ruby; sample at SQL level |
+| Status | Item |
+|--------|------|
+| DONE (PR #1560, 2026-06-10) | `floating_controller` scroll listener leak |
+| DONE (PR #1576, 2026-06-11) | `prefetch_controller.js` mouseover listener leak |
+| DONE (PR #1627, 2026-06-14) | `auto_refresh_controller.js` dead code, min −363 B |
+| DONE (PR #1632, 2026-06-14) | `infinite_scroll_controller.js` observer leak + dedup |
+| DONE (PR #1669, 2026-06-16) | `textarea_autogrow_controller.js` dead code, min −709 B |
+| DONE (PR #1683, 2026-06-18) | 7 more dead controllers, min −2,534 B |
+| DONE (PR #1693, 2026-06-19) | `auto_hide_controller.js` setTimeout leak |
+| DONE (PR #1702, 2026-06-20) | `session_controller.js` wallet listener leak |
+| DONE (PR #1710, 2026-06-21) | `#modal` listener leak in 3 controllers |
+| DONE (PR #1714, 2026-06-22 by `an-lee`) | 16 list-view images lazy-loaded |
+| **PR OPENED 2026-06-22** (branch `efficiency/prefers-reduced-motion`, commit `cbf2b9a`) | No `prefers-reduced-motion` handling anywhere — 35+ GPU-using sites collapse to <1ms; CSS bundle +320 B (+0.062%) |
+| LOW | `User#available_articles` Ruby `.uniq` after two `.to_a` (push to SQL `UNION`) |
+| LOW | `Article#author_revenue_usd` / `reader_revenue_usd` Ruby sums |
+| LOW | `article_form_controller.js:403` `setTimeout(this.autosave(), 2000)` — autosave retry never fires (logic bug) |
+| LOW | `HomeController#hot_tags` — `.sample(5)` in Ruby; sample at SQL level |
 
-**Dead-code sweep heuristic** (confirmed and exhausted): a Stimulus controller is dead iff **all** of (a) `grep -rn 'data-controller="<name>"' app/views/ test/`, (b) `grep -rn 'controller: "<name>"' app/views/`, (c) `grep -rn 'data-<name>-target' app/views/`, (d) `grep -rEn '<name>#' app/views/ app/javascript/` return zero hits. **All 9 dead controllers across 3 sweep PRs (#1627, #1669, #1683) are now merged; remaining 42 controllers are all live.**
+**Reduced-motion sweep pattern** (now applied via single global rule, commit `cbf2b9a`): add `@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; } }` once at the end of the Tailwind input CSS. Covers all 35+ transition / animation / duration sites in `app/views/` without per-call-site maintenance.
 
-**Listener-leak sweep pattern** (now confirmed across 7 controllers): any `addEventListener` / `setTimeout` / `.on(...)` in `connect()` or `*ValueChanged` callback whose target is global (document, window, singleton wallet, **or the long-lived `#modal` turbo frame**) must store the handle and clear it in `disconnect()`. **No remaining listener-cleanup targets in `app/javascript/controllers/`.**
+**Dead-code sweep heuristic** (confirmed and exhausted): a Stimulus controller is dead iff all of (a) `grep -rn 'data-controller="<name>"' app/views/ test/`, (b) `grep -rn 'controller: "<name>"' app/views/`, (c) `grep -rn 'data-<name>-target' app/views/`, (d) `grep -rEn '<name>#' app/views/ app/javascript/` return zero hits. All 9 dead controllers across 3 sweep PRs are merged; remaining 42 controllers are all live.
 
-**Lazy-loading sweep pattern** (now confirmed across 10 list-view partials): any `image_tag` inside a repeating list row, table row, or notification stream should pass `lazy: true` (Rails emits `loading="lazy" decoding="async"`). **Remaining non-lazy image_tags are all above-the-fold (hero, LCP, brand logos) and intentional.**
+**Listener-leak sweep pattern**: applied across 7 controllers, all merged. No remaining listener-cleanup targets in `app/javascript/controllers/`.
 
 ## work in progress
 
-_(none — 2026-06-21 PR `efficiency/list-image-lazy-loading` (commit `a874b3d`) is awaiting maintainer review; patch at `/tmp/gh-aw/aw-efficiency-list-image-lazy-loading.patch`, 12,258 B.)_
+_(none — 2026-06-22 PR `efficiency/prefers-reduced-motion` (commit `cbf2b9a`) is awaiting maintainer review; patch at `/tmp/gh-aw/aw-efficiency-prefers-reduced-motion.patch`, 4,051 B.)_
 
 ## completed work
 
-- **PR #1560** (merged 2026-06-10): `floating_controller.js` — passive listener, correct debounce, `disconnect()`.
-- **PR #1576** (merged 2026-06-11): `prefetch_controller.js` — debounce + `disconnect()` + remove dead `load()`.
-- **PR #1627** (merged 2026-06-14): dead-code removal of `auto_refresh_controller.js` — 33 lines / 3 files. Minified −363 B; dev −720 B.
-- **PR #1632** (merged 2026-06-14): `infinite_scroll_controller.js` IntersectionObserver cleanup + fetch dedup. Minified +281 B (+0.005%) — repaid many times over by avoided duplicate fetches per scroll-tick. 35+ views.
-- **PR #1669** (merged 2026-06-16): dead-code removal of `textarea_autogrow_controller.js` — 42 lines / 3 files. Minified −709 B; dev −1,143 B.
-- **PR #1683** (merged 2026-06-18 by `an-lee`): dead-code removal of 7 Stimulus controllers — 231 lines / 9 files. Minified −2,534 B; dev −6,358 B.
-- **PR #1691 → #1693** (merged 2026-06-19 10:16:25 UTC by `an-lee`, commit `875f03c`): `auto_hide_controller.js` setTimeout leak. Min +79 B / dev +155 B.
-- **PR #1702** (merged 2026-06-20 00:17:33 UTC by `an-lee`, commit `07f9ad7`): `session_controller.js` wallet listener leak. Min +549 B / dev +873 B. Simulated 20 reconnects: 60 stale handlers before, 0 after.
-- **PR #1710** (merged 2026-06-21 by `an-lee`, commit `c37eb372` → `603cdb64`): modal listener cleanup in 3 controllers (`article-form`, `mvm-deposit`, `pre-orders-payment-component`). Min +732 B / dev +1,230 B. Simulated 20 reconnects: 20 stale listeners each before, 0 after.
-- **PR (2026-06-21 run)**: list-view lazy loading — added `lazy: true` to 16 `image_tag` calls across 10 partials (`articles/_card`, `dashboard/articles/_published_article`, `dashboard/articles/_hidden_article`, `dashboard/collections/_collection`, `dashboard/assets/_token`, `dashboard/swap_orders/_swap_order`, `dashboard/transfers/_transfer`, `transfers/_transfer`, `dashboard/notifications/_notification`, `dashboard/payments/_payment`). Branch `efficiency/list-image-lazy-loading`, commit `a874b3d`. 10 files, +16/−16. Patch at `/tmp/gh-aw/aw-efficiency-list-image-lazy-loading.patch` (12,258 B). PR opened via `safeoutputs create_pull_request`; awaiting maintainer review.
+- PR #1560 (2026-06-10): `floating_controller.js` — passive listener + correct debounce + `disconnect()`.
+- PR #1576 (2026-06-11): `prefetch_controller.js` — debounce + `disconnect()` + remove dead `load()`.
+- PR #1627 (2026-06-14): dead-code `auto_refresh_controller.js`, min −363 B / dev −720 B.
+- PR #1632 (2026-06-14): `infinite_scroll_controller.js` IntersectionObserver cleanup + fetch dedup across 35+ views.
+- PR #1669 (2026-06-16): dead-code `textarea_autogrow_controller.js`, min −709 B / dev −1,143 B.
+- PR #1683 (2026-06-18): 7 dead controllers, min −2,534 B / dev −6,358 B.
+- PR #1693 (2026-06-19): `auto_hide_controller.js` setTimeout leak.
+- PR #1702 (2026-06-20): `session_controller.js` wallet listener leak (commit `07f9ad7`).
+- PR #1710 (2026-06-21): modal listener cleanup in 3 controllers.
+- PR #1714 (2026-06-22 by `an-lee`): list-view lazy loading — 16 `image_tag` calls across 10 partials now `lazy: true`. Patch `/tmp/gh-aw/aw-efficiency-list-image-lazy-loading.patch` (12,258 B).
+- PR (2026-06-22, awaiting review): prefers-reduced-motion — single global `@media (prefers-reduced-motion: reduce)` rule in `app/assets/stylesheets/application.tailwind.css`. 1 file, +21/-0. Branch `efficiency/prefers-reduced-motion`, commit `cbf2b9a`. CSS bundle 512,752 B → 513,072 B (+0.062%). Patch `/tmp/gh-aw/aw-efficiency-prefers-reduced-motion.patch` (4,051 B).
 
 ## last task runs
 
 | Task | Last run (UTC) |
 |------|----------------|
-| 1 | 2026-06-21 23:26 |
-| 2 | 2026-06-21 23:26 |
-| 3 | 2026-06-21 23:26 |
-| 4 | 2026-06-21 23:26 |
-| 5 | 2026-06-21 23:26 |
-| 6 | 2026-06-21 23:26 |
-| 7 | 2026-06-21 23:26 |
+| 1 | 2026-06-22 23:45 |
+| 2 | 2026-06-22 23:45 |
+| 3 | 2026-06-22 23:45 |
+| 4 | 2026-06-22 23:45 |
+| 5 | 2026-06-22 23:45 |
+| 6 | 2026-06-22 23:45 |
+| 7 | 2026-06-22 23:45 |
 
 ## monthly summary — checked off by maintainer
 
@@ -97,6 +99,7 @@ _(Lines removed from Suggested Actions when maintainer checked them off.)_
 - 2026-06-14: PR #1632 (merged 2026-06-14).
 - 2026-06-14: PR #1627 (merged 2026-06-14).
 - 2026-06-18: PR #1669 (merged 2026-06-16 by `an-lee`).
-- 2026-06-19: auto_hide entry removed (PR #1691 → #1693 merged 2026-06-19 10:16:25 UTC by `an-lee`, commit `875f03c`).
-- 2026-06-20: session entry removed (PR #1702 merged 2026-06-20 00:17:33 UTC by `an-lee`, commit `07f9ad7`).
-- 2026-06-21: modal-listener entry removed (PR #1710 merged 2026-06-21 by `an-lee`).
+- 2026-06-19: PR #1693 (merged 2026-06-19 by `an-lee`).
+- 2026-06-20: PR #1702 (merged 2026-06-20 by `an-lee`).
+- 2026-06-21: PR #1710 (merged 2026-06-21 by `an-lee`).
+- 2026-06-22: PR #1714 (merged 2026-06-22 00:16:52 UTC by `an-lee`).
