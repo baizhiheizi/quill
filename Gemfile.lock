@@ -231,7 +231,7 @@ GEM
       raabro (~> 1.4)
     globalid (1.3.0)
       activesupport (>= 6.1)
-    graphql (2.6.3)
+    graphql (2.6.4)
       base64
       fiber-storage
       logger
@@ -674,7 +674,7 @@ DEPENDENCIES
   exception-track
   fastimage
   fnv
-  graphql (~> 2.0)
+  graphql (~> 2.6)
   groupdate
   grover
   high_voltage
@@ -815,7 +815,7 @@ CHECKSUMS
   friendly_id (5.7.0) sha256=b8994416ebaceebc7c60bc556e84ef32a3a663e2e582eb04c429216cc98de4c4
   fugit (1.12.2) sha256=643f2bf28db263bd400cbf8e0dd8b76b2c9b94bdb130e12d2394de04d9c20e5e
   globalid (1.3.0) sha256=05c639ad6eb4594522a0b07983022f04aa7254626ab69445a0e493aa3786ff11
-  graphql (2.6.3) sha256=31fe845b509fda27db38d09380f27ffc0de1c7ea2f9f3b12fa42bdde8317239b
+  graphql (2.6.4) sha256=b5ea1ea6d584fb36d3ac81d10d4842ec6bb0cbb71bbd099e69541cb524c0d1c4
   groupdate (6.8.0) sha256=16f90ea18ca981c38e41e592416480b28353aa5e5cc3e7cb13a68b8fb5d40510
   grover (1.2.10) sha256=989b21d1a0048e3793b9939b392152fb309c7a107911ad04c10e422de4e1479b
   h2c (0.2.1) sha256=a53b7dfeb95660c97b615235ea1b29ec8e1856edc571845685682d94b6e8e227
