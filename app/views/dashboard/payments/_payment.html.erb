@@ -2,7 +2,7 @@
   <div class="table-cell pr-4 py-4 min-w-max">
     <div class="flex items-center space-x-2 col-span-2">
       <div class="w-6">
-        <%= image_tag payment.currency.icon_url, class: "w-6 h-6 rounded-full inline-block" %>
+        <%= image_tag payment.currency.icon_url, class: "w-6 h-6 rounded-full inline-block", lazy: true %>
       </div>
       <span class="font-bold whitespace-nowrap"><%= payment.price_tag %></span>
     </div>

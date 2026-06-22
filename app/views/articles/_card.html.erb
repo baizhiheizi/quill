@@ -33,7 +33,7 @@
     </div>
     <% if article.thumb_url.present? %>
       <div class="sm:flex-shrink-0">
-        <%= image_tag article.thumb_url, class: "w-full sm:w-40 sm:h-28 rounded-lg object-cover border border-base-content/5" %>
+        <%= image_tag article.thumb_url, class: "w-full sm:w-40 sm:h-28 rounded-lg object-cover border border-base-content/5", lazy: true %>
       </div>
     <% end %>
   <% end %>
@@ -44,7 +44,7 @@
         <span class="badge badge-success badge-sm font-medium">Free</span>
       <% else %>
         <div class="flex items-center space-x-1.5 bg-base-content/5 px-2 py-1 rounded-md text-xs font-medium text-base-content/80">
-          <%= image_tag article.currency.icon_url, class: "w-3.5 h-3.5 rounded-full" %>
+          <%= image_tag article.currency.icon_url, class: "w-3.5 h-3.5 rounded-full", lazy: true %>
           <span><%= article.price_tag %></span>
         </div>
       <% end %>
