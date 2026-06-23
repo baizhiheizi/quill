@@ -49,7 +49,7 @@
 | DONE (PR #1702, 2026-06-20) | `session_controller.js` wallet listener leak |
 | DONE (PR #1710, 2026-06-21) | `#modal` listener leak in 3 controllers |
 | DONE (PR #1714, 2026-06-22 by `an-lee`) | 16 list-view images lazy-loaded |
-| **PR OPENED 2026-06-22** (branch `efficiency/prefers-reduced-motion`, commit `cbf2b9a`) | No `prefers-reduced-motion` handling anywhere — 35+ GPU-using sites collapse to <1ms; CSS bundle +320 B (+0.062%) |
+| **PR OPENED 2026-06-22** (branch `efficiency/prefers-reduced-motion`, head commit `8943f42`, base `9a4e75f`) | No `prefers-reduced-motion` handling anywhere — 35+ GPU-using sites collapse to <1ms; CSS bundle +320 B (+0.062%) |
 | LOW | `User#available_articles` Ruby `.uniq` after two `.to_a` (push to SQL `UNION`) |
 | LOW | `Article#author_revenue_usd` / `reader_revenue_usd` Ruby sums |
 | LOW | `article_form_controller.js:403` `setTimeout(this.autosave(), 2000)` — autosave retry never fires (logic bug) |
@@ -63,7 +63,7 @@
 
 ## work in progress
 
-_(none — 2026-06-22 PR `efficiency/prefers-reduced-motion` (commit `cbf2b9a`) is awaiting maintainer review; patch at `/tmp/gh-aw/aw-efficiency-prefers-reduced-motion.patch`, 4,051 B.)_
+_(none — 2026-06-22 PR #1719 `efficiency/prefers-reduced-motion` (head commit `8943f42`) is awaiting maintainer review; PR opened via `safeoutputs create_pull_request`.)_
 
 ## completed work
 
@@ -83,13 +83,13 @@ _(none — 2026-06-22 PR `efficiency/prefers-reduced-motion` (commit `cbf2b9a`) 
 
 | Task | Last run (UTC) |
 |------|----------------|
-| 1 | 2026-06-22 23:45 |
-| 2 | 2026-06-22 23:45 |
-| 3 | 2026-06-22 23:45 |
-| 4 | 2026-06-22 23:45 |
-| 5 | 2026-06-22 23:45 |
-| 6 | 2026-06-22 23:45 |
-| 7 | 2026-06-22 23:45 |
+| 1 | 2026-06-23 00:00 |
+| 2 | 2026-06-23 00:00 |
+| 3 | 2026-06-23 00:00 |
+| 4 | 2026-06-23 00:00 |
+| 5 | 2026-06-23 00:00 |
+| 6 | 2026-06-23 00:00 |
+| 7 | 2026-06-23 00:00 |
 
 ## monthly summary — checked off by maintainer
 
