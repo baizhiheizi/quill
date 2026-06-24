@@ -85,4 +85,26 @@ class PreOrdersCreateControllerTest < ActionController::TestCase
     assert_response :success
     assert_includes @response.body, "pre-orders-payment-component"
   end
+
+  test "create mixin buy article succeeds when currency icon_url is missing" do
+    @article.currency.update_column(:raw, @article.currency.raw.except("icon_url"))
+
+    with_quill_bot_stub do
+      assert_difference "MixinPreOrder.count", 1 do
+        post :create, params: {
+          pre_order: {
+            order_type: "buy_article",
+            item_id: @article.id,
+            item_type: "Article",
+            asset_id: @article.asset_id,
+            amount: @article.price,
+            type: "MixinPreOrder"
+          }
+        }, format: :turbo_stream
+      end
+    end
+
+    assert_response :success
+    assert_includes @response.body, "pre-orders-payment-component"
+  end
 end
