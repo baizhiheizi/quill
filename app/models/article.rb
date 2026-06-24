@@ -357,6 +357,8 @@ class Article < ApplicationRecord
     return true if free?
 
     asset_id.in?(Mixpay.api.settlement_asset_ids)
+  rescue Mixpay::Errors::Error
+    false
   end
 
   def self.ransackable_attributes(_auth_object = nil)

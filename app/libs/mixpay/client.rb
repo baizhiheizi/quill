@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "http"
+
 module Mixpay
   class Client
     SERVER_SCHEME = "https"
@@ -26,9 +28,12 @@ module Mixpay
       options[:headers] ||= {}
       options[:headers]["Content-Type"] ||= "application/json"
 
+      client = HTTP.timeout(connect: 5, write: 5, read: 5)
+      request_options = options.slice(:params, :json, :body, :form).merge(headers: options[:headers])
+
       begin
-        response = HTTP.timeout(connect: 5, write: 5, read: 5).request(verb, uri, options)
-      rescue HTTP::Error => e
+        response = client.public_send(verb, uri.to_s, **request_options)
+      rescue HTTP::Error, Errno::ECONNREFUSED, Errno::ETIMEDOUT, SocketError => e
         raise Errors::HttpError, e.message
       end
 

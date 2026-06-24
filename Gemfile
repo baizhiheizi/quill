@@ -115,6 +115,9 @@ gem "config"
 # Makes http fun again!
 gem "httparty"
 
+# httprb client used by Mixpay::Client
+gem "http"
+
 # Tracking ⚠️ exceptions for Rails application and store them in database.
 gem "exception-track"
 

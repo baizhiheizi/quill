@@ -68,6 +68,8 @@ class PreOrder < ApplicationRecord
     return false unless asset_id.in?(Mixpay.api.settlement_asset_ids)
 
     Mixpay.api.quote_assets_cached.find(&->(asset) { asset["assetId"] == asset_id && amount >= asset["minQuoteAmount"].to_f && amount <= asset["maxQuoteAmount"].to_f }).present?
+  rescue Mixpay::Errors::Error
+    false
   end
 
   def broadcast_to_views

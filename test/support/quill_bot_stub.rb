@@ -19,6 +19,10 @@ module QuillBotStub
     def ticker(_asset_id, _at = nil)
       { "price_btc" => "0.001", "price_usd" => "50000" }
     end
+
+    def safe_pay_url(**_options)
+      "https://example.com/pay"
+    end
   end
 
   def with_quill_bot_stub(client_id: FAKE_CLIENT_ID)

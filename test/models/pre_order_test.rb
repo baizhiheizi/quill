@@ -293,6 +293,29 @@ class PreOrderTest < ActiveSupport::TestCase
     end
   end
 
+  test "mixpay_supported? returns false when mixpay api fails" do
+    with_quill_bot_stub do
+      pre_order = MixinPreOrder.new(
+        item: @article,
+        payer: @reader,
+        order_type: :buy_article,
+        amount: @article.price,
+        asset_id: @article.asset_id
+      )
+      pre_order.define_singleton_method(:setup_attributes) { }
+
+      failing_api = Object.new
+      failing_api.define_singleton_method(:settlement_asset_ids) { raise Mixpay::Errors::HttpError, "connection failed" }
+      failing_api.define_singleton_method(:quote_assets_cached) { [] }
+
+      original_api = Mixpay.instance_variable_get(:@api)
+      Mixpay.instance_variable_set(:@api, failing_api)
+      assert_not pre_order.mixpay_supported?
+    ensure
+      Mixpay.instance_variable_set(:@api, original_api)
+    end
+  end
+
   test "pay fails when pre_order is expired" do
     with_quill_bot_stub do
       pre_order = MixinPreOrder.create!(

@@ -6,7 +6,7 @@
   <% end %>
 <% else %>
   <%= turbo_stream.update "modal" do %>
-    <%= render_modal title: t(p@pre_order.order_type), backdrop: 'static' do %>
+    <%= render_modal title: t(@pre_order.order_type), backdrop: 'static' do %>
       <%= render "pre_orders/payment", pre_order: @pre_order %>
     <% end %>
   <% end %>

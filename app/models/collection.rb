@@ -165,6 +165,8 @@ class Collection < ApplicationRecord
 
   def mixpay_supported?
     asset_id.in?(Mixpay.api.settlement_asset_ids)
+  rescue Mixpay::Errors::Error
+    false
   end
 
   private

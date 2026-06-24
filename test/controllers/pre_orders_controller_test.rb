@@ -48,3 +48,41 @@ class PreOrdersControllerTest < IntegrationTestCase
     end
   end
 end
+
+class PreOrdersCreateControllerTest < ActionController::TestCase
+  tests PreOrdersController
+
+  include QuillBotStub
+
+  setup do
+    @article = articles(:published_paid)
+    @buyer = users(:reader_one)
+    session[:current_session_id] = Session.create!(
+      user: @buyer,
+      uuid: SecureRandom.uuid,
+      info: { "provider" => "mixin" }
+    ).uuid
+
+    Rails.cache.write("mixpay_settlement_asset_ids", [], expires_in: 10.minutes)
+  end
+
+  test "create mixin buy article saves pre_order and renders payment modal" do
+    with_quill_bot_stub do
+      assert_difference "MixinPreOrder.count", 1 do
+        post :create, params: {
+          pre_order: {
+            order_type: "buy_article",
+            item_id: @article.id,
+            item_type: "Article",
+            asset_id: @article.asset_id,
+            amount: @article.price,
+            type: "MixinPreOrder"
+          }
+        }, format: :turbo_stream
+      end
+    end
+
+    assert_response :success
+    assert_includes @response.body, "pre-orders-payment-component"
+  end
+end

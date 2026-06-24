@@ -28,7 +28,7 @@ class Currency < ApplicationRecord
   XIN_ASSET_ID = "c94ac88f-4671-3976-b60a-09064f1811e8"
   ETH_ASSET_ID = "43d61dcd-e413-450d-80b8-101d5e903357"
 
-  store :raw, accessors: %i[name icon_url change_usd]
+  store_accessor :raw, :name, :icon_url, :change_usd
 
   before_validation :set_defaults
 
