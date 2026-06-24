@@ -4,7 +4,7 @@ module Admin
   class MixinNetworkUsersController < Admin::BaseController
     def index
       mixin_network_users = MixinNetworkUser.all
-      mixin_network_users = mixin_network_users.where(owner_type: params[:owner_type], owner_id: params[:owner_type]) if params[:owner_id].present? && params[:owner_type].present?
+      mixin_network_users = mixin_network_users.where(owner_type: params[:owner_type], owner_id: params[:owner_id]) if params[:owner_id].present? && params[:owner_type].present?
 
       @type = params[:type] || "Splitter"
       mixin_network_users =
