@@ -2,66 +2,59 @@
   "Home": {
     "sourceFiles": [
       {"path": "README.md", "hash": "manual"},
-      {"path": "Gemfile", "hash": "manual"},
       {"path": "config/routes.rb", "hash": "manual"},
-      {"path": "config/application.rb", "hash": "manual"},
       {"path": "config/settings.yml", "hash": "manual"}
     ],
     "templateHash": "manual",
-    "generatedAt": "2026-06-20T00:00:00Z"
+    "generatedAt": "2026-06-24T00:00:00Z"
   },
   "Architecture": {
     "sourceFiles": [
       {"path": "config/routes.rb", "hash": "manual"},
-      {"path": "config/routes/", "hash": "manual"},
-      {"path": "config/application.rb", "hash": "manual"}
+      {"path": "config/routes/admin.rb", "hash": "manual"}
     ],
     "templateHash": "manual",
-    "generatedAt": "2026-06-20T00:00:00Z"
+    "generatedAt": "2026-06-24T00:00:00Z"
   },
   "Value-Net": {
     "sourceFiles": [
-      {"path": "app/services/orders/distribute_service.rb", "hash": "manual"},
-      {"path": "app/jobs/orders/distribute_job.rb", "hash": "manual"},
-      {"path": "app/models/order.rb", "hash": "manual"},
-      {"path": "app/models/article.rb", "hash": "manual"}
+      {"path": "app/services/orders/distribute_service.rb", "hash": "manual"}
     ],
     "templateHash": "manual",
-    "generatedAt": "2026-06-20T00:00:00Z"
+    "generatedAt": "2026-06-24T00:00:00Z"
   },
   "Backend": {
     "sourceFiles": [
-      {"path": "Gemfile", "hash": "manual"},
       {"path": "config/routes.rb", "hash": "manual"},
+      {"path": "config/routes/admin.rb", "hash": "manual"},
       {"path": "config/queue.yml", "hash": "manual"},
-      {"path": "app/", "hash": "manual"}
+      {"path": "app/controllers/admin/comments_controller.rb", "hash": "manual"}
     ],
     "templateHash": "manual",
-    "generatedAt": "2026-06-20T00:00:00Z"
+    "generatedAt": "2026-06-24T00:00:00Z"
   },
   "Background-Jobs": {
     "sourceFiles": [
-      {"path": "app/jobs/", "hash": "manual"},
-      {"path": "config/queue.yml", "hash": "manual"}
+      {"path": "config/queue.yml", "hash": "manual"},
+      {"path": "app/jobs/", "hash": "manual"}
     ],
     "templateHash": "manual",
-    "generatedAt": "2026-06-20T00:00:00Z"
+    "generatedAt": "2026-06-24T00:00:00Z"
   },
   "Services": {
     "sourceFiles": [
       {"path": "app/services/", "hash": "manual"}
     ],
     "templateHash": "manual",
-    "generatedAt": "2026-06-20T00:00:00Z"
+    "generatedAt": "2026-06-24T00:00:00Z"
   },
   "Frontend": {
     "sourceFiles": [
-      {"path": "package.json", "hash": "manual"},
-      {"path": "app/javascript/", "hash": "manual"},
-      {"path": "bin/dev", "hash": "manual"}
+      {"path": "app/assets/stylesheets/application.tailwind.css", "hash": "manual"},
+      {"path": "app/views/layouts/", "hash": "manual"}
     ],
     "templateHash": "manual",
-    "generatedAt": "2026-06-20T00:00:00Z"
+    "generatedAt": "2026-06-24T00:00:00Z"
   },
   "Stimulus-Controllers": {
     "sourceFiles": [
@@ -69,7 +62,7 @@
       {"path": "app/javascript/controllers/", "hash": "manual"}
     ],
     "templateHash": "manual",
-    "generatedAt": "2026-06-20T00:00:00Z"
+    "generatedAt": "2026-06-24T00:00:00Z"
   },
   "API-Reference": {
     "sourceFiles": [
@@ -77,7 +70,7 @@
       {"path": "app/controllers/api/", "hash": "manual"}
     ],
     "templateHash": "manual",
-    "generatedAt": "2026-06-20T00:00:00Z"
+    "generatedAt": "2026-06-24T00:00:00Z"
   },
   "Getting-Started": {
     "sourceFiles": [
@@ -89,27 +82,27 @@
       {"path": "bin/dev", "hash": "manual"}
     ],
     "templateHash": "manual",
-    "generatedAt": "2026-06-20T00:00:00Z"
+    "generatedAt": "2026-06-24T00:00:00Z"
   },
   "For-Agents": {
     "sourceFiles": [
       {"path": ".github/agentic-wiki/PAGES.md", "hash": "manual"}
     ],
     "templateHash": "manual",
-    "generatedAt": "2026-06-20T00:00:00Z"
+    "generatedAt": "2026-06-24T00:00:00Z"
   },
   "AGENTS.md": {
     "sourceFiles": [
       {"path": ".github/agentic-wiki/PAGES.md", "hash": "manual"}
     ],
     "templateHash": "manual",
-    "generatedAt": "2026-06-20T00:00:00Z"
+    "generatedAt": "2026-06-24T00:00:00Z"
   },
   "llms.txt": {
     "sourceFiles": [
       {"path": ".github/agentic-wiki/PAGES.md", "hash": "manual"}
     ],
     "templateHash": "manual",
-    "generatedAt": "2026-06-20T00:00:00Z"
+    "generatedAt": "2026-06-24T00:00:00Z"
   }
 }
