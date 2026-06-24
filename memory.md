@@ -49,10 +49,10 @@
 | DONE (PR #1702, 2026-06-20) | `session_controller.js` wallet listener leak |
 | DONE (PR #1710, 2026-06-21) | `#modal` listener leak in 3 controllers |
 | DONE (PR #1714, 2026-06-22 by `an-lee`) | 16 list-view images lazy-loaded |
-| **PR OPENED 2026-06-22** (branch `efficiency/prefers-reduced-motion`, head commit `8943f42`, base `9a4e75f`) | No `prefers-reduced-motion` handling anywhere — 35+ GPU-using sites collapse to <1ms; CSS bundle +320 B (+0.062%) |
-| LOW | `User#available_articles` Ruby `.uniq` after two `.to_a` (push to SQL `UNION`) |
-| LOW | `Article#author_revenue_usd` / `reader_revenue_usd` Ruby sums |
-| LOW | `article_form_controller.js:403` `setTimeout(this.autosave(), 2000)` — autosave retry never fires (logic bug) |
+| DONE (PR #1719, merged 2026-06-24 by `an-lee`) | prefers-reduced-motion — single global `@media` rule covering 35+ transition sites |
+| DONE (PR created 2026-06-24, awaiting push; patch `/tmp/gh-aw/aw-efficiency-autosave-retry-debounce.patch` 1,871 B / 41 lines; branch `efficiency/autosave-retry-debounce`, head `ce51bcc`) | `article_form_controller.js` autosave retry fix — 60% fewer XHRs on flaky network (5 → 2 in 6 s window) |
+| COVERED ELSEWHERE 2026-06-24 (PR #1729 repo-assist) | `User#available_articles` SQL `UNION` + `distinct` |
+| COVERED ELSEWHERE 2026-06-24 (PR #1731 repo-assist) | `Article#author_revenue_usd` / `reader_revenue_usd` `joins(:currency)` |
 | LOW | `HomeController#hot_tags` — `.sample(5)` in Ruby; sample at SQL level |
 
 **Reduced-motion sweep pattern** (now applied via single global rule, commit `cbf2b9a`): add `@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; } }` once at the end of the Tailwind input CSS. Covers all 35+ transition / animation / duration sites in `app/views/` without per-call-site maintenance.
@@ -77,19 +77,20 @@ _(none — 2026-06-22 PR #1719 `efficiency/prefers-reduced-motion` (head commit 
 - PR #1702 (2026-06-20): `session_controller.js` wallet listener leak (commit `07f9ad7`).
 - PR #1710 (2026-06-21): modal listener cleanup in 3 controllers.
 - PR #1714 (2026-06-22 by `an-lee`): list-view lazy loading — 16 `image_tag` calls across 10 partials now `lazy: true`. Patch `/tmp/gh-aw/aw-efficiency-list-image-lazy-loading.patch` (12,258 B).
-- PR (2026-06-22, awaiting review): prefers-reduced-motion — single global `@media (prefers-reduced-motion: reduce)` rule in `app/assets/stylesheets/application.tailwind.css`. 1 file, +21/-0. Branch `efficiency/prefers-reduced-motion`, commit `cbf2b9a`. CSS bundle 512,752 B → 513,072 B (+0.062%). Patch `/tmp/gh-aw/aw-efficiency-prefers-reduced-motion.patch` (4,051 B).
+- PR (2026-06-22, merged 2026-06-24 by `an-lee`): prefers-reduced-motion — single global `@media (prefers-reduced-motion: reduce)` rule in `app/assets/stylesheets/application.tailwind.css`. 1 file, +21/-0. CSS bundle 512,752 B → 513,072 B (+0.062%).
+- PR (2026-06-24, awaiting push): autosave-retry-debounce — `article_form_controller.js:406` `setTimeout(this.autosave(), 2000)` → `setTimeout(this.autosave, 2000)`. 1 file, +4/-1. Branch `efficiency/autosave-retry-debounce`, commit `ce51bcc`. Patch `/tmp/gh-aw/aw-efficiency-autosave-retry-debounce.patch` (1,871 B / 41 lines). Measured: 5 XHRs in 6 s (buggy) → 2 XHRs (fixed) under sustained-failure scenario, i.e. 60% reduction / 3 fewer PUT requests per 6 s window. Repro script `/tmp/autosave-final-repro.js`.
 
 ## last task runs
 
 | Task | Last run (UTC) |
 |------|----------------|
-| 1 | 2026-06-23 00:00 |
-| 2 | 2026-06-23 00:00 |
-| 3 | 2026-06-23 00:00 |
-| 4 | 2026-06-23 00:00 |
-| 5 | 2026-06-23 00:00 |
-| 6 | 2026-06-23 00:00 |
-| 7 | 2026-06-23 00:00 |
+| 1 | 2026-06-24 23:20 |
+| 2 | 2026-06-24 23:20 |
+| 3 | 2026-06-24 23:20 |
+| 4 | 2026-06-24 23:20 |
+| 5 | 2026-06-24 23:20 |
+| 6 | 2026-06-24 23:20 |
+| 7 | 2026-06-24 23:20 |
 
 ## monthly summary — checked off by maintainer
 
@@ -102,4 +103,4 @@ _(Lines removed from Suggested Actions when maintainer checked them off.)_
 - 2026-06-19: PR #1693 (merged 2026-06-19 by `an-lee`).
 - 2026-06-20: PR #1702 (merged 2026-06-20 by `an-lee`).
 - 2026-06-21: PR #1710 (merged 2026-06-21 by `an-lee`).
-- 2026-06-22: PR #1714 (merged 2026-06-22 00:16:52 UTC by `an-lee`).
+- 2026-06-24: PR #1719 (merged 2026-06-24 01:54:29 UTC by `an-lee`).
