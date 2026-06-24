@@ -13,10 +13,13 @@ module Users::Scopable
 
     scope :active, lambda {
       without_blocked
-        .order_by_articles_count
+        .joins(:articles)
         .where(
           articles: { created_at: (3.months.ago)..., orders_count: 1... }
         )
+        .group(:id)
+        .select("users.*, COUNT(articles.id) AS active_articles_count")
+        .order(active_articles_count: :desc, id: :asc)
     }
     scope :only_email_verified, -> { where.not(email_verified_at: nil) }
     scope :only_validated, -> { where.not(validated_at: nil) }

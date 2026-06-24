@@ -148,6 +148,17 @@ class UserTest < ActiveSupport::TestCase
     assert_not_includes sql, "GROUP BY"
   end
 
+  test "active authors joins qualifying articles and returns unique users" do
+    author = users(:author)
+    author.articles.update_all(created_at: 1.day.ago, orders_count: 1)
+
+    rows = User.active.to_a
+    row_ids = rows.map(&:id)
+
+    assert_includes row_ids, author.id
+    assert_equal row_ids.uniq, row_ids
+  end
+
   test "order_by_comments_count includes all users and orders by the cached counter column" do
     users(:author).update_column(:comments_count, users(:author).comments.count)
     users(:reader_one).update_column(:comments_count, 0)
