@@ -2,13 +2,13 @@
 
 > **30-second summary:** Install Ruby 4.0.5 (via `mise` or `rbenv`), PostgreSQL, and Bun 1.x. Copy `config/settings.yml` to `config/settings.local.yml`, edit credentials with `bin/rails credentials:edit --development`, then run `bin/dev` to boot the app on `http://localhost:3000`.
 
-This guide assumes a fresh Linux or macOS machine. If anything here drifts, the authoritative source is the [AGENTS.md](../../AGENTS.md) and the [README](../../README.md) at the repository root — please update this page when you fix a step.
+This guide assumes a fresh Linux or macOS machine. The authoritative sources are [AGENTS.md](../../AGENTS.md) and [README](../../README.md) at the repository root — update this page when you fix a step.
 
 ## 1. Install system dependencies
 
 ### Ruby 4.0.5
 
-Quill pins the Ruby version in `.ruby-version` and `mise.toml`. Either of the following works:
+Quill pins Ruby in `.ruby-version` and `mise.toml`. Use either:
 
 ```bash
 # Using mise (recommended)
@@ -19,11 +19,9 @@ rbenv install 4.0.5
 rbenv global 4.0.5
 ```
 
-Verify with `ruby -v`. You should see `ruby 4.0.5`.
-
 ### PostgreSQL
 
-PostgreSQL is required for the **primary** database. Solid Queue, Solid Cable, and Solid Cache each use their own SQLite file under `storage/` (created and migrated by `bin/rails db:prepare`), so they don't need a separate Postgres connection.
+PostgreSQL is required for the **primary** database only — Solid Queue/Cable/Cache each use their own SQLite file under `storage/`, created and migrated by `bin/rails db:prepare`.
 
 ```bash
 # Ubuntu
@@ -34,21 +32,16 @@ sudo systemctl start postgresql.service
 # macOS (Homebrew)
 brew install postgresql
 brew services start postgresql
-```
 
-Create a Postgres role that can create databases, e.g.:
-
-```bash
-sudo -u postgres createuser -s quill
-sudo -u postgres createdb -O quill quill_development
+# Then on either platform, create a role that can create databases:
+sudo -u postgres createuser -s quill && sudo -u postgres createdb -O quill quill_development
 ```
 
 ### Node.js 18+ and Bun 1.x
 
-`esbuild` bundles the JavaScript and Tailwind CSS, both of which Bun orchestrates.
+`esbuild` bundles JavaScript and Tailwind CSS via Bun (which ships its own Node runtime, so no separate Node install):
 
 ```bash
-# Bun (provides its own Node runtime)
 curl -fsSL https://bun.sh/install | bash
 ```
 
@@ -63,13 +56,11 @@ bun install
 
 ## 3. Configure credentials
 
-Quill uses Rails encrypted credentials for secrets and a YAML file for non-secret config.
+Quill uses Rails encrypted credentials for secrets and a YAML file for non-secret config. Edit development credentials with:
 
 ```bash
 EDITOR=vim bin/rails credentials:edit --development
 ```
-
-A minimal development credentials file looks like:
 
 ```yaml
 # Register a Mixin bot at https://developers.mixin.one/dashboard first.
@@ -88,56 +79,34 @@ active_record_encryption:
   key_derivation_salt:
 ```
 
-Copy the non-secret settings:
+Then copy the non-secret settings and edit `host` in `config/settings.local.yml` to match your local URL (default `https://quill.im`; for local work use `http://localhost:3000`):
 
 ```bash
 cp config/settings.yml config/settings.local.yml
 ```
 
-Edit `host` in `config/settings.local.yml` to match the URL you reach the app from (default `https://quill.im`; for local work use `http://localhost:3000`).
-
-## 4. Prepare the database
+## 4. Run, verify, and troubleshoot
 
 ```bash
 bin/rails db:prepare
-```
-
-This creates both the primary database and the Solid Queue/Cable/Cache database, then runs migrations.
-
-## 5. Boot the app
-
-```bash
 bin/dev
 ```
 
-`bin/dev` reads `Procfile.dev` and starts:
-
-- the Rails server
-- the Solid Queue worker (`bin/jobs`)
-- the CSS and JS watchers (esbuild + Tailwind)
-- the Mixin blaze client (when `blaze_enable: true` in `settings.local.yml`)
-
-App: [http://localhost:3000](http://localhost:3000)
-Admin: [http://localhost:3000/admin](http://localhost:3000/admin)
-
-To create an admin account:
-
-```bash
-bin/rails console
-```
+`db:prepare` creates and migrates the primary database and the Solid Queue/Cable/Cache database. `bin/dev` reads `Procfile.dev` and starts Rails on [http://localhost:3000](http://localhost:3000) (admin at [/admin](http://localhost:3000/admin)), the Solid Queue worker (`bin/jobs`), the CSS/JS watchers (esbuild + Tailwind), and — when `blaze_enable: true` in `settings.local.yml` — the Mixin blaze client.
 
 ```ruby
+# Create the admin account from bin/rails console:
 Administrator.create name: 'admin', password: 'admin'
 ```
 
-## 6. Verify with the test suite
+Then verify with the test suite — CI also runs `bin/rubocop` and `bun run lint-check`, so run them locally too:
 
 ```bash
 bin/rails test
 bin/rails zeitwerk:check
+bin/rubocop
+bun run lint-check
 ```
-
-CI also runs `bin/rubocop` and `bun run lint-check`. Run those locally before opening a pull request.
 
 ## Troubleshooting
 
