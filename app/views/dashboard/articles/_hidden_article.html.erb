@@ -25,7 +25,7 @@
         <span class="text-sm opacity-60">
           ≈$<%= article.price_usd %>
         </span>
-        <%= image_tag article.currency.icon_url, class: "w-6 h-6 rounded-full", lazy: true %>
+        <%= remote_image_tag article.currency.icon_url, class: "w-6 h-6 rounded-full", lazy: true %>
       <% end %>
     </div>
   </div>
@@ -45,7 +45,7 @@
       </div>
     </div>
     <% if article.cover_url.present? %>
-      <%= image_tag article.cover_url, class: "w-28 h-28 rounded object-center", lazy: true %>
+      <%= remote_image_tag article.cover_url, class: "w-28 h-28 rounded object-center", lazy: true %>
     <% end %>
   <% end %>
 

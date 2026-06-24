@@ -29,7 +29,7 @@
 
 <div class="mb-6">
   <div class="flex items-center space-x-2 mb-4">
-    <%= image_tag collection.currency.icon_url, class: "w-6 h-6 rounded-full" %>
+    <%= remote_image_tag collection.currency.icon_url, class: "w-6 h-6 rounded-full" %>
     <div class="">
       <span class="text-xl font-bold font-serif"><%= collection.price_tag %></span>
       <span class="text-sm opacity-60">

@@ -22,7 +22,7 @@
       <span class="text-sm opacity-60">
         ≈$<%= collection.price_usd %>
       </span>
-      <%= image_tag collection.currency.icon_url, class: "w-6 h-6 rounded-full", lazy: true %>
+      <%= remote_image_tag collection.currency.icon_url, class: "w-6 h-6 rounded-full", lazy: true %>
     </div>
   </div>
 

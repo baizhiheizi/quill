@@ -90,10 +90,10 @@
           class: "btn btn-soft w-full mb-4 flex items-center justify-between py-2 px-4 bg-base-200 rounded-lg" do %>
           <div id="<%= dom_id form.object.currency %>" class="flex items-center space-x-4">
             <div class='relative'>
-              <%= image_tag form.object.currency.icon_url, 
+              <%= remote_image_tag form.object.currency.icon_url, 
                 data: { article_form_target: 'currencyIcon' }, 
                 class: 'w-8 h-8 rounded-full' %>
-              <%= image_tag form.object.currency.icon_url, 
+              <%= remote_image_tag form.object.currency.icon_url, 
                 data: { article_form_target: 'currencyChainIcon' }, 
                 class: 'absolute bottom-0 w-3 h-3 rounded-full' %>
             </div>

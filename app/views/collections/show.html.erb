@@ -2,7 +2,7 @@
   <div class="mb-12">
     <div class="lg:grid grid-cols-2 lg:gap-8 mb-8">
       <div class="w-full mb-8 lg:mb-0">
-        <%= image_tag @collection.cover_url, class: "object-contain object-center w-full rounded-2xl" %>
+        <%= remote_image_tag @collection.cover_url, class: "object-contain object-center w-full rounded-2xl" %>
       </div>
       <div class="lg:order-first">
         <%= render "collections/detail", collection: @collection %>

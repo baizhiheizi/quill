@@ -1,6 +1,6 @@
 <% if article.collection.present? %>
   <div class="bg-base-200 py-2 px-4 rounded-lg mb-6 flex items-center text-sm truncate">
-    <%= image_tag article.collection.cover_url, class: "w-8 h-8 rounded-full" %>
+    <%= remote_image_tag article.collection.cover_url, class: "w-8 h-8 rounded-full" %>
     <div class="ml-4 sm:ml-6 mr-2"><%= t('published_in') %></div>
     <%= link_to article.collection.name, collection_path(article.collection_id), class: "font-bold truncate" %>
   </div>
@@ -86,6 +86,6 @@
       pswp_width: article.cover.metadata&.[]('width'),
       pswp_height: article.cover.metadata&.[]('height'),
     } do %>
-    <%= image_tag article.cover_url, class: "w-full" %>
+    <%= remote_image_tag article.cover_url, class: "w-full" %>
   <% end %>
 <% end %>

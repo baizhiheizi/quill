@@ -33,7 +33,7 @@
     </div>
     <% if article.thumb_url.present? %>
       <div class="sm:flex-shrink-0">
-        <%= image_tag article.thumb_url, class: "w-full sm:w-40 sm:h-28 rounded-lg object-cover border border-base-content/5", lazy: true %>
+        <%= remote_image_tag article.thumb_url, class: "w-full sm:w-40 sm:h-28 rounded-lg object-cover border border-base-content/5", lazy: true %>
       </div>
     <% end %>
   <% end %>

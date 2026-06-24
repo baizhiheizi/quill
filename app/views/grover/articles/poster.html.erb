@@ -5,7 +5,7 @@
     </div>
     <div class="px-[24px] pb-[48px] -mt-[42px]">
       <div class="mb-4">
-        <%= image_tag @article.author.avatar_url, class: "w-[80px] h-[80px] rounded-full border-4 border-white" %>
+        <%= remote_image_tag @article.author.avatar_url, class: "w-[80px] h-[80px] rounded-full border-4 border-white" %>
       </div>
       <div class="mb-8 text-2xl font-bold max-w-28 truncate">
         <%= @article.author.name %>
@@ -21,7 +21,7 @@
     </div>
     <div class="">
       <div class="flex items-center space-x-4 justify-end mb-4">
-        <%= image_tag @article.currency.icon_url, class: "w-[40px] h-[40px]" %>
+        <%= remote_image_tag @article.currency.icon_url, class: "w-[40px] h-[40px]" %>
         <span class="font-black text-3xl"><%= @article.price_tag %></span>
       </div>
       <div class="text-right opacity-60 text-2xl">

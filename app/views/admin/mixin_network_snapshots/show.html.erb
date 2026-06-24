@@ -8,7 +8,7 @@
 
 <div class="bg-base-100 rounded-lg p-4 shadow">
   <div class="flex items-center space-x-2 mb-4">
-    <%= image_tag @mixin_network_snapshot.currency.icon_url, class: "w-10 h-10 rounded" %>
+    <%= remote_image_tag @mixin_network_snapshot.currency.icon_url, class: "w-10 h-10 rounded" %>
     <div>
       <div><%= @mixin_network_snapshot.price_tag %></div>
       <div class="text-sm opacity-70"><%= @mixin_network_snapshot.trace_id %></div>

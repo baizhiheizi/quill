@@ -14,7 +14,7 @@
   </td>
   <td class="p-4">
     <div class="flex items-center space-x-2">
-      <%= image_tag payment.currency.icon_url, class: "w-10 h-10 rounded" %>
+      <%= remote_image_tag payment.currency.icon_url, class: "w-10 h-10 rounded" %>
       <span><%= payment.price_tag %></span>
     </div>
   </td>
