@@ -167,6 +167,48 @@ class ArticleTest < ActiveSupport::TestCase
     assert_equal buyer, readers.first
   end
 
+  test "author_revenue_usd returns 0 when there are no author_revenue transfers" do
+    article = articles(:published_paid)
+
+    assert_equal 0, article.author_revenue_usd
+  end
+
+  test "reader_revenue_usd returns 0 when there are no reader_revenue transfers" do
+    article = articles(:published_paid)
+
+    assert_equal 0, article.reader_revenue_usd
+  end
+
+  test "author_revenue_usd sums amount * currencies.price_usd for author_revenue transfers" do
+    article = articles(:published_paid)
+    buyer = users(:reader_one)
+
+    expected = nil
+    with_quill_bot_stub do
+      order = create_buy_order!(article: article, buyer: buyer, total: 1.0)
+      distribute_order!(order)
+      expected = order.transfers.where(transfer_type: :author_revenue).sum { |t| t.amount.to_f * t.currency.price_usd.to_f }
+    end
+
+    assert_in_delta expected, article.author_revenue_usd, 0.0001
+  end
+
+  test "reader_revenue_usd sums amount * currencies.price_usd for reader_revenue transfers" do
+    article = articles(:published_paid)
+    buyer_one = users(:reader_one)
+    buyer_two = users(:reader_two)
+
+    expected = nil
+    with_quill_bot_stub do
+      create_buy_order!(article: article, buyer: buyer_one, total: 1.0, created_at: 3.days.ago)
+      order = create_buy_order!(article: article, buyer: buyer_two, total: 2.0, created_at: 1.day.ago)
+      distribute_order!(order)
+      expected = order.transfers.where(transfer_type: :reader_revenue).sum { |t| t.amount.to_f * t.currency.price_usd.to_f }
+    end
+
+    assert_in_delta expected, article.reader_revenue_usd, 0.0001
+  end
+
   test "order_by_popularity includes articles with no orders" do
     # Regression: INNER JOIN against orders excluded articles without any
     # purchases from the default feed. With LEFT JOIN + COALESCE they
