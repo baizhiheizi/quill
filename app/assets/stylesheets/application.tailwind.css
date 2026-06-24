@@ -203,3 +203,24 @@
 pre code.hljs {
   padding: 0;
 }
+
+/* Honor `prefers-reduced-motion: reduce` system preference.
+ * Disables CSS transitions and animations (including Tailwind `transition-*`,
+ * `animate-*`, and `duration-*` utilities, plus vendor prefixes) for users who
+ * have requested reduced motion at the OS level. Also disables smooth scrolling.
+ * Pure-CSS, zero JS overhead, no per-call site changes needed — applies to all
+ * 35+ transition sites in `app/views/` in one rule. Skips intentional, brief
+ * opacity transitions used for status feedback (≤ 1ms) so state changes still
+ * read; longer animations collapse to instant. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-delay: 0s !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    transition-delay: 0s !important;
+    scroll-behavior: auto !important;
+  }
+}
