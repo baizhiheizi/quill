@@ -30,6 +30,11 @@ class Currency < ApplicationRecord
 
   store_accessor :raw, :name, :icon_url, :change_usd
 
+  def icon_url
+    url = read_store_attribute(:raw, "icon_url")
+    url.presence if url.is_a?(String) && url.match?(%r{\Ahttps?://}i)
+  end
+
   before_validation :set_defaults
 
   validates :raw, presence: true

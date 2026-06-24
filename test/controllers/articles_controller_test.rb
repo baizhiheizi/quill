@@ -55,4 +55,22 @@ class ArticlesControllerTest < IntegrationTestCase
 
     assert_response :success
   end
+
+  test "index succeeds when a paid article currency has a missing icon_url" do
+    currency = articles(:published_paid).currency
+    currency.update_column(:raw, currency.raw.except("icon_url"))
+
+    get articles_path
+
+    assert_response :success
+  end
+
+  test "index succeeds when a paid article currency has an invalid icon_url" do
+    currency = articles(:published_paid).currency
+    currency.update_column(:raw, currency.raw.merge("icon_url" => "icon_url"))
+
+    get articles_path
+
+    assert_response :success
+  end
 end

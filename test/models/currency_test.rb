@@ -77,4 +77,14 @@ class CurrencyTest < ActiveSupport::TestCase
     @btc.price_usd = 0
     assert_equal 0.00001, @btc.minimal_price_amount
   end
+
+  test "icon_url returns only absolute http(s) urls" do
+    assert_equal "https://example.com/btc.png", @btc.icon_url
+
+    @btc.raw = @btc.raw.merge("icon_url" => "icon_url")
+    assert_nil @btc.icon_url
+
+    @btc.raw = @btc.raw.except("icon_url")
+    assert_nil @btc.icon_url
+  end
 end
