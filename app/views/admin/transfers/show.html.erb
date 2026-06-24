@@ -8,7 +8,7 @@
 
 <div class="bg-base-100 rounded-lg p-4 shadow">
   <div class="flex items-center space-x-2 mb-4">
-    <%= image_tag @transfer.currency.icon_url, class: "w-10 h-10 rounded" %>
+    <%= remote_image_tag @transfer.currency.icon_url, class: "w-10 h-10 rounded" %>
     <div>
       <div><%= @transfer.price_tag %></div>
       <div class="text-sm opacity-70"><%= @transfer.trace_id %></div>

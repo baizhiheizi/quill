@@ -19,8 +19,8 @@
            data-modal-component-minimal-reward-amount-param="<%= currency.minimal_reward_amount %>"
            data-action="click->modal-component#ok">
         <div class='relative mr-2'>
-          <%= image_tag currency.icon_url, class: 'h-6 w-6 rounded-full' %>
-          <%= image_tag currency.chain.icon_url, class: 'absolute bottom-0 h-3 w-3 rounded-full' if currency.chain.present? %>
+          <%= remote_image_tag currency.icon_url, class: 'h-6 w-6 rounded-full' %>
+          <%= remote_image_tag currency.chain.icon_url, class: 'absolute bottom-0 h-3 w-3 rounded-full' if currency.chain.present? %>
         </div>
         <div class="text-sm sm:text-base">
           <%= currency.symbol %>

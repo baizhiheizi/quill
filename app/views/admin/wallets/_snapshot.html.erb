@@ -5,7 +5,7 @@
   <td class="p-4">
     <% asset = Currency.find_by(asset_id: snapshot['asset_id']) %>
     <div class="flex items-center space-x-2">
-      <%= image_tag asset.icon_url, class: "w-10 w-10 rounded-full" %>
+      <%= remote_image_tag asset.icon_url, class: "w-10 w-10 rounded-full" %>
       <span><%= snapshot['amount'] %></span>
       <span><%= asset.symbol %></span>
     </div>
