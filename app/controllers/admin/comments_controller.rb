@@ -44,11 +44,6 @@ module Admin
       @pagy, @comments = pagy(:countless, comments)
     end
 
-    def show
-      @tab = params[:tab] || "orders"
-      @comment = Article.find_by uuid: params[:uuid]
-    end
-
     def delete
       @comment = Comment.find_by(id: params[:comment_id])
       return if @comment.blank?
