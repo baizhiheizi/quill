@@ -63,7 +63,15 @@ class PreOrdersCreateControllerTest < ActionController::TestCase
       info: { "provider" => "mixin" }
     ).uuid
 
-    Rails.cache.write("mixpay_settlement_asset_ids", [], expires_in: 10.minutes)
+    @original_mixpay_api = Mixpay.instance_variable_get(:@api)
+    mixpay_api = Object.new
+    mixpay_api.define_singleton_method(:settlement_asset_ids) { [] }
+    mixpay_api.define_singleton_method(:quote_assets_cached) { [] }
+    Mixpay.instance_variable_set(:@api, mixpay_api)
+  end
+
+  teardown do
+    Mixpay.instance_variable_set(:@api, @original_mixpay_api)
   end
 
   test "create mixin buy article saves pre_order and renders payment modal" do
