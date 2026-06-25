@@ -107,6 +107,25 @@ class UserTest < ActiveSupport::TestCase
     assert articles.all? { |a| a.is_a?(Article) }
   end
 
+  test "available_articles dedupes across bought, own, and free pools" do
+    user = users(:reader_one)
+
+    # Behaviour: union of (bought and published) + (own and published) + (any free and published).
+    # The previous Ruby .to_a + .to_a + .uniq implementation was correct in semantics but
+    # materialised every free article in the database into memory before deduping. This test
+    # pins the set-equivalence so the SQL rewrite stays correct.
+    expected_ids = (
+      user.bought_articles.only_published.pluck(:id) +
+        user.articles.only_published.pluck(:id) +
+        Article.only_free.only_published.where.not(id: user.bought_articles.only_published.select(:id))
+          .where.not(id: user.articles.only_published.select(:id)).pluck(:id)
+    ).uniq.sort
+
+    actual_ids = user.available_articles.distinct.pluck(:id).sort
+
+    assert_equal expected_ids, actual_ids
+  end
+
   test "requires name, mixin_id, mixin_uuid, uid" do
     user = User.new
 

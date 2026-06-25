@@ -171,10 +171,11 @@ class User < ApplicationRecord
   end
 
   def available_articles
-    (
-      bought_articles.only_published.to_a +
-        articles.only_published.or(Article.only_free.only_published).to_a
-    ).uniq
+    Article
+      .where(id: bought_articles.only_published.select(:id))
+      .or(articles.only_published)
+      .or(Article.only_free.only_published)
+      .distinct
   end
 
   def owning_collection_ids
