@@ -29,11 +29,11 @@
 - `safeoutputs create_pull_request` actually creates the PR (intent is real, maintainer reviews/merges later). Patch file persists at `/tmp/gh-aw/aw-efficiency-*.patch`; query GitHub for the actual PR number.
 - `safeoutputs update_issue` rewrites the full monthly activity issue body in one call (`operation: "replace"`). Issue number + body work; everything else preserved.
 - **`safeoutputs push_repo_memory` total file size limit is 12 KB** (10 KB + 20% overhead). Trim older completed PRs into compact one-liners.
-- **Lazy-loading sweep pattern**: any `image_tag` inside a repeating list row, table row, or notification stream should pass `lazy: true` (Rails emits `loading="lazy" decoding="async"`). Hero/LCP must stay eager. Remaining non-lazy image_tags are all above-the-fold and intentional.
-- **`User#available_articles`** (`app/models/user.rb:168`): Ruby-side `(bought_articles.only_published.to_a + articles.only_published.or(...).to_a).uniq` materializes two AR relations to Ruby arrays before dedup. Could be `Article.published.where(...).union(...)`.
+- **Lazy-loading sweep pattern**: any `image_tag` / `remote_image_tag` inside a repeating list row, table row, or notification stream should pass `lazy: true` (Rails emits `loading="lazy" decoding="async"`). Hero/LCP must stay eager. Remaining non-lazy image_tags are all above-the-fold and intentional.
+- **`remote_image_tag` helper** (`app/helpers/application_helper.rb:8`): accepts both `loading:` (Rails standard) and `lazy: true` (mapped to `loading="lazy"`). Confirmed via standalone Ruby test (see Run 2026-06-25).
+- **`User#available_articles`** (`app/models/user.rb:168`): Ruby-side `(bought_articles.only_published.to_a + articles.only_published.or(...).to_a).uniq` materializes two AR relations to Ruby arrays before dedup. Covered by PR #1729 (repo-assist) as SQL `UNION` + `distinct`.
 - **`HomeController#hot_tags`**: 50 cached rows then `.sample(5)` in Ruby. Tiny impact; SQL `ORDER BY RANDOM() LIMIT 5` cleaner but small gain.
-- **`article_form_controller.js:403`** bug: `setTimeout(this.autosave(), 2000);` — calls debounced autosave immediately, then passes `undefined` to setTimeout. Retry never fires. Not a perf issue per se but a logic bug worth flagging.
-- **Edit-tool trailing whitespace pitfall**: `Edit` tool collapses trailing spaces inside `<div ...>` attributes. If you write a multi-line old_string that includes a line ending in `.../80"> ` (with trailing space), the new line gets emitted as `.../80">` (no space). When modifying files via Edit, run `python3` (or sed) to restore any accidentally-stripped trailing whitespace before committing.
+- **Edit-tool trailing whitespace pitfall**: `Edit` tool collapses trailing spaces inside `<div ...>` attributes. When modifying files via Edit, run `python3` (or sed) to restore any accidentally-stripped trailing whitespace before committing.
 
 ## optimization backlog
 
@@ -50,20 +50,21 @@
 | DONE (PR #1710, 2026-06-21) | `#modal` listener leak in 3 controllers |
 | DONE (PR #1714, 2026-06-22 by `an-lee`) | 16 list-view images lazy-loaded |
 | DONE (PR #1719, merged 2026-06-24 by `an-lee`) | prefers-reduced-motion — single global `@media` rule covering 35+ transition sites |
-| DONE (PR created 2026-06-24, awaiting push; patch `/tmp/gh-aw/aw-efficiency-autosave-retry-debounce.patch` 1,871 B / 41 lines; branch `efficiency/autosave-retry-debounce`, head `ce51bcc`) | `article_form_controller.js` autosave retry fix — 60% fewer XHRs on flaky network (5 → 2 in 6 s window) |
-| COVERED ELSEWHERE 2026-06-24 (PR #1729 repo-assist) | `User#available_articles` SQL `UNION` + `distinct` |
-| COVERED ELSEWHERE 2026-06-24 (PR #1731 repo-assist) | `Article#author_revenue_usd` / `reader_revenue_usd` `joins(:currency)` |
+| DONE (PR #1733, merged 2026-06-25) | `article_form_controller.js` autosave retry fix — 60% fewer XHRs on flaky network |
+| DONE (PR draft 2026-06-25, awaiting push) | `efficiency/admin-row-icons-lazy-loading` — 11 admin list-row icons lazy-loaded (commit `6c278753`, patch 8,884 B) |
+| COVERED ELSEWHERE (PR #1729 repo-assist 2026-06-24) | `User#available_articles` SQL `UNION` + `distinct` |
+| COVERED ELSEWHERE (PR #1731 repo-assist 2026-06-24) | `Article#author_revenue_usd` / `reader_revenue_usd` `joins(:currency)` |
 | LOW | `HomeController#hot_tags` — `.sample(5)` in Ruby; sample at SQL level |
 
-**Reduced-motion sweep pattern** (now applied via single global rule, commit `cbf2b9a`): add `@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; } }` once at the end of the Tailwind input CSS. Covers all 35+ transition / animation / duration sites in `app/views/` without per-call-site maintenance.
+**Reduced-motion sweep pattern** (applied via PR #1719, merged 2026-06-24): a single global `@media (prefers-reduced-motion: reduce)` rule at the end of the Tailwind input CSS covers all 35+ transition / animation / duration sites without per-call-site maintenance.
 
-**Dead-code sweep heuristic** (confirmed and exhausted): a Stimulus controller is dead iff all of (a) `grep -rn 'data-controller="<name>"' app/views/ test/`, (b) `grep -rn 'controller: "<name>"' app/views/`, (c) `grep -rn 'data-<name>-target' app/views/`, (d) `grep -rEn '<name>#' app/views/ app/javascript/` return zero hits. All 9 dead controllers across 3 sweep PRs are merged; remaining 42 controllers are all live.
+**Listener-leak sweep pattern** (applied across 7 controllers, all merged): any `addEventListener` / `setTimeout` / `.on(...)` in `connect()` whose target is global (document, window, singleton wallet, or the long-lived `#modal` turbo frame) must store the handle and clear it in `disconnect()`. No remaining listener-cleanup targets.
 
-**Listener-leak sweep pattern**: applied across 7 controllers, all merged. No remaining listener-cleanup targets in `app/javascript/controllers/`.
+**Lazy-loading sweep pattern** (PR #1714 merged 2026-06-22 + PR draft 2026-06-25): `image_tag` / `remote_image_tag` inside a repeating list row, table row, or notification stream should pass `lazy: true`. Admin row icons + currency icons + asset icons all sweep-able.
 
 ## work in progress
 
-_(none — 2026-06-22 PR #1719 `efficiency/prefers-reduced-motion` (head commit `8943f42`) is awaiting maintainer review; PR opened via `safeoutputs create_pull_request`.)_
+_(none — 2026-06-25 PR draft `efficiency/admin-row-icons-lazy-loading` (head commit `6c278753`) is awaiting maintainer review; PR opened via `safeoutputs create_pull_request`.)_
 
 ## completed work
 
@@ -74,23 +75,24 @@ _(none — 2026-06-22 PR #1719 `efficiency/prefers-reduced-motion` (head commit 
 - PR #1669 (2026-06-16): dead-code `textarea_autogrow_controller.js`, min −709 B / dev −1,143 B.
 - PR #1683 (2026-06-18): 7 dead controllers, min −2,534 B / dev −6,358 B.
 - PR #1693 (2026-06-19): `auto_hide_controller.js` setTimeout leak.
-- PR #1702 (2026-06-20): `session_controller.js` wallet listener leak (commit `07f9ad7`).
+- PR #1702 (2026-06-20): `session_controller.js` wallet listener leak.
 - PR #1710 (2026-06-21): modal listener cleanup in 3 controllers.
-- PR #1714 (2026-06-22 by `an-lee`): list-view lazy loading — 16 `image_tag` calls across 10 partials now `lazy: true`. Patch `/tmp/gh-aw/aw-efficiency-list-image-lazy-loading.patch` (12,258 B).
-- PR (2026-06-22, merged 2026-06-24 by `an-lee`): prefers-reduced-motion — single global `@media (prefers-reduced-motion: reduce)` rule in `app/assets/stylesheets/application.tailwind.css`. 1 file, +21/-0. CSS bundle 512,752 B → 513,072 B (+0.062%).
-- PR (2026-06-24, awaiting push): autosave-retry-debounce — `article_form_controller.js:406` `setTimeout(this.autosave(), 2000)` → `setTimeout(this.autosave, 2000)`. 1 file, +4/-1. Branch `efficiency/autosave-retry-debounce`, commit `ce51bcc`. Patch `/tmp/gh-aw/aw-efficiency-autosave-retry-debounce.patch` (1,871 B / 41 lines). Measured: 5 XHRs in 6 s (buggy) → 2 XHRs (fixed) under sustained-failure scenario, i.e. 60% reduction / 3 fewer PUT requests per 6 s window. Repro script `/tmp/autosave-final-repro.js`.
+- PR #1714 (2026-06-22 by `an-lee`): list-view lazy loading — 16 `image_tag` calls across 10 partials now `lazy: true`.
+- PR #1719 (2026-06-22, merged 2026-06-24 by `an-lee`): prefers-reduced-motion — single global `@media (prefers-reduced-motion: reduce)` rule.
+- PR #1733 (2026-06-24, merged 2026-06-25): autosave-retry-debounce — `article_form_controller.js:406` `setTimeout(this.autosave(), 2000)` → `setTimeout(this.autosave, 2000)`.
+- PR (2026-06-25, awaiting push): admin-row-icons-lazy-loading — `lazy: true` on 11 currency/asset icons across 10 admin row partials.
 
 ## last task runs
 
 | Task | Last run (UTC) |
 |------|----------------|
-| 1 | 2026-06-24 23:20 |
-| 2 | 2026-06-24 23:20 |
-| 3 | 2026-06-24 23:20 |
-| 4 | 2026-06-24 23:20 |
-| 5 | 2026-06-24 23:20 |
-| 6 | 2026-06-24 23:20 |
-| 7 | 2026-06-24 23:20 |
+| 1 | 2026-06-25 23:29 |
+| 2 | 2026-06-25 23:29 |
+| 3 | 2026-06-25 23:29 |
+| 4 | 2026-06-25 23:29 |
+| 5 | 2026-06-25 23:29 |
+| 6 | 2026-06-25 23:29 |
+| 7 | 2026-06-25 23:29 |
 
 ## monthly summary — checked off by maintainer
 
@@ -104,3 +106,4 @@ _(Lines removed from Suggested Actions when maintainer checked them off.)_
 - 2026-06-20: PR #1702 (merged 2026-06-20 by `an-lee`).
 - 2026-06-21: PR #1710 (merged 2026-06-21 by `an-lee`).
 - 2026-06-24: PR #1719 (merged 2026-06-24 01:54:29 UTC by `an-lee`).
+- 2026-06-25: PR #1733 (autosave retry fix) MERGED.
