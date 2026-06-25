@@ -211,11 +211,11 @@ class Article < ApplicationRecord
   end
 
   def author_revenue_usd
-    @author_revenue_usd ||= author_transfers.includes(:currency).sum("amount * currencies.price_usd")
+    @author_revenue_usd ||= author_transfers.joins(:currency).sum("amount * currencies.price_usd")
   end
 
   def reader_revenue_usd
-    @reader_revenue_usd ||= reader_transfers.includes(:currency).sum("amount * currencies.price_usd")
+    @reader_revenue_usd ||= reader_transfers.joins(:currency).sum("amount * currencies.price_usd")
   end
 
   def tag_names
