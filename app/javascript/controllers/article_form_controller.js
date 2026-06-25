@@ -400,7 +400,10 @@ export default class extends Controller {
             JSON.stringify({ title, intro, content, updatedAt: Date.now() }),
           );
 
-          setTimeout(this.autosave(), 2000);
+          // Pass the bound, debounced method reference (not its return value)
+          // so the retry actually fires 2 s later instead of invoking autosave
+          // synchronously and scheduling an undefined callback.
+          setTimeout(this.autosave, 2000);
         });
     } else {
       localStorage.setItem(
