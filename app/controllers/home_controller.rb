@@ -24,14 +24,22 @@ class HomeController < ApplicationController
   end
 
   def active_authors
-    @users =
+    relation =
       User
       .active
-      .where.not(id: current_user&.block_user_ids)
-      .where.not(id: current_user&.id)
       .where(locale: current_locale)
-      .limit(20)
-      .sample(5)
+    if current_user
+      # Same SQL subquery pattern as ArticleSearchService#filter_block_authors
+      # (PR #1598): never materialize the blocked user IDs in Ruby. The
+      # `actions` table has an index on (user_type, user_id, action_type),
+      # so the IN-list subquery is index-scannable.
+      blocked_ids =
+        Action
+        .where(user_id: current_user.id, action_type: "block", target_type: "User")
+        .select(:target_id)
+      relation = relation.where.not(id: blocked_ids).where.not(id: current_user.id)
+    end
+    @users = relation.limit(20).sample(5)
   end
 
   def more
