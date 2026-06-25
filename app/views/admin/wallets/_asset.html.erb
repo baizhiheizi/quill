@@ -1,7 +1,7 @@
 <tr>
   <td class="p-4">
     <div class="flex items-center space-x-2">
-      <%= remote_image_tag asset['icon_url'], class: "w-10 w-10 rounded-full" %>
+      <%= remote_image_tag asset['icon_url'], class: "w-10 w-10 rounded-full", lazy: true %>
       <span><%= asset['symbol'] %></span>
     </div>
   </td>

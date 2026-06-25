@@ -14,14 +14,14 @@
   </td>
   <td class="p-4">
     <div class="flex items-center space-x-2">
-      <%= remote_image_tag swap_order.pay_asset.icon_url, class: "w-10 h-10 rounded" %>
+      <%= remote_image_tag swap_order.pay_asset.icon_url, class: "w-10 h-10 rounded", lazy: true %>
       <span><%= swap_order.funds %></span>
       <span><%= swap_order.pay_asset.symbol %></span>
     </div>
   </td>
   <td class="p-4">
     <div class="flex items-center space-x-2">
-      <%= remote_image_tag swap_order.fill_asset.icon_url, class: "w-10 h-10 rounded" %>
+      <%= remote_image_tag swap_order.fill_asset.icon_url, class: "w-10 h-10 rounded", lazy: true %>
       <span><%= swap_order.amount || '-' %></span>
       <span><%= swap_order.fill_asset.symbol %></span>
     </div>
