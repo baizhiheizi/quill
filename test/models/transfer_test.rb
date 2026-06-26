@@ -241,8 +241,7 @@ class TransferTest < ActiveSupport::TestCase
   end
 
   test "notify_recipient is a no-op when currency is missing" do
-    transfer = build_transfer(opponent_id: @author.mixin_uuid)
-    transfer.write_attribute(:asset_id, SecureRandom.uuid) # force no currency match
+    transfer = build_transfer(opponent_id: @author.mixin_uuid, asset_id: SecureRandom.uuid)
 
     assert_nothing_raised { transfer.notify_recipient }
   end
@@ -295,30 +294,10 @@ class TransferTest < ActiveSupport::TestCase
   end
 
   test "process! drives a Bonus source through complete!" do
-    # The Bonus model expects a "bonus" table (singular) but the migration creates "bonuses".
-    # The pre-existing repository bug prevents creating real Bonus records in tests.
+    # The Bonus model expects a "bonus" table (singular) but the migration creates "bonuses",
+    # so real Bonus records cannot be created in tests yet. Remove this skip once the
+    # Bonus table-name mismatch is resolved and re-enable the assertion body.
     skip "Bonus model table name mismatch (model: 'bonus', migration: 'bonuses')"
-
-    bonus = build_bonus_for_state_test!
-    transfer = create_transfer!(
-      trace_id: SecureRandom.uuid,
-      source: bonus,
-      transfer_type: :bonus
-    )
-
-    called = false
-    bonus.define_singleton_method(:complete!) { called = true }
-
-    with_quill_bot_stub do
-      QuillBot.api.define_singleton_method(:safe_transaction) do |_trace_id|
-        { "data" => { "snapshot_id" => "snap-process-bonus", "transaction_hash" => "hash-bonus" } }
-      end
-
-      transfer.process!
-
-      assert called, "expected bonus.complete! to be invoked"
-      assert transfer.reload.processed?
-    end
   end
 
   test "process_safe_transfer! only calls create_safe_transfer when Mixin reports NotFoundError" do
@@ -345,7 +324,10 @@ class TransferTest < ActiveSupport::TestCase
     with_quill_bot_stub do
       QuillBot.api.define_singleton_method(:safe_transaction) { |_| { "data" => existing_snapshot } }
       create_called = false
-      QuillBot.api.define_singleton_method(:create_safe_transfer) { |**| create_called = true; { "data" => {} } }
+      QuillBot.api.define_singleton_method(:create_safe_transfer) do |_|
+        create_called = true
+        { "data" => {} }
+      end
 
       transfer.process_safe_transfer!
 
@@ -385,19 +367,6 @@ class TransferTest < ActiveSupport::TestCase
       transfer_type: :author_revenue,
       opponent_id: @author.mixin_uuid
     }.merge(attrs))
-  end
-
-  def stub_create_safe_transfer!(snapshot_id:, transaction_hash: "hash-stub")
-    QuillBot.api.define_singleton_method(:create_safe_transfer) do |**kwargs|
-      assert_equal kwargs[:asset_id], @btc.asset_id
-      assert_equal kwargs[:request_id], kwargs[:trace_id] if kwargs[:request_id].nil? == false
-      {
-        "data" => {
-          "snapshot_id" => snapshot_id,
-          "transaction_hash" => transaction_hash
-        }
-      }
-    end
   end
 
   def build_payment_with_state!(state)
