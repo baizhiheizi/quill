@@ -1,18 +1,18 @@
 # Stimulus controllers reference
 
-> **30-second summary:** Quill's frontend is wired by [Stimulus](https://stimulus.hotwired.dev/) controllers in [`app/javascript/controllers/`](../../app/javascript/controllers/). Each `*_controller.js` exports a default class for one behaviour; the manifest in [`index.js`](../../app/javascript/controllers/index.js) maps `data-controller="…"` to those classes. Listeners attached outside `this.element` **must** be removable from `disconnect()` so Turbo navigations do not leak handlers.
+> **30-second summary:** [Stimulus](https://stimulus.hotwired.dev/) controllers in [`app/javascript/controllers/`](../../app/javascript/controllers/) wire Quill's frontend. Each `*_controller.js` exports one class, registered in [`index.js`](../../app/javascript/controllers/index.js) via `data-controller="…"`. Listeners outside `this.element` must be removable from `disconnect()` so Turbo doesn't leak them across navigations.
 
 ## Conventions
 
 - **One controller per file** in [`app/javascript/controllers/`](../../app/javascript/controllers/), named `<snake_case>_controller.js`.
-- **Identifier mapping** lives in `index.js`: `application.register("floating", FloatingController)` binds `data-controller="floating"`. Regenerate after add/rename with `./bin/rails stimulus:manifest:update`.
-- **Lifecycle:** anything registered in `connect()` (observers, intervals, document-level listeners) **must** be torn down in `disconnect()`. Store bound handlers as instance properties (`this.boundOnScroll = …`) — inline arrow functions cannot be removed.
+- **Identifier mapping** lives in `index.js` — `application.register("floating", FloatingController)` binds `data-controller="floating"`. Regenerate after add/rename with `./bin/rails stimulus:manifest:update`.
+- **Lifecycle:** anything registered in `connect()` **must** be torn down in `disconnect()`. Store bound handlers on the instance (`this.boundOnScroll = …`) — inline arrow functions cannot be removed.
 - **Values/targets:** declare `static values` and `static targets`; consume via `this.<name>Value` and `this.has<Name>Target` / `this.<name>Target`.
-- **Reuse utilities** in [`app/javascript/utils/`](../../app/javascript/utils/) (`toast`, `notify`, `uploader`) and [`stimulus-use`](https://github.com/stimulus-use/stimulus-use) mixins (`useHover`, `useTransition`).
+- **Reuse utilities** in [`app/javascript/utils/`](../../app/javascript/utils/) (`toast`, `notify`, `uploader`) and [`stimulus-use`](https://github.com/stimulus-use/stimulus-use) mixins.
 
 ## Catalog
 
-Every controller registered in `app/javascript/controllers/index.js`, with its source file and a one-line purpose. Read the source for full behaviour. All file paths are under `app/javascript/controllers/`.
+Every controller in `app/javascript/controllers/index.js`, with its source file and a one-line purpose. Paths are under `app/javascript/controllers/`.
 
 | Identifier | File | Purpose |
 |------------|------|---------|
@@ -22,13 +22,13 @@ Every controller registered in `app/javascript/controllers/index.js`, with its s
 | `collections-form-component` | `collections_form_component_controller.js` | Author-side collection editing UI |
 | `comment-form` | `comment_form_controller.js` | Comment composer (inline validation, optimistic render) |
 | `darkmode` | `darkmode_controller.js` | Theme toggle persisted to local storage |
-| `dropdown` | `dropdown_controller.js` | Open/close menu with enter/leave transitions |
-| `eth-wallet` | `eth_wallet_controller.js` | Ethereum (MVM) wallet glue for EIP-1193 providers |
+| `dropdown` | `dropdown_controller.js` | Open/close menu with transitions |
+| `eth-wallet` | `eth_wallet_controller.js` | Ethereum (MVM) wallet glue for EIP-1193 |
 | `fennec` | `fennec_controller.js` | FenneC wallet integration |
 | `flash` | `flash_controller.js` | Dismissible flash banners |
-| `floating` | `floating_controller.js` | Mobile floating action bar that shows on scroll |
+| `floating` | `floating_controller.js` | Floating action bar shown on scroll |
 | `flyonui-dropdown` | `flyonui_dropdown_controller.js` | FlyonUI-themed dropdown wrapper |
-| `hljs` | `hljs_controller.js` | Highlight.js runner triggered on visible code blocks |
+| `hljs` | `hljs_controller.js` | Highlight.js runner on visible code blocks |
 | `infinite-scroll` | `infinite_scroll_controller.js` | Paginates via `IntersectionObserver` |
 | `load-more` | `load_more_controller.js` | Click-to-load pagination button |
 | `login` | `login_controller.js` | Login form state (provider switching) |
@@ -59,10 +59,10 @@ Every controller registered in `app/javascript/controllers/index.js`, with its s
 
 ### Lifecycle and document-level listeners
 
-Turbo replaces the `<body>` on every navigation, so `disconnect()` runs for every controller on every page. Anything registered in `connect()` must be removable in `disconnect()` — especially listeners outside `this.element`. Two failure modes follow:
+Turbo replaces `<body>` on every navigation, so `disconnect()` runs for every controller. Anything registered in `connect()` must be removable in `disconnect()` — especially listeners outside `this.element`:
 
-1. **Listener leaks.** `document.addEventListener("scroll", () => …)` with an inline arrow function creates a new reference on every `connect()`. After *N* article views you have *N* listeners firing on every scroll. Store the bound handler as an instance property so `disconnect()` can pass the same reference to `removeEventListener`.
-2. **Active timers.** Clear `setTimeout` handles in `disconnect()` so a queued callback cannot fire against a controller whose DOM is gone.
+1. **Listener leaks:** `document.addEventListener("scroll", () => …)` creates a new reference on every `connect()`, so `removeEventListener` can't reach it. Store the bound handler as an instance property.
+2. **Active timers:** clear `setTimeout` handles in `disconnect()` so a queued callback can't fire against a torn-down controller.
 
 The reference example is [`floating_controller.js`](../../app/javascript/controllers/floating_controller.js):
 
@@ -109,11 +109,11 @@ export default class extends Controller {
 }
 ```
 
-Things to notice: `this.boundOnScroll` is a stored reference (inline lambdas cannot be removed); the scroll listener uses `{ passive: true }` so Chrome does not stall paint waiting on a `preventDefault`; `show` is wrapped in `debounce(fn, ms)` once in `connect()` — passing `classList.add(...)` directly fails because it runs eagerly and returns `undefined`; `disconnect()` clears both the document listener and the pending hide timer. The same pattern applies to element-scoped listeners — see [`prefetch_controller.js`](../../app/javascript/controllers/prefetch_controller.js).
+Key details: `boundOnScroll` is stored on the instance so `removeEventListener` can reach it. `{ passive: true }` keeps Chrome from stalling paint waiting on `preventDefault`. `show` is debounced in `connect()` since `classList.add(...)` runs eagerly. `disconnect()` clears the listener and pending `hideTimer`. Element-scoped listeners follow the same pattern ([prefetch_controller.js](../../app/javascript/controllers/prefetch_controller.js)).
 
 ### Observer teardown
 
-`IntersectionObserver` and `MutationObserver` leak the same way as event listeners: the observer holds a closure over the controller, and if `disconnect()` cannot reach it, the closure survives every Turbo navigation. Store the observer as an instance property and call `.disconnect()` on it from `disconnect()`.
+`IntersectionObserver` and `MutationObserver` leak like event listeners if `disconnect()` can't reach the closure. Store the observer as an instance property and call `.disconnect()` on it from `disconnect()`.
 
 The reference example is [`infinite_scroll_controller.js`](../../app/javascript/controllers/infinite_scroll_controller.js):
 
@@ -148,10 +148,7 @@ export default class extends Controller {
   }
 
   handleIntersect(entries) {
-    const visible = entries.some((entry) => entry.isIntersecting);
-    if (visible) {
-      this.loadMore();
-    }
+    if (entries.some((entry) => entry.isIntersecting)) this.loadMore();
   }
 
   async loadMore() {
@@ -176,11 +173,11 @@ export default class extends Controller {
 }
 ```
 
-Things to notice: `this.observer` is stored on the instance — a local `const observer = new IntersectionObserver(...)` would be unreachable from `disconnect()` and leak the observer for the lifetime of the page; the observer is only created when `hasScrollAreaTarget` is true so a partial that lacks the target still tears down cleanly. `IntersectionObserver` callbacks fire repeatedly while the trigger stays in view, so the example dedups fetches in `loadMore()` with `this.loading` (overlapping fetches) and `this.lastFetchedHref` (repeated viewport hits).
+Key details: `observer` is stored on the instance (a local `const` would leak for the page's lifetime). The observer is only created when `hasScrollAreaTarget` is true. `loadMore()` dedups overlapping fetches (`this.loading`) and repeated viewport hits (`this.lastFetchedHref`).
 
 ### Debouncing DOM writes
 
-Wrap DOM-mutating work in `debounce` (use `underscore`'s, already in the bundle) so a burst of events collapses into a single write:
+Wrap DOM-mutating work in `debounce` (`underscore`, already in the bundle) so bursts collapse into one write:
 
 ```javascript
 import { debounce } from "underscore";
@@ -190,7 +187,7 @@ connect() {
 }
 
 disconnect() {
-  // cancel pending debounced calls so they don't fire after teardown
+  // cancel pending calls so they don't fire after teardown
   this.persist.cancel();
 }
 ```
@@ -199,30 +196,25 @@ For observer-style work that does not need DOM writes, prefer `IntersectionObser
 
 ### Using `stimulus-use`
 
-[`stimulus-use`](https://github.com/stimulus-use/stimulus-use) mixins add shared lifecycle hooks. Two in use today: `useHover` (`mouseEnter` / `mouseLeave`, [`sidebar_controller.js`](../../app/javascript/controllers/sidebar_controller.js)) and `useTransition` (`enter` / `leave` / `toggle`, [`dropdown_controller.js`](../../app/javascript/controllers/dropdown_controller.js)):
+[`stimulus-use`](https://github.com/stimulus-use/stimulus-use) mixins add shared lifecycle hooks. Two in use: `useHover` ([`sidebar_controller.js`](../../app/javascript/controllers/sidebar_controller.js)) and `useTransition` ([`dropdown_controller.js`](../../app/javascript/controllers/dropdown_controller.js)):
 
 ```javascript
 import { useHover } from "stimulus-use";
 
 connect() {
-  useHover(this);
+  useHover(this);  // adds mouseEnter() / mouseLeave()
 }
-
-mouseEnter() { /* … */ }
-mouseLeave() { /* … */ }
 ```
 
 ## Adding a new controller
 
-1. Run `./bin/rails generate stimulus <name>` (or hand-create `app/javascript/controllers/<name>_controller.js` and add `application.register("<name>", <Name>Controller)` to `index.js`).
-2. Implement `connect()` and `disconnect()`. Tear down everything — listeners, timers, observers, document-level registrations — and follow the patterns above for each one.
-3. For listeners outside `this.element`, store the bound handler on `this` and pass `{ passive: true }` where appropriate.
-4. Wrap DOM-write bursts in `debounce(fn, ms)` and `cancel()` it from `disconnect()`; expose the delay as a Stimulus value when views need to tune it.
-5. Add a row to the catalog above.
-6. Run `bun run lint-check` (Prettier) on the touched files before opening a pull request.
+1. Run `./bin/rails generate stimulus <name>` (or hand-create the file and register it in `index.js`).
+2. Implement `connect()` and `disconnect()`, tearing down everything registered in `connect()` per the patterns above.
+3. Add a row to the catalog above.
+4. Run `bun run lint-check` on the touched files before opening a pull request.
 
 ## See also
 
-- [Explanation → Architecture](../explanation/architecture.md) — Hotwire, Tailwind, esbuild, Bun
-- [How-to → Set up local development](../how-to/local-development.md) — Bun + esbuild tooling
-- [AGENTS.md](../../AGENTS.md) — agent-facing project context
+- [Explanation → Architecture](../explanation/architecture.md)
+- [How-to → Set up local development](../how-to/local-development.md)
+- [AGENTS.md](../../AGENTS.md)
