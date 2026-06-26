@@ -1,108 +1,108 @@
 {
   "Home": {
     "sourceFiles": [
-      {"path": "README.md", "hash": "manual"},
-      {"path": "config/routes.rb", "hash": "manual"},
-      {"path": "config/settings.yml", "hash": "manual"}
+      {"path": "README.md", "hash": "3030"},
+      {"path": "config/routes.rb", "hash": "4100"},
+      {"path": "config/settings.yml", "hash": "1093"}
     ],
-    "templateHash": "manual",
-    "generatedAt": "2026-06-24T00:00:00Z"
+    "templateHash": "v2",
+    "generatedAt": "2026-06-26T00:00:00Z"
   },
   "Architecture": {
     "sourceFiles": [
-      {"path": "config/routes.rb", "hash": "manual"},
+      {"path": "config/routes.rb", "hash": "4100"},
       {"path": "config/routes/admin.rb", "hash": "manual"}
     ],
-    "templateHash": "manual",
-    "generatedAt": "2026-06-24T00:00:00Z"
+    "templateHash": "v2",
+    "generatedAt": "2026-06-26T00:00:00Z"
   },
   "Value-Net": {
     "sourceFiles": [
       {"path": "app/services/orders/distribute_service.rb", "hash": "manual"}
     ],
-    "templateHash": "manual",
-    "generatedAt": "2026-06-24T00:00:00Z"
+    "templateHash": "v2",
+    "generatedAt": "2026-06-26T00:00:00Z"
   },
   "Backend": {
     "sourceFiles": [
-      {"path": "config/routes.rb", "hash": "manual"},
-      {"path": "config/routes/admin.rb", "hash": "manual"},
-      {"path": "config/queue.yml", "hash": "manual"},
-      {"path": "app/controllers/admin/comments_controller.rb", "hash": "manual"}
+      {"path": "config/routes.rb", "hash": "4100"},
+      {"path": "config/queue.yml", "hash": "manual"}
     ],
-    "templateHash": "manual",
-    "generatedAt": "2026-06-24T00:00:00Z"
+    "templateHash": "v2",
+    "generatedAt": "2026-06-26T00:00:00Z"
   },
   "Background-Jobs": {
     "sourceFiles": [
       {"path": "config/queue.yml", "hash": "manual"},
       {"path": "app/jobs/", "hash": "manual"}
     ],
-    "templateHash": "manual",
-    "generatedAt": "2026-06-24T00:00:00Z"
+    "templateHash": "v2",
+    "generatedAt": "2026-06-26T00:00:00Z"
   },
   "Services": {
     "sourceFiles": [
       {"path": "app/services/", "hash": "manual"}
     ],
-    "templateHash": "manual",
-    "generatedAt": "2026-06-24T00:00:00Z"
+    "templateHash": "v2",
+    "generatedAt": "2026-06-26T00:00:00Z"
   },
   "Frontend": {
     "sourceFiles": [
       {"path": "app/assets/stylesheets/application.tailwind.css", "hash": "manual"},
       {"path": "app/views/layouts/", "hash": "manual"}
     ],
-    "templateHash": "manual",
-    "generatedAt": "2026-06-24T00:00:00Z"
+    "templateHash": "v2",
+    "generatedAt": "2026-06-26T00:00:00Z"
   },
   "Stimulus-Controllers": {
     "sourceFiles": [
-      {"path": "app/javascript/controllers/index.js", "hash": "manual"},
+      {"path": "app/javascript/controllers/index.js", "hash": "5268"},
       {"path": "app/javascript/controllers/", "hash": "manual"}
     ],
-    "templateHash": "manual",
-    "generatedAt": "2026-06-24T00:00:00Z"
+    "templateHash": "v2",
+    "generatedAt": "2026-06-26T00:00:00Z"
   },
   "API-Reference": {
     "sourceFiles": [
-      {"path": "config/routes/api.rb", "hash": "manual"},
-      {"path": "app/controllers/api/", "hash": "manual"}
+      {"path": "config/routes/api.rb", "hash": "270"},
+      {"path": "app/controllers/api/articles_controller.rb", "hash": "2205"},
+      {"path": "app/controllers/api/base_controller.rb", "hash": "1772"},
+      {"path": "app/controllers/api/valid_users_controller.rb", "hash": "627"}
     ],
-    "templateHash": "manual",
-    "generatedAt": "2026-06-24T00:00:00Z"
+    "templateHash": "v2",
+    "generatedAt": "2026-06-26T00:00:00Z"
   },
   "Getting-Started": {
     "sourceFiles": [
-      {"path": "README.md", "hash": "manual"},
+      {"path": "README.md", "hash": "3030"},
       {"path": "Gemfile", "hash": "manual"},
       {"path": "package.json", "hash": "manual"},
       {"path": "mise.toml", "hash": "manual"},
-      {"path": "config/settings.yml", "hash": "manual"},
+      {"path": "config/settings.yml", "hash": "1093"},
       {"path": "bin/dev", "hash": "manual"}
     ],
-    "templateHash": "manual",
-    "generatedAt": "2026-06-24T00:00:00Z"
+    "templateHash": "v2",
+    "generatedAt": "2026-06-26T00:00:00Z"
   },
   "For-Agents": {
     "sourceFiles": [
       {"path": ".github/agentic-wiki/PAGES.md", "hash": "manual"}
     ],
-    "templateHash": "manual",
-    "generatedAt": "2026-06-24T00:00:00Z"
+    "templateHash": "v2",
+    "generatedAt": "2026-06-26T00:00:00Z"
   },
   "AGENTS.md": {
     "sourceFiles": [
       {"path": ".github/agentic-wiki/PAGES.md", "hash": "manual"}
     ],
-    "templateHash": "manual",
-    "generatedAt": "2026-06-24T00:00:00Z"
+    "templateHash": "v2",
+    "generatedAt": "2026-06-26T00:00:00Z"
   },
   "llms.txt": {
     "sourceFiles": [
       {"path": ".github/agentic-wiki/PAGES.md", "hash": "manual"}
     ],
-    "templateHash": "manual",
-    "generatedAt": "2026-06-24T00:00:00Z"
+    "templateHash": "v2",
+    "generatedAt": "2026-06-26T00:00:00Z"
   }
 }
