@@ -178,6 +178,29 @@ class User < ApplicationRecord
       .distinct
   end
 
+  # SQL subquery that returns every user_id that subscribed to `self`.
+  # The action_store gem's `subscribe_by_user_ids` materializes the full
+  # list of subscriber ids into a Ruby array first; this relation lets
+  # callers push the predicate straight into the database instead.
+  # Matches the NOT IN / IN subquery pattern used by
+  # `HomeController#active_authors` (PR #1735) and
+  # `ArticleSearchService#filter_block_authors`.
+  def subscribed_user_ids_relation
+    Action
+      .where(target_type: "User", target_id: id, action_type: "subscribe")
+      .select(:user_id)
+  end
+
+  # SQL subquery that returns every user_id that `self` has blocked.
+  # The action_store gem's `block_user_ids` materializes the list into
+  # Ruby first; this relation keeps the predicate in SQL. See
+  # `subscribed_user_ids_relation` for context.
+  def blocked_user_ids_relation
+    Action
+      .where(user_type: "User", user_id: id, target_type: "User", action_type: "block")
+      .select(:target_id)
+  end
+
   def owning_collection_ids
     Collection.joins(:buy_orders).where(buy_orders: { buyer_id: id }).distinct.pluck(:uuid)
   end
