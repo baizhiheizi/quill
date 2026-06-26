@@ -27,7 +27,7 @@
   </td>
   <td class="p-4">
     <div class="flex items-center space-x-2">
-      <%= remote_image_tag pre_order.currency.icon_url, class: "w-10 h-10 rounded" %>
+      <%= remote_image_tag pre_order.currency.icon_url, class: "w-10 h-10 rounded", lazy: true %>
       <span><%= pre_order.amount_tag %></span>
     </div>
   </td>
