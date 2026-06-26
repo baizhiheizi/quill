@@ -1,5 +1,6 @@
 # Test Improver Memory
 
+- [Run notes 2026-06-26](2026-06-26-notes.md) — NotificationSetting coverage (14 tests / 100 assertions, commit `faa4ec8`)
 - [Run notes 2026-06-25](2026-06-25-notes.md) — Transfer model coverage (35 tests / 83 assertions, commit `8d069bd`)
 - [Run notes 2026-06-20](2026-06-20-notes.md) — SwapOrderSwappingNotifier coverage (9 tests, commit `1704bf6`)
 - [Run notes 2026-06-19](2026-06-19-notes.md) — CollectionListedNotifier coverage (17 tests, commit `7e48232`)
@@ -27,14 +28,16 @@
 - **PreOrder**: AASM `drafted → paid/expired`. `pay!` after_commit `broadcast_to_views`. `setup_attributes` auto-fills follow_id/trace_id/memo (base64)/payee_id/asset_id.
 - **`safeoutputs create_pull_request` body limit**: 10 KB hard cap. Monthly Activity issue body must stay under 10 KB.
 - **`safeoutputs create_pull_request`**: Returns patch/bundle path when bridge is in patch mode; PRs may not appear in `list_pull_requests` until bridge pushes.
+- **`NotificationSetting.set_defaults` overrides constructor attrs on `.new()`** — `after_initialize` runs after constructor. Use `update!` (not `.new(attrs)`) to test `cast_string_value_to_boolean` callback behavior on a fresh record.
+- **`NotificationSetting::DEFAULT_SETTING`**: frozen, 19 keys, `webhook_url: nil`, `web + mixin_bot: true`, `webhook: false`.
 
 ## Backlog
 
 - **HIGH**: `Bonus` model AASM — blocked by `self.table_name = "bonus"` vs migration `"bonuses"` mismatch (pre-existing repo bug).
 - **LOW**: `NftCollection.icon_url` fallback — tiny.
 - **MEDIUM**: `MixinNetworkUser` model — zero coverage, heavy stubs needed.
-- All notifier backlog exhausted. See `2026-06-25-notes.md` for next-run candidates.
+- All notifier backlog exhausted. NotificationSetting done (2026-06-26).
 
 ## Last Run
 
-- 2026-06-25 — Transfer model coverage added (33 new tests / 83 assertions, branch `test-assist/transfer-model-coverage`, commit `8d069bd`); PR via safeoutputs patch mode; pivot from notifiers (exhausted) to revenue-pipeline-critical Transfer model.
+- 2026-06-26 — NotificationSetting coverage added (14 new tests / 100 assertions, branch `test-assist/notification-setting-coverage`, commit `faa4ec8`); PR via safeoutputs patch mode.
