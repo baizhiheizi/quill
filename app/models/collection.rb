@@ -144,7 +144,9 @@ class Collection < ApplicationRecord
     CollectionListedNotifier
       .with(record: self, collection: self)
       .deliver(
-        User.where(id: (author.subscribe_by_user_ids - author.block_user_ids))
+        User
+          .where(id: author.subscribed_user_ids_relation)
+          .where.not(id: author.blocked_user_ids_relation)
       )
   end
 
