@@ -12,15 +12,22 @@ class HomeController < ApplicationController
   end
 
   def hot_tags
-    hot_tags =
+    # Sample at the SQL level (`ORDER BY RANDOM() LIMIT 5`) and cache the
+    # already-narrowed 5-row Array. The previous shape loaded `.limit(50)`
+    # into the cache and then called `.sample(5)` in Ruby on every request
+    # (Enumerable's `sample` first materializes the relation to a 50-row
+    # Array, then picks 5). Caching the final 5 records keeps the cache
+    # payload ~10x smaller in production and removes the per-request Ruby
+    # sampling step.
+    @hot_tags =
       Rails.cache.fetch "#{current_locale}_hot_tags", expires_in: 5.minutes do
         Tag
           .hot
           .where(locale: current_locale.to_s.split("-").first)
-          .limit(50)
+          .order(Arel.sql("RANDOM()"))
+          .limit(5)
+          .to_a
       end
-
-    @hot_tags = hot_tags.sample(5)
   end
 
   def active_authors
