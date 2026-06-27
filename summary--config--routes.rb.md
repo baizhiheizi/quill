@@ -1,1 +1,2 @@
-Surfaces: draw :admin, :dashboard, :mvm, :api, :grover. Auth via /auth/{mixin,twitter,fennec,mvm}. Public: articles, comments, collections, tags, users, transfers. SubdomainConstraint removed in PR #1718.
+4100
+Surfaces: draw :admin, :dashboard, :mvm, :api, :grover. Auth /auth/{mixin,twitter,fennec,mvm}, /oauth/mixin/callback. /login, /logout, /nonce. Public: articles (except destroy, param:uuid, update_content, share, comments), collections, comments, upvoted/downvoted articles+comments, pre_orders (with state.json), mixpay_pre_order, transfers, article_references, block_users, subscribe_*, tags, currencies, users (with nested), locales, high_voltage pages (/fair, /rules). SubdomainConstraint removed (PR #1718 redirects prsdigg.com/bunshow.jp to quill.im with 301).

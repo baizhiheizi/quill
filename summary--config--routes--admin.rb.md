@@ -1,1 +1,2 @@
-Admin namespace with AdminConstraint. Mounts: MissionControl::Jobs, PgHero, ExceptionTrack. Resources: users, collections, articles, comments (no show after PR #1721), orders, pre_orders, payments, transfers, mixin_network_*, statistics, bonuses, wallets.
+1648
+Admin namespace with AdminConstraint (session :current_admin_id + Administrator.find_by). Mounts: MissionControl::Jobs, PgHero, ExceptionTrack. Resources: users (validate/unvalidate/block/unblock), collections, articles (block/unblock), comments (delete/undelete - no show after PR #1721), orders, pre_orders, swap_orders, payments, transfers (process_now), mixin_network_snapshots (process_now), mixin_network_users, statistics, bonuses (deliver), wallets (assets/snapshots/safe_outputs). Session login/logout.

@@ -5,62 +5,64 @@
       {"path": "config/routes.rb", "hash": "4100"},
       {"path": "config/settings.yml", "hash": "1093"}
     ],
-    "templateHash": "v2",
-    "generatedAt": "2026-06-26T00:00:00Z"
+    "templateHash": "v3",
+    "generatedAt": "2026-06-27T00:00:00Z"
   },
   "Architecture": {
     "sourceFiles": [
       {"path": "config/routes.rb", "hash": "4100"},
-      {"path": "config/routes/admin.rb", "hash": "manual"}
+      {"path": "config/routes/admin.rb", "hash": "1648"}
     ],
-    "templateHash": "v2",
-    "generatedAt": "2026-06-26T00:00:00Z"
+    "templateHash": "v3",
+    "generatedAt": "2026-06-27T00:00:00Z"
   },
   "Value-Net": {
     "sourceFiles": [
-      {"path": "app/services/orders/distribute_service.rb", "hash": "manual"}
+      {"path": "app/services/orders/distribute_service.rb", "hash": "7030"},
+      {"path": "app/models/order.rb", "hash": "auto"},
+      {"path": "app/models/article.rb", "hash": "auto"}
     ],
-    "templateHash": "v2",
-    "generatedAt": "2026-06-26T00:00:00Z"
+    "templateHash": "v3",
+    "generatedAt": "2026-06-27T00:00:00Z"
   },
   "Backend": {
     "sourceFiles": [
       {"path": "config/routes.rb", "hash": "4100"},
-      {"path": "config/queue.yml", "hash": "manual"}
+      {"path": "config/queue.yml", "hash": "615"}
     ],
-    "templateHash": "v2",
-    "generatedAt": "2026-06-26T00:00:00Z"
+    "templateHash": "v3",
+    "generatedAt": "2026-06-27T00:00:00Z"
   },
   "Background-Jobs": {
     "sourceFiles": [
-      {"path": "config/queue.yml", "hash": "manual"},
-      {"path": "app/jobs/", "hash": "manual"}
+      {"path": "config/queue.yml", "hash": "615"},
+      {"path": "app/jobs/", "hash": "auto"}
     ],
-    "templateHash": "v2",
-    "generatedAt": "2026-06-26T00:00:00Z"
+    "templateHash": "v3",
+    "generatedAt": "2026-06-27T00:00:00Z"
   },
   "Services": {
     "sourceFiles": [
-      {"path": "app/services/", "hash": "manual"}
+      {"path": "app/services/", "hash": "auto"}
     ],
-    "templateHash": "v2",
-    "generatedAt": "2026-06-26T00:00:00Z"
+    "templateHash": "v3",
+    "generatedAt": "2026-06-27T00:00:00Z"
   },
   "Frontend": {
     "sourceFiles": [
-      {"path": "app/assets/stylesheets/application.tailwind.css", "hash": "manual"},
-      {"path": "app/views/layouts/", "hash": "manual"}
+      {"path": "app/assets/stylesheets/application.tailwind.css", "hash": "auto"},
+      {"path": "app/views/layouts/", "hash": "auto"}
     ],
-    "templateHash": "v2",
-    "generatedAt": "2026-06-26T00:00:00Z"
+    "templateHash": "v3",
+    "generatedAt": "2026-06-27T00:00:00Z"
   },
   "Stimulus-Controllers": {
     "sourceFiles": [
       {"path": "app/javascript/controllers/index.js", "hash": "5268"},
-      {"path": "app/javascript/controllers/", "hash": "manual"}
+      {"path": "app/javascript/controllers/", "hash": "auto"}
     ],
-    "templateHash": "v2",
-    "generatedAt": "2026-06-26T00:00:00Z"
+    "templateHash": "v3",
+    "generatedAt": "2026-06-27T00:00:00Z"
   },
   "API-Reference": {
     "sourceFiles": [
@@ -69,40 +71,40 @@
       {"path": "app/controllers/api/base_controller.rb", "hash": "1772"},
       {"path": "app/controllers/api/valid_users_controller.rb", "hash": "627"}
     ],
-    "templateHash": "v2",
-    "generatedAt": "2026-06-26T00:00:00Z"
+    "templateHash": "v3",
+    "generatedAt": "2026-06-27T00:00:00Z"
   },
   "Getting-Started": {
     "sourceFiles": [
       {"path": "README.md", "hash": "3030"},
-      {"path": "Gemfile", "hash": "manual"},
-      {"path": "package.json", "hash": "manual"},
-      {"path": "mise.toml", "hash": "manual"},
+      {"path": "Gemfile", "hash": "auto"},
+      {"path": "package.json", "hash": "auto"},
+      {"path": "mise.toml", "hash": "auto"},
       {"path": "config/settings.yml", "hash": "1093"},
-      {"path": "bin/dev", "hash": "manual"}
+      {"path": "bin/dev", "hash": "auto"}
     ],
-    "templateHash": "v2",
-    "generatedAt": "2026-06-26T00:00:00Z"
+    "templateHash": "v3",
+    "generatedAt": "2026-06-27T00:00:00Z"
   },
   "For-Agents": {
     "sourceFiles": [
-      {"path": ".github/agentic-wiki/PAGES.md", "hash": "manual"}
+      {"path": ".github/agentic-wiki/PAGES.md", "hash": "auto"}
     ],
-    "templateHash": "v2",
-    "generatedAt": "2026-06-26T00:00:00Z"
+    "templateHash": "v3",
+    "generatedAt": "2026-06-27T00:00:00Z"
   },
   "AGENTS.md": {
     "sourceFiles": [
-      {"path": ".github/agentic-wiki/PAGES.md", "hash": "manual"}
+      {"path": ".github/agentic-wiki/PAGES.md", "hash": "auto"}
     ],
-    "templateHash": "v2",
-    "generatedAt": "2026-06-26T00:00:00Z"
+    "templateHash": "v3",
+    "generatedAt": "2026-06-27T00:00:00Z"
   },
   "llms.txt": {
     "sourceFiles": [
-      {"path": ".github/agentic-wiki/PAGES.md", "hash": "manual"}
+      {"path": ".github/agentic-wiki/PAGES.md", "hash": "auto"}
     ],
-    "templateHash": "v2",
-    "generatedAt": "2026-06-26T00:00:00Z"
+    "templateHash": "v3",
+    "generatedAt": "2026-06-27T00:00:00Z"
   }
 }
