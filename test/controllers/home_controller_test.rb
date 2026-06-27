@@ -22,21 +22,12 @@ class HomeControllerTest < ActionController::TestCase
     # Block the author so the predicate is actually exercised
     @user.block_user(users(:author))
 
-    queries = []
-    callback = ->(*, payload) {
-      next if payload[:name] == "SCHEMA"
-      queries << payload[:sql]
-    }
-
-    ActiveSupport::Notifications.subscribed(callback, "sql.active_record") do
-      get :active_authors
-    end
+    queries = capture_queries { get :active_authors }
 
     # The main users SELECT must inline the block predicate as a subquery
-    users_selects = queries.select { |q| q.include?('FROM "users"') }
-    assert_predicate users_selects, :any?, "expected at least one FROM \"users\" SELECT"
+    main = main_users_select(queries)
+    assert_not_nil main, "expected at least one FROM \"users\" SELECT"
 
-    main = users_selects.find { |q| q.include?("NOT IN") } || users_selects.first
     assert_match(/NOT\s+IN\s*\(SELECT/i, main,
       "expected active_authors to use NOT IN (SELECT ...) subquery for blocked users, got: #{main}")
 
@@ -54,20 +45,11 @@ class HomeControllerTest < ActionController::TestCase
     # Drop the signed-in session
     @request.session[:current_session_id] = nil
 
-    queries = []
-    callback = ->(*, payload) {
-      next if payload[:name] == "SCHEMA"
-      queries << payload[:sql]
-    }
+    queries = capture_queries { get :active_authors }
 
-    ActiveSupport::Notifications.subscribed(callback, "sql.active_record") do
-      get :active_authors
-    end
+    main = main_users_select(queries)
+    assert_not_nil main, "expected at least one FROM \"users\" SELECT"
 
-    users_selects = queries.select { |q| q.include?('FROM "users"') }
-    assert_predicate users_selects, :any?, "expected at least one FROM \"users\" SELECT"
-
-    main = users_selects.find { |q| q.include?("NOT IN") } || users_selects.first
     assert_no_match(/NOT\s+IN\s*\(SELECT/i, main,
       "expected no NOT IN subquery when @current_user is nil (guard clause), got: #{main}")
 
@@ -101,16 +83,7 @@ class HomeControllerTest < ActionController::TestCase
     # one query: `... ORDER BY ... RANDOM() LIMIT 5`. We can't reliably
     # assert the cache round-trip here (test env uses `:null_store`), so we
     # pin the SQL shape instead.
-    queries = []
-    callback = ->(*, payload) {
-      next if payload[:name] == "SCHEMA"
-      next if payload[:sql].include?("solid_cache_entries")
-      queries << payload[:sql]
-    }
-
-    ActiveSupport::Notifications.subscribed(callback, "sql.active_record") do
-      get :hot_tags
-    end
+    queries = capture_queries(exclude: [ "solid_cache_entries" ]) { get :hot_tags }
 
     tag_selects = queries.select { |q| q.start_with?("SELECT") && q.include?('FROM "tags"') }
     assert_predicate tag_selects, :any?,
@@ -139,5 +112,29 @@ class HomeControllerTest < ActionController::TestCase
     get :hot_tags
     assert_response :success
     assert_not_nil @controller.instance_variable_get(:@hot_tags)
+  end
+
+  private
+
+  # Captures every SQL query issued by the block (SCHEMA queries excluded).
+  # Pass `exclude:` to also drop noise from a known source (e.g. solid_cache).
+  def capture_queries(exclude: [], &block)
+    queries = []
+    callback = ->(*, payload) {
+      next if payload[:name] == "SCHEMA"
+      next if exclude.any? { |needle| payload[:sql].include?(needle) }
+      queries << payload[:sql]
+    }
+    ActiveSupport::Notifications.subscribed(callback, "sql.active_record", &block)
+    queries
+  end
+
+  # Returns the primary users SELECT — the one whose shape the action
+  # controls (the others are session/auth lookups). When the action emits
+  # a NOT IN block-filter subquery, prefer that select; otherwise fall
+  # back to the first users SELECT.
+  def main_users_select(queries)
+    users_selects = queries.select { |q| q.include?('FROM "users"') }
+    users_selects.find { |q| q.include?("NOT IN") } || users_selects.first
   end
 end
