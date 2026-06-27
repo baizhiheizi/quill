@@ -93,4 +93,51 @@ class HomeControllerTest < ActionController::TestCase
     result = @controller.instance_variable_get(:@users).to_a
     assert_not_includes result.map(&:id), author.id
   end
+
+  test "hot_tags samples at the SQL level with LIMIT 5 (not LIMIT 50 + Ruby sample)" do
+    # The previous shape loaded `.limit(50)` and then called `.sample(5)` in
+    # Ruby, which meant ActiveRecord issued a 50-row fetch plus a separate
+    # COUNT + OFFSET round-trip for the sample. The new shape does both in
+    # one query: `... ORDER BY ... RANDOM() LIMIT 5`. We can't reliably
+    # assert the cache round-trip here (test env uses `:null_store`), so we
+    # pin the SQL shape instead.
+    queries = []
+    callback = ->(*, payload) {
+      next if payload[:name] == "SCHEMA"
+      next if payload[:sql].include?("solid_cache_entries")
+      queries << payload[:sql]
+    }
+
+    ActiveSupport::Notifications.subscribed(callback, "sql.active_record") do
+      get :hot_tags
+    end
+
+    tag_selects = queries.select { |q| q.start_with?("SELECT") && q.include?('FROM "tags"') }
+    assert_predicate tag_selects, :any?,
+      "expected at least one FROM \"tags\" SELECT, got: #{queries.inspect}"
+
+    main = tag_selects.first
+    # `RANDOM()` may be appended to the existing `Tag.hot` ORDER BY (which
+    # already orders by `COUNT(articles.id) DESC, tags.created_at DESC`),
+    # so check for the `RANDOM()` token rather than an exact match.
+    assert_match(/RANDOM\(\)/i, main,
+      "expected RANDOM() in the ORDER BY at the SQL level, got: #{main}")
+    assert_match(/LIMIT\s+\$4|limit\s+5/i, main,
+      "expected LIMIT 5 (not 50) at the SQL level, got: #{main}")
+
+    # `@hot_tags` must be a materialized Array — not an AR relation still
+    # capable of issuing more queries.
+    result = @controller.instance_variable_get(:@hot_tags)
+    assert_kind_of Array, result
+    assert_operator result.length, :<=, 5
+  end
+
+  test "hot_tags is called as a public action and assigns @hot_tags" do
+    # The endpoint is mounted as a turbo-frame src (`/hot_tags`) by
+    # `app/views/articles/_widgets.html.erb`. Verify the action is routed
+    # and assigns the instance variable.
+    get :hot_tags
+    assert_response :success
+    assert_not_nil @controller.instance_variable_get(:@hot_tags)
+  end
 end
