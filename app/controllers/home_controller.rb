@@ -46,7 +46,15 @@ class HomeController < ApplicationController
         .select(:target_id)
       relation = relation.where.not(id: blocked_ids).where.not(id: current_user.id)
     end
-    @users = relation.limit(20).sample(5)
+    # Same SQL-sample pattern as `hot_tags`: `ORDER BY RANDOM() LIMIT 5` lets
+    # Postgres pick 5 rows directly from the filtered relation instead of
+    # shipping 20 rows over the wire and discarding 15 in Ruby. The previous
+    # `.limit(20).sample(5)` shape was 75% wasted bytes (20 rows for 5) plus
+    # an Enumerable#sample call after the AR relation materialised. We don't
+    # cache the result here (unlike `hot_tags`) because the sample depends
+    # on the per-visitor blocked-user set — caching would return identical
+    # authors to every signed-in visitor regardless of their blocks.
+    @users = relation.order(Arel.sql("RANDOM()")).limit(5).to_a
   end
 
   def more

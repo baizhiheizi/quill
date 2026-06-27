@@ -20,6 +20,19 @@ Benchmarks::Runner.register("article.random_readers") do
   article.random_readers(24).to_a
 end
 
+# Mirror of `HomeController#active_authors` for the signed-out path
+# (no per-visitor blocked-user filter — all visitors share the same sample).
+# Uses `ORDER BY RANDOM() LIMIT 5` so Postgres picks 5 rows directly; the
+# previous shape loaded `.limit(20)` and discarded 15 in Ruby.
+Benchmarks::Runner.register("home.active_authors") do
+  User.active.where(locale: :en).order(Arel.sql("RANDOM()")).limit(5).to_a
+end
+
+# Pre-optimisation shape, kept around for direct A/B comparison.
+Benchmarks::Runner.register("home.active_authors.legacy") do
+  User.active.where(locale: :en).limit(20).sample(5)
+end
+
 Benchmarks::Runner.setup("article_search.bought") do
   article = articles(:published_paid)
   buyer = users(:reader_one)
