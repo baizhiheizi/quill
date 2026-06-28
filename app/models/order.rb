@@ -113,12 +113,20 @@ class Order < ApplicationRecord
   end
 
   def notify_subscribers
+    # `buyer.subscribe_by_users` materialises every User record that follows
+    # `buyer` into a Ruby Array before `Noticed.deliver` walks the relation to
+    # build `noticed_notifications` rows. For popular buyers with many
+    # followers this allocates O(n) User records per order. The `subscribed
+    # _user_ids_relation` helper on User (added by PR #1749 for the same
+    # reason) pushes the predicate into a `IN (SELECT user_id FROM actions
+    # WHERE …)` subquery so Noticed loads only the User records it needs.
+    followers = User.where(id: buyer.subscribed_user_ids_relation)
     if reward_article?
-      ArticleRewardedNotifier.with(record: self, order: self).deliver(buyer.subscribe_by_users)
+      ArticleRewardedNotifier.with(record: self, order: self).deliver(followers)
     elsif buy_article?
-      ArticleBoughtNotifier.with(record: self, order: self).deliver(buyer.subscribe_by_users)
+      ArticleBoughtNotifier.with(record: self, order: self).deliver(followers)
     elsif buy_collection?
-      CollectionBoughtNotifier.with(record: self, order: self).deliver(buyer.subscribe_by_users)
+      CollectionBoughtNotifier.with(record: self, order: self).deliver(followers)
     end
   end
 

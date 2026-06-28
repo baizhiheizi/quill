@@ -575,4 +575,77 @@ class OrderTest < ActiveSupport::TestCase
       assert_equal({}, order.collect_early_readers)
     end
   end
+
+  # === notify_subscribers SQL shape ===
+
+  # `Order#notify_subscribers` fires on every buy/reward/collection purchase.
+  # The previous shape called `buyer.subscribe_by_users`, which materialised
+  # every follower into a Ruby Array (action_store's `has_many through:` issues
+  # a SELECT for actions + a SELECT for users). The current shape pushes the
+  # predicate into `User.where(id: buyer.subscribed_user_ids_relation)` — a
+  # single SELECT with `IN (SELECT user_id FROM actions …)`.
+  test "notify_subscribers for buy_article pushes follower filter to SQL subquery" do
+    with_quill_bot_stub do
+      ensure_notification_setting!(@reader_one)
+      ensure_notification_setting!(@reader_two)
+
+      # reader_two subscribes to reader_one so the notify_subscribers call has
+      # at least one recipient and the `IN (SELECT user_id FROM actions …)`
+      # subquery actually has rows to match.
+      @reader_two.create_action(:subscribe, target: @reader_one) unless @reader_two.subscribe_user?(@reader_one)
+
+      order = create_buy_order!(article: @article, buyer: @reader_one, total: 1.0)
+
+      queries = capture_queries { order.notify_subscribers }
+
+      users_selects = queries.select { |q| q.include?('FROM "users"') }
+
+      # Exactly one SELECT FROM users — no action_store materialise step
+      # (which would add a second one for the through: relation).
+      assert_equal 1, users_selects.length,
+                   "expected 1 FROM users SELECT, got #{users_selects.length}: #{users_selects.inspect}"
+
+      # The follower filter is pushed into SQL via an IN-subquery rather than
+      # a materialized id list.
+      main_select = users_selects.first
+      assert_includes main_select, 'IN (SELECT "actions"."user_id" FROM "actions"',
+                      "follower filter should be a SQL subquery, got: #{main_select}"
+
+      # The Notified::Notification rows still get created for the follower.
+      assert_operator Noticed::Notification.where(recipient: @reader_two).count, :>=, 1
+    end
+  end
+
+  test "notify_subscribers for reward_article uses the same subquery shape" do
+    with_quill_bot_stub do
+      ensure_notification_setting!(@reader_one)
+      ensure_notification_setting!(@reader_two)
+
+      @reader_two.create_action(:subscribe, target: @reader_one) unless @reader_two.subscribe_user?(@reader_one)
+
+      payment = create_payment!(payer: @reader_one, article: @article, order_type: "REWARD", amount: 0.5)
+      order = payment.order
+
+      queries = capture_queries { order.notify_subscribers }
+
+      users_selects = queries.select { |q| q.include?('FROM "users"') }
+      assert_equal 1, users_selects.length,
+                   "expected 1 FROM users SELECT, got #{users_selects.length}: #{users_selects.inspect}"
+      assert_includes users_selects.first, 'IN (SELECT "actions"."user_id" FROM "actions"',
+                      "reward path should use the SQL subquery shape"
+    end
+  end
+
+  private
+
+  # Captures every SQL query emitted while running `block`, dropping the
+  # SCHEMA queries Rails fires on first-touch (e.g. cache table probes).
+  def capture_queries(&block)
+    queries = []
+    subscriber = ->(*, payload) {
+      queries << payload[:sql] unless payload[:name] == "SCHEMA"
+    }
+    ActiveSupport::Notifications.subscribed(subscriber, "sql.active_record", &block)
+    queries
+  end
 end
