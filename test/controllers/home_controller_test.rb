@@ -76,6 +76,29 @@ class HomeControllerTest < ActionController::TestCase
     assert_not_includes result.map(&:id), author.id
   end
 
+  test "active_authors samples at the SQL level with LIMIT 5 (not LIMIT 20 + Ruby sample)" do
+    # Same SQL-sample pattern as `hot_tags`. The previous shape loaded
+    # `.limit(20)` then called `.sample(5)` in Ruby. The new shape lets
+    # Postgres pick 5 rows directly via `ORDER BY RANDOM() LIMIT 5`. We
+    # can't assert cache behavior here (test env uses `:null_store`); pin
+    # the SQL shape instead.
+    queries = capture_queries { get :active_authors }
+
+    main = main_users_select(queries)
+    assert_not_nil main, "expected at least one FROM \"users\" SELECT"
+
+    assert_match(/RANDOM\(\)/i, main,
+      "expected RANDOM() in the ORDER BY at the SQL level, got: #{main}")
+    assert_match(/LIMIT\s+\$4|limit\s+5/i, main,
+      "expected LIMIT 5 (not 20) at the SQL level, got: #{main}")
+
+    # `@users` must be a materialized Array — not an AR relation still
+    # capable of issuing more queries.
+    result = @controller.instance_variable_get(:@users)
+    assert_kind_of Array, result
+    assert_operator result.length, :<=, 5
+  end
+
   test "hot_tags samples at the SQL level with LIMIT 5 (not LIMIT 50 + Ruby sample)" do
     # The previous shape loaded `.limit(50)` and then called `.sample(5)` in
     # Ruby, which meant ActiveRecord issued a 50-row fetch plus a separate
