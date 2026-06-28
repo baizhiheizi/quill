@@ -6,86 +6,74 @@
 - **Stack**: Ruby 4.0.5, PostgreSQL, Solid Cache/Queue/Cable, Hotwire, esbuild
 
 ## Validated Commands
-
-### Build/Setup
-- `bundle install --jobs4 --retry3` - Install Ruby gems
-- `bun install --frozen-lockfile` - Install Node modules
-- `bin/dev` - Run full development stack
-- `bun run build` / `bun run build:css` - Build frontend assets
-
-### Test (NOTE: `unset CI` in this workflow env)
-- `bin/rails test` - Run all tests
-- `bin/rails zeitwerk:check` - Check Zeitwerk autoload
-- `CI= bin/rails test` - Triggers eager load (DO NOT use — see Performance Notes)
-
-### Lint
-- `bin/rubocop` - Ruby lint
-- `bun run lint-check` - Prettier check on JS/TS
-- `bun run lint` - Prettier write
-
-### CI
-- `bin/ci` - Full CI pipeline
-
-### Benchmarks
-- `bin/benchmark` - All scenarios; per-scenario via `bin/benchmark article_search.subscribed`
-- **Env note**: must `unset CI` first (see Performance Notes)
+- `bundle install --jobs4 --retry3` — Install Ruby gems
+- `bun install --frozen-lockfile` — Install Node modules
+- `bin/dev` — Run full development stack
+- `bin/rails test` — Run all tests (NOTE: `unset CI` in this workflow env)
+- `bin/rails zeitwerk:check` — Check Zeitwerk autoload
+- `bin/rubocop` — Ruby lint
+- `bun run lint-check` — Prettier check on JS/TS
+- `bin/ci` — Full CI pipeline
+- `bin/benchmark` — All scenarios; per-scenario via `bin/benchmark article_search.subscribed`
 
 ## Performance Opportunities Backlog
-1. **[DONE] `has_unread_notification?` / `unread_notifications_count` hot path** — SQL `exists?` / `count` on `notifications.unread.for_web`. PR #1695 — **MERGED 2026-06-19**.
-2. **[DONE] Admin::UsersController `bought_articles_count` / `author_revenue_total_usd` / `payment_total_usd`** — Added `preload_user_aggregates(users)` private helper that runs 3 batched GROUP BY queries and primes the per-user memoization ivars. 72 → 3 queries per admin user list page (96% reduction). PR #1708 — **MERGED 2026-06-21**.
-3. **[DONE] HomeController#active_authors blocked-users exclusion** — PR opened 2026-06-25 (`perf-assist/active-authors-block-subquery-20260625`). Replaces `where.not(id: current_user&.block_user_ids)` with a `NOT IN (SELECT actions.target_id FROM actions WHERE ...)` subquery. Eliminates 1 round-trip + O(N) Ruby array allocation per render. Guest render no longer touches the actions table at all. Same pattern as PR #1598.
-4. **[DONE by repo-assist] `author_revenue_usd` / `reader_revenue_usd` (single-article)** — `includes(:currency)` → `joins(:currency)` cleanup. PR #1731 (repo-assist) — **MERGED 2026-06-25**.
-5. **[LOW] `Admin::UsersController#show` single-user aggregates** — same three methods called once on `@user` (3 queries, single round-trip each). Not worth batching; admin show page is low-traffic.
-6. **[POTENTIAL] `notify_subscribers` callbacks (`Article` / `Tagging` / `Collection`)** — Three `after_create_commit` callbacks all build `(author.subscribe_by_user_ids - author.block_user_ids)` Ruby array set-difference then pass to `User.where(id: ...)`. Cold path (runs once per record create). Could be a single SQL: `WHERE id IN (SELECT target_id FROM actions WHERE …) AND id NOT IN (SELECT user_id FROM actions WHERE …)`. Symmetric follow-up to PRs #1546/#1598/active_authors, but absolute wall-time impact is small.
+1. **[DONE] `has_unread_notification?` / `unread_notifications_count`** — SQL `exists?` / `count` on `notifications.unread.for_web`. PR #1695 — **MERGED 2026-06-19**.
+2. **[DONE] Admin user-list aggregate preloader** — `preload_user_aggregates(users)` runs 3 batched GROUP BY queries. 72 → 3 queries per page. PR #1708 — **MERGED 2026-06-21**.
+3. **[DONE] `active_authors` block subquery** — PR #1735 — **MERGED 2026-06-26**.
+4. **[DONE] `author_revenue_usd` / `reader_revenue_usd`** — `includes` → `joins(:currency)` cleanup. PR #1731 (repo-assist) — **MERGED 2026-06-25**.
+5. **[DONE by repo-assist] `notify_subscribers` (Article/Collection/Tagging)** — PR #1749 — **MERGED 2026-06-26**. Adds `User#subscribed_user_ids_relation` / `User#blocked_user_ids_relation` helpers.
+6. **[DONE by efficiency-improver] `active_authors` SQL sampling** — PR #1759 — **MERGED 2026-06-28**.
+7. **[DONE by efficiency-improver] `hot_tags` SQL sampling + cache** — PR #1752 — **MERGED 2026-06-27**.
+8. **[DRAFT PR] `Order#notify_subscribers` SQL subquery refactor** — Branch `perf-assist/order-notify-subscribers-sql-subquery-20260628` (draft PR opened 2026-06-28). Reuses PR #1749 helper. Eliminates 1 round-trip per buy/reward/collection purchase. Fires on EVERY order, not just first publish.
+9. **[LOW] `Admin::UsersController#show` single-user aggregates** — 3 queries, single round-trip each. Not worth batching.
+10. **[POTENTIAL] `Dashboard::NotificationsController#index`** — `current_user.notifications.for_web.newest_first.select(&:visible_in_web?)` materialises ALL web notifications before pagy filters. A SQL-side `visible_in_web?` predicate (joins notification_setting) would be a real win for power users.
 
 ## Work in Progress
-- Draft PR open on `perf-assist/active-authors-block-subquery-20260625` — waiting for maintainer review
+- Draft PR open on `perf-assist/order-notify-subscribers-sql-subquery-20260628` — waiting for maintainer review
 
-## Completed Work
-- PR (home active_authors block subquery) on `perf-assist/active-authors-block-subquery-20260625` — **DRAFT 2026-06-25** (queries 2.01→2.0 per call, 1 round-trip + O(N) Ruby array eliminated per render)
-- PR #1708 (admin user-list aggregate preloader) on `perf-assist/admin-user-aggregates-batch-20260620-104507` — **MERGED 2026-06-21**
+## Completed Work (recent)
+- PR (order follower filter subqueries) — **DRAFT 2026-06-28**
+- PR #1759 (active_authors SQL sampling, efficiency-improver) — **MERGED 2026-06-28**
+- PR (home active_authors block subquery) — **MERGED 2026-06-26** as PR #1735
+- PR #1749 (notify_subscribers Article/Collection/Tagging, repo-assist) — **MERGED 2026-06-26**
+- PR #1752 (hot_tags SQL sampling, efficiency-improver) — **MERGED 2026-06-27**
+- PR #1708 (admin user-list aggregate preloader) — **MERGED 2026-06-21**
 - PR #1695 (unread notification SQL EXISTS) — **MERGED 2026-06-19**
 - PR #1688 (users.articles_count / comments_count counter caches) — **MERGED 2026-06-19**
 - PR #1678 (Tag.hot count fix) — **MERGED 2026-06-17**
 - PR #1634 (Users::Scopable LEFT JOINs) — **MERGED 2026-06-14**
-- Monthly Activity issue #1513 `[perf-improver] Monthly Activity 2026-06` last updated 2026-06-25 (this run)
-- PR #1518 (random_readers SQL sampling) — merged
-- PR #1521 (bought subquery) — merged
-- PR #1523 (DailyStatistic payer counts) — merged
-- PR #1539 (order_by_popularity LEFT JOIN + COALESCE) — merged 2026-06-07
-- PR #1546 (subscribed filter SQL subqueries) — merged 2026-06-09
-- PR #1598 (block filters SQL subqueries) — merged 2026-06-12
+- PR #1598 (block filters SQL subqueries) — **MERGED 2026-06-12**
+- PR #1546 (subscribed filter SQL subqueries) — **MERGED 2026-06-09**
+- PR #1539 (order_by_popularity LEFT JOIN + COALESCE) — **MERGED 2026-06-07**
+- Monthly Activity issue #1513 `[perf-improver] Monthly Activity 2026-06` last updated 2026-06-28 (this run)
 
 ## Performance Notes
 - **Env quirk**: gh-aw sets `CI=true`, triggering `config.eager_load = true` in test.rb → HTTP 403 from arweave.net. **`unset CI`** before any `bin/rails test` / `bin/benchmark`.
 - **Memoization measurement**: `||=` ivars persist across loop iterations in `bin/rails runner`. Reload user instances per simulated request to measure properly.
 - **Order test fixtures**: `Order#setup_attributes` needs a Payment; use `Order.insert_all!` for benchmark tests that don't exercise the lifecycle.
 - **`blocked_reader` fixture has no `authorization`**: rendering admin user list raises `undefined method 'provider' for nil` via `messenger?`. Use direct controller tests or filter `@users` to authorized-only.
-- **Admin auth bypass**: `@request.session[:current_admin_id] = administrators(:one).id` — `Admin::BaseController` only checks `current_admin.blank?`.
-- **User session bypass for `ActionController::TestCase`**: set `@request.session[:current_session_id] = test_session.uuid` (where `test_session` is the return of `sign_in(user)`). `current_user` is `Session.find_by(uuid: session[:current_session_id])&.user`.
-- **Counter cache pattern**: migration adds column + `belongs_to ..., counter_cache: true` on child. Already used extensively (Tagging→Tag, Comment→Commentable, action_store, etc.). SoftDeletable caveat: only fires on create/destroy, not `soft_delete!`.
-- **Action store**: `action_store :verb, :target` dynamically generates `subscribe_user_ids`, `block_user_ids`, etc. Don't define manually in User model.
-- **`safeoutputs update_issue` doesn't actually update body** in push-triggered runs (no triggering issue). Workaround: use `safeoutputs add_comment` with `item_number:` to append a new comment to the Monthly Activity issue.
-- **`safeoutputs create_pull_request`** returns success with patch + bundle on disk — workflow orchestrator pushes and opens PR after agent run.
+- **Admin auth bypass**: `@request.session[:current_admin_id] = administrators(:one).id`.
+- **Counter cache pattern**: migration adds column + `belongs_to ..., counter_cache: true` on child. SoftDeletable caveat: only fires on create/destroy, not `soft_delete!`.
+- **Action store**: `action_store :verb, :target` dynamically generates `subscribe_user_ids`, `block_user_ids`, etc. `subscribe_by_users` is a `has_many through: :subscribe_by_user_actions, source: :user` — issues 2 SELECTs (actions + users via auto-include).
+- **`safeoutputs update_issue` doesn't actually update body** in push-triggered runs. Workaround: `safeoutputs add_comment` with `item_number:`.
 - **Query counter**: no `assert_queries_count` helper. Use `ActiveSupport::Notifications.subscribed(->(*, p) { ... }, "sql.active_record")` and skip `payload[:name] == "SCHEMA"`.
 - **`Tag.hot.count` bug**: `relation.select("COUNT(...) AS foo")` (unused alias) breaks `relation.count` — PG rejects. Drop the alias or use `count(:id)`.
-- **Test view rendering**: tests that hit `get :foo` may try to render the layout (which loads `application.css` — not present in test env). Stub `render` on the controller class to inspect `@users` / SQL via `ActiveSupport::Notifications.subscribed` instead. Pattern: `HomeController.send(:define_method, :render) { |*| response_body || "" }` in setup, with teardown to `remove_method`. Also use `@controller.instance_variable_get(:@ivar)` instead of `assigns(:ivar)` (the latter requires the `rails-controller-testing` gem, which is not loaded here).
 - **`assigns` is unavailable** without `rails-controller-testing`. Use `@controller.instance_variable_get(:@ivar)` instead.
-- **Bug history**: INNER JOIN → LEFT JOIN + COALESCE for `order_by_popularity` (PR #1539), `Users::Scopable` order_by_* (PR #1634), `Tag.hot` count alias (PR #1678). All discovered and fixed by perf-improver.
-- **`active_authors` is the homepage's "active authors" Turbo Frame** — highest-traffic page in the app. Every round-trip saved there scales with homepage traffic.
+- **Bug history**: INNER JOIN → LEFT JOIN + COALESCE for `order_by_popularity` (PR #1539), `Users::Scopable` order_by_* (PR #1634), `Tag.hot` count alias (PR #1678).
+- **`active_authors` is the homepage's "active authors" Turbo Frame** — highest-traffic page in the app.
+- **Notifier helpers** (in `test/support/notifier_helpers.rb`): `ensure_notification_setting!(user)` creates the row; `deliver_notifier!(klass, record:, recipient:)` wraps the `.with(...).deliver(...)` chain; `notification_for(recipient)` returns the most recent `Noticed::Notification`.
+- **Noticed `deliver(relation)`**: calls `Array.wrap(recipients)` which calls `.to_a` on the relation — so even a Relation becomes a Ruby Array before the bulk insert, but the SQL path to *populate* the relation is now a single `IN (SELECT ...)` instead of the action_store materialize step.
+- **`Noticed::Notification.where(recipient: user)`** works via polymorphic `recipient_id` + `recipient_type` columns.
 
 ## Run History (recent)
-- **2026-06-25** - [Run](https://github.com/baizhiheizi/quill/actions/runs/28164802463) - `HomeController#active_authors` block subquery. Draft PR on `perf-assist/active-authors-block-subquery-20260625`. Verified PR #1708 MERGED. Noted PR #1731 (repo-assist) handled `joins(:currency)` cleanup.
-- **2026-06-24** - [Run](https://github.com/baizhiheizi/quill/actions/runs/28093588419) - `HomeController#active_authors` block subquery (FIRST ATTEMPT, branch was never pushed - data lost). Verified PR #1708 + #1688 MERGED.
+- **2026-06-28** - [Run](https://github.com/baizhiheizi/quill/actions/runs/28319357046) - `Order#notify_subscribers` SQL subquery refactor. Draft PR on `perf-assist/order-notify-subscribers-sql-subquery-20260628`. Verified PR #1759 (efficiency-improver active_authors SQL sampling) MERGED 2026-06-28, PR #1749 (repo-assist notify_subscribers subqueries) MERGED 2026-06-26, PR #1752 (efficiency-improver hot_tags SQL sampling) MERGED 2026-06-27. Homepage hot-path trilogy now closed.
+- **2026-06-25** - [Run](https://github.com/baizhiheizi/quill/actions/runs/28164802463) - `HomeController#active_authors` block subquery. Draft PR. Verified PR #1708 MERGED.
+- **2026-06-24** - [Run](https://github.com/baizhiheizi/quill/actions/runs/28093588419) - `HomeController#active_authors` block subquery (FIRST ATTEMPT, branch never pushed).
 - **2026-06-20 10:45 UTC** - [Run](https://github.com/baizhiheizi/quill/actions/runs/27868593597) - Admin user-list preloader. PR #1708 MERGED 2026-06-21.
 - **2026-06-19 12:30 UTC** - [Run](https://github.com/baizhiheizi/quill/actions/runs/27825037181) - `has_unread_notification?` SQL EXISTS. PR #1695 MERGED.
-- **2026-06-18 18:30 UTC** - [Run](https://github.com/baizhiheizi/quill/actions/runs/27757618658) - User counter caches. PR #1688 MERGED 2026-06-19.
-- **2026-06-17 14:21 UTC** - [Run](https://github.com/baizhiheizi/quill/actions/runs/27688558877) - `Tag.hot` count fix. PR #1678 MERGED 2026-06-17.
 
 ## Backlog Cursor
-- `has_unread_notification?` / `unread_notifications_count` — ✅ **MERGED** as PR #1695
-- `Admin::UsersController#preload_user_aggregates` — ✅ **MERGED** as PR #1708 on 2026-06-21
-- `users.articles_count` / `users.comments_count` counter caches — ✅ **MERGED** as PR #1688 on 2026-06-19
-- `HomeController#active_authors` block subquery — ✅ **DRAFT PR** on `perf-assist/active-authors-block-subquery-20260625` (1 round-trip + O(N) Ruby array eliminated per render)
-- `notify_subscribers` callbacks (Article/Tagging/Collection) — POTENTIAL follow-up to PR #1598/active_authors; cold path
-- **Next**: monitor the open active_authors PR; if no review feedback by next run, pivot to (a) `notify_subscribers` callback refactor for symmetry, or (b) measurement infrastructure work (a backend complement to the efficiency-improver's `bin/measure-frontend-efficiency` proposal #1720).
+- `Order#notify_subscribers` SQL subquery refactor — ✅ **DRAFT PR** on `perf-assist/order-notify-subscribers-sql-subquery-20260628` (reuses PR #1749 helper; 1 fewer round-trip per buy/reward/collection)
+- Homepage hot-path trilogy (active_authors block + active_authors sampling + hot_tags) — ✅ **ALL MERGED** (PR #1735, PR #1759, PR #1752)
+- `notify_subscribers` callbacks — ✅ **DONE** (PR #1749 by repo-assist + the Order call site in this run)
+- **Next**: monitor the open Order#notify_subscribers draft PR. If no review feedback by next run, pivot candidates: (a) `Dashboard::NotificationsController#index` (currently materialises ALL web notifications before pagy filters); (b) measurement-infrastructure work; (c) another `.limit(N).sample(K)` audit beyond app/.
