@@ -44,11 +44,14 @@
 |--------|------|
 | DONE | 13 PRs across 2026-06-10 → 2026-06-27 (listener-leak × 7, dead-code × 9 controllers across 3 PRs, lazy-loading × 16 list images + 11 admin rows, reduced-motion single global rule, autosave-retry fix). See "completed work" for the full list with PR numbers. |
 | DONE (applied to main by `an-lee` without GitHub PR — safeoutputs limitation) | `hot-tags-sql-sample` — `HomeController#hot_tags` SQL `RANDOM()` + LIMIT 5 + cache 5-row Array + benchmark scenario |
-| DONE (PR draft 2026-06-27 awaiting push) | `active-authors-sql-sample` (commit `b1d0844`) — `HomeController#active_authors` SQL `RANDOM()` + LIMIT 5, no cache (per-visitor block-filter); 2 benchmark scenarios (new + legacy) |
+| DONE (PR #1759 merged 2026-06-28) | `active-authors-sql-sample` — `HomeController#active_authors` SQL `RANDOM()` + LIMIT 5, no cache (per-visitor block-filter); 2 benchmark scenarios (new + legacy) |
+| DONE (PR draft 2026-06-28 awaiting push) | `buyers-view-sql-sample` (commit `7cf6b55`) — `articles/_buyers.html.erb` swaps `article.readers.sample(24)` (N-row materialise + Array#sample) for `article.random_readers(24)` (SQL `RANDOM() LIMIT 24` subquery). Also `any?` → `exists?` |
 | COVERED ELSEWHERE (PR #1729, 1731, 1749 repo-assist) | `User#available_articles`, `Article#author_revenue_usd`/`reader_revenue_usd`, `notify_subscribers` SQL subqueries |
 | LOW | `Dashboard::NotificationsController#index` — `.select(&:visible_in_web?)` is intentional (per-recipient `notification_setting` only accessible in Ruby) |
 | LOW | `pre_orders/_payment.html.erb` + `dashboard/destinations/deposit.html.erb` — `pay_asset.icon_url` rendered twice in adjacent divs (main + chain overlay, different sizes); intentional layered design |
-| EXHAUSTED | Listener-leak, reduced-motion, lazy-loading, dead-code, and `.limit(N).sample(K)` sweeps — all known anti-patterns addressed. SQL-sample sweep closed by hot-tags and active-authors PRs. |
+| EXHAUSTED | Listener-leak, reduced-motion, lazy-loading (partial — see new opportunities below), dead-code, and `.limit(N).sample(K)` on hot paths — all known anti-patterns addressed. SQL-sample sweep on `home#*` closed by hot-tags + active-authors PRs. Buyers-view sweep closed by `buyers-view-sql-sample`. |
+| LOW | `currencies/_list.html.erb` lines 22-23 — list-row currency icon and chain icon lack `lazy: true`. 2 lines, trivial. Not bundled with `buyers-view-sql-sample` to keep PRs focused. |
+| LOW | `test/benchmarks/README.md` Scenarios table — missing `home.active_authors` and `home.active_authors.legacy` entries (the new SQL-sample benchmark scenarios added with PR #1759). 2 lines. Trivial docs fix. |
 
 **Sweep patterns** (all applied):
 - **Listener-leak sweep** (7 controllers, all merged)
@@ -60,28 +63,31 @@
 
 ## work in progress
 
-- **PR draft 2026-06-27**: branch `efficiency/active-authors-sql-sample` (commit `b1d0844`). Patch at `/tmp/gh-aw/aw-efficiency-active-authors-sql-sample.patch` (4,954 B). 2nd occurrence of safeoutputs `create_pull_request` not pushing. Maintainer `an-lee` manually applied the hot-tags patch after the previous run; same path expected here.
+- **PR draft 2026-06-28**: branch `efficiency/buyers-view-sql-count-and-sample` (commit `7cf6b55`). Patch at `/tmp/gh-aw/agent/buyers-view.patch` (2,443 B, 53 lines). 3rd occurrence of safeoutputs `create_pull_request` returning success but not pushing. Maintainer expected to apply manually as with prior patches.
+- **PR #1759 merged 2026-06-28**: active-authors-sql-sample (was awaiting push). Maintainer applied.
 
 ## completed work
 
-- PRs #1560, #1576, #1627, #1632, #1669, #1683, #1693, #1702, #1710, #1714 (by an-lee), #1719 (by an-lee, merged), #1733 (merged) — see "monthly summary — checked off by maintainer" for dates
+- PRs #1560, #1576, #1627, #1632, #1669, #1683, #1693, #1702, #1710, #1714 (by an-lee), #1719 (by an-lee, merged), #1733 (merged), #1759 (active-authors-sql-sample, merged 2026-06-28) — see "monthly summary — checked off by maintainer" for dates
 - Admin row icons (2026-06-25 in main, no PR by me): 11 `lazy: true` added to admin row partials
 - hot-tags-sql-sample (2026-06-26, applied to main by `an-lee` without GitHub PR)
-- active-authors-sql-sample (2026-06-27, awaiting push)
+- active-authors-sql-sample (PR #1759, merged 2026-06-28 by an-lee)
+- buyers-view-sql-sample (2026-06-28, awaiting manual push)
 
 ## last task runs
 
 | Task | Last run (UTC) |
 |------|----------------|
-| 1 | 2026-06-27 23:17 |
-| 2 | 2026-06-27 23:17 |
-| 3 | 2026-06-27 23:17 |
-| 4 | 2026-06-27 23:17 |
-| 5 | 2026-06-27 23:17 |
-| 6 | 2026-06-27 23:17 |
-| 7 | 2026-06-27 23:17 |
+| 1 | 2026-06-28 23:36 |
+| 2 | 2026-06-28 23:36 |
+| 3 | 2026-06-28 23:36 |
+| 4 | 2026-06-28 23:36 |
+| 5 | 2026-06-28 23:36 |
+| 6 | 2026-06-28 23:36 |
+| 7 | 2026-06-28 23:36 |
 
 ## monthly summary — checked off by maintainer
 
 - 2026-06-10 → 2026-06-25: PRs #1560, #1576, #1627, #1632, #1669, #1693, #1702, #1710, #1719, #1733 all merged by `an-lee`.
 - 2026-06-26: hot-tags-sql-sample optimization applied to main by `an-lee` (PR not on GitHub — safeoutputs limitation).
+- 2026-06-28: PR #1759 (active-authors-sql-sample) merged by `an-lee`.
