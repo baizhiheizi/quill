@@ -24,15 +24,16 @@
 5. **[DONE by repo-assist] `notify_subscribers` (Article/Collection/Tagging)** — PR #1749 — **MERGED 2026-06-26**. Adds `User#subscribed_user_ids_relation` / `User#blocked_user_ids_relation` helpers.
 6. **[DONE by efficiency-improver] `active_authors` SQL sampling** — PR #1759 — **MERGED 2026-06-28**.
 7. **[DONE by efficiency-improver] `hot_tags` SQL sampling + cache** — PR #1752 — **MERGED 2026-06-27**.
-8. **[DRAFT PR] `Order#notify_subscribers` SQL subquery refactor** — Branch `perf-assist/order-notify-subscribers-sql-subquery-20260628` (draft PR opened 2026-06-28). Reuses PR #1749 helper. Eliminates 1 round-trip per buy/reward/collection purchase. Fires on EVERY order, not just first publish.
+8. **[DONE] `Order#notify_subscribers` SQL subquery refactor** — Branch `perf-assist/order-notify-subscribers-sql-subquery-20260628`. PR #1760 — **MERGED 2026-06-28**. Reuses PR #1749 helper. 1 fewer round-trip per buy/reward/collection purchase. Fires on EVERY order. Follow-up PR #1767 (code-simplifier comment trim) MERGED 2026-06-29.
 9. **[LOW] `Admin::UsersController#show` single-user aggregates** — 3 queries, single round-trip each. Not worth batching.
-10. **[POTENTIAL] `Dashboard::NotificationsController#index`** — `current_user.notifications.for_web.newest_first.select(&:visible_in_web?)` materialises ALL web notifications before pagy filters. A SQL-side `visible_in_web?` predicate (joins notification_setting) would be a real win for power users.
+10. **[POTENTIAL — DEFERRED] `Dashboard::NotificationsController#index`** — `current_user.notifications.for_web.newest_first.select(&:visible_in_web?)` materialises ALL web notifications before pagy filters. `visible_in_web?` calls `recipient.notification_setting.<event>_web` (no SQL when association is loaded) and, for `CommentCreatedNotifier` / `TaggingCreatedNotifier`, `should_notify?` which calls `recipient.block_user? author` → `ActionStore::Mixin::ClassMethods#find_action` → 1 SELECT per row. A SQL-side `web_visible` boolean column (set at delivery time, default true) would let the controller become a single `where(web_visible: true)` query. Requires migration + populating the column in the delivery pipeline + backfill. Scope too large for one run; pivot to dedicated measurement + migration in a future run.
 
 ## Work in Progress
-- Draft PR open on `perf-assist/order-notify-subscribers-sql-subquery-20260628` — waiting for maintainer review
+- Nothing open. All in-scope backlog items are MERGED.
 
 ## Completed Work (recent)
-- PR (order follower filter subqueries) — **DRAFT 2026-06-28**
+- PR #1767 (code-simplifier comment trim on Order#notify_subscribers) — **MERGED 2026-06-29**
+- PR #1760 (order follower filter subqueries) — **MERGED 2026-06-28**
 - PR #1759 (active_authors SQL sampling, efficiency-improver) — **MERGED 2026-06-28**
 - PR (home active_authors block subquery) — **MERGED 2026-06-26** as PR #1735
 - PR #1749 (notify_subscribers Article/Collection/Tagging, repo-assist) — **MERGED 2026-06-26**
@@ -45,7 +46,7 @@
 - PR #1598 (block filters SQL subqueries) — **MERGED 2026-06-12**
 - PR #1546 (subscribed filter SQL subqueries) — **MERGED 2026-06-09**
 - PR #1539 (order_by_popularity LEFT JOIN + COALESCE) — **MERGED 2026-06-07**
-- Monthly Activity issue #1513 `[perf-improver] Monthly Activity 2026-06` last updated 2026-06-28 (this run)
+- Monthly Activity issue #1513 `[perf-improver] Monthly Activity 2026-06` last updated 2026-06-29 (this run)
 
 ## Performance Notes
 - **Env quirk**: gh-aw sets `CI=true`, triggering `config.eager_load = true` in test.rb → HTTP 403 from arweave.net. **`unset CI`** before any `bin/rails test` / `bin/benchmark`.
@@ -64,8 +65,10 @@
 - **Notifier helpers** (in `test/support/notifier_helpers.rb`): `ensure_notification_setting!(user)` creates the row; `deliver_notifier!(klass, record:, recipient:)` wraps the `.with(...).deliver(...)` chain; `notification_for(recipient)` returns the most recent `Noticed::Notification`.
 - **Noticed `deliver(relation)`**: calls `Array.wrap(recipients)` which calls `.to_a` on the relation — so even a Relation becomes a Ruby Array before the bulk insert, but the SQL path to *populate* the relation is now a single `IN (SELECT ...)` instead of the action_store materialize step.
 - **`Noticed::Notification.where(recipient: user)`** works via polymorphic `recipient_id` + `recipient_type` columns.
+- **`visible_in_web?` (`config/initializers/noticed.rb`)** — per-row Ruby predicate: (1) `event.type.constantize.persist_web_notification` (class attr, cheap); (2) `may_notify_via_web?` if defined, else `web_notification_enabled?` — the latter reads `recipient.notification_setting.<event>_web` JSONB (no SQL when assoc loaded); (3) `may_notify_via_web?` for `CommentCreatedNotifier` / `TaggingCreatedNotifier` chains `should_notify?` → `recipient.block_user? author` → `ActionStore::Mixin#find_action` (1 SELECT per row). So for power users with many notifications, the `select(&:visible_in_web?)` in `Dashboard::NotificationsController#index` is O(N) Ruby + O(N) action_store SELECTs (for comment/tagging rows).
 
 ## Run History (recent)
+- **2026-06-29 13:02 UTC** - [Run](https://github.com/baizhiheizi/quill/actions/runs/28372647768) - Verified PR #1760 (Order#notify_subscribers SQL subquery) MERGED 2026-06-28; PR #1767 (code-simplifier comment trim) MERGED 2026-06-29. No open perf-improver PRs. Investigated `Dashboard::NotificationsController#index` `select(&:visible_in_web?)` cost (O(N) Ruby rows + O(N) action_store SELECTs for Comment/Tagging notifiers via `should_notify?`). Documented as POTENTIAL — DEFERRED for a dedicated measurement + migration run.
 - **2026-06-28** - [Run](https://github.com/baizhiheizi/quill/actions/runs/28319357046) - `Order#notify_subscribers` SQL subquery refactor. Draft PR on `perf-assist/order-notify-subscribers-sql-subquery-20260628`. Verified PR #1759 (efficiency-improver active_authors SQL sampling) MERGED 2026-06-28, PR #1749 (repo-assist notify_subscribers subqueries) MERGED 2026-06-26, PR #1752 (efficiency-improver hot_tags SQL sampling) MERGED 2026-06-27. Homepage hot-path trilogy now closed.
 - **2026-06-25** - [Run](https://github.com/baizhiheizi/quill/actions/runs/28164802463) - `HomeController#active_authors` block subquery. Draft PR. Verified PR #1708 MERGED.
 - **2026-06-24** - [Run](https://github.com/baizhiheizi/quill/actions/runs/28093588419) - `HomeController#active_authors` block subquery (FIRST ATTEMPT, branch never pushed).
@@ -73,7 +76,8 @@
 - **2026-06-19 12:30 UTC** - [Run](https://github.com/baizhiheizi/quill/actions/runs/27825037181) - `has_unread_notification?` SQL EXISTS. PR #1695 MERGED.
 
 ## Backlog Cursor
-- `Order#notify_subscribers` SQL subquery refactor — ✅ **DRAFT PR** on `perf-assist/order-notify-subscribers-sql-subquery-20260628` (reuses PR #1749 helper; 1 fewer round-trip per buy/reward/collection)
+- `Order#notify_subscribers` SQL subquery refactor — ✅ **MERGED 2026-06-28** as PR #1760
 - Homepage hot-path trilogy (active_authors block + active_authors sampling + hot_tags) — ✅ **ALL MERGED** (PR #1735, PR #1759, PR #1752)
-- `notify_subscribers` callbacks — ✅ **DONE** (PR #1749 by repo-assist + the Order call site in this run)
-- **Next**: monitor the open Order#notify_subscribers draft PR. If no review feedback by next run, pivot candidates: (a) `Dashboard::NotificationsController#index` (currently materialises ALL web notifications before pagy filters); (b) measurement-infrastructure work; (c) another `.limit(N).sample(K)` audit beyond app/.
+- `notify_subscribers` callbacks — ✅ **DONE** (PR #1749 by repo-assist + PR #1760 Order call site)
+- `Dashboard::NotificationsController#index` — 🔍 **DEFERRED for dedicated run**. The `select(&:visible_in_web?)` materializes ALL web notifications + runs per-row action_store SELECTs for Comment/Tagging rows. Fix requires migration (boolean `web_visible` column) + delivery-time population + backfill + tests. Need to measure with realistic fixture scale before/after.
+- **Next**: measure `Dashboard::NotificationsController#index` baseline cost (synthesize ~500 notifications for a fixture user, run a controller test with `ActiveSupport::Notifications.subscribed`, count `FROM "actions"` SELECTs and total Ruby allocations). If the measured cost is significant, open the migration + delivery-time hook as a single PR. Otherwise pivot to (a) measurement-infrastructure work; (b) another `.limit(N).sample(K)` audit beyond `app/`.
