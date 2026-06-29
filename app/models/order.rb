@@ -113,12 +113,16 @@ class Order < ApplicationRecord
   end
 
   def notify_subscribers
+    # Push the buyer-followers predicate into a SQL subquery instead of
+    # materialising the user list in Ruby (see `User#subscribed_user_ids_relation`).
+    # Matches the pattern used by `Article#notify_subscribers` (PR #1749).
+    followers = User.where(id: buyer.subscribed_user_ids_relation)
     if reward_article?
-      ArticleRewardedNotifier.with(record: self, order: self).deliver(buyer.subscribe_by_users)
+      ArticleRewardedNotifier.with(record: self, order: self).deliver(followers)
     elsif buy_article?
-      ArticleBoughtNotifier.with(record: self, order: self).deliver(buyer.subscribe_by_users)
+      ArticleBoughtNotifier.with(record: self, order: self).deliver(followers)
     elsif buy_collection?
-      CollectionBoughtNotifier.with(record: self, order: self).deliver(buyer.subscribe_by_users)
+      CollectionBoughtNotifier.with(record: self, order: self).deliver(followers)
     end
   end
 
