@@ -1,9 +1,6 @@
 # Test Improver Memory
 
-- [Run notes 2026-06-26](2026-06-26-notes.md) — NotificationSetting coverage (14 tests / 100 assertions, commit `faa4ec8`)
-- [Run notes 2026-06-25](2026-06-25-notes.md) — Transfer model coverage (35 tests / 83 assertions, commit `8d069bd`)
-- [Run notes 2026-06-20](2026-06-20-notes.md) — SwapOrderSwappingNotifier coverage (9 tests, commit `1704bf6`)
-- [Run notes 2026-06-19](2026-06-19-notes.md) — CollectionListedNotifier coverage (17 tests, commit `7e48232`)
+- [Run notes 2026-06-29](2026-06-29-notes.md) — Announcement coverage (17 tests / 50 assertions, commit `5ed39f2`)
 
 ## Discovered Commands
 
@@ -30,14 +27,22 @@
 - **`safeoutputs create_pull_request`**: Returns patch/bundle path when bridge is in patch mode; PRs may not appear in `list_pull_requests` until bridge pushes.
 - **`NotificationSetting.set_defaults` overrides constructor attrs on `.new()`** — `after_initialize` runs after constructor. Use `update!` (not `.new(attrs)`) to test `cast_string_value_to_boolean` callback behavior on a fresh record.
 - **`NotificationSetting::DEFAULT_SETTING`**: frozen, 19 keys, `webhook_url: nil`, `web + mixin_bot: true`, `webhook: false`.
+- **`Announcement#preview` returns `perform_later` result**, not the message hash. Capture API call payload in a closure; assert on what was passed to `QuillBot.api.plain_text/plain_post`.
+- **`Announcement#deliver_as_text`** batches via `in_groups_of(100, false)`. **`deliver_as_post`** is one job per message (no batching). Pin both separately.
+- **`User.pluck(:mixin_uuid)` includes nils**. For "no users with mixin_uuid" tests, `User.delete_all` is cleaner than `User.update_all(mixin_uuid: nil)`.
+- **`AdminNotificationService`** calls `QuillBot.api.plain_text(conversation_id:, data:)` (no recipient_id). `Announcement#deliver_as_text/post` calls with `(conversation_id:, recipient_id:, data:)`. Stubs must make recipient_id optional.
+- **`User` validation requires `uid`** (presence). When creating users in-test, set `uid: SecureRandom.hex(8)`.
+- **`assert_enqueued_jobs N, only: JobClass`** is canonical. `enqueued_jobs.first[:job]` returns the Job class, not a string.
 
 ## Backlog
 
 - **HIGH**: `Bonus` model AASM — blocked by `self.table_name = "bonus"` vs migration `"bonuses"` mismatch (pre-existing repo bug).
-- **LOW**: `NftCollection.icon_url` fallback — tiny.
+- **MEDIUM**: `Tagging` model — `notify_subscribers` callback with `ActionStore` query + `destroy_notifications` AASM-less callbacks.
 - **MEDIUM**: `MixinNetworkUser` model — zero coverage, heavy stubs needed.
-- All notifier backlog exhausted. NotificationSetting done (2026-06-26).
+- **LOW**: `NftCollection.icon_url` fallback — tiny.
+- **LOW**: `UserAuthorization` non-`has_safe?` methods (`mixin_api`).
+- All notifier backlog exhausted. NotificationSetting + Announcement done.
 
 ## Last Run
 
-- 2026-06-26 — NotificationSetting coverage added (14 new tests / 100 assertions, branch `test-assist/notification-setting-coverage`, commit `faa4ec8`); PR via safeoutputs patch mode.
+- 2026-06-29 — Announcement coverage added (17 new tests / 50 assertions, branch `test-assist/announcement-coverage`, commit `5ed39f2`); PR via safeoutputs patch mode.
