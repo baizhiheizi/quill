@@ -31,7 +31,7 @@ class ArticlesController < ApplicationController
 
   def show
     @article = Article.with_associations.without_drafted.find_by(uuid: params[:uuid])
-    return redirect_back fallback_location: root_path if @article.blank?
+    return render_not_found_page if @article.blank?
 
     authorize @article, :show?
 
@@ -80,7 +80,7 @@ class ArticlesController < ApplicationController
     if @article.present?
       impressionist @article, "share"
     else
-      redirect_back fallback_location: root_path
+      render_not_found_page
     end
   end
 
@@ -149,6 +149,6 @@ class ArticlesController < ApplicationController
 
   def load_article
     @article = current_user.articles.find_by uuid: params[:uuid]
-    redirect_back fallback_location: root_path if @article.blank?
+    render_not_found_page if @article.blank?
   end
 end

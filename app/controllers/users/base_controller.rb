@@ -7,7 +7,7 @@ class Users::BaseController < ApplicationController
 
   def load_user!
     @user = User.find_by(uid: params[:user_uid])
-    redirect_to root_path if @user.blank?
+    render_not_found_page if @user.blank?
   end
 
   def set_page_meta

@@ -22,6 +22,6 @@ class UsersController < ApplicationController
   def load_user
     uid = params[:uid] || params[:user_id] || params[:full_user_uid] || request.subdomain
     @user = User.find_by(uid:)
-    redirect_back fallback_location: root_path if @user.blank?
+    render_not_found_page if @user.blank?
   end
 end
