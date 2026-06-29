@@ -1,8 +1,6 @@
 # Deploy Quill with Kamal
 
-> **30-second summary:** Production deploys are kicked off manually from GitHub Actions (`gh workflow run Deploy`). The workflow builds the `anleework/quill` image, pushes it to Docker Hub, then runs `bundle exec kamal deploy --skip-push` against the server at `172.235.197.72`. Persistent storage is mounted at `/rails/storage` from the host via the **top-level** `volumes:` key in `config/deploy.yml` — Kamal 2.x rejects the per-role `volumes:` syntax.
-
-If a step here drifts, the source of truth is `config/deploy.yml`, `.github/workflows/deploy.yml`, and the Kamal hooks under `.kamal/hooks/`.
+> **30-second summary:** Production deploys run via `gh workflow run Deploy`, which builds/pushes the image and runs `bundle exec kamal deploy --skip-push` against `172.235.197.72`.
 
 ## 1. What gets deployed
 
@@ -18,7 +16,7 @@ Two **accessories** run alongside the app: `db` (`pgvector/pgvector:pg16` on por
 
 ## 2. Persistent storage
 
-Article uploads and snapshots live under `/rails/storage`, backed by a named host volume:
+Article uploads and snapshots live under `/rails/storage`, backed by a host volume. Declare the bind mount at the **top level** of `config/deploy.yml` (Kamal 2.x rejects per-role `volumes:` keys — never reintroduce them or the deploy fails):
 
 ```yaml
 # config/deploy.yml
@@ -26,15 +24,11 @@ volumes:
   - /var/lib/quill/storage:/rails/storage
 ```
 
-### Why the volume sits at the top level
-
-Kamal 2.x rejects per-role `volumes:` keys (e.g. `servers.web.volumes:`) as a schema error. Declaring the bind mount at the top level applies it to every role that needs it. The host directory `/var/lib/quill/storage` must already exist before the first deploy — create it once with:
+Create the host directory once before the first deploy:
 
 ```bash
 ssh deploy@172.235.197.72 'sudo mkdir -p /var/lib/quill/storage && sudo chown 1000:1000 /var/lib/quill/storage'
 ```
-
-> **Heads up:** when you change the storage path or add another volume, edit the top-level `volumes:` list. Do **not** reintroduce per-role `volumes:` keys — Kamal 2.x will reject the deploy and the workflow run will fail at the `kamal deploy` step.
 
 ## 3. Required secrets
 
@@ -58,7 +52,7 @@ Deploys are triggered manually from the GitHub UI or CLI:
 gh workflow run Deploy
 ```
 
-The workflow (`.github/workflows/deploy.yml`) builds and pushes `anleework/quill:$GITHUB_SHA` and `anleework/quill:latest` to Docker Hub, then runs `bundle exec kamal deploy --skip-push` so Kamal skips its own push step. Watch the run from the Actions tab — the deploy step usually takes a couple of minutes.
+The workflow (`.github/workflows/deploy.yml`) builds/pushes the image and runs `bundle exec kamal deploy --skip-push` so Kamal skips its own push step. Watch the run in the Actions tab.
 
 ## 5. Operate a running deploy
 
@@ -72,7 +66,7 @@ Once the service is up, use Kamal aliases to interact with the web container wit
 | `bin/kamal logs -r job` | Follow logs from the first host in the `job` role |
 | `bin/kamal dbc` | `app exec --interactive --reuse "bin/rails dbconsole"` |
 
-For job-container-specific work (queue inspection, Solid Queue console, etc.), pass `-r job` to any `app exec` invocation.
+For job-container work (queue inspection, Solid Queue console), pass `-r job` to any `app exec` invocation.
 
 ### Rolling back
 
@@ -83,17 +77,17 @@ git checkout <last-good-sha>
 gh workflow run Deploy
 ```
 
-If only the env changed (the image is fine), run `bin/kamal deploy --skip-push` directly.
+If only the env changed, run `bin/kamal deploy --skip-push` directly.
 
 ## 6. Customizing the deploy
 
-The Kamal config is intentionally minimal — most app configuration lives in Rails credentials and `config/settings.yml`. When extending it: **host volumes** go in the top-level `volumes:` list; **accessories** append to `accessories:` (single-host topology only); **env vars** go in `env.clear:` or `env.secret:`, then run `bin/kamal env push`; **roles** add a `servers.<name>:` block with `hosts:` and `cmd:`.
+The Kamal config is intentionally minimal — most app configuration lives in Rails credentials and `config/settings.yml`. When extending it: **host volumes** belong at the top level (see [Persistent storage](#2-persistent-storage)); **accessories** append to `accessories:` (single-host topology only); **env vars** go in `env.clear:` or `env.secret:`, then `bin/kamal env push`; **roles** add a `servers.<name>:` block with `hosts:` and `cmd:`.
 
 Keep the deploy file under 200 lines and comment anything non-obvious.
 
 ## Troubleshooting
 
-- **`kamal deploy` rejects the config with a schema error mentioning `volumes`** — you reintroduced a per-role `volumes:` key. Move it back to the top level.
+- **`kamal deploy` rejects the config with a schema error mentioning `volumes`** — a per-role `volumes:` key crept back in. Move it to the top level (see [Persistent storage](#2-persistent-storage)).
 - **`KAMAL_REGISTRY_PASSWORD` is undefined** — the GitHub Actions secret is missing or rotated; update it and rerun.
 - **Container exits because `Rails can't decrypt credentials`** — `RAILS_MASTER_KEY` no longer matches `config/credentials/production.yml.enc`; re-add the matching key as a secret.
 - **`db_backup` fails with S3 errors** — confirm `S3_*` secrets and that `POSTGRES_HOST=172.18.0.1` is reachable from the accessory's Docker network.
