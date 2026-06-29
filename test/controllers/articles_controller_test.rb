@@ -3,12 +3,24 @@
 require "test_helper"
 
 class ArticlesControllerTest < IntegrationTestCase
-  test "show redirects for draft articles" do
+  test "show returns not found for missing article uuid" do
+    get article_path("微信图片编辑_20240910165925")
+
+    assert_response :not_found
+  end
+
+  test "show returns not found for spam image scan paths" do
+    get "/articles/spam_scan_test.jpg"
+
+    assert_response :not_found
+  end
+
+  test "show returns not found for draft articles" do
     article = articles(:draft)
 
     get user_article_path(article.author, article)
 
-    assert_response :redirect
+    assert_response :not_found
   end
 
   test "show allows guests who may buy to view paywalled article" do

@@ -8,7 +8,7 @@ class CollectionsController < ApplicationController
   def show
     @collection = Collection.listed.find_by uuid: params[:uuid]
     if @collection.blank?
-      redirect_back fallback_location: root_path
+      render_not_found_page
     else
       impressionist @collection
 
@@ -20,6 +20,8 @@ class CollectionsController < ApplicationController
 
   def share
     @collection = Collection.listed.find_by uuid: params[:collection_uuid]
+    return render_not_found_page if @collection.blank?
+
     impressionist @collection, "share"
   end
 end

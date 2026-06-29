@@ -7,6 +7,6 @@ class Collections::BaseController < ApplicationController
 
   def load_collection
     @collection = Collection.find_by uuid: params[:collection_uuid]
-    redirect_to root_path unless @collection&.listed?
+    render_not_found_page unless @collection&.listed?
   end
 end

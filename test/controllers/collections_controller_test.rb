@@ -17,6 +17,12 @@ class CollectionsControllerTest < IntegrationTestCase
     )
   end
 
+  test "show returns not found for missing collection uuid" do
+    get collection_path(SecureRandom.uuid)
+
+    assert_response :not_found
+  end
+
   test "show succeeds when currency icon_url is missing" do
     @collection.currency.update_column(:raw, @collection.currency.raw.except("icon_url"))
 
