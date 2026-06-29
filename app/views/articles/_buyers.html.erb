@@ -11,9 +11,9 @@
     </div>
   </div>
 
-  <% if article.readers.any? %>
+  <% if article.readers.exists? %>
     <div class="w-full max-w-sm mb-10 <%= article.readers.count > 8 ? 'grid grid-cols-8 gap-1.5 sm:gap-2' : 'flex items-center justify-center space-x-2' %>">
-      <% article.readers.sample(24).each do |reader| %>
+      <% article.random_readers(24).each do |reader| %>
         <div class="avatar tooltip" data-tip="<%= reader.name %>">
           <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-full ring-2 ring-base-100 hover:ring-primary transition-all cursor-pointer">
             <%= render "shared/avatar", user: reader, thumb: true, class: "rounded-full" %>
