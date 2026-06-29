@@ -28,20 +28,20 @@ module Users::EmailVerifiable
     update email_verified_at: nil
   end
 
-  def email_vefified?
+  def email_verified?
     email_verified_at?
   end
 
   def email_may_verify?
     return false if email.blank?
-    return false if email_vefified?
+    return false if email_verified?
     return false if email_verifying?
 
     true
   end
 
   def email_verifying?
-    return false if email_vefified?
+    return false if email_verified?
 
     Rails.cache.fetch("#{email}_verifying").present?
   end
