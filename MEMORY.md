@@ -1,6 +1,6 @@
 # Test Improver Memory
 
-- [Run notes 2026-06-29](2026-06-29-notes.md) — Announcement coverage (17 tests / 50 assertions, commit `5ed39f2`)
+- [Run notes 2026-07-01](2026-07-01-notes.md) — Tagging callbacks + notify_subscribers SQL subquery (16 tests / 43 assertions, commit `728a8a9`)
 
 ## Discovered Commands
 
@@ -33,16 +33,20 @@
 - **`AdminNotificationService`** calls `QuillBot.api.plain_text(conversation_id:, data:)` (no recipient_id). `Announcement#deliver_as_text/post` calls with `(conversation_id:, recipient_id:, data:)`. Stubs must make recipient_id optional.
 - **`User` validation requires `uid`** (presence). When creating users in-test, set `uid: SecureRandom.hex(8)`.
 - **`assert_enqueued_jobs N, only: JobClass`** is canonical. `enqueued_jobs.first[:job]` returns the Job class, not a string.
+- **Article `cannot_edit_frozen_attributes_once_published`**: fires on first save when `published_at` is set in the constructor. Build drafted (no published_at), then `article.publish!` via AASM. Set `article.content = "<p>test</p>"` before `save!` for non-drafted authoring state.
+- **`Noticed::Event.type` is an STI column** — fake class names raise `ActiveRecord::SubclassNotFound`. Use existing notifier class names in tests.
+- **`noticed_notifications` doesn't denormalise `record`** — filter via `joins(:event).where(noticed_events: { record_type:, record_id: })`.
+- **Notifiers serialise params (incl. AR records)** — invoke `notify_subscribers` only on saved records (`Tagging.create!`, not `Tagging.new`).
+- **`User#blocked_user_ids_relation` returns users the receiver has BLOCKED**, not users who blocked them. Filter `User.where.not(id: author.blocked_user_ids_relation)` excludes users the AUTHOR has blocked.
 
 ## Backlog
 
 - **HIGH**: `Bonus` model AASM — blocked by `self.table_name = "bonus"` vs migration `"bonuses"` mismatch (pre-existing repo bug).
-- **MEDIUM**: `Tagging` model — `notify_subscribers` callback with `ActionStore` query + `destroy_notifications` AASM-less callbacks.
 - **MEDIUM**: `MixinNetworkUser` model — zero coverage, heavy stubs needed.
 - **LOW**: `NftCollection.icon_url` fallback — tiny.
 - **LOW**: `UserAuthorization` non-`has_safe?` methods (`mixin_api`).
-- All notifier backlog exhausted. NotificationSetting + Announcement done.
+- All notifier backlog exhausted. NotificationSetting + Announcement + Tagging callbacks done.
 
 ## Last Run
 
-- 2026-06-29 — Announcement coverage added (17 new tests / 50 assertions, branch `test-assist/announcement-coverage`, commit `5ed39f2`); PR via safeoutputs patch mode.
+- 2026-07-01 — Tagging callbacks + notify_subscribers coverage added (16 new tests / 43 assertions, branch `test-assist/tagging-callbacks-coverage`, commit `728a8a9`); PR via safeoutputs patch mode.
