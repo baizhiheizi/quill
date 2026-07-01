@@ -45,7 +45,10 @@ class User < ApplicationRecord
 
   extend Enumerize
 
-  has_one :authorization, -> { where(provider: :mixin) }, class_name: "UserAuthorization", inverse_of: :user, dependent: :restrict_with_exception
+  # The primary auth record. Mixin is the active sign-in provider; fennec
+  # and mvm_eth are retired but their historical UserAuthorization rows are
+  # kept (those users still exist — like future Google/GitHub users pre-OAuth).
+  has_one :authorization, -> { where(provider: %w[mixin fennec mvm_eth]) }, class_name: "UserAuthorization", inverse_of: :user, dependent: :restrict_with_exception
   has_many :user_authorizations, dependent: :restrict_with_exception
   has_one :twitter_authorization, -> { where(provider: :twitter) }, class_name: "UserAuthorization", inverse_of: :user, dependent: :restrict_with_exception
 
