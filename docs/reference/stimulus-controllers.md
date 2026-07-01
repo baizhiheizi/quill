@@ -43,7 +43,6 @@ Every controller in `app/javascript/controllers/index.js`, with its source file 
 | `references-select` | `references_select_controller.js` | Cross-article reference picker |
 | `search` | `search_controller.js` | Debounced article search box |
 | `select-currency` | `select_currency_controller.js` | Currency picker for pre-orders |
-| `session` | `session_controller.js` | Session/keepalive heartbeat |
 | `sidebar` | `sidebar_controller.js` | Hover-driven sidebar expand/collapse |
 | `syntax-highlight` | `syntax_highlight_controller.js` | Syntax highlighter wrapper |
 | `tabs` | `tabs_controller.js` | Tab group state machine |
