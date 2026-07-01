@@ -4,7 +4,12 @@ class Dashboard::CollectionsController < Dashboard::BaseController
   before_action :load_collection, only: %i[show edit update destroy]
 
   def index
-    @collections = current_user.collections.order(updated_at: :desc)
+    # Eager-load `:currency` (used for `price_tag`, `price_usd`, `currency.icon_url` in the
+    # partial) and the ActiveStorage `cover_attachment → :blob` chain (used for
+    # `collection.cover.attached?` + `image_tag collection.cover`). Without these includes,
+    # each row triggers ~3 SELECTs (currency + attachment + blob) — for an author with N
+    # collections on /dashboard/collections, that is ~3N queries per index page load.
+    @collections = current_user.collections.includes(:currency, cover_attachment: :blob).order(updated_at: :desc)
   end
 
   def show
