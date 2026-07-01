@@ -1,13 +1,12 @@
 <%= form_with url: admin_users_path, method: :get, class: "flex items-center flex-wrap" do |form| %>
   <%= form.select :filter, 
     [
-      ['All', 'all'], 
+      ['All', 'all'],
       ['Mixin', 'mixin'],
       ['Fennec', 'fennec'],
-      ['MVM', 'mvm'],
       ['Validated', 'only_validated'],
       ['Blocked', 'only_blocked']
-    ], 
+    ],
     { selected: @filter }, 
     class: "select select-bordered select-sm m-1" %>
   <%= form.select :order_by, 

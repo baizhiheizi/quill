@@ -27,13 +27,6 @@ require "test_helper"
 #     3. existing auth row → `update!` is only fired when `raw` changed;
 #        the returned User is the existing one
 #
-# - `auth_from_mvm_eth(address, signature)` is intentionally NOT covered
-#   here — its branches depend on `Eth::Signature.verify` /
-#   `personal_recover` and `MVM.bridge.user`, which require crypto-fixture
-#   data the rest of the suite doesn't have. Pinning it would mean
-#   reproducing those fixtures; the value (3 return-value branches,
-#   ReplayProtectionError rescue) isn't worth the maintenance cost.
-#
 # Why a dedicated file: `auth_from_mixin` / `auth_from_fennec` mutate
 # `UserAuthorization` and `User` rows in a single transaction-like flow,
 # and the `messenger?` re-sync branch only fires for `mixin` providers.

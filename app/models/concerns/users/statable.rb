@@ -85,41 +85,10 @@ module Users::Statable
     authorization.provider == "mixin"
   end
 
-  def mvm_eth?
-    authorization.provider == "mvm_eth"
-  end
-
   def accessable?
     return true unless Settings.whitelist&.enable
 
     mixin_uuid.in? (Settings.whitelist&.mixin_id || []).map(&:to_s)
-  end
-
-  def may_claim_faucet?
-    return false unless mvm_eth?
-
-    faucet_bonus.blank?
-  end
-
-  def claim_faucet!
-    return unless may_claim_faucet?
-
-    deposit = authorization.mixin_api.snapshots["data"].find(&->(snapshot) { snapshot["type"] == "deposit" })
-    return if deposit.blank?
-
-    deposit_asset = Currency.find_or_create_by asset_id: deposit["asset_id"]
-    bonus =
-      bonuses.create!(
-        asset_id: Currency::XIN_ASSET_ID,
-        title: "Faucet",
-        description: "Desposited #{deposit['amount']} #{deposit_asset.symbol}",
-        amount: Bonus::XIN_FAUCET_AMOUNT
-      )
-    bonus.deliver!
-  end
-
-  def faucet_bonus
-    @faucet_bonus = bonuses.find_by(asset_id: Currency::XIN_ASSET_ID, title: "Faucet")
   end
 
   def twitter_username

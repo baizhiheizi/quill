@@ -15,17 +15,6 @@
       <%= image_tag 'fennec-logo.png', class: 'h-8 w-auto absolute left-4' %>
       <span class="text-lg"><%= t('confirm_to_pay') %></span>
     </a>
-  <% when MVMPreOrder %>
-    <div data-action="click->pre-orders-payment-component#pay">
-      <%= render "shared/mvm_pay_button",
-        currency: pay_asset,
-        amount: pay_amount,
-        payer: pre_order.payer,
-        receivers: [pre_order.payee_id],
-        threshold: 1,
-        memo: pre_order.memo,
-        trace_id: pre_order.trace_id %>
-    </div>
   <% when MixinPreOrder %>
     <a href="<%= pre_order.pay_url(pay_asset.asset_id) %>"
        data-turbo-frame="_top"

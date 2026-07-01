@@ -6,11 +6,13 @@
 # Database name: primary
 #
 #  id                          :bigint           not null, primary key
+#  articles_count              :integer          default(0), not null
 #  authoring_subscribers_count :integer          default(0)
 #  biography                   :text
 #  blocked_at                  :datetime
 #  blocking_count              :integer          default(0)
 #  blocks_count                :integer          default(0)
+#  comments_count              :integer          default(0), not null
 #  email                       :string
 #  email_verified_at           :datetime
 #  locale                      :string
@@ -38,13 +40,12 @@ class User < ApplicationRecord
 
   include Authenticatable
   include Users::EmailVerifiable
-  include Users::MVMQueriable
   include Users::Scopable
   include Users::Statable
 
   extend Enumerize
 
-  has_one :authorization, -> { where(provider: %w[mixin fennec mvm_eth]) }, class_name: "UserAuthorization", inverse_of: :user, dependent: :restrict_with_exception
+  has_one :authorization, -> { where(provider: %w[mixin fennec]) }, class_name: "UserAuthorization", inverse_of: :user, dependent: :restrict_with_exception
   has_many :user_authorizations, dependent: :restrict_with_exception
   has_one :twitter_authorization, -> { where(provider: :twitter) }, class_name: "UserAuthorization", inverse_of: :user, dependent: :restrict_with_exception
 
@@ -212,36 +213,6 @@ class User < ApplicationRecord
     "mixin://transfer/#{mixin_uuid}"
   end
 
-  def mvm_deposit_address(asset_id)
-    return unless mvm_eth?
-    return if asset_id.blank?
-
-    r = authorization.mixin_api.asset asset_id
-    r["deposit_entries"].first
-  rescue MixinBot::Error
-    {}
-  end
-
-  def mvm_address_url
-    return unless mvm_eth?
-
-    Addressable::URI.new(
-      scheme: "https",
-      host: "scan.mvm.dev",
-      path: "address/#{uid}"
-    ).to_s
-  end
-
-  def ether_address_url
-    return unless mvm_eth?
-
-    Addressable::URI.new(
-      scheme: "https",
-      host: "etherscan.io",
-      path: "address/#{uid}"
-    ).to_s
-  end
-
   def notify_for_login
     UserConnectedNotifier.with(record: self, user: self).deliver(self)
   end
@@ -263,8 +234,6 @@ class User < ApplicationRecord
       "MixinPreOrder"
     elsif fennec?
       "FennecPreOrder"
-    elsif mvm_eth?
-      "MVMPreOrder"
     end
   end
 

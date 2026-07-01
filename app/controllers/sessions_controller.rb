@@ -2,7 +2,7 @@
 
 class SessionsController < ApplicationController
   skip_before_action :ensure_launched!
-  skip_before_action :verify_authenticity_token, only: %i[mixin fennec mvm]
+  skip_before_action :verify_authenticity_token, only: %i[mixin fennec]
 
   def new
     redirect_to auth_mixin_path(return_to: params[:return_to]) if from_mixin_messenger?
@@ -66,28 +66,6 @@ class SessionsController < ApplicationController
     end
   end
 
-  def mvm
-    user, session_id =
-      begin
-        User.auth_from_mvm_eth(
-          params[:address],
-          params[:signature]
-        )
-      rescue MVM::Error => e
-        raise e if Rails.env.development?
-
-        nil
-      end
-
-    if user.present?
-      user_session = user.sessions.create(uuid: session_id, info: { request: request_info, provider: params[:provider] })
-      user_sign_in user_session
-      redirect_to safe_return_to, success: t("connected")
-    else
-      redirect_to safe_return_to, alert: t("failed_to_connect")
-    end
-  end
-
   def twitter
     auth = Rails.cache.read params[:state]
     redirect_to root_path if auth.blank?
@@ -122,15 +100,6 @@ class SessionsController < ApplicationController
     redirect_to dashboard_settings_path
   rescue Rack::OAuth2::Client::Error
     redirect_to root_path
-  end
-
-  def nonce
-    return if params[:address].blank?
-
-    session_id = SecureRandom.uuid
-    Rails.cache.write params[:address], { session: session_id }.to_json, ex: 5.minutes
-
-    render json: { session: session_id }
   end
 
   def delete

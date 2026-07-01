@@ -23,7 +23,6 @@ Every controller in `app/javascript/controllers/index.js`, with its source file 
 | `comment-form` | `comment_form_controller.js` | Comment composer (inline validation, optimistic render) |
 | `darkmode` | `darkmode_controller.js` | Theme toggle persisted to local storage |
 | `dropdown` | `dropdown_controller.js` | Open/close menu with transitions |
-| `eth-wallet` | `eth_wallet_controller.js` | Ethereum (MVM) wallet glue for EIP-1193 |
 | `fennec` | `fennec_controller.js` | FenneC wallet integration |
 | `flash` | `flash_controller.js` | Dismissible flash banners |
 | `floating` | `floating_controller.js` | Floating action bar shown on scroll |
@@ -31,10 +30,7 @@ Every controller in `app/javascript/controllers/index.js`, with its source file 
 | `hljs` | `hljs_controller.js` | Highlight.js runner on visible code blocks |
 | `infinite-scroll` | `infinite_scroll_controller.js` | Paginates via `IntersectionObserver` |
 | `load-more` | `load_more_controller.js` | Click-to-load pagination button |
-| `login` | `login_controller.js` | Login form state (provider switching) |
 | `modal-component` | `flyonui_modal_controller.js` | FlyonUI-themed modal wrapper (manifest name is `modal-component`, not `flyonui-modal`). |
-| `mvm-deposit` | `mvm_deposit_controller.js` | MVM deposit flow state |
-| `mvm-pay-button-component` | `mvm_pay_button_component_controller.js` | MVM "pay" button subcomponent |
 | `nested-form` | `nested_form_controller.js` | Add/remove nested form rows |
 | `photoswipe` | `photoswipe_controller.js` | PhotoSwipe gallery wiring |
 | `pre-orders-form-component` | `pre_orders_form_component_controller.js` | Pre-order authoring form |

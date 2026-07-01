@@ -12,10 +12,8 @@
   "version": "0.1.0",
   "dependencies": {
     "@37signals/lexxy": "^0.9.15-alpha.4",
-    "@coinbase/wallet-sdk": "^4.3.7",
     "@hotwired/stimulus": "^3.2.2",
     "@hotwired/turbo-rails": "^8.0.23",
-    "@metamask/detect-provider": "^2.0.0",
     "@rails/actiontext": "^8.1.300",
     "@rails/activestorage": "^8.1.300",
     "@rails/request.js": "^0.0.13",
@@ -23,8 +21,6 @@
     "@tailwindcss/forms": "^0.5.11",
     "@tailwindcss/line-clamp": "^0.4.4",
     "@tailwindcss/typography": "^0.5.19",
-    "@walletconnect/ethereum-provider": "^2.23.9",
-    "@walletconnect/modal": "^2.7.0",
     "abortcontroller-polyfill": "^1.7.8",
     "autoprefixer": "^10.5.0",
     "axios": "^1.17.0",
@@ -51,8 +47,7 @@
     "tailwindcss": "^4.3.0",
     "tom-select": "^2.6.1",
     "typescript": "^6.0.3",
-    "underscore": "^1.13.8",
-    "web3": "4.16.0"
+    "underscore": "^1.13.8"
   },
   "devDependencies": {
     "@iconify-json/tabler": "^1.2.35",
