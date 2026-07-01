@@ -37,7 +37,6 @@ class Payment < ApplicationRecord
 
   has_one :refund_transfer, -> { where(transfer_type: :payment_refund) }, class_name: "Transfer", as: :source, dependent: :nullify, inverse_of: false
   has_one :order, primary_key: :trace_id, foreign_key: :trace_id, dependent: :restrict_with_exception, inverse_of: :payment
-  has_one :swap_order, dependent: :nullify
 
   before_validation :setup_attributes, on: :create
 
@@ -51,8 +50,6 @@ class Payment < ApplicationRecord
   after_create_commit do
     notify_payer
   end
-
-  delegate :swappable?, to: :currency
 
   aasm column: :state do
     state :paid, initial: true
@@ -87,22 +84,13 @@ class Payment < ApplicationRecord
   end
 
   def payment_memo
-    @payment_memo ||=
-      if from_foxswap?
-        pre_order&.decoded_memo
-      else
-        decoded_memo
-      end
+    @payment_memo ||= decoded_memo
   end
 
   def memo_correct?
     payment_memo.key?("t") &&
       payment_memo["t"].in?(%w[BUY REWARD CITE REVENUE]) &&
       (payment_memo.key?("a") || payment_memo.key?("l"))
-  end
-
-  def from_foxswap?
-    decoded_memo["s"].in? %w[4swapTrade 4swapRefund]
   end
 
   def article
@@ -133,11 +121,7 @@ class Payment < ApplicationRecord
 
   def pre_order
     @pre_order ||=
-      if from_foxswap?
-        PreOrder.find_by follow_id: decoded_memo["t"]
-      elsif decoded_memo["f"].present?
-        PreOrder.find_by follow_id: decoded_memo["f"]
-      end
+      PreOrder.find_by(follow_id: decoded_memo["f"]) if decoded_memo["f"].present?
   end
 
   def generate_order!
@@ -160,14 +144,10 @@ class Payment < ApplicationRecord
 
     raise ActiveRecord::RecordInvalid.new(self), "blocked by author" if article.author.block_user?(payer)
 
-    if decoded_memo["s"] == "4swapRefund"
-      generate_refund_transfer!
-    elsif payment_memo["t"] == "REVENUE"
+    if payment_memo["t"] == "REVENUE"
       complete!
     elsif asset_id == article.asset_id || payment_memo["t"] == "CITE"
       place_article_order!
-    elsif swappable?
-      place_swap_order!
     end
   end
 
@@ -176,35 +156,7 @@ class Payment < ApplicationRecord
 
     raise ActiveRecord::RecordInvalid.new(self), "blocked by author" if collection.author.block_user?(payer)
 
-    if decoded_memo["s"] == "4swapRefund"
-      generate_refund_transfer!
-    elsif asset_id == collection.asset_id
-      place_collection_order!
-    elsif swappable?
-      place_swap_order!
-    end
-  end
-
-  def place_swap_order!
-    if article.present?
-      create_swap_order!(
-        funds: amount,
-        min_amount: decoded_memo["t"] == "BUY" ? article.price : nil,
-        fill_asset_id: article.asset_id,
-        pay_asset_id: asset_id,
-        trace_id: QuillBot.api.unique_conversation_id(wallet_id, trace_id),
-        user_id: wallet_id
-      )
-    elsif collection.present?
-      create_swap_order!(
-        funds: amount,
-        min_amount: collection.price,
-        fill_asset_id: collection.asset_id,
-        pay_asset_id: asset_id,
-        trace_id: QuillBot.api.unique_conversation_id(wallet_id, trace_id),
-        user_id: wallet_id
-      )
-    end
+    place_collection_order! if asset_id == collection.asset_id
   end
 
   def place_article_order!
@@ -269,7 +221,7 @@ class Payment < ApplicationRecord
   end
 
   def ensure_refund_transfer_created
-    refund_transfer.present? || swap_order&.refunded?
+    refund_transfer.present?
   end
 
   def notify_payer

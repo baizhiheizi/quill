@@ -75,14 +75,12 @@ zh-CN:
   already_paid: 已经支付
   try_to: 试试
   refresh: 刷新
-  pay_via_swap_tips: 您也可以用其他主流币支付
   please_login: 请先登录
   failed_to_connect: 连接失败，请重试
   connected: 成功连接，欢迎！
   love_thie_article: 大爱此文
   share: 分享
   signature: 签名
-  swap_supported_by: Swap 服务来自
   polling_payment: 支付结果查询中
   refund_warning: 支付失败，已原路退款。请重新支付。
   buy_article: 购买文章
@@ -207,7 +205,6 @@ zh-CN:
   author_transfers: 作者收益
   reader_transfers: 读者收益
   payments: 支付记录
-  swap_orders: Swap 订单
   access_token: Access Token
   tips_of_general_notifications: 您可以自定义消息通知的方式，网站通知、Mixin 机器人消息通知和 Webhook（开发中）。
   tips_of_article_published_notifications: 订阅的作者发表新文章时，您将收到通知。

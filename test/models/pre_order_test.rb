@@ -340,6 +340,61 @@ class PreOrderTest < ActiveSupport::TestCase
     assert_includes Array(pay_event.options[:after_commit]), :broadcast_to_views
   end
 
+  # === Direct payment (pay_url / pay_amount) ===
+
+  test "pay_url returns a direct SAFE transfer URL to the platform bot" do
+    with_quill_bot_stub do
+      pre_order = MixinPreOrder.create!(
+        item: @article,
+        payer: @reader,
+        order_type: :buy_article,
+        amount: @article.price,
+        asset_id: @article.asset_id
+      )
+
+      assert_equal pre_order.direct_pay_url, pre_order.pay_url
+      assert_equal pre_order.direct_pay_url, pre_order.pay_url(SecureRandom.uuid)
+    end
+  end
+
+  test "direct_pay_url delegates to QuillBot safe_pay_url with the order's own asset and amount" do
+    with_quill_bot_stub do
+      pre_order = MixinPreOrder.create!(
+        item: @article,
+        payer: @reader,
+        order_type: :buy_article,
+        amount: @article.price,
+        asset_id: @article.asset_id
+      )
+
+      expected_url = QuillBot.api.safe_pay_url(
+        members: [ QuillBot.api.client_id ],
+        threshold: 1,
+        asset_id: pre_order.asset_id,
+        amount: pre_order.amount,
+        trace_id: pre_order.trace_id,
+        memo: pre_order.memo
+      )
+
+      assert_equal expected_url, pre_order.direct_pay_url
+    end
+  end
+
+  test "pay_amount always returns the pre_order's own amount regardless of argument" do
+    with_quill_bot_stub do
+      pre_order = MixinPreOrder.create!(
+        item: @article,
+        payer: @reader,
+        order_type: :buy_article,
+        amount: @article.price,
+        asset_id: @article.asset_id
+      )
+
+      assert_equal pre_order.amount, pre_order.pay_amount
+      assert_equal pre_order.amount, pre_order.pay_amount(SecureRandom.uuid)
+    end
+  end
+
   # === Display helpers ===
 
   test "to_param returns follow_id" do

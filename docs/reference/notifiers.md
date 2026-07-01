@@ -65,18 +65,11 @@ Concrete notifiers add their own `required_param`, a `deliver_by :mixin_bot` blo
 | `PaymentCreatedNotifier` | `:payment` | `PLAIN_TEXT` | A payment snapshot is created (mostly for debugging / Mixin traceability). |
 | `PaymentRefundedNotifier` | `:payment` | `PLAIN_TEXT` | A payment is refunded. The message interpolates the related `pre_order.item.title` so the buyer can identify the original purchase. |
 
-### Swap orders
-
-| Notifier | Required param | Category | Fires when |
-|----------|----------------|----------|-----------|
-| `SwapOrderSwappingNotifier` | `:swap_order` | `PLAIN_TEXT` | A swap order starts. Sends the in-flight `pay_asset -> fill_asset` pair to the user. |
-| `SwapOrderFinishedNotifier` | `:swap_order` | `PLAIN_TEXT` | A swap order ends. The message switches on `swap_order.state` — `completed`/`refunded` produces a swapped summary, `rejected` produces a rejection notice. |
-
 ### Transfers and accounts
 
 | Notifier | Required param | Category | Fires when |
 |----------|----------------|----------|-----------|
-| `TransferProcessedNotifier` | `:transfer` | `APP_CARD` | A confirmed transfer (author revenue, reader revenue, payment refund, bonus, swap change, or swap refund) arrives. Skips Mixin delivery when the transfer came from the Quill bot wallet itself (`from_quill_bot?` returns true). |
+| `TransferProcessedNotifier` | `:transfer` | `APP_CARD` | A confirmed transfer (author revenue, reader revenue, payment refund, or bonus) arrives. Skips Mixin delivery when the transfer came from the Quill bot wallet itself (`from_quill_bot?` returns true). |
 | `UserConnectedNotifier` | `:user` | `PLAIN_TEXT` | A user connects the Mixin Messenger bot for the first time. `persist_web_notification = false` because it is a one-time greeting. |
 | `UserSafeRegistrationNotifier` | `:user` | `PLAIN_TEXT` | A user is asked to update Mixin Messenger to receive transfers. `persist_web_notification = false`; only fans out over Mixin bot. |
 

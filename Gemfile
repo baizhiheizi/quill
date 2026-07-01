@@ -43,9 +43,6 @@ gem "bcrypt"
 # A simple API wrapper for Mixin Network in Ruby
 gem "mixin_bot", "~> 2.0"
 
-# A simple API wrapper for Pando in Ruby
-gem "pando_bot"
-
 # S3 active storage service
 gem "aws-sdk-s3", require: false
 
