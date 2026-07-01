@@ -11,32 +11,20 @@
       data-fennec-amount-param="<%= pay_amount %>"
       data-fennec-memo-param="<%= pre_order.memo %>"
       data-fennec-opponent-id-param="<%= pre_order.payee_id %>"
-      data-fennec-code-id-param="<%= pre_order.fswap_pay_code_id(pay_asset.asset_id) %>"
       class="btn btn-primary btn-lg w-full relative my-4">
       <%= image_tag 'fennec-logo.png', class: 'h-8 w-auto absolute left-4' %>
       <span class="text-lg"><%= t('confirm_to_pay') %></span>
     </a>
   <% when MVMPreOrder %>
     <div data-action="click->pre-orders-payment-component#pay">
-      <% if pre_order.asset_id == pay_asset.asset_id %>
-        <%= render "shared/mvm_pay_button",
-          currency: pay_asset,
-          amount: pay_amount,
-          payer: pre_order.payer,
-          receivers: [pre_order.payee_id],
-          threshold: 1,
-          memo: pre_order.memo,
-          trace_id: pre_order.trace_id %>
-      <% else %>
-        <%= render "shared/mvm_pay_button",
-          currency: pay_asset,
-          amount: pay_amount,
-          payer: pre_order.payer,
-          receivers: Settings.pando.mtg_members,
-          threshold: Settings.pando.mtg_threshold,
-          memo: pre_order.fswap_mtg_memo,
-          trace_id: pre_order.trace_id %>
-      <% end %>
+      <%= render "shared/mvm_pay_button",
+        currency: pay_asset,
+        amount: pay_amount,
+        payer: pre_order.payer,
+        receivers: [pre_order.payee_id],
+        threshold: 1,
+        memo: pre_order.memo,
+        trace_id: pre_order.trace_id %>
     </div>
   <% when MixinPreOrder %>
     <a href="<%= pre_order.pay_url(pay_asset.asset_id) %>"

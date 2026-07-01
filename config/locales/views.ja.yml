@@ -75,14 +75,12 @@ ja:
   already_paid: 支払い済みですか?
   try_to: 更新
   refresh: してみてください
-  pay_via_swap_tips:
   please_login: ログインしてください
   failed_to_connect: 接続に失敗しました
   connected: が正常に接続されました。ようこそ!
   love_thie_article: 記事にいいねする
   share: シェア
   signature: 署名
-  swap_supported_by: スワップ support by
   polling_payment: 支払い状況を確認中
   refund_warning: 返金されました、もう一度お試しください
   buy_article: 記事を購入
@@ -198,7 +196,6 @@ ja:
   author_transfers: 作者収益
   reader_transfers: 読者収益
   payments: 決済
-  swap_orders: スワップオーダー
   access_token: アクセストークン
   tips_of_general_notifications: 通知設定を変更できます。
   tips_of_article_published_notifications: フォロー中の作者が新しい記事を投稿した時、通知されます。

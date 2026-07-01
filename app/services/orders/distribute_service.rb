@@ -237,6 +237,6 @@ class Orders::DistributeService
   end
 
   def revenue_asset_id
-    @revenue_asset_id ||= payment.swap_order&.fill_asset_id || payment.asset_id
+    @revenue_asset_id ||= payment.asset_id
   end
 end

@@ -61,7 +61,6 @@ class User < ApplicationRecord
   has_many :buy_orders, -> { where(order_type: %w[buy_article]) }, class_name: "Order", foreign_key: :buyer_id, inverse_of: :buyer, dependent: :nullify
   has_many :bought_articles, -> { order(created_at: :desc) }, through: :buy_orders, source: :item, source_type: "Article"
   has_many :comments, foreign_key: :author_id, inverse_of: :author, dependent: :nullify
-  has_many :swap_orders, through: :payments
   has_many :notifications, as: :recipient, dependent: :destroy, class_name: "Noticed::Notification"
   has_many :bonuses, dependent: :restrict_with_exception
   has_many :pre_orders, primary_key: :mixin_uuid, foreign_key: :payer_id, dependent: :restrict_with_exception, inverse_of: :payer

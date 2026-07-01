@@ -75,14 +75,12 @@ en:
   already_paid: Already paid
   try_to: Try to
   refresh: Refresh
-  pay_via_swap_tips: You can pay with other token!
   please_login: Please Login
   failed_to_connect: Failed to connect
   connected: You've connected. Welcome!
   love_thie_article: Love this Post
   share: Share
   signature: Signature
-  swap_supported_by: Swap supported by
   polling_payment: Checking Payment Status
   refund_warning: Payment has been refunded. Please try again.
   buy_article: Buy Post
@@ -207,7 +205,6 @@ en:
   author_transfers: Author Revenue
   reader_transfers: Reader Revenue
   payments: Payments
-  swap_orders: Swap Orders
   access_token: Access Token
   tips_of_general_notifications: You can customize your notification via Web, Mixin Bot and Webhook(on development).
   tips_of_article_published_notifications: When your subscribed authors publish a new post, you will be notified.

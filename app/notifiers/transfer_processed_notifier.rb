@@ -20,10 +20,6 @@ class TransferProcessedNotifier < ApplicationNotifier
         t(".payment_refund")
       when :bonus
         t(".bonus")
-      when :swap_change
-        t(".swap_change")
-      when :swap_refund
-        t(".swap_refund")
       end
     end
 

@@ -121,7 +121,7 @@
         } do %>
         Orders
       <% end %>
-      <%= link_to admin_user_path(@user, tab: :pre_orders), 
+      <%= link_to admin_user_path(@user, tab: :pre_orders),
         class: "btn btn-soft btn-sm text-base-content",
         data: {
           tabs_target: "tab",
@@ -129,15 +129,7 @@
         } do %>
         Pre Orders
       <% end %>
-      <%= link_to admin_user_path(@user, tab: :swap_orders), 
-        class: "btn btn-soft btn-sm text-base-content",
-        data: {
-          tabs_target: "tab",
-          tabs_tabname_param: "swap_orders",
-        } do %>
-        Swap Orders
-      <% end %>
-      <%= link_to admin_user_path(@user, tab: :transfers), 
+      <%= link_to admin_user_path(@user, tab: :transfers),
         class: "btn btn-soft btn-sm text-base-content",
         data: {
           tabs_target: "tab",
@@ -217,13 +209,6 @@
         data-tabs-content-param="pre_orders"
         data-tabs-target="content">
       <%= turbo_frame_tag 'admin_pre_orders', src: admin_pre_orders_path(payer_id: @user.mixin_uuid) do %>
-        <%= render "shared/loading" %>
-      <% end %>
-    </div>
-    <div class="hidden"
-        data-tabs-content-param="swap_orders"
-        data-tabs-target="content">
-      <%= turbo_frame_tag 'admin_swap_orders', src: admin_swap_orders_path(payer_id: @user.mixin_uuid) do %>
         <%= render "shared/loading" %>
       <% end %>
     </div>
