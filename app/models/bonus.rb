@@ -22,8 +22,6 @@
 #
 
 class Bonus < ApplicationRecord
-  XIN_FAUCET_AMOUNT = 0.001
-
   include AASM
 
   belongs_to :user

@@ -6,11 +6,13 @@
 # Database name: primary
 #
 #  id                          :bigint           not null, primary key
+#  articles_count              :integer          default(0), not null
 #  authoring_subscribers_count :integer          default(0)
 #  biography                   :text
 #  blocked_at                  :datetime
 #  blocking_count              :integer          default(0)
 #  blocks_count                :integer          default(0)
+#  comments_count              :integer          default(0), not null
 #  email                       :string
 #  email_verified_at           :datetime
 #  locale                      :string

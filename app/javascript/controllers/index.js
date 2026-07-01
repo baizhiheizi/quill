@@ -34,9 +34,6 @@ application.register("flyonui-dropdown", FlyonuiDropdownController);
 import DropdownController from "./dropdown_controller";
 application.register("dropdown", DropdownController);
 
-import EthWalletController from "./eth_wallet_controller";
-application.register("eth-wallet", EthWalletController);
-
 import FennecController from "./fennec_controller";
 application.register("fennec", FennecController);
 
@@ -55,20 +52,8 @@ application.register("infinite-scroll", InfiniteScrollController);
 import LoadMoreController from "./load_more_controller";
 application.register("load-more", LoadMoreController);
 
-import LoginController from "./login_controller";
-application.register("login", LoginController);
-
 import FlyonuiModalController from "./flyonui_modal_controller";
 application.register("modal-component", FlyonuiModalController);
-
-import MvmDepositController from "./mvm_deposit_controller";
-application.register("mvm-deposit", MvmDepositController);
-
-import MvmPayButtonComponentController from "./mvm_pay_button_component_controller";
-application.register(
-  "mvm-pay-button-component",
-  MvmPayButtonComponentController,
-);
 
 import NestedFormController from "./nested_form_controller";
 application.register("nested-form", NestedFormController);
@@ -117,9 +102,6 @@ application.register("search", SearchController);
 
 import SelectCurrencyController from "./select_currency_controller";
 application.register("select-currency", SelectCurrencyController);
-
-import SessionController from "./session_controller";
-application.register("session", SessionController);
 
 import SyntaxHighlightController from "./syntax_highlight_controller";
 application.register("syntax-highlight", SyntaxHighlightController);

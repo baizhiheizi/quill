@@ -94,15 +94,6 @@ class Currency < ApplicationRecord
         rescue MixinBot::Error
           {}
         end
-      # self.mvm_contract_address = MVM.registry.contract_from_asset asset_id
-      # elsif mvm_contract_address.present?
-      #   self.asset_id = MVM.registry.asset_from_contract mvm_contract_address
-      #   self.raw =
-      #     begin
-      #       QuillBot.api.asset(asset_id)['data']
-      #     rescue MixinBot::Error
-      #       {}
-      #     end
     end
 
     assign_attributes(

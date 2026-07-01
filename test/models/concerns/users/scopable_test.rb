@@ -11,7 +11,7 @@ require "test_helper"
 #     `user_authorizations` SELECT so iterating `.authorization` does not
 #     trigger an N+1)
 #   - `only_blocked` / `without_blocked` (disjoint, union = every row)
-#   - `only_mixin_messenger` / `only_fennec` / `only_mvm` (provider filters
+#   - `only_mixin_messenger` / `only_fennec` (provider filters
 #     used by `Admin::UsersController#query`)
 #   - `only_email_verified` / `only_validated` (predicate filters also used
 #     by `Admin::UsersController#query`)
@@ -133,26 +133,6 @@ class Users::ScopableTest < ActiveSupport::TestCase
     result = User.joins(:authorization).only_fennec
 
     assert_includes result, fennec_user
-    assert_not_includes result, @author
-  end
-
-  test "only_mvm returns users whose authorization has provider mvm_eth" do
-    mvm_user = User.create!(
-      uid: "300001",
-      name: "MVM Reader",
-      mixin_id: "300001",
-      mixin_uuid: "e6666666-6666-4666-8666-666666666666",
-      locale: :en
-    )
-    mvm_user.user_authorizations.create!(
-      provider: :mvm_eth,
-      uid: "mvm-reader-uid",
-      raw: { "user_id" => "mvm-reader-uid" }
-    )
-
-    result = User.joins(:authorization).only_mvm
-
-    assert_includes result, mvm_user
     assert_not_includes result, @author
   end
 

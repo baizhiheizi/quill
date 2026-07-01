@@ -18,16 +18,9 @@ export default class extends Controller {
     "amountOption",
     "amountTag",
     "amountUsdTag",
-    "mvmTips",
-    "mixpayUrl",
   ];
 
   amountValueChanged() {
-    if (this.hasMixpayUrlTarget) {
-      const link = new URL(this.mixpayUrlTarget.href);
-      link.searchParams.set("amount", this.amountValue);
-      this.mixpayUrlTarget.href = link;
-    }
     this.amountInputTargets.forEach((target) => {
       target.value = this.amountValue;
     });

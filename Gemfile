@@ -125,9 +125,6 @@ gem "kramdown-parser-gfm"
 # Easily include static pages in your Rails app.
 gem "high_voltage"
 
-# a straightforward library to build, sign, and broadcast ethereum transactions anywhere you can run ruby.
-gem "eth"
-
 # FastImage finds the size or type of an image given its uri by fetching as little as needed
 gem "fastimage"
 

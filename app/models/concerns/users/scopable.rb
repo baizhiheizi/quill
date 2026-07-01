@@ -9,7 +9,6 @@ module Users::Scopable
     scope :without_blocked, -> { where(blocked_at: nil) }
     scope :only_mixin_messenger, -> { where(authorization: { provider: :mixin }) }
     scope :only_fennec, -> { where(authorization: { provider: :fennec }) }
-    scope :only_mvm, -> { where(authorization: { provider: :mvm_eth }) }
 
     scope :active, lambda {
       without_blocked
