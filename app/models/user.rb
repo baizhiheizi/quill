@@ -45,7 +45,7 @@ class User < ApplicationRecord
 
   extend Enumerize
 
-  has_one :authorization, -> { where(provider: %w[mixin fennec]) }, class_name: "UserAuthorization", inverse_of: :user, dependent: :restrict_with_exception
+  has_one :authorization, -> { where(provider: :mixin) }, class_name: "UserAuthorization", inverse_of: :user, dependent: :restrict_with_exception
   has_many :user_authorizations, dependent: :restrict_with_exception
   has_one :twitter_authorization, -> { where(provider: :twitter) }, class_name: "UserAuthorization", inverse_of: :user, dependent: :restrict_with_exception
 
@@ -114,7 +114,7 @@ class User < ApplicationRecord
   end
 
   def bio
-    biography || authorization.biography || I18n.t("activerecord.attributes.user.default_bio")
+    biography || authorization&.biography || I18n.t("activerecord.attributes.user.default_bio")
   end
 
   def wallet_id
@@ -230,11 +230,7 @@ class User < ApplicationRecord
   end
 
   def default_payment
-    if messenger?
-      "MixinPreOrder"
-    elsif fennec?
-      "FennecPreOrder"
-    end
+    "MixinPreOrder" if messenger?
   end
 
   def self.ransackable_attributes(_auth_object = nil)

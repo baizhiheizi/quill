@@ -22,24 +22,6 @@ module Authenticatable
       find_or_create_user_by_auth auth
     end
 
-    def auth_from_fennec(token)
-      res = QuillBot.api.me access_token: token
-      raise res.inspect if res["error"].present?
-
-      auth = UserAuthorization.create_with(
-        raw: res["data"],
-        access_token: token
-      ).find_or_create_by!(
-        uid: res["data"].fetch("user_id"),
-        provider: :fennec
-      )
-      raw = (auth.raw.presence || {}).merge(res["data"])
-      auth.raw = raw
-      auth.update! raw: raw if auth.raw_changed?
-
-      find_or_create_user_by_auth auth
-    end
-
     private
 
     def find_or_create_user_by_auth(auth)

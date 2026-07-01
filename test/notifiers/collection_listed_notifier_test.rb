@@ -219,15 +219,15 @@ class CollectionListedNotifierTest < ActiveSupport::TestCase
 
   test "deliver does not enqueue a mixin bot message when recipient is not a messenger" do
     reader_two_auth = user_authorizations(:reader_two_auth)
-    reader_two_auth.update!(provider: "fennec")
-    fennec_recipient = users(:reader_two)
-    fennec_recipient.create_notification_setting! if fennec_recipient.notification_setting.blank?
+    reader_two_auth.update!(provider: "twitter")
+    non_messenger_recipient = users(:reader_two)
+    non_messenger_recipient.create_notification_setting! if non_messenger_recipient.notification_setting.blank?
 
     deliver_notifier!(
       CollectionListedNotifier,
       record: @collection,
       collection: @collection,
-      recipient: fennec_recipient
+      recipient: non_messenger_recipient
     )
 
     perform_enqueued_jobs only: Noticed::EventJob

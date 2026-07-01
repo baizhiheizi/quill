@@ -20,7 +20,6 @@ ja:
   confirm: Confirm
   pay: 支払う
   pay_with_mixin: Linksで支払う
-  pay_with_fennec: Fennecで支払う
   waiting_for_payment: 支払い待ち
   processing_payment: 入金、処理中
   scan_with_mixin: LinksでQRコードを読み取ってください

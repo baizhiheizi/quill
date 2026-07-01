@@ -55,7 +55,7 @@ The application is the **sole source of truth** for published article content �
 
 ## Cross-cutting concerns
 
-**Authentication** runs through `SessionsController` (Mixin OAuth, Fennec, Twitter); API access tokens live on `AccessToken`. **Authorization** uses Pundit (`app/policies/`). **Internationalization** keys live in `config/locales/`, with the user-facing locale selectable via `LocaleController`. **Notifications** use the [Noticed](https://github.com/excid3/noticed) gem (delivery methods in `app/notifiers/delivery_methods/`); admin alerts route through `AdminNotificationService`. See [Reference → Notifiers](../reference/notifiers.md) for the full catalog.
+**Authentication** runs through `SessionsController` (Mixin OAuth, Twitter); API access tokens live on `AccessToken`. **Authorization** uses Pundit (`app/policies/`). **Internationalization** keys live in `config/locales/`, with the user-facing locale selectable via `LocaleController`. **Notifications** use the [Noticed](https://github.com/excid3/noticed) gem (delivery methods in `app/notifiers/delivery_methods/`); admin alerts route through `AdminNotificationService`. See [Reference → Notifiers](../reference/notifiers.md) for the full catalog.
 
 ## Configuration surface
 

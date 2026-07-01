@@ -11,8 +11,8 @@ require "test_helper"
 #     `user_authorizations` SELECT so iterating `.authorization` does not
 #     trigger an N+1)
 #   - `only_blocked` / `without_blocked` (disjoint, union = every row)
-#   - `only_mixin_messenger` / `only_fennec` (provider filters
-#     used by `Admin::UsersController#query`)
+#   - `only_mixin_messenger` (provider filter used by
+#     `Admin::UsersController#query`)
 #   - `only_email_verified` / `only_validated` (predicate filters also used
 #     by `Admin::UsersController#query`)
 #
@@ -114,34 +114,6 @@ class Users::ScopableTest < ActiveSupport::TestCase
     assert_includes mixin_users, @author
     assert_includes mixin_users, @reader_one
     assert_includes mixin_users, @reader_two
-  end
-
-  test "only_fennec returns users whose authorization has provider fennec" do
-    fennec_user = User.create!(
-      uid: "200001",
-      name: "Fennec Reader",
-      mixin_id: "200001",
-      mixin_uuid: "d5555555-5555-4555-8555-555555555555",
-      locale: :en
-    )
-    fennec_user.user_authorizations.create!(
-      provider: :fennec,
-      uid: "fennec-reader-uid",
-      raw: { "user_id" => "fennec-reader-uid" }
-    )
-
-    result = User.joins(:authorization).only_fennec
-
-    assert_includes result, fennec_user
-    assert_not_includes result, @author
-  end
-
-  test "only_mixin_messenger and only_fennec are disjoint" do
-    mixin_ids = User.joins(:authorization).only_mixin_messenger.pluck(:id)
-    fennec_ids = User.joins(:authorization).only_fennec.pluck(:id)
-
-    assert_empty(mixin_ids & fennec_ids,
-      "only_mixin_messenger and only_fennec overlap on: #{(mixin_ids & fennec_ids).inspect}")
   end
 
   # --- only_email_verified / only_validated --------------------------------

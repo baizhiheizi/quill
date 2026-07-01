@@ -77,12 +77,8 @@ module Users::Statable
     update blocked_at: nil
   end
 
-  def fennec?
-    authorization.provider == "fennec"
-  end
-
   def messenger?
-    authorization.provider == "mixin"
+    authorization&.provider == "mixin"
   end
 
   def accessable?
