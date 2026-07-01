@@ -2,7 +2,7 @@
 
 class SessionsController < ApplicationController
   skip_before_action :ensure_launched!
-  skip_before_action :verify_authenticity_token, only: %i[mixin fennec]
+  skip_before_action :verify_authenticity_token, only: %i[mixin]
 
   def new
     redirect_to auth_mixin_path(return_to: params[:return_to]) if from_mixin_messenger?
@@ -44,22 +44,6 @@ class SessionsController < ApplicationController
     if user.present?
       user_sign_in user.sessions.create!(info: { request: request_info })
       user.notify_for_login
-      redirect_to safe_return_to, success: t("connected")
-    else
-      redirect_to safe_return_to, alert: t("failed_to_connect")
-    end
-  end
-
-  def fennec
-    user =
-      begin
-        User.auth_from_fennec params[:token]
-      rescue MixinBot::Error
-        nil
-      end
-
-    if user.present?
-      user_sign_in user.sessions.create! info: { request: request_info }
       redirect_to safe_return_to, success: t("connected")
     else
       redirect_to safe_return_to, alert: t("failed_to_connect")

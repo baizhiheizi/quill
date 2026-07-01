@@ -91,7 +91,7 @@ class PreOrder < ApplicationRecord
     follow_id
   end
 
-  # Mixin/Fennec payers pay directly in the item's asset via a SAFE transfer
+  # Mixin payers pay directly in the item's asset via a SAFE transfer
   # to the platform bot. Cross-asset payment is handled by MixPay
   # (MixpayPreOrder), not the retired 4swap path.
   def pay_url(_pay_asset_id = asset_id)

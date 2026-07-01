@@ -1,22 +1,27 @@
 class RemoveMvmEthUserAuthorizations < ActiveRecord::Migration[8.1]
-  # MVM (Mixin Virtual Machine) is shut down and the mvm_eth auth path has been
-  # removed. The `user_authorizations.provider` enum keeps its numeric values
+  # MVM (Mixin Virtual Machine) and Fennec (Pando browser-extension wallet) are
+  # both deprecated; their auth paths have been removed. The
+  # `user_authorizations.provider` enum keeps its numeric values
   # (mixin: 0, fennec: 1, mvm_eth: 2, twitter: 3) so historical rows still load;
-  # this migration purges the orphaned mvm_eth authorizations and any users whose
-  # *only* authorization was mvm_eth (they can no longer sign in).
+  # this migration purges the orphaned fennec (1) and mvm_eth (2) authorizations
+  # and any users whose *only* authorization was one of them (they can no
+  # longer sign in).
   #
-  # Users that also have a mixin/fennec/twitter authorization are kept — only
-  # their mvm_eth authorization row is removed.
+  # Users that also have a mixin/twitter authorization are kept — only their
+  # fennec/mvm_eth authorization rows are removed.
+  DEPRECATED_PROVIDERS = [ 1, 2 ].freeze # fennec, mvm_eth
+
   def up
-    # Users whose only authorization is mvm_eth. Materialized up front:
-    # deleting the provider = 2 rows below would otherwise make a re-evaluated
-    # subquery see none of them, silently turning the later user cleanup into
-    # a no-op.
+    # Users whose only authorization is a deprecated provider. Materialized up
+    # front: deleting the deprecated rows below would otherwise make a
+    # re-evaluated subquery see none of them, silently turning the later user
+    # cleanup into a no-op.
     orphan_user_ids = select_values(<<~SQL.squish)
       SELECT user_id FROM user_authorizations
-      WHERE provider = 2 AND user_id IS NOT NULL
+      WHERE provider IN (#{DEPRECATED_PROVIDERS.join(',')}) AND user_id IS NOT NULL
       AND user_id NOT IN (
-        SELECT user_id FROM user_authorizations WHERE provider != 2 AND user_id IS NOT NULL
+        SELECT user_id FROM user_authorizations
+        WHERE provider NOT IN (#{DEPRECATED_PROVIDERS.join(',')}) AND user_id IS NOT NULL
       )
     SQL
 
@@ -30,8 +35,8 @@ class RemoveMvmEthUserAuthorizations < ActiveRecord::Migration[8.1]
       AND recipient_id IN (#{orphan_user_ids.join(',')})
     SQL
 
-    # Drop all mvm_eth authorizations.
-    execute "DELETE FROM user_authorizations WHERE provider = 2"
+    # Drop all fennec/mvm_eth authorizations.
+    execute "DELETE FROM user_authorizations WHERE provider IN (#{DEPRECATED_PROVIDERS.join(',')})"
 
     # Drop users left without any authorization.
     execute <<~SQL.squish

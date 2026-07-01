@@ -10,8 +10,6 @@ module Admin
         case @filter
         when "mixin"
           users.only_mixin_messenger
-        when "fennec"
-          users.only_fennec
         when "only_validated"
           users.only_validated
         when "only_blocked"

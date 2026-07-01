@@ -34,9 +34,6 @@ application.register("flyonui-dropdown", FlyonuiDropdownController);
 import DropdownController from "./dropdown_controller";
 application.register("dropdown", DropdownController);
 
-import FennecController from "./fennec_controller";
-application.register("fennec", FennecController);
-
 import FlashController from "./flash_controller";
 application.register("flash", FlashController);
 

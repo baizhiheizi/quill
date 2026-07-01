@@ -23,7 +23,6 @@ Every controller in `app/javascript/controllers/index.js`, with its source file 
 | `comment-form` | `comment_form_controller.js` | Comment composer (inline validation, optimistic render) |
 | `darkmode` | `darkmode_controller.js` | Theme toggle persisted to local storage |
 | `dropdown` | `dropdown_controller.js` | Open/close menu with transitions |
-| `fennec` | `fennec_controller.js` | FenneC wallet integration |
 | `flash` | `flash_controller.js` | Dismissible flash banners |
 | `floating` | `floating_controller.js` | Floating action bar shown on scroll |
 | `flyonui-dropdown` | `flyonui_dropdown_controller.js` | FlyonUI-themed dropdown wrapper |
