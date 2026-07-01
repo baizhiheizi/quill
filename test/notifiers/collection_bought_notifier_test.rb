@@ -205,7 +205,7 @@ class CollectionBoughtNotifierTest < ActiveSupport::TestCase
 
   test "deliver does not enqueue a mixin bot message when recipient is not a messenger" do
     reader_two_auth = user_authorizations(:reader_two_auth)
-    reader_two_auth.update!(provider: "fennec")
+    reader_two_auth.update!(provider: "twitter")
 
     deliver_notifier!(
       CollectionBoughtNotifier,

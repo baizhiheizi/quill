@@ -46,10 +46,7 @@
     <%= javascript_include_tag "application", "data-turbo-track": "reload" %>
   </head>
 
-  <body data-controller='session'
-        data-session-provider-value="<%= current_session&.info&.[]('provider') %>"
-        data-session-address-value="<%= current_session&.user&.uid %>"
-        data-session-uuid-value="<%= current_session&.uuid %>">
+  <body>
     <main class="min-h-screen bg-base-100 text-base-content">
       <div class="max-w-xl lg:max-w-2xl 2xl:max-w-3xl mx-auto">
         <%= yield %>

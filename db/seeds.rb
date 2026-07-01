@@ -11,10 +11,6 @@ if Rails.env.development?
 end
 
 unless Rails.env.test?
-  Currency.swappable_asset_ids.each do |asset|
-    Currency.find_or_create_by asset_id: asset
-  end
-
   Article::SUPPORTED_ASSETS.each do |asset|
     Currency.find_or_create_by asset_id: asset
   end

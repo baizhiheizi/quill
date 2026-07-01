@@ -43,9 +43,6 @@ gem "bcrypt"
 # A simple API wrapper for Mixin Network in Ruby
 gem "mixin_bot", "~> 2.0"
 
-# A simple API wrapper for Pando in Ruby
-gem "pando_bot"
-
 # S3 active storage service
 gem "aws-sdk-s3", require: false
 
@@ -127,9 +124,6 @@ gem "kramdown-parser-gfm"
 
 # Easily include static pages in your Rails app.
 gem "high_voltage"
-
-# a straightforward library to build, sign, and broadcast ethereum transactions anywhere you can run ruby.
-gem "eth"
 
 # FastImage finds the size or type of an image given its uri by fetching as little as needed
 gem "fastimage"

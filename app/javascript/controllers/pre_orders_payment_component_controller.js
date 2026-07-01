@@ -71,7 +71,7 @@ export default class extends Controller {
   }
 
   pay() {
-    if (this.hasStateTarget && this.typeValue !== "MVMPreOrder") {
+    if (this.hasStateTarget) {
       this.stateTarget.classList.remove("hidden");
     }
     if (this.hasOtherPaymentsTarget) {

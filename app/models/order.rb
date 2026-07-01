@@ -168,16 +168,7 @@ class Order < ApplicationRecord
   private
 
   def setup_attributes
-    amount =
-      if payment.asset_id == item.asset_id || cite_article?
-        payment.amount.round(8)
-      elsif payment.swap_order&.swapped? || payment.swap_order&.completed?
-        if buy_article? || buy_collection?
-          payment.swap_order.min_amount
-        elsif reward_article?
-          payment.swap_order.amount
-        end
-      end
+    amount = payment.amount.round(8)
 
     self.currency = if cite_article?
                       payment.currency

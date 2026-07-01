@@ -1,15 +1,5 @@
 <div class="truncate font-mono text-xs sm:text-sm">
-  <% if user.mvm_eth? %>
-    <div class="tooltip flex cursor-pointer items-center space-x-1 opacity-75 [--placement:bottom-start]" data-tip="<%= user.uid %>">
-      <div>@<%= user.uid.first(4) %></div>
-      <div class="flex items-center space-x-1">
-        <div class="h-1 w-1 rounded-full bg-[#77beff]"></div>
-        <div class="h-1 w-1 rounded-full bg-[#ff51a3]"></div>
-        <div class="h-1 w-1 rounded-full bg-[#ffcf54]"></div>
-      </div>
-      <div class="w-16 uppercase"><%= user.uid.last(4) %></div>
-    </div>
-  <% elsif user.messenger? %>
+  <% if user.messenger? %>
     <span class="opacity-75">@<%= user.uid %></span>
   <% else %>
     <div class="tooltip relative flex items-center space-x-1 opacity-75 [--placement:bottom-start]" data-tip="<%= user.uid %>">

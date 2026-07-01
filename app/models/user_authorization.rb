@@ -45,15 +45,4 @@ class UserAuthorization < ApplicationRecord
     refresh!
     raw["has_safe"]
   end
-
-  def mixin_api
-    return unless provider == "mvm_eth"
-    return if key.blank?
-
-    @mixin_api ||= MixinBot::API.new(
-      client_id: key["client_id"],
-      private_key: key["private_key"],
-      session_id: key["session_id"]
-    )
-  end
 end

@@ -91,12 +91,9 @@
           <%= render_dropdown class: 'w-full', button: dropdown_button do %>
             <ul class="menu menu-sm w-56 p-2 rounded-xl border border-base-content/10 shadow-lg bg-base-100 mb-2">
               <li><%= link_to t('profile_page'), user_path(current_user), class: "dropdown-item rounded-lg py-2" %></li>
-              <% if current_user.mvm_eth? %>
-                <li><%= link_to t('my_wallet'), dashboard_wallet_path, class: "dropdown-item rounded-lg py-2" %></li>
-              <% end %>
               <li><%= link_to t('settings'), dashboard_settings_path, class: "dropdown-item rounded-lg py-2" %></li>
               <div class="divider my-1"></div>
-              <li><%= link_to t('disconnect'), logout_path, data: { action: 'session#destroy' }, class: "dropdown-item rounded-lg py-2 text-error" %></li>
+              <li><%= link_to t('disconnect'), logout_path, class: "dropdown-item rounded-lg py-2 text-error" %></li>
             </ul>
           <% end %>
         <% else %>

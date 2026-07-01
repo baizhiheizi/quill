@@ -35,13 +35,6 @@ zh-CN:
       notification:
         bought: 成功购买了
         rewarded: 成功赞赏了
-    swap_order_swapping_notifier:
-      notification:
-        swapping: '正在兑换:'
-    swap_order_finished_notifier:
-      notification:
-        swapped: '成功兑换:'
-        rejected: 兑换失败，您将收到退款
     transfer_processed_notifier:
       notification:
         received: 收到
@@ -49,8 +42,6 @@ zh-CN:
         reader_revenue: 读者收益
         payment_refund: 支付退款
         bonus: 奖励
-        swap_change: 兑换找零
-        swap_refund: 兑换后购买失败退款
     subscribe_user_action_created_notifier:
       notification:
         subscribed: 订阅了您的动态

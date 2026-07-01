@@ -133,34 +133,34 @@ class PaymentRefundedNotifierTest < ActiveSupport::TestCase
 
   test "may_notify_via_mixin_bot is false for non-messenger recipients" do
     reader_two_auth = user_authorizations(:reader_two_auth)
-    reader_two_auth.update!(provider: "fennec")
-    fennec_recipient = users(:reader_two)
-    fennec_recipient.create_notification_setting! if fennec_recipient.notification_setting.blank?
+    reader_two_auth.update!(provider: "twitter")
+    non_messenger_recipient = users(:reader_two)
+    non_messenger_recipient.create_notification_setting! if non_messenger_recipient.notification_setting.blank?
     payment = build_refunded_payment!
 
     deliver_notifier!(
       PaymentRefundedNotifier,
       record: payment,
       payment: payment,
-      recipient: fennec_recipient
+      recipient: non_messenger_recipient
     )
 
-    notification = notification_for(fennec_recipient)
+    notification = notification_for(non_messenger_recipient)
     assert_not notification.may_notify_via_mixin_bot?
   end
 
   test "deliver does not send a mixin bot message when recipient is not a messenger" do
     reader_two_auth = user_authorizations(:reader_two_auth)
-    reader_two_auth.update!(provider: "fennec")
-    fennec_recipient = users(:reader_two)
-    fennec_recipient.create_notification_setting! if fennec_recipient.notification_setting.blank?
+    reader_two_auth.update!(provider: "twitter")
+    non_messenger_recipient = users(:reader_two)
+    non_messenger_recipient.create_notification_setting! if non_messenger_recipient.notification_setting.blank?
     payment = build_refunded_payment!
 
     deliver_notifier!(
       PaymentRefundedNotifier,
       record: payment,
       payment: payment,
-      recipient: fennec_recipient
+      recipient: non_messenger_recipient
     )
 
     perform_enqueued_jobs only: Noticed::EventJob

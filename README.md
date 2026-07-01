@@ -29,7 +29,7 @@ Author A prices article X at 100 sats. Readers B, C, and D each pay 100 sats in 
 
 ## Experience
 
-Open [quill.im](https://quill.im/), connect your wallet via MetaMask, Coinbase or WalletConnect.
+Open [quill.im](https://quill.im/) and sign in with Mixin Messenger.
 
 ## API
 
