@@ -8,19 +8,26 @@ class RemoveMvmEthUserAuthorizations < ActiveRecord::Migration[8.1]
   # Users that also have a mixin/fennec/twitter authorization are kept — only
   # their mvm_eth authorization row is removed.
   def up
-    # Users whose only authorization is mvm_eth.
-    orphan_user_ids_sql = <<~SQL.squish
+    # Users whose only authorization is mvm_eth. Materialized up front:
+    # deleting the provider = 2 rows below would otherwise make a re-evaluated
+    # subquery see none of them, silently turning the later user cleanup into
+    # a no-op.
+    orphan_user_ids = select_values(<<~SQL.squish)
       SELECT user_id FROM user_authorizations
       WHERE provider = 2 AND user_id IS NOT NULL
-      AND user_id NOT IN (SELECT user_id FROM user_authorizations WHERE provider != 2)
+      AND user_id NOT IN (
+        SELECT user_id FROM user_authorizations WHERE provider != 2 AND user_id IS NOT NULL
+      )
     SQL
 
+    return if orphan_user_ids.empty?
+
     # Clear dependent rows that use restrict_with_exception dependencies.
-    execute "DELETE FROM sessions WHERE user_id IN (#{orphan_user_ids_sql})"
+    execute "DELETE FROM sessions WHERE user_id IN (#{orphan_user_ids.join(',')})"
     execute <<~SQL.squish
       DELETE FROM noticed_notifications
       WHERE recipient_type = 'User'
-      AND recipient_id IN (#{orphan_user_ids_sql})
+      AND recipient_id IN (#{orphan_user_ids.join(',')})
     SQL
 
     # Drop all mvm_eth authorizations.
@@ -29,7 +36,7 @@ class RemoveMvmEthUserAuthorizations < ActiveRecord::Migration[8.1]
     # Drop users left without any authorization.
     execute <<~SQL.squish
       DELETE FROM users
-      WHERE id IN (#{orphan_user_ids_sql})
+      WHERE id IN (#{orphan_user_ids.join(',')})
       AND id NOT IN (SELECT user_id FROM user_authorizations WHERE user_id IS NOT NULL)
     SQL
   end

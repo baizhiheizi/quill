@@ -4,7 +4,7 @@
 
 ## Project Overview
 
-Quill is a Web3 paid-publishing platform ([quill.im](https://quill.im/)) where authors publish priced articles and readers pay to access them. Its distinguishing feature is **early reader rewards**: a share of each article's new revenue (default 40%) is distributed proportionally to readers who paid earlier. The stack is a Rails monolith with Hotwire (Turbo + Stimulus), ERB partials, PostgreSQL, Solid Cable, Solid Cache, and background jobs via Solid Queue (separate queue database). Integrations include Mixin Network, MVM (Ethereum L2), MixPay, and wallet login (MetaMask, Coinbase, WalletConnect).
+Quill is a Web3 paid-publishing platform ([quill.im](https://quill.im/)) where authors publish priced articles and readers pay to access them. Its distinguishing feature is **early reader rewards**: a share of each article's new revenue (default 40%) is distributed proportionally to readers who paid earlier. The stack is a Rails monolith with Hotwire (Turbo + Stimulus), ERB partials, PostgreSQL, Solid Cable, Solid Cache, and background jobs via Solid Queue (separate queue database). Integrations include Mixin Network (OAuth + Fennec login) and MixPay (cross-asset payment rail).
 
 ## Tech Stack
 
@@ -22,24 +22,24 @@ Quill is a Web3 paid-publishing platform ([quill.im](https://quill.im/)) where a
 
 ## Architecture
 
-Classic Rails MVC with namespaced controllers, route draws, service objects, and ActiveJob workers. Public site, author **dashboard**, **admin**, JSON **API**, and **mvm**/**grover** sub-apps share models but use separate controllers.
+Classic Rails MVC with namespaced controllers, route draws, service objects, and ActiveJob workers. Public site, author **dashboard**, **admin**, JSON **API**, and **grover** sub-apps share models but use separate controllers.
 
 ### Directory Structure
 
 ```
 quill/
 ├── app/
-│   ├── controllers/     # Web, dashboard, admin, api, mvm, grover
+│   ├── controllers/     # Web, dashboard, admin, api, grover
 │   ├── models/          # ActiveRecord + concerns (AASM, etc.)
 │   ├── views/           # ERB templates and partials
 │   ├── helpers/         # View helpers (UiHelper for modal/dropdown wrappers)
-│   ├── javascript/      # Stimulus controllers, MVM wallet TS, esbuild entry
+│   ├── javascript/      # Stimulus controllers, esbuild entry
 │   ├── jobs/            # Active Job work (orders, transfers)
 │   ├── services/        # Query/command objects (e.g. ArticleSearchService)
 │   ├── notifiers/       # Noticed 3 notifier classes + delivery_methods/
 │   └── libs/            # Non-Rails Ruby helpers
 ├── config/
-│   ├── routes/          # Route draws: admin, dashboard, api, mvm, grover
+│   ├── routes/          # Route draws: admin, dashboard, api, grover
 │   ├── settings/        # Config gem YAML (copy to settings.local.yml)
 │   └── credentials/     # Encrypted secrets (Mixin bot, encryption keys)
 ├── db/migrate/          # Schema migrations
@@ -112,7 +112,7 @@ bun run build:css
 - **Views**: reusable UI in `app/views/**/_*.html.erb` partials; block/slot patterns via `UiHelper` (`render_modal`, `render_dropdown`, etc.)
 - **Controllers**: concerns in `app/controllers/concerns/` (`Localizable`, `RenderingHelper`, `API::RenderingHelper`)
 - **Routes**: partial routes in `config/routes/*.rb`, loaded via `draw :name` in `config/routes.rb`
-- **JS**: Stimulus controllers in `app/javascript/controllers/`; TypeScript in `app/javascript/mvm/`; entry `app/javascript/application.js`
+- **JS**: Stimulus controllers in `app/javascript/controllers/`; entry `app/javascript/application.js`
 - **Comments**: sparse; schema comments auto-generated on models
 
 ## Testing Conventions
