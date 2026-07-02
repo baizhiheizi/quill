@@ -29,7 +29,7 @@ module Authenticatable
         user = auth.user
         if user.messenger?
           user.update(
-            name: auth.name,
+            name: auth.raw["full_name"],
             biography: auth.biography
           )
         end
