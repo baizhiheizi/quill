@@ -144,15 +144,11 @@ class AuthenticatableTest < ActiveSupport::TestCase
     user = User.auth_from_mixin("auth-code")
 
     assert_equal existing.id, user.id
-    # Pin actual behavior: the existing-user branch passes `auth.name`
-    # (which reads `raw["name"]`, not Mixin's `full_name`), so the
-    # `user.update(name: nil, biography: "Fresh Bio")` call leaves
-    # `name` nil. Because `User` has `validates :name, presence: true`,
-    # the entire update fails and neither field is refreshed. This is a
-    # known mismatch vs the new-user branch that uses
-    # `auth.raw["full_name"]`.
-    assert_equal "Stale Name", user.reload.name
-    assert_equal "Stale Bio", user.reload.biography
+    # Both fields should refresh from the new `me` payload. The new-user
+    # branch already uses `auth.raw["full_name"]`; this branch must use
+    # the same key (Mixin's API populates `full_name`, not `name`).
+    assert_equal "Fresh Name", user.reload.name
+    assert_equal "Fresh Bio", user.reload.biography
   end
 
   test "auth_from_mixin returns the existing User even when authorization#user is nil" do
