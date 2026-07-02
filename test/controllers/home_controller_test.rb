@@ -35,7 +35,7 @@ class HomeControllerTest < ActionController::TestCase
     # `users(:author)` is already loaded by the test, so an `actions.*` SELECT
     # containing the author's id is the signature of the old code path.
     refute_selecting = queries.select { |q|
-      q.start_with?("SELECT") && q.include?('FROM "actions"') && q.include?(users(:author).id.to_s)
+      q[:sql].start_with?("SELECT") && q[:sql].include?('FROM "actions"') && q[:sql].include?(users(:author).id.to_s)
     }
     assert_empty refute_selecting,
       "expected no SELECT on actions loading the blocked author id, got: #{refute_selecting.inspect}"
@@ -54,7 +54,7 @@ class HomeControllerTest < ActionController::TestCase
       "expected no NOT IN subquery when @current_user is nil (guard clause), got: #{main}")
 
     # The guest path must not touch the actions table at all
-    actions_selects = queries.select { |q| q.start_with?("SELECT") && q.include?('FROM "actions"') }
+    actions_selects = queries.select { |q| q[:sql].start_with?("SELECT") && q[:sql].include?('FROM "actions"') }
     assert_empty actions_selects, "expected no SELECT on actions when @current_user is nil"
   end
 
@@ -89,8 +89,11 @@ class HomeControllerTest < ActionController::TestCase
 
     assert_match(/RANDOM\(\)/i, main,
       "expected RANDOM() in the ORDER BY at the SQL level, got: #{main}")
-    assert_match(/LIMIT\s+\$4|limit\s+5/i, main,
-      "expected LIMIT 5 (not 20) at the SQL level, got: #{main}")
+    # The LIMIT placeholder index depends on how many binds come before it
+    # (e.g. the NOT IN (SELECT ...) block-filter subquery adds 3). Assert
+    # against the bound parameter instead of the placeholder number.
+    assert_equal 5, limit_value_for(main, queries),
+      "expected LIMIT 5 (not 20) at the SQL level, got: #{main}"
 
     # `@users` must be a materialized Array — not an AR relation still
     # capable of issuing more queries.
@@ -108,18 +111,18 @@ class HomeControllerTest < ActionController::TestCase
     # pin the SQL shape instead.
     queries = capture_queries(exclude: [ "solid_cache_entries" ]) { get :hot_tags }
 
-    tag_selects = queries.select { |q| q.start_with?("SELECT") && q.include?('FROM "tags"') }
+    tag_selects = queries.select { |q| q[:sql].start_with?("SELECT") && q[:sql].include?('FROM "tags"') }
     assert_predicate tag_selects, :any?,
       "expected at least one FROM \"tags\" SELECT, got: #{queries.inspect}"
 
-    main = tag_selects.first
+    main = tag_selects.first[:sql]
     # `RANDOM()` may be appended to the existing `Tag.hot` ORDER BY (which
     # already orders by `COUNT(articles.id) DESC, tags.created_at DESC`),
     # so check for the `RANDOM()` token rather than an exact match.
     assert_match(/RANDOM\(\)/i, main,
       "expected RANDOM() in the ORDER BY at the SQL level, got: #{main}")
-    assert_match(/LIMIT\s+\$4|limit\s+5/i, main,
-      "expected LIMIT 5 (not 50) at the SQL level, got: #{main}")
+    assert_equal 5, limit_value_for(main, queries),
+      "expected LIMIT 5 (not 50) at the SQL level, got: #{main}"
 
     # `@hot_tags` must be a materialized Array — not an AR relation still
     # capable of issuing more queries.
@@ -141,12 +144,14 @@ class HomeControllerTest < ActionController::TestCase
 
   # Captures every SQL query issued by the block (SCHEMA queries excluded).
   # Pass `exclude:` to also drop noise from a known source (e.g. solid_cache).
+  # Returns an Array of Hashes with :sql and :binds so callers can inspect
+  # bound parameter values, not just the SQL placeholder text.
   def capture_queries(exclude: [], &block)
     queries = []
     callback = ->(*, payload) {
       next if payload[:name] == "SCHEMA"
       next if exclude.any? { |needle| payload[:sql].include?(needle) }
-      queries << payload[:sql]
+      queries << { sql: payload[:sql], binds: payload[:type_casted_binds] }
     }
     ActiveSupport::Notifications.subscribed(callback, "sql.active_record", &block)
     queries
@@ -157,7 +162,22 @@ class HomeControllerTest < ActionController::TestCase
   # a NOT IN block-filter subquery, prefer that select; otherwise fall
   # back to the first users SELECT.
   def main_users_select(queries)
-    users_selects = queries.select { |q| q.include?('FROM "users"') }
-    users_selects.find { |q| q.include?("NOT IN") } || users_selects.first
+    users_selects = queries.select { |q| q[:sql].include?('FROM "users"') }
+    users_selects.find { |q| q[:sql].include?("NOT IN") }&.dig(:sql) || users_selects.first&.dig(:sql)
+  end
+
+  # Resolves the LIMIT value bound to `sql` by looking up its placeholder
+  # index in the corresponding binds. The placeholder index isn't stable
+  # (it depends on the number of binds that come before LIMIT in the
+  # query), so we look it up by index rather than asserting a fixed
+  # number.
+  def limit_value_for(sql, queries)
+    pair = queries.find { |q| q[:sql] == sql }
+    return unless pair
+
+    placeholder = sql[/\bLIMIT\s+\$(\d+)\b/, 1]
+    return unless placeholder
+
+    pair[:binds][placeholder.to_i - 1]
   end
 end
