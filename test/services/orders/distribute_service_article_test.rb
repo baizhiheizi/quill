@@ -314,9 +314,13 @@ class Orders::DistributeServiceArticleTest < ActiveSupport::TestCase
     end
   end
 
-  # === References memo: ref.reference.wallet_id routing ===
+  # === References memo: ref.reference.author.mixin_uuid routing ===
+  #
+  # Articles no longer provision per-article Mixin wallets (#1797), so
+  # reference_revenue routes to the cited article's author Mixin identity
+  # rather than the now-absent article wallet.
 
-  test "reference_revenue opponent_id is the reference article's wallet_id" do
+  test "reference_revenue opponent_id is the reference article author's mixin_uuid" do
     with_quill_bot_stub do
       referenced_article = articles(:published_free)
       CiterReference.create!(
@@ -330,7 +334,7 @@ class Orders::DistributeServiceArticleTest < ActiveSupport::TestCase
 
       reference_transfer = order.transfers.find_by(transfer_type: :reference_revenue)
       assert reference_transfer
-      assert_equal referenced_article.wallet_id, reference_transfer.opponent_id
+      assert_equal referenced_article.author.mixin_uuid, reference_transfer.opponent_id
     end
   end
 end

@@ -27,9 +27,10 @@ When an author runs `Article#publish!`:
 1. The `Article` row transitions to the `published` state via AASM.
 2. `notify_for_first_published` fires (see [Reference → Notifiers](../reference/notifiers.md#articlepublishednotifier)).
 3. `Articles::GeneratePosterJob` enqueues a social-share poster render on the `low` queue.
-4. `Articles::CreateWalletJob` provisions a Mixin wallet for the article (one-time).
 
 That is the complete list. There is **no** enqueue for an external upload, **no** outbound HTTP call to a permanence network, and **no** background job that "mirrors" content elsewhere. The poster-render job writes a derived asset (the Open Graph image) back into ActiveStorage; it does not leave the application.
+
+Note: per-article Mixin wallets are no longer provisioned on publish (Phase 3 cleanup tracked in #1790). Article revenue settlement now routes directly to the author's Mixin identity; see [Value net → Settlement targets](./value-net.md#settlement-targets-post-1797) for the full target table.
 
 ## What was removed
 
@@ -59,5 +60,5 @@ The `content-storage` capability asserts that Quill stores published content in 
 
 - [`openspec/specs/content-storage/spec.md`](../../openspec/specs/content-storage/spec.md) — the formal capability and its scenarios.
 - [Explanation → Architecture](./architecture.md#persistence) — the Persistence section that this page elaborates.
-- [Reference → Background jobs](../reference/background-jobs.md#articles) — the publishing-related jobs (poster, locale, wallet, notify).
+- [Reference → Background jobs](../reference/background-jobs.md#articles) — the publishing-related jobs (poster, locale, notify).
 - [Explanation → Value net](./value-net.md) — the order / payment flow that runs alongside publishing, not part of content storage.

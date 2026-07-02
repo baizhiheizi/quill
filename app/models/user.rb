@@ -116,8 +116,13 @@ class User < ApplicationRecord
     biography || authorization&.biography || I18n.t("activerecord.attributes.user.default_bio")
   end
 
+  # Reads the user's Mixin wallet UUID only — must not trigger `create_wallet`,
+  # since provisioning a Mixin Network user now costs 0.5 USDT
+  # (MixinBot::CREATE_USER_BILLING_INCREMENT). `wallet` association still loads
+  # existing wallets (legacy rows); new wallets are created explicitly via the
+  # admin tooling, never as a side effect of a read. See #1797.
   def wallet_id
-    @wallet_id = (wallet.presence || create_wallet)&.uuid
+    @wallet_id = wallet&.uuid
   end
 
   def avatar_image_url
@@ -153,7 +158,6 @@ class User < ApplicationRecord
   end
 
   def prepare
-    # create_wallet! if wallet.blank?
     create_notification_setting! if notification_setting.blank?
     create_bot_contact_conversation
   end

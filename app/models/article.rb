@@ -250,10 +250,6 @@ class Article < ApplicationRecord
     Articles::NotifyForFirstPublishedJob.perform_later id
   end
 
-  def create_wallet_async
-    Articles::CreateWalletJob.perform_later id
-  end
-
   def do_first_publish
     return unless published?
     return if published_at.present?

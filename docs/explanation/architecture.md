@@ -41,7 +41,7 @@ See [Value net](./value-net.md) for the rules.
 
 ### Background work
 
-ActiveJob classes live under `app/jobs/`, grouped by domain: `articles/` (poster, locale, wallet — `Articles::CreateWalletJob`), `orders/` (per-order and batch distribution), `mixin_messages/` (outbound Mixin bot), `mixin_network_snapshots/` and `mixin_network_users/` (Mixin API polling), `currencies/` and `daily_statistics/` (rates and rollups), `users/` (`PrepareJob` setup), and `transfers/` (state polling, `Transfers::CacheStatsJob`). Workers run on **Solid Queue**, backed by a separate database. See [Reference → Background jobs](../reference/background-jobs.md).
+ActiveJob classes live under `app/jobs/`, grouped by domain: `articles/` (poster, locale, notify), `orders/` (per-order and batch distribution), `mixin_messages/` (outbound Mixin bot), `mixin_network_snapshots/` and `mixin_network_users/` (Mixin API polling), `currencies/` and `daily_statistics/` (rates and rollups), `users/` (`PrepareJob` setup), and `transfers/` (state polling, `Transfers::CacheStatsJob`). Workers run on **Solid Queue**, backed by a separate database. See [Reference → Background jobs](../reference/background-jobs.md).
 
 ### Persistence
 
