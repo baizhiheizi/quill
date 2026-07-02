@@ -672,7 +672,6 @@ DEPENDENCIES
   debug (>= 1.0.0)
   dockerfile-rails (>= 1.2)
   enumerize
-  eth
   exception-track
   fastimage
   fnv

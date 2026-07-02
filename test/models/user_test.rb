@@ -6,11 +6,13 @@
 # Database name: primary
 #
 #  id                          :bigint           not null, primary key
+#  articles_count              :integer          default(0), not null
 #  authoring_subscribers_count :integer          default(0)
 #  biography                   :text
 #  blocked_at                  :datetime
 #  blocking_count              :integer          default(0)
 #  blocks_count                :integer          default(0)
+#  comments_count              :integer          default(0), not null
 #  email                       :string
 #  email_verified_at           :datetime
 #  locale                      :string
@@ -97,6 +99,34 @@ class UserTest < ActiveSupport::TestCase
     user = users(:author)
 
     assert_equal "mixin://transfer/#{user.mixin_uuid}", user.mixin_deposit_url
+  end
+
+  test "default_payment returns MixinPreOrder for messenger users" do
+    assert_equal "MixinPreOrder", users(:reader_one).default_payment
+  end
+
+  # Fennec/mvm_eth login was removed, but those users and their
+  # `UserAuthorization` rows are intentionally kept (see #1795) — they simply
+  # have no working payment provider left until a new login path exists.
+  test "default_payment returns nil for retired fennec/mvm_eth users" do
+    fennec_user = User.create!(
+      name: "Legacy Fennec",
+      mixin_id: "fennec-1",
+      mixin_uuid: SecureRandom.uuid,
+      uid: "fennec-1"
+    )
+    UserAuthorization.create!(user: fennec_user, provider: :fennec, uid: "fennec-uid-1", raw: { "user_id" => "fennec-uid-1" })
+
+    mvm_user = User.create!(
+      name: "Legacy MVM",
+      mixin_id: "mvm-1",
+      mixin_uuid: SecureRandom.uuid,
+      uid: "mvm-1"
+    )
+    UserAuthorization.create!(user: mvm_user, provider: :mvm_eth, uid: "mvm-uid-1", raw: { "user_id" => "mvm-uid-1" })
+
+    assert_nil fennec_user.default_payment
+    assert_nil mvm_user.default_payment
   end
 
   test "available_articles includes bought and own published articles" do

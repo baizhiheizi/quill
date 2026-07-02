@@ -14,6 +14,27 @@ require "test_helper"
 #     rescue path swallows StandardError and logs instead of failing the
 #     destroy.
 #   * `#notifications` returns the noticed_events association.
+# == Schema Information
+#
+# Table name: actions
+# Database name: primary
+#
+#  id            :bigint           not null, primary key
+#  action_option :string
+#  action_type   :string           not null
+#  target_type   :string
+#  user_type     :string
+#  created_at    :datetime         not null
+#  updated_at    :datetime         not null
+#  target_id     :bigint
+#  user_id       :bigint
+#
+# Indexes
+#
+#  index_actions_on_target_type_and_target_id_and_action_type  (target_type,target_id,action_type)
+#  index_actions_on_user_type_and_user_id_and_action_type      (user_type,user_id,action_type)
+#  uk_action_target_user                                       (action_type,target_type,target_id,user_type,user_id) UNIQUE
+#
 class ActionTest < ActiveSupport::TestCase
   setup do
     @subscriber = users(:reader_one)

@@ -20,8 +20,6 @@ en:
   confirm: Confirm
   pay: Pay
   pay_with_mixin: Pay with Mixin
-  pay_with_fennec: Pay with Fennec
-  pay_with_metamask: Pay with MetaMask
   waiting_for_payment: Waiting for payment
   processing_payment: Payment recevied, processing
   scan_with_mixin: Please scan the QRCode using Mixin Messenger
@@ -291,9 +289,6 @@ en:
   this_address_supports_erc20: This address supports all ERC20 tokens, such as ETH、USDT、XIN.
   first_deposit_tips: For first deposit to new address, please try a small amount! 
   deposit_receive_tips: "Deposit will receive after at least %<confirmations>s blocks confirmation."
-  deposit_to_mvm: Desposit to MVM
-  add_to_metamask: Add to MetaMask
-  you_may_claim_some_xin_as_gas_after_your_first_deposit: You may claim some XIN as gas after your first deposit.
   address: Address
   claim_free_xin: Claim Free XIN
   you_have_successfully_claimed_please_check_your_wallet_later: You have successfully claimed free XIN! Please check your wallet later.
@@ -305,14 +300,12 @@ en:
   words_count: Words count
   deposit: Desposit
   withdraw: Withdraw
-  using_eth_wallet: Using ETH wallet
   using_mixin_wallet: Using Mixin wallet
   continue: Continue
   confirm_to_pay: Confirm to Pay
   payment_crypto: Payment crypto
   payment_method: Payment method
   not_supported_yet: Not supported yet
-  you_need_to_switch_network_to_mvm: You need to switch network to MVM
   waiting_for_mixpay: Waiting for MixPay
   paying: Paying
   choose_other_payment: Choose other payment
@@ -358,4 +351,3 @@ en:
   connect: Connect
   reconnect: Reconnect
   stats: Stats
-  withdraw_tips: If you need to withdraw your assets to your other personal wallet, please use https://bridge.mvm.app to finish the cross-chain transfer.

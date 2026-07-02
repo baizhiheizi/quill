@@ -2,6 +2,7 @@
 
 class PreOrdersController < ApplicationController
   before_action :authenticate_user!
+  before_action :ensure_payment_method!, only: %i[new create]
 
   def show
     @pre_order = current_user.pre_orders.find_by follow_id: params[:follow_id]
@@ -64,6 +65,10 @@ class PreOrdersController < ApplicationController
 
   def pre_order_params
     params.require(:pre_order).permit(:item_id, :item_type, :type, :order_type, :asset_id, :amount)
+  end
+
+  def ensure_payment_method!
+    redirect_to login_path, warning: t("please_login") if current_user.default_payment.blank?
   end
 
   def authorize_pre_order_item!(item, order_type)

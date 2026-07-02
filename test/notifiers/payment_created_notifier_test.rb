@@ -109,9 +109,9 @@ class PaymentCreatedNotifierTest < ActiveSupport::TestCase
       locale: :en
     )
     non_messenger.create_authorization!(
-      provider: :fennec,
-      uid: "fennec-uid",
-      raw: { "user_id" => "fennec-uid", "name" => "Non Messenger" }
+      provider: :twitter,
+      uid: "twitter-uid",
+      raw: { "user_id" => "twitter-uid", "name" => "Non Messenger" }
     )
 
     assert_not non_messenger.messenger?
