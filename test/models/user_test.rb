@@ -174,6 +174,24 @@ class UserTest < ActiveSupport::TestCase
     assert_includes new_user.errors[:uid], "has already been taken"
   end
 
+  # Reading #wallet_id must not provision a new Mixin user — provisioning now
+  # costs 0.5 USDT (MixinBot::CREATE_USER_BILLING_INCREMENT). See #1797.
+  test "wallet_id returns nil and does not create a wallet when none exists" do
+    user = users(:author)
+    user.update!(wallet: nil)
+
+    assert_nothing_raised { assert_nil user.wallet_id }
+    assert_nil user.reload.wallet, "wallet_id read must not create a MixinNetworkUser"
+  end
+
+  test "wallet_id returns the existing wallet uuid when one is present" do
+    wallet = mixin_network_users(:article_wallet)
+    user = users(:author)
+    user.update!(wallet: wallet)
+
+    assert_equal wallet.uuid, user.wallet_id
+  end
+
   test "order_by_articles_count includes all users and orders by the cached counter column" do
     # `author` fixture has an article; `reader_one` and `reader_two` do not.
     # The scope is now a simple `ORDER BY articles_count DESC, id ASC` over

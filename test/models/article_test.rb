@@ -221,4 +221,42 @@ class ArticleTest < ActiveSupport::TestCase
     assert_includes result.to_a, article
     assert_equal 0, result.first.attributes["popularity"]
   end
+
+  # Per-article Mixin wallets are no longer provisioned on publish (#1797).
+  # wallet_id must read nil without triggering any creation, and the publish
+  # flow must not enqueue the deleted Articles::CreateWalletJob.
+  test "wallet_id returns nil without creating a wallet when none exists" do
+    article = articles(:published_paid)
+    article.update!(wallet: nil)
+
+    assert_nothing_raised { assert_nil article.wallet_id }
+    assert_nil article.reload.wallet, "wallet_id read must not create a MixinNetworkUser"
+  end
+
+  test "wallet_id returns the existing wallet uuid when one is present" do
+    article = articles(:published_paid)
+    wallet = mixin_network_users(:article_wallet)
+    article.update!(wallet: wallet)
+
+    assert_equal wallet.uuid, article.wallet_id
+  end
+
+  test "do_first_publish does not enqueue Articles::CreateWalletJob (deleted)" do
+    article = articles(:published_paid)
+    article.update_columns(state: "drafted", published_at: nil)
+    initial_count = MixinNetworkUser.where(owner_type: "Article", owner_id: article.id).count
+
+    # The class must not exist after the #1797 cleanup.
+    assert_not defined?(Articles::CreateWalletJob),
+               "Articles::CreateWalletJob must not be defined after #1797 cleanup"
+
+    perform_enqueued_jobs do
+      assert_nothing_raised { article.publish! }
+    end
+
+    # Publishing must not create a new MixinNetworkUser for this article.
+    assert_equal initial_count,
+                 MixinNetworkUser.where(owner_type: "Article", owner_id: article.id).count,
+                 "publishing must not create a MixinNetworkUser for this article (no per-article wallets — #1797)"
+  end
 end

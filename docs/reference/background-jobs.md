@@ -18,7 +18,6 @@ Adjust lane assignments in `config/queue.yml` (Solid Queue config). The runner i
 
 | Job | Queue | Purpose |
 |-----|-------|---------|
-| `CreateWalletJob` | `default` | Provisions a Mixin wallet for a newly published article |
 | `DetectLocaleJob` | `default` | Auto-detects the locale of an article based on its content |
 | `GeneratePosterJob` | `low` | Renders the social-share poster image for an article |
 | `NotifyForFirstPublishedJob` | `default` | Fires the "first publication" notification to subscribers |

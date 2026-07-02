@@ -152,7 +152,7 @@ class Orders::DistributeService
           queue_priority: :low,
           transfer_type: :reference_revenue,
           wallet_id: distributor_wallet_id,
-          opponent_id: ref.reference.wallet_id,
+          opponent_id: ref.reference.author.mixin_uuid,
           asset_id: revenue_asset_id,
           amount: _ref_amount,
           memo: Base64.encode64({

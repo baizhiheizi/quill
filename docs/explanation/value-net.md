@@ -40,6 +40,22 @@ The split is implemented by [`Orders::DistributeService`](../../app/services/ord
 
 Key symbols: `Order#order_type` distinguishes the three kinds of payment (`:buy_article` and `:reward_article` count toward the early-reader pool, `:cite_article` does not); `Order#value_btc` weights shares across mixed currencies; `Order#complete!` marks an order as distributed; `Orders::DistributeService::MINIMUM_AMOUNT` (`0.00000001`) is the sub-floor skip threshold for both per-reader and author transfers; and `Orders::DistributeService#collect_early_readers` (returning `{ mixin_uuid => [trace_id, ...] }`) is the hash whose iteration enforces the one-share-per-reader rule.
 
+## Settlement targets (post #1797)
+
+Revenue settlement routes through two kinds of Mixin identity. Per-article wallets and per-user wallets are no longer created — provisioning a Mixin Network user now costs 0.5 USDT (`MixinBot::CREATE_USER_BILLING_INCREMENT`), and reading a wallet id must not silently spend money (see #1790 §2.4).
+
+| Recipient | Identity used | Why |
+|-----------|---------------|-----|
+| **Platform fee** (`quill_revenue`) | `QuillBot.api.client_id` (opponent) | Already the platform bot — no change. |
+| **Author revenue** | `author.mixin_uuid` (opponent) | The author already has a Mixin identity from OAuth; payouts go there directly. No app-issued wallet needed. |
+| **Early-reader revenue** | `buyer.mixin_uuid` (opponent) | Same — readers arrive via Mixin login and already have a Mixin identity. |
+| **Reference revenue** | `reference.author.mixin_uuid` (opponent) | Cited article's author. Previously the per-article wallet was used; that wallet no longer exists. |
+| **Collection revenue** | `_order.buyer.mixin_uuid` (opponent) | Same — the buyer's Mixin identity. |
+
+The **source** side (`transfers.wallet_id`) is the **platform bot** for all article-order transfers (`Orders::DistributeService#distributor_wallet_id = QuillBot.api.client_id`). For collection orders the source remains `payment.wallet_id` (the buyer's Mixin identity), matching the existing collection-payment flow.
+
+MixinNetworkUser rows for already-provisioned users/articles are kept and remain accessible via the admin tooling — only **creation** is gated. New wallets are created explicitly via the admin Mixin Network Users console, never as a side effect of a read or publish event.
+
 ## Further reading
 
 - [README](../../README.md) for the user-facing description.
