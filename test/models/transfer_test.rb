@@ -3,6 +3,7 @@
 # == Schema Information
 #
 # Table name: transfers
+# Database name: primary
 #
 #  id                :bigint           not null, primary key
 #  amount            :decimal(, )
@@ -290,6 +291,24 @@ class TransferTest < ActiveSupport::TestCase
       assert called, "expected payment.refund! to be invoked"
       assert transfer.reload.processed?
       assert_equal "snap-process-payment", transfer.snapshot_id
+    end
+  end
+
+  test "process! does not raise for a legacy retired SwapOrder source_type" do
+    with_quill_bot_stub do
+      transfer = create_transfer!(
+        trace_id: SecureRandom.uuid,
+        source_type: "SwapOrder",
+        source_id: 999_999,
+        transfer_type: :swap_refund
+      )
+
+      QuillBot.api.define_singleton_method(:safe_transaction) do |_trace_id|
+        { "data" => { "snapshot_id" => "snap-legacy-swap", "transaction_hash" => "hash-legacy-swap" } }
+      end
+
+      assert_nothing_raised { transfer.process! }
+      assert transfer.reload.processed?
     end
   end
 

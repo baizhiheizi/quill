@@ -52,15 +52,6 @@ zh-CN:
           refunded: 已退款
           completed: 已完成
         snapshot: 链上快照
-      swap_order:
-        state:
-          paid: 已支付
-          swapping: 兑换中
-          rejected: 兑换失败
-          swapped: 兑换成功
-          order_placed: 购买中
-          completed: 已完成
-          refunded: 已退款
       user:
         name: 昵称
         avatar: 头像

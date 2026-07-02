@@ -35,13 +35,6 @@ en:
       notification:
         bought: Successfully bought
         rewarded: Successfully rewarded
-    swap_order_swapping_notifier:
-      notification:
-        swapping: 'Swapping:'
-    swap_order_finished_notifier:
-      notification:
-        swapped: 'Successfully swapped:'
-        rejected: Your swap was rejected, you will receive the refund soon.
     transfer_processed_notifier:
       notification:
         received: Received
@@ -49,8 +42,6 @@ en:
         reader_revenue: reader revenue
         payment_refund: payment refund
         bonus: bonus
-        swap_change: swap change
-        swap_refund: refund after swapped
     subscribe_user_action_created_notifier:
       notification:
         subscribed: subscribed your activities

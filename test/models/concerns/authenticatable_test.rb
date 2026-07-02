@@ -19,35 +19,19 @@ require "test_helper"
 #     4. existing User with messenger authorization → `name`/`biography`
 #        are refreshed from the new `me` payload
 #
-# - `auth_from_fennec(token)` — same shape, but skips the OAuth-code
-#   exchange (token comes from the caller) and the `uid` is stored as the
-#   `user_id` with dashes stripped (`uid.gsub("-", "")`). Branches pinned:
-#     1. error payload → raises the inspected response
-#     2. new auth row + new User row (uid = user_id without dashes)
-#     3. existing auth row → `update!` is only fired when `raw` changed;
-#        the returned User is the existing one
-#
-# - `auth_from_mvm_eth(address, signature)` is intentionally NOT covered
-#   here — its branches depend on `Eth::Signature.verify` /
-#   `personal_recover` and `MVM.bridge.user`, which require crypto-fixture
-#   data the rest of the suite doesn't have. Pinning it would mean
-#   reproducing those fixtures; the value (3 return-value branches,
-#   ReplayProtectionError rescue) isn't worth the maintenance cost.
-#
-# Why a dedicated file: `auth_from_mixin` / `auth_from_fennec` mutate
+# Why a dedicated file: `auth_from_mixin` mutates
 # `UserAuthorization` and `User` rows in a single transaction-like flow,
 # and the `messenger?` re-sync branch only fires for `mixin` providers.
 # Pinned independently from `user_test.rb` so the OAuth stub shape and
 # the upsert / re-sync decisions stay review-actionable.
 class AuthenticatableTest < ActiveSupport::TestCase
   MIXIN_USER_ID = "e5555555-5555-5555-8555-555555555555"
-  FENNEC_USER_ID = "f6666666-6666-6666-8666-666666666666"
   IDENTITY_NUMBER = "70001"
 
   setup do
     @previous_quill_bot_api = QuillBot.api if QuillBot.respond_to?(:api)
-    UserAuthorization.where(provider: %i[mixin fennec]).destroy_all
-    User.where(uid: [ IDENTITY_NUMBER, "f6666666666666666666666666666666" ]).destroy_all
+    UserAuthorization.where(provider: :mixin).destroy_all
+    User.where(uid: [ IDENTITY_NUMBER ]).destroy_all
   end
 
   teardown do
@@ -205,128 +189,11 @@ class AuthenticatableTest < ActiveSupport::TestCase
     assert_equal user, user.authorization.reload.user
   end
 
-  # --- auth_from_fennec --------------------------------------------------
-
-  test "auth_from_fennec raises the inspected response when me returns an error" do
-    stub_quill_bot! do |api|
-      api.me_response = { "error" => "expired_token", "data" => nil }
-    end
-
-    error = assert_raises(RuntimeError) { User.auth_from_fennec("fennec-token") }
-    assert_match(/expired_token/, error.message)
-  end
-
-  test "auth_from_fennec creates a fresh UserAuthorization and User when both are new" do
-    expected_uid = FENNEC_USER_ID.delete("-")
-
-    stub_quill_bot! do |api|
-      api.me_response = {
-        "data" => {
-          "user_id" => FENNEC_USER_ID,
-          "full_name" => "Fennec Reader",
-          "biography" => "Hi from Fennec",
-          # No identity_number — fennec does not populate mixin_id
-          "identity_number" => nil
-        }
-      }
-    end
-
-    user = User.auth_from_fennec("fennec-token")
-
-    assert_kind_of User, user
-    assert_equal "Fennec Reader", user.name
-    assert_equal "Hi from Fennec", user.biography
-    assert_equal FENNEC_USER_ID, user.mixin_uuid
-    assert_equal expected_uid, user.uid
-    assert_equal "0", user.mixin_id
-
-    auth = user.authorization
-    assert_equal "fennec", auth.provider
-    assert_equal FENNEC_USER_ID, auth.uid
-    assert_equal "fennec-token", auth.access_token
-    assert_equal FENNEC_USER_ID, auth.raw["user_id"]
-  end
-
-  test "auth_from_fennec reuses the existing authorization when the raw payload is unchanged" do
-    existing_auth = UserAuthorization.create!(
-      provider: :fennec,
-      uid: FENNEC_USER_ID,
-      access_token: "old-token",
-      raw: {
-        "user_id" => FENNEC_USER_ID,
-        "full_name" => "Fennec Reader",
-        "biography" => "Hi from Fennec"
-      }
-    )
-    user = User.create!(
-      name: "Fennec Reader",
-      biography: "Hi from Fennec",
-      mixin_id: "0",
-      mixin_uuid: FENNEC_USER_ID,
-      uid: FENNEC_USER_ID.delete("-")
-    )
-    existing_auth.update!(user: user)
-
-    # Same data — re-merging must not change `raw_changed?`, so the
-    # `update!` branch is skipped.
-    stub_quill_bot! do |api|
-      api.me_response = {
-        "data" => {
-          "user_id" => FENNEC_USER_ID,
-          "full_name" => "Fennec Reader",
-          "biography" => "Hi from Fennec"
-        }
-      }
-    end
-
-    assert_equal user, User.auth_from_fennec("fennec-token")
-
-    # access_token was assigned via the local variable but `update!` only
-    # fires when `raw_changed?` is true.
-    assert_equal "old-token", existing_auth.reload.access_token
-  end
-
-  test "auth_from_fennec updates the existing authorization when the raw payload changes" do
-    existing_auth = UserAuthorization.create!(
-      provider: :fennec,
-      uid: FENNEC_USER_ID,
-      access_token: "old-token",
-      raw: { "user_id" => FENNEC_USER_ID, "full_name" => "Old" }
-    )
-    user = User.create!(
-      name: "Old",
-      mixin_id: "0",
-      mixin_uuid: FENNEC_USER_ID,
-      uid: FENNEC_USER_ID.delete("-")
-    )
-    existing_auth.update!(user: user)
-
-    stub_quill_bot! do |api|
-      api.me_response = {
-        "data" => {
-          "user_id" => FENNEC_USER_ID,
-          "full_name" => "New",
-          "biography" => "New bio"
-        }
-      }
-    end
-
-    assert_equal user, User.auth_from_fennec("new-token")
-
-    existing_auth.reload
-    # Pin the actual behavior: only `raw` is updated when raw_changed?,
-    # the access_token stays as it was on the row.
-    assert_equal "old-token", existing_auth.access_token
-    assert_equal "New", existing_auth.raw["full_name"]
-    assert_equal "New bio", existing_auth.raw["biography"]
-  end
-
   private
 
   # Build a `QuillBot.api` singleton that responds to `oauth_token` and
-  # `me` with the payloads each test wants. Both methods take an
-  # `access_token` arg (the fennec path passes the caller's token, the
-  # mixin path uses the one returned by `oauth_token`).
+  # `me` with the payloads each test wants. The mixin path uses the
+  # `access_token` returned by `oauth_token`.
   def stub_quill_bot!
     api = Object.new
     captured_oauth = { "access_token" => "fake-token" }

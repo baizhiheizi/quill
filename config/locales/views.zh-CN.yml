@@ -20,8 +20,6 @@ zh-CN:
   confirm: 确认
   pay: 支付
   pay_with_mixin: Mixin 支付
-  pay_with_fennec: Fennec 支付
-  pay_with_metamask: MetaMask 支付
   waiting_for_payment: 等待支付
   processing_payment: 付款成功,正在处理
   scan_with_mixin: 请使用 Mixin Messenger 扫码支付
@@ -75,14 +73,12 @@ zh-CN:
   already_paid: 已经支付
   try_to: 试试
   refresh: 刷新
-  pay_via_swap_tips: 您也可以用其他主流币支付
   please_login: 请先登录
   failed_to_connect: 连接失败，请重试
   connected: 成功连接，欢迎！
   love_thie_article: 大爱此文
   share: 分享
   signature: 签名
-  swap_supported_by: Swap 服务来自
   polling_payment: 支付结果查询中
   refund_warning: 支付失败，已原路退款。请重新支付。
   buy_article: 购买文章
@@ -207,7 +203,6 @@ zh-CN:
   author_transfers: 作者收益
   reader_transfers: 读者收益
   payments: 支付记录
-  swap_orders: Swap 订单
   access_token: Access Token
   tips_of_general_notifications: 您可以自定义消息通知的方式，网站通知、Mixin 机器人消息通知和 Webhook（开发中）。
   tips_of_article_published_notifications: 订阅的作者发表新文章时，您将收到通知。
@@ -294,9 +289,6 @@ zh-CN:
   this_address_supports_erc20: 该地址支持所有 ERC20 代币，例如 ETH、USDT、XIN 等
   first_deposit_tips: 向新地址第一次充值时，请少量尝试！
   deposit_receive_tips: "所有充值到帐需要至少 %<confirmations>s 个区块确认"
-  deposit_to_mvm: 充值至 MVM
-  add_to_metamask: 添加至MetaMask
-  you_may_claim_some_xin_as_gas_after_your_first_deposit: 首次充值成功后，您可以免费领取一点 XIN 作为 MVM 燃料费。
   address: 地址
   claim_free_xin: 领取免费XIN
   you_have_successfully_claimed_please_check_your_wallet_later: 成功领取免费 XIN，请稍候在您的钱包查收。
@@ -308,14 +300,12 @@ zh-CN:
   words_count: 字数
   deposit: 存入
   withdraw: 提出
-  using_eth_wallet: 使用 ETH 钱包
   using_mixin_wallet: 使用 Mixin 钱包
   continue: 继续
   confirm_to_pay: 确认支付
   payment_crypto: 选择支付币种
   payment_method: 支付方式
   not_supported_yet: 暂不支持
-  you_need_to_switch_network_to_mvm: 请先切换至 MVM 网络
   waiting_for_mixpay: 等待 MixPay 完成支付
   paying: 正在支付
   choose_other_payment: 其他支付方式
@@ -360,4 +350,3 @@ zh-CN:
   connect: 连接
   reconnect: 重新连接
   stats: 统计
-  withdraw_tips: 您的资产存放在 MVM 网络，如果您需要提现至您的其他个人钱包，请务必使用跨链桥(https://bridge.mvm.app)进行跨链提现，不要直接使用钱包进行跨链转账，否则可能损失资产。

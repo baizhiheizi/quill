@@ -1,36 +1,20 @@
 <% size ||= 'lg' %>
 
-<% if current_user.present? %>
-  <% if current_user.mvm_eth? && article.mixpay_supported? %>
-    <%= link_to mixpay_pre_order_path(
-        order_type: :buy_article,
-        item_id: article.id,
-        item_type: article.class.name,
-        asset_id: article.asset_id,
-        amount: article.price
-      ),
-      data: {
-        turbo_frame: '_top'
-      }, 
-      class: "btn btn-primary rounded-full #{size == 'lg' ? 'btn-lg' : 'btn-sm'} no-underline" do %>
-      <%= t('pay_to_read') %>
-    <% end %>
-  <% else %>
-    <%= form_for PreOrder.new(
-      order_type: :buy_article,
-      item: article,
-      asset_id: article.asset_id,
-      amount: article.price,
-    ) do |form| %>
-      <%= form.hidden_field :order_type %>
-      <%= form.hidden_field :item_id %>
-      <%= form.hidden_field :item_type %>
-      <%= form.hidden_field :asset_id %>
-      <%= form.hidden_field :amount %>
-      <%= form.hidden_field :type, value: current_user.default_payment %>
+<% if current_user.present? && current_user.default_payment.present? %>
+  <%= form_for PreOrder.new(
+    order_type: :buy_article,
+    item: article,
+    asset_id: article.asset_id,
+    amount: article.price,
+  ) do |form| %>
+    <%= form.hidden_field :order_type %>
+    <%= form.hidden_field :item_id %>
+    <%= form.hidden_field :item_type %>
+    <%= form.hidden_field :asset_id %>
+    <%= form.hidden_field :amount %>
+    <%= form.hidden_field :type, value: current_user.default_payment %>
 
-      <%= form.submit t('pay_to_read'), class: "btn btn-primary rounded-full #{size == 'lg' ? 'btn-lg' : 'btn-sm'} no-underline" %>
-    <% end %>
+    <%= form.submit t('pay_to_read'), class: "btn btn-primary rounded-full #{size == 'lg' ? 'btn-lg' : 'btn-sm'} no-underline" %>
   <% end %>
 <% elsif from_mixin_messenger? %>
   <%= link_to t('pay_to_read'), 

@@ -288,36 +288,9 @@ class Orders::DistributeServiceCollectionTest < ActiveSupport::TestCase
 
       author_transfer = order.transfers.find_by(transfer_type: :author_revenue)
       quill_transfer = order.transfers.find_by(transfer_type: :quill_revenue)
-      # For buy_collection with no swap, revenue_asset_id = payment.asset_id.
+      # revenue_asset_id = payment.asset_id (cross-asset swap payout removed).
       assert_equal payment.asset_id, author_transfer.asset_id
       assert_equal payment.asset_id, quill_transfer.asset_id
-    end
-  end
-
-  test "buy_collection uses swap_order fill_asset_id when present" do
-    with_quill_bot_stub do
-      payment = create_payment!(
-        payer: @reader_one,
-        collection: @collection,
-        order_type: "BUY",
-        amount: @collection.price
-      )
-      order = payment.order
-
-      # Build a swap_order stub that exposes only fill_asset_id, mimicking the
-      # shape used by distribute_service. The order's payment.swap_order must
-      # respond to fill_asset_id.
-      fill_asset = "99999999-9999-4999-8999-999999999999"
-      swap_order_stub = Struct.new(:fill_asset_id).new(fill_asset)
-      payment.define_singleton_method(:swap_order) { swap_order_stub }
-
-      distribute_order!(order)
-
-      author_transfer = order.transfers.find_by(transfer_type: :author_revenue)
-      quill_transfer = order.transfers.find_by(transfer_type: :quill_revenue)
-      assert_equal fill_asset, author_transfer.asset_id,
-                   "author_revenue should use swap_order.fill_asset_id when swap_order is present"
-      assert_equal fill_asset, quill_transfer.asset_id
     end
   end
 

@@ -8,7 +8,7 @@ Quill runs as a single service (`service: quill`) with three roles on one host (
 
 | Role | Entrypoint | Notes |
 |------|-----------|-------|
-| `web` | Rails (default `bin/rails server`) | Serves public web, dashboard, admin, API, mvm, grover |
+| `web` | Rails (default `bin/rails server`) | Serves public web, dashboard, admin, API, grover |
 | `job` | `bin/jobs` | Solid Queue worker for ActiveJob processing |
 | `blaze` | `bin/mixin_blaze` | Mixin blaze client (Mixin network integration) |
 

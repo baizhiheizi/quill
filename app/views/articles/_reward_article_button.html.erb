@@ -1,6 +1,6 @@
 <% size ||= 'lg' %>
 
-<% if current_user.present? %>
+<% if current_user.present? && current_user.default_payment.present? %>
   <%= link_to new_pre_order_path(order_type: :reward_article, article_uuid: article.uuid), 
     data: {
       turbo_frame: :modal

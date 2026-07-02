@@ -119,8 +119,6 @@ class Article < ApplicationRecord
     detect_locale_async if content_changed_since_save?
   end
 
-  delegate :swappable?, to: :currency
-
   scope :with_associations, -> { includes(:currency, :tags, :author) }
   scope :without_blocked, -> { where.not(state: :blocked) }
   scope :without_free, -> { where("price > ?", 0) }

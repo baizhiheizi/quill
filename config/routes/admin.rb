@@ -44,8 +44,6 @@ namespace :admin do
   resources :orders, only: %i[index show]
   resources :pre_orders, only: %i[index show], param: :follow_id
 
-  resources :swap_orders, only: %i[index show]
-
   resources :payments, only: %i[index show]
 
   resources :transfers, only: %i[index show] do

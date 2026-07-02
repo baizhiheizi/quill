@@ -47,30 +47,8 @@ class Currency < ApplicationRecord
 
   belongs_to :chain, class_name: "Currency", primary_key: :asset_id, optional: true, inverse_of: false
 
-  scope :swappable, -> { where(asset_id: swappable_asset_ids).order(symbol: :asc) }
   scope :pricable, -> { where(asset_id: Article::SUPPORTED_ASSETS) }
   scope :btc, -> { find_by(asset_id: BTC_ASSET_ID) }
-
-  def self.pando_lake_pairs
-    Rails.cache.fetch "pando_lake_routes", expires_in: 5.seconds do
-      PandoLake.api.pairs["data"]["pairs"]
-    end
-  rescue StandardError
-    []
-  end
-
-  # disable swappable for now
-  def self.swappable_asset_ids
-    []
-    # Rails.cache.fetch 'swappable_asset_ids', expires_in: 1.hour do
-    #   pando_lake_pairs
-    #     .filter(&lambda { |p|
-    #       (p['base_value'].to_f + p['quote_value'].to_f > 50_000) || p['swap_method'] == 'curve'
-    #     }).map do |p|
-    #     [p['base_asset_id'], p['quote_asset_id']]
-    #   end.flatten.uniq
-    # end
-  end
 
   def minimal_reward_amount
     if price_usd.positive?
@@ -98,10 +76,6 @@ class Currency < ApplicationRecord
     end
   end
 
-  def swappable?
-    asset_id.in? self.class.swappable_asset_ids
-  end
-
   def pricable?
     asset_id.in? Article::SUPPORTED_ASSETS
   end
@@ -120,15 +94,6 @@ class Currency < ApplicationRecord
         rescue MixinBot::Error
           {}
         end
-      # self.mvm_contract_address = MVM.registry.contract_from_asset asset_id
-      # elsif mvm_contract_address.present?
-      #   self.asset_id = MVM.registry.asset_from_contract mvm_contract_address
-      #   self.raw =
-      #     begin
-      #       QuillBot.api.asset(asset_id)['data']
-      #     rescue MixinBot::Error
-      #       {}
-      #     end
     end
 
     assign_attributes(

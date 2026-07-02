@@ -25,9 +25,6 @@
       <%= render_dropdown class: 'flex justify-center py-4', button: dropdown_button do %>
         <ul class="menu menu-sm w-52 p-2">
           <li><%= link_to t('profile_page'), user_path(current_user), class: "dropdown-item" %></li>
-          <% if current_user.mvm_eth? %>
-            <li><%= link_to t('my_wallet'), dashboard_wallet_path, class: "dropdown-item" %></li>
-          <% end %>
           <li><%= link_to t('notification'), dashboard_notifications_path, class: "dropdown-item" %></li>
           <li><%= link_to t('settings'), dashboard_settings_path, class: "dropdown-item" %></li>
           <li><%= link_to t('language'), edit_locale_path, data: { turbo_frame: :modal }, class: "dropdown-item" %></li>
@@ -37,7 +34,7 @@
               <a class="dropdown-item hidden cursor-pointer" data-darkmode-target="darkButton" data-action="darkmode#toggle"><%= t('light_mode') %></a>
             </div>
           </li>
-          <li><%= link_to t('disconnect'), logout_path, data: { action: 'session#destroy' }, class: "dropdown-item" %></li>
+          <li><%= link_to t('disconnect'), logout_path, class: "dropdown-item" %></li>
         </ul>
       <% end %>
     <% else %>

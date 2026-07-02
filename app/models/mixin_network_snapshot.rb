@@ -50,7 +50,6 @@ class MixinNetworkSnapshot < ApplicationRecord
   scope :only_input, -> { where(amount: 0...) }
   scope :only_output, -> { where(amount: ...0) }
   scope :only_quill, -> { where(user_id: QuillBot.api.client_id) }
-  scope :only_4swap, -> { where(opponent_id: [ SwapOrder::FOX_SWAP_APP_ID, nil ]) }
 
   def self.poll
     @__retry = 0
@@ -133,11 +132,6 @@ class MixinNetworkSnapshot < ApplicationRecord
   end
 
   def decoded_memo
-    # memo from 4swap
-    # memo = {
-    #   s: '4swapTrade|4swapRefund',
-    #   t: 'trace_id'
-    # }
     @decoded_memo =
       begin
         JSON.parse Base64.decode64(data.to_s)
@@ -159,13 +153,27 @@ class MixinNetworkSnapshot < ApplicationRecord
   def process!
     return if processed?
 
-    if decoded_memo["s"].in? %w[4swapTrade 4swapRefund]
-      process_4swap_snapshot
+    if legacy_4swap_snapshot?
+      notify_legacy_4swap_snapshot
     elsif amount.positive?
       process_payment_snapshot
     end
 
     touch_proccessed_at
+  end
+
+  # The 4swap/Pando Lake cross-asset payment path has been retired, but a
+  # snapshot using its memo protocol could still arrive if a trade was
+  # in-flight at deploy time. Surface it loudly instead of silently marking
+  # it processed with no follow-up action.
+  def legacy_4swap_snapshot?
+    decoded_memo["s"].in? %w[4swapTrade 4swapRefund]
+  end
+
+  def notify_legacy_4swap_snapshot
+    error = StandardError.new("Received legacy 4swap snapshot after removal of the swap payment path")
+    Rails.logger.error "#{error.message}: snapshot_id=#{snapshot_id}, trace_id=#{trace_id}"
+    ExceptionNotifier.notify_exception(error, data: { snapshot_id:, trace_id:, memo: decoded_memo }) if Rails.env.production?
   end
 
   def process_payment_snapshot
@@ -185,40 +193,6 @@ class MixinNetworkSnapshot < ApplicationRecord
           trace_id:
         }
       ).find_or_create_by!(trace_id:)
-  end
-
-  def process_4swap_snapshot
-    return if amount.negative?
-
-    swap_order = SwapOrder.find_by trace_id: decoded_memo["t"]
-    pre_order = PreOrder.find_by follow_id: decoded_memo["t"]
-
-    if swap_order.present?
-      case decoded_memo["s"]
-      when "4swapTrade"
-        swap_order.update!(amount:)
-        if swap_order.swapping?
-          swap_order.swap!
-        elsif swap_order.swapped?
-          swap_order.place_payment_order!
-        end
-      when "4swapRefund"
-        swap_order.reject! if swap_order.may_reject?
-      end
-    elsif pre_order.present?
-      Currency.find_or_create_by(asset_id:)
-      Payment
-        .create_with(
-          raw: {
-            amount:,
-            memo: data,
-            asset_id:,
-            opponent_id:,
-            snapshot_id:,
-            trace_id:
-          }
-        ).find_or_create_by!(trace_id:)
-    end
   end
 
   def touch_proccessed_at

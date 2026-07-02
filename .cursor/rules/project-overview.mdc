@@ -3,7 +3,7 @@ description: Project context and high-level guidance for Quill
 alwaysApply: true
 ---
 
-Quill is a Rails 8 Web3 paid-publishing platform with early-reader revenue sharing. Authors publish priced articles; readers pay via crypto (Mixin, MVM, MixPay); platform takes ~10%, early readers ~40%, author the remainder.
+Quill is a Rails 8 Web3 paid-publishing platform with early-reader revenue sharing. Authors publish priced articles; readers pay via crypto (Mixin, MixPay); platform takes ~10%, early readers ~40%, author the remainder.
 
 When making changes, always:
 - Keep diffs focused; match existing Rails patterns (frozen string literal, snake_case, concerns)
@@ -12,4 +12,4 @@ When making changes, always:
 - Prefer extending existing models/jobs/services over parallel implementations
 - Read `AGENTS.md` for setup commands, architecture, and domain gotchas (revenue ratios, launch gate, API auth)
 
-Key domains: `Article`, `Order`, `Transfer`, `User`, `Collection`, `PreOrder`, Mixin/MVM payment flows, Solid Queue workers (`bin/jobs`).
+Key domains: `Article`, `Order`, `Transfer`, `User`, `Collection`, `PreOrder`, Mixin/MixPay payment flows, Solid Queue workers (`bin/jobs`).

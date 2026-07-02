@@ -49,15 +49,6 @@ ja:
           refunded: 返金済み
           completed: 完了
         snapshot: スナップショット
-      swap_order:
-        state:
-          paid: 支払い済み
-          swapping: 交換中
-          rejected: 拒否されました
-          swapped: 交換済み
-          order_placed: 購入中
-          completed: 完了
-          refunded: 返金済み
       user:
         name: 名称
         avatar: アバター

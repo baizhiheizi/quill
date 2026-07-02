@@ -35,13 +35,6 @@ ja:
       notification:
         bought: 購入完了しました
         rewarded: リワードが付与されました
-    swap_order_swapping_notifier:
-      notification:
-        swapping: 'スワップ:'
-    swap_order_finished_notifier:
-      notification:
-        swapped: 'スワップ成功:'
-        rejected: スワップが拒否されましたが、すぐに払い戻しされます
     transfer_processed_notifier:
       notification:
         received: 受け取り済み
@@ -49,8 +42,6 @@ ja:
         reader_revenue: 読者収入
         payment_refund: 払い戻し
         bonus: ボーナス
-        swap_change: スワップ変動
-        swap_refund: スワップ後の払い戻し
     subscribe_user_action_created_notifier:
       notification:
         subscribed: 新しく投稿した記事がフォローされました

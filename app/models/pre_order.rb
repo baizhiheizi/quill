@@ -30,7 +30,6 @@
 class PreOrder < ApplicationRecord
   extend Enumerize
   include AASM
-  include PreOrders::Swappable
 
   enumerize :order_type, in: %i[buy_article reward_article buy_collection]
 
@@ -90,6 +89,28 @@ class PreOrder < ApplicationRecord
 
   def to_param
     follow_id
+  end
+
+  # Mixin payers pay directly in the item's asset via a SAFE transfer
+  # to the platform bot. Cross-asset payment is handled by MixPay
+  # (MixpayPreOrder), not the retired 4swap path.
+  def pay_url(_pay_asset_id = asset_id)
+    direct_pay_url
+  end
+
+  def direct_pay_url
+    QuillBot.api.safe_pay_url(
+      members: [ QuillBot.api.client_id ],
+      threshold: 1,
+      asset_id:,
+      amount:,
+      trace_id:,
+      memo:
+    )
+  end
+
+  def pay_amount(_pay_asset_id = asset_id)
+    amount
   end
 
   def decoded_memo

@@ -20,8 +20,6 @@ ja:
   confirm: Confirm
   pay: 支払う
   pay_with_mixin: Linksで支払う
-  pay_with_fennec: Fennecで支払う
-  pay_with_metamask: MetaMaskで支払う
   waiting_for_payment: 支払い待ち
   processing_payment: 入金、処理中
   scan_with_mixin: LinksでQRコードを読み取ってください
@@ -75,14 +73,12 @@ ja:
   already_paid: 支払い済みですか?
   try_to: 更新
   refresh: してみてください
-  pay_via_swap_tips:
   please_login: ログインしてください
   failed_to_connect: 接続に失敗しました
   connected: が正常に接続されました。ようこそ!
   love_thie_article: 記事にいいねする
   share: シェア
   signature: 署名
-  swap_supported_by: スワップ support by
   polling_payment: 支払い状況を確認中
   refund_warning: 返金されました、もう一度お試しください
   buy_article: 記事を購入
@@ -198,7 +194,6 @@ ja:
   author_transfers: 作者収益
   reader_transfers: 読者収益
   payments: 決済
-  swap_orders: スワップオーダー
   access_token: アクセストークン
   tips_of_general_notifications: 通知設定を変更できます。
   tips_of_article_published_notifications: フォロー中の作者が新しい記事を投稿した時、通知されます。
@@ -285,9 +280,6 @@ ja:
   this_address_supports_erc20: This address supports all ERC20 tokens, such as ETH、USDT、XIN.
   first_deposit_tips: For first deposit to new address, please try a small amount! 
   deposit_receive_tips: "Deposit will receive after at least %<confirmations>s blocks confirmation."
-  deposit_to_mvm: Desposit to MVM
-  add_to_metamask: 追加へのMetaMask
-  you_may_claim_some_xin_as_gas_after_your_first_deposit: You may claim some XIN as gas after your first deposit.
   address: アドレス
   claim_free_xin: Claim Free XIN
   you_have_successfully_claimed_please_check_your_wallet_later: You have successfully claimed free XIN! Please check your wallet later.
@@ -299,14 +291,12 @@ ja:
   words_count: Words count
   deposit: Desposit
   withdraw: Withdraw
-  using_eth_wallet: Using ETH wallet
   using_mixin_wallet: Using Mixin wallet
   continue: Continue
   confirm_to_pay: Confirm to Pay
   payment_crypto: Payment crypto
   payment_method: Payment method
   not_supported_yet: Not supported yet
-  you_need_to_switch_network_to_mvm: You need to switch network to MVM
   waiting_for_mixpay: Waiting for MixPay
   paying: Paying
   choose_other_payment: Choose other payment
@@ -349,4 +339,3 @@ ja:
   alert_for_blocked_user: The account is suspected of being fraudulent. Please pay with caution.
   alert: Alert
   stats: Stats
-  withdraw_tips: If you need to withdraw your assets to your other personal wallet, please use https://bridge.mvm.app to finish the cross-chain transfer.

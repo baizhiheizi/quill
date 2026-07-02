@@ -3,20 +3,12 @@
   data-tabs-active-tab-value="<%= tab %>"
   data-tabs-active-class-value="bg-primary/10 text-primary">
   <div class="mb-4 flex w-full flex-nowrap items-center space-x-4 overflow-auto scrollbar-hide">
-    <%= link_to t('payments'), 
+    <%= link_to t('payments'),
       dashboard_orders_path(tab: :payments),
       class: "min-w-fit cursor-pointer rounded-full px-3 py-1",
       data: {
         tabs_target: "tab",
         tabs_tabname_param: "payments",
-        action: "tabs#active"
-      } %>
-    <%= link_to t('swap_orders'), 
-      dashboard_orders_path(tab: :swap_orders),
-      class: "min-w-fit cursor-pointer rounded-full px-3 py-1",
-      data: {
-        tabs_target: "tab",
-        tabs_tabname_param: "swap_orders",
         action: "tabs#active"
       } %>
   </div>
@@ -25,13 +17,6 @@
     data-tabs-content-param="payments"
     data-tabs-target="content">
     <%= turbo_frame_tag "#{dom_id current_user}_payments", src: dashboard_payments_path, loading: :lazy do %>
-      <%= render "shared/loading" %>
-    <% end %>
-  </div>
-  <div class="hidden pb-4"
-    data-tabs-content-param="swap_orders"
-    data-tabs-target="content">
-    <%= turbo_frame_tag "#{dom_id current_user}_swap_orders", src: dashboard_swap_orders_path, loading: :lazy do %>
       <%= render "shared/loading" %>
     <% end %>
   </div>

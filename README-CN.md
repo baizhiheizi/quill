@@ -48,4 +48,4 @@ Quill 为作者与读者打造一个 **Web3 的价值网络**。
 
 ## 体验
 
-浏览 [quill.im](https://quill.im) 即可体验，目前支持 MetaMask、Coinbase、WalletConnect 等主流钱包连接。
+浏览 [quill.im](https://quill.im) 即可体验，使用 Mixin Messenger 登录。

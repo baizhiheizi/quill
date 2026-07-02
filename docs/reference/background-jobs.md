@@ -41,12 +41,6 @@ The `DistributeJob` is the entry point into the value-net pipeline; see [Explana
 |-----|-------|---------|
 | `NotifySubscribersJob` | `default` | Notifies subscribers when an article is added to a collection |
 
-### `currencies/`
-
-| Job | Queue | Purpose |
-|-----|-------|---------|
-| `SyncJob` | `low` | Polls the Mixin network for updated asset rates |
-
 ### `daily_statistics/`
 
 | Job | Queue | Purpose |

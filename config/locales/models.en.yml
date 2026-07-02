@@ -51,15 +51,6 @@ en:
           refunded: Refunded
           completed: Completed
         snapshot: Snapshot
-      swap_order:
-        state:
-          paid: Paid
-          swapping: Swapping
-          rejected: Rejected
-          swapped: Swapped
-          order_placed: Buying
-          completed: Completed
-          refunded: Refunded
       user:
         default_bio: Didn't leave anything
         author_revenue_total: Author Revenue(USD)
