@@ -113,23 +113,31 @@ class Articles::PosterGeneratorTest < ActiveSupport::TestCase
     end
   end
 
+  def with_grover_credentials(grover_token)
+    original_credentials = Rails.application.credentials
+    Rails.application.define_singleton_method(:credentials) do
+      FakeCredentials.new(grover_token)
+    end
+    yield
+  ensure
+    Rails.application.define_singleton_method(:credentials) { original_credentials }
+  end
+
   test "generated_poster_url uses grover_article_poster_url with the credential token and png format" do
     article = articles(:published_paid)
     expected_token = "grover-test-token"
     article.define_singleton_method(:grover_article_poster_url) do |uuid, **opts|
       { uuid: uuid, opts: opts, endpoint: "grover/articles/#{uuid}/poster.#{opts[:format]}" }
     end
-    previous_credentials = Rails.application.credentials
-    Rails.application.instance_variable_set(:@credentials, FakeCredentials.new(expected_token))
 
-    result = article.generated_poster_url
+    with_grover_credentials(expected_token) do
+      result = article.generated_poster_url
 
-    assert_equal article.uuid, result[:uuid]
-    assert_equal expected_token, result[:opts][:token]
-    assert_equal :png, result[:opts][:format]
-    assert_equal "grover/articles/#{article.uuid}/poster.png", result[:endpoint]
-  ensure
-    Rails.application.instance_variable_set(:@credentials, previous_credentials)
+      assert_equal article.uuid, result[:uuid]
+      assert_equal expected_token, result[:opts][:token]
+      assert_equal :png, result[:opts][:format]
+      assert_equal "grover/articles/#{article.uuid}/poster.png", result[:endpoint]
+    end
   end
 
   test "generated_poster_url passes a nil token when credentials do not provide one" do
@@ -139,14 +147,12 @@ class Articles::PosterGeneratorTest < ActiveSupport::TestCase
       captured = opts
       "https://example.invalid/poster.png"
     end
-    previous_credentials = Rails.application.credentials
-    Rails.application.instance_variable_set(:@credentials, FakeCredentials.new(nil))
 
-    article.generated_poster_url
+    with_grover_credentials(nil) do
+      article.generated_poster_url
+    end
 
     assert_nil captured[:token]
-  ensure
-    Rails.application.instance_variable_set(:@credentials, previous_credentials)
   end
 
   # --- `generate_poster_async` ------------------------------------------

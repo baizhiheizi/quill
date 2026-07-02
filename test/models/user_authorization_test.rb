@@ -48,22 +48,14 @@ class UserAuthorizationTest < ActiveSupport::TestCase
   # removes the original in `ensure` instead of restoring it. Snap the
   # original up front so this file's tests stay green regardless of run order.
   ORIGINAL_HAS_SAFE = UserAuthorization.instance_method(:has_safe?)
+  ORIGINAL_QUILL_BOT_API = QuillBot.method(:api)
 
   setup do
     UserAuthorization.define_method(:has_safe?, ORIGINAL_HAS_SAFE)
-    @previous_quill_bot_api = QuillBot.api if QuillBot.respond_to?(:api)
   end
 
   teardown do
-    # `define_singleton_method` evaluates the block under `QuillBot`, not the
-    # test instance, so capture `@previous_quill_bot_api` in a local that the
-    # block's lexical scope can read.
-    previous_api = @previous_quill_bot_api
-    if previous_api
-      QuillBot.define_singleton_method(:api) { previous_api }
-    elsif QuillBot.instance_variable_defined?(:@api)
-      QuillBot.remove_instance_variable(:@api)
-    end
+    QuillBot.define_singleton_method(:api, ORIGINAL_QUILL_BOT_API)
   end
 
   # --- store_accessor --------------------------------------------------

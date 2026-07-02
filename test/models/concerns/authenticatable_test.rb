@@ -27,19 +27,15 @@ require "test_helper"
 class AuthenticatableTest < ActiveSupport::TestCase
   MIXIN_USER_ID = "e5555555-5555-5555-8555-555555555555"
   IDENTITY_NUMBER = "70001"
+  ORIGINAL_QUILL_BOT_API = QuillBot.method(:api)
 
   setup do
-    @previous_quill_bot_api = QuillBot.api if QuillBot.respond_to?(:api)
     UserAuthorization.where(provider: :mixin).destroy_all
     User.where(uid: [ IDENTITY_NUMBER ]).destroy_all
   end
 
   teardown do
-    if @previous_quill_bot_api
-      QuillBot.define_singleton_method(:api) { @previous_quill_bot_api }
-    elsif QuillBot.instance_variable_defined?(:@api)
-      QuillBot.remove_instance_variable(:@api)
-    end
+    QuillBot.define_singleton_method(:api, ORIGINAL_QUILL_BOT_API)
   end
 
   # --- auth_from_mixin ---------------------------------------------------

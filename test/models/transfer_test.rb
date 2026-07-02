@@ -37,6 +37,8 @@
 require "test_helper"
 
 class TransferTest < ActiveSupport::TestCase
+  ORIGINAL_HAS_SAFE = UserAuthorization.instance_method(:has_safe?)
+
   setup do
     @btc = currencies(:btc)
     @author = users(:author)
@@ -226,7 +228,7 @@ class TransferTest < ActiveSupport::TestCase
     UserAuthorization.define_method(:has_safe?) { false }
     assert_not transfer.recipient_has_safe?
   ensure
-    UserAuthorization.send(:remove_method, :has_safe?)
+    UserAuthorization.define_method(:has_safe?, ORIGINAL_HAS_SAFE)
   end
 
   test "recipient_has_safe? returns nil when recipient is missing" do
