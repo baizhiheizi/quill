@@ -228,9 +228,12 @@ class ArticleTest < ActiveSupport::TestCase
   test "wallet_id returns nil without creating a wallet when none exists" do
     article = articles(:published_paid)
     article.update!(wallet: nil)
+    initial_count = MixinNetworkUser.count
 
     assert_nothing_raised { assert_nil article.wallet_id }
     assert_nil article.reload.wallet, "wallet_id read must not create a MixinNetworkUser"
+    assert_equal initial_count, MixinNetworkUser.count,
+                 "wallet_id read must not create any MixinNetworkUser"
   end
 
   test "wallet_id returns the existing wallet uuid when one is present" do
