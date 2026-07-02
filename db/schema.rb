@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_07_01_102748) do
+ActiveRecord::Schema[8.1].define(version: 2026_06_18_000001) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_stat_statements"
@@ -166,32 +166,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_01_102748) do
     t.index ["reference_type", "reference_id"], name: "index_citer_references_on_reference"
   end
 
-  create_table "collectibles", force: :cascade do |t|
-    t.uuid "collection_id"
-    t.datetime "created_at", null: false
-    t.string "identifier"
-    t.jsonb "metadata"
-    t.string "metahash"
-    t.string "name"
-    t.bigint "source_id"
-    t.string "source_type"
-    t.string "state"
-    t.uuid "token_id"
-    t.datetime "updated_at", null: false
-    t.index ["collection_id", "identifier"], name: "index_collectibles_on_collection_id_and_identifier", unique: true
-    t.index ["metahash"], name: "index_collectibles_on_metahash", unique: true
-    t.index ["source_type", "source_id"], name: "index_collectibles_on_source_type_and_source_id", unique: true
-    t.index ["token_id"], name: "index_collectibles_on_token_id", unique: true
-  end
-
-  create_table "collectings", force: :cascade do |t|
-    t.bigint "collection_id"
-    t.datetime "created_at", null: false
-    t.bigint "nft_collection_id"
-    t.datetime "updated_at", null: false
-    t.index ["collection_id", "nft_collection_id"], name: "index_collectings_on_collection_id_and_nft_collection_id", unique: true
-  end
-
   create_table "collections", force: :cascade do |t|
     t.uuid "asset_id"
     t.uuid "author_id"
@@ -323,28 +297,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_01_102748) do
     t.uuid "uuid"
     t.index ["owner_type", "owner_id"], name: "index_mixin_network_users_on_owner_type_and_owner_id"
     t.index ["uuid"], name: "index_mixin_network_users_on_uuid", unique: true
-  end
-
-  create_table "nft_collections", force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.uuid "creator_id"
-    t.jsonb "raw"
-    t.datetime "updated_at", null: false
-    t.uuid "uuid"
-    t.index ["uuid"], name: "index_nft_collections_on_uuid", unique: true
-  end
-
-  create_table "non_fungible_outputs", force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.uuid "output_id"
-    t.jsonb "raw"
-    t.string "state"
-    t.uuid "token_id"
-    t.datetime "updated_at", null: false
-    t.uuid "user_id"
-    t.index ["output_id"], name: "index_non_fungible_outputs_on_output_id", unique: true
-    t.index ["token_id"], name: "index_non_fungible_outputs_on_token_id"
-    t.index ["user_id"], name: "index_non_fungible_outputs_on_user_id"
   end
 
   create_table "noticed_events", force: :cascade do |t|

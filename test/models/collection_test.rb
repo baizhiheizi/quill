@@ -70,7 +70,7 @@ class CollectionTest < ActiveSupport::TestCase
     end
   end
 
-  test "publish! creates nft_collection and lists drafted collection" do
+  test "publish! lists drafted collection" do
     collection = Collection.create!(
       name: "Publish Collection",
       symbol: "PC",
@@ -88,7 +88,6 @@ class CollectionTest < ActiveSupport::TestCase
 
     assert collection.published?
     assert collection.listed?
-    assert collection.nft_collection.present?
   end
 
   test "authorized? denies strangers" do

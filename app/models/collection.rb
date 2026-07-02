@@ -39,11 +39,6 @@ class Collection < ApplicationRecord
   belongs_to :currency, primary_key: :asset_id, foreign_key: :asset_id, inverse_of: false
   belongs_to :author, class_name: "User", primary_key: :mixin_uuid
 
-  has_one :nft_collection, primary_key: :uuid, foreign_key: :uuid, dependent: :restrict_with_exception, inverse_of: :collection
-
-  has_many :collectings, dependent: :restrict_with_exception
-  has_many :collectibles, primary_key: :uuid, dependent: :restrict_with_exception
-  has_many :validatable_collections, through: :collectings, source: :nft_collection
   has_many :articles, primary_key: :uuid, dependent: :restrict_with_exception
   has_many :orders, as: :item, dependent: :restrict_with_exception
   has_many :buy_orders, -> { where(order_type: :buy_collection) }, class_name: "Order", as: :item, dependent: :restrict_with_exception, inverse_of: :item
@@ -65,7 +60,7 @@ class Collection < ApplicationRecord
     state :listed
     state :hidden
 
-    event :list, guard: :nft_collection_present?, after_commit: :notify_subscribers_async do
+    event :list, after_commit: :notify_subscribers_async do
       transitions from: :drafted, to: :listed
       transitions from: :hidden, to: :listed
     end
@@ -75,15 +70,12 @@ class Collection < ApplicationRecord
     end
   end
 
-  delegate :present?, to: :nft_collection, prefix: true
-
   def publish!
     return if published?
 
     self.uuid ||= SecureRandom.uuid
     generate_cover if cover_url.blank?
     save!
-    NftCollection.find_or_create_by!(uuid: uuid) { |nc| nc.raw = { "source" => "quill" } }
     list! if may_list?
   end
 
