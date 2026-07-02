@@ -13,6 +13,9 @@ class SessionsController < ApplicationController
       "%<oauth_path>s?client_id=%<client_id>s&scope=%<scope>s&return_to=%<return_to>s",
       oauth_path: Settings.mixin_oauth_path,
       client_id: QuillBot.api.client_id,
+      # COLLECTIBLES:READ is an upstream Mixin Network OAuth scope (the
+      # Mixin Messenger-side "collectibles" feature), unrelated to Quill's
+      # since-removed `Collectible` model.
       scope: "PROFILE:READ+COLLECTIBLES:READ",
       return_to: params[:return_to]
     ), allow_other_host: true

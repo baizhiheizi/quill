@@ -101,9 +101,9 @@ class Transfer < ApplicationRecord
 
     process_safe_transfer!
 
-    # source_type is checked before resolving the polymorphic `source` association
-    # because legacy transfers may reference retired source classes (e.g. the
-    # removed SwapOrder model), which would otherwise raise NameError.
+    # source_type is filtered first so a stale source_type referencing a
+    # class that is no longer autoloaded never reaches the polymorphic
+    # `source` lookup (which would raise NameError).
     case source_type
     when "Payment"
       source.refund! if source.may_refund?

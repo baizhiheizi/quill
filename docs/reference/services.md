@@ -17,7 +17,7 @@ For `Article` orders the service does, in order:
 5. **Pay collection revenue.** When the article belongs to a `Collection` with positive `collection_revenue_ratio`, its share splits evenly across every prior `buy_collection` order on that collection.
 6. **Pay the author** whatever is left after steps 3-5, floored, dropped if sub-floor (the remainder rolls into the author's line; if that is also sub-floor the transfer is skipped).
 
-`MINIMUM_AMOUNT = 0.00000001` floors every emitted transfer (sub-floor amounts stay with the order's author). `#early_orders` is the memoised prior-orders scope. `#revenue_asset_id` is `payment.swap_order&.fill_asset_id || payment.asset_id` — payout is always in this asset, even when historical weights are denominated in BTC. `#quill_amount` and `#distributor_wallet_id` derive from `item.platform_revenue_ratio` and `QuillBot.api.client_id`.
+`MINIMUM_AMOUNT = 0.00000001` floors every emitted transfer (sub-floor amounts stay with the order's author). `#early_orders` is the memoised prior-orders scope. `#revenue_asset_id` is `payment.asset_id` — payout is always in this asset, even when historical weights are denominated in BTC. `#quill_amount` and `#distributor_wallet_id` derive from `item.platform_revenue_ratio` and `QuillBot.api.client_id`.
 
 Invoked per-order from [`Orders::DistributeJob`](../../app/jobs/orders/distribute_job.rb) (critical queue) and `Order#distribute!` / `Order#distribute_async`. See [Value net](../explanation/value-net.md) for the rules.
 - `Orders::DistributeService::MINIMUM_AMOUNT = 0.00000001` — floor for every emitted transfer. Sub-floor amounts stay with the order's author.
