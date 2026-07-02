@@ -42,7 +42,7 @@
     "punycode": "^2.3.1",
     "puppeteer": "^25.1.0",
     "qrcode": "^1.5.4",
-    "stimulus-use": "^0.52.3",
+    "stimulus-use": "^0.53.0",
     "tailwind-scrollbar-hide": "4.0.0",
     "tailwindcss": "^4.3.0",
     "tom-select": "^2.6.1",
