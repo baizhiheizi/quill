@@ -23,7 +23,7 @@ Key methods and constants:
 - `#early_orders` — memoised scope: prior `buy_article` / `reward_article` orders on the same item with `id` and `created_at` strictly before the current order.
 - `#early_orders_with_the_same_currency` — predicate that decides between the `total` and `value_btc` weighting bases.
 - `#collect_early_readers` — folds prior orders by `buyer.mixin_uuid` so a reader who both bought and rewarded counts as a single early reader.
-- `#revenue_asset_id` — `payment.swap_order&.fill_asset_id || payment.asset_id`. Payout is always in this asset, even when historical weights are denominated in BTC.
+- `#revenue_asset_id` — `payment.asset_id`. Payout is always in this asset, even when historical weights are denominated in BTC.
 - `#quill_amount`, `#distributor_wallet_id` — derived from `item.platform_revenue_ratio` and `QuillBot.api.client_id`.
 
 Invoked from [`Orders::DistributeJob`](../../app/jobs/orders/distribute_job.rb) (per-order worker on the `critical` queue) and from `Order#distribute!` / `Order#distribute_async` when an order is marked paid. See [Explanation → Value net](../explanation/value-net.md) for the rules this service implements.

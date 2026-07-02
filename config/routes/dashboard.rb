@@ -22,7 +22,6 @@ namespace :dashboard do
   resources :subscribe_tags, only: %i[index]
   resources :orders, only: %i[index]
   resources :payments, only: %i[index]
-  resources :swap_orders, only: %i[index]
   resources :notifications, only: %i[index show]
   resources :transfers, only: %i[index]
   get "/transfers/stats", to: "transfers#stats", as: :transfers_stats

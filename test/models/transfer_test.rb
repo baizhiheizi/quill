@@ -293,6 +293,24 @@ class TransferTest < ActiveSupport::TestCase
     end
   end
 
+  test "process! does not raise for a legacy retired SwapOrder source_type" do
+    with_quill_bot_stub do
+      transfer = create_transfer!(
+        trace_id: SecureRandom.uuid,
+        source_type: "SwapOrder",
+        source_id: 999_999,
+        transfer_type: :swap_refund
+      )
+
+      QuillBot.api.define_singleton_method(:safe_transaction) do |_trace_id|
+        { "data" => { "snapshot_id" => "snap-legacy-swap", "transaction_hash" => "hash-legacy-swap" } }
+      end
+
+      assert_nothing_raised { transfer.process! }
+      assert transfer.reload.processed?
+    end
+  end
+
   test "process! drives a Bonus source through complete!" do
     # The Bonus model expects a "bonus" table (singular) but the migration creates "bonuses",
     # so real Bonus records cannot be created in tests yet. Remove this skip once the

@@ -147,6 +147,50 @@ class PaymentTest < ActiveSupport::TestCase
     end
   end
 
+  test "asset mismatch on article payment triggers refund instead of stalling" do
+    with_quill_bot_stub do
+      memo = build_payment_memo(type: "BUY", article: @article)
+      payment = create_payment_from_memo!(
+        memo: memo,
+        payer: @payer,
+        amount: @article.price,
+        asset_id: Currency::ETH_ASSET_ID
+      )
+
+      assert_nil payment.order
+      assert payment.refund_transfer.present?
+      assert payment.paid?
+    end
+  end
+
+  test "asset mismatch on collection payment triggers refund instead of stalling" do
+    collection = Collection.create!(
+      uuid: SecureRandom.uuid,
+      name: "Payment Mismatch Collection",
+      symbol: "PMC",
+      description: "Collection for asset mismatch payment test",
+      author: users(:author),
+      asset_id: Currency::BTC_ASSET_ID,
+      price: 0.001,
+      revenue_ratio: 0.1,
+      state: "listed"
+    )
+    memo = build_payment_memo(type: "BUY", collection: collection)
+
+    with_quill_bot_stub do
+      payment = create_payment_from_memo!(
+        memo: memo,
+        payer: @payer,
+        amount: collection.price,
+        asset_id: Currency::ETH_ASSET_ID
+      )
+
+      assert_nil payment.order
+      assert payment.refund_transfer.present?
+      assert payment.paid?
+    end
+  end
+
   test "invalid memo does not create order" do
     with_quill_bot_stub do
       payment = nil

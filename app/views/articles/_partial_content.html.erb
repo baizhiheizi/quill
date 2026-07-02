@@ -36,9 +36,4 @@
       <%= link_to t('login'), login_path(return_to: article_url(article.uuid)), data: { turbo_frame: :modal }, class: "text-primary underline font-bold" %>
     <% end %>
   </div>
-  <% if article.swappable? %>
-    <div class='text-sm text-gray-500 text-center'>
-      <%= t('pay_via_swap_tips') %>
-    </div>
-  <% end %>
 </div>

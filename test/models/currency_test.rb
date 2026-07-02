@@ -49,10 +49,6 @@ class CurrencyTest < ActiveSupport::TestCase
     assert_not @btc.pricable?
   end
 
-  test "swappable? returns false when the asset is not in the swappable list" do
-    assert_not @btc.swappable?
-  end
-
   test "minimal_reward_amount returns the usd-derived amount when price_usd is positive" do
     # 0.5 USD at 50_000 USD/BTC = 0.00001 BTC, rounded up to 8 decimals
     assert_equal BigDecimal("0.00001"), @btc.minimal_reward_amount

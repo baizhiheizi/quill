@@ -1,8 +1,4 @@
 default: &recurring_jobs
-  currencies_sync_job:
-    class: Currencies::SyncJob
-    queue: low
-    schedule: "*/5 * * * *"
   daily_statistics_generate_job:
     class: DailyStatistics::GenerateJob
     queue: low
