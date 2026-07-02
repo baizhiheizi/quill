@@ -1,6 +1,6 @@
 <% size ||= 'lg' %>
 
-<% if current_user.present? %>
+<% if current_user.present? && current_user.default_payment.present? %>
   <%= form_for PreOrder.new(
     order_type: :buy_article,
     item: article,

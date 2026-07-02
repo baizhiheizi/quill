@@ -41,7 +41,7 @@
   <% if !collection.authorized?(current_user) %>
     <div class="relative w-full lg:w-48 btn btn-primary btn-lg rounded-full">
       <span><%= t('buy_collection') %></span>
-      <% if current_user.present? %>
+      <% if current_user.present? && current_user.default_payment.present? %>
         <%= form_for PreOrder.new(
           order_type: :buy_collection,
           item: collection,
