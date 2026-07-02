@@ -6,7 +6,7 @@ module Admin
       @state = params[:state] || "all"
       @order_by = params[:order_by] || "created_at_desc"
 
-      collections = Collection.includes(:author, :currency, :nft_collection)
+      collections = Collection.includes(:author, :currency)
 
       collections = collections.where(author_id: params[:user_id]) if params[:user_id].present?
 
