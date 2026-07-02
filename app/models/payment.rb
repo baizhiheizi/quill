@@ -148,6 +148,8 @@ class Payment < ApplicationRecord
       complete!
     elsif asset_id == article.asset_id || payment_memo["t"] == "CITE"
       place_article_order!
+    else
+      generate_refund_transfer!
     end
   end
 
@@ -156,7 +158,11 @@ class Payment < ApplicationRecord
 
     raise ActiveRecord::RecordInvalid.new(self), "blocked by author" if collection.author.block_user?(payer)
 
-    place_collection_order! if asset_id == collection.asset_id
+    if asset_id == collection.asset_id
+      place_collection_order!
+    else
+      generate_refund_transfer!
+    end
   end
 
   def place_article_order!

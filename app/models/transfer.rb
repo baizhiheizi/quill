@@ -101,10 +101,13 @@ class Transfer < ApplicationRecord
 
     process_safe_transfer!
 
-    case source
-    when Payment
+    # source_type is checked before resolving the polymorphic `source` association
+    # because legacy transfers may reference retired source classes (e.g. the
+    # removed SwapOrder model), which would otherwise raise NameError.
+    case source_type
+    when "Payment"
       source.refund! if source.may_refund?
-    when Bonus
+    when "Bonus"
       source.complete! if source.may_complete?
     end
 

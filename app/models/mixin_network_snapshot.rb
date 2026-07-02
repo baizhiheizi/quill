@@ -153,9 +153,27 @@ class MixinNetworkSnapshot < ApplicationRecord
   def process!
     return if processed?
 
-    process_payment_snapshot if amount.positive?
+    if legacy_4swap_snapshot?
+      notify_legacy_4swap_snapshot
+    elsif amount.positive?
+      process_payment_snapshot
+    end
 
     touch_proccessed_at
+  end
+
+  # The 4swap/Pando Lake cross-asset payment path has been retired, but a
+  # snapshot using its memo protocol could still arrive if a trade was
+  # in-flight at deploy time. Surface it loudly instead of silently marking
+  # it processed with no follow-up action.
+  def legacy_4swap_snapshot?
+    decoded_memo["s"].in? %w[4swapTrade 4swapRefund]
+  end
+
+  def notify_legacy_4swap_snapshot
+    error = StandardError.new("Received legacy 4swap snapshot after removal of the swap payment path")
+    Rails.logger.error "#{error.message}: snapshot_id=#{snapshot_id}, trace_id=#{trace_id}"
+    ExceptionNotifier.notify_exception(error, data: { snapshot_id:, trace_id:, memo: decoded_memo }) if Rails.env.production?
   end
 
   def process_payment_snapshot

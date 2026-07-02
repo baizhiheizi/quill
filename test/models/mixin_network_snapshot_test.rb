@@ -30,7 +30,36 @@
 require "test_helper"
 
 class MixinNetworkSnapshotTest < ActiveSupport::TestCase
-  # test "the truth" do
-  #   assert true
-  # end
+  def build_snapshot(memo_payload:, amount: 1)
+    MixinNetworkSnapshot.new(
+      amount: amount,
+      asset_id: SecureRandom.uuid,
+      data: Base64.encode64(memo_payload.to_json),
+      transferred_at: Time.current,
+      user_id: SecureRandom.uuid,
+      snapshot_id: SecureRandom.uuid,
+      trace_id: SecureRandom.uuid
+    )
+  end
+
+  test "legacy_4swap_snapshot? recognizes retired 4swap memo protocol" do
+    trade = build_snapshot(memo_payload: { "s" => "4swapTrade", "t" => SecureRandom.uuid })
+    refund = build_snapshot(memo_payload: { "s" => "4swapRefund", "t" => SecureRandom.uuid })
+    payment = build_snapshot(memo_payload: { "t" => "BUY", "a" => SecureRandom.uuid })
+
+    assert trade.legacy_4swap_snapshot?
+    assert refund.legacy_4swap_snapshot?
+    refute payment.legacy_4swap_snapshot?
+  end
+
+  test "process! does not silently create a payment for a legacy 4swap snapshot" do
+    snapshot = build_snapshot(memo_payload: { "s" => "4swapTrade", "t" => SecureRandom.uuid })
+    snapshot.save!
+
+    assert_no_difference "Payment.count" do
+      snapshot.process!
+    end
+
+    assert snapshot.reload.processed?
+  end
 end
