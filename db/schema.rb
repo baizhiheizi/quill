@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_07_02_120000) do
+ActiveRecord::Schema[8.1].define(version: 2026_07_02_130001) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_stat_statements"
@@ -205,7 +205,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_02_120000) do
     t.uuid "asset_id"
     t.uuid "chain_id"
     t.datetime "created_at", null: false
-    t.string "mvm_contract_address"
     t.decimal "price_btc"
     t.decimal "price_usd"
     t.jsonb "raw"
@@ -425,24 +424,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_02_120000) do
     t.datetime "datetime", precision: nil
     t.string "type"
     t.datetime "updated_at", null: false
-  end
-
-  create_table "swap_orders", force: :cascade do |t|
-    t.decimal "amount", comment: "swapped amount"
-    t.datetime "created_at", null: false
-    t.uuid "fill_asset_id", comment: "swapped asset"
-    t.decimal "funds", comment: "paid amount"
-    t.decimal "min_amount", comment: "minimum swapped amount"
-    t.uuid "pay_asset_id", comment: "paid asset"
-    t.bigint "payment_id"
-    t.json "raw", comment: "raw order response"
-    t.string "state"
-    t.uuid "trace_id"
-    t.datetime "updated_at", null: false
-    t.uuid "user_id"
-    t.index ["payment_id"], name: "index_swap_orders_on_payment_id"
-    t.index ["trace_id"], name: "index_swap_orders_on_trace_id", unique: true
-    t.index ["user_id"], name: "index_swap_orders_on_user_id"
   end
 
   create_table "taggings", force: :cascade do |t|

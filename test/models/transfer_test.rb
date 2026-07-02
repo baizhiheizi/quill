@@ -294,17 +294,17 @@ class TransferTest < ActiveSupport::TestCase
     end
   end
 
-  test "process! does not raise for a legacy retired SwapOrder source_type" do
+  test "process! does not raise for a source_type that no longer resolves to a class" do
     with_quill_bot_stub do
       transfer = create_transfer!(
         trace_id: SecureRandom.uuid,
-        source_type: "SwapOrder",
+        source_type: "RetiredSource",
         source_id: 999_999,
         transfer_type: :swap_refund
       )
 
       QuillBot.api.define_singleton_method(:safe_transaction) do |_trace_id|
-        { "data" => { "snapshot_id" => "snap-legacy-swap", "transaction_hash" => "hash-legacy-swap" } }
+        { "data" => { "snapshot_id" => "snap-retired-source", "transaction_hash" => "hash-retired-source" } }
       end
 
       assert_nothing_raised { transfer.process! }
