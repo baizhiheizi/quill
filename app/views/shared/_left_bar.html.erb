@@ -93,7 +93,7 @@
               <li><%= link_to t('profile_page'), user_path(current_user), class: "dropdown-item rounded-lg py-2" %></li>
               <li><%= link_to t('settings'), dashboard_settings_path, class: "dropdown-item rounded-lg py-2" %></li>
               <div class="divider my-1"></div>
-              <li><%= link_to t('disconnect'), logout_path, class: "dropdown-item rounded-lg py-2 text-error" %></li>
+              <li><%= link_to t('disconnect'), logout_path, data: { turbo_prefetch: false }, class: "dropdown-item rounded-lg py-2 text-error" %></li>
             </ul>
           <% end %>
         <% else %>
