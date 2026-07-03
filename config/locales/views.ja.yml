@@ -249,6 +249,7 @@ ja:
   bio: はじめに
   sync: シンク
   no_record: 記録なし
+  no_search_results: 「%{query}」に一致する結果はありません
   active_authors: アクティブな作家陣
   blocking: さんをブロック
   block_user: さんをブロック
@@ -314,6 +315,7 @@ ja:
   select_crypto: Select Crypto
   press_enter_to_search_all_articles: Press Enter to search all articles
   home: Home
+  home_value_proposition: 読んで、書いて、暗号資産の報酬を得る——Web3のためのパブリッシングプラットフォーム。
   collections: Collections
   new_collection: New Collection
   collection_revenue_ratio_tips: A part of every sell of article in the collection will be split as bonus to the buyers of the collection.

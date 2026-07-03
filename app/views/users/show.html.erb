@@ -1,32 +1,28 @@
-<div class="hidden sm:flex mb-8 items-center justify-between">
-  <div class="flex-1 text-2xl font-bold truncate">
+<div class="mb-8 hidden items-center justify-between sm:flex">
+  <div class="font-display flex-1 truncate text-2xl font-medium text-base-content">
     <%= @user.name %>
   </div>
-  <div class="hidden sm:flex justify-end">
-    <%= link_to full_user_share_path(@user), 
-      data: {
-        turbo_frame: :modal
-      },
-      class: "flex items-center space-x-1" do %>
-      <%= inline_svg_tag 'icons/share-solid.svg', class: 'w-5 h-5 lg:w-6 lg:h-6 text-primary' %>
-    <% end %>
-  </div>
+  <%= link_to full_user_share_path(@user), 
+    data: {
+      turbo_frame: :modal
+    },
+    class: "flex items-center text-base-content/60 transition-colors hover:text-base-content" do %>
+    <span class="i-[tabler--share] size-5"></span>
+  <% end %>
 </div>
 
-<div class="xl:hidden">
-  <%= render "users/user_card", user: @user %>
-</div>
+<%= render "users/user_card", user: @user %>
 
 <% if @user.block_user?(current_user) || current_user&.block_user?(@user) %>
   <%= render "shared/empty", text: t('blocked') %>
 <% else %>
-  <div class="mx-auto max-w-3xl text-base-content"
+  <div class="mx-auto max-w-3xl border-t border-base-300 pt-6 text-base-content"
     data-controller="tabs"
     data-tabs-active-tab-value="<%= @tab %>"
-    data-tabs-active-class-value="tab-active">
-    <div class="tabs tabs-bordered mb-4 w-full overflow-auto scrollbar-hide">
+    data-tabs-active-class-value="!bg-base-content !text-base-100 !font-semibold">
+    <div class="mb-4 flex w-full items-center gap-1 overflow-auto scrollbar-hide">
       <%= link_to user_path(@user, tab: :published),
-        class: "tab #{'tab-active' if @tab.to_s == 'published'}",
+        class: "flex-shrink-0 rounded-full px-3 py-1.5 text-sm text-base-content/60 transition-colors hover:bg-base-200",
         data: {
           tabs_target: "tab",
           tabs_tabname_param: "published",
@@ -36,7 +32,7 @@
       <% end %>
 
       <%= link_to user_path(@user, tab: :bought),
-        class: "tab #{'tab-active' if @tab.to_s == 'bought'}",
+        class: "flex-shrink-0 rounded-full px-3 py-1.5 text-sm text-base-content/60 transition-colors hover:bg-base-200",
         data: {
           tabs_target: "tab",
           tabs_tabname_param: "bought",
@@ -46,7 +42,7 @@
       <% end %>
 
       <%= link_to user_comments_path(@user),
-        class: "tab #{'tab-active' if @tab.to_s == 'commented'}",
+        class: "flex-shrink-0 rounded-full px-3 py-1.5 text-sm text-base-content/60 transition-colors hover:bg-base-200",
         data: {
           tabs_target: "tab",
           tabs_tabname_param: "commented",
@@ -79,22 +75,17 @@
   </div>
 <% end %>
 
-<div class="xl:hidden mb-8">
+<div class="mt-12 border-t border-base-300 pt-8">
   <%= render "shared/footer" %>
 </div>
 
-<%= content_for :sidebar do %>
-  <%= render "users/user_card", user: @user %>
-  <%= render "shared/footer" %>
-<% end %>
-
 <% content_for :topbar do %>
-  <div class="h-12 flex items-center justify-between">
-    <div class="flex items-center px-4 truncate">
-      <%= link_to :back, class: "pr-2" do %>
-        <%= inline_svg_tag "icons/chevron-left.svg", class: "w-5 h-5 font-bold" %>
+  <div class="flex h-12 items-center justify-between">
+    <div class="flex items-center truncate px-4">
+      <%= link_to :back, class: "pr-2 text-base-content/70" do %>
+        <span class="i-[tabler--chevron-left] size-5"></span>
       <% end %>
-      <span class="font-bold text-lg truncate">
+      <span class="truncate text-lg font-semibold">
         <%= @user.name %>
       </span>
     </div>
@@ -103,8 +94,8 @@
       data: {
         turbo_frame: :modal
       },
-      class: "block px-6 py-3 #{from_mixin_messenger? ? 'mr-24' : ''}" do %>
-      <%= inline_svg_tag 'icons/share-solid.svg', class: 'w-6 h-6 text-primary' %>
+      class: "block px-6 py-3 text-base-content/60 #{from_mixin_messenger? ? 'mr-24' : ''}" do %>
+      <span class="i-[tabler--share] size-5"></span>
     <% end %>
   </div>
 <% end %>

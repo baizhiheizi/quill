@@ -14,15 +14,15 @@
     <%= form.hidden_field :amount %>
     <%= form.hidden_field :type, value: current_user.default_payment %>
 
-    <%= form.submit t('pay_to_read'), class: "btn btn-primary rounded-full #{size == 'lg' ? 'btn-lg' : 'btn-sm'} no-underline" %>
+    <%= form.submit t('pay_to_read'), class: "btn btn-primary rounded-full font-medium #{size == 'lg' ? 'btn-lg' : 'btn-sm'} no-underline" %>
   <% end %>
 <% elsif from_mixin_messenger? %>
   <%= link_to t('pay_to_read'), 
     login_path(return_to: user_article_url(article.author, article.uuid)), 
-    class: "btn btn-primary rounded-full #{size == 'lg' ? 'btn-lg' : 'btn-sm'} no-underline" %>
+    class: "btn btn-primary rounded-full font-medium #{size == 'lg' ? 'btn-lg' : 'btn-sm'} no-underline" %>
 <% else %>
   <%= link_to t('pay_to_read'), 
     login_path(return_to: user_article_url(article.author, article.uuid)), 
     data: { turbo_frame: :modal }, 
-    class: "btn btn-primary rounded-full #{size == 'lg' ? 'btn-lg' : 'btn-sm'} no-underline" %>
+    class: "btn btn-primary rounded-full font-medium #{size == 'lg' ? 'btn-lg' : 'btn-sm'} no-underline" %>
 <% end %>

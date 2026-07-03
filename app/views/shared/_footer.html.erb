@@ -1,6 +1,9 @@
-<div class="flex items-center justify-between text-xs text-base-content/60">
-  <%= link_to t('rules'), rules_page_path, class: "link link-hover" %>
-  <%= link_to t('fair'), fair_page_path, class: "link link-hover" %>
-  <%= link_to t('help'), '/docs', target: '_blank', class: "link link-hover" %>
-  <%= link_to 'Github', 'https://github.com/baizhiheizi/quill', target: '_blank', class: "link link-hover" %>
+<div class="flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-xs text-base-content/60 sm:justify-between">
+  <span class="hidden font-medium text-base-content/50 sm:inline">© <%= Date.current.year %> Quill</span>
+  <div class="flex flex-wrap items-center justify-center gap-x-5 gap-y-2">
+    <%= link_to t('rules'), rules_page_path, class: "link link-hover" %>
+    <%= link_to t('fair'), fair_page_path, class: "link link-hover" %>
+    <%= link_to t('help'), '/docs', target: '_blank', class: "link link-hover" %>
+    <%= link_to 'Github', 'https://github.com/baizhiheizi/quill', target: '_blank', class: "link link-hover" %>
+  </div>
 </div>

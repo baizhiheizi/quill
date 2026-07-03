@@ -1,12 +1,15 @@
-<div class="mb-6 sm:mb-8">
-  <%= render "search/form" %>
-</div>
+<%# The masthead (app/views/shared/_masthead.html.erb) now owns the single
+    search entry point for this page — no page-level search form here to
+    avoid a duplicate #search_result_list DOM id. %>
 <%= render "articles/filter_bar", filter: @filter, time_range: @time_range %>
 <%= turbo_frame_tag "articles" do %>
   <%= render "articles/list", articles: @articles, pagy: @pagy %>
 <% end %>
 
-<%= content_for :sidebar do %>
+<%# The old right-rail sidebar (active authors, hot tags, footer) has no
+    persistent widget rail in the new single-column public layout (design
+    doc §5.2) — these move inline, below the feed, as a compact strip. %>
+<div class="mt-12 space-y-10 border-t border-base-300 pt-8">
   <% if @tag.present? %>
     <%= turbo_frame_tag 'selected_tag' do %>
       <%= render "tags/tag_card", tag: @tag %>
@@ -15,5 +18,6 @@
 
   <%= turbo_frame_tag 'active_authors', src: '/active_authors', loading: :lazy %>
   <%= turbo_frame_tag 'hot_tags', src: '/hot_tags', loading: :lazy %>
+
   <%= render "shared/footer" %>
-<% end %>
+</div>

@@ -11,7 +11,9 @@
   themes: quill --default, quill-dark;
 }
 @plugin '@tailwindcss/typography';
-@plugin '@iconify/tailwind4';
+@plugin '@iconify/tailwind4' {
+  prefix: 'i';
+}
 
 @import 'flyonui/variants.css';
 
@@ -28,15 +30,17 @@
   prefersdark: false;
   color-scheme: light;
 
+  /* Editorial redesign (§4.1 of docs/superpowers/specs/2026-07-03-ui-redesign-design.md):
+   * near-grayscale base + one cobalt accent, reserved for actions/links/focus. */
   --color-base-100: #ffffff;
-  --color-base-200: #f4f4f4;
-  --color-base-300: #e5e7eb;
-  --color-base-content: #222222;
-  --color-primary: #5c6bef;
+  --color-base-200: #fafafa;
+  --color-base-300: rgba(0, 0, 0, 0.08);
+  --color-base-content: #111111;
+  --color-primary: #3355ff;
   --color-primary-content: #ffffff;
   --color-secondary: #8686bf;
   --color-secondary-content: #ffffff;
-  --color-accent: #5c6bef;
+  --color-accent: #3355ff;
   --color-accent-content: #ffffff;
   --color-neutral: #444655;
   --color-neutral-content: #ffffff;
@@ -49,6 +53,9 @@
   --color-error: #f3463f;
   --color-error-content: #ffffff;
 
+  /* Reward/bonus tint (text-only — never a filled badge, see §6.2) */
+  --color-reward: #92661c;
+
   --radius-selector: 1rem;
   --radius-field: 0.5rem;
   --radius-box: 0.75rem;
@@ -60,15 +67,15 @@
   prefersdark: false;
   color-scheme: dark;
 
-  --color-base-100: #121212;
-  --color-base-200: #1a1a1a;
-  --color-base-300: #2a2a2a;
-  --color-base-content: #ffffff;
-  --color-primary: #5c6bef;
+  --color-base-100: #111111;
+  --color-base-200: #181818;
+  --color-base-300: rgba(255, 255, 255, 0.1);
+  --color-base-content: #f2f2f2;
+  --color-primary: #6b84ff;
   --color-primary-content: #ffffff;
   --color-secondary: #8686bf;
   --color-secondary-content: #ffffff;
-  --color-accent: #5c6bef;
+  --color-accent: #6b84ff;
   --color-accent-content: #ffffff;
   --color-neutral: #1a1a1a;
   --color-neutral-content: #ffffff;
@@ -81,17 +88,28 @@
   --color-error: #f3463f;
   --color-error-content: #ffffff;
 
+  --color-reward: #d9a653;
+
   --radius-selector: 1rem;
   --radius-field: 0.5rem;
   --radius-box: 0.75rem;
 }
 
 @theme {
-  --font-sans: 'Noto Sans SC', ui-sans-serif, system-ui, sans-serif;
-  --font-serif: 'Roboto Serif', ui-serif, Georgia, serif;
-  --font-mono: 'Roboto Mono', ui-monospace, monospace;
+  /* Editorial type pairing (§4.2): serif display for headlines, sans for
+   * UI + body copy (including article body — matches Chinese-reader norms). */
+  --font-sans: 'Inter', 'Noto Sans SC', ui-sans-serif, system-ui, sans-serif;
+  --font-serif: 'Newsreader', 'Noto Serif SC', ui-serif, Georgia, serif;
+  --font-display: 'Newsreader', 'Noto Serif SC', ui-serif, Georgia, serif;
+  --font-mono: 'Roboto Mono', 'JetBrains Mono', ui-monospace, monospace;
 
-  --color-primary: #5c6bef;
+  --color-primary: #3355ff;
+  /* Registering this here (mirroring --color-primary above) is what makes
+   * Tailwind generate `text-reward`/`bg-reward` utilities at all — values
+   * declared only inside a `flyonui/theme { ... }` block become raw CSS
+   * custom properties scoped by `[data-theme]`, but Tailwind's utility
+   * generator only picks up names declared in an actual `@theme` block. */
+  --color-reward: #92661c;
 
   --min-height-screen-1\/2: 50vh;
   --min-height-screen-1\/3: 33vh;
@@ -168,32 +186,24 @@
   }
 }
 
-@utility tag-style-0 {
-  @apply rounded bg-[#FFE9E9] text-[#CC6767] dark:bg-[#372A2A];
+/* Neutral chip style for topic tags (§6.2) — replaces the pastel
+ * tag-style-0..5 per-category color system (all call sites migrated). */
+@utility tag-chip {
+  @apply rounded-full bg-base-200 text-base-content/70;
 }
 
-@utility tag-style-1 {
-  @apply rounded bg-[#EFEFFF] text-[#8686BF] dark:bg-[#363644];
-}
-
-@utility tag-style-2 {
-  @apply rounded bg-[#FFF1E6] text-[#E19B64] dark:bg-[#433C37];
-}
-
-@utility tag-style-3 {
-  @apply rounded bg-[#EEF7FB] text-[#5CADD1] dark:bg-[#2F3639];
-}
-
-@utility tag-style-4 {
-  @apply rounded bg-[#F7ECFB] text-[#B688C6] dark:bg-[#3B353D];
-}
-
-@utility tag-style-5 {
-  @apply rounded bg-[#E4F1FF] text-[#71A6E8] dark:bg-[#2B333C];
-}
-
+/* Body copy inherits the page's --font-sans by default (Typography's `prose`
+ * doesn't set a font-family) — matches FR-012's sans body-copy requirement.
+ * In-body headings get the serif --font-display for editorial hierarchy. */
 @utility prose-article {
-  @apply prose dark:prose-invert prose-blockquote:not-italic prose-img:mx-auto prose-img:rounded-md prose-img:shadow-md xl:prose-lg mx-auto max-w-none break-words prose-blockquote:border-primary prose-pre:rounded-lg prose-pre:border prose-pre:border-base-content/10 prose-pre:bg-base-200 prose-pre:text-base-content dark:prose-pre:bg-base-200 dark:prose-pre:text-base-content dark:prose-code:bg-base-300 dark:prose-code:text-base-content;
+  @apply prose dark:prose-invert prose-headings:font-display prose-blockquote:not-italic prose-img:mx-auto prose-img:rounded-md prose-img:shadow-md xl:prose-lg mx-auto max-w-none break-words prose-blockquote:border-primary prose-pre:rounded-lg prose-pre:border prose-pre:border-base-content/10 prose-pre:bg-base-200 prose-pre:text-base-content dark:prose-pre:bg-base-200 dark:prose-pre:text-base-content dark:prose-code:bg-base-300 dark:prose-code:text-base-content;
+}
+
+/* Paywall fade boundary (§6.3): gradual gradient fade instead of an abrupt
+ * cutoff, applied to the last visible content block of a locked article. */
+@utility paywall-fade-mask {
+  mask-image: linear-gradient(to bottom, black 0%, black 45%, transparent 96%);
+  -webkit-mask-image: linear-gradient(to bottom, black 0%, black 45%, transparent 96%);
 }
 
 @utility prose-comment {

@@ -1,7 +1,9 @@
 <div data-controller="infinite-scroll">
   <% pagy_id ||= "articles_pagination" %>
   <% if articles.blank? %>
-    <%= render "shared/empty", text: t('no_record') %>
+    <%# Friendly, query-aware empty state for zero search results (FR-014) —
+        every other empty listing keeps the generic `no_record` copy. %>
+    <%= render "shared/empty", text: params[:query].present? ? t('no_search_results', query: params[:query]) : t('no_record') %>
   <% else %>
     <div id="articles_list">
       <%= render partial: "articles/card", collection: articles, as: :article %>

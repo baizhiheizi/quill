@@ -1,0 +1,99 @@
+<%# Masthead: top-nav shell for the 5 in-scope public pages (home feed, article
+    reader, author profile, search, collections), replacing shared/_left_bar +
+    shared/_navbar for these pages only — those partials are untouched and
+    still power the out-of-scope dashboard shell.
+
+    Exposes the same primary actions as the old left_bar/navbar for parity
+    (contracts/component-contracts.md): Home link, Write/Connect-Wallet CTA,
+    notifications, profile dropdown, locale switcher, dark-mode toggle. On
+    mobile, pages that set `content_for :topbar` (article/profile/collection
+    show pages — a contextual back-button bar) keep that instead of the
+    default bar; desktop always shows the full masthead. %>
+<header
+  class="sticky top-0 z-40 w-full border-b border-base-300 bg-base-100/95 backdrop-blur-sm transition-shadow duration-150"
+  data-controller="masthead"
+  data-masthead-scrolled-class="shadow-sm">
+  <% if browser.device.mobile? && content_for?(:topbar) %>
+    <%= yield :topbar %>
+  <% else %>
+    <div class="mx-auto flex w-full max-w-5xl flex-wrap items-center gap-x-4 gap-y-2 px-4 py-2 sm:h-16 sm:flex-nowrap sm:py-0 sm:px-6">
+      <div class="flex flex-shrink-0 items-center gap-6">
+        <%= link_to root_path, class: "flex-shrink-0", data: { controller: "prefetch" } do %>
+          <%= image_tag 'logo.svg', class: "h-7 w-auto dark:hidden" %>
+          <%= image_tag 'logo-light.svg', class: "hidden h-7 w-auto dark:block" %>
+        <% end %>
+
+        <nav class="hidden items-center gap-1 sm:flex">
+          <%= link_to t('home'), articles_path,
+            class: "rounded-full px-3 py-1.5 text-sm font-medium transition-colors #{@active_page == 'home' ? 'text-base-content' : 'text-base-content/60 hover:text-base-content'}",
+            data: { controller: 'prefetch' } %>
+        </nav>
+      </div>
+
+      <div class="order-3 w-full sm:order-none sm:w-auto sm:max-w-sm sm:flex-1">
+        <%= render "search/form" %>
+      </div>
+
+      <div class="ml-auto flex flex-shrink-0 items-center gap-1.5 sm:gap-2">
+        <% if current_user.present? %>
+          <%= link_to new_article_path, class: "btn btn-primary btn-sm rounded-full px-3 font-medium sm:btn-md sm:px-4" do %>
+            <span class="i-[tabler--edit] size-4"></span>
+            <span class="hidden sm:inline"><%= t('write') %></span>
+          <% end %>
+        <% else %>
+          <%= link_to login_path, data: { turbo_frame: :modal }, class: "btn btn-primary btn-sm rounded-full px-3 font-medium sm:btn-md sm:px-4" do %>
+            <span class="i-[tabler--wallet] size-4"></span>
+            <span class="hidden sm:inline"><%= t('connect_wallet') %></span>
+          <% end %>
+        <% end %>
+
+        <% if current_user.present? %>
+          <%= link_to dashboard_notifications_path, class: "btn btn-ghost btn-circle btn-sm sm:btn-md", "aria-label": t('notification') do %>
+            <span class="indicator">
+              <span class="i-[tabler--bell] size-5 text-base-content/60"></span>
+              <% if current_user.has_unread_notification? %>
+                <span class="indicator-item badge badge-error badge-xs"></span>
+              <% end %>
+            </span>
+          <% end %>
+        <% end %>
+
+        <div data-controller="darkmode" class="hidden items-center sm:flex">
+          <a class="btn btn-ghost btn-circle btn-sm hidden cursor-pointer" data-darkmode-target="lightButton" data-action="darkmode#toggle" title="<%= t('dark_mode') %>" aria-label="<%= t('dark_mode') %>">
+            <span class="i-[tabler--moon] size-5 text-base-content/60"></span>
+          </a>
+          <a class="btn btn-ghost btn-circle btn-sm hidden cursor-pointer" data-darkmode-target="darkButton" data-action="darkmode#toggle" title="<%= t('light_mode') %>" aria-label="<%= t('light_mode') %>">
+            <span class="i-[tabler--sun] size-5 text-base-content/60"></span>
+          </a>
+        </div>
+
+        <%= link_to edit_locale_path, data: { turbo_frame: :modal }, class: "btn btn-ghost btn-circle btn-sm hidden sm:flex", title: t('language'), "aria-label": t('language') do %>
+          <span class="i-[tabler--world] size-5 text-base-content/60"></span>
+        <% end %>
+
+        <% if current_user.present? %>
+          <% dropdown_button = capture do %>
+            <div class="avatar cursor-pointer">
+              <div class="size-8 rounded-full sm:size-9">
+                <%= render "shared/avatar", user: current_user, thumb: true, class: "rounded-full" %>
+              </div>
+            </div>
+          <% end %>
+          <%= render_dropdown class: '', button: dropdown_button do %>
+            <ul class="menu menu-sm mt-2 w-56 rounded-xl border border-base-300 bg-base-100 p-2 shadow-lg">
+              <li class="menu-title truncate"><%= current_user.name %></li>
+              <li><%= link_to t('profile_page'), user_path(current_user), class: "dropdown-item rounded-lg py-2" %></li>
+              <li><%= link_to t('settings'), dashboard_settings_path, class: "dropdown-item rounded-lg py-2" %></li>
+              <div class="divider my-1"></div>
+              <li><%= link_to t('disconnect'), logout_path, data: { turbo_prefetch: false }, class: "dropdown-item rounded-lg py-2 text-error" %></li>
+            </ul>
+          <% end %>
+        <% else %>
+          <%= link_to login_path, data: { turbo_frame: :modal }, class: "btn btn-ghost btn-circle btn-sm sm:hidden", "aria-label": t('login', default: 'Login') do %>
+            <span class="i-[tabler--user] size-5"></span>
+          <% end %>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+</header>

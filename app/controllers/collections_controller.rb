@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class CollectionsController < ApplicationController
+  layout "public", only: %i[index show]
+
   def index
     @collections = Collection.listed.order(updated_at: :desc)
   end

@@ -258,6 +258,7 @@ zh-CN:
   bio: 简介
   sync: 同步
   no_record: 没有记录
+  no_search_results: 没有找到与 “%{query}” 相关的结果
   active_authors: 活跃作者
   blocking: 屏蔽
   block_user: 屏蔽用户
@@ -324,6 +325,7 @@ zh-CN:
   select_crypto: 选择加密货币
   press_enter_to_search_all_articles: 按回车键确认搜索所有文章
   home: 首页
+  home_value_proposition: 阅读、写作、赚取加密货币奖励——为 Web3 打造的发布平台。
   collections: 合辑
   new_collection: 新建合辑
   collection_revenue_ratio_tips: 合辑内所有文章单独售卖的收入，将有一部分作为合辑购买者的奖励
