@@ -218,7 +218,7 @@ class Payment < ApplicationRecord
       amount:,
       asset_id:,
       trace_id: QuillBot.api.unique_uuid(trace_id, opponent_id),
-      memo: "REDUND"
+      memo: "REFUND"
     )
   end
 

@@ -191,6 +191,17 @@ class PaymentTest < ActiveSupport::TestCase
     end
   end
 
+  test "refund transfer memo is REFUND, not REDUND (fixes typo on on-chain label)" do
+    @article.author.block_user(@payer)
+
+    with_quill_bot_stub do
+      payment = create_payment!(payer: @payer, article: @article, order_type: "BUY", amount: @article.price)
+
+      assert_nil payment.order
+      assert_equal "REFUND", payment.refund_transfer.memo
+    end
+  end
+
   test "invalid memo does not create order" do
     with_quill_bot_stub do
       payment = nil
