@@ -98,3 +98,39 @@ high_revenue:
   locale: en
   created_at: <%= 1.day.ago %>
   updated_at: <%= 1.day.ago %>
+
+published_zh:
+  uuid: dddddddd-dddd-4ddd-8ddd-dddddddddddd
+  title: 中文付费文章
+  intro: 一个测试用的中文付费文章简介。
+  author: author_zh
+  asset_id: c6d0c728-2624-429b-8e0d-d9d19b6592fa
+  price: 0.0001
+  state: published
+  published_at: <%= 2.days.ago %>
+  locale: zh
+  free_content_ratio: 0.1
+  readers_revenue_ratio: 0.4
+  platform_revenue_ratio: 0.1
+  author_revenue_ratio: 0.5
+  references_revenue_ratio: 0.0
+  created_at: <%= 2.days.ago %>
+  updated_at: <%= 2.days.ago %>
+
+published_ja:
+  uuid: eeeeeeee-eeee-4eee-8eee-eeeeeeeeeeee
+  title: 日本語の有料記事
+  intro: テスト用の日本語の有料記事の概要です。
+  author: author_ja
+  asset_id: c6d0c728-2624-429b-8e0d-d9d19b6592fa
+  price: 0.0001
+  state: published
+  published_at: <%= 2.days.ago %>
+  locale: ja
+  free_content_ratio: 0.1
+  readers_revenue_ratio: 0.4
+  platform_revenue_ratio: 0.1
+  author_revenue_ratio: 0.5
+  references_revenue_ratio: 0.0
+  created_at: <%= 2.days.ago %>
+  updated_at: <%= 2.days.ago %>

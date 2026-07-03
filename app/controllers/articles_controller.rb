@@ -12,7 +12,7 @@ class ArticlesController < ApplicationController
     @time_range ||= "week" if @filter == "revenue"
     @tag = Tag.find_by name: params[:tag].to_s.strip
 
-    articles = ArticleSearchService.call(params.merge(current_user:, locale: current_locale))
+    articles = ArticleSearchService.call(params.merge(current_user:))
 
     @pagy, @articles = pagy(:countless, articles.with_attached_cover)
     @active_page = "home"
