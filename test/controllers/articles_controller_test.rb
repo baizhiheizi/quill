@@ -55,6 +55,14 @@ class ArticlesControllerTest < IntegrationTestCase
     assert_match "data-paywall-fade-target=\"unlock\"", response.body
   end
 
+  test "index renders a friendly, query-aware empty state for a search with no matches" do
+    get articles_path(query: "no-such-article-xyz123")
+
+    assert_response :success
+    assert_match "No results for", response.body
+    assert_match "no-such-article-xyz123", response.body
+  end
+
   test "content fields partial renders lexxy editor" do
     html = ApplicationController.render(
       inline: <<~ERB,

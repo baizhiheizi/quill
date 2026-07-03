@@ -249,6 +249,7 @@ ja:
   bio: はじめに
   sync: シンク
   no_record: 記録なし
+  no_search_results: 「%{query}」に一致する結果はありません
   active_authors: アクティブな作家陣
   blocking: さんをブロック
   block_user: さんをブロック

@@ -258,6 +258,7 @@ zh-CN:
   bio: 简介
   sync: 同步
   no_record: 没有记录
+  no_search_results: 没有找到与 “%{query}” 相关的结果
   active_authors: 活跃作者
   blocking: 屏蔽
   block_user: 屏蔽用户

@@ -124,9 +124,9 @@ Single-project Rails monolith (existing structure) — no new top-level director
 
 ### Implementation for User Story 4
 
-- [ ] T032 [US4] Finish the masthead-integrated search input in `app/views/search/_form.html.erb`: focus/active states and clear button using the new accent color, reconciling with wherever T012 placed the search field (masthead vs. feed-page-level) so there is exactly one search entry point, not two competing ones
-- [ ] T033 [US4] Confirm/adjust the zero-results empty state for a searched query renders via `app/views/shared/_empty.html.erb` with friendly copy, per FR-014
-- [ ] T034 [US4] Manual QA: run the "Story 4" section of `quickstart.md` (submit a query, confirm feed-row reuse, confirm empty state)
+- [X] T032 [US4] Finish the masthead-integrated search input in `app/views/search/_form.html.erb`: focus/active states and clear button using the new accent color, reconciling with wherever T012 placed the search field (masthead vs. feed-page-level) so there is exactly one search entry point, not two competing ones
+- [X] T033 [US4] Confirm/adjust the zero-results empty state for a searched query renders via `app/views/shared/_empty.html.erb` with friendly copy, per FR-014
+- [X] T034 [US4] Manual QA: run the "Story 4" section of `quickstart.md` (submit a query, confirm feed-row reuse, confirm empty state)
 
 **Checkpoint**: User Stories 1–4 all work independently.
 

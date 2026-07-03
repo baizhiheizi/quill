@@ -258,6 +258,7 @@ en:
   bio: Bio
   sync: Sync
   no_record: No record
+  no_search_results: 'No results for "%{query}"'
   active_authors: Active Authors
   blocking: Blocking
   block_user: Block User
