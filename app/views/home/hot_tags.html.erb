@@ -1,7 +1,7 @@
 <%= turbo_frame_tag 'hot_tags' do %>
   <% if @hot_tags.present? %>
     <div>
-      <div class="mb-3 text-sm font-medium text-base-content/50"><%= t('hot_tags') %></div>
+      <div class="mb-3 text-sm font-medium text-base-content/60"><%= t('hot_tags') %></div>
       <% if current_user.blank? %>
         <div class="flex flex-wrap items-center gap-2">
           <% @hot_tags.each do |tag| %>

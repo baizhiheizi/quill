@@ -3,7 +3,7 @@
   data-tabs-active-tab-value="<%= filter %>"
   data-tabs-active-class-value="!bg-base-content !text-base-100 !font-semibold">
   <div class="mb-4 flex w-full flex-nowrap items-center gap-1 overflow-auto scrollbar-hide">
-    <%= link_to '/more', class: "mr-1 flex-shrink-0 rounded-full p-2 text-base-content/50 sm:hidden" do %>
+    <%= link_to '/more', class: "mr-1 flex-shrink-0 rounded-full p-2 text-base-content/60 sm:hidden" do %>
       <span class="i-[tabler--plus] size-4"></span>
     <% end %>
 
@@ -65,7 +65,7 @@
     data-tabs-active-class-value="!text-base-content !font-semibold">
     <%= link_to t('in_a_week'),
       articles_path(filter: :revenue, time_range: :week),
-      class: "flex-shrink-0 text-base-content/50",
+      class: "flex-shrink-0 text-base-content/60",
       data: {
         controller: 'prefetch',
         tabs_target: "tab",
@@ -73,7 +73,7 @@
       } %>
     <%= link_to t('in_a_month'),
       articles_path(filter: :revenue, time_range: :month),
-      class: "flex-shrink-0 text-base-content/50",
+      class: "flex-shrink-0 text-base-content/60",
       data: {
         controller: 'prefetch',
         tabs_target: "tab",
@@ -81,7 +81,7 @@
       } %>
     <%= link_to t('in_a_year'),
       articles_path(filter: :revenue, time_range: :year),
-      class: "flex-shrink-0 text-base-content/50",
+      class: "flex-shrink-0 text-base-content/60",
       data: {
         controller: 'prefetch',
         tabs_target: "tab",
@@ -89,7 +89,7 @@
       } %>
     <%= link_to t('all'),
       articles_path(filter: :revenue, time_range: :all),
-      class: "flex-shrink-0 text-base-content/50",
+      class: "flex-shrink-0 text-base-content/60",
       data: {
         controller: 'prefetch',
         tabs_target: "tab",

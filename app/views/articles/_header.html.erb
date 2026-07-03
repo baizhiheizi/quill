@@ -22,7 +22,7 @@
     data: {
       turbo_frame: :modal
     },
-    class: "relative z-10 hidden items-center text-base-content/50 transition-colors hover:text-base-content sm:flex" do %>
+    class: "relative z-10 hidden items-center text-base-content/60 transition-colors hover:text-base-content sm:flex" do %>
     <span class="i-[tabler--share] size-5"></span>
   <% end %>
 </div>
@@ -50,7 +50,7 @@
   </div>
 <% end %>
 
-<div class="mb-5 flex items-center justify-between text-sm text-base-content/50">
+<div class="mb-5 flex items-center justify-between text-sm text-base-content/60">
   <span>
     <% if article.published_at.present? %>
       <%= render_time_format datetime: article.published_at.utc.rfc3339 do %>

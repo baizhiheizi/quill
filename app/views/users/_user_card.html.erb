@@ -8,7 +8,7 @@
     </span>
     <% if current_user.present? && current_user != user %>
       <% dropdown_button = capture do %>
-        <span class="i-[tabler--dots] size-5 text-base-content/40"></span>
+        <span class="i-[tabler--dots] size-5 text-base-content/50"></span>
       <% end %>
       <%= render_dropdown button: dropdown_button do %>
         <% if current_user.block_user?(user) %>
@@ -67,7 +67,7 @@
     <% end %>
   </div>
 
-  <div class="mb-4 flex items-center gap-1.5 text-xs text-base-content/40">
+  <div class="mb-4 flex items-center gap-1.5 text-xs text-base-content/50">
     <span class="i-[tabler--calendar] size-3.5"></span>
     <span><%= t('joined_at') %> <%= l(user.created_at.to_date, format: :long) %></span>
   </div>

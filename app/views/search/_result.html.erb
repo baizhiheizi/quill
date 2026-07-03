@@ -23,7 +23,7 @@
           p-2
           shadow-lg">
   <% if tags.present? %>
-    <div class="px-2 py-1.5 text-xs font-medium text-base-content/50"><%= t('tags') %></div>
+    <div class="px-2 py-1.5 text-xs font-medium text-base-content/60"><%= t('tags') %></div>
     <% tags.each do |tag| %>
       <%= link_to articles_path(tag: tag.name), class: "flex items-center rounded-lg px-2 py-1.5 hover:bg-base-200" do %>
         <span class="tag-chip max-w-full truncate px-2.5 py-1 text-sm">
@@ -34,7 +34,7 @@
   <% end %>
 
   <% if users.present? %>
-    <div class="px-2 py-1.5 text-xs font-medium text-base-content/50"><%= t('author') %></div>
+    <div class="px-2 py-1.5 text-xs font-medium text-base-content/60"><%= t('author') %></div>
     <% users.each do |user| %>
       <%= link_to user_path(user), 
         class: "flex items-center gap-2 rounded-lg px-2 py-1.5 text-sm hover:bg-base-200" do %>

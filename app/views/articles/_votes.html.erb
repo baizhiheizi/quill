@@ -2,7 +2,7 @@
   <div class="flex items-center space-x-6">
     <!-- Upvote Button -->
     <div class="relative group">
-      <div class="flex items-center justify-center w-12 h-12 rounded-full cursor-pointer transition-all duration-200 <%= user&.upvote_article?(article) ? 'bg-primary/10 text-primary ring-2 ring-primary/20' : 'bg-base-200 text-base-content/50 hover:bg-base-300 hover:text-base-content' %>">
+      <div class="flex items-center justify-center w-12 h-12 rounded-full cursor-pointer transition-all duration-200 <%= user&.upvote_article?(article) ? 'bg-primary/10 text-primary ring-2 ring-primary/20' : 'bg-base-200 text-base-content/60 hover:bg-base-300 hover:text-base-content' %>">
         <%= inline_svg_tag "icons/like-solid.svg", class: "h-6 w-6 transition-transform group-hover:scale-110" %>
       </div>
 
@@ -30,7 +30,7 @@
 
     <!-- Downvote Button -->
     <div class="relative group">
-      <div class="flex items-center justify-center w-12 h-12 rounded-full cursor-pointer transition-all duration-200 <%= user&.downvote_article?(article) ? 'bg-error/10 text-error ring-2 ring-error/20' : 'bg-base-200 text-base-content/50 hover:bg-base-300 hover:text-base-content' %>">
+      <div class="flex items-center justify-center w-12 h-12 rounded-full cursor-pointer transition-all duration-200 <%= user&.downvote_article?(article) ? 'bg-error/10 text-error ring-2 ring-error/20' : 'bg-base-200 text-base-content/60 hover:bg-base-300 hover:text-base-content' %>">
         <%= inline_svg_tag "icons/dislike-solid.svg", class: "h-6 w-6 transition-transform group-hover:scale-110" %>
       </div>
 

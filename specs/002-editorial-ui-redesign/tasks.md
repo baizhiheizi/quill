@@ -153,14 +153,14 @@ Single-project Rails monolith (existing structure) — no new top-level director
 
 **Purpose**: Improvements that span multiple stories, plus final validation gates.
 
-- [ ] T039 [P] Restyle `app/views/shared/_footer.html.erb` to match the new visual system (referenced from multiple in-scope pages after T016/T024)
-- [ ] T040 [P] Restyle `app/views/shared/_empty.html.erb` once, globally, so all 5 stories' empty states (T018, T033, T036, and the profile equivalent) share one consistent, friendly treatment
-- [ ] T041 Full dark-mode pass across all 5 pages: verify WCAG AA contrast for body text in both `quill` and `quill-dark` themes (SC-005), fixing any component missed since T003
-- [ ] T042 Full CJK rendering pass across all 5 pages with real Chinese sample content: verify no missing-glyph ("tofu") characters and that the serif-headline/sans-body split (FR-012) is applied consistently (SC-006)
-- [ ] T043 Mobile-width pass (~375px) across all 5 pages: no horizontal scrolling, no overlapping elements (SC-008)
-- [ ] T044 Regression check: confirm out-of-scope pages (`/dashboard/*`, `/articles/:uuid/edit` via `layouts/editor.html.erb`, `/admin/*`) render exactly as before — still using `layouts/application.html.erb` and the untouched `shared/_left_bar.html.erb`/`shared/_navbar.html.erb`
-- [ ] T045 Run `bin/rubocop` and `bun run lint-check`; fix any offenses introduced by this feature
-- [ ] T046 Run the full `bin/rails test` suite; fix any regressions (compare against the T001 baseline)
+- [X] T039 [P] Restyle `app/views/shared/_footer.html.erb` to match the new visual system (referenced from multiple in-scope pages after T016/T024)
+- [X] T040 [P] Restyle `app/views/shared/_empty.html.erb` once, globally, so all 5 stories' empty states (T018, T033, T036, and the profile equivalent) share one consistent, friendly treatment
+- [X] T041 Full dark-mode pass across all 5 pages: verify WCAG AA contrast for body text in both `quill` and `quill-dark` themes (SC-005), fixing any component missed since T003
+- [X] T042 Full CJK rendering pass across all 5 pages with real Chinese sample content: verify no missing-glyph ("tofu") characters and that the serif-headline/sans-body split (FR-012) is applied consistently (SC-006)
+- [X] T043 Mobile-width pass (~375px) across all 5 pages: no horizontal scrolling, no overlapping elements (SC-008)
+- [X] T044 Regression check: confirm out-of-scope pages (`/dashboard/*`, `/articles/:uuid/edit` via `layouts/editor.html.erb`, `/admin/*`) render exactly as before — still using `layouts/application.html.erb` and the untouched `shared/_left_bar.html.erb`/`shared/_navbar.html.erb`
+- [X] T045 Run `bin/rubocop` and `bun run lint-check`; fix any offenses introduced by this feature
+- [X] T046 Run the full `bin/rails test` suite; fix any regressions (compare against the T001 baseline)
 - [ ] T047 Update draft PR [#1822](https://github.com/baizhiheizi/quill/pull/1822): check off the test-plan items in the PR description and mark ready for review
 
 ---

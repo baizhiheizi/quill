@@ -1,8 +1,11 @@
-<div data-controller="floating" id="<%= dom_id(article) %>_floating_bar" class="fixed bottom-0 z-30 -mx-6 w-full translate-y-24 border-t border-base-300 bg-base-100 px-4 py-3 transition ease-in-out sm:hidden">
+<%# `inset-x-0` (not a negative margin) spans the fixed bar full-width
+    regardless of the surrounding column's own padding, avoiding horizontal
+    overflow on mobile (SC-008). %>
+<div data-controller="floating" id="<%= dom_id(article) %>_floating_bar" class="fixed inset-x-0 bottom-0 z-30 translate-y-24 border-t border-base-300 bg-base-100 px-4 py-3 transition ease-in-out sm:hidden">
   <div class="flex w-full items-center justify-between">
     <div class="grid grid-cols-3">
       <div class="relative flex items-center space-x-1 border-inherit px-2">
-        <span class="i-[tabler--thumb-up] size-5 <%= user&.upvote_article?(article) ? 'text-primary' : 'text-base-content/40' %>"></span>
+        <span class="i-[tabler--thumb-up] size-5 <%= user&.upvote_article?(article) ? 'text-primary' : 'text-base-content/50' %>"></span>
         <span class="text-sm text-base-content/70">
           <%= article.upvotes_count %>
         </span>
@@ -19,7 +22,7 @@
         <% end %>
       </div>
       <div class="relative flex items-center space-x-1 border-inherit px-2">
-        <span class="i-[tabler--thumb-down] size-5 <%= user&.downvote_article?(article) ? 'text-error' : 'text-base-content/40' %>"></span>
+        <span class="i-[tabler--thumb-down] size-5 <%= user&.downvote_article?(article) ? 'text-error' : 'text-base-content/50' %>"></span>
         <span class="text-sm text-base-content/70">
           <%= article.downvotes_count %>
         </span>
@@ -40,7 +43,7 @@
           turbo_frame: :modal,
         },
         class: "px-2 flex items-center space-x-1" do %>
-        <span class="i-[tabler--message-circle] size-5 text-base-content/40"></span>
+        <span class="i-[tabler--message-circle] size-5 text-base-content/50"></span>
         <span class="text-sm text-base-content/70">
           <%= article.comments.count %>
         </span>

@@ -9,14 +9,14 @@
   </div>
 
   <div data-paywall-fade-target="unlock" class="relative z-10 mx-auto max-w-md rounded-2xl border border-base-300 bg-base-100 px-6 py-6 text-center shadow-sm">
-    <div class="mb-1 text-xs font-medium text-base-content/50">
+    <div class="mb-1 text-xs font-medium text-base-content/60">
       <%= t('more_to_read', percent: "#{((1 - article.free_content_ratio) * 100).round(1)} %") %>
     </div>
 
     <div class="font-display mb-1 text-lg leading-snug font-medium text-base-content">
       <%= t('pay') %> <span class="text-primary"><%= article.price_tag %></span> <%= t('to_continue_reading') %>
     </div>
-    <div class="mb-5 text-sm text-base-content/40">
+    <div class="mb-5 text-sm text-base-content/50">
       ≈$<%= article.price_usd %>
     </div>
 
@@ -24,16 +24,16 @@
       <%= render "articles/buy_article_button", article: article %>
     </div>
 
-    <div class="mb-4 text-xs text-base-content/50">
+    <div class="mb-4 text-xs text-base-content/60">
       <%= t('and_receive_early_reader_revenue') %>
       (<%= link_to t('rules'), rules_page_path, data: { controller: 'prefetch' }, class: "font-medium text-primary underline" %>)
     </div>
 
-    <div class="mb-4 rounded-lg border border-base-300 bg-base-200/60 px-3 py-2 text-xs text-base-content/60">
+    <div class="mb-4 rounded-lg border border-base-300 bg-base-200/60 px-3 py-2 text-xs text-base-content/70">
       <%= t('pay_warning') %>
     </div>
 
-    <div class="text-xs text-base-content/40">
+    <div class="text-xs text-base-content/50">
       <%= t('already_paid') %>? <%= t('try_to') %>
       <% if current_user.present? %>
         <%= link_to t('refresh'), user_article_path(article.author, article), data: { turbo: false }, class: "font-medium text-primary underline" %>

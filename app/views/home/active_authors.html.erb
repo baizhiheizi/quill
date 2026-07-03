@@ -1,7 +1,7 @@
 <%= turbo_frame_tag 'active_authors' do %>
   <% if @users.present? %>
     <div>
-      <div class="mb-3 text-sm font-medium text-base-content/50"><%= t('active_authors') %></div>
+      <div class="mb-3 text-sm font-medium text-base-content/60"><%= t('active_authors') %></div>
       <div class="flex flex-wrap items-center gap-3">
         <% @users.each do |user| %>
           <div class="flex items-center gap-2 rounded-full border border-base-300 py-1 pr-3 pl-1">

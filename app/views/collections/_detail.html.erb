@@ -6,7 +6,7 @@
     data: {
       turbo_frame: :modal
     },
-    class: "relative z-10 hidden items-center text-base-content/50 transition-colors hover:text-base-content sm:flex" do %>
+    class: "relative z-10 hidden items-center text-base-content/60 transition-colors hover:text-base-content sm:flex" do %>
     <span class="i-[tabler--share] size-5"></span>
   <% end %>
 </div>
@@ -26,7 +26,7 @@
   <div class="mb-4 flex items-center gap-2">
     <%= remote_image_tag collection.currency.icon_url, class: "size-6 rounded-full" %>
     <span class="font-display text-xl font-medium text-base-content"><%= collection.price_tag %></span>
-    <span class="text-sm text-base-content/40">
+    <span class="text-sm text-base-content/50">
       ≈$<%= collection.price_usd %>
     </span>
   </div>
