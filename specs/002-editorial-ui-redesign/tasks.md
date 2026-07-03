@@ -161,7 +161,7 @@ Single-project Rails monolith (existing structure) — no new top-level director
 - [X] T044 Regression check: confirm out-of-scope pages (`/dashboard/*`, `/articles/:uuid/edit` via `layouts/editor.html.erb`, `/admin/*`) render exactly as before — still using `layouts/application.html.erb` and the untouched `shared/_left_bar.html.erb`/`shared/_navbar.html.erb`
 - [X] T045 Run `bin/rubocop` and `bun run lint-check`; fix any offenses introduced by this feature
 - [X] T046 Run the full `bin/rails test` suite; fix any regressions (compare against the T001 baseline)
-- [ ] T047 Update draft PR [#1822](https://github.com/baizhiheizi/quill/pull/1822): check off the test-plan items in the PR description and mark ready for review
+- [X] T047 Update draft PR [#1822](https://github.com/baizhiheizi/quill/pull/1822): check off the test-plan items in the PR description and mark ready for review
 
 ---
 
