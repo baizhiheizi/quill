@@ -2,13 +2,13 @@
 
 > **30-second summary:** Install Ruby 4.0.5 (via `mise` or `rbenv`), PostgreSQL, and Bun 1.x. Copy `config/settings.yml` to `config/settings.local.yml`, edit credentials with `bin/rails credentials:edit --development`, then run `bin/dev` to boot the app on `http://localhost:3000`.
 
-This guide assumes a fresh Linux or macOS machine. The authoritative sources are [AGENTS.md](../../AGENTS.md) and [README](../../README.md) at the repository root — update this page when you fix a step.
+Fresh Linux or macOS only. Authoritative sources are [AGENTS.md](../../AGENTS.md) and [README](../../README.md); update this page if you fix a step.
 
 ## 1. Install system dependencies
 
 ### Ruby 4.0.5
 
-Quill pins Ruby in `.ruby-version` and `mise.toml`. Use either:
+Quill pins Ruby in `.ruby-version` and `mise.toml`; install via either:
 
 ```bash
 # Using mise (recommended)
@@ -21,7 +21,7 @@ rbenv global 4.0.5
 
 ### PostgreSQL
 
-PostgreSQL is required for the **primary** database only — Solid Queue/Cable/Cache each use their own SQLite file under `storage/`, created and migrated by `bin/rails db:prepare`.
+PostgreSQL for app data; Solid Queue / Cable / Cache use separate SQLite files under `storage/`. All are migrated by `bin/rails db:prepare` (run in §4).
 
 ```bash
 # Ubuntu
@@ -33,13 +33,13 @@ sudo systemctl start postgresql.service
 brew install postgresql
 brew services start postgresql
 
-# Then on either platform, create a role that can create databases:
+# Create a role that can create databases (either platform):
 sudo -u postgres createuser -s quill && sudo -u postgres createdb -O quill quill_development
 ```
 
-### Node.js 18+ and Bun 1.x
+### Bun 1.x
 
-`esbuild` bundles JavaScript and Tailwind CSS via Bun (which ships its own Node runtime, so no separate Node install):
+`esbuild` bundles JavaScript and Tailwind CSS via Bun (no separate Node install needed):
 
 ```bash
 curl -fsSL https://bun.sh/install | bash
@@ -56,7 +56,7 @@ bun install
 
 ## 3. Configure credentials
 
-Quill uses Rails encrypted credentials for secrets and a YAML file for non-secret config. Edit development credentials with:
+Secrets live in encrypted credentials; non-secret config in YAML. Edit development credentials with:
 
 ```bash
 EDITOR=vim bin/rails credentials:edit --development
@@ -79,27 +79,27 @@ active_record_encryption:
   key_derivation_salt:
 ```
 
-Then copy the non-secret settings and edit `host` in `config/settings.local.yml` to match your local URL (default `https://quill.im`; for local work use `http://localhost:3000`):
+Then copy the settings file and set `host` to your local URL (`https://quill.im` → `http://localhost:3000` for local work):
 
 ```bash
 cp config/settings.yml config/settings.local.yml
 ```
 
-## 4. Run, verify, and troubleshoot
+## 4. Run and verify
 
 ```bash
 bin/rails db:prepare
 bin/dev
 ```
 
-`db:prepare` creates and migrates the primary database and the Solid Queue/Cable/Cache database. `bin/dev` reads `Procfile.dev` and starts Rails on [http://localhost:3000](http://localhost:3000) (admin at [/admin](http://localhost:3000/admin)), the Solid Queue worker (`bin/jobs`), the CSS/JS watchers (esbuild + Tailwind), and — when `blaze_enable: true` in `settings.local.yml` — the Mixin blaze client.
+`db:prepare` creates and migrates the primary database plus the Solid Queue/Cable/Cache SQLite files. `bin/dev` reads `Procfile.dev` and starts Rails on <http://localhost:3000> (admin at `/admin`), `bin/jobs`, the CSS/JS watchers, and the Mixin blaze client when `blaze_enable: true` in `settings.local.yml`.
 
 ```ruby
 # Create the admin account from bin/rails console:
 Administrator.create name: 'admin', password: 'admin'
 ```
 
-Then verify with the test suite — CI also runs `bin/rubocop` and `bun run lint-check`, so run them locally too:
+Then match what CI runs:
 
 ```bash
 bin/rails test
@@ -113,10 +113,8 @@ bun run lint-check
 - **"quill_bot credentials missing"** — re-open `bin/rails credentials:edit --development` and fill in the `quill_bot.*` keys.
 - **"PG::ConnectionBad"** — confirm PostgreSQL is running and that your `config/database.yml` user can create databases.
 - **"Cannot find module 'tailwindcss'"** — re-run `bun install`.
-- **Solid Queue backlogs piling up** — confirm `bin/jobs` is running (it is part of `bin/dev`). Check `bin/rails solid_queue:start` if you want to run it standalone.
+- **Solid Queue backlogs piling up** — confirm `bin/jobs` is running (it is part of `bin/dev`); use `bin/rails solid_queue:start` to run it standalone.
 
 ## Next steps
 
-- Read [Explanation → Architecture](../explanation/architecture.md) for the subsystems you just brought up.
-- Skim [Reference → Services](../reference/services.md) to find the code that wires the request flow.
-- Open an issue with the `documentation` label if any step is wrong or unclear.
+Read [Explanation → Architecture](../explanation/architecture.md) for the subsystems you just brought up, or [Reference → Services](../reference/services.md) to map them to code. Spotted a wrong step? File a `documentation`-labelled issue.
