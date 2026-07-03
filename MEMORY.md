@@ -1,5 +1,6 @@
 # Test Improver Memory
 
+- [Run notes 2026-07-03](2026-07-03-notes.md) — MixinNetworkUser coverage (32 / 76, commit `f89703f`)
 - [Run notes 2026-07-02](2026-07-02-notes.md) — UserAuthorization coverage (11 / 35, commit `6b70069`)
 - [Run notes 2026-07-01](2026-07-01-notes.md) — Tagging callbacks + notify_subscribers SQL subquery (16 / 43, commit `728a8a9`)
 
@@ -33,14 +34,16 @@
 - **`AdminNotificationService`** calls `QuillBot.api.plain_text(conversation_id:, data:)` (no recipient_id). `Announcement#deliver_as_text/post` calls with `(conversation_id:, recipient_id:, data:)`. Stubs must make `recipient_id` optional.
 - **`User` validation requires `uid`** (presence). When creating users in-test, set `uid: SecureRandom.hex(8)`.
 - **`User#blocked_user_ids_relation`** returns users the receiver has BLOCKED, not users who blocked them. `User.where.not(id: author.blocked_user_ids_relation)` excludes users the AUTHOR has blocked.
+- **`before_validation on: :create` callbacks fire on every `valid?`**, not just `save!`. Tests that check validations on new records must stub the callback to a no-op (`define_singleton_method(:setup_attributes) { }`) or stub the API the callback calls.
+- **`encrypts :pin` + no `active_record_encryption.primary_key` in test credentials** → reading `pin` raises `ActiveRecord::Encryption::Errors::Configuration`. Workaround: stub `update!` / `update` on the instance to capture args + return true; set `encrypted_pin` directly via `update_column`.
+- **`MixinBot::API.singleton_class.define_method(:new)` evaluates `self` as `MixinBot::API`** — `assert_equal` doesn't work inside the override. Capture kwargs in a closure and assert after. Restore with `MixinBot::API.define_singleton_method(:new, original_method)`.
 
 ## Backlog
 
-- **MEDIUM**: `MixinNetworkUser` model — zero coverage, heavy stubs (`encrypted_pin`, `before_validation :setup_attributes` calling `QuillBot.api.create_user`).
-- **HIGH**: `Bonus` AASM — blocked by `Bonus.table_name = "bonus"` (Rails inference) vs `db/schema.rb` `"bonuses"` mismatch.
 - **LOW**: `NftCollection.icon_url` fallback — single-method model.
-- All notifier backlog exhausted. NotificationSetting + Announcement + Tagging callbacks + UserAuthorization done (15/16 notifier models + UserAuthorization covered in 2026).
+- **`Bonus` AASM still blocked by table-name bug** — would be HIGH if unblocked.
+- All notifier backlog exhausted. NotificationSetting + Announcement + Tagging callbacks + UserAuthorization + MixinNetworkUser done.
 
 ## Last Run
 
-- 2026-07-02 — UserAuthorization coverage added (11 / 35 assertions, branch `test-assist/user-authorization-coverage`, commit `6b70069`); PR via safeoutputs patch mode.
+- 2026-07-03 — MixinNetworkUser coverage added (32 / 76 assertions, branch `test-assist/mixin-network-user-coverage`, commit `f89703f`); PR via safeoutputs patch mode.
