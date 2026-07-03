@@ -60,3 +60,5 @@ config/settings.local.yml
 .kamal/secrets
 
 __pycache__/
+# Brainstorming visual companion sessions
+.superpowers/
