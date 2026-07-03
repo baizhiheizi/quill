@@ -105,10 +105,10 @@ Single-project Rails monolith (existing structure) — no new top-level director
 
 ### Implementation for User Story 3
 
-- [ ] T028 [P] [US3] Restyle `app/views/users/show.html.erb`: single-column profile layout, tabs restyle (published/bought/commented) to match the new visual system
-- [ ] T029 [US3] Restyle `app/views/users/_user_card.html.erb`: surface `user.articles_count` and `user.subscribers_count` as the modest public stats, and add a new "joined" display using the existing `user.created_at` field (no schema change — see `data-model.md`); confirm no earnings/on-chain financial data appears anywhere on this partial per FR-008
-- [ ] T030 [P] [US3] Migrate icons touched by this story to `i-tabler-*`: `icons/dot-horizontal.svg` in `app/views/users/_user_card.html.erb`; `icons/share-solid.svg`, `icons/chevron-left.svg` in `app/views/users/show.html.erb`
-- [ ] T031 [US3] Manual QA: run the "Story 3" section of `quickstart.md`, explicitly confirming zero earnings/on-chain figures appear (SC-007) and the articles tab renders via the already-redesigned `articles/_card` from US1
+- [X] T028 [P] [US3] Restyle `app/views/users/show.html.erb`: single-column profile layout, tabs restyle (published/bought/commented) to match the new visual system
+- [X] T029 [US3] Restyle `app/views/users/_user_card.html.erb`: surface `user.articles_count` and `user.subscribers_count` as the modest public stats, and add a new "joined" display using the existing `user.created_at` field (no schema change — see `data-model.md`); confirm no earnings/on-chain financial data appears anywhere on this partial per FR-008
+- [X] T030 [P] [US3] Migrate icons touched by this story to `i-tabler-*`: `icons/dot-horizontal.svg` in `app/views/users/_user_card.html.erb`; `icons/share-solid.svg`, `icons/chevron-left.svg` in `app/views/users/show.html.erb`
+- [X] T031 [US3] Manual QA: run the "Story 3" section of `quickstart.md`, explicitly confirming zero earnings/on-chain figures appear (SC-007) and the articles tab renders via the already-redesigned `articles/_card` from US1
 
 **Checkpoint**: User Stories 1–3 all work independently.
 

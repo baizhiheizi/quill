@@ -1,22 +1,22 @@
+<%# Public author card (FR-008): modest public stats only — post count,
+    subscriber count, join date. No earnings/on-chain financial figures ever
+    appear on this partial (see spec.md SC-007). %>
 <div class="<%= dom_id user %>_card mb-8 xl:mb-16">
-  <div class="flex items-center justify-between mb-4">
-    <div class="avatar">
-      <div class="size-20 rounded-full border-2 shadow">
-        <%= render "shared/avatar", user:, class: "rounded-full size-full" %>
-      </div>
-    </div>
+  <div class="mb-4 flex items-center justify-between">
+    <span class="block size-20 flex-shrink-0 overflow-hidden rounded-full">
+      <%= render "shared/avatar", user:, class: "block h-full w-full rounded-full" %>
+    </span>
     <% if current_user.present? && current_user != user %>
       <% dropdown_button = capture do %>
-        <%= inline_svg_tag "icons/dot-horizontal.svg", class: 'w-4 h-4' %>
+        <span class="i-[tabler--dots] size-5 text-base-content/40"></span>
       <% end %>
       <%= render_dropdown button: dropdown_button do %>
-
         <% if current_user.block_user?(user) %>
           <%= link_to block_user_path(user.uid), 
             data: {
               turbo_method: :delete
             },
-            class: "cursor-pointer w-full block px-4 text-sm opacity-70 dark:text-white" do %>
+            class: "dropdown-item w-full block px-4 text-sm text-base-content/70" do %>
             <%= t('unblock_user') %>
           <% end %>
         <% else %>
@@ -24,7 +24,7 @@
             data: { 
               turbo_frame: :modal,
             }, 
-            class: "cursor-pointer w-full block px-4 text-sm opacity-70 text-[#F3463F]" do %>
+            class: "dropdown-item w-full block px-4 text-sm text-error" do %>
             <%= t('block_user') %>
           <% end %>
         <% end %>
@@ -32,46 +32,47 @@
     <% end %>
   </div>
 
-  <div class="truncate mb-4">
-    <div class="flex items-center mb-1 space-x-2">
+  <div class="mb-4 truncate">
+    <div class="mb-1 flex items-center space-x-2">
       <%= link_to user.name,
         user_path(user),
-        class: "tooltip truncate text-lg font-bold sm:text-xl [--placement:top]",
+        class: "font-display tooltip truncate text-lg font-medium text-base-content sm:text-xl [--placement:top]",
         data: { tip: user.name, turbo_frame: "_top" } %>
-      <div class="flex items-center space-x-2 min-w-max">
-        <% if user.twitter_connected? %>
-          <%= link_to user.twitter_profile_url, target: "_blank" do %>
-            <%= image_tag 'twitter.ico', class: 'w-4 h-4 rounded-full' %>
-          <% end %>
+      <% if user.twitter_connected? %>
+        <%= link_to user.twitter_profile_url, target: "_blank" do %>
+          <%= image_tag 'twitter.ico', class: 'w-4 h-4 rounded-full' %>
         <% end %>
-      </div>
+      <% end %>
     </div>
     <%= render "users/user_uid", user: user %>
   </div>
 
-  <div class="grid grid-cols-2 xl:grid-cols-3 gap-4 mb-4 text-sm">
-    <%= link_to user_subscribe_users_path(user), 
-      data: { 
-        controller: 'prefetch', 
-        turbo_frame: :modal 
-      }, 
-      class:"flex items:center space-x-1" do %>
-      <span class="opacity-75"><%= t('subscribing') %>:</span> 
-      <span class="text-mono"><%= user.subscribing_count %></span>
-    <% end %>
-
+  <div class="mb-4 flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-base-content/60">
+    <span><span class="font-medium text-base-content"><%= user.articles_count %></span> <%= t('articles_count') %></span>
     <%= link_to user_subscribe_by_users_path(user.uid), 
       data: { 
         controller: 'prefetch',
         turbo_frame: :modal
       }, 
-      class:"flex items:center space-x-1" do %>
-      <span class="opacity-75"><%= t('subscribers') %>:</span> 
-      <span class="text-mono"><%= user.subscribers_count %></span>
+      class: "hover:text-base-content" do %>
+      <span class="font-medium text-base-content"><%= user.subscribers_count %></span> <%= t('subscribers') %>
+    <% end %>
+    <%= link_to user_subscribe_users_path(user), 
+      data: { 
+        controller: 'prefetch', 
+        turbo_frame: :modal 
+      }, 
+      class: "hover:text-base-content" do %>
+      <span class="font-medium text-base-content"><%= user.subscribing_count %></span> <%= t('subscribing') %>
     <% end %>
   </div>
 
-  <div class="text-sm opacity-75 mb-6 break-words">
+  <div class="mb-4 flex items-center gap-1.5 text-xs text-base-content/40">
+    <span class="i-[tabler--calendar] size-3.5"></span>
+    <span><%= t('joined_at') %> <%= l(user.created_at.to_date, format: :long) %></span>
+  </div>
+
+  <div class="mb-6 text-sm break-words text-base-content/70">
     <%= user.bio %>
   </div>
 
