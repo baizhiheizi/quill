@@ -68,3 +68,21 @@ blocked_reader:
   blocked_at: <%= 1.day.ago %>
   created_at: <%= 2.days.ago %>
   updated_at: <%= 2.days.ago %>
+
+author_zh:
+  uid: "300001"
+  name: 测试中文作者
+  mixin_uuid: f5555555-5555-4555-8555-555555555555
+  mixin_id: "300001"
+  locale: zh-CN
+  created_at: <%= 2.days.ago %>
+  updated_at: <%= 2.days.ago %>
+
+author_ja:
+  uid: "300002"
+  name: テスト日本語著者
+  mixin_uuid: a6666666-6666-4666-8666-666666666666
+  mixin_id: "300002"
+  locale: ja
+  created_at: <%= 2.days.ago %>
+  updated_at: <%= 2.days.ago %>

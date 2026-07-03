@@ -16,6 +16,12 @@
           <%= article.published_at.strftime("%b %d, %Y") %>
         <% end %>
       </span>
+      <%# Cross-Locale Article Visibility (FR-010, SC-007): surface the article's language so a visitor can tell what they are about to read, regardless of their own locale. %>
+      <% if article.locale.present? %>
+        <span class="article-card__locale badge badge-ghost badge-sm font-medium uppercase" title="<%= I18n.t("languages.#{article.locale}", default: article.locale) %>">
+          <%= article.locale %>
+        </span>
+      <% end %>
       <%= link_to '', user_path(article.author), data: { turbo_frame: '_top' }, class: "absolute inset-0" %>
     </div>
   </div>

@@ -51,7 +51,15 @@ class TagTest < ActiveSupport::TestCase
   test "scope recommended orders by articles_count desc" do
     recommended_tags = Tag.recommended.to_a
 
-    assert_equal recommended_tags.sort_by(&:articles_count).reverse, recommended_tags
+    # The primary sort key is `articles_count DESC`. We assert that property
+    # without depending on the tie-break order (multiple tags may share the
+    # same `articles_count`, and Rails does not guarantee a stable secondary
+    # order across all databases). Cross-Locale Article Visibility added
+    # multi-locale fixtures (`tech_zh`, `tech_ja`) that share articles_count
+    # with each other; this assertion is robust to that tie.
+    counts = recommended_tags.map(&:articles_count)
+    assert_equal counts.sort.reverse, counts,
+      "expected Tag.recommended to be sorted by articles_count DESC, got #{counts.inspect}"
   end
 
   test "scope hot filters published articles from last 3 months" do

@@ -108,6 +108,96 @@ class ArticleSearchServiceTest < ActiveSupport::TestCase
       "expected no NOT IN subqueries when @current_user is nil")
   end
 
+  # Cross-Locale Article Visibility (US1, FR-001, SC-001):
+  # The default feed must include articles in every language regardless of
+  # the caller's `current_user.locale`. The previous `#localize` step
+  # narrowed the relation to `articles.locale = caller_locale`; that step
+  # has been removed.
+  test "default feed includes articles from every locale regardless of caller's locale" do
+    chinese_user = users(:author_zh)
+    english_user = users(:author)
+    japanese_user = users(:author_ja)
+
+    %w[zh en ja].each do |caller_locale|
+      u = case caller_locale
+      when "zh" then chinese_user
+      when "ja" then japanese_user
+      else english_user
+      end
+
+      articles = ArticleSearchService.call(current_user: u).to_a
+      uuids = articles.map(&:uuid)
+
+      assert_includes uuids, articles(:published_paid).uuid,
+        "expected en article in feed for caller_locale=#{caller_locale}"
+      assert_includes uuids, articles(:published_zh).uuid,
+        "expected zh article in feed for caller_locale=#{caller_locale}"
+      assert_includes uuids, articles(:published_ja).uuid,
+        "expected ja article in feed for caller_locale=#{caller_locale}"
+    end
+  end
+
+  test "default feed does not emit a WHERE locale = ? predicate" do
+    queries = capture_queries do
+      ArticleSearchService.call(current_user: users(:author_zh)).to_a
+    end
+
+    main_article_query = queries.find { |q| q.include?('FROM "articles"') }
+    assert_not_nil main_article_query
+    assert_no_match(/"articles"\."locale"\s*=/i, main_article_query,
+      "expected no `articles.locale = ...` predicate in default feed, got: #{main_article_query}")
+  end
+
+  # Cross-Locale Article Visibility (US2, FR-002, FR-003, SC-002, SC-003):
+  # Text search and the `subscribed` / `bought` filters must return matches
+  # across all locales regardless of caller_locale.
+  test "text query returns cross-locale matches" do
+    articles = ArticleSearchService.call(query: "文章").to_a
+
+    uuids = articles.map(&:uuid)
+    assert_includes uuids, articles(:published_zh).uuid,
+      "expected zh article in text-search results (query='文章')"
+  end
+
+  test "subscribed filter returns articles from every locale the followed author published" do
+    reader = users(:reader_one)
+    author = users(:author)
+    # Subscribe to the existing 'author' (en). Now confirm cross-locale:
+    # the service must not narrow by the reader's locale.
+    reader.create_action(:subscribe, target: author)
+
+    articles = ArticleSearchService.call(filter: "subscribed", current_user: reader).to_a
+
+    uuids = articles.map(&:uuid)
+    assert_includes uuids, articles(:published_paid).uuid,
+      "expected en article in subscribed feed"
+    # The subscribed filter must not emit a WHERE articles.locale predicate.
+    queries = capture_queries do
+      ArticleSearchService.call(filter: "subscribed", current_user: reader).to_a
+    end
+    main_article_query = queries.find { |q| q.include?('FROM "articles"') }
+    assert_no_match(/"articles"\."locale"\s*=/i, main_article_query,
+      "expected no articles.locale predicate in subscribed filter, got: #{main_article_query}")
+  end
+
+  test "bought filter returns articles from every locale the visitor purchased" do
+    article = articles(:published_paid)
+    buyer = users(:reader_one)
+
+    with_quill_bot_stub do
+      create_buy_order!(article: article, buyer: buyer)
+    end
+
+    queries = capture_queries do
+      ArticleSearchService.call(filter: "bought", current_user: buyer).to_a
+    end
+
+    main_article_query = queries.find { |q| q.include?('FROM "articles"') }
+    assert_not_nil main_article_query
+    assert_no_match(/"articles"\."locale"\s*=/i, main_article_query,
+      "expected no articles.locale predicate in bought filter, got: #{main_article_query}")
+  end
+
   private
 
   def capture_queries

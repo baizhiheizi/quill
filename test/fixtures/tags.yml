@@ -16,3 +16,17 @@ web3:
   locale: en
   created_at: <%= 2.days.ago %>
   updated_at: <%= 2.days.ago %>
+
+tech_zh:
+  name: 区块链
+  locale: zh
+  articles_count: 1
+  created_at: <%= 2.days.ago %>
+  updated_at: <%= 2.days.ago %>
+
+tech_ja:
+  name: ブロックチェーン
+  locale: ja
+  articles_count: 1
+  created_at: <%= 2.days.ago %>
+  updated_at: <%= 2.days.ago %>
