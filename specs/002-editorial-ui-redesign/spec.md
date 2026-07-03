@@ -25,7 +25,7 @@ As a reader (logged in or not), I land on the home page and see a clean, minimal
 1. **Given** I am a logged-out visitor, **When** I open the home page, **Then** I see a compact masthead with a brief value-proposition message, followed immediately by the article feed.
 2. **Given** I am a logged-in reader, **When** I open the home page, **Then** I see the compact masthead (without the value-proposition message) followed immediately by the article feed.
 3. **Given** the feed is displayed, **When** I scan it, **Then** each article row shows its title, a short excerpt, author, relative publish date, a thumbnail, and whether it is paid (with price) or free.
-4. **Given** an article in the feed carries an early-reader reward for me personally, **When** I view the feed, **Then** that reward status is visible inline on the row without needing to open the article.
+4. **Given** an article in the feed has accumulated early-reader reward value, **When** I view the feed, **Then** that reward/revenue indicator is visible inline on the row (as informational, platform-wide data — not a personalized-to-me figure) without needing to open the article.
 
 ---
 
@@ -110,7 +110,7 @@ As a visitor, when I view a curated collection, I see the collection's context (
 - **FR-001**: The home page MUST present a compact masthead (not a full-height promotional banner) with the article feed visible immediately below it.
 - **FR-002**: The home page MUST show a single, brief value-proposition message near the masthead only to logged-out visitors; logged-in readers MUST NOT see this message.
 - **FR-003**: Every article preview surfaced in the feed, search results, author profile, and collection pages MUST use one consistent list-row presentation showing: title, short excerpt, author, relative publish date, thumbnail, and price status (amount or free).
-- **FR-004**: An article's early-reader reward status, when applicable to the current viewer, MUST be visible inline within its list row without requiring the article to be opened.
+- **FR-004**: An article's early-reader reward/revenue indicator (informational, shown to all viewers) MUST be visible inline within its list row without requiring the article to be opened.
 - **FR-005**: Topic tags on articles MUST use one consistent neutral visual style, not per-category color coding.
 - **FR-006**: When a reader reaches the paid boundary of a locked article, the visible content MUST fade out gradually and present an inline unlock prompt with price and action, rather than an abrupt cutoff or full-page interstitial.
 - **FR-007**: The article reading page MUST present content in a single focused column without a persistent side panel; the unlock/support action MUST remain reachable via a compact, non-intrusive control while reading.
@@ -146,5 +146,5 @@ As a visitor, when I view a curated collection, I see the collection's context (
 - The visual design system (colors, typography, layout patterns, and component treatments) approved in `docs/superpowers/specs/2026-07-03-ui-redesign-design.md` is the source of design truth for this feature; this spec defines the product-facing requirements that implementation must satisfy, not the visual system itself.
 - Author dashboard/studio, the article editor, the admin panel, and the wallet-connect/login modal internals are explicitly out of scope for this feature and retain their current presentation; only the trigger buttons that open the login modal are affected (visual restyling to match the new primary-action treatment).
 - This is a presentation-layer redesign: existing routes, underlying data models (Article, User, Collection, Order, Transfer, etc.), revenue-split logic, authentication, and infinite-scroll/pagination behavior are unchanged.
-- "Early-reader reward status" in FR-004/User Story 1 refers to the existing reward mechanic already computed by the platform; this feature only changes how/where that status is displayed, not how it is calculated.
+- "Early-reader reward indicator" in FR-004/User Story 1 refers to the existing platform-wide, informational revenue/reward figure already computed and displayed by the platform (currently `article.revenue_usd`) — it is not a per-viewer personalized figure. This feature only changes how it is presented, not how it is calculated. (Corrected during planning after inspecting the current `articles/_card` partial.)
 - No new performance budget was specified; standard expectations for a content-heavy web page (fast-perceived load, no layout shift from font loading) apply.
