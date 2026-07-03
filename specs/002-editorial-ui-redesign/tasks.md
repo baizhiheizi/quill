@@ -140,10 +140,10 @@ Single-project Rails monolith (existing structure) — no new top-level director
 
 ### Implementation for User Story 5
 
-- [ ] T035 [P] [US5] Restyle `app/views/collections/show.html.erb` and `app/views/collections/_detail.html.erb`: collection header (title, description, curator byline) to match the new visual system
-- [ ] T036 [US5] Confirm the empty-collection state in `app/views/collections/articles/index.html.erb` (via `shared/_empty.html.erb`) matches FR-014's friendly-message requirement
-- [ ] T037 [P] [US5] Migrate icons touched by this story to `i-tabler-*`: `icons/share-solid.svg`, `icons/exclamation-circle-solid.svg` in `app/views/collections/show.html.erb`
-- [ ] T038 [US5] Manual QA: run the "Story 5" section of `quickstart.md` (collection header, article-list reuse, empty state)
+- [X] T035 [P] [US5] Restyle `app/views/collections/show.html.erb` and `app/views/collections/_detail.html.erb`: collection header (title, description, curator byline) to match the new visual system
+- [X] T036 [US5] Confirm the empty-collection state in `app/views/collections/articles/index.html.erb` (via `shared/_empty.html.erb`) matches FR-014's friendly-message requirement
+- [X] T037 [P] [US5] Migrate icons touched by this story to `i-tabler-*`: `icons/share-solid.svg`, `icons/exclamation-circle-solid.svg` in `app/views/collections/show.html.erb`
+- [X] T038 [US5] Manual QA: run the "Story 5" section of `quickstart.md` (collection header, article-list reuse, empty state)
 
 **Checkpoint**: All 5 user stories independently functional.
 

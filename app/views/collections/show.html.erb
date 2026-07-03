@@ -1,47 +1,48 @@
 <div class="max-w-full">
-  <div class="mb-12">
-    <div class="lg:grid grid-cols-2 lg:gap-8 mb-8">
-      <div class="w-full mb-8 lg:mb-0">
-        <%= remote_image_tag @collection.cover_url, class: "object-contain object-center w-full rounded-2xl" %>
+  <div class="mb-10">
+    <div class="mb-8 grid grid-cols-1 gap-8 lg:grid-cols-2">
+      <div class="w-full overflow-hidden rounded-2xl">
+        <%= remote_image_tag @collection.cover_url, class: "object-contain object-center w-full" %>
       </div>
-      <div class="lg:order-first">
+      <div>
         <%= render "collections/detail", collection: @collection %>
       </div>
     </div>
 
-    <div class="mb-6">
-      <div class="mb-2 text-sm opacity-75">
+    <div>
+      <div class="mb-2 text-sm text-base-content/50">
         <%= t('collection_introduction') %>
       </div>
-      <div class="prose max-w-none dark:prose-invert bg-base-200 p-4 rounded text-base-content">
+      <div class="prose max-w-none rounded-lg bg-base-200 p-4 text-base-content dark:prose-invert">
         <%= MarkdownRenderService.call(@collection.description).html_safe %>
       </div>
     </div>
-
   </div>
 
-  <%= turbo_frame_tag "articles", 
-    src: collection_articles_path(@collection.uuid),
-    data: {
-      turbo_frame: "_top"
-    },
-    loading: :lazy do %>
-    <%= render "shared/loading" %>
-  <% end %>
+  <div class="border-t border-base-300 pt-8">
+    <%= turbo_frame_tag "articles", 
+      src: collection_articles_path(@collection.uuid),
+      data: {
+        turbo_frame: "_top"
+      },
+      loading: :lazy do %>
+      <%= render "shared/loading" %>
+    <% end %>
+  </div>
 </div>
 
 <%= content_for :topbar do %>
-  <div class="h-12 flex items-center justify-between">
+  <div class="flex h-12 items-center justify-between">
     <%= link_to root_path, class: "block px-6 py-2" do %>
-      <%= image_tag 'logo.svg', class: "w-auto h-8" %>
+      <%= image_tag 'logo.svg', class: "h-8 w-auto" %>
     <% end %>
     <% if current_user.present? %>
       <%= link_to collection_share_path(@collection.uuid), 
         data: {
           turbo_frame: :modal
         },
-        class: "block px-6 py-3 #{from_mixin_messenger? ? 'mr-24' : ''}" do %>
-        <%= inline_svg_tag 'icons/share-solid.svg', class: 'w-6 h-6 text-primary' %>
+        class: "block px-6 py-3 text-base-content/60 #{from_mixin_messenger? ? 'mr-24' : ''}" do %>
+        <span class="i-[tabler--share] size-5"></span>
       <% end %>
     <% end %>
   </div>
@@ -50,8 +51,8 @@
 <% if @collection.author.blocked? && current_user != @collection.author %>
   <%= turbo_frame_tag 'modal' do %>
     <%= render_modal title: t('alert') do %>
-      <div class="alert alert-error max-w-md mx-auto">
-        <%= inline_svg_tag "icons/exclamation-circle-solid.svg", class: "w-6 h-6 shrink-0" %>
+      <div class="alert alert-error mx-auto max-w-md">
+        <span class="i-[tabler--alert-circle] size-6 flex-shrink-0"></span>
         <span><%= t('alert_for_blocked_user') %></span>
       </div>
     <% end %>

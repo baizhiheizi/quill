@@ -1,45 +1,38 @@
-<div class="flex items-start space-x-4 justify-between">
-  <div class="flex-1 font-semibold text-2xl lg:text-3xl mb-6 text-ellipsis overflow-hidden">
+<div class="mb-5 flex items-start justify-between gap-4">
+  <h1 class="font-display flex-1 text-2xl leading-tight font-medium text-ellipsis text-base-content lg:text-3xl">
     <%= collection.name %>
-  </div>
-  <div class="hidden sm:flex justify-end">
-    <%= link_to collection_share_path(collection.uuid), 
-      data: {
-        turbo_frame: :modal
-      },
-      class: "flex items-center space-x-1" do %>
-      <%= inline_svg_tag 'icons/share-solid.svg', class: 'w-5 h-5 lg:w-6 lg:h-6 text-primary' %>
-    <% end %>
-  </div>
+  </h1>
+  <%= link_to collection_share_path(collection.uuid), 
+    data: {
+      turbo_frame: :modal
+    },
+    class: "relative z-10 hidden items-center text-base-content/50 transition-colors hover:text-base-content sm:flex" do %>
+    <span class="i-[tabler--share] size-5"></span>
+  <% end %>
 </div>
 
-<div class="flex items-center space-x-2 w-36 mb-6">
-  <div class="avatar">
-    <div class="size-10 rounded-full">
-      <%= render "shared/avatar", user: collection.author, thumb: true, class: "rounded-full" %>
-    </div>
-  </div>
-  <div class="truncate">
-    <div class="font-bold truncate overflow-hidden">
-      <%= collection.author.name %>
-    </div>
+<div class="relative mb-6 flex items-center gap-3 truncate">
+  <span class="block size-10 flex-shrink-0 overflow-hidden rounded-full">
+    <%= render "shared/avatar", user: collection.author, thumb: true, class: "block h-full w-full rounded-full" %>
+  </span>
+  <div class="truncate leading-tight">
+    <div class="truncate text-base font-semibold text-base-content"><%= collection.author.name %></div>
     <%= render "users/user_uid", user: collection.author %>
   </div>
+  <%= link_to '', user_path(collection.author), data: { controller: 'prefetch' }, class: "absolute inset-0" %>
 </div>
 
 <div class="mb-6">
-  <div class="flex items-center space-x-2 mb-4">
-    <%= remote_image_tag collection.currency.icon_url, class: "w-6 h-6 rounded-full" %>
-    <div class="">
-      <span class="text-xl font-bold font-serif"><%= collection.price_tag %></span>
-      <span class="text-sm opacity-60">
-        ≈$<%= collection.price_usd %>
-      </span>
-    </div>
+  <div class="mb-4 flex items-center gap-2">
+    <%= remote_image_tag collection.currency.icon_url, class: "size-6 rounded-full" %>
+    <span class="font-display text-xl font-medium text-base-content"><%= collection.price_tag %></span>
+    <span class="text-sm text-base-content/40">
+      ≈$<%= collection.price_usd %>
+    </span>
   </div>
 
   <% if !collection.authorized?(current_user) %>
-    <div class="relative w-full lg:w-48 btn btn-primary btn-lg rounded-full">
+    <div class="btn btn-primary relative w-full rounded-full font-medium lg:w-48">
       <span><%= t('buy_collection') %></span>
       <% if current_user.present? && current_user.default_payment.present? %>
         <%= form_for PreOrder.new(
@@ -67,9 +60,9 @@
       <% end %>
     </div>
   <% elsif collection.author != current_user %>
-    <div class="relative flex items-center space-x-1 justify-end">
-      <%= inline_svg_tag "icons/check-circle-solid.svg", class: "w-6 h-6 text-success" %>
-      <span class="opacity-75"><%= t('subscribed') %></span>
+    <div class="relative flex items-center gap-1.5 justify-end text-success">
+      <span class="i-[tabler--circle-check] size-5"></span>
+      <span class="text-base-content/70"><%= t('subscribed') %></span>
     </div>
   <% end %>
 </div>
