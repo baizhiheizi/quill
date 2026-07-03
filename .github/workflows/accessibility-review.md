@@ -43,7 +43,7 @@ timeout-minutes: 15
 
 steps:
   - name: Checkout repository
-    uses: actions/checkout@v6.0.3
+    uses: actions/checkout@v7.0.0
     with:
       fetch-depth: 0
       persist-credentials: false
