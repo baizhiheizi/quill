@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class SearchController < ApplicationController
+  layout "public", only: :index
+
   def index
     @query = params[:query].to_s.strip
 

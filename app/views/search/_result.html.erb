@@ -24,7 +24,7 @@
 
   <% tags.each do |tag| %>
     <%= link_to articles_path(tag: tag.name), class: "cursor-pointer flex items-center space-x-4 py-2 px-4 border-b border-base-content/5 hover:font-bold" do %>
-      <div class="text-lg h-8 my-2 mr-4 px-2 py-1 max-w-full truncate rounded tag-style-<%= tag.id % 6 %>">
+      <div class="tag-chip text-sm h-8 my-2 mr-4 max-w-full truncate px-3 py-1">
         <%= tag.name %>
       </div>
     <% end %>

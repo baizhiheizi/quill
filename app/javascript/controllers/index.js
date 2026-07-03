@@ -49,6 +49,9 @@ application.register("infinite-scroll", InfiniteScrollController);
 import LoadMoreController from "./load_more_controller";
 application.register("load-more", LoadMoreController);
 
+import MastheadController from "./masthead_controller";
+application.register("masthead", MastheadController);
+
 import FlyonuiModalController from "./flyonui_modal_controller";
 application.register("modal-component", FlyonuiModalController);
 
@@ -84,6 +87,9 @@ application.register(
 
 import PrefetchController from "./prefetch_controller";
 application.register("prefetch", PrefetchController);
+
+import PaywallFadeController from "./paywall_fade_controller";
+application.register("paywall-fade", PaywallFadeController);
 
 import PreviewUploadController from "./preview_upload_controller";
 application.register("preview-upload", PreviewUploadController);

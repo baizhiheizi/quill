@@ -2,6 +2,7 @@
 
 class UsersController < ApplicationController
   before_action :load_user
+  layout "public", only: :show
 
   def show
     @tab = params[:tab] || "published"

@@ -1,95 +1,94 @@
-<div class="group relative py-6 mb-2 border-b border-base-content/10 transition-colors hover:bg-base-200/50 -mx-4 px-4 sm:mx-0 sm:px-4 sm:-mx-4 sm:rounded-2xl sm:hover:bg-base-200/50">
-  <div class="flex items-center justify-between mb-3 relative z-10">
-    <div class="flex items-center space-x-2">
-      <div class="avatar flex-shrink-0">
-        <div class="size-6 rounded-full">
-          <%= render "shared/avatar", user: article.author, thumb: true, class: "rounded-full block" %>
-        </div>
-      </div>
-      <div class="flex flex-col sm:flex-row sm:items-center text-sm">
-        <span class="font-medium text-base-content sm:mr-2 truncate max-w-[120px] sm:max-w-none"><%= article.author.name %></span>
-        <%= render "users/user_uid", user: article.author %>
-      </div>
-      <span class="hidden sm:inline text-base-content/30 mx-1">•</span>
-      <span class="text-sm text-base-content/50 truncate">
-        <%= render_time_format datetime: article.published_at.rfc3339, format: 'date' do %>
-          <%= article.published_at.strftime("%b %d, %Y") %>
-        <% end %>
+<%# "Minimal List" row (design doc §6.1) — the single shared article preview
+    component reused by the home feed, search results (via the same feed),
+    author profile articles tab, and collection articles (research.md). %>
+<article class="group relative border-b border-base-300 py-5 sm:py-6" data-article-card>
+  <div class="relative z-10 mb-2 flex flex-wrap items-center gap-1.5">
+    <% if article.free? %>
+      <span class="tag-chip inline-flex items-center px-2 py-0.5 text-[11px] font-medium">
+        <%= t('free', default: 'Free') %>
       </span>
-      <%# Cross-Locale Article Visibility (FR-010, SC-007): surface the article's language so a visitor can tell what they are about to read, regardless of their own locale. %>
-      <% if article.locale.present? %>
-        <span class="article-card__locale badge badge-ghost badge-sm font-medium uppercase" title="<%= I18n.t("languages.#{article.locale}", default: article.locale) %>">
-          <%= article.locale %>
-        </span>
-      <% end %>
-      <%= link_to '', user_path(article.author), data: { turbo_frame: '_top' }, class: "absolute inset-0" %>
-    </div>
+    <% else %>
+      <span class="inline-flex items-center rounded-full bg-base-content px-2 py-0.5 text-[11px] font-medium text-base-100">
+        <%= article.price_tag %>
+      </span>
+    <% end %>
+
+    <% article.tags.first(3).each do |tag| %>
+      <%= link_to tag.name, articles_path(tag: tag.name),
+        data: { controller: 'prefetch', turbo_frame: '_top' },
+        class: "tag-chip inline-flex max-w-[8rem] truncate px-2 py-0.5 text-[11px] font-medium transition-colors hover:text-base-content" %>
+    <% end %>
+
+    <%# Cross-Locale Article Visibility (FR-010, SC-007): surface the article's language regardless of the viewer's own locale. %>
+    <% if article.locale.present? %>
+      <span class="article-card__locale badge badge-ghost badge-xs font-medium uppercase" title="<%= I18n.t("languages.#{article.locale}", default: article.locale) %>">
+        <%= article.locale %>
+      </span>
+    <% end %>
   </div>
 
   <%= link_to user_article_path(article.author, article),
     data: { controller: "prefetch", turbo_frame: "_top" },
-    class: "flex flex-col sm:flex-row sm:items-start sm:space-x-6 mb-4 cursor-pointer relative z-0 block" do %>
-    <div class="flex-1 h-full mb-4 sm:mb-0">
-      <h2 class="text-xl sm:text-2xl font-bold font-serif text-base-content mb-2 leading-tight group-hover:underline decoration-primary decoration-2 underline-offset-4">
+    class: "relative z-10 flex items-start gap-4 sm:gap-6" do %>
+    <div class="min-w-0 flex-1">
+      <h2 class="font-display line-clamp-2 text-base leading-snug font-medium text-base-content decoration-1 underline-offset-2 group-hover:underline sm:text-lg">
         <%= article.title %>
       </h2>
-      <div class="text-base break-words text-ellipsis overflow-hidden line-clamp-3 text-base-content/70 leading-relaxed font-serif"> 
+      <p class="mt-1 line-clamp-1 text-sm text-base-content/60">
         <%= article.intro %>
-      </div>
+      </p>
     </div>
+
     <% if article.thumb_url.present? %>
-      <div class="sm:flex-shrink-0">
-        <%= remote_image_tag article.thumb_url, class: "w-full sm:w-40 sm:h-28 rounded-lg object-cover border border-base-content/5", lazy: true %>
+      <div class="size-20 flex-shrink-0 overflow-hidden rounded-lg bg-base-200 sm:size-24">
+        <%= remote_image_tag article.thumb_url, class: "h-full w-full object-cover", lazy: true %>
+      </div>
+    <% else %>
+      <div class="hidden size-20 flex-shrink-0 items-center justify-center rounded-lg bg-base-200 text-base-content/20 sm:flex sm:size-24">
+        <span class="i-[tabler--photo] size-6"></span>
       </div>
     <% end %>
   <% end %>
 
-  <div class="flex items-center justify-between mt-2 relative z-10">
-    <div class="flex items-center space-x-2">
-      <% if article.free? %>
-        <span class="badge badge-success badge-sm font-medium">Free</span>
-      <% else %>
-        <div class="flex items-center space-x-1.5 bg-base-content/5 px-2 py-1 rounded-md text-xs font-medium text-base-content/80">
-          <%= remote_image_tag article.currency.icon_url, class: "w-3.5 h-3.5 rounded-full", lazy: true %>
-          <span><%= article.price_tag %></span>
-        </div>
+  <div class="relative z-10 mt-2.5 flex flex-wrap items-center gap-x-3 gap-y-1.5 text-xs text-base-content/50">
+    <span class="relative flex items-center gap-1.5">
+      <span class="block size-5 flex-shrink-0 overflow-hidden rounded-full">
+        <%= render "shared/avatar", user: article.author, thumb: true, class: "block h-full w-full rounded-full" %>
+      </span>
+      <span class="max-w-[7rem] truncate font-medium text-base-content/70"><%= article.author.name %></span>
+      <%= link_to '', user_path(article.author), data: { turbo_frame: '_top' }, class: "absolute inset-0" %>
+    </span>
+
+    <span class="truncate">
+      <%= render_time_format datetime: article.published_at.rfc3339, format: 'date' do %>
+        <%= article.published_at.strftime("%b %d, %Y") %>
       <% end %>
+    </span>
 
-      <div class="hidden sm:flex items-center space-x-2 ml-4">
-        <% article.tags.first(2).each do |tag| %>
-          <%= link_to articles_path(tag: tag.name), 
-            data: { controller: 'prefetch', turbo_frame: "_top" }, 
-            class: "text-xs px-2 py-0.5 rounded-full bg-base-content/5 text-base-content/60 hover:text-base-content hover:bg-base-content/10 transition-colors" do %>
-            <%= tag.name %>
-          <% end %>
-        <% end %>
-      </div>
-    </div>
+    <%# Aggregate, platform-wide early-reader reward figure — not personalized (research.md, FR-004). %>
+    <% if article.revenue_usd.to_f.positive? %>
+      <span class="tooltip flex items-center gap-1 text-reward [--placement:top]" data-tip="Early Reader Rewards">
+        <span class="i-[tabler--coin] size-3.5"></span>
+        <span><%= article.revenue_usd.round(2) %></span>
+      </span>
+    <% end %>
 
-    <div class="flex items-center space-x-5 text-base-content/40">
-      <div class="flex items-center space-x-1.5 hover:text-primary transition-colors cursor-pointer tooltip" data-tip="Early Reader Rewards">
-        <%= inline_svg_tag 'icons/income-solid.svg', class: 'w-4 h-4' %>
-        <span class="text-xs font-medium"><%= article.revenue_usd.round(2) %></span>
-      </div>
-      <div class="flex items-center space-x-1.5 hover:text-primary transition-colors cursor-pointer">
-        <%= inline_svg_tag 'icons/comment-solid.svg', class: 'w-4 h-4' %>
-        <span class="text-xs font-medium"><%= article.comments_count %></span>
-      </div>
+    <span class="ml-auto flex items-center gap-3">
+      <span class="flex items-center gap-1">
+        <span class="i-[tabler--message-circle] size-3.5"></span>
+        <span><%= article.comments_count %></span>
+      </span>
       <% if article.upvote_ratio.present? %>
-        <div class="flex items-center space-x-1.5 hover:text-primary transition-colors cursor-pointer">
-          <% if (article.upvote_ratio.to_i / 100.0) > 0.6 %>
-            <%= inline_svg_tag 'icons/like-solid.svg', class: 'w-4 h-4' %>
-          <% else %>
-            <%= inline_svg_tag 'icons/dislike-solid.svg', class: 'w-4 h-4' %>
-          <% end %>
-          <span class="text-xs font-medium"><%= article.upvote_ratio %></span>
-        </div>
+        <span class="flex items-center gap-1">
+          <span class="<%= (article.upvote_ratio.to_i / 100.0) > 0.6 ? 'i-[tabler--thumb-up]' : 'i-[tabler--thumb-down]' %> size-3.5"></span>
+          <span><%= article.upvote_ratio %></span>
+        </span>
       <% end %>
-      <%= link_to article_share_path(article_uuid: article.uuid), 
+      <%= link_to article_share_path(article_uuid: article.uuid),
         data: { turbo_frame: :modal },
-        class: "flex items-center space-x-1.5 hover:text-primary transition-colors cursor-pointer" do %>
-        <%= inline_svg_tag 'icons/share-solid.svg', class: 'w-4 h-4' %>
+        class: "relative z-10 flex items-center hover:text-base-content" do %>
+        <span class="i-[tabler--share] size-3.5"></span>
       <% end %>
-    </div>
+    </span>
   </div>
-</div>
+</article>

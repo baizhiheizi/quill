@@ -3,7 +3,7 @@
 class ArticlesController < ApplicationController
   before_action :authenticate_user!, only: %i[new edit update update_content]
   before_action :load_article, only: %i[edit update]
-  layout "editor", only: %i[new edit]
+  layout :public_or_editor_layout
 
   def index
     @query = params[:query]
@@ -88,6 +88,15 @@ class ArticlesController < ApplicationController
   end
 
   private
+
+  # Editorial UI redesign: `new`/`edit` keep the distraction-free editor
+  # shell; every other action (index/show/share/etc.) uses the new
+  # masthead-based public layout. Rails' `layout` macro doesn't merge across
+  # multiple calls, so this replaces the old `layout "editor", only: %i[new edit]`
+  # with a single conditional method rather than a second competing call.
+  def public_or_editor_layout
+    action_name.in?(%w[new edit]) ? "editor" : "public"
+  end
 
   def create_article_params
     params

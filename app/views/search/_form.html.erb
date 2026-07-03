@@ -6,8 +6,8 @@
     remote: false,
   },
   class: "relative w-full" do |form| %>
-  <div class="absolute inset-y-0 left-0 flex items-center pl-4">
-    <%= inline_svg_tag "icons/search.svg", class: "w-6 h-6" %>
+  <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5">
+    <span class="i-[tabler--search] size-4 text-base-content/40"></span>
   </div>
   <%= form.text_field :query, 
     placeholder: t('search'), 
@@ -16,12 +16,12 @@
       search_target: "input",
       action: "input->search#submit",
     },
-    class: "input w-full rounded-full border-none bg-base-200 px-12 py-2 focus:ring-0 sm:py-3" %>
+    class: "input w-full rounded-full border-none bg-base-200 px-10 py-2 text-sm focus:ring-1 focus:ring-primary/40" %>
   <%= form.hidden_field :filter, value: :lately %> 
   <%= form.submit 'search', class:"hidden" %>
-  <div class="absolute inset-y-0 right-0 flex items-center pr-2">
-    <button class="hidden cursor-pointer" data-search-target="clearButton" data-action="search#clear">
-      <%= inline_svg_tag "icons/close.svg", class: "w-6 h-6 opacity-50" %>
+  <div class="absolute inset-y-0 right-0 flex items-center pr-3">
+    <button class="hidden cursor-pointer text-base-content/40 hover:text-base-content" data-search-target="clearButton" data-action="search#clear">
+      <span class="i-[tabler--x] size-4"></span>
     </button>
   </div>
   <div id="search_result_list"></div>

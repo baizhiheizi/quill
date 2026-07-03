@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<% @page_title = @page_title.presence || Settings.page_title %>
+<% @page_description ||= Settings.page_description %>
+<% @page_keywords ||= Settings.page_keywords %>
+<% @page_image ||= asset_url('article-poster-bg.png') %>
+
+<html lang="<%= I18n.locale %>" data-theme="quill">
+  <head>
+    <title><%= @page_title %></title>
+    <meta
+      name='viewport'
+      content='minimum-scale=1, initial-scale=1, width=device-width, user-scalable=no, shrink-to-fit=no, viewport-fit=cover'
+    />
+    <meta name="theme-color" content="#fff" />
+
+    <meta name='title' content="<%= @page_title %>">
+    <meta name='keywords' content="<%= @page_keywords %>">
+    <meta name='description' content="<%= @page_description %>">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@<%= Settings.twitter_account %>" />
+    <meta name="twitter:creator" content="@<%= Settings.twitter_account %>" />
+    <meta name="twitter:title" content="<%= @page_title %>">
+    <meta name="twitter:description" content="<%= @page_description %>">
+    <meta name="twitter:image" content="<%= @page_image %>">
+
+    <meta property="og:url" content="<%= request.original_url %>" />
+    <meta property="og:title" content="<%= @page_title %>" />
+    <meta property="og:description" content="<%= @page_description %>" />
+    <meta property="og:image" content="<%= @page_image %>" />
+
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <% if Rails.env.development? %>
+      <script src="https://unpkg.com/vconsole@latest/dist/vconsole.min.js"></script>
+      <script>
+        // VConsole will be exported to `window.VConsole` by default.
+        if (window.VConsole) {
+          let vConsole = new window.VConsole();
+        }
+      </script>
+    <% end %>
+
+    <% if current_user.blank? %>
+      <script>
+        // Ensure to clear session before login;
+        // Avoid stange behavior on Android Mixin Webview
+        document.cookie = "_quill_sessions=; Max-Age=0"
+      </script>
+    <% end %>
+
+    <%# Editorial redesign type pairing (§4.2): serif display for headlines
+        (Newsreader/Noto Serif SC), sans for UI + body (Inter/Noto Sans SC). %>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,500;0,600;1,500&family=Noto+Serif+SC:wght@500;600&family=Inter:wght@400;500;600&family=Noto+Sans+SC:wght@400;500;600&display=swap" rel="stylesheet">
+    <%= favicon_link_tag "favicon.svg" %>
+    <script>
+      (function () {
+        var theme = localStorage.theme;
+        if (theme === 'dark' || (!theme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+          document.documentElement.dataset.theme = 'quill-dark';
+          document.documentElement.classList.add('dark');
+        }
+      })();
+    </script>
+    <%= stylesheet_link_tag "application", media: "all", "data-turbo-track": "reload" %>
+    <%= javascript_include_tag "application", "data-turbo-track": "reload" %>
+  </head>
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-TNT4ZMVDL4"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-TNT4ZMVDL4');
+  </script>
+
+  <body class="min-h-screen overflow-x-hidden bg-base-100 text-base-content">
+    <%= render 'shared/masthead' %>
+    <%= render 'shared/tabbar' if browser.device.mobile? && @active_page.in?(%w[home readings authorings]) %>
+
+    <main class="mx-auto w-full max-w-3xl px-4 pt-6 pb-24 sm:px-6 sm:pb-16 lg:pt-10">
+      <%= yield %>
+    </main>
+
+    <%= turbo_frame_tag 'modal' %>
+
+    <div data-controller="darkmode">
+    </div>
+
+    <div class="fixed bottom-24 h-0 w-full px-4 z-50 flex flex-col justify-end" id="flashes">
+      <% flash.each do |type, message| %>
+        <%= render "flashes/flash", type: type, message: message %>
+      <% end %>
+    </div>
+
+    <div class="absolute bottom-0" id="toast-slot">
+      <div id="loading-toast" class="hidden fixed inset-0 z-50 flex items-center justify-center w-full bg-black/30">
+        <%= render "shared/loading" %>
+      </div>
+    </div>
+    <%= turbo_stream_from "user_#{current_user.mixin_uuid}" if current_user.present? %>
+  </body>
+</html>

@@ -1,6 +1,8 @@
-<div class="mb-16">
+<div class="mb-10">
   <div class="tooltip mb-6 truncate [--placement:top]" data-tip="<%= tag.name %>">
-    <%= ui_badge tag.name, variant: :primary, class: "my-2 mr-4 h-8 max-w-[6rem] truncate px-2 py-1 text-lg tag-style-#{tag.id % 6}" %>
+    <span class="tag-chip inline-flex max-w-[10rem] truncate px-3 py-1.5 text-base font-medium">
+      <%= tag.name %>
+    </span>
   </div>
   <div class='mb-2'>
     <%= render "subscribe_tags/subscribe_button", tag: tag, style: 'block' %>
