@@ -46,6 +46,15 @@ class ArticlesControllerTest < IntegrationTestCase
     assert_response :success
   end
 
+  test "show renders the fade/unlock prompt for a guest viewing a locked article" do
+    article = articles(:published_paid)
+
+    get user_article_path(article.author, article)
+
+    assert_response :success
+    assert_match "data-paywall-fade-target=\"unlock\"", response.body
+  end
+
   test "content fields partial renders lexxy editor" do
     html = ApplicationController.render(
       inline: <<~ERB,

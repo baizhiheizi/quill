@@ -1,39 +1,47 @@
-<div class="mb-10 prose-article relative">
-  <%= article.partial_content_as_html.html_safe %>
-  <div class="absolute bottom-0 h-14 max-h-full w-full bg-gradient-to-t from-base-100">
-  </div>
-</div>
-
-<div class="mb-8">
-  <div class="flex justify-center text-red-500 mb-4 text-sm">
-    - <%= t('more_to_read', percent: "#{((1 - article.free_content_ratio) * 100).round(1)} %") %> -
-  </div>
-
-  <div class="flex justify-center flex-wrap mb-4">
-    <span class="min-w-fit"><%= t('pay') %></span>
-    <span class="mx-2 text-red-500 font-bold min-w-fit"><%= article.price_tag %> (≈$<%= article.price_usd %>)</span>
-    <span class="min-w-fit"><%= t('to_continue_reading') %></span>
-  </div>
-  <div class="flex justify-center flex-wrap mb-6">
-    <span><%= t('and_receive_early_reader_revenue') %></span>
-    (<%= link_to t('rules'), rules_page_path, data: { controller: 'prefetch' }, class: "text-primary underline font-bold min-w-fit" %>)
-  </div>
-  <div class="text-base mb-6 rounded-lg border border-amber-400 bg-amber-50 dark:bg-amber-800 dark:border-amber-900 px-4 py-2">
-    <%= t('pay_warning') %>
+<%# Paywall fade boundary (FR-006, design doc §6.3): the last visible block
+    fades gradually via a CSS mask-image gradient instead of an abrupt
+    cutoff, with an inline unlock card overlapping the fade area. The
+    server-rendered boundary itself (`partial_content_as_html`) is unchanged —
+    only its presentation changes here. %>
+<div data-controller="paywall-fade" class="mb-10">
+  <div class="prose-article paywall-fade-mask relative" data-paywall-fade-target="fade">
+    <%= article.partial_content_as_html.html_safe %>
   </div>
 
-  <div class="flex justify-center mb-4">
-    <%= render "articles/buy_article_button", article: article %>
-  </div>
+  <div data-paywall-fade-target="unlock" class="relative z-10 mx-auto max-w-md rounded-2xl border border-base-300 bg-base-100 px-6 py-6 text-center shadow-sm">
+    <div class="mb-1 text-xs font-medium text-base-content/50">
+      <%= t('more_to_read', percent: "#{((1 - article.free_content_ratio) * 100).round(1)} %") %>
+    </div>
 
-  <div class='text-sm text-gray-500 text-center'>
-    <%= t('already_paid') %>? <%= t('try_to') %>
-    <% if current_user.present? %>
-      <%= link_to t('refresh'), user_article_path(article.author, article), data: { turbo: false }, class: "text-primary underline font-bold" %>
-    <% elsif from_mixin_messenger? %>
-      <%= link_to t('login'), login_path(return_to: article_url(article.uuid)), class: "text-primary underline font-bold" %>
-    <% else %>
-      <%= link_to t('login'), login_path(return_to: article_url(article.uuid)), data: { turbo_frame: :modal }, class: "text-primary underline font-bold" %>
-    <% end %>
+    <div class="font-display mb-1 text-lg leading-snug font-medium text-base-content">
+      <%= t('pay') %> <span class="text-primary"><%= article.price_tag %></span> <%= t('to_continue_reading') %>
+    </div>
+    <div class="mb-5 text-sm text-base-content/40">
+      ≈$<%= article.price_usd %>
+    </div>
+
+    <div class="mb-4 flex justify-center">
+      <%= render "articles/buy_article_button", article: article %>
+    </div>
+
+    <div class="mb-4 text-xs text-base-content/50">
+      <%= t('and_receive_early_reader_revenue') %>
+      (<%= link_to t('rules'), rules_page_path, data: { controller: 'prefetch' }, class: "font-medium text-primary underline" %>)
+    </div>
+
+    <div class="mb-4 rounded-lg border border-base-300 bg-base-200/60 px-3 py-2 text-xs text-base-content/60">
+      <%= t('pay_warning') %>
+    </div>
+
+    <div class="text-xs text-base-content/40">
+      <%= t('already_paid') %>? <%= t('try_to') %>
+      <% if current_user.present? %>
+        <%= link_to t('refresh'), user_article_path(article.author, article), data: { turbo: false }, class: "font-medium text-primary underline" %>
+      <% elsif from_mixin_messenger? %>
+        <%= link_to t('login'), login_path(return_to: article_url(article.uuid)), class: "font-medium text-primary underline" %>
+      <% else %>
+        <%= link_to t('login'), login_path(return_to: article_url(article.uuid)), data: { turbo_frame: :modal }, class: "font-medium text-primary underline" %>
+      <% end %>
+    </div>
   </div>
 </div>

@@ -1,20 +1,18 @@
-<article data-controller="photoswipe" class="photoswipe-gallery max-w-full mb-4">
-  <div class="mb-4">
-    <div class="mb-8">
-      <%= render "articles/header", article: @article %>
-    </div>
+<article data-controller="photoswipe" class="photoswipe-gallery mb-4 max-w-full">
+  <div class="mb-8">
+    <%= render "articles/header", article: @article %>
+  </div>
 
-    <div class="mb-8">
-      <%= render "articles/content", article: @article, user: current_user %>
-    </div>
+  <div class="mb-8">
+    <%= render "articles/content", article: @article, user: current_user %>
+  </div>
 
-    <div class="hidden sm:block mb-8">
-      <%= render partial: "articles/votes", locals: { article: @article, user: current_user } %>
-    </div>
+  <div class="mb-8 hidden sm:block">
+    <%= render partial: "articles/votes", locals: { article: @article, user: current_user } %>
+  </div>
 
-    <div id="article_<%= @article.uuid %>_buyers" class="mb-8">
-      <%= render "articles/buyers", article: @article, user: current_user %>
-    </div>
+  <div id="article_<%= @article.uuid %>_buyers" class="mb-8">
+    <%= render "articles/buyers", article: @article, user: current_user %>
   </div>
 
   <div data-controller="comment-form" class="mb-8">
@@ -25,28 +23,48 @@
     <% end %>
   </div>
 
-  <div class="xl:hidden mb-8 pt-8 border-t dark:border-white/5">
+  <%# No right-rail sidebar in the single-column public layout (T007/T024) —
+      the widget strip now renders inline for every viewport, once. %>
+  <div class="mb-8 border-t border-base-300 pt-8">
     <%= render "articles/widgets", article: @article %>
     <%= render "shared/footer" %>
   </div>
+
+  <%# Reserves room so the fixed sticky bar below never overlaps the footer. %>
+  <% if current_user != @article.author %>
+    <div class="hidden sm:block sm:h-16" aria-hidden="true"></div>
+  <% end %>
 </article>
 
-<%= content_for :sidebar do %>
-  <%= render "articles/widgets", article: @article %>
-  <%= render "shared/footer" %>
+<%# Reachable unlock/support control while reading (FR-007): mobile already
+    gets a persistent bottom bar above; desktop gets a slim sticky bar so the
+    buy/reward action stays reachable without scrolling back to the top. %>
+<% if current_user != @article.author %>
+  <div class="fixed inset-x-0 bottom-0 z-30 hidden border-t border-base-300 bg-base-100/95 backdrop-blur-sm sm:block">
+    <div class="mx-auto flex max-w-3xl items-center justify-between gap-4 px-6 py-3">
+      <span class="min-w-0 truncate text-sm font-medium text-base-content/70"><%= @article.title %></span>
+      <div class="flex-shrink-0">
+        <% if @article.authorized?(current_user) %>
+          <%= render "articles/reward_article_button", article: @article, size: 'sm' %>
+        <% else %>
+          <%= render "articles/buy_article_button", article: @article, size: 'sm' %>
+        <% end %>
+      </div>
+    </div>
+  </div>
 <% end %>
 
 <%= content_for :topbar do %>
-  <div class="h-12 flex items-center justify-between">
+  <div class="flex h-12 items-center justify-between">
     <%= link_to root_path, class: "block px-6 py-2" do %>
-      <%= image_tag 'logo.svg', class: "w-auto h-8" %>
+      <%= image_tag 'logo.svg', class: "h-8 w-auto" %>
     <% end %>
     <%= link_to article_share_path(article_uuid: @article.uuid), 
       data: {
         turbo_frame: :modal
       },
-      class: "block px-6 py-3 #{from_mixin_messenger? ? 'mr-24' : ''}" do %>
-      <%= inline_svg_tag 'icons/share-solid.svg', class: 'w-6 h-6 text-primary' %>
+      class: "block px-6 py-3 text-base-content/60 #{from_mixin_messenger? ? 'mr-24' : ''}" do %>
+      <span class="i-[tabler--share] size-5"></span>
     <% end %>
   </div>
 <% end %>
@@ -56,7 +74,7 @@
     <%= render_modal title: t('alert') do %>
       <div class="mb-4 flex justify-center">
         <div class="alert alert-error max-w-md">
-          <%= inline_svg_tag "icons/exclamation-circle-solid.svg", class: "w-6 h-6 shrink-0" %>
+          <span class="i-[tabler--alert-circle] size-6 flex-shrink-0"></span>
           <span><%= t('alert_for_blocked_user') %></span>
         </div>
       </div>

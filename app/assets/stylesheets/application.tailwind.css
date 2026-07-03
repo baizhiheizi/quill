@@ -192,8 +192,18 @@
   @apply rounded-full bg-base-200 text-base-content/70;
 }
 
+/* Body copy inherits the page's --font-sans by default (Typography's `prose`
+ * doesn't set a font-family) — matches FR-012's sans body-copy requirement.
+ * In-body headings get the serif --font-display for editorial hierarchy. */
 @utility prose-article {
-  @apply prose dark:prose-invert prose-blockquote:not-italic prose-img:mx-auto prose-img:rounded-md prose-img:shadow-md xl:prose-lg mx-auto max-w-none break-words prose-blockquote:border-primary prose-pre:rounded-lg prose-pre:border prose-pre:border-base-content/10 prose-pre:bg-base-200 prose-pre:text-base-content dark:prose-pre:bg-base-200 dark:prose-pre:text-base-content dark:prose-code:bg-base-300 dark:prose-code:text-base-content;
+  @apply prose dark:prose-invert prose-headings:font-display prose-blockquote:not-italic prose-img:mx-auto prose-img:rounded-md prose-img:shadow-md xl:prose-lg mx-auto max-w-none break-words prose-blockquote:border-primary prose-pre:rounded-lg prose-pre:border prose-pre:border-base-content/10 prose-pre:bg-base-200 prose-pre:text-base-content dark:prose-pre:bg-base-200 dark:prose-pre:text-base-content dark:prose-code:bg-base-300 dark:prose-code:text-base-content;
+}
+
+/* Paywall fade boundary (§6.3): gradual gradient fade instead of an abrupt
+ * cutoff, applied to the last visible content block of a locked article. */
+@utility paywall-fade-mask {
+  mask-image: linear-gradient(to bottom, black 0%, black 45%, transparent 96%);
+  -webkit-mask-image: linear-gradient(to bottom, black 0%, black 45%, transparent 96%);
 }
 
 @utility prose-comment {

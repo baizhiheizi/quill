@@ -83,15 +83,15 @@ Single-project Rails monolith (existing structure) — no new top-level director
 
 ### Implementation for User Story 2
 
-- [ ] T019 [P] [US2] Restyle `app/views/articles/_header.html.erb`: serif headline treatment for `article.title`, byline restyle
-- [ ] T020 [P] [US2] Restyle `app/views/articles/_content.html.erb`: body copy typography → sans (Inter/Noto Sans SC) per FR-012, replacing the current `prose` serif-leaning defaults
-- [ ] T021 [US2] Implement the fade-to-blur paywall boundary on the locked-content wrapper in `app/views/articles/_content.html.erb` (and/or `app/views/articles/show.html.erb`): CSS gradient `mask-image` (with `-webkit-mask-image` fallback) fading the last visible block, per the technique documented in `research.md`
-- [ ] T022 [P] [US2] Implement `app/javascript/controllers/paywall_fade_controller.js`: positions the inline unlock card at the fade boundary; must degrade gracefully (unlock card still visible, just unpositioned) with JS disabled
-- [ ] T023 [US2] Restyle `app/views/articles/_buy_article_button.html.erb` into a compact, sticky unlock/support control (replacing the old sidebar buy-widget framing) per FR-007
-- [ ] T024 [US2] Update `app/views/articles/show.html.erb` and `app/views/articles/_widgets.html.erb`: drop the `content_for :sidebar` right-rail framing (author card, references, related articles, hot tags) in favor of an inline placement below the article body, consistent with the single-column `public` layout from T007
-- [ ] T025 [P] [US2] Migrate icons touched by this story to `i-tabler-*`: `icons/share-solid.svg`, `icons/exclamation-circle-solid.svg` in `app/views/articles/_header.html.erb` and `app/views/articles/show.html.erb`
-- [ ] T026 [US2] Review `test/system/article_paywall_test.rb`: update selectors/assertions if this story's markup changes affect them; add an assertion that the fade/unlock prompt renders for a locked article the current user hasn't purchased, and does not render once purchased
-- [ ] T027 [US2] Manual QA: run the "Story 2" section of `quickstart.md` (free article, locked article at the paid boundary, already-purchased article, sticky control reachability while scrolling)
+- [X] T019 [P] [US2] Restyle `app/views/articles/_header.html.erb`: serif headline treatment for `article.title`, byline restyle
+- [X] T020 [P] [US2] Restyle `app/views/articles/_content.html.erb`: body copy typography → sans (Inter/Noto Sans SC) per FR-012, replacing the current `prose` serif-leaning defaults
+- [X] T021 [US2] Implement the fade-to-blur paywall boundary on the locked-content wrapper in `app/views/articles/_content.html.erb` (and/or `app/views/articles/show.html.erb`): CSS gradient `mask-image` (with `-webkit-mask-image` fallback) fading the last visible block, per the technique documented in `research.md`
+- [X] T022 [P] [US2] Implement `app/javascript/controllers/paywall_fade_controller.js`: positions the inline unlock card at the fade boundary; must degrade gracefully (unlock card still visible, just unpositioned) with JS disabled
+- [X] T023 [US2] Restyle `app/views/articles/_buy_article_button.html.erb` into a compact, sticky unlock/support control (replacing the old sidebar buy-widget framing) per FR-007
+- [X] T024 [US2] Update `app/views/articles/show.html.erb` and `app/views/articles/_widgets.html.erb`: drop the `content_for :sidebar` right-rail framing (author card, references, related articles, hot tags) in favor of an inline placement below the article body, consistent with the single-column `public` layout from T007
+- [X] T025 [P] [US2] Migrate icons touched by this story to `i-tabler-*`: `icons/share-solid.svg`, `icons/exclamation-circle-solid.svg` in `app/views/articles/_header.html.erb` and `app/views/articles/show.html.erb`
+- [X] T026 [US2] Review `test/system/article_paywall_test.rb`: update selectors/assertions if this story's markup changes affect them; add an assertion that the fade/unlock prompt renders for a locked article the current user hasn't purchased, and does not render once purchased
+- [X] T027 [US2] Manual QA: run the "Story 2" section of `quickstart.md` (free article, locked article at the paid boundary, already-purchased article, sticky control reachability while scrolling)
 
 **Checkpoint**: User Stories 1 AND 2 both work independently.
 

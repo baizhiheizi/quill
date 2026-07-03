@@ -1,89 +1,78 @@
 <% if article.collection.present? %>
-  <div class="bg-base-200 py-2 px-4 rounded-lg mb-6 flex items-center text-sm truncate">
-    <%= remote_image_tag article.collection.cover_url, class: "w-8 h-8 rounded-full" %>
-    <div class="ml-4 sm:ml-6 mr-2"><%= t('published_in') %></div>
-    <%= link_to article.collection.name, collection_path(article.collection_id), class: "font-bold truncate" %>
-  </div>
+  <%= link_to collection_path(article.collection_id), class: "mb-6 flex items-center gap-3 truncate rounded-lg bg-base-200 px-4 py-2 text-sm transition-colors hover:bg-base-300/60" do %>
+    <%= remote_image_tag article.collection.cover_url, class: "size-8 flex-shrink-0 rounded-full" %>
+    <span class="text-base-content/60"><%= t('published_in') %></span>
+    <span class="truncate font-medium text-base-content"><%= article.collection.name %></span>
+  <% end %>
 <% end %>
 
-<div class="flex items-center justify-between mb-6">
-  <div class="relative flex items-center space-x-2 truncate">
-    <div class="avatar">
-      <div class="size-10 rounded-full">
-        <%= render "shared/avatar", user: article.author, thumb: true, class: "rounded-full" %>
-      </div>
-    </div>
-    <div class="leading-4 truncate">
-      <span class="text-base font-semibold truncate max-w-24"><%= article.author.name %></span>
+<div class="mb-5 flex items-center justify-between">
+  <div class="relative flex items-center gap-3 truncate">
+    <span class="block size-10 flex-shrink-0 overflow-hidden rounded-full">
+      <%= render "shared/avatar", user: article.author, thumb: true, class: "block h-full w-full rounded-full" %>
+    </span>
+    <div class="truncate leading-tight">
+      <div class="truncate text-base font-semibold text-base-content"><%= article.author.name %></div>
       <%= render "users/user_uid", user: article.author %>
     </div>
-    <%= link_to user_path(article.author), data: { controller: 'prefetch' } do %>
-      <span aria-hidden="true" class="absolute inset-0"></span>
-    <% end %>
+    <%= link_to '', user_path(article.author), data: { controller: 'prefetch' }, class: "absolute inset-0" %>
   </div>
-  <div class="hidden sm:flex justify-end">
-    <%= link_to article_share_path(article_uuid: @article.uuid), 
-      data: {
-        turbo_frame: :modal
-      },
-      class: "flex items-center space-x-1" do %>
-      <%= inline_svg_tag 'icons/share-solid.svg', class: 'w-5 h-5 lg:w-6 lg:h-6 text-primary' %>
-    <% end %>
-  </div>
+
+  <%= link_to article_share_path(article_uuid: @article.uuid),
+    data: {
+      turbo_frame: :modal
+    },
+    class: "relative z-10 hidden items-center text-base-content/50 transition-colors hover:text-base-content sm:flex" do %>
+    <span class="i-[tabler--share] size-5"></span>
+  <% end %>
 </div>
 
-<div class="font-semibold text-xl lg:text-3xl 3xl:text-4xl mb-6 text-ellipsis overflow-hidden">
+<h1 class="font-display mb-4 text-2xl leading-tight font-medium text-ellipsis text-base-content lg:text-4xl">
   <%= article.title %>
   <%# Cross-Locale Article Visibility (FR-010, SC-007): surface the article's language on the article header, alongside the title. %>
   <% if article.locale.present? %>
-    <span class="article-header__locale badge badge-ghost badge-sm font-medium uppercase ml-2 align-middle" title="<%= I18n.t("languages.#{article.locale}", default: article.locale) %>">
+    <span class="article-header__locale badge badge-ghost badge-sm ml-2 align-middle font-medium uppercase" title="<%= I18n.t("languages.#{article.locale}", default: article.locale) %>">
       <%= article.locale %>
     </span>
   <% end %>
-</div>
+</h1>
 
 <% if article.tags.present? %>
-  <div class="max-w-full flex items-center space-x-4 overflow-x-scroll scrollbar-hide mb-4">
+  <div class="mb-4 flex max-w-full items-center gap-2 overflow-x-auto scrollbar-hide">
     <% article.tags.each do |tag| %>
-      <%= link_to articles_path(tag: tag.name), 
-        data: { 
-          controller: 'prefetch' 
-        }, 
-        class: "tag-chip px-2.5 py-1 text-sm min-w-max" do %>
-        <%= tag.name %>
-      <% end %>
+      <%= link_to tag.name,
+        articles_path(tag: tag.name),
+        data: {
+          controller: 'prefetch'
+        },
+        class: "tag-chip min-w-max px-2.5 py-1 text-sm" %>
     <% end %>
   </div>
 <% end %>
 
-<div class="flex items-center justify-between mb-4 text-sm xl:text-base opacity-75">
-  <% if article.published_at.present? %>
-    <%= render_time_format datetime: article.published_at.utc.rfc3339 do %>
-      <%= article.published_at.strftime("%Y-%m-%d %H:%M") %>
+<div class="mb-5 flex items-center justify-between text-sm text-base-content/50">
+  <span>
+    <% if article.published_at.present? %>
+      <%= render_time_format datetime: article.published_at.utc.rfc3339 do %>
+        <%= article.published_at.strftime("%Y-%m-%d %H:%M") %>
+      <% end %>
+    <% else %>
+      <%= render_time_format datetime: article.updated_at.utc.rfc3339 do %>
+        <%= article.updated_at.strftime("%Y-%m-%d %H:%M") %>
+      <% end %>
     <% end %>
-  <% else %>
-    <%= render_time_format datetime: article.updated_at.utc.rfc3339 do %>
-      <%= article.updated_at.strftime("%Y-%m-%d %H:%M") %>
-    <% end %>
-  <% end %>
+  </span>
 
-  <div class="flex items-center space-x-2">
-    <span>
-      <%= t("words_count") %>:
-    </span>
-    <span>
-      <%= article.words_count %>
-    </span>
-  </div>
+  <span><%= t("words_count") %>: <%= article.words_count %></span>
 </div>
 
-<div class="py-2 px-4 bg-base-200 rounded break-words mb-6 text-base-content">
+<div class="mb-6 rounded-lg bg-base-200 px-4 py-3 break-words text-base-content/70">
   <%= article.intro %>
 </div>
 
 <% if article.cover.attached? %>
   <%= link_to article.cover_url, 
-    class: "photoswipe block", 
+    class: "photoswipe block rounded-lg overflow-hidden", 
     target: "_blank",
     width: article.cover.metadata&.[]('width'),
     height: article.cover.metadata&.[]('height'),
