@@ -70,7 +70,7 @@ steps:
       echo "Server failed to start within 60s"
       cat log/development.log || true
       exit 1
-source: githubnext/agentics/workflows/accessibility-review.md@e15e57b40918dbca11b350c55d02ab61934afa75
+source: githubnext/agentics/workflows/accessibility-review.md@1c6668b751c51af8571f01204ceffb19362e0f66
 ---
 
 # Accessibility Review
@@ -97,4 +97,3 @@ The code of the application has been checked out to the current working director
    - A clear description of the problem
    - References to the appropriate section(s) of WCAG 2.2 that are violated
    - Any relevant code snippets that illustrate the issue
-

@@ -1,57 +1,54 @@
 ---
-name: Discussion Task Miner
-description: Scans recent GitHub Discussions to extract actionable improvement tasks and create trackable GitHub issues
 on:
   schedule: daily
-  workflow_dispatch:
-
+  workflow_dispatch: null
 permissions:
   contents: read
   discussions: read
   issues: read
   pull-requests: read
-
-tracker-id: discussion-task-miner
-timeout-minutes: 20
-
 network:
   allowed:
-    - defaults
-
+  - defaults
+imports:
+- shared/runtime.md
+- shared/engine-minimax.md
+- shared/reporting.md
 safe-outputs:
-  report-failure-as-issue: false
   create-issue:
-    title-prefix: "[task-miner] "
-    labels: [automated-analysis]
-    max: 5
-    group: true
     expires: 1d
+    group: true
+    labels:
+    - automated-analysis
+    max: 5
+    title-prefix: "[task-miner] "
   messages:
     footer: "> 🔍 *Task mining by [{workflow_name}]({run_url})*"
-    run-started: "🔍 Discussion Task Miner starting! [{workflow_name}]({run_url}) is scanning discussions for actionable tasks..."
-    run-success: "✅ Task mining complete! [{workflow_name}]({run_url}) has identified actionable tasks from recent discussions. 📊"
-    run-failure: "⚠️ Task mining interrupted! [{workflow_name}]({run_url}) {status}. Please review the logs..."
-
+    run-failure: ⚠️ Task mining interrupted! [{workflow_name}]({run_url}) {status}. Please review the logs...
+    run-started: 🔍 Discussion Task Miner starting! [{workflow_name}]({run_url}) is scanning discussions for actionable tasks...
+    run-success: ✅ Task mining complete! [{workflow_name}]({run_url}) has identified actionable tasks from recent discussions. 📊
+  report-failure-as-issue: false
+description: Scans recent GitHub Discussions to extract actionable improvement tasks and create trackable GitHub issues
+name: Discussion Task Miner
+runs-on:
+- self-hosted
+- linux
+- agentic
+runs-on-slim: self-hosted
+source: githubnext/agentics/workflows/discussion-task-miner.md@1c6668b751c51af8571f01204ceffb19362e0f66
+timeout-minutes: 20
 tools:
+  bash:
+  - jq *
+  - cat *
+  - date *
   cache-memory: true
   github:
-    toolsets: [default, discussions]
-  bash:
-    - "jq *"
-    - "cat *"
-    - "date *"
-
-
-runs-on: [self-hosted, linux, agentic]
-runs-on-slim: "self-hosted"
-
-imports:
-  - shared/runtime.md
-  - shared/engine-minimax.md
-  - shared/reporting.md
-source: githubnext/agentics/workflows/discussion-task-miner.md@e15e57b40918dbca11b350c55d02ab61934afa75
+    toolsets:
+    - default
+    - discussions
+tracker-id: discussion-task-miner
 ---
-
 # Discussion Task Miner
 
 You are a task mining agent that analyzes recent GitHub Discussions to discover actionable improvement opportunities.

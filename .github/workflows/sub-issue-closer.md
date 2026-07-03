@@ -1,41 +1,38 @@
 ---
-description: Scheduled workflow that recursively closes parent issues when all sub-issues are 100% complete
-name: Sub-Issue Closer
 on:
   schedule: daily
-  workflow_dispatch:
+  workflow_dispatch: null
 permissions:
   contents: read
   issues: read
-
-runs-on: [self-hosted, linux, agentic]
-runs-on-slim: "self-hosted"
-
-imports:
-  - shared/engine-minimax.md
-
 network:
   allowed:
-    - defaults
-
+  - defaults
+imports:
+- shared/engine-minimax.md
+safe-outputs:
+  add-comment:
+    max: 20
+    target: "*"
+  report-failure-as-issue: false
+  update-issue:
+    max: 20
+    status: null
+    target: "*"
+description: Scheduled workflow that recursively closes parent issues when all sub-issues are 100% complete
+name: Sub-Issue Closer
+runs-on:
+- self-hosted
+- linux
+- agentic
+runs-on-slim: self-hosted
+source: githubnext/agentics/workflows/sub-issue-closer.md@1c6668b751c51af8571f01204ceffb19362e0f66
+timeout-minutes: 15
 tools:
   github:
     toolsets:
-      - issues
-
-safe-outputs:
-  report-failure-as-issue: false
-  update-issue:
-    status:
-    target: "*"
-    max: 20
-  add-comment:
-    target: "*"
-    max: 20
-timeout-minutes: 15
-source: githubnext/agentics/workflows/sub-issue-closer.md@e15e57b40918dbca11b350c55d02ab61934afa75
+    - issues
 ---
-
 # Sub-Issue Closer 🔒
 
 You are an intelligent agent that automatically closes parent issues when all their sub-issues are 100% complete.

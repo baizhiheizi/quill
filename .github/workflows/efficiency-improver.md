@@ -1,42 +1,21 @@
 ---
-description: |
-  A green-software-focused repository assistant that runs regularly (daily by default) to identify and implement
-  energy efficiency improvements. Its north-star KPI is reducing the energy consumption and
-  computational footprint of the codebase. Always methodical, measurement-driven, and mindful of trade-offs.
-
 on:
-  schedule: daily
-  workflow_dispatch:
-  reaction: "eyes"
   permissions:
     pull-requests: read
-  # For scheduled runs, check if there are already MAX_OPEN_PRS open PRs
-  # with the "[efficiency-improver]" prefix. If so, skip the run
-  # to avoid spamming maintainers with too many PRs.
+  reaction: eyes
+  schedule: daily
   steps:
-    - id: check
-      env:
-        GH_TOKEN: ${{ github.token }}
-      run: |
-        MAX_OPEN_PRS=8
-        if [[ "$GITHUB_EVENT_NAME" != "schedule" ]]; then exit 0; fi
-        COUNT=$(gh pr list --repo "$GITHUB_REPOSITORY" --state open --search 'in:title "[efficiency-improver]"' --json number --jq 'length' 2>/dev/null || echo 0)
-        [[ "$COUNT" -lt "$MAX_OPEN_PRS" ]]
-      # exits 0 if not scheduled or <MAX_OPEN_PRS open PRs, 1 if ≥MAX_OPEN_PRS
-
-runs-on: [self-hosted, linux, agentic]
-runs-on-slim: "self-hosted"
-
-imports:
-  - shared/runtime.md
-  - shared/engine-minimax.md
-
-if: needs.pre_activation.outputs.check_result == 'success'
-
-timeout-minutes: 60
-
+  - env:
+      GH_TOKEN: ${{ github.token }}
+    id: check
+    run: |
+      MAX_OPEN_PRS=8
+      if [[ "$GITHUB_EVENT_NAME" != "schedule" ]]; then exit 0; fi
+      COUNT=$(gh pr list --repo "$GITHUB_REPOSITORY" --state open --search 'in:title "[efficiency-improver]"' --json number --jq 'length' 2>/dev/null || echo 0)
+      [[ "$COUNT" -lt "$MAX_OPEN_PRS" ]]
+  workflow_dispatch: null
 permissions: read-all
-
+if: needs.pre_activation.outputs.check_result == 'success'
 network:
   allowed:
   - defaults
@@ -45,39 +24,55 @@ network:
   - python
   - rust
   - java
-
+imports:
+- shared/runtime.md
+- shared/engine-minimax.md
 safe-outputs:
-  report-failure-as-issue: false
   add-comment:
+    hide-older-comments: true
     max: 10
     target: "*"
-    hide-older-comments: true
-  create-pull-request:
-    max: 3
-    draft: true
-    title-prefix: "[efficiency-improver] "
-    labels: [automation, efficiency, green-software]
-  push-to-pull-request-branch:
-    target: "*"
-    required-title-prefix: "[efficiency-improver] "
   create-issue:
-    title-prefix: "[efficiency-improver] "
-    labels: [automation, efficiency, green-software]
+    labels:
+    - automation
+    - efficiency
+    - green-software
     max: 4
-  update-issue:
+    title-prefix: "[efficiency-improver] "
+  create-pull-request:
+    draft: true
+    labels:
+    - automation
+    - efficiency
+    - green-software
+    max: 3
+    title-prefix: "[efficiency-improver] "
+  push-to-pull-request-branch:
+    required-title-prefix: "[efficiency-improver] "
     target: "*"
+  report-failure-as-issue: false
+  update-issue:
     max: 1
-
+    target: "*"
+description: |
+  A green-software-focused repository assistant that runs regularly (daily by default) to identify and implement
+  energy efficiency improvements. Its north-star KPI is reducing the energy consumption and
+  computational footprint of the codebase. Always methodical, measurement-driven, and mindful of trade-offs.
+runs-on:
+- self-hosted
+- linux
+- agentic
+runs-on-slim: self-hosted
+source: githubnext/agentics/workflows/efficiency-improver.md@1c6668b751c51af8571f01204ceffb19362e0f66
+timeout-minutes: 60
 tools:
-  web-fetch:
-  github:
-    toolsets: [all]
   bash: true
+  github:
+    toolsets:
+    - all
   repo-memory: true
-
-source: githubnext/agentics/workflows/efficiency-improver.md@e15e57b40918dbca11b350c55d02ab61934afa75
+  web-fetch: null
 ---
-
 # Efficiency Improver
 
 You are **Efficiency Improver** for `${{ github.repository }}`. Your job is to systematically identify and implement **energy efficiency improvements** across all dimensions of the codebase — code, data, network/I/O, and frontend/UI — with the north-star goal of **reducing the energy consumption and computational footprint** of the software.

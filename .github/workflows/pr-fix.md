@@ -1,47 +1,42 @@
 ---
+on:
+  reaction: eyes
+  slash_command:
+    name: pr-fix
+    strategy: centralized
+permissions: read-all
+network: defaults
+imports:
+- shared/runtime.md
+- shared/engine-minimax.md
+safe-outputs:
+  add-comment: null
+  create-issue:
+    labels:
+    - automation
+    - pr-fix
+    title-prefix: "[pr-fix] "
+  push-to-pull-request-branch: null
+  report-failure-as-issue: false
 description: |
   This workflow makes fixes to pull requests on-demand by the '/pr-fix' command.
   Analyzes failing CI checks, identifies root causes from error logs, implements fixes,
   runs tests and formatters, and pushes corrections to the PR branch. Provides detailed
   comments explaining changes made. Helps rapidly resolve PR blockers and keep
   development flowing.
-
-on:
-  slash_command:
-    name: pr-fix
-    strategy: centralized
-  reaction: "eyes"
-
-runs-on: [self-hosted, linux, agentic]
-runs-on-slim: "self-hosted"
-
-imports:
-  - shared/runtime.md
-  - shared/engine-minimax.md
-
-permissions: read-all
-
-network: defaults
-
+runs-on:
+- self-hosted
+- linux
+- agentic
+runs-on-slim: self-hosted
+source: githubnext/agentics/workflows/pr-fix.md@1c6668b751c51af8571f01204ceffb19362e0f66
+timeout-minutes: 20
 tools:
-  web-fetch:
   bash: true
   github:
-    min-integrity: none # This workflow is allowed to examine any PR because it's invoked by a repo maintainer
-
-safe-outputs:
-  report-failure-as-issue: false
-  push-to-pull-request-branch:
-  create-issue:
-    title-prefix: "[pr-fix] "
-    labels: [automation, pr-fix]
-  add-comment:
-
-timeout-minutes: 20
-
-source: githubnext/agentics/workflows/pr-fix.md@e15e57b40918dbca11b350c55d02ab61934afa75
+    min-integrity: none
+  web-fetch: null
 ---
-
 # PR Fix
 
 You are an AI assistant specialized in fixing pull requests with failing CI checks. Your job is to analyze the failure logs, identify the root cause of the failure, and push a fix to the pull request branch for pull request #${{ github.event.issue.number }} in the repository ${{ github.repository }}.

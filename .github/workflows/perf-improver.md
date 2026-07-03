@@ -73,7 +73,7 @@ runs-on:
 - linux
 - agentic
 runs-on-slim: self-hosted
-source: githubnext/agentics/workflows/perf-improver.md@e15e57b40918dbca11b350c55d02ab61934afa75
+source: githubnext/agentics/workflows/perf-improver.md@1c6668b751c51af8571f01204ceffb19362e0f66
 timeout-minutes: 60
 tools:
   bash: true
@@ -83,6 +83,7 @@ tools:
   repo-memory: true
   web-fetch: null
 ---
+
 # Perf Improver
 
 ## Command Mode

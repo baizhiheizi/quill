@@ -1,10 +1,8 @@
 ---
-name: Code Simplifier
-description: Analyzes recently modified code and creates pull requests with simplifications that improve clarity, consistency, and maintainability while preserving functionality
 on:
   schedule: daily
-  skip-if-match: 'is:pr is:open in:title "[code-simplifier]"'
-
+  skip-if-match: is:pr is:open in:title "[code-simplifier]"
+permissions: read-all
 network:
   allowed:
   - defaults
@@ -13,36 +11,36 @@ network:
   - python
   - rust
   - java
-
-permissions: read-all
-
-tracker-id: code-simplifier
-
-runs-on: [self-hosted, linux, agentic]
-runs-on-slim: "self-hosted"
-
 imports:
-  - shared/runtime.md
-  - shared/engine-minimax.md
-  - shared/formatting.md
-  - shared/reporting.md
-
+- shared/runtime.md
+- shared/engine-minimax.md
+- shared/formatting.md
+- shared/reporting.md
 safe-outputs:
-  report-failure-as-issue: false
   create-pull-request:
-    title-prefix: "[code-simplifier] "
-    labels: [refactoring, code-quality, automation]
     expires: 1d
+    labels:
+    - refactoring
+    - code-quality
+    - automation
     protected-files: fallback-to-issue
-
+    title-prefix: "[code-simplifier] "
+  report-failure-as-issue: false
+description: Analyzes recently modified code and creates pull requests with simplifications that improve clarity, consistency, and maintainability while preserving functionality
+name: Code Simplifier
+runs-on:
+- self-hosted
+- linux
+- agentic
+runs-on-slim: self-hosted
+source: githubnext/agentics/workflows/code-simplifier.md@1c6668b751c51af8571f01204ceffb19362e0f66
+timeout-minutes: 30
 tools:
   github:
-    toolsets: [default]
-
-timeout-minutes: 30
-source: githubnext/agentics/workflows/code-simplifier.md@e15e57b40918dbca11b350c55d02ab61934afa75
+    toolsets:
+    - default
+tracker-id: code-simplifier
 ---
-
 <!-- This prompt will be imported in the agentic workflow .github/workflows/code-simplifier.md at runtime. -->
 <!-- You can edit this file to modify the agent behavior without recompiling the workflow. -->
 
@@ -276,8 +274,6 @@ Please verify:
 - No unintended side effects
 
 ---
-
-*Automated by Code Simplifier Agent*
 ```
 
 ### 4.3 Use Safe Outputs

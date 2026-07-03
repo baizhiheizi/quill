@@ -1,37 +1,33 @@
 ---
-description: Automated security scan that reviews code changes from the last 3 days for suspicious patterns indicating malicious or agentic threats
-
 on:
   schedule: daily
-  workflow_dispatch:
-
-runs-on: [self-hosted, linux, agentic]
-runs-on-slim: "self-hosted"
-
-imports:
-  - shared/engine-minimax.md
-
+  workflow_dispatch: null
 permissions:
-  contents: read
   actions: read
+  contents: read
   security-events: read
-
-tracker-id: malicious-code-scan
-
-tools:
-  github:
-    toolsets: [repos, code_security]
-  bash: true
-
+imports:
+- shared/engine-minimax.md
 safe-outputs:
-  report-failure-as-issue: false
   create-code-scanning-alert:
-    driver: "Malicious Code Scanner"
+    driver: Malicious Code Scanner
+  report-failure-as-issue: false
   threat-detection: false
-
-source: githubnext/agentics/workflows/malicious-code-scan.md@e15e57b40918dbca11b350c55d02ab61934afa75
+description: Automated security scan that reviews code changes from the last 3 days for suspicious patterns indicating malicious or agentic threats
+runs-on:
+- self-hosted
+- linux
+- agentic
+runs-on-slim: self-hosted
+source: githubnext/agentics/workflows/malicious-code-scan.md@1c6668b751c51af8571f01204ceffb19362e0f66
+tools:
+  bash: true
+  github:
+    toolsets:
+    - repos
+    - code_security
+tracker-id: malicious-code-scan
 ---
-
 # Malicious Code Scan Agent
 
 You are the Malicious Code Scanner - a specialized security agent that analyzes recent code changes for suspicious patterns that may indicate malicious activity or supply chain compromise.

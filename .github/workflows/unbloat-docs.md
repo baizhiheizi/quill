@@ -1,97 +1,82 @@
 ---
-name: Documentation Unbloat
-description: Reviews and simplifies documentation by reducing verbosity while maintaining clarity and completeness
 on:
-  # Daily (scattered execution time)
-  schedule: daily
-  
-  # Command trigger for /unbloat in PR comments
-  slash_command:
-    name: unbloat
-    strategy: centralized
-    events: [pull_request_comment]
-  
-  # Manual trigger for testing
-  workflow_dispatch:
   permissions:
     pull-requests: read
+  schedule: daily
+  slash_command:
+    events:
+    - pull_request_comment
+    name: unbloat
+    strategy: centralized
   steps:
-    - id: check
-      env:
-        GH_TOKEN: ${{ github.token }}
-      run: |
-        MAX_OPEN_PRS=8
-        if [[ "$GITHUB_EVENT_NAME" != "schedule" ]]; then exit 0; fi
-        COUNT=$(gh pr list --repo ${{ github.repository }} --state open --search 'in:title "[docs]"' --json number --jq 'length')
-        [[ "$COUNT" -lt "$MAX_OPEN_PRS" ]]
-      # exits 0 if not scheduled or <MAX_OPEN_PRS open PRs, 1 if ≥MAX_OPEN_PRS
-
-runs-on: [self-hosted, linux, agentic]
-runs-on-slim: "self-hosted"
-
-imports:
-  - shared/engine-minimax.md
-
-if: needs.pre_activation.outputs.check_result == 'success'
-
-# Minimal permissions - safe-outputs handles write operations
+  - env:
+      GH_TOKEN: ${{ github.token }}
+    id: check
+    run: |
+      MAX_OPEN_PRS=8
+      if [[ "$GITHUB_EVENT_NAME" != "schedule" ]]; then exit 0; fi
+      COUNT=$(gh pr list --repo ${{ github.repository }} --state open --search 'in:title "[docs]"' --json number --jq 'length')
+      [[ "$COUNT" -lt "$MAX_OPEN_PRS" ]]
+  workflow_dispatch: null
 permissions:
   contents: read
-  pull-requests: read
   issues: read
-
-# Network access for documentation research
+  pull-requests: read
+if: needs.pre_activation.outputs.check_result == 'success'
 network:
   allowed:
-    - defaults
-    - github
-
-# Sandbox configuration
-sandbox:
-  agent: awf
-
-# Tools configuration
-tools:
-  cache-memory: true
-  github:
-    toolsets: [default]
-  edit:
-  bash:
-    - "find * -name"
-    - "wc -l *"
-    - "grep -n *"
-    - "git"
-    - "cat *"
-    - "head *"
-    - "tail *"
-    - "cd *"
-    - "echo *"
-    - "mkdir *"
-    - "cp *"
-    - "mv *"
-
-# Safe outputs configuration
+  - defaults
+  - github
+imports:
+- shared/engine-minimax.md
 safe-outputs:
-  report-failure-as-issue: false
-  create-pull-request:
-    expires: 2d
-    title-prefix: "[docs] "
-    labels: [documentation, automation]
-    draft: true
-    protected-files: fallback-to-issue
   add-comment:
     max: 1
+  create-pull-request:
+    draft: true
+    expires: 2d
+    labels:
+    - documentation
+    - automation
+    protected-files: fallback-to-issue
+    title-prefix: "[docs] "
   messages:
     footer: "> 🗜️ *Compressed by [{workflow_name}]({run_url})*"
-    run-started: "📦 Time to slim down! [{workflow_name}]({run_url}) is trimming the excess from this {event_type}..."
-    run-success: "🗜️ Docs on a diet! [{workflow_name}]({run_url}) has removed the bloat. Lean and mean! 💪"
-    run-failure: "📦 Unbloating paused! [{workflow_name}]({run_url}) {status}. The docs remain... fluffy."
-
-# Timeout
+    run-failure: 📦 Unbloating paused! [{workflow_name}]({run_url}) {status}. The docs remain... fluffy.
+    run-started: 📦 Time to slim down! [{workflow_name}]({run_url}) is trimming the excess from this {event_type}...
+    run-success: 🗜️ Docs on a diet! [{workflow_name}]({run_url}) has removed the bloat. Lean and mean! 💪
+  report-failure-as-issue: false
+description: Reviews and simplifies documentation by reducing verbosity while maintaining clarity and completeness
+name: Documentation Unbloat
+runs-on:
+- self-hosted
+- linux
+- agentic
+runs-on-slim: self-hosted
+sandbox:
+  agent: awf
+source: githubnext/agentics/workflows/unbloat-docs.md@1c6668b751c51af8571f01204ceffb19362e0f66
 timeout-minutes: 30
-source: githubnext/agentics/workflows/unbloat-docs.md@e15e57b40918dbca11b350c55d02ab61934afa75
+tools:
+  bash:
+  - find * -name
+  - wc -l *
+  - grep -n *
+  - git
+  - cat *
+  - head *
+  - tail *
+  - cd *
+  - echo *
+  - mkdir *
+  - cp *
+  - mv *
+  cache-memory: true
+  edit: null
+  github:
+    toolsets:
+    - default
 ---
-
 # Documentation Unbloat Workflow
 
 You are a technical documentation editor focused on **clarity and conciseness**. Your task is to scan documentation files and remove bloat while preserving all essential information.
@@ -191,7 +176,7 @@ Once you've confirmed the file is editable, read it and identify bloat:
 
 Make targeted edits to improve clarity:
 
-**Consolidate bullet points**: 
+**Consolidate bullet points**:
 - Convert long bullet lists into concise prose or tables
 - Remove redundant points that say the same thing differently
 

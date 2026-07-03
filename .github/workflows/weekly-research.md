@@ -1,42 +1,36 @@
 ---
+on:
+  schedule: weekly on monday
+  workflow_dispatch: null
+permissions: read-all
+network: defaults
+imports:
+- shared/engine-minimax.md
+safe-outputs:
+  create-discussion:
+    category: ideas
+    title-prefix: "[weekly-research] "
+  report-failure-as-issue: false
 description: |
   This workflow performs research to  provides industry insights and competitive analysis.
   Reviews recent code, issues, PRs, industry news, and trends to create comprehensive
   research reports. Covers related products, research papers, market opportunities,
   business analysis, and new ideas. Creates GitHub discussions with findings to inform
   strategic decision-making.
-
-on:
-  schedule: weekly on monday
-  workflow_dispatch:
-
-runs-on: [self-hosted, linux, agentic]
-runs-on-slim: "self-hosted"
-
-imports:
-  - shared/engine-minimax.md
-
-permissions: read-all
-
-network: defaults
-
-safe-outputs:
-  report-failure-as-issue: false
-  create-discussion:
-    title-prefix: "[weekly-research] "
-    category: "ideas"
-
+runs-on:
+- self-hosted
+- linux
+- agentic
+runs-on-slim: self-hosted
+source: githubnext/agentics/workflows/weekly-research.md@1c6668b751c51af8571f01204ceffb19362e0f66
+timeout-minutes: 15
 tools:
   github:
-    toolsets: [all]
-    min-integrity: none # This workflow is allowed to examine and comment on any issues or PRs
-  web-fetch:
-
-timeout-minutes: 15
-
-source: githubnext/agentics/workflows/weekly-research.md@e15e57b40918dbca11b350c55d02ab61934afa75
+    min-integrity: none
+    toolsets:
+    - all
+  web-fetch: null
 ---
-
 # Weekly Research
 
 ## Job Description

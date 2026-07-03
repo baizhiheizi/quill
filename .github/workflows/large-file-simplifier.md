@@ -1,55 +1,54 @@
 ---
-name: Large File Simplifier
-description: Analyzes source files to identify the largest file and creates an actionable issue with a detailed refactoring plan when it exceeds healthy size thresholds
 on:
-  workflow_dispatch:
   schedule: daily on weekdays
-  skip-if-match: 'is:issue is:open in:title "[large-file-simplifier]"'
-
+  skip-if-match: is:issue is:open in:title "[large-file-simplifier]"
+  workflow_dispatch: null
 permissions:
   contents: read
   issues: read
   pull-requests: read
-
-tracker-id: large-file-simplifier
-
-runs-on: [self-hosted, linux, agentic]
-runs-on-slim: "self-hosted"
-
 imports:
-  - shared/runtime.md
-  - shared/engine-minimax.md
-  - shared/formatting.md
-  - shared/reporting.md
-
+- shared/runtime.md
+- shared/engine-minimax.md
+- shared/formatting.md
+- shared/reporting.md
 safe-outputs:
-  report-failure-as-issue: false
   create-issue:
-    expires: 2d
-    title-prefix: "[large-file-simplifier] "
-    labels: [refactoring, code-health, automated-analysis]
     assignees: copilot
+    expires: 2d
+    labels:
+    - refactoring
+    - code-health
+    - automated-analysis
     max: 1
-
-tools:
-  github:
-    toolsets: [default]
-  bash:
-    - "git ls-tree -r --name-only HEAD"
-    - "git ls-tree -r -l --full-name HEAD"
-    - "git ls-tree -r --name-only HEAD | grep -E * | grep -vE * | xargs wc -l 2>/dev/null"
-    - "git ls-tree -r --name-only HEAD | grep -E * | xargs wc -l 2>/dev/null"
-    - "wc -l *"
-    - "head -n * *"
-    - "tail -n * *"
-    - "grep -n * *"
-    - "sort *"
-    - "cat *"
-
+    title-prefix: "[large-file-simplifier] "
+  report-failure-as-issue: false
+description: Analyzes source files to identify the largest file and creates an actionable issue with a detailed refactoring plan when it exceeds healthy size thresholds
+name: Large File Simplifier
+runs-on:
+- self-hosted
+- linux
+- agentic
+runs-on-slim: self-hosted
+source: githubnext/agentics/workflows/large-file-simplifier.md@1c6668b751c51af8571f01204ceffb19362e0f66
 timeout-minutes: 20
-source: githubnext/agentics/workflows/large-file-simplifier.md@e15e57b40918dbca11b350c55d02ab61934afa75
+tools:
+  bash:
+  - git ls-tree -r --name-only HEAD
+  - git ls-tree -r -l --full-name HEAD
+  - git ls-tree -r --name-only HEAD | grep -E * | grep -vE * | xargs wc -l 2>/dev/null
+  - git ls-tree -r --name-only HEAD | grep -E * | xargs wc -l 2>/dev/null
+  - wc -l *
+  - head -n * *
+  - tail -n * *
+  - grep -n * *
+  - sort *
+  - cat *
+  github:
+    toolsets:
+    - default
+tracker-id: large-file-simplifier
 ---
-
 # Large File Simplifier Agent
 
 You are the Large File Simplifier Agent — a code health specialist that identifies oversized source files and creates detailed, actionable refactoring plans. You analyze file structure, identify logical boundaries, and produce an issue with concrete guidance for splitting large files into smaller, focused modules.

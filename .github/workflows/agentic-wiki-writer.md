@@ -1,147 +1,145 @@
 ---
-name: Agentic Wiki Writer
-description: >
-  Generates GitHub wiki pages from source code using a PAGES.md template.
-  Runs once a day if any merges to the default branch have happened, or on manual dispatch.
-
 on:
+  schedule: daily
   workflow_dispatch:
     inputs:
       regenerate-template:
-        description: "Regenerate PAGES.md from scratch (full regen)"
-        type: boolean
         default: false
-  schedule: daily
-
-runs-on: [self-hosted, linux, agentic]
-runs-on-slim: "self-hosted"
-
-imports:
-  - shared/engine-minimax.md
-
+        description: Regenerate PAGES.md from scratch (full regen)
+        type: boolean
 permissions:
   contents: read
   issues: read
   pull-requests: read
-
-steps:
-  - name: Pre-stage event payload for sandbox
-    run: |
-      cp "$GITHUB_EVENT_PATH" /tmp/gh-aw/event.json
-      echo "Event payload staged to /tmp/gh-aw/event.json"
-      cat /tmp/gh-aw/event.json
-  - name: Create agentic-wiki directory
-    run: mkdir -p .github/agentic-wiki
-
-tools:
-  bash:
-    - "find * -type f -not -path"
-    - "tree *"
-    - "wc *"
-    - "ls"
-    - "cat *"
-    - "head *"
-  edit:
-  repo-memory:
-    branch-name: memory/agentic-wiki
-    description: "Source file mappings, content hashes, and file summaries for incremental wiki regeneration"
-    allowed-extensions: [".json", ".md"]
-    max-file-size: 1048576
-    max-file-count: 50
-  github:
-    toolsets: [default]
-
+imports:
+- shared/engine-minimax.md
 safe-outputs:
-  report-failure-as-issue: false
   create-pull-request:
-    title-prefix: "[agentic-wiki]"
-    labels: [documentation, automated]
     allowed-files:
-      - ".github/agentic-wiki/**"
+    - .github/agentic-wiki/**
+    labels:
+    - documentation
+    - automated
     protected-files: allowed
+    title-prefix: "[agentic-wiki]"
   jobs:
     push-wiki:
-      description: >
-        Push generated wiki pages to the repository wiki.
-        Pass a JSON object mapping filenames to markdown content.
-      runs-on: ubuntu-latest
-      output: "Wiki pages pushed successfully"
-      permissions:
-        contents: write
+      description: |
+        Push generated wiki pages to the repository wiki. Pass a JSON object mapping filenames to markdown content.
       inputs:
         files:
           description: "JSON object mapping filenames to markdown content, e.g. {\"Home.md\": \"...\", \"_Sidebar.md\": \"...\"}"
           required: true
           type: string
+      output: Wiki pages pushed successfully
+      permissions:
+        contents: write
+      runs-on: ubuntu-latest
       steps:
-        - name: Checkout wiki
-          uses: actions/checkout@v7.0.0
-          with:
-            repository: ${{ github.repository }}.wiki
-            token: ${{ secrets.GITHUB_TOKEN }}
-        - name: Write wiki pages
-          run: |
-            jq -r '.items[] | select(.type == "push_wiki") | .files | fromjson | to_entries[] | @base64' "$GH_AW_AGENT_OUTPUT" | while IFS= read -r entry; do
-              FILENAME=$(printf '%s' "$entry" | base64 -d | jq -r '.key')
-              CONTENT=$(printf '%s' "$entry" | base64 -d | jq -r '.value')
-              printf '%s\n' "$CONTENT" > "$FILENAME"
-            done
-        - name: Sanitize Mermaid diagrams
-          run: |
-            python3 - <<'EOF'
-            import re, glob
-
-            def fix_mermaid_block(block):
-                # Remove backtick markdown-string syntax from node labels.
-                # GitHub's wiki renderer does not support mermaid markdown strings
-                # (e.g. A["`text`"]), causing "Unable to render rich display" errors.
-                # Pattern: "` inside_bt ` after_bt " -> " inside_bt after_bt "
-                def fix_backtick_label(m):
-                    inside_bt = m.group(1)
-                    after_bt = m.group(2)
-                    combined = re.sub(
-                        r'\s+', ' ',
-                        (inside_bt + ' ' + after_bt).replace('\\n', ' ')
-                    ).strip()
-                    return '"' + combined + '"'
-
-                fixed = re.sub(r'"`([^`]*)`([^"]*)"', fix_backtick_label, block)
-                # Fix any remaining \n escape sequences in labels (replace with space)
-                fixed = re.sub(r'\\n', ' ', fixed)
-                return fixed
-
-            def fix_file(path):
-                with open(path, encoding='utf-8') as f:
-                    content = f.read()
-                parts = re.split(r'(```mermaid[^\n]*\n.*?```)', content, flags=re.DOTALL)
-                fixed = ''.join(
-                    fix_mermaid_block(p) if p.startswith('```mermaid') else p
-                    for p in parts
-                )
-                if fixed != content:
-                    with open(path, 'w', encoding='utf-8') as f:
-                        f.write(fixed)
-                    return True
-                return False
-
-            changed = [f for f in glob.glob('*.md') if fix_file(f)]
-            if changed:
-                print(f'Fixed Mermaid syntax in: {", ".join(changed)}')
-            else:
-                print('No Mermaid syntax issues found')
-            EOF
-        - name: Commit and push
-          run: |
-            git config user.name "github-actions[bot]"
-            git config user.email "github-actions[bot]@users.noreply.github.com"
-            git add -A
-            git diff --cached --quiet && echo "No changes to commit" && exit 0
-            git commit -m "Update wiki pages [agentic-wiki]"
-            git push
+      - name: Checkout wiki
+        uses: actions/checkout@v7.0.0
+        with:
+          repository: ${{ github.repository }}.wiki
+          token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Write wiki pages
+        run: |
+          jq -r '.items[] | select(.type == "push_wiki") | .files | fromjson | to_entries[] | @base64' "$GH_AW_AGENT_OUTPUT" | while IFS= read -r entry; do
+            FILENAME=$(printf '%s' "$entry" | base64 -d | jq -r '.key')
+            CONTENT=$(printf '%s' "$entry" | base64 -d | jq -r '.value')
+            printf '%s\n' "$CONTENT" > "$FILENAME"
+          done
+      - name: Sanitize Mermaid diagrams
+        run: |
+          python3 - <<'EOF'
+          import re, glob
+          
+          def fix_mermaid_block(block):
+              # Remove backtick markdown-string syntax from node labels.
+              # GitHub's wiki renderer does not support mermaid markdown strings
+              # (e.g. A["`text`"]), causing "Unable to render rich display" errors.
+              # Pattern: "` inside_bt ` after_bt " -> " inside_bt after_bt "
+              def fix_backtick_label(m):
+                  inside_bt = m.group(1)
+                  after_bt = m.group(2)
+                  combined = re.sub(
+                      r'\s+', ' ',
+                      (inside_bt + ' ' + after_bt).replace('\\n', ' ')
+                  ).strip()
+                  return '"' + combined + '"'
+          
+              fixed = re.sub(r'"`([^`]*)`([^"]*)"', fix_backtick_label, block)
+              # Fix any remaining \n escape sequences in labels (replace with space)
+              fixed = re.sub(r'\\n', ' ', fixed)
+              return fixed
+          
+          def fix_file(path):
+              with open(path, encoding='utf-8') as f:
+                  content = f.read()
+              parts = re.split(r'(```mermaid[^\n]*\n.*?```)', content, flags=re.DOTALL)
+              fixed = ''.join(
+                  fix_mermaid_block(p) if p.startswith('```mermaid') else p
+                  for p in parts
+              )
+              if fixed != content:
+                  with open(path, 'w', encoding='utf-8') as f:
+                      f.write(fixed)
+                  return True
+              return False
+          
+          changed = [f for f in glob.glob('*.md') if fix_file(f)]
+          if changed:
+              print(f'Fixed Mermaid syntax in: {", ".join(changed)}')
+          else:
+              print('No Mermaid syntax issues found')
+          EOF
+      - name: Commit and push
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git diff --cached --quiet && echo "No changes to commit" && exit 0
+          git commit -m "Update wiki pages [agentic-wiki]"
+          git push
+  report-failure-as-issue: false
+steps:
+- name: Pre-stage event payload for sandbox
+  run: |
+    cp "$GITHUB_EVENT_PATH" /tmp/gh-aw/event.json
+    echo "Event payload staged to /tmp/gh-aw/event.json"
+    cat /tmp/gh-aw/event.json
+- name: Create agentic-wiki directory
+  run: mkdir -p .github/agentic-wiki
+description: |
+  Generates GitHub wiki pages from source code using a PAGES.md template. Runs once a day if any merges to the default branch have happened, or on manual dispatch.
+name: Agentic Wiki Writer
+runs-on:
+- self-hosted
+- linux
+- agentic
+runs-on-slim: self-hosted
+source: githubnext/agentics/workflows/agentic-wiki-writer.md@1c6668b751c51af8571f01204ceffb19362e0f66
 timeout-minutes: 30
-source: githubnext/agentics/workflows/agentic-wiki-writer.md@e15e57b40918dbca11b350c55d02ab61934afa75
+tools:
+  bash:
+  - find * -type f -not -path
+  - tree *
+  - wc *
+  - ls
+  - cat *
+  - head *
+  edit: null
+  github:
+    toolsets:
+    - default
+  repo-memory:
+    allowed-extensions:
+    - .json
+    - .md
+    branch-name: memory/agentic-wiki
+    description: Source file mappings, content hashes, and file summaries for incremental wiki regeneration
+    max-file-count: 50
+    max-file-size: 1048576
 ---
-
 # Wiki Generator
 
 You are a wiki generator for this repository. Your job is to produce high-quality GitHub wiki pages from the source code, either by generating a documentation template (PAGES.md) or by reading an existing template and writing the wiki content.
