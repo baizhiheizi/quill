@@ -140,6 +140,40 @@ class HomeControllerTest < ActionController::TestCase
     assert_not_nil @controller.instance_variable_get(:@hot_tags)
   end
 
+  # Cross-Locale Article Visibility (US3, FR-004):
+  # `hot_tags` must not apply a `tags.locale = caller_locale` predicate.
+  # The previous code narrowed the relation to the visitor's locale; after
+  # the redesign the tags module surfaces every language.
+  test "hot_tags does not emit a WHERE tags.locale = ? predicate" do
+    # Force a Chinese-locale session so the caller's preferred locale
+    # would be the filter value if the old code path was still in place.
+    @request.session[:current_locale] = "zh-CN"
+
+    queries = capture_queries(exclude: [ "solid_cache_entries" ]) { get :hot_tags }
+
+    tag_selects = queries.select { |q| q[:sql].start_with?("SELECT") && q[:sql].include?('FROM "tags"') }
+    assert_predicate tag_selects, :any?,
+      "expected at least one FROM \"tags\" SELECT, got: #{queries.inspect}"
+
+    main = tag_selects.first[:sql]
+    assert_no_match(/"tags"\."locale"\s*=/i, main,
+      "expected no `tags.locale = ...` predicate in hot_tags SQL, got: #{main}")
+  end
+
+  # Cross-Locale Article Visibility (US3, FR-005):
+  # `active_authors` must not apply a `users.locale = caller_locale` predicate.
+  test "active_authors does not emit a WHERE users.locale = ? predicate" do
+    @request.session[:current_locale] = "zh-CN"
+
+    queries = capture_queries { get :active_authors }
+
+    main = main_users_select(queries)
+    assert_not_nil main, "expected at least one FROM \"users\" SELECT"
+
+    assert_no_match(/"users"\."locale"\s*=/i, main,
+      "expected no `users.locale = ...` predicate in active_authors SQL, got: #{main}")
+  end
+
   private
 
   # Captures every SQL query issued by the block (SCHEMA queries excluded).

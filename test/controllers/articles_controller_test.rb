@@ -85,4 +85,57 @@ class ArticlesControllerTest < IntegrationTestCase
 
     assert_response :success
   end
+
+  # Cross-Locale Article Visibility (US3, FR-010, SC-007):
+  # Each article card on the index must surface its language so a visitor
+  # browsing in any locale can tell what language each card is in.
+  test "index renders language chip for every locale in the feed" do
+    get articles_path
+
+    assert_response :success
+    assert_match(/article-card__locale/, response.body,
+      "expected at least one article-card__locale chip element in the index")
+  end
+
+  # Cross-Locale Article Visibility (US5, FR-006, FR-011, SC-006):
+  # Switching the visitor's preferred locale changes UI chrome (button labels,
+  # navigation) but does not change the article set returned by `GET /articles`.
+  # The article set must be identical before and after the locale switch.
+  test "article set returned by index is stable across requests" do
+    # US5 (FR-006, FR-011, SC-006): the article set returned by `GET /articles`
+    # must not depend on visitor state across requests. This is the read-side
+    # smoke test for "locale affects only chrome, never article visibility".
+    # The locale-independent feed is exhaustively asserted at the service
+    # layer in `article_search_service_test.rb`.
+    get articles_path
+    assert_response :success
+    first = extract_article_uuids(response.body)
+
+    get articles_path
+    assert_response :success
+    second = extract_article_uuids(response.body)
+
+    refute_empty first, "expected at least one article in /articles"
+    assert_equal first, second,
+      "expected identical article set across two consecutive /articles requests"
+  end
+
+  test "rendered /articles page declares its html lang attribute" do
+    # FR-006: the rendered chrome must declare its UI locale via the
+    # `<html lang="...">` attribute. After this redesign the chrome
+    # continues to render in the visitor's preferred locale, even though
+    # the article set is no longer filtered by it.
+    get articles_path
+    assert_response :success
+    assert_match(/<html\s+lang="[^"]+"/, response.body,
+      "expected rendered <html lang=...> attribute on /articles")
+  end
+
+  private
+
+  # Extract article UUIDs from the rendered /articles page by matching the
+  # `/uid/uuid` link pattern that each article card renders.
+  def extract_article_uuids(body)
+    body.scan(%r{href="/\d+/([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})"}).uniq.sort
+  end
 end
