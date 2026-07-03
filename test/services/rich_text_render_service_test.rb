@@ -46,10 +46,10 @@ class RichTextRenderServiceTest < ActiveSupport::TestCase
     refute_includes html, 'target="_blank"'
   end
 
-  test "full type adds text-ellipsis class to paragraphs" do
+  test "full type adds break-words class to paragraphs" do
     html = RichTextRenderService.call("<p>hi</p>", type: :full)
 
-    assert_match(/<p[^>]*class="text-ellipsis overflow-x-hidden"/, html)
+    assert_match(/<p[^>]*class="break-words"/, html)
   end
 
   test "full type wraps tables in overflow container" do

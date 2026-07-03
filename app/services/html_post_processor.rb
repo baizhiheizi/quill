@@ -14,8 +14,14 @@ module HtmlPostProcessor
     end
   end
 
+  # `overflow-x-hidden` alone (without `overflow-y`) makes browsers compute
+  # `overflow-y` as `auto` per the CSS overflow spec, which paints a
+  # persistent (if empty) vertical scrollbar on every paragraph on
+  # platforms with classic, non-overlay scrollbars. `break-words` prevents
+  # long unbroken strings (e.g. URLs) from overflowing horizontally without
+  # touching either axis's overflow.
   def parse_paragraph
-    transform("p") { |p| p["class"] = "text-ellipsis overflow-x-hidden" }
+    transform("p") { |p| p["class"] = "break-words" }
   end
 
   def parse_table
