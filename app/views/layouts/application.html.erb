@@ -82,7 +82,7 @@
     <%= render 'shared/navbar' if browser.device.mobile? %>
     <%= render 'shared/dashboard_tabbar' if browser.device.mobile? %>
     <div class="w-full max-w-full lg:flex">
-      <%= render 'shared/dashboard_rail' unless browser.device.mobile? %>
+      <%= render 'shared/dashboard_rail' if current_user.present? && !browser.device.mobile? %>
 
       <main class="flex w-full max-w-full 2xl:max-w-screen-2xl pt-12 pb-24 sm:py-0">
         <div class="w-full <%= content_for?(:sidebar) ? 'lg:w-[48rem] 2xl:w-[64rem]' : 'lg:max-w-5xl 2xl:max-w-6xl mx-auto' %>">

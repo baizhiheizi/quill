@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class HomeController < ApplicationController
-  layout "public", only: :index
+  layout "public", only: %i[index hot_tags active_authors selected_articles more]
 
   def index
     redirect_to articles_path if current_user.present? || browser.device.mobile?
