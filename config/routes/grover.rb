@@ -6,5 +6,6 @@ namespace :grover do
   end
   resources :articles, only: %i[], param: :uuid do
     get :poster
+    get :cover
   end
 end

@@ -9,12 +9,16 @@ module Users::Scopable
     scope :without_blocked, -> { where(blocked_at: nil) }
     scope :only_mixin_messenger, -> { where(authorization: { provider: :mixin }) }
 
-    scope :active, lambda {
+    scope :active_base, lambda {
       without_blocked
         .joins(:articles)
         .where(
           articles: { created_at: (3.months.ago)..., orders_count: 1... }
         )
+    }
+
+    scope :active, lambda {
+      active_base
         .group(:id)
         .select("users.*, COUNT(articles.id) AS active_articles_count")
         .order(active_articles_count: :desc, id: :asc)

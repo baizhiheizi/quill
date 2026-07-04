@@ -11,15 +11,15 @@
     class: "btn btn-primary rounded-full" %>
 </div>
 
-<div class="mb-2 py-2 border-b border-base-content/10">
+<div class="mb-2 py-2 border-b border-base-300">
   <span class="<%= current_user.email_verified? ? 'opacity-100' : 'opacity-50' %>">
     <%= current_user.email.presence || '-' %>
   </span>
 
   <% if current_user.email_verified? %>
-    <%= inline_svg_tag 'icons/check-circle-solid.svg', class: 'w-6 h-6 text-green-500 inline' %>
+    <span class="i-[tabler--circle-check] inline size-6 text-success"></span>
   <% else %>
-    <%= inline_svg_tag 'icons/exclamation-circle-solid.svg', class: 'w-6 h-6 text-red-500 inline' %>
+    <span class="i-[tabler--alert-circle] inline size-6 text-error"></span>
   <% end %>
 </div>
 

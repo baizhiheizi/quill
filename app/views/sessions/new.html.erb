@@ -1,44 +1,33 @@
 <%= turbo_frame_tag 'modal' do %>
   <%= render_modal title: t('connect_wallet') do %>
-    <div class="">
-      <div class="">
-        <div class="flex justify-center mb-2">
-          <%= link_to auth_mixin_path(return_to: params[:return_to] || request.referer),
-            data: { turbo_frame: '_top' },
-            class: "btn btn-soft btn-primary relative w-full justify-center text-lg" do %>
-            <div class="w-8 h-8 flex absolute left-4">
-              <%= image_tag ('mixin-logo.png'), class: 'w-full h-auto' %>
-            </div>
-            <span>Mixin Messenger</span>
-          <% end %>
-        </div>
-      </div>
+    <div class="space-y-6">
+      <p class="text-center text-sm text-base-content/60">
+        <%= t('connect_wallet_modal_intro', default: 'Sign in with Mixin to read, write, and receive crypto rewards on Quill.') %>
+      </p>
 
-      <div class="flex justify-center items-center flex-wrap text-center text-sm opacity-75 sm:w-[70%] mx-auto">
-        <span>
-          <%= t('by_connecting_your_wallet_you_agree_to') %>
+      <%= link_to auth_mixin_path(return_to: params[:return_to] || request.referer),
+        data: { turbo_frame: '_top' },
+        class: "btn btn-primary relative w-full justify-center rounded-full py-3 text-base font-medium" do %>
+        <span class="absolute left-4 flex size-8 items-center justify-center">
+          <%= image_tag 'mixin-logo.png', class: 'size-7' %>
         </span>
-        <%= link_to t('terms_of_service'), 'https://docs.quill.im/terms-of-service', target: "_blank", class: "font-bold mx-0.5" %>
-        <span>
-          <%= t('and') %>
-        </span>
-        <%= link_to t('privacy_policy'), 'https://docs.quill.im/privacy-policy', target: "_blank", class: "font-bold mx-0.5" %>
-      </div>
+        <span>Mixin Messenger</span>
+      <% end %>
+
+      <p class="text-center text-xs leading-relaxed text-base-content/50">
+        <%= t('by_connecting_your_wallet_you_agree_to') %>
+        <%= link_to t('terms_of_service'), 'https://docs.quill.im/terms-of-service', target: "_blank", class: "font-medium text-base-content/70 underline-offset-2 hover:underline" %>
+        <%= t('and') %>
+        <%= link_to t('privacy_policy'), 'https://docs.quill.im/privacy-policy', target: "_blank", class: "font-medium text-base-content/70 underline-offset-2 hover:underline" %>
+      </p>
     </div>
   <% end %>
 <% end %>
 
-<div class="flex my-16 items-center justify-center">
+<div class="my-16 flex items-center justify-center">
   <% if from_mixin_messenger? %>
-    <%= link_to t('connect_wallet'), 
-      auth_mixin_path, 
-      class: "btn btn-primary rounded-full" %>
+    <%= link_to t('connect_wallet'), auth_mixin_path, class: "btn btn-primary rounded-full px-6" %>
   <% else %>
-    <%= link_to t('connect_wallet'), 
-      login_path, 
-      data: { 
-        turbo_frame: :modal 
-      }, 
-      class: "btn btn-primary rounded-full" %>
+    <%= link_to t('connect_wallet'), login_path, data: { turbo_frame: :modal }, class: "btn btn-primary rounded-full px-6" %>
   <% end %>
 </div>

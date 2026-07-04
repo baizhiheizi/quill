@@ -21,7 +21,7 @@
 
     <%# Cross-Locale Article Visibility (FR-010, SC-007): surface the article's language regardless of the viewer's own locale. %>
     <% if article.locale.present? %>
-      <span class="article-card__locale badge badge-ghost badge-xs font-medium uppercase" title="<%= I18n.t("languages.#{article.locale}", default: article.locale) %>">
+      <span class="article-card__locale badge badge-soft badge-xs font-medium uppercase" title="<%= I18n.t("languages.#{article.locale}", default: article.locale) %>">
         <%= article.locale %>
       </span>
     <% end %>
@@ -43,6 +43,8 @@
       <div class="size-20 flex-shrink-0 overflow-hidden rounded-lg bg-base-200 sm:size-24">
         <%= remote_image_tag article.thumb_url, class: "h-full w-full object-cover", lazy: true %>
       </div>
+    <% elsif article.published? %>
+      <div class="hidden size-20 flex-shrink-0 overflow-hidden rounded-lg sm:flex sm:size-24" style="background: <%= ColorFromSeed.gradient_css(article.uuid) %>"></div>
     <% else %>
       <div class="hidden size-20 flex-shrink-0 items-center justify-center rounded-lg bg-base-200 text-base-content/20 sm:flex sm:size-24">
         <span class="i-[tabler--photo] size-6"></span>

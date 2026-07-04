@@ -15,8 +15,8 @@
   data-article-form-selectable-collections-value="<%= current_user.collections.listed.to_json(only: %i[uuid revenue_ratio]) %>" 
   data-article-form-article-published-value="<%= article.published_at? %>">
 
-  <div class="w-full fixed left-0 top-0 z-50 bg-base-100/90 backdrop-blur-sm">
-    <div class="max-w-xl lg:max-w-2xl 2xl:max-w-3xl mx-auto px-4 py-3 sm:px-0 flex items-center justify-between text-sm sm:text-base">
+  <div class="fixed left-0 top-0 z-50 w-full border-b border-base-300 bg-base-100/95 backdrop-blur-sm">
+    <div class="mx-auto flex max-w-xl items-center justify-between px-4 py-3 text-sm sm:max-w-2xl sm:px-6 sm:text-base 2xl:max-w-3xl">
       <div class="flex items-center">
         <%= link_to root_path, class: 'mr-4' do %>
           <%= image_tag "logo.svg", class: 'w-auto h-8 hidden sm:block' %>
@@ -34,8 +34,8 @@
                 <%= article.updated_at.strftime("%H:%M") %>
               <% end %>
             </div>
-            <div class="flex items-center space-x-2 hidden" data-article-form-target="notSavedAlert">
-              <%= inline_svg_tag 'icons/exclamation-circle-solid.svg', class: 'w-4 h-4 text-red-500 inline' %>
+            <div class="hidden items-center space-x-2" data-article-form-target="notSavedAlert">
+              <span class="i-[tabler--alert-circle] inline size-4 text-error"></span>
             </div>
           <% end %>
         </div>
@@ -56,7 +56,7 @@
         </div>
 
         <div 
-          class="btn btn-outline btn-sm rounded-full font-semibold" 
+          class="btn btn-soft btn-sm rounded-full font-medium" 
           data-action="click->article-form#save">
           <%= t('save') %>
         </div>

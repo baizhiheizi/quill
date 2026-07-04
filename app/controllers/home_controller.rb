@@ -5,10 +5,16 @@ class HomeController < ApplicationController
 
   def index
     redirect_to articles_path if current_user.present? || browser.device.mobile?
+
+    @platform_stats = {
+      articles: Article.only_published.count,
+      authors: User.active_base.distinct.count(:id),
+      revenue_label: format_revenue_stat(Article.only_published.sum(:revenue_usd))
+    }
   end
 
   def selected_articles
-    @articles = ArticleSearchService.call(filter: "revenue", time_range: "month").limit(6)
+    @articles = ArticleSearchService.call(filter: "revenue", time_range: "month", current_user:).limit(6)
   end
 
   def hot_tags
@@ -64,5 +70,20 @@ class HomeController < ApplicationController
 
   def more
     redirect_to root_path unless browser.device.mobile?
+  end
+
+  private
+
+  def format_revenue_stat(total)
+    total = total.to_f
+    return "$0" if total <= 0
+
+    if total >= 1_000_000
+      "$#{(total / 1_000_000).round(1)}M"
+    elsif total >= 1_000
+      "$#{(total / 1_000).round(1)}K"
+    else
+      "$#{total.round(0)}"
+    end
   end
 end

@@ -51,8 +51,9 @@
       </script>
     <% end %>
 
-    <link rel=preconnect"" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Noto Sans SC" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,500;0,600;1,500&family=Noto+Serif+SC:wght@500;600&family=Inter:wght@400;500;600&family=Noto+Sans+SC:wght@400;500;600&display=swap" rel="stylesheet">
     <%= favicon_link_tag "favicon.svg" %>
     <script>
       (function () {
@@ -90,13 +91,13 @@
           </div>
         </div>
 
-        <aside class="relative hidden min-h-screen w-80 border-base-content/10 border-l p-6 xl:block">
+        <aside class="relative hidden min-h-screen w-80 border-l border-base-300 p-6 xl:block">
           <div class="sticky top-8 space-y-8">
             <% if current_user.blank? %>
-              <div class="bg-base-200/30 border border-base-content/5 rounded-2xl p-6 text-center shadow-sm">
-                <h3 class="font-serif font-bold text-xl text-base-content mb-2"><%= t('login', default: 'Join Quill') %></h3>
-                <p class="text-sm text-base-content/60 mb-6">Read, write, and earn crypto rewards.</p>
-                <%= link_to login_path, data: { turbo_frame: :modal }, class: "btn btn-primary w-full rounded-full shadow-md shadow-primary/20" do %>
+              <div class="rounded-xl border border-base-300 bg-base-200 p-6 text-center">
+                <h3 class="font-display mb-2 text-xl font-medium text-base-content"><%= t('login', default: 'Join Quill') %></h3>
+                <p class="mb-6 text-sm text-base-content/60"><%= t('home_value_proposition') %></p>
+                <%= link_to login_path, data: { turbo_frame: :modal }, class: "btn btn-primary w-full rounded-full" do %>
                   <%= t('connect_wallet', default: 'Connect Wallet') %>
                 <% end %>
               </div>

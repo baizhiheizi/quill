@@ -1,46 +1,43 @@
-<nav class="fixed bottom-0 z-50 block w-full border-t border-base-content/5 bg-base-200 shadow lg:hidden">
+<nav class="fixed bottom-0 z-50 block w-full border-t border-base-300 bg-base-100 lg:hidden">
   <div class="grid grid-cols-4">
-    <div class="relative py-[1.125rem]">
-      <%= inline_svg_tag (@active_page == 'home' ? 'icons/home-solid.svg' : 'icons/home.svg'),
-        class: "mx-auto h-6 w-6 text-base-content/60" %>
-      <%= link_to '', articles_path, class: "absolute inset-0" unless @active_page == 'home' %>
+    <div class="relative py-3">
+      <span class="<%= @active_page == 'home' ? 'text-base-content' : 'text-base-content/60' %> i-[tabler--home] mx-auto block size-6"></span>
+      <%= link_to '', articles_path, class: "absolute inset-0", data: { controller: 'prefetch' } unless @active_page == 'home' %>
     </div>
 
-    <div class="relative py-[1.125rem]">
-      <%= inline_svg_tag (@active_page == 'readings' ? 'icons/glasses-solid.svg' : 'icons/glasses.svg'),
-        class: "mx-auto h-6 w-6 text-base-content/60" %>
+    <div class="relative py-3">
+      <span class="<%= @active_page == 'readings' ? 'text-base-content' : 'text-base-content/60' %> i-[tabler--eyeglass] mx-auto block size-6"></span>
       <%= link_to '', dashboard_readings_path, class: "absolute inset-0" unless @active_page == 'readings' %>
     </div>
 
-    <div class="relative py-[1.125rem]">
-      <%= inline_svg_tag (@active_page == 'authorings' ? 'icons/article-solid.svg' : 'icons/article.svg'),
-        class: "mx-auto h-6 w-6 text-base-content/60" %>
+    <div class="relative py-3">
+      <span class="<%= @active_page == 'authorings' ? 'text-base-content' : 'text-base-content/60' %> i-[tabler--article] mx-auto block size-6"></span>
       <%= link_to '', dashboard_authorings_path, class: "absolute inset-0" unless @active_page == 'authorings' %>
     </div>
 
     <% if current_user.present? %>
       <% dropdown_button = capture do %>
-        <%= render "shared/avatar", user: current_user, thumb: true, class: "h-7 w-7 rounded-full" %>
+        <%= render "shared/avatar", user: current_user, thumb: true, class: "mx-auto size-7 rounded-full" %>
       <% end %>
-      <%= render_dropdown class: 'flex justify-center py-4', button: dropdown_button do %>
-        <ul class="menu menu-sm w-52 p-2">
-          <li><%= link_to t('profile_page'), user_path(current_user), class: "dropdown-item" %></li>
-          <li><%= link_to t('notification'), dashboard_notifications_path, class: "dropdown-item" %></li>
-          <li><%= link_to t('settings'), dashboard_settings_path, class: "dropdown-item" %></li>
-          <li><%= link_to t('language'), edit_locale_path, data: { turbo_frame: :modal }, class: "dropdown-item" %></li>
+      <%= render_dropdown class: 'flex justify-center py-3', button: dropdown_button do %>
+        <ul class="menu menu-sm w-52 rounded-xl border border-base-300 bg-base-100 p-2 shadow-lg">
+          <li><%= link_to t('profile_page'), user_path(current_user), class: "dropdown-item rounded-lg" %></li>
+          <li><%= link_to t('notification'), dashboard_notifications_path, class: "dropdown-item rounded-lg" %></li>
+          <li><%= link_to t('settings'), dashboard_settings_path, class: "dropdown-item rounded-lg" %></li>
+          <li><%= link_to t('language'), edit_locale_path, data: { turbo_frame: :modal }, class: "dropdown-item rounded-lg" %></li>
           <li>
             <div data-controller="darkmode">
-              <a class="dropdown-item hidden cursor-pointer" data-darkmode-target="lightButton" data-action="darkmode#toggle"><%= t('dark_mode') %></a>
-              <a class="dropdown-item hidden cursor-pointer" data-darkmode-target="darkButton" data-action="darkmode#toggle"><%= t('light_mode') %></a>
+              <a class="dropdown-item hidden cursor-pointer rounded-lg" data-darkmode-target="lightButton" data-action="darkmode#toggle"><%= t('dark_mode') %></a>
+              <a class="dropdown-item hidden cursor-pointer rounded-lg" data-darkmode-target="darkButton" data-action="darkmode#toggle"><%= t('light_mode') %></a>
             </div>
           </li>
-          <li><%= link_to t('disconnect'), logout_path, class: "dropdown-item" %></li>
+          <li><%= link_to t('disconnect'), logout_path, class: "dropdown-item rounded-lg text-error" %></li>
         </ul>
       <% end %>
     <% else %>
       <% login_link_options = from_mixin_messenger? ? {} : { data: { turbo_frame: :modal } } %>
-      <div class="relative py-[1.125rem]">
-        <%= inline_svg_tag 'icons/user.svg', class: "mx-auto h-6 w-6 text-base-content/60" %>
+      <div class="relative py-3">
+        <span class="i-[tabler--user] mx-auto block size-6 text-base-content/60"></span>
         <%= link_to '', login_path, **login_link_options, class: "absolute inset-0" %>
       </div>
     <% end %>

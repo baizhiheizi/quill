@@ -48,7 +48,7 @@
         <% end %>
 
         <% if current_user.present? %>
-          <%= link_to dashboard_notifications_path, class: "btn btn-ghost btn-circle btn-sm sm:btn-md", "aria-label": t('notification') do %>
+          <%= link_to dashboard_notifications_path, class: "btn btn-soft btn-circle btn-sm sm:btn-md", "aria-label": t('notification') do %>
             <span class="indicator">
               <span class="i-[tabler--bell] size-5 text-base-content/60"></span>
               <% if current_user.has_unread_notification? %>
@@ -59,15 +59,15 @@
         <% end %>
 
         <div data-controller="darkmode" class="hidden items-center sm:flex">
-          <a class="btn btn-ghost btn-circle btn-sm hidden cursor-pointer" data-darkmode-target="lightButton" data-action="darkmode#toggle" title="<%= t('dark_mode') %>" aria-label="<%= t('dark_mode') %>">
+          <a class="btn btn-soft btn-circle btn-sm hidden cursor-pointer" data-darkmode-target="lightButton" data-action="darkmode#toggle" title="<%= t('dark_mode') %>" aria-label="<%= t('dark_mode') %>">
             <span class="i-[tabler--moon] size-5 text-base-content/60"></span>
           </a>
-          <a class="btn btn-ghost btn-circle btn-sm hidden cursor-pointer" data-darkmode-target="darkButton" data-action="darkmode#toggle" title="<%= t('light_mode') %>" aria-label="<%= t('light_mode') %>">
+          <a class="btn btn-soft btn-circle btn-sm hidden cursor-pointer" data-darkmode-target="darkButton" data-action="darkmode#toggle" title="<%= t('light_mode') %>" aria-label="<%= t('light_mode') %>">
             <span class="i-[tabler--sun] size-5 text-base-content/60"></span>
           </a>
         </div>
 
-        <%= link_to edit_locale_path, data: { turbo_frame: :modal }, class: "btn btn-ghost btn-circle btn-sm hidden sm:flex", title: t('language'), "aria-label": t('language') do %>
+        <%= link_to edit_locale_path, data: { turbo_frame: :modal }, class: "btn btn-soft btn-circle btn-sm hidden sm:flex", title: t('language'), "aria-label": t('language') do %>
           <span class="i-[tabler--world] size-5 text-base-content/60"></span>
         <% end %>
 
@@ -89,7 +89,7 @@
             </ul>
           <% end %>
         <% else %>
-          <%= link_to login_path, data: { turbo_frame: :modal }, class: "btn btn-ghost btn-circle btn-sm sm:hidden", "aria-label": t('login', default: 'Login') do %>
+          <%= link_to login_path, data: { turbo_frame: :modal }, class: "btn btn-soft btn-circle btn-sm sm:hidden", "aria-label": t('login', default: 'Login') do %>
             <span class="i-[tabler--user] size-5"></span>
           <% end %>
         <% end %>

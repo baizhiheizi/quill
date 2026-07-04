@@ -1,6 +1,6 @@
 <div id="article_<%= article.uuid %>_comments_card" class="mb-8 hidden w-full sm:block">
   <div class="flex items-center justify-between mb-8 pb-4 border-b border-base-content/10">
-    <div class="text-2xl font-serif font-semibold text-base-content">
+    <div class="font-display text-2xl font-semibold text-base-content">
       <%= t('comments') %> <span class="text-base-content/50 text-lg font-sans font-medium ml-2"><%= article.comments_count %></span>
     </div>
     <% if article.authorized? user %>

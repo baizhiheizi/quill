@@ -1,0 +1,7 @@
+<div class="relative overflow-hidden" style="width: <%= @width %>px; height: <%= @height %>px; background: linear-gradient(135deg, hsl(<%= @cover_hue %>, 65%, 45%), hsl(<%= (@cover_hue + 40) % 360 %>, 55%, 35%));">
+  <div class="absolute inset-0 opacity-20" style="background-image: radial-gradient(circle at 30% 20%, white 0%, transparent 50%), radial-gradient(circle at 70% 80%, white 0%, transparent 40%);"></div>
+  <div class="absolute inset-0 flex flex-col justify-end p-8">
+    <p class="text-white/80 text-sm font-medium mb-2 truncate"><%= @article.author.name %></p>
+    <p class="text-white text-2xl font-bold leading-tight line-clamp-3"><%= @article.title %></p>
+  </div>
+</div>

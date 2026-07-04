@@ -6,4 +6,11 @@ class Grover::ArticlesController < Grover::BaseController
     @width = 640
     @height = 860
   end
+
+  def cover
+    @article = Article.find_by uuid: params[:article_uuid]
+    @width = 384
+    @height = 384
+    @cover_hue = ColorFromSeed.hue(@article&.uuid)
+  end
 end
