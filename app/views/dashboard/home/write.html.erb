@@ -1,134 +1,50 @@
-<div class="hidden sm:block mb-8">
-  <span class="text-xl font-bold">
-    <%= t('write') %>
-  </span>
-</div>
-
-<div class="sm:mb-8"
-  data-controller="tabs"
-  data-tabs-active-tab-value="<%= @tab %>"
-  data-tabs-active-class-value="font-bold text-primary !border-primary">
-  <div class="mb-2 flex w-full flex-nowrap items-center overflow-auto scrollbar-hide sm:mb-4">
-    <%= link_to dashboard_write_path(tab: :drafted),
-      class: "min-w-fit cursor-pointer border-transparent py-1 pr-8",
-      data: {
-        tabs_target: "tab",
-        tabs_tabname_param: "drafted" 
-      } do %>
-      <div class="min-w-fit">
-        <%= t('drafted') %>
-      </div>
-      <div class="h-2 border-b-2 border-inherit w-4 mx-auto"></div>
-    <% end %>
-    <%= link_to dashboard_write_path(tab: :collections),
-      class: "min-w-fit cursor-pointer border-transparent py-1 pr-8",
-      data: {
-        tabs_target: "tab",
-        tabs_tabname_param: "collections" 
-      } do %>
-      <div class="min-w-fit">
-        <%= t('collections') %>
-      </div>
-      <div class="h-2 border-b-2 border-inherit w-4 mx-auto"></div>
-    <% end %>
-    <%= link_to dashboard_write_path(tab: :published),
-      class: "min-w-fit cursor-pointer border-transparent py-1 pr-8",
-      data: {
-        tabs_target: "tab",
-        tabs_tabname_param: "published" 
-      } do %>
-      <div class="min-w-fit">
-        <%= t('published') %>
-      </div>
-      <div class="h-2 border-b-2 border-inherit w-4 mx-auto"></div>
-    <% end %>
-    <%= link_to dashboard_write_path(tab: :hidden),
-      class: "min-w-fit cursor-pointer border-transparent py-1 pr-8",
-      data: {
-        tabs_target: "tab",
-        tabs_tabname_param: "hidden" 
-      } do %>
-      <div class="min-w-fit">
-        <%= t('hidden') %>
-      </div>
-      <div class="h-2 border-b-2 border-inherit w-4 mx-auto"></div>
-    <% end %>
-    <%= link_to dashboard_write_path(tab: :transfers),
-      class: "min-w-fit cursor-pointer border-transparent py-1 pr-8",
-      data: {
-        tabs_target: "tab",
-        tabs_tabname_param: "transfers" 
-      } do %>
-      <div class="min-w-fit">
-        <%= t('author_revenue') %>
-      </div>
-      <div class="h-2 border-b-2 border-inherit w-4 mx-auto"></div>
+<%# Author Workspace — status-grouped sections replacing the old flat 5-tab
+    strip (specs/005-dashboard-ux-redesign, US3). Every section reuses its
+    existing controller/turbo-frame endpoint unchanged (FR-012–FR-015); only
+    the presentation groups them together instead of hiding all but one
+    behind a tab switch. %>
+<div class="space-y-10">
+  <div class="flex items-center justify-between">
+    <h1 class="font-display text-2xl font-medium text-base-content"><%= t('write') %></h1>
+    <%= link_to new_article_path, class: "btn btn-primary btn-sm rounded-full" do %>
+      <span class="i-[tabler--edit] size-4"></span>
+      <%= t('write') %>
     <% end %>
   </div>
 
-  <div class="hidden pb-4"
-    data-tabs-content-param="drafted"
-    data-tabs-target="content">
-    <%= turbo_frame_tag "my_drafted_articles", 
-      src: dashboard_articles_path(tab: :drafted), 
-      data: {
-        turbo_frame: "_top"
-      },
-      loading: :lazy do %>
+  <section id="write-drafted">
+    <h2 class="mb-3 text-sm font-semibold text-base-content"><%= t('drafted') %></h2>
+    <%= turbo_frame_tag "my_drafted_articles", src: dashboard_articles_path(tab: :drafted), loading: :lazy do %>
       <%= render "shared/loading" %>
     <% end %>
-  </div>
+  </section>
 
-  <div class="hidden pb-4"
-    data-tabs-content-param="collections"
-    data-tabs-target="content">
-    <%= turbo_frame_tag "my_collections", 
-      src: dashboard_collections_path, 
-      data: {
-        turbo_frame: "_top"
-      },
-      loading: :lazy do %>
+  <section id="write-published">
+    <h2 class="mb-3 text-sm font-semibold text-base-content"><%= t('published') %></h2>
+    <%= turbo_frame_tag "my_published_articles", src: dashboard_articles_path(tab: :published), loading: :lazy do %>
       <%= render "shared/loading" %>
     <% end %>
-  </div>
+  </section>
 
-  <div class="hidden pb-4"
-    data-tabs-content-param="published"
-    data-tabs-target="content">
-    <%= turbo_frame_tag "my_published_articles", 
-      src: dashboard_articles_path(tab: :published), 
-      data: {
-        turbo_frame: "_top"
-      },
-      loading: :lazy do %>
+  <section id="write-hidden">
+    <h2 class="mb-3 text-sm font-semibold text-base-content"><%= t('hidden') %></h2>
+    <%= turbo_frame_tag "my_hidden_articles", src: dashboard_articles_path(tab: :hidden), loading: :lazy do %>
       <%= render "shared/loading" %>
     <% end %>
-  </div>
+  </section>
 
-  <div class="hidden pb-4"
-    data-tabs-content-param="hidden"
-    data-tabs-target="content">
-    <%= turbo_frame_tag "my_hidden_articles", 
-      src: dashboard_articles_path(tab: :hidden), 
-      data: {
-        turbo_frame: "_top"
-      },
-      loading: :lazy do %>
+  <section id="write-collections">
+    <h2 class="mb-3 text-sm font-semibold text-base-content"><%= t('collections') %></h2>
+    <%= turbo_frame_tag "my_collections", src: dashboard_collections_path, loading: :lazy do %>
       <%= render "shared/loading" %>
     <% end %>
-  </div>
+  </section>
 
-  <div class="hidden pb-4"
-    data-tabs-content-param="transfers"
-    data-tabs-target="content">
+  <section id="write-earnings">
+    <h2 class="mb-3 text-sm font-semibold text-base-content"><%= t('author_revenue') %></h2>
     <%= turbo_frame_tag "my_transfers_stats", src: dashboard_transfers_stats_path %>
-    <%= turbo_frame_tag "my_transfers", 
-      src: dashboard_transfers_path(tab: :author), 
-      data: {
-        turbo_frame: "_top"
-      },
-      loading: :lazy do %>
+    <%= turbo_frame_tag "my_transfers", src: dashboard_transfers_path(tab: :author), loading: :lazy do %>
       <%= render "shared/loading" %>
     <% end %>
-  </div>
+  </section>
 </div>

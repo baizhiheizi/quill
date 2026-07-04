@@ -1,5 +1,6 @@
 zh-CN:
   notification: 消息通知
+  notification_settings_manage: 通知偏好设置
   notifiers:
     article_published_notifier:
       notification:

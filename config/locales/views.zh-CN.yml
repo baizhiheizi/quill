@@ -166,6 +166,14 @@ zh-CN:
   overview: 总览
   finances: 财务
   account: 账户
+  overview_unread_notifications: "%{count} 条未读通知"
+  recently_published: 最近发表
+  recently_read: 最近阅读
+  overview_no_published_articles: 你还没有发表过文章。
+  overview_no_bought_articles: 你还没有购买过文章。
+  earnings: 收益
+  preferences: 偏好设置
+  notification_settings_manage_hint: 在消息通知中心管理你会收到哪些通知、以何种方式接收。
   notifications_manage: 消息通知
   settings: 个人设置
   articles_manage: 文章管理

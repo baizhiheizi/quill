@@ -1,5 +1,6 @@
 en:
   notification: Notification
+  notification_settings_manage: Notification preferences
   notifiers:
     article_published_notifier:
       notification:

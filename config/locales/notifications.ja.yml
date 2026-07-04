@@ -1,5 +1,6 @@
 ja:
   notification: 通知
+  notification_settings_manage: 通知設定
   notifiers:
     article_published_notifier:
       notification:

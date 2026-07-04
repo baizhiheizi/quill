@@ -2,14 +2,21 @@
 
 class Dashboard::TransfersController < Dashboard::BaseController
   def index
-    @tab = params[:tab] || "author"
+    @tab = params[:tab] || "all"
 
+    # "all" powers the unified Finances view (specs/005-dashboard-ux-redesign,
+    # FR-021) — reader-reward and author-revenue transfers together, each row
+    # attributed to its role by `dashboard/transfers/_transfer.html.erb`. The
+    # Write/Read workspace embeds keep passing an explicit `tab:` so their
+    # role-scoped behavior is unchanged.
     transfers =
       case @tab
       when "author"
         current_user.author_revenue_transfers
       when "reader"
         current_user.reader_revenue_transfers
+      else
+        current_user.revenue_transfers
       end
 
     # Eager-load associations consumed by the rendered partial
@@ -28,6 +35,6 @@ class Dashboard::TransfersController < Dashboard::BaseController
   end
 
   def stats
-    @role = params[:role] || "author"
+    @role = params[:role] || "all"
   end
 end

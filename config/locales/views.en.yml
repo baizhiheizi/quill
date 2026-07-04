@@ -166,6 +166,14 @@ en:
   overview: Overview
   finances: Finances
   account: Account
+  overview_unread_notifications: "%{count} unread notifications"
+  recently_published: Recently published
+  recently_read: Recently read
+  overview_no_published_articles: You haven't published anything yet.
+  overview_no_bought_articles: You haven't bought anything yet.
+  earnings: Earnings
+  preferences: Preferences
+  notification_settings_manage_hint: Manage what you get notified about and how, from the notifications center.
   notifications_manage: Notifications
   settings: Settings
   articles_manage: Posts

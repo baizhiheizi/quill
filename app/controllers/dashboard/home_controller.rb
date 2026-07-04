@@ -1,8 +1,29 @@
 # frozen_string_literal: true
 
 class Dashboard::HomeController < Dashboard::BaseController
+  RECENT_LIMIT = 3
+
+  # Composed entirely from already-existing `Users::Statable` aggregate
+  # methods (counter caches / small indexed sums, already used to power the
+  # rail's notification badge and the Write/Read workspaces' earnings tabs)
+  # plus two small `.limit(3)` recency queries following the exact
+  # `.includes(...)` eager-loading shape already used by
+  # `Dashboard::ArticlesController#index` — no new queries, jobs, or caching
+  # layer (specs/005-dashboard-ux-redesign data-model.md "Dashboard Overview").
   def index
-    redirect_to dashboard_read_path
+    @active_section = :overview
+    @is_author = current_user.articles_count > 0
+    @unread_notifications_count = current_user.unread_notifications_count
+    @author_revenue_total_usd = current_user.author_revenue_total_usd if @is_author
+    @reader_revenue_total_usd = current_user.reader_revenue_total_usd
+    @recent_articles = current_user.articles.published
+      .order(updated_at: :desc)
+      .limit(RECENT_LIMIT)
+      .includes(:currency, :tags, cover_attachment: :blob)
+    @recent_reads = current_user.bought_articles
+      .order(created_at: :desc)
+      .limit(RECENT_LIMIT)
+      .includes(:author, :currency)
   end
 
   def write
@@ -13,6 +34,10 @@ class Dashboard::HomeController < Dashboard::BaseController
   def read
     @active_section = :read
     @tab = params[:tab] || "bought"
+  end
+
+  def finances
+    @active_section = :finances
   end
 
   def account
