@@ -41,17 +41,14 @@ class Articles::PosterGeneratorTest < ActiveSupport::TestCase
     assert_nil article.thumb_url
   end
 
-  test "thumb_url enqueues GenerateDefaultCoverJob for paid published article without cover" do
+  test "thumb_url returns nil for paid published article without cover" do
     article = articles(:published_paid)
     article.update_columns(price: 0.0001, state: "published")
     article.define_singleton_method(:cover) do
       Struct.new(:attached?).new(false)
     end
-    article.define_singleton_method(:generate_default_cover) { nil }
 
-    assert_enqueued_with(job: Articles::GenerateDefaultCoverJob, args: [ article.id ]) do
-      assert_nil article.thumb_url
-    end
+    assert_nil article.thumb_url
   end
 
   test "thumb_url extracts the first absolute image URL from content when free" do
@@ -133,23 +130,6 @@ class Articles::PosterGeneratorTest < ActiveSupport::TestCase
     Rails.application.define_singleton_method(:credentials) { original_credentials }
   end
 
-  test "generated_default_cover_url uses grover_article_cover_url with the credential token and png format" do
-    article = articles(:published_paid)
-    expected_token = "grover-cover-token"
-    article.define_singleton_method(:grover_article_cover_url) do |uuid, **opts|
-      { uuid: uuid, opts: opts, endpoint: "grover/articles/#{uuid}/cover.#{opts[:format]}" }
-    end
-
-    with_grover_credentials(expected_token) do
-      result = article.generated_default_cover_url
-
-      assert_equal article.uuid, result[:uuid]
-      assert_equal expected_token, result[:opts][:token]
-      assert_equal :png, result[:opts][:format]
-      assert_equal "grover/articles/#{article.uuid}/cover.png", result[:endpoint]
-    end
-  end
-
   test "ColorFromSeed produces distinct hues for different article uuids" do
     a = articles(:published_paid)
     b = articles(:published_free)
@@ -157,7 +137,7 @@ class Articles::PosterGeneratorTest < ActiveSupport::TestCase
     refute_equal ColorFromSeed.hue(a.uuid), ColorFromSeed.hue(b.uuid)
   end
 
-  test "thumb_url prefers attached cover over generated default" do
+  test "thumb_url prefers attached cover over content image" do
     article = stub_cover(attached: true, key: "covers/abc/cover.jpg")
 
     assert_equal "#{Settings.storage.endpoint}/covers/abc/cover.jpg", article.thumb_url

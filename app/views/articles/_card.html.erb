@@ -39,12 +39,14 @@
       </p>
     </div>
 
-    <% if article.thumb_url.present? %>
+    <% if (card_image_url = article_card_image_url(article)).present? %>
       <div class="size-20 flex-shrink-0 overflow-hidden rounded-lg bg-base-200 sm:size-24">
-        <%= remote_image_tag article.thumb_url, class: "h-full w-full object-cover", lazy: true %>
+        <%= remote_image_tag card_image_url, class: "h-full w-full object-cover", lazy: true %>
       </div>
     <% elsif article.published? %>
-      <div class="hidden size-20 flex-shrink-0 overflow-hidden rounded-lg sm:flex sm:size-24" style="background: <%= ColorFromSeed.gradient_css(article.uuid) %>"></div>
+      <div class="hidden size-20 flex-shrink-0 sm:block sm:size-24">
+        <%= render "articles/card_cover", article: %>
+      </div>
     <% else %>
       <div class="hidden size-20 flex-shrink-0 items-center justify-center rounded-lg bg-base-200 text-base-content/20 sm:flex sm:size-24">
         <span class="i-[tabler--photo] size-6"></span>

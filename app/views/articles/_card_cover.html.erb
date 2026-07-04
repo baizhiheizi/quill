@@ -1,0 +1,20 @@
+<% art = CoverArt.for(article.uuid) %>
+<div class="relative h-full w-full overflow-hidden rounded-lg" style="background: <%= art.background %>;">
+  <svg class="pointer-events-none absolute inset-0 h-full w-full" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+    <% art.shapes.each do |shape| %>
+      <% fill = CoverArt.shape_fill(shape, base_hue: art.base_hue) %>
+      <% stroke = CoverArt.shape_stroke(shape, base_hue: art.base_hue) %>
+      <% transform = shape.rotation.nonzero? ? "rotate(#{shape.rotation} #{shape.cx} #{shape.cy})" : nil %>
+      <% case shape.kind %>
+      <% when :circle %>
+        <circle cx="<%= shape.cx %>" cy="<%= shape.cy %>" r="<%= shape.r %>" fill="<%= fill %>" <%= "transform=\"#{transform}\"" if transform %> />
+      <% when :ring %>
+        <circle cx="<%= shape.cx %>" cy="<%= shape.cy %>" r="<%= shape.r %>" fill="none" stroke="<%= stroke %>" stroke-width="<%= shape.stroke_width %>" <%= "transform=\"#{transform}\"" if transform %> />
+      <% when :ellipse, :blob %>
+        <ellipse cx="<%= shape.cx %>" cy="<%= shape.cy %>" rx="<%= shape.rx %>" ry="<%= shape.ry %>" fill="<%= fill %>" <%= "transform=\"#{transform}\"" if transform %> />
+      <% when :diamond %>
+        <rect x="<%= shape.cx - shape.rx %>" y="<%= shape.cy - shape.ry %>" width="<%= shape.rx * 2 %>" height="<%= shape.ry * 2 %>" rx="3" fill="<%= fill %>" stroke="<%= stroke %>" stroke-width="<%= shape.stroke_width %>" <%= "transform=\"#{transform}\"" if transform %> />
+      <% end %>
+    <% end %>
+  </svg>
+</div>

@@ -11,21 +11,6 @@ module Articles::PosterGenerator
     [ Settings.storage.endpoint, cover.key ].join("/") if cover.attached?
   end
 
-  def generated_default_cover_url
-    grover_article_cover_url uuid, token: Rails.application.credentials.dig(:grover, :token), format: :png
-  end
-
-  def generate_default_cover
-    return if cover.attached?
-
-    file = URI.parse(generated_default_cover_url).open
-    cover.attach io: file, filename: "default_cover_#{uuid}.png"
-  end
-
-  def generate_default_cover_async
-    Articles::GenerateDefaultCoverJob.perform_later id
-  end
-
   def poster_url
     if poster.attached?
       [ Settings.storage.endpoint, poster.key ].join("/")
@@ -62,13 +47,7 @@ module Articles::PosterGenerator
   def resolve_thumb_url
     return cover_url if cover.attached?
 
-    content_image = extract_content_image_url if free?
-    return content_image if content_image.present?
-
-    return unless published?
-
-    ensure_default_cover_attached!
-    cover_url
+    extract_content_image_url if free?
   end
 
   def extract_content_image_url
@@ -77,14 +56,5 @@ module Articles::PosterGenerator
       .css("img")
       .map(&->(img) { img.attr("src") })
       .find(&->(url) { URI::DEFAULT_PARSER.make_regexp.match?(url) })
-  end
-
-  def ensure_default_cover_attached!
-    return if cover.attached?
-
-    generate_default_cover_async
-    generate_default_cover
-  rescue StandardError => e
-    Rails.logger.warn("[Articles::PosterGenerator] default cover generation failed for #{uuid}: #{e.message}")
   end
 end
