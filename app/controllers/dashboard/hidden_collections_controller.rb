@@ -9,7 +9,7 @@ class Dashboard::HiddenCollectionsController < Dashboard::BaseController
   def update
     @collection.hide! if @collection.may_hide?
 
-    redirect_to dashboard_authorings_path(tab: :collections)
+    redirect_to dashboard_write_path(tab: :collections)
   end
 
   private

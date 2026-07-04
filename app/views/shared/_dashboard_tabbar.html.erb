@@ -1,0 +1,28 @@
+<%# Dashboard studio bottom tab bar (mobile) — same 5 groupings as
+    shared/_dashboard_rail plus the persistent Notifications icon, no
+    divergent mobile-only IA (FR-006, specs/005-dashboard-ux-redesign).
+    Access tokens (FR-003) has no dedicated icon here (6 icons is already
+    dense for a bottom bar) — it's one tap into Account, same as desktop's
+    dropdown entry, satisfying SC-001's "within two navigation actions". %>
+<nav class="fixed bottom-0 z-50 block w-full border-t border-base-300 bg-base-100 lg:hidden">
+  <div class="grid grid-cols-6">
+    <% dashboard_rail_sections.each do |item| %>
+      <div class="relative py-3">
+        <span class="<%= @active_section == item[:section] ? 'text-base-content' : 'text-base-content/60' %> <%= item[:icon] %> mx-auto block size-6"></span>
+        <%= link_to '', item[:path], class: "absolute inset-0", data: { controller: 'prefetch' } unless @active_section == item[:section] %>
+      </div>
+    <% end %>
+
+    <div class="relative py-3">
+      <span class="indicator mx-auto block">
+        <span class="i-[tabler--bell] mx-auto block size-6 text-base-content/60"></span>
+        <% if current_user.has_unread_notification? %>
+          <span class="indicator-item badge badge-error badge-xs"></span>
+        <% end %>
+      </span>
+      <%= link_to '', dashboard_notifications_path, class: "absolute inset-0" %>
+    </div>
+  </div>
+
+  <div style="height:env(safe-area-inset-bottom)"></div>
+</nav>

@@ -3,6 +3,7 @@
 class Dashboard::ArticlesController < Dashboard::BaseController
   def index
     @tab = params[:tab] || "drafted"
+    @active_section = @tab == "bought" ? :read : :write
 
     articles =
       case @tab

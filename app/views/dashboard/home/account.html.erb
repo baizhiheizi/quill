@@ -3,7 +3,7 @@
   data-tabs-active-tab-value="<%= @tab %>"
   data-tabs-active-class-value="font-bold text-primary !border-primary">
   <div class="mb-8 flex w-full flex-nowrap items-center overflow-auto scrollbar-hide">
-    <%= link_to dashboard_settings_path(tab: :profile),
+    <%= link_to dashboard_account_path(tab: :profile),
       class: "cursor-pointer py-1 pr-8",
       data: {
         tabs_target: "tab",
@@ -15,7 +15,7 @@
       </div>
       <div class="h-2 border-b-2 border-inherit mx-auto w-5"></div>
     <% end %>
-    <%= link_to dashboard_settings_path(tab: :notification),
+    <%= link_to dashboard_account_path(tab: :notification),
       class: "cursor-pointer py-1 pr-8",
       data: {
         tabs_target: "tab",
@@ -48,7 +48,7 @@
       <span class="i-[tabler--chevron-left] size-5 font-bold"></span>
     <% end %>
     <span class="font-bold text-lg">
-      <%= t('settings') %>
+      <%= t('account') %>
     </span>
   </div>
 <% end %>

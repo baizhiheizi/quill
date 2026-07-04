@@ -80,41 +80,29 @@
 
   <body class="flex min-h-screen justify-center overflow-x-hidden bg-base-100 text-base-content">
     <%= render 'shared/navbar' if browser.device.mobile? %>
-    <%= render 'shared/tabbar' if browser.device.mobile? && @active_page.in?(%w[home readings authorings]) %>
+    <%= render 'shared/dashboard_tabbar' if browser.device.mobile? %>
     <div class="w-full max-w-full lg:w-auto lg:flex">
-      <%= render 'shared/left_bar' unless browser.device.mobile? %>
+      <%= render 'shared/dashboard_rail' unless browser.device.mobile? %>
 
-      <main class="flex max-w-full 2xl:max-w-screen-2xl pt-12 pb-24 sm:py-0">
-        <div class="w-full lg:w-[48rem] 2xl:w-[64rem]">
-          <div class="w-full md:w-auto md:max-w-screen-md mx-auto py-4 px-6 sm:p-8">
+      <main class="flex w-full max-w-full 2xl:max-w-screen-2xl pt-12 pb-24 sm:py-0">
+        <div class="w-full <%= content_for?(:sidebar) ? 'lg:w-[48rem] 2xl:w-[64rem]' : 'lg:max-w-5xl 2xl:max-w-6xl mx-auto' %>">
+          <div class="w-full py-4 px-6 sm:p-8">
             <%= yield %>
           </div>
         </div>
 
-        <aside class="relative hidden min-h-screen w-80 border-l border-base-300 p-6 xl:block">
-          <div class="sticky top-8 space-y-8">
-            <% if current_user.blank? %>
-              <div class="rounded-xl border border-base-300 bg-base-200 p-6 text-center">
-                <h3 class="font-display mb-2 text-xl font-medium text-base-content"><%= t('login', default: 'Join Quill') %></h3>
-                <p class="mb-6 text-sm text-base-content/60"><%= t('home_value_proposition') %></p>
-                <%= link_to login_path, data: { turbo_frame: :modal }, class: "btn btn-primary w-full rounded-full" do %>
-                  <%= t('connect_wallet', default: 'Connect Wallet') %>
-                <% end %>
-              </div>
-            <% end %>
-
-            <% if content_for? :sidebar %>
+        <% if content_for?(:sidebar) %>
+          <%# Dashboard pages default to no right rail — the public-page
+              widgets (join-Quill card, active-authors/hot-tags, footer) are
+              marketing/discovery content with no dashboard relevance, and
+              removing them reclaims width for denser workspace layouts
+              (research.md §6). Pages may still opt in via content_for(:sidebar). %>
+          <aside class="relative hidden min-h-screen w-80 border-l border-base-300 p-6 xl:block">
+            <div class="sticky top-8 space-y-8">
               <%= yield :sidebar %>
-            <% else %>
-              <%= turbo_frame_tag 'active_authors', src: '/active_authors', loading: :lazy %>
-              <div class="divider opacity-30"></div>
-              <%= turbo_frame_tag 'hot_tags', src: '/hot_tags', loading: :lazy %>
-              <div class="pt-4">
-                <%= render "shared/footer" %>
-              </div>
-            <% end %>
-          </div>
-        </aside>
+            </div>
+          </aside>
+        <% end %>
       </main>
     </div>
 

@@ -84,7 +84,7 @@ class SessionsController < ApplicationController
         uid: raw["id"]
       )
     end
-    redirect_to dashboard_settings_path
+    redirect_to dashboard_account_path
   rescue Rack::OAuth2::Client::Error
     redirect_to root_path
   end

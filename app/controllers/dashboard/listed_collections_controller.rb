@@ -13,9 +13,9 @@ class Dashboard::ListedCollectionsController < Dashboard::BaseController
       @collection.publish!
     end
 
-    redirect_to dashboard_authorings_path(tab: :collections), success: t("success_updated")
+    redirect_to dashboard_write_path(tab: :collections), success: t("success_updated")
   rescue StandardError => e
-    redirect_to dashboard_authorings_path(tab: :collections), warning: e.inspect
+    redirect_to dashboard_write_path(tab: :collections), warning: e.inspect
   end
 
   private

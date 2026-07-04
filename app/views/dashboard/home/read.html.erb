@@ -1,6 +1,6 @@
 <div class="hidden sm:block mb-8">
   <span class="text-xl font-bold">
-    <%= t('my_reading') %>
+    <%= t('read') %>
   </span>
 </div>
 
@@ -9,7 +9,7 @@
   data-tabs-active-tab-value="<%= @tab %>"
   data-tabs-active-class-value="font-bold text-primary !border-primary">
   <div class="mb-2 flex w-full flex-nowrap items-center overflow-auto scrollbar-hide sm:mb-4">
-    <%= link_to dashboard_readings_path(tab: :bought),
+    <%= link_to dashboard_read_path(tab: :bought),
       class: "min-w-fit cursor-pointer border-transparent py-1 pr-8",
       data: {
         tabs_target: "tab",
@@ -20,7 +20,7 @@
       </div>
       <div class="h-2 border-b-2 border-inherit w-4 mx-auto"></div>
     <% end %>
-    <%= link_to dashboard_readings_path(tab: :comments),
+    <%= link_to dashboard_read_path(tab: :comments),
       class: "min-w-fit cursor-pointer border-transparent py-1 pr-8",
       data: {
         tabs_target: "tab",
@@ -31,7 +31,7 @@
       </div>
       <div class="h-2 border-b-2 border-inherit w-4 mx-auto"></div>
     <% end %>
-    <%= link_to dashboard_readings_path(tab: :subscriptions),
+    <%= link_to dashboard_read_path(tab: :subscriptions),
       class: "min-w-fit cursor-pointer border-transparent py-1 pr-8",
       data: {
         tabs_target: "tab",
@@ -42,7 +42,7 @@
       </div>
       <div class="h-2 border-b-2 border-inherit w-4 mx-auto"></div>
     <% end %>
-    <%= link_to dashboard_readings_path(tab: :orders),
+    <%= link_to dashboard_read_path(tab: :orders),
       class: "min-w-fit cursor-pointer border-transparent py-1 pr-8",
       data: {
         tabs_target: "tab",
@@ -53,7 +53,7 @@
       </div>
       <div class="h-2 border-b-2 border-inherit w-4 mx-auto"></div>
     <% end %>
-    <%= link_to dashboard_readings_path(tab: :transfers),
+    <%= link_to dashboard_read_path(tab: :transfers),
       class: "min-w-fit cursor-pointer border-transparent py-1 pr-8",
       data: {
         tabs_target: "tab",
