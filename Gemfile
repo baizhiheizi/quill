@@ -137,8 +137,6 @@ gem "enumerize"
 # Mailjet official Ruby GEM#
 gem "mailjet"
 
-gem "inline_svg"
-
 # Do some browser detection with Ruby. Includes ActionController integration.
 gem "browser"
 

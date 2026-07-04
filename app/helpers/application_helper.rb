@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 module ApplicationHelper
-  include InlineSvg::ActionView::Helpers
   include UiHelper
 
   # Renders an external image URL without passing bare strings to Propshaft.
