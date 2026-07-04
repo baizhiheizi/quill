@@ -8,6 +8,14 @@
     </div>
   </div>
 
+  <div class="table-cell pr-4 py-4 min-w-max whitespace-nowrap">
+    <% if transfer.author_revenue? %>
+      <span class="badge badge-soft badge-primary badge-sm"><%= t('author_revenue') %></span>
+    <% elsif transfer.reader_revenue? %>
+      <span class="badge badge-soft badge-secondary badge-sm"><%= t('readers_revenue') %></span>
+    <% end %>
+  </div>
+
   <div class="table-cell pr-4 py-4 text-opacity-80 min-w-max whitespace-nowrap">
     <% case transfer.source.item %>
     <% when Article %>

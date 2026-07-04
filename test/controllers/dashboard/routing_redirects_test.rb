@@ -20,10 +20,10 @@ class Dashboard::RoutingRedirectsTest < ActionController::TestCase
     ensure_notification_setting!(@user) if @user.notification_setting.blank?
   end
 
-  test "dashboard_root_path resolves and redirects into the app (never a dead end)" do
+  test "dashboard_root_path renders the Overview (never a dead end)" do
     get :index
 
-    assert_response :redirect
+    assert_response :success
   end
 
   test "old readings path redirects to the new read section, tab preserved" do

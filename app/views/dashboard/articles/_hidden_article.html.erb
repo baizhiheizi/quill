@@ -1,103 +1,47 @@
-<div id="<%= dom_id article %>_hidden" class="pt-8 pb-4 border-b border-base-300">
-  <div class="flex items-center justify-between mb-4">
-    <div class="flex items-center">
-      <span class="text-sm opacity-60">
-        <% if article.published_at.present? %>
-          <%= render_time_format datetime: article.published_at.utc.rfc3339 do %>
-            <%= article.published_at.strftime("%Y-%m-%d %H:%M") %>
-          <% end %>
-        <% else %>
-          <%= render_time_format datetime: article.updated_at.utc.rfc3339 do %>
-            <%= article.updated_at.strftime("%Y-%m-%d %H:%M") %>
-          <% end %>
-        <% end %>
-      </span>
-    </div>
-    <div class="flex items-center space-x-2">
-      <% if article.free? %>
-        <div class="badge badge-success badge-sm">
-          FREE
-        </div>
-      <% else %>
-        <span class="text-sm">
-          <%= article.price_tag %>
-        </span>
-        <span class="text-sm opacity-60">
-          ≈$<%= article.price_usd %>
-        </span>
-        <%= remote_image_tag article.currency.icon_url, class: "w-6 h-6 rounded-full", lazy: true %>
-      <% end %>
-    </div>
-  </div>
-
-  <%= link_to user_article_path(article.author, article),
-    data: {
-      controller: "prefetch",
-      turbo_frame: "_top"
-    },
-    class: "flex items-start max-h-28 space-x-4 mb-6" do %>
-    <div class="flex-1 h-ful max-w-full">
-      <div class="truncate overflow-hidden font-bold text-xl mb-3">
-        <%= article.title %>
-      </div>
-      <div class="text-base break-words text-ellipsis overflow-hidden line-clamp-3 text-base-content/80"> 
-        <%= article.intro %>
-      </div>
-    </div>
+<div id="<%= dom_id article %>_hidden" class="border-b border-base-300 py-4">
+  <div class="flex items-start gap-4">
     <% if article.cover_url.present? %>
-      <%= remote_image_tag article.cover_url, class: "w-28 h-28 rounded object-center", lazy: true %>
+      <%= link_to user_article_path(article.author, article), data: { controller: "prefetch", turbo_frame: "_top" }, class: "flex-shrink-0" do %>
+        <%= remote_image_tag article.cover_url, class: "size-16 rounded-lg object-cover opacity-80", lazy: true %>
+      <% end %>
     <% end %>
-  <% end %>
 
-  <div class="flex items-center space-x-4 justify-between overflow-x-scroll scrollbar-hide">
-    <div class="text-primary flex items-center space-x-4 min-w-fit">
-      <%= link_to t('detail'), 
-        dashboard_article_path(article.uuid),
-        class: 'min-w-fit',
-        data: {
-          controller: 'prefetch',
-          turbo_frame: '_top'
-        } %>
-      <%= link_to t('edit'), 
-        edit_article_path(article.uuid),
-        class: 'min-w-fit',
-        data: {
-          controller: 'prefetch',
-          turbo_frame: '_top'
-        } %>
-      <%= link_to t('publish'), 
-        new_dashboard_published_article_path(uuid: article.uuid), 
-        data: { turbo_frame: :modal },
-        class: "bg-transparent cursor-pointer min-w-fit" %>
-    </div>
+    <div class="min-w-0 flex-1">
+      <%= link_to article.title, user_article_path(article.author, article),
+        data: { controller: "prefetch", turbo_frame: "_top" },
+        class: "block truncate text-base font-semibold text-base-content" %>
 
-    <div class="flex items-center space-x-4 ml-4 text-base-content/50">
-      <div class="flex items-center space-x-1">
-        <span class="i-[tabler--coin] size-4"></span>
-        <span class="text-sm">
-          <%= article.revenue_usd.round(4) %>
+      <div class="mt-1 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-base-content/60">
+        <span class="badge badge-neutral badge-xs"><%= t('hidden') %></span>
+        <span>
+          <% if article.published_at.present? %>
+            <%= render_time_format datetime: article.published_at.utc.rfc3339 do %>
+              <%= article.published_at.strftime("%Y-%m-%d %H:%M") %>
+            <% end %>
+          <% else %>
+            <%= render_time_format datetime: article.updated_at.utc.rfc3339 do %>
+              <%= article.updated_at.strftime("%Y-%m-%d %H:%M") %>
+            <% end %>
+          <% end %>
         </span>
+        <% if article.free? %>
+          <span class="badge badge-success badge-xs">FREE</span>
+        <% else %>
+          <span class="inline-flex items-center gap-1">
+            <%= remote_image_tag article.currency.icon_url, class: "size-3.5 rounded-full", lazy: true %>
+            <%= article.price_tag %> (≈$<%= article.price_usd %>)
+          </span>
+        <% end %>
+        <span class="inline-flex items-center gap-1"><span class="i-[tabler--coin] size-3.5"></span><%= article.revenue_usd.round(2) %></span>
+        <span class="inline-flex items-center gap-1"><span class="i-[tabler--message] size-3.5"></span><%= article.comments_count %></span>
+        <span class="inline-flex items-center gap-1"><span class="i-[tabler--thumb-up] size-3.5"></span><%= article.upvotes_count %></span>
+        <span class="inline-flex items-center gap-1"><span class="i-[tabler--thumb-down] size-3.5"></span><%= article.downvotes_count %></span>
       </div>
 
-      <div class="flex items-center space-x-1">
-        <span class="i-[tabler--message] size-4"></span>
-        <span class="text-sm">
-          <%= article.comments_count %>
-        </span>
-      </div>
-
-      <div class="flex items-center space-x-1">
-        <span class="i-[tabler--thumb-up] size-4"></span>
-        <span class="text-sm">
-          <%= article.upvotes_count %>
-        </span>
-      </div>
-
-      <div class="flex items-center space-x-1">
-        <span class="i-[tabler--thumb-down] size-4"></span>
-        <span class="text-sm">
-          <%= article.downvotes_count %>
-        </span>
+      <div class="mt-2 flex items-center gap-4 text-sm text-primary">
+        <%= link_to t('detail'), dashboard_article_path(article.uuid), data: { controller: 'prefetch', turbo_frame: '_top' } %>
+        <%= link_to t('edit'), edit_article_path(article.uuid), data: { controller: 'prefetch', turbo_frame: '_top' } %>
+        <%= link_to t('publish'), new_dashboard_published_article_path(uuid: article.uuid), data: { turbo_frame: :modal } %>
       </div>
     </div>
   </div>

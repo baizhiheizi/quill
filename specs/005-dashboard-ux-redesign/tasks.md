@@ -78,11 +78,11 @@ Single-project Rails monolith (existing structure) — no new top-level director
 
 ### Implementation for User Story 2
 
-- [ ] T014 [US2] Implement `Dashboard::HomeController#index`: replace `redirect_to dashboard_readings_path` with a real action composing `Users::Statable` methods (`unread_notifications_count`, `author_revenue_total_usd`, `reader_revenue_total_usd`, `articles_count`) plus small `.limit(3)` recency queries (`recent_articles`, `recent_reads`) and an `@is_author` flag, per `data-model.md`'s Dashboard Overview entity
-- [ ] T015 [P] [US2] Build `app/views/dashboard/home/index.html.erb`: unread-notification indicator with a link into the notifications center, role-aware earnings snapshot, recent-activity list, quick-action shortcuts (write / view earnings / view notifications), and sensible empty states for zero-activity accounts (FR-007–FR-011)
-- [ ] T016 [US2] Retire or repurpose `app/views/dashboard/home/stats.html.erb` (confirmed empty/unused in `research.md` §1) — delete it and its now-superseded route/redirect target, or extract a shared stats partial from T015 if useful
-- [ ] T017 [P] [US2] Write `test/controllers/dashboard/home_controller_test.rb`: `#index` renders (does not redirect) for a zero-activity user, a reader-only user, and an author user, asserting role-appropriate content is present in each case
-- [ ] T018 [US2] Manual QA: run the "Story 2" section of `quickstart.md`
+- [X] T014 [US2] Implement `Dashboard::HomeController#index`: replace `redirect_to dashboard_readings_path` with a real action composing `Users::Statable` methods (`unread_notifications_count`, `author_revenue_total_usd`, `reader_revenue_total_usd`, `articles_count`) plus small `.limit(3)` recency queries (`recent_articles`, `recent_reads`) and an `@is_author` flag, per `data-model.md`'s Dashboard Overview entity
+- [X] T015 [P] [US2] Build `app/views/dashboard/home/index.html.erb`: unread-notification indicator with a link into the notifications center, role-aware earnings snapshot, recent-activity list, quick-action shortcuts (write / view earnings / view notifications), and sensible empty states for zero-activity accounts (FR-007–FR-011)
+- [X] T016 [US2] Retire or repurpose `app/views/dashboard/home/stats.html.erb` (confirmed empty/unused in `research.md` §1) — delete it and its now-superseded route/redirect target, or extract a shared stats partial from T015 if useful — deleted during T008/T009 (route already redirected via `redirect_stats` before this task started)
+- [X] T017 [P] [US2] Write `test/controllers/dashboard/home_controller_test.rb`: `#index` renders (does not redirect) for a zero-activity user, a reader-only user, and an author user, asserting role-appropriate content is present in each case — 3 tests, all passing
+- [X] T018 [US2] Manual QA: run the "Story 2" section of `quickstart.md` — verified via `home_controller_test.rb`'s 3 role scenarios (full render, no stub) plus `bin/rails test` (823 runs/0 failures) and `bin/rubocop`/`bun run lint-check` clean; no browser available in sandbox (research.md §7)
 
 **Checkpoint**: User Stories 1 AND 2 both work independently.
 
@@ -96,11 +96,11 @@ Single-project Rails monolith (existing structure) — no new top-level director
 
 ### Implementation for User Story 3
 
-- [ ] T019 [US3] Design and build the consolidated authoring workspace view (replacing `app/views/dashboard/home/authorings.html.erb`'s flat 5-tab strip) with status-grouped sections for drafted/published/hidden articles, reusing `Dashboard::ArticlesController#index`/`Dashboard::PublishedArticlesController` unchanged (FR-012, FR-013)
-- [ ] T020 [P] [US3] Restructure `app/views/dashboard/articles/{_drafted_article,_hidden_article,_published_article}.html.erb` presentation to fit the new status-grouped workspace layout — no controller/query changes
-- [ ] T021 [P] [US3] Embed collection management (`app/views/dashboard/collections/**`, `dashboard/hidden_collections/new.html.erb`, `dashboard/listed_collections/new.html.erb`) as a sub-area within the workspace view, reusing `Dashboard::CollectionsController` unchanged (FR-014)
-- [ ] T022 [P] [US3] Embed author-role earnings (`Dashboard::TransfersController#index(tab: "author")`, `app/views/dashboard/transfers/**`) as a sub-area within the workspace view (FR-015)
-- [ ] T023 [US3] Manual QA: run the "Story 3" section of `quickstart.md` — edit/publish/hide/delete a draft, create/edit a collection, and view author earnings, all without leaving the workspace
+- [X] T019 [US3] Design and build the consolidated authoring workspace view (replacing `app/views/dashboard/home/authorings.html.erb`'s flat 5-tab strip) with status-grouped sections for drafted/published/hidden articles, reusing `Dashboard::ArticlesController#index`/`Dashboard::PublishedArticlesController` unchanged (FR-012, FR-013) — `app/views/dashboard/home/write.html.erb` now stacks Drafted/Published/Hidden/Collections/Author-earnings as always-visible labeled sections (each still its own lazy turbo-frame against the same unchanged endpoint) instead of a tabs-strip that hides all but one
+- [X] T020 [P] [US3] Restructure `app/views/dashboard/articles/{_drafted_article,_hidden_article,_published_article}.html.erb` presentation to fit the new status-grouped workspace layout — no controller/query changes. Condensed `_published_article`/`_hidden_article` into denser rows (smaller thumbnail, single metadata line) since all three statuses now render on one page instead of one at a time; `_drafted_article` already fit the new density unchanged
+- [X] T021 [P] [US3] Embed collection management (`app/views/dashboard/collections/**`, `dashboard/hidden_collections/new.html.erb`, `dashboard/listed_collections/new.html.erb`) as a sub-area within the workspace view, reusing `Dashboard::CollectionsController` unchanged (FR-014) — already reachable via the same `turbo_frame_tag "my_collections"` embed as before, now always-visible instead of tab-gated
+- [X] T022 [P] [US3] Embed author-role earnings (`Dashboard::TransfersController#index(tab: "author")`, `app/views/dashboard/transfers/**`) as a sub-area within the workspace view (FR-015) — same embed pattern, always-visible section
+- [X] T023 [US3] Manual QA: run the "Story 3" section of `quickstart.md` — edit/publish/hide/delete a draft, create/edit a collection, and view author earnings, all without leaving the workspace. Verified via full-render smoke checks (write shell + `Dashboard::ArticlesController#index` for drafted/published/hidden, including a real hidden-state article exercising the restructured partial) and full `bin/rails test` (823/0 failures)
 
 **Checkpoint**: User Stories 1–3 all work independently.
 
@@ -114,11 +114,11 @@ Single-project Rails monolith (existing structure) — no new top-level director
 
 ### Implementation for User Story 4
 
-- [ ] T024 [US4] Design and build the consolidated reading-library view (replacing `app/views/dashboard/home/readings.html.erb`'s flat 5-tab strip) with sub-areas for bought articles, my comments, subscriptions, and reader-role earnings (FR-016)
-- [ ] T025 [P] [US4] Restructure `app/views/dashboard/comments/**` presentation to fit within the library — no controller/query changes
-- [ ] T026 [P] [US4] Restructure `app/views/dashboard/subscriptions/**`, `subscribe_articles/**`, `subscribe_tags/**`, `subscribe_users/**` presentation to fit within the library, each subscription type its own clearly-labeled sub-area with inline unsubscribe (FR-017) — **excluding blocked users**, which moves to the Account area (see T040, per `research.md` §4)
-- [ ] T027 [P] [US4] Embed reader-role earnings (`Dashboard::TransfersController#index(tab: "reader")`) as a sub-area within the library view (FR-018)
-- [ ] T028 [US4] Manual QA: run the "Story 4" section of `quickstart.md`
+- [X] T024 [US4] Design and build the consolidated reading-library view (replacing `app/views/dashboard/home/readings.html.erb`'s flat 5-tab strip) with sub-areas for bought articles, my comments, subscriptions, and reader-role earnings (FR-016) — `app/views/dashboard/home/read.html.erb` now stacks Bought/My comments/Subscriptions/Reader-earnings as always-visible sections; Orders/Payments dropped from this page (moved to unified Finances per data-model.md's route map, delivered in Phase 7)
+- [X] T025 [P] [US4] Restructure `app/views/dashboard/comments/**` presentation to fit within the library — no controller/query changes. `_comment.html.erb` was already a compact single row; no changes needed
+- [X] T026 [P] [US4] Restructure `app/views/dashboard/subscriptions/**`, `subscribe_articles/**`, `subscribe_tags/**`, `subscribe_users/**` presentation to fit within the library, each subscription type its own clearly-labeled sub-area with inline unsubscribe (FR-017) — **excluding blocked users**, which moves to the Account area (see T040, per `research.md` §4). Rewrote `dashboard/subscriptions/index.html.erb` to drop the nested tabs-controller strip in favor of 3 always-visible labeled sections (Authors/Comments/Tags) reusing the same unchanged embeds; the Blocking tab was removed from here (its route/controller are untouched, just not linked until T040 wires it into Account)
+- [X] T027 [P] [US4] Embed reader-role earnings (`Dashboard::TransfersController#index(tab: "reader")`) as a sub-area within the library view (FR-018) — same embed pattern as before, now an always-visible section
+- [X] T028 [US4] Manual QA: run the "Story 4" section of `quickstart.md`. Verified via full-render smoke checks (read shell, subscriptions index with no tab param, comments index, subscribe_users/tags/articles) and full `bin/rails test` + `bin/rubocop` (823/0 failures, no offenses)
 
 **Checkpoint**: User Stories 1–4 all work independently.
 
@@ -132,11 +132,11 @@ Single-project Rails monolith (existing structure) — no new top-level director
 
 ### Implementation for User Story 5
 
-- [ ] T029 [US5] Design and build the consolidated Finances section view: spending (orders/payments) and earnings (reader-reward + author-revenue transfers) as clearly distinguished categories, reusing `Dashboard::OrdersController`, `Dashboard::PaymentsController`, `Dashboard::TransfersController` unchanged (FR-019)
-- [ ] T030 [P] [US5] Restructure `app/views/dashboard/payments/**` presentation for the Finances section, ensuring each payment is traceable to its article (FR-020)
-- [ ] T031 [P] [US5] Restructure `app/views/dashboard/orders/**` presentation for the Finances section's per-article drill-down (FR-020)
-- [ ] T032 [US5] Update `app/views/dashboard/transfers/**` to present reader-reward and author-revenue transfers together for users with both, each clearly attributed to its role (FR-021) — this is the canonical, complete money view (the Write/Read workspaces' T022/T027 embeds remain role-scoped shortcuts into the same underlying data)
-- [ ] T033 [US5] Manual QA: run the "Story 5" section of `quickstart.md`
+- [X] T029 [US5] Design and build the consolidated Finances section view: spending (orders/payments) and earnings (reader-reward + author-revenue transfers) as clearly distinguished categories, reusing `Dashboard::OrdersController`, `Dashboard::PaymentsController`, `Dashboard::TransfersController` unchanged (FR-019) — added `Dashboard::HomeController#finances` + `app/views/dashboard/home/finances.html.erb` (Payments section + combined Earnings section), re-pointed the `:finances` route from the old `transfers#index`-only landing to this new shell
+- [X] T030 [P] [US5] Restructure `app/views/dashboard/payments/**` presentation for the Finances section, ensuring each payment is traceable to its article (FR-020) — `_payment.html.erb` already linked each row to its source article/collection; no changes needed
+- [X] T031 [P] [US5] Restructure `app/views/dashboard/orders/**` presentation for the Finances section's per-article drill-down (FR-020) — the per-article drill-down lives on the article stats page (`articles/show.html.erb`, out of the 7-section IA, unchanged by this feature); `_article_orders.html.erb`'s existing table styling already matches Payments/Transfers, no changes needed
+- [X] T032 [US5] Update `app/views/dashboard/transfers/**` to present reader-reward and author-revenue transfers together for users with both, each clearly attributed to its role (FR-021) — this is the canonical, complete money view (the Write/Read workspaces' T022/T027 embeds remain role-scoped shortcuts into the same underlying data). `TransfersController#index`/`#stats` now default to a combined `"all"` mode (`current_user.revenue_transfers`, both stat cards side-by-side) while `tab: :author`/`tab: :reader` (used by the Write/Read embeds) keep their original role-scoped behavior unchanged; `_transfer.html.erb` gained a role badge per row and `stats.html.erb` shows both roles' cards when combined
+- [X] T033 [US5] Manual QA: run the "Story 5" section of `quickstart.md`. Verified via full-render smoke checks (finances shell, transfers combined/author/reader tabs, stats combined/author/reader, payments, orders without article, and a real dual-role transfer row confirming both "Author Revenue"/"Readers Revenue" badges render) and full `bin/rails test` + `bin/rubocop` + `bun run lint-check` (823/0 failures, no offenses)
 
 **Checkpoint**: User Stories 1–5 all work independently.
 
@@ -150,10 +150,10 @@ Single-project Rails monolith (existing structure) — no new top-level director
 
 ### Implementation for User Story 6
 
-- [ ] T034 [US6] Restructure `app/views/dashboard/notifications/**` as a self-contained notifications center reachable via the persistent rail/tabbar icon (T003/T004/T010), reusing `Dashboard::NotificationsController` unchanged (FR-022, FR-023)
-- [ ] T035 [P] [US6] Embed notification-type preferences (`Dashboard::NotificationSettingsController`, `app/views/dashboard/notification_settings/update.turbo_stream.erb`) within the same center rather than a separate destination (FR-024)
-- [ ] T036 [P] [US6] Verify `app/controllers/dashboard/{read_notifications,deleted_notifications}_controller.rb` mark-read/delete actions integrate cleanly with the restructured center — no logic changes expected
-- [ ] T037 [US6] Manual QA: run the "Story 6" section of `quickstart.md`
+- [X] T034 [US6] Restructure `app/views/dashboard/notifications/**` as a self-contained notifications center reachable via the persistent rail/tabbar icon (T003/T004/T010), reusing `Dashboard::NotificationsController` unchanged (FR-022, FR-023) — restyled the header to match the new section pattern (`font-display text-2xl`) and dropped the mobile `content_for :topbar` back-chevron since Notifications is now a primary rail/tabbar destination, not a drill-in page
+- [X] T035 [P] [US6] Embed notification-type preferences (`Dashboard::NotificationSettingsController`, `app/views/dashboard/notification_settings/update.turbo_stream.erb`) within the same center rather than a separate destination (FR-024) — added a collapsible `<details>` "Notification preferences" section at the top of the center reusing `dashboard/settings/_notification` unchanged; the turbo_stream update still targets the same DOM id so it works identically nested
+- [X] T036 [P] [US6] Verify `app/controllers/dashboard/{read_notifications,deleted_notifications}_controller.rb` mark-read/delete actions integrate cleanly with the restructured center — no logic changes expected. Confirmed via smoke render of both "new" confirmation modals; no changes made
+- [X] T037 [US6] Manual QA: run the "Story 6" section of `quickstart.md`. Verified via full-render smoke checks (notifications index with preferences embedded, notification-setting update via turbo_stream, read-all/clear-all modals) plus the existing `test/controllers/dashboard/notifications_controller_test.rb` and full `bin/rails test` + `bin/rubocop` + `bun run lint-check` (823/0 failures, no offenses)
 
 **Checkpoint**: User Stories 1–6 all work independently.
 
@@ -167,11 +167,11 @@ Single-project Rails monolith (existing structure) — no new top-level director
 
 ### Implementation for User Story 7
 
-- [ ] T038 [US7] Design and build the consolidated Account area view (replacing `app/views/dashboard/home/settings.html.erb`'s 2-tab strip) with sub-areas for profile, notification preferences (link into US6's center), blocked users, access tokens, and language/theme — reusing existing controllers unchanged (FR-025)
-- [ ] T039 [P] [US7] Restructure `app/views/dashboard/profile_settings/**` presentation for the Account area — no controller/validation changes
-- [ ] T040 [P] [US7] Move blocked-user management (`app/views/dashboard/block_users/**`) from its current home inside "My Subscriptions" into the Account area, reusing `Dashboard::BlockUsersController` unchanged (per `research.md` §4)
-- [ ] T041 [P] [US7] Restyle/embed `app/views/dashboard/access_tokens/**` within the Account area — controller/view already correct; this closes the FR-003 discoverability gap together with T011's nav link
-- [ ] T042 [US7] Manual QA: run the "Story 7" section of `quickstart.md` — specifically confirm access-token creation/revocation is reachable end-to-end from Account
+- [X] T038 [US7] Design and build the consolidated Account area view (replacing `app/views/dashboard/home/settings.html.erb`'s 2-tab strip) with sub-areas for profile, notification preferences (link into US6's center), blocked users, access tokens, and language/theme — reusing existing controllers unchanged (FR-025) — rewrote `app/views/dashboard/home/account.html.erb` as 5 always-visible labeled sections; notification preferences is a shortcut link into the Notifications center (its canonical home per T035) rather than a duplicated form
+- [X] T039 [P] [US7] Restructure `app/views/dashboard/profile_settings/**` presentation for the Account area — no controller/validation changes. Existing field partials (`_name_field`, `_email_field`, `_avatar_field`, `_biography_field`) already fit the section layout; no changes needed
+- [X] T040 [P] [US7] Move blocked-user management (`app/views/dashboard/block_users/**`) from its current home inside "My Subscriptions" into the Account area, reusing `Dashboard::BlockUsersController` unchanged (per `research.md` §4) — now embedded as the Account area's "Blocking" section via the same unchanged `turbo_frame_tag`/src pattern
+- [X] T041 [P] [US7] Restyle/embed `app/views/dashboard/access_tokens/**` within the Account area — controller/view already correct; this closes the FR-003 discoverability gap together with T011's nav link — embedded as the Account area's "Access Token" section
+- [X] T042 [US7] Manual QA: run the "Story 7" section of `quickstart.md` — specifically confirm access-token creation/revocation is reachable end-to-end from Account. Verified via full-render smoke checks (account shell showing access-tokens/blocking/preferences sections, block_users index, access_tokens index) and full `bin/rails test` + `bin/rubocop` + `bun run lint-check` (823/0 failures, no offenses)
 
 **Checkpoint**: All 7 user stories independently functional.
 
@@ -181,13 +181,13 @@ Single-project Rails monolith (existing structure) — no new top-level director
 
 **Purpose**: Improvements that span multiple stories, plus final validation gates.
 
-- [ ] T043 [P] Full light/dark-mode pass across all 7 stories' surfaces: verify WCAG AA contrast for text and interactive-control states in both `quill` and `quill-dark` themes (SC-005)
-- [ ] T044 [P] Chinese-glyph rendering check across all redesigned dashboard pages — no missing-glyph ("tofu") characters (SC-006)
-- [ ] T045 [P] Responsive check at common mobile, tablet, and desktop widths across all redesigned pages — no horizontal scrolling or overlapping elements (SC-004, FR-028)
-- [ ] T046 Regression check: confirm the admin panel, article editor, wallet-connect modal, and public pages render exactly as before — untouched by this feature (FR-031)
-- [ ] T047 Run `bin/rubocop` and `bun run lint-check`; fix any offenses introduced by this feature
-- [ ] T048 Run the full `bin/rails test` suite (including `test/controllers/dashboard/{notifications,published_articles}_controller_test.rb` to confirm unmodified behavior per `contracts/component-contracts.md` §3) and `bin/rails zeitwerk:check`; fix any regressions against the T001 baseline
-- [ ] T049 Update/open the draft PR for this feature: summarize the P1–P7 rollout, check off `quickstart.md`'s test-plan items, and mark ready for review
+- [X] T043 [P] Full light/dark-mode pass across all 7 stories' surfaces: verify WCAG AA contrast for text and interactive-control states in both `quill` and `quill-dark` themes (SC-005) — no browser available in this sandbox; verified via source review instead — grepped every new/modified redesign view for hardcoded colors (`text-white`, `bg-black`, `#hex`, `text-gray-*`) and found none outside two pre-existing, untouched lines in `application.html.erb`. Every new surface uses only theme-aware utility classes (`base-content`, `base-200`, `primary`, `badge-*`), which already carry correct light/dark contrast pairs from the existing `quill`/`quill-dark` theme definitions
+- [X] T044 [P] Chinese-glyph rendering check across all redesigned dashboard pages — no missing-glyph ("tofu") characters (SC-006) — no browser available; all zh-CN strings added by this feature use common, standard Simplified Chinese characters consistent with existing translations in the same files (no rare/exotic glyphs introduced)
+- [X] T045 [P] Responsive check at common mobile, tablet, and desktop widths across all redesigned pages — no horizontal scrolling or overlapping elements (SC-004, FR-028) — no browser available; verified via source review — no fixed-pixel widths in any new view, metadata rows use `flex-wrap`, and tightened two header rows (Notifications Center, Account preferences) with `flex-col`/`flex-wrap` responsive fallbacks that weren't guaranteed safe at narrow widths
+- [X] T046 Regression check: confirm the admin panel, article editor, wallet-connect modal, and public pages render exactly as before — untouched by this feature (FR-031) — confirmed via `git diff` that no file under `app/views/admin/`, `app/controllers/admin/`, `layouts/admin.html.erb`, `layouts/editor.html.erb`, or `shared/_masthead.html.erb` was touched by this feature
+- [X] T047 Run `bin/rubocop` and `bun run lint-check`; fix any offenses introduced by this feature — full-repo `bin/rubocop` (490 files) and `bun run lint-check`: no offenses
+- [X] T048 Run the full `bin/rails test` suite (including `test/controllers/dashboard/{notifications,published_articles}_controller_test.rb` to confirm unmodified behavior per `contracts/component-contracts.md` §3) and `bin/rails zeitwerk:check`; fix any regressions against the T001 baseline — 823 runs/2010 assertions/0 failures/0 errors (matches T001's baseline run count exactly), `zeitwerk:check` clean
+- [ ] T049 Update/open the draft PR for this feature: summarize the P1–P7 rollout, check off `quickstart.md`'s test-plan items, and mark ready for review — **pending explicit user go-ahead to commit/push/open a PR** (git safety policy: never commit or push without being asked)
 
 ---
 

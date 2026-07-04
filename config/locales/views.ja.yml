@@ -157,6 +157,15 @@ ja:
   overview: ユーザーデータ
   finances: 収益
   account: アカウント
+  overview_unread_notifications: "未読の通知が%{count}件あります"
+  recently_published: 最近公開した記事
+  recently_read: 最近読んだ記事
+  overview_no_published_articles: まだ記事を公開していません。
+  overview_no_bought_articles: まだ記事を購入していません。
+  earnings: 収益
+  preferences: 環境設定
+  notification_settings_manage_hint: 通知センターで、通知内容と受け取り方法を管理できます。
+  earnings: 収益
   notifications_manage: 通知
   settings: 設定
   articles_manage: 記事管理

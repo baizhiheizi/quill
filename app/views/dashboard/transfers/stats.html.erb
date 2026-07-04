@@ -1,6 +1,6 @@
 <%= turbo_frame_tag 'my_transfers_stats' do %>
-  <div class="grid grid-cols-2 gap-4">
-    <% if @role == 'author' %>
+  <div class="grid grid-cols-2 gap-4 <%= 'sm:grid-cols-4' if @role == 'all' %>">
+    <% if @role == 'all' || @role == 'author' %>
       <div class="card bg-base-200 border border-base-300 text-center p-4 mb-2">
         <div class="text-2xl font-bold mb-2">
           <%= current_user.transfers.where(transfer_type: :author_revenue).count %>
@@ -17,7 +17,8 @@
           <%= t('author_revenue_total') %>
         </div>
       </div>
-    <% elsif @role == 'reader' %>
+    <% end %>
+    <% if @role == 'all' || @role == 'reader' %>
       <div class="card bg-base-200 border border-base-300 text-center p-4 mb-2">
         <div class="text-2xl font-bold mb-2">
           <%= current_user.transfers.where(transfer_type: :reader_revenue).count %>

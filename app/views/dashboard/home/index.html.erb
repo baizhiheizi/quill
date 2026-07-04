@@ -1,50 +1,111 @@
-<div class="p-4 space-y-4">
-  <div class="card bg-base-100 border border-base-300 shadow-sm">
-    <div class="card-body sm:grid sm:grid-cols-3 gap-4 p-4">
-    <div class="text-center p-2">
-      <div class="opacity-70">
-        <%= t('activerecord.attributes.user.articles_count') %>
+<div class="space-y-8">
+  <div>
+    <h1 class="font-display text-2xl font-medium text-base-content"><%= t('overview') %></h1>
+    <p class="mt-1 text-sm text-base-content/60"><%= current_user.name %></p>
+  </div>
+
+  <%# Unread-notification indicator (FR-008) %>
+  <% if @unread_notifications_count.positive? %>
+    <%= link_to dashboard_notifications_path, class: "flex items-center gap-3 rounded-xl border border-base-300 bg-base-200/60 p-4 transition-colors hover:bg-base-200" do %>
+      <span class="indicator">
+        <span class="i-[tabler--bell] size-5 text-base-content/70"></span>
+        <span class="indicator-item badge badge-error badge-xs"></span>
+      </span>
+      <span class="text-sm font-medium text-base-content">
+        <%= t('overview_unread_notifications', count: @unread_notifications_count) %>
+      </span>
+      <span class="i-[tabler--chevron-right] ml-auto size-4 text-base-content/40"></span>
+    <% end %>
+  <% end %>
+
+  <%# Role-aware earnings snapshot (FR-009) %>
+  <div class="grid grid-cols-2 gap-3 sm:grid-cols-4">
+    <% if @is_author %>
+      <div class="rounded-xl border border-base-300 p-4">
+        <div class="text-xs text-base-content/60"><%= t('activerecord.attributes.user.author_revenue_total') %></div>
+        <div class="mt-1 text-xl font-semibold text-base-content">$<%= @author_revenue_total_usd.round(2) %></div>
       </div>
-      <div class="text-xl font-bold">
-        <%= current_user.articles_count %>
+      <div class="rounded-xl border border-base-300 p-4">
+        <div class="text-xs text-base-content/60"><%= t('activerecord.attributes.user.articles_count') %></div>
+        <div class="mt-1 text-xl font-semibold text-base-content"><%= current_user.articles_count %></div>
       </div>
+    <% end %>
+    <div class="rounded-xl border border-base-300 p-4">
+      <div class="text-xs text-base-content/60"><%= t('activerecord.attributes.user.reader_revenue_total') %></div>
+      <div class="mt-1 text-xl font-semibold text-base-content">$<%= @reader_revenue_total_usd.round(2) %></div>
     </div>
-    <div class="text-center p-2">
-      <div class="opacity-70">
-        <%= t('activerecord.attributes.user.bought_articles_count') %>
-      </div>
-      <div class="text-xl font-bold">
-        <%= current_user.bought_articles_count %>
-      </div>
-    </div>
+    <div class="rounded-xl border border-base-300 p-4">
+      <div class="text-xs text-base-content/60"><%= t('activerecord.attributes.user.bought_articles_count') %></div>
+      <div class="mt-1 text-xl font-semibold text-base-content"><%= current_user.bought_articles_count %></div>
     </div>
   </div>
-  <div class="card bg-base-100 border border-base-300 shadow-sm">
-    <div class="card-body sm:grid sm:grid-cols-3 gap-4 p-4">
-    <div class="text-center p-2">
-      <div class="opacity-70">
-        <%= t('activerecord.attributes.user.author_revenue_total') %>
+
+  <%# Quick actions (FR-010) %>
+  <div class="flex flex-wrap gap-2">
+    <%= link_to new_article_path, class: "btn btn-primary rounded-full btn-sm" do %>
+      <span class="i-[tabler--edit] size-4"></span>
+      <%= t('write') %>
+    <% end %>
+    <%= link_to dashboard_finances_path, class: "btn btn-soft rounded-full btn-sm" do %>
+      <span class="i-[tabler--wallet] size-4"></span>
+      <%= t('finances') %>
+    <% end %>
+    <%= link_to dashboard_notifications_path, class: "btn btn-soft rounded-full btn-sm" do %>
+      <span class="i-[tabler--bell] size-4"></span>
+      <%= t('notification') %>
+    <% end %>
+  </div>
+
+  <%# Recent activity (FR-008, empty states per FR-011) %>
+  <% if @is_author %>
+    <div>
+      <div class="mb-3 flex items-center justify-between">
+        <h2 class="text-sm font-semibold text-base-content"><%= t('recently_published') %></h2>
+        <%= link_to t('home_view_all'), dashboard_write_path, class: "text-xs text-base-content/60 hover:text-base-content" %>
       </div>
-      <div class="text-xl font-bold">
-        $<%= current_user.author_revenue_total_usd.round(4) %>
-      </div>
+      <% if @recent_articles.any? %>
+        <div class="divide-y divide-base-300 rounded-xl border border-base-300">
+          <% @recent_articles.each do |article| %>
+            <%= link_to user_article_path(article.author, article), data: { turbo_frame: '_top' }, class: "flex items-center gap-3 p-4 transition-colors hover:bg-base-200/40" do %>
+              <div class="min-w-0 flex-1">
+                <div class="truncate text-sm font-medium text-base-content"><%= article.title.presence || t('untitled') %></div>
+                <div class="mt-0.5 text-xs text-base-content/60"><%= article.updated_at.strftime("%b %d, %Y") %></div>
+              </div>
+              <span class="i-[tabler--chevron-right] size-4 flex-shrink-0 text-base-content/40"></span>
+            <% end %>
+          <% end %>
+        </div>
+      <% else %>
+        <div class="rounded-xl border border-dashed border-base-300 p-6 text-center text-sm text-base-content/60">
+          <%= t('overview_no_published_articles') %>
+          <%= link_to t('write'), new_article_path, class: "link link-primary" %>
+        </div>
+      <% end %>
     </div>
-    <div class="text-center p-2">
-      <div class="opacity-70">
-        <%= t('activerecord.attributes.user.reader_revenue_total') %>
-      </div>
-      <div class="text-xl font-bold">
-        $<%= current_user.reader_revenue_total_usd.round(4) %>
-      </div>
+  <% end %>
+
+  <div>
+    <div class="mb-3 flex items-center justify-between">
+      <h2 class="text-sm font-semibold text-base-content"><%= t('recently_read') %></h2>
+      <%= link_to t('home_view_all'), dashboard_read_path, class: "text-xs text-base-content/60 hover:text-base-content" %>
     </div>
-    <div class="text-center p-2">
-      <div class="opacity-70">
-        <%= t('activerecord.attributes.user.payment_total_usd') %>
+    <% if @recent_reads.any? %>
+      <div class="divide-y divide-base-300 rounded-xl border border-base-300">
+        <% @recent_reads.each do |article| %>
+          <%= link_to user_article_path(article.author, article), data: { turbo_frame: '_top' }, class: "flex items-center gap-3 p-4 transition-colors hover:bg-base-200/40" do %>
+            <div class="min-w-0 flex-1">
+              <div class="truncate text-sm font-medium text-base-content"><%= article.title.presence || t('untitled') %></div>
+              <div class="mt-0.5 truncate text-xs text-base-content/60"><%= article.author.name %></div>
+            </div>
+            <span class="i-[tabler--chevron-right] size-4 flex-shrink-0 text-base-content/40"></span>
+          <% end %>
+        <% end %>
       </div>
-      <div class="text-xl font-bold">
-        $<%= current_user.payment_total_usd.round(4) %>
+    <% else %>
+      <div class="rounded-xl border border-dashed border-base-300 p-6 text-center text-sm text-base-content/60">
+        <%= t('overview_no_bought_articles') %>
+        <%= link_to t('start_reading'), articles_path, class: "link link-primary" %>
       </div>
-    </div>
-    </div>
+    <% end %>
   </div>
 </div>

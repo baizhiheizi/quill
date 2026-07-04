@@ -1,24 +1,38 @@
-<div class="flex items-center justify-between mb-4 sm:mb-8">
-  <div class="">
-    <span class="hidden sm:block text-xl font-bold"><%= t('notification') %></span>
-  </div>
+<%# Notifications Center — self-contained destination reachable via the
+    persistent bell icon on the rail/tabbar (specs/005-dashboard-ux-redesign,
+    US6). Preferences live inside this same center instead of a separate
+    Account destination (FR-024); reuses Dashboard::NotificationsController /
+    Dashboard::NotificationSettingsController unchanged. %>
+<div class="flex flex-col gap-3 mb-6 sm:flex-row sm:items-center sm:justify-between">
+  <h1 class="font-display text-2xl font-medium text-base-content"><%= t('notification') %></h1>
 
-  <div class="flex items-center space-x-4 justify-end">
-    <%= link_to t("read_all"), 
-      new_dashboard_read_notification_path, 
-      data: { 
+  <div class="flex items-center space-x-2 justify-end">
+    <%= link_to t("read_all"),
+      new_dashboard_read_notification_path,
+      data: {
         turbo_frame: :modal,
-      }, 
-      class: "btn btn-outline btn-primary rounded-full" %>
+      },
+      class: "btn btn-outline btn-primary btn-sm rounded-full" %>
 
-    <%= link_to t("clear_all"), 
-      new_dashboard_deleted_notification_path, 
-      data: { 
+    <%= link_to t("clear_all"),
+      new_dashboard_deleted_notification_path,
+      data: {
         turbo_frame: :modal,
-      }, 
-      class: "btn btn-outline btn-primary rounded-full" %>
+      },
+      class: "btn btn-outline btn-primary btn-sm rounded-full" %>
   </div>
 </div>
+
+<details class="mb-6 rounded-lg border border-base-300 px-4">
+  <summary class="cursor-pointer list-none py-3 text-sm font-semibold text-base-content">
+    <span class="i-[tabler--settings] mr-1 inline-block size-4 align-text-bottom"></span>
+    <%= t('notification_settings_manage') %>
+  </summary>
+  <div class="pb-2">
+    <%= render "dashboard/settings/notification" %>
+  </div>
+</details>
+
 <div data-controller="infinite-scroll">
   <% if @notifications.blank? %>
     <%= render "shared/empty", text: t('no_record') %>
@@ -31,14 +45,3 @@
     <%= render partial: "shared/pagination", locals: { pagy: @pagy } %>
   <% end %>
 </div>
-
-<% content_for :topbar do %>
-  <div class="flex items-center px-4 h-12">
-    <%= link_to :back, class: "pr-2" do %>
-      <span class="i-[tabler--chevron-left] size-5 font-bold"></span>
-    <% end %>
-    <span class="font-bold text-lg">
-      <%= t('notification') %>
-    </span>
-  </div>
-<% end %>

@@ -6,7 +6,7 @@ namespace :dashboard do
   # Canonical grouped-section landing routes (rail/tabbar shell).
   get :write, to: "home#write"
   get :read, to: "home#read"
-  get :finances, to: "transfers#index"
+  get :finances, to: "home#finances"
   get :account, to: "home#account"
 
   # Legacy paths kept resolving per FR-030/SC-008 — redirect to the new

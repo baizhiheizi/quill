@@ -81,7 +81,7 @@
   <body class="flex min-h-screen justify-center overflow-x-hidden bg-base-100 text-base-content">
     <%= render 'shared/navbar' if browser.device.mobile? %>
     <%= render 'shared/dashboard_tabbar' if browser.device.mobile? %>
-    <div class="w-full max-w-full lg:w-auto lg:flex">
+    <div class="w-full max-w-full lg:flex">
       <%= render 'shared/dashboard_rail' unless browser.device.mobile? %>
 
       <main class="flex w-full max-w-full 2xl:max-w-screen-2xl pt-12 pb-24 sm:py-0">

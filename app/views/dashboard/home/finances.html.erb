@@ -1,0 +1,25 @@
+<%# Finances — unified money view (specs/005-dashboard-ux-redesign, US5).
+    Spending and Earnings are clearly distinguished categories (FR-019);
+    Earnings shows reader-reward and author-revenue transfers together, each
+    row attributed to its role (FR-021). Reuses
+    Dashboard::PaymentsController/TransfersController unchanged; the
+    Write/Read workspaces' role-scoped transfer embeds (tab: :author / :reader)
+    remain shortcuts into this same underlying data. %>
+<div class="space-y-10">
+  <h1 class="font-display text-2xl font-medium text-base-content"><%= t('finances') %></h1>
+
+  <section id="finances-spending">
+    <h2 class="mb-3 text-sm font-semibold text-base-content"><%= t('payments') %></h2>
+    <%= turbo_frame_tag "#{dom_id current_user}_payments", src: dashboard_payments_path, loading: :lazy do %>
+      <%= render "shared/loading" %>
+    <% end %>
+  </section>
+
+  <section id="finances-earnings">
+    <h2 class="mb-3 text-sm font-semibold text-base-content"><%= t('earnings') %></h2>
+    <%= turbo_frame_tag "my_transfers_stats", src: dashboard_transfers_stats_path %>
+    <%= turbo_frame_tag "my_transfers", src: dashboard_transfers_path, loading: :lazy do %>
+      <%= render "shared/loading" %>
+    <% end %>
+  </section>
+</div>

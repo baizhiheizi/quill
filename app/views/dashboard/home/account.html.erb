@@ -1,54 +1,50 @@
-<div class="mb-8"
-  data-controller="tabs"
-  data-tabs-active-tab-value="<%= @tab %>"
-  data-tabs-active-class-value="font-bold text-primary !border-primary">
-  <div class="mb-8 flex w-full flex-nowrap items-center overflow-auto scrollbar-hide">
-    <%= link_to dashboard_account_path(tab: :profile),
-      class: "cursor-pointer py-1 pr-8",
-      data: {
-        tabs_target: "tab",
-        tabs_tabname_param: "profile",
-        action: "tabs#active"
-      } do %>
-      <div class="min-w-fit">
-        <%= t('profile') %>
-      </div>
-      <div class="h-2 border-b-2 border-inherit mx-auto w-5"></div>
-    <% end %>
-    <%= link_to dashboard_account_path(tab: :notification),
-      class: "cursor-pointer py-1 pr-8",
-      data: {
-        tabs_target: "tab",
-        tabs_tabname_param: "notification",
-        action: "tabs#active"
-      } do %>
-      <div class="min-w-fit">
-        <%= t('notification') %>
-      </div>
-      <div class="h-2 border-b-2 border-inherit mx-auto w-5"></div>
-    <% end %>
-  </div>
+<%# Account area — every profile/security/preference destination in one
+    predictable place (specs/005-dashboard-ux-redesign, US7), closing the
+    access-tokens discoverability gap (FR-003/FR-025). Every sub-area reuses
+    its existing controller unchanged. %>
+<div class="space-y-10">
+  <h1 class="font-display text-2xl font-medium text-base-content"><%= t('account') %></h1>
 
-  <div class="hidden pb-4"
-    data-tabs-content-param="profile"
-    data-tabs-target="content">
+  <section id="account-profile">
+    <h2 class="mb-3 text-sm font-semibold text-base-content"><%= t('profile') %></h2>
     <%= render "dashboard/settings/profile" %>
-  </div>
+  </section>
 
-  <div class="hidden pb-4"
-    data-tabs-content-param="notification"
-    data-tabs-target="content">
-    <%= render "dashboard/settings/notification" %>
-  </div>
-</div>
-
-<% content_for :topbar do %>
-  <div class="flex items-center px-4 h-12">
-    <%= link_to :back, class: "pr-2" do %>
-      <span class="i-[tabler--chevron-left] size-5 font-bold"></span>
+  <section id="account-notifications">
+    <h2 class="mb-3 text-sm font-semibold text-base-content"><%= t('notification') %></h2>
+    <p class="mb-3 text-sm text-base-content/60"><%= t('notification_settings_manage_hint') %></p>
+    <%= link_to dashboard_notifications_path, class: "btn btn-soft btn-sm rounded-full" do %>
+      <span class="i-[tabler--bell] size-4"></span>
+      <%= t('notification_settings_manage') %>
     <% end %>
-    <span class="font-bold text-lg">
-      <%= t('account') %>
-    </span>
-  </div>
-<% end %>
+  </section>
+
+  <section id="account-blocking">
+    <h2 class="mb-3 text-sm font-semibold text-base-content"><%= t('blocking') %></h2>
+    <%= turbo_frame_tag "#{dom_id current_user}_blocking", src: dashboard_block_users_path, loading: :lazy do %>
+      <%= render "shared/loading" %>
+    <% end %>
+  </section>
+
+  <section id="account-access-tokens">
+    <h2 class="mb-3 text-sm font-semibold text-base-content"><%= t('access_token') %></h2>
+    <%= turbo_frame_tag "#{dom_id current_user}_access_tokens", src: dashboard_access_tokens_path, loading: :lazy do %>
+      <%= render "shared/loading" %>
+    <% end %>
+  </section>
+
+  <section id="account-preferences">
+    <h2 class="mb-3 text-sm font-semibold text-base-content"><%= t('preferences') %></h2>
+    <div class="flex flex-wrap items-center gap-6">
+      <%= link_to edit_locale_path, data: { turbo_frame: :modal }, class: "flex items-center gap-2 text-sm text-base-content/70 hover:text-base-content" do %>
+        <span class="i-[tabler--world] size-4"></span>
+        <%= t('language') %>
+      <% end %>
+      <div data-controller="darkmode" class="flex items-center gap-2 text-sm text-base-content/70">
+        <span class="i-[tabler--sun-moon] size-4"></span>
+        <a class="cursor-pointer hidden" data-darkmode-target="lightButton" data-action="darkmode#toggle"><%= t('dark_mode') %></a>
+        <a class="cursor-pointer hidden" data-darkmode-target="darkButton" data-action="darkmode#toggle"><%= t('light_mode') %></a>
+      </div>
+    </div>
+  </section>
+</div>
