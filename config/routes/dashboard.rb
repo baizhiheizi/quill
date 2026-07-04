@@ -2,10 +2,19 @@
 
 namespace :dashboard do
   root to: "home#index"
-  get :settings, to: "home#settings"
-  get :readings, to: "home#readings"
-  get :authorings, to: "home#authorings"
-  get :stats, to: "home#stats"
+
+  # Canonical grouped-section landing routes (rail/tabbar shell).
+  get :write, to: "home#write"
+  get :read, to: "home#read"
+  get :finances, to: "transfers#index"
+  get :account, to: "home#account"
+
+  # Legacy paths kept resolving per FR-030/SC-008 — redirect to the new
+  # canonical equivalent above, preserving `tab` where meaningful.
+  get :settings, to: "home#redirect_settings"
+  get :readings, to: "home#redirect_readings"
+  get :authorings, to: "home#redirect_authorings"
+  get :stats, to: "home#redirect_stats"
 
   resources :listed_collections, only: %i[new update]
   resources :hidden_collections, only: %i[new update]

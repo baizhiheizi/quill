@@ -1,0 +1,86 @@
+<%# Dashboard studio rail — grouped sections replacing shared/_left_bar's flat
+    4-item nav (specs/005-dashboard-ux-redesign). Persistent on desktop; mobile
+    equivalent is shared/_dashboard_tabbar. %>
+<div class="border-base-300 lg:min-h-screen lg:border-r">
+  <nav class="hidden h-full w-64 lg:block">
+    <div class="sticky top-0 flex h-screen flex-col justify-between py-6 px-4">
+      <div class="flex flex-col space-y-6">
+        <div class="flex items-center justify-between px-4">
+          <%= link_to root_path, data: { controller: 'prefetch' } do %>
+            <%= image_tag 'logo.svg', class: "h-auto w-24 dark:hidden" %>
+            <%= image_tag 'logo-light.svg', class: "hidden h-auto w-24 dark:block" %>
+          <% end %>
+
+          <%= link_to dashboard_notifications_path, class: "btn btn-soft btn-circle btn-sm", "aria-label": t('notification') do %>
+            <span class="indicator">
+              <span class="i-[tabler--bell] size-5 text-base-content/60"></span>
+              <% if current_user.has_unread_notification? %>
+                <span class="indicator-item badge badge-error badge-xs"></span>
+              <% end %>
+            </span>
+          <% end %>
+        </div>
+
+        <div class="flex flex-col space-y-1">
+          <% dashboard_rail_sections.each do |item| %>
+            <%= link_to item[:path],
+              data: { controller: 'prefetch' },
+              class: "flex items-center gap-3 rounded-full px-4 py-3 text-sm font-medium transition-colors #{@active_section == item[:section] ? 'bg-base-200 text-base-content' : 'text-base-content/70 hover:bg-base-200/60 hover:text-base-content'}" do %>
+              <span class="<%= item[:icon] %> size-5 flex-shrink-0"></span>
+              <span><%= item[:label] %></span>
+            <% end %>
+          <% end %>
+        </div>
+
+        <div class="px-2 mt-2">
+          <%= link_to new_article_path, class: "btn btn-primary w-full rounded-full font-medium" do %>
+            <span class="i-[tabler--edit] size-4"></span>
+            <%= t('write') %>
+          <% end %>
+        </div>
+      </div>
+
+      <div class="flex flex-col w-full space-y-2">
+        <div class="flex items-center justify-between px-4 mb-2">
+          <%= link_to edit_locale_path, data: { turbo_frame: :modal }, class: "flex items-center gap-2 text-sm text-base-content/60 transition-colors hover:text-base-content" do %>
+            <span class="i-[tabler--world] size-5"></span>
+            <span><%= t('language') %></span>
+          <% end %>
+
+          <div data-controller="darkmode" class="flex items-center">
+            <a class="btn btn-soft btn-circle btn-sm hidden cursor-pointer" data-darkmode-target="lightButton" data-action="darkmode#toggle" title="<%= t('dark_mode') %>" aria-label="<%= t('dark_mode') %>">
+              <span class="i-[tabler--moon] size-4"></span>
+            </a>
+            <a class="btn btn-soft btn-circle btn-sm hidden cursor-pointer" data-darkmode-target="darkButton" data-action="darkmode#toggle" title="<%= t('light_mode') %>" aria-label="<%= t('light_mode') %>">
+              <span class="i-[tabler--sun] size-4"></span>
+            </a>
+          </div>
+        </div>
+
+        <% dropdown_button = capture do %>
+          <div class="flex w-full cursor-pointer items-center gap-3 rounded-full px-4 py-3 text-left transition-colors hover:bg-base-200/60">
+            <div class="avatar flex-shrink-0">
+              <div class="size-10 rounded-full">
+                <%= render "shared/avatar", user: current_user, thumb: true, class: "rounded-full" %>
+              </div>
+            </div>
+            <div class="min-w-0 flex-1 overflow-hidden">
+              <div class="truncate text-sm font-medium text-base-content"><%= current_user.name %></div>
+              <div class="truncate text-xs text-base-content/60"><%= current_user.mixin_uuid.split('-').first %>...</div>
+            </div>
+            <span class="i-[tabler--chevron-down] size-4 flex-shrink-0 text-base-content/50"></span>
+          </div>
+        <% end %>
+        <%= render_dropdown class: 'w-full', button: dropdown_button do %>
+          <ul class="menu menu-sm mb-2 w-56 rounded-xl border border-base-300 bg-base-100 p-2 shadow-lg">
+            <li><%= link_to t('profile_page'), user_path(current_user), class: "dropdown-item rounded-lg py-2" %></li>
+            <li><%= link_to t('account'), dashboard_account_path, class: "dropdown-item rounded-lg py-2" %></li>
+            <li><%= link_to t('access_token'), dashboard_access_tokens_path, class: "dropdown-item rounded-lg py-2" %></li>
+            <div class="divider my-1"></div>
+            <li><%= link_to t('disconnect'), logout_path, data: { turbo_prefetch: false }, class: "dropdown-item rounded-lg py-2 text-error" %></li>
+          </ul>
+        <% end %>
+      </div>
+    </div>
+  </nav>
+</div>

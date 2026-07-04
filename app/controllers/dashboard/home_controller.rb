@@ -2,21 +2,39 @@
 
 class Dashboard::HomeController < Dashboard::BaseController
   def index
-    redirect_to dashboard_readings_path
+    redirect_to dashboard_read_path
   end
 
-  def readings
-    @tab = params[:tab] || "bought"
-    @active_page = "readings"
-  end
-
-  def authorings
+  def write
+    @active_section = :write
     @tab = params[:tab] || "drafted"
-    @active_page = "authorings"
   end
 
-  def settings
+  def read
+    @active_section = :read
+    @tab = params[:tab] || "bought"
+  end
+
+  def account
+    @active_section = :account
     @tab = params[:tab] || "profile"
-    @active_page = "settings"
+  end
+
+  # Legacy paths kept resolving per FR-030/SC-008 — old bookmarks/links
+  # redirect straight to their new canonical equivalent, tab params preserved.
+  def redirect_readings
+    redirect_to dashboard_read_path(tab: params[:tab])
+  end
+
+  def redirect_authorings
+    redirect_to dashboard_write_path(tab: params[:tab])
+  end
+
+  def redirect_settings
+    redirect_to dashboard_account_path(tab: params[:tab])
+  end
+
+  def redirect_stats
+    redirect_to dashboard_root_path
   end
 end
