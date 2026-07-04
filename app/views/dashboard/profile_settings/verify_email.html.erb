@@ -1,14 +1,14 @@
 <div class="m-8">
   <% if @user.present? %>
     <div class="mb-2 flex justify-center">
-      <%= inline_svg_tag "icons/check-circle-solid.svg", class: "w-16 h-16 text-green-500" %>
+      <span class="i-[tabler--circle-check] size-16 text-success"></span>
     </div>
     <div class="flex justify-center">
       You email <span class="font-bold mx-2"><%= @user.email %></span> has been verified!
     </div>
   <% else %>
     <div class="mb-2 flex justify-center">
-      <%= inline_svg_tag "icons/exclamation-circle-solid.svg", class: "w-16 h-16 text-red-500" %>
+      <span class="i-[tabler--alert-circle] size-16 text-error"></span>
     </div>
     <div class="flex justify-center">
       Cannot verify, please re-verify your email in your dashboard.

@@ -1,4 +1,4 @@
-<div id="<%= dom_id article %>_draft" class="border-b border-base-content/10 py-4 flex items-center justify-between space-x-4">
+<div id="<%= dom_id article %>_draft" class="border-b border-base-300 py-4 flex items-center justify-between space-x-4">
   <%= link_to article.title.presence || t('articles.title_placeholder'), 
     edit_article_path(article.uuid), 
     data: { 
@@ -10,7 +10,7 @@
       <%= article.updated_at.strftime("%Y-%m-%d %H:%M") %>
     <% end %>
     <% dropdown_button = capture do %>
-      <%= inline_svg_tag "icons/chevron-down.svg", class: 'w-4 h-4 opacity-60' %>
+      <span class="i-[tabler--chevron-down] size-4 opacity-60"></span>
     <% end %>
     <%= render_dropdown button: dropdown_button do %>
       <%= link_to t('delete'), 

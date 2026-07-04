@@ -1,37 +1,35 @@
 <%= turbo_frame_tag 'selected_articles' do %>
   <% if @articles.present? %>
-    <div class='py-8 border-b border-base-content/5'>
-      <div class="grid gap-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
-        <% @articles.each_with_index do |article, index| %>
-          <%= link_to user_article_path(article.author, article), 
-            data: { 
-              turbo_frame: '_top'
-            },
-            class: "flex space-x-4" do %>
-            <div class="font-mono font-bold text-[3rem] text-[#E7E7F0]">
-              0<%= index + 1 %>
+    <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      <% @articles.each_with_index do |article, index| %>
+        <%= link_to user_article_path(article.author, article),
+          data: { turbo_frame: '_top', controller: 'prefetch' },
+          class: "group flex flex-col overflow-hidden rounded-xl border border-base-300 bg-base-200 transition-colors hover:border-base-content/20" do %>
+          <% if article.thumb_url.present? %>
+            <div class="aspect-[16/10] overflow-hidden bg-base-300">
+              <%= remote_image_tag article.thumb_url, class: "h-full w-full object-cover transition-transform group-hover:scale-[1.02]", lazy: true %>
             </div>
-            <div class="">
-              <div class="mb-2 text-sm opacity-40">
-                <%= render_time_format datetime: article.published_at.utc.rfc3339 do %>
-                  <%= article.published_at&.strftime("%Y-%m-%d %H:%M") %>
-                <% end %>
-              </div>
-              <div class="h-14 opacity-80 font-bold mb-6 w-full overflow-hidden text-ellipsis line-clamp-2 text-lg">
-                <%= article.title %>
-              </div>
-              <div class="flex items-center space-x-4">
-                <div class="avatar">
-                  <div class="size-7 rounded-full">
-                    <%= render "shared/avatar", user: article.author, thumb: true, class: "rounded-full" %>
-                  </div>
-                </div>
-                <span class="text-sm max-w-24 truncate"><%= article.author.name %> </span>
-              </div>
+          <% else %>
+            <div class="aspect-[16/10]" style="background: <%= ColorFromSeed.gradient_css(article.uuid) %>"></div>
+          <% end %>
+          <div class="flex flex-1 flex-col p-4">
+            <div class="mb-2 flex items-center gap-2 text-xs text-base-content/60">
+              <span class="font-mono tabular-nums text-base-content/40">0<%= index + 1 %></span>
+              <span class="truncate"><%= article.author.name %></span>
             </div>
+            <h3 class="font-display line-clamp-2 flex-1 text-base leading-snug font-medium text-base-content group-hover:underline">
+              <%= article.title %>
+            </h3>
+            <% if article.revenue_usd.to_f.positive? %>
+              <p class="mt-2 text-xs text-reward"><%= t('early_reader_rewards', default: 'Early reader rewards') %> · $<%= article.revenue_usd.round(2) %></p>
             <% end %>
+          </div>
         <% end %>
-      </div>
+      <% end %>
     </div>
+  <% else %>
+    <p class="rounded-xl border border-base-300 bg-base-200 px-4 py-8 text-center text-sm text-base-content/60">
+      <%= t('home_featured_empty') %>
+    </p>
   <% end %>
 <% end %>

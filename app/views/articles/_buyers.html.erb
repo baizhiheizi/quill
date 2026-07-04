@@ -27,7 +27,7 @@
 <% if article.authorized? user %>
   <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 mb-8">
     <div class="col-span-1 flex flex-col items-center justify-center p-4 rounded-2xl bg-base-200/30 border border-base-content/5">
-      <div class="text-2xl font-serif font-semibold text-base-content mb-1">
+      <div class="text-2xl font-display font-semibold text-base-content mb-1">
         <%= article.price %>
       </div>
       <div class="text-xs uppercase tracking-wider font-semibold text-base-content/60">
@@ -35,7 +35,7 @@
       </div>
     </div>
     <div class="col-span-1 flex flex-col items-center justify-center p-4 rounded-2xl bg-base-200/30 border border-base-content/5">
-      <div class="text-2xl font-serif font-semibold text-base-content mb-1">
+      <div class="text-2xl font-display font-semibold text-base-content mb-1">
         <%= article.orders_count %>
       </div>
       <div class="text-xs uppercase tracking-wider font-semibold text-base-content/60">
@@ -43,7 +43,7 @@
       </div>
     </div>
     <div class="col-span-1 flex flex-col items-center justify-center p-4 rounded-2xl bg-base-200/30 border border-base-content/5">
-      <div class="text-2xl font-serif font-semibold text-base-content mb-1">
+      <div class="text-2xl font-display font-semibold text-base-content mb-1">
         $<%= article.revenue_usd.presence&.round(2) || '0.00' %>
       </div>
       <div class="text-xs uppercase tracking-wider font-semibold text-base-content/60">
@@ -51,7 +51,7 @@
       </div>
     </div>
     <div class="col-span-1 flex flex-col items-center justify-center p-4 rounded-2xl bg-base-200/30 border border-base-content/5">
-      <div class="text-2xl font-serif font-semibold text-base-content mb-1">
+      <div class="text-2xl font-display font-semibold text-base-content mb-1">
         <%= (article.share_of(user).to_f * 100).round(1) %>%
       </div>
       <div class="text-xs uppercase tracking-wider font-semibold text-base-content/60">

@@ -1,4 +1,4 @@
-<div id="<%= dom_id article %>_published" class="pt-8 pb-4 border-b border-base-content/10">
+<div id="<%= dom_id article %>_published" class="pt-8 pb-4 border-b border-base-300">
   <div class="flex items-center justify-between mb-4">
     <div class="flex items-center">
       <span class="text-sm opacity-60">
@@ -67,28 +67,28 @@
 
     <div class="flex items-center space-x-4 ml-4 text-base-content/50">
       <div class="flex items-center space-x-1">
-        <%= inline_svg_tag 'icons/income-solid.svg', class: 'w-4 h-4' %>
+        <span class="i-[tabler--coin] size-4"></span>
         <span class="text-sm">
           <%= article.revenue_usd.round(4) %>
         </span>
       </div>
 
       <div class="flex items-center space-x-1">
-        <%= inline_svg_tag 'icons/comment-solid.svg', class: 'w-4 h-4' %>
+        <span class="i-[tabler--message] size-4"></span>
         <span class="text-sm">
           <%= article.comments_count %>
         </span>
       </div>
 
       <div class="flex items-center space-x-1">
-        <%= inline_svg_tag 'icons/like-solid.svg', class: 'w-4 h-4' %>
+        <span class="i-[tabler--thumb-up] size-4"></span>
         <span class="text-sm">
           <%= article.upvotes_count %>
         </span>
       </div>
 
       <div class="flex items-center space-x-1">
-        <%= inline_svg_tag 'icons/dislike-solid.svg', class: 'w-4 h-4' %>
+        <span class="i-[tabler--thumb-down] size-4"></span>
         <span class="text-sm">
           <%= article.downvotes_count %>
         </span>

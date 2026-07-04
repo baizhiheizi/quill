@@ -6,8 +6,8 @@
   data-article-form-active-tab-value="edit"
   class="article-form--new">
 
-  <div class="w-full fixed left-0 top-0 z-50 bg-base-100/90 backdrop-blur-sm">
-    <div class="max-w-xl lg:max-w-2xl 2xl:max-w-3xl mx-auto px-4 py-3 sm:px-0 flex items-center justify-between text-sm sm:text-base">
+  <div class="fixed left-0 top-0 z-50 w-full border-b border-base-300 bg-base-100/95 backdrop-blur-sm">
+    <div class="mx-auto flex max-w-xl items-center justify-between px-4 py-3 text-sm sm:max-w-2xl sm:px-6 sm:text-base 2xl:max-w-3xl">
 
       <%= link_to root_path, class: 'mr-2 sm:mr-4' do %>
         <%= image_tag "logo.svg", class: 'w-auto h-8 hidden sm:block' %>
@@ -15,7 +15,7 @@
       <% end %>
 
       <div class="flex items-center space-x-3 sm:space-x-4">
-        <div class="btn btn-outline btn-sm rounded-full font-semibold" 
+        <div class="btn btn-soft btn-sm rounded-full font-medium" 
           data-action="click->article-form#submit">
           <%= t('save_draft') %>
         </div>

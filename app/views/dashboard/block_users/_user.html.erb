@@ -1,4 +1,4 @@
-<div id="block_user_<%= dom_id user %>" class="relative flex items-center py-4 border-b border-base-content/10 justify-between">
+<div id="block_user_<%= dom_id user %>" class="relative flex items-center py-4 border-b border-base-300 justify-between">
   <%= link_to user_path(user), class: "flex items-center space-x-2", data: { turbo_frame: "_top" } do %>
     <%= render "shared/avatar", user:, thumb: true, class: "w-8 h-8 rounded-full" %>
     <span class="truncate max-w-24"><%= user.name %></span>

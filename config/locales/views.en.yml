@@ -326,6 +326,17 @@ en:
   press_enter_to_search_all_articles: Press Enter to search all articles
   home: Home
   home_value_proposition: Read, write, and earn crypto rewards — publishing built for Web3.
+  home_landing_headline: Publish with conviction. Reward your earliest readers.
+  home_landing_subheadline: Quill is editorial publishing with Web3-native payments — authors set a price, and early readers earn a share of every new sale.
+  home_cta_explore: Explore articles
+  home_cta_write: Start writing
+  home_stat_articles: Published articles
+  home_stat_authors: Active authors
+  home_stat_reader_rewards: Shared with early readers
+  home_featured_heading: Featured this month
+  home_view_all: View all
+  home_featured_empty: Featured articles will appear here as the community grows.
+  early_reader_rewards: Early reader rewards
   collections: Collections
   new_collection: New Collection
   collection_revenue_ratio_tips: A part of every sell of article in the collection will be split as bonus to the buyers of the collection.

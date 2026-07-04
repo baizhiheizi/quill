@@ -316,6 +316,17 @@ ja:
   press_enter_to_search_all_articles: Press Enter to search all articles
   home: Home
   home_value_proposition: 読んで、書いて、暗号資産の報酬を得る——Web3のためのパブリッシングプラットフォーム。
+  home_landing_headline: 信念を持って書く。最初の読者に報いる。
+  home_landing_subheadline: Quill は Web3 ネイティブな有料出版——作者が価格を設定し、早期読者が新しい売上の一部を得ます。
+  home_cta_explore: 記事を見る
+  home_cta_write: 執筆を始める
+  home_stat_articles: 公開記事
+  home_stat_authors: アクティブな作者
+  home_stat_reader_rewards: 早期読者への分配
+  home_featured_heading: 今月の注目
+  home_view_all: すべて見る
+  home_featured_empty: コミュニティの成長に合わせて、注目記事がここに表示されます。
+  early_reader_rewards: 早期読者報酬
   collections: Collections
   new_collection: New Collection
   collection_revenue_ratio_tips: A part of every sell of article in the collection will be split as bonus to the buyers of the collection.

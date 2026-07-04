@@ -30,8 +30,9 @@
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
-    <link rel=preconnect"" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Noto Sans SC" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,500;0,600;1,500&family=Noto+Serif+SC:wght@500;600&family=Inter:wght@400;500;600&family=Noto+Sans+SC:wght@400;500;600&display=swap" rel="stylesheet">
     <%= favicon_link_tag "favicon.svg" %>
     <script>
       (function () {
@@ -46,9 +47,9 @@
     <%= javascript_include_tag "application", "data-turbo-track": "reload" %>
   </head>
 
-  <body>
-    <main class="min-h-screen bg-base-100 text-base-content">
-      <div class="max-w-xl lg:max-w-2xl 2xl:max-w-3xl mx-auto">
+  <body class="min-h-screen bg-base-100 text-base-content">
+    <main class="min-h-screen">
+      <div class="mx-auto max-w-xl px-4 py-6 sm:max-w-2xl sm:px-6 sm:py-8 2xl:max-w-3xl">
         <%= yield %>
       </div>
     </main>

@@ -1,4 +1,4 @@
-<div id="subscribe_article_<%= dom_id article %>" class="relative flex items-center space-x-4 py-4 border-b border-base-content/10">
+<div id="subscribe_article_<%= dom_id article %>" class="relative flex items-center space-x-4 py-4 border-b border-base-300">
   <%= link_to user_article_path(article.author, article), class: "flex flex-1 items-center space-x-2 truncate", data: { turbo_frame: "_top" } do %>
     <%= render "shared/avatar", user: article.author, thumb: true, class: "w-8 h-8 rounded-full" %>
     <span class="truncate"><%= article.title %></span>

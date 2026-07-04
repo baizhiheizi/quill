@@ -1,19 +1,57 @@
-<%# Editorial redesign (FR-001/FR-002): slim masthead (rendered by the
-    "public" layout) + a one-line value prop for logged-out visitors only —
-    no full-height hero banner. The feed begins immediately below. %>
-<% if current_user.blank? %>
-  <div class="mb-8 text-center sm:mb-10">
-    <p class="font-display text-lg text-base-content sm:text-xl">
-      <%= t('home_value_proposition') %>
-    </p>
+<%# Editorial landing page for logged-out desktop visitors (FR-008–FR-014).
+    Logged-in and mobile visitors are redirected to /articles by HomeController#index. %>
+<section class="mb-12 text-center sm:mb-16">
+  <h1 class="font-display mx-auto max-w-2xl text-3xl leading-tight font-medium text-base-content sm:text-4xl lg:text-5xl">
+    <%= t('home_landing_headline') %>
+  </h1>
+  <p class="mx-auto mt-4 max-w-xl text-base text-base-content/60 sm:text-lg">
+    <%= t('home_landing_subheadline') %>
+  </p>
+
+  <div class="mt-8 flex flex-wrap items-center justify-center gap-3">
+    <%= link_to articles_path, class: "btn btn-primary rounded-full px-6", data: { controller: "prefetch" } do %>
+      <%= t('home_cta_explore') %>
+    <% end %>
+    <% if current_user.present? %>
+      <%= link_to new_article_path, class: "btn btn-soft btn-primary rounded-full px-6" do %>
+        <%= t('write') %>
+      <% end %>
+    <% else %>
+      <%= link_to login_path, data: { turbo_frame: :modal }, class: "btn btn-soft btn-primary rounded-full px-6" do %>
+        <%= t('home_cta_write') %>
+      <% end %>
+    <% end %>
   </div>
+</section>
+
+<% if @platform_stats.present? %>
+  <section class="mb-12 grid grid-cols-2 gap-4 sm:grid-cols-3 sm:gap-6">
+    <div class="rounded-xl border border-base-300 bg-base-200 px-4 py-5 text-center">
+      <p class="font-display text-2xl font-medium text-base-content"><%= number_with_delimiter(@platform_stats[:articles]) %></p>
+      <p class="mt-1 text-xs text-base-content/60 sm:text-sm"><%= t('home_stat_articles') %></p>
+    </div>
+    <div class="rounded-xl border border-base-300 bg-base-200 px-4 py-5 text-center">
+      <p class="font-display text-2xl font-medium text-base-content"><%= number_with_delimiter(@platform_stats[:authors]) %></p>
+      <p class="mt-1 text-xs text-base-content/60 sm:text-sm"><%= t('home_stat_authors') %></p>
+    </div>
+    <div class="col-span-2 rounded-xl border border-base-300 bg-base-200 px-4 py-5 text-center sm:col-span-1">
+      <p class="font-display text-2xl font-medium text-reward"><%= @platform_stats[:revenue_label] %></p>
+      <p class="mt-1 text-xs text-base-content/60 sm:text-sm"><%= t('home_stat_reader_rewards') %></p>
+    </div>
+  </section>
 <% end %>
 
-<%= turbo_frame_tag 'articles', src: articles_path do %>
-  <%= render 'shared/loading' %>
-<% end %>
+<section class="mb-12">
+  <div class="mb-6 flex items-end justify-between gap-4">
+    <h2 class="font-display text-xl font-medium text-base-content sm:text-2xl"><%= t('home_featured_heading') %></h2>
+    <%= link_to t('home_view_all'), articles_path, class: "text-sm font-medium text-primary hover:underline", data: { controller: "prefetch" } %>
+  </div>
+  <%= turbo_frame_tag 'selected_articles', src: selected_articles_path, loading: :lazy do %>
+    <%= render 'shared/loading' %>
+  <% end %>
+</section>
 
-<div class="mt-12 space-y-10 border-t border-base-300 pt-8">
+<div class="space-y-10 border-t border-base-300 pt-8">
   <%= turbo_frame_tag 'active_authors', src: active_authors_path, loading: :lazy %>
   <%= turbo_frame_tag 'hot_tags', src: hot_tags_path, loading: :lazy %>
   <%= render 'shared/footer' %>
