@@ -1,9 +1,8 @@
-<% button_class ||= "w-4 h-4 lg:w-6 lg:h-6" %>
+<% button_class ||= "size-5 lg:size-6 text-base-content/60 transition-transform hover:scale-105 hover:text-base-content" %>
 
-<%= link_to article_share_path(article_uuid: article.uuid), 
-  data: { 
-    turbo_frame: :modal 
-  },
-  class: "m-auto hover:scale-105" do %>
-  <%= inline_svg_tag "icons/share-solid.svg", class: button_class %>
+<%= link_to article_share_path(article_uuid: article.uuid),
+  data: { turbo_frame: :modal },
+  class: "inline-flex items-center justify-center",
+  aria: { label: t('share', default: 'Share') } do %>
+  <span class="i-[tabler--share-3] <%= button_class %>"></span>
 <% end %>

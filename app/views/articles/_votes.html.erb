@@ -1,27 +1,27 @@
 <div id="<%= dom_id article %>_votes" class="flex flex-col items-center justify-center space-y-4">
   <div class="flex items-center space-x-6">
     <!-- Upvote Button -->
-    <div class="relative group">
-      <div class="flex items-center justify-center w-12 h-12 rounded-full cursor-pointer transition-all duration-200 <%= user&.upvote_article?(article) ? 'bg-primary/10 text-primary ring-2 ring-primary/20' : 'bg-base-200 text-base-content/60 hover:bg-base-300 hover:text-base-content' %>">
-        <%= inline_svg_tag "icons/like-solid.svg", class: "h-6 w-6 transition-transform group-hover:scale-110" %>
+    <div class="group relative">
+      <div class="flex h-12 w-12 cursor-pointer items-center justify-center rounded-full transition-all duration-200 <%= user&.upvote_article?(article) ? 'bg-primary/10 text-primary ring-2 ring-primary/20' : 'bg-base-200 text-base-content/60 hover:bg-base-300 hover:text-base-content' %>">
+        <span class="i-[tabler--thumb-up-filled] size-6 transition-transform group-hover:scale-110"></span>
       </div>
 
       <% if user.blank? %>
-        <%= link_to '', login_path, data: { turbo_frame: :modal }, class: 'absolute inset-0 z-10 rounded-full' %>
+        <%= link_to '', login_path, data: { turbo_frame: :modal }, class: 'absolute inset-0 z-10 rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-base-100' %>
       <% elsif user&.upvote_article? article %>
-        <%= link_to '', upvoted_article_path(article), data: { turbo_method: :delete }, class: "absolute inset-0 z-10 rounded-full" %>
+        <%= link_to '', upvoted_article_path(article), data: { turbo_method: :delete }, class: "absolute inset-0 z-10 rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-base-100" %>
       <% else %>
-        <%= link_to '', upvoted_article_path(article), data: { turbo_method: :put }, class: "absolute inset-0 z-10 rounded-full" %>
+        <%= link_to '', upvoted_article_path(article), data: { turbo_method: :put }, class: "absolute inset-0 z-10 rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-base-100" %>
       <% end %>
     </div>
 
     <!-- Ratio Bar -->
-    <div class="flex flex-col items-center w-24">
-      <div class="flex justify-between w-full text-xs font-medium text-base-content/60 mb-1.5 px-1">
+    <div class="flex w-24 flex-col items-center">
+      <div class="mb-1.5 flex w-full justify-between px-1 text-xs font-medium text-base-content/60">
         <span><%= article.upvotes_count %></span>
         <span><%= article.downvotes_count %></span>
       </div>
-      <div class="w-full h-1.5 rounded-full bg-base-300 overflow-hidden flex">
+      <div class="flex h-1.5 w-full overflow-hidden rounded-full bg-base-300">
         <% upvote_ratio = article.upvote_ratio.to_f.nan? ? 50 : article.upvote_ratio.to_i %>
         <div class="h-full bg-primary transition-all duration-500 ease-out" style="width: <%= upvote_ratio %>%"></div>
         <div class="h-full bg-base-content/20 transition-all duration-500 ease-out" style="width: <%= 100 - upvote_ratio %>%"></div>
@@ -29,17 +29,17 @@
     </div>
 
     <!-- Downvote Button -->
-    <div class="relative group">
-      <div class="flex items-center justify-center w-12 h-12 rounded-full cursor-pointer transition-all duration-200 <%= user&.downvote_article?(article) ? 'bg-error/10 text-error ring-2 ring-error/20' : 'bg-base-200 text-base-content/60 hover:bg-base-300 hover:text-base-content' %>">
-        <%= inline_svg_tag "icons/dislike-solid.svg", class: "h-6 w-6 transition-transform group-hover:scale-110" %>
+    <div class="group relative">
+      <div class="flex h-12 w-12 cursor-pointer items-center justify-center rounded-full transition-all duration-200 <%= user&.downvote_article?(article) ? 'bg-error/10 text-error ring-2 ring-error/20' : 'bg-base-200 text-base-content/60 hover:bg-base-300 hover:text-base-content' %>">
+        <span class="i-[tabler--thumb-down-filled] size-6 transition-transform group-hover:scale-110"></span>
       </div>
 
       <% if user.blank? %>
-        <%= link_to '', login_path, data: { turbo_frame: :modal }, class: 'absolute inset-0 z-10 rounded-full' %>
+        <%= link_to '', login_path, data: { turbo_frame: :modal }, class: 'absolute inset-0 z-10 rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-base-100' %>
       <% elsif user&.downvote_article? article %>
-        <%= link_to '', downvoted_article_path(article), data: { turbo_method: :delete }, class: "absolute inset-0 z-10 rounded-full" %>
+        <%= link_to '', downvoted_article_path(article), data: { turbo_method: :delete }, class: "absolute inset-0 z-10 rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-base-100" %>
       <% else %>
-        <%= link_to '', downvoted_article_path(article), data: { turbo_method: :put }, class: "absolute inset-0 z-10 rounded-full" %>
+        <%= link_to '', downvoted_article_path(article), data: { turbo_method: :put }, class: "absolute inset-0 z-10 rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-base-100" %>
       <% end %>
     </div>
   </div>

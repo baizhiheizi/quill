@@ -3,27 +3,28 @@
   class="overlay modal modal-middle overlay-open:opacity-100 overlay-open:duration-300 hidden <%= classes %>"
   role="dialog"
   tabindex="-1"
+  aria-modal="true"
   data-controller="modal-component"
   data-action="turbo:submit-end->modal-component#submitEnd"
   data-modal-component-backdrop-value="<%= backdrop %>">
-  <div class="modal-dialog <%= local_assigns[:dialog_class] %>">
-    <div class="modal-content">
-      <div class="modal-header">
+  <div class="modal-dialog max-w-md <%= local_assigns[:dialog_class] %>">
+    <div class="modal-content overflow-hidden rounded-2xl border border-base-300 bg-base-100 shadow-none">
+      <div class="modal-header relative border-b border-base-300 px-6 py-4">
         <% if header.present? %>
           <%= header %>
         <% else %>
-          <h3 class="modal-title"><%= title %></h3>
+          <h3 class="modal-title pe-10 font-display text-lg font-semibold text-base-content"><%= title %></h3>
         <% end %>
         <button
           type="button"
-          class="btn btn-text btn-circle btn-sm absolute end-3 top-3"
+          class="btn btn-soft btn-circle btn-sm absolute end-3 top-3 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-base-100"
           aria-label="<%= t('close', default: 'Close') %>"
           data-action="modal-component#close">
-          <span class="icon-[tabler--x] size-4"></span>
+          <span class="i-[tabler--x] size-4"></span>
         </button>
       </div>
 
-      <div class="modal-body">
+      <div class="modal-body px-6 py-5">
         <%= content %>
         <div style="height:env(safe-area-inset-bottom)"></div>
       </div>

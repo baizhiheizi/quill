@@ -34,21 +34,21 @@
         </div>
 
         <button type="button"
-          class="btn btn-ghost btn-sm lg:hidden"
+          class="btn btn-soft btn-sm lg:hidden"
           data-action="article-form#toggleSettingsRail"
           aria-expanded="false">
           <%= t("articles.settings_panel") %>
         </button>
 
         <button type="button"
-          class="btn btn-ghost btn-sm hidden sm:inline-flex"
+          class="btn btn-soft btn-sm hidden sm:inline-flex"
           data-action="article-form#toggleFocusMode">
           <%= t("articles.focus_mode") %>
         </button>
 
         <% if article.persisted? %>
           <button type="button"
-            class="btn btn-ghost btn-sm"
+            class="btn btn-soft btn-sm"
             data-action="article-form#togglePreview">
             <%= t("articles.preview") %>
           </button>

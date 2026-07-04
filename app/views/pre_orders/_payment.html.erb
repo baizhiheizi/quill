@@ -13,7 +13,7 @@
     <div class="mb-4">
       <div class="flex items-center space-x-2">
         <%= remote_image_tag pre_order.currency.icon_url, class: "w-6 h-6 rounded-full", lazy: true %>
-        <span class="text-2xl font-serif font-black"><%= pre_order.amount_tag %></span>
+        <span class="font-display text-2xl font-semibold"><%= pre_order.amount_tag %></span>
       </div>
       <div id="<%= dom_id pre_order %>_pay_amount" class="text-sm">
         ≈$ <%= sprintf('%.4f', pre_order.currency.price_usd * pre_order.amount) %>

@@ -1,21 +1,23 @@
 <%#
   locals: label, path:, active: false, icon:, solid_icon: nil, badge: false, turbo_frame: nil, action: nil
+  icon: Tabler slug (e.g. "home", "bell")
+  solid_icon: optional Tabler slug when active (defaults to icon)
 %>
 <% link_path = local_assigns[:path] %>
 <% active = local_assigns.fetch(:active, false) %>
 <% show_badge = local_assigns.fetch(:badge, false) %>
 <% turbo_frame = local_assigns[:turbo_frame] %>
 <% action = local_assigns[:action] %>
-<% link_options = { class: "flex items-center space-x-4 w-full px-4 py-3 rounded-full hover:bg-base-content/5 transition-colors #{active ? 'font-bold' : ''}" } %>
+<% tabler_icon = active ? (local_assigns[:solid_icon] || icon) : icon %>
+<% link_options = { class: "flex w-full items-center gap-4 rounded-full px-4 py-3 transition-colors hover:bg-base-content/5 #{active ? 'font-bold' : ''}" } %>
 <% link_options[:data] = { turbo_frame: turbo_frame } if turbo_frame.present? %>
 <% link_options[:data] = { action: action } if action.present? %>
 
 <%= link_to link_path, **link_options do %>
-  <div class="relative flex-shrink-0">
-    <%= inline_svg_tag (active ? solid_icon || icon : icon),
-      class: "h-6 w-6 #{active ? 'text-base-content' : 'text-base-content/70'}" %>
+  <div class="relative shrink-0">
+    <span class="i-[tabler--<%= tabler_icon %>] size-6 <%= active ? 'text-base-content' : 'text-base-content/70' %>"></span>
     <% if show_badge == true || show_badge.present? %>
-      <span class="absolute top-0 right-0 h-2 w-2 rounded-full bg-error"></span>
+      <span class="absolute right-0 top-0 size-2 rounded-full bg-error"></span>
     <% end %>
   </div>
   <span class="text-base <%= active ? 'text-base-content' : 'text-base-content/80' %>"><%= label %></span>

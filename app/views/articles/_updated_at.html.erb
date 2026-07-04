@@ -1,6 +1,6 @@
-<div id="<%= dom_id article %>_updated_at" class="flex items-center space-x-2">
-  <div class="flex items-center space-x-1 opacity-75 text-xs">
-    <span class="">
+<div id="<%= dom_id article %>_updated_at" class="flex items-center gap-2">
+  <div class="flex items-center gap-1 text-xs text-base-content/60">
+    <span>
       <%= t('last_saved') %>:
     </span>
     <%= render_time_format datetime: article.updated_at.rfc3339, format: 'time' do %>
@@ -8,6 +8,6 @@
     <% end %>
   </div>
   <div data-controller="auto-hide">
-    <%= inline_svg_tag "icons/check-circle-solid.svg", class: "w-4 h-4 text-green-500" %>
+    <span class="i-[tabler--circle-check-filled] size-4 text-success"></span>
   </div>
 </div>
