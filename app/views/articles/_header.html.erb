@@ -29,12 +29,6 @@
 
 <h1 class="font-display mb-4 text-2xl leading-tight font-medium text-ellipsis text-base-content lg:text-4xl">
   <%= article.title %>
-  <%# Cross-Locale Article Visibility (FR-010, SC-007): surface the article's language on the article header, alongside the title. %>
-  <% if article.locale.present? %>
-    <span class="article-header__locale badge badge-soft badge-sm ml-2 align-middle font-medium uppercase" title="<%= I18n.t("languages.#{article.locale}", default: article.locale) %>">
-      <%= article.locale %>
-    </span>
-  <% end %>
 </h1>
 
 <% if article.tags.present? %>

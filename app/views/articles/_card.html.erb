@@ -18,13 +18,6 @@
         data: { controller: 'prefetch', turbo_frame: '_top' },
         class: "tag-chip inline-flex max-w-[8rem] truncate px-2 py-0.5 text-[11px] font-medium transition-colors hover:text-base-content" %>
     <% end %>
-
-    <%# Cross-Locale Article Visibility (FR-010, SC-007): surface the article's language regardless of the viewer's own locale. %>
-    <% if article.locale.present? %>
-      <span class="article-card__locale badge badge-soft badge-xs font-medium uppercase" title="<%= I18n.t("languages.#{article.locale}", default: article.locale) %>">
-        <%= article.locale %>
-      </span>
-    <% end %>
   </div>
 
   <%= link_to user_article_path(article.author, article),
