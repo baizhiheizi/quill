@@ -161,7 +161,7 @@ Single-project Rails monolith — all paths under `app/views/`, `app/assets/styl
 - [X] T034 Run full `bin/rails test` suite; fix any regressions (823 runs, 2010 assertions, 0 failures, 2 skips)
 - [X] T035 Run `bin/rubocop` and `bun run lint-check` on touched paths; fix offenses introduced by this feature (490 files, 0 RuboCop offenses; Prettier clean)
 - [X] T036 Confirm admin panel untouched: `app/views/admin/**` still contains original `inline_svg_tag` usage (FR-017) — confirmed `admin/_aside.html.erb` unchanged
-- [ ] T037 Update/open PR for `006-editorial-ui-polish`: summarize P1–P6, check off remaining `quickstart.md` items, mark ready for review (user action — not auto-created)
+- [X] T037 Update/open PR for `006-editorial-ui-polish`: summarize P1–P6, check off remaining `quickstart.md` items, mark ready for review — https://github.com/baizhiheizi/quill/pull/1832
 
 ---
 
