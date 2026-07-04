@@ -1,18 +1,31 @@
-<div class="h-full my-auto">
+<div class="my-auto h-full">
   <div class="mb-6">
-    <div class="mb-2 text-xl sm:text-2xl font-bold text-center text-base-content">
-      <%= article.title %>
+    <div class="mb-2 text-center text-xl font-bold text-base-content sm:text-2xl">
+      <%= article.title.presence || t("articles.untitled") %>
     </div>
-    <div class="mb-4 text-center text-yellow-600 font-bold">
+    <div class="mb-4 text-center font-bold text-yellow-600">
       <%= article.price_tag %>
     </div>
 
+    <% if @readiness_errors.present? %>
+      <div class="mb-6 rounded-xl border border-warning/30 bg-warning/10 p-4 text-left">
+        <p class="mb-2 text-sm font-semibold text-warning"><%= t("articles.publish_blocked") %></p>
+        <ul class="list-inside list-disc space-y-1 text-sm text-base-content/80">
+          <% @readiness_errors.each do |message| %>
+            <li><%= message %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% else %>
+      <p class="mb-4 text-center text-sm text-base-content/70"><%= t("articles.publish_ready") %></p>
+    <% end %>
+
     <% if article.references.present? %>
       <div class="mb-4">
-        <div class="text-base-content/60 mb-2 text-center text-sm"><%= t("article_references") %></div>
+        <div class="mb-2 text-center text-sm text-base-content/60"><%= t("article_references") %></div>
         <% article.references.each do |reference| %>
-          <div class="flex font-sm items-center justify-center space-x-2 text-sm text-base-content/60">
-            <%= render "shared/avatar", user: reference.author, thumb: true, class: "w-4 h-4 rounded-full" %>
+          <div class="flex items-center justify-center space-x-2 text-sm text-base-content/60">
+            <%= render "shared/avatar", user: reference.author, thumb: true, class: "h-4 w-4 rounded-full" %>
             <span><%= reference.title %></span>
           </div>
         <% end %>
@@ -20,21 +33,22 @@
     <% end %>
   </div>
 
-  <div class="flex items-center justify-center space-x-6">
-    <button data-action="modal-component#cancel" class="btn btn-outline rounded-full py-2 w-24 border-base-300">
-      <%= t('cancel') %>
+  <div class="flex items-center justify-center space-x-4 sm:space-x-6">
+    <button data-action="modal-component#cancel" class="btn btn-outline w-24 rounded-full border-base-300 py-2">
+      <%= t("cancel") %>
     </button>
 
-    <%= link_to t('options'), 
-      edit_article_path(article, tab: 'options'), 
-      class: "btn btn-outline btn-primary rounded-full py-2 w-24" %>
-
-    <%= button_to t('publish'),
-      dashboard_published_article_path(article), 
-      method: :put,
-      data: { 
-        turbo_frame: "_top"
-      },
-      class: "btn btn-primary rounded-full py-2 w-24" %>
+    <% if @readiness_errors.blank? && @article.may_publish? %>
+      <%= button_to t("publish"),
+        dashboard_published_article_path(article),
+        method: :put,
+        data: { turbo_frame: "_top" },
+        class: "btn btn-primary w-24 rounded-full py-2" %>
+    <% else %>
+      <%= link_to t("articles.fix_in_editor"),
+        edit_article_path(article),
+        class: "btn btn-primary w-auto rounded-full px-4 py-2",
+        data: { turbo_frame: "_top" } %>
+    <% end %>
   </div>
 </div>

@@ -1,271 +1,258 @@
-<div data-article-form-target="optionFields" 
-  class="hidden px-4 py-5 bg-base-100 space-y-6 sm:p-6">
-
-  <div class="mb-4">
-    <div class="w-full aspect-square rounded-2xl bg-base-200/90 flex border border-base-content/10 border-dashed">
-      <div data-controller="preview-upload" class="w-full h-full flex justify-center items-center">
-        <%= form.label :cover, 
-          class: "block h-full w-full cursor-pointer" do %>
-          <img data-preview-upload-target="imageTpl" class="hidden w-full h-full object-cover rounded-2xl" />
-          <div data-preview-upload-target="output" class="h-full flex">
-            <% if form.object.cover.attached? %>
-              <img src="<%= form.object.cover.url %>" class="w-full h-full object-cover rounded-2xl" />
-            <% else %>
-              <div class="m-auto">
-                <div class="flex justify-center mb-4">
-                  <span class="i-[tabler--upload] size-12 opacity-50"></span>
+<div data-article-form-target="optionFields" class="flex flex-col gap-7">
+  <section aria-labelledby="settings-cover-tags">
+    <h3 id="settings-cover-tags" class="mb-3 text-xs font-semibold uppercase tracking-wide text-base-content/50">
+      <%= t("articles.settings.cover_and_tags") %>
+    </h3>
+    <div class="space-y-4">
+      <div class="aspect-square w-full rounded-2xl border border-dashed border-base-content/10 bg-base-200/90">
+        <div data-controller="preview-upload" class="flex h-full w-full items-center justify-center">
+          <%= form.label :cover, class: "block h-full w-full cursor-pointer" do %>
+            <img data-preview-upload-target="imageTpl" class="hidden h-full w-full rounded-2xl object-cover" />
+            <div data-preview-upload-target="output" class="flex h-full">
+              <% if form.object.cover.attached? %>
+                <img src="<%= form.object.cover.url %>" class="h-full w-full rounded-2xl object-cover" />
+              <% else %>
+                <div class="m-auto">
+                  <div class="mb-4 flex justify-center">
+                    <span class="i-[tabler--upload] size-10 opacity-50"></span>
+                  </div>
+                  <div class="text-center text-sm opacity-75"><%= t("upload_cover") %></div>
                 </div>
-                <div class="text-center opacity-75">
-                  <%= t('upload_cover') %>
+              <% end %>
+            </div>
+            <%= form.file_field :cover,
+              class: "sr-only",
+              accept: "image/*",
+              data: {
+                preview_upload_target: "input",
+                action: "input->preview-upload#preview"
+              },
+              direct_upload: true %>
+          <% end %>
+        </div>
+      </div>
+
+      <%= form.select :tag_names,
+        form.object.tag_names.presence || Tag.all.first(10).pluck(:name),
+        {},
+        multiple: true,
+        placeholder: t("articles.add_some_tags"),
+        data: {
+          controller: "tags-select",
+          tags_select_items_value: form.object.tag_names
+        },
+        class: "input w-full" %>
+    </div>
+  </section>
+
+  <section aria-labelledby="settings-pricing">
+    <h3 id="settings-pricing" class="mb-3 text-xs font-semibold uppercase tracking-wide text-base-content/50">
+      <%= t("articles.settings.pricing_and_access") %>
+    </h3>
+    <div class="space-y-4">
+      <div>
+        <%= form.label :currency, required: true, class: "mb-1 block text-sm font-medium opacity-70" %>
+        <% if form.object.published_at? %>
+          <%= form.collection_select :asset_id,
+            Currency.pricable,
+            :asset_id,
+            :symbol,
+            {},
+            disabled: true,
+            class: "input w-full bg-base-200 opacity-60" %>
+          <p class="mt-1 text-xs text-base-content/50"><%= t("articles.locked_after_publishing") %></p>
+        <% else %>
+          <%= form.collection_select :asset_id,
+            Currency.pricable,
+            :asset_id,
+            :symbol,
+            {},
+            class: "sr-only",
+            tabindex: -1,
+            aria: { hidden: true } %>
+
+          <%= link_to currencies_path(identifier: form.object.uuid),
+            data: { turbo_frame: :modal },
+            class: "btn btn-soft flex w-full items-center justify-between rounded-lg bg-base-200 px-4 py-2 hover:bg-base-300" do %>
+            <% if form.object.currency.present? %>
+              <div id="<%= dom_id form.object.currency %>" class="flex items-center space-x-4">
+                <div class="relative">
+                  <%= remote_image_tag form.object.currency.icon_url,
+                    data: { article_form_target: "currencyIcon" },
+                    class: "h-8 w-8 rounded-full" %>
+                  <%= remote_image_tag form.object.currency.chain&.icon_url || form.object.currency.icon_url,
+                    data: { article_form_target: "currencyChainIcon" },
+                    class: "absolute bottom-0 h-3 w-3 rounded-full" %>
+                </div>
+                <div class="text-lg font-bold" data-article-form-target="currencySymbol">
+                  <%= form.object.currency.symbol %>
                 </div>
               </div>
+            <% else %>
+              <span class="text-base-content/70"><%= t("select_crypto") %></span>
             <% end %>
-          </div>
-          <%= form.file_field :cover, 
-            class: "sr-only", 
-            accept: "image/*", 
-            data: {
-              preview_upload_target: "input",
-              action: "input->preview-upload#preview"
-            },
-            direct_upload: true %>
+            <span class="i-[tabler--chevron-right] size-6 font-bold opacity-60"></span>
+          <% end %>
+        <% end %>
+        <% if form.object.errors.where(:asset_id).present? %>
+          <div class="py-1 text-sm text-error"><%= form.object.errors.where(:asset_id).map(&:full_message).join("; ") %></div>
         <% end %>
       </div>
-    </div>
-  </div>
-  <div class="mb-4">
-    <%= form.select :tag_names, 
-      form.object.tag_names.presence || Tag.all.first(10).pluck(:name), 
-      {}, 
-      multiple: true,
-      placeholder: t("articles.add_some_tags"),
-      data: {
-        controller: "tags-select",
-        tags_select_items_value: form.object.tag_names,
-      }, 
-      class: "input w-full" 
-    %>
-  </div>
 
-  <div class="grid grid-cols-3 gap-3">
-    <%= form.label :collection, class: "col-span-3 sm:col-span-1 block text-sm font-medium opacity-70" %>
-    <div class="col-span-3 sm:col-span-2">
-      <div class="rounded-md shadow-sm">
-        <%= form.collection_select :collection_id, 
-          current_user.collections.listed,
-          :uuid,
-          :name,
-          {
-            include_blank: 'None',
-          },
-          disabled: (form.object.published_at? && form.object.collection_revenue_ratio.positive?),
-          data: {
-            action: "article-form#selectCollection article-form#touchDirty"
-          },
-          class: "input w-full bg-base-200" %>
-      </div>
-      <% if form.object.errors.where(:intro).present? %>
-        <div class="py-2 text-red-700 font-sm"><%= form.object.errors.where(:intro).map(&:full_message).join(';') %></div>
-      <% end %>
-    </div>
-  </div>
-
-
-  <div class="grid grid-cols-3 gap-3">
-    <%= form.label :currency, required: true, class: "col-span-3 sm:col-span-1 block text-sm font-medium opacity-70" %>
-    <div class="col-span-3 sm:col-span-2">
-      <div class="<%= form.object.published_at? ? '' : 'hidden' %>">
-        <%= form.collection_select :asset_id, 
-          Currency.pricable, 
-          :asset_id, 
-          :symbol, 
-          {}, 
-          disabled: form.object.published_at?,
-          class: "input w-full bg-base-200" %>
-      </div>
-
-      <% if form.object.currency.present? && !form.object.published_at? %>
-        <%= link_to currencies_path(identifier: form.object.uuid), 
-          data: { controller: :turbo },
-          class: "btn btn-soft w-full mb-4 flex items-center justify-between py-2 px-4 bg-base-200 rounded-lg" do %>
-          <div id="<%= dom_id form.object.currency %>" class="flex items-center space-x-4">
-            <div class='relative'>
-              <%= remote_image_tag form.object.currency.icon_url, 
-                data: { article_form_target: 'currencyIcon' }, 
-                class: 'w-8 h-8 rounded-full' %>
-              <%= remote_image_tag form.object.currency.icon_url, 
-                data: { article_form_target: 'currencyChainIcon' }, 
-                class: 'absolute bottom-0 w-3 h-3 rounded-full' %>
-            </div>
-            <div class="text-lg font-bold" data-article-form-target="currencySymbol">
-              <%= form.object.currency.symbol %>
-            </div>
-          </div>
-          <span class="i-[tabler--chevron-right] size-6 font-bold"></span>
-        <% end %>
-      <% end %>
-
-      <% if form.object.errors.where(:asset_id).present? %>
-        <div class="py-2 text-red-700 font-sm"><%= form.object.errors.where(:asset_id).map(&:full_message).join(';') %></div>
-      <% end %>
-    </div>
-  </div>
-
-  <div class="grid grid-cols-3 gap-3">
-    <%= form.label :price, 
-      required: true, 
-      class: "col-span-3 sm:col-span-1 block text-sm font-medium opacity-70" %>
-    <div class="col-span-3 sm:col-span-2">
-      <div class="rounded-md shadow-sm">
-        <%= form.number_field :price, 
-          required: true, 
-          step: '0.0000001', 
-          min: '0', 
-          data: {
-            action: 'change->article-form#calPriceUsd change->article-form#touchDirty',
-          },
-          class: "input w-full font-bold bg-base-200", placeholder: "Input price" %>
-      </div>
-      <div class="flex justify-between items-center">
+      <div>
+        <%= form.label :price, required: true, class: "mb-1 block text-sm font-medium opacity-70" %>
+        <%= form.number_field :price,
+          required: true,
+          step: "0.0000001",
+          min: "0",
+          data: { action: "change->article-form#calPriceUsd" },
+          class: "input w-full bg-base-200 font-bold",
+          placeholder: t("articles.price_place_holder") %>
         <% if form.object.errors.where(:price).present? %>
-          <div class="py-2 text-red-700 font-sm"><%= form.object.errors.where(:price).map(&:full_message).join(';') %></div>
+          <div class="py-1 text-sm text-error"><%= form.object.errors.where(:price).map(&:full_message).join("; ") %></div>
         <% end %>
         <% if form.object.currency.present? %>
-          <div class="py-2 font-sm opacity-70 text-right ml-auto">
+          <div class="py-1 text-right text-sm opacity-70">
             ≈ $<span data-article-form-target="priceUsd"><%= (form.object.price * form.object.currency.price_usd).floor(2) %></span>
           </div>
         <% end %>
       </div>
-    </div>
-  </div>
 
-  <div class="grid grid-cols-3 gap-3">
-    <%= form.label :free_content_ratio, class: "col-span-3 sm:col-span-1 block text-sm font-medium opacity-70" %>
-    <div class="col-span-3 sm:col-span-2">
-      <div class="rounded-md shadow-sm">
-        <%= form.number_field :free_content_ratio, 
-          required: true, 
+      <div>
+        <%= form.label :free_content_ratio, class: "mb-1 block text-sm font-medium opacity-70" %>
+        <%= form.number_field :free_content_ratio,
+          required: true,
           min: "0.0",
           max: "0.9",
           step: "0.1",
-          class: "input w-full font-bold bg-base-200"
-        %>
+          class: "input w-full bg-base-200 font-bold" %>
       </div>
     </div>
-  </div>
+  </section>
 
-  <div class="grid grid-cols-3 gap-3">
-    <%= form.label :readers_revenue_ratio, class: "col-span-3 sm:col-span-1 block text-sm font-medium opacity-70" %>
-    <div class="col-span-3 sm:col-span-2">
-      <div class="rounded-md shadow-sm">
-        <%= form.number_field :readers_revenue_ratio, 
-          required: true, 
-          disabled: form.object.published_at?,
-          min: "0.1",
-          max: "0.9",
-          step: "0.1",
-          data: { 
-            article_form_target: 'readersRevenueRatio',
-            action: 'blur->article-form#updateReadersRevenueRatio'
-          }, 
-          class: "input w-full font-bold bg-base-200"
-        %>
+  <section aria-labelledby="settings-revenue">
+    <h3 id="settings-revenue" class="mb-3 text-xs font-semibold uppercase tracking-wide text-base-content/50">
+      <%= t("articles.settings.revenue_split") %>
+    </h3>
+    <div class="space-y-4">
+      <p data-article-form-target="revenueSummary" class="rounded-lg bg-base-200/80 px-3 py-2 text-sm leading-relaxed"></p>
+
+      <div class="grid grid-cols-2 gap-3">
+        <div>
+          <%= form.label :platform_revenue_ratio, class: "mb-1 block text-xs font-medium opacity-70" %>
+          <%= form.number_field :platform_revenue_ratio,
+            disabled: true,
+            class: "input w-full bg-base-200 text-sm opacity-60" %>
+        </div>
+        <div>
+          <%= form.label :collection_revenue_ratio, class: "mb-1 block text-xs font-medium opacity-70" %>
+          <%= form.number_field :collection_revenue_ratio,
+            disabled: true,
+            data: { article_form_target: "collectionRevenueRatio" },
+            class: "input w-full bg-base-200 text-sm opacity-60" %>
+          <% if form.object.errors.where(:collection_revenue_ratio).present? %>
+            <div class="py-1 text-sm text-error"><%= form.object.errors.where(:collection_revenue_ratio).map(&:full_message).join("; ") %></div>
+          <% end %>
+        </div>
+      </div>
+
+      <button type="button"
+        class="link link-primary text-sm"
+        data-action="article-form#toggleRevenueAdvanced">
+        <%= t("articles.revenue_advanced") %>
+      </button>
+
+      <div data-article-form-target="revenueAdvanced" class="hidden space-y-3 border-t border-base-300 pt-3">
+        <% if form.object.published_at? %>
+          <p class="text-xs text-base-content/50"><%= t("articles.locked_after_publishing") %></p>
+        <% end %>
+
+        <div>
+          <%= form.label :readers_revenue_ratio, class: "mb-1 block text-sm font-medium opacity-70" %>
+          <%= form.number_field :readers_revenue_ratio,
+            disabled: form.object.published_at?,
+            min: "0.1",
+            max: "0.9",
+            step: "0.1",
+            data: {
+              article_form_target: "readersRevenueRatio",
+              action: "blur->article-form#updateReadersRevenueRatio"
+            },
+            class: "input w-full bg-base-200 font-bold" %>
+        </div>
+
+        <div>
+          <%= form.label :author_revenue_ratio, class: "mb-1 block text-sm font-medium opacity-70" %>
+          <%= form.number_field :author_revenue_ratio,
+            disabled: form.object.published_at?,
+            min: "0",
+            max: "0.8",
+            step: "0.1",
+            data: { article_form_target: "authorRevenueRatio" },
+            class: "input w-full bg-base-200 font-bold" %>
+          <% if form.object.errors.where(:author_revenue_ratio).present? %>
+            <div class="py-1 text-sm text-error"><%= form.object.errors.where(:author_revenue_ratio).map(&:full_message).join("; ") %></div>
+          <% end %>
+        </div>
+
+        <div>
+          <%= form.label :references_revenue_ratio, class: "mb-1 block text-sm font-medium opacity-70" %>
+          <%= form.number_field :references_revenue_ratio,
+            disabled: form.object.published_at?,
+            min: "0",
+            max: "0.8",
+            step: "0.05",
+            data: { article_form_target: "referenceRevenueRatio" },
+            class: "input w-full bg-base-200 font-bold" %>
+          <% if form.object.errors.where(:references_revenue_ratio).present? %>
+            <div class="py-1 text-sm text-error"><%= form.object.errors.where(:references_revenue_ratio).map(&:full_message).join("; ") %></div>
+          <% end %>
+        </div>
       </div>
     </div>
-  </div>
+  </section>
 
-  <div class="grid grid-cols-3 gap-3">
-    <%= form.label :platform_revenue_ratio, class: "col-span-3 sm:col-span-1 block text-sm font-medium opacity-70" %>
-    <div class="col-span-3 sm:col-span-2">
-      <div class="rounded-md shadow-sm">
-        <%= form.number_field :platform_revenue_ratio, 
-          required: true, 
-          disabled: true, 
-          class: "input w-full font-bold bg-base-200 opacity-60 cursor-not-allowed"
-        %>
-      </div>
-    </div>
-  </div>
-
-  <div class="grid grid-cols-3 gap-3">
-    <%= form.label :collection_revenue_ratio, class: "col-span-3 sm:col-span-1 block text-sm font-medium opacity-70" %>
-    <div class="col-span-3 sm:col-span-2">
-      <div class="rounded-md shadow-sm">
-        <%= form.number_field :collection_revenue_ratio, 
-          disabled: true,
-          data: { 
-            article_form_target: 'collectionRevenueRatio'
-          }, 
-          class: "input w-full font-bold bg-base-200 opacity-60 cursor-not-allowed"
-        %>
-      </div>
-      <% if form.object.errors.where(:collection_revenue_ratio).present? %>
-        <div class="py-2 text-red-700 font-sm"><%= form.object.errors.where(:collection_revenue_ratio).map(&:full_message).join(';') %></div>
+  <section aria-labelledby="settings-references">
+    <h3 id="settings-references" class="mb-3 text-xs font-semibold uppercase tracking-wide text-base-content/50">
+      <%= t("articles.settings.references") %>
+    </h3>
+    <template class="hidden" data-nested-form-target="template">
+      <%= form.fields_for :article_references, form.object.article_references.new, child_index: "NEW_RECORD", data: { new_record: true } do |reference_form| %>
+        <%= render partial: "article_references/form", locals: { form: reference_form, article: form.object } %>
       <% end %>
-    </div>
-  </div>
+    </template>
 
-  <div class="grid grid-cols-3 gap-3">
-    <%= form.label :author_revenue_ratio, class: "col-span-3 sm:col-span-1 block text-sm font-medium opacity-70" %>
-    <div class="col-span-3 sm:col-span-2">
-      <div class="rounded-md shadow-sm">
-        <%= form.number_field :author_revenue_ratio, 
-          required: true, 
-          disabled: form.object.published_at?,
-          min: "0",
-          max: "0.8",
-          step: "0.1",
-          data: { 
-            article_form_target: 'authorRevenueRatio',
-            action: 'article-form#touchDirty'
-          }, 
-          class: "input w-full font-bold bg-base-200"
-        %>
-      </div>
-      <% if form.object.errors.where(:author_revenue_ratio).present? %>
-        <div class="py-2 text-red-700 font-sm"><%= form.object.errors.where(:author_revenue_ratio).map(&:full_message).join(';') %></div>
-      <% end %>
-    </div>
-  </div>
-
-  <div class="grid grid-cols-3 gap-3">
-    <%= form.label :references_revenue_ratio, class: "col-span-3 sm:col-span-1 block text-sm font-medium opacity-70" %>
-    <div class="col-span-3 sm:col-span-2">
-      <div class="rounded-md shadow-sm">
-        <%= form.number_field :references_revenue_ratio, 
-          required: true, 
-          disabled: form.object.published_at?,
-          min: "0",
-          max: "0.8",
-          step: "0.05",
-          data: { 
-            article_form_target: 'referenceRevenueRatio',
-            action: 'article-form#touchDirty'
-          }, 
-          class: "input w-full font-bold bg-base-200"
-        %>
-      </div>
-      <% if form.object.errors.where(:references_revenue_ratio).present? %>
-        <div class="py-2 text-red-700 font-sm"><%= form.object.errors.where(:references_revenue_ratio).map(&:full_message).join(';') %></div>
-      <% end %>
-    </div>
-  </div>
-
-  <template class="hidden" data-nested-form-target="template">
-    <%= form.fields_for :article_references, form.object.article_references.new, child_index: 'NEW_RECORD', data: { new_record: true } do |reference_form| %>
-      <%= render partial:  "article_references/form", locals: { form: reference_form, article: form.object } %>
+    <%= form.fields_for :article_references do |reference_form| %>
+      <%= render partial: "article_references/form", locals: { form: reference_form, article: form.object } unless reference_form.object.new_record? %>
     <% end %>
-  </template>
 
-  <%= form.fields_for :article_references do |reference_form| %>
-    <%= render partial:  "article_references/form", locals: { form: reference_form, article: form.object } unless reference_form.object.new_record? %>
-  <% end %>
-  <% if form.object.published_at.blank? %>
-    <div data-nested-form-target="target"></div>
-    <div 
-      data-action="click->nested-form#add click->article-form#calReferenceRatio click->article-form#touchDirty"
-      class="btn btn-outline btn-primary rounded-full w-full">
-      <%= t('articles.add_reference') %>
-    </div>
-  <% end %>
+    <% if form.object.published_at.blank? %>
+      <div data-nested-form-target="target"></div>
+      <button type="button"
+        data-action="click->nested-form#add click->article-form#calReferenceRatio"
+        class="btn btn-outline btn-primary mt-3 w-full rounded-full">
+        <%= t("articles.add_reference") %>
+      </button>
+    <% end %>
+  </section>
+
+  <section aria-labelledby="settings-collection">
+    <h3 id="settings-collection" class="mb-3 text-xs font-semibold uppercase tracking-wide text-base-content/50">
+      <%= t("articles.settings.collection") %>
+    </h3>
+    <%= form.collection_select :collection_id,
+      current_user.collections.listed,
+      :uuid,
+      :name,
+      { include_blank: "None" },
+      disabled: (form.object.published_at? && form.object.collection_revenue_ratio.positive?),
+      data: { action: "article-form#selectCollection" },
+      class: "input w-full bg-base-200" %>
+    <% if form.object.published_at? && form.object.collection_revenue_ratio.positive? %>
+      <p class="mt-1 text-xs text-base-content/50"><%= t("articles.locked_after_publishing") %></p>
+    <% end %>
+    <% if form.object.errors.where(:collection_id).present? %>
+      <div class="py-1 text-sm text-error"><%= form.object.errors.where(:collection_id).map(&:full_message).join("; ") %></div>
+    <% end %>
+  </section>
 </div>

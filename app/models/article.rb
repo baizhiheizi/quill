@@ -15,6 +15,7 @@
 #  intro                               :string
 #  legacy_markdown_content             :text
 #  locale                              :string
+#  lock_version                        :integer          default(0), not null
 #  orders_count                        :integer          default(0), not null
 #  platform_revenue_ratio              :float            default(0.1)
 #  price                               :decimal(, )      not null

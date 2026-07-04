@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_07_02_130001) do
+ActiveRecord::Schema[8.1].define(version: 2026_07_04_013655) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_stat_statements"
@@ -119,6 +119,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_02_130001) do
     t.string "intro"
     t.text "legacy_markdown_content"
     t.string "locale"
+    t.integer "lock_version", default: 0, null: false
     t.integer "orders_count", default: 0, null: false
     t.float "platform_revenue_ratio", default: 0.1
     t.decimal "price", null: false

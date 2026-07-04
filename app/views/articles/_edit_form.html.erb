@@ -1,88 +1,95 @@
-<% active_tab ||= 'edit' %>
-
-<div 
+<div
   id="<%= dom_id article %>_edit_form"
-  data-controller="article-form" 
-  data-article-form-draft-key-value="quill_article_draft_<%= article.uuid %>" 
-  data-article-form-updated-at-value="<%= article.updated_at.to_i * 1000 %>" 
-  data-article-form-new-record-value="false" 
-  data-article-form-dirty-value="<%= article.errors.present? %>" 
-  data-article-form-autosave-url-value="<%= article_update_content_path(article) %>" 
-  data-article-form-active-tab-value="<%= active_tab %>" 
-  data-article-form-currency-price-usd-value="<%= article.currency.price_usd %>" 
-  data-article-form-article-uuid-value="<%= article.uuid %>" 
-  data-article-form-selected-collection-id-value="<%= article.collection_id %>" 
-  data-article-form-selectable-collections-value="<%= current_user.collections.listed.to_json(only: %i[uuid revenue_ratio]) %>" 
-  data-article-form-article-published-value="<%= article.published_at? %>">
+  data-controller="article-form"
+  data-article-form-draft-key-value="quill_article_draft_<%= article.uuid %>"
+  data-article-form-create-url-value="<%= articles_path %>"
+  data-article-form-update-url-value="<%= article_path(article) %>"
+  data-article-form-article-uuid-value="<%= article.uuid %>"
+  data-article-form-new-record-value="false"
+  data-article-form-dirty-value="false"
+  data-article-form-save-status-value="idle"
+  data-article-form-lock-version-value="<%= article.lock_version %>"
+  data-article-form-currency-price-usd-value="<%= article.currency&.price_usd %>"
+  data-article-form-selectable-collections-value="<%= current_user.collections.map { |c| { uuid: c.uuid, revenue_ratio: c.revenue_ratio } }.to_json %>"
+  data-article-form-selected-collection-id-value="<%= article.collection_id %>"
+  data-article-form-article-published-value="<%= article.published? %>"
+  data-article-form-updated-at-value="<%= article.updated_at.to_i * 1000 %>"
+  data-article-form-preview-url-value="<%= article_preview_path(article) %>"
+  class="article-editor">
 
-  <div class="fixed left-0 top-0 z-50 w-full border-b border-base-300 bg-base-100/95 backdrop-blur-sm">
-    <div class="mx-auto flex max-w-xl items-center justify-between px-4 py-3 text-sm sm:max-w-2xl sm:px-6 sm:text-base 2xl:max-w-3xl">
-      <div class="flex items-center">
-        <%= link_to root_path, class: 'mr-4' do %>
-          <%= image_tag "logo.svg", class: 'w-auto h-8 hidden sm:block' %>
-          <%= image_tag "logo.png", class: 'w-auto h-6 sm:hidden' %>
+  <div data-article-form-target="editorChrome" class="fixed left-0 top-0 z-50 w-full border-b border-base-300 bg-base-100/95 backdrop-blur-sm">
+    <div class="article-editor__chrome mx-auto flex w-full max-w-[88rem] items-center justify-between gap-3 px-4 py-3 text-sm sm:px-8 sm:text-base">
+      <%= link_to root_path, class: "shrink-0" do %>
+        <%= image_tag "logo.svg", class: "hidden h-8 w-auto sm:block" %>
+        <%= image_tag "logo.png", class: "h-6 w-auto sm:hidden" %>
+      <% end %>
+
+      <div class="flex min-w-0 flex-1 items-center justify-end gap-2 sm:gap-3">
+        <div id="<%= dom_id article %>_save_status">
+          <%= render "articles/save_status", article:, status: :idle %>
+        </div>
+
+        <div id="<%= dom_id article %>_updated_at" class="hidden sm:block">
+          <%= render "articles/updated_at", article: %>
+        </div>
+
+        <button type="button"
+          class="btn btn-ghost btn-sm lg:hidden"
+          data-action="article-form#toggleSettingsRail"
+          aria-expanded="false">
+          <%= t("articles.settings_panel") %>
+        </button>
+
+        <button type="button"
+          class="btn btn-ghost btn-sm hidden sm:inline-flex"
+          data-action="article-form#toggleFocusMode">
+          <%= t("articles.focus_mode") %>
+        </button>
+
+        <% if article.persisted? %>
+          <button type="button"
+            class="btn btn-ghost btn-sm"
+            data-action="article-form#togglePreview">
+            <%= t("articles.preview") %>
+          </button>
         <% end %>
 
-        <div class="hidden md:flex items-center space-x-4 opacity-60 text-xs">
-          <div id="<%= dom_id article %>_words_count">
-            <%= t('words_count') %>:<%= article.words_count %>
-          </div>
-          <% if article.persisted? %>
-            <div id="<%= dom_id article %>_updated_at" class="flex items-center space-x-1">
-              <span><%= t('last_saved') %>:</span>
-              <%= render_time_format datetime: article.updated_at.rfc3339, format: 'time' do %>
-                <%= article.updated_at.strftime("%H:%M") %>
-              <% end %>
-            </div>
-            <div class="hidden items-center space-x-2" data-article-form-target="notSavedAlert">
-              <span class="i-[tabler--alert-circle] inline size-4 text-error"></span>
-            </div>
-          <% end %>
-        </div>
-      </div>
+        <% unless article.published? %>
+          <%= button_to t("publish"),
+            new_dashboard_published_article_path,
+            method: :get,
+            params: { uuid: article.uuid },
+            data: { turbo_frame: :modal, article_form_target: "publishButton" },
+            class: "btn btn-primary btn-sm rounded-full font-semibold" %>
+        <% end %>
 
-      <div class="flex items-center space-x-3 sm:space-x-4">
-        <div 
-          data-action="click->article-form#edit" 
-          data-article-form-target="editButton"
-          class="cursor-pointer text-sm font-medium hover:opacity-100 transition text-primary">
-          <%= t('edit') %>
-        </div>
-        <div 
-          data-action="click->article-form#options" 
-          data-article-form-target="optionsButton"
-          class="cursor-pointer text-sm font-medium hover:opacity-100 transition opacity-60">
-          <%= t('options') %>
-        </div>
-
-        <div 
-          class="btn btn-soft btn-sm rounded-full font-medium" 
-          data-action="click->article-form#save">
-          <%= t('save') %>
-        </div>
-
-        <%= button_to t("publish"), 
-          new_dashboard_published_article_path, 
-          method: :get,
-          params: { uuid: article.uuid },
-          data: { turbo_frame: :modal, article_form_target: 'publishButton' },
-          class: "btn btn-primary btn-sm rounded-full font-semibold" unless article.published? %>
-        
-        <%= link_to dashboard_authorings_path, 
-          data: { controller: 'prefetch' },
-          role: "menuitem", 
-          tabindex: "-1" do %>
-          <div class="avatar <%= from_mixin_messenger? ? 'mr-16' : '' %>">
-            <div class="size-8 rounded-full">
-              <%= render "shared/avatar", user: current_user, thumb: true, class: "rounded-full" %>
-            </div>
+        <%= link_to dashboard_authorings_path,
+          data: { controller: "prefetch" },
+          class: "avatar shrink-0 #{from_mixin_messenger? ? 'mr-12 sm:mr-0' : ''}" do %>
+          <div class="size-8 rounded-full">
+            <%= render "shared/avatar", user: current_user, thumb: true, class: "rounded-full" %>
           </div>
         <% end %>
       </div>
     </div>
   </div>
 
-  <div class="w-full mx-auto relative py-12 sm:py-24 px-4 sm:px-0">
-    <%= render "articles/form", article: article %>
+  <% if article.persisted? %>
+    <iframe data-article-form-target="previewPanel"
+      class="fixed inset-0 z-40 hidden h-full w-full border-0 bg-base-100 pt-14"
+      title="<%= t('articles.preview') %>"
+      loading="lazy"></iframe>
+  <% end %>
+
+  <button type="button"
+    class="article-editor__floating-exit btn btn-circle btn-sm z-[100] shadow-lg"
+    data-article-form-target="floatingExit"
+    data-action="article-form#exitOverlay"
+    aria-label="<%= t('articles.exit_overlay') %>">
+    <span class="i-[tabler--x] size-4"></span>
+  </button>
+
+  <div class="article-editor__body mx-auto w-full max-w-[88rem] px-4 py-16 sm:px-8 sm:py-20">
+    <%= render "articles/form", article: %>
   </div>
 </div>

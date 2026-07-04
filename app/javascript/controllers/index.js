@@ -94,6 +94,9 @@ application.register("paywall-fade", PaywallFadeController);
 import PreviewUploadController from "./preview_upload_controller";
 application.register("preview-upload", PreviewUploadController);
 
+import PreviewController from "./preview_controller";
+application.register("preview", PreviewController);
+
 import QrcodeComponentController from "./qrcode_component_controller";
 application.register("qrcode-component", QrcodeComponentController);
 

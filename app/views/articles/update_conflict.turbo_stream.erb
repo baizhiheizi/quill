@@ -1,0 +1,7 @@
+<%= turbo_stream.replace "#{dom_id @article}_save_status" do %>
+  <%= render "articles/save_status", article: @article, status: :conflict %>
+<% end %>
+
+<%= turbo_stream.update "article-form-meta" do %>
+  <span data-article-form-lock-version-param="<%= @article.lock_version %>"></span>
+<% end %>

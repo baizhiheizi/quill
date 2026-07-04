@@ -1,0 +1,11 @@
+<%= turbo_stream.replace "article-form-meta" do %>
+  <div id="article-form-meta">
+    <span data-article-form-lock-version-param="<%= @article.lock_version %>"></span>
+    <span data-article-form-uuid-param="<%= @article.uuid %>"></span>
+    <span data-article-form-edit-path-param="<%= edit_article_path(@article.uuid) %>"></span>
+  </div>
+<% end %>
+
+<%= turbo_stream.replace "article-form-save-status" do %>
+  <%= render "articles/save_status", article: @article, status: :saved %>
+<% end %>

@@ -277,6 +277,31 @@ ja:
     revenue_distribution: 収益配分
     you_will_create_a_free_article: あなたの記事が無料で読めるようになります
     add_some_tags: 追加トピックス
+    save_conflict: 他の場所で記事が更新されました。最新版を読み込んでから続けてください。
+    settings_panel: 設定
+    focus_mode: 集中モード
+    preview: プレビュー
+    close_preview: プレビューを閉じる
+    exit_overlay: 終了
+    locked_after_publishing: 公開後は変更できません
+    price_place_holder: 価格を入力
+    revenue_advanced: 詳細な収益設定
+    publish_blocked: 公開前に以下を完了してください
+    publish_ready: 記事は公開の準備ができています。
+    fix_in_editor: エディターで修正
+    untitled: 無題
+    save_status:
+      idle: 保存済み
+      saving: 保存中…
+      saved: 保存しました
+      error: 保存に失敗 — 再試行中
+      conflict: 編集の競合 — 更新を推奨
+    settings:
+      cover_and_tags: カバーとタグ
+      pricing_and_access: 価格とアクセス
+      revenue_split: 収益分配
+      references: 参照
+      collection: コレクション
   this_address_supports: This address supports
   this_address_supports_erc20: This address supports all ERC20 tokens, such as ETH、USDT、XIN.
   first_deposit_tips: For first deposit to new address, please try a small amount! 
