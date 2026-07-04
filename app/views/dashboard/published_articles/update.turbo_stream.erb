@@ -7,7 +7,7 @@
   <%= turbo_stream.prepend "flashes" do %>
     <%= render "flashes/flash", message: t('article_not_completed'), type: :warning %>
   <% end %>
-  <%= turbo_stream.replace "edit_article_#{@article.id}" do %>
-    <%= render partial: "articles/form", locals: { article: @article } %>
+  <%= turbo_stream.replace "#{dom_id @article}_edit_form" do %>
+    <%= render "articles/edit_form", article: @article %>
   <% end %>
 <% end %>

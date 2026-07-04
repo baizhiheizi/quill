@@ -286,6 +286,31 @@ en:
     revenue_distribution: Revenue
     you_will_create_a_free_article: You will create a free post
     add_some_tags: Add some tags
+    save_conflict: This article was updated elsewhere. Refresh to continue with the latest version.
+    settings_panel: Settings
+    focus_mode: Focus
+    preview: Preview
+    close_preview: Close preview
+    exit_overlay: Exit
+    locked_after_publishing: Locked after publishing
+    price_place_holder: Enter price
+    revenue_advanced: Advanced revenue settings
+    publish_blocked: Complete these items before publishing
+    publish_ready: Your article is ready to publish.
+    fix_in_editor: Fix in editor
+    untitled: Untitled
+    save_status:
+      idle: All changes saved
+      saving: Saving…
+      saved: Saved
+      error: Save failed — retrying
+      conflict: Edit conflict — refresh recommended
+    settings:
+      cover_and_tags: Cover & tags
+      pricing_and_access: Pricing & access
+      revenue_split: Revenue split
+      references: References
+      collection: Collection
   this_address_supports: This address supports
   this_address_supports_erc20: This address supports all ERC20 tokens, such as ETH、USDT、XIN.
   first_deposit_tips: For first deposit to new address, please try a small amount! 

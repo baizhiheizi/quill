@@ -156,3 +156,98 @@ class ArticlesControllerTest < IntegrationTestCase
     body.scan(%r{href="/\d+/([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})"}).uniq.sort
   end
 end
+
+class ArticlesAuthenticatedControllerTest < ActionController::TestCase
+  tests ArticlesController
+
+  test "create returns json with uuid and persists tags" do
+    author = users(:author)
+    @request.session[:current_session_id] = sign_in(author).uuid
+
+    assert_difference -> { author.articles.count }, 1 do
+      post :create, params: {
+        article: {
+          title: "Autosaved draft",
+          intro: "A short intro for the draft",
+          content: "<p>Body content for the new article</p>",
+          tag_names: %w[ruby rails]
+        }
+      }, format: :json
+    end
+
+    assert_response :success
+    body = response.parsed_body
+    assert body["uuid"].present?
+    assert body["edit_path"].present?
+    assert body["lock_version"].present?
+
+    article = author.articles.find_by!(uuid: body["uuid"])
+    assert_equal article.lock_version, body["lock_version"]
+    assert_equal %w[rails ruby], article.tags.pluck(:name).sort
+  end
+
+  test "update accepts partial content autosave via turbo stream" do
+    article = articles(:draft)
+    @request.session[:current_session_id] = sign_in(article.author).uuid
+
+    patch :update, params: {
+      uuid: article.uuid,
+      article: {
+        title: "Updated draft title",
+        lock_version: article.lock_version
+      }
+    }, format: :turbo_stream
+
+    assert_response :success
+    assert_equal "Updated draft title", article.reload.title
+    assert_equal 1, article.lock_version
+  end
+
+  test "update returns conflict when lock_version is stale" do
+    article = articles(:draft)
+    @request.session[:current_session_id] = sign_in(article.author).uuid
+
+    patch :update, params: {
+      uuid: article.uuid,
+      article: { title: "First save", lock_version: article.lock_version }
+    }, format: :turbo_stream
+    assert_response :success
+
+    patch :update, params: {
+      uuid: article.uuid,
+      article: { title: "Stale save", lock_version: 0 }
+    }, format: :turbo_stream
+
+    assert_response :conflict
+    assert_equal "First save", article.reload.title
+  end
+
+  test "preview shows full content for free articles" do
+    article = articles(:published_free)
+    @request.session[:current_session_id] = sign_in(article.author).uuid
+
+    get :preview, params: { article_uuid: article.uuid }
+
+    assert_response :success
+    assert_match article.title, response.body
+  end
+
+  test "preview shows paywall boundary for priced articles" do
+    article = articles(:published_paid)
+    @request.session[:current_session_id] = sign_in(article.author).uuid
+
+    get :preview, params: { article_uuid: article.uuid }
+
+    assert_response :success
+    assert_match article.title, response.body
+  end
+
+  test "preview is author-only" do
+    article = articles(:draft)
+    @request.session[:current_session_id] = sign_in(users(:reader_one)).uuid
+
+    get :preview, params: { article_uuid: article.uuid }
+
+    assert_response :not_found
+  end
+end

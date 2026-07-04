@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 class ArticlesController < ApplicationController
-  before_action :authenticate_user!, only: %i[new edit update update_content]
-  before_action :load_article, only: %i[edit update]
+  before_action :authenticate_user!, only: %i[new create edit update preview]
+  before_action :load_article, only: %i[edit update preview]
   layout :public_or_editor_layout
 
   def index
@@ -43,8 +43,9 @@ class ArticlesController < ApplicationController
   end
 
   def new
-    collection = current_user.collections.find_by uuid: params[:collection_id]
-    @article = current_user.articles.new collection:
+    collection = current_user.collections.find_by(uuid: params[:collection_id])
+    @article = current_user.articles.new(collection: collection)
+    assign_new_article_defaults!(@article)
   end
 
   def edit
@@ -53,26 +54,71 @@ class ArticlesController < ApplicationController
   def create
     @article = current_user.articles.new create_article_params
 
-    if @article.save
-      redirect_to edit_article_path(@article.uuid)
-    else
-      render :new, status: :unprocessable_entity, layout: "editor"
+    saved = false
+    ActiveRecord::Base.transaction do
+      saved = @article.save
+      CreateTagService.call(@article, tag_names_param) if saved
+    end
+
+    respond_to do |format|
+      if saved
+        @article.reload
+        format.html { redirect_to edit_article_path(@article.uuid) }
+        format.json do
+          render json: {
+            uuid: @article.uuid,
+            edit_path: edit_article_path(@article.uuid),
+            lock_version: @article.lock_version
+          }
+        end
+        format.turbo_stream { render :create }
+      else
+        format.html { render :new, status: :unprocessable_entity, layout: "editor" }
+        format.json { render json: { errors: @article.errors.full_messages }, status: :unprocessable_entity }
+        format.turbo_stream { render :create, status: :unprocessable_entity }
+      end
     end
   end
 
   def update
     ActiveRecord::Base.transaction do
-      CreateTagService.call(@article, params[:article][:tag_names] || [])
+      CreateTagService.call(@article, tag_names_param) if params.dig(:article, :tag_names)
       @article.update! update_article_params
     end
+
+    respond_to do |format|
+      format.html { redirect_to edit_article_path(@article.uuid) }
+      format.turbo_stream
+      format.json do
+        render json: {
+          uuid: @article.uuid,
+          lock_version: @article.lock_version,
+          updated_at: @article.updated_at.iso8601
+        }
+      end
+    end
   rescue ActiveRecord::RecordInvalid
-    render status: :unprocessable_entity
+    respond_to do |format|
+      format.html { render :edit, status: :unprocessable_entity, layout: "editor" }
+      format.turbo_stream { render status: :unprocessable_entity }
+      format.json { render json: { errors: @article.errors.full_messages }, status: :unprocessable_entity }
+    end
+  rescue ActiveRecord::StaleObjectError
+    @article.reload
+    respond_to do |format|
+      format.turbo_stream { render :update_conflict, status: :conflict }
+      format.json do
+        render json: {
+          conflict: true,
+          lock_version: @article.lock_version,
+          errors: [ I18n.t("articles.save_conflict") ]
+        }, status: :conflict
+      end
+    end
   end
 
-  def update_content
-    @article = current_user.articles.find_by uuid: params[:article_uuid]
-    @article.assign_attributes params.require(:article).permit(:title, :intro, :content)
-    @article.save
+  def preview
+    @preview_user = nil
   end
 
   def share
@@ -84,18 +130,10 @@ class ArticlesController < ApplicationController
     end
   end
 
-  def preview
-  end
-
   private
 
-  # Editorial UI redesign: `new`/`edit` keep the distraction-free editor
-  # shell; every other action (index/show/share/etc.) uses the new
-  # masthead-based public layout. Rails' `layout` macro doesn't merge across
-  # multiple calls, so this replaces the old `layout "editor", only: %i[new edit]`
-  # with a single conditional method rather than a second competing call.
   def public_or_editor_layout
-    action_name.in?(%w[new edit]) ? "editor" : "public"
+    action_name.in?(%w[new edit preview]) ? "editor" : "public"
   end
 
   def create_article_params
@@ -112,6 +150,7 @@ class ArticlesController < ApplicationController
         :references_revenue_ratio,
         :price,
         :cover,
+        :collection_id,
         article_references_attributes: %i[
           id
           reference_type
@@ -129,6 +168,7 @@ class ArticlesController < ApplicationController
       intro
       cover
       free_content_ratio
+      lock_version
     ]
 
     permitted.push(:price) if !@article.published_at? || (!@article.free? && params[:article][:price].to_d.positive?)
@@ -156,8 +196,25 @@ class ArticlesController < ApplicationController
       .permit(permitted)
   end
 
+  def tag_names_param
+    Array(params.dig(:article, :tag_names)).compact_blank
+  end
+
+  def assign_new_article_defaults!(article)
+    return if article.blank?
+
+    article.uuid = SecureRandom.uuid if article.uuid.blank?
+    article.asset_id = Currency::BTC_ASSET_ID if article.asset_id.blank?
+
+    default_currency = article.currency || Currency.btc
+    return if article.price.present? || default_currency.blank?
+
+    article.price = default_currency.minimal_price_amount
+  end
+
   def load_article
-    @article = current_user.articles.find_by uuid: params[:uuid]
+    article_uuid = params[:uuid].presence || params[:article_uuid]
+    @article = current_user.articles.find_by uuid: article_uuid
     render_not_found_page if @article.blank?
   end
 end

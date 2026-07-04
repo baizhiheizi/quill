@@ -1,40 +1,46 @@
-<div 
-  data-controller="article-form" 
-  data-article-form-draft-key-value="quill_article_draft" 
-  data-article-form-new-record-value="true" 
-  data-article-form-dirty-value="false" 
-  data-article-form-active-tab-value="edit"
-  class="article-form--new">
+<div
+  data-controller="article-form"
+  data-article-form-draft-key-value="quill_article_draft"
+  data-article-form-create-url-value="<%= articles_path %>"
+  data-article-form-article-uuid-value="<%= @article.uuid %>"
+  data-article-form-new-record-value="true"
+  data-article-form-dirty-value="false"
+  data-article-form-save-status-value="idle"
+  data-article-form-lock-version-value="0"
+  data-article-form-currency-price-usd-value="<%= @article.currency&.price_usd %>"
+  data-article-form-selectable-collections-value="<%= current_user.collections.map { |c| { uuid: c.uuid, revenue_ratio: c.revenue_ratio } }.to_json %>"
+  class="article-editor article-editor--new">
 
-  <div class="fixed left-0 top-0 z-50 w-full border-b border-base-300 bg-base-100/95 backdrop-blur-sm">
-    <div class="mx-auto flex max-w-xl items-center justify-between px-4 py-3 text-sm sm:max-w-2xl sm:px-6 sm:text-base 2xl:max-w-3xl">
-
-      <%= link_to root_path, class: 'mr-2 sm:mr-4' do %>
-        <%= image_tag "logo.svg", class: 'w-auto h-8 hidden sm:block' %>
-        <%= image_tag "logo.png", class: 'w-auto h-6 sm:hidden' %>
+  <div data-article-form-target="editorChrome" class="fixed left-0 top-0 z-50 w-full border-b border-base-300 bg-base-100/95 backdrop-blur-sm">
+    <div class="article-editor__chrome mx-auto flex w-full max-w-[88rem] items-center justify-between gap-3 px-4 py-3 text-sm sm:px-8 sm:text-base">
+      <%= link_to root_path, class: "shrink-0" do %>
+        <%= image_tag "logo.svg", class: "hidden h-8 w-auto sm:block" %>
+        <%= image_tag "logo.png", class: "h-6 w-auto sm:hidden" %>
       <% end %>
 
-      <div class="flex items-center space-x-3 sm:space-x-4">
-        <div class="btn btn-soft btn-sm rounded-full font-medium" 
-          data-action="click->article-form#submit">
-          <%= t('save_draft') %>
+      <div class="flex items-center gap-3">
+        <div id="article-form-save-status">
+          <%= render "articles/save_status", article: @article, status: :idle %>
         </div>
-        
-        <%= link_to dashboard_authorings_path, 
-          data: { controller: 'prefetch' },
-          role: "menuitem", 
-          tabindex: "-1" do %>
-          <div class="avatar <%= from_mixin_messenger? ? 'mr-16' : '' %>">
-            <div class="size-8 rounded-full">
-              <%= render "shared/avatar", user: current_user, thumb: true, class: "rounded-full" %>
-            </div>
+
+        <button type="button"
+          class="btn btn-ghost btn-sm lg:hidden"
+          data-action="article-form#toggleSettingsRail">
+          <%= t("articles.settings_panel") %>
+        </button>
+
+        <%= link_to dashboard_authorings_path,
+          data: { controller: "prefetch" },
+          class: "avatar shrink-0 #{from_mixin_messenger? ? 'mr-12' : ''}" do %>
+          <div class="size-8 rounded-full">
+            <%= render "shared/avatar", user: current_user, thumb: true, class: "rounded-full" %>
           </div>
         <% end %>
       </div>
     </div>
   </div>
 
-  <div class="w-full mx-auto relative py-12 sm:py-24 px-4 sm:px-0">
+  <div class="article-editor__body mx-auto w-full max-w-[88rem] px-4 py-16 sm:px-8 sm:py-20">
     <%= render "articles/form", article: @article %>
   </div>
 </div>

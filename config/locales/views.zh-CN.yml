@@ -286,6 +286,31 @@ zh-CN:
     revenue_distribution: 收益分配
     you_will_create_a_free_article: 将创建一篇免费文章
     add_some_tags: 添加话题
+    save_conflict: 文章已在其他位置更新，请刷新后继续编辑。
+    settings_panel: 设置
+    focus_mode: 专注模式
+    preview: 预览
+    close_preview: 关闭预览
+    exit_overlay: 退出
+    locked_after_publishing: 发布后不可修改
+    price_place_holder: 输入价格
+    revenue_advanced: 高级收益设置
+    publish_blocked: 发布前请完成以下项目
+    publish_ready: 文章已准备好发布。
+    fix_in_editor: 返回编辑
+    untitled: 未命名
+    save_status:
+      idle: 已保存
+      saving: 保存中…
+      saved: 已保存
+      error: 保存失败，正在重试
+      conflict: 编辑冲突，建议刷新页面
+    settings:
+      cover_and_tags: 封面与标签
+      pricing_and_access: 定价与访问
+      revenue_split: 收益分配
+      references: 引用
+      collection: 合集
   this_address_supports: 该地址仅支持
   this_address_supports_erc20: 该地址支持所有 ERC20 代币，例如 ETH、USDT、XIN 等
   first_deposit_tips: 向新地址第一次充值时，请少量尝试！

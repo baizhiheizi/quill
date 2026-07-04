@@ -55,7 +55,7 @@ Rails.application.routes.draw do
   end
 
   resources :articles, except: %i[destroy], param: :uuid do
-    put :update_content
+    get :preview
     get :share
     resources :comments, only: %i[index]
   end
@@ -64,7 +64,6 @@ Rails.application.routes.draw do
   resources :comments, only: %i[create new]
   resources :upvoted_comments, only: %i[update destroy]
   resources :downvoted_comments, only: %i[update destroy]
-  post "/articles/preview", to: "articles#preview", as: :preview_article
   resources :article_references, only: %i[index], default: { format: :json }
 
   resources :block_users, only: %i[create destroy new], param: :uid

@@ -1,40 +1,62 @@
-<%= form_for article, 
-  html: { class: "text-base", autocomplete: 'off' },
-  data: { 
+<%= form_with model: article,
+  html: {
+    class: "article-editor__form text-base",
+    autocomplete: "off"
+  },
+  data: {
     controller: "nested-form",
-    nested_form_wrapper_selector_value: '.nested-form-wrapper',
+    nested_form_wrapper_selector_value: ".nested-form-wrapper",
     article_form_target: "form",
+    action: "change->article-form#queueAutosave input->article-form#queueAutosave"
   } do |form| %>
-    <%= form.text_field :title, 
-      class: "font-display w-full border-0 bg-transparent px-0 py-4 text-3xl font-medium focus:outline-none focus:ring-0 placeholder:text-base-content/30 md:text-4xl", 
-      placeholder: t("articles.title_placeholder"), 
-      data: { 
-        article_form_target: "title",
-        action: form.object.published? ? '' : "change->article-form#autosave"
-      } 
-    %>
-    
-    <%= form.text_area :intro, 
-      rows: 1,
-      class: "w-full px-0 py-2 text-xl text-base-content/70 border-0 bg-transparent focus:outline-none focus:ring-0 placeholder:text-base-content/30 resize-none overflow-hidden", 
-      placeholder: "Add a subtitle...",
-      data: {
-        action: form.object.published? ? '' : "change->article-form#autosave"
-      },
-      oninput: "this.style.height = ''; this.style.height = this.scrollHeight + 'px'"
-    %>
 
-    <div class="flex items-center space-x-3 my-6">
-      <div class="avatar">
-        <div class="w-10 h-10 rounded-full">
-          <%= render "shared/avatar", user: current_user, thumb: true, class: "rounded-full" %>
+  <div id="article-form-meta">
+    <span data-article-form-lock-version-param="<%= article.lock_version %>"></span>
+  </div>
+
+  <div class="article-editor__layout">
+    <div data-article-form-target="writingSurface" class="article-editor__writing">
+      <%= form.text_field :title,
+        placeholder: t("articles.title_placeholder"),
+        class: "font-display w-full border-0 bg-transparent px-0 py-3 text-3xl font-medium placeholder:text-base-content/30 focus:outline-none focus:ring-0 md:text-4xl",
+        data: { action: "input->article-form#autosave" } %>
+
+      <%= form.text_area :intro,
+        placeholder: t("articles.intro_place_holder"),
+        rows: 1,
+        class: "mt-2 w-full resize-none border-0 bg-transparent px-0 py-2 text-xl text-base-content/70 placeholder:text-base-content/30 focus:outline-none focus:ring-0",
+        data: {
+          controller: "textarea",
+          action: "input->article-form#autosave input->textarea#resize"
+        } %>
+      <% if form.object.errors.where(:intro).present? %>
+        <div class="py-1 text-sm text-error"><%= form.object.errors.where(:intro).map(&:full_message).join("; ") %></div>
+      <% end %>
+
+      <div class="my-6 flex items-center gap-3">
+        <div class="avatar">
+          <div class="size-10 rounded-full">
+            <%= render "shared/avatar", user: current_user, thumb: true, class: "rounded-full" %>
+          </div>
+        </div>
+        <div>
+          <div class="font-medium"><%= current_user.name %></div>
+          <div class="text-xs text-base-content/60"><%= t("draft") %></div>
         </div>
       </div>
-      <div>
-        <div class="font-medium text-base"><%= current_user.name %></div>
-        <div class="text-xs text-base-content/60"><%= t('draft') %></div>
-      </div>
+
+      <%= render "articles/content_fields", form: %>
     </div>
-    <%= render "articles/content_fields", form: form %>
-    <%= render "articles/option_fields", form: form %>
+
+    <aside data-article-form-target="settingsRail"
+      class="article-editor__settings"
+      aria-label="<%= t('articles.settings_panel') %>">
+      <div class="article-editor__settings-inner">
+        <h2 class="article-editor__settings-heading">
+          <%= t("articles.settings_panel") %>
+        </h2>
+        <%= render "articles/option_fields", form: %>
+      </div>
+    </aside>
+  </div>
 <% end %>
