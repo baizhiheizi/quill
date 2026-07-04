@@ -9,34 +9,28 @@ metadata:
 
 ## Current state
 
-- **Run 28694259683 on 2026-07-04 04:09 UTC.** Repo: baizhiheizi/quill (Rails 8.1, Ruby 4.0.5). AGENTS.md exists.
-- **Open Repo Assist PRs**: 1 draft (push-blocked by `contents: write` wall — patch + bundle preserved):
-  1. `repo-assist/perf-dashboard-payments-eager-load-2026-07-04` (commit `5d91eeab`) — `Dashboard::PaymentsController#index` `.includes(:currency)`. Closes out the dashboard-#index N+1 revival class.
+- **Run 28699967377 on 2026-07-04 08:07 UTC.** Repo: baizhiheizi/quill (Rails 8.1, Ruby 4.0.5). AGENTS.md exists.
+- **Open Repo Assist PRs**: 1 draft pending self-hosted CI:
+  1. **PR #1830** (`[repo-assist] perf(payments): eager-load currency in dashboard index`) — branch `repo-assist/perf-dashboard-payments-eager-load-2026-07-04-89658ab122c39c75` (commit `0416d2da`). `.includes(:currency)` on `Dashboard::PaymentsController#index`. Closes out the dashboard-#index N+1 revival class. **Opened successfully by `safeoutputs create_pull_request` this run (no manual revival needed)**.
 - **Open issues**: 13 (unchanged).
-- **Previous drafts revived and merged by maintainer in this window (2026-07-03 — 2026-07-04 04:09 UTC)**:
-  - `repo-assist/test-mixpay-api-coverage-2026-07-03` (commit `48121fb5`) → **PR #1826 merged** 2026-07-03 02:32 UTC vicinity
-  - `repo-assist/fix-refund-memo-typo-2026-07-03` (commit `73e8b7dc`) → **PR #1828 merged** (commit `9e9cd1b1`) — F9 from #1821
-  - `repo-assist/perf-dashboard-transfers-eager-load-2026-07-03` (commit `53435ed7`) → **PR #1829 merged** (commit `895aeb8a`)
-- **Recent merges (this run window)**: #1829 articles eager-load, #1828 REDUND→REFUND fix, #1827 docs, #1826 Mixpay::API tests, #1825 perf-improver monthly, #1824 perf-improver monthly, #1823 perf-improver transfers (revival of my branch), #1822 Editorial Web3 UI redesign, #1820 MixinNetworkUser tests, #1819 articles-public visibility, #1815 articles eager-load, #1814 docs unbloat, #1813 lexxy 0.9.22.
+- **Recent merges (this run window)**: #1829 transfers eager-load, #1828 REDUND→REFUND fix, #1827 docs, #1826 Mixpay::API tests, #1825 perf-improver monthly, #1824 perf-improver monthly, #1823 perf-improver transfers (revival of my branch), #1822 Editorial Web3 UI redesign, #1820 MixinNetworkUser tests, #1819 articles-public visibility, #1815 articles eager-load, #1814 docs unbloat, #1813 lexxy 0.9.22.
 
-## This run (28694259683)
+## This run (28699967377)
 
-- **Selected tasks**: Task 2, Task 3, Task 8, plus Task 11.
-- **Task 3 (Issue Fix)**: No `bug` / `help wanted` / `good first issue` issues open in the repo. Substituted to Task 8 per the fallback chain.
-- **Task 8 (Performance)**: `Dashboard::PaymentsController#index` `Payment#article`/`#collection` are memo-decoded lookups so AR `includes` only preloads `:currency`. Same N+1 family as merged #1802, #1815, #1829. Verified scope:
-  - `Grep :currency` in `app/controllers/dashboard/payments_controller.rb` → 1 hit (this PR).
-  - `_payment.html.erb` references confirmed: `payment.currency.icon_url`, `payment.price_tag` (uses `currency.symbol`).
-  - Local: `bin/rails zeitwerk:check` clean; `bin/rubocop` clean; `bin/rails test` not runnable (no Postgres).
-  - Commit `5d91eeab` on `repo-assist/perf-dashboard-payments-eager-load-2026-07-04`. Draft PR via safeoutputs.
-- **Task 2 (Issue Comment)**: Commented on #1821 — noted F9 closed via #1828, summarized F1/F2/F3 blockers, offered F1+F2 as a low-risk contingent PR, deferred F3 (AASM behavior change) and F4–F8 per #1571's 5-cycle cooldown.
-- **Task 11**: Updated #1789. Body ~5500 bytes (well under 10 KB cap). Cleaned "Suggested Actions": removed the 3 stale "Review PR" bullets for #1826/#1828/#1829 (now merged), added the payments-draft bullet + comment-check bullet + maintainer-#1717-close + F1-F8-define-goal. Run History: prepended 2026-07-04 04:09 UTC entry, kept 2026-07-03 21:32 UTC and 2026-07-03 16:56 UTC entries, dropped older entries.
+- **Selected tasks**: Task 5, Task 3, Task 4, plus Task 11.
+- **Task 3 (Issue Fix)**: No `bug` / `help wanted` / `good first issue` issues open in the repo. Substituted to Task 2 per the fallback chain.
+- **Task 2 (Issue Comment — substitute for Task 3)**: Commented on #1717 — flagged that both Dependabot PRs it referenced (#1715 graphql 2.6.3→2.6.4 merged 2026-06-24; #1716 lexxy 0.9.18→0.9.19 closed/merged 2026-06-23) have shipped, and the lexxy line advanced further to 0.9.22 via #1813. Applying the bundle's patch on current `main` would downgrade lexxy. Suggested action: close #1717.
+- **Task 5 (Coding Improvements)**: No fresh low-risk coding improvement identified this run. PR #1830 already covers the recent coding-improvement theme (`.includes(:currency)` on `Dashboard::PaymentsController#index`). A `dashboard/orders_controller.rb` DRY refactor (`case @order_type / when "buy_article" / :buy_article / ...` → `if Order.order_types.key?(@order_type)`) was identified but is too small to justify its own PR. Also considered: extracting a `prefetch_link_to` helper for the `data: { controller: 'prefetch', turbo_frame: "_top" }` pattern used 35+ times — too invasive for a single PR.
+- **Task 4 (Engineering Investments)**: No actionable dependency / CI / build improvement identifiable. The bundle PR (#1717) is now obsolete (its deps were merged individually); Dependabot auto-flow handles ongoing patch updates. Substituted to Task 5 (no-op this run).
+- **Task 11**: Updated #1789. Body rewritten with the standard format; "Suggested Actions" now points at PR #1830 directly (was branch+patch+bundle reference in the prior run since the PR wasn't yet opened). Added new "Check comment on #1717" bullet for the closure-suggestion comment posted this run. Run History: prepended 2026-07-04 08:07 UTC entry, kept 2026-07-04 04:09 UTC, 2026-07-03 21:32 UTC, and 2026-07-03 16:56 UTC entries, dropped older entries.
 
-## Previous run (28684209719) — see #1789 Run History
+## Previous run (28694259683) — see #1789 Run History
 
-- Task 10, Task 4 (→ Task 10 substitute), Task 3. Three drafts revived and merged by maintainer.
+- Selected 2/3/8. PR #1830 (payments eager-load) was created via `safeoutputs create_pull_request` this run — no manual revival needed. Commented on #1821 (F9 closed via #1828, F1+F2 offered contingent, F3–F8 deferred per #1571).
 
 ## Earlier runs — see #1789 Run History
 
+- 28684209719: Task 10, Task 4 (→ Task 10 substitute), Task 3. Three drafts revived and merged by maintainer (#1826, #1828, #1829).
 - 28673327022: Task 9 (Mixpay::API tests revived → #1826), Task 3 no-op, Task 2 no-op, Task 11.
 - 28660097062: Task 1/2/3 no-ops, Task 11.
 - 28637693543: Task 2/3/5 (deferred).
@@ -47,16 +41,17 @@ metadata:
 
 - **Concern testing (1 remaining)**: `rich_text_content` — blocked on whether maintainer wants the concern split from inline `before_save :track_content_change` callback.
 - **Issue #1778** (AGENTS.md codify concern-test convention): CLOSED 2026-07-01 as `not_planned`.
-- **Open perf (RESOLVED this run)**: `Dashboard::PaymentsController#index` `:currency` eager-load — draft PR `repo-assist/perf-dashboard-payments-eager-load-2026-07-04` (commit `5d91eeab`).
+- **Open perf (RESOLVED this window)**: `Dashboard::PaymentsController#index` `:currency` eager-load — PR #1830 (commit `0416d2da`). Awaiting self-hosted CI.
 - **Open perf (RESOLVED in prior window)**: `Dashboard::TransfersController#index` — merged as PR #1829.
 - **Open perf (RESOLVED)**: `Dashboard::ArticlesController#index` — merged as PR #1815 on 2026-07-03.
 - **Open perf (RESOLVED)**: `Dashboard::CollectionsController#index` — merged as PR #1802 on 2026-07-01.
 - **Dashboard-#index N+1 revival class: COMPLETE**. No remaining `Dashboard::XxxController#index` actions with obvious single-association eager-load gaps that aren't memo-decoded lookups.
+- **Issue #1717** (bundle graphql+lexxy): commented this run noting #1715 + #1716 were merged individually and lexxy advanced to 0.9.22 via #1813. Suggested action: close the bundle. Awaiting maintainer ack.
+- **Potential refactor candidates** (next-round, very small): `dashboard/orders_controller.rb` `case @order_type` simplification; `prefetch_link_to` helper for the `data: { controller: 'prefetch', turbo_frame: "_top" }` pattern (35+ usages, too invasive for a single PR).
 - Respect issue #1571's 5-cycle cooldown on payment/Web3 resilience.
 - #1667 + #1686 + #1694 + #1771 + #1790 + #1794-#1798: maintainer-led design discussions, out of scope.
 - **Duplicated perf-improver PRs** (#1783 + #1784): both merged; workflow-determinism issue deferred.
-- **Issue #1821** (BigDecimal/DistributeService audit, F1-F12): F9 closed via #1828 this prior run. F1/F2/F3 still HIGH; offer contingent in #1821 comment awaiting maintainer ack.
-- **Issue #1717** (bundle graphql+lexxy): 4 Dependabot PRs it referenced merged individually. Add to Suggested Actions: close #1717 with a note.
+- **Issue #1821** (BigDecimal/DistributeService audit, F1-F12): F9 closed via #1828 (prior run). F1/F2/F3 still HIGH; offer contingent in #1821 comment awaiting maintainer ack.
 - **Test gaps** (next-round, lower priority): `MarkdownRenderService`, `RichTextRenderService`, `admin_notification_service`, `text_notification_service` lack direct unit tests.
 
 ## Notes
