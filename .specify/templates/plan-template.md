@@ -40,7 +40,18 @@
 
 *GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
 
-[Gates determined based on constitution file]
+Reference: `.specify/memory/constitution.md` (Quill v1.0.0)
+
+- [ ] **I. Code Quality**: Extends existing Rails patterns; no parallel implementations;
+      RuboCop/Prettier plan for touched files; no secrets in diff
+- [ ] **II. Testing**: Test scope defined for non-trivial behavior; happy path + relevant
+      edge cases; `bin/rails test` and `zeitwerk:check` impact assessed
+- [ ] **III. UX Consistency**: Reuses UiHelper partials, Turbo/Stimulus, Tailwind;
+      new strings in locale files; API errors follow existing JSON helpers
+- [ ] **IV. Performance**: Hot-path impact assessed; heavy work via Solid Queue jobs;
+      `bin/benchmark` planned if search/order/transfer logic changes
+
+> Record any violations in **Complexity Tracking** below with rejected simpler alternatives.
 
 ## Project Structure
 

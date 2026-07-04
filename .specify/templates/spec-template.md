@@ -83,6 +83,11 @@
 <!--
   ACTION REQUIRED: The content in this section represents placeholders.
   Fill them out with the right functional requirements.
+
+  Constitution alignment (`.specify/memory/constitution.md`):
+  - UX: reuse existing UI patterns; i18n for new user-visible strings
+  - Performance: note hot-path impact; async via jobs where applicable
+  - Testing: acceptance scenarios MUST map to verifiable, non-trivial tests
 -->
 
 ### Functional Requirements
