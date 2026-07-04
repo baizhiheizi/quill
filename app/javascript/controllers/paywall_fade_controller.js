@@ -23,6 +23,6 @@ export default class extends Controller {
     if (!this.hasFadeTarget || !this.hasUnlockTarget) return;
 
     const fadeHeight = this.fadeTarget.offsetHeight;
-    this.unlockTarget.style.marginTop = `-${Math.round(fadeHeight * 0.6)}px`;
+    this.unlockTarget.style.marginTop = `-${Math.round(fadeHeight * 0.55)}px`;
   }
 }

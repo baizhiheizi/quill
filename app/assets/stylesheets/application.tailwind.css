@@ -199,11 +199,47 @@
   @apply prose dark:prose-invert prose-headings:font-display prose-blockquote:not-italic prose-img:mx-auto prose-img:rounded-md prose-img:shadow-md xl:prose-lg mx-auto max-w-none break-words prose-blockquote:border-primary prose-pre:rounded-lg prose-pre:border prose-pre:border-base-content/10 prose-pre:bg-base-200 prose-pre:text-base-content dark:prose-pre:bg-base-200 dark:prose-pre:text-base-content dark:prose-code:bg-base-300 dark:prose-code:text-base-content;
 }
 
-/* Paywall fade boundary (§6.3): gradual gradient fade instead of an abrupt
- * cutoff, applied to the last visible content block of a locked article. */
+/* Paywall fade boundary (§6.3): mask fades the preview text; an ::after scrim
+ * adds base-100 opacity + backdrop blur so the unlock card sits on a clean
+ * surface instead of bleeding through. */
 @utility paywall-fade-mask {
-  mask-image: linear-gradient(to bottom, black 0%, black 45%, transparent 96%);
-  -webkit-mask-image: linear-gradient(to bottom, black 0%, black 45%, transparent 96%);
+  mask-image: linear-gradient(to bottom, black 0%, black 24%, rgba(0, 0, 0, 0.35) 52%, transparent 76%);
+  -webkit-mask-image: linear-gradient(to bottom, black 0%, black 24%, rgba(0, 0, 0, 0.35) 52%, transparent 76%);
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset-inline: 0;
+    bottom: 0;
+    height: 78%;
+    pointer-events: none;
+    background: linear-gradient(
+      to bottom,
+      transparent 0%,
+      color-mix(in oklab, var(--color-base-100) 55%, transparent) 32%,
+      color-mix(in oklab, var(--color-base-100) 94%, transparent) 62%,
+      var(--color-base-100) 88%
+    );
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    mask-image: linear-gradient(to bottom, transparent 0%, black 26%, black 100%);
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 26%, black 100%);
+  }
+}
+
+/* Solid floor under the unlock card — keeps residual faded text from showing
+ * through the overlap zone once the card is positioned by Stimulus. */
+@utility paywall-fade-zone {
+  &::before {
+    content: '';
+    position: absolute;
+    inset-inline: 0;
+    bottom: 0;
+    z-index: 1;
+    height: min(20rem, 50%);
+    pointer-events: none;
+    background: var(--color-base-100);
+  }
 }
 
 @utility prose-comment {
@@ -232,5 +268,7 @@ pre code.hljs {
     transition-duration: 0.001ms !important;
     transition-delay: 0s !important;
     scroll-behavior: auto !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
   }
 }

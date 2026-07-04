@@ -3,12 +3,12 @@
     cutoff, with an inline unlock card overlapping the fade area. The
     server-rendered boundary itself (`partial_content_as_html`) is unchanged —
     only its presentation changes here. %>
-<div data-controller="paywall-fade" class="mb-10">
+<div data-controller="paywall-fade" class="paywall-fade-zone relative mb-10">
   <div class="prose-article paywall-fade-mask relative" data-paywall-fade-target="fade">
     <%= article.partial_content_as_html.html_safe %>
   </div>
 
-  <div data-paywall-fade-target="unlock" class="relative z-10 mx-auto max-w-md rounded-2xl border border-base-300 bg-base-100 px-6 py-6 text-center shadow-sm">
+  <div data-paywall-fade-target="unlock" class="relative z-10 mx-auto max-w-md rounded-2xl border border-base-300 bg-base-100 px-6 py-6 text-center shadow-lg ring-1 shadow-base-content/5 ring-base-content/5">
     <div class="mb-1 text-xs font-medium text-base-content/60">
       <%= t('more_to_read', percent: "#{((1 - article.free_content_ratio) * 100).round(1)} %") %>
     </div>
