@@ -5,19 +5,23 @@
   <% if current_user.blank? %>
     <%= link_to login_path,
       data: { turbo_frame: :modal },
-      class: "flex w-full cursor-pointer items-center justify-center space-x-1 text-center text-sm #{block_classes}" do %>
-      <%= inline_svg_tag 'icons/add.svg', class: 'h-3 w-3' unless style == 'block' %>
+      class: "flex w-full cursor-pointer items-center justify-center gap-1 text-center text-sm #{block_classes}" do %>
+      <% unless style == 'block' %>
+        <span class="i-[tabler--plus] size-3.5"></span>
+      <% end %>
       <span><%= t('subscribe') %></span>
     <% end %>
   <% elsif current_user.subscribe_tag? tag %>
     <%= link_to t('subscribed'),
       new_subscribe_tag_path(id: tag.id),
       data: { turbo_frame: :modal },
-      class: "flex w-full cursor-pointer items-center justify-center space-x-1 rounded-full text-center text-sm text-base-content/60 #{style == 'block' ? 'w-full bg-base-300 py-3' : 'w-24 py-1.5'}" %>
+      class: "flex w-full cursor-pointer items-center justify-center gap-1 rounded-full text-center text-sm text-base-content/60 #{style == 'block' ? 'w-full bg-base-300 py-3' : 'w-24 py-1.5'}" %>
   <% else %>
     <%= button_to subscribe_tags_path(id: tag.id),
-      class: "flex w-full cursor-pointer items-center justify-center space-x-1 text-center text-sm #{block_classes}" do %>
-      <%= inline_svg_tag 'icons/add.svg', class: 'h-3 w-3' unless style == 'block' %>
+      class: "flex w-full cursor-pointer items-center justify-center gap-1 text-center text-sm #{block_classes}" do %>
+      <% unless style == 'block' %>
+        <span class="i-[tabler--plus] size-3.5"></span>
+      <% end %>
       <span><%= t('subscribe') %></span>
     <% end %>
   <% end %>

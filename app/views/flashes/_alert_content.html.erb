@@ -1,13 +1,13 @@
 <div
-  class="alert <%= alert_class %> relative ml-auto max-w-xl shadow-lg"
+  class="alert <%= alert_class %> relative ml-auto max-w-xl rounded-xl border border-base-300 shadow-lg"
   role="alert">
-  <span class="icon-[tabler--<%= icon %>] size-5 shrink-0"></span>
+  <span class="i-[tabler--<%= icon %>] size-5 shrink-0"></span>
   <span class="text-sm font-medium"><%= message %></span>
   <button
     type="button"
-    class="btn btn-circle btn-xs btn-text absolute end-2 top-2"
+    class="btn btn-soft btn-circle btn-xs absolute end-2 top-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-base-100"
     aria-label="<%= t('close', default: 'Close') %>"
     data-action="flash#hide">
-    <span class="icon-[tabler--x] size-4"></span>
+    <span class="i-[tabler--x] size-4"></span>
   </button>
 </div>

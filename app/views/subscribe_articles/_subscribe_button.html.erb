@@ -1,21 +1,17 @@
-<div class="<%= dom_id article %>_subscribe_button" >
+<div class="<%= dom_id article %>_subscribe_button">
   <% if current_user.blank? %>
-    <%= link_to t('subscribe'), 
-      login_path(return_to: user_article_url(article.author, article.uuid)), 
-      data: { 
-        turbo_frame: :modal 
-      }, 
-      class: "block w-full cursor-pointer rounded text-primary text-center py-1 px-4 min-w-fit break-keep" %>
+    <%= link_to t('subscribe'),
+      login_path(return_to: user_article_url(article.author, article.uuid)),
+      data: { turbo_frame: :modal },
+      class: "btn btn-outline btn-primary btn-sm w-full rounded-full" %>
   <% elsif current_user.commenting_subscribe_article? article %>
-    <%= link_to t('unsubscribe'), 
-      new_subscribe_article_path(uuid: article.uuid), 
-      data: { 
-        turbo_frame: :modal
-      }, 
-      class: "bg-transparent cursor-pointer opacity-50 min-w-fit break-keep" %>
+    <%= link_to t('unsubscribe'),
+      new_subscribe_article_path(uuid: article.uuid),
+      data: { turbo_frame: :modal },
+      class: "btn btn-soft btn-sm w-full rounded-full text-base-content/60" %>
   <% else %>
-    <%= button_to t('subscribe'), 
-      subscribe_articles_path(uuid: article.uuid), 
-      class: "block w-full cursor-pointer text-primary hover:scale-105 rounded text-center py-1 px-4" %>
+    <%= button_to t('subscribe'),
+      subscribe_articles_path(uuid: article.uuid),
+      class: "btn btn-outline btn-primary btn-sm w-full rounded-full" %>
   <% end %>
 </div>

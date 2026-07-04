@@ -8,7 +8,7 @@
   data-pre-orders-form-component-amount-value="<%= price %>"
   data-pre-orders-form-component-price-usd-value="<%= article.currency.price_usd %>">
 
-  <div class="bg-base-200 px-4 py-2 rounded mb-4 hidden sm:block">
+  <div class="mb-4 hidden rounded-xl border border-base-300 bg-base-200 px-4 py-3 sm:block">
     <div class="flex items-center space-x-2 mb-1">
       <div class="avatar">
         <div class="size-6 rounded-full">
@@ -32,11 +32,11 @@
           data-pre-orders-form-component-target="amountOption"
           data-pre-orders-form-component-amount-param="<%= number * article.currency.minimal_reward_amount %>"
           data-action="click->pre-orders-form-component#updateAmount"
-          class="relative cursor-pointer flex items-center space-x-2 justify-center border border-zinc-200 dark:border-zinc-600 p-1 rounded">
+          class="relative flex cursor-pointer items-center justify-center space-x-2 rounded-lg border border-base-300 p-2 transition-colors hover:bg-base-200">
           <span class="text-sm sm:text-base">
             <%= sprintf('%.8f', article.currency.minimal_reward_amount * number).gsub(/0+\z/, '0') %>
           </span>
-          <%= inline_svg_tag "icons/check-circle-solid.svg", class: "w-4 h-4 text-primary absolute right-1 top-1 checkmark hidden" %>
+          <span class="i-[tabler--circle-check-filled] checkmark absolute right-1 top-1 hidden size-4 text-primary"></span>
         </div>
       <% end %>
     </div>
@@ -45,10 +45,10 @@
   <div class="mb-4">
     <div class="flex items-center justify-end space-x-2">
       <%= remote_image_tag article.currency.icon_url, class: "w-6 h-6 rounded-full", lazy: true %>
-      <span class="text-2xl font-serif font-black" data-pre-orders-form-component-target="amountTag">
+      <span class="font-display text-2xl font-semibold" data-pre-orders-form-component-target="amountTag">
         <%= sprintf('%.8f', price).gsub(/0+\z/, '') %>
       </span>
-      <span class="text-2xl font-serif font-black">
+      <span class="font-display text-2xl font-semibold">
         <%= article.currency.symbol %>
       </span>
     </div>
@@ -74,7 +74,7 @@
       %>
       <%= form.hidden_field :type, value: payer.default_payment %>
 
-      <%= form.submit t('continue'), class: "btn btn-primary btn-lg w-full text-xl" %>
+      <%= form.submit t('continue'), class: "btn btn-primary btn-lg w-full rounded-full" %>
     <% end %>
   </div>
 </div>

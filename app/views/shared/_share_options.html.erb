@@ -1,39 +1,39 @@
 <%# locals: (share_url:, share_title:, mixin_href: nil) %>
-<div class="flex items-center">
+<div class="flex items-stretch gap-2">
   <% if mixin_href.present? %>
-    <a class="flex flex-1 flex-col items-center rounded-lg p-4 hover:bg-base-200 active:bg-base-200"
+    <a class="flex flex-1 flex-col items-center rounded-xl p-4 transition-colors hover:bg-base-200 active:bg-base-200"
       target="_blank"
       data-action="modal-component#close"
       href="<%= mixin_href %>">
       <%= image_tag 'mixin-logo.png', class: "mb-2 h-12 w-auto" %>
-      <div class="text-base text-center">Mixin</div>
+      <div class="text-center text-sm font-medium">Mixin</div>
     </a>
   <% end %>
 
-  <a class="flex flex-1 flex-col items-center rounded-lg p-4 opacity-70 hover:bg-base-200 active:bg-base-200"
+  <a class="flex flex-1 flex-col items-center rounded-xl p-4 transition-colors hover:bg-base-200 active:bg-base-200"
       target="_blank"
       data-action="modal-component#close"
       href="<%= share_to_twitter share_url, share_title %>">
-    <span class="icon-[tabler--brand-x] mb-2 size-12 text-base-content"></span>
-    <div class="text-base text-center">Twitter</div>
+    <span class="i-[tabler--brand-x] mb-2 size-10 text-base-content"></span>
+    <div class="text-center text-sm font-medium">Twitter</div>
   </a>
 
-  <a class="flex flex-1 flex-col items-center rounded-lg p-4 opacity-70 hover:bg-base-200 active:bg-base-200"
+  <a class="flex flex-1 flex-col items-center rounded-xl p-4 transition-colors hover:bg-base-200 active:bg-base-200"
       target="_blank"
       data-action="modal-component#close"
       href="<%= share_to_telegram share_url, share_title %>">
-    <span class="icon-[tabler--brand-telegram] mb-2 size-12 text-base-content"></span>
-    <div class="text-base text-center">Telegram</div>
+    <span class="i-[tabler--brand-telegram] mb-2 size-10 text-base-content"></span>
+    <div class="text-center text-sm font-medium">Telegram</div>
   </a>
 
-  <button class="flex w-full flex-1 flex-col items-center rounded-lg p-4 opacity-70 hover:bg-base-200 active:bg-base-200"
+  <button class="flex flex-1 flex-col items-center rounded-xl p-4 transition-colors hover:bg-base-200 active:bg-base-200"
     data-controller="clipboard"
     data-clipboard-text-value="<%= share_url %>"
     data-clipboard-success-tip-value="Copied"
     data-action="clipboard#copy modal-component#close">
-    <div class="mb-2 flex size-12 items-center justify-center rounded-full bg-base-300">
-      <%= inline_svg_tag "icons/copy.svg", class: "size-6 text-base-100" %>
+    <div class="mb-2 flex size-10 items-center justify-center rounded-full bg-base-200">
+      <span class="i-[tabler--copy] size-5 text-base-content"></span>
     </div>
-    <div data-clipboard-target="button" class="text-base text-center">URL</div>
+    <div data-clipboard-target="button" class="text-center text-sm font-medium">URL</div>
   </button>
 </div>

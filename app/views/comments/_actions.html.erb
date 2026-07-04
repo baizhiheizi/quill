@@ -1,40 +1,27 @@
-<div class="<%= dom_id comment %>_actions flex items-center space-x-4 opacity-75 text-sm">
-  <%= button_to upvoted_comment_path(comment), method: :put, class: "btn btn-soft btn-sm flex items-center space-x-2" do %>
-    <% if current_user&.upvote_comment? comment %>
-      <span>
-        <%= inline_svg_tag 'icons/like-solid.svg', class: 'w-4 h-4 text-primary' %>
-      </span>
-    <% else %>
-      <span>
-        <%= inline_svg_tag 'icons/like-solid.svg', class: 'w-4 h-4 text-[#B1B6C6]' %>
-      </span>
-    <% end %>
+<div class="<%= dom_id comment %>_actions flex items-center gap-3 text-sm text-base-content/60">
+  <%= button_to upvoted_comment_path(comment), method: :put, class: "btn btn-soft btn-sm gap-1.5" do %>
+    <span class="i-[tabler--thumb-up-filled] size-4 <%= current_user&.upvote_comment?(comment) ? 'text-primary' : 'text-base-content/60' %>"></span>
     <span><%= comment.upvotes_count %></span>
   <% end %>
 
-  <%= button_to downvoted_comment_path(comment), method: :put, class: "btn btn-soft btn-sm flex items-center space-x-2" do %>
-    <% if current_user&.downvote_comment? comment %>
-      <span>
-        <%= inline_svg_tag 'icons/dislike-solid.svg', class: 'w-4 h-4 text-red-500' %>
-      </span>
-    <% else %>
-      <span>
-        <%= inline_svg_tag 'icons/dislike-solid.svg', class: 'w-4 h-4 text-[#B1B6C6]' %>
-      </span>
-    <% end %>
+  <%= button_to downvoted_comment_path(comment), method: :put, class: "btn btn-soft btn-sm gap-1.5" do %>
+    <span class="i-[tabler--thumb-down-filled] size-4 <%= current_user&.downvote_comment?(comment) ? 'text-error' : 'text-base-content/60' %>"></span>
     <span><%= comment.downvotes_count %></span>
   <% end %>
+
   <% if comment.commentable.authorized? current_user %>
-    <%= link_to new_comment_path(quote_comment_id: comment.id), 
-      data: {
-        turbo_frame: :modal
-      },
-      class: "btn btn-soft btn-sm btn-square" do %>
-      <%= inline_svg_tag 'icons/reply-solid.svg', class: 'w-4 h-4 text-[#B1B6C6]' %>
+    <%= link_to new_comment_path(quote_comment_id: comment.id),
+      data: { turbo_frame: :modal },
+      class: "btn btn-soft btn-sm btn-square",
+      aria: { label: t('reply', default: 'Reply') } do %>
+      <span class="i-[tabler--arrow-back-up] size-4"></span>
     <% end %>
   <% elsif current_user.blank? %>
-    <%= link_to login_path(return_to: user_article_path(comment.commentable.author, comment.commentable)), data: { turbo_frame: :modal }, class: "btn btn-soft btn-sm btn-square" do %>
-      <%= inline_svg_tag 'icons/reply-solid.svg', class: 'w-4 h-4 text-[#B1B6C6]' %>
+    <%= link_to login_path(return_to: user_article_path(comment.commentable.author, comment.commentable)),
+      data: { turbo_frame: :modal },
+      class: "btn btn-soft btn-sm btn-square",
+      aria: { label: t('reply', default: 'Reply') } do %>
+      <span class="i-[tabler--arrow-back-up] size-4"></span>
     <% end %>
   <% end %>
 </div>
