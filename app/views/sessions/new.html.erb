@@ -5,8 +5,9 @@
         <%= t('connect_wallet_modal_intro', default: 'Sign in with Mixin to read, write, and receive crypto rewards on Quill.') %>
       </p>
 
-      <%= link_to auth_mixin_path(return_to: params[:return_to] || request.referer),
-        data: { turbo_frame: '_top' },
+      <%= button_to auth_mixin_path(return_to: params[:return_to] || request.referer),
+        method: :post,
+        data: { turbo: false },
         class: "btn btn-primary relative w-full justify-center rounded-full py-3 text-base font-medium" do %>
         <span class="absolute left-4 flex size-8 items-center justify-center">
           <%= image_tag 'mixin-logo.png', class: 'size-7' %>
@@ -26,7 +27,7 @@
 
 <div class="my-16 flex items-center justify-center">
   <% if from_mixin_messenger? %>
-    <%= link_to t('connect_wallet'), auth_mixin_path, class: "btn btn-primary rounded-full px-6" %>
+    <%= button_to t('connect_wallet'), auth_mixin_path, method: :post, data: { turbo: false }, class: "btn btn-primary rounded-full px-6" %>
   <% else %>
     <%= link_to t('connect_wallet'), login_path, data: { turbo_frame: :modal }, class: "btn btn-primary rounded-full px-6" %>
   <% end %>

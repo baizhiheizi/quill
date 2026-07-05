@@ -1,4 +1,5 @@
 host: 'https://quill.im'
+# Deprecated: Mixin OAuth authorization URL is configured by omniauth-mixin.
 mixin_oauth_path: 'https://mixin.one/oauth/authorize'
 
 # lauch time

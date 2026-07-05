@@ -1,0 +1,5 @@
+<%= form_tag auth_mixin_path(return_to: @return_to), method: :post, data: { turbo: false }, id: "mixin-oauth-form", class: "hidden" do %>
+<% end %>
+<script>
+  document.getElementById("mixin-oauth-form").requestSubmit();
+</script>

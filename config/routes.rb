@@ -13,10 +13,17 @@ Rails.application.routes.draw do
   draw :grover
 
   get "login", to: "sessions#new", as: :login
-  get "auth/mixin", to: "sessions#mixin_auth", as: :auth_mixin
+  direct :auth_mixin do |options = {}|
+    return_to = options[:return_to]
+    query = return_to.present? ? "?#{ { return_to: return_to }.to_query }" : ""
+    "/auth/mixin#{query}"
+  end
+  match "/auth/:provider/callback", to: "oauth/callbacks#create", via: %i[get post]
+  get "/auth/failure", to: "oauth/callbacks#failure"
+  get "/oauth/mixin/callback", to: redirect { |_params, request|
+    "/auth/mixin/callback?#{request.query_string}"
+  }
   get "auth/twitter", to: "sessions#twitter_auth", as: :auth_twitter
-  get "auth/mixin/callback", to: "sessions#mixin"
-  get "oauth/mixin/callback", to: "sessions#mixin"
   get "auth/twitter/callback", to: "sessions#twitter"
   get "logout", to: "sessions#delete", as: :logout
 

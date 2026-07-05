@@ -2,23 +2,13 @@
 
 class SessionsController < ApplicationController
   skip_before_action :ensure_launched!
-  skip_before_action :verify_authenticity_token, only: %i[mixin]
 
   def new
-    redirect_to auth_mixin_path(return_to: params[:return_to]) if from_mixin_messenger?
-  end
-
-  def mixin_auth
-    redirect_to format(
-      "%<oauth_path>s?client_id=%<client_id>s&scope=%<scope>s&return_to=%<return_to>s",
-      oauth_path: Settings.mixin_oauth_path,
-      client_id: QuillBot.api.client_id,
-      # COLLECTIBLES:READ is an upstream Mixin Network OAuth scope (the
-      # Mixin Messenger-side "collectibles" feature), unrelated to Quill's
-      # since-removed `Collectible` model.
-      scope: "PROFILE:READ+COLLECTIBLES:READ",
-      return_to: params[:return_to]
-    ), allow_other_host: true
+    if from_mixin_messenger?
+      @return_to = params[:return_to]
+      render :mixin_auth, layout: "application"
+      return
+    end
   end
 
   def twitter_auth
@@ -34,25 +24,6 @@ class SessionsController < ApplicationController
       )
     Rails.cache.write client.state, { code_verifier: client.code_verifier, uid: current_user.uid }
     redirect_to auth_uri, allow_other_host: true
-  end
-
-  def mixin
-    user =
-      begin
-        User.auth_from_mixin params[:code]
-      rescue MixinBot::RateLimitError
-        return redirect_to safe_return_to, alert: t("mixin_rate_limited")
-      rescue MixinBot::Error
-        nil
-      end
-
-    if user.present?
-      user_sign_in user.sessions.create!(info: { request: request_info })
-      user.notify_for_login
-      redirect_to safe_return_to, success: t("connected")
-    else
-      redirect_to safe_return_to, alert: t("failed_to_connect")
-    end
   end
 
   def twitter

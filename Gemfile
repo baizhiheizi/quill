@@ -155,6 +155,11 @@ gem "impressionist", github: "charlotte-ruby/impressionist"
 # Twitter OAuth 2.0 Client Library in Ruby
 gem "twitter_oauth2"
 
+# Standard OAuth middleware and Mixin strategy
+gem "omniauth"
+gem "omniauth-rails_csrf_protection"
+gem "omniauth-mixin", github: "an-lee/omniauth-mixin"
+
 gem "solid_queue"
 gem "mission_control-jobs"
 
