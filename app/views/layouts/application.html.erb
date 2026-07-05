@@ -80,7 +80,7 @@
 
   <body class="flex min-h-screen justify-center overflow-x-hidden bg-base-100 text-base-content">
     <%= render 'shared/navbar' if browser.device.mobile? %>
-    <%= render 'shared/dashboard_tabbar' if browser.device.mobile? %>
+    <%= render 'shared/dashboard_tabbar' if current_user.present? && browser.device.mobile? %>
     <div class="w-full max-w-full lg:flex">
       <%= render 'shared/dashboard_rail' if current_user.present? && !browser.device.mobile? %>
 

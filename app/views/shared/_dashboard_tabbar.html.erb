@@ -16,7 +16,7 @@
     <div class="relative py-3">
       <span class="indicator mx-auto block">
         <span class="i-[tabler--bell] mx-auto block size-6 text-base-content/60"></span>
-        <% if current_user.has_unread_notification? %>
+        <% if current_user&.has_unread_notification? %>
           <span class="indicator-item badge badge-error badge-xs"></span>
         <% end %>
       </span>
