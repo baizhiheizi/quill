@@ -36,7 +36,15 @@ module Admin
           }.merge(m: "or")
         ).result
 
-      @pagy, @payments = pagy(:countless, payments)
+      # Eager-load associations consumed by the rendered partial
+      # `app/views/admin/payments/_payment.html.erb`:
+      #   - `:payer`    → `payment.payer` (admin/users/_field.html.erb)
+      #   - `:currency` → `payment.currency.icon_url`, `payment.price_tag`
+      #
+      # Without these includes each row triggers ~2 SELECTs (payer +
+      # currency). For an admin viewing a pagy page of 50 payments, the
+      # action runs ~100 SELECTs per request.
+      @pagy, @payments = pagy(:countless, payments.includes(:payer, :currency))
     end
 
     def show
