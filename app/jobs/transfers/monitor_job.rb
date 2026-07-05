@@ -8,7 +8,7 @@ class Transfers::MonitorJob < ApplicationJob
     return if transfers.none?
 
     count = transfers.count
-    transfers.find_each(&:process!)
+    transfers.find_each(&:process_with_rescue!)
     AdminNotificationService.new.text(
       "There are #{count} unprocessed transfers delayed longer than 12 hours"
     )

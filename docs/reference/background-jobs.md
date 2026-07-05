@@ -77,8 +77,9 @@ The `DistributeJob` is the entry point into the value-net pipeline; see [Explana
 
 | Job | Queue | Purpose |
 |-----|-------|---------|
-| `MonitorJob` | `low` | Polls Mixin for transfer status |
-| `ProcessJob` | `critical` | Applies a confirmed transfer (e.g. marks the corresponding `Order` as paid) |
+| `ProcessJob` | `critical` | Processes a single unprocessed transfer by `trace_id` (enqueued on create) |
+| `ProcessPendingJob` | `critical` | Minute-cadence sweep of eligible unprocessed transfers |
+| `MonitorJob` | `low` | Alerts when transfers remain unprocessed longer than 12 hours |
 | `CacheStatsJob` | `low` | Refreshes per-transfer statistics used by the author dashboard |
 
 ## Adding a new job

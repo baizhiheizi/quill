@@ -64,6 +64,8 @@ class Transfer < ApplicationRecord
   validates :amount, numericality: { greater_than_or_equal_to: MINIMUM_AMOUNT }
   validate :ensure_opponent_presence
 
+  after_commit :process_async, on: :create
+
   scope :unprocessed, -> { where(processed_at: nil) }
   scope :processed, -> { where.not(processed_at: nil) }
   scope :only_user_revenue, -> { where(transfer_type: %i[author_revenue reader_revenue]) }
@@ -112,6 +114,33 @@ class Transfer < ApplicationRecord
     end
 
     notify_recipient if recipient.present?
+  end
+
+  def process_with_rescue!
+    with_lock("FOR UPDATE NOWAIT") do
+      reload
+      return if processed?
+
+      Rails.logger.info "Transfer processing ##{id} #{Time.current}"
+      process!
+    end
+  rescue ActiveRecord::LockWaitTimeout, ActiveRecord::StatementInvalid => e
+    raise unless lock_not_available?(e)
+
+    Rails.logger.info "Transfer ##{id} already locked, skipping"
+  rescue MixinBot::UserNotFoundError
+    Rails.logger.warn "Transfer user not found ##{id} #{Time.current}"
+
+    if retry_at.blank? || created_at > 7.days.ago
+      recipient&.notify_for_safe_registration
+      update retry_at: 1.day.from_now
+    else
+      update retry_at: 7.days.from_now
+    end
+  rescue MixinBot::InsufficientBalanceError
+    Rails.logger.warn "Transfer insufficient balance ##{id} #{Time.current}"
+  rescue StandardError => e
+    Rails.logger.error e
   end
 
   def safe_receiver
@@ -211,46 +240,18 @@ class Transfer < ApplicationRecord
     }.stringify_keys
   end
 
-  def self.process_all!
-    @__retry_count = 0
-
-    loop do
-      unprocessed.where("retry_at IS NULL OR retry_at < ?", Time.current).find_each do |transfer|
-        Rails.logger.info "Transfer processing ##{transfer.id} #{Time.current}"
-        transfer.process!
-      rescue MixinBot::UserNotFoundError
-        Rails.logger.warn "Transfer user not found ##{transfer.id} #{Time.current}"
-
-        if transfer.retry_at.blank? || transfer.created_at > 7.days.ago
-          transfer.recipient&.notify_for_safe_registration
-          transfer.update retry_at: 1.day.from_now
-        else
-          transfer.update retry_at: 7.days.from_now
-        end
-
-        next
-      rescue MixinBot::InsufficientBalanceError
-        Rails.logger.warn "Transfer insufficient balance ##{transfer.id} #{Time.current}"
-        next
-      rescue StandardError => e
-        Rails.logger.error e
-        sleep 1
-        next
-      end
-
-      @__retry_count = 0
-      sleep 1
-      Rails.logger.info "Transfer all clear #{Time.current}"
-    rescue StandardError => e
-      Rails.logger.error e
-      raise e if @__retry_count >= 10
-
-      sleep 3
-      @__retry_count += 1
-    end
+  def self.process_pending!
+    unprocessed.where("retry_at IS NULL OR retry_at < ?", Time.current).find_each(&:process_with_rescue!)
   end
 
   private
+
+  def lock_not_available?(error)
+    return true if error.is_a?(ActiveRecord::LockWaitTimeout)
+
+    cause = error.cause
+    cause.is_a?(PG::LockNotAvailable) || error.message.include?("could not obtain lock")
+  end
 
   def ensure_opponent_presence
     errors.add(:opponent_id, " must cannot be blank") if opponent_id.blank? && opponent_multisig.blank?

@@ -44,7 +44,6 @@ EM.run do
     end
   end
 
-  thrs << run_forever.call("Transfer.process_all!") { Transfer.process_all! }
   thrs << run_forever.call("MixinNetworkSnapshot.poll") { MixinNetworkSnapshot.poll }
 
   thrs.join

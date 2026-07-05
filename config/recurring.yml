@@ -18,6 +18,10 @@ default: &recurring_jobs
     class: Transfers::MonitorJob
     queue: low
     schedule: "*/15 * * * *"
+  transfers_process_pending_job:
+    class: Transfers::ProcessPendingJob
+    queue: critical
+    schedule: "* * * * *"
   clear_solid_queue_finished_jobs:
     command: "SolidQueue::Job.clear_finished_in_batches(sleep_between_batches: 0.3)"
     schedule: every hour at minute 12

@@ -398,6 +398,73 @@ class TransferTest < ActiveSupport::TestCase
     end
   end
 
+  test "process_with_rescue! sets retry_at when recipient is not found on Mixin" do
+    transfer = create_transfer!(trace_id: SecureRandom.uuid, opponent_id: SecureRandom.uuid)
+
+    with_quill_bot_stub do
+      QuillBot.api.define_singleton_method(:safe_transaction) { |_| raise MixinBot::NotFoundError, "missing" }
+      QuillBot.api.define_singleton_method(:create_safe_transfer) do |**_kwargs|
+        raise MixinBot::UserNotFoundError, "user not found"
+      end
+
+      transfer.process_with_rescue!
+
+      transfer.reload
+      assert transfer.retry_at.present?
+      assert transfer.retry_at > Time.current
+      assert_nil transfer.processed_at
+    end
+  end
+
+  test "process_with_rescue! leaves transfer unprocessed on insufficient balance" do
+    transfer = create_transfer!(trace_id: SecureRandom.uuid)
+
+    with_quill_bot_stub do
+      QuillBot.api.define_singleton_method(:safe_transaction) { |_| raise MixinBot::NotFoundError, "missing" }
+      QuillBot.api.define_singleton_method(:create_safe_transfer) do |**_kwargs|
+        raise MixinBot::InsufficientBalanceError, "insufficient balance"
+      end
+
+      assert_nothing_raised { transfer.process_with_rescue! }
+
+      assert_nil transfer.reload.processed_at
+    end
+  end
+
+  test "process_with_rescue! skips when row lock is unavailable" do
+    transfer = create_transfer!(trace_id: SecureRandom.uuid)
+    processed = false
+    transfer.define_singleton_method(:process!) { processed = true }
+
+    lock_error = ActiveRecord::StatementInvalid.new("PG::LockNotAvailable: could not obtain lock")
+    lock_error.set_backtrace(caller)
+    transfer.define_singleton_method(:with_lock) { |*_args| raise lock_error }
+
+    assert_nothing_raised { transfer.process_with_rescue! }
+    assert_not processed
+  end
+
+  test "process_pending! processes eligible unprocessed transfers" do
+    transfer = create_transfer!(trace_id: SecureRandom.uuid)
+
+    with_quill_bot_stub do
+      QuillBot.api.define_singleton_method(:safe_transaction) { |_| raise MixinBot::NotFoundError, "missing" }
+      QuillBot.api.define_singleton_method(:create_safe_transfer) do |**_kwargs|
+        { "data" => { "snapshot_id" => "snap-batch", "transaction_hash" => "hash-batch" } }
+      end
+
+      Transfer.process_pending!
+
+      assert transfer.reload.processed?
+    end
+  end
+
+  test "after_commit enqueues ProcessJob on create" do
+    assert_enqueued_with(job: Transfers::ProcessJob) do
+      create_transfer!(trace_id: SecureRandom.uuid)
+    end
+  end
+
   private
 
   def create_transfer!(attrs = {})
