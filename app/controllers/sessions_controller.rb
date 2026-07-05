@@ -40,6 +40,8 @@ class SessionsController < ApplicationController
     user =
       begin
         User.auth_from_mixin params[:code]
+      rescue MixinBot::RateLimitError
+        return redirect_to safe_return_to, alert: t("mixin_rate_limited")
       rescue MixinBot::Error
         nil
       end

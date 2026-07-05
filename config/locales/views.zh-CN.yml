@@ -75,6 +75,7 @@ zh-CN:
   refresh: 刷新
   please_login: 请先登录
   failed_to_connect: 连接失败，请重试
+  mixin_rate_limited: Mixin 服务繁忙，请稍后再试。
   connected: 成功连接，欢迎！
   love_thie_article: 大爱此文
   share: 分享

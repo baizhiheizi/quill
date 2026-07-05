@@ -13,3 +13,7 @@
 ActiveSupport::Inflector.inflections(:en) do |inflect|
   inflect.acronym "API"
 end
+
+Rails.autoloaders.main.inflector.inflect(
+  "mixin_api" => "MixinApi"
+)

@@ -36,3 +36,18 @@ whitelist:
 
 storage:
   endpoint: https://assets.quill.im
+
+mixin_api_gate:
+  enabled: true
+  interactive_max_wait_seconds: 5
+  scopes:
+    quill_bot:
+      min_interval_ms: 125
+    revenue_bot:
+      min_interval_ms: 200
+    user:
+      min_interval_ms: 250
+  backoff:
+    initial_seconds: 1
+    max_seconds: 60
+    multiplier: 2

@@ -2,11 +2,27 @@
 
 module QuillBot
   def self.api
-    @api ||= MixinBot::API.new(**Rails.application.credentials[:quill_bot], debug: Rails.env.development?)
+    @api ||= wrap_api(build_api, mode: :background)
   rescue StandardError => e
     Rails.logger.error e
     nil
   end
+
+  def self.interactive_api
+    wrap_api(build_api, mode: :interactive)
+  rescue StandardError => e
+    Rails.logger.error e
+    nil
+  end
+
+  def self.build_api
+    MixinBot::API.new(**Rails.application.credentials[:quill_bot], debug: Rails.env.development?)
+  end
+
+  def self.wrap_api(api, mode:)
+    MixinApi.wrap(api, scope: :quill_bot, mode: mode)
+  end
+  private_class_method :build_api, :wrap_api
 
   def self.generate_app_report
     <<~TEXT

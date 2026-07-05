@@ -75,6 +75,7 @@ ja:
   refresh: してみてください
   please_login: ログインしてください
   failed_to_connect: 接続に失敗しました
+  mixin_rate_limited: Mixin が混み合っています。しばらくしてからもう一度お試しください。
   connected: が正常に接続されました。ようこそ!
   love_thie_article: 記事にいいねする
   share: シェア

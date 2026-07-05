@@ -5,8 +5,9 @@ module Authenticatable
 
   class_methods do
     def auth_from_mixin(code)
-      token = QuillBot.api.oauth_token(code)["access_token"]
-      res = QuillBot.api.me access_token: token
+      api = QuillBot.interactive_api
+      token = api.oauth_token(code)["access_token"]
+      res = api.me access_token: token
       raise res.inspect if res["error"].present?
 
       auth = UserAuthorization.create_with(

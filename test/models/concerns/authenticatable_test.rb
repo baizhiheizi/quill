@@ -28,6 +28,7 @@ class AuthenticatableTest < ActiveSupport::TestCase
   MIXIN_USER_ID = "e5555555-5555-5555-8555-555555555555"
   IDENTITY_NUMBER = "70001"
   ORIGINAL_QUILL_BOT_API = QuillBot.method(:api)
+  ORIGINAL_QUILL_BOT_INTERACTIVE_API = QuillBot.method(:interactive_api)
 
   setup do
     UserAuthorization.where(provider: :mixin).destroy_all
@@ -36,6 +37,7 @@ class AuthenticatableTest < ActiveSupport::TestCase
 
   teardown do
     QuillBot.define_singleton_method(:api, ORIGINAL_QUILL_BOT_API)
+    QuillBot.define_singleton_method(:interactive_api, ORIGINAL_QUILL_BOT_INTERACTIVE_API)
   end
 
   # --- auth_from_mixin ---------------------------------------------------
@@ -200,6 +202,7 @@ class AuthenticatableTest < ActiveSupport::TestCase
     end
     yield(api)
     QuillBot.define_singleton_method(:api) { api }
+    QuillBot.define_singleton_method(:interactive_api) { api }
   end
 
   def create_mixin_user!(mixin_uuid:, name:, biography: nil)

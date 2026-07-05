@@ -379,6 +379,25 @@ class TransferTest < ActiveSupport::TestCase
     assert_not transfer.reload.processed?
   end
 
+  test "process_safe_transfer! does not mark processed when create_safe_transfer raises RateLimitError" do
+    transfer = create_transfer!(trace_id: SecureRandom.uuid, amount: 0.1)
+
+    with_quill_bot_stub do
+      QuillBot.api.define_singleton_method(:safe_transaction) { |_| raise MixinBot::NotFoundError, "missing" }
+      QuillBot.api.define_singleton_method(:create_safe_transfer) do |**_kwargs|
+        raise MixinBot::RateLimitError.new(
+          code: 429,
+          description: "Too Many Requests",
+          verb: "POST",
+          path: "/safe/transfers"
+        )
+      end
+
+      assert_raises(MixinBot::RateLimitError) { transfer.process_safe_transfer! }
+      assert_nil transfer.reload.processed_at
+    end
+  end
+
   private
 
   def create_transfer!(attrs = {})

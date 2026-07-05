@@ -49,12 +49,16 @@ class MixinNetworkUser < ApplicationRecord
   encrypts :pin
 
   def mixin_api
-    @mixin_api ||= MixinBot::API.new(
-      client_id: uuid,
-      client_secret: nil,
-      session_id:,
-      pin_token:,
-      private_key:
+    @mixin_api ||= MixinApi.wrap(
+      MixinBot::API.new(
+        client_id: uuid,
+        client_secret: nil,
+        session_id:,
+        pin_token:,
+        private_key:
+      ),
+      scope: "user:#{uuid}",
+      mode: :background
     )
   end
 
