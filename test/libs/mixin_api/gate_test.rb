@@ -93,6 +93,24 @@ class MixinApi::GateTest < ActiveSupport::TestCase
     end
   end
 
+  test "record_retryable applies exponential backoff" do
+    error = Faraday::TimeoutError.new("Net::ReadTimeout")
+
+    delay1 = MixinApi::Gate.record_retryable(@scope, error)
+    delay2 = MixinApi::Gate.record_retryable(@scope, error)
+
+    assert_in_delta 1.0, delay1, 0.001
+    assert_in_delta 2.0, delay2, 0.001
+  end
+
+  test "record_throttle uses exponential backoff when retry_after is zero" do
+    error = rate_limit_error(retry_after: 0)
+
+    delay = MixinApi::Gate.record_throttle(@scope, error)
+
+    assert_in_delta 1.0, delay, 0.001
+  end
+
   private
 
   def rate_limit_error(retry_after: nil)

@@ -30,6 +30,10 @@ module MixinApi
         rescue MixinBot::RateLimitError => e
           Gate.record_throttle(@scope, e)
           raise e if interactive? && interactive_exhausted?(started_at)
+        rescue StandardError => e
+          raise e unless background_retryable?(e)
+
+          Gate.record_retryable(@scope, e)
         end
       end
     end
@@ -40,6 +44,10 @@ module MixinApi
 
     def interactive_exhausted?(started_at)
       Process.clock_gettime(Process::CLOCK_MONOTONIC) - started_at >= Gate.interactive_max_wait_seconds
+    end
+
+    def background_retryable?(error)
+      @mode == :background && MixinBot.retryable?(error)
     end
   end
 end

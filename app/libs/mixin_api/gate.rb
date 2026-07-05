@@ -46,6 +46,18 @@ module MixinApi
       delay
     end
 
+    def record_retryable(scope, error)
+      delay = nil
+      mutex(scope).synchronize do
+        attempt = read_cache(scope, :backoff_attempt).to_i + 1
+        delay = exponential_backoff(attempt)
+        write_cache(scope, :backoff_until, (Time.current + delay).iso8601(6))
+        write_cache(scope, :backoff_attempt, attempt)
+        log_retryable(scope, error, delay)
+      end
+      delay
+    end
+
     def backoff_remaining(scope)
       until_time = read_cache(scope, :backoff_until)
       return 0.0 if until_time.blank?
@@ -86,14 +98,17 @@ module MixinApi
     end
 
     def backoff_delay(error, attempt)
-      if error.retry_after.present?
-        error.retry_after.to_f
-      else
-        initial = settings.backoff.initial_seconds.to_f
-        multiplier = settings.backoff.multiplier.to_f
-        max_seconds = settings.backoff.max_seconds.to_f
-        [ initial * (multiplier**(attempt - 1)), max_seconds ].min
-      end
+      retry_after = error.retry_after.to_f
+      return retry_after if retry_after.positive?
+
+      exponential_backoff(attempt)
+    end
+
+    def exponential_backoff(attempt)
+      initial = settings.backoff.initial_seconds.to_f
+      multiplier = settings.backoff.multiplier.to_f
+      max_seconds = settings.backoff.max_seconds.to_f
+      [ initial * (multiplier**(attempt - 1)), max_seconds ].min
     end
 
     def scope_min_interval_ms(scope)
@@ -120,6 +135,17 @@ module MixinApi
           path: path,
           backoff: delay,
           retry_after: error.retry_after.inspect
+        )
+      )
+    end
+
+    def log_retryable(scope, error, delay)
+      Rails.logger.warn(
+        format(
+          "[MixinApi::Gate] scope=%<scope>s retryable error=%<error>s backoff=%<backoff>.1fs",
+          scope: scope,
+          error: error.class.name,
+          backoff: delay
         )
       )
     end

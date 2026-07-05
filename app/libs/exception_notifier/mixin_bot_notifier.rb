@@ -10,6 +10,7 @@ module ExceptionNotifier
 
     def call(exception, options = {})
       return if @conversation_id.blank?
+      return if MixinApi::ErrorNotification.skip?(exception)
 
       msg = @bot.api.plain_post(
         conversation_id: @conversation_id,
@@ -17,6 +18,15 @@ module ExceptionNotifier
       )
 
       MixinMessages::SendJob.perform_later msg.stringify_keys
+    rescue StandardError => e
+      Rails.logger.error(
+        format(
+          "[ExceptionNotifier::MixinBotNotifier] delivery failed (%<class>s: %<message>s) for %<exception>s",
+          class: e.class.name,
+          message: e.message,
+          exception: exception.class.name
+        )
+      )
     end
 
     private

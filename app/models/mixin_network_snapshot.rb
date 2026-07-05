@@ -30,6 +30,17 @@
 class MixinNetworkSnapshot < ApplicationRecord
   POLLING_INTERVAL = 0.1
   POLLING_LIMIT = 500
+  POLL_RETRYABLE_ERRORS = [
+    MixinBot::RateLimitError,
+    MixinBot::ResponseError,
+    MixinBot::HttpError,
+    MixinBot::RequestError,
+    MixinBot::ServerError,
+    MixinBot::TransientError,
+    Faraday::TimeoutError,
+    Faraday::ConnectionFailed,
+    OpenSSL::SSL::SSLError
+  ].freeze
 
   belongs_to :wallet, class_name: "MixinNetworkUser", foreign_key: :user_id, primary_key: :uuid, inverse_of: :snapshots, optional: true
   belongs_to :opponent, class_name: "User", primary_key: :mixin_uuid, optional: true
@@ -95,13 +106,8 @@ class MixinNetworkSnapshot < ApplicationRecord
       end
 
       @__retry = 0
-    rescue MixinBot::RateLimitError, MixinBot::ResponseError, MixinBot::HttpError, MixinBot::RequestError, OpenSSL::SSL::SSLError => e
-      logger.error e.inspect
-      raise e if @__retry > 10
-
-      sleep POLLING_INTERVAL * 10
-      @__retry += 1
-
+    rescue *POLL_RETRYABLE_ERRORS => e
+      handle_poll_error(e)
       retry
     rescue ActiveRecord::StatementInvalid => e
       logger.error e.inspect
@@ -109,12 +115,31 @@ class MixinNetworkSnapshot < ApplicationRecord
 
       retry
     rescue StandardError => e
-      logger.error "#{e.inspect}\n#{e.backtrace.join("\n")}"
-      ExceptionNotifier.notify_exception e if Rails.env.production?
-      raise e if Rails.env.production?
-
-      sleep POLLING_INTERVAL * 10
+      handle_poll_error(e, notify: true)
+      retry
     end
+  end
+
+  def self.handle_poll_error(error, notify: false)
+    logger.error error.inspect
+    MixinApi::ErrorNotification.notify_unless_mixin_api(error, context: "MixinNetworkSnapshot.poll") if notify && Rails.env.production?
+
+    delay =
+      if error.is_a?(MixinBot::RateLimitError)
+        MixinApi::Gate.record_throttle(:quill_bot, error)
+      elsif MixinBot.retryable?(error)
+        MixinApi::Gate.record_retryable(:quill_bot, error)
+      else
+        poll_retry_delay(@__retry)
+      end
+
+    sleep delay if delay.positive?
+    @__retry += 1
+  end
+
+  def self.poll_retry_delay(attempt)
+    base = POLLING_INTERVAL * 10
+    [ base * (2**[ attempt, 6 ].min), 60 ].min
   end
 
   def self.last_polled_at

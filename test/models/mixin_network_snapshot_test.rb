@@ -62,4 +62,10 @@ class MixinNetworkSnapshotTest < ActiveSupport::TestCase
 
     assert snapshot.reload.processed?
   end
+
+  test "poll_retry_delay increases with attempt count and caps at 60 seconds" do
+    assert_in_delta 1.0, MixinNetworkSnapshot.poll_retry_delay(0), 0.001
+    assert_in_delta 2.0, MixinNetworkSnapshot.poll_retry_delay(1), 0.001
+    assert_in_delta 60.0, MixinNetworkSnapshot.poll_retry_delay(10), 0.001
+  end
 end

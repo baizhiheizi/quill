@@ -5,8 +5,20 @@ require 'bundler/setup'
 require File.expand_path('../config/environment', __dir__)
 
 EM.run do
-  Thread.abort_on_exception = true
+  Thread.abort_on_exception = false
   thrs = []
+
+  run_forever = lambda do |name, &block|
+    Thread.new do
+      loop do
+        block.call
+      rescue StandardError => e
+        Rails.logger.error "#{name} exited unexpectedly: #{e.inspect}\n#{e.backtrace.join("\n")}"
+        MixinApi::ErrorNotification.notify_unless_mixin_api(e, context: name) if Rails.env.production?
+        sleep 10
+      end
+    end
+  end
 
   if Settings.blaze_enable
     thrs << QuillBot.api.start_blaze_connect do
@@ -32,8 +44,8 @@ EM.run do
     end
   end
 
-  thrs << Thread.new { Transfer.process_all! }
-  thrs << Thread.new { MixinNetworkSnapshot.poll }
+  thrs << run_forever.call("Transfer.process_all!") { Transfer.process_all! }
+  thrs << run_forever.call("MixinNetworkSnapshot.poll") { MixinNetworkSnapshot.poll }
 
   thrs.join
 end

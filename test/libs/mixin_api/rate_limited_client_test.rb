@@ -80,4 +80,18 @@ class MixinApi::RateLimitedClientTest < ActiveSupport::TestCase
     assert_equal 1, result.data.length
     assert_equal 3, attempts
   end
+
+  test "background mode retries after Faraday timeout then succeeds" do
+    attempts = 0
+    @inner.define_singleton_method(:get) do |*_args, **_kwargs|
+      attempts += 1
+      raise Faraday::TimeoutError, "Net::ReadTimeout" if attempts == 1
+
+      FakeEnvelope.new("ok")
+    end
+
+    result = @client.get("/safe/snapshots", limit: 500)
+    assert_equal "ok", result.data
+    assert_equal 2, attempts
+  end
 end
