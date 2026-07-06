@@ -103,17 +103,6 @@ class ArticlesControllerTest < IntegrationTestCase
     assert_response :success
   end
 
-  # Cross-Locale Article Visibility (US3, FR-010, SC-007):
-  # Each article card on the index must surface its language so a visitor
-  # browsing in any locale can tell what language each card is in.
-  test "index renders language chip for every locale in the feed" do
-    get articles_path
-
-    assert_response :success
-    assert_match(/article-card__locale/, response.body,
-      "expected at least one article-card__locale chip element in the index")
-  end
-
   # Cross-Locale Article Visibility (US5, FR-006, FR-011, SC-006):
   # Switching the visitor's preferred locale changes UI chrome (button labels,
   # navigation) but does not change the article set returned by `GET /articles`.

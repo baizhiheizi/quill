@@ -243,7 +243,9 @@ class MixinNetworkUserTest < ActiveSupport::TestCase
   test "mixin_api constructs a MixinBot::API from uuid/pin_token/session_id/private_key and memoizes it" do
     wallet = mixin_network_users(:quill_wallet)
 
+    fake_client = Object.new
     fake_api = Object.new
+    fake_api.define_singleton_method(:client) { fake_client }
     captured_kwargs = nil
     constructor_calls = 0
 

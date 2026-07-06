@@ -26,6 +26,8 @@
 #  index_mixin_network_users_on_uuid                     (uuid) UNIQUE
 #
 
+require_dependency "mixin_api/gate"
+
 class MixinNetworkUser < ApplicationRecord
   DEFAULT_AVATAR_FILE = Rails.application.root.join("app/assets/images/#{Settings.icon_file}")
 
