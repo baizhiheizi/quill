@@ -2,6 +2,7 @@
 
 class Admin::BaseController < ActionController::Base
   include Pagy::Method
+  include UserFieldPreloads
 
   before_action :authenticate_admin!
 
@@ -28,17 +29,9 @@ class Admin::BaseController < ActionController::Base
     @current_admin = nil
   end
 
-  def admin_user_field_preloads
-    [
-      :authorization,
-      {
-        avatar_attachment: {
-          blob: {
-            variant_records: { image_attachment: :blob },
-            preview_image_attachment: { blob: { variant_records: { image_attachment: :blob } } }
-          }
-        }
-      }
-    ]
-  end
+  # Backwards-compatible alias for the preload chain — moved to
+  # `UserFieldPreloads#user_field_preloads` so the dashboard surface can
+  # share the exact same eager-load shape. Existing admin controllers
+  # continue to call `admin_user_field_preloads` and remain unchanged.
+  alias_method :admin_user_field_preloads, :user_field_preloads
 end

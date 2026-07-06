@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class Dashboard::BaseController < ApplicationController
+  include UserFieldPreloads
+
   # Default section per controller for the new grouped rail/tabbar
   # (`shared/_dashboard_rail`, `shared/_dashboard_tabbar`) to highlight the
   # user's current location (spec FR-005). A handful of controllers serve
