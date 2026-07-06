@@ -30,6 +30,8 @@ BENCHMARK_ITERATIONS=10 bin/benchmark article_search.bought
 | `article_search.bought` | Purchased-articles filter |
 | `article_search.subscribed` | Subscribed-authors filter |
 | `article.random_readers` | SQL-sampled reader avatars |
+| `home.active_authors` | Signed-out home active-authors sample (`ORDER BY RANDOM() LIMIT 5`) |
+| `home.active_authors.legacy` | Pre-optimisation shape (`LIMIT 20` + Ruby `sample(5)`) for A/B comparison |
 
 ## Limitations
 
