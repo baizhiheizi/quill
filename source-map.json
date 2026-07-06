@@ -1,110 +1,15 @@
 {
-  "Home": {
-    "sourceFiles": [
-      {"path": "README.md", "hash": "3030"},
-      {"path": "config/routes.rb", "hash": "4100"},
-      {"path": "config/settings.yml", "hash": "1093"}
-    ],
-    "templateHash": "v3",
-    "generatedAt": "2026-06-27T00:00:00Z"
-  },
-  "Architecture": {
-    "sourceFiles": [
-      {"path": "config/routes.rb", "hash": "4100"},
-      {"path": "config/routes/admin.rb", "hash": "1648"}
-    ],
-    "templateHash": "v3",
-    "generatedAt": "2026-06-27T00:00:00Z"
-  },
-  "Value-Net": {
-    "sourceFiles": [
-      {"path": "app/services/orders/distribute_service.rb", "hash": "7030"},
-      {"path": "app/models/order.rb", "hash": "auto"},
-      {"path": "app/models/article.rb", "hash": "auto"}
-    ],
-    "templateHash": "v3",
-    "generatedAt": "2026-06-27T00:00:00Z"
-  },
-  "Backend": {
-    "sourceFiles": [
-      {"path": "config/routes.rb", "hash": "4100"},
-      {"path": "config/queue.yml", "hash": "615"}
-    ],
-    "templateHash": "v3",
-    "generatedAt": "2026-06-27T00:00:00Z"
-  },
-  "Background-Jobs": {
-    "sourceFiles": [
-      {"path": "config/queue.yml", "hash": "615"},
-      {"path": "app/jobs/", "hash": "auto"}
-    ],
-    "templateHash": "v3",
-    "generatedAt": "2026-06-27T00:00:00Z"
-  },
-  "Services": {
-    "sourceFiles": [
-      {"path": "app/services/", "hash": "auto"}
-    ],
-    "templateHash": "v3",
-    "generatedAt": "2026-06-27T00:00:00Z"
-  },
-  "Frontend": {
-    "sourceFiles": [
-      {"path": "app/assets/stylesheets/application.tailwind.css", "hash": "auto"},
-      {"path": "app/views/layouts/", "hash": "auto"}
-    ],
-    "templateHash": "v3",
-    "generatedAt": "2026-06-27T00:00:00Z"
-  },
-  "Stimulus-Controllers": {
-    "sourceFiles": [
-      {"path": "app/javascript/controllers/index.js", "hash": "5268"},
-      {"path": "app/javascript/controllers/", "hash": "auto"}
-    ],
-    "templateHash": "v3",
-    "generatedAt": "2026-06-27T00:00:00Z"
-  },
-  "API-Reference": {
-    "sourceFiles": [
-      {"path": "config/routes/api.rb", "hash": "270"},
-      {"path": "app/controllers/api/articles_controller.rb", "hash": "2205"},
-      {"path": "app/controllers/api/base_controller.rb", "hash": "1772"},
-      {"path": "app/controllers/api/valid_users_controller.rb", "hash": "627"}
-    ],
-    "templateHash": "v3",
-    "generatedAt": "2026-06-27T00:00:00Z"
-  },
-  "Getting-Started": {
-    "sourceFiles": [
-      {"path": "README.md", "hash": "3030"},
-      {"path": "Gemfile", "hash": "auto"},
-      {"path": "package.json", "hash": "auto"},
-      {"path": "mise.toml", "hash": "auto"},
-      {"path": "config/settings.yml", "hash": "1093"},
-      {"path": "bin/dev", "hash": "auto"}
-    ],
-    "templateHash": "v3",
-    "generatedAt": "2026-06-27T00:00:00Z"
-  },
-  "For-Agents": {
-    "sourceFiles": [
-      {"path": ".github/agentic-wiki/PAGES.md", "hash": "auto"}
-    ],
-    "templateHash": "v3",
-    "generatedAt": "2026-06-27T00:00:00Z"
-  },
-  "AGENTS.md": {
-    "sourceFiles": [
-      {"path": ".github/agentic-wiki/PAGES.md", "hash": "auto"}
-    ],
-    "templateHash": "v3",
-    "generatedAt": "2026-06-27T00:00:00Z"
-  },
-  "llms.txt": {
-    "sourceFiles": [
-      {"path": ".github/agentic-wiki/PAGES.md", "hash": "auto"}
-    ],
-    "templateHash": "v3",
-    "generatedAt": "2026-06-27T00:00:00Z"
-  }
+  "Home": {"sources": ["README.md", "config/routes.rb", "config/settings.yml"], "tpl": "v4", "at": "2026-07-06T00:00:00Z"},
+  "Architecture": {"sources": ["config/routes.rb", "config/routes/admin.rb", "config/routes/dashboard.rb", "config/routes/api.rb", "config/routes/grover.rb", "docs/explanation/architecture.md"], "tpl": "v4", "at": "2026-07-06T00:00:00Z"},
+  "Value-Net": {"sources": ["app/services/orders/distribute_service.rb", "app/jobs/orders/distribute_job.rb", "app/jobs/orders/batch_distribute_job.rb", "app/models/order.rb", "app/models/article.rb", "docs/explanation/value-net.md"], "tpl": "v4", "at": "2026-07-06T00:00:00Z"},
+  "Backend": {"sources": ["config/routes.rb", "config/queue.yml", "config/settings.yml", "docs/explanation/architecture.md"], "tpl": "v4", "at": "2026-07-06T00:00:00Z"},
+  "Background-Jobs": {"sources": ["config/queue.yml", "app/jobs/", "docs/reference/background-jobs.md"], "tpl": "v4", "at": "2026-07-06T00:00:00Z"},
+  "Services": {"sources": ["app/services/", "docs/reference/services.md"], "tpl": "v4", "at": "2026-07-06T00:00:00Z"},
+  "Frontend": {"sources": ["app/assets/stylesheets/application.tailwind.css", "app/javascript/application.js", "esbuild.config.js", "app/views/layouts/"], "tpl": "v4", "at": "2026-07-06T00:00:00Z"},
+  "Stimulus-Controllers": {"sources": ["app/javascript/controllers/index.js", "app/javascript/controllers/", "docs/reference/stimulus-controllers.md"], "tpl": "v4", "at": "2026-07-06T00:00:00Z"},
+  "API-Reference": {"sources": ["config/routes/api.rb", "app/controllers/api/articles_controller.rb", "app/controllers/api/base_controller.rb", "app/controllers/api/valid_users_controller.rb", "docs/reference/api.md"], "tpl": "v4", "at": "2026-07-06T00:00:00Z"},
+  "Getting-Started": {"sources": ["README.md", "Gemfile", "package.json", "mise.toml", "config/settings.yml", "bin/dev", "docs/how-to/local-development.md"], "tpl": "v4", "at": "2026-07-06T00:00:00Z"},
+  "For-Agents": {"sources": [".github/agentic-wiki/PAGES.md"], "tpl": "v4", "at": "2026-07-06T00:00:00Z"},
+  "AGENTS.md": {"sources": [".github/agentic-wiki/PAGES.md"], "tpl": "v4", "at": "2026-07-06T00:00:00Z"},
+  "llms.txt": {"sources": [".github/agentic-wiki/PAGES.md"], "tpl": "v4", "at": "2026-07-06T00:00:00Z"}
 }
