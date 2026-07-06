@@ -41,7 +41,18 @@ module Admin
           }.merge(m: "or")
         ).result
 
-      @pagy, @comments = pagy(:countless, comments)
+      # Eager-load associations consumed by the rendered partial
+      # `app/views/admin/comments/_comment.html.erb`:
+      #   - `:author`      → `render "admin/users/field", user: comment.author, ...`
+      #     (uses `user.name` + avatar fallback)
+      #   - `:commentable` → `render "admin/articles/field", article: comment.commentable, ...`
+      #     (`commentable` is polymorphic; Rails 7+ groups preloaded polymorphic
+      #     rows by `item_type` so the partial only sees in-memory objects).
+      #
+      # Without these includes each row triggers ~2 SELECTs (author + commentable).
+      # For an admin viewing a pagy page of 50 comments, the action runs
+      # ~100 SELECTs per request.
+      @pagy, @comments = pagy(:countless, comments.includes(:author, :commentable))
     end
 
     def delete
