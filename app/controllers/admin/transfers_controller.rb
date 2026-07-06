@@ -49,7 +49,18 @@ module Admin
           }.merge(m: "or")
         ).result
 
-      @pagy, @transfers = pagy(:countless, transfers)
+      # Eager-load associations consumed by the rendered partial
+      # `app/views/admin/transfers/_transfer.html.erb`:
+      #   - `:wallet`    → `transfer.wallet`
+      #     (admin/mixin_network_users/_field.html.erb)
+      #   - `:recipient` → `transfer.recipient` plus avatar fallback data
+      #     (admin/users/_field.html.erb)
+      #   - `:currency`  → `transfer.currency.icon_url`, `transfer.price_tag`
+      #
+      # Without these includes each row triggers ~3 SELECTs (wallet +
+      # recipient + currency). For an admin viewing a pagy page of 50
+      # transfers, the action runs ~150 SELECTs per request.
+      @pagy, @transfers = pagy(:countless, transfers.includes(:wallet, :currency, recipient: admin_user_field_preloads))
     end
 
     def show
