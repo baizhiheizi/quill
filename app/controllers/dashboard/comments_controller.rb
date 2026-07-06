@@ -6,12 +6,12 @@ class Dashboard::CommentsController < Dashboard::BaseController
   def index
     comments =
       if @article.present?
-        @article.comments
+        @article.comments.includes(:author)
       else
-        current_user.comments
+        current_user.comments.includes(commentable: :author)
       end
 
-    @pagy, @comments = pagy comments.includes(:commentable, :author).order(created_at: :desc)
+    @pagy, @comments = pagy comments.order(created_at: :desc)
   end
 
   private

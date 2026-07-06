@@ -7,7 +7,6 @@ class SessionsController < ApplicationController
     if from_mixin_messenger?
       @return_to = params[:return_to]
       render :mixin_auth, layout: "application"
-      return
     end
   end
 
