@@ -2,144 +2,113 @@
 
 Status: Approved (design phase) · Date: 2026-07-03
 
-## 1. Problem & Goal
+## 1. Goal and scope
 
-Quill's current UI (Tailwind v4 + FlyonUI, indigo brand, left-sidebar app shell) reads as a generic dashboard/dapp rather than a publishing product. The goal is to redesign the visual language and page layouts to feel like an editorial, Web3-native publishing platform in the spirit of [Paragraph](https://paragraph.com/) and [Substack](https://substack.com/) — content-first, minimal chrome, Web3 elements present only where contextually relevant (paywall, rewards, wallet).
+Quill's current UI (Tailwind v4 + FlyonUI, indigo brand, left-sidebar app shell) reads as a generic dashboard/dapp rather than an editorial publishing product. This redesign moves the public experience toward a content-first, Web3-native feel in the spirit of [Paragraph](https://paragraph.com/) and [Substack](https://substack.com/): minimal chrome, strong reading surfaces, and wallet/payment/reward UI only where context requires it.
 
-This spec defines a **general design system** (colors, typography, layout shell, component patterns) and applies it to the highest-traffic public pages. It intentionally does **not** cover the author dashboard/studio, article editor, admin panel, or the wallet-connect modal internals — see [§8 Out of Scope](#8-out-of-scope-follow-up-phases).
+This spec defines the shared visual system and applies it to the highest-traffic public pages. Dashboard/studio, editor, admin, and wallet-modal internals are follow-up phases.
 
-## 2. Design Principles
+| In scope | Out of scope for this pass |
+|---|---|
+| Home/article feed (`home#index`, logged-in and logged-out), article reader (`articles#show`), author profile (`users#show`), search results, collection page | Author dashboard/studio, article editor, admin panel, wallet-connect/login modal internals, notifications page |
 
-1. **Editorial-first, Web3-contextual.** Reading/writing surfaces feel like a quiet, premium publishing product, not a dapp. Wallet/payment/reward UI shows up precisely where relevant (byline, paywall, reward badge) — never as constant chrome.
-2. **Monochrome + one accent.** Near-grayscale UI (white/black/gray) with a single accent color reserved for primary actions, links, and focus states. Color carries meaning, not decoration.
-3. **Density over decorative whitespace.** The feed is a scannable list optimized for fast reading, not a magazine grid.
-4. **Chinese-first typography.** Most content on the platform is Chinese. Every typographic decision optimizes for CJK legibility first, Latin second.
-5. **Dark mode is first-class**, not an afterthought — designed and reviewed with equal care to light mode.
+Follow-up direction: the author dashboard/studio should keep a restyled left-sidebar shell because dense navigation fits that context. The editor may inherit the same typography tokens but needs its own writing-surface pass; admin remains an internal tool; only wallet/login trigger buttons are covered here.
 
-## 3. Scope
+## 2. Design direction
 
-**In scope (this spec):**
-- Home / article feed (`home#index`, logged-in and logged-out states)
-- Article reader (`articles#show`)
-- Author public profile (`users#show`)
-- Search results
-- Collection page
+1. **Editorial-first, Web3-contextual.** Reading and writing surfaces feel like a quiet premium publishing product; wallet, payment, and reward UI appears only in context.
+2. **Monochrome + one accent.** Near-grayscale UI with one accent for primary actions, links, focus states, and active navigation.
+3. **Dense, scannable feeds.** Prefer list density over decorative whitespace; the feed optimizes for fast reading, not magazine layout.
+4. **Chinese-first typography.** Most content is Chinese, so CJK legibility leads every type choice.
+5. **First-class dark mode.** Light and dark themes are designed and reviewed equally.
 
-**Explicitly out of scope** (existing styling untouched for now — see §8): author dashboard/studio, article editor, admin panel, wallet-connect/login modal internals, notifications page.
+## 3. Visual system
 
-## 4. Visual System
+### 3.1 Color
 
-### 4.1 Color
-
-Both themes are first-class deliverables, not one primary + one fallback.
+Both themes are first-class deliverables.
 
 | Token | Light | Dark | Usage |
 |---|---|---|---|
-| `base-100` (background) | `#FFFFFF` | `#111111` | Page background |
-| `base-200` (surface) | `#FAFAFA` | `#181818` | Cards, raised surfaces |
-| `base-300` (border/divider) | `rgba(0,0,0,.08)` | `rgba(255,255,255,.10)` | Dividers, card borders |
-| `base-content` (text primary) | `#111111` | `#F2F2F2` | Headlines, body |
-| `base-content/60` (text muted) | `rgba(0,0,0,.55–.6)` | `rgba(255,255,255,.55–.6)` | Meta, timestamps, secondary text |
-| `primary` (accent) | `#3355FF` | `#6B84FF` | Links, primary buttons, focus rings, active nav state |
-| Reward/bonus tint | `#92661C` (muted amber), text only | `#D9A653` | Early-reader bonus %, earnings figures — text color only, never a filled badge |
+| `base-100` | `#FFFFFF` | `#111111` | Page background |
+| `base-200` | `#FAFAFA` | `#181818` | Cards, raised surfaces |
+| `base-300` | `rgba(0,0,0,.08)` | `rgba(255,255,255,.10)` | Dividers, card borders |
+| `base-content` | `#111111` | `#F2F2F2` | Headlines, body |
+| `base-content/60` | `rgba(0,0,0,.55–.6)` | `rgba(255,255,255,.55–.6)` | Meta, timestamps, secondary text |
+| `primary` | `#3355FF` | `#6B84FF` | Links, primary buttons, focus rings, active nav state |
+| Reward/bonus tint | `#92661C` | `#D9A653` | Early-reader bonus %, earnings figures; text only, never a filled badge |
 
-Removed: the current 6-color pastel `tag-style-0..5` utility system. Replaced by a single neutral gray chip style for topic tags (see §5.3). Price/free badges use black (paid) / light-gray (free) solid pills, not brand color, to keep the accent reserved for actions.
+Remove the current 6-color pastel `tag-style-0..5` utilities. Topic tags become a single neutral gray chip; price/free badges use black or light-gray solid pills so the accent stays reserved for actions.
 
-### 4.2 Typography
+### 3.2 Typography
 
 | Role | Latin | CJK | Weight | Used for |
 |---|---|---|---|---|
-| Headline/display | Newsreader | Noto Serif SC | 500–600 | Article titles, feed card titles, page headers, masthead wordmark treatment |
-| UI + body | Inter | Noto Sans SC | 400–600 | Navigation, buttons, meta text, form fields, **and article body copy** |
+| Headline/display | Newsreader | Noto Serif SC | 500–600 | Article titles, feed titles, page headers, masthead wordmark |
+| UI + body | Inter | Noto Sans SC | 400–600 | Navigation, buttons, meta text, form fields, and article body copy |
 | Mono | Roboto Mono / JetBrains Mono (unchanged) | — | 400–500 | Code blocks |
 
-Rationale: headline serif carries the "editorial" signal; body stays sans for long-form legibility, matching Chinese-reader norms (知乎/微信-style) and validated directly against real paragraph-length Chinese sample text.
+Headline serif adds the editorial signal; sans body text matches Chinese long-form norms and stays legible in paragraph-length samples.
 
-Font stack example (Tailwind `@theme`):
 ```css
 --font-display: 'Newsreader', 'Noto Serif SC', ui-serif, serif;
 --font-sans: 'Inter', 'Noto Sans SC', ui-sans-serif, system-ui, sans-serif;
 --font-mono: 'Roboto Mono', 'JetBrains Mono', ui-monospace, monospace;
 ```
-Google Fonts serves CJK families pre-split by unicode-range, so no manual subsetting is required to keep payload reasonable.
 
-### 4.3 Icons
+Google Fonts serves CJK families with unicode-range splitting, so no manual subsetting is needed.
 
-Migrate from hand-rolled inline SVGs (`icons/*.svg`, referenced via `inline_svg_tag`) to **Tabler icons via `@iconify/tailwind4`** utility classes (`i-tabler-*`). Both dependencies are already installed but unused. This gives one consistent stroke width/style and removes the need to hand-maintain SVG files per icon. Migrate incrementally, file by file, as pages are touched — no need for a single big-bang icon swap.
+### 3.3 Icons, radius, elevation
 
-### 4.4 Radius & Elevation
+Migrate from hand-rolled inline SVGs (`icons/*.svg` via `inline_svg_tag`) to Tabler icons through `@iconify/tailwind4` (`i-tabler-*`). Both dependencies are already installed; migrate incrementally as pages are touched.
 
-Keep the existing FlyonUI radius tokens (`--radius-selector: 1rem`, `--radius-field: 0.5rem`, `--radius-box: 0.75rem`) — they already suit the softer pill/rounded-card aesthetic. Avoid box-shadows for elevation; use `border` + subtle background differences (`base-100` vs `base-200`) instead, consistent with the monochrome-editorial direction.
+Keep the existing FlyonUI radius tokens (`--radius-selector: 1rem`, `--radius-field: 0.5rem`, `--radius-box: 0.75rem`). Avoid box shadows; use borders and subtle `base-100`/`base-200` background contrast for elevation.
 
-## 5. Layout Shell (in-scope pages)
+## 4. Public layout shell
 
-Top-nav, single centered content column — **no persistent left sidebar and no persistent right widget rail** on public pages (this replaces the current fixed left-sidebar app shell for these pages only).
+Public pages use a top-nav and one centered content column — no persistent left sidebar or sticky right widget rail.
 
-### 5.1 Top bar
-- Sticky, thin bottom border (no shadow), background = `base-100`.
-- Left: logo/wordmark. Center or left-adjacent: primary nav (Home, Search). Right: Write CTA (pill button), wallet/profile control, dark-mode toggle, locale switcher.
-- Logged-out state: Write CTA becomes "Connect Wallet" (opens existing login modal — unchanged).
+| Area | Direction |
+|---|---|
+| Top bar | Sticky with a thin bottom border, `base-100` background, no shadow. Left logo/wordmark; center or left-adjacent Home/Search; right Write CTA, wallet/profile control, dark-mode toggle, locale switcher. Logged-out Write becomes Connect Wallet and opens the existing login modal. |
+| Feed/list column | Comfortable row width using the full column for scannability. |
+| Article reader | Capped at a comfortable reading measure (`~65ch` / `680px`) independent of outer page width. |
+| Former right-rail widgets | Active authors, hot tags, and footer links move into a compact strip below the home masthead or into the footer. |
+| Mobile | Top bar collapses to logo plus essential actions. The existing logged-in bottom tabbar may remain structurally unchanged; restyle only. |
 
-### 5.2 Content column
-- Feed/list pages: comfortable row width, full column used for scannability.
-- Article reader: content column capped at a comfortable reading measure (~`65ch`/680px equivalent), independent of the outer page width.
-- Contextual widgets that previously lived in the right rail (active authors, hot tags, footer links) move into a compact horizontal strip below the masthead on the home page, or into the page footer — not a sticky sidebar card.
+## 5. Core components
 
-### 5.3 Responsive behavior
-- Mobile: top bar collapses to logo + essential actions (existing bottom tabbar can remain for logged-in primary navigation — restyle only, not restructure, since it's out of scope for structural change).
+| Component | Direction |
+|---|---|
+| Minimal List row | Reused by home feed, search, author profile, and collection lists. Rows are divided by thin horizontal rules, not card borders. Left text block: neutral tag chip + price/free badge, serif title around 17px, one-line muted excerpt, meta row with 20px avatar, author, relative date, and optional amber reward text such as `早期读者 +18%`. Right thumbnail: square `~88px`, rounded, right-aligned, `flex-shrink-0`. |
+| Tag and status chips | Topic tag: neutral gray pill (`base-200`, `base-content/70`). Paid badge: solid black in light mode / white in dark mode, e.g. `¥128`. Free badge: light-gray pill, e.g. `免费`. Reward/bonus remains plain muted-amber text in the meta row only. |
+| Paywall | Locked articles fade the last visible paragraph under a vertical `base-100` gradient, with an inline unlock card (`解锁全文 · ¥128`) overlapping the fade. Buy/support actions move to a slim sticky bar instead of a right-sidebar card. |
+| Author profile header | Avatar, name, bio, and public stats only: article count, total reader count, join date. Earnings, revenue, and on-chain financial data remain dashboard-only. |
+| Buttons | Primary actions (Write, Connect Wallet, Unlock article) are accent-filled pills. Secondary/inline actions use `rounded-md` outline or ghost styles. |
 
-## 6. Core Components
+## 6. Page application
 
-### 6.1 Feed/article row ("Minimal List")
-Thin horizontal divider between rows (no card borders on the list itself). Per row, left-to-right:
-- Text block (flex: 1): tag chip + price/free badge (small, above title) → serif title (headline font, ~17px) → one-line sans excerpt (muted) → meta row (avatar 20px, author name, relative date, reward indicator e.g. "早期读者 +18%" in amber text when applicable).
-- Thumbnail: small square (~88px), rounded corners, right-aligned, flex-shrink-0.
+| Page | Application |
+|---|---|
+| Home/feed (`home#index`) | Slim masthead, no full-height hero. Logged-out visitors see a one-line value proposition; logged-in users do not. Feed starts immediately below and keeps existing infinite scroll. |
+| Article reader (`articles#show`) | Single column, serif headline, sans body copy, fade-blur paywall, sticky slim support/buy bar, comments and votes below the fold, author byline card at article end. |
+| Author profile (`users#show`) | Header from §5, followed by Minimal List rows. |
+| Search | Search input integrated into the masthead; results use Minimal List rows with no bespoke result component. |
+| Collection page | Collection header with title, description, and curator byline, followed by Minimal List rows. |
 
-This single component is reused for: home feed, search results, author profile article list, collection article list.
+## 7. Implementation notes and open questions
 
-### 6.2 Tag & status chips
-- Topic tag: neutral gray pill (`base-200` background, `base-content/70` text) — replaces the 6-color category system.
-- Price badge (paid article): solid black (light) / white (dark) pill, e.g. `¥128`.
-- Free badge: light-gray pill, e.g. `免费`.
-- Reward/bonus indicator: plain text in the muted-amber tint, not a filled pill — appears inline in the meta row only when relevant.
+Implementation notes:
 
-### 6.3 Paywall
-Fade-to-blur treatment: the last visible paragraph of a locked article fades under a vertical gradient (`base-100` at full opacity increasing toward the bottom), with an inline unlock card ("解锁全文 · ¥128") overlapping the fade area. Replaces any hard-break paywall banner. The buy/support action becomes a slim sticky bar (top or bottom of viewport) rather than a right-sidebar card, consistent with the single-column article layout.
+- Update `app/assets/stylesheets/application.tailwind.css`: `--color-primary`, related FlyonUI theme blocks for `quill` / `quill-dark`, and `--font-display`.
+- Swap Google Fonts links in layouts for the new Latin + CJK families.
+- Replace `tag-style-0..5` with one neutral tag-chip utility.
+- Add/update partials for masthead/top-nav, Minimal List row, paywall fade, and author profile header; the masthead supersedes `shared/_left_bar` + `shared/_navbar` on in-scope pages only.
+- Introduce `i-tabler-*` classes as each view is touched; leave existing `inline_svg_tag` usages until then.
+- Restyle the mobile bottom tabbar only; no structural change in this pass.
 
-### 6.4 Author profile header
-Avatar, name, bio, and **modest public stats only**: article count, total reader count, join date. No earnings, revenue, or on-chain financial data is shown on the public profile — that remains dashboard-only (out of scope here). Below the header: the author's articles rendered via the same Minimal List row component (§6.1).
+Open questions for planning:
 
-### 6.5 Buttons
-- Primary actions (Write, Connect Wallet, Unlock article): pill / `rounded-full`, accent-filled.
-- Secondary/inline actions: `rounded-md`, outline or ghost style.
-
-## 7. Page-by-Page Application
-
-- **Home / feed** (`home#index`): slim masthead — no full-height hero banner. Logged-out visitors see a single-line value proposition next to/below the masthead; logged-in users see none. The article feed (Minimal List rows) begins immediately below, infinite-scroll unchanged.
-- **Article reader** (`articles#show`): single column, serif headline + sans body copy throughout, fade-blur paywall (§6.3), sticky slim support/buy bar, comments and votes below the fold, author byline card at the end of the article rather than a sidebar.
-- **Author profile** (`users#show`): header per §6.4, followed by their articles as Minimal List rows.
-- **Search**: search input integrated into the masthead area; results rendered as Minimal List rows (reuses §6.1 directly, no bespoke result component).
-- **Collection page**: collection header (title, description, curator byline) followed by its articles as Minimal List rows.
-
-## 8. Out of Scope (Follow-up Phases)
-
-Documented here so the direction is consistent when these are tackled later, but not designed in detail in this pass:
-
-- **Author dashboard/studio** (drafts, stats, earnings, payments, settings): keep a **restyled left-sidebar** shell here (denser navigation genuinely earns its keep in a studio context), rather than top-nav. Should inherit the same color/type tokens from this spec.
-- **Article editor**: not addressed; likely inherits typography tokens but needs its own pass given its distinct toolbar/writing-surface needs.
-- **Admin panel**: internal tool, not addressed.
-- **Wallet-connect/login modal internals**: not addressed; only the trigger buttons (Write/Connect Wallet CTA) are covered by this spec.
-
-## 9. Implementation Notes (non-binding, for the follow-up plan)
-
-- Tailwind theme (`app/assets/stylesheets/application.tailwind.css`): update `--color-primary` and related FlyonUI theme blocks for both `quill` and `quill-dark` themes per §4.1; add `--font-display` token; swap Google Fonts `<link>` tags in layouts for the new families + CJK counterparts.
-- Remove `tag-style-0..5` utilities; add a single neutral tag-chip utility.
-- New/updated partials likely needed: masthead/top-nav (replacing `shared/_left_bar` + `shared/_navbar` for in-scope pages), a shared "minimal list row" partial (replacing/superseding `articles/_preview`), paywall fade component, author profile header partial.
-- Icon migration: introduce `i-tabler-*` classes incrementally; leave `inline_svg_tag` usages alone until each view is touched.
-- No structural change needed for mobile bottom tabbar in this pass (restyle only).
-
-## 10. Open Questions for Implementation Planning
-
-- Exact breakpoint behavior for the masthead nav on tablet widths.
-- Whether the "active authors" / "hot tags" widgets get a new compact presentation or are deprioritized/removed from public pages entirely.
-- Migration order across the 5 in-scope pages (recommend: shared components + home feed first, since Minimal List is reused everywhere else).
+- Exact masthead breakpoint behavior on tablet widths.
+- Whether active-authors / hot-tags widgets get compact presentation or are removed from public pages.
+- Migration order across the five in-scope pages; recommended order is shared components + home feed first because Minimal List is reused everywhere.
