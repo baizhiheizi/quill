@@ -38,7 +38,8 @@ module Admin
 
       # Eager-load associations consumed by the rendered partial
       # `app/views/admin/bonuses/_bonus.html.erb`:
-      #   - `:user`     → `bonus.user` (admin/users/_field.html.erb)
+      #   - `:user`     → `bonus.user` plus avatar fallback data
+      #     (admin/users/_field.html.erb)
       #   - `:currency` → `bonus.price_tag` reads `bonus.currency.symbol`
       #   - `:transfer` → `bonus.transfer` (polymorphic `has_one :transfer,
       #     as: :source`, used by the `admin_transfer_path` link)
@@ -46,7 +47,7 @@ module Admin
       # Without these includes each row triggers ~3 SELECTs (user +
       # currency + polymorphic transfer). For an admin viewing a pagy
       # page of 50 bonuses, the action runs ~150 SELECTs per request.
-      @pagy, @bonuses = pagy(:countless, bonuses.includes(:user, :currency, :transfer))
+      @pagy, @bonuses = pagy(:countless, bonuses.includes(:currency, :transfer, user: admin_user_field_preloads))
     end
 
     def create

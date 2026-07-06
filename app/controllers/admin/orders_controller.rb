@@ -42,13 +42,14 @@ module Admin
       #   - `:item`   → `case order.item` (polymorphic Article/Collection).
       #     Rails 7+ groups preloaded polymorphic rows by `item_type` and
       #     fires one SELECT per type instead of one per row.
-      #   - `:buyer`  → `order.buyer` (admin/users/_field.html.erb)
+      #   - `:buyer`  → `order.buyer` plus avatar fallback data
+      #     (admin/users/_field.html.erb)
       #   - `:currency` → `order.currency.icon_url`, `order.price_tag`
       #
       # Without these includes each row triggers ~3 SELECTs (item + buyer +
       # currency). For an admin viewing a pagy page of 50 orders, the
       # action runs ~150 SELECTs per request.
-      @pagy, @orders = pagy(:countless, orders.includes(:item, :buyer, :currency))
+      @pagy, @orders = pagy(:countless, orders.includes(:item, :currency, buyer: admin_user_field_preloads))
     end
 
     def show
