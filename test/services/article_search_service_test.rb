@@ -159,6 +159,21 @@ class ArticleSearchServiceTest < ActiveSupport::TestCase
       "expected zh article in text-search results (query='文章')"
   end
 
+  test "query longer than the limit is truncated before hitting Ransack" do
+    long_query = "a" * (ArticleSearchService::QUERY_LENGTH_LIMIT + 50)
+    truncated = "a" * ArticleSearchService::QUERY_LENGTH_LIMIT
+
+    queries = capture_queries do
+      ArticleSearchService.call(query: long_query).to_a
+    end
+
+    main_query = queries.find { |q| q.include?('FROM "articles"') }
+    assert_match(/ILIKE.*#{truncated}/, main_query,
+      "expected the ILIKE pattern to be truncated to #{ArticleSearchService::QUERY_LENGTH_LIMIT} chars")
+    assert_no_match(/ILIKE.*#{long_query}/, main_query,
+      "expected the oversized query to never reach SQL")
+  end
+
   test "subscribed filter returns articles from every locale the followed author published" do
     reader = users(:reader_one)
     author = users(:author)

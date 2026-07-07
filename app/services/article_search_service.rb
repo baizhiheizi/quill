@@ -1,9 +1,14 @@
 # frozen_string_literal: true
 
 class ArticleSearchService
+  # Cap query length so a long `query` param can't bloat the ILIKE pattern
+  # into an expensive seq-scan. Pairs with the pg_trgm GIN indexes (see
+  # db/migrate/*_add_pg_trgm_indexes_for_search.rb).
+  QUERY_LENGTH_LIMIT = 64
+
   def initialize(params = {})
-    @query = params[:query].to_s.strip
-    @tag = params[:tag].to_s.strip
+    @query = params[:query].to_s.strip.first(QUERY_LENGTH_LIMIT)
+    @tag = params[:tag].to_s.strip.first(QUERY_LENGTH_LIMIT)
     @filter = params[:filter]
     @time_range = params[:time_range]
     @current_user = params[:current_user]

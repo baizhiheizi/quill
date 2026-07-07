@@ -10,10 +10,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_07_04_013655) do
+ActiveRecord::Schema[8.1].define(version: 2026_07_07_234118) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_stat_statements"
+  enable_extension "pg_trgm"
   enable_extension "pgcrypto"
 
   create_table "access_tokens", force: :cascade do |t|
@@ -138,6 +139,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_04_013655) do
     t.index ["asset_id"], name: "index_articles_on_asset_id"
     t.index ["author_id"], name: "index_articles_on_author_id"
     t.index ["collection_id"], name: "index_articles_on_collection_id"
+    t.index ["intro"], name: "index_articles_on_intro_trgm", opclass: :gin_trgm_ops, using: :gin
+    t.index ["title"], name: "index_articles_on_title_trgm", opclass: :gin_trgm_ops, using: :gin
     t.index ["uuid"], name: "index_articles_on_uuid", unique: true
   end
 
@@ -442,6 +445,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_04_013655) do
     t.string "name"
     t.integer "subscribers_count", default: 0
     t.datetime "updated_at", null: false
+    t.index ["name"], name: "index_tags_on_name_trgm", opclass: :gin_trgm_ops, using: :gin
   end
 
   create_table "transfers", force: :cascade do |t|
@@ -508,6 +512,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_04_013655) do
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["mixin_id"], name: "index_users_on_mixin_id"
     t.index ["mixin_uuid"], name: "index_users_on_mixin_uuid", unique: true
+    t.index ["name"], name: "index_users_on_name_trgm", opclass: :gin_trgm_ops, using: :gin
     t.index ["uid"], name: "index_users_on_uid", unique: true
   end
 
