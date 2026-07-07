@@ -63,4 +63,48 @@ class Admin::ArticlesControllerTest < ActionController::TestCase
     assert_includes locales, "zh"
     assert_includes locales, "ja"
   end
+
+  # Admin articles index N+1 regression guard.
+  #
+  # `Admin::ArticlesController#index` renders `app/views/admin/articles/_article.html.erb`
+  # which calls `render "admin/users/field", user: article.author` →
+  # `shared/_avatar` with `thumb: true` → `user.avatar_image_thumb` →
+  # ActiveStorage `:avatar_attachment.blob.variant_records` chain AND
+  # `authorization&.raw&.[]("avatar_url")` (OAuth fallback).
+  #
+  # Without `author: admin_user_field_preloads`, every row fires extra
+  # SELECTs for `authorizations`, `active_storage_attachments`, and
+  # `active_storage_blobs`. With the preload chain, both are loaded in
+  # ~2 SELECTs total regardless of page size.
+  test "index does not fire per-row avatar SELECTs for author" do
+    # Capture every ActiveRecord SQL query emitted while rendering the
+    # index action. Skip SCHEMA queries (they fire on first connection).
+    queries = []
+    callback = ->(_name, _start, _finish, _id, payload) do
+      next if payload[:name] == "SCHEMA"
+
+      queries << payload[:sql]
+    end
+
+    ActiveSupport::Notifications.subscribed(callback, "sql.active_record") do
+      get :index, params: { locale: "all" }
+    end
+
+    assert_response :success
+
+    # The preload chain should produce AT MOST one SELECT per top-level
+    # association (authorizations, active_storage_attachments,
+    # active_storage_blobs, active_storage_variant_records). The
+    # regression-guard budget is 2 SELECTs per association to absorb
+    # any future schema-query noise without flaking.
+    auth_queries = queries.count { |q| q =~ /\bauthorization\b/i }
+    assert_operator auth_queries, :<=, 2,
+      "expected at most 2 authorizations SELECTs (one per preload chain), " \
+      "got #{auth_queries}. Per-row avatar fan-out N+1 regression?"
+
+    blob_queries = queries.count { |q| q =~ /\bactive_storage_blobs\b/i }
+    assert_operator blob_queries, :<=, 4,
+      "expected at most 4 active_storage_blobs SELECTs (one per blob in the " \
+      "avatar chain), got #{blob_queries}. Per-row avatar fan-out N+1 regression?"
+  end
 end
