@@ -56,7 +56,18 @@ module Admin
           }.merge(m: "or")
         ).result
 
-      @pagy, @mixin_network_users = pagy(:countless, mixin_network_users)
+      # Eager-load associations consumed by the rendered partial
+      # `app/views/admin/mixin_network_users/_mixin_network_user.html.erb`:
+      #   - `:owner` → `mixin_network_user.owner` (polymorphic Article/User).
+      #     Rails 7+ groups preloaded polymorphic rows by `owner_type` and
+      #     fires one SELECT per type instead of one per row.
+      #     The partial dispatches on `mixin_network_user.owner.is_a? Article|User`
+      #     and renders the corresponding field partial.
+      #
+      # Without this include each row triggers ~1 SELECT (`Owner`). For an
+      # admin viewing a pagy page of 50 Mixin Network Users, the action runs
+      # ~50 SELECTs per request.
+      @pagy, @mixin_network_users = pagy(:countless, mixin_network_users.includes(:owner))
     end
 
     def show

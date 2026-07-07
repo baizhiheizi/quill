@@ -46,7 +46,19 @@ module Admin
           }.merge(m: "or")
         ).result
 
-      @pagy, @pre_orders = pagy(:countless, pre_orders)
+      # Eager-load associations consumed by the rendered partial
+      # `app/views/admin/pre_orders/_pre_order.html.erb`:
+      #   - `:item`      → `case pre_order.item` (polymorphic Article/Collection).
+      #     Rails 7+ groups preloaded polymorphic rows by `item_type` and
+      #     fires one SELECT per type instead of one per row.
+      #   - `:payer`     → `render "admin/users/field", user: pre_order.payer, ...`
+      #     (uses `user.name` + avatar fallback)
+      #   - `:currency`  → `pre_order.currency.icon_url`, `pre_order.amount_tag`
+      #
+      # Without these includes each row triggers ~3 SELECTs (item + payer +
+      # currency). For an admin viewing a pagy page of 50 pre-orders, the
+      # action runs ~150 SELECTs per request.
+      @pagy, @pre_orders = pagy(:countless, pre_orders.includes(:item, :payer, :currency))
     end
 
     def show
