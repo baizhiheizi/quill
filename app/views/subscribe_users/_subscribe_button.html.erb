@@ -13,7 +13,7 @@
     <% end %>
   <% elsif current_user == user %>
     <span></span>
-  <% elsif current_user.subscribe_user? user %>
+  <% elsif Array(@preloaded_subscribe_user_ids).include?(user.id) || current_user.subscribe_user?(user) %>
     <%= link_to t('subscribed'),
       new_subscribe_user_path(uid: user.uid),
       data: { turbo_frame: :modal },
