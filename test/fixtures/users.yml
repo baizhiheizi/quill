@@ -30,6 +30,7 @@
 #  index_users_on_email       (email) UNIQUE
 #  index_users_on_mixin_id    (mixin_id)
 #  index_users_on_mixin_uuid  (mixin_uuid) UNIQUE
+#  index_users_on_name_trgm   (name) USING gin
 #  index_users_on_uid         (uid) UNIQUE
 #
 author:

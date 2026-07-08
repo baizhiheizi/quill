@@ -39,6 +39,8 @@
 #  index_articles_on_asset_id       (asset_id)
 #  index_articles_on_author_id      (author_id)
 #  index_articles_on_collection_id  (collection_id)
+#  index_articles_on_intro_trgm     (intro) USING gin
+#  index_articles_on_title_trgm     (title) USING gin
 #  index_articles_on_uuid           (uuid) UNIQUE
 #
 published_paid:

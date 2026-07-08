@@ -13,6 +13,10 @@
 #  created_at        :datetime         not null
 #  updated_at        :datetime         not null
 #
+# Indexes
+#
+#  index_tags_on_name_trgm  (name) USING gin
+#
 
 class Tag < ApplicationRecord
   has_many :taggings, dependent: :nullify

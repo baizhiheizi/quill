@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class API::ArticlesController < API::BaseController
+  QUERY_LENGTH_LIMIT = 64
+
   before_action :authenticate_user!, only: [ :create ]
 
   def index
@@ -16,7 +18,14 @@ class API::ArticlesController < API::BaseController
         Article.only_published
       end
 
-    query = params[:query]&.split(",")&.map(&:strip) || []
+    # Cap the query string and each comma-separated term so a long `query`
+    # param can't bloat the ILIKE pattern into an expensive seq-scan. Pairs
+    # with the pg_trgm GIN indexes (see
+    # db/migrate/*_add_pg_trgm_indexes_for_search.rb).
+    query =
+      params[:query].to_s.first(QUERY_LENGTH_LIMIT).split(",").map { |term|
+        term.strip.first(QUERY_LENGTH_LIMIT)
+      }.reject(&:blank?)
     limit = params[:limit] || 20
     limit = 100 if limit.to_i > 100
     order = params[:order]&.to_sym
