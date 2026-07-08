@@ -12,16 +12,26 @@ class Orders::DistributeService
   end
 
   def call
-    return if @order.completed?
+    # Two paths can dispatch distribution concurrently for the same order:
+    # `after_create_commit :distribute_async` and `Orders::BatchDistributeJob`
+    # (which re-dispatches every paid order every 10 minutes). Without a row
+    # lock both workers can pass the `completed?` guard and attempt to create
+    # the same transfers, racing on the `transfers.trace_id` unique constraint.
+    # Acquire `FOR UPDATE`, then re-check the AASM state under the lock so only
+    # one worker proceeds to completion.
+    @order.class.transaction do
+      @order.lock!
+      return if @order.completed?
 
-    case @order.item
-    when Article
-      distribute_article_order!
-    when Collection
-      distribute_collection_order!
+      case @order.item
+      when Article
+        distribute_article_order!
+      when Collection
+        distribute_collection_order!
+      end
+
+      @order.complete! if @order.paid?
     end
-
-    @order.complete! if @order.paid?
   end
 
   private
