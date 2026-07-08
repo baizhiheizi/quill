@@ -28,11 +28,13 @@
 one:
   created_at: <%= 1.day.ago %>
   updated_at: <%= 1.day.ago %>
+  processed_at: <%= 1.day.ago %>
 
 # column: value
 #
 two:
   created_at: <%= 1.day.ago %>
   updated_at: <%= 1.day.ago %>
+  processed_at: <%= 1.day.ago %>
 
 # column: value
