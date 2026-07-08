@@ -28,7 +28,7 @@
     <%= collection.revenue_ratio %>
   </td>
   <td class="p-4">
-    <%= link_to collection.articles.count, admin_collection_path(collection, tab: 'articles') %>
+    <%= link_to(@articles_count_by_collection_uuid&.[](collection.uuid) || collection.articles.count, admin_collection_path(collection, tab: 'articles')) %>
   </td>
   <td class="p-4">
     <%= link_to collection.orders_count, admin_collection_path(collection, tab: 'orders') %>
