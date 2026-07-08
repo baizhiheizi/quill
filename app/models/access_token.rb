@@ -29,6 +29,7 @@ class AccessToken < ApplicationRecord
 
   validates :value, presence: true, uniqueness: true
   validates :memo, presence: true
+  validate :within_per_user_limit, on: :create
 
   after_initialize if: :new_record? do
     self.value = SecureRandom.uuid
@@ -36,7 +37,24 @@ class AccessToken < ApplicationRecord
 
   scope :kept, -> { without_deleted }
 
+  # Defense-in-depth cap behind the `access_tokens/user` throttle. Limits how
+  # many active (non-soft-deleted) tokens a single user can hold — long-lived
+  # credentials that otherwise have no mint-rate bound.
+  def self.per_user_limit
+    20
+  end
+
   def desensitized_value
     value.first(4) + ("*" * 6) + value.last(4)
+  end
+
+  private
+
+  def within_per_user_limit
+    return if user_id.blank?
+
+    return if user.access_tokens.kept.count < self.class.per_user_limit
+
+    errors.add(:base, :token_limit_exceeded, limit: self.class.per_user_limit)
   end
 end

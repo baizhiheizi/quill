@@ -2,6 +2,12 @@ en:
   activerecord:
     models:
       article: Article
+    errors:
+      models:
+        access_token:
+          attributes:
+            base:
+              token_limit_exceeded: "You've reached the limit of %{limit} access tokens. Delete an unused one first."
     attributes:
       article:
         title: Title

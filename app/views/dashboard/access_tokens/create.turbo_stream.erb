@@ -1,19 +1,30 @@
-<%= turbo_stream.prepend "#{dom_id current_user}_access_tokens_list" do %>
-  <div id="<%= dom_id @access_token %>" class="border-b py-2 px-4">
-    <div class="flex items-center space-x-4">
-      <div class=""><%= @access_token.memo %></div>
-      <div class="flex-1 flex justify-center">
-        <code class="badge badge-soft badge-sm font-mono"><%= @access_token.value %></code>
-      </div>
-      <div class="">
-        <%= button_to t('delete'), 
-          dashboard_access_token_path(@access_token), 
-          method: :delete,
-          class: "btn btn-soft btn-error btn-sm" %>
+<% if @access_token.persisted? %>
+  <%= turbo_stream.prepend "#{dom_id current_user}_access_tokens_list" do %>
+    <div id="<%= dom_id @access_token %>" class="border-b py-2 px-4">
+      <div class="flex items-center space-x-4">
+        <div class=""><%= @access_token.memo %></div>
+        <div class="flex-1 flex justify-center">
+          <code class="badge badge-soft badge-sm font-mono"><%= @access_token.value %></code>
+        </div>
+        <div class="">
+          <%= button_to t('delete'),
+            dashboard_access_token_path(@access_token),
+            method: :delete,
+            class: "btn btn-soft btn-error btn-sm" %>
+        </div>
       </div>
     </div>
-  </div>
-<% end %>
+  <% end %>
 
-<%= turbo_stream.update "modal" do %>
+  <%= turbo_stream.update "modal" do %>
+  <% end %>
+<% else %>
+  <%= turbo_stream.update "modal" do %>
+    <div class="p-4">
+      <div class="alert alert-error mb-4">
+        <%= safe_join(@access_token.errors.full_messages, tag.br) %>
+      </div>
+      <%= render partial: "form", locals: { } %>
+    </div>
+  <% end %>
 <% end %>
