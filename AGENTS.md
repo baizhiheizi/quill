@@ -88,6 +88,16 @@ bin/benchmark article_search     # filter by scenario name
 
 See `test/benchmarks/README.md` for env vars and limitations. Stdlib-only; not run in CI.
 
+### Frontend efficiency
+
+```bash
+bin/measure-frontend-efficiency            # bundle sizes, lazy-loading & motion coverage, listener-leak sweep
+bin/measure-frontend-efficiency --json     # machine-readable (for before/after diffs / future CI baselines)
+bin/measure-frontend-efficiency --minify   # also measure minified JS (builds once; restores dev build)
+```
+
+Stdlib-only; no Rails boot. Gracefully reports `not built` / `null` when `app/assets/builds/` or `node_modules/` are absent. Not run in CI.
+
 ### Lint
 
 ```bash
