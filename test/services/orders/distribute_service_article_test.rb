@@ -337,4 +337,57 @@ class Orders::DistributeServiceArticleTest < ActiveSupport::TestCase
       assert_equal referenced_article.author.mixin_uuid, reference_transfer.opponent_id
     end
   end
+
+  # === Concurrency: row lock guards double distribution ===
+  #
+  # Both `after_create_commit :distribute_async` and
+  # `Orders::BatchDistributeJob` can dispatch distribution for the same order
+  # concurrently. The service must acquire `FOR UPDATE` and re-check
+  # `completed?` under the lock so the transfers are generated only once.
+  ORIGINAL_ALL_TRANSFERS_GENERATED = Order.instance_method(:all_transfers_generated?)
+
+  def with_all_transfers_generated!
+    Order.define_method(:all_transfers_generated?) { true }
+    yield
+  ensure
+    Order.define_method(:all_transfers_generated?, ORIGINAL_ALL_TRANSFERS_GENERATED)
+  end
+
+  test "call is a no-op once the order is already completed" do
+    with_quill_bot_stub do
+      with_all_transfers_generated! do
+        order = create_buy_order!(article: @article, buyer: @reader_one, total: 1.0)
+        Orders::DistributeService.call(order)
+        assert order.reload.completed?
+
+        transfers_before = order.transfers.count
+        Orders::DistributeService.call(order)
+        assert_equal transfers_before, order.transfers.count,
+                     "re-running distribution on a completed order must not create transfers"
+      end
+    end
+  end
+
+  test "concurrent calls generate transfers exactly once" do
+    with_quill_bot_stub do
+      with_all_transfers_generated! do
+        order = create_buy_order!(article: @article, buyer: @reader_one, total: 1.0)
+
+        threads = Array.new(4) do
+          Thread.new do
+            ActiveRecord::Base.connection_pool.with_connection do
+              Orders::DistributeService.call(Order.find(order.id))
+            end
+          end
+        end
+        threads.map(&:join)
+
+        order.reload
+        assert order.completed?, "order should be completed after distribution"
+        # quill_revenue transfer is keyed by a deterministic trace_id derived
+        # from the order, so it must exist exactly once regardless of caller count.
+        assert_equal 1, order.transfers.where(transfer_type: :quill_revenue).count
+      end
+    end
+  end
 end
