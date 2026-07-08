@@ -22,6 +22,18 @@ module CommerceHelpers
     originals&.each { |klass, method| klass.define_singleton_method(:with, method) }
   end
 
+  # `Orders::DistributeJob` re-fetches the order via `Order.find_by`, so
+  # per-instance stubs don't survive the re-fetch. Stub the AASM guard on the
+  # class for the test's duration and restore the original implementation.
+  ORIGINAL_ALL_TRANSFERS_GENERATED = Order.instance_method(:all_transfers_generated?)
+
+  def with_all_transfers_generated!
+    Order.define_method(:all_transfers_generated?) { true }
+    yield
+  ensure
+    Order.define_method(:all_transfers_generated?, ORIGINAL_ALL_TRANSFERS_GENERATED)
+  end
+
   def build_payment_memo(type:, article: nil, collection: nil, citer: nil, follow_id: nil)
     payload = { "t" => type }
     payload["a"] = article.uuid if article

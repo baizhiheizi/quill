@@ -344,14 +344,6 @@ class Orders::DistributeServiceArticleTest < ActiveSupport::TestCase
   # `Orders::BatchDistributeJob` can dispatch distribution for the same order
   # concurrently. The service must acquire `FOR UPDATE` and re-check
   # `completed?` under the lock so the transfers are generated only once.
-  ORIGINAL_ALL_TRANSFERS_GENERATED = Order.instance_method(:all_transfers_generated?)
-
-  def with_all_transfers_generated!
-    Order.define_method(:all_transfers_generated?) { true }
-    yield
-  ensure
-    Order.define_method(:all_transfers_generated?, ORIGINAL_ALL_TRANSFERS_GENERATED)
-  end
 
   test "call is a no-op once the order is already completed" do
     with_quill_bot_stub do
