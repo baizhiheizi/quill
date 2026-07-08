@@ -9,23 +9,26 @@ metadata:
 
 ## Current state
 
-- **Run 28915834322 on 2026-07-08 03:55 UTC.** Repo: baizhiheizi/quill (Rails 8.1, Ruby 4.0.5). AGENTS.md exists.
+- **Run 28940715564 on 2026-07-08 12:30 UTC.** Repo: baizhiheizi/quill (Rails 8.1, Ruby 4.0.5). AGENTS.md exists.
 - **Open Repo Assist PRs**:
-  1. **Draft PR — perf dashboard block/subscribe users** — branch `repo-assist/perf-dashboard-block-subscribe-users-eager-load-2026-07-08` (commit `a7ec2ef8`, 5 files +82/-6). Adds `dashboard_user_field_preloads` helper; eager-loads avatar chain on BlockUsers/SubscribeUsers; batches per-row action_store check into `pluck(:target_id).to_set`. Patch + bundle at `/tmp/gh-aw/aw-repo-assist-perf-dashboard-block-subscribe-users-eager-load-2026-07-08.{patch,bundle}`. Awaiting maintainer-revival.
+  1. **Draft PR — perf articles show page** — branch `repo-assist/perf-article-show-action-store-2026-07-08` (commit `3ce8c929`, 5 files +233/-49). Adds `Article.with_show_associations` scope; batches per-call action_store / order / readers queries with `pluck(:target_id).to_set` + grouped Order count; preloads random_readers sample with avatar chain. Patch + bundle at `/tmp/gh-aw/aw-repo-assist-perf-article-show-action-store-2026-07-08.{patch,bundle}`. Awaiting maintainer-revival.
+  2. **Draft PR — perf users subscribe lists** — branch `repo-assist/perf-users-subscribe-action-store-2026-07-08` (commit `40b5648b`, 3 files +53/-0). Adds shared `preloaded_subscribe_user_ids` + `users_user_field_preloads` helpers to `Users::BaseController`; applies both to `Users::SubscribeUsersController#index` and `Users::SubscribeByUsersController#index`. Patch + bundle at `/tmp/gh-aw/aw-repo-assist-perf-users-subscribe-action-store-2026-07-08.{patch,bundle}`. Awaiting maintainer-revival.
 - **Other open PRs**: none.
 - **Open issues**: 9 (all AI-generated). #1789 (Monthly Activity) updated.
-- **Recent merges (2026-07-07 → 2026-07-08)**: PR #1861 (ApplicationJob retry matrix), #1860 (Order distribution row lock), #1859 (Solid Queue worker pools), #1858 (access token per-user cap), #1857 (search/API DoS hardening), #1856 (per-endpoint rate throttles + shared cache), #1852 (value-net.md), #1850 (lexxy), #1849 (graphql), #1848, #1845, #1844, #1843, #1842, #1838, #1837 — all by `an-lee`. Maintainer merged #1849/#1850 individually, superseding this run's prior bundle PR.
+- **Recent merges (2026-07-08)**: PR #1862 (perf dashboard block/subscribe users) — the prior run's draft revived by an-lee. Earlier this week: #1861, #1860, #1859, #1858, #1857, #1856, #1852, #1850, #1849, #1848, #1845, #1844, #1843, #1842, #1838, #1837 — all by `an-lee`.
 
-## This run (28915834322)
+## This run (28940715564)
 
-- **Selected tasks**: Task 2, Task 4, Task 8, plus Task 11.
-- **Task 2 (Issue Comment)**: No engagement opportunities. All 9 open issues are AI-generated proposals/audits or system-managed tracking issues. Substituted (no-op).
-- **Task 4 (Engineering Investments)**: No actionable item this run. Maintainer merged 6 substantive PRs today; no Dependabot, CI, or build gap remains. Substituted (no-op).
-- **Task 8 (Performance Improvements)**: Created draft PR (commit `a7ec2ef8`) adding eager-load + batched action_store check on `Dashboard::BlockUsersController#index` and `Dashboard::SubscribeUsersController#index`. Bundle preserved.
-- **Task 11**: Updated #1789 body (~7,500 bytes). Suggested Actions pruned: removed superseded "Close Dependabot #1849 + #1850"; added the new perf PR with commit `a7ec2ef8`; retained #1847 (with note that #1856/#1857 partially close it), #1840 (with note that #1859/#1860/#1861 partially close it), #1839, #1821. Run History prepended.
+- **Selected tasks**: Task 3, Task 8, Task 5, plus Task 11.
+- **Task 3 (Issue Investigation and Fix)**: No bug/help-wanted/good-first-issue open. Substituted (no-op).
+- **Task 8 (Performance Improvements)**: Created draft PR (commit `3ce8c929`) closing the public article show page N+1 — adds `Article.with_show_associations` scope separate from the index-side `with_associations`; batches per-call `user.upvote_article?` / `downvote_article?` / `article.buy_orders.count` / `reward_orders.count` / `readers.count` / `random_readers(24)` via primed Sets; partials (`_votes`, `_floating_bar`, `_buyers`) consult primed values with `defined?(@var)` fallback so the same partials still render correctly from the unprimed `turbo_stream` responses of UpvotedArticles/DownvotedArticles controllers.
+- **Task 5 (Coding Improvements)**: Created draft PR (commit `40b5648b`) extending the #1862 pattern to the public profile subscribers / subscribing lists (`Users::SubscribeUsersController`, `Users::SubscribeByUsersController`). The user-card subscribes-link modal rendering fires the same `shared/_avatar` chain and `subscribe_users/_subscribe_button` partial per row. Helpers (`preloaded_subscribe_user_ids`, `users_user_field_preloads`) live in `Users::BaseController` (guest-safe: empty Set when `current_user` is nil, partial falls through to live helper). Considered but rejected: refactor between `MarkdownRenderService` / `RichTextRenderService` (real duplication but too risky without maintainer signal).
+- **Task 11**: Updated #1789 body. Suggested Actions pruned: removed now-merged #1862 entry; added the two new draft PRs (article show + users subscribe); retained #1847, #1840, #1839, #1821. Run History prepended with the 2026-07-08 12:30 UTC entry; trimmed earlier entries to fit the 10 KB safe-output cap.
+- **Environmental note**: `test/controllers/articles_controller_test.rb` and `test/integration/dashboard_tabbar_guest_test.rb` fail on the pre-existing `application.css` asset-pipeline error (no `bun`/`esbuild` in this runner); reproduced on `origin/main` without this branch's changes. Documented in both PR bodies.
 
 ## Earlier runs — see #1789 Run History
 
+- 28915834322: Draft PR (perf dashboard block/subscribe users, `a7ec2ef8`). **Merged 2026-07-08 as PR #1862.**
 - 28885552691: Bundle Dependabot #1849 + #1850 → commit `55cb1805`. **Superseded 2026-07-07** — maintainer merged #1849 + #1850 individually.
 - 28853214649: Admin articles avatar preload → commit `c2dd8e67`. **Merged 2026-07-07 as PR #1845.**
 - 28825462623: Task 4 no-op (single Dependabot #1842 was aasm major bump).
@@ -44,8 +47,10 @@ metadata:
 - **Issue #1821** (BigDecimal/DistributeService audit, F1-F12): F9 closed via #1828. F1/F2/F3 still HIGH; contingent offer in #1821 comment awaiting maintainer ack.
 - Respect issue #1571's 5-cycle cooldown on payment/Web3 resilience.
 - #1667 + #1686 + #1694 + #1771 + #1790 + #1794-#1798: maintainer-led design discussions, out of scope.
-- **Dashboard-#index N+1 revival class: COMPLETE** (#1802/#1815/#1829/#1830/#1833 — all merged + this run's BlockUsers/SubscribeUsers draft awaiting revival).
-- **Admin-#index N+1 revival class: COMPLETE** (Orders/Payments/Transfers/Bonuses in main + #1837 merged + #1845 merged).
+- **Dashboard-#index N+1 revival class: COMPLETE** (#1802/#1815/#1829/#1830/#1833/#1862 all merged).
+- **Admin-#index N+1 revival class: COMPLETE** (Orders/Payments/Transfers/Bonuses in main + #1837 + #1845 merged).
+- **Public article show N+1 revival class: IN FLIGHT** — this run's `perf-article-show-action-store` draft awaiting revival.
+- **Users namespace N+1 revival class: IN FLIGHT** — this run's `perf-users-subscribe-action-store` is the first entry; `Users::ArticlesController#index` and `Users::CommentsController#index` are the obvious follow-ups (same `shared/_avatar` chain).
 - **Test gaps (low-value)**: Only `MarkdownRenderService` direct unit tests remain.
 
 ## Notes
