@@ -3,6 +3,12 @@ zh-CN:
     models:
       article: 文章
       collection: 合辑
+    errors:
+      models:
+        access_token:
+          attributes:
+            base:
+              token_limit_exceeded: "访问令牌数量已达上限（%{limit} 个），请先删除不再使用的令牌。"
     attributes:
       article:
         title: 标题

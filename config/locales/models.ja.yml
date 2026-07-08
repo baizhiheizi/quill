@@ -2,6 +2,12 @@ ja:
   created_at: 投稿日
   updated_at: 更新日
   activerecord:
+    errors:
+      models:
+        access_token:
+          attributes:
+            base:
+              token_limit_exceeded: "アクセストークンは%{limit}個が上限です。使わないものを削除してください。"
     models:
       article: 記事
     attributes:

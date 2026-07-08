@@ -6,7 +6,13 @@ class Dashboard::AccessTokensController < Dashboard::BaseController
   end
 
   def create
-    @access_token = current_user.access_tokens.create access_token_params
+    @access_token = current_user.access_tokens.new access_token_params
+
+    return if @access_token.save
+
+    # Validation failed (e.g. per-user token cap reached). Re-show the form
+    # with the errors inside the modal slot.
+    render :create, status: :unprocessable_entity
   end
 
   def destroy
