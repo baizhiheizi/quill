@@ -1,0 +1,140 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+# Emit one-line proxy metrics for energy-impacting frontend changes, so before/after
+# deltas become a single command instead of re-derived grep invocations every run.
+#
+# Usage:
+#   bin/measure-frontend-efficiency            # human-readable report
+#   bin/measure-frontend-efficiency --json     # machine-readable (for future CI baselines)
+#   bin/measure-frontend-efficiency --minify   # also measure minified JS (slow; builds once)
+#
+# Stdlib only; no Rails boot, no DB. ~1s (without --minify). Gracefully degrades when
+# build artifacts or node_modules are missing (fresh clone before `bun install`).
+
+require "fileutils"
+require "json"
+require "open3"
+require "shellwords"
+require "tmpdir"
+
+APP_ROOT = File.expand_path("..", __dir__)
+VIEWS = "app/views"
+CONTROLLERS = "app/javascript/controllers"
+BUILD_JS = "app/assets/builds/application.js"
+
+# --- helpers ----------------------------------------------------------------
+
+# Count lines under +dir+ matching +pattern+, optionally filtered by +extra_grep+.
+def count_matches(dir, pattern, extra_grep: nil)
+  cmd = "grep -rn #{pattern.shellescape} #{dir.shellescape} 2>/dev/null"
+  cmd = "#{cmd} | grep #{extra_grep.shellescape}" if extra_grep
+  `#{cmd} | wc -l`.to_i
+end
+
+# Distinct values for a class-prefix regex (e.g. "transition-[a-z]*") -> { name => count }.
+def class_breakdown(dir, regex)
+  out = `grep -rho #{regex.shellescape} #{dir.shellescape} 2>/dev/null | sort | uniq -c | sort -rn`
+  out.each_line.with_object({}) do |line, acc|
+    n, name = line.strip.split(/\s+/, 2)
+    acc[name] = n.to_i if name
+  end
+end
+
+# Bytes of a file, or nil when it isn't built yet.
+def bundle_size(path)
+  File.size(path)
+rescue StandardError
+  nil
+end
+
+# Build the minified JS bundle and return its size, restoring the dev build afterwards.
+# Returns nil if esbuild / the config isn't available.
+def minified_js_size
+  return nil unless File.exist?("esbuild.config.js") && File.exist?("node_modules/.bin/esbuild")
+
+  return nil unless File.exist?(BUILD_JS) # nothing to back up -> skip safely
+
+  backup = File.join(Dir.mktmpdir("fe-eff"), "application.js")
+  FileUtils.cp(BUILD_JS, backup)
+  _out, status = Open3.capture2e("node esbuild.config.js --minify")
+  size = status.success? ? bundle_size(BUILD_JS) : nil
+  FileUtils.cp(backup, BUILD_JS)
+  size
+rescue StandardError
+  nil
+end
+
+# --- gather metrics ---------------------------------------------------------
+
+Dir.chdir(APP_ROOT) do
+  branch = `git rev-parse --abbrev-ref HEAD 2>/dev/null`.strip
+  sha = `git rev-parse --short HEAD 2>/dev/null`.strip
+
+  js_dev = bundle_size(BUILD_JS)
+  js_min = ARGV.include?("--minify") ? minified_js_size : nil
+  css = bundle_size("app/assets/builds/application.css")
+
+  img_total = count_matches(VIEWS, "image_tag")
+  img_lazy = count_matches(VIEWS, "image_tag", extra_grep: "lazy:.*true")
+  lazy_pct = img_total.zero? ? 0 : (img_lazy.to_f / img_total * 100).round(1)
+
+  transitions = class_breakdown(VIEWS, "transition-[a-z]*")
+  animates = class_breakdown(VIEWS, "animate-[a-z0-9-]*")
+  gpu_motion = %w[transition-all transition-transform].sum { |k| transitions[k].to_i } +
+               animates.values.sum
+  motion_reduce = count_matches(VIEWS, "motion-reduce")
+
+  # Listener-leak sweep: controllers whose connect() registers a listener and which
+  # (heuristically) provide a disconnect() that removes it.
+  listeners = cleanup = 0
+  Dir.glob("#{CONTROLLERS}/*.js").each do |f|
+    src = File.read(f)
+    next unless src.match?(/connect\(\)/) && src.include?("addEventListener")
+
+    listeners += 1
+    cleanup += 1 if src.match?(/disconnect\(\)/)
+  end
+
+  report = {
+    branch: branch,
+    commit: sha,
+    js_bundle: { dev: js_dev, minified: js_min },
+    css_bundle: css,
+    lazy_loading: { total: img_total, with_lazy: img_lazy, pct: lazy_pct },
+    transitions: transitions,
+    animates: animates,
+    gpu_motion: gpu_motion,
+    motion_reduce_aware: motion_reduce,
+    listener_leak: { add_in_connect: listeners, with_disconnect: cleanup,
+                     leaks: listeners - cleanup }
+  }
+
+  if ARGV.include?("--json")
+    puts JSON.pretty_generate(report)
+  else
+    bytes = ->(n) { n.nil? ? "not built" : format("%<n>d B", n: n) }
+    puts "Frontend efficiency report \xE2\x80\x94 #{branch} @ #{sha}"
+    puts
+    puts "JS bundle (esbuild):"
+    puts "  dev:      #{bytes.call(js_dev)}"
+    min_line = js_min.nil? ? "not measured (pass --minify, or run `node esbuild.config.js --minify`)" : bytes.call(js_min)
+    puts "  minified: #{min_line}"
+    puts
+    puts "CSS bundle (tailwind):"
+    puts "  application.css: #{bytes.call(css)}"
+    puts
+    puts "Lazy-loading coverage (image_tag in #{VIEWS}/):"
+    puts "  total image_tags:   #{img_total}"
+    puts "  with lazy: true:    #{img_lazy}  (#{format('%<p>.1f', p: lazy_pct)}%)"
+    puts
+    puts "Transition coverage (transition-*, animate-* in #{VIEWS}/):"
+    transitions.merge(animates).each { |name, n| puts "  #{name}: #{n}" }
+    puts "  total GPU-using:     #{gpu_motion}"
+    puts "  motion-reduce-aware: #{motion_reduce} occurrences"
+    puts
+    puts "Listener-leak sweep (#{CONTROLLERS}/*.js):"
+    puts "  addEventListener in connect():  #{listeners}"
+    puts "  with disconnect() cleanup:      #{cleanup}  (#{listeners - cleanup} leaks)"
+  end
+end
