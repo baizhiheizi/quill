@@ -1,0 +1,1 @@
+rack_attack: cache=Rails.cache (Solid Cache). Throttles: req/ip 600/5m prod; admin 5/20s; oauth 10/1m; api 300/5m; comments 30/1m; votes 200/1m; subscribe 60/1m; pre_orders 10/1m; access_tokens 5/1h; search 20/1m. throttled_responder JSON for /api with Retry-After.

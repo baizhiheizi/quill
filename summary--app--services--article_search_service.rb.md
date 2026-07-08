@@ -1,1 +1,1 @@
-ArticleSearchService chainable query. .call(params) returns relation. Stages: query (Ransack OR title/intro/author/tag), tagging (all), filter (lately/revenue/subscribed/bought/popularity), filter_block_authors, select_in_time_range, localize.
+ArticleSearchService chainable. .call(params) returns relation. Stages: query (Ransack OR title/intro/author/tag), tagging (all), filter (lately/revenue/subscribed/bought/popularity), filter_block_authors, select_in_time_range. QUERY_LENGTH_LIMIT=64.

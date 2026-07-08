@@ -1,2 +1,1 @@
-7030
-Orders::DistributeService. MINIMUM_AMOUNT=0.00000001. Idempotent transfers via create_with+find_or_create_by!(trace_id: MixinBot::Utils.unique_uuid(trace_id, opponent_uuid)). Branches: distribute_article_order!, distribute_collection_order!. 5 transfer types: quill_revenue (10% platform), author_revenue (residual), reader_revenue (40% pro-rata by total or value_btc), reference_revenue (cite articles), collection_revenue (avg per collection buyer). early_orders_with_the_same_currency picks total vs value_btc weighting. complete! marks order done when paid.
+distribute_service: row-lock transaction; re-checks completed?; branches Article vs Collection; Article: platform+readers+references+collection+author; uses total or value_btc by currency; idempotent via trace_id.

@@ -10,6 +10,6 @@
   {"t": "API Reference", "s": "API-Reference", "l": 1},
   {"t": "Getting Started", "s": "Getting-Started", "l": 1},
   {"t": "For Agents", "s": "For-Agents", "l": 1},
-  {"t": "AGENTS.md", "s": "AGENTS.md", "l": 2, "p": "For-Agents"},
-  {"t": "llms.txt", "s": "llms.txt", "l": 2, "p": "For-Agents"}
+  {"t": "AGENTS.md", "s": "AGENTS", "l": 2, "p": "For-Agents"},
+  {"t": "llms.txt", "s": "llms-txt", "l": 2, "p": "For-Agents"}
 ]

@@ -1,0 +1,1 @@
+application_job: discard permanent (Deserialization/RecordNotFound/Mixin 4xx); retry transient (Faraday/SSL/Mixin 5xx) polynomial 5x; retry Deadlocked 3x; rescue_from generic Mixin via MixinBot.retryable?; report_discarded central.
