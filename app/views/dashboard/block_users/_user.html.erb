@@ -4,11 +4,12 @@
     <span class="truncate max-w-24"><%= user.name %></span>
   <% end %>
   <div class="">
-    <% if current_user.block_user?(user) %>
-      <%= button_to t('unblock_user'), 
-        block_user_path(user.uid), 
+    <% if (@preloaded_block_user_ids || []).include?(user.id) %>
+      <%= button_to t("unblock_user"),
+        block_user_path(user.uid),
         method: :delete,
         class: "cursor-pointer opacity-75" %>
     <% end %>
   </div>
 </div>
+
