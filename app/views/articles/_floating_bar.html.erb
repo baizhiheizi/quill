@@ -3,9 +3,20 @@
     overflow on mobile (SC-008). %>
 <div data-controller="floating" id="<%= dom_id(article) %>_floating_bar" class="fixed inset-x-0 bottom-0 z-30 translate-y-24 border-t border-base-300 bg-base-100 px-4 py-3 transition ease-in-out sm:hidden">
   <div class="flex w-full items-center justify-between">
+    <%# Consult the controller's primed `upvote_article_actions` /
+        `downvote_article_actions` Sets instead of calling
+        `user.upvote_article?(article)` / `downvote_article?(article)` —
+        each of those action_store helpers does 1 SELECT per call, and this
+        partial consults each twice (icon state + button target), so without
+        the prime the mobile show view fires 4 extra SELECTs. Fall back to
+        the live helper when the partial is rendered from another site
+        (e.g. a feed card, or the turbo_stream response from
+        `UpvotedArticlesController#update`). %>
+    <% upvoted = defined?(@preloaded_upvoted_article_ids) ? @preloaded_upvoted_article_ids.include?(article.id) : user&.upvote_article?(article) %>
+    <% downvoted = defined?(@preloaded_downvoted_article_ids) ? @preloaded_downvoted_article_ids.include?(article.id) : user&.downvote_article?(article) %>
     <div class="grid grid-cols-3">
       <div class="relative flex items-center space-x-1 border-inherit px-2">
-        <span class="i-[tabler--thumb-up] size-5 <%= user&.upvote_article?(article) ? 'text-primary' : 'text-base-content/50' %>"></span>
+        <span class="i-[tabler--thumb-up] size-5 <%= upvoted ? 'text-primary' : 'text-base-content/50' %>"></span>
         <span class="text-sm text-base-content/70">
           <%= article.upvotes_count %>
         </span>
@@ -15,14 +26,14 @@
           <% else %>
             <%= link_to '', login_path(return_to: user_article_url(article.author, article.uuid)), data: { turbo_frame: :modal }, class: 'absolute inset-0' %>
           <% end %>
-        <% elsif user&.upvote_article? article %>
+        <% elsif upvoted %>
           <%= link_to '', upvoted_article_path(article), data: { turbo_method: :delete }, class: 'absolute inset-0' %>
         <% else %>
           <%= link_to '', upvoted_article_path(article), data: { turbo_method: :put }, class: 'absolute inset-0' %>
         <% end %>
       </div>
       <div class="relative flex items-center space-x-1 border-inherit px-2">
-        <span class="i-[tabler--thumb-down] size-5 <%= user&.downvote_article?(article) ? 'text-error' : 'text-base-content/50' %>"></span>
+        <span class="i-[tabler--thumb-down] size-5 <%= downvoted ? 'text-error' : 'text-base-content/50' %>"></span>
         <span class="text-sm text-base-content/70">
           <%= article.downvotes_count %>
         </span>
@@ -32,7 +43,7 @@
           <% else %>
             <%= link_to '', login_path(return_to: user_article_url(article.author, article.uuid)), data: { turbo_frame: :modal }, class: 'absolute inset-0' %>
           <% end %>
-        <% elsif user&.downvote_article? article %>
+        <% elsif downvoted %>
           <%= link_to '', downvoted_article_path(article), data: { turbo_method: :delete }, class: 'absolute inset-0' %>
         <% else %>
           <%= link_to '', downvoted_article_path(article), data: { turbo_method: :put }, class: 'absolute inset-0' %>

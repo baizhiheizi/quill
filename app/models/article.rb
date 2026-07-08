@@ -122,7 +122,36 @@ class Article < ApplicationRecord
     detect_locale_async if content_changed_since_save?
   end
 
+  # Eager-load chain consumed by the public article index / search results
+  # (`ArticleSearchService` and `ArticlesController#index`):
+  #   - `:currency`   → `article.price_tag`
+  #   - `:tags`       → tag chips
+  #   - `:author`     → author byline + `user_path(article.author)`
+  # The show page uses a heavier chain (see `with_show_associations`) —
+  # it needs the article's own `cover_attachment.blob`, the `collection`
+  # + its cover, and the `article_references` list.
   scope :with_associations, -> { includes(:currency, :tags, :author) }
+
+  # Eager-load chain consumed by `ArticlesController#show` →
+  # `articles/show.html.erb`. Includes the base `with_associations`
+  # shape plus:
+  #   - `:collection` (+ its `cover_attachment.blob`) → the "published in
+  #     <collection>" pill in `_header.html.erb` and the collection card
+  #     in `_widgets.html.erb`. `Collection#cover_url` walks the
+  #     ActiveStorage chain, so the attachment and its blob must be
+  #     loaded together.
+  #   - `cover_attachment: :blob` → `article.cover.attached?` +
+  #     `cover.metadata` + `remote_image_tag article.cover_url` in
+  #     `_header.html.erb`. Without this preload the show page fires
+  #     1 extra SELECT to load the cover blob on every visit.
+  #   - `:article_references` → the references card in `_widgets.html.erb`.
+  scope :with_show_associations, -> {
+    with_associations.includes(
+      :article_references,
+      { cover_attachment: :blob },
+      { collection: { cover_attachment: :blob } }
+    )
+  }
   scope :without_blocked, -> { where.not(state: :blocked) }
   scope :without_free, -> { where("price > ?", 0) }
   scope :only_free, -> { where(price: 0.0) }
