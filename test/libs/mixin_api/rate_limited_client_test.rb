@@ -12,9 +12,16 @@ class MixinApi::RateLimitedClientTest < ActiveSupport::TestCase
     @scope = :quill_bot
     @inner = Object.new
     @client = MixinApi::RateLimitedClient.new(@inner, scope: @scope, mode: :background)
+    @original_jitter = Settings.mixin_api_gate.backoff.jitter_ratio
+    @original_max_attempts = Settings.mixin_api_gate.background_max_attempts
+    @original_max_wait = Settings.mixin_api_gate.background_max_wait_seconds
+    Settings.mixin_api_gate.backoff.jitter_ratio = 0
   end
 
   teardown do
+    Settings.mixin_api_gate.backoff.jitter_ratio = @original_jitter
+    Settings.mixin_api_gate.background_max_attempts = @original_max_attempts
+    Settings.mixin_api_gate.background_max_wait_seconds = @original_max_wait
     Rails.cache = @original_cache
   end
 
@@ -63,7 +70,7 @@ class MixinApi::RateLimitedClientTest < ActiveSupport::TestCase
     assert_equal 1, attempts
   end
 
-  test "safe_snapshots-style GET retries indefinitely in background mode" do
+  test "safe_snapshots-style GET retries then succeeds in background mode" do
     attempts = 0
     @inner.define_singleton_method(:get) do |path, **_kwargs|
       attempts += 1
@@ -78,6 +85,21 @@ class MixinApi::RateLimitedClientTest < ActiveSupport::TestCase
 
     result = @client.get("/safe/snapshots", limit: 500, order: "ASC")
     assert_equal 1, result.data.length
+    assert_equal 3, attempts
+  end
+
+  test "background mode re-raises RateLimitError after max attempts" do
+    Settings.mixin_api_gate.background_max_attempts = 3
+    Settings.mixin_api_gate.background_max_wait_seconds = 600
+    attempts = 0
+    @inner.define_singleton_method(:get) do |*_args, **_kwargs|
+      attempts += 1
+      raise MixinBot::RateLimitError.new(
+        code: 429, description: "Too Many Requests", verb: "GET", path: "/safe/snapshots", retry_after: 0
+      )
+    end
+
+    assert_raises(MixinBot::RateLimitError) { @client.get("/safe/snapshots") }
     assert_equal 3, attempts
   end
 

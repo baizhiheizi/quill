@@ -82,4 +82,38 @@ class CurrencyTest < ActiveSupport::TestCase
     @btc.raw = @btc.raw.except("icon_url")
     assert_nil @btc.icon_url
   end
+
+  test "set_defaults caches Mixin asset lookups" do
+    original_cache = Rails.cache
+    Rails.cache = ActiveSupport::Cache.lookup_store(:memory_store)
+    Rails.cache.clear
+
+    asset_id = SecureRandom.uuid
+    calls = 0
+    payload = {
+      "asset_id" => asset_id,
+      "symbol" => "TST",
+      "chain_id" => SecureRandom.uuid,
+      "price_usd" => "1.0",
+      "price_btc" => "0.00001"
+    }
+
+    with_quill_bot_stub do
+      QuillBot.api.define_singleton_method(:asset) do |_id|
+        calls += 1
+        { "data" => payload }
+      end
+
+      first = Currency.new(asset_id: asset_id)
+      first.valid?
+      second = Currency.new(asset_id: asset_id)
+      second.valid?
+
+      assert_equal 1, calls
+      assert_equal "TST", first.symbol
+      assert_equal "TST", second.symbol
+    end
+  ensure
+    Rails.cache = original_cache
+  end
 end

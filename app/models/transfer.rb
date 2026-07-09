@@ -37,6 +37,7 @@
 
 class Transfer < ApplicationRecord
   MINIMUM_AMOUNT = 0.000_000_01
+  PENDING_BATCH_LIMIT = 20
 
   belongs_to :source, polymorphic: true, optional: true
   belongs_to :wallet, class_name: "MixinNetworkUser", primary_key: :uuid, inverse_of: :transfers, optional: true
@@ -139,8 +140,14 @@ class Transfer < ApplicationRecord
     end
   rescue MixinBot::InsufficientBalanceError
     Rails.logger.warn "Transfer insufficient balance ##{id} #{Time.current}"
+  rescue MixinBot::RateLimitError => e
+    defer_for_mixin_api!(e)
   rescue StandardError => e
-    Rails.logger.error e
+    if MixinBot.retryable?(e)
+      defer_for_mixin_api!(e)
+    else
+      Rails.logger.error e
+    end
   end
 
   def safe_receiver
@@ -241,10 +248,31 @@ class Transfer < ApplicationRecord
   end
 
   def self.process_pending!
-    unprocessed.where("retry_at IS NULL OR retry_at < ?", Time.current).find_each(&:process_with_rescue!)
+    if MixinApi::Gate.throttled?(:quill_bot)
+      Rails.logger.info(
+        format(
+          "[Transfer] skipping process_pending! — quill_bot backoff remaining %.1fs",
+          MixinApi::Gate.backoff_remaining(:quill_bot)
+        )
+      )
+      return
+    end
+
+    unprocessed
+      .where("retry_at IS NULL OR retry_at < ?", Time.current)
+      .order(:created_at)
+      .limit(PENDING_BATCH_LIMIT)
+      .each(&:process_with_rescue!)
   end
 
   private
+
+  def defer_for_mixin_api!(error)
+    remaining = MixinApi::Gate.backoff_remaining(:quill_bot)
+    delay = remaining.positive? ? remaining : 30.seconds
+    Rails.logger.warn "Transfer ##{id} deferred for Mixin API (#{error.class}): retry in #{delay.round(1)}s"
+    update!(retry_at: Time.current + delay)
+  end
 
   def lock_not_available?(error)
     return true if error.is_a?(ActiveRecord::LockWaitTimeout)

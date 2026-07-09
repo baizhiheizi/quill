@@ -28,7 +28,10 @@
 #
 
 class MixinNetworkSnapshot < ApplicationRecord
-  POLLING_INTERVAL = 0.1
+  # Catch-up pacing: at least one gate interval between full-page polls.
+  POLLING_INTERVAL = 0.5
+  # Idle pacing when caught up (partial page).
+  POLLING_IDLE_INTERVAL = 5.0
   POLLING_LIMIT = 500
   POLL_RETRYABLE_ERRORS = [
     MixinBot::RateLimitError,
@@ -66,6 +69,8 @@ class MixinNetworkSnapshot < ApplicationRecord
     @__retry = 0
 
     loop do
+      wait_for_gate_backoff!
+
       offset = last_polled_at
 
       r = QuillBot.api.safe_snapshots(offset:, limit: POLLING_LIMIT, order: "ASC", app: QuillBot.api.client_id)
@@ -98,12 +103,7 @@ class MixinNetworkSnapshot < ApplicationRecord
 
       Rails.cache.write "last_polled_at", r["data"].last["created_at"] if r["data"].length.positive?
 
-      if r["data"].length < POLLING_LIMIT
-        # pull down the kernel outputs
-        sleep POLLING_INTERVAL * 10
-      else
-        sleep POLLING_INTERVAL
-      end
+      sleep poll_sleep_duration(r["data"].length)
 
       @__retry = 0
     rescue *POLL_RETRYABLE_ERRORS => e
@@ -118,6 +118,16 @@ class MixinNetworkSnapshot < ApplicationRecord
       handle_poll_error(e, notify: true)
       retry
     end
+  end
+
+  def self.wait_for_gate_backoff!
+    remaining = MixinApi::Gate.backoff_remaining(:quill_bot)
+    sleep remaining if remaining.positive?
+  end
+
+  def self.poll_sleep_duration(page_length)
+    base = page_length < POLLING_LIMIT ? POLLING_IDLE_INTERVAL : POLLING_INTERVAL
+    [ base, MixinApi::Gate.backoff_remaining(:quill_bot) ].max
   end
 
   def self.handle_poll_error(error, notify: false)
@@ -138,7 +148,7 @@ class MixinNetworkSnapshot < ApplicationRecord
   end
 
   def self.poll_retry_delay(attempt)
-    base = POLLING_INTERVAL * 10
+    base = POLLING_IDLE_INTERVAL
     [ base * (2**[ attempt, 6 ].min), 60 ].min
   end
 

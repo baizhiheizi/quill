@@ -26,6 +26,7 @@ class Currency < ApplicationRecord
   PUSD_ASSET_ID = "31d2ea9c-95eb-3355-b65b-ba096853bc18"
   XIN_ASSET_ID = "c94ac88f-4671-3976-b60a-09064f1811e8"
   ETH_ASSET_ID = "43d61dcd-e413-450d-80b8-101d5e903357"
+  ASSET_CACHE_TTL = 30.minutes
 
   store_accessor :raw, :name, :icon_url, :change_usd
 
@@ -87,12 +88,7 @@ class Currency < ApplicationRecord
 
   def set_defaults
     if asset_id.present?
-      self.raw =
-        begin
-          QuillBot.api.asset(asset_id)["data"]
-        rescue MixinBot::Error
-          {}
-        end
+      self.raw = fetch_asset_raw
     end
 
     assign_attributes(
@@ -102,5 +98,17 @@ class Currency < ApplicationRecord
       price_usd: raw["price_usd"],
       price_btc: raw["price_btc"]
     )
+  end
+
+  def fetch_asset_raw
+    Rails.cache.fetch(asset_cache_key, expires_in: ASSET_CACHE_TTL) do
+      QuillBot.api.asset(asset_id)["data"]
+    end
+  rescue MixinBot::Error
+    {}
+  end
+
+  def asset_cache_key
+    "currency:asset:#{asset_id}"
   end
 end

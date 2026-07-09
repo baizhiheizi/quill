@@ -459,6 +459,88 @@ class TransferTest < ActiveSupport::TestCase
     end
   end
 
+  test "process_with_rescue! sets retry_at on RateLimitError" do
+    transfer = create_transfer!(trace_id: SecureRandom.uuid)
+
+    with_quill_bot_stub do
+      QuillBot.api.define_singleton_method(:safe_transaction) { |_| raise MixinBot::NotFoundError, "missing" }
+      QuillBot.api.define_singleton_method(:create_safe_transfer) do |**_kwargs|
+        raise MixinBot::RateLimitError.new(
+          code: 429,
+          description: "Too Many Requests",
+          verb: "POST",
+          path: "/safe/transfers"
+        )
+      end
+
+      assert_nothing_raised { transfer.process_with_rescue! }
+
+      transfer.reload
+      assert transfer.retry_at.present?
+      assert transfer.retry_at > Time.current
+      assert_nil transfer.processed_at
+    end
+  end
+
+  test "process_pending! skips when quill_bot gate is throttled" do
+    original_cache = Rails.cache
+    Rails.cache = ActiveSupport::Cache.lookup_store(:memory_store)
+    Rails.cache.clear
+    original_jitter = Settings.mixin_api_gate.backoff.jitter_ratio
+    Settings.mixin_api_gate.backoff.jitter_ratio = 0
+
+    transfer = create_transfer!(trace_id: SecureRandom.uuid)
+    MixinApi::Gate.record_throttle(
+      :quill_bot,
+      MixinBot::RateLimitError.new(
+        code: 429,
+        description: "Too Many Requests",
+        verb: "GET",
+        path: "/safe/snapshots",
+        retry_after: 30
+      )
+    )
+
+    with_quill_bot_stub do
+      QuillBot.api.define_singleton_method(:safe_transaction) { |_| raise MixinBot::NotFoundError, "missing" }
+      QuillBot.api.define_singleton_method(:create_safe_transfer) do |**_kwargs|
+        { "data" => { "snapshot_id" => "snap", "transaction_hash" => "hash" } }
+      end
+
+      Transfer.process_pending!
+
+      assert_nil transfer.reload.processed_at
+    end
+  ensure
+    Settings.mixin_api_gate.backoff.jitter_ratio = original_jitter
+    Rails.cache = original_cache
+  end
+
+  test "process_pending! respects PENDING_BATCH_LIMIT" do
+    Transfer.unprocessed.update_all(processed_at: Time.current)
+
+    original_limit = Transfer::PENDING_BATCH_LIMIT
+    silence_warnings { Transfer.const_set(:PENDING_BATCH_LIMIT, 2) }
+
+    transfers = 3.times.map { create_transfer!(trace_id: SecureRandom.uuid) }
+    processed_ids = []
+
+    with_quill_bot_stub do
+      QuillBot.api.define_singleton_method(:safe_transaction) { |_| raise MixinBot::NotFoundError, "missing" }
+      QuillBot.api.define_singleton_method(:create_safe_transfer) do |**kwargs|
+        processed_ids << kwargs[:request_id]
+        { "data" => { "snapshot_id" => "snap", "transaction_hash" => "hash" } }
+      end
+
+      Transfer.process_pending!
+    end
+
+    assert_equal 2, processed_ids.length
+    assert_equal 1, transfers.count { |t| t.reload.processed_at.nil? }
+  ensure
+    silence_warnings { Transfer.const_set(:PENDING_BATCH_LIMIT, original_limit) } if original_limit
+  end
+
   test "after_commit enqueues ProcessJob on create" do
     assert_enqueued_with(job: Transfers::ProcessJob) do
       create_transfer!(trace_id: SecureRandom.uuid)

@@ -41,9 +41,11 @@ storage:
 mixin_api_gate:
   enabled: true
   interactive_max_wait_seconds: 5
+  background_max_attempts: 10
+  background_max_wait_seconds: 120
   scopes:
     quill_bot:
-      min_interval_ms: 125
+      min_interval_ms: 500
     revenue_bot:
       min_interval_ms: 200
     user:
@@ -52,3 +54,6 @@ mixin_api_gate:
     initial_seconds: 1
     max_seconds: 60
     multiplier: 2
+    jitter_ratio: 0.25
+    cool_down_after_attempts: 5
+    cool_down_seconds: 300

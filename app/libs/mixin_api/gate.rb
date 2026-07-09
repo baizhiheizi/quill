@@ -12,6 +12,10 @@ module MixinApi
       true
     end
 
+    def throttled?(scope)
+      backoff_remaining(scope).positive?
+    end
+
     def acquire(scope, mode: :background)
       return unless enabled?
 
@@ -41,7 +45,7 @@ module MixinApi
         delay = backoff_delay(error, attempt)
         write_cache(scope, :backoff_until, (Time.current + delay).iso8601(6))
         write_cache(scope, :backoff_attempt, attempt)
-        log_throttle(scope, error, delay)
+        log_throttle(scope, error, delay, attempt)
       end
       delay
     end
@@ -50,7 +54,7 @@ module MixinApi
       delay = nil
       mutex(scope).synchronize do
         attempt = read_cache(scope, :backoff_attempt).to_i + 1
-        delay = exponential_backoff(attempt)
+        delay = with_jitter(exponential_backoff_base(attempt))
         write_cache(scope, :backoff_until, (Time.current + delay).iso8601(6))
         write_cache(scope, :backoff_attempt, attempt)
         log_retryable(scope, error, delay)
@@ -69,6 +73,20 @@ module MixinApi
     def interactive_max_wait_seconds
       value = settings.interactive_max_wait_seconds
       value.to_i.positive? ? value.to_i : 5
+    end
+
+    def background_max_attempts
+      value = settings.background_max_attempts
+      value.to_i.positive? ? value.to_i : 10
+    rescue StandardError
+      10
+    end
+
+    def background_max_wait_seconds
+      value = settings.background_max_wait_seconds
+      value.to_i.positive? ? value.to_i : 120
+    rescue StandardError
+      120
     end
 
     def mutexes
@@ -99,16 +117,52 @@ module MixinApi
 
     def backoff_delay(error, attempt)
       retry_after = error.retry_after.to_f
-      return retry_after if retry_after.positive?
-
-      exponential_backoff(attempt)
+      base = retry_after.positive? ? retry_after : exponential_backoff_base(attempt)
+      delay = with_jitter(base)
+      apply_cool_down(delay, attempt)
     end
 
-    def exponential_backoff(attempt)
+    def exponential_backoff_base(attempt)
       initial = settings.backoff.initial_seconds.to_f
       multiplier = settings.backoff.multiplier.to_f
       max_seconds = settings.backoff.max_seconds.to_f
       [ initial * (multiplier**(attempt - 1)), max_seconds ].min
+    end
+
+    def with_jitter(delay)
+      return delay if delay <= 0
+
+      ratio = jitter_ratio
+      return delay if ratio <= 0
+
+      factor = 1.0 + ((rand * 2) - 1) * ratio
+      delay * factor
+    end
+
+    def apply_cool_down(delay, attempt)
+      threshold = cool_down_after_attempts
+      return delay if threshold <= 0 || attempt < threshold
+
+      [ delay, cool_down_seconds ].max
+    end
+
+    def jitter_ratio
+      settings.backoff.jitter_ratio.to_f
+    rescue StandardError
+      0.25
+    end
+
+    def cool_down_after_attempts
+      settings.backoff.cool_down_after_attempts.to_i
+    rescue StandardError
+      5
+    end
+
+    def cool_down_seconds
+      value = settings.backoff.cool_down_seconds.to_f
+      value.positive? ? value : 300.0
+    rescue StandardError
+      300.0
     end
 
     def scope_min_interval_ms(scope)
@@ -125,16 +179,19 @@ module MixinApi
       250
     end
 
-    def log_throttle(scope, error, delay)
+    def log_throttle(scope, error, delay, attempt)
       path = error.path.to_s.split("?").first
+      cool_down = attempt >= cool_down_after_attempts && cool_down_after_attempts.positive?
       Rails.logger.warn(
         format(
-          "[MixinApi::Gate] scope=%<scope>s throttle verb=%<verb>s path=%<path>s backoff=%<backoff>.1fs retry_after=%<retry_after>s",
+          "[MixinApi::Gate] scope=%<scope>s throttle verb=%<verb>s path=%<path>s backoff=%<backoff>.1fs retry_after=%<retry_after>s attempt=%<attempt>d%<cool_down>s",
           scope: scope,
           verb: error.verb.to_s.upcase,
           path: path,
           backoff: delay,
-          retry_after: error.retry_after.inspect
+          retry_after: error.retry_after.inspect,
+          attempt: attempt,
+          cool_down: cool_down ? " cool_down=true" : ""
         )
       )
     end
@@ -163,9 +220,9 @@ module MixinApi
     end
 
     def cache_ttl
-      settings.backoff.max_seconds.to_i + 60
+      [ settings.backoff.max_seconds.to_i, cool_down_seconds.to_i ].max + 60
     rescue StandardError
-      120
+      360
     end
 
     def settings
