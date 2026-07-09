@@ -1,14 +1,25 @@
 <div id="<%= dom_id article %>_votes" class="flex flex-col items-center justify-center space-y-4">
+  <%# Consult the controller's primed `upvote_article_actions` /
+      `downvote_article_actions` Sets instead of calling
+      `user.upvote_article?(article)` / `downvote_article?(article)` —
+      each of those action_store helpers does 1 SELECT per call, and this
+      partial consults each twice (state-check + button target), so without
+      the prime the show view fires 4 extra SELECTs. Fall back to the
+      live helper when the partial is rendered from another site that
+      hasn't primed the sets (e.g. a feed card, or the turbo_stream
+      response from `UpvotedArticlesController#update`). %>
+  <% upvoted = defined?(@preloaded_upvoted_article_ids) ? @preloaded_upvoted_article_ids.include?(article.id) : user&.upvote_article?(article) %>
+  <% downvoted = defined?(@preloaded_downvoted_article_ids) ? @preloaded_downvoted_article_ids.include?(article.id) : user&.downvote_article?(article) %>
   <div class="flex items-center space-x-6">
     <!-- Upvote Button -->
     <div class="group relative">
-      <div class="flex h-12 w-12 cursor-pointer items-center justify-center rounded-full transition-all duration-200 <%= user&.upvote_article?(article) ? 'bg-primary/10 text-primary ring-2 ring-primary/20' : 'bg-base-200 text-base-content/60 hover:bg-base-300 hover:text-base-content' %>">
+      <div class="flex h-12 w-12 cursor-pointer items-center justify-center rounded-full transition-all duration-200 <%= upvoted ? 'bg-primary/10 text-primary ring-2 ring-primary/20' : 'bg-base-200 text-base-content/60 hover:bg-base-300 hover:text-base-content' %>">
         <span class="i-[tabler--thumb-up-filled] size-6 transition-transform group-hover:scale-110"></span>
       </div>
 
       <% if user.blank? %>
         <%= link_to '', login_path, data: { turbo_frame: :modal }, class: 'absolute inset-0 z-10 rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-base-100' %>
-      <% elsif user&.upvote_article? article %>
+      <% elsif upvoted %>
         <%= link_to '', upvoted_article_path(article), data: { turbo_method: :delete }, class: "absolute inset-0 z-10 rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-base-100" %>
       <% else %>
         <%= link_to '', upvoted_article_path(article), data: { turbo_method: :put }, class: "absolute inset-0 z-10 rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-base-100" %>
@@ -30,13 +41,13 @@
 
     <!-- Downvote Button -->
     <div class="group relative">
-      <div class="flex h-12 w-12 cursor-pointer items-center justify-center rounded-full transition-all duration-200 <%= user&.downvote_article?(article) ? 'bg-error/10 text-error ring-2 ring-error/20' : 'bg-base-200 text-base-content/60 hover:bg-base-300 hover:text-base-content' %>">
+      <div class="flex h-12 w-12 cursor-pointer items-center justify-center rounded-full transition-all duration-200 <%= downvoted ? 'bg-error/10 text-error ring-2 ring-error/20' : 'bg-base-200 text-base-content/60 hover:bg-base-300 hover:text-base-content' %>">
         <span class="i-[tabler--thumb-down-filled] size-6 transition-transform group-hover:scale-110"></span>
       </div>
 
       <% if user.blank? %>
         <%= link_to '', login_path, data: { turbo_frame: :modal }, class: 'absolute inset-0 z-10 rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-base-100' %>
-      <% elsif user&.downvote_article? article %>
+      <% elsif downvoted %>
         <%= link_to '', downvoted_article_path(article), data: { turbo_method: :delete }, class: "absolute inset-0 z-10 rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-base-100" %>
       <% else %>
         <%= link_to '', downvoted_article_path(article), data: { turbo_method: :put }, class: "absolute inset-0 z-10 rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-base-100" %>

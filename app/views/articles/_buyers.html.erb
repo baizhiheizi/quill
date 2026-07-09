@@ -1,19 +1,31 @@
 <div class="flex flex-col items-center justify-center mb-8">
+  <%# Read preloaded counts when the controller primed them, fall back to
+      live counts when the partial is rendered from a site that didn't
+      (e.g. dashboard/admin article previews). The preloaded path is what
+      the public show view uses and saves 2 SELECTs (one grouped query
+      for both counts instead of two separate count queries). %>
+  <% buy_orders_count = defined?(@buy_orders_count) ? @buy_orders_count : article.buy_orders.count %>
+  <% reward_orders_count = defined?(@reward_orders_count) ? @reward_orders_count : article.reward_orders.count %>
+  <% readers_count = defined?(@readers_count) ? @readers_count : article.readers.distinct.count %>
   <div class="inline-flex items-center justify-center space-x-3 px-4 py-2 rounded-full bg-base-200/50 text-sm border border-base-content/5 mb-6">
     <div class="flex items-center space-x-1.5">
-      <span class="text-primary font-bold"><%= article.buy_orders.count %></span>
+      <span class="text-primary font-bold"><%= buy_orders_count %></span>
       <span class="text-base-content/60"><%= t('times_bought') %></span>
     </div>
     <span class="text-base-content/20">•</span>
     <div class="flex items-center space-x-1.5">
-      <span class="text-primary font-bold"><%= article.reward_orders.count %></span>
+      <span class="text-primary font-bold"><%= reward_orders_count %></span>
       <span class="text-base-content/60"><%= t('times_reward') %></span>
     </div>
   </div>
 
-  <% if article.readers.exists? %>
-    <div class="w-full max-w-sm mb-10 <%= article.readers.count > 8 ? 'grid grid-cols-8 gap-1.5 sm:gap-2' : 'flex items-center justify-center space-x-2' %>">
-      <% article.random_readers(24).each do |reader| %>
+  <% if readers_count.positive? %>
+    <div class="w-full max-w-sm mb-10 <%= readers_count > 8 ? 'grid grid-cols-8 gap-1.5 sm:gap-2' : 'flex items-center justify-center space-x-2' %>">
+      <%# Use the controller's preloaded sample (avatar chain eager-loaded)
+          when present — saves ~3 SELECTs per reader for the shared
+          `_avatar` partial. Fall back to the live helper otherwise. %>
+      <% random_readers = defined?(@random_readers) ? @random_readers : article.random_readers(24) %>
+      <% random_readers.each do |reader| %>
         <div class="avatar tooltip" data-tip="<%= reader.name %>">
           <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-full ring-2 ring-base-100 hover:ring-primary transition-all cursor-pointer">
             <%= render "shared/avatar", user: reader, thumb: true, class: "rounded-full" %>
