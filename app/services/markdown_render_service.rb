@@ -23,16 +23,11 @@ class MarkdownRenderService
         .parse_link
         .parse_table
         .add_attributes_to_images
-        .parse_mention_user
         .add_scroll_to_comment_attributes
         .escape_iframes
     end
 
     @html
-  end
-
-  def parse_mention_user
-    self
   end
 
   # Markdown mentions embed `blob://<key>/...` URLs in image tags so the

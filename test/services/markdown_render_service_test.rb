@@ -209,4 +209,14 @@ class MarkdownRenderServiceTest < ActiveSupport::TestCase
 
     refute_match(/<iframe[^>]*>/, html)
   end
+
+  test "does not define a parse_mention_user no-op stub" do
+    # Pin the dead-method removal. The Markdown pipeline never rewrote
+    # @-mentions — the prior implementation was a no-op stub left over
+    # from a design that moved mention rewriting to the rich-text path
+    # instead. If a future contributor re-adds a `parse_mention_user`
+    # instance method on MarkdownRenderService, this test fails so they
+    # have to consciously replace it with real coverage.
+    refute_includes MarkdownRenderService.instance_methods(false), :parse_mention_user
+  end
 end
