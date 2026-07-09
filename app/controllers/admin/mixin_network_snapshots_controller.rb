@@ -65,16 +65,31 @@ module Admin
           }.merge(m: "or")
         ).result
 
-      @pagy, @mixin_network_snapshots = pagy(:countless, mixin_network_snapshots)
+      # Close per-row N+1s walked by `admin/mixin_network_snapshots/_mixin_network_snapshot.html.erb`.
+      # Without this, a 50-row admin page fires ~200 SELECTs for the four
+      # belongs_to + ~250 more for the opponent avatar chain. With the
+      # prime the page renders in ~7 SELECTs regardless of page size.
+      @pagy, @mixin_network_snapshots = pagy(:countless, mixin_network_snapshots.includes(*index_includes))
     end
 
     def show
-      @mixin_network_snapshot = MixinNetworkSnapshot.find params[:id]
+      # Same partial chain as `index` — preload the belongs_to + the opponent
+      # avatar chain so the show view renders flat (1 SELECT for each chain).
+      @mixin_network_snapshot = MixinNetworkSnapshot.includes(*index_includes).find(params[:id])
     end
 
     def process_now
       @mixin_network_snapshot = MixinNetworkSnapshot.find params[:mixin_network_snapshot_id]
       @mixin_network_snapshot.process!
+    end
+
+    private
+
+    # Eager-load chain shared between `index` and `show`. See
+    # `admin/mixin_network_snapshots/_mixin_network_snapshot.html.erb`
+    # for the exact fields walked per row.
+    def index_includes
+      [ :wallet, :opponent_wallet, :currency, { opponent: admin_user_field_preloads } ]
     end
   end
 end
