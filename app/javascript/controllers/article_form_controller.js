@@ -9,13 +9,11 @@ export default class extends Controller {
     updateUrl: String,
     articleUuid: String,
     newRecord: Boolean,
+    articlePublished: Boolean,
     currencyPriceUsd: Number,
     dirty: Boolean,
     saveStatus: { type: String, default: "idle" },
     lockVersion: { type: Number, default: 0 },
-    selectableCollections: Array,
-    selectedCollectionId: String,
-    articlePublished: Boolean,
     updatedAt: Number,
     settingsRailOpen: { type: Boolean, default: false },
     focusMode: { type: Boolean, default: false },
@@ -32,13 +30,6 @@ export default class extends Controller {
     "saveStatus",
     "title",
     "content",
-    "readersRevenueRatio",
-    "authorRevenueRatio",
-    "collectionRevenueRatio",
-    "referenceRevenueRatio",
-    "articleReferenceRevenueRatio",
-    "revenueSummary",
-    "revenueAdvanced",
     "currencyIcon",
     "currencyChainIcon",
     "currencySymbol",
@@ -57,21 +48,27 @@ export default class extends Controller {
     this.boundKeydown = this.handleKeydown.bind(this);
     this.boundPreviewMessage = this.handlePreviewMessage.bind(this);
     this.confirmLeaving = this.confirmLeaving.bind(this);
+    this.boundRevenueQueueAutosave = () => this.queueAutosave();
   }
 
   connect() {
     document.addEventListener("keydown", this.boundKeydown);
     window.addEventListener("message", this.boundPreviewMessage);
+    this.element.addEventListener(
+      "article-revenue:queue-autosave",
+      this.boundRevenueQueueAutosave,
+    );
     this.setupCurrencyModalListener();
     this.recoverDraftWhenReady();
-    if (this.hasRevenueSummaryTarget) {
-      this.renderRevenueSummary();
-    }
   }
 
   disconnect() {
     document.removeEventListener("keydown", this.boundKeydown);
     window.removeEventListener("message", this.boundPreviewMessage);
+    this.element.removeEventListener(
+      "article-revenue:queue-autosave",
+      this.boundRevenueQueueAutosave,
+    );
     if (this.boundModalOk) {
       document.removeEventListener("modal-component:ok", this.boundModalOk);
       this.boundModalOk = null;
@@ -443,25 +440,6 @@ export default class extends Controller {
     if (hiddenInput) hiddenInput.value = content;
   }
 
-  selectCollection(event) {
-    if (this.articlePublishedValue) return;
-    this.selectedCollectionIdValue = event.currentTarget.value;
-    this.queueAutosave();
-  }
-
-  selectedCollectionIdValueChanged() {
-    if (this.articlePublishedValue || !this.hasCollectionRevenueRatioTarget)
-      return;
-
-    const selectedCollection = this.selectableCollectionsValue.find(
-      (c) => c.uuid == this.selectedCollectionIdValue,
-    );
-    this.collectionRevenueRatioTarget.value = selectedCollection
-      ? selectedCollection.revenue_ratio
-      : 0.0;
-    this.calReferenceRatio();
-  }
-
   currencyPriceUsdValueChanged() {
     if (!this.currencyPriceUsdValue || !this.hasPriceUsdTarget) return;
     this.calPriceUsd();
@@ -479,162 +457,9 @@ export default class extends Controller {
     ).toFixed(4);
   }
 
-  updateReadersRevenueRatio(event) {
-    if (!this.hasReadersRevenueRatioTarget) return;
-
-    let value = parseFloat(event.target.value);
-    if (Number.isNaN(value) || value < 0.1) value = 0.1;
-    if (value > 0.9) value = 0.9;
-    this.readersRevenueRatioTarget.value = value;
-    this.calReferenceRatio();
-    this.queueAutosave();
-  }
-
-  formatReferenceRatio(event) {
-    if (!this.hasReadersRevenueRatioTarget) return;
-
-    let ratio = 0.05;
-    if (event.target.value) ratio = parseFloat(event.target.value);
-
-    if (
-      ratio < 0 ||
-      ratio > 0.9 - parseFloat(this.readersRevenueRatioTarget.value)
-    ) {
-      ratio = 0.05;
-    }
-
-    event.target.value = ratio.toFixed(2);
-    this.calReferenceRatio();
-    this.queueAutosave();
-  }
-
-  calReferenceRatio() {
-    if (
-      !this.hasReferenceRevenueRatioTarget ||
-      !this.hasReadersRevenueRatioTarget
-    ) {
-      return;
-    }
-
-    const referenceRevenueRatio = this.articleReferenceRevenueRatioTargets
-      .filter(
-        (target) =>
-          window.getComputedStyle(target.closest(".nested-form-wrapper"))
-            .display !== "none",
-      )
-      .map((target) => parseFloat(target.value))
-      .reduce((prev, cur) => prev + cur, 0);
-
-    if (
-      referenceRevenueRatio <=
-      0.9 - parseFloat(this.readersRevenueRatioTarget.value)
-    ) {
-      this.referenceRevenueRatioTarget.value = parseFloat(
-        referenceRevenueRatio.toFixed(2),
-      );
-    }
-    this.calAuthorRevenueRatio();
-    this.renderRevenueSummary();
-    this.validateRevenueSplit();
-  }
-
-  calAuthorRevenueRatio() {
-    if (
-      !this.hasAuthorRevenueRatioTarget ||
-      !this.hasReadersRevenueRatioTarget ||
-      !this.hasReferenceRevenueRatioTarget ||
-      !this.hasCollectionRevenueRatioTarget
-    ) {
-      return;
-    }
-
-    this.authorRevenueRatioTarget.value = parseFloat(
-      (
-        0.9 -
-        this.readersRevenueRatioTarget.value -
-        this.referenceRevenueRatioTarget.value -
-        this.collectionRevenueRatioTarget.value
-      ).toFixed(2),
-    );
-    this.renderRevenueSummary();
-    this.validateRevenueSplit();
-  }
-
-  articleReferenceRevenueRatioTargetConnected() {
-    this.calReferenceRatio();
-  }
-
-  articleReferenceRevenueRatioTargetDisconnected() {
-    this.calReferenceRatio();
-  }
-
-  toggleRevenueAdvanced(event) {
-    event.preventDefault();
-    if (!this.hasRevenueAdvancedTarget) return;
-    this.revenueAdvancedTarget.classList.toggle("hidden");
-  }
-
-  renderRevenueSummary() {
-    if (!this.hasRevenueSummaryTarget) return;
-
-    const author = this.hasAuthorRevenueRatioTarget
-      ? parseFloat(this.authorRevenueRatioTarget.value)
-      : 0;
-    const readers = this.hasReadersRevenueRatioTarget
-      ? parseFloat(this.readersRevenueRatioTarget.value)
-      : 0;
-    const platform = 0.1;
-    const collection = this.hasCollectionRevenueRatioTarget
-      ? parseFloat(this.collectionRevenueRatioTarget.value)
-      : 0;
-    const references = this.hasReferenceRevenueRatioTarget
-      ? parseFloat(this.referenceRevenueRatioTarget.value)
-      : 0;
-
-    this.revenueSummaryTarget.innerHTML = this.revenueSummaryTemplate(
-      author,
-      readers,
-      platform,
-      collection,
-      references,
-    );
-  }
-
-  revenueSummaryTemplate(author, readers, platform, collection, references) {
-    const pct = (value) => `${Math.round(value * 100)}%`;
-    const parts = [
-      `<span class="font-medium">${pct(author)}</span> you`,
-      `<span>${pct(readers)}</span> early readers`,
-      `<span>${pct(platform)}</span> platform`,
-    ];
-    if (collection > 0)
-      parts.push(`<span>${pct(collection)}</span> collection`);
-    if (references > 0)
-      parts.push(`<span>${pct(references)}</span> references`);
-
-    return parts.join(" · ");
-  }
-
-  validateRevenueSplit() {
-    const sum =
-      0.1 +
-      (this.hasReadersRevenueRatioTarget
-        ? parseFloat(this.readersRevenueRatioTarget.value)
-        : 0) +
-      (this.hasAuthorRevenueRatioTarget
-        ? parseFloat(this.authorRevenueRatioTarget.value)
-        : 0) +
-      (this.hasCollectionRevenueRatioTarget
-        ? parseFloat(this.collectionRevenueRatioTarget.value)
-        : 0) +
-      (this.hasReferenceRevenueRatioTarget
-        ? parseFloat(this.referenceRevenueRatioTarget.value)
-        : 0);
-
-    const valid = Math.abs(sum - 1.0) < 0.01;
-    if (this.hasRevenueSummaryTarget) {
-      this.revenueSummaryTarget.classList.toggle("text-error", !valid);
-    }
-    return valid;
-  }
+  // No-op: the views still bind `article-form#touchDirty` on reference
+  // add/remove/select, but the method never existed — those edits already
+  // trigger autosave via the revenue controller's calReferenceRatio path.
+  // Kept intentionally empty to preserve existing behavior (issue #1839).
+  touchDirty() {}
 }

@@ -135,7 +135,7 @@
       <%= t("articles.settings.revenue_split") %>
     </h3>
     <div class="space-y-4">
-      <p data-article-form-target="revenueSummary" class="rounded-lg bg-base-200/80 px-3 py-2 text-sm leading-relaxed"></p>
+      <p data-article-revenue-target="revenueSummary" class="rounded-lg bg-base-200/80 px-3 py-2 text-sm leading-relaxed"></p>
 
       <div class="grid grid-cols-2 gap-3">
         <div>
@@ -148,7 +148,7 @@
           <%= form.label :collection_revenue_ratio, class: "mb-1 block text-xs font-medium opacity-70" %>
           <%= form.number_field :collection_revenue_ratio,
             disabled: true,
-            data: { article_form_target: "collectionRevenueRatio" },
+            data: { article_revenue_target: "collectionRevenueRatio" },
             class: "input w-full bg-base-200 text-sm opacity-60" %>
           <% if form.object.errors.where(:collection_revenue_ratio).present? %>
             <div class="py-1 text-sm text-error"><%= form.object.errors.where(:collection_revenue_ratio).map(&:full_message).join("; ") %></div>
@@ -158,11 +158,11 @@
 
       <button type="button"
         class="link link-primary text-sm"
-        data-action="article-form#toggleRevenueAdvanced">
+        data-action="article-revenue#toggleRevenueAdvanced">
         <%= t("articles.revenue_advanced") %>
       </button>
 
-      <div data-article-form-target="revenueAdvanced" class="hidden space-y-3 border-t border-base-300 pt-3">
+      <div data-article-revenue-target="revenueAdvanced" class="hidden space-y-3 border-t border-base-300 pt-3">
         <% if form.object.published_at? %>
           <p class="text-xs text-base-content/50"><%= t("articles.locked_after_publishing") %></p>
         <% end %>
@@ -175,8 +175,8 @@
             max: "0.9",
             step: "0.1",
             data: {
-              article_form_target: "readersRevenueRatio",
-              action: "blur->article-form#updateReadersRevenueRatio"
+              article_revenue_target: "readersRevenueRatio",
+              action: "blur->article-revenue#updateReadersRevenueRatio"
             },
             class: "input w-full bg-base-200 font-bold" %>
         </div>
@@ -188,7 +188,7 @@
             min: "0",
             max: "0.8",
             step: "0.1",
-            data: { article_form_target: "authorRevenueRatio" },
+            data: { article_revenue_target: "authorRevenueRatio" },
             class: "input w-full bg-base-200 font-bold" %>
           <% if form.object.errors.where(:author_revenue_ratio).present? %>
             <div class="py-1 text-sm text-error"><%= form.object.errors.where(:author_revenue_ratio).map(&:full_message).join("; ") %></div>
@@ -202,7 +202,7 @@
             min: "0",
             max: "0.8",
             step: "0.05",
-            data: { article_form_target: "referenceRevenueRatio" },
+            data: { article_revenue_target: "referenceRevenueRatio" },
             class: "input w-full bg-base-200 font-bold" %>
           <% if form.object.errors.where(:references_revenue_ratio).present? %>
             <div class="py-1 text-sm text-error"><%= form.object.errors.where(:references_revenue_ratio).map(&:full_message).join("; ") %></div>
@@ -229,7 +229,7 @@
     <% if form.object.published_at.blank? %>
       <div data-nested-form-target="target"></div>
       <button type="button"
-        data-action="click->nested-form#add click->article-form#calReferenceRatio"
+        data-action="click->nested-form#add click->article-revenue#calReferenceRatio"
         class="btn btn-outline btn-primary mt-3 w-full rounded-full">
         <%= t("articles.add_reference") %>
       </button>
@@ -246,7 +246,7 @@
       :name,
       { include_blank: "None" },
       disabled: (form.object.published_at? && form.object.collection_revenue_ratio.positive?),
-      data: { action: "article-form#selectCollection" },
+      data: { action: "article-revenue#selectCollection" },
       class: "input w-full bg-base-200" %>
     <% if form.object.published_at? && form.object.collection_revenue_ratio.positive? %>
       <p class="mt-1 text-xs text-base-content/50"><%= t("articles.locked_after_publishing") %></p>

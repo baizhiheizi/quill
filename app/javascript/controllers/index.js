@@ -7,6 +7,9 @@ import { application } from "./application";
 import ArticleFormController from "./article_form_controller";
 application.register("article-form", ArticleFormController);
 
+import ArticleRevenueController from "./article_revenue_controller";
+application.register("article-revenue", ArticleRevenueController);
+
 import AvatarController from "./avatar_controller";
 application.register("avatar", AvatarController);
 
