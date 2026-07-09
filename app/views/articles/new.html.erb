@@ -1,5 +1,5 @@
 <div
-  data-controller="article-form"
+  data-controller="article-form article-revenue"
   data-article-form-draft-key-value="quill_article_draft"
   data-article-form-create-url-value="<%= articles_path %>"
   data-article-form-article-uuid-value="<%= @article.uuid %>"
@@ -8,7 +8,8 @@
   data-article-form-save-status-value="idle"
   data-article-form-lock-version-value="0"
   data-article-form-currency-price-usd-value="<%= @article.currency&.price_usd %>"
-  data-article-form-selectable-collections-value="<%= current_user.collections.map { |c| { uuid: c.uuid, revenue_ratio: c.revenue_ratio } }.to_json %>"
+  data-article-revenue-selectable-collections-value="<%= current_user.collections.map { |c| { uuid: c.uuid, revenue_ratio: c.revenue_ratio } }.to_json %>"
+  data-article-revenue-article-published-value="false"
   class="article-editor article-editor--new">
 
   <div data-article-form-target="editorChrome" class="fixed left-0 top-0 z-50 w-full border-b border-base-300 bg-base-100/95 backdrop-blur-sm">

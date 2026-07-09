@@ -1,6 +1,6 @@
 <div
   id="<%= dom_id article %>_edit_form"
-  data-controller="article-form"
+  data-controller="article-form article-revenue"
   data-article-form-draft-key-value="quill_article_draft_<%= article.uuid %>"
   data-article-form-create-url-value="<%= articles_path %>"
   data-article-form-update-url-value="<%= article_path(article) %>"
@@ -10,11 +10,12 @@
   data-article-form-save-status-value="idle"
   data-article-form-lock-version-value="<%= article.lock_version %>"
   data-article-form-currency-price-usd-value="<%= article.currency&.price_usd %>"
-  data-article-form-selectable-collections-value="<%= current_user.collections.map { |c| { uuid: c.uuid, revenue_ratio: c.revenue_ratio } }.to_json %>"
-  data-article-form-selected-collection-id-value="<%= article.collection_id %>"
   data-article-form-article-published-value="<%= article.published? %>"
   data-article-form-updated-at-value="<%= article.updated_at.to_i * 1000 %>"
   data-article-form-preview-url-value="<%= article_preview_path(article) %>"
+  data-article-revenue-selectable-collections-value="<%= current_user.collections.map { |c| { uuid: c.uuid, revenue_ratio: c.revenue_ratio } }.to_json %>"
+  data-article-revenue-selected-collection-id-value="<%= article.collection_id %>"
+  data-article-revenue-article-published-value="<%= article.published? %>"
   class="article-editor">
 
   <div data-article-form-target="editorChrome" class="fixed left-0 top-0 z-50 w-full border-b border-base-300 bg-base-100/95 backdrop-blur-sm">
