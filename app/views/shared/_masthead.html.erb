@@ -34,7 +34,7 @@
         <%= render "search/form" %>
       </div>
 
-      <div class="ml-auto flex flex-shrink-0 items-center gap-1.5 sm:gap-2">
+      <div class="ml-auto flex flex-shrink-0 items-center gap-1.5 sm:gap-2 <%= 'mr-24' if from_mixin_messenger? %>">
         <% if current_user.present? %>
           <%= link_to new_article_path, class: "btn btn-primary btn-sm rounded-full px-3 font-medium sm:btn-md sm:px-4" do %>
             <span class="i-[tabler--edit] size-4"></span>
