@@ -123,9 +123,15 @@ class Article < ApplicationRecord
   end
 
   # Eager-load chain consumed by the public article index / search results
-  # (`ArticleSearchService` and `ArticlesController#index`):
+  # (`ArticleSearchService` and `ArticlesController#index`) AND by the
+  # dashboard / users articles tabs (which now use this scope too — see
+  # `Dashboard::ArticlesController#index` and `Users::ArticlesController#index`):
   #   - `:currency`   → `article.price_tag`
   #   - `:tags`       → tag chips
+  #   - `cover_attachment: :blob` → `article.cover.attached?` +
+  #     `article.cover.key` via `article_card_image_url(article)` in
+  #     `articles/_card.html.erb`. Without this nested preload each row
+  #     with a cover fires 1 extra SELECT to resolve the blob.
   #   - `:author`     → author byline + `user_path(article.author)` +
   #     author avatar chain consumed by `shared/_avatar` in
   #     `articles/_card.html.erb`. Without the nested
@@ -135,9 +141,12 @@ class Article < ApplicationRecord
   #     that's 200-250 extra SELECTs per feed render — see the comment on
   #     `User::AVATAR_PRELOADS` for the breakdown.
   # The show page uses a heavier chain (see `with_show_associations`) —
-  # it needs the article's own `cover_attachment.blob`, the `collection`
-  # + its cover, and the `article_references` list.
-  scope :with_associations, -> { includes(:currency, :tags, author: User::AVATAR_PRELOADS) }
+  # it adds `:article_references`, the `collection` (with its own cover),
+  # and an explicit `cover_attachment: :blob` (Rails merges the duplicate
+  # hash key from the base scope into a single preload).
+  scope :with_associations, -> {
+    includes(:currency, :tags, cover_attachment: :blob, author: User::AVATAR_PRELOADS)
+  }
 
   # Eager-load chain consumed by `ArticlesController#show` →
   # `articles/show.html.erb`. Includes the base `with_associations`
