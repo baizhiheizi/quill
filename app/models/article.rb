@@ -126,11 +126,18 @@ class Article < ApplicationRecord
   # (`ArticleSearchService` and `ArticlesController#index`):
   #   - `:currency`   → `article.price_tag`
   #   - `:tags`       → tag chips
-  #   - `:author`     → author byline + `user_path(article.author)`
+  #   - `:author`     → author byline + `user_path(article.author)` +
+  #     author avatar chain consumed by `shared/_avatar` in
+  #     `articles/_card.html.erb`. Without the nested
+  #     `User::AVATAR_PRELOADS` chain each row would fire 4-5 extra
+  #     SELECTs (authorization + avatar_attachment + blob + variant_records
+  #     + image_attachment blob). For the default pagy page of 50 articles
+  #     that's 200-250 extra SELECTs per feed render — see the comment on
+  #     `User::AVATAR_PRELOADS` for the breakdown.
   # The show page uses a heavier chain (see `with_show_associations`) —
   # it needs the article's own `cover_attachment.blob`, the `collection`
   # + its cover, and the `article_references` list.
-  scope :with_associations, -> { includes(:currency, :tags, :author) }
+  scope :with_associations, -> { includes(:currency, :tags, author: User::AVATAR_PRELOADS) }
 
   # Eager-load chain consumed by `ArticlesController#show` →
   # `articles/show.html.erb`. Includes the base `with_associations`
