@@ -9,12 +9,12 @@ metadata:
 
 ## Current state
 
-- **Run 28993481069 on 2026-07-09 04:18 UTC.** Repo: baizhiheizi/quill (Rails 8.1, Ruby 4.0.5). AGENTS.md exists.
+- **Run 29005693993 on 2026-07-09 09:01 UTC.** Repo: baizhiheizi/quill (Rails 8.1, Ruby 4.0.5). AGENTS.md exists.
 - **Open Repo Assist PRs**:
-  1. **Draft PR — perf users articles/comments index** — branch `repo-assist/perf-users-articles-comments-preloads-2026-07-09` (commit `edf915c2`, 2 files +22/-2). Adds the same `.includes(:author, :currency, :tags, cover_attachment: :blob)` chain to `Users::ArticlesController#index` as `Dashboard::ArticlesController#index` (PR #1815); adds `.includes(:commentable, :author, commentable: :author)` to `Users::CommentsController#index` for the polymorphic commentable chain. Patch + bundle at `/tmp/gh-aw/aw-repo-assist-perf-users-articles-comments-preloads-2026-07-09.{patch,bundle}`. Awaiting maintainer-revival + first-time-contributor CI approval.
+  1. **Draft PR — perf with_associations author avatar** — branch `repo-assist/perf-with-associations-author-avatar-2026-07-09` (commit `2b136f97`, 2 files +40/-2). Adds `User::AVATAR_PRELOADS` constant in `app/models/user.rb` and extends `Article.with_associations` to `includes(:currency, :tags, author: User::AVATAR_PRELOADS)`. Consumed by `ArticleSearchService` → `ArticlesController#index` (homepage feed, search) and `HomeController#selected_articles`. Eliminates 4-5 SELECTs/row for the author avatar chain in `articles/_card`. Patch + bundle at `/tmp/gh-aw/aw-repo-assist-perf-with-associations-author-avatar-2026-07-09.{patch,bundle}`. Awaiting maintainer revival.
 - **Other open PRs**: none.
 - **Open issues**: 7 (all AI-generated). #1789 (Monthly Activity) updated.
-- **Recent merges (2026-07-08 → 2026-07-09)**: PR #1870 (masthead mixin menu), #1868 (admin collections article counts prime, efficiency-improver), #1867 (MarkdownRenderService no-op stub removal — this branch), #1866 (users subscribe lists — this branch), #1865 (article show action_store — this branch), #1862 (dashboard block/subscribe users), #1864 (with_all_transfers_generated! consolidation). All by `an-lee`.
+- **Recent merges (2026-07-08 → 2026-07-09)**: PR #1871 (perf users articles/comments preloads — this branch's predecessor), #1870 (masthead mixin menu), #1868 (admin collections article counts prime, efficiency-improver), #1867 (MarkdownRenderService no-op stub removal — this branch), #1866 (users subscribe lists — this branch), #1865 (article show action_store — this branch), #1862 (dashboard block/subscribe users), #1864 (with_all_transfers_generated! consolidation). All by `an-lee`.
 
 ## This run (28993481069)
 
@@ -23,6 +23,14 @@ metadata:
 - **Task 4 (Engineering Investments)**: Created draft PR (commit `edf915c2`) closing the last two obvious Users-namespace N+1 revival targets — `Users::ArticlesController#index` and `Users::CommentsController#index`. `Users::BaseController` already exposed `users_user_field_preloads` via #1866, so the controller-level `.includes(...)` calls were the only missing piece. Both follow the no-controller-test perf PR pattern (PRs #1802/#1815/#1829/#1830/#1833/#1862/#1866/#1867). `bin/rubocop` (2 files) + `bin/rails zeitwerk:check` clean.
 - **Task 2 (Issue Comment)**: Substituted → no engagement. All 7 open issues are AI-generated proposals/audits or system tracking. None warrant a new Repo Assist comment. Memory's backlog items (issue #1717 bundle patch stale; F1/F2/F3 from #1821 awaiting ack) remain contingent on maintainer signal.
 - **Task 11**: Updated #1789 body. Cleaned three prior-run drafts (now merged as #1865/#1866/#1867). Added this run's draft. Retained the four audits/proposals (#1847, #1840, #1839, #1821) and the test-improver/efficiency-improver Monthly activity suggestions (#1817, #1801) as cross-references — they're actionable for the maintainer. Run History prepended with the 2026-07-09 04:18 UTC entry.
+
+## This run (29005693993)
+
+- **Selected tasks**: Task 4, Task 8, Task 2, plus Task 11.
+- **Task 8 (Performance)**: Created draft PR (commit `2b136f97`) extending `Article.with_associations` to include the avatar chain on `:author` (`includes(:currency, :tags, author: User::AVATAR_PRELOADS)`). Consumed by `ArticleSearchService` → `ArticlesController#index` (homepage feed, search) and `HomeController#selected_articles`. Without the avatar chain each row fires 4-5 SELECTs (`authorization + avatar_attachment + blob + variant_records + image_attachment blob`); 50-row pages drop from ~205 SELECTs to ~7. Adds `User::AVATAR_PRELOADS` constant in `app/models/user.rb` as single source of truth for the avatar preload chain. Dashboard / Users articles controllers (#1815 / #1871) still inline their own includes — out of scope for this PR; could be migrated to `with_associations` in a follow-up. `bin/rubocop` (2 files) + `bin/rails zeitwerk:check` clean. Patch + bundle at `/tmp/gh-aw/aw-repo-assist-perf-with-associations-author-avatar-2026-07-09.{patch,bundle}`.
+- **Task 4 (Engineering Investments)**: Substituted → no engineering investment opportunity identified after the perf change (no Dependabot PRs, no CI gaps, no build improvements outstanding).
+- **Task 2 (Issue Comment)**: Substituted → no engagement. All 7 open issues are AI-generated audits/proposals or system tracking.
+- **Task 11**: Updated #1789 body. Removed the now-merged #1871 line from Suggested Actions. Added this run's draft PR (push-blocked). Retained the four audits/proposals (#1847, #1840, #1839, #1821) and the test-improver/efficiency-improver Monthly cross-references (#1817, #1801) as actionable for the maintainer. Run History prepended with the 2026-07-09 09:01 UTC entry.
 
 ## Earlier runs — see #1789 Run History
 
@@ -50,8 +58,10 @@ metadata:
 - **Dashboard-#index N+1 revival class: COMPLETE** (#1802/#1815/#1829/#1830/#1833/#1862 all merged).
 - **Admin-#index N+1 revival class: COMPLETE** (Orders/Payments/Transfers/Bonuses in main + #1837 + #1845 + #1868 merged).
 - **Public article show N+1 revival class: COMPLETE** (#1865 merged).
-- **Users namespace N+1 revival class: COMPLETE** (#1866 subscribe lists merged + #1871 articles/comments in draft PR this run, awaiting revival).
+- **Users namespace N+1 revival class: COMPLETE** (#1866 subscribe lists + #1871 articles/comments both merged 2026-07-09).
+- **Article index / search avatar chain N+1**: COMPLETE — `Article.with_associations` extended to include `author: User::AVATAR_PRELOADS`; closes the article-feed N+1 fan-out (homepage + search + `selected_articles`). Draft PR this run, awaiting revival.
 - **MarkdownRenderService no-op stub removal: COMPLETE** (#1867 merged).
+- **Dashboard / Users articles controllers → `with_associations` migration**: follow-up after the scope-extension PR merges. Replace `.includes(:author, :currency, :tags, cover_attachment: :blob)` with `.with_associations` to share the avatar chain fix and remove duplicated include lists.
 - **Test gaps (low-value)**: `HtmlPostProcessor` direct unit tests (covered indirectly via both render services).
 
 ## Notes
@@ -94,3 +104,4 @@ metadata:
 - **`MarkdownRenderService#parse_mention_user` was a no-op stub (REMOVED via PR #1867)**: `def parse_mention_user; self; end` returned `self` without mutating `@html`. Method + its `.parse_mention_user` call in the `:full` pipeline both dropped. `RichTextRenderService` and `HtmlPostProcessor` carry no equivalent stub (rich-text uses `<action-text-mention>` elements, not raw `@handle` rewriting).
 - **Guard-test pattern for dead-method removal (NEW 28977072290)**: when removing a dead method, add `refute_includes <Class>.instance_methods(false), :method_name` to pin the removal — any future contributor who re-adds the method has to consciously remove the test.
 - **`Users::ArticlesController#index` and `Users::CommentsController#index` N+1 closure pattern (NEW 28993481069)**: `.includes(:author, :currency, :tags, cover_attachment: :blob)` for articles (mirrors #1815); `.includes(:commentable, :author, commentable: :author)` for comments (polymorphic, works because both Comment and Article carry `belongs_to :author`).
+- **`Article.with_associations` scope-extension pattern (NEW 29005693993)**: scope now reads `includes(:currency, :tags, author: User::AVATAR_PRELOADS)`. Single-source-of-truth at the model level (`User::AVATAR_PRELOADS` constant, `.freeze`d) — the three controller-level helpers (`admin_user_field_preloads`, `dashboard_user_field_preloads`, `users_user_field_preloads`) can stay as aliases or migrate to the constant in a follow-up. Search-feed SELECT-count drops from 4N+1 to ~7 for a pagy page of 50.
