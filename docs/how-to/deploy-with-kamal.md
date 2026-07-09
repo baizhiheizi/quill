@@ -1,10 +1,10 @@
 # Deploy Quill with Kamal
 
-> **30-second summary:** Production deploys run via `gh workflow run Deploy`, which builds/pushes the image and runs `bundle exec kamal deploy --skip-push` against `172.233.64.194`.
+> **30-second summary:** Production deploys run via `gh workflow run Deploy`, which builds/pushes the image and runs `bundle exec kamal deploy --skip-push` against `172.233.67.145`.
 
 ## 1. What gets deployed
 
-Quill runs as a single service (`service: quill`) with three roles on one host (`172.233.64.194`):
+Quill runs as a single service (`service: quill`) with three roles on one host (`172.233.67.145`):
 
 | Role | Entrypoint | Notes |
 |------|-----------|-------|
@@ -27,7 +27,7 @@ volumes:
 Create the host directory once before the first deploy:
 
 ```bash
-ssh deploy@172.233.64.194 'sudo mkdir -p /var/lib/quill/storage && sudo chown 1000:1000 /var/lib/quill/storage'
+ssh deploy@172.233.67.145 'sudo mkdir -p /var/lib/quill/storage && sudo chown 1000:1000 /var/lib/quill/storage'
 ```
 
 ## 3. Required secrets
@@ -38,7 +38,7 @@ These secrets are never committed and must exist as GitHub Actions secrets on th
 |--------|---------|------------------|
 | `RAILS_MASTER_KEY` | Rails boot (decrypts `config/credentials/production.yml.enc`) | Rails env |
 | `KAMAL_REGISTRY_PASSWORD` | Docker Hub login + `kamal env push` | Kamal registry config |
-| `SSH_PRIVATE_KEY` | Kamal SSHs to `172.233.64.194` to manage containers | Kamal agent |
+| `SSH_PRIVATE_KEY` | Kamal SSHs to `172.233.67.145` to manage containers | Kamal agent |
 | `S3_ACCESS_KEY_ID`, `S3_SECRET_ACCESS_KEY`, `S3_BUCKET`, `S3_ENDPOINT` | `db_backup` accessory | Postgres dump uploads |
 | `POSTGRES_PASSWORD` | Database containers (app + accessory) | `DATABASE_URL` env |
 
