@@ -154,7 +154,7 @@ class PaymentTest < ActiveSupport::TestCase
         memo: memo,
         payer: @payer,
         amount: @article.price,
-        asset_id: Currency::ETH_ASSET_ID
+        asset_id: SecureRandom.uuid
       )
 
       assert_nil payment.order
@@ -182,7 +182,7 @@ class PaymentTest < ActiveSupport::TestCase
         memo: memo,
         payer: @payer,
         amount: collection.price,
-        asset_id: Currency::ETH_ASSET_ID
+        asset_id: SecureRandom.uuid
       )
 
       assert_nil payment.order

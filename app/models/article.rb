@@ -50,9 +50,6 @@ class Article < ApplicationRecord
   is_impressionable
 
   SUPPORTED_ASSETS = Settings.supported_assets || [ Currency::BTC_ASSET_ID ]
-  AUTHOR_REVENUE_RATIO_DEFAULT = 0.5
-  READERS_REVENUE_RATIO_DEFAULT = 0.4
-  PLATFORM_REVENUE_RATIO_DEFAULT = 0.1
 
   include AASM
   include Articles::ContentPreview

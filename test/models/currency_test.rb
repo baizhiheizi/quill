@@ -29,10 +29,6 @@ class CurrencyTest < ActiveSupport::TestCase
 
   test "exposes the well-known asset id constants" do
     assert_equal "c6d0c728-2624-429b-8e0d-d9d19b6592fa", Currency::BTC_ASSET_ID
-    assert_equal "0ff3f325-4f34-334d-b6c0-a3bd8850fc06", Currency::JPYC_ASSET_ID
-    assert_equal "31d2ea9c-95eb-3355-b65b-ba096853bc18", Currency::PUSD_ASSET_ID
-    assert_equal "c94ac88f-4671-3976-b60a-09064f1811e8", Currency::XIN_ASSET_ID
-    assert_equal "43d61dcd-e413-450d-80b8-101d5e903357", Currency::ETH_ASSET_ID
   end
 
   test "btc scope returns the bitcoin currency" do
