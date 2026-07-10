@@ -9,20 +9,21 @@ metadata:
 
 ## Current state
 
-- **Run 29052269991 on 2026-07-09 12:00 UTC.** Repo: baizhiheizi/quill (Rails 8.1, Ruby 4.0.5). AGENTS.md exists.
+- **Run 29068529243 on 2026-07-10 04:30 UTC.** Repo: baizhiheizi/quill (Rails 8.1, Ruby 4.0.5). AGENTS.md exists.
 - **Open Repo Assist PRs**:
-  1. **Draft PR — perf with_associations cover preload + dashboard/users migration** — branch `repo-assist/perf-with-associations-cover-preload-2026-07-09` (commit `e7e8f2df`, 3 files +26/-29). Extends `Article.with_associations` to `includes(:currency, :tags, cover_attachment: :blob, author: User::AVATAR_PRELOADS)` and migrates `Dashboard::ArticlesController#index` + `Users::ArticlesController#index` to use the shared scope. Closes the cover-blob N+1 on homepage feed / search / dashboard / users articles tabs. For a dashboard author with 50 articles, SELECTs drop from ~250 (~5N+1) to ~7. Patch + bundle at `/tmp/gh-aw/aw-repo-assist-perf-with-associations-cover-preload-2026-07-09.{patch,bundle}`. Awaiting maintainer revival.
+  1. **Draft PR — refactor dead-code cleanup** — branch `repo-assist/cleanup-dead-code-2026-07-10` (commit `0c470542`, 7 files +2/-66). Drops `Article::{AUTHOR,READERS,PLATFORM}_REVENUE_RATIO_DEFAULT`, `Currency::{JPYC,PUSD,XIN,ETH}_ASSET_ID`, `Collection::DEFAULT_SPLIT`, `UiHelper#ui_button` + `#ui_badge` + their `BUTTON_VARIANTS` / `BUTTON_SIZES` / `BADGE_VARIANTS` maps, and `API::RenderingHelper#render_ok` + `#render_bad_request`. `bin/rubocop` (7 files) + `bin/rails zeitwerk:check` clean. `bin/rails test test/models/currency_test.rb` 10 runs / 13 assertions / 0 failures. Patch + bundle at `/tmp/gh-aw/aw-repo-assist-cleanup-dead-code-2026-07-10.{patch,bundle}`. Awaiting maintainer revival.
+  2. **Draft PR — test Oauth::MixinAdapter + FlashBroadcast** — branch `repo-assist/test-oauth-flash-broadcast-2026-07-10` (commit `3559de6d`, 2 files +115/-0). New tests: `Oauth::Adapters::MixinAdapter` (5 tests) + `DeliveryMethods::FlashBroadcast` (1 test). Both hermetic. `bin/rubocop` (2 files) clean. `bin/rails test` 6 runs / 17 assertions / 0 failures. Patch + bundle at `/tmp/gh-aw/aw-repo-assist-test-oauth-flash-broadcast-2026-07-10.{patch,bundle}`. Awaiting maintainer revival.
 - **Other open PRs**: #1877 (Dependabot pagy 43.5.6→43.6.0), #1878 (Dependabot typescript 6.0.3→7.0.2), #1879 (docs unbloat background-jobs.md, automation).
-- **Open issues**: 8 (all AI-generated). #1789 (Monthly Activity) updated.
-- **Recent merges (2026-07-08 → 2026-07-09)**: #1876 (perf dashboard comments + subscribe_articles indexes), #1874 (perf article with_associations author avatar), #1873 (test API ValidUsersController#filter), #1872 (refactor masthead mr-24), #1871 (perf users articles/comments preloads), #1870 (fix masthead mr-24), #1869 (Extract revenue logic from article_form_controller), #1868 (admin collections article counts prime), #1867 (MarkdownRenderService no-op stub removal), #1866 (users subscribe lists), #1865 (article show action_store), #1864 (with_all_transfers_generated! consolidation), #1862 (dashboard block/subscribe users). All by `an-lee`.
+- **Open issues**: 9 (all AI-generated). #1789 (Monthly Activity) updated.
+- **Recent merges (2026-07-08 → 2026-07-10)**: #1880 (perf article cover preload + dashboard/users migration), #1876 (perf dashboard comments + subscribe_articles indexes), #1874 (perf article with_associations author avatar), #1873 (test API ValidUsersController#filter), #1872 (refactor masthead mr-24), #1871 (perf users articles/comments preloads), #1870 (fix masthead mr-24), #1869 (Extract revenue logic from article_form_controller), #1868 (admin collections article counts prime), #1867 (MarkdownRenderService no-op stub removal), #1866 (users subscribe lists), #1865 (article show action_store), #1864 (with_all_transfers_generated! consolidation), #1862 (dashboard block/subscribe users). All by `an-lee`.
 
-## This run (29052269991)
+## This run (29068529243)
 
-- **Selected tasks**: Task 3, Task 8, Task 2, plus Task 11.
-- **Task 3 (Issue Fix)**: Substituted → no fixable issues. All 8 open issues are AI-generated audits/proposals or system tracking.
-- **Task 8 (Performance)**: Created draft PR (commit `e7e8f2df`) extending `Article.with_associations` to include `cover_attachment: :blob` and migrating `Dashboard::ArticlesController#index` + `Users::ArticlesController#index` to the shared scope. SELECTs drop from ~250 to ~7 for a pagy page of 50.
-- **Task 2 (Issue Comment)**: Substituted → no engagement. All open issues are AI-generated.
-- **Task 11**: Updated #1789. Replaced merged #1874 line with this run's draft. Added #1875 (Observability audit, 2026-07-09). Future Work: marked "Dashboard / Users articles controllers → `with_associations`" COMPLETE.
+- **Selected tasks**: Task 5, Task 3, Task 9, plus Task 11.
+- **Task 5 (Coding Improvements)**: Created draft PR (commit `0c470542`) deleting dead constants/helpers across 5 source files: 3 Article ratio defaults, 4 Currency asset-id constants, 1 Collection default split, 2 UiHelper methods + their variant maps, 2 API::RenderingHelper methods. 7 files changed total (including 2 test fixtures). Net −64 lines.
+- **Task 3 (Issue Fix)**: Substituted → no fixable issues. All 9 open issues are AI-generated (Monthly activity summaries from sister agents, no-op run tracker, threat-detection tracker, audit PR-as-issues blocked by file-protection policy).
+- **Task 9 (Testing Improvements)**: Created draft PR (commit `3559de6d`) adding 6 new hermetic tests across 2 files. `Oauth::MixinAdapter` test pins symbol/string-key fallback, deep-stringification, and missing-user_id guard. `DeliveryMethods::FlashBroadcast` test pins the broadcast_as_flash delegation.
+- **Task 11**: Updated #1789. Added this run's two new drafts (cleanup + tests) to Suggested Actions; removed the previously listed cover-preload PR (now merged as #1880). Future Work: marked "Dead-code sweep", "Oauth::MixinAdapter direct test coverage", and "DeliveryMethods::FlashBroadcast direct test coverage" COMPLETE.
 
 ## Backlog
 
@@ -31,8 +32,9 @@ metadata:
 - **Issue #1821** (BigDecimal/DistributeService audit, F1-F12): F9 closed via #1828. F1/F2/F3 still HIGH; contingent offer in #1821 comment awaiting maintainer ack.
 - Respect #1571 5-cycle cooldown on payment/Web3 resilience.
 - #1667 + #1686 + #1694 + #1771 + #1790 + #1794-#1798: maintainer-led design discussions, out of scope.
-- **N+1 revival classes: ALL COMPLETE**: Dashboard-#index (#1802/#1815/#1829/#1830/#1833/#1862), Admin-#index (#1834/#1837/#1845/#1862/#1868), Public article show (#1865), Users namespace (#1866/#1871), Article-feed avatar chain (#1874), Article-feed cover blob (this run, draft), MarkdownRenderService no-op stub (#1867).
-- **Test gaps (low-value)**: `HtmlPostProcessor` direct unit tests (covered indirectly via both render services).
+- **N+1 revival classes: ALL COMPLETE**: Dashboard-#index (#1802/#1815/#1829/#1830/#1833/#1862), Admin-#index (#1834/#1837/#1845/#1862/#1868), Public article show (#1865), Users namespace (#1866/#1871), Article-feed avatar chain (#1874), Article-feed cover blob (#1880, merged 2026-07-10), MarkdownRenderService no-op stub (#1867).
+- **Dead-code sweep**: COMPLETE — this run (commit `0c470542`).
+- **Test gaps**: Oauth::MixinAdapter COMPLETE; DeliveryMethods::FlashBroadcast COMPLETE. Low-value remaining: `HtmlPostProcessor` direct unit tests (covered indirectly via both render services).
 
 ## Notes
 
@@ -69,3 +71,7 @@ metadata:
 - **`Users::ArticlesController#index` and `Users::CommentsController#index` N+1 closure pattern (NEW 28993481069)**: `.includes(:author, :currency, :tags, cover_attachment: :blob)` for articles; `.includes(:commentable, :author, commentable: :author)` for comments.
 - **`Article.with_associations` scope-extension pattern (NEW 29005693993)**: scope reads `includes(:currency, :tags, author: User::AVATAR_PRELOADS)`. Search-feed SELECT-count drops from 4N+1 to ~7.
 - **`Article.with_associations` cover-preload extension (NEW 29052269991)**: scope reads `includes(:currency, :tags, cover_attachment: :blob, author: User::AVATAR_PRELOADS)`. Duplicate key in `with_show_associations` is merged by Rails. Dashboard / Users tabs' SELECT-count drops from ~5N+1 to ~7 for a pagy page of 50.
+- **`Minitest::Mock` is gone in Minitest 6.0.6**: use `Object.new` + `define_singleton_method` + a closure-captured flag, then assert on the flag. Pattern in `test/notifiers/delivery_methods/flash_broadcast_test.rb`. The deleted memory note about `Object#stub` still applies for general stubs.
+- **`deep_stringify_keys` does not coerce values**: only keys are stringified. Integer values stay integer. Test should assert on keys, not on stringified values.
+- **Dead-constant confidence ladder**: before deleting, grep across `app/`, `lib/`, AND `test/`. Constants referenced only in tests = safe to delete with the test reference.
+- **Deletion-only PRs are the maintainer's preferred refactor style**: see #1867, #1872, #1864, #1869.
