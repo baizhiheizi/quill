@@ -32,6 +32,10 @@ BENCHMARK_ITERATIONS=10 bin/benchmark article_search.bought
 | `article.random_readers` | SQL-sampled reader avatars |
 | `home.active_authors` | Signed-out home active-authors sample (`ORDER BY RANDOM() LIMIT 5`) |
 | `home.active_authors.legacy` | Pre-optimisation shape (`LIMIT 20` + Ruby `sample(5)`) for A/B comparison |
+| `dashboard.orders.eager_load` | `Dashboard::OrdersController#index` includes shape (citer + buyer avatar chain) |
+| `dashboard.orders.legacy` | Pre-optimisation shape (no includes) for A/B comparison |
+| `admin.mixin_network_snapshots.eager_load` | `Admin::MixinNetworkSnapshotsController#index` includes shape (wallet + opponent_wallet + currency + opponent avatar chain) |
+| `admin.mixin_network_snapshots.legacy` | Pre-optimisation shape (no includes) for A/B comparison |
 
 ## Limitations
 

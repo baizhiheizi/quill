@@ -69,6 +69,39 @@ Benchmarks::Runner.register("dashboard.orders.legacy") do
     .each { |o| o.buyer.avatar_image_thumb; o.citer.author.name if o.citer.is_a?(Article) }
 end
 
+# Mirror of `Admin::MixinNetworkSnapshotsController#index` after PR #1868
+# follow-up: the four belongs_to + the opponent avatar field chain are
+# eagerly loaded in one pass. Without this prime the partial fires
+# ~4 SELECTs/row + ~5 SELECTs/row for the opponent avatar chain.
+Benchmarks::Runner.register("admin.mixin_network_snapshots.eager_load") do
+  MixinNetworkSnapshot
+    .includes(:wallet, :opponent_wallet, :currency, opponent: USER_FIELD_PRELOADS)
+    .order(created_at: :desc)
+    .limit(50)
+    .to_a
+    .each do |s|
+      s.wallet&.uuid
+      s.opponent_wallet&.uuid
+      s.currency&.icon_url
+      s.opponent&.avatar_image_thumb
+    end
+end
+
+# Pre-optimisation shape for direct A/B comparison — the per-row N+1
+# fan-out this PR closes.
+Benchmarks::Runner.register("admin.mixin_network_snapshots.legacy") do
+  MixinNetworkSnapshot
+    .order(created_at: :desc)
+    .limit(50)
+    .to_a
+    .each do |s|
+      s.wallet&.uuid
+      s.opponent_wallet&.uuid
+      s.currency&.icon_url
+      s.opponent&.avatar_image_thumb
+    end
+end
+
 Benchmarks::Runner.setup("article_search.bought") do
   article = articles(:published_paid)
   buyer = users(:reader_one)
