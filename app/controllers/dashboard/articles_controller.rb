@@ -17,19 +17,13 @@ class Dashboard::ArticlesController < Dashboard::BaseController
         current_user.bought_articles
       end
 
-    # Eager-load associations consumed by the rendered partials:
-    #   - `:currency` → `article.currency.icon_url`, `article.price_tag`, `article.price_usd`
-    #     (in `_published_article`, `_hidden_article`, and `articles/_card`)
-    #   - `:author`  → `user_article_path(article.author, ...)` and the author block in `articles/_card`
-    #   - `cover_attachment: :blob` → `article.cover.attached?` + `article.cover_url`
-    #     (Rails 6+ ActiveStorage nested preload — answers `attached?` from the cached
-    #     `Attachment` row and resolves `cover.key` from the preloaded `Blob`)
-    #   - `:tags`    → `article.tags.first(2)` in `articles/_card` (bought tab)
-    #
-    # Without these includes, each row triggers ~4–6 SELECTs. For an author with N
-    # articles on the dashboard tabs, the action runs **~(4–6)N + 1** SELECTs per page
-    # load (more for the `bought` tab since `_card` also touches `:author` and `:tags`).
-    @pagy, @articles = pagy articles.includes(:author, :currency, :tags, cover_attachment: :blob).order(updated_at: :desc)
+    # Delegate to `Article.with_associations` — the shared scope covers
+    # `:currency` + `:tags` + `cover_attachment: :blob` + the author avatar
+    # chain consumed by `articles/_card`. Centralizing the include list at
+    # the model layer keeps this controller and `Users::ArticlesController#index`
+    # (and `ArticleSearchService`) byte-for-byte in sync; if the card partial
+    # adds new associations, only `with_associations` needs to change.
+    @pagy, @articles = pagy articles.with_associations.order(updated_at: :desc)
   end
 
   def show

@@ -34,20 +34,13 @@
         <%= render "search/form" %>
       </div>
 
-      <div class="ml-auto flex flex-shrink-0 items-center gap-1.5 sm:gap-2 <%= 'mr-24' if from_mixin_messenger? %>">
+      <div class="ml-auto flex flex-shrink-0 items-center gap-1.5 sm:gap-2 <%= from_mixin_messenger? ? 'mr-24' : '' %>">
         <% if current_user.present? %>
           <%= link_to new_article_path, class: "btn btn-primary btn-sm rounded-full px-3 font-medium sm:btn-md sm:px-4" do %>
             <span class="i-[tabler--edit] size-4"></span>
             <span class="hidden sm:inline"><%= t('write') %></span>
           <% end %>
-        <% else %>
-          <%= link_to login_path, data: { turbo_frame: :modal }, class: "btn btn-primary btn-sm rounded-full px-3 font-medium sm:btn-md sm:px-4" do %>
-            <span class="i-[tabler--wallet] size-4"></span>
-            <span class="hidden sm:inline"><%= t('connect_wallet') %></span>
-          <% end %>
-        <% end %>
 
-        <% if current_user.present? %>
           <%= link_to dashboard_notifications_path, class: "btn btn-soft btn-circle btn-sm sm:btn-md", "aria-label": t('notification') do %>
             <span class="indicator">
               <span class="i-[tabler--bell] size-5 text-base-content/60"></span>
@@ -55,6 +48,11 @@
                 <span class="indicator-item badge badge-error badge-xs"></span>
               <% end %>
             </span>
+          <% end %>
+        <% else %>
+          <%= link_to login_path, data: { turbo_frame: :modal }, class: "btn btn-primary btn-sm rounded-full px-3 font-medium sm:btn-md sm:px-4" do %>
+            <span class="i-[tabler--wallet] size-4"></span>
+            <span class="hidden sm:inline"><%= t('connect_wallet') %></span>
           <% end %>
         <% end %>
 

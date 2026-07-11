@@ -12,7 +12,12 @@ module Users
           @user.bought_articles.published
         end
 
-      @pagy, @articles = pagy(:countless, articles.order(published_at: :desc))
+      # Delegate to `Article.with_associations` — the shared scope covers
+      # `:currency` + `:tags` + `cover_attachment: :blob` + the author avatar
+      # chain consumed by `articles/_card`. Same scope as
+      # `Dashboard::ArticlesController#index` and `ArticleSearchService` —
+      # single source of truth at the model layer.
+      @pagy, @articles = pagy(:countless, articles.with_associations.order(published_at: :desc))
     end
   end
 end

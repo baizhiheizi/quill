@@ -2,12 +2,17 @@
 
 class Dashboard::SubscribeArticlesController < Dashboard::BaseController
   def index
-    # Eager-load `:author` for the partial at
-    # `app/views/dashboard/subscribe_articles/_article.html.erb`, which reads
-    # `article.author` twice (once in `user_article_path`, once in
-    # `shared/avatar`). Without this include each row triggers a SELECT on
-    # `users`; for a user subscribed to N articles' comments the action runs
-    # ~2N SELECTs per page load (pagy default page size).
-    @pagy, @articles = pagy current_user.commenting_subscribe_articles.includes(:author).order("actions.created_at DESC")
+    # Eager-load `:author` plus the ActiveStorage avatar chain for the
+    # partial at `app/views/dashboard/subscribe_articles/_article.html.erb`,
+    # which renders `shared/avatar` with `thumb: true`. Without the
+    # `dashboard_user_field_preloads` chain each row fires ~5 extra SELECTs
+    # (`authorization` + `avatar_attachment` + `blob` + `variant_records` +
+    # `image_attachment.blob`). With the 50-row pagy default that's ~250
+    # extra SELECTs per index hit — same family as the eager-load work
+    # already shipped for `Dashboard::BlockUsersController#index` (PR
+    # #1834) and `Dashboard::SubscribeUsersController#index`.
+    @pagy, @articles = pagy current_user.commenting_subscribe_articles
+      .includes(author: dashboard_user_field_preloads)
+      .order("actions.created_at DESC")
   end
 end

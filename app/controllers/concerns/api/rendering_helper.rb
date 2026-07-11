@@ -5,11 +5,6 @@ module API::RenderingHelper
 
   private
 
-  def render_ok(data = nil)
-    data ||= {}
-    render json: data, status: :ok
-  end
-
   def render_created(data = nil)
     data ||= {}
     render json: data, status: :created
@@ -27,11 +22,6 @@ module API::RenderingHelper
   def render_forbidden(message = nil)
     message ||= "Forbidden"
     render json: { message: }, status: :forbidden
-  end
-
-  def render_bad_request(message = nil)
-    message ||= "Bad request"
-    render json: { message: }, status: :bad_request
   end
 
   def render_not_found(message = nil)

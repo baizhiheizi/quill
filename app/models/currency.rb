@@ -22,10 +22,6 @@
 
 class Currency < ApplicationRecord
   BTC_ASSET_ID = "c6d0c728-2624-429b-8e0d-d9d19b6592fa"
-  JPYC_ASSET_ID = "0ff3f325-4f34-334d-b6c0-a3bd8850fc06"
-  PUSD_ASSET_ID = "31d2ea9c-95eb-3355-b65b-ba096853bc18"
-  XIN_ASSET_ID = "c94ac88f-4671-3976-b60a-09064f1811e8"
-  ETH_ASSET_ID = "43d61dcd-e413-450d-80b8-101d5e903357"
   ASSET_CACHE_TTL = 30.minutes
 
   store_accessor :raw, :name, :icon_url, :change_usd
