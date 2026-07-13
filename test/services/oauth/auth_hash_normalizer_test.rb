@@ -33,25 +33,9 @@ class Oauth::AuthHashNormalizerTest < ActiveSupport::TestCase
     assert_raises(Oauth::SignInError) { Oauth::AuthHashNormalizer.call(nil) }
   end
 
-  test "normalizes stub test_provider auth hash for extensibility" do
-    auth = OmniAuth::AuthHash.new(
-      provider: "test_provider",
-      uid: "stub-uid",
-      credentials: OmniAuth::AuthHash.new(token: "stub-token"),
-      extra: {
-        raw_info: {
-          "uid" => "stub-uid",
-          "full_name" => "Stub User"
-        }
-      }
-    )
-
-    identity = Oauth::AuthHashNormalizer.call(auth)
-
-    assert_equal :fennec, identity.provider
-    assert_equal "stub-uid", identity.uid
-    assert_equal "stub-token", identity.access_token
-    assert_equal "Stub User", identity.raw["full_name"]
+  test "removed dead test_provider adapter stays removed" do
+    refute_includes Oauth::Adapters.constants, :TestAdapter
+    refute_includes Oauth::AuthHashNormalizer::ADAPTERS.keys, "test_provider"
   end
 
   private
