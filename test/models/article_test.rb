@@ -265,4 +265,43 @@ class ArticleTest < ActiveSupport::TestCase
                  MixinNetworkUser.where(owner_type: "Article", owner_id: article.id).count,
                  "publishing must not create a MixinNetworkUser for this article (no per-article wallets — #1797)"
   end
+
+  # Article show N+1 regression guard.
+  #
+  # `ArticlesController#show` consumes `Article.with_show_associations`.
+  # `articles/_widgets.html.erb` renders `_references_card.html.erb` which
+  # walks `reference.reference.author` + the `shared/_avatar` chain for each
+  # of the article's `article_references`. Without the nested preload, each
+  # reference fires ~5 SELECTs (polymorphic reference + author + authorization
+  # + avatar_attachment + blob + variant_records). This test pins the preload
+  # chain shape so any future regression that drops one of the nested keys
+  # is caught immediately.
+  test "with_show_associations preloads article_references with reference.author avatar chain" do
+    article = Article.with_show_associations.first
+
+    # The article itself has no references in fixtures, but the preload
+    # chain shape must still include the nested hash. We check the value
+    # of the loaded relation rather than the schema-level fixture data.
+    preload_values = Article.with_show_associations.values[:includes]
+
+    article_references_chain = preload_values.find do |v|
+      v.is_a?(Hash) && v.key?(:article_references)
+    end
+    assert article_references_chain, "expected :article_references in preload chain, got #{preload_values.inspect}"
+
+    reference_chain = article_references_chain[:article_references]
+    assert reference_chain.is_a?(Hash), "expected :article_references to be a hash for nested preload, got #{reference_chain.inspect}"
+    assert reference_chain.key?(:reference), "expected :reference nested under :article_references"
+
+    author_chain = reference_chain[:reference]
+    assert author_chain.is_a?(Hash), "expected :reference to be a hash for nested preload, got #{author_chain.inspect}"
+    assert author_chain.key?(:author), "expected :author nested under :reference (for references_card avatar render)"
+
+    # The author must use the full AVATAR_PRELOADS chain (authorization +
+    # ActiveStorage fan-out) since `_references_card` renders the avatar
+    # via `shared/_avatar`. Anything less re-introduces the per-reference
+    # avatar N+1.
+    assert_equal User::AVATAR_PRELOADS, author_chain[:author],
+                 "expected reference.author to use User::AVATAR_PRELOADS, got #{author_chain[:author].inspect}"
+  end
 end
