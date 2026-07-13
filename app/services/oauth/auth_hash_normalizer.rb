@@ -3,8 +3,7 @@
 module Oauth
   class AuthHashNormalizer
     ADAPTERS = {
-      "mixin" => Adapters::MixinAdapter,
-      "test_provider" => Adapters::TestAdapter
+      "mixin" => Adapters::MixinAdapter
     }.freeze
 
     def self.call(omniauth_auth)
