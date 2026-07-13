@@ -1,0 +1,11 @@
+en:
+  admin:
+    transfers:
+      transfer:
+        state:
+          stale: "Stale"
+          unprocessed: "Unprocessed"
+        actions:
+          stale: "Mark Stale"
+          reactivate: "Reactivate"
+        confirm_stale: "Are you sure? This transfer will be excluded from all future processing."

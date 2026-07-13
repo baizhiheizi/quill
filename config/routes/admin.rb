@@ -48,6 +48,8 @@ namespace :admin do
 
   resources :transfers, only: %i[index show] do
     post :process_now
+    post :stale
+    post :reactivate
   end
 
   resources :mixin_network_snapshots, only: %i[index show] do

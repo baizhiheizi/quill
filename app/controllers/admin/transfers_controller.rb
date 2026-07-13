@@ -14,6 +14,8 @@ module Admin
           transfers.unprocessed
         when "processed"
           transfers.processed
+        when "stale"
+          transfers.stale
         else
           transfers
         end
@@ -70,6 +72,33 @@ module Admin
     def process_now
       @transfer = Transfer.find params[:transfer_id]
       @transfer.process!
+    end
+
+    def stale
+      @transfer = Transfer.find params[:transfer_id]
+
+      if @transfer.processed?
+        flash.now[:alert] = "Cannot mark a processed transfer as stale"
+        return render :stale, status: :unprocessable_entity
+      end
+
+      @transfer.stale!(current_admin)
+    end
+
+    def reactivate
+      @transfer = Transfer.find params[:transfer_id]
+
+      if @transfer.processed?
+        flash.now[:alert] = "Cannot reactivate a processed transfer"
+        return render :reactivate, status: :unprocessable_entity
+      end
+
+      unless @transfer.stale?
+        flash.now[:alert] = "Transfer is not marked as stale"
+        return render :reactivate, status: :unprocessable_entity
+      end
+
+      @transfer.reactivate!
     end
   end
 end

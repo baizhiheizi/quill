@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_07_07_234118) do
+ActiveRecord::Schema[8.1].define(version: 2026_07_13_084214) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_stat_statements"
@@ -461,6 +461,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_07_234118) do
     t.json "snapshot"
     t.bigint "source_id"
     t.string "source_type"
+    t.datetime "stale_at"
+    t.bigint "staled_by_id"
     t.uuid "trace_id"
     t.integer "transfer_type"
     t.datetime "updated_at", null: false
@@ -468,6 +470,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_07_234118) do
     t.index ["asset_id"], name: "index_transfers_on_asset_id"
     t.index ["created_at"], name: "index_transfers_on_created_at"
     t.index ["opponent_id"], name: "index_transfers_on_opponent_id"
+    t.index ["processed_at", "stale_at"], name: "index_transfers_on_processed_at_and_stale_at"
     t.index ["processed_at"], name: "index_transfers_on_processed_at"
     t.index ["source_type", "source_id"], name: "index_transfers_on_source_type_and_source_id"
     t.index ["trace_id"], name: "index_transfers_on_trace_id", unique: true

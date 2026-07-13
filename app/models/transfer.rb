@@ -14,12 +14,14 @@
 #  retry_at          :datetime
 #  snapshot          :json
 #  source_type       :string
+#  stale_at          :datetime
 #  transfer_type     :integer
 #  created_at        :datetime         not null
 #  updated_at        :datetime         not null
 #  asset_id          :uuid
 #  opponent_id       :uuid
 #  source_id         :bigint
+#  staled_by_id      :bigint
 #  trace_id          :uuid
 #  wallet_id         :uuid
 #
@@ -29,6 +31,7 @@
 #  index_transfers_on_created_at                 (created_at)
 #  index_transfers_on_opponent_id                (opponent_id)
 #  index_transfers_on_processed_at               (processed_at)
+#  index_transfers_on_processed_at_and_stale_at  (processed_at,stale_at)
 #  index_transfers_on_source_type_and_source_id  (source_type,source_id)
 #  index_transfers_on_trace_id                   (trace_id) UNIQUE
 #  index_transfers_on_transfer_type              (transfer_type)
@@ -43,6 +46,8 @@ class Transfer < ApplicationRecord
   belongs_to :wallet, class_name: "MixinNetworkUser", primary_key: :uuid, inverse_of: :transfers, optional: true
   belongs_to :recipient, class_name: "User", primary_key: :mixin_uuid, foreign_key: :opponent_id, inverse_of: :transfers, optional: true
   belongs_to :currency, primary_key: :asset_id, foreign_key: :asset_id, inverse_of: :transfers, optional: true
+
+  belongs_to :staled_by, class_name: "Administrator", optional: true
 
   enum :queue_priority, { default: 0, critical: 1, high: 2, low: 3 }, prefix: true
   enum :transfer_type, {
@@ -67,8 +72,9 @@ class Transfer < ApplicationRecord
 
   after_commit :process_async, on: :create
 
-  scope :unprocessed, -> { where(processed_at: nil) }
+  scope :unprocessed, -> { where(processed_at: nil).where(stale_at: nil) }
   scope :processed, -> { where.not(processed_at: nil) }
+  scope :stale, -> { where.not(stale_at: nil) }
   scope :only_user_revenue, -> { where(transfer_type: %i[author_revenue reader_revenue]) }
 
   def snapshot_id
@@ -210,6 +216,22 @@ class Transfer < ApplicationRecord
 
   def process_async
     Transfers::ProcessJob.perform_later trace_id
+  end
+
+  def stale?
+    stale_at?
+  end
+
+  def stale!(admin)
+    raise "Cannot mark a processed transfer as stale" if processed?
+
+    update!(stale_at: Time.current, staled_by_id: admin.id, retry_at: nil)
+  end
+
+  def reactivate!
+    raise "Cannot reactivate a processed transfer" if processed?
+
+    update!(stale_at: nil, staled_by_id: nil)
   end
 
   def recipient_has_safe?

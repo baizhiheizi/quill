@@ -12,12 +12,14 @@
 #  retry_at          :datetime
 #  snapshot          :json
 #  source_type       :string
+#  stale_at          :datetime
 #  transfer_type     :integer
 #  created_at        :datetime         not null
 #  updated_at        :datetime         not null
 #  asset_id          :uuid
 #  opponent_id       :uuid
 #  source_id         :bigint
+#  staled_by_id      :bigint
 #  trace_id          :uuid
 #  wallet_id         :uuid
 #
@@ -27,6 +29,7 @@
 #  index_transfers_on_created_at                 (created_at)
 #  index_transfers_on_opponent_id                (opponent_id)
 #  index_transfers_on_processed_at               (processed_at)
+#  index_transfers_on_processed_at_and_stale_at  (processed_at,stale_at)
 #  index_transfers_on_source_type_and_source_id  (source_type,source_id)
 #  index_transfers_on_trace_id                   (trace_id) UNIQUE
 #  index_transfers_on_transfer_type              (transfer_type)

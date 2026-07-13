@@ -14,12 +14,14 @@
 #  retry_at          :datetime
 #  snapshot          :json
 #  source_type       :string
+#  stale_at          :datetime
 #  transfer_type     :integer
 #  created_at        :datetime         not null
 #  updated_at        :datetime         not null
 #  asset_id          :uuid
 #  opponent_id       :uuid
 #  source_id         :bigint
+#  staled_by_id      :bigint
 #  trace_id          :uuid
 #  wallet_id         :uuid
 #
@@ -29,6 +31,7 @@
 #  index_transfers_on_created_at                 (created_at)
 #  index_transfers_on_opponent_id                (opponent_id)
 #  index_transfers_on_processed_at               (processed_at)
+#  index_transfers_on_processed_at_and_stale_at  (processed_at,stale_at)
 #  index_transfers_on_source_type_and_source_id  (source_type,source_id)
 #  index_transfers_on_trace_id                   (trace_id) UNIQUE
 #  index_transfers_on_transfer_type              (transfer_type)
@@ -235,6 +238,97 @@ class TransferTest < ActiveSupport::TestCase
     transfer = build_transfer(opponent_id: SecureRandom.uuid)
 
     assert_nil transfer.recipient_has_safe?
+  end
+
+  test "stale? returns true when stale_at is set" do
+    transfer = build_transfer(stale_at: Time.current)
+
+    assert transfer.stale?
+  end
+
+  test "stale? returns false when stale_at is nil" do
+    transfer = build_transfer(stale_at: nil)
+
+    assert_not transfer.stale?
+  end
+
+  test "stale! sets stale_at, staled_by_id, and clears retry_at" do
+    admin = administrators(:one)
+    transfer = create_transfer!(trace_id: SecureRandom.uuid, retry_at: 1.day.from_now)
+
+    transfer.stale!(admin)
+    transfer.reload
+
+    assert transfer.stale_at.present?
+    assert_equal admin.id, transfer.staled_by_id
+    assert_nil transfer.retry_at
+  end
+
+  test "stale! raises when transfer is already processed" do
+    admin = administrators(:one)
+    transfer = create_transfer!(trace_id: SecureRandom.uuid, processed_at: Time.current)
+
+    error = assert_raises(RuntimeError) { transfer.stale!(admin) }
+    assert_match "Cannot mark a processed transfer as stale", error.message
+  end
+
+  test "reactivate! clears stale_at and staled_by_id" do
+    admin = administrators(:one)
+    transfer = create_transfer!(trace_id: SecureRandom.uuid)
+    transfer.update!(stale_at: Time.current, staled_by_id: admin.id)
+
+    transfer.reactivate!
+    transfer.reload
+
+    assert_nil transfer.stale_at
+    assert_nil transfer.staled_by_id
+  end
+
+  test "reactivate! raises when transfer is already processed" do
+    admin = administrators(:one)
+    transfer = create_transfer!(trace_id: SecureRandom.uuid, processed_at: Time.current,
+                                stale_at: Time.current, staled_by_id: admin.id)
+
+    error = assert_raises(RuntimeError) { transfer.reactivate! }
+    assert_match "Cannot reactivate a processed transfer", error.message
+  end
+
+  test "unprocessed scope excludes stale transfers" do
+    unprocessed = create_transfer!(trace_id: SecureRandom.uuid)
+    stale = create_transfer!(trace_id: SecureRandom.uuid, stale_at: Time.current, staled_by_id: administrators(:one).id)
+
+    assert_includes Transfer.unprocessed, unprocessed
+    assert_not_includes Transfer.unprocessed, stale
+  end
+
+  test "stale scope returns only stale transfers" do
+    stale = create_transfer!(trace_id: SecureRandom.uuid, stale_at: Time.current, staled_by_id: administrators(:one).id)
+    unprocessed = create_transfer!(trace_id: SecureRandom.uuid)
+
+    results = Transfer.stale
+
+    assert_includes results, stale
+    assert_not_includes results, unprocessed
+  end
+
+  test "process_pending! skips stale transfers" do
+    Transfer.unprocessed.update_all(processed_at: Time.current)
+    admin = administrators(:one)
+
+    stale_transfer = create_transfer!(trace_id: SecureRandom.uuid, stale_at: Time.current, staled_by_id: admin.id)
+    active_transfer = create_transfer!(trace_id: SecureRandom.uuid)
+
+    with_quill_bot_stub do
+      QuillBot.api.define_singleton_method(:safe_transaction) { |_| raise MixinBot::NotFoundError, "missing" }
+      QuillBot.api.define_singleton_method(:create_safe_transfer) do |**_kwargs|
+        { "data" => { "snapshot_id" => "snap-batch", "transaction_hash" => "hash-batch" } }
+      end
+
+      Transfer.process_pending!
+    end
+
+    assert active_transfer.reload.processed?
+    assert_not stale_transfer.reload.processed?
   end
 
   test "notify_recipient is a no-op when there is no recipient" do

@@ -65,6 +65,10 @@
           <span class="badge badge-success">
             Processed
           </span>
+        <% elsif @transfer.stale? %>
+          <span class="badge badge-warning">
+            Stale
+          </span>
         <% else %>
           <span class="badge badge-neutral">
             Unprocessed

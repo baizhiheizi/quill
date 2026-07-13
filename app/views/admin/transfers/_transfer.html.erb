@@ -36,9 +36,13 @@
         <span class="badge badge-success">
           Processed
         </span>
+      <% elsif transfer.stale? %>
+        <span class="badge badge-warning">
+          <%= t(".state.stale", default: "Stale") %>
+        </span>
       <% else %>
         <span class="badge badge-neutral">
-          Unprocessed
+          <%= t(".state.unprocessed", default: "Unprocessed") %>
         </span>
       <% end %>
     </div>
@@ -54,6 +58,13 @@
   </td>
   <td class="p-4 flex items-center space-x-4">
     <%= link_to 'Detail', admin_transfer_path(transfer), class: "btn btn-primary btn-sm", data: { turbo_frame: "_top" } %>
-    <%= button_to 'Process', admin_transfer_process_now_path(transfer.id), class: "btn btn-error btn-sm" unless transfer.processed? %>
+    <% unless transfer.processed? %>
+      <% if transfer.stale? %>
+        <%= button_to t(".actions.reactivate", default: "Reactivate"), admin_transfer_reactivate_path(transfer.id), class: "btn btn-success btn-sm" %>
+      <% else %>
+        <%= button_to 'Process', admin_transfer_process_now_path(transfer.id), class: "btn btn-error btn-sm" %>
+        <%= button_to t(".actions.stale", default: "Mark Stale"), admin_transfer_stale_path(transfer.id), class: "btn btn-warning btn-sm", data: { confirm: t(".confirm_stale", default: "Are you sure? This transfer will be excluded from all future processing.") } %>
+      <% end %>
+    <% end %>
   </td>
 </tr>

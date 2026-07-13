@@ -1,0 +1,9 @@
+<% if flash.now[:alert].present? %>
+  <%= turbo_stream.append "flashes" do %>
+    <%= render partial: "flashes/flash", locals: { type: :danger, message: flash.now[:alert] } %>
+  <% end %>
+<% else %>
+  <%= turbo_stream.replace dom_id(@transfer) do %>
+    <%= render 'admin/transfers/transfer', transfer: @transfer %>
+  <% end %>
+<% end %>
