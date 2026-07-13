@@ -102,6 +102,34 @@ Benchmarks::Runner.register("admin.mixin_network_snapshots.legacy") do
     end
 end
 
+# Mirror of `ArticlesController#show` (`Article.with_show_associations`)
+# driving the `articles/_references_card.html.erb` partial walk: each
+# reference loads its polymorphic `reference` + `reference.author` + the
+# `shared/_avatar` chain. Without the nested preload this PR adds,
+# each reference fires ~5 SELECTs.
+Benchmarks::Runner.register("article.show_references.eager_load") do
+  Article.with_show_associations
+    .where.not(id: nil)
+    .to_a
+    .each do |a|
+      a.article_references.each do |r|
+        r.reference.author.avatar_image_thumb if r.reference.respond_to?(:author)
+      end
+    end
+end
+
+# Pre-optimisation shape for direct A/B comparison.
+Benchmarks::Runner.register("article.show_references.legacy") do
+  Article
+    .where.not(id: nil)
+    .to_a
+    .each do |a|
+      a.article_references.each do |r|
+        r.reference.author.avatar_image_thumb if r.reference.respond_to?(:author)
+      end
+    end
+end
+
 Benchmarks::Runner.setup("article_search.bought") do
   article = articles(:published_paid)
   buyer = users(:reader_one)

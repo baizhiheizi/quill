@@ -157,10 +157,18 @@ class Article < ApplicationRecord
   #     `cover.metadata` + `remote_image_tag article.cover_url` in
   #     `_header.html.erb`. Without this preload the show page fires
   #     1 extra SELECT to load the cover blob on every visit.
-  #   - `:article_references` → the references card in `_widgets.html.erb`.
+  #   - `article_references: { reference: { author: User::AVATAR_PRELOADS } }`
+  #     → the references card in `_widgets.html.erb` walks
+  #     `reference.reference.author` and renders `shared/_avatar`, which
+  #     reads `authorization&.raw["avatar_url"]` + the full ActiveStorage
+  #     variant chain. Without the nested preload each reference fires
+  #     ~5 SELECTs (polymorphic reference + author + authorization +
+  #     avatar_attachment + blob + variant_records). For an article with
+  #     N references the show page drops from ~6N extra SELECTs to ~3
+  #     (one per reference_type group + the avatar preload).
   scope :with_show_associations, -> {
     with_associations.includes(
-      :article_references,
+      { article_references: { reference: { author: User::AVATAR_PRELOADS } } },
       { cover_attachment: :blob },
       { collection: { cover_attachment: :blob } }
     )
