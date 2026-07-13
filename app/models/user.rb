@@ -121,7 +121,7 @@ class User < ApplicationRecord
 
   after_commit :prepare_async, on: :create
 
-  delegate :phone, :public_key, to: :authorization
+  delegate :phone, to: :authorization
 
   # subscribe user
   action_store :subscribe, :user, counter_cache: "subscribers_count", user_counter_cache: "subscribing_count"
@@ -242,10 +242,6 @@ class User < ApplicationRecord
 
   def to_param
     uid
-  end
-
-  def mixin_deposit_url
-    "mixin://transfer/#{mixin_uuid}"
   end
 
   def notify_for_login
