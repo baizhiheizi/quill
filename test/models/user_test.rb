@@ -96,12 +96,6 @@ class UserTest < ActiveSupport::TestCase
     assert_not Action.exists?(action_type: :block, target: reader, user: author)
   end
 
-  test "mixin_deposit_url formats correctly" do
-    user = users(:author)
-
-    assert_equal "mixin://transfer/#{user.mixin_uuid}", user.mixin_deposit_url
-  end
-
   test "default_payment returns MixinPreOrder for messenger users" do
     assert_equal "MixinPreOrder", users(:reader_one).default_payment
   end
@@ -415,5 +409,10 @@ class UserTest < ActiveSupport::TestCase
 
     assert thumb_url.present?
     assert_includes thumb_url, Settings.storage.endpoint
+  end
+
+  test "removed dead methods stay removed" do
+    refute_includes User.instance_methods(false), :mixin_deposit_url
+    refute_includes User.instance_methods(false), :public_key
   end
 end
