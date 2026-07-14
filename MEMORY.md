@@ -1,5 +1,6 @@
 # Test Improver Memory
 
+- [Run notes 2026-07-14](2026-07-14-notes.md) — MixinNetworkSnapshots::ProcessJob + MonitorJob (commit `e44b4a1`); fixed `remove_method` class-pollution bug
 - [Run notes 2026-07-09](2026-07-09-notes.md) — API::ValidUsersController#filter coverage (15 / 41, commit `74bc86c`); Payment auto-completes gotcha
 - [Run notes 2026-07-07](2026-07-07-notes.md) — MixinMessage coverage re-run (21 / 52, commit `2043b01`)
 
@@ -26,6 +27,7 @@
 - **`assert_enqueued_jobs N, only: JobClass`** is canonical. `enqueued_jobs.first[:job]` returns the Job class.
 - **`safeoutputs create_pull_request` + `update_issue` body limit**: 10 KB hard cap. PR descriptions and Monthly Activity bodies must stay under 10 KB.
 - **`safeoutputs create_pull_request` patch mode**: returns patch/bundle path. The PR itself is created at workflow completion — to reference a new PR in the Monthly Activity issue, use `branch + commit + run URL`.
+- **`define_singleton_method` + `remove_method` teardown is unsafe** — a raise inside the test body leaves the class with the method uninstalled. Prefer `stub_class_method` (`test/test_helper.rb` → `JobTestCase`) which restores the original `UnboundMethod`. Applies to *any* class-method stub, not just jobs. Found in the wild: `test/jobs/mixin_network_snapshots/process_job_test.rb` (fixed 2026-07-14, this run) and `test/models/transfer_test.rb` lines 220-229 (`UserAuthorization#has_safe?`, noted 2026-07-02).
 - **`enqueued_jobs.size` after `create!` includes the after_commit enqueue** for any `after_commit :<job>, on: :create` callbacks. Tests that also call the enqueuing method directly must assert `enqueued_jobs.size == 2`.
 - **`Payment#create!` auto-transitions to `completed`** via `after_create :generate_order!` → `place_article_order!` → `complete!` (for `BUY` memos on real articles). The AASM initial state is `:paid` but a successful `Payment.create!` always ends at `:completed`. To create a payment in another state, stub `generate_order!` on the instance before `save!`, then `update_columns(state:)` to set the desired AASM value.
 - **Published articles need a content body**: `validate_rich_text_content_presence?` returns true when `state != "drafted"`. Pattern: `Article.create!(state: "drafted", ...)` then `article.content = "..."` + `article.published_at = ...` + `article.publish!`.
@@ -39,6 +41,7 @@
 
 ## Last Run
 
+- 2026-07-14 — MixinNetworkSnapshots::ProcessJob + MonitorJob (9 / 9, branch `test-assist/mixin-network-snapshots-jobs`, commit `e44b4a1`); fixed `remove_method` class-pollution bug in existing ProcessJob test. PR via safeoutputs patch mode. Monthly Activity #1801 updated.
 - 2026-07-09 — API::ValidUsersController#filter coverage (15 / 41, branch `test-assist/api-valid-users-controller`, commit `74bc86c`); PR via safeoutputs patch mode. Monthly Activity #1801 updated.
 - 2026-07-07 — MixinMessage coverage re-done (21 / 52, branch `test-assist/mixin-message-coverage`, commit `2043b01`); PR via safeoutputs patch mode. Monthly Activity #1801 updated.
 - 2026-07-03 — MixinNetworkUser coverage PR **merged as #1820** (commit `875284b7`).
