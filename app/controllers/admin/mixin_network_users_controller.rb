@@ -63,16 +63,33 @@ module Admin
       #     fires one SELECT per type instead of one per row.
       #     The partial dispatches on `mixin_network_user.owner.is_a? Article|User`
       #     and renders the corresponding field partial.
+      #   - `owner: admin_user_field_preloads` → for User-owner rows the partial
+      #     renders `admin/users/_field` → `shared/_avatar`, which walks
+      #     `user.avatar_image_thumb` → `authorization.raw["avatar_url"]` +
+      #     `avatar_attachment.blob.variant_records`. The preload chain primes
+      #     all of those in IN-batched SELECTs. Article-owner rows ignore the
+      #     user-shaped keys (Rails 7+ polymorphic preload only follows keys
+      #     present on each target model), so no extra SELECTs fire on that branch.
       #
-      # Without this include each row triggers ~1 SELECT (`Owner`). For an
-      # admin viewing a pagy page of 50 Mixin Network Users, the action runs
-      # ~50 SELECTs per request.
-      @pagy, @mixin_network_users = pagy(:countless, mixin_network_users.includes(:owner))
+      # Without the User-owner preload chain each User-owner row triggers
+      # ~4-5 SELECTs (authorization + attachment + blob + variant_records).
+      # For an admin viewing a pagy page of 50 User-owner Mixin Network Users,
+      # the action would run ~200-250 extra SELECTs per request.
+      @pagy, @mixin_network_users = pagy(:countless, mixin_network_users.includes(*index_includes))
     end
 
     def show
       @tab = params[:tab] || "assets"
       @mixin_network_user = MixinNetworkUser.find params[:id]
+    end
+
+    private
+
+    # Eager-load chain shared between `index` and (potentially) `show`.
+    # See `admin/mixin_network_users/_mixin_network_user.html.erb` for the
+    # exact fields walked per row.
+    def index_includes
+      [ { owner: admin_user_field_preloads } ]
     end
   end
 end
