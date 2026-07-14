@@ -43,13 +43,13 @@
 | DONE (PR #1868 merged 2026-07-09) | `Admin::CollectionsController#index` batched article count prime (commit `d0742fb`). |
 | DONE (PR #1880 merged 2026-07-09) | `Article.with_associations` extended with cover_attachment + author avatar chain (Repo Assist). |
 | DONE (PR #1886 merged 2026-07-11 by an-lee, revived from local commit `680d74e`) | `Admin::MixinNetworkSnapshotsController#index` + `#show` eager-load (~450 → ~7 SELECTs/page). |
-| DRAFT (this run, commit `1b6260a`, push-blocked?) | `Admin::MixinNetworkUsersController#index` polymorphic owner + avatar chain (~300 → ~7 SELECTs/page for User-owner rows). Patch + bundle at `/tmp/gh-aw/aw-efficiency-admin-mixin-network-users-owner-avatar-preload.{patch,bundle}`. |
+| DRAFT (this run, commit `5dd98fc`, push-blocked?) | `Admin::MixinNetworkUsersController#index` polymorphic owner + avatar chain (~252 → ~7 SELECTs/page for User-owner rows). Patch + bundle at `/tmp/gh-aw/aw-efficiency-admin-mixin-network-users-owner-avatar-preload.{patch,bundle}` (8.7 KB + 4.3 KB). |
 
 **Sweep patterns**: Listener-leak · Reduced-motion · Lazy-loading · SQL-sample · Autosave-retry · Dead-code · Dashboard N+1 · Admin N+1 · Article show N+1 · Subscribe-lists · Frontend efficiency helper · Mixin Network Users avatar chain.
 
 ## work in progress
 
-- **PR draft 2026-07-13**: `efficiency/admin-mixin-network-users-owner-avatar-preload` (commit `1b6260a`, 4 files +129/-12). `safeoutputs create_pull_request` returned success — verify via `search_pull_requests` or `/repos/.../pulls?head=baizhiheizi:efficiency/admin-mixin-network-users-owner-avatar-preload`.
+- **PR draft 2026-07-14**: `efficiency/admin-mixin-network-users-owner-avatar-preload` (commit `5dd98fc`, 3 files +103/-4). `.includes(:owner)` → `.includes(owner: admin_user_field_preloads)` extracted as private `index_includes`. New regression-guard test pins the chain shape. Benchmark scenario `admin.mixin_network_users.eager_load` added. `safeoutputs create_pull_request` returned success on 3 retries but PR did not appear on GitHub (intermittent); patch + bundle preserved on disk at `/tmp/gh-aw/aw-efficiency-admin-mixin-network-users-owner-avatar-preload.{patch,bundle}`.
 - (Merged as #1868) **PR draft 2026-07-08**: `efficiency/admin-collections-articles-count-prime` (commit `d0742fb`).
 - (Merged as #1834) **PR draft 2026-07-05**: `efficiency/admin-indexes-eager-load` (commit `4717fd0`).
 - (Merged as #1815) **PR draft 2026-07-02**: `efficiency/dashboard-articles-eager-load`.
@@ -61,7 +61,8 @@
 
 ## last task runs
 
-- 2026-07-13 23:35 UTC (this run): all 7 tasks done + new efficiency PR draft.
+- 2026-07-14 23:15 UTC (this run): all 7 tasks done. New efficiency PR draft (commit `5dd98fc`, push-blocked but patch + bundle on disk for maintainer revival).
+- 2026-07-13 23:35 UTC: all 7 tasks done + new efficiency PR draft (commit `1b6260a`, also push-blocked but replaced by this run's commit `5dd98fc`).
 - 2026-07-09 23:35 UTC: all 7 tasks done + PR #1886 draft (later merged).
 
 ## monthly summary — checked off by maintainer
