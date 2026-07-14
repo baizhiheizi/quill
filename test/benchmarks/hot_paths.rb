@@ -87,6 +87,30 @@ Benchmarks::Runner.register("admin.mixin_network_snapshots.eager_load") do
     end
 end
 
+# Mirror of `Admin::MixinNetworkUsersController#index` after the owner
+# avatar preload chain is added: the polymorphic `:owner` is grouped by
+# `owner_type` (Rails 7+) and User-owner rows additionally get the
+# `user_field_preloads` chain primed in IN-batched SELECTs. Article-owner
+# rows ignore the user-shaped keys (no avatar chain) so the second
+# `includes` line costs nothing on that branch.
+Benchmarks::Runner.register("admin.mixin_network_users.eager_load") do
+  MixinNetworkUser
+    .includes(owner: USER_FIELD_PRELOADS)
+    .order(created_at: :desc)
+    .limit(50)
+    .to_a
+    .each do |u|
+      # Walks the polymorphic dispatch: Article-owner rows hit
+      # `admin/articles/_field` (no avatar), User-owner rows hit
+      # `admin/users/_field` → `shared/_avatar` (4-5 SELECTs without the
+      # preload chain above).
+      owner = u.owner
+      next unless owner.is_a?(User)
+
+      owner.avatar_image_thumb
+    end
+end
+
 # Pre-optimisation shape for direct A/B comparison — the per-row N+1
 # fan-out this PR closes.
 Benchmarks::Runner.register("admin.mixin_network_snapshots.legacy") do
