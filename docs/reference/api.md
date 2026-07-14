@@ -1,10 +1,10 @@
 # HTTP API reference
 
-> **30-second summary:** The API is mounted at `/api` and returns JSON only. Authenticate with an access token issued from the dashboard (`X-Access-Token` header). The root URL is `https://quill.im/api`. Endpoints are stable but additive; breaking changes ship behind a version bump.
+> **30-second summary:** The API is mounted at `/api`, returns JSON, and authenticates via the `X-Access-Token` header (issued from the dashboard). Endpoints are stable but additive; breaking changes ship behind a version bump.
 
 ## Authentication
 
-Generate an access token at [https://quill.im/dashboard/settings](https://quill.im/dashboard/settings) and pass it as a request header:
+Generate an access token at [https://quill.im/dashboard/settings](https://quill.im/dashboard/settings) and pass it as `X-Access-Token`:
 
 ```http
 GET /api/articles HTTP/1.1
@@ -12,17 +12,15 @@ Host: quill.im
 X-Access-Token: <your-token>
 ```
 
-Without a valid token, `GET /articles/:uuid` returns metadata only; the body is gated by `ArticlePolicy#show?` (author or paid reader only).
-
 ## Conventions
 
-All responses are JSON, timestamps are ISO-8601 UTC, pagination uses `limit` (capped at `100`) and `offset`. Errors return a single `message` key with the appropriate HTTP status — see [Errors](#errors).
+All responses are JSON with ISO-8601 timestamps; pagination uses `limit` (capped at 100) and `offset`. Errors return a single `message` key — see [Errors](#errors).
 
 ## Endpoints
 
 ### `GET /api/articles`
 
-List articles. The response shape depends on whether `author_id` or an access token is supplied.
+List articles. The response shape depends on `author_id` or the caller's access.
 
 | Param | Type | Notes |
 |-------|------|-------|
@@ -36,13 +34,13 @@ Example: [https://quill.im/api/articles?limit=5&order=asc&offset=2021-01-18T07:4
 
 ### `GET /api/articles/:uuid`
 
-Fetch a single article by UUID. Body is gated by `ArticlePolicy#show?` (see [Authentication](#authentication)).
+Fetch a single article by UUID. Body gated by `ArticlePolicy#show?`; without a token, metadata only.
 
 ### `POST /api/articles`
 
 Create a draft article. **Requires a valid access token.**
 
-Article fields **must** nest under an `article` key (`API::ArticlesController#article_params`); top-level fields return `400 Bad Request`. `tag_names` stays top-level (not an `Article` attribute) and is forwarded to `CreateTagService` after the save.
+Article fields **must** nest under `article` (top-level → `400`); `tag_names` stays top-level and is forwarded to `CreateTagService` after the save.
 
 Request body:
 
@@ -68,25 +66,19 @@ Request body:
 | `article.asset_id` | yes | One of the supported asset UUIDs (see `config/settings.yml`) |
 | `tag_names` | no | Array of tag names; missing tags are created automatically |
 
-On success, returns the new article's UUID:
-
-```json
-{ "uuid": "f3a1..." }
-```
-
-If the article publishes immediately, `article.publish!` runs before the response.
+On success, returns `{ "uuid": "f3a1..." }`. If the article publishes immediately, `article.publish!` runs before the response.
 
 ### `GET /api/valid_user_filter`
 
-Returns the validation rules the dashboard uses when inviting readers — useful for clients that want to mirror those checks.
+Returns the dashboard's reader-invitation validation rules.
 
 ### Catch-all
 
-Unmatched paths fall through to `API::HomeController#index`, which returns `{"message":"Not found"}` with `404`. There is no service metadata index.
+Unmatched paths fall through to `API::HomeController#index`, returning `{"message":"Not found"}` with `404`.
 
 ## Errors
 
-Every error returns the same envelope — a single `message` string — produced by [`API::RenderingHelper`](../../app/controllers/concerns/api/rendering_helper.rb). On `422`, `article.errors.full_messages` is joined into the message (not an `errors` array).
+Every error returns the same envelope — a single `message` string from [`API::RenderingHelper`](../../app/controllers/concerns/api/rendering_helper.rb). On `422`, the message joins `article.errors.full_messages` (not an `errors` array).
 
 | Status | `message` body | When |
 |--------|---------------|------|
