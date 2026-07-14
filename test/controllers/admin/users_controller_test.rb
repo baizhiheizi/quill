@@ -156,4 +156,44 @@ class Admin::UsersControllerTest < ActionController::TestCase
     # 0.0001 BTC * $50000/BTC = $5 USD.
     assert_in_delta 5.0, reader_two_row.author_revenue_total_usd, 0.0001
   end
+
+  test "index does not fire per-row SELECTs for the avatar chain" do
+    # Regression guard for the avatar-chain preload on
+    # `Admin::UsersController#index`. The `_user` partial renders
+    # `shared/_avatar` (via `admin/users/_field`), which walks
+    # `user.avatar_image_thumb` → `authorization&.raw["avatar_url"]` +
+    # `avatar_attachment.blob.variant_records`. Without
+    # `includes(*user_field_preloads)` the controller fires 1 SELECT per
+    # row for each step of that chain — ~3-5 SELECTs per user on a 24-user
+    # admin page. With the preload the chain is resolved in O(1) SELECTs
+    # regardless of the page size.
+    #
+    # The test uses `get :index` so the controller walks the partial for
+    # every fixture user. We only assert that the per-row tables
+    # (`user_authorizations`, `active_storage_attachments`,
+    # `active_storage_blobs`, `active_storage_variant_records`) are not
+    # queried without `WHERE users.id IN (...)` batching — i.e. the test
+    # fails when the controller drops the `includes`.
+    queries = []
+    callback = ->(*, payload) {
+      next if payload[:name] == "SCHEMA"
+      sql = payload[:sql]
+      next unless sql =~ /FROM\s+"user_authorizations"\s|FROM\s+"active_storage_attachments"\s|FROM\s+"active_storage_blobs"\s|FROM\s+"active_storage_variant_records"\s/i
+      # A correctly-preloaded chain uses a single IN-batched SELECT per
+      # table — the partial never re-fires SELECTs with a `users.id = ?`
+      # equality predicate because the records are already in the
+      # identity map.
+      next if sql =~ /IN\s*\(\s*\d+\s*(?:,\s*\d+\s*)+\)/i
+      next if sql =~ /IN\s*\(\s*SELECT\s+/i
+      queries << sql
+    }
+
+    ActiveSupport::Notifications.subscribed(callback, "sql.active_record") do
+      get :index
+    end
+
+    assert_response :success
+    assert_empty queries,
+      "expected no per-row avatar SELECTs after the preload, got #{queries.size}:\n#{queries.first(5).join("\n")}"
+  end
 end

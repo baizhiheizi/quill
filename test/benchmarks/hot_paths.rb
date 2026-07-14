@@ -153,3 +153,29 @@ Benchmarks::Runner.setup("article.random_readers") do
     create_buy_order!(article: article, buyer: buyer) unless article.orders.exists?
   end
 end
+
+# Mirror of `Admin::UsersController#index` after the avatar-chain preload
+# added in `perf-assist/admin-users-avatar-preload-20260714`. The
+# `_user` partial renders `admin/users/_field`, which walks the
+# `shared/_avatar` chain (`authorization.raw["avatar_url"]` +
+# `avatar_attachment.blob.variant_records`). Without the preload, each
+# row triggers ~3-5 SELECTs. With it, the chain is resolved in O(1)
+# SELECTs regardless of page size.
+Benchmarks::Runner.register("admin.users.eager_load") do
+  User
+    .includes(*USER_FIELD_PRELOADS)
+    .order(created_at: :desc)
+    .limit(24)
+    .to_a
+    .each { |u| u.avatar_image_thumb }
+end
+
+# Pre-optimisation shape for direct A/B comparison — the per-row N+1
+# fan-out this fix closes.
+Benchmarks::Runner.register("admin.users.legacy") do
+  User
+    .order(created_at: :desc)
+    .limit(24)
+    .to_a
+    .each { |u| u.avatar_image_thumb }
+end
