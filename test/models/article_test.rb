@@ -304,4 +304,18 @@ class ArticleTest < ActiveSupport::TestCase
     assert_equal User::AVATAR_PRELOADS, author_chain[:author],
                  "expected reference.author to use User::AVATAR_PRELOADS, got #{author_chain[:author].inspect}"
   end
+
+  test "removed dead scopes stay removed (only_free + only_published + without_drafted + without_blocked remain)" do
+    # Pin the third-round dead-scope sweep (PR #1896 cleanup). These scopes
+    # were declared on `Article` but had zero callers across app/, lib/, and
+    # test/; seeing one re-add itself without an accompanying caller is the
+    # regression this assertion catches.
+    assert_includes Article.singleton_methods(false), :only_free
+    assert_includes Article.singleton_methods(false), :only_published
+    assert_includes Article.singleton_methods(false), :without_drafted
+    assert_includes Article.singleton_methods(false), :without_blocked
+
+    refute_includes Article.singleton_methods(false), :without_free
+    refute_includes Article.singleton_methods(false), :only_drafted
+  end
 end

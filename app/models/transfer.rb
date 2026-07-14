@@ -75,7 +75,6 @@ class Transfer < ApplicationRecord
   scope :unprocessed, -> { where(processed_at: nil).where(stale_at: nil) }
   scope :processed, -> { where.not(processed_at: nil) }
   scope :stale, -> { where.not(stale_at: nil) }
-  scope :only_user_revenue, -> { where(transfer_type: %i[author_revenue reader_revenue]) }
 
   def snapshot_id
     _snapshot = snapshot.is_a?(Array) ? snapshot.first : snapshot

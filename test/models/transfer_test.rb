@@ -641,6 +641,18 @@ class TransferTest < ActiveSupport::TestCase
     end
   end
 
+  test "removed dead scopes stay removed (unprocessed + processed + stale remain)" do
+    # Pin the third-round dead-scope sweep (PR #1896 cleanup). `only_user_revenue`
+    # was declared but unused across app/, lib/, and test/. Seeing it
+    # re-added without an accompanying caller is the regression this assertion
+    # catches.
+    assert_includes Transfer.singleton_methods(false), :unprocessed
+    assert_includes Transfer.singleton_methods(false), :processed
+    assert_includes Transfer.singleton_methods(false), :stale
+
+    refute_includes Transfer.singleton_methods(false), :only_user_revenue
+  end
+
   private
 
   def create_transfer!(attrs = {})

@@ -61,9 +61,6 @@ class MixinNetworkSnapshot < ApplicationRecord
 
   scope :processed, -> { where.not(processed_at: nil) }
   scope :unprocessed, -> { where(processed_at: nil) }
-  scope :only_input, -> { where(amount: 0...) }
-  scope :only_output, -> { where(amount: ...0) }
-  scope :only_quill, -> { where(user_id: QuillBot.api.client_id) }
 
   def self.poll
     @__retry = 0

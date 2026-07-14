@@ -104,4 +104,17 @@ class MixinNetworkSnapshotTest < ActiveSupport::TestCase
     Settings.mixin_api_gate.backoff.jitter_ratio = original_jitter
     Rails.cache = original_cache
   end
+
+  test "removed dead scopes stay removed (processed + unprocessed remain)" do
+    # Pin the third-round dead-scope sweep (PR #1896 cleanup).
+    # `only_input` / `only_output` / `only_quill` were declared but unused
+    # across app/, lib/, and test/. Seeing any of them re-added without an
+    # accompanying caller is the regression this assertion catches.
+    assert_includes MixinNetworkSnapshot.singleton_methods(false), :processed
+    assert_includes MixinNetworkSnapshot.singleton_methods(false), :unprocessed
+
+    refute_includes MixinNetworkSnapshot.singleton_methods(false), :only_input
+    refute_includes MixinNetworkSnapshot.singleton_methods(false), :only_output
+    refute_includes MixinNetworkSnapshot.singleton_methods(false), :only_quill
+  end
 end
