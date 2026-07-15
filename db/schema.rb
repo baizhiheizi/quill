@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_07_13_084214) do
+ActiveRecord::Schema[8.1].define(version: 2026_07_14_000001) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_stat_statements"
@@ -360,6 +360,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_13_084214) do
     t.index ["buyer_id"], name: "index_orders_on_buyer_id"
     t.index ["citer_type", "citer_id"], name: "index_orders_on_citer_type_and_citer_id"
     t.index ["item_type", "item_id"], name: "index_orders_on_item_type_and_item_id"
+    t.index ["order_type", "buyer_id", "item_type", "item_id"], name: "idx_orders_buyer_item_type_unique", unique: true, where: "(order_type = ANY (ARRAY[0, 3]))"
     t.index ["seller_id"], name: "index_orders_on_seller_id"
   end
 

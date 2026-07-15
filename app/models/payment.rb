@@ -127,14 +127,18 @@ class Payment < ApplicationRecord
   def generate_order!
     return unless memo_correct?
 
-    if article.present?
-      generate_article_order!
-    elsif collection.present?
-      generate_collection_order!
-    end
+    with_lock do
+      return if order.present?
 
-    pre_order&.pay! if pre_order&.may_pay?
-  rescue ActiveRecord::RecordInvalid, ActiveRecord::RecordNotFound => e
+      if article.present?
+        generate_article_order!
+      elsif collection.present?
+        generate_collection_order!
+      end
+
+      pre_order&.pay! if pre_order&.may_pay?
+    end
+  rescue ActiveRecord::RecordInvalid, ActiveRecord::RecordNotFound, AASM::InvalidTransition => e
     Rails.logger.error e
     reload.generate_refund_transfer!
   end
@@ -228,6 +232,21 @@ class Payment < ApplicationRecord
 
   def ensure_refund_transfer_created
     refund_transfer.present?
+  end
+
+  def refund_with_observability!
+    if may_refund?
+      refund!
+    else
+      Rails.logger.warn "Payment##{id} refund guard failed: state=#{state}"
+      Rails.error.report(
+        StandardError.new("Payment#refund guard failed"),
+        handled: true,
+        severity: :info,
+        context: { payment_id: id, state: state }
+      )
+      false
+    end
   end
 
   def notify_payer

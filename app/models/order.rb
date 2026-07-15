@@ -91,6 +91,21 @@ class Order < ApplicationRecord
     end
   end
 
+  def complete_with_observability!
+    if may_complete?
+      complete!
+    else
+      Rails.logger.warn "Order##{id} complete guard failed: all_transfers_generated?=#{all_transfers_generated?}, state=#{state}"
+      Rails.error.report(
+        StandardError.new("Order#complete guard failed"),
+        handled: true,
+        severity: :info,
+        context: { order_id: id, state: state }
+      )
+      false
+    end
+  end
+
   def all_transfers_generated?
     transfers
       .where(wallet_id: payment.wallet_id)

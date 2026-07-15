@@ -30,7 +30,7 @@ class Orders::DistributeService
         distribute_collection_order!
       end
 
-      @order.complete! if @order.paid?
+      @order.complete_with_observability! if @order.paid?
     end
   end
 

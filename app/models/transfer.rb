@@ -114,7 +114,7 @@ class Transfer < ApplicationRecord
     # `source` lookup (which would raise NameError).
     case source_type
     when "Payment"
-      source.refund! if source.may_refund?
+      source.refund_with_observability!
     when "Bonus"
       source.complete! if source.may_complete?
     end
@@ -238,19 +238,19 @@ class Transfer < ApplicationRecord
   end
 
   def self.author_revenue_total_in_usd
-    Rails.cache.fetch("author_revenue_total_in_usd", expires_in: 1.minute) do
+    Rails.cache.fetch("author_revenue_total_in_usd", expires_in: 1.minute, race_condition_ttl: 5.seconds) do
       joins(:currency).where(transfer_type: :author_revenue).sum("amount * currencies.price_usd").to_f.round(4)
     end
   end
 
   def self.reader_revenue_total_in_usd
-    Rails.cache.fetch("reader_revenue_total_in_usd", expires_in: 1.minute) do
+    Rails.cache.fetch("reader_revenue_total_in_usd", expires_in: 1.minute, race_condition_ttl: 5.seconds) do
       joins(:currency).where(transfer_type: :reader_revenue).sum("amount * currencies.price_usd").to_f.round(4)
     end
   end
 
   def self.stats
-    Rails.cache.fetch("transfer_stats", expires_in: 15.minutes) do
+    Rails.cache.fetch("transfer_stats", expires_in: 15.minutes, race_condition_ttl: 30.seconds) do
       cal_stats
     end
   end

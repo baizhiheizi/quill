@@ -27,21 +27,25 @@
 #
 
 class Splitter < MixinNetworkUser
-  def collect_assets
-    assets = mixin_api.assets["data"]
-    assets.each do |asset|
-      next if asset["balance"].to_f.zero?
-      next if transfers.unprocessed.where(asset_id: asset["asset_id"]).present?
+  include AdvisoryLockable
 
-      transfers
-        .create(
-          transfer_type: :default,
-          asset_id: asset["asset_id"],
-          amount: asset["balance"],
-          opponent_id: QuillBot.api.client_id,
-          trace_id: SecureRandom.uuid,
-          memo: "assets collection"
-        )
+  def collect_assets
+    with_advisory_lock("splitter:#{id}:collect") do
+      assets = mixin_api.assets["data"]
+      assets.each do |asset|
+        next if asset["balance"].to_f.zero?
+        next if transfers.unprocessed.where(asset_id: asset["asset_id"]).present?
+
+        transfers
+          .create(
+            transfer_type: :default,
+            asset_id: asset["asset_id"],
+            amount: asset["balance"],
+            opponent_id: QuillBot.api.client_id,
+            trace_id: SecureRandom.uuid,
+            memo: "assets collection"
+          )
+      end
     end
   end
 end
