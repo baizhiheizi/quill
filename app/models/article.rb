@@ -174,9 +174,7 @@ class Article < ApplicationRecord
     )
   }
   scope :without_blocked, -> { where.not(state: :blocked) }
-  scope :without_free, -> { where("price > ?", 0) }
   scope :only_free, -> { where(price: 0.0) }
-  scope :only_drafted, -> { where(state: :drafted) }
   scope :only_published, -> { where(state: :published) }
   scope :without_drafted, -> { where.not(state: :drafted) }
   scope :order_by_revenue_usd, -> { order(revenue_usd: :desc) }
