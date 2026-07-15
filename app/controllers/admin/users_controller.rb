@@ -46,6 +46,15 @@ module Admin
           }.merge(m: "or")
         ).result
 
+      # Eager-load the avatar chain (`shared/_avatar` → `user.avatar_image_thumb`
+      # walks `User#avatar_attachment.blob.variant_records` plus the OAuth
+      # `authorization.raw["avatar_url"]` fallback). Without this, each row
+      # fires ~3 SELECTs (authorization + attachment + blob/variant); for the
+      # default pagy page of 24 users that's ~72 extra SELECTs per request.
+      # Same `user_field_preloads` chain as `Admin::OrdersController`,
+      # `Admin::ArticlesController`, `Admin::TransfersController`, and the
+      # dashboard orders/articles preloads (consolidated in PR #1841/#1876).
+      users = users.includes(*user_field_preloads)
       @pagy, @users = pagy(:countless, users)
       preload_user_aggregates(@users)
     end
