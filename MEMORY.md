@@ -1,5 +1,6 @@
 # Test Improver Memory
 
+- [Run notes 2026-07-15](2026-07-15-notes.md) — ArticleSnapshot model (17 / 39, commit `851ab77`); flagged `previous_signed_snapshot` undefined `signed` scope
 - [Run notes 2026-07-14](2026-07-14-notes.md) — MixinNetworkSnapshots::ProcessJob + MonitorJob (commit `e44b4a1`); fixed `remove_method` class-pollution bug
 - [Run notes 2026-07-09](2026-07-09-notes.md) — API::ValidUsersController#filter coverage (15 / 41, commit `74bc86c`); Payment auto-completes gotcha
 - [Run notes 2026-07-07](2026-07-07-notes.md) — MixinMessage coverage re-run (21 / 52, commit `2043b01`)
@@ -36,11 +37,13 @@
 
 - **LOW**: `NftCollection.icon_url` fallback — single-method model.
 - **`Bonus` AASM still blocked by table-name bug** — would be HIGH if unblocked. Requires production-code change to `app/models/bonus.rb`.
-- **LOW**: `article_snapshot`, `session`, `statistic`, `administrator` — thin model surfaces.
+- **LOW**: `mixin_pre_order.rb` (single validator), `administrator` (has_secure_password), `session` (uuid generator), `statistic` (empty model).
+- **`ArticleSnapshot#previous_signed_snapshot`** is broken code (calls undefined `signed` scope). Flagged in 2026-07-15 PR description; needs a maintainer decision (add scope or remove method).
 - All notifier backlog exhausted. NotificationSetting + Announcement + Tagging + UserAuthorization + MixinNetworkUser + MixinMessage done.
 
 ## Last Run
 
+- 2026-07-15 — ArticleSnapshot model (17 / 39, branch `test-assist/article-snapshot-coverage`, commit `851ab77`); `store_accessor` + `set_defaults` + `fresh?` + `delegate :author` + association chain. PR via safeoutputs patch mode.
 - 2026-07-14 — MixinNetworkSnapshots::ProcessJob + MonitorJob (9 / 9, branch `test-assist/mixin-network-snapshots-jobs`, commit `e44b4a1`); fixed `remove_method` class-pollution bug in existing ProcessJob test. PR via safeoutputs patch mode. Monthly Activity #1801 updated.
 - 2026-07-09 — API::ValidUsersController#filter coverage (15 / 41, branch `test-assist/api-valid-users-controller`, commit `74bc86c`); PR via safeoutputs patch mode. Monthly Activity #1801 updated.
 - 2026-07-07 — MixinMessage coverage re-done (21 / 52, branch `test-assist/mixin-message-coverage`, commit `2043b01`); PR via safeoutputs patch mode. Monthly Activity #1801 updated.
