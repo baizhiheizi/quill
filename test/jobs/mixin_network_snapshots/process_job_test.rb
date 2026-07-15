@@ -15,11 +15,29 @@ class MixinNetworkSnapshots::ProcessJobTest < JobTestCase
     called = false
     snapshot.define_singleton_method(:process!) { called = true }
 
-    MixinNetworkSnapshot.define_singleton_method(:find_by) { |id:| snapshot if id == 1 }
-    MixinNetworkSnapshots::ProcessJob.perform_now(1)
+    stub_class_method(MixinNetworkSnapshot, :find_by, ->(**kwargs) { kwargs[:id] == 1 ? snapshot : nil }) do
+      MixinNetworkSnapshots::ProcessJob.perform_now(1)
+    end
 
     assert called
-  ensure
-    MixinNetworkSnapshot.singleton_class.remove_method(:find_by)
+  end
+
+  test "perform no-ops for missing snapshot" do
+    stub_class_method(MixinNetworkSnapshot, :find_by, ->(**) { nil }) do
+      assert_nothing_raised { MixinNetworkSnapshots::ProcessJob.perform_now(SecureRandom.uuid) }
+    end
+  end
+
+  test "perform uses safe-navigation so a nil snapshot does not raise" do
+    # `MixinNetworkSnapshot.find_by(id:)&.process!` — the `&.` is what lets the
+    # job no-op on a missing record. Pin that contract so a future refactor
+    # to `find_by(id:).process!` (no `&.`) gets caught immediately.
+    stub_class_method(MixinNetworkSnapshot, :find_by, ->(**) { nil }) do
+      assert_nothing_raised { MixinNetworkSnapshots::ProcessJob.perform_now(-1) }
+    end
+  end
+
+  test "perform is queued as :critical" do
+    assert_equal "critical", MixinNetworkSnapshots::ProcessJob.new.queue_name
   end
 end
