@@ -49,6 +49,27 @@ class Bonus < ApplicationRecord
     end
   end
 
+  def deliver_with_lock!
+    with_lock do
+      deliver!
+    end
+  end
+
+  def deliver_with_observability!
+    if may_deliver?
+      deliver!
+    else
+      Rails.logger.warn "Bonus##{id} deliver guard failed: state=#{state}"
+      Rails.error.report(
+        StandardError.new("Bonus#deliver guard failed"),
+        handled: true,
+        severity: :info,
+        context: { bonus_id: id, state: state }
+      )
+      false
+    end
+  end
+
   def ensure_transfer_created
     transfer.presence ||
       create_transfer!(

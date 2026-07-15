@@ -39,6 +39,7 @@ class Orders::DistributableTest < ActiveSupport::TestCase
     @author = users(:author)
     @reader_one = users(:reader_one)
     @reader_two = users(:reader_two)
+    @blocked_reader = users(:blocked_reader)
   end
 
   # Order.create! runs through validations, which include a uniqueness check
@@ -112,7 +113,7 @@ class Orders::DistributableTest < ActiveSupport::TestCase
                                          created_at: 3.days.ago)
       older_reward = create_buy_order_raw!(article: @article, buyer: @reader_two, total: 0.5,
                                            created_at: 2.days.ago, order_type: :reward_article)
-      order = create_buy_order_raw!(article: @article, buyer: @reader_one, total: 1.0,
+      order = create_buy_order_raw!(article: @article, buyer: @blocked_reader, total: 1.0,
                                     created_at: 1.day.ago)
 
       ids = order.early_orders.pluck(:id)
@@ -155,7 +156,7 @@ class Orders::DistributableTest < ActiveSupport::TestCase
                                     created_at: 5.days.ago)
       newer = create_buy_order_raw!(article: @article, buyer: @reader_two, total: 1.0,
                                     created_at: 2.days.ago)
-      order = create_buy_order_raw!(article: @article, buyer: @reader_one, total: 1.0,
+      order = create_buy_order_raw!(article: @article, buyer: @blocked_reader, total: 1.0,
                                     created_at: 1.day.ago)
 
       assert_equal [ newer.id, older.id ], order.early_orders.pluck(:id)
@@ -192,7 +193,7 @@ class Orders::DistributableTest < ActiveSupport::TestCase
                             created_at: 3.days.ago)
       create_buy_order_raw!(article: @article, buyer: @reader_two, total: 1.0,
                             created_at: 2.days.ago)
-      order = create_buy_order_raw!(article: @article, buyer: @reader_one, total: 1.0,
+      order = create_buy_order_raw!(article: @article, buyer: @blocked_reader, total: 1.0,
                                     created_at: 1.day.ago)
 
       assert order.early_orders_with_the_same_currency
@@ -220,7 +221,7 @@ class Orders::DistributableTest < ActiveSupport::TestCase
       # Adding early orders after memoization must NOT flip the cached value.
       create_buy_order_raw!(article: @article, buyer: @reader_two, total: 1.0,
                             created_at: 2.days.ago)
-      foreign = create_buy_order_raw!(article: @article, buyer: @reader_one, total: 1.0,
+      foreign = create_buy_order_raw!(article: @article, buyer: @blocked_reader, total: 1.0,
                                       created_at: 3.days.ago)
       foreign.update_columns(asset_id: SecureRandom.uuid)
 
@@ -242,12 +243,12 @@ class Orders::DistributableTest < ActiveSupport::TestCase
   test "collect_early_readers groups trace_ids by buyer mixin_uuid" do
     with_quill_bot_stub do
       a1 = create_buy_order_raw!(article: @article, buyer: @reader_one, total: 1.0,
-                                 created_at: 3.days.ago)
+                                 created_at: 3.days.ago, order_type: :reward_article)
       a2 = create_buy_order_raw!(article: @article, buyer: @reader_one, total: 1.0,
                                  created_at: 2.days.ago)
       b1 = create_buy_order_raw!(article: @article, buyer: @reader_two, total: 1.0,
                                  created_at: 4.days.ago)
-      order = create_buy_order_raw!(article: @article, buyer: @reader_one, total: 1.0,
+      order = create_buy_order_raw!(article: @article, buyer: @blocked_reader, total: 1.0,
                                     created_at: 1.day.ago)
 
       readers = order.collect_early_readers
@@ -259,7 +260,7 @@ class Orders::DistributableTest < ActiveSupport::TestCase
   test "collect_early_readers preserves the early_orders created_at-desc ordering per buyer" do
     with_quill_bot_stub do
       older = create_buy_order_raw!(article: @article, buyer: @reader_one, total: 1.0,
-                                    created_at: 5.days.ago)
+                                    created_at: 5.days.ago, order_type: :reward_article)
       newer = create_buy_order_raw!(article: @article, buyer: @reader_one, total: 1.0,
                                     created_at: 2.days.ago)
       order = create_buy_order_raw!(article: @article, buyer: @reader_two, total: 1.0,

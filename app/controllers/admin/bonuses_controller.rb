@@ -56,7 +56,7 @@ module Admin
 
     def deliver
       @bonus = Bonus.find_by id: params[:bonus_id]
-      @bonus.deliver! if @bonus&.drafted?
+      @bonus.deliver_with_lock! if @bonus&.drafted?
     end
 
     private

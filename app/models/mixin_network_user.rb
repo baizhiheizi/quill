@@ -29,6 +29,8 @@
 require_dependency "mixin_api/gate"
 
 class MixinNetworkUser < ApplicationRecord
+  include AdvisoryLockable
+
   DEFAULT_AVATAR_FILE = Rails.application.root.join("app/assets/images/#{Settings.icon_file}")
 
   belongs_to :owner, optional: true, inverse_of: false, polymorphic: true
@@ -69,12 +71,14 @@ class MixinNetworkUser < ApplicationRecord
   end
 
   def update_pin!
-    new_pin = SecureRandom.random_number.to_s.split(".").last.first(6)
-    r = mixin_api.update_pin(old_pin: pin, pin: new_pin)
+    with_advisory_lock("mixin_user:#{uuid}:pin_update") do
+      new_pin = SecureRandom.random_number.to_s.split(".").last.first(6)
+      r = mixin_api.update_pin(old_pin: pin, pin: new_pin)
 
-    raise r.inspect if r["data"].blank?
+      raise r.inspect if r["data"].blank?
 
-    update! pin: new_pin
+      update! pin: new_pin
+    end
   end
 
   def initialize_pin!

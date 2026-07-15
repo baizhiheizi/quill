@@ -150,7 +150,7 @@ class MixinNetworkSnapshot < ApplicationRecord
   end
 
   def self.last_polled_at
-    Rails.cache.fetch("last_polled_at") do
+    Rails.cache.fetch("last_polled_at", expires_in: 5.minutes, race_condition_ttl: 10.seconds) do
       MixinNetworkSnapshot.order(transferred_at: :desc).first&.transferred_at&.utc&.rfc3339 || Time.current.utc.rfc3339
     end
   end
