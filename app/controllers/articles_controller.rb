@@ -244,11 +244,11 @@ class ArticlesController < ApplicationController
       .order(Arel.sql("RANDOM()"))
       .limit(24)
 
-    # The shared `dashboard_user_field_preloads` / `admin_user_field_preloads`
-    # chains (see `Dashboard::BaseController`, `Admin::BaseController`) are
-    # admin-specific. The public avatar chain is the same shape, but we
-    # inline it here so the public show page doesn't need to depend on a
-    # private controller helper from a different namespace.
+    # The shared `UserFieldPreloads#user_field_preloads` chain (see the
+    # `UserFieldPreloads` concern included in `Dashboard::BaseController` and
+    # `Admin::BaseController`) is the same shape, but we inline it here so
+    # the public show page doesn't need to depend on a controller concern
+    # from a different namespace.
     @random_readers = User
       .where(id: sampled_buyer_ids)
       .includes(

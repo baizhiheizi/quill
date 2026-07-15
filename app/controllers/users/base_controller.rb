@@ -37,10 +37,10 @@ class Users::BaseController < ApplicationController
   end
 
   # Same avatar-ActiveStorage chain as
-  # `Dashboard::BaseController#dashboard_user_field_preloads`. Kept inline
-  # in the Users base (rather than shared across both bases) because the
-  # two paths currently use the same shape — if a third caller appears,
-  # lift it to a shared module instead of copy-pasting again.
+  # `UserFieldPreloads#user_field_preloads`. Kept inline in the Users base
+  # (rather than shared across both bases) because the two paths currently
+  # use the same shape — if a third caller appears, lift it to a shared
+  # module instead of copy-pasting again.
   def users_user_field_preloads
     [
       :authorization,

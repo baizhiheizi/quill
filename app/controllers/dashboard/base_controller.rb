@@ -48,37 +48,4 @@ class Dashboard::BaseController < ApplicationController
   def set_default_active_section
     @active_section ||= SECTION_BY_CONTROLLER[self.class.name]
   end
-
-  # Eager-load chain for the per-row User partials on the dashboard
-  # (currently `dashboard/block_users/_user.html.erb` and
-  # `dashboard/subscribe_users/_user.html.erb`, both of which render
-  # `shared/_avatar` with `thumb: true`).
-  #
-  # Without these `includes` each row fires:
-  #   - 1 SELECT for the `authorization` row (read in
-  #     `User#avatar_image_thumb`'s OAuth-fallback branch)
-  #   - 1 SELECT for `avatar_attachment`
-  #   - 1 SELECT for the attachment `blob`
-  #   - 1 SELECT for the `variant_records` (the `:thumb` variant)
-  #   - 1 SELECT for the variant's `image_attachment` blob
-  #
-  # That's ~5 SELECTs per row. With a 24-row pagy page that's ~120 SELECTs
-  # before the view even hits the action_store check below.
-  #
-  # Same shape as `Admin::BaseController#admin_user_field_preloads`. Lives
-  # here too so dashboard endpoints don't have to inline the chain (and
-  # drift from the admin version over time).
-  def dashboard_user_field_preloads
-    [
-      :authorization,
-      {
-        avatar_attachment: {
-          blob: {
-            variant_records: { image_attachment: :blob },
-            preview_image_attachment: { blob: { variant_records: { image_attachment: :blob } } }
-          }
-        }
-      }
-    ]
-  end
 end

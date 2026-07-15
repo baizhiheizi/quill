@@ -4,11 +4,11 @@ class Dashboard::BlockUsersController < Dashboard::BaseController
   def index
     # Eager-load the avatar chain used by `shared/_avatar` and batch the
     # `current_user.block_user?(user)` check (action_store fires one SELECT
-    # per call). See `Dashboard::BaseController#dashboard_user_field_preloads`
-    # and `#preloaded_block_user_ids` for context.
+    # per call). See `UserFieldPreloads#user_field_preloads` and
+    # `#preloaded_block_user_ids` for context.
     @pagy, @users = pagy current_user.block_users
       .order("actions.created_at DESC")
-      .includes(dashboard_user_field_preloads)
+      .includes(user_field_preloads)
     @preloaded_block_user_ids = preloaded_block_user_ids
   end
 
