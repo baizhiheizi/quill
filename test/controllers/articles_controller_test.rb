@@ -85,6 +85,21 @@ class ArticlesControllerTest < IntegrationTestCase
     assert_response :success
   end
 
+  # Regression: after MVM login was removed, historical mvm_eth authors keep
+  # Ethereum-address uids (0x…). Viewing their article from Mixin Messenger
+  # used to call MixinBot::UUID.new(hex: uid) and raise InvalidUuidFormatError.
+  test "show succeeds for mvm_eth author when viewed from Mixin messenger" do
+    article = articles(:published_free)
+    author = article.author
+    author.update!(uid: "0x71f4dC846d2da8C855C61c62Ffb1997138458868")
+    author.authorization.update!(provider: :mvm_eth)
+
+    get user_article_path(author, article), headers: { "User-Agent" => "Mixin/1.0.0" }
+
+    assert_response :success
+    assert_includes response.body, "https://mixin.one/users/#{author.mixin_uuid}"
+  end
+
   test "index succeeds when a paid article currency has a missing icon_url" do
     currency = articles(:published_paid).currency
     currency.update_column(:raw, currency.raw.except("icon_url"))
