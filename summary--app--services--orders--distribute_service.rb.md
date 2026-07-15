@@ -1,1 +1,1 @@
-distribute_service: row-lock transaction; re-checks completed?; branches Article vs Collection; Article: platform+readers+references+collection+author; uses total or value_btc by currency; idempotent via trace_id.
+distribute_service: row-lock transaction (lock! + re-check completed?); branches Article vs Collection; Article: platform+readers+references+collection+author; uses total or value_btc by currency; idempotent via trace_id. Concurrent dispatch paths: after_create_commit distribute_async + Orders::BatchDistributeJob.

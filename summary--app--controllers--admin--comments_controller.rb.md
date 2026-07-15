@@ -1,1 +1,1 @@
-Admin::CommentsController: index (Ransack filters), delete/undelete soft-actions. After PR #1721, :show removed.
+Admin::CommentsController: index (Ransack filters), delete/undelete soft-actions. Index uses admin_user_field_preloads canonical chain: includes(:commentable, author: admin_user_field_preloads). After PR #1721, :show removed. After PR #1896/PR #1903 the preload chain is the deep avatar/authorization chain shared by all sibling admin index controllers.
