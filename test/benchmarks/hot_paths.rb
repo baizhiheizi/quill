@@ -203,3 +203,32 @@ Benchmarks::Runner.register("admin.users.legacy") do
     .to_a
     .each { |u| u.avatar_image_thumb }
 end
+
+# Mirror of `API::ArticlesController#index` after the author avatar
+# preload chain is added: `article.author.avatar_image_url` (called
+# from `api/articles/index.json.jbuilder`) walks
+# `avatar_attachment → blob` plus the `authorization` fallback. Without
+# the preload each row fires 2-4 SELECTs (avatar_attachment + blob +
+# authorization + the variant chain if `avatar.variant(:thumb)` is
+# touched). For an API request capped at `limit: 100`, that is up to
+# ~400 extra SELECTs per request. The eager-load shape mirrors the
+# chain `Article.with_associations` already uses for the dashboard card.
+Benchmarks::Runner.register("api.articles.eager_load") do
+  Article
+    .only_published
+    .limit(20)
+    .includes(:tags, :currency, author: USER_FIELD_PRELOADS)
+    .to_a
+    .each { |a| a.author.avatar_image_url }
+end
+
+# Pre-optimisation shape for direct A/B comparison — the per-row N+1
+# fan-out this fix closes.
+Benchmarks::Runner.register("api.articles.legacy") do
+  Article
+    .only_published
+    .limit(20)
+    .includes(:tags, :currency)
+    .to_a
+    .each { |a| a.author.avatar_image_url }
+end
