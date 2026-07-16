@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class Users::BaseController < ApplicationController
+  include UserFieldPreloads
+
   before_action :load_user!, :set_page_meta
 
   private
@@ -34,24 +36,5 @@ class Users::BaseController < ApplicationController
       else
         Set.new
       end
-  end
-
-  # Same avatar-ActiveStorage chain as
-  # `UserFieldPreloads#user_field_preloads`. Kept inline in the Users base
-  # (rather than shared across both bases) because the two paths currently
-  # use the same shape — if a third caller appears, lift it to a shared
-  # module instead of copy-pasting again.
-  def users_user_field_preloads
-    [
-      :authorization,
-      {
-        avatar_attachment: {
-          blob: {
-            variant_records: { image_attachment: :blob },
-            preview_image_attachment: { blob: { variant_records: { image_attachment: :blob } } }
-          }
-        }
-      }
-    ]
   end
 end
