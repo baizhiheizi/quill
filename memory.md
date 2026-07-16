@@ -43,13 +43,15 @@
 | DONE (PR #1868 merged 2026-07-09) | `Admin::CollectionsController#index` batched article count prime (commit `d0742fb`). |
 | DONE (PR #1880 merged 2026-07-09) | `Article.with_associations` extended with cover_attachment + author avatar chain (Repo Assist). |
 | DONE (PR #1886 merged 2026-07-11 by an-lee, revived from local commit `680d74e`) | `Admin::MixinNetworkSnapshotsController#index` + `#show` eager-load (~450 → ~7 SELECTs/page). |
-| DRAFT (this run, commit `5dd98fc`, push-blocked?) | `Admin::MixinNetworkUsersController#index` polymorphic owner + avatar chain (~252 → ~7 SELECTs/page for User-owner rows). Patch + bundle at `/tmp/gh-aw/aw-efficiency-admin-mixin-network-users-owner-avatar-preload.{patch,bundle}` (8.7 KB + 4.3 KB). |
+| DRAFT (this run, commit `09cebcc`, push-blocked?) | `API::ArticlesController#index` author avatar chain (~58 → ~38 SELECTs/page at `limit: 5`; up to ~400 saved at `limit: 100`). Patch + bundle at `/tmp/gh-aw/aw-efficiency-api-articles-author-avatar-preload.{patch,bundle}` (7.4 KB + 4.5 KB). |
+| DONE (PR #1902 merged 2026-07-15 by repo-assist, commit `8c246b5`, revived from local `5dd98fc`) | `Admin::MixinNetworkUsersController#index` polymorphic owner + avatar chain (~252 → ~7 SELECTs/page for User-owner rows). |
 
 **Sweep patterns**: Listener-leak · Reduced-motion · Lazy-loading · SQL-sample · Autosave-retry · Dead-code · Dashboard N+1 · Admin N+1 · Article show N+1 · Subscribe-lists · Frontend efficiency helper · Mixin Network Users avatar chain.
 
 ## work in progress
 
-- **PR draft 2026-07-14**: `efficiency/admin-mixin-network-users-owner-avatar-preload` (commit `5dd98fc`, 3 files +103/-4). `.includes(:owner)` → `.includes(owner: admin_user_field_preloads)` extracted as private `index_includes`. New regression-guard test pins the chain shape. Benchmark scenario `admin.mixin_network_users.eager_load` added. `safeoutputs create_pull_request` returned success on 3 retries but PR did not appear on GitHub (intermittent); patch + bundle preserved on disk at `/tmp/gh-aw/aw-efficiency-admin-mixin-network-users-owner-avatar-preload.{patch,bundle}`.
+- **PR draft 2026-07-16**: `efficiency/api-articles-author-avatar-preload` (commit `09cebcc`, 3 files +93/-1). `.includes(:author, :tags, :currency)` → `.includes(:tags, :currency, author: User::AVATAR_PRELOADS)`. New regression-guard test pins `SELECT_BUDGET = 50` at `limit: 5`. Benchmark scenarios `api.articles.eager_load` + `api.articles.legacy` added. Patch + bundle preserved at `/tmp/gh-aw/aw-efficiency-api-articles-author-avatar-preload.{patch,bundle}`. Github MCP was 503 across all reads during the run; tool response was success but cannot verify the PR appeared — verify on next run with `search_pull_requests`. NOTE: mid-run a linter/user reverted the test + benchmark additions on the main working tree (only the controller change remains there); the branch + commit + patch still contain all 3 files.
+- (Merged as #1902) **PR draft 2026-07-14**: `efficiency/admin-mixin-network-users-owner-avatar-preload` (commit `5dd98fc`).
 - (Merged as #1868) **PR draft 2026-07-08**: `efficiency/admin-collections-articles-count-prime` (commit `d0742fb`).
 - (Merged as #1834) **PR draft 2026-07-05**: `efficiency/admin-indexes-eager-load` (commit `4717fd0`).
 - (Merged as #1815) **PR draft 2026-07-02**: `efficiency/dashboard-articles-eager-load`.
@@ -61,7 +63,8 @@
 
 ## last task runs
 
-- 2026-07-14 23:15 UTC (this run): all 7 tasks done. New efficiency PR draft (commit `5dd98fc`, push-blocked but patch + bundle on disk for maintainer revival).
+- 2026-07-16 23:35 UTC (this run): all 7 tasks done. New efficiency PR draft (commit `09cebcc`, push-blocked but patch + bundle on disk for maintainer revival). GitHub MCP returned 503 across all reads during this run.
+- 2026-07-14 23:15 UTC: all 7 tasks done + new efficiency PR draft (commit `5dd98fc`, revived as PR #1902 by repo-assist on 2026-07-15).
 - 2026-07-13 23:35 UTC: all 7 tasks done + new efficiency PR draft (commit `1b6260a`, also push-blocked but replaced by this run's commit `5dd98fc`).
 - 2026-07-09 23:35 UTC: all 7 tasks done + PR #1886 draft (later merged).
 
@@ -74,3 +77,4 @@
 - 2026-07-08: #1862 (repo-assist), #1863 (closes #1720) — `an-lee`.
 - 2026-07-09: #1868 (efficiency-improver revival, commit `d0742fb`) — `an-lee`.
 - 2026-07-11: #1886 (efficiency-improver revival, commit `680d74e`) — `an-lee`.
+- 2026-07-15: #1902 (efficiency-improver revival of local commit `5dd98fc`) — repo-assist.
