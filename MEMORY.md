@@ -1,5 +1,6 @@
 # Test Improver Memory
 
+- [Run notes 2026-07-16](2026-07-16-notes.md) — Splitter model (10 / 24, commit `b3d4aba`); flagged `collect_assets` has zero callers in app/lib/jobs; QuillBot.api.client_id silently nil in tests without `with_quill_bot_stub`
 - [Run notes 2026-07-15](2026-07-15-notes.md) — ArticleSnapshot model (17 / 39, commit `851ab77`); flagged `previous_signed_snapshot` undefined `signed` scope
 - [Run notes 2026-07-14](2026-07-14-notes.md) — MixinNetworkSnapshots::ProcessJob + MonitorJob (commit `e44b4a1`); fixed `remove_method` class-pollution bug
 - [Run notes 2026-07-09](2026-07-09-notes.md) — API::ValidUsersController#filter coverage (15 / 41, commit `74bc86c`); Payment auto-completes gotcha
@@ -39,10 +40,13 @@
 - **`Bonus` AASM still blocked by table-name bug** — would be HIGH if unblocked. Requires production-code change to `app/models/bonus.rb`.
 - **LOW**: `mixin_pre_order.rb` (single validator), `administrator` (has_secure_password), `session` (uuid generator), `statistic` (empty model).
 - **`ArticleSnapshot#previous_signed_snapshot`** is broken code (calls undefined `signed` scope). Flagged in 2026-07-15 PR description; needs a maintainer decision (add scope or remove method).
+- **`Splitter#collect_assets` has zero callers in `app/`, `lib/`, or jobs** — flagged in 2026-07-16 PR description. Dead code or missing dispatcher.
+- **`app/libs/mixpay/client.rb`** — only 2 cases in `test/libs/mixpay/client_test.rb`. Mostly covered transitively via `mixpay_pre_order_test.rb`; only worth expanding if new gap emerges.
 - All notifier backlog exhausted. NotificationSetting + Announcement + Tagging + UserAuthorization + MixinNetworkUser + MixinMessage done.
 
 ## Last Run
 
+- 2026-07-16 — Splitter model (10 / 24, branch `test-assist/splitter-model-coverage`, commit `b3d4aba`); STI + `collect_assets` lock + transfer creation + dedup + zero-balance + processed-allow + mixed-batch. PR via safeoutputs.
 - 2026-07-15 — ArticleSnapshot model (17 / 39, branch `test-assist/article-snapshot-coverage`, commit `851ab77`); `store_accessor` + `set_defaults` + `fresh?` + `delegate :author` + association chain. PR via safeoutputs patch mode.
 - 2026-07-14 — MixinNetworkSnapshots::ProcessJob + MonitorJob (9 / 9, branch `test-assist/mixin-network-snapshots-jobs`, commit `e44b4a1`); fixed `remove_method` class-pollution bug in existing ProcessJob test. PR via safeoutputs patch mode. Monthly Activity #1801 updated.
 - 2026-07-09 — API::ValidUsersController#filter coverage (15 / 41, branch `test-assist/api-valid-users-controller`, commit `74bc86c`); PR via safeoutputs patch mode. Monthly Activity #1801 updated.
