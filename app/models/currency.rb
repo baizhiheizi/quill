@@ -97,7 +97,7 @@ class Currency < ApplicationRecord
   end
 
   def fetch_asset_raw
-    Rails.cache.fetch(asset_cache_key, expires_in: ASSET_CACHE_TTL) do
+    Rails.cache.fetch(asset_cache_key, expires_in: ASSET_CACHE_TTL, race_condition_ttl: 30.seconds) do
       QuillBot.api.asset(asset_id)["data"]
     end
   rescue MixinBot::Error

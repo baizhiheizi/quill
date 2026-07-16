@@ -30,7 +30,7 @@ class HomeController < ApplicationController
     # suffix) and the tag relation is no longer narrowed by `tags.locale =
     # caller_locale`. Every visitor sees the platform-wide hot-tag set.
     @hot_tags =
-      Rails.cache.fetch "hot_tags", expires_in: 5.minutes do
+      Rails.cache.fetch "hot_tags", expires_in: 5.minutes, race_condition_ttl: 30.seconds do
         Tag
           .hot
           .order(Arel.sql("RANDOM()"))

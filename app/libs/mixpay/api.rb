@@ -52,19 +52,19 @@ module Mixpay
     end
 
     def quote_assets_cached
-      Rails.cache.fetch("mixpay_quote_assets", expires_in: 10.minutes) do
+      Rails.cache.fetch("mixpay_quote_assets", expires_in: 10.minutes, race_condition_ttl: 60.seconds) do
         quote_assets
       end
     end
 
     def quote_asset_ids
-      Rails.cache.fetch("mixpay_quote_asset_ids", expires_in: 10.minutes) do
+      Rails.cache.fetch("mixpay_quote_asset_ids", expires_in: 10.minutes, race_condition_ttl: 60.seconds) do
         quote_assets.map(&->(asset) { asset["assetId"] })
       end
     end
 
     def settlement_asset_ids
-      Rails.cache.fetch("mixpay_settlement_asset_ids", expires_in: 10.minutes) do
+      Rails.cache.fetch("mixpay_settlement_asset_ids", expires_in: 10.minutes, race_condition_ttl: 60.seconds) do
         settlement_assets.map(&->(asset) { asset["assetId"] })
       end
     end
