@@ -2,7 +2,7 @@
 on:
   permissions:
     pull-requests: read
-  schedule: daily
+  schedule: daily around 5:00 utc+8
   slash_command:
     events:
     - pull_request_comment

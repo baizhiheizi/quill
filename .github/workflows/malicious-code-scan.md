@@ -1,6 +1,6 @@
 ---
 on:
-  schedule: daily
+  schedule: daily around 2:00 utc+8
   workflow_dispatch: null
 permissions:
   actions: read

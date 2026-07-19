@@ -3,7 +3,7 @@ on:
   permissions:
     pull-requests: read
   reaction: eyes
-  schedule: daily
+  schedule: daily around 3:00 utc+8
   slash_command:
     name: test-assist
     strategy: centralized

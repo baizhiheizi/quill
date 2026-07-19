@@ -1,6 +1,6 @@
 ---
 on:
-  schedule: daily
+  schedule: daily around 1:00 utc+8
   skip-if-match: is:pr is:open in:title "[code-simplifier]"
 permissions: read-all
 network:

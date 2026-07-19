@@ -1,6 +1,6 @@
 ---
 on:
-  schedule: weekly on monday
+  schedule: weekly on sunday around 3:00 utc+8
   workflow_dispatch: null
 permissions: read-all
 network: defaults

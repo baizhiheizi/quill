@@ -1,6 +1,6 @@
 ---
 on:
-  schedule: daily
+  schedule: daily around 1:00 utc+8
   workflow_dispatch:
     inputs:
       regenerate-template:
