@@ -13,7 +13,7 @@ network:
   - java
 imports:
 - shared/runtime.md
-- shared/engine-minimax.md
+- shared/engine-deepseek.md
 - shared/formatting.md
 - shared/reporting.md
 safe-outputs:

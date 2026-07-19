@@ -26,7 +26,7 @@ network:
   - java
 imports:
 - shared/runtime.md
-- shared/engine-minimax.md
+- shared/engine-deepseek.md
 safe-outputs:
   add-comment:
     hide-older-comments: true

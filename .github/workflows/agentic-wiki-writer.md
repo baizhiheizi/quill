@@ -12,7 +12,7 @@ permissions:
   issues: read
   pull-requests: read
 imports:
-- shared/engine-minimax.md
+- shared/engine-deepseek.md
 safe-outputs:
   create-pull-request:
     allowed-files:
