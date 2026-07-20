@@ -18,7 +18,6 @@ on:
       - Gemfile.lock
       - package.json
       - bun.lock
-      - bun.lockb
       - config.ru
       - Rakefile
       - mise.toml
