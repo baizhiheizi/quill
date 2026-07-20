@@ -81,8 +81,4 @@ class PreOrdersController < ApplicationController
       authorize item, :purchase?
     end
   end
-
-  def should_redirect?
-    true if @pre_order.order_type.reward_article?
-  end
 end
