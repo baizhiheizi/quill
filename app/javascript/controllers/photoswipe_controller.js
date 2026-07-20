@@ -9,6 +9,13 @@ export default class extends Controller {
     this.initLightbox();
   }
 
+  disconnect() {
+    if (this.lightbox) {
+      this.lightbox.destroy();
+      this.lightbox = null;
+    }
+  }
+
   initLightbox() {
     this.lightbox = new PhotoSwipeLightbox({
       gallerySelector: ".photoswipe-gallery",
