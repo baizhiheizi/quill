@@ -182,8 +182,11 @@ class Admin::UsersControllerTest < ActionController::TestCase
       # A correctly-preloaded chain uses a single IN-batched SELECT per
       # table — the partial never re-fires SELECTs with a `users.id = ?`
       # equality predicate because the records are already in the
-      # identity map.
+      # identity map. Rails emits IN clauses as either raw integer lists
+      # (`IN (1, 2, 3)`) or parameterized placeholders (`IN ($1, $2, $3)`);
+      # either form is batched and we skip both.
       next if sql =~ /IN\s*\(\s*\d+\s*(?:,\s*\d+\s*)+\)/i
+      next if sql =~ /IN\s*\(\s*\$\d+\s*(?:,\s*\$\d+\s*)+\)/i
       next if sql =~ /IN\s*\(\s*SELECT\s+/i
       queries << sql
     }

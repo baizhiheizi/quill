@@ -107,7 +107,7 @@ class ArticleSnapshotTest < ActiveSupport::TestCase
   test "set_defaults stores SHA3-256 of article.content_body as raw['digest']" do
     snapshot = ArticleSnapshot.create!(article: @article)
 
-    expected_digest = SHA3::Digest::SHA256.hexdigest(@article.content_body)
+    expected_digest = SHA3::Digest::SHA3_256.hexdigest(@article.content_body)
 
     assert_equal expected_digest, snapshot.raw["digest"]
   end

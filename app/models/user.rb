@@ -120,7 +120,7 @@ class User < ApplicationRecord
 
   after_commit :prepare_async, on: :create
 
-  delegate :phone, to: :authorization
+  delegate :phone, to: :authorization, allow_nil: true
 
   # subscribe user
   action_store :subscribe, :user, counter_cache: "subscribers_count", user_counter_cache: "subscribing_count"
