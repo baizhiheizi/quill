@@ -73,12 +73,10 @@ class PreOrdersController < ApplicationController
 
   def authorize_pre_order_item!(item, order_type)
     case order_type.to_s
-    when "buy_article"
+    when "buy_article", "buy_collection"
       authorize item, :purchase?
     when "reward_article"
       authorize item, :reward?
-    when "buy_collection"
-      authorize item, :purchase?
     end
   end
 end
