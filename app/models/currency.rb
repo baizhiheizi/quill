@@ -76,10 +76,6 @@ class Currency < ApplicationRecord
     asset_id.in? Article::SUPPORTED_ASSETS
   end
 
-  def sync!
-    update! asset_id:
-  end
-
   private
 
   def set_defaults

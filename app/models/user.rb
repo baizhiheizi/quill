@@ -39,7 +39,6 @@
 class User < ApplicationRecord
   is_impressionable
 
-  include Authenticatable
   include Users::EmailVerifiable
   include Users::Scopable
   include Users::Statable
