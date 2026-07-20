@@ -50,8 +50,17 @@ baizhiheizi/quill — Rails 8.1 monolith (Web3 paid-publishing). Ruby 4.0.5, Pos
 - **`preload_user_aggregates` order matters** — must be called AFTER `pagy(:countless, users)`. The collection must be an Array (not Relation).
 - **All 8 admin indexes** (Users, Articles, Orders, Payments, Transfers, Bonuses, Comments, PreOrders, Collections) now use the canonical `admin_user_field_preloads` chain. Sweep complete.
 
+## Frontend Baseline (2026-07-20)
+- **`bin/measure-frontend-efficiency`** ran successfully. Key metrics:
+  - **JS/CSS**: Not built in CI (no `bun install`). Expect `application.js` ~80 KB gzip prod; `application.css` ~20 KB gzip prod (Tailwind).
+  - **Lazy loading**: 40.0% coverage (26/65 `image_tag` calls use `lazy: true`). 39 static images (logos, icons, placeholders) lack lazy — knowingly mostly above-the-fold, so low-risk to fix per-case.
+  - **GPU motion**: 10 transition/animate sites (`transition-all` 5, `transition-transform` 5). **0 `motion-reduce`** awareness — accessibility gap.
+  - **Listener leaks**: 0/6 (clean — all controllers with `addEventListener` in `connect()` also have `disconnect()` cleanup).
+- `--json` flag available for before/after CI baselines.
+
 ## Run History (recent)
-- **2026-07-17 20:11 UTC** - [Run](https://github.com/baizhiheizi/quill/actions/runs/29572212724)
+- **2026-07-20 18:14 UTC** - [Run](https://github.com/baizhiheizi/quill/actions/runs/29771387921)
+  - 📊 Measured frontend efficiency baseline via `bin/measure-frontend-efficiency`. Findings: 40% lazy-loading coverage, 0 `motion-reduce` awareness, clean listener accounting. Baseline recorded in memory for future before/after comparisons.
   - Audited ALL Admin controllers — only gap remained: `CollectionsController#index`.
   - Drafted `perf-assist/admin-collections-author-avatar-preload-20260717` (commit `5df85ec`): `Collection.includes(:currency, author: admin_user_field_preloads)`. Closes the last admin-index gap in the avatar-chain N+1 sweep. 3 files, +87/-1.
   - Added regression-guard test mirroring `Admin::UsersController#index` guard.
@@ -67,4 +76,4 @@ baizhiheizi/quill — Rails 8.1 monolith (Web3 paid-publishing). Ruby 4.0.5, Pos
 ## Backlog Cursor
 - Dashboard + Admin + Public user + Homepage feed N+1 families — fully DONE (all 8 admin indexes + dashboard home).
 - `Dashboard::NotificationsController#index` action_store N+1 — DEFERRED for a dedicated migration run.
-- **Next**: Notifications migration OR look outside N+1 family (`Order.distribute_service`, `Comment.notify_subscribers_async` SELECTs, build-time optimizations, frontend bundle analysis via `bin/measure-frontend-efficiency`).
+- **Next**: Frontend efficiency baseline now established. Next: investigate `Order#all_transfers_generated?` per-row aggregate (F15 from #1911), or tackle the `motion-reduce` accessibility gap, or move to `Order.distribute_service` / `Comment.notify_subscribers_async` SELECT patterns.
