@@ -169,7 +169,7 @@ GEM
     cgi (0.5.2)
     chunky_png (1.4.0)
     cli-ui (2.7.0)
-    concurrent-ruby (1.3.7)
+    concurrent-ruby (1.3.8)
     config (5.6.1)
       deep_merge (~> 1.2, >= 1.2.1)
       ostruct
@@ -382,7 +382,7 @@ GEM
       railties (>= 7.1)
       stimulus-rails
       turbo-rails
-    mixin_bot (2.3.0)
+    mixin_bot (2.4.0)
       activesupport (>= 7)
       awesome_print (~> 1.8)
       base58 (~> 0.2)
@@ -398,7 +398,7 @@ GEM
       jose (~> 1.1)
       msgpack (~> 1.3)
       rbnacl (~> 7.1)
-      sha3 (~> 1.0)
+      sha3 (~> 2.2)
       thor (~> 1.0)
     msgpack (1.8.3)
     multi_xml (0.9.1)
@@ -621,7 +621,7 @@ GEM
       rexml (~> 3.2, >= 3.2.5)
       rubyzip (>= 1.2.2, < 4.0)
       websocket (~> 1.0)
-    sha3 (1.0.5)
+    sha3 (2.2.4)
     simple_command (1.0.1)
     snaky_hash (2.0.6)
       hashie (>= 0.1.0, < 6)
@@ -823,7 +823,7 @@ CHECKSUMS
   chunky_png (1.4.0) sha256=89d5b31b55c0cf4da3cf89a2b4ebc3178d8abe8cbaf116a1dba95668502fdcfe
   cld (0.13.0)
   cli-ui (2.7.0) sha256=e36147f2e8088796b996f0560f577bd1599f2b6aa3c374fe09fff59af5589c35
-  concurrent-ruby (1.3.7) sha256=4412caec3a5ea2e5fdc52076724c071a81f2c0593d83b2ac8cbb8ca63b3151b0
+  concurrent-ruby (1.3.8) sha256=b2f1be836e968ccc78ccfce277ea79c72a88633f22306782c16ff23fb415d1e1
   config (5.6.1) sha256=a9f0f0f9ffa6d12d43147a3fa1ab8486fe484c3098a350c6a2e0f32430e0d1cc
   connection_pool (3.0.2) sha256=33fff5ba71a12d2aa26cb72b1db8bba2a1a01823559fb01d29eb74c286e62e0a
   crass (1.0.7) sha256=94868719948664c89ddcaf0a37c65048413dfcb1c869470a5f7a7ceb5390b295
@@ -918,7 +918,7 @@ CHECKSUMS
   mini_racer (0.21.4) sha256=ccf5e37288097f079d84449e111cd4e2170b37f3b80b30900766ffa6df4632db
   minitest (6.0.6) sha256=153ea36d1d987a62942382b61075745042a2b3123b1cd48f4c3675af9cc7d6f1
   mission_control-jobs (1.1.0) sha256=b13da9cde3344fec7c744b79d2a34c3ecd454f45d4d593d4c968ba762315e84c
-  mixin_bot (2.3.0) sha256=81282f3ca9c2f977affccada20f51e897dbbb07ac0002fae3eead071afb482c4
+  mixin_bot (2.4.0) sha256=348253bd23eea734947e6455573190d28cd22b28f6f54b415ab24144bceb4925
   msgpack (1.8.3) sha256=8bda4a6428d3244e50d6bd55854d354edbada88a4e1f4f5731a39a0f86bee6a1
   multi_xml (0.9.1) sha256=7ce766b59c17241ed62976caeae1fae9b2431b263398c35396239a68c4a64e57
   multipart-post (2.4.1) sha256=9872d03a8e552020ca096adadbf5e3cb1cd1cdd6acd3c161136b8a5737cdb4a8
@@ -1003,7 +1003,7 @@ CHECKSUMS
   scrypt (3.1.0) sha256=67fde35bc7e3b7fe906c5be9c242acf95fe4a886c89572f405f6b11df30aa6af
   securerandom (0.4.1) sha256=cc5193d414a4341b6e225f0cb4446aceca8e50d5e1888743fac16987638ea0b1
   selenium-webdriver (4.46.0) sha256=cb6cfa6f79eac041749df0b14cdcb0e9fe5df3715a64c77bfaa56b345b99f957
-  sha3 (1.0.5) sha256=e6193f950d26f0309b3d8a505abb3dd0d20e888852d97a2edd1576d4a54c90fd
+  sha3 (2.2.4) sha256=2a3c7b8c8fd5ba2571f8f21b51935c8c513c1036f1e472181e8275c469b16bc7
   simple_command (1.0.1) sha256=abae895cb11ae8fd99e40a144e6e8e3d199f41e83d4cd747718782bed9f908bb
   snaky_hash (2.0.6) sha256=3663cae48cdef582b517025cf8a39d8789996eaf0b4ed89e2f0624836505654a
   solid_cable (4.0.0) sha256=8379680ef6bf36e195eb876a6306ea290f87d5fa10bc4a757bc2a918f83229b5
