@@ -16,7 +16,13 @@ class CreateTagService
 
     tag_names.compact_blank!
 
-    new_tags = tag_names.map { |x| Tag.find_or_create_by(name: x.strip) }
+    # Batch-lookup existing tags to avoid N+1 queries from per-name
+    # find_or_create_by calls. In the common case (most tags already exist),
+    # this reduces queries from N to 1.
+    existing = Tag.where(name: tag_names.map(&:strip)).index_by(&:name)
+    new_tags = tag_names.map do |x|
+      existing[x.strip] || Tag.find_or_create_by(name: x.strip)
+    end
     old_tags = article.tags.to_a
     add_tags = (new_tags - old_tags)
     remove_tags = (old_tags - new_tags)
