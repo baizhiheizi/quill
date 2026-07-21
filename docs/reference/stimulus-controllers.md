@@ -103,90 +103,45 @@ export default class extends Controller {
 }
 ```
 
-Key details: `boundOnScroll` is stored on the instance so `removeEventListener` can reach it. `{ passive: true }` keeps Chrome from stalling paint waiting on `preventDefault`. `show` is debounced in `connect()` since `classList.add(...)` runs eagerly. `disconnect()` clears the listener and pending `hideTimer`. Element-scoped listeners follow the same pattern ([prefetch_controller.js](../../app/javascript/controllers/prefetch_controller.js)).
+`{ passive: true }` keeps Chrome from stalling paint on `preventDefault`. Element-scoped listeners follow the same pattern ([prefetch_controller.js](../../app/javascript/controllers/prefetch_controller.js)).
 
 ### Observer teardown
 
-`IntersectionObserver` and `MutationObserver` leak like event listeners if `disconnect()` can't reach the closure. Store the observer as an instance property and call `.disconnect()` on it from `disconnect()`.
-
-The reference example is [`infinite_scroll_controller.js`](../../app/javascript/controllers/infinite_scroll_controller.js):
+Store `IntersectionObserver` and `MutationObserver` instances as instance properties so `disconnect()` can tear them down:
 
 ```javascript
 import { Controller } from "@hotwired/stimulus";
-import { get } from "@rails/request.js";
 
 export default class extends Controller {
-  static targets = ["scrollArea", "pagination"];
-
   connect() {
-    this.loading = false;
-    this.lastFetchedHref = null;
-    this.createObserver();
-  }
-
-  createObserver() {
     this.observer = new IntersectionObserver(
       (entries) => this.handleIntersect(entries),
       { threshold: [0, 1.0] },
     );
-    if (this.hasScrollAreaTarget) {
-      this.observer.observe(this.scrollAreaTarget);
-    }
+    this.observer.observe(this.element);
   }
 
-  disconnect() {
-    if (this.observer) {
-      this.observer.disconnect();
-      this.observer = null;
-    }
-  }
+  disconnect() { this.observer?.disconnect(); }
 
   handleIntersect(entries) {
-    if (entries.some((entry) => entry.isIntersecting)) this.loadMore();
-  }
-
-  async loadMore() {
-    if (this.loading) return;
-
-    const next = this.paginationTarget.querySelector("a");
-    if (!next || !next.href) return;
-
-    if (this.lastFetchedHref === next.href) return;
-
-    this.loading = true;
-    this.lastFetchedHref = next.href;
-    try {
-      await get(next.href, {
-        contentType: "application/json",
-        responseKind: "turbo-stream",
-      });
-    } finally {
-      this.loading = false;
-    }
+    if (entries.some((e) => e.isIntersecting)) this.loadMore();
   }
 }
 ```
 
-Key details: `observer` is stored on the instance (a local `const` would leak for the page's lifetime). The observer is only created when `hasScrollAreaTarget` is true. `loadMore()` dedups overlapping fetches (`this.loading`) and repeated viewport hits (`this.lastFetchedHref`).
+See [`infinite_scroll_controller.js`](../../app/javascript/controllers/infinite_scroll_controller.js) for the full source with pagination dedup logic (`this.loading`, `this.lastFetchedHref`).
 
 ### Debouncing DOM writes
 
-Wrap DOM-mutating work in `debounce` (`underscore`, already in the bundle) so bursts collapse into one write:
+Wrap DOM-mutating work in `debounce` (`underscore`, already in the bundle) to collapse bursts into single writes:
 
 ```javascript
 import { debounce } from "underscore";
 
-connect() {
-  this.persist = debounce(this.persist.bind(this), 500);
-}
+connect() { this.persist = debounce(this.persist.bind(this), 500); }
 
-disconnect() {
-  // cancel pending calls so they don't fire after teardown
-  this.persist.cancel();
-}
+disconnect() { this.persist.cancel(); }
 ```
-
-For observer-style work that does not need DOM writes, prefer `IntersectionObserver` or `MutationObserver` — see the example above.
 
 ### Using `stimulus-use`
 
