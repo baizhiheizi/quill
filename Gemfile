@@ -50,7 +50,7 @@ gem "aws-sdk-s3", require: false
 gem "image_processing", "~> 2.0"
 
 # Modern rich text editor for Action Text
-gem "lexxy", "~> 0.9.23"
+gem "lexxy", "~> 0.9.25"
 
 # URI parsing and normalization (used for profile and payment URLs in production)
 gem "addressable"
