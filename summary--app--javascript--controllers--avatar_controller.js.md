@@ -1,2 +1,1 @@
-13
-AvatarController. Static seed value. connect() sets element.style.backgroundColor = colorFromSeed(seedValue). Deterministic background for users without uploaded avatars.
+<!-- 277 -->Avatar. static seed. connect: bg = colorFromSeed(seed).

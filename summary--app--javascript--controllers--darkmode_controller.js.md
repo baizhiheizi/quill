@@ -1,0 +1,1 @@
+<!-- 1834 -->Darkmode. lightButton/darkButton targets. Toggle localStorage.theme. dark/light methods set data-theme, class "dark", theme-color meta, call reloadTheme().

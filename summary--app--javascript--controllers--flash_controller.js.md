@@ -1,0 +1,1 @@
+<!-- 565 -->Flash. useTransition. connect: enter + setTimeout hide at delay(3s). hide: leave → remove. disconnect: clearTimeout.

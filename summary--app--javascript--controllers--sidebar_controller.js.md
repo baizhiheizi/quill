@@ -1,0 +1,1 @@
+<!-- 1007 -->Sidebar. useHover. openClass/collapseClass values. sidebar/openButton/collapseButton targets. Collapse/expand on mouseEnter/Leave. Hide on outside click.

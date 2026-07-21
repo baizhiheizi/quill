@@ -1,0 +1,1 @@
+<!-- 928 -->Index JSON: array of uuid, title, intro, partial_content, price_usd, price, currency, tag_names, original_url, state, orders/comments/upvotes/downvotes counts, timestamps. Nested author: name, avatar, avatar_seed, avatar_initials.

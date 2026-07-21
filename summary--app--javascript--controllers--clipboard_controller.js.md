@@ -1,0 +1,1 @@
+<!-- 1178 -->Clipboard. button target, text/successTip/successDuration values. copy: writeText or execCommand fallback. Show successTip, restore after duration.

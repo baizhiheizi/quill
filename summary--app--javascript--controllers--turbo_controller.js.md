@@ -1,0 +1,1 @@
+<!-- 388 -->Turbo. initialize: set data-action. click: preventDefault, get(href, responseKind turbo-stream).

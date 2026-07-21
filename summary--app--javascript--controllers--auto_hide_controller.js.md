@@ -1,0 +1,1 @@
+<!-- 641 -->AutoHide. connect: setTimeout → addClass hidden at delayValue. disconnect: clearTimeout.

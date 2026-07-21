@@ -1,0 +1,1 @@
+<!-- 925 -->Search. form/input/clearButton targets. Debounced 300ms GET /search?query via Turbo Stream. Clear button toggle.

@@ -1,2 +1,7 @@
-627
-filter: user=User.find_by(mixin_uuid: user_id). approved = false if blank; if type=recent, sum payments(paid|completed) in last week OR articles only_published in last week; else sum payments(paid|completed) OR articles only_published (all-time). Renders {approved:}.
+<!-- hash: 627 -->
+API::ValidUsersController < API::BaseController
+- filter: GET /api/valid_user_filter?user_id=<Mixin UUID>&type=recent
+- Finds user by mixin_uuid. If blank, approved=false.
+- type="recent": checks payments sum > 0 or published articles > 0 in past week
+- Otherwise: checks any payments sum > 0 or any published articles > 0
+- Returns: {"approved": true/false}
