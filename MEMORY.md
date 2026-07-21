@@ -1,5 +1,6 @@
 # Test Improver Memory
 
+- [Run notes 2026-07-21](2026-07-21-notes.md) — Testing guide created (PR) + new opportunities identified
 - [Run notes 2026-07-20](2026-07-20-notes.md) — Infra proposal + Monthly Activity update
 
 ## Discovered Commands
@@ -32,15 +33,18 @@
 
 ## Backlog
 
-**Model coverage substantially complete** (22 non-trivial models). Pivot to infrastructure.
+**Model coverage substantially complete** (22 non-trivial models). **Testing guide created** (PR open). Pivot to controller/infrastructure.
 
 Pending items:
 - **Bonus AASM** — blocked by table-name bug
 - **ArticleSnapshot#previous_signed_snapshot** — broken code (undefined `signed` scope)
 - **Splitter#collect_assets** — zero callers (dead or missing dispatcher)
 - **NftCollection / mixin_pre_order / administrator / session** — thin surfaces, LOW
-- **Infra proposal** (2026-07-20): SimpleCov + testing docs — awaiting feedback
+- **SimpleCov proposal** (issue #1934) — awaiting maintainer feedback
+- **Dashboard controller coverage** — 17 untested controllers (collections, transfers, payments, articles+)
+- **Concern coverage** — AdvisoryLockable, RichTextContent, Localizable (all untested)
+- **Controller concern coverage** — UserFieldPreloads, RenderingHelper
 
 ## Last Run
 
-2026-07-20 — Infra proposal (issue); Monthly Activity updated. DailyStatistic PR #1922 merged. Pivot to infrastructure.
+2026-07-21 — Testing guide created (PR), new controller/concern opportunities identified. Monthly Activity updated.
