@@ -8,8 +8,6 @@ export default class extends Controller {
 
   static targets = ["tab", "content"];
 
-  connect() {}
-
   active(event) {
     event.preventDefault();
     const { tabname } = event.params;

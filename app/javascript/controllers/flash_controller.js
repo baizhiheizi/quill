@@ -6,8 +6,6 @@ export default class extends Controller {
     delay: Number,
   };
 
-  initialize() {}
-
   connect() {
     useTransition(this);
     this.enter();

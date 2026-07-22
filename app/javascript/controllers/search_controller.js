@@ -5,12 +5,8 @@ import { get } from "@rails/request.js";
 export default class extends Controller {
   static targets = ["form", "input", "clearButton"];
 
-  initialize() {
-    this.search = this.search.bind(this);
-  }
-
   connect() {
-    this.search = debounce(this.search, 300);
+    this.search = debounce(this.search.bind(this), 300);
   }
 
   submit() {
