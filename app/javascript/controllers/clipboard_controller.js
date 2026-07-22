@@ -20,6 +20,7 @@ export default class extends Controller {
   disconnect() {
     if (this.timeout) {
       clearTimeout(this.timeout);
+      this.timeout = null;
     }
   }
 

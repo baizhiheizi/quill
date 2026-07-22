@@ -8,9 +8,9 @@ export default class extends Controller {
   };
 
   connect() {
+    this.boundVisibilityChanged = this._visibilityChanged.bind(this);
+    document.addEventListener("visibilitychange", this.boundVisibilityChanged);
     this.startPolling();
-    this._boundVisibilityChanged = this._visibilityChanged.bind(this);
-    document.addEventListener("visibilitychange", this._boundVisibilityChanged);
   }
 
   _visibilityChanged() {
@@ -22,14 +22,15 @@ export default class extends Controller {
   }
 
   startPolling() {
-    if (this._interval) clearInterval(this._interval);
-    this._interval = setInterval(() => this.verify(), this.intervalValue);
+    if (document.hidden) return;
+    if (this.interval) clearInterval(this.interval);
+    this.interval = setInterval(() => this.verify(), this.intervalValue);
   }
 
   stopPolling() {
-    if (this._interval) {
-      clearInterval(this._interval);
-      this._interval = null;
+    if (this.interval) {
+      clearInterval(this.interval);
+      this.interval = null;
     }
   }
 
@@ -49,10 +50,10 @@ export default class extends Controller {
 
   disconnect() {
     this.stopPolling();
-    if (this._boundVisibilityChanged) {
+    if (this.boundVisibilityChanged) {
       document.removeEventListener(
         "visibilitychange",
-        this._boundVisibilityChanged,
+        this.boundVisibilityChanged,
       );
     }
   }
