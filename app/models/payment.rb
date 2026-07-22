@@ -105,12 +105,9 @@ class Payment < ApplicationRecord
   def collection
     return if payment_memo["l"].blank?
 
-    @collection ||=
-      if payment_memo["l"].present?
-        Collection.find_by uuid: payment_memo["l"]
-      elsif pre_order&.item_type == "Collection"
-        pre_order.item
-      end
+    @collection ||= Collection.find_by(uuid: payment_memo["l"])
+    @collection ||= pre_order.item if pre_order&.item_type == "Collection"
+    @collection
   end
 
   def citer

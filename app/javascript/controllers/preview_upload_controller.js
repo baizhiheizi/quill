@@ -9,49 +9,29 @@ export default class extends Controller {
 
   preview() {
     const input = this.inputTarget;
+    if (!input.files || !input.files[0]) return;
 
-    if (input.files && input.files[0]) {
-      const file = input.files[0];
-      switch (file.type.split("/")[0]) {
-        case "video":
-          if (this.hasVideoTplTarget) {
-            const video = this.videoTplTarget;
-            video.src = URL.createObjectURL(file);
-            video.classList.remove("hidden");
-            video.setAttribute("controls", true);
-            this.outputTarget.replaceChildren(video);
-          } else {
-            this.outputTarget.innerHTML = `<video class="w-full" src=${URL.createObjectURL(
-              file,
-            )} controls></video>`;
-          }
-          break;
-        case "audio":
-          if (this.hasAudioTplTarget) {
-            const audio = this.audioTplTarget;
-            audio.src = URL.createObjectURL(file);
-            audio.classList.remove("hidden");
-            audio.setAttribute("controls", true);
-            this.outputTarget.replaceChildren(audio);
-          } else {
-            this.outputTarget.innerHTML = `<audio class="w-full" src=${URL.createObjectURL(
-              file,
-            )} controls></audio>`;
-          }
-          break;
-        case "image":
-          if (this.hasImageTplTarget) {
-            const image = this.imageTplTarget;
-            image.src = URL.createObjectURL(file);
-            image.classList.remove("hidden");
-            this.outputTarget.replaceChildren(image);
-          } else {
-            this.outputTarget.innerHTML = `<img class="w-full" src=${URL.createObjectURL(
-              file,
-            )} />`;
-          }
-          break;
-      }
+    const file = input.files[0];
+    const kind = file.type.split("/")[0];
+    this.renderPreview(kind, URL.createObjectURL(file));
+  }
+
+  renderPreview(kind, url) {
+    const tagName = kind === "image" ? "img" : kind;
+    const targetProp = `${kind}TplTarget`;
+    const hasTargetProp =
+      `has${kind.charAt(0).toUpperCase() + kind.slice(1)}TplTarget`;
+
+    if (this[hasTargetProp]) {
+      const el = this[targetProp];
+      el.src = url;
+      el.classList.remove("hidden");
+      if (kind !== "image") el.setAttribute("controls", true);
+      this.outputTarget.replaceChildren(el);
+    } else {
+      const attrs = kind === "image" ? "" : " controls";
+      this.outputTarget.innerHTML =
+        `<${tagName} class="w-full" src=${url}${attrs}></${tagName}>`;
     }
   }
 }

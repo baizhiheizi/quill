@@ -76,14 +76,16 @@ class Transfer < ApplicationRecord
   scope :processed, -> { where.not(processed_at: nil) }
   scope :stale, -> { where.not(stale_at: nil) }
 
+  def normalized_snapshot
+    @normalized_snapshot ||= snapshot.is_a?(Array) ? snapshot.first : snapshot
+  end
+
   def snapshot_id
-    _snapshot = snapshot.is_a?(Array) ? snapshot.first : snapshot
-    _snapshot&.[]("snapshot_id")
+    normalized_snapshot&.[]("snapshot_id")
   end
 
   def transaction_hash
-    _snapshot = snapshot.is_a?(Array) ? snapshot.first : snapshot
-    _snapshot&.[]("transaction_hash")
+    normalized_snapshot&.[]("transaction_hash")
   end
 
   def snapshot_url
