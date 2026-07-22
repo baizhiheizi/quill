@@ -37,7 +37,7 @@ name: Agentic Maintenance
 
 on:
   schedule:
-    - cron: "37 0,10,12,14,16,18,20,22 * * *"  # Outside Beijing worktime (09-18 CST)
+    - cron: "37 */2 * * *"  # Every 2 hours (based on minimum expires: 1 days)
   workflow_dispatch:
     inputs:
       operation:
