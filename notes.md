@@ -59,7 +59,14 @@ baizhiheizi/quill — Rails 8.1 monolith (Web3 paid-publishing). Ruby 4.0.5, Pos
 - `--json` flag available for before/after CI baselines.
 
 ## Run History (recent)
-- **2026-07-20 18:14 UTC** - [Run](https://github.com/baizhiheizi/quill/actions/runs/29771387921)
+- **2026-07-22 17:55 UTC** - [Run](https://github.com/baizhiheizi/quill/actions/runs/29948379479)
+  - 🔍 Audited `Collections::ArticlesController#index` — found public-facing collection article render with no `.includes(...)` on `articles/_card` partial. Partial walks `article.currency`, `article.tags`, `article.author` avatar chain, `article.cover.attached?` per row. ~25-40 extra SELECTs per 5-article page.
+  - 🔧 Branch `perf-assist/collections-articles-card-preload-20260722` (commit `d42ab87`): 4 files, +98/-1. Controller adds `.includes(:currency, :tags, cover_attachment: :blob, author: User::AVATAR_PRELOADS)`.
+  - 🧪 New regression-guard test: asserts ≤20 SELECTs for 5 unique-author articles (bypasses identity-map cache).
+  - 📊 Bench scenarios: `collections.articles.{eager_load,legacy}`.
+  - ✅ rubocop + zeitwerk clean. PR submitted via safeoutputs.
+  - 🐛 Confirmed: `safeoutputs create_pull_request` now materializes (successful response in this run).
+  - 🐛 `safeoutputs update_issue` consumed by first empty-args call; used `add_comment` as fallback.
   - 📊 Measured frontend efficiency baseline via `bin/measure-frontend-efficiency`. Findings: 40% lazy-loading coverage, 0 `motion-reduce` awareness, clean listener accounting. Baseline recorded in memory for future before/after comparisons.
   - Audited ALL Admin controllers — only gap remained: `CollectionsController#index`.
   - Drafted `perf-assist/admin-collections-author-avatar-preload-20260717` (commit `5df85ec`): `Collection.includes(:currency, author: admin_user_field_preloads)`. Closes the last admin-index gap in the avatar-chain N+1 sweep. 3 files, +87/-1.
@@ -75,5 +82,6 @@ baizhiheizi/quill — Rails 8.1 monolith (Web3 paid-publishing). Ruby 4.0.5, Pos
 
 ## Backlog Cursor
 - Dashboard + Admin + Public user + Homepage feed N+1 families — fully DONE (all 8 admin indexes + dashboard home).
+- `Collections::ArticlesController#index` — DRAFTED this run (branch `perf-assist/collections-articles-card-preload-20260722`).
 - `Dashboard::NotificationsController#index` action_store N+1 — DEFERRED for a dedicated migration run.
-- **Next**: Frontend efficiency baseline now established. Next: investigate `Order#all_transfers_generated?` per-row aggregate (F15 from #1911), or tackle the `motion-reduce` accessibility gap, or move to `Order.distribute_service` / `Comment.notify_subscribers_async` SELECT patterns.
+- **Next**: Public-facing controller sweep complete (all collection-iteration paths now preloaded). Future runs can investigate `Order.distribute_service` / `Comment.notify_subscribers_async` SELECT patterns, or revisit the DEFERRED notifications migration.
