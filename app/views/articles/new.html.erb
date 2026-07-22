@@ -13,27 +13,33 @@
   class="article-editor article-editor--new">
 
   <div data-article-form-target="editorChrome" class="fixed left-0 top-0 z-50 w-full border-b border-base-300 bg-base-100/95 backdrop-blur-sm">
-    <div class="article-editor__chrome mx-auto flex w-full max-w-[88rem] items-center justify-between gap-3 px-4 py-3 text-sm sm:px-8 sm:text-base">
+    <div class="article-editor__chrome mx-auto flex w-full max-w-[88rem] items-center justify-between gap-2 px-3 py-2.5 text-sm sm:gap-3 sm:px-8 sm:py-3 sm:text-base">
       <%= link_to root_path, class: "shrink-0" do %>
         <%= image_tag "logo.svg", class: "hidden h-8 w-auto sm:block" %>
         <%= image_tag "logo.png", class: "h-6 w-auto sm:hidden" %>
       <% end %>
 
-      <div class="flex items-center gap-3">
-        <div id="article-form-save-status">
+      <div class="article-editor__chrome-actions flex min-w-0 flex-1 items-center justify-end gap-1 sm:gap-2 md:gap-3">
+        <div id="article-form-save-status" class="shrink-0">
           <%= render "articles/save_status", article: @article, status: :idle %>
         </div>
 
         <button type="button"
-          class="btn btn-soft btn-sm lg:hidden"
-          data-action="article-form#toggleSettingsRail">
-          <%= t("articles.settings_panel") %>
+          class="btn btn-soft btn-sm shrink-0 px-2.5 sm:gap-1.5 sm:px-3"
+          data-article-form-target="settingsToggle"
+          data-action="article-form#toggleSettingsRail"
+          aria-expanded="false"
+          aria-label="<%= t("articles.settings.open") %>"
+          title="<%= t("articles.settings.open") %>">
+          <span class="i-[tabler--adjustments-horizontal] size-4" aria-hidden="true"></span>
+          <span class="hidden sm:inline"><%= t("articles.settings.open") %></span>
         </button>
 
         <%= link_to dashboard_write_path,
           data: { controller: "prefetch" },
-          class: "avatar shrink-0 #{from_mixin_messenger? ? 'mr-12' : ''}" do %>
-          <div class="size-8 rounded-full">
+          class: "avatar shrink-0 #{from_mixin_messenger? ? 'mr-10 sm:mr-0' : ''}",
+          "aria-label": current_user.name do %>
+          <div class="size-7 rounded-full sm:size-8">
             <%= render "shared/avatar", user: current_user, thumb: true, class: "rounded-full" %>
           </div>
         <% end %>

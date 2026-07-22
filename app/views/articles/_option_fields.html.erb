@@ -33,7 +33,7 @@
       </div>
 
       <%= form.select :tag_names,
-        form.object.tag_names.presence || Tag.all.first(10).pluck(:name),
+        form.object.tag_names.presence || Tag.recommended.limit(10).pluck(:name),
         {},
         multiple: true,
         placeholder: t("articles.add_some_tags"),
@@ -62,37 +62,35 @@
             class: "input w-full bg-base-200 opacity-60" %>
           <p class="mt-1 text-xs text-base-content/50"><%= t("articles.locked_after_publishing") %></p>
         <% else %>
-          <%= form.collection_select :asset_id,
-            Currency.pricable,
-            :asset_id,
-            :symbol,
-            {},
-            class: "sr-only",
-            tabindex: -1,
-            aria: { hidden: true } %>
-
-          <%= link_to currencies_path(identifier: form.object.uuid),
-            data: { turbo_frame: :modal },
-            class: "btn btn-soft flex w-full items-center justify-between rounded-lg bg-base-200 px-4 py-2 hover:bg-base-300" do %>
+          <div class="flex items-center gap-3 rounded-lg bg-base-200 px-3 py-2">
             <% if form.object.currency.present? %>
-              <div id="<%= dom_id form.object.currency %>" class="flex items-center space-x-4">
-                <div class="relative">
-                  <%= remote_image_tag form.object.currency.icon_url,
-                    data: { article_form_target: "currencyIcon" },
-                    class: "h-8 w-8 rounded-full" %>
-                  <%= remote_image_tag form.object.currency.chain&.icon_url || form.object.currency.icon_url,
-                    data: { article_form_target: "currencyChainIcon" },
-                    class: "absolute bottom-0 h-3 w-3 rounded-full" %>
-                </div>
-                <div class="text-lg font-bold" data-article-form-target="currencySymbol">
-                  <%= form.object.currency.symbol %>
-                </div>
+              <div class="relative shrink-0">
+                <%= remote_image_tag form.object.currency.icon_url,
+                  data: { article_form_target: "currencyIcon" },
+                  class: "h-7 w-7 rounded-full" %>
+                <%= remote_image_tag form.object.currency.chain&.icon_url || form.object.currency.icon_url,
+                  data: { article_form_target: "currencyChainIcon" },
+                  class: "absolute bottom-0 h-3 w-3 rounded-full" %>
               </div>
-            <% else %>
-              <span class="text-base-content/70"><%= t("select_crypto") %></span>
+              <span class="sr-only" data-article-form-target="currencySymbol"><%= form.object.currency.symbol %></span>
             <% end %>
-            <span class="i-[tabler--chevron-right] size-6 font-bold opacity-60"></span>
-          <% end %>
+            <select name="article[asset_id]"
+              id="article_asset_id"
+              required="required"
+              data-action="change->article-form#changeCurrency"
+              class="input flex-1 border-0 bg-transparent px-0 font-semibold focus:outline-none focus:ring-0">
+              <% Currency.pricable.each do |currency| %>
+                <option value="<%= currency.asset_id %>"
+                  data-price-usd="<%= currency.price_usd %>"
+                  data-symbol="<%= currency.symbol %>"
+                  data-icon-url="<%= currency.icon_url %>"
+                  data-chain-icon-url="<%= currency.chain&.icon_url || currency.icon_url %>"
+                  <%= "selected" if currency.asset_id == form.object.asset_id %>>
+                  <%= currency.symbol %>
+                </option>
+              <% end %>
+            </select>
+          </div>
         <% end %>
         <% if form.object.errors.where(:asset_id).present? %>
           <div class="py-1 text-sm text-error"><%= form.object.errors.where(:asset_id).map(&:full_message).join("; ") %></div>
@@ -100,21 +98,38 @@
       </div>
 
       <div>
-        <%= form.label :price, required: true, class: "mb-1 block text-sm font-medium opacity-70" %>
-        <%= form.number_field :price,
-          required: true,
-          step: "0.0000001",
-          min: "0",
-          data: { action: "change->article-form#calPriceUsd" },
-          class: "input w-full bg-base-200 font-bold",
-          placeholder: t("articles.price_place_holder") %>
+        <label class="mb-1 block text-sm font-medium opacity-70"><%= t("articles.price.usd_label") %></label>
+        <% if form.object.currency.present? && form.object.currency.price_usd&.positive? %>
+          <%= form.hidden_field :price,
+            data: { article_form_target: "priceCrypto" } %>
+          <input type="number"
+            name="article[price_usd_input]"
+            step="0.01"
+            min="0.10"
+            required="required"
+            value="<%= (form.object.price.to_d * form.object.currency.price_usd).to_f.round(2) if form.object.price.present? %>"
+            data-article-form-target="priceUsdInput"
+            data-action="input->article-form#calCryptoFromUsd"
+            class="input w-full bg-base-200 font-bold"
+            placeholder="0.50" />
+          <div class="mt-2 flex flex-wrap gap-2">
+            <% [0.5, 1, 2, 5].each do |preset| %>
+              <button type="button"
+                class="btn btn-soft btn-xs rounded-full"
+                data-action="article-form#setPricePreset"
+                data-article-form-preset-param="<%= preset %>">
+                $<%= preset %>
+              </button>
+            <% end %>
+          </div>
+          <div class="py-1 text-right text-sm opacity-70">
+            ≈ <span data-article-form-target="priceCryptoDisplay"><%= form.object.price&.round(8) %> <%= form.object.currency.symbol %></span>
+          </div>
+        <% else %>
+          <p class="rounded-lg bg-warning/10 px-3 py-2 text-sm text-warning"><%= t("articles.price.feed_unavailable") %></p>
+        <% end %>
         <% if form.object.errors.where(:price).present? %>
           <div class="py-1 text-sm text-error"><%= form.object.errors.where(:price).map(&:full_message).join("; ") %></div>
-        <% end %>
-        <% if form.object.currency.present? %>
-          <div class="py-1 text-right text-sm opacity-70">
-            ≈ $<span data-article-form-target="priceUsd"><%= (form.object.price * form.object.currency.price_usd).floor(2) %></span>
-          </div>
         <% end %>
       </div>
 
@@ -134,7 +149,24 @@
     <h3 id="settings-revenue" class="mb-3 text-xs font-semibold uppercase tracking-wide text-base-content/50">
       <%= t("articles.settings.revenue_split") %>
     </h3>
-    <div class="space-y-4">
+    <%
+      has_non_default_revenue = form.object.readers_revenue_ratio.present? && form.object.readers_revenue_ratio != 0.4 ||
+                                form.object.article_references.any? ||
+                                form.object.collection_revenue_ratio&.positive?
+    %>
+    <button type="button"
+      class="flex w-full items-center justify-between rounded-lg bg-base-200/80 px-3 py-2 text-sm font-medium hover:bg-base-300"
+      data-action="article-revenue#toggleRevenueSection"
+      aria-expanded="<%= has_non_default_revenue %>">
+      <span class="flex flex-col items-start text-left">
+        <span><%= t("articles.revenue.customize") %></span>
+        <% unless has_non_default_revenue %>
+          <span class="mt-0.5 text-xs font-normal opacity-60"><%= t("articles.revenue.default_summary") %></span>
+        <% end %>
+      </span>
+      <span class="i-[tabler--chevron-down] size-4 shrink-0 transition-transform article-revenue-chevron"></span>
+    </button>
+    <div data-article-revenue-target="revenueSection" class="<%= 'hidden' unless has_non_default_revenue %> mt-3 space-y-4">
       <p data-article-revenue-target="revenueSummary" class="rounded-lg bg-base-200/80 px-3 py-2 text-sm leading-relaxed"></p>
 
       <div class="grid grid-cols-2 gap-3">
@@ -156,17 +188,11 @@
         </div>
       </div>
 
-      <button type="button"
-        class="link link-primary text-sm"
-        data-action="article-revenue#toggleRevenueAdvanced">
-        <%= t("articles.revenue_advanced") %>
-      </button>
+      <% if form.object.published_at? %>
+        <p class="text-xs text-base-content/50"><%= t("articles.locked_after_publishing") %></p>
+      <% end %>
 
-      <div data-article-revenue-target="revenueAdvanced" class="hidden space-y-3 border-t border-base-300 pt-3">
-        <% if form.object.published_at? %>
-          <p class="text-xs text-base-content/50"><%= t("articles.locked_after_publishing") %></p>
-        <% end %>
-
+      <div class="space-y-3 border-t border-base-300 pt-3">
         <div>
           <%= form.label :readers_revenue_ratio, class: "mb-1 block text-sm font-medium opacity-70" %>
           <%= form.number_field :readers_revenue_ratio,
@@ -216,24 +242,36 @@
     <h3 id="settings-references" class="mb-3 text-xs font-semibold uppercase tracking-wide text-base-content/50">
       <%= t("articles.settings.references") %>
     </h3>
-    <template class="hidden" data-nested-form-target="template">
-      <%= form.fields_for :article_references, form.object.article_references.new, child_index: "NEW_RECORD", data: { new_record: true } do |reference_form| %>
-        <%= render partial: "article_references/form", locals: { form: reference_form, article: form.object } %>
+    <%
+      has_references = form.object.article_references.reject(&:new_record?).any?
+    %>
+    <button type="button"
+      class="flex w-full items-center justify-between rounded-lg bg-base-200/80 px-3 py-2 text-sm font-medium hover:bg-base-300"
+      data-action="article-revenue#toggleReferencesSection"
+      aria-expanded="<%= has_references %>">
+      <span><%= t("articles.references.cite_advanced") %></span>
+      <span class="i-[tabler--chevron-down] size-4 transition-transform article-revenue-chevron"></span>
+    </button>
+    <div data-article-revenue-target="referencesSection" class="<%= 'hidden' unless has_references %> mt-3">
+      <template class="hidden" data-nested-form-target="template">
+        <%= form.fields_for :article_references, form.object.article_references.new, child_index: "NEW_RECORD", data: { new_record: true } do |reference_form| %>
+          <%= render partial: "article_references/form", locals: { form: reference_form, article: form.object } %>
+        <% end %>
+      </template>
+
+      <%= form.fields_for :article_references do |reference_form| %>
+        <%= render partial: "article_references/form", locals: { form: reference_form, article: form.object } unless reference_form.object.new_record? %>
       <% end %>
-    </template>
 
-    <%= form.fields_for :article_references do |reference_form| %>
-      <%= render partial: "article_references/form", locals: { form: reference_form, article: form.object } unless reference_form.object.new_record? %>
-    <% end %>
-
-    <% if form.object.published_at.blank? %>
-      <div data-nested-form-target="target"></div>
-      <button type="button"
-        data-action="click->nested-form#add click->article-revenue#calReferenceRatio"
-        class="btn btn-outline btn-primary mt-3 w-full rounded-full">
-        <%= t("articles.add_reference") %>
-      </button>
-    <% end %>
+      <% if form.object.published_at.blank? %>
+        <div data-nested-form-target="target"></div>
+        <button type="button"
+          data-action="click->nested-form#add click->article-revenue#calReferenceRatio"
+          class="btn btn-outline btn-primary mt-3 w-full rounded-full">
+          <%= t("articles.add_reference") %>
+        </button>
+      <% end %>
+    </div>
   </section>
 
   <section aria-labelledby="settings-collection">

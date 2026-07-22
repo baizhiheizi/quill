@@ -314,6 +314,28 @@ ja:
       revenue_split: 収益分配
       references: 参照
       collection: コレクション
+      open: 設定
+      close: 設定を閉じる
+    price:
+      usd_label: 価格（USD）
+      crypto_equivalent: "≈ %{amount} %{symbol}"
+      feed_unavailable: 価格データが利用できません。後でもう一度お試しください
+      minimum_error: 最低価格は約 $0.10 です
+    revenue:
+      customize: 収益分配をカスタマイズ
+      default_summary: "50% あなた · 40% 初期読者 · 10% プラットフォーム"
+    references:
+      cite_advanced: 記事を引用して収益を分配（詳細）
+    conflict:
+      title: 保存の競合が検出されました
+      description: この記事は別のセッションで編集されました。対処方法を選んでください。
+      reload_latest: 最新版を読み込む
+      keep_mine: 自分の版を残す
+    readiness:
+      things_to_fix: "公開前に %{count} %{thing}修正が必要です"
+      thing: 件の
+      things: 件の
+      ready: 公開できます
   this_address_supports: This address supports
   this_address_supports_erc20: This address supports all ERC20 tokens, such as ETH、USDT、XIN.
   first_deposit_tips: For first deposit to new address, please try a small amount! 

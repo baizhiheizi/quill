@@ -1,0 +1,23 @@
+<div id="conflict-resolution" class="fixed left-0 right-0 top-14 z-[55] mx-auto max-w-xl px-4">
+  <div class="rounded-xl border border-warning/30 bg-warning/10 p-4 shadow-lg backdrop-blur-sm">
+    <div class="flex items-start gap-3">
+      <span class="i-[tabler--alert-triangle] mt-0.5 size-5 shrink-0 text-warning"></span>
+      <div class="flex-1">
+        <p class="text-sm font-semibold text-warning"><%= t("articles.conflict.title") %></p>
+        <p class="mt-1 text-sm text-base-content/80"><%= t("articles.conflict.description") %></p>
+        <div class="mt-3 flex gap-3">
+          <%= link_to edit_article_path(article.uuid),
+            data: { turbo_frame: "_top" },
+            class: "btn btn-outline btn-sm rounded-full" do %>
+            <%= t("articles.conflict.reload_latest") %>
+          <% end %>
+          <button type="button"
+            class="btn btn-primary btn-sm rounded-full"
+            data-action="article-form#keepMyVersion">
+            <%= t("articles.conflict.keep_mine") %>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

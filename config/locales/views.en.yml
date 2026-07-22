@@ -322,6 +322,28 @@ en:
       revenue_split: Revenue split
       references: References
       collection: Collection
+      open: Settings
+      close: Close settings
+    price:
+      usd_label: Price (USD)
+      crypto_equivalent: "≈ %{amount} %{symbol}"
+      feed_unavailable: Price feed unavailable — try again later
+      minimum_error: Minimum price is ~$0.10
+    revenue:
+      customize: Customize revenue split
+      default_summary: "50% you · 40% early readers · 10% platform"
+    references:
+      cite_advanced: Cite articles & share revenue (advanced)
+    conflict:
+      title: Save conflict detected
+      description: This article was edited in another session. Choose how to resolve.
+      reload_latest: Reload latest
+      keep_mine: Keep my version
+    readiness:
+      things_to_fix: "%{count} %{thing} to fix before publishing"
+      thing: thing
+      things: things
+      ready: Ready to publish
   this_address_supports: This address supports
   this_address_supports_erc20: This address supports all ERC20 tokens, such as ETH、USDT、XIN.
   first_deposit_tips: For first deposit to new address, please try a small amount! 

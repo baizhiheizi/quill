@@ -254,4 +254,142 @@ class ArticlesAuthenticatedControllerTest < ActionController::TestCase
 
     assert_response :not_found
   end
+
+  test "update returns 409 conflict with resolution payload when lock_version is stale" do
+    article = articles(:draft)
+    @request.session[:current_session_id] = sign_in(article.author).uuid
+
+    article.update!(title: "Saved by other session")
+
+    patch :update, params: {
+      uuid: article.uuid,
+      article: { title: "Stale edit", lock_version: 0, content: "x" }
+    }, as: :turbo_stream
+
+    assert_response :conflict
+    assert_match "conflict-resolution", response.body
+  end
+
+  test "new article page renders settings toggle button" do
+    @request.session[:current_session_id] = sign_in(users(:author)).uuid
+
+    get :new
+
+    assert_response :success
+    assert_match "settingsToggle", response.body
+    assert_match "toggleSettingsRail", response.body
+  end
+
+  test "edit article page renders settings toggle and readiness indicator" do
+    article = articles(:draft)
+    @request.session[:current_session_id] = sign_in(article.author).uuid
+
+    get :edit, params: { uuid: article.uuid }
+
+    assert_response :success
+    assert_match "settingsToggle", response.body
+    assert_match "readinessIndicator", response.body
+  end
+
+  test "pricing section shows USD-first input" do
+    article = articles(:draft)
+    @request.session[:current_session_id] = sign_in(article.author).uuid
+
+    get :edit, params: { uuid: article.uuid }
+
+    assert_response :success
+    assert_match "price_usd_input", response.body
+    assert_match "setPricePreset", response.body
+  end
+
+  test "currency selection is an inline select not a modal link" do
+    article = articles(:draft)
+    @request.session[:current_session_id] = sign_in(article.author).uuid
+
+    get :edit, params: { uuid: article.uuid }
+
+    assert_response :success
+    assert_match "changeCurrency", response.body
+    assert_match "article_asset_id", response.body
+    assert_no_match %r{href="[^"]*/currencies}, response.body
+  end
+
+  test "conflict resolution omits dismiss action" do
+    article = articles(:draft)
+    @request.session[:current_session_id] = sign_in(article.author).uuid
+
+    article.update!(title: "Saved by other session")
+
+    patch :update, params: {
+      uuid: article.uuid,
+      article: { title: "Stale edit", lock_version: 0, content: "x" }
+    }, as: :turbo_stream
+
+    assert_response :conflict
+    assert_match "keepMyVersion", response.body
+    assert_no_match "dismissConflict", response.body
+  end
+
+  test "revenue collapsed state shows default summary" do
+    article = articles(:draft)
+    @request.session[:current_session_id] = sign_in(article.author).uuid
+
+    get :edit, params: { uuid: article.uuid }
+
+    assert_response :success
+    assert_match I18n.t("articles.revenue.default_summary"), response.body
+  end
+
+  test "edit page wires readiness translations" do
+    article = articles(:draft)
+    @request.session[:current_session_id] = sign_in(article.author).uuid
+
+    get :edit, params: { uuid: article.uuid }
+
+    assert_response :success
+    assert_match "readiness-translations-value", response.body
+    assert_match I18n.t("articles.readiness.ready"), response.body
+  end
+
+  test "revenue section has disclosure toggle" do
+    article = articles(:draft)
+    @request.session[:current_session_id] = sign_in(article.author).uuid
+
+    get :edit, params: { uuid: article.uuid }
+
+    assert_response :success
+    assert_match "toggleRevenueSection", response.body
+    assert_match "revenueSection", response.body
+  end
+
+  test "references section has cite-advanced disclosure toggle" do
+    article = articles(:draft)
+    @request.session[:current_session_id] = sign_in(article.author).uuid
+
+    get :edit, params: { uuid: article.uuid }
+
+    assert_response :success
+    assert_match "toggleReferencesSection", response.body
+    assert_match "referencesSection", response.body
+  end
+
+  test "revenue section auto-expanded for non-default values" do
+    article = articles(:draft)
+    article.update!(readers_revenue_ratio: 0.6, author_revenue_ratio: 0.3)
+    @request.session[:current_session_id] = sign_in(article.author).uuid
+
+    get :edit, params: { uuid: article.uuid }
+
+    assert_response :success
+    assert_match 'aria-expanded="true"', response.body
+  end
+
+  test "tag suggestions use recommended scope not unscoped" do
+    @request.session[:current_session_id] = sign_in(users(:author)).uuid
+
+    get :new
+
+    assert_response :success
+    assert_no_match "Tag.all", response.body
+  end
 end

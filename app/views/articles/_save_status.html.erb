@@ -1,23 +1,23 @@
 <div id="<%= dom_id article %>_save_status"
-  class="flex items-center gap-2 text-xs opacity-80"
+  class="flex items-center gap-1.5 text-xs opacity-80 sm:gap-2"
   data-article-form-target="saveStatus"
   data-save-status="<%= status %>"
   aria-live="polite">
   <% case status.to_sym %>
   <% when :saving %>
     <span class="loading loading-spinner loading-xs"></span>
-    <span><%= t("articles.save_status.saving") %></span>
+    <span class="hidden sm:inline"><%= t("articles.save_status.saving") %></span>
   <% when :saved %>
-    <span class="i-[tabler--circle-check] size-4 text-success"></span>
-    <span><%= t("articles.save_status.saved") %></span>
+    <span class="i-[tabler--circle-check] size-4 text-success" aria-hidden="true"></span>
+    <span class="sr-only sm:not-sr-only sm:inline"><%= t("articles.save_status.saved") %></span>
   <% when :error %>
-    <span class="i-[tabler--alert-circle] size-4 text-error"></span>
-    <span><%= t("articles.save_status.error") %></span>
+    <span class="i-[tabler--alert-circle] size-4 text-error" aria-hidden="true"></span>
+    <span class="sr-only sm:not-sr-only sm:inline"><%= t("articles.save_status.error") %></span>
   <% when :conflict %>
-    <span class="i-[tabler--alert-triangle] size-4 text-warning"></span>
-    <span><%= t("articles.save_status.conflict") %></span>
+    <span class="i-[tabler--alert-triangle] size-4 text-warning" aria-hidden="true"></span>
+    <span class="sr-only sm:not-sr-only sm:inline"><%= t("articles.save_status.conflict") %></span>
   <% else %>
-    <span class="i-[tabler--pencil] size-4 opacity-60"></span>
-    <span><%= t("articles.save_status.idle") %></span>
+    <span class="i-[tabler--pencil] size-4 opacity-60" aria-hidden="true"></span>
+    <span class="sr-only sm:not-sr-only sm:inline"><%= t("articles.save_status.idle") %></span>
   <% end %>
 </div>

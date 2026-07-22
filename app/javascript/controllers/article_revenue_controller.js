@@ -19,6 +19,8 @@ export default class extends Controller {
     "articleReferenceRevenueRatio",
     "revenueSummary",
     "revenueAdvanced",
+    "revenueSection",
+    "referencesSection",
   ];
 
   connect() {
@@ -133,6 +135,25 @@ export default class extends Controller {
 
   articleReferenceRevenueRatioTargetDisconnected() {
     this.calReferenceRatio();
+  }
+
+  toggleRevenueSection(event) {
+    event.preventDefault();
+    this.toggleDisclosure(this.revenueSectionTarget, event.currentTarget);
+  }
+
+  toggleReferencesSection(event) {
+    event.preventDefault();
+    this.toggleDisclosure(this.referencesSectionTarget, event.currentTarget);
+  }
+
+  toggleDisclosure(section, trigger) {
+    const isHidden = section.classList.toggle("hidden");
+    trigger.setAttribute("aria-expanded", String(!isHidden));
+    const chevron = trigger.querySelector(".article-revenue-chevron");
+    if (chevron) {
+      chevron.classList.toggle("rotate-180", !isHidden);
+    }
   }
 
   toggleRevenueAdvanced(event) {

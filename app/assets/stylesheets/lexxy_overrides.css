@@ -117,6 +117,20 @@ html.dark lexxy-editor summary,
   display: inline-flex;
 }
 
+/* Editor chrome: keep a single compact row on narrow screens */
+.article-editor__chrome {
+  flex-wrap: nowrap;
+}
+
+.article-editor__chrome-actions {
+  flex-wrap: nowrap;
+}
+
+.article-editor__chrome-actions .button_to {
+  display: inline-flex;
+  margin: 0;
+}
+
 /* Two-pane editor shell */
 .article-editor__layout {
   display: flex;
@@ -182,16 +196,42 @@ html.dark lexxy-editor summary,
 @media (min-width: 1024px) {
   .article-editor__layout {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) 22rem;
+    grid-template-columns: minmax(0, 1fr);
     gap: 3.5rem;
     align-items: start;
   }
 
+  .article-editor--settings-open .article-editor__layout {
+    grid-template-columns: minmax(0, 1fr) 22rem;
+  }
+
+  /* Closed settings: centered writing surface (no empty right-rail placeholder) */
   .article-editor__writing {
+    width: 100%;
     max-width: 46rem;
+    margin-inline: auto;
+  }
+
+  .article-editor--settings-open .article-editor__writing {
+    margin-inline: 0;
+  }
+
+  /* Focus mode: drop the settings column entirely and re-center writing */
+  .article-editor--focus .article-editor__layout,
+  .article-editor--focus.article-editor--settings-open .article-editor__layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .article-editor--focus .article-editor__writing,
+  .article-editor--focus.article-editor--settings-open .article-editor__writing {
+    margin-inline: auto;
   }
 
   .article-editor__settings {
+    display: none;
+  }
+
+  .article-editor--settings-open .article-editor__settings {
     display: block;
     position: sticky;
     top: 5.5rem;
@@ -221,8 +261,17 @@ html.dark lexxy-editor summary,
 
 @media (min-width: 1280px) {
   .article-editor__layout {
-    grid-template-columns: minmax(0, 1fr) 24rem;
+    grid-template-columns: minmax(0, 1fr);
     gap: 4rem;
+  }
+
+  .article-editor--settings-open .article-editor__layout {
+    grid-template-columns: minmax(0, 1fr) 24rem;
+  }
+
+  .article-editor--focus .article-editor__layout,
+  .article-editor--focus.article-editor--settings-open .article-editor__layout {
+    grid-template-columns: minmax(0, 1fr);
   }
 
   .article-editor__writing {

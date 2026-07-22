@@ -13,61 +13,82 @@
   data-article-form-article-published-value="<%= article.published? %>"
   data-article-form-updated-at-value="<%= article.updated_at.to_i * 1000 %>"
   data-article-form-preview-url-value="<%= article_preview_path(article) %>"
+  data-article-form-readiness-translations-value="<%= {
+    ready: I18n.t("articles.readiness.ready", default: "Ready to publish"),
+    things_to_fix: I18n.t(
+      "articles.readiness.things_to_fix",
+      default: "%{count} %{thing} to fix before publishing",
+      count: "%{count}",
+      thing: "%{thing}"
+    ),
+    thing: I18n.t("articles.readiness.thing", default: "thing"),
+    things: I18n.t("articles.readiness.things", default: "things")
+  }.to_json %>"
   data-article-revenue-selectable-collections-value="<%= current_user.collections.map { |c| { uuid: c.uuid, revenue_ratio: c.revenue_ratio } }.to_json %>"
   data-article-revenue-selected-collection-id-value="<%= article.collection_id %>"
   data-article-revenue-article-published-value="<%= article.published? %>"
   class="article-editor">
 
   <div data-article-form-target="editorChrome" class="fixed left-0 top-0 z-50 w-full border-b border-base-300 bg-base-100/95 backdrop-blur-sm">
-    <div class="article-editor__chrome mx-auto flex w-full max-w-[88rem] items-center justify-between gap-3 px-4 py-3 text-sm sm:px-8 sm:text-base">
+    <div class="article-editor__chrome mx-auto flex w-full max-w-[88rem] items-center justify-between gap-2 px-3 py-2.5 text-sm sm:gap-3 sm:px-8 sm:py-3 sm:text-base">
       <%= link_to root_path, class: "shrink-0" do %>
         <%= image_tag "logo.svg", class: "hidden h-8 w-auto sm:block" %>
         <%= image_tag "logo.png", class: "h-6 w-auto sm:hidden" %>
       <% end %>
 
-      <div class="flex min-w-0 flex-1 items-center justify-end gap-2 sm:gap-3">
-        <div id="<%= dom_id article %>_save_status">
+      <div class="article-editor__chrome-actions flex min-w-0 flex-1 items-center justify-end gap-1 sm:gap-2 md:gap-3">
+        <div id="<%= dom_id article %>_save_status" class="shrink-0">
           <%= render "articles/save_status", article:, status: :idle %>
         </div>
 
-        <div id="<%= dom_id article %>_updated_at" class="hidden sm:block">
+        <div id="<%= dom_id article %>_updated_at" class="hidden lg:block">
           <%= render "articles/updated_at", article: %>
         </div>
 
         <button type="button"
-          class="btn btn-soft btn-sm lg:hidden"
+          class="btn btn-soft btn-sm shrink-0 px-2.5 sm:gap-1.5 sm:px-3"
+          data-article-form-target="settingsToggle"
           data-action="article-form#toggleSettingsRail"
-          aria-expanded="false">
-          <%= t("articles.settings_panel") %>
+          aria-expanded="false"
+          aria-label="<%= t("articles.settings.open") %>"
+          title="<%= t("articles.settings.open") %>">
+          <span class="i-[tabler--adjustments-horizontal] size-4" aria-hidden="true"></span>
+          <span class="hidden sm:inline"><%= t("articles.settings.open") %></span>
         </button>
 
         <button type="button"
-          class="btn btn-soft btn-sm hidden sm:inline-flex"
+          class="btn btn-soft btn-sm hidden shrink-0 sm:inline-flex"
           data-action="article-form#toggleFocusMode">
           <%= t("articles.focus_mode") %>
         </button>
 
         <% if article.persisted? %>
           <button type="button"
-            class="btn btn-soft btn-sm"
-            data-action="article-form#togglePreview">
-            <%= t("articles.preview") %>
+            class="btn btn-soft btn-sm shrink-0 px-2.5 sm:px-3"
+            data-action="article-form#togglePreview"
+            aria-label="<%= t("articles.preview") %>"
+            title="<%= t("articles.preview") %>">
+            <span class="i-[tabler--eye] size-4 sm:hidden" aria-hidden="true"></span>
+            <span class="hidden sm:inline"><%= t("articles.preview") %></span>
           </button>
         <% end %>
 
         <% unless article.published? %>
+          <span data-article-form-target="readinessIndicator"
+            class="hidden rounded-full px-2 py-0.5 text-xs font-medium sm:inline-flex"></span>
           <%= button_to t("publish"),
             new_dashboard_published_article_path,
             method: :get,
             params: { uuid: article.uuid },
             data: { turbo_frame: :modal, article_form_target: "publishButton" },
-            class: "btn btn-primary btn-sm rounded-full font-semibold" %>
+            class: "btn btn-primary btn-sm shrink-0 rounded-full px-3 font-semibold sm:px-4" %>
         <% end %>
 
         <%= link_to dashboard_write_path,
           data: { controller: "prefetch" },
-          class: "avatar shrink-0 #{from_mixin_messenger? ? 'mr-12 sm:mr-0' : ''}" do %>
-          <div class="size-8 rounded-full">
+          class: "avatar shrink-0 #{from_mixin_messenger? ? 'mr-10 sm:mr-0' : ''}",
+          "aria-label": current_user.name do %>
+          <div class="size-7 rounded-full sm:size-8">
             <%= render "shared/avatar", user: current_user, thumb: true, class: "rounded-full" %>
           </div>
         <% end %>

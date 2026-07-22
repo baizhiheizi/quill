@@ -124,6 +124,9 @@ application.register("tabs", TabsController);
 import TagsSelectController from "./tags_select_controller";
 application.register("tags-select", TagsSelectController);
 
+import TextareaController from "./textarea_controller";
+application.register("textarea", TextareaController);
+
 import TimeFormatComponentController from "./time_format_component_controller";
 application.register("time-format-component", TimeFormatComponentController);
 

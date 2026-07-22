@@ -19,12 +19,14 @@ export default class extends Controller {
     focusMode: { type: Boolean, default: false },
     previewOpen: { type: Boolean, default: false },
     previewUrl: String,
+    readinessTranslations: Object,
   };
 
   static targets = [
     "form",
     "contentFields",
     "settingsRail",
+    "settingsToggle",
     "writingSurface",
     "editorChrome",
     "saveStatus",
@@ -33,8 +35,11 @@ export default class extends Controller {
     "currencyIcon",
     "currencyChainIcon",
     "currencySymbol",
-    "priceUsd",
+    "priceUsdInput",
+    "priceCrypto",
+    "priceCryptoDisplay",
     "publishButton",
+    "readinessIndicator",
     "previewPanel",
     "floatingExit",
   ];
@@ -44,7 +49,6 @@ export default class extends Controller {
     this.debouncedAutosave = debounce(this.runAutosave, 1000);
     this.inFlight = false;
     this.pendingAutosave = false;
-    this.boundModalOk = null;
     this.boundKeydown = this.handleKeydown.bind(this);
     this.boundPreviewMessage = this.handlePreviewMessage.bind(this);
     this.confirmLeaving = this.confirmLeaving.bind(this);
@@ -58,8 +62,8 @@ export default class extends Controller {
       "article-revenue:queue-autosave",
       this.boundRevenueQueueAutosave,
     );
-    this.setupCurrencyModalListener();
     this.recoverDraftWhenReady();
+    this.updateReadiness();
   }
 
   disconnect() {
@@ -69,39 +73,7 @@ export default class extends Controller {
       "article-revenue:queue-autosave",
       this.boundRevenueQueueAutosave,
     );
-    if (this.boundModalOk) {
-      document.removeEventListener("modal-component:ok", this.boundModalOk);
-      this.boundModalOk = null;
-    }
     document.removeEventListener("turbo:before-visit", this.confirmLeaving);
-  }
-
-  setupCurrencyModalListener() {
-    if (this.articlePublishedValue || this.boundModalOk) return;
-
-    this.boundModalOk = (event) => {
-      const identifier = event.detail.identifier;
-      if (identifier !== this.articleUuidValue) return;
-      if (
-        !this.hasCurrencyIconTarget ||
-        !this.hasCurrencyChainIconTarget ||
-        !this.hasCurrencySymbolTarget
-      ) {
-        return;
-      }
-
-      const assetSelect = this.element.querySelector("#article_asset_id");
-      if (assetSelect) {
-        assetSelect.value = event.detail.assetId;
-      }
-
-      this.currencyIconTarget.src = event.detail.iconUrl;
-      this.currencyChainIconTarget.src = event.detail.chainIconUrl;
-      this.currencySymbolTarget.innerText = event.detail.symbol;
-      this.currencyPriceUsdValue = event.detail.priceUsd;
-      this.queueAutosave();
-    };
-    document.addEventListener("modal-component:ok", this.boundModalOk);
   }
 
   handleKeydown(event) {
@@ -147,6 +119,12 @@ export default class extends Controller {
       "article-editor--settings-open",
       this.settingsRailOpenValue,
     );
+    if (this.hasSettingsToggleTarget) {
+      this.settingsToggleTarget.setAttribute(
+        "aria-expanded",
+        String(this.settingsRailOpenValue),
+      );
+    }
   }
 
   toggleFocusMode() {
@@ -248,6 +226,7 @@ export default class extends Controller {
   }
 
   autosave() {
+    this.updateReadiness();
     this.queueAutosave();
   }
 
@@ -294,7 +273,12 @@ export default class extends Controller {
           this.clearDraft();
           this.setSaveStatus("saved");
           this.dirtyValue = false;
+          this.removeConflictResolution();
         } else if (response.statusCode === 409) {
+          // request.js only auto-renders turbo streams for 200/422 — apply 409 manually
+          if (response.isTurboStream) {
+            await response.renderTurboStream();
+          }
           this.syncLockVersionFromMeta();
           this.setSaveStatus("conflict");
         } else {
@@ -329,7 +313,6 @@ export default class extends Controller {
     }
 
     window.history.replaceState(null, "", edit_path);
-    this.setupCurrencyModalListener();
   }
 
   syncLockVersionFromMeta() {
@@ -441,25 +424,133 @@ export default class extends Controller {
   }
 
   currencyPriceUsdValueChanged() {
-    if (!this.currencyPriceUsdValue || !this.hasPriceUsdTarget) return;
-    this.calPriceUsd();
+    this.calCryptoFromUsd();
   }
 
-  calPriceUsd() {
-    if (!this.currencyPriceUsdValue || !this.hasPriceUsdTarget) return;
+  changeCurrency(event) {
+    const option = event.target.selectedOptions?.[0];
+    if (!option) return;
 
-    const priceInput = this.element.querySelector(
-      "input[name='article[price]']",
-    );
-    const price = (priceInput && priceInput.value) || 0;
-    this.priceUsdTarget.innerText = (
-      parseFloat(price) * parseFloat(this.currencyPriceUsdValue)
-    ).toFixed(4);
+    const priceUsd = parseFloat(option.dataset.priceUsd || "0");
+    this.currencyPriceUsdValue = Number.isNaN(priceUsd) ? 0 : priceUsd;
+
+    if (this.hasCurrencySymbolTarget) {
+      this.currencySymbolTarget.innerText =
+        option.dataset.symbol || option.textContent.trim();
+    }
+    if (this.hasCurrencyIconTarget && option.dataset.iconUrl) {
+      this.currencyIconTarget.src = option.dataset.iconUrl;
+    }
+    if (this.hasCurrencyChainIconTarget && option.dataset.chainIconUrl) {
+      this.currencyChainIconTarget.src = option.dataset.chainIconUrl;
+    }
+
+    this.calCryptoFromUsd();
+    this.updateReadiness();
+    this.queueAutosave();
   }
 
-  // No-op: the views still bind `article-form#touchDirty` on reference
-  // add/remove/select, but the method never existed — those edits already
-  // trigger autosave via the revenue controller's calReferenceRatio path.
-  // Kept intentionally empty to preserve existing behavior (issue #1839).
-  touchDirty() {}
+  calCryptoFromUsd() {
+    if (!this.hasPriceUsdInputTarget) return;
+
+    if (!this.currencyPriceUsdValue) {
+      this.updateReadiness();
+      return;
+    }
+
+    const usdValue = parseFloat(this.priceUsdInputTarget.value);
+    if (Number.isNaN(usdValue) || usdValue <= 0) {
+      this.updateReadiness();
+      return;
+    }
+
+    const cryptoAmount = usdValue / this.currencyPriceUsdValue;
+    const rounded = parseFloat(cryptoAmount.toFixed(8));
+
+    if (this.hasPriceCryptoTarget) {
+      this.priceCryptoTarget.value = rounded;
+    }
+    if (this.hasPriceCryptoDisplayTarget) {
+      const symbol =
+        this.currencySymbolTarget?.textContent?.trim() ||
+        this.element.querySelector("#article_asset_id option:checked")?.dataset
+          ?.symbol ||
+        "";
+      this.priceCryptoDisplayTarget.innerText = `${rounded} ${symbol}`.trim();
+    }
+    this.updateReadiness();
+  }
+
+  setPricePreset(event) {
+    if (!this.hasPriceUsdInputTarget) return;
+    this.priceUsdInputTarget.value = parseFloat(event.params.preset).toFixed(2);
+    this.calCryptoFromUsd();
+    this.queueAutosave();
+  }
+
+  keepMyVersion() {
+    this.syncLockVersionFromMeta();
+    this.setSaveStatus("idle");
+    this.removeConflictResolution();
+    this.queueAutosave();
+  }
+
+  removeConflictResolution() {
+    document.getElementById("conflict-resolution")?.remove();
+  }
+
+  updateReadiness() {
+    if (!this.hasReadinessIndicatorTarget || this.newRecordValue) return;
+
+    const blockers = [];
+    const title = this.element.querySelector("#article_title")?.value?.trim();
+    const intro = this.element.querySelector("#article_intro")?.value?.trim();
+    const usdValue = this.hasPriceUsdInputTarget
+      ? parseFloat(this.priceUsdInputTarget.value)
+      : NaN;
+
+    if (!title) blockers.push("title");
+    if (!intro) blockers.push("intro");
+    if (!this.contentValue?.trim()) blockers.push("content");
+    if (
+      !this.hasPriceUsdInputTarget ||
+      Number.isNaN(usdValue) ||
+      usdValue < 0.1
+    ) {
+      blockers.push("price");
+    }
+
+    const indicator = this.readinessIndicatorTarget;
+    if (blockers.length === 0) {
+      indicator.textContent = this.readinessLabel("ready");
+      indicator.className =
+        "hidden items-center rounded-full bg-success/15 px-2 py-0.5 text-xs font-medium text-success sm:inline-flex";
+    } else {
+      indicator.textContent = this.readinessThingsToFix(blockers.length);
+      indicator.className =
+        "hidden items-center rounded-full bg-warning/15 px-2 py-0.5 text-xs font-medium text-warning sm:inline-flex";
+    }
+  }
+
+  readinessLabel(key) {
+    const translations = this.readinessTranslationsValue || {};
+    if (key === "ready") {
+      return translations.ready || "Ready to publish";
+    }
+    return translations[key] || key;
+  }
+
+  readinessThingsToFix(count) {
+    const translations = this.readinessTranslationsValue || {};
+    const thing =
+      count === 1
+        ? translations.thing || "thing"
+        : translations.things || "things";
+    const template =
+      translations.things_to_fix ||
+      "%{count} %{thing} to fix before publishing";
+    return template
+      .replace("%{count}", String(count))
+      .replace("%{thing}", thing);
+  }
 }

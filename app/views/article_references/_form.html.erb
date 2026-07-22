@@ -26,7 +26,7 @@
                 }
               }
             },
-            action: "change->article-form#touchDirty"
+            action: "change->article-form#queueAutosave"
           }, 
           class: "focus:ring-blue-500 focus:border-blue-500 flex-1 block w-full rounded" 
         %>
@@ -37,7 +37,7 @@
           disabled: article.published_at.present?,
           data: {
             article_revenue_target: "articleReferenceRevenueRatio",
-            action: "article-revenue#calReferenceRatio blur->article-revenue#formatReferenceRatio article-form#touchDirty"
+            action: "article-revenue#calReferenceRatio blur->article-revenue#formatReferenceRatio"
           },
           step: "0.01",
           min: "0.01",
@@ -51,7 +51,7 @@
   <% if article.published_at.blank? %>
     <div class="flex justify-end">
       <div 
-        data-action="click->nested-form#remove click->article-revenue#calReferenceRatio click->article-form#touchDirty"
+        data-action="click->nested-form#remove click->article-revenue#calReferenceRatio"
         class="cursor-pointer px-4 py-2 font-bold text-center border border-dashed border-red-500 text-red-500 rounded-full">
         <%= t('articles.remove_reference') %>
       </div>

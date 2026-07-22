@@ -322,6 +322,28 @@ zh-CN:
       revenue_split: 收益分配
       references: 引用
       collection: 合集
+      open: 设置
+      close: 关闭设置
+    price:
+      usd_label: 价格（美元）
+      crypto_equivalent: "≈ %{amount} %{symbol}"
+      feed_unavailable: 价格数据暂不可用，请稍后重试
+      minimum_error: 最低价格约为 $0.10
+    revenue:
+      customize: 自定义收益分配
+      default_summary: "50% 作者 · 40% 早期读者 · 10% 平台"
+    references:
+      cite_advanced: 引用文章并分享收益（高级）
+    conflict:
+      title: 检测到保存冲突
+      description: 该文章已在其他会话中被编辑。请选择如何处理。
+      reload_latest: 加载最新版本
+      keep_mine: 保留我的版本
+    readiness:
+      things_to_fix: "发布前还有 %{count} %{thing}待完善"
+      thing: 项
+      things: 项
+      ready: 可以发布
   this_address_supports: 该地址仅支持
   this_address_supports_erc20: 该地址支持所有 ERC20 代币，例如 ETH、USDT、XIN 等
   first_deposit_tips: 向新地址第一次充值时，请少量尝试！
