@@ -17,6 +17,13 @@ export default class extends Controller {
     this.originalText = this.buttonTarget.innerText;
   }
 
+  disconnect() {
+    if (this.timeout) {
+      clearTimeout(this.timeout);
+      this.timeout = null;
+    }
+  }
+
   copy(event) {
     event.preventDefault();
 

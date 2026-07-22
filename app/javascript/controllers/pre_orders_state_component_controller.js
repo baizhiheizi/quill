@@ -8,7 +8,30 @@ export default class extends Controller {
   };
 
   connect() {
+    this.boundVisibilityChanged = this._visibilityChanged.bind(this);
+    document.addEventListener("visibilitychange", this.boundVisibilityChanged);
+    this.startPolling();
+  }
+
+  _visibilityChanged() {
+    if (document.hidden) {
+      this.stopPolling();
+    } else {
+      this.startPolling();
+    }
+  }
+
+  startPolling() {
+    if (document.hidden) return;
+    if (this.interval) clearInterval(this.interval);
     this.interval = setInterval(() => this.verify(), this.intervalValue);
+  }
+
+  stopPolling() {
+    if (this.interval) {
+      clearInterval(this.interval);
+      this.interval = null;
+    }
   }
 
   verify() {
@@ -26,8 +49,12 @@ export default class extends Controller {
   }
 
   disconnect() {
-    if (this.interval) {
-      clearInterval(this.interval);
+    this.stopPolling();
+    if (this.boundVisibilityChanged) {
+      document.removeEventListener(
+        "visibilitychange",
+        this.boundVisibilityChanged,
+      );
     }
   }
 }
