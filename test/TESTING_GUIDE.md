@@ -1,7 +1,7 @@
 # Quill Testing Guide
 
 > **Purpose**: Consolidated reference for Quill-specific testing patterns, gotchas, and workarounds.
-> **Maintained by**: [Test Improver](https://github.com/baizhiheizi/quill/actions/workflows/test-improver.yml)
+> **Maintained by**: [Test Improver](../.github/workflows/test-improver.md)
 > **Last updated**: 2026-07-21
 
 ---
@@ -12,7 +12,7 @@
 |---------|---------|-------|
 | Full CI | `bin/ci` | setup, rubocop, lint-check, tests, db:seed:replant |
 | All tests | `bin/rails test` | Minitest |
-| Model tests | `SKIP_CSS_BUILD=1 bin/rails test test/models/` | Skips CSS build (~10s) |
+| Model tests | `bin/rails test test/models/` | Targets model tests; the test command does not build CSS. |
 | Single test | `bin/rails test test/models/foo_test.rb` | |
 | Zeitwerk check | `bin/rails zeitwerk:check` | Must pass before PR |
 | Ruby lint | `bin/rubocop` | |
@@ -101,11 +101,13 @@ define_singleton_method(:method_name) { |*args| desired_return_value }
 ```
 
 ### `define_singleton_method` + `remove_method` is unsafe
-Class-level `remove_method` leaves the class without the method if the test raises before the `ensure` block. **Always use `stub_class_method`** (from `JobTestCase` in `test/test_helper.rb`):
+Class-level `remove_method` can leave the class without the method when cleanup is omitted or interrupted. Prefer `stub_class_method` (from `JobTestCase` in `test/test_helper.rb`) for class methods:
 ```ruby
-stub_class_method(MixinNetworkSnapshot, :find_by) { |id: MockSnapshot.new(id) }
+stub_class_method(MixinNetworkSnapshot, :find_by, ->(**) { nil }) do
+  MixinNetworkSnapshot.find_by(id: 1)
+end
 ```
-This restores the original `UnboundMethod` via `ensure`.
+The helper restores the original method via `ensure`. For instance methods, stub the specific object instead of changing the model class.
 
 ### `QuillBot` stubs
 - **`QuillBot.api.client_id` returns `nil` in tests** unless wrapped in `with_quill_bot_stub`. Use the helper from `test/support/quill_bot_stub.rb`:
@@ -128,8 +130,8 @@ This restores the original `UnboundMethod` via `ensure`.
 - **Association instances are fresh**: Stubbing on a fixture instance (`msg.user`) does **not** propagate to the association. The `belongs_to` association loads its own fresh instance. Stub on the association instance directly, not on the fixture.
 - **`belongs_to` with custom key**: Same issue — class-level `define_method` on the model class is needed when the association uses a non-standard `primary_key`. Restore in `ensure`.
 
-### `UserAuthorization#has_safe?` class-pollution bug in `transfer_test.rb`
-`test/models/transfer_test.rb` lines 220–229 swaps `UserAuthorization#has_safe?` then uses `remove_method` in teardown. If the test raises before `ensure`, `UserAuthorization` is left without `has_safe?` for every later test in the process. Mitigated by `ORIGINAL_HAS_SAFE = UserAuthorization.instance_method(:has_safe?)` at file load. Don't replicate this pattern; use `stub_class_method` instead.
+### Class-level stubbing and teardown
+Some tests change methods on a model or notifier class with `define_method` and restore them with `remove_method` (for example, `test/models/concerns/orders/distributable_test.rb:85-96`). If cleanup is omitted or interrupted, later tests can observe the modified class. Use `stub_class_method` for class methods. For instance methods such as `UserAuthorization#has_safe?`, stub the specific association instance instead of changing the class.
 
 ---
 
@@ -137,7 +139,7 @@ This restores the original `UnboundMethod` via `ensure`.
 
 ### Article
 - See "Fixtures & Test Data" above for creation patterns.
-- `content_as_html` / `content_body` / `plain_text` / `migrated_content?` in `RichTextContent` concern delegate to `RichTextRenderService` or `MarkdownRenderService` depending on `migrated_content?`.
+- `content_as_html` uses `RichTextRenderService` for migrated content and `MarkdownRenderService` for legacy content. `content_body` uses `content.body.to_html` for migrated content and `MarkdownRenderService` for legacy content. `plain_text` uses `content.to_plain_text` for migrated content and the legacy markdown string otherwise. `migrated_content?` checks `content.body.present?`.
 
 ### ArticleSnapshot
 - `store_accessor :raw, %w[title intro content digest]` — the four declared accessors are conveniences, not a schema. `raw["extra_field"]` round-trips fine.
@@ -151,8 +153,8 @@ This restores the original `UnboundMethod` via `ensure`.
 ### MixinMessage
 - `setup_attributes` reads `raw["data"]` — stub per-instance when `raw` is nil.
 - `belongs_to :user, primary_key: :mixin_uuid` — custom key association.
-- `touch_proccessed_at` — misspelled in production (should be `processed`).
-- `process_user_message` calls `QuillBot.api.unique_uuid` with no rescue.
+- `touch_proccessed_at` is misspelled in production (it should be `touch_processed_at`).
+- `process_user_message` returns unless a user exists and the conversation ID matches `QuillBot.api.unique_uuid(user_id)`; it does not rescue errors.
 
 ### MixinNetworkUser
 - `before_validation :setup_attributes, on: :create` calls `QuillBot.api.create_user`.
@@ -177,10 +179,10 @@ This restores the original `UnboundMethod` via `ensure`.
 
 ### Tagging
 - `notify_subscribers` is on `after_create_commit`. The tagging must be saved before invoking manually (notifier serialises params).
-- `Tagging#notify_subscribers` uses `admin_notification_inboxes` join + `blocked_by` filter via `User#blocked_user_ids_relation` (users the tagger has blocked).
+- `Tagging#notify_subscribers` selects subscribers with `Action.where(target_type: "Tag", target_id: tag.id, action_type: "subscribe")` and excludes IDs in `article.author.blocked_user_ids_relation`.
 
 ### Transfer
-- `process!` source dispatch: `Payment` → `payment.refund! if payment.may_refund?` (needs `:paid`); `Bonus` → `bonus.complete! if bonus.may_complete?`.
+- `process!` source dispatch: `Payment` → `source.refund_with_observability!`; `Bonus` → `source.complete! if source.may_complete?`.
 - `Transfer#unprocessed` scope excludes stale transfers (`where(processed_at: nil).where(stale_at: nil)`).
 
 ### User
@@ -229,7 +231,7 @@ These areas have been identified as candidates but not yet addressed:
 - **`API::RenderingHelper`** (`app/controllers/concerns/api/rendering_helper.rb`) — API rendering.
 
 ### Dashboard Controllers (17 untested of 25)
-Larger/more critical controllers with no tests:
+Larger/more critical controllers with no tests (non-exhaustive sample):
 - `dashboard/payments_controller.rb` (20 LOC)
 - `dashboard/transfers_controller.rb` (40 LOC)
 - `dashboard/collections_controller.rb` (64 LOC)
