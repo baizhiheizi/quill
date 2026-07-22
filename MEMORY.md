@@ -1,11 +1,12 @@
 # Test Improver Memory
 
-- [Run notes 2026-07-21](2026-07-21-notes.md) — Testing guide created (PR) + new opportunities identified
+- [Run notes 2026-07-22](2026-07-22-notes.md) — Dashboard controller tests (Payments + Transfers), Monthly Activity updated
+- [Run notes 2026-07-21](2026-07-21-notes.md) — Testing guide created (PR #1940, merged 07-22) + new opportunities identified
 - [Run notes 2026-07-20](2026-07-20-notes.md) — Infra proposal + Monthly Activity update
 
 ## Discovered Commands
 
-- Tests: `bin/rails test` (Minitest 6.0.6). CSS bypass: `SKIP_CSS_BUILD=1 bin/rails test:models`.
+- Tests: `SKIP_CSS_BUILD=1 bin/rails test` (Minitest 6.0.6). CSS needs to be built first (`npx tailwindcss -i ...`).
 - Lint: `bin/rubocop`, `bun run lint-check`. Zeitwerk: `bin/rails zeitwerk:check`.
 - DB: `bin/rails db:prepare` (main + cable + queue). CI: `bin/ci`.
 
@@ -30,10 +31,11 @@
 - **`MixinBot::API.singleton_class.define_method(:new)` evaluates self as `MixinBot::API`**: Capture kwargs in a closure.
 - **`enqueued_jobs.size` includes after_commit**: `after_commit :<job>, on: :create` adds to enqueued count. Assert `size == 2` when both callback and direct call enqueue.
 - **safeoutputs body limit**: 10 KB for PR descriptions and issue bodies.
+- **Transfer partial requires source polymorphic association**: `Dashboard::TransfersController` index renders `transfer.source.item` — test transfers need a real Order as source to avoid template errors.
 
 ## Backlog
 
-**Model coverage substantially complete** (22 non-trivial models). **Testing guide created** (PR open). Pivot to controller/infrastructure.
+**Model coverage substantially complete** (22 non-trivial models). **Testing guide** (PR #1940) created and merged. **Controller coverage** in progress.
 
 Pending items:
 - **Bonus AASM** — blocked by table-name bug
@@ -41,10 +43,10 @@ Pending items:
 - **Splitter#collect_assets** — zero callers (dead or missing dispatcher)
 - **NftCollection / mixin_pre_order / administrator / session** — thin surfaces, LOW
 - **SimpleCov proposal** (issue #1934) — awaiting maintainer feedback
-- **Dashboard controller coverage** — 17 untested controllers (collections, transfers, payments, articles+)
+- **Dashboard controller coverage** — 15 remaining untested controllers (articles, collections, subscriptions, profile_settings, etc.)
 - **Concern coverage** — AdvisoryLockable, RichTextContent, Localizable (all untested)
 - **Controller concern coverage** — UserFieldPreloads, RenderingHelper
 
 ## Last Run
 
-2026-07-21 — Testing guide created (PR), new controller/concern opportunities identified. Monthly Activity updated.
+2026-07-22 — Dashboard controller tests (Payments + Transfers, 11 tests). PR created. Monthly Activity updated.

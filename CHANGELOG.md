@@ -1,7 +1,8 @@
 # Run History (Consolidated)
 
 ## 2026-07
-- **21** ✅ Testing guide created (draft PR), new opportunities identified
+- **22** ✅ Dashboard PaymentsController + TransfersController tests (11 tests)
+- **21** ✅ Testing guide — PR #1940 created and merged
 - **20** ✅ Infrastructure proposal (SimpleCov + testing docs, issue #1934)
 - **17** ✅ DailyStatistic model coverage — PR #1922 merged
 - **16** ✅ Splitter model coverage — PR #1916 merged
