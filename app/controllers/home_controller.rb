@@ -7,9 +7,9 @@ class HomeController < ApplicationController
     redirect_to articles_path if current_user.present? || browser.device.mobile?
 
     @platform_stats = {
-      articles: Article.only_published.count,
-      authors: User.active_base.distinct.count(:id),
-      revenue_label: format_revenue_stat(Article.only_published.sum(:revenue_usd))
+      articles:   cached_article_count,
+      authors:    cached_active_author_count,
+      revenue_label: cached_revenue_label
     }
   end
 
@@ -84,6 +84,32 @@ class HomeController < ApplicationController
       "$#{(total / 1_000).round(1)}K"
     else
       "$#{total.round(0)}"
+    end
+  end
+
+  # Platform-wide article count — changes only when articles are published
+  # or unpublished. Cached 5 minutes with race-condition protection, matching
+  # the existing hot_tags caching strategy (see #hot_tags).
+  def cached_article_count
+    Rails.cache.fetch "platform_stats/articles", expires_in: 5.minutes, race_condition_ttl: 30.seconds do
+      Article.only_published.count
+    end
+  end
+
+  # Distinct active (3-month window, ≥1 paid order) author count. Same slow
+  # churn rate as article count; caching avoids this aggregate on every
+  # unauthenticated landing-page visit.
+  def cached_active_author_count
+    Rails.cache.fetch "platform_stats/authors", expires_in: 5.minutes, race_condition_ttl: 30.seconds do
+      User.active_base.distinct.count(:id)
+    end
+  end
+
+  # Formatted total reader revenue (e.g. "$12.3K"). Sums `revenue_usd` across
+  # published articles. Cache key embedded so different formats never collide.
+  def cached_revenue_label
+    Rails.cache.fetch "platform_stats/revenue_label", expires_in: 5.minutes, race_condition_ttl: 30.seconds do
+      format_revenue_stat(Article.only_published.sum(:revenue_usd))
     end
   end
 end
