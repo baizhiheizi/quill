@@ -1,1 +1,88 @@
-{"Home":{"sources":["README.md","package.json"],"tpl":"v8","at":"2026-07-21T00:00:00Z"},"Architecture":{"sources":[],"tpl":"v8","at":"2026-07-21T00:00:00Z"},"Value-Net":{"sources":[],"tpl":"v8","at":"2026-07-21T00:00:00Z"},"Backend":{"sources":[],"tpl":"v8","at":"2026-07-21T00:00:00Z"},"Background-Jobs":{"sources":[],"tpl":"v8","at":"2026-07-21T00:00:00Z"},"Services":{"sources":[],"tpl":"v8","at":"2026-07-21T00:00:00Z"},"Frontend":{"sources":[],"tpl":"v8","at":"2026-07-21T00:00:00Z"},"Stimulus-Controllers":{"sources":["app/javascript/controllers/index.js","app/javascript/controllers/avatar_controller.js","app/javascript/controllers/floating_controller.js","app/javascript/controllers/clipboard_controller.js","app/javascript/controllers/flash_controller.js","app/javascript/controllers/auto_hide_controller.js","app/javascript/controllers/turbo_controller.js","app/javascript/controllers/darkmode_controller.js","app/javascript/controllers/dropdown_controller.js","app/javascript/controllers/sidebar_controller.js","app/javascript/controllers/infinite_scroll_controller.js","app/javascript/controllers/search_controller.js","app/javascript/controllers/tabs_controller.js"],"tpl":"v8","at":"2026-07-21T00:00:00Z"},"API-Reference":{"sources":["config/routes/api.rb","app/controllers/api/base_controller.rb","app/controllers/api/articles_controller.rb","app/controllers/api/valid_users_controller.rb","app/views/api/articles/index.json.jbuilder","app/views/api/articles/show.json.jbuilder"],"tpl":"v8","at":"2026-07-21T00:00:00Z"},"Getting-Started":{"sources":["README.md","package.json","mise.toml"],"tpl":"v8","at":"2026-07-21T00:00:00Z"},"For-Agents":{"sources":[".github/agentic-wiki/PAGES.md"],"tpl":"v8","at":"2026-07-21T00:00:00Z"},"AGENTS":{"sources":[".github/agentic-wiki/PAGES.md"],"tpl":"v8","at":"2026-07-21T00:00:00Z"},"llms-txt":{"sources":[".github/agentic-wiki/PAGES.md"],"tpl":"v8","at":"2026-07-21T00:00:00Z"}}
+{
+  "Home": {
+    "sourceFiles": [
+      { "path": "README.md", "hash": "3002" },
+      { "path": "package.json", "hash": "2213" }
+    ],
+    "templateHash": "6513",
+    "generatedAt": "2026-07-22T00:00:00Z"
+  },
+  "Architecture": {
+    "sourceFiles": [],
+    "templateHash": "6513",
+    "generatedAt": "2026-07-22T00:00:00Z"
+  },
+  "Value-Net": {
+    "sourceFiles": [],
+    "templateHash": "6513",
+    "generatedAt": "2026-07-22T00:00:00Z"
+  },
+  "Backend": {
+    "sourceFiles": [],
+    "templateHash": "6513",
+    "generatedAt": "2026-07-22T00:00:00Z"
+  },
+  "Background-Jobs": {
+    "sourceFiles": [],
+    "templateHash": "6513",
+    "generatedAt": "2026-07-22T00:00:00Z"
+  },
+  "Services": {
+    "sourceFiles": [],
+    "templateHash": "6513",
+    "generatedAt": "2026-07-22T00:00:00Z"
+  },
+  "Frontend": {
+    "sourceFiles": [],
+    "templateHash": "6513",
+    "generatedAt": "2026-07-22T00:00:00Z"
+  },
+  "Stimulus-Controllers": {
+    "sourceFiles": [
+      { "path": "app/javascript/controllers/index.js", "hash": "5136" }
+    ],
+    "templateHash": "6513",
+    "generatedAt": "2026-07-22T00:00:00Z"
+  },
+  "API-Reference": {
+    "sourceFiles": [
+      { "path": "config/routes/api.rb", "hash": "270" },
+      { "path": "app/controllers/api/base_controller.rb", "hash": "1772" },
+      { "path": "app/controllers/api/articles_controller.rb", "hash": "3708" },
+      { "path": "app/controllers/api/valid_users_controller.rb", "hash": "627" },
+      { "path": "app/views/api/articles/index.json.jbuilder", "hash": "928" },
+      { "path": "app/views/api/articles/show.json.jbuilder", "hash": "666" }
+    ],
+    "templateHash": "6513",
+    "generatedAt": "2026-07-22T00:00:00Z"
+  },
+  "Getting-Started": {
+    "sourceFiles": [
+      { "path": "README.md", "hash": "3002" },
+      { "path": "package.json", "hash": "2213" }
+    ],
+    "templateHash": "6513",
+    "generatedAt": "2026-07-22T00:00:00Z"
+  },
+  "For-Agents": {
+    "sourceFiles": [
+      { "path": ".github/agentic-wiki/PAGES.md", "hash": "6513" }
+    ],
+    "templateHash": "6513",
+    "generatedAt": "2026-07-22T00:00:00Z"
+  },
+  "AGENTS": {
+    "sourceFiles": [
+      { "path": ".github/agentic-wiki/PAGES.md", "hash": "6513" }
+    ],
+    "templateHash": "6513",
+    "generatedAt": "2026-07-22T00:00:00Z"
+  },
+  "llms-txt": {
+    "sourceFiles": [
+      { "path": ".github/agentic-wiki/PAGES.md", "hash": "6513" }
+    ],
+    "templateHash": "6513",
+    "generatedAt": "2026-07-22T00:00:00Z"
+  }
+}
