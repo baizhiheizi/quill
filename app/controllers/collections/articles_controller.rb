@@ -2,6 +2,6 @@
 
 class Collections::ArticlesController < Collections::BaseController
   def index
-    @pagy, @articles = pagy @collection.articles.published.order(published_at: :desc), items: 5
+    @pagy, @articles = pagy @collection.articles.with_associations.published.order(published_at: :desc), items: 5
   end
 end

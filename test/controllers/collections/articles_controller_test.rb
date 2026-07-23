@@ -103,6 +103,35 @@ class Collections::ArticlesControllerTest < ActionDispatch::IntegrationTest
     assert_response :not_found
   end
 
+  # Regression guard for #1944. The `_card` partial walks `price_tag`
+  # (currency.symbol), `tags.first(3)`, `author` (via `shared/_avatar` →
+  # authorization + ActiveStorage variant chain), and `cover.attached?`.
+  # Without `Article.with_associations` preloading each row fires 5-8
+  # SELECTs, so 5 articles blow the budget well past 25.
+  test "index renders without triggering per-row SELECT fan-out" do
+    SELECT_BUDGET = 25
+    5.times do |i|
+      article = create_published_collection_article!(title: "row #{i}", collection: @collection)
+      article.update_columns(published_at: 1.day.ago - i.minutes)
+    end
+
+    select_count = 0
+    counter = ->(_name, _start, _finish, _id, payload) do
+      next if payload[:name] == "SCHEMA"
+
+      select_count += 1
+    end
+
+    ActiveSupport::Notifications.subscribed(counter, "sql.active_record") do
+      get collection_articles_path(collection_uuid: @collection.uuid)
+    end
+
+    assert_response :success
+    assert_operator select_count, :<=, SELECT_BUDGET,
+      "Expected index to fire ≤#{SELECT_BUDGET} SELECTs, got #{select_count}. " \
+      "Likely cause: a partial chain (currency, tags, cover, author avatar) regressed."
+  end
+
   private
 
   # Create a published article in this collection. We build with
