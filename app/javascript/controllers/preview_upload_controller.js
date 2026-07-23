@@ -19,8 +19,7 @@ export default class extends Controller {
   renderPreview(kind, url) {
     const tagName = kind === "image" ? "img" : kind;
     const targetProp = `${kind}TplTarget`;
-    const hasTargetProp =
-      `has${kind.charAt(0).toUpperCase() + kind.slice(1)}TplTarget`;
+    const hasTargetProp = `has${kind.charAt(0).toUpperCase() + kind.slice(1)}TplTarget`;
 
     if (this[hasTargetProp]) {
       const el = this[targetProp];
@@ -30,8 +29,7 @@ export default class extends Controller {
       this.outputTarget.replaceChildren(el);
     } else {
       const attrs = kind === "image" ? "" : " controls";
-      this.outputTarget.innerHTML =
-        `<${tagName} class="w-full" src=${url}${attrs}></${tagName}>`;
+      this.outputTarget.innerHTML = `<${tagName} class="w-full" src=${url}${attrs}></${tagName}>`;
     }
   }
 }
