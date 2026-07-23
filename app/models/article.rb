@@ -269,8 +269,12 @@ class Article < ApplicationRecord
     @reader_revenue_usd ||= reader_transfers.joins(:currency).sum("amount * currencies.price_usd")
   end
 
+  # Returns the tag names using the in-memory association when tags are
+  # preloaded via `Article.with_associations` (which includes `:tags`).
+  # Uses `map` instead of `pluck` so it reads from the loaded association
+  # cache rather than firing a separate SELECT query per article.
   def tag_names
-    @tag_names ||= tags.pluck(:name)
+    @tag_names ||= tags.map(&:name)
   end
 
   def price_tag
