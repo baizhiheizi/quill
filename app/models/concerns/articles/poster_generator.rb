@@ -54,7 +54,7 @@ module Articles::PosterGenerator
     Nokogiri::HTML
       .fragment(content_as_html)
       .css("img")
-      .map(&->(img) { img.attr("src") })
-      .find(&->(url) { URI::DEFAULT_PARSER.make_regexp.match?(url) })
+      .map { |img| img.attr("src") }
+      .find { |url| URI::DEFAULT_PARSER.make_regexp.match?(url) }
   end
 end

@@ -36,29 +36,22 @@ module SoftDeletable
 
   private
 
-  def _run_soft_delete
-    r = false
-    f = lambda do
-      self.deleted_at = Time.current
-      r = yield
-    end
+  def run_soft_action(callback_name, deleted_at_value, &block)
+    result = false
+    action = -> { self.deleted_at = deleted_at_value; result = block.call }
 
     self.class.transaction do
-      run_callbacks :soft_delete, &f
+      run_callbacks callback_name, &action
     end
-    r
+
+    result
   end
 
-  def _run_soft_undelete
-    r = false
-    f = lambda do
-      self.deleted_at = nil
-      r = yield
-    end
+  def _run_soft_delete(&block)
+    run_soft_action(:soft_delete, Time.current, &block)
+  end
 
-    self.class.transaction do
-      run_callbacks :soft_undelete, &f
-    end
-    r
+  def _run_soft_undelete(&block)
+    run_soft_action(:soft_undelete, nil, &block)
   end
 end
