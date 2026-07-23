@@ -7,42 +7,20 @@
     "templateHash": "6513",
     "generatedAt": "2026-07-22T00:00:00Z"
   },
-  "Architecture": {
-    "sourceFiles": [],
-    "templateHash": "6513",
-    "generatedAt": "2026-07-22T00:00:00Z"
-  },
-  "Value-Net": {
-    "sourceFiles": [],
-    "templateHash": "6513",
-    "generatedAt": "2026-07-22T00:00:00Z"
-  },
-  "Backend": {
-    "sourceFiles": [],
-    "templateHash": "6513",
-    "generatedAt": "2026-07-22T00:00:00Z"
-  },
-  "Background-Jobs": {
-    "sourceFiles": [],
-    "templateHash": "6513",
-    "generatedAt": "2026-07-22T00:00:00Z"
-  },
-  "Services": {
-    "sourceFiles": [],
-    "templateHash": "6513",
-    "generatedAt": "2026-07-22T00:00:00Z"
-  },
-  "Frontend": {
-    "sourceFiles": [],
-    "templateHash": "6513",
-    "generatedAt": "2026-07-22T00:00:00Z"
-  },
   "Stimulus-Controllers": {
     "sourceFiles": [
-      { "path": "app/javascript/controllers/index.js", "hash": "5136" }
+      { "path": "app/javascript/controllers/index.js", "hash": "5136" },
+      { "path": "app/javascript/controllers/article_form_controller.js", "hash": "5555" },
+      { "path": "app/javascript/controllers/article_form/autosave.js", "hash": "4881" },
+      { "path": "app/javascript/controllers/article_form/conflict.js", "hash": "815" },
+      { "path": "app/javascript/controllers/article_form/content.js", "hash": "1652" },
+      { "path": "app/javascript/controllers/article_form/currency.js", "hash": "2915" },
+      { "path": "app/javascript/controllers/article_form/draft.js", "hash": "1967" },
+      { "path": "app/javascript/controllers/article_form/readiness.js", "hash": "2508" },
+      { "path": "app/javascript/controllers/article_form/ui.js", "hash": "4128" }
     ],
     "templateHash": "6513",
-    "generatedAt": "2026-07-22T00:00:00Z"
+    "generatedAt": "2026-07-23T16:00:00Z"
   },
   "API-Reference": {
     "sourceFiles": [
@@ -60,27 +38,6 @@
     "sourceFiles": [
       { "path": "README.md", "hash": "3002" },
       { "path": "package.json", "hash": "2213" }
-    ],
-    "templateHash": "6513",
-    "generatedAt": "2026-07-22T00:00:00Z"
-  },
-  "For-Agents": {
-    "sourceFiles": [
-      { "path": ".github/agentic-wiki/PAGES.md", "hash": "6513" }
-    ],
-    "templateHash": "6513",
-    "generatedAt": "2026-07-22T00:00:00Z"
-  },
-  "AGENTS": {
-    "sourceFiles": [
-      { "path": ".github/agentic-wiki/PAGES.md", "hash": "6513" }
-    ],
-    "templateHash": "6513",
-    "generatedAt": "2026-07-22T00:00:00Z"
-  },
-  "llms-txt": {
-    "sourceFiles": [
-      { "path": ".github/agentic-wiki/PAGES.md", "hash": "6513" }
     ],
     "templateHash": "6513",
     "generatedAt": "2026-07-22T00:00:00Z"

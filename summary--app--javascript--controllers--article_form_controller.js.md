@@ -1,2 +1,2 @@
-490
-Article editor. autosave via put() to autosaveUrl (turbo_stream). localStorage draftKey. Debounced autosave+submit (1000ms). Binds once to #modal modal-component:ok (singleton, removes in disconnect). dirtyValue toggles turbo:before-visit confirmLeaving listener. ratio math: readers (0.1-0.9, default 0.4), reference (0.05), collection, author (residual 0.9 - others). valueChanged on currencyPriceUsd, selectedCollectionId, activeTab. formTargetConnected/contentTargetConnected trigger recoverDraftWhenReady. contentValue handles LEXXY-EDITOR/INPUT/TEXTAREA/hidden input. setContentValue clears or sets.
+<!-- hash:5555 -->
+article_form_controller.js: Thin orchestrator → 7 modules (Autosave, UI, Draft, Content, Currency, Readiness, Conflict). 19 targets, 15 values. Lifecycle: init modules in initialize(), add/remove listeners in connect/disconnect. Proxy callbacks to modules. Shared helpers: setSaveStatus, contentValue, confirmLeaving.
