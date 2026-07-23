@@ -1,7 +1,19 @@
 import { Controller } from "@hotwired/stimulus";
-import { patch, post } from "@rails/request.js";
 import { debounce } from "underscore";
+import Autosave from "./article_form/autosave";
+import UI from "./article_form/ui";
+import Draft from "./article_form/draft";
+import Content from "./article_form/content";
+import Currency from "./article_form/currency";
+import Readiness from "./article_form/readiness";
+import Conflict from "./article_form/conflict";
 
+// Thin orchestrator. Each concern lives in its own module under
+// `article_form/`; the controller's job is to wire Stimulus lifecycle
+// callbacks (data-action, value-changed, target-connected) to the
+// right module, own the cross-module shared helpers (`setSaveStatus`,
+// `contentValue`, `confirmLeaving`), and hold module instances so they
+// can call back into each other when needed.
 export default class extends Controller {
   static values = {
     draftKey: String,
@@ -45,12 +57,19 @@ export default class extends Controller {
   ];
 
   initialize() {
-    this.runAutosave = this.runAutosave.bind(this);
-    this.debouncedAutosave = debounce(this.runAutosave, 1000);
+    this.autosave = new Autosave(this);
+    this.ui = new UI(this);
+    this.draft = new Draft(this);
+    this.content = new Content(this);
+    this.currency = new Currency(this);
+    this.readiness = new Readiness(this);
+    this.conflict = new Conflict(this);
+
+    this.debouncedAutosave = debounce(() => this.autosave.runAutosave(), 1000);
     this.inFlight = false;
     this.pendingAutosave = false;
-    this.boundKeydown = this.handleKeydown.bind(this);
-    this.boundPreviewMessage = this.handlePreviewMessage.bind(this);
+    this.boundKeydown = (event) => this.ui.handleKeydown(event);
+    this.boundPreviewMessage = (event) => this.ui.handlePreviewMessage(event);
     this.confirmLeaving = this.confirmLeaving.bind(this);
     this.boundRevenueQueueAutosave = () => this.queueAutosave();
   }
@@ -62,8 +81,8 @@ export default class extends Controller {
       "article-revenue:queue-autosave",
       this.boundRevenueQueueAutosave,
     );
-    this.recoverDraftWhenReady();
-    this.updateReadiness();
+    this.draft.recoverDraftWhenReady();
+    this.readiness.update();
   }
 
   disconnect() {
@@ -76,122 +95,102 @@ export default class extends Controller {
     document.removeEventListener("turbo:before-visit", this.confirmLeaving);
   }
 
-  handleKeydown(event) {
-    if (event.key !== "Escape") return;
-
-    if (this.previewOpenValue) {
-      this.closePreview();
-      return;
-    }
-
-    if (this.focusModeValue) {
-      this.focusModeValue = false;
-    }
+  // Data-action proxies — Stimulus dispatches these by name from the
+  // form's data-action attributes, so each must remain a top-level
+  // method on the controller.
+  autosave() {
+    this.autosave.autosave();
   }
 
-  handlePreviewMessage(event) {
-    if (event.data !== "close-preview" || !this.previewOpenValue) return;
-    if (event.origin !== window.location.origin) return;
-
-    if (
-      this.hasPreviewPanelTarget &&
-      event.source !== this.previewPanelTarget.contentWindow
-    ) {
-      return;
-    }
-
-    this.closePreview();
-  }
-
-  focusModeValueChanged() {
-    this.element.classList.toggle("article-editor--focus", this.focusModeValue);
-  }
-
-  previewOpenValueChanged() {
-    this.element.classList.toggle(
-      "article-editor--preview-open",
-      this.previewOpenValue,
-    );
-  }
-
-  settingsRailOpenValueChanged() {
-    this.element.classList.toggle(
-      "article-editor--settings-open",
-      this.settingsRailOpenValue,
-    );
-    if (this.hasSettingsToggleTarget) {
-      this.settingsToggleTarget.setAttribute(
-        "aria-expanded",
-        String(this.settingsRailOpenValue),
-      );
-    }
+  queueAutosave() {
+    this.autosave.queueAutosave();
   }
 
   toggleFocusMode() {
-    this.focusModeValue = !this.focusModeValue;
+    this.ui.toggleFocusMode();
   }
 
   toggleSettingsRail() {
-    this.settingsRailOpenValue = !this.settingsRailOpenValue;
+    this.ui.toggleSettingsRail();
   }
 
   togglePreview() {
-    if (!this.previewUrlValue) return;
-
-    this.previewOpenValue = !this.previewOpenValue;
-    if (this.hasPreviewPanelTarget) {
-      this.previewPanelTarget.classList.toggle(
-        "hidden",
-        !this.previewOpenValue,
-      );
-      if (this.previewOpenValue) {
-        this.previewPanelTarget.src = `${this.previewUrlValue}?t=${Date.now()}`;
-      }
-    }
+    this.ui.togglePreview();
   }
 
   closePreview() {
-    this.previewOpenValue = false;
-    if (this.hasPreviewPanelTarget) {
-      this.previewPanelTarget.classList.add("hidden");
-      this.previewPanelTarget.removeAttribute("src");
-    }
+    this.ui.closePreview();
   }
 
   exitOverlay() {
-    if (this.previewOpenValue) {
-      this.closePreview();
-    }
+    this.ui.exitOverlay();
+  }
 
-    if (this.focusModeValue) {
-      this.focusModeValue = false;
-    }
+  changeCurrency(event) {
+    this.currency.changeCurrency(event);
+  }
+
+  setPricePreset(event) {
+    this.currency.setPricePreset(event);
+  }
+
+  keepMyVersion() {
+    this.conflict.keepMyVersion();
+  }
+
+  // Stimulus value-changed callbacks — Stimulus invokes these by name
+  // (`focusModeValueChanged`, etc.) when the matching value mutates.
+  focusModeValueChanged() {
+    this.ui.focusModeChanged();
+  }
+
+  previewOpenValueChanged() {
+    this.ui.previewOpenChanged();
+  }
+
+  settingsRailOpenValueChanged() {
+    this.ui.settingsRailOpenChanged();
   }
 
   saveStatusValueChanged() {
-    this.updateLeaveWarning();
-    if (this.hasPublishButtonTarget) {
-      const blocked = ["dirty", "saving", "error", "conflict"].includes(
-        this.saveStatusValue,
-      );
-      this.publishButtonTarget.disabled = blocked;
-      this.publishButtonTarget.classList.toggle("cursor-not-allowed", blocked);
-      this.publishButtonTarget.classList.toggle("opacity-60", blocked);
-      this.publishButtonTarget.classList.toggle("cursor-pointer", !blocked);
-    }
+    this.ui.saveStatusChanged();
   }
 
   dirtyValueChanged() {
-    this.saveStatusValueChanged();
+    this.ui.saveStatusChanged();
   }
 
-  updateLeaveWarning() {
-    const atRisk = ["dirty", "saving", "error"].includes(this.saveStatusValue);
-    if (atRisk) {
-      document.addEventListener("turbo:before-visit", this.confirmLeaving);
-    } else {
-      document.removeEventListener("turbo:before-visit", this.confirmLeaving);
-    }
+  currencyPriceUsdValueChanged() {
+    this.currency.priceUsdChanged();
+  }
+
+  // Stimulus target-connected callbacks — fired when the matching
+  // target enters the DOM. We defer draft recovery until both the form
+  // and content targets are mounted so the rich-text editor is ready.
+  formTargetConnected() {
+    this.draft.targetConnected();
+  }
+
+  contentTargetConnected() {
+    this.draft.targetConnected();
+  }
+
+  // Shared helpers used by multiple modules. Modules reach these via
+  // `this.controller.setSaveStatus(...)`, `this.controller.contentValue`,
+  // and `this.controller.confirmLeaving`.
+  setSaveStatus(status) {
+    this.saveStatusValue = status;
+    if (!this.hasSaveStatusTarget) return;
+
+    this.saveStatusTarget.dataset.saveStatus = status;
+  }
+
+  get contentValue() {
+    return this.content.getValue();
+  }
+
+  setContentValue(value) {
+    this.content.setValue(value);
   }
 
   confirmLeaving(event) {
@@ -202,355 +201,5 @@ export default class extends Controller {
     ) {
       event.preventDefault();
     }
-  }
-
-  formTargetConnected() {
-    this.recoverDraftWhenReady();
-  }
-
-  contentTargetConnected() {
-    this.recoverDraftWhenReady();
-  }
-
-  recoverDraftWhenReady() {
-    if (!this.hasContentTarget) return;
-    this.recoverDraft();
-  }
-
-  queueAutosave() {
-    if (this.articlePublishedValue && !this.canEditPublishedFields()) return;
-    if (!this.hasMeaningfulInput()) return;
-
-    this.setSaveStatus("dirty");
-    this.debouncedAutosave();
-  }
-
-  autosave() {
-    this.updateReadiness();
-    this.queueAutosave();
-  }
-
-  async runAutosave() {
-    if (!this.hasFormTarget) return;
-    if (!this.hasMeaningfulInput()) return;
-
-    if (this.inFlight) {
-      this.pendingAutosave = true;
-      return;
-    }
-
-    this.inFlight = true;
-    this.setSaveStatus("saving");
-
-    const formData = this.buildFormData();
-
-    try {
-      if (this.newRecordValue) {
-        const response = await post(this.createUrlValue, {
-          body: formData,
-          responseKind: "json",
-        });
-
-        if (response.ok) {
-          const data = await response.json;
-          this.promoteNewRecord(data);
-          this.clearDraft();
-          this.setSaveStatus("saved");
-          this.dirtyValue = false;
-        } else {
-          this.persistLocalDraft();
-          this.setSaveStatus("error");
-          setTimeout(() => this.runAutosave(), 2000);
-        }
-      } else {
-        const response = await patch(this.updateUrlValue, {
-          body: formData,
-          responseKind: "turbo-stream",
-        });
-
-        if (response.ok) {
-          this.syncLockVersionFromMeta();
-          this.clearDraft();
-          this.setSaveStatus("saved");
-          this.dirtyValue = false;
-          this.removeConflictResolution();
-        } else if (response.statusCode === 409) {
-          // request.js only auto-renders turbo streams for 200/422 — apply 409 manually
-          if (response.isTurboStream) {
-            await response.renderTurboStream();
-          }
-          this.syncLockVersionFromMeta();
-          this.setSaveStatus("conflict");
-        } else {
-          this.persistLocalDraft();
-          this.setSaveStatus("error");
-          setTimeout(() => this.runAutosave(), 2000);
-        }
-      }
-    } catch {
-      this.persistLocalDraft();
-      this.setSaveStatus("error");
-      setTimeout(() => this.runAutosave(), 2000);
-    } finally {
-      this.inFlight = false;
-      if (this.pendingAutosave) {
-        this.pendingAutosave = false;
-        this.runAutosave();
-      }
-    }
-  }
-
-  promoteNewRecord({ uuid, edit_path, lock_version }) {
-    this.newRecordValue = false;
-    this.articleUuidValue = uuid;
-    this.updateUrlValue = edit_path.replace(/\/edit\/?$/, "");
-    this.lockVersionValue = lock_version || 0;
-    this.previewUrlValue = `${this.updateUrlValue}/preview`;
-
-    const methodInput = this.formTarget.querySelector('input[name="_method"]');
-    if (methodInput) {
-      methodInput.value = "patch";
-    }
-
-    window.history.replaceState(null, "", edit_path);
-  }
-
-  syncLockVersionFromMeta() {
-    const meta = document.getElementById("article-form-meta");
-    const param = meta?.querySelector("[data-article-form-lock-version-param]");
-    if (param?.dataset.articleFormLockVersionParam) {
-      this.lockVersionValue = parseInt(
-        param.dataset.articleFormLockVersionParam,
-        10,
-      );
-    }
-  }
-
-  buildFormData() {
-    const formData = new FormData(this.formTarget);
-    formData.set("article[lock_version]", this.lockVersionValue);
-    return formData;
-  }
-
-  hasMeaningfulInput() {
-    const title = this.element.querySelector("#article_title")?.value?.trim();
-    const intro = this.element.querySelector("#article_intro")?.value?.trim();
-    const content = this.contentValue?.trim();
-    return Boolean(title || intro || content);
-  }
-
-  canEditPublishedFields() {
-    return true;
-  }
-
-  setSaveStatus(status) {
-    this.saveStatusValue = status;
-    if (!this.hasSaveStatusTarget) return;
-
-    this.saveStatusTarget.dataset.saveStatus = status;
-  }
-
-  persistLocalDraft() {
-    const title = this.element.querySelector("#article_title")?.value;
-    const intro = this.element.querySelector("#article_intro")?.value;
-    const content = this.contentValue;
-
-    localStorage.setItem(
-      this.draftKeyValue,
-      JSON.stringify({ title, intro, content, updatedAt: Date.now() }),
-    );
-  }
-
-  recoverDraft() {
-    const draft = localStorage.getItem(this.draftKeyValue);
-    if (!draft) return;
-
-    const { title, intro, content, updatedAt } = JSON.parse(draft);
-    if (this.updatedAtValue && this.updatedAtValue > updatedAt) return;
-
-    const titleEl = this.element.querySelector("#article_title");
-    if (titleEl && title) titleEl.value = title;
-
-    const introEl = this.element.querySelector("#article_intro");
-    if (introEl && intro) {
-      introEl.value = intro;
-      introEl.style.height = "";
-      introEl.style.height = `${introEl.scrollHeight}px`;
-    }
-
-    this.setContentValue(content);
-    this.setSaveStatus("error");
-  }
-
-  clearDraft() {
-    localStorage.removeItem(this.draftKeyValue);
-  }
-
-  get contentValue() {
-    if (!this.hasContentTarget) return "";
-
-    const target = this.contentTarget;
-    if (target.tagName === "LEXXY-EDITOR") return target.value ?? "";
-    if (target.tagName === "INPUT" || target.tagName === "TEXTAREA") {
-      return target.value;
-    }
-
-    const hiddenInput = target.querySelector('input[name="article[content]"]');
-    if (hiddenInput) return hiddenInput.value;
-
-    return target.value ?? target.textContent ?? "";
-  }
-
-  setContentValue(content) {
-    if (!this.hasContentTarget) return;
-
-    const target = this.contentTarget;
-    const editor =
-      target.tagName === "LEXXY-EDITOR"
-        ? target
-        : this.contentFieldsTarget?.querySelector("lexxy-editor");
-
-    if (editor) {
-      editor.value = content;
-      return;
-    }
-
-    const hiddenInput =
-      target.tagName === "INPUT"
-        ? target
-        : target.querySelector('input[name="article[content]"]');
-
-    if (hiddenInput) hiddenInput.value = content;
-  }
-
-  currencyPriceUsdValueChanged() {
-    this.calCryptoFromUsd();
-  }
-
-  changeCurrency(event) {
-    const option = event.target.selectedOptions?.[0];
-    if (!option) return;
-
-    const priceUsd = parseFloat(option.dataset.priceUsd || "0");
-    this.currencyPriceUsdValue = Number.isNaN(priceUsd) ? 0 : priceUsd;
-
-    if (this.hasCurrencySymbolTarget) {
-      this.currencySymbolTarget.innerText =
-        option.dataset.symbol || option.textContent.trim();
-    }
-    if (this.hasCurrencyIconTarget && option.dataset.iconUrl) {
-      this.currencyIconTarget.src = option.dataset.iconUrl;
-    }
-    if (this.hasCurrencyChainIconTarget && option.dataset.chainIconUrl) {
-      this.currencyChainIconTarget.src = option.dataset.chainIconUrl;
-    }
-
-    this.calCryptoFromUsd();
-    this.updateReadiness();
-    this.queueAutosave();
-  }
-
-  calCryptoFromUsd() {
-    if (!this.hasPriceUsdInputTarget) return;
-
-    if (!this.currencyPriceUsdValue) {
-      this.updateReadiness();
-      return;
-    }
-
-    const usdValue = parseFloat(this.priceUsdInputTarget.value);
-    if (Number.isNaN(usdValue) || usdValue <= 0) {
-      this.updateReadiness();
-      return;
-    }
-
-    const cryptoAmount = usdValue / this.currencyPriceUsdValue;
-    const rounded = parseFloat(cryptoAmount.toFixed(8));
-
-    if (this.hasPriceCryptoTarget) {
-      this.priceCryptoTarget.value = rounded;
-    }
-    if (this.hasPriceCryptoDisplayTarget) {
-      const symbol =
-        this.currencySymbolTarget?.textContent?.trim() ||
-        this.element.querySelector("#article_asset_id option:checked")?.dataset
-          ?.symbol ||
-        "";
-      this.priceCryptoDisplayTarget.innerText = `${rounded} ${symbol}`.trim();
-    }
-    this.updateReadiness();
-  }
-
-  setPricePreset(event) {
-    if (!this.hasPriceUsdInputTarget) return;
-    this.priceUsdInputTarget.value = parseFloat(event.params.preset).toFixed(2);
-    this.calCryptoFromUsd();
-    this.queueAutosave();
-  }
-
-  keepMyVersion() {
-    this.syncLockVersionFromMeta();
-    this.setSaveStatus("idle");
-    this.removeConflictResolution();
-    this.queueAutosave();
-  }
-
-  removeConflictResolution() {
-    document.getElementById("conflict-resolution")?.remove();
-  }
-
-  updateReadiness() {
-    if (!this.hasReadinessIndicatorTarget || this.newRecordValue) return;
-
-    const blockers = [];
-    const title = this.element.querySelector("#article_title")?.value?.trim();
-    const intro = this.element.querySelector("#article_intro")?.value?.trim();
-    const usdValue = this.hasPriceUsdInputTarget
-      ? parseFloat(this.priceUsdInputTarget.value)
-      : NaN;
-
-    if (!title) blockers.push("title");
-    if (!intro) blockers.push("intro");
-    if (!this.contentValue?.trim()) blockers.push("content");
-    if (
-      !this.hasPriceUsdInputTarget ||
-      Number.isNaN(usdValue) ||
-      usdValue < 0.1
-    ) {
-      blockers.push("price");
-    }
-
-    const indicator = this.readinessIndicatorTarget;
-    if (blockers.length === 0) {
-      indicator.textContent = this.readinessLabel("ready");
-      indicator.className =
-        "hidden items-center rounded-full bg-success/15 px-2 py-0.5 text-xs font-medium text-success sm:inline-flex";
-    } else {
-      indicator.textContent = this.readinessThingsToFix(blockers.length);
-      indicator.className =
-        "hidden items-center rounded-full bg-warning/15 px-2 py-0.5 text-xs font-medium text-warning sm:inline-flex";
-    }
-  }
-
-  readinessLabel(key) {
-    const translations = this.readinessTranslationsValue || {};
-    if (key === "ready") {
-      return translations.ready || "Ready to publish";
-    }
-    return translations[key] || key;
-  }
-
-  readinessThingsToFix(count) {
-    const translations = this.readinessTranslationsValue || {};
-    const thing =
-      count === 1
-        ? translations.thing || "thing"
-        : translations.things || "things";
-    const template =
-      translations.things_to_fix ||
-      "%{count} %{thing} to fix before publishing";
-    return template
-      .replace("%{count}", String(count))
-      .replace("%{thing}", thing);
   }
 }
