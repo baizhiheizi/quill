@@ -623,6 +623,7 @@ GEM
       websocket (~> 1.0)
     sha3 (2.2.4)
     simple_command (1.0.1)
+    simplecov (1.0.2)
     snaky_hash (2.0.6)
       hashie (>= 0.1.0, < 6)
       version_gem (>= 1.1.8, < 3)
@@ -760,6 +761,7 @@ DEPENDENCIES
   ruby-vips (~> 2.2)
   selenium-webdriver (>= 4.11)
   simple_command
+  simplecov
   solid_cable (~> 4.0)
   solid_cache (~> 1.0)
   solid_queue
@@ -1005,6 +1007,7 @@ CHECKSUMS
   selenium-webdriver (4.46.0) sha256=cb6cfa6f79eac041749df0b14cdcb0e9fe5df3715a64c77bfaa56b345b99f957
   sha3 (2.2.4) sha256=2a3c7b8c8fd5ba2571f8f21b51935c8c513c1036f1e472181e8275c469b16bc7
   simple_command (1.0.1) sha256=abae895cb11ae8fd99e40a144e6e8e3d199f41e83d4cd747718782bed9f908bb
+  simplecov (1.0.2) sha256=c6459434efe4b948b46477cc2df2faa73ab365f83a33c7c17f81262f4f7f1244
   snaky_hash (2.0.6) sha256=3663cae48cdef582b517025cf8a39d8789996eaf0b4ed89e2f0624836505654a
   solid_cable (4.0.2) sha256=084636a67679ad00d23088b33c84047e614bcf41ee559db24b414d83cdc42d03
   solid_cache (1.0.10) sha256=bc05a2fb3ac78a6f43cbb5946679cf9db67dd30d22939ededc385cb93e120d41

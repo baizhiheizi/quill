@@ -12,6 +12,7 @@
 |---------|---------|-------|
 | Full CI | `bin/ci` | setup, rubocop, lint-check, tests, db:seed:replant |
 | All tests | `bin/rails test` | Minitest |
+| Coverage | `COVERAGE=1 bin/rails test` | SimpleCov report in `coverage/index.html` |
 | Model tests | `bin/rails test test/models/` | Targets model tests; the test command does not build CSS. |
 | Single test | `bin/rails test test/models/foo_test.rb` | |
 | Zeitwerk check | `bin/rails zeitwerk:check` | Must pass before PR |

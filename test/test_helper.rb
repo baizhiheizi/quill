@@ -1,5 +1,14 @@
 # frozen_string_literal: true
 
+if ENV["COVERAGE"]
+  require "simplecov"
+  SimpleCov.start "rails" do
+    skip "/test/"
+    skip "/config/"
+    skip "/db/"
+  end
+end
+
 ENV["RAILS_ENV"] ||= "test"
 require_relative "../config/environment"
 require "rails/test_help"

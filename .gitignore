@@ -33,6 +33,9 @@
 /public/assets
 .byebug_history
 
+# SimpleCov output
+/coverage
+
 # Ignore master key for decrypting credentials and more.
 /config/master.key
 /config/credentials/*.key
