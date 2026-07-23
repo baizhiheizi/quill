@@ -10,10 +10,11 @@ export default class UI {
     this.controller = controller;
   }
 
-  connect() {}
-
   disconnect() {
-    document.removeEventListener("turbo:before-visit", this.controller.confirmLeaving);
+    document.removeEventListener(
+      "turbo:before-visit",
+      this.controller.confirmLeaving,
+    );
   }
 
   handleKeydown(event) {
@@ -30,7 +31,8 @@ export default class UI {
   }
 
   handlePreviewMessage(event) {
-    if (event.data !== "close-preview" || !this.controller.previewOpenValue) return;
+    if (event.data !== "close-preview" || !this.controller.previewOpenValue)
+      return;
     if (event.origin !== window.location.origin) return;
 
     if (
@@ -76,7 +78,8 @@ export default class UI {
   }
 
   toggleSettingsRail() {
-    this.controller.settingsRailOpenValue = !this.controller.settingsRailOpenValue;
+    this.controller.settingsRailOpenValue =
+      !this.controller.settingsRailOpenValue;
   }
 
   togglePreview() {
@@ -122,19 +125,33 @@ export default class UI {
         controller.saveStatusValue,
       );
       controller.publishButtonTarget.disabled = blocked;
-      controller.publishButtonTarget.classList.toggle("cursor-not-allowed", blocked);
+      controller.publishButtonTarget.classList.toggle(
+        "cursor-not-allowed",
+        blocked,
+      );
       controller.publishButtonTarget.classList.toggle("opacity-60", blocked);
-      controller.publishButtonTarget.classList.toggle("cursor-pointer", !blocked);
+      controller.publishButtonTarget.classList.toggle(
+        "cursor-pointer",
+        !blocked,
+      );
     }
   }
 
   updateLeaveWarning() {
     const controller = this.controller;
-    const atRisk = ["dirty", "saving", "error"].includes(controller.saveStatusValue);
+    const atRisk = ["dirty", "saving", "error"].includes(
+      controller.saveStatusValue,
+    );
     if (atRisk) {
-      document.addEventListener("turbo:before-visit", controller.confirmLeaving);
+      document.addEventListener(
+        "turbo:before-visit",
+        controller.confirmLeaving,
+      );
     } else {
-      document.removeEventListener("turbo:before-visit", controller.confirmLeaving);
+      document.removeEventListener(
+        "turbo:before-visit",
+        controller.confirmLeaving,
+      );
     }
   }
 }

@@ -16,7 +16,8 @@ export default class Autosave {
 
   queueAutosave() {
     const controller = this.controller;
-    if (controller.articlePublishedValue && !this.canEditPublishedFields()) return;
+    if (controller.articlePublishedValue && !this.canEditPublishedFields())
+      return;
     if (!this.hasMeaningfulInput()) return;
 
     controller.setSaveStatus("dirty");
@@ -57,9 +58,7 @@ export default class Autosave {
           controller.setSaveStatus("saved");
           controller.dirtyValue = false;
         } else {
-          controller.draft.persistLocalDraft();
-          controller.setSaveStatus("error");
-          setTimeout(() => this.runAutosave(), 2000);
+          this.handleAutosaveError();
         }
       } else {
         const response = await patch(controller.updateUrlValue, {
@@ -81,15 +80,11 @@ export default class Autosave {
           this.syncLockVersionFromMeta();
           controller.setSaveStatus("conflict");
         } else {
-          controller.draft.persistLocalDraft();
-          controller.setSaveStatus("error");
-          setTimeout(() => this.runAutosave(), 2000);
+          this.handleAutosaveError();
         }
       }
     } catch {
-      controller.draft.persistLocalDraft();
-      controller.setSaveStatus("error");
-      setTimeout(() => this.runAutosave(), 2000);
+      this.handleAutosaveError();
     } finally {
       controller.inFlight = false;
       if (controller.pendingAutosave) {
@@ -97,6 +92,13 @@ export default class Autosave {
         this.runAutosave();
       }
     }
+  }
+
+  handleAutosaveError() {
+    const controller = this.controller;
+    controller.draft.persistLocalDraft();
+    controller.setSaveStatus("error");
+    setTimeout(() => this.runAutosave(), 2000);
   }
 
   promoteNewRecord({ uuid, edit_path, lock_version }) {
@@ -107,7 +109,9 @@ export default class Autosave {
     controller.lockVersionValue = lock_version || 0;
     controller.previewUrlValue = `${controller.updateUrlValue}/preview`;
 
-    const methodInput = controller.formTarget.querySelector('input[name="_method"]');
+    const methodInput = controller.formTarget.querySelector(
+      'input[name="_method"]',
+    );
     if (methodInput) {
       methodInput.value = "patch";
     }
@@ -136,8 +140,12 @@ export default class Autosave {
 
   hasMeaningfulInput() {
     const controller = this.controller;
-    const title = controller.element.querySelector("#article_title")?.value?.trim();
-    const intro = controller.element.querySelector("#article_intro")?.value?.trim();
+    const title = controller.element
+      .querySelector("#article_title")
+      ?.value?.trim();
+    const intro = controller.element
+      .querySelector("#article_intro")
+      ?.value?.trim();
     const content = controller.contentValue?.trim();
     return Boolean(title || intro || content);
   }
