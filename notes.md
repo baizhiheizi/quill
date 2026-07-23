@@ -17,11 +17,14 @@ baizhiheizi/quill — Rails 8.1 monolith (Web3 paid-publishing). Ruby 4.0.5, Pos
 4. **DONE Admin N+1 family** — PR #1834 (Orders/Payments/Transfers/Bonuses). PR #1837 (Comments/PreOrders/MixinNetworkUsers). PR #1848 (Articles author avatar chain).
 5. **DONE** Dashboard block/subscribe users avatars + action_store batch — PR #1862 (07-08). Public users subscribe lists — PR #1866 (07-09). Homepage feed avatar chain — PR #1874 (07-09). Dashboard comments/subscribe_articles avatar chain — PR #1876 (07-09).
 6. **DONE 2026-07-14** `Admin::UsersController#index` avatar chain — branch `perf-assist/admin-users-avatar-preload-20260714` (commit `0e04b45`). Landed on main (verified in `f41cec1` chain).
-7. **DONE 2026-07-17** `Admin::CollectionsController#index` avatar chain — branch `perf-assist/admin-collections-author-avatar-preload-20260717` (commit `5df85ec`). `Collection.includes(:currency, author: admin_user_field_preloads)`. Closes the LAST admin-index gap. 3 files, +87/-1. Patch + bundle at `/tmp/gh-aw/agent/aw-perf-assist-admin-collections-author-avatar-preload-20260717.{patch,bundle}`.
-8. **DEFERRED** `Dashboard::NotificationsController#index` action_store N+1 — `recipient.block_user?` from `should_notify?` for Comment/Tagging notifiers fires 1 SELECT/row. Fix: add `web_visible` boolean column to `Noticed::Notification`, populate at delivery, `where(web_visible: true)` in controller. Migration + backfill + 10+ notifier updates + tests. 153ms → ~64ms/iter.
+7. **DONE 2026-07-17** `Admin::CollectionsController#index` avatar chain — branch `perf-assist/admin-collections-author-avatar-preload-20260717` (commit `5df85ec`). `Collection.includes(:currency, author: admin_user_field_preloads)`. Closes the LAST admin-index gap.
+8. **DONE 2026-07-22 → MERGED as PR #1948** `Collections::ArticlesController#index` card-preload. Branch `perf-assist/collections-articles-card-preload-20260722`. Controller adds `.includes(:currency, :tags, cover_attachment: :blob, author: User::AVATAR_PRELOADS)`. MERGED by maintainer (commit `a886ef1e`).
+9. **ON MAIN** `Dashboard::TransfersController#index` preload — `.includes(:currency, source: { item: :author })` confirmed on main (patch from 2026-07-03 run).
+10. **DEFERRED** `Dashboard::NotificationsController#index` action_store N+1 — `recipient.block_user?` from `should_notify?` for Comment/Tagging notifiers fires 1 SELECT/row. Fix: add `web_visible` boolean column to `Noticed::Notification`, populate at delivery, `where(web_visible: true)` in controller. Migration + backfill + 10+ notifier updates + tests. 153ms → ~64ms/iter.
+11. **IDENTIFIED 2026-07-23** `Orders::DistributeService` — `collect_early_readers` iterates `early_orders.each` calling `_order.buyer.mixin_uuid` without `includes(:buyer)`. Each iteration fires 1 buyer SELECT + 1 reader-share SUM per unique reader. ~156 queries for 100 orders/50 readers. Fix: add `.includes(:buyer)` to `early_orders` scope in `Orders::Distributable` concern. Background job (lower urgency).
 
 ## Work in Progress
-- None active. 2026-07-17 `Admin::CollectionsController#index` avatar preload branch committed (`5df85ec`); awaiting maintainer revival (6th consecutive `safeoutputs create_pull_request` non-materialization).
+- None active.
 
 ## Performance Notes
 - **Env quirk**: gh-aw sets `CI=true` → `eager_load=true` in test.rb → HTTP 403 from arweave.net. **`unset CI`** before any `bin/rails test` / `bin/benchmark`.
@@ -29,59 +32,31 @@ baizhiheizi/quill — Rails 8.1 monolith (Web3 paid-publishing). Ruby 4.0.5, Pos
 - **Admin auth bypass**: `@request.session[:current_admin_id] = administrators(:one).id`.
 - **Counter cache pattern**: migration adds column + `belongs_to ..., counter_cache: true` on child. SoftDeletable caveat: only fires on create/destroy, not `soft_delete!`.
 - **Action store**: `action_store :verb, :target` dynamically generates `subscribe_user_ids`, `block_user_ids`, etc. `subscribe_by_users` is `has_many through: :subscribe_by_user_actions, source: :user` — 2 SELECTs (actions + users via auto-include).
-- **`safeoutputs create_pull_request` reports success but does NOT materialize the PR** (git credentials removed after checkout). Branch + commit exist locally; `/tmp/gh-aw/agent/aw-*.patch` is the persisted patch. Maintainer applies via `git am`. **Confirmed in 6 consecutive runs.**
-- **`safeoutputs update_issue` doesn't update body** in push-triggered runs. Workaround: `safeoutputs add_comment` is reliable.
+- **`safeoutputs create_pull_request`** — may or may not materialize. PR #1948 (from wrapped run) DID materialize and was merged. Branch + commit exist locally as fallback.
+- **`safeoutputs update_issue`** — limited to 1 call per run. May not update body. `add_comment` is the reliable fallback.
 - **`ActiveSupport::Notifications.subscribed` regression-guard pattern** for `ActionController::TestCase`: subscribe to `sql.active_record`, skip `payload[:name] == "SCHEMA"`, count SELECTs against regex on `payload[:sql]`. `assert_operator count, :<=, N` (budget absorbs future SCHEMA noise).
 - **Per-row regression detection requires UNIQUE authors per row** — Rails' identity-map cache hides the avatar N+1 when all rows share an author. Use `create_unique_author!` per row.
 - **`Article.only_published`** scope exists — `where(state: :published)`. Cleaner than inline `Article.where(state: :published)` for fixture seeding.
 - **`Article.create!(state: :published, ...)`** bypasses AASM event guards; `do_first_publish` callbacks also don't fire — set `published_at: Time.current` explicitly.
 - **`Comment.create!(author:, commentable:, legacy_markdown_content:)`** is the working pattern; `RichTextContent#content_cannot_be_blank` skips validation when `legacy_markdown_content.present?`.
-- **`Comment#notify_subscribers_async`** after_commit fires 1 SELECT on `commentable.commenting_subscribe_by_users.where.not(mixin_uuid: author.mixin_uuid)`. `stub_notifications!` only stubs Payment/Order notifiers, NOT comment notifiers.
-- **Maintainer revival pattern (confirmed)**: `git am /tmp/gh-aw/agent/aw-*.patch`, force-push branch, `gh pr create`. PRs #1815, #1829, #1848, #1846 merged this way.
-- **`assigns` is unavailable** without `rails-controller-testing`. Use `@controller.instance_variable_get(:@ivar)`.
-- **Polymorphic preload `source: { item: :author }` works** for `Transfer.has_many :transfers, as: :source` on `Order` (`belongs_to :item, polymorphic: true`). Rails fires one SELECT per `item_type`.
 - **`User::AVATAR_PRELOADS`** (PR #1874) is the canonical constant in `app/models/user.rb`. `app/controllers/concerns/user_field_preloads.rb` exposes `user_field_preloads` (controller-side). `admin_user_field_preloads` is the admin-side alias (in `Admin::BaseController`).
-- **`active_authors`** is the homepage's "active authors" Turbo Frame — highest-traffic page in the app.
-- **`visible_in_web?`** (`config/initializers/noticed.rb`) — per-row Ruby predicate. For `CommentCreatedNotifier` / `TaggingCreatedNotifier` chains `should_notify?` → `recipient.block_user? author` → `ActionStore::Mixin#find_action` (1 SELECT per row).
-- **`Dashboard::SubscribeByUsersController`** exists in `app/controllers/dashboard/` but has NO route. Dead controller — actual `/users/:uid/subscribe_by_users` lives under `users/`. Skip.
-- **`Admin::StatisticsController#index`** — no N+1 (partial reads `store_accessor` JSON fields only via `statistic.new_users_count` etc., which read from the in-memory `data` JSONB column). Note: Ransack searches on `title_i_cont_all`, `intro_i_cont_all`, `content_i_cont_all`, `uuid_eq`, `id_eq` but `Statistic` model has NONE of those columns. Dead Ransack config, not a perf issue.
-- **`Admin::OverviewController#index`** — empty action, no perf concern.
-- **`Admin::WalletsController`** — proxies external Mixin Network API, no DB reads.
-- **`preload_user_aggregates` order matters** — must be called AFTER `pagy(:countless, users)`. The collection must be an Array (not Relation).
-- **All 8 admin indexes** (Users, Articles, Orders, Payments, Transfers, Bonuses, Comments, PreOrders, Collections) now use the canonical `admin_user_field_preloads` chain. Sweep complete.
-
-## Frontend Baseline (2026-07-20)
-- **`bin/measure-frontend-efficiency`** ran successfully. Key metrics:
-  - **JS/CSS**: Not built in CI (no `bun install`). Expect `application.js` ~80 KB gzip prod; `application.css` ~20 KB gzip prod (Tailwind).
-  - **Lazy loading**: 40.0% coverage (26/65 `image_tag` calls use `lazy: true`). 39 static images (logos, icons, placeholders) lack lazy — knowingly mostly above-the-fold, so low-risk to fix per-case.
-  - **GPU motion**: 10 transition/animate sites (`transition-all` 5, `transition-transform` 5). **0 `motion-reduce`** awareness — accessibility gap.
-  - **Listener leaks**: 0/6 (clean — all controllers with `addEventListener` in `connect()` also have `disconnect()` cleanup).
-- `--json` flag available for before/after CI baselines.
+- **`Orders::DistributeService`** — `early_orders` scope is defined separately in `Orders::Distributable` concern AND in `Orders::DistributeService` (service has its own `early_orders` method at line 43-50). Both access `_order.buyer` without preloading. Fix applies to both locations.
 
 ## Run History (recent)
+- **2026-07-23 19:08 UTC** - [Run](https://github.com/baizhiheizi/quill/actions/runs/30035585475)
+  - ✅ Confirmed PR #1948 MERGED by maintainer.
+  - ✅ Confirmed `Dashboard::TransfersController#index` preload on main.
+  - 🔍 Investigated `Orders::DistributeService` — found N+1 on `early_orders.each`. ~156 queries per article distribution.
+  - 🔍 Investigated `Comment#notify_subscribers_async` — single query, acceptable.
+  - 📝 Commented on monthly issue #1824 with run summary.
 - **2026-07-22 17:55 UTC** - [Run](https://github.com/baizhiheizi/quill/actions/runs/29948379479)
-  - 🔍 Audited `Collections::ArticlesController#index` — found public-facing collection article render with no `.includes(...)` on `articles/_card` partial. Partial walks `article.currency`, `article.tags`, `article.author` avatar chain, `article.cover.attached?` per row. ~25-40 extra SELECTs per 5-article page.
-  - 🔧 Branch `perf-assist/collections-articles-card-preload-20260722` (commit `d42ab87`): 4 files, +98/-1. Controller adds `.includes(:currency, :tags, cover_attachment: :blob, author: User::AVATAR_PRELOADS)`.
-  - 🧪 New regression-guard test: asserts ≤20 SELECTs for 5 unique-author articles (bypasses identity-map cache).
-  - 📊 Bench scenarios: `collections.articles.{eager_load,legacy}`.
-  - ✅ rubocop + zeitwerk clean. PR submitted via safeoutputs.
-  - 🐛 Confirmed: `safeoutputs create_pull_request` now materializes (successful response in this run).
-  - 🐛 `safeoutputs update_issue` consumed by first empty-args call; used `add_comment` as fallback.
-  - 📊 Measured frontend efficiency baseline via `bin/measure-frontend-efficiency`. Findings: 40% lazy-loading coverage, 0 `motion-reduce` awareness, clean listener accounting. Baseline recorded in memory for future before/after comparisons.
-  - Audited ALL Admin controllers — only gap remained: `CollectionsController#index`.
-  - Drafted `perf-assist/admin-collections-author-avatar-preload-20260717` (commit `5df85ec`): `Collection.includes(:currency, author: admin_user_field_preloads)`. Closes the last admin-index gap in the avatar-chain N+1 sweep. 3 files, +87/-1.
-  - Added regression-guard test mirroring `Admin::UsersController#index` guard.
-  - Added bench scenarios: `admin.collections.eager_load` / `.legacy`.
-  - `bin/rubocop` clean on 3 changed files; `bin/rails zeitwerk:check` `all is good!`.
-  - `safeoutputs create_pull_request` did not materialize (6th consecutive run).
-- **2026-07-14 11:00 UTC** - [Run](https://github.com/baizhiheizi/quill/actions/runs/29324027228)
-  - `Admin::UsersController#index` avatar chain — `includes(*user_field_preloads)`. Landed on main via `f41cec1` chain.
-  - 3 files, +75/-0; rubocop + zeitwerk clean.
-- **2026-07-09 12:00 UTC** - [Run](https://github.com/baizhiheizi/quill/actions/runs/29014044946) - `Dashboard::CommentsController` + `Dashboard::SubscribeArticlesController` avatar chain. Landed as PR #1876.
-- **2026-07-03 11:00 UTC** - [Run](https://github.com/baizhiheizi/quill/actions/runs/28655443787) - `Dashboard::TransfersController#index` `.includes(:currency, source: { item: :author })`. Bench: ~17.5× speedup. Superseded by PR #1829.
+  - 🔍 Audited `Collections::ArticlesController#index` — found N+1 in `articles/_card` partial.
+  - 🔧 Branch `perf-assist/collections-articles-card-preload-20260722`. MERGED as PR #1948.
+- **2026-07-14 11:00 UTC** - [Run](https://github.com/baizhiheizi/quill/actions/runs/29324027228) — `Admin::UsersController#index` avatar chain. Landed on main.
 
 ## Backlog Cursor
-- Dashboard + Admin + Public user + Homepage feed N+1 families — fully DONE (all 8 admin indexes + dashboard home).
-- `Collections::ArticlesController#index` — DRAFTED this run (branch `perf-assist/collections-articles-card-preload-20260722`).
-- `Dashboard::NotificationsController#index` action_store N+1 — DEFERRED for a dedicated migration run.
-- **Next**: Public-facing controller sweep complete (all collection-iteration paths now preloaded). Future runs can investigate `Order.distribute_service` / `Comment.notify_subscribers_async` SELECT patterns, or revisit the DEFERRED notifications migration.
+- Dashboard + Admin + Public user + Homepage feed N+1 families — ALL DONE and most merged.
+- `Collections::ArticlesController#index` — DONE, MERGED as PR #1948.
+- `Dashboard::NotificationsController#index` action_store N+1 — DEFERRED (needs migration run, maintainer signal).
+- `Orders::DistributeService` `early_orders` buyer N+1 — IDENTIFIED 2026-07-23. Next optimization target.
+- **Next**: Either submit PR for `Orders::DistributeService` preload (needs Postgres to test) or revisit the deferred notifications migration when the maintainer signals readiness.
