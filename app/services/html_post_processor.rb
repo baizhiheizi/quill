@@ -50,14 +50,19 @@ module HtmlPostProcessor
 
   # `add_attributes_to_images` does enough non-CSS work (FastImage fetch,
   # photoswipe anchor wrap, conditional attribute writes) that it stays as
-  # its own block, but the parse/serialize/return-self prologue and epilogue
-  # are still factored out below.
+  # its own block.
   def add_attributes_to_images
-    doc = Nokogiri::HTML.fragment(@html)
-    doc.css("img").each { |img| decorate_image(img) }
-    @html = doc.to_html
-
+    ensure_document!
+    @doc.css("img").each { |img| decorate_image(img) }
     self
+  end
+
+  # Serialize the shared document back to @html and reset the document.
+  # Must be called after the last transform in a chain to persist changes.
+  def serialize!
+    @html = @doc.to_html if @doc
+    @doc = nil
+    @html
   end
 
   # Hook for subclasses to rewrite an image's src before caching/fetching
@@ -73,15 +78,22 @@ module HtmlPostProcessor
 
   private
 
-  # Common parse / transform / serialize / return-self pipeline used by
-  # every transform-style post-processor above. Yields each matched
-  # element to the block for in-place mutation.
+  # Lazily initializes a shared Nokogiri document from @html, then
+  # applies the CSS selector + block to it. Unlike the previous
+  # implementation, this does NOT serialize back to @html after each
+  # call — the document is mutated in place across all transform steps
+  # and serialized once via `serialize!` at the end of the chain.
+  #
+  # This avoids 4-5 redundant parse+serialize cycles per article render
+  # (one per transform step) while producing identical HTML output.
   def transform(css, &block)
-    doc = Nokogiri::HTML.fragment(@html)
-    doc.css(css).each(&block)
-    @html = doc.to_html
-
+    ensure_document!
+    @doc.css(css).each(&block)
     self
+  end
+
+  def ensure_document!
+    @doc ||= Nokogiri::HTML.fragment(@html)
   end
 
   def decorate_image(img)
