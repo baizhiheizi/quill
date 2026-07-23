@@ -16,13 +16,13 @@ metadata:
 - **Open issues**: 7 (all AI-generated). #1789 (Monthly Activity) updated.
 - **Recent merges (2026-07-17)**: #1920, #1919 (efficiency/api-articles-author-avatar-preload). Prior merges 2026-07-16: #1918 (Users::BaseController single-source-of-truth), #1917 (Collections subscribers preload), #1915 (cache-stampede guard), #1914 (UserMailer verify_email tests), #1912 (Dependabot http 6.0.4), #1910 (test-improver ArticleSnapshot), #1916 (test-improver Splitter). Prior 2026-07-15: #1899, #1909, #1903.
 
-## This run (29628912851)
+## This run (30041515531)
 
-- **Selected tasks**: Task 2, Task 1, Task 4, plus Task 11.
-- **Task 4 (Engineering Investments)**: Created draft PR (commit `f07a07fb`) removing the dead `bun.lockb` entry from `.github/workflows/check.yml` path filter. Bun dropped binary lockfiles in v1.2 (this repo pins `bun@1.3.14` and ships only the text `bun.lock`). Verified locally: `grep -c "bun.lockb"` → 0 post-edit, `ls bun.lock*` → only `bun.lock`. `bin/rubocop .github/` clean. `safeoutputs create_pull_request` returned success but no PR number surfaced — bundle preserved on disk per the maintainer-revival pattern.
-- **Task 1 (Issue Labelling)**: Substituted → no-op. All 7 open issues already labelled.
-- **Task 2 (Issue Investigation and Comment)**: Substituted → no-op. All 7 open issues are AI-generated audits/tracking (#1789, #1801, #1817, #1824 monthlies + #1810, #1818 aw + #1923 large-file-simplifier). No human contributors awaiting support.
-- **Task 11**: Updated #1789. Removed previously-lost drafts (`drop-duplicate-subscribe-user-ids-preloads-2026-07-17`, `eng-drop-dead-bun-lockb-path-2026-07-17`) from Suggested Actions. Added this run's `eng-drop-dead-bun-lockb-path-2026-07-18` draft. Refreshed Future Work to mark #1918 merged, document the lost draft, and confirm `bun.lockb` removal. Body 9.5 KB.
+- **Selected tasks**: Task 3 (Issue Fix), Task 8 (Performance), Task 4 (Engineering), plus Task 11.
+- **Task 3 (Issue Fix)**: Substituted → Task 2 → No-op. No open issues labelled `bug`/`help wanted`/`good first issue`. All 6 open issues are AI-generated/generated tracking.
+- **Task 8 (Performance Improvements)**: Created draft PR (`[perf] use preloaded tags in Article#tag_names (map instead of pluck)`). 1 file +5/-1. Branch: `repo-assist/perf-tag-names-map-2026-07-23`. `tags.pluck(:name)` → `tags.map(&:name)` so preloaded tags don't fire a separate SELECT. Rubocop clean, 1109 tests pass. `safeoutputs create_pull_request` returned success.
+- **Task 4 (Engineering Investments)**: Substituted → Task 5 → no clearly beneficial improvement identifiable. Dependabot PR #1950 (solid_queue 1.5.0) already open. CI workflow changes likely blocked by protection.
+- **Task 11**: Updated #1789 with this run's entry in Run History, added new draft PR to Suggested Actions.
 
 ## Backlog
 
