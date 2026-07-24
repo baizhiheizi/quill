@@ -71,7 +71,7 @@ export default class extends Controller {
     this.boundKeydown = (event) => this.ui.handleKeydown(event);
     this.boundPreviewMessage = (event) => this.ui.handlePreviewMessage(event);
     this.confirmLeaving = this.confirmLeaving.bind(this);
-    this.boundRevenueQueueAutosave = () => this.queueAutosave();
+    this.boundRevenueQueueAutosave = () => this.autosave.queueAutosave();
   }
 
   connect() {

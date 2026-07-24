@@ -10,13 +10,6 @@ export default class UI {
     this.controller = controller;
   }
 
-  disconnect() {
-    document.removeEventListener(
-      "turbo:before-visit",
-      this.controller.confirmLeaving,
-    );
-  }
-
   handleKeydown(event) {
     if (event.key !== "Escape") return;
 
