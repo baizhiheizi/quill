@@ -44,6 +44,7 @@ class Orders::DistributeService
     @early_orders ||=
       item
       .orders
+      .includes(:buyer)
       .where(order_type: %i[buy_article reward_article])
       .where("id < ? and created_at < ?", order.id, order.created_at)
       .order(created_at: :desc)
@@ -200,7 +201,7 @@ class Orders::DistributeService
       end
 
     if (_collection_avg_amount - MINIMUM_AMOUNT).positive?
-      item.collection.orders.where(order_type: :buy_collection).find_each do |_order|
+      item.collection.orders.includes(:buyer).where(order_type: :buy_collection).find_each do |_order|
         transfers.create_with(
           queue_priority: :low,
           wallet_id: distributor_wallet_id,
