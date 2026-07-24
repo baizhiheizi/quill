@@ -27,7 +27,7 @@ class MarkdownRenderService
         .escape_iframes
     end
 
-    @html
+    serialize!
   end
 
   # Markdown mentions embed `blob://<key>/...` URLs in image tags so the

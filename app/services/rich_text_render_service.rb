@@ -33,6 +33,6 @@ class RichTextRenderService
       escape_iframes
     end
 
-    @html
+    serialize!
   end
 end
