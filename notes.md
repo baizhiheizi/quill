@@ -43,6 +43,9 @@ baizhiheizi/quill — Rails 8.1 monolith (Web3 paid-publishing). Ruby 4.0.5, Pos
 - **`Orders::DistributeService`** — `early_orders` scope is defined separately in `Orders::Distributable` concern AND in `Orders::DistributeService` (service has its own `early_orders` method at line 43-50). Both access `_order.buyer` without preloading. Fix applies to both locations.
 
 ## Run History (recent)
+- **2026-07-24 13:00 UTC** - [Run](https://github.com/baizhiheizi/quill/actions/runs/30119452786)
+  - 🔧 Implemented `Orders::DistributeService` buyer preload — 3x `.includes(:buyer)` across service early_orders, service collection orders, and concern early_orders.
+  - 📝 Draft PR submitted: branch `perf-assist/orders-distribute-buyer-preload-20260724`.
 - **2026-07-23 19:08 UTC** - [Run](https://github.com/baizhiheizi/quill/actions/runs/30035585475)
   - ✅ Confirmed PR #1948 MERGED by maintainer.
   - ✅ Confirmed `Dashboard::TransfersController#index` preload on main.
@@ -58,5 +61,5 @@ baizhiheizi/quill — Rails 8.1 monolith (Web3 paid-publishing). Ruby 4.0.5, Pos
 - Dashboard + Admin + Public user + Homepage feed N+1 families — ALL DONE and most merged.
 - `Collections::ArticlesController#index` — DONE, MERGED as PR #1948.
 - `Dashboard::NotificationsController#index` action_store N+1 — DEFERRED (needs migration run, maintainer signal).
-- `Orders::DistributeService` `early_orders` buyer N+1 — IDENTIFIED 2026-07-23. Next optimization target.
-- **Next**: Either submit PR for `Orders::DistributeService` preload (needs Postgres to test) or revisit the deferred notifications migration when the maintainer signals readiness.
+- `Orders::DistributeService` `early_orders` buyer N+1 — **DONE 2026-07-24**. PR submitted (branch `perf-assist/orders-distribute-buyer-preload-20260724`). 3x `.includes(:buyer)` in service + concern + collection orders query.
+- **Next**: Either revisit the deferred notifications migration when the maintainer signals readiness, or investigate new performance opportunities.
