@@ -1,6 +1,7 @@
 # Run History (Consolidated)
 
 ## 2026-07
+- **24** ✅ Dashboard BlockUsers + SubscribeUsers controller tests (12 tests)
 - **23** ✅ Dashboard ArticlesController tests (9 tests)
 - **22** ✅ Dashboard PaymentsController + TransfersController tests (11 tests)
 - **21** ✅ Testing guide (PR #1940, merged)

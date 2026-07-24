@@ -1,7 +1,7 @@
 # Test Improver Memory
 
+- [Run notes 2026-07-24](2026-07-24-notes.md) — Dashboard BlockUsers + SubscribeUsers controller tests (12 tests), Monthly Activity updated
 - [Run notes 2026-07-23](2026-07-23-notes.md) — Dashboard ArticlesController tests (9 tests), Monthly Activity updated
-- [Run notes 2026-07-22](2026-07-22-notes.md) — Dashboard PaymentsController + TransfersController tests (11 tests), Monthly Activity updated
 
 ## Discovered Commands
 
@@ -19,8 +19,8 @@ See `test/TESTING_GUIDE.md` for the consolidated reference (~40 gotchas). Key go
 
 **Model coverage**: 22 non-trivial models covered. **Testing guide**: merged. **SimpleCov**: implemented.
 **Controller coverage in progress**:
-- ✅ Dashboard: Home, Orders, Comments, Notifications, Payments, Transfers, Articles (10 of 25 tested)
-- ❌ 15 untested dashboard controllers (collections, subscriptions, profile settings, block_users, etc.)
+- ✅ Dashboard: Home, Orders, Comments, Notifications, Payments, Transfers, Articles, BlockUsers, SubscribeUsers (12 of 25 tested)
+- ❌ 13 untested dashboard controllers (collections, subscriptions, profile settings, etc.)
 - ❌ Controller concerns (AdvisoryLockable, RichTextContent, Localizable)
 
 **Known issues**:
@@ -31,4 +31,4 @@ See `test/TESTING_GUIDE.md` for the consolidated reference (~40 gotchas). Key go
 
 ## Last Run
 
-2026-07-23 — Dashboard ArticlesController tests (9 tests). Monthly Activity updated.
+2026-07-24 — Dashboard BlockUsers + SubscribeUsers controllers (12 tests). Monthly Activity updated.
