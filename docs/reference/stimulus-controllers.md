@@ -53,10 +53,7 @@ Every controller in `app/javascript/controllers/index.js`, with its source file 
 
 ### Lifecycle and document-level listeners
 
-Turbo replaces `<body>` on every navigation, so `disconnect()` runs for every controller. Anything registered in `connect()` must be removable in `disconnect()` — especially listeners outside `this.element`:
-
-1. **Listener leaks:** `document.addEventListener("scroll", () => …)` creates a new reference on every `connect()`, so `removeEventListener` can't reach it. Store the bound handler as an instance property.
-2. **Active timers:** clear `setTimeout` handles in `disconnect()` so a queued callback can't fire against a torn-down controller.
+Turbo replaces `<body>` on every navigation, so `disconnect()` always runs. Anything registered in `connect()` — listeners outside `this.element`, timers, observers — must be removable: store bound handlers as instance properties and clear all handles.
 
 The reference example is [`floating_controller.js`](../../app/javascript/controllers/floating_controller.js):
 
@@ -73,41 +70,30 @@ export default class extends Controller {
   connect() {
     this.show = debounce(this.show.bind(this), this.showDelayValue);
     this.hide = this.hide.bind(this);
-
     this.boundOnScroll = () => {
       this.show();
       clearTimeout(this.hideTimer);
       this.hideTimer = setTimeout(this.hide, this.hideDelayValue);
     };
-
     this.element.classList.remove("translate-x-24");
     document.addEventListener("scroll", this.boundOnScroll, { passive: true });
   }
 
   disconnect() {
-    if (this.boundOnScroll) {
-      document.removeEventListener("scroll", this.boundOnScroll);
-    }
-    if (this.hideTimer) {
-      clearTimeout(this.hideTimer);
-    }
+    document.removeEventListener("scroll", this.boundOnScroll);
+    clearTimeout(this.hideTimer);
   }
 
-  show() {
-    this.element.classList.add("translate-y-24");
-  }
-
-  hide() {
-    this.element.classList.remove("translate-y-24");
-  }
+  show() { this.element.classList.add("translate-y-24"); }
+  hide() { this.element.classList.remove("translate-y-24"); }
 }
 ```
 
-`{ passive: true }` keeps Chrome from stalling paint on `preventDefault`. Element-scoped listeners follow the same pattern ([prefetch_controller.js](../../app/javascript/controllers/prefetch_controller.js)).
+`{ passive: true }` keeps Chrome from stalling paint on `preventDefault`. Scoped element listeners follow the same pattern ([prefetch_controller.js](../../app/javascript/controllers/prefetch_controller.js)).
 
 ### Observer teardown
 
-Store `IntersectionObserver` and `MutationObserver` instances as instance properties so `disconnect()` can tear them down:
+Store observer instances as instance properties so `disconnect()` can tear them down:
 
 ```javascript
 import { Controller } from "@hotwired/stimulus";
@@ -120,39 +106,32 @@ export default class extends Controller {
     );
     this.observer.observe(this.element);
   }
-
   disconnect() { this.observer?.disconnect(); }
-
   handleIntersect(entries) {
     if (entries.some((e) => e.isIntersecting)) this.loadMore();
   }
 }
 ```
 
-See [`infinite_scroll_controller.js`](../../app/javascript/controllers/infinite_scroll_controller.js) for the full source with pagination dedup logic (`this.loading`, `this.lastFetchedHref`).
+See [`infinite_scroll_controller.js`](../../app/javascript/controllers/infinite_scroll_controller.js) for the full source (`this.loading`, `this.lastFetchedHref`).
 
 ### Debouncing DOM writes
 
-Wrap DOM-mutating work in `debounce` (`underscore`, already in the bundle) to collapse bursts into single writes:
+Wrap DOM-mutating work in `debounce` to collapse bursts into single writes:
 
 ```javascript
 import { debounce } from "underscore";
-
 connect() { this.persist = debounce(this.persist.bind(this), 500); }
-
 disconnect() { this.persist.cancel(); }
 ```
 
 ### Using `stimulus-use`
 
-[`stimulus-use`](https://github.com/stimulus-use/stimulus-use) mixins add shared lifecycle hooks. Two in use: `useHover` ([`sidebar_controller.js`](../../app/javascript/controllers/sidebar_controller.js)) and `useTransition` ([`dropdown_controller.js`](../../app/javascript/controllers/dropdown_controller.js)):
+[`stimulus-use`](https://github.com/stimulus-use/stimulus-use) mixins add shared lifecycle hooks — `useHover` ([`sidebar_controller.js`](../../app/javascript/controllers/sidebar_controller.js)) and `useTransition` ([`dropdown_controller.js`](../../app/javascript/controllers/dropdown_controller.js)) are in use:
 
 ```javascript
 import { useHover } from "stimulus-use";
-
-connect() {
-  useHover(this);  // adds mouseEnter() / mouseLeave()
-}
+connect() { useHover(this); }  // adds mouseEnter() / mouseLeave()
 ```
 
 ## Adding a new controller
