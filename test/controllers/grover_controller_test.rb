@@ -4,22 +4,44 @@ require "test_helper"
 
 # Grover::BaseController gates every action behind a token check:
 # `Rails.application.credentials.dig(:grover, :token) == params[:token]`.
-# We replace the entire `Rails.application.credentials` with a stub
-# object for the duration of each test.
+# The credentials memoization in Rails means we need a process-wide stub
+# whose lifetime matches the test run, plus per-test hooks to install and
+# tear it down. We replace the whole `credentials` method on Rails.application
+# rather than mucking with `@credentials`, because the latter trips up
+# process-wide memoization across the two Grover test classes.
 module GroverCredentialsStub
+  GLOBAL_LOCK = Mutex.new
+
+  module SavedState
+    @installed = false
+    @original_unbound_method = nil
+
+    class << self
+      attr_accessor :installed, :original_unbound_method
+    end
+  end
+
   def stub_grover_token
     @stub_grover_token = "configured-token-stub"
-    @original_credentials = Rails.application.credentials
-    token = @stub_grover_token
-    stub = Object.new
-    stub.define_singleton_method(:dig) do |*args|
-      token if args == [ :grover, :token ]
+    GroverCredentialsStub::GLOBAL_LOCK.synchronize do
+      unless SavedState.installed
+        SavedState.original_unbound_method = Rails.application.method(:credentials).unbind
+        SavedState.installed = true
+      end
+      token = @stub_grover_token
+      stub = Object.new
+      stub.define_singleton_method(:dig) do |*args|
+        token if args == [ :grover, :token ]
+      end
+      Rails.application.define_singleton_method(:credentials) { stub }
     end
-    Rails.application.instance_variable_set(:@credentials, stub)
   end
 
   def restore_grover_token
-    Rails.application.instance_variable_set(:@credentials, @original_credentials)
+    GroverCredentialsStub::GLOBAL_LOCK.synchronize do
+      return unless SavedState.installed
+      Rails.application.singleton_class.send(:define_method, :credentials, SavedState.original_unbound_method)
+    end
   end
 
   # The Grover views reference fixture fields (`@collection.author.avatar_url`)

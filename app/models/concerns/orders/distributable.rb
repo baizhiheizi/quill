@@ -17,7 +17,7 @@ module Orders::Distributable
       .orders
       .includes(:buyer)
       .where(order_type: %i[buy_article reward_article])
-      .where("id < ? and created_at < ?", id, created_at)
+      .where("orders.id < ? and orders.created_at < ?", id, created_at)
       .order(created_at: :desc)
   end
 
