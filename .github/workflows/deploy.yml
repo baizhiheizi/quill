@@ -3,9 +3,13 @@ name: Deploy
 on:
   workflow_dispatch:
 
+permissions:
+  contents: read
+  packages: write
+
 jobs:
   Deploy:
-    runs-on: [self-hosted, linux]
+    runs-on: ubuntu-latest
 
     env:
       DOCKER_BUILDKIT: 1
@@ -14,14 +18,14 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Set up Docker Buildx
         id: buildx
-        uses: docker/setup-buildx-action@v3
+        uses: docker/setup-buildx-action@v4
 
-      - name: Login to GitHub Container Registry
-        uses: docker/login-action@v3
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v4
         with:
           registry: ghcr.io
           username: baizhiheizi
@@ -32,16 +36,12 @@ jobs:
         run: echo "tag=$(git rev-parse "$GITHUB_SHA")" >> $GITHUB_OUTPUT
 
       - name: Build image
-        uses: docker/build-push-action@v6
+        uses: docker/build-push-action@v7
         with:
           context: .
           file: Dockerfile
           builder: ${{ steps.buildx.outputs.name }}
           push: true
-          platforms: linux/amd64
-          build-args: |
-            RUBY_VERSION=4.0.5
-            NODE_VERSION=24.12.0
           labels: service=quill
           tags: |
             ghcr.io/baizhiheizi/quill:latest
@@ -49,7 +49,7 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-      - uses: webfactory/ssh-agent@v0.9.0
+      - uses: webfactory/ssh-agent@v0.10.0
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
@@ -60,7 +60,14 @@ jobs:
           bundler-cache: true
 
       - name: Deploy command
-        run: bundle exec kamal deploy --skip-push
         env:
           RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
           KAMAL_REGISTRY_PASSWORD: ${{ secrets.KAMAL_REGISTRY_PASSWORD }}
+          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+          S3_ACCESS_KEY_ID: ${{ secrets.S3_ACCESS_KEY_ID }}
+          S3_SECRET_ACCESS_KEY: ${{ secrets.S3_SECRET_ACCESS_KEY }}
+          S3_BUCKET: ${{ secrets.S3_BUCKET }}
+          S3_ENDPOINT: ${{ secrets.S3_ENDPOINT }}
+        run: |
+          cp .kamal/secrets.example .kamal/secrets
+          bin/kamal deploy --skip-push
