@@ -15,6 +15,7 @@ module Orders::Distributable
     @early_orders ||=
       item
       .orders
+      .includes(:buyer)
       .where(order_type: %i[buy_article reward_article])
       .where("id < ? and created_at < ?", id, created_at)
       .order(created_at: :desc)
