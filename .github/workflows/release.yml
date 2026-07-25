@@ -1,14 +1,14 @@
-name: Deploy
+name: Release
 
 on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
   packages: write
 
 jobs:
-  Deploy:
+  deploy:
     runs-on: ubuntu-latest
 
     env:
@@ -71,3 +71,25 @@ jobs:
         run: |
           cp .kamal/secrets.example .kamal/secrets
           bin/kamal deploy --skip-push
+
+  release:
+    needs: deploy
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v7
+
+      - name: Compute release tag
+        id: meta
+        run: |
+          short=$(git rev-parse --short HEAD)
+          echo "tag=release-$(date -u +%Y-%m-%d)-${short}-${{ github.run_id }}" >> "$GITHUB_OUTPUT"
+
+      - name: Create GitHub Release
+        uses: ncipollo/release-action@v1
+        with:
+          tag: ${{ steps.meta.outputs.tag }}
+          commit: ${{ github.sha }}
+          name: ${{ steps.meta.outputs.tag }}
+          generateReleaseNotes: true
+          token: ${{ secrets.GITHUB_TOKEN }}
