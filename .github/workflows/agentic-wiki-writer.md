@@ -1,6 +1,6 @@
 ---
 on:
-  schedule: daily around 1:00 utc+8
+  schedule: weekly on tuesday around 1:00 utc+8
   workflow_dispatch:
     inputs:
       regenerate-template:
@@ -37,7 +37,7 @@ safe-outputs:
       runs-on: ubuntu-latest
       steps:
       - name: Checkout wiki
-        uses: actions/checkout@v7.0.0
+        uses: actions/checkout@v7.0.1
         with:
           repository: ${{ github.repository }}.wiki
           token: ${{ secrets.GITHUB_TOKEN }}

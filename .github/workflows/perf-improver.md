@@ -3,7 +3,7 @@ on:
   permissions:
     pull-requests: read
   reaction: eyes
-  schedule: daily around 2:00 utc+8
+  schedule: weekly on thursday around 3:00 utc+8
   slash_command:
     name: perf-assist
     strategy: centralized
