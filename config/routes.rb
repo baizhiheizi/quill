@@ -50,7 +50,7 @@ Rails.application.routes.draw do
   get "/:locale",
       to: "locales#show",
       constraints: {
-        locale: I18n.available_locales.map(&:to_s)
+        locale: Regexp.union(I18n.available_locales.map(&:to_s))
       }
 
   resources :collections, only: %i[index show], param: :uuid do
