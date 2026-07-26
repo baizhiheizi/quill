@@ -35,7 +35,7 @@ network:
   - java
 imports:
 - shared/runtime.md
-- shared/engine-deepseek.md
+- shared/engine-minimax.md
 safe-outputs:
   report-failure-as-issue: false
   add-comment:

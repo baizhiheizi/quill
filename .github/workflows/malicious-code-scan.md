@@ -7,7 +7,7 @@ permissions:
   contents: read
   security-events: read
 imports:
-- shared/engine-deepseek.md
+- shared/engine-minimax.md
 safe-outputs:
   create-code-scanning-alert:
     driver: Malicious Code Scanner

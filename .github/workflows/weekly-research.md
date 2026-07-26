@@ -5,7 +5,7 @@ on:
 permissions: read-all
 network: defaults
 imports:
-- shared/engine-deepseek.md
+- shared/engine-minimax.md
 safe-outputs:
   create-discussion:
     category: ideas

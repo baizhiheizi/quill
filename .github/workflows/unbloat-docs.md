@@ -28,7 +28,7 @@ network:
   - defaults
   - github
 imports:
-- shared/engine-deepseek.md
+- shared/engine-minimax.md
 safe-outputs:
   add-comment:
     max: 1
