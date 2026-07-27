@@ -9,20 +9,21 @@ metadata:
 
 ## Current state
 
-- **Run 29628912851 on 2026-07-18 03:35 UTC.** Repo: baizhiheizi/quill (Rails 8.1, Ruby 4.0.5). AGENTS.md exists.
-- **Open Repo Assist PRs (local bundles awaiting maintainer revival)**:
-  1. **`bun.lockb` dead-path removal** — branch `repo-assist/eng-drop-dead-bun-lockb-path-2026-07-18`, commit `f07a07fb`. 1 file +0/-1. Drops the dead `bun.lockb` line from `.github/workflows/check.yml` path filter. Bundle at `/tmp/gh-aw/aw-repo-assist-eng-drop-dead-bun-lockb-path-2026-07-18.{patch,bundle}` (patch 919 B).
-- **Other open PRs**: #1922 (test-improver DailyStatistic draft), #1921 (Dependabot aws-sdk-s3 1.228.0).
-- **Open issues**: 7 (all AI-generated). #1789 (Monthly Activity) updated.
-- **Recent merges (2026-07-17)**: #1920, #1919 (efficiency/api-articles-author-avatar-preload). Prior merges 2026-07-16: #1918 (Users::BaseController single-source-of-truth), #1917 (Collections subscribers preload), #1915 (cache-stampede guard), #1914 (UserMailer verify_email tests), #1912 (Dependabot http 6.0.4), #1910 (test-improver ArticleSnapshot), #1916 (test-improver Splitter). Prior 2026-07-15: #1899, #1909, #1903.
+- **Run 30303601437 on 2026-07-27 20:55 UTC.** Repo: baizhiheizi/quill (Rails 8.1, Ruby 4.0.5). AGENTS.md exists.
+- **Current draft PR intents**:
+  1. `repo-assist/perf-memoize-poster-urls-2026-07-27` (commit `9efef854`) — memoizes article cover/poster URLs and avoids duplicate poster-generation enqueues.
+  2. `repo-assist/test-users-public-controllers-2026-07-27` (commit `a5264d2b`) — adds public user article/comment controller coverage.
+- **Other open PRs at run start**: #1965 (Dependabot simplecov 1.0.3).
+- **Open issues**: 6 generated/system-managed issues. #1789 monthly activity summary updated.
+- **Test environment**: PostgreSQL at the configured address was unreachable, so targeted Rails tests could not start. RuboCop, Ruby syntax, diff checks, and Zeitwerk passed where applicable.
 
-## This run (30041515531)
+## This run (30303601437)
 
-- **Selected tasks**: Task 3 (Issue Fix), Task 8 (Performance), Task 4 (Engineering), plus Task 11.
-- **Task 3 (Issue Fix)**: Substituted → Task 2 → No-op. No open issues labelled `bug`/`help wanted`/`good first issue`. All 6 open issues are AI-generated/generated tracking.
-- **Task 8 (Performance Improvements)**: Created draft PR (`[perf] use preloaded tags in Article#tag_names (map instead of pluck)`). 1 file +5/-1. Branch: `repo-assist/perf-tag-names-map-2026-07-23`. `tags.pluck(:name)` → `tags.map(&:name)` so preloaded tags don't fire a separate SELECT. Rubocop clean, 1109 tests pass. `safeoutputs create_pull_request` returned success.
-- **Task 4 (Engineering Investments)**: Substituted → Task 5 → no clearly beneficial improvement identifiable. Dependabot PR #1950 (solid_queue 1.5.0) already open. CI workflow changes likely blocked by protection.
-- **Task 11**: Updated #1789 with this run's entry in Run History, added new draft PR to Suggested Actions.
+- **Selected tasks**: Task 8 (Performance), Task 10 (Take Repository Forward), Task 9 (Testing), plus Task 11.
+- **Task 8 (Performance Improvements)**: Created draft PR intent for `repo-assist/perf-memoize-poster-urls-2026-07-27` (commit `9efef854`). `cover_url`/`poster_url` cache both URL and nil results; repeated missing-poster calls enqueue one job per model instance. RuboCop, syntax, diff checks, and Zeitwerk passed. Targeted Rails test was blocked before execution by unavailable PostgreSQL networking.
+- **Task 9 (Testing Improvements)**: Created draft PR intent for `repo-assist/test-users-public-controllers-2026-07-27` (commit `a5264d2b`). Added public article/comment tab controller coverage, including bought/published branching and polymorphic eager-loading assertions. RuboCop, syntax, and diff checks passed; targeted Rails tests were blocked before execution by unavailable PostgreSQL networking.
+- **Task 10 (Take Repository Forward)**: Used the same public-controller coverage PR to close the highest-value uncovered public namespace gap without adding dependencies or touching payment/Web3 code.
+- **Task 11**: Replaced #1789 body with exact monthly format, prepended this run, and refreshed pending actions against live open issues/PRs.
 
 ## Backlog
 
