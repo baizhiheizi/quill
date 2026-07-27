@@ -11,7 +11,18 @@ class Dashboard::PublishedArticlesController < Dashboard::BaseController
     if @article.published_at.present?
       @article.publish! if @article.may_publish?
     elsif @article.may_publish?
-      redirect_to @article, notice: t("success_published_article") if @article.publish!
+      if @article.publish!
+        PostHog.capture(
+          distinct_id: current_user.posthog_distinct_id,
+          event: "article_published",
+          properties: {
+            article_uuid: @article.uuid,
+            is_free: @article.free?,
+            has_collection: @article.collection_id.present?
+          }
+        )
+        redirect_to @article, notice: t("success_published_article")
+      end
     end
   end
 

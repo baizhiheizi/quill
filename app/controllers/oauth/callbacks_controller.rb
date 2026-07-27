@@ -7,7 +7,19 @@ module Oauth
     def create
       identity = Oauth::AuthHashNormalizer.call(request.env["omniauth.auth"])
       user = Oauth::SignIn.call(identity:, request_info:)
+      is_new_user = user.sessions.none?
       user_sign_in user.sessions.create!(info: request_info)
+
+      PostHog.identify(
+        distinct_id: user.posthog_distinct_id,
+        properties: user.posthog_properties
+      )
+      PostHog.capture(
+        distinct_id: user.posthog_distinct_id,
+        event: is_new_user ? "user_signed_up" : "user_logged_in",
+        properties: { provider: identity.provider }
+      )
+
       user.notify_for_login
       redirect_to oauth_return_to_path, success: t("connected")
     rescue MixinBot::RateLimitError

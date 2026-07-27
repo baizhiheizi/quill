@@ -77,6 +77,11 @@ active_record_encryption:
   primary_key:
   deterministic_key:
   key_derivation_salt:
+
+# Optional: PostHog analytics (https://us.posthog.com/project/settings)
+posthog:
+  project_token:
+  host: https://us.i.posthog.com
 ```
 
 Then copy the settings file and set `host` to your local URL (`https://quill.im` → `http://localhost:3000` for local work):

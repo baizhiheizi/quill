@@ -31,7 +31,7 @@
               <a class="dropdown-item hidden cursor-pointer rounded-lg" data-darkmode-target="darkButton" data-action="darkmode#toggle"><%= t('light_mode') %></a>
             </div>
           </li>
-          <li><%= link_to t('disconnect'), logout_path, class: "dropdown-item rounded-lg text-error" %></li>
+          <li><%= link_to t('disconnect'), logout_path, data: { turbo: false }, class: "dropdown-item rounded-lg text-error" %></li>
         </ul>
       <% end %>
     <% else %>

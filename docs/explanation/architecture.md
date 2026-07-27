@@ -66,6 +66,7 @@ The application is the **sole source of truth** for published article content â€
 | Mixin OAuth URL | `config/settings.yml` â†’ `mixin_oauth_path` |
 | Mixin bot credentials | `config/credentials/*.yml.enc` under `quill_bot.*` |
 | ActiveRecord encryption keys | `config/credentials/...` under `active_record_encryption.*` |
+| PostHog project token | `config/credentials/...` under `posthog.project_token` (optional `posthog.host`) |
 | Local overrides | Copy `config/settings.yml` to `config/settings.local.yml` |
 
 Local development typically only needs `config/settings.local.yml` plus credentials.

@@ -16,6 +16,15 @@ class UpvotedArticlesController < ApplicationController
     end
 
     @article.reload
+
+    PostHog.capture(
+      distinct_id: current_user.posthog_distinct_id,
+      event: "article_upvoted",
+      properties: {
+        article_uuid: @article.uuid,
+        upvotes_count: @article.upvotes_count
+      }
+    )
   end
 
   def destroy

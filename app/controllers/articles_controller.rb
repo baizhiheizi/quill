@@ -76,6 +76,15 @@ class ArticlesController < ApplicationController
     respond_to do |format|
       if saved
         @article.reload
+        PostHog.capture(
+          distinct_id: current_user.posthog_distinct_id,
+          event: "article_created",
+          properties: {
+            article_uuid: @article.uuid,
+            is_free: @article.free?,
+            has_collection: @article.collection_id.present?
+          }
+        )
         format.html { redirect_to edit_article_path(@article.uuid) }
         format.json do
           render json: {

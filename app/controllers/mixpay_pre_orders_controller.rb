@@ -7,6 +7,15 @@ class MixpayPreOrdersController < ApplicationController
     @pre_order = current_user.pre_orders.new pre_order_params
 
     if @pre_order.save
+      PostHog.capture(
+        distinct_id: current_user.posthog_distinct_id,
+        event: "payment_initiated",
+        properties: {
+          item_type: @pre_order.item_type,
+          order_type: @pre_order.order_type,
+          asset_id: @pre_order.asset_id
+        }
+      )
       redirect_to @pre_order.pay_url, allow_other_host: true
     else
       redirect_to user_article_path(@pre_order.item.author, @pre_order.item)

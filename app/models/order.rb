@@ -60,7 +60,7 @@ class Order < ApplicationRecord
   delegate :price_tag, to: :payment, prefix: true
 
   after_create :subscribe_comments_for_buyer, :broadcast_to_views
-  after_create_commit :update_cache_async, :notify_async, :distribute_async
+  after_create_commit :update_cache_async, :notify_async, :distribute_async, :track_posthog_event
 
   before_destroy :destroy_notifications
 
@@ -209,5 +209,30 @@ class Order < ApplicationRecord
 
   def self.ransackable_associations(_auth_object = nil)
     %w[buyer item payment]
+  end
+
+  def track_posthog_event
+    return unless buyer.present?
+
+    event_name = case order_type
+    when "buy_article" then "article_purchased"
+    when "reward_article" then "article_rewarded"
+    when "buy_collection" then "collection_purchased"
+    else return
+    end
+
+    properties = {
+      value_usd: value_usd&.to_f,
+      asset_id: asset_id,
+      order_type: order_type
+    }
+    properties[:article_uuid] = item.uuid if item.is_a?(Article)
+    properties[:collection_uuid] = item.uuid if item.respond_to?(:uuid) && !item.is_a?(Article)
+
+    PostHog.capture(
+      distinct_id: buyer.posthog_distinct_id,
+      event: event_name,
+      properties: properties
+    )
   end
 end

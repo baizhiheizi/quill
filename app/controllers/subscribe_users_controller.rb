@@ -9,6 +9,11 @@ class SubscribeUsersController < ApplicationController
     return if @user.block_user? current_user
 
     current_user.create_action :subscribe, target: @user
+
+    PostHog.capture(
+      distinct_id: current_user.posthog_distinct_id,
+      event: "user_subscribed_to_author"
+    )
   end
 
   def destroy

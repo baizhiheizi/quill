@@ -263,6 +263,17 @@ class User < ApplicationRecord
     "MixinPreOrder" if messenger?
   end
 
+  def posthog_distinct_id
+    id.to_s
+  end
+
+  def posthog_properties
+    {
+      locale: locale,
+      date_joined: created_at&.iso8601
+    }
+  end
+
   def self.ransackable_attributes(_auth_object = nil)
     %w[name mixin_id id uid email locale]
   end

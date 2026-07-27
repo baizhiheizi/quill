@@ -205,3 +205,7 @@ gem "solid_cable", "~> 4.0"
 gem "pundit", "~> 2.5"
 
 gem "ruby-vips", "~> 2.2"
+
+# PostHog analytics
+gem "posthog-ruby"
+gem "posthog-rails"

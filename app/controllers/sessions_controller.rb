@@ -63,6 +63,7 @@ class SessionsController < ApplicationController
 
   def delete
     user_sign_out
+    session[:posthog_reset] = true
 
     redirect_to root_path
   end

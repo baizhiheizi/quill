@@ -10,6 +10,12 @@ class SubscribeTagsController < ApplicationController
   def create
     current_user.create_action :subscribe, target: @tag
     @tag.reload
+
+    PostHog.capture(
+      distinct_id: current_user.posthog_distinct_id,
+      event: "tag_subscribed",
+      properties: { tag_name: @tag.name }
+    )
   end
 
   def destroy

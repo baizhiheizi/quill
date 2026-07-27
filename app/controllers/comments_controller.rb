@@ -45,6 +45,17 @@ class CommentsController < ApplicationController
     @comment = current_user.comments.create(
       comment_params.except(:commentable_id, :commentable_type).merge(commentable:)
     )
+
+    if @comment.persisted?
+      PostHog.capture(
+        distinct_id: current_user.posthog_distinct_id,
+        event: "comment_created",
+        properties: {
+          article_uuid: commentable.respond_to?(:uuid) ? commentable.uuid : nil,
+          commentable_type: commentable.class.name
+        }
+      )
+    end
   end
 
   private

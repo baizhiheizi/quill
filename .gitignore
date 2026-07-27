@@ -66,3 +66,4 @@ __pycache__/
 # Brainstorming visual companion sessions
 .superpowers/
 .zcode/
+.env
