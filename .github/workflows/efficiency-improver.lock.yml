@@ -168,6 +168,7 @@ jobs:
           GH_AW_INFO_FRONTMATTER_SOURCE: "githubnext/agentics/workflows/efficiency-improver.md@1c6668b751c51af8571f01204ceffb19362e0f66"
           GH_AW_INFO_BODY_MODIFIED: "false"
           GH_AW_COMPILED_STRICT: "true"
+          GH_AW_INFO_MODEL_COSTS: '{"providers":{"anthropic":{"models":{"MiniMax-M3":{"cost":{"cache_read":0.24,"input":1.2,"output":4.8}}}}}}'
         uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
         with:
           script: |
