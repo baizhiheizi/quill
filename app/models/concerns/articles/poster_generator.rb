@@ -8,16 +8,24 @@ module Articles::PosterGenerator
   end
 
   def cover_url
-    [ Settings.storage.endpoint, cover.key ].join("/") if cover.attached?
+    return @cover_url if defined?(@cover_url)
+
+    @cover_url =
+      if cover.attached?
+        [ Settings.storage.endpoint, cover.key ].join("/")
+      end
   end
 
   def poster_url
-    if poster.attached?
-      [ Settings.storage.endpoint, poster.key ].join("/")
-    else
-      generate_poster_async
-      nil
-    end
+    return @poster_url if defined?(@poster_url)
+
+    @poster_url =
+      if poster.attached?
+        [ Settings.storage.endpoint, poster.key ].join("/")
+      else
+        generate_poster_async
+        nil
+      end
   end
 
   def generated_poster_url

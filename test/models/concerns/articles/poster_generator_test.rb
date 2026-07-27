@@ -23,6 +23,30 @@ class Articles::PosterGeneratorTest < ActiveSupport::TestCase
     assert_equal "#{Settings.storage.endpoint}/covers/abc/cover.jpg", article.cover_url
   end
 
+  test "cover_url memoizes the URL across calls" do
+    article = stub_cover(attached: true, key: "covers/abc/cover.jpg")
+
+    first = article.cover_url
+    second = article.cover_url
+
+    assert_same first, second
+  end
+
+  test "cover_url memoizes a missing cover across calls" do
+    article = articles(:published_paid)
+    attached_calls = 0
+    cover = Object.new
+    cover.define_singleton_method(:attached?) do
+      attached_calls += 1
+      false
+    end
+    article.define_singleton_method(:cover) { cover }
+
+    assert_nil article.cover_url
+    assert_nil article.cover_url
+    assert_equal 1, attached_calls
+  end
+
   # --- `thumb_url` -------------------------------------------------------
 
   test "thumb_url returns cover_url when cover is attached" do
@@ -98,13 +122,14 @@ class Articles::PosterGeneratorTest < ActiveSupport::TestCase
     assert_equal "#{Settings.storage.endpoint}/posters/xyz/poster.png", article.poster_url
   end
 
-  test "poster_url enqueues Articles::GeneratePosterJob and returns nil when poster is not attached" do
+  test "poster_url memoizes the missing poster and enqueues generation once" do
     article = articles(:published_paid)
     article.define_singleton_method(:poster) do
       Struct.new(:attached?).new(false)
     end
 
-    assert_enqueued_with(job: Articles::GeneratePosterJob, args: [ article.id ]) do
+    assert_enqueued_jobs 1, only: Articles::GeneratePosterJob do
+      assert_nil article.poster_url
       assert_nil article.poster_url
     end
   end
