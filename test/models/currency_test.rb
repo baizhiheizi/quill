@@ -31,8 +31,14 @@ class CurrencyTest < ActiveSupport::TestCase
     assert_equal "c6d0c728-2624-429b-8e0d-d9d19b6592fa", Currency::BTC_ASSET_ID
   end
 
-  test "btc scope returns the bitcoin currency" do
+  test "btc returns the bitcoin currency" do
     assert_equal @btc, Currency.btc
+  end
+
+  test "btc returns nil when the bitcoin currency is absent" do
+    @btc.destroy!
+
+    assert_nil Currency.btc
   end
 
   test "pricable? returns true when the asset is in Article::SUPPORTED_ASSETS" do

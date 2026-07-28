@@ -44,7 +44,10 @@ class Currency < ApplicationRecord
   belongs_to :chain, class_name: "Currency", primary_key: :asset_id, optional: true, inverse_of: false
 
   scope :pricable, -> { where(asset_id: Article::SUPPORTED_ASSETS) }
-  scope :btc, -> { find_by(asset_id: BTC_ASSET_ID) }
+
+  def self.btc
+    find_by(asset_id: BTC_ASSET_ID)
+  end
 
   def minimal_reward_amount
     if price_usd.positive?
