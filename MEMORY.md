@@ -1,5 +1,6 @@
 # Test Improver Memory
 
+- [Run notes 2026-07-29](2026-07-29-notes.md) — Dashboard NotificationSettingsController tests (3 tests), commands validated, Monthly Activity updated
 - [Run notes 2026-07-24](2026-07-24-notes.md) — Dashboard BlockUsers + SubscribeUsers controller tests (12 tests), Monthly Activity updated
 - [Run notes 2026-07-23](2026-07-23-notes.md) — Dashboard ArticlesController tests (9 tests), Monthly Activity updated
 
@@ -18,9 +19,9 @@ See `test/TESTING_GUIDE.md` for the consolidated reference (~40 gotchas). Key go
 ## Backlog
 
 **Model coverage**: 22 non-trivial models covered. **Testing guide**: merged. **SimpleCov**: implemented.
-**Controller coverage in progress**:
-- ✅ Dashboard: Home, Orders, Comments, Notifications, Payments, Transfers, Articles, BlockUsers, SubscribeUsers (12 of 25 tested)
-- ❌ 13 untested dashboard controllers (collections, subscriptions, profile settings, etc.)
+**Controller coverage in progress** (14 of 24 non-base dashboard controllers tested):
+- ✅ Dashboard: Home, Orders, Comments, Notifications, Payments, Transfers, Articles, BlockUsers, SubscribeUsers, SubscribeArticles, Collections, PublishedArticles, AccessTokens, NotificationSettings
+- ❌ 10 untested dashboard controllers: ListedCollections, Settings, SubscribeByUsers, SubscribeTags, DeletedNotifications, ReadNotifications, Subscriptions, HiddenCollections, ProfileSettings, DeletedArticles
 - ❌ Controller concerns (AdvisoryLockable, RichTextContent, Localizable)
 
 **Known issues**:
@@ -31,4 +32,4 @@ See `test/TESTING_GUIDE.md` for the consolidated reference (~40 gotchas). Key go
 
 ## Last Run
 
-2026-07-24 — Dashboard BlockUsers + SubscribeUsers controllers (12 tests). Monthly Activity updated.
+2026-07-29 — Dashboard NotificationSettingsController (3 tests). Zeitwerk/RuboCop passed; Rails test DB and Bun unavailable. Monthly Activity updated.
