@@ -38,32 +38,10 @@ class Orders::DistributeService
 
   attr_reader :order
 
-  delegate :transfers, :trace_id, :payment, :total, :buyer, :item, :cite_article?, :buy_article?, to: :order
-
-  def early_orders
-    @early_orders ||=
-      item
-      .orders
-      .includes(:buyer)
-      .where(order_type: %i[buy_article reward_article])
-      .where("orders.id < ? and orders.created_at < ?", order.id, order.created_at)
-      .order(created_at: :desc)
-  end
-
-  def early_orders_with_the_same_currency
-    @early_orders_with_the_same_currency ||=
-      early_orders.where.not(asset_id: order.asset_id).blank?
-  end
-
-  def collect_early_readers
-    readers = {}
-    early_orders.each do |_order|
-      readers[_order.buyer.mixin_uuid] ||= []
-      readers[_order.buyer.mixin_uuid].push _order.trace_id
-    end
-
-    readers
-  end
+  delegate :transfers, :trace_id, :payment, :total, :buyer, :item,
+           :cite_article?, :buy_article?,
+           :early_orders, :early_orders_with_the_same_currency, :collect_early_readers,
+           to: :order
 
   def distribute_collection_order!
     if payment.wallet_id != QuillBot.api.client_id
