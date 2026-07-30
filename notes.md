@@ -40,9 +40,13 @@ baizhiheizi/quill — Rails 8.1 monolith (Web3 paid-publishing). Ruby 4.0.5, Pos
 - **`Article.create!(state: :published, ...)`** bypasses AASM event guards; `do_first_publish` callbacks also don't fire — set `published_at: Time.current` explicitly.
 - **`Comment.create!(author:, commentable:, legacy_markdown_content:)`** is the working pattern; `RichTextContent#content_cannot_be_blank` skips validation when `legacy_markdown_content.present?`.
 - **`User::AVATAR_PRELOADS`** (PR #1874) is the canonical constant in `app/models/user.rb`. `app/controllers/concerns/user_field_preloads.rb` exposes `user_field_preloads` (controller-side). `admin_user_field_preloads` is the admin-side alias (in `Admin::BaseController`).
-- **`Orders::DistributeService`** — `early_orders` scope is defined separately in `Orders::Distributable` concern AND in `Orders::DistributeService` (service has its own `early_orders` method at line 43-50). Both access `_order.buyer` without preloading. Fix applies to both locations.
+- **`Orders::DistributeService`** — `early_orders` scope is defined separately in `Orders::Distributable` concern AND in `Orders::DistributeService` (service has its own `early_orders` method at line 43-50). Both access `_order.buyer` without preloading. Fix applies to both locations. **UPDATED 2026-07-30**: PR #1972 (repo-assist) collapsed the service's copies into a single `delegate :early_orders, :early_orders_with_the_same_currency, :collect_early_readers, to: :order` line. Service-side `.includes(:buyer)` is now gone; the concern-side `.includes(:buyer)` is the SOLE source-of-truth and survives unchanged.
 
 ## Run History (recent)
+- **2026-07-30 16:00 UTC** - [Run](https://github.com/baizhiheizi/quill/actions/runs/30577709614)
+  - ✅ Verified `Orders::Distributable` buyer preload preserved post-PR #1972 (repo-assist refactor). `.includes(:buyer)` intact on line 18 of concern.
+  - 📝 Posted update comment to #1824 — removed stale "Review Orders::DistributeService buyer preload PR" line; PR #1972 supersedes.
+  - 🔍 Re-scanned Search/Tags/Home/Articles/Collections/API::Articles — all preloaded/cached/bounded. No new HTTP-surface N+1 families.
 - **2026-07-24 13:00 UTC** - [Run](https://github.com/baizhiheizi/quill/actions/runs/30119452786)
   - 🔧 Implemented `Orders::DistributeService` buyer preload — 3x `.includes(:buyer)` across service early_orders, service collection orders, and concern early_orders.
   - 📝 Draft PR submitted: branch `perf-assist/orders-distribute-buyer-preload-20260724`.
