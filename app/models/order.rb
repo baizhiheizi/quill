@@ -57,8 +57,6 @@ class Order < ApplicationRecord
 
   enum :order_type, { buy_article: 0, reward_article: 1, cite_article: 2, buy_collection: 3 }
 
-  delegate :price_tag, to: :payment, prefix: true
-
   after_create :subscribe_comments_for_buyer, :broadcast_to_views
   after_create_commit :update_cache_async, :notify_async, :distribute_async, :track_posthog_event
 
