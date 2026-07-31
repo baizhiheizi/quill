@@ -42,14 +42,14 @@
 | MEDIUM | Frontend/UI | Clear clipboard success timeout on disconnect (clipboard_controller.js). | Timer handle survives Turbo navigation if `copied()` was recently triggered. |
 | MEDIUM | Code-Level | `HtmlPostProcessor#decorate_image` — N sequential FastImage HTTP fetches per article render; no batch pre-warming. | Wall-clock per image-dense article; blocked Puma worker time. |
 | MEDIUM | Frontend/UI | `article_form_controller.js` — retry `setTimeout` calls not cancelled in `disconnect()`; debounced autosave never flushed. | Timer closures survive Turbo navigation; measure pending callback count after navigation. |
-| MEDIUM | Frontend/UI | `tags_select_controller.js` / `references_select_controller.js` — `new TomSelect(...)` never destroyed in `disconnect()`, leaking event listeners on each Turbo navigation. | Accumulated listeners per navigation cycle. |
+| DONE | Frontend/UI | `tags_select_controller.js` / `references_select_controller.js` — `new TomSelect(...)` never destroyed in `disconnect()`, leaking event listeners on each Turbo navigation. | Retained listeners per navigation: 4 × N widgets → 0. PR created 2026-07-31 (`efficiency/tom-select-disconnect-20260731`). |
 | MEDIUM | Frontend/UI | `hljs_controller.js` — full highlight.js bundle import (~90 KB) instead of tree-shaken subset. | Bundle size impact measured via `bin/measure-frontend-efficiency --minify`. |
 | LOW | Frontend/UI | Avoid re-highlighting already processed code blocks. | Browser scripting time on a code-heavy article. |
 | LOW | Code-Level | `ArticleSearchService#select_in_time_range` re-evaluates `1.week.ago`, `1.month.ago`, `1.year.ago` on every filter call. | Time object allocation count per request. |
 | DONE | Code-Level | `HtmlPostProcessor#transform` single-pass refactoring — shared document across 6 transform steps, serialized once. | Nokogiri parse+serialize cycles: 6 → 1 per article render. PR created 2026-07-23. |
 | DONE | Broad sweep | Listener leaks ×7, reduced motion, lazy loading, dead code, SQL sampling, autosave retry, Dashboard/Admin/public/API N+1 families, frontend measurement helper. | See merged PR history below. |
 
-**Backlog cursor:** next run should consider the `article_form_controller.js` disconnect cleanup (MEDIUM, Frontend/UI) or the hidden-tab polling pause for `pre_orders_state_component_controller.js` (HIGH, Network/I/O).
+**Backlog cursor:** next run should consider the `article_form_controller.js` disconnect cleanup (MEDIUM, Frontend/UI) or the hidden-tab polling pause for `pre_orders_state_component_controller.js` (HIGH, Network/I/O). Repo-assist already covered the autosave-retry half of article_form (#1977) — focus on debounced autosave flush / un-flushed callbacks next.
 
 ## work in progress
 
@@ -57,12 +57,14 @@
 
 ## completed work
 
+- **2026-07-31 draft PR:** `[efficiency-improver] Destroy TomSelect instances on Stimulus disconnect` (branch `efficiency/tom-select-disconnect-20260731`). Both `tags_select_controller.js` and `references_select_controller.js` now call `select.destroy()` in `disconnect()`, eliminating wrapper DOM + 4 listeners (`invalid`, `mousedown`, `scroll`, `resize`) that previously leaked per Turbo navigation. `bin/measure-frontend-efficiency --json` reports `listener_leak.leaks = 0`. Prettier clean.
 - **2026-07-23 draft PR:** `[efficiency-improver] Batch Nokogiri transforms into single parse/serialize cycle in HtmlPostProcessor` (branch `efficiency/html-post-processor-single-pass-20260723`). Introduces shared `@doc` across all transform steps, serializing once via `serialize!` instead of 6 independent parse+serialize cycles. 41 tests, 0 failures (3 pre-existing FastImage errors). RuboCop clean. Zeitwerk check passed.
 - **2026-07-22 draft PR:** `[efficiency-improver] Cache home page platform stats` (branch `efficiency/home-stats-cache-20260722`). Adds `Rails.cache.fetch` around three aggregate SQL queries in `HomeController#index`. 5-min TTL + 30s race_condition_ttl per key, matching `hot_tags` pattern.
 - **2026-07-21 draft PR:** `[efficiency-improver] Stimulus disconnect cleanup` (branch `efficiency/stimulus-disconnect-cleanup-20260721`). Pause pre-order polling when hidden + clear clipboard timeout on disconnect.
 
 ## last task runs
 
+- 2026-07-31 22:XX UTC: Tasks 3, 7. Implemented TomSelect disconnect cleanup in `tags_select_controller.js` and `references_select_controller.js` — `select.destroy()` now called on disconnect, eliminating wrapper DOM + 4 listeners (`invalid`, `mousedown`, `scroll`, `resize`) that previously leaked per Turbo navigation. Created draft PR `efficiency/tom-select-disconnect-20260731`. Updated monthly activity issue #1817.
 - 2026-07-23 21:54 UTC: Tasks 3, 7. Implemented HtmlPostProcessor single-pass Nokogiri transform — shared document across all 6 transform steps, reducing parse+serialize cycles from 6 to 1 per article render. Created draft PR `efficiency/html-post-processor-single-pass-20260723`. Updated monthly activity issue #1817.
 - 2026-07-22 22:XX UTC: Tasks 2, 3, 7. Created draft PR `efficiency/home-stats-cache-20260722` (cache 3 aggregate SQL queries on landing page with 5-min TTL). Scanned codebase for code-level and frontend efficiency opportunities; found HtmlPostProcessor 5x Nokogiri parse, article_form_controller.js timer cleanup gaps, TomSelect disconnect gaps, and hljs bundle size as notable findings.
 - 2026-07-21 21:XX UTC: Tasks 3, 7. Created draft PR `efficiency/stimulus-disconnect-cleanup-20260721` (pause pre-order polling when hidden + clear clipboard timeout on disconnect). Noted PhotoSwipe disconnect already on main via `6ebc599`. Updated monthly activity issue #1817.
@@ -75,3 +77,4 @@
 - 2026-07-20 22:18: counter-cache item removed from suggested actions (code already applied to main); PhotoSwipe draft PR added.
 - 2026-07-21: PhotoSwipe disconnect already on main via `6ebc599`; remove from suggested actions. Created PR for hidden-tab polling + clipboard cleanup.
 - 2026-07-22: created PR for home stats caching (branch `efficiency/home-stats-cache-20260722`).
+- 2026-07-31: TomSelect disconnect cleanup shipped (`efficiency/tom-select-disconnect-20260731`); both PR #1954 (HtmlPostProcessor) and #1977 (autosave retry) already covered by other agents; suggest moving backlog cursor to debounced-autosave flush or hidden-tab polling.
