@@ -9,26 +9,25 @@ metadata:
 
 ## Current state
 
-- **Run 30578897589 on 2026-07-30 20:24 UTC.** Repo: baizhiheizi/quill (Rails 8.1, Ruby 4.0.5). `AGENTS.md` exists.
+- **Run 30663389086 on 2026-07-31 20:40 UTC.** Repo: baizhiheizi/quill (Rails 8.1, Ruby 4.0.5). `AGENTS.md` exists.
 - Seven open issues are automation/system-managed; all are labelled. No human issue required a comment or fix. Monthly issue: #1789.
-- Three open Dependabot PRs (#1973 solid_queue 1.5.1, #1974 lexxy 0.9.28, #1975 rails 8.1.3.1) and open protected-file issue #1969 (CI install reliability) are surfaced for maintainer action.
-- The 2026-07-29 `Orders::DistributeService` reader delegation PR (#1972) merged; the 2026-07-28 `Currency.btc` class-method PR (#1968) and the protected-files engineering intent (now issue #1969) are also closed.
-- The 2026-07-30 dead-code cleanup attempt (`Order#payment_price_tag` delegate removal) was reverted by the maintainer. The PR was withdrawn; the local branch was deleted. Do not propose this specific removal again.
+- Dependabot PRs #1973 (solid_queue), #1974 (lexxy), #1975 (rails) all merged by the maintainer on 2026-07-31. The bundle-Dependabot suggestion is no longer applicable.
+- The 2026-07-30 `Order#payment_price_tag` delegate removal was MERGED by the maintainer as PR #1976 on 2026-07-31 (earlier "reverted/withdrawn" memory framing was a pre-merge snapshot).
+- Two new revival-patch branches are surfaced for maintainer action: `repo-assist/test-hidden-listed-collections-2026-07-31` and `repo-assist/perf-cancel-autosave-retry-2026-07-31`. Both survived the `safeoutputs create_pull_request` push-blocked pattern; patches and bundles are preserved at `/tmp/gh-aw/aw-repo-assist-*.{patch,bundle}`.
 
 ## This run
 
-- Selected tasks: Task 10 (Take the Repository Forward), Task 5 (Coding Improvements), Task 2 (Issue Investigation and Comment), plus Task 11.
-- Task 2 was not applicable: all open issues are automation-managed and already labelled; no human issue requires a comment.
-- Task 5 attempted `Order#payment_price_tag` delegate removal. RuboCop and Zeitwerk passed locally. The maintainer reverted the change; the PR was withdrawn and the local branch deleted. Recorded here so the change is not re-proposed.
-- Task 10 surfaced the three open Dependabot PRs and protected-file issue #1969 in Suggested Actions for maintainer review.
-- Task 11 rewrote #1789 in the required July format. The first issue update referenced the withdrawn PR; the per-run update_issue limit prevented a follow-up correction, so the entry now references a search URL that resolves to no open PR.
+- Selected tasks: Task 2 (Issue Investigation and Comment), Task 9 (Testing Improvements), Task 8 (Performance Improvements), plus Task 11.
+- Task 2 was not applicable: all 7 open issues are automation-managed and already labelled; no human issue requires a comment.
+- Task 9 added 10 controller tests for `Dashboard::HiddenCollectionsController` and `Dashboard::ListedCollectionsController`. Ruby syntax, RuboCop (after autocorrect), and Zeitwerk passed locally; targeted Rails tests blocked by unreachable PostgreSQL.
+- Task 8 added a `cancelPendingRetry` hook to `Autosave` and called it from `article_form_controller#disconnect`. Prettier + Babel parser passed locally; full Bun lint blocked by missing Bun.
+- Task 11 updated #1789 with the 2026-07-31 run entry, removed the merged PR #1976 and Dependabot entries from Suggested Actions, and added the two revival-patch entries. The patch-blocked pattern from previous runs recurred; both branches are preserved locally with patches.
 
 ## Backlog
 
-- The 2026-07-30 `payment_price_tag` removal is permanently withdrawn — do not re-propose.
 - Keep #1824 performance, #1801 testing, and #1817 efficiency backlog items in the monthly suggested-actions list until closed or acknowledged.
-- Maintainer can bundle #1973/#1974/#1975 into a single Dependabot group PR if desired; the three patches are independent and CI-safe.
 - Issue #1969 (CI install reliability with retryable Bundler and frozen Bun lockfile) requires a maintainer-created PR because `.github/workflows/check.yml` is protected.
+- Maintainer can revive the two 2026-07-31 patch bundles via `git am --3way < /tmp/gh-aw/aw-repo-assist-*.patch`.
 
 ## Test and workflow notes
 
