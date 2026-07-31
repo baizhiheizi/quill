@@ -19,6 +19,17 @@ export default class extends Controller {
     });
   }
 
+  // Destroy the TomSelect instance and detach its listeners so they do
+  // not leak when the controller disconnects (e.g. Turbo navigation).
+  // Without this, every navigation cycle leaves the wrapper element
+  // and its document/window listeners in memory until the page reloads.
+  disconnect() {
+    if (this.select) {
+      this.select.destroy();
+      this.select = null;
+    }
+  }
+
   loadTagOptions(query, callback) {
     get("/tags?query=" + encodeURIComponent(query), {
       contentType: "application/json",
