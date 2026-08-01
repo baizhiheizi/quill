@@ -13,6 +13,7 @@ class Dashboard::NotificationSettingsControllerTest < ActionController::TestCase
 
   test "update persists permitted notification settings" do
     patch :update, params: {
+      id: @setting.id,
       notification_setting: {
         article_published_web: "0",
         transfer_processed_mixin_bot: "0"
@@ -29,6 +30,7 @@ class Dashboard::NotificationSettingsControllerTest < ActionController::TestCase
     @setting.update!(webhook_url: "https://example.com/original")
 
     patch :update, params: {
+      id: @setting.id,
       notification_setting: {
         article_published_web: "0",
         webhook_url: "https://example.com/changed"
@@ -46,6 +48,7 @@ class Dashboard::NotificationSettingsControllerTest < ActionController::TestCase
     session.delete(:current_session_id)
 
     patch :update, params: {
+      id: @setting.id,
       notification_setting: { article_published_web: "1" }
     }, format: :turbo_stream
 
