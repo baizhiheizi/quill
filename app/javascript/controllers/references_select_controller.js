@@ -37,6 +37,15 @@ export default class extends Controller {
     });
   }
 
+  // Destroy the TomSelect instance and detach its listeners so they do
+  // not leak when the controller disconnects (e.g. Turbo navigation).
+  disconnect() {
+    if (this.select) {
+      this.select.destroy();
+      this.select = null;
+    }
+  }
+
   authorAvatarMarkup(author) {
     const className = "h-6 w-6 rounded-full my-0";
 
