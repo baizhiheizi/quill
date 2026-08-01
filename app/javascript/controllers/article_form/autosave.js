@@ -98,7 +98,23 @@ export default class Autosave {
     const controller = this.controller;
     controller.draft.persistLocalDraft();
     controller.setSaveStatus("error");
-    setTimeout(() => this.runAutosave(), 2000);
+    this.cancelPendingRetry();
+    this.retryTimer = setTimeout(() => {
+      this.retryTimer = null;
+      this.runAutosave();
+    }, 2000);
+  }
+
+  // Cancels the pending autosave retry timer (if any). Called from the
+  // orchestrator's `disconnect()` so a Turbo navigation does not leave a
+  // `runAutosave()` closure alive against a detached form — see
+  // efficiency-improver backlog "MEDIUM Frontend/UI article_form_controller.js
+  // — retry setTimeout calls not cancelled in disconnect()".
+  cancelPendingRetry() {
+    if (this.retryTimer) {
+      clearTimeout(this.retryTimer);
+      this.retryTimer = null;
+    }
   }
 
   promoteNewRecord({ uuid, edit_path, lock_version }) {

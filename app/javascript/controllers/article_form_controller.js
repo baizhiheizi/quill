@@ -93,6 +93,10 @@ export default class extends Controller {
       this.boundRevenueQueueAutosave,
     );
     document.removeEventListener("turbo:before-visit", this.confirmLeaving);
+    // Cancel any pending autosave retry — see `Autosave#cancelPendingRetry`.
+    // Without this, a Turbo navigation during the 2s error retry window
+    // leaves the closure alive to fire against a detached form.
+    this.autosave.cancelPendingRetry();
   }
 
   // Data-action proxies — Stimulus dispatches these by name from the
