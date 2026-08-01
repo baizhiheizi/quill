@@ -17,6 +17,9 @@ class Dashboard::HiddenCollectionsControllerTest < ActionController::TestCase
       info: { "provider" => "mixin" }
     ).uuid
 
+    # Created directly in the `:listed` AASM state (with a uuid) instead of via
+    # `publish!`, which would call `generate_cover` and make a real HTTP request
+    # to the grover service in tests.
     @collection = Collection.create!(
       author: @user,
       name: "Hideable",
@@ -24,9 +27,10 @@ class Dashboard::HiddenCollectionsControllerTest < ActionController::TestCase
       description: "ready to hide",
       asset_id: currencies(:btc).asset_id,
       price: 0.0005,
-      revenue_ratio: 0.2
+      revenue_ratio: 0.2,
+      uuid: SecureRandom.uuid,
+      state: "listed"
     )
-    @collection.publish!
     assert @collection.may_hide?, "fixture must be in :listed state"
   end
 
@@ -63,13 +67,14 @@ class Dashboard::HiddenCollectionsControllerTest < ActionController::TestCase
       description: "owned by another author",
       asset_id: currencies(:btc).asset_id,
       price: 0.0005,
-      revenue_ratio: 0.2
+      revenue_ratio: 0.2,
+      uuid: SecureRandom.uuid,
+      state: "listed"
     )
-    foreign.publish!
 
-    patch :update, params: { id: foreign.id }
-
-    assert_response :not_found
+    assert_raises(ActiveRecord::RecordNotFound) do
+      patch :update, params: { id: foreign.id }
+    end
     assert_equal "listed", foreign.reload.state
   end
 

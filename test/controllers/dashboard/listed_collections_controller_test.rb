@@ -45,6 +45,9 @@ class Dashboard::ListedCollectionsControllerTest < ActionController::TestCase
       revenue_ratio: 0.2
     )
     assert_nil draft.uuid
+    # `publish!` only calls `generate_cover` (a grover HTTP request) when no
+    # cover is attached — attach one so the action runs network-free.
+    draft.cover.attach(io: StringIO.new("cover"), filename: "cover.png", content_type: "image/png")
 
     patch :update, params: { id: draft.id }
 
@@ -55,6 +58,8 @@ class Dashboard::ListedCollectionsControllerTest < ActionController::TestCase
   end
 
   test "update lists a previously hidden collection without re-publishing" do
+    # Created directly in `:listed` state (with a uuid) to avoid `publish!`'s
+    # grover HTTP request, then `hide!` is a pure AASM transition.
     collection = Collection.create!(
       author: @user,
       name: "Back",
@@ -62,9 +67,10 @@ class Dashboard::ListedCollectionsControllerTest < ActionController::TestCase
       description: "hidden then listed again",
       asset_id: currencies(:btc).asset_id,
       price: 0.0005,
-      revenue_ratio: 0.2
+      revenue_ratio: 0.2,
+      uuid: SecureRandom.uuid,
+      state: "listed"
     )
-    collection.publish!
     original_uuid = collection.uuid
     collection.hide!
 
@@ -88,9 +94,12 @@ class Dashboard::ListedCollectionsControllerTest < ActionController::TestCase
       revenue_ratio: 0.2
     )
 
-    patch :update, params: { id: foreign.id }
-
-    assert_response :not_found
+    # The owner-scoped `load_collection` (`current_user.collections.find`)
+    # raises `RecordNotFound` for another author's collection — in functional
+    # tests the exception propagates instead of rendering a 404 response.
+    assert_raises(ActiveRecord::RecordNotFound) do
+      patch :update, params: { id: foreign.id }
+    end
     assert_nil foreign.reload.uuid
   end
 
