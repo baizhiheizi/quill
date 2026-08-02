@@ -8,11 +8,11 @@ CI.run do
   step "Style: Ruby", "bin/rubocop"
 
   step "Style: JavaScript", "bun run lint-check"
+  step "Tests: JavaScript", "bun run test:js"
   step "Tests: Rails", "bin/rails test"
   step "Tests: Seeds", "env RAILS_ENV=test bin/rails db:seed:replant"
 
-  # Optional: Run system tests
-  # step "Tests: System", "bin/rails test:system"
+  step "Tests: System", "bin/rails test:system"
 
   # Optional: set a green GitHub commit status to unblock PR merge.
   # Requires the `gh` CLI and `gh extension install basecamp/gh-signoff`.

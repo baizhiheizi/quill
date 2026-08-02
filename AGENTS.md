@@ -125,6 +125,17 @@ bun run build:css
 - **JS**: Stimulus controllers in `app/javascript/controllers/`; entry `app/javascript/application.js`
 - **Comments**: sparse; schema comments auto-generated on models
 
+## UI/UX Skills
+
+This project is a **server-rendered Rails web app** (Turbo, Stimulus, Tailwind, ERB). Two UI/UX skills are installed but target different platforms:
+
+| When to use | Skill | Scope |
+|---|---|---|
+| **Web UI review, accessibility audit, or web interface compliance** | `web-design-guidelines` | Desktop/web — matches this project's stack |
+| **Mobile-app design system generation** (colors, typography, chart selection, UX patterns) | `ui-ux-pro-max` | Mobile/React-Native-oriented design intelligence DB — **do not use its stack-specific steps or checklist for this Rails web project** |
+
+**Routing rule:** For any UI review, accessibility check, or web UX work in this repository, use `web-design-guidelines`. The `ui-ux-pro-max` skill provides platform-agnostic design-system data (color palettes, font pairings, UX guidelines) that may supplement design decisions, but its stack examples (`react-native-vector-icons`, `hitSlop`, `safe-area`, bottom tab bars) do not apply to this web stack.
+
 ## Testing Conventions
 
 - **Location**: `test/` mirrors `app/` (`test/models/`, `test/controllers/`, `test/jobs/`, `test/notifiers/`)
