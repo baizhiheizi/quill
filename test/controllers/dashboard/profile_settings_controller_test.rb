@@ -7,6 +7,7 @@ require "test_helper"
 # `verify_email` action (no authentication required) consumes a one-shot
 # verification code stored in `Rails.cache` by `Users::EmailVerifiable`.
 class Dashboard::ProfileSettingsControllerTest < ActionController::TestCase
+  include ActionMailer::TestHelper
   tests Dashboard::ProfileSettingsController
 
   setup do
@@ -16,6 +17,13 @@ class Dashboard::ProfileSettingsControllerTest < ActionController::TestCase
       uuid: SecureRandom.uuid,
       info: { "provider" => "mixin" }
     ).uuid
+
+    @previous_cache = Rails.cache
+    Rails.cache = ActiveSupport::Cache::MemoryStore.new
+  end
+
+  teardown do
+    Rails.cache = @previous_cache
   end
 
   # --- edit -------------------------------------------------------------
@@ -94,7 +102,7 @@ class Dashboard::ProfileSettingsControllerTest < ActionController::TestCase
   end
 
   test "update does not re-verify when email is unchanged" do
-    @user.update!(email: "fixed@example.test", email_verified_at: 1.day.ago)
+    @user.update_columns(email: "fixed@example.test", email_verified_at: 1.day.ago)
 
     perform_enqueued_jobs do
       patch :update, params: {
@@ -126,29 +134,31 @@ class Dashboard::ProfileSettingsControllerTest < ActionController::TestCase
 
   test "verify_email consumes a valid cached code and marks the email as verified" do
     new_email = "verified@example.test"
-    @user.update!(email: new_email)
+    @user.update_columns(email: new_email)
     Rails.cache.write "verify-code-1", new_email
 
     get :verify_email, params: { code: "verify-code-1" }
 
     assert_response :success
-    assert_not_nil assigns(:user)
+    assert_match "has been verified", response.body
     assert @user.reload.email_verified?
     assert_nil Rails.cache.read("verify-code-1")
   end
 
   test "verify_email renders failure UI for a missing code" do
+    @user.update_columns(email: "unverified@example.test")
+
     get :verify_email, params: { code: "no-such-code" }
 
     assert_response :success
-    assert_nil assigns(:user)
+    assert_match "Cannot verify", response.body
     assert_not @user.reload.email_verified?
   end
 
   test "verify_email does not require authentication" do
     session.delete(:current_session_id)
     new_email = "noauth@example.test"
-    @user.update!(email: new_email)
+    @user.update_columns(email: new_email)
     Rails.cache.write "verify-code-2", new_email
 
     get :verify_email, params: { code: "verify-code-2" }
