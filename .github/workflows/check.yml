@@ -72,8 +72,9 @@ jobs:
           sudo apt-get -yyq install libpq-dev
           # Install Chrome for system tests (Selenium WebDriver 4.x auto-manages the matching driver)
           if ! command -v google-chrome-stable &>/dev/null; then
+            sudo apt-get -yyq install wget
             wget -q -O /tmp/chrome.deb https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-            sudo apt-get -yyq install /tmp/chrome.deb || true
+            sudo apt-get -yyq install /tmp/chrome.deb
           fi
 
       - name: CI
