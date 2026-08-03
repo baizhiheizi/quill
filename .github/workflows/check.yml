@@ -64,8 +64,8 @@ jobs:
 
       - name: Install dependencies
         run: |
-          bundle install
-          bun install
+          bundle install --jobs 4 --retry 3
+          bun install --frozen-lockfile
 
       - name: Install system dependencies
         run: |
