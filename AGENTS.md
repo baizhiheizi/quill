@@ -4,48 +4,40 @@
 
 ## Project Overview
 
-Quill is a Web3 paid-publishing platform ([quill.im](https://quill.im/)) where authors publish priced articles and readers pay to access them. Its distinguishing feature is **early reader rewards**: a share of each article's new revenue (default 40%) is distributed proportionally to readers who paid earlier. The stack is a Rails monolith with Hotwire (Turbo + Stimulus), ERB partials, PostgreSQL, Solid Cable, Solid Cache, and background jobs via Solid Queue (separate queue database). Integrations include Mixin Network (OAuth) and MixPay (cross-asset payment rail).
+Quill is a Web3 paid-publishing platform ([quill.im](https://quill.im/)) where authors publish priced articles and readers pay to access them. Its distinguishing feature is **early reader rewards**: a share of each article's new revenue (default 40%) is distributed proportionally to readers who paid earlier.
+
+Stack: Rails monolith with Hotwire (Turbo + Stimulus), ERB partials, PostgreSQL, Solid Cable, Solid Cache, and Solid Queue (separate queue database). Integrations: Mixin Network (OAuth) and MixPay (cross-asset payment rail).
 
 ## Tech Stack
 
-| Layer | Technology | Version |
-|-------|-----------|---------|
-| Language | Ruby | 4.0.5 (see `.ruby-version`, `mise.toml`) |
-| Framework | Rails | 8.1.x |
-| Database | PostgreSQL | — |
-| Real-time | Solid Cable (separate `*_cable` DB) | — |
-| Cache / jobs | Solid Cache, Solid Queue | — |
-| Frontend | Turbo, Stimulus, Tailwind, esbuild | Node 20+, Bun 1.x |
-| Testing | Minitest, Capybara | minitest ~> 6.0 (locked to 6.0.6) |
-| Lint | RuboCop (rails-omakase), Prettier | — |
-| Deploy | Kamal, Docker | manual `workflow_dispatch` |
+| Layer | Stack |
+|-------|-------|
+| Language | Ruby 4.0.5 (see `.ruby-version`, `mise.toml`) |
+| Framework | Rails 8.1.x |
+| Database | PostgreSQL |
+| Real-time | Solid Cable (separate `*_cable` DB) |
+| Cache / jobs | Solid Cache + Solid Queue (separate queue DB) |
+| Frontend | Turbo, Stimulus, Tailwind, esbuild (Node 20+, Bun 1.x) |
+| Testing | Minitest ~> 6.0.6 + Capybara |
+| Lint | RuboCop (rails-omakase), Prettier |
+| Deploy | Kamal + Docker (manual `workflow_dispatch`) |
 
 ## Architecture
 
-Classic Rails MVC with namespaced controllers, route draws, service objects, and ActiveJob workers. Public site, author **dashboard**, **admin**, JSON **API**, and **grover** sub-apps share models but use separate controllers.
+Five sub-apps share models but use separate controllers: public site, **dashboard**, **admin**, JSON **API**, and **grover**.
 
 ### Directory Structure
 
 ```
 quill/
-├── app/
-│   ├── controllers/     # Web, dashboard, admin, api, grover
-│   ├── models/          # ActiveRecord + concerns (AASM, etc.)
-│   ├── views/           # ERB templates and partials
-│   ├── helpers/         # View helpers (UiHelper for modal/dropdown wrappers)
-│   ├── javascript/      # Stimulus controllers, esbuild entry
-│   ├── jobs/            # Active Job work (orders, transfers)
-│   ├── services/        # Query/command objects (e.g. ArticleSearchService)
-│   ├── notifiers/       # Noticed 3 notifier classes + delivery_methods/
-│   └── libs/            # Non-Rails Ruby helpers
-├── config/
-│   ├── routes/          # Route draws: admin, dashboard, api, grover
-│   ├── settings/        # Config gem YAML (copy to settings.local.yml)
-│   └── credentials/     # Encrypted secrets (Mixin bot, encryption keys)
-├── db/migrate/          # Schema migrations
-├── test/                # Minitest (models, controllers, jobs, notifiers)
+├── app/{controllers,models,views,helpers,javascript,jobs,services,notifiers,libs}
+├── config/{routes,settings,credentials}/
+├── db/migrate/
+├── test/                # mirrors app/ (models, controllers, jobs, notifiers)
 └── .github/workflows/   # check.yml (CI), deploy.yml (Kamal)
 ```
+
+Notable: `UiHelper` (`render_modal`, `render_dropdown`); Noticed 3 notifiers in `app/notifiers/` plus `app/notifiers/delivery_methods/`; encrypted Mixin bot + AR encryption keys in `config/credentials/`.
 
 ## Development
 
@@ -59,7 +51,7 @@ cp config/settings.yml config/settings.local.yml       # edit host for local URL
 bin/rails db:prepare
 ```
 
-Requires PostgreSQL running locally (or via Docker). See `CONTRIBUTING.md` for credential field examples (note: README versions are authoritative over CONTRIBUTING's Ruby 3.2 note).
+PostgreSQL required (locally or via Docker). For credential fields see `CONTRIBUTING.md` — its Ruby version is outdated; `.ruby-version` and `mise.toml` are authoritative.
 
 ### Run
 
@@ -77,53 +69,36 @@ bin/rails test
 bin/rails zeitwerk:check
 ```
 
-CI also runs `bin/rubocop` and `bun run lint-check`.
-
-### Benchmarks
+### Benchmarks & frontend efficiency
 
 ```bash
-bin/benchmark                    # all hot-path scenarios (test fixtures)
-bin/benchmark article_search     # filter by scenario name
+bin/benchmark article_search       # hot-path scenarios (filter by name)
+bin/measure-frontend-efficiency    # bundle sizes, lazy-loading & motion coverage, listener-leak sweep
 ```
 
-See `test/benchmarks/README.md` for env vars and limitations. Stdlib-only; not run in CI.
+Both are stdlib-only and not run in CI. `measure-frontend-efficiency` gracefully reports `not built` / `null` when `app/assets/builds/` or `node_modules/` are absent; see `test/benchmarks/README.md` for env vars and limitations.
 
-### Frontend efficiency
-
-```bash
-bin/measure-frontend-efficiency            # bundle sizes, lazy-loading & motion coverage, listener-leak sweep
-bin/measure-frontend-efficiency --json     # machine-readable (for before/after diffs / future CI baselines)
-bin/measure-frontend-efficiency --minify   # also measure minified JS (builds once; restores dev build)
-```
-
-Stdlib-only; no Rails boot. Gracefully reports `not built` / `null` when `app/assets/builds/` or `node_modules/` are absent. Not run in CI.
-
-### Lint
+### Lint & build assets
 
 ```bash
 bin/rubocop
 bun run lint-check          # Prettier check on app/javascript
 bun run lint                # Prettier write
-```
-
-### Build assets (without bin/dev)
-
-```bash
-bun run build
+bun run build               # one-off asset build
 bun run build:css
 ```
 
+`bin/rubocop` and `bun run lint-check` also run in CI.
+
 ## Code Conventions
 
-- **Frozen string**: `# frozen_string_literal: true` at top of Ruby files
-- **Naming**: snake_case files/methods; PascalCase classes; `API::` namespace for API controllers
-- **Models**: schema annotations via `annotaterb`; AASM `state` columns; counter caches
-- **Services**: class with `.call` factory (see `ArticleSearchService`)
-- **Views**: reusable UI in `app/views/**/_*.html.erb` partials; block/slot patterns via `UiHelper` (`render_modal`, `render_dropdown`, etc.)
-- **Controllers**: concerns in `app/controllers/concerns/` (`Localizable`, `RenderingHelper`, `API::RenderingHelper`)
-- **Routes**: partial routes in `config/routes/*.rb`, loaded via `draw :name` in `config/routes.rb`
-- **JS**: Stimulus controllers in `app/javascript/controllers/`; entry `app/javascript/application.js`
-- **Comments**: sparse; schema comments auto-generated on models
+- **Ruby**: `# frozen_string_literal: true` at top of files; snake_case files/methods, PascalCase classes, `API::` namespace for API controllers; schema annotations via `annotaterb` with AASM `state` columns and counter caches on models.
+- **Services**: class with `.call` factory (see `ArticleSearchService`).
+- **Views**: reusable UI in `app/views/**/_*.html.erb` partials; block/slot patterns via `UiHelper` (`render_modal`, `render_dropdown`, etc.).
+- **Controllers**: concerns in `app/controllers/concerns/` (`Localizable`, `RenderingHelper`, `API::RenderingHelper`).
+- **Routes**: partials in `config/routes/*.rb`, loaded via `draw :name` in `config/routes.rb`.
+- **JS**: Stimulus controllers in `app/javascript/controllers/`; entry `app/javascript/application.js`.
+- **Comments**: sparse; schema comments auto-generated on models.
 
 ## UI/UX Skills
 
@@ -138,41 +113,33 @@ This project is a **server-rendered Rails web app** (Turbo, Stimulus, Tailwind, 
 
 ## Testing Conventions
 
-- **Location**: `test/` mirrors `app/` (`test/models/`, `test/controllers/`, `test/jobs/`, `test/notifiers/`)
-- **Naming**: `*_test.rb`; fixtures in `test/fixtures/`
-- **Style**: Minitest
-- **Env**: `RAILS_ENV=test`; CI uses Postgres service container
+`test/` mirrors `app/` (models, controllers, jobs, notifiers). Tests use `*_test.rb` names with fixtures in `test/fixtures/`, run under Minitest with `RAILS_ENV=test`; CI runs against a Postgres service container.
 
 ## Common Tasks
 
 ### Add a web route + controller action
 
-1. Add route in `config/routes.rb` or appropriate `config/routes/*.rb` draw file
-2. Implement action in `app/controllers/` (or namespaced submodule)
-3. Add view or partial under `app/views/`
-4. Add `test/controllers/..._test.rb` when behavior is non-trivial
+1. Add route in `config/routes.rb` (or a draw file in `config/routes/`)
+2. Implement action in `app/controllers/` (or namespaced submodule) plus view/partial in `app/views/`
+3. Add `test/controllers/..._test.rb` when behavior is non-trivial
 
 ### Add an API endpoint
 
-1. Route under `config/routes/api.rb` inside `namespace :api`
-2. Controller inheriting `API::BaseController` in `app/controllers/api/`
-3. Auth via `HTTP_X_ACCESS_TOKEN` → `AccessToken` → `current_user`; call `authenticate_user!` when required
-4. Use `API::RenderingHelper` JSON helpers; rescue patterns already in base controller
+1. Route under `config/routes/api.rb` inside `namespace :api`; controller inheriting `API::BaseController` in `app/controllers/api/`
+2. Auth via `HTTP_X_ACCESS_TOKEN` (call `authenticate_user!` when required); use `API::RenderingHelper` JSON helpers (rescue patterns already in base controller)
 
 ### Add a background job
 
 1. Create `app/jobs/<namespace>/<name>_job.rb` inheriting `ApplicationJob`
-2. Enqueue with `perform_later`; Solid Queue runs via `bin/jobs` (in `bin/dev` Procfile). Recurring tasks in `config/recurring.yml`; queues in `config/queue.yml`
+2. Enqueue with `perform_later`. Solid Queue runs via `bin/jobs` (in `bin/dev`'s Procfile); recurring tasks in `config/recurring.yml`, queues in `config/queue.yml`
 3. Add `test/jobs/..._test.rb`
 
 ### Add a notifier (Noticed 3)
 
-1. Create `app/notifiers/<name>_notifier.rb` inheriting `ApplicationNotifier`
-2. Declare `required_param(s)` and wrap UI helpers (`message`, `url`, `icon_url`) in `notification_methods do ... end`
-3. Configure delivery methods with blocks (`deliver_by :mixin_bot do |config| ... end`); database persistence is automatic — do **not** add `deliver_by :database`
-4. Pass `record:` in `.with(record: model, ...)` when the notifier relates to an ActiveRecord object (enables `has_many :noticed_events, as: :record`)
-5. Add translations under `config/locales/notifications.*.yml` at `notifiers.<notifier_name>.notification.*`
-6. Add tests in `test/notifiers/`; use `NotifierHelpers#deliver_notifier!` and assert on `Noticed::Event` / `Noticed::Notification`
+1. Create `app/notifiers/<name>_notifier.rb` inheriting `ApplicationNotifier`; declare `required_param(s)` and wrap UI helpers (`message`, `url`, `icon_url`) in `notification_methods do ... end`
+2. Configure delivery methods with blocks (`deliver_by :mixin_bot do |config| ... end`). Database persistence is automatic — do **not** add `deliver_by :database`
+3. Pass `record:` in `.with(record: model, ...)` when the notifier relates to an ActiveRecord object (enables `has_many :noticed_events, as: :record`)
+4. Add translations under `config/locales/notifications.*.yml` at `notifiers.<notifier_name>.notification.*` and tests in `test/notifiers/`; use `NotifierHelpers#deliver_notifier!` and assert on `Noticed::Event` / `Noticed::Notification`
 
 ### Database migration
 
@@ -183,23 +150,23 @@ bin/rails db:migrate
 
 Re-run `annotaterb` in development if model annotations are stale.
 
-### Testing improvements (local Cursor)
+### Cursor agents (local)
 
-Run `/test-assist <instructions>` for focused test work. For a full run, `/test-improver` is self-contained: clean worktree, dedicated branch, round-robin tasks, memory committed in the run draft PR, monthly issue update, then return to your starting branch. State in `.cursor/test-improver/memory.md`; see `.cursor/skills/test-improver/SKILL.md`. Requires `gh auth login`.
+Each domain has a focused assistant and a self-contained full runner. The full runner spins up a clean worktree, dedicates a branch, round-robins tasks, commits memory in the run draft PR, updates the monthly issue, and returns to your starting branch.
 
-### Performance improvements (local Cursor)
+| Domain | Focused | Full runner | Memory |
+|---|---|---|---|
+| Tests | `/test-assist <instructions>` | `/test-improver` | `.cursor/test-improver/memory.md` (see `.cursor/skills/test-improver/SKILL.md`) |
+| Perf | `/perf-assist <instructions>` | `/perf-improver` | `.cursor/perf-improver/memory.md` (see `.cursor/skills/perf-improver/SKILL.md`) |
 
-Run `/perf-assist <instructions>` for focused perf work. For a full run, `/perf-improver` is self-contained: clean worktree, dedicated branch, round-robin tasks, memory committed in the run draft PR, monthly issue update, then return to your starting branch. State in `.cursor/perf-improver/memory.md`; see `.cursor/skills/perf-improver/SKILL.md`. Requires `gh auth login`.
+Both require `gh auth login`.
 
 ## Gotchas
 
-- **Launch gate**: `ApplicationController#ensure_launched!` redirects to landing until `Settings.launch_time` passes (unless user is `accessable?`)
-- **Revenue math**: Article defaults — 40% early readers, 10% platform, 50% author (`readers_revenue_ratio`, `platform_revenue_ratio`, `author_revenue_ratio`); changing splits affects `Order` distribution jobs
-- **Paid content**: Article body often gated; API `show` omits content without valid access token
-- **Secrets**: Never commit `config/master.key`, `config/settings.local.yml`, or credential values; Mixin bot keys live in encrypted credentials
-- **Ruby 4 / minitest**: Gemfile pins `minitest ~> 6.0` (locked to `6.0.6`); Rails 8.1 test runner works on minitest 6 in this stack — bump together with Ruby upgrades.
-- **CONTRIBUTING.md**: matches the README's Ruby 4.0.5 target; consult `.ruby-version` and `mise.toml` for the authoritative versions of Ruby, Bun, and Node
-- **Deploy**: Production deploy is manual (`gh workflow run Deploy`); uses Kamal + Docker Hub image `anleework/quill`
-- **Noticed 3**: Notifiers live in `app/notifiers/`, inherit `Noticed::Event` via `ApplicationNotifier`; user inbox uses `Noticed::Notification` (`User#notifications`). Web UI filters with `visible_in_web?` / `for_web` because DB records are always created (including Mixin-only delivery). Custom delivery: `DeliveryMethods::MixinBot`, `DeliveryMethods::FlashBroadcast`. Extend gem models in `config/initializers/noticed.rb`.
-- **Solid Cable**: Real-time WebSocket backend uses a separate `cable` database (`config/database.yml`). Run `bin/rails db:prepare` to create/migrate all databases.
-- **Solid Queue**: Jobs use a separate `queue` database (`config/database.yml`); admin dashboard at `/admin/jobs` (Mission Control). Run `bin/rails db:prepare` to create/migrate all databases.
+- **Access control**: `ApplicationController#ensure_launched!` redirects to landing until `Settings.launch_time` passes (unless `accessable?`); paid-article bodies (API `show`) are gated without a valid access token.
+- **Revenue math**: Article defaults — 40% early readers, 10% platform, 50% author (`readers_revenue_ratio`, `platform_revenue_ratio`, `author_revenue_ratio`); changing splits affects `Order` distribution jobs.
+- **Secrets**: Never commit `config/master.key`, `config/settings.local.yml`, or credential values; Mixin bot keys live in encrypted credentials.
+- **Ruby 4 / minitest**: Gemfile pins `minitest ~> 6.0` (locked `6.0.6`); bump with Ruby upgrades. Consult `.ruby-version`/`mise.toml` for authoritative Ruby/Bun/Node versions; `CONTRIBUTING.md` lags behind.
+- **Deploy**: Production deploy is manual (`gh workflow run Deploy`); uses Kamal + Docker Hub image `anleework/quill`.
+- **Noticed 3**: Notifiers in `app/notifiers/` inherit via `ApplicationNotifier`; user inbox uses `Noticed::Notification` (`User#notifications`). Web UI filters with `visible_in_web?` / `for_web` since DB records always exist. Custom delivery in `DeliveryMethods::{MixinBot, FlashBroadcast}`; gem extensions in `config/initializers/noticed.rb`.
+- **Solid Cable / Solid Queue**: Solid Cable backs the WebSocket layer; Solid Queue runs jobs (admin at `/admin/jobs`, Mission Control). Both use separate databases (`config/database.yml`) — `bin/rails db:prepare` creates and migrates all of them.
