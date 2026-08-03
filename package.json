@@ -7,7 +7,9 @@
     "build:css": "tailwindcss -i ./app/assets/stylesheets/application.tailwind.css -o ./app/assets/builds/application.css",
     "build": "node esbuild.config.js",
     "build:css:watch": "tailwindcss -i ./app/assets/stylesheets/application.tailwind.css -o ./app/assets/builds/application.css --watch",
-    "build:watch": "node esbuild.config.js --watch"
+    "build:watch": "node esbuild.config.js --watch",
+    "test": "bun test",
+    "test:js": "bun test test/javascript/"
   },
   "version": "0.1.0",
   "dependencies": {

@@ -356,7 +356,7 @@ Extract key information from user request:
 - **Product type**: Entertainment (social, video, music, gaming), Tool (scanner, editor, converter), Productivity (task manager, notes, calendar), or hybrid
 - **Target audience**: C-end consumer users; consider age group, usage context (commute, leisure, work)
 - **Style keywords**: playful, vibrant, minimal, dark mode, content-first, immersive, etc.
-- **Stack**: React Native (this project's only tech stack)
+- **Stack**: Identify the host project's frontend stack from its manifest, README, or AGENTS.md. This skill's design-system data (colors, typography, UX guidelines, charts) is platform-agnostic; its stack-specific steps and checklists are oriented to mobile/React Native and should be skipped for web projects.
 
 ### Step 2: Generate Design System (REQUIRED)
 
@@ -436,7 +436,9 @@ python3 skills/ui-ux-pro-max/scripts/search.py "<keyword>" --domain <domain> [-n
 | App interface a11y | `web` | `--domain web "accessibilityLabel touch safe-areas"` |
 | AI prompt / CSS keywords | `prompt` | `--domain prompt "minimalism"` |
 
-### Step 4: Stack Guidelines (React Native)
+### Step 4: Stack Guidelines (React Native host projects only)
+
+> **Scope:** This step applies **only** when the host project is a React Native app. This repository (Quill) is a **server-rendered Rails web app** (Turbo, Stimulus, Tailwind, ERB) — skip Step 4 entirely and rely on `web-design-guidelines` plus the platform-agnostic domains in Step 3.
 
 Get React Native implementation-specific best practices:
 
@@ -474,13 +476,15 @@ python3 skills/ui-ux-pro-max/scripts/search.py "<keyword>" --stack react-native
 
 ## Example Workflow
 
+> The example below assumes a **React Native host project**. For this repository (Quill, a Rails web app), run Steps 1–3 the same way but **skip Step 4** and review output against `web-design-guidelines`.
+
 **User request:** "Make an AI search homepage."
 
 ### Step 1: Analyze Requirements
 - Product type: Tool (AI search engine)
 - Target audience: C-end users looking for fast, intelligent search
 - Style keywords: modern, minimal, content-first, dark mode
-- Stack: React Native
+- Stack: React Native *(example only — always detect the real host stack from AGENTS.md)*
 
 ### Step 2: Generate Design System (REQUIRED)
 
@@ -531,7 +535,7 @@ python3 skills/ui-ux-pro-max/scripts/search.py "fintech crypto" --design-system 
 - Use **multi-dimensional keywords** — combine product + industry + tone + density: `"entertainment social vibrant content-dense"` not just `"app"`
 - Try different keywords for the same need: `"playful neon"` → `"vibrant dark"` → `"content-first minimal"`
 - Use `--design-system` first for full recommendations, then `--domain` to deep-dive any dimension you're unsure about
-- Always add `--stack react-native` for implementation-specific guidance
+- Add `--stack react-native` **only** when the host project is a React Native app (confirm via AGENTS.md); Rails/web projects must skip stack search
 
 ### Common Sticking Points
 
