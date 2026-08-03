@@ -88,33 +88,35 @@ class Dashboard::ProfileSettingsControllerTest < ActionController::TestCase
   end
 
   test "update triggers email verification when email changes" do
-    perform_enqueued_jobs do
-      patch :update, params: {
-        user: { name: @user.name, email: "newauthor@example.test" }
-      }, format: :turbo_stream
+    assert_emails(1) do
+      perform_enqueued_jobs do
+        patch :update, params: {
+          user: { name: @user.name, email: "newauthor@example.test" }
+        }, format: :turbo_stream
+      end
     end
 
     assert_response :success
     @user.reload
     assert_equal "newauthor@example.test", @user.email
     assert_nil @user.email_verified_at
-    assert_equal 1, ActionMailer::Base.deliveries.size
   end
 
   test "update does not re-verify when email is unchanged" do
     @user.update_columns(email: "fixed@example.test", email_verified_at: 1.day.ago)
 
-    perform_enqueued_jobs do
-      patch :update, params: {
-        user: { name: "Renamed Again", email: "fixed@example.test" }
-      }, format: :turbo_stream
+    assert_no_emails do
+      perform_enqueued_jobs do
+        patch :update, params: {
+          user: { name: "Renamed Again", email: "fixed@example.test" }
+        }, format: :turbo_stream
+      end
     end
 
     assert_response :success
     @user.reload
     assert_equal "Renamed Again", @user.name
     assert_not_nil @user.email_verified_at
-    assert_equal 0, ActionMailer::Base.deliveries.size
   end
 
   test "update redirects unauthenticated requests to login" do
