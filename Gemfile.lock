@@ -190,7 +190,7 @@ GEM
     drb (2.2.3)
     ecdsa (1.2.0)
     ed25519 (1.4.0)
-    enumerize (2.8.1)
+    enumerize (3.0.0)
       activesupport (>= 3.2)
     erb (6.0.6)
     erubi (1.13.1)
@@ -847,7 +847,7 @@ CHECKSUMS
   drb (2.2.3) sha256=0b00d6fdb50995fe4a45dea13663493c841112e4068656854646f418fda13373
   ecdsa (1.2.0) sha256=b8f7c9541b6c587cbe37e705a1b76be6dc1e85336aa23ac3cf2f07b038bcec55
   ed25519 (1.4.0) sha256=16e97f5198689a154247169f3453ef4cfd3f7a47481fde0ae33206cdfdcac506
-  enumerize (2.8.1) sha256=6f2fa9c7714d8f6c4f69503e41f3c060a3382cba1dcbbc69dab931bffd023d9a
+  enumerize (3.0.0) sha256=977b90c103bec66f65b4dced14a10ec4d54bb9a8183bc7b40a06d7f8ca7c01a5
   erb (6.0.6) sha256=a9b24986700f5bf127c4f297c5403c3ca41b83b0a316c0cd09a096b56e644ae5
   erubi (1.13.1) sha256=a082103b0885dbc5ecf1172fede897f9ebdb745a4b97a5e8dc63953db1ee4ad9
   et-orbi (1.4.1) sha256=007e2685b1d873415a7587ef889336c6dcdf8a47fc9c9a63547582b21660a11b
