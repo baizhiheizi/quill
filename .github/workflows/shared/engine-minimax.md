@@ -15,9 +15,9 @@ models:
       models:
         MiniMax-M3:
           cost:
-            input: 1.20
-            output: 4.80
-            cache_read: 0.24
+            input: 1.2e-6
+            output: 4.8e-6
+            cache_read: 0.24e-6
 network:
   allowed:
     - defaults
