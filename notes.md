@@ -3,13 +3,13 @@ name: repo-assist-notes
 description: Persistent notes for Repo Assist workflow runs on baizhiheizi/quill
 metadata:
   type: project
-  updated: 2026-08-11
+  updated: 2026-08-12
 ---
 
 ## Repo Assist — Persistent Notes
 
 ### Recurring state
-- Seven open issues are all automation/system-managed tracking issues (Failed jobs, No-Op Runs, Detection Runs, monthly summaries for repo-assist, perf-improver, efficiency-improver, test-improver). No human-submitted bug or feature issue requires engagement.
+- Nine open issues are all automation/system-managed tracking issues (Failed jobs, No-Op Runs, Detection Runs, monthly summaries for repo-assist, perf-improver, efficiency-improver, test-improver, plus the prior run's #1997 / #1998 tracking issues). No human-submitted bug or feature issue requires engagement.
 - Issue #1969 (CI install reliability) was closed `not_planned` on 2026-08-03; the workflow remains unconstrained.
 
 ### Backlog cursor
@@ -25,21 +25,25 @@ metadata:
 - **2026-08-11**: Two new local branches recorded (safeoutputs create_pull_request was push-blocked, patches and bundles preserved under `/tmp/gh-aw/`):
   - `repo-assist/eng-bundle-dependabot-updates-2026-08-11` — bundles Dependabot PRs #1992, #1993, #1994, #1995, #1996 (image_processing, posthog-rails, lexxy, pghero, aws-sdk-s3).
   - `repo-assist/perf-eager-load-article-references-2026-08-11` — N+1 fix in `Orders::DistributeService#distribute_article_order!` (drops `2R + 1` queries to a constant 3).
+- **2026-08-12**: Two new local branches recorded (same push-blocked pattern, patches preserved):
+  - `repo-assist/perf-eager-load-article-references-2026-08-12` — same N+1 fix as 2026-08-11 (re-applied because the prior patch was reverted by a linter, per system reminder).
+  - `repo-assist/test-dashboard-deleted-articles-2026-08-12` — 4 controller tests for `Dashboard::DeletedArticlesController` covering authorization boundary (cross-author scope), happy-path destroy, missing-uuid 404, and cross-author 404.
 
 ### Suggested items checked off by maintainer
 - (None known; verify before future summary updates.)
 
 ### Priority action items for next run
-- If the two push-blocked branches (`eng-bundle-dependabot-updates-2026-08-11`, `perf-eager-load-article-references-2026-08-11`) are still unmerged at the next run, decide whether to retry via safeoutputs or surface them in the monthly summary for manual push.
+- If the four push-blocked branches across the last two runs (`eng-bundle-dependabot-updates-2026-08-11`, `perf-eager-load-article-references-2026-08-11`, `perf-eager-load-article-references-2026-08-12`, `test-dashboard-deleted-articles-2026-08-12`) are still unmerged at the next run, decide whether to retry via safeoutputs or surface them in the monthly summary for manual push.
 - Re-check whether PostgreSQL and Bun are available before claiming Rails or JavaScript test execution.
 - Keep #1824 (performance), #1801 (testing), and #1817 (efficiency) in the maintainer suggested-actions list until their linked work is closed or acknowledged.
 - The `safeoutputs create_pull_request` intermittent push-blocked pattern remains a risk; continue to preserve branches and patches in `/tmp/gh-aw/` and avoid manual `git push`.
+- Additional `Orders::DistributeService` perf wins surfaced by the 2026-08-12 explore agent (memoize `item.author` / `item.collection`, fold per-group `early_orders.sum` into one grouped query) are queued for a follow-up run.
 
 ### Reference points
 - Monthly activity issue index:
   - 2026-07: closed (was #1789).
   - 2026-08: #1981 (label: `repo-assist`).
-- Test-improver backlog (issue #1801) remaining controllers (after 2026-08-01):
-  Tested: Home, Orders, Comments, Notifications, Payments, Transfers, Articles, BlockUsers, SubscribeUsers, SubscribeArticles, Collections, PublishedArticles, AccessTokens, NotificationSettings, HiddenCollections, ListedCollections, ProfileSettings (PR #1980).
-  Untested: Settings (no route, dead code), SubscribeByUsers, SubscribeTags, DeletedNotifications, ReadNotifications, Subscriptions, DeletedArticles.
+- Test-improver backlog (issue #1801) remaining controllers (after 2026-08-12):
+  Tested: Home, Orders, Comments, Notifications, Payments, Transfers, Articles, BlockUsers, SubscribeUsers, SubscribeArticles, Collections, PublishedArticles, AccessTokens, NotificationSettings, HiddenCollections, ListedCollections, ProfileSettings (PR #1980), DeletedArticles (PR 2026-08-12).
+  Untested: Settings (no route, dead code), SubscribeByUsers, SubscribeTags, DeletedNotifications, ReadNotifications, Subscriptions.
   Controller concerns still untested: AdvisoryLockable, RichTextContent, Localizable.
