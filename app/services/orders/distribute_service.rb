@@ -132,8 +132,12 @@ class Orders::DistributeService
     end
 
     _references_amount = 0
-    if item.article_references.count.positive?
-      item.article_references.each do |ref|
+    # Eager-load each ArticleReference's referenced Article and its author in
+    # a fixed 3 queries (article_references + references + authors) instead of
+    # the prior `2R + 1` pattern (count + N article_references + N authors).
+    references = item.article_references.includes(reference: :author)
+    if references.any?
+      references.each do |ref|
         _ref_amount = (total * ref.revenue_ratio).floor(8)
         next if (_ref_amount - MINIMUM_AMOUNT).negative?
 
