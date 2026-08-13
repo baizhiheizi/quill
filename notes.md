@@ -21,7 +21,11 @@ baizhiheizi/quill — Rails 8.1 monolith (Web3 paid-publishing). Ruby 4.0.5, Pos
 8. **DONE 2026-07-22 → MERGED as PR #1948** `Collections::ArticlesController#index` card-preload. Branch `perf-assist/collections-articles-card-preload-20260722`. Controller adds `.includes(:currency, :tags, cover_attachment: :blob, author: User::AVATAR_PRELOADS)`. MERGED by maintainer (commit `a886ef1e`).
 9. **ON MAIN** `Dashboard::TransfersController#index` preload — `.includes(:currency, source: { item: :author })` confirmed on main (patch from 2026-07-03 run).
 10. **DEFERRED** `Dashboard::NotificationsController#index` action_store N+1 — `recipient.block_user?` from `should_notify?` for Comment/Tagging notifiers fires 1 SELECT/row. Fix: add `web_visible` boolean column to `Noticed::Notification`, populate at delivery, `where(web_visible: true)` in controller. Migration + backfill + 10+ notifier updates + tests. 153ms → ~64ms/iter.
-11. **IDENTIFIED 2026-07-23** `Orders::DistributeService` — `collect_early_readers` iterates `early_orders.each` calling `_order.buyer.mixin_uuid` without `includes(:buyer)`. Each iteration fires 1 buyer SELECT + 1 reader-share SUM per unique reader. ~156 queries for 100 orders/50 readers. Fix: add `.includes(:buyer)` to `early_orders` scope in `Orders::Distributable` concern. Background job (lower urgency).
+11. **DONE 2026-08-12 via PR #1999** `Orders::DistributeService` article_references N+1 — `item.article_references.count.positive?` + `each` → `item.article_references.includes(reference: :author).any?` + `each`. Closed by repo-assist. (Originally identified 2026-07-23.)
+12. **DONE 2026-08-13** Public `TransfersController#index` source.item.author preload — branch `perf-assist/transfers-controller-author-preload-20260813` (commit `710068f`). `.includes(:currency, source: { item: :author })`. Regression-guard test in `test/controllers/transfers_controller_test.rb` (asserts `:source`, `source.item`, `source.item.author` are all `association.loaded?` after index). Patch preserved at `/tmp/gh-aw/aw-perf-assist-transfers-controller-author-preload-20260813.{patch,bundle}`. Rubocop clean, zeitwerk clean.
+13. **IDENTIFIED 2026-08-13** `Dashboard::SubscribeByUsersController#index` — missing `user_field_preloads` + `preloaded_subscribe_user_ids`. Sibling `Dashboard::SubscribeUsersController` already preloads. View reads `shared/_avatar` + per-row `current_user.subscribe_user?(user)`. ~4 SELECTs/row from avatar + 1 SELECT/row from action_store check.
+14. **IDENTIFIED 2026-08-13** `Dashboard::SubscribeTagsController#index` — missing `subscribe_tag_ids` prime. View's `subscribe_tags/_subscribe_button` partial calls `current_user.subscribe_tag?(@tag)` per pagy item — 1 action_store SELECT per row.
+15. **IDENTIFIED 2026-08-13** `ArticleReferencesController#index` — deduplicates via `Array#uniq` which strips `.includes` chains. Could rewrite as `r1.or(r2).or(r3).distinct.with_associations` (uses `Article.with_associations`).
 
 ## Work in Progress
 - None active.
@@ -43,6 +47,15 @@ baizhiheizi/quill — Rails 8.1 monolith (Web3 paid-publishing). Ruby 4.0.5, Pos
 - **`Orders::DistributeService`** — `early_orders` scope is defined separately in `Orders::Distributable` concern AND in `Orders::DistributeService` (service has its own `early_orders` method at line 43-50). Both access `_order.buyer` without preloading. Fix applies to both locations. **UPDATED 2026-07-30**: PR #1972 (repo-assist) collapsed the service's copies into a single `delegate :early_orders, :early_orders_with_the_same_currency, :collect_early_readers, to: :order` line. Service-side `.includes(:buyer)` is now gone; the concern-side `.includes(:buyer)` is the SOLE source-of-truth and survives unchanged.
 
 ## Run History (recent)
+- **2026-08-13 19:48 UTC** - [Run](https://github.com/baizhiheizi/quill/actions/runs/31737461080)
+  - 🔍 Verified PR #1999 (repo-assist) closed the `Orders::DistributeService` article_references slice — merged 2026-08-12.
+  - 🔍 Explored remaining un-preloaded controllers via Explore agent. Found 4 new hotspots:
+    1. `Dashboard::SubscribeByUsersController#index` — missing `user_field_preloads` + `preloaded_subscribe_user_ids`.
+    2. `Dashboard::SubscribeTagsController#index` — missing `subscribe_tag_ids` prime.
+    3. `TransfersController#index` (public) — missing `source: { item: :author }`.
+    4. `ArticleReferencesController#index` — `Array#uniq` strips `.includes` chain.
+  - 🔧 Implemented TransfersController preload fix — branch `perf-assist/transfers-controller-author-preload-20260813` (commit `710068f`). `.includes(:currency, source: { item: :author })`. Mirrors dashboard controller's merged preload. Regression-guard test pins `:source` + `source.item` + `source.item.author` as `association.loaded?`.
+  - 📝 Draft PR submitted; patch preserved at `/tmp/gh-aw/aw-perf-assist-transfers-controller-author-preload-20260813.{patch,bundle}` (PR not materialised on GitHub — same intermittent `safeoutputs create_pull_request` pattern as historical runs; branch + commit survive locally for maintainer revival).
 - **2026-07-30 16:00 UTC** - [Run](https://github.com/baizhiheizi/quill/actions/runs/30577709614)
   - ✅ Verified `Orders::Distributable` buyer preload preserved post-PR #1972 (repo-assist refactor). `.includes(:buyer)` intact on line 18 of concern.
   - 📝 Posted update comment to #1824 — removed stale "Review Orders::DistributeService buyer preload PR" line; PR #1972 supersedes.
@@ -64,6 +77,7 @@ baizhiheizi/quill — Rails 8.1 monolith (Web3 paid-publishing). Ruby 4.0.5, Pos
 ## Backlog Cursor
 - Dashboard + Admin + Public user + Homepage feed N+1 families — ALL DONE and most merged.
 - `Collections::ArticlesController#index` — DONE, MERGED as PR #1948.
+- `Orders::DistributeService` article_references slice — DONE via PR #1999 (repo-assist, 2026-08-12).
+- Public `TransfersController#index` source.item.author preload — **DONE 2026-08-13**. Branch `perf-assist/transfers-controller-author-preload-20260813`, commit `710068f`. Patch preserved.
 - `Dashboard::NotificationsController#index` action_store N+1 — DEFERRED (needs migration run, maintainer signal).
-- `Orders::DistributeService` `early_orders` buyer N+1 — **DONE 2026-07-24**. PR submitted (branch `perf-assist/orders-distribute-buyer-preload-20260724`). 3x `.includes(:buyer)` in service + concern + collection orders query.
-- **Next**: Either revisit the deferred notifications migration when the maintainer signals readiness, or investigate new performance opportunities.
+- **Next identified** (from 2026-08-13 explore): `Dashboard::SubscribeByUsersController#index` (missing user_field_preloads), `Dashboard::SubscribeTagsController#index` (missing subscribe_tag_ids prime), `ArticleReferencesController#index` (Array#uniq strips includes chain). Pick one for next run.
