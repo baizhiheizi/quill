@@ -52,4 +52,29 @@ class TransfersControllerTest < ActionController::TestCase
 
     assert_response :success
   end
+
+  test "index eager-loads the polymorphic source item and its author" do
+    transfer = Transfer.create!(
+      trace_id: SecureRandom.uuid,
+      amount: 0.0001,
+      asset_id: @btc.asset_id,
+      transfer_type: :author_revenue,
+      opponent_id: @author.mixin_uuid,
+      source: @article
+    )
+
+    get :index
+
+    transfers = @controller.instance_variable_get(:@transfers)
+    t = transfers.first
+    assert_equal transfer, t
+    assert t.association(:source).loaded?,
+           "Expected source to be eager-loaded, got lazy load"
+    source = t.association(:source).target
+    assert source.association(:item).loaded?,
+           "Expected source.item to be eager-loaded, got lazy load"
+    item = source.association(:item).target
+    assert item.association(:author).loaded?,
+           "Expected source.item.author to be eager-loaded, got lazy load"
+  end
 end
