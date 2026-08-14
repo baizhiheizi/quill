@@ -150,7 +150,7 @@ GEM
     blake3-rb (1.8.3.0-aarch64-linux-musl)
     blake3-rb (1.8.3.0-x86_64-linux)
     blake3-rb (1.8.3.0-x86_64-linux-musl)
-    bls12-381 (0.3.1)
+    bls12-381 (0.4.0)
       bigdecimal
       h2c (>= 0.2.1, < 0.3)
     bootsnap (1.25.0)
@@ -269,7 +269,7 @@ GEM
       multi_xml (>= 0.5.2)
     httpclient (2.9.0)
       mutex_m
-    httpx (1.8.0)
+    httpx (1.8.1)
       http-2 (>= 1.2.0)
     i18n (1.15.2)
       concurrent-ruby (~> 1.0)
@@ -382,7 +382,7 @@ GEM
       railties (>= 7.1)
       stimulus-rails
       turbo-rails
-    mixin_bot (2.4.0)
+    mixin_bot (2.4.1)
       activesupport (>= 7)
       awesome_print (~> 1.8)
       base58 (~> 0.2)
@@ -742,7 +742,7 @@ DEPENDENCIES
   mini_racer
   minitest (~> 6.0)
   mission_control-jobs
-  mixin_bot (~> 2.0)
+  mixin_bot (~> 2.4)
   mutex_m
   noticed (~> 3.0)
   omniauth
@@ -822,7 +822,7 @@ CHECKSUMS
   blake3-rb (1.8.3.0-aarch64-linux-musl) sha256=81cf5282d9cdac91eb2b8c2695bb03c47c2ea8e5910979fb99c49e8f444a593f
   blake3-rb (1.8.3.0-x86_64-linux) sha256=9e92998cf1198ed29084188a223292d6c1f493462150f16756d35a98b40b6ec1
   blake3-rb (1.8.3.0-x86_64-linux-musl) sha256=98fcb5f0123d10d3917b659844135e56e12e7048832ee3ef643d56628cfb7ea4
-  bls12-381 (0.3.1) sha256=d1525cd319c53f14178d54f355dfe1b4c572fbf5625965c1afccdc425b9896dc
+  bls12-381 (0.4.0) sha256=b05e35b997acc5400b226d91f8b35e8e1fd88a34966ad1ca32de66bb3d539f46
   bootsnap (1.25.0) sha256=41059e7d0f9cb4023a33465d095f64b913fc9d1b808d6524c307da945fbcffcf
   browser (6.2.0) sha256=281d5295788825c9396427c292c2d2be0a5c91875c93c390fde6e5d61a5ace2d
   builder (3.3.0) sha256=497918d2f9dca528fdca4b88d84e4ef4387256d984b8154e9d5d3fe5a9c8835f
@@ -883,7 +883,7 @@ CHECKSUMS
   http-cookie (1.1.6) sha256=ba4b82be64de61dc281243dac70e3c382c45142f20268ed9276a3670c93feaa9
   httparty (0.24.2) sha256=8fca6a54aa0c4aa4303a0fd33e5e2156175d6a5334f714263b458abd7fda9c38
   httpclient (2.9.0) sha256=4b645958e494b2f86c2f8a2f304c959baa273a310e77a2931ddb986d83e498c8
-  httpx (1.8.0) sha256=10b300875be99cbc3497397278cf99632262567886f3582ee25ce492bdadbe2a
+  httpx (1.8.1) sha256=8d9e003019b2c1a8f582daac9371ec9da96182c23064e211386eaad70b6e12e5
   i18n (1.15.2) sha256=00f9eb62412fe593b2a65a97daa75300d37abb8f7202ec748e94b6d46a9dd1b5
   image_processing (2.0.3) sha256=793e33f38470edd0a2d6bfd00acf8cb239c76284ba2e3dfb76633ac2b457f23a
   immutable-ruby (0.2.0) sha256=1ab896e0d9c8c3fe21ddc3dd29be87511da2f6b0970c5a1c36838a9a4a4605e7
@@ -927,7 +927,7 @@ CHECKSUMS
   mini_racer (0.21.4) sha256=ccf5e37288097f079d84449e111cd4e2170b37f3b80b30900766ffa6df4632db
   minitest (6.0.6) sha256=153ea36d1d987a62942382b61075745042a2b3123b1cd48f4c3675af9cc7d6f1
   mission_control-jobs (1.1.0) sha256=b13da9cde3344fec7c744b79d2a34c3ecd454f45d4d593d4c968ba762315e84c
-  mixin_bot (2.4.0) sha256=348253bd23eea734947e6455573190d28cd22b28f6f54b415ab24144bceb4925
+  mixin_bot (2.4.1) sha256=c9acb23d3f1753bbf4364821b3a3b240cae16211c4138e39ef9a42c544e959c0
   msgpack (1.8.4) sha256=4411c22d350dd1c20250f7eada3cca2695438c2f769cf0782f0cd065d90a3e7b
   multi_xml (0.9.1) sha256=7ce766b59c17241ed62976caeae1fae9b2431b263398c35396239a68c4a64e57
   multipart-post (2.4.1) sha256=9872d03a8e552020ca096adadbf5e3cb1cd1cdd6acd3c161136b8a5737cdb4a8
