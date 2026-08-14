@@ -84,6 +84,18 @@ class Dashboard::SubscribeByUsersControllerTest < ActionController::TestCase
     assert_equal 2, pagy.pages
   end
 
+  test "index sets preloaded_subscribe_user_ids" do
+    subscriber = users(:reader_one)
+    subscriber.create_action(:subscribe, target: @author)
+
+    get :index
+
+    assert_response :success
+    preloaded = @controller.instance_variable_get(:@preloaded_subscribe_user_ids)
+    assert_not_nil preloaded
+    assert_includes preloaded, subscriber.id
+  end
+
   test "index redirects to login for unauthenticated access" do
     @request.session[:current_session_id] = nil
 
