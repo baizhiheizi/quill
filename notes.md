@@ -3,13 +3,13 @@ name: repo-assist-notes
 description: Persistent notes for Repo Assist workflow runs on baizhiheizi/quill
 metadata:
   type: project
-  updated: 2026-08-12
+  updated: 2026-08-14
 ---
 
 ## Repo Assist — Persistent Notes
 
 ### Recurring state
-- Nine open issues are all automation/system-managed tracking issues (Failed jobs, No-Op Runs, Detection Runs, monthly summaries for repo-assist, perf-improver, efficiency-improver, test-improver, plus the prior run's #1997 / #1998 tracking issues). No human-submitted bug or feature issue requires engagement.
+- Ten open issues are all automation/system-managed tracking issues (Failed jobs, No-Op Runs, Detection Runs, monthly summaries for repo-assist, perf-improver, efficiency-improver, test-improver, plus prior-run tracking issues #1997 / #1998). No human-submitted bug or feature issue requires engagement.
 - Issue #1969 (CI install reliability) was closed `not_planned` on 2026-08-03; the workflow remains unconstrained.
 
 ### Backlog cursor
@@ -21,29 +21,29 @@ metadata:
 - **2026-07-31**: Task 9 PR: `repo-assist/test-hidden-listed-collections-2026-07-31` — covered `HiddenCollectionsController` and `ListedCollectionsController`. MERGED as PR #1978.
 - **2026-07-31**: Task 8 PR: `repo-assist/perf-cancel-autosave-retry-2026-07-31` — cancelled autosave retry timer on disconnect. MERGED as PR #1977.
 - **2026-08-01**: Task 9 PR: `repo-assist/test-profile-settings-2026-08-01` — 11 tests covering `Dashboard::ProfileSettingsController`. Initially push-blocked, later revived and MERGED as PR #1980 (commit `e050644a`).
-- **2026-08-10**: No draft PR created this run. Tasks 5/4/3 had no actionable work — all open issues are automation-managed and prior repo-assist/code-simplifier runs have already covered the obvious low-risk improvements. Task 11 updated monthly issue #1981.
-- **2026-08-11**: Two new local branches recorded (safeoutputs create_pull_request was push-blocked, patches and bundles preserved under `/tmp/gh-aw/`):
-  - `repo-assist/eng-bundle-dependabot-updates-2026-08-11` — bundles Dependabot PRs #1992, #1993, #1994, #1995, #1996 (image_processing, posthog-rails, lexxy, pghero, aws-sdk-s3).
-  - `repo-assist/perf-eager-load-article-references-2026-08-11` — N+1 fix in `Orders::DistributeService#distribute_article_order!` (drops `2R + 1` queries to a constant 3).
-- **2026-08-12**: Two new local branches recorded (same push-blocked pattern, patches preserved):
-  - `repo-assist/perf-eager-load-article-references-2026-08-12` — same N+1 fix as 2026-08-11 (re-applied because the prior patch was reverted by a linter, per system reminder).
-  - `repo-assist/test-dashboard-deleted-articles-2026-08-12` — 4 controller tests for `Dashboard::DeletedArticlesController` covering authorization boundary (cross-author scope), happy-path destroy, missing-uuid 404, and cross-author 404.
+- **2026-08-10**: No draft PR created this run. All open issues are automation-managed.
+- **2026-08-11**: Two push-blocked branches recorded (patches preserved): `repo-assist/eng-bundle-dependabot-updates-2026-08-11` (bundles #1992–#1996); `repo-assist/perf-eager-load-article-references-2026-08-11` (N+1 in distribute service).
+- **2026-08-12**: Two push-blocked branches recorded (patches preserved, both later revived and merged): `repo-assist/perf-eager-load-article-references-2026-08-12` → PR #1999; `repo-assist/test-dashboard-deleted-articles-2026-08-12` → PR #2000.
+- **2026-08-13**: Branch `repo-assist/test-dashboard-notifications-bulk-actions-2026-08-13` → PR #2001 (merged).
+- **2026-08-14 (02:53 UTC)**: Branch `repo-assist/test-dashboard-subscribe-controllers-2026-08-14` → PR #2006 (merged earlier this morning).
+- **2026-08-14 (13:51 UTC, this run)**: Branch `repo-assist/perf-dashboard-subscribe-by-users-preload-2026-08-14` (commit `1a218e7f`) — mirrors `Dashboard::SubscribeUsersController#index` preload on the inverse `subscribe_by_users` direction. Avatar chain + batched `subscribe_user?` set. ~125 SELECTs → ~3 on a 25-row page. Patch + bundle preserved at `/tmp/gh-aw/aw-repo-assist-perf-dashboard-subscribe-by-users-preload-2026-08-14.{patch,bundle}` (and copied to `/tmp/gh-aw/agent/`). Closes one slice of #1824.
 
 ### Suggested items checked off by maintainer
 - (None known; verify before future summary updates.)
 
 ### Priority action items for next run
-- If the four push-blocked branches across the last two runs (`eng-bundle-dependabot-updates-2026-08-11`, `perf-eager-load-article-references-2026-08-11`, `perf-eager-load-article-references-2026-08-12`, `test-dashboard-deleted-articles-2026-08-12`) are still unmerged at the next run, decide whether to retry via safeoutputs or surface them in the monthly summary for manual push.
+- Verify whether the 2026-08-14 inverse-subscribe preload branch merges via revival; if not, surface in monthly summary for manual push.
 - Re-check whether PostgreSQL and Bun are available before claiming Rails or JavaScript test execution.
 - Keep #1824 (performance), #1801 (testing), and #1817 (efficiency) in the maintainer suggested-actions list until their linked work is closed or acknowledged.
 - The `safeoutputs create_pull_request` intermittent push-blocked pattern remains a risk; continue to preserve branches and patches in `/tmp/gh-aw/` and avoid manual `git push`.
-- Additional `Orders::DistributeService` perf wins surfaced by the 2026-08-12 explore agent (memoize `item.author` / `item.collection`, fold per-group `early_orders.sum` into one grouped query) are queued for a follow-up run.
+- Additional `Orders::DistributeService` perf wins remain queued (`item.author` / `item.collection` memoization, per-group `early_orders.sum` aggregation).
+- Next-best testing candidates: the three remaining controller concerns (`AdvisoryLockable`, `RichTextContent`, `Localizable`); the `Dashboard::SettingsController` is dead code.
 
 ### Reference points
 - Monthly activity issue index:
   - 2026-07: closed (was #1789).
   - 2026-08: #1981 (label: `repo-assist`).
-- Test-improver backlog (issue #1801) remaining controllers (after 2026-08-12):
-  Tested: Home, Orders, Comments, Notifications, Payments, Transfers, Articles, BlockUsers, SubscribeUsers, SubscribeArticles, Collections, PublishedArticles, AccessTokens, NotificationSettings, HiddenCollections, ListedCollections, ProfileSettings (PR #1980), DeletedArticles (PR 2026-08-12).
-  Untested: Settings (no route, dead code), SubscribeByUsers, SubscribeTags, DeletedNotifications, ReadNotifications, Subscriptions.
+- Test-improver backlog (issue #1801) remaining controllers (after 2026-08-14):
+  Tested: Home, Orders, Comments, Notifications, Payments, Transfers, Articles, BlockUsers, SubscribeUsers, SubscribeArticles, SubscribeByUsers, SubscribeTags, Subscriptions, Collections, PublishedArticles, AccessTokens, NotificationSettings, HiddenCollections, ListedCollections, ProfileSettings (PR #1980), DeletedArticles (PR #2000), DeletedNotifications, ReadNotifications (PR #2001).
+  Untested: Settings (no route, dead code), `Dashboard::SettingsController` (no route, dead code).
   Controller concerns still untested: AdvisoryLockable, RichTextContent, Localizable.
