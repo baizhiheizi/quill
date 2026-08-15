@@ -382,4 +382,51 @@ class Orders::DistributeServiceArticleTest < ActiveSupport::TestCase
       end
     end
   end
+
+  # === Per-reader share aggregation (one grouped query, not N) ===
+
+  test "reader_revenue per-reader share is computed from a single grouped query, not N aggregate queries" do
+    with_quill_bot_stub do
+      # Two early readers, each with one buy + one reward order, so the
+      # per-reader share loop iterates over 2 reader groups. (Reward orders
+      # count as "early" alongside buy orders — see
+      # `Orders::Distributable#early_orders`. Reward orders also bypass the
+      # buy_article uniqueness validation, so each reader can have multiple
+      # early orders.) The "current" order is from a fresh buyer so it isn't
+      # part of its own early_orders set.
+      create_buy_order!(article: @article, buyer: @reader_one, total: 1.0, created_at: 5.days.ago)
+      reward_one = create_payment!(payer: @reader_one, article: @article, order_type: "REWARD", amount: 0.5)
+      reward_one.order.update_columns(created_at: 4.days.ago, updated_at: 4.days.ago)
+
+      create_buy_order!(article: @article, buyer: @reader_two, total: 1.0, created_at: 3.days.ago)
+      reward_two = create_payment!(payer: @reader_two, article: @article, order_type: "REWARD", amount: 0.5)
+      reward_two.order.update_columns(created_at: 2.days.ago, updated_at: 2.days.ago)
+
+      third_buyer = User.create!(
+        uid: "100005",
+        name: "Third Reader",
+        mixin_uuid: SecureRandom.uuid,
+        mixin_id: "100005"
+      )
+      order = create_buy_order!(article: @article, buyer: third_buyer, total: 1.0)
+
+      sum_queries = []
+      callback = ->(_name, _start, _finish, _id, payload) do
+        sql = payload[:sql].to_s
+        # Match SUM aggregates scoped to the `orders` table — both the
+        # denominator (`early_orders.sum(:total)`) and the per-trace_id
+        # grouped query (`early_orders.unscope(:order).group(:trace_id).sum`).
+        sum_queries << sql if sql.match?(/SELECT[^;]*SUM\("?orders"?\.(?:"?total"?|"?value_btc"?)\)[^;]*FROM "orders"/i)
+      end
+      ActiveSupport::Notifications.subscribed(callback, "sql.active_record") do
+        distribute_order!(order)
+      end
+
+      # 1 (denominator) + 1 (grouped per trace_id) = 2 SUM queries. Before
+      # the change the per-reader loop issued 1 SUM per reader group.
+      assert_equal 2, sum_queries.size,
+                   "Expected exactly 2 SUM queries (denominator + grouped per-trace_id); got #{sum_queries.size}:\n  " +
+                     sum_queries.first(3).join("\n  ")
+    end
+  end
 end
