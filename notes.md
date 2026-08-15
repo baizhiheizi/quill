@@ -3,7 +3,7 @@ name: repo-assist-notes
 description: Persistent notes for Repo Assist workflow runs on baizhiheizi/quill
 metadata:
   type: project
-  updated: 2026-08-14
+  updated: 2026-08-15
 ---
 
 ## Repo Assist — Persistent Notes
@@ -27,23 +27,26 @@ metadata:
 - **2026-08-13**: Branch `repo-assist/test-dashboard-notifications-bulk-actions-2026-08-13` → PR #2001 (merged).
 - **2026-08-14 (02:53 UTC)**: Branch `repo-assist/test-dashboard-subscribe-controllers-2026-08-14` → PR #2006 (merged earlier this morning).
 - **2026-08-14 (13:51 UTC, this run)**: Branch `repo-assist/perf-dashboard-subscribe-by-users-preload-2026-08-14` (commit `1a218e7f`) — mirrors `Dashboard::SubscribeUsersController#index` preload on the inverse `subscribe_by_users` direction. Avatar chain + batched `subscribe_user?` set. ~125 SELECTs → ~3 on a 25-row page. Patch + bundle preserved at `/tmp/gh-aw/aw-repo-assist-perf-dashboard-subscribe-by-users-preload-2026-08-14.{patch,bundle}` (and copied to `/tmp/gh-aw/agent/`). Closes one slice of #1824.
+- **2026-08-15 (01:59 UTC, this run)**: Two push-blocked branches recorded (patches preserved at `/tmp/gh-aw/agent/`):
+  - `repo-assist/perf-distribute-service-batch-early-readers-2026-08-15` (commit `f5972d57`) — `Orders::DistributeService#distribute_article_order!` per-reader share batching via `early_orders.group(:trace_id).sum(...)`. With R readers saves R-1 SQL round trips per article order. Also memoizes `item.collection` and the author `mixin_uuid` in the author_revenue block. Adds regression test using `ActiveSupport::Notifications.subscribed` on `sql.active_record`. Closes one slice of #1824.
+  - `repo-assist/remove-dead-settings-controller-2026-08-15` (commit `d99a868f`) — deletes orphaned `Dashboard::SettingsController` (no route, no callers, no tests). Closes one slice of #1801.
 
 ### Suggested items checked off by maintainer
 - (None known; verify before future summary updates.)
 
 ### Priority action items for next run
-- Verify whether the 2026-08-14 inverse-subscribe preload branch merges via revival; if not, surface in monthly summary for manual push.
+- Verify whether the 2026-08-14 inverse-subscribe preload branch (#2007) and 2026-08-15 distribute-service / dead-controller branches merge via revival; if not, surface in monthly summary for manual push.
 - Re-check whether PostgreSQL and Bun are available before claiming Rails or JavaScript test execution.
 - Keep #1824 (performance), #1801 (testing), and #1817 (efficiency) in the maintainer suggested-actions list until their linked work is closed or acknowledged.
 - The `safeoutputs create_pull_request` intermittent push-blocked pattern remains a risk; continue to preserve branches and patches in `/tmp/gh-aw/` and avoid manual `git push`.
-- Additional `Orders::DistributeService` perf wins remain queued (`item.author` / `item.collection` memoization, per-group `early_orders.sum` aggregation).
-- Next-best testing candidates: the three remaining controller concerns (`AdvisoryLockable`, `RichTextContent`, `Localizable`); the `Dashboard::SettingsController` is dead code.
+- Additional `Orders::DistributeService` perf wins remain queued (broader `item.author` / `item.collection` memoization across the whole method).
+- Next-best testing candidates: the three remaining controller concerns (`AdvisoryLockable`, `RichTextContent`, `Localizable`). All routed dashboard controllers now have controller-level coverage; `Dashboard::SettingsController` deleted this run.
 
 ### Reference points
 - Monthly activity issue index:
   - 2026-07: closed (was #1789).
   - 2026-08: #1981 (label: `repo-assist`).
-- Test-improver backlog (issue #1801) remaining controllers (after 2026-08-14):
+- Test-improver backlog (issue #1801) remaining controllers (after 2026-08-15):
   Tested: Home, Orders, Comments, Notifications, Payments, Transfers, Articles, BlockUsers, SubscribeUsers, SubscribeArticles, SubscribeByUsers, SubscribeTags, Subscriptions, Collections, PublishedArticles, AccessTokens, NotificationSettings, HiddenCollections, ListedCollections, ProfileSettings (PR #1980), DeletedArticles (PR #2000), DeletedNotifications, ReadNotifications (PR #2001).
-  Untested: Settings (no route, dead code), `Dashboard::SettingsController` (no route, dead code).
+  Untested: Settings (no route, dead code) — `Dashboard::SettingsController` deleted this run.
   Controller concerns still untested: AdvisoryLockable, RichTextContent, Localizable.
