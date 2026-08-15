@@ -103,7 +103,10 @@ class Orders::DistributeService
     # Compute per-reader share in a single grouped query rather than issuing
     # one `early_orders.where(trace_id: order_ids).sum(...)` aggregate per
     # reader group. With R readers this saves R-1 SQL round trips.
-    share_by_trace_id = early_orders.group(:trace_id).sum(readers_share_column)
+    # `unscope(:order)` is required because `early_orders` carries
+    # `.order(created_at: :desc)`, which PostgreSQL rejects in a `GROUP BY`
+    # context (PG::GroupingError: column must appear in GROUP BY).
+    share_by_trace_id = early_orders.unscope(:order).group(:trace_id).sum(readers_share_column)
     reader_shares = collect_early_readers.transform_values do |order_ids|
       order_ids.sum { |trace_id| share_by_trace_id[trace_id].to_f }
     end
