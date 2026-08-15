@@ -79,12 +79,9 @@ class Orders::DistributeService
   def distribute_article_order!
     amount = total * item.readers_revenue_ratio
 
-    sum =
-      if early_orders_with_the_same_currency
-        early_orders.sum(:total)
-      else
-        early_orders.sum(:value_btc)
-      end
+    readers_share_column = early_orders_with_the_same_currency ? :total : :value_btc
+
+    sum = early_orders.sum(readers_share_column)
 
     if quill_amount.positive? && payment.wallet_id != QuillBot.api.client_id
       transfers.create_with(
@@ -103,18 +100,20 @@ class Orders::DistributeService
       )
     end
 
-    _readers_amount = 0
-    collect_early_readers.each do |reader_id, order_ids|
-      share =
-        if early_orders_with_the_same_currency
-          early_orders.where(trace_id: order_ids).sum(:total)
-        else
-          early_orders.where(trace_id: order_ids).sum(:value_btc)
-        end
+    # Compute per-reader share in a single grouped query rather than issuing
+    # one `early_orders.where(trace_id: order_ids).sum(...)` aggregate per
+    # reader group. With R readers this saves R-1 SQL round trips.
+    share_by_trace_id = early_orders.group(:trace_id).sum(readers_share_column)
+    reader_shares = collect_early_readers.transform_values do |order_ids|
+      order_ids.sum { |trace_id| share_by_trace_id[trace_id].to_f }
+    end
 
-      _amount = (amount * share.to_f / sum).floor(8)
+    _readers_amount = 0
+    reader_shares.each do |reader_id, share|
+      _amount = (amount * share / sum).floor(8)
       next if (_amount - MINIMUM_AMOUNT).negative?
 
+      order_ids = collect_early_readers.fetch(reader_id)
       salt = order_ids.push trace_id
       transfers.create_with(
         queue_priority: :low,
@@ -162,16 +161,17 @@ class Orders::DistributeService
     end
 
     _collection_amount = 0.0
+    collection = item.collection
     _collection_sum =
-      if item.collection_revenue_ratio.positive? && item.collection.present?
+      if item.collection_revenue_ratio.positive? && collection.present?
         (total * item.collection_revenue_ratio).floor(8)
       else
         0.0
       end
 
     _collection_orders_count =
-      if item.collection.present?
-        item.collection.orders.where(order_type: :buy_collection).count
+      if collection.present?
+        collection.orders.where(order_type: :buy_collection).count
       else
         0
       end
@@ -183,7 +183,7 @@ class Orders::DistributeService
       end
 
     if (_collection_avg_amount - MINIMUM_AMOUNT).positive?
-      item.collection.orders.includes(:buyer).where(order_type: :buy_collection).find_each do |_order|
+      collection.orders.includes(:buyer).where(order_type: :buy_collection).find_each do |_order|
         transfers.create_with(
           queue_priority: :low,
           wallet_id: distributor_wallet_id,
@@ -208,16 +208,17 @@ class Orders::DistributeService
       else
         "#{buyer.name} #{buy_article? ? 'bought' : 'rewarded'} #{item.title}"
       end
+    author_mixin_uuid = item.author.mixin_uuid
     transfers.create_with(
       queue_priority: :low,
       wallet_id: distributor_wallet_id,
       transfer_type: :author_revenue,
-      opponent_id: item.author.mixin_uuid,
+      opponent_id: author_mixin_uuid,
       asset_id: revenue_asset_id,
       amount: author_revenue_amount,
       memo: author_revenue_transfer_memo.truncate(70)
     ).find_or_create_by!(
-      trace_id: QuillBot.api.unique_uuid(trace_id, item.author.mixin_uuid)
+      trace_id: QuillBot.api.unique_uuid(trace_id, author_mixin_uuid)
     )
   end
 

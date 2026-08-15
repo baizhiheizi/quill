@@ -382,4 +382,31 @@ class Orders::DistributeServiceArticleTest < ActiveSupport::TestCase
       end
     end
   end
+
+  # === Per-reader share aggregation (one grouped query, not N) ===
+
+  test "reader_revenue per-reader share is computed from a single grouped query, not N aggregate queries" do
+    with_quill_bot_stub do
+      # Two earlier readers with two orders each so the per-group aggregation
+      # path actually runs (otherwise collect_early_readers is empty).
+      create_buy_order!(article: @article, buyer: @reader_one, total: 1.0, created_at: 4.days.ago)
+      create_buy_order!(article: @article, buyer: @reader_two, total: 1.0, created_at: 3.days.ago)
+      create_buy_order!(article: @article, buyer: @reader_two, total: 2.0, created_at: 2.days.ago)
+      order = create_buy_order!(article: @article, buyer: @reader_one, total: 1.0)
+
+      aggregate_count = 0
+      callback = ->(_name, _start, _finish, _id, payload) do
+        aggregate_count += 1 if payload[:sql]&.include?("SUM(") && payload[:sql]&.include?("early_orders")
+      end
+      ActiveSupport::Notifications.subscribed(callback, "sql.active_record") do
+        distribute_order!(order)
+      end
+
+      # The first SUM(...) is the top-level `early_orders.sum(:total)` (denominator).
+      # The second SUM(...) is the single grouped `early_orders.group(:trace_id).sum(:total)`.
+      # Before the change there were 1 + R SUM aggregates (one per reader group).
+      assert_operator aggregate_count, :<=, 2,
+                      "Expected at most 2 SUM queries (denominator + grouped per-trace_id); got #{aggregate_count}"
+    end
+  end
 end
