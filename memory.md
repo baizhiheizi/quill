@@ -3,28 +3,27 @@ name: repo-assist-memory
 description: Repo Assist run state, completed work, open backlog, monthly issue, and notes
 metadata:
   type: project
-  updated: 2026-08-15
+  updated: 2026-08-16
 ---
 
 # Repo Assist Memory
 
 ## Current state
 
-- **Run 31857567331 on 2026-08-15 (01:59 UTC).** Repo: baizhiheizi/quill (Rails 8.1, Ruby 4.0.5). `AGENTS.md` exists.
-- All 11 open issues are automation/system-managed — no human-submitted bug or feature issue requires engagement.
-- August 2026 monthly issue #1981 was updated with the 2026-08-15 01:59 UTC entry; the merged PR #2006 line was replaced by the two new push-blocked PRs from this run.
-- Two new local branches awaiting maintainer revival (safeoutputs push-blocked; patches + bundles preserved at `/tmp/gh-aw/aw-repo-assist-*.{patch,bundle}` and copied to `/tmp/gh-aw/agent/`):
-  - `repo-assist/perf-distribute-service-batch-early-readers-2026-08-15` (commit `f5972d57`) — `Orders::DistributeService#distribute_article_order!` per-reader share batching: replaces per-group `early_orders.where(trace_id: order_ids).sum(...)` with one `early_orders.group(:trace_id).sum(...)` lookup. Saves R-1 SQL round trips per article order. Adds regression test asserting SUM query count bounded ≤2 via `ActiveSupport::Notifications.subscribed`. Closes one slice of #1824.
-  - `repo-assist/remove-dead-settings-controller-2026-08-15` (commit `d99a868f`) — deletes orphaned `Dashboard::SettingsController` (no route, no callers, no tests). The two partials under `app/views/dashboard/settings/` stay because they're rendered from `dashboard/notifications/index` and `notification_settings/update.turbo_stream`. Closes one slice of #1801.
-- **Confirmed**: PR #2006 (subscribe-shell test PR from earlier run) merged into `main` earlier on 2026-08-14. Pattern: push-blocked patches reliably revive downstream.
+- **Run 31920755569 on 2026-08-16 (02:00 UTC).** Repo: baizhiheizi/quill (Rails 8.1, Ruby 4.0.5). `AGENTS.md` exists.
+- All 10 open issues are automation/system-managed — no human-submitted bug or feature issue requires engagement.
+- August 2026 monthly issue #1981 was updated with the 2026-08-16 02:00 UTC entry; the two merged PR lines (#2013, #2014) from the previous edition were replaced by the new CI pinning PR.
+- One new local branch awaiting maintainer revival (safeoutputs push-blocked; patch + bundle preserved at `/tmp/gh-aw/aw-repo-assist-eng-ci-postgres-image-2026-08-16.{patch,bundle}`):
+  - `repo-assist/eng-ci-postgres-image-2026-08-16` (commit `f8cb2a5b`) — pins `.github/workflows/check.yml` Postgres service from `postgres:latest` to `pgvector/pgvector:pg16`. Aligns CI with production (`config/deploy.yml`) and the rest of the repo's workflows (all of which already use `pgvector/pgvector:pg16-trixie`). Eliminates a source of CI/prod drift for the `pg_trgm` extension migration (`db/migrate/20260707234118_add_pg_trgm_indexes_for_search.rb`). Pure workflow image change — no Ruby/JavaScript source touched.
+- **Confirmed (this run)**: PR #2013 (per-reader share batch) and PR #2014 (SettingsController removal) — the two push-blocked branches from 2026-08-15 — were revived and merged into `main` on 2026-08-15. Pattern: push-blocked patches reliably revive downstream.
 
 ## This run
 
-- Selected tasks: Task 2 (Issue Investigation and Comment), Task 8 (Performance Improvements), Task 5 (Coding Improvements), plus mandatory Task 11.
-- Task 2: not applicable. All 11 open issues are automation/system-managed and labelled.
-- Task 8: implemented `Orders::DistributeService#distribute_article_order!` per-reader share batching on `repo-assist/perf-distribute-service-batch-early-readers-2026-08-15` (commit `f5972d57`). Mirror of existing `group(:trace_id)` pattern. `bin/rubocop` clean. `ruby -c` Syntax OK on both files. PR recorded via safeoutputs `create_pull_request` (push-blocked). Closes one slice of #1824.
-- Task 5: removed orphaned `Dashboard::SettingsController` on `repo-assist/remove-dead-settings-controller-2026-08-15` (commit `d99a868f`). Verified no route, no callers, no tests reference it. The two settings partials stay (still rendered). PR recorded via safeoutputs `create_pull_request` (push-blocked). Closes one slice of #1801.
-- Task 11: monthly issue #1981 updated; the merged PR #2006 line was replaced by the two new push-blocked PRs from this run.
+- Selected tasks: Task 2 (Issue Investigation and Comment), Task 3 (Issue Investigation and Fix), Task 4 (Engineering Investments), plus mandatory Task 11.
+- Task 2: not applicable. All 10 open issues are automation/system-managed; 0 unlabelled.
+- Task 3: not applicable. No issues labelled `bug`, `help wanted`, or `good first issue` that are fixable.
+- Task 4: pinned `check.yml` Postgres service from `postgres:latest` to `pgvector/pgvector:pg16` on `repo-assist/eng-ci-postgres-image-2026-08-16` (commit `f8cb2a5b`). Pure workflow image change; PR recorded via safeoutputs `create_pull_request` (push-blocked). Aligns CI with production and the rest of the repo's workflows.
+- Task 11: monthly issue #1981 updated; the merged PR #2013 and #2014 lines from the previous edition were replaced by the new CI pinning PR.
 
 ## Backlog
 
@@ -40,7 +39,7 @@ metadata:
 - PostgreSQL is unreachable in this sandbox (`ActiveRecord::ConnectionNotEstablished: connection to server at "10.200.0.1", port 5432`); `bin/rails test` cannot run locally — CI validates.
 - Bun availability must be checked before claiming JS test execution.
 - `safeoutputs update_issue` is capped at 1 per run; prepare the complete monthly body before updating.
-- `Dashboard::SettingsController` was deleted in this run. `Dashboard::ProfileSettingsController` is routed via `resource :profile_setting` and `email_verify`.
+- `Dashboard::SettingsController` was deleted in PR #2014. `Dashboard::ProfileSettingsController` is routed via `resource :profile_setting` and `email_verify`.
 - `Noticed::Notification` includes the `noticed` gem's `Readable` concern, which provides both the `read`/`unread` scopes and a `read?` instance method (defined at `concerns/noticed/readable.rb:70`).
 - Controller concerns (`AdvisoryLockable`, `RichTextContent`, `Localizable`) remain untested per the test-improver backlog.
 - `Dashboard::DeletedArticlesController#update` has only a turbo_stream template; controller tests must send `format: :turbo_stream` for the destroy path to render successfully. Same applies to `Dashboard::ReadNotificationsController#update` (also turbo_stream only).
@@ -53,3 +52,4 @@ metadata:
 - `Dashboard::BlockUsersController` is the precedent for the same pattern (`@preloaded_block_user_ids` from `current_user.block_user_actions.pluck(:target_id).to_set`).
 - The per-reader share batching pattern (`early_orders.group(:trace_id).sum(...)`) is now in `Orders::DistributeService#distribute_article_order!`. `collect_early_readers` is delegated from `Orders::Distributable` and returns a `{mixin_uuid => [trace_ids]}` hash.
 - `ActiveSupport::Notifications.subscribed(callback, "sql.active_record")` works for SQL-count regression tests even without a DB connection at compile time — but the test still needs a real DB to actually run.
+- `.github/workflows/check.yml` Postgres service was pinned to `pgvector/pgvector:pg16` (this run). The migration comment in `db/migrate/20260707234118_add_pg_trgm_indexes_for_search.rb` already declared this image as the production one, but `check.yml` was the only workflow using `postgres:latest` until now. Every other workflow (test-improver, perf-improver, repo-assist, efficiency-improver, code-simplifier, pr-fix, large-file-simplifier, agentic-wiki-writer, malicious-code-scan, unbloat-docs, weekly-research) already uses `pgvector/pgvector:pg16-trixie`.
