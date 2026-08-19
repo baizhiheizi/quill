@@ -81,8 +81,6 @@ class Orders::DistributeService
 
     readers_share_column = early_orders_with_the_same_currency ? :total : :value_btc
 
-    sum = early_orders.sum(readers_share_column)
-
     if quill_amount.positive? && payment.wallet_id != QuillBot.api.client_id
       transfers.create_with(
         queue_priority: :low,
@@ -107,6 +105,7 @@ class Orders::DistributeService
     # `.order(created_at: :desc)`, which PostgreSQL rejects in a `GROUP BY`
     # context (PG::GroupingError: column must appear in GROUP BY).
     share_by_trace_id = early_orders.unscope(:order).group(:trace_id).sum(readers_share_column)
+    sum = share_by_trace_id.values.sum
     reader_shares = collect_early_readers.transform_values do |order_ids|
       order_ids.sum { |trace_id| share_by_trace_id[trace_id].to_f }
     end
