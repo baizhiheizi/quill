@@ -472,10 +472,10 @@ GEM
     pghero (4.0.1)
       activerecord (>= 7.2)
     pkg-config (1.6.5)
-    posthog-rails (3.18.2)
-      posthog-ruby (= 3.23.1)
+    posthog-rails (3.18.3)
+      posthog-ruby (= 3.23.2)
       railties (>= 5.2.0)
-    posthog-ruby (3.23.1)
+    posthog-ruby (3.23.2)
       concurrent-ruby (~> 1)
     pp (0.6.4)
       prettyprint
@@ -559,7 +559,7 @@ GEM
       ffi (~> 1.0)
     rbnacl (7.1.2)
       ffi (~> 1)
-    rbs (4.1.3)
+    rbs (4.2.0)
       logger
       prism (>= 1.6.0)
       tsort
@@ -963,8 +963,8 @@ CHECKSUMS
   pg (1.6.3-x86_64-linux-musl) sha256=9c9c90d98c72f78eb04c0f55e9618fe55d1512128e411035fe229ff427864009
   pghero (4.0.1) sha256=5fa794616065f030a9efc64b30ce34ee99f9cd7077e4d312322b7df3a9b7fa17
   pkg-config (1.6.5) sha256=33f9f81c5322983d22b439b8b672f27777b406fea23bfec74ff14bbeb42ec733
-  posthog-rails (3.18.2) sha256=7d8c239884883d4ae41945cd81b4fc6b9233c82dda5edf766f4d2ff2eab38df8
-  posthog-ruby (3.23.1) sha256=77489ee4f8ecc24dead26ecaca2281156166df656c795a4524ed469d1442b1a4
+  posthog-rails (3.18.3) sha256=112dfa6a3b1a681b94cc0a9e99e6ffde1fdddc9884048306a0c40684a1dabb0c
+  posthog-ruby (3.23.2) sha256=f896513ac8248db60dc197d8a1bd50833c06bc38ad8d1f46fb0b7cf2f6c988d0
   pp (0.6.4) sha256=dfcb0fce700c41456265922884f9fe195d7fbb0674a3578e6c0f69588e82b570
   prettyprint (0.2.0) sha256=2bc9e15581a94742064a3cc8b0fb9d45aae3d03a1baa6ef80922627a0766f193
   prism (1.9.0) sha256=7b530c6a9f92c24300014919c9dcbc055bf4cdf51ec30aed099b06cd6674ef85
@@ -993,7 +993,7 @@ CHECKSUMS
   rb-fsevent (0.11.2) sha256=43900b972e7301d6570f64b850a5aa67833ee7d87b458ee92805d56b7318aefe
   rb-inotify (0.11.1) sha256=a0a700441239b0ff18eb65e3866236cd78613d6b9f78fea1f9ac47a85e47be6e
   rbnacl (7.1.2) sha256=c58433e93b390a7b8c03a9da9e54f2de67e6cc3d6731553265299c6aac889a60
-  rbs (4.1.3) sha256=0c4474a9751cdc14364bfad0b3e53678323bbdc2c31683b0445932867dbab8c4
+  rbs (4.2.0) sha256=51f7b886dcc05bc09e10b901daa6a81829f6adc03101d6ca9ea4aac6103e0674
   rbsecp256k1 (6.0.0) sha256=d38f563bfc6bcf3ce20c336a4798cc6990427f291e74c6817360363a72f11669
   rbtree (0.4.7) sha256=1efabbcb3fd5f12249c9c8a610a765074868164eed0c50c9db2531c00ed161cb
   rdoc (8.0.0) sha256=03bf8c08a9639658855a0cfd77c0abca8325c227693f7f33f82957811348c469
