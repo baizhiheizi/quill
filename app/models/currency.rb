@@ -86,6 +86,7 @@ class Currency < ApplicationRecord
       self.raw = fetch_asset_raw
     end
 
+    raw = self.raw || {}
     assign_attributes(
       symbol: raw["symbol"],
       chain_id: raw["chain_id"],
@@ -98,8 +99,8 @@ class Currency < ApplicationRecord
   def fetch_asset_raw
     Rails.cache.fetch(asset_cache_key, expires_in: ASSET_CACHE_TTL, race_condition_ttl: 30.seconds) do
       QuillBot.api.asset(asset_id)["data"]
-    end
-  rescue MixinBot::Error
+    end || {}
+  rescue MixinBot::Error, QuillBot::ClientUnavailableError
     {}
   end
 

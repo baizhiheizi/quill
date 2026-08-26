@@ -1,18 +1,22 @@
 # frozen_string_literal: true
 
 module QuillBot
+  # Raised when the Mixin API client fails to build. Callers get a typed error
+  # instead of a nil client, so the failure surfaces at its source.
+  class ClientUnavailableError < StandardError; end
+
   def self.api
     @api ||= wrap_api(build_api, mode: :background)
   rescue StandardError => e
     Rails.logger.error e
-    nil
+    raise ClientUnavailableError, e.message
   end
 
   def self.interactive_api
     wrap_api(build_api, mode: :interactive)
   rescue StandardError => e
     Rails.logger.error e
-    nil
+    raise ClientUnavailableError, e.message
   end
 
   def self.build_api
