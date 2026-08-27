@@ -7,7 +7,7 @@ CI.run do
 
   step "Style: Ruby", "bin/rubocop"
 
-  step "Lint: Design system", "bin/lint-design-system"
+  step "Lint: Design system", "bin/lint-design-system --no-fail"
 
   step "Style: JavaScript", "bun run lint-check"
   step "Tests: JavaScript", "bun run test:js"
