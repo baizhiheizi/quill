@@ -32,6 +32,9 @@ Rails.application.routes.draw do
   # health check
   get "up", to: "rails/health#show", as: :rails_health_check
 
+  # design-system reference page (specs/011-comprehensive-ui-refactor)
+  get "design-system", to: "design_system#show", as: :design_system
+
   # error pages
   get "/404", to: "errors#not_found"
   get "/406", to: "errors#not_acceptable"

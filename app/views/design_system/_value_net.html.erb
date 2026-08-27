@@ -1,0 +1,15 @@
+<%# specs/011-comprehensive-ui-refactor — design-system reference: value-net widgets. %>
+<div class="ds-value-net flex flex-col gap-6">
+  <div class="flex items-center gap-4">
+    <span class="font-mono text-sm text-base-content/60">early reader</span>
+    <%= render_value_note "+18%", format: :percent %>
+  </div>
+  <div class="flex items-center gap-4">
+    <span class="font-mono text-sm text-base-content/60">earnings</span>
+    <%= render_value_note "¥12,840", format: :currency %>
+  </div>
+  <div class="rounded-[10px] border border-base-300 p-4">
+    <p class="font-mono text-xs text-base-content/60">SPLIT (40% / 50% / 10%)</p>
+    <p class="mt-2 font-display text-lg">Readers first. Authors second. Platform last.</p>
+  </div>
+</div>

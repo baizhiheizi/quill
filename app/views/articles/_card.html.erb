@@ -1,22 +1,23 @@
 <%# "Minimal List" row (design doc §6.1) — the single shared article preview
     component reused by the home feed, search results (via the same feed),
-    author profile articles tab, and collection articles (research.md). %>
+    author profile articles tab, and collection articles (research.md).
+
+    Refactored in specs/011-comprehensive-ui-refactor (T090) to consume
+    `render_chip` and `render_value_note` from the design-system primitives. %>
 <article class="group relative border-b border-base-300 py-5 sm:py-6" data-article-card>
   <div class="relative z-10 mb-2 flex flex-wrap items-center gap-1.5">
     <% if article.free? %>
-      <span class="tag-chip inline-flex items-center px-2 py-0.5 text-[11px] font-medium">
-        <%= t('free', default: 'Free') %>
-      </span>
+      <%= render_chip t('free', default: 'Free'), kind: :price %>
     <% else %>
-      <span class="inline-flex items-center rounded-full bg-base-content px-2 py-0.5 text-[11px] font-medium text-base-100">
-        <%= article.price_tag %>
-      </span>
+      <%= render_chip article.price_tag, kind: :price %>
     <% end %>
 
     <% article.tags.first(3).each do |tag| %>
-      <%= link_to tag.name, articles_path(tag: tag.name),
+      <%= link_to articles_path(tag: tag.name),
         data: { controller: 'prefetch', turbo_frame: '_top' },
-        class: "tag-chip inline-flex max-w-[8rem] truncate px-2 py-0.5 text-[11px] font-medium transition-colors hover:text-base-content" %>
+        class: "max-w-[8rem] truncate text-[11px]" do %>
+        <%= render_chip tag.name, kind: :topic %>
+      <% end %>
     <% end %>
   </div>
 

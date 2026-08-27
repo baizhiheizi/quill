@@ -1,0 +1,54 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+# bin/lint-design-system — enforce the Quill design-system contracts.
+#
+# Usage:
+#   bin/lint-design-system                  # full check (CI mode)
+#   bin/lint-design-system --phase a        # scope to a single phase + earlier
+#   bin/lint-design-system --list-violations # emit JSON instead of plain text
+#
+# Exit codes: 0 = clean, 1 = violations (or internal error).
+
+require "bundler/setup"
+require "rails/command"
+ENV["RAILS_ENV"] ||= "development"
+
+require_relative "../config/environment"
+require "design_system"
+
+phase = nil
+json_output = false
+
+ARGV.each do |arg|
+  case arg
+  when /^--phase=(\w+)$/, /^--phase\s+(\w+)$/ then phase = Regexp.last_match(1)
+  when "--list-violations"                  then json_output = true
+  when "--help", "-h"
+    puts "Usage: bin/lint-design-system [--phase a|b|c|d] [--list-violations]"
+    exit 0
+  end
+end
+
+begin
+  violations = DesignSystem::Lint.run(Rails.root, phase: phase)
+rescue DesignSystem::Lint::PhaseError => e
+  warn e.message
+  exit 2
+end
+
+if json_output
+  require "json"
+  puts JSON.pretty_generate(violations.map(&:to_h))
+else
+  if violations.empty?
+    puts "bin/lint-design-system: 0 violations."
+  else
+    violations.each { |v| warn "#{v.file}:#{v.line}: #{v.rule_id}: #{v.message}" }
+    warn "bin/lint-design-system: #{violations.size} violation(s)."
+  end
+end
+
+# Only :error and :warning severities fail CI; :info is informational.
+blocking = violations.reject { |v| v.severity == :info }
+exit(blocking.empty? ? 0 : 1)

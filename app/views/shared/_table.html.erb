@@ -1,0 +1,40 @@
+<%# frozen_string_literal: true %>
+<%# specs/011-comprehensive-ui-refactor — primitive: data table.
+    Replaces every bespoke dashboard + admin table. Mono numerics in the right
+    column, sticky header on scroll, token-driven borders + spacing. %>
+<%
+  columns      ||= []
+  rows         ||= []
+  row_path     ||= nil
+  empty        ||= t("tables.empty", default: "Nothing to show.")
+%>
+<div class="ds-table overflow-x-auto" data-controller="table">
+  <% if rows.empty? %>
+    <%= render_state_empty icon: "inbox", title: empty %>
+  <% else %>
+    <table class="w-full text-left text-sm">
+      <thead class="border-b border-base-300 bg-base-100 text-base-content/60">
+        <tr>
+          <% columns.each do |col| %>
+            <th class="<%= ['px-4 py-3 font-medium', col[:align] == 'right' ? 'text-right' : nil].compact.join(' ') %>"><%= col[:label] %></th>
+          <% end %>
+        </tr>
+      </thead>
+      <tbody>
+        <% rows.each do |row| %>
+          <tr class="border-b border-base-300 last:border-b-0 hover:bg-base-200/40">
+            <% columns.each do |col| %>
+              <td class="<%= ['px-4 py-3', col[:align] == 'right' ? 'text-right font-mono' : nil].compact.join(' ') %>">
+                <% if col[:format].is_a?(Proc) %>
+                  <%= col[:format].call(row) %>
+                <% else %>
+                  <%= row.public_send(col[:key]) %>
+                <% end %>
+              </td>
+            <% end %>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% end %>
+</div>

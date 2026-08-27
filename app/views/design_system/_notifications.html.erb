@@ -1,0 +1,12 @@
+<%# specs/011-comprehensive-ui-refactor — design-system reference: notification card. %>
+<%
+  fake_event = Struct.new(:title, :body, :created_at).new(
+    "New reader unlocked your article",
+    "Anonymous reader paid ¥128 for “How the value net splits revenue”. You earned ¥64.00.",
+    Time.zone.local(2026, 8, 27, 14, 32)
+  )
+%>
+<div class="ds-notifications-example rounded-[10px] border border-base-300">
+  <%= render_notification_card(fake_event, unread: true) %>
+  <%= render_notification_card(fake_event, unread: false) %>
+</div>

@@ -24,4 +24,40 @@ module UiHelper
   def ui_card(title: nil, classes: nil, body_class: nil, &block)
     render "shared/ui_card", title:, classes:, body_class:, content: capture(&block)
   end
+
+  # ─── specs/011-comprehensive-ui-refactor — design-system primitive helpers ───
+  # Each helper wraps a single shared partial under app/views/shared/_*.html.erb.
+  # See specs/011-comprehensive-ui-refactor/contracts/primitives.md.
+
+  def render_button(label, variant: :primary, size: :md, icon: nil, href: nil, type: "button", **html_options)
+    render "shared/button", label:, variant:, size:, icon:, href:, type:, **html_options
+  end
+
+  def render_chip(label, kind: :topic, **html_options)
+    render "shared/chip", label:, kind:, **html_options
+  end
+
+  def render_list_row(article, **opts)
+    render "shared/list_row", article:, **opts
+  end
+
+  def render_value_note(value, label: nil, format: :plain)
+    render "shared/value_note", value:, label:, format:
+  end
+
+  def render_notification_card(event, unread: false)
+    render "shared/notification_card", event:, unread:
+  end
+
+  def render_skeleton(width: "w-full", height: "h-4", rounded: "rounded")
+    render "shared/skeleton", width:, height:, rounded:
+  end
+
+  def render_state_empty(icon: "info-circle", title:, body: nil, action: nil, action_href: nil)
+    render "shared/state_empty", icon:, title:, body:, action:, action_href:
+  end
+
+  def render_table(columns:, rows:, row_path: nil, empty: nil)
+    render "shared/table", columns:, rows:, row_path:, empty:
+  end
 end
