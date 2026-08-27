@@ -52,10 +52,13 @@ module DesignSystem
           "_dropdown.html.erb"          => :render_dropdown
         }
 
-        dir = File.expand_path("../../../app/views/shared", __dir__)
+        dir = Rails.root.join("app/views/shared").to_s
         Dir.glob(File.join(dir, "_*.html.erb"))
            .sort
-           .map { |path| file = File.basename(path); { name: file.delete(".html.erb").sub(/^_/, "").to_sym, partial_path: path.sub(Rails.root.to_s + "/", ""), helper: helper_map[file] } }
+           .map do |path|
+             file = File.basename(path, ".html.erb") # strip the suffix only
+             { name: file.sub(/^_/, "").to_sym, partial_path: path.sub(Rails.root.to_s + "/", ""), helper: helper_map["#{file}.html.erb"] }
+           end
       end
     end
   end

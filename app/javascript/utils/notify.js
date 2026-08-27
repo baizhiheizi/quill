@@ -8,15 +8,15 @@
 // in the FlyonUI theme layer.
 
 const ICON = {
-  info:    "i-[tabler--info-circle]",
-  danger:  "i-[tabler--alert-circle]",
+  info: "i-[tabler--info-circle]",
+  danger: "i-[tabler--alert-circle]",
   success: "i-[tabler--circle-check]",
   warning: "i-[tabler--alert-triangle]",
 };
 
 const TYPE_CLASS = {
-  info:    "text-info bg-info/10",
-  danger:  "text-error bg-error/10",
+  info: "text-info bg-info/10",
+  danger: "text-error bg-error/10",
   success: "text-success bg-success/10",
   warning: "text-warning bg-warning/10",
 };

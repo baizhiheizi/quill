@@ -7,6 +7,7 @@
   type     ||= "button"
   icon     ||= nil
   href     ||= nil
+  html_options = local_assigns.fetch(:html_options, {})
 
   variant_class = {
     "primary"   => "bg-primary text-primary-content hover:opacity-90",
@@ -32,7 +33,7 @@
     <%= icon_html %><span><%= label %></span>
   <% end %>
 <% else %>
-  <%= html_options[:type] = type %>
+  <% html_options[:type] = type %>
   <button <%= tag.attributes(html_options) %>>
     <%= icon_html %><span><%= label %></span>
   </button>
