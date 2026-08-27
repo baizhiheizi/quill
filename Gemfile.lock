@@ -457,7 +457,7 @@ GEM
     order_as_specified (1.7)
       activerecord (>= 5.0.0)
     ostruct (0.6.3)
-    pagy (43.6.1)
+    pagy (43.6.2)
       json
       uri
       yaml
@@ -954,7 +954,7 @@ CHECKSUMS
   openssl (3.3.3) sha256=d46902138f2987c13122fab826030a11c2bb9b8a16394215cbfc5062c5e2d335
   order_as_specified (1.7) sha256=5e4016542f0bda13bc21821021199192567c32823a22f6962bc16b3dc254ce13
   ostruct (0.6.3) sha256=95a2ed4a4bd1d190784e666b47b2d3f078e4a9efda2fccf18f84ddc6538ed912
-  pagy (43.6.1) sha256=59fb6a58ea956480094a167b43a86796638ceb3a3917a25ae67973b584ace2eb
+  pagy (43.6.2) sha256=b1d461b6bb43ce410ed2b9f09ce2a90430fa804265d167207a30337ea45c1dd3
   parallel (2.1.0) sha256=b35258865c2e31134c5ecb708beaaf6772adf9d5efae28e93e99260877b09356
   parser (3.3.12.0) sha256=21a6d7f755d5a24dfbdc6e6b772e4e879a52e7631a88bc5a3a134606052c9828
   pg (1.6.3-aarch64-linux) sha256=0698ad563e02383c27510b76bf7d4cd2de19cd1d16a5013f375dd473e4be72ea
