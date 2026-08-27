@@ -4,6 +4,7 @@
     Reward is text-only — never a filled badge (per brand-spec). %>
 <%
   kind ||= "topic"
+  html_options = local_assigns.fetch(:html_options, {})
   kind_class = case kind.to_s
                when "price"  then "rounded-full bg-base-content px-2 py-0.5 text-sm text-base-100"
                when "status" then "rounded-full border border-base-300 px-2 py-0.5 text-sm"
