@@ -8,7 +8,10 @@
     notifications, profile dropdown, locale switcher, dark-mode toggle. On
     mobile, pages that set `content_for :topbar` (article/profile/collection
     show pages — a contextual back-button bar) keep that instead of the
-    default bar; desktop always shows the full masthead. %>
+    default bar; desktop always shows the full masthead.
+
+    Refactored in specs/011-comprehensive-ui-refactor (T045) to consume
+    `render_button` from the design-system primitives. %>
 <header
   class="sticky top-0 z-40 w-full border-b border-base-300 bg-base-100/95 backdrop-blur-sm transition-shadow duration-150"
   data-controller="masthead"
@@ -36,10 +39,12 @@
 
       <div class="ml-auto flex flex-shrink-0 items-center gap-1.5 sm:gap-2 <%= from_mixin_messenger? ? 'mr-24' : '' %>">
         <% if current_user.present? %>
-          <%= link_to new_article_path, class: "btn btn-primary btn-sm rounded-full px-3 font-medium sm:btn-md sm:px-4" do %>
-            <span class="i-[tabler--edit] size-4"></span>
-            <span class="hidden sm:inline"><%= t('write') %></span>
-          <% end %>
+          <%= render_button t('write'),
+                            href: new_article_path,
+                            variant: :primary,
+                            size: :sm,
+                            icon: "edit",
+                            html_options: { class: "sm:btn-md" } %>
 
           <%= link_to dashboard_notifications_path, class: "btn btn-soft btn-circle btn-sm sm:btn-md", "aria-label": t('notification') do %>
             <span class="indicator">
@@ -50,10 +55,12 @@
             </span>
           <% end %>
         <% else %>
-          <%= link_to login_path, data: { turbo_frame: :modal }, class: "btn btn-primary btn-sm rounded-full px-3 font-medium sm:btn-md sm:px-4" do %>
-            <span class="i-[tabler--wallet] size-4"></span>
-            <span class="hidden sm:inline"><%= t('connect_wallet') %></span>
-          <% end %>
+          <%= render_button t('connect_wallet'),
+                            href: login_path,
+                            variant: :primary,
+                            size: :sm,
+                            icon: "wallet",
+                            html_options: { data: { turbo_frame: :modal }, class: "sm:btn-md" } %>
         <% end %>
 
         <div data-controller="darkmode" class="hidden items-center sm:flex">

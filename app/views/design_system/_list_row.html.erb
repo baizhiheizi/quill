@@ -1,0 +1,16 @@
+<%# specs/011-comprehensive-ui-refactor — design-system reference: list row. %>
+<%
+  # Build an anonymous object that quacks like an Article so the example
+  # renders without needing fixtures.
+  fake_article = Struct.new(:title, :description, :category, :user, :created_at, :early_reader_reward_ratio).new(
+    "How the value net splits revenue",
+    "Every new payment is split three ways — 50% to the author, 40% pro-rata to earlier readers, and 10% to the platform.",
+    OpenStruct.new(name: "Bitcoin"),
+    OpenStruct.new(name: "林知遥"),
+    Time.zone.local(2026, 8, 27),
+    18
+  )
+%>
+<div class="ds-list-row-example">
+  <%= render_list_row(fake_article) %>
+</div>

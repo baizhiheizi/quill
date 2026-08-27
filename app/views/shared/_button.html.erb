@@ -1,0 +1,39 @@
+<%# frozen_string_literal: true %>
+<%# specs/011-comprehensive-ui-refactor — primitive: button.
+    Single source-of-truth for buttons. See contracts/primitives.md. %>
+<%
+  variant ||= "primary"
+  size     ||= "md"
+  type     ||= "button"
+  icon     ||= nil
+  href     ||= nil
+
+  variant_class = {
+    "primary"   => "bg-primary text-primary-content hover:opacity-90",
+    "secondary" => "bg-base-200 text-base-content border border-base-300 hover:bg-base-300",
+    "soft"      => "bg-base-200 text-base-content hover:bg-base-300",
+    "ghost"     => "bg-transparent text-base-content hover:bg-base-200",
+    "danger"    => "bg-error text-error-content hover:opacity-90",
+  }.fetch(variant.to_s, "bg-primary text-primary-content hover:opacity-90")
+
+  size_class = {
+    "sm" => "h-8 px-3 text-sm",
+    "md" => "h-10 px-4",
+    "lg" => "h-12 px-6 text-lg",
+  }.fetch(size.to_s, "h-10 px-4")
+
+  base_class = "inline-flex items-center justify-center gap-2 rounded-[10px] font-medium transition focus-ring disabled:cursor-not-allowed disabled:opacity-50"
+  classes = [ base_class, variant_class, size_class, html_options[:class] ].compact.join(" ")
+  html_options[:class] = classes
+  icon_html = icon.present? ? content_tag(:span, "", class: "i-[tabler--#{icon}] text-current") : "".html_safe
+%>
+<% if href.present? %>
+  <%= link_to href, **html_options do %>
+    <%= icon_html %><span><%= label %></span>
+  <% end %>
+<% else %>
+  <%= html_options[:type] = type %>
+  <button <%= tag.attributes(html_options) %>>
+    <%= icon_html %><span><%= label %></span>
+  </button>
+<% end %>

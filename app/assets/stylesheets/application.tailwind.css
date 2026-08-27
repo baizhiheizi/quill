@@ -111,6 +111,11 @@
    * generator only picks up names declared in an actual `@theme` block. */
   --color-reward: #92661c;
 
+  /* Keyboard focus ring — generated as `ring-ring` (combines with `ring-2`,
+   * `focus-visible:ring-2`, etc.). Light value; dark overrides in the
+   * [data-theme='quill-dark'] block above. */
+  --color-ring: color-mix(in oklch, var(--color-primary, #3355ff) 50%, transparent);
+
   --min-height-screen-1\/2: 50vh;
   --min-height-screen-1\/3: 33vh;
   --min-height-screen-2\/3: 67vh;
@@ -271,4 +276,89 @@ pre code.hljs {
     backdrop-filter: none !important;
     -webkit-backdrop-filter: none !important;
   }
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+ * Design-system token layer (specs/011-comprehensive-ui-refactor/contracts/tokens.md)
+ * ─────────────────────────────────────────────────────────────────────────
+ *
+ * This block declares the brand-spec tokens from the OpenDesign value-net
+ * redesign (docs/superpowers/specs/opendesign-011/) as :root CSS custom
+ * properties so every primitive + view can consume them. Tailwind utility
+ * equivalents (bg-base-100, text-base-content, etc.) come from the existing
+ * @plugin 'flyonui/theme' blocks above; the variables here power the few
+ * cases where raw CSS or `color-mix()` needs to reach them.
+ *
+ * No view, helper, or partial should declare a new hex literal — register it
+ * here first, then consume it via Tailwind or `var(--token)`.
+ * ───────────────────────────────────────────────────────────────────────── */
+
+:root {
+  /* Spacing scale (8pt grid) */
+  --gap-xs:  8px;
+  --gap-sm:  12px;
+  --gap-md:  20px;
+  --gap-lg:  32px;
+  --gap-xl:  56px;
+  --gap-2xl: 96px;
+
+  /* Container / measure / gutter */
+  --container: 1120px;
+  --measure:   68ch;
+  --gutter:    clamp(20px, 4vw, 48px);
+
+  /* Brand-spec radii (coexist with FlyonUI selector/field/box radii) */
+  --radius:      10px;
+  --radius-lg:   14px;
+  --radius-full: 999px;
+
+  /* Focus ring — kept subtle so dark mode + CJK stay legible. Declared as
+   * `--color-ring` (not `--ring`) so Tailwind v4 auto-generates `ring-ring`
+   * utilities that compose with `focus-visible:ring-2` etc. The light value
+   * lives in @theme below; this :root only stores a fallback for raw CSS. */
+  --color-ring: color-mix(in oklch, var(--color-primary, #3355ff) 50%, transparent);
+}
+
+[data-theme='quill-dark'] {
+  --color-ring: color-mix(in oklch, var(--color-primary, #6b84ff) 60%, transparent);
+}
+
+.dark {
+  --color-ring: color-mix(in oklch, var(--color-primary, #6b84ff) 60%, transparent);
+}
+
+/* Payment-asset brand marks — kept as-is, like the Quill logo. */
+:root {
+  --coin-btc:  #f7931a;
+  --coin-eth:  #627eea;
+  --coin-xin:  #5c6bef;
+  --coin-pusd: #0b3d91;
+}
+
+/* Utility: design-system reward text — never a filled badge.
+ * Use `<%= render_value_note … %>`; the helper composes this for you. */
+@utility reward-text {
+  @apply font-mono text-[13px] text-reward;
+}
+
+/* Utility: keyboard focus ring (semantic — uses --ring token). */
+@utility focus-ring {
+  @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-base-100;
+}
+
+/* Utility: thin scrollbar matching the editorial system. */
+@utility scrollbar-thin {
+  scrollbar-width: thin;
+
+  &::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+}
+
+/* Utility: content-prose — Tailwind Typography wired for the design-system
+ * font stack + dark mode + readable measure. Used by long-form static pages
+ * (pages/fair, pages/rules, dashboard settings). */
+@utility content-prose {
+  @apply prose max-w-[68ch] prose-headings:font-display prose-blockquote:not-italic prose-img:rounded-md dark:prose-invert;
 }

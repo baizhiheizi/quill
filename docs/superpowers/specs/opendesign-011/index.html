@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Quill — Value Net · UI Redesign</title>
+  <meta name="theme-color" content="#ffffff" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@400;500;600&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/style.css" />
+  <script>(function(){var t=localStorage.theme;if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme: dark)').matches))document.documentElement.setAttribute('data-theme','dark')})();</script>
+  <style>
+    .launch-hero { text-align:center; padding: clamp(56px,9vw,110px) 0 clamp(40px,6vw,64px); }
+    .launch-mark { width:64px; height:64px; margin:0 auto 24px; }
+    .launch-hero .h1-tagline { font-family:var(--font-display); font-size:clamp(36px,5vw,58px); line-height:1.04; letter-spacing:-0.02em; max-width:16ch; margin:0 auto; }
+    .launch-hero .sub { color:var(--muted); margin:20px auto 0; max-width:48ch; }
+    .launch-hero .hero-cta { margin-top:30px; }
+    .screen-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:18px; }
+    @media(max-width:1100px){ .screen-grid{ grid-template-columns:repeat(2,1fr);} }
+    @media(max-width:640px){ .screen-grid{ grid-template-columns:1fr; } }
+    .screen-card { border:1px solid var(--border); border-radius:var(--radius-lg); overflow:hidden; background:var(--surface); transition:border-color .15s ease, transform .15s ease; display:flex; flex-direction:column; }
+    .screen-card:hover { border-color:var(--fg); transform:translateY(-2px); }
+    .screen-card .shot { height:120px; background:var(--accent-softer); display:grid; place-items:center; }
+    .screen-card .shot svg { width:34px; height:34px; color:var(--accent); }
+    .screen-card .shot.tint-reward { background:var(--reward-soft); }
+    .screen-card .shot.tint-reward svg { color:var(--reward); }
+    .screen-card .scr { padding:16px; display:flex; flex-direction:column; gap:4px; }
+    .screen-card .scr .t { font-weight:600; font-size:15px; }
+    .screen-card .scr .d { color:var(--muted); font-size:12.5px; }
+    .screen-card .scr .badge { margin-top:10px; }
+    .system-panel { border:1px solid var(--border); border-radius:var(--radius-lg); padding:28px; background:var(--surface); }
+    .swatch-row { display:grid; grid-template-columns:repeat(6,1fr); gap:10px; margin-top:14px; }
+    .sw { border-radius:10px; }
+    .sw .c { height:54px; border-radius:8px; }
+    .sw .l { font-family:var(--font-mono); font-size:11px; margin-top:6px; color:var(--muted); }
+    @media(max-width:640px){ .swatch-row{ grid-template-columns:repeat(3,1fr);} }
+  </style>
+</head>
+<body>
+  <header class="topnav" data-od-id="nav">
+    <div class="container topnav-inner">
+      <a class="brand" href="index.html" aria-label="Quill home">
+        <svg class="brand-mark" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><circle cx="18" cy="18" r="18" fill="#5C6BEF"/><path fill-rule="evenodd" clip-rule="evenodd" d="M30.4583 18C30.4583 20.2641 29.8193 22.3817 28.7087 24.1887L33 28.1207H30.5273L12.5604 11.6938C11.2655 12.1386 9.98368 12.9053 8.96603 13.7452C8.59758 14.0492 8.59632 14.5979 8.93533 14.9339L20.289 25.3407C20.6119 25.6608 21.0499 25.8406 21.5065 25.8406H26.2697L26.9293 26.4331C24.7122 28.6353 21.6331 30 18.2291 30C11.4752 30 6 24.6274 6 18C6 11.3726 11.4752 6 18.2291 6C24.9831 6 30.4583 11.3726 30.4583 18ZM27.6986 18.955V23.2888L14.5172 11.228C15.0219 11.1572 15.5377 11.1206 16.0621 11.1206C18.5515 11.1206 20.4764 11.9461 22.3134 13.3359L27.202 17.7558C27.5202 18.0752 27.6986 18.5061 27.6986 18.955Z" fill="#fff"/></svg>
+        <span class="brand-word">Quill<span class="dot">.</span></span>
+      </a>
+      <nav aria-label="Primary">
+        <a href="feed.html" class="keep">Home</a>
+        <a href="search.html" class="keep">Search</a>
+        <a href="components.html" class="keep">Library</a>
+      </nav>
+      <div class="topnav-actions">
+        <button class="btn btn-primary btn-sm" onclick="switchPage('editor.html')" data-od-id="cta-write">Write</button>
+        <button class="icon-btn" aria-label="Toggle dark mode" onclick="toggleTheme(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 3a9 9 0 1 0 9 9c0-.46-.04-.92-.1-1.36a5.39 5.39 0 0 1-4.4 2.26 5.4 5.4 0 0 1-3.14-9.8c-.44-.06-.9-.1-1.36-.1Z"/></svg></button>
+      </div>
+    </div>
+  </header>
+
+  <section class="launch-hero" data-od-id="launch-hero">
+    <div class="container">
+      <svg class="launch-mark" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><circle cx="18" cy="18" r="18" fill="#5C6BEF"/><path fill-rule="evenodd" clip-rule="evenodd" d="M30.4583 18C30.4583 20.2641 29.8193 22.3817 28.7087 24.1887L33 28.1207H30.5273L12.5604 11.6938C11.2655 12.1386 9.98368 12.9053 8.96603 13.7452C8.59758 14.0492 8.59632 14.5979 8.93533 14.9339L20.289 25.3407C20.6119 25.6608 21.0499 25.8406 21.5065 25.8406H26.2697L26.9293 26.4331C24.7122 28.6353 21.6331 30 18.2291 30C11.4752 30 6 24.6274 6 18C6 11.3726 11.4752 6 18.2291 6C24.9831 6 30.4583 11.3726 30.4583 18ZM27.6986 16.955V21.2888L14.5172 9.228C15.0219 9.1572 15.5377 9.1206 16.0621 9.1206C18.5515 9.1206 20.4764 9.9461 22.3134 11.3359L27.202 15.7558C27.5202 16.0752 27.6986 16.5061 27.6986 16.955Z" fill="#fff"/></svg>
+      <h1 class="h1-tagline">A redesigned Quill, built around the value net.</h1>
+      <p class="sub">Quill pays the readers who trusted an article first. This prototype re-imagines the whole experience — keeping the feather logo and its cobalt idea, and re-anchoring every screen on reading and writing.</p>
+      <div class="hero-cta">
+        <button class="btn btn-primary btn-lg" onclick="switchPage('reader.html')" data-od-id="cta-open-reader">Open the reading page</button>
+        <button class="btn btn-secondary btn-lg" onclick="switchPage('components.html')">Browse the library</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" data-od-id="launch-screens" style="padding-top:24px;">
+    <div class="container">
+      <div class="row-between" style="margin-bottom:26px;">
+        <div><p class="eyebrow" style="margin-bottom:6px;">THE SCREENS</p><h2 style="font-size:28px;">Main screens & components</h2></div>
+        <button class="btn btn-ghost btn-arrow" onclick="switchPage('components.html')">Open library</button>
+      </div>
+
+      <div class="screen-grid">
+        <a class="screen-card" href="reader.html" data-od-id="card-reader">
+          <div class="shot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></div>
+          <div class="scr"><span class="badge chip chip-accent" style="align-self:flex-start;">★ Most important</span><span class="t" style="margin-top:8px;">Article reader</span><span class="d">Serif headline, paragraph measure, fade paywall, unlock modal, sticky support rail.</span></div>
+        </a>
+        <a class="screen-card" href="editor.html" data-od-id="card-editor">
+          <div class="shot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 5h18M3 10h12M3 15h8"/><circle cx="17" cy="17" r="4"/><path d="m20 20 2 2"/></svg></div>
+          <div class="scr"><span class="badge chip chip-accent" style="align-self:flex-start;">★ Most important</span><span class="t" style="margin-top:8px;">Article editor</span><span class="d">Quiet writing surface with toolbar, pricing, tags, cover, reward split, autosave.</span></div>
+        </a>
+        <a class="screen-card" href="feed.html" data-od-id="card-feed">
+          <div class="shot tint-reward"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 5h16M4 10h16M4 15h16M4 20h16"/></svg></div>
+          <div class="scr"><span class="t">Home feed</span><span class="d">Dense discovery feed, slim masthead, hot-tag strip, value prop for first-time visitors.</span></div>
+        </a>
+        <a class="screen-card" href="dashboard.html" data-od-id="card-dashboard">
+          <div class="shot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 4h16v12H4zM4 20h16M8 8h8"/></svg></div>
+          <div class="scr"><span class="t">Author studio</span><span class="d">Left-rail shell. Financial overview where revenue belongs, split calculator, article table.</span></div>
+        </a>
+        <a class="screen-card" href="author-profile.html" data-od-id="card-profile">
+          <div class="shot tint-reward"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg></div>
+          <div class="scr"><span class="t">Author profile</span><span class="d">Public header — no on-chain finances. Follow, then the minimal list of articles.</span></div>
+        </a>
+        <a class="screen-card" href="collection.html" data-od-id="card-collection">
+          <div class="shot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg></div>
+          <div class="scr"><span class="t">Collection</span><span class="d">Curated series with an editor byline and subscribe action.</span></div>
+        </a>
+        <a class="screen-card" href="search.html" data-od-id="card-search">
+          <div class="shot tint-reward"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="11" cy="11" r="7"/><path d="m21 21-4-4"/></svg></div>
+          <div class="scr"><span class="t">Search</span><span class="d">Masthead-integrated search; results reuse the minimal list row.</span></div>
+        </a>
+        <a class="screen-card" href="components.html" data-od-id="card-components">
+          <div class="shot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></div>
+          <div class="scr"><span class="t">Component library</span><span class="d">Tokens, type, buttons, chips, list row, value-net components, forms, modal.</span></div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" data-od-id="launch-system">
+    <div class="container grid-2-1">
+      <div class="system-panel">
+        <p class="eyebrow" style="margin-bottom:10px;">DESIGN SYSTEM</p>
+        <h2 style="font-size:24px;">Editorial-first. One accent. Reward in amber.</h2>
+        <p class="muted" style="margin-top:14px;max-width:52ch;">Near-grayscale monochrome so reading surfaces stay quiet; the cobalt accent appears only for actions, links, and focus. Early-reader figures read in a quiet amber — text only, never a filled badge — so the mechanic never shouts.</p>
+        <div class="swatch-row">
+          <div class="sw"><div class="c" style="background:var(--bg);border:1px solid var(--border);"></div><div class="l">bg</div></div>
+          <div class="sw"><div class="c" style="background:var(--surface);border:1px solid var(--border);"></div><div class="l">surface</div></div>
+          <div class="sw"><div class="c" style="background:var(--fg);"></div><div class="l">fg</div></div>
+          <div class="sw"><div class="c" style="background:var(--accent);"></div><div class="l">accent</div></div>
+          <div class="sw"><div class="c" style="background:var(--reward);"></div><div class="l">reward</div></div>
+          <div class="sw"><div class="c" style="background:var(--bg);border:1px solid var(--border);"></div><div class="l">↑ dark</div></div>
+        </div>
+      </div>
+      <div class="system-panel">
+        <p class="eyebrow" style="margin-bottom:10px;">THE MECHANIC</p>
+        <h2 style="font-size:24px;">50 / 40 / 10</h2>
+        <p class="muted" style="margin-top:12px;">Every new payment for an article is split three ways.</p>
+        <div class="stack" style="margin-top:18px;">
+          <div class="split-pill" style="justify-content:space-between;"><span>Author</span><span class="seg-bar" style="flex:1;"><i class="authors" style="width:50%"></i></span><span class="num">50</span></div>
+          <div class="split-pill" style="justify-content:space-between;"><span>Early readers</span><span class="seg-bar" style="flex:1;"><i class="readers" style="width:40%"></i></span><span class="num reward">40</span></div>
+          <div class="split-pill" style="justify-content:space-between;"><span>Platform</span><span class="seg-bar" style="flex:1;"><i class="platform" style="width:10%"></i></span><span class="num">10</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="pagefoot" style="margin-top:0;">
+    <div class="container row-between">
+      <span>© Quill · Value Net · UI redesign prototype</span>
+      <span class="meta">reader.html · editor.html · feed.html · dashboard.html · components.html</span>
+    </div>
+  </footer>
+
+  <div class="tabbar">
+    <a href="feed.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 12l9-9 9 9M5 10v10h14V10"/></svg>Home</a>
+    <a href="search.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="m21 21-4-4"/></svg>Search</a>
+    <a href="components.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>Library</a>
+    <a href="dashboard.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 4h16v12H4zM4 20h16M8 8h8"/></svg>Studio</a>
+  </div>
+
+  <script>
+    function toggleTheme(btn){var el=document.documentElement;var dark=el.getAttribute('data-theme')==='dark';if(dark){el.removeAttribute('data-theme');localStorage.theme='light';}else{el.setAttribute('data-theme','dark');localStorage.theme='dark';}}
+    function switchPage(url){window.location.href=url;}
+  </script>
+</body>
+</html>

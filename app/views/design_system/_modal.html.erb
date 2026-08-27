@@ -1,0 +1,17 @@
+<%# specs/011-comprehensive-ui-refactor — design-system reference: modal. %>
+<div class="ds-modal-example">
+  <%= render_button "Open modal", variant: :primary, icon: "layout-grid",
+                    html_options: { data: { action: "click->flyonui-modal#open", modal_target: "ds-modal-example" } } %>
+
+  <div id="ds-modal-example" class="fixed inset-0 z-50 hidden place-items-center bg-black/40 backdrop-blur-sm" data-controller="flyonui-modal">
+    <div class="m-4 max-w-md rounded-[14px] border border-base-300 bg-base-100 p-6 shadow-lg">
+      <h2 class="font-display text-xl">Modal title</h2>
+      <p class="mt-2 text-base-content/60">Single source-of-truth shell. Used by every modal across the product.</p>
+      <div class="mt-4 flex justify-end gap-2">
+        <%= render_button "Cancel", variant: :ghost,
+                          html_options: { data: { action: "click->flyonui-modal#close" } } %>
+        <%= render_button "Confirm", variant: :primary %>
+      </div>
+    </div>
+  </div>
+</div>

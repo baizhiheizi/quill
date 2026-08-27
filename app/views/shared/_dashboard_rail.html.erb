@@ -1,6 +1,9 @@
 <%# Dashboard studio rail — grouped sections replacing shared/_left_bar's flat
     4-item nav (specs/005-dashboard-ux-redesign). Persistent on desktop; mobile
-    equivalent is shared/_dashboard_tabbar. %>
+    equivalent is shared/_dashboard_tabbar.
+
+    Refactored in specs/011-comprehensive-ui-refactor (T048) to consume
+    `render_button` from the design-system primitives. %>
 <div class="border-base-300 lg:min-h-screen lg:border-r">
   <nav class="hidden h-full w-64 lg:block">
     <div class="sticky top-0 flex h-screen flex-col justify-between py-6 px-4">
@@ -33,10 +36,11 @@
         </div>
 
         <div class="px-2 mt-2">
-          <%= link_to new_article_path, class: "btn btn-primary w-full rounded-full font-medium" do %>
-            <span class="i-[tabler--edit] size-4"></span>
-            <%= t('write') %>
-          <% end %>
+          <%= render_button t('write'),
+                            href: new_article_path,
+                            variant: :primary,
+                            icon: "edit",
+                            html_options: { class: "w-full" } %>
         </div>
       </div>
 

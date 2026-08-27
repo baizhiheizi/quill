@@ -1,0 +1,20 @@
+<%# specs/011-comprehensive-ui-refactor — design-system reference: tokens. %>
+<% tokens = [
+  { name: "bg",      light: "oklch(1 0 0)",       dark: "oklch(0.178 0 0)",       usage: "page background",       tw: "bg-base-100" },
+  { name: "surface", light: "oklch(0.985 0 0)",   dark: "oklch(0.205 0 0)",       usage: "cards, raised",          tw: "bg-base-200" },
+  { name: "fg",      light: "oklch(0.178 0 0)",   dark: "oklch(0.945 0 0)",       usage: "headlines, body",        tw: "text-base-content" },
+  { name: "muted",   light: "oklch(0.556 0 0)",   dark: "oklch(0.71 0 0)",        usage: "meta, captions",         tw: "text-base-content/60" },
+  { name: "border",  light: "oklch(0.94 0 0)",    dark: "oklch(0.29 0 0)",        usage: "dividers",               tw: "border-base-300" },
+  { name: "accent",  light: "oklch(0.543 0.252 267.5)", dark: "oklch(0.655 0.183 271.8)", usage: "links, primary, focus", tw: "text-primary" },
+  { name: "reward",  light: "oklch(0.543 0.103 75.5)", dark: "oklch(0.756 0.117 77.6)", usage: "early-reader text only", tw: "text-reward" },
+] %>
+<div class="ds-tokens-grid grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
+  <% tokens.each do |t| %>
+    <div class="ds-token-swatch flex flex-col gap-2 rounded-[10px] border border-base-300 p-4">
+      <div class="h-12 rounded-md" style="background: var(--<%= t[:name] %>); border: 1px solid var(--border);"></div>
+      <code class="font-mono text-sm">--<%= t[:name] %></code>
+      <span class="text-xs text-base-content/60"><%= t[:usage] %></span>
+      <code class="font-mono text-xs text-primary"><%= t[:tw] %></code>
+    </div>
+  <% end %>
+</div>

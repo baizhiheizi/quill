@@ -82,13 +82,35 @@ Both are stdlib-only and not run in CI. `measure-frontend-efficiency` gracefully
 
 ```bash
 bin/rubocop
+bin/lint-design-system      # design-system contracts (DS001..DS013)
 bun run lint-check          # Prettier check on app/javascript
 bun run lint                # Prettier write
 bun run build               # one-off asset build
 bun run build:css
 ```
 
-`bin/rubocop` and `bun run lint-check` also run in CI.
+`bin/rubocop`, `bin/lint-design-system`, and `bun run lint-check` also run in CI.
+
+### Design system
+
+Every view, partial, and Stimulus controller in Quill consumes one in-app
+design system. The single source-of-truth is:
+
+- **`/design-system`** — in-app reference page (`DesignSystemController#show`),
+  development-only. Production requests to the route get a generic 404 redirect
+  to `root_path`; the page is internal documentation, not a public surface.
+- **`app/views/shared/_*.html.erb`** — every primitive lives here as an ERB
+  partial; each has a thin wrapper in `UiHelper` (`render_button`,
+  `render_chip`, `render_list_row`, `render_value_note`,
+  `render_notification_card`, `render_skeleton`, `render_state_empty`,
+  `render_table`, `render_modal`, `render_dropdown`, `ui_input`, `ui_card`).
+- **`app/assets/stylesheets/application.tailwind.css`** — the token layer
+  (color, type, radius, spacing). No view should declare a new hex literal;
+  register it in the token layer and consume it via Tailwind utilities.
+- **`specs/011-comprehensive-ui-refactor/contracts/`** — the written
+  contracts each primitive must satisfy.
+- **`bin/lint-design-system`** — enforces DS001..DS013; CI fails on any
+  blocking violation.
 
 ## Code Conventions
 

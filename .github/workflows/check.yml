@@ -82,3 +82,6 @@ jobs:
 
       - name: Zeitwerk
         run: bin/rails zeitwerk:check
+
+      - name: Lint design system
+        run: bin/lint-design-system

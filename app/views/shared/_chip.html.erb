@@ -1,0 +1,18 @@
+<%# frozen_string_literal: true %>
+<%# specs/011-comprehensive-ui-refactor — primitive: chip.
+    Topic tags, price pills, status pills, and reward text.
+    Reward is text-only — never a filled badge (per brand-spec). %>
+<%
+  kind ||= "topic"
+  kind_class = case kind.to_s
+               when "price"  then "rounded-full bg-base-content px-2 py-0.5 text-sm text-base-100"
+               when "status" then "rounded-full border border-base-300 px-2 py-0.5 text-sm"
+               when "reward" then nil # handled below
+               else               "rounded-full bg-base-200 px-2 py-0.5 text-sm text-base-content/70"
+               end
+%>
+<% if kind.to_s == "reward" %>
+  <span class="font-mono text-[13px] text-reward"><%= label %></span>
+<% else %>
+  <span class="<%= [kind_class, html_options[:class]].compact.join(' ') %>" <%= tag.attributes(html_options.except(:class)) %>><%= label %></span>
+<% end %>

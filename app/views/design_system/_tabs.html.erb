@@ -1,0 +1,9 @@
+<%# specs/011-comprehensive-ui-refactor — design-system reference: tabs. %>
+<div class="ds-tabs-example" data-controller="tabs">
+  <div role="tablist" class="flex border-b border-base-300">
+    <button type="button" role="tab" data-tabs-target="tab" data-action="click->tabs#activate" class="px-4 py-2 text-sm font-medium border-b-2 border-primary text-primary">Overview</button>
+    <button type="button" role="tab" data-tabs-target="tab" data-action="click->tabs#activate" class="px-4 py-2 text-sm font-medium border-b-2 border-transparent text-base-content/60 hover:text-base-content">Drafts</button>
+    <button type="button" role="tab" data-tabs-target="tab" data-action="click->tabs#activate" class="px-4 py-2 text-sm font-medium border-b-2 border-transparent text-base-content/60 hover:text-base-content">Published</button>
+  </div>
+  <div class="px-4 py-6 text-sm text-base-content/60">Tabs drive the active highlight via the existing <code class="font-mono text-xs text-primary">tabs_controller</code>.</div>
+</div>

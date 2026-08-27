@@ -1,0 +1,43 @@
+<%# frozen_string_literal: true %>
+<%# specs/011-comprehensive-ui-refactor — primitive: minimal list row.
+    Shared by feed / search / author profile / collection / dashboard reads. %>
+<%
+  show_topic    = local_assigns.fetch(:show_topic, true)
+  show_excerpt  = local_assigns.fetch(:show_excerpt, true)
+  show_meta     = local_assigns.fetch(:show_meta, true)
+  show_thumbnail = local_assigns.fetch(:show_thumbnail, true)
+  target        = local_assigns.fetch(:target, :self)
+%>
+<article class="ds-list-row flex items-start gap-4 border-b border-base-300 py-5 first:pt-0" data-controller="list-row">
+  <div class="min-w-0 flex-1">
+    <% if show_topic && article.respond_to?(:category) && article.category.present? %>
+      <div class="mb-1">
+        <%= render_chip article.category.name, kind: :topic %>
+      </div>
+    <% end %>
+    <h3 class="font-display text-[17px] leading-snug">
+      <%= link_to article.title, article_path(article), target: (target == :_blank ? "_blank" : nil), class: "hover:underline" %>
+    </h3>
+    <% if show_excerpt && article.respond_to?(:description) && article.description.present? %>
+      <p class="mt-1 line-clamp-1 text-base-content/60"><%= article.description %></p>
+    <% end %>
+    <% if show_meta %>
+      <div class="mt-2 flex items-center gap-3 text-[13px] text-base-content/60">
+        <% if article.respond_to?(:user) && article.user %>
+          <span><%= article.user.name %></span>
+        <% end %>
+        <% if article.respond_to?(:created_at) %>
+          <span class="font-mono"><%= article.created_at&.strftime("%b %-d") %></span>
+        <% end %>
+        <% if article.respond_to?(:early_reader_reward_ratio) && article.early_reader_reward_ratio.to_f > 0 %>
+          <%= render_value_note("+#{article.early_reader_reward_ratio.to_i}%", label: "early reader", format: :percent) %>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+  <% if show_thumbnail %>
+    <div class="h-[88px] w-[88px] flex-shrink-0 overflow-hidden rounded-[10px] bg-base-200">
+      <%= render "articles/card_cover", article: article rescue nil %>
+    </div>
+  <% end %>
+</article>
