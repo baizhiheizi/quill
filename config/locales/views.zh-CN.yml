@@ -420,3 +420,12 @@ zh-CN:
   connect: 连接
   reconnect: 重新连接
   stats: 统计
+
+  # specs/011-comprehensive-ui-refactor — value-net 设计系统
+  ds_platform_label: 平台
+  ds_fair_subhead: |
+    平台实时数据 — 读者、文章，以及价值在作者、早期读者与平台之间的分配方式。
+  ds_transfers_heading: 资金流水
+  ds_transfers_last_n: "最近 %{count} 条"
+  ds_rules_subhead: |
+    价值网络如何运作 — Quill 的规则与贯穿产品的早期读者奖励机制。

@@ -67,6 +67,18 @@ every primitive in one place.
 - `app/views/errors/{not_found,internal_server_error,not_acceptable,unprocessable_entity}.html.erb`
   — rewritten to use `render_state_empty` + `render_button` (serif display
   headline, neutral palette, accent CTA).
+- `app/views/pages/fair.html.erb` — Stats page refactored: editorial
+  header (`PLATFORM` eyebrow + serif headline + subhead), stat cards in
+  `rounded-[14px]` containers, transfers list in a bordered section.
+- `app/views/pages/rules.html.erb` — Long-form content page matched to
+  the same header pattern; body wrapped in the existing `prose-article`
+  utility.
+- `app/views/transfers/stats.html.erb` — Stat cards refactored to use
+  `render_value_note` + `bg-base-200` token; the six `bg-[#F4F4F4]`
+  arbitrary-value cells (DS001 violations) are gone.
+- New i18n keys (`ds_platform_label`, `ds_fair_subhead`,
+  `ds_transfers_heading`, `ds_transfers_last_n`, `ds_rules_subhead`) in
+  `config/locales/views.{en,ja,zh-CN}.yml`.
 
 ### Documented follow-up
 
