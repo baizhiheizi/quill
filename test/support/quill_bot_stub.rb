@@ -27,10 +27,10 @@ module QuillBotStub
 
   def with_quill_bot_stub(client_id: FAKE_CLIENT_ID)
     api = FakeApi.new(client_id: client_id)
-    original_api = QuillBot.api
+    original_api = QuillBot.method(:api)
     QuillBot.define_singleton_method(:api) { api }
     yield
   ensure
-    QuillBot.define_singleton_method(:api) { original_api }
+    QuillBot.define_singleton_method(:api, original_api)
   end
 end
