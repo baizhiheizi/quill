@@ -2,7 +2,9 @@
     design system. Stats cards + transfers list share the `bg-base-200` token,
     `font-display` headlines, and the muted-amber `render_value_note` accent.
 
-    Public layout shell — renders under app/views/layouts/public.html.erb. %>
+    Public layout shell — controlled by HighVoltage.layout = "public" in
+    config/initializers/high_voltage.rb so this view inherits the masthead
+    + design system with the rest of the public reader experience. %>
 <header class="mb-10">
   <p class="font-mono text-[13px] text-base-content/60"><%= t('ds_platform_label') %></p>
   <h1 class="mt-2 font-display text-3xl sm:text-4xl"><%= t('fair') %></h1>
@@ -30,20 +32,3 @@
     <%= render "shared/loading" %>
   <% end %>
 </section>
-
-<%= content_for :sidebar do %>
-  <%= turbo_frame_tag 'active_authors', src: '/active_authors', loading: :lazy %>
-  <%= turbo_frame_tag 'hot_tags', src: '/hot_tags', loading: :lazy %>
-  <%= render "shared/footer" %>
-<% end %>
-
-<% content_for :topbar do %>
-  <div class="flex h-12 items-center px-4">
-    <%= link_to :back, class: "pr-2" do %>
-      <span class="i-[tabler--chevron-left] size-5"></span>
-    <% end %>
-    <span class="text-lg font-medium">
-      <%= t('fair') %>
-    </span>
-  </div>
-<% end %>
