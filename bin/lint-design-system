@@ -7,8 +7,10 @@
 #   bin/lint-design-system                  # full check (CI mode)
 #   bin/lint-design-system --phase a        # scope to a single phase + earlier
 #   bin/lint-design-system --list-violations # emit JSON instead of plain text
+#   bin/lint-design-system --no-fail        # report but don't exit non-zero
 #
-# Exit codes: 0 = clean, 1 = violations (or internal error).
+# Exit codes: 0 = clean (or --no-fail), 1 = violations (or internal error),
+#            2 = PhaseError (unknown phase).
 
 require "bundler/setup"
 require "rails/command"
@@ -19,13 +21,15 @@ require "design_system"
 
 phase = nil
 json_output = false
+no_fail = false
 
 ARGV.each do |arg|
   case arg
   when /^--phase=(\w+)$/, /^--phase\s+(\w+)$/ then phase = Regexp.last_match(1)
   when "--list-violations"                  then json_output = true
+  when "--no-fail"                          then no_fail = true
   when "--help", "-h"
-    puts "Usage: bin/lint-design-system [--phase a|b|c|d] [--list-violations]"
+    puts "Usage: bin/lint-design-system [--phase a|b|c|d] [--list-violations] [--no-fail]"
     exit 0
   end
 end
@@ -51,4 +55,4 @@ end
 
 # Only :error and :warning severities fail CI; :info is informational.
 blocking = violations.reject { |v| v.severity == :info }
-exit(blocking.empty? ? 0 : 1)
+exit((blocking.empty? || no_fail) ? 0 : 1)
