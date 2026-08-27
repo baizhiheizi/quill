@@ -410,3 +410,14 @@ ja:
   alert_for_blocked_user: The account is suspected of being fraudulent. Please pay with caution.
   alert: Alert
   stats: Stats
+
+  # specs/011-comprehensive-ui-refactor — value-net design system
+  ds_platform_label: PLATFORM
+  ds_fair_subhead: |
+    Live platform numbers — readers, articles, and how value has been split
+    across authors, early readers, and the platform over time.
+  ds_transfers_heading: Transfers
+  ds_transfers_last_n: "last %{count}"
+  ds_rules_subhead: |
+    How the value net works — the rules that govern Quill and the early-reader
+    rewards mechanism at the heart of the product.
