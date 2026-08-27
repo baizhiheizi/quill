@@ -1,0 +1,30 @@
+<% style ||= 'default' %>
+<% block_classes = style == 'block' ? 'btn btn-primary w-full rounded-full py-3' : 'btn btn-outline btn-primary w-24 py-1.5' %>
+
+<div class="<%= dom_id user %>_subscribe_button<%= style == 'block' ? '_block' : '' %>">
+  <% if current_user.blank? %>
+    <%= link_to login_path(return_to: user_url(user)),
+      data: { turbo_frame: :modal },
+      class: "flex cursor-pointer items-center justify-center gap-1 text-center text-sm #{block_classes}" do %>
+      <% unless style == 'block' %>
+        <span class="i-[tabler--plus] size-3.5"></span>
+      <% end %>
+      <span><%= t('subscribe') %></span>
+    <% end %>
+  <% elsif current_user == user %>
+    <span></span>
+  <% elsif Array(@preloaded_subscribe_user_ids).include?(user.id) || current_user.subscribe_user?(user) %>
+    <%= link_to t('subscribed'),
+      new_subscribe_user_path(uid: user.uid),
+      data: { turbo_frame: :modal },
+      class: "flex cursor-pointer items-center justify-center gap-1 rounded-full bg-base-300 text-center text-sm text-base-content/60 #{style == 'block' ? 'w-full py-3' : 'w-24 py-1.5'}" %>
+  <% else %>
+    <%= button_to subscribe_users_path(uid: user.uid),
+      class: "flex cursor-pointer items-center justify-center gap-1 text-center text-sm #{block_classes}" do %>
+      <% unless style == 'block' %>
+        <span class="i-[tabler--plus] size-3.5"></span>
+      <% end %>
+      <span><%= t('subscribe') %></span>
+    <% end %>
+  <% end %>
+</div>

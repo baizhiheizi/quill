@@ -54,13 +54,18 @@ class TransfersControllerTest < ActionController::TestCase
   end
 
   test "index eager-loads the polymorphic source item and its author" do
+    # `transfer.source` is a polymorphic `Order`; `source.item` resolves to
+    # the underlying `Article`, and `source.item.author` is the author.
+    # Build a real Order via the BUY payment path so the eager-load chain
+    # (`source: { item: :author }`) actually targets an `item` association.
+    order = create_payment!(payer: @reader, article: @article, order_type: "BUY").order
     transfer = Transfer.create!(
       trace_id: SecureRandom.uuid,
       amount: 0.0001,
       asset_id: @btc.asset_id,
       transfer_type: :author_revenue,
       opponent_id: @author.mixin_uuid,
-      source: @article
+      source: order
     )
 
     get :index

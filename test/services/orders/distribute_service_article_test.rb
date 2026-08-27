@@ -413,19 +413,21 @@ class Orders::DistributeServiceArticleTest < ActiveSupport::TestCase
       sum_queries = []
       callback = ->(_name, _start, _finish, _id, payload) do
         sql = payload[:sql].to_s
-        # Match SUM aggregates scoped to the `orders` table — both the
-        # denominator (`early_orders.sum(:total)`) and the per-trace_id
-        # grouped query (`early_orders.unscope(:order).group(:trace_id).sum`).
+        # Match SUM aggregates scoped to the `orders` table. After the
+        # perf optimization in 77756d96 the denominator and per-trace_id
+        # aggregates are folded into a single grouped query.
         sum_queries << sql if sql.match?(/SELECT[^;]*SUM\("?orders"?\.(?:"?total"?|"?value_btc"?)\)[^;]*FROM "orders"/i)
       end
       ActiveSupport::Notifications.subscribed(callback, "sql.active_record") do
         distribute_order!(order)
       end
 
-      # 1 (denominator) + 1 (grouped per trace_id) = 2 SUM queries. Before
-      # the change the per-reader loop issued 1 SUM per reader group.
-      assert_equal 2, sum_queries.size,
-                   "Expected exactly 2 SUM queries (denominator + grouped per-trace_id); got #{sum_queries.size}:\n  " +
+      # 1 grouped query: the denominator and per-trace_id aggregates are
+      # folded into a single `SUM(orders.total) ... GROUP BY trace_id`.
+      # Before the optimization the per-reader loop issued 1 SUM per
+      # reader group; the current implementation always issues 1.
+      assert_equal 1, sum_queries.size,
+                   "Expected exactly 1 SUM query (denominator + per-trace_id folded into one grouped query); got #{sum_queries.size}:\n  " +
                      sum_queries.first(3).join("\n  ")
     end
   end
