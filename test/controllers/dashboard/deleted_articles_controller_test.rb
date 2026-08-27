@@ -35,7 +35,7 @@ class Dashboard::DeletedArticlesControllerTest < ActionController::TestCase
     end
 
     assert_response :success
-    assert_equal "text/vnd.turbo-stream.html; charset=utf-8", response.media_type
+    assert_match(/\Atext\/vnd\.turbo-stream\.html/, response.media_type)
   end
 
   test "update is a no-op when the article is missing" do
