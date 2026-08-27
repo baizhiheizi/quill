@@ -16,7 +16,7 @@ jobs:
     runs-on: [self-hosted, linux, agentic]
     services:
       db:
-        image: postgres:latest
+        image: pgvector/pgvector:pg16
         ports: ['5432:5432']
         env:
           POSTGRES_HOST_AUTH_METHOD: trust
