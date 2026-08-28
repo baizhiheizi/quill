@@ -50,13 +50,69 @@ class CommentsControllerTest < ActionController::TestCase
     assert_match %r{href="/comments/new\?quote_comment_id=#{comments(:one).id}"}, response.body
   end
 
-  test "new renders login link for quote comment when logged out" do
+  test "quote comment link renders login link for guests" do
+    guest_view = Class.new(ApplicationController) do
+      def current_user = nil
+    end
+
+    html = guest_view.render(
+      inline: "<%= render 'comments/quote_comment_link', comment: comment %>",
+      locals: { comment: comments(:one) },
+      layout: false,
+    )
+
+    assert_includes html, %(href="/login?return_to=)
+    assert_includes html, %(data-turbo-frame="modal")
+    assert_not_includes html, "/comments/new?quote_comment_id"
+  end
+
+  test "new redirects guests to root" do
     session.delete(:current_session_id)
 
-    get :new, params: { quote_comment_id: comments(:two).id }
+    get :new, params: { quote_comment_id: comments(:one).id }
+
+    assert_redirected_to root_path
+  end
+
+  test "new returns not found without commentable params" do
+    get :new
+
+    assert_response :not_found
+  end
+
+  test "new returns not found for unknown commentable id" do
+    get :new, params: { commentable_type: "Article", commentable_id: -1 }
+
+    assert_response :not_found
+  end
+
+  test "new returns not found for unknown quote comment id" do
+    get :new, params: { quote_comment_id: -1 }
+
+    assert_response :not_found
+  end
+
+  test "new renders form for published free article" do
+    article = articles(:published_free)
+
+    get :new, params: { commentable_type: "Article", commentable_id: article.id }
 
     assert_response :ok
-    assert_match %r{href="/login\?return_to=}, response.body
-    assert_no_match %r{href="/comments/new\?quote_comment_id}, response.body
+    assert_match %r{name="comment\[commentable_id\]"}, response.body
+  end
+
+  test "new renders form for quote comment" do
+    get :new, params: { quote_comment_id: comments(:one).id }
+
+    assert_response :ok
+    assert_match %r{name="comment\[quote_comment_id\]"}, response.body
+  end
+
+  test "new rejects unauthorized articles" do
+    article = articles(:draft)
+
+    get :new, params: { commentable_type: "Article", commentable_id: article.id }
+
+    assert_redirected_to root_path
   end
 end
