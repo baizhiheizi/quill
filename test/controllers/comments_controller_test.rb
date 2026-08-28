@@ -42,4 +42,21 @@ class CommentsControllerTest < ActionController::TestCase
       }, format: :turbo_stream
     end
   end
+
+  test "new renders reply modal link for quote comment when logged in" do
+    get :new, params: { quote_comment_id: comments(:two).id }
+
+    assert_response :ok
+    assert_match %r{href="/comments/new\?quote_comment_id=#{comments(:one).id}"}, response.body
+  end
+
+  test "new renders login link for quote comment when logged out" do
+    session.delete(:current_session_id)
+
+    get :new, params: { quote_comment_id: comments(:two).id }
+
+    assert_response :ok
+    assert_match %r{href="/login\?return_to=}, response.body
+    assert_no_match %r{href="/comments/new\?quote_comment_id}, response.body
+  end
 end
