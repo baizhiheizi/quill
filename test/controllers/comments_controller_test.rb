@@ -42,4 +42,46 @@ class CommentsControllerTest < ActionController::TestCase
       }, format: :turbo_stream
     end
   end
+
+  test "new returns not found without commentable params" do
+    get :new
+
+    assert_response :not_found
+  end
+
+  test "new returns not found for unknown commentable id" do
+    get :new, params: { commentable_type: "Article", commentable_id: -1 }
+
+    assert_response :not_found
+  end
+
+  test "new returns not found for unknown quote comment id" do
+    get :new, params: { quote_comment_id: -1 }
+
+    assert_response :not_found
+  end
+
+  test "new renders form for published free article" do
+    article = articles(:published_free)
+
+    get :new, params: { commentable_type: "Article", commentable_id: article.id }
+
+    assert_response :ok
+    assert_match %r{name="comment\[commentable_id\]"}, response.body
+  end
+
+  test "new renders form for quote comment" do
+    get :new, params: { quote_comment_id: comments(:one).id }
+
+    assert_response :ok
+    assert_match %r{name="comment\[quote_comment_id\]"}, response.body
+  end
+
+  test "new rejects unauthorized articles" do
+    article = articles(:draft)
+
+    get :new, params: { commentable_type: "Article", commentable_id: article.id }
+
+    assert_redirected_to root_path
+  end
 end
