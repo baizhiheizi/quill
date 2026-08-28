@@ -43,6 +43,37 @@ class CommentsControllerTest < ActionController::TestCase
     end
   end
 
+  test "new renders reply modal link for quote comment when logged in" do
+    get :new, params: { quote_comment_id: comments(:two).id }
+
+    assert_response :ok
+    assert_match %r{href="/comments/new\?quote_comment_id=#{comments(:one).id}"}, response.body
+  end
+
+  test "quote comment link renders login link for guests" do
+    guest_view = Class.new(ApplicationController) do
+      def current_user = nil
+    end
+
+    html = guest_view.render(
+      inline: "<%= render 'comments/quote_comment_link', comment: comment %>",
+      locals: { comment: comments(:one) },
+      layout: false,
+    )
+
+    assert_includes html, %(href="/login?return_to=)
+    assert_includes html, %(data-turbo-frame="modal")
+    assert_not_includes html, "/comments/new?quote_comment_id"
+  end
+
+  test "new redirects guests to root" do
+    session.delete(:current_session_id)
+
+    get :new, params: { quote_comment_id: comments(:one).id }
+
+    assert_redirected_to root_path
+  end
+
   test "new returns not found without commentable params" do
     get :new
 
