@@ -30,11 +30,11 @@ module UiHelper
   # See specs/011-comprehensive-ui-refactor/contracts/primitives.md.
 
   def render_button(label, variant: :primary, size: :md, icon: nil, href: nil, type: "button", **html_options)
-    render "shared/button", label:, variant:, size:, icon:, href:, type:, **html_options
+    render "shared/button", label:, variant:, size:, icon:, href:, type:, html_options:
   end
 
   def render_chip(label, kind: :topic, **html_options)
-    render "shared/chip", label:, kind:, **html_options
+    render "shared/chip", label:, kind:, html_options:
   end
 
   def render_list_row(article, **opts)

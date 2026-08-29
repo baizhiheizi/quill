@@ -2,7 +2,7 @@
 <%= render_dropdown(
       class: "ds-dropdown-example",
       button: render_button("Options", variant: :soft, icon: "dots-vertical",
-                            html_options: { data: { action: "click->flyonui-dropdown#toggle" } })
+                            data: { action: "click->flyonui-dropdown#toggle" })
     ) do %>
   <%= link_to "Edit",     "#", class: "block px-4 py-2 text-sm hover:bg-base-200" %>
   <%= link_to "Duplicate", "#", class: "block px-4 py-2 text-sm hover:bg-base-200" %>
