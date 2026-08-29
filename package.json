@@ -4,9 +4,8 @@
   "scripts": {
     "lint": "prettier --write --no-error-on-unmatched-pattern app/javascript/**/*.{tsx,ts,js,gql}",
     "lint-check": "prettier --check --no-error-on-unmatched-pattern app/javascript/**/*.{tsx,ts,js,gql}",
-    "build:css": "tailwindcss -i ./app/assets/stylesheets/application.tailwind.css -o ./app/assets/builds/application.css",
+    "build:css": "tailwindcss -i ./app/assets/stylesheets/application.tailwind.css -o ./app/assets/builds/application.css --minify",
     "build": "node esbuild.config.js",
-    "build:css:watch": "tailwindcss -i ./app/assets/stylesheets/application.tailwind.css -o ./app/assets/builds/application.css --watch",
     "build:watch": "node esbuild.config.js --watch",
     "test": "bun test",
     "test:js": "bun test test/javascript/"
@@ -24,7 +23,6 @@
     "@tailwindcss/line-clamp": "^0.4.4",
     "@tailwindcss/typography": "^0.5.20",
     "abortcontroller-polyfill": "^1.7.8",
-    "autoprefixer": "^10.5.2",
     "axios": "^1.18.1",
     "babel-plugin-import": "^1.13.8",
     "babel-plugin-macros": "^3.1.0",
@@ -38,8 +36,6 @@
     "json-rpc-engine": "^6.1.0",
     "mixin-messenger-utils": "^0.1.5",
     "photoswipe": "^5.4.4",
-    "postcss": "^8.5.18",
-    "postcss-import": "^17.0.0",
     "process": "^0.11.10",
     "punycode": "^2.3.1",
     "puppeteer": "^25.3.0",
@@ -55,7 +51,6 @@
     "@iconify-json/tabler": "^1.2.35",
     "@iconify/tailwind4": "^1.2.3",
     "@tailwindcss/cli": "^4.3.2",
-    "@tailwindcss/postcss": "^4.3.2",
     "prettier": "^3.9.5"
   },
   "browserslist": [

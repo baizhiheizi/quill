@@ -26,7 +26,6 @@ on:
       - .prettierignore
       - esbuild.config.js
       - esbuild.inject.js
-      - postcss.config.js
       - tsconfig.json
       - tslint.json
       - Procfile.dev
