@@ -164,9 +164,12 @@ class UiHelperTest < ActionView::TestCase
   end
 
   test "render_value_note is text-only and never emits a filled badge background" do
-    html = render_value_note("+40%", label: "early reader", format: :percent)
+    html = render_value_note("+40", label: "early reader", format: :percent)
 
-    assert_includes html, "text-reward"
+    # reward-text is the specced utility (specs/011 T009) composing
+    # font-mono text-[13px] text-reward.
+    assert_includes html, "reward-text"
+    assert_includes html, "+40%"
     assert_not_includes html, "rounded-full"
     assert_not_includes html, "bg-base-content"
   end
