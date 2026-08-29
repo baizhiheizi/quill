@@ -209,4 +209,172 @@ class UiHelperTest < ActionView::TestCase
     assert_includes html, "i-[tabler--alert-triangle]"
     assert_not_includes html, "i-[tabler--info-circle]"
   end
+
+  # ─── render_list_row ───
+
+  test "render_list_row renders the article title as a link to article_path" do
+    article = articles(:published_paid)
+    html = render_list_row(article)
+
+    assert_includes html, "ds-list-row"
+    assert_includes html, article.title
+    # The partial always links the title through article_path; only the
+    # `target == :_blank` branch adds target="_blank".
+    assert_includes html, "href=\"/articles/#{article.uuid}\""
+    assert_not_includes html, 'target="_blank"'
+  end
+
+  test "render_list_row adds target=_blank when target is :_blank" do
+    article = articles(:published_paid)
+    html = render_list_row(article, target: :_blank)
+
+    assert_includes html, 'target="_blank"'
+  end
+
+  test "render_list_row hides the thumbnail when show_thumbnail: false" do
+    article = articles(:published_paid)
+    full = render_list_row(article)
+    hidden = render_list_row(article, show_thumbnail: false)
+
+    assert_includes full, "ds-list-row"
+    # The thumbnail wrapper is a 88×88 square; without it the row no longer
+    # contains that fixed-size slot.
+    assert_includes full, "h-[88px] w-[88px]"
+    assert_not_includes hidden, "h-[88px] w-[88px]"
+  end
+
+  test "render_list_row hides the meta line when show_meta: false" do
+    article = articles(:published_paid)
+    html = render_list_row(article, show_meta: false)
+
+    # The meta line carries the created_at timestamp; with show_meta: false
+    # the row should not contain the formatted date fragment.
+    assert_not_includes html, "font-mono"
+  end
+
+  test "render_list_row does not render topic chip when show_topic: false" do
+    article = articles(:published_paid)
+    html = render_list_row(article, show_topic: false)
+
+    # Articles have no `category` association, so the chip section is skipped
+    # even with show_topic: true. The negative invariant is that toggling
+    # show_topic never introduces a rounded chip fragment on a category-less
+    # article — the topic chip class is `rounded-full bg-base-200 px-2 ...`.
+    assert_not_includes html, "rounded-full bg-base-200"
+  end
+
+  # ─── render_table ───
+
+  test "render_table renders column headers from the column specs" do
+    # Rows are objects responding to the column keys — the partial renders
+    # cells via `row.public_send(col[:key])` (see _table.html.erb).
+    row = Struct.new(:name, :count)
+    rows = [ row.new("Alice", 3), row.new("Bob", 7) ]
+    columns = [
+      { key: :name, label: "Name" },
+      { key: :count, label: "Count" }
+    ]
+    html = render_table(columns: columns, rows: rows)
+
+    assert_includes html, "ds-table"
+    assert_includes html, "<th"
+    assert_includes html, ">Name<"
+    assert_includes html, ">Count<"
+    assert_includes html, "Alice"
+    assert_includes html, "Bob"
+    assert_includes html, "3"
+    assert_includes html, "7"
+  end
+
+  test "render_table applies text-right + font-mono to right-aligned columns" do
+    columns = [ { key: :amount, label: "Amount", align: "right" } ]
+    rows = [ Struct.new(:amount).new("42") ]
+    html = render_table(columns: columns, rows: rows)
+
+    assert_includes html, "text-right font-mono"
+    assert_includes html, "42"
+  end
+
+  test "render_table invokes a Proc formatter when col[:format] is callable" do
+    columns = [
+      {
+        key: :amount,
+        label: "Amount",
+        format: ->(row) { "$#{row[:amount]}" }
+      }
+    ]
+    rows = [ { amount: 5 }, { amount: 12 } ]
+    html = render_table(columns: columns, rows: rows)
+
+    assert_includes html, "$5"
+    assert_includes html, "$12"
+  end
+
+  test "render_table renders the empty state when rows is blank" do
+    html = render_table(columns: [ { key: :name, label: "Name" } ], rows: [])
+
+    # Empty rows fall through to `render_state_empty` with the inbox icon.
+    assert_includes html, "i-[tabler--inbox]"
+    assert_not_includes html, "<table"
+  end
+
+  test "render_table honors a custom empty message" do
+    html = render_table(
+      columns: [ { key: :name, label: "Name" } ],
+      rows: [],
+      empty: "No results found."
+    )
+
+    assert_includes html, "No results found."
+  end
+
+  # ─── render_notification_card ───
+
+  test "render_notification_card renders title and body from a duck-typed event" do
+    event = Struct.new(:title, :body, :created_at).new(
+      "Article published",
+      "Alice published a new article.",
+      Time.zone.local(2026, 8, 29, 12, 0, 0)
+    )
+    html = render_notification_card(event)
+
+    assert_includes html, "ds-notification-card"
+    assert_includes html, "Article published"
+    assert_includes html, "Alice published a new article."
+    assert_includes html, "i-[tabler--bell]"
+  end
+
+  test "render_notification_card falls back to type when title is missing" do
+    event = Struct.new(:type, :created_at).new("CommentReplied", Time.current)
+    html = render_notification_card(event)
+
+    assert_includes html, "CommentReplied"
+  end
+
+  test "render_notification_card marks itself with bg-base-200/40 when unread: true" do
+    event = Struct.new(:title, :created_at).new("Title", Time.current)
+
+    read = render_notification_card(event, unread: false)
+    unread = render_notification_card(event, unread: true)
+
+    assert_not_includes read, "bg-base-200/40"
+    assert_includes unread, "bg-base-200/40"
+    # Unread badge: a small primary dot with the "Unread" aria-label.
+    assert_includes unread, "bg-primary"
+    assert_includes unread, "aria-label=\"Unread\""
+  end
+
+  test "render_notification_card accepts a Hash and falls back to the default title and empty body" do
+    # A plain Hash doesn't respond to `.try(:title)`, so the partial's
+    # fallback chain `event.try(:title) || event.try(:type) ||
+    # t("notifications.inbox.default_title", default: "Notification")`
+    # lands on the i18n default. Hash also doesn't respond to `.try(:body)`,
+    # so the body default (empty string) applies — meaning the `<p>` body
+    # block is skipped.
+    event = { title: "Reward received", body: "+0.001 BTC", created_at: Time.current }
+    html = render_notification_card(event)
+
+    assert_includes html, "Notification"
+    assert_not_includes html, "+0.001 BTC"
+  end
 end
