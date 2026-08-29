@@ -1,18 +1,17 @@
 # Notifiers reference
 
-> **30-second summary:** [Noticed](https://github.com/excid3/noticed) event classes under `app/notifiers/`. Each fans an event out to delivery methods (ActionCable + flash, Mixin bot) gated by `NotificationSetting`. All 18 notifiers inherit from `ApplicationNotifier` and declare their params, delivery methods, and payload helpers.
+> **30-second summary:** 15 [Noticed](https://github.com/excid3/noticed) event classes under `app/notifiers/`, each fanning an event out to ActionCable + flash and a Mixin bot delivery, gated by `NotificationSetting`. Every notifier inherits from `ApplicationNotifier`, declares its `required_param`, and supplies `notification_methods`.
 
 ## Base class
 
 ### `ApplicationNotifier` — [`app/notifiers/application_notifier.rb`](../../app/notifiers/application_notifier.rb)
 
-Inherits from `Noticed::Event` and sets the defaults for every concrete notifier:
+Inherits from `Noticed::Event` and sets defaults for every concrete notifier:
 
-- `class_attribute :persist_web_notification, default: true` — persists to the `notifications` table; set `false` for real-time-only notifiers (`UserConnectedNotifier`, `UserSafeRegistrationNotifier`).
-- `deliver_by :action_cable` — broadcasts the formatted message over Solid Cable so the navbar bell updates live; gated by `visible_in_web? && message.present?`.
-- `deliver_by :flash_broadcast, class: "DeliveryMethods::FlashBroadcast"` — surfaces a one-time Rails flash banner under the same gate.
-- `QUILL_ICON_URL` — the asset-path-resolved brand icon, reused when a notifier has no natural icon (e.g. `TaggingCreatedNotifier`).
-- `notification_methods` — helpers: `format_for_action_cable`, `message`, `url`, `icon_url`, `recipient_messenger?` (guard for linked Mixin accounts).
+- `class_attribute :persist_web_notification, default: true` — write to the `notifications` table; set `false` for real-time-only notifiers (`UserConnectedNotifier`, `UserSafeRegistrationNotifier`).
+- `deliver_by :action_cable` and `deliver_by :flash_broadcast, class: "DeliveryMethods::FlashBroadcast"` — broadcast over Solid Cable and surface a one-time flash banner; both gated by `visible_in_web? && message.present?`.
+- `QUILL_ICON_URL` — the asset-path-resolved brand icon, used when a notifier has no natural icon (e.g. `TaggingCreatedNotifier`).
+- `notification_methods` — `format_for_action_cable`, `message`, `url`, `icon_url`, and `recipient_messenger?` (guard for linked Mixin accounts).
 
 Concrete notifiers add `required_param`, a `deliver_by :mixin_bot` block, and override `notification_methods` for event-specific data.
 
@@ -50,12 +49,12 @@ The "Fires when" column names the trigger and recipient; the notifier class live
 
 ### `required_param` and `params`
 
-`required_param :article` is the [Noticed](https://github.com/excid3/noticed) idiom that enforces the named key on `params`. Concrete notifiers expose it via `def article = params[:article]` or `delegate :article, to: :tagging`. Always reach for `params[:thing]` rather than storing records — that's the boundary that makes `NotifierHelpers#deliver_notifier!` work uniformly.
+`required_param :article` is the [Noticed](https://github.com/excid3/noticed) idiom that enforces the named key on `params`. Concrete notifiers expose it via `def article = params[:article]` (or `delegate :article, to: :tagging`). Reach for `params[:thing]` rather than storing records — that's the boundary that makes `NotifierHelpers#deliver_notifier!` work uniformly.
 
 ### Web vs Mixin opt-out
 
-- `web_notification_enabled?` / `mixin_bot_notification_enabled?` — read the matching `*_web` / `*_mixin_bot` boolean on `recipient.notification_setting`.
-- `may_notify_via_mixin_bot?` — `recipient_messenger? && mixin_bot_notification_enabled?`; called by the `if:` lambda on `deliver_by :mixin_bot`.
+- `web_notification_enabled?` / `mixin_bot_notification_enabled?` read the matching `*_web` / `*_mixin_bot` boolean on `recipient.notification_setting`.
+- `may_notify_via_mixin_bot?` combines `recipient_messenger?` with `mixin_bot_notification_enabled?`; used by the `if:` lambda on `deliver_by :mixin_bot`.
 - `should_notify?` — extra guard for blocking (see `CommentCreatedNotifier`, `TaggingCreatedNotifier`). When defined, also expose `may_notify_via_web?` that ANDs the guard in.
 
 ### `data` shape
@@ -71,7 +70,7 @@ The "Fires when" column names the trigger and recipient; the notifier class live
 }
 ```
 
-`TransferProcessedNotifier` adds `shareable: false` (deep-links to a Mixin snapshot). The `action` URL varies by type: `user_article_url(author, uuid)` for articles, `collection_url(uuid)` for collections, `https://mixin.one/snapshots/<id>` for transfers.
+`TransferProcessedNotifier` adds `shareable: false` (deep-links to a Mixin snapshot). `action` URL varies by type: `user_article_url(author, uuid)` for articles, `collection_url(uuid)` for collections, `https://mixin.one/snapshots/<id>` for transfers.
 
 ### I18n
 
@@ -83,8 +82,8 @@ Strings live in [`config/locales/notifications.<locale>.yml`](../../config/local
 
 - **Verb is computed, not stored.** `order.order_type` → `t(".bought")` (for `buy_article` / `buy_collection`) or `t(".rewarded")` (for `reward_article`). Body is the verb joined with `item.title` (Article) or `item.name` (Collection).
 - **URL is item-typed.** `Article` orders → `user_article_url(item.author, item.uuid)`; `Collection` orders → `collection_url(item.uuid)`.
-- **`data` mirrors `message`.** No card payload — `data = message` directly, so the URL is informational only.
-- **Mixin predicate has no opt-out.** `may_notify_via_mixin_bot?` is `recipient_messenger?` alone (no `notification_setting` check) — every buyer with a linked Mixin account gets the receipt.
+- **`data` mirrors `message`.** No card payload — `data = message`, so the URL is informational only.
+- **Mixin predicate has no opt-out.** `may_notify_via_mixin_bot?` is `recipient_messenger?` alone — every buyer with a linked Mixin account gets the receipt.
 
 ## Testing
 
@@ -97,10 +96,12 @@ Shared helpers in [`test/support/notifier_helpers.rb`](../../test/support/notifi
 
 Notifier tests live under [`test/notifiers/`](../../test/notifiers/), one file per row in the catalog above (e.g. `article_published_notifier_test.rb` covers `ArticlePublishedNotifier`). `test/notifiers/delivery_methods/mixin_bot_test.rb` covers bot resolution and payload shape.
 
-For Mixin enqueueing, assert `assert_enqueued_jobs 1, only: Noticed::EventJob`, `perform_enqueued_jobs only: Noticed::EventJob`, then `assert_enqueued_jobs 1, only: DeliveryMethods::MixinBot` — the same pattern covers bought / rewarded / collection-bought paths.
+For Mixin enqueueing, the bought / rewarded / collection-bought paths share this assertion sequence: `assert_enqueued_jobs 1, only: Noticed::EventJob`, `perform_enqueued_jobs only: Noticed::EventJob`, then `assert_enqueued_jobs 1, only: DeliveryMethods::MixinBot`.
 
 ## Adding a new notifier
 
-Create `app/notifiers/<verb>_<subject>_notifier.rb` inheriting from `ApplicationNotifier` with `required_param :thing` and a `deliver_by :mixin_bot` block. Override `notification_methods` to fill in `data`, `message`, `description` (cards only), `url`, and `*_enabled?` predicates — reuse the `truncate(36)` / `truncate(72)` envelope for `APP_CARD`, or `data = message` for `PLAIN_TEXT`.
+Create `app/notifiers/<verb>_<subject>_notifier.rb` inheriting from `ApplicationNotifier` with `required_param :thing` and a `deliver_by :mixin_bot` block. Override `notification_methods` to fill in `data`, `message`, `description` (cards only), `url`, and `*_enabled?` predicates — reuse the `truncate(36)` / `truncate(72)` envelope for `APP_CARD`, or `data = message` for `PLAIN_TEXT`. Also add:
 
-Also add i18n keys under `config/locales/notifications.<locale>.yml` → `notifiers.<your_notifier>.notification.*`; for delivery skip logic, add `should_notify?` and route both `may_notify_via_web?` and `may_notify_via_mixin_bot?` through it; add a catalog row and a test under `test/notifiers/` using the helpers above.
+- i18n keys under `config/locales/notifications.<locale>.yml` → `notifiers.<your_notifier>.notification.*`
+- A `should_notify?` guard that both `may_notify_via_web?` and `may_notify_via_mixin_bot?` route through, for any delivery-skip logic
+- A catalog row above and a test under `test/notifiers/` using the helpers above
