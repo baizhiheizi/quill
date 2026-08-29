@@ -239,8 +239,8 @@ class UiHelperTest < ActionView::TestCase
     assert_includes full, "ds-list-row"
     # The thumbnail wrapper is a 88×88 square; without it the row no longer
     # contains that fixed-size slot.
-    assert_includes full, "h-\\[88px\\] w-\\[88px\\]"
-    assert_not_includes hidden, "h-\\[88px\\] w-\\[88px\\]"
+    assert_includes full, "h-[88px] w-[88px]"
+    assert_not_includes hidden, "h-[88px] w-[88px]"
   end
 
   test "render_list_row hides the meta line when show_meta: false" do
@@ -266,7 +266,10 @@ class UiHelperTest < ActionView::TestCase
   # ─── render_table ───
 
   test "render_table renders column headers from the column specs" do
-    rows = [ { name: "Alice", count: 3 }, { name: "Bob", count: 7 } ]
+    # Rows are objects responding to the column keys — the partial renders
+    # cells via `row.public_send(col[:key])` (see _table.html.erb).
+    row = Struct.new(:name, :count)
+    rows = [ row.new("Alice", 3), row.new("Bob", 7) ]
     columns = [
       { key: :name, label: "Name" },
       { key: :count, label: "Count" }
@@ -285,7 +288,7 @@ class UiHelperTest < ActionView::TestCase
 
   test "render_table applies text-right + font-mono to right-aligned columns" do
     columns = [ { key: :amount, label: "Amount", align: "right" } ]
-    rows = [ { amount: "42" } ]
+    rows = [ Struct.new(:amount).new("42") ]
     html = render_table(columns: columns, rows: rows)
 
     assert_includes html, "text-right font-mono"
