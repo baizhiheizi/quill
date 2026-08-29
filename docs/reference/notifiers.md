@@ -1,6 +1,6 @@
 # Notifiers reference
 
-> **30-second summary:** 18 [Noticed](https://github.com/excid3/noticed) event classes under `app/notifiers/`, each fanning an event out to ActionCable + flash and a Mixin bot delivery, gated by `NotificationSetting`. Every notifier inherits from `ApplicationNotifier`, declares its `required_param`, and supplies `notification_methods`.
+> **30-second summary:** 15 [Noticed](https://github.com/excid3/noticed) event classes under `app/notifiers/`, each fanning an event out to ActionCable + flash and a Mixin bot delivery, gated by `NotificationSetting`. Every notifier inherits from `ApplicationNotifier`, declares its `required_param`, and supplies `notification_methods`.
 
 ## Base class
 
