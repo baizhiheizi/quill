@@ -106,7 +106,12 @@ class Orders::DistributeService
     # context (PG::GroupingError: column must appear in GROUP BY).
     share_by_trace_id = early_orders.unscope(:order).group(:trace_id).sum(readers_share_column)
     sum = share_by_trace_id.values.sum
-    reader_shares = collect_early_readers.transform_values do |order_ids|
+    # `collect_early_readers` walks `early_orders` to group trace_ids by buyer;
+    # the readers loop below calls it again per reader group to fetch the salt.
+    # Hoisting the result to a local avoids re-walking `early_orders` once per
+    # reader — O(N+R) instead of O(N*R) over the already-loaded early_orders set.
+    early_readers_by_mixin_uuid = collect_early_readers
+    reader_shares = early_readers_by_mixin_uuid.transform_values do |order_ids|
       order_ids.sum { |trace_id| share_by_trace_id[trace_id].to_f }
     end
 
@@ -115,7 +120,7 @@ class Orders::DistributeService
       _amount = (amount * share / sum).floor(8)
       next if (_amount - MINIMUM_AMOUNT).negative?
 
-      order_ids = collect_early_readers.fetch(reader_id)
+      order_ids = early_readers_by_mixin_uuid.fetch(reader_id)
       salt = order_ids.push trace_id
       transfers.create_with(
         queue_priority: :low,

@@ -431,4 +431,45 @@ class Orders::DistributeServiceArticleTest < ActiveSupport::TestCase
                      sum_queries.first(3).join("\n  ")
     end
   end
+
+  # === Per-reader O(N+R) instead of O(N*R) walk ===
+
+  # `collect_early_readers` rebuilds a `{ buyer_mixin_uuid => [trace_id, ...] }`
+  # hash by walking `early_orders`. The readers-revenue loop historically
+  # called it once per reader group to fetch the salt — O(N×R) over the
+  # already-loaded early_orders set. The fix hoists the result to a local
+  # variable, dropping it to O(N+R). The invariant is observable: with R
+  # reader groups the call count must be 1, not R+1.
+  test "collect_early_readers is invoked exactly once during distribute_article_order!" do
+    with_quill_bot_stub do
+      create_buy_order!(article: @article, buyer: @reader_one, total: 1.0, created_at: 5.days.ago)
+      create_buy_order!(article: @article, buyer: @reader_two, total: 1.0, created_at: 3.days.ago)
+      create_buy_order!(article: @article, buyer: @blocked_reader, total: 1.0, created_at: 1.day.ago)
+
+      fresh_buyer = User.create!(
+        uid: "100006",
+        name: "Fresh Buyer",
+        mixin_uuid: SecureRandom.uuid,
+        mixin_id: "100006"
+      )
+      order = create_buy_order!(article: @article, buyer: fresh_buyer, total: 1.0)
+
+      call_count = 0
+      original = Order.instance_method(:collect_early_readers)
+      Order.define_method(:collect_early_readers) do
+        call_count += 1
+        original.bind(self).call
+      end
+
+      begin
+        distribute_order!(order)
+      ensure
+        Order.define_method(:collect_early_readers, original)
+      end
+
+      assert_equal 1, call_count,
+                   "collect_early_readers must be called once; got #{call_count} " \
+                     "(3 reader groups × 1 + the outer call = 4 in the unfixed O(N×R) variant)"
+    end
+  end
 end
