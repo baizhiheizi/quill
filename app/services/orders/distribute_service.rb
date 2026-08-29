@@ -62,17 +62,18 @@ class Orders::DistributeService
     end
 
     author_revenue_transfer_memo = "#{buyer.name} bought #{item.name}"
+    author_mixin_uuid = item.author.mixin_uuid
 
     transfers.create_with(
       queue_priority: :low,
       wallet_id: payment.wallet_id,
       transfer_type: :author_revenue,
-      opponent_id: item.author.mixin_uuid,
+      opponent_id: author_mixin_uuid,
       asset_id: revenue_asset_id,
       amount: (total - quill_amount).floor(8),
       memo: author_revenue_transfer_memo.truncate(70)
     ).find_or_create_by!(
-      trace_id: MixinBot::Utils.unique_uuid(trace_id, item.author.mixin_uuid)
+      trace_id: MixinBot::Utils.unique_uuid(trace_id, author_mixin_uuid)
     )
   end
 
