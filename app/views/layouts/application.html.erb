@@ -111,6 +111,5 @@
     </div>
     <%= turbo_stream_from "user_#{current_user.mixin_uuid}" if current_user.present? %>
     <%= render "shared/posthog" %>
-    <%= render "shared/google_analytics" %>
   </body>
 </html>
