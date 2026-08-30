@@ -36,6 +36,10 @@ on:
       - main
     paths: *check_paths
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   Check:
     runs-on: [self-hosted, linux]
