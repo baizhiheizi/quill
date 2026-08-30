@@ -36,6 +36,24 @@ class API::ArticlesControllerTest < IntegrationTestCase
     assert_equal article.content_body, response.parsed_body["content"]
   end
 
+  test "index returns 404 when author_id does not match a user" do
+    get api_articles_path(author_id: "00000000-0000-4000-8000-000000000000"), as: :json
+
+    assert_response :not_found
+    assert_equal "Not found", response.parsed_body["message"]
+  end
+
+  test "index returns published articles for a known author_id" do
+    author = users(:author)
+
+    get api_articles_path(author_id: author.mixin_uuid), as: :json
+
+    assert_response :success
+    uuids = response.parsed_body.pluck("uuid")
+    assert_includes uuids, articles(:published_paid).uuid
+    assert_not_includes uuids, articles(:draft).uuid
+  end
+
   test "index truncates an oversized query param to the length limit" do
     limit = API::ArticlesController::QUERY_LENGTH_LIMIT
     long_query = "a" * (limit + 50)

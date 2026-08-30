@@ -9,7 +9,7 @@ class API::ArticlesController < API::BaseController
     @articles =
       if params[:author_id].present?
         author = User.find_by(mixin_uuid: params[:author_id])
-        raise ActiveRecord::RecordNotFound && return if author.blank?
+        raise ActiveRecord::RecordNotFound if author.blank?
 
         author.articles.only_published
       elsif current_user
