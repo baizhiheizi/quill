@@ -32,8 +32,7 @@
       </script>
     <% end %>
 
-    <link href='https://fonts.googleapis.com/css?family=Roboto Serif' rel='stylesheet'>
-    <link href='https://fonts.googleapis.com/css?family=Roboto Mono' rel='stylesheet'>
+    <%= render "shared/web_fonts" %>
     <%= favicon_link_tag "favicon.svg" %>
     <script>
       (function () {
@@ -45,7 +44,7 @@
       })();
     </script>
     <%= stylesheet_link_tag "application", media: "all", "data-turbo-track": "reload" %>
-    <%= javascript_include_tag "application", "data-turbo-track": "reload" %>
+    <%= javascript_include_tag "application", "data-turbo-track": "reload", defer: true %>
   </head>
 
   <body class="overflow-x-hidden bg-base-100 text-base-content">
