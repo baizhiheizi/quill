@@ -41,8 +41,7 @@
         }
       })();
     </script>
-    <%= stylesheet_link_tag "application", media: "all", "data-turbo-track": "reload" %>
-    <%= javascript_include_tag "application", "data-turbo-track": "reload", defer: true %>
+    <%= render "shared/frontend_assets", editor: true %>
   </head>
 
   <body class="min-h-screen bg-base-100 text-base-content">

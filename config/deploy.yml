@@ -110,7 +110,7 @@ proxy:
 # If your app is using the Sprockets gem, ensure it sets `config.assets.manifest`.
 # See https://github.com/basecamp/kamal/issues/626 for details
 #
-# asset_path: /rails/public/assets
+asset_path: /rails/public/assets
 
 # Configure rolling deploys by setting a wait time between batches of restarts.
 # boot:

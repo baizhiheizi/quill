@@ -22,8 +22,8 @@
     <div class="mx-auto flex w-full max-w-5xl flex-wrap items-center gap-x-4 gap-y-2 px-4 py-2 sm:h-16 sm:flex-nowrap sm:py-0 sm:px-6">
       <div class="flex flex-shrink-0 items-center gap-6">
         <%= link_to root_path, class: "flex-shrink-0", data: { controller: "prefetch" } do %>
-          <%= image_tag 'logo.svg', class: "h-7 w-auto dark:hidden" %>
-          <%= image_tag 'logo-light.svg', class: "hidden h-7 w-auto dark:block" %>
+          <%= image_tag 'logo.svg', class: "h-7 w-auto dark:hidden", size: "56x28", alt: "Quill" %>
+          <%= image_tag 'logo-light.svg', class: "hidden h-7 w-auto dark:block", size: "54x28", alt: "Quill" %>
         <% end %>
 
         <nav class="hidden items-center gap-1 sm:flex">

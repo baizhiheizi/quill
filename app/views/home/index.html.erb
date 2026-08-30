@@ -54,13 +54,11 @@
     <h2 class="font-display text-xl font-medium text-base-content sm:text-2xl"><%= t('home_featured_heading') %></h2>
     <%= link_to t('home_view_all'), articles_path, class: "text-sm font-medium text-primary hover:underline", data: { controller: "prefetch" } %>
   </div>
-  <%= turbo_frame_tag 'selected_articles', src: selected_articles_path, loading: :lazy do %>
-    <%= render 'shared/loading' %>
-  <% end %>
+  <%= render template: "home/selected_articles" %>
 </section>
 
 <div class="flex flex-col gap-10 border-t border-base-300 pt-8">
-  <%= turbo_frame_tag 'active_authors', src: active_authors_path, loading: :lazy %>
-  <%= turbo_frame_tag 'hot_tags', src: hot_tags_path, loading: :lazy %>
+  <%= render template: "home/active_authors" %>
+  <%= render template: "home/hot_tags" %>
   <%= render 'shared/footer' %>
 </div>

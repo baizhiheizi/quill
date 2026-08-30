@@ -1,0 +1,12 @@
+<%# Shared CSS/JS tags. The guest desktop landing page skips reader + editor
+    bundles so first paint is Tailwind + application.js only. %>
+<%= stylesheet_link_tag "application", media: "all", "data-turbo-track": "reload" %>
+<%= javascript_include_tag "application", "data-turbo-track": "reload", defer: true %>
+<% unless local_assigns[:landing] %>
+  <%= stylesheet_link_tag "reader", media: "all", "data-turbo-track": "reload" %>
+  <%= javascript_include_tag "reader", "data-turbo-track": "reload", defer: true %>
+<% end %>
+<% if local_assigns[:editor] %>
+  <%= stylesheet_link_tag "editor", media: "all", "data-turbo-track": "reload" %>
+  <%= javascript_include_tag "editor", "data-turbo-track": "reload", defer: true %>
+<% end %>

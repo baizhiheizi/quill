@@ -11,6 +11,13 @@ class HomeController < ApplicationController
       authors:    cached_active_author_count,
       revenue_label: cached_revenue_label
     }
+    # Guest desktop / is the Lighthouse path. Inline the three discovery
+    # sections on first paint so lazy turbo-frames don't shift the footer
+    # after a second round-trip. The dedicated frame actions stay mounted
+    # for /articles widgets and signed-in/mobile visitors.
+    selected_articles
+    hot_tags
+    active_authors
   end
 
   def selected_articles

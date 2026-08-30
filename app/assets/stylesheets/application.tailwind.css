@@ -1,11 +1,3 @@
-@import '../../../node_modules/@37signals/lexxy/dist/stylesheets/lexxy-variables.css';
-@import '../../../node_modules/@37signals/lexxy/dist/stylesheets/lexxy-content.css';
-@import '../../../node_modules/@37signals/lexxy/dist/stylesheets/lexxy-editor.css';
-@import './lexxy_overrides.css';
-@import 'highlight.js/styles/github';
-@import 'photoswipe/dist/photoswipe.css';
-@import 'tom-select/dist/css/tom-select';
-
 @import 'tailwindcss';
 @plugin 'flyonui' {
   themes: quill --default, quill-dark;
@@ -132,56 +124,6 @@
   --max-height-screen: 100vh;
 }
 
-.full .ts-control,
-.ts-control {
-  background-color: #f4f4f4;
-  border-color: rgba(255, 255, 255, 0.05);
-  padding: 0.75rem;
-}
-
-.ts-wrapper.single.input-active .ts-control {
-  background-color: #f4f4f4;
-}
-
-[data-theme='quill-dark'] .ts-wrapper.single.input-active .ts-control,
-.dark .ts-wrapper.single.input-active .ts-control {
-  background-color: #333444;
-}
-
-[data-theme='quill-dark'] .ts-control,
-.dark .ts-control {
-  background-color: #333444;
-  border-color: rgba(255, 255, 255, 0.05);
-  color: rgba(255, 255, 255, 0.8);
-}
-
-[data-theme='quill-dark'] .ts-control input,
-.dark .ts-control input {
-  color: rgba(255, 255, 255, 0.8);
-}
-
-[data-theme='quill-dark'] .ts-dropdown input,
-.dark .ts-dropdown input {
-  color: rgba(255, 255, 255, 0.8);
-}
-
-.ts-dropdown {
-  background-color: #f4f4f4;
-}
-
-[data-theme='quill-dark'] .ts-dropdown,
-.dark .ts-dropdown {
-  background-color: #333444;
-  color: white;
-  border: rgba(255, 255, 255, 0.05);
-}
-
-[data-theme='quill-dark'] .ts-dropdown .active,
-.dark .ts-dropdown .active {
-  background-color: #444655;
-  color: white;
-}
-
 @utility scrollbar-hide {
   -ms-overflow-style: none;
   scrollbar-width: none;
@@ -249,10 +191,6 @@
 
 @utility prose-comment {
   @apply prose prose-h1:m-0 prose-h2:m-0 prose-h3:m-0 prose-h4:m-0 mb-2 max-w-none text-base-content/60 prose-h1:text-base prose-h2:text-base prose-h3:text-base prose-blockquote:not-italic prose-blockquote:my-4 prose-blockquote:pl-2 prose-blockquote:border-[#B1B6C6] dark:prose-invert prose-blockquote:dark:border-[#80808E];
-}
-
-pre code.hljs {
-  padding: 0;
 }
 
 /* Honor `prefers-reduced-motion: reduce` system preference.

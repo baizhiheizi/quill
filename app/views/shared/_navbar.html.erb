@@ -4,8 +4,8 @@
   <% else %>
     <div class="navbar-start">
       <%= link_to root_path, data: { controller: 'prefetch' } do %>
-        <%= image_tag 'logo.svg', class: "h-8 w-auto dark:hidden" %>
-        <%= image_tag 'logo-light.svg', class: "hidden h-8 w-auto dark:block" %>
+        <%= image_tag 'logo.svg', class: "h-8 w-auto dark:hidden", size: "64x32", alt: "Quill" %>
+        <%= image_tag 'logo-light.svg', class: "hidden h-8 w-auto dark:block", size: "62x32", alt: "Quill" %>
       <% end %>
     </div>
     <% if current_user.present? %>
