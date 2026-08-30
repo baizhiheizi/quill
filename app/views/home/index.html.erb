@@ -59,7 +59,7 @@
   <% end %>
 </section>
 
-<div class="space-y-10 border-t border-base-300 pt-8">
+<div class="flex flex-col gap-10 border-t border-base-300 pt-8">
   <%= turbo_frame_tag 'active_authors', src: active_authors_path, loading: :lazy %>
   <%= turbo_frame_tag 'hot_tags', src: hot_tags_path, loading: :lazy %>
   <%= render 'shared/footer' %>
