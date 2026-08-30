@@ -1,0 +1,8 @@
+@import '../../../node_modules/@37signals/lexxy/dist/stylesheets/lexxy-variables.css';
+@import '../../../node_modules/@37signals/lexxy/dist/stylesheets/lexxy-content.css';
+@import '../../../node_modules/highlight.js/styles/github.css';
+@import '../../../node_modules/photoswipe/dist/photoswipe.css';
+
+pre code.hljs {
+  padding: 0;
+}

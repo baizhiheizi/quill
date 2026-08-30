@@ -34,7 +34,7 @@
 <%= content_for :topbar do %>
   <div class="flex h-12 items-center justify-between">
     <%= link_to root_path, class: "block px-6 py-2" do %>
-      <%= image_tag 'logo.svg', class: "h-8 w-auto" %>
+      <%= image_tag 'logo.svg', class: "h-8 w-auto", size: "64x32", alt: "Quill" %>
     <% end %>
     <% if current_user.present? %>
       <%= link_to collection_share_path(@collection.uuid), 

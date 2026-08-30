@@ -10,8 +10,8 @@
       <div class="flex flex-col space-y-6">
         <div class="flex items-center justify-between px-4">
           <%= link_to root_path, data: { controller: 'prefetch' } do %>
-            <%= image_tag 'logo.svg', class: "h-auto w-24 dark:hidden" %>
-            <%= image_tag 'logo-light.svg', class: "hidden h-auto w-24 dark:block" %>
+            <%= image_tag 'logo.svg', class: "h-auto w-24 dark:hidden", size: "96x48", alt: "Quill" %>
+            <%= image_tag 'logo-light.svg', class: "hidden h-auto w-24 dark:block", size: "96x50", alt: "Quill" %>
           <% end %>
 
           <%= link_to dashboard_notifications_path, class: "btn btn-soft btn-circle btn-sm", "aria-label": t('notification') do %>
