@@ -98,9 +98,9 @@
 @theme {
   /* Editorial type pairing (§4.2): serif display for headlines, sans for
    * UI + body copy (including article body — matches Chinese-reader norms). */
-  --font-sans: 'Inter', 'Noto Sans SC', ui-sans-serif, system-ui, sans-serif;
-  --font-serif: 'Newsreader', 'Noto Serif SC', ui-serif, Georgia, serif;
-  --font-display: 'Newsreader', 'Noto Serif SC', ui-serif, Georgia, serif;
+  --font-sans: 'Inter', 'Noto Sans SC', 'PingFang SC', 'Hiragino Sans GB', 'Hiragino Kaku Gothic ProN', 'Microsoft YaHei', 'Yu Gothic', ui-sans-serif, system-ui, sans-serif;
+  --font-serif: 'Newsreader', 'Noto Serif SC', 'Songti SC', 'Hiragino Mincho ProN', 'Yu Mincho', 'STSong', 'SimSun', ui-serif, Georgia, serif;
+  --font-display: 'Newsreader', 'Noto Serif SC', 'Songti SC', 'Hiragino Mincho ProN', 'Yu Mincho', 'STSong', 'SimSun', ui-serif, Georgia, serif;
   --font-mono: 'Roboto Mono', 'JetBrains Mono', ui-monospace, monospace;
 
   --color-primary: #3355ff;

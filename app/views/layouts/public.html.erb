@@ -50,11 +50,7 @@
       </script>
     <% end %>
 
-    <%# Editorial redesign type pairing (§4.2): serif display for headlines
-        (Newsreader/Noto Serif SC), sans for UI + body (Inter/Noto Sans SC). %>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,500;0,600;1,500&family=Noto+Serif+SC:wght@500;600&family=Inter:wght@400;500;600&family=Noto+Sans+SC:wght@400;500;600&display=swap" rel="stylesheet">
+    <%= render "shared/web_fonts" %>
     <%= favicon_link_tag "favicon.svg" %>
     <script>
       (function () {
@@ -66,20 +62,8 @@
       })();
     </script>
     <%= stylesheet_link_tag "application", media: "all", "data-turbo-track": "reload" %>
-    <%= javascript_include_tag "application", "data-turbo-track": "reload" %>
-
-    <%= render "shared/posthog" %>
+    <%= javascript_include_tag "application", "data-turbo-track": "reload", defer: true %>
   </head>
-
-  <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-TNT4ZMVDL4"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-
-    gtag('config', 'G-TNT4ZMVDL4');
-  </script>
 
   <body class="min-h-screen overflow-x-hidden bg-base-100 text-base-content">
     <%= render 'shared/masthead' %>
@@ -106,5 +90,7 @@
       </div>
     </div>
     <%= turbo_stream_from "user_#{current_user.mixin_uuid}" if current_user.present? %>
+    <%= render "shared/posthog" %>
+    <%= render "shared/google_analytics" %>
   </body>
 </html>
