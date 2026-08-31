@@ -244,7 +244,7 @@ GEM
       raabro (~> 1.4)
     globalid (1.4.0)
       activesupport (>= 6.1)
-    graphql (2.6.9)
+    graphql (2.6.10)
       base64
       fiber-storage
       logger
@@ -872,7 +872,7 @@ CHECKSUMS
   friendly_id (5.7.0) sha256=b8994416ebaceebc7c60bc556e84ef32a3a663e2e582eb04c429216cc98de4c4
   fugit (1.13.0) sha256=a4f093fce740da52f216740a5041e2a594ea763cdb89e8b2754ca4399634ab18
   globalid (1.4.0) sha256=037f12fbf1d9d7a014d501c2d5c77356fd4ddd96d7a7991d6700bba96706f427
-  graphql (2.6.9) sha256=afe7bc03164f1a61abc66a415744ffd315c5aca116c9f3438c57391a431e4fe5
+  graphql (2.6.10) sha256=9b7c8633767f516ff9d48a8d6305b2a00a2101c82aa871b92e69086944f9f83e
   groupdate (6.8.0) sha256=16f90ea18ca981c38e41e592416480b28353aa5e5cc3e7cb13a68b8fb5d40510
   grover (1.2.10) sha256=989b21d1a0048e3793b9939b392152fb309c7a107911ad04c10e422de4e1479b
   h2c (0.2.1) sha256=a53b7dfeb95660c97b615235ea1b29ec8e1856edc571845685682d94b6e8e227
