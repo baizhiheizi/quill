@@ -3,26 +3,14 @@
 module NoticedNotificationExtensions
   extend ActiveSupport::Concern
 
-  MIXIN_ONLY_TYPES = %w[
-    UserConnectedNotifier::Notification
-    UserSafeRegistrationNotifier::Notification
-  ].freeze
-
   included do
-    scope :for_web, -> { where.not(type: MIXIN_ONLY_TYPES) }
-  end
-
-  def visible_in_web?
-    notifier_class = event.type.constantize
-    return false unless notifier_class.persist_web_notification
-    return may_notify_via_web? if respond_to?(:may_notify_via_web?, true)
-    return web_notification_enabled? if respond_to?(:web_notification_enabled?, true)
-
-    true
+    # Written from the notification-kind declaration when the row is created,
+    # so the inbox is a plain indexed query.
+    scope :for_web, -> { where(web_visible: true) }
   end
 
   def broadcast_as_flash
-    return unless visible_in_web? && message.present?
+    return unless web_visible? && message.present?
 
     broadcast_prepend_later_to(
       "user_#{recipient.mixin_uuid}",

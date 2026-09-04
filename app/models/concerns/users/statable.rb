@@ -3,16 +3,10 @@
 module Users::Statable
   extend ActiveSupport::Concern
 
-  # Counts unread non-mixin-only notifications. Replaces the previous
-  # implementation that loaded every matching row into Ruby and filtered via
-  # `select(&:visible_in_web?)`; the badge in `_navbar` / `_left_bar` runs on
-  # every page render, so the previous version pulled all unread rows just to
-  # answer a yes/no question. `for_web` already excludes the two mixin-only
-  # notifier types that never show in the web UI; the per-recipient visibility
-  # predicate is intentionally not reproduced here — the badge is an indicator
-  # and a small overcount (notifications muted via `notification_setting`) is
-  # acceptable. The exact visible-only set is still computed on the
-  # notifications index (`Dashboard::NotificationsController`).
+  # Counts unread notifications that are visible in the web inbox. Visibility
+  # is denormalised onto `noticed_notifications.web_visible` at creation, so
+  # this is an indexed `count` — and, unlike the earlier implementations, it
+  # agrees with the index instead of overcounting by the muted kinds.
   def unread_notifications_count
     notifications.unread.for_web.count
   end

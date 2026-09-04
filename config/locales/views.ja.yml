@@ -214,6 +214,8 @@ ja:
   tips_of_tagging_created_notifications: フォロー中のタグに新しい記事が投稿された時、通知されます。
   tips_of_comment_created_notifications: フォロー中の記事に新しいコメントがついた時、通知されます。
   tips_of_transfer_processed_notifications: 記事からのリワードや返金を含む送金を受け取ったとき通知を受け取ります。
+  tips_of_collection_listed_notifications: フォロー中の作者が新しいコレクションを出品した時、通知されます。
+  tips_of_collection_bought_notifications: 読者があなたのコレクションを購入した時、通知されます。
   confirm_to_generate_token: サードパーティ製アプリケーションにアクセストークンを提供して、記事を管理できます。新しいアクセストークンを生成しますか?
   generate_new_token: 新しいアクセストークンを生成する
   token_memo_placeholder: アクセストークンのメモ

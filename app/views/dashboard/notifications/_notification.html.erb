@@ -1,4 +1,4 @@
-<% if notification.visible_in_web? && notification.message.present? %>
+<% if notification.message.present? %>
   <div id="<%= dom_id notification %>" class="flex items-center space-x-4">
     <div class="w-2 h-2 rounded-full <%= notification.read? ? '' : 'bg-primary ring-2 ring-primary/30' %>">
     </div>

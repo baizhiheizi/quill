@@ -222,6 +222,8 @@ en:
   tips_of_tagging_created_notifications: When new post tagged by your subscribed tags, you will be notified.
   tips_of_comment_created_notifications: When your subscribed post are commented, you will be notified.
   tips_of_transfer_processed_notifications: When new transfers(including revenue from posts and refunding) received, you will be notified.
+  tips_of_collection_listed_notifications: When an author you subscribe to lists a new collection, you will be notified.
+  tips_of_collection_bought_notifications: When a reader buys one of your collections, you will be notified.
   confirm_to_generate_token: You can provide an Access Token to a third-party application to manage your posts. Are you sure to generate a new Access Token？
   generate_new_token: Generate New Token
   token_memo_placeholder: Memo for the Access Token

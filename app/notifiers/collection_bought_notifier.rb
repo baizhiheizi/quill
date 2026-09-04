@@ -1,10 +1,7 @@
 # frozen_string_literal: true
 
 class CollectionBoughtNotifier < ApplicationNotifier
-  deliver_by :mixin_bot, class: "DeliveryMethods::MixinBot" do |config|
-    config.category = "APP_CARD"
-    config.if = -> { may_notify_via_mixin_bot? }
-  end
+  notifies :collection_bought
 
   required_param :order
 
@@ -17,13 +14,8 @@ class CollectionBoughtNotifier < ApplicationNotifier
       order.item
     end
 
-    def data
-      {
-        icon_url:,
-        title: collection.name.truncate(36),
-        description: description.truncate(72),
-        action: url
-      }
+    def title
+      collection.name
     end
 
     def description
@@ -42,24 +34,8 @@ class CollectionBoughtNotifier < ApplicationNotifier
       collection_url collection.uuid
     end
 
-    def web_notification_enabled?
-      recipient.notification_setting.article_bought_web
-    end
-
-    def mixin_bot_notification_enabled?
-      recipient.notification_setting.article_bought_mixin_bot
-    end
-
     def should_notify?
       !recipient.block_user? order.buyer
-    end
-
-    def may_notify_via_web?
-      should_notify? && web_notification_enabled?
-    end
-
-    def may_notify_via_mixin_bot?
-      should_notify? && recipient_messenger? && mixin_bot_notification_enabled?
     end
   end
 end

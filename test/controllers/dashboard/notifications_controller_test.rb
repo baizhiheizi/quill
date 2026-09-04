@@ -12,11 +12,7 @@ class Dashboard::NotificationsControllerTest < ActionController::TestCase
     @user = users(:reader_one)
     @test_session = sign_in(@user)
     @request.session[:current_session_id] = @test_session.uuid
-    # `visible_in_web?` for non-Comment/Tagging notifiers reads
-    # `recipient.notification_setting.<event>_web` — the fixture user has no
-    # notification_setting by default, so synthesise one with the same
-    # defaults the model applies to fresh rows.
-    ensure_notification_setting!(@user) if @user.notification_setting.blank?
+    ensure_notification_setting!(@user)
   end
 
   teardown do
@@ -29,63 +25,25 @@ class Dashboard::NotificationsControllerTest < ActionController::TestCase
     assert_response :success
     notifications = @controller.instance_variable_get(:@notifications)
     refute_nil notifications
-    # pagy wraps the relation/array — accept either
-    assert(notifications.respond_to?(:each), "expected @notifications to be enumerable")
+    # pagy wraps the relation — it must stay a query, not a Ruby array
+    assert(notifications.respond_to?(:to_sql), "expected @notifications to be a relation")
     assert notifications.all? { |n| n.recipient_id == @user.id }, "expected only this user's notifications"
   end
 
-  test "index filters out notifiers excluded by `for_web`" do
-    # MIXIN_ONLY_TYPES in config/initializers/noticed.rb are filtered out by
-    # the `for_web` scope.  We synthesise one valid web notification and assert
-    # it shows up; the path that excludes UserConnected is exercised by the
-    # `where.not(type: MIXIN_ONLY_TYPES)` clause at the top of `index`.
-    article = articles(:published_paid)
-    event = Noticed::Event.create!(
-      record_type: "Article",
-      record_id: article.id,
-      type: "ArticlePublishedNotifier",
-      params: { article: article },
-      created_at: 1.minute.ago,
-      updated_at: 1.minute.ago
-    )
-    Noticed::Notification.create!(
-      event: event,
-      recipient: @user,
-      type: "ArticlePublishedNotifier::Notification",
-      created_at: event.created_at,
-      updated_at: event.updated_at
-    )
+  test "index returns only the rows persisted as web visible" do
+    web = build_notification!(web_visible: true)
+    build_notification!(web_visible: false)
 
     get :index
 
     assert_response :success
     notifications = @controller.instance_variable_get(:@notifications)
-    types = notifications.map(&:type)
-    assert_includes types, "ArticlePublishedNotifier::Notification"
+    assert_equal [ web.type ], notifications.map(&:type)
+    assert_equal [ web.id ], notifications.map(&:id)
   end
 
-  test "index eager-loads noticed_events (no per-row N+1 SELECT on noticed_events)" do
-    # Synthesise 30 web notifications across two notifier types so that the
-    # `event.type.constantize` chain inside `visible_in_web?` would otherwise
-    # issue 30 extra SELECTs.
-    30.times do |i|
-      Noticed::Event.create!(
-        record_type: "Article",
-        record_id: articles(:published_paid).id,
-        type: "ArticlePublishedNotifier",
-        created_at: i.seconds.ago,
-        updated_at: i.seconds.ago,
-        params: {}
-      ).tap do |event|
-        Noticed::Notification.create!(
-          event: event,
-          recipient: @user,
-          type: "ArticlePublishedNotifier::Notification",
-          created_at: event.created_at,
-          updated_at: event.updated_at
-        )
-      end
-    end
+  test "index is paginated SQL with no per-row N+1 SELECT on noticed_events" do
+    30.times { |i| build_notification!(web_visible: true, created_at: i.seconds.ago) }
 
     queries = capture_queries { get :index }
 
@@ -98,6 +56,25 @@ class Dashboard::NotificationsControllerTest < ActionController::TestCase
   end
 
   private
+
+  def build_notification!(web_visible:, created_at: Time.current)
+    event = Noticed::Event.create!(
+      record_type: "Article",
+      record_id: articles(:published_paid).id,
+      type: "ArticlePublishedNotifier",
+      params: { article: articles(:published_paid) },
+      created_at: created_at,
+      updated_at: created_at
+    )
+    Noticed::Notification.create!(
+      event: event,
+      recipient: @user,
+      type: "ArticlePublishedNotifier::Notification",
+      web_visible: web_visible,
+      created_at: event.created_at,
+      updated_at: event.updated_at
+    )
+  end
 
   def capture_queries(exclude: [], &block)
     queries = []
