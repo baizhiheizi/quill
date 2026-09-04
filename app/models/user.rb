@@ -217,8 +217,7 @@ class User < ApplicationRecord
   # list of subscriber ids into a Ruby array first; this relation lets
   # callers push the predicate straight into the database instead.
   # Matches the NOT IN / IN subquery pattern used by
-  # `HomeController#active_authors` (PR #1735) and
-  # `ArticleSearchService#filter_block_authors`.
+  # `ArticleVisibility.blocked_by` / `.blocking`.
   def subscribed_user_ids_relation
     Action
       .where(target_type: "User", target_id: id, action_type: "subscribe")

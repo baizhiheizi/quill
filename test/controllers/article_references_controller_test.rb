@@ -5,26 +5,10 @@ require "test_helper"
 class ArticleReferencesControllerTest < ActionController::TestCase
   tests ArticleReferencesController
 
-  # `config/routes.rb` declares this route with `default: { format: :json }`
-  # where it means `defaults:` — the misspelled key is stored as a default
-  # named `:default`, which makes `article_references_path` un-generatable and
-  # every `ActionController::TestCase` request for it raise
-  # `ActionController::UrlGenerationError` before the action runs. Until that
-  # line is fixed, the tests below draw a minimal, correctly-defaulted route
-  # set so the action can be reached at all.
+  # The route carries `defaults: { format: :json }`, so no `format:` param is
+  # needed below.
   setup do
-    @original_routes = @routes
-    @routes =
-      ActionDispatch::Routing::RouteSet.new.tap do |routes|
-        routes.draw do
-          get "article_references" => "article_references#index", defaults: { format: :json }
-        end
-      end
     session[:current_session_id] = sign_in(users(:reader_one)).uuid
-  end
-
-  teardown do
-    @routes = @original_routes
   end
 
   # The reference picker is an access listing (bought / own / free), so the
