@@ -54,7 +54,7 @@ class Article < ApplicationRecord
   include AASM
   include Articles::ContentPreview
   include Articles::PosterGenerator
-  include Articles::Purchasable
+  include Purchasable
   include RichTextContent
 
   belongs_to :author, class_name: "User", inverse_of: :articles, counter_cache: true
@@ -389,27 +389,24 @@ class Article < ApplicationRecord
     Articles::DetectLocaleJob.perform_later uuid
   end
 
-  def payment_trace_id(user)
-    return if user.blank?
+  def may_buy_by?(user = nil)
+    return false if author.block_user?(user)
+    return false if user&.block_user?(author)
 
-    # generate a unique trace ID for paying
-    # avoid duplicate payment
-    candidate = QuillBot.api.unique_uuid(uuid, user.mixin_uuid)
-    loop do
-      break unless Payment.exists?(trace_id: candidate) || PreOrder.exists?(trace_id: candidate, state: %i[paid expired])
+    published?
+  end
 
-      candidate = QuillBot.api.unique_uuid(uuid, candidate)
-    end
+  def authorized?(user = nil)
+    return true if (published? && free?) || author == user
+    return false if user.blank?
 
-    candidate
+    orders.where(order_type: :buy_article).find_by(buyer: user).present? || collection&.authorized?(user)
   end
 
   def mixpay_supported?
     return true if free?
 
-    asset_id.in?(Mixpay.api.settlement_asset_ids)
-  rescue Mixpay::Errors::Error
-    false
+    super
   end
 
   def self.ransackable_attributes(_auth_object = nil)

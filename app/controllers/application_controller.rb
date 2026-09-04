@@ -3,7 +3,6 @@
 class ApplicationController < ActionController::Base
   include Pagy::Method
   include Localizable
-  include RenderingHelper
   include Pundit::Authorization
 
   before_action :ensure_launched!
@@ -95,5 +94,10 @@ class ApplicationController < ActionController::Base
 
   def pundit_user
     current_user
+  end
+
+  def render_not_found_page
+    @page_title = "404"
+    render "errors/not_found", status: :not_found, formats: [ :html ]
   end
 end

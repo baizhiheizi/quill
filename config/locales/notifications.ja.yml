@@ -20,9 +20,6 @@ ja:
     comment_created_notifier:
       notification:
         commented: コメントされました
-    comment_deleted_notifier:
-      notification:
-        deleted: あなたのコメントは運営によって削除されました
     tagging_created_notifier:
       notification:
         has_new_article: 新しい記事があります
