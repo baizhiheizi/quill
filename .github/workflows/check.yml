@@ -74,41 +74,57 @@ jobs:
           # runner's egress is flaky (on 2026-09-04 the dl.google.com download
           # failed five runs in a row), so: skip when the host already has a
           # browser, retry the .deb download with backoff, fall back to
-          # Chrome-for-Testing, and degrade to a ::warning — config/ci.rb then
-          # skips `Tests: System` instead of failing every run on a network
-          # step. CHROME_REQUIRED=1 flips that back to fatal.
-          if command -v google-chrome-stable &>/dev/null; then
-            echo "google-chrome-stable already present"
-            exit 0
-          fi
+          # Chrome-for-Testing, and print diagnostics when the result cannot
+          # launch — config/ci.rb smoke-tests the browser and skips
+          # `Tests: System` instead of failing every run on the environment.
+          # CHROME_REQUIRED=1 flips that back to fatal.
+          install_from_deb() {
+            for attempt in 1 2 3 4 5; do
+              if wget --tries=3 --timeout=30 -O /tmp/chrome.deb \
+                   https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb &&
+                 sudo apt-get -yyq install /tmp/chrome.deb; then
+                return 0
+              fi
+              echo "Chrome .deb install attempt ${attempt}/5 failed; retrying in $((attempt * 10))s"
+              sleep "$((attempt * 10))"
+            done
+            return 1
+          }
 
-          sudo apt-get -yyq install wget unzip
-          for attempt in 1 2 3 4 5; do
-            if wget --tries=3 --timeout=30 -O /tmp/chrome.deb \
-                 https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb &&
-               sudo apt-get -yyq install /tmp/chrome.deb; then
-              exit 0
-            fi
-            echo "Chrome .deb install attempt ${attempt}/5 failed; retrying in $((attempt * 10))s"
-            sleep "$((attempt * 10))"
-          done
-
-          # Fallback: Chrome-for-Testing lives on a different Google host.
-          cft_version="$(wget -qO- https://googlechromelabs.github.io/chrome-for-testing/LATEST_RELEASE_STABLE || true)"
-          if [ -n "$cft_version" ]; then
+          install_from_cft() {
+            # Chrome-for-Testing lives on a different Google host.
+            local version
+            version="$(wget -qO- https://googlechromelabs.github.io/chrome-for-testing/LATEST_RELEASE_STABLE || true)"
+            [ -n "$version" ] || return 1
             sudo apt-get -yyq install libnss3 libnspr4 libatk1.0-0 libatk-bridge2.0-0 \
               libcups2 libdrm2 libxkbcommon0 libxcomposite1 libxdamage1 libxfixes3 \
               libxrandr2 libgbm1 libasound2t64
-            if wget --tries=3 --timeout=60 -O /tmp/cft.zip \
-                 "https://storage.googleapis.com/chrome-for-testing-public/${cft_version}/linux64/chrome-linux64.zip" &&
-               sudo unzip -q /tmp/cft.zip -d /opt/chrome-for-testing &&
-               sudo ln -sf /opt/chrome-for-testing/chrome-linux64/chrome /usr/local/bin/google-chrome-stable; then
-              echo "Installed Chrome-for-Testing ${cft_version}"
-              exit 0
-            fi
+            wget --tries=3 --timeout=60 -O /tmp/cft.zip \
+              "https://storage.googleapis.com/chrome-for-testing-public/${version}/linux64/chrome-linux64.zip" &&
+              sudo unzip -q /tmp/cft.zip -d /opt/chrome-for-testing &&
+              sudo ln -sf /opt/chrome-for-testing/chrome-linux64/chrome /usr/local/bin/google-chrome-stable
+          }
+
+          if command -v google-chrome-stable &>/dev/null; then
+            echo "google-chrome-stable already present: $(google-chrome-stable --version 2>/dev/null || echo 'unversioned')"
+          elif install_from_deb || install_from_cft; then
+            echo "Installed: $(google-chrome-stable --version 2>/dev/null || echo 'unversioned')"
+          else
+            echo "::warning::No browser could be installed (runner egress). config/ci.rb will skip Tests: System; every other step still gates this run."
+            exit 0
           fi
 
-          echo "::warning::No browser could be installed (runner egress). config/ci.rb will skip Tests: System; every other step still gates this run."
+          # Launch diagnostics: config/ci.rb skips the system suite when the
+          # browser cannot start, so surface WHY here (missing libs, sandbox).
+          if ! google-chrome-stable --headless --no-sandbox --disable-gpu --disable-dev-shm-usage --dump-dom about:blank >/tmp/chrome-smoke.log 2>&1; then
+            {
+              echo "::warning::Chrome smoke test failed; Tests: System will be skipped. Diagnostics:"
+              echo "--- missing shared libraries:"
+              ldd "$(readlink -f "$(command -v google-chrome-stable)")" 2>/dev/null | grep "not found" || echo "  (none)"
+              echo "--- launch log:"
+              tail -10 /tmp/chrome-smoke.log
+            } | sed 's/^/  /'
+          fi
 
       - name: CI
         run: bin/ci
