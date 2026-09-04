@@ -45,35 +45,24 @@ class Orders::DistributeService
 
   def distribute_collection_order!
     if payment.wallet_id != QuillBot.api.client_id
-      transfers.create_with(
-        queue_priority: :low,
-        wallet_id: payment.wallet_id,
+      issue_revenue_transfer!(
         transfer_type: :quill_revenue,
-        opponent_id: QuillBot.api.client_id,
-        asset_id: revenue_asset_id,
+        to: QuillBot.api.client_id,
         amount: quill_amount.to_s,
-        memo: Base64.encode64({
-          t: "REVENUE",
-          a: item.uuid
-        }.to_json)
-      ).find_or_create_by!(
-        trace_id: MixinBot::Utils.unique_uuid(trace_id, QuillBot.api.client_id)
+        memo: quill_revenue_memo,
+        trace_id: MixinBot::Utils.unique_uuid(trace_id, QuillBot.api.client_id),
+        wallet_id: payment.wallet_id
       )
     end
 
-    author_revenue_transfer_memo = "#{buyer.name} bought #{item.name}"
     author_mixin_uuid = item.author.mixin_uuid
-
-    transfers.create_with(
-      queue_priority: :low,
-      wallet_id: payment.wallet_id,
+    issue_revenue_transfer!(
       transfer_type: :author_revenue,
-      opponent_id: author_mixin_uuid,
-      asset_id: revenue_asset_id,
+      to: author_mixin_uuid,
       amount: (total - quill_amount).floor(8),
-      memo: author_revenue_transfer_memo.truncate(70)
-    ).find_or_create_by!(
-      trace_id: MixinBot::Utils.unique_uuid(trace_id, author_mixin_uuid)
+      memo: "#{buyer.name} bought #{item.name}".truncate(70),
+      trace_id: MixinBot::Utils.unique_uuid(trace_id, author_mixin_uuid),
+      wallet_id: payment.wallet_id
     )
   end
 
@@ -83,18 +72,11 @@ class Orders::DistributeService
     readers_share_column = early_orders_with_the_same_currency ? :total : :value_btc
 
     if quill_amount.positive? && payment.wallet_id != QuillBot.api.client_id
-      transfers.create_with(
-        queue_priority: :low,
-        wallet_id: distributor_wallet_id,
+      issue_revenue_transfer!(
         transfer_type: :quill_revenue,
-        opponent_id: QuillBot.api.client_id,
-        asset_id: revenue_asset_id,
+        to: QuillBot.api.client_id,
         amount: quill_amount.to_s,
-        memo: Base64.encode64({
-          t: "REVENUE",
-          a: item.uuid
-        }.to_json)
-      ).find_or_create_by!(
+        memo: quill_revenue_memo,
         trace_id: MixinBot::Utils.unique_uuid(trace_id, QuillBot.api.client_id)
       )
     end
@@ -123,15 +105,11 @@ class Orders::DistributeService
 
       order_ids = early_readers_by_mixin_uuid.fetch(reader_id)
       salt = order_ids.push trace_id
-      transfers.create_with(
-        queue_priority: :low,
-        wallet_id: distributor_wallet_id,
+      issue_revenue_transfer!(
         transfer_type: :reader_revenue,
-        opponent_id: reader_id,
-        asset_id: revenue_asset_id,
+        to: reader_id,
         amount: _amount.to_f.to_s,
-        memo: "Reader revenue from #{item.title}".truncate(70)
-      ).find_or_create_by!(
+        memo: "Reader revenue from #{item.title}".truncate(70),
         trace_id: MixinBot::Utils.unique_uuid(*salt)
       )
 
@@ -142,30 +120,19 @@ class Orders::DistributeService
     # Eager-load each ArticleReference's referenced Article and its author in
     # a fixed 3 queries (article_references + references + authors) instead of
     # the prior `2R + 1` pattern (count + N article_references + N authors).
-    references = item.article_references.includes(reference: :author)
-    if references.any?
-      references.each do |ref|
-        _ref_amount = (total * ref.revenue_ratio).floor(8)
-        next if (_ref_amount - MINIMUM_AMOUNT).negative?
+    item.article_references.includes(reference: :author).each do |ref|
+      _ref_amount = (total * ref.revenue_ratio).floor(8)
+      next if (_ref_amount - MINIMUM_AMOUNT).negative?
 
-        transfers.create_with(
-          queue_priority: :low,
-          transfer_type: :reference_revenue,
-          wallet_id: distributor_wallet_id,
-          opponent_id: ref.reference.author.mixin_uuid,
-          asset_id: revenue_asset_id,
-          amount: _ref_amount,
-          memo: Base64.encode64({
-            t: "CITE",
-            a: ref.reference.uuid,
-            c: item.uuid
-          }.to_json)
-        ).find_or_create_by(
-          trace_id: QuillBot.api.unique_uuid(trace_id, ref.reference.uuid)
-        )
+      issue_revenue_transfer!(
+        transfer_type: :reference_revenue,
+        to: ref.reference.author.mixin_uuid,
+        amount: _ref_amount,
+        memo: Base64.encode64({ t: "CITE", a: ref.reference.uuid, c: item.uuid }.to_json),
+        trace_id: QuillBot.api.unique_uuid(trace_id, ref.reference.uuid)
+      )
 
-        _references_amount += _ref_amount
-      end
+      _references_amount += _ref_amount
     end
 
     _collection_amount = 0.0
@@ -192,15 +159,11 @@ class Orders::DistributeService
 
     if (_collection_avg_amount - MINIMUM_AMOUNT).positive?
       collection.orders.includes(:buyer).where(order_type: :buy_collection).find_each do |_order|
-        transfers.create_with(
-          queue_priority: :low,
-          wallet_id: distributor_wallet_id,
+        issue_revenue_transfer!(
           transfer_type: :reader_revenue,
-          opponent_id: _order.buyer.mixin_uuid,
-          asset_id: revenue_asset_id,
+          to: _order.buyer.mixin_uuid,
           amount: _collection_avg_amount,
-          memo: "collection revenue from #{item.title}".truncate(70)
-        ).find_or_create_by!(
+          memo: "collection revenue from #{item.title}".truncate(70),
           trace_id: QuillBot.api.unique_uuid(trace_id, _order.trace_id)
         )
         _collection_amount += _collection_avg_amount
@@ -217,17 +180,34 @@ class Orders::DistributeService
         "#{buyer.name} #{buy_article? ? 'bought' : 'rewarded'} #{item.title}"
       end
     author_mixin_uuid = item.author.mixin_uuid
-    transfers.create_with(
-      queue_priority: :low,
-      wallet_id: distributor_wallet_id,
+    issue_revenue_transfer!(
       transfer_type: :author_revenue,
-      opponent_id: author_mixin_uuid,
-      asset_id: revenue_asset_id,
+      to: author_mixin_uuid,
       amount: author_revenue_amount,
-      memo: author_revenue_transfer_memo.truncate(70)
-    ).find_or_create_by!(
+      memo: author_revenue_transfer_memo.truncate(70),
       trace_id: QuillBot.api.unique_uuid(trace_id, author_mixin_uuid)
     )
+  end
+
+  # The single mechanics for every revenue transfer the value net emits:
+  # low queue priority, payment-asset denomination, and idempotency keyed
+  # on the caller-derived trace_id. Call sites own the policy — transfer
+  # type, opponent, amount, memo text, trace derivation and funding wallet —
+  # so each payout reads as a statement of who gets what.
+  def issue_revenue_transfer!(transfer_type:, to:, amount:, memo:, trace_id:, wallet_id: distributor_wallet_id)
+    transfers.create_with(
+      queue_priority: :low,
+      wallet_id: wallet_id,
+      transfer_type: transfer_type,
+      opponent_id: to,
+      asset_id: revenue_asset_id,
+      amount: amount,
+      memo: memo
+    ).find_or_create_by!(trace_id: trace_id)
+  end
+
+  def quill_revenue_memo
+    Base64.encode64({ t: "REVENUE", a: item.uuid }.to_json)
   end
 
   def quill_amount
