@@ -16,7 +16,7 @@ require "test_helper"
 # pointed at a scratch database instead of `SolidCache::Record` so the tests
 # never touch the real cache/primary pools.
 class SolidCacheRecoveryTest < ActiveSupport::TestCase
-  SIDE_CAR_SUFFIXES = ["", "-wal", "-shm", "-journal"].freeze
+  SIDE_CAR_SUFFIXES = [ "", "-wal", "-shm", "-journal" ].freeze
 
   setup do
     # Unique per test so `establish_connection` always builds a fresh pool

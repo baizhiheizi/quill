@@ -66,7 +66,7 @@ module SolidCacheRecovery
   # SQLITE_CORRUPT ("database disk image is malformed") and SQLITE_NOTADB
   # ("file is not a database" — zeroed-out or truncated file) both mean the
   # file itself is unusable, as opposed to transient lock/timeout errors.
-  RECOVERABLE_SQLITE_ERRORS = [SQLite3::CorruptException, SQLite3::NotADatabaseException].freeze
+  RECOVERABLE_SQLITE_ERRORS = [ SQLite3::CorruptException, SQLite3::NotADatabaseException ].freeze
 
   # Installed as the Solid Cache store's `error_handler` at the bottom of this
   # file. Solid Cache routes every error it handles itself through this one
@@ -141,7 +141,7 @@ module SolidCacheRecovery
       end
 
       def remove_database_files!
-        [db_path, "#{db_path}-wal", "#{db_path}-shm", "#{db_path}-journal"].each do |file|
+        [ db_path, "#{db_path}-wal", "#{db_path}-shm", "#{db_path}-journal" ].each do |file|
           File.delete(file) if File.exist?(file)
         end
       end
