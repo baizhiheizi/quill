@@ -76,6 +76,9 @@ class MixinNetworkSnapshot < ApplicationRecord
       r["data"].each do |snapshot|
         next if snapshot["user_id"].blank?
 
+        # Mixin hands the memo back hex-encoded; unpacking it here restores the
+        # memo as we wrote it (a base64 string), which `Mixin::Memo.decode`
+        # reads back on the instances.
         data =
           begin
             [ snapshot["memo"] ].pack("H*")
@@ -164,18 +167,11 @@ class MixinNetworkSnapshot < ApplicationRecord
   end
 
   def decoded_memo
-    @decoded_memo =
-      begin
-        JSON.parse Base64.decode64(data.to_s)
-      rescue JSON::ParserError
-        {}
-      end
+    @decoded_memo ||= Mixin::Memo.decode(data)
   end
 
   def payment_memo_correct?
-    decoded_memo.key?("t") &&
-      decoded_memo["t"].in?(%w[BUY REWARD CITE REVENUE]) &&
-      (decoded_memo.key?("a") || decoded_memo.key?("l"))
+    Mixin::Memo.quill_payment?(decoded_memo)
   end
 
   def processed?

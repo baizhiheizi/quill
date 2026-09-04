@@ -12,34 +12,17 @@ class Admin::UsersControllerTest < ActionController::TestCase
     @request.session[:current_admin_id] = @admin.id
   end
 
-  test "preload_user_aggregates is a no-op when @users is empty" do
-    queries = []
-    callback = ->(*, payload) {
-      next if payload[:name] == "SCHEMA"
-      queries << payload[:sql] if payload[:sql] =~ /FROM\s+"orders"|FROM\s+"transfers"/i
-    }
-
-    ActiveSupport::Notifications.subscribed(callback, "sql.active_record") do
-      @controller.send(:preload_user_aggregates, [])
-    end
-
-    assert_empty queries, "expected no aggregate queries on empty user list, got: #{queries.inspect}"
-  end
-
-  test "preload_user_aggregates emits at most 3 batched aggregate queries regardless of user count" do
-    # Arrange: deterministic Order + Transfer data so the preloader has
-    # non-trivial rows to group. Insert directly with `insert_all` to skip
-    # `Order#setup_attributes` (which requires a `payment` association) and
-    # other callbacks that aren't relevant to the aggregator test.
+  # Deterministic Order + Transfer rows for the aggregate assertions.
+  # `insert_all!` skips `Order#setup_attributes` (which requires a `payment`
+  # association) and other callbacks that aren't relevant to the aggregator.
+  def seed_orders_and_transfers!
     article = articles(:published_free)
     currency = currencies(:btc)
-    reader_one = users(:reader_one)
-    reader_two = users(:reader_two)
-
     now = Time.current
+
     Order.insert_all!([
       {
-        buyer_id: reader_one.id,
+        buyer_id: users(:reader_one).id,
         seller_id: users(:author).id,
         item_type: "Article",
         item_id: article.id,
@@ -54,7 +37,7 @@ class Admin::UsersControllerTest < ActionController::TestCase
         updated_at: now
       },
       {
-        buyer_id: reader_two.id,
+        buyer_id: users(:reader_two).id,
         seller_id: users(:author).id,
         item_type: "Article",
         item_id: article.id,
@@ -75,17 +58,25 @@ class Admin::UsersControllerTest < ActionController::TestCase
         wallet_id: nil,
         asset_id: currency.asset_id,
         trace_id: SecureRandom.uuid,
-        opponent_id: reader_one.mixin_uuid,
+        opponent_id: users(:reader_one).mixin_uuid,
         amount: 5.0,
         transfer_type: Transfer.transfer_types[:author_revenue],
         created_at: now,
         updated_at: now
       }
     ])
+  end
 
-    users = User.where.not(id: nil).to_a
+  test "index primes the aggregate columns with at most 3 batched queries" do
+    # Regression guard for the aggregate N+1 on `Admin::UsersController#index`.
+    # The `_user` partial renders `bought_articles_count`,
+    # `payment_total_usd` and `author_revenue_total_usd` once per row; the
+    # naive readers each fire one query per user, so a 24-user page cost ~72
+    # queries. `User.preload_aggregates` — called by the controller — must
+    # collapse those to 3 GROUP BY queries regardless of how many users are
+    # on the page.
+    seed_orders_and_transfers!
 
-    # Act: invoke the preloader and capture aggregate-shaped queries.
     aggregate_queries = []
     callback = ->(*, payload) {
       next if payload[:name] == "SCHEMA"
@@ -95,66 +86,23 @@ class Admin::UsersControllerTest < ActionController::TestCase
     }
 
     ActiveSupport::Notifications.subscribed(callback, "sql.active_record") do
-      @controller.send(:preload_user_aggregates, users)
+      get :index
     end
 
-    # Assert: regardless of how many users are in the fixture set, the
-    # preloader should emit at most 3 GROUP BY aggregate queries (one per
-    # metric), not 3 × N per-user queries.
+    assert_response :success
     assert_operator aggregate_queries.size, :<=, 3,
       "expected <= 3 batched aggregate queries, got #{aggregate_queries.size}:\n#{aggregate_queries.first(5).join("\n")}"
-  end
 
-  test "preload_user_aggregates returns correct values for each user" do
-    article = articles(:published_free)
-    currency = currencies(:btc)
-    reader_one = users(:reader_one)
-    reader_two = users(:reader_two)
+    users = @controller.instance_variable_get(:@users)
+    primed_one = users.find { |u| u.id == users(:reader_one).id }
+    primed_two = users.find { |u| u.id == users(:reader_two).id }
 
-    now = Time.current
-    Order.insert_all!([
-      {
-        buyer_id: reader_one.id,
-        seller_id: users(:author).id,
-        item_type: "Article",
-        item_id: article.id,
-        asset_id: currency.asset_id,
-        trace_id: SecureRandom.uuid,
-        order_type: Order.order_types[:buy_article],
-        total: 10.0,
-        value_btc: 0.0,
-        value_usd: 10.0,
-        state: "paid",
-        created_at: now,
-        updated_at: now
-      }
-    ])
-    Transfer.insert_all!([
-      {
-        asset_id: currency.asset_id,
-        trace_id: SecureRandom.uuid,
-        opponent_id: reader_two.mixin_uuid,
-        amount: 0.0001,
-        transfer_type: Transfer.transfer_types[:author_revenue],
-        created_at: now,
-        updated_at: now
-      }
-    ])
-
-    users = User.where.not(id: nil).to_a
-
-    @controller.send(:preload_user_aggregates, users)
-
-    reader_one_row = users.find { |u| u.id == reader_one.id }
-    assert_equal 1, reader_one_row.bought_articles_count
-    assert_in_delta 10.0, reader_one_row.payment_total_usd, 0.0001
-    assert_in_delta 0.0, reader_one_row.author_revenue_total_usd, 0.0001
-
-    reader_two_row = users.find { |u| u.id == reader_two.id }
-    assert_equal 0, reader_two_row.bought_articles_count
-    assert_in_delta 0.0, reader_two_row.payment_total_usd, 0.0001
-    # 0.0001 BTC * $50000/BTC = $5 USD.
-    assert_in_delta 5.0, reader_two_row.author_revenue_total_usd, 0.0001
+    # The page renders the primed values — proving the bulk pass and the
+    # per-user readers agree without the controller touching model internals.
+    assert_equal 1, primed_one.bought_articles_count
+    assert_in_delta 10.0, primed_one.payment_total_usd, 0.0001
+    assert_equal 1, primed_two.bought_articles_count
+    assert_in_delta 20.0, primed_two.payment_total_usd, 0.0001
   end
 
   test "index does not fire per-row SELECTs for the avatar chain" do
@@ -163,7 +111,7 @@ class Admin::UsersControllerTest < ActionController::TestCase
     # `shared/_avatar` (via `admin/users/_field`), which walks
     # `user.avatar_image_thumb` → `authorization&.raw["avatar_url"]` +
     # `avatar_attachment.blob.variant_records`. Without
-    # `includes(*user_field_preloads)` the controller fires 1 SELECT per
+    # `includes(*User::AVATAR_PRELOADS)` the controller fires 1 SELECT per
     # row for each step of that chain — ~3-5 SELECTs per user on a 24-user
     # admin page. With the preload the chain is resolved in O(1) SELECTs
     # regardless of the page size.

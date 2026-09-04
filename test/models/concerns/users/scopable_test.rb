@@ -24,8 +24,8 @@ require "test_helper"
 # `where(authorization: { provider: ... })`, which only resolves once a
 # JOIN brings in `user_authorizations` aliased as `authorization`. The
 # tests exercise them via `joins(:authorization)` so the JOIN is explicit.
-# In production, `Admin::UsersController#preload_user_aggregates` chains
-# `with_authorization` (which is `includes(:authorization)`); Rails
+# In production, `Admin::UsersController#index` chains
+# `includes(*User::AVATAR_PRELOADS)` (which preloads `:authorization`); Rails
 # switches `includes` to an eager-load `LEFT OUTER JOIN` once the WHERE
 # references the included table's columns, so the production chain works
 # via the same JOIN the tests use here.

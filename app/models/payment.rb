@@ -67,21 +67,7 @@ class Payment < ApplicationRecord
   end
 
   def decoded_memo
-    # memo from Quill user
-    # memo = {
-    #  't': BUY|REWARD|CITE|REVENUE,
-    #  'a': article's uuid,
-    #  'c': citer's uuid,
-    #  'p': pre order trace ID
-    #  'l': collection's uuid
-    # }
-    #
-    @decoded_memo =
-      begin
-        JSON.parse Base64.decode64(memo.to_s)
-      rescue JSON::ParserError
-        {}
-      end
+    @decoded_memo ||= Mixin::Memo.decode(memo)
   end
 
   def payment_memo
@@ -89,9 +75,7 @@ class Payment < ApplicationRecord
   end
 
   def memo_correct?
-    payment_memo.key?("t") &&
-      payment_memo["t"].in?(%w[BUY REWARD CITE REVENUE]) &&
-      (payment_memo.key?("a") || payment_memo.key?("l"))
+    Mixin::Memo.quill_payment?(payment_memo)
   end
 
   def article
@@ -219,7 +203,7 @@ class Payment < ApplicationRecord
       opponent_id: payer_id,
       amount:,
       asset_id:,
-      trace_id: QuillBot.api.unique_uuid(trace_id, opponent_id),
+      trace_id: Mixin.trace_key(trace_id, opponent_id),
       memo: "REFUND"
     )
   end
