@@ -160,6 +160,21 @@ class CollectionBoughtNotifierTest < ActiveSupport::TestCase
     assert_not notification_for(@subscriber).visible_in_web?
   end
 
+  test "visible_in_web is false when subscriber blocked the buyer" do
+    @subscriber.create_action(:block, target: @buyer)
+
+    deliver_notifier!(
+      CollectionBoughtNotifier,
+      record: @order,
+      order: @order,
+      recipient: @subscriber
+    )
+
+    notification = notification_for(@subscriber)
+    assert_not notification.visible_in_web?
+    assert_not notification.may_notify_via_mixin_bot?
+  end
+
   test "deliver enqueues mixin bot delivery for messenger recipients" do
     assert @subscriber.messenger?
 

@@ -66,6 +66,16 @@ class ArticleRewardedNotifierTest < ActiveSupport::TestCase
     assert_not notification_for(@author).visible_in_web?
   end
 
+  test "visible_in_web is false when recipient blocked the buyer" do
+    @author.create_action(:block, target: @buyer)
+
+    deliver_notifier!(ArticleRewardedNotifier, record: @order, order: @order, recipient: @author)
+
+    notification = notification_for(@author)
+    assert_not notification.visible_in_web?
+    assert_not notification.may_notify_via_mixin_bot?
+  end
+
   test "deliver enqueues mixin bot delivery for messenger recipients" do
     assert @author.messenger?
 

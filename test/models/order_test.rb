@@ -636,6 +636,27 @@ class OrderTest < ActiveSupport::TestCase
     end
   end
 
+  # `ArticleBoughtNotifier#should_notify?` folds the recipient-side block
+  # guard into both delivery paths (`may_notify_via_web?` and the mixin bot
+  # `config.if`). The Noticed row still persists — the web inbox and the
+  # Mixin bot just have to stop showing/sending it.
+  test "notify_subscribers does not deliver to followers who blocked the buyer" do
+    with_quill_bot_stub do
+      ensure_notification_setting!(@reader_one)
+      ensure_notification_setting!(@reader_two)
+
+      @reader_two.create_action(:subscribe, target: @reader_one) unless @reader_two.subscribe_user?(@reader_one)
+      @reader_two.create_action(:block, target: @reader_one)
+
+      order = create_buy_order!(article: @article, buyer: @reader_one, total: 1.0)
+      order.notify_subscribers
+
+      notification = Noticed::Notification.where(recipient: @reader_two).order(:id).last
+      assert notification, "Noticed persists the row before delivery gating"
+      assert_not notification.visible_in_web?
+    end
+  end
+
   private
 
   # Captures every SQL query emitted while running `block`, dropping the
