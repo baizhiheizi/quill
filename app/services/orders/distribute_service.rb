@@ -49,8 +49,8 @@ class Orders::DistributeService
         transfer_type: :quill_revenue,
         to: QuillBot.api.client_id,
         amount: quill_amount.to_s,
-        memo: quill_revenue_memo,
-        trace_id: MixinBot::Utils.unique_uuid(trace_id, QuillBot.api.client_id),
+        memo: Mixin::Memo.revenue!(article: item),
+        trace_id: Mixin.trace_key(trace_id, QuillBot.api.client_id),
         wallet_id: payment.wallet_id
       )
     end
@@ -61,7 +61,7 @@ class Orders::DistributeService
       to: author_mixin_uuid,
       amount: (total - quill_amount).floor(8),
       memo: "#{buyer.name} bought #{item.name}".truncate(70),
-      trace_id: MixinBot::Utils.unique_uuid(trace_id, author_mixin_uuid),
+      trace_id: Mixin.trace_key(trace_id, author_mixin_uuid),
       wallet_id: payment.wallet_id
     )
   end
@@ -76,8 +76,8 @@ class Orders::DistributeService
         transfer_type: :quill_revenue,
         to: QuillBot.api.client_id,
         amount: quill_amount.to_s,
-        memo: quill_revenue_memo,
-        trace_id: MixinBot::Utils.unique_uuid(trace_id, QuillBot.api.client_id)
+        memo: Mixin::Memo.revenue!(article: item),
+        trace_id: Mixin.trace_key(trace_id, QuillBot.api.client_id)
       )
     end
 
@@ -110,7 +110,7 @@ class Orders::DistributeService
         to: reader_id,
         amount: _amount.to_f.to_s,
         memo: "Reader revenue from #{item.title}".truncate(70),
-        trace_id: MixinBot::Utils.unique_uuid(*salt)
+        trace_id: Mixin.trace_key(*salt)
       )
 
       _readers_amount += _amount
@@ -128,8 +128,8 @@ class Orders::DistributeService
         transfer_type: :reference_revenue,
         to: ref.reference.author.mixin_uuid,
         amount: _ref_amount,
-        memo: Base64.encode64({ t: "CITE", a: ref.reference.uuid, c: item.uuid }.to_json),
-        trace_id: QuillBot.api.unique_uuid(trace_id, ref.reference.uuid)
+        memo: Mixin::Memo.cite!(article: ref.reference, citer: item),
+        trace_id: Mixin.trace_key(trace_id, ref.reference.uuid)
       )
 
       _references_amount += _ref_amount
@@ -164,7 +164,7 @@ class Orders::DistributeService
           to: _order.buyer.mixin_uuid,
           amount: _collection_avg_amount,
           memo: "collection revenue from #{item.title}".truncate(70),
-          trace_id: QuillBot.api.unique_uuid(trace_id, _order.trace_id)
+          trace_id: Mixin.trace_key(trace_id, _order.trace_id)
         )
         _collection_amount += _collection_avg_amount
       end
@@ -185,7 +185,7 @@ class Orders::DistributeService
       to: author_mixin_uuid,
       amount: author_revenue_amount,
       memo: author_revenue_transfer_memo.truncate(70),
-      trace_id: QuillBot.api.unique_uuid(trace_id, author_mixin_uuid)
+      trace_id: Mixin.trace_key(trace_id, author_mixin_uuid)
     )
   end
 
@@ -205,10 +205,6 @@ class Orders::DistributeService
       amount: amount,
       memo: memo
     ).find_or_create_by!(trace_id: trace_id)
-  end
-
-  def quill_revenue_memo
-    Base64.encode64({ t: "REVENUE", a: item.uuid }.to_json)
   end
 
   def quill_amount
