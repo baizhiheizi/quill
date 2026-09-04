@@ -228,7 +228,7 @@ These areas have been identified as candidates but not yet addressed:
 
 ### Controller Concerns
 - **`Localizable`** (`app/controllers/concerns/localizable.rb`) — Accept-Language header parsing with quality-value sorting.
-- **`UserFieldPreloads`** (`app/controllers/concerns/user_field_preloads.rb`) — preload helper.
+- **`ViewerActionSets`** (`app/controllers/concerns/viewer_action_sets.rb`) — per-viewer action-id set helper; avatar preloads come from `User::AVATAR_PRELOADS`.
 - **`API::RenderingHelper`** (`app/controllers/concerns/api/rendering_helper.rb`) — API rendering.
 
 ### Dashboard Controllers (17 untested of 25)

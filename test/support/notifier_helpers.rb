@@ -14,8 +14,10 @@ module NotifierHelpers
     end
   end
 
+  # Delegates to the app dispatch verb (`Notifiable`), so the suite exercises
+  # exactly the seam production code does instead of its own copy.
   def deliver_notifier!(notifier_class, record:, recipient:, **params)
-    notifier_class.with(record: record, **params).deliver(recipient)
+    Notifiable.dispatch(notifier_class, record: record, recipient: recipient, **params)
   end
 
   def notification_for(recipient)

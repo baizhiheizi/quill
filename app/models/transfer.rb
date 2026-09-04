@@ -39,6 +39,8 @@
 #
 
 class Transfer < ApplicationRecord
+  include Notifiable
+
   MINIMUM_AMOUNT = 0.000_000_01
   PENDING_BATCH_LIMIT = 20
 
@@ -208,7 +210,7 @@ class Transfer < ApplicationRecord
     return if recipient.blank?
     return if currency.blank?
 
-    TransferProcessedNotifier.with(record: self, transfer: self).deliver(recipient)
+    notify!(TransferProcessedNotifier, recipient: recipient, transfer: self)
   end
 
   def price_tag

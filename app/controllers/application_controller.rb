@@ -3,6 +3,7 @@
 class ApplicationController < ActionController::Base
   include Pagy::Method
   include Localizable
+  include ViewerActionSets
   include Pundit::Authorization
 
   before_action :ensure_launched!

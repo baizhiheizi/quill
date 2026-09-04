@@ -35,6 +35,7 @@ class Order < ApplicationRecord
   PLATFORM_RATIO = 0.1
 
   include AASM
+  include Notifiable
   include Orders::Distributable
 
   belongs_to :buyer, class_name: "User"
@@ -129,21 +130,15 @@ class Order < ApplicationRecord
   end
 
   def notify_subscribers
-    # Push the buyer-followers predicate into a SQL subquery instead of
-    # materialising the user list in Ruby (see `User#subscribed_user_ids_relation`).
-    # Matches the pattern used by `Article#notify_subscribers` (PR #1749).
-    followers = User.where(id: buyer.subscribed_user_ids_relation)
-    if reward_article?
-      ArticleRewardedNotifier.with(record: self, order: self).deliver(followers)
-    elsif buy_article?
-      ArticleBoughtNotifier.with(record: self, order: self).deliver(followers)
-    elsif buy_collection?
-      CollectionBoughtNotifier.with(record: self, order: self).deliver(followers)
-    end
+    return unless order_type.in? %w[buy_article reward_article buy_collection]
+
+    notify!(follower_notifier, recipient: Notifiers::Audience.subscribed_to(buyer), order: self)
   end
 
   def notify_buyer
-    OrderCreatedNotifier.with(record: self, order: self).deliver(buyer) if order_type.in? %w[buy_article reward_article buy_collection]
+    return unless order_type.in? %w[buy_article reward_article buy_collection]
+
+    notify!(OrderCreatedNotifier, recipient: buyer, order: self)
   end
 
   def subscribe_comments_for_buyer
@@ -182,6 +177,18 @@ class Order < ApplicationRecord
   end
 
   private
+
+  # The follower-facing event for what the buyer just did — the audience (the
+  # buyer's followers) is the same for all three.
+  def follower_notifier
+    if reward_article?
+      ArticleRewardedNotifier
+    elsif buy_article?
+      ArticleBoughtNotifier
+    else
+      CollectionBoughtNotifier
+    end
+  end
 
   def setup_attributes
     amount = payment.amount.round(8)
