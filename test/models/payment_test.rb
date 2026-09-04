@@ -48,6 +48,20 @@ class PaymentTest < ActiveSupport::TestCase
     assert_equal @article.uuid, payment.decoded_memo["a"]
   end
 
+  test "decoded_memo reads both wire encodings still present in persisted rows" do
+    payload = { "t" => "BUY", "a" => @article.uuid }.to_json
+
+    assert_equal "BUY", Payment.new(memo: Base64.urlsafe_encode64(payload, padding: false)).decoded_memo["t"]
+    assert_equal "BUY", Payment.new(memo: Base64.encode64(payload)).decoded_memo["t"]
+  end
+
+  test "decoded_memo fails open to an empty memo for a payload we did not write" do
+    payment = Payment.new(memo: "not-valid-base64-memo")
+
+    assert_equal({}, payment.decoded_memo)
+    refute payment.memo_correct?
+  end
+
   test "BUY payment creates buy_article order" do
     with_quill_bot_stub do
       payment = create_payment!(payer: @payer, article: @article, order_type: "BUY", amount: @article.price)

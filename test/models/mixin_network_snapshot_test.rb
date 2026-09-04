@@ -63,6 +63,22 @@ class MixinNetworkSnapshotTest < ActiveSupport::TestCase
     assert snapshot.reload.processed?
   end
 
+  test "decoded_memo reads the memo carried in data" do
+    snapshot = build_snapshot(memo_payload: { "t" => "BUY", "a" => SecureRandom.uuid })
+
+    assert_equal "BUY", snapshot.decoded_memo["t"]
+    assert snapshot.payment_memo_correct?
+  end
+
+  test "decoded_memo fails open to an empty memo for a memo we did not write" do
+    snapshot = build_snapshot(memo_payload: { "t" => "BUY", "a" => SecureRandom.uuid })
+    snapshot.data = "REFUND"
+
+    assert_equal({}, snapshot.decoded_memo)
+    refute snapshot.payment_memo_correct?
+    refute snapshot.legacy_4swap_snapshot?
+  end
+
   test "poll_retry_delay increases with attempt count and caps at 60 seconds" do
     assert_in_delta 5.0, MixinNetworkSnapshot.poll_retry_delay(0), 0.001
     assert_in_delta 10.0, MixinNetworkSnapshot.poll_retry_delay(1), 0.001
