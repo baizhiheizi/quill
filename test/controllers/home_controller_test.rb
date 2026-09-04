@@ -76,6 +76,24 @@ class HomeControllerTest < ActionController::TestCase
     assert_not_includes result.map(&:id), author.id
   end
 
+  # Issue #2075: `active_authors` was a degraded copy of the feed's block
+  # filter — it excluded only authors the viewer had blocked, not authors who
+  # had blocked the viewer. Both directions are the same rule now.
+  test "active_authors excludes authors who blocked the viewer" do
+    # `User.active` requires at least one paid article in the last 3 months.
+    articles(:published_paid).update_column(:orders_count, 1)
+    articles(:published_zh).update_column(:orders_count, 1)
+    users(:author_zh).block_user(@user)
+
+    get :active_authors
+
+    result = @controller.instance_variable_get(:@users).to_a
+    assert_not_includes result.map(&:id), users(:author_zh).id,
+      "expected authors who blocked the viewer to be hidden"
+    assert_includes result.map(&:id), users(:author).id,
+      "expected unrelated authors to stay visible"
+  end
+
   test "active_authors samples at the SQL level with LIMIT 5 (not LIMIT 20 + Ruby sample)" do
     # Same SQL-sample pattern as `hot_tags`. The previous shape loaded
     # `.limit(20)` then called `.sample(5)` in Ruby. The new shape lets

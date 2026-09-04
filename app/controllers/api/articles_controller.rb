@@ -1,9 +1,16 @@
 # frozen_string_literal: true
 
 class API::ArticlesController < API::BaseController
-  QUERY_LENGTH_LIMIT = 64
-
   before_action :authenticate_user!, only: [ :create ]
+
+  # `?order=asc|desc`; anything else falls back to the popularity feed.
+  ORDER_KEYS = { "asc" => :oldest, "desc" => :newest }.freeze
+
+  # The public API's frozen search contract: title, intro and tags — but not
+  # the author name. Widening it would change result sets for existing
+  # consumers, so this endpoint deliberately narrows `ArticleVisibility`'s
+  # default field set.
+  SEARCH_FIELDS = %i[title intro tags].freeze
 
   def index
     @articles =
@@ -11,25 +18,14 @@ class API::ArticlesController < API::BaseController
         author = User.find_by(mixin_uuid: params[:author_id])
         raise ActiveRecord::RecordNotFound if author.blank?
 
-        author.articles.only_published
+        ArticleVisibility.for(current_user, base: author.articles.only_published)
       elsif current_user
-        current_user.articles
+        ArticleVisibility.for(current_user, base: current_user.articles)
       else
-        Article.only_published
+        ArticleVisibility.for(current_user)
       end
 
-    # Cap the query string and each comma-separated term so a long `query`
-    # param can't bloat the ILIKE pattern into an expensive seq-scan. Pairs
-    # with the pg_trgm GIN indexes (see
-    # db/migrate/*_add_pg_trgm_indexes_for_search.rb).
-    query =
-      params[:query].to_s.first(QUERY_LENGTH_LIMIT).split(",").map { |term|
-        term.strip.first(QUERY_LENGTH_LIMIT)
-      }.reject(&:blank?)
-    limit = params[:limit] || 20
-    limit = 100 if limit.to_i > 100
-    order = params[:order]&.to_sym
-    q_ransack = { title_i_cont_any: query, intro_i_cont_any: query, tags_name_i_cont_any: query }
+    order = ORDER_KEYS.fetch(params[:order], :popularity)
 
     # Eager-load the author avatar chain consumed by the JSON template
     # (`app/views/api/articles/index.json.jbuilder` reads
@@ -51,29 +47,19 @@ class API::ArticlesController < API::BaseController
     # #1834, #1843, #1862, #1886, #1902, #1896, #1895.
     @articles =
       @articles
-      .ransack(q_ransack.merge(m: "or"))
-      .result(distinct: true)
+      .searching(params[:query], fields: SEARCH_FIELDS)
       .includes(:tags, :currency, author: User::AVATAR_PRELOADS)
-      .limit(limit)
-
-    @articles =
-      case order
-      when :asc
-        @articles.order(created_at: :asc)
-      when :desc
-        @articles.order(created_at: :desc)
-      else
-        @articles.order_by_popularity
-      end
+      .limit(capped_limit)
+      .ordered_by(order)
 
     return if params[:offset].blank?
 
     @articles =
       if /^\d+$/.match? params[:offset]
         @articles.offset(params[:offset].to_i)
-      elsif order == :asc
+      elsif order == :oldest
         @articles.where(created_at: Time.zone.parse(params[:offset])...)
-      elsif order == :desc
+      elsif order == :newest
         @articles.where(created_at: ...Time.zone.parse(params[:offset]))
       else
         @articles
@@ -100,6 +86,12 @@ class API::ArticlesController < API::BaseController
   end
 
   private
+
+  def capped_limit
+    limit = params[:limit] || 20
+    limit = 100 if limit.to_i > 100
+    limit
+  end
 
   def article_params
     params.require(:article).permit(:title, :intro, :content, :price, :asset_id)

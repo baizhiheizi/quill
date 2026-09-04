@@ -217,13 +217,10 @@ class User < ApplicationRecord
   # The action_store gem's `subscribe_by_user_ids` materializes the full
   # list of subscriber ids into a Ruby array first; this relation lets
   # callers push the predicate straight into the database instead.
-  # Matches the NOT IN / IN subquery pattern used by
-  # `HomeController#active_authors` (PR #1735) and
-  # `ArticleSearchService#filter_block_authors`.
   #
-  # The composition itself lives in `Notifiers::Audience`, which owns every
-  # audience rule; this alias keeps the reader-facing name the delivery sites
-  # and `TESTING_GUIDE.md` refer to.
+  # The composition lives in `Notifiers::Audience`, which owns every
+  # audience rule; this alias keeps the reader-facing name the delivery
+  # sites and `TESTING_GUIDE.md` refer to.
   def subscribed_user_ids_relation
     Notifiers::Audience.subscriber_ids_of(self)
   end
