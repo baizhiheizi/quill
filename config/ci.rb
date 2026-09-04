@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "tmpdir"
+
 # Run using bin/ci
 
 CI.run do
@@ -27,7 +29,12 @@ CI.run do
       puts ">> chromedriver in PATH: #{driver_in_path.empty? ? "none" : `chromedriver --version 2>&1`.lines.first&.strip}"
       puts ">> google-chrome-stable: #{`google-chrome-stable --version 2>&1`.strip}"
     end
-    options = Selenium::WebDriver::Chrome::Options.new(args: %w[--headless --no-sandbox --disable-gpu --disable-dev-shm-usage])
+    options = Selenium::WebDriver::Chrome::Options.new(
+      args: [
+        "--headless", "--no-sandbox", "--disable-gpu", "--disable-dev-shm-usage",
+        "--user-data-dir=#{Dir.mktmpdir("chrome-probe", File.join(ENV.fetch("HOME", Dir.tmpdir), ".cache"))}"
+      ]
+    )
     Selenium::WebDriver.for(:chrome, options: options).quit
     true
   rescue StandardError => e
