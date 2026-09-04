@@ -44,7 +44,7 @@ class Orders::DistributeService
            to: :order
 
   def distribute_collection_order!
-    if payment.wallet_id != QuillBot.api.client_id
+    unless payment.platform_wallet?
       issue_revenue_transfer!(
         transfer_type: :quill_revenue,
         to: QuillBot.api.client_id,
@@ -71,7 +71,7 @@ class Orders::DistributeService
 
     readers_share_column = early_orders_with_the_same_currency ? :total : :value_btc
 
-    if quill_amount.positive? && payment.wallet_id != QuillBot.api.client_id
+    if quill_amount.positive? && !payment.platform_wallet?
       issue_revenue_transfer!(
         transfer_type: :quill_revenue,
         to: QuillBot.api.client_id,
@@ -191,10 +191,11 @@ class Orders::DistributeService
 
   # The single mechanics for every revenue transfer the value net emits:
   # low queue priority, payment-asset denomination, and idempotency keyed
-  # on the caller-derived trace_id. Call sites own the policy — transfer
-  # type, opponent, amount, memo text, trace derivation and funding wallet —
-  # so each payout reads as a statement of who gets what.
-  def issue_revenue_transfer!(transfer_type:, to:, amount:, memo:, trace_id:, wallet_id: distributor_wallet_id)
+  # on the caller-derived trace_id. Every payout debits the wallet that
+  # funded the payment. Call sites own the policy — transfer type,
+  # opponent, amount, memo text and trace derivation — so each payout
+  # reads as a statement of who gets what.
+  def issue_revenue_transfer!(transfer_type:, to:, amount:, memo:, trace_id:, wallet_id: payment.wallet_id)
     transfers.create_with(
       queue_priority: :low,
       wallet_id: wallet_id,
@@ -212,10 +213,6 @@ class Orders::DistributeService
 
   def quill_amount
     @quill_amount ||= (total * item.platform_revenue_ratio).floor(8)
-  end
-
-  def distributor_wallet_id
-    @distributor_wallet_id ||= QuillBot.api.client_id
   end
 
   def revenue_asset_id

@@ -7,11 +7,10 @@ class Orders::DistributeJobTest < JobTestCase
     with_quill_bot_stub do
       order = create_buy_order!(article: articles(:published_paid), buyer: users(:reader_one), total: 1.0)
 
-      with_all_transfers_generated! do
-        Orders::DistributeJob.perform_now(order.trace_id)
-      end
+      Orders::DistributeJob.perform_now(order.trace_id)
 
       assert order.transfers.exists?
+      assert order.reload.completed?, "the job should leave the order completed through the real guard"
     end
   end
 

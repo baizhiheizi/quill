@@ -97,9 +97,13 @@ class OrderTest < ActiveSupport::TestCase
     end
   end
 
-  test "all_transfers_generated? when transfers sum to expected amount" do
+  # `distribute_order!` runs the real service and the real guard — this is
+  # the ledger invariant itself, not a stubbed predicate.
+  test "all_transfers_generated? is false before distribution and true after a real one" do
     with_quill_bot_stub do
       order = create_buy_order!(article: @article, buyer: @reader_one, total: 1.0)
+      assert_not order.all_transfers_generated?
+
       distribute_order!(order)
 
       assert order.all_transfers_generated?

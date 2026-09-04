@@ -104,16 +104,19 @@ class Order < ApplicationRecord
     end
   end
 
+  # The ledger invariant, in one place: the revenue transfers that debit the
+  # funding wallet (`payment.wallet_id`) must sum to the full total — minus
+  # the platform's own share when the platform wallet funded the payment,
+  # since its fee never transfers to itself.
   def all_transfers_generated?
-    transfers
-      .where(wallet_id: payment.wallet_id)
-      .sum(:amount)
-      .round(8) >=
-      if payment.wallet_id == QuillBot.api.client_id
+    expected =
+      if payment.platform_wallet?
         (total * (1 - item.platform_revenue_ratio)).round(8)
       else
         total.round(8)
       end
+
+    transfers.where(wallet_id: payment.wallet_id).sum(:amount).round(8) >= expected
   end
 
   def notify

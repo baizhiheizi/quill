@@ -227,6 +227,14 @@ class Payment < ApplicationRecord
     @wallet_id = snapshot&.user_id
   end
 
+  # Whether the payment landed in the platform bot's wallet. When it did,
+  # the bot fronts every revenue payout from its own holdings and keeps its
+  # fee in place (no quill_revenue transfer is emitted), so the ledger
+  # expectation in `Order#all_transfers_generated?` differs.
+  def platform_wallet?
+    wallet_id == QuillBot.api.client_id
+  end
+
   def ensure_refund_transfer_created
     refund_transfer.present?
   end
