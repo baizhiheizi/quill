@@ -72,6 +72,9 @@ jobs:
 
       - name: Install system dependencies
         run: |
+          # Runner images no longer ship a pre-warmed apt index; without this
+          # every install below fails with "Unable to locate package".
+          sudo apt-get update
           sudo apt-get -yyq install libpq-dev
           # Install Chrome for system tests (Selenium WebDriver 4.x auto-manages the matching driver)
           if ! command -v google-chrome-stable &>/dev/null; then
