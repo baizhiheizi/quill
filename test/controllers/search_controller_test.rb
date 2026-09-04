@@ -4,7 +4,7 @@ require "test_helper"
 
 class SearchControllerTest < ActionDispatch::IntegrationTest
   test "index truncates an oversized query to the length limit" do
-    limit = SearchController::QUERY_LENGTH_LIMIT
+    limit = ArticleVisibility::QUERY_LENGTH_LIMIT
     long_query = "a" * (limit + 50)
 
     queries = capture_sql do
