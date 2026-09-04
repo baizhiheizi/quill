@@ -1,6 +1,6 @@
 # Notifiers reference
 
-> **30-second summary:** 15 [Noticed](https://github.com/excid3/noticed) event classes under `app/notifiers/`, each fanning an event out to ActionCable + flash and a Mixin bot delivery, gated by `NotificationSetting`. Every notifier inherits from `ApplicationNotifier`, declares its `required_param`, and supplies `notification_methods`.
+> **30-second summary:** 14 [Noticed](https://github.com/excid3/noticed) event classes under `app/notifiers/`, each fanning an event out to ActionCable + flash and a Mixin bot delivery, gated by `NotificationSetting`. Every notifier inherits from `ApplicationNotifier`, declares its `required_param`, and supplies `notification_methods`.
 
 ## Base class
 
@@ -37,7 +37,6 @@ The "Fires when" column names the trigger and recipient; the notifier class live
 | `CollectionListedNotifier` | `:collection` | `APP_CARD` | New collection published; notifies readers (same `article_published_*` toggle drives collection listings) |
 | `CollectionBoughtNotifier` | `:order` | `APP_CARD` | Reader buys a collection; notifies the **author** (buyer + collection name) |
 | `CommentCreatedNotifier` | `:comment` | `APP_CARD` | Reader comments; notifies the **author** (skips if blocked). URL anchors to `#comment_<id>` |
-| `CommentDeletedNotifier` | `:comment` | `PLAIN_TEXT` | Admin deletes a comment; notifies the **commenter** |
 | `TaggingCreatedNotifier` | `:tagging` | `APP_CARD` | Article tagged; notifies tag subscribers (`has_new_article` feed). Blocked-author checks apply |
 | `SubscribeUserActionCreatedNotifier` | `:action` | `PLAIN_TEXT` | New subscriber follows a user; sends `subscribed` notice to the followed user |
 | `OrderCreatedNotifier` | `:order` | `PLAIN_TEXT` | Buyer completes a paid order; `bought`/`rewarded` verb from `order.order_type`. Fires from `Order#notify_buyer` after author-facing notifiers — see [OrderCreatedNotifier shape](#ordercreatednotifier-shape) |

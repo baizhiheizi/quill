@@ -20,9 +20,6 @@ zh-CN:
     comment_created_notifier:
       notification:
         commented: 发表了新评论
-    comment_deleted_notifier:
-      notification:
-        deleted: 您的评论被管理员删除
     tagging_created_notifier:
       notification:
         has_new_article: 有新的文章

@@ -228,7 +228,6 @@ These areas have been identified as candidates but not yet addressed:
 
 ### Controller Concerns
 - **`Localizable`** (`app/controllers/concerns/localizable.rb`) — Accept-Language header parsing with quality-value sorting.
-- **`RenderingHelper`** (`app/controllers/concerns/rendering_helper.rb`) — 404 page renderer (trivial, 3 LOC).
 - **`UserFieldPreloads`** (`app/controllers/concerns/user_field_preloads.rb`) — preload helper.
 - **`API::RenderingHelper`** (`app/controllers/concerns/api/rendering_helper.rb`) — API rendering.
 

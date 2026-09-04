@@ -20,9 +20,6 @@ en:
     comment_created_notifier:
       notification:
         commented: commented
-    comment_deleted_notifier:
-      notification:
-        deleted: Your comment was deleted by admin
     tagging_created_notifier:
       notification:
         has_new_article: has a new article
