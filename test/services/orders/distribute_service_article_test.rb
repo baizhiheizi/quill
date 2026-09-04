@@ -383,6 +383,25 @@ class Orders::DistributeServiceArticleTest < ActiveSupport::TestCase
     end
   end
 
+  # === Completion guard: real, non-stubbed ===
+  #
+  # `CommerceHelpers#distribute_order!` neuters `all_transfers_generated?`
+  # so the suite can run at all. This test runs the service bare and asserts
+  # the guard itself — the only protection against a paid order re-entering
+  # `Orders::BatchDistributeJob`'s sweep every 10 minutes forever.
+
+  test "an article order completes through the real completion guard" do
+    with_quill_bot_stub do
+      order = create_buy_order!(article: @article, buyer: @reader_one, total: 1.0)
+
+      Orders::DistributeService.call(order)
+
+      order.reload
+      assert order.transfers.exists?, "distribution should have created transfers"
+      assert order.completed?, "article order should complete once its revenue transfers exist"
+    end
+  end
+
   # === Per-reader share aggregation (one grouped query, not N) ===
 
   test "reader_revenue per-reader share is computed from a single grouped query, not N aggregate queries" do
