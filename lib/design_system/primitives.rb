@@ -55,7 +55,7 @@ module DesignSystem
       # `UiHelper#render_x`, or by `UiHelper#x` for the two legacy
       # form-builder helpers (`ui_card`, `ui_input`).
       def self.helper_for(name)
-        candidates = [:"render_#{name}", name.to_sym]
+        candidates = [ :"render_#{name}", name.to_sym ]
         (primitive_helpers & candidates).first
       end
 

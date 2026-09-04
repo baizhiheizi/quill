@@ -54,7 +54,7 @@ class DesignSystem::PrimitivesTest < ActiveSupport::TestCase
     DesignSystem::Primitives::Registry.all.each do |prim|
       next if prim[:helper].nil?
 
-      expected = [:"render_#{prim[:name]}", prim[:name].to_sym]
+      expected = [ :"render_#{prim[:name]}", prim[:name].to_sym ]
 
       assert_includes expected, prim[:helper],
                       "#{prim[:helper]} does not follow the render_<primitive> " \

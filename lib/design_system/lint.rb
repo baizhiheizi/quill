@@ -25,6 +25,10 @@ module DesignSystem
     # File-level allowlist. Each entry: relative path (String) => reason (String).
     # Reasons are committed next to the path so future maintainers know why
     # an exception is allowed.
+    #
+    # A value may also be a Hash scoping the exemption to specific rules —
+    # `{ rules: %w[DS005], reason: "…" }` — so a legacy file can be waved
+    # through one rule without losing the other thirteen.
     ALLOWLIST = {
       "app/views/articles/_card_cover.html.erb" => "procedural cover-art SVG (not an icon)",
       "app/javascript/utils/notify.js" => "toast icons migrated to i-[tabler--*]; allowlist shrinks in Phase 7",
@@ -33,6 +37,16 @@ module DesignSystem
     }.freeze
 
     HEX_RE = /(?<![0-9A-Za-z_])#[0-9A-Fa-f]{3,8}\b/.freeze
+
+    # `render "shared/x"`, `render 'shared/x'`, `render partial: "shared/x"`,
+    # with or without parens / trailing locals.
+    RENDER_SHARED_RE = /\brender\b\s*\(?\s*(?:partial:\s*)?["']shared\/([\w]+)["']/.freeze
+
+    # `render "shared/ui_input"` is a partial-path string, not a call to
+    # `ui_input`. Strip every quoted string that names a shared partial so the
+    # helper-name exemption on DS005/DS006/DS011-13 only fires for genuine
+    # helper invocations.
+    SHARED_PATH_STRING_RE = /["'][^"']*shared\/[\w]+["']/.freeze
 
     # Files where the scan walks: ERB views, JS controllers/helpers, ERB helpers, CSS.
     SCAN_GLOBS = [
@@ -87,16 +101,27 @@ module DesignSystem
       IGNORE_DIRS.any? { |dir| rel.start_with?(dir + "/") || rel == dir }
     end
 
-    def allowlisted?(path)
-      rel = path.sub(root.to_s + "/", "")
-      ALLOWLIST.key?(rel)
+    def whole_file_allowlisted?(rel)
+      ALLOWLIST.key?(rel) && !ALLOWLIST.fetch(rel).is_a?(Hash)
+    end
+
+    # Rule ids a file is exempt from. A plain-String reason exempts the file
+    # from everything; a `{ rules: […], reason: "…" }` entry scopes the
+    # exemption so a legacy file keeps the other thirteen rules.
+    def allowlisted_rules(rel)
+      entry = ALLOWLIST[rel]
+      return [] unless entry.is_a?(Hash)
+
+      entry.fetch(:rules, [])
     end
 
     def scan_file(path)
-      return if allowlisted?(path)
+      rel = path.sub(root.to_s + "/", "")
+      return if whole_file_allowlisted?(rel)
 
       lines = File.readlines(path, encoding: "UTF-8", invalid: :replace, undef: :replace)
-      rel = path.sub(root.to_s + "/", "")
+      exempt = allowlisted_rules(rel)
+      count_before = violations.size
 
       lines.each_with_index do |line, i|
         check_hex!(rel, line, i + 1)
@@ -112,7 +137,16 @@ module DesignSystem
         check_raw_input!(rel, line, i + 1)
         check_raw_modal!(rel, line, i + 1)
         check_raw_dropdown!(rel, line, i + 1)
+        check_direct_primitive_render!(rel, line, i + 1)
       end
+
+      drop_exempt!(from: count_before, rules: exempt)
+    end
+
+    def drop_exempt!(from:, rules:)
+      return if rules.empty?
+
+      violations.reject!.with_index { |v, idx| idx >= from && rules.include?(v.rule_id) }
     end
 
     # DS001 — raw hex outside the token layer / coin allowlist.
@@ -187,7 +221,7 @@ module DesignSystem
       return unless rel.start_with?("app/views/")
       return if rel == "app/views/shared/_button.html.erb"
       return if rel == "app/views/design_system/_buttons.html.erb"
-      return if line.include?("render_button")
+      return if helper_called_on_line?("render_button", line)
       return unless line.match?(/\bbtn\s+btn-(primary|secondary|soft|ghost|danger)\b/)
 
       violations << Violation.new(
@@ -204,7 +238,7 @@ module DesignSystem
       return unless rel.start_with?("app/views/")
       return if rel == "app/views/shared/_chip.html.erb"
       return if rel == "app/views/design_system/_chips.html.erb"
-      return if line.include?("render_chip")
+      return if helper_called_on_line?("render_chip", line)
       return unless line.match?(/\bchip\s+chip-[a-z-]+/i)
 
       violations << Violation.new(
@@ -284,7 +318,7 @@ module DesignSystem
       return unless rel.start_with?("app/views/")
       return if rel == "app/views/shared/_ui_input.html.erb"
       return if rel == "app/views/design_system/_forms.html.erb"
-      return if line.include?("ui_input")
+      return if helper_called_on_line?("ui_input", line)
       return unless line.include?("<input ") && line.match?(/\bclass\s*=\s*["'][^"']*\binput\b/i)
 
       violations << Violation.new(
@@ -301,7 +335,7 @@ module DesignSystem
       return unless rel.start_with?("app/views/")
       return if rel == "app/views/shared/_modal.html.erb"
       return if rel == "app/views/design_system/_modal.html.erb"
-      return if line.include?("render_modal")
+      return if helper_called_on_line?("render_modal", line)
       return unless line.include?("<div ") && line.match?(/\bclass\s*=\s*["'][^"']*\bmodal\b/i)
 
       violations << Violation.new(
@@ -318,7 +352,7 @@ module DesignSystem
       return unless rel.start_with?("app/views/")
       return if rel == "app/views/shared/_dropdown.html.erb"
       return if rel == "app/views/design_system/_dropdown.html.erb"
-      return if line.include?("render_dropdown")
+      return if helper_called_on_line?("render_dropdown", line)
       return unless line.include?("<div ") && line.match?(/\bclass\s*=\s*["'][^"']*\bdropdown\b/i)
 
       violations << Violation.new(
@@ -328,6 +362,48 @@ module DesignSystem
         line: ln,
         message: "raw `.dropdown` markup outside `shared/_dropdown.html.erb`; use `<%= render_dropdown … %>`",
       )
+    end
+
+    # DS014 — a direct `render "shared/<primitive>"` (or `render partial:`)
+    # for a primitive that has a UiHelper wrapper. This polices the interface
+    # rather than the markup: the partial is a primitive's implementation, the
+    # helper is its contract, and the contract is where a signature change has
+    # to land. app/views/shared/ is exempt — that is the implementation, and
+    # primitives composing each other there is not a consumer bypass.
+    def check_direct_primitive_render!(rel, line, ln)
+      return unless rel.start_with?("app/views/")
+      return if rel.start_with?("app/views/shared/")
+
+      line.scan(RENDER_SHARED_RE).each do |match|
+        name = match[0]
+        helper = helpers_by_name[name.to_sym]
+        next if helper.nil?
+
+        violations << Violation.new(
+          rule_id: "DS014",
+          severity: :error,
+          file: rel,
+          line: ln,
+          message: "renders `shared/#{name}` directly; use `<%= #{helper} … %>`",
+        )
+      end
+    end
+
+    # Registry lookup shared with the rule above.
+    def helpers_by_name
+      @helpers_by_name ||= DesignSystem::Primitives::Registry.all
+                                                           .each_with_object({}) do |prim, index|
+        index[prim[:name]] = prim[:helper] if prim[:helper]
+      end
+    end
+
+    # True when `line` actually invokes the helper — `<%= render_button … %>`,
+    # `ui_input form, :email` — and not merely mentions its name inside a
+    # partial path (`render "shared/ui_input"`) or a comment.
+    def helper_called_on_line?(helper, line)
+      candidates = line.gsub(SHARED_PATH_STRING_RE, "")
+
+      candidates.match?(/\b#{Regexp.escape(helper)}\b/)
     end
   end
 end
