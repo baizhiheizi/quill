@@ -48,7 +48,7 @@ class UiHelperTest < ActionView::TestCase
   test "render_button renders an icon span when icon is provided" do
     html = render_button("Lock", icon: "lock-open")
 
-    assert_includes html, 'i-[tabler--lock-open]'
+    assert_includes html, "i-[tabler--lock-open]"
     assert_includes html, "Lock"
   end
 

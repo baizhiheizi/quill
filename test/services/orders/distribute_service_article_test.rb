@@ -347,39 +347,92 @@ class Orders::DistributeServiceArticleTest < ActiveSupport::TestCase
 
   test "call is a no-op once the order is already completed" do
     with_quill_bot_stub do
-      with_all_transfers_generated! do
-        order = create_buy_order!(article: @article, buyer: @reader_one, total: 1.0)
-        Orders::DistributeService.call(order)
-        assert order.reload.completed?
+      order = create_buy_order!(article: @article, buyer: @reader_one, total: 1.0)
+      Orders::DistributeService.call(order)
+      assert order.reload.completed?
 
-        transfers_before = order.transfers.count
-        Orders::DistributeService.call(order)
-        assert_equal transfers_before, order.transfers.count,
-                     "re-running distribution on a completed order must not create transfers"
-      end
+      transfers_before = order.transfers.count
+      Orders::DistributeService.call(order)
+      assert_equal transfers_before, order.transfers.count,
+                   "re-running distribution on a completed order must not create transfers"
     end
   end
 
   test "concurrent calls generate transfers exactly once" do
     with_quill_bot_stub do
-      with_all_transfers_generated! do
-        order = create_buy_order!(article: @article, buyer: @reader_one, total: 1.0)
+      order = create_buy_order!(article: @article, buyer: @reader_one, total: 1.0)
 
-        threads = Array.new(4) do
-          Thread.new do
-            ActiveRecord::Base.connection_pool.with_connection do
-              Orders::DistributeService.call(Order.find(order.id))
-            end
+      threads = Array.new(4) do
+        Thread.new do
+          ActiveRecord::Base.connection_pool.with_connection do
+            Orders::DistributeService.call(Order.find(order.id))
           end
         end
-        threads.map(&:join)
-
-        order.reload
-        assert order.completed?, "order should be completed after distribution"
-        # quill_revenue transfer is keyed by a deterministic trace_id derived
-        # from the order, so it must exist exactly once regardless of caller count.
-        assert_equal 1, order.transfers.where(transfer_type: :quill_revenue).count
       end
+      threads.map(&:join)
+
+      order.reload
+      assert order.completed?, "order should be completed after distribution"
+      # quill_revenue transfer is keyed by a deterministic trace_id derived
+      # from the order, so it must exist exactly once regardless of caller count.
+      assert_equal 1, order.transfers.where(transfer_type: :quill_revenue).count
+    end
+  end
+
+  test "an article order funded by the platform wallet completes through the real guard" do
+    # Payment landed in the bot wallet: the bot fronts the payouts and keeps
+    # its own fee in place, so the transfers debit the bot wallet and sum to
+    # total minus the platform share — the guard's platform branch.
+    bot_client_id = QuillBotStub::FAKE_CLIENT_ID
+
+    with_quill_bot_stub(client_id: bot_client_id) do
+      snapshot = MixinNetworkSnapshot.create!(
+        snapshot_id: SecureRandom.uuid,
+        user_id: bot_client_id,
+        asset_id: @article.asset_id,
+        amount: 0,
+        trace_id: SecureRandom.uuid,
+        opponent_id: @reader_one.mixin_uuid,
+        transferred_at: Time.current,
+        data: ""
+      )
+
+      payment = create_payment!(
+        payer: @reader_one,
+        article: @article,
+        order_type: "BUY",
+        amount: @article.price
+      )
+      payment.update_columns(snapshot_id: snapshot.snapshot_id, trace_id: snapshot.trace_id)
+      order = payment.order
+      order.update_columns(trace_id: snapshot.trace_id)
+
+      Orders::DistributeService.call(order)
+
+      order.reload
+      assert order.completed?, "platform-funded article order should complete"
+      assert order.all_transfers_generated?
+      assert_nil order.transfers.find_by(transfer_type: :quill_revenue),
+                 "the platform should not transfer its own fee to itself"
+    end
+  end
+
+  # === Completion guard: real, non-stubbed ===
+  #
+  # `CommerceHelpers#distribute_order!` neuters `all_transfers_generated?`
+  # so the suite can run at all. This test runs the service bare and asserts
+  # the guard itself — the only protection against a paid order re-entering
+  # `Orders::BatchDistributeJob`'s sweep every 10 minutes forever.
+
+  test "an article order completes through the real completion guard" do
+    with_quill_bot_stub do
+      order = create_buy_order!(article: @article, buyer: @reader_one, total: 1.0)
+
+      Orders::DistributeService.call(order)
+
+      order.reload
+      assert order.transfers.exists?, "distribution should have created transfers"
+      assert order.completed?, "article order should complete once its revenue transfers exist"
     end
   end
 

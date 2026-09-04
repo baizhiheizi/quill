@@ -44,7 +44,7 @@ Per-article and per-user Mixin wallets are no longer created — provisioning co
 | **Reference revenue** | `reference.author.mixin_uuid` (cited article's author) |
 | **Collection revenue** | `_order.buyer.mixin_uuid` |
 
-For article-order transfers the **source** (`transfers.wallet_id`) is the platform bot (`Orders::DistributeService#distributor_wallet_id = QuillBot.api.client_id`); for collection orders the source is `payment.wallet_id` (the buyer's Mixin identity).
+Revenue transfers always debit the wallet that funded the payment (`transfers.wallet_id = payment.wallet_id`): the platform bot when the payment landed there — in which case its own fee stays in place and no `quill_revenue` transfer is emitted — otherwise the external wallet that received the payment. `Order#all_transfers_generated?` states the matching ledger invariant.
 
 ## Further reading
 
