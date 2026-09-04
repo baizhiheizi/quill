@@ -62,7 +62,7 @@
     </div>
     <% if article.author == user %>
       <span class="block size-8 flex-shrink-0 overflow-hidden rounded-full">
-        <%= render "shared/avatar", user:, thumb: true, class: "block h-full w-full rounded-full" %>
+        <%= render_avatar user:, thumb: true, class: "block h-full w-full rounded-full" %>
       </span>
     <% elsif article.authorized? user %> 
       <%= render "articles/reward_article_button", article: article, size: 'sm' %>

@@ -3,5 +3,5 @@
 <% end %>
 
 <%= turbo_stream.update 'subscribing_users_pagination' do %>
-  <%= render "shared/pagination", pagy: @pagy, id: 'subscribing_users_pagination' %>
+  <%= render_pagination @pagy, id: 'subscribing_users_pagination' %>
 <% end %>

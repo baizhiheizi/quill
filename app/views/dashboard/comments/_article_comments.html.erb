@@ -11,6 +11,6 @@
     </div>
     <div data-infinite-scroll-target='scrollArea'></div>
 
-    <%= render "shared/pagination", pagy: pagy, id: "#{dom_id article}_comments_pagination" %>
+    <%= render_pagination pagy, id: "#{dom_id article}_comments_pagination" %>
   </div>
 <% end %>

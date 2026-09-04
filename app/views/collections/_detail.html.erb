@@ -13,7 +13,7 @@
 
 <div class="relative mb-6 flex items-center gap-3 truncate">
   <span class="block size-10 flex-shrink-0 overflow-hidden rounded-full">
-    <%= render "shared/avatar", user: collection.author, thumb: true, class: "block h-full w-full rounded-full" %>
+    <%= render_avatar user: collection.author, thumb: true, class: "block h-full w-full rounded-full" %>
   </span>
   <div class="truncate leading-tight">
     <div class="truncate text-base font-semibold text-base-content"><%= collection.author.name %></div>

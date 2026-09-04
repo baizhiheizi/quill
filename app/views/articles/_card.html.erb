@@ -51,7 +51,7 @@
   <div class="relative z-10 mt-2.5 flex flex-wrap items-center gap-x-3 gap-y-1.5 text-xs text-base-content/60">
     <span class="relative flex items-center gap-1.5">
       <span class="block size-5 flex-shrink-0 overflow-hidden rounded-full">
-        <%= render "shared/avatar", user: article.author, thumb: true, class: "block h-full w-full rounded-full" %>
+        <%= render_avatar user: article.author, thumb: true, class: "block h-full w-full rounded-full" %>
       </span>
       <span class="max-w-[7rem] truncate font-medium text-base-content/70"><%= article.author.name %></span>
       <%= link_to '', user_path(article.author), data: { turbo_frame: '_top' }, class: "absolute inset-0" %>

@@ -14,7 +14,7 @@
 <%= render "users/user_card", user: @user %>
 
 <% if @user.block_user?(current_user) || current_user&.block_user?(@user) %>
-  <%= render "shared/empty", text: t('blocked') %>
+  <%= render_empty text: t('blocked') %>
 <% else %>
   <div class="mx-auto max-w-3xl border-t border-base-300 pt-6 text-base-content"
     data-controller="tabs"
@@ -55,21 +55,21 @@
       data-tabs-content-param="published"
       data-tabs-target="content">
       <%= turbo_frame_tag "#{dom_id @user}_published_articles", src: user_articles_path(@user, tab: :published), target: '_top', loading: :lazy do %>
-        <%= render "shared/loading" %>
+        <%= render_loading %>
       <% end %>
     </div> 
     <div class="hidden pb-4"
       data-tabs-content-param="bought"
       data-tabs-target="content">
       <%= turbo_frame_tag "#{dom_id @user}_bought_articles", src: user_articles_path(@user, tab: :bought), target: '_top', loading: :lazy do %>
-        <%= render "shared/loading" %>
+        <%= render_loading %>
       <% end %>
     </div> 
     <div class="hidden pb-4"
       data-tabs-content-param="commented"
       data-tabs-target="content">
       <%= turbo_frame_tag "#{dom_id @user}_comments", src: user_comments_path(@user), target: '_top', loading: :lazy do %>
-        <%= render "shared/loading" %>
+        <%= render_loading %>
       <% end %>
     </div> 
   </div>

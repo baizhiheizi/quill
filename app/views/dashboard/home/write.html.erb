@@ -15,28 +15,28 @@
   <section id="write-drafted">
     <h2 class="mb-3 text-sm font-semibold text-base-content"><%= t('drafted') %></h2>
     <%= turbo_frame_tag "my_drafted_articles", src: dashboard_articles_path(tab: :drafted), loading: :lazy do %>
-      <%= render "shared/loading" %>
+      <%= render_loading %>
     <% end %>
   </section>
 
   <section id="write-published">
     <h2 class="mb-3 text-sm font-semibold text-base-content"><%= t('published') %></h2>
     <%= turbo_frame_tag "my_published_articles", src: dashboard_articles_path(tab: :published), loading: :lazy do %>
-      <%= render "shared/loading" %>
+      <%= render_loading %>
     <% end %>
   </section>
 
   <section id="write-hidden">
     <h2 class="mb-3 text-sm font-semibold text-base-content"><%= t('hidden') %></h2>
     <%= turbo_frame_tag "my_hidden_articles", src: dashboard_articles_path(tab: :hidden), loading: :lazy do %>
-      <%= render "shared/loading" %>
+      <%= render_loading %>
     <% end %>
   </section>
 
   <section id="write-collections">
     <h2 class="mb-3 text-sm font-semibold text-base-content"><%= t('collections') %></h2>
     <%= turbo_frame_tag "my_collections", src: dashboard_collections_path, loading: :lazy do %>
-      <%= render "shared/loading" %>
+      <%= render_loading %>
     <% end %>
   </section>
 
@@ -44,7 +44,7 @@
     <h2 class="mb-3 text-sm font-semibold text-base-content"><%= t('author_revenue') %></h2>
     <%= turbo_frame_tag "my_transfers_stats", src: dashboard_transfers_stats_path %>
     <%= turbo_frame_tag "my_transfers", src: dashboard_transfers_path(tab: :author), loading: :lazy do %>
-      <%= render "shared/loading" %>
+      <%= render_loading %>
     <% end %>
   </section>
 </div>

@@ -31,7 +31,7 @@
         </tbody>
       </table>
       <div data-infinite-scroll-target='scrollArea'></div>
-      <%= render partial: "shared/pagination", locals: { pagy: @pagy } %>
+      <%= render_pagination @pagy %>
     </div>
   <% end %>
 </div>

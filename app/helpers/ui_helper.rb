@@ -60,4 +60,29 @@ module UiHelper
   def render_table(columns:, rows:, row_path: nil, empty: nil)
     render "shared/table", columns:, rows:, row_path:, empty:
   end
+
+  # Infinite-scroll pagination footer (`app/views/shared/_pagination.html.erb`).
+  # `id` is the DOM anchor Turbo appends the next page after; it defaults to
+  # "pagination" inside the partial. Pass `id:` whenever more than one paginated
+  # list can appear on the same page.
+  def render_pagination(pagy, id: nil)
+    render "shared/pagination", pagy:, id:
+  end
+
+  # Inline infinite-scroll spinner (`app/views/shared/_loading.html.erb`).
+  def render_loading
+    render "shared/loading"
+  end
+
+  # User avatar with initials fallback (`app/views/shared/_avatar.html.erb`).
+  # `class:` is passed through verbatim; the partial falls back to
+  # "rounded-full" when it is blank.
+  def render_avatar(user:, thumb: false, class: nil)
+    render "shared/avatar", user:, thumb:, class:
+  end
+
+  # Empty-list placeholder (`app/views/shared/_empty.html.erb`).
+  def render_empty(text:)
+    render "shared/empty", text:
+  end
 end

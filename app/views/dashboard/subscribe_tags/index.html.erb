@@ -1,14 +1,14 @@
 <%= turbo_frame_tag "#{dom_id current_user}_subscribe_tags" do %>
   <div data-controller="infinite-scroll">
     <% if @tags.blank? %>
-      <%= render "shared/empty", text: t('no_record') %>
+      <%= render_empty text: t('no_record') %>
     <% else %>
       <div id="<%= dom_id current_user %>_subscribe_tags_list">
         <%= render partial: "dashboard/subscribe_tags/tag", collection: @tags, as: :tag %>
       </div>
       <div data-infinite-scroll-target='scrollArea'></div>
 
-      <%= render "shared/pagination", pagy: @pagy, id: "subscribe_tags_pagination" %>
+      <%= render_pagination @pagy, id: "subscribe_tags_pagination" %>
     <% end %>
   </div>
 <% end %>

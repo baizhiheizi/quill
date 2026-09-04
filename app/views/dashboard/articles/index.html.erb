@@ -1,7 +1,7 @@
 <%= turbo_frame_tag "my_#{@tab}_articles" do %>
   <div data-controller="infinite-scroll">
     <% if @articles.blank? %>
-      <%= render "shared/empty", text: t('no_record') %>
+      <%= render_empty text: t('no_record') %>
     <% else %>
       <div id="my_<%= @tab %>_articles_list" class="mb-10">
         <% case @tab %>
@@ -18,7 +18,7 @@
     <% end %>
 
     <div data-infinite-scroll-target='scrollArea'></div>
-    <%= render "shared/pagination", pagy: @pagy, id: "my_#{@tab}_articles_pagination" %>
+    <%= render_pagination @pagy, id: "my_#{@tab}_articles_pagination" %>
 
     <div class="my-8">
       <div class="flex justify-center mb-4">

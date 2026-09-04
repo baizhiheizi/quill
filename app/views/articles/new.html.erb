@@ -40,7 +40,7 @@
           class: "avatar shrink-0 #{from_mixin_messenger? ? 'mr-10 sm:mr-0' : ''}",
           "aria-label": current_user.name do %>
           <div class="size-7 rounded-full sm:size-8">
-            <%= render "shared/avatar", user: current_user, thumb: true, class: "rounded-full" %>
+            <%= render_avatar user: current_user, thumb: true, class: "rounded-full" %>
           </div>
         <% end %>
       </div>

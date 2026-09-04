@@ -19,7 +19,7 @@
 
 <div class="mb-10">
   <%= turbo_frame_tag 'transfers_stats', src: 'transfers/stats' do %>
-    <%= render 'shared/loading' %>
+    <%= render_loading %>
   <% end %>
 </div>
 
@@ -29,6 +29,6 @@
     <p class="font-mono text-[13px] text-base-content/60"><%= t('ds_transfers_last_n', count: 50) %></p>
   </div>
   <%= turbo_frame_tag "transfers", src: transfers_path, target: "_top" do %>
-    <%= render "shared/loading" %>
+    <%= render_loading %>
   <% end %>
 </section>
