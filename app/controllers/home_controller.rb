@@ -50,20 +50,12 @@ class HomeController < ApplicationController
     # Cross-Locale Article Visibility: the relation is no longer narrowed
     # by `users.locale = caller_locale`. Every visitor sees the
     # platform-wide active-author set.
-    relation =
-      User
-      .active
-    if current_user
-      # Same SQL subquery pattern as ArticleSearchService#filter_block_authors
-      # (PR #1598): never materialize the blocked user IDs in Ruby. The
-      # `actions` table has an index on (user_type, user_id, action_type),
-      # so the IN-list subquery is index-scannable.
-      blocked_ids =
-        Action
-        .where(user_id: current_user.id, action_type: "block", target_type: "User")
-        .select(:target_id)
-      relation = relation.where.not(id: blocked_ids).where.not(id: current_user.id)
-    end
+    #
+    # `ArticleVisibility.authors` carries the same two-directional block rule
+    # the article feed applies — never materialize the blocked user IDs in
+    # Ruby; the `actions` table has an index on (user_type, user_id,
+    # action_type), so the IN-list subquery is index-scannable.
+    relation = ArticleVisibility.authors(current_user)
     # Same SQL-sample pattern as `hot_tags`: `ORDER BY RANDOM() LIMIT 5` lets
     # Postgres pick 5 rows directly from the filtered relation instead of
     # shipping 20 rows over the wire and discarding 15 in Ruby. The previous

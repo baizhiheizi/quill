@@ -55,7 +55,7 @@ class API::ArticlesControllerTest < IntegrationTestCase
   end
 
   test "index truncates an oversized query param to the length limit" do
-    limit = API::ArticlesController::QUERY_LENGTH_LIMIT
+    limit = ArticleVisibility::QUERY_LENGTH_LIMIT
     long_query = "a" * (limit + 50)
 
     get api_articles_path(query: long_query), as: :json
@@ -66,6 +66,67 @@ class API::ArticlesControllerTest < IntegrationTestCase
     # generated SQL that the pattern was truncated.
     # (Behavioral smoke test — the truncation unit test lives in the service
     # test; here we just confirm the endpoint does not blow up on a huge query.)
+  end
+
+  # Issue #2075: the API used to skip the block rule entirely while the web
+  # feed applied it in both directions. That divergence is now an assertion —
+  # the catalogue branch hides authors blocked in either direction, exactly
+  # like the web.
+  test "index applies the two-directional block rule for an authenticated viewer" do
+    viewer = users(:reader_one)
+    viewer.block_user(users(:author))
+    users(:author_zh).block_user(viewer)
+    headers = api_headers(access_tokens(:reader_token))
+
+    get api_articles_path(author_id: users(:author).mixin_uuid), headers: headers, as: :json
+
+    assert_response :success
+    assert_empty response.parsed_body, "expected authors the viewer blocked to be hidden"
+
+    get api_articles_path(author_id: users(:author_zh).mixin_uuid), headers: headers, as: :json
+
+    assert_response :success
+    assert_empty response.parsed_body, "expected authors who blocked the viewer to be hidden"
+
+    get api_articles_path(author_id: users(:author_ja).mixin_uuid), headers: headers, as: :json
+
+    assert_response :success
+    assert_includes response.parsed_body.pluck("uuid"), articles(:published_ja).uuid,
+      "expected unrelated authors to stay visible"
+  end
+
+  test "index keeps the viewer's own articles when another author blocked them" do
+    users(:author_zh).block_user(users(:author))
+
+    get api_articles_path, headers: api_headers(access_tokens(:author_token)), as: :json
+
+    assert_response :success
+    uuids = response.parsed_body.pluck("uuid")
+    assert_includes uuids, articles(:published_paid).uuid,
+      "expected the viewer's own articles to survive the blocker predicate"
+    assert_not_includes uuids, articles(:published_zh).uuid
+  end
+
+  test "index hides the requested author's articles from a viewer they blocked" do
+    users(:author).block_user(users(:reader_one))
+
+    get api_articles_path(author_id: users(:author).mixin_uuid),
+        headers: api_headers(access_tokens(:reader_token)), as: :json
+
+    assert_response :success
+    assert_empty response.parsed_body
+  end
+
+  test "index applies no block rule for an anonymous viewer" do
+    users(:reader_one).block_user(users(:author))
+    users(:author_zh).block_user(users(:reader_one))
+
+    get api_articles_path, as: :json
+
+    assert_response :success
+    uuids = response.parsed_body.pluck("uuid")
+    assert_includes uuids, articles(:published_paid).uuid
+    assert_includes uuids, articles(:published_zh).uuid
   end
 
   test "index eager-loads the author avatar chain consumed by the JSON template" do
