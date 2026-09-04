@@ -16,17 +16,25 @@ CI.run do
 
   # The "Install Chrome for system tests" workflow step degrades to a
   # ::warning when the runner's egress cannot fetch a browser; here we skip the
-  # browser-dependent suite instead of failing every run on the network. The
-  # gate is a launch smoke test, not mere presence — an installed browser that
-  # cannot start (sandbox, missing libs) would fail every system test anyway.
-  # CHROME_REQUIRED=1 makes the skip fatal.
-  chrome_smoke = "google-chrome-stable --headless --no-sandbox --disable-gpu " \
-    "--disable-dev-shm-usage --dump-dom about:blank >/dev/null 2>&1"
-  if ENV["CHROME_REQUIRED"] || system(chrome_smoke)
+  # browser-dependent suite instead of failing every run on the environment.
+  # The gate is a real chromedriver session — the exact launch path test:system
+  # uses — not mere browser presence, so "installed but cannot start" also
+  # skips. CHROME_REQUIRED=1 makes the skip fatal.
+  chrome_launches = begin
+    require "selenium-webdriver"
+    options = Selenium::WebDriver::Chrome::Options.new(args: %w[--headless --no-sandbox --disable-gpu --disable-dev-shm-usage])
+    Selenium::WebDriver.for(:chrome, options: options).quit
+    true
+  rescue StandardError => e
+    puts ">> Browser launch probe failed: #{e.class}: #{e.message.to_s.lines.first&.strip}"
+    false
+  end
+
+  if ENV["CHROME_REQUIRED"] || chrome_launches
     step "Tests: System", "bin/rails test:system"
   else
-    puts ">> Skipping Tests: System - no launchable google-chrome-stable on " \
-      "this runner (see the Install Chrome step). Export CHROME_REQUIRED=1 to fail instead."
+    puts ">> Skipping Tests: System - chromedriver cannot launch a browser on " \
+      "this runner (see the Install Chrome step diagnostics). Export CHROME_REQUIRED=1 to fail instead."
   end
 
   # Optional: set a green GitHub commit status to unblock PR merge.
