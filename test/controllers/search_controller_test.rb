@@ -28,6 +28,15 @@ class SearchControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  # The live search always requests turbo_stream (`search_controller.js`
+  # responseKind), but /search is a real route: a direct visit must not raise
+  # UnknownFormat. This is also the request RackAttackTest makes 21 times.
+  test "index renders for a plain html visit" do
+    get search_path(query: "author")
+
+    assert_response :success
+  end
+
   private
 
   def capture_sql
