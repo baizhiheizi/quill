@@ -55,6 +55,28 @@ class ArticlesControllerTest < IntegrationTestCase
     assert_match "data-paywall-fade-target=\"unlock\"", response.body
   end
 
+  test "show for a guest primes the vote sets without touching the actions table" do
+    # `ViewerActionSets#ids_for` must answer a nil viewer with an empty Set
+    # and no query. The show page assigns both vote sets up front (in
+    # `#show`), so this pins the guest branch of the concern on the public
+    # surface where a guest is the common case.
+    article = articles(:published_paid)
+
+    queries = []
+    callback = ->(*, payload) {
+      next if payload[:name] == "SCHEMA"
+      queries << payload[:sql] if payload[:sql] =~ /FROM\s+"actions"/i
+    }
+
+    ActiveSupport::Notifications.subscribed(callback, "sql.active_record") do
+      get user_article_path(article.author, article)
+    end
+
+    assert_response :success
+    assert_empty queries,
+      "a guest should get empty vote sets without an actions SELECT, got: #{queries.inspect}"
+  end
+
   test "index renders a friendly, query-aware empty state for a search with no matches" do
     get articles_path(query: "no-such-article-xyz123")
 
@@ -163,6 +185,42 @@ end
 
 class ArticlesAuthenticatedControllerTest < ActionController::TestCase
   tests ArticlesController
+
+  test "show primes both vote sets in one SELECT per side" do
+    # `ArticlesController#show` assigns `@preloaded_upvoted_article_ids` /
+    # `@preloaded_downvoted_article_ids` from `ViewerActionSets#ids_for`. The
+    # `_votes` and `_floating_bar` partials consult each set twice (state
+    # check + button target), so without the prime the show page fires 4
+    # SELECTs of this kind; with it, exactly one per side.
+    article = articles(:published_free)
+    viewer = users(:reader_one)
+    other = articles(:published_paid)
+
+    viewer.create_action(:upvote, target: article)
+    viewer.create_action(:downvote, target: other)
+    @request.session[:current_session_id] = sign_in(viewer).uuid
+
+    actions_queries = []
+    callback = ->(*, payload) {
+      next if payload[:name] == "SCHEMA"
+      # Only the priming SELECTs (`pluck(:target_id)`). The partials also run
+      # their live `upvote_article?` / `downvote_article?` `find_by` fallbacks
+      # from a render path that does not see the primed ivars — that is
+      # pre-existing behaviour and out of scope here.
+      actions_queries << payload[:sql] if payload[:sql] =~ /SELECT\s+"actions"\."target_id"\s+FROM\s+"actions"/i
+    }
+
+    ActiveSupport::Notifications.subscribed(callback, "sql.active_record") do
+      get :show, params: { uid: article.author.uid, uuid: article.uuid }
+    end
+
+    assert_response :success
+    assert_equal 2, actions_queries.size,
+      "expected exactly one priming SELECT per vote side, got #{actions_queries.size}:\n#{actions_queries.join("\n")}"
+
+    assert_includes @controller.instance_variable_get(:@preloaded_upvoted_article_ids), article.id
+    assert_includes @controller.instance_variable_get(:@preloaded_downvoted_article_ids), other.id
+  end
 
   test "create returns json with uuid and persists tags" do
     author = users(:author)

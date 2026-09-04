@@ -51,7 +51,7 @@ module Admin
       #   - `:item`     → `case pre_order.item` (polymorphic
       #     Article/Collection; Rails 7+ groups preloaded rows by
       #     `item_type` and fires one SELECT per type).
-      #   - `payer: admin_user_field_preloads` → `render "admin/users/field",
+      #   - `payer: User::AVATAR_PRELOADS` → `render "admin/users/field",
       #     user: pre_order.payer` → `shared/_avatar` with `thumb: true` →
       #     `user.avatar_image_thumb` walks the ActiveStorage
       #     `:avatar_attachment.blob.variant_records` chain AND
@@ -59,14 +59,14 @@ module Admin
       #   - `:currency` → `pre_order.currency.icon_url`,
       #     `pre_order.amount_tag`
       #
-      # `admin_user_field_preloads` is the canonical preload chain used by
+      # `User::AVATAR_PRELOADS` is the canonical preload chain used by
       # every sibling admin index (`Admin::OrdersController`,
       # `Admin::PaymentsController`, `Admin::TransfersController`,
       # `Admin::BonusesController`, `Admin::ArticlesController`). Without
       # it, each row triggers ~3 extra SELECTs (authorization + avatar
       # attachment + blob/variant) — for the default pagy page of 50
       # pre-orders that's ~150 extra SELECTs per request.
-      @pagy, @pre_orders = pagy(:countless, pre_orders.includes(:item, :currency, payer: admin_user_field_preloads))
+      @pagy, @pre_orders = pagy(:countless, pre_orders.includes(:item, :currency, payer: User::AVATAR_PRELOADS))
     end
 
     def show

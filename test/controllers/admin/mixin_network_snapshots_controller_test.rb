@@ -42,7 +42,7 @@ class Admin::MixinNetworkSnapshotsControllerTest < ActionController::TestCase
     opponent_chain = includes.find { |v| v.is_a?(Hash) && v.key?(:opponent) }
     assert opponent_chain, "expected opponent in preload chain, got #{includes.inspect}"
     assert_equal(
-      Admin::BaseController.new.admin_user_field_preloads,
+      User::AVATAR_PRELOADS,
       opponent_chain[:opponent]
     )
   end

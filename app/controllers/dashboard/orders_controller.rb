@@ -40,7 +40,7 @@ class Dashboard::OrdersController < Dashboard::BaseController
     #     follow-up SELECT for `:author` only when the citer is an Article,
     #     so the chain is safe for orders with no citer (the common case).
     #   - `:currency`       → `order.currency.symbol` in the price cell.
-    #   - `buyer: user_field_preloads` → `shared/avatar` partial reads
+    #   - `buyer: User::AVATAR_PRELOADS` → `shared/avatar` partial reads
     #     `user.avatar_image_thumb`, which loads `:authorization` (for the
     #     raw `avatar_url` fallback) and the ActiveStorage
     #     `avatar_attachment: blob: variant_records` chain (for `variant(:thumb)
@@ -56,6 +56,6 @@ class Dashboard::OrdersController < Dashboard::BaseController
     #                     1 (avatar_attachments) + 1 (blobs/variants) +
     #                     1 (citer authors when cite_article rows present)
     #                     ≈ 6-8 SELECTs total.
-    @pagy, @orders = pagy orders.includes(:item, :currency, citer: :author, buyer: user_field_preloads).order(created_at: :desc)
+    @pagy, @orders = pagy orders.includes(:item, :currency, citer: :author, buyer: User::AVATAR_PRELOADS).order(created_at: :desc)
   end
 end
