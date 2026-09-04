@@ -32,6 +32,7 @@ class Collection < ApplicationRecord
   MINIMUM_PRICE_USD = 6.99
 
   include AASM
+  include Notifiable
   include Purchasable
 
   has_one_attached :cover
@@ -133,13 +134,11 @@ class Collection < ApplicationRecord
   end
 
   def notify_subscribers
-    CollectionListedNotifier
-      .with(record: self, collection: self)
-      .deliver(
-        User
-          .where(id: author.subscribed_user_ids_relation)
-          .where.not(id: author.blocked_user_ids_relation)
-      )
+    notify!(
+      CollectionListedNotifier,
+      recipient: Notifiers::Audience.subscribed_to(author, excluding_blocked: author),
+      collection: self
+    )
   end
 
   private

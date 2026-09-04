@@ -17,6 +17,8 @@
 #
 
 class Tagging < ApplicationRecord
+  include Notifiable
+
   belongs_to :tag, counter_cache: :articles_count, touch: true
   belongs_to :article, counter_cache: :tags_count, touch: true
 
@@ -27,20 +29,11 @@ class Tagging < ApplicationRecord
   def notify_subscribers
     return unless article.published?
 
-    # Push the (subscribed-to-tag) - (author-blocked) predicate into
-    # SQL subqueries so we never materialize either id list in Ruby.
-    # Matches the pattern used by `HomeController#active_authors`
-    # (PR #1735) and `Article#notify_subscribers`. The Tag-side
-    # subquery targets `target_type: "Tag"` (the action_store gem
-    # accepts any target_type); the block filter reuses
-    # `User#blocked_user_ids_relation`.
-    TaggingCreatedNotifier
-      .with(record: self, tagging: self)
-      .deliver(
-        User
-          .where(id: Action.where(target_type: "Tag", target_id: tag.id, action_type: "subscribe").select(:user_id))
-          .where.not(id: article.author.blocked_user_ids_relation)
-      )
+    notify!(
+      TaggingCreatedNotifier,
+      recipient: Notifiers::Audience.subscribed_to(tag, excluding_blocked: article.author),
+      tagging: self
+    )
   end
 
   has_many :noticed_events, as: :record, dependent: :destroy, class_name: "Noticed::Event"

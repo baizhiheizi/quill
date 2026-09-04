@@ -28,6 +28,7 @@
 
 class Payment < ApplicationRecord
   include AASM
+  include Notifiable
 
   belongs_to :payer, class_name: "User", primary_key: :mixin_uuid, inverse_of: :payments, optional: true
   belongs_to :payer_wallet, class_name: "MixinNetworkUser", foreign_key: :opponent_id, primary_key: :uuid, inverse_of: false, optional: true
@@ -259,9 +260,9 @@ class Payment < ApplicationRecord
 
     case state
     when "paid", "completed"
-      PaymentCreatedNotifier.with(record: self, payment: self).deliver(payer)
+      notify!(PaymentCreatedNotifier, recipient: payer, payment: self)
     when "refunded"
-      PaymentRefundedNotifier.with(record: self, payment: self).deliver(payer)
+      notify!(PaymentRefundedNotifier, recipient: payer, payment: self)
     end
   end
 

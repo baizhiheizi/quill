@@ -39,6 +39,7 @@
 class User < ApplicationRecord
   is_impressionable
 
+  include Notifiable
   include Users::EmailVerifiable
   include Users::Scopable
   include Users::Statable
@@ -219,10 +220,12 @@ class User < ApplicationRecord
   # Matches the NOT IN / IN subquery pattern used by
   # `HomeController#active_authors` (PR #1735) and
   # `ArticleSearchService#filter_block_authors`.
+  #
+  # The composition itself lives in `Notifiers::Audience`, which owns every
+  # audience rule; this alias keeps the reader-facing name the delivery sites
+  # and `TESTING_GUIDE.md` refer to.
   def subscribed_user_ids_relation
-    Action
-      .where(target_type: "User", target_id: id, action_type: "subscribe")
-      .select(:user_id)
+    Notifiers::Audience.subscriber_ids_of(self)
   end
 
   # SQL subquery that returns every user_id that `self` has blocked.
@@ -230,9 +233,7 @@ class User < ApplicationRecord
   # Ruby first; this relation keeps the predicate in SQL. See
   # `subscribed_user_ids_relation` for context.
   def blocked_user_ids_relation
-    Action
-      .where(user_type: "User", user_id: id, target_type: "User", action_type: "block")
-      .select(:target_id)
+    Notifiers::Audience.blocked_ids_of(self)
   end
 
   def owning_collection_ids
@@ -244,13 +245,13 @@ class User < ApplicationRecord
   end
 
   def notify_for_login
-    UserConnectedNotifier.with(record: self, user: self).deliver(self)
+    notify!(UserConnectedNotifier, recipient: self, user: self)
   end
 
   def notify_for_safe_registration
     return if has_safe?
 
-    UserSafeRegistrationNotifier.with(record: self, user: self).deliver(self)
+    notify!(UserSafeRegistrationNotifier, recipient: self, user: self)
   end
 
   def short_uid
