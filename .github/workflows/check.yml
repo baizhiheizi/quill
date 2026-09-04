@@ -105,6 +105,23 @@ jobs:
               sudo ln -sf /opt/chrome-for-testing/chrome-linux64/chrome /usr/local/bin/google-chrome-stable
           }
 
+          install_matching_chromedriver() {
+            # Selenium Manager prefers a chromedriver found in PATH; a stale
+            # host one (e.g. /usr/bin/chromedriver) cannot launch a newer
+            # Chrome and every session dies with "Chrome instance exited".
+            # Put a version-matched chromedriver on /usr/local/bin, which
+            # shadows /usr/bin.
+            local browser_version major driver_version
+            browser_version="$(google-chrome-stable --version 2>/dev/null | grep -oE '[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+' | head -1)" || return 1
+            major="${browser_version%%.*}"
+            driver_version="$(wget -qO- "https://googlechromelabs.github.io/chrome-for-testing/LATEST_RELEASE_${major}" || true)"
+            [ -n "$driver_version" ] || return 0
+            wget --tries=3 --timeout=60 -O /tmp/chromedriver.zip \
+              "https://storage.googleapis.com/chrome-for-testing-public/${driver_version}/linux64/chromedriver-linux64.zip" &&
+              sudo unzip -qo /tmp/chromedriver.zip -d /opt/chrome-for-testing &&
+              sudo ln -sf /opt/chrome-for-testing/chromedriver-linux64/chromedriver /usr/local/bin/chromedriver
+          }
+
           if command -v google-chrome-stable &>/dev/null; then
             echo "google-chrome-stable already present: $(google-chrome-stable --version 2>/dev/null || echo 'unversioned')"
           elif install_from_deb || install_from_cft; then
@@ -113,6 +130,8 @@ jobs:
             echo "::warning::No browser could be installed (runner egress). config/ci.rb will skip Tests: System; every other step still gates this run."
             exit 0
           fi
+
+          install_matching_chromedriver || echo "::warning::No version-matched chromedriver could be installed; relying on whatever chromedriver is in PATH."
 
           # Launch diagnostics: config/ci.rb skips the system suite when the
           # browser cannot start, so surface WHY here (missing libs, sandbox).
