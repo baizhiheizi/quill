@@ -170,6 +170,7 @@ Some tests change methods on a model or notifier class with `define_method` and 
 
 ### Order
 - `setup_attributes` requires a real `Payment.amount`. Bypass with `save(validate: false)`.
+- `notify_subscribers` delivers to the buyer's followers. `ArticleBoughtNotifier` / `ArticleRewardedNotifier` / `CollectionBoughtNotifier` guard with `should_notify? → !recipient.block_user?(order.buyer)`: a follower who blocked the buyer still gets the persisted row but `visible_in_web?` is false and mixin delivery is skipped.
 
 ### Splitter
 - `collect_assets` wraps in `with_advisory_lock("splitter:#{id}:collect")`. Short-circuits when lock is not acquired.

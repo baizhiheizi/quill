@@ -48,8 +48,16 @@ class ArticleRewardedNotifier < ApplicationNotifier
       recipient.notification_setting.article_rewarded_mixin_bot
     end
 
+    def should_notify?
+      !recipient.block_user? order.buyer
+    end
+
+    def may_notify_via_web?
+      should_notify? && web_notification_enabled?
+    end
+
     def may_notify_via_mixin_bot?
-      recipient_messenger? && mixin_bot_notification_enabled?
+      should_notify? && recipient_messenger? && mixin_bot_notification_enabled?
     end
   end
 end
