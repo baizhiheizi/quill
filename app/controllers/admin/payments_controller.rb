@@ -45,7 +45,7 @@ module Admin
       # Without these includes each row triggers ~2 SELECTs (payer +
       # currency). For an admin viewing a pagy page of 50 payments, the
       # action runs ~100 SELECTs per request.
-      @pagy, @payments = pagy(:countless, payments.includes(:currency, payer: admin_user_field_preloads))
+      @pagy, @payments = pagy(:countless, payments.includes(:currency, payer: User::AVATAR_PRELOADS))
     end
 
     def show

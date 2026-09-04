@@ -72,7 +72,7 @@ class Admin::ArticlesControllerTest < ActionController::TestCase
   # ActiveStorage `:avatar_attachment.blob.variant_records` chain AND
   # `authorization&.raw&.[]("avatar_url")` (OAuth fallback).
   #
-  # Without `author: admin_user_field_preloads`, every row fires extra
+  # Without `author: User::AVATAR_PRELOADS`, every row fires extra
   # SELECTs for `authorizations`, `active_storage_attachments`, and
   # `active_storage_blobs`. With the preload chain, both are loaded in
   # ~2 SELECTs total regardless of page size.

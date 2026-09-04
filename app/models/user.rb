@@ -45,12 +45,11 @@ class User < ApplicationRecord
 
   extend Enumerize
 
-  # Canonical preload chain for any caller that renders `shared/_avatar`
-  # (or `admin/users/_field`, which delegates to it). The chain mirrors
-  # `UserFieldPreloads#user_field_preloads` in
-  # `app/controllers/concerns/user_field_preloads.rb` — both partials
-  # resolve `user.avatar_image_thumb` / `user.avatar_image_url`, which
-  # walks:
+  # The canonical — and only — avatar preload chain. Every surface that
+  # renders `shared/_avatar` (or `admin/users/_field`, which delegates to it)
+  # includes this constant; there is no controller-side copy to keep in sync.
+  # Both partials resolve `user.avatar_image_thumb` / `user.avatar_image_url`,
+  # which walks:
   #   - `authorization&.raw["avatar_url"]` (OAuth fallback when no
   #     ActiveStorage avatar is attached)
   #   - `avatar.attached?` (the `attachments` row)
@@ -58,12 +57,9 @@ class User < ApplicationRecord
   #   - `avatar.variant(:thumb).processed.key` (the variant chain:
   #     `variant_records → image_attachment → blob`)
   #
-  # Without these preloads each row fires 4-5 SELECTs. The constant
-  # exists so non-controller callers (Article scopes, test factories,
-  # background jobs) can include the chain with the same shape that
-  # `Admin::BaseController#admin_user_field_preloads` already uses
-  # inline — keeping them byte-for-byte identical avoids drift between
-  # the controller helper and the model-level eager-load.
+  # Without these preloads each row fires 4-5 SELECTs. The chain is used by
+  # the admin, dashboard, users and collections indexes, `Article` scopes,
+  # and the public article show page.
   AVATAR_PRELOADS = [
     :authorization,
     {

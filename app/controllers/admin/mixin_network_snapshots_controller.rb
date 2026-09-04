@@ -89,7 +89,7 @@ module Admin
     # `admin/mixin_network_snapshots/_mixin_network_snapshot.html.erb`
     # for the exact fields walked per row.
     def index_includes
-      [ :wallet, :opponent_wallet, :currency, { opponent: admin_user_field_preloads } ]
+      [ :wallet, :opponent_wallet, :currency, { opponent: User::AVATAR_PRELOADS } ]
     end
   end
 end
