@@ -25,8 +25,10 @@ CI.run do
   chrome_launches = begin
     require "selenium-webdriver"
     if ENV["CI"]
-      driver_in_path = `command -v chromedriver`.strip
-      puts ">> chromedriver in PATH: #{driver_in_path.empty? ? "none" : `chromedriver --version 2>&1`.lines.first&.strip}"
+      # NOTE: a single-quoted-looking `command -v ...` would be exec'd directly
+      # by Ruby (no shell metacharacters -> no shell) and fail with ENOENT.
+      driver_version = `chromedriver --version 2>&1`.lines.first&.strip
+      puts ">> chromedriver in PATH: #{driver_version || "none"}"
       puts ">> google-chrome-stable: #{`google-chrome-stable --version 2>&1`.strip}"
     end
     options = Selenium::WebDriver::Chrome::Options.new(
