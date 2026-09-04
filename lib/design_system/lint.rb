@@ -22,6 +22,17 @@ module DesignSystem
   class Lint
     class PhaseError < StandardError; end
 
+    # ─── Rule-scoped legacy debt ───────────────────────────────────────────
+    # The reasons below describe the raw-markup backlog that predates the
+    # design system (issue #2077). Each file is exempted from the specific
+    # rules it trips and nothing else, so a new rule or a new file stays
+    # policed. Deleting an entry is the fix.
+    LEGACY_ADMIN_TABLE = "admin index table renders a collection of row partials inside <tbody>; _table.html.erb has no row-partial slot to receive it yet"
+    LEGACY_ADMIN_BUTTONS = "admin console markup predates the primitive: row-action link_to and query-bar form.submit carry .btn classes; converting needs a submit-button primitive and a visual pass over the console"
+    LEGACY_CHROME = "layout chrome (close/cancel/toggle) carries .btn plus focus-ring and absolute-positioning classes; render_button cannot emit that composite yet"
+    LEGACY_SETTINGS_FORMS = "profile settings form controls carry .btn classes alongside Rails form builder attributes; moving them changes the emitted markup and needs a visual pass"
+    LEGACY_BESPOKE = "bespoke .btn markup with per-surface rounded-full / size / state variants; render_button cannot express the variant today, needs a per-surface pass"
+
     # File-level allowlist. Each entry: relative path (String) => reason (String).
     # Reasons are committed next to the path so future maintainers know why
     # an exception is allowed.
@@ -33,7 +44,99 @@ module DesignSystem
       "app/views/articles/_card_cover.html.erb" => "procedural cover-art SVG (not an icon)",
       "app/javascript/utils/notify.js" => "toast icons migrated to i-[tabler--*]; allowlist shrinks in Phase 7",
       "app/assets/stylesheets/application.tailwind.css" => "source of token layer (hex literals are intentional)",
-      "app/assets/stylesheets/lexxy_overrides.css" => "Lexxy editor internals; not owned by Quill"
+      "app/assets/stylesheets/lexxy_overrides.css" => "Lexxy editor internals; not owned by Quill",
+      "app/views/admin/_aside.html.erb" => { rules: %w[DS005], reason: LEGACY_ADMIN_BUTTONS },
+      "app/views/admin/articles/_article.html.erb" => { rules: %w[DS005], reason: LEGACY_ADMIN_BUTTONS },
+      "app/views/admin/articles/_query.html.erb" => { rules: %w[DS005], reason: LEGACY_ADMIN_BUTTONS },
+      "app/views/admin/articles/index.html.erb" => { rules: %w[DS007], reason: LEGACY_ADMIN_TABLE },
+      "app/views/admin/articles/show.html.erb" => { rules: %w[DS005], reason: LEGACY_ADMIN_BUTTONS },
+      "app/views/admin/bonuses/_bonus.html.erb" => { rules: %w[DS005], reason: LEGACY_ADMIN_BUTTONS },
+      "app/views/admin/bonuses/_form.html.erb" => { rules: %w[DS005], reason: LEGACY_ADMIN_BUTTONS },
+      "app/views/admin/bonuses/_query.html.erb" => { rules: %w[DS005], reason: LEGACY_ADMIN_BUTTONS },
+      "app/views/admin/bonuses/index.html.erb" => { rules: %w[DS005 DS007], reason: "#{LEGACY_ADMIN_TABLE} #{LEGACY_ADMIN_BUTTONS}" },
+      "app/views/admin/collections/_query.html.erb" => { rules: %w[DS005], reason: LEGACY_ADMIN_BUTTONS },
+      "app/views/admin/collections/index.html.erb" => { rules: %w[DS007], reason: LEGACY_ADMIN_TABLE },
+      "app/views/admin/collections/show.html.erb" => { rules: %w[DS005], reason: LEGACY_ADMIN_BUTTONS },
+      "app/views/admin/comments/_comment.html.erb" => { rules: %w[DS005], reason: LEGACY_ADMIN_BUTTONS },
+      "app/views/admin/comments/_query.html.erb" => { rules: %w[DS005], reason: LEGACY_ADMIN_BUTTONS },
+      "app/views/admin/comments/index.html.erb" => { rules: %w[DS007], reason: LEGACY_ADMIN_TABLE },
+      "app/views/admin/login/new.html.erb" => { rules: %w[DS005], reason: LEGACY_ADMIN_BUTTONS },
+      "app/views/admin/mixin_network_snapshots/_mixin_network_snapshot.html.erb" => { rules: %w[DS005], reason: LEGACY_ADMIN_BUTTONS },
+      "app/views/admin/mixin_network_snapshots/_query.html.erb" => { rules: %w[DS005], reason: LEGACY_ADMIN_BUTTONS },
+      "app/views/admin/mixin_network_snapshots/index.html.erb" => { rules: %w[DS007], reason: LEGACY_ADMIN_TABLE },
+      "app/views/admin/mixin_network_users/_mixin_network_user.html.erb" => { rules: %w[DS005], reason: LEGACY_ADMIN_BUTTONS },
+      "app/views/admin/mixin_network_users/_query.html.erb" => { rules: %w[DS005], reason: LEGACY_ADMIN_BUTTONS },
+      "app/views/admin/mixin_network_users/index.html.erb" => { rules: %w[DS007], reason: LEGACY_ADMIN_TABLE },
+      "app/views/admin/mixin_network_users/show.html.erb" => { rules: %w[DS005], reason: LEGACY_ADMIN_BUTTONS },
+      "app/views/admin/orders/_order.html.erb" => { rules: %w[DS005], reason: LEGACY_ADMIN_BUTTONS },
+      "app/views/admin/orders/_query.html.erb" => { rules: %w[DS005], reason: LEGACY_ADMIN_BUTTONS },
+      "app/views/admin/orders/index.html.erb" => { rules: %w[DS007], reason: LEGACY_ADMIN_TABLE },
+      "app/views/admin/payments/_payment.html.erb" => { rules: %w[DS005], reason: LEGACY_ADMIN_BUTTONS },
+      "app/views/admin/payments/_query.html.erb" => { rules: %w[DS005], reason: LEGACY_ADMIN_BUTTONS },
+      "app/views/admin/payments/index.html.erb" => { rules: %w[DS007], reason: LEGACY_ADMIN_TABLE },
+      "app/views/admin/pre_orders/_pre_order.html.erb" => { rules: %w[DS005], reason: LEGACY_ADMIN_BUTTONS },
+      "app/views/admin/pre_orders/_query.html.erb" => { rules: %w[DS005], reason: LEGACY_ADMIN_BUTTONS },
+      "app/views/admin/pre_orders/index.html.erb" => { rules: %w[DS007], reason: LEGACY_ADMIN_TABLE },
+      "app/views/admin/sessions/_query.html.erb" => { rules: %w[DS005], reason: LEGACY_ADMIN_BUTTONS },
+      "app/views/admin/sessions/index.html.erb" => { rules: %w[DS007], reason: LEGACY_ADMIN_TABLE },
+      "app/views/admin/statistics/_query.html.erb" => { rules: %w[DS005], reason: LEGACY_ADMIN_BUTTONS },
+      "app/views/admin/statistics/index.html.erb" => { rules: %w[DS007], reason: LEGACY_ADMIN_TABLE },
+      "app/views/admin/transfers/_query.html.erb" => { rules: %w[DS005], reason: LEGACY_ADMIN_BUTTONS },
+      "app/views/admin/transfers/_transfer.html.erb" => { rules: %w[DS005], reason: LEGACY_ADMIN_BUTTONS },
+      "app/views/admin/transfers/index.html.erb" => { rules: %w[DS007], reason: LEGACY_ADMIN_TABLE },
+      "app/views/admin/users/_query.html.erb" => { rules: %w[DS005], reason: LEGACY_ADMIN_BUTTONS },
+      "app/views/admin/users/_user.html.erb" => { rules: %w[DS005], reason: LEGACY_ADMIN_BUTTONS },
+      "app/views/admin/users/index.html.erb" => { rules: %w[DS007], reason: LEGACY_ADMIN_TABLE },
+      "app/views/admin/users/show.html.erb" => { rules: %w[DS005], reason: LEGACY_ADMIN_BUTTONS },
+      "app/views/admin/wallets/assets.html.erb" => { rules: %w[DS007], reason: LEGACY_ADMIN_TABLE },
+      "app/views/admin/wallets/safe_outputs.html.erb" => { rules: %w[DS007], reason: LEGACY_ADMIN_TABLE },
+      "app/views/admin/wallets/snapshots.html.erb" => { rules: %w[DS007], reason: LEGACY_ADMIN_TABLE },
+      "app/views/articles/_buy_article_button.html.erb" => { rules: %w[DS005], reason: LEGACY_BESPOKE },
+      "app/views/articles/_conflict_resolution.html.erb" => { rules: %w[DS005], reason: LEGACY_BESPOKE },
+      "app/views/articles/_edit_form.html.erb" => { rules: %w[DS005], reason: LEGACY_BESPOKE },
+      "app/views/articles/_option_fields.html.erb" => { rules: %w[DS005], reason: LEGACY_BESPOKE },
+      "app/views/articles/new.html.erb" => { rules: %w[DS005], reason: LEGACY_BESPOKE },
+      "app/views/articles/preview.html.erb" => { rules: %w[DS005], reason: LEGACY_BESPOKE },
+      "app/views/collections/_card.html.erb" => { rules: %w[DS005], reason: LEGACY_BESPOKE },
+      "app/views/collections/_detail.html.erb" => { rules: %w[DS005], reason: LEGACY_BESPOKE },
+      "app/views/collections/_form.html.erb" => { rules: %w[DS005], reason: LEGACY_BESPOKE },
+      "app/views/comments/_actions.html.erb" => { rules: %w[DS005], reason: LEGACY_BESPOKE },
+      "app/views/comments/_form.html.erb" => { rules: %w[DS005], reason: LEGACY_BESPOKE },
+      "app/views/dashboard/access_tokens/_access_token.html.erb" => { rules: %w[DS005], reason: LEGACY_BESPOKE },
+      "app/views/dashboard/access_tokens/_form.html.erb" => { rules: %w[DS005], reason: LEGACY_BESPOKE },
+      "app/views/dashboard/access_tokens/create.turbo_stream.erb" => { rules: %w[DS005], reason: LEGACY_BESPOKE },
+      "app/views/dashboard/articles/_drafted_article.html.erb" => { rules: %w[DS005], reason: LEGACY_BESPOKE },
+      "app/views/dashboard/articles/index.html.erb" => { rules: %w[DS005], reason: LEGACY_BESPOKE },
+      "app/views/dashboard/articles/show.html.erb" => { rules: %w[DS005], reason: LEGACY_BESPOKE },
+      "app/views/dashboard/collections/index.html.erb" => { rules: %w[DS005], reason: LEGACY_BESPOKE },
+      "app/views/dashboard/collections/new.html.erb" => { rules: %w[DS005], reason: LEGACY_BESPOKE },
+      "app/views/dashboard/hidden_collections/new.html.erb" => { rules: %w[DS005], reason: LEGACY_BESPOKE },
+      "app/views/dashboard/home/account.html.erb" => { rules: %w[DS005], reason: LEGACY_BESPOKE },
+      "app/views/dashboard/home/index.html.erb" => { rules: %w[DS005], reason: LEGACY_BESPOKE },
+      "app/views/dashboard/home/write.html.erb" => { rules: %w[DS005], reason: LEGACY_BESPOKE },
+      "app/views/dashboard/listed_collections/new.html.erb" => { rules: %w[DS005], reason: LEGACY_BESPOKE },
+      "app/views/dashboard/profile_settings/_avatar_field.html.erb" => { rules: %w[DS005], reason: LEGACY_SETTINGS_FORMS },
+      "app/views/dashboard/profile_settings/_biography_field.html.erb" => { rules: %w[DS005], reason: LEGACY_SETTINGS_FORMS },
+      "app/views/dashboard/profile_settings/_email_field.html.erb" => { rules: %w[DS005], reason: LEGACY_SETTINGS_FORMS },
+      "app/views/dashboard/profile_settings/_name_field.html.erb" => { rules: %w[DS005], reason: LEGACY_SETTINGS_FORMS },
+      "app/views/dashboard/profile_settings/edit.html.erb" => { rules: %w[DS005], reason: LEGACY_SETTINGS_FORMS },
+      "app/views/dashboard/profile_settings/verify_email.html.erb" => { rules: %w[DS005], reason: LEGACY_SETTINGS_FORMS },
+      "app/views/dashboard/published_articles/_form.html.erb" => { rules: %w[DS005], reason: LEGACY_BESPOKE },
+      "app/views/dashboard/settings/_notification.html.erb" => { rules: %w[DS005], reason: LEGACY_SETTINGS_FORMS },
+      "app/views/dashboard/settings/_profile.html.erb" => { rules: %w[DS005], reason: LEGACY_SETTINGS_FORMS },
+      "app/views/flashes/_alert_content.html.erb" => { rules: %w[DS005], reason: LEGACY_CHROME },
+      "app/views/pre_orders/_form.html.erb" => { rules: %w[DS005], reason: LEGACY_BESPOKE },
+      "app/views/pre_orders/_pay_button.html.erb" => { rules: %w[DS005], reason: LEGACY_BESPOKE },
+      "app/views/pre_orders/show.html.erb" => { rules: %w[DS005], reason: LEGACY_BESPOKE },
+      "app/views/sessions/new.html.erb" => { rules: %w[DS005], reason: LEGACY_BESPOKE },
+      "app/views/shared/_dashboard_rail.html.erb" => { rules: %w[DS005], reason: LEGACY_CHROME },
+      "app/views/shared/_masthead.html.erb" => { rules: %w[DS005], reason: LEGACY_CHROME },
+      "app/views/shared/_modal.html.erb" => { rules: %w[DS005], reason: LEGACY_CHROME },
+      "app/views/shared/_navbar.html.erb" => { rules: %w[DS005], reason: LEGACY_CHROME },
+      "app/views/subscribe_articles/_subscribe_button.html.erb" => { rules: %w[DS005], reason: LEGACY_BESPOKE },
+      "app/views/subscribe_by_users/_subscribe_button.html.erb" => { rules: %w[DS005], reason: LEGACY_BESPOKE },
+      "app/views/subscribe_tags/_subscribe_button.html.erb" => { rules: %w[DS005], reason: LEGACY_BESPOKE },
+      "app/views/subscribe_users/_subscribe_button.html.erb" => { rules: %w[DS005], reason: LEGACY_BESPOKE }
     }.freeze
 
     HEX_RE = /(?<![0-9A-Za-z_])#[0-9A-Fa-f]{3,8}\b/.freeze

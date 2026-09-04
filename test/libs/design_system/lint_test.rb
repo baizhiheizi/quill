@@ -132,6 +132,23 @@ class DesignSystem::LintTest < ActiveSupport::TestCase
     end
   end
 
+  test "every allowlisted path still exists, so entries cannot outlive their file" do
+    DesignSystem::Lint::ALLOWLIST.each_key do |path|
+      assert Rails.root.join(path).exist?,
+             "allowlist entry #{path} points at a file that no longer exists — delete the entry"
+    end
+  end
+
+  test "rule-scoped entries never name a rule that does not exist" do
+    DesignSystem::Lint::ALLOWLIST.each do |path, entry|
+      next unless entry.is_a?(Hash)
+
+      entry[:rules].each do |rule|
+        assert_match(/\ADS\d{3}\z/, rule, "#{path} allowlists an unparsable rule id")
+      end
+    end
+  end
+
   private
 
   # ALLOWLIST is a frozen constant, so swap it wholesale for the duration of a

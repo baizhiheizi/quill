@@ -90,6 +90,8 @@ jobs:
         run: bin/rails zeitwerk:check
 
       - name: Lint design system
-        # Non-blocking during the rollout period (175 pre-existing violations on main);
-        # drop --no-fail once the backlog is cleared.
-        run: bin/lint-design-system --no-fail
+        # Blocking since 2026-09-04 (#2077). The interface rules (DS001-DS006,
+        # DS011-DS014) are clean; the remaining raw-markup backlog lives in
+        # DesignSystem::Lint::ALLOWLIST as rule-scoped entries, each citing the
+        # reason it still exists. DS010 is informational and does not block.
+        run: bin/lint-design-system
