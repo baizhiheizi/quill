@@ -1,95 +1,22 @@
 <div id="<%= dom_id current_user %>_notification_setting" class="px-4">
   <%= form_for [:dashboard, current_user.notification_setting] do |form| %>
-    <div class="py-4">
-      <div class="opacity-70 mb-2">
-        <%= t('tips_of_article_published_notifications') %>
+    <% NotificationKind.with_settings.each do |kind| %>
+      <div class="py-4">
+        <div class="opacity-70 mb-2">
+          <%= t("tips_of_#{kind.name}_notifications") %>
+        </div>
+        <div class="flex space-x-8 items-center">
+          <label class="flex items-center gap-2 cursor-pointer">
+            <%= form.check_box kind.setting_key(:web), class: "switch switch-primary" %>
+            <span class="opacity-70">Web</span>
+          </label>
+          <label class="flex items-center gap-2 cursor-pointer">
+            <%= form.check_box kind.setting_key(:mixin_bot), class: "switch switch-primary" %>
+            <span class="opacity-70"><%= t('mixin_bot') %></span>
+          </label>
+        </div>
       </div>
-      <div class="flex space-x-8 items-center">
-        <label class="flex items-center gap-2 cursor-pointer">
-          <%= form.check_box :article_published_web, class: "switch switch-primary" %>
-          <span class="opacity-70">Web</span>
-        </label>
-        <label class="flex items-center gap-2 cursor-pointer">
-          <%= form.check_box :article_published_mixin_bot, class: "switch switch-primary" %>
-          <span class="opacity-70"><%= t('mixin_bot') %></span>
-        </label>
-      </div>
-    </div>
-    <div class="py-4">
-      <div class="opacity-70 mb-2">
-        <%= t('tips_of_article_bought_notifications') %>
-      </div>
-      <div class="flex space-x-8 items-center">
-        <label class="flex items-center gap-2 cursor-pointer">
-          <%= form.check_box :article_bought_web, class: "switch switch-primary" %>
-          <span class="opacity-70">Web</span>
-        </label>
-        <label class="flex items-center gap-2 cursor-pointer">
-          <%= form.check_box :article_bought_mixin_bot, class: "switch switch-primary" %>
-          <span class="opacity-70"><%= t('mixin_bot') %></span>
-        </label>
-      </div>
-    </div>
-    <div class="py-4">
-      <div class="opacity-70 mb-2">
-        <%= t('tips_of_article_rewarded_notifications') %>
-      </div>
-      <div class="flex space-x-8 items-center">
-        <label class="flex items-center gap-2 cursor-pointer">
-          <%= form.check_box :article_rewarded_web, class: "switch switch-primary" %>
-          <span class="opacity-70">Web</span>
-        </label>
-        <label class="flex items-center gap-2 cursor-pointer">
-          <%= form.check_box :article_rewarded_mixin_bot, class: "switch switch-primary" %>
-          <span class="opacity-70"><%= t('mixin_bot') %></span>
-        </label>
-      </div>
-    </div>
-    <div class="py-4">
-      <div class="opacity-70 mb-2">
-        <%= t('tips_of_tagging_created_notifications') %>
-      </div>
-      <div class="flex space-x-8 items-center">
-        <label class="flex items-center gap-2 cursor-pointer">
-          <%= form.check_box :tagging_created_web, class: "switch switch-primary" %>
-          <span class="opacity-70">Web</span>
-        </label>
-        <label class="flex items-center gap-2 cursor-pointer">
-          <%= form.check_box :tagging_created_mixin_bot, class: "switch switch-primary" %>
-          <span class="opacity-70"><%= t('mixin_bot') %></span>
-        </label>
-      </div>
-    </div>
-    <div class="py-4">
-      <div class="opacity-70 mb-2">
-        <%= t('tips_of_comment_created_notifications') %>
-      </div>
-      <div class="flex space-x-8 items-center">
-        <label class="flex items-center gap-2 cursor-pointer">
-          <%= form.check_box :comment_created_web, class: "switch switch-primary" %>
-          <span class="opacity-70">Web</span>
-        </label>
-        <label class="flex items-center gap-2 cursor-pointer">
-          <%= form.check_box :comment_created_mixin_bot, class: "switch switch-primary" %>
-          <span class="opacity-70"><%= t('mixin_bot') %></span>
-        </label>
-      </div>
-    </div>
-    <div class="py-4">
-      <div class="opacity-70 mb-2">
-        <%= t('tips_of_transfer_processed_notifications') %>
-      </div>
-      <div class="flex space-x-8 items-center">
-        <label class="flex items-center gap-2 cursor-pointer">
-          <%= form.check_box :transfer_processed_web, class: "switch switch-primary" %>
-          <span class="opacity-70">Web</span>
-        </label>
-        <label class="flex items-center gap-2 cursor-pointer">
-          <%= form.check_box :transfer_processed_mixin_bot, class: "switch switch-primary" %>
-          <span class="opacity-70"><%= t('mixin_bot') %></span>
-        </label>
-      </div>
-    </div>
+    <% end %>
     <div class="py-4 flex justify-center">
       <%= form.submit t('save'), class: "btn btn-primary rounded-full" %>
     </div>

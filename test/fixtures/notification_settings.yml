@@ -7,10 +7,11 @@
 #  article_bought     :jsonb
 #  article_published  :jsonb
 #  article_rewarded   :jsonb
+#  collection_bought  :jsonb
+#  collection_listed  :jsonb
 #  comment_created    :jsonb
 #  tagging_created    :jsonb
 #  transfer_processed :jsonb
-#  webhook            :jsonb
 #  created_at         :datetime         not null
 #  updated_at         :datetime         not null
 #  user_id            :bigint

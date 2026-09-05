@@ -222,6 +222,8 @@ zh-CN:
   tips_of_tagging_created_notifications: 订阅的话题有新文章时，您将收到通知。
   tips_of_comment_created_notifications: 订阅的文章有新评论时，您将收到通知。
   tips_of_transfer_processed_notifications: 有新的转账（包括文章收益、退款等）时，您将收到通知。
+  tips_of_collection_listed_notifications: 订阅的作者上架新合集时，您将收到通知。
+  tips_of_collection_bought_notifications: 读者购买您的合集时，您将收到通知。
   confirm_to_generate_token: Access Token 可提供给第三方应用以管理您的文章，确定需要生成新的 Token 吗？
   generate_new_token: 生成新 Token
   token_memo_placeholder: 备注一下 Token
