@@ -1,10 +1,7 @@
 # frozen_string_literal: true
 
 class ArticlePublishedNotifier < ApplicationNotifier
-  deliver_by :mixin_bot, class: "DeliveryMethods::MixinBot" do |config|
-    config.category = "APP_CARD"
-    config.if = -> { may_notify_via_mixin_bot? }
-  end
+  notifies :article_published
 
   required_param :article
 
@@ -13,13 +10,8 @@ class ArticlePublishedNotifier < ApplicationNotifier
       params[:article]
     end
 
-    def data
-      {
-        icon_url:,
-        title: article.title.truncate(36),
-        description: description.truncate(72),
-        action: url
-      }
+    def title
+      article.title
     end
 
     def description
@@ -27,7 +19,7 @@ class ArticlePublishedNotifier < ApplicationNotifier
     end
 
     def message
-      [ article.author.name.truncate(10), t(".published"), ":", params[:article].title ].join(" ")
+      [ article.author.name.truncate(10), t(".published"), ":", article.title ].join(" ")
     end
 
     def url
@@ -36,18 +28,6 @@ class ArticlePublishedNotifier < ApplicationNotifier
 
     def icon_url
       article.author.avatar_url
-    end
-
-    def web_notification_enabled?
-      recipient.notification_setting.article_published_web
-    end
-
-    def mixin_bot_notification_enabled?
-      recipient.notification_setting.article_published_mixin_bot
-    end
-
-    def may_notify_via_mixin_bot?
-      recipient_messenger? && mixin_bot_notification_enabled?
     end
   end
 end

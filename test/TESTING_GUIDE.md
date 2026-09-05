@@ -79,7 +79,7 @@
   The record persists without triggering `setup_attributes`, `generate_order!`, etc.
 
 ### `after_initialize :set_defaults`
-- **Overrides constructor-supplied attributes**: `after_initialize set_defaults if: :new_record?` runs AFTER the constructor, so `NotificationSetting.new(user: u, webhook_url: "x")` gets `webhook_url == nil`.
+- **Overrides constructor-supplied attributes**: `after_initialize set_defaults if: :new_record?` runs AFTER the constructor, so `NotificationSetting.new(user: u, article_published_web: false)` gets `article_published_web == true`.
 - **Does NOT re-fire on update**: Only runs for new records. Use `update!` (not `.new(attrs)`) when testing update-only callbacks.
 
 ### `after_commit`
@@ -164,13 +164,13 @@ Some tests change methods on a model or notifier class with `define_method` and 
 - `mixin_api` memoizes `MixinBot::API.new(...)`.
 
 ### NotificationSetting
-- `DEFAULT_SETTING` is frozen. 19 keys: 6 categories × 3 channels + `webhook_url`.
+- `DEFAULT_SETTING` is frozen and derived from `NotificationKind`: one `web` / `mixin_bot` toggle per muteable kind.
 - `set_defaults` overrides constructor attributes (see Callback Behavior).
-- `article_bought_daily_times` is an exposed store accessor with no default value.
+- A stored row missing a key reads as the declared default, not as "muted" (`read_store_attribute`).
 
 ### Order
 - `setup_attributes` requires a real `Payment.amount`. Bypass with `save(validate: false)`.
-- `notify_subscribers` delivers to the buyer's followers. `ArticleBoughtNotifier` / `ArticleRewardedNotifier` / `CollectionBoughtNotifier` guard with `should_notify? → !recipient.block_user?(order.buyer)`: a follower who blocked the buyer still gets the persisted row but `visible_in_web?` is false and mixin delivery is skipped.
+- `notify_subscribers` delivers to the buyer's followers. `ArticleBoughtNotifier` / `ArticleRewardedNotifier` / `CollectionBoughtNotifier` guard with `should_notify? → !recipient.block_user?(order.buyer)`: a follower who blocked the buyer still gets the persisted row but `web_visible` is false and mixin delivery is skipped.
 
 ### Splitter
 - `collect_assets` wraps in `with_advisory_lock("splitter:#{id}:collect")`. Short-circuits when lock is not acquired.
@@ -228,7 +228,7 @@ These areas have been identified as candidates but not yet addressed:
 
 ### Controller Concerns
 - **`Localizable`** (`app/controllers/concerns/localizable.rb`) — Accept-Language header parsing with quality-value sorting.
-- **`UserFieldPreloads`** (`app/controllers/concerns/user_field_preloads.rb`) — preload helper.
+- **`ViewerActionSets`** (`app/controllers/concerns/viewer_action_sets.rb`) — per-viewer action-id set helper; avatar preloads come from `User::AVATAR_PRELOADS`.
 - **`API::RenderingHelper`** (`app/controllers/concerns/api/rendering_helper.rb`) — API rendering.
 
 ### Dashboard Controllers (17 untested of 25)

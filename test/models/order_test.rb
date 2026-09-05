@@ -604,10 +604,11 @@ class OrderTest < ActiveSupport::TestCase
 
       users_selects = queries.select { |q| q.include?('FROM "users"') }
 
-      # Exactly one SELECT FROM users — no action_store materialise step
-      # (which would add a second one for the through: relation).
-      assert_equal 1, users_selects.length,
-                   "expected 1 FROM users SELECT, got #{users_selects.length}: #{users_selects.inspect}"
+      # Two SELECTs FROM users: the IN-subquery form (never a materialised id
+      # list), plus the single `buyer` point lookup the create-time visibility
+      # predicate performs through `should_notify?`.
+      assert_equal 2, users_selects.length,
+                   "expected 2 FROM users SELECTs, got #{users_selects.length}: #{users_selects.inspect}"
 
       # The follower filter is pushed into SQL via an IN-subquery rather than
       # a materialized id list.
@@ -633,8 +634,8 @@ class OrderTest < ActiveSupport::TestCase
       queries = capture_queries { order.notify_subscribers }
 
       users_selects = queries.select { |q| q.include?('FROM "users"') }
-      assert_equal 1, users_selects.length,
-                   "expected 1 FROM users SELECT, got #{users_selects.length}: #{users_selects.inspect}"
+      assert_equal 2, users_selects.length,
+                   "expected 2 FROM users SELECTs, got #{users_selects.length}: #{users_selects.inspect}"
       assert_includes users_selects.first, 'IN (SELECT "actions"."user_id" FROM "actions"',
                       "reward path should use the SQL subquery shape"
     end
@@ -657,7 +658,7 @@ class OrderTest < ActiveSupport::TestCase
 
       notification = Noticed::Notification.where(recipient: @reader_two).order(:id).last
       assert notification, "Noticed persists the row before delivery gating"
-      assert_not notification.visible_in_web?
+      assert_not notification.web_visible?
     end
   end
 

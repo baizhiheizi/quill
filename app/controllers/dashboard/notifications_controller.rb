@@ -2,11 +2,13 @@
 
 class Dashboard::NotificationsController < Dashboard::BaseController
   def index
-    # `visible_in_web?` reads `event.type.constantize` per row; eager-load to
-    # avoid an N+1 SELECT on `noticed_events` for large inboxes.
-    web_notifications = current_user.notifications.for_web.newest_first
-      .includes(:event).select(&:visible_in_web?)
-    @pagy, @notifications = pagy(:offset, web_notifications, limit: 50)
+    # Visibility is a column, so the whole inbox is paginated SQL. The event is
+    # preloaded because the partial reads `params` (message / url / icon) per row.
+    @pagy, @notifications = pagy(
+      :offset,
+      current_user.notifications.for_web.newest_first.includes(:event),
+      limit: 50
+    )
     @active_page = "notification"
   end
 

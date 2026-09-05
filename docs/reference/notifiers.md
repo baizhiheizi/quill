@@ -1,19 +1,36 @@
 # Notifiers reference
 
-> **30-second summary:** 14 [Noticed](https://github.com/excid3/noticed) event classes under `app/notifiers/`, each fanning an event out to ActionCable + flash and a Mixin bot delivery, gated by `NotificationSetting`. Every notifier inherits from `ApplicationNotifier`, declares its `required_param`, and supplies `notification_methods`.
+> **30-second summary:** 14 [Noticed](https://github.com/excid3/noticed) event classes under `app/notifiers/`, each fanning an event out to ActionCable + flash and a Mixin bot delivery, gated by `NotificationSetting`. Every kind is declared once in [`NotificationKind`](../../app/notifiers/notification_kind.rb); a notifier inherits from `ApplicationNotifier`, calls `notifies :the_kind`, declares its `required_param`, and supplies `notification_methods`.
+
+## Kind registry
+
+### `NotificationKind` — [`app/notifiers/notification_kind.rb`](../../app/notifiers/notification_kind.rb)
+
+The single declaration of every notification kind. One entry carries the facts that are true for a whole kind:
+
+| Field | Meaning |
+|-------|---------|
+| `category` | `:card` renders a Mixin `APP_CARD`, `:text` a plain message |
+| `settings` | whether the recipient can mute the kind per channel (`web` / `mixin_bot`) |
+| `web` | whether the kind ever surfaces in the web inbox |
+| `bot` | the Mixin bot carrying the message (defaults to QuillBot) |
+| `position` | where the kind sits in the settings form |
+
+Derived from it: the `deliver_by :mixin_bot` config and delivery guards (`ApplicationNotifier`), the `noticed_notifications.web_visible` column, `NotificationSetting`'s store columns / defaults / casts, the settings strong params, and the settings form rows.
 
 ## Base class
 
 ### `ApplicationNotifier` — [`app/notifiers/application_notifier.rb`](../../app/notifiers/application_notifier.rb)
 
-Inherits from `Noticed::Event` and sets defaults for every concrete notifier:
+Inherits from `Noticed::Event` and derives everything shared by concrete notifiers:
 
-- `class_attribute :persist_web_notification, default: true` — write to the `notifications` table; set `false` for real-time-only notifiers (`UserConnectedNotifier`, `UserSafeRegistrationNotifier`).
-- `deliver_by :action_cable` and `deliver_by :flash_broadcast, class: "DeliveryMethods::FlashBroadcast"` — broadcast over Solid Cable and surface a one-time flash banner; both gated by `visible_in_web? && message.present?`.
+- `notifies :the_kind` — looks the kind up in the registry, stores it as `notification_kind`, and installs the `deliver_by :mixin_bot` config (category, bot, `may_notify_via_mixin_bot?` guard).
+- `recipient_attributes_for` — writes `web_visible` onto every `noticed_notifications` row from the kind plus the recipient's toggles, so the inbox is an indexed query and no reader re-derives visibility.
+- `deliver_by :action_cable` and `deliver_by :flash_broadcast, class: "DeliveryMethods::FlashBroadcast"` — broadcast over Solid Cable and surface a one-time flash banner; both gated by `web_visible? && message.present?`.
 - `QUILL_ICON_URL` — the asset-path-resolved brand icon, used when a notifier has no natural icon (e.g. `TaggingCreatedNotifier`).
-- `notification_methods` — `format_for_action_cable`, `message`, `url`, `icon_url`, and `recipient_messenger?` (guard for linked Mixin accounts).
+- `notification_methods` — `format_for_action_cable` (per-recipient locale), `message`, `url`, `icon_url`, `recipient_messenger?`, the derived guards (`may_notify_via_web?`, `may_notify_via_mixin_bot?`), and the `data` envelope (cards get the four `APP_CARD` keys from `title` / `description` / `icon_url` / `url`; text kinds send the bare message).
 
-Concrete notifiers add `required_param`, a `deliver_by :mixin_bot` block, and override `notification_methods` for event-specific data.
+Concrete notifiers add `required_param` and override `notification_methods` for the event-specific content: `title`, `description`, `message`, `url`, `icon_url` and an optional `should_notify?` guard.
 
 ## Delivery methods
 
@@ -23,7 +40,7 @@ Concrete notifiers add `required_param`, a `deliver_by :mixin_bot` block, and ov
 | `:flash_broadcast` | [`app/notifiers/delivery_methods/flash_broadcast.rb`](../../app/notifiers/delivery_methods/flash_broadcast.rb) | `notification.broadcast_as_flash` for one-time Rails flash messages. |
 | `:mixin_bot` | [`app/notifiers/delivery_methods/mixin_bot.rb`](../../app/notifiers/delivery_methods/mixin_bot.rb) | Sends a Mixin Messenger message via `MixinMessages::SendJob`. Resolves bot, conversation id, category, and data from `config` and `notification.data`. |
 
-`APP_CARD` payloads are rich cards (`icon_url`, `title`, `description`, `action` URL); `PLAIN_TEXT` payloads are short free-text notices. Keep the four card keys in `notification_methods#data` in sync with the bot client.
+`APP_CARD` payloads are rich cards (`icon_url`, `title`, `description`, `action` URL); `PLAIN_TEXT` payloads are short free-text notices. The card envelope is derived — a card kind supplies `title`, `description`, `icon_url` and `url`.
 
 ## Notifier catalog
 
@@ -34,7 +51,7 @@ The "Fires when" column names the trigger and recipient; the notifier class live
 | `ArticlePublishedNotifier` | `:article` | `APP_CARD` | Author publishes a draft (`notify_for_first_published`); notifies readers opted in to `article_published_*` |
 | `ArticleBoughtNotifier` | `:order` | `APP_CARD` | Reader buys an article; notifies the **author** (buyer + title) |
 | `ArticleRewardedNotifier` | `:order` | `APP_CARD` | Reader tips an article; notifies the **author** (tipper + title) |
-| `CollectionListedNotifier` | `:collection` | `APP_CARD` | New collection published; notifies readers (same `article_published_*` toggle drives collection listings) |
+| `CollectionListedNotifier` | `:collection` | `APP_CARD` | New collection published; notifies readers muted via `collection_listed_*` |
 | `CollectionBoughtNotifier` | `:order` | `APP_CARD` | Reader buys a collection; notifies the **author** (buyer + collection name) |
 | `CommentCreatedNotifier` | `:comment` | `APP_CARD` | Reader comments; notifies the **author** (skips if blocked). URL anchors to `#comment_<id>` |
 | `TaggingCreatedNotifier` | `:tagging` | `APP_CARD` | Article tagged; notifies tag subscribers (`has_new_article` feed). Blocked-author checks apply |
@@ -43,8 +60,8 @@ The "Fires when" column names the trigger and recipient; the notifier class live
 | `PaymentCreatedNotifier` | `:payment` | `PLAIN_TEXT` | Payment snapshot created (debugging / Mixin traceability) |
 | `PaymentRefundedNotifier` | `:payment` | `PLAIN_TEXT` | Payment refunded; message includes `pre_order.item.title` for identification |
 | `TransferProcessedNotifier` | `:transfer` | `APP_CARD` | Confirmed transfer arrives (author revenue, reader revenue, payment refund, or bonus); skips Mixin delivery if `from_quill_bot?` |
-| `UserConnectedNotifier` | `:user` | `PLAIN_TEXT` | User connects Mixin Messenger bot for the first time. `persist_web_notification = false` (one-time greeting) |
-| `UserSafeRegistrationNotifier` | `:user` | `PLAIN_TEXT` | User asked to update Mixin Messenger to receive transfers. `persist_web_notification = false`; Mixin bot only |
+| `UserConnectedNotifier` | `:user` | `PLAIN_TEXT` | User connects Mixin Messenger bot for the first time. `web: false` — Mixin only, never in the web inbox |
+| `UserSafeRegistrationNotifier` | `:user` | `PLAIN_TEXT` | User asked to update Mixin Messenger to receive transfers. `web: false` — Mixin bot only |
 
 ### `required_param` and `params`
 
@@ -52,9 +69,9 @@ The "Fires when" column names the trigger and recipient; the notifier class live
 
 ### Web vs Mixin opt-out
 
-- `web_notification_enabled?` / `mixin_bot_notification_enabled?` read the matching `*_web` / `*_mixin_bot` boolean on `recipient.notification_setting`.
+- `web_notification_enabled?` / `mixin_bot_notification_enabled?` are derived: kinds without settings are always on, kinds with settings read the matching `*_web` / `*_mixin_bot` boolean on `recipient.notification_setting`. A recipient with no preferences row at all has not opted out of anything.
 - `may_notify_via_mixin_bot?` combines `recipient_messenger?` with `mixin_bot_notification_enabled?`; used by the `if:` lambda on `deliver_by :mixin_bot`.
-- `should_notify?` — extra guard for blocking (see `CommentCreatedNotifier`, `TaggingCreatedNotifier`). When defined, also expose `may_notify_via_web?` that ANDs the guard in.
+- `should_notify?` — extra guard for blocking (see `CommentCreatedNotifier`, `TaggingCreatedNotifier`); both derived predicates AND it in.
 
 ### `data` shape
 

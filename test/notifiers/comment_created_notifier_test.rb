@@ -16,31 +16,26 @@ class CommentCreatedNotifierTest < ActiveSupport::TestCase
     )
   end
 
-  test "deliver creates a visible web notification for subscribers" do
-    deliver_notifier!(
-      CommentCreatedNotifier,
-      record: @comment,
-      comment: @comment,
-      recipient: @recipient
-    )
+  test "message names the commenter and the commented article" do
+    deliver_notifier!(CommentCreatedNotifier, record: @comment, comment: @comment, recipient: @recipient)
 
     notification = notification_for(@recipient)
 
     assert_includes notification.message, @commenter.name
     assert_includes notification.message, @article.title
-    assert notification.visible_in_web?
   end
 
-  test "visible_in_web is false when recipient blocked the comment author" do
+  test "url anchors to the comment on the article page" do
+    deliver_notifier!(CommentCreatedNotifier, record: @comment, comment: @comment, recipient: @recipient)
+
+    assert_includes notification_for(@recipient).url, "comment_#{@comment.id}"
+  end
+
+  test "a recipient who blocked the commenter keeps the row out of the inbox" do
     @recipient.create_action(:block, target: @commenter)
 
-    deliver_notifier!(
-      CommentCreatedNotifier,
-      record: @comment,
-      comment: @comment,
-      recipient: @recipient
-    )
+    deliver_notifier!(CommentCreatedNotifier, record: @comment, comment: @comment, recipient: @recipient)
 
-    assert_not notification_for(@recipient).visible_in_web?
+    assert_not notification_for(@recipient).web_visible?
   end
 end

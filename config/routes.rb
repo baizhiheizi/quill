@@ -74,7 +74,7 @@ Rails.application.routes.draw do
   resources :comments, only: %i[create new]
   resources :upvoted_comments, only: %i[update destroy]
   resources :downvoted_comments, only: %i[update destroy]
-  resources :article_references, only: %i[index], default: { format: :json }
+  resources :article_references, only: %i[index], defaults: { format: :json }
 
   resources :block_users, only: %i[create destroy new], param: :uid
 

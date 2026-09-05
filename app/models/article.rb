@@ -52,6 +52,7 @@ class Article < ApplicationRecord
   SUPPORTED_ASSETS = Settings.supported_assets || [ Currency::BTC_ASSET_ID ]
 
   include AASM
+  include Notifiable
   include Articles::ContentPreview
   include Articles::PosterGenerator
   include Purchasable
@@ -238,13 +239,11 @@ class Article < ApplicationRecord
   def notify_subscribers
     return if author.blocked?
 
-    ArticlePublishedNotifier
-      .with(record: self, article: self)
-      .deliver(
-        User
-          .where(id: author.subscribed_user_ids_relation)
-          .where.not(id: author.blocked_user_ids_relation)
-      )
+    notify!(
+      ArticlePublishedNotifier,
+      recipient: Notifiers::Audience.subscribed_to(author, excluding_blocked: author),
+      article: self
+    )
   end
 
   def notify_admin

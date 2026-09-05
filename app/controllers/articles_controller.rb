@@ -41,12 +41,13 @@ class ArticlesController < ApplicationController
 
     # Prime the action_store / order-count / readers queries so the
     # partials (`_votes`, `_floating_bar`, `_buyers`) read preloaded values
-    # instead of firing a SELECT per call. See the helper methods below
-    # for the per-relation breakdown. The random-readers sample is
+    # instead of firing a SELECT per call. The viewer's upvote/downvote sets
+    # come from `ViewerActionSets#ids_for`; see the helper methods below for
+    # the order-count and readers breakdown. The random-readers sample is
     # skipped when there are no readers — there's nothing to render in
     # that branch of the partial.
-    preloaded_upvoted_article_ids
-    preloaded_downvoted_article_ids
+    @preloaded_upvoted_article_ids = ids_for(:upvote_article)
+    @preloaded_downvoted_article_ids = ids_for(:downvote_article)
     preloaded_buy_orders_count
     preloaded_reward_orders_count
     preloaded_readers_count
@@ -158,41 +159,15 @@ class ArticlesController < ApplicationController
     action_name.in?(%w[new edit preview]) ? "editor" : "public"
   end
 
-  # Set of `Article#id`s that `current_user` has upvoted. Replaces the
+  # `@preloaded_upvoted_article_ids` / `@preloaded_downvoted_article_ids` are
+  # primed in `#show` via `ViewerActionSets#ids_for`. They replace the
   # `user.upvote_article?(article)` calls in `articles/_votes.html.erb` and
   # `articles/_floating_bar.html.erb` — that action_store helper does
   # `Action.find_by(...).present?` which is 1 SELECT per call, and each of
   # those partials consults it twice (state-check + button target), so the
-  # show page fires 4 SELECTs of this kind before any other work. With this
-  # prime we collapse all upvoted-id lookups for the show view to a single
-  # SELECT.
-  #
-  # `upvote_article_actions` is the action_store-generated relation
-  # (`has_many :upvote_article_actions` → `Action.where(...)`); `pluck` keeps
-  # the result as a flat Array of ids so we never load the full Action
-  # rows. `.to_set` makes the per-article include? check O(1).
-  def preloaded_upvoted_article_ids
-    return @preloaded_upvoted_article_ids if defined?(@preloaded_upvoted_article_ids)
-
-    @preloaded_upvoted_article_ids =
-      if current_user
-        current_user.upvote_article_actions.pluck(:target_id).to_set
-      else
-        Set.new
-      end
-  end
-
-  # See `preloaded_upvoted_article_ids` — same shape for the downvote side.
-  def preloaded_downvoted_article_ids
-    return @preloaded_downvoted_article_ids if defined?(@preloaded_downvoted_article_ids)
-
-    @preloaded_downvoted_article_ids =
-      if current_user
-        current_user.downvote_article_actions.pluck(:target_id).to_set
-      else
-        Set.new
-      end
-  end
+  # show page fires 4 SELECTs of this kind before any other work. With the
+  # prime we collapse all upvoted/downvoted-id lookups for the show view to a
+  # single SELECT per side.
 
   # Combined buy/reward order count for `@article` in a single grouped
   # query. Replaces `article.buy_orders.count` + `article.reward_orders.count`
@@ -243,6 +218,11 @@ class ArticlesController < ApplicationController
   # `:avatar_attachment → :blob → :variant_records` chain, so without the
   # preload each of the 24 readers would fire ~3 SELECTs to load their
   # avatar thumbnails.
+  #
+  # The chain is `User::AVATAR_PRELOADS` — the model constant every avatar
+  # surface shares. It lives on the model precisely so a public controller
+  # doesn't have to reach into another namespace (or re-type the hash) to
+  # preload it.
   def preloaded_random_readers
     return @random_readers if defined?(@random_readers)
 
@@ -253,24 +233,9 @@ class ArticlesController < ApplicationController
       .order(Arel.sql("RANDOM()"))
       .limit(24)
 
-    # The shared `UserFieldPreloads#user_field_preloads` chain (see the
-    # `UserFieldPreloads` concern included in `Dashboard::BaseController` and
-    # `Admin::BaseController`) is the same shape, but we inline it here so
-    # the public show page doesn't need to depend on a controller concern
-    # from a different namespace.
     @random_readers = User
       .where(id: sampled_buyer_ids)
-      .includes(
-        :authorization,
-        {
-          avatar_attachment: {
-            blob: {
-              variant_records: { image_attachment: :blob },
-              preview_image_attachment: { blob: { variant_records: { image_attachment: :blob } } }
-            }
-          }
-        }
-      )
+      .includes(*User::AVATAR_PRELOADS)
       .to_a
   end
 

@@ -39,18 +39,18 @@
 class User < ApplicationRecord
   is_impressionable
 
+  include Notifiable
   include Users::EmailVerifiable
   include Users::Scopable
   include Users::Statable
 
   extend Enumerize
 
-  # Canonical preload chain for any caller that renders `shared/_avatar`
-  # (or `admin/users/_field`, which delegates to it). The chain mirrors
-  # `UserFieldPreloads#user_field_preloads` in
-  # `app/controllers/concerns/user_field_preloads.rb` — both partials
-  # resolve `user.avatar_image_thumb` / `user.avatar_image_url`, which
-  # walks:
+  # The canonical — and only — avatar preload chain. Every surface that
+  # renders `shared/_avatar` (or `admin/users/_field`, which delegates to it)
+  # includes this constant; there is no controller-side copy to keep in sync.
+  # Both partials resolve `user.avatar_image_thumb` / `user.avatar_image_url`,
+  # which walks:
   #   - `authorization&.raw["avatar_url"]` (OAuth fallback when no
   #     ActiveStorage avatar is attached)
   #   - `avatar.attached?` (the `attachments` row)
@@ -58,12 +58,9 @@ class User < ApplicationRecord
   #   - `avatar.variant(:thumb).processed.key` (the variant chain:
   #     `variant_records → image_attachment → blob`)
   #
-  # Without these preloads each row fires 4-5 SELECTs. The constant
-  # exists so non-controller callers (Article scopes, test factories,
-  # background jobs) can include the chain with the same shape that
-  # `Admin::BaseController#admin_user_field_preloads` already uses
-  # inline — keeping them byte-for-byte identical avoids drift between
-  # the controller helper and the model-level eager-load.
+  # Without these preloads each row fires 4-5 SELECTs. The chain is used by
+  # the admin, dashboard, users and collections indexes, `Article` scopes,
+  # and the public article show page.
   AVATAR_PRELOADS = [
     :authorization,
     {
@@ -216,13 +213,12 @@ class User < ApplicationRecord
   # The action_store gem's `subscribe_by_user_ids` materializes the full
   # list of subscriber ids into a Ruby array first; this relation lets
   # callers push the predicate straight into the database instead.
-  # Matches the NOT IN / IN subquery pattern used by
-  # `HomeController#active_authors` (PR #1735) and
-  # `ArticleSearchService#filter_block_authors`.
+  #
+  # The composition lives in `Notifiers::Audience`, which owns every
+  # audience rule; this alias keeps the reader-facing name the delivery
+  # sites and `TESTING_GUIDE.md` refer to.
   def subscribed_user_ids_relation
-    Action
-      .where(target_type: "User", target_id: id, action_type: "subscribe")
-      .select(:user_id)
+    Notifiers::Audience.subscriber_ids_of(self)
   end
 
   # SQL subquery that returns every user_id that `self` has blocked.
@@ -230,9 +226,7 @@ class User < ApplicationRecord
   # Ruby first; this relation keeps the predicate in SQL. See
   # `subscribed_user_ids_relation` for context.
   def blocked_user_ids_relation
-    Action
-      .where(user_type: "User", user_id: id, target_type: "User", action_type: "block")
-      .select(:target_id)
+    Notifiers::Audience.blocked_ids_of(self)
   end
 
   def owning_collection_ids
@@ -244,13 +238,13 @@ class User < ApplicationRecord
   end
 
   def notify_for_login
-    UserConnectedNotifier.with(record: self, user: self).deliver(self)
+    notify!(UserConnectedNotifier, recipient: self, user: self)
   end
 
   def notify_for_safe_registration
     return if has_safe?
 
-    UserSafeRegistrationNotifier.with(record: self, user: self).deliver(self)
+    notify!(UserSafeRegistrationNotifier, recipient: self, user: self)
   end
 
   def short_uid

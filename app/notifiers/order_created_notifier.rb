@@ -1,10 +1,7 @@
 # frozen_string_literal: true
 
 class OrderCreatedNotifier < ApplicationNotifier
-  deliver_by :mixin_bot, class: "DeliveryMethods::MixinBot" do |config|
-    config.category = "PLAIN_TEXT"
-    config.if = -> { may_notify_via_mixin_bot? }
-  end
+  notifies :order_created
 
   required_param :order
 
@@ -16,7 +13,7 @@ class OrderCreatedNotifier < ApplicationNotifier
     end
 
     def action_name
-      case params[:order].order_type.to_sym
+      case order.order_type.to_sym
       when :buy_article, :buy_collection
         t(".bought")
       when :reward_article
@@ -24,12 +21,8 @@ class OrderCreatedNotifier < ApplicationNotifier
       end
     end
 
-    def data
-      message
-    end
-
     def message
-      case order.item
+      case item
       when Article
         [ action_name, item.title ].join(" ")
       when Collection
@@ -38,16 +31,12 @@ class OrderCreatedNotifier < ApplicationNotifier
     end
 
     def url
-      case order.item
+      case item
       when Article
         user_article_url item.author, item.uuid
       when Collection
         collection_url item.uuid
       end
-    end
-
-    def may_notify_via_mixin_bot?
-      recipient_messenger?
     end
   end
 end
