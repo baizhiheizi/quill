@@ -29,7 +29,7 @@
   </div>
   <div id="<%= dom_id article %>_comments_list">
     <% if comments.blank? %>
-      <%= render "shared/empty", text: t("no_comments") %>
+      <%= render_empty text: t("no_comments") %>
     <% else %>
       <%= render partial: "comments/comment", collection: comments, as: :comment %>
     <% end %>

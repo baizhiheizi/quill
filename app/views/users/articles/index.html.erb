@@ -1,14 +1,14 @@
 <%= turbo_frame_tag "#{dom_id @user}_#{@tab}_articles", target: "_top" do %>
   <div data-controller="infinite-scroll">
     <% if @articles.blank? %>
-      <%= render "shared/empty", text: t('no_record') %>
+      <%= render_empty text: t('no_record') %>
     <% else %>
       <div id="<%= "#{dom_id(@user)}_#{@tab}_articles_list" %>">
         <%= render partial: "articles/card", collection: @articles, as: :article %>
       </div>
       <div data-infinite-scroll-target='scrollArea'></div>
 
-      <%= render "shared/pagination", pagy: @pagy, id: "#{dom_id @user}_#{@tab}_articles_pagination" %>
+      <%= render_pagination @pagy, id: "#{dom_id @user}_#{@tab}_articles_pagination" %>
     <% end %>
   </div>
 <% end %>

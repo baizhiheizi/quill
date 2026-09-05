@@ -80,7 +80,7 @@
           <% dropdown_button = capture do %>
             <div class="avatar cursor-pointer">
               <div class="size-8 rounded-full sm:size-9">
-                <%= render "shared/avatar", user: current_user, thumb: true, class: "rounded-full" %>
+                <%= render_avatar user: current_user, thumb: true, class: "rounded-full" %>
               </div>
             </div>
           <% end %>

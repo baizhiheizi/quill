@@ -196,7 +196,21 @@ render_chip(label, kind: :topic, **html_options)
 
 1. No raw `<button class="btn btn-primary">` in views — use `render_button`. (Allowlist: `app/views/shared/_button.html.erb` itself.)
 2. No raw `<span class="chip chip-topic">` in views — use `render_chip`. (Allowlist: `app/views/shared/_chip.html.erb` itself.)
-3. No raw `<table>` outside `app/views/shared/_table.html.erb` and the allowlisted admin tables that pre-date the refactor (tracked in `lib/design_system/lint.rb`'s `@allowlist` set).
+3. No raw `<table>` outside `app/views/shared/_table.html.erb` and the allowlisted admin tables that pre-date the refactor (tracked in `lib/design_system/lint.rb`'s `ALLOWLIST`).
 4. No raw `<svg>` outside the allowlist (procedural cover art + Lexxy internals + `app/assets/builds/application.js` bundled vendor code).
+5. **DS014 — no direct `render "shared/<primitive>"` for a primitive that has a UiHelper wrapper.** This is the interface rule: the partial is a primitive's implementation, the helper is its contract. Every syntax variant counts — string, `partial:` + `locals:`, single-quoted, parenthesised. `app/views/shared/` is exempt (that is the implementation; primitives composing each other there is not a consumer bypass).
+
+The helper-name exemptions on DS005/DS006/DS011–13 fire only for a genuine
+helper *call* (`<%= render_button … %>`, `ui_input form, :email`). A line that
+merely names the partial path (`render "shared/ui_input"`) no longer exempts
+itself from the markup rule it would otherwise trip.
+
+Allowlist entries are one of:
+
+- `"path" => "reason"` — exempts the whole file; or
+- `"path" => { rules: %w[DS005], reason: "…" }` — exempts only the named rules,
+  so a legacy file keeps the other thirteen.
+
+Every entry must cite a reason; a bare path list is not accepted.
 
 Violations fail CI; the script emits one violation per line as `file:line: rule: message`.

@@ -2,13 +2,13 @@
   <%= render_modal title: t('subscribers') do %>
     <div data-controller="infinite-scroll">
       <% if @users.blank? %>
-        <%= render "shared/empty", text: t('no_record') %>
+        <%= render_empty text: t('no_record') %>
       <% else %>
         <div id="<%= dom_id @user %>_subscribers_list">
           <%= render partial: "users/subscribe_by_users/user", collection: @users, as: :user %>
         </div>
         <div data-infinite-scroll-target='scrollArea'></div>
-        <%= render partial: "shared/pagination", locals: { pagy: @pagy, id: "#{dom_id @user}_subscribers_pagination" } %>
+        <%= render_pagination @pagy, id: "#{dom_id @user}_subscribers_pagination" %>
       <% end %>
     </div>
   <% end %>

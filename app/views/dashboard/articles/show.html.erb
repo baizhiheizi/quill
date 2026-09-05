@@ -246,28 +246,28 @@
     data-tabs-content-param="buy_records"
     data-tabs-target="content">
     <%= turbo_frame_tag "#{dom_id @article}_orders", src: dashboard_orders_path(article_uuid: @article.uuid, order_type: :buy_article), loading: :lazy do %>
-      <%= render "shared/loading" %>
+      <%= render_loading %>
     <% end %>
   </div>
   <div class="hidden pb-4"
     data-tabs-content-param="reward_records"
     data-tabs-target="content">
     <%= turbo_frame_tag "#{dom_id @article}_orders", src: dashboard_orders_path(article_uuid: @article.uuid, order_type: :reward_article), loading: :lazy do %>
-      <%= render "shared/loading" %>
+      <%= render_loading %>
     <% end %>
   </div>
   <div class="hidden pb-4"
     data-tabs-content-param="cite_records"
     data-tabs-target="content">
     <%= turbo_frame_tag "#{dom_id @article}_orders", src: dashboard_orders_path(article_uuid: @article.uuid, order_type: :cite_article), loading: :lazy do %>
-      <%= render "shared/loading" %>
+      <%= render_loading %>
     <% end %>
   </div>
   <div class="hidden pb-4"
     data-tabs-content-param="comment_records"
     data-tabs-target="content">
     <%= turbo_frame_tag "#{dom_id @article}_comments", src: dashboard_comments_path(article_uuid: @article.uuid), loading: :lazy do %>
-      <%= render "shared/loading" %>
+      <%= render_loading %>
     <% end %>
   </div>
 </div>

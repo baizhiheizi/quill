@@ -11,7 +11,7 @@
   <section id="finances-spending">
     <h2 class="mb-3 text-sm font-semibold text-base-content"><%= t('payments') %></h2>
     <%= turbo_frame_tag "#{dom_id current_user}_payments", src: dashboard_payments_path, loading: :lazy do %>
-      <%= render "shared/loading" %>
+      <%= render_loading %>
     <% end %>
   </section>
 
@@ -19,7 +19,7 @@
     <h2 class="mb-3 text-sm font-semibold text-base-content"><%= t('earnings') %></h2>
     <%= turbo_frame_tag "my_transfers_stats", src: dashboard_transfers_stats_path %>
     <%= turbo_frame_tag "my_transfers", src: dashboard_transfers_path, loading: :lazy do %>
-      <%= render "shared/loading" %>
+      <%= render_loading %>
     <% end %>
   </section>
 </div>

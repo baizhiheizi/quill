@@ -7,7 +7,7 @@
         turbo_frame: "_top" 
       } do %>
       <div class="size-9 rounded-full">
-        <%= render "shared/avatar", user: comment.author, thumb: true, class: "rounded-full" %>
+        <%= render_avatar user: comment.author, thumb: true, class: "rounded-full" %>
       </div>
     <% end %>
     <div class="">

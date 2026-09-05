@@ -89,21 +89,21 @@
         data-tabs-content-param="articles"
         data-tabs-target="content">
       <%= turbo_frame_tag 'admin_articles', src: admin_articles_path(collection_id: @collection.uuid) do %>
-        <%= render "shared/loading" %>
+        <%= render_loading %>
       <% end %>
     </div>
     <div class="hidden"
         data-tabs-content-param="orders"
         data-tabs-target="content">
       <%= turbo_frame_tag 'admin_orders', src: admin_orders_path(item_id: @collection.id, item_type: 'Collection') do %>
-        <%= render "shared/loading" %>
+        <%= render_loading %>
       <% end %>
     </div>
     <div class="hidden"
         data-tabs-content-param="pre_orders"
         data-tabs-target="content">
       <%= turbo_frame_tag 'admin_pre_orders', src: admin_pre_orders_path(item_id: @collection.id, item_type: 'Collection') do %>
-        <%= render "shared/loading" %>
+        <%= render_loading %>
       <% end %>
     </div>
   </div>

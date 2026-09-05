@@ -1,7 +1,7 @@
 <%= turbo_frame_tag "transfers" do %>
   <div data-controller="infinite-scroll">
     <% if @transfers.blank? %>
-      <%= render "shared/empty", text: t('no_record') %>
+      <%= render_empty text: t('no_record') %>
     <% else %>
       <div class="overflow-x-auto">
         <div class="table table-auto w-full">
@@ -11,7 +11,7 @@
         </div>
       </div>
       <div data-infinite-scroll-target='scrollArea'></div>
-      <%= render partial: "shared/pagination", locals: { pagy: @pagy } %>
+      <%= render_pagination @pagy %>
     <% end %>
   </div>
 <% end %>

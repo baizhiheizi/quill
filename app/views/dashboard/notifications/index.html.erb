@@ -35,13 +35,13 @@
 
 <div data-controller="infinite-scroll">
   <% if @notifications.blank? %>
-    <%= render "shared/empty", text: t('no_record') %>
+    <%= render_empty text: t('no_record') %>
   <% else %>
     <div id="<%= dom_id current_user %>_notifications_list">
       <%= render partial: "dashboard/notifications/notification", collection: @notifications, as: :notification %>
     </div>
     <div data-infinite-scroll-target='scrollArea'></div>
 
-    <%= render partial: "shared/pagination", locals: { pagy: @pagy } %>
+    <%= render_pagination @pagy %>
   <% end %>
 </div>

@@ -151,21 +151,21 @@
         data-tabs-content-param="orders"
         data-tabs-target="content">
       <%= turbo_frame_tag 'admin_orders', src: admin_orders_path(item_id: @article.id, item_type: 'Article') do %>
-        <%= render "shared/loading" %>
+        <%= render_loading %>
       <% end %>
     </div>
     <div class="hidden"
         data-tabs-content-param="pre_orders"
         data-tabs-target="content">
       <%= turbo_frame_tag 'admin_pre_orders', src: admin_pre_orders_path(item_id: @article.id, item_type: 'Article') do %>
-        <%= render "shared/loading" %>
+        <%= render_loading %>
       <% end %>
     </div>
     <div class="hidden"
         data-tabs-content-param="comments"
         data-tabs-target="content">
       <%= turbo_frame_tag 'admin_comments', src: admin_comments_path(commentable_id: @article.id, commentable_type: 'Article') do %>
-        <%= render "shared/loading" %>
+        <%= render_loading %>
       <% end %>
     </div>
   </div>

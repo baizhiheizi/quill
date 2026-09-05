@@ -25,7 +25,7 @@
         <div class="mb-2 text-center text-sm text-base-content/60"><%= t("article_references") %></div>
         <% article.references.each do |reference| %>
           <div class="flex items-center justify-center space-x-2 text-sm text-base-content/60">
-            <%= render "shared/avatar", user: reference.author, thumb: true, class: "h-4 w-4 rounded-full" %>
+            <%= render_avatar user: reference.author, thumb: true, class: "h-4 w-4 rounded-full" %>
             <span><%= reference.title %></span>
           </div>
         <% end %>

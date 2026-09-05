@@ -9,6 +9,11 @@
 #   bin/lint-design-system --list-violations # emit JSON instead of plain text
 #   bin/lint-design-system --no-fail        # report but don't exit non-zero
 #
+# Rules: DS001..DS014 (see lib/design_system/lint.rb and
+# specs/011-comprehensive-ui-refactor/contracts/primitives.md). Allowlist
+# entries in DesignSystem::Lint::ALLOWLIST exempt a whole file, or named rules
+# only, and must cite a reason.
+#
 # Exit codes: 0 = clean (or --no-fail), 1 = violations (or internal error),
 #            2 = PhaseError (unknown phase).
 

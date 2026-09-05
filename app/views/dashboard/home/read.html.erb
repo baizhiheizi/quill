@@ -10,21 +10,21 @@
   <section id="read-bought">
     <h2 class="mb-3 text-sm font-semibold text-base-content"><%= t('bought') %></h2>
     <%= turbo_frame_tag "my_bought_articles", src: dashboard_articles_path(tab: :bought), loading: :lazy do %>
-      <%= render "shared/loading" %>
+      <%= render_loading %>
     <% end %>
   </section>
 
   <section id="read-comments">
     <h2 class="mb-3 text-sm font-semibold text-base-content"><%= t('my_comments') %></h2>
     <%= turbo_frame_tag "my_comments", src: dashboard_comments_path, loading: :lazy do %>
-      <%= render "shared/loading" %>
+      <%= render_loading %>
     <% end %>
   </section>
 
   <section id="read-subscriptions">
     <h2 class="mb-3 text-sm font-semibold text-base-content"><%= t('my_subscriptions') %></h2>
     <%= turbo_frame_tag "my_subscriptions", src: dashboard_subscriptions_path, loading: :lazy do %>
-      <%= render "shared/loading" %>
+      <%= render_loading %>
     <% end %>
   </section>
 
@@ -32,7 +32,7 @@
     <h2 class="mb-3 text-sm font-semibold text-base-content"><%= t('readers_revenue') %></h2>
     <%= turbo_frame_tag "my_transfers_stats", src: dashboard_transfers_stats_path(role: :reader) %>
     <%= turbo_frame_tag "my_transfers", src: dashboard_transfers_path(tab: :reader), loading: :lazy do %>
-      <%= render "shared/loading" %>
+      <%= render_loading %>
     <% end %>
   </section>
 </div>

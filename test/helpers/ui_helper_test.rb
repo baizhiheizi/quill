@@ -380,4 +380,111 @@ class UiHelperTest < ActionView::TestCase
     assert_includes html, "Notification"
     assert_not_includes html, "+0.001 BTC"
   end
+
+  # ─── render_pagination ───
+
+  # Minimal stand-in for the Pagy object `_pagination.html.erb` consumes:
+  # `pagy&.next&.present?` gates the Load More link, `pagy.page_url(n)` builds it.
+  class FakePagy
+    attr_accessor :page
+
+    def initialize(page)
+      @page = page
+    end
+
+    define_method(:next) { @page < 2 ? @page + 1 : nil }
+
+    def page_url(num)
+      "/?page=#{num}"
+    end
+  end
+
+  test "render_pagination renders the infinite-scroll anchor with the default id" do
+    html = render_pagination(FakePagy.new(1))
+
+    assert_includes html, "data-infinite-scroll-target='pagination'"
+    assert_includes html, 'id="pagination"'
+    assert_includes html, "Load More"
+    assert_includes html, 'href="/?page=2"'
+  end
+
+  test "render_pagination forwards a custom id" do
+    html = render_pagination(FakePagy.new(1), id: "my_transfers_pagination")
+
+    assert_includes html, 'id="my_transfers_pagination"'
+    # The default id must not leak onto a page that asked for its own anchor.
+    assert_not_includes html, 'id="pagination"'
+  end
+
+  test "render_pagination renders an empty anchor on the last page" do
+    html = render_pagination(FakePagy.new(5), id: "tail")
+
+    assert_includes html, 'id="tail"'
+    assert_not_includes html, "Load More"
+  end
+
+  test "render_pagination renders an empty anchor without a pagy object" do
+    html = render_pagination(nil)
+
+    assert_includes html, 'id="pagination"'
+    assert_not_includes html, "Load More"
+  end
+
+  # ─── render_loading ───
+
+  test "render_loading renders the infinite-scroll spinner" do
+    html = render_loading
+
+    assert_includes html, "/assets/loading-"
+    assert_includes html, "p-4 flex justify-center"
+  end
+
+  # ─── render_avatar ───
+
+  AvatarUser = Struct.new(:name, :mixin_uuid, :avatar_image_url, :avatar_image_thumb)
+
+  test "render_avatar renders the remote image when the user has an avatar" do
+    user = AvatarUser.new("Alice", "uuid-1", "https://example.com/a.png", "https://example.com/t.png")
+
+    html = render_avatar(user:, thumb: true, class: "w-8 h-8 rounded-full")
+
+    assert_includes html, "https://example.com/t.png"
+    assert_includes html, "w-8 h-8 rounded-full"
+    assert_not_includes html, "avatar-placeholder"
+  end
+
+  test "render_avatar renders the initials placeholder when the avatar is missing" do
+    user = AvatarUser.new("Alice", "uuid-2", "", "")
+
+    html = render_avatar(user:, class: "w-8 h-8 rounded-full")
+
+    assert_includes html, "avatar-placeholder"
+    assert_includes html, "data-avatar-seed-value=\"uuid-2\""
+    assert_includes html, "w-8 h-8 rounded-full"
+  end
+
+  test "render_avatar defaults to the full-size image and the rounded-full class" do
+    user = AvatarUser.new("Alice", "uuid-3", "https://example.com/a.png", "https://example.com/t.png")
+
+    html = render_avatar(user:)
+
+    assert_includes html, "https://example.com/a.png"
+    assert_includes html, "rounded-full"
+  end
+
+  # ─── render_empty ───
+
+  test "render_empty renders the empty-state artwork and the message" do
+    html = render_empty(text: "Nothing here yet")
+
+    assert_includes html, "/assets/empty-"
+    assert_includes html, "Nothing here yet"
+  end
+
+  test "render_empty escapes the message" do
+    html = render_empty(text: "<b>no record</b>")
+
+    assert_includes html, "&lt;b&gt;no record&lt;/b&gt;"
+    assert_not_includes html, "<b>no record</b>"
+  end
 end

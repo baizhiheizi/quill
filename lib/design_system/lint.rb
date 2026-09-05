@@ -22,17 +22,134 @@ module DesignSystem
   class Lint
     class PhaseError < StandardError; end
 
+    # ─── Rule-scoped legacy debt ───────────────────────────────────────────
+    # The reasons below describe the raw-markup backlog that predates the
+    # design system (issue #2077). Each file is exempted from the specific
+    # rules it trips and nothing else, so a new rule or a new file stays
+    # policed. Deleting an entry is the fix.
+    LEGACY_ADMIN_TABLE = "admin index table renders a collection of row partials inside <tbody>; _table.html.erb has no row-partial slot to receive it yet"
+    LEGACY_ADMIN_BUTTONS = "admin console markup predates the primitive: row-action link_to and query-bar form.submit carry .btn classes; converting needs a submit-button primitive and a visual pass over the console"
+    LEGACY_CHROME = "layout chrome (close/cancel/toggle) carries .btn plus focus-ring and absolute-positioning classes; render_button cannot emit that composite yet"
+    LEGACY_SETTINGS_FORMS = "profile settings form controls carry .btn classes alongside Rails form builder attributes; moving them changes the emitted markup and needs a visual pass"
+    LEGACY_BESPOKE = "bespoke .btn markup with per-surface rounded-full / size / state variants; render_button cannot express the variant today, needs a per-surface pass"
+
     # File-level allowlist. Each entry: relative path (String) => reason (String).
     # Reasons are committed next to the path so future maintainers know why
     # an exception is allowed.
+    #
+    # A value may also be a Hash scoping the exemption to specific rules —
+    # `{ rules: %w[DS005], reason: "…" }` — so a legacy file can be waved
+    # through one rule without losing the other thirteen.
     ALLOWLIST = {
       "app/views/articles/_card_cover.html.erb" => "procedural cover-art SVG (not an icon)",
       "app/javascript/utils/notify.js" => "toast icons migrated to i-[tabler--*]; allowlist shrinks in Phase 7",
       "app/assets/stylesheets/application.tailwind.css" => "source of token layer (hex literals are intentional)",
-      "app/assets/stylesheets/lexxy_overrides.css" => "Lexxy editor internals; not owned by Quill"
+      "app/assets/stylesheets/lexxy_overrides.css" => "Lexxy editor internals; not owned by Quill",
+      "app/views/admin/_aside.html.erb" => { rules: %w[DS005], reason: LEGACY_ADMIN_BUTTONS },
+      "app/views/admin/articles/_article.html.erb" => { rules: %w[DS005], reason: LEGACY_ADMIN_BUTTONS },
+      "app/views/admin/articles/_query.html.erb" => { rules: %w[DS005], reason: LEGACY_ADMIN_BUTTONS },
+      "app/views/admin/articles/index.html.erb" => { rules: %w[DS007], reason: LEGACY_ADMIN_TABLE },
+      "app/views/admin/articles/show.html.erb" => { rules: %w[DS005], reason: LEGACY_ADMIN_BUTTONS },
+      "app/views/admin/bonuses/_bonus.html.erb" => { rules: %w[DS005], reason: LEGACY_ADMIN_BUTTONS },
+      "app/views/admin/bonuses/_form.html.erb" => { rules: %w[DS005], reason: LEGACY_ADMIN_BUTTONS },
+      "app/views/admin/bonuses/_query.html.erb" => { rules: %w[DS005], reason: LEGACY_ADMIN_BUTTONS },
+      "app/views/admin/bonuses/index.html.erb" => { rules: %w[DS005 DS007], reason: "#{LEGACY_ADMIN_TABLE} #{LEGACY_ADMIN_BUTTONS}" },
+      "app/views/admin/collections/_query.html.erb" => { rules: %w[DS005], reason: LEGACY_ADMIN_BUTTONS },
+      "app/views/admin/collections/index.html.erb" => { rules: %w[DS007], reason: LEGACY_ADMIN_TABLE },
+      "app/views/admin/collections/show.html.erb" => { rules: %w[DS005], reason: LEGACY_ADMIN_BUTTONS },
+      "app/views/admin/comments/_comment.html.erb" => { rules: %w[DS005], reason: LEGACY_ADMIN_BUTTONS },
+      "app/views/admin/comments/_query.html.erb" => { rules: %w[DS005], reason: LEGACY_ADMIN_BUTTONS },
+      "app/views/admin/comments/index.html.erb" => { rules: %w[DS007], reason: LEGACY_ADMIN_TABLE },
+      "app/views/admin/login/new.html.erb" => { rules: %w[DS005], reason: LEGACY_ADMIN_BUTTONS },
+      "app/views/admin/mixin_network_snapshots/_mixin_network_snapshot.html.erb" => { rules: %w[DS005], reason: LEGACY_ADMIN_BUTTONS },
+      "app/views/admin/mixin_network_snapshots/_query.html.erb" => { rules: %w[DS005], reason: LEGACY_ADMIN_BUTTONS },
+      "app/views/admin/mixin_network_snapshots/index.html.erb" => { rules: %w[DS007], reason: LEGACY_ADMIN_TABLE },
+      "app/views/admin/mixin_network_users/_mixin_network_user.html.erb" => { rules: %w[DS005], reason: LEGACY_ADMIN_BUTTONS },
+      "app/views/admin/mixin_network_users/_query.html.erb" => { rules: %w[DS005], reason: LEGACY_ADMIN_BUTTONS },
+      "app/views/admin/mixin_network_users/index.html.erb" => { rules: %w[DS007], reason: LEGACY_ADMIN_TABLE },
+      "app/views/admin/mixin_network_users/show.html.erb" => { rules: %w[DS005], reason: LEGACY_ADMIN_BUTTONS },
+      "app/views/admin/orders/_order.html.erb" => { rules: %w[DS005], reason: LEGACY_ADMIN_BUTTONS },
+      "app/views/admin/orders/_query.html.erb" => { rules: %w[DS005], reason: LEGACY_ADMIN_BUTTONS },
+      "app/views/admin/orders/index.html.erb" => { rules: %w[DS007], reason: LEGACY_ADMIN_TABLE },
+      "app/views/admin/payments/_payment.html.erb" => { rules: %w[DS005], reason: LEGACY_ADMIN_BUTTONS },
+      "app/views/admin/payments/_query.html.erb" => { rules: %w[DS005], reason: LEGACY_ADMIN_BUTTONS },
+      "app/views/admin/payments/index.html.erb" => { rules: %w[DS007], reason: LEGACY_ADMIN_TABLE },
+      "app/views/admin/pre_orders/_pre_order.html.erb" => { rules: %w[DS005], reason: LEGACY_ADMIN_BUTTONS },
+      "app/views/admin/pre_orders/_query.html.erb" => { rules: %w[DS005], reason: LEGACY_ADMIN_BUTTONS },
+      "app/views/admin/pre_orders/index.html.erb" => { rules: %w[DS007], reason: LEGACY_ADMIN_TABLE },
+      "app/views/admin/sessions/_query.html.erb" => { rules: %w[DS005], reason: LEGACY_ADMIN_BUTTONS },
+      "app/views/admin/sessions/index.html.erb" => { rules: %w[DS007], reason: LEGACY_ADMIN_TABLE },
+      "app/views/admin/statistics/_query.html.erb" => { rules: %w[DS005], reason: LEGACY_ADMIN_BUTTONS },
+      "app/views/admin/statistics/index.html.erb" => { rules: %w[DS007], reason: LEGACY_ADMIN_TABLE },
+      "app/views/admin/transfers/_query.html.erb" => { rules: %w[DS005], reason: LEGACY_ADMIN_BUTTONS },
+      "app/views/admin/transfers/_transfer.html.erb" => { rules: %w[DS005], reason: LEGACY_ADMIN_BUTTONS },
+      "app/views/admin/transfers/index.html.erb" => { rules: %w[DS007], reason: LEGACY_ADMIN_TABLE },
+      "app/views/admin/users/_query.html.erb" => { rules: %w[DS005], reason: LEGACY_ADMIN_BUTTONS },
+      "app/views/admin/users/_user.html.erb" => { rules: %w[DS005], reason: LEGACY_ADMIN_BUTTONS },
+      "app/views/admin/users/index.html.erb" => { rules: %w[DS007], reason: LEGACY_ADMIN_TABLE },
+      "app/views/admin/users/show.html.erb" => { rules: %w[DS005], reason: LEGACY_ADMIN_BUTTONS },
+      "app/views/admin/wallets/assets.html.erb" => { rules: %w[DS007], reason: LEGACY_ADMIN_TABLE },
+      "app/views/admin/wallets/safe_outputs.html.erb" => { rules: %w[DS007], reason: LEGACY_ADMIN_TABLE },
+      "app/views/admin/wallets/snapshots.html.erb" => { rules: %w[DS007], reason: LEGACY_ADMIN_TABLE },
+      "app/views/articles/_buy_article_button.html.erb" => { rules: %w[DS005], reason: LEGACY_BESPOKE },
+      "app/views/articles/_conflict_resolution.html.erb" => { rules: %w[DS005], reason: LEGACY_BESPOKE },
+      "app/views/articles/_edit_form.html.erb" => { rules: %w[DS005], reason: LEGACY_BESPOKE },
+      "app/views/articles/_option_fields.html.erb" => { rules: %w[DS005], reason: LEGACY_BESPOKE },
+      "app/views/articles/new.html.erb" => { rules: %w[DS005], reason: LEGACY_BESPOKE },
+      "app/views/articles/preview.html.erb" => { rules: %w[DS005], reason: LEGACY_BESPOKE },
+      "app/views/collections/_card.html.erb" => { rules: %w[DS005], reason: LEGACY_BESPOKE },
+      "app/views/collections/_detail.html.erb" => { rules: %w[DS005], reason: LEGACY_BESPOKE },
+      "app/views/collections/_form.html.erb" => { rules: %w[DS005], reason: LEGACY_BESPOKE },
+      "app/views/comments/_actions.html.erb" => { rules: %w[DS005], reason: LEGACY_BESPOKE },
+      "app/views/comments/_form.html.erb" => { rules: %w[DS005], reason: LEGACY_BESPOKE },
+      "app/views/dashboard/access_tokens/_access_token.html.erb" => { rules: %w[DS005], reason: LEGACY_BESPOKE },
+      "app/views/dashboard/access_tokens/_form.html.erb" => { rules: %w[DS005], reason: LEGACY_BESPOKE },
+      "app/views/dashboard/access_tokens/create.turbo_stream.erb" => { rules: %w[DS005], reason: LEGACY_BESPOKE },
+      "app/views/dashboard/articles/_drafted_article.html.erb" => { rules: %w[DS005], reason: LEGACY_BESPOKE },
+      "app/views/dashboard/articles/index.html.erb" => { rules: %w[DS005], reason: LEGACY_BESPOKE },
+      "app/views/dashboard/articles/show.html.erb" => { rules: %w[DS005], reason: LEGACY_BESPOKE },
+      "app/views/dashboard/collections/index.html.erb" => { rules: %w[DS005], reason: LEGACY_BESPOKE },
+      "app/views/dashboard/collections/new.html.erb" => { rules: %w[DS005], reason: LEGACY_BESPOKE },
+      "app/views/dashboard/hidden_collections/new.html.erb" => { rules: %w[DS005], reason: LEGACY_BESPOKE },
+      "app/views/dashboard/home/account.html.erb" => { rules: %w[DS005], reason: LEGACY_BESPOKE },
+      "app/views/dashboard/home/index.html.erb" => { rules: %w[DS005], reason: LEGACY_BESPOKE },
+      "app/views/dashboard/home/write.html.erb" => { rules: %w[DS005], reason: LEGACY_BESPOKE },
+      "app/views/dashboard/listed_collections/new.html.erb" => { rules: %w[DS005], reason: LEGACY_BESPOKE },
+      "app/views/dashboard/profile_settings/_avatar_field.html.erb" => { rules: %w[DS005], reason: LEGACY_SETTINGS_FORMS },
+      "app/views/dashboard/profile_settings/_biography_field.html.erb" => { rules: %w[DS005], reason: LEGACY_SETTINGS_FORMS },
+      "app/views/dashboard/profile_settings/_email_field.html.erb" => { rules: %w[DS005], reason: LEGACY_SETTINGS_FORMS },
+      "app/views/dashboard/profile_settings/_name_field.html.erb" => { rules: %w[DS005], reason: LEGACY_SETTINGS_FORMS },
+      "app/views/dashboard/profile_settings/edit.html.erb" => { rules: %w[DS005], reason: LEGACY_SETTINGS_FORMS },
+      "app/views/dashboard/profile_settings/verify_email.html.erb" => { rules: %w[DS005], reason: LEGACY_SETTINGS_FORMS },
+      "app/views/dashboard/published_articles/_form.html.erb" => { rules: %w[DS005], reason: LEGACY_BESPOKE },
+      "app/views/dashboard/settings/_notification.html.erb" => { rules: %w[DS005], reason: LEGACY_SETTINGS_FORMS },
+      "app/views/dashboard/settings/_profile.html.erb" => { rules: %w[DS005], reason: LEGACY_SETTINGS_FORMS },
+      "app/views/flashes/_alert_content.html.erb" => { rules: %w[DS005], reason: LEGACY_CHROME },
+      "app/views/pre_orders/_form.html.erb" => { rules: %w[DS005], reason: LEGACY_BESPOKE },
+      "app/views/pre_orders/_pay_button.html.erb" => { rules: %w[DS005], reason: LEGACY_BESPOKE },
+      "app/views/pre_orders/show.html.erb" => { rules: %w[DS005], reason: LEGACY_BESPOKE },
+      "app/views/sessions/new.html.erb" => { rules: %w[DS005], reason: LEGACY_BESPOKE },
+      "app/views/shared/_dashboard_rail.html.erb" => { rules: %w[DS005], reason: LEGACY_CHROME },
+      "app/views/shared/_masthead.html.erb" => { rules: %w[DS005], reason: LEGACY_CHROME },
+      "app/views/shared/_modal.html.erb" => { rules: %w[DS005], reason: LEGACY_CHROME },
+      "app/views/shared/_navbar.html.erb" => { rules: %w[DS005], reason: LEGACY_CHROME },
+      "app/views/subscribe_articles/_subscribe_button.html.erb" => { rules: %w[DS005], reason: LEGACY_BESPOKE },
+      "app/views/subscribe_by_users/_subscribe_button.html.erb" => { rules: %w[DS005], reason: LEGACY_BESPOKE },
+      "app/views/subscribe_tags/_subscribe_button.html.erb" => { rules: %w[DS005], reason: LEGACY_BESPOKE },
+      "app/views/subscribe_users/_subscribe_button.html.erb" => { rules: %w[DS005], reason: LEGACY_BESPOKE }
     }.freeze
 
     HEX_RE = /(?<![0-9A-Za-z_])#[0-9A-Fa-f]{3,8}\b/.freeze
+
+    # `render "shared/x"`, `render 'shared/x'`, `render partial: "shared/x"`,
+    # with or without parens / trailing locals.
+    RENDER_SHARED_RE = /\brender\b\s*\(?\s*(?:partial:\s*)?["']shared\/([\w]+)["']/.freeze
+
+    # `render "shared/ui_input"` is a partial-path string, not a call to
+    # `ui_input`. Strip every quoted string that names a shared partial so the
+    # helper-name exemption on DS005/DS006/DS011-13 only fires for genuine
+    # helper invocations.
+    SHARED_PATH_STRING_RE = /["'][^"']*shared\/[\w]+["']/.freeze
 
     # Files where the scan walks: ERB views, JS controllers/helpers, ERB helpers, CSS.
     SCAN_GLOBS = [
@@ -87,16 +204,27 @@ module DesignSystem
       IGNORE_DIRS.any? { |dir| rel.start_with?(dir + "/") || rel == dir }
     end
 
-    def allowlisted?(path)
-      rel = path.sub(root.to_s + "/", "")
-      ALLOWLIST.key?(rel)
+    def whole_file_allowlisted?(rel)
+      ALLOWLIST.key?(rel) && !ALLOWLIST.fetch(rel).is_a?(Hash)
+    end
+
+    # Rule ids a file is exempt from. A plain-String reason exempts the file
+    # from everything; a `{ rules: […], reason: "…" }` entry scopes the
+    # exemption so a legacy file keeps the other thirteen rules.
+    def allowlisted_rules(rel)
+      entry = ALLOWLIST[rel]
+      return [] unless entry.is_a?(Hash)
+
+      entry.fetch(:rules, [])
     end
 
     def scan_file(path)
-      return if allowlisted?(path)
+      rel = path.sub(root.to_s + "/", "")
+      return if whole_file_allowlisted?(rel)
 
       lines = File.readlines(path, encoding: "UTF-8", invalid: :replace, undef: :replace)
-      rel = path.sub(root.to_s + "/", "")
+      exempt = allowlisted_rules(rel)
+      count_before = violations.size
 
       lines.each_with_index do |line, i|
         check_hex!(rel, line, i + 1)
@@ -112,7 +240,16 @@ module DesignSystem
         check_raw_input!(rel, line, i + 1)
         check_raw_modal!(rel, line, i + 1)
         check_raw_dropdown!(rel, line, i + 1)
+        check_direct_primitive_render!(rel, line, i + 1)
       end
+
+      drop_exempt!(from: count_before, rules: exempt)
+    end
+
+    def drop_exempt!(from:, rules:)
+      return if rules.empty?
+
+      violations.reject!.with_index { |v, idx| idx >= from && rules.include?(v.rule_id) }
     end
 
     # DS001 — raw hex outside the token layer / coin allowlist.
@@ -187,7 +324,7 @@ module DesignSystem
       return unless rel.start_with?("app/views/")
       return if rel == "app/views/shared/_button.html.erb"
       return if rel == "app/views/design_system/_buttons.html.erb"
-      return if line.include?("render_button")
+      return if helper_called_on_line?("render_button", line)
       return unless line.match?(/\bbtn\s+btn-(primary|secondary|soft|ghost|danger)\b/)
 
       violations << Violation.new(
@@ -204,7 +341,7 @@ module DesignSystem
       return unless rel.start_with?("app/views/")
       return if rel == "app/views/shared/_chip.html.erb"
       return if rel == "app/views/design_system/_chips.html.erb"
-      return if line.include?("render_chip")
+      return if helper_called_on_line?("render_chip", line)
       return unless line.match?(/\bchip\s+chip-[a-z-]+/i)
 
       violations << Violation.new(
@@ -284,7 +421,7 @@ module DesignSystem
       return unless rel.start_with?("app/views/")
       return if rel == "app/views/shared/_ui_input.html.erb"
       return if rel == "app/views/design_system/_forms.html.erb"
-      return if line.include?("ui_input")
+      return if helper_called_on_line?("ui_input", line)
       return unless line.include?("<input ") && line.match?(/\bclass\s*=\s*["'][^"']*\binput\b/i)
 
       violations << Violation.new(
@@ -301,7 +438,7 @@ module DesignSystem
       return unless rel.start_with?("app/views/")
       return if rel == "app/views/shared/_modal.html.erb"
       return if rel == "app/views/design_system/_modal.html.erb"
-      return if line.include?("render_modal")
+      return if helper_called_on_line?("render_modal", line)
       return unless line.include?("<div ") && line.match?(/\bclass\s*=\s*["'][^"']*\bmodal\b/i)
 
       violations << Violation.new(
@@ -318,7 +455,7 @@ module DesignSystem
       return unless rel.start_with?("app/views/")
       return if rel == "app/views/shared/_dropdown.html.erb"
       return if rel == "app/views/design_system/_dropdown.html.erb"
-      return if line.include?("render_dropdown")
+      return if helper_called_on_line?("render_dropdown", line)
       return unless line.include?("<div ") && line.match?(/\bclass\s*=\s*["'][^"']*\bdropdown\b/i)
 
       violations << Violation.new(
@@ -328,6 +465,48 @@ module DesignSystem
         line: ln,
         message: "raw `.dropdown` markup outside `shared/_dropdown.html.erb`; use `<%= render_dropdown … %>`",
       )
+    end
+
+    # DS014 — a direct `render "shared/<primitive>"` (or `render partial:`)
+    # for a primitive that has a UiHelper wrapper. This polices the interface
+    # rather than the markup: the partial is a primitive's implementation, the
+    # helper is its contract, and the contract is where a signature change has
+    # to land. app/views/shared/ is exempt — that is the implementation, and
+    # primitives composing each other there is not a consumer bypass.
+    def check_direct_primitive_render!(rel, line, ln)
+      return unless rel.start_with?("app/views/")
+      return if rel.start_with?("app/views/shared/")
+
+      line.scan(RENDER_SHARED_RE).each do |match|
+        name = match[0]
+        helper = helpers_by_name[name.to_sym]
+        next if helper.nil?
+
+        violations << Violation.new(
+          rule_id: "DS014",
+          severity: :error,
+          file: rel,
+          line: ln,
+          message: "renders `shared/#{name}` directly; use `<%= #{helper} … %>`",
+        )
+      end
+    end
+
+    # Registry lookup shared with the rule above.
+    def helpers_by_name
+      @helpers_by_name ||= DesignSystem::Primitives::Registry.all
+                                                           .each_with_object({}) do |prim, index|
+        index[prim[:name]] = prim[:helper] if prim[:helper]
+      end
+    end
+
+    # True when `line` actually invokes the helper — `<%= render_button … %>`,
+    # `ui_input form, :email` — and not merely mentions its name inside a
+    # partial path (`render "shared/ui_input"`) or a comment.
+    def helper_called_on_line?(helper, line)
+      candidates = line.gsub(SHARED_PATH_STRING_RE, "")
+
+      candidates.match?(/\b#{Regexp.escape(helper)}\b/)
     end
   end
 end
