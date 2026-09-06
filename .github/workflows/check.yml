@@ -25,7 +25,6 @@ on:
       - .rubocop.yml
       - .prettierignore
       - esbuild.config.js
-      - esbuild.inject.js
       - tsconfig.json
       - tslint.json
       - Procfile.dev

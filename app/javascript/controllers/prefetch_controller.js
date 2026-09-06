@@ -1,5 +1,5 @@
 import { Controller } from "@hotwired/stimulus";
-import { debounce } from "underscore";
+import { debounce } from "../utils/debounce";
 
 // Prefetches a link's target document so the next navigation is instant.
 //

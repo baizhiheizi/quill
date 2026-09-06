@@ -1,12 +1,7 @@
 import { Controller } from "@hotwired/stimulus";
-import dayjs from "dayjs";
-import utc from "dayjs/plugin/utc";
-import timezone from "dayjs/plugin/timezone";
-import advancedFormat from "dayjs/plugin/advancedFormat";
-dayjs.extend(utc);
-dayjs.extend(timezone);
-dayjs.extend(advancedFormat);
 
+// Formats the `datetime-value` in the viewer's local timezone. Plain `Date`
+// arithmetic — the three fixed shapes below don't need a date library.
 export default class extends Controller {
   static targets = ["time"];
   static values = {
@@ -19,13 +14,21 @@ export default class extends Controller {
       return;
     }
 
-    let format = "YYYY-MM-DD HH:mm";
-    if (this.formatValue === "date") {
-      format = "MM/DD";
-    } else if (this.formatValue === "time") {
-      format = "HH:mm";
+    const datetime = new Date(this.datetimeValue);
+    if (Number.isNaN(datetime.getTime())) {
+      return;
     }
 
-    this.element.innerText = dayjs(this.datetimeValue).format(format);
+    const pad = (n) => String(n).padStart(2, "0");
+    const date = `${pad(datetime.getMonth() + 1)}/${pad(datetime.getDate())}`;
+    const time = `${pad(datetime.getHours())}:${pad(datetime.getMinutes())}`;
+
+    if (this.formatValue === "date") {
+      this.element.innerText = date;
+    } else if (this.formatValue === "time") {
+      this.element.innerText = time;
+    } else {
+      this.element.innerText = `${datetime.getFullYear()}-${pad(datetime.getMonth() + 1)}-${pad(datetime.getDate())} ${time}`;
+    }
   }
 }

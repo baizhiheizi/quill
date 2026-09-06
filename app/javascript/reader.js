@@ -5,9 +5,6 @@ import { application } from "./controllers/application";
 import PhotoswipeController from "./controllers/photoswipe_controller";
 application.register("photoswipe", PhotoswipeController);
 
-import HljsController from "./controllers/hljs_controller";
-application.register("hljs", HljsController);
-
 import SyntaxHighlightController from "./controllers/syntax_highlight_controller";
 application.register("syntax-highlight", SyntaxHighlightController);
 

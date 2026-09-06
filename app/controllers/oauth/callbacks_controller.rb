@@ -5,7 +5,7 @@ module Oauth
     skip_before_action :ensure_launched!
 
     def create
-      identity = Oauth::AuthHashNormalizer.call(request.env["omniauth.auth"])
+      identity = Oauth::SignIn.normalize(request.env["omniauth.auth"])
       user = Oauth::SignIn.call(identity:, request_info:)
       is_new_user = user.sessions.none?
       user_sign_in user.sessions.create!(info: request_info)
@@ -24,7 +24,7 @@ module Oauth
       redirect_to oauth_return_to_path, success: t("connected")
     rescue MixinBot::RateLimitError
       redirect_to oauth_return_to_path, alert: t("mixin_rate_limited")
-    rescue Oauth::SignInError, Oauth::UnsupportedProviderError
+    rescue Oauth::SignInError
       redirect_to oauth_return_to_path, alert: t("failed_to_connect")
     end
 
