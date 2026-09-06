@@ -40,9 +40,18 @@ module Mixpay
       raise Errors::APIError, response.to_s if response.status.server_error?
 
       # Mixpay answers JSON for every endpoint this client talks to; the
-      # envelope is `{ success:, data: }`.
-      result = JSON.parse(response.body.to_s)
-      raise Errors::APIError, result unless result["success"]
+      # envelope is `{ success:, data: }`. A body that is not JSON (a proxy or
+      # WAF error page, an empty body) still becomes an APIError: callers
+      # rescue `Mixpay::Errors::Error` to degrade gracefully, so letting a
+      # bare JSON::ParserError escape would turn a Mixpay outage into a 500.
+      result =
+        begin
+          JSON.parse(response.body.to_s)
+        rescue JSON::ParserError
+          raise Errors::APIError, "non-JSON response: #{response.body.to_s[0, 200]}"
+        end
+
+      raise Errors::APIError, result unless result.is_a?(Hash) && result["success"]
 
       result["data"]
     end
