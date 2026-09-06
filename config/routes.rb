@@ -103,8 +103,8 @@ Rails.application.routes.draw do
   resources :transfers, only: %i[index]
   get "/transfers/stats", to: "transfers#stats"
 
-  get "/fair" => "high_voltage/pages#show", id: "fair", as: :fair_page
-  get "/rules" => "high_voltage/pages#show", id: "rules", as: :rules_page
+  get "/fair" => "pages#fair", as: :fair_page
+  get "/rules" => "pages#rules", as: :rules_page
 
   get "/:uid",
       to: "users#show",

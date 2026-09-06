@@ -2,8 +2,8 @@
     design system. Stats cards + transfers list share the `bg-base-200` token,
     `font-display` headlines, and the muted-amber `render_value_note` accent.
 
-    Public layout shell — controlled by HighVoltage.layout = "public" in
-    config/initializers/high_voltage.rb so this view inherits the masthead
+    Public layout shell — PagesController renders with layout "public" so
+    this view inherits the masthead
     + design system with the rest of the public reader experience. %>
 <header class="mb-10">
   <p class="font-mono text-[13px] text-base-content/60"><%= t('ds_platform_label') %></p>
