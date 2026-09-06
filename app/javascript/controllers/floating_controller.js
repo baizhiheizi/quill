@@ -1,5 +1,5 @@
 import { Controller } from "@hotwired/stimulus";
-import { debounce } from "underscore";
+import { debounce } from "../utils/debounce";
 
 // Shows a mobile floating action bar at the bottom of the article page as
 // the user scrolls down, then hides it after they stop. Implemented as a

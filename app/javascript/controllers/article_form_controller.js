@@ -1,5 +1,5 @@
 import { Controller } from "@hotwired/stimulus";
-import { debounce } from "underscore";
+import { debounce } from "../utils/debounce";
 import Autosave from "./article_form/autosave";
 import UI from "./article_form/ui";
 import Draft from "./article_form/draft";
@@ -97,7 +97,7 @@ export default class extends Controller {
     // Without this, a Turbo navigation during the 2s error retry window
     // leaves the closure alive to fire against a detached form.
     this.autosave.cancelPendingRetry();
-    // Cancel the 1s debounce window too — Underscore's `debounced.cancel()`
+    // Cancel the 1s debounce window too — `debounced.cancel()`
     // clears the internal setTimeout so a navigation within the debounce
     // window doesn't fire `runAutosave()` against a detached form.
     this.debouncedAutosave.cancel();
