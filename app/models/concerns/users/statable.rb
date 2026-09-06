@@ -168,12 +168,6 @@ module Users::Statable
     authorization&.provider == "mixin"
   end
 
-  def accessable?
-    return true unless Settings.whitelist&.enable
-
-    mixin_uuid.in? (Settings.whitelist&.mixin_id || []).map(&:to_s)
-  end
-
   def twitter_username
     raw = twitter_authorization&.raw
     return unless raw.is_a?(Hash)

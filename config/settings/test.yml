@@ -1,6 +1,4 @@
 host:
-# lauch time
-launch_time:
 
 # page
 app_name: Quill
@@ -21,11 +19,5 @@ available_locales:
 supported_assets:
   # BTC
   - c6d0c728-2624-429b-8e0d-d9d19b6592fa
-
-# whitelist
-whitelist:
-  enable: false
-  phone_country_code: 
-  mixin_id:
 
 encryption_salt: yleyZdwghSvfeMImsYHjXNZpMajPzdXGObFssdsyzx8=

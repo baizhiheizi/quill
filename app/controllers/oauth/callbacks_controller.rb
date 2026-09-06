@@ -2,8 +2,6 @@
 
 module Oauth
   class CallbacksController < ApplicationController
-    skip_before_action :ensure_launched!
-
     def create
       identity = Oauth::SignIn.normalize(request.env["omniauth.auth"])
       user = Oauth::SignIn.call(identity:, request_info:)
