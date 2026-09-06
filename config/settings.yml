@@ -1,8 +1,5 @@
 host: 'https://quill.im'
 
-# lauch time
-launch_time:
-
 # assets
 icon_file: icon.png
 
@@ -23,12 +20,6 @@ supported_assets:
   - 43d61dcd-e413-450d-80b8-101d5e903357
   # pUSD
   - 31d2ea9c-95eb-3355-b65b-ba096853bc18
-
-# whitelist
-whitelist:
-  enable: false
-  mixin_id:
-    - 7ed9292d-7c95-4333-aa48-a8c640064186
 
 storage:
   endpoint: https://assets.quill.im

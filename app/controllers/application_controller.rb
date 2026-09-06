@@ -6,7 +6,6 @@ class ApplicationController < ActionController::Base
   include ViewerActionSets
   include Pundit::Authorization
 
-  before_action :ensure_launched!
   before_action :prepare_exception_notifier
 
   helper_method :current_session
@@ -21,17 +20,6 @@ class ApplicationController < ActionController::Base
   add_flash_types :success, :warning, :danger, :info
 
   private
-
-  def ensure_launched!
-    redirect_to landing_path unless launched?
-  end
-
-  def launched?
-    return true if Settings.launch_time.blank?
-    return true if current_user&.accessable?
-
-    Time.current > Time.zone.parse(Settings.launch_time)
-  end
 
   def authenticate_user!
     redirect_to root_path if current_user.blank?

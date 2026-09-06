@@ -10,7 +10,6 @@
 # not a public URL.
 
 class DesignSystemController < ApplicationController
-  skip_before_action :ensure_launched!
   before_action :ensure_development_only!
 
   def show
