@@ -17,7 +17,7 @@ export default class extends Controller {
   search(query) {
     if (query) {
       this.showClearButton();
-      get(`/search?query=${query}`, {
+      get(`/search?query=${encodeURIComponent(query)}`, {
         contentType: "application/json",
         responseKind: "turbo-stream",
       });
