@@ -39,16 +39,12 @@ module Mixpay
 
       raise Errors::APIError, response.to_s if response.status.server_error?
 
-      parse_response(response) do |parse_as, result|
-        case parse_as
-        when :json
-          break result[:data] if result[:success]
+      # Mixpay answers JSON for every endpoint this client talks to; the
+      # envelope is `{ success:, data: }`.
+      result = JSON.parse(response.body.to_s)
+      raise Errors::APIError, result unless result["success"]
 
-          raise Errors::APIError, result
-        else
-          result
-        end
-      end
+      result["data"]
     end
 
     def uri_for(path)
@@ -58,33 +54,6 @@ module Mixpay
         path:
       }
       Addressable::URI.new(uri_options)
-    end
-
-    def parse_response(response)
-      content_type = response.headers[:content_type]
-      parse_as = {
-        %r{^application/json} => :json,
-        %r{^text/html} => :xml,
-        %r{^text/plain} => :plain
-      }.each_with_object([]) { |match, memo| memo << match[1] if content_type =~ match[0] }.first || :plain
-
-      if parse_as == :plain
-        result = JSON.parse(response&.body&.to_s)
-        result && yield(:json, result)
-
-        yield(:plain, response.body)
-      end
-
-      result = case parse_as
-      when :json
-                 JSON.parse(response.body.to_s).with_indifferent_access
-      when :xml
-                 Hash.from_xml(response.body.to_s)
-      else
-                 response.body
-      end
-
-      yield(parse_as, result)
     end
   end
 end
