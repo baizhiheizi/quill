@@ -1,0 +1,41 @@
+import { Controller } from "@hotwired/stimulus";
+import { debounce } from "../utils/debounce";
+import { get } from "@rails/request.js";
+
+export default class extends Controller {
+  static targets = ["form", "input", "clearButton"];
+
+  connect() {
+    this.search = debounce(this.search.bind(this), 300);
+  }
+
+  submit() {
+    const query = this.inputTarget.value;
+    this.search(query);
+  }
+
+  search(query) {
+    if (query) {
+      this.showClearButton();
+      get(`/search?query=${query}`, {
+        contentType: "application/json",
+        responseKind: "turbo-stream",
+      });
+    } else {
+      this.hideClearButton();
+    }
+  }
+
+  showClearButton() {
+    this.clearButtonTarget.classList.remove("hidden");
+  }
+
+  hideClearButton() {
+    this.clearButtonTarget.classList.add("hidden");
+  }
+
+  clear() {
+    this.inputTarget.value = "";
+    this.hideClearButton();
+  }
+}

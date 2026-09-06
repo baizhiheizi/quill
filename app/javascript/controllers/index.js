@@ -20,6 +20,12 @@ application.register("auto-hide", AutoHideController);
 import ClipboardController from "./clipboard_controller";
 application.register("clipboard", ClipboardController);
 
+import CollectionsFormComponentController from "./collections_form_component_controller";
+application.register(
+  "collections-form-component",
+  CollectionsFormComponentController,
+);
+
 import CommentFormController from "./comment_form_controller";
 application.register("comment-form", CommentFormController);
 
@@ -50,6 +56,9 @@ application.register("masthead", MastheadController);
 import FlyonuiModalController from "./flyonui_modal_controller";
 application.register("modal-component", FlyonuiModalController);
 
+import NestedFormController from "./nested_form_controller";
+application.register("nested-form", NestedFormController);
+
 import PreOrdersFormComponentController from "./pre_orders_form_component_controller";
 application.register(
   "pre-orders-form-component",
@@ -74,6 +83,9 @@ application.register(
   PreOrdersStateComponentController,
 );
 
+import PrefetchController from "./prefetch_controller";
+application.register("prefetch", PrefetchController);
+
 import PaywallFadeController from "./paywall_fade_controller";
 application.register("paywall-fade", PaywallFadeController);
 
@@ -83,6 +95,9 @@ application.register("preview-upload", PreviewUploadController);
 import PreviewController from "./preview_controller";
 application.register("preview", PreviewController);
 
+import SearchController from "./search_controller";
+application.register("search", SearchController);
+
 import SelectCurrencyController from "./select_currency_controller";
 application.register("select-currency", SelectCurrencyController);
 
@@ -91,6 +106,9 @@ application.register("sidebar", SidebarController);
 
 import TabsController from "./tabs_controller";
 application.register("tabs", TabsController);
+
+import TextareaController from "./textarea_controller";
+application.register("textarea", TextareaController);
 
 import TimeFormatComponentController from "./time_format_component_controller";
 application.register("time-format-component", TimeFormatComponentController);
