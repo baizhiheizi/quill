@@ -153,7 +153,7 @@ GEM
     bls12-381 (0.4.0)
       bigdecimal
       h2c (>= 0.2.1, < 0.3)
-    bootsnap (1.25.0)
+    bootsnap (1.26.0)
       msgpack (~> 1.5)
     browser (6.2.0)
     builder (3.3.0)
@@ -791,7 +791,7 @@ CHECKSUMS
   blake3-rb (1.8.3.0-x86_64-linux) sha256=9e92998cf1198ed29084188a223292d6c1f493462150f16756d35a98b40b6ec1
   blake3-rb (1.8.3.0-x86_64-linux-musl) sha256=98fcb5f0123d10d3917b659844135e56e12e7048832ee3ef643d56628cfb7ea4
   bls12-381 (0.4.0) sha256=b05e35b997acc5400b226d91f8b35e8e1fd88a34966ad1ca32de66bb3d539f46
-  bootsnap (1.25.0) sha256=41059e7d0f9cb4023a33465d095f64b913fc9d1b808d6524c307da945fbcffcf
+  bootsnap (1.26.0) sha256=ca96237015e6cd74a02963d5821cf00ac5ea134653b323e8cd6d702a7718bf1b
   browser (6.2.0) sha256=281d5295788825c9396427c292c2d2be0a5c91875c93c390fde6e5d61a5ace2d
   builder (3.3.0) sha256=497918d2f9dca528fdca4b88d84e4ef4387256d984b8154e9d5d3fe5a9c8835f
   bundler (4.0.13) sha256=19f08be7f27022cf0b89f27da0b044ae075e8270a9ef44ad248a932614e1ca3b
