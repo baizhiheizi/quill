@@ -44,7 +44,7 @@ gem "mixin_bot", "~> 2.4"
 gem "aws-sdk-s3", require: false
 
 # Use Active Storage variant
-gem "image_processing", "~> 2.0"
+gem "image_processing", "~> 2.1"
 
 # Modern rich text editor for Action Text
 gem "lexxy", "~> 0.9.31"
