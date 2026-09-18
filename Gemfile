@@ -38,7 +38,7 @@ gem "jbuilder"
 gem "bcrypt"
 
 # A simple API wrapper for Mixin Network in Ruby
-gem "mixin_bot", "~> 2.6"
+gem "mixin_bot", "~> 3.0"
 
 # S3 active storage service
 gem "aws-sdk-s3", require: false
