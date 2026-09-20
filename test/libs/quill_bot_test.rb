@@ -27,4 +27,30 @@ class QuillBotTest < ActiveSupport::TestCase
     QuillBot.define_singleton_method(:build_api, original)
     QuillBot.private_class_method(:build_api)
   end
+
+  # --- blaze_reactor ---------------------------------------------------------
+
+  test "blaze_reactor acknowledges only after the handler has run" do
+    with_quill_bot_stub do
+      assert_equal :after_handler, QuillBot.blaze_reactor.ack_policy
+    end
+  end
+
+  test "blaze_reactor handler persists the envelope through MixinMessage.ingest!" do
+    payload = {
+      "action" => "CREATE_MESSAGE",
+      "data" => {
+        "message_id" => SecureRandom.uuid,
+        "category" => "PLAIN_TEXT",
+        "user_id" => SecureRandom.uuid,
+        "data" => "hello"
+      }
+    }
+
+    with_quill_bot_stub do
+      msg = QuillBot.blaze_reactor.handler.call(payload)
+
+      assert_equal payload["data"]["message_id"], msg.message_id
+    end
+  end
 end

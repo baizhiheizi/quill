@@ -35,6 +35,24 @@ class MixinMessage < ApplicationRecord
 
   scope :unprocessed, -> { where(processed_at: nil) }
 
+  # Persists one envelope decoded from the Blaze feed. `MixinMessages::ProcessJob`
+  # picks the row up from there.
+  #
+  # Not every frame is a message: the `LIST_PENDING_MESSAGES` reply carries an
+  # Array in `data` (receipt confirmations are filtered before the handler
+  # runs), so anything without a `message_id` is skipped instead of being
+  # stored as an invalid row.
+  #
+  # Redelivery is expected: the reactor acknowledges only after the handler
+  # returns, so a message whose ack never went out comes back on reconnect. The
+  # unique index on `message_id` and `find_or_create_by` make that a no-op.
+  def self.ingest!(envelope)
+    data = envelope["data"]
+    return unless data.is_a?(Hash) && data["message_id"].present?
+
+    create_with(raw: envelope).find_or_create_by(message_id: data["message_id"])
+  end
+
   def plain?
     /^PLAIN_/.match? category
   end
