@@ -13,7 +13,7 @@ module Mixin
   # It is `MixinBot::Utils.unique_uuid` under the hood — the same computation
   # the mixin_bot gem exposes through a second, partially-defaulted interface:
   #
-  #   # mixin_bot-2.5.0 lib/mixin_bot/api/conversation.rb:134
+  #   # mixin_bot-3.0.0 lib/mixin_bot/api/conversation.rb:134
   #   def unique_uuid(user_id, opponent_id = nil)
   #     opponent_id ||= config.app_id
   #     MixinBot.utils.unique_uuid user_id, opponent_id
@@ -25,7 +25,7 @@ module Mixin
   #
   # Argument order is preserved deliberately: `MixinBot::Utils.unique_uuid`
   # folds its arguments pairwise left to right, and the `uuids.sort` in
-  # `MixinBot::Utils::Crypto#unique_uuid` (crypto.rb:243) discards the sorted
+  # `MixinBot::Utils::Crypto#unique_uuid` (crypto.rb:241) discards the sorted
   # copy it builds, so three or more parts are order-sensitive. The reader
   # revenue salt depends on that order staying exactly as the caller passed
   # it.

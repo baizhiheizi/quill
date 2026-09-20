@@ -1,50 +1,29 @@
 #!/usr/bin/env ruby
 
-require 'rubygems'
-require 'bundler/setup'
-require File.expand_path('../config/environment', __dir__)
+require "rubygems"
+require "bundler/setup"
+require File.expand_path("../config/environment", __dir__)
 
-EM.run do
-  Thread.abort_on_exception = false
-  thrs = []
-
-  run_forever = lambda do |name, &block|
-    Thread.new do
-      loop do
-        block.call
-      rescue StandardError => e
-        Rails.logger.error "#{name} exited unexpectedly: #{e.inspect}\n#{e.backtrace.join("\n")}"
-        MixinApi::ErrorNotification.notify_unless_mixin_api(e, context: name) if Rails.env.production?
-        sleep 10
-      end
+# Mixin integration loops. Each runs until the container is stopped and
+# restarts itself if it exits unexpectedly.
+#
+# - Blaze: the gem's fiber-based reactor (Async) owns the WebSocket —
+#   connect, keepalive, read, ack, reconnect with backoff. No EventMachine.
+# - Snapshots: the Safe snapshot poller, paced by MixinApi::Gate.
+run_forever = lambda do |name, &block|
+  Thread.new do
+    loop do
+      block.call
+    rescue StandardError => e
+      Rails.logger.error "#{name} exited unexpectedly: #{e.inspect}\n#{e.backtrace.join("\n")}"
+      MixinApi::ErrorNotification.notify_unless_mixin_api(e, context: name) if Rails.env.production?
+      sleep 10
     end
   end
-
-  if Settings.blaze_enable
-    thrs << QuillBot.api.start_blaze_connect do
-      def on_open(ws, _event)
-        Rails.logger.info ['Quill', Time.current, :open]
-        ws.send QuillBot.api.list_pending_message
-      end
-
-      def on_message(ws, event)
-        raw = JSON.parse QuillBot.api.ws_message(event.data)
-        return if raw&.[]('action') == 'ACKNOWLEDGE_MESSAGE_RECEIPT'
-
-        Rails.logger.info ['Quill', Time.current, :message, raw&.[]('action')]
-        data = raw['data']
-        return if data.blank?
-
-        # process message
-        MixinMessage.create_with(raw: raw).find_or_create_by(message_id: data['message_id'])
-
-        # ack
-        ws.send QuillBot.api.acknowledge_message_receipt(data['message_id']) if data&.[]('message_id').present?
-      end
-    end
-  end
-
-  thrs << run_forever.call("MixinNetworkSnapshot.poll") { MixinNetworkSnapshot.poll }
-
-  thrs.join
 end
+
+thrs = []
+thrs << run_forever.call("MixinBot::Blaze::Reactor") { QuillBot.blaze_reactor.run } if Settings.blaze_enable
+thrs << run_forever.call("MixinNetworkSnapshot.poll") { MixinNetworkSnapshot.poll }
+
+thrs.each(&:join)

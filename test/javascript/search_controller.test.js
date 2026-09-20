@@ -3,11 +3,18 @@ import { test, expect, describe, mock } from "bun:test";
 // Capture the URLs the controller hands to @rails/request.js without
 // booting Stimulus or a real DOM, the same way article_revenue.test.js
 // exercises its controller through the bare prototype.
+//
+// bun's mock.module is process-wide, so this mock also stands in for the
+// package in sibling files: article_form_controller.test.js loads
+// article_form/autosave, which imports { patch, post }. Export every verb the
+// graph asks for, or those imports fail with "Export named 'patch' not found".
 const requests = [];
 mock.module("@rails/request.js", () => ({
   get: (url, options) => {
     requests.push({ url, options });
   },
+  post: () => {},
+  patch: () => {},
 }));
 
 const SearchController = (
