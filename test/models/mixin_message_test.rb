@@ -107,6 +107,13 @@ class MixinMessageTest < ActiveSupport::TestCase
     end
   end
 
+  test "ingest! ignores a frame that is not an object" do
+    assert_no_difference "MixinMessage.count" do
+      assert_nil MixinMessage.ingest!([])
+      assert_nil MixinMessage.ingest!("plain text frame")
+    end
+  end
+
   # --- setup_attributes callback ---------------------------------------------
 
   test "setup_attributes populates fields from raw['data'] on create" do
