@@ -21,6 +21,7 @@ require "tmpdir"
 APP_ROOT = File.expand_path("..", __dir__)
 VIEWS = "app/views"
 CONTROLLERS = "app/javascript/controllers"
+TOKEN_LAYER = "app/assets/stylesheets/application.tailwind.css"
 BUILD_JS = "app/assets/builds/application.js"
 
 # --- helpers ----------------------------------------------------------------
@@ -84,6 +85,10 @@ Dir.chdir(APP_ROOT) do
   gpu_motion = %w[transition-all transition-transform].sum { |k| transitions[k].to_i } +
                animates.values.sum
   motion_reduce = count_matches(VIEWS, "motion-reduce")
+  # Views are not the only place motion can be gated: the token layer carries a
+  # single `@media (prefers-reduced-motion: reduce)` rule for the whole app, so
+  # report both rather than reading a view-only count as "not aware".
+  reduced_motion_rule = count_matches(TOKEN_LAYER, "@media (prefers-reduced-motion")
 
   # Listener-leak sweep: controllers whose connect() registers a listener and which
   # (heuristically) provide a disconnect() that removes it.
@@ -106,6 +111,7 @@ Dir.chdir(APP_ROOT) do
     animates: animates,
     gpu_motion: gpu_motion,
     motion_reduce_aware: motion_reduce,
+    reduced_motion_rule: reduced_motion_rule,
     listener_leak: { add_in_connect: listeners, with_disconnect: cleanup,
                      leaks: listeners - cleanup }
   }
@@ -131,7 +137,8 @@ Dir.chdir(APP_ROOT) do
     puts "Transition coverage (transition-*, animate-* in #{VIEWS}/):"
     transitions.merge(animates).each { |name, n| puts "  #{name}: #{n}" }
     puts "  total GPU-using:     #{gpu_motion}"
-    puts "  motion-reduce-aware: #{motion_reduce} occurrences"
+    rule = reduced_motion_rule.positive? ? "global @media rule in the token layer" : "no global @media rule"
+    puts "  reduced motion:      #{rule} (+#{motion_reduce} motion-reduce: in views)"
     puts
     puts "Listener-leak sweep (#{CONTROLLERS}/*.js):"
     puts "  addEventListener in connect():  #{listeners}"
