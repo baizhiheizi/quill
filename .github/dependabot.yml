@@ -9,6 +9,12 @@ updates:
     directory: "/" # Location of package manifests
     schedule:
       interval: "daily"
+    # The Gemfile pins json "~> 2.21" on purpose (Rails 8.1's
+    # ActiveSupport::JSON.decode passes options positionally, which json 3
+    # rejects). Without this ignore, Dependabot rewrites the pin (see #2125).
+    ignore:
+      - dependency-name: "json"
+        versions: [">= 3"]
 
   - package-ecosystem: "npm"
     directory: "/"
