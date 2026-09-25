@@ -356,7 +356,7 @@ GEM
     kramdown-parser-gfm (1.1.0)
       kramdown (~> 2.0)
     language_server-protocol (3.17.0.6)
-    lexxy (0.9.32)
+    lexxy (0.9.33)
       railties (>= 8.0.2)
     lint_roller (1.1.0)
     listen (3.10.0)
@@ -760,7 +760,7 @@ DEPENDENCIES
   kamal
   kramdown
   kramdown-parser-gfm
-  lexxy (~> 0.9.32)
+  lexxy (~> 0.9.33)
   listen (~> 3.10)
   mailjet
   minitest (~> 6.0)
@@ -932,7 +932,7 @@ CHECKSUMS
   kramdown (2.5.2) sha256=1ba542204c66b6f9111ff00dcc26075b95b220b07f2905d8261740c82f7f02fa
   kramdown-parser-gfm (1.1.0) sha256=fb39745516427d2988543bf01fc4cf0ab1149476382393e0e9c48592f6581729
   language_server-protocol (3.17.0.6) sha256=5ef2c0c138f8267e1bc631d3328347d354f96724b0af22f2c79516120443b7f0
-  lexxy (0.9.32) sha256=f4139804085bd87749fed1eab5f4c3b490105f480d5de8c2712ca3b8cd34c47c
+  lexxy (0.9.33) sha256=bb2e183d17878369c32f44848fa42f094ec05f89b3b01894985b3a8343924cc0
   lint_roller (1.1.0) sha256=2c0c845b632a7d172cb849cc90c1bce937a28c5c8ccccb50dfd46a485003cc87
   listen (3.10.0) sha256=c6e182db62143aeccc2e1960033bebe7445309c7272061979bb098d03760c9d2
   llhttp (0.6.2) sha256=3c3c59aafb1e1594ab2f45293478f697458f5a91eb0f0db4b27f61a064024982
