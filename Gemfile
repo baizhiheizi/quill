@@ -9,7 +9,7 @@ gem "rails", "~> 8.1"
 
 # Rails 8.1.x calls JSON.parse(source, options) positionally, which json 3
 # rejects (keywords only). Hold at 2.x until a Rails release supports json 3.
-gem "json", "~> 3.0"
+gem "json", "~> 2.21"
 
 gem "pg"
 gem "sqlite3"
