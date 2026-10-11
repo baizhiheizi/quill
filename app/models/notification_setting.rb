@@ -9,10 +9,11 @@
 #  article_bought     :jsonb
 #  article_published  :jsonb
 #  article_rewarded   :jsonb
+#  collection_bought  :jsonb
+#  collection_listed  :jsonb
 #  comment_created    :jsonb
 #  tagging_created    :jsonb
 #  transfer_processed :jsonb
-#  webhook            :jsonb
 #  created_at         :datetime         not null
 #  updated_at         :datetime         not null
 #  user_id            :bigint
@@ -23,43 +24,36 @@
 #
 
 class NotificationSetting < ApplicationRecord
-  DEFAULT_SETTING = {
-    webhook_url: nil,
-    article_published_web: true,
-    article_published_mixin_bot: true,
-    article_published_webhook: false,
-    article_bought_web: true,
-    article_bought_mixin_bot: true,
-    article_bought_webhook: false,
-    article_rewarded_web: true,
-    article_rewarded_mixin_bot: true,
-    article_rewarded_webhook: false,
-    comment_created_web: true,
-    comment_created_mixin_bot: true,
-    comment_created_webhook: false,
-    tagging_created_web: true,
-    tagging_created_mixin_bot: true,
-    tagging_created_webhook: false,
-    transfer_processed_web: true,
-    transfer_processed_mixin_bot: true,
-    transfer_processed_webhook: false
-  }.freeze
+  DEFAULT_SETTING = NotificationKind.settings_defaults
 
-  store :webhook, accessors: %i[url], prefix: true
-  store :article_published, accessors: %i[web mixin_bot webhook], prefix: true
-  store :article_bought, accessors: %i[web mixin_bot webhook daily_times], prefix: true
-  store :article_rewarded, accessors: %i[web mixin_bot webhook daily_times], prefix: true
-  store :comment_created, accessors: %i[web mixin_bot webhook], prefix: true
-  store :tagging_created, accessors: %i[web mixin_bot webhook], prefix: true
-  store :transfer_processed, accessors: %i[web mixin_bot webhook], prefix: true
+  # One jsonb column per muteable kind, one accessor per channel.
+  NotificationKind.with_settings.each do |kind|
+    store kind.settings_key, accessors: NotificationKind::CHANNELS, prefix: true
+  end
 
   belongs_to :user
 
   after_initialize :set_defaults, if: :new_record?
-  before_validation :cast_string_value_to_boolean
+  before_validation :cast_string_values_to_boolean
+
+  def self.permittable_settings
+    NotificationKind.permittable_settings
+  end
+
+  def self.boolean_keys
+    NotificationKind.with_settings.flat_map { |kind| NotificationKind::CHANNELS.map { |channel| kind.setting_key(channel) } }
+  end
 
   def reset
     update DEFAULT_SETTING
+  end
+
+  # A row written before a kind gained settings has no key in its jsonb column;
+  # read it as the declared default rather than as "muted". `false` is a real
+  # preference and must not be mistaken for a missing key.
+  def read_store_attribute(store_attribute, key)
+    stored = super
+    stored.nil? ? DEFAULT_SETTING.fetch(:"#{store_attribute}_#{key}", nil) : stored
   end
 
   private
@@ -68,29 +62,13 @@ class NotificationSetting < ApplicationRecord
     assign_attributes DEFAULT_SETTING
   end
 
-  def cast_string_value_to_boolean
-    self.article_published_web = ActiveModel::Type::Boolean.new.cast article_published_web
-    self.article_published_mixin_bot = ActiveModel::Type::Boolean.new.cast article_published_mixin_bot
-    self.article_published_webhook = ActiveModel::Type::Boolean.new.cast article_published_webhook
-
-    self.article_bought_web = ActiveModel::Type::Boolean.new.cast article_bought_web
-    self.article_bought_mixin_bot = ActiveModel::Type::Boolean.new.cast article_bought_mixin_bot
-    self.article_bought_webhook = ActiveModel::Type::Boolean.new.cast article_bought_webhook
-
-    self.article_rewarded_web = ActiveModel::Type::Boolean.new.cast article_rewarded_web
-    self.article_rewarded_mixin_bot = ActiveModel::Type::Boolean.new.cast article_rewarded_mixin_bot
-    self.article_rewarded_webhook = ActiveModel::Type::Boolean.new.cast article_rewarded_webhook
-
-    self.comment_created_web = ActiveModel::Type::Boolean.new.cast comment_created_web
-    self.comment_created_mixin_bot = ActiveModel::Type::Boolean.new.cast comment_created_mixin_bot
-    self.comment_created_webhook = ActiveModel::Type::Boolean.new.cast comment_created_webhook
-
-    self.tagging_created_web = ActiveModel::Type::Boolean.new.cast tagging_created_web
-    self.tagging_created_mixin_bot = ActiveModel::Type::Boolean.new.cast tagging_created_mixin_bot
-    self.tagging_created_webhook = ActiveModel::Type::Boolean.new.cast tagging_created_webhook
-
-    self.transfer_processed_web = ActiveModel::Type::Boolean.new.cast transfer_processed_web
-    self.transfer_processed_mixin_bot = ActiveModel::Type::Boolean.new.cast transfer_processed_mixin_bot
-    self.transfer_processed_webhook = ActiveModel::Type::Boolean.new.cast transfer_processed_webhook
+  def cast_string_values_to_boolean
+    self.class.boolean_keys.each do |key|
+      public_send :"#{key}=", CASTER.cast(public_send(key))
+    end
   end
+
+  CASTER = ActiveModel::Type::Boolean.new
+
+  private_constant :CASTER
 end

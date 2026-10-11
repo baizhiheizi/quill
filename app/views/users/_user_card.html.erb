@@ -4,7 +4,7 @@
 <div class="<%= dom_id user %>_card mb-8 xl:mb-16">
   <div class="mb-4 flex items-center justify-between">
     <span class="block size-20 flex-shrink-0 overflow-hidden rounded-full">
-      <%= render "shared/avatar", user:, class: "block h-full w-full rounded-full" %>
+      <%= render_avatar user:, class: "block h-full w-full rounded-full" %>
     </span>
     <% if current_user.present? && current_user != user %>
       <% dropdown_button = capture do %>

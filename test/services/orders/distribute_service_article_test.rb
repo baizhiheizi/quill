@@ -347,39 +347,92 @@ class Orders::DistributeServiceArticleTest < ActiveSupport::TestCase
 
   test "call is a no-op once the order is already completed" do
     with_quill_bot_stub do
-      with_all_transfers_generated! do
-        order = create_buy_order!(article: @article, buyer: @reader_one, total: 1.0)
-        Orders::DistributeService.call(order)
-        assert order.reload.completed?
+      order = create_buy_order!(article: @article, buyer: @reader_one, total: 1.0)
+      Orders::DistributeService.call(order)
+      assert order.reload.completed?
 
-        transfers_before = order.transfers.count
-        Orders::DistributeService.call(order)
-        assert_equal transfers_before, order.transfers.count,
-                     "re-running distribution on a completed order must not create transfers"
-      end
+      transfers_before = order.transfers.count
+      Orders::DistributeService.call(order)
+      assert_equal transfers_before, order.transfers.count,
+                   "re-running distribution on a completed order must not create transfers"
     end
   end
 
   test "concurrent calls generate transfers exactly once" do
     with_quill_bot_stub do
-      with_all_transfers_generated! do
-        order = create_buy_order!(article: @article, buyer: @reader_one, total: 1.0)
+      order = create_buy_order!(article: @article, buyer: @reader_one, total: 1.0)
 
-        threads = Array.new(4) do
-          Thread.new do
-            ActiveRecord::Base.connection_pool.with_connection do
-              Orders::DistributeService.call(Order.find(order.id))
-            end
+      threads = Array.new(4) do
+        Thread.new do
+          ActiveRecord::Base.connection_pool.with_connection do
+            Orders::DistributeService.call(Order.find(order.id))
           end
         end
-        threads.map(&:join)
-
-        order.reload
-        assert order.completed?, "order should be completed after distribution"
-        # quill_revenue transfer is keyed by a deterministic trace_id derived
-        # from the order, so it must exist exactly once regardless of caller count.
-        assert_equal 1, order.transfers.where(transfer_type: :quill_revenue).count
       end
+      threads.map(&:join)
+
+      order.reload
+      assert order.completed?, "order should be completed after distribution"
+      # quill_revenue transfer is keyed by a deterministic trace_id derived
+      # from the order, so it must exist exactly once regardless of caller count.
+      assert_equal 1, order.transfers.where(transfer_type: :quill_revenue).count
+    end
+  end
+
+  test "an article order funded by the platform wallet completes through the real guard" do
+    # Payment landed in the bot wallet: the bot fronts the payouts and keeps
+    # its own fee in place, so the transfers debit the bot wallet and sum to
+    # total minus the platform share — the guard's platform branch.
+    bot_client_id = QuillBotStub::FAKE_CLIENT_ID
+
+    with_quill_bot_stub(client_id: bot_client_id) do
+      snapshot = MixinNetworkSnapshot.create!(
+        snapshot_id: SecureRandom.uuid,
+        user_id: bot_client_id,
+        asset_id: @article.asset_id,
+        amount: 0,
+        trace_id: SecureRandom.uuid,
+        opponent_id: @reader_one.mixin_uuid,
+        transferred_at: Time.current,
+        data: ""
+      )
+
+      payment = create_payment!(
+        payer: @reader_one,
+        article: @article,
+        order_type: "BUY",
+        amount: @article.price
+      )
+      payment.update_columns(snapshot_id: snapshot.snapshot_id, trace_id: snapshot.trace_id)
+      order = payment.order
+      order.update_columns(trace_id: snapshot.trace_id)
+
+      Orders::DistributeService.call(order)
+
+      order.reload
+      assert order.completed?, "platform-funded article order should complete"
+      assert order.all_transfers_generated?
+      assert_nil order.transfers.find_by(transfer_type: :quill_revenue),
+                 "the platform should not transfer its own fee to itself"
+    end
+  end
+
+  # === Completion guard: real, non-stubbed ===
+  #
+  # `CommerceHelpers#distribute_order!` neuters `all_transfers_generated?`
+  # so the suite can run at all. This test runs the service bare and asserts
+  # the guard itself — the only protection against a paid order re-entering
+  # `Orders::BatchDistributeJob`'s sweep every 10 minutes forever.
+
+  test "an article order completes through the real completion guard" do
+    with_quill_bot_stub do
+      order = create_buy_order!(article: @article, buyer: @reader_one, total: 1.0)
+
+      Orders::DistributeService.call(order)
+
+      order.reload
+      assert order.transfers.exists?, "distribution should have created transfers"
+      assert order.completed?, "article order should complete once its revenue transfers exist"
     end
   end
 
@@ -413,20 +466,63 @@ class Orders::DistributeServiceArticleTest < ActiveSupport::TestCase
       sum_queries = []
       callback = ->(_name, _start, _finish, _id, payload) do
         sql = payload[:sql].to_s
-        # Match SUM aggregates scoped to the `orders` table — both the
-        # denominator (`early_orders.sum(:total)`) and the per-trace_id
-        # grouped query (`early_orders.unscope(:order).group(:trace_id).sum`).
+        # Match SUM aggregates scoped to the `orders` table. After the
+        # perf optimization in 77756d96 the denominator and per-trace_id
+        # aggregates are folded into a single grouped query.
         sum_queries << sql if sql.match?(/SELECT[^;]*SUM\("?orders"?\.(?:"?total"?|"?value_btc"?)\)[^;]*FROM "orders"/i)
       end
       ActiveSupport::Notifications.subscribed(callback, "sql.active_record") do
         distribute_order!(order)
       end
 
-      # 1 (denominator) + 1 (grouped per trace_id) = 2 SUM queries. Before
-      # the change the per-reader loop issued 1 SUM per reader group.
-      assert_equal 2, sum_queries.size,
-                   "Expected exactly 2 SUM queries (denominator + grouped per-trace_id); got #{sum_queries.size}:\n  " +
+      # 1 grouped query: the denominator and per-trace_id aggregates are
+      # folded into a single `SUM(orders.total) ... GROUP BY trace_id`.
+      # Before the optimization the per-reader loop issued 1 SUM per
+      # reader group; the current implementation always issues 1.
+      assert_equal 1, sum_queries.size,
+                   "Expected exactly 1 SUM query (denominator + per-trace_id folded into one grouped query); got #{sum_queries.size}:\n  " +
                      sum_queries.first(3).join("\n  ")
+    end
+  end
+
+  # === Per-reader O(N+R) instead of O(N*R) walk ===
+
+  # `collect_early_readers` rebuilds a `{ buyer_mixin_uuid => [trace_id, ...] }`
+  # hash by walking `early_orders`. The readers-revenue loop historically
+  # called it once per reader group to fetch the salt — O(N×R) over the
+  # already-loaded early_orders set. The fix hoists the result to a local
+  # variable, dropping it to O(N+R). The invariant is observable: with R
+  # reader groups the call count must be 1, not R+1.
+  test "collect_early_readers is invoked exactly once during distribute_article_order!" do
+    with_quill_bot_stub do
+      create_buy_order!(article: @article, buyer: @reader_one, total: 1.0, created_at: 5.days.ago)
+      create_buy_order!(article: @article, buyer: @reader_two, total: 1.0, created_at: 3.days.ago)
+      create_buy_order!(article: @article, buyer: @blocked_reader, total: 1.0, created_at: 1.day.ago)
+
+      fresh_buyer = User.create!(
+        uid: "100006",
+        name: "Fresh Buyer",
+        mixin_uuid: SecureRandom.uuid,
+        mixin_id: "100006"
+      )
+      order = create_buy_order!(article: @article, buyer: fresh_buyer, total: 1.0)
+
+      call_count = 0
+      original = Order.instance_method(:collect_early_readers)
+      Order.define_method(:collect_early_readers) do
+        call_count += 1
+        original.bind(self).call
+      end
+
+      begin
+        distribute_order!(order)
+      ensure
+        Order.define_method(:collect_early_readers, original)
+      end
+
+      assert_equal 1, call_count,
+                   "collect_early_readers must be called once; got #{call_count} " \
+                     "(3 reader groups × 1 + the outer call = 4 in the unfixed O(N×R) variant)"
     end
   end
 end

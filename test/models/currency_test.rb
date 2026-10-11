@@ -118,4 +118,21 @@ class CurrencyTest < ActiveSupport::TestCase
   ensure
     Rails.cache = original_cache
   end
+
+  test "set_defaults degrades to an empty asset when the Mixin client is unavailable" do
+    original_cache = Rails.cache
+    Rails.cache = ActiveSupport::Cache.lookup_store(:memory_store)
+    Rails.cache.clear
+
+    original_api = QuillBot.method(:api)
+    QuillBot.define_singleton_method(:api) { raise QuillBot::ClientUnavailableError }
+
+    currency = Currency.new(asset_id: SecureRandom.uuid)
+
+    assert_nothing_raised { currency.valid? }
+    assert_not currency.valid?
+  ensure
+    QuillBot.define_singleton_method(:api, original_api)
+    Rails.cache = original_cache
+  end
 end

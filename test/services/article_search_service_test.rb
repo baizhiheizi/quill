@@ -160,7 +160,7 @@ class ArticleSearchServiceTest < ActiveSupport::TestCase
   end
 
   test "query longer than the limit is truncated before hitting Ransack" do
-    long_query = "a" * (ArticleSearchService::QUERY_LENGTH_LIMIT + 50)
+    long_query = "a" * (ArticleVisibility::QUERY_LENGTH_LIMIT + 50)
     truncated = "a" * ArticleSearchService::QUERY_LENGTH_LIMIT
 
     queries = capture_queries do
@@ -169,7 +169,7 @@ class ArticleSearchServiceTest < ActiveSupport::TestCase
 
     main_query = queries.find { |q| q.include?('FROM "articles"') }
     assert_match(/ILIKE.*#{truncated}/, main_query,
-      "expected the ILIKE pattern to be truncated to #{ArticleSearchService::QUERY_LENGTH_LIMIT} chars")
+      "expected the ILIKE pattern to be truncated to #{ArticleVisibility::QUERY_LENGTH_LIMIT} chars")
     assert_no_match(/ILIKE.*#{long_query}/, main_query,
       "expected the oversized query to never reach SQL")
   end

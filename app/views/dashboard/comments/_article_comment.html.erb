@@ -1,7 +1,7 @@
 <div class="py-4 border-b border-base-300">
   <div class="flex items-center justify-between space-x-4">
     <div class="flex items-center space-x-2">
-      <%= render "shared/avatar", user: comment.author, thumb: true, class: "w-8 h-8 rounded-full" %>
+      <%= render_avatar user: comment.author, thumb: true, class: "w-8 h-8 rounded-full" %>
       <div class="truncate max-w-24">
         <%= comment.author.name %>
       </div>

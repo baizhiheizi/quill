@@ -12,5 +12,5 @@
 <% end %>
 
 <%= turbo_stream.update "my_#{@tab}_articles_pagination" do %>
-  <%= render "shared/pagination", pagy: @pagy, id: "my_#{@tab}_articles_pagination" %>
+  <%= render_pagination @pagy, id: "my_#{@tab}_articles_pagination" %>
 <% end %>

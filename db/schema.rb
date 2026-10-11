@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_07_14_000001) do
+ActiveRecord::Schema[8.1].define(version: 2026_09_04_000000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_stat_statements"
@@ -322,7 +322,9 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_14_000001) do
     t.datetime "seen_at", precision: nil
     t.string "type"
     t.datetime "updated_at", null: false
+    t.boolean "web_visible", default: false, null: false
     t.index ["event_id"], name: "index_noticed_notifications_on_event_id"
+    t.index ["recipient_type", "recipient_id", "web_visible"], name: "index_noticed_notifications_on_recipient_and_web_visible"
     t.index ["recipient_type", "recipient_id"], name: "index_noticed_notifications_on_recipient"
   end
 
@@ -330,13 +332,14 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_14_000001) do
     t.jsonb "article_bought", default: "{}"
     t.jsonb "article_published", default: "{}"
     t.jsonb "article_rewarded", default: "{}"
+    t.jsonb "collection_bought", default: "{}"
+    t.jsonb "collection_listed", default: "{}"
     t.jsonb "comment_created", default: "{}"
     t.datetime "created_at", null: false
     t.jsonb "tagging_created", default: "{}"
     t.jsonb "transfer_processed", default: "{}"
     t.datetime "updated_at", null: false
     t.bigint "user_id"
-    t.jsonb "webhook", default: "{}"
     t.index ["user_id"], name: "index_notification_settings_on_user_id"
   end
 

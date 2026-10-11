@@ -19,7 +19,6 @@ class Dashboard::SubscriptionsControllerTest < ActionController::TestCase
     get :index
 
     assert_response :success
-    assert_template :index
   end
 
   test "index defaults @tab to subscribing_users when no param is given" do

@@ -7,6 +7,10 @@ ruby "~> 4.0"
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem "rails", "~> 8.1"
 
+# Rails 8.1.x calls JSON.parse(source, options) positionally, which json 3
+# rejects (keywords only). Hold at 2.x until a Rails release supports json 3.
+gem "json", "~> 2.21"
+
 gem "pg"
 gem "sqlite3"
 
@@ -31,9 +35,6 @@ gem "cssbundling-rails"
 # Bundle and transpile JavaScript in Rails with esbuild, rollup.js, or Webpack.
 gem "jsbundling-rails"
 
-# Rails Request.JS encapsulates the logic to send by default some headers that are required by rails applications like the X-CSRF-Token
-gem "requestjs-rails"
-
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem "jbuilder"
 
@@ -41,16 +42,16 @@ gem "jbuilder"
 gem "bcrypt"
 
 # A simple API wrapper for Mixin Network in Ruby
-gem "mixin_bot", "~> 2.4"
+gem "mixin_bot", "~> 3.0"
 
 # S3 active storage service
 gem "aws-sdk-s3", require: false
 
 # Use Active Storage variant
-gem "image_processing", "~> 2.0"
+gem "image_processing", "~> 2.1"
 
 # Modern rich text editor for Action Text
-gem "lexxy", "~> 0.9.31"
+gem "lexxy", "~> 0.9.32"
 
 # URI parsing and normalization (used for profile and payment URLs in production)
 gem "addressable"
@@ -67,23 +68,18 @@ gem "tsort"
 # AASM - State machines for Ruby classes (plain Ruby, ActiveRecord, Mongoid)
 gem "aasm"
 
-# Allows to use ActiveRecord transactional callbacks outside of ActiveRecord models, literally everywhere in your application.
+# AASM's :after_commit callbacks delegate to this (silences its race-condition
+# deprecation warning); kept even though nothing requires it directly.
 gem "after_commit_everywhere"
 
 # Store different kinds of actions (Like, Follow, Star, Block, etc.) in a single table via ActiveRecord Polymorphic Associations.
 gem "action-store"
-
-# The simplest way to group temporal data
-gem "groupdate"
 
 # Object-based searching. http://ransack-demo.herokuapp.com
 gem "ransack"
 
 # Ruby gem for reporting errors to honeybadger.io
 # gem 'honeybadger', '~> 4.8'
-
-# A simple, standardized way to build and use Service Objects (aka Commands) in Ruby
-gem "simple_command"
 
 # Notifications for Ruby on Rails applications
 gem "noticed", "~> 3.0"
@@ -103,14 +99,8 @@ gem "pagy"
 # Rack Middleware for handling Cross-Origin Resource Sharing (CORS), which makes cross-origin AJAX possible.
 gem "rack-cors"
 
-# fnv1 and fnv1a hash functions in ruby
-gem "fnv"
-
 # Config helps you easily manage environment specific settings in an easy and usable manner.
 gem "config"
-
-# Makes http fun again!
-gem "httparty"
 
 # httprb client used by Mixpay::Client
 gem "http"
@@ -121,9 +111,6 @@ gem "exception-track"
 # kramdown is a fast, pure Ruby Markdown superset converter, using a strict syntax definition and supporting several common extensions.
 gem "kramdown"
 gem "kramdown-parser-gfm"
-
-# Easily include static pages in your Rails app.
-gem "high_voltage"
 
 # FastImage finds the size or type of an image given its uri by fetching as little as needed
 gem "fastimage"
@@ -145,9 +132,6 @@ gem "grover"
 
 # A Ruby library that encodes QR Codes
 gem "rqrcode"
-
-# A Ruby library for declaring, composing and executing GraphQL queries
-gem "graphql", "~> 2.6"
 
 # Rails Plugin that tracks impressions and page views
 gem "impressionist", github: "charlotte-ruby/impressionist"
@@ -195,7 +179,6 @@ group :test do
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
-gem "mini_racer", platforms: :ruby
 gem "tzinfo-data", platforms: %i[windows jruby]
 
 gem "dockerfile-rails", ">= 1.2", group: :development
@@ -207,5 +190,4 @@ gem "pundit", "~> 2.5"
 gem "ruby-vips", "~> 2.2"
 
 # PostHog analytics
-gem "posthog-ruby"
 gem "posthog-rails"

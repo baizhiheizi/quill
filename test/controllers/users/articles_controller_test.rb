@@ -34,4 +34,16 @@ class Users::ArticlesControllerTest < ActionController::TestCase
     assert_equal "bought", @controller.instance_variable_get(:@tab)
     assert_includes @controller.instance_variable_get(:@articles), article
   end
+
+  # Issue #2105 — an unknown `tab` value used to leave the articles relation
+  # nil and crash on `.with_associations` (NoMethodError for nil).
+  test "index falls back to the published tab for an unknown tab param" do
+    get :index, params: { user_uid: @author.uid, tab: "whatever" }
+
+    assert_response :success
+    assert_equal "published", @controller.instance_variable_get(:@tab)
+    articles = @controller.instance_variable_get(:@articles).to_a
+    assert articles.any?
+    assert articles.all? { |article| article.author_id == @author.id }
+  end
 end

@@ -71,6 +71,49 @@ class MixinMessageTest < ActiveSupport::TestCase
     assert_includes duplicate.errors[:message_id], "has already been taken"
   end
 
+  # --- ingest! ---------------------------------------------------------------
+
+  test "ingest! persists a decoded envelope" do
+    payload = raw_payload
+    msg = MixinMessage.ingest!(payload)
+
+    assert msg.persisted?
+    assert_equal "CREATE_MESSAGE", msg.action
+    assert_equal payload["data"]["message_id"], msg.message_id
+    assert_equal payload["data"]["category"], msg.category
+    assert_equal payload["data"]["conversation_id"], msg.conversation_id
+    assert_equal payload["data"]["user_id"], msg.user_id
+  end
+
+  test "ingest! returns the existing row when the reactor redelivers a message" do
+    payload = raw_payload
+    first = MixinMessage.ingest!(payload)
+
+    assert_no_difference "MixinMessage.count" do
+      assert_equal first, MixinMessage.ingest!(payload)
+    end
+  end
+
+  test "ingest! ignores the LIST_PENDING_MESSAGES reply" do
+    # `data` is an Array in that reply, not a message envelope.
+    assert_no_difference "MixinMessage.count" do
+      assert_nil MixinMessage.ingest!({ "action" => "LIST_PENDING_MESSAGES", "data" => [] })
+    end
+  end
+
+  test "ingest! ignores an envelope without a message_id" do
+    assert_no_difference "MixinMessage.count" do
+      assert_nil MixinMessage.ingest!({ "action" => "CREATE_MESSAGE", "data" => { "category" => "PLAIN_TEXT" } })
+    end
+  end
+
+  test "ingest! ignores a frame that is not an object" do
+    assert_no_difference "MixinMessage.count" do
+      assert_nil MixinMessage.ingest!([])
+      assert_nil MixinMessage.ingest!("plain text frame")
+    end
+  end
+
   # --- setup_attributes callback ---------------------------------------------
 
   test "setup_attributes populates fields from raw['data'] on create" do

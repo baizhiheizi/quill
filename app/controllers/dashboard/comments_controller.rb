@@ -7,7 +7,7 @@ class Dashboard::CommentsController < Dashboard::BaseController
     # Eager-load `:author` plus the ActiveStorage avatar chain for the
     # partial at `app/views/dashboard/comments/_article_comment.html.erb`,
     # which renders `shared/avatar` with `thumb: true`. Without the
-    # `UserFieldPreloads#user_field_preloads` chain each row fires ~5 extra
+    # `User::AVATAR_PRELOADS` chain each row fires ~5 extra
     # SELECTs (`authorization` + `avatar_attachment` + `blob` +
     # `variant_records` + `image_attachment.blob`). The second branch also
     # eager-loads `commentable.author` for the partial's
@@ -18,9 +18,9 @@ class Dashboard::CommentsController < Dashboard::BaseController
     # surfaces.
     comments =
       if @article.present?
-        @article.comments.includes(author: user_field_preloads)
+        @article.comments.includes(author: User::AVATAR_PRELOADS)
       else
-        current_user.comments.includes(author: user_field_preloads, commentable: :author)
+        current_user.comments.includes(author: User::AVATAR_PRELOADS, commentable: :author)
       end
 
     @pagy, @comments = pagy comments.order(created_at: :desc)

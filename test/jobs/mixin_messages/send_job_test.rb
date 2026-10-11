@@ -9,12 +9,12 @@ class MixinMessages::SendJobTest < JobTestCase
     api = Object.new
     api.define_singleton_method(:send_message) { |payload| called = payload == message }
 
-    original_api = QuillBot.api
+    original_api = QuillBot.method(:api)
     QuillBot.define_singleton_method(:api) { api }
     MixinMessages::SendJob.perform_now(message)
     assert called
   ensure
-    QuillBot.define_singleton_method(:api) { original_api }
+    QuillBot.define_singleton_method(:api, original_api)
   end
 
   test "perform sends message via RevenueBot when requested" do

@@ -35,7 +35,7 @@ end
 
 # Mirror of the eager-load shape introduced for
 # `Dashboard::OrdersController#index` (see PR #1843 follow-up). Uses the
-# same `citer: :author` + `buyer: user_field_preloads` chain that the
+# same `citer: :author` + `buyer: User::AVATAR_PRELOADS` chain that the
 # controller passes to `.includes(...)`, so the benchmark captures the
 # full partial-render SQL cost (preload SELECTs + ActiveStorage blob +
 # variant_record fan-out + authorization lookup) end to end.
@@ -90,7 +90,7 @@ end
 # Mirror of `Admin::MixinNetworkUsersController#index` after the owner
 # avatar preload chain is added: the polymorphic `:owner` is grouped by
 # `owner_type` (Rails 7+) and User-owner rows additionally get the
-# `user_field_preloads` chain primed in IN-batched SELECTs. Article-owner
+# `User::AVATAR_PRELOADS` chain primed in IN-batched SELECTs. Article-owner
 # rows ignore the user-shaped keys (no avatar chain) so the second
 # `includes` line costs nothing on that branch.
 Benchmarks::Runner.register("admin.mixin_network_users.eager_load") do

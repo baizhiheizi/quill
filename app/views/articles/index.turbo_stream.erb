@@ -2,5 +2,5 @@
   <%= render partial: "articles/card", collection: @articles, as: :article %>
 <% end %>
 <%= turbo_stream.update "articles_pagination" do %>
-  <%= render "shared/pagination", pagy: @pagy, id: "articles_pagination" %>
+  <%= render_pagination @pagy, id: "articles_pagination" %>
 <% end %>

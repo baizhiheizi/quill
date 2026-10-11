@@ -15,7 +15,9 @@ class Dashboard::ReadNotificationsController < Dashboard::BaseController
   end
 
   def update
-    @notification = current_user.notifications.find(params[:id])
+    @notification = current_user.notifications.find_by(id: params[:id])
+    return head :not_found if @notification.blank?
+
     @notification.mark_as_read!
   end
 end

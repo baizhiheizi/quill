@@ -18,7 +18,7 @@
   
   <div class="space-y-6">
     <%= turbo_frame_tag "#{dom_id article}_comments", src: article_comments_path(article.uuid), lazy: true do %>
-      <%= render "shared/loading" %>
+      <%= render_loading %>
     <% end %>
   </div>
 </div>

@@ -10,6 +10,17 @@ if ENV["COVERAGE"]
 end
 
 ENV["RAILS_ENV"] ||= "test"
+
+# Split editor/reader bundles live in gitignored app/assets/builds/. Stub
+# them before boot so Propshaft can resolve stylesheet/javascript tags in CI.
+require "fileutils"
+builds = File.expand_path("../app/assets/builds", __dir__)
+FileUtils.mkdir_p(builds)
+%w[application.css application.js editor.css editor.js reader.css reader.js].each do |name|
+  path = File.join(builds, name)
+  File.write(path, "/* test stub */\n") unless File.exist?(path)
+end
+
 require_relative "../config/environment"
 require "rails/test_help"
 

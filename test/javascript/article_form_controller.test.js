@@ -1,6 +1,6 @@
 import { test, expect, describe, beforeAll } from "bun:test";
 import ArticleFormController from "../../app/javascript/controllers/article_form_controller";
-import { debounce } from "underscore";
+import { debounce } from "../../app/javascript/utils/debounce";
 
 // Spy on debounce so we can assert the controller calls `.cancel()` on it
 // during disconnect. We don't want a real setTimeout to fire during the test
@@ -56,9 +56,9 @@ describe("ArticleFormController — disconnect lifecycle", () => {
     expect(debounceSpy.canceled).toBe(true);
   });
 
-  test("underscore debounce() returns a function with a .cancel() method", () => {
+  test("debounce() returns a function with a .cancel() method", () => {
     // Regression guard for the underlying assumption the disconnect fix
-    // relies on. If Underscore's API ever changes, we want this to fail
+    // relies on. If the utility's API ever changes, we want this to fail
     // loudly rather than silently leak timers.
     const debounced = debounce(() => {}, 1000);
     expect(typeof debounced.cancel).toBe("function");

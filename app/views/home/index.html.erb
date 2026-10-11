@@ -9,17 +9,25 @@
   </p>
 
   <div class="mt-8 flex flex-wrap items-center justify-center gap-3">
-    <%= link_to articles_path, class: "btn btn-primary rounded-full px-6", data: { controller: "prefetch" } do %>
-      <%= t('home_cta_explore') %>
-    <% end %>
+    <%= render_button t('home_cta_explore'),
+                      href: articles_path,
+                      variant: :primary,
+                      size: :lg,
+                      icon: "arrow-right",
+                      html_options: { data: { controller: "prefetch" } } %>
     <% if current_user.present? %>
-      <%= link_to new_article_path, class: "btn btn-soft btn-primary rounded-full px-6" do %>
-        <%= t('write') %>
-      <% end %>
+      <%= render_button t('write'),
+                        href: new_article_path,
+                        variant: :soft,
+                        size: :lg,
+                        icon: "pencil" %>
     <% else %>
-      <%= link_to login_path, data: { turbo_frame: :modal }, class: "btn btn-soft btn-primary rounded-full px-6" do %>
-        <%= t('home_cta_write') %>
-      <% end %>
+      <%= render_button t('home_cta_write'),
+                        href: login_path,
+                        variant: :soft,
+                        size: :lg,
+                        icon: "pencil",
+                        html_options: { data: { turbo_frame: :modal } } %>
     <% end %>
   </div>
 </section>
@@ -46,13 +54,11 @@
     <h2 class="font-display text-xl font-medium text-base-content sm:text-2xl"><%= t('home_featured_heading') %></h2>
     <%= link_to t('home_view_all'), articles_path, class: "text-sm font-medium text-primary hover:underline", data: { controller: "prefetch" } %>
   </div>
-  <%= turbo_frame_tag 'selected_articles', src: selected_articles_path, loading: :lazy do %>
-    <%= render 'shared/loading' %>
-  <% end %>
+  <%= render template: "home/selected_articles" %>
 </section>
 
-<div class="space-y-10 border-t border-base-300 pt-8">
-  <%= turbo_frame_tag 'active_authors', src: active_authors_path, loading: :lazy %>
-  <%= turbo_frame_tag 'hot_tags', src: hot_tags_path, loading: :lazy %>
+<div class="flex flex-col gap-10 border-t border-base-300 pt-8">
+  <%= render template: "home/active_authors" %>
+  <%= render template: "home/hot_tags" %>
   <%= render 'shared/footer' %>
 </div>

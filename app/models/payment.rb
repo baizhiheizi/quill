@@ -28,6 +28,7 @@
 
 class Payment < ApplicationRecord
   include AASM
+  include Notifiable
 
   belongs_to :payer, class_name: "User", primary_key: :mixin_uuid, inverse_of: :payments, optional: true
   belongs_to :payer_wallet, class_name: "MixinNetworkUser", foreign_key: :opponent_id, primary_key: :uuid, inverse_of: false, optional: true
@@ -66,21 +67,7 @@ class Payment < ApplicationRecord
   end
 
   def decoded_memo
-    # memo from Quill user
-    # memo = {
-    #  't': BUY|REWARD|CITE|REVENUE,
-    #  'a': article's uuid,
-    #  'c': citer's uuid,
-    #  'p': pre order trace ID
-    #  'l': collection's uuid
-    # }
-    #
-    @decoded_memo =
-      begin
-        JSON.parse Base64.decode64(memo.to_s)
-      rescue JSON::ParserError
-        {}
-      end
+    @decoded_memo ||= Mixin::Memo.decode(memo)
   end
 
   def payment_memo
@@ -88,9 +75,7 @@ class Payment < ApplicationRecord
   end
 
   def memo_correct?
-    payment_memo.key?("t") &&
-      payment_memo["t"].in?(%w[BUY REWARD CITE REVENUE]) &&
-      (payment_memo.key?("a") || payment_memo.key?("l"))
+    Mixin::Memo.quill_payment?(payment_memo)
   end
 
   def article
@@ -218,13 +203,21 @@ class Payment < ApplicationRecord
       opponent_id: payer_id,
       amount:,
       asset_id:,
-      trace_id: QuillBot.api.unique_uuid(trace_id, opponent_id),
+      trace_id: Mixin.trace_key(trace_id, opponent_id),
       memo: "REFUND"
     )
   end
 
   def wallet_id
     @wallet_id = snapshot&.user_id
+  end
+
+  # Whether the payment landed in the platform bot's wallet. When it did,
+  # the bot fronts every revenue payout from its own holdings and keeps its
+  # fee in place (no quill_revenue transfer is emitted), so the ledger
+  # expectation in `Order#all_transfers_generated?` differs.
+  def platform_wallet?
+    wallet_id == QuillBot.api.client_id
   end
 
   def ensure_refund_transfer_created
@@ -251,9 +244,9 @@ class Payment < ApplicationRecord
 
     case state
     when "paid", "completed"
-      PaymentCreatedNotifier.with(record: self, payment: self).deliver(payer)
+      notify!(PaymentCreatedNotifier, recipient: payer, payment: self)
     when "refunded"
-      PaymentRefundedNotifier.with(record: self, payment: self).deliver(payer)
+      notify!(PaymentRefundedNotifier, recipient: payer, payment: self)
     end
   end
 

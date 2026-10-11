@@ -1,10 +1,10 @@
 # Deploy Quill with Kamal
 
-> **30-second summary:** Production deploys run via `gh workflow run Deploy`, which builds/pushes the image and runs `bundle exec kamal deploy --skip-push` against `172.233.67.145`.
+> **30-second summary:** Production deploys run via `gh workflow run Release`, which builds/pushes the image and runs `bin/kamal deploy --skip-push` against `172.233.90.34`.
 
 ## 1. What gets deployed
 
-Quill runs as a single service (`service: quill`) with three roles on one host (`172.233.67.145`):
+Quill runs as a single service (`service: quill`) with three roles on one host (`172.233.90.34`):
 
 | Role | Entrypoint | Notes |
 |------|-----------|-------|
@@ -27,7 +27,7 @@ volumes:
 Create the host directory once before the first deploy:
 
 ```bash
-ssh deploy@172.233.67.145 'sudo mkdir -p /var/lib/quill/storage && sudo chown 1000:1000 /var/lib/quill/storage'
+ssh deploy@172.233.90.34 'sudo mkdir -p /var/lib/quill/storage && sudo chown 1000:1000 /var/lib/quill/storage'
 ```
 
 ## 3. Required secrets
@@ -37,8 +37,8 @@ These secrets are never committed and must exist as GitHub Actions secrets on th
 | Secret | Used by | Where it ends up |
 |--------|---------|------------------|
 | `RAILS_MASTER_KEY` | Rails boot (decrypts `config/credentials/production.yml.enc`) | Rails env |
-| `KAMAL_REGISTRY_PASSWORD` | Docker Hub login + `kamal env push` | Kamal registry config |
-| `SSH_PRIVATE_KEY` | Kamal SSHs to `172.233.67.145` to manage containers | Kamal agent |
+| `KAMAL_REGISTRY_PASSWORD` | GitHub Container Registry login + `kamal env push` | Kamal registry config |
+| `SSH_PRIVATE_KEY` | Kamal SSHs to `172.233.90.34` to manage containers | Kamal agent |
 | `S3_ACCESS_KEY_ID`, `S3_SECRET_ACCESS_KEY`, `S3_BUCKET`, `S3_ENDPOINT` | `db_backup` accessory | Postgres dump uploads |
 | `POSTGRES_PASSWORD` | Database containers (app + accessory) | `DATABASE_URL` env |
 
@@ -49,10 +49,10 @@ Rotate `RAILS_MASTER_KEY` or `KAMAL_REGISTRY_PASSWORD` on GitHub **before** the 
 Deploys are triggered manually from the GitHub UI or CLI:
 
 ```bash
-gh workflow run Deploy
+gh workflow run Release
 ```
 
-The workflow (`.github/workflows/deploy.yml`) builds/pushes the image and runs `bundle exec kamal deploy --skip-push` so Kamal skips its own push step. Watch the run in the Actions tab.
+The workflow (`.github/workflows/release.yml`) builds/pushes the image and runs `bin/kamal deploy --skip-push` so Kamal skips its own push step, then tags a GitHub release. Watch the run in the Actions tab.
 
 ## 5. Operate a running deploy
 
@@ -70,11 +70,11 @@ For job-container work (queue inspection, Solid Queue console), pass `-r job` to
 
 ### Rolling back
 
-Kamal does not roll back automatically. If the new image is broken, re-tag a known-good SHA as `:latest` and rerun `gh workflow run Deploy`:
+Kamal does not roll back automatically. Every image is also tagged with its commit SHA, so the way back is to run the release workflow for a known-good revision — it rebuilds that revision and pushes it as `:latest`. A `workflow_dispatch` run takes a branch or a tag, not a bare SHA, so push one first:
 
 ```bash
-git checkout <last-good-sha>
-gh workflow run Deploy
+git push origin <last-good-sha>:refs/heads/rollback
+gh workflow run Release --ref rollback
 ```
 
 If only the env changed, run `bin/kamal deploy --skip-push` directly.

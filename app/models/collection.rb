@@ -32,6 +32,8 @@ class Collection < ApplicationRecord
   MINIMUM_PRICE_USD = 6.99
 
   include AASM
+  include Notifiable
+  include Purchasable
 
   has_one_attached :cover
 
@@ -132,34 +134,11 @@ class Collection < ApplicationRecord
   end
 
   def notify_subscribers
-    CollectionListedNotifier
-      .with(record: self, collection: self)
-      .deliver(
-        User
-          .where(id: author.subscribed_user_ids_relation)
-          .where.not(id: author.blocked_user_ids_relation)
-      )
-  end
-
-  def payment_trace_id(user)
-    return if user.blank?
-
-    # generate a unique trace ID for paying
-    # avoid duplicate payment
-    candidate = QuillBot.api.unique_uuid(uuid, user.mixin_uuid)
-    loop do
-      break unless Payment.exists?(trace_id: candidate) || PreOrder.exists?(trace_id: candidate, state: %i[paid expired])
-
-      candidate = QuillBot.api.unique_uuid(uuid, candidate)
-    end
-
-    candidate
-  end
-
-  def mixpay_supported?
-    asset_id.in?(Mixpay.api.settlement_asset_ids)
-  rescue Mixpay::Errors::Error
-    false
+    notify!(
+      CollectionListedNotifier,
+      recipient: Notifiers::Audience.subscribed_to(author, excluding_blocked: author),
+      collection: self
+    )
   end
 
   private

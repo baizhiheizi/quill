@@ -1,0 +1,15 @@
+<%# Opens the reply modal for `comment`; logged-out visitors get the login modal instead %>
+<% if current_user.present? %>
+  <%= link_to "##{comment.id}",
+    new_comment_path(quote_comment_id: comment.id),
+    class: "italic",
+    data: {
+      controller: 'prefetch',
+      turbo_frame: :modal
+  } %>
+<% else %>
+  <%= link_to "##{comment.id}",
+    login_path(return_to: user_article_path(comment.commentable.author, comment.commentable)),
+    class: "italic",
+    data: { turbo_frame: :modal } %>
+<% end %>

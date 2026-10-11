@@ -20,4 +20,11 @@ module ApplicationHelper
 
     article.thumb_url if article.free?
   end
+
+  # Guest desktop landing page (`HomeController#index`). Used to skip
+  # reader/editor CSS+JS so first paint does not download Lexxy, PhotoSwipe,
+  # or highlight.js.
+  def landing_page?
+    controller_name == "home" && action_name == "index"
+  end
 end

@@ -1,7 +1,4 @@
 // Entry point for the build script in your package.json
-import '@rails/actiontext';
-import '@37signals/lexxy';
-
 import '@hotwired/turbo-rails';
 import { hideLoading } from './utils';
 import './controllers';

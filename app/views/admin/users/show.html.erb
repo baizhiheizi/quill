@@ -8,7 +8,7 @@
 
 <div class="bg-base-100 rounded-lg p-4 shadow">
   <div class="flex items-center space-x-2 mb-4">
-    <%= render "shared/avatar", user: @user, thumb: true, class: "w-12 h-12 rounded-full" %>
+    <%= render_avatar user: @user, thumb: true, class: "w-12 h-12 rounded-full" %>
     <div>
       <div><%= @user.name %></div>
       <div class="text-sm opacity-70"><%= @user.uid %></div>
@@ -166,70 +166,70 @@
         data-tabs-content-param="articles"
         data-tabs-target="content">
       <%= turbo_frame_tag 'admin_articles', src: admin_articles_path(author_id: @user.id) do %>
-        <%= render "shared/loading" %>
+        <%= render_loading %>
       <% end %>
     </div>
     <div class="hidden"
         data-tabs-content-param="collections"
         data-tabs-target="content">
       <%= turbo_frame_tag 'admin_collections', src: admin_collections_path(author_id: @user.id) do %>
-        <%= render "shared/loading" %>
+        <%= render_loading %>
       <% end %>
     </div>
     <div class="hidden"
         data-tabs-content-param="comments"
         data-tabs-target="content">
       <%= turbo_frame_tag 'admin_comments', src: admin_comments_path(author_id: @user.id) do %>
-        <%= render "shared/loading" %>
+        <%= render_loading %>
       <% end %>
     </div>
     <div class="hidden"
         data-tabs-content-param="payments"
         data-tabs-target="content">
       <%= turbo_frame_tag 'admin_payments', src: admin_payments_path(payer_id: @user.mixin_uuid) do %>
-        <%= render "shared/loading" %>
+        <%= render_loading %>
       <% end %>
     </div>
     <div class="hidden"
         data-tabs-content-param="orders"
         data-tabs-target="content">
       <%= turbo_frame_tag 'admin_orders', src: admin_orders_path(buyer_id: @user.id) do %>
-        <%= render "shared/loading" %>
+        <%= render_loading %>
       <% end %>
     </div>
     <div class="hidden"
         data-tabs-content-param="pre_orders"
         data-tabs-target="content">
       <%= turbo_frame_tag 'admin_pre_orders', src: admin_pre_orders_path(payer_id: @user.mixin_uuid) do %>
-        <%= render "shared/loading" %>
+        <%= render_loading %>
       <% end %>
     </div>
     <div class="hidden"
         data-tabs-content-param="transfers"
         data-tabs-target="content">
       <%= turbo_frame_tag 'admin_transfers', src: admin_transfers_path(opponent_id: @user.mixin_uuid) do %>
-        <%= render "shared/loading" %>
+        <%= render_loading %>
       <% end %>
     </div>
     <div class="hidden"
         data-tabs-content-param="mixin_network_snapshots"
         data-tabs-target="content">
       <%= turbo_frame_tag 'admin_mixin_network_snapshots', src: admin_mixin_network_snapshots_path(opponent_id: @user.mixin_uuid) do %>
-        <%= render "shared/loading" %>
+        <%= render_loading %>
       <% end %>
     </div>
     <div class="hidden"
         data-tabs-content-param="bonuses"
         data-tabs-target="content">
       <%= turbo_frame_tag 'admin_bonuses', src: admin_bonuses_path(user_id: @user.id) do %>
-        <%= render "shared/loading" %>
+        <%= render_loading %>
       <% end %>
     </div>
     <div class="hidden"
         data-tabs-content-param="sessions"
         data-tabs-target="content">
       <%= turbo_frame_tag 'admin_sessions', src: admin_sessions_path(user_id: @user.id) do %>
-        <%= render "shared/loading" %>
+        <%= render_loading %>
       <% end %>
     </div>
   </div>

@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>The Case for Early-Reader Rewards · Quill</title>
+  <meta name="theme-color" content="#ffffff" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter:wght@400;500;600&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/style.css" />
+  <script>(function(){var t=localStorage.theme;if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme: dark)').matches))document.documentElement.setAttribute('data-theme','dark')})();</script>
+  <style>
+    .reader-head { padding-top: clamp(40px,6vw,72px); }
+    .reader-head .meta-row { display:flex; align-items:center; gap:16px; flex-wrap:wrap; margin-top:20px; }
+    .reader-body { padding-top: clamp(32px,5vw,52px); }
+    .value-note { display:flex; align-items:center; gap:10px; padding:13px 16px; border:1px solid var(--border); border-radius:var(--radius); color:var(--muted); font-size:13px; margin-top:26px; background:var(--surface); }
+    .value-note b { color:var(--fg); font-weight:600; }
+    .value-note .ico { color:var(--reward); }
+    .share-cluster { display:flex; gap:10px; }
+  </style>
+</head>
+<body>
+  <header class="topnav" data-od-id="reader-nav">
+    <div class="container topnav-inner">
+      <a class="brand" href="index.html" aria-label="Quill home">
+        <svg class="brand-mark" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><circle cx="18" cy="18" r="18" fill="#5C6BEF"/><path fill-rule="evenodd" clip-rule="evenodd" d="M30.4583 18C30.4583 20.2641 29.8193 22.3817 28.7087 24.1887L33 28.1207H30.5273L12.5604 11.6938C11.2655 12.1386 9.98368 12.9053 8.96603 13.7452C8.59758 14.0492 8.59632 14.5979 8.93533 14.9339L20.289 25.3407C20.6119 25.6608 21.0499 25.8406 21.5065 25.8406H26.2697L26.9293 26.4331C24.7122 28.6353 21.6331 30 18.2291 30C11.4752 30 6 24.6274 6 18C6 11.3726 11.4752 6 18.2291 6C24.9831 6 30.4583 11.3726 30.4583 18ZM27.6986 18.955V23.2888L14.5172 11.228C15.0219 11.1572 15.5377 11.1206 16.0621 11.1206C18.5515 11.1206 20.4764 11.9461 22.3134 13.3359L27.202 17.7558C27.5202 18.0752 27.6986 18.5061 27.6986 18.955Z" fill="#fff"/></svg>
+        <span class="brand-word">Quill<span class="dot">.</span></span>
+      </a>
+      <nav aria-label="Primary">
+        <a href="feed.html" class="keep">Home</a>
+        <a href="search.html" class="keep">Search</a>
+        <a href="components.html">Library</a>
+      </nav>
+      <div class="topnav-actions">
+        <button class="btn btn-primary btn-sm" onclick="switchPage('editor.html')" data-od-id="cta-write">Write</button>
+        <button class="icon-btn" aria-label="Toggle dark mode" onclick="toggleTheme(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 3a9 9 0 1 0 9 9c0-.46-.04-.92-.1-1.36a5.39 5.39 0 0 1-4.4 2.26 5.4 5.4 0 0 1-3.14-9.8c-.44-.06-.9-.1-1.36-.1Z"/></svg></button>
+        <span class="avatar" title="You" data-od-id="avatar">林</span>
+      </div>
+    </div>
+  </header>
+
+  <main class="container-narrow">
+    <section class="reader-head" data-od-id="reader-head">
+      <div class="chips">
+        <span class="chip chip-topic">Bitcoin</span>
+        <span class="chip chip-topic">Web3</span>
+        <span class="chip chip-price">128 sats</span>
+      </div>
+      <h1 style="margin-top:14px;">The case for paying readers first</h1>
+      <p class="lead" style="margin-top:14px;">Everyone knows early buyers carry the risk. What if the people who believed first earned from everyone who followed?</p>
+      <div class="meta-row">
+        <div class="byline">
+          <span class="avatar">白</span>
+          <div class="who">
+            <span class="name">Baizhi Heizi</span>
+            <span class="role">6 min read · Aug 27</span>
+          </div>
+        </div>
+        <span style="flex:1"></span>
+        <div class="share-cluster">
+          <button class="btn btn-secondary btn-sm">↗ Share</button>
+          <button class="btn btn-ghost btn-sm">♡ Save</button>
+        </div>
+      </div>
+      <div class="value-note" data-od-id="value-note">
+        <svg class="ico" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2v20M5 8l7-6 7 6M5 16l7 6 7-6"/></svg>
+        <span>This article is a <b>value-net</b> reward: <b>40%</b> of new income is split among earlier readers, <b>50%</b> to the author, <b>10%</b> to the platform.</span>
+      </div>
+    </section>
+
+    <section class="reader-body" data-od-id="reader-body">
+      <div id="paywall" class="paywall-wrap">
+        <article class="paywall-fade prose" id="demo-article">
+          <h2>The problem with publishing markets</h2>
+          <p>Most Web3 writing platforms hand all the upside to the author while the first readers take the risk. When an article lands, the author collects every purchase after it. The earliest reader — the one who paid before any social proof existed — gets nothing more than the article itself.</p>
+          <p>Quill asks a different question. Instead of a one-way sale, what if each article is a small economy where readers who <em>went first</em> are repaid by the readers who followed?</p>
+          <blockquote>Every new payment is split three ways — 50% to the author, 40% pro-rata to earlier readers, 10% to the platform.</blockquote>
+          <h2>How the split works</h2>
+          <p>On every purchase, the early-reader pool is divided proportionally by what each earlier reader paid. If you were the only reader before it got popular, you are the pool. If you tipped, your tip counts too — a tipper is a buyer for future rewards.</p>
+          <figure>
+            <div style="overflow-x:auto;">
+              <table class="ds-table" style="border:1px solid var(--border);border-radius:var(--radius-lg);padding:4px 12px;min-width:520px;">
+                <thead><tr><th>Order</th><th>Paid</th><th class="num-col">Platform 10%</th><th class="num-col">Author 50%</th><th class="num-col">Early pool 40%</th></tr></thead>
+                <tbody>
+                  <tr><td>B · 1st</td><td>100 sats</td><td class="num-col">10</td><td class="num-col">90</td><td class="num-col">—</td></tr>
+                  <tr><td>C · 2nd</td><td>100 sats</td><td class="num-col">10</td><td class="num-col">45</td><td class="num-col">40 → B</td></tr>
+                  <tr><td>D · 3rd</td><td>100 sats</td><td class="num-col">10</td><td class="num-col">45</td><td class="num-col">40 → B·C</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <figcaption>Three readers pay 100 sats in order. B is first, nets 150 sats; C nets 65; the author 90.</figcaption>
+          </figure>
+          <h2>Why this matters more than it sounds</h2>
+          <p>Paying first used to be an act of faith. Under a value net, it is an act of ownership. The mechanism aligns the reader's incentive with the author's success, and it compounds: a bigger pool attracts more readers, which makes the early position worth more, which draws more writers.</p>
+          <p>It is a small reframing with a large consequence. Risk, for the first time, is shared — and rewarded.</p>
+        </article>
+      </div>
+
+      <!-- locked: fade + unlock card -->
+      <div class="unlock-card" id="unlock-card" data-od-id="unlock-card">
+        <div class="price-line">
+          <span class="amount">128 sats</span>
+          <span class="cur">≈ $1.20 · paid once · unlocks for you</span>
+        </div>
+        <p class="hint">Unlock to read the full article and join the early-reader pool.</p>
+        <button class="btn btn-primary btn-lg btn-block" style="margin-top:16px;" data-od-id="unlock-cta" onclick="openPay()">Unlock article</button>
+      </div>
+
+      <!-- unlocked: support rail -->
+      <div class="support-rail hide" id="support-rail" data-od-id="support-rail">
+        <div class="priced"><span class="amount">128</span><span class="cur">sats</span></div>
+        <div class="row" style="gap:10px;">
+          <button class="btn btn-secondary btn-sm" onclick="switchPage('feed.html')">Back to feed</button>
+          <button class="btn btn-primary btn-sm" data-od-id="cta-tip">Tip author +40</button>
+          <button class="btn btn-ghost btn-sm">♡</button>
+        </div>
+      </div>
+    </section>
+
+    <section data-od-id="author-card" style="margin-top:48px;padding-top:32px;border-top:1px solid var(--border);">
+      <div class="card row" style="align-items:center;gap:18px;">
+        <span class="avatar" style="width:56px;height:56px;font-size:20px;">白</span>
+        <div style="flex:1;min-width:0;">
+          <div class="row" style="gap:8px;"><span style="font-weight:600;">Baizhi Heizi</span><span class="chip chip-neutral" style="font-size:10.5px;">AUTHOR</span></div>
+          <p style="color:var(--muted);font-size:13.5px;margin:6px 0 0;">Writing about value nets, Bitcoin, and the small economies hiding inside the internet. 12 articles · 4,208 readers.</p>
+        </div>
+        <button class="btn btn-secondary btn-sm">Follow</button>
+      </div>
+    </section>
+
+    <section data-od-id="reader-comments" style="margin-top:48px;">
+      <div class="row-between" style="margin-bottom:8px;">
+        <h2 style="font-size:22px;">Comments <span class="meta">· 8</span></h2>
+        <button class="btn btn-ghost btn-sm">Sort</button>
+      </div>
+      <div class="notif">
+        <span class="avatar">风</span>
+        <div class="body">
+          <span class="text"><b>WindHover</b> The payout table in the middle is the clearest explanation of early-reader rewards I've seen.</span>
+          <div class="meta">2h ago</div>
+        </div>
+      </div>
+      <div class="notif">
+        <span class="avatar">S</span>
+        <div class="body">
+          <span class="text"><b>SatoshiSpirit</b> Bought last week at 30 sats — this pool is going to feel very good soon.</span>
+          <div class="meta">5h ago <span class="reward reward-line">· early reader</span></div>
+        </div>
+      </div>
+      <div class="field" style="margin-top:14px;">
+        <textarea class="textarea" placeholder="Add a comment..."></textarea>
+        <div class="row" style="justify-content:flex-end;"><button class="btn btn-primary btn-sm">Post</button></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="pagefoot">
+    <div class="container row-between">
+      <span>© Quill · Build your value net on Web3</span>
+      <span class="meta">quill.im · hello@quill.im</span>
+    </div>
+  </footer>
+
+  <div class="overlay" id="pay-modal" data-od-id="pay-modal">
+    <div class="backdrop" onclick="closeOverlay('pay-modal')"></div>
+    <div class="modal">
+      <div class="row-between">
+        <h2 style="font-size:22px;">Unlock article</h2>
+        <button class="icon-btn" onclick="closeOverlay('pay-modal')" aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+      </div>
+      <p class="modal-sub">One payment unlocks the full article and places you in the early-reader pool.</p>
+      <div class="row-between" style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;">
+        <div><div class="meta">TOTAL</div><div class="row" style="gap:8px;"><span class="num" style="font-size:22px;font-weight:500;">128</span><span class="meta">sats ≈ $1.20</span></div></div>
+        <div class="seg"><button class="is-on">sats</button><button>USD</button></div>
+      </div>
+      <div class="pay-options">
+        <button class="pay-option sel" data-pay="btc"><span class="pay-asset btc"></span><span class="pay-name">Bitcoin <span class="meta">· sats</span></span><span class="check">✓</span></button>
+        <button class="pay-option" data-pay="eth"><span class="pay-asset eth"></span><span class="pay-name">Ethereum <span class="meta">· ETH</span></span></button>
+        <button class="pay-option" data-pay="xin"><span class="pay-asset xin"></span><span class="pay-name">Mixin <span class="meta">· XIN</span></span></button>
+        <button class="pay-option" data-pay="pusd"><span class="pay-asset pusd"></span><span class="pay-name">pUSD <span class="meta">· stable</span></span></button>
+      </div>
+      <button class="btn btn-primary btn-lg btn-block" data-od-id="pay-confirm" onclick="confirmPay()">Pay with MixPay</button>
+      <p class="center meta" style="margin-top:12px;">Payments settle on-chain · 10% platform · 50% author · 40% early readers</p>
+    </div>
+  </div>
+
+  <div class="tabbar">
+    <a href="feed.html" class="is-active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 12l9-9 9 9M5 10v10h14V10"/></svg>Home</a>
+    <a href="search.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="m21 21-4-4"/></svg>Search</a>
+    <a href="components.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>Library</a>
+    <a href="dashboard.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 4h16v12H4zM4 20h16M8 8h8"/></svg>Studio</a>
+  </div>
+
+  <script>
+    function toggleTheme(btn){var el=document.documentElement;var dark=el.getAttribute('data-theme')==='dark';if(dark){el.removeAttribute('data-theme');localStorage.theme='light';}else{el.setAttribute('data-theme','dark');localStorage.theme='dark';}}
+    function switchPage(url){window.location.href=url;}
+    function openPay(){document.getElementById('pay-modal').classList.add('open');}
+    function closeOverlay(id){document.getElementById(id).classList.remove('open');}
+    function confirmPay(){
+      document.getElementById('pay-modal').classList.remove('open');
+      document.getElementById('unlock-card').classList.add('hide');
+      document.getElementById('support-rail').classList.remove('hide');
+      var a=document.getElementById('demo-article'); a.classList.remove('paywall-fade');
+      window.scrollTo({top:document.getElementById('support-rail').offsetTop-300,behavior:'smooth'});
+    }
+    document.querySelectorAll('.pay-option').forEach(function(o){o.addEventListener('click',function(){document.querySelectorAll('.pay-option').forEach(function(p){p.classList.remove('sel');p.querySelector('.check')&&p.querySelector('.check').remove();});o.classList.add('sel');o.insertAdjacentHTML('beforeend','<span class="check">✓</span>');});});
+    document.addEventListener('keydown',function(e){if(e.key==='Escape'){document.querySelectorAll('.overlay.open').forEach(function(o){o.classList.remove('open')});}});
+  </script>
+</body>
+</html>

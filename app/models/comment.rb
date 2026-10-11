@@ -26,6 +26,7 @@
 #
 
 class Comment < ApplicationRecord
+  include Notifiable
   include SoftDeletable
   include RichTextContent
 
@@ -50,12 +51,16 @@ class Comment < ApplicationRecord
     1000
   end
 
-  def subscribers
-    @subscribers ||= commentable.commenting_subscribe_by_users.where.not(mixin_uuid: author.mixin_uuid) if commentable.is_a?(Article)
+  def notify_subscribers_async
+    Comments::NotifySubscribersJob.perform_later id
   end
 
-  def notify_subscribers_async
-    CommentCreatedNotifier.with(record: self, comment: self).deliver(subscribers)
+  def notify_subscribers
+    notify!(
+      CommentCreatedNotifier,
+      recipient: Notifiers::Audience.commenting_subscribers_of(commentable, excluding: author),
+      comment: self
+    )
   end
 
   def subscribe_for_author

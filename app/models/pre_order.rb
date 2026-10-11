@@ -114,7 +114,7 @@ class PreOrder < ApplicationRecord
   end
 
   def decoded_memo
-    JSON.parse Base64.decode64(memo)
+    Mixin::Memo.decode(memo)
   end
 
   private
@@ -131,11 +131,11 @@ class PreOrder < ApplicationRecord
     self.memo =
       case order_type
       when "buy_article"
-        Base64.urlsafe_encode64({ t: "BUY", a: item.uuid, f: follow_id }.to_json, padding: false)
+        Mixin::Memo.buy!(article: item, follow_id: follow_id)
       when "reward_article"
-        Base64.urlsafe_encode64({ t: "REWARD", a: item.uuid, f: follow_id }.to_json, padding: false)
+        Mixin::Memo.reward!(article: item, follow_id: follow_id)
       when "buy_collection"
-        Base64.urlsafe_encode64({ t: "BUY", l: item.uuid, f: follow_id }.to_json, padding: false)
+        Mixin::Memo.buy!(collection: item, follow_id: follow_id)
       end
 
     self.payee_id = QuillBot.api.client_id

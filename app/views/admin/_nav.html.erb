@@ -1,7 +1,7 @@
 <nav class="navbar fixed top-0 z-50 hidden w-full bg-base-100 sm:block">
   <div class="navbar-start px-4">
     <%= link_to admin_root_path, class: 'flex items-center space-x-2' do %>
-      <%= image_tag 'logo.svg', class: 'h-10 w-auto' %>
+      <%= image_tag 'logo.svg', class: 'h-10 w-auto', size: "80x40", alt: "Quill" %>
       <span class="text-lg font-semibold text-base-content">Admin</span>
     <% end %>
   </div>
@@ -10,7 +10,7 @@
 <nav class="navbar fixed top-0 z-50 w-full bg-base-100 sm:hidden">
   <div class="navbar-center">
     <%= link_to admin_root_path, class: "flex items-center space-x-2" do %>
-      <%= image_tag 'logo.svg', class: 'h-8 w-8' %>
+      <%= image_tag 'logo.svg', class: 'h-8 w-8', size: "32x32", alt: "Quill" %>
       <span class='text-xl font-medium text-base-content'>Admin</span>
     <% end %>
   </div>

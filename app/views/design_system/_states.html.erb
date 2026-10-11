@@ -1,0 +1,18 @@
+<%# specs/011-comprehensive-ui-refactor — design-system reference: states. %>
+<div class="ds-states-grid grid grid-cols-1 gap-6 md:grid-cols-2">
+  <div class="rounded-[10px] border border-base-300">
+    <%= render_state_empty(
+          icon: "inbox",
+          title: "No notifications yet",
+          body: "When readers unlock your work or follow you, you'll see updates here.",
+          action: "Write a new article",
+          action_href: "/articles/new"
+        ) %>
+  </div>
+  <div class="flex flex-col gap-3 rounded-[10px] border border-base-300 p-6">
+    <%= render_skeleton width: "w-1/2", height: "h-6" %>
+    <%= render_skeleton width: "w-3/4" %>
+    <%= render_skeleton width: "w-2/3" %>
+    <%= render_skeleton width: "w-full", height: "h-32", rounded: "rounded-md" %>
+  </div>
+</div>

@@ -1,14 +1,17 @@
 <%# Dashboard studio rail — grouped sections replacing shared/_left_bar's flat
     4-item nav (specs/005-dashboard-ux-redesign). Persistent on desktop; mobile
-    equivalent is shared/_dashboard_tabbar. %>
+    equivalent is shared/_dashboard_tabbar.
+
+    Refactored in specs/011-comprehensive-ui-refactor (T048) to consume
+    `render_button` from the design-system primitives. %>
 <div class="border-base-300 lg:min-h-screen lg:border-r">
   <nav class="hidden h-full w-64 lg:block">
     <div class="sticky top-0 flex h-screen flex-col justify-between py-6 px-4">
       <div class="flex flex-col space-y-6">
         <div class="flex items-center justify-between px-4">
           <%= link_to root_path, data: { controller: 'prefetch' } do %>
-            <%= image_tag 'logo.svg', class: "h-auto w-24 dark:hidden" %>
-            <%= image_tag 'logo-light.svg', class: "hidden h-auto w-24 dark:block" %>
+            <%= image_tag 'logo.svg', class: "h-auto w-24 dark:hidden", size: "96x48", alt: "Quill" %>
+            <%= image_tag 'logo-light.svg', class: "hidden h-auto w-24 dark:block", size: "96x50", alt: "Quill" %>
           <% end %>
 
           <%= link_to dashboard_notifications_path, class: "btn btn-soft btn-circle btn-sm", "aria-label": t('notification') do %>
@@ -33,10 +36,11 @@
         </div>
 
         <div class="px-2 mt-2">
-          <%= link_to new_article_path, class: "btn btn-primary w-full rounded-full font-medium" do %>
-            <span class="i-[tabler--edit] size-4"></span>
-            <%= t('write') %>
-          <% end %>
+          <%= render_button t('write'),
+                            href: new_article_path,
+                            variant: :primary,
+                            icon: "edit",
+                            html_options: { class: "w-full" } %>
         </div>
       </div>
 
@@ -61,7 +65,7 @@
           <div class="flex w-full cursor-pointer items-center gap-3 rounded-full px-4 py-3 text-left transition-colors hover:bg-base-200/60">
             <div class="avatar flex-shrink-0">
               <div class="size-10 rounded-full">
-                <%= render "shared/avatar", user: current_user, thumb: true, class: "rounded-full" %>
+                <%= render_avatar user: current_user, thumb: true, class: "rounded-full" %>
               </div>
             </div>
             <div class="min-w-0 flex-1 overflow-hidden">

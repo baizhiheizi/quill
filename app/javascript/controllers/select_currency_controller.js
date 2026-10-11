@@ -1,5 +1,5 @@
 import { Controller } from "@hotwired/stimulus";
-import { debounce } from "underscore";
+import { debounce } from "../utils/debounce";
 
 export default class extends Controller {
   static targets = ["seachInput", "currencyOption"];

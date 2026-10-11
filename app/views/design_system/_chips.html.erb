@@ -1,0 +1,15 @@
+<%# specs/011-comprehensive-ui-refactor — design-system reference: chips. %>
+<div class="ds-chips-grid flex flex-wrap items-center gap-3">
+  <%= render_chip "Bitcoin",     kind: :topic %>
+  <%= render_chip "value net",   kind: :topic %>
+  <%= render_chip "editorial",   kind: :topic %>
+
+  <%= render_chip "¥128",        kind: :price %>
+  <%= render_chip "Free",        kind: :price %>
+
+  <%= render_chip "Draft",       kind: :status %>
+  <%= render_chip "Published",   kind: :status %>
+
+  <%= render_chip "+18%",        kind: :reward %>
+  <%= render_chip "+40%",        kind: :reward %>
+</div>

@@ -1,0 +1,28 @@
+<%# frozen_string_literal: true %>
+<%# specs/011-comprehensive-ui-refactor — primitive: notification card.
+    Used by dashboard/notifications inbox and the real-time toast (driven by
+    app/javascript/utils/notify.js). %>
+<%
+  unread ||= false
+  icon = "bell"
+  title = event.try(:title) || event.try(:type) || t("notifications.inbox.default_title", default: "Notification")
+  body  = event.try(:body) || event.try(:description) || ""
+  time  = event.try(:created_at) || Time.current
+%>
+<div class="ds-notification-card flex items-start gap-3 border-b border-base-300 py-4 <%= 'bg-base-200/40' if unread %>">
+  <div class="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full bg-base-200">
+    <span class="i-[tabler--<%= icon %>] text-base-content"></span>
+  </div>
+  <div class="min-w-0 flex-1">
+    <div class="flex items-baseline justify-between gap-3">
+      <span class="truncate font-medium"><%= title %></span>
+      <span class="font-mono text-xs text-base-content/60"><%= render_time_format(time) rescue time.strftime("%b %-d") %></span>
+    </div>
+    <% if body.present? %>
+      <p class="mt-1 line-clamp-2 text-sm text-base-content/70"><%= body %></p>
+    <% end %>
+  </div>
+  <% if unread %>
+    <span class="mt-2 h-2 w-2 flex-shrink-0 rounded-full bg-primary" aria-label="<%= t('notifications.unread', default: 'Unread') %>"></span>
+  <% end %>
+</div>

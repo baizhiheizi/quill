@@ -15,19 +15,24 @@ require "test_helper"
 #
 # The initializer prepends a module on `SolidCache::Store::Failsafe` that
 # expands the rescue list to include `ActiveRecord::StatementInvalid` and
-# routes rescued errors through `Rails.error.report` (handled, warning).
-# These tests pin both behaviors so a future gem upgrade or refactor can't
-# silently re-break the page.
+# routes rescued errors into the store's `error_handler`, which the
+# initializer sets to `SolidCacheRecovery::ERROR_HANDLER` — the choke point
+# that reports to `Rails.error` (handled, warning), logs, and rebuilds the
+# database when the error is actual corruption (see
+# test/initializers/solid_cache_recovery_test.rb). These tests pin those
+# behaviors so a future gem upgrade or refactor can't silently re-break the
+# page.
 class SolidCacheFailsafeStatementInvalidExtTest < ActiveSupport::TestCase
   include ActiveSupport::Testing::ErrorReporterAssertions
 
   # The Solid Cache gem ships Failsafe as a module, not a class. We need a
   # concrete object to call the private `failsafe` on, so we instantiate a
-  # bare `SolidCache::Store` and reach into its included modules via
-  # `send`. (We do not actually hit SQLite — the block is responsible for
-  # raising or returning.)
+  # bare `SolidCache::Store` with the same `error_handler` the initializer
+  # injects in production and reach into its included modules via `send`.
+  # (We do not actually hit SQLite — the block is responsible for raising or
+  # returning.)
   setup do
-    @store = SolidCache::Store.new
+    @store = SolidCache::Store.new(error_handler: SolidCacheRecovery::ERROR_HANDLER)
   end
 
   test "failsafe returns the supplied default when the block raises ActiveRecord::StatementInvalid (e.g. SQLite3::CorruptException)" do

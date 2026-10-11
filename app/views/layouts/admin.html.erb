@@ -10,12 +10,11 @@
     <%= csp_meta_tag %>
     <meta name="viewport" content="user-scalable=no,initial-scale=1"/>
 
-    <%= javascript_include_tag "application", "data-turbo-track": "reload" %>
-    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+    <%= render "shared/frontend_assets" %>
     <%= favicon_link_tag "favicon.svg" %>
   </head>
 
-  <body class="">
+  <body class="min-h-screen bg-base-100 text-base-content">
     <%= render "admin/nav" %>
     <div class="relative flex h-screen bg-base-200 pt-12 text-base-content sm:pt-16">
       <%= render "admin/aside" %>
@@ -36,7 +35,7 @@
 
     <div class="absolute bottom-0" id="toast-slot">
       <div id="loading-toast" class="fixed inset-0 z-50 flex items-center justify-center w-full bg-black/30">
-        <%= render "shared/loading" %>
+        <%= render_loading %>
       </div>
     </div>
 

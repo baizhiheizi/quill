@@ -3,13 +3,16 @@
 module Users
   class ArticlesController < Users::BaseController
     def index
-      @tab = params[:tab] || "published"
+      # Only `published` and `bought` are real tabs. Any other `tab` value
+      # (typo, stale link, probe) used to leave `articles` nil and blow up on
+      # `.with_associations` below (issue #2105) — fall back to `published`.
+      @tab = params[:tab].presence_in(%w[published bought]) || "published"
       articles =
         case @tab
-        when "published"
-          @user.articles.published
         when "bought"
           @user.bought_articles.published
+        else
+          @user.articles.published
         end
 
       # Delegate to `Article.with_associations` — the shared scope covers

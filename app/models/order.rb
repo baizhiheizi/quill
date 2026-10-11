@@ -35,6 +35,7 @@ class Order < ApplicationRecord
   PLATFORM_RATIO = 0.1
 
   include AASM
+  include Notifiable
   include Orders::Distributable
 
   belongs_to :buyer, class_name: "User"
@@ -104,16 +105,19 @@ class Order < ApplicationRecord
     end
   end
 
+  # The ledger invariant, in one place: the revenue transfers that debit the
+  # funding wallet (`payment.wallet_id`) must sum to the full total — minus
+  # the platform's own share when the platform wallet funded the payment,
+  # since its fee never transfers to itself.
   def all_transfers_generated?
-    transfers
-      .where(wallet_id: payment.wallet_id)
-      .sum(:amount)
-      .round(8) >=
-      if payment.wallet_id == QuillBot.api.client_id
+    expected =
+      if payment.platform_wallet?
         (total * (1 - item.platform_revenue_ratio)).round(8)
       else
         total.round(8)
       end
+
+    transfers.where(wallet_id: payment.wallet_id).sum(:amount).round(8) >= expected
   end
 
   def notify
@@ -126,21 +130,15 @@ class Order < ApplicationRecord
   end
 
   def notify_subscribers
-    # Push the buyer-followers predicate into a SQL subquery instead of
-    # materialising the user list in Ruby (see `User#subscribed_user_ids_relation`).
-    # Matches the pattern used by `Article#notify_subscribers` (PR #1749).
-    followers = User.where(id: buyer.subscribed_user_ids_relation)
-    if reward_article?
-      ArticleRewardedNotifier.with(record: self, order: self).deliver(followers)
-    elsif buy_article?
-      ArticleBoughtNotifier.with(record: self, order: self).deliver(followers)
-    elsif buy_collection?
-      CollectionBoughtNotifier.with(record: self, order: self).deliver(followers)
-    end
+    return unless order_type.in? %w[buy_article reward_article buy_collection]
+
+    notify!(follower_notifier, recipient: Notifiers::Audience.subscribed_to(buyer), order: self)
   end
 
   def notify_buyer
-    OrderCreatedNotifier.with(record: self, order: self).deliver(buyer) if order_type.in? %w[buy_article reward_article buy_collection]
+    return unless order_type.in? %w[buy_article reward_article buy_collection]
+
+    notify!(OrderCreatedNotifier, recipient: buyer, order: self)
   end
 
   def subscribe_comments_for_buyer
@@ -179,6 +177,18 @@ class Order < ApplicationRecord
   end
 
   private
+
+  # The follower-facing event for what the buyer just did — the audience (the
+  # buyer's followers) is the same for all three.
+  def follower_notifier
+    if reward_article?
+      ArticleRewardedNotifier
+    elsif buy_article?
+      ArticleBoughtNotifier
+    else
+      CollectionBoughtNotifier
+    end
+  end
 
   def setup_attributes
     amount = payment.amount.round(8)

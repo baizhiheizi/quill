@@ -25,6 +25,8 @@
 # rubocop:disable Rails/ApplicationRecord
 class Action < ActiveRecord::Base
   # rubocop:enable Rails/ApplicationRecord
+  include Notifiable
+
   belongs_to :target, polymorphic: true, optional: true
   belongs_to :user, polymorphic: true, optional: true
 
@@ -48,7 +50,7 @@ class Action < ActiveRecord::Base
 
     case action_type.to_sym
     when :subscribe
-      SubscribeUserActionCreatedNotifier.with(record: self, action: self).deliver(target)
+      notify!(SubscribeUserActionCreatedNotifier, recipient: target, action: self)
     end
   end
 end

@@ -1,0 +1,16 @@
+<%# specs/011-comprehensive-ui-refactor — design-system reference: buttons. %>
+<div class="ds-buttons-grid flex flex-col gap-4">
+  <div class="flex flex-wrap items-center gap-3">
+    <%= render_button "Unlock article", variant: :primary, size: :md, icon: "lock-open" %>
+    <%= render_button "Join Quill",     variant: :primary, size: :lg %>
+    <%= render_button "Tip +40",        variant: :primary, size: :sm %>
+  </div>
+  <div class="flex flex-wrap items-center gap-3">
+    <%= render_button "Preview",  variant: :secondary %>
+    <%= render_button "Follow",   variant: :soft, icon: "user-plus" %>
+    <%= render_button "Read more", variant: :ghost, icon: "arrow-right" %>
+  </div>
+  <div class="flex flex-wrap items-center gap-3">
+    <%= render_button "Delete article", variant: :danger, icon: "trash" %>
+  </div>
+</div>

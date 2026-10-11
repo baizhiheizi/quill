@@ -253,12 +253,13 @@ class AnnouncementTest < ActiveSupport::TestCase
       announcement.deliver_to_users
     end
 
-    # QuillBotStub#unique_conversation_id returns Digest::UUID.uuid_v5(URL, parts.join("-"))
-    # which is a stable UUID; the only contract we pin is that the conversation
-    # id is NOT the admin group id and matches the recipient id.
+    # QuillBotStub#unique_conversation_id now uses the real Mixin derivation
+    # (a single-argument call folds the recipient against the app id); the only
+    # contract we pin is that the conversation id is NOT the admin group id and
+    # is derived from the recipient.
     refute_empty captured
     captured.each do |call|
-      expected_conversation = Digest::UUID.uuid_v5(Digest::UUID::URL_NAMESPACE, call[:recipient_id])
+      expected_conversation = Mixin.trace_key(call[:recipient_id], QuillBotStub::FAKE_CLIENT_ID)
       assert_equal expected_conversation, call[:conversation_id]
     end
   end

@@ -33,7 +33,10 @@ class CommentsController < ApplicationController
     elsif params[:commentable_type] == "Article"
       @commentable = Article.find_by id: params[:commentable_id]
     end
-    nil if @commentable.blank?
+
+    return head :not_found if @commentable.blank?
+
+    authorize @commentable, :comment?
   end
 
   def create

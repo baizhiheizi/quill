@@ -1,11 +1,14 @@
 <%= turbo_frame_tag 'modal' do %>
   <%= render_modal title: t('delete_article') do %>
     <div class="max-w-full mx-auto">
-      <div class="mb-6">
+      <p class="mb-2 font-display text-lg text-base-content">
+        <%= @article.title %>
+      </p>
+      <div class="mb-6 text-base-content/60">
         <%= t('confirm_to_delete') %>
       </div>
-      <%= button_to t('delete'), 
-        dashboard_deleted_article_path(@article), 
+      <%= button_to t('delete'),
+        dashboard_deleted_article_path(@article),
         method: :put,
         class: "btn btn-error btn-block text-lg"
       %>

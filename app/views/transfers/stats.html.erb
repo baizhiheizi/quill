@@ -1,57 +1,36 @@
+<%# specs/011-comprehensive-ui-refactor — refactored to consume the design-system
+    primitives (render_value_note + bg-base-200 token). Replaces the prior
+    `bg-[#F4F4F4]` arbitrary-value cells that DS001 would flag. %>
 <%= turbo_frame_tag 'transfers_stats' do %>
-  <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
-    <div class="text-center p-4 bg-[#F4F4F4] bg-base-300 rounded mb-2">
-      <div class="text-2xl font-bold mb-2">
-        <%= User.count %>
-      </div>
-      <div class="opacity-70 text-sm">
-        <%= t('users_count') %>
-      </div>
+  <div class="grid grid-cols-2 gap-4 sm:grid-cols-3">
+    <div class="rounded-[10px] border border-base-300 bg-base-200 p-4 text-center">
+      <p class="font-display text-2xl font-medium"><%= User.count %></p>
+      <p class="mt-1 text-sm text-base-content/60"><%= t('users_count') %></p>
     </div>
 
-    <div class="text-center p-4 bg-[#F4F4F4] bg-base-300 rounded mb-2">
-      <div class="text-2xl font-bold mb-2">
-        <%= Article.count %>
-      </div>
-      <div class="opacity-70 text-sm">
-        <%= t('articles_count') %>
-      </div>
+    <div class="rounded-[10px] border border-base-300 bg-base-200 p-4 text-center">
+      <p class="font-display text-2xl font-medium"><%= Article.count %></p>
+      <p class="mt-1 text-sm text-base-content/60"><%= t('articles_count') %></p>
     </div>
 
-    <div class="text-center p-4 bg-[#F4F4F4] bg-base-300 rounded mb-2">
-      <div class="text-2xl font-bold mb-2">
-        $<%= Transfer.stats['author_revenue_total_in_usd'] %>
-      </div>
-      <div class="opacity-70 text-sm">
-        <%= t('author_revenue_total') %>
-      </div>
+    <div class="rounded-[10px] border border-base-300 bg-base-200 p-4 text-center">
+      <%= render_value_note "$#{Transfer.stats['author_revenue_total_in_usd']}" %>
+      <p class="mt-1 text-sm text-base-content/60"><%= t('author_revenue_total') %></p>
     </div>
 
-    <div class="text-center p-4 bg-[#F4F4F4] bg-base-300 rounded mb-2">
-      <div class="text-2xl font-bold mb-2">
-        $<%= Transfer.stats['reader_revenue_total_in_usd'] %>
-      </div>
-      <div class="opacity-70 text-sm">
-        <%= t('reader_revenue_total') %>
-      </div>
+    <div class="rounded-[10px] border border-base-300 bg-base-200 p-4 text-center">
+      <%= render_value_note "$#{Transfer.stats['reader_revenue_total_in_usd']}" %>
+      <p class="mt-1 text-sm text-base-content/60"><%= t('reader_revenue_total') %></p>
     </div>
 
-    <div class="text-center p-4 bg-[#F4F4F4] bg-base-300 rounded mb-2">
-      <div class="text-2xl font-bold mb-2">
-        $<%= Transfer.stats['platform_revenue_last_month'] %>
-      </div>
-      <div class="opacity-70 text-sm">
-        <%= t('platform_revenue_last_month') %>
-      </div>
+    <div class="rounded-[10px] border border-base-300 bg-base-200 p-4 text-center">
+      <%= render_value_note "$#{Transfer.stats['platform_revenue_last_month']}" %>
+      <p class="mt-1 text-sm text-base-content/60"><%= t('platform_revenue_last_month') %></p>
     </div>
 
-    <div class="text-center p-4 bg-[#F4F4F4] bg-base-300 rounded mb-2">
-      <div class="text-2xl font-bold mb-2">
-        $<%= Transfer.stats['platform_revenue_this_month'] %>
-      </div>
-      <div class="opacity-70 text-sm">
-        <%= t('platform_revenue_this_month') %>
-      </div>
+    <div class="rounded-[10px] border border-base-300 bg-base-200 p-4 text-center">
+      <%= render_value_note "$#{Transfer.stats['platform_revenue_this_month']}" %>
+      <p class="mt-1 text-sm text-base-content/60"><%= t('platform_revenue_this_month') %></p>
     </div>
   </div>
 <% end %>

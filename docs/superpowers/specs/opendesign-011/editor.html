@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>New article · Quill Studio</title>
+  <meta name="theme-color" content="#ffffff" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@400;500;600&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/style.css" />
+  <script>(function(){var t=localStorage.theme;if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme: dark)').matches))document.documentElement.setAttribute('data-theme','dark')})();</script>
+  <style>
+    .editor-statusbar .chars { font-family:var(--font-mono); }
+    .ratio-line { display:flex; align-items:center; gap:12px; }
+    .ratio-line .num-col { font-family:var(--font-mono); width:44px; color:var(--fg); font-weight:500; }
+  </style>
+</head>
+<body>
+  <div class="editor-shell">
+    <header class="editor-topbar" data-od-id="editor-topbar">
+      <div class="left">
+        <a class="brand" href="dashboard.html" aria-label="Back to studio">
+          <svg class="brand-mark" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><circle cx="18" cy="18" r="18" fill="#5C6BEF"/><path fill-rule="evenodd" clip-rule="evenodd" d="M30.4583 18C30.4583 20.2641 29.8193 22.3817 28.7087 24.1887L33 28.1207H30.5273L12.5604 11.6938C11.2655 12.1386 9.98368 12.9053 8.96603 13.7452C8.59758 14.0492 8.59632 14.5979 8.93533 14.9339L20.289 25.3407C20.6119 25.6608 21.0499 25.8406 21.5065 25.8406H26.2697L26.9293 26.4331C24.7122 28.6353 21.6331 30 18.2291 30C11.4752 30 6 24.6274 6 18C6 11.3726 11.4752 6 18.2291 6C24.9831 6 30.4583 11.3726 30.4583 18ZM27.6986 18.955V23.2888L14.5172 11.228C15.0219 11.1572 15.5377 11.1206 16.0621 11.1206C18.5515 11.1206 20.4764 11.9461 22.3134 13.3359L27.202 17.7558C27.5202 18.0752 27.6986 18.5061 27.6986 18.955Z" fill="#fff"/></svg>
+          <span class="brand-word">Quill<span class="dot">.</span></span>
+        </a>
+        <span class="meta" style="margin-left:6px;">Studio / New draft</span>
+      </div>
+      <div class="right">
+        <span class="save-state" id="save-state" data-od-id="save-state"><span class="dot"></span><span id="save-text">Saved · just now</span></span>
+        <button class="btn btn-secondary btn-sm">Preview</button>
+        <button class="btn btn-primary btn-sm" data-od-id="cta-publish" onclick="publish()">Publish</button>
+        <button class="icon-btn" aria-label="Toggle dark mode" onclick="toggleTheme(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 3a9 9 0 1 0 9 9c0-.46-.04-.92-.1-1.36a5.39 5.39 0 0 1-4.4 2.26 5.4 5.4 0 0 1-3.14-9.8c-.44-.06-.9-.1-1.36-.1Z"/></svg></button>
+      </div>
+    </header>
+
+    <div class="editor-workspace">
+      <section class="editor-main" data-od-id="editor-canvas">
+        <div class="toolbar" data-od-id="editor-toolbar" aria-label="Formatting">
+          <button class="etool" title="Heading"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 5v14M12 5v14M4 12h8"/></svg></button>
+          <button class="etool is-on" title="Bold"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M6 4h8a4 4 0 0 1 0 8H6zM6 12h9a4 4 0 0 1 0 8H6z"/></svg></button>
+          <button class="etool" title="Italic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M10 4h6M8 20h6M14 4 10 20"/></svg></button>
+          <button class="etool" title="Quote"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M7 7h4v4H7zM13 13h4v4h-4z"/></svg></button>
+          <span class="etool-sep"></span>
+          <button class="etool" title="Code"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m8 6-6 6 6 6M16 6l6 6-6 6"/></svg></button>
+          <span class="etool-sep"></span>
+          <button class="etool" title="Link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M10 14a5 5 0 0 0 7 0l2-2a5 5 0 0 0-7-7l-1 1M14 10a5 5 0 0 0-7 0l-2 2a5 5 0 0 0 7 7l1-1"/></svg></button>
+          <button class="etool" title="Image"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-5-5L5 21"/></svg></button>
+        </div>
+
+        <div class="editor-canvas">
+          <input class="editor-title" id="ed-title" placeholder="Untitled — write a strong headline" value="The case for paying readers first" />
+          <textarea class="editor-body" id="ed-body" placeholder="Start writing…">Everyone knows early buyers carry the risk. What if the people who believed first earned from everyone who followed?
+
+## The problem with publishing markets
+
+Most Web3 writing platforms hand all the upside to the author while the first readers take the risk. When an article lands, the author collects every purchase after it.</textarea>
+
+          <div class="editor-statusbar">
+            <span class="chars" id="chars">142 words · 3 min read</span>
+            <span class="meta">Autosaves every 5s · Ctrl+S</span>
+          </div>
+        </div>
+      </section>
+
+      <aside class="editor-panel" data-od-id="editor-panel">
+        <div class="panel-section">
+          <label class="panel-head">Publication</label>
+          <div class="field" style="margin-bottom:14px;">
+            <label>Status</label>
+            <div class="seg" style="width:100%;"><button class="is-on" style="flex:1;">Draft</button><button style="flex:1;">Published</button></div>
+          </div>
+          <div class="field"><label>Publish on</label><input class="input" type="date" value="2026-08-27" /></div>
+        </div>
+
+        <div class="panel-section">
+          <label class="panel-head">Pricing</label>
+          <div class="field">
+            <label>Price</label>
+            <div class="input-group">
+              <input class="input" type="number" id="price" value="128" min="0" />
+              <span class="input-append">sats</span>
+            </div>
+          </div>
+          <div class="field" style="margin-top:14px;">
+            <label>Paid asset</label>
+            <div class="select"><div class="row" style="gap:8px;"><span class="pay-asset btc" style="width:16px;height:16px;"></span><span>Bitcoin (sats)</span></div></div>
+          </div>
+          <div class="toggle" style="margin-top:14px;"><span class="res" style="font-size:14px;font-weight:500;">Free to read</span><label class="switch"><input type="checkbox" id="freeToggle"><span class="track"></span></label></div>
+        </div>
+
+        <div class="panel-section">
+          <label class="panel-head">Tags</label>
+          <div class="row-wrap" style="gap:8px;">
+            <span class="chip chip-topic">Bitcoin</span>
+            <span class="chip chip-topic">Web3</span>
+            <span class="chip chip-topic">Crypto</span>
+            <button class="chip chip-neutral" style="border:1px dashed var(--border);">+ Add</button>
+          </div>
+        </div>
+
+        <div class="panel-section">
+          <label class="panel-head">Cover</label>
+          <div class="ph-img wide" style="aspect-ratio:2/1;min-height:120px;">Cover image</div>
+          <button class="btn btn-secondary btn-sm btn-block" style="margin-top:10px;">Upload</button>
+        </div>
+
+        <div class="panel-section">
+          <label class="panel-head">Reward split · set by platform</label>
+          <div class="row-between" style="margin-bottom:12px;"><span class="meta">Early readers</span><span class="reward num">40%</span></div>
+          <div class="row-between" style="margin-bottom:12px;"><span class="meta">Author</span><span class="num">50%</span></div>
+          <div class="row-between"><span class="meta">Platform</span><span class="num">10%</span></div>
+          <p style="color:var(--muted);font-size:12px;margin:14px 0 0;">On every fresh purchase, 40% is split proportionally among readers who paid earlier. Tips count too.</p>
+        </div>
+
+        <div class="panel-section">
+          <label class="panel-head">SEO</label>
+          <div class="field"><label>Description</label><textarea class="textarea" style="min-height:64px;" placeholder="Short summary for the feed…">A case for rewarding the first readers of an article, and a worked example of the value-net split.</textarea></div>
+        </div>
+      </aside>
+    </div>
+  </div>
+
+  <div class="tabbar">
+    <a href="feed.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 12l9-9 9 9M5 10v10h14V10"/></svg>Home</a>
+    <a href="dashboard.html" class="is-active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 4h16v12H4zM4 20h16M8 8h8"/></svg>Studio</a>
+  </div>
+  <div class="overlay" id="pub-modal">
+    <div class="backdrop" onclick="closeOverlay('pub-modal')"></div>
+    <div class="modal center">
+      <h2 style="margin-bottom:8px;">Ready to publish?</h2>
+      <p class="modal-sub">Your article will be live on the value net at 128 sats. You can unpublish anytime.</p>
+      <button class="btn btn-primary btn-lg btn-block" onclick="closeOverlay('pub-modal');toast()">Publish article</button>
+      <button class="btn btn-ghost btn-block" style="margin-top:8px;" onclick="closeOverlay('pub-modal')">Keep editing</button>
+    </div>
+  </div>
+  <div class="overlay" id="toast-modal">
+    <div style="position:fixed;bottom:96px;left:50%;transform:translateX(-50%);background:var(--fg);color:var(--bg);padding:12px 22px;border-radius:var(--radius-full);font-size:14px;box-shadow:0 14px 40px -14px rgba(0,0,0,.4);">Published · Draft “The case for paying readers first” is now live.</div>
+  </div>
+
+  <script>
+    function toggleTheme(btn){var el=document.documentElement;var dark=el.getAttribute('data-theme')==='dark';if(dark){el.removeAttribute('data-theme');localStorage.theme='light';}else{el.setAttribute('data-theme','dark');localStorage.theme='dark';}}
+    function publish(){document.getElementById('pub-modal').classList.add('open');}
+    function closeOverlay(id){document.getElementById(id).classList.remove('open');}
+    function toast(){var t=document.getElementById('toast-modal');t.classList.add('open');setTimeout(function(){t.classList.remove('open');},2600);}
+    var saveState=document.getElementById('save-state'),saveText=document.getElementById('save-text');
+    function dirty(){saveState.classList.remove('saved');saveText.textContent='Saving…';}
+    function clean(){saveState.classList.add('saved');saveText.textContent='Saved · just now';}
+    ['ed-title','ed-body'].forEach(function(id){var el=document.getElementById(id);el.addEventListener('input',function(){dirty();clearTimeout(el._t);el._t=setTimeout(clean,900);});});
+    document.getElementById('chars').textContent='142 words · 3 min read';
+    document.getElementById('freeToggle').addEventListener('change',function(){var p=document.getElementById('price');p.value=this.checked?'0':128;});
+    document.querySelectorAll('.etool').forEach(function(b){b.addEventListener('click',function(){if(b.classList.contains('is-on')){b.classList.remove('is-on')}else{b.classList.add('is-on')}});});
+    document.querySelectorAll('.seg button').forEach(function(b){b.addEventListener('click',function(){b.parentElement.querySelectorAll('button').forEach(function(x){x.classList.remove('is-on')});b.classList.add('is-on');});});
+    document.addEventListener('keydown',function(e){if(e.key==='Escape'){document.querySelectorAll('.overlay.open').forEach(function(o){o.classList.remove('open')});}});
+  </script>
+</body>
+</html>

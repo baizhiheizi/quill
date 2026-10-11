@@ -7,21 +7,21 @@
     <div>
       <h3 class="mb-3 text-xs font-semibold uppercase tracking-wide text-base-content/50"><%= t('authors') %></h3>
       <%= turbo_frame_tag "#{dom_id current_user}_subscribing_users", src: dashboard_subscribe_users_path, loading: :lazy do %>
-        <%= render "shared/loading" %>
+        <%= render_loading %>
       <% end %>
     </div>
 
     <div>
       <h3 class="mb-3 text-xs font-semibold uppercase tracking-wide text-base-content/50"><%= t('commenting_subscriptions') %></h3>
       <%= turbo_frame_tag "#{dom_id current_user}_subscribe_articles", src: dashboard_subscribe_articles_path, loading: :lazy do %>
-        <%= render "shared/loading" %>
+        <%= render_loading %>
       <% end %>
     </div>
 
     <div>
       <h3 class="mb-3 text-xs font-semibold uppercase tracking-wide text-base-content/50"><%= t('tag_subscriptions') %></h3>
       <%= turbo_frame_tag "#{dom_id current_user}_subscribe_tags", src: dashboard_subscribe_tags_path, loading: :lazy do %>
-        <%= render "shared/loading" %>
+        <%= render_loading %>
       <% end %>
     </div>
   </div>

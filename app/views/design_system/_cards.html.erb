@@ -1,0 +1,12 @@
+<%# specs/011-comprehensive-ui-refactor — design-system reference: cards. %>
+<div class="ds-cards-grid grid grid-cols-1 gap-4 md:grid-cols-2">
+  <%= ui_card title: "Reader stat" do %>
+    <p class="font-mono text-3xl">1,284</p>
+    <p class="mt-1 text-base-content/60">articles unlocked this week</p>
+  <% end %>
+
+  <%= ui_card title: "Author stat", classes: "border-primary" do %>
+    <%= render_value_note "¥12,840", label: "earnings", format: :currency %>
+    <p class="mt-1 text-base-content/60">across 12 articles</p>
+  <% end %>
+</div>

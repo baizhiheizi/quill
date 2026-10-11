@@ -1,9 +1,9 @@
 <%= turbo_frame_tag 'transfers_stats', src: 'transfers/stats'  do %>
-  <%= render 'shared/loading' %>
+  <%= render_loading %>
 <% end %>
 
 <div class="p-4 bg-base-100 rounded-lg shadow mb-4">
   <%= turbo_frame_tag 'admin_wallet_safe_outputs', src: admin_wallet_safe_outputs_path(QuillBot.api.client_id) do %>
-    <%= render "shared/loading" %>
+    <%= render_loading %>
   <% end %>
 </div>

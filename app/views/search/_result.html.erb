@@ -26,9 +26,7 @@
     <div class="px-2 py-1.5 text-xs font-medium text-base-content/60"><%= t('tags') %></div>
     <% tags.each do |tag| %>
       <%= link_to articles_path(tag: tag.name), class: "flex items-center rounded-lg px-2 py-1.5 hover:bg-base-200" do %>
-        <span class="tag-chip max-w-full truncate px-2.5 py-1 text-sm">
-          <%= tag.name %>
-        </span>
+        <span class="tag-chip max-w-full truncate"><%= render_chip tag.name, kind: :topic %></span>
       <% end %>
     <% end %>
   <% end %>
@@ -39,7 +37,7 @@
       <%= link_to user_path(user), 
         class: "flex items-center gap-2 rounded-lg px-2 py-1.5 text-sm hover:bg-base-200" do %>
         <span class="block size-6 flex-shrink-0 overflow-hidden rounded-full">
-          <%= render "shared/avatar", user:, thumb: true, class: "block h-full w-full rounded-full" %>
+          <%= render_avatar user:, thumb: true, class: "block h-full w-full rounded-full" %>
         </span>
         <span class="truncate"><%= user.name %></span>
       <% end %>

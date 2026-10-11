@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 class Users::BaseController < ApplicationController
-  include UserFieldPreloads
-
   before_action :load_user!, :set_page_meta
 
   private
@@ -16,25 +14,5 @@ class Users::BaseController < ApplicationController
     @page_title = @user.name
     @page_description = @user.bio
     @page_image = @user.avatar
-  end
-
-  # Set of `User#id`s that `current_user` is subscribed to, in a single
-  # SELECT. Mirrors `Dashboard::BaseController#preloaded_subscribe_user_ids`
-  # — the `subscribe_users/_subscribe_button.html.erb` partial (rendered
-  # from `users/subscribe_users/_user.html.erb` and the dashboard/user
-  # card) consults it and would otherwise call
-  # `current_user.subscribe_user?(user)` once per row. Returns an empty
-  # Set for guests — unlike the dashboard, the Users namespace does not
-  # `authenticate_user!`, so this endpoint is reachable from the public
-  # profile page. The partial falls through to the live helper for
-  # guests and stays correct.
-  def preloaded_subscribe_user_ids
-    return @preloaded_subscribe_user_ids if defined?(@preloaded_subscribe_user_ids)
-    @preloaded_subscribe_user_ids =
-      if current_user
-        current_user.subscribe_user_actions.pluck(:target_id).to_set
-      else
-        Set.new
-      end
   end
 end

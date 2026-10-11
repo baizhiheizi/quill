@@ -1,0 +1,76 @@
+<%# specs/011-comprehensive-ui-refactor — design-system reference page.
+    Rendered by DesignSystemController#show at /design-system.
+    See app/helpers/design_system_helper.rb for render_design_system_section. %>
+<article class="ds-reference mx-auto w-full max-w-[1120px] px-5 py-12 sm:px-12" data-controller="design-system-reference">
+  <header class="ds-reference__head border-b border-base-300 pb-10">
+    <p class="eyebrow mb-2 font-mono text-[13px] text-base-content/60">DESIGN SYSTEM</p>
+    <h1 class="font-display text-4xl">Quill — Value Net</h1>
+    <p class="mt-3 max-w-[60ch] text-base-content/60">
+      Every token, every primitive, every pattern used in Quill. Rendered from the same
+      partials the rest of the app uses — change a partial here and it changes everywhere.
+      See
+      <a class="text-primary hover:underline" href="/specs/011-comprehensive-ui-refactor/contracts/README.md">the contracts</a>
+      for the rules each primitive must follow.
+    </p>
+  </header>
+
+  <%= render_design_system_section(title: "Tokens", description: "Color, type, spacing, radius. Light + dark. The single source-of-truth.", primitive: :button) do %>
+    <%= render "design_system/tokens" %>
+  <% end %>
+
+  <%= render_design_system_section(title: "Type", description: "Newsreader / Inter / Roboto Mono with CJK fallbacks.") do %>
+    <%= render "design_system/type" %>
+  <% end %>
+
+  <%= render_design_system_section(title: "Buttons", description: "One primary style per viewport. Accent is reserved for actions, links, and focus.", primitive: :button) do %>
+    <%= render "design_system/buttons" %>
+  <% end %>
+
+  <%= render_design_system_section(title: "Chips", description: "Topic tags are one neutral chip. Price is a solid pill. Free stays outlined. Reward is text, never a badge.", primitive: :chip) do %>
+    <%= render "design_system/chips" %>
+  <% end %>
+
+  <%= render_design_system_section(title: "List row", description: "Reused by feed / search / author profile / collection. Thin horizontal rules, not card borders.", primitive: :list_row) do %>
+    <%= render "design_system/list_row" %>
+  <% end %>
+
+  <%= render_design_system_section(title: "Cards", description: "Generic card primitive. Border, padding, header, footer.", primitive: :ui_card) do %>
+    <%= render "design_system/cards" %>
+  <% end %>
+
+  <%= render_design_system_section(title: "Forms", description: "Inputs, textareas, helper text, error states.", primitive: :ui_input) do %>
+    <%= render "design_system/forms" %>
+  <% end %>
+
+  <%= render_design_system_section(title: "Tabs", description: "Active-tab highlight via the existing tabs_controller.") do %>
+    <%= render "design_system/tabs" %>
+  <% end %>
+
+  <%= render_design_system_section(title: "Value net", description: "Early-reader figures + earnings. Text-only muted-amber — never a filled badge.", primitive: :value_note) do %>
+    <%= render "design_system/value_net" %>
+  <% end %>
+
+  <%= render_design_system_section(title: "Notifications", description: "Inbox card + real-time toast. Uses i-[tabler--*] for the icon.", primitive: :notification_card) do %>
+    <%= render "design_system/notifications" %>
+  <% end %>
+
+  <%= render_design_system_section(title: "States", description: "Empty state + skeleton loader. Reused by every empty/error surface.", primitive: :state_empty) do %>
+    <%= render "design_system/states" %>
+  <% end %>
+
+  <%= render_design_system_section(title: "Modal", description: "Single source-of-truth shell. Used by every modal across the product.", primitive: :modal) do %>
+    <%= render "design_system/modal" %>
+  <% end %>
+
+  <%= render_design_system_section(title: "Dropdown", description: "Single source-of-truth shell. Used by every dropdown across the product.", primitive: :dropdown) do %>
+    <%= render "design_system/dropdown" %>
+  <% end %>
+
+  <%= render_design_system_section(title: "Masthead", description: "Public top-nav. Logo, search, Write CTA, profile dropdown, dark-mode toggle.", primitive: :masthead) do %>
+    <%= render "design_system/masthead" %>
+  <% end %>
+
+  <%= render_design_system_section(title: "Page shell", description: "Slim masthead + single column + comfortable reading measure.") do %>
+    <%= render "design_system/page_shell" %>
+  <% end %>
+</article>

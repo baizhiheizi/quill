@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Quill · Discover</title>
+  <meta name="theme-color" content="#ffffff" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@400;500;600&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/style.css" />
+  <script>(function(){var t=localStorage.theme;if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme: dark)').matches))document.documentElement.setAttribute('data-theme','dark')})();</script>
+  <style>
+    .masthead { padding: clamp(30px,5vw,52px) 0 20px; }
+    .masthead-tagline { font-family:var(--font-display); font-size:clamp(24px,3.4vw,34px); line-height:1.18; letter-spacing:-0.015em; max-width:26ch; }
+    .masthead-sub { color:var(--muted); margin-top:8px; }
+    .searchbar { display:flex; align-items:center; gap:10px; background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:11px 16px; max-width:520px; width:100%; color:var(--muted); }
+    .searchbar input { border:0; background:transparent; outline:none; color:var(--fg); font:inherit; font-size:14px; flex:1; }
+    .searchbar input::placeholder { color:var(--muted); }
+    .hot-tags { display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin-top:22px; }
+    .hot-tags .lab { color:var(--muted); font-size:12.5px; font-family:var(--font-mono); margin-right:4px; }
+    .authors-strip { display:grid; grid-template-columns:repeat(3,1fr); gap:var(--gap-sm); margin-top:26px; }
+    @media(max-width:620px){ .authors-strip{ grid-template-columns:1fr; } }
+    .author-cell { border:1px solid var(--border); border-radius:var(--radius); padding:14px; }
+    .author-cell .row { gap:10px; }
+    .author-cell .n { font-size:13.5px; font-weight:600; }
+    .author-cell .m { color:var(--muted); font-size:12px; }
+    .join-card { margin-top:34px; border-top:1px solid var(--border); padding-top:24px; }
+  </style>
+</head>
+<body>
+  <header class="topnav" data-od-id="nav">
+    <div class="container topnav-inner">
+      <a class="brand" href="index.html" aria-label="Quill home">
+        <svg class="brand-mark" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><circle cx="18" cy="18" r="18" fill="#5C6BEF"/><path fill-rule="evenodd" clip-rule="evenodd" d="M30.4583 18C30.4583 20.2641 29.8193 22.3817 28.7087 24.1887L33 28.1207H30.5273L12.5604 11.6938C11.2655 12.1386 9.98368 12.9053 8.96603 13.7452C8.59758 14.0492 8.59632 14.5979 8.93533 14.9339L20.289 25.3407C20.6119 25.6608 21.0499 25.8406 21.5065 25.8406H26.2697L26.9293 26.4331C24.7122 28.6353 21.6331 30 18.2291 30C11.4752 30 6 24.6274 6 18C6 11.3726 11.4752 6 18.2291 6C24.9831 6 30.4583 11.3726 30.4583 18ZM27.6986 18.955V23.2888L14.5172 11.228C15.0219 11.1572 15.5377 11.1206 16.0621 11.1206C18.5515 11.1206 20.4764 11.9461 22.3134 13.3359L27.202 17.7558C27.5202 18.0752 27.6986 18.5061 27.6986 18.955Z" fill="#fff"/></svg>
+        <span class="brand-word">Quill<span class="dot">.</span></span>
+      </a>
+      <nav aria-label="Primary">
+        <a href="feed.html" class="keep is-active">Home</a>
+        <a href="search.html" class="keep">Search</a>
+        <a href="components.html">Library</a>
+      </nav>
+      <div class="topnav-actions">
+        <button class="btn btn-primary btn-sm" onclick="switchPage('editor.html')" data-od-id="cta-write">Write</button>
+        <button class="btn btn-secondary btn-sm" onclick="openConnect()">Connect Wallet</button>
+        <button class="icon-btn" aria-label="Toggle dark mode" onclick="toggleTheme(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 3a9 9 0 1 0 9 9c0-.46-.04-.92-.1-1.36a5.39 5.39 0 0 1-4.4 2.26 5.4 5.4 0 0 1-3.14-9.8c-.44-.06-.9-.1-1.36-.1Z"/></svg></button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container-narrow">
+    <section class="masthead" data-od-id="masthead">
+      <h1 class="masthead-tagline">Read first. Get paid when it does well.</h1>
+      <p class="masthead-sub">On Quill, 40% of new income goes to the readers who found an article first.</p>
+      <div class="searchbar" style="margin-top:22px;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="m21 21-4-4"/></svg>
+        <input id="feed-search" placeholder="Search articles, authors, tags…" onkeydown="if(event.key==='Enter')switchPage('search.html')" />
+      </div>
+      <div class="tabs" style="margin-top:24px;">
+        <button type="button" class="is-active">Discover</button>
+        <button type="button">Following <span class="count">24</span></button>
+        <button type="button">Authors</button>
+        <button type="button">Collections</button>
+      </div>
+      <div class="hot-tags" data-od-id="hot-tags">
+        <span class="lab">HOT</span>
+        <a href="search.html" class="chip chip-topic">Bitcoin</a>
+        <a href="search.html" class="chip chip-topic">Ordinals</a>
+        <a href="search.html" class="chip chip-topic">Lightning</a>
+        <a href="search.html" class="chip chip-topic">value net</a>
+        <a href="search.html" class="chip chip-topic">Essays</a>
+        <a href="search.html" class="chip chip-topic">Protocols</a>
+      </div>
+    </section>
+
+    <section data-od-id="feed" aria-label="Article feed">
+      <article class="list-row">
+        <div class="list-main">
+          <div class="chips"><span class="chip chip-topic">Bitcoin</span><span class="chip chip-price">128 sats</span></div>
+          <h3><a href="reader.html">The case for paying readers first</a></h3>
+          <p class="excerpt">Everyone knows early buyers carry the risk. What if the people who believed first earned from everyone who followed?</p>
+          <div class="meta-row"><span class="avatar">白</span><span class="name" style="font-size:13px;font-weight:600;">Baizhi Heizi</span><span class="meta">· 2h</span><span class="reward">Early readers +18%</span></div>
+        </div>
+        <div class="thumb"><div class="ph-img none-img" style="aspect-ratio:1/1;height:100%;border:0;border-radius:0;">⌁</div></div>
+      </article>
+
+      <article class="list-row">
+        <div class="list-main">
+          <div class="chips"><span class="chip chip-topic">Ordinals</span><span class="chip chip-price">64 sats</span></div>
+          <h3>Why inscriptions broke the ledger’s social contract</h3>
+          <p class="excerpt">Ordinals turned the block into a gallery. Here’s what Bitcoin’s founding purists got wrong about permanence.</p>
+          <div class="meta-row"><span class="avatar">巽</span><span class="name" style="font-size:13px;font-weight:600;">Xun Zhao</span><span class="meta">· 5h</span><span class="reward">Early readers +9%</span></div>
+        </div>
+        <div class="thumb"><div class="ph-img none-img" style="aspect-ratio:1/1;height:100%;border:0;border-radius:0;">⛓</div></div>
+      </article>
+
+      <article class="list-row">
+        <div class="list-main">
+          <div class="chips"><span class="chip chip-topic">Lightning</span><span class="chip chip-price free">Free</span></div>
+          <h3>The micropayment is a unit of attention</h3>
+          <p class="excerpt">When sending a sat costs nothing, the sat becomes a signal. Essays on the smallest marketable thought.</p>
+          <div class="meta-row"><span class="avatar">N</span><span class="name" style="font-size:13px;font-weight:600;">Nadia Ok</span><span class="meta">· 8h</span></div>
+        </div>
+        <div class="thumb"><div class="ph-img none-img" style="aspect-ratio:1/1;height:100%;border:0;border-radius:0;">⚡</div></div>
+      </article>
+
+      <article class="list-row">
+        <div class="list-main">
+          <div class="chips"><span class="chip chip-topic">value net</span><span class="chip chip-price">256 sats</span></div>
+          <h3>Portfolio of one: building a treasury from tips</h3>
+          <p class="excerpt">A weekend experiment: can an author’s early-reader rewards compound into a meaningful balance?</p>
+          <div class="meta-row"><span class="avatar">白</span><span class="name" style="font-size:13px;font-weight:600;">Baizhi Heizi</span><span class="meta">· 1d</span><span class="reward">Early readers +42%</span></div>
+        </div>
+        <div class="thumb"><div class="ph-img none-img" style="aspect-ratio:1/1;height:100%;border:0;border-radius:0;">◮</div></div>
+      </article>
+
+      <article class="list-row">
+        <div class="list-main">
+          <div class="chips"><span class="chip chip-topic">Protocols</span><span class="chip chip-price">96 sats</span></div>
+          <h3>What a value net feels like after thirty days</h3>
+          <p class="excerpt">Field notes from the first month of publishing inside the new economy — what pays, what flops.</p>
+          <div class="meta-row"><span class="avatar">巽</span><span class="name" style="font-size:13px;font-weight:600;">Xun Zhao</span><span class="meta">· 1d</span><span class="reward">Early readers +7%</span></div>
+        </div>
+        <div class="thumb"><div class="ph-img none-img" style="aspect-ratio:1/1;height:100%;border:0;border-radius:0;">◑</div></div>
+      </article>
+
+      <article class="list-row">
+        <div class="list-main">
+          <div class="chips"><span class="chip chip-topic">Essays</span><span class="chip chip-price free">Free</span></div>
+          <h3>Notes on writing for people who pay</h3>
+          <p class="excerpt">Free readers skim. Paid readers argue. A short letter to first-time authors on Quill.</p>
+          <div class="meta-row"><span class="avatar">N</span><span class="name" style="font-size:13px;font-weight:600;">Nadia Ok</span><span class="meta">· 2d</span></div>
+        </div>
+        <div class="thumb"><div class="ph-img none-img" style="aspect-ratio:1/1;height:100%;border:0;border-radius:0;">✳</div></div>
+      </article>
+
+      <div class="center" style="padding:24px 0 8px;"><button class="btn btn-ghost btn-arrow">Load more</button></div>
+    </section>
+
+    <section class="join-card" data-od-id="join-card" style="padding-top:28px;">
+      <div class="card" style="padding:26px;">
+        <div class="row-between" style="gap:20px;align-items:center;">
+          <div style="max-width:34ch;">
+            <h2 style="font-size:22px;">Want to be paid for being right?</h2>
+            <p style="color:var(--muted);margin-top:8px;">Connect your Mixin wallet, write what you know, and let the first readers become your earliest investors.</p>
+          </div>
+          <div class="hero-cta"><button class="btn btn-primary" data-od-id="cta-join">Join Quill</button><button class="btn btn-secondary">Read about the value net</button></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="pagefoot">
+    <div class="container row-between">
+      <span>© Quill · Build your value net on Web3</span>
+      <span class="meta">quill.im · @quill_im</span>
+    </div>
+  </footer>
+
+  <div class="overlay" id="connect-modal" data-od-id="connect-modal">
+    <div class="backdrop" onclick="closeOverlay('connect-modal')"></div>
+    <div class="modal">
+      <div class="row-between"><h2 style="font-size:22px;">Connect your wallet</h2><button class="icon-btn" onclick="closeOverlay('connect-modal')" aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
+      <p class="modal-sub">Sign in with Mixin Messenger to read, write, and earn rewards.</p>
+      <button class="btn btn-primary btn-lg btn-block">Continue with Mixin</button>
+      <div class="row" style="justify-content:center;margin-top:14px;gap:6px;"><span class="meta">Secured by</span><span class="pay-asset xin" style="width:14px;height:14px;"></span><span class="meta">Mixin Network</span></div>
+    </div>
+  </div>
+
+  <div class="tabbar">
+    <a href="feed.html" class="is-active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 12l9-9 9 9M5 10v10h14V10"/></svg>Home</a>
+    <a href="search.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="m21 21-4-4"/></svg>Search</a>
+    <a href="components.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>Library</a>
+    <a href="dashboard.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 4h16v12H4zM4 20h16M8 8h8"/></svg>Studio</a>
+  </div>
+
+  <script>
+    function toggleTheme(btn){var el=document.documentElement;var dark=el.getAttribute('data-theme')==='dark';if(dark){el.removeAttribute('data-theme');localStorage.theme='light';}else{el.setAttribute('data-theme','dark');localStorage.theme='dark';}}
+    function switchPage(url){window.location.href=url;}
+    function openConnect(){document.getElementById('connect-modal').classList.add('open');}
+    function closeOverlay(id){document.getElementById(id).classList.remove('open');}
+    document.querySelectorAll('.tabs :is(a, button)').forEach(function(a){a.addEventListener('click',function(e){e.preventDefault();document.querySelectorAll('.tabs :is(a, button)').forEach(function(x){x.classList.remove('is-active')});a.classList.add('is-active');});});
+    document.addEventListener('keydown',function(e){if(e.key==='Escape'){document.querySelectorAll('.overlay.open').forEach(function(o){o.classList.remove('open')});}});
+  </script>
+</body>
+</html>

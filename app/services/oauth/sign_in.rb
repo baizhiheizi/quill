@@ -2,6 +2,27 @@
 
 module Oauth
   class SignIn
+    # OmniAuth only ever sees the mixin strategy, so normalization is a
+    # single inline step rather than a provider adapter registry. Every
+    # failure mode raises SignInError — callers rescue exactly that.
+    def self.normalize(omniauth_auth)
+      raise Oauth::SignInError, "missing auth hash" if omniauth_auth.blank?
+
+      provider = omniauth_auth.provider.to_s
+      raise Oauth::SignInError, "unsupported provider: #{provider}" unless provider == "mixin"
+
+      raw = (omniauth_auth.extra["raw_info"] || omniauth_auth.extra[:raw_info] || {}).deep_stringify_keys
+      uid = raw["user_id"]
+      raise Oauth::SignInError, "missing user_id" if uid.blank?
+
+      Oauth::NormalizedIdentity.new(
+        provider: :mixin,
+        uid: uid,
+        access_token: omniauth_auth.credentials.token,
+        raw: raw
+      )
+    end
+
     def self.call(identity:, request_info: nil)
       new(identity:, request_info:).call
     end

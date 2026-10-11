@@ -1,0 +1,18 @@
+<%# frozen_string_literal: true %>
+<%# specs/011-comprehensive-ui-refactor — primitive: value note.
+    Text-only reward / earnings / stat figure. NEVER a filled badge. %>
+<%
+  label ||= nil
+  format ||= "plain"
+  formatted = case format.to_s
+              when "percent" then "#{value}%"
+              when "currency" then "¥#{value}"
+              else value.to_s
+              end
+%>
+<span class="reward-text inline-flex items-center gap-1">
+  <% if label.present? %>
+    <span class="text-base-content/60"><%= label %>:</span>
+  <% end %>
+  <span><%= formatted %></span>
+</span>

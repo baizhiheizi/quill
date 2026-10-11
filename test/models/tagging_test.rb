@@ -148,10 +148,11 @@ class TaggingTest < ActiveSupport::TestCase
 
       queries = capture_queries { tagging.send(:notify_subscribers) }
 
-      # Only one users SELECT — the IN-subquery form, not a materialised id list.
+      # Two users SELECTs: the IN-subquery form (never a materialised id list),
+      # plus one point lookup made by the create-time visibility predicate.
       users_selects = queries.grep(/FROM "users"/)
-      assert_equal 1, users_selects.length,
-                   "expected 1 FROM users SELECT, got #{users_selects.length}: #{users_selects.inspect}"
+      assert_equal 2, users_selects.length,
+                   "expected 2 FROM users SELECTs, got #{users_selects.length}: #{users_selects.inspect}"
 
       main_select = users_selects.first
       assert_includes main_select,

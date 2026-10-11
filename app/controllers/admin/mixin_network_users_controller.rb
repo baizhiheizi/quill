@@ -63,7 +63,7 @@ module Admin
       #     fires one SELECT per type instead of one per row.
       #     The partial dispatches on `mixin_network_user.owner.is_a? Article|User`
       #     and renders the corresponding field partial.
-      #   - `owner: admin_user_field_preloads` → for User-owner rows the partial
+      #   - `owner: User::AVATAR_PRELOADS` → for User-owner rows the partial
       #     renders `admin/users/_field` → `shared/_avatar`, which walks
       #     `user.avatar_image_thumb` → `authorization.raw["avatar_url"]` +
       #     `avatar_attachment.blob.variant_records`. The preload chain primes
@@ -89,7 +89,7 @@ module Admin
     # See `admin/mixin_network_users/_mixin_network_user.html.erb` for the
     # exact fields walked per row.
     def index_includes
-      [ { owner: admin_user_field_preloads } ]
+      [ { owner: User::AVATAR_PRELOADS } ]
     end
   end
 end

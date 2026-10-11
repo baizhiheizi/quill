@@ -17,7 +17,7 @@
 
     <% if current_user.present? %>
       <% dropdown_button = capture do %>
-        <%= render "shared/avatar", user: current_user, thumb: true, class: "mx-auto size-7 rounded-full" %>
+        <%= render_avatar user: current_user, thumb: true, class: "mx-auto size-7 rounded-full" %>
       <% end %>
       <%= render_dropdown class: 'flex justify-center py-3', button: dropdown_button do %>
         <ul class="menu menu-sm w-52 rounded-xl border border-base-300 bg-base-100 p-2 shadow-lg">

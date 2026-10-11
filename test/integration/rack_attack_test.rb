@@ -45,8 +45,20 @@ class RackAttackTest < ActionDispatch::IntegrationTest
   end
 
   test "throttles search after 20 requests in 1min" do
-    20.times { get "/search", params: { query: "x" } }
-    get "/search", params: { query: "x" }
-    assert_equal 429, response.status
+    # Rack::Attack buckets per `Time.now.to_i / period`, so when these requests
+    # straddle a minute boundary the counter resets partway through — on a slow
+    # runner that is the common case, not the edge case. Drive until the
+    # throttle bites (bounded far past one bucket) and assert that it does.
+    statuses = []
+    80.times do
+      get "/search", params: { query: "x" }
+      statuses << response.status
+      break if response.status == 429
+    end
+
+    assert statuses.tally.fetch(200, 0) >= 20,
+      "expected ~20 requests to be served before the throttle: #{statuses.inspect}"
+    assert_equal 429, statuses.last,
+      "expected the search throttle to fire within 80 requests: #{statuses.inspect}"
   end
 end

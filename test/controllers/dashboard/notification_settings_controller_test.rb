@@ -26,13 +26,27 @@ class Dashboard::NotificationSettingsControllerTest < ActionController::TestCase
     assert_equal false, @setting.transfer_processed_mixin_bot
   end
 
-  test "update ignores unpermitted notification setting fields" do
-    @setting.update!(webhook_url: "https://example.com/original")
+  test "update persists the toggles of a newly declared kind" do
+    patch :update, params: {
+      id: @setting.id,
+      notification_setting: {
+        collection_bought_web: "0",
+        collection_listed_mixin_bot: "0"
+      }
+    }, format: :turbo_stream
 
+    assert_response :success
+    @setting.reload
+    assert_equal false, @setting.collection_bought_web
+    assert_equal false, @setting.collection_listed_mixin_bot
+  end
+
+  test "update ignores unpermitted notification setting fields" do
     patch :update, params: {
       id: @setting.id,
       notification_setting: {
         article_published_web: "0",
+        user_id: users(:author).id,
         webhook_url: "https://example.com/changed"
       }
     }, format: :turbo_stream
@@ -40,11 +54,12 @@ class Dashboard::NotificationSettingsControllerTest < ActionController::TestCase
     assert_response :success
     @setting.reload
     assert_equal false, @setting.article_published_web
-    assert_equal "https://example.com/original", @setting.webhook_url
+    assert_equal @user.id, @setting.user_id
+    assert_nil @setting.read_attribute(:webhook)
   end
 
   test "update redirects unauthenticated access to login" do
-    @setting.update!(article_published_web: false)
+    @setting.update! article_published_web: false
     session.delete(:current_session_id)
 
     patch :update, params: {

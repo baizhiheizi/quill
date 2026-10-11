@@ -1,134 +1,70 @@
 # frozen_string_literal: true
 
+# Web-feed composition over `ArticleVisibility`. The JSON API, the home page
+# and the article-reference picker use the module's predicates directly; this
+# service only exists to keep the `ArticlesController#index` params → scope
+# mapping in one place. The visibility rule itself lives in
+# `ArticleVisibility`, not here.
 class ArticleSearchService
-  # Cap query length so a long `query` param can't bloat the ILIKE pattern
-  # into an expensive seq-scan. Pairs with the pg_trgm GIN indexes (see
-  # db/migrate/*_add_pg_trgm_indexes_for_search.rb).
-  QUERY_LENGTH_LIMIT = 64
-
-  def initialize(params = {})
-    @query = params[:query].to_s.strip.first(QUERY_LENGTH_LIMIT)
-    @tag = params[:tag].to_s.strip.first(QUERY_LENGTH_LIMIT)
-    @filter = params[:filter]
-    @time_range = params[:time_range]
-    @current_user = params[:current_user]
-    @articles =
-      Article
-      .with_associations
-      .without_drafted
-      .left_joins(:author)
-      .where(
-        users: {
-          blocked_at: nil
-        }
-      )
-  end
+  QUERY_LENGTH_LIMIT = ArticleVisibility::QUERY_LENGTH_LIMIT
 
   def self.call(*)
     new(*).call
   end
 
+  def initialize(params = {})
+    @query = ArticleVisibility.cap(params[:query])
+    @tag = ArticleVisibility.cap(params[:tag])
+    @filter = params[:filter]
+    @time_range = params[:time_range]
+    @current_user = params[:current_user]
+  end
+
   def call
-    query
-      .tagging
-      .filter
-      .filter_block_authors
-      .select_in_time_range
+    relation = ArticleVisibility.for(@current_user, base: feed, hide_blocked_authors: hide_blocked_authors?)
+    relation = relation.searching(@query)
+    relation = relation.tagged(@tag)
+    relation = filtered(relation)
 
-    @articles
+    relation.in_range(@time_range)
   end
 
-  def tagging
-    @articles = @articles.ransack({ tags_name_i_cont_all: @tag }).result(distinct: true) if @tag.present?
+  private
 
-    self
+  # Every non-draft article by a non-blocked platform author, preloaded for
+  # the article card partial.
+  def feed
+    Article
+      .with_associations
+      .without_drafted
+      .left_joins(:author)
+      .where(users: { blocked_at: nil })
   end
 
-  def query
-    q_ransack = {
-      title_i_cont: @query,
-      intro_i_cont: @query,
-      author_name_i_cont: @query,
-      tags_name_i_cont: @query
-    }
-
-    @articles = @articles.ransack(q_ransack.merge(m: "or")).result(distinct: true) if @query.present?
-
-    self
+  # The `bought` filter lists access the viewer already paid for, so the block
+  # rule does not apply — same reason the article-reference picker bypasses it.
+  def hide_blocked_authors?
+    @filter != "bought"
   end
 
-  def filter
-    @articles =
-      case @filter
-      when "lately"
-        @articles.published.order(published_at: :desc)
-      when "revenue"
-        @articles.published.order_by_revenue_usd
-      when "subscribed"
-        return @articles.none if @current_user.blank?
-
-        # Inline as subqueries so we never materialize every subscribed-author
-        # ID or owned-collection UUID in Ruby. Matches the pattern used by
-        # `bought_articles&.select(:id)` in the filter below.
-        subscribed_author_ids =
-          Action
-            .where(user_id: @current_user.id, action_type: "subscribe", target_type: "User")
-            .select(:target_id)
-        owned_collection_uuids =
-          Collection
-            .joins(:buy_orders)
-            .where(buy_orders: { buyer_id: @current_user.id })
-            .select(:uuid)
-
-        @articles.published
-                 .where(author_id: subscribed_author_ids)
-                 .or(
-                   @articles
-                     .published
-                     .where(collection_id: owned_collection_uuids)
-                 ).order(published_at: :desc)
-      when "bought"
-        @articles.where(id: @current_user&.bought_articles&.select(:id)).order(published_at: :desc)
-      else
-        @articles.published.order_by_popularity
-      end
-
-    self
+  def filtered(relation)
+    case @filter
+    when "lately"
+      relation.only_published.ordered_by(:recent)
+    when "revenue"
+      relation.only_published.ordered_by(:revenue)
+    when "subscribed"
+      subscribed(relation)
+    when "bought"
+      relation.bought_by(@current_user).ordered_by(:recent)
+    else
+      relation.only_published.ordered_by(:popularity)
+    end
   end
 
-  def select_in_time_range
-    @articles =
-      case @time_range
-      when "week"
-        @articles.where(published_at: (1.week.ago)...)
-      when "month"
-        @articles.where(published_at: (1.month.ago)...)
-      when "year"
-        @articles.where(published_at: (1.year.ago)...)
-      else
-        @articles
-      end
+  def subscribed(relation)
+    return relation.none if @current_user.blank?
 
-    self
-  end
-
-  def filter_block_authors
-    return self if @filter == "bought" || @current_user.blank?
-
-    # Subqueries exclude (a) authors @current_user has blocked and (b) authors
-    # who have blocked @current_user. Matches the `subscribed` filter pattern:
-    # never materialize IDs in Ruby, let SQL handle the predicate.
-    blocked_ids =
-      Action
-        .where(user_id: @current_user.id, action_type: "block", target_type: "User")
-        .select(:target_id)
-    blockers_ids =
-      Action
-        .where(target_id: @current_user.id, target_type: "User", user_type: "User", action_type: "block")
-        .select(:user_id)
-
-    @articles = @articles.where.not(author_id: blocked_ids).where.not(author_id: blockers_ids)
-
-    self
+    relation.only_published.subscribed_to(@current_user).ordered_by(:recent)
   end
 end

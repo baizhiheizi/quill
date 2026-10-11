@@ -26,6 +26,7 @@ namespace :dashboard do
   resources :subscriptions, only: %i[index]
   resources :block_users, only: %i[index]
   resources :subscribe_users, only: %i[index]
+  resources :subscribe_by_users, only: %i[index]
   resources :subscribe_articles, only: %i[index]
   resources :subscribe_tags, only: %i[index]
   resources :orders, only: %i[index]

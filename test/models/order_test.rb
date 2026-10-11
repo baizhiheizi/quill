@@ -97,9 +97,13 @@ class OrderTest < ActiveSupport::TestCase
     end
   end
 
-  test "all_transfers_generated? when transfers sum to expected amount" do
+  # `distribute_order!` runs the real service and the real guard — this is
+  # the ledger invariant itself, not a stubbed predicate.
+  test "all_transfers_generated? is false before distribution and true after a real one" do
     with_quill_bot_stub do
       order = create_buy_order!(article: @article, buyer: @reader_one, total: 1.0)
+      assert_not order.all_transfers_generated?
+
       distribute_order!(order)
 
       assert order.all_transfers_generated?
@@ -600,10 +604,11 @@ class OrderTest < ActiveSupport::TestCase
 
       users_selects = queries.select { |q| q.include?('FROM "users"') }
 
-      # Exactly one SELECT FROM users — no action_store materialise step
-      # (which would add a second one for the through: relation).
-      assert_equal 1, users_selects.length,
-                   "expected 1 FROM users SELECT, got #{users_selects.length}: #{users_selects.inspect}"
+      # Two SELECTs FROM users: the IN-subquery form (never a materialised id
+      # list), plus the single `buyer` point lookup the create-time visibility
+      # predicate performs through `should_notify?`.
+      assert_equal 2, users_selects.length,
+                   "expected 2 FROM users SELECTs, got #{users_selects.length}: #{users_selects.inspect}"
 
       # The follower filter is pushed into SQL via an IN-subquery rather than
       # a materialized id list.
@@ -629,10 +634,31 @@ class OrderTest < ActiveSupport::TestCase
       queries = capture_queries { order.notify_subscribers }
 
       users_selects = queries.select { |q| q.include?('FROM "users"') }
-      assert_equal 1, users_selects.length,
-                   "expected 1 FROM users SELECT, got #{users_selects.length}: #{users_selects.inspect}"
+      assert_equal 2, users_selects.length,
+                   "expected 2 FROM users SELECTs, got #{users_selects.length}: #{users_selects.inspect}"
       assert_includes users_selects.first, 'IN (SELECT "actions"."user_id" FROM "actions"',
                       "reward path should use the SQL subquery shape"
+    end
+  end
+
+  # `ArticleBoughtNotifier#should_notify?` folds the recipient-side block
+  # guard into both delivery paths (`may_notify_via_web?` and the mixin bot
+  # `config.if`). The Noticed row still persists — the web inbox and the
+  # Mixin bot just have to stop showing/sending it.
+  test "notify_subscribers does not deliver to followers who blocked the buyer" do
+    with_quill_bot_stub do
+      ensure_notification_setting!(@reader_one)
+      ensure_notification_setting!(@reader_two)
+
+      @reader_two.create_action(:subscribe, target: @reader_one) unless @reader_two.subscribe_user?(@reader_one)
+      @reader_two.create_action(:block, target: @reader_one)
+
+      order = create_buy_order!(article: @article, buyer: @reader_one, total: 1.0)
+      order.notify_subscribers
+
+      notification = Noticed::Notification.where(recipient: @reader_two).order(:id).last
+      assert notification, "Noticed persists the row before delivery gating"
+      assert_not notification.web_visible?
     end
   end
 

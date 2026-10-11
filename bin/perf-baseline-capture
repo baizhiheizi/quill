@@ -1,0 +1,28 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+# bin/perf-baseline-capture — capture a frontend-efficiency baseline.
+#
+# Writes the output of `bin/measure-frontend-efficiency` to
+# specs/011-comprehensive-ui-refactor/perf/<timestamp>.txt and prints the
+# most recent baseline file path to stdout. Used to gate Phase 7
+# acceptance (no metric regresses > 5% vs baseline).
+
+require "fileutils"
+
+ROOT = File.expand_path("..", __dir__)
+PERF_DIR = File.join(ROOT, "specs", "011-comprehensive-ui-refactor", "perf")
+FileUtils.mkdir_p(PERF_DIR)
+
+timestamp = Time.now.utc.strftime("%Y%m%dT%H%M%SZ")
+out_path  = File.join(PERF_DIR, "#{timestamp}.txt")
+
+Dir.chdir(ROOT) do
+  ok = system("bin/measure-frontend-efficiency > #{out_path} 2>&1")
+  if ok
+    puts "captured baseline → #{out_path}"
+  else
+    warn "bin/measure-frontend-equot; failed (exit #{$?.exitstatus}) — see #{out_path}"
+    exit 1
+  end
+end

@@ -1,14 +1,14 @@
 <%= turbo_frame_tag "#{dom_id @user}_comments" do %>
   <div data-controller="infinite-scroll">
     <% if @comments.blank? %>
-      <%= render "shared/empty", text: t('no_record') %>
+      <%= render_empty text: t('no_record') %>
     <% else %>
       <div id="<%= dom_id @user %>_comments_list">
         <%= render partial: "users/comments/comment", collection: @comments, as: :comment %>
       </div>
       <div data-infinite-scroll-target='scrollArea'></div>
 
-      <%= render "shared/pagination", pagy: @pagy, id: "#{dom_id @user}_comments_pagination" %>
+      <%= render_pagination @pagy, id: "#{dom_id @user}_comments_pagination" %>
       <% end %>
   </div>
 <% end %>

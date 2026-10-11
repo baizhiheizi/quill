@@ -21,6 +21,26 @@ Rails.application.configure do
   config.require_master_key = true
 
   config.public_file_server.enabled = ENV["RAILS_SERVE_STATIC_FILES"].present? || ENV["RENDER"].present?
+  # Fingerprinted Propshaft assets are safe to cache forever. Puma serves
+  # them in production (`RAILS_SERVE_STATIC_FILES`); without this header
+  # every page load re-downloads application.js/css.
+  config.public_file_server.headers = {
+    "Cache-Control" => "public, max-age=#{1.year.to_i}, immutable"
+  }
+
+  # gzip HTML/CSS/JS/SVG. Inserted outside ActionDispatch::Static so both
+  # Puma-served assets and app responses are compressed. Skip already-
+  # compressed types (woff2, png, jpeg) via the include list.
+  config.middleware.insert_before ActionDispatch::Static, Rack::Deflater,
+    include: %w[
+      text/plain
+      text/html
+      text/css
+      text/javascript
+      application/javascript
+      application/json
+      image/svg+xml
+    ]
 
   # Enable serving of images, stylesheets, and JavaScripts from an asset server.
   # config.asset_host = "http://assets.example.com"

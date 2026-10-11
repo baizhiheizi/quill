@@ -76,14 +76,14 @@
         data-tabs-content-param="assets"
         data-tabs-target="content">
       <%= turbo_frame_tag 'admin_wallet_assets', src: admin_wallet_assets_path(@mixin_network_user.uuid) do %>
-        <%= render "shared/loading" %>
+        <%= render_loading %>
       <% end %>
     </div>
     <div class="hidden"
         data-tabs-content-param="snapshots"
         data-tabs-target="content">
       <%= turbo_frame_tag 'admin_wallet_snapshots', src: admin_wallet_snapshots_path(@mixin_network_user.uuid) do %>
-        <%= render "shared/loading" %>
+        <%= render_loading %>
       <% end %>
     </div>
   </div>

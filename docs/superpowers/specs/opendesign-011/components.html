@@ -1,0 +1,262 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Component Library · Quill</title>
+  <meta name="theme-color" content="#ffffff" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@400;500;600&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/style.css" />
+  <script>(function(){var t=localStorage.theme;if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme: dark)').matches))document.documentElement.setAttribute('data-theme','dark')})();</script>
+  <style>
+    body { background: var(--bg); }
+    .lib-wrap { display:grid; grid-template-columns:224px 1fr; gap:0; min-height:100vh; }
+    .lib-side { border-right:1px solid var(--border); padding:22px 16px; position:sticky; top:0; height:100vh; overflow:auto; }
+    .lib-side nav a { display:block; padding:8px 12px; border-radius:8px; color:var(--muted); font-size:13.5px; margin-bottom:2px; }
+    .lib-side nav a:hover { color:var(--fg); background:var(--fg-soft); }
+    .lib-main { min-width:0; }
+    .lib-section { padding:40px var(--gutter) 48px; border-bottom:1px solid var(--border); }
+    .lib-section h2 { font-size:26px; margin-bottom:6px; }
+    .lib-section .role { color:var(--muted); margin-bottom:26px; }
+    .demo-row { display:flex; gap:12px; flex-wrap:wrap; align-items:center; }
+    .demo-stack { display:flex; flex-direction:column; gap:16px; margin-top:16px; }
+    .token-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:14px; }
+    .token-swatch { border:1px solid var(--border); border-radius:var(--radius); padding:14px; display:flex; flex-direction:column; gap:8px; }
+    .token-swatch .chip-color { height:56px; border-radius:8px; }
+    .token-swatch .t { font-family:var(--font-mono); font-size:12px; }
+    .token-swatch .v { color:var(--muted); font-size:11.5px; }
+    .type-row { border-top:1px solid var(--border); padding:18px 0; }
+    .type-row:first-child { border-top:0; }
+    .bar { height:6px; border-radius:999px; }
+    .skel { border-radius:6px; background: linear-gradient(90deg, var(--fg-soft) 25%, var(--muted-soft) 50%, var(--fg-soft) 75%); background-size:200% 100%; animation: shimmer 1.4s infinite linear; }
+    @keyframes shimmer { from { background-position:200% 0; } to { background-position:-200% 0; } }
+    @media(max-width:920px){ .lib-wrap{ grid-template-columns:1fr; } .lib-side{ display:none; } }
+  </style>
+</head>
+<body>
+<div class="lib-wrap">
+  <aside class="lib-side" data-od-id="lib-nav">
+    <a class="brand" href="index.html" style="margin-bottom:18px;">
+      <svg class="brand-mark" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><circle cx="18" cy="18" r="18" fill="#5C6BEF"/><path fill-rule="evenodd" clip-rule="evenodd" d="M30.4583 18C30.4583 20.2641 29.8193 22.3817 28.7087 24.1887L33 28.1207H30.5273L12.5604 11.6938C11.2655 12.1386 9.98368 12.9053 8.96603 13.7452C8.59758 14.0492 8.59632 14.5979 8.93533 14.9339L20.289 25.3407C20.6119 25.6608 21.0499 25.8406 21.5065 25.8406H26.2697L26.9293 26.4331C24.7122 28.6353 21.6331 30 18.2291 30C11.4752 30 6 24.6274 6 18C6 11.3726 11.4752 6 18.2291 6C24.9831 6 30.4583 11.3726 30.4583 18ZM27.6986 18.955V23.2888L14.5172 11.228C15.0219 11.1572 15.5377 11.1206 16.0621 11.1206C18.5515 11.1206 20.4764 11.9461 22.3134 13.3359L27.202 17.7558C27.5202 18.0752 27.6986 18.5061 27.6986 18.955Z" fill="#fff"/></svg>
+      <span class="brand-word">Quill<span class="dot">.</span></span>
+    </a>
+    <nav>
+      <a href="#tokens">Tokens</a>
+      <a href="#type">Type</a>
+      <a href="#buttons">Buttons</a>
+      <a href="#chips">Chips</a>
+      <a href="#listrow">List row</a>
+      <a href="#cards">Cards</a>
+      <a href="#forms">Forms</a>
+      <a href="#tabs">Tabs</a>
+      <a href="#valuenet">Value net</a>
+      <a href="#notif">Notifications</a>
+      <a href="#states">States</a>
+      <a href="#modal">Modal</a>
+    </nav>
+    <button class="icon-btn" aria-label="Toggle dark mode" onclick="toggleTheme(this)" style="margin-top:16px;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 3a9 9 0 1 0 9 9c0-.46-.04-.92-.1-1.36a5.39 5.39 0 0 1-4.4 2.26 5.4 5.4 0 0 1-3.14-9.8c-.44-.06-.9-.1-1.36-.1Z"/></svg></button>
+  </aside>
+
+  <main class="lib-main" id="top">
+    <section class="lib-section" data-od-id="lib-tokens" id="tokens">
+      <h2>Design tokens</h2>
+      <p class="role">Near-grayscale monochrome with one cobalt accent. Reward figures use a quiet amber — text only, never a filled badge.</p>
+      <div class="token-grid">
+        <div class="token-swatch"><div class="chip-color" style="background:var(--bg);border:1px solid var(--border);"></div><div class="t">--bg</div><div class="v">Page background</div></div>
+        <div class="token-swatch"><div class="chip-color" style="background:var(--surface);border:1px solid var(--border);"></div><div class="t">--surface</div><div class="v">Cards, raised</div></div>
+        <div class="token-swatch"><div class="chip-color" style="background:var(--fg);"></div><div class="t">--fg</div><div class="v">Text</div></div>
+        <div class="token-swatch"><div class="chip-color" style="background:var(--muted);"></div><div class="t">--muted</div><div class="v">Secondary</div></div>
+        <div class="token-swatch"><div class="chip-color" style="background:var(--accent);"></div><div class="t">--accent</div><div class="v">Links · primary CTA</div></div>
+        <div class="token-swatch"><div class="chip-color" style="background:var(--reward);"></div><div class="t">--reward</div><div class="v">Early-reader text</div></div>
+      </div>
+    </section>
+
+    <section class="lib-section" data-od-id="lib-type" id="type">
+      <h2>Type</h2>
+      <p class="role">Serif display (Newsreader) for headlines, sans (Inter) for UI + long-form body, mono (Roboto Mono) for numerics, captions, eyebrows.</p>
+      <div class="type-row"><div class="meta">Display / H1</div><h1 style="font-size:44px;margin-top:8px;">Pay readers first</h1></div>
+      <div class="type-row"><div class="meta">H2</div><h2 style="margin-top:8px;">How the value net splits</h2></div>
+      <div class="type-row"><div class="meta">Body</div><p style="margin:8px 0 0;max-width:60ch;">Every new payment is split three ways — 50% to the author, 40% pro-rata to earlier readers, and 10% to the platform. The mechanism aligns the reader's incentive with the author's success.</p></div>
+      <div class="type-row"><div class="meta">Meta / mono</div><span class="meta" style="display:block;margin-top:8px;">Aug 27 · 6 min read · 128 sats</span></div>
+    </section>
+
+    <section class="lib-section" data-od-id="lib-buttons" id="buttons">
+      <h2>Buttons</h2>
+      <p class="role">One primary style per viewport. Accent is reserved for actions, links, and focus.</p>
+      <div class="demo-stack">
+        <div class="demo-row"><button class="btn btn-primary">Unlock article</button><button class="btn btn-primary btn-lg">Join Quill</button><button class="btn btn-primary btn-sm">Tip +40</button></div>
+        <div class="demo-row"><button class="btn btn-secondary">Preview</button><button class="btn btn-soft">Follow</button><button class="btn btn-ghost btn-arrow">Read the story</button></div>
+        <div class="demo-row"><button class="btn btn-ghost">View all</button></div>
+      </div>
+    </section>
+
+    <section class="lib-section" data-od-id="lib-chips" id="chips">
+      <h2>Chips & status pills</h2>
+      <p class="role">Topic tags are one neutral chip. Price is a solid pill (black in light, white in dark). Free stays outlined. Reward is text, never a badge.</p>
+      <div class="demo-row">
+        <span class="chip chip-topic">Bitcoin</span>
+        <span class="chip chip-topic">value net</span>
+        <span class="chip chip-price">128 sats</span>
+        <span class="chip chip-price free">Free</span>
+        <span class="chip chip-accent">Collection</span>
+        <span class="chip chip-reward">+42%</span>
+        <span class="chip chip-neutral">Author</span>
+      </div>
+    </section>
+
+    <section class="lib-section" data-od-id="lib-listrow" id="listrow">
+      <h2>Minimal list row</h2>
+      <p class="role">The feed / profile / search / collection unit. Divided by hairlines, never card borders.</p>
+      <div style="border-top:1px solid var(--border);">
+        <article class="list-row">
+          <div class="list-main">
+            <div class="chips"><span class="chip chip-topic">Bitcoin</span><span class="chip chip-price">128 sats</span></div>
+            <h3>The case for paying readers first</h3>
+            <p class="excerpt">Everyone knows early buyers carry the risk. What if the people who believed first earned from everyone who followed?</p>
+            <div class="meta-row"><span class="avatar">白</span><span class="name" style="font-size:13px;font-weight:600;">Baizhi Heizi</span><span class="meta">· 2h</span><span class="reward">Early readers +18%</span></div>
+          </div>
+          <div class="thumb"><div class="ph-img none-img" style="aspect-ratio:1/1;height:100%;border:0;border-radius:0;">⌁</div></div>
+        </article>
+      </div>
+    </section>
+
+    <section class="lib-section" data-od-id="lib-cards" id="cards">
+      <h2>Cards</h2>
+      <p class="role">Raised surfaces use `--surface` + a hairline. Borders and tonal contrast, no boxy shadows.</p>
+      <div class="grid-2">
+        <div class="card">
+          <div class="panel-head" style="font-family:var(--font-mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:12px;">Balance</div>
+          <div class="num" style="font-size:28px;font-weight:600;">0.0012</div>
+          <div class="meta" style="margin-top:4px;">BTC · Mixin wallet</div>
+        </div>
+        <div class="card">
+          <span class="chip chip-accent">Value net</span>
+          <p style="margin:12px 0 0;color:var(--muted);">Early readers receive 40% of new income on every article. Paying first pays off.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="lib-section" data-od-id="lib-forms" id="forms">
+      <h2>Forms</h2>
+      <p class="role">Focus uses the accent ring. Inputs are quiet on the surface.</p>
+      <div class="grid-2">
+        <div class="demo-stack">
+          <div class="field"><label>Title</label><input class="input" placeholder="Untitled" /></div>
+          <div class="field"><label>Description</label><textarea class="textarea" placeholder="Short summary…"></textarea></div>
+        </div>
+        <div class="demo-stack">
+          <div class="field"><label>Price</label><div class="input-group"><input class="input" value="128" /><span class="input-append">sats</span></div></div>
+          <div class="field"><label>Asset</label><select class="select"><option>Bitcoin (sats)</option><option>Ethereum (ETH)</option><option>Mixin (XIN)</option><option>pUSD</option></select></div>
+          <div class="toggle"><span class="t">Free to read</span><label class="switch"><input type="checkbox"><span class="track"></span></label></div>
+          <div class="seg"><button class="is-on">Draft</button><button>Published</button></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="lib-section" data-od-id="lib-tabs" id="tabs">
+      <h2>Tabs</h2>
+      <div class="tabs">
+        <button type="button" class="is-active">Discover</button>
+        <button type="button">Following <span class="count">24</span></button>
+        <button type="button">Authors</button>
+      </div>
+    </section>
+
+    <section class="lib-section" data-od-id="lib-valuenet" id="valuenet">
+      <h2>Value-net components</h2>
+      <p class="role">The distinguishing mechanic — reward split and early-reader earnings.</p>
+      <div class="demo-stack">
+        <div class="split-pill"><span>Author</span><span class="seg-bar"><i class="authors" style="width:50%"></i><i class="readers" style="width:40%"></i><i class="platform" style="width:10%"></i></span><span class="num">50</span></div>
+        <div class="split-pill"><span>Early readers</span><span class="seg-bar"><i class="readers" style="width:40%"></i></span><span class="num reward">40</span></div>
+        <div class="rev-split">
+          <div class="rev"><div class="p reward">40%</div><div class="l">To earlier readers<br>split pro-rata by what they paid</div></div>
+          <div class="rev"><div class="p">50%</div><div class="l">To the author<br>keeps writing paid</div></div>
+          <div class="rev platform"><div class="p">10%</div><div class="l">Platform fee<br>keeps the net running</div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="lib-section" data-od-id="lib-notif" id="notif">
+      <h2>Notifications</h2>
+      <div class="notif">
+        <span class="avatar">S</span>
+        <div class="body"><span class="text"><b>SatoshiSpirit</b> tipped <b>+40 sats</b> on your article.</span><div class="meta">2h ago</div></div>
+      </div>
+      <div class="notif">
+        <span class="avatar">风</span>
+        <div class="body"><span class="text"><b>WindHover</b> bought your article.</span><div class="meta">5h ago <span class="reward">· early reader</span></div></div>
+      </div>
+    </section>
+
+    <section class="lib-section" data-od-id="lib-states" id="states">
+      <h2>Empty, loading & error</h2>
+      <p class="role">States for when a list has nothing yet, is still fetching, or something broke. Every state still keeps the layout quiet and the accent reserved.</p>
+      <div class="grid-2">
+        <div class="card" style="text-align:center;padding:38px 24px;">
+          <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" style="margin:0 auto;color:var(--muted);"><path d="M4 5h16M4 10h16M4 15h10M4 20h7"/></svg>
+          <h3 style="font-family:var(--font-display);font-size:19px;margin-top:14px;">No drafts yet</h3>
+          <p style="color:var(--muted);font-size:14px;margin:8px auto 18px;max-width:26ch;">Your published and draft articles will appear here. Start with a headline.</p>
+          <button class="btn btn-primary" onclick="switchPage('editor.html')">Write your first article</button>
+        </div>
+        <div class="card" style="padding:24px;">
+          <div class="row" style="gap:12px;"><span class="avatar" style="background:var(--muted-soft);color:transparent;">·</span><div style="flex:1;"><div class="skel" style="width:40%;height:11px;"></div><div class="skel" style="width:70%;height:9px;margin-top:8px;"></div></div><div class="skel" style="width:52px;height:52px;border-radius:10px;"></div></div>
+          <div class="row" style="gap:12px;margin-top:16px;"><span class="avatar" style="background:var(--muted-soft);color:transparent;">·</span><div style="flex:1;"><div class="skel" style="width:34%;height:11px;"></div><div class="skel" style="width:60%;height:9px;margin-top:8px;"></div></div><div class="skel" style="width:52px;height:52px;border-radius:10px;"></div></div>
+          <div class="row" style="gap:12px;margin-top:16px;"><span class="avatar" style="background:var(--muted-soft);color:transparent;">·</span><div style="flex:1;"><div class="skel" style="width:48%;height:11px;"></div><div class="skel" style="width:66%;height:9px;margin-top:8px;"></div></div><div class="skel" style="width:52px;height:52px;border-radius:10px;"></div></div>
+          <p class="meta" style="margin-top:14px;">Loading · list is fetching</p>
+        </div>
+      </div>
+      <div class="card row" style="margin-top:20px;gap:14px;align-items:flex-start;">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" style="color:var(--danger);flex-shrink:0;margin-top:2px;"><circle cx="12" cy="12" r="9"/><path d="M12 8v4M12 16h.01"/></svg>
+        <div style="flex:1;">
+          <h3 style="font-family:var(--font-display);font-size:17px;">Payment didn't finish</h3>
+          <p style="color:var(--muted);font-size:13.5px;margin:5px 0 0;">The order wasn't confirmed on-chain. Nothing was charged — retry the transfer, and check the same wallet before trying again.</p>
+          <div class="row" style="gap:10px;margin-top:12px;"><button class="btn btn-primary btn-sm">Retry payment</button><button class="btn btn-ghost btn-sm">Cancel</button></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="lib-section" data-od-id="lib-modal" id="modal">
+      <h2>Payment modal</h2>
+      <p class="role">Wallet + payment appears only in context. Multi-asset settlement via MixPay.</p>
+      <button class="btn btn-secondary" onclick="openDemo()">Open example</button>
+    </section>
+  </main>
+</div>
+
+<div class="tabbar">
+  <a href="feed.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 12l9-9 9 9M5 10v10h14V10"/></svg>Home</a>
+  <a href="search.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="m21 21-4-4"/></svg>Search</a>
+  <a href="components.html" class="is-active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>Library</a>
+  <a href="dashboard.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 4h16v12H4zM4 20h16M8 8h8"/></svg>Studio</a>
+</div>
+
+<div class="overlay" id="demo-pay">
+  <div class="backdrop" onclick="closeDemo()"></div>
+  <div class="modal">
+    <div class="row-between"><h2 style="font-size:22px;">Unlock article</h2><button class="icon-btn" onclick="closeDemo()" aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
+    <p class="modal-sub">One payment unlocks the full article and places you in the early-reader pool.</p>
+    <div class="row-between" style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;"><div><div class="meta">TOTAL</div><div class="row" style="gap:8px;"><span class="num" style="font-size:22px;font-weight:500;">128</span><span class="meta">sats ≈ $1.20</span></div></div><div class="seg"><button class="is-on">sats</button><button>USD</button></div></div>
+    <div class="pay-options">
+      <button class="pay-option sel"><span class="pay-asset btc"></span><span class="pay-name">Bitcoin <span class="meta">· sats</span></span><span class="check">✓</span></button>
+      <button class="pay-option"><span class="pay-asset eth"></span><span class="pay-name">Ethereum <span class="meta">· ETH</span></span></button>
+      <button class="pay-option"><span class="pay-asset xin"></span><span class="pay-name">Mixin <span class="meta">· XIN</span></span></button>
+    </div>
+    <button class="btn btn-primary btn-lg btn-block">Pay with MixPay</button>
+  </div>
+</div>
+
+<script>
+  function toggleTheme(btn){var el=document.documentElement;var dark=el.getAttribute('data-theme')==='dark';if(dark){el.removeAttribute('data-theme');localStorage.theme='light';}else{el.setAttribute('data-theme','dark');localStorage.theme='dark';}}
+  function switchPage(url){window.location.href=url;}
+  function openDemo(){document.getElementById('demo-pay').classList.add('open');}
+  function closeDemo(){document.getElementById('demo-pay').classList.remove('open');}
+  document.querySelectorAll('.seg button').forEach(function(b){b.addEventListener('click',function(){b.parentElement.querySelectorAll('button').forEach(function(x){x.classList.remove('is-on')});b.classList.add('is-on');});});
+  document.querySelectorAll('.tabs :is(a, button)').forEach(function(a){a.addEventListener('click',function(e){e.preventDefault();document.querySelectorAll('.tabs :is(a, button)').forEach(function(x){x.classList.remove('is-active')});a.classList.add('is-active');});});
+  document.querySelectorAll('.pay-option').forEach(function(o){o.addEventListener('click',function(){document.querySelectorAll('.pay-option').forEach(function(p){p.classList.remove('sel');p.querySelector('.check')&&p.querySelector('.check').remove();});o.classList.add('sel');o.insertAdjacentHTML('beforeend','<span class="check">✓</span>');});});
+  document.querySelectorAll('.lib-side nav a').forEach(function(a){a.addEventListener('click',function(){document.querySelectorAll('.lib-side nav a').forEach(function(x){x.style.color='';});a.style.color='var(--accent)';});});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape'){document.querySelectorAll('.overlay.open').forEach(function(o){o.classList.remove('open')});}});
+</script>
+</body>
+</html>

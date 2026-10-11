@@ -2,7 +2,7 @@
 
 <div class="" 
      id="article_<%= article.uuid %>_content"
-     data-controller="hljs">
+     data-controller="syntax-highlight">
   <% if article.authorized? user %> 
     <%= render partial: "articles/full_content", locals: { article: article, user: user } %>
   <% else %>

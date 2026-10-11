@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Studio · Quill</title>
+  <meta name="theme-color" content="#ffffff" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@400;500;600&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/style.css" />
+  <script>(function(){var t=localStorage.theme;if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme: dark)').matches))document.documentElement.setAttribute('data-theme','dark')})();</script>
+  <style>
+    .stat-card { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius-lg); padding:18px 20px; }
+    .stat-card .k { color:var(--muted); font-size:12.5px; }
+    .stat-card .v { font-family:var(--font-mono); font-size:26px; font-weight:600; letter-spacing:-0.02em; margin-top:6px; }
+    .stat-card .v.reward { color:var(--reward); }
+    .stat-card .sub { color:var(--muted); font-size:12px; margin-top:4px; }
+    .delta { font-size:11.5px; font-weight:600; }
+    .delta.up { color:var(--reward); }
+    .draft-status { display:inline-flex; align-items:center; gap:6px; font-size:12px; font-weight:500; }
+    .draft-status .st-dot { width:8px; height:8px; border-radius:50%; }
+    .st-live { color:var(--reward); } .st-live .st-dot{background:var(--reward);}
+    .st-draft { color:var(--muted); } .st-draft .st-dot{background:var(--muted);}
+    .st-private { color:var(--muted); } .st-private .st-dot{background:var(--accent);}
+  </style>
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="rail" data-od-id="rail">
+      <a class="brand" href="index.html" aria-label="Quill home">
+        <svg class="brand-mark" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><circle cx="18" cy="18" r="18" fill="#5C6BEF"/><path fill-rule="evenodd" clip-rule="evenodd" d="M30.4583 18C30.4583 20.2641 29.8193 22.3817 28.7087 24.1887L33 28.1207H30.5273L12.5604 11.6938C11.2655 12.1386 9.98368 12.9053 8.96603 13.7452C8.59758 14.0492 8.59632 14.5979 8.93533 14.9339L20.289 25.3407C20.6119 25.6608 21.0499 25.8406 21.5065 25.8406H26.2697L26.9293 26.4331C24.7122 28.6353 21.6331 30 18.2291 30C11.4752 30 6 24.6274 6 18C6 11.3726 11.4752 6 18.2291 6C24.9831 6 30.4583 11.3726 30.4583 18ZM27.6986 18.955V23.2888L14.5172 11.228C15.0219 11.1572 15.5377 11.1206 16.0621 11.1206C18.5515 11.1206 20.4764 11.9461 22.3134 13.3359L27.202 17.7558C27.5202 18.0752 27.6986 18.5061 27.6986 18.955Z" fill="#fff"/></svg>
+        <span class="brand-word">Quill<span class="dot">.</span></span>
+      </a>
+      <nav class="rail-nav" aria-label="Studio">
+        <a href="#" class="is-active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 4h16v12H4zM4 20h16M8 8h8"/></svg>Overview</a>
+        <a href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8zM14 2v6h6"/></svg>Articles</a>
+        <a href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M3 12h4l3-8 4 16 3-8h4"/></svg>Orders</a>
+        <a href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M3 10h18"/></svg>Wallet</a>
+        <a href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>Comments</a>
+        <a href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="9"/><path d="M12 8v4l3 2"/></svg>Collections</a>
+        <a href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9M10 21h4"/></svg>Notifications</a>
+        <a href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.9.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.9 1.7 1.7 0 0 0-1.5-1H4a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.9l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.9.3h.1A1.7 1.7 0 0 0 11 5V4a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5h.1a1.7 1.7 0 0 0 1.9-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.9v.1a1.7 1.7 0 0 0 1.5 1H20a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>Settings</a>
+      </nav>
+      <div class="rail-foot">
+        <button class="icon-btn" aria-label="Toggle dark mode" onclick="toggleTheme(this)" style="color:var(--muted);"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 3a9 9 0 1 0 9 9c0-.46-.04-.92-.1-1.36a5.39 5.39 0 0 1-4.4 2.26 5.4 5.4 0 0 1-3.14-9.8c-.44-.06-.9-.1-1.36-.1Z"/></svg></button>
+        <span class="avatar" title="Baizhi Heizi">白</span>
+      </div>
+    </aside>
+
+    <div class="app-main">
+      <div class="app-head" data-od-id="studio-head">
+        <div>
+          <h1 style="font-size:clamp(26px,3.4vw,34px);">Overview</h1>
+          <div class="crumb">Welcome back, Baizhi. Here’s how your value net is doing.</div>
+        </div>
+        <button class="btn btn-primary btn-sm" onclick="switchPage('editor.html')" data-od-id="cta-new-draft">+ New draft</button>
+      </div>
+
+      <main style="padding:26px var(--gutter) 64px;">
+        <div class="grid-4" style="gap:18px;" data-od-id="stats">
+          <div class="stat-card">
+            <div class="k">Balance</div>
+            <div class="v">0.0012</div>
+            <div class="sub">BTC · Mixin wallet</div>
+          </div>
+          <div class="stat-card">
+            <div class="k">Lifetime revenue</div>
+            <div class="v">+0.31</div>
+            <div class="sub">BTC · <span class="delta up">64,120 sats</span></div>
+          </div>
+          <div class="stat-card">
+            <div class="k">Early-reader rewards paid</div>
+            <div class="v reward">0.086</div>
+            <div class="sub">BTC · to 1,094 readers</div>
+          </div>
+          <div class="stat-card">
+            <div class="k">Readers this month</div>
+            <div class="v">512</div>
+            <div class="sub delta up">+18% vs July</div>
+          </div>
+        </div>
+
+        <section class="grid-2-1" style="margin-top:26px;gap:24px;" data-od-id="studio-split">
+          <div>
+            <div class="row-between" style="margin-bottom:6px;"><h2 style="font-size:19px;">Your articles</h2><button class="btn btn-ghost btn-sm btn-arrow" type="button">View all</button></div>
+            <div style="overflow-x:auto;">
+            <table class="ds-table" style="min-width:560px;">
+              <thead><tr><th>Article</th><th>Price</th><th class="num-col">Readers</th><th class="num-col">Revenue</th><th>Status</th></tr></thead>
+              <tbody>
+                <tr>
+                  <td><a href="reader.html" style="font-weight:500;">The case for paying readers first</a><div class="meta">Aug 27</div></td>
+                  <td><span class="num">128 sats</span></td>
+                  <td class="num-col">416</td>
+                  <td class="num-col reward">+18%</td>
+                  <td><span class="draft-status st-live"><span class="st-dot"></span>Live</span></td>
+                </tr>
+                <tr>
+                  <td><a href="reader.html" style="font-weight:500;">Portfolio of one: treasury from tips</a><div class="meta">Aug 21</div></td>
+                  <td><span class="num">256 sats</span></td>
+                  <td class="num-col">289</td>
+                  <td class="num-col reward">+42%</td>
+                  <td><span class="draft-status st-live"><span class="st-dot"></span>Live</span></td>
+                </tr>
+                <tr>
+                  <td><a href="reader.html" style="font-weight:500;">A faucet is not a market</a><div class="meta">Aug 14</div></td>
+                  <td><span class="num">Free</span></td>
+                  <td class="num-col">302</td>
+                  <td class="num-col">—</td>
+                  <td><span class="draft-status st-private"><span class="st-dot"></span>Live</span></td>
+                </tr>
+                <tr>
+                  <td><a href="editor.html" style="font-weight:500;color:var(--muted);">Untitled — draft</a><div class="meta">Edited 2h ago</div></td>
+                  <td><span class="num">128 sats</span></td>
+                  <td class="num-col">—</td>
+                  <td class="num-col">—</td>
+                  <td><span class="draft-status st-draft"><span class="st-dot"></span>Draft</span></td>
+                </tr>
+              </tbody>
+            </table>
+            </div>
+          </div>
+
+          <div class="stack" style="gap:18px;">
+            <div class="card" style="padding:22px;">
+              <div class="panel-head" style="font-family:var(--font-mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:14px;">Value-net split</div>
+              <div class="split-pill" style="width:100%;justify-content:space-between;">
+                <span>Author</span><span class="seg-bar" style="flex:1;"><i class="authors" style="width:50%"></i><i class="readers" style="width:40%"></i><i class="platform" style="width:10%"></i></span><span class="num">50</span>
+              </div>
+              <div class="split-pill" style="width:100%;justify-content:space-between;margin-top:8px;">
+                <span>Early readers</span><span class="seg-bar" style="flex:1;"><i class="readers" style="width:40%"></i></span><span class="num reward">40</span>
+              </div>
+              <div class="split-pill" style="width:100%;justify-content:space-between;margin-top:8px;">
+                <span>Platform</span><span class="seg-bar" style="flex:1;"><i class="platform" style="width:10%"></i></span><span class="num">10</span>
+              </div>
+              <p style="color:var(--muted);font-size:12px;margin:16px 0 0;">On every new purchase, 40% goes to earlier readers of that article. Tips count toward the pool.</p>
+            </div>
+
+            <div class="card" style="padding:22px;">
+              <div class="panel-head" style="font-family:var(--font-mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:14px;">Notifications</div>
+              <div class="notif">
+                <span class="avatar" style="width:34px;height:34px;font-size:13px;">S</span>
+                <div class="body"><span class="text"><b>SatoshiSpirit</b> tipped <b>+40 sats</b> on your article.</span><div class="meta">2h ago</div></div>
+              </div>
+              <div class="notif">
+                <span class="avatar" style="width:34px;height:34px;font-size:13px;">风</span>
+                <div class="body"><span class="text"><b>WindHover</b> commented: <b>“The clearest explanation I’ve seen.”</b></span><div class="meta">5h ago</div></div>
+              </div>
+              <button class="btn btn-ghost btn-arrow" type="button" style="margin-top:8px;">Open inbox</button>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <div class="tabbar">
+    <a href="feed.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 12l9-9 9 9M5 10v10h14V10"/></svg>Home</a>
+    <a href="dashboard.html" class="is-active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 4h16v12H4zM4 20h16M8 8h8"/></svg>Studio</a>
+  </div>
+
+  <script>
+    function toggleTheme(btn){var el=document.documentElement;var dark=el.getAttribute('data-theme')==='dark';if(dark){el.removeAttribute('data-theme');localStorage.theme='light';}else{el.setAttribute('data-theme','dark');localStorage.theme='dark';}}
+    function switchPage(url){window.location.href=url;}
+  </script>
+</body>
+</html>

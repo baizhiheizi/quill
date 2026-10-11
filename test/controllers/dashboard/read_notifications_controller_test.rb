@@ -28,7 +28,7 @@ class Dashboard::ReadNotificationsControllerTest < ActionController::TestCase
       type: "ArticlePublishedNotifier",
       created_at: 1.minute.ago,
       updated_at: 1.minute.ago,
-      params: {}
+      params: { article: articles(:published_paid) }
     )
   end
 
@@ -75,7 +75,7 @@ class Dashboard::ReadNotificationsControllerTest < ActionController::TestCase
       updated_at: @event.updated_at
     )
 
-    assert_no_difference -> { unread.reload.read? } do
+    assert_no_difference -> { unread.reload.read? ? 1 : 0 } do
       post :create
     end
 
@@ -94,7 +94,7 @@ class Dashboard::ReadNotificationsControllerTest < ActionController::TestCase
     patch :update, params: { id: notification.id }, format: :turbo_stream
 
     assert_response :success
-    assert_equal "text/vnd.turbo-stream.html; charset=utf-8", response.media_type
+    assert_match(/\Atext\/vnd\.turbo-stream\.html/, response.media_type)
     assert notification.reload.read?
   end
 
@@ -107,7 +107,7 @@ class Dashboard::ReadNotificationsControllerTest < ActionController::TestCase
       type: "ArticlePublishedNotifier",
       created_at: 1.minute.ago,
       updated_at: 1.minute.ago,
-      params: {}
+      params: { article: articles(:published_paid) }
     )
     other_notification = Noticed::Notification.create!(
       event: other_event,

@@ -3,10 +3,9 @@
 class ApplicationController < ActionController::Base
   include Pagy::Method
   include Localizable
-  include RenderingHelper
+  include ViewerActionSets
   include Pundit::Authorization
 
-  before_action :ensure_launched!
   before_action :prepare_exception_notifier
 
   helper_method :current_session
@@ -21,17 +20,6 @@ class ApplicationController < ActionController::Base
   add_flash_types :success, :warning, :danger, :info
 
   private
-
-  def ensure_launched!
-    redirect_to landing_path unless launched?
-  end
-
-  def launched?
-    return true if Settings.launch_time.blank?
-    return true if current_user&.accessable?
-
-    Time.current > Time.zone.parse(Settings.launch_time)
-  end
 
   def authenticate_user!
     redirect_to root_path if current_user.blank?
@@ -95,5 +83,10 @@ class ApplicationController < ActionController::Base
 
   def pundit_user
     current_user
+  end
+
+  def render_not_found_page
+    @page_title = "404"
+    render "errors/not_found", status: :not_found, formats: [ :html ]
   end
 end

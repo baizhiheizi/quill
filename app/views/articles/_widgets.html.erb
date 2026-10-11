@@ -2,7 +2,7 @@
     in the single-column public layout — author card, collection, references,
     related articles, and hot tags render inline below the article body
     instead, spaced like the home feed's inline widget strip. %>
-<div class="space-y-10">
+<div class="flex flex-col gap-10">
   <%= render "users/user_card", user: article.author %>
   <%= render "collections/card", collection: article.collection if article.collection.present? %>
 

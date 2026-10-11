@@ -29,7 +29,7 @@
         </tbody>
       </table>
       <div data-infinite-scroll-target='scrollArea'></div>
-      <%= render "shared/pagination", pagy: @pagy, id: "admin_collections_pagination" %>
+      <%= render_pagination @pagy, id: "admin_collections_pagination" %>
     </div>
   <% end %>
 </div>

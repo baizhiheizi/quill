@@ -1,5 +1,5 @@
 import { Controller } from "@hotwired/stimulus";
-import { debounce } from "underscore";
+import { debounce } from "../utils/debounce";
 import { get } from "@rails/request.js";
 
 export default class extends Controller {
@@ -17,7 +17,7 @@ export default class extends Controller {
   search(query) {
     if (query) {
       this.showClearButton();
-      get(`/search?query=${query}`, {
+      get(`/search?query=${encodeURIComponent(query)}`, {
         contentType: "application/json",
         responseKind: "turbo-stream",
       });

@@ -17,7 +17,7 @@ models:
           cost:
             input: 1.2e-6
             output: 4.8e-6
-            cache_read: 0.24e-6
+            cache_read: 2.4e-7
 network:
   allowed:
     - defaults

@@ -3,5 +3,5 @@
 <% end %>
 
 <%= turbo_stream.update 'pagination' do %>
-  <%= render partial: "shared/pagination", locals: { pagy: @pagy } %>
+  <%= render_pagination @pagy %>
 <% end %>

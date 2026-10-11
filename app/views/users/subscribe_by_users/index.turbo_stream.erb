@@ -3,5 +3,5 @@
 <% end %>
 
 <%= turbo_stream.update "#{dom_id @user}_subscribers_pagination" do %>
-  <%= render partial: "shared/pagination", locals: { pagy: @pagy, id: "#{dom_id @user}_subscribers_pagination" } %>
+  <%= render_pagination @pagy, id: "#{dom_id @user}_subscribers_pagination" %>
 <% end %>

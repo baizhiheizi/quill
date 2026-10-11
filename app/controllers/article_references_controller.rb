@@ -4,17 +4,15 @@ class ArticleReferencesController < ApplicationController
   before_action :authenticate_user!
 
   def index
-    q = params[:query].to_s.strip
-    q_ransack = { title_cont: q, intro_cont: q, author_name_cont: q, tags_name_cont: q, m: "or" }
-
+    # Access listing, not discovery: the picker enumerates the articles the
+    # viewer can already reach (bought / own / free), so the block rule does
+    # not apply — same reason `ArticleSearchService` skips it for
+    # `filter: "bought"`. `current_user.available_articles` is exactly the
+    # bought ∪ own ∪ free set this action used to union in Ruby, deduped in
+    # SQL instead.
     @articles =
-      if q.blank?
-        current_user.available_articles
-      else
-        r1 = current_user.bought_articles.only_published.ransack(q_ransack).result
-        r2 = current_user.articles.only_published.ransack(q_ransack).result
-        r3 = Article.only_free.only_published.ransack(q_ransack).result
-        (r1 + r2 + r3).uniq
-      end
+      ArticleVisibility
+      .for(current_user, base: current_user.available_articles, hide_blocked_authors: false)
+      .searching(params[:query])
   end
 end

@@ -26,7 +26,7 @@ class Admin::MixinNetworkUsersControllerTest < ActionController::TestCase
   #     each User-owner row fires ~4-5 SELECTs (authorization + attachment +
   #     blob + variant_records). Article-owner rows don't walk the chain.
   #
-  # Without the user_field_preloads nested under `:owner`, a 50-row admin
+  # Without the User::AVATAR_PRELOADS chain nested under `:owner`, a 50-row admin
   # page of User-owner MixinNetworkUsers fires ~200-250 extra SELECTs. After
   # the fix: ~7 SELECTs total, regardless of page size (2 polymorphic IN-batch
   # SELECTs for the owner rows + 4-5 IN-batch SELECTs for the avatar chain).
@@ -34,7 +34,7 @@ class Admin::MixinNetworkUsersControllerTest < ActionController::TestCase
   # This test pins the preload shape so a future regression that drops the
   # user-shaped preload chain (e.g. someone refactoring the partial or the
   # controller) is caught immediately.
-  test "index_includes preloads owner with the user_field_preloads chain for User-owner rows" do
+  test "index_includes preloads owner with the User::AVATAR_PRELOADS chain for User-owner rows" do
     includes = @controller.send(:index_includes)
 
     # Only one shape in the chain — the polymorphic owner + avatar fan-out.
@@ -44,14 +44,14 @@ class Admin::MixinNetworkUsersControllerTest < ActionController::TestCase
     assert owner_chain.is_a?(Hash), "expected Hash shape, got #{owner_chain.inspect}"
     assert owner_chain.key?(:owner), "expected :owner in preload chain, got #{owner_chain.inspect}"
 
-    # The :owner chain must use the canonical admin_user_field_preloads shape
+    # The :owner chain must use the canonical User::AVATAR_PRELOADS shape
     # so User-owner rows render flat. Article-owner rows ignore the
     # user-shaped keys (Rails 7+ polymorphic preload only follows keys present
     # on each target model), so no extra SELECTs fire on that branch.
     assert_equal(
-      Admin::BaseController.new.admin_user_field_preloads,
+      User::AVATAR_PRELOADS,
       owner_chain[:owner],
-      "owner chain should match admin_user_field_preloads so User-owner rows " \
+      "owner chain should match User::AVATAR_PRELOADS so User-owner rows " \
         "render the avatar partial without N+1s"
     )
   end

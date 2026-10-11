@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 class SessionsController < ApplicationController
-  skip_before_action :ensure_launched!
-
   def new
     if from_mixin_messenger?
       @return_to = params[:return_to]

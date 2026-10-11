@@ -34,7 +34,7 @@ quill/
 ├── config/{routes,settings,credentials}/
 ├── db/migrate/
 ├── test/                # mirrors app/ (models, controllers, jobs, notifiers)
-└── .github/workflows/   # check.yml (CI), deploy.yml (Kamal)
+└── .github/workflows/   # check.yml (CI), release.yml (release + Kamal deploy)
 ```
 
 Notable: `UiHelper` (`render_modal`, `render_dropdown`); Noticed 3 notifiers in `app/notifiers/` plus `app/notifiers/delivery_methods/`; encrypted Mixin bot + AR encryption keys in `config/credentials/`.
@@ -51,7 +51,7 @@ cp config/settings.yml config/settings.local.yml       # edit host for local URL
 bin/rails db:prepare
 ```
 
-PostgreSQL required (locally or via Docker). For credential fields see `CONTRIBUTING.md` — its Ruby version is outdated; `.ruby-version` and `mise.toml` are authoritative.
+PostgreSQL required (locally or via Docker). For credential fields see `CONTRIBUTING.md`.
 
 ### Run
 
@@ -82,13 +82,35 @@ Both are stdlib-only and not run in CI. `measure-frontend-efficiency` gracefully
 
 ```bash
 bin/rubocop
+bin/lint-design-system      # design-system contracts (DS001..DS013)
 bun run lint-check          # Prettier check on app/javascript
 bun run lint                # Prettier write
 bun run build               # one-off asset build
 bun run build:css
 ```
 
-`bin/rubocop` and `bun run lint-check` also run in CI.
+`bin/rubocop`, `bin/lint-design-system`, and `bun run lint-check` also run in CI.
+
+### Design system
+
+Every view, partial, and Stimulus controller in Quill consumes one in-app
+design system. The single source-of-truth is:
+
+- **`/design-system`** — in-app reference page (`DesignSystemController#show`),
+  development-only. Production requests to the route get a generic 404 redirect
+  to `root_path`; the page is internal documentation, not a public surface.
+- **`app/views/shared/_*.html.erb`** — every primitive lives here as an ERB
+  partial; each has a thin wrapper in `UiHelper` (`render_button`,
+  `render_chip`, `render_list_row`, `render_value_note`,
+  `render_notification_card`, `render_skeleton`, `render_state_empty`,
+  `render_table`, `render_modal`, `render_dropdown`, `ui_input`, `ui_card`).
+- **`app/assets/stylesheets/application.tailwind.css`** — the token layer
+  (color, type, radius, spacing). No view should declare a new hex literal;
+  register it in the token layer and consume it via Tailwind utilities.
+- **`specs/011-comprehensive-ui-refactor/contracts/`** — the written
+  contracts each primitive must satisfy.
+- **`bin/lint-design-system`** — enforces DS001..DS013; CI fails on any
+  blocking violation.
 
 ## Code Conventions
 
@@ -166,7 +188,7 @@ Both require `gh auth login`.
 - **Access control**: `ApplicationController#ensure_launched!` redirects to landing until `Settings.launch_time` passes (unless `accessable?`); paid-article bodies (API `show`) are gated without a valid access token.
 - **Revenue math**: Article defaults — 40% early readers, 10% platform, 50% author (`readers_revenue_ratio`, `platform_revenue_ratio`, `author_revenue_ratio`); changing splits affects `Order` distribution jobs.
 - **Secrets**: Never commit `config/master.key`, `config/settings.local.yml`, or credential values; Mixin bot keys live in encrypted credentials.
-- **Ruby 4 / minitest**: Gemfile pins `minitest ~> 6.0` (locked `6.0.6`); bump with Ruby upgrades. Consult `.ruby-version`/`mise.toml` for authoritative Ruby/Bun/Node versions; `CONTRIBUTING.md` lags behind.
-- **Deploy**: Production deploy is manual (`gh workflow run Deploy`); uses Kamal + Docker Hub image `anleework/quill`.
-- **Noticed 3**: Notifiers in `app/notifiers/` inherit via `ApplicationNotifier`; user inbox uses `Noticed::Notification` (`User#notifications`). Web UI filters with `visible_in_web?` / `for_web` since DB records always exist. Custom delivery in `DeliveryMethods::{MixinBot, FlashBroadcast}`; gem extensions in `config/initializers/noticed.rb`.
+- **Ruby 4 / minitest**: Gemfile pins `minitest ~> 6.0` (locked `6.0.6`); bump with Ruby upgrades. Ruby and Bun versions are pinned in `.ruby-version`/`mise.toml`.
+- **Deploy**: Production deploy is manual (`gh workflow run Release`); uses Kamal with the GHCR image `ghcr.io/baizhiheizi/quill`.
+- **Noticed 3**: Notifiers in `app/notifiers/` inherit via `ApplicationNotifier` and each declares its kind (`notifies :the_kind`) in `app/notifiers/notification_kind.rb`; user inbox uses `Noticed::Notification` (`User#notifications`), whose `web_visible` column is written at creation and drives `for_web`. Custom delivery in `DeliveryMethods::{MixinBot, FlashBroadcast}`; gem extensions in `config/initializers/noticed.rb`.
 - **Solid Cable / Solid Queue**: Solid Cable backs the WebSocket layer; Solid Queue runs jobs (admin at `/admin/jobs`, Mission Control). Both use separate databases (`config/database.yml`) — `bin/rails db:prepare` creates and migrates all of them.

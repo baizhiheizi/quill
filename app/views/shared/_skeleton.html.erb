@@ -1,0 +1,9 @@
+<%# frozen_string_literal: true %>
+<%# specs/011-comprehensive-ui-refactor — primitive: skeleton.
+    Loading placeholder driven by design-system tokens. %>
+<%
+  width  ||= "w-full"
+  height ||= "h-4"
+  rounded ||= "rounded"
+%>
+<div class="<%= [ 'animate-pulse bg-base-200', width, height, rounded ].compact.join(' ') %>"></div>

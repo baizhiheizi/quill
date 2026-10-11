@@ -43,7 +43,7 @@ module Admin
 
       # Eager-load associations consumed by the rendered partial
       # `app/views/admin/comments/_comment.html.erb`:
-      #   - `author: admin_user_field_preloads` → `render "admin/users/field",
+      #   - `author: User::AVATAR_PRELOADS` → `render "admin/users/field",
       #     user: comment.author` → `shared/_avatar` with `thumb: true` →
       #     `user.avatar_image_thumb` walks the ActiveStorage
       #     `:avatar_attachment.blob.variant_records` chain AND
@@ -52,14 +52,14 @@ module Admin
       #     article: comment.commentable` (polymorphic; Rails 7+ groups
       #     preloaded rows by `item_type`).
       #
-      # `admin_user_field_preloads` is the canonical preload chain used by
+      # `User::AVATAR_PRELOADS` is the canonical preload chain used by
       # every sibling admin index (`Admin::OrdersController`,
       # `Admin::PaymentsController`, `Admin::TransfersController`,
       # `Admin::BonusesController`, `Admin::ArticlesController`). Without
       # it, each row triggers ~3 extra SELECTs (authorization + avatar
       # attachment + blob/variant) — for the default pagy page of 50
       # comments that's ~150 extra SELECTs per request.
-      @pagy, @comments = pagy(:countless, comments.includes(:commentable, author: admin_user_field_preloads))
+      @pagy, @comments = pagy(:countless, comments.includes(:commentable, author: User::AVATAR_PRELOADS))
     end
 
     def delete

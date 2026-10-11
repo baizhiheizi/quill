@@ -3,6 +3,13 @@
 module Localizable
   extend ActiveSupport::Concern
 
+  # `match?` is invoked from `browser_locale` below and from tests via
+  # `HOST_CLASS#match?`. Public so both call sites can use it directly
+  # without `send`.
+  def match?(sym1, sym2)
+    sym1.to_s.casecmp(sym2.to_s).zero?
+  end
+
   private
 
   def browser_locale
@@ -33,9 +40,5 @@ module Localizable
     else
       locales.last
     end
-  end
-
-  def match?(sym1, sym2)
-    sym1.to_s.casecmp(sym2.to_s).zero?
   end
 end

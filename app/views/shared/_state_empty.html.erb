@@ -1,0 +1,22 @@
+<%# frozen_string_literal: true %>
+<%# specs/011-comprehensive-ui-refactor — primitive: state-empty.
+    Used by empty states + every error page. %>
+<%
+  icon  ||= "info-circle"
+  title ||= ""
+  body  ||= nil
+  action ||= nil
+  action_href ||= nil
+%>
+<div class="ds-state-empty flex flex-col items-center justify-center px-6 py-16 text-center">
+  <span class="i-[tabler--<%= icon %>] mb-4 text-4xl text-base-content/60" aria-hidden="true"></span>
+  <h2 class="font-display text-xl"><%= title %></h2>
+  <% if body.present? %>
+    <p class="mt-2 max-w-[44ch] text-base-content/60"><%= body %></p>
+  <% end %>
+  <% if action.present? && action_href.present? %>
+    <div class="mt-6">
+      <%= render_button action, href: action_href, variant: :primary %>
+    </div>
+  <% end %>
+</div>

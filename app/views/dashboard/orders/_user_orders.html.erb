@@ -17,7 +17,7 @@
     data-tabs-content-param="payments"
     data-tabs-target="content">
     <%= turbo_frame_tag "#{dom_id current_user}_payments", src: dashboard_payments_path, loading: :lazy do %>
-      <%= render "shared/loading" %>
+      <%= render_loading %>
     <% end %>
   </div>
 </div>

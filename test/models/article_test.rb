@@ -318,4 +318,50 @@ class ArticleTest < ActiveSupport::TestCase
     refute_includes Article.singleton_methods(false), :without_free
     refute_includes Article.singleton_methods(false), :only_drafted
   end
+
+  # === may_buy_by? / authorized? decision table ===
+  # Moved from test/models/concerns/articles/purchasable_test.rb when the
+  # concern narrowed to the shared payment interface (`Purchasable`) and
+  # these Article-specific predicates moved onto the model.
+
+  test "may_buy_by? allows any caller on a published article with no blocks" do
+    article = articles(:published_paid)
+
+    assert article.may_buy_by?
+    assert article.may_buy_by?(users(:reader_one))
+  end
+
+  test "may_buy_by? allows a published free article" do
+    assert articles(:published_free).may_buy_by?(users(:reader_one))
+  end
+
+  test "may_buy_by? ignores the block state when the article is not published" do
+    article = articles(:draft)
+    users(:author).block_user(users(:reader_one))
+    users(:reader_one).block_user(users(:author))
+
+    # published? is the final predicate, so blocks do not change the
+    # outcome for a non-published article. The result is still false.
+    assert_not article.may_buy_by?(users(:reader_one))
+  end
+
+  test "authorized? denies a buyer whose only order is reward_article" do
+    article = articles(:published_paid)
+    with_quill_bot_stub do
+      order = create_buy_order!(article: article, buyer: users(:reader_one))
+      order.update!(order_type: :reward_article)
+    end
+
+    assert_not article.authorized?(users(:reader_one))
+  end
+
+  test "authorized? does not consult the collection when the article has no collection" do
+    article = Article.new
+    assert_nil article.collection
+
+    # No collection → collection&.authorized? short-circuits to nil → final
+    # result is whatever the published/buyer path returns. An unpublished
+    # article with no orders stays unauthorized.
+    assert_not article.authorized?(users(:reader_one))
+  end
 end

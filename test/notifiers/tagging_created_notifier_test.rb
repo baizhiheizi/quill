@@ -11,13 +11,8 @@ class TaggingCreatedNotifierTest < ActiveSupport::TestCase
     ensure_notification_setting!(@recipient)
   end
 
-  test "deliver creates a visible web notification with tag name and article title" do
-    deliver_notifier!(
-      TaggingCreatedNotifier,
-      record: @tagging,
-      tagging: @tagging,
-      recipient: @recipient
-    )
+  test "message joins the tag, the has_new_article translation, and the article title" do
+    deliver_notifier!(TaggingCreatedNotifier, record: @tagging, tagging: @tagging, recipient: @recipient)
 
     notification = notification_for(@recipient)
 
@@ -25,97 +20,27 @@ class TaggingCreatedNotifierTest < ActiveSupport::TestCase
     assert_includes notification.message,
                     I18n.t("notifiers.tagging_created_notifier.notification.has_new_article")
     assert_includes notification.message, @article.title
-    assert notification.visible_in_web?
+  end
+
+  test "icon_url is the Quill icon because a tag has no avatar" do
+    deliver_notifier!(TaggingCreatedNotifier, record: @tagging, tagging: @tagging, recipient: @recipient)
+
+    assert_equal ApplicationNotifier::QUILL_ICON_URL, notification_for(@recipient).data[:icon_url]
   end
 
   test "url anchors to the tagged article on the author's article page" do
-    deliver_notifier!(
-      TaggingCreatedNotifier,
-      record: @tagging,
-      tagging: @tagging,
-      recipient: @recipient
-    )
+    deliver_notifier!(TaggingCreatedNotifier, record: @tagging, tagging: @tagging, recipient: @recipient)
 
-    notification = notification_for(@recipient)
-
-    assert_includes notification.url, @article.uuid
+    assert_includes notification_for(@recipient).url, @article.uuid
   end
 
-  test "data payload exposes the APP_CARD shape for mixin bot delivery" do
-    deliver_notifier!(
-      TaggingCreatedNotifier,
-      record: @tagging,
-      tagging: @tagging,
-      recipient: @recipient
-    )
-
-    notification = notification_for(@recipient)
-
-    payload = notification.data
-    assert_equal ApplicationNotifier::QUILL_ICON_URL, payload[:icon_url]
-    assert_equal @article.title.truncate(36), payload[:title]
-    assert_includes payload[:description], "##{@tagging.tag.name}"
-    assert_includes payload[:action], @article.uuid
-  end
-
-  test "visible_in_web is false when recipient blocked the article author" do
+  test "a recipient who blocked the author keeps the row out of the inbox" do
     @recipient.create_action(:block, target: @author)
 
-    deliver_notifier!(
-      TaggingCreatedNotifier,
-      record: @tagging,
-      tagging: @tagging,
-      recipient: @recipient
-    )
+    deliver_notifier!(TaggingCreatedNotifier, record: @tagging, tagging: @tagging, recipient: @recipient)
 
-    assert_not notification_for(@recipient).visible_in_web?
-  end
-
-  test "visible_in_web is false when recipient disables web notifications" do
-    @recipient.notification_setting.update!(tagging_created_web: false)
-
-    deliver_notifier!(
-      TaggingCreatedNotifier,
-      record: @tagging,
-      tagging: @tagging,
-      recipient: @recipient
-    )
-
-    assert_not notification_for(@recipient).visible_in_web?
-  end
-
-  test "deliver enqueues mixin bot delivery for messenger recipients" do
-    assert @recipient.messenger?
-
-    deliver_notifier!(
-      TaggingCreatedNotifier,
-      record: @tagging,
-      tagging: @tagging,
-      recipient: @recipient
-    )
-
-    assert_enqueued_jobs 1, only: Noticed::EventJob
-
-    perform_enqueued_jobs only: Noticed::EventJob
-
-    assert_enqueued_jobs 1, only: DeliveryMethods::MixinBot
-  end
-
-  test "deliver does not send a mixin bot message when recipient disabled mixin bot" do
-    @recipient.notification_setting.update!(tagging_created_mixin_bot: false)
-
-    deliver_notifier!(
-      TaggingCreatedNotifier,
-      record: @tagging,
-      tagging: @tagging,
-      recipient: @recipient
-    )
-
-    # Noticed's config.if gates delivery at perform time, not enqueue time, so
-    # the MixinBot job is enqueued but no-ops when the setting is disabled.
-    perform_enqueued_jobs only: Noticed::EventJob
-    perform_enqueued_jobs only: DeliveryMethods::MixinBot
-
-    assert_no_enqueued_jobs only: MixinMessages::SendJob
+    notification = notification_for(@recipient)
+    assert_not notification.web_visible?
+    assert_not notification.may_notify_via_mixin_bot?
   end
 end

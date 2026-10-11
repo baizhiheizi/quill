@@ -1,11 +1,7 @@
 # frozen_string_literal: true
 
 class TransferProcessedNotifier < ApplicationNotifier
-  deliver_by :mixin_bot, class: "DeliveryMethods::MixinBot" do |config|
-    config.category = "APP_CARD"
-    config.bot = "RevenueBot"
-    config.if = -> { may_notify_via_mixin_bot? }
-  end
+  notifies :transfer_processed
 
   required_param :transfer
 
@@ -23,6 +19,7 @@ class TransferProcessedNotifier < ApplicationNotifier
       end
     end
 
+    # Deep-links into Mixin, so it carries an extra key the other cards omit.
     def data
       {
         icon_url:,
@@ -49,20 +46,12 @@ class TransferProcessedNotifier < ApplicationNotifier
       )
     end
 
-    def web_notification_enabled?
-      recipient.notification_setting.transfer_processed_web
-    end
-
-    def mixin_bot_notification_enabled?
-      recipient.notification_setting.transfer_processed_mixin_bot
+    def should_notify?
+      !from_quill_bot?
     end
 
     def from_quill_bot?
       params[:transfer].wallet.blank?
-    end
-
-    def may_notify_via_mixin_bot?
-      recipient_messenger? && mixin_bot_notification_enabled? && !from_quill_bot?
     end
   end
 end

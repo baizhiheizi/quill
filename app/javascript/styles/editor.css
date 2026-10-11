@@ -1,0 +1,54 @@
+@import '../../../node_modules/@37signals/lexxy/dist/stylesheets/lexxy-variables.css';
+@import '../../../node_modules/@37signals/lexxy/dist/stylesheets/lexxy-editor.css';
+@import '../../assets/stylesheets/lexxy_overrides.css';
+@import '../../../node_modules/tom-select/dist/css/tom-select.css';
+
+.full .ts-control,
+.ts-control {
+  background-color: #f4f4f4;
+  border-color: rgba(255, 255, 255, 0.05);
+  padding: 0.75rem;
+}
+
+.ts-wrapper.single.input-active .ts-control {
+  background-color: #f4f4f4;
+}
+
+[data-theme='quill-dark'] .ts-wrapper.single.input-active .ts-control,
+.dark .ts-wrapper.single.input-active .ts-control {
+  background-color: #333444;
+}
+
+[data-theme='quill-dark'] .ts-control,
+.dark .ts-control {
+  background-color: #333444;
+  border-color: rgba(255, 255, 255, 0.05);
+  color: rgba(255, 255, 255, 0.8);
+}
+
+[data-theme='quill-dark'] .ts-control input,
+.dark .ts-control input {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+[data-theme='quill-dark'] .ts-dropdown input,
+.dark .ts-dropdown input {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.ts-dropdown {
+  background-color: #f4f4f4;
+}
+
+[data-theme='quill-dark'] .ts-dropdown,
+.dark .ts-dropdown {
+  background-color: #333444;
+  color: white;
+  border: rgba(255, 255, 255, 0.05);
+}
+
+[data-theme='quill-dark'] .ts-dropdown .active,
+.dark .ts-dropdown .active {
+  background-color: #444655;
+  color: white;
+}
