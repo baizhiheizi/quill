@@ -85,6 +85,14 @@ class ArticlesControllerTest < IntegrationTestCase
     assert_match "no-such-article-xyz123", response.body
   end
 
+  test "index coerces ?page=0 to the first page instead of raising" do
+    # Regression for #2137: CountlessPaginator raises Pagy::OptionError on
+    # `?page=0` because it preserves the raw param before the integer check.
+    get articles_path(page: "0")
+
+    assert_response :success
+  end
+
   test "content fields partial renders lexxy editor" do
     html = ApplicationController.render(
       inline: <<~ERB,

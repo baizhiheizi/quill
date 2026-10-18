@@ -7,6 +7,7 @@ class ApplicationController < ActionController::Base
   include Pundit::Authorization
 
   before_action :prepare_exception_notifier
+  before_action :coerce_pagination_params
 
   helper_method :current_session
   helper_method :current_user
@@ -67,6 +68,16 @@ class ApplicationController < ActionController::Base
     request.env["exception_notifier.exception_data"] = {
       current_user:
     }
+  end
+
+  # Countless paginator preserves raw page params (`"0"` survives parsing)
+  # and raises `Pagy::OptionError` when page < 1. Coerce such inputs to 1
+  # before pagy resolves them. See #2137.
+  def coerce_pagination_params
+    return unless params[:page].is_a?(String)
+
+    page_int = params[:page].to_i
+    params[:page] = "1" if page_int < 1
   end
 
   def safe_return_to(fallback = root_path)
