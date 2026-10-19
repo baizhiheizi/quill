@@ -93,6 +93,16 @@ class ArticlesControllerTest < IntegrationTestCase
     assert_response :success
   end
 
+  test "index coerces out-of-range and unparseable ?page= values to the first page" do
+    # Pagy::OptionError fires for any `page` that resolves to < 1, not just
+    # `"0"`. Negative, empty, and non-numeric strings all reach the countless
+    # paginator as raw strings and trip the same assertion.
+    %w[-1 abc 0foo].each do |bad|
+      get articles_path(page: bad)
+      assert_response :success, "expected success for page=#{bad.inspect}"
+    end
+  end
+
   test "content fields partial renders lexxy editor" do
     html = ApplicationController.render(
       inline: <<~ERB,

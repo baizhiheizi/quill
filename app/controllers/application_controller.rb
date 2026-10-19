@@ -73,11 +73,18 @@ class ApplicationController < ActionController::Base
   # Countless paginator preserves raw page params (`"0"` survives parsing)
   # and raises `Pagy::OptionError` when page < 1. Coerce such inputs to 1
   # before pagy resolves them. See #2137.
+  #
+  # Pagy reads from `request.GET` (a memoized HashWithIndifferentAccess),
+  # not the controller's `params`, so both must be updated.
   def coerce_pagination_params
     return unless params[:page].is_a?(String)
 
     page_int = params[:page].to_i
-    params[:page] = "1" if page_int < 1
+    return unless page_int < 1
+
+    new_value = "1"
+    params[:page] = new_value
+    request.GET["page"] = new_value
   end
 
   def safe_return_to(fallback = root_path)
