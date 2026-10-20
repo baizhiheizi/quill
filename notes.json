@@ -1,15 +1,21 @@
 {
   "version": 1,
   "cursors": {
-    "labelling_after": 2166,
-    "investigation_after": 2166
+    "labelling_after": 2170,
+    "investigation_after": 2170
   },
   "issues": [
+    {
+      "number": 2170,
+      "state": "awaiting_approval",
+      "updated_at": "2026-10-20",
+      "note": "asset_id overwritten with BTC on create. Fix + tests in draft PR #2171; commented on the issue. Close it once #2171 merges."
+    },
     {
       "number": 2137,
       "state": "awaiting_approval",
       "updated_at": "2026-10-20",
-      "note": "Pagy::OptionError on ?page=. PR #2163 (draft) extended 2026-10-20 to the admin namespace via a CoercesPaginationParams concern. Awaiting maintainer review; do not open a second pagy PR."
+      "note": "Pagy::OptionError on ?page=. PR #2163 (draft) covers both ApplicationController and Admin::BaseController. CI green. Do not open a second pagy PR."
     },
     {
       "number": 2161,
@@ -44,32 +50,46 @@
   ],
   "fixes": [
     {
+      "issue": 2170,
+      "pr": 2171,
+      "branch": "repo-assist/fix-article-asset-id-override-50fabce3ed7d76a6",
+      "status": "open",
+      "updated_at": "2026-10-20",
+      "note": "Commit 1: stop overwriting a user-selected asset_id with BTC. Commit 2: nil-guard both currency lookups (NoMethodError -> 500 when the asset had no Currency row), widen test settings to four assets, add currency fixtures + test/config/supported_assets_test.rb. Suite 1595 runs / 0 failures."
+    },
+    {
       "issue": 2137,
       "pr": 2163,
       "branch": "repo-assist/fix-issue-2137-pagy-page-zero-33192aa93be74f0f",
       "status": "open",
       "updated_at": "2026-10-20",
-      "note": "Added CoercesPaginationParams concern shared by ApplicationController and Admin::BaseController, plus test/controllers/admin/pagination_coercion_test.rb. Admin gap reproduced first (13 actions still raised). Suite 1589 runs, 0 failures."
+      "note": "Shared CoercesPaginationParams concern in ApplicationController and Admin::BaseController, plus test/controllers/admin/pagination_coercion_test.rb. CI green."
     }
   ],
   "checks": [
     {
       "area": "tests",
       "checked_at": "2026-10-20",
-      "result": "Full non-system suite: 1587-1589 runs, ~5075 assertions, 0 failures, 0 errors, 2 skips. CI green on PR #2163.",
+      "result": "Full non-system suite: 1595 runs, 5098 assertions, 0 failures, 0 errors, 2 skips. Green after widening the test settings to four assets.",
       "follow_up": "Run via ruby -Itest glob loader, NOT `bin/rails test`: the rake path pulls test:prepare -> css:install and aborts without bun, and a piped exit 0 masks the abort."
     },
     {
       "area": "tooling",
       "checked_at": "2026-10-20",
-      "result": "bin/rubocop 600-602 files no offenses; bin/rails zeitwerk:check all good; bin/lint-design-system 43 pre-existing DS010 warnings, none blocking, none introduced.",
+      "result": "bin/rubocop 601 files no offenses; bin/rails zeitwerk:check all good; bin/lint-design-system 43 pre-existing DS010 warnings, none blocking, none introduced.",
       "follow_up": null
+    },
+    {
+      "area": "ci",
+      "checked_at": "2026-10-20",
+      "result": "PR #2171's Check job failed in `bun install --frozen-lockfile`: `mise/shims/node: Text file busy` (exit 126) - a self-hosted runner race, not the branch. Same flake hit main and two dependabot PRs this month.",
+      "follow_up": "A retry wrapper around the dependency-install step in check.yml would make the workflow self-healing; the durable fix is the runner's job-concurrency setting."
     },
     {
       "area": "docs",
       "checked_at": "2026-10-20",
-      "result": "CHANGELOG.md had missed all 22 commits since release-2026-09-07. Synced on branch repo-assist/changelog-unreleased-sync (draft PR): mixin_bot 3.0 Blaze reactor, json ~>2.21 pin + revert history, #2105/#2107 crashes, #2122 doc fixes.",
-      "follow_up": "Number that PR from the branch name; the run could not record the number because safe outputs apply after the agent exits."
+      "result": "CHANGELOG.md had missed all 22 commits since release-2026-09-07. Synced on branch repo-assist/changelog-unreleased-sync (draft PR #2172): mixin_bot 3.0 Blaze reactor, json ~>2.21 pin, #2105/#2107 crashes.",
+      "follow_up": null
     },
     {
       "area": "release",
@@ -80,26 +100,16 @@
     {
       "area": "code",
       "checked_at": "2026-10-20",
-      "result": "Found: Article#setup_attributes set self.asset_id = Currency::BTC_ASSET_ID unconditionally in before_validation on:create, discarding the author's editor selection. Verified against production SUPPORTED_ASSETS (4 assets).",
-      "follow_up": "Fixed on branch repo-assist/fix-article-asset-id-override (draft PR). Also required correcting test/models/user_test.rb, which passed only because of this bug."
+      "result": "Found and fixed: Article#setup_attributes overwrote asset_id with BTC on create, and both currency lookups dereferenced nil -> NoMethodError (500) when the asset had no Currency row.",
+      "follow_up": null
     }
   ],
   "completed_actions": [],
   "priorities": [
     {
-      "task": 3,
-      "item": "Nil-guard Article#ensure_price_not_too_low against a nil currency",
-      "note": "An asset_id with no matching Currency row raises NoMethodError (500) instead of failing the inclusion validation. Already reachable via update_article_params. Documented in the asset_id issue; left out to keep that PR surgical."
-    },
-    {
-      "task": 9,
-      "item": "config/settings/test.yml narrows supported_assets to BTC only",
-      "note": "No test can exercise a multi-asset path; that blind spot hid the asset_id bug. Widening the test settings and currency fixtures would catch a whole class of defects."
-    },
-    {
       "task": 9,
       "item": "Sweep untested helpers: dashboard_helper, design_system_helper, HtmlPostProcessor",
-      "note": "Named as future work on 2026-10-19. Neither helper has a test file. Extends the API::RenderingHelper contract work in PR #2169."
+      "note": "Named as future work on 2026-10-19 and repeated on the monthly issue. Neither helper has a test file. Extends the API::RenderingHelper contract work in PR #2169."
     },
     {
       "task": 6,
@@ -108,8 +118,13 @@
     },
     {
       "task": 2,
-      "item": "Recover the two PR numbers raised on 2026-10-20",
-      "note": "repo-assist/fix-article-asset-id-override and repo-assist/changelog-unreleased-sync were created as draft PRs whose numbers were not yet assigned when memory was written."
+      "item": "Re-check the four repo-assist drafts once CI re-runs on #2171",
+      "note": "#2163 and #2169 are green; #2172 has no Check run because check.yml filters on paths and CHANGELOG.md is not one - expected, not a gap."
+    },
+    {
+      "task": 4,
+      "item": "Make check.yml self-healing against the mise-shim 'Text file busy' race",
+      "note": "Newly identified 2026-10-20. A retry loop around `bun install --frozen-lockfile` would stop infra flakes from blocking PRs."
     }
   ]
 }
