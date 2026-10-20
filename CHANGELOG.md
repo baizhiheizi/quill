@@ -1,5 +1,61 @@
 # Changelog
 
+## Unreleased
+
+### mixin_bot 3.0 and the Blaze async reactor
+
+`mixin_bot` is now `~> 3.0` (locked 3.0.2). The gem replaced its EventMachine
+Blaze client with `MixinBot::Blaze::Reactor` (async-websocket), which owns
+connect, keepalive, read, ack and reconnect-with-backoff. `bin/mixin_blaze`
+shrinks accordingly; the standalone process, its Kamal role, and the
+`Settings.blaze_enable` gate are unchanged — only the Blaze half of the feed
+moved.
+
+`QuillBot` gained the reactor wiring and `MixinMessage` gained the message
+model, both covered by new tests.
+
+### Deliberate `json` pin — do not bump
+
+`json` is held at `~> 2.21`. Rails 8.1 calls `JSON.parse(source, options)`
+positionally; json 3 dropped the positional options hash, so **every json
+column read raises `ArgumentError` and 500s any controller that touches one**.
+
+Dependabot #2125 bumped to json 3.0.2 and broke main; #2130 reverted it. The
+pin carries an explanatory comment in the `Gemfile` — keep it until a Rails
+release adopts the json 3 signature.
+
+### Crash fixes
+
+- **Profile tab crash (#2105)** — any `tab` param other than
+  `published`/`bought` left the articles relation `nil` and blew up on
+  `.with_associations` (`NoMethodError`). Unknown tabs now fall back to
+  `published`.
+- **Output buffer encoding (#2107)** — a binary-tagged (ASCII-8BIT) string
+  carrying non-ASCII bytes raised `Encoding::CompatibilityError` against a
+  UTF-8 output buffer, 500ing the page for every visitor (PostHog 01a0918e:
+  14 users hit `/articles` in a 7-second window). Binary-tagged strings are
+  re-tagged to UTF-8 on each `append=` path, since `append=`/`concat` are
+  class-body aliases of `<<` and would otherwise bypass a prepended `<<`.
+
+### Dependencies
+
+`ransack` 4.4.1 → 5.0.0 (#2128, now locked 6.0.0), plus routine patch bumps
+(lexxy, posthog-rails, sqlite3, simplecov, bootsnap, aws-sdk-s3,
+image_processing, mission_control-jobs, selenium-webdriver).
+
+### Tooling and docs corrections
+
+- `docs/how-to/deploy-with-kamal.md` corrected against the real deployment:
+  storage server IP, `Release` (not `Deploy`) as the workflow name,
+  `bin/kamal deploy --skip-push`, `KAMAL_REGISTRY_PASSWORD` as a ghcr.io
+  login, and the rollback snippet (`workflow_dispatch` takes a branch or tag,
+  not a bare SHA).
+- `bin/measure-frontend-efficiency` now reports `reduced_motion_rule`
+  alongside `motion_reduce_aware`. Motion is gated by one
+  `@media (prefers-reduced-motion: reduce)` rule in the token layer, so the
+  view-level count alone read as a false gap.
+- `AGENTS.md` corrected: Docker Hub image name, `deploy.yml` → `release.yml`.
+
 ## Unreleased — specs/011-comprehensive-ui-refactor
 
 ### Design system foundation
