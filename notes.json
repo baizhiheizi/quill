@@ -1,12 +1,115 @@
 {
   "version": 1,
   "cursors": {
-    "labelling_after": null,
-    "investigation_after": null
+    "labelling_after": 2166,
+    "investigation_after": 2166
   },
-  "issues": [],
-  "fixes": [],
-  "checks": [],
+  "issues": [
+    {
+      "number": 2137,
+      "state": "awaiting_approval",
+      "updated_at": "2026-10-20",
+      "note": "Pagy::OptionError on ?page=. PR #2163 (draft) extended 2026-10-20 to the admin namespace via a CoercesPaginationParams concern. Awaiting maintainer review; do not open a second pagy PR."
+    },
+    {
+      "number": 2161,
+      "state": "deferred",
+      "updated_at": "2026-10-19",
+      "note": "[aw] startup-failure notice; repo memory was corrupted on that run only. Listed for maintainer closure in the monthly issue. Do not comment again."
+    },
+    {
+      "number": 2162,
+      "state": "deferred",
+      "updated_at": "2026-10-19",
+      "note": "[aw] missing terminal safe output; superseded by run 39200571453. Listed for maintainer closure. Do not comment again."
+    },
+    {
+      "number": 2165,
+      "state": "deferred",
+      "updated_at": "2026-10-19",
+      "note": "[aw] failed-run notice, superseded. Listed for maintainer closure. Do not comment again."
+    },
+    {
+      "number": 2166,
+      "state": "deferred",
+      "updated_at": "2026-10-19",
+      "note": "[aw] failed-jobs notice, superseded. Listed for maintainer closure. Do not comment again."
+    },
+    {
+      "number": 2153,
+      "state": "deferred",
+      "updated_at": "2026-10-20",
+      "note": "[aw] Detection Runs thread; machine-generated workflow telemetry, not a code defect. No action unless a maintainer asks."
+    }
+  ],
+  "fixes": [
+    {
+      "issue": 2137,
+      "pr": 2163,
+      "branch": "repo-assist/fix-issue-2137-pagy-page-zero-33192aa93be74f0f",
+      "status": "open",
+      "updated_at": "2026-10-20",
+      "note": "Added CoercesPaginationParams concern shared by ApplicationController and Admin::BaseController, plus test/controllers/admin/pagination_coercion_test.rb. Admin gap reproduced first (13 actions still raised). Suite 1589 runs, 0 failures."
+    }
+  ],
+  "checks": [
+    {
+      "area": "tests",
+      "checked_at": "2026-10-20",
+      "result": "Full non-system suite: 1587-1589 runs, ~5075 assertions, 0 failures, 0 errors, 2 skips. CI green on PR #2163.",
+      "follow_up": "Run via ruby -Itest glob loader, NOT `bin/rails test`: the rake path pulls test:prepare -> css:install and aborts without bun, and a piped exit 0 masks the abort."
+    },
+    {
+      "area": "tooling",
+      "checked_at": "2026-10-20",
+      "result": "bin/rubocop 600-602 files no offenses; bin/rails zeitwerk:check all good; bin/lint-design-system 43 pre-existing DS010 warnings, none blocking, none introduced.",
+      "follow_up": null
+    },
+    {
+      "area": "docs",
+      "checked_at": "2026-10-20",
+      "result": "CHANGELOG.md had missed all 22 commits since release-2026-09-07. Synced on branch repo-assist/changelog-unreleased-sync (draft PR): mixin_bot 3.0 Blaze reactor, json ~>2.21 pin + revert history, #2105/#2107 crashes, #2122 doc fixes.",
+      "follow_up": "Number that PR from the branch name; the run could not record the number because safe outputs apply after the agent exits."
+    },
+    {
+      "area": "release",
+      "checked_at": "2026-10-20",
+      "result": "NOT released. 22 commits unreleased since 2026-09-07, incl. a major dep bump and two 500 fixes. Release is workflow_dispatch on release.yml and deploys to production.",
+      "follow_up": "Never trigger Release: it deploys to production and needs maintainer approval. Flagged in the monthly issue instead."
+    },
+    {
+      "area": "code",
+      "checked_at": "2026-10-20",
+      "result": "Found: Article#setup_attributes set self.asset_id = Currency::BTC_ASSET_ID unconditionally in before_validation on:create, discarding the author's editor selection. Verified against production SUPPORTED_ASSETS (4 assets).",
+      "follow_up": "Fixed on branch repo-assist/fix-article-asset-id-override (draft PR). Also required correcting test/models/user_test.rb, which passed only because of this bug."
+    }
+  ],
   "completed_actions": [],
-  "priorities": []
+  "priorities": [
+    {
+      "task": 3,
+      "item": "Nil-guard Article#ensure_price_not_too_low against a nil currency",
+      "note": "An asset_id with no matching Currency row raises NoMethodError (500) instead of failing the inclusion validation. Already reachable via update_article_params. Documented in the asset_id issue; left out to keep that PR surgical."
+    },
+    {
+      "task": 9,
+      "item": "config/settings/test.yml narrows supported_assets to BTC only",
+      "note": "No test can exercise a multi-asset path; that blind spot hid the asset_id bug. Widening the test settings and currency fixtures would catch a whole class of defects."
+    },
+    {
+      "task": 9,
+      "item": "Sweep untested helpers: dashboard_helper, design_system_helper, HtmlPostProcessor",
+      "note": "Named as future work on 2026-10-19. Neither helper has a test file. Extends the API::RenderingHelper contract work in PR #2169."
+    },
+    {
+      "task": 6,
+      "item": "Confirm the PostHog Pagy::OptionError fingerprint drops after PR #2163 merges",
+      "note": "If it does not, another paginating entry point remains beyond the admin namespace that was fixed."
+    },
+    {
+      "task": 2,
+      "item": "Recover the two PR numbers raised on 2026-10-20",
+      "note": "repo-assist/fix-article-asset-id-override and repo-assist/changelog-unreleased-sync were created as draft PRs whose numbers were not yet assigned when memory was written."
+    }
+  ]
 }
