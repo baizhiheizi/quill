@@ -16,8 +16,19 @@ available_locales:
   - zh-CN
 
 # assets
+# Keep this list identical to `supported_assets` in config/settings.yml.
+# Narrowing it here hides every non-BTC pricing path from the whole test
+# suite — that blind spot is what let the article editor's asset selection
+# ship broken. `test/config/supported_assets_test.rb` fails if the two lists
+# drift.
 supported_assets:
   # BTC
   - c6d0c728-2624-429b-8e0d-d9d19b6592fa
+  # XIN
+  - c94ac88f-4671-3976-b60a-09064f1811e8
+  # ETH
+  - 43d61dcd-e413-450d-80b8-101d5e903357
+  # pUSD
+  - 31d2ea9c-95eb-3355-b65b-ba096853bc18
 
 encryption_salt: yleyZdwghSvfeMImsYHjXNZpMajPzdXGObFssdsyzx8=

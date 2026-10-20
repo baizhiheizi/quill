@@ -25,3 +25,30 @@ btc:
   raw:
     name: Bitcoin
     icon_url: https://example.com/btc.png
+
+eth:
+  asset_id: 43d61dcd-e413-450d-80b8-101d5e903357
+  symbol: ETH
+  price_btc: 0.03
+  price_usd: 2000.0
+  raw:
+    name: Ethereum
+    icon_url: https://example.com/eth.png
+
+xin:
+  asset_id: c94ac88f-4671-3976-b60a-09064f1811e8
+  symbol: XIN
+  price_btc: 0.0000004
+  price_usd: 0.02
+  raw:
+    name: Mixin Xin
+    icon_url: https://example.com/xin.png
+
+pusd:
+  asset_id: 31d2ea9c-95eb-3355-b65b-ba096853bc18
+  symbol: pUSD
+  price_btc: 0.00002
+  price_usd: 1.0
+  raw:
+    name: Mixin USD
+    icon_url: https://example.com/pusd.png

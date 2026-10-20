@@ -365,25 +365,63 @@ class ArticleTest < ActiveSupport::TestCase
     assert_not article.authorized?(users(:reader_one))
   end
 
-  # `config/settings/test.yml` narrows `supported_assets` to BTC, so these
-  # exercise `setup_attributes` directly rather than a full save — the
-  # production config lists four assets and the article editor renders a
-  # selector over all of them.
-  test "setup_attributes preserves a caller-supplied asset_id" do
-    article = Article.new
-    article.asset_id = "43d61dcd-e413-450d-80b8-101d5e903357" # ETH
-    article.price = BigDecimal("0.001") # set, so the `currency` lookup is skipped
+  # === asset selection ===
+  # `config/settings/test.yml` mirrors `config/settings.yml`, so the article
+  # editor's asset selector can be exercised end to end instead of poking at
+  # `setup_attributes` in isolation.
 
-    article.send(:setup_attributes)
+  test "an article keeps the asset the author selected" do
+    article = Article.new(
+      title: "Priced in ETH",
+      intro: "An article the author priced in ether.",
+      price: BigDecimal("0.001"),
+      asset_id: currencies(:eth).asset_id,
+      author: users(:author)
+    )
 
-    assert_equal "43d61dcd-e413-450d-80b8-101d5e903357", article.asset_id
+    assert article.save
+    assert_equal currencies(:eth).asset_id, article.asset_id
+    assert_equal currencies(:eth), article.currency
   end
 
-  test "setup_attributes still defaults to BTC when asset_id is blank" do
-    article = Article.new
+  test "a new article defaults to BTC when the author selected no asset" do
+    article = Article.new(
+      title: "Priced in BTC",
+      intro: "An article the author left on the default asset.",
+      author: users(:author)
+    )
 
-    article.send(:setup_attributes)
-
+    assert article.save
     assert_equal Currency::BTC_ASSET_ID, article.asset_id
+    assert_equal currencies(:btc), article.currency
+  end
+
+  test "an asset without a currency row is invalid instead of raising" do
+    article = Article.new(
+      title: "Priced in an unknown asset",
+      intro: "An article pointing at an asset the currency sync has not seen.",
+      price: BigDecimal("0.001"),
+      asset_id: SecureRandom.uuid,
+      author: users(:author)
+    )
+
+    # `belongs_to :currency` is required, so the missing row surfaces as a
+    # validation error. It used to raise NoMethodError (HTTP 500) from
+    # `ensure_price_not_too_low`.
+    assert_not article.valid?
+    assert_includes article.errors.full_messages, "Currency must exist"
+  end
+
+  test "the price floor follows the selected asset" do
+    article = Article.new(
+      title: "Priced in ether",
+      intro: "An article priced below the ether floor.",
+      price: BigDecimal("0.0000001"),
+      asset_id: currencies(:eth).asset_id,
+      author: users(:author)
+    )
+
+    assert_not article.valid?
+    assert_includes article.errors.full_messages, "Price < $0.1"
   end
 end
