@@ -364,4 +364,26 @@ class ArticleTest < ActiveSupport::TestCase
     # article with no orders stays unauthorized.
     assert_not article.authorized?(users(:reader_one))
   end
+
+  # `config/settings/test.yml` narrows `supported_assets` to BTC, so these
+  # exercise `setup_attributes` directly rather than a full save — the
+  # production config lists four assets and the article editor renders a
+  # selector over all of them.
+  test "setup_attributes preserves a caller-supplied asset_id" do
+    article = Article.new
+    article.asset_id = "43d61dcd-e413-450d-80b8-101d5e903357" # ETH
+    article.price = BigDecimal("0.001") # set, so the `currency` lookup is skipped
+
+    article.send(:setup_attributes)
+
+    assert_equal "43d61dcd-e413-450d-80b8-101d5e903357", article.asset_id
+  end
+
+  test "setup_attributes still defaults to BTC when asset_id is blank" do
+    article = Article.new
+
+    article.send(:setup_attributes)
+
+    assert_equal Currency::BTC_ASSET_ID, article.asset_id
+  end
 end

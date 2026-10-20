@@ -251,7 +251,7 @@ class UserTest < ActiveSupport::TestCase
       title: "Counter-cache test",
       intro: "intro",
       author: author,
-      asset_id: SecureRandom.uuid,
+      asset_id: Currency::BTC_ASSET_ID,
       price: 0.0001,
       state: :published
     )

@@ -430,7 +430,7 @@ class Article < ApplicationRecord
     return unless new_record?
 
     self.uuid = SecureRandom.uuid if uuid.blank?
-    self.asset_id = Currency::BTC_ASSET_ID
+    self.asset_id = Currency::BTC_ASSET_ID if asset_id.blank?
     self.price = currency.minimal_price_amount if price.blank?
   end
 
