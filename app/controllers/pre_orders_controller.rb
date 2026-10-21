@@ -20,6 +20,8 @@ class PreOrdersController < ApplicationController
       end
 
       format.turbo_stream do
+        return redirect_to root_path if @pre_order.blank?
+
         render :show
       end
     end
@@ -27,12 +29,13 @@ class PreOrdersController < ApplicationController
 
   def new
     article = Article.published.find_by uuid: params[:article_uuid]
+    order_type = params[:order_type].presence_in(PreOrder.order_types)
 
-    return if article.blank?
+    return redirect_to root_path if article.blank? || order_type.blank?
 
-    authorize_pre_order_item!(article, params[:order_type])
+    authorize_pre_order_item!(article, order_type)
 
-    @pre_order = current_user.pre_orders.new item: article, order_type: params[:order_type]
+    @pre_order = current_user.pre_orders.new item: article, order_type: order_type
   end
 
   def create

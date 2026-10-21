@@ -33,6 +33,12 @@ class PreOrder < ApplicationRecord
 
   enumerize :order_type, in: %i[buy_article reward_article buy_collection]
 
+  # The order types a request may ask for, so a controller can validate the
+  # value before it reaches the view.
+  def self.order_types
+    enumerized_attributes[:order_type].values.map(&:value)
+  end
+
   belongs_to :item, polymorphic: true
   belongs_to :payer, class_name: "User", primary_key: :mixin_uuid
   belongs_to :payee, class_name: "MixinNetworkUser", primary_key: :uuid, optional: true

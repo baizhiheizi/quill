@@ -29,7 +29,7 @@ module Admin
           transfers.where(transfer_type: @transfer_type)
         end
 
-      @order_by = params[:order_by] || "created_at_desc"
+      @order_by = allowed_param(:order_by, "created_at_desc", %w[processed_at_desc created_at_desc created_at_asc])
       transfers =
         case @order_by
         when "processed_at_desc"

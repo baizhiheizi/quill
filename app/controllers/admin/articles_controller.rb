@@ -52,7 +52,7 @@ module Admin
           articles.where(state: @state)
         end
 
-      @order_by = params[:order_by] || "created_at_desc"
+      @order_by = allowed_param(:order_by, "created_at_desc", %w[published_at_desc published_at_asc created_at_desc created_at_asc revenue_usd orders_count comments_count upvotes_count downvotes_count])
       articles =
         case @order_by
         when "published_at_desc"

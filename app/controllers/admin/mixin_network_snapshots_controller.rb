@@ -42,7 +42,7 @@ module Admin
           mixin_network_snapshots
         end
 
-      @order_by = params[:order_by] || "created_at_desc"
+      @order_by = allowed_param(:order_by, "created_at_desc", %w[processed_at_desc created_at_desc created_at_asc])
       mixin_network_snapshots =
         case @order_by
         when "processed_at_desc"

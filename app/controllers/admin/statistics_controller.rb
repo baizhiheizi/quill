@@ -14,7 +14,7 @@ module Admin
           statistics.where(type: @type)
         end
 
-      @order_by = params[:order_by] || "datetime_desc"
+      @order_by = allowed_param(:order_by, "datetime_desc", %w[datetime_desc datetime_asc])
       statistics =
         case @order_by
         when "datetime_desc"

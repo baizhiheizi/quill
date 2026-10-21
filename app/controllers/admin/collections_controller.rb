@@ -4,7 +4,7 @@ module Admin
   class CollectionsController < Admin::BaseController
     def index
       @state = params[:state] || "all"
-      @order_by = params[:order_by] || "created_at_desc"
+      @order_by = allowed_param(:order_by, "created_at_desc", %w[created_at_desc created_at_asc])
 
       collections = Collection.includes(:author, :currency)
 

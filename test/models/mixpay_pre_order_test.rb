@@ -183,6 +183,24 @@ class MixpayPreOrderTest < ActiveSupport::TestCase
     end
   end
 
+  # The pay button partial always renders `pre_order.pay_url(pay_asset.asset_id)`,
+  # but `MixpayPreOrder#pay_url` used to override the base method with a
+  # zero-argument signature, so every MixPay pre-order raised
+  # `ArgumentError` while rendering the button.
+  test "pay_url accepts the optional pay asset argument the pay button passes" do
+    with_quill_bot_stub do
+      pre_order = MixpayPreOrder.create!(
+        item: @article,
+        payer: @reader,
+        order_type: :buy_article,
+        amount: @article.price,
+        asset_id: @article.asset_id
+      )
+
+      assert_equal pre_order.pay_url, pre_order.pay_url(pre_order.asset_id)
+    end
+  end
+
   test "pay_url returnTo points to pre_order_url scoped to follow_id" do
     with_quill_bot_stub do
       pre_order = MixpayPreOrder.create!(
