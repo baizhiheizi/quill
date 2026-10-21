@@ -63,6 +63,16 @@ class Dashboard::ArticlesControllerTest < ActionController::TestCase
     assert_includes articles, article
   end
 
+  test "index falls back to the drafted tab for an unknown tab value" do
+    # An unknown `tab` used to leave the scope nil and blow up on
+    # `.with_associations` below (the same class of bug #2105 fixed in
+    # `Users::ArticlesController#index`).
+    get :index, params: { tab: "not-a-tab" }
+
+    assert_response :success
+    assert_equal "drafted", @controller.instance_variable_get(:@tab)
+  end
+
   test "index renders empty state for user with no articles" do
     # reader_two has no authored articles
     buyer = users(:reader_two)

@@ -2,7 +2,11 @@
 
 class Dashboard::ArticlesController < Dashboard::BaseController
   def index
-    @tab = params[:tab] || "drafted"
+    # Only these four are real tabs. Any other `tab` value (typo, stale
+    # link, probe) used to leave the scope nil and blow up on
+    # `.with_associations` below — the same bug #2105 fixed in
+    # `Users::ArticlesController#index`.
+    @tab = params[:tab].presence_in(%w[drafted hidden published bought]) || "drafted"
     @active_section = @tab == "bought" ? :read : :write
 
     articles =
