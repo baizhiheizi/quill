@@ -142,4 +142,34 @@ class RichTextRenderServiceTest < ActiveSupport::TestCase
     assert_equal HtmlPostProcessor::IFRAME_SRC_WHITE_LIST_REGEX,
                  RichTextRenderService::IFRAME_SRC_WHITE_LIST_REGEX
   end
+
+  test "strips script tags from author-supplied html" do
+    html = RichTextRenderService.call(
+      "<p>hi</p><script>alert(document.domain)</script>",
+      type: :default
+    )
+
+    refute_includes html, "<script"
+    refute_includes html, "alert(document.domain)"
+    assert_includes html, "<p>hi</p>"
+  end
+
+  test "strips script tags from an ActionText::RichText body" do
+    rich_text = ActionText::RichText.new(
+      body: "<p>hi</p><script>alert(document.domain)</script>"
+    )
+    html = RichTextRenderService.call(rich_text, type: :default)
+
+    refute_includes html, "<script"
+    assert_includes html, "<p>hi</p>"
+  end
+
+  test "strips event handler attributes" do
+    html = RichTextRenderService.call(
+      '<p onclick="alert(1)">hi</p>',
+      type: :default
+    )
+
+    refute_includes html, "onclick"
+  end
 end

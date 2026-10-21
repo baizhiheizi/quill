@@ -46,7 +46,7 @@ module RichTextContent
 
   def content_body
     if migrated_content?
-      content.body.to_html
+      HtmlSanitizer.call(content.body.to_html)
     elsif legacy_markdown_content.present?
       MarkdownRenderService.call(legacy_markdown_content, type: :default)
     else

@@ -13,7 +13,7 @@ class MarkdownRenderService
   end
 
   def call
-    @html = Kramdown::Document.new(@content, input: "GFM").to_html
+    @html = HtmlSanitizer.call(Kramdown::Document.new(@content, input: "GFM").to_html)
 
     case @type
     when :default

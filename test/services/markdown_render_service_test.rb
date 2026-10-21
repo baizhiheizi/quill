@@ -219,4 +219,21 @@ class MarkdownRenderServiceTest < ActiveSupport::TestCase
     # have to consciously replace it with real coverage.
     refute_includes MarkdownRenderService.instance_methods(false), :parse_mention_user
   end
+
+  test "strips script tags from author-supplied markdown" do
+    html = MarkdownRenderService.call(
+      "hello\n\n<script>alert(document.domain)</script>",
+      type: :default
+    )
+
+    refute_includes html, "<script"
+    refute_includes html, "alert(document.domain)"
+    assert_includes html, "hello"
+  end
+
+  test "strips inline event handler attributes" do
+    html = MarkdownRenderService.call('<p onclick="alert(1)">hi</p>', type: :default)
+
+    refute_includes html, "onclick"
+  end
 end
