@@ -1,10 +1,28 @@
 {
   "version": 1,
   "cursors": {
-    "labelling_after": 2170,
-    "investigation_after": 2170
+    "labelling_after": 2179,
+    "investigation_after": 2179
   },
   "issues": [
+    {
+      "number": 2179,
+      "state": "awaiting_approval",
+      "updated_at": "2026-10-21",
+      "note": "Unvalidated-param 500s (pre-orders + 12 admin indexes). Fixed in a draft PR on branch repo-assist/fix-issue-2179-nil-query-params-3f7a2c91e8b4d605; commented. PR number assigned on publish - match by branch."
+    },
+    {
+      "number": 2177,
+      "state": "awaiting_approval",
+      "updated_at": "2026-10-21",
+      "note": "CI dependency-install retry. The 05:09 run's push was rejected (no `workflows` permission for the App). Re-created on branch repo-assist/improve-ci-dependency-install-retry-e3080a8204e1cdcb; commented. Match by branch."
+    },
+    {
+      "number": 2175,
+      "state": "awaiting_approval",
+      "updated_at": "2026-10-21",
+      "note": "Stored XSS (author HTML rendered raw). Draft fix PR #2176, CI green. Commented 2026-10-21, flagging dropped inline styles / data-* attributes and the commented-out CSP initializer. Close once #2176 merges."
+    },
     {
       "number": 2170,
       "state": "awaiting_approval",
@@ -50,6 +68,22 @@
   ],
   "fixes": [
     {
+      "issue": 2179,
+      "pr": null,
+      "branch": "repo-assist/fix-issue-2179-nil-query-params-3f7a2c91e8b4d605",
+      "status": "open",
+      "updated_at": "2026-10-21",
+      "note": "PreOrdersController#new redirects on unknown article/order_type (validated before authorize); price helper falls back to the item's price; turbo stream falls back to the pre-order currency; MixpayPreOrder#pay_url takes the optional asset; admin order_by/filter allow-listed."
+    },
+    {
+      "issue": 2177,
+      "pr": null,
+      "branch": "repo-assist/improve-ci-dependency-install-retry-e3080a8204e1cdcb",
+      "status": "open",
+      "updated_at": "2026-10-21",
+      "note": "check.yml 'Install dependencies' retries 5x with 10s..40s backoff, then fails with an ::error:: annotation. Script exercised under `bash -e` against stub commands for all three paths."
+    },
+    {
       "issue": 2170,
       "pr": 2171,
       "branch": "repo-assist/fix-article-asset-id-override-50fabce3ed7d76a6",
@@ -70,20 +104,26 @@
     {
       "area": "tests",
       "checked_at": "2026-10-21",
-      "result": "Full non-system suite: 1604 runs, 5135 assertions, 0 failures, 1 error, 2 skips. The error is RackAttackTest OAuth-callback throttle (csrf_detected): pre-existing and seed-dependent, reproduced on unmodified main with seed 63055, passes in isolation.",
+      "result": "Full non-system suite: 1607 runs, 5102 assertions, 0 failures, 0 errors, 2 skips. The seed-dependent RackAttack csrf_detected error did not reproduce this run.",
       "follow_up": "Run via ruby -Itest glob loader, NOT `bin/rails test`: the rake path pulls test:prepare -> css:install and aborts without bun, and a piped exit 0 masks the abort."
+    },
+    {
+      "area": "hygiene",
+      "checked_at": "2026-10-21",
+      "result": "Integration sessions do NOT persist here: IntegrationTestCase#sign_in sets session[:current_session_id] but the cookie is never written, so the next request is anonymous.",
+      "follow_up": "So a test asserting 'redirects to root_path' can pass for the wrong reason (authenticate_user! redirects there too). Use ActionController::TestCase with @request.session, and add a happy-path 200 assertion."
     },
     {
       "area": "tooling",
       "checked_at": "2026-10-21",
-      "result": "bin/rubocop 602 files no offenses; bin/rails zeitwerk:check all good; bin/lint-design-system 43 pre-existing DS010 warnings, none blocking, none introduced.",
+      "result": "bin/rubocop 601 files no offenses; bin/rails zeitwerk:check all good; bin/lint-design-system 43 pre-existing DS010 warnings, none blocking, none introduced.",
       "follow_up": "bun is NOT on PATH by default - export PATH=\"$HOME/.local/share/mise/shims:$PATH\" before prettier or bun test."
     },
     {
       "area": "ci",
       "checked_at": "2026-10-21",
-      "result": "PR #2171's Check job re-ran green (run 39467129482) - the earlier 'mise/shims/node: Text file busy' failure was a runner race, not the branch. Draft PR adds a retry wrapper for the dependency-install step.",
-      "follow_up": "The durable fix is still the runner's job-concurrency setting, outside this repo."
+      "result": "The self-hosted runner's mise-shim race (ETXTBSY, exit 126) is a runner-side concurrency problem, not a branch problem. A bounded retry in the install step is the repo-side mitigation.",
+      "follow_up": "The durable fix is the runner's job-concurrency setting, outside this repo. The workflow's App has no `workflows` permission, so a direct push of check.yml is refused - go through the normal PR path."
     },
     {
       "area": "docs",
@@ -100,38 +140,18 @@
     {
       "area": "code",
       "checked_at": "2026-10-21",
-      "result": "Audit found a family of unvalidated-param 500s. Verified: PreOrdersController#new bare `return` -> nil @pre_order; pre_order_form_price has no else -> nil -> sprintf('%.8f', nil); pre_orders/show.turbo_stream.erb pay_asset nil; 13 admin index actions 500 on an unknown order_by.",
-      "follow_up": "NOT bugs: the admin member routes (block/unblock/delete/deliver/process_now) - `rails routes` shows the param names DO match the controllers. Ignore claims that they are broken. Pre-order + admin index cases are filed as an issue, still unfixed."
+      "result": "The unvalidated-param 500 family from #2179 is fixed. The dead `@pay_asset` branch in app/views/pre_orders/show.turbo_stream.erb remains - `@pay_asset` is never assigned, so the `~$` estimate never renders.",
+      "follow_up": "Left alone: fixing it changes what the view shows, so it needs a product decision. Also: admin/articles and admin/comments map 'created_at_asc' to `updated_at: :desc` - a behaviour quirk, not a 500."
     },
     {
       "area": "qa",
       "checked_at": "2026-10-21",
-      "result": "Stored XSS confirmed and fixed: ActionText sanitizes only via ActionText::ContentHelper, but RichTextRenderService, MarkdownRenderService and RichTextContent#content_body all read the raw fragment. A <script> posted via POST /api/articles reached every reader.",
+      "result": "Stored XSS confirmed and fixed in draft PR #2176: ActionText sanitizes only via ActionText::ContentHelper, but RichTextRenderService, MarkdownRenderService and RichTextContent#content_body read the raw fragment.",
       "follow_up": "config/initializers/content_security_policy.rb is entirely commented out - a CSP header is a natural follow-up. The sanitizer drops inline style attributes and non-Turbo data-* attributes; worth a maintainer look before merge."
     }
   ],
   "completed_actions": [],
   "priorities": [
-    {
-      "task": 3,
-      "item": "Draft PR open on branch repo-assist/fix-sanitize-author-html (XSS)",
-      "note": "Allow-list sanitizer applied to RichTextRenderService, MarkdownRenderService and RichTextContent#content_body. Tracking issue filed this run (stored XSS). PR number assigned at publish time - match by branch until then."
-    },
-    {
-      "task": 3,
-      "item": "Draft PR open on branch repo-assist/fix-dashboard-articles-unknown-tab",
-      "note": "Unknown ?tab= on Dashboard::ArticlesController#index left the scope nil -> 500. Fixed with the presence_in guard Users::ArticlesController uses for #2105. Regression test added. Match by branch until the PR number exists."
-    },
-    {
-      "task": 5,
-      "item": "Draft PR open on branch repo-assist/improve-ci-dependency-install-retry",
-      "note": "check.yml dependency-install step now retries 5x with backoff so the self-hosted runner's mise-shim 'Text file busy' race (ETXTBSY, exit 126) cannot fail a build before any test runs."
-    },
-    {
-      "task": 2,
-      "item": "Fix the pre-order and admin-index 500s from the nil-params issue",
-      "note": "Filed 2026-10-21. PreOrdersController#new needs a real render instead of a bare `return`; pre_order_form_price needs an else; the 13 admin index actions need a presence_in guard on order_by/filter, as Users::ArticlesController does."
-    },
     {
       "task": 9,
       "item": "Sweep untested helpers: dashboard_helper, design_system_helper, HtmlPostProcessor",
@@ -140,7 +160,7 @@
     {
       "task": 9,
       "item": "Make RackAttackTest's OAuth-callback throttle test order-independent",
-      "note": "Found 2026-10-21. It errors with csrf_detected on some seeds and passes on others; reproduced on unmodified main with seed 63055. The neighbouring search-throttle test already documents the same class of fragility."
+      "note": "Found 2026-10-21. It errors with csrf_detected on some seeds and passes on others; reproduced on unmodified main with seed 63055. The neighbouring search-throttle test documents the same fragility."
     },
     {
       "task": 6,
@@ -149,8 +169,13 @@
     },
     {
       "task": 6,
-      "item": "Re-check the repo-assist drafts once CI re-runs on the three new PRs",
-      "note": "#2163, #2169 and #2172 are green. The three new drafts have no numbers yet - find them by branch name until the publish step assigns them, then record them in fixes."
+      "item": "Re-check the repo-assist drafts once CI re-runs",
+      "note": "#2163, #2169, #2171, #2172, #2176 and #2178 are green. The two new drafts (nil-params fix, CI retry) have no numbers yet - find them by branch until the publish step assigns them."
+    },
+    {
+      "task": 10,
+      "item": "Decide whether the dead @pay_asset branch in show.turbo_stream.erb goes",
+      "note": "Raised in the monthly issue on 2026-10-21. Making it live changes what the pay modal renders, so it needs a product decision, not a bug fix."
     }
   ]
 }
