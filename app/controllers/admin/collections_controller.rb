@@ -4,7 +4,7 @@ module Admin
   class CollectionsController < Admin::BaseController
     def index
       @state = params[:state] || "all"
-      @order_by = allowed_param(:order_by, "created_at_desc", %w[created_at_desc created_at_asc])
+      @order_by = allowed_param(:order_by, "created_at_desc", %w[created_at_desc created_at_asc updated_at_desc updated_at_asc])
 
       collections = Collection.includes(:author, :currency)
 
@@ -24,6 +24,10 @@ module Admin
           collections.order(created_at: :desc)
         when "created_at_asc"
           collections.order(created_at: :asc)
+        when "updated_at_desc"
+          collections.order(updated_at: :desc, id: :desc)
+        when "updated_at_asc"
+          collections.order(updated_at: :asc, id: :asc)
         end
 
       @query = params[:query].to_s.strip

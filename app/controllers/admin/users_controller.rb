@@ -18,13 +18,15 @@ module Admin
           users
         end
 
-      @order_by = allowed_param(:order_by, "created_at_desc", %w[created_at_desc created_at_asc revenue_total orders_total articles_count comments_count])
+      @order_by = allowed_param(:order_by, "created_at_desc", %w[created_at_desc created_at_asc author_revenue_total revenue_total orders_total articles_count comments_count])
       users =
         case @order_by
         when "created_at_desc"
           users.order(created_at: :desc)
         when "created_at_asc"
           users.order(created_at: :asc)
+        when "author_revenue_total"
+          users.order_by_author_revenue_total
         when "revenue_total"
           users.order_by_revenue_total
         when "orders_total"

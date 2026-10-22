@@ -337,6 +337,29 @@ class UserTest < ActiveSupport::TestCase
     assert_equal 0.0, rows.find { |u| u.id == users(:reader_one).id }.attributes["revenue_total"].to_f
   end
 
+  test "order_by_author_revenue_total sums author revenue only" do
+    # The admin users list renders `author_revenue_total_usd` in its revenue
+    # column, so the sort that goes with it has to order by author revenue
+    # alone. `order_by_revenue_total` also counts the early-reader reward,
+    # which is a different number than the one on screen.
+    seed_revenue_transfers!
+
+    rows = User.order_by_author_revenue_total.to_a
+    author_row = rows.find { |u| u.id == users(:author).id }
+    reader_row = rows.find { |u| u.id == users(:reader_one).id }
+
+    assert_in_delta 100_000.0, author_row.attributes["author_revenue_total"].to_f, 0.01
+    assert_equal 0.0, reader_row.attributes["author_revenue_total"].to_f
+    assert_operator rows.index(author_row), :<, rows.index(reader_row),
+      "expected the author to sort above a user with only reader revenue"
+
+    # The total-revenue scope still counts the reader reward, which is what
+    # makes the two orderings differ.
+    total_rows = User.order_by_revenue_total.to_a
+    assert_operator total_rows.index(total_rows.find { |u| u.id == users(:reader_one).id }),
+      :<, total_rows.index(total_rows.find { |u| u.id == users(:author).id })
+  end
+
   test "twitter_connected requires a usable username" do
     user = users(:author)
     user.user_authorizations.create!(
@@ -417,5 +440,40 @@ class UserTest < ActiveSupport::TestCase
   test "removed dead methods stay removed" do
     refute_includes User.instance_methods(false), :mixin_deposit_url
     refute_includes User.instance_methods(false), :public_key
+  end
+
+  private
+
+  # One author-revenue transfer for the author (2 BTC at the fixture's
+  # 50_000 USD/BTC = 100_000 USD) and one reader-revenue transfer for the
+  # reader (100 BTC = 5_000_000 USD), so the author-revenue and the
+  # total-revenue orderings disagree. `insert_all!` skips the callbacks
+  # (`process_async`) and the validations that are irrelevant here.
+  def seed_revenue_transfers!
+    currency = currencies(:btc)
+    now = Time.current
+
+    Transfer.insert_all!([
+      {
+        wallet_id: nil,
+        asset_id: currency.asset_id,
+        trace_id: SecureRandom.uuid,
+        opponent_id: users(:author).mixin_uuid,
+        amount: 2.0,
+        transfer_type: Transfer.transfer_types[:author_revenue],
+        created_at: now,
+        updated_at: now
+      },
+      {
+        wallet_id: nil,
+        asset_id: currency.asset_id,
+        trace_id: SecureRandom.uuid,
+        opponent_id: users(:reader_one).mixin_uuid,
+        amount: 100.0,
+        transfer_type: Transfer.transfer_types[:reader_revenue],
+        created_at: now,
+        updated_at: now
+      }
+    ])
   end
 end

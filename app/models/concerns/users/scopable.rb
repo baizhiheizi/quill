@@ -46,6 +46,21 @@ module Users::Scopable
           SQL
         ).order(revenue_total: :desc)
     }
+    # Author revenue only — the metric the admin users list renders in its
+    # "Author Revenue" column (`User#author_revenue_total_usd`).
+    # `order_by_revenue_total` sums author *and* reader revenue, so sorting
+    # the list by it ordered the rows by a number that was not the one on
+    # screen.
+    scope :order_by_author_revenue_total, lambda {
+      left_joins(author_revenue_transfers: :currency)
+        .group(:id)
+        .select(
+          <<~SQL.squish
+            users.*,
+            COALESCE(SUM(transfers.amount * currencies.price_usd), 0) AS author_revenue_total
+          SQL
+        ).order(author_revenue_total: :desc)
+    }
     scope :order_by_orders_total, lambda {
       left_joins(:orders)
         .group(:id)

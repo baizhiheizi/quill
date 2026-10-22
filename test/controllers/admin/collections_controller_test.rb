@@ -117,4 +117,26 @@ class Admin::CollectionsControllerTest < ActionController::TestCase
     assert_equal 2, counts[collections(:one).uuid]
     assert_equal 1, counts[collections(:two).uuid]
   end
+
+  test "index can sort by the updated_at column it displays" do
+    # The collections list renders `collection.updated_at` in its last
+    # column, but the sort options only covered `created_at` — picking a
+    # sort ordered the rows by a timestamp the admin could not see, and the
+    # options were labelled just "DESC"/"ASC" so it was not obvious which
+    # one was being sorted.
+    collections(:one).update_column(:updated_at, 2.days.ago)
+    collections(:two).update_column(:updated_at, 1.hour.ago)
+
+    @controller.params = ActionController::Parameters.new(order_by: "updated_at_desc")
+    @controller.send(:index)
+
+    ids = @controller.instance_variable_get(:@collections).map(&:id)
+    assert_equal collections(:two).id, ids.first, "expected the most recently updated collection first"
+
+    @controller.params = ActionController::Parameters.new(order_by: "updated_at_asc")
+    @controller.send(:index)
+
+    ids = @controller.instance_variable_get(:@collections).map(&:id)
+    assert_equal collections(:one).id, ids.first, "expected the least recently updated collection first"
+  end
 end
