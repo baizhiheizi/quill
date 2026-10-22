@@ -153,6 +153,9 @@ class Collection < ApplicationRecord
 
   def ensure_price_not_too_low
     return unless price_changed? || asset_id_changed?
+    # No Currency row for the selected asset means there is no floor to
+    # compare against; `belongs_to :currency` already reports it as invalid.
+    return if currency.blank?
 
     errors.add(:price, "< $#{MINIMUM_PRICE_USD}") if price.to_f.positive? && price < currency.minimal_price_amount(MINIMUM_PRICE_USD)
   end

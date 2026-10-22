@@ -413,15 +413,27 @@ class ArticleTest < ActiveSupport::TestCase
   end
 
   test "the price floor follows the selected asset" do
-    article = Article.new(
+    eth = Article.new(
       title: "Priced in ether",
-      intro: "An article priced below the ether floor.",
-      price: BigDecimal("0.0000001"),
+      intro: "An article priced below the ether floor but above the bitcoin floor.",
+      price: BigDecimal("0.00001"),
       asset_id: currencies(:eth).asset_id,
       author: users(:author)
     )
 
-    assert_not article.valid?
-    assert_includes article.errors.full_messages, "Price < $0.1"
+    assert_not eth.valid?
+    assert_includes eth.errors.full_messages, "Price < $0.1"
+
+    # The same amount clears the bitcoin floor, so the error above really
+    # came from the selected asset and not from a fixed threshold.
+    btc = Article.new(
+      title: "Priced in bitcoin",
+      intro: "The same amount, priced in bitcoin.",
+      price: BigDecimal("0.00001"),
+      asset_id: currencies(:btc).asset_id,
+      author: users(:author)
+    )
+
+    assert btc.valid?
   end
 end

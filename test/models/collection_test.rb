@@ -105,4 +105,44 @@ class CollectionTest < ActiveSupport::TestCase
 
     assert_not collection.authorized?(users(:reader_one))
   end
+
+  # === asset selection ===
+
+  test "a collection priced in a supported asset is valid" do
+    collection = Collection.new(
+      uuid: SecureRandom.uuid,
+      name: "Ether Collection",
+      symbol: "EC",
+      description: "A collection priced in ether.",
+      author: users(:author),
+      asset_id: currencies(:eth).asset_id,
+      price: BigDecimal("0.01"),
+      revenue_ratio: 0.1,
+      state: "listed"
+    )
+
+    assert collection.valid?
+    assert_equal currencies(:eth), collection.currency
+  end
+
+  test "a collection priced in an asset without a currency row is invalid instead of raising" do
+    collection = Collection.new(
+      uuid: SecureRandom.uuid,
+      name: "Unknown Asset Collection",
+      symbol: "UC",
+      description: "A collection pointing at an asset the currency sync has not seen.",
+      author: users(:author),
+      asset_id: SecureRandom.uuid,
+      price: BigDecimal("0.01"),
+      revenue_ratio: 0.1,
+      state: "listed"
+    )
+
+    # `belongs_to :currency` is required, so the missing row surfaces as a
+    # validation error. It used to raise NoMethodError (HTTP 500) from
+    # `ensure_price_not_too_low`.
+    assert_nothing_raised { collection.valid? }
+    assert_not collection.valid?
+    assert_includes collection.errors.full_messages, "Currency must exist"
+  end
 end

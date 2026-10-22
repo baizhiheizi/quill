@@ -29,7 +29,8 @@ btc:
 eth:
   asset_id: 43d61dcd-e413-450d-80b8-101d5e903357
   symbol: ETH
-  price_btc: 0.03
+  # 2_000 USD at the fixture set's 50_000 USD/BTC.
+  price_btc: 0.04
   price_usd: 2000.0
   raw:
     name: Ethereum

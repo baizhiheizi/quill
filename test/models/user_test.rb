@@ -251,13 +251,16 @@ class UserTest < ActiveSupport::TestCase
       title: "Counter-cache test",
       intro: "intro",
       author: author,
-      asset_id: Currency::BTC_ASSET_ID,
+      asset_id: currencies(:eth).asset_id,
       price: 0.0001,
       state: :published
     )
     article.content = "<p>test</p>"
     article.save!
 
+    # A non-default asset, so the counter cache is exercised on an article
+    # that keeps the asset its author selected.
+    assert_equal currencies(:eth).asset_id, article.asset_id
     assert_equal initial + 1, author.reload.articles_count
   end
 
