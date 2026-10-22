@@ -1,111 +1,35 @@
 {
   "version": 1,
   "cursors": {
-    "labelling_after": 2179,
-    "investigation_after": 2182
+    "labelling_after": null,
+    "investigation_after": null
   },
   "issues": [
     {
-      "number": 2179,
-      "state": "awaiting_approval",
-      "updated_at": "2026-10-22",
-      "note": "Unvalidated-param 500s (pre-orders + 12 admin indexes). Fixed in draft PR #2181 (branch repo-assist/fix-issue-2179-nil-query-params-3f7a2c91e8b4d605-996de30166f4996c); commented. Close once #2181 merges."
-    },
-    {
-      "number": 2182,
-      "state": "awaiting_approval",
-      "updated_at": "2026-10-22",
-      "note": "CI dependency-install retry. No PR is possible - the workflow App lacks `workflows` permission so GitHub refuses any push touching check.yml. A verified one-step diff is posted in the issue for a maintainer to apply. #2177 closed as its duplicate."
-    },
-    {
-      "number": 2175,
-      "state": "awaiting_approval",
-      "updated_at": "2026-10-21",
-      "note": "Stored XSS (author HTML rendered raw). Draft fix PR #2176, CI green. Commented 2026-10-21, flagging dropped inline styles / data-* attributes and the commented-out CSP initializer. Close once #2176 merges."
-    },
-    {
-      "number": 2170,
-      "state": "awaiting_approval",
-      "updated_at": "2026-10-20",
-      "note": "asset_id overwritten with BTC on create. Fix + tests in draft PR #2171; commented on the issue. Close it once #2171 merges."
-    },
-    {
-      "number": 2137,
-      "state": "awaiting_approval",
-      "updated_at": "2026-10-20",
-      "note": "Pagy::OptionError on ?page=. PR #2163 (draft) covers both ApplicationController and Admin::BaseController. CI green. Do not open a second pagy PR."
-    },
-    {
-      "number": 2161,
-      "state": "deferred",
-      "updated_at": "2026-10-19",
-      "note": "[aw] startup-failure notice; repo memory was corrupted on that run only. Listed for maintainer closure in the monthly issue. Do not comment again."
-    },
-    {
-      "number": 2162,
-      "state": "deferred",
-      "updated_at": "2026-10-19",
-      "note": "[aw] missing terminal safe output; superseded by run 39200571453. Listed for maintainer closure. Do not comment again."
-    },
-    {
-      "number": 2165,
-      "state": "deferred",
-      "updated_at": "2026-10-19",
-      "note": "[aw] failed-run notice, superseded. Listed for maintainer closure. Do not comment again."
-    },
-    {
-      "number": 2166,
-      "state": "deferred",
-      "updated_at": "2026-10-19",
-      "note": "[aw] failed-jobs notice, superseded. Listed for maintainer closure. Do not comment again."
-    },
-    {
       "number": 2153,
       "state": "deferred",
-      "updated_at": "2026-10-20",
+      "updated_at": "2026-10-22",
       "note": "[aw] Detection Runs thread; machine-generated workflow telemetry, not a code defect. No action unless a maintainer asks."
-    }
-  ],
-  "fixes": [
-    {
-      "issue": 2179,
-      "pr": 2181,
-      "branch": "repo-assist/fix-issue-2179-nil-query-params-3f7a2c91e8b4d605-996de30166f4996c",
-      "status": "open",
-      "updated_at": "2026-10-22",
-      "note": "PreOrdersController#new redirects on unknown article/order_type; price helper falls back to the item's price; turbo stream falls back to the pre-order currency; MixpayPreOrder#pay_url takes the optional asset; admin order_by/filter allow-listed. CI green."
-    },
-    {
-      "issue": 2177,
-      "pr": null,
-      "branch": "repo-assist/improve-ci-dependency-install-retry-e3080a8204e1cdcb",
-      "status": "closed",
-      "updated_at": "2026-10-22",
-      "note": "The PR path is exhausted: the App is refused write access to .github/workflows/check.yml, so the remote branch stays at main. The verified one-step diff now lives in issue #2182 for a maintainer to apply."
-    },
-    {
-      "issue": 2170,
-      "pr": 2171,
-      "branch": "repo-assist/fix-article-asset-id-override-50fabce3ed7d76a6",
-      "status": "open",
-      "updated_at": "2026-10-20",
-      "note": "Stops setup_attributes overwriting a user-selected asset_id with BTC, and nil-guards both currency lookups (NoMethodError -> 500 when the asset had no Currency row). Test settings widened to four assets."
-    },
-    {
-      "issue": 2137,
-      "pr": 2163,
-      "branch": "repo-assist/fix-issue-2137-pagy-page-zero-33192aa93be74f0f",
-      "status": "open",
-      "updated_at": "2026-10-20",
-      "note": "Shared CoercesPaginationParams concern in ApplicationController and Admin::BaseController, plus test/controllers/admin/pagination_coercion_test.rb. CI green."
     }
   ],
   "checks": [
     {
-      "area": "tests",
+      "area": "ci",
       "checked_at": "2026-10-22",
-      "result": "Full non-system suite: 1560 runs, 4394 assertions, 0 failures, 0 errors, 1 skip. The two new admin sort regression tests fail on unpatched code and pass after the fix.",
-      "follow_up": "Run via ruby -Itest glob loader, NOT `bin/rails test`: the rake path pulls test:prepare -> css:install and aborts without bun, and a piped exit 0 masks the abort."
+      "result": "The self-hosted runner's mise-shim race (ETXTBSY, exit 126) is runner-side concurrency, not a branch problem. The repo-side retry for check.yml cannot ship as a PR: the App is refused write access to .github/workflows.",
+      "follow_up": "A verified one-step diff is in issue #2182. The maintainer closed #2182 on 2026-10-22 and check.yml is unchanged since #2094, so the retry was NOT applied - most likely the runner's job-concurrency was fixed instead. Do not re-raise; the durable fix is outside this repo."
+    },
+    {
+      "area": "code",
+      "checked_at": "2026-10-22",
+      "result": "Audit of all thirteen admin index sorts against their table columns is COMPLETE. Found and fixed: created_at_asc mis-mapped on Articles+Comments (#2184, merged), the users revenue column/sort mismatch, and the collections sort vs 'Updated At' column. The other eleven indexes match their labels.",
+      "follow_up": "The admin invariant test (test/controllers/admin/order_by_test.rb) already pins allow-list == case branches == view options for every admin index - new sorts must be added in all three places."
+    },
+    {
+      "area": "docs",
+      "checked_at": "2026-10-20",
+      "result": "CHANGELOG.md had missed all 22 commits since release-2026-09-07. Synced on branch repo-assist/changelog-unreleased-sync (PR #2172, merged): mixin_bot 3.0 Blaze reactor, json ~>2.21 pin, #2105/#2107 crashes.",
+      "follow_up": "The changelog is now 12 commits behind again (the 11 merged PRs of 2026-10-22); a re-sync would be needed before a release."
     },
     {
       "area": "hygiene",
@@ -114,84 +38,58 @@
       "follow_up": "So a test asserting 'redirects to root_path' can pass for the wrong reason (authenticate_user! redirects there too). Use ActionController::TestCase with @request.session, and add a happy-path 200 assertion."
     },
     {
-      "area": "tooling",
-      "checked_at": "2026-10-22",
-      "result": "bin/rubocop 600 files no offenses; bin/rails zeitwerk:check all good; bin/lint-design-system 43 pre-existing DS010 warnings, none blocking, none introduced. safeoutputs update_issue allows only ONE call per run.",
-      "follow_up": "Spend that single update_issue on the monthly activity issue body, not on closing a duplicate - 2026-10-22 lost the body update that way. bun is NOT on PATH by default: export PATH=\"$HOME/.local/share/mise/shims:$PATH\" before prettier or bun test."
+      "area": "qa",
+      "checked_at": "2026-10-21",
+      "result": "Stored XSS confirmed and fixed in draft PR #2176 (now merged): ActionText sanitizes only via ActionText::ContentHelper, but RichTextRenderService, MarkdownRenderService and RichTextContent#content_body read the raw fragment.",
+      "follow_up": "config/initializers/content_security_policy.rb is entirely commented out - a CSP header is a natural follow-up. The sanitizer drops inline style attributes and non-Turbo data-* attributes."
     },
     {
-      "area": "ci",
+      "area": "release",
       "checked_at": "2026-10-22",
-      "result": "The self-hosted runner's mise-shim race (ETXTBSY, exit 126) is runner-side concurrency, not a branch problem. The repo-side retry for check.yml cannot ship as a PR: the App is refused write access to .github/workflows.",
-      "follow_up": "A verified one-step diff is in issue #2182 for a maintainer to apply. The durable fix is the runner's job-concurrency setting, outside this repo."
+      "result": "NOT released. 34 commits unreleased since 2026-09-07, including eight Repo Assist fixes merged on 2026-10-22, a security fix, a major ransack bump and the deliberate json pin.",
+      "follow_up": "Never trigger Release: it deploys to production and needs maintainer approval. Flagged in the monthly issue instead."
     },
     {
       "area": "repo_assist_prs",
       "checked_at": "2026-10-22",
-      "result": "All 7 open Repo Assist PRs (#2181, #2178, #2176, #2172, #2171, #2169, #2163) have a green Check job; no follow-up commits were needed.",
-      "follow_up": "#2172 shows no Check run because CHANGELOG.md is outside check.yml's paths filter - that is not a failure."
+      "result": "All seven Repo Assist PRs (#2181, #2184, #2178, #2176, #2172, #2171, #2169, #2163) were MERGED by the maintainer on 2026-10-22, and every issue they referenced was auto-closed. The only open PR is dependabot's #2185 (posthog-rails 3.19.2, Check green).",
+      "follow_up": "No open Repo Assist drafts to maintain; the new admin-sort draft is the only one."
     },
     {
-      "area": "code",
+      "area": "tests",
       "checked_at": "2026-10-22",
-      "result": "The admin 'Created ASC' sort on Articles and Comments ordered by updated_at DESC - the opposite of the label and of the other ten admin indexes. Fixed on branch repo-assist/fix-admin-created-at-asc-sort.",
-      "follow_up": "Audit the other admin sort keys (published_at_*, revenue_usd, the *_count counters) against their dropdown labels; only created_at_asc was checked. The dead @pay_asset branch still needs a product decision."
+      "result": "Full non-system suite: 1659 runs, 4706 assertions, 0 failures, 0 errors, 1 skip on the rack-attack branch (1662 runs on the admin-sort branch). The admin-sort regression test fails on the unpatched controller and passes after the fix.",
+      "follow_up": "Run via ruby -Itest glob loader, NOT `bin/rails test`: the rake path pulls test:prepare -> css:install and aborts without bun. Rack::Attack buckets per Time.now.to_i / period, so a fixed-request-count throttle test is a bucket-boundary flake."
     },
     {
-      "area": "qa",
-      "checked_at": "2026-10-21",
-      "result": "Stored XSS confirmed and fixed in draft PR #2176: ActionText sanitizes only via ActionText::ContentHelper, but RichTextRenderService, MarkdownRenderService and RichTextContent#content_body read the raw fragment.",
-      "follow_up": "config/initializers/content_security_policy.rb is entirely commented out - a CSP header is a natural follow-up. The sanitizer drops inline style attributes and non-Turbo data-* attributes; worth a maintainer look before merge."
-    },
-    {
-      "area": "docs",
-      "checked_at": "2026-10-20",
-      "result": "CHANGELOG.md had missed all 22 commits since release-2026-09-07. Synced on branch repo-assist/changelog-unreleased-sync (draft PR #2172): mixin_bot 3.0 Blaze reactor, json ~>2.21 pin, #2105/#2107 crashes.",
-      "follow_up": null
-    },
-    {
-      "area": "release",
-      "checked_at": "2026-10-20",
-      "result": "NOT released. 22 commits unreleased since 2026-09-07, incl. a major dep bump and two 500 fixes. Release is workflow_dispatch on release.yml and deploys to production.",
-      "follow_up": "Never trigger Release: it deploys to production and needs maintainer approval. Flagged in the monthly issue instead."
+      "area": "tooling",
+      "checked_at": "2026-10-22",
+      "result": "bin/rubocop 607 files no offenses; bin/rails zeitwerk:check all good; bin/lint-design-system 43 pre-existing DS010 warnings, none blocking, none introduced. safeoutputs update_issue allows only ONE call per run.",
+      "follow_up": "Spend that single update_issue on the monthly activity issue body, not on closing a duplicate - 2026-10-22 lost the body update that way. bun is NOT on PATH by default: export PATH=\"$HOME/.local/share/mise/shims:$PATH\" before prettier or bun test."
     }
   ],
   "completed_actions": [],
   "priorities": [
     {
       "task": 6,
-      "item": "Match the admin sort PR and issue by branch repo-assist/fix-admin-created-at-asc-sort",
-      "note": "Both numbers are assigned on publish. Fixes Admin::ArticlesController and Admin::CommentsController ordering by updated_at DESC for created_at_asc. Locally green: 1560 runs / 0 failures."
-    },
-    {
-      "task": 5,
-      "item": "Audit the remaining admin sort dropdowns against their labels",
-      "note": "Found 2026-10-22: created_at_asc was mis-mapped in two of twelve admin indexes. The other keys (published_at_*, revenue_usd, the *_count counters) have not been checked against their dropdown labels."
+      "item": "Check the two new draft PRs once they are published",
+      "note": "Branches repo-assist/fix-admin-sort-column-mismatch-2edfe8e9de7f (admin sort vs column) and repo-assist/fix-rack-attack-throttle-test-flakiness-2af8cbed42e6 (throttle tests). Numbers assigned on publish; both green locally."
     },
     {
       "task": 9,
       "item": "Sweep untested helpers: dashboard_helper, design_system_helper, HtmlPostProcessor",
-      "note": "Named as future work on 2026-10-19 and repeated on the monthly issue. Neither helper has a test file. Extends the API::RenderingHelper contract work in PR #2169."
-    },
-    {
-      "task": 9,
-      "item": "Make RackAttackTest's OAuth-callback throttle test order-independent",
-      "note": "Found 2026-10-21. It errors with csrf_detected on some seeds and passes on others; reproduced on unmodified main with seed 63055. The neighbouring search-throttle test documents the same fragility."
-    },
-    {
-      "task": 6,
-      "item": "Confirm the PostHog Pagy::OptionError fingerprint drops after PR #2163 merges",
-      "note": "If it does not, another paginating entry point remains beyond the admin namespace that was fixed."
-    },
-    {
-      "task": 6,
-      "item": "Re-check the repo-assist drafts once CI re-runs",
-      "note": "#2163, #2169, #2171, #2172, #2176, #2178 and #2181 were all green on 2026-10-22. The CI-retry PR does not exist and never will - see issue #2182."
+      "note": "Named as future work on 2026-10-19 and repeated on the monthly issue. Neither helper has a test file. Extends the API::RenderingHelper contract work in PR #2169 (merged)."
     },
     {
       "task": 10,
       "item": "Decide whether the dead @pay_asset branch in show.turbo_stream.erb goes",
-      "note": "Raised in the monthly issue on 2026-10-21. Making it live changes what the pay modal renders, so it needs a product decision, not a bug fix."
+      "note": "Raised in the monthly issue on 2026-10-21 and again on 2026-10-22 as a Define goal item. Making it live changes what the pay modal renders, so it needs a product decision, not a bug fix."
+    },
+    {
+      "task": 6,
+      "item": "Confirm the PostHog Pagy::OptionError fingerprint drops now that #2163 is merged",
+      "note": "The fix merged on 2026-10-22 and covers ApplicationController and Admin::BaseController, so every paginating action is covered. Verification needs PostHog access, so it is a maintainer-side check; listed in the monthly issue."
     }
-  ]
+  ],
+  "fixes": []
 }
