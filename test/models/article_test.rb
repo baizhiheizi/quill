@@ -364,4 +364,76 @@ class ArticleTest < ActiveSupport::TestCase
     # article with no orders stays unauthorized.
     assert_not article.authorized?(users(:reader_one))
   end
+
+  # === asset selection ===
+  # `config/settings/test.yml` mirrors `config/settings.yml`, so the article
+  # editor's asset selector can be exercised end to end instead of poking at
+  # `setup_attributes` in isolation.
+
+  test "an article keeps the asset the author selected" do
+    article = Article.new(
+      title: "Priced in ETH",
+      intro: "An article the author priced in ether.",
+      price: BigDecimal("0.001"),
+      asset_id: currencies(:eth).asset_id,
+      author: users(:author)
+    )
+
+    assert article.save
+    assert_equal currencies(:eth).asset_id, article.asset_id
+    assert_equal currencies(:eth), article.currency
+  end
+
+  test "a new article defaults to BTC when the author selected no asset" do
+    article = Article.new(
+      title: "Priced in BTC",
+      intro: "An article the author left on the default asset.",
+      author: users(:author)
+    )
+
+    assert article.save
+    assert_equal Currency::BTC_ASSET_ID, article.asset_id
+    assert_equal currencies(:btc), article.currency
+  end
+
+  test "an asset without a currency row is invalid instead of raising" do
+    article = Article.new(
+      title: "Priced in an unknown asset",
+      intro: "An article pointing at an asset the currency sync has not seen.",
+      price: BigDecimal("0.001"),
+      asset_id: SecureRandom.uuid,
+      author: users(:author)
+    )
+
+    # `belongs_to :currency` is required, so the missing row surfaces as a
+    # validation error. It used to raise NoMethodError (HTTP 500) from
+    # `ensure_price_not_too_low`.
+    assert_not article.valid?
+    assert_includes article.errors.full_messages, "Currency must exist"
+  end
+
+  test "the price floor follows the selected asset" do
+    eth = Article.new(
+      title: "Priced in ether",
+      intro: "An article priced below the ether floor but above the bitcoin floor.",
+      price: BigDecimal("0.00001"),
+      asset_id: currencies(:eth).asset_id,
+      author: users(:author)
+    )
+
+    assert_not eth.valid?
+    assert_includes eth.errors.full_messages, "Price < $0.1"
+
+    # The same amount clears the bitcoin floor, so the error above really
+    # came from the selected asset and not from a fixed threshold.
+    btc = Article.new(
+      title: "Priced in bitcoin",
+      intro: "The same amount, priced in bitcoin.",
+      price: BigDecimal("0.00001"),
+      asset_id: currencies(:btc).asset_id,
+      author: users(:author)
+    )
+
+    assert btc.valid?
+  end
 end

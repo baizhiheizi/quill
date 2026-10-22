@@ -430,8 +430,11 @@ class Article < ApplicationRecord
     return unless new_record?
 
     self.uuid = SecureRandom.uuid if uuid.blank?
-    self.asset_id = Currency::BTC_ASSET_ID
-    self.price = currency.minimal_price_amount if price.blank?
+    self.asset_id = Currency::BTC_ASSET_ID if asset_id.blank?
+    # An asset with no Currency row yet (the sync is async) has no minimum
+    # price to derive from. Leave the price blank so the missing currency is
+    # reported as a validation error instead of raising NoMethodError.
+    self.price = currency.minimal_price_amount if price.blank? && currency.present?
   end
 
   def set_defaults
@@ -459,6 +462,9 @@ class Article < ApplicationRecord
 
   def ensure_price_not_too_low
     return unless price_changed? || asset_id_changed?
+    # No Currency row for the selected asset means there is no floor to
+    # compare against; `belongs_to :currency` already reports it as invalid.
+    return if currency.blank?
 
     errors.add(:price, "< $0.1") if price.positive? && price < currency.minimal_price_amount
   end

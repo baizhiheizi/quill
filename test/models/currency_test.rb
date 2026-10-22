@@ -50,6 +50,12 @@ class CurrencyTest < ActiveSupport::TestCase
     assert_not @btc.pricable?
   end
 
+  test "pricable covers every supported asset" do
+    # The article editor renders a selector over `Currency.pricable`, so an
+    # asset missing from this scope is an asset no author can price in.
+    assert_equal Article::SUPPORTED_ASSETS.sort, Currency.pricable.map(&:asset_id).sort
+  end
+
   test "minimal_reward_amount returns the usd-derived amount when price_usd is positive" do
     # 0.5 USD at 50_000 USD/BTC = 0.00001 BTC, rounded up to 8 decimals
     assert_equal BigDecimal("0.00001"), @btc.minimal_reward_amount
@@ -58,6 +64,11 @@ class CurrencyTest < ActiveSupport::TestCase
   test "minimal_reward_amount falls back to symbol defaults when price_usd is zero" do
     @btc.price_usd = 0
     assert_equal 0.00005, @btc.minimal_reward_amount
+  end
+
+  test "minimal_reward_amount derives from price_usd for a non-BTC asset" do
+    # 0.5 USD at 1 USD/pUSD = 0.5 pUSD
+    assert_equal BigDecimal("0.5"), currencies(:pusd).minimal_reward_amount
   end
 
   test "minimal_price_amount returns the usd-derived amount when price_usd is positive" do
@@ -73,6 +84,16 @@ class CurrencyTest < ActiveSupport::TestCase
   test "minimal_price_amount falls back to symbol defaults when price_usd is zero" do
     @btc.price_usd = 0
     assert_equal 0.00001, @btc.minimal_price_amount
+  end
+
+  test "minimal_price_amount derives from price_usd for a non-BTC asset" do
+    # 0.1 USD at 2_000 USD/ETH = 0.00005 ETH, rounded up to 8 decimals
+    assert_equal BigDecimal("0.00005"), currencies(:eth).minimal_price_amount
+  end
+
+  test "minimal_price_amount derives from price_usd for a stablecoin asset" do
+    # 0.1 USD at 1 USD/pUSD = 0.1 pUSD
+    assert_equal BigDecimal("0.1"), currencies(:pusd).minimal_price_amount
   end
 
   test "icon_url returns only absolute http(s) urls" do
