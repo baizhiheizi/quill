@@ -50,4 +50,25 @@ class RichTextContentTest < ActiveSupport::TestCase
     refute_includes article.content_body, "alert(document.domain)"
     assert_includes article.content_body, "<p>hi</p>"
   end
+
+  test "content_body drops iframes that are not on the youtube allow-list" do
+    article = articles(:published_free)
+    article.content.update!(
+      body: '<p>hi</p><iframe src="https://evil.example.com/x"></iframe>'
+    )
+
+    refute_includes article.content_body, "evil.example.com"
+    refute_includes article.content_body, "<iframe"
+    assert_includes article.content_body, "<p>hi</p>"
+  end
+
+  test "content_body keeps youtube iframes" do
+    article = articles(:published_free)
+    article.content.update!(
+      body: '<iframe src="https://www.youtube.com/embed/abc"></iframe>'
+    )
+
+    assert_includes article.content_body, "youtube.com"
+    assert_includes article.content_body, "<iframe"
+  end
 end

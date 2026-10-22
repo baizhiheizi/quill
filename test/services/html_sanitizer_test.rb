@@ -41,10 +41,51 @@ class HtmlSanitizerTest < ActiveSupport::TestCase
     assert_includes html, "youtube.com"
   end
 
-  test "keeps data-turbo-method so parse_link does not add target=_blank" do
-    html = HtmlSanitizer.call('<a href="https://example.com" data-turbo-method="post">x</a>')
+  test "strips data-turbo-method so author links cannot change the request method" do
+    html = HtmlSanitizer.call('<a href="/articles/1" data-turbo-method="delete">click</a>')
 
-    assert_includes html, "data-turbo-method"
+    refute_includes html, "data-turbo-method"
+    assert_includes html, 'href="/articles/1"'
+  end
+
+  test "keeps the turbo attributes that cannot change the request method" do
+    html = HtmlSanitizer.call(
+      '<a href="/articles/1" data-turbo-frame="modal" data-turbo-confirm="sure?">click</a>'
+    )
+
+    assert_includes html, "data-turbo-frame"
+    assert_includes html, "data-turbo-confirm"
+  end
+
+  test "iframe allow-list only accepts real youtube hosts" do
+    allow_list = HtmlPostProcessor::IFRAME_SRC_WHITE_LIST_REGEX
+
+    assert allow_list.any? { |regex| regex.match?("https://www.youtube.com/embed/abc") }
+    assert allow_list.any? { |regex| regex.match?("https://youtube.com/embed/abc") }
+
+    [ "https://wwwayoutube.com/pwn", "https://www-youtube.com/pwn", "https://wwwXyoutube.com/pwn" ].each do |src|
+      assert allow_list.none? { |regex| regex.match?(src) }, "expected #{src} to be rejected"
+    end
+  end
+
+  test "look-alike iframe hosts are removed by the render pipeline" do
+    html = RichTextRenderService.call(
+      '<iframe src="https://wwwayoutube.com/pwn"></iframe>',
+      type: :default
+    )
+
+    refute_includes html, "wwwayoutube.com"
+    refute_includes html, "<iframe"
+  end
+
+  test "real youtube iframes survive the render pipeline" do
+    html = RichTextRenderService.call(
+      '<iframe src="https://www.youtube.com/embed/abc"></iframe>',
+      type: :default
+    )
+
+    assert_includes html, "youtube.com"
+    assert_includes html, "<iframe"
   end
 
   test "keeps class attributes" do

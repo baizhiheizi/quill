@@ -58,13 +58,16 @@ class MarkdownRenderServiceTest < ActiveSupport::TestCase
     assert_includes html, 'target="_blank"'
   end
 
-  test "full type does not add target=_blank to links with data-turbo-method" do
+  test "full type strips author-supplied data-turbo-method and opens the link in a new tab" do
     html = MarkdownRenderService.call(
-      '<a href="https://example.com" data-turbo-method="post">x</a>',
+      '<a href="https://example.com" data-turbo-method="delete">x</a>',
       type: :full
     )
 
-    refute_includes html, 'target="_blank"'
+    # Author-supplied data-turbo-method is removed by the sanitizer, so the
+    # link is opened with target=_blank and Turbo does not intercept it.
+    refute_includes html, "data-turbo-method"
+    assert_includes html, 'target="_blank"'
   end
 
   test "full type adds break-words class to paragraphs" do

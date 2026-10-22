@@ -9,8 +9,8 @@
 #
 # The lists below are the union of what the editor can emit and what the
 # render pipeline post-processes (tables, figures, YouTube iframes). Anything
-# outside them is dropped: the element is removed but its text is kept, so a
-# disallowed tag degrades to plain text instead of vanishing.
+# outside them is dropped together with its content, so a disallowed element
+# (e.g. `<script>`) never reaches the page, not even as inert text.
 #
 # `iframe` is allowed here on purpose. `HtmlPostProcessor#escape_iframes`
 # runs after this and removes every iframe whose src is not a YouTube URL,
@@ -30,10 +30,13 @@ module HtmlSanitizer
 
   # Rails' SafeListSanitizer defaults, plus the Turbo attributes and the
   # iframe/media attributes that `escape_iframes` and the post-processing
-  # pipeline read.
+  # pipeline read. `data-turbo-method` is deliberately absent: it would let
+  # author-supplied links issue state-changing requests (Turbo attaches the
+  # CSRF token), so it is only ever added by the pipeline itself, after
+  # sanitization.
   ALLOWED_ATTRIBUTES = %w[
     abbr alt cite class datetime height href lang name src title width xml:lang
-    data-turbo-method data-turbo-frame data-turbo-confirm
+    data-turbo-frame data-turbo-confirm
     allowfullscreen frameborder allow scrolling referrerpolicy
     controls poster
   ].freeze
