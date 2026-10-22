@@ -25,7 +25,7 @@ module Admin
         when "created_at_desc"
           comments.order(created_at: :desc)
         when "created_at_asc"
-          comments.order(updated_at: :desc)
+          comments.order(created_at: :asc, id: :asc)
         when "upvotes_count"
           comments.order(upvotes_count: :desc, created_at: :desc)
         when "downvotes_count"

@@ -107,4 +107,47 @@ class Admin::ArticlesControllerTest < ActionController::TestCase
       "expected at most 4 active_storage_blobs SELECTs (one per blob in the " \
       "avatar chain), got #{blob_queries}. Per-row avatar fan-out N+1 regression?"
   end
+  # `order_by=created_at_asc` is offered as "Created ASC" in
+  # `app/views/admin/articles/_query.html.erb`. It must order by
+  # `created_at`, like every other admin index does.
+  test "index 'Created ASC' orders by created_at ascending" do
+    older = articles(:published_paid)
+    newer = articles(:published_free)
+    # Decouple the two timestamps: `older` was created first but touched
+    # last, so a sort on `updated_at` yields the opposite order.
+    older.update_column(:created_at, 3.days.ago)
+    older.update_column(:updated_at, 1.day.ago)
+    newer.update_column(:created_at, 2.days.ago)
+    newer.update_column(:updated_at, 1.hour.ago)
+
+    get :index, params: { order_by: "created_at_asc" }
+
+    assert_response :success
+    result = @controller.instance_variable_get(:@articles).to_a
+
+    assert_includes result, older
+    assert_includes result, newer
+    assert_operator result.index(older), :<, result.index(newer),
+      "expected 'Created ASC' to sort by created_at ascending"
+  end
+
+  # `created_at` alone is not a unique sort key. The admin index paginates
+  # with OFFSET, so rows tying on `created_at` may come back in a different
+  # order between requests — a row can be skipped on one page and repeated on
+  # the next. Sorting by `id` as a secondary key makes the order total, and
+  # therefore the pagination deterministic.
+  test "index 'Created ASC' breaks created_at ties by id" do
+    sqls = []
+    callback = ->(_name, _start, _finish, _id, payload) do
+      sqls << payload[:sql] if payload[:sql].include?("FROM \"articles\"")
+    end
+
+    ActiveSupport::Notifications.subscribed(callback, "sql.active_record") do
+      get :index, params: { order_by: "created_at_asc" }
+    end
+
+    order_sql = sqls.reverse.find { |sql| sql.include?("ORDER BY") }
+    assert_not_nil order_sql, "expected an ordered SELECT for the articles index"
+    assert_match(/ORDER BY\s+"articles"\."created_at" ASC,\s*"articles"\."id" ASC/i, order_sql)
+  end
 end

@@ -62,7 +62,7 @@ module Admin
         when "created_at_desc"
           articles.order(created_at: :desc)
         when "created_at_asc"
-          articles.order(updated_at: :desc)
+          articles.order(created_at: :asc, id: :asc)
         when "revenue_usd"
           articles.order_by_revenue_usd
         when "orders_count"
