@@ -6,7 +6,7 @@
 module HtmlPostProcessor
   # Allow-list of iframe src patterns kept by `escape_iframes`. Only
   # YouTube is currently trusted; everything else is stripped.
-  IFRAME_SRC_WHITE_LIST_REGEX = [ %r{\Ahttps://(www.)?youtube\.com/\S+\z} ].freeze
+  IFRAME_SRC_WHITE_LIST_REGEX = [ %r{\Ahttps://(?:www\.)?youtube\.com/\S+\z} ].freeze
 
   def parse_link
     transform("a") do |a|
@@ -96,6 +96,11 @@ module HtmlPostProcessor
     @doc ||= Nokogiri::HTML.fragment(@html)
   end
 
+  # Builds the photoswipe anchor through the Nokogiri node API instead of
+  # string interpolation. Loofah only escapes space and `"` inside an
+  # attribute value, so a single quote in an author-supplied `src` used to
+  # break out of the interpolated attribute and be parsed as a new one
+  # (e.g. `onclick`) on the generated anchor.
   def decorate_image(img)
     src = img.attr("src")
     normalize_image_src(img, src)
@@ -107,16 +112,14 @@ module HtmlPostProcessor
 
     size ||= []
 
-    img.wrap <<~TAG
-      <a#{' '}
-        class='photoswipe'#{' '}
-        data-pswp-src='#{img['src']}'#{' '}
-        data-pswp-width='#{size.first}'#{' '}
-        data-pswp-height='#{size.last}'#{' '}
-        href='#{img['src']}'#{' '}
-        target='_blank'
-      >
-    TAG
+    anchor = Nokogiri::XML::Node.new("a", img.document)
+    anchor["class"] = "photoswipe"
+    anchor["data-pswp-src"] = img["src"]
+    anchor["data-pswp-width"] = size.first.to_s
+    anchor["data-pswp-height"] = size.last.to_s
+    anchor["href"] = img["src"]
+    anchor["target"] = "_blank"
+    img.wrap(anchor)
 
     img["class"] = "max-w-full mx-auto bg-zinc-50"
     img["width"] = size.first if size.first.present?

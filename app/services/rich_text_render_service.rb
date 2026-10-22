@@ -5,14 +5,16 @@ class RichTextRenderService
 
   def initialize(rich_text, **kargs)
     @html =
-      case rich_text
-      when ActionText::RichText
-        rich_text.body.to_html
-      when ActionText::Content
-        rich_text.to_html
-      else
-        rich_text.to_s
-      end
+      HtmlSanitizer.call(
+        case rich_text
+        when ActionText::RichText
+          rich_text.body.to_html
+        when ActionText::Content
+          rich_text.to_html
+        else
+          rich_text.to_s
+        end
+      )
     @type = kargs[:type] || :default
   end
 

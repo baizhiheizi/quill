@@ -37,13 +37,16 @@ class RichTextRenderServiceTest < ActiveSupport::TestCase
     assert_includes html, 'target="_blank"'
   end
 
-  test "full type does not override existing data-turbo-method" do
+  test "full type strips author-supplied data-turbo-method and opens the link in a new tab" do
     html = RichTextRenderService.call(
-      '<a href="https://example.com" data-turbo-method="post">x</a>',
+      '<a href="https://example.com" data-turbo-method="delete">x</a>',
       type: :full
     )
 
-    refute_includes html, 'target="_blank"'
+    # Author-supplied data-turbo-method is removed by the sanitizer, so the
+    # link is opened with target=_blank and Turbo does not intercept it.
+    refute_includes html, "data-turbo-method"
+    assert_includes html, 'target="_blank"'
   end
 
   test "full type adds break-words class to paragraphs" do
@@ -141,5 +144,63 @@ class RichTextRenderServiceTest < ActiveSupport::TestCase
                  MarkdownRenderService::IFRAME_SRC_WHITE_LIST_REGEX
     assert_equal HtmlPostProcessor::IFRAME_SRC_WHITE_LIST_REGEX,
                  RichTextRenderService::IFRAME_SRC_WHITE_LIST_REGEX
+  end
+
+  test "strips script tags from author-supplied html" do
+    html = RichTextRenderService.call(
+      "<p>hi</p><script>alert(document.domain)</script>",
+      type: :default
+    )
+
+    refute_includes html, "<script"
+    refute_includes html, "alert(document.domain)"
+    assert_includes html, "<p>hi</p>"
+  end
+
+  test "strips script tags from an ActionText::RichText body" do
+    rich_text = ActionText::RichText.new(
+      body: "<p>hi</p><script>alert(document.domain)</script>"
+    )
+    html = RichTextRenderService.call(rich_text, type: :default)
+
+    refute_includes html, "<script"
+    assert_includes html, "<p>hi</p>"
+  end
+
+  test "strips event handler attributes" do
+    html = RichTextRenderService.call(
+      '<p onclick="alert(1)">hi</p>',
+      type: :default
+    )
+
+    refute_includes html, "onclick"
+  end
+
+  test "photoswipe anchor does not gain event handler attributes from a quoted src" do
+    html = RichTextRenderService.call(
+      %(<img src="x'onclick='alert(document.domain)'" alt="pic" />),
+      type: :full
+    )
+
+    assert_includes html, "photoswipe"
+
+    event_handlers = Nokogiri::HTML.fragment(html).css("*").flat_map do |node|
+      node.attributes.keys.map(&:to_s)
+    end.select { |name| name.start_with?("on") }
+
+    assert_empty event_handlers
+  end
+
+  test "photoswipe anchor keeps the src value verbatim instead of parsing it as markup" do
+    html = RichTextRenderService.call(
+      %(<img src="x'onclick='alert(document.domain)'" alt="pic" />),
+      type: :full
+    )
+
+    anchor = Nokogiri::HTML.fragment(html).css("a.photoswipe").first
+
+    assert_not_nil anchor
+    assert_equal "x'onclick='alert(document.domain)'", anchor["href"]
+    assert_equal "x'onclick='alert(document.domain)'", anchor["data-pswp-src"]
   end
 end
