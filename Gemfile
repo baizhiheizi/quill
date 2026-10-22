@@ -7,8 +7,11 @@ ruby "~> 4.0"
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem "rails", "~> 8.1"
 
-# Rails 8.1.x calls JSON.parse(source, options) positionally, which json 3
-# rejects (keywords only). Hold at 2.x until a Rails release supports json 3.
+# json 3 dropped the positional options hash that Rails 8.1.3.1 passed to
+# JSON.parse(source, options), so every json column read raised ArgumentError
+# (see #2125 / #2130). Rails 8.1.4 calls JSON.parse(source, **options), which
+# json 3 accepts, so this pin is now conservative rather than required -
+# re-test with "~> 3.0" and drop it if the suite stays green.
 gem "json", "~> 2.21"
 
 gem "pg"

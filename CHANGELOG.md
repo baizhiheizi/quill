@@ -14,15 +14,21 @@ moved.
 `QuillBot` gained the reactor wiring and `MixinMessage` gained the message
 model, both covered by new tests.
 
-### Deliberate `json` pin — do not bump
+### The deliberate `json` pin
 
-`json` is held at `~> 2.21`. Rails 8.1 calls `JSON.parse(source, options)`
-positionally; json 3 dropped the positional options hash, so **every json
-column read raises `ArgumentError` and 500s any controller that touches one**.
+`json` is held at `~> 2.21` (locked 2.21.2).
 
-Dependabot #2125 bumped to json 3.0.2 and broke main; #2130 reverted it. The
-pin carries an explanatory comment in the `Gemfile` — keep it until a Rails
-release adopts the json 3 signature.
+The pin was necessary on Rails 8.1.3.1, which called `JSON.parse(source,
+options)` positionally; json 3 dropped the positional options hash, so **every
+json column read raised `ArgumentError` and 500ed any controller that touched
+one**. Dependabot #2125 bumped to json 3.0.2 and broke main; #2130 reverted it.
+
+The pin is now conservative rather than required: Rails 8.1.4 (locked since
+#2152) calls `JSON.parse(source, **options)`, which json 3 accepts — the
+condition the pin was waiting for ("until a Rails release adopts the json 3
+signature") was already met by the locked Rails version. The `Gemfile` comment
+records why the pin exists; re-test with `gem "json", "~> 3.0"` and drop the
+pin if the suite stays green.
 
 ### Crash fixes
 
@@ -39,14 +45,17 @@ release adopts the json 3 signature.
 
 ### Dependencies
 
-`ransack` 4.4.1 → 5.0.0 (#2128, now locked 6.0.0), plus routine patch bumps
-(lexxy, posthog-rails, sqlite3, simplecov, bootsnap, aws-sdk-s3,
-image_processing, mission_control-jobs, selenium-webdriver).
+`ransack` 4.4.1 → 5.0.0 (#2128, now locked 6.0.0). Also bumped since the
+release: lexxy 0.9.31 → 1.0.1 (crossed 1.0, #2157), posthog-rails 3.18.4 →
+3.19.1, pagy 43.6.2 → 43.8.1, sqlite3 2.9.6 → 2.10.0, simplecov 1.1.1 →
+1.3.2, bootsnap 1.25.0 → 1.26.0, aws-sdk-s3 1.229.0 → 1.233.2,
+image_processing 2.0.3 → 2.2.0, mission_control-jobs 1.2.0 → 1.3.1,
+selenium-webdriver 4.48.0 → 4.51.0.
 
 ### Tooling and docs corrections
 
 - `docs/how-to/deploy-with-kamal.md` corrected against the real deployment:
-  storage server IP, `Release` (not `Deploy`) as the workflow name,
+  app host IP, `Release` (not `Deploy`) as the workflow name,
   `bin/kamal deploy --skip-push`, `KAMAL_REGISTRY_PASSWORD` as a ghcr.io
   login, and the rollback snippet (`workflow_dispatch` takes a branch or tag,
   not a bare SHA).
@@ -56,9 +65,9 @@ image_processing, mission_control-jobs, selenium-webdriver).
   view-level count alone read as a false gap.
 - `AGENTS.md` corrected: Docker Hub image name, `deploy.yml` → `release.yml`.
 
-## Unreleased — specs/011-comprehensive-ui-refactor
+### specs/011-comprehensive-ui-refactor
 
-### Design system foundation
+#### Design system foundation
 
 Quill now has a single, well-maintained design system. Open `/design-system`
 in development (or as an Administrator in production) to see every token and
@@ -116,7 +125,7 @@ every primitive in one place.
   brand spec + 9 HTML prototypes + style.css. The live source-of-truth
   remains the OpenDesign project; the snapshot is for diffability.
 
-### Layout refresh
+#### Layout refresh
 
 - `app/views/layouts/admin.html.erb` — body class switched to design-system
   base (`min-h-screen bg-base-100 text-base-content`).
@@ -136,7 +145,7 @@ every primitive in one place.
   `ds_transfers_heading`, `ds_transfers_last_n`, `ds_rules_subhead`) in
   `config/locales/views.{en,ja,zh-CN}.yml`.
 
-### Documented follow-up
+#### Documented follow-up
 
 The foundation is in place; mechanical migration of all 116 raw `<button
 class="btn btn-*">` and 16 raw `<table>` occurrences across the rest of the
