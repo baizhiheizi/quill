@@ -2,7 +2,7 @@
 
 require "test_helper"
 
-# Pins the contract of `API::RenderingHelper`, the small set of JSON render
+# Pins the contract of `API::RenderingHelper`, the seven JSON render
 # helpers mixed into `API::BaseController`. Every JSON-only controller in the
 # API namespace (`api/articles_controller`, `api/home_controller`,
 # `api/valid_users_controller`) plus the `rescue_from` blocks in
@@ -10,9 +10,9 @@ require "test_helper"
 # load-bearing for every JSON response shape the API returns.
 #
 # The host controller below is the smallest object that satisfies the
-# concern: a single `#dispatch` action picks one of the render helpers based
+# concern: a single `#render_kind` action picks one of the render helpers based
 # on the `kind` query param and forwards any optional `message` / `data`
-# params. Each test invokes `dispatch` directly on a fresh controller
+# params. Each test invokes `render_kind` directly on a fresh controller
 # instance — no routing (the host class is intentionally not in
 # `config/routes.rb`) — and asserts on status, body, and (for the
 # data-bearing helper) payload contents.
@@ -26,10 +26,15 @@ class API::RenderingHelperTest < ActiveSupport::TestCase
   HOST_CLASS = Class.new(ActionController::Base) do
     include API::RenderingHelper
 
-    # Single dispatch action — the `kind` param selects which render helper
+    # Single render action — the `kind` param selects which render helper
     # is invoked, the optional `message` / `data` params are forwarded as-is
     # to exercise the default-vs-custom-message branches.
-    def dispatch
+    #
+    # Named `#render_kind` rather than `#dispatch`: `dispatch` is a public
+    # framework method on `ActionController::Metal`
+    # (`dispatch(name, request, response)`) and shadowing it with a
+    # zero-arity method would make the host class unroutable.
+    def render_kind
       case params[:kind]
       when "created_with_data"
         render_created(JSON.parse(params[:data]))
@@ -73,7 +78,7 @@ class API::RenderingHelperTest < ActiveSupport::TestCase
 
   def invoke(params = {})
     @controller.params = ActionController::Parameters.new(params)
-    @controller.dispatch
+    @controller.render_kind
   end
 
   # ---- render_created ---------------------------------------------------
@@ -179,5 +184,24 @@ class API::RenderingHelperTest < ActiveSupport::TestCase
 
     assert_response :internal_server_error
     assert_equal({ message: "Upstream timeout" }.to_json, @response.body)
+  end
+
+  # ---- visibility -------------------------------------------------------
+
+  test "the render helpers stay private" do
+    expected = %i[
+      render_created render_forbidden render_internal_server_error render_no_content
+      render_not_found render_unauthorized render_unprocessable_entity
+    ].sort
+
+    assert_equal expected, API::RenderingHelper.private_instance_methods(false).sort
+  end
+
+  test "the host action does not shadow the framework's dispatch method" do
+    # `ActionController::Metal#dispatch(name, request, response)` is public
+    # framework API — a zero-arity override of the same name would make the
+    # host class unroutable.
+    assert_not_equal HOST_CLASS, HOST_CLASS.instance_method(:dispatch).owner,
+      "the host class must not define its own #dispatch"
   end
 end
