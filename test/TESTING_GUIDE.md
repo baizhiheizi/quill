@@ -140,7 +140,7 @@ Some tests change methods on a model or notifier class with `define_method` and 
 
 ### Article
 - See "Fixtures & Test Data" above for creation patterns.
-- `content_as_html` uses `RichTextRenderService` for migrated content and `MarkdownRenderService` for legacy content. `content_body` uses `content.body.to_html` for migrated content and `MarkdownRenderService` for legacy content. `plain_text` uses `content.to_plain_text` for migrated content and the legacy markdown string otherwise. `migrated_content?` checks `content.body.present?`.
+- `content_as_html` uses `RichTextRenderService` for migrated content and `MarkdownRenderService` for legacy content. `content_body` also uses `RichTextRenderService` (type `:default`) for migrated content and `MarkdownRenderService` for legacy content. `plain_text` uses `content.to_plain_text` for migrated content and the legacy markdown string otherwise. `migrated_content?` checks `content.body.present?`.
 
 ### ArticleSnapshot
 - `store_accessor :raw, %w[title intro content digest]` — the four declared accessors are conveniences, not a schema. `raw["extra_field"]` round-trips fine.
