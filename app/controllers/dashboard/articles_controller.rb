@@ -31,7 +31,9 @@ class Dashboard::ArticlesController < Dashboard::BaseController
   end
 
   def show
-    @tab = params[:tab] || "buy_records"
+    # Same allow-list policy as `#index`: only the four real sub-tabs are
+    # accepted, anything else falls back to the default panel.
+    @tab = params[:tab].presence_in(%w[buy_records reward_records cite_records comment_records]) || "buy_records"
     @article = current_user.articles.find_by uuid: params[:uuid]
   end
 end

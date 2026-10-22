@@ -43,6 +43,21 @@ class Dashboard::ArticlesControllerTest < ActionController::TestCase
     assert articles.all? { |a| a.state == "published" }
   end
 
+  test "index renders hidden tab" do
+    # No fixture ships a `hidden`-state article, so promote one of the
+    # author's published articles to `hidden`.
+    hidden = articles(:published_free)
+    hidden.update_column(:state, "hidden")
+
+    get :index, params: { tab: "hidden" }
+
+    assert_response :success
+    assert_equal "hidden", @controller.instance_variable_get(:@tab)
+    result = @controller.instance_variable_get(:@articles)
+    assert_includes result, hidden
+    assert result.all? { |a| a.state == "hidden" }
+  end
+
   test "index renders bought tab" do
     buyer = users(:reader_two)
     article = articles(:published_paid)
@@ -136,5 +151,14 @@ class Dashboard::ArticlesControllerTest < ActionController::TestCase
 
     assert_response :success
     assert_equal "reward_records", @controller.instance_variable_get(:@tab)
+  end
+
+  test "show falls back to the buy_records tab for an unknown tab value" do
+    article = articles(:published_paid)
+
+    get :show, params: { uuid: article.uuid, tab: "not-a-tab" }
+
+    assert_response :success
+    assert_equal "buy_records", @controller.instance_variable_get(:@tab)
   end
 end
