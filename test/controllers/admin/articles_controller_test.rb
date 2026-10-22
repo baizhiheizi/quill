@@ -107,4 +107,25 @@ class Admin::ArticlesControllerTest < ActionController::TestCase
       "expected at most 4 active_storage_blobs SELECTs (one per blob in the " \
       "avatar chain), got #{blob_queries}. Per-row avatar fan-out N+1 regression?"
   end
+  # `order_by=created_at_asc` is offered as "Created ASC" in
+  # `app/views/admin/articles/_query.html.erb`. It must order by
+  # `created_at`, like every other admin index does.
+  test "index 'Created ASC' orders by created_at ascending" do
+    older = articles(:published_paid)
+    newer = articles(:published_free)
+    # Decouple the two timestamps: `older` was created first but touched
+    # last, so a sort on `updated_at` yields the opposite order.
+    older.update_column(:created_at, 3.days.ago)
+    older.update_column(:updated_at, 1.day.ago)
+    newer.update_column(:created_at, 2.days.ago)
+    newer.update_column(:updated_at, 1.hour.ago)
+
+    get :index, params: { order_by: "created_at_asc" }
+
+    assert_response :success
+    result = @controller.instance_variable_get(:@articles).to_a
+
+    assert_operator result.index(older), :<, result.index(newer),
+      "expected 'Created ASC' to sort by created_at ascending"
+  end
 end
