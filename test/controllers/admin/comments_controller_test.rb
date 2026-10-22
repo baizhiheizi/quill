@@ -155,7 +155,29 @@ class Admin::CommentsControllerTest < ActionController::TestCase
     assert_response :success
     result = @controller.instance_variable_get(:@comments).to_a
 
+    assert_includes result, older
+    assert_includes result, newer
     assert_operator result.index(older), :<, result.index(newer),
       "expected 'Created ASC' to sort by created_at ascending"
+  end
+
+  # `created_at` alone is not a unique sort key. The admin index paginates
+  # with OFFSET, so rows tying on `created_at` may come back in a different
+  # order between requests — a row can be skipped on one page and repeated on
+  # the next. Sorting by `id` as a secondary key makes the order total, and
+  # therefore the pagination deterministic.
+  test "index 'Created ASC' breaks created_at ties by id" do
+    sqls = []
+    callback = ->(_name, _start, _finish, _id, payload) do
+      sqls << payload[:sql] if payload[:sql].include?("FROM \"comments\"")
+    end
+
+    ActiveSupport::Notifications.subscribed(callback, "sql.active_record") do
+      get :index, params: { order_by: "created_at_asc" }
+    end
+
+    order_sql = sqls.reverse.find { |sql| sql.include?("ORDER BY") }
+    assert_not_nil order_sql, "expected an ordered SELECT for the comments index"
+    assert_match(/ORDER BY\s+"comments"\."created_at" ASC,\s*"comments"\."id" ASC/i, order_sql)
   end
 end
