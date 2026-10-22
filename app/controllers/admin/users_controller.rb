@@ -5,7 +5,7 @@ module Admin
     def index
       users = User.all
 
-      @filter = params[:filter] || "all"
+      @filter = allowed_param(:filter, "all", %w[mixin only_validated only_blocked all])
       users =
         case @filter
         when "mixin"
@@ -18,7 +18,7 @@ module Admin
           users
         end
 
-      @order_by = params[:order_by] || "created_at_desc"
+      @order_by = allowed_param(:order_by, "created_at_desc", %w[created_at_desc created_at_asc revenue_total orders_total articles_count comments_count])
       users =
         case @order_by
         when "created_at_desc"

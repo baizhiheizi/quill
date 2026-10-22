@@ -16,7 +16,7 @@ module Admin
           bonuses.where(state: @state)
         end
 
-      @order_by = params[:order_by] || "created_at_desc"
+      @order_by = allowed_param(:order_by, "created_at_desc", %w[created_at_desc created_at_asc])
       bonuses =
         case @order_by
         when "created_at_desc"

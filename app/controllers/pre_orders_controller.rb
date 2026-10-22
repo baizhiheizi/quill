@@ -20,6 +20,8 @@ class PreOrdersController < ApplicationController
       end
 
       format.turbo_stream do
+        return redirect_to root_path if @pre_order.blank?
+
         render :show
       end
     end
@@ -27,12 +29,17 @@ class PreOrdersController < ApplicationController
 
   def new
     article = Article.published.find_by uuid: params[:article_uuid]
+    # `new` only ever serves an Article; `buy_collection` belongs to the
+    # Collection flow, which posts straight to `create`. Accepting it here
+    # rendered the buy-collection form for an Article and produced a pre-order
+    # whose on-chain memo put the article's uuid in the collection slot.
+    order_type = params[:order_type].presence_in(%w[buy_article reward_article])
 
-    return if article.blank?
+    return redirect_to root_path if article.blank? || order_type.blank?
 
-    authorize_pre_order_item!(article, params[:order_type])
+    authorize_pre_order_item!(article, order_type)
 
-    @pre_order = current_user.pre_orders.new item: article, order_type: params[:order_type]
+    @pre_order = current_user.pre_orders.new item: article, order_type: order_type
   end
 
   def create

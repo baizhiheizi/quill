@@ -30,7 +30,11 @@
 class MixpayPreOrder < PreOrder
   validate :ensure_mixpay_supported
 
-  def pay_url
+  # The optional argument keeps the signature compatible with
+  # `PreOrder#pay_url` — the pay button partial always passes the asset
+  # it is rendering for, and a zero-argument override raised
+  # `ArgumentError` for every MixPay pre-order.
+  def pay_url(_pay_asset_id = asset_id)
     Addressable::URI.new(
       scheme: "https",
       host: "mixpay.me",
