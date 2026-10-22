@@ -5,6 +5,7 @@ class ApplicationController < ActionController::Base
   include Localizable
   include ViewerActionSets
   include Pundit::Authorization
+  include CoercesPaginationParams
 
   before_action :prepare_exception_notifier
 

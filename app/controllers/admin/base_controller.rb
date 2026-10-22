@@ -2,6 +2,7 @@
 
 class Admin::BaseController < ActionController::Base
   include Pagy::Method
+  include CoercesPaginationParams
 
   before_action :authenticate_admin!
 
