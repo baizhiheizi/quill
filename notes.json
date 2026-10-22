@@ -2,20 +2,20 @@
   "version": 1,
   "cursors": {
     "labelling_after": 2179,
-    "investigation_after": 2179
+    "investigation_after": 2182
   },
   "issues": [
     {
       "number": 2179,
       "state": "awaiting_approval",
-      "updated_at": "2026-10-21",
-      "note": "Unvalidated-param 500s (pre-orders + 12 admin indexes). Fixed in a draft PR on branch repo-assist/fix-issue-2179-nil-query-params-3f7a2c91e8b4d605; commented. PR number assigned on publish - match by branch."
+      "updated_at": "2026-10-22",
+      "note": "Unvalidated-param 500s (pre-orders + 12 admin indexes). Fixed in draft PR #2181 (branch repo-assist/fix-issue-2179-nil-query-params-3f7a2c91e8b4d605-996de30166f4996c); commented. Close once #2181 merges."
     },
     {
-      "number": 2177,
+      "number": 2182,
       "state": "awaiting_approval",
-      "updated_at": "2026-10-21",
-      "note": "CI dependency-install retry. The 05:09 run's push was rejected (no `workflows` permission for the App). Re-created on branch repo-assist/improve-ci-dependency-install-retry-e3080a8204e1cdcb; commented. Match by branch."
+      "updated_at": "2026-10-22",
+      "note": "CI dependency-install retry. No PR is possible - the workflow App lacks `workflows` permission so GitHub refuses any push touching check.yml. A verified one-step diff is posted in the issue for a maintainer to apply. #2177 closed as its duplicate."
     },
     {
       "number": 2175,
@@ -69,19 +69,19 @@
   "fixes": [
     {
       "issue": 2179,
-      "pr": null,
-      "branch": "repo-assist/fix-issue-2179-nil-query-params-3f7a2c91e8b4d605",
+      "pr": 2181,
+      "branch": "repo-assist/fix-issue-2179-nil-query-params-3f7a2c91e8b4d605-996de30166f4996c",
       "status": "open",
-      "updated_at": "2026-10-21",
-      "note": "PreOrdersController#new redirects on unknown article/order_type (validated before authorize); price helper falls back to the item's price; turbo stream falls back to the pre-order currency; MixpayPreOrder#pay_url takes the optional asset; admin order_by/filter allow-listed."
+      "updated_at": "2026-10-22",
+      "note": "PreOrdersController#new redirects on unknown article/order_type; price helper falls back to the item's price; turbo stream falls back to the pre-order currency; MixpayPreOrder#pay_url takes the optional asset; admin order_by/filter allow-listed. CI green."
     },
     {
       "issue": 2177,
       "pr": null,
       "branch": "repo-assist/improve-ci-dependency-install-retry-e3080a8204e1cdcb",
-      "status": "open",
-      "updated_at": "2026-10-21",
-      "note": "check.yml 'Install dependencies' retries 5x with 10s..40s backoff, then fails with an ::error:: annotation. Script exercised under `bash -e` against stub commands for all three paths."
+      "status": "closed",
+      "updated_at": "2026-10-22",
+      "note": "The PR path is exhausted: the App is refused write access to .github/workflows/check.yml, so the remote branch stays at main. The verified one-step diff now lives in issue #2182 for a maintainer to apply."
     },
     {
       "issue": 2170,
@@ -103,8 +103,8 @@
   "checks": [
     {
       "area": "tests",
-      "checked_at": "2026-10-21",
-      "result": "Full non-system suite: 1607 runs, 5102 assertions, 0 failures, 0 errors, 2 skips. The seed-dependent RackAttack csrf_detected error did not reproduce this run.",
+      "checked_at": "2026-10-22",
+      "result": "Full non-system suite: 1560 runs, 4394 assertions, 0 failures, 0 errors, 1 skip. The two new admin sort regression tests fail on unpatched code and pass after the fix.",
       "follow_up": "Run via ruby -Itest glob loader, NOT `bin/rails test`: the rake path pulls test:prepare -> css:install and aborts without bun, and a piped exit 0 masks the abort."
     },
     {
@@ -115,15 +115,33 @@
     },
     {
       "area": "tooling",
-      "checked_at": "2026-10-21",
-      "result": "bin/rubocop 601 files no offenses; bin/rails zeitwerk:check all good; bin/lint-design-system 43 pre-existing DS010 warnings, none blocking, none introduced.",
-      "follow_up": "bun is NOT on PATH by default - export PATH=\"$HOME/.local/share/mise/shims:$PATH\" before prettier or bun test."
+      "checked_at": "2026-10-22",
+      "result": "bin/rubocop 600 files no offenses; bin/rails zeitwerk:check all good; bin/lint-design-system 43 pre-existing DS010 warnings, none blocking, none introduced. safeoutputs update_issue allows only ONE call per run.",
+      "follow_up": "Spend that single update_issue on the monthly activity issue body, not on closing a duplicate - 2026-10-22 lost the body update that way. bun is NOT on PATH by default: export PATH=\"$HOME/.local/share/mise/shims:$PATH\" before prettier or bun test."
     },
     {
       "area": "ci",
+      "checked_at": "2026-10-22",
+      "result": "The self-hosted runner's mise-shim race (ETXTBSY, exit 126) is runner-side concurrency, not a branch problem. The repo-side retry for check.yml cannot ship as a PR: the App is refused write access to .github/workflows.",
+      "follow_up": "A verified one-step diff is in issue #2182 for a maintainer to apply. The durable fix is the runner's job-concurrency setting, outside this repo."
+    },
+    {
+      "area": "repo_assist_prs",
+      "checked_at": "2026-10-22",
+      "result": "All 7 open Repo Assist PRs (#2181, #2178, #2176, #2172, #2171, #2169, #2163) have a green Check job; no follow-up commits were needed.",
+      "follow_up": "#2172 shows no Check run because CHANGELOG.md is outside check.yml's paths filter - that is not a failure."
+    },
+    {
+      "area": "code",
+      "checked_at": "2026-10-22",
+      "result": "The admin 'Created ASC' sort on Articles and Comments ordered by updated_at DESC - the opposite of the label and of the other ten admin indexes. Fixed on branch repo-assist/fix-admin-created-at-asc-sort.",
+      "follow_up": "Audit the other admin sort keys (published_at_*, revenue_usd, the *_count counters) against their dropdown labels; only created_at_asc was checked. The dead @pay_asset branch still needs a product decision."
+    },
+    {
+      "area": "qa",
       "checked_at": "2026-10-21",
-      "result": "The self-hosted runner's mise-shim race (ETXTBSY, exit 126) is a runner-side concurrency problem, not a branch problem. A bounded retry in the install step is the repo-side mitigation.",
-      "follow_up": "The durable fix is the runner's job-concurrency setting, outside this repo. The workflow's App has no `workflows` permission, so a direct push of check.yml is refused - go through the normal PR path."
+      "result": "Stored XSS confirmed and fixed in draft PR #2176: ActionText sanitizes only via ActionText::ContentHelper, but RichTextRenderService, MarkdownRenderService and RichTextContent#content_body read the raw fragment.",
+      "follow_up": "config/initializers/content_security_policy.rb is entirely commented out - a CSP header is a natural follow-up. The sanitizer drops inline style attributes and non-Turbo data-* attributes; worth a maintainer look before merge."
     },
     {
       "area": "docs",
@@ -136,22 +154,20 @@
       "checked_at": "2026-10-20",
       "result": "NOT released. 22 commits unreleased since 2026-09-07, incl. a major dep bump and two 500 fixes. Release is workflow_dispatch on release.yml and deploys to production.",
       "follow_up": "Never trigger Release: it deploys to production and needs maintainer approval. Flagged in the monthly issue instead."
-    },
-    {
-      "area": "code",
-      "checked_at": "2026-10-21",
-      "result": "The unvalidated-param 500 family from #2179 is fixed. The dead `@pay_asset` branch in app/views/pre_orders/show.turbo_stream.erb remains - `@pay_asset` is never assigned, so the `~$` estimate never renders.",
-      "follow_up": "Left alone: fixing it changes what the view shows, so it needs a product decision. Also: admin/articles and admin/comments map 'created_at_asc' to `updated_at: :desc` - a behaviour quirk, not a 500."
-    },
-    {
-      "area": "qa",
-      "checked_at": "2026-10-21",
-      "result": "Stored XSS confirmed and fixed in draft PR #2176: ActionText sanitizes only via ActionText::ContentHelper, but RichTextRenderService, MarkdownRenderService and RichTextContent#content_body read the raw fragment.",
-      "follow_up": "config/initializers/content_security_policy.rb is entirely commented out - a CSP header is a natural follow-up. The sanitizer drops inline style attributes and non-Turbo data-* attributes; worth a maintainer look before merge."
     }
   ],
   "completed_actions": [],
   "priorities": [
+    {
+      "task": 6,
+      "item": "Match the admin sort PR and issue by branch repo-assist/fix-admin-created-at-asc-sort",
+      "note": "Both numbers are assigned on publish. Fixes Admin::ArticlesController and Admin::CommentsController ordering by updated_at DESC for created_at_asc. Locally green: 1560 runs / 0 failures."
+    },
+    {
+      "task": 5,
+      "item": "Audit the remaining admin sort dropdowns against their labels",
+      "note": "Found 2026-10-22: created_at_asc was mis-mapped in two of twelve admin indexes. The other keys (published_at_*, revenue_usd, the *_count counters) have not been checked against their dropdown labels."
+    },
     {
       "task": 9,
       "item": "Sweep untested helpers: dashboard_helper, design_system_helper, HtmlPostProcessor",
@@ -170,7 +186,7 @@
     {
       "task": 6,
       "item": "Re-check the repo-assist drafts once CI re-runs",
-      "note": "#2163, #2169, #2171, #2172, #2176 and #2178 are green. The two new drafts (nil-params fix, CI retry) have no numbers yet - find them by branch until the publish step assigns them."
+      "note": "#2163, #2169, #2171, #2172, #2176, #2178 and #2181 were all green on 2026-10-22. The CI-retry PR does not exist and never will - see issue #2182."
     },
     {
       "task": 10,
