@@ -97,10 +97,31 @@ class ArticlesControllerTest < IntegrationTestCase
     # Pagy::OptionError fires for any `page` that resolves to < 1, not just
     # `"0"`. Negative, empty, and non-numeric strings all reach the countless
     # paginator as raw strings and trip the same assertion.
-    %w[-1 abc 0foo].each do |bad|
+    #
+    # A huge page number is hostile in the other direction: pagy accepts it as
+    # a valid integer, but the derived OFFSET (`limit * (page - 1)`) overflows
+    # a Postgres bigint and used to raise `PG::NumericValueOutOfRange` ->
+    # HTTP 500 on the public index.
+    %w[-1 abc 0foo 99999999999999999999].each do |bad|
       get articles_path(page: bad)
       assert_response :success, "expected success for page=#{bad.inspect}"
     end
+  end
+
+  test "index keeps a legitimate deep page" do
+    get articles_path(page: "2")
+
+    assert_response :success
+    assert_equal 2, effective_pagy_page,
+      "expected page=2 to stay on page 2 instead of being clamped"
+  end
+
+  test "index clamps a page above the maximum to the first page" do
+    get articles_path(page: "99999999999999999999")
+
+    assert_response :success
+    assert_equal 1, effective_pagy_page,
+      "expected an out-of-range page to be clamped to page 1"
   end
 
   test "content fields partial renders lexxy editor" do
@@ -193,6 +214,12 @@ class ArticlesControllerTest < IntegrationTestCase
   end
 
   private
+
+  # The page pagy actually resolved for the last request. Reading it from
+  # the controller proves the coercion ran before pagy saw the parameter.
+  def effective_pagy_page
+    controller.instance_variable_get(:@pagy)&.page
+  end
 
   # Extract article UUIDs from the rendered /articles page by matching the
   # `/uid/uuid` link pattern that each article card renders.
