@@ -43,6 +43,21 @@ class Dashboard::ArticlesControllerTest < ActionController::TestCase
     assert articles.all? { |a| a.state == "published" }
   end
 
+  test "index renders hidden tab" do
+    # No fixture ships a `hidden`-state article, so promote one of the
+    # author's published articles to `hidden`.
+    hidden = articles(:published_free)
+    hidden.update_column(:state, "hidden")
+
+    get :index, params: { tab: "hidden" }
+
+    assert_response :success
+    assert_equal "hidden", @controller.instance_variable_get(:@tab)
+    result = @controller.instance_variable_get(:@articles)
+    assert_includes result, hidden
+    assert result.all? { |a| a.state == "hidden" }
+  end
+
   test "index renders bought tab" do
     buyer = users(:reader_two)
     article = articles(:published_paid)
@@ -61,6 +76,16 @@ class Dashboard::ArticlesControllerTest < ActionController::TestCase
     assert_response :success
     articles = @controller.instance_variable_get(:@articles)
     assert_includes articles, article
+  end
+
+  test "index falls back to the drafted tab for an unknown tab value" do
+    # An unknown `tab` used to leave the scope nil and blow up on
+    # `.with_associations` below (the same class of bug #2105 fixed in
+    # `Users::ArticlesController#index`).
+    get :index, params: { tab: "not-a-tab" }
+
+    assert_response :success
+    assert_equal "drafted", @controller.instance_variable_get(:@tab)
   end
 
   test "index renders empty state for user with no articles" do
@@ -126,5 +151,14 @@ class Dashboard::ArticlesControllerTest < ActionController::TestCase
 
     assert_response :success
     assert_equal "reward_records", @controller.instance_variable_get(:@tab)
+  end
+
+  test "show falls back to the buy_records tab for an unknown tab value" do
+    article = articles(:published_paid)
+
+    get :show, params: { uuid: article.uuid, tab: "not-a-tab" }
+
+    assert_response :success
+    assert_equal "buy_records", @controller.instance_variable_get(:@tab)
   end
 end
