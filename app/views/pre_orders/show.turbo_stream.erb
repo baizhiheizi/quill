@@ -1,7 +1,7 @@
 <% pay_asset = Currency.find_by(asset_id: params[:pay_asset_id].presence || @pre_order.asset_id) || @pre_order.currency %>
 
 <%= turbo_stream.update "#{dom_id @pre_order}_pay_amount" do %>
-  <% if @pay_asset == @pre_order.currency %>
+  <% if pay_asset == @pre_order.currency %>
     ≈$ <%= sprintf('%.4f', @pre_order.currency.price_usd * @pre_order.amount) %>
   <% else %>
     ≈ <%= @pre_order.pay_amount(pay_asset.asset_id) %> <%= pay_asset.symbol %>

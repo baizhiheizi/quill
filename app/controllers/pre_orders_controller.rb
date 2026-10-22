@@ -29,7 +29,11 @@ class PreOrdersController < ApplicationController
 
   def new
     article = Article.published.find_by uuid: params[:article_uuid]
-    order_type = params[:order_type].presence_in(PreOrder.order_types)
+    # `new` only ever serves an Article; `buy_collection` belongs to the
+    # Collection flow, which posts straight to `create`. Accepting it here
+    # rendered the buy-collection form for an Article and produced a pre-order
+    # whose on-chain memo put the article's uuid in the collection slot.
+    order_type = params[:order_type].presence_in(%w[buy_article reward_article])
 
     return redirect_to root_path if article.blank? || order_type.blank?
 

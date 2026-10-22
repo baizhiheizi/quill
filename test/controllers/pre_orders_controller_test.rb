@@ -106,6 +106,32 @@ class PreOrdersNewControllerTest < ActionController::TestCase
     assert_redirected_to root_path
   end
 
+  # `new` only ever resolves an Article, but `PreOrder.order_types` also
+  # contains `buy_collection`. Accepting it here rendered the buy-collection
+  # form for an Article, and submitting it saved a pre-order whose on-chain
+  # memo put the ARTICLE's uuid in the collection slot
+  # (`Mixin::Memo.buy!(collection: item, ...)`) — a protocol violation.
+  # `buy_collection` belongs to the Collection flow, which posts straight to
+  # `create`.
+  #
+  # The reader used here has NOT bought the article, so `authorize item,
+  # :purchase?` succeeds: before the fix the buy-collection form rendered
+  # (HTTP 200) instead of redirecting.
+  test "new redirects home for the buy_collection order type" do
+    buyer = users(:reader_two)
+    session[:current_session_id] = Session.create!(
+      user: buyer,
+      uuid: SecureRandom.uuid,
+      info: { "provider" => "mixin" }
+    ).uuid
+
+    assert_no_difference "PreOrder.count" do
+      get :new, params: { article_uuid: @article.uuid, order_type: "buy_collection" }
+    end
+
+    assert_redirected_to root_path
+  end
+
   # The turbo stream is the format the pay button's Stimulus controller
   # requests. An unknown `follow_id` left `@pre_order` nil and `dom_id(nil)`
   # raised `ArgumentError` -> HTTP 500.
@@ -133,6 +159,29 @@ class PreOrdersNewControllerTest < ActionController::TestCase
     end
 
     assert_response :success
+  end
+
+  # The turbo stream template compares the resolved `pay_asset` local with
+  # the pre order's currency to choose between the "≈$ <usd>" estimate and
+  # the "≈ <amount> <SYMBOL>" one. The comparison used the never-assigned
+  # `@pay_asset` ivar, so the USD variant was dead code and the template
+  # always rendered the asset amount.
+  test "show renders the usd estimate when the pay asset matches the pre order currency" do
+    with_quill_bot_stub do
+      pre_order = PreOrder.create!(
+        item: @article,
+        payer: @buyer,
+        order_type: :buy_article,
+        amount: @article.price,
+        asset_id: @article.asset_id
+      )
+
+      get :show, params: { follow_id: pre_order.follow_id }, format: :turbo_stream
+    end
+
+    assert_response :success
+    assert_includes @response.body, "≈$",
+      "expected the USD estimate for a pay asset matching the pre order currency"
   end
 end
 
