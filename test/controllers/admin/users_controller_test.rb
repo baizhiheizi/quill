@@ -147,4 +147,61 @@ class Admin::UsersControllerTest < ActionController::TestCase
     assert_empty queries,
       "expected no per-row avatar SELECTs after the preload, got #{queries.size}:\n#{queries.first(5).join("\n")}"
   end
+
+  test "index orders the list by the revenue the list displays" do
+    # The revenue column renders `author_revenue_total_usd`, so the sort
+    # next to it has to order by author revenue. It used to order by author
+    # *and* reader revenue, which put a user whose early-reader reward was
+    # large above a user with more revenue on screen.
+    seed_author_and_reader_revenue!
+
+    get :index, params: { order_by: "author_revenue_total" }
+    assert_response :success
+
+    ids = @controller.instance_variable_get(:@users).map(&:id)
+    assert_operator ids.index(users(:author).id), :<, ids.index(users(:reader_one).id),
+      "expected the author to sort above a user with only reader revenue"
+
+    # The total-revenue sort is a different metric and stays available as its
+    # own option.
+    get :index, params: { order_by: "revenue_total" }
+    assert_response :success
+
+    ids = @controller.instance_variable_get(:@users).map(&:id)
+    assert_operator ids.index(users(:reader_one).id), :<, ids.index(users(:author).id),
+      "expected the total-revenue sort to count the early-reader reward"
+  end
+
+  private
+
+  # The author earns 2 BTC (100_000 USD at the fixture's 50_000 USD/BTC) as
+  # author revenue; the reader earns 100 BTC (5_000_000 USD) as an
+  # early-reader reward. The two orderings therefore disagree.
+  def seed_author_and_reader_revenue!
+    currency = currencies(:btc)
+    now = Time.current
+
+    Transfer.insert_all!([
+      {
+        wallet_id: nil,
+        asset_id: currency.asset_id,
+        trace_id: SecureRandom.uuid,
+        opponent_id: users(:author).mixin_uuid,
+        amount: 2.0,
+        transfer_type: Transfer.transfer_types[:author_revenue],
+        created_at: now,
+        updated_at: now
+      },
+      {
+        wallet_id: nil,
+        asset_id: currency.asset_id,
+        trace_id: SecureRandom.uuid,
+        opponent_id: users(:reader_one).mixin_uuid,
+        amount: 100.0,
+        transfer_type: Transfer.transfer_types[:reader_revenue],
+        created_at: now,
+        updated_at: now
+      }
+    ])
+  end
 end
