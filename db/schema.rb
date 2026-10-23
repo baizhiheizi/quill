@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_09_04_000000) do
+ActiveRecord::Schema[8.1].define(version: 2026_10_23_090000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_stat_statements"
@@ -140,6 +140,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_04_000000) do
     t.index ["author_id"], name: "index_articles_on_author_id"
     t.index ["collection_id"], name: "index_articles_on_collection_id"
     t.index ["intro"], name: "index_articles_on_intro_trgm", opclass: :gin_trgm_ops, using: :gin
+    t.index ["state", "published_at"], name: "index_articles_on_state_and_published_at"
     t.index ["title"], name: "index_articles_on_title_trgm", opclass: :gin_trgm_ops, using: :gin
     t.index ["uuid"], name: "index_articles_on_uuid", unique: true
   end
@@ -439,6 +440,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_04_000000) do
     t.datetime "created_at", null: false
     t.bigint "tag_id"
     t.datetime "updated_at", null: false
+    t.index ["article_id"], name: "index_taggings_on_article_id"
     t.index ["tag_id", "article_id"], name: "index_taggings_on_tag_id_and_article_id", unique: true
   end
 

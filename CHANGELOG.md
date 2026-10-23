@@ -91,6 +91,38 @@ pin if the suite stays green.
   silently discarded on create (it was honoured on update). The chosen
   `asset_id` is now preserved.
 
+### Performance
+
+Two indexes the article surfaces needed but the schema did not have.
+
+- **`articles (state, published_at)`** — `state` was unindexed, so every
+  `Article.only_published` query seq-scanned the table: the web feed, the
+  JSON API index, the home page's article count and revenue sum, and the
+  admin articles index. `published_at` was unindexed too, so the "lately"
+  feed sort (`ORDER BY published_at DESC`) sorted the whole published set
+  before taking 50 rows. With the composite index the "lately" feed is a
+  backward index scan that returns rows already in order.
+- **`taggings (article_id)`** — the only index on `taggings` was
+  `(tag_id, article_id)`, which cannot answer a lookup by `article_id`
+  alone. Every article list preloads `:tags` through that join
+  (`Article.with_associations` → `includes(:tags)`), so the preload seq-scanned
+  `taggings` on every feed page.
+
+The migration also runs `ANALYZE` on both tables. Postgres collects per-index
+statistics during `ANALYZE`, and an index added to a populated table has
+none — without them the planner will not choose the ordered index scan, so
+the index would sit unused until the next autovacuum.
+
+`bin/measure-feed-indexes` reproduces the measurement: it seeds a synthetic
+dataset inside a transaction it rolls back, then runs `EXPLAIN (ANALYZE,
+BUFFERS)` on the queries the feed issues, with and without the indexes. On
+20,000 articles with 30% published, the "lately" feed sort goes from a
+seq-scan-and-sort to an index scan (3.49 ms → 0.05 ms), the tags preload
+goes from 0.77 ms to 0.01 ms, and the home page's published-article count
+goes from 1.57 ms to 0.64 ms. The default feed sort (popularity) is
+unchanged — it orders on a computed expression, so it reads and sorts the
+published set regardless.
+
 ### Dependencies
 
 `ransack` 4.4.1 → 5.0.0 (#2128, now locked 6.0.0). Also bumped since the

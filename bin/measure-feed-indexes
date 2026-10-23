@@ -1,0 +1,194 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+# Measures whether the feed's hot queries use the indexes they are supposed
+# to, and what the planner does with and without them.
+#
+# The repo's `bin/benchmark` harness runs against test fixtures, which are
+# far too small for an index to change a plan — Postgres will seq-scan a
+# three-row table no matter what. This script instead seeds a synthetic
+# dataset large enough for the planner to have a choice, runs `EXPLAIN
+# (ANALYZE, BUFFERS)` on the queries the feed actually issues, and prints
+# the two plans side by side.
+#
+# Everything happens inside a transaction that is rolled back at the end, so
+# the test database is left exactly as it was found. The candidate indexes
+# are created and dropped inside that same transaction.
+#
+#   bin/measure-feed-indexes
+#   PUBLISHED_PCT=10 bin/measure-feed-indexes
+#
+# Not run in CI: it writes ~20k rows and depends on the planner's choices,
+# which vary between Postgres versions.
+
+ENV["RAILS_ENV"] = "test"
+
+require_relative "../config/environment"
+
+ARTICLES = Integer(ENV.fetch("ARTICLES", "20_000"))
+USERS = Integer(ENV.fetch("USERS", "200"))
+TAGS = Integer(ENV.fetch("TAGS", "50"))
+TAGGINGS = Integer(ENV.fetch("TAGGINGS", "20_000"))
+PUBLISHED_PCT = Integer(ENV.fetch("PUBLISHED_PCT", "30"))
+
+# The indexes this script measures. They must exist in the schema for the
+# "with" pass to mean anything.
+CANDIDATES = {
+  "index_articles_on_state_and_published_at" => %w[articles state published_at].freeze,
+  "index_taggings_on_article_id" => %w[taggings article_id].freeze
+}.freeze
+
+QUERIES = {
+  # `ArticleSearchService#feed` + `filtered` with the default sort. Orders on
+  # a computed expression, so it reads and sorts the published set whatever
+  # the indexes do.
+  "feed.popularity" => <<~SQL.squish,
+    SELECT articles.*,
+           (((COALESCE(SUM(orders.value_usd), 0) * 10 +
+              (articles.upvotes_count - articles.downvotes_count) * COALESCE(AVG(orders.value_usd), 0) * 20 +
+              articles.comments_count) /
+             POW(((EXTRACT(EPOCH FROM (now()-articles.published_at)) / 3600)::integer + 1), 2))) AS popularity
+    FROM articles
+    LEFT JOIN users ON users.id = articles.author_id
+    LEFT JOIN orders ON orders.item_type = 'Article' AND orders.item_id = articles.id
+    WHERE articles.state != 'drafted' AND articles.state = 'published' AND users.blocked_at IS NULL
+    GROUP BY articles.id
+    ORDER BY popularity DESC, published_at DESC
+    LIMIT 50
+  SQL
+  # The "lately" filter: `Article.only_published.ordered_by(:recent)`.
+  "feed.recent" => <<~SQL.squish,
+    SELECT articles.* FROM articles
+    LEFT JOIN users ON users.id = articles.author_id
+    WHERE articles.state = 'published' AND users.blocked_at IS NULL
+    ORDER BY articles.published_at DESC
+    LIMIT 50
+  SQL
+  # `HomeController`'s article count.
+  "home.count" => "SELECT COUNT(*) FROM articles WHERE state = 'published'",
+  # The `:tags` preload that `Article.with_associations` performs on every
+  # article list.
+  "articles.tags_preload" => "SELECT taggings.* FROM taggings WHERE taggings.article_id IN (1,2,3,4,5,6,7,8,9,10)"
+}.freeze
+
+def seed!(conn)
+  conn.execute("TRUNCATE taggings, orders, articles, users RESTART IDENTITY CASCADE")
+  conn.execute(<<~SQL)
+    INSERT INTO users (id, name, created_at, updated_at)
+    SELECT g, 'author ' || g, now(), now() FROM generate_series(1, #{USERS}) g
+  SQL
+  conn.execute(<<~SQL)
+    INSERT INTO articles (id, author_id, state, price, published_at, created_at, updated_at,
+                          upvotes_count, downvotes_count, comments_count, revenue_usd, uuid)
+    SELECT g,
+           1 + (g % #{USERS}),
+           CASE WHEN g % 100 < #{PUBLISHED_PCT} THEN 'published'
+                WHEN g % 100 < #{PUBLISHED_PCT} + 10 THEN 'drafted'
+                ELSE 'blocked' END,
+           10.0,
+           now() - (g || ' minutes')::interval,
+           now() - (g || ' minutes')::interval,
+           now(),
+           g % 500, g % 200, g % 100, (g % 1000)::numeric / 100,
+           gen_random_uuid()
+    FROM generate_series(1, #{ARTICLES}) g
+  SQL
+  conn.execute(<<~SQL)
+    INSERT INTO orders (item_type, item_id, buyer_id, order_type, value_usd, created_at, updated_at)
+    SELECT 'Article', 1 + (g % #{ARTICLES}), 1 + (g % #{USERS}), 0, 1.5, now(), now()
+    FROM generate_series(1, #{ARTICLES / 4}) g
+  SQL
+  conn.execute(<<~SQL)
+    INSERT INTO taggings (article_id, tag_id, created_at, updated_at)
+    SELECT s.a, s.t, now(), now()
+    FROM (
+      SELECT DISTINCT 1 + (g % #{ARTICLES}) AS a, 1 + ((g * 7) % #{TAGS}) AS t
+      FROM generate_series(1, #{TAGGINGS}) g
+    ) s
+  SQL
+  conn.execute("ANALYZE articles")
+  conn.execute("ANALYZE taggings")
+  conn.execute("ANALYZE orders")
+  conn.execute("ANALYZE users")
+end
+
+def drop_candidates!(conn)
+  CANDIDATES.each_key do |name|
+    conn.execute("DROP INDEX IF EXISTS #{name}")
+  end
+end
+
+def create_candidates!(conn)
+  CANDIDATES.each do |name, (table, *columns)|
+    conn.execute("CREATE INDEX IF NOT EXISTS #{name} ON #{table} (#{columns.join(", ")})")
+  end
+end
+
+# Postgres collects per-index statistics during ANALYZE. An index created
+# after the last ANALYZE has no statistics, and the planner will not use it
+# for an ordered scan until one runs. A migration that adds an index to a
+# populated table has exactly this shape, so the measurement re-analyzes
+# after creating the index — otherwise it reports the plan a production
+# database would show before its first autovacuum.
+#
+# `users` is analyzed too, and it matters: the feed joins `articles` to
+# `users` to drop blocked authors. With stale statistics on `users` the
+# planner mis-estimates the join and cannot push the LIMIT below it, so it
+# sorts the whole published set even when the index is right there.
+def analyze_candidates!(conn)
+  conn.execute("ANALYZE articles")
+  conn.execute("ANALYZE taggings")
+  conn.execute("ANALYZE orders")
+  conn.execute("ANALYZE users")
+end
+
+def measure(conn, sql)
+  conn.execute(sql) # warm the cache so the timing compares plans, not cold disk
+  plan = conn.select_all("EXPLAIN (ANALYZE, BUFFERS) #{sql}").rows.flatten.join("\n")
+  {
+    ms: plan[/Execution Time: ([\d.]+) ms/, 1].to_f,
+    buffers: plan[/Buffers: shared hit=(\d+)/, 1].to_i,
+    sort: plan.include?("Sort  ("),
+    scans: plan.scan(/(?:Seq Scan|Index Scan(?: Backward)? using \S+|Bitmap Index Scan on \S+|Bitmap Heap Scan on \w+)/).uniq.join(" | ")
+  }
+end
+
+conn = ActiveRecord::Base.connection
+results = {}
+published = "?"
+
+begin
+  conn.transaction do
+    seed!(conn)
+    published = conn.select_value("SELECT COUNT(*) FROM articles WHERE state = 'published'")
+
+    drop_candidates!(conn)
+    without = QUERIES.transform_values { |sql| measure(conn, sql) }
+
+    create_candidates!(conn)
+    analyze_candidates!(conn)
+    with = QUERIES.transform_values { |sql| measure(conn, sql) }
+
+    results = { without: without, with: with }
+
+    raise ActiveRecord::Rollback
+  end
+rescue ActiveRecord::Rollback
+  # The rollback is the point: the test database is left untouched.
+end
+
+puts "Feed index measurement — #{ARTICLES} articles, #{published} published (#{PUBLISHED_PCT}%), #{TAGGINGS} taggings"
+puts "All rows seeded and rolled back inside a transaction; the test database is unchanged."
+puts
+
+QUERIES.each_key do |name|
+  before = results[:without][name]
+  after = results[:with][name]
+  ratio = before[:ms].zero? ? "n/a" : format("%.1fx", before[:ms] / after[:ms])
+
+  puts "── #{name}"
+  puts format("   without index: %8.2f ms  hit=%-6d %-9s %s", before[:ms], before[:buffers], before[:sort] ? "SORT" : "no-sort", before[:scans])
+  puts format("   with index:    %8.2f ms  hit=%-6d %-9s %s", after[:ms], after[:buffers], after[:sort] ? "SORT" : "no-sort", after[:scans])
+  puts format("   -> %s", ratio)
+  puts
+end
