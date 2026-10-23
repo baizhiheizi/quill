@@ -1,41 +1,41 @@
 {
   "version": 1,
   "cursors": {
-    "labelling_after": 2153,
-    "investigation_after": 2153
+    "labelling_after": 2164,
+    "investigation_after": 2164
   },
   "issues": [
     {
       "number": 2153,
       "state": "deferred",
       "updated_at": "2026-10-23",
-      "note": "[aw] Detection Runs thread; machine-generated workflow telemetry. The issue body says 'No action to take - do not assign to an agent'. Do not touch."
+      "note": "[aw] Detection Runs thread; machine-generated telemetry. The body says 'No action to take - do not assign to an agent'. Do not touch."
     }
   ],
   "checks": [
     {
       "area": "ci",
       "checked_at": "2026-10-22",
-      "result": "The self-hosted runner's mise-shim race (ETXTBSY, exit 126) is runner-side concurrency, not a branch problem. The repo-side retry for check.yml cannot ship as a PR: the App is refused write access to .github/workflows.",
-      "follow_up": "A verified one-step diff is in issue #2182. The maintainer closed #2182 on 2026-10-22 and check.yml is unchanged since #2094, so the retry was NOT applied - most likely the runner's job-concurrency was fixed instead. Do not re-raise; the durable fix is outside this repo."
+      "result": "The self-hosted runner's mise-shim race (ETXTBSY, exit 126) is runner-side concurrency, not a branch problem. The repo-side retry cannot ship: the App is refused write access to .github/workflows.",
+      "follow_up": "A verified one-step diff is in issue #2182. The maintainer closed #2182 on 2026-10-22 and check.yml is unchanged since #2094, so the retry was NOT applied - the runner's concurrency was fixed instead. Do not re-raise."
     },
     {
       "area": "code",
       "checked_at": "2026-10-23",
-      "result": "Admin sort audit COMPLETE (all thirteen indexes match their labels). NEW finding: the /design-system page's thirteen 'Source' links pointed at '/shared/_button.html.erb' and the header's contracts link at '/specs/.../README.md' - app paths no route serves, so all fourteen 404'd.",
-      "follow_up": "The link fix is a draft PR (branch repo-assist/fix-design-system-source-links-5e9b3d07). The repo URL and branch now live in config/settings.yml as github_repo_url / github_source_branch."
+      "result": "Admin sort audit COMPLETE. Design-system 'Source' links fixed in #2189 (merged). NEW: articles.state, articles.published_at and taggings.article_id were never indexed - the feed seq-scanned all three.",
+      "follow_up": "Two perf PRs are drafts: repo-assist/perf-missing-indexes-2026-10-23 and repo-assist/perf-article-authorized-memo-2026-10-23 - both based on main, not on each other. On 20k articles: 'lately' feed 3.49ms -> 0.05ms, tags preload 0.77ms -> 0.01ms; 7 authorized? lookups 5.82ms -> 0.18ms cached."
     },
     {
       "area": "docs",
       "checked_at": "2026-10-23",
-      "result": "CHANGELOG.md re-synced for the eight PRs merged on 2026-10-22, which the previous sync (#2172, merged 08:02) had missed because they landed at 08:23-08:26. The gap had left a stored-XSS fix and four 500 fixes undocumented. Draft PR on branch repo-assist/docs-changelog-sync-2026-10-22.",
-      "follow_up": "The changelog documents merged work only. If the two other open drafts merge before the next release, they need a short follow-up entry (the design-system link fix is the user-visible one)."
+      "result": "CHANGELOG.md was synced for the eight PRs merged on 2026-10-22 (#2190, merged). The five PRs merged on 2026-10-23 (#2185-#2189) are NOT in it yet.",
+      "follow_up": "Two of this run's PRs each add a '### Performance' section at the same anchor, so CHANGELOG.md will conflict between them - flagged in the monthly issue."
     },
     {
       "area": "hygiene",
       "checked_at": "2026-10-21",
       "result": "Integration sessions do NOT persist here: IntegrationTestCase#sign_in sets session[:current_session_id] but the cookie is never written, so the next request is anonymous.",
-      "follow_up": "So a test asserting 'redirects to root_path' can pass for the wrong reason (authenticate_user! redirects there too). Use ActionController::TestCase with @request.session, and add a happy-path 200 assertion."
+      "follow_up": "So a test asserting 'redirects to root_path' can pass for the wrong reason. Use ActionController::TestCase with @request.session, and add a happy-path 200 assertion."
     },
     {
       "area": "qa",
@@ -46,26 +46,26 @@
     {
       "area": "release",
       "checked_at": "2026-10-23",
-      "result": "NOT released. 34 commits unreleased since 2026-09-07, including eight Repo Assist fixes merged on 2026-10-22, a security fix, a major ransack bump and the deliberate json pin.",
+      "result": "NOT released. 48 commits unreleased since the 2026-09-07 release, including eight Repo Assist fixes merged on 2026-10-22, a security fix, a major ransack bump and the deliberate json pin.",
       "follow_up": "Never trigger Release: it deploys to production and needs maintainer approval. Flagged in the monthly issue instead."
     },
     {
       "area": "repo_assist_prs",
       "checked_at": "2026-10-23",
-      "result": "Open Repo Assist drafts: #2186 (admin sort vs column), #2187 (rack-attack throttle test flakiness), plus three new ones - helper test coverage, design-system source links, and the changelog re-sync. #2186 and #2187 are green on Check with no comments or reviews.",
-      "follow_up": "All the PRs the previous summary listed (#2181, #2184, #2178, #2176, #2172, #2171, #2169, #2163, #2180, #2174, #2167) are MERGED, and every issue it listed is CLOSED. The monthly body was rewritten around that."
+      "result": "Every previous Repo Assist PR is merged (#2185-#2190 on 2026-10-23). This run opened three drafts: the dependency bundle, the feed indexes, and the Article#authorized? memoization. Numbers are assigned on publish; all green locally.",
+      "follow_up": "All the PRs the previous summary listed are MERGED and every issue it listed is CLOSED, so the monthly body was rewritten around that."
     },
     {
       "area": "tests",
       "checked_at": "2026-10-23",
-      "result": "Full non-system suite on main: 1686 runs, 5385 assertions, 0 failures, 0 errors, 2 skips. With the helper tests: 1714 runs. With the link fix: 1688 runs.",
-      "follow_up": "Run via ruby -Itest glob loader, NOT `bin/rails test`: the rake path pulls test:prepare -> css:install and aborts without bun. Rack::Attack buckets per Time.now.to_i / period, so a fixed-request-count throttle test is a bucket-boundary flake. New tests were mutation-checked."
+      "result": "Full non-system suite on main: 1719 runs, 5527 assertions, 0 failures, 0 errors, 2 skips. With the feed-index tests: 1721. With the authorized? test: 1723. rubocop: 612 files, no offenses.",
+      "follow_up": "Run via ruby -Itest glob loader, NOT `bin/rails test`: the rake path pulls test:prepare -> css:install and aborts without bun. Rack::Attack buckets per Time.now.to_i / period, so fixed-request-count throttle tests are bucket-boundary flakes. New tests were mutation-checked."
     },
     {
       "area": "tooling",
       "checked_at": "2026-10-23",
-      "result": "bin/rubocop 607 files no offenses; bin/rails zeitwerk:check all good; bin/lint-design-system 43 pre-existing DS010 warnings, none blocking, none introduced. safeoutputs update_issue allows only ONE call per run.",
-      "follow_up": "This run spent that single call on the monthly activity body, so the body was replaced instead of a comment being appended. bun is NOT on PATH by default: export PATH=\"$HOME/.local/share/mise/shims:$PATH\" first."
+      "result": "Dependency updates bundled into one lockfile change (branch repo-assist/bundle-dependabot-updates-2026-10-23): aws-sdk-s3 1.235.0, sqlite3 2.10.1, posthog-rails 3.19.6, pghero 4.1.0, mailjet 1.9.0, rubocop 1.92.1 - supersedes dependabot #2191/#2192. Added bin/measure-feed-indexes.",
+      "follow_up": "NOT bundled: omniauth 2.3.1 (pulls rack-oauth2 2.x across a major; omniauth-mixin is the maintainer's own fork), json 3.1.0 (deliberate pin), marcel 2 / net-ssh 8 / openssl 4 / prism 2 (majors). npm still has postcss, postcss-import and puppeteer unclaimed."
     }
   ],
   "completed_actions": [],
@@ -73,22 +73,32 @@
     {
       "task": 6,
       "item": "Check the three new draft PRs once they are published",
-      "note": "Branches repo-assist/test-untested-helpers-7c1d4a92 (helper contract tests), repo-assist/fix-design-system-source-links-5e9b3d07 (404 source links), repo-assist/docs-changelog-sync-2026-10-22 (changelog). Numbers assigned on publish; all green locally."
+      "note": "Branches repo-assist/bundle-dependabot-updates-2026-10-23, repo-assist/perf-missing-indexes-2026-10-23, repo-assist/perf-article-authorized-memo-2026-10-23. Numbers assigned on publish; all green locally. The two perf PRs conflict in CHANGELOG.md only."
+    },
+    {
+      "task": 8,
+      "item": "Close the comments-list N+1 next",
+      "note": "app/controllers/comments_controller.rb:26 preloads only :author, so each row costs ~7 queries - the avatar chain, two action-store vote lookups, and a reload of the article behind the polymorphic commentable."
     },
     {
       "task": 9,
       "item": "Sweep app/libs/revenue_bot.rb and app/libs/twitter_bot.rb - neither has a test file",
-      "note": "Follows the 2026-10-23 sweep that closed dashboard_helper, design_system_helper and HtmlPostProcessor. app/libs/mixin.rb has only mixin_test.rb; revenue_bot and twitter_bot have none."
+      "note": "Follows the 2026-10-23 sweep that closed dashboard_helper, design_system_helper and HtmlPostProcessor. app/libs/mixin.rb has only mixin_test.rb."
     },
     {
       "task": 10,
       "item": "Decide whether the dead @pay_asset branch in show.turbo_stream.erb goes",
-      "note": "Raised in the monthly issue on 2026-10-21, 2026-10-22 and again on 2026-10-23 as a Define goal item. Making it live changes what the pay modal renders, so it needs a product decision, not a bug fix."
+      "note": "Raised as a Define goal item in the monthly issue on 2026-10-21, 22 and 23. Making it live changes what the pay modal renders, so it needs a product decision, not a bug fix."
     },
     {
       "task": 6,
       "item": "Confirm the PostHog Pagy::OptionError fingerprint drops now that #2163 is merged",
-      "note": "The fix merged on 2026-10-22 and covers ApplicationController and Admin::BaseController, so every paginating action is covered. Verification needs PostHog access, so it is a maintainer-side check; listed in the monthly issue."
+      "note": "The fix merged on 2026-10-22 and covers ApplicationController and Admin::BaseController. Verification needs PostHog access, so it is a maintainer-side check; listed in the monthly issue."
+    },
+    {
+      "task": 10,
+      "item": "Ask whether the default feed sort should become a stored column",
+      "note": "order_by_popularity orders on a computed expression, so no index helps it - the feed still reads and sorts the whole published set. Flagged as a Define goal item on 2026-10-23."
     }
   ],
   "fixes": []
