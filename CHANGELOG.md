@@ -42,6 +42,54 @@ pin if the suite stays green.
   14 users hit `/articles` in a 7-second window). Binary-tagged strings are
   re-tagged to UTF-8 on each `append=` path, since `append=`/`concat` are
   class-body aliases of `<<` and would otherwise bypass a prepended `<<`.
+- **Unvalidated query params (#2181)** — three pre-order actions and twelve
+  admin index actions raised `NoMethodError` on an unknown value. The
+  pre-order flow now redirects for an unknown article or an unsupported order
+  type, and validates the order type before it can skip authorization; the
+  price helper falls back to the item's own price instead of `nil`; the turbo
+  stream falls back to the pre-order's currency for an unknown
+  `pay_asset_id`; `MixpayPreOrder#pay_url` takes the same optional argument
+  as the base class; and the twelve admin indexes match `order_by`/`filter`
+  against an allow-list.
+- **`Pagy::OptionError` on an out-of-range `?page=` (#2163)** — pagy's
+  `CountlessPaginator` raises when `?page=` is out of range, and the first
+  fix only covered `ApplicationController`. `Admin::BaseController` is a
+  separate hierarchy, so all thirteen admin paginating actions still 500'd on
+  `?page=0`. A shared `CoercesPaginationParams` concern now coerces the
+  parameter in both base controllers.
+- **Unknown dashboard tab (#2178)** — an unrecognised `?tab=` on the dashboard
+  articles index left the scope nil and raised `NoMethodError`. It now falls
+  back to `drafted`, with the same `presence_in` guard the users' articles
+  index adopted for #2105.
+- **Nil currency on an article create (#2171)** — `Article#setup_attributes`
+  forced every new article to BTC, discarding the asset the author picked in
+  the editor, and `ensure_price_not_too_low` dereferenced `currency`
+  unconditionally, so an `asset_id` with no `Currency` row raised
+  `NoMethodError` (HTTP 500) instead of failing validation.
+
+### Security
+
+- **Stored XSS in article HTML (#2176)** — ActionText only sanitizes a
+  `RichText` when it is rendered through `ActionText::ContentHelper`, and
+  all three render paths read the raw fragment instead, so a `<script>` tag
+  posted alongside an article reached every reader's page. An allow-list
+  sanitizer (`HtmlSanitizer`) now runs inside both render services, covering
+  the article body, the API's paid-content body and collection
+  descriptions. A disallowed element is pruned together with its content, so
+  a `<script>` never survives even as inert text. `iframe` stays allowed in
+  the sanitizer on purpose, so the narrow per-source policy lives in one
+  place: `HtmlPostProcessor#escape_iframes` removes every iframe whose `src`
+  is not a YouTube URL.
+
+### Corrections
+
+- **Admin "Created ASC" sort (#2184)** — the `created_at_asc` branch of the
+  sort switch in `Admin::ArticlesController` and `Admin::CommentsController`
+  ordered by `updated_at DESC`, the opposite of the label and of the other
+  ten admin indexes. Both now order by `created_at ASC`.
+- **Article asset selection (#2171)** — the editor's asset selector was
+  silently discarded on create (it was honoured on update). The chosen
+  `asset_id` is now preserved.
 
 ### Dependencies
 
@@ -64,6 +112,8 @@ selenium-webdriver 4.48.0 → 4.51.0.
   `@media (prefers-reduced-motion: reduce)` rule in the token layer, so the
   view-level count alone read as a false gap.
 - `AGENTS.md` corrected: Docker Hub image name, `deploy.yml` → `release.yml`.
+- `API::RenderingHelper` gained a contract test covering all seven render
+  helpers (#2169), pinning the JSON response shape the API returns.
 
 ### specs/011-comprehensive-ui-refactor
 
