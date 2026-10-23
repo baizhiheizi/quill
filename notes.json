@@ -1,15 +1,15 @@
 {
   "version": 1,
   "cursors": {
-    "labelling_after": null,
-    "investigation_after": null
+    "labelling_after": 2153,
+    "investigation_after": 2153
   },
   "issues": [
     {
       "number": 2153,
       "state": "deferred",
-      "updated_at": "2026-10-22",
-      "note": "[aw] Detection Runs thread; machine-generated workflow telemetry, not a code defect. No action unless a maintainer asks."
+      "updated_at": "2026-10-23",
+      "note": "[aw] Detection Runs thread; machine-generated workflow telemetry. The issue body says 'No action to take - do not assign to an agent'. Do not touch."
     }
   ],
   "checks": [
@@ -21,15 +21,15 @@
     },
     {
       "area": "code",
-      "checked_at": "2026-10-22",
-      "result": "Audit of all thirteen admin index sorts against their table columns is COMPLETE. Found and fixed: created_at_asc mis-mapped on Articles+Comments (#2184, merged), the users revenue column/sort mismatch, and the collections sort vs 'Updated At' column. The other eleven indexes match their labels.",
-      "follow_up": "The admin invariant test (test/controllers/admin/order_by_test.rb) already pins allow-list == case branches == view options for every admin index - new sorts must be added in all three places."
+      "checked_at": "2026-10-23",
+      "result": "Admin sort audit COMPLETE (all thirteen indexes match their labels). NEW finding: the /design-system page's thirteen 'Source' links pointed at '/shared/_button.html.erb' and the header's contracts link at '/specs/.../README.md' - app paths no route serves, so all fourteen 404'd.",
+      "follow_up": "The link fix is a draft PR (branch repo-assist/fix-design-system-source-links-5e9b3d07). The repo URL and branch now live in config/settings.yml as github_repo_url / github_source_branch."
     },
     {
       "area": "docs",
-      "checked_at": "2026-10-20",
-      "result": "CHANGELOG.md had missed all 22 commits since release-2026-09-07. Synced on branch repo-assist/changelog-unreleased-sync (PR #2172, merged): mixin_bot 3.0 Blaze reactor, json ~>2.21 pin, #2105/#2107 crashes.",
-      "follow_up": "The changelog is now 12 commits behind again (the 11 merged PRs of 2026-10-22); a re-sync would be needed before a release."
+      "checked_at": "2026-10-23",
+      "result": "CHANGELOG.md re-synced for the eight PRs merged on 2026-10-22, which the previous sync (#2172, merged 08:02) had missed because they landed at 08:23-08:26. The gap had left a stored-XSS fix and four 500 fixes undocumented. Draft PR on branch repo-assist/docs-changelog-sync-2026-10-22.",
+      "follow_up": "The changelog documents merged work only. If the two other open drafts merge before the next release, they need a short follow-up entry (the design-system link fix is the user-visible one)."
     },
     {
       "area": "hygiene",
@@ -39,51 +39,51 @@
     },
     {
       "area": "qa",
-      "checked_at": "2026-10-21",
-      "result": "Stored XSS confirmed and fixed in draft PR #2176 (now merged): ActionText sanitizes only via ActionText::ContentHelper, but RichTextRenderService, MarkdownRenderService and RichTextContent#content_body read the raw fragment.",
+      "checked_at": "2026-10-22",
+      "result": "Stored XSS confirmed and fixed in PR #2176 (MERGED): ActionText sanitizes only via ActionText::ContentHelper, but RichTextRenderService, MarkdownRenderService and RichTextContent#content_body read the raw fragment.",
       "follow_up": "config/initializers/content_security_policy.rb is entirely commented out - a CSP header is a natural follow-up. The sanitizer drops inline style attributes and non-Turbo data-* attributes."
     },
     {
       "area": "release",
-      "checked_at": "2026-10-22",
+      "checked_at": "2026-10-23",
       "result": "NOT released. 34 commits unreleased since 2026-09-07, including eight Repo Assist fixes merged on 2026-10-22, a security fix, a major ransack bump and the deliberate json pin.",
       "follow_up": "Never trigger Release: it deploys to production and needs maintainer approval. Flagged in the monthly issue instead."
     },
     {
       "area": "repo_assist_prs",
-      "checked_at": "2026-10-22",
-      "result": "All seven Repo Assist PRs (#2181, #2184, #2178, #2176, #2172, #2171, #2169, #2163) were MERGED by the maintainer on 2026-10-22, and every issue they referenced was auto-closed. The only open PR is dependabot's #2185 (posthog-rails 3.19.2, Check green).",
-      "follow_up": "No open Repo Assist drafts to maintain; the new admin-sort draft is the only one."
+      "checked_at": "2026-10-23",
+      "result": "Open Repo Assist drafts: #2186 (admin sort vs column), #2187 (rack-attack throttle test flakiness), plus three new ones - helper test coverage, design-system source links, and the changelog re-sync. #2186 and #2187 are green on Check with no comments or reviews.",
+      "follow_up": "All the PRs the previous summary listed (#2181, #2184, #2178, #2176, #2172, #2171, #2169, #2163, #2180, #2174, #2167) are MERGED, and every issue it listed is CLOSED. The monthly body was rewritten around that."
     },
     {
       "area": "tests",
-      "checked_at": "2026-10-22",
-      "result": "Full non-system suite: 1659 runs, 4706 assertions, 0 failures, 0 errors, 1 skip on the rack-attack branch (1662 runs on the admin-sort branch). The admin-sort regression test fails on the unpatched controller and passes after the fix.",
-      "follow_up": "Run via ruby -Itest glob loader, NOT `bin/rails test`: the rake path pulls test:prepare -> css:install and aborts without bun. Rack::Attack buckets per Time.now.to_i / period, so a fixed-request-count throttle test is a bucket-boundary flake."
+      "checked_at": "2026-10-23",
+      "result": "Full non-system suite on main: 1686 runs, 5385 assertions, 0 failures, 0 errors, 2 skips. With the helper tests: 1714 runs. With the link fix: 1688 runs.",
+      "follow_up": "Run via ruby -Itest glob loader, NOT `bin/rails test`: the rake path pulls test:prepare -> css:install and aborts without bun. Rack::Attack buckets per Time.now.to_i / period, so a fixed-request-count throttle test is a bucket-boundary flake. New tests were mutation-checked."
     },
     {
       "area": "tooling",
-      "checked_at": "2026-10-22",
+      "checked_at": "2026-10-23",
       "result": "bin/rubocop 607 files no offenses; bin/rails zeitwerk:check all good; bin/lint-design-system 43 pre-existing DS010 warnings, none blocking, none introduced. safeoutputs update_issue allows only ONE call per run.",
-      "follow_up": "Spend that single update_issue on the monthly activity issue body, not on closing a duplicate - 2026-10-22 lost the body update that way. bun is NOT on PATH by default: export PATH=\"$HOME/.local/share/mise/shims:$PATH\" before prettier or bun test."
+      "follow_up": "This run spent that single call on the monthly activity body, so the body was replaced instead of a comment being appended. bun is NOT on PATH by default: export PATH=\"$HOME/.local/share/mise/shims:$PATH\" first."
     }
   ],
   "completed_actions": [],
   "priorities": [
     {
       "task": 6,
-      "item": "Check the two new draft PRs once they are published",
-      "note": "Branches repo-assist/fix-admin-sort-column-mismatch-2edfe8e9de7f (admin sort vs column) and repo-assist/fix-rack-attack-throttle-test-flakiness-2af8cbed42e6 (throttle tests). Numbers assigned on publish; both green locally."
+      "item": "Check the three new draft PRs once they are published",
+      "note": "Branches repo-assist/test-untested-helpers-7c1d4a92 (helper contract tests), repo-assist/fix-design-system-source-links-5e9b3d07 (404 source links), repo-assist/docs-changelog-sync-2026-10-22 (changelog). Numbers assigned on publish; all green locally."
     },
     {
       "task": 9,
-      "item": "Sweep untested helpers: dashboard_helper, design_system_helper, HtmlPostProcessor",
-      "note": "Named as future work on 2026-10-19 and repeated on the monthly issue. Neither helper has a test file. Extends the API::RenderingHelper contract work in PR #2169 (merged)."
+      "item": "Sweep app/libs/revenue_bot.rb and app/libs/twitter_bot.rb - neither has a test file",
+      "note": "Follows the 2026-10-23 sweep that closed dashboard_helper, design_system_helper and HtmlPostProcessor. app/libs/mixin.rb has only mixin_test.rb; revenue_bot and twitter_bot have none."
     },
     {
       "task": 10,
       "item": "Decide whether the dead @pay_asset branch in show.turbo_stream.erb goes",
-      "note": "Raised in the monthly issue on 2026-10-21 and again on 2026-10-22 as a Define goal item. Making it live changes what the pay modal renders, so it needs a product decision, not a bug fix."
+      "note": "Raised in the monthly issue on 2026-10-21, 2026-10-22 and again on 2026-10-23 as a Define goal item. Making it live changes what the pay modal renders, so it needs a product decision, not a bug fix."
     },
     {
       "task": 6,
