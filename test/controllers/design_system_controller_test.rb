@@ -29,4 +29,29 @@ class DesignSystemControllerTest < ActionDispatch::IntegrationTest
     assert DesignSystem::Primitives::Registry.all.is_a?(Array)
     assert DesignSystem::Primitives::Registry.all.any? { |p| p[:name] == :button }
   end
+
+  test "every Source link points at a real file in the source repository" do
+    get "/design-system"
+
+    hrefs = @response.body.scan(%r{<a[^>]*href="([^"]*)"[^>]*>Source</a>}).flatten
+
+    assert hrefs.any?, "the reference page should link at least one primitive's source"
+
+    hrefs.each do |href|
+      prefix = "#{Settings.github_repo_url}/blob/#{Settings.github_source_branch}/"
+
+      assert href.start_with?(prefix),
+             "Source link #{href} does not point at the source repository"
+
+      path = href.delete_prefix(prefix)
+      assert Rails.root.join(path).exist?,
+             "Source link #{href} points at #{path}, which is not in the repository"
+    end
+  end
+
+  test "the contracts link points at the source repository" do
+    get "/design-system"
+
+    assert_match %r{href="#{Regexp.escape(Settings.github_repo_url)}/blob/#{Regexp.escape(Settings.github_source_branch)}/specs/011-comprehensive-ui-refactor/contracts/README\.md"}, @response.body
+  end
 end

@@ -1,5 +1,10 @@
 host: 'https://quill.im'
 
+# source repository, used by the in-app design-system reference page to
+# link each primitive back to the file that defines it
+github_repo_url: 'https://github.com/baizhiheizi/quill'
+github_source_branch: 'main'
+
 # assets
 icon_file: icon.png
 
