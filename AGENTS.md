@@ -74,9 +74,10 @@ bin/rails zeitwerk:check
 ```bash
 bin/benchmark article_search       # hot-path scenarios (filter by name)
 bin/measure-frontend-efficiency    # bundle sizes, lazy-loading & motion coverage, listener-leak sweep
+bin/measure-feed-indexes           # EXPLAIN plans for the feed's hot queries, with and without the feed indexes
 ```
 
-Both are stdlib-only and not run in CI. `measure-frontend-efficiency` gracefully reports `not built` / `null` when `app/assets/builds/` or `node_modules/` are absent; see `test/benchmarks/README.md` for env vars and limitations.
+All are stdlib-only and not run in CI. `measure-frontend-efficiency` gracefully reports `not built` / `null` when `app/assets/builds/` or `node_modules/` are absent; see `test/benchmarks/README.md` for env vars and limitations. `measure-feed-indexes` seeds a synthetic dataset inside a transaction it rolls back, so the test database is left untouched.
 
 ### Lint & build assets
 
