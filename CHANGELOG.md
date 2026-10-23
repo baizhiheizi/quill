@@ -145,6 +145,10 @@ release: lexxy 0.9.31 → 1.0.1 (crossed 1.0, #2157), posthog-rails 3.18.4 →
 image_processing 2.0.3 → 2.2.0, mission_control-jobs 1.2.0 → 1.3.1,
 selenium-webdriver 4.48.0 → 4.51.0.
 
+Bundled into one lockfile update (supersedes #2191 and #2192): aws-sdk-s3
+1.233.2 → 1.235.0, sqlite3 2.10.0 → 2.10.1, posthog-rails 3.19.2 → 3.19.6,
+pghero 4.0.1 → 4.1.0, mailjet 1.8.3 → 1.9.0, rubocop 1.92.0 → 1.92.1.
+
 ### Tooling and docs corrections
 
 - `docs/how-to/deploy-with-kamal.md` corrected against the real deployment:
