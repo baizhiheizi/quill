@@ -7,6 +7,16 @@
 # This helper only owns the chrome of the reference page itself.
 
 module DesignSystemHelper
+  # Builds a link to a file in the source repository.
+  #
+  # The reference page's "Source" links used to point at an app path
+  # ("/shared/_button.html.erb") that no route serves, so every one of
+  # them 404'd. A repository URL is the only place the backing file
+  # actually exists, so link there instead.
+  def github_source_url(path)
+    "#{Settings.github_repo_url}/blob/#{Settings.github_source_branch}/#{path}"
+  end
+
   # Renders a labeled section on the design-system reference page.
   #
   # The block MUST render one example of the primitive being documented.
@@ -17,14 +27,14 @@ module DesignSystemHelper
     anchor = title.to_s.downcase.gsub(/[^a-z0-9]+/, "-").gsub(/(^-|-$)/, "")
 
     source = primitive && DesignSystem::Primitives::Registry.all.find { |p| p[:name] == primitive.to_sym }
-    source_path = source && source[:partial_path].sub("app/views/", "")
+    source_url = source && github_source_url(source[:partial_path])
 
     desc_html = description ? content_tag(:p, description, class: "ds-section__desc mt-1 max-w-[60ch] text-base-content/60") : "".html_safe
     title_html = content_tag(:h2, title, class: "ds-section__title font-display text-2xl")
     title_block = content_tag(:div, safe_join([ title_html, desc_html ]))
 
-    source_link = if source_path
-      content_tag(:a, "Source", href: "/#{source_path}", class: "font-mono text-xs text-primary hover:underline")
+    source_link = if source_url
+      content_tag(:a, "Source", href: source_url, class: "font-mono text-xs text-primary hover:underline")
     else
       "".html_safe
     end
