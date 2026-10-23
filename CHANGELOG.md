@@ -93,7 +93,8 @@ pin if the suite stays green.
 
 ### Performance
 
-Two indexes the article surfaces needed but the schema did not have.
+Two indexes the article surfaces needed but the schema did not have, and one
+authorization lookup the article page was repeating.
 
 - **`articles (state, published_at)`** — `state` was unindexed, so every
   `Article.only_published` query seq-scanned the table: the web feed, the
@@ -107,6 +108,18 @@ Two indexes the article surfaces needed but the schema did not have.
   alone. Every article list preloads `:tags` through that join
   (`Article.with_associations` → `includes(:tags)`), so the preload seq-scanned
   `taggings` on every feed page.
+- **`Article#authorized?` asks the database once per reader** — the article
+  page asks the same question about the same reader seven times: the policy,
+  the content partial, the comments card, the buyers list, the mobile
+  floating bar and the controller's impression tag all call `authorized?`.
+  Each call re-ran the same buy-order lookup, rebuilding the relation and
+  regenerating the SQL every time. The answer is now cached on the instance,
+  which lasts exactly one request — an order for the article and the reader
+  is only ever created by `Payment#generate_order!`, and that runs in a
+  background job, never in the request that renders the page.
+
+  On a paid article viewed by a signed-in reader who has not bought it, the
+  seven lookups cost about 5.8 ms; the cached answer costs about 0.2 ms.
 
 The migration also runs `ANALYZE` on both tables. Postgres collects per-index
 statistics during `ANALYZE`, and an index added to a populated table has

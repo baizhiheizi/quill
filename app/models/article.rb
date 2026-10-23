@@ -399,7 +399,19 @@ class Article < ApplicationRecord
     return true if (published? && free?) || author == user
     return false if user.blank?
 
-    orders.where(order_type: :buy_article).find_by(buyer: user).present? || collection&.authorized?(user)
+    # The article page asks the same question about the same reader seven
+    # times — the policy, the content partial, the comments card, the buyers
+    # list, the mobile floating bar and the controller's impression tag all
+    # call `authorized?`. Each call re-ran the same buy-order lookup, so a
+    # paid article that a signed-in reader had not bought fired the identical
+    # SELECT seven times over. The cache lives on this instance, so it lasts
+    # one request: an order for this article and this reader can only be
+    # created by `Payment#generate_order!`, which runs in a background job
+    # and never in the request that renders the page.
+    authorized_cache.fetch(user.id) do
+      authorized_cache[user.id] =
+        orders.where(order_type: :buy_article).find_by(buyer: user).present? || collection&.authorized?(user)
+    end
   end
 
   def mixpay_supported?
@@ -417,6 +429,10 @@ class Article < ApplicationRecord
   end
 
   private
+
+  def authorized_cache
+    @authorized_cache ||= {}
+  end
 
   def drafted?
     state == "drafted"

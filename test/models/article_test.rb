@@ -365,6 +365,37 @@ class ArticleTest < ActiveSupport::TestCase
     assert_not article.authorized?(users(:reader_one))
   end
 
+  test "authorized? asks the database once per reader, however often it is called" do
+    article = articles(:published_paid)
+    reader = users(:reader_one)
+    article.author # the author association is loaded up front, so only the buy-order lookup is counted
+
+    # The article page asks the same question seven times — the policy, the
+    # content partial, the comments card, the buyers list, the floating bar
+    # and the controller's impression tag all call `authorized?`. Only the
+    # first call may look the order up.
+    #
+    # The count includes queries served from the per-request query cache,
+    # because that is where the cost is: re-running the lookup rebuilds the
+    # relation and regenerates the SQL every time, even on a cache hit.
+    queries = count_sql_statements { 6.times { article.authorized?(reader) } }
+
+    assert_equal 1, queries,
+                 "authorized? re-ran the buy-order lookup instead of answering from the instance cache"
+  end
+
+  test "authorized? caches each reader separately" do
+    article = articles(:published_paid)
+    reader = users(:reader_one)
+    author = users(:author)
+
+    assert_not article.authorized?(reader)
+    # The author is allowed by a different rule, and must not be answered
+    # from the reader's cached answer.
+    assert article.authorized?(author)
+    assert_not article.authorized?(reader)
+  end
+
   # === asset selection ===
   # `config/settings/test.yml` mirrors `config/settings.yml`, so the article
   # editor's asset selector can be exercised end to end instead of poking at
@@ -435,5 +466,21 @@ class ArticleTest < ActiveSupport::TestCase
     )
 
     assert btc.valid?
+  end
+
+  private
+
+  # Counts every SQL statement the block issues, including the ones served
+  # from the per-request query cache. `assert_queries_count` drops cached
+  # queries, so it cannot see a repeated lookup that the cache absorbed.
+  def count_sql_statements
+    count = 0
+    subscriber = ActiveSupport::Notifications.subscribe("sql.active_record") do |*, payload|
+      count += 1 unless payload[:name] == "SCHEMA"
+    end
+    yield
+    count
+  ensure
+    ActiveSupport::Notifications.unsubscribe(subscriber)
   end
 end
