@@ -13,11 +13,11 @@ models:
   providers:
     anthropic:
       models:
-        MiniMax-M3:
+        MiniMax-M3.1-Flash:
           cost:
-            input: 1.2e-6
-            output: 4.8e-6
-            cache_read: 2.4e-7
+            input: 1.5e-7
+            output: 6.0e-7
+            cache_read: 1.5e-8
 network:
   allowed:
     - defaults
