@@ -1,12 +1,12 @@
 # Set up local development
 
-> **30-second summary:** Install Ruby 4.0.5 (via `mise` or `rbenv`), PostgreSQL, and Bun 1.x. Copy `config/settings.yml` to `config/settings.local.yml`, edit credentials with `bin/rails credentials:edit --development`, then run `bin/dev` to boot the app on `http://localhost:3000`.
+> **30-second summary:** Install Ruby 4.0.9 (via `mise` or `rbenv`), PostgreSQL, and Bun 1.x. Copy `config/settings.yml` to `config/settings.local.yml`, edit credentials with `bin/rails credentials:edit --development`, then run `bin/dev` to boot the app on `http://localhost:3000`.
 
 Fresh Linux or macOS only. Authoritative sources are [AGENTS.md](../../AGENTS.md) and [README](../../README.md); update this page if you fix a step.
 
 ## 1. Install system dependencies
 
-### Ruby 4.0.5
+### Ruby 4.0.9
 
 Quill pins Ruby in `.ruby-version` and `mise.toml`; install via either:
 
@@ -15,8 +15,8 @@ Quill pins Ruby in `.ruby-version` and `mise.toml`; install via either:
 mise install
 
 # Or using rbenv
-rbenv install 4.0.5
-rbenv global 4.0.5
+rbenv install 4.0.9
+rbenv global 4.0.9
 ```
 
 ### PostgreSQL

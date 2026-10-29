@@ -12,7 +12,7 @@ Stack: Rails monolith with Hotwire (Turbo + Stimulus), ERB partials, PostgreSQL,
 
 | Layer | Stack |
 |-------|-------|
-| Language | Ruby 4.0.5 (see `.ruby-version`, `mise.toml`) |
+| Language | Ruby 4.0.9 (see `.ruby-version`, `mise.toml`) |
 | Framework | Rails 8.1.x |
 | Database | PostgreSQL |
 | Real-time | Solid Cable (separate `*_cable` DB) |
