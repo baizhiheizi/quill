@@ -726,7 +726,7 @@ jobs:
       - name: Setup Ruby
         uses: ruby/setup-ruby@824c0e29fdfc7d689c191c27acc969d2d04b7dd8 # v1.331.0
         with:
-          ruby-version: '4.0.5'
+          ruby-version: '4.0.9'
       - name: Create gh-aw temp directory
         run: bash "${RUNNER_TEMP}/gh-aw/actions/create_gh_aw_tmp_dir.sh"
       - name: Configure gh CLI for GitHub Enterprise

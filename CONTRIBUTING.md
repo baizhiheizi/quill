@@ -1,6 +1,6 @@
 ## Requirements
 
-- Ruby v4.0.5 (see `.ruby-version` and `mise.toml` at the repo root)
+- Ruby v4.0.9 (see `.ruby-version` and `mise.toml` at the repo root)
 - PostgreSQL
 - Node.js 20+ and Bun 1.x
 
@@ -21,11 +21,11 @@ echo 'export PATH="$HOME/.rbenv/bin:$PATH"' >> ~/.bashrc
 eval "$(rbenv init -)" >> ~/.bashrc
 source ~/.bashrc
 
-rbenv install 4.0.5
-rbenv global 4.0.5
+rbenv install 4.0.9
+rbenv global 4.0.9
 rbenv rehash
 
-ruby -v    # should report 4.0.5
+ruby -v    # should report 4.0.9
 gem update --system
 gem install bundler
 ```

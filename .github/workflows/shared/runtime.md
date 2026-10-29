@@ -1,6 +1,6 @@
 ---
 # Runner requirement: every self-hosted Linux runner used by `repo-assist` must
-# have Ruby 4.0.5 pre-installed at /opt/hostedtoolcache/Ruby/4.0.5/x64/bin.
+# have Ruby 4.0.9 pre-installed at /opt/hostedtoolcache/Ruby/4.0.9/x64/bin.
 # `ruby/setup-ruby@v1` falls back to installing Ruby on its own only when the
 # runner user can `mkdir /opt/hostedtoolcache`; on the gh-sr container runners
 # the directory is not writable, so without the pre-baked path the agent job
@@ -9,7 +9,7 @@
 # (`Setup Ruby` step in repo-assist.lock.yml).
 runtimes:
   ruby:
-    version: "4.0.5"
+    version: "4.0.9"
   bun:
     version: "1.3.14"
 

@@ -2,17 +2,15 @@
 
 source "https://rubygems.org"
 
-ruby "~> 4.0"
+ruby "~> 4"
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem "rails", "~> 8.1"
+gem "rails"
 
 # json 3 dropped the positional options hash that Rails 8.1.3.1 passed to
-# JSON.parse(source, options), so every json column read raised ArgumentError
-# (see #2125 / #2130). Rails 8.1.4 calls JSON.parse(source, **options), which
-# json 3 accepts, so this pin is now conservative rather than required -
-# re-test with "~> 3.0" and drop it if the suite stays green.
-gem "json", "~> 2.21"
+# JSON.parse(source, options) (see #2125 / #2130). Rails >= 8.1.4 calls
+# JSON.parse(source, **options), so json 3 is fine; keep Rails >= 8.1.4.
+gem "json"
 
 gem "pg"
 gem "sqlite3"
@@ -45,22 +43,22 @@ gem "jbuilder"
 gem "bcrypt"
 
 # A simple API wrapper for Mixin Network in Ruby
-gem "mixin_bot", "~> 3.0"
+gem "mixin_bot"
 
 # S3 active storage service
 gem "aws-sdk-s3", require: false
 
 # Use Active Storage variant
-gem "image_processing", "~> 2.1"
+gem "image_processing"
 
 # Modern rich text editor for Action Text
-gem "lexxy", "~> 1.0.1"
+gem "lexxy"
 
 # URI parsing and normalization (used for profile and payment URLs in production)
 gem "addressable"
 
 # Reduces boot times through caching; required in config/boot.rb
-gem "bootsnap", ">= 1.4.4", require: false
+gem "bootsnap", require: false
 
 # Required on Ruby 4.0+ (no longer default gems)
 gem "benchmark"
@@ -150,17 +148,17 @@ gem "omniauth-mixin", github: "an-lee/omniauth-mixin"
 gem "solid_queue"
 gem "mission_control-jobs"
 
-gem "solid_cache", "~> 1.0"
+gem "solid_cache"
 
 group :development, :test do
   # Start debugger with binding.b [https://github.com/ruby/debug]
-  gem "debug", ">= 1.0.0", platforms: %i[mri windows]
+  gem "debug", platforms: %i[mri windows]
 end
 
 group :development do
   # Access an interactive console on exception pages or by calling 'console' anywhere in the code.
-  gem "listen", "~> 3.10"
-  gem "web-console", ">= 3.3.0"
+  gem "listen"
+  gem "web-console"
   # Annotate Rails classes with schema and routes info
   gem "annotaterb", require: false
   # A Ruby static code analyzer and formatter
@@ -171,11 +169,11 @@ end
 
 group :test do
   # Rails 7.1 test runner is incompatible with minitest 6 (pulled in on Ruby 4)
-  gem "minitest", "~> 6.0"
+  gem "minitest"
 
   # Adds support for Capybara system testing and selenium driver
-  gem "capybara", ">= 2.15"
-  gem "selenium-webdriver", ">= 4.11"
+  gem "capybara"
+  gem "selenium-webdriver"
 
   # Code coverage analysis; enabled with COVERAGE=1 bin/rails test
   gem "simplecov", require: false
@@ -184,13 +182,13 @@ end
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem "tzinfo-data", platforms: %i[windows jruby]
 
-gem "dockerfile-rails", ">= 1.2", group: :development
+gem "dockerfile-rails", group: :development
 
-gem "solid_cable", "~> 4.0"
+gem "solid_cable"
 
-gem "pundit", "~> 2.5"
+gem "pundit"
 
-gem "ruby-vips", "~> 2.2"
+gem "ruby-vips"
 
 # PostHog analytics
 gem "posthog-rails"
