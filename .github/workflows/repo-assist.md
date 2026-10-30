@@ -49,7 +49,7 @@ network:
   - java
   - github
 imports:
-- shared/engine-minimax.md
+- shared/engine-glm.md
 - shared/runtime.md
 - shared/github-app.md
 safe-outputs:
