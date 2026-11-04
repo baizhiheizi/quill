@@ -108,7 +108,7 @@ pre-agent-steps:
     run: |
       NET=$(docker network ls --format '{{.Name}}' | grep '^github_network_' | tail -1)
       PG_CID=$(docker network inspect -f '{{range .Containers}}{{.Name}} {{end}}' "$NET" | tr ' ' '\n' | while read -r c; do
-        case "$(docker inspect -f '{{.Config.Image}}' "$c" 2>/dev/null)" in *pgvector*|*postgres*) echo "$c"; break ;; esac
+        case "$(docker inspect -f '{{.Config.Image}}' "$c" 2>/dev/null)" in (*pgvector*|*postgres*) echo "$c"; break ;; esac
       done)
       PG_HOST=$(docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}} {{end}}' "$PG_CID" | awk '{print $1}')
       echo "postgres container: $PG_CID at $PG_HOST"

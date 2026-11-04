@@ -1,5 +1,5 @@
 ---
-max-ai-credits: -1
+max-ai-credits: 100M
 engine:
   id: claude
   env:
