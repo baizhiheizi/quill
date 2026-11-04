@@ -1,8 +1,8 @@
 {
   "version": 1,
   "cursors": {
-    "labelling_after": 2164,
-    "investigation_after": 2164
+    "labelling_after": 2217,
+    "investigation_after": 2217
   },
   "issues": [
     {
@@ -10,26 +10,38 @@
       "state": "deferred",
       "updated_at": "2026-10-23",
       "note": "[aw] Detection Runs thread; machine-generated telemetry. The body says 'No action to take - do not assign to an agent'. Do not touch."
+    },
+    {
+      "number": 2211,
+      "state": "deferred",
+      "updated_at": "2026-11-04",
+      "note": "[aw] engine driver crashed (run 41530721079, then 41591921252 via #2217). Machine-generated harness telemetry; no repo-side fix. Do not comment; maintainer decides on the aw harness (they upgraded it 2026-10-30 and crashes continued)."
+    },
+    {
+      "number": 2217,
+      "state": "deferred",
+      "updated_at": "2026-11-04",
+      "note": "[aw] engine driver crashed; carries the follow-up comments for runs 41591921252, 41703607492 and 41784873632 (most recent 2026-11-04). This run 41899816317 is the first completed run since the crash streak. Same policy as #2153/#2211: telemetry only, do not touch."
     }
   ],
   "checks": [
     {
       "area": "ci",
       "checked_at": "2026-10-22",
-      "result": "The self-hosted runner's mise-shim race (ETXTBSY, exit 126) is runner-side concurrency, not a branch problem. The repo-side retry cannot ship: the App is refused write access to .github/workflows.",
-      "follow_up": "A verified one-step diff is in issue #2182. The maintainer closed #2182 on 2026-10-22 and check.yml is unchanged since #2094, so the retry was NOT applied - the runner's concurrency was fixed instead. Do not re-raise."
+      "result": "The self-hosted runner's mise-shim race (ETXTBSY, exit 126) was runner-side concurrency, fixed on the runner. #2182 (repo-side retry) was closed unapplied; do not re-raise.",
+      "follow_up": "None."
     },
     {
       "area": "code",
-      "checked_at": "2026-10-23",
-      "result": "Admin sort audit COMPLETE. Design-system 'Source' links fixed in #2189 (merged). NEW: articles.state, articles.published_at and taggings.article_id were never indexed - the feed seq-scanned all three.",
-      "follow_up": "Two perf PRs are drafts: repo-assist/perf-missing-indexes-2026-10-23 and repo-assist/perf-article-authorized-memo-2026-10-23 - both based on main, not on each other. On 20k articles: 'lately' feed 3.49ms -> 0.05ms, tags preload 0.77ms -> 0.01ms; 7 authorized? lookups 5.82ms -> 0.18ms cached."
+      "checked_at": "2026-11-04",
+      "result": "Perf audit complete for the article feed (#2194 indexes), the article page (#2195 authorized? memo) and the public comments list (comments N+1 fixed this run: 56->18 SQL on an 11-row page, 28->12 guest; PR branch repo-assist/perf-comments-index-n-plus-one, number assigned on publish).",
+      "follow_up": "Comments N+1 changelog entry deferred until its PR merges (no entry for unmerged work). Remaining known surfaces (users/admin comment lists, article show) already preloaded."
     },
     {
       "area": "docs",
-      "checked_at": "2026-10-23",
-      "result": "CHANGELOG.md was synced for the eight PRs merged on 2026-10-22 (#2190, merged). The five PRs merged on 2026-10-23 (#2185-#2189) are NOT in it yet.",
-      "follow_up": "Two of this run's PRs each add a '### Performance' section at the same anchor, so CHANGELOG.md will conflict between them - flagged in the monthly issue."
+      "checked_at": "2026-11-04",
+      "result": "CHANGELOG.md synced through 2026-11-04 (branch repo-assist/docs-changelog-sync-2026-11-04): json pin lift (#2206), Ruby 4.0.9, omniauth 2.3.1 (#2200), Dependabot #2212-#2216, Rails 8.1.4.1 (c205bc29), corrections #2186/#2189, test work #2187/#2188.",
+      "follow_up": "If the two drafts from this run are still open next run, a CHANGELOG conflict risk exists between them: none (one touches only the json-pin/Dependencies/Corrections/Tooling anchors; the perf PR did not touch CHANGELOG)."
     },
     {
       "area": "hygiene",
@@ -40,45 +52,45 @@
     {
       "area": "qa",
       "checked_at": "2026-10-22",
-      "result": "Stored XSS confirmed and fixed in PR #2176 (MERGED): ActionText sanitizes only via ActionText::ContentHelper, but RichTextRenderService, MarkdownRenderService and RichTextContent#content_body read the raw fragment.",
-      "follow_up": "config/initializers/content_security_policy.rb is entirely commented out - a CSP header is a natural follow-up. The sanitizer drops inline style attributes and non-Turbo data-* attributes."
+      "result": "Stored XSS fixed in #2176 (MERGED). config/initializers/content_security_policy.rb is still entirely commented out - a CSP header is the natural follow-up. The sanitizer drops inline style attributes and non-Turbo data-* attributes.",
+      "follow_up": "CSP proposal only after the sanitizer approach settles; listed as Future Work in the 2026-11 monthly issue."
     },
     {
       "area": "release",
-      "checked_at": "2026-10-23",
-      "result": "NOT released. 48 commits unreleased since the 2026-09-07 release, including eight Repo Assist fixes merged on 2026-10-22, a security fix, a major ransack bump and the deliberate json pin.",
-      "follow_up": "Never trigger Release: it deploys to production and needs maintainer approval. Flagged in the monthly issue instead."
+      "checked_at": "2026-11-04",
+      "result": "NOT released. ~60 commits unreleased since the 2026-09-07 release: stored-XSS fix, Ruby 4.0.9, Rails 8.1.4.1, omniauth 2.3.1, eleven Repo Assist fixes. Flagged in the 2026-11 monthly issue.",
+      "follow_up": "Never trigger Release: it deploys to production and needs maintainer approval."
     },
     {
       "area": "repo_assist_prs",
-      "checked_at": "2026-10-23",
-      "result": "Every previous Repo Assist PR is merged (#2185-#2190 on 2026-10-23). This run opened three drafts: the dependency bundle, the feed indexes, and the Article#authorized? memoization. Numbers are assigned on publish; all green locally.",
-      "follow_up": "All the PRs the previous summary listed are MERGED and every issue it listed is CLOSED, so the monthly body was rewritten around that."
+      "checked_at": "2026-11-04",
+      "result": "All Repo Assist PRs through #2195 merged. Two new drafts this run, numbers on publish: repo-assist/perf-comments-index-n-plus-one and repo-assist/docs-changelog-sync-2026-11-04. Both off main, independent.",
+      "follow_up": "Check both drafts once published. Dependabot #2212-#2216 and #2206 merged; nothing else pending."
     },
     {
       "area": "tests",
-      "checked_at": "2026-10-23",
-      "result": "Full non-system suite on main: 1719 runs, 5527 assertions, 0 failures, 0 errors, 2 skips. With the feed-index tests: 1721. With the authorized? test: 1723. rubocop: 612 files, no offenses.",
-      "follow_up": "Run via ruby -Itest glob loader, NOT `bin/rails test`: the rake path pulls test:prepare -> css:install and aborts without bun. Rack::Attack buckets per Time.now.to_i / period, so fixed-request-count throttle tests are bucket-boundary flakes. New tests were mutation-checked."
+      "checked_at": "2026-11-04",
+      "result": "Full non-system suite green: 1723 runs (1687 core + 36 integration/routing/etc), 0 failures, 0 errors, 2 pre-existing skips. rubocop 612 files clean; zeitwerk ok.",
+      "follow_up": "Run via ruby -Itest glob loader, NOT bin/rails test (rake path needs bun for css:install; bun absent here). Query-count tests use count_sql_statements; bounds cite measured numbers."
     },
     {
       "area": "tooling",
-      "checked_at": "2026-10-23",
-      "result": "Dependency updates bundled into one lockfile change (branch repo-assist/bundle-dependabot-updates-2026-10-23): aws-sdk-s3 1.235.0, sqlite3 2.10.1, posthog-rails 3.19.6, pghero 4.1.0, mailjet 1.9.0, rubocop 1.92.1 - supersedes dependabot #2191/#2192. Added bin/measure-feed-indexes.",
-      "follow_up": "NOT bundled: omniauth 2.3.1 (pulls rack-oauth2 2.x across a major; omniauth-mixin is the maintainer's own fork), json 3.1.0 (deliberate pin), marcel 2 / net-ssh 8 / openssl 4 / prism 2 (majors). npm still has postcss, postcss-import and puppeteer unclaimed."
+      "checked_at": "2026-11-04",
+      "result": "Ruby 4.0.9 + ruby '~> 4' (#2206); json pin LIFTED (3.1.0 locked, #2206); omniauth 2.3.1 (#2200); Rails 8.1.4.1, posthog-rails 3.20.0, addressable 2.9.2, grover 2.0.0 (major), rubocop 1.92.2 (c205bc29).",
+      "follow_up": "2026-10-23 'NOT bundled' notes obsolete. Unclaimed majors: marcel 2, net-ssh 8, openssl 4, prism 2; npm postcss/postcss-import/puppeteer."
     }
   ],
   "completed_actions": [],
   "priorities": [
     {
       "task": 6,
-      "item": "Check the three new draft PRs once they are published",
-      "note": "Branches repo-assist/bundle-dependabot-updates-2026-10-23, repo-assist/perf-missing-indexes-2026-10-23, repo-assist/perf-article-authorized-memo-2026-10-23. Numbers assigned on publish; all green locally. The two perf PRs conflict in CHANGELOG.md only."
+      "item": "Check the two new draft PRs once they are published",
+      "note": "Branches repo-assist/perf-comments-index-n-plus-one and repo-assist/docs-changelog-sync-2026-11-04; numbers assigned on publish; both green locally, independent of each other."
     },
     {
-      "task": 8,
-      "item": "Close the comments-list N+1 next",
-      "note": "app/controllers/comments_controller.rb:26 preloads only :author, so each row costs ~7 queries - the avatar chain, two action-store vote lookups, and a reload of the article behind the polymorphic commentable."
+      "task": 5,
+      "item": "Add the Performance changelog entry for the comments N+1 after its PR merges",
+      "note": "The 2026-11-04 changelog sync deliberately deferred it - no entry for unmerged work. Anchor: existing '### Performance' section."
     },
     {
       "task": 9,
@@ -88,17 +100,17 @@
     {
       "task": 10,
       "item": "Decide whether the dead @pay_asset branch in show.turbo_stream.erb goes",
-      "note": "Raised as a Define goal item in the monthly issue on 2026-10-21, 22 and 23. Making it live changes what the pay modal renders, so it needs a product decision, not a bug fix."
+      "note": "Raised in the monthly issues 2026-10-21/22/23 and again 2026-11-04. Needs a product decision, not a bug fix."
     },
     {
       "task": 6,
       "item": "Confirm the PostHog Pagy::OptionError fingerprint drops now that #2163 is merged",
-      "note": "The fix merged on 2026-10-22 and covers ApplicationController and Admin::BaseController. Verification needs PostHog access, so it is a maintainer-side check; listed in the monthly issue."
+      "note": "Maintainer-side check (needs PostHog access); listed in the monthly issue."
     },
     {
       "task": 10,
       "item": "Ask whether the default feed sort should become a stored column",
-      "note": "order_by_popularity orders on a computed expression, so no index helps it - the feed still reads and sorts the whole published set. Flagged as a Define goal item on 2026-10-23."
+      "note": "order_by_popularity orders on a computed expression, so no index helps it. Flagged in the monthly issues 2026-10-23 and 2026-11-04."
     }
   ],
   "fixes": []
