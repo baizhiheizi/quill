@@ -14,21 +14,20 @@ moved.
 `QuillBot` gained the reactor wiring and `MixinMessage` gained the message
 model, both covered by new tests.
 
-### The deliberate `json` pin
+### The `json` pin, lifted
 
-`json` is held at `~> 2.21` (locked 2.21.2).
+`json` is no longer pinned (locked 3.1.0, #2206).
 
 The pin was necessary on Rails 8.1.3.1, which called `JSON.parse(source,
 options)` positionally; json 3 dropped the positional options hash, so **every
 json column read raised `ArgumentError` and 500ed any controller that touched
 one**. Dependabot #2125 bumped to json 3.0.2 and broke main; #2130 reverted it.
 
-The pin is now conservative rather than required: Rails 8.1.4 (locked since
-#2152) calls `JSON.parse(source, **options)`, which json 3 accepts — the
-condition the pin was waiting for ("until a Rails release adopts the json 3
-signature") was already met by the locked Rails version. The `Gemfile` comment
-records why the pin exists; re-test with `gem "json", "~> 3.0"` and drop the
-pin if the suite stays green.
+Rails 8.1.4 (locked since #2152) calls `JSON.parse(source, **options)`, which
+json 3 accepts, so the condition the pin was waiting for was met and #2206
+dropped the pin: `gem "json"` is unversioned and the suite runs green on json
+3.1. The constraint moved into the `Gemfile` comment, where it belongs — the
+real requirement is `rails >= 8.1.4`, not a json version.
 
 ### Crash fixes
 
@@ -90,6 +89,19 @@ pin if the suite stays green.
 - **Article asset selection (#2171)** — the editor's asset selector was
   silently discarded on create (it was honoured on update). The chosen
   `asset_id` is now preserved.
+- **Admin sort options that did not match their columns (#2186)** — the admin
+  users list renders `author_revenue_total_usd`, but its "Revenue" option
+  ordered by author *and* reader revenue (`User.order_by_revenue_total`), so
+  the list was never ordered by the number on screen. The collections list
+  offered only `created_at` sorts, labelled just "DESC"/"ASC", leaving it
+  ambiguous which timestamp was being sorted. Users now sort by the author
+  revenue the column displays (total revenue remains as its own labelled
+  option), and collections gained the missing `updated_at` sorts; all four
+  options are named after the column they order.
+- **Design-system source links 404ed (#2189)** — the `/design-system` page
+  built each primitive's "source" link from the app host, a URL that does not
+  exist. The links now point at each primitive's file in the GitHub
+  repository.
 
 ### Performance
 
@@ -149,6 +161,22 @@ Bundled into one lockfile update (supersedes #2191 and #2192): aws-sdk-s3
 1.233.2 → 1.235.0, sqlite3 2.10.0 → 2.10.1, posthog-rails 3.19.2 → 3.19.6,
 pghero 4.0.1 → 4.1.0, mailjet 1.8.3 → 1.9.0, rubocop 1.92.0 → 1.92.1.
 
+The Ruby 4.0.9 upgrade's bundle (#2206) carried omniauth 2.1.4 → 2.3.1
+(#2200) plus omniauth-oauth2 1.9.0 → 1.10.0, json 2.21.2 → 3.1.0 (the pin
+lift above), aws-sdk-s3 1.235.0 → 1.236.0 and lexxy 1.0.1 → 1.0.2.
+
+The 2026-11-03 Dependabot batch: annotaterb 4.25.0 → 4.26.0 (#2212),
+selenium-webdriver 4.51.0 → 4.52.0 (#2213), lexxy 1.0.2 → 1.0.3 (#2214),
+aws-sdk-s3 1.236.0 → 1.237.0 (#2215), addressable 2.9.0 → 2.9.1 (#2216).
+
+The 2026-11-04 bundle update: **Rails 8.1.4 → 8.1.4.1**, **grover 1.2.10 →
+2.0.0 (major)**, posthog-rails 3.19.6 → 3.20.0, posthog-ruby 3.28.4 →
+3.29.0, solid_queue 1.7.0 → 1.7.2, noticed 3.1.0 → 3.1.1, rubocop 1.92.1 →
+1.92.2, addressable 2.9.1 → 2.9.2, nokogiri 1.19.6 → 1.19.7, kaminari
+1.3.1 → 1.3.2, and transitive bumps (bls12-381 0.5.0, httpclient 2.10.0,
+h2c 0.4.0, net-scp 4.2.1, net-sftp 4.1.1, msgpack 1.8.7). The full suite
+runs green on grover 2.
+
 ### Tooling and docs corrections
 
 - `docs/how-to/deploy-with-kamal.md` corrected against the real deployment:
@@ -163,6 +191,20 @@ pghero 4.0.1 → 4.1.0, mailjet 1.8.3 → 1.9.0, rubocop 1.92.0 → 1.92.1.
 - `AGENTS.md` corrected: Docker Hub image name, `deploy.yml` → `release.yml`.
 - `API::RenderingHelper` gained a contract test covering all seven render
   helpers (#2169), pinning the JSON response shape the API returns.
+- Ruby 4.0.5 → 4.0.9 across `.ruby-version`, `mise.toml`, the Dockerfile, the
+  CI runtime and the docs; the Gemfile constraint loosened to `ruby "~> 4"`
+  (#2206).
+- The rack-attack throttle tests no longer depend on the counter bucket:
+  Rack::Attack keys its counters per `Time.now.to_i / period`, so a request
+  landing in the next bucket started a fresh counter and the fixed-count
+  admin-login, OAuth-callback and API throttle tests failed whenever their
+  requests straddled a boundary. They now drive until the throttle fires
+  through a shared helper, asserting the documented minimum was served and
+  the throttle does fire (#2187).
+- Three untested helpers gained test files: `DashboardHelper`,
+  `DesignSystemHelper` and the `HtmlPostProcessor` service (#2188).
+- Dev tooling: the `gh-aw` workflow lock and actions were upgraded, and
+  OpenSpec skill definitions were added under `.agents/skills/`.
 
 ### specs/011-comprehensive-ui-refactor
 
