@@ -21,17 +21,23 @@ class ViewerActionSetsTest < ActiveSupport::TestCase
   # verb → the `action_store` action that seeds it plus the kind of target
   # that action accepts (`action_store` filters each relation by
   # `target_type`, so `upvote_article` must be seeded with an Article, not a
-  # User). All four verbs are swept by every "across all four verbs"
+  # User). All six verbs are swept by every "across all verbs"
   # assertion below.
   VERBS = {
     subscribe_user: { action: :subscribe, target_kind: :user },
     block_user: { action: :block, target_kind: :user },
     upvote_article: { action: :upvote, target_kind: :article },
-    downvote_article: { action: :downvote, target_kind: :article }
+    downvote_article: { action: :downvote, target_kind: :article },
+    upvote_comment: { action: :upvote, target_kind: :comment },
+    downvote_comment: { action: :downvote, target_kind: :comment }
   }.freeze
 
   def target_for(kind)
-    kind == :user ? users(:reader_one) : articles(:published_free)
+    case kind
+    when :user then users(:reader_one)
+    when :article then articles(:published_free)
+    when :comment then comments(:one)
+    end
   end
 
   # Every controller that renders a partial consulting a preloaded action set
@@ -39,6 +45,7 @@ class ViewerActionSetsTest < ActiveSupport::TestCase
   # fails here instead of surfacing as a `NoMethodError` mid-render.
   CONSUMERS = %w[
     ArticlesController
+    CommentsController
     Dashboard::SubscribeUsersController
     Dashboard::BlockUsersController
     Users::SubscribeUsersController
@@ -78,7 +85,31 @@ class ViewerActionSetsTest < ActiveSupport::TestCase
     end
   end
 
-  test "returns an empty set for a guest across all four verbs" do
+  test "target_ids scopes a comment-vote set to the page about to render" do
+    viewer = users(:reader_one)
+    upvoted_comment = comments(:one)
+    viewer.create_action(:upvote, target: upvoted_comment)
+    viewer.create_action(:upvote, target: articles(:published_free))
+
+    # The comments list asks for one page's ids: a viewer's comment votes
+    # span every article they ever read, so the set is scoped rather than
+    # materialised in full.
+    ids = harness(viewer).send(:ids_for, :upvote_comment, target_ids: [ upvoted_comment.id, comments(:two).id ])
+
+    assert_instance_of Set, ids
+    assert_includes ids, upvoted_comment.id
+    assert_not_includes ids, articles(:published_free).id,
+      "a comment-vote page set must never contain article ids"
+
+    # A page that does not contain the acted-on comment gets an empty set —
+    # the scope bounds the SELECT to the rows about to render. A fresh
+    # harness because the slot memoizes per verb for the request.
+    other_page = harness(viewer).send(:ids_for, :upvote_comment, target_ids: [ comments(:two).id ])
+
+    assert_empty other_page, "a page without the acted-on comment must see an empty set"
+  end
+
+  test "returns an empty set for a guest across all verbs" do
     VERBS.each_key do |verb|
       ids = harness(nil).send(:ids_for, verb)
 

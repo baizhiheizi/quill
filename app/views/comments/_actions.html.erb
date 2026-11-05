@@ -1,11 +1,18 @@
+<%# `CommentsController#index` primes `@preloaded_upvoted_comment_ids` /
+    `@preloaded_downvoted_comment_ids` for the page — one scoped SELECT per
+    side instead of two per row. Rendered without a primed controller
+    (create.turbo_stream renders a single comment), fall through to the
+    per-row action_store helper. %>
+<% upvoted = defined?(@preloaded_upvoted_comment_ids) ? @preloaded_upvoted_comment_ids.include?(comment.id) : current_user&.upvote_comment?(comment) %>
+<% downvoted = defined?(@preloaded_downvoted_comment_ids) ? @preloaded_downvoted_comment_ids.include?(comment.id) : current_user&.downvote_comment?(comment) %>
 <div class="<%= dom_id comment %>_actions flex items-center gap-3 text-sm text-base-content/60">
   <%= button_to upvoted_comment_path(comment), method: :put, class: "btn btn-soft btn-sm gap-1.5" do %>
-    <span class="i-[tabler--thumb-up-filled] size-4 <%= current_user&.upvote_comment?(comment) ? 'text-primary' : 'text-base-content/60' %>"></span>
+    <span class="i-[tabler--thumb-up-filled] size-4 <%= upvoted ? 'text-primary' : 'text-base-content/60' %>"></span>
     <span><%= comment.upvotes_count %></span>
   <% end %>
 
   <%= button_to downvoted_comment_path(comment), method: :put, class: "btn btn-soft btn-sm gap-1.5" do %>
-    <span class="i-[tabler--thumb-down-filled] size-4 <%= current_user&.downvote_comment?(comment) ? 'text-error' : 'text-base-content/60' %>"></span>
+    <span class="i-[tabler--thumb-down-filled] size-4 <%= downvoted ? 'text-error' : 'text-base-content/60' %>"></span>
     <span><%= comment.downvotes_count %></span>
   <% end %>
 
