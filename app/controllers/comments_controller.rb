@@ -23,8 +23,38 @@ class CommentsController < ApplicationController
         comments.order(created_at: :desc)
       end
 
-    @pagy, @comments = pagy comments.without_deleted.includes(:author)
+    @pagy, @comments = pagy comments.without_deleted.includes(*COMMENTS_INDEX_PRELOADS)
+
+    # The `_actions` partial asks "has the viewer voted on this comment?" per
+    # row. Prime the page's answer sets here so the partial reads them instead
+    # of firing two SELECTs per comment; the sets are scoped to this page's
+    # ids because a viewer's comment votes span every article they ever read.
+    page_ids = @comments.map(&:id)
+    @preloaded_upvoted_comment_ids = ids_for(:upvote_comment, target_ids: page_ids)
+    @preloaded_downvoted_comment_ids = ids_for(:downvote_comment, target_ids: page_ids)
   end
+
+  # Everything one comments-list row touches: the author's avatar chain, the
+  # commentable (the `_actions` reply gate calls `commentable.authorized?` per
+  # row — with the commentable preloaded all rows share one Article instance,
+  # so the memoized answer costs one SELECT for the whole page), the comment's
+  # own rich text, and the quoted comment with its author, its commentable and
+  # its rich text.
+  #
+  # `User::AVATAR_PRELOADS` is the model constant every avatar surface shares
+  # (see `ArticlesController#preloaded_random_readers`).
+  COMMENTS_INDEX_PRELOADS = [
+    { author: User::AVATAR_PRELOADS },
+    { commentable: :author },
+    :rich_text_content,
+    {
+      quote_comment: [
+        { author: User::AVATAR_PRELOADS },
+        { commentable: :author },
+        :rich_text_content
+      ]
+    }
+  ].freeze
 
   def new
     if params[:quote_comment_id].present?
