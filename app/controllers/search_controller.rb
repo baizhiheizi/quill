@@ -15,6 +15,7 @@ class SearchController < ApplicationController
             mixin_id: @query
           }.merge(m: "or")
         ).result
+        .includes(*User::AVATAR_PRELOADS)
         .limit(10)
 
     @tags =

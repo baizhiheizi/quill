@@ -37,7 +37,47 @@ class SearchControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  test "index preloads the avatar chain for its user hits" do
+    seed_searchable_users
+
+    queries = capture_sql do
+      get search_path(query: "zeta"), as: :turbo_stream
+    end
+
+    assert_response :success
+    assert_match "Zeta Searcher 0", response.body,
+      "expected the seeded user hits to render — a budget passing on an " \
+      "empty result proves nothing"
+
+    # Measured 4 with the preload (22 before it): the per-row avatar chain
+    # fired an authorization + attachment SELECT for every one of the 10
+    # hits. The headroom absorbs adapter-level variance without letting a
+    # per-row lookup back in.
+    assert queries.size <= 8, "expected a full page of user hits (10 users " \
+      "with authorizations) to stay within 8 SQL statements, got #{queries.size}"
+  end
+
   private
+
+  # A full page of user hits: ten users sharing one name prefix, each with a
+  # Mixin authorization carrying an avatar_url — the worst shape of one
+  # keystroke's response. Runs outside the counted block.
+  def seed_searchable_users
+    10.times do |i|
+      user = User.create!(
+        uid: "90000#{i}",
+        name: "Zeta Searcher #{i}",
+        mixin_uuid: SecureRandom.uuid,
+        mixin_id: "zeta#{i}"
+      )
+      UserAuthorization.create!(
+        user: user,
+        provider: :mixin,
+        uid: "zeta-auth-#{i}",
+        raw: { user_id: "zeta-auth-#{i}", name: user.name, avatar_url: "https://example.com/zeta#{i}.png" }
+      )
+    end
+  end
 
   def capture_sql
     queries = []
