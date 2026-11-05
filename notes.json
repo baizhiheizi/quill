@@ -15,7 +15,7 @@
       "number": 2217,
       "state": "deferred",
       "updated_at": "2026-11-05",
-      "note": "[aw] engine driver crashed (runs 41591921252, 41703607492, 41784873632). Streak appears over: 41899816317 and 41982482836 completed. Same policy: telemetry only, do not touch."
+      "note": "[aw] engine driver crashed (runs 41591921252, 41703607492, 41784873632). Streak appears over: 41899816317, 41982482836, 42098578036 completed. Same policy: telemetry only, do not touch."
     }
   ],
   "checks": [
@@ -28,14 +28,14 @@
     {
       "area": "code",
       "checked_at": "2026-11-05",
-      "result": "Perf: feed indexes (#2194), article authorized? memo (#2195), comments N+1 RECREATED after the lost publish (preloads avatar/commentable/rich-text/quote chains; page-scoped viewer vote sets via ids_for). 13-row page: 69->22 SQL signed-in, 39->14 guest.",
-      "follow_up": "Comments N+1 changelog entry deferred until its PR merges. Users/admin comment lists and article show already preloaded."
+      "result": "Perf so far: feed indexes (#2194), authorized? memo (#2195), comments N+1 (#2219 open), search-avatar N+1 (branch improve-search-avatar-preloads, this run: 22 -> 4 SQL per keystroke, budget test pins 8). Unclaimed scan leftovers are queued in priorities.",
+      "follow_up": "Claim leftovers one small PR at a time; lock_attributes_once_listed may be an unwired validator - investigate before removing."
     },
     {
       "area": "docs",
       "checked_at": "2026-11-05",
-      "result": "CHANGELOG sync RECREATED (repo-assist/docs-changelog-sync-2026-11-04) through 2026-11-04: json pin lift (#2206), Ruby 4.0.9, omniauth 2.3.1 (#2200), Dependabot #2212-#2216, 2026-11-04 bundle (Rails 8.1.4.1, grover 2.0.0), #2186/#2189, #2187/#2188.",
-      "follow_up": "Performance changelog entry for the comments N+1 after its PR merges (anchor: '### Performance')."
+      "result": "CHANGELOG sync open as #2220 through 2026-11-04: json pin lift (#2206), Ruby 4.0.9, omniauth 2.3.1 (#2200), Dependabot #2212-#2216, 2026-11-04 bundle (Rails 8.1.4.1, grover 2.0.0), #2186/#2189, #2187/#2188.",
+      "follow_up": "Performance changelog entries for #2219 (comments N+1) and the search-avatar PR after they merge (anchor: '### Performance')."
     },
     {
       "area": "hygiene",
@@ -51,21 +51,21 @@
     },
     {
       "area": "release",
-      "checked_at": "2026-11-04",
-      "result": "NOT released. ~60 commits unreleased since the 2026-09-07 release: stored-XSS fix, Ruby 4.0.9, Rails 8.1.4.1, omniauth 2.3.1, eleven Repo Assist fixes. Flagged in the 2026-11 monthly issue.",
+      "checked_at": "2026-11-05",
+      "result": "NOT released. ~60 commits unreleased since the 2026-09-07 release: stored-XSS fix, Ruby 4.0.9, Rails 8.1.4.1, omniauth 2.3.1, eleven Repo Assist fixes. Flagged in the 2026-11 monthly issue; #2220 brings release notes current first.",
       "follow_up": "Never trigger Release: it deploys to production and needs maintainer approval."
     },
     {
       "area": "repo_assist_prs",
       "checked_at": "2026-11-05",
-      "result": "INCIDENT: run 41899816317 recorded two PRs that never landed on the remote. Rebuilt this run: repo-assist/perf-comments-index-n-plus-one (#2219) and repo-assist/docs-changelog-sync-2026-11-04 (#2220); off main, independent, green locally.",
-      "follow_up": "NEXT RUN VERIFY FIRST: confirm both recreated PRs exist (list_pull_requests + branch list) before any other work. If missing again, re-run create_pull_request, then report_incomplete."
+      "result": "Lost-publication incident RESOLVED: #2219 (Check CI green) and #2220 (docs-only, no CI by design) confirmed on remote. This run also created improve-search-avatar-preloads (aw_pr_search), publication pending.",
+      "follow_up": "NEXT RUN VERIFY FIRST: search-avatar PR landed; #2219/#2220 still open/unchanged; the aw_pr_search placeholder in the 2026-11 issue body got replaced (previous run's placeholders were not and needed manual fixup)."
     },
     {
       "area": "tests",
       "checked_at": "2026-11-05",
-      "result": "Full non-system suite green: 1727 runs, 0 failures, 0 errors, 2 pre-existing skips (+4 new: 3 comments-index query-budget/priming tests, 1 concern target_ids test). rubocop 612 files clean; zeitwerk ok; DS lint: DS010 advisories unchanged.",
-      "follow_up": "Run via ruby -Itest glob loader, NOT bin/rails test (needs bun; absent). Query-count bounds cite measured numbers (24/16 over measured 22/14; old code 69/39)."
+      "result": "Full non-system suite green on main + search-avatar change: 1724 runs, 0 failures, 0 errors, 2 pre-existing skips. rubocop clean on changed files; zeitwerk ok; search budget test fails unpatched (22 vs budget 8).",
+      "follow_up": "Loader gotcha: 'ruby -Itest f1 f2 ...' runs ONLY f1 - use a require-all loader script with -Itest (was at /tmp/gh-aw/agent/run_suite.rb)."
     },
     {
       "area": "tooling",
@@ -78,13 +78,13 @@
   "priorities": [
     {
       "task": 6,
-      "item": "VERIFY FIRST: the two recreated PRs landed on the remote",
-      "note": "list_pull_requests + branch check for repo-assist/perf-comments-index-n-plus-one and repo-assist/docs-changelog-sync-2026-11-04 before any other work. Run 41899816317 lost its publications silently; this run recreated them. Check CI on both drafts."
+      "item": "Verify the search-avatar PR landed on the remote",
+      "note": "Branch repo-assist/improve-search-avatar-preloads (temp id aw_pr_search) created 2026-11-05 20:14, publication pending at write time. Also re-confirm #2219/#2220 still open and unchanged before any other work."
     },
     {
       "task": 5,
-      "item": "Add the Performance changelog entry for the comments N+1 after its PR merges",
-      "note": "The sync deliberately deferred it - no entry for unmerged work. Anchor: existing '### Performance' section."
+      "item": "Add Performance changelog entries for #2219 and the search-avatar PR after they merge",
+      "note": "The sync deliberately defers unmerged work. Anchor: existing '### Performance' section."
     },
     {
       "task": 9,
@@ -105,6 +105,11 @@
       "task": 10,
       "item": "Ask whether the default feed sort should become a stored column",
       "note": "order_by_popularity orders on a computed expression, so no index helps it. Flagged in the monthly issues 2026-10-23, 2026-11-04 and 2026-11-05."
+    },
+    {
+      "task": 5,
+      "item": "Unclaimed Explore-scan candidates from 2026-11-05 (one small PR each)",
+      "note": "Dead code: User#avatar_thumb, User#owning_collection_ids, Collection#lock_attributes_once_listed (may be an unwired validator - check first), articles/_share_button and shared/_nav_icon_link partials. Hygiene: DistributeService .to_s -> .to_s(\"F\"). Perf: filter_bar present? -> ids_for."
     }
   ],
   "fixes": []
