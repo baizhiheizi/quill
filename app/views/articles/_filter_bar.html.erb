@@ -16,7 +16,7 @@
         tabs_tabname_param: "default",
       } %>
 
-    <% if current_user.present? && current_user.subscribe_users.present? %>
+    <% if current_user.present? && current_user.subscribe_users.exists? %>
       <%= link_to t('subscribed'),
         articles_path(filter: :subscribed),
         class: "flex-shrink-0 rounded-full px-3 py-1.5 text-sm text-base-content/60 transition-colors hover:bg-base-200",

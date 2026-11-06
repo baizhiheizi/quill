@@ -231,6 +231,37 @@ end
 class ArticlesAuthenticatedControllerTest < ActionController::TestCase
   tests ArticlesController
 
+  test "index decides the subscribed tab with a bounded query, not a full load" do
+    # The filter bar shows the "Subscribed" tab when the viewer subscribes to
+    # at least one user. It answered that with `subscribe_users.present?`,
+    # which SELECTs and instantiates every subscribed user on every feed
+    # render; `exists?` asks Postgres for one row instead. On the default
+    # feed the check is the only consumer of a subscribe-shaped query, so
+    # every query it captures must carry LIMIT.
+    reader = users(:reader_one)
+    author = users(:author)
+    reader.create_action(:subscribe, target: author)
+    @request.session[:current_session_id] = sign_in(reader).uuid
+
+    queries = []
+    callback = ->(*, payload) {
+      next if payload[:name] == "SCHEMA"
+      # The prepared-statement payload carries bind placeholders ($1, $2...),
+      # so match on the join shape rather than the literal action_type value.
+      queries << payload[:sql] if payload[:sql] =~ /FROM\s+"users"\s+INNER\s+JOIN\s+"actions"/i
+    }
+
+    ActiveSupport::Notifications.subscribed(callback, "sql.active_record") do
+      get :index
+    end
+
+    assert_response :success
+    assert queries.any?, "expected the subscribed-tab check to query the actions table"
+    assert queries.all? { |sql| sql.include?("LIMIT") },
+      "the subscribed-tab check should be a LIMIT 1 exists? query, got: #{queries.inspect}"
+    assert_match "filter=subscribed", response.body
+  end
+
   test "show primes both vote sets in one SELECT per side" do
     # `ArticlesController#show` assigns `@preloaded_upvoted_article_ids` /
     # `@preloaded_downvoted_article_ids` from `ViewerActionSets#ids_for`. The
