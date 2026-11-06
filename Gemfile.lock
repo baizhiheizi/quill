@@ -471,8 +471,6 @@ GEM
       actionpack (>= 4.2)
       omniauth (~> 2.0)
     openssl (3.3.3)
-    order_as_specified (1.7)
-      activerecord (>= 5.0.0)
     ostruct (0.6.3)
     pagy (43.8.1)
       json
@@ -527,9 +525,6 @@ GEM
     rack (3.2.8)
     rack-attack (6.8.0)
       rack (>= 1.0, < 4)
-    rack-cors (3.0.0)
-      logger
-      rack (>= 3.0.14)
     rack-oauth2 (1.21.3)
       activesupport
       attr_required
@@ -771,7 +766,6 @@ DEPENDENCIES
   omniauth
   omniauth-mixin!
   omniauth-rails_csrf_protection
-  order_as_specified
   pagy
   pg
   pghero
@@ -780,7 +774,6 @@ DEPENDENCIES
   puma
   pundit
   rack-attack
-  rack-cors
   rails
   rails-i18n
   ransack
@@ -970,7 +963,6 @@ CHECKSUMS
   omniauth-oauth2 (1.10.0) sha256=eeaac3bf4d6a6e2dff4edf8238f0cc046d935347c80d422ff4bdbb028c6f7dd2
   omniauth-rails_csrf_protection (2.0.1) sha256=c6e3204d7e3925bb537cb52d50fdfc9f05293f1a9d87c5d4ab4ca3a39ba8c32d
   openssl (3.3.3) sha256=d46902138f2987c13122fab826030a11c2bb9b8a16394215cbfc5062c5e2d335
-  order_as_specified (1.7) sha256=5e4016542f0bda13bc21821021199192567c32823a22f6962bc16b3dc254ce13
   ostruct (0.6.3) sha256=95a2ed4a4bd1d190784e666b47b2d3f078e4a9efda2fccf18f84ddc6538ed912
   pagy (43.8.1) sha256=8f136a4bded93b04c87bc385e8be24c8b5adbaab1c0fac1c4c0c63eddae9c2ff
   parallel (2.3.0) sha256=f75a3e904101ce6a1ccb6b8dc800cbafd42166d83330192438dcf29395167a6f
@@ -1001,7 +993,6 @@ CHECKSUMS
   racc (1.8.1) sha256=4a7f6929691dbec8b5209a0b373bc2614882b55fc5d2e447a21aaa691303d62f
   rack (3.2.8) sha256=1fecc85e463ebc7a2a945fff829ffcd549babeb1556384796fad946c28dc4ec7
   rack-attack (6.8.0) sha256=f2499fdebf85bcc05573a22dff57d24305ac14ec2e4156cd3c28d47cafeeecf2
-  rack-cors (3.0.0) sha256=7b95be61db39606906b61b83bd7203fa802b0ceaaad8fcb2fef39e097bf53f68
   rack-oauth2 (1.21.3) sha256=4e72a79dd6a866692e84422a552b27c38a5a1918ded06661e04910f2bbe676ba
   rack-protection (4.2.1) sha256=cf6e2842df8c55f5e4d1a4be015e603e19e9bc3a7178bae58949ccbb58558bac
   rack-session (2.1.2) sha256=595434f8c0c3473ae7d7ac56ecda6cc6dfd9d37c0b2b5255330aa1576967ffe8

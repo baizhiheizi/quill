@@ -88,17 +88,11 @@ gem "noticed", "~> 3.0"
 # Centralization of locale data collection for Ruby on Rails.
 gem "rails-i18n"
 
-# Add arbitrary ordering to ActiveRecord queries.
-gem "order_as_specified"
-
 # Rack middleware for blocking & throttling abusive requests
 gem "rack-attack"
 
 # The ultimate pagination ruby gem
 gem "pagy"
-
-# Rack Middleware for handling Cross-Origin Resource Sharing (CORS), which makes cross-origin AJAX possible.
-gem "rack-cors"
 
 # Config helps you easily manage environment specific settings in an easy and usable manner.
 gem "config"
