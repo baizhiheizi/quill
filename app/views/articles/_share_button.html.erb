@@ -1,8 +1,0 @@
-<% button_class ||= "size-5 lg:size-6 text-base-content/60 transition-transform hover:scale-105 hover:text-base-content" %>
-
-<%= link_to article_share_path(article_uuid: article.uuid),
-  data: { turbo_frame: :modal },
-  class: "inline-flex items-center justify-center",
-  aria: { label: t('share', default: 'Share') } do %>
-  <span class="i-[tabler--share-3] <%= button_class %>"></span>
-<% end %>

@@ -64,7 +64,7 @@ namespace :admin do
     post :deliver
   end
 
-  resources :wallets do
+  resources :wallets, only: [] do
     get :assets
     get :snapshots
     get :safe_outputs

@@ -84,7 +84,6 @@ Rails.application.routes.draw do
 
   resources :tags, only: %i[index]
 
-  resources :currencies, only: %i[index]
   resources :users, only: :show, param: :uid, as: :full_user do
     get :share
   end
