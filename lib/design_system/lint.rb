@@ -257,7 +257,6 @@ module DesignSystem
       return if rel == "app/views/layouts/application.html.erb" && line.include?("theme-color")
       return if rel == "app/views/layouts/public.html.erb" && line.include?("theme-color")
       return if rel == "app/views/layouts/editor.html.erb" && line.include?("theme-color")
-      return if rel == "app/views/layouts/homepage.html.erb" && line.include?("theme-color")
       return if rel == "app/javascript/controllers/darkmode_controller.js" && line.include?("setAttribute")
       return if rel == "app/assets/stylesheets/application.tailwind.css"
 
@@ -353,11 +352,9 @@ module DesignSystem
       )
     end
 
-    # DS007 — raw `<table>` outside `shared/_table.html.erb`.
+    # DS007 — raw `<table>` in a view outside the rule-scoped allowlist.
     def check_raw_table!(rel, line, ln)
       return unless rel.start_with?("app/views/")
-      return if rel == "app/views/shared/_table.html.erb"
-      return if rel == "app/views/design_system/_table.html.erb"
       return unless line.include?("<table")
 
       violations << Violation.new(
@@ -365,7 +362,7 @@ module DesignSystem
         severity: :warning,
         file: rel,
         line: ln,
-        message: "raw `<table>` outside `shared/_table.html.erb`; use `<%= render_table … %>`",
+        message: "raw `<table>` markup in a view; add a rule-scoped ALLOWLIST entry with a reason",
       )
     end
 
