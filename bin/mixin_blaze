@@ -4,11 +4,9 @@ require "rubygems"
 require "bundler/setup"
 require File.expand_path("../config/environment", __dir__)
 
-# Mixin integration loops. Each runs until the container is stopped and
-# restarts itself if it exits unexpectedly.
+# Mixin integration loop. Runs until the container is stopped and restarts
+# itself if it exits unexpectedly.
 #
-# - Blaze: the gem's fiber-based reactor (Async) owns the WebSocket —
-#   connect, keepalive, read, ack, reconnect with backoff. No EventMachine.
 # - Snapshots: the Safe snapshot poller, paced by MixinApi::Gate.
 run_forever = lambda do |name, &block|
   Thread.new do
@@ -23,7 +21,6 @@ run_forever = lambda do |name, &block|
 end
 
 thrs = []
-thrs << run_forever.call("MixinBot::Blaze::Reactor") { QuillBot.blaze_reactor.run } if Settings.blaze_enable
 thrs << run_forever.call("MixinNetworkSnapshot.poll") { MixinNetworkSnapshot.poll }
 
 thrs.each(&:join)

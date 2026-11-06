@@ -10,7 +10,7 @@ Quill runs as a single service (`service: quill`) with three roles on one host (
 |------|-----------|-------|
 | `web` | Rails (default `bin/rails server`) | Serves public web, dashboard, admin, API, grover |
 | `job` | `bin/jobs` | Solid Queue worker for ActiveJob processing |
-| `blaze` | `bin/mixin_blaze` | Mixin blaze client (Mixin network integration) |
+| `blaze` | `bin/mixin_blaze` | Mixin Safe snapshot poller (Mixin network integration) |
 
 Two **accessories** run alongside the app: `db` (`pgvector/pgvector:pg16` on port `5432`, data mounted to `/var/lib/postgresql/data`) and `db_backup` (`eeshugerman/postgres-backup-s3:16`, `@daily`, 7 days of S3 backups). Traefik fronts the `web` role on `quill.im` with TLS.
 
