@@ -1,23 +1,18 @@
 {
   "version": 1,
   "cursors": {
-    "labelling_after": 2218,
-    "investigation_after": 2218
+    "labelling_after": 2222,
+    "investigation_after": 2222
   },
   "issues": [
     {
-      "number": 2211,
+      "number": 2222,
       "state": "deferred",
-      "updated_at": "2026-11-05",
-      "note": "[aw] engine driver crashed (runs 41530721079, 41591921252). Machine-generated harness telemetry; no repo-side fix. Do not comment; maintainer decides on the aw harness."
-    },
-    {
-      "number": 2217,
-      "state": "deferred",
-      "updated_at": "2026-11-05",
-      "note": "[aw] engine driver crashed (runs 41591921252, 41703607492, 41784873632). Streak appears over: 41899816317, 41982482836, 42098578036 completed. Same policy: telemetry only, do not touch."
+      "updated_at": "2026-11-06",
+      "note": "PostHog ArgumentError 'key cannot be blank' (blank Rails.cache key). Labelled bug + commented root cause; fix PR open on repo-assist/fix-issue-2222-blank-cache-keys (aw_pr_2222), Closes #2222."
     }
   ],
+  "fixes": [],
   "checks": [
     {
       "area": "ci",
@@ -27,90 +22,94 @@
     },
     {
       "area": "code",
-      "checked_at": "2026-11-05",
-      "result": "Perf so far: feed indexes (#2194), authorized? memo (#2195), comments N+1 (#2219 open), search-avatar N+1 (branch improve-search-avatar-preloads, this run: 22 -> 4 SQL per keystroke, budget test pins 8). Unclaimed scan leftovers are queued in priorities.",
-      "follow_up": "Claim leftovers one small PR at a time; lock_attributes_once_listed may be an unwired validator - investigate before removing."
+      "checked_at": "2026-11-06",
+      "result": "Perf shipped: feed indexes #2194, authorized? memo #2195, comments N+1 #2219, search-avatar #2221, filter-bar exists? (aw_pr_filterbar). Blank-cache-key audit for #2222 covered all Rails.cache sites.",
+      "follow_up": "Product decision pending: sessions#twitter unreachable (shadowed by omniauth catch-all, routes.rb:21) - Twitter connect broken. Documented in aw_pr_2222 + pinning test; do not change routing unilaterally."
     },
     {
       "area": "docs",
-      "checked_at": "2026-11-05",
-      "result": "CHANGELOG sync open as #2220 through 2026-11-04: json pin lift (#2206), Ruby 4.0.9, omniauth 2.3.1 (#2200), Dependabot #2212-#2216, 2026-11-04 bundle (Rails 8.1.4.1, grover 2.0.0), #2186/#2189, #2187/#2188.",
-      "follow_up": "Performance changelog entries for #2219 (comments N+1) and the search-avatar PR after they merge (anchor: '### Performance')."
+      "checked_at": "2026-11-06",
+      "result": "Performance changelog entries for #2219/#2221 added (aw_pr_changelog, open). Changelog current through #2221.",
+      "follow_up": "After the three open PRs merge, no deferred entries remain; add entries for the #2222 fix and filter-bar perf only after THEY merge."
     },
     {
       "area": "hygiene",
-      "checked_at": "2026-10-21",
-      "result": "Integration sessions do NOT persist here: IntegrationTestCase#sign_in sets session[:current_session_id] but the cookie is never written, so the next request is anonymous.",
-      "follow_up": "So a test asserting 'redirects to root_path' can pass for the wrong reason. Use ActionController::TestCase with @request.session, and add a happy-path 200 assertion."
+      "checked_at": "2026-11-06",
+      "result": "CONFIRMED: IntegrationTestCase#sign_in does not persist - session writes between requests never reach the cookie jar (the /up priming does not fix it), so signed-in integration tests run as GUESTS.",
+      "follow_up": "Task 9 candidate: fix sign_in; buyer/auth tests currently pass for the wrong reason. Until then use ActionController::TestCase + @request.session."
     },
     {
       "area": "qa",
       "checked_at": "2026-10-22",
-      "result": "Stored XSS fixed in #2176 (MERGED). config/initializers/content_security_policy.rb is still entirely commented out - a CSP header is the natural follow-up. The sanitizer drops inline style attributes and non-Turbo data-* attributes.",
+      "result": "Stored XSS fixed in #2176 (MERGED). config/initializers/content_security_policy.rb is still entirely commented out - a CSP header is the natural follow-up. Sanitizer drops inline style attributes.",
       "follow_up": "CSP proposal only after the sanitizer approach settles; listed as Future Work in the 2026-11 monthly issue."
     },
     {
       "area": "release",
-      "checked_at": "2026-11-05",
-      "result": "NOT released. ~60 commits unreleased since the 2026-09-07 release: stored-XSS fix, Ruby 4.0.9, Rails 8.1.4.1, omniauth 2.3.1, eleven Repo Assist fixes. Flagged in the 2026-11 monthly issue; #2220 brings release notes current first.",
+      "checked_at": "2026-11-06",
+      "result": "NOT released. ~60 commits unreleased since 2026-09-07, now including #2219/#2220/#2221 and this run's work. Flagged in the 2026-11 monthly issue; changelog current through #2221.",
       "follow_up": "Never trigger Release: it deploys to production and needs maintainer approval."
     },
     {
       "area": "repo_assist_prs",
-      "checked_at": "2026-11-05",
-      "result": "Lost-publication incident RESOLVED: #2219 (Check CI green) and #2220 (docs-only, no CI by design) confirmed on remote. This run also created improve-search-avatar-preloads (aw_pr_search), publication pending.",
-      "follow_up": "NEXT RUN VERIFY FIRST: search-avatar PR landed; #2219/#2220 still open/unchanged; the aw_pr_search placeholder in the 2026-11 issue body got replaced (previous run's placeholders were not and needed manual fixup)."
+      "checked_at": "2026-11-06",
+      "result": "Lost-publication recovery COMPLETE: #2219/#2220 merged 11-05, #2221 (aw_pr_search) merged 11-06. This run: aw_pr_2222, aw_pr_filterbar, aw_pr_changelog pending publication.",
+      "follow_up": "NEXT RUN FIRST: verify the 3 PRs landed with intended diffs; fix '(number on publish)' refs in issue #2218 (update_issue does NOT resolve #aw_ placeholders - confirmed twice)."
     },
     {
       "area": "tests",
-      "checked_at": "2026-11-05",
-      "result": "Full non-system suite green on main + search-avatar change: 1724 runs, 0 failures, 0 errors, 2 pre-existing skips. rubocop clean on changed files; zeitwerk ok; search budget test fails unpatched (22 vs budget 8).",
-      "follow_up": "Loader gotcha: 'ruby -Itest f1 f2 ...' runs ONLY f1 - use a require-all loader script with -Itest (was at /tmp/gh-aw/agent/run_suite.rb)."
+      "checked_at": "2026-11-06",
+      "result": "Full suite green: 1733 runs, 0 failures, 2 pre-existing skips. Needs SKIP_CSS_BUILD=1 here (no bun binary; cssbundling needs bun for bun.lock). Loader gotcha stands: use /tmp/gh-aw/agent/run_tests.rb.",
+      "follow_up": "Explicit ERB paths bypass rubocop Exclude (junk offenses). Notification sql payload has bind placeholders ($N) - query matchers must match SQL shape, not literals."
     },
     {
       "area": "tooling",
-      "checked_at": "2026-11-04",
-      "result": "Ruby 4.0.9 + ruby '~> 4' (#2206); json pin LIFTED (3.1.0 locked, #2206); omniauth 2.3.1 (#2200); Rails 8.1.4.1, posthog-rails 3.20.0, addressable 2.9.2, grover 2.0.0 (major), rubocop 1.92.2 (c205bc29).",
-      "follow_up": "Unclaimed majors: marcel 2, net-ssh 8, openssl 4, prism 2; npm postcss/postcss-import/puppeteer."
+      "checked_at": "2026-11-06",
+      "result": "No open Dependabot PRs. bundle outdated blocked here (read-only gem cache); last Ruby sweep 2026-11-04. npm: tailwind 4.3.4, postcss 8.5.32, puppeteer 25.16, axios 1.21 minor/patch available; lexxy 1.0.3 major.",
+      "follow_up": "npm updates need bun.lock regen - blocked without bun binary; noted in monthly issue. Unclaimed Ruby majors: marcel 2, net-ssh 8, openssl 4, prism 2."
     }
   ],
   "completed_actions": [],
   "priorities": [
     {
       "task": 6,
-      "item": "Verify the search-avatar PR landed on the remote",
-      "note": "Branch repo-assist/improve-search-avatar-preloads (temp id aw_pr_search) created 2026-11-05 20:14, publication pending at write time. Also re-confirm #2219/#2220 still open and unchanged before any other work."
-    },
-    {
-      "task": 5,
-      "item": "Add Performance changelog entries for #2219 and the search-avatar PR after they merge",
-      "note": "The sync deliberately defers unmerged work. Anchor: existing '### Performance' section."
+      "item": "Verify the three new PRs landed; fix monthly-issue placeholders",
+      "note": "aw_pr_2222, aw_pr_filterbar, aw_pr_changelog created 2026-11-06 07:30, publication pending at write. Replace '(number on publish)' in issue #2218 with real numbers; confirm #2222 open until merge."
     },
     {
       "task": 9,
-      "item": "Sweep app/libs/revenue_bot.rb and app/libs/twitter_bot.rb - neither has a test file",
+      "item": "Fix IntegrationTestCase#sign_in session persistence",
+      "note": "Signed-in integration tests silently run as guests (cookie never written; /up priming ineffective). Fix may surface real failures in buyer/auth tests - go carefully, one PR."
+    },
+    {
+      "task": 9,
+      "item": "Sweep app/libs/revenue_bot.rb and app/libs/twitter_bot.rb - no test files",
       "note": "Follows the 2026-10-23 sweep that closed dashboard_helper, design_system_helper and HtmlPostProcessor. app/libs/mixin.rb has only mixin_test.rb."
     },
     {
       "task": 10,
+      "item": "Twitter connect flow: maintainer decision needed",
+      "note": "sessions#twitter unreachable - route shadowed by omniauth catch-all (routes.rb:21 vs 27). Surfaced in aw_pr_2222 description and the 2026-11 monthly issue. Do not change routing unilaterally."
+    },
+    {
+      "task": 10,
       "item": "Decide whether the dead @pay_asset branch in show.turbo_stream.erb goes",
-      "note": "Raised in the monthly issues 2026-10-21/22/23 and again 2026-11-04/05. Needs a product decision, not a bug fix."
+      "note": "Raised in the monthly issues 2026-10-21/22/23 and 2026-11-04/05/06. Needs a product decision, not a bug fix."
     },
     {
       "task": 6,
-      "item": "Confirm the PostHog Pagy::OptionError fingerprint drops now that #2163 is merged",
+      "item": "Confirm the PostHog Pagy::OptionError fingerprint drops since #2163",
       "note": "Maintainer-side check (needs PostHog access); listed in the monthly issue."
     },
     {
       "task": 10,
       "item": "Ask whether the default feed sort should become a stored column",
-      "note": "order_by_popularity orders on a computed expression, so no index helps it. Flagged in the monthly issues 2026-10-23, 2026-11-04 and 2026-11-05."
+      "note": "order_by_popularity orders on a computed expression, so no index helps it. Flagged in the monthly issues 2026-10-23 and 2026-11-04/05/06."
     },
     {
       "task": 5,
       "item": "Unclaimed Explore-scan candidates from 2026-11-05 (one small PR each)",
-      "note": "Dead code: User#avatar_thumb, User#owning_collection_ids, Collection#lock_attributes_once_listed (may be an unwired validator - check first), articles/_share_button and shared/_nav_icon_link partials. Hygiene: DistributeService .to_s -> .to_s(\"F\"). Perf: filter_bar present? -> ids_for."
+      "note": "Dead code: User#avatar_thumb, User#owning_collection_ids, Collection#lock_attributes_once_listed (may be unwired validator - check first), _share_button and _nav_icon_link partials. Hygiene: DistributeService .to_s(\"F\")."
     }
-  ],
-  "fixes": []
+  ]
 }
