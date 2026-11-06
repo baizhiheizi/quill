@@ -158,14 +158,6 @@ class MixinNetworkSnapshot < ApplicationRecord
     end
   end
 
-  def owner
-    @owner = wallet&.owner
-  end
-
-  def article
-    @article = owner.is_a?(Article) && owner
-  end
-
   def decoded_memo
     @decoded_memo ||= Mixin::Memo.decode(data)
   end

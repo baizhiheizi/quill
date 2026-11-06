@@ -34,10 +34,6 @@ class DailyStatistic < Statistic
     )
   end
 
-  def regenerate
-    update data_attributes(datetime)
-  end
-
   def data_attributes(date)
     {
       new_users_count: User.where(created_at: date.beginning_of_day...date.end_of_day).count,

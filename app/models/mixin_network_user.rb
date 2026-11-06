@@ -66,10 +66,6 @@ class MixinNetworkUser < ApplicationRecord
     )
   end
 
-  def verify_pin
-    mixin_api.verify_pin pin
-  end
-
   def update_pin!
     with_advisory_lock("mixin_user:#{uuid}:pin_update") do
       new_pin = SecureRandom.random_number.to_s.split(".").last.first(6)
@@ -87,14 +83,6 @@ class MixinNetworkUser < ApplicationRecord
     update_pin!
   end
 
-  def sync_profile!
-    r = mixin_api.me
-
-    raise r.inspect if r["data"].blank?
-
-    update! raw: r["data"]
-  end
-
   def initialize_pin_async
     MixinNetworkUsers::InitializePinJob.perform_later id
   end
@@ -108,13 +96,6 @@ class MixinNetworkUser < ApplicationRecord
     update raw: r["data"] if r["data"].present?
   ensure
     img&.close
-  end
-
-  def update_name
-    r = mixin_api.update_me(
-      full_name: default_name
-    )
-    update name: r["data"]["full_name"], raw: r["data"] if r["data"].present?
   end
 
   def update_avatar_async

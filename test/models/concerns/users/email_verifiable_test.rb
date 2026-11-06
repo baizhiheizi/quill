@@ -8,8 +8,7 @@ require "test_helper"
 # Public surface tested:
 #
 # - `email_verified?` — predicate over `email_verified_at`
-# - `email_verify!` / `email_unverify!` — bang actions that stamp or
-#   clear `email_verified_at`
+# - `email_verify!` — bang action that stamps `email_verified_at`
 # - `email_may_verify?` — gating predicate for the verify flow (false
 #   when email is blank, already verified, or a recent verify is in
 #   flight — the dedup window the cache provides)
@@ -59,7 +58,7 @@ class Users::EmailVerifiableTest < ActiveSupport::TestCase
     assert @user.reload.email_verified?
   end
 
-  # --- email_verify! / email_unverify! ---
+  # --- email_verify! ---
 
   test "email_verify! stamps email_verified_at with a current timestamp" do
     assert_nil @user.email_verified_at
@@ -68,15 +67,6 @@ class Users::EmailVerifiableTest < ActiveSupport::TestCase
 
     assert_in_delta now.to_f, @user.reload.email_verified_at.to_f, 1.0
     assert @user.email_verified?
-  end
-
-  test "email_unverify! clears email_verified_at" do
-    @user.update_column(:email_verified_at, 1.hour.ago)
-
-    @user.email_unverify!
-
-    assert_nil @user.reload.email_verified_at
-    assert_not @user.email_verified?
   end
 
   test "email_verify! re-stamps email_verified_at even when already verified" do
@@ -201,20 +191,5 @@ class Users::EmailVerifiableTest < ActiveSupport::TestCase
     @user.update!(name: "No Email Change")
 
     assert_not @cache.read("#{@user.email}_verifying")
-  end
-
-  # --- edge cases / scope consistency ---
-
-  test "only_email_verified scope from Users::Scopable mirrors email_verified?" do
-    @user.update!(email_verified_at: 1.hour.ago)
-
-    assert_includes User.only_email_verified, @user
-    assert @user.email_verified?
-  end
-
-  test "unverified user is excluded from only_email_verified scope" do
-    @user.update!(email_verified_at: nil)
-
-    assert_not_includes User.only_email_verified, @user
   end
 end

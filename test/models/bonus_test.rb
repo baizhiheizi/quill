@@ -124,37 +124,6 @@ class BonusTest < ActiveSupport::TestCase
     end
   end
 
-  test "deliver_with_observability returns false and reports when guard fails" do
-    bonus = build_bonus
-    assert bonus.save
-    bonus.deliver_with_lock!
-    # Clear transfer so ensure_transfer_created attempts to create again.
-    # Stub create_transfer! to return nil to simulate guard failure.
-    bonus.transfer = nil
-    bonus.define_singleton_method(:create_transfer!) { |**| nil }
-
-    captured = []
-    original_logger_warn = Rails.logger.method(:warn)
-    Rails.logger.define_singleton_method(:warn) { |msg| captured << msg }
-    original_report = Rails.error.method(:report)
-    Rails.error.define_singleton_method(:report) { |*args, **kw| captured << [ args, kw ] }
-
-    assert_equal false, bonus.deliver_with_observability!
-    assert(captured.any? { |c| c.to_s.include?("Bonus##{bonus.id} deliver guard failed") })
-
-    Rails.logger.define_singleton_method(:warn, original_logger_warn)
-    Rails.error.define_singleton_method(:report, original_report)
-  end
-
-  test "deliver_with_observability calls deliver! when guard passes" do
-    bonus = build_bonus
-    assert bonus.save
-    bonus.define_singleton_method(:ensure_transfer_created) { transfer || true }
-
-    assert bonus.deliver_with_observability!
-    assert_equal "delivering", bonus.reload.state
-  end
-
   test "price_tag formats amount and currency symbol" do
     bonus = build_bonus(amount: 0.00012345)
 

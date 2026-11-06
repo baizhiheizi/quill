@@ -237,10 +237,6 @@ class Transfer < ApplicationRecord
     update!(stale_at: nil, staled_by_id: nil)
   end
 
-  def recipient_has_safe?
-    recipient&.has_safe?
-  end
-
   def self.author_revenue_total_in_usd
     Rails.cache.fetch("author_revenue_total_in_usd", expires_in: 1.minute, race_condition_ttl: 5.seconds) do
       joins(:currency).where(transfer_type: :author_revenue).sum("amount * currencies.price_usd").to_f.round(4)

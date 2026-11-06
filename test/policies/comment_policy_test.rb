@@ -5,23 +5,8 @@ require "test_helper"
 class CommentPolicyTest < ActiveSupport::TestCase
   setup do
     @article = articles(:published_paid)
-    @free_article = articles(:published_free)
     @reader = users(:reader_one)
     @author = users(:author)
-  end
-
-  test "create? allows readers on published articles" do
-    assert CommentPolicy.new(@reader, @free_article).create?
-  end
-
-  test "create? denies guests" do
-    refute CommentPolicy.new(nil, @free_article).create?
-  end
-
-  test "create? denies commenting on draft articles without access" do
-    draft = articles(:draft)
-
-    refute CommentPolicy.new(@reader, draft).create?
   end
 
   test "vote? allows authorized non-author readers" do

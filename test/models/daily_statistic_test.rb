@@ -115,17 +115,6 @@ class DailyStatisticTest < ActiveSupport::TestCase
     assert DailyStatistic.where(datetime: 5.days.ago.beginning_of_day..5.days.ago.end_of_day).exists?
   end
 
-  test "regenerate overwrites data with fresh data_attributes for the same datetime" do
-    stat = DailyStatistic.new(datetime: 1.day.ago, data: { "new_users_count" => 999 })
-    stat.save!(validate: false)
-
-    seed_users(count: 2, created_at: 1.day.ago)
-
-    stat.regenerate
-
-    assert_equal 2, stat.reload.new_users_count
-  end
-
   test "data_attributes new_users_count counts User rows whose created_at falls within the day" do
     _in_day     = seed_users(count: 2, created_at: 1.day.ago)
     _before_day = seed_users(count: 3, created_at: 5.days.ago)

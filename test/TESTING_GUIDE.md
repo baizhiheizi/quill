@@ -145,8 +145,6 @@ Some tests change methods on a model or notifier class with `define_method` and 
 ### ArticleSnapshot
 - `store_accessor :raw, %w[title intro content digest]` — the four declared accessors are conveniences, not a schema. `raw["extra_field"]` round-trips fine.
 - `before_validation :set_defaults, on: :create` populates raw from `article.as_json`. **Unconditionally overwrites** a pre-supplied `raw:` value.
-- `fresh?` uses a fresh query, not a cached count — destroying a later snapshot correctly flips stale → fresh.
-- `ArticleSnapshot#previous_signed_snapshot` calls `article.snapshots.signed`, but no `signed` scope or column exists. Either dead code or a missing scope.
 
 ### Collection
 - `#tradable?`: Fennec-tradable check. Requires `fennec_trade_url` to be present.
@@ -173,11 +171,7 @@ Some tests change methods on a model or notifier class with `define_method` and 
 - `notify_subscribers` delivers to the buyer's followers. `ArticleBoughtNotifier` / `ArticleRewardedNotifier` / `CollectionBoughtNotifier` guard with `should_notify? → !recipient.block_user?(order.buyer)`: a follower who blocked the buyer still gets the persisted row but `web_visible` is false and mixin delivery is skipped.
 
 ### Splitter
-- `collect_assets` wraps in `with_advisory_lock("splitter:#{id}:collect")`. Short-circuits when lock is not acquired.
-- Zero-balance assets (`"0"`, `"0.0"`, `"0.00000000"`) are skipped.
-- Existing unprocessed transfer for same `(wallet_id, asset_id)` blocks creation.
-- `QuillBot.api.client_id` returns nil without `with_quill_bot_stub` → silently produces zero transfers.
-- **`collect_assets` has zero callers in the codebase** — either dead code or the dispatcher is missing.
+- Empty STI subclass of `MixinNetworkUser` (rows with `type = "Splitter"`); behavior lives on the parent class.
 
 ### Tagging
 - `notify_subscribers` is on `after_create_commit`. The tagging must be saved before invoking manually (notifier serialises params).

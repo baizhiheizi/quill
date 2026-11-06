@@ -44,10 +44,6 @@ class Tag < ApplicationRecord
       .order(Arel.sql("COUNT(articles.id) DESC, tags.created_at DESC"))
   }
 
-  def update_locale
-    update locale: detect_locale
-  end
-
   def detect_locale
     CLD.detect_language(name)[:code]
   end
