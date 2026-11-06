@@ -10,12 +10,4 @@ class AdminNotificationService
     )
     MixinMessages::SendJob.perform_later message.stringify_keys
   end
-
-  def post(post)
-    message = QuillBot.api.plain_post(
-      conversation_id: Rails.application.credentials.dig(:admin, :group_conversation_id),
-      data: post
-    )
-    MixinMessages::SendJob.perform_later message.stringify_keys
-  end
 end
