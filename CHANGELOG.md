@@ -105,8 +105,9 @@ real requirement is `rails >= 8.1.4`, not a json version.
 
 ### Performance
 
-Two indexes the article surfaces needed but the schema did not have, and one
-authorization lookup the article page was repeating.
+Two indexes the article surfaces needed but the schema did not have, one
+authorization lookup the article page was repeating, and two per-row query
+chains — the comments list and header live search — collapsed into preloads.
 
 - **`articles (state, published_at)`** — `state` was unindexed, so every
   `Article.only_published` query seq-scanned the table: the web feed, the
@@ -132,6 +133,26 @@ authorization lookup the article page was repeating.
 
   On a paid article viewed by a signed-in reader who has not bought it, the
   seven lookups cost about 5.8 ms; the cached answer costs about 0.2 ms.
+- **Comments list preloads everything one row touches (#2219)** — the
+  article page's comments turbo frame fired a SELECT per comment row: each
+  row's rich text, its commentable plus that article's buy-order lookup for
+  the reply gate, the quoted comment with its author and body, and the
+  viewer's per-row upvote/downvote checks. On a representative 13-comment
+  page that measured 69 SQL statements for a signed-in reader and 39 for a
+  guest. The index now preloads author avatar chains (`User::AVATAR_PRELOADS`),
+  the commentable with its author, both rich-text bodies and the quote chain,
+  and primes page-scoped viewer vote sets via `ViewerActionSets#ids_for`,
+  which gains the `upvote_comment`/`downvote_comment` verbs and an optional
+  `target_ids:` scope. Measured on the same page: 22 signed-in, 14 guest.
+  Query-count tests pin the budgets and fail on the unpatched code.
+- **Live search preloads the avatar chain (#2221)** — the header live search
+  fires one turbo-stream request per keystroke (300 ms debounce) and rendered
+  `shared/_avatar` with `thumb: true` per user hit, each hit walking the
+  avatar chain unpaged: an authorization SELECT plus an attachment SELECT per
+  row, measuring 22 SQL statements on a full page of 10 hits. The ransack
+  result now applies the shared `User::AVATAR_PRELOADS`, as every other
+  avatar surface already does; the same page costs 4 statements regardless of
+  hit count, and a query-budget test pins the page to 8.
 
 The migration also runs `ANALYZE` on both tables. Postgres collects per-index
 statistics during `ANALYZE`, and an index added to a populated table has
