@@ -2,14 +2,20 @@
   "version": 1,
   "cursors": {
     "labelling_after": 2222,
-    "investigation_after": 2222
+    "investigation_after": 2231
   },
   "issues": [
     {
       "number": 2222,
       "state": "deferred",
       "updated_at": "2026-11-06",
-      "note": "PostHog ArgumentError 'key cannot be blank' (blank Rails.cache key). Labelled bug + commented root cause; fix PR open on repo-assist/fix-issue-2222-blank-cache-keys (aw_pr_2222), Closes #2222."
+      "note": "PostHog blank Rails.cache key crash. Fix rebuilt (07:33 publication failed, see #2231): branch repo-assist/fix-issue-2222-blank-cache-keys, PR aw_pr_2222 pending publication, Closes #2222."
+    },
+    {
+      "number": 2231,
+      "state": "deferred",
+      "updated_at": "2026-11-06",
+      "note": "Harness failure issue for run 42176241893 (create_pull_request git 128). Commented with root cause + recovery. Close once the rebuilt #2222 PR merges."
     }
   ],
   "fixes": [],
@@ -23,20 +29,20 @@
     {
       "area": "code",
       "checked_at": "2026-11-06",
-      "result": "Perf shipped: feed indexes #2194, authorized? memo #2195, comments N+1 #2219, search-avatar #2221, filter-bar exists? (aw_pr_filterbar). Blank-cache-key audit for #2222 covered all Rails.cache sites.",
-      "follow_up": "Product decision pending: sessions#twitter unreachable (shadowed by omniauth catch-all, routes.rb:21) - Twitter connect broken. Documented in aw_pr_2222 + pinning test; do not change routing unilaterally."
+      "result": "Perf shipped: feed indexes #2194, authorized? memo #2195, comments N+1 #2219, search-avatar #2221, filter-bar exists? #2229. Sweep #2223-#2228 removed all dead-code candidates; @pay_asset branch wired - goal resolved.",
+      "follow_up": "Twitter connect still broken (routes.rb:21 catch-all shadows line 27 sessions#twitter); routing decision pending, pinned by test in aw_pr_2222."
     },
     {
       "area": "docs",
       "checked_at": "2026-11-06",
-      "result": "Performance changelog entries for #2219/#2221 added (aw_pr_changelog, open). Changelog current through #2221.",
-      "follow_up": "After the three open PRs merge, no deferred entries remain; add entries for the #2222 fix and filter-bar perf only after THEY merge."
+      "result": "Changelog current through #2230 (#2219/#2221 entries added via merged #2230).",
+      "follow_up": "Deferred entries once merged: #2229 (filter-bar perf), aw_pr_2222 (blank cache keys), aw_pr_signin (integration sign_in)."
     },
     {
       "area": "hygiene",
       "checked_at": "2026-11-06",
-      "result": "CONFIRMED: IntegrationTestCase#sign_in does not persist - session writes between requests never reach the cookie jar (the /up priming does not fix it), so signed-in integration tests run as GUESTS.",
-      "follow_up": "Task 9 candidate: fix sign_in; buyer/auth tests currently pass for the wrong reason. Until then use ActionController::TestCase + @request.session."
+      "result": "RESOLVED: IntegrationTestCase#sign_in fixed via real OAuth callback (OmniAuth test mode). Branch repo-assist/test-integration-sign-in-session, PR aw_pr_signin pending publication. Only 3 bare call sites existed.",
+      "follow_up": "None."
     },
     {
       "area": "qa",
@@ -47,20 +53,20 @@
     {
       "area": "release",
       "checked_at": "2026-11-06",
-      "result": "NOT released. ~60 commits unreleased since 2026-09-07, now including #2219/#2220/#2221 and this run's work. Flagged in the 2026-11 monthly issue; changelog current through #2221.",
-      "follow_up": "Never trigger Release: it deploys to production and needs maintainer approval."
+      "result": "CORRECTED: tag release-2026-11-04-c205bc2 EXISTS - 24 commits unreleased since, incl #2229/#2230. Earlier ~60-commits memory was wrong. Never trigger Release: it deploys to production.",
+      "follow_up": "Changelog entries for the three deferred items (see docs check)."
     },
     {
       "area": "repo_assist_prs",
       "checked_at": "2026-11-06",
-      "result": "Lost-publication recovery COMPLETE: #2219/#2220 merged 11-05, #2221 (aw_pr_search) merged 11-06. This run: aw_pr_2222, aw_pr_filterbar, aw_pr_changelog pending publication.",
-      "follow_up": "NEXT RUN FIRST: verify the 3 PRs landed with intended diffs; fix '(number on publish)' refs in issue #2218 (update_issue does NOT resolve #aw_ placeholders - confirmed twice)."
+      "result": "#2229 and #2230 merged 2026-11-06 09:31 UTC with intended diffs. Pending publication this run: aw_pr_2222, aw_pr_signin.",
+      "follow_up": "Next run first: verify branches repo-assist/fix-issue-2222-blank-cache-keys and repo-assist/test-integration-sign-in-session landed with intended diffs."
     },
     {
       "area": "tests",
       "checked_at": "2026-11-06",
-      "result": "Full suite green: 1733 runs, 0 failures, 2 pre-existing skips. Needs SKIP_CSS_BUILD=1 here (no bun binary; cssbundling needs bun for bun.lock). Loader gotcha stands: use /tmp/gh-aw/agent/run_tests.rb.",
-      "follow_up": "Explicit ERB paths bypass rubocop Exclude (junk offenses). Notification sql payload has bind placeholders ($N) - query matchers must match SQL shape, not literals."
+      "result": "Full suite green: 1634 runs, 0 failures, 2 skips (count down from 1733 after sweep removed ~100 life-support tests). SKIP_CSS_BUILD=1 required here. Integration sign_in gotcha FIXED.",
+      "follow_up": "bin/rails test works directly (old loader script gone). Notification sql payload has $N bind placeholders - match SQL shape, not literals."
     },
     {
       "area": "tooling",
@@ -73,43 +79,23 @@
   "priorities": [
     {
       "task": 6,
-      "item": "Verify the three new PRs landed; fix monthly-issue placeholders",
-      "note": "aw_pr_2222, aw_pr_filterbar, aw_pr_changelog created 2026-11-06 07:30, publication pending at write. Replace '(number on publish)' in issue #2218 with real numbers; confirm #2222 open until merge."
-    },
-    {
-      "task": 9,
-      "item": "Fix IntegrationTestCase#sign_in session persistence",
-      "note": "Signed-in integration tests silently run as guests (cookie never written; /up priming ineffective). Fix may surface real failures in buyer/auth tests - go carefully, one PR."
-    },
-    {
-      "task": 9,
-      "item": "Sweep app/libs/revenue_bot.rb and app/libs/twitter_bot.rb - no test files",
-      "note": "Follows the 2026-10-23 sweep that closed dashboard_helper, design_system_helper and HtmlPostProcessor. app/libs/mixin.rb has only mixin_test.rb."
+      "item": "Verify the two new PRs landed; close #2231 after merge",
+      "note": "Branches: repo-assist/fix-issue-2222-blank-cache-keys, repo-assist/test-integration-sign-in-session. After merges add changelog entries (#2229, #2222 fix, sign_in) and close #2231 via update_issue."
     },
     {
       "task": 10,
-      "item": "Twitter connect flow: maintainer decision needed",
-      "note": "sessions#twitter unreachable - route shadowed by omniauth catch-all (routes.rb:21 vs 27). Surfaced in aw_pr_2222 description and the 2026-11 monthly issue. Do not change routing unilaterally."
+      "item": "Twitter connect flow: maintainer decision",
+      "note": "sessions#twitter unreachable - omniauth catch-all shadows it (routes.rb:21 vs 27). Pinned by test in aw_pr_2222. Do not change routing unilaterally."
     },
     {
       "task": 10,
-      "item": "Decide whether the dead @pay_asset branch in show.turbo_stream.erb goes",
-      "note": "Raised in the monthly issues 2026-10-21/22/23 and 2026-11-04/05/06. Needs a product decision, not a bug fix."
+      "item": "Feed sort stored column: ask maintainer",
+      "note": "order_by_popularity sorts a computed expression, no index helps. Raised in monthly issues 2026-10-23 and 2026-11-04/05/06."
     },
     {
       "task": 6,
-      "item": "Confirm the PostHog Pagy::OptionError fingerprint drops since #2163",
-      "note": "Maintainer-side check (needs PostHog access); listed in the monthly issue."
-    },
-    {
-      "task": 10,
-      "item": "Ask whether the default feed sort should become a stored column",
-      "note": "order_by_popularity orders on a computed expression, so no index helps it. Flagged in the monthly issues 2026-10-23 and 2026-11-04/05/06."
-    },
-    {
-      "task": 5,
-      "item": "Unclaimed Explore-scan candidates from 2026-11-05 (one small PR each)",
-      "note": "Dead code: User#avatar_thumb, User#owning_collection_ids, Collection#lock_attributes_once_listed (may be unwired validator - check first), _share_button and _nav_icon_link partials. Hygiene: DistributeService .to_s(\"F\")."
+      "item": "Confirm PostHog fingerprints drop",
+      "note": "Pagy::OptionError since #2163; key-cannot-be-blank after aw_pr_2222 merges. Maintainer-side check (needs PostHog access); in monthly issue."
     }
   ]
 }
