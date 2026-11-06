@@ -1,5 +1,4 @@
 ja:
-  app_name: Quill
   load_more: さらに表示
   subscribe: フォロー
   unsubscribe: フォロー解除
@@ -19,21 +18,12 @@ ja:
   remove: Remove
   confirm: Confirm
   pay: 支払う
-  pay_with_mixin: Linksで支払う
   waiting_for_payment: 支払い待ち
   processing_payment: 入金、処理中
   scan_with_mixin: LinksでQRコードを読み取ってください
-  success_submitted: 送信しました
-  success_subscribed: フォローしました
-  success_unsubscribed: フォローを解除しました
-  success_hidden_article: 記事が非表示です
   success_published_article: 記事が投稿されました
   success_updated: 正常に更新されました
-  success_copied: 正常にコピーされました
   success_deleted: 正常に削除されました
-  success_paid: 正常に支払いました、ありがとうございます！
-  failed_to_save: 保存に失敗しました
-  please_retry: Please retry
   read: 記事を読む
   write: 記事を作成
   search: 検索
@@ -41,18 +31,13 @@ ja:
   fair: Quillデータ
   help: Help
   twitter: Twitter
-  community: コミュニティ
-  open_source: オープンソース
   language: Language
   dark_mode: Dark Mode
   light_mode: Light Mode
   dashboard: ダッシュボード
-  my_reading: My Reading
-  my_authoring: My Authoring
   my_comments: My Comments
   my_subscriptions: My Subscriptions
   my_orders: My Orders
-  my_wallet: My Wallet
   token: Token
   profile_page: Profile
   login: ログイン
@@ -61,14 +46,12 @@ ja:
   order_by_lately: 最新の記事
   order_by_revenue: 収益
   tags: タグ
-  comments_zone: コメント
   comment: コメント
   more_to_read: 内容はまだ続きます
   pay: 続きを読むためには
   to_continue_reading: が必要です
   and_receive_early_reader_revenue: また、早期に購入して頂くことで早期購入特典を受け取ることができます。
   pay_warning: この記事はQuillで販売されているものであり、一度支払われた金額は返金されません。購入は慎重にお願いします。
-  be_the_first_reader: 最初の読者になる
   pay_to_read: 記事を購入する
   already_paid: 支払い済みですか?
   try_to: 更新
@@ -77,15 +60,11 @@ ja:
   failed_to_connect: 接続に失敗しました
   mixin_rate_limited: Mixin が混み合っています。しばらくしてからもう一度お試しください。
   connected: が正常に接続されました。ようこそ!
-  love_thie_article: 記事にいいねする
   share: シェア
   signature: 署名
-  polling_payment: 支払い状況を確認中
-  refund_warning: 返金されました、もう一度お試しください
   buy_article: 記事を購入
   reward_article: リワード
   reward: リワード
-  finish: 完了
   later: 後ほど
   times_bought: 購入回数
   times_reward: リワード回数
@@ -95,7 +74,6 @@ ja:
   bought: 購入済み
   commented: コメント
   search: 検索
-  search_placeholder: タイトル 前書き 作者 タグ を入力
   users_count: ユーザー
   articles_count: 記事
   revenue_count: Revenue Count
@@ -108,8 +86,6 @@ ja:
   author_revenue: 作者収益
   references_revenue: 参照収益
   collection_revenue: Collection Revenue
-  revenue_chart: 収益チャート（USD）
-  transactions: トランザクション
   rules_content: |
     ### Quillの仕組み
 
@@ -145,7 +121,6 @@ ja:
   comments: 読者コメント
   subscribe_comments: フォロワーコメント
   no_comments: コメントがありません
-  comment_deleted: 管理者により削除
   quote: 引用
   from: From
   desc: 投稿時間（降順）
@@ -167,22 +142,14 @@ ja:
   preferences: 環境設定
   notification_settings_manage_hint: 通知センターで、通知内容と受け取り方法を管理できます。
   earnings: 収益
-  notifications_manage: 通知
   settings: 設定
   articles_manage: 記事管理
-  subscriptions_manage: フォロー管理
-  revenue_manage: 収益管理
-  orders_manage: オーダー管理
-  comments_manage: コメント管理
   back: 戻る
-  article_detail: 記事詳細
   new_article: 新しい記事
   edit_article: 記事を編集
   publish_article: 公開記事
   clear_all: 削除
   read_all: 既読
-  confirm_to_publish: この記事を公開しますか？
-  confirm_to_hide: この記事を非公開にしますか？早期読者には影響ありません。
   confirm_to_delete: この記事のドラフトを削除してよろしいですか？
   publish: 公開
   hide: 非公開にする
@@ -198,16 +165,12 @@ ja:
   subscribers: 購読者
   subscribing: 購読する
   commenting_subscriptions: コメント欄
-  commenting_subscriptions_tip: フォローしたコメント欄の通知を受け取ります。
   tag_subscriptions: タグ
-  tag_subscriptions_tip: フォローしたタグで新しい記事が作成されたとき、通知を受け取ります。
   confirm_to_unsubscribe: フォロー解除しますか？
-  confirm_to_subscribe: フォローしますか？
   author_transfers: 作者収益
   reader_transfers: 読者収益
   payments: 決済
   access_token: アクセストークン
-  tips_of_general_notifications: 通知設定を変更できます。
   tips_of_article_published_notifications: フォロー中の作者が新しい記事を投稿した時、通知されます。
   tips_of_article_bought_notifications: フォロー中の読者が新しい記事を購入した時、通知されます。
   tips_of_article_rewarded_notifications: フォロー中の読者が新しいリワードを贈った時、通知されます。
@@ -216,36 +179,16 @@ ja:
   tips_of_transfer_processed_notifications: 記事からのリワードや返金を含む送金を受け取ったとき通知を受け取ります。
   tips_of_collection_listed_notifications: フォロー中の作者が新しいコレクションを出品した時、通知されます。
   tips_of_collection_bought_notifications: 読者があなたのコレクションを購入した時、通知されます。
-  confirm_to_generate_token: サードパーティ製アプリケーションにアクセストークンを提供して、記事を管理できます。新しいアクセストークンを生成しますか?
-  generate_new_token: 新しいアクセストークンを生成する
   token_memo_placeholder: アクセストークンのメモ
-  token_generated_tips: 新しいアクセストークンを生成しました！
-  token_security_tips: アクセストークンを安全に保管してください。一度閉じると、トークンは表示されません。トークンが失われた場合は、新しいトークンを生成します。
-  confirm_to_delete_token: アクセストークンを削除しますか？
   copy: コピー
-  present_value: 現在の価格
-  per_price_when_paid: 支払い時の価格
-  invalid_authorization: 無効な認証
-  please_confirm_all_authorizations_required: 必要な認証をすべて承認してください。
-  reauthorize: 再認証する
-  no_access: アクセス負荷
-  sorry_you_are_not_authorized_to_access_this_application: 申し訳ありません。あなたはこのアプリケーションにアクセスする権限がありません。
   mixin_bot: Linksロボ
-  comming_soon: Quill 近日公開
-  you_will_get_1000_satoshi_airdrop_once_we_launched: |
     事前登録完了です🎉
     正式リリース時に1000satoshi分のビットコインが届きます
-  login_to_earn_btc: Linksで事前登録
-  login_right_now_to_earn_btc_airdrop: 事前登録でビットコインがもらえます（先着2000名）
   copied: コピー成功
-  mixin_contact: Links
-  copy_url: URLコピー
   subscribed: フォロー
   article_references: 参考記事
-  referenced_by: 関連記事
   related_articles: 関連記事
   hot_tags: ホットタグ
-  login_via_mixin: Linksでログイン
   in_a_week: 1週間以内
   in_a_month: 1ヶ月以内
   in_a_year: 1年以内
@@ -270,26 +213,15 @@ ja:
   unblock_user: さんのブロックを解除
   confirm_to_block: ブロックすると、その人はあなたに関するメッセージを受け取ったり、あなたの投稿を見たり買ったりすることができなくなり、あなたはその人の投稿を見ることができなくなります。
   articles:
-    not_finished: まずは記事を完成させてください
     title_is_required: 記事のタイトルを入力してください
-    title_is_too_long: 記事のタイトルが長すぎる
     intro_is_required: 記事の導入を入力してください
-    intro_is_too_long: 記事のあらすじが長すぎる
     content_is_required: 記事の本文を入力してください
-    price_is_too_low: 価格が低すぎます
-    confirm_to_create: 本当に記事を作成しますか？
-    confirm_to_update: 本当に記事を更新しますか？
     title_placeholder: 記事タイトル
     content_place_holder: あなただけの文章を書いてみましょう
     intro_place_holder: より多くの人にあなたの素敵な文章を見て貰えるように記事紹介を書いてみましょう
     revenue_ratio: 収益率
     add_reference: 追加参照
     remove_reference: 削除参照
-    please_select_an_article: 記事を選択してください
-    please_input_revenue_ratio: 収益率を入力してください
-    references_revenue_cannot_larger_than_50%: 参照収益が50％以上にならない
-    revenue_distribution: 収益配分
-    you_will_create_a_free_article: あなたの記事が無料で読めるようになります
     add_some_tags: 追加トピックス
     save_conflict: 他の場所で記事が更新されました。最新版を読み込んでから続けてください。
     settings_panel: 設定
@@ -298,8 +230,6 @@ ja:
     close_preview: プレビューを閉じる
     exit_overlay: 終了
     locked_after_publishing: 公開後は変更できません
-    price_place_holder: 価格を入力
-    revenue_advanced: 詳細な収益設定
     publish_blocked: 公開前に以下を完了してください
     publish_ready: 記事は公開の準備ができています。
     fix_in_editor: エディターで修正
@@ -320,9 +250,7 @@ ja:
       close: 設定を閉じる
     price:
       usd_label: 価格（USD）
-      crypto_equivalent: "≈ %{amount} %{symbol}"
       feed_unavailable: 価格データが利用できません。後でもう一度お試しください
-      minimum_error: 最低価格は約 $0.10 です
     revenue:
       customize: 収益分配をカスタマイズ
       default_summary: "50% あなた · 40% 初期読者 · 10% プラットフォーム"
@@ -338,27 +266,13 @@ ja:
       thing: 件の
       things: 件の
       ready: 公開できます
-  this_address_supports: This address supports
-  this_address_supports_erc20: This address supports all ERC20 tokens, such as ETH、USDT、XIN.
-  first_deposit_tips: For first deposit to new address, please try a small amount! 
-  deposit_receive_tips: "Deposit will receive after at least %<confirmations>s blocks confirmation."
   address: アドレス
-  claim_free_xin: Claim Free XIN
-  you_have_successfully_claimed_please_check_your_wallet_later: You have successfully claimed free XIN! Please check your wallet later.
-  transaction_submitted: Transaction submitted
-  get_more_xin: Get more XIN 
-  you_may_write_a_good_article_and_sell_it_for_xin: You may write a good article and sell it for XIN!
-  you_need_to_deposit_first: You need to deposit first.
   balance: 残高
   words_count: Words count
-  deposit: Desposit
   withdraw: Withdraw
-  using_mixin_wallet: Using Mixin wallet
   continue: Continue
   confirm_to_pay: Confirm to Pay
-  payment_crypto: Payment crypto
   payment_method: Payment method
-  not_supported_yet: Not supported yet
   waiting_for_mixpay: Waiting for MixPay
   paying: Paying
   choose_other_payment: Choose other payment
@@ -370,13 +284,9 @@ ja:
   privacy_policy: Privary Policy
   verify: Verify
   reverify: Reverify
-  veifiy_email_subject: Verify email address for quill.im
-  start_writing_in_desktop: Start writing in desktop
-  save_draft: Save draft
   select_crypto: Select Crypto
   press_enter_to_search_all_articles: Press Enter to search all articles
   home: Home
-  home_value_proposition: 読んで、書いて、暗号資産の報酬を得る——Web3のためのパブリッシングプラットフォーム。
   home_landing_headline: 信念を持って書く。最初の読者に報いる。
   home_landing_subheadline: Quill は Web3 ネイティブな有料出版——作者が価格を設定し、早期読者が新しい売上の一部を得ます。
   home_cta_explore: 記事を見る
@@ -402,11 +312,9 @@ ja:
   list_collection_from_hidden_tips: You are listing your collection so that readers can buy your it.
   list_collection_from_drafted_tips: You are listing your collection for the first time. Once listed, you may not change your collection's name, symbol and revenue ratio.
   hide_collection_tips: You are hiding your collection. Once hidden, readers may not buy this collection.
-  article_collection_introduction: |
     This article is belong to this collection. You may buy the collection to read all articles in it and receive collection revenue. <span class="font-bold text-red-500">%<orders_count>s</span> readers have subscribed this collection, sharing <span class="font-bold text-red-500">%<revenue_ratio>s</span> of revenue.
   collection_introduction: Collection introduction
   subscribe_collection: Subscribe
-  click_to_validate: Click To Validate
   upload_cover: Upload cover
   import: Import
   alert_for_blocked_user: The account is suspected of being fraudulent. Please pay with caution.

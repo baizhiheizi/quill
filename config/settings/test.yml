@@ -1,19 +1,10 @@
 host:
 
 # page
-app_name: Quill
 page_title: 'Quill: hand with a quill pen on Web3'
 page_keywords: Quill, Write, Read, Web3, Blockchain, Bitcoin, ETH
-page_description: Write and read in the Web3 way. 
-messenger: mixin
+page_description: Write and read in the Web3 way.
 twitter_account: prsdigg
-
-# locale
-time_zone: UTC
-default_locale: en
-available_locales:
-  - en
-  - zh-CN
 
 # assets
 # Keep this list identical to `supported_assets` in config/settings.yml.
@@ -30,5 +21,3 @@ supported_assets:
   - 43d61dcd-e413-450d-80b8-101d5e903357
   # pUSD
   - 31d2ea9c-95eb-3355-b65b-ba096853bc18
-
-encryption_salt: yleyZdwghSvfeMImsYHjXNZpMajPzdXGObFssdsyzx8=
