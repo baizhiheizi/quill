@@ -157,6 +157,15 @@ class Dashboard::ProfileSettingsControllerTest < ActionController::TestCase
     assert_not @user.reload.email_verified?
   end
 
+  test "verify_email renders failure UI when the code param is absent" do
+    # A request without `code` must not hand Rails.cache a nil key.
+    get :verify_email
+
+    assert_response :success
+    assert_match "Cannot verify", response.body
+    assert_not @user.reload.email_verified?
+  end
+
   test "verify_email does not require authentication" do
     session.delete(:current_session_id)
     new_email = "noauth@example.test"

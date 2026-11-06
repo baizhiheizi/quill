@@ -85,6 +85,20 @@ class HtmlPostProcessorTest < ActiveSupport::TestCase
     refute_includes html, "<iframe"
   end
 
+  test "add_attributes_to_images leaves a src-less image undecorated" do
+    # A nil src must not reach Rails.cache as a blank cache key.
+    html = process('<div><img alt="no source"></div>') { |p| p.add_attributes_to_images }
+
+    refute_includes html, "photoswipe"
+    assert_includes html, '<img alt="no source">'
+  end
+
+  test "add_attributes_to_images leaves an empty-src image undecorated" do
+    html = process('<div><img src="" alt="empty source"></div>') { |p| p.add_attributes_to_images }
+
+    refute_includes html, "photoswipe"
+  end
+
   test "every transform returns self so the calls can be chained" do
     processor = Processor.new("<p>hi</p>")
 

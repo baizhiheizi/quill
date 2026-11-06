@@ -24,11 +24,13 @@ class SessionsController < ApplicationController
   end
 
   def twitter
+    return redirect_to root_path if params[:state].blank?
+
     auth = Rails.cache.read params[:state]
-    redirect_to root_path if auth.blank?
+    return redirect_to root_path if auth.blank?
 
     user = User.find_by uid: auth[:uid]
-    redirect_to root_path if user.blank?
+    return redirect_to root_path if user.blank?
 
     if current_user.blank?
       user_session = user.sessions.create(info: { request: request_info, provider: params[:provider] })
