@@ -97,14 +97,6 @@ class TagTest < ActiveSupport::TestCase
     assert_includes sql, "tags.created_at DESC"
   end
 
-  test "update_locale updates locale field" do
-    tag = Tag.new(name: "新技术")
-
-    # detect_locale uses CLD which may not be reliable in test
-    # Just verify the method exists and is callable
-    assert_respond_to tag, :update_locale
-  end
-
   test "detect_locale returns language code" do
     tag = Tag.new(name: "blockchain")
 

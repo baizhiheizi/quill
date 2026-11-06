@@ -17,13 +17,6 @@ module QuillBot
     raise ClientUnavailableError, e.message
   end
 
-  def self.interactive_api
-    wrap_api(build_api, mode: :interactive)
-  rescue StandardError => e
-    Rails.logger.error e
-    raise ClientUnavailableError, e.message
-  end
-
   def self.build_api
     MixinBot::API.new(**Rails.application.credentials[:quill_bot], debug: Rails.env.development?)
   end

@@ -143,14 +143,6 @@ class Collection < ApplicationRecord
 
   private
 
-  def lock_attributes_once_listed
-    return if uuid.blank?
-
-    errors.add(:name, "cannot change") if name_changed?
-    errors.add(:symbol, "cannot change") if symbol_changed?
-    errors.add(:revenue_ratio, "cannot change") if revenue_ratio_changed?
-  end
-
   def ensure_price_not_too_low
     return unless price_changed? || asset_id_changed?
     # No Currency row for the selected asset means there is no floor to

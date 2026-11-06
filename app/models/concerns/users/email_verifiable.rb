@@ -24,10 +24,6 @@ module Users::EmailVerifiable
     update email_verified_at: Time.current
   end
 
-  def email_unverify!
-    update email_verified_at: nil
-  end
-
   def email_verified?
     email_verified_at?
   end

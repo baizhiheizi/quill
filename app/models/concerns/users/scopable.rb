@@ -4,7 +4,6 @@ module Users::Scopable
   extend ActiveSupport::Concern
 
   included do
-    scope :with_authorization, -> { includes(:authorization) }
     scope :only_blocked, -> { where.not(blocked_at: nil) }
     scope :without_blocked, -> { where(blocked_at: nil) }
     scope :only_mixin_messenger, -> { where(authorization: { provider: :mixin }) }
@@ -23,7 +22,6 @@ module Users::Scopable
         .select("users.*, COUNT(articles.id) AS active_articles_count")
         .order(active_articles_count: :desc, id: :asc)
     }
-    scope :only_email_verified, -> { where.not(email_verified_at: nil) }
     scope :only_validated, -> { where.not(validated_at: nil) }
     # `order_by_articles_count` and `order_by_comments_count` order on the
     # `users.articles_count` / `users.comments_count` counter-cache columns

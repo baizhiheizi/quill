@@ -27,25 +27,7 @@
 #
 
 class Splitter < MixinNetworkUser
-  include AdvisoryLockable
-
-  def collect_assets
-    with_advisory_lock("splitter:#{id}:collect") do
-      assets = mixin_api.assets["data"]
-      assets.each do |asset|
-        next if asset["balance"].to_f.zero?
-        next if transfers.unprocessed.where(asset_id: asset["asset_id"]).present?
-
-        transfers
-          .create(
-            transfer_type: :default,
-            asset_id: asset["asset_id"],
-            amount: asset["balance"],
-            opponent_id: QuillBot.api.client_id,
-            trace_id: SecureRandom.uuid,
-            memo: "assets collection"
-          )
-      end
-    end
-  end
+  # STI type for admin-managed splitter accounts (rows of
+  # `mixin_network_users.type = "Splitter"`); behavior lives on
+  # MixinNetworkUser.
 end

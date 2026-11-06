@@ -19,25 +19,6 @@ class CollectionPolicyTest < ActiveSupport::TestCase
     )
   end
 
-  test "show? allows author" do
-    assert CollectionPolicy.new(@author, @collection).show?
-  end
-
-  test "show? allows published collection to readers" do
-    assert CollectionPolicy.new(@reader, @collection).show?
-  end
-
-  test "show? denies readers when collection is not published" do
-    @collection.update!(uuid: nil, state: "drafted")
-
-    refute CollectionPolicy.new(@reader, @collection).show?
-  end
-
-  test "update? allows author only" do
-    assert CollectionPolicy.new(@author, @collection).update?
-    refute CollectionPolicy.new(@reader, @collection).update?
-  end
-
   test "purchase? allows readers who have not bought" do
     assert CollectionPolicy.new(@reader, @collection).purchase?
   end

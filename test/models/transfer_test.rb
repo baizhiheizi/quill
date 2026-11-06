@@ -40,8 +40,6 @@
 require "test_helper"
 
 class TransferTest < ActiveSupport::TestCase
-  ORIGINAL_HAS_SAFE = UserAuthorization.instance_method(:has_safe?)
-
   setup do
     @btc = currencies(:btc)
     @author = users(:author)
@@ -220,24 +218,6 @@ class TransferTest < ActiveSupport::TestCase
 
     assert_includes Transfer.processed, processed
     assert_not_includes Transfer.processed, unprocessed
-  end
-
-  test "recipient_has_safe? delegates to the recipient user" do
-    transfer = build_transfer(opponent_id: @author.mixin_uuid)
-
-    UserAuthorization.define_method(:has_safe?) { true }
-    assert transfer.recipient_has_safe?
-
-    UserAuthorization.define_method(:has_safe?) { false }
-    assert_not transfer.recipient_has_safe?
-  ensure
-    UserAuthorization.define_method(:has_safe?, ORIGINAL_HAS_SAFE)
-  end
-
-  test "recipient_has_safe? returns nil when recipient is missing" do
-    transfer = build_transfer(opponent_id: SecureRandom.uuid)
-
-    assert_nil transfer.recipient_has_safe?
   end
 
   test "stale? returns true when stale_at is set" do

@@ -177,10 +177,6 @@ class User < ApplicationRecord
     avatar_image_url || self.class.default_avatar_url
   end
 
-  def avatar_thumb
-    avatar_image_thumb || self.class.default_avatar_url
-  end
-
   def self.default_avatar_url
     ActionController::Base.helpers.asset_url(Settings.icon_file)
   end
@@ -227,10 +223,6 @@ class User < ApplicationRecord
   # `subscribed_user_ids_relation` for context.
   def blocked_user_ids_relation
     Notifiers::Audience.blocked_ids_of(self)
-  end
-
-  def owning_collection_ids
-    Collection.joins(:buy_orders).where(buy_orders: { buyer_id: id }).distinct.pluck(:uuid)
   end
 
   def to_param

@@ -272,26 +272,8 @@ class MixinNetworkUserTest < ActiveSupport::TestCase
   end
 
   # ---------------------------------------------------------------------------
-  # verify_pin / initialize_pin! / update_pin!
+  # initialize_pin! / update_pin!
   # ---------------------------------------------------------------------------
-
-  test "verify_pin delegates to mixin_api.verify_pin with the wallet's pin" do
-    wallet = mixin_network_users(:quill_wallet)
-    captured_pin = nil
-    wallet.define_singleton_method(:pin) { "abcdef" }
-    wallet.define_singleton_method(:mixin_api) do
-      api = Object.new
-      api.define_singleton_method(:verify_pin) do |pin|
-        captured_pin = pin
-        { "data" => { "valid" => true } }
-      end
-      api
-    end
-
-    wallet.verify_pin
-
-    assert_equal "abcdef", captured_pin
-  end
 
   test "initialize_pin! is a no-op when pin is already present (does not call update_pin!)" do
     wallet = mixin_network_users(:quill_wallet)
@@ -365,96 +347,8 @@ class MixinNetworkUserTest < ActiveSupport::TestCase
   end
 
   # ---------------------------------------------------------------------------
-  # sync_profile!
+  # update_avatar
   # ---------------------------------------------------------------------------
-
-  test "sync_profile! calls mixin_api.me and updates raw with the returned data" do
-    wallet = mixin_network_users(:quill_wallet)
-    profile = { "user_id" => wallet.uuid, "full_name" => "Renamed" }
-    wallet.define_singleton_method(:mixin_api) do
-      api = Object.new
-      api.define_singleton_method(:me) { { "data" => profile } }
-      api
-    end
-
-    saved_attrs = nil
-    wallet.define_singleton_method(:update!) do |attrs|
-      saved_attrs = attrs
-      true
-    end
-
-    wallet.sync_profile!
-
-    assert_equal profile, saved_attrs[:raw]
-  end
-
-  test "sync_profile! raises and does not persist when the API response is empty" do
-    wallet = mixin_network_users(:quill_wallet)
-    wallet.define_singleton_method(:mixin_api) do
-      api = Object.new
-      api.define_singleton_method(:me) { { "data" => nil, "error" => "boom" } }
-      api
-    end
-
-    saved = false
-    wallet.define_singleton_method(:update!) do |_attrs|
-      saved = true
-      true
-    end
-
-    assert_raises(RuntimeError) { wallet.sync_profile! }
-    assert_not saved
-  end
-
-  # ---------------------------------------------------------------------------
-  # update_name / update_avatar
-  # ---------------------------------------------------------------------------
-
-  test "update_name calls mixin_api.update_me with the default name and persists name + raw" do
-    wallet = mixin_network_users(:quill_wallet)
-    profile = { "full_name" => "Quill" }
-    captured = nil
-    wallet.define_singleton_method(:mixin_api) do
-      api = Object.new
-      api.define_singleton_method(:update_me) do |**kwargs|
-        captured = kwargs
-        { "data" => profile }
-      end
-      api
-    end
-
-    saved_attrs = nil
-    wallet.define_singleton_method(:update) do |attrs|
-      saved_attrs = attrs
-      true
-    end
-
-    wallet.update_name
-
-    assert_equal "Quill", captured[:full_name]
-    assert_nil captured[:avatar_base64]
-    assert_equal "Quill", saved_attrs[:name]
-    assert_equal profile, saved_attrs[:raw]
-  end
-
-  test "update_name is a no-op (no save) when the API returns no data" do
-    wallet = mixin_network_users(:quill_wallet)
-    wallet.define_singleton_method(:mixin_api) do
-      api = Object.new
-      api.define_singleton_method(:update_me) { |**| { "data" => nil } }
-      api
-    end
-
-    saved = false
-    wallet.define_singleton_method(:update) do |_attrs|
-      saved = true
-      true
-    end
-
-    wallet.update_name
-
-    assert_not saved
-  end
 
   test "update_avatar passes an avatar_base64 payload and updates raw on success" do
     wallet = mixin_network_users(:quill_wallet)

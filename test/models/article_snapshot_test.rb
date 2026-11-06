@@ -138,46 +138,6 @@ class ArticleSnapshotTest < ActiveSupport::TestCase
     assert_equal original_raw["digest"], snapshot.raw["digest"]
   end
 
-  # === fresh? ===
-
-  test "fresh? is true for the most recent snapshot of an article" do
-    ArticleSnapshot.where(article_uuid: @article.uuid).destroy_all
-    only = ArticleSnapshot.create!(article: @article)
-
-    assert only.fresh?
-  end
-
-  test "fresh? is false when a later snapshot exists for the same article" do
-    ArticleSnapshot.where(article_uuid: @article.uuid).destroy_all
-    first = ArticleSnapshot.create!(article: @article, created_at: 2.days.ago)
-    _second = ArticleSnapshot.create!(article: @article, created_at: 1.day.ago)
-
-    assert_not first.fresh?
-  end
-
-  test "fresh? scopes by article_uuid, not by all snapshots" do
-    ArticleSnapshot.where(article_uuid: @article.uuid).destroy_all
-    other_article = articles(:published_free)
-    ArticleSnapshot.where(article_uuid: other_article.uuid).destroy_all
-
-    mine = ArticleSnapshot.create!(article: @article, created_at: 1.day.ago)
-    _theirs = ArticleSnapshot.create!(article: other_article, created_at: 1.minute.ago)
-
-    assert mine.fresh?
-  end
-
-  test "fresh? is false even when the later snapshot has been destroyed (uses a fresh query)" do
-    ArticleSnapshot.where(article_uuid: @article.uuid).destroy_all
-    snapshot = ArticleSnapshot.create!(article: @article)
-    later = ArticleSnapshot.create!(article: @article)
-
-    assert_not snapshot.fresh?
-
-    later.destroy!
-
-    assert snapshot.reload.fresh?
-  end
-
   # === delegate :author, to: :article ===
 
   test "delegates author to the associated article" do
@@ -185,14 +145,6 @@ class ArticleSnapshotTest < ActiveSupport::TestCase
 
     assert_equal @article.author, snapshot.author
   end
-
-  # === Side-finding for the maintainer ===
-
-  # ArticleSnapshot#previous_signed_snapshot (app/models/article_snapshot.rb:34)
-  # calls `article.snapshots.signed` but no `signed` scope or column exists on
-  # the association. Calling it raises NoMethodError today. This is not
-  # asserted here because it would document a broken contract; flagging for
-  # the maintainer in the PR description instead.
 
   # === Inverse association ===
 

@@ -106,8 +106,8 @@ class PreOrdersNewControllerTest < ActionController::TestCase
     assert_redirected_to root_path
   end
 
-  # `new` only ever resolves an Article, but `PreOrder.order_types` also
-  # contains `buy_collection`. Accepting it here rendered the buy-collection
+  # `new` only ever resolves an Article, but `buy_collection` is also a
+  # valid `PreOrder` order type. Accepting it here rendered the buy-collection
   # form for an Article, and submitting it saved a pre-order whose on-chain
   # memo put the ARTICLE's uuid in the collection slot
   # (`Mixin::Memo.buy!(collection: item, ...)`) — a protocol violation.

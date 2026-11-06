@@ -163,15 +163,6 @@ class Order < ApplicationRecord
     noticed_events.destroy_all
   end
 
-  def cache_history_ticker
-    r = QuillBot.api.ticker asset_id, created_at.utc.rfc3339
-    update value_btc: r["price_btc"].to_f * total, value_usd: r["price_usd"].to_f * total
-  end
-
-  def cache_history_ticker_async
-    Orders::CacheHistoryTickerJob.perform_later id
-  end
-
   def price_tag
     [ format("%.8f", total), currency&.symbol ].join(" ")
   end

@@ -2,20 +2,20 @@
 
 require "test_helper"
 
-# Covers the `AdvisoryLockable` concern, which is mixed into `Splitter` and
+# Covers the `AdvisoryLockable` concern, which is mixed into
 # `MixinNetworkUser` (and any future model that opts in via
-# `include AdvisoryLockable`). The concern wraps a block in a PostgreSQL
-# advisory lock keyed by a SHA-256 hash of the caller's key string.
+# `include AdvisoryLockable`; `Splitter` inherits it through that ancestor).
+# The concern wraps a block in a PostgreSQL advisory lock keyed by a SHA-256
+# hash of the caller's key string.
 #
 # Two surfaces are exercised:
 #   * `AdvisoryLockable.lock_id_for(key)` is a pure function — same key
 #     always yields the same BigInt-shaped signed 63-bit integer, distinct
 #     keys never collide, and non-string keys coerce via `to_s`.
-#   * `with_advisory_lock(key, &block)` is exercised end-to-end through the
-#     existing `Splitter#collect_assets` path (`test/models/splitter_test.rb`
-#     already stubs the lock branches). This file pins the concern's pure
-#     surface and the lock_id-for-key contract so a regression here surfaces
-#     independently of Splitter's transfer-creation side effects.
+#   * `with_advisory_lock(key, &block)` is exercised through
+#     `MixinNetworkUser`. This file pins the concern's pure surface and the
+#     lock_id-for-key contract so a regression here surfaces independently
+#     of any caller's side effects.
 class AdvisoryLockableTest < ActiveSupport::TestCase
   # ---------------------------------------------------------------------------
   # lock_id_for — pure-function surface
