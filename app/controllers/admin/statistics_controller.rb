@@ -5,13 +5,14 @@ module Admin
     def index
       statistics = Statistic.all
 
-      @type = params[:type] || "all"
+      # The query form submits `:state`; filter on the STI type column.
+      @state = params[:state] || "all"
       statistics =
-        case @type
+        case @state
         when "all"
           statistics
         else
-          statistics.where(type: @type)
+          statistics.where(type: @state)
         end
 
       @order_by = allowed_param(:order_by, "datetime_desc", %w[datetime_desc datetime_asc])
@@ -22,18 +23,6 @@ module Admin
         when "datetime_asc"
           statistics.order(datetime: :asc)
         end
-
-      @query = params[:query].to_s.strip
-      statistics =
-        statistics.ransack(
-          {
-            title_i_cont_all: @query,
-            intro_i_cont_all: @query,
-            content_i_cont_all: @query,
-            uuid_eq: @query,
-            id_eq: @query
-          }.merge(m: "or")
-        ).result
 
       @pagy, @statistics = pagy(:countless, statistics)
     end

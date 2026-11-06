@@ -1,5 +1,4 @@
 zh-CN:
-  app_name: Quill
   load_more: 加载更多
   subscribe: 订阅
   unsubscribe: 取消订阅
@@ -19,21 +18,12 @@ zh-CN:
   remove: 移除
   confirm: 确认
   pay: 支付
-  pay_with_mixin: Mixin 支付
   waiting_for_payment: 等待支付
   processing_payment: 付款成功,正在处理
   scan_with_mixin: 请使用 Mixin Messenger 扫码支付
-  success_submitted: 成功提交
-  success_subscribed: 成功订阅
-  success_unsubscribed: 已取消订阅
-  success_hidden_article: 文章已隐藏
   success_published_article: 文章已公开
   success_updated: 成功更新
-  success_copied: 成功复制
   success_deleted: 成功删除
-  success_paid: 支付成功，感谢支持！
-  failed_to_save: 保存失败
-  please_retry: 请重试
   read: 读文章
   write: 写文章
   search: 搜索
@@ -41,18 +31,13 @@ zh-CN:
   fair: 公示
   twitter: 推特
   help: 帮助
-  community: 社区
-  open_source: 开源
   language: 切换语言
   dark_mode: 深色模式
   light_mode: 浅色模式
   dashboard: 管理中心
-  my_reading: 我的阅读
-  my_authoring: 我的写作
   my_comments: 我的评论
   my_subscriptions: 我的订阅
   my_orders: 我的订单
-  my_wallet: 我的钱包
   token: 代币
   profile_page: 个人主页
   login: 登录
@@ -61,14 +46,12 @@ zh-CN:
   order_by_lately: 最新发表
   order_by_revenue: 营收最多
   tags: 话题
-  comments_zone: 评论区
   comment: 评论
   more_to_read: "以下还有 %{percent} 内容"
   pay: 支付
   to_continue_reading: 继续阅读
   and_receive_early_reader_revenue: 并享受早期读者奖励
   pay_warning: 文章为作者在Quill平台出售的虚拟商品，一经付款，概不退还。谨慎付款，以防被骗。
-  be_the_first_reader: 成为第一位读者
   pay_to_read: 付费阅读
   already_paid: 已经支付
   try_to: 试试
@@ -77,15 +60,11 @@ zh-CN:
   failed_to_connect: 连接失败，请重试
   mixin_rate_limited: Mixin 服务繁忙，请稍后再试。
   connected: 成功连接，欢迎！
-  love_thie_article: 大爱此文
   share: 分享
   signature: 签名
-  polling_payment: 支付结果查询中
-  refund_warning: 支付失败，已原路退款。请重新支付。
   buy_article: 购买文章
   reward_article: 赞赏
   reward: 赞赏
-  finish: 完成
   later: 再想想
   times_bought: 次购买
   times_reward: 次赞赏
@@ -95,7 +74,6 @@ zh-CN:
   bought: 已购买
   commented: 已评论
   search: 搜索
-  search_placeholder: 请输入文章标题/简介/作者/话题
   users_count: 用户总量
   articles_count: 文章总数
   revenue_count: 收益次数
@@ -108,8 +86,6 @@ zh-CN:
   readers_revenue: 读者收益
   references_revenue: 引用收益
   collection_revenue: 合辑收益
-  revenue_chart: 平台收益曲线(USD)
-  transactions: 转账记录
   rules_content: |
     ### Quill 规则介绍
 
@@ -154,7 +130,6 @@ zh-CN:
   comments: 读者评论
   subscribe_comments: 订阅新评论
   no_comments: 暂无评论
-  comment_deleted: 此评论已被管理员删除
   quote: 引用
   from: 来自
   desc: 时间倒序
@@ -175,22 +150,14 @@ zh-CN:
   earnings: 收益
   preferences: 偏好设置
   notification_settings_manage_hint: 在消息通知中心管理你会收到哪些通知、以何种方式接收。
-  notifications_manage: 消息通知
   settings: 个人设置
   articles_manage: 文章管理
-  subscriptions_manage: 订阅管理
-  revenue_manage: 收益管理
-  orders_manage: 订单管理
-  comments_manage: 评论管理
   back: 返回
-  article_detail: 文章详情
   new_article: 创建文章
   edit_article: 文章编辑
   publish_article: 发表文章
   clear_all: 清空
   read_all: 全部已读
-  confirm_to_publish: 确定要将文章公开发表吗？
-  confirm_to_hide: 确定要将文章隐藏吗？已购读者将不受影响。
   confirm_to_delete: 确定要删除这篇草稿吗?
   publish: 发表
   hide: 隐藏
@@ -206,16 +173,13 @@ zh-CN:
   subscribers: 订阅者
   subscribing: 正在订阅
   commenting_subscriptions: 评论
-  commenting_subscriptions_tip: 订阅的文章有新评论时，您将收到通知
   tag_subscriptions: 话题
-  tag_subscriptions_tip: 该话题下有新文章时，你将收到通知
   confirm_to_unsubscribe: 确定要取消订阅吗？
   confirm_unsubscribe: 确定要订阅吗？
   author_transfers: 作者收益
   reader_transfers: 读者收益
   payments: 支付记录
   access_token: Access Token
-  tips_of_general_notifications: 您可以自定义消息通知的方式，网站通知、Mixin 机器人消息通知和 Webhook（开发中）。
   tips_of_article_published_notifications: 订阅的作者发表新文章时，您将收到通知。
   tips_of_article_bought_notifications: 订阅的读者购买新文章时，您将收到通知。
   tips_of_article_rewarded_notifications: 订阅的读者赞赏新文章时，您将收到通知。
@@ -224,36 +188,16 @@ zh-CN:
   tips_of_transfer_processed_notifications: 有新的转账（包括文章收益、退款等）时，您将收到通知。
   tips_of_collection_listed_notifications: 订阅的作者上架新合集时，您将收到通知。
   tips_of_collection_bought_notifications: 读者购买您的合集时，您将收到通知。
-  confirm_to_generate_token: Access Token 可提供给第三方应用以管理您的文章，确定需要生成新的 Token 吗？
-  generate_new_token: 生成新 Token
   token_memo_placeholder: 备注一下 Token
-  token_generated_tips: 新 Access Token 已经生成
-  token_security_tips: 请妥善保管您的 Access Token，关闭后将不再显示。如果丢失请重新生成。
-  confirm_to_delete_token: 确认要删除 Access Token 吗？
   copy: 复制
-  present_value: 按当前价格折算
-  per_price_when_paid: 按支付时价格折算
-  invalid_authorization: 授权失效
-  please_confirm_all_authorizations_required: 请确认所有必要的授权
-  reauthorize: 重新授权
-  no_access: 不能访问
-  sorry_you_are_not_authorized_to_access_this_application: 抱歉，您无法使用该应用
   mixin_bot: Mixin 机器人
-  comming_soon: 即将发布
-  you_will_get_1000_satoshi_airdrop_once_we_launched: |
     🎉 正式发布时
     您将收到 1000 Satoshi 空投
-  login_to_earn_btc: 登录赢取 BTC
-  login_right_now_to_earn_btc_airdrop: 立即登录，当正式发布时，您将收到 BTC 空投
   copied: 已复制
-  mixin_contact: Mixin
-  copy_url: 复制URL
   subscribed: 已订阅
   article_references: 引用文章
-  referenced_by: 相关文章
   related_articles: 相关文章
   hot_tags: 热门标签
-  login_via_mixin: 使用 Mixin Messenger 登录
   in_a_week: 1 周内
   in_a_month: 1 月内
   in_a_year: 1 年内
@@ -278,26 +222,15 @@ zh-CN:
   unblock_user: 解除屏蔽
   confirm_to_block: 屏蔽之后，他/她将无法收到关于你的消息，无法看见或者购买你的文章，你也将无法看到他/她的任何文章。
   articles:
-    not_finished: 请先完成你的文章
     title_is_required: 请输入文章标题
-    title_is_too_long: 文章标题太长了
     intro_is_required: 请输入文章的介绍
-    intro_is_too_long: 文章介绍太长了
     content_is_required: 请输入文章的正文
-    price_is_too_low: 价格太低了
-    confirm_to_create: 确定要创建文章吗？
-    confirm_to_update: 确定要修改你的文章吗？
     title_placeholder: 这里输入文章标题
     content_place_holder: 写点有价值的东西
     intro_place_holder: 请简要介绍一下你的文章，简介内容为公开可见。
     revenue_ratio: 收益比例
     add_reference: 添加引用
     remove_reference: 移除引用
-    please_select_an_article: 请选择引用的文章
-    please_input_revenue_ratio: 请输入收益比例
-    references_revenue_cannot_larger_than_50%: 引用收益不可超过 50%
-    revenue_distribution: 收益分配
-    you_will_create_a_free_article: 将创建一篇免费文章
     add_some_tags: 添加话题
     save_conflict: 文章已在其他位置更新，请刷新后继续编辑。
     settings_panel: 设置
@@ -306,8 +239,6 @@ zh-CN:
     close_preview: 关闭预览
     exit_overlay: 退出
     locked_after_publishing: 发布后不可修改
-    price_place_holder: 输入价格
-    revenue_advanced: 高级收益设置
     publish_blocked: 发布前请完成以下项目
     publish_ready: 文章已准备好发布。
     fix_in_editor: 返回编辑
@@ -328,9 +259,7 @@ zh-CN:
       close: 关闭设置
     price:
       usd_label: 价格（美元）
-      crypto_equivalent: "≈ %{amount} %{symbol}"
       feed_unavailable: 价格数据暂不可用，请稍后重试
-      minimum_error: 最低价格约为 $0.10
     revenue:
       customize: 自定义收益分配
       default_summary: "50% 作者 · 40% 早期读者 · 10% 平台"
@@ -346,27 +275,13 @@ zh-CN:
       thing: 项
       things: 项
       ready: 可以发布
-  this_address_supports: 该地址仅支持
-  this_address_supports_erc20: 该地址支持所有 ERC20 代币，例如 ETH、USDT、XIN 等
-  first_deposit_tips: 向新地址第一次充值时，请少量尝试！
-  deposit_receive_tips: "所有充值到帐需要至少 %<confirmations>s 个区块确认"
   address: 地址
-  claim_free_xin: 领取免费XIN
-  you_have_successfully_claimed_please_check_your_wallet_later: 成功领取免费 XIN，请稍候在您的钱包查收。
-  transaction_submitted: 交易已提交
-  get_more_xin: 获取更多XIN 
-  you_may_write_a_good_article_and_sell_it_for_xin: 您可以写一篇好文章出售，赚取 XIN。
-  you_need_to_deposit_first: 您需要先充值资产
   balance: 余额
   words_count: 字数
-  deposit: 存入
   withdraw: 提出
-  using_mixin_wallet: 使用 Mixin 钱包
   continue: 继续
   confirm_to_pay: 确认支付
-  payment_crypto: 选择支付币种
   payment_method: 支付方式
-  not_supported_yet: 暂不支持
   waiting_for_mixpay: 等待 MixPay 完成支付
   paying: 正在支付
   choose_other_payment: 其他支付方式
@@ -379,13 +294,10 @@ zh-CN:
   verify: 验证
   reverify: 重新验证
   verify_email_subject: 请验证您 Quill 帐号的 Email 地址
-  start_writing_in_desktop: 请在桌面端开始您的写作
-  save_draft: 保存草稿
   start_reading: 开始阅读
   select_crypto: 选择加密货币
   press_enter_to_search_all_articles: 按回车键确认搜索所有文章
   home: 首页
-  home_value_proposition: 阅读、写作、赚取加密货币奖励——为 Web3 打造的发布平台。
   home_landing_headline: 认真写作，奖励最早的支持者。
   home_landing_subheadline: Quill 是 Web3 原生付费出版平台——作者定价，早期读者分享每一篇新收入。
   home_cta_explore: 浏览文章
@@ -411,10 +323,8 @@ zh-CN:
   list_collection_from_hidden_tips: 你正在上架合辑，读者们将可以购买该合辑。
   list_collection_from_drafted_tips: 你正在首次上架合辑，成功后合辑名称、简称和收益比例将不可修改。
   hide_collection_tips: 你正在下架合辑，读者们将无法购买该合辑。
-  article_collection_introduction: '本文属于以下合辑，购买合辑可以解锁合辑内所有文章并获得合辑收益。<span class="font-bold text-red-500">%<orders_count>s</span> 人已经购买，共享 <span class="font-bold text-red-500">%<revenue_ratio>s</span> 收益。'
   collection_introduction: 合辑简介
   buy_collection: 订阅合辑
-  click_to_validate: 点击验证
   upload_cover: 上传封面图
   import: 导入
   alert_for_blocked_user: 该帐号有造假/违规/发布不良内容的嫌疑，请谨慎购买。

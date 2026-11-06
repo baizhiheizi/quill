@@ -9,11 +9,14 @@ github_source_branch: 'main'
 icon_file: icon.png
 
 # page
-app_name: Quill
 page_title: 'Quill: Build your value net on Web3 with Quill'
 page_keywords: Quill, Write, Read, Web3, Blockchain, Bitcoin, ETH
-page_description: Build your value net on Web3 with Quill  
+page_description: Build your value net on Web3 with Quill
 twitter_account: with_quill
+
+# display name for broker-managed Mixin network accounts (read by
+# MixinNetworkUser#default_name)
+broker_name: 'Quill'
 
 # assets
 supported_assets:
