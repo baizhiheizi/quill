@@ -8,7 +8,7 @@
   show_thumbnail = local_assigns.fetch(:show_thumbnail, true)
   target        = local_assigns.fetch(:target, :self)
 %>
-<article class="ds-list-row flex items-start gap-4 border-b border-base-300 py-5 first:pt-0" data-controller="list-row">
+<article class="ds-list-row flex items-start gap-4 border-b border-base-300 py-5 first:pt-0">
   <div class="min-w-0 flex-1">
     <% if show_topic && article.respond_to?(:category) && article.category.present? %>
       <div class="mb-1">

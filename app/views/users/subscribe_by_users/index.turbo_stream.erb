@@ -1,5 +1,5 @@
 <%= turbo_stream.append "#{dom_id @user}_subscribers_list" do %>
-  <%= render partial: "users/subscribe_users/user", collection: @users, as: :user %>
+  <%= render partial: "users/subscribe_by_users/user", collection: @users, as: :user %>
 <% end %>
 
 <%= turbo_stream.update "#{dom_id @user}_subscribers_pagination" do %>

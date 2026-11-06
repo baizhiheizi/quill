@@ -57,10 +57,6 @@ module UiHelper
     render "shared/state_empty", icon:, title:, body:, action:, action_href:
   end
 
-  def render_table(columns:, rows:, row_path: nil, empty: nil)
-    render "shared/table", columns:, rows:, row_path:, empty:
-  end
-
   # Infinite-scroll pagination footer (`app/views/shared/_pagination.html.erb`).
   # `id` is the DOM anchor Turbo appends the next page after; it defaults to
   # "pagination" inside the partial. Pass `id:` whenever more than one paginated
