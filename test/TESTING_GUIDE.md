@@ -151,12 +151,6 @@ Some tests change methods on a model or notifier class with `define_method` and 
 ### Collection
 - `#tradable?`: Fennec-tradable check. Requires `fennec_trade_url` to be present.
 
-### MixinMessage
-- `setup_attributes` reads `raw["data"]` — stub per-instance when `raw` is nil.
-- `belongs_to :user, primary_key: :mixin_uuid` — custom key association.
-- `touch_proccessed_at` is misspelled in production (it should be `touch_processed_at`).
-- `process_user_message` returns unless a user exists and the conversation ID matches `QuillBot.api.unique_uuid(user_id)`; it does not rescue errors.
-
 ### MixinNetworkUser
 - `before_validation :setup_attributes, on: :create` calls `QuillBot.api.create_user`.
 - `avatar` does `raw["avatar_url"]` without a nil-guard on `raw`. `raw: nil` raises `NoMethodError`.

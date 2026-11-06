@@ -97,7 +97,7 @@ bin/rails db:prepare
 bin/dev
 ```
 
-`db:prepare` creates and migrates the primary database plus the Solid Queue/Cable/Cache SQLite files. `bin/dev` reads `Procfile.dev` and starts Rails on <http://localhost:3000> (admin at `/admin`), `bin/jobs`, the CSS/JS watchers, and the Mixin blaze client when `blaze_enable: true` in `settings.local.yml`.
+`db:prepare` creates and migrates the primary database plus the Solid Queue/Cable/Cache SQLite files. `bin/dev` reads `Procfile.dev` and starts Rails on <http://localhost:3000> (admin at `/admin`), `bin/jobs`, and the CSS/JS watchers.
 
 ```ruby
 # Create the admin account from bin/rails console:
