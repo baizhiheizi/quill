@@ -48,17 +48,13 @@ class PreOrdersControllerTest < IntegrationTestCase
     end
   end
 
-  # The `new` action is exercised as a controller test below
-  # (`PreOrdersNewControllerTest`): an integration session does not carry
-  # the signed-in reader here, and `ApplicationController#authenticate_user!`
-  # redirects an anonymous visitor to `root_path` as well.
+  # The `new` action is additionally exercised as a controller test below
+  # (`PreOrdersNewControllerTest`), where the signed-in reader is explicit.
 end
 
 # `PreOrdersController#new` and `#show` are exercised as a controller test
-# (rather than through the integration session) so the signed-in reader is
-# explicit: `ApplicationController#authenticate_user!` redirects an
-# anonymous visitor to `root_path` as well, which would make every
-# "redirects home" assertion pass for the wrong reason.
+# alongside the integration coverage above, so the signed-in reader is
+# explicit.
 class PreOrdersNewControllerTest < ActionController::TestCase
   tests PreOrdersController
 

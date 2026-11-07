@@ -44,6 +44,9 @@ class ArticlesControllerTest < IntegrationTestCase
     get user_article_path(article.author, article)
 
     assert_response :success
+    # The buyer must see the full body: no fade/unlock prompt. Before the
+    # callback-based sign_in this ran as a guest and passed vacuously.
+    refute_includes response.body, "data-paywall-fade-target=\"unlock\""
   end
 
   test "show renders the fade/unlock prompt for a guest viewing a locked article" do
