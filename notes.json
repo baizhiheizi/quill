@@ -1,8 +1,8 @@
 {
   "version": 1,
   "cursors": {
-    "labelling_after": 2222,
-    "investigation_after": 2231
+    "labelling_after": 2234,
+    "investigation_after": 2234
   },
   "issues": [],
   "fixes": [],
@@ -16,14 +16,14 @@
     {
       "area": "code",
       "checked_at": "2026-11-07",
-      "result": "Perf shipped through #2229; sweep #2223-#2228 cleared dead code. MixpayPreOrdersController#show crash fix on branch fix-mixpay-pre-order-item-guard (PR aw_mixpay_fix); that controller has no purchase/reward auth gate - pre-existing, unchanged.",
-      "follow_up": "Twitter routing: sessions#twitter shadowed by omniauth catch-all (routes.rb:21 vs 27), pinned by test in #2232. Maintainer decision; do not change unilaterally."
+      "result": "redirect_to-without-return sweep: only HomeController#index had discarded work behind the guard - fixed this run (PR aw_landing_perf; 2 RANDOM() queries saved per signed-in/mobile landing, 4 cold-cache; tests pin zero). Others are before_action guards or intentional fall-throughs.",
+      "follow_up": "Twitter routing shadowed (routes.rb:21 vs 27) - maintainer decision. Feed sort stored column - maintainer decision, re-raised in monthly."
     },
     {
       "area": "docs",
       "checked_at": "2026-11-07",
-      "result": "Changelog PR aw_changelog_nov7 (branch docs-changelog-2026-11-07): entries for #2229 perf, #2222 blank keys, #2233 sign_in. Verify branch landed next run.",
-      "follow_up": "Add mixpay-fix changelog entry once merged."
+      "result": "aw_changelog_nov7 (run 42344859843) confirmed never landed. Rebuilt on same branch repo-assist/docs-changelog-2026-11-07, PR aw_changelog_nov7: entries for #2232, #2233, #2234 (dropped #2229 entries - already landed via #2230). Changelog current through #2234 once merged.",
+      "follow_up": "Verify the PR landed next run."
     },
     {
       "area": "hygiene",
@@ -40,34 +40,34 @@
     {
       "area": "release",
       "checked_at": "2026-11-07",
-      "result": "28 commits unreleased since tag release-2026-11-04-c205bc2 (rev-list verified). Never trigger Release: it deploys to production.",
-      "follow_up": "Changelog entry for mixpay fix once merged."
+      "result": "31 commits unreleased since tag release-2026-11-04-c205bc2 (rev-list verified). Never trigger Release: it deploys to production.",
+      "follow_up": "Changelog is current through #2234 once the docs PR merges."
     },
     {
       "area": "repo_assist_prs",
       "checked_at": "2026-11-07",
-      "result": "#2232 and #2233 merged 2026-11-06 with intended diffs. Pending verification: aw_changelog_nov7, aw_mixpay_fix. Monthly #2218 body NOT rewritten (update_issue budget spent closing #2231); run summary posted as comment aw_monthly_nov7.",
-      "follow_up": "Next run FIRST: verify both branches landed; then update_issue #2218 folding in comment aw_monthly_nov7."
+      "result": "#2232/#2233 merged 11-06, #2234 merged 11-07 (mixpay guard). #2218 body rewritten this run: folded in the aw_monthly_nov7 delta, removed actioned items, added PR reviews. Pending verification: PR aw_changelog_nov7 (changelog docs) and PR aw_landing_perf (home index perf).",
+      "follow_up": "Next run FIRST: verify both PRs landed with intended diffs."
     },
     {
       "area": "tests",
       "checked_at": "2026-11-07",
-      "result": "Suite green: 1641 runs (1634 on main + 7 mixpay), 0 failures, 2 skips. SKIP_CSS_BUILD=1 required. MixpayPreOrdersController now covered. Name-based gap scans unreliable - DistributeService tests use *_article/_collection suffixes.",
+      "result": "Suite green: 1643 runs, 0 failures, 2 skips (SKIP_CSS_BUILD=1). Includes the 2 new HomeController redirect-path tests (verified red on unpatched code).",
       "follow_up": "Notification sql payload has $N bind placeholders - match SQL shape, not literals."
     },
     {
       "area": "tooling",
-      "checked_at": "2026-11-06",
-      "result": "No open Dependabot PRs. bundle outdated blocked here (read-only gem cache); last Ruby sweep 2026-11-04. npm minor/patch available (tailwind, postcss, puppeteer, axios); lexxy 1.0.3 major.",
-      "follow_up": "npm needs bun.lock regen - no bun binary here; in monthly issue. Ruby majors unclaimed: marcel 2, net-ssh 8, openssl 4, prism 2."
+      "checked_at": "2026-11-07",
+      "result": "Stale remote branches repo-assist/improve-ci-dependency-install-retry-* have zero unique commits (point at old main) - deletion suggested in monthly. No open Dependabot PRs (0 open PRs at all). bundle outdated blocked (read-only gem cache); npm needs bun.lock regen - no bun binary here.",
+      "follow_up": "Ruby majors unclaimed: marcel 2, net-ssh 8, openssl 4, prism 2."
     }
   ],
   "completed_actions": [],
   "priorities": [
     {
       "task": 6,
-      "item": "Verify aw_changelog_nov7 and aw_mixpay_fix landed; sync #2218 body",
-      "note": "Branches repo-assist/docs-changelog-2026-11-07 and repo-assist/fix-mixpay-pre-order-item-guard. Then update_issue #2218: fold in the delta from comment aw_monthly_nov7 (budget went to closing #2231 on 2026-11-07)."
+      "item": "Verify PR aw_changelog_nov7 and PR aw_landing_perf landed",
+      "note": "Branches repo-assist/docs-changelog-2026-11-07 and repo-assist/improve-landing-redirect-queries. Lost publications are a recurring pattern - check branch + diff before anything else."
     },
     {
       "task": 10,
@@ -77,17 +77,17 @@
     {
       "task": 10,
       "item": "Feed sort stored column: ask maintainer",
-      "note": "order_by_popularity sorts a computed expression, no index helps. Raised in monthly issues 2026-10-23 and 2026-11-04 through 07."
+      "note": "order_by_popularity sorts a computed expression, no index helps. Re-raised in monthly 2026-11-07."
     },
     {
       "task": 6,
       "item": "Confirm PostHog fingerprints drop",
-      "note": "key-cannot-be-blank since #2232 merged (2026-11-06); Pagy::OptionError since #2163. Maintainer-side check; in monthly issue."
+      "note": "key-cannot-be-blank since #2232 merged (2026-11-07); Pagy::OptionError since #2163. Maintainer-side check; in monthly issue."
     },
     {
       "task": 9,
       "item": "Remaining untested surfaces if a testing task recurs",
-      "note": "Low priority: Admin::{Login,Overview,Wallets}Controller, PagesController, OAuth::{NormalizedIdentity,SignInError}, TwitterBot. Avoid coverage inflation; DistributeService is covered."
+      "note": "Low priority: Admin::{Login,Overview,Wallets}Controller, PagesController, OAuth::{NormalizedIdentity,SignInError}, TwitterBot. Avoid coverage inflation."
     }
   ]
 }
