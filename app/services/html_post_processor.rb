@@ -103,6 +103,8 @@ module HtmlPostProcessor
   # (e.g. `onclick`) on the generated anchor.
   def decorate_image(img)
     src = img.attr("src")
+    return if src.blank?
+
     normalize_image_src(img, src)
 
     size = Rails.cache.fetch(img["src"]) do

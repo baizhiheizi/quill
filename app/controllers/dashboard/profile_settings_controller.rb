@@ -16,6 +16,8 @@ class Dashboard::ProfileSettingsController < Dashboard::BaseController
   end
 
   def verify_email
+    return if params[:code].blank?
+
     email = Rails.cache.fetch params[:code]
     @user = User.find_by email: email if email.present?
     return if @user.blank?
