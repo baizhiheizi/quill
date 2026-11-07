@@ -4,98 +4,90 @@
     "labelling_after": 2222,
     "investigation_after": 2231
   },
-  "issues": [
-    {
-      "number": 2222,
-      "state": "deferred",
-      "updated_at": "2026-11-06",
-      "note": "PostHog blank Rails.cache key crash. Fix rebuilt (07:33 publication failed, see #2231): branch repo-assist/fix-issue-2222-blank-cache-keys, PR aw_pr_2222 pending publication, Closes #2222."
-    },
-    {
-      "number": 2231,
-      "state": "deferred",
-      "updated_at": "2026-11-06",
-      "note": "Harness failure issue for run 42176241893 (create_pull_request git 128). Commented with root cause + recovery. Close once the rebuilt #2222 PR merges."
-    }
-  ],
+  "issues": [],
   "fixes": [],
   "checks": [
     {
       "area": "ci",
       "checked_at": "2026-10-22",
-      "result": "The self-hosted runner's mise-shim race (ETXTBSY, exit 126) was runner-side concurrency, fixed on the runner. #2182 (repo-side retry) was closed unapplied; do not re-raise.",
+      "result": "Runner mise-shim race (ETXTBSY) was runner-side, fixed on the runner. #2182 closed unapplied; do not re-raise.",
       "follow_up": "None."
     },
     {
       "area": "code",
-      "checked_at": "2026-11-06",
-      "result": "Perf shipped: feed indexes #2194, authorized? memo #2195, comments N+1 #2219, search-avatar #2221, filter-bar exists? #2229. Sweep #2223-#2228 removed all dead-code candidates; @pay_asset branch wired - goal resolved.",
-      "follow_up": "Twitter connect still broken (routes.rb:21 catch-all shadows line 27 sessions#twitter); routing decision pending, pinned by test in aw_pr_2222."
+      "checked_at": "2026-11-07",
+      "result": "Perf shipped through #2229; sweep #2223-#2228 cleared dead code. MixpayPreOrdersController#show crash fix on branch fix-mixpay-pre-order-item-guard (PR aw_mixpay_fix); that controller has no purchase/reward auth gate - pre-existing, unchanged.",
+      "follow_up": "Twitter routing: sessions#twitter shadowed by omniauth catch-all (routes.rb:21 vs 27), pinned by test in #2232. Maintainer decision; do not change unilaterally."
     },
     {
       "area": "docs",
-      "checked_at": "2026-11-06",
-      "result": "Changelog current through #2230 (#2219/#2221 entries added via merged #2230).",
-      "follow_up": "Deferred entries once merged: #2229 (filter-bar perf), aw_pr_2222 (blank cache keys), aw_pr_signin (integration sign_in)."
+      "checked_at": "2026-11-07",
+      "result": "Changelog PR aw_changelog_nov7 (branch docs-changelog-2026-11-07): entries for #2229 perf, #2222 blank keys, #2233 sign_in. Verify branch landed next run.",
+      "follow_up": "Add mixpay-fix changelog entry once merged."
     },
     {
       "area": "hygiene",
       "checked_at": "2026-11-06",
-      "result": "RESOLVED: IntegrationTestCase#sign_in fixed via real OAuth callback (OmniAuth test mode). Branch repo-assist/test-integration-sign-in-session, PR aw_pr_signin pending publication. Only 3 bare call sites existed.",
+      "result": "IntegrationTestCase#sign_in fixed via real OAuth callback, merged as #2233.",
       "follow_up": "None."
     },
     {
       "area": "qa",
       "checked_at": "2026-10-22",
-      "result": "Stored XSS fixed in #2176 (MERGED). config/initializers/content_security_policy.rb is still entirely commented out - a CSP header is the natural follow-up. Sanitizer drops inline style attributes.",
-      "follow_up": "CSP proposal only after the sanitizer approach settles; listed as Future Work in the 2026-11 monthly issue."
+      "result": "Stored XSS fixed in #2176 (merged). content_security_policy.rb still fully commented out; sanitizer drops inline style attributes.",
+      "follow_up": "CSP proposal only after sanitizer approach settles; in monthly issue Future Work."
     },
     {
       "area": "release",
-      "checked_at": "2026-11-06",
-      "result": "CORRECTED: tag release-2026-11-04-c205bc2 EXISTS - 24 commits unreleased since, incl #2229/#2230. Earlier ~60-commits memory was wrong. Never trigger Release: it deploys to production.",
-      "follow_up": "Changelog entries for the three deferred items (see docs check)."
+      "checked_at": "2026-11-07",
+      "result": "28 commits unreleased since tag release-2026-11-04-c205bc2 (rev-list verified). Never trigger Release: it deploys to production.",
+      "follow_up": "Changelog entry for mixpay fix once merged."
     },
     {
       "area": "repo_assist_prs",
-      "checked_at": "2026-11-06",
-      "result": "#2229 and #2230 merged 2026-11-06 09:31 UTC with intended diffs. Pending publication this run: aw_pr_2222, aw_pr_signin.",
-      "follow_up": "Next run first: verify branches repo-assist/fix-issue-2222-blank-cache-keys and repo-assist/test-integration-sign-in-session landed with intended diffs."
+      "checked_at": "2026-11-07",
+      "result": "#2232 and #2233 merged 2026-11-06 with intended diffs. Pending verification: aw_changelog_nov7, aw_mixpay_fix. Monthly #2218 body NOT rewritten (update_issue budget spent closing #2231); run summary posted as comment aw_monthly_nov7.",
+      "follow_up": "Next run FIRST: verify both branches landed; then update_issue #2218 folding in comment aw_monthly_nov7."
     },
     {
       "area": "tests",
-      "checked_at": "2026-11-06",
-      "result": "Full suite green: 1634 runs, 0 failures, 2 skips (count down from 1733 after sweep removed ~100 life-support tests). SKIP_CSS_BUILD=1 required here. Integration sign_in gotcha FIXED.",
-      "follow_up": "bin/rails test works directly (old loader script gone). Notification sql payload has $N bind placeholders - match SQL shape, not literals."
+      "checked_at": "2026-11-07",
+      "result": "Suite green: 1641 runs (1634 on main + 7 mixpay), 0 failures, 2 skips. SKIP_CSS_BUILD=1 required. MixpayPreOrdersController now covered. Name-based gap scans unreliable - DistributeService tests use *_article/_collection suffixes.",
+      "follow_up": "Notification sql payload has $N bind placeholders - match SQL shape, not literals."
     },
     {
       "area": "tooling",
       "checked_at": "2026-11-06",
-      "result": "No open Dependabot PRs. bundle outdated blocked here (read-only gem cache); last Ruby sweep 2026-11-04. npm: tailwind 4.3.4, postcss 8.5.32, puppeteer 25.16, axios 1.21 minor/patch available; lexxy 1.0.3 major.",
-      "follow_up": "npm updates need bun.lock regen - blocked without bun binary; noted in monthly issue. Unclaimed Ruby majors: marcel 2, net-ssh 8, openssl 4, prism 2."
+      "result": "No open Dependabot PRs. bundle outdated blocked here (read-only gem cache); last Ruby sweep 2026-11-04. npm minor/patch available (tailwind, postcss, puppeteer, axios); lexxy 1.0.3 major.",
+      "follow_up": "npm needs bun.lock regen - no bun binary here; in monthly issue. Ruby majors unclaimed: marcel 2, net-ssh 8, openssl 4, prism 2."
     }
   ],
   "completed_actions": [],
   "priorities": [
     {
       "task": 6,
-      "item": "Verify the two new PRs landed; close #2231 after merge",
-      "note": "Branches: repo-assist/fix-issue-2222-blank-cache-keys, repo-assist/test-integration-sign-in-session. After merges add changelog entries (#2229, #2222 fix, sign_in) and close #2231 via update_issue."
+      "item": "Verify aw_changelog_nov7 and aw_mixpay_fix landed; sync #2218 body",
+      "note": "Branches repo-assist/docs-changelog-2026-11-07 and repo-assist/fix-mixpay-pre-order-item-guard. Then update_issue #2218: fold in the delta from comment aw_monthly_nov7 (budget went to closing #2231 on 2026-11-07)."
     },
     {
       "task": 10,
       "item": "Twitter connect flow: maintainer decision",
-      "note": "sessions#twitter unreachable - omniauth catch-all shadows it (routes.rb:21 vs 27). Pinned by test in aw_pr_2222. Do not change routing unilaterally."
+      "note": "sessions#twitter unreachable - catch-all shadows it (routes.rb:21 vs 27). Pinned by test merged in #2232. Do not change routing unilaterally."
     },
     {
       "task": 10,
       "item": "Feed sort stored column: ask maintainer",
-      "note": "order_by_popularity sorts a computed expression, no index helps. Raised in monthly issues 2026-10-23 and 2026-11-04/05/06."
+      "note": "order_by_popularity sorts a computed expression, no index helps. Raised in monthly issues 2026-10-23 and 2026-11-04 through 07."
     },
     {
       "task": 6,
       "item": "Confirm PostHog fingerprints drop",
-      "note": "Pagy::OptionError since #2163; key-cannot-be-blank after aw_pr_2222 merges. Maintainer-side check (needs PostHog access); in monthly issue."
+      "note": "key-cannot-be-blank since #2232 merged (2026-11-06); Pagy::OptionError since #2163. Maintainer-side check; in monthly issue."
+    },
+    {
+      "task": 9,
+      "item": "Remaining untested surfaces if a testing task recurs",
+      "note": "Low priority: Admin::{Login,Overview,Wallets}Controller, PagesController, OAuth::{NormalizedIdentity,SignInError}, TwitterBot. Avoid coverage inflation; DistributeService is covered."
     }
   ]
 }
