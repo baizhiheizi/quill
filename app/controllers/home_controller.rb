@@ -4,7 +4,10 @@ class HomeController < ApplicationController
   layout "public", only: %i[index hot_tags active_authors selected_articles more]
 
   def index
-    redirect_to articles_path if current_user.present? || browser.device.mobile?
+    # `redirect_to` does not halt: without `return`, the discovery work below
+    # (platform stats, hot tags, active authors) still ran and was discarded
+    # on every visit that ends in the feed redirect.
+    return redirect_to articles_path if current_user.present? || browser.device.mobile?
 
     @platform_stats = {
       articles:   cached_article_count,
