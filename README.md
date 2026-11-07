@@ -77,3 +77,4 @@ bun install
 bin/rails db:setup
 bin/rails test
 ```
+<!-- vigil-e2e: fix-loop test PR -->
