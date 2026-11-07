@@ -1,0 +1,33 @@
+# quill · 仓库 manifest（agent 通用描述，vigil F1）
+# 2026-11-07 基于实测生成
+repo: baizhiheizi/quill
+stack: "rails + TSX/TS 前端（esbuild / tailwind / prettier / GraphQL）/ kamal 部署"
+
+commands:
+  install: "bundle install && bun install --frozen-lockfile"
+  test: "bin/ci"
+  lint: "bun run lint-check"
+  build: "bun run build:css && bun run build"
+
+review:
+  run_tests: false
+  test_timeout: 300
+
+review_rubric:
+  - id: tsx-typing
+    text: "TSX 组件 props 必须显式类型，禁止 any / as any"
+  - id: gql-schema-sync
+    text: "GraphQL query/mutation 变更必须与服务端 schema 同步"
+  - id: strong-params
+    text: "controller 写入模型必须走 Strong Parameters"
+  - id: migration-safety
+    text: "迁移必须可回滚，大表操作须说明锁影响"
+
+gates:
+  auto_merge_max_diff_lines: 80
+  always_ask_paths: ["db/migrate/**", "config/routes.rb"]
+  max_auto_fix_rounds: 3
+
+branch:
+  prefix: "feat/"
+  labels: ["repo:quill"]
