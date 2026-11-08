@@ -65,6 +65,35 @@ real requirement is `rails >= 8.1.4`, not a json version.
   the editor, and `ensure_price_not_too_low` dereferenced `currency`
   unconditionally, so an `asset_id` with no `Currency` row raised
   `NoMethodError` (HTTP 500) instead of failing validation.
+- **Blank cache keys from user input (#2232)** — three live paths raised
+  `ArgumentError: key cannot be blank` (the PostHog alert in #2222).
+  `Dashboard::ProfileSettingsController#verify_email` is public and fetched
+  `Rails.cache.fetch params[:code]` before checking the param, so a request
+  without `code` crashed; it now renders the existing failure UI.
+  `HtmlPostProcessor#decorate_image` fetched image dimensions with the raw
+  `src` attribute, so an article body containing an `<img>` without a src
+  500ed the whole render; src-less images are now left undecorated.
+  `SessionsController#twitter` read `params[:state]` unguarded, and its
+  early `redirect_to` guards fell through to `auth[:uid]` on `nil`
+  (`redirect_to` does not halt); the handler now returns after each guard
+  and bounces on a blank state. The Twitter handler itself is still
+  unreachable — the omniauth catch-all at `config/routes.rb:21` shadows
+  `auth/twitter/callback` — and a routing test pins that shadowing so a
+  re-order is a visible, deliberate change rather than an accident.
+- **Stale or crafted Mixpay pre-order links (#2234)** — the mixpay button
+  encodes the item's class and id in the query string, and
+  `MixpayPreOrdersController#show` trusted both. Four inputs raised before
+  the action could redirect: an unknown `item_id` hit
+  `ActiveRecord::RecordNotFound` in the failure branch, a missing
+  `item_type`/`item_id` called `payment_trace_id` on `nil`, a garbage
+  `item_type` was constantized (`NameError`), and a failed save for a
+  collection built an article-only URL (`UrlGenerationError` — the URL
+  generation predates collection pre-orders). Following the #2181
+  hardening, the action resolves the item up front (a `presence_in`
+  allow-list on `Article` and `Collection`, `find_by` instead of `find`)
+  and redirects home when it does not resolve; the failed-save branch routes
+  by item class, mirroring `PreOrdersController#show`, so a collection
+  failure now lands on the collection page.
 
 ### Security
 
@@ -226,6 +255,18 @@ runs green on grover 2.
   `DesignSystemHelper` and the `HtmlPostProcessor` service (#2188).
 - Dev tooling: the `gh-aw` workflow lock and actions were upgraded, and
   OpenSpec skill definitions were added under `.agents/skills/`.
+- Integration tests sign in through the real OAuth callback (#2233).
+  `IntegrationTestCase#sign_in` wrote `session[:current_session_id]` between
+  requests, but in an integration test `session` wraps the *last* request's
+  env, so the write never reached the cookie jar and every signed-in
+  integration test silently ran as a guest. `sign_in` now drives the real
+  mixin callback in OmniAuth test mode (pre-creating the bound
+  `UserAuthorization`), and raises loudly if the callback does not produce a
+  session, so a silently-broken sign-in can never happen again. Three tests
+  that were passing vacuously as guests now exercise their real branches.
+- `agent.project.yaml` added — an agent-facing repo manifest (stack, command
+  entry points, review rubric, and merge gates) for the automation agents
+  that work in this repository.
 
 ### specs/011-comprehensive-ui-refactor
 
