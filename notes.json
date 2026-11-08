@@ -16,14 +16,14 @@
     {
       "area": "code",
       "checked_at": "2026-11-07",
-      "result": "redirect_to-without-return sweep: only HomeController#index had discarded work behind the guard - fixed this run (PR aw_landing_perf; 2 RANDOM() queries saved per signed-in/mobile landing, 4 cold-cache; tests pin zero). Others are before_action guards or intentional fall-throughs.",
+      "result": "redirect_to-without-return sweep: only HomeController#index had discarded work behind the guard - fixed (PR #2236). Others are before_action guards or intentional fall-throughs.",
       "follow_up": "Twitter routing shadowed (routes.rb:21 vs 27) - maintainer decision. Feed sort stored column - maintainer decision, re-raised in monthly."
     },
     {
       "area": "docs",
-      "checked_at": "2026-11-07",
-      "result": "aw_changelog_nov7 (run 42344859843) confirmed never landed. Rebuilt on same branch repo-assist/docs-changelog-2026-11-07, PR aw_changelog_nov7: entries for #2232, #2233, #2234 (dropped #2229 entries - already landed via #2230). Changelog current through #2234 once merged.",
-      "follow_up": "Verify the PR landed next run."
+      "checked_at": "2026-11-08",
+      "result": "11-07 changelog rebuild never landed again. Rebuilt 11-08 on branch repo-assist/docs-changelog-2026-11-08: entries for #2232/#2234 (Crash fixes), #2233 and agent.project.yaml (Tooling). Changelog current through #2234 once merged.",
+      "follow_up": "Verify the branch landed next run FIRST (third lost-publication risk); confirm real PR number and fix monthly placeholders."
     },
     {
       "area": "hygiene",
@@ -39,15 +39,15 @@
     },
     {
       "area": "release",
-      "checked_at": "2026-11-07",
-      "result": "31 commits unreleased since tag release-2026-11-04-c205bc2 (rev-list verified). Never trigger Release: it deploys to production.",
-      "follow_up": "Changelog is current through #2234 once the docs PR merges."
+      "checked_at": "2026-11-08",
+      "result": "31 commits unreleased since tag release-2026-11-04-c205bc2-41926707390 (rev-list re-verified 11-08). Never trigger Release: it deploys to production.",
+      "follow_up": "Changelog is current through #2234 once #2237 merges."
     },
     {
       "area": "repo_assist_prs",
-      "checked_at": "2026-11-07",
-      "result": "#2232/#2233 merged 11-06, #2234 merged 11-07 (mixpay guard). #2218 body rewritten this run: folded in the aw_monthly_nov7 delta, removed actioned items, added PR reviews. Pending verification: PR aw_changelog_nov7 (changelog docs) and PR aw_landing_perf (home index perf).",
-      "follow_up": "Next run FIRST: verify both PRs landed with intended diffs."
+      "checked_at": "2026-11-08",
+      "result": "#2236 (landing perf) open, mergeable clean, vigil approved twice (risk low); needs maintainer merge, nothing for me. Changelog docs PR created 11-08 (branch repo-assist/docs-changelog-2026-11-08; number assigned on publish). Monthly #2218 rewritten 11-08 with real numbers and this run's history.",
+      "follow_up": "Next run FIRST: verify branch repo-assist/docs-changelog-2026-11-08 landed; correct monthly if predicted #2237 differs."
     },
     {
       "area": "tests",
@@ -57,17 +57,17 @@
     },
     {
       "area": "tooling",
-      "checked_at": "2026-11-07",
-      "result": "Stale remote branches repo-assist/improve-ci-dependency-install-retry-* have zero unique commits (point at old main) - deletion suggested in monthly. No open Dependabot PRs (0 open PRs at all). bundle outdated blocked (read-only gem cache); npm needs bun.lock regen - no bun binary here.",
-      "follow_up": "Ruby majors unclaimed: marcel 2, net-ssh 8, openssl 4, prism 2."
+      "checked_at": "2026-11-08",
+      "result": "Task 4 sweep 11-08: bin/ci covers rubocop, DS lint, JS lint+tests, rails tests, seeds, browser-probed system suite; Zeitwerk separate - no CI gap. Ruby pins consistent (4.0.9). bundle outdated still blocked (read-only gem cache); no open Dependabot PRs; stale branches still on remote.",
+      "follow_up": "Ruby majors unclaimed: marcel 2, net-ssh 8, openssl 4, prism 2. npm needs bun.lock regen - no bun binary."
     }
   ],
   "completed_actions": [],
   "priorities": [
     {
       "task": 6,
-      "item": "Verify PR aw_changelog_nov7 and PR aw_landing_perf landed",
-      "note": "Branches repo-assist/docs-changelog-2026-11-07 and repo-assist/improve-landing-redirect-queries. Lost publications are a recurring pattern - check branch + diff before anything else."
+      "item": "Verify PR #2237 (changelog docs) landed",
+      "note": "Branch repo-assist/docs-changelog-2026-11-08, created run 42452877742. Lost publications are a recurring pattern (three incidents) - check branch + diff before anything else. #2236 still open and healthy; needs maintainer merge, nothing for me."
     },
     {
       "task": 10,
