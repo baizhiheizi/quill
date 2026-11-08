@@ -26,10 +26,10 @@ module Admin
       @wallet =
         if params[:wallet_id] == QuillBot.api.client_id
           QuillBot.api
-        elsif MixinNetworkUser.find_by(uuid: params[:wallet_id])
-          MixinNetworkUser.find_by(uuid: params[:wallet_id]).mixin_api
+        else
+          MixinNetworkUser.find_by(uuid: params[:wallet_id])&.mixin_api
         end
-      raise "Wallet nof found" if @wallet.blank?
+      raise "Wallet not found" if @wallet.blank?
     end
   end
 end
