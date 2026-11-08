@@ -192,7 +192,47 @@ class HomeControllerTest < ActionController::TestCase
       "expected no `users.locale = ...` predicate in active_authors SQL, got: #{main}")
   end
 
+  # `redirect_to` does not halt the action, so the landing discovery work
+  # (platform stats, hot tags, active authors) ran and was discarded on
+  # every visit that ends in the feed redirect.
+  test "index redirects signed-in visitors without running the discovery queries" do
+    queries = capture_queries { get :index }
+
+    assert_response :redirect
+    assert_redirected_to articles_path
+
+    assert_empty discovery_queries(queries),
+      "expected no discovery SQL behind the signed-in redirect, got: #{sql_shapes(discovery_queries(queries))}"
+  end
+
+  test "index redirects mobile guests without running the discovery queries" do
+    @request.session[:current_session_id] = nil
+    @request.user_agent = "Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) " \
+      "AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Mobile/15E148 Safari/604.1"
+
+    queries = capture_queries { get :index }
+
+    assert_response :redirect
+    assert_redirected_to articles_path
+
+    assert_empty discovery_queries(queries),
+      "expected no discovery SQL behind the mobile redirect, got: #{sql_shapes(discovery_queries(queries))}"
+  end
+
   private
+
+  # The landing discovery footprint: the two RANDOM() sample queries (hot
+  # tags, active authors) and the platform-stat aggregates over articles.
+  def discovery_queries(queries)
+    queries.select { |q|
+      q[:sql].start_with?("SELECT") &&
+        (q[:sql].include?("RANDOM()") || q[:sql].include?('FROM "tags"') || q[:sql].include?('FROM "articles"'))
+    }
+  end
+
+  def sql_shapes(queries)
+    queries.map { |q| q[:sql].first(100) }.inspect
+  end
 
   # Captures every SQL query issued by the block (SCHEMA queries excluded).
   # Pass `exclude:` to also drop noise from a known source (e.g. solid_cache).
