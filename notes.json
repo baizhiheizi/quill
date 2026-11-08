@@ -15,15 +15,15 @@
     },
     {
       "area": "code",
-      "checked_at": "2026-11-07",
-      "result": "redirect_to-without-return sweep: only HomeController#index had discarded work behind the guard - fixed (PR #2236). Others are before_action guards or intentional fall-throughs.",
-      "follow_up": "Twitter routing shadowed (routes.rb:21 vs 27) - maintainer decision. Feed sort stored column - maintainer decision, re-raised in monthly."
+      "checked_at": "2026-11-08",
+      "result": "redirect_to-without-return sweep: only HomeController#index had discarded work behind the guard - fixed (PR #2236, still open). Wallets load_wallet ran find_by twice per request - fixed in wallets branch.",
+      "follow_up": "Twitter routing shadowed (routes.rb:21 vs 27) - maintainer decision. Feed sort stored column - maintainer decision, in monthly."
     },
     {
       "area": "docs",
       "checked_at": "2026-11-08",
-      "result": "11-07 changelog rebuild never landed again. Rebuilt 11-08 on branch repo-assist/docs-changelog-2026-11-08: entries for #2232/#2234 (Crash fixes), #2233 and agent.project.yaml (Tooling). Changelog current through #2234 once merged.",
-      "follow_up": "Verify the branch landed next run FIRST (third lost-publication risk); confirm real PR number and fix monthly placeholders."
+      "result": "Third lost publication: the 06:18 run's 'PR #2237' never existed. Rebuilt ~18:10 UTC as PR intent on repo-assist/docs-changelog-2026-11-08 (#2232/#2234 crash fixes, #2233 + agent.project.yaml tooling).",
+      "follow_up": "Next run FIRST: verify both new PRs landed, capture numbers, fix monthly refs."
     },
     {
       "area": "hygiene",
@@ -40,25 +40,25 @@
     {
       "area": "release",
       "checked_at": "2026-11-08",
-      "result": "31 commits unreleased since tag release-2026-11-04-c205bc2-41926707390 (rev-list re-verified 11-08). Never trigger Release: it deploys to production.",
-      "follow_up": "Changelog is current through #2234 once #2237 merges."
+      "result": "31 commits unreleased since tag release-2026-11-04-c205bc2-41926707390 (re-verified 11-08; main at df85f65a). Never trigger Release: it deploys to production.",
+      "follow_up": "Changelog current once the recreated changelog PR merges."
     },
     {
       "area": "repo_assist_prs",
       "checked_at": "2026-11-08",
-      "result": "#2236 (landing perf) open, mergeable clean, vigil approved twice (risk low); needs maintainer merge, nothing for me. Changelog docs PR created 11-08 (branch repo-assist/docs-changelog-2026-11-08; number assigned on publish). Monthly #2218 rewritten 11-08 with real numbers and this run's history.",
-      "follow_up": "Next run FIRST: verify branch repo-assist/docs-changelog-2026-11-08 landed; correct monthly if predicted #2237 differs."
+      "result": "#2236 open, CI green, vigil approved 3x; needs maintainer merge. Two PR intents recorded: changelog docs (docs-changelog-2026-11-08) and wallets tests+dedupe (test-admin-wallets-controller, rebased onto main).",
+      "follow_up": "Next run: confirm both branches exist on remote with PRs; comment nothing unless CI fails."
     },
     {
       "area": "tests",
-      "checked_at": "2026-11-07",
-      "result": "Suite green: 1643 runs, 0 failures, 2 skips (SKIP_CSS_BUILD=1). Includes the 2 new HomeController redirect-path tests (verified red on unpatched code).",
-      "follow_up": "Notification sql payload has $N bind placeholders - match SQL shape, not literals."
+      "checked_at": "2026-11-08",
+      "result": "Suite green: 1646 runs, 0 failures, 2 skips, incl. 5 new WalletsController tests. Rails 8.1: assigns() removed; statement-cache events flagged cached:true are skipped by assert_queries_match - capture sql.active_record directly, run request uncached.",
+      "follow_up": "Red-green: both wallets pins verified red on unpatched controller. Admin tests easy: QuillBotStub + session[:current_admin_id]."
     },
     {
       "area": "tooling",
       "checked_at": "2026-11-08",
-      "result": "Task 4 sweep 11-08: bin/ci covers rubocop, DS lint, JS lint+tests, rails tests, seeds, browser-probed system suite; Zeitwerk separate - no CI gap. Ruby pins consistent (4.0.9). bundle outdated still blocked (read-only gem cache); no open Dependabot PRs; stale branches still on remote.",
+      "result": "Task 4 sweep 11-08: bin/ci covers rubocop, DS lint, JS lint+tests, rails tests, seeds, browser-probed system suite; Zeitwerk separate - no CI gap. Ruby pins consistent (4.0.9). bundle outdated blocked (read-only gem cache); no Dependabot PRs.",
       "follow_up": "Ruby majors unclaimed: marcel 2, net-ssh 8, openssl 4, prism 2. npm needs bun.lock regen - no bun binary."
     }
   ],
@@ -66,8 +66,8 @@
   "priorities": [
     {
       "task": 6,
-      "item": "Verify PR #2237 (changelog docs) landed",
-      "note": "Branch repo-assist/docs-changelog-2026-11-08, created run 42452877742. Lost publications are a recurring pattern (three incidents) - check branch + diff before anything else. #2236 still open and healthy; needs maintainer merge, nothing for me."
+      "item": "Verify the two PR intents from run 42507362234 landed",
+      "note": "Branches repo-assist/docs-changelog-2026-11-08 and repo-assist/test-admin-wallets-controller, recorded ~18:10 UTC 2026-11-08. Four-loss pattern watch: check branches + PR list first; then replace monthly branch refs with real PR numbers."
     },
     {
       "task": 10,
@@ -87,7 +87,7 @@
     {
       "task": 9,
       "item": "Remaining untested surfaces if a testing task recurs",
-      "note": "Low priority: Admin::{Login,Overview,Wallets}Controller, PagesController, OAuth::{NormalizedIdentity,SignInError}, TwitterBot. Avoid coverage inflation."
+      "note": "Low priority: Admin::{Login,Overview}Controller, PagesController, TwitterBot. Wallets covered 2026-11-08; Oauth::SignIn already tested; NormalizedIdentity/SignInError trivial. Avoid coverage inflation."
     }
   ]
 }
