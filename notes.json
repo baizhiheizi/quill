@@ -15,15 +15,15 @@
     },
     {
       "area": "code",
-      "checked_at": "2026-11-08",
-      "result": "redirect_to-without-return sweep: only HomeController#index had discarded work behind the guard - fixed (PR #2236, still open). Wallets load_wallet ran find_by twice per request - fixed in wallets branch.",
-      "follow_up": "Twitter routing shadowed (routes.rb:21 vs 27) - maintainer decision. Feed sort stored column - maintainer decision, in monthly."
+      "checked_at": "2026-11-09",
+      "result": "redirect_to sweep complete: landing guard merged #2236; wallets double lookup merged #2238. Twitter routing shadow (routes.rb:21 vs 27) and feed sort stored column remain maintainer decisions.",
+      "follow_up": "Both decisions live in the monthly issue."
     },
     {
       "area": "docs",
-      "checked_at": "2026-11-08",
-      "result": "Third lost publication: the 06:18 run's 'PR #2237' never existed. Rebuilt ~18:10 UTC as PR intent on repo-assist/docs-changelog-2026-11-08 (#2232/#2234 crash fixes, #2233 + agent.project.yaml tooling).",
-      "follow_up": "Next run FIRST: verify both new PRs landed, capture numbers, fix monthly refs."
+      "checked_at": "2026-11-09",
+      "result": "Changelog current through #2234 via merged #2237. New docs PR records #2236 and #2238 (branch repo-assist/docs-changelog-2026-11-09).",
+      "follow_up": "Verify the docs PR landed; changelog current once it merges."
     },
     {
       "area": "hygiene",
@@ -35,39 +35,39 @@
       "area": "qa",
       "checked_at": "2026-10-22",
       "result": "Stored XSS fixed in #2176 (merged). content_security_policy.rb still fully commented out; sanitizer drops inline style attributes.",
-      "follow_up": "CSP proposal only after sanitizer approach settles; in monthly issue Future Work."
+      "follow_up": "CSP proposal only after sanitizer approach settles; in monthly Future Work."
     },
     {
       "area": "release",
-      "checked_at": "2026-11-08",
-      "result": "31 commits unreleased since tag release-2026-11-04-c205bc2-41926707390 (re-verified 11-08; main at df85f65a). Never trigger Release: it deploys to production.",
-      "follow_up": "Changelog current once the recreated changelog PR merges."
+      "checked_at": "2026-11-09",
+      "result": "35 commits unreleased since tag release-2026-11-04-c205bc2-41926707390 (main at 76afe70f). Never trigger Release: it deploys to production.",
+      "follow_up": "Release decision sits with the maintainer via the monthly issue."
     },
     {
       "area": "repo_assist_prs",
-      "checked_at": "2026-11-08",
-      "result": "#2236 open, CI green, vigil approved 3x; needs maintainer merge. Two PR intents recorded: changelog docs (docs-changelog-2026-11-08) and wallets tests+dedupe (test-admin-wallets-controller, rebased onto main).",
-      "follow_up": "Next run: confirm both branches exist on remote with PRs; comment nothing unless CI fails."
+      "checked_at": "2026-11-09",
+      "result": "Older PRs all merged: #2236, #2237, #2238. Two new intents: admin login/overview tests and changelog docs (branches recorded in docs check and priorities).",
+      "follow_up": "Next run FIRST: verify both branches and PRs landed, then fix monthly branch refs."
     },
     {
       "area": "tests",
-      "checked_at": "2026-11-08",
-      "result": "Suite green: 1646 runs, 0 failures, 2 skips, incl. 5 new WalletsController tests. Rails 8.1: assigns() removed; statement-cache events flagged cached:true are skipped by assert_queries_match - capture sql.active_record directly, run request uncached.",
-      "follow_up": "Red-green: both wallets pins verified red on unpatched controller. Admin tests easy: QuillBotStub + session[:current_admin_id]."
+      "checked_at": "2026-11-09",
+      "result": "Suite green: 1655 runs, 0 failures, 2 pre-existing skips, incl. 7 new Admin::{Login,Overview} tests. Fixture administrators(:one) password_digest is not real bcrypt - login tests create their own admin. Overview render needs with_quill_bot_stub (view resolves QuillBot.api.client_id, nil unstubbed).",
+      "follow_up": "Sandbox full-suite runs need SKIP_CSS_BUILD=1 (see tooling check)."
     },
     {
       "area": "tooling",
-      "checked_at": "2026-11-08",
-      "result": "Task 4 sweep 11-08: bin/ci covers rubocop, DS lint, JS lint+tests, rails tests, seeds, browser-probed system suite; Zeitwerk separate - no CI gap. Ruby pins consistent (4.0.9). bundle outdated blocked (read-only gem cache); no Dependabot PRs.",
-      "follow_up": "Ruby majors unclaimed: marcel 2, net-ssh 8, openssl 4, prism 2. npm needs bun.lock regen - no bun binary."
+      "checked_at": "2026-11-09",
+      "result": "Re-sweep: no open or Dependabot PRs, no CI gap - CI installs bun itself, so the sandbox cssbundling failure (no bun binary; npm rejected without package-lock.json) is environment-only. Ruby majors unclaimed: marcel 2, net-ssh 8, openssl 4, prism 2.",
+      "follow_up": "Run full suites here with SKIP_CSS_BUILD=1."
     }
   ],
   "completed_actions": [],
   "priorities": [
     {
       "task": 6,
-      "item": "Verify the two PR intents from run 42507362234 landed",
-      "note": "Branches repo-assist/docs-changelog-2026-11-08 and repo-assist/test-admin-wallets-controller, recorded ~18:10 UTC 2026-11-08. Four-loss pattern watch: check branches + PR list first; then replace monthly branch refs with real PR numbers."
+      "item": "Verify the two PR intents from run 42572951308 landed",
+      "note": "Branches repo-assist/test-admin-login-overview-controllers and repo-assist/docs-changelog-2026-11-09, recorded ~06:40 UTC 2026-11-09. Lost-publication pattern: check branches + PR list first; then replace monthly branch refs with real PR numbers."
     },
     {
       "task": 10,
@@ -77,7 +77,7 @@
     {
       "task": 10,
       "item": "Feed sort stored column: ask maintainer",
-      "note": "order_by_popularity sorts a computed expression, no index helps. Re-raised in monthly 2026-11-07."
+      "note": "order_by_popularity sorts a computed expression, no index helps. In monthly issue."
     },
     {
       "task": 6,
@@ -86,8 +86,8 @@
     },
     {
       "task": 9,
-      "item": "Remaining untested surfaces if a testing task recurs",
-      "note": "Low priority: Admin::{Login,Overview}Controller, PagesController, TwitterBot. Wallets covered 2026-11-08; Oauth::SignIn already tested; NormalizedIdentity/SignInError trivial. Avoid coverage inflation."
+      "item": "Remaining untested surfaces",
+      "note": "Login/Overview covered 2026-11-09 (PR pending); wallets done in #2238. Remaining named candidates: PagesController, TwitterBot; Admin::{Orders,Payments,Statistics}Controller optional. Avoid coverage inflation."
     }
   ]
 }
