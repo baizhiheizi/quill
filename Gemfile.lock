@@ -269,7 +269,7 @@ GEM
       raabro (~> 1.4)
     globalid (1.4.0)
       activesupport (>= 6.1)
-    grover (2.0.0)
+    grover (2.0.1)
       nokogiri (~> 1)
     h2c (0.4.0)
       ecdsa (~> 1.2.0)
@@ -889,7 +889,7 @@ CHECKSUMS
   friendly_id (5.7.0) sha256=b8994416ebaceebc7c60bc556e84ef32a3a663e2e582eb04c429216cc98de4c4
   fugit (1.14.0) sha256=e311a9cc85a54bb67649df45060e721282a1e2c8ebad40e41874a3a7d576f37e
   globalid (1.4.0) sha256=037f12fbf1d9d7a014d501c2d5c77356fd4ddd96d7a7991d6700bba96706f427
-  grover (2.0.0) sha256=e90e415543916aa9e765dde967f9ae8d6c26cac6444c5b00f870882e2cbbd726
+  grover (2.0.1) sha256=fcb71e18c8bebf8c7bb4127abad7ec15b469291bd2f2cee3b78e84c6e3225cd6
   h2c (0.4.0) sha256=1ef0d436a00606281a347c0b9891fe1f6f24a75b293cfd8932f219071f5b21a9
   hashie (5.2.0) sha256=357a22635195c2e3911fbbc3de9a7d528843d1f42ab0aae02171048f16332d72
   http (6.0.4) sha256=3768f902489ea8309424f1881c668af8d3ca73675648a755dfe2cb0030d42d26
