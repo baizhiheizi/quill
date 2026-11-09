@@ -22,9 +22,9 @@ class Admin::LoginControllerTest < ActionController::TestCase
   end
 
   test "POST create rejects a wrong password without signing in" do
-    admin = Administrator.create!(name: "wrong-password", password: "hunter2")
+    admin = Administrator.create!(name: "wrong-password", password: "quiet lime meadow")
 
-    post :create, params: { name: admin.name, password: "not-hunter2" }
+    post :create, params: { name: admin.name, password: "sour lime meadow" }
 
     assert_redirected_to admin_root_path
     assert_nil @request.session[:current_admin_id]
