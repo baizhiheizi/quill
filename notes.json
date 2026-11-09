@@ -22,8 +22,8 @@
     {
       "area": "docs",
       "checked_at": "2026-11-09",
-      "result": "Changelog current through #2234 via merged #2237. New docs PR records #2236 and #2238 (branch repo-assist/docs-changelog-2026-11-09).",
-      "follow_up": "Verify the docs PR landed; changelog current once it merges."
+      "result": "Changelog current through #2234 via #2237. Fourth attempt at the #2236/#2238 entries recorded as PR intent on branch repo-assist/docs-changelog-2026-11-09 (22:33 UTC run 42710957175). Performance intro sentence extended for #2236; #2238 entry added to Tooling.",
+      "follow_up": "Next run: verify the branch/PR landed; replace monthly branch refs with the real number."
     },
     {
       "area": "hygiene",
@@ -40,34 +40,39 @@
     {
       "area": "release",
       "checked_at": "2026-11-09",
-      "result": "35 commits unreleased since tag release-2026-11-04-c205bc2-41926707390 (main at 76afe70f). Never trigger Release: it deploys to production.",
+      "result": "35 commits unreleased since tag release-2026-11-04-c205bc2-41926707390 (main at 76afe70f, unchanged). Never trigger Release: it deploys to production.",
       "follow_up": "Release decision sits with the maintainer via the monthly issue."
     },
     {
       "area": "repo_assist_prs",
       "checked_at": "2026-11-09",
-      "result": "Older PRs all merged: #2236, #2237, #2238. Two new intents: admin login/overview tests and changelog docs (branches recorded in docs check and priorities).",
-      "follow_up": "Next run FIRST: verify both branches and PRs landed, then fix monthly branch refs."
+      "result": "#2239 open (draft): Check green, vigil APPROVE; GitGuardian false positive on the hunter2 literal fixed by pushed commit 938d6fee. Two new PR intents recorded this run: changelog docs and dependabot bundle (supersedes #2240-2242); branches recorded in docs check and priorities.",
+      "follow_up": "Next run FIRST: verify both branches landed; fix monthly branch refs. GitGuardian retry budget: 1."
     },
     {
       "area": "tests",
       "checked_at": "2026-11-09",
-      "result": "Suite green: 1655 runs, 0 failures, 2 pre-existing skips, incl. 7 new Admin::{Login,Overview} tests. Fixture administrators(:one) password_digest is not real bcrypt - login tests create their own admin. Overview render needs with_quill_bot_stub (view resolves QuillBot.api.client_id, nil unstubbed).",
-      "follow_up": "Sandbox full-suite runs need SKIP_CSS_BUILD=1 (see tooling check)."
+      "result": "Suite green on the bundle: 1648 runs (1655 minus the 7 tests living on #2239), 0 failures, 2 pre-existing skips. Fixture administrators(:one) password_digest is not real bcrypt - login tests create their own admin. Overview render needs with_quill_bot_stub.",
+      "follow_up": "Sandbox suites need SKIP_CSS_BUILD=1 and now the vendor/bundle path (see tooling)."
     },
     {
       "area": "tooling",
       "checked_at": "2026-11-09",
-      "result": "Re-sweep: no open or Dependabot PRs, no CI gap - CI installs bun itself, so the sandbox cssbundling failure (no bun binary; npm rejected without package-lock.json) is environment-only. Ruby majors unclaimed: marcel 2, net-ssh 8, openssl 4, prism 2.",
-      "follow_up": "Run full suites here with SKIP_CSS_BUILD=1."
+      "result": "System gem dir is READ-ONLY - why bundle install failed here. Fix: bundle config set --local path vendor/bundle -> bundle outdated works. Round-2 gems queued (see monthly Future Work). Majors: marcel 2, net-ssh 8, openssl 4, rack-oauth2 2.3.",
+      "follow_up": "Round-2 bundle after the current one merges. bun.lock needs a bun binary."
     }
   ],
   "completed_actions": [],
   "priorities": [
     {
       "task": 6,
-      "item": "Verify the two PR intents from run 42572951308 landed",
-      "note": "Branches repo-assist/test-admin-login-overview-controllers and repo-assist/docs-changelog-2026-11-09, recorded ~06:40 UTC 2026-11-09. Lost-publication pattern: check branches + PR list first; then replace monthly branch refs with real PR numbers."
+      "item": "Verify the 22:33 run's two PR intents landed",
+      "note": "Branches repo-assist/docs-changelog-2026-11-09 and repo-assist/bundle-dependabot-2026-11-09 (run 42710957175). Lost-publication pattern: check branches + PR list first; then replace monthly branch refs with real PR numbers."
+    },
+    {
+      "task": 6,
+      "item": "Confirm GitGuardian now passes on #2239",
+      "note": "Fix pushed as 938d6fee (~22:20 UTC). If the new strings are still flagged, retry once with password values built programmatically (no static literals); then comment and leave for maintainer."
     },
     {
       "task": 10,
@@ -85,9 +90,14 @@
       "note": "key-cannot-be-blank since #2232 merged (2026-11-07); Pagy::OptionError since #2163. Maintainer-side check; in monthly issue."
     },
     {
+      "task": 4,
+      "item": "Round-2 dependency bundle",
+      "note": "After the current bundle merges: aws-sdk-s3 1.240.0, posthog-rails 3.22.0, kaminari 1.3.3, lexxy 1.0.4, pagy, ransack 6.1.0, rubocop-ast 1.51.0. minitest 6.1.0 separately (test-framework risk). Majors need maintainer sign-off."
+    },
+    {
       "task": 9,
       "item": "Remaining untested surfaces",
-      "note": "Login/Overview covered 2026-11-09 (PR pending); wallets done in #2238. Remaining named candidates: PagesController, TwitterBot; Admin::{Orders,Payments,Statistics}Controller optional. Avoid coverage inflation."
+      "note": "Login/Overview pending review in #2239; wallets done in #2238. Remaining named candidates: PagesController, TwitterBot; Admin::{Orders,Payments,Statistics}Controller optional. Avoid coverage inflation."
     }
   ]
 }
