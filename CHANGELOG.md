@@ -137,6 +137,8 @@ real requirement is `rails >= 8.1.4`, not a json version.
 Two indexes the article surfaces needed but the schema did not have, one
 authorization lookup the article page was repeating, and two per-row query
 chains — the comments list and header live search — collapsed into preloads.
+The landing page also stops running its discovery work on the visits that end
+in the feed redirect.
 
 - **`articles (state, published_at)`** — `state` was unindexed, so every
   `Article.only_published` query seq-scanned the table: the web feed, the
@@ -182,6 +184,15 @@ chains — the comments list and header live search — collapsed into preloads.
   result now applies the shared `User::AVATAR_PRELOADS`, as every other
   avatar surface already does; the same page costs 4 statements regardless of
   hit count, and a query-budget test pins the page to 8.
+- **The landing page skips its discovery work when it redirects (#2236)** —
+  `HomeController#index` short-circuits signed-in and mobile visitors to the
+  feed, but `redirect_to` does not halt the action, so the platform-stat
+  aggregates, the hot-tags sample and the active-authors sample still ran and
+  were discarded on every redirecting visit — the two `RANDOM()` sample
+  queries in production, four aggregate queries when the caches are cold.
+  The action now returns the redirect, and query-count tests pin the redirect
+  path to zero discovery SQL (both fail with the full wasted query list on
+  the unpatched code).
 
 The migration also runs `ANALYZE` on both tables. Postgres collects per-index
 statistics during `ANALYZE`, and an index added to a populated table has
@@ -267,6 +278,19 @@ runs green on grover 2.
 - `agent.project.yaml` added — an agent-facing repo manifest (stack, command
   entry points, review rubric, and merge gates) for the automation agents
   that work in this repository.
+- `Admin::WalletsController` gained controller tests (#2238), covering all
+  three actions through both wallet-resolution paths — the platform wallet
+  (QuillBot client_id) and a `MixinNetworkUser` wallet (`mixin_api` stubbed
+  at class level, since the controller loads the record itself) — plus the
+  pagination `has_next` behavior on full and short pages and the raise on an
+  unknown `wallet_id`. Writing the lookup test surfaced a small dedupe:
+  `load_wallet` ran `MixinNetworkUser.find_by` twice per request (once for
+  the truthiness check, then again for the value); it now finds once and
+  chains `mixin_api` (2 → 1 lookups, pinned by capturing the
+  `sql.active_record` stream directly — the duplicate hid behind the
+  statement cache, whose events `assert_queries_match` skips as cached).
+  Also fixed the raise message typo ("Wallet nof found"), which the message
+  assertion pins.
 
 ### specs/011-comprehensive-ui-refactor
 
