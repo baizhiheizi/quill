@@ -94,6 +94,14 @@ real requirement is `rails >= 8.1.4`, not a json version.
   and redirects home when it does not resolve; the failed-save branch routes
   by item class, mirroring `PreOrdersController#show`, so a collection
   failure now lands on the collection page.
+- **A client-supplied `Client-Ip` header 500ed the request (#2243)** —
+  `ActionDispatch::RemoteIp` raises `IpSpoofAttackError` when a request
+  carries both a `Client-Ip` header and an `X-Forwarded-For` chain that
+  disagrees with it. kamal-proxy sets `X-Forwarded-For` itself and forwards
+  client headers untouched, so any caller could 500 a request at will by
+  sending a stale `Client-Ip`. The spoofing check is now off
+  (`config.action_dispatch.ip_spoofing_check = false`); the client address
+  still resolves from the proxy-set chain.
 
 ### Security
 
@@ -108,6 +116,14 @@ real requirement is `rails >= 8.1.4`, not a json version.
   the sanitizer on purpose, so the narrow per-source policy lives in one
   place: `HtmlPostProcessor#escape_iframes` removes every iframe whose `src`
   is not a YouTube URL.
+- **A client-chosen rate-limit bucket via the `Forwarded` header** — Rack
+  resolves the client address by preferring the RFC 7239 `Forwarded` header
+  over `X-Forwarded-For`, and kamal-proxy forwards `Forwarded` untouched, so
+  a caller could rotate `Forwarded: for=<random>` and land in a fresh
+  `Rack::Attack` bucket on every request — defeating the admin-login
+  brute-force limit (5 per 20s), the OAuth callback limit (10 per minute) and
+  the catch-all IP limit. `Rack::Request.forwarded_priority` is now
+  `[:x_forwarded]`, so only the header kamal-proxy actually sets is trusted.
 
 ### Corrections
 

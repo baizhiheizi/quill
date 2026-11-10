@@ -29,7 +29,8 @@ module Quill
 
     # Behind kamal-proxy, a client-supplied Client-Ip header that disagrees with
     # X-Forwarded-For made the spoofing check 500 every such request (#2243).
-    # With the check off, remote_ip still comes from the proxy-set chain.
+    # With the check off, remote_ip still comes from the proxy-set chain, which
+    # is the only header we trust — see config/initializers/forwarded_headers.rb.
     config.action_dispatch.ip_spoofing_check = false
 
     config.action_mailer.delivery_method = :mailjet

@@ -31,6 +31,24 @@ class RackAttackTest < ActionDispatch::IntegrationTest
     assert_not_nil response.headers["Retry-After"]
   end
 
+  # `Forwarded` (RFC 7239) is a client header, and Rack prefers it over
+  # `X-Forwarded-For` when it resolves the client address. If it were honoured
+  # here, rotating it would hand every request a fresh throttle bucket and
+  # defeat the admin-login brute-force limit entirely.
+  test "throttles POST /admin/login even when the Forwarded header rotates" do
+    attempt = 0
+    statuses = drive_until_throttled(40) do
+      attempt += 1
+      post "/admin/login", params: { name: "x", password: "y" },
+        headers: { "Forwarded" => "for=6.6.#{attempt}.6", "X-Forwarded-For" => "198.51.100.7" }
+    end
+
+    assert_operator served_count(statuses), :>=, 5,
+      "expected ~5 requests to be served before the throttle: #{statuses.inspect}"
+    assert_equal 429, statuses.last,
+      "expected the admin login throttle to fire within 40 requests: #{statuses.inspect}"
+  end
+
   test "throttles OAuth callback after 10 hits in 1min" do
     statuses = drive_until_throttled(80) do
       get "/auth/mixin/callback"
