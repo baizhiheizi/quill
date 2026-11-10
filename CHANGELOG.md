@@ -254,6 +254,21 @@ The 2026-11-04 bundle update: **Rails 8.1.4 → 8.1.4.1**, **grover 1.2.10 →
 h2c 0.4.0, net-scp 4.2.1, net-sftp 4.1.1, msgpack 1.8.7). The full suite
 runs green on grover 2.
 
+The 2026-11-10 Dependabot round was bundled twice. The first bundle (#2245,
+lockfile-identical to the union of the three open Dependabot PRs) carried
+aws-sdk-s3 1.237.0 → 1.238.0 (#2242), grover 2.0.0 → 2.0.1 (#2241) and
+posthog-rails 3.20.0 → 3.20.4 (#2240), with aws-partitions 1.1303.0,
+aws-sdk-core 3.265.0, aws-sdk-kms 1.140.0, posthog-ruby 3.30.2 and
+irb 1.19.0 transitively.
+
+The second bundle (#2247) was a conservative update — a plain `bundle
+update` also dragged minitest 6.1.0 and prism 2.x in through the shared
+graph, so they stay locked — carrying aws-sdk-s3 1.238.0 → 1.240.0,
+kaminari 1.3.2 → 1.3.3, lexxy 1.0.3 → 1.0.4, pagy 43.8.1 → 43.8.2,
+posthog-rails 3.20.4 → 3.22.0, ransack 6.0.1 → 6.1.0 and rubocop-ast
+1.50.0 → 1.51.0, with aws-sdk-core 3.266.0 and posthog-ruby 3.32.1
+transitively (rubocop-ast's prism floor moved from `~> 1.7` to `>= 1.7`).
+
 ### Tooling and docs corrections
 
 - `docs/how-to/deploy-with-kamal.md` corrected against the real deployment:
@@ -307,6 +322,17 @@ runs green on grover 2.
   statement cache, whose events `assert_queries_match` skips as cached).
   Also fixed the raise message typo ("Wallet nof found"), which the message
   assertion pins.
+- `Admin::LoginController` and `Admin::OverviewController` gained controller
+  tests (#2239). The credential path is covered both ways — a valid password
+  signs in, a wrong password and an unknown name are rejected without
+  signing in, logout clears the session — using purpose-built
+  `Administrator`s, because the shared fixture's `password_digest` is not a
+  real bcrypt hash. The overview render is wrapped in the quill-bot stub its
+  view needs: it resolves
+  `admin_wallet_safe_outputs_path(QuillBot.api.client_id)`, and an unstubbed
+  `client_id` is nil in the test env, so the route helper raises.
+- `PagesController` gained its first tests (#2248): `/fair` and `/rules`
+  render 200 with their i18n headings under the public layout.
 
 ### specs/011-comprehensive-ui-refactor
 
