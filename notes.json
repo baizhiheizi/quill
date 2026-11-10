@@ -22,8 +22,8 @@
     {
       "area": "docs",
       "checked_at": "2026-11-10",
-      "result": "Changelog current through #2238 via #2244 (merged). Not yet recorded: #2239 admin tests, the Dependabot batch #2240-45, and the #2243 spoofing-check fix.",
-      "follow_up": "Next docs pass after the three current PRs land, so entry contents are final."
+      "result": "Changelog catch-up PR intent (repo-assist/docs-changelog-2026-11-10) covers #2239, #2245 (+Dependabot #2240-42), #2247, #2248. Client-Ip fix already recorded by maintainer commit 0fb58701 - do not duplicate.",
+      "follow_up": "Next docs pass: entry for the in-flight admin tests PR once it lands."
     },
     {
       "area": "hygiene",
@@ -40,34 +40,34 @@
     {
       "area": "release",
       "checked_at": "2026-11-10",
-      "result": "41 commits unreleased since tag release-2026-11-04-c205bc2-41926707390 (main at 1cbee224). Never trigger Release: it deploys to production.",
+      "result": "48 commits unreleased since tag release-2026-11-04-c205bc2-41926707390 (main at c709fb44, incl. #2246-2248). Never trigger Release: it deploys to production.",
       "follow_up": "Release decision sits with the maintainer via the monthly issue."
     },
     {
       "area": "repo_assist_prs",
       "checked_at": "2026-11-10",
-      "result": "Run start: 0 open, #2239/#2244/#2245 all merged. Three PR intents recorded: fix #2243 (fix-issue-2243-ip-spoofing-check; #2243 labelled bug), round-2 bundle (bundle-deps-2026-11-10), pages tests (test-pages-controller). fixes[] entries fail validation - keep fixes empty.",
-      "follow_up": "Next run: verify all three landed; fix monthly branch refs."
+      "result": "Run 42888046855: 0 open at start; all three prior intents merged (#2246 fix #2243 closed completed, #2247 bundle, #2248 pages tests). Two new intents: tests (test-admin-orders-payments-statistics) and docs (docs-changelog-2026-11-10). fixes[] entries fail validation - keep fixes empty.",
+      "follow_up": "Next run: verify both intents landed (lost-publication pattern: branches + PR list first), then replace monthly branch refs with real PR numbers."
     },
     {
       "area": "tests",
       "checked_at": "2026-11-10",
-      "result": "Suite green: 1657 runs (main + 2 new PagesController tests), 0 failures, 2 pre-existing skips. Fixture administrators(:one) password_digest is not real bcrypt - login tests create their own admin. Overview render needs with_quill_bot_stub.",
-      "follow_up": "None."
+      "result": "Suite 1678 runs green incl. 18 new admin orders/payments/statistics tests; with that PR every admin controller is covered. Shipped fixtures for those three lack currency/datetime and the index partials dereference unguarded - setups wipe them. administrators(:one) password_digest not real bcrypt.",
+      "follow_up": "TwitterBot still gated on the routing decision; no other coverage-inflation candidates."
     },
     {
       "area": "tooling",
       "checked_at": "2026-11-10",
-      "result": "bundle outdated works via writable vendor/bundle path. Plain bundle update drags shared deps (minitest 6.1.0, prism 2.1.0) - use --conservative. After bundle work, unset the local path so suite runs use the system gem cache. bun.lock needs a bun binary.",
-      "follow_up": "Round-3: minitest separately; majors need sign-off."
+      "result": "Full suite runs in the bun-less sandbox when the css/js build-skip env flags are set (prebuilt builds exist). minitest 6.1.0 verified green (1660 runs on main) via writable vendor/bundle; lockfile reverted after. Dependency majors stay maintainer-decision territory. bun.lock needs a bun binary.",
+      "follow_up": "Dependabot #2249 mergeable on this evidence; npm updates still need bun."
     }
   ],
   "completed_actions": [],
   "priorities": [
     {
       "task": 6,
-      "item": "Verify the three 2026-11-10 PR intents landed",
-      "note": "Branches repo-assist/fix-issue-2243-ip-spoofing-check, repo-assist/bundle-deps-2026-11-10, repo-assist/test-pages-controller (run 42774161431). Lost-publication pattern: check branches + PR list first; then replace the monthly issue's branch refs with real PR numbers."
+      "item": "Verify the two 2026-11-10 20:00 PR intents landed",
+      "note": "Branches repo-assist/test-admin-orders-payments-statistics and repo-assist/docs-changelog-2026-11-10 (run 42888046855). Lost-publication pattern: check branches + PR list first, then replace the monthly issue's branch refs with real PR numbers."
     },
     {
       "task": 10,
@@ -86,18 +86,13 @@
     },
     {
       "task": 4,
-      "item": "Round-3 dependency work",
-      "note": "minitest 6.1.0 bump separately (test-framework risk). Majors need maintainer sign-off: marcel 2, net-ssh 8, openssl 4, rack-oauth2 2.3, prism 2.x."
-    },
-    {
-      "task": 9,
-      "item": "Remaining untested surfaces",
-      "note": "PagesController covered (2026-11-10 PR intent). TwitterBot pending the routing decision; Admin::{Orders,Payments,Statistics}Controller optional. Avoid coverage inflation."
+      "item": "Dependency majors need maintainer sign-off",
+      "note": "marcel 2, net-ssh 8, openssl 4, rack-oauth2 2.3, prism 2.x. minitest 6.1.0 handled by Dependabot #2249 (verified green 2026-11-10); npm updates need bun."
     },
     {
       "task": 7,
-      "item": "Changelog entries for post-#2238 merges",
-      "note": "#2239, the Dependabot batch #2240-45, and the #2243 fix are not yet in CHANGELOG. Write after the current PRs land."
+      "item": "Changelog entry for the admin tests PR",
+      "note": "repo-assist/test-admin-orders-payments-statistics (orders/payments/statistics coverage) needs a Tooling bullet - write in the next docs pass after it lands."
     }
   ]
 }
