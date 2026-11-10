@@ -1,8 +1,8 @@
 {
   "version": 1,
   "cursors": {
-    "labelling_after": 2234,
-    "investigation_after": 2234
+    "labelling_after": 2243,
+    "investigation_after": 2243
   },
   "issues": [],
   "fixes": [],
@@ -21,9 +21,9 @@
     },
     {
       "area": "docs",
-      "checked_at": "2026-11-09",
-      "result": "Changelog current through #2234 via #2237. Fourth attempt at the #2236/#2238 entries recorded as PR intent on branch repo-assist/docs-changelog-2026-11-09 (22:33 UTC run 42710957175). Performance intro sentence extended for #2236; #2238 entry added to Tooling.",
-      "follow_up": "Next run: verify the branch/PR landed; replace monthly branch refs with the real number."
+      "checked_at": "2026-11-10",
+      "result": "Changelog current through #2238 via #2244 (merged). Not yet recorded: #2239 admin tests, the Dependabot batch #2240-45, and the #2243 spoofing-check fix.",
+      "follow_up": "Next docs pass after the three current PRs land, so entry contents are final."
     },
     {
       "area": "hygiene",
@@ -39,40 +39,35 @@
     },
     {
       "area": "release",
-      "checked_at": "2026-11-09",
-      "result": "35 commits unreleased since tag release-2026-11-04-c205bc2-41926707390 (main at 76afe70f, unchanged). Never trigger Release: it deploys to production.",
+      "checked_at": "2026-11-10",
+      "result": "41 commits unreleased since tag release-2026-11-04-c205bc2-41926707390 (main at 1cbee224). Never trigger Release: it deploys to production.",
       "follow_up": "Release decision sits with the maintainer via the monthly issue."
     },
     {
       "area": "repo_assist_prs",
-      "checked_at": "2026-11-09",
-      "result": "#2239 open (draft): Check green, vigil APPROVE; GitGuardian false positive on the hunter2 literal fixed by pushed commit 938d6fee. Two new PR intents recorded this run: changelog docs and dependabot bundle (supersedes #2240-2242); branches recorded in docs check and priorities.",
-      "follow_up": "Next run FIRST: verify both branches landed; fix monthly branch refs. GitGuardian retry budget: 1."
+      "checked_at": "2026-11-10",
+      "result": "Run start: 0 open, #2239/#2244/#2245 all merged. Three PR intents recorded: fix #2243 (fix-issue-2243-ip-spoofing-check; #2243 labelled bug), round-2 bundle (bundle-deps-2026-11-10), pages tests (test-pages-controller). fixes[] entries fail validation - keep fixes empty.",
+      "follow_up": "Next run: verify all three landed; fix monthly branch refs."
     },
     {
       "area": "tests",
-      "checked_at": "2026-11-09",
-      "result": "Suite green on the bundle: 1648 runs (1655 minus the 7 tests living on #2239), 0 failures, 2 pre-existing skips. Fixture administrators(:one) password_digest is not real bcrypt - login tests create their own admin. Overview render needs with_quill_bot_stub.",
-      "follow_up": "Sandbox suites need SKIP_CSS_BUILD=1 and now the vendor/bundle path (see tooling)."
+      "checked_at": "2026-11-10",
+      "result": "Suite green: 1657 runs (main + 2 new PagesController tests), 0 failures, 2 pre-existing skips. Fixture administrators(:one) password_digest is not real bcrypt - login tests create their own admin. Overview render needs with_quill_bot_stub.",
+      "follow_up": "None."
     },
     {
       "area": "tooling",
-      "checked_at": "2026-11-09",
-      "result": "System gem dir is READ-ONLY - why bundle install failed here. Fix: bundle config set --local path vendor/bundle -> bundle outdated works. Round-2 gems queued (see monthly Future Work). Majors: marcel 2, net-ssh 8, openssl 4, rack-oauth2 2.3.",
-      "follow_up": "Round-2 bundle after the current one merges. bun.lock needs a bun binary."
+      "checked_at": "2026-11-10",
+      "result": "bundle outdated works via writable vendor/bundle path. Plain bundle update drags shared deps (minitest 6.1.0, prism 2.1.0) - use --conservative. After bundle work, unset the local path so suite runs use the system gem cache. bun.lock needs a bun binary.",
+      "follow_up": "Round-3: minitest separately; majors need sign-off."
     }
   ],
   "completed_actions": [],
   "priorities": [
     {
       "task": 6,
-      "item": "Verify the 22:33 run's two PR intents landed",
-      "note": "Branches repo-assist/docs-changelog-2026-11-09 and repo-assist/bundle-dependabot-2026-11-09 (run 42710957175). Lost-publication pattern: check branches + PR list first; then replace monthly branch refs with real PR numbers."
-    },
-    {
-      "task": 6,
-      "item": "Confirm GitGuardian now passes on #2239",
-      "note": "Fix pushed as 938d6fee (~22:20 UTC). If the new strings are still flagged, retry once with password values built programmatically (no static literals); then comment and leave for maintainer."
+      "item": "Verify the three 2026-11-10 PR intents landed",
+      "note": "Branches repo-assist/fix-issue-2243-ip-spoofing-check, repo-assist/bundle-deps-2026-11-10, repo-assist/test-pages-controller (run 42774161431). Lost-publication pattern: check branches + PR list first; then replace the monthly issue's branch refs with real PR numbers."
     },
     {
       "task": 10,
@@ -82,7 +77,7 @@
     {
       "task": 10,
       "item": "Feed sort stored column: ask maintainer",
-      "note": "order_by_popularity sorts a computed expression, no index helps. In monthly issue."
+      "note": "order_by_popularity sorts a computed expression, no index helps (re-confirmed by measure-feed-indexes 2026-11-10). In monthly issue."
     },
     {
       "task": 6,
@@ -91,13 +86,18 @@
     },
     {
       "task": 4,
-      "item": "Round-2 dependency bundle",
-      "note": "After the current bundle merges: aws-sdk-s3 1.240.0, posthog-rails 3.22.0, kaminari 1.3.3, lexxy 1.0.4, pagy, ransack 6.1.0, rubocop-ast 1.51.0. minitest 6.1.0 separately (test-framework risk). Majors need maintainer sign-off."
+      "item": "Round-3 dependency work",
+      "note": "minitest 6.1.0 bump separately (test-framework risk). Majors need maintainer sign-off: marcel 2, net-ssh 8, openssl 4, rack-oauth2 2.3, prism 2.x."
     },
     {
       "task": 9,
       "item": "Remaining untested surfaces",
-      "note": "Login/Overview pending review in #2239; wallets done in #2238. Remaining named candidates: PagesController, TwitterBot; Admin::{Orders,Payments,Statistics}Controller optional. Avoid coverage inflation."
+      "note": "PagesController covered (2026-11-10 PR intent). TwitterBot pending the routing decision; Admin::{Orders,Payments,Statistics}Controller optional. Avoid coverage inflation."
+    },
+    {
+      "task": 7,
+      "item": "Changelog entries for post-#2238 merges",
+      "note": "#2239, the Dependabot batch #2240-45, and the #2243 fix are not yet in CHANGELOG. Write after the current PRs land."
     }
   ]
 }
