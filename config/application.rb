@@ -27,6 +27,11 @@ module Quill
     config.active_record.raise_on_missing_required_finder_order_columns = true
     config.action_view.remove_hidden_field_autocomplete = true
 
+    # Behind kamal-proxy, a client-supplied Client-Ip header that disagrees with
+    # X-Forwarded-For made the spoofing check 500 every such request (#2243).
+    # With the check off, remote_ip still comes from the proxy-set chain.
+    config.action_dispatch.ip_spoofing_check = false
+
     config.action_mailer.delivery_method = :mailjet
 
     config.active_record.yaml_column_permitted_classes = [ ActiveSupport::HashWithIndifferentAccess, Symbol ]
