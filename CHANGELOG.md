@@ -333,6 +333,16 @@ transitively (rubocop-ast's prism floor moved from `~> 1.7` to `>= 1.7`).
   `client_id` is nil in the test env, so the route helper raises.
 - `PagesController` gained its first tests (#2248): `/fair` and `/rules`
   render 200 with their i18n headings under the public layout.
+- `Admin::OrdersController`, `Admin::PaymentsController` and
+  `Admin::StatisticsController` gained controller tests (#2251) — the last
+  three untested admin controllers. Each index pins its filter semantics
+  (buyer/payer, item type/id, state, and the statistics STI type filter),
+  the `order_by` allow-list fallbacks through `allowed_param` (including the
+  unknown-value fallback), ransack OR-query matching, and the show actions.
+  Because the shipped fixtures for all three tables are near-empty and the
+  index partials dereference `currency.icon_url` and `datetime` unguarded,
+  each setup wipes the shipped fixtures and builds well-formed records via
+  the shared commerce helpers.
 
 ### specs/011-comprehensive-ui-refactor
 
