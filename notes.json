@@ -21,9 +21,9 @@
     },
     {
       "area": "docs",
-      "checked_at": "2026-11-10",
-      "result": "Changelog catch-up PR intent (repo-assist/docs-changelog-2026-11-10) covers #2239, #2245 (+Dependabot #2240-42), #2247, #2248. Client-Ip fix already recorded by maintainer commit 0fb58701 - do not duplicate.",
-      "follow_up": "Next docs pass: entry for the in-flight admin tests PR once it lands."
+      "checked_at": "2026-11-11",
+      "result": "#2250 (changelog catch-up) merged; verified accurate - cites only merged #2239/#2248 and the dependency bundles. Client-Ip fix already recorded by maintainer commit 0fb58701 - do not duplicate.",
+      "follow_up": "Next docs pass: Tooling bullet for the re-filed orders/payments/statistics tests PR once it lands."
     },
     {
       "area": "hygiene",
@@ -39,35 +39,35 @@
     },
     {
       "area": "release",
-      "checked_at": "2026-11-10",
-      "result": "48 commits unreleased since tag release-2026-11-04-c205bc2-41926707390 (main at c709fb44, incl. #2246-2248). Never trigger Release: it deploys to production.",
+      "checked_at": "2026-11-11",
+      "result": "52 commits unreleased since tag release-2026-11-04-c205bc2-41926707390 (main at dd950d69, incl. #2249 minitest and #2250 changelog). Never trigger Release: it deploys to production.",
       "follow_up": "Release decision sits with the maintainer via the monthly issue."
     },
     {
       "area": "repo_assist_prs",
-      "checked_at": "2026-11-10",
-      "result": "Run 42888046855: 0 open at start; all three prior intents merged (#2246 fix #2243 closed completed, #2247 bundle, #2248 pages tests). Two new intents: tests (test-admin-orders-payments-statistics) and docs (docs-changelog-2026-11-10). fixes[] entries fail validation - keep fixes empty.",
-      "follow_up": "Next run: verify both intents landed (lost-publication pattern: branches + PR list first), then replace monthly branch refs with real PR numbers."
+      "checked_at": "2026-11-11",
+      "result": "Run 42971381468: 0 open at start. Docs intent landed as #2250 (merged); tests intent was LOST - re-filed this run, 25 tests. fixes[] entries fail validation - keep fixes empty.",
+      "follow_up": "Next run: verify the re-filed tests intent lands, then replace the monthly branch ref with the real PR number."
     },
     {
       "area": "tests",
-      "checked_at": "2026-11-10",
-      "result": "Suite 1678 runs green incl. 18 new admin orders/payments/statistics tests; with that PR every admin controller is covered. Shipped fixtures for those three lack currency/datetime and the index partials dereference unguarded - setups wipe them. administrators(:one) password_digest not real bcrypt.",
-      "follow_up": "TwitterBot still gated on the routing decision; no other coverage-inflation candidates."
+      "checked_at": "2026-11-11",
+      "result": "Re-filed 25 tests for Admin::{Orders,Payments,Statistics}Controller (filters, order_by fallbacks incl. unknown, ransack, STI filter, show). Suite 1685 runs / 0 failures / 2 skips; rubocop clean. Setups wipe shipped fixtures - partials dereference currency/datetime unguarded.",
+      "follow_up": "With merge, every admin controller is covered; no other coverage candidates."
     },
     {
       "area": "tooling",
       "checked_at": "2026-11-10",
-      "result": "Full suite runs in the bun-less sandbox when the css/js build-skip env flags are set (prebuilt builds exist). minitest 6.1.0 verified green (1660 runs on main) via writable vendor/bundle; lockfile reverted after. Dependency majors stay maintainer-decision territory. bun.lock needs a bun binary.",
-      "follow_up": "Dependabot #2249 mergeable on this evidence; npm updates still need bun."
+      "result": "Full suite runs in the bun-less sandbox with SKIP_CSS_BUILD=1 SKIP_JS_BUILD=1 (prebuilt builds exist; plain bin/rails test dies at css:install). minitest 6.1.0 merged via Dependabot #2249 (verified green 2026-11-10). Dependency majors stay maintainer-decision territory. bun.lock needs a bun binary.",
+      "follow_up": "npm updates still need bun."
     }
   ],
   "completed_actions": [],
   "priorities": [
     {
       "task": 6,
-      "item": "Verify the two 2026-11-10 20:00 PR intents landed",
-      "note": "Branches repo-assist/test-admin-orders-payments-statistics and repo-assist/docs-changelog-2026-11-10 (run 42888046855). Lost-publication pattern: check branches + PR list first, then replace the monthly issue's branch refs with real PR numbers."
+      "item": "Verify the re-filed tests PR intent lands",
+      "note": "Branch repo-assist/test-admin-orders-payments-statistics, run 42971381468, 25 tests. Check branches + PR list first; if lost again, re-create from the tests check."
     },
     {
       "task": 10,
@@ -87,12 +87,12 @@
     {
       "task": 4,
       "item": "Dependency majors need maintainer sign-off",
-      "note": "marcel 2, net-ssh 8, openssl 4, rack-oauth2 2.3, prism 2.x. minitest 6.1.0 handled by Dependabot #2249 (verified green 2026-11-10); npm updates need bun."
+      "note": "marcel 2, net-ssh 8, openssl 4, rack-oauth2 2.3, prism 2.x. npm updates need bun."
     },
     {
       "task": 7,
-      "item": "Changelog entry for the admin tests PR",
-      "note": "repo-assist/test-admin-orders-payments-statistics (orders/payments/statistics coverage) needs a Tooling bullet - write in the next docs pass after it lands."
+      "item": "Changelog entry for the re-filed admin tests PR",
+      "note": "Write the Tooling bullet in the next docs pass after the re-filed tests PR lands."
     }
   ]
 }
