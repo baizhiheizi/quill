@@ -15,15 +15,15 @@
     },
     {
       "area": "code",
-      "checked_at": "2026-11-09",
-      "result": "redirect_to sweep complete: landing guard merged #2236; wallets double lookup merged #2238. Twitter routing shadow (routes.rb:21 vs 27) and feed sort stored column remain maintainer decisions.",
-      "follow_up": "Both decisions live in the monthly issue."
+      "checked_at": "2026-11-11",
+      "result": "redirect_to sweep complete. Twitter routing shadow and feed sort stored column remain maintainer decisions. Grover bare-RuntimeError 500 considered and not filed (token-gate behaviour change; in monthly Future Work).",
+      "follow_up": "Do not re-propose the grover raise change without a maintainer ask."
     },
     {
       "area": "docs",
       "checked_at": "2026-11-11",
-      "result": "#2250 (changelog catch-up) merged; verified accurate - cites only merged #2239/#2248 and the dependency bundles. Client-Ip fix already recorded by maintainer commit 0fb58701 - do not duplicate.",
-      "follow_up": "Next docs pass: Tooling bullet for the re-filed orders/payments/statistics tests PR once it lands."
+      "result": "Changelog bullet for #2251 filed (branch repo-assist/docs-changelog-2026-11-11, run 43088494145; details read from merged commit 18fa6942). #2250 was verified accurate earlier.",
+      "follow_up": "Next docs pass: changelog bullet for the users subscribe-lists tests PR once it lands."
     },
     {
       "area": "hygiene",
@@ -40,25 +40,25 @@
     {
       "area": "release",
       "checked_at": "2026-11-11",
-      "result": "52 commits unreleased since tag release-2026-11-04-c205bc2-41926707390 (main at dd950d69, incl. #2249 minitest and #2250 changelog). Never trigger Release: it deploys to production.",
+      "result": "54 commits unreleased since tag release-2026-11-04-c205bc2-41926707390 (main at fc7a35bd incl. #2251). Never trigger Release: it deploys to production.",
       "follow_up": "Release decision sits with the maintainer via the monthly issue."
     },
     {
       "area": "repo_assist_prs",
       "checked_at": "2026-11-11",
-      "result": "Run 42971381468: 0 open at start. Docs intent landed as #2250 (merged); tests intent was LOST - re-filed this run, 25 tests. fixes[] entries fail validation - keep fixes empty.",
-      "follow_up": "Next run: verify the re-filed tests intent lands, then replace the monthly branch ref with the real PR number."
+      "result": "Run 43088494145 filed two PR intents: tests (branch repo-assist/test-users-subscribe-lists) and docs changelog (branch repo-assist/docs-changelog-2026-11-11). #2251 (admin tests) merged. Past intents have been lost in publication before - verify on landing.",
+      "follow_up": "Next run: verify both intents published as PRs (branches + PR list); if lost, re-create from the run's patches at /tmp/gh-aw/aw-*.patch or memory."
     },
     {
       "area": "tests",
       "checked_at": "2026-11-11",
-      "result": "Re-filed 25 tests for Admin::{Orders,Payments,Statistics}Controller (filters, order_by fallbacks incl. unknown, ransack, STI filter, show). Suite 1685 runs / 0 failures / 2 skips; rubocop clean. Setups wipe shipped fixtures - partials dereference currency/datetime unguarded.",
-      "follow_up": "With merge, every admin controller is covered; no other coverage candidates."
+      "result": "Users subscribe pair were the last untested non-base controllers; tests filed this run (16 tests; suite 1701/0/2 skips). Grover pair covered under grover_controller_test.rb. Remaining gaps: base controllers only. ids_for is viewer-relative (guests: empty Set).",
+      "follow_up": "After the users tests PR merges, changelog bullet owed in next docs pass."
     },
     {
       "area": "tooling",
       "checked_at": "2026-11-10",
-      "result": "Full suite runs in the bun-less sandbox with SKIP_CSS_BUILD=1 SKIP_JS_BUILD=1 (prebuilt builds exist; plain bin/rails test dies at css:install). minitest 6.1.0 merged via Dependabot #2249 (verified green 2026-11-10). Dependency majors stay maintainer-decision territory. bun.lock needs a bun binary.",
+      "result": "Full suite runs in the bun-less sandbox with SKIP_CSS_BUILD=1 SKIP_JS_BUILD=1 (prebuilt builds exist; plain bin/rails test dies at css:install). minitest 6.1.0 merged via Dependabot #2249. Dependency majors stay maintainer-decision territory. bun.lock needs a bun binary.",
       "follow_up": "npm updates still need bun."
     }
   ],
@@ -66,8 +66,8 @@
   "priorities": [
     {
       "task": 6,
-      "item": "Verify the re-filed tests PR intent lands",
-      "note": "Branch repo-assist/test-admin-orders-payments-statistics, run 42971381468, 25 tests. Check branches + PR list first; if lost again, re-create from the tests check."
+      "item": "Verify the two 2026-11-11 PR intents land",
+      "note": "Branches repo-assist/test-users-subscribe-lists (16 tests) and repo-assist/docs-changelog-2026-11-11 (changelog bullet for #2251), run 43088494145. Check branches + PR list first; if lost, re-create from memory/tests check content."
     },
     {
       "task": 10,
@@ -91,8 +91,8 @@
     },
     {
       "task": 7,
-      "item": "Changelog entry for the re-filed admin tests PR",
-      "note": "Write the Tooling bullet in the next docs pass after the re-filed tests PR lands."
+      "item": "Changelog entry for the users subscribe tests PR",
+      "note": "Write the Tooling bullet in the next docs pass after repo-assist/test-users-subscribe-lists lands."
     }
   ]
 }
