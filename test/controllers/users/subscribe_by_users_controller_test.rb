@@ -55,15 +55,24 @@ class Users::SubscribeByUsersControllerTest < ActionController::TestCase
   end
 
   # `ViewerActionSets#ids_for` is viewer-relative: guests get an empty Set
-  # (no query) and the partial falls through to the per-row check.
-  test "index gives guests an empty preloaded set" do
+  # and no query. The subscribe-button partial short-circuits on
+  # `current_user.blank?` with a login link, so the per-row
+  # `current_user.subscribe_user?(user)` check in its third branch is never
+  # reached for guests — the empty Set is `ids_for`'s uniform guest semantics,
+  # not a fallback the view depends on.
+  test "index gives guests an empty preloaded set without querying actions" do
     subscriber = users(:reader_one)
     subscriber.create_action(:subscribe, target: @author)
 
-    get :index, params: { user_uid: @author.uid }
+    queries = capture_queries { get :index, params: { user_uid: @author.uid } }
 
     assert_response :success
     assert_equal Set.new, @controller.instance_variable_get(:@preloaded_subscribe_user_ids)
+
+    # The list itself JOINs actions; what must not appear is the standalone
+    # `SELECT ... FROM "actions"` that ids_for would issue for a viewer.
+    actions_selects = queries.grep(/\ASELECT\b.*\bFROM "actions"/)
+    assert_empty actions_selects, "expected no SELECT on actions for a guest, got: #{actions_selects.inspect}"
   end
 
   test "index preloads the viewer's subscribed user ids" do
@@ -105,5 +114,19 @@ class Users::SubscribeByUsersControllerTest < ActionController::TestCase
 
     assert_response :success
     assert_equal @author.name, @controller.instance_variable_get(:@page_title)
+  end
+
+  private
+
+  # Captures the SQL a request emits (SCHEMA noise excluded) so query-shape
+  # invariants can be pinned without counting unrelated lookups.
+  def capture_queries(&block)
+    queries = []
+    callback = ->(*, payload) {
+      next if payload[:name] == "SCHEMA"
+      queries << payload[:sql]
+    }
+    ActiveSupport::Notifications.subscribed(callback, "sql.active_record", &block)
+    queries
   end
 end
