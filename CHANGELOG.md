@@ -335,14 +335,16 @@ transitively (rubocop-ast's prism floor moved from `~> 1.7` to `>= 1.7`).
   render 200 with their i18n headings under the public layout.
 - `Admin::OrdersController`, `Admin::PaymentsController` and
   `Admin::StatisticsController` gained controller tests (#2251) — the last
-  three untested admin controllers. Each index pins its filter semantics
-  (buyer/payer, item type/id, state, and the statistics STI type filter),
-  the `order_by` allow-list fallbacks through `allowed_param` (including the
-  unknown-value fallback), ransack OR-query matching, and the show actions.
-  Because the shipped fixtures for all three tables are near-empty and the
-  index partials dereference `currency.icon_url` and `datetime` unguarded,
-  each setup wipes the shipped fixtures and builds well-formed records via
-  the shared commerce helpers.
+  three untested admin controllers. Each index pins the `order_by`
+  allow-list fallbacks through `allowed_param` (including the unknown-value
+  fallback) and its own filter semantics (buyer/payer and state for orders
+  and payments, orders' item type/id, and the statistics STI type filter).
+  Ransack OR-query matching and the show actions are covered for orders and
+  payments only — statistics has just an `index`. Because the shipped
+  fixtures for all three tables are near-empty and the index partials
+  dereference `currency.icon_url` or `datetime` unguarded, each setup wipes
+  them; orders and payments rebuild well-formed records via the shared
+  commerce helpers, while statistics creates real `DailyStatistic` rows.
 
 ### specs/011-comprehensive-ui-refactor
 
