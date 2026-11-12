@@ -345,6 +345,19 @@ transitively (rubocop-ast's prism floor moved from `~> 1.7` to `>= 1.7`).
   dereference `currency.icon_url` or `datetime` unguarded, each setup wipes
   them; orders and payments rebuild well-formed records via the shared
   commerce helpers, while statistics creates real `DailyStatistic` rows.
+- `Users::SubscribeUsersController` and `Users::SubscribeByUsersController`
+  gained controller tests (#2252) — the last untested non-base controllers:
+  the public following/followers modals on a user profile
+  (`/users/:user_uid/subscribe_users` and
+  `/users/:user_uid/subscribe_by_users`). Each pins its list direction
+  (including the negative case), the most-recent-first order, the 404 on an
+  unknown uid, pagination, and the selected user's profile page meta. The
+  viewer-relative `ViewerActionSets#ids_for` preload is covered both ways: a
+  signed-in viewer gets their subscribed user ids, a guest gets an empty Set —
+  pinned with `capture_queries` assertions that no standalone
+  `SELECT FROM "actions"` appears, since the list itself JOINs actions and the
+  subscribe-button partial short-circuits on `current_user.blank?` before ever
+  consulting the per-row check.
 
 ### specs/011-comprehensive-ui-refactor
 
