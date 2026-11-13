@@ -34,7 +34,7 @@ end
 
 Minitest.after_run do
   logs = Dir["/tmp/chromedriver-*.log"]
-  return if logs.empty? || !ENV["CI"]
+  next if logs.empty? || !ENV["CI"]
 
   warn "\n===== chromedriver verbose logs (tails) ====="
   logs.each do |path|
