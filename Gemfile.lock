@@ -487,7 +487,7 @@ GEM
     pghero (4.1.0)
       activerecord (>= 7.2)
     pkg-config (1.6.7)
-    posthog-rails (3.22.0)
+    posthog-rails (3.26.0)
       posthog-ruby (= 3.32.1)
       railties (>= 5.2.0)
     posthog-ruby (3.32.1)
@@ -977,7 +977,7 @@ CHECKSUMS
   pg (1.7.0-x86_64-linux-musl) sha256=0c9bc93b6e0aca2a5b07daef00b7ec4f9882bfe21ef3872b4371f8ecffe1f1e1
   pghero (4.1.0) sha256=e8000515afa825171c27648a1deae267864e054348efe2720d9186c2d2dac3de
   pkg-config (1.6.7) sha256=0415eff78595da55a60d1ba4e9098572c73afbe6b4c06ec50ded1972f1e1070b
-  posthog-rails (3.22.0) sha256=74124b48d996bacd2edf48ae1e72f606f0ce15038ee41dfa2d39680d07faa8ca
+  posthog-rails (3.26.0) sha256=1e3c2ce4a0b8c1cb290ff478a3440d0441d6830ec643aa025bac0788872097b4
   posthog-ruby (3.32.1) sha256=d7bcacffb7293ff222d614d37d1a94171a356bc3042136c66d891e9924428d90
   pp (0.6.4) sha256=dfcb0fce700c41456265922884f9fe195d7fbb0674a3578e6c0f69588e82b570
   prettyprint (0.2.1) sha256=d555d57ea6d7cf001d4774b693546a6bd88bec1e778ddffb5c60b68ceec4b7d4
