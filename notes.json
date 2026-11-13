@@ -1,17 +1,54 @@
 {
   "version": 1,
   "cursors": {
-    "labelling_after": 2243,
-    "investigation_after": 2243
+    "labelling_after": 2257,
+    "investigation_after": 2257
   },
-  "issues": [],
+  "issues": [
+    {
+      "number": 2256,
+      "state": "resolution_recommended",
+      "updated_at": "2026-11-13",
+      "note": "Run 43173092739 hit 429 mid-run but still delivered PR #2254 (merged as 3e99abd0). Commented with evidence recommending closure; awaiting maintainer."
+    },
+    {
+      "number": 2257,
+      "state": "resolution_recommended",
+      "updated_at": "2026-11-13",
+      "note": "Run 43294697396 rejected by engine 429 before any output; transient, later runs fine. Commented recommending closure; awaiting maintainer."
+    }
+  ],
   "fixes": [],
   "checks": [
     {
       "area": "ci",
-      "checked_at": "2026-10-22",
-      "result": "Runner mise-shim race (ETXTBSY) was runner-side, fixed on the runner. #2182 closed unapplied; do not re-raise.",
-      "follow_up": "None."
+      "checked_at": "2026-11-13",
+      "result": "System suite now runs (runner has a browser); the top-level after_run hook's `return` raised LocalJumpError on every full CI run after tests pass (PR #2258 run 43448653839). Fix filed: return->next, branch repo-assist/eng-system-after-run-return-2026-11-13, run 43494445906.",
+      "follow_up": "Main CI goes red on the next code push until the fix merges; verify intent publishes as a PR."
+    },
+    {
+      "area": "tests",
+      "checked_at": "2026-11-13",
+      "result": "API::BaseController auth/error contract was untested. Filed 8-test suite (repo-assist/test-api-base-error-matrix): 401s incl. soft-deleted token, 404, 422, last_request audit, rescue matrix via probe. Probe caught StandardError shadowing Pundit's 403 handler; reordered. Suite 1709/0/2.",
+      "follow_up": "Owed changelog bullet after merge. Still untested: web/grover/dashboard/admin base controllers (mostly exercised indirectly)."
+    },
+    {
+      "area": "dependencies",
+      "checked_at": "2026-11-13",
+      "result": "Open Dependabot #2258 (posthog-rails 3.22.0->3.26.0, minor): its red Check is unrelated to the bump (see ci check); explained in a PR comment. Majors pending maintainer sign-off: marcel 2, net-ssh 8, openssl 4, rack-oauth2 2.3, prism 2.x; npm updates need bun.",
+      "follow_up": "None beyond the majors queue."
+    },
+    {
+      "area": "repo_assist_prs",
+      "checked_at": "2026-11-13",
+      "result": "Both 2026-11-11 intents merged (#2252 tests, #2254 changelog). Two new intents filed this run (43494445906): eng-system-after-run-return-2026-11-13 and test-api-base-error-matrix; patches at /tmp/gh-aw/aw-*.patch. Past intents were lost in publication before.",
+      "follow_up": "Verify both branches/PRs exist next run; if lost, re-create from patches or memory."
+    },
+    {
+      "area": "docs",
+      "checked_at": "2026-11-13",
+      "result": "Changelog bullets for #2251 and the users subscribe-lists tests both landed (#2253, #2254). No docs debt outstanding.",
+      "follow_up": "Owed: changelog bullets for the after_run fix and the API base contract PR once they land."
     },
     {
       "area": "code",
@@ -20,22 +57,10 @@
       "follow_up": "Do not re-propose the grover raise change without a maintainer ask."
     },
     {
-      "area": "docs",
-      "checked_at": "2026-11-11",
-      "result": "Changelog bullet for #2251 filed (branch repo-assist/docs-changelog-2026-11-11, run 43088494145; details read from merged commit 18fa6942). #2250 was verified accurate earlier.",
-      "follow_up": "Next docs pass: changelog bullet for the users subscribe-lists tests PR once it lands."
-    },
-    {
-      "area": "hygiene",
-      "checked_at": "2026-11-06",
-      "result": "IntegrationTestCase#sign_in fixed via real OAuth callback, merged as #2233.",
-      "follow_up": "None."
-    },
-    {
-      "area": "qa",
-      "checked_at": "2026-10-22",
-      "result": "Stored XSS fixed in #2176 (merged). content_security_policy.rb still fully commented out; sanitizer drops inline style attributes.",
-      "follow_up": "CSP proposal only after sanitizer approach settles; in monthly Future Work."
+      "area": "tooling",
+      "checked_at": "2026-11-10",
+      "result": "Full suite runs in the bun-less sandbox with SKIP_CSS_BUILD=1 SKIP_JS_BUILD=1; minitest 6.1.0 is in CI since #2249. Sandbox has chromedriver but chromium is an uninstalled snap stub, so the system suite is not runnable locally.",
+      "follow_up": "npm updates still need bun."
     },
     {
       "area": "release",
@@ -44,30 +69,29 @@
       "follow_up": "Release decision sits with the maintainer via the monthly issue."
     },
     {
-      "area": "repo_assist_prs",
-      "checked_at": "2026-11-11",
-      "result": "Run 43088494145 filed two PR intents: tests (branch repo-assist/test-users-subscribe-lists) and docs changelog (branch repo-assist/docs-changelog-2026-11-11). #2251 (admin tests) merged. Past intents have been lost in publication before - verify on landing.",
-      "follow_up": "Next run: verify both intents published as PRs (branches + PR list); if lost, re-create from the run's patches at /tmp/gh-aw/aw-*.patch or memory."
+      "area": "qa",
+      "checked_at": "2026-10-22",
+      "result": "Stored XSS fixed in #2176 (merged). content_security_policy.rb still fully commented out; sanitizer drops inline style attributes.",
+      "follow_up": "CSP proposal only after sanitizer approach settles; in monthly Future Work."
     },
     {
-      "area": "tests",
-      "checked_at": "2026-11-11",
-      "result": "Users subscribe pair were the last untested non-base controllers; tests filed this run (16 tests; suite 1701/0/2 skips). Grover pair covered under grover_controller_test.rb. Remaining gaps: base controllers only. ids_for is viewer-relative (guests: empty Set).",
-      "follow_up": "After the users tests PR merges, changelog bullet owed in next docs pass."
-    },
-    {
-      "area": "tooling",
-      "checked_at": "2026-11-10",
-      "result": "Full suite runs in the bun-less sandbox with SKIP_CSS_BUILD=1 SKIP_JS_BUILD=1 (prebuilt builds exist; plain bin/rails test dies at css:install). minitest 6.1.0 merged via Dependabot #2249. Dependency majors stay maintainer-decision territory. bun.lock needs a bun binary.",
-      "follow_up": "npm updates still need bun."
+      "area": "hygiene",
+      "checked_at": "2026-11-06",
+      "result": "IntegrationTestCase#sign_in fixed via real OAuth callback, merged as #2233.",
+      "follow_up": null
     }
   ],
   "completed_actions": [],
   "priorities": [
     {
       "task": 6,
-      "item": "Verify the two 2026-11-11 PR intents land",
-      "note": "Branches repo-assist/test-users-subscribe-lists (16 tests) and repo-assist/docs-changelog-2026-11-11 (changelog bullet for #2251), run 43088494145. Check branches + PR list first; if lost, re-create from memory/tests check content."
+      "item": "Verify the two 2026-11-13 PR intents land",
+      "note": "Branches repo-assist/eng-system-after-run-return-2026-11-13 (urgent: main CI red until merged) and repo-assist/test-api-base-error-matrix. Check branches + PR list first; if lost, re-create from patches or memory checks."
+    },
+    {
+      "task": 6,
+      "item": "Maintain the two new PRs once published",
+      "note": "Watch CI on both: each depends on the after_run fix being in effect on its base. Fix my-change CI failures; comment on infra-only failures."
     },
     {
       "task": 10,
@@ -91,8 +115,8 @@
     },
     {
       "task": 7,
-      "item": "Changelog entry for the users subscribe tests PR",
-      "note": "Write the Tooling bullet in the next docs pass after repo-assist/test-users-subscribe-lists lands."
+      "item": "Changelog entries for the two 2026-11-13 PRs",
+      "note": "Write Tooling/CI bullet for the after_run fix and Tests bullet for the API base error-matrix PR in the next docs pass after they land."
     }
   ]
 }
