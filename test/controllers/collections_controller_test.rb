@@ -17,6 +17,12 @@ class CollectionsControllerTest < IntegrationTestCase
     )
   end
 
+  test "index is not routable instead of crashing on the missing template" do
+    get "/collections"
+
+    assert_response :not_found
+  end
+
   test "show returns not found for missing collection uuid" do
     get collection_path(SecureRandom.uuid)
 
