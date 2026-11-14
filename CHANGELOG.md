@@ -209,6 +209,16 @@ in the feed redirect.
   The action now returns the redirect, and query-count tests pin the redirect
   path to zero discovery SQL (both fail with the full wasted query list on
   the unpatched code).
+- **The inbox stops sorting the recipient's whole match set** — the
+  notifications page paginates `notifications.for_web.newest_first`, but the
+  recipient index on `noticed_notifications` stopped at `web_visible`, so
+  every page view read and sorted the recipient's entire web-visible set
+  before taking its 50 rows. That index is replaced with a composite ending
+  in `created_at`, so Postgres walks it backwards in order and stops at the
+  page boundary. On a synthetic 5,000-notification inbox the page plan goes
+  from a scan-and-sort to an ordered backward index scan (cost ≈313 → ≈4.4);
+  the unread-badge queries (`unread.for_web.count` / `exists?`) share the
+  index prefix.
 
 The migration also runs `ANALYZE` on both tables. Postgres collects per-index
 statistics during `ANALYZE`, and an index added to a populated table has
