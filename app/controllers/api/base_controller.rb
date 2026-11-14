@@ -13,14 +13,16 @@ class API::BaseController < ActionController::API
   class UnauthorizedError < StandardError; end
   class UnprocessableEntityError < StandardError; end
 
-  rescue_from Pundit::NotAuthorizedError do
-    render_forbidden
-  end
-
   rescue_from StandardError do |ex|
     Rails.logger.error ex.inspect
     message = Rails.env.local? ? ex.message : "Internal server error"
     render_internal_server_error message
+  end
+
+  # rescue_from matches bottom-up, so this must sit below the StandardError
+  # handler above or that one shadows it and Pundit denials render as 500s.
+  rescue_from Pundit::NotAuthorizedError do
+    render_forbidden
   end
 
   rescue_from UnauthorizedError do
