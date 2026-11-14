@@ -358,6 +358,21 @@ transitively (rubocop-ast's prism floor moved from `~> 1.7` to `>= 1.7`).
   `SELECT FROM "actions"` appears, since the list itself JOINs actions and the
   subscribe-button partial short-circuits on `current_user.blank?` before ever
   consulting the per-row check.
+- The system suite's `after_run` chromedriver-log hook no longer crashes the
+  CI job (#2259). Minitest runs `after_run` blocks at exit via `&:call`, long
+  after the file's top-level frame is gone, so the hook's `return` raised
+  `LocalJumpError` and failed the whole job after the tests themselves had
+  passed — first observed on the posthog-rails bump, the first PR whose
+  runner could execute the browser suite. `next` keeps the same early-exit
+  semantics inside a block.
+- `API::BaseController` gained a test suite pinning its auth and error
+  contract (#2260): token authentication through the real `/api` routes, the
+  full `rescue_from` matrix via a test-only probe controller, and the token
+  `last_request_at` audit. Writing it immediately caught a dead handler —
+  `rescue_from` matches bottom-up, so the `StandardError` handler declared
+  after `Pundit::NotAuthorizedError` shadowed it and a Pundit denial rendered
+  a 500 leaking Pundit's internal message instead of the declared 403. The
+  Pundit handler moved below `StandardError`; no live path changes.
 
 ### specs/011-comprehensive-ui-refactor
 
