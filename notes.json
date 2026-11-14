@@ -9,70 +9,76 @@
       "number": 2256,
       "state": "resolution_recommended",
       "updated_at": "2026-11-13",
-      "note": "Run 43173092739 hit 429 mid-run but still delivered PR #2254 (merged as 3e99abd0). Commented with evidence recommending closure; awaiting maintainer."
+      "note": "Commented with evidence recommending closure; awaiting maintainer."
     },
     {
       "number": 2257,
       "state": "resolution_recommended",
       "updated_at": "2026-11-13",
-      "note": "Run 43294697396 rejected by engine 429 before any output; transient, later runs fine. Commented recommending closure; awaiting maintainer."
+      "note": "Commented recommending closure; awaiting maintainer."
     }
   ],
   "fixes": [],
   "checks": [
     {
+      "area": "repo_assist_prs",
+      "checked_at": "2026-11-14",
+      "result": "Four open drafts: #2259 after_run fix (urgent), #2260 API tests, plus two new run-43565919708 intents: branches repo-assist/perf-inbox-composite-index-2026-11-14 and repo-assist/fix-collections-index-500-2026-11-14 (not issue-tied). #2260's red Check is the inherited after_run bug; commented.",
+      "follow_up": "Verify the two new intents publish next run; re-create from /tmp/gh-aw patches if lost. All red until #2259 merges - infra, comment not push."
+    },
+    {
       "area": "ci",
-      "checked_at": "2026-11-13",
-      "result": "System suite now runs (runner has a browser); the top-level after_run hook's `return` raised LocalJumpError on every full CI run after tests pass (PR #2258 run 43448653839). Fix filed: return->next, branch repo-assist/eng-system-after-run-return-2026-11-13, run 43494445906.",
-      "follow_up": "Main CI goes red on the next code push until the fix merges; verify intent publishes as a PR."
+      "checked_at": "2026-11-14",
+      "result": "Main Check confirmed RED (run 43518873856, the #2258 merge push) on the after_run LocalJumpError; fix pending in PR #2259 (its own Check green). #2260's Check failed the same way despite 1709/0/2 passing - diagnosed and commented; merge #2259 first then re-run.",
+      "follow_up": "Until #2259 merges, every green-suite CI run exits 1."
+    },
+    {
+      "area": "performance",
+      "checked_at": "2026-11-14",
+      "result": "Hot paths already optimized by prior passes. Filed inbox composite index on noticed_notifications (branch perf-inbox-composite-index-2026-11-14; 5k rows 1.0ms+sort -> 0.035ms). Rejected: single-record page preloads, navbar avatar preload, comments sort index.",
+      "follow_up": "Do not re-propose the rejected items without a maintainer ask."
     },
     {
       "area": "tests",
       "checked_at": "2026-11-13",
-      "result": "API::BaseController auth/error contract was untested. Filed 8-test suite (repo-assist/test-api-base-error-matrix): 401s incl. soft-deleted token, 404, 422, last_request audit, rescue matrix via probe. Probe caught StandardError shadowing Pundit's 403 handler; reordered. Suite 1709/0/2.",
-      "follow_up": "Owed changelog bullet after merge. Still untested: web/grover/dashboard/admin base controllers (mostly exercised indirectly)."
+      "result": "API::BaseController auth/error contract suite pending merge in PR #2260 (8 tests + StandardError/Pundit rescue reorder). Suite baseline on main: 1701/0/2.",
+      "follow_up": "Owed changelog bullet after merge."
     },
     {
       "area": "dependencies",
-      "checked_at": "2026-11-13",
-      "result": "Open Dependabot #2258 (posthog-rails 3.22.0->3.26.0, minor): its red Check is unrelated to the bump (see ci check); explained in a PR comment. Majors pending maintainer sign-off: marcel 2, net-ssh 8, openssl 4, rack-oauth2 2.3, prism 2.x; npm updates need bun.",
+      "checked_at": "2026-11-14",
+      "result": "No open Dependabot PRs (#2258 posthog merged 2026-11-13). bundle outdated cannot run in this sandbox (read-only bundler git cache). Majors need maintainer sign-off: marcel 2, net-ssh 8, openssl 4, rack-oauth2 2.3, prism 2.x; npm updates need bun.",
       "follow_up": "None beyond the majors queue."
-    },
-    {
-      "area": "repo_assist_prs",
-      "checked_at": "2026-11-13",
-      "result": "Both 2026-11-11 intents merged (#2252 tests, #2254 changelog). Two new intents filed this run (43494445906): eng-system-after-run-return-2026-11-13 and test-api-base-error-matrix; patches at /tmp/gh-aw/aw-*.patch. Past intents were lost in publication before.",
-      "follow_up": "Verify both branches/PRs exist next run; if lost, re-create from patches or memory."
     },
     {
       "area": "docs",
       "checked_at": "2026-11-13",
-      "result": "Changelog bullets for #2251 and the users subscribe-lists tests both landed (#2253, #2254). No docs debt outstanding.",
-      "follow_up": "Owed: changelog bullets for the after_run fix and the API base contract PR once they land."
+      "result": "Changelog bullets for #2251 and the users subscribe-lists tests landed (#2253, #2254). No other docs debt outstanding.",
+      "follow_up": "Owed: bullets for #2259, #2260, and the two 2026-11-14 PRs once they land."
+    },
+    {
+      "area": "release",
+      "checked_at": "2026-11-14",
+      "result": "64 commits unreleased since tag release-2026-11-04-c205bc2-41926707390 (main at e5fa203f incl. #2258). Never trigger Release: it deploys to production.",
+      "follow_up": "Release decision sits with the maintainer via the monthly issue."
     },
     {
       "area": "code",
       "checked_at": "2026-11-11",
-      "result": "redirect_to sweep complete. Twitter routing shadow and feed sort stored column remain maintainer decisions. Grover bare-RuntimeError 500 considered and not filed (token-gate behaviour change; in monthly Future Work).",
+      "result": "redirect_to sweep complete. Twitter routing shadow and feed sort stored column remain maintainer decisions. Grover bare-RuntimeError 500 considered and not filed (token-gate behaviour change).",
       "follow_up": "Do not re-propose the grover raise change without a maintainer ask."
     },
     {
       "area": "tooling",
       "checked_at": "2026-11-10",
-      "result": "Full suite runs in the bun-less sandbox with SKIP_CSS_BUILD=1 SKIP_JS_BUILD=1; minitest 6.1.0 is in CI since #2249. Sandbox has chromedriver but chromium is an uninstalled snap stub, so the system suite is not runnable locally.",
+      "result": "Full suite runs with SKIP_CSS_BUILD=1 SKIP_JS_BUILD=1; minitest 6.1.0 in CI since #2249. System suite not runnable locally (chromium is an uninstalled snap stub). EXPLAIN probes work via bin/rails runner in test env inside a rolled-back transaction.",
       "follow_up": "npm updates still need bun."
-    },
-    {
-      "area": "release",
-      "checked_at": "2026-11-11",
-      "result": "54 commits unreleased since tag release-2026-11-04-c205bc2-41926707390 (main at fc7a35bd incl. #2251). Never trigger Release: it deploys to production.",
-      "follow_up": "Release decision sits with the maintainer via the monthly issue."
     },
     {
       "area": "qa",
       "checked_at": "2026-10-22",
       "result": "Stored XSS fixed in #2176 (merged). content_security_policy.rb still fully commented out; sanitizer drops inline style attributes.",
-      "follow_up": "CSP proposal only after sanitizer approach settles; in monthly Future Work."
+      "follow_up": "CSP proposal only after sanitizer approach settles."
     },
     {
       "area": "hygiene",
@@ -85,13 +91,13 @@
   "priorities": [
     {
       "task": 6,
-      "item": "Verify the two 2026-11-13 PR intents land",
-      "note": "Branches repo-assist/eng-system-after-run-return-2026-11-13 (urgent: main CI red until merged) and repo-assist/test-api-base-error-matrix. Check branches + PR list first; if lost, re-create from patches or memory checks."
+      "item": "Verify the two 2026-11-14 PR intents publish",
+      "note": "Branches repo-assist/perf-inbox-composite-index-2026-11-14 and repo-assist/fix-collections-index-500-2026-11-14. If lost, re-create from /tmp/gh-aw patches or memory."
     },
     {
       "task": 6,
-      "item": "Maintain the two new PRs once published",
-      "note": "Watch CI on both: each depends on the after_run fix being in effect on its base. Fix my-change CI failures; comment on infra-only failures."
+      "item": "Maintain the four open PRs",
+      "note": "#2259 urgent (main red until merged), #2260, and the two new ones. Red Checks are the inherited after_run bug - comment not push; fix CI failures caused by my changes."
     },
     {
       "task": 10,
@@ -115,8 +121,8 @@
     },
     {
       "task": 7,
-      "item": "Changelog entries for the two 2026-11-13 PRs",
-      "note": "Write Tooling/CI bullet for the after_run fix and Tests bullet for the API base error-matrix PR in the next docs pass after they land."
+      "item": "Changelog entries for the four open PRs",
+      "note": "CI bullet for #2259, Tests bullet for #2260, DB/perf bullet for the inbox index, Crash-fixes bullet for the /collections prune - next docs pass after they land."
     }
   ]
 }
