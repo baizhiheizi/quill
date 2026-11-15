@@ -4,62 +4,49 @@
     "labelling_after": 2257,
     "investigation_after": 2257
   },
-  "issues": [
-    {
-      "number": 2256,
-      "state": "resolution_recommended",
-      "updated_at": "2026-11-13",
-      "note": "Commented with evidence recommending closure; awaiting maintainer."
-    },
-    {
-      "number": 2257,
-      "state": "resolution_recommended",
-      "updated_at": "2026-11-13",
-      "note": "Commented recommending closure; awaiting maintainer."
-    }
-  ],
+  "issues": [],
   "fixes": [],
   "checks": [
     {
       "area": "repo_assist_prs",
-      "checked_at": "2026-11-14",
-      "result": "Run 43565919708's two intents never published. Re-derived and re-filed all three as run-43624094289 intents: #2262 (perf inbox index), #2261 (/collections prune, suite 1710/0/2), #2263 (docs bullets for #2259/#2260). Branches carry the commits.",
-      "follow_up": "Verify the three intents publish next run; re-create again from the branch names if lost."
+      "checked_at": "2026-11-15",
+      "result": "All three 2026-11-14 intents merged (#2261 collections prune, #2262 inbox composite index, #2263 docs). New intent this run: drop the now-subsumed 2-col index_noticed_notifications_on_recipient on branch repo-assist/perf-drop-redundant-recipient-index-2026-11-15.",
+      "follow_up": "Verify the new intent publishes next run; re-create from the branch if lost."
     },
     {
       "area": "ci",
       "checked_at": "2026-11-14",
-      "result": "Main Check GREEN: run 43569706156 (run_number 4136, the #2260 merge push) succeeded. #2259/#2260 both merged 2026-11-14; the after_run saga is closed.",
+      "result": "Main Check GREEN: run 43569706156 (run_number 4136, the #2260 merge push) succeeded. Chrome-install step already hardened (retries, CFT fallback, skip-on-egress); nothing to touch.",
       "follow_up": null
     },
     {
       "area": "performance",
-      "checked_at": "2026-11-14",
-      "result": "Inbox composite index re-filed (4-col recipient+web_visible+created_at, replaces 3-col; ANALYZE in migration). Fresh probe: 5k inbox scan-and-sort cost ~313 -> ordered backward scan ~4.4. Rejected still: single-record page preloads, navbar avatar preload, comments sort index.",
-      "follow_up": "Possible follow-up: drop the now-redundant 2-col index_noticed_notifications_on_recipient (noted in PR/issue). Do not re-propose rejected items without a maintainer ask."
+      "checked_at": "2026-11-15",
+      "result": "Inbox composite index merged (#2262). Follow-up filed this run: migration drops the subsumed 2-col recipient index + guard test. Rejected still: page preloads, navbar avatar preload, comments sort index.",
+      "follow_up": "Do not re-propose rejected items without a maintainer ask."
     },
     {
       "area": "tests",
-      "checked_at": "2026-11-14",
-      "result": "#2260 API base contract suite merged. Full-suite baseline on the collections fix branch: 1710/0/2.",
+      "checked_at": "2026-11-15",
+      "result": "#2260 API base contract suite merged. Full-suite baseline with the index-drop branch: 1712 runs / 0 failures / 2 skips (baseline 1710 + 2 new guard tests).",
       "follow_up": null
     },
     {
       "area": "dependencies",
       "checked_at": "2026-11-14",
-      "result": "No open Dependabot PRs. bundle outdated cannot run in this sandbox (read-only bundler git cache). Majors need maintainer sign-off: marcel 2, net-ssh 8, openssl 4, rack-oauth2 2.3, prism 2.x; npm updates need bun.",
+      "result": "No open Dependabot PRs (re-checked 2026-11-15, search returns zero). bundle outdated cannot run in this sandbox (read-only bundler git cache). Majors need maintainer sign-off: marcel 2, net-ssh 8, openssl 4, rack-oauth2 2.3, prism 2.x; npm updates need bun.",
       "follow_up": "None beyond the majors queue."
     },
     {
       "area": "docs",
-      "checked_at": "2026-11-14",
-      "result": "Changelog current once the three open PRs land: #2263 covers #2259/#2260; the collections and perf PRs carry their own bullets. No docs debt queued.",
+      "checked_at": "2026-11-15",
+      "result": "Changelog current: all merged work covered after #2263; the index-drop PR carries its own Performance bullet. No docs debt queued.",
       "follow_up": null
     },
     {
       "area": "release",
-      "checked_at": "2026-11-14",
-      "result": "68 commits unreleased since tag release-2026-11-04-c205bc2-41926707390 (main at 6f45280c incl. #2259/#2260). Never trigger Release: it deploys to production.",
+      "checked_at": "2026-11-15",
+      "result": "76 commits unreleased since tag release-2026-11-04-c205bc2-41926707390 (now incl. #2261/#2262/#2263). Never trigger Release: it deploys to production.",
       "follow_up": "Release decision sits with the maintainer via the monthly issue."
     },
     {
@@ -91,8 +78,8 @@
   "priorities": [
     {
       "task": 6,
-      "item": "Verify the three 2026-11-14 18:13 PR intents publish",
-      "note": "#2262, #2261, #2263 on branches repo-assist/perf-inbox-composite-index-2026-11-14, repo-assist/fix-collections-index-500-2026-11-14, repo-assist/docs-changelog-2026-11-14. If lost, re-create from those branches/memory."
+      "item": "Verify the 2026-11-15 PR intent publishes",
+      "note": "Index-drop PR on branch repo-assist/perf-drop-redundant-recipient-index-2026-11-15. If lost, re-create from that branch/memory."
     },
     {
       "task": 10,
