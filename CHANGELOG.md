@@ -218,12 +218,13 @@ in the feed redirect.
   page boundary. On a synthetic 5,000-notification inbox the page plan goes
   from a scan-and-sort to an ordered backward index scan (cost ≈313 → ≈4.4);
   the unread-badge queries (`unread.for_web.count` / `exists?`) share the
-  index prefix.
+  index prefix. The migration runs `ANALYZE` on `noticed_notifications`
+  alone — the one table it re-indexes.
 
-The migration also runs `ANALYZE` on both tables. Postgres collects per-index
-statistics during `ANALYZE`, and an index added to a populated table has
-none — without them the planner will not choose the ordered index scan, so
-the index would sit unused until the next autovacuum.
+The feed-index migration above also runs `ANALYZE` on both tables. Postgres
+collects per-index statistics during `ANALYZE`, and an index added to a
+populated table has none — without them the planner will not choose the
+ordered index scan, so the index would sit unused until the next autovacuum.
 
 `bin/measure-feed-indexes` reproduces the measurement: it seeds a synthetic
 dataset inside a transaction it rolls back, then runs `EXPLAIN (ANALYZE,
