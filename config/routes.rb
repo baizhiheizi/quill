@@ -56,7 +56,7 @@ Rails.application.routes.draw do
         locale: Regexp.union(I18n.available_locales.map(&:to_s))
       }
 
-  resources :collections, only: %i[index show], param: :uuid do
+  resources :collections, only: :show, param: :uuid do
     get :share
   end
   resources :collections, only: [], module: :collections, param: :uuid do

@@ -102,6 +102,12 @@ real requirement is `rails >= 8.1.4`, not a json version.
   sending a stale `Client-Ip`. The spoofing check is now off
   (`config.action_dispatch.ip_spoofing_check = false`); the client address
   still resolves from the proxy-set chain.
+- **`GET /collections` 500ed on a missing template** — the public collections
+  resource routed an `index` action, but no index template ever existed
+  (`ActionView::MissingTemplate`), so `/collections` returned a 500. Nothing
+  links to the index — collections are reached via their show-page URLs — so
+  the route is pruned and the URL now 404s like any other unknown path;
+  `show`/`share` and the nested articles/subscribers indexes are unchanged.
 
 ### Security
 
