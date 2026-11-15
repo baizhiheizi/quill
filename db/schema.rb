@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_11_14_181005) do
+ActiveRecord::Schema[8.1].define(version: 2026_11_15_090000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_stat_statements"
@@ -302,7 +302,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_14_181005) do
     t.boolean "web_visible", default: false, null: false
     t.index ["event_id"], name: "index_noticed_notifications_on_event_id"
     t.index ["recipient_type", "recipient_id", "web_visible", "created_at"], name: "index_noticed_notifications_on_recipient_web_visible_created"
-    t.index ["recipient_type", "recipient_id"], name: "index_noticed_notifications_on_recipient"
   end
 
   create_table "notification_settings", force: :cascade do |t|

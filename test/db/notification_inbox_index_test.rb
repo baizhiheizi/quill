@@ -19,6 +19,12 @@ class NotificationInboxIndexTest < ActiveSupport::TestCase
                  "created_at must come last so the index can serve ORDER BY created_at DESC"
   end
 
+  test "the two-column recipient index stays dropped" do
+    assert_nil index_for(:noticed_notifications, "index_noticed_notifications_on_recipient"),
+               "the composite's leftmost prefix serves recipient-only lookups; " \
+               "the standalone two-column index is redundant write overhead"
+  end
+
   private
 
   def index_for(table, name)
