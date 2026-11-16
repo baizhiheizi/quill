@@ -10,8 +10,8 @@
     {
       "area": "repo_assist_prs",
       "checked_at": "2026-11-16",
-      "result": "#2264 (drop the subsumed 2-col recipient index) verified healthy: CI Check green, vigil APPROVE (risk low), mergeable clean, no maintainer comments. New intent: locale parity fix on branch repo-assist/fix-locale-completeness-2026-11-16 (translation-missing gaps + en⊆ja/zh-CN guard test).",
-      "follow_up": "Both open repo-assist PRs (#2264 and the locale fix) await maintainer review; re-check health and conflicts each run."
+      "result": "#2264 (index drop) and #2265 (locale parity) merged 2026-11-16; zero open repo-assist PRs. Filed test-only PR on branch repo-assist/test-coerces-pagination-params: 5 tests pin the CoercesPaginationParams coercion matrix, changelog bullet included.",
+      "follow_up": "Verify the new PR CI/mergeable next run; maintain until merged."
     },
     {
       "area": "ci",
@@ -28,7 +28,7 @@
     {
       "area": "tests",
       "checked_at": "2026-11-16",
-      "result": "New test/i18n/locale_completeness_test.rb (6 tests) pins en leaf keys ⊆ ja/zh-CN for views/models/notifications. Branch suite: 1717 runs / 0 failures / 2 skips; rubocop + zeitwerk clean. admin.en.yml intentionally excluded (no ja/zh translations exist).",
+      "result": "Full branch suite 1723 runs / 0 failures / 2 skips (1718 on main + 5 new). New coerces_pagination_params_test.rb pins the ?page= coercion guard (with_routing probe + real /articles); red-check verified: 3 tests fail with the before_action disabled.",
       "follow_up": null
     },
     {
@@ -77,11 +77,6 @@
   "completed_actions": [],
   "priorities": [
     {
-      "task": 6,
-      "item": "Maintain open repo-assist PRs #2264 and the 2026-11-16 locale fix",
-      "note": "Both healthy as of 2026-11-16; re-verify CI/conflicts/comments each run. If an intent is lost, re-create from the local branch/memory."
-    },
-    {
       "task": 10,
       "item": "Twitter connect flow: maintainer decision",
       "note": "sessions#twitter unreachable - catch-all shadows it (routes.rb:21 vs 27). Pinned by test merged in #2232. Do not change routing unilaterally."
@@ -100,6 +95,11 @@
       "task": 4,
       "item": "Dependency majors need maintainer sign-off",
       "note": "marcel 2, net-ssh 8, openssl 4, rack-oauth2 2.3, prism 2.x. npm updates need bun."
+    },
+    {
+      "task": 6,
+      "item": "Maintain repo-assist/test-coerces-pagination-params PR until merged",
+      "note": "Filed 2026-11-16: 5 coercion tests + changelog bullet; suite 1723/0/2, rubocop + zeitwerk clean. Re-verify CI/conflicts/comments each run."
     }
   ]
 }
