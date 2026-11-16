@@ -284,6 +284,7 @@ ja:
   privacy_policy: Privary Policy
   verify: Verify
   reverify: Reverify
+  start_reading: 読み始める
   select_crypto: Select Crypto
   press_enter_to_search_all_articles: Press Enter to search all articles
   home: Home
@@ -314,11 +315,13 @@ ja:
   hide_collection_tips: You are hiding your collection. Once hidden, readers may not buy this collection.
     This article is belong to this collection. You may buy the collection to read all articles in it and receive collection revenue. <span class="font-bold text-red-500">%<orders_count>s</span> readers have subscribed this collection, sharing <span class="font-bold text-red-500">%<revenue_ratio>s</span> of revenue.
   collection_introduction: Collection introduction
-  subscribe_collection: Subscribe
+  buy_collection: コレクションを購入
   upload_cover: Upload cover
   import: Import
   alert_for_blocked_user: The account is suspected of being fraudulent. Please pay with caution.
   alert: Alert
+  connect: 接続
+  reconnect: 再接続
   stats: Stats
 
   # specs/011-comprehensive-ui-refactor — value-net design system

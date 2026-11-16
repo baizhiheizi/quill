@@ -133,6 +133,27 @@ real requirement is `rails >= 8.1.4`, not a json version.
 
 ### Corrections
 
+- **Untranslated Japanese strings on the dashboard and collection pages** —
+  four view keys had no Japanese text: `start_reading` (the dashboard home
+  link), `connect`/`reconnect` (the settings page's Twitter authorization
+  links) and `buy_collection` (the collection page's buy button). The
+  dashboard article page's `reader_revenue_total` label existed in no
+  complete form: `en` never defined it, `ja` defined only a misspelled
+  `reader_tevenue_total` so the finished translation was never found, and
+  `zh-CN` was the sole locale that could render it. Production enables
+  `config.i18n.fallbacks`, so the four missing view keys fell back to
+  their English text — the collection buy button read "Subscribe" — rather
+  than `translation missing`; the article `reader_revenue_total` label was
+  the one that reached readers as `translation missing`, since neither `en`
+  nor `ja` defined it. `views.ja` gained the four keys (the stale
+  `subscribe_collection` remnant is gone), `models.ja` gained the article
+  stat labels the dashboard article page renders (`pre_orders_count`, the
+  two view counters, `shares_count`) with the typo fixed, and `models.en`
+  gained `reader_revenue_total` while dropping the unused
+  `collection_revenue_total`. A new
+  `test/i18n/locale_completeness_test.rb` fails whenever an `en` leaf key
+  in the `views`/`models`/`notifications` families is absent from `ja` or
+  `zh-CN`, so the drift cannot ship unnoticed again.
 - **Admin "Created ASC" sort (#2184)** — the `created_at_asc` branch of the
   sort switch in `Admin::ArticlesController` and `Admin::CommentsController`
   ordered by `updated_at DESC`, the opposite of the label and of the other
