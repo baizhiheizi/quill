@@ -226,6 +226,12 @@ in the feed redirect.
   the unread-badge queries (`unread.for_web.count` / `exists?`) share the
   index prefix. The migration runs `ANALYZE` on `noticed_notifications`
   alone — the one table it re-indexes.
+- **The inbox composite drops its now-redundant sibling** — the standalone
+  two-column recipient index on `noticed_notifications` predates the
+  composite above, whose leftmost prefix (`recipient_type`, `recipient_id`)
+  serves every lookup that index could. Every notification insert was still
+  maintaining it, so the migration removes it; the composite's `down` and
+  the original migrations keep older paths intact.
 
 The feed-index migration above also runs `ANALYZE` on both tables. Postgres
 collects per-index statistics during `ANALYZE`, and an index added to a
