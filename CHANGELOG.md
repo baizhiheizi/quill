@@ -417,6 +417,16 @@ transitively (rubocop-ast's prism floor moved from `~> 1.7` to `>= 1.7`).
   after `Pundit::NotAuthorizedError` shadowed it and a Pundit denial rendered
   a 500 leaking Pundit's internal message instead of the declared 403. The
   Pundit handler moved below `StandardError`; no live path changes.
+- The pagination `?page=` guard gained a test suite
+  (`test/controllers/concerns/coerces_pagination_params_test.rb`). The
+  `CoercesPaginationParams` concern that fixed the `Pagy::OptionError` 500s
+  (#2163) had no direct tests; a probe controller now pins the coercion
+  matrix — `0`, `-3`, `abc`, empty, over-bigint and over-`MAX_PAGE` values
+  coerce to 1 in both `params` and `request.GET` (the source Pagy reads),
+  while in-range values including the `MAX_PAGE` boundary and an absent
+  param pass through untouched — plus end-to-end requests against the real
+  `/articles` index. The coercion tests fail with the concern's
+  `before_action` disabled.
 
 ### specs/011-comprehensive-ui-refactor
 
