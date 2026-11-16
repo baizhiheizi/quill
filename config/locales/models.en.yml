@@ -28,7 +28,7 @@ en:
         shares_count: Shares Count
         revenue: Revenue
         author_revenue_total: Author Revenue
-        collection_revenue_total: Collection Revenue
+        reader_revenue_total: Reader Revenue
         my_share: My Share(%)
         state_text: State
         tags: Tags

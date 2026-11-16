@@ -133,6 +133,21 @@ real requirement is `rails >= 8.1.4`, not a json version.
 
 ### Corrections
 
+- **Translation-missing strings on live pages** — four view keys
+  (`start_reading`, `connect`, `reconnect`, `buy_collection` — the last one
+  the collection page's buy button) had no Japanese text, and the article
+  stats page's `reader_revenue_total` label existed in no complete form:
+  `en` never defined it, `ja` defined only a misspelled
+  `reader_tevenue_total` so the finished translation was never found, and
+  `zh-CN` was the sole locale that could render it. `views.ja` gained the
+  four keys (the stale `subscribe_collection` remnant is gone), `models.ja`
+  gained the article stat labels the admin pages render
+  (`pre_orders_count`, the two view counters, `shares_count`) with the
+  typo fixed, and `models.en` gained `reader_revenue_total` while dropping
+  the unused `collection_revenue_total`. A new
+  `test/i18n/locale_completeness_test.rb` fails whenever an `en` leaf key
+  in the `views`/`models`/`notifications` families is absent from `ja` or
+  `zh-CN`, so the drift cannot ship unnoticed again.
 - **Admin "Created ASC" sort (#2184)** — the `created_at_asc` branch of the
   sort switch in `Admin::ArticlesController` and `Admin::CommentsController`
   ordered by `updated_at DESC`, the opposite of the label and of the other

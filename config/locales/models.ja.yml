@@ -21,12 +21,16 @@ ja:
         upvotes_count: Good数
         downvotes_count: Bad数
         comments_count: コメント数
+        pre_orders_count: 支払い試行回数
         orders_count: 支払い回数
         buy_orders_count: 購入された回数
         reward_orders_count: リワード回数
+        unpaid_views_count: 閲覧数（未購入）
+        paid_views_count: 閲覧数（購入済み）
+        shares_count: シェア数
         revenue: 収益
         author_revenue_total: 作者収益
-        reader_tevenue_total: 読者収益
+        reader_revenue_total: 読者収益
         my_share: 自分の割合（%）
         state_text: 状態
         tags: タグ
