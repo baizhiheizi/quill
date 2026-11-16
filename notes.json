@@ -9,9 +9,9 @@
   "checks": [
     {
       "area": "repo_assist_prs",
-      "checked_at": "2026-11-15",
-      "result": "All three 2026-11-14 intents merged (#2261 collections prune, #2262 inbox composite index, #2263 docs). New intent this run: drop the now-subsumed 2-col index_noticed_notifications_on_recipient on branch repo-assist/perf-drop-redundant-recipient-index-2026-11-15.",
-      "follow_up": "Verify the new intent publishes next run; re-create from the branch if lost."
+      "checked_at": "2026-11-16",
+      "result": "#2264 (drop the subsumed 2-col recipient index) verified healthy: CI Check green, vigil APPROVE (risk low), mergeable clean, no maintainer comments. New intent: locale parity fix on branch repo-assist/fix-locale-completeness-2026-11-16 (translation-missing gaps + en⊆ja/zh-CN guard test).",
+      "follow_up": "Both open repo-assist PRs (#2264 and the locale fix) await maintainer review; re-check health and conflicts each run."
     },
     {
       "area": "ci",
@@ -22,13 +22,13 @@
     {
       "area": "performance",
       "checked_at": "2026-11-15",
-      "result": "Inbox composite index merged (#2262). Follow-up filed this run: migration drops the subsumed 2-col recipient index + guard test. Rejected still: page preloads, navbar avatar preload, comments sort index.",
+      "result": "Inbox composite index merged (#2262); index-drop follow-up is open as #2264. Rejected still: page preloads, navbar avatar preload, comments sort index.",
       "follow_up": "Do not re-propose rejected items without a maintainer ask."
     },
     {
       "area": "tests",
-      "checked_at": "2026-11-15",
-      "result": "#2260 API base contract suite merged. Full-suite baseline with the index-drop branch: 1712 runs / 0 failures / 2 skips (baseline 1710 + 2 new guard tests).",
+      "checked_at": "2026-11-16",
+      "result": "New test/i18n/locale_completeness_test.rb (6 tests) pins en leaf keys ⊆ ja/zh-CN for views/models/notifications. Branch suite: 1717 runs / 0 failures / 2 skips; rubocop + zeitwerk clean. admin.en.yml intentionally excluded (no ja/zh translations exist).",
       "follow_up": null
     },
     {
@@ -39,21 +39,21 @@
     },
     {
       "area": "docs",
-      "checked_at": "2026-11-15",
-      "result": "Changelog current: all merged work covered after #2263; the index-drop PR carries its own Performance bullet. No docs debt queued.",
+      "checked_at": "2026-11-16",
+      "result": "Changelog current; the locale-fix PR carries its own Corrections bullet. No docs debt queued.",
       "follow_up": null
     },
     {
       "area": "release",
       "checked_at": "2026-11-15",
-      "result": "76 commits unreleased since tag release-2026-11-04-c205bc2-41926707390 (now incl. #2261/#2262/#2263). Never trigger Release: it deploys to production.",
+      "result": "76 commits unreleased since tag release-2026-11-04-c205bc2-41926707390. Never trigger Release: it deploys to production.",
       "follow_up": "Release decision sits with the maintainer via the monthly issue."
     },
     {
       "area": "code",
-      "checked_at": "2026-11-11",
-      "result": "redirect_to sweep complete. Twitter routing shadow and feed sort stored column remain maintainer decisions. Grover bare-RuntimeError 500 considered and not filed (token-gate behaviour change).",
-      "follow_up": "Do not re-propose the grover raise change without a maintainer ask."
+      "checked_at": "2026-11-16",
+      "result": "Twitter routing shadow and feed sort stored column remain maintainer decisions; grover raise change not to be re-proposed. Locale parity en/ja/zh-CN fixed 2026-11-16 (guard test added); details in PR on branch repo-assist/fix-locale-completeness-2026-11-16.",
+      "follow_up": null
     },
     {
       "area": "tooling",
@@ -78,8 +78,8 @@
   "priorities": [
     {
       "task": 6,
-      "item": "Verify the 2026-11-15 PR intent publishes",
-      "note": "Index-drop PR on branch repo-assist/perf-drop-redundant-recipient-index-2026-11-15. If lost, re-create from that branch/memory."
+      "item": "Maintain open repo-assist PRs #2264 and the 2026-11-16 locale fix",
+      "note": "Both healthy as of 2026-11-16; re-verify CI/conflicts/comments each run. If an intent is lost, re-create from the local branch/memory."
     },
     {
       "task": 10,
