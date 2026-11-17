@@ -17,7 +17,7 @@ Stack: Rails monolith with Hotwire (Turbo + Stimulus), ERB partials, PostgreSQL,
 | Database | PostgreSQL |
 | Real-time | Solid Cable (separate `*_cable` DB) |
 | Cache / jobs | Solid Cache + Solid Queue (separate queue DB) |
-| Frontend | Turbo, Stimulus, Tailwind, esbuild (Node 20+, Bun 1.x) |
+| Frontend | Turbo, Stimulus, Tailwind, esbuild (Node 18+, Bun 1.x) |
 | Testing | Minitest ~> 6.0.6 + Capybara |
 | Lint | RuboCop (rails-omakase), Prettier |
 | Deploy | Kamal + Docker (manual `workflow_dispatch`) |

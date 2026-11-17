@@ -2,7 +2,7 @@
 
 - Ruby v4.0.9 (see `.ruby-version` and `mise.toml` at the repo root)
 - PostgreSQL
-- Node.js 20+ and Bun 1.x
+- Node.js 18+ (see `.node-version`) and Bun 1.x (see `mise.toml`)
 
 ### Install Ruby
 
