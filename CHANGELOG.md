@@ -313,6 +313,13 @@ posthog-rails 3.20.4 → 3.22.0, ransack 6.0.1 → 6.1.0 and rubocop-ast
 1.50.0 → 1.51.0, with aws-sdk-core 3.266.0 and posthog-ruby 3.32.1
 transitively (rubocop-ast's prism floor moved from `~> 1.7` to `>= 1.7`).
 
+The 2026-11-17 Dependabot round landed as three separate PRs (#2266–#2268)
+rather than one bundle, but the resulting lockfile is identical to the union
+of the three: posthog-rails 3.26.0 → 3.26.4 with posthog-ruby 3.32.1 →
+3.34.1, aws-sdk-s3 1.240.0 → 1.242.0 with aws-sdk-core 3.266.0 → 3.268.0,
+aws-sdk-kms 1.140.0 → 1.143.0 and aws-partitions 1.1303.0 → 1.1305.0, and
+puma 8.0.2 → 8.0.3.
+
 ### Tooling and docs corrections
 
 - `docs/how-to/deploy-with-kamal.md` corrected against the real deployment:
