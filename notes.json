@@ -2,39 +2,58 @@
   "version": 1,
   "cursors": {
     "labelling_after": 2257,
-    "investigation_after": 2257
+    "investigation_after": 2272
   },
-  "issues": [],
+  "issues": [
+    {
+      "number": 2272,
+      "state": "commented",
+      "updated_at": "2026-11-17",
+      "note": "Posthog auto-filed MixinBot::ServerError 2026-11-17: Mixin-side /messages 5xx; retry ladder (in-process backoff + 5 retry_on) exhausted, reported by design. No app bug (plain_post builds params only). Root-cause comment, needs triage, close-as-expected suggested; original 'An *A...' alert lost."
+    }
+  ],
   "fixes": [],
   "checks": [
     {
       "area": "repo_assist_prs",
       "checked_at": "2026-11-17",
-      "result": "Three open PRs. #2269: CI green; vigil claims-gap (low) verified, CHANGELOG recalibrated in a6298f5e pushed, corrected framing commented. New: bundle PR (union of Dependabot #2266-#2268) and docs PR (version claims).",
-      "follow_up": "Verify the two new PRs publish with green CI next run; maintain all three until merged; close-out for #2266-#2268 after bundle merges."
-    },
-    {
-      "area": "dependencies",
-      "checked_at": "2026-11-17",
-      "result": "Bundled #2266-#2268 into one PR, lockfile-identical to their union (posthog-rails 3.26.4, aws-sdk-s3 1.242.0 + transitives, puma 8.0.3); checksums re-verified by bundle install. Plain bundle update today resolves puma 8.1.2 / aws-sdk-s3 1.243.0 - deliberately not taken.",
-      "follow_up": "Majors still maintainer-decision: marcel 2, net-ssh 8, openssl 4, rack-oauth2 2.3, prism 2.x. npm needs bun."
-    },
-    {
-      "area": "tests",
-      "checked_at": "2026-11-17",
-      "result": "Bundle-branch suite (union lockfile): 1718 runs / 0 failures / 2 skips - main's baseline. puma 8.0.3 native extensions compiled.",
-      "follow_up": null
+      "result": "Zero open RA PRs: #2269, #2270, #2271 and Dependabot #2266-#2268 all merged 2026-11-17. New docs PR branch repo-assist/docs-changelog-blaze-retirement-2026-11-17 (stale Blaze changelog section).",
+      "follow_up": "Verify the docs PR publishes with green CI next run; maintain until merged."
     },
     {
       "area": "docs",
       "checked_at": "2026-11-17",
-      "result": "Version claims aligned via docs PR: README Rails 8.1.3 -> 8.1.4; CONTRIBUTING/AGENTS Node 20+ -> 18+ (.node-version pins 18.15.0, engines >=18, CI bun-only). No docs debt queued.",
+      "result": "Fixed stale Unreleased Blaze section (described reactor, Settings.blaze_enable gate and MixinMessage as live; all removed by bac11d3c 2026-11-06 after the last changelog pass; gate false in prod since 2022). How-to docs already correct; CHANGELOG.md the only stale surface. Citations verified.",
+      "follow_up": null
+    },
+    {
+      "area": "code",
+      "checked_at": "2026-11-17",
+      "result": "Twitter routing shadow and feed sort stored column remain maintainer decisions; grover raise not re-proposed. Retry/discard matrix and mixin_api layer confirmed fully tested. PostHog now auto-files production-error issues; #2272 first artifact.",
+      "follow_up": null
+    },
+    {
+      "area": "release",
+      "checked_at": "2026-11-17",
+      "result": "94 commits unreleased since tag release-2026-11-04-c205bc2-41926707390 (was 81 earlier today; #2266-#2271 landed). Never trigger Release: it deploys to production.",
+      "follow_up": "Release decision sits with the maintainer via the monthly issue."
+    },
+    {
+      "area": "dependencies",
+      "checked_at": "2026-11-17",
+      "result": "2026-11-17 round merged (#2266-#2268 individually; lockfile identical to the #2271 bundle union: posthog-rails 3.26.4, aws-sdk-s3 1.242.0, puma 8.0.3). Nothing open. Majors maintainer-decision: marcel 2, net-ssh 8, openssl 4, rack-oauth2 2.3, prism 2.x. npm needs bun.",
+      "follow_up": null
+    },
+    {
+      "area": "tests",
+      "checked_at": "2026-11-17",
+      "result": "Suite baseline 1718 runs / 0 failures / 2 skips on main. Retry matrix, mixin_api gate/client/error-notification, send_job and mixin_bot_notifier all have named test files.",
       "follow_up": null
     },
     {
       "area": "tooling",
       "checked_at": "2026-11-17",
-      "result": "KEY FIND: read-only toolcache blocks bundler downloads, but BUNDLE_PATH=vendor/bundle (gitignored) is fully writable - bundle update/install work in-sandbox. Suite still runs with SKIP_CSS_BUILD=1 SKIP_JS_BUILD=1. EXPLAIN probes need explicit-transaction rollback. db:rollback needs :primary form.",
+      "result": "Read-only toolcache blocks bundler downloads, but BUNDLE_PATH=vendor/bundle (gitignored) is fully writable - bundle update/install work in-sandbox. Suite runs with SKIP_CSS_BUILD=1 SKIP_JS_BUILD=1. EXPLAIN probes need explicit-transaction rollback. db:rollback needs :primary form.",
       "follow_up": null
     },
     {
@@ -48,18 +67,6 @@
       "checked_at": "2026-11-15",
       "result": "Inbox composite index merged (#2262); recipient-index drop merged (#2264). Rejected still: page preloads, navbar avatar preload, comments sort index.",
       "follow_up": "Do not re-propose rejected items without a maintainer ask."
-    },
-    {
-      "area": "release",
-      "checked_at": "2026-11-17",
-      "result": "81 commits unreleased since tag release-2026-11-04-c205bc2-41926707390 (unchanged since 2026-11-16). Never trigger Release: it deploys to production.",
-      "follow_up": "Release decision sits with the maintainer via the monthly issue."
-    },
-    {
-      "area": "code",
-      "checked_at": "2026-11-16",
-      "result": "Twitter routing shadow and feed sort stored column remain maintainer decisions; grover raise change not to be re-proposed. Locale parity en/ja/zh-CN fixed and merged (#2265).",
-      "follow_up": null
     },
     {
       "area": "qa",
@@ -78,8 +85,13 @@
   "priorities": [
     {
       "task": 6,
-      "item": "Maintain the three open repo-assist PRs until merged",
-      "note": "#2269 (coercion tests, vigil finding addressed in a6298f5e), bundle PR (supersedes Dependabot #2266-#2268), docs PR (version claims). Re-verify CI/conflicts/comments each run."
+      "item": "Maintain the blaze changelog docs PR until merged",
+      "note": "Branch repo-assist/docs-changelog-blaze-retirement-2026-11-17. Re-verify CI/conflicts/comments each run."
+    },
+    {
+      "task": 2,
+      "item": "Watch posthog auto-filed issues",
+      "note": "Each is a production-error alert: investigate, root-cause, label, suggest resolution on arrival (see #2272 handling)."
     },
     {
       "task": 10,
@@ -92,9 +104,9 @@
       "note": "order_by_popularity sorts a computed expression, no index helps. In monthly issue."
     },
     {
-      "task": 6,
+      "task": 2,
       "item": "Confirm PostHog fingerprints drop",
-      "note": "key-cannot-be-blank since #2232 merged (2026-11-07); Pagy::OptionError since #2163. Maintainer-side check; in monthly issue."
+      "note": "Auto-filing now files issues (#2272); no recurrence filed for key-cannot-be-blank (fixed #2232) or Pagy::OptionError (fixed #2163). Maintainer-side dashboard check; in monthly issue."
     },
     {
       "task": 4,
