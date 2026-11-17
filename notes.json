@@ -9,9 +9,33 @@
   "checks": [
     {
       "area": "repo_assist_prs",
-      "checked_at": "2026-11-16",
-      "result": "#2264 (index drop) and #2265 (locale parity) merged 2026-11-16; zero open repo-assist PRs. Filed test-only PR on branch repo-assist/test-coerces-pagination-params: 5 tests pin the CoercesPaginationParams coercion matrix, changelog bullet included.",
-      "follow_up": "Verify the new PR CI/mergeable next run; maintain until merged."
+      "checked_at": "2026-11-17",
+      "result": "Three open PRs. #2269: CI green; vigil claims-gap (low) verified, CHANGELOG recalibrated in a6298f5e pushed, corrected framing commented. New: bundle PR (union of Dependabot #2266-#2268) and docs PR (version claims).",
+      "follow_up": "Verify the two new PRs publish with green CI next run; maintain all three until merged; close-out for #2266-#2268 after bundle merges."
+    },
+    {
+      "area": "dependencies",
+      "checked_at": "2026-11-17",
+      "result": "Bundled #2266-#2268 into one PR, lockfile-identical to their union (posthog-rails 3.26.4, aws-sdk-s3 1.242.0 + transitives, puma 8.0.3); checksums re-verified by bundle install. Plain bundle update today resolves puma 8.1.2 / aws-sdk-s3 1.243.0 - deliberately not taken.",
+      "follow_up": "Majors still maintainer-decision: marcel 2, net-ssh 8, openssl 4, rack-oauth2 2.3, prism 2.x. npm needs bun."
+    },
+    {
+      "area": "tests",
+      "checked_at": "2026-11-17",
+      "result": "Bundle-branch suite (union lockfile): 1718 runs / 0 failures / 2 skips - main's baseline. puma 8.0.3 native extensions compiled.",
+      "follow_up": null
+    },
+    {
+      "area": "docs",
+      "checked_at": "2026-11-17",
+      "result": "Version claims aligned via docs PR: README Rails 8.1.3 -> 8.1.4; CONTRIBUTING/AGENTS Node 20+ -> 18+ (.node-version pins 18.15.0, engines >=18, CI bun-only). No docs debt queued.",
+      "follow_up": null
+    },
+    {
+      "area": "tooling",
+      "checked_at": "2026-11-17",
+      "result": "KEY FIND: read-only toolcache blocks bundler downloads, but BUNDLE_PATH=vendor/bundle (gitignored) is fully writable - bundle update/install work in-sandbox. Suite still runs with SKIP_CSS_BUILD=1 SKIP_JS_BUILD=1. EXPLAIN probes need explicit-transaction rollback. db:rollback needs :primary form.",
+      "follow_up": null
     },
     {
       "area": "ci",
@@ -22,44 +46,20 @@
     {
       "area": "performance",
       "checked_at": "2026-11-15",
-      "result": "Inbox composite index merged (#2262); index-drop follow-up is open as #2264. Rejected still: page preloads, navbar avatar preload, comments sort index.",
+      "result": "Inbox composite index merged (#2262); recipient-index drop merged (#2264). Rejected still: page preloads, navbar avatar preload, comments sort index.",
       "follow_up": "Do not re-propose rejected items without a maintainer ask."
     },
     {
-      "area": "tests",
-      "checked_at": "2026-11-16",
-      "result": "Full branch suite 1723 runs / 0 failures / 2 skips (1718 on main + 5 new). New coerces_pagination_params_test.rb pins the ?page= coercion guard (with_routing probe + real /articles); red-check verified: 3 tests fail with the before_action disabled.",
-      "follow_up": null
-    },
-    {
-      "area": "dependencies",
-      "checked_at": "2026-11-14",
-      "result": "No open Dependabot PRs (re-checked 2026-11-15, search returns zero). bundle outdated cannot run in this sandbox (read-only bundler git cache). Majors need maintainer sign-off: marcel 2, net-ssh 8, openssl 4, rack-oauth2 2.3, prism 2.x; npm updates need bun.",
-      "follow_up": "None beyond the majors queue."
-    },
-    {
-      "area": "docs",
-      "checked_at": "2026-11-16",
-      "result": "Changelog current; the locale-fix PR carries its own Corrections bullet. No docs debt queued.",
-      "follow_up": null
-    },
-    {
       "area": "release",
-      "checked_at": "2026-11-15",
-      "result": "76 commits unreleased since tag release-2026-11-04-c205bc2-41926707390. Never trigger Release: it deploys to production.",
+      "checked_at": "2026-11-17",
+      "result": "81 commits unreleased since tag release-2026-11-04-c205bc2-41926707390 (unchanged since 2026-11-16). Never trigger Release: it deploys to production.",
       "follow_up": "Release decision sits with the maintainer via the monthly issue."
     },
     {
       "area": "code",
       "checked_at": "2026-11-16",
-      "result": "Twitter routing shadow and feed sort stored column remain maintainer decisions; grover raise change not to be re-proposed. Locale parity en/ja/zh-CN fixed 2026-11-16 (guard test added); details in PR on branch repo-assist/fix-locale-completeness-2026-11-16.",
+      "result": "Twitter routing shadow and feed sort stored column remain maintainer decisions; grover raise change not to be re-proposed. Locale parity en/ja/zh-CN fixed and merged (#2265).",
       "follow_up": null
-    },
-    {
-      "area": "tooling",
-      "checked_at": "2026-11-14",
-      "result": "Full suite runs with SKIP_CSS_BUILD=1 SKIP_JS_BUILD=1. EXPLAIN probes: bin/rails runner -e test inside an explicit transaction raising ActiveRecord::Rollback (a bare runner does NOT rollback and pollutes the test DB; db:test:prepare + db:fixtures:load restores). db:rollback needs :primary form.",
-      "follow_up": "npm updates still need bun."
     },
     {
       "area": "qa",
@@ -77,6 +77,11 @@
   "completed_actions": [],
   "priorities": [
     {
+      "task": 6,
+      "item": "Maintain the three open repo-assist PRs until merged",
+      "note": "#2269 (coercion tests, vigil finding addressed in a6298f5e), bundle PR (supersedes Dependabot #2266-#2268), docs PR (version claims). Re-verify CI/conflicts/comments each run."
+    },
+    {
       "task": 10,
       "item": "Twitter connect flow: maintainer decision",
       "note": "sessions#twitter unreachable - catch-all shadows it (routes.rb:21 vs 27). Pinned by test merged in #2232. Do not change routing unilaterally."
@@ -84,7 +89,7 @@
     {
       "task": 10,
       "item": "Feed sort stored column: ask maintainer",
-      "note": "order_by_popularity sorts a computed expression, no index helps (re-confirmed by measure-feed-indexes 2026-11-10). In monthly issue."
+      "note": "order_by_popularity sorts a computed expression, no index helps. In monthly issue."
     },
     {
       "task": 6,
@@ -95,11 +100,6 @@
       "task": 4,
       "item": "Dependency majors need maintainer sign-off",
       "note": "marcel 2, net-ssh 8, openssl 4, rack-oauth2 2.3, prism 2.x. npm updates need bun."
-    },
-    {
-      "task": 6,
-      "item": "Maintain repo-assist/test-coerces-pagination-params PR until merged",
-      "note": "Filed 2026-11-16: 5 coercion tests + changelog bullet; suite 1723/0/2, rubocop + zeitwerk clean. Re-verify CI/conflicts/comments each run."
     }
   ]
 }
