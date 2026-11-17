@@ -67,9 +67,9 @@ Request body example (note: article fields are nested under the `article` key pe
 ## Development
 
 - Ruby 4.0.9
-- Rails 8.1.3
+- Rails 8.1.4
 - PostgreSQL for local/CI tests
-- Node.js 18+ and Bun 1.x for the asset pipeline (see `.node-version` and `mise.toml`)
+- Node.js 18+ and Bun 1.x for the asset pipeline (see `.node-version`; `mise.toml` pins Ruby and Bun)
 
 ```bash
 bundle install
