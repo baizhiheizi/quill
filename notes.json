@@ -9,7 +9,7 @@
       "number": 2272,
       "state": "commented",
       "updated_at": "2026-11-18",
-      "note": "Posthog auto-filed MixinBot::ServerError 2026-11-17: Mixin-side 5xx; retry ladder reported by design; no app bug. Root-cause comment 2026-11-17; needs triage label applied 2026-11-18 (earlier attempt was suggest-only, never landed). Awaiting maintainer close vs second alert channel."
+      "note": "Posthog auto-filed MixinBot::ServerError: Mixin-side 5xx 2026-11-17; retry ladder by design; no app bug; root-cause comment same day. needs triage re-applied directly 2026-11-18 (two earlier applications never landed; verify next run it shows). Awaiting maintainer close vs second alert channel."
     }
   ],
   "fixes": [],
@@ -17,20 +17,26 @@
     {
       "area": "repo_assist_prs",
       "checked_at": "2026-11-18",
-      "result": "Two open RA PRs: #2273 (docs blaze changelog, docs-only so Check path filters exclude CI by design; base clean) and the RevenueBot contract tests + send_job restore fix (branch repo-assist/test-revenue-bot-contract, created 2026-11-18).",
-      "follow_up": "Verify both PRs publish with green CI (test/** IS in Check paths, so the new PR gets CI) and no conflicts each run; maintain until merged."
+      "result": "Three open RA PRs: #2273 (docs blaze changelog, base clean, no CI expected), #2274 (RevenueBot tests, Check green, updated 6aa7ee91 with vigil fixes), aw_rb_gate (revenue_bot gate-load fix, created 2026-11-18).",
+      "follow_up": "Verify all three publish green and conflict-free each run; maintain until merged."
     },
     {
       "area": "tests",
       "checked_at": "2026-11-18",
-      "result": "Suite baseline on main: 1723 runs / 0 / 2 skips (old 1718 note was stale — #2269 added 5 after it was recorded). With 2 new RevenueBot tests: 1725 / 0 / 2, green across 3 seeds. send_job_test RevenueBot restore leak FIXED (value-closure replaced RevenueBot.api permanently).",
+      "result": "Main baseline 1723/0/2; with #2274's RevenueBot tests 1725/0/2. revenue_bot_test now pins failure-not-cached (build counter) and gate wiring (wrap kwargs). Fix branch suite 1723/0/2.",
       "follow_up": "Do not reintroduce value-capture restores; mirror the QuillBot method-capture pattern when stubbing module singletons."
     },
     {
       "area": "code",
       "checked_at": "2026-11-18",
-      "result": "app/libs fully test-covered (RevenueBot pinned 2026-11-18). Deliberately untested: RichTextContent concern, Oauth data classes, base controllers + grover (selective). Twitter routing shadow + feed sort column remain maintainer calls; wallets QuillBot.api stubbing judged harmless.",
+      "result": "app/libs fully test-covered. Gate-load fix filed as draft PR aw_rb_gate (branch repo-assist/fix-revenue-bot-gate-load-2026-11-18): revenue_bot.rb requires mixin_api/gate like quill_bot.rb; dev processes previously got silent nil fallback. test.rb eager_load = ENV['CI'].present?.",
       "follow_up": null
+    },
+    {
+      "area": "dependencies",
+      "checked_at": "2026-11-18",
+      "result": "New Dependabot PRs #2275 (puma 8.1.1) and #2276 (omniauth 2.4.1) opened 2026-11-18. Majors still maintainer-decision: marcel 2, net-ssh 8, openssl 4, rack-oauth2 2.3, prism 2.x. npm needs bun.",
+      "follow_up": "Bundle #2275+#2276 next Task 4 selection if still open (precedent #2271)."
     },
     {
       "area": "docs",
@@ -40,26 +46,20 @@
     },
     {
       "area": "release",
-      "checked_at": "2026-11-17",
-      "result": "94 commits unreleased since tag release-2026-11-04-c205bc2-41926707390. Never trigger Release: it deploys to production.",
+      "checked_at": "2026-11-18",
+      "result": "94 commits unreleased since release-2026-11-04-c205bc2-41926707390 (unchanged from 2026-11-17). Never trigger Release: it deploys to production.",
       "follow_up": "Release decision sits with the maintainer via the monthly issue."
-    },
-    {
-      "area": "dependencies",
-      "checked_at": "2026-11-17",
-      "result": "2026-11-17 round merged (#2266-#2268 individually; union via #2271: posthog-rails 3.26.4, aws-sdk-s3 1.242.0, puma 8.0.3). Nothing open. Majors maintainer-decision: marcel 2, net-ssh 8, openssl 4, rack-oauth2 2.3, prism 2.x. npm needs bun.",
-      "follow_up": null
     },
     {
       "area": "tooling",
       "checked_at": "2026-11-17",
-      "result": "Read-only toolcache blocks bundler downloads; BUNDLE_PATH=vendor/bundle (gitignored) is writable. Suite: SKIP_CSS_BUILD=1 SKIP_JS_BUILD=1, ~30s per run — over 60s foreground, use run_in_background. EXPLAIN probes need explicit-transaction rollback; db:rollback needs :primary.",
+      "result": "Read-only toolcache blocks bundler downloads; BUNDLE_PATH=vendor/bundle (gitignored) is writable. Suite: SKIP_CSS_BUILD=1 SKIP_JS_BUILD=1, run in background. EXPLAIN probes need explicit-transaction rollback; db:rollback needs :primary.",
       "follow_up": null
     },
     {
       "area": "ci",
       "checked_at": "2026-11-14",
-      "result": "Main Check GREEN: run 43569706156 (the #2260 merge push) succeeded. Chrome-install step hardened. Check path filters include test/** (new test PRs get CI) but not CHANGELOG.md (docs PRs get none — expected).",
+      "result": "Main Check GREEN (run 43569706156). Check path filters include test/** but not CHANGELOG.md (docs PRs get no CI - expected).",
       "follow_up": null
     },
     {
@@ -77,7 +77,7 @@
     {
       "area": "hygiene",
       "checked_at": "2026-11-06",
-      "result": "IntegrationTestCase#sign_in fixed via real OAuth callback, merged as #2233. Stale branches repo-assist/improve-ci-dependency-install-retry-* re-verified present 2026-11-14.",
+      "result": "IntegrationTestCase#sign_in fixed via real OAuth callback, merged as #2233. Stale branches repo-assist/improve-ci-dependency-install-retry-* still present 2026-11-14.",
       "follow_up": null
     }
   ],
@@ -85,13 +85,18 @@
   "priorities": [
     {
       "task": 6,
-      "item": "Maintain the two open RA PRs until merged",
-      "note": "#2273 (docs blaze changelog) and repo-assist/test-revenue-bot-contract (RevenueBot tests + send_job restore fix). Re-verify CI/conflicts/comments each run."
+      "item": "Maintain the three open RA PRs until merged",
+      "note": "#2273 (docs), #2274 (RevenueBot tests, updated 6aa7ee91), aw_rb_gate (gate-load fix). Re-verify CI/conflicts/comments each run."
     },
     {
       "task": 2,
-      "item": "Watch posthog auto-filed issues",
-      "note": "Each is a production-error alert: investigate, root-cause, label (apply directly, no suggest:true), suggest resolution on arrival (see #2272 handling)."
+      "item": "Watch posthog auto-filed issues; verify #2272 label landed",
+      "note": "Each is a production-error alert: investigate, root-cause, label directly, suggest resolution on arrival. #2272's label failed to land twice — confirm it shows now."
+    },
+    {
+      "task": 4,
+      "item": "Bundle Dependabot #2275+#2276 next Task 4 selection",
+      "note": "puma 8.1.1 + omniauth 2.4.1, union update per #2271 precedent. Majors (marcel 2, net-ssh 8, openssl 4, rack-oauth2 2.3, prism 2.x) need maintainer sign-off; npm needs bun."
     },
     {
       "task": 10,
@@ -106,12 +111,7 @@
     {
       "task": 2,
       "item": "Confirm PostHog fingerprints drop",
-      "note": "Auto-filing now files issues (#2272); no recurrence filed for key-cannot-be-blank (fixed #2232) or Pagy::OptionError (fixed #2163). Maintainer-side dashboard check; in monthly issue."
-    },
-    {
-      "task": 4,
-      "item": "Dependency majors need maintainer sign-off",
-      "note": "marcel 2, net-ssh 8, openssl 4, rack-oauth2 2.3, prism 2.x. npm updates need bun."
+      "note": "No recurrence filed for key-cannot-be-blank (fixed #2232) or Pagy::OptionError (fixed #2163). Maintainer-side dashboard check; in monthly issue."
     }
   ]
 }
