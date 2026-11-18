@@ -1,5 +1,12 @@
 # frozen_string_literal: true
 
+# `MixinApi.wrap` is defined in gate.rb, which Zeitwerk loads only when
+# `MixinApi::Gate` is referenced. Name it here: without it, a lazy-loaded
+# process whose first touch is RevenueBot.api (development server/console)
+# rescues the missing-method error into a nil client and silently falls back
+# to QuillBot.
+require_dependency "mixin_api/gate"
+
 module RevenueBot
   def self.api
     @api ||= MixinApi.wrap(build_api, scope: :revenue_bot, mode: :background)

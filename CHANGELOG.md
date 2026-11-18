@@ -133,6 +133,14 @@ real requirement is `rails >= 8.1.4`, not a json version.
 
 ### Corrections
 
+- **`RevenueBot.api` was always `nil` in lazy-loaded processes** — unlike
+  `QuillBot`, `RevenueBot` never required `mixin_api/gate`, and `MixinApi.wrap`
+  is defined in that file. In any process that does not eager-load (development
+  server and console; the test environment unless `CI` is set) the call rescued
+  a `NoMethodError` into a `nil` client, so every `RevenueBot` notification
+  silently fell back to `QuillBot` locally regardless of the bot's credentials.
+  It now names the same `require_dependency "mixin_api/gate"` that
+  `quill_bot.rb` has carried for exactly this reason.
 - **Untranslated Japanese strings on the dashboard and collection pages** —
   four view keys had no Japanese text: `start_reading` (the dashboard home
   link), `connect`/`reconnect` (the settings page's Twitter authorization
