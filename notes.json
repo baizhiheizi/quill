@@ -1,65 +1,65 @@
 {
   "version": 1,
   "cursors": {
-    "labelling_after": 2257,
+    "labelling_after": 2272,
     "investigation_after": 2272
   },
   "issues": [
     {
       "number": 2272,
       "state": "commented",
-      "updated_at": "2026-11-17",
-      "note": "Posthog auto-filed MixinBot::ServerError 2026-11-17: Mixin-side /messages 5xx; retry ladder (in-process backoff + 5 retry_on) exhausted, reported by design. No app bug (plain_post builds params only). Root-cause comment, needs triage, close-as-expected suggested; original 'An *A...' alert lost."
+      "updated_at": "2026-11-18",
+      "note": "Posthog auto-filed MixinBot::ServerError 2026-11-17: Mixin-side 5xx; retry ladder reported by design; no app bug. Root-cause comment 2026-11-17; needs triage label applied 2026-11-18 (earlier attempt was suggest-only, never landed). Awaiting maintainer close vs second alert channel."
     }
   ],
   "fixes": [],
   "checks": [
     {
       "area": "repo_assist_prs",
-      "checked_at": "2026-11-17",
-      "result": "Zero open RA PRs: #2269, #2270, #2271 and Dependabot #2266-#2268 all merged 2026-11-17. New docs PR branch repo-assist/docs-changelog-blaze-retirement-2026-11-17 (stale Blaze changelog section).",
-      "follow_up": "Verify the docs PR publishes with green CI next run; maintain until merged."
+      "checked_at": "2026-11-18",
+      "result": "Two open RA PRs: #2273 (docs blaze changelog, docs-only so Check path filters exclude CI by design; base clean) and the RevenueBot contract tests + send_job restore fix (branch repo-assist/test-revenue-bot-contract, created 2026-11-18).",
+      "follow_up": "Verify both PRs publish with green CI (test/** IS in Check paths, so the new PR gets CI) and no conflicts each run; maintain until merged."
+    },
+    {
+      "area": "tests",
+      "checked_at": "2026-11-18",
+      "result": "Suite baseline on main: 1723 runs / 0 / 2 skips (old 1718 note was stale — #2269 added 5 after it was recorded). With 2 new RevenueBot tests: 1725 / 0 / 2, green across 3 seeds. send_job_test RevenueBot restore leak FIXED (value-closure replaced RevenueBot.api permanently).",
+      "follow_up": "Do not reintroduce value-capture restores; mirror the QuillBot method-capture pattern when stubbing module singletons."
+    },
+    {
+      "area": "code",
+      "checked_at": "2026-11-18",
+      "result": "app/libs fully test-covered (RevenueBot pinned 2026-11-18). Deliberately untested: RichTextContent concern, Oauth data classes, base controllers + grover (selective). Twitter routing shadow + feed sort column remain maintainer calls; wallets QuillBot.api stubbing judged harmless.",
+      "follow_up": null
     },
     {
       "area": "docs",
       "checked_at": "2026-11-17",
-      "result": "Fixed stale Unreleased Blaze section (described reactor, Settings.blaze_enable gate and MixinMessage as live; all removed by bac11d3c 2026-11-06 after the last changelog pass; gate false in prod since 2022). How-to docs already correct; CHANGELOG.md the only stale surface. Citations verified.",
-      "follow_up": null
-    },
-    {
-      "area": "code",
-      "checked_at": "2026-11-17",
-      "result": "Twitter routing shadow and feed sort stored column remain maintainer decisions; grover raise not re-proposed. Retry/discard matrix and mixin_api layer confirmed fully tested. PostHog now auto-files production-error issues; #2272 first artifact.",
+      "result": "Blaze changelog fix sits in open PR #2273. How-to docs correct; CHANGELOG.md was the only stale surface.",
       "follow_up": null
     },
     {
       "area": "release",
       "checked_at": "2026-11-17",
-      "result": "94 commits unreleased since tag release-2026-11-04-c205bc2-41926707390 (was 81 earlier today; #2266-#2271 landed). Never trigger Release: it deploys to production.",
+      "result": "94 commits unreleased since tag release-2026-11-04-c205bc2-41926707390. Never trigger Release: it deploys to production.",
       "follow_up": "Release decision sits with the maintainer via the monthly issue."
     },
     {
       "area": "dependencies",
       "checked_at": "2026-11-17",
-      "result": "2026-11-17 round merged (#2266-#2268 individually; lockfile identical to the #2271 bundle union: posthog-rails 3.26.4, aws-sdk-s3 1.242.0, puma 8.0.3). Nothing open. Majors maintainer-decision: marcel 2, net-ssh 8, openssl 4, rack-oauth2 2.3, prism 2.x. npm needs bun.",
-      "follow_up": null
-    },
-    {
-      "area": "tests",
-      "checked_at": "2026-11-17",
-      "result": "Suite baseline 1718 runs / 0 failures / 2 skips on main. Retry matrix, mixin_api gate/client/error-notification, send_job and mixin_bot_notifier all have named test files.",
+      "result": "2026-11-17 round merged (#2266-#2268 individually; union via #2271: posthog-rails 3.26.4, aws-sdk-s3 1.242.0, puma 8.0.3). Nothing open. Majors maintainer-decision: marcel 2, net-ssh 8, openssl 4, rack-oauth2 2.3, prism 2.x. npm needs bun.",
       "follow_up": null
     },
     {
       "area": "tooling",
       "checked_at": "2026-11-17",
-      "result": "Read-only toolcache blocks bundler downloads, but BUNDLE_PATH=vendor/bundle (gitignored) is fully writable - bundle update/install work in-sandbox. Suite runs with SKIP_CSS_BUILD=1 SKIP_JS_BUILD=1. EXPLAIN probes need explicit-transaction rollback. db:rollback needs :primary form.",
+      "result": "Read-only toolcache blocks bundler downloads; BUNDLE_PATH=vendor/bundle (gitignored) is writable. Suite: SKIP_CSS_BUILD=1 SKIP_JS_BUILD=1, ~30s per run — over 60s foreground, use run_in_background. EXPLAIN probes need explicit-transaction rollback; db:rollback needs :primary.",
       "follow_up": null
     },
     {
       "area": "ci",
       "checked_at": "2026-11-14",
-      "result": "Main Check GREEN: run 43569706156 (run_number 4136, the #2260 merge push) succeeded. Chrome-install step already hardened (retries, CFT fallback, skip-on-egress); nothing to touch.",
+      "result": "Main Check GREEN: run 43569706156 (the #2260 merge push) succeeded. Chrome-install step hardened. Check path filters include test/** (new test PRs get CI) but not CHANGELOG.md (docs PRs get none — expected).",
       "follow_up": null
     },
     {
@@ -85,13 +85,13 @@
   "priorities": [
     {
       "task": 6,
-      "item": "Maintain the blaze changelog docs PR until merged",
-      "note": "Branch repo-assist/docs-changelog-blaze-retirement-2026-11-17. Re-verify CI/conflicts/comments each run."
+      "item": "Maintain the two open RA PRs until merged",
+      "note": "#2273 (docs blaze changelog) and repo-assist/test-revenue-bot-contract (RevenueBot tests + send_job restore fix). Re-verify CI/conflicts/comments each run."
     },
     {
       "task": 2,
       "item": "Watch posthog auto-filed issues",
-      "note": "Each is a production-error alert: investigate, root-cause, label, suggest resolution on arrival (see #2272 handling)."
+      "note": "Each is a production-error alert: investigate, root-cause, label (apply directly, no suggest:true), suggest resolution on arrival (see #2272 handling)."
     },
     {
       "task": 10,
