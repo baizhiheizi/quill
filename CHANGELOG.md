@@ -2,17 +2,25 @@
 
 ## Unreleased
 
-### mixin_bot 3.0 and the Blaze async reactor
+### mixin_bot 3.0, and the Blaze reactor that never ran
 
-`mixin_bot` is now `~> 3.0` (locked 3.0.2). The gem replaced its EventMachine
-Blaze client with `MixinBot::Blaze::Reactor` (async-websocket), which owns
-connect, keepalive, read, ack and reconnect-with-backoff. `bin/mixin_blaze`
-shrinks accordingly; the standalone process, its Kamal role, and the
-`Settings.blaze_enable` gate are unchanged — only the Blaze half of the feed
-moved.
+`mixin_bot` moved to the 3.0 line (locked 3.0.2; the `~> 3.0` Gemfile pin was
+lifted to unversioned in the Ruby 4.0.9 bundle, same policy as the `json`
+pin above). #2122 moved the realtime feed onto the gem's
+`MixinBot::Blaze::Reactor` (async-websocket), but the inbound feed it served
+had been dead for years: the `Settings.blaze_enable` gate was false in
+production since October 2022 (4e581c10) and the key was deleted from
+`settings.yml` outright in #2094, so `bin/mixin_blaze` resolved it to `nil`
+and the reactor thread never started anywhere — the wiring shipped as a
+zombie. The whole Blaze inbound subsystem was retired on 2026-11-06
+(bac11d3c): the gated reactor thread, the `QuillBot` reactor wiring, and the
+`MixinMessage` model with its `MixinMessages::ProcessJob` were deleted, and
+the write-dead `mixin_messages` table was dropped (20261106050456).
 
-`QuillBot` gained the reactor wiring and `MixinMessage` gained the message
-model, both covered by new tests.
+What remains: `MixinMessages::SendJob` — every outbound bot message
+(notifiers, the exception notifier, the daily report, admin broadcasts) —
+and `bin/mixin_blaze`, now only the Safe snapshot poller; the Kamal `blaze`
+role and the Procfile.dev entry keep running it.
 
 ### The `json` pin, lifted
 
