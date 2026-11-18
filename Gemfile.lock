@@ -465,7 +465,7 @@ GEM
       rack (>= 1.2, < 4)
       snaky_hash (~> 2.0, >= 2.0.9)
       version_gem (~> 1.1, >= 1.1.17)
-    omniauth (2.3.1)
+    omniauth (2.4.1)
       hashie (>= 3.5.2)
       logger
       rack (>= 2.2.8)
@@ -542,7 +542,7 @@ GEM
       httpclient
       json-jwt (>= 1.11.0)
       rack (>= 2.1.0)
-    rack-protection (4.2.1)
+    rack-protection (4.2.2)
       base64 (>= 0.1.0)
       logger (>= 1.6.0)
       rack (>= 3.0.0, < 4)
@@ -978,7 +978,7 @@ CHECKSUMS
   nokogiri (1.19.7-x86_64-linux-musl) sha256=464d1f3dfb0d53cf54c0c6a7e23e8e91cf68ec3cafc2b27dc4a7682f2d9bf546
   noticed (3.1.1) sha256=da82247aa890d1098f46da6e76a725e6210024b1cb7a6eef7b9aa8999a301123
   oauth2 (2.1.0) sha256=69925a45030c231cdca3ef4a54a8e848e5319f12c3fdbbfa5065dfbeb4efe835
-  omniauth (2.3.1) sha256=bb47bfcd5614b00cd89de4b45b0687123d09143dfeb5dbaf1bb57ff190bc2d2e
+  omniauth (2.4.1) sha256=99950c2cf9231d4e960d2bda87e7efec5ace7c3e2d1860016ad3f2e40366489c
   omniauth-mixin (0.1.0)
   omniauth-oauth2 (1.10.0) sha256=eeaac3bf4d6a6e2dff4edf8238f0cc046d935347c80d422ff4bdbb028c6f7dd2
   omniauth-rails_csrf_protection (2.0.1) sha256=c6e3204d7e3925bb537cb52d50fdfc9f05293f1a9d87c5d4ab4ca3a39ba8c32d
@@ -1019,7 +1019,7 @@ CHECKSUMS
   rack (3.2.8) sha256=1fecc85e463ebc7a2a945fff829ffcd549babeb1556384796fad946c28dc4ec7
   rack-attack (6.8.0) sha256=f2499fdebf85bcc05573a22dff57d24305ac14ec2e4156cd3c28d47cafeeecf2
   rack-oauth2 (1.21.3) sha256=4e72a79dd6a866692e84422a552b27c38a5a1918ded06661e04910f2bbe676ba
-  rack-protection (4.2.1) sha256=cf6e2842df8c55f5e4d1a4be015e603e19e9bc3a7178bae58949ccbb58558bac
+  rack-protection (4.2.2) sha256=0e75764dae462c4041544452ce568bb1f1ced556b791cd32ac479d0781065a99
   rack-session (2.1.2) sha256=595434f8c0c3473ae7d7ac56ecda6cc6dfd9d37c0b2b5255330aa1576967ffe8
   rack-test (2.3.0) sha256=b118d177cc002c572fc1b6fd8d19c9ed5881a36e8d6f689f9e618f9f861241e8
   rackup (2.3.1) sha256=6c79c26753778e90983761d677a48937ee3192b3ffef6bc963c0950f94688868
