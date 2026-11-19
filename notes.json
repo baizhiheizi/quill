@@ -8,46 +8,40 @@
     {
       "number": 2272,
       "state": "commented",
-      "updated_at": "2026-11-18",
-      "note": "Posthog auto-filed MixinBot::ServerError: Mixin-side 5xx 2026-11-17; retry ladder by design; no app bug; root-cause comment same day. needs triage re-applied directly 2026-11-18 (two earlier applications never landed; verify next run it shows). Awaiting maintainer close vs second alert channel."
+      "updated_at": "2026-11-19",
+      "note": "Posthog auto-filed MixinBot::ServerError: Mixin-side 5xx; retry ladder by design; no app bug; root-cause comment 2026-11-17; close-as-expected-behaviour recommended. 'invalid' label applied 2026-11-19 ('needs triage' does not exist in repo). Awaiting maintainer close."
     }
   ],
   "fixes": [],
   "checks": [
     {
       "area": "repo_assist_prs",
-      "checked_at": "2026-11-18",
-      "result": "Three open RA PRs: #2273 (docs blaze changelog, base clean, no CI expected), #2274 (RevenueBot tests, Check green, updated 6aa7ee91 with vigil fixes), aw_rb_gate (revenue_bot gate-load fix, created 2026-11-18).",
-      "follow_up": "Verify all three publish green and conflict-free each run; maintain until merged."
+      "checked_at": "2026-11-19",
+      "result": "All five prior items merged 2026-11-18/19: #2273, #2274, #2275, #2276, and gate-load intent as #2277. Open RA PRs now: #2278 (API ?limit= guard) and #2279 (CITE bogus-uuid wedge), both from morning run 44479285429 — drafts, Check green, mergeable clean.",
+      "follow_up": "Re-verify #2278/#2279 CI + conflicts + comments each run until merged."
+    },
+    {
+      "area": "dependencies",
+      "checked_at": "2026-11-19",
+      "result": "#2275 (puma 8.1.1) and #2276 (omniauth 2.4.1) merged separately 2026-11-19 — bundling moot. #2280 (kramdown 2.5.2→2.6.1) open alone. Majors still maintainer-decision: marcel 2, net-ssh 8, openssl 4, rack-oauth2 2.3, prism 2.x. npm needs bun.",
+      "follow_up": "Bundle only if multiple Dependabot PRs accumulate open simultaneously (precedent #2271)."
     },
     {
       "area": "tests",
       "checked_at": "2026-11-18",
-      "result": "Main baseline 1723/0/2; with #2274's RevenueBot tests 1725/0/2. revenue_bot_test now pins failure-not-cached (build counter) and gate wiring (wrap kwargs). Fix branch suite 1723/0/2.",
+      "result": "Main baseline 1725/0/2 (with #2274's RevenueBot tests merged). revenue_bot_test pins failure-not-cached (build counter) and gate wiring (wrap kwargs).",
       "follow_up": "Do not reintroduce value-capture restores; mirror the QuillBot method-capture pattern when stubbing module singletons."
     },
     {
       "area": "code",
-      "checked_at": "2026-11-18",
-      "result": "app/libs fully test-covered. Gate-load fix filed as draft PR aw_rb_gate (branch repo-assist/fix-revenue-bot-gate-load-2026-11-18): revenue_bot.rb requires mixin_api/gate like quill_bot.rb; dev processes previously got silent nil fallback. test.rb eager_load = ENV['CI'].present?.",
-      "follow_up": null
-    },
-    {
-      "area": "dependencies",
-      "checked_at": "2026-11-18",
-      "result": "New Dependabot PRs #2275 (puma 8.1.1) and #2276 (omniauth 2.4.1) opened 2026-11-18. Majors still maintainer-decision: marcel 2, net-ssh 8, openssl 4, rack-oauth2 2.3, prism 2.x. npm needs bun.",
-      "follow_up": "Bundle #2275+#2276 next Task 4 selection if still open (precedent #2271)."
-    },
-    {
-      "area": "docs",
-      "checked_at": "2026-11-17",
-      "result": "Blaze changelog fix sits in open PR #2273. How-to docs correct; CHANGELOG.md was the only stale surface.",
+      "checked_at": "2026-11-19",
+      "result": "app/libs fully test-covered (#2274 merged). Gate-load fix merged as #2277 (revenue_bot.rb requires mixin_api/gate like quill_bot.rb). Open fix candidates live in #2278 (api articles limit) and #2279 (Payment CITE memo nil-author).",
       "follow_up": null
     },
     {
       "area": "release",
-      "checked_at": "2026-11-18",
-      "result": "94 commits unreleased since release-2026-11-04-c205bc2-41926707390 (unchanged from 2026-11-17). Never trigger Release: it deploys to production.",
+      "checked_at": "2026-11-19",
+      "result": "105 commits unreleased since release-2026-11-04-c205bc2-41926707390 (was 94 on 2026-11-18). Never trigger Release: it deploys to production.",
       "follow_up": "Release decision sits with the maintainer via the monthly issue."
     },
     {
@@ -76,8 +70,14 @@
     },
     {
       "area": "hygiene",
-      "checked_at": "2026-11-06",
-      "result": "IntegrationTestCase#sign_in fixed via real OAuth callback, merged as #2233. Stale branches repo-assist/improve-ci-dependency-install-retry-* still present 2026-11-14.",
+      "checked_at": "2026-11-19",
+      "result": "IntegrationTestCase#sign_in fixed via real OAuth callback, merged as #2233. Stale branches repo-assist/improve-ci-dependency-install-retry-* still present 2026-11-19 (re-verified).",
+      "follow_up": null
+    },
+    {
+      "area": "docs",
+      "checked_at": "2026-11-17",
+      "result": "Blaze changelog fix merged as #2273 on 2026-11-19. How-to docs correct; CHANGELOG.md was the only stale surface.",
       "follow_up": null
     }
   ],
@@ -85,18 +85,13 @@
   "priorities": [
     {
       "task": 6,
-      "item": "Maintain the three open RA PRs until merged",
-      "note": "#2273 (docs), #2274 (RevenueBot tests, updated 6aa7ee91), aw_rb_gate (gate-load fix). Re-verify CI/conflicts/comments each run."
+      "item": "Maintain open RA PRs #2278 and #2279 until merged",
+      "note": "Both Check-green and mergeable-clean as of 2026-11-19. Re-verify CI/conflicts/comments each run."
     },
     {
       "task": 2,
-      "item": "Watch posthog auto-filed issues; verify #2272 label landed",
-      "note": "Each is a production-error alert: investigate, root-cause, label directly, suggest resolution on arrival. #2272's label failed to land twice — confirm it shows now."
-    },
-    {
-      "task": 4,
-      "item": "Bundle Dependabot #2275+#2276 next Task 4 selection",
-      "note": "puma 8.1.1 + omniauth 2.4.1, union update per #2271 precedent. Majors (marcel 2, net-ssh 8, openssl 4, rack-oauth2 2.3, prism 2.x) need maintainer sign-off; npm needs bun."
+      "item": "Watch posthog auto-filed issues; triage on arrival with EXISTING labels only",
+      "note": "Each is a production-error alert: investigate, root-cause, label, resolve. Non-existent labels silently no-op (needs triage etc) - use invalid/wontfix/question/bug. Skip #2255 (machine-managed tracker). #2272 awaits close."
     },
     {
       "task": 10,
