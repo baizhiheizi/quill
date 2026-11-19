@@ -116,6 +116,17 @@ real requirement is `rails >= 8.1.4`, not a json version.
   links to the index — collections are reached via their show-page URLs — so
   the route is pruned and the URL now 404s like any other unknown path;
   `show`/`share` and the nested articles/subscribers indexes are unchanged.
+- **A CITE transfer memo with an unresolvable uuid wedged the snapshot
+  pipeline** — the memo is arbitrary on-chain data and `Mixin::Memo.quill_payment?`
+  (the snapshot gate) validates key presence, not that the cited uuid
+  resolves, so a crafted `{"t":"CITE","c":<bogus>}` passed the gate and then
+  `Payment#setup_attributes` raised `NoMethodError` on
+  `Article.find_by(...).author`. `MixinNetworkSnapshot#process!` never
+  reached `touch_proccessed_at`, so the snapshot sat in
+  `MixinNetworkSnapshots::ProcessJob` retries forever with `MonitorJob`
+  alerting on every pass. The lookup is now nil-safe (`&.author`), matching
+  every sibling lookup in the model: the payment persists with a nil payer
+  and the snapshot processes.
 
 ### Security
 
