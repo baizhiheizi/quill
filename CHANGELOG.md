@@ -116,6 +116,14 @@ real requirement is `rails >= 8.1.4`, not a json version.
   links to the index — collections are reached via their show-page URLs — so
   the route is pruned and the URL now 404s like any other unknown path;
   `show`/`share` and the nested articles/subscribers indexes are unchanged.
+- **`API::ArticlesController` 500ed on a malformed `?limit=`** — the public
+  articles index passed the raw query param into `.limit`, so `abc` and a
+  blank value raised `ArgumentError` inside `Relation#limit`, an array
+  raised `TypeError`, and a negative value reached Postgres
+  (`PG::InvalidRowCountInLimitClause`) — all 500s on an unauthenticated
+  endpoint. `capped_limit` now mirrors the sibling `?offset=` guard: only
+  digit strings are honored (clamped at 100); anything else falls back to
+  the default 20. Digit inputs behave exactly as before.
 
 ### Security
 
