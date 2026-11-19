@@ -274,7 +274,13 @@ class Payment < ApplicationRecord
     )
     self.payer =
       if decoded_memo["t"] == "CITE"
-        Article.find_by(uuid: decoded_memo["c"]).author
+        # The memo is arbitrary on-chain data: `Mixin::Memo.quill_payment?`
+        # (the snapshot gate) validates key presence, not that the cited
+        # uuid resolves. An unresolvable cite target must leave the payer
+        # nil — same contract as the `find_by` branches below — instead of
+        # raising inside `Payment.create!`, which would wedge the snapshot
+        # in `MixinNetworkSnapshots::ProcessJob` retries forever.
+        Article.find_by(uuid: decoded_memo["c"])&.author
       elsif pre_order.present?
         pre_order.payer
       else
