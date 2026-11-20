@@ -389,10 +389,30 @@ class TransferTest < ActiveSupport::TestCase
   end
 
   test "process! drives a Bonus source through complete!" do
-    # The Bonus model expects a "bonus" table (singular) but the migration creates "bonuses",
-    # so real Bonus records cannot be created in tests yet. Remove this skip once the
-    # Bonus table-name mismatch is resolved and re-enable the assertion body.
-    skip "Bonus model table name mismatch (model: 'bonus', migration: 'bonuses')"
+    with_quill_bot_stub do
+      bonus = Bonus.create!(
+        user: @author,
+        currency: @btc,
+        asset_id: @btc.asset_id,
+        amount: 1,
+        title: "Test bonus"
+      )
+      bonus.deliver!
+      transfer = bonus.reload.transfer
+
+      assert_equal "delivering", bonus.state
+
+      QuillBot.api.define_singleton_method(:safe_transaction) { |_| raise MixinBot::NotFoundError, "missing" }
+      QuillBot.api.define_singleton_method(:create_safe_transfer) do |**_kwargs|
+        { "data" => { "snapshot_id" => "snap-bonus-1", "transaction_hash" => "hash-bonus-1" } }
+      end
+
+      transfer.process!
+
+      assert transfer.reload.processed?
+      assert_equal "snap-bonus-1", transfer.snapshot_id
+      assert_equal "completed", bonus.reload.state
+    end
   end
 
   test "process_safe_transfer! only calls create_safe_transfer when Mixin reports NotFoundError" do

@@ -2,20 +2,10 @@
 
 require "test_helper"
 
-# Tests for `Admin::BonusesController`. The view templates use URL helpers
-# that don't actually exist (`new_admin_bonus_path`,
-# `admin_bonus_deliver_path`) because Rails 8 fails to pluralise "bonus" →
-# "bonuses" — see `test/models/bonus_test.rb` for the inflector
-# workaround. Where rendering would raise on those broken helpers, the
-# suite calls the action method directly and inspects instance variables
-# instead.
 class Admin::BonusesControllerTest < ActionController::TestCase
   tests Admin::BonusesController
 
   setup do
-    # Workaround for the inflector issue: see test/models/bonus_test.rb.
-    Bonus.table_name = "bonuses"
-
     @admin = administrators(:one)
     @request.session[:current_admin_id] = @admin.id
   end
