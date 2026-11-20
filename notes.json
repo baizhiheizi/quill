@@ -9,7 +9,7 @@
       "number": 2272,
       "state": "commented",
       "updated_at": "2026-11-20",
-      "note": "Posthog auto-filed MixinBot::ServerError: Mixin-side 5xx; by design; no app bug; root-cause comment 2026-11-17; close recommended. wontfix applied 2026-11-20 (invalid is outside the tooling label set and silently no-ops). Awaiting maintainer close."
+      "note": "Posthog auto-filed MixinBot::ServerError: Mixin-side 5xx; by design; close recommended. wontfix re-applied 2026-11-20 evening (morning application never landed). Awaiting maintainer close."
     }
   ],
   "fixes": [],
@@ -17,37 +17,37 @@
     {
       "area": "repo_assist_prs",
       "checked_at": "2026-11-20",
-      "result": "#2278 (api ?limit= guard) and #2279 (CITE bogus-uuid) still Check-green, based on main 61070f6b, no conflicts, no human comments. New draft from test-mixin-preorder-mixin-guard branch. Dependabot #2280 (kramdown) Check-green, open alone — no bundling.",
-      "follow_up": "Re-verify #2278/#2279/#2280 and the new mixin-preorder PR (CI + conflicts + comments + real PR number) each run until merged."
+      "result": "5 open RA PRs: #2278/#2279/#2281 Check-green on 61070f6b, no human comments; new: deps bundle (repo-assist/eng-bundle-deps-2026-11-20) and bonus-inflection fix (repo-assist/test-transfer-bonus-process), both published 2026-11-20 evening, CI pending.",
+      "follow_up": "Re-verify all five PRs (CI + conflicts + comments + real numbers for the two new) each run. Bundle merge lets #2280/#2282/#2283 be closed."
     },
     {
       "area": "dependencies",
-      "checked_at": "2026-11-19",
-      "result": "#2275 (puma 8.1.1) and #2276 (omniauth 2.4.1) merged separately 2026-11-19 — bundling moot. #2280 (kramdown 2.5.2→2.6.1) open alone. Majors still maintainer-decision: marcel 2, net-ssh 8, openssl 4, rack-oauth2 2.3, prism 2.x. npm needs bun.",
-      "follow_up": "Bundle only if multiple Dependabot PRs accumulate open simultaneously (precedent #2271)."
+      "checked_at": "2026-11-20",
+      "result": "Three Dependabot PRs open simultaneously (#2280/#2282/#2283) — bundled into one PR per #2271 precedent; conflict-free merges; bundle verified locally (install clean, suite 1725/0/2). Majors maintainer-decision: marcel 2, net-ssh 8, openssl 4, rack-oauth2 2.3, prism 2.x.",
+      "follow_up": null
     },
     {
       "area": "tests",
       "checked_at": "2026-11-20",
-      "result": "Main baseline 1725/0/2; branch with mixin-preorder guard test: 1726/0/2. App models/services fully pinned (application_record aside) — MixinPreOrder was the last unpinned model contract, closed 2026-11-20 pending merge. revenue_bot_test pins failure-not-cached and gate wiring.",
-      "follow_up": "Do not reintroduce value-capture restores; mirror the QuillBot method-capture pattern when stubbing module singletons."
+      "result": "Main baseline 1725/0/2; bonus-fix branch 1725/0/1 (transfer Bonus test now real, not skipped). Coverage sweep re-run: controllers/jobs/notifiers/models/services/libs all covered (grover pair in grover_controller_test.rb). Only remaining skip: design_system (by design).",
+      "follow_up": null
     },
     {
       "area": "code",
       "checked_at": "2026-11-20",
-      "result": "app/libs fully test-covered (#2274). Gate-load fix merged as #2277. Open RA fix PRs: #2278 (api articles limit), #2279 (Payment CITE memo nil-author); new: mixin-preorder validation pin. No other unpinned model/service contract found in the 2026-11-20 sweep.",
-      "follow_up": null
+      "result": "Bonus inflection bug fixed pending merge: 'bonus'.pluralize stays singular, Bonus mapped to nonexistent table, every admin bonuses query 500'd; inflect.irregular 'bonus','bonuses' fixes table mapping and route helper naming. Old suite masked it via per-example table_name overrides.",
+      "follow_up": "Sweep found no other model names the default inflector pluralizes oddly; only Bonus had the -s/-us issue."
     },
     {
       "area": "release",
       "checked_at": "2026-11-20",
-      "result": "105 commits unreleased since release-2026-11-04-c205bc2-41926707390 (unchanged from 2026-11-19; main has not moved). Never trigger Release: it deploys to production.",
+      "result": "105 commits unreleased since release-2026-11-04-c205bc2-41926707390 (main unchanged 61070f6b this run). Never trigger Release: it deploys to production.",
       "follow_up": "Release decision sits with the maintainer via the monthly issue."
     },
     {
       "area": "tooling",
-      "checked_at": "2026-11-17",
-      "result": "Read-only toolcache blocks bundler downloads; BUNDLE_PATH=vendor/bundle (gitignored) is writable. Suite: SKIP_CSS_BUILD=1 SKIP_JS_BUILD=1, run in background. EXPLAIN probes need explicit-transaction rollback; db:rollback needs :primary. node_modules IS present (frontend measurement runs fully).",
+      "checked_at": "2026-11-20",
+      "result": "CORRECTION: bundler downloads DO work with BUNDLE_PATH=vendor/bundle (writable); only the default toolcache gem path is blocked. Suite: SKIP_CSS_BUILD=1 SKIP_JS_BUILD=1 in background. node_modules present.",
       "follow_up": null
     },
     {
@@ -59,7 +59,7 @@
     {
       "area": "performance",
       "checked_at": "2026-11-20",
-      "result": "measure-frontend-efficiency 2026-11-20: 0 listener leaks; transitions reduced-motion gated; 24/63 image_tags lazy, rest by design (logos, chrome, icons, posters) — no blanket lazy. Inbox index #2262 + recipient drop #2264 merged. Rejected: page preloads, navbar avatar preload, comments sort index.",
+      "result": "Frontend sweep 2026-11-20: 0 listener leaks; transitions reduced-motion gated; non-lazy image_tags by design. Inbox index merged. Rejected: page preloads, navbar avatar preload, comments sort index.",
       "follow_up": "Do not re-propose rejected items without a maintainer ask."
     },
     {
@@ -71,13 +71,13 @@
     {
       "area": "hygiene",
       "checked_at": "2026-11-19",
-      "result": "IntegrationTestCase#sign_in fixed via real OAuth callback, merged as #2233. Stale branches repo-assist/improve-ci-dependency-install-retry-* still present 2026-11-19 (re-verified).",
+      "result": "IntegrationTestCase#sign_in fixed via real OAuth callback, merged #2233. Stale branches repo-assist/improve-ci-dependency-install-retry-* still present.",
       "follow_up": null
     },
     {
       "area": "docs",
-      "checked_at": "2026-11-17",
-      "result": "Blaze changelog fix merged as #2273 on 2026-11-19. How-to docs correct; CHANGELOG.md was the only stale surface.",
+      "checked_at": "2026-11-20",
+      "result": "Blaze changelog fix merged #2273. Bonus crash-fix bullet added to CHANGELOG 2026-11-20 evening (part of the bonus-inflection PR). How-to docs correct.",
       "follow_up": null
     }
   ],
@@ -85,18 +85,18 @@
   "priorities": [
     {
       "task": 6,
-      "item": "Maintain open RA PRs #2278, #2279 and the new mixin-preorder test PR until merged",
-      "note": "#2278/#2279 Check-green and mergeable-clean as of 2026-11-20; new draft needs CI verification once published. Re-verify each run."
+      "item": "Maintain open RA PRs #2278, #2279, #2281, the deps bundle, and the bonus-inflection fix until merged",
+      "note": "First three Check-green and mergeable-clean 2026-11-20; the two new evening PRs need CI verification and real PR numbers captured next run. Bundle merge enables closing #2280/#2282/#2283."
     },
     {
       "task": 2,
       "item": "Watch posthog auto-filed issues; triage with EXISTING labels only",
-      "note": "Each is a production-error alert: investigate, root-cause, label, resolve. Use wontfix/question/bug etc. — never invalid (not in tooling set) or needs triage (not in repo). Skip #2255 (machine-managed tracker). #2272 awaits close with wontfix applied."
+      "note": "Use wontfix/question/bug - never invalid (outside tooling set) or needs triage (not in repo). Skip #2255 (machine-managed). #2272 awaits close, wontfix applied."
     },
     {
       "task": 10,
       "item": "Twitter connect flow: maintainer decision",
-      "note": "sessions#twitter unreachable - catch-all shadows it (routes.rb:21 vs 27). Pinned by test merged in #2232. Do not change routing unilaterally."
+      "note": "sessions#twitter unreachable - catch-all shadows it (routes.rb:21 vs 27). Do not change routing unilaterally."
     },
     {
       "task": 10,
@@ -106,7 +106,7 @@
     {
       "task": 2,
       "item": "Confirm PostHog fingerprints drop",
-      "note": "No recurrence filed for key-cannot-be-blank (fixed #2232) or Pagy::OptionError (fixed #2163). Maintainer-side dashboard check; in monthly issue."
+      "note": "No recurrence filed for key-cannot-be-blank (fixed #2232) or Pagy::OptionError (fixed #2163). Maintainer-side dashboard check."
     }
   ]
 }
