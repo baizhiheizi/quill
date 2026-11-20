@@ -104,6 +104,31 @@ class PreOrderTest < ActiveSupport::TestCase
     end
   end
 
+  test "rejects payer without a mixin authorization" do
+    with_quill_bot_stub do
+      # `pre_order[type]` is client-supplied, so `ensure_payer_mixin` is the
+      # server-side backstop keeping non-Mixin payers out of MixinPreOrder.
+      legacy_user = User.create!(
+        name: "Legacy Fennec",
+        mixin_id: "fennec-model-guard",
+        mixin_uuid: SecureRandom.uuid,
+        uid: "fennec-model-guard"
+      )
+      UserAuthorization.create!(user: legacy_user, provider: :fennec, uid: "fennec-model-guard-uid", raw: { "user_id" => "fennec-model-guard-uid" })
+
+      pre_order = MixinPreOrder.new(
+        item: @article,
+        payer: legacy_user,
+        order_type: :buy_article,
+        amount: @article.price,
+        asset_id: @article.asset_id
+      )
+
+      assert_not pre_order.valid?
+      assert_includes pre_order.errors[:payer], "must from Mixin"
+    end
+  end
+
   test "auto-assigns follow_id on create" do
     with_quill_bot_stub do
       pre_order = MixinPreOrder.create!(

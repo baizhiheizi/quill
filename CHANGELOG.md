@@ -338,6 +338,11 @@ puma 8.0.2 → 8.0.3.
 
 ### Tooling and docs corrections
 
+- `MixinPreOrder` gained a test pinning the `ensure_payer_mixin` backstop: a
+  payer without a Mixin authorization (e.g. a legacy fennec/mvm_eth user) is
+  rejected with "must from Mixin". The controllers redirect those users at
+  `ensure_payment_method!`, but `pre_order[type]` is client-supplied, so the
+  validation is the only server-side guarantee on any other construction path.
 - `docs/how-to/deploy-with-kamal.md` corrected against the real deployment:
   app host IP, `Release` (not `Deploy`) as the workflow name,
   `bin/kamal deploy --skip-push`, `KAMAL_REGISTRY_PASSWORD` as a ghcr.io
