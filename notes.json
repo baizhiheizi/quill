@@ -8,17 +8,17 @@
     {
       "number": 2272,
       "state": "commented",
-      "updated_at": "2026-11-19",
-      "note": "Posthog auto-filed MixinBot::ServerError: Mixin-side 5xx; retry ladder by design; no app bug; root-cause comment 2026-11-17; close-as-expected-behaviour recommended. 'invalid' label applied 2026-11-19 ('needs triage' does not exist in repo). Awaiting maintainer close."
+      "updated_at": "2026-11-20",
+      "note": "Posthog auto-filed MixinBot::ServerError: Mixin-side 5xx; by design; no app bug; root-cause comment 2026-11-17; close recommended. wontfix applied 2026-11-20 (invalid is outside the tooling label set and silently no-ops). Awaiting maintainer close."
     }
   ],
   "fixes": [],
   "checks": [
     {
       "area": "repo_assist_prs",
-      "checked_at": "2026-11-19",
-      "result": "All five prior items merged 2026-11-18/19: #2273, #2274, #2275, #2276, and gate-load intent as #2277. Open RA PRs now: #2278 (API ?limit= guard) and #2279 (CITE bogus-uuid wedge), both from morning run 44479285429 — drafts, Check green, mergeable clean.",
-      "follow_up": "Re-verify #2278/#2279 CI + conflicts + comments each run until merged."
+      "checked_at": "2026-11-20",
+      "result": "#2278 (api ?limit= guard) and #2279 (CITE bogus-uuid) still Check-green, based on main 61070f6b, no conflicts, no human comments. New draft from test-mixin-preorder-mixin-guard branch. Dependabot #2280 (kramdown) Check-green, open alone — no bundling.",
+      "follow_up": "Re-verify #2278/#2279/#2280 and the new mixin-preorder PR (CI + conflicts + comments + real PR number) each run until merged."
     },
     {
       "area": "dependencies",
@@ -28,26 +28,26 @@
     },
     {
       "area": "tests",
-      "checked_at": "2026-11-18",
-      "result": "Main baseline 1725/0/2 (with #2274's RevenueBot tests merged). revenue_bot_test pins failure-not-cached (build counter) and gate wiring (wrap kwargs).",
+      "checked_at": "2026-11-20",
+      "result": "Main baseline 1725/0/2; branch with mixin-preorder guard test: 1726/0/2. App models/services fully pinned (application_record aside) — MixinPreOrder was the last unpinned model contract, closed 2026-11-20 pending merge. revenue_bot_test pins failure-not-cached and gate wiring.",
       "follow_up": "Do not reintroduce value-capture restores; mirror the QuillBot method-capture pattern when stubbing module singletons."
     },
     {
       "area": "code",
-      "checked_at": "2026-11-19",
-      "result": "app/libs fully test-covered (#2274 merged). Gate-load fix merged as #2277 (revenue_bot.rb requires mixin_api/gate like quill_bot.rb). Open fix candidates live in #2278 (api articles limit) and #2279 (Payment CITE memo nil-author).",
+      "checked_at": "2026-11-20",
+      "result": "app/libs fully test-covered (#2274). Gate-load fix merged as #2277. Open RA fix PRs: #2278 (api articles limit), #2279 (Payment CITE memo nil-author); new: mixin-preorder validation pin. No other unpinned model/service contract found in the 2026-11-20 sweep.",
       "follow_up": null
     },
     {
       "area": "release",
-      "checked_at": "2026-11-19",
-      "result": "105 commits unreleased since release-2026-11-04-c205bc2-41926707390 (was 94 on 2026-11-18). Never trigger Release: it deploys to production.",
+      "checked_at": "2026-11-20",
+      "result": "105 commits unreleased since release-2026-11-04-c205bc2-41926707390 (unchanged from 2026-11-19; main has not moved). Never trigger Release: it deploys to production.",
       "follow_up": "Release decision sits with the maintainer via the monthly issue."
     },
     {
       "area": "tooling",
       "checked_at": "2026-11-17",
-      "result": "Read-only toolcache blocks bundler downloads; BUNDLE_PATH=vendor/bundle (gitignored) is writable. Suite: SKIP_CSS_BUILD=1 SKIP_JS_BUILD=1, run in background. EXPLAIN probes need explicit-transaction rollback; db:rollback needs :primary.",
+      "result": "Read-only toolcache blocks bundler downloads; BUNDLE_PATH=vendor/bundle (gitignored) is writable. Suite: SKIP_CSS_BUILD=1 SKIP_JS_BUILD=1, run in background. EXPLAIN probes need explicit-transaction rollback; db:rollback needs :primary. node_modules IS present (frontend measurement runs fully).",
       "follow_up": null
     },
     {
@@ -58,8 +58,8 @@
     },
     {
       "area": "performance",
-      "checked_at": "2026-11-15",
-      "result": "Inbox composite index merged (#2262); recipient-index drop merged (#2264). Rejected still: page preloads, navbar avatar preload, comments sort index.",
+      "checked_at": "2026-11-20",
+      "result": "measure-frontend-efficiency 2026-11-20: 0 listener leaks; transitions reduced-motion gated; 24/63 image_tags lazy, rest by design (logos, chrome, icons, posters) — no blanket lazy. Inbox index #2262 + recipient drop #2264 merged. Rejected: page preloads, navbar avatar preload, comments sort index.",
       "follow_up": "Do not re-propose rejected items without a maintainer ask."
     },
     {
@@ -85,13 +85,13 @@
   "priorities": [
     {
       "task": 6,
-      "item": "Maintain open RA PRs #2278 and #2279 until merged",
-      "note": "Both Check-green and mergeable-clean as of 2026-11-19. Re-verify CI/conflicts/comments each run."
+      "item": "Maintain open RA PRs #2278, #2279 and the new mixin-preorder test PR until merged",
+      "note": "#2278/#2279 Check-green and mergeable-clean as of 2026-11-20; new draft needs CI verification once published. Re-verify each run."
     },
     {
       "task": 2,
-      "item": "Watch posthog auto-filed issues; triage on arrival with EXISTING labels only",
-      "note": "Each is a production-error alert: investigate, root-cause, label, resolve. Non-existent labels silently no-op (needs triage etc) - use invalid/wontfix/question/bug. Skip #2255 (machine-managed tracker). #2272 awaits close."
+      "item": "Watch posthog auto-filed issues; triage with EXISTING labels only",
+      "note": "Each is a production-error alert: investigate, root-cause, label, resolve. Use wontfix/question/bug etc. — never invalid (not in tooling set) or needs triage (not in repo). Skip #2255 (machine-managed tracker). #2272 awaits close with wontfix applied."
     },
     {
       "task": 10,
