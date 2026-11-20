@@ -12,6 +12,9 @@
 
 ActiveSupport::Inflector.inflections(:en) do |inflect|
   inflect.acronym "API"
+  # Rails' default /s$/ -> s rule leaves "bonus" unchanged, so Bonus mapped
+  # to a nonexistent singular `bonus` table while the schema has `bonuses`.
+  inflect.irregular "bonus", "bonuses"
 end
 
 Rails.autoloaders.main.inflector.inflect(
