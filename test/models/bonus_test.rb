@@ -23,14 +23,8 @@
 
 require "test_helper"
 
-# NOTE: `app/models/bonus.rb` does not override `self.table_name`. Rails 8
-# inflects `Bonus` → `bonus` (singular — "bonus" doesn't match the standard
-# English plural rules), but the migration created `bonuses` (plural). To
-# exercise the model without modifying business code, the suite sets the
-# table_name at the start of every example.
 class BonusTest < ActiveSupport::TestCase
   setup do
-    Bonus.table_name = "bonuses"
     @user = users(:author)
     @currency = currencies(:btc)
   end
