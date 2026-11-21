@@ -127,14 +127,16 @@ real requirement is `rails >= 8.1.4`, not a json version.
 - **A CITE transfer memo with an unresolvable uuid wedged the snapshot
   pipeline** — the memo is arbitrary on-chain data and `Mixin::Memo.quill_payment?`
   (the snapshot gate) validates key presence, not that the cited uuid
-  resolves, so a crafted `{"t":"CITE","c":<bogus>}` passed the gate and then
-  `Payment#setup_attributes` raised `NoMethodError` on
+  resolves, so a crafted `{"t":"CITE","a":<any>,"c":<bogus>}` passed the gate
+  and then `Payment#setup_attributes` raised `NoMethodError` on
   `Article.find_by(...).author`. `MixinNetworkSnapshot#process!` never
-  reached `touch_proccessed_at`, so the snapshot sat in
-  `MixinNetworkSnapshots::ProcessJob` retries forever with `MonitorJob`
-  alerting on every pass. The lookup is now nil-safe (`&.author`), matching
-  every sibling lookup in the model: the payment persists with a nil payer
-  and the snapshot processes.
+  reached `touch_proccessed_at`, so `MixinNetworkSnapshots::ProcessJob`
+  failed on every attempt and the recurring `MonitorJob` died on the wedged
+  snapshot before reaching its admin alert — the stuck snapshot was never
+  surfaced. The lookup is now nil-safe (`&.author`), matching every sibling
+  lookup in the model: the snapshot processes, and the payment persists paid
+  with a nil payer — no order is placed and no refund transfer is generated
+  (the refund path returns early for a nil payer).
 
 ### Security
 
