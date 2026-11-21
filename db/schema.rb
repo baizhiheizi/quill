@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_11_15_090000) do
+ActiveRecord::Schema[8.1].define(version: 2026_11_21_192737) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_stat_statements"
@@ -341,6 +341,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_15_090000) do
     t.index ["item_type", "item_id"], name: "index_orders_on_item_type_and_item_id"
     t.index ["order_type", "buyer_id", "item_type", "item_id"], name: "idx_orders_buyer_item_type_unique", unique: true, where: "(order_type = ANY (ARRAY[0, 3]))"
     t.index ["seller_id"], name: "index_orders_on_seller_id"
+    t.index ["trace_id"], name: "index_orders_on_trace_id"
   end
 
   create_table "payments", force: :cascade do |t|
@@ -390,6 +391,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_15_090000) do
     t.index ["item_type", "item_id"], name: "index_pre_orders_on_item"
     t.index ["payee_id"], name: "index_pre_orders_on_payee_id"
     t.index ["payer_id"], name: "index_pre_orders_on_payer_id"
+    t.index ["trace_id"], name: "index_pre_orders_on_trace_id"
   end
 
   create_table "sessions", force: :cascade do |t|
