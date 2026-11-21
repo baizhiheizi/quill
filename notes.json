@@ -1,8 +1,8 @@
 {
   "version": 1,
   "cursors": {
-    "labelling_after": 2272,
-    "investigation_after": 2272
+    "labelling_after": 2286,
+    "investigation_after": 2286
   },
   "issues": [
     {
@@ -10,6 +10,12 @@
       "state": "commented",
       "updated_at": "2026-11-20",
       "note": "Posthog auto-filed MixinBot::ServerError: Mixin-side 5xx; by design; close recommended. wontfix re-applied 2026-11-20 evening (morning application never landed). Awaiting maintainer close."
+    },
+    {
+      "number": 2286,
+      "state": "commented",
+      "updated_at": "2026-11-21",
+      "note": "Machine-filed failure report: morning run 44878603198 finished without terminal safe output. No repo work attached. Informational; suggested close in monthly issue. Always emit a terminal safe output."
     }
   ],
   "fixes": [],
