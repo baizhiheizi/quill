@@ -87,10 +87,15 @@ class API::ArticlesController < API::BaseController
 
   private
 
+  # Only digit strings reach `.limit`, mirroring the `offset` contract above;
+  # `?limit=abc`/blank/array/negative used to raise inside `Relation#limit`
+  # (ArgumentError/TypeError) or Postgres (`LIMIT -5`) — 500s on an
+  # unauthenticated endpoint.
   def capped_limit
-    limit = params[:limit] || 20
-    limit = 100 if limit.to_i > 100
-    limit
+    limit = params[:limit]
+    return 20 unless /^\d+$/.match?(limit.to_s)
+
+    [ limit.to_i, 100 ].min
   end
 
   def article_params

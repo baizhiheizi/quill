@@ -68,6 +68,42 @@ class API::ArticlesControllerTest < IntegrationTestCase
     # test; here we just confirm the endpoint does not blow up on a huge query.)
   end
 
+  # The `?limit=` contract mirrors the sibling `?offset=` guard: digit strings
+  # clamp at 100, anything else falls back to the default 20. Before the
+  # guard, `abc`/blank/array/negative inputs raised inside `Relation#limit`
+  # (ArgumentError/TypeError) or Postgres (`LIMIT -5`) — 500s on an
+  # unauthenticated endpoint.
+  test "index falls back to the default limit for malformed ?limit= values" do
+    [ "abc", "", "1e3", "-5", [ 1, 2 ] ].each do |bad_limit|
+      payloads = []
+      counter = ->(_name, _start, _finish, _id, payload) { payloads << payload }
+
+      ActiveSupport::Notifications.subscribed(counter, "sql.active_record") do
+        get api_articles_path(limit: bad_limit), as: :json
+      end
+
+      assert_response :success
+      assert_equal 20, applied_articles_limit(payloads),
+        "expected ?limit=#{bad_limit.inspect} to fall back to the default 20"
+    end
+  end
+
+  test "index honors in-range ?limit= values and clamps at 100" do
+    payloads = []
+    counter = ->(_name, _start, _finish, _id, payload) { payloads << payload }
+
+    ActiveSupport::Notifications.subscribed(counter, "sql.active_record") do
+      get api_articles_path(limit: 2), as: :json
+      assert_response :success
+      assert_equal 2, applied_articles_limit(payloads)
+
+      payloads.clear
+      get api_articles_path(limit: 500), as: :json
+      assert_response :success
+      assert_equal 100, applied_articles_limit(payloads)
+    end
+  end
+
   # Issue #2075: the API used to skip the block rule entirely while the web
   # feed applied it in both directions. That divergence is now an assertion —
   # the catalogue branch hides authors blocked in either direction, exactly
@@ -148,6 +184,16 @@ class API::ArticlesControllerTest < IntegrationTestCase
   end
 
   private
+
+  # Rails binds the LIMIT clause (`LIMIT $3`), so the applied value only
+  # shows up in the query's bind params, not in the SQL text.
+  def applied_articles_limit(payloads)
+    payload = payloads.find do |p|
+      p[:sql].to_s.include?('FROM "articles"') &&
+        p[:binds].to_a.any? { |bind| bind.name == "LIMIT" }
+    end
+    payload[:binds].find { |bind| bind.name == "LIMIT" }&.value_for_database
+  end
 
   # SELECT_BUDGET covers 1 ransack (articles) + 1 articles +
   # 1 authors + 1 tags + 1 currencies + 5 authorizations +
