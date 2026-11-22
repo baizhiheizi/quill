@@ -30,10 +30,10 @@
 require "test_helper"
 
 class MixinNetworkSnapshotTest < ActiveSupport::TestCase
-  def build_snapshot(memo_payload:, amount: 1)
+  def build_snapshot(memo_payload:, amount: 1, asset_id: SecureRandom.uuid)
     MixinNetworkSnapshot.new(
       amount: amount,
-      asset_id: SecureRandom.uuid,
+      asset_id: asset_id,
       data: Base64.encode64(memo_payload.to_json),
       transferred_at: Time.current,
       user_id: SecureRandom.uuid,
@@ -61,6 +61,41 @@ class MixinNetworkSnapshotTest < ActiveSupport::TestCase
     end
 
     assert snapshot.reload.processed?
+  end
+
+  # The memo is arbitrary on-chain data: the `quill_payment?` gate checks key
+  # presence, not that the cited uuid resolves. Before the `&.author` guard in
+  # `Payment#setup_attributes`, this snapshot raised NoMethodError inside
+  # `Payment.create!`, `process!` never reached `touch_proccessed_at`,
+  # ProcessJob failed on every attempt, and MonitorJob died on the wedged
+  # snapshot before reaching its admin alert.
+  #
+  # The surviving terminal state is pinned deliberately: the payment lands
+  # paid with a nil payer, so no order can be placed (buyer must exist) and
+  # no refund transfer is generated (the refund path returns early for a nil
+  # payer). Whether such a payment should fall back to the sender is a
+  # product decision — this test only records what actually happens.
+  test "process! survives a CITE memo whose cite target does not resolve" do
+    article = articles(:published_paid)
+    snapshot = build_snapshot(
+      memo_payload: { "t" => "CITE", "a" => article.uuid, "c" => SecureRandom.uuid },
+      asset_id: article.asset_id
+    )
+    snapshot.save!
+
+    stub_notifications! do
+      with_quill_bot_stub do
+        assert_nothing_raised { snapshot.process! }
+      end
+    end
+
+    assert snapshot.reload.processed?, "an unresolvable cite target must not wedge the snapshot"
+    payment = Payment.find_by(trace_id: snapshot.trace_id)
+    assert payment.present?
+    assert_nil payment.payer
+    assert_equal "paid", payment.reload.state
+    assert_nil payment.order, "a nil-payer CITE payment cannot place an order"
+    assert_nil payment.refund_transfer, "a nil payer leaves nothing to refund"
   end
 
   test "decoded_memo reads the memo carried in data" do
