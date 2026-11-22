@@ -26,6 +26,7 @@
 #  index_pre_orders_on_item      (item_type,item_id)
 #  index_pre_orders_on_payee_id  (payee_id)
 #  index_pre_orders_on_payer_id  (payer_id)
+#  index_pre_orders_on_trace_id  (trace_id)
 #
 class MixpayPreOrder < PreOrder
   validate :ensure_mixpay_supported
