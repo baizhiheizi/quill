@@ -16,6 +16,12 @@
       "state": "commented",
       "updated_at": "2026-11-22",
       "note": "Machine-filed failure report (2026-11-21 morning run). Informational; suggested close in monthly issue. Always emit a terminal safe output."
+    },
+    {
+      "number": 2289,
+      "state": "commented",
+      "updated_at": "2026-11-22",
+      "note": "CI pg health-check fix (workflow-file push refused, needs workflows perm). Issue has manual instructions; empty branch repo-assist/eng-pg-health-tcp-* deletable. Never retry the push."
     }
   ],
   "fixes": [],
@@ -23,13 +29,13 @@
     {
       "area": "repo_assist_prs",
       "checked_at": "2026-11-22",
-      "result": "Maintainer merged all 8 open RA/Dependabot PRs 2026-11-22 morning (#2278, #2279, #2281, #2285, #2287, #2280/#2282/#2283 directly; bundle #2284 closed). Zero open. New intents: ci health check (repo-assist/eng-pg-health-tcp) and changelog catch-up (repo-assist/docs-changelog-2026-11-22).",
-      "follow_up": "Next run: capture real PR numbers, verify CI (ci PR's Check exercises the new health check), handle vigil findings."
+      "result": "PR #2288 open: vigil REQUEST_CHANGES addressed by b3065256 + 075b6a5e (bullet cites measure script). Tooling PR intent: bin/measure-trace-id-indexes (number lands on publication). CI intent = issue #2289 (push refused, needs workflows perm).",
+      "follow_up": "Watch vigil re-review of #2288 heads; capture the tooling PR number at publication."
     },
     {
       "area": "dependencies",
       "checked_at": "2026-11-22",
-      "result": "2026-11-20 round landed: kramdown 2.6.1 (+ maintainer nested-depth fix), puma 8.1.2, aws-sdk-s3 1.243.0 (aws-sdk-core 3.271.0, aws-sdk-kms 1.145.0, aws-partitions 1.1309.0). Zero open Dependabot PRs. Majors maintainer-decision: marcel 2, net-ssh 8, openssl 4, rack-oauth2 2.3, prism 2.x.",
+      "result": "2026-11-20 round landed: kramdown 2.6.1 (+ maintainer nested-depth fix), puma 8.1.2, aws-sdk-s3 1.243.0. Zero open Dependabot PRs (re-verified 2026-11-22 evening). Majors maintainer-decision: marcel 2, net-ssh 8, openssl 4, rack-oauth2 2.3, prism 2.x.",
       "follow_up": null
     },
     {
@@ -47,19 +53,19 @@
     {
       "area": "release",
       "checked_at": "2026-11-22",
-      "result": "125 commits unreleased since release-2026-11-04-c205bc2 (main 6fa18cd3); full merge batch is in. Never trigger Release: it deploys to production; maintainer's call via monthly issue.",
+      "result": "125 commits unreleased since release-2026-11-04-c205bc2 (main 6fa18cd3); full merge batch is in. Never trigger Release: it deploys to production; maintainer call via monthly issue.",
       "follow_up": null
     },
     {
       "area": "ci",
       "checked_at": "2026-11-22",
-      "result": "Main Check green on merged HEAD (44990535930). Found: #2285 PR run failed in 9s - Postgres service healthy mid-initdb (temp server socket-only), bin/setup hit 5x 'quill_test does not exist'. Fix filed: pg_isready -h localhost on eng-pg-health-tcp. Never edit shared/runtime.md (gh-aw tooling).",
-      "follow_up": "Verify the ci PR's Check run goes green."
+      "result": "Main Check green on merged HEAD (44990535930). #2285 PR-run failure root-caused: pg_isready passes mid-initdb (socket-only temp server). Fix needs workflows permission - filed as issue #2289. Never edit shared/runtime.md; never retry workflow-file pushes.",
+      "follow_up": null
     },
     {
       "area": "performance",
       "checked_at": "2026-11-22",
-      "result": "Re-baselined on merged main: trace_id indexes live. article_search 5.3-5.9ms; feed recent 72.8x, tags 40.1x, home.count 3.6x; popularity sort still scan-and-sort 14.30->9.37ms (stored column = maintainer decision). Frontend 0 leaks; non-lazy images by design. Rejected items stand.",
+      "result": "Re-baselined on merged main: trace_id indexes live. article_search 5.3-5.9ms; feed recent 72.8x, tags 40.1x, home.count 3.6x; popularity sort 14.30->9.37ms. bin/measure-trace-id-indexes created (PR intent): reproduced 4.86->0.01ms orders, 3.72->0.00ms pre_orders.",
       "follow_up": "Do not re-propose rejected items without a maintainer ask."
     },
     {
@@ -71,13 +77,13 @@
     {
       "area": "hygiene",
       "checked_at": "2026-11-22",
-      "result": "Stale remote branches repo-assist/improve-ci-dependency-install-retry-* still present (re-verified 2026-11-22); housekeeping item kept in monthly issue.",
+      "result": "Stale remote branches repo-assist/improve-ci-dependency-install-retry-* still present (re-verified 2026-11-22); housekeeping item kept in monthly issue. Also empty repo-assist/eng-pg-health-tcp-* (see #2289).",
       "follow_up": null
     },
     {
       "area": "docs",
       "checked_at": "2026-11-22",
-      "result": "Batch changelog audit: missing were the #2287 trace_id perf bullet and the 2026-11-18 + 2026-11-20 dep rounds - filed as catch-up PR (branch repo-assist/docs-changelog-2026-11-22); versions from merge diffs + lockfile.",
+      "result": "PR #2288 (changelog catch-up) live: #2287 trace_id bullet + 2026-11-19/2026-11-22 dep rounds (merge-day convention per vigil). Bullet now cites bin/measure-trace-id-indexes once the tooling PR merges.",
       "follow_up": null
     }
   ],
@@ -85,8 +91,8 @@
   "priorities": [
     {
       "task": 6,
-      "item": "Maintain the two new PRs (ci health check, changelog catch-up) until merged",
-      "note": "Capture real PR numbers next run; the ci PR's own Check validates the new health check; address vigil findings."
+      "item": "Maintain PR #2288 + the measure-trace-id-indexes PR until merged",
+      "note": "Vigil findings addressed (b3065256, 075b6a5e). CI intent is issue #2289, not a PR - never retry workflow pushes."
     },
     {
       "task": 2,
