@@ -8,64 +8,58 @@
     {
       "number": 2272,
       "state": "commented",
-      "updated_at": "2026-11-20",
-      "note": "Posthog auto-filed MixinBot::ServerError: Mixin-side 5xx; by design; close recommended. wontfix re-applied 2026-11-20 evening (morning application never landed). Awaiting maintainer close."
+      "updated_at": "2026-11-22",
+      "note": "Posthog auto-filed MixinBot::ServerError: Mixin-side 5xx; by design; close recommended. wontfix in place. Awaiting maintainer close."
     },
     {
       "number": 2286,
       "state": "commented",
-      "updated_at": "2026-11-21",
-      "note": "Machine-filed failure report: morning run 44878603198 finished without terminal safe output. No repo work attached. Informational; suggested close in monthly issue. Always emit a terminal safe output."
+      "updated_at": "2026-11-22",
+      "note": "Machine-filed failure report (2026-11-21 morning run). Informational; suggested close in monthly issue. Always emit a terminal safe output."
     }
   ],
   "fixes": [],
   "checks": [
     {
       "area": "repo_assist_prs",
-      "checked_at": "2026-11-20",
-      "result": "5 open RA PRs: #2278/#2279/#2281 Check-green on 61070f6b, no human comments; new: deps bundle (repo-assist/eng-bundle-deps-2026-11-20) and bonus-inflection fix (repo-assist/test-transfer-bonus-process), both published 2026-11-20 evening, CI pending.",
-      "follow_up": "Re-verify all five PRs (CI + conflicts + comments + real numbers for the two new) each run. Bundle merge lets #2280/#2282/#2283 be closed."
+      "checked_at": "2026-11-22",
+      "result": "Maintainer merged all 8 open RA/Dependabot PRs 2026-11-22 morning (#2278, #2279, #2281, #2285, #2287, #2280/#2282/#2283 directly; bundle #2284 closed). Zero open. New intents: ci health check (repo-assist/eng-pg-health-tcp) and changelog catch-up (repo-assist/docs-changelog-2026-11-22).",
+      "follow_up": "Next run: capture real PR numbers, verify CI (ci PR's Check exercises the new health check), handle vigil findings."
     },
     {
       "area": "dependencies",
-      "checked_at": "2026-11-20",
-      "result": "Three Dependabot PRs open simultaneously (#2280/#2282/#2283) — bundled into one PR per #2271 precedent; conflict-free merges; bundle verified locally (install clean, suite 1725/0/2). Majors maintainer-decision: marcel 2, net-ssh 8, openssl 4, rack-oauth2 2.3, prism 2.x.",
+      "checked_at": "2026-11-22",
+      "result": "2026-11-20 round landed: kramdown 2.6.1 (+ maintainer nested-depth fix), puma 8.1.2, aws-sdk-s3 1.243.0 (aws-sdk-core 3.271.0, aws-sdk-kms 1.145.0, aws-partitions 1.1309.0). Zero open Dependabot PRs. Majors maintainer-decision: marcel 2, net-ssh 8, openssl 4, rack-oauth2 2.3, prism 2.x.",
       "follow_up": null
     },
     {
       "area": "tests",
-      "checked_at": "2026-11-20",
-      "result": "Main baseline 1725/0/2; bonus-fix branch 1725/0/1 (transfer Bonus test now real, not skipped). Coverage sweep re-run: controllers/jobs/notifiers/models/services/libs all covered (grover pair in grover_controller_test.rb). Only remaining skip: design_system (by design).",
+      "checked_at": "2026-11-22",
+      "result": "New main baseline 1733/0/1 (was 1725/0/2): bonus skip now real; trace_id guards + route-helper pin landed. Coverage sweep clean; only skip is design_system (by design).",
       "follow_up": null
     },
     {
       "area": "code",
-      "checked_at": "2026-11-20",
-      "result": "Bonus inflection bug fixed pending merge: 'bonus'.pluralize stays singular, Bonus mapped to nonexistent table, every admin bonuses query 500'd; inflect.irregular 'bonus','bonuses' fixes table mapping and route helper naming. Old suite masked it via per-example table_name overrides.",
-      "follow_up": "Sweep found no other model names the default inflector pluralizes oddly; only Bonus had the -s/-us issue."
+      "checked_at": "2026-11-22",
+      "result": "Bonus inflection fix MERGED as #2285. Batch fixes live on main 6fa18cd3: #2278 API limit guard, #2279 CITE nil-safe lookup, #2287 trace_id indexes.",
+      "follow_up": null
     },
     {
       "area": "release",
-      "checked_at": "2026-11-20",
-      "result": "105 commits unreleased since release-2026-11-04-c205bc2-41926707390 (main unchanged 61070f6b this run). Never trigger Release: it deploys to production.",
-      "follow_up": "Release decision sits with the maintainer via the monthly issue."
-    },
-    {
-      "area": "tooling",
-      "checked_at": "2026-11-20",
-      "result": "CORRECTION: bundler downloads DO work with BUNDLE_PATH=vendor/bundle (writable); only the default toolcache gem path is blocked. Suite: SKIP_CSS_BUILD=1 SKIP_JS_BUILD=1 in background. node_modules present.",
+      "checked_at": "2026-11-22",
+      "result": "125 commits unreleased since release-2026-11-04-c205bc2 (main 6fa18cd3); full merge batch is in. Never trigger Release: it deploys to production; maintainer's call via monthly issue.",
       "follow_up": null
     },
     {
       "area": "ci",
-      "checked_at": "2026-11-14",
-      "result": "Main Check GREEN (run 43569706156). Check path filters include test/** but not CHANGELOG.md (docs PRs get no CI - expected).",
-      "follow_up": null
+      "checked_at": "2026-11-22",
+      "result": "Main Check green on merged HEAD (44990535930). Found: #2285 PR run failed in 9s - Postgres service healthy mid-initdb (temp server socket-only), bin/setup hit 5x 'quill_test does not exist'. Fix filed: pg_isready -h localhost on eng-pg-health-tcp. Never edit shared/runtime.md (gh-aw tooling).",
+      "follow_up": "Verify the ci PR's Check run goes green."
     },
     {
       "area": "performance",
-      "checked_at": "2026-11-20",
-      "result": "Frontend sweep 2026-11-20: 0 listener leaks; transitions reduced-motion gated; non-lazy image_tags by design. Inbox index merged. Rejected: page preloads, navbar avatar preload, comments sort index.",
+      "checked_at": "2026-11-22",
+      "result": "Re-baselined on merged main: trace_id indexes live. article_search 5.3-5.9ms; feed recent 72.8x, tags 40.1x, home.count 3.6x; popularity sort still scan-and-sort 14.30->9.37ms (stored column = maintainer decision). Frontend 0 leaks; non-lazy images by design. Rejected items stand.",
       "follow_up": "Do not re-propose rejected items without a maintainer ask."
     },
     {
@@ -76,14 +70,14 @@
     },
     {
       "area": "hygiene",
-      "checked_at": "2026-11-19",
-      "result": "IntegrationTestCase#sign_in fixed via real OAuth callback, merged #2233. Stale branches repo-assist/improve-ci-dependency-install-retry-* still present.",
+      "checked_at": "2026-11-22",
+      "result": "Stale remote branches repo-assist/improve-ci-dependency-install-retry-* still present (re-verified 2026-11-22); housekeeping item kept in monthly issue.",
       "follow_up": null
     },
     {
       "area": "docs",
-      "checked_at": "2026-11-20",
-      "result": "Blaze changelog fix merged #2273. Bonus crash-fix bullet added to CHANGELOG 2026-11-20 evening (part of the bonus-inflection PR). How-to docs correct.",
+      "checked_at": "2026-11-22",
+      "result": "Batch changelog audit: missing were the #2287 trace_id perf bullet and the 2026-11-18 + 2026-11-20 dep rounds - filed as catch-up PR (branch repo-assist/docs-changelog-2026-11-22); versions from merge diffs + lockfile.",
       "follow_up": null
     }
   ],
@@ -91,8 +85,8 @@
   "priorities": [
     {
       "task": 6,
-      "item": "Maintain open RA PRs #2278, #2279, #2281, the deps bundle, and the bonus-inflection fix until merged",
-      "note": "First three Check-green and mergeable-clean 2026-11-20; the two new evening PRs need CI verification and real PR numbers captured next run. Bundle merge enables closing #2280/#2282/#2283."
+      "item": "Maintain the two new PRs (ci health check, changelog catch-up) until merged",
+      "note": "Capture real PR numbers next run; the ci PR's own Check validates the new health check; address vigil findings."
     },
     {
       "task": 2,
@@ -107,7 +101,7 @@
     {
       "task": 10,
       "item": "Feed sort stored column: ask maintainer",
-      "note": "order_by_popularity sorts a computed expression, no index helps. In monthly issue."
+      "note": "order_by_popularity sorts a computed expression; re-measured 2026-11-22: 14.30->9.37ms from state filter alone on 20k synthetic. In monthly issue."
     },
     {
       "task": 2,
