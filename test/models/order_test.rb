@@ -24,11 +24,13 @@
 #
 # Indexes
 #
+#  idx_orders_buyer_item_type_unique        (order_type,buyer_id,item_type,item_id) UNIQUE WHERE (order_type = ANY (ARRAY[0, 3]))
 #  index_orders_on_asset_id                 (asset_id)
 #  index_orders_on_buyer_id                 (buyer_id)
 #  index_orders_on_citer_type_and_citer_id  (citer_type,citer_id)
 #  index_orders_on_item_type_and_item_id    (item_type,item_id)
 #  index_orders_on_seller_id                (seller_id)
+#  index_orders_on_trace_id                 (trace_id)
 #
 require "test_helper"
 
