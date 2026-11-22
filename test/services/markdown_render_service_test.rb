@@ -239,4 +239,17 @@ class MarkdownRenderServiceTest < ActiveSupport::TestCase
 
     refute_includes html, "onclick"
   end
+
+  test "degrades deeply nested markdown to plain text instead of raising" do
+    # kramdown >= 2.6.0 raises Kramdown::Error past 100 nested block levels,
+    # where 2.5.x rendered the same input fine. The service must degrade to
+    # sanitized plain text — author-supplied markdown reaches public pages,
+    # and an unhandled Kramdown::Error would 500 them.
+    content = ("> " * 100) + "deep"
+
+    html = MarkdownRenderService.call(content, type: :default)
+
+    assert_includes html, "deep"
+    refute_includes html, "<blockquote"
+  end
 end
