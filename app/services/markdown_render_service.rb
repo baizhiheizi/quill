@@ -13,7 +13,7 @@ class MarkdownRenderService
   end
 
   def call
-    @html = HtmlSanitizer.call(Kramdown::Document.new(@content, input: "GFM").to_html)
+    @html = HtmlSanitizer.call(render_markdown)
 
     case @type
     when :default
@@ -45,5 +45,18 @@ class MarkdownRenderService
       blob = ActiveStorage::Blob.find_by(key:)
       img["src"] = blob.url if blob.present?
     end
+  end
+
+  private
+
+  # kramdown >= 2.6.0 refuses to parse content nested deeper than 100 block
+  # levels and raises Kramdown::Error, where 2.5.x rendered it fine.
+  # Author-supplied Markdown reaches public pages, so degrade to sanitized
+  # plain text instead of letting the error bubble up as a 500.
+  def render_markdown
+    Kramdown::Document.new(@content, input: "GFM").to_html
+  rescue Kramdown::Error => e
+    Rails.logger.warn("MarkdownRenderService fell back to plain text: #{e.message}")
+    @content
   end
 end

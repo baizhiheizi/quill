@@ -137,6 +137,13 @@ real requirement is `rails >= 8.1.4`, not a json version.
   lookup in the model: the snapshot processes, and the payment persists paid
   with a nil payer — no order is placed and no refund transfer is generated
   (the refund path returns early for a nil payer).
+- **kramdown 2.6's nested-depth limit could 500 public pages** — the 2.6
+  upgrade made kramdown raise `Kramdown::Error` for content nested deeper
+  than 100 block levels, where 2.5 rendered the same input fine, and
+  `MarkdownRenderService` had no rescue — author-supplied markdown (e.g. a
+  collection description) would 500 its public page on every visit.
+  `MarkdownRenderService` now degrades past the limit to sanitized plain
+  text and logs a warning.
 
 ### Security
 
