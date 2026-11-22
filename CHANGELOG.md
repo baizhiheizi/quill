@@ -320,9 +320,11 @@ in the feed redirect.
   indexed, so all of those lookups seq-scanned their tables. Plain b-tree
   indexes on both columns now serve them: on a synthetic 100,000-order /
   50,000-pre-order dataset, the orders lookup goes 5.0 ms → 0.019 ms and
-  the pre_orders probe 3.8 ms → 0.010 ms — measured in #2287's one-off
-  `EXPLAIN ANALYZE` run; not reproducible from the repo (no committed
-  measurement script). The early-reader revenue aggregate groups *by*
+  the pre_orders probe 3.8 ms → 0.010 ms. `bin/measure-trace-id-indexes`
+  reproduces the measurement the same way `bin/measure-feed-indexes` does
+  for the feed: it seeds the synthetic dataset inside a transaction it
+  rolls back, then runs `EXPLAIN (ANALYZE, BUFFERS)` with and without the
+  indexes. The early-reader revenue aggregate groups *by*
   trace_id without filtering on it, so it keeps its existing
   `(item_type, item_id)` plan; guard tests pin both new indexes to the
   schema.
