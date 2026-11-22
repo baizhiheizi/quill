@@ -319,9 +319,10 @@ in the feed redirect.
   `Order.find_by(trace_id:)` in `Orders::DistributeJob`. Neither column was
   indexed, so all of those lookups seq-scanned their tables. Plain b-tree
   indexes on both columns now serve them: on a synthetic 100,000-order /
-  50,000-pre-order dataset (`EXPLAIN ANALYZE`, transaction rolled back), the
-  orders lookup goes 5.0 ms → 0.019 ms and the pre_orders probe
-  3.8 ms → 0.010 ms. The early-reader revenue aggregate groups *by*
+  50,000-pre-order dataset, the orders lookup goes 5.0 ms → 0.019 ms and
+  the pre_orders probe 3.8 ms → 0.010 ms — measured in #2287's one-off
+  `EXPLAIN ANALYZE` run; not reproducible from the repo (no committed
+  measurement script). The early-reader revenue aggregate groups *by*
   trace_id without filtering on it, so it keeps its existing
   `(item_type, item_id)` plan; guard tests pin both new indexes to the
   schema.
@@ -392,8 +393,8 @@ of the three: posthog-rails 3.26.0 → 3.26.4 with posthog-ruby 3.32.1 →
 aws-sdk-kms 1.140.0 → 1.143.0 and aws-partitions 1.1303.0 → 1.1305.0, and
 puma 8.0.2 → 8.0.3.
 
-The 2026-11-18 round landed as omniauth 2.3.1 → 2.4.1 (#2276) and puma
-8.0.3 → 8.1.1 (#2275). The 2026-11-20 round landed as three separate PRs
+The 2026-11-19 round landed as omniauth 2.3.1 → 2.4.1 (#2276) and puma
+8.0.3 → 8.1.1 (#2275). The 2026-11-22 round landed as three separate PRs
 rather than one bundle — kramdown 2.5.2 → 2.6.1 (#2280), puma 8.1.1 → 8.1.2
 (#2282) and aws-sdk-s3 1.242.0 → 1.243.0 (#2283), with aws-sdk-core
 3.268.0 → 3.271.0, aws-sdk-kms 1.143.0 → 1.145.0 and aws-partitions
