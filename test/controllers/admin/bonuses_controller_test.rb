@@ -2,20 +2,10 @@
 
 require "test_helper"
 
-# Tests for `Admin::BonusesController`. The view templates use URL helpers
-# that don't actually exist (`new_admin_bonus_path`,
-# `admin_bonus_deliver_path`) because Rails 8 fails to pluralise "bonus" →
-# "bonuses" — see `test/models/bonus_test.rb` for the inflector
-# workaround. Where rendering would raise on those broken helpers, the
-# suite calls the action method directly and inspects instance variables
-# instead.
 class Admin::BonusesControllerTest < ActionController::TestCase
   tests Admin::BonusesController
 
   setup do
-    # Workaround for the inflector issue: see test/models/bonus_test.rb.
-    Bonus.table_name = "bonuses"
-
     @admin = administrators(:one)
     @request.session[:current_admin_id] = @admin.id
   end
@@ -140,5 +130,18 @@ class Admin::BonusesControllerTest < ActionController::TestCase
     @controller.params = ActionController::Parameters.new(bonus_id: -1)
     @controller.send(:deliver)
     assert_nil @controller.instance_variable_get(:@bonus)
+  end
+
+  # routing ------------------------------------------------------------
+
+  # `resources :bonuses` derives its member helpers and `:bonus_id` param
+  # from `"bonuses".singularize`. Before `bonus`/`bonuses` was registered as
+  # irregular in config/initializers/inflections.rb, that produced
+  # `admin_bonuse_deliver_path` and a `:bonuse_id` param, which 500s the
+  # admin bonuses view and makes `deliver` silently miss its record.
+  test "admin bonus route helpers use the bonus singular" do
+    assert_equal "/admin/bonuses", Rails.application.routes.url_helpers.admin_bonuses_path
+    assert_equal "/admin/bonuses/new", Rails.application.routes.url_helpers.new_admin_bonus_path
+    assert_equal "/admin/bonuses/42/deliver", Rails.application.routes.url_helpers.admin_bonus_deliver_path(42)
   end
 end

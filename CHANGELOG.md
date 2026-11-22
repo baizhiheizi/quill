@@ -144,6 +144,19 @@ real requirement is `rails >= 8.1.4`, not a json version.
   collection description) would 500 its public page on every visit.
   `MarkdownRenderService` now degrades past the limit to sanitized plain
   text and logs a warning.
+- **Admin bonuses raised `PG::UndefinedTable` on every request** — Rails'
+  default `/s$/ → s` plural rule leaves "bonus" unchanged, so the `Bonus`
+  model resolved to a nonexistent singular `bonus` table while the migration
+  (20201126025923) created `bonuses`. Every admin bonuses query (index,
+  create, deliver — the whole `Admin::BonusesController` surface) 500'd, and
+  the bonus transfer flow in `Transfer#process!` could never run. The test
+  suite had papered over this by overriding `Bonus.table_name = "bonuses"`
+  per example; an `inflect.irregular "bonus", "bonuses"` rule fixes the root
+  cause, and also repairs the URL helpers the admin views call
+  (`new_admin_bonus_path`, `admin_bonus_deliver_path`), which the broken
+  inflector mis-generated as `bonuse`. The per-test overrides are removed and
+  the previously skipped "process! drives a Bonus source through complete!"
+  transfer test now runs for real.
 
 ### Security
 

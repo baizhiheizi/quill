@@ -61,7 +61,7 @@
 - **`idx_orders_buyer_item_type_unique`**: DB-level unique constraint on `(order_type, buyer_id, item_type, item_id)`. `save(validate: false)` skips Ruby uniqueness validators but **not the DB constraint**. Use a fresh `Article` (each `build_article` gets a new UUID) per order when the same buyer needs multiple orders.
 
 ### Table Name Mismatch
-- **`Bonus` table_name bug**: `Bonus.table_name` resolves to `"bonus"` (Rails class-name inference) but `db/schema.rb` defines `"bonuses"`. `Bonus.create!` raises `PG::UndefinedTable`. Fix: add `self.table_name = "bonuses"` to `app/models/bonus.rb`.
+- **`Bonus` table_name bug — FIXED**: `bonus`/`bonuses` is an irregular plural, registered via `inflect.irregular "bonus", "bonuses"` in `config/initializers/inflections.rb`, so `Bonus.table_name` resolves to `"bonuses"`. Do **not** add `self.table_name = "bonuses"` to the model or assign `Bonus.table_name` in tests — a class-level `table_name` assignment is a process-global mutation that leaks across tests and can mask an inflection regression.
 
 ### Encryption
 - **`encrypts :pin` not configured in test**: `active_record_encryption.primary_key` is missing from `config/credentials/test.yml.enc`. Reading `pin` on a record raises a config error. Workaround: set `encrypted_pin` via `update_column` or stub `update!` on the instance.

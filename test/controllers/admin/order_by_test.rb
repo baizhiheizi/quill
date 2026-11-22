@@ -91,9 +91,8 @@ end
 # at once, so a new index cannot reintroduce the bug unnoticed.
 #
 # The action is called directly instead of rendering the view: several
-# admin index views need fixtures that this suite does not have (and the
-# bonuses view uses URL helpers that do not exist), and the defect under
-# test lives in the controller, not in the view.
+# admin index views need fixtures that this suite does not have, and the
+# defect under test lives in the controller, not in the view.
 module AdminOrderByGuard
   extend ActiveSupport::Concern
 
@@ -163,11 +162,6 @@ end
 class Admin::BonusesOrderByTest < ActionController::TestCase
   tests Admin::BonusesController
   include AdminOrderByGuard
-
-  setup do
-    # Workaround for the inflector issue: see test/models/bonus_test.rb.
-    Bonus.table_name = "bonuses"
-  end
 
   test "an unknown order_by does not break the index" do
     assert_unknown_order_by_is_handled(:@bonuses)
