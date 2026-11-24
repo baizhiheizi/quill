@@ -1,8 +1,8 @@
 {
   "version": 1,
   "cursors": {
-    "labelling_after": 2286,
-    "investigation_after": 2286
+    "labelling_after": 2290,
+    "investigation_after": 2290
   },
   "issues": [
     {
@@ -15,57 +15,63 @@
       "number": 2286,
       "state": "commented",
       "updated_at": "2026-11-22",
-      "note": "Machine-filed failure report (2026-11-21 morning run). Informational; suggested close in monthly issue. Always emit a terminal safe output."
+      "note": "Machine-filed failure report (2026-11-21 morning run). Informational; suggested close in monthly issue."
     },
     {
       "number": 2289,
       "state": "commented",
       "updated_at": "2026-11-22",
       "note": "CI pg health-check fix (workflow-file push refused, needs workflows perm). Issue has manual instructions; empty branch repo-assist/eng-pg-health-tcp-* deletable. Never retry the push."
+    },
+    {
+      "number": 2290,
+      "state": "commented",
+      "updated_at": "2026-11-24",
+      "note": "Posthog 401 alert: QuillBot session credential invalid; ops rotation, not code. Vigil triaged with 3 maintainer questions. No RA comment (would duplicate vigil). Watch for reply."
     }
   ],
   "fixes": [],
   "checks": [
     {
       "area": "repo_assist_prs",
-      "checked_at": "2026-11-22",
-      "result": "PR #2288 open: vigil REQUEST_CHANGES addressed by b3065256 + 075b6a5e (bullet cites measure script). Tooling PR intent: bin/measure-trace-id-indexes (number lands on publication). CI intent = issue #2289 (push refused, needs workflows perm).",
-      "follow_up": "Watch vigil re-review of #2288 heads; capture the tooling PR number at publication."
+      "checked_at": "2026-11-24",
+      "result": "#2288 merged 2026-11-23. Two 2026-11-24 PR intents: tooling bin/measure-trace-id-indexes (branch repo-assist/eng-measure-trace-id-indexes-2026-11-24) and docs 2026-11-23 dep round (branch repo-assist/docs-changelog-2026-11-23). Numbers land on publication.",
+      "follow_up": "Capture both PR numbers at publication; watch vigil re-review."
     },
     {
       "area": "dependencies",
-      "checked_at": "2026-11-22",
-      "result": "2026-11-20 round landed: kramdown 2.6.1 (+ maintainer nested-depth fix), puma 8.1.2, aws-sdk-s3 1.243.0. Zero open Dependabot PRs (re-verified 2026-11-22 evening). Majors maintainer-decision: marcel 2, net-ssh 8, openssl 4, rack-oauth2 2.3, prism 2.x.",
+      "checked_at": "2026-11-24",
+      "result": "2026-11-23 round merged directly as #2291-#2295: ransack 6.1.1 (+connection_pool 3.0.3), bootsnap 1.26.2, omniauth 2.4.2 (+rack 3.2.9), selenium-webdriver 4.53.0 (dev), pagy 43.8.5. Zero open Dependabot PRs. Majors: marcel 2, net-ssh 8, openssl 4, rack-oauth2 2.3, prism 2.x.",
       "follow_up": null
     },
     {
       "area": "tests",
-      "checked_at": "2026-11-22",
-      "result": "New main baseline 1733/0/1 (was 1725/0/2): bonus skip now real; trace_id guards + route-helper pin landed. Coverage sweep clean; only skip is design_system (by design).",
+      "checked_at": "2026-11-24",
+      "result": "Baseline re-verified on 22b0b8cc: 1733/0/1 (design_system skip by design), SKIP_CSS_BUILD=1 SKIP_JS_BUILD=1.",
       "follow_up": null
     },
     {
       "area": "code",
-      "checked_at": "2026-11-22",
-      "result": "Bonus inflection fix MERGED as #2285. Batch fixes live on main 6fa18cd3: #2278 API limit guard, #2279 CITE nil-safe lookup, #2287 trace_id indexes.",
+      "checked_at": "2026-11-24",
+      "result": "No app-code changes this run. Batch fixes live on main: #2278 API limit guard, #2279 CITE nil-safe, #2287 trace_id indexes, #2285 bonus inflection.",
       "follow_up": null
     },
     {
       "area": "release",
-      "checked_at": "2026-11-22",
-      "result": "125 commits unreleased since release-2026-11-04-c205bc2 (main 6fa18cd3); full merge batch is in. Never trigger Release: it deploys to production; maintainer call via monthly issue.",
+      "checked_at": "2026-11-24",
+      "result": "131 commits unreleased since release-2026-11-04-c205bc2 (main 22b0b8cc). Never trigger Release: it deploys to production; maintainer call via monthly issue.",
       "follow_up": null
     },
     {
       "area": "ci",
-      "checked_at": "2026-11-22",
-      "result": "Main Check green on merged HEAD (44990535930). #2285 PR-run failure root-caused: pg_isready passes mid-initdb (socket-only temp server). Fix needs workflows permission - filed as issue #2289. Never edit shared/runtime.md; never retry workflow-file pushes.",
+      "checked_at": "2026-11-24",
+      "result": "Unchanged: #2289 carries the TCP-forcing pg health-check patch (workflows perm blocked). Never edit shared/runtime.md; never retry workflow-file pushes.",
       "follow_up": null
     },
     {
       "area": "performance",
-      "checked_at": "2026-11-22",
-      "result": "Re-baselined on merged main: trace_id indexes live. article_search 5.3-5.9ms; feed recent 72.8x, tags 40.1x, home.count 3.6x; popularity sort 14.30->9.37ms. bin/measure-trace-id-indexes created (PR intent): reproduced 4.86->0.01ms orders, 3.72->0.00ms pre_orders.",
+      "checked_at": "2026-11-24",
+      "result": "bin/measure-trace-id-indexes materialized (PR intent): orders 2.36ms -> 0.01ms (294x), pre_orders 1.69ms -> 0.01ms (282x), early-reader aggregate keeps (item_type,item_id) plan. Rubocop clean; rollback verified 0/0 rows.",
       "follow_up": "Do not re-propose rejected items without a maintainer ask."
     },
     {
@@ -76,14 +82,14 @@
     },
     {
       "area": "hygiene",
-      "checked_at": "2026-11-22",
-      "result": "Stale remote branches repo-assist/improve-ci-dependency-install-retry-* still present (re-verified 2026-11-22); housekeeping item kept in monthly issue. Also empty repo-assist/eng-pg-health-tcp-* (see #2289).",
+      "checked_at": "2026-11-24",
+      "result": "Stale remote branches repo-assist/improve-ci-dependency-install-retry-* still present; empty repo-assist/eng-pg-health-tcp-* present (verified via git branch -r 2026-11-24). Housekeeping items kept in monthly issue.",
       "follow_up": null
     },
     {
       "area": "docs",
-      "checked_at": "2026-11-22",
-      "result": "PR #2288 (changelog catch-up) live: #2287 trace_id bullet + 2026-11-19/2026-11-22 dep rounds (merge-day convention per vigil). Bullet now cites bin/measure-trace-id-indexes once the tooling PR merges.",
+      "checked_at": "2026-11-24",
+      "result": "Changelog current through the 2026-11-23 round once the docs PR merges. #2288 bin/measure-trace-id-indexes reference becomes true when the tooling PR merges. AGENTS.md registers the script.",
       "follow_up": null
     }
   ],
@@ -91,13 +97,13 @@
   "priorities": [
     {
       "task": 6,
-      "item": "Maintain PR #2288 + the measure-trace-id-indexes PR until merged",
-      "note": "Vigil findings addressed (b3065256, 075b6a5e). CI intent is issue #2289, not a PR - never retry workflow pushes."
+      "item": "Maintain the two 2026-11-24 PR intents until merged; capture numbers at publication",
+      "note": "Tooling: bin/measure-trace-id-indexes. Docs: 2026-11-23 dep round. Watch vigil re-review."
     },
     {
       "task": 2,
       "item": "Watch posthog auto-filed issues; triage with EXISTING labels only",
-      "note": "Use wontfix/question/bug - never invalid (outside tooling set) or needs triage (not in repo). Skip #2255 (machine-managed). #2272 awaits close, wontfix applied."
+      "note": "Use wontfix/question/bug - never invalid or needs triage. Skip #2255 (machine-managed). #2272 awaits close. #2290 vigil-triaged, watch for maintainer reply before re-engaging."
     },
     {
       "task": 10,
