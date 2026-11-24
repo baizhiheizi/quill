@@ -149,6 +149,27 @@ class ArticlesControllerTest < IntegrationTestCase
     assert_response :success
   end
 
+  # Regression: legacy Markdown stored uploads as `blob://<key>/<filename>`.
+  # The sanitizer (#2176) drops that scheme from `img[src]`, and a src-less
+  # image then failed the render with `ArgumentError: key cannot be blank` —
+  # the page 500ed for every visitor.
+  test "show keeps a legacy blob image on a free markdown article" do
+    article = articles(:published_free)
+    blob = create_blob
+    # An article renders from `legacy_markdown_content` once its Action Text
+    # row is gone.
+    article.content.destroy
+    article.reload
+    article.update_columns(legacy_markdown_content: "![dot](blob://#{blob.key}/dot.png)")
+
+    with_blob_urls do
+      get user_article_path(article.author, article)
+    end
+
+    assert_response :success
+    assert_includes response.body, 'src="https://example.invalid/uploads/dot.png"'
+  end
+
   # Regression: after MVM login was removed, historical mvm_eth authors keep
   # Ethereum-address uids (0x…). Viewing their article from Mixin Messenger
   # used to call MixinBot::UUID.new(hex: uid) and raise InvalidUuidFormatError.

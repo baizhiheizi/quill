@@ -28,6 +28,7 @@ require "rails/test_help"
   support/quill_bot_stub.rb
   support/commerce_helpers.rb
   support/notifier_helpers.rb
+  support/active_storage_helpers.rb
   support/integration_test_case.rb
 ].each { |f| require_relative f }
 
@@ -38,6 +39,7 @@ module ActiveSupport
     fixtures :all
 
     include ActiveJob::TestHelper
+    include ActiveStorageHelpers
     include CommerceHelpers
     include NotifierHelpers
     include QuillBotStub

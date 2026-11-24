@@ -100,6 +100,13 @@ class Articles::PosterGeneratorTest < ActiveSupport::TestCase
     assert_nil article.thumb_url
   end
 
+  test "thumb_url uses a legacy blob image as the page image" do
+    blob = create_blob
+    article = legacy_markdown_article("![dot](blob://#{blob.key}/dot.png)")
+
+    assert_equal "https://example.invalid/uploads/dot.png", with_blob_urls { article.thumb_url }
+  end
+
   test "thumb_url memoizes the parsed result across calls" do
     article = articles(:published_free)
     article.update_columns(price: 0.0)
