@@ -249,9 +249,9 @@ GEM
     faraday-retry (2.4.0)
       faraday (~> 2.0)
     fastimage (2.4.3)
-    faye-websocket (0.12.0)
+    faye-websocket (0.13.0)
       eventmachine (>= 0.12.0)
-      websocket-driver (>= 0.8.0)
+      websocket-driver (>= 0.9.0)
     ffi (1.17.4)
     ffi (1.17.4-aarch64-linux-gnu)
     ffi (1.17.4-aarch64-linux-musl)
@@ -286,7 +286,7 @@ GEM
       domain_name (~> 0.5)
     httpclient (2.10.0)
       mutex_m
-    httpx (1.9.0)
+    httpx (1.9.1)
       http-2 (>= 1.2.0)
     i18n (1.15.2)
       concurrent-ruby (~> 1.0)
@@ -398,7 +398,7 @@ GEM
       railties (>= 7.1)
       stimulus-rails
       turbo-rails
-    mixin_bot (3.0.2)
+    mixin_bot (3.0.3)
       activesupport (>= 7)
       async (~> 2.0)
       async-websocket (~> 0.30)
@@ -493,7 +493,7 @@ GEM
     pg (1.7.0-x86_64-linux-musl)
     pghero (4.1.0)
       activerecord (>= 7.2)
-    pkg-config (1.6.7)
+    pkg-config (1.6.8)
     posthog-rails (3.26.6)
       posthog-ruby (= 3.34.3)
       railties (>= 5.2.0)
@@ -723,10 +723,10 @@ GEM
       bindex (>= 0.4.0)
       railties (>= 8.0.0)
     websocket (1.2.11)
-    websocket-driver (0.8.2)
+    websocket-driver (0.9.0)
       base64
-      websocket-extensions (>= 0.1.0)
-    websocket-extensions (0.1.5)
+      websocket-extensions (>= 0.2.0)
+    websocket-extensions (0.2.0)
     xpath (3.2.0)
       nokogiri (~> 1.8)
     yajl-ruby (1.4.3)
@@ -894,7 +894,7 @@ CHECKSUMS
   faraday-net_http (3.5.0) sha256=2e7094c34e38754ee048cc3df47376f8657005d9375f8473bce1c3b526a22e36
   faraday-retry (2.4.0) sha256=7b79c48fb7e56526faf247b12d94a680071ff40c9fda7cf1ec1549439ad11ebe
   fastimage (2.4.3) sha256=304457e3c35bfdaefda3f1dacab2222a96b230b8ce6977b6b54748c1cc7ec539
-  faye-websocket (0.12.0) sha256=ad9f7dfcd0306d0a13baeee450729657661129af15bb5f38716c242484ab42e1
+  faye-websocket (0.13.0) sha256=4c83189002a11fc884d78a7e9e3e1d5a9651f79129ab7d1452a19b1c656e5cc5
   ffi (1.17.4) sha256=bcd1642e06f0d16fc9e09ac6d49c3a7298b9789bcb58127302f934e437d60acf
   ffi (1.17.4-aarch64-linux-gnu) sha256=b208f06f91ffd8f5e1193da3cae3d2ccfc27fc36fba577baf698d26d91c080df
   ffi (1.17.4-aarch64-linux-musl) sha256=9286b7a615f2676245283aef0a0a3b475ae3aae2bb5448baace630bb77b91f39
@@ -915,7 +915,7 @@ CHECKSUMS
   http-2 (1.3.0) sha256=58fc8636c2b937b651853e9f6d9ada9fdaa8bf80b5a7d0333ce15653e5ca6ac1
   http-cookie (1.1.6) sha256=ba4b82be64de61dc281243dac70e3c382c45142f20268ed9276a3670c93feaa9
   httpclient (2.10.0) sha256=8c10f65a5e618b9e1c37dc95fccec9e84953b74748257f65930c68c6f221a4ed
-  httpx (1.9.0) sha256=ce6fb4bee1d23d311fb41414094f3423a0ad7b6ae68ea6d9619d1b6e411f18a9
+  httpx (1.9.1) sha256=06396e98dc99edfd37859910c77303c7eacd29d76f20d1f6b8b1bea3dfec99a9
   i18n (1.15.2) sha256=00f9eb62412fe593b2a65a97daa75300d37abb8f7202ec748e94b6d46a9dd1b5
   image_processing (2.2.0) sha256=e0cb9892a4395ac2b7bb2fac5c6f5bc63361f2f18ed08773e21fce5b111c6974
   immutable-ruby (0.2.0) sha256=1ab896e0d9c8c3fe21ddc3dd29be87511da2f6b0970c5a1c36838a9a4a4605e7
@@ -957,7 +957,7 @@ CHECKSUMS
   mini_portile2 (2.8.9) sha256=0cd7c7f824e010c072e33f68bc02d85a00aeb6fce05bb4819c03dfd3c140c289
   minitest (6.1.0) sha256=ff373595aa8888631e8a5463986a76b3845346ae6d7fa46e139c1633d418076e
   mission_control-jobs (1.3.1) sha256=3230be224069b39fee2893eecd27c1c334fb5467290bf575e88b5c9121287b26
-  mixin_bot (3.0.2) sha256=f1aeb85f3ef7d7d370ac4f6e34ed106cfb723162ae1ca0b942677887e3d17411
+  mixin_bot (3.0.3) sha256=6fc0a13eb3e49d0425f0d6cdfa75f8e5d65f3d27db7e86aa73f63306b5dbc8c8
   msgpack (1.8.7) sha256=dfefec761b5f9047e6e8d95d2c7f8af4b3725d984a01942adc533aa819a2df33
   multi_xml (0.9.1) sha256=7ce766b59c17241ed62976caeae1fae9b2431b263398c35396239a68c4a64e57
   multipart-post (2.4.1) sha256=9872d03a8e552020ca096adadbf5e3cb1cd1cdd6acd3c161136b8a5737cdb4a8
@@ -993,7 +993,7 @@ CHECKSUMS
   pg (1.7.0-x86_64-linux) sha256=d0a24f448b3c874c8b2658d4efbbbefce7315c228ede84f6f6f42089d1d704b6
   pg (1.7.0-x86_64-linux-musl) sha256=0c9bc93b6e0aca2a5b07daef00b7ec4f9882bfe21ef3872b4371f8ecffe1f1e1
   pghero (4.1.0) sha256=e8000515afa825171c27648a1deae267864e054348efe2720d9186c2d2dac3de
-  pkg-config (1.6.7) sha256=0415eff78595da55a60d1ba4e9098572c73afbe6b4c06ec50ded1972f1e1070b
+  pkg-config (1.6.8) sha256=7045fa6e185929fa7329f39c6fac934b0df70d643f3e0954c4a2e592355ea2e8
   posthog-rails (3.26.6) sha256=0dedbf6fcdee3bcaaba973fabc235c1ad5f81f1553b4d49011b6a0b43b0193a1
   posthog-ruby (3.34.3) sha256=2b4895c8c65bc74afe1c2328b762a63489de1a1807653e2c56425a77a3efa878
   pp (0.6.4) sha256=dfcb0fce700c41456265922884f9fe195d7fbb0674a3578e6c0f69588e82b570
@@ -1083,8 +1083,8 @@ CHECKSUMS
   version_gem (1.1.17) sha256=70420b9675fbb77a7e7e7eb8ed6580dd4dd25be53b1454c1a79cc18f3c5a8dfd
   web-console (4.3.0) sha256=e13b71301cdfc2093f155b5aa3a622db80b4672d1f2f713119cc7ec7ac6a6da4
   websocket (1.2.11) sha256=b7e7a74e2410b5e85c25858b26b3322f29161e300935f70a0e0d3c35e0462737
-  websocket-driver (0.8.2) sha256=97c556b019bf3410b4961002ac501621e9322d3f8a7bc02161a09301cc4c4146
-  websocket-extensions (0.1.5) sha256=1c6ba63092cda343eb53fc657110c71c754c56484aad42578495227d717a8241
+  websocket-driver (0.9.0) sha256=4dfcc6ac0ea1b6771daf5fb54cbbca131e4d5922ea0a65ba2da980370dadbe9f
+  websocket-extensions (0.2.0) sha256=6fb0d0f687aa8adc8eafa5ce68db36dfd6a8ebf232515040ce27c33c1291e589
   xpath (3.2.0) sha256=6dfda79d91bb3b949b947ecc5919f042ef2f399b904013eb3ef6d20dd3a4082e
   yajl-ruby (1.4.3) sha256=8c974d9c11ae07b0a3b6d26efea8407269b02e4138118fbe3ef0d2ec9724d1d2
   yaml (0.4.0) sha256=240e69d1e6ce3584d6085978719a0faa6218ae426e034d8f9b02fb54d3471942
