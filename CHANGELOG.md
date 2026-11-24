@@ -157,6 +157,25 @@ real requirement is `rails >= 8.1.4`, not a json version.
   inflector mis-generated as `bonuse`. The per-test overrides are removed and
   the previously skipped "process! drives a Bonus source through complete!"
   transfer test now runs for real.
+- **Legacy `blob://` images 500'd their articles, and FastImage read server
+  paths (#2296)** — #2176 sanitizes author HTML before the post-processor,
+  and the sanitizer drops an `img[src]` whose scheme is not on Loofah's
+  allow-list; `blob` is not on it. The Markdown editor recorded every upload
+  as `blob://<key>/<filename>` and left resolving it to
+  `MarkdownRenderService#normalize_image_src`, which that ordering made
+  unreachable, so every legacy upload rendered as a src-less `<img>`. On the
+  code in production (`c205bc29`) a src-less image raises
+  `ArgumentError: key cannot be blank` in `decorate_image` — the #2232
+  fingerprint, which PostHog still shows 43 times on two free articles since
+  the 2026-11-04 deploy — through `Article#thumb_url`, which renders the
+  whole article to find the og:image. #2232 keeps the page up but leaves
+  those images broken. The lookup now runs before sanitization, and only for
+  `:full`: `content_body` (`:default`) is what an `ArticleSnapshot` digests.
+  The same method also still failed on main for another class of input.
+  FastImage treats any source that is not an http(s) URL or `data:` URI as a
+  path on the server and opens it with `File.open`, so `![](/)` raised
+  `Errno::EISDIR`, which is outside FastImage's rescue list. Only the
+  sources FastImage does not open as files are measured now.
 
 ### Security
 

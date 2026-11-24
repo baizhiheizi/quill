@@ -169,6 +169,34 @@ class MarkdownRenderServiceTest < ActiveSupport::TestCase
     refute_includes html, "abc123.png"
   end
 
+  test "full type resolves a legacy blob:// image to the blob's url" do
+    # The Markdown editor recorded uploads as `blob://<key>/<filename>`. The
+    # sanitizer drops that scheme from `img[src]`, so the lookup has to run
+    # before it; after it, every legacy upload rendered as a src-less `<img>`.
+    blob = create_blob
+
+    html = with_blob_urls { MarkdownRenderService.call("![alt](blob://#{blob.key}/dot.png)", type: :full) }
+
+    assert_equal "https://example.invalid/uploads/dot.png", Nokogiri::HTML.fragment(html).at_css("img")["src"]
+  end
+
+  test "full type leaves a legacy blob:// image src-less when its blob is gone" do
+    html = MarkdownRenderService.call("![alt](blob://missing/dot.png)", type: :full)
+
+    refute_includes html, "blob://"
+    assert_nil Nokogiri::HTML.fragment(html).at_css("img")["src"]
+  end
+
+  test "default type does not resolve legacy blob:// images" do
+    # `content_body` renders with :default and is what an ArticleSnapshot
+    # digests, so its output must stay free of storage lookups.
+    blob = create_blob
+
+    html = with_blob_urls { MarkdownRenderService.call("![alt](blob://#{blob.key}/dot.png)", type: :default) }
+
+    refute_includes html, "example.invalid"
+  end
+
   test "full type applies both image wrapping and iframe escaping" do
     html = MarkdownRenderService.call(
       "![pic](https://example.invalid/a.png)\n\n<iframe src=\"https://evil.test\"></iframe>",

@@ -10,6 +10,10 @@ require "test_helper"
 # and the chaining contract (mutate in place, return self, serialize once
 # at the end) is only implicit in the callers.
 class HtmlPostProcessorTest < ActiveSupport::TestCase
+  # A 1x1 transparent PNG, as its bytes and as the base64 of a `data:` URI.
+  PNG_1X1 = "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==".unpack1("m0")
+  PNG_1X1_BASE64 = [ PNG_1X1 ].pack("m0")
+
   # Minimal harness mirroring the render services: the module mutates
   # `@html` in place and serializes once at the end of the chain.
   class Processor
@@ -99,6 +103,45 @@ class HtmlPostProcessorTest < ActiveSupport::TestCase
     refute_includes html, "photoswipe"
   end
 
+  test "add_attributes_to_images wraps an image whose src is a server path instead of raising" do
+    # FastImage opens anything that is not a web URL as a file on this server
+    # and does not rescue what the filesystem raises back: reading the root
+    # directory (Errno::EISDIR) failed the whole render of `![](/)`.
+    html = process('<div><img src="/" alt="root"></div>') { |p| p.add_attributes_to_images }
+
+    assert_includes html, "photoswipe"
+    assert_includes html, 'src="/"'
+    assert_includes html, 'loading="lazy"'
+  end
+
+  test "add_attributes_to_images never measures an image from the server's own filesystem" do
+    Dir.mktmpdir do |dir|
+      path = File.join(dir, "dot.png")
+      File.binwrite(path, PNG_1X1)
+
+      html = process(%(<img src="#{path}" alt="dot">)) { |p| p.add_attributes_to_images }
+
+      assert_includes html, 'data-pswp-width=""'
+      refute_includes html, 'width="1"'
+    end
+  end
+
+  test "add_attributes_to_images measures an inline data URI" do
+    html = process(%(<img src="data:image/png;base64,#{PNG_1X1_BASE64}" alt="dot">)) { |p| p.add_attributes_to_images }
+
+    assert_includes html, 'data-pswp-width="1"'
+    assert_includes html, 'data-pswp-height="1"'
+  end
+
+  test "add_attributes_to_images measures an image served over http" do
+    url = serve_once(PNG_1X1, "image/png")
+
+    html = process(%(<img src="#{url}" alt="dot">)) { |p| p.add_attributes_to_images }
+
+    assert_includes html, 'data-pswp-width="1"'
+    assert_includes html, 'height="1"'
+  end
+
   test "every transform returns self so the calls can be chained" do
     processor = Processor.new("<p>hi</p>")
 
@@ -149,5 +192,31 @@ class HtmlPostProcessorTest < ActiveSupport::TestCase
     processor.normalize_image_src(img, img["src"])
 
     assert_equal "/rails/active_storage/blobs/abc123", img["src"]
+  end
+
+  private
+
+  # Serves `body` once over HTTP on the loopback interface and returns its
+  # URL, so a test exercises a real fetch without leaving the machine.
+  def serve_once(body, content_type)
+    server = TCPServer.new("127.0.0.1", 0)
+    port = server.addr[1]
+
+    Thread.new do
+      next unless IO.select([ server ], nil, nil, 10)
+
+      socket = server.accept
+      request = +""
+      request << socket.readpartial(1024) until request.include?("\r\n\r\n")
+      socket.write(
+        "HTTP/1.1 200 OK\r\nContent-Type: #{content_type}\r\nContent-Length: #{body.bytesize}\r\nConnection: close\r\n\r\n",
+        body
+      )
+    ensure
+      socket&.close
+      server.close
+    end
+
+    "http://127.0.0.1:#{port}/dot.png"
   end
 end

@@ -3,6 +3,9 @@
 class MarkdownRenderService
   include HtmlPostProcessor
 
+  # `src="blob://<key>/<filename>"`, how the Markdown editor recorded uploads.
+  BLOB_IMAGE_SRC = %r{src=(["'])blob://([^"'/]+)/[^"']*\1}
+
   def initialize(content, **kargs)
     @content = content.to_s
     @type = kargs[:type] || :default
@@ -13,7 +16,9 @@ class MarkdownRenderService
   end
 
   def call
-    @html = HtmlSanitizer.call(render_markdown)
+    html = render_markdown
+    html = resolve_blob_images(html) if @type == :full
+    @html = HtmlSanitizer.call(html)
 
     case @type
     when :default
@@ -30,24 +35,28 @@ class MarkdownRenderService
     serialize!
   end
 
-  # Markdown mentions embed `blob://<key>/...` URLs in image tags so the
-  # post-processor must look up the underlying ActiveStorage::Blob and
-  # rewrite the src to a fetchable URL before the photoswipe wrapper
-  # measures the image.
-  def normalize_image_src(img, src)
-    return if src.blank?
+  private
 
-    case src
-    when %r{/rails/active_storage/blobs/\S+}
-      img["src"] = src.gsub(/\.\S+\z/, "")
-    when %r{blob://\S+}
-      key = src.gsub("blob://", "").split("/").first
-      blob = ActiveStorage::Blob.find_by(key:)
-      img["src"] = blob.url if blob.present?
+  # The Markdown editor recorded an upload as `blob://<key>/<filename>` and
+  # left resolving it to the blob's URL to render time. That has to happen
+  # before sanitization: the sanitizer drops an `img[src]` whose scheme is not
+  # on its allow-list and `blob` is not on it, so resolving after it turned
+  # every legacy upload into a src-less `<img>`.
+  #
+  # Only the :full pipeline does this. `content_body` renders with :default
+  # and is what an ArticleSnapshot digests, so its output is left as it is.
+  def resolve_blob_images(html)
+    keys = html.scan(BLOB_IMAGE_SRC).map { |_, key| key }.uniq
+    return html if keys.empty?
+
+    urls = ActiveStorage::Blob.where(key: keys).index_by(&:key).transform_values(&:url)
+
+    html.gsub(BLOB_IMAGE_SRC) do
+      matched = Regexp.last_match
+      url = urls[matched[2]]
+      url ? %(src="#{ERB::Util.html_escape(url)}") : matched[0]
     end
   end
-
-  private
 
   # kramdown >= 2.6.0 refuses to parse content nested deeper than 100 block
   # levels and raises Kramdown::Error, where 2.5.x rendered it fine.

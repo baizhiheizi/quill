@@ -91,6 +91,22 @@ class Articles::PosterGeneratorTest < ActiveSupport::TestCase
     assert_equal "https://cdn.example.com/hero.png", article.thumb_url
   end
 
+  # Regression: `thumb_url` renders the whole article, so anything that raises
+  # while rendering an image fails the page for every visitor, not just the
+  # og:image. A server path as the first image raised Errno::EISDIR.
+  test "thumb_url survives legacy markdown whose first image is a server path" do
+    article = legacy_markdown_article("![root](/)\n\nbody")
+
+    assert_nil article.thumb_url
+  end
+
+  test "thumb_url uses a legacy blob image as the page image" do
+    blob = create_blob
+    article = legacy_markdown_article("![dot](blob://#{blob.key}/dot.png)")
+
+    assert_equal "https://example.invalid/uploads/dot.png", with_blob_urls { article.thumb_url }
+  end
+
   test "thumb_url memoizes the parsed result across calls" do
     article = articles(:published_free)
     article.update_columns(price: 0.0)
@@ -254,5 +270,18 @@ class Articles::PosterGeneratorTest < ActiveSupport::TestCase
     cover = Struct.new(:attached?, :key).new(attached, key)
     article.define_singleton_method(:cover) { cover }
     article
+  end
+
+  # A free, cover-less article whose body is legacy Markdown. An article only
+  # renders from `legacy_markdown_content` once its Action Text row is gone.
+  def legacy_markdown_article(markdown)
+    articles(:published_free).tap do |article|
+      article.content.destroy
+      article.reload
+      article.define_singleton_method(:cover) do
+        Struct.new(:attached?).new(false)
+      end
+      article.update_columns(legacy_markdown_content: markdown)
+    end
   end
 end
