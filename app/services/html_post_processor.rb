@@ -107,12 +107,7 @@ module HtmlPostProcessor
 
     normalize_image_src(img, src)
 
-    size = Rails.cache.fetch(img["src"]) do
-      FastImage.size img["src"]
-    end
-    Rails.cache.delete(img["src"]) if size.blank?
-
-    size ||= []
+    size = image_size(img["src"])
 
     anchor = Nokogiri::XML::Node.new("a", img.document)
     anchor["class"] = "photoswipe"
@@ -127,5 +122,25 @@ module HtmlPostProcessor
     img["width"] = size.first if size.first.present?
     img["height"] = size.last if size.last.present?
     img["loading"] = "lazy"
+  end
+
+  # The [width, height] of the image at `src`, or an empty array when it
+  # cannot be measured. They only feed the photoswipe anchor and the width
+  # and height attributes, so an image without them still renders.
+  #
+  # FastImage only fetches http(s) URLs and decodes `data:` URIs; any other
+  # source it treats as a path on *this* server and opens with `File.open`.
+  # Author-supplied markdown such as `![](/)` therefore read the server's
+  # filesystem, and the `Errno::EISDIR` that came back is outside FastImage's
+  # own rescue list: it failed the whole render. Only the sources FastImage
+  # does not open as files are measured.
+  def image_size(src)
+    return [] unless src.start_with?("data:") || URI.parse(src).is_a?(URI::HTTP)
+
+    size = Rails.cache.fetch(src) { FastImage.size(src) }
+    Rails.cache.delete(src) if size.blank?
+    size || []
+  rescue URI::InvalidURIError
+    []
   end
 end
