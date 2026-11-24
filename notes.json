@@ -35,31 +35,31 @@
     {
       "area": "repo_assist_prs",
       "checked_at": "2026-11-24",
-      "result": "#2288 merged 2026-11-23. Two 2026-11-24 PR intents: tooling bin/measure-trace-id-indexes (branch repo-assist/eng-measure-trace-id-indexes-2026-11-24) and docs 2026-11-23 dep round (branch repo-assist/docs-changelog-2026-11-23). Numbers land on publication.",
-      "follow_up": "Capture both PR numbers at publication; watch vigil re-review."
+      "result": "#2288 merged 2026-11-23. Three 2026-11-24 PR intents (earlier two never published; re-filed): tooling measure-trace-id-indexes, docs 2026-11-23 dep round, tests grover collections auth gate. Numbers land on publication.",
+      "follow_up": "Capture the three PR numbers at publication; watch vigil re-review."
     },
     {
       "area": "dependencies",
       "checked_at": "2026-11-24",
-      "result": "2026-11-23 round merged directly as #2291-#2295: ransack 6.1.1 (+connection_pool 3.0.3), bootsnap 1.26.2, omniauth 2.4.2 (+rack 3.2.9), selenium-webdriver 4.53.0 (dev), pagy 43.8.5. Zero open Dependabot PRs. Majors: marcel 2, net-ssh 8, openssl 4, rack-oauth2 2.3, prism 2.x.",
+      "result": "2026-11-23 round merged as #2291-#2295: ransack 6.1.1 (+connection_pool 3.0.3), bootsnap 1.26.2, omniauth 2.4.2 (+rack 3.2.9), selenium-webdriver 4.53.0 (dev), pagy 43.8.5. Zero open Dependabot PRs. Majors queued: marcel 2, net-ssh 8, openssl 4, rack-oauth2 2.3, prism 2.x.",
       "follow_up": null
     },
     {
       "area": "tests",
       "checked_at": "2026-11-24",
-      "result": "Baseline re-verified on 22b0b8cc: 1733/0/1 (design_system skip by design), SKIP_CSS_BUILD=1 SKIP_JS_BUILD=1.",
+      "result": "Full suite green on grover branch (main tip 5455bb88 incl. #2296 tests + 2 new): 1745/0/1 (design_system skip by design), SKIP_CSS_BUILD=1 SKIP_JS_BUILD=1. Coverage sweep with basename normalization: comprehensive; only gap was grover collections auth pair (now fixed).",
       "follow_up": null
     },
     {
       "area": "code",
       "checked_at": "2026-11-24",
-      "result": "No app-code changes this run. Batch fixes live on main: #2278 API limit guard, #2279 CITE nil-safe, #2287 trace_id indexes, #2285 bonus inflection.",
+      "result": "No app-code changes this run (tooling+docs+test only). Batch fixes live on main: #2278 API limit guard, #2279 CITE nil-safe, #2287 trace_id indexes, #2285 bonus inflection, #2296 blob:// + FastImage fixes.",
       "follow_up": null
     },
     {
       "area": "release",
       "checked_at": "2026-11-24",
-      "result": "131 commits unreleased since release-2026-11-04-c205bc2 (main 22b0b8cc). Never trigger Release: it deploys to production; maintainer call via monthly issue.",
+      "result": "RESOLVED: maintainer cut release-2026-11-24-5455bb8-45316253685 on main tip 5455bb88 (135 commits since release-2026-11-04-c205bc2). Release-decision item removed from monthly issue. Never trigger Release: it deploys to production.",
       "follow_up": null
     },
     {
@@ -71,7 +71,7 @@
     {
       "area": "performance",
       "checked_at": "2026-11-24",
-      "result": "bin/measure-trace-id-indexes materialized (PR intent): orders 2.36ms -> 0.01ms (294x), pre_orders 1.69ms -> 0.01ms (282x), early-reader aggregate keeps (item_type,item_id) plan. Rubocop clean; rollback verified 0/0 rows.",
+      "result": "bin/measure-trace-id-indexes re-filed (40k orders / 20k pre_orders defaults): orders find_by 0.94ms -> 0.01ms (187.2x), pre_orders dedup probe 0.65ms -> 0.00ms (215.3x); early-reader aggregate keeps (item_type,item_id) plan both passes. Rubocop clean.",
       "follow_up": "Do not re-propose rejected items without a maintainer ask."
     },
     {
@@ -83,13 +83,13 @@
     {
       "area": "hygiene",
       "checked_at": "2026-11-24",
-      "result": "Stale remote branches repo-assist/improve-ci-dependency-install-retry-* still present; empty repo-assist/eng-pg-health-tcp-* present (verified via git branch -r 2026-11-24). Housekeeping items kept in monthly issue.",
+      "result": "Stale remote branches re-verified present: repo-assist/improve-ci-dependency-install-retry-* (two) + empty repo-assist/eng-pg-health-tcp-fae6c15d167e042e. Housekeeping items kept in monthly issue.",
       "follow_up": null
     },
     {
       "area": "docs",
       "checked_at": "2026-11-24",
-      "result": "Changelog current through the 2026-11-23 round once the docs PR merges. #2288 bin/measure-trace-id-indexes reference becomes true when the tooling PR merges. AGENTS.md registers the script.",
+      "result": "Changelog gains the 2026-11-23 dep round once the docs PR merges (section currently stops at 2026-11-22 via #2288). AGENTS.md registers bin/measure-trace-id-indexes in the tooling PR. #2296 changelog entry landed with the fix.",
       "follow_up": null
     }
   ],
@@ -97,8 +97,8 @@
   "priorities": [
     {
       "task": 6,
-      "item": "Maintain the two 2026-11-24 PR intents until merged; capture numbers at publication",
-      "note": "Tooling: bin/measure-trace-id-indexes. Docs: 2026-11-23 dep round. Watch vigil re-review."
+      "item": "Maintain the three 2026-11-24 PR intents until merged; capture numbers at publication",
+      "note": "Tooling: bin/measure-trace-id-indexes. Docs: 2026-11-23 dep round. Tests: grover collections auth gate. Watch vigil re-review."
     },
     {
       "task": 2,
