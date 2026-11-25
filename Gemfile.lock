@@ -290,7 +290,7 @@ GEM
       http-2 (>= 1.2.0)
     i18n (1.15.2)
       concurrent-ruby (~> 1.0)
-    image_processing (2.2.0)
+    image_processing (2.2.1)
     immutable-ruby (0.2.0)
       concurrent-ruby (~> 1.1)
       sorted_set (~> 1.0)
@@ -917,7 +917,7 @@ CHECKSUMS
   httpclient (2.10.0) sha256=8c10f65a5e618b9e1c37dc95fccec9e84953b74748257f65930c68c6f221a4ed
   httpx (1.9.0) sha256=ce6fb4bee1d23d311fb41414094f3423a0ad7b6ae68ea6d9619d1b6e411f18a9
   i18n (1.15.2) sha256=00f9eb62412fe593b2a65a97daa75300d37abb8f7202ec748e94b6d46a9dd1b5
-  image_processing (2.2.0) sha256=e0cb9892a4395ac2b7bb2fac5c6f5bc63361f2f18ed08773e21fce5b111c6974
+  image_processing (2.2.1) sha256=b844efd3b2d52b4b9e670ed847fc9128e3c24d8f4c44df3624f54553a1486bb4
   immutable-ruby (0.2.0) sha256=1ab896e0d9c8c3fe21ddc3dd29be87511da2f6b0970c5a1c36838a9a4a4605e7
   importmap-rails (2.2.3) sha256=7101be2a4dc97cf1558fb8f573a718404c5f6bcfe94f304bf1f39e444feeb16a
   impressionist (2.0.0)
