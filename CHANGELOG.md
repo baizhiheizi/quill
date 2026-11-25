@@ -423,6 +423,17 @@ rather than one bundle — kramdown 2.5.2 → 2.6.1 (#2280), puma 8.1.1 → 8.1.
 — 2.6 raises where 2.5 rendered — and its nested-depth crash fix is under
 Crash fixes above.
 
+The 2026-11-23 round landed as five separate PRs (#2291–#2295):
+ransack 6.1.0 → 6.1.1 with connection_pool 3.0.2 → 3.0.3 transitively
+(#2291), bootsnap 1.26.1 → 1.26.2 (#2292), omniauth 2.4.1 → 2.4.2 with
+rack 3.2.8 → 3.2.9 transitively (#2293), selenium-webdriver 4.52.0 →
+4.53.0 (#2294, dev) and pagy 43.8.2 → 43.8.5 (#2295).
+
+The 2026-11-24 round landed as two separate PRs: aws-sdk-s3 1.243.0 →
+1.245.1 with aws-sdk-core 3.271.0 → 3.272.0 and aws-partitions 1.1309.0 →
+1.1311.0 transitively (#2298), and posthog-rails 3.26.4 → 3.26.6 with
+posthog-ruby 3.34.1 → 3.34.3 transitively (#2301).
+
 ### Tooling and docs corrections
 
 - `MixinPreOrder` gained a test pinning the `ensure_payer_mixin` backstop: a
