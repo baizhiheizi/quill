@@ -104,6 +104,14 @@ class GroverCollectionsControllerTest < ActionController::TestCase
     restore_grover_token
   end
 
+  test "rejects requests without a token" do
+    assert_raises(RuntimeError) { get :cover, params: { collection_id: @collection.id } }
+  end
+
+  test "rejects requests with a wrong token" do
+    assert_raises(RuntimeError) { get :cover, params: { collection_id: @collection.id, token: "wrong" } }
+  end
+
   test "cover assigns the collection and dimensions when token matches" do
     get :cover, params: { collection_id: @collection.id, token: @stub_grover_token }
 
