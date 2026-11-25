@@ -1,0 +1,199 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+# Measures whether the payment-critical trace_id lookups use the indexes
+# `AddTraceIdIndexesToOrdersAndPreOrders` added, and what the planner does
+# with and without them.
+#
+# Like `bin/measure-feed-indexes`, this seeds a synthetic dataset large
+# enough for the planner to have a choice (test fixtures are too small),
+# runs `EXPLAIN (ANALYZE, BUFFERS)` on the queries the purchase paths
+# actually issue, and prints the two plans side by side:
+#
+#   orders.find_by_trace_id       `Orders::DistributeJob` and `Payment`'s
+#                                 trace-keyed `has_one :order` resolve
+#                                 `WHERE orders.trace_id = ?` on every
+#                                 purchase's revenue distribution.
+#   pre_orders.dedup_probe        `Purchasable#payment_trace_id` probes
+#                                 `PreOrder.exists?(trace_id: ..., state:
+#                                 [paid, expired])` in its dedup loop —
+#                                 normally a miss, so a random uuid is
+#                                 probed.
+#   orders.early_reader_aggregate `Orders::DistributeService`'s grouped
+#                                 early-reader share. Control scenario: it
+#                                 filters on (item_type, item_id), not
+#                                 trace_id, so it should keep the
+#                                 `index_orders_on_item_type_and_item_id`
+#                                 plan in both passes.
+#
+# Everything happens inside a transaction that is rolled back at the end, so
+# the test database is left exactly as it was found. The trace_id indexes
+# are dropped and re-created inside that same transaction (as `CREATE INDEX`,
+# matching the migration — only `CONCURRENTLY` is banned there), and the
+# migration's `ANALYZE` is repeated after creating them so the planner sees
+# index statistics the way a freshly migrated database does.
+#
+#   bin/measure-trace-id-indexes
+#   ORDERS=100000 PRE_ORDERS=50000 bin/measure-trace-id-indexes
+#
+# Not run in CI: it writes tens of thousands of rows and depends on the
+# planner's choices, which vary between Postgres versions.
+
+ENV["RAILS_ENV"] = "test"
+
+require_relative "../config/environment"
+
+ORDERS = Integer(ENV.fetch("ORDERS", "40_000"))
+PRE_ORDERS = Integer(ENV.fetch("PRE_ORDERS", "20_000"))
+ARTICLES = Integer(ENV.fetch("ARTICLES", "400"))
+USERS = Integer(ENV.fetch("USERS", "200"))
+
+# The indexes this script measures. They must exist in the schema for the
+# "with" pass to mean anything.
+CANDIDATES = {
+  "index_orders_on_trace_id" => %w[orders trace_id].freeze,
+  "index_pre_orders_on_trace_id" => %w[pre_orders trace_id].freeze
+}.freeze
+
+# `Orders::DistributeService`'s early-reader share aggregate (control).
+AGGREGATE = <<~SQL.squish
+  SELECT orders.trace_id, SUM(orders.value_btc)
+  FROM orders
+  WHERE orders.item_type = 'Article' AND orders.item_id = 1
+    AND orders.order_type IN (0, 1)
+    AND orders.id < #{ORDERS} AND orders.created_at < now()
+  GROUP BY orders.trace_id
+SQL
+
+def seed!(conn)
+  conn.execute("TRUNCATE pre_orders, taggings, orders, articles, users RESTART IDENTITY CASCADE")
+  conn.execute(<<~SQL)
+    INSERT INTO users (id, name, created_at, updated_at)
+    SELECT g, 'buyer ' || g, now(), now() FROM generate_series(1, #{USERS}) g
+  SQL
+  conn.execute(<<~SQL)
+    INSERT INTO articles (id, author_id, state, price, published_at, created_at, updated_at, uuid)
+    SELECT g, 1, 'published', 10.0, now(), now(), now(), gen_random_uuid()
+    FROM generate_series(1, #{ARTICLES}) g
+  SQL
+  conn.execute(<<~SQL)
+    INSERT INTO orders (item_type, item_id, buyer_id, seller_id, order_type, state,
+                        total, value_btc, value_usd, asset_id, trace_id, created_at, updated_at)
+    SELECT 'Article',
+           1 + (g % #{ARTICLES}),
+           -- The partial unique index on (order_type, buyer_id, item_type,
+           -- item_id) forbids a buyer buying the same article twice, so even
+           -- rows (buy_article) derive the buyer from the quotient: each
+           -- (item, buyer) pair occurs at most once.
+           CASE WHEN g % 2 = 0 THEN 1 + ((g / #{ARTICLES}) % #{USERS}) ELSE 1 + (g % #{USERS}) END,
+           1,
+           g % 2, -- buy_article / reward_article mix
+           'paid',
+           10.0, (g % 100)::numeric / 10000, 1.5,
+           gen_random_uuid(),
+           gen_random_uuid(),
+           now() - (g || ' minutes')::interval,
+           now()
+    FROM generate_series(1, #{ORDERS}) g
+  SQL
+  conn.execute(<<~SQL)
+    INSERT INTO pre_orders (type, item_type, item_id, payer_id, order_type, state,
+                            amount, memo, asset_id, trace_id, created_at, updated_at)
+    SELECT NULL,
+           'Article',
+           1 + (g % #{ARTICLES}),
+           gen_random_uuid(),
+           'buy_article',
+           CASE WHEN g % 10 = 0 THEN 'expired' ELSE 'paid' END,
+           10.0,
+           'measure-trace-id-indexes',
+           gen_random_uuid(),
+           gen_random_uuid(),
+           now() - (g || ' minutes')::interval,
+           now()
+    FROM generate_series(1, #{PRE_ORDERS}) g
+  SQL
+  conn.execute("ANALYZE orders")
+  conn.execute("ANALYZE pre_orders")
+end
+
+def drop_candidates!(conn)
+  CANDIDATES.each_key do |name|
+    conn.execute("DROP INDEX IF EXISTS #{name}")
+  end
+end
+
+def create_candidates!(conn)
+  CANDIDATES.each do |name, (table, column)|
+    conn.execute("CREATE INDEX #{name} ON #{table} (#{column})")
+  end
+  # The migration ends with `ANALYZE`; repeat it here so the freshly created
+  # indexes have statistics and the "with" pass shows the plan a freshly
+  # migrated database would.
+  conn.execute("ANALYZE orders")
+  conn.execute("ANALYZE pre_orders")
+end
+
+def measure(conn, sql)
+  conn.execute(sql) # warm the cache so the timing compares plans, not cold disk
+  plan = conn.select_all("EXPLAIN (ANALYZE, BUFFERS) #{sql}").rows.flatten.join("\n")
+  {
+    ms: plan[/Execution Time: ([\d.]+) ms/, 1].to_f,
+    buffers: plan[/Buffers: shared hit=(\d+)/, 1].to_i,
+    scans: plan.scan(/(?:Seq Scan on \S+|Index Scan(?: Backward)? using \S+|Bitmap Index Scan on \S+|Bitmap Heap Scan on \S+)/).uniq.join(" | ")
+  }
+end
+
+conn = ActiveRecord::Base.connection
+results = {}
+orders_count = pre_orders_count = 0
+
+begin
+  conn.transaction do
+    seed!(conn)
+    orders_count = conn.select_value("SELECT COUNT(*) FROM orders")
+    pre_orders_count = conn.select_value("SELECT COUNT(*) FROM pre_orders")
+
+    # Pin the probes after seeding: the find_by probe is an existing trace
+    # (the distribution path resolves a real order), the dedup probe is a
+    # random uuid (the purchase path probes candidates until one is unused).
+    trace_probe = conn.select_value("SELECT trace_id::text FROM orders ORDER BY id DESC LIMIT 1")
+    dedup_probe = conn.select_value("SELECT gen_random_uuid()::text")
+    queries = {
+      "orders.find_by_trace_id" =>
+        "SELECT orders.* FROM orders WHERE orders.trace_id = '#{trace_probe}' LIMIT 1",
+      "pre_orders.dedup_probe" =>
+        "SELECT 1 AS one FROM pre_orders WHERE pre_orders.trace_id = '#{dedup_probe}' " \
+        "AND pre_orders.state IN ('paid', 'expired') LIMIT 1",
+      "orders.early_reader_aggregate" => AGGREGATE
+    }
+
+    drop_candidates!(conn)
+    without = queries.transform_values { |sql| measure(conn, sql) }
+
+    create_candidates!(conn)
+    with = queries.transform_values { |sql| measure(conn, sql) }
+
+    results = { without: without, with: with }
+
+    raise ActiveRecord::Rollback
+  end
+rescue ActiveRecord::Rollback
+  # The rollback is the point: the test database is left untouched.
+end
+
+puts "trace_id index measurement — #{orders_count} orders, #{pre_orders_count} pre_orders, #{ARTICLES} articles"
+puts "All rows seeded and rolled back inside a transaction; the test database is unchanged."
+puts
+
+results[:without].each_key do |name|
+  before = results[:without][name]
+  after = results[:with][name]
+  ratio = before[:ms].zero? ? "n/a" : format("%.1fx", before[:ms] / after[:ms])
+
+  puts "── #{name}"
+  puts format("   without index: %8.2f ms  hit=%-6d %s", before[:ms], before[:buffers], before[:scans])
+  puts format("   with index:    %8.2f ms  hit=%-6d %s", after[:ms], after[:buffers], after[:scans])
+  puts format("   -> %s", ratio)
+  puts
+end
