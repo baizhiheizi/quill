@@ -434,6 +434,11 @@ The 2026-11-24 round landed as two separate PRs: aws-sdk-s3 1.243.0 →
 1.1311.0 transitively (#2298), and posthog-rails 3.26.4 → 3.26.6 with
 posthog-ruby 3.34.1 → 3.34.3 transitively (#2301).
 
+The 2026-11-25 round landed as three separate patch bumps: image_processing
+2.2.0 → 2.2.1 (#2299) and 2.2.1 → 2.2.2 (#2308), and ransack 6.1.1 → 6.1.2
+(#2309). A fourth Dependabot PR from the same day, mixin_bot 3.0.2 → 3.0.3
+(#2300), was closed unmerged, so the gem stays locked at 3.0.2.
+
 ### Tooling and docs corrections
 
 - `MixinPreOrder` gained a test pinning the `ensure_payer_mixin` backstop: a
