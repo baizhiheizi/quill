@@ -14,7 +14,7 @@
     {
       "number": 2286,
       "state": "commented",
-      "updated_at": "2026-11-22",
+      "updated_at": "2026-11-21",
       "note": "Machine-filed failure report (2026-11-21 morning run). Informational; suggested close in monthly issue."
     },
     {
@@ -22,56 +22,50 @@
       "state": "commented",
       "updated_at": "2026-11-22",
       "note": "CI pg health-check fix (workflow-file push refused, needs workflows perm). Issue has manual instructions; empty branch repo-assist/eng-pg-health-tcp-* deletable. Never retry the push."
-    },
-    {
-      "number": 2290,
-      "state": "commented",
-      "updated_at": "2026-11-24",
-      "note": "Posthog 401 alert: QuillBot session credential invalid; ops rotation, not code. Vigil triaged with 3 maintainer questions. No RA comment (would duplicate vigil). Watch for reply."
     }
   ],
   "fixes": [],
   "checks": [
     {
       "area": "repo_assist_prs",
-      "checked_at": "2026-11-24",
-      "result": "#2288 merged 2026-11-23. Three 2026-11-24 PR intents (earlier two never published; re-filed): tooling measure-trace-id-indexes, docs 2026-11-23 dep round, tests grover collections auth gate. Numbers land on publication.",
-      "follow_up": "Capture the three PR numbers at publication; watch vigil re-review."
+      "checked_at": "2026-11-26",
+      "result": "All three 2026-11-24 intents merged 2026-11-25: #2302 tooling, #2303 docs, #2304 tests. #2297 closeable once maintainer sees. Three new 2026-11-26 PR intents re-filed (numbers land on publication): docs changelog 2026-11-25, watchdog-alert fix, dashboard-collections pagination.",
+      "follow_up": "Capture the three 2026-11-26 PR numbers at publication; maintain until merged."
     },
     {
       "area": "dependencies",
-      "checked_at": "2026-11-24",
-      "result": "2026-11-23 round merged as #2291-#2295: ransack 6.1.1 (+connection_pool 3.0.3), bootsnap 1.26.2, omniauth 2.4.2 (+rack 3.2.9), selenium-webdriver 4.53.0 (dev), pagy 43.8.5. Zero open Dependabot PRs. Majors queued: marcel 2, net-ssh 8, openssl 4, rack-oauth2 2.3, prism 2.x.",
+      "checked_at": "2026-11-26",
+      "result": "2026-11-25 round merged: #2299 image_processing 2.2.1, #2308 2.2.2, #2309 ransack 6.1.2 (no transitives). #2300 mixin_bot 3.0.3 closed unmerged - gem locked 3.0.2. Zero open Dependabot PRs. Majors queued: marcel 2, net-ssh 8, openssl 4, rack-oauth2 2.3, prism 2.x.",
       "follow_up": null
     },
     {
       "area": "tests",
-      "checked_at": "2026-11-24",
-      "result": "Full suite green on grover branch (main tip 5455bb88 incl. #2296 tests + 2 new): 1745/0/1 (design_system skip by design), SKIP_CSS_BUILD=1 SKIP_JS_BUILD=1. Coverage sweep with basename normalization: comprehensive; only gap was grover collections auth pair (now fixed).",
+      "checked_at": "2026-11-26",
+      "result": "Baseline main e57f6eb6: 1745/0/1 (design_system skip by design), SKIP_CSS_BUILD=1 SKIP_JS_BUILD=1. Branches: watchdog fix 1747/0/1 (red-check 4/7 fail on old job), collections pagination 1746/0/1 (red-check 1 fail on old controller). Rubocop+zeitwerk clean.",
       "follow_up": null
     },
     {
       "area": "code",
-      "checked_at": "2026-11-24",
-      "result": "No app-code changes this run (tooling+docs+test only). Batch fixes live on main: #2278 API limit guard, #2279 CITE nil-safe, #2287 trace_id indexes, #2285 bonus inflection, #2296 blob:// + FastImage fixes.",
-      "follow_up": null
+      "checked_at": "2026-11-26",
+      "result": "Survey (jobs/models/controllers/helpers/services/notifiers) ranked 5 candidates; executed watchdog alert fix + collections pagination this run.",
+      "follow_up": "Unfiled: StaleObjectError rescue lacks format.html; bonus deliver drafted? outside lock; mark-all-read batching (low). Next Task 5 candidates."
     },
     {
       "area": "release",
       "checked_at": "2026-11-24",
-      "result": "RESOLVED: maintainer cut release-2026-11-24-5455bb8-45316253685 on main tip 5455bb88 (135 commits since release-2026-11-04-c205bc2). Release-decision item removed from monthly issue. Never trigger Release: it deploys to production.",
+      "result": "RESOLVED: maintainer cut release-2026-11-24-5455bb8-45316253685. Never trigger Release: it deploys to production.",
       "follow_up": null
     },
     {
       "area": "ci",
-      "checked_at": "2026-11-24",
-      "result": "Unchanged: #2289 carries the TCP-forcing pg health-check patch (workflows perm blocked). Never edit shared/runtime.md; never retry workflow-file pushes.",
+      "checked_at": "2026-11-26",
+      "result": "Main green at e57f6eb6 (run 45643189156, 2026-11-25). #2289 carries the TCP-forcing pg health-check patch (workflows perm blocked). Never edit shared/runtime.md; never retry workflow-file pushes.",
       "follow_up": null
     },
     {
       "area": "performance",
       "checked_at": "2026-11-24",
-      "result": "bin/measure-trace-id-indexes re-filed (40k orders / 20k pre_orders defaults): orders find_by 0.94ms -> 0.01ms (187.2x), pre_orders dedup probe 0.65ms -> 0.00ms (215.3x); early-reader aggregate keeps (item_type,item_id) plan both passes. Rubocop clean.",
+      "result": "bin/measure-trace-id-indexes merged as #2302. Feed popularity sort still a maintainer decision (stored column).",
       "follow_up": "Do not re-propose rejected items without a maintainer ask."
     },
     {
@@ -82,14 +76,14 @@
     },
     {
       "area": "hygiene",
-      "checked_at": "2026-11-24",
-      "result": "Stale remote branches re-verified present: repo-assist/improve-ci-dependency-install-retry-* (two) + empty repo-assist/eng-pg-health-tcp-fae6c15d167e042e. Housekeeping items kept in monthly issue.",
+      "checked_at": "2026-11-26",
+      "result": "Stale remote branches re-verified present 2026-11-26: repo-assist/improve-ci-dependency-install-retry-* (two) + empty repo-assist/eng-pg-health-tcp-fae6c15d167e042e. Housekeeping items in monthly issue.",
       "follow_up": null
     },
     {
       "area": "docs",
-      "checked_at": "2026-11-24",
-      "result": "Changelog gains the 2026-11-23 dep round once the docs PR merges (section currently stops at 2026-11-22 via #2288). AGENTS.md registers bin/measure-trace-id-indexes in the tooling PR. #2296 changelog entry landed with the fix.",
+      "checked_at": "2026-11-26",
+      "result": "Changelog Dependencies section stopped at 2026-11-24; 2026-11-25 round entry on branch docs-changelog-2026-11-25 (pending). Watchdog + pagination changelog bullets on their fix branches. AGENTS.md benchmark registration landed with #2302.",
       "follow_up": null
     }
   ],
@@ -97,13 +91,18 @@
   "priorities": [
     {
       "task": 6,
-      "item": "Maintain the three 2026-11-24 PR intents until merged; capture numbers at publication",
-      "note": "Tooling: bin/measure-trace-id-indexes. Docs: 2026-11-23 dep round. Tests: grover collections auth gate. Watch vigil re-review."
+      "item": "Maintain the three 2026-11-26 PR intents until merged; capture numbers at publication",
+      "note": "Docs: changelog 2026-11-25 round. Fix: snapshots MonitorJob alert. Fix: dashboard collections pagination."
     },
     {
       "task": 2,
       "item": "Watch posthog auto-filed issues; triage with EXISTING labels only",
-      "note": "Use wontfix/question/bug - never invalid or needs triage. Skip #2255 (machine-managed). #2272 awaits close. #2290 vigil-triaged, watch for maintainer reply before re-engaging."
+      "note": "Use wontfix/question/bug - never invalid or needs triage. Skip #2255 (machine-managed). #2272 awaits close. #2290 closed by maintainer 2026-11-24."
+    },
+    {
+      "task": 5,
+      "item": "Execute next survey candidates if Task 5 drawn again",
+      "note": "StaleObjectError rescue lacks format.html (articles_controller.rb ~129); Admin bonus deliver drafted? outside lock (double-click 500). Mark-all-read batching low value."
     },
     {
       "task": 10,
