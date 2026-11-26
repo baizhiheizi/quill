@@ -201,6 +201,17 @@ real requirement is `rails >= 8.1.4`, not a json version.
 
 ### Corrections
 
+- **The stale-snapshot watchdog reported the wrong count, or nothing at all**
+  — `MixinNetworkSnapshots::MonitorJob` re-read `snapshots.count` after
+  processing the backlog, but the relation re-queries `processed_at IS NULL`
+  on every `count`, so when the sweep succeeded the alert read "There are 0
+  unprocessed snapshots"; and because the loop was `snapshots.map(&:process!)`,
+  one raising snapshot (e.g. `Payment.find_or_create_by!`) aborted the whole
+  job before the alert could fire — the monitor never alerted in exactly the
+  stuck state it exists to report. It now captures the delayed count before
+  processing, iterates with `find_each`, and isolates per-row failures with a
+  logged rescue so the alert always fires, mirroring
+  `Transfers::MonitorJob`.
 - **`RevenueBot.api` was always `nil` in lazy-loaded processes** — unlike
   `QuillBot`, `RevenueBot` never required `mixin_api/gate`, and `MixinApi.wrap`
   is defined in that file. In any process that does not eager-load (development
