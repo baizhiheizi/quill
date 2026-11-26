@@ -1,6 +1,8 @@
 <%= turbo_frame_tag 'my_collections' do %>
   <%= render partial: 'dashboard/collections/collection', collection: @collections, as: :collection %>
 
+  <%= render_pagination @pagy, id: "my_collections_pagination" %>
+
   <div class="my-8 flex justify-center">
     <%= link_to t('new_collection'), 
       new_dashboard_collection_path, 

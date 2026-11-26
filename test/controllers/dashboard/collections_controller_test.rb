@@ -35,6 +35,15 @@ class Dashboard::CollectionsControllerTest < ActionController::TestCase
     assert_equal "Mine", collections.first.name
   end
 
+  test "index paginates the collection list" do
+    get :index
+
+    assert_response :success
+    pagy = @controller.instance_variable_get(:@pagy)
+    assert_not_nil pagy
+    assert_equal 1, pagy.page
+  end
+
   # show ---------------------------------------------------------------
 
   test "show renders the requested collection" do

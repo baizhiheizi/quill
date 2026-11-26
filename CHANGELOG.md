@@ -201,6 +201,11 @@ real requirement is `rails >= 8.1.4`, not a json version.
 
 ### Corrections
 
+- **The dashboard collections index rendered the whole list unpaginated** —
+  every sibling dashboard index (articles, orders, payments, transfers,
+  notifications) pages its list with pagy, but `/dashboard/collections`
+  materialised the author's entire collection set on one render. It now
+  paginates like its siblings.
 - **`RevenueBot.api` was always `nil` in lazy-loaded processes** — unlike
   `QuillBot`, `RevenueBot` never required `mixin_api/gate`, and `MixinApi.wrap`
   is defined in that file. In any process that does not eager-load (development
