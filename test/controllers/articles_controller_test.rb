@@ -348,6 +348,20 @@ class ArticlesAuthenticatedControllerTest < ActionController::TestCase
     assert_equal %w[rails ruby], article.tags.pluck(:name).sort
   end
 
+  test "update re-renders the editor as unprocessable for blank price html submissions" do
+    article = articles(:draft)
+    original_price = article.price
+    @request.session[:current_session_id] = sign_in(article.author).uuid
+
+    patch :update, params: {
+      uuid: article.uuid,
+      article: { price: "", lock_version: article.lock_version }
+    }
+
+    assert_response :unprocessable_entity
+    assert_equal original_price, article.reload.price
+  end
+
   test "update accepts partial content autosave via turbo stream" do
     article = articles(:draft)
     @request.session[:current_session_id] = sign_in(article.author).uuid

@@ -482,7 +482,7 @@ class Article < ApplicationRecord
     # compare against; `belongs_to :currency` already reports it as invalid.
     return if currency.blank?
 
-    errors.add(:price, "< $0.1") if price.positive? && price < currency.minimal_price_amount
+    errors.add(:price, "< $0.1") if price&.positive? && price < currency.minimal_price_amount
   end
 
   def ensure_revenue_ratios_sum_to_one
