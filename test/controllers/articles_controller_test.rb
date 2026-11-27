@@ -348,6 +348,38 @@ class ArticlesAuthenticatedControllerTest < ActionController::TestCase
     assert_equal %w[rails ruby], article.tags.pluck(:name).sort
   end
 
+  test "create redirects html submissions to the editor" do
+    author = users(:author)
+    @request.session[:current_session_id] = sign_in(author).uuid
+
+    assert_difference -> { author.articles.count }, 1 do
+      post :create, params: {
+        article: {
+          title: "No-JS draft",
+          intro: "A draft saved without JavaScript",
+          content: "<p>Body content for the new article</p>"
+        }
+      }
+    end
+
+    article = author.articles.order(:created_at).last
+    assert_redirected_to edit_article_path(article.uuid)
+    assert_equal "No-JS draft", article.title
+  end
+
+  test "update redirects html submissions back to the editor" do
+    article = articles(:draft)
+    @request.session[:current_session_id] = sign_in(article.author).uuid
+
+    patch :update, params: {
+      uuid: article.uuid,
+      article: { title: "HTML save", lock_version: article.lock_version }
+    }
+
+    assert_redirected_to edit_article_path(article.uuid)
+    assert_equal "HTML save", article.reload.title
+  end
+
   test "update accepts partial content autosave via turbo stream" do
     article = articles(:draft)
     @request.session[:current_session_id] = sign_in(article.author).uuid
