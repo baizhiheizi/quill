@@ -384,6 +384,22 @@ class ArticlesAuthenticatedControllerTest < ActionController::TestCase
     assert_equal "First save", article.reload.title
   end
 
+  test "update re-renders the editor with a conflict alert for stale html requests" do
+    article = articles(:draft)
+    @request.session[:current_session_id] = sign_in(article.author).uuid
+
+    article.update!(title: "Saved by other session")
+
+    patch :update, params: {
+      uuid: article.uuid,
+      article: { title: "Stale edit", lock_version: 0 }
+    }
+
+    assert_response :conflict
+    assert_match I18n.t("articles.save_conflict"), response.body
+    assert_equal "Saved by other session", article.reload.title
+  end
+
   test "preview shows full content for free articles" do
     article = articles(:published_free)
     @request.session[:current_session_id] = sign_in(article.author).uuid

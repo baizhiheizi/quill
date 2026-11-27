@@ -129,6 +129,10 @@ class ArticlesController < ApplicationController
   rescue ActiveRecord::StaleObjectError
     @article.reload
     respond_to do |format|
+      format.html do
+        flash.now[:alert] = I18n.t("articles.save_conflict")
+        render :edit, status: :conflict, layout: "editor"
+      end
       format.turbo_stream { render :update_conflict, status: :conflict }
       format.json do
         render json: {
