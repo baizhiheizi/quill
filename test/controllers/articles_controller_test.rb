@@ -545,6 +545,29 @@ class ArticlesAuthenticatedControllerTest < ActionController::TestCase
     )
   end
 
+  test "a turbo stream create keeps the lock version field on the new article's form" do
+    author = users(:author)
+    @request.session[:current_session_id] = sign_in(author).uuid
+
+    post :create, params: {
+      article: {
+        title: "Streamed draft",
+        intro: "A draft saved through the turbo stream",
+        content: "<p>Body content for the new article</p>"
+      }
+    }, format: :turbo_stream
+
+    assert_response :success
+    article = author.articles.order(:created_at).last
+    # The create response replaces the whole `#article-form-meta` div, so it
+    # has to carry the hidden field over — without it the new article's form
+    # would submit no version and skip the optimistic-lock check.
+    assert_match(
+      %r{name="article\[lock_version\]"[^>]*value="#{article.lock_version}"},
+      response.body
+    )
+  end
+
   test "preview shows full content for free articles" do
     article = articles(:published_free)
     @request.session[:current_session_id] = sign_in(article.author).uuid

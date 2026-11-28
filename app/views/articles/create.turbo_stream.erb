@@ -3,6 +3,11 @@
     <span data-article-form-lock-version-param="<%= @article.lock_version %>"></span>
     <span data-article-form-uuid-param="<%= @article.uuid %>"></span>
     <span data-article-form-edit-path-param="<%= edit_article_path(@article.uuid) %>"></span>
+    <%# The form now submits `article[lock_version]` so a plain (no-JS) save
+        reaches the optimistic-lock check. This response replaces the whole
+        `#article-form-meta` div, so the hidden field has to be carried over
+        here too — otherwise the newly created article's form would lose it. %>
+    <%= hidden_field_tag "article[lock_version]", @article.lock_version %>
   </div>
 <% end %>
 
