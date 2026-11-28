@@ -201,6 +201,17 @@ real requirement is `rails >= 8.1.4`, not a json version.
 
 ### Corrections
 
+- **A no-JS article save silently overwrote a concurrent save** — the editor
+  form only exposed `lock_version` to Stimulus, as a
+  `data-article-form-lock-version-param` attribute the autosave read, and
+  Rails' `form_with` does not emit a hidden `lock_version` field. A plain
+  form submit therefore carried no version at all, so the optimistic-lock
+  check never ran on that path and a browser without JavaScript overwrote
+  whatever the other session had saved — no conflict, no warning. The form
+  now submits `article[lock_version]` (and the turbo_stream responses that
+  refresh the version refresh the field with it), and the HTML branch of the
+  stale-lock rescue re-renders the editor with a 409 and a conflict alert
+  instead of raising `ActionController::UnknownFormat`.
 - **`RevenueBot.api` was always `nil` in lazy-loaded processes** — unlike
   `QuillBot`, `RevenueBot` never required `mixin_api/gate`, and `MixinApi.wrap`
   is defined in that file. In any process that does not eager-load (development
