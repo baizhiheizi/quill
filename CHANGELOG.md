@@ -211,7 +211,20 @@ real requirement is `rails >= 8.1.4`, not a json version.
   stuck state it exists to report. It now captures the delayed count before
   processing, iterates with `find_each`, and isolates per-row failures with a
   logged rescue so the alert always fires, mirroring
-  `Transfers::MonitorJob`.
+  `Transfers::MonitorJob`. A row that still fails is reported to error
+  tracking (`Rails.error.report`, handled/warning) and counted in the alert,
+  so "recovered" and "still broken" no longer read the same.
+- **A no-JS article save silently overwrote a concurrent save** — the editor
+  form only exposed `lock_version` to Stimulus, as a
+  `data-article-form-lock-version-param` attribute the autosave read, and
+  Rails' `form_with` does not emit a hidden `lock_version` field. A plain
+  form submit therefore carried no version at all, so the optimistic-lock
+  check never ran on that path and a browser without JavaScript overwrote
+  whatever the other session had saved — no conflict, no warning. The form
+  now submits `article[lock_version]` (and the turbo_stream responses that
+  refresh the version refresh the field with it), and the HTML branch of the
+  stale-lock rescue re-renders the editor with a 409 and a conflict alert
+  instead of raising `ActionController::UnknownFormat`.
 - **`RevenueBot.api` was always `nil` in lazy-loaded processes** — unlike
   `QuillBot`, `RevenueBot` never required `mixin_api/gate`, and `MixinApi.wrap`
   is defined in that file. In any process that does not eager-load (development
@@ -444,6 +457,11 @@ The 2026-11-24 round landed as two separate PRs: aws-sdk-s3 1.243.0 →
 1.245.1 with aws-sdk-core 3.271.0 → 3.272.0 and aws-partitions 1.1309.0 →
 1.1311.0 transitively (#2298), and posthog-rails 3.26.4 → 3.26.6 with
 posthog-ruby 3.34.1 → 3.34.3 transitively (#2301).
+
+The 2026-11-25 round landed as three separate patch bumps: image_processing
+2.2.0 → 2.2.1 (#2299) and 2.2.1 → 2.2.2 (#2308), and ransack 6.1.1 → 6.1.2
+(#2309). A fourth Dependabot PR from the same day, mixin_bot 3.0.2 → 3.0.3
+(#2300), was closed unmerged, so the gem stays locked at 3.0.2.
 
 ### Tooling and docs corrections
 

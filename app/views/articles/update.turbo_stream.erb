@@ -12,4 +12,5 @@
 
 <%= turbo_stream.update "article-form-meta" do %>
   <span data-article-form-lock-version-param="<%= @article.lock_version %>"></span>
+  <%= hidden_field_tag "article[lock_version]", @article.lock_version %>
 <% end %>
