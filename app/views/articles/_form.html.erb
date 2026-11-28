@@ -12,6 +12,14 @@
 
   <div id="article-form-meta">
     <span data-article-form-lock-version-param="<%= article.lock_version %>"></span>
+    <%# The editor autosaves through Stimulus, which injects `article[lock_version]`
+        into the request body itself. A no-JS browser never gets that injection,
+        so the plain form submit has to carry the version too — otherwise the
+        optimistic-lock check never runs and a concurrent save is silently
+        overwritten. Both live inside `#article-form-meta` so the turbo_stream
+        responses that refresh the lock version refresh the hidden field as
+        well. %>
+    <%= form.hidden_field :lock_version %>
   </div>
 
   <div class="article-editor__layout">
