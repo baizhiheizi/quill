@@ -89,6 +89,40 @@ class ArticleReferencesControllerTest < ActionController::TestCase
       "expected at most 2 users queries (viewer + author preload), got #{users_queries}"
   end
 
+  # The production path for this picker is the *search* branch:
+  # `references_select_controller.js` requests `/article_references?query=…`
+  # on every keystroke. That branch goes through
+  # `ArticleVisibility::Query#searching`, which rebuilds the relation with
+  # `ransack(...).result(distinct: true)` — a *different* relation object
+  # than the no-query branch returns, so the budget above does not cover it.
+  #
+  # Ransack joins `users`/`taggings`/`tags` for its predicates. Rails 8 keeps
+  # those in a separate `left_outer_joins_values` bucket, so
+  # `joined_includes_values` (`includes_values & joins_values`) stays empty
+  # and `eager_loading?` stays false: the `includes` is still applied as a
+  # preload instead of being folded into the main query as a LEFT JOIN of the
+  # whole avatar chain. This test pins that — if the preload ever regressed
+  # here, or if a Ransack upgrade started eager-loading, this would fail.
+  test "index preloads authors on the search branch too" do
+    create_free_published_article(author: users(:author_zh), title: "Quill zh searchable")
+    create_free_published_article(author: users(:author_ja), title: "Quill ja searchable")
+    create_free_published_article(author: users(:reader_two), title: "Quill reader two searchable")
+
+    queries = capture_sql { get :index, params: { query: "Quill" }, format: :json }
+
+    assert_response :success
+    assert_operator response.parsed_body.length, :>=, 3,
+      "expected the search to return the three seeded articles by distinct authors"
+
+    # The main query is `SELECT DISTINCT "articles".* FROM "articles" LEFT
+    # OUTER JOIN "users" …` — Ransack's join, which never reads `FROM
+    # "users"`. So the only two users queries left are the viewer lookup and
+    # the author preload, no matter how many rows the search returns.
+    users_queries = queries.count { |q| q.include?('FROM "users"') }
+    assert users_queries <= 2,
+      "expected at most 2 users queries (viewer + author preload), got #{users_queries}"
+  end
+
   private
 
   def create_free_published_article(author:, title:)
@@ -106,16 +140,5 @@ class ArticleReferencesControllerTest < ActionController::TestCase
     # reject the new record.
     article.update_columns(published_at: 2.days.ago)
     article
-  end
-
-  def capture_sql
-    queries = []
-    sub = ActiveSupport::Notifications.subscribe("sql.active_record") do |_, _, _, _, payload|
-      queries << payload[:sql] unless payload[:name] == "SCHEMA"
-    end
-    yield
-    queries
-  ensure
-    ActiveSupport::Notifications.unsubscribe(sub) if sub
   end
 end

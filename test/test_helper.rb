@@ -29,6 +29,7 @@ require "rails/test_help"
   support/commerce_helpers.rb
   support/notifier_helpers.rb
   support/active_storage_helpers.rb
+  support/query_budget_helpers.rb
   support/integration_test_case.rb
 ].each { |f| require_relative f }
 
@@ -43,6 +44,7 @@ module ActiveSupport
     include CommerceHelpers
     include NotifierHelpers
     include QuillBotStub
+    include QueryBudgetHelpers
 
     setup do
       @previous_queue_adapter = ActiveJob::Base.queue_adapter

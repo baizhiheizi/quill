@@ -92,7 +92,68 @@ class Dashboard::SubscribeByUsersControllerTest < ActionController::TestCase
     assert_response :redirect
   end
 
+  # The list rows render `shared/_avatar`, whose helper walks the attachment /
+  # blob / authorization chain — without `User::AVATAR_PRELOADS` every row
+  # costs its own SELECTs on `active_storage_attachments` and
+  # `user_authorizations`, so the page cost grew with the number of
+  # subscribers.
+  #
+  # The relation itself is already a `users` query (it joins `actions`), so
+  # counting rows is not what tells the two states apart — the avatar chain
+  # is. The assertion is that the chain costs the same for a page of two and
+  # a page of five: one preload, whatever the row count.
+  test "index resolves every row's avatar in a fixed number of queries" do
+    subscribe(users(:reader_one))
+    subscribe(users(:reader_two))
+
+    queries_two = capture_sql { get :index }
+
+    assert_response :success
+
+    3.times { |i| subscribe(create_subscriber(i)) }
+
+    queries_five = capture_sql { get :index }
+
+    assert_response :success
+
+    assert_equal avatar_chain_query_count(queries_two), avatar_chain_query_count(queries_five),
+      "expected the avatar chain to cost the same for two and five rows:\n" \
+      "two rows:\n#{queries_two.join("\n")}\nfive rows:\n#{queries_five.join("\n")}"
+  end
+
+  # The dashboard list rows render `subscribe_by_users/_subscribe_button`,
+  # which asks "has the viewer subscribed to this user?". The controller
+  # hands the answer down as a primed id set (`ViewerActionSets#ids_for`),
+  # so the answer costs one SELECT for the page instead of one per row.
+  test "index primes the viewer's subscribed user ids" do
+    # A subscriber of the viewer, and someone the viewer subscribed to —
+    # the primed set answers the second question ("Subscribed" button).
+    subscribe(users(:reader_one))
+    @author.create_action(:subscribe, target: users(:reader_two))
+
+    get :index
+
+    assert_response :success
+    preloaded = @controller.instance_variable_get(:@preloaded_subscribe_user_ids)
+    assert_not_nil preloaded
+    assert_includes preloaded, users(:reader_two).id
+  end
+
   private
+
+  def subscribe(subscriber)
+    subscriber.create_action(:subscribe, target: @author)
+    subscriber
+  end
+
+  def create_subscriber(index)
+    User.create!(
+      uid: "81000#{index}",
+      name: "Subscriber #{index}",
+      mixin_uuid: SecureRandom.uuid,
+      mixin_id: "81000#{index}"
+    )
+  end
 
   def sign_in_as(user)
     test_session = sign_in(user)

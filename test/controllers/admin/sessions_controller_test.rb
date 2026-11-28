@@ -135,17 +135,4 @@ class Admin::SessionsControllerTest < ActionController::TestCase
     assert users_queries <= 1,
       "expected the index to preload all row users in one query, got #{users_queries} users queries"
   end
-
-  private
-
-  def capture_sql
-    queries = []
-    sub = ActiveSupport::Notifications.subscribe("sql.active_record") do |_, _, _, _, payload|
-      queries << payload[:sql] unless payload[:name] == "SCHEMA"
-    end
-    yield
-    queries
-  ensure
-    ActiveSupport::Notifications.unsubscribe(sub) if sub
-  end
 end

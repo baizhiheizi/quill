@@ -6,7 +6,11 @@ module Admin
       @state = params[:state] || "all"
       @order_by = allowed_param(:order_by, "created_at_desc", %w[created_at_desc created_at_asc updated_at_desc updated_at_asc])
 
-      collections = Collection.includes(:author, :currency)
+      # Every row renders `admin/users/field`, whose avatar helper walks the
+      # attachment / blob / authorization chain — preloading
+      # `User::AVATAR_PRELOADS` for the author resolves the whole page in one
+      # query instead of ~5 SELECTs per row.
+      collections = Collection.includes(:currency, author: User::AVATAR_PRELOADS)
 
       collections = collections.where(author_id: params[:user_id]) if params[:user_id].present?
 
