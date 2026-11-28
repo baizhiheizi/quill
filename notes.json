@@ -22,39 +22,39 @@
       "state": "commented",
       "updated_at": "2026-11-22",
       "note": "CI pg health-check fix (workflow-file push refused, needs workflows perm). Issue has manual instructions; empty branch repo-assist/eng-pg-health-tcp-* deletable. Never retry the push."
-    },
-    {
-      "number": 2315,
-      "state": "commented",
-      "updated_at": "2026-11-27",
-      "note": "Machine-filed 429 quota failure (2026-11-26 run, Zhipu GLM account quota, vigil-triaged). No repo defect; family of #2196/#2256/#2257. No comment left; close recommended in monthly issue."
     }
   ],
   "fixes": [],
   "checks": [
     {
       "area": "repo_assist_prs",
-      "checked_at": "2026-11-27",
-      "result": "Docs PR merged as #2310. #2311 (watchdog) + #2312 (pagination) open, CI green, awaiting review. Three 2026-11-27 intents re-filed (numbers land on publication): stale-conflict html fix, blank-price 500 fix, editor html-path coverage tests.",
-      "follow_up": "Capture the three 2026-11-27 PR numbers at publication; maintain all five until merged."
+      "checked_at": "2026-11-28",
+      "result": "Maintainer merged all five open PRs 2026-11-28 (#2311, #2312, #2320, #2321, #2322). Two new intents filed this run: bonus double-click fix and perf preload picker+sessions; branches fix-bonus-deliver-double-click-a3f9c21b7d5e8402 / perf-preload-picker-and-sessions-9c4e1d77a2b6f315.",
+      "follow_up": "Capture the two 2026-11-28 PR numbers at publication; maintain both until merged."
     },
     {
       "area": "dependencies",
-      "checked_at": "2026-11-27",
-      "result": "2026-11-26/27 rounds merged directly (#2314 selenium, #2316 pagy 43.8.7, #2317 posthog, #2318 aws-sdk-s3). Open: #2313 addressable 2.10.0, #2319 noticed 3.2.0. Majors queued: marcel 2, net-ssh 8, openssl 4, rack-oauth2 2.3, prism 2.x.",
-      "follow_up": "If #2313 and #2319 are both still open next run with Task 4 drawn, bundle them."
+      "checked_at": "2026-11-28",
+      "result": "All open Dependabot PRs merged 2026-11-28 (#2313 addressable 2.10.0, #2319 noticed 3.2.0). None open. Majors queued: marcel 2, net-ssh 8, openssl 4, rack-oauth2 2.3, prism 2.x.",
+      "follow_up": "Bundle only when several Dependabot PRs accumulate open simultaneously."
     },
     {
       "area": "tests",
-      "checked_at": "2026-11-27",
-      "result": "Main baseline e9be27d3: 1745/0/1 (design_system skip by design), SKIP_CSS_BUILD=1 SKIP_JS_BUILD=1. Branches: stale-html 1746/0/1, blank-price 1747/0/1 (both red-checked), html-paths +2 green. Rubocop+zeitwerk clean.",
+      "checked_at": "2026-11-28",
+      "result": "Perf branch full suite 1774/0/1; bonus branch 1772/0/1 (1 skip = design_system, by design). SKIP_CSS_BUILD=1 SKIP_JS_BUILD=1. Rubocop + zeitwerk clean on both branches.",
       "follow_up": null
     },
     {
       "area": "code",
-      "checked_at": "2026-11-27",
-      "result": "Filed 2026-11-27: stale-conflict html gap + blank-price 500 (found while covering html fallbacks). Unfiled: bonus deliver drafted? outside lock; mark-all-read (low). Sweep: all dirs tested except TwitterBot (unreachable flow).",
-      "follow_up": "Next Task 5 candidates: bonus lock, mark-all-read (low)."
+      "checked_at": "2026-11-28",
+      "result": "Bonus deliver double-click 500 fixed and filed as PR. Remaining survey candidates: mark-all-read batching (low), subscribe-tags id-set preload (low). All index surfaces now preloaded.",
+      "follow_up": "Next Task 5 candidates are both low value; prefer surveying other areas."
+    },
+    {
+      "area": "performance",
+      "checked_at": "2026-11-28",
+      "result": "Full N+1 sweep of every index surface done 2026-11-28: picker + admin sessions were the last unpredeloaded chains (fixed with pins); subscribe-tags per-row subscribe_tag? is the only finding left (needs id-set preload, not includes). Feed sort still a maintainer decision.",
+      "follow_up": "Do not re-propose rejected items without a maintainer ask."
     },
     {
       "area": "release",
@@ -67,12 +67,6 @@
       "checked_at": "2026-11-26",
       "result": "Main green at e57f6eb6 (run 45643189156, 2026-11-25). #2289 carries the TCP-forcing pg health-check patch (workflows perm blocked). Never edit shared/runtime.md; never retry workflow-file pushes.",
       "follow_up": null
-    },
-    {
-      "area": "performance",
-      "checked_at": "2026-11-24",
-      "result": "bin/measure-trace-id-indexes merged as #2302. Feed popularity sort still a maintainer decision (stored column).",
-      "follow_up": "Do not re-propose rejected items without a maintainer ask."
     },
     {
       "area": "qa",
@@ -88,8 +82,8 @@
     },
     {
       "area": "docs",
-      "checked_at": "2026-11-26",
-      "result": "Changelog Dependencies section stopped at 2026-11-24; 2026-11-25 round entry on branch docs-changelog-2026-11-25 (pending). Watchdog + pagination changelog bullets on their fix branches. AGENTS.md benchmark registration landed with #2302.",
+      "checked_at": "2026-11-28",
+      "result": "Changelog bullets for the bonus fix (Corrections) and the preload perf work (Performance) live on their fix branches. Earlier docs PRs all merged.",
       "follow_up": null
     }
   ],
@@ -97,18 +91,13 @@
   "priorities": [
     {
       "task": 6,
-      "item": "Maintain five Repo Assist PRs; capture 2026-11-27 numbers at publication",
-      "note": "#2311/#2312 open; pending: stale-html, blank-price, html-paths tests (fix PRs merge before tests PR)."
+      "item": "Maintain the two 2026-11-28 PRs until merged; capture numbers at publication",
+      "note": "Bonus double-click fix + perf preload picker/sessions; both CI-susceptible, watch check runs."
     },
     {
       "task": 2,
       "item": "Watch posthog/vigil auto-filed issues; triage with EXISTING labels only",
-      "note": "Use wontfix/question/bug - never invalid or needs triage. Skip #2255 (machine-managed). #2272/#2286/#2315 recommended for close in monthly issue."
-    },
-    {
-      "task": 5,
-      "item": "Execute next survey candidates if Task 5 drawn again",
-      "note": "Admin bonus deliver drafted? outside lock (double-click 500). Mark-all-read batching low value."
+      "note": "Use wontfix/question/bug - never invalid or needs triage. Skip #2255 (machine-managed). #2272/#2286 recommended for close in monthly issue."
     },
     {
       "task": 10,
@@ -119,11 +108,6 @@
       "task": 10,
       "item": "Feed sort stored column: ask maintainer",
       "note": "In monthly issue since 2026-10-23. Do not re-propose rejected items without a maintainer ask."
-    },
-    {
-      "task": 4,
-      "item": "Bundle #2313/#2319 if both open when Task 4 drawn",
-      "note": "Bundling rule: only when several Dependabot PRs accumulate open simultaneously."
     }
   ]
 }
