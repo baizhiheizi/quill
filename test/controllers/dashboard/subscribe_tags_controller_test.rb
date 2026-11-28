@@ -79,6 +79,36 @@ class Dashboard::SubscribeTagsControllerTest < ActionController::TestCase
     assert_response :redirect
   end
 
+  test "index sets preloaded_subscribe_tag_ids" do
+    subscribed = tags(:web3)
+    not_subscribed = tags(:tech_zh)
+    @reader.create_action(:subscribe, target: subscribed)
+
+    get :index
+
+    assert_response :success
+    preloaded = @controller.instance_variable_get(:@preloaded_subscribe_tag_ids)
+    assert_instance_of Set, preloaded
+    assert_includes preloaded, subscribed.id
+    assert_not_includes preloaded, not_subscribed.id,
+      "the set must hold every subscribed tag, so it can also answer the no case"
+  end
+
+  # The button state the partial renders comes from the primed set rather
+  # than from a live per-row check, so pin the rendered result: every row of
+  # this list is a tag the viewer subscribes to, so each renders the
+  # Subscribed link.
+  test "index renders the subscribe button state from the primed set" do
+    tag = tags(:web3)
+    @reader.create_action(:subscribe, target: tag)
+
+    get :index
+
+    assert_response :success
+    assert_select "a[href=?]", new_subscribe_tag_path(id: tag.id),
+      message: "expected the row to render the Subscribed link from the primed set"
+  end
+
   private
 
   def sign_in_as(user)
