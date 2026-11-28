@@ -121,4 +121,18 @@ class Admin::SessionsControllerTest < ActionController::TestCase
 
     assert_redirected_to admin_login_path
   end
+
+  # Every row renders `admin/users/field`, which reads the user's name,
+  # short_uid, mixin_uuid and avatar (attachment / blob / authorization).
+  # Without a preload the index pays a users SELECT per row — the same shape
+  # `Admin::BonusesController#index` had before its `includes`.
+  test "GET index preloads users so rendering rows costs one users query" do
+    queries = capture_sql { get :index }
+
+    assert_response :success
+
+    users_queries = queries.count { |q| q.include?('FROM "users"') }
+    assert users_queries <= 1,
+      "expected the index to preload all row users in one query, got #{users_queries} users queries"
+  end
 end

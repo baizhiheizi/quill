@@ -306,7 +306,53 @@ Two indexes the article surfaces needed but the schema did not have, one
 authorization lookup the article page was repeating, and two per-row query
 chains — the comments list and header live search — collapsed into preloads.
 The landing page also stops running its discovery work on the visits that end
-in the feed redirect.
+in the feed redirect. Four more surfaces that draw an avatar per row join
+them with the same preload treatment: the article-reference picker, the admin
+sessions index, the admin collections index, and the dashboard's list of
+subscribers.
+
+- **The article-reference picker queried the author of every reachable
+  article** — the picker (`/article_references`, the author-selector in the
+  editor) is an access listing: it serialises every article the viewer can
+  reach — bought, own and free — and is not paginated. Each row reads
+  `author.name`, `author.avatar_image_url` and `author.mixin_uuid`, so
+  without a preload the request paid a users SELECT per reachable article
+  (plus attachment/authorization lookups inside the avatar) — growing with
+  the viewer's whole accessible history, not with the page. The relation now
+  carries `includes(author: User::AVATAR_PRELOADS)`, the same chain every
+  other avatar surface preloads; a three-author picker drops from 4 users
+  queries to 2 (viewer + one preload), and the count no longer scales with
+  the result set. The picker's *search* branch — the one the editor actually
+  uses on every keystroke — rebuilds the relation through Ransack, so it is
+  budgeted separately and stays on the preload path.
+- **The admin sessions index queried users per row** — every row renders
+  `admin/users/field`, whose avatar helper walks the attachment / blob /
+  authorization chain, so a page of sessions cost a users SELECT per row
+  (measured: 2 rows → 2 queries, the same shape `Admin::BonusesController`
+  had before its includes). The index now preloads
+  `user: User::AVATAR_PRELOADS`; the whole page resolves its users in one
+  query regardless of row count.
+- **The admin collections index paid the whole avatar chain per row** — the
+  author rows were already preloaded (`includes(:author)`), but the avatar
+  itself was not, so every row still walked the attachment / blob /
+  authorization chain — ~5 SELECTs per row. The relation now carries
+  `includes(author: User::AVATAR_PRELOADS)`, and a page of collections
+  resolves its avatars in one query per chain whatever the row count.
+- **The dashboard's subscriber list paid the avatar chain per row** — the
+  same shape, one surface over: `Dashboard::SubscribeByUsersController`
+  preloaded nothing at all, so every subscriber row cost its own avatar
+  SELECTs. It now carries `User::AVATAR_PRELOADS` like its sibling
+  `Dashboard::SubscribeUsersController`.
+- **The subscribe button asked the database once per row** — the button
+  partials asked `current_user.subscribe_user?(user)` for every row even
+  where the controller had already primed the answer as a set of ids: the
+  primed set was consulted only as a fast path for the "Subscribed" case, so
+  a "not subscribed" row fell through to a live query. That set holds
+  *every* target the viewer subscribed to, so it answers both cases — the
+  partials now read it as the answer and fall back to the live check only
+  where no controller primed it (the guest-facing surfaces and the
+  subscribe/destroy turbo-stream frames). A list of subscribers costs one
+  SELECT for the page instead of one per row.
 
 - **`articles (state, published_at)`** — `state` was unindexed, so every
   `Article.only_published` query seq-scanned the table: the web feed, the

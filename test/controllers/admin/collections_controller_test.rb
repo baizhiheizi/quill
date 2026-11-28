@@ -118,6 +118,40 @@ class Admin::CollectionsControllerTest < ActionController::TestCase
     assert_equal 1, counts[collections(:two).uuid]
   end
 
+  # Admin collections index avatar-chain N+1 regression guard.
+  #
+  # Every row renders `admin/users/field`, which draws the author's avatar
+  # through `shared/_avatar` — that walks the attachment / blob /
+  # authorization chain, so a row cost ~5 SELECTs. The index now carries
+  # `User::AVATAR_PRELOADS` for `collection.author`, which resolves the
+  # whole page in one query instead of one per row.
+  #
+  # The author rows themselves were already preloaded (`includes(:author)`),
+  # so the `users` table was never the fan-out — the avatar chain was. The
+  # assertion is therefore that the chain costs the same for a page of two
+  # and a page of four: one preload, whatever the row count.
+  test "index resolves every row's avatar in a fixed number of queries" do
+    build_renderable_collection(collections(:one), users(:author), "Fixture One")
+    build_renderable_collection(collections(:two), users(:author_zh), "Fixture Two")
+
+    queries_two = capture_sql { get :index }
+
+    assert_response :success
+    assert_equal 2, @controller.instance_variable_get(:@collections).size
+
+    build_renderable_collection(nil, users(:author_ja), "Live One")
+    build_renderable_collection(nil, users(:reader_two), "Live Two")
+
+    queries_four = capture_sql { get :index }
+
+    assert_response :success
+    assert_equal 4, @controller.instance_variable_get(:@collections).size
+
+    assert_equal avatar_chain_query_count(queries_two), avatar_chain_query_count(queries_four),
+      "expected the avatar chain to cost the same for two and four rows:\n" \
+      "two rows:\n#{queries_two.join("\n")}\nfour rows:\n#{queries_four.join("\n")}"
+  end
+
   test "index can sort by the updated_at column it displays" do
     # The collections list renders `collection.updated_at` in its last
     # column, but the sort options only covered `created_at` — picking a
@@ -138,5 +172,31 @@ class Admin::CollectionsControllerTest < ActionController::TestCase
 
     ids = @controller.instance_variable_get(:@collections).map(&:id)
     assert_equal collections(:one).id, ids.first, "expected the least recently updated collection first"
+  end
+
+  private
+
+  # The collection fixtures carry no author, price, currency or uuid, and the
+  # index row renders `collection.author` and `collection.price_tag` — so a
+  # renderable row needs all of them. `collection` is nil for a row that
+  # should be created rather than patched.
+  def build_renderable_collection(collection, author, name)
+    attributes = {
+      name: name,
+      symbol: name.gsub(/\s+/, ""),
+      description: "A renderable collection.",
+      asset_id: Currency::BTC_ASSET_ID,
+      price: 10.0,
+      revenue_ratio: 0.2,
+      author_id: author.mixin_uuid,
+      uuid: SecureRandom.uuid
+    }
+
+    if collection
+      collection.update_columns(attributes)
+      collection
+    else
+      Collection.create!(attributes)
+    end
   end
 end

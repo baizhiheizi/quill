@@ -67,16 +67,78 @@ class ArticleReferencesControllerTest < ActionController::TestCase
       "expected the oversized query to be truncated before SQL")
   end
 
+  # The picker serialises `author.name`, `author.avatar_image_url` and
+  # `author.mixin_uuid` for every row, and it is not paginated — without a
+  # preload each row costs a fresh users SELECT (plus attachment/authorization
+  # lookups inside the avatar), so a viewer with many reachable articles pays
+  # a users query per article.
+  test "index preloads authors so serialising rows costs one users query" do
+    create_free_published_article(author: users(:author_zh), title: "Free zh two")
+    create_free_published_article(author: users(:author_ja), title: "Free ja two")
+
+    queries = capture_sql { get :index, format: :json }
+
+    assert_response :success
+    assert_operator response.parsed_body.length, :>=, 3,
+      "expected the picker to list at least three articles by distinct authors"
+
+    users_queries = queries.count { |q| q.include?('FROM "users"') }
+    # One query resolves the signed-in viewer, one preload covers every row's
+    # author regardless of how many articles the viewer can reach.
+    assert users_queries <= 2,
+      "expected at most 2 users queries (viewer + author preload), got #{users_queries}"
+  end
+
+  # The production path for this picker is the *search* branch:
+  # `references_select_controller.js` requests `/article_references?query=…`
+  # on every keystroke. That branch goes through
+  # `ArticleVisibility::Query#searching`, which rebuilds the relation with
+  # `ransack(...).result(distinct: true)` — a *different* relation object
+  # than the no-query branch returns, so the budget above does not cover it.
+  #
+  # Ransack joins `users`/`taggings`/`tags` for its predicates. Rails 8 keeps
+  # those in a separate `left_outer_joins_values` bucket, so
+  # `joined_includes_values` (`includes_values & joins_values`) stays empty
+  # and `eager_loading?` stays false: the `includes` is still applied as a
+  # preload instead of being folded into the main query as a LEFT JOIN of the
+  # whole avatar chain. This test pins that — if the preload ever regressed
+  # here, or if a Ransack upgrade started eager-loading, this would fail.
+  test "index preloads authors on the search branch too" do
+    create_free_published_article(author: users(:author_zh), title: "Quill zh searchable")
+    create_free_published_article(author: users(:author_ja), title: "Quill ja searchable")
+    create_free_published_article(author: users(:reader_two), title: "Quill reader two searchable")
+
+    queries = capture_sql { get :index, params: { query: "Quill" }, format: :json }
+
+    assert_response :success
+    assert_operator response.parsed_body.length, :>=, 3,
+      "expected the search to return the three seeded articles by distinct authors"
+
+    # The main query is `SELECT DISTINCT "articles".* FROM "articles" LEFT
+    # OUTER JOIN "users" …` — Ransack's join, which never reads `FROM
+    # "users"`. So the only two users queries left are the viewer lookup and
+    # the author preload, no matter how many rows the search returns.
+    users_queries = queries.count { |q| q.include?('FROM "users"') }
+    assert users_queries <= 2,
+      "expected at most 2 users queries (viewer + author preload), got #{users_queries}"
+  end
+
   private
 
-  def capture_sql
-    queries = []
-    sub = ActiveSupport::Notifications.subscribe("sql.active_record") do |_, _, _, _, payload|
-      queries << payload[:sql] unless payload[:name] == "SCHEMA"
-    end
-    yield
-    queries
-  ensure
-    ActiveSupport::Notifications.unsubscribe(sub) if sub
+  def create_free_published_article(author:, title:)
+    article = Article.create!(
+      title: title,
+      intro: "A free article intro.",
+      content: "<p>A free article body.</p>",
+      author: author,
+      price: 0.0,
+      state: "published",
+      locale: "en"
+    )
+    # published_at is set after create so the "frozen attributes once
+    # published" guard (which fires while asset_id is still dirty) doesn't
+    # reject the new record.
+    article.update_columns(published_at: 2.days.ago)
+    article
   end
 end
