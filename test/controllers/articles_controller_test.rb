@@ -384,6 +384,56 @@ class ArticlesAuthenticatedControllerTest < ActionController::TestCase
     assert_equal "First save", article.reload.title
   end
 
+  test "update re-renders the editor with a conflict alert for stale html requests" do
+    article = articles(:draft)
+    @request.session[:current_session_id] = sign_in(article.author).uuid
+
+    # The lock version the no-JS form carried when the other session saved.
+    stale_lock_version = article.lock_version
+    article.update!(title: "Saved by other session")
+
+    patch :update, params: {
+      uuid: article.uuid,
+      article: { title: "Stale edit", lock_version: stale_lock_version }
+    }
+
+    assert_response :conflict
+    assert_match I18n.t("articles.save_conflict"), response.body
+    assert_equal "Saved by other session", article.reload.title
+  end
+
+  test "the editor form submits the lock version so no-JS saves reach the optimistic-lock check" do
+    article = articles(:draft)
+    @request.session[:current_session_id] = sign_in(article.author).uuid
+
+    get :edit, params: { uuid: article.uuid }
+
+    assert_response :success
+    # Without this field a plain (no-JS) form submit never carries a version,
+    # so the optimistic-lock check never runs and a concurrent save is
+    # silently overwritten instead of reported as a conflict.
+    assert_select "input[type=hidden][name=?][value=?]", "article[lock_version]", article.lock_version.to_s
+  end
+
+  test "a successful autosave refreshes the lock version carried by the form" do
+    article = articles(:draft)
+    @request.session[:current_session_id] = sign_in(article.author).uuid
+
+    patch :update, params: {
+      uuid: article.uuid,
+      article: { title: "Updated draft title", lock_version: article.lock_version }
+    }, format: :turbo_stream
+
+    assert_response :success
+    # The hidden field lives inside `#article-form-meta`, so the turbo_stream
+    # response that refreshes the Stimulus lock version refreshes the field
+    # a later no-JS submit would send as well.
+    assert_match(
+      %r{name="article\[lock_version\]"[^>]*value="#{article.reload.lock_version}"},
+      response.body
+    )
+  end
+
   test "preview shows full content for free articles" do
     article = articles(:published_free)
     @request.session[:current_session_id] = sign_in(article.author).uuid

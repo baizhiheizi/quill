@@ -83,7 +83,7 @@ gem "ransack"
 # gem 'honeybadger', '~> 4.8'
 
 # Notifications for Ruby on Rails applications
-gem "noticed", "~> 3.0"
+gem "noticed", "~> 3.2"
 
 # Centralization of locale data collection for Ruby on Rails.
 gem "rails-i18n"
