@@ -9,7 +9,13 @@ class Dashboard::CollectionsController < Dashboard::BaseController
     # `collection.cover.attached?` + `image_tag collection.cover`). Without these includes,
     # each row triggers ~3 SELECTs (currency + attachment + blob) — for an author with N
     # collections on /dashboard/collections, that is ~3N queries per index page load.
-    @collections = current_user.collections.includes(:currency, cover_attachment: :blob).order(updated_at: :desc)
+    # Paginated like every sibling dashboard index — this one rendered the
+    # whole set unbounded.
+    #
+    # `updated_at` is not unique (collections written in the same batch share a
+    # timestamp), so it needs a unique tiebreaker: without `id` the same row
+    # could show up on two pages, or be skipped at the page boundary.
+    @pagy, @collections = pagy current_user.collections.includes(:currency, cover_attachment: :blob).order(updated_at: :desc, id: :desc)
   end
 
   def show

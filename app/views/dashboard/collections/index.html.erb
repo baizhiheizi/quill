@@ -1,12 +1,19 @@
 <%= turbo_frame_tag 'my_collections' do %>
-  <%= render partial: 'dashboard/collections/collection', collection: @collections, as: :collection %>
+  <div data-controller="infinite-scroll">
+    <div id="my_collections_list">
+      <%= render partial: 'dashboard/collections/collection', collection: @collections, as: :collection %>
+    </div>
 
-  <div class="my-8 flex justify-center">
-    <%= link_to t('new_collection'), 
-      new_dashboard_collection_path, 
-      data: {
-        turbo_frame: '_top'
-      },
-      class: "btn btn-primary rounded-full" %>
+    <div data-infinite-scroll-target='scrollArea'></div>
+    <%= render_pagination @pagy, id: "my_collections_pagination" %>
+
+    <div class="my-8 flex justify-center">
+      <%= link_to t('new_collection'), 
+        new_dashboard_collection_path, 
+        data: {
+          turbo_frame: '_top'
+        },
+        class: "btn btn-primary rounded-full" %>
+    </div>
   </div>
 <% end %>
