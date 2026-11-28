@@ -209,6 +209,19 @@ real requirement is `rails >= 8.1.4`, not a json version.
   `validates :price, presence: true` the model already declares. The floor
   check now no-ops for a nil price and the presence validation reports
   `Price can't be blank` normally.
+- **The stale-snapshot watchdog reported the wrong count, or nothing at all**
+  — `MixinNetworkSnapshots::MonitorJob` re-read `snapshots.count` after
+  processing the backlog, but the relation re-queries `processed_at IS NULL`
+  on every `count`, so when the sweep succeeded the alert read "There are 0
+  unprocessed snapshots"; and because the loop was `snapshots.map(&:process!)`,
+  one raising snapshot (e.g. `Payment.find_or_create_by!`) aborted the whole
+  job before the alert could fire — the monitor never alerted in exactly the
+  stuck state it exists to report. It now captures the delayed count before
+  processing, iterates with `find_each`, and isolates per-row failures with a
+  logged rescue so the alert always fires, mirroring
+  `Transfers::MonitorJob`. A row that still fails is reported to error
+  tracking (`Rails.error.report`, handled/warning) and counted in the alert,
+  so "recovered" and "still broken" no longer read the same.
 - **A no-JS article save silently overwrote a concurrent save** — the editor
   form only exposed `lock_version` to Stimulus, as a
   `data-article-form-lock-version-param` attribute the autosave read, and
