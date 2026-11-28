@@ -237,6 +237,20 @@ class ArticlesControllerTest < IntegrationTestCase
       "expected rendered <html lang=...> attribute on /articles")
   end
 
+  test "update without an article payload returns bad request instead of raising" do
+    article = articles(:published_paid)
+    sign_in(article.author)
+
+    patch article_path(article), params: {}
+
+    # `params.require(:article)` raises `ActionController::ParameterMissing`,
+    # which the middleware stack turns into a 400. Reading
+    # `params[:article][:price]` before that raised `NoMethodError` instead —
+    # a 500 for a request that is merely missing a parameter.
+    assert_response :bad_request
+    assert_equal "Paid Article", article.reload.title
+  end
+
   private
 
   # The page pagy actually resolved for the last request. Reading it from

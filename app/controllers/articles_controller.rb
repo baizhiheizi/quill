@@ -274,7 +274,11 @@ class ArticlesController < ApplicationController
       lock_version
     ]
 
-    permitted.push(:price) if !@article.published_at? || (!@article.free? && params[:article][:price].to_d.positive?)
+    # `params[:article]` is missing on a request that carries no article
+    # payload at all, so read the price through `dig` — `params[:article][:price]`
+    # raised `NoMethodError` (HTTP 500) before `params.require(:article)` could
+    # turn it into the `ParameterMissing` 400 the request deserves.
+    permitted.push(:price) if !@article.published_at? || (!@article.free? && params.dig(:article, :price).to_d.positive?)
     if @article.published_at?
       permitted.push(:collection_id) if @article.collection_revenue_ratio.zero?
     else
