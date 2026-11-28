@@ -90,10 +90,14 @@ class BonusTest < ActiveSupport::TestCase
     first_transfer_id = bonus.reload.transfer.id
     first_state = bonus.state
 
-    # Re-running deliver on a non-drafted bonus must not change state or
-    # create a second transfer (AASM raises InvalidTransition, but the
-    # bonus is delivered via with_lock — the rescue lives at the caller).
-    bonus.send(:deliver_with_lock!) rescue nil
+    # Re-running deliver on a non-drafted bonus (e.g. a double-clicked
+    # Deliver button) must not raise, change state, or create a second
+    # transfer: inside `with_lock` the reload shows the bonus is no longer
+    # drafted, so the transition is skipped.
+    assert_no_difference -> { Transfer.count } do
+      bonus.deliver_with_lock!
+    end
+
     bonus.reload
 
     assert_equal first_transfer_id, bonus.transfer.id

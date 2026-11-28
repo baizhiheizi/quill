@@ -51,7 +51,10 @@ class Bonus < ApplicationRecord
 
   def deliver_with_lock!
     with_lock do
-      deliver!
+      # `with_lock` reloads the row, so `drafted?` sees the state committed by
+      # any concurrent deliver — a double-clicked Deliver becomes a no-op
+      # instead of raising AASM::InvalidTransition.
+      deliver! if drafted?
     end
   end
 

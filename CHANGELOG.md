@@ -201,6 +201,15 @@ real requirement is `rails >= 8.1.4`, not a json version.
 
 ### Corrections
 
+- **A double-clicked Deliver on an admin bonus raised a 500** —
+  `Admin::BonusesController#deliver` checked `drafted?` outside the lock, so
+  two rapid POSTs both passed the check; the loser then ran `deliver!` inside
+  `with_lock` on a bonus the first request had already moved to `delivering`,
+  and the `AASM::InvalidTransition` escaped as an unhandled 500.
+  `Bonus#deliver_with_lock!` now re-checks `drafted?` inside the lock —
+  `with_lock` reloads the row, so the concurrent re-delivery becomes a no-op
+  and the second request simply re-renders the refreshed row (the same
+  idempotency idiom `Payment#generate_order!` uses).
 - **Clearing an article's price raised a 500 instead of reporting the error** —
   `Article#ensure_price_not_too_low` called `price.positive?` whenever the price
   changed, but an update that clears the price field reaches it with
