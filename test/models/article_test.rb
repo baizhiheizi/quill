@@ -443,6 +443,17 @@ class ArticleTest < ActiveSupport::TestCase
     assert_includes article.errors.full_messages, "Currency must exist"
   end
 
+  test "a nil price is invalid instead of raising in the price-floor check" do
+    article = articles(:draft)
+    article.price = nil
+
+    # Only the price-floor check reads `price.positive?`, and it runs after
+    # the presence validation adds its own error. It used to raise
+    # NoMethodError (HTTP 500) when a submitted update cleared the price.
+    assert_not article.valid?
+    assert_includes article.errors[:price], "can't be blank"
+  end
+
   test "the price floor follows the selected asset" do
     eth = Article.new(
       title: "Priced in ether",
