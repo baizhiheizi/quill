@@ -201,6 +201,14 @@ real requirement is `rails >= 8.1.4`, not a json version.
 
 ### Corrections
 
+- **Clearing an article's price raised a 500 instead of reporting the error** —
+  `Article#ensure_price_not_too_low` called `price.positive?` whenever the price
+  changed, but an update that clears the price field reaches it with
+  `price = nil` (a blank field casts to nil on the decimal column), so
+  `NoMethodError` escaped and the editor save 500ed instead of failing the
+  `validates :price, presence: true` the model already declares. The floor
+  check now no-ops for a nil price and the presence validation reports
+  `Price can't be blank` normally.
 - **The dashboard collections index rendered the whole list unpaginated** —
   every sibling dashboard index (articles, orders, payments, transfers,
   notifications) pages its list with pagy, but `/dashboard/collections`

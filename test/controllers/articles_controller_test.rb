@@ -237,6 +237,20 @@ class ArticlesControllerTest < IntegrationTestCase
       "expected rendered <html lang=...> attribute on /articles")
   end
 
+  test "update without an article payload returns bad request instead of raising" do
+    article = articles(:published_paid)
+    sign_in(article.author)
+
+    patch article_path(article), params: {}
+
+    # `params.require(:article)` raises `ActionController::ParameterMissing`,
+    # which the middleware stack turns into a 400. Reading
+    # `params[:article][:price]` before that raised `NoMethodError` instead —
+    # a 500 for a request that is merely missing a parameter.
+    assert_response :bad_request
+    assert_equal "Paid Article", article.reload.title
+  end
+
   private
 
   # The page pagy actually resolved for the last request. Reading it from
@@ -346,6 +360,20 @@ class ArticlesAuthenticatedControllerTest < ActionController::TestCase
     article = author.articles.find_by!(uuid: body["uuid"])
     assert_equal article.lock_version, body["lock_version"]
     assert_equal %w[rails ruby], article.tags.pluck(:name).sort
+  end
+
+  test "update re-renders the editor as unprocessable for blank price html submissions" do
+    article = articles(:draft)
+    original_price = article.price
+    @request.session[:current_session_id] = sign_in(article.author).uuid
+
+    patch :update, params: {
+      uuid: article.uuid,
+      article: { price: "", lock_version: article.lock_version }
+    }
+
+    assert_response :unprocessable_entity
+    assert_equal original_price, article.reload.price
   end
 
   test "create redirects html submissions to the editor" do
