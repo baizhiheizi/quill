@@ -380,6 +380,57 @@ class ArticlesAuthenticatedControllerTest < ActionController::TestCase
     assert_equal "HTML save", article.reload.title
   end
 
+  test "update without a lock version still redirects html submissions back to the editor" do
+    # A client that does not send `article[lock_version]` — a browser holding a
+    # page rendered before the form carried the field — must still save; the
+    # optimistic-lock check simply does not run for that request.
+    article = articles(:draft)
+    @request.session[:current_session_id] = sign_in(article.author).uuid
+
+    patch :update, params: {
+      uuid: article.uuid,
+      article: { title: "HTML save without a version" }
+    }
+
+    assert_redirected_to edit_article_path(article.uuid)
+    assert_equal "HTML save without a version", article.reload.title
+  end
+
+  test "update re-renders the editor as unprocessable for invalid html submissions" do
+    article = articles(:draft)
+    @request.session[:current_session_id] = sign_in(article.author).uuid
+
+    patch :update, params: {
+      uuid: article.uuid,
+      article: { title: "T" * 65, lock_version: article.lock_version }
+    }
+
+    # `validates :title, length: { maximum: 64 }` fails, so the update raises
+    # `RecordInvalid` and the HTML branch re-renders the editor with a 422.
+    # Without that branch the no-JS path would raise `UnknownFormat` and 500.
+    assert_response :unprocessable_entity
+    assert_select "input[name=?][value=?]", "article[title]", "T" * 65
+    assert_equal "Draft Article", article.reload.title
+  end
+
+  test "create re-renders the editor as unprocessable for invalid html submissions" do
+    author = users(:author)
+    @request.session[:current_session_id] = sign_in(author).uuid
+
+    assert_no_difference -> { author.articles.count } do
+      post :create, params: {
+        article: {
+          title: "T" * 65,
+          intro: "A draft saved without JavaScript",
+          content: "<p>Body content for the new article</p>"
+        }
+      }
+    end
+
+    assert_response :unprocessable_entity
+    assert_select "input[name=?][value=?]", "article[title]", "T" * 65
+  end
+
   test "update accepts partial content autosave via turbo stream" do
     article = articles(:draft)
     @request.session[:current_session_id] = sign_in(article.author).uuid
