@@ -29,31 +29,31 @@
     {
       "area": "repo_assist_prs",
       "checked_at": "2026-11-28",
-      "result": "Maintainer merged all five open PRs 2026-11-28 (#2311, #2312, #2320, #2321, #2322). Two new intents filed this run: bonus double-click fix and perf preload picker+sessions; branches fix-bonus-deliver-double-click-a3f9c21b7d5e8402 / perf-preload-picker-and-sessions-9c4e1d77a2b6f315.",
-      "follow_up": "Capture the two 2026-11-28 PR numbers at publication; maintain both until merged."
+      "result": "Morning PRs merged as #2324/#2325; maintainer also merged all 2026-11-27 PRs and both Dependabot PRs (#2313, #2319). New intent: perf primed subscribe-tag/article sets, branch repo-assist/perf-primed-subscribe-tag-and-article-sets.",
+      "follow_up": "Capture the new PR number at publication; maintain it until merged."
     },
     {
       "area": "dependencies",
       "checked_at": "2026-11-28",
-      "result": "All open Dependabot PRs merged 2026-11-28 (#2313 addressable 2.10.0, #2319 noticed 3.2.0). None open. Majors queued: marcel 2, net-ssh 8, openssl 4, rack-oauth2 2.3, prism 2.x.",
+      "result": "No Dependabot PRs open (both merged: #2313 addressable 2.10.0, #2319 noticed 3.2.0). Majors queued: marcel 2, net-ssh 8, openssl 4, rack-oauth2 2.3, prism 2.x.",
       "follow_up": "Bundle only when several Dependabot PRs accumulate open simultaneously."
     },
     {
       "area": "tests",
       "checked_at": "2026-11-28",
-      "result": "Perf branch full suite 1774/0/1; bonus branch 1772/0/1 (1 skip = design_system, by design). SKIP_CSS_BUILD=1 SKIP_JS_BUILD=1. Rubocop + zeitwerk clean on both branches.",
+      "result": "Primed-sets branch: full suite 1785 runs / 0 failures / 1 skip (design_system, by design); 5878 assertions. Red-check: 4 new pins fail on unpatched controllers. SKIP_CSS_BUILD=1 SKIP_JS_BUILD=1. Rubocop + zeitwerk clean; design-system lint at its 42-violation main baseline (non-blocking, exit 0).",
       "follow_up": null
     },
     {
       "area": "code",
       "checked_at": "2026-11-28",
-      "result": "Bonus deliver double-click 500 fixed and filed as PR. Remaining survey candidates: mark-all-read batching (low), subscribe-tags id-set preload (low). All index surfaces now preloaded.",
-      "follow_up": "Next Task 5 candidates are both low value; prefer surveying other areas."
+      "result": "N+1 survey fully discharged: picker, admin sessions, admin collections, dashboard subscribers fixed in morning PRs; subscribe-tags + commenting-subscribe-article + home widgets fixed in this run's PR. No Task 5 candidates left from the survey.",
+      "follow_up": null
     },
     {
       "area": "performance",
       "checked_at": "2026-11-28",
-      "result": "Full N+1 sweep of every index surface done 2026-11-28: picker + admin sessions were the last unpredeloaded chains (fixed with pins); subscribe-tags per-row subscribe_tag? is the only finding left (needs id-set preload, not includes). Feed sort still a maintainer decision.",
+      "result": "All action-verb gaps in ViewerActionSets closed (8 verbs now). Only remaining survey candidate: mark-all-read fires one UPDATE per unread notification (low value). Feed sort stored column still a maintainer decision.",
       "follow_up": "Do not re-propose rejected items without a maintainer ask."
     },
     {
@@ -64,8 +64,8 @@
     },
     {
       "area": "ci",
-      "checked_at": "2026-11-26",
-      "result": "Main green at e57f6eb6 (run 45643189156, 2026-11-25). #2289 carries the TCP-forcing pg health-check patch (workflows perm blocked). Never edit shared/runtime.md; never retry workflow-file pushes.",
+      "checked_at": "2026-11-28",
+      "result": "Main green at e2c7a54d (Check run 46146121111, 2026-11-28). #2289 carries the TCP-forcing pg health-check patch (workflows perm blocked). Never edit shared/runtime.md; never retry workflow-file pushes.",
       "follow_up": null
     },
     {
@@ -83,7 +83,7 @@
     {
       "area": "docs",
       "checked_at": "2026-11-28",
-      "result": "Changelog bullets for the bonus fix (Corrections) and the preload perf work (Performance) live on their fix branches. Earlier docs PRs all merged.",
+      "result": "Changelog Performance bullet for the primed subscribe sets lives on the new branch. Morning PRs' changelog bullets merged with them.",
       "follow_up": null
     }
   ],
@@ -91,8 +91,8 @@
   "priorities": [
     {
       "task": 6,
-      "item": "Maintain the two 2026-11-28 PRs until merged; capture numbers at publication",
-      "note": "Bonus double-click fix + perf preload picker/sessions; both CI-susceptible, watch check runs."
+      "item": "Maintain the new perf PR until merged; capture number at publication",
+      "note": "Branch repo-assist/perf-primed-subscribe-tag-and-article-sets; CI-susceptible, watch check runs."
     },
     {
       "task": 2,
