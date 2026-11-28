@@ -3,6 +3,8 @@
 require "test_helper"
 
 class MixinNetworkSnapshots::MonitorJobTest < JobTestCase
+  include ActiveSupport::Testing::ErrorReporterAssertions
+
   test "perform completes when no delayed snapshots exist" do
     relation = delayed_relation(none: true)
 
@@ -31,6 +33,7 @@ class MixinNetworkSnapshots::MonitorJobTest < JobTestCase
 
     assert processed
     assert_match(/There are 1 unprocessed snapshots/, alert_message)
+    refute_match(/failed to process/, alert_message)
   end
 
   test "perform does not notify admin when no delayed snapshots exist" do
@@ -88,7 +91,11 @@ class MixinNetworkSnapshots::MonitorJobTest < JobTestCase
 
     poisoned = Object.new
     poisoned.define_singleton_method(:id) { 42 }
-    poisoned.define_singleton_method(:process!) { raise ActiveRecord::RecordInvalid, "invalid" }
+    # `ActiveRecord::RecordInvalid` carries the offending record — passing a
+    # bare String raises `NoMethodError` from the constructor instead.
+    invalid_record = MixinNetworkSnapshot.new
+    invalid_record.errors.add(:base, "is not a valid snapshot")
+    poisoned.define_singleton_method(:process!) { raise ActiveRecord::RecordInvalid.new(invalid_record) }
 
     relation = delayed_relation(count: 2, members: [ poisoned, healthy ])
 
@@ -96,14 +103,26 @@ class MixinNetworkSnapshots::MonitorJobTest < JobTestCase
     notifier = Object.new
     notifier.define_singleton_method(:text) { |message| alert_message = message }
 
-    stub_class_method(MixinNetworkSnapshot, :unprocessed, -> { relation }) do
-      stub_class_method(AdminNotificationService, :new, -> { notifier }) do
-        assert_nothing_raised { MixinNetworkSnapshots::MonitorJob.perform_now }
+    report = assert_error_reported(ActiveRecord::RecordInvalid) do
+      stub_class_method(MixinNetworkSnapshot, :unprocessed, -> { relation }) do
+        stub_class_method(AdminNotificationService, :new, -> { notifier }) do
+          MixinNetworkSnapshots::MonitorJob.perform_now
+        end
       end
     end
 
     assert healthy_processed
     assert_match(/There are 2 unprocessed snapshots/, alert_message)
+    # The alert must distinguish "the sweep recovered every row" from "a row is
+    # still broken" — the delayed count alone reads the same in both cases.
+    assert_match(/1 failed to process/, alert_message)
+
+    # A poisoned row is only visible in error tracking if the per-row rescue
+    # reports it, matching `Orders::BatchDistributeJob`.
+    assert_predicate report, :handled?
+    assert_equal :warning, report.severity
+    assert_equal "MixinNetworkSnapshots::MonitorJob", report.context[:job]
+    assert_equal 42, report.context[:snapshot_id]
   end
 
   test "the alert reports the delayed count captured before processing" do
@@ -137,6 +156,38 @@ class MixinNetworkSnapshots::MonitorJobTest < JobTestCase
 
   test "perform is queued as :low" do
     assert_equal "low", MixinNetworkSnapshots::MonitorJob.new.queue_name
+  end
+
+  test "perform sweeps a real delayed snapshot row through a real relation" do
+    # The stub relation above replaces the whole `ActiveRecord::Relation`, so
+    # it can never catch a `find_each` that breaks on a real relation (loaded
+    # relation, implicit ordering, cursor validation). Run the sweep against a
+    # real row so the production path is actually covered.
+    #
+    # This test deliberately does NOT stub `MixinNetworkSnapshot.unprocessed`:
+    # the real scope has to resolve the delayed row on its own.
+    MixinNetworkSnapshot.unprocessed.delete_all
+
+    snapshot = MixinNetworkSnapshot.create!(
+      amount: 1,
+      asset_id: SecureRandom.uuid,
+      user_id: SecureRandom.uuid,
+      snapshot_id: SecureRandom.uuid,
+      trace_id: SecureRandom.uuid,
+      transferred_at: 2.minutes.ago,
+      created_at: 2.minutes.ago
+    )
+
+    alert_message = nil
+    notifier = Object.new
+    notifier.define_singleton_method(:text) { |message| alert_message = message }
+
+    stub_class_method(AdminNotificationService, :new, -> { notifier }) do
+      MixinNetworkSnapshots::MonitorJob.perform_now
+    end
+
+    assert snapshot.reload.processed_at.present?, "expected the delayed snapshot to be marked processed"
+    assert_match(/There are 1 unprocessed snapshots/, alert_message)
   end
 
   private
