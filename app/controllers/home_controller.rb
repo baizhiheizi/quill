@@ -47,6 +47,10 @@ class HomeController < ApplicationController
           .limit(5)
           .to_a
       end
+    # Batch the per-row `subscribe_tag?` check the button partial makes into
+    # one preloaded id set. For guests `ids_for` returns an empty Set without
+    # a query — the partial's guest branch never consults it.
+    @preloaded_subscribe_tag_ids = ids_for(:subscribe_tag)
   end
 
   def active_authors
@@ -68,6 +72,10 @@ class HomeController < ApplicationController
     # on the per-visitor blocked-user set — caching would return identical
     # authors to every signed-in visitor regardless of their blocks.
     @users = relation.order(Arel.sql("RANDOM()")).limit(5).to_a
+    # Batch the per-row `viewer_subscribed_to?` check the author chip's
+    # subscribe button makes into one preloaded id set. Guests get an empty
+    # Set without a query.
+    @preloaded_subscribe_user_ids = ids_for(:subscribe_user)
   end
 
   def more

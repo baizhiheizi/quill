@@ -158,6 +158,48 @@ class HomeControllerTest < ActionController::TestCase
     assert_not_nil @controller.instance_variable_get(:@hot_tags)
   end
 
+  # The widget renders the tag subscribe button per row; the controller must
+  # prime the viewer's subscribe-tag set (`ViewerActionSets#ids_for`) so the
+  # rows cost one actions SELECT instead of one live check per row.
+  test "hot_tags primes the viewer's subscribe-tag set with one actions SELECT" do
+    tag = tags(:web3)
+    @user.create_action(:subscribe, target: tag)
+
+    queries = capture_queries(exclude: [ "solid_cache_entries" ]) { get :hot_tags }
+
+    assert_response :success
+    preloaded = @controller.instance_variable_get(:@preloaded_subscribe_tag_ids)
+    assert_instance_of Set, preloaded
+    assert_includes preloaded, tag.id
+
+    actions_selects = queries.select { |q| q[:sql].start_with?('SELECT "actions"') }
+    assert_equal 1, actions_selects.size,
+      "expected exactly one standalone actions SELECT (the primed set), got: #{actions_selects.map { |q| q[:sql] }.inspect}"
+  end
+
+  # Same primed-set contract for the author chips: the subscribe button each
+  # chip renders must be answered from the primed set, not a live per-row
+  # check. (`users(:author)` may or may not appear in the sampled five — the
+  # set is viewer-scoped, so the id is present regardless.)
+  test "active_authors primes the viewer's subscribe-user set with one actions SELECT" do
+    author = users(:author)
+    @user.create_action(:subscribe, target: author)
+
+    queries = capture_queries(exclude: [ "solid_cache_entries" ]) { get :active_authors }
+
+    assert_response :success
+    preloaded = @controller.instance_variable_get(:@preloaded_subscribe_user_ids)
+    assert_instance_of Set, preloaded
+    assert_includes preloaded, author.id
+
+    # The main users SELECT legitimately embeds actions subqueries (the
+    # block filters); count only standalone actions SELECTs — the primed
+    # set's pluck.
+    actions_selects = queries.select { |q| q[:sql].start_with?('SELECT "actions"') }
+    assert_equal 1, actions_selects.size,
+      "expected exactly one standalone actions SELECT (the primed set), got: #{actions_selects.map { |q| q[:sql] }.inspect}"
+  end
+
   # Cross-Locale Article Visibility (US3, FR-004):
   # `hot_tags` must not apply a `tags.locale = caller_locale` predicate.
   # The previous code narrowed the relation to the visitor's locale; after

@@ -14,5 +14,10 @@ class Dashboard::SubscribeArticlesController < Dashboard::BaseController
     @pagy, @articles = pagy current_user.commenting_subscribe_articles
       .includes(author: User::AVATAR_PRELOADS)
       .order("actions.created_at DESC")
+    # Batch the per-row `commenting_subscribe_article?` check the button
+    # partial makes (action_store fires one SELECT per call) into a single
+    # preloaded id set, the same shape `Dashboard::SubscribeUsersController`
+    # uses.
+    @preloaded_commenting_subscribe_article_ids = ids_for(:commenting_subscribe_article)
   end
 end

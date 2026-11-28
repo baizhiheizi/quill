@@ -45,6 +45,34 @@ class Dashboard::SubscribeArticlesControllerTest < ActionController::TestCase
       "Likely cause: avatar chain (authorization + ActiveStorage) regressed."
   end
 
+  test "index sets preloaded_commenting_subscribe_article_ids" do
+    seed_subscriptions!
+
+    get :index
+
+    assert_response :success
+    preloaded = @controller.instance_variable_get(:@preloaded_commenting_subscribe_article_ids)
+    assert_instance_of Set, preloaded
+    assert_equal @reader.commenting_subscribe_articles.count, preloaded.size
+    assert_not_includes preloaded, articles(:draft).id,
+      "the set must hold every commenting-subscribed article, so it can also answer the no case"
+  end
+
+  # The button state the partial renders comes from the primed set rather
+  # than from a live per-row check, so pin the rendered result: every row of
+  # this list is an article the viewer commenting-subscribed to, so each
+  # renders the Unsubscribe link.
+  test "index renders the subscribe button state from the primed set" do
+    seed_subscriptions!
+    article = @reader.commenting_subscribe_articles.first
+
+    get :index
+
+    assert_response :success
+    assert_select "a[href=?]", new_subscribe_article_path(uuid: article.uuid),
+      message: "expected the row to render the Unsubscribe link from the primed set"
+  end
+
   private
 
   def sign_in_as(user)

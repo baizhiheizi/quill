@@ -21,10 +21,12 @@ class ViewerActionSetsTest < ActiveSupport::TestCase
   # verb → the `action_store` action that seeds it plus the kind of target
   # that action accepts (`action_store` filters each relation by
   # `target_type`, so `upvote_article` must be seeded with an Article, not a
-  # User). All six verbs are swept by every "across all verbs"
+  # User). All eight verbs are swept by every "across all verbs"
   # assertion below.
   VERBS = {
     subscribe_user: { action: :subscribe, target_kind: :user },
+    subscribe_tag: { action: :subscribe, target_kind: :tag },
+    commenting_subscribe_article: { action: :commenting_subscribe, target_kind: :article },
     block_user: { action: :block, target_kind: :user },
     upvote_article: { action: :upvote, target_kind: :article },
     downvote_article: { action: :downvote, target_kind: :article },
@@ -37,6 +39,7 @@ class ViewerActionSetsTest < ActiveSupport::TestCase
     when :user then users(:reader_one)
     when :article then articles(:published_free)
     when :comment then comments(:one)
+    when :tag then tags(:web3)
     end
   end
 
@@ -46,14 +49,17 @@ class ViewerActionSetsTest < ActiveSupport::TestCase
   CONSUMERS = %w[
     ArticlesController
     CommentsController
+    HomeController
     Dashboard::SubscribeUsersController
+    Dashboard::SubscribeTagsController
+    Dashboard::SubscribeArticlesController
     Dashboard::BlockUsersController
     Users::SubscribeUsersController
     Users::SubscribeByUsersController
     Collections::SubscribersController
   ].freeze
 
-  test "returns the acted-on ids for a signed-in viewer across all four verbs" do
+  test "returns the acted-on ids for a signed-in viewer across all verbs" do
     viewer = users(:author)
 
     VERBS.each do |verb, spec|
