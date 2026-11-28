@@ -139,6 +139,26 @@ class Dashboard::SubscribeByUsersControllerTest < ActionController::TestCase
     assert_includes preloaded, users(:reader_two).id
   end
 
+  # The button state the partial renders comes from the primed set rather
+  # than from a live per-row check, so pin the rendered result for both
+  # answers: a row the viewer subscribed to shows "Subscribed", a row they
+  # did not shows the subscribe button.
+  test "index renders the subscribe button state from the primed set" do
+    subscribed_to = users(:reader_one)
+    not_subscribed_to = users(:reader_two)
+    subscribe(subscribed_to)
+    subscribe(not_subscribed_to)
+    @author.create_action(:subscribe, target: subscribed_to)
+
+    get :index
+
+    assert_response :success
+    assert_select "a[href=?]", new_subscribe_user_path(uid: subscribed_to.uid),
+      message: "expected the row the viewer subscribed to to render the Subscribed link"
+    assert_select "form[action=?]", subscribe_users_path(uid: not_subscribed_to.uid),
+      message: "expected the row the viewer did not subscribe to to render the subscribe button"
+  end
+
   private
 
   def subscribe(subscriber)
