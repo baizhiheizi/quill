@@ -11,7 +11,11 @@ class Dashboard::CollectionsController < Dashboard::BaseController
     # collections on /dashboard/collections, that is ~3N queries per index page load.
     # Paginated like every sibling dashboard index — this one rendered the
     # whole set unbounded.
-    @pagy, @collections = pagy current_user.collections.includes(:currency, cover_attachment: :blob).order(updated_at: :desc)
+    #
+    # `updated_at` is not unique (collections written in the same batch share a
+    # timestamp), so it needs a unique tiebreaker: without `id` the same row
+    # could show up on two pages, or be skipped at the page boundary.
+    @pagy, @collections = pagy current_user.collections.includes(:currency, cover_attachment: :blob).order(updated_at: :desc, id: :desc)
   end
 
   def show

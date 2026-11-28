@@ -36,12 +36,75 @@ class Dashboard::CollectionsControllerTest < ActionController::TestCase
   end
 
   test "index paginates the collection list" do
+    limit = Pagy::DEFAULT[:limit]
+    collections = create_collections(limit + 1)
+
     get :index
 
     assert_response :success
     pagy = @controller.instance_variable_get(:@pagy)
     assert_not_nil pagy
     assert_equal 1, pagy.page
+    assert_equal limit, @controller.instance_variable_get(:@collections).size
+
+    # The first page renders its own rows and holds back the overflow row.
+    assert_includes @response.body, collections.last.name
+    refute_includes @response.body, collections.first.name
+
+    # The pagination footer carries the next-page link the infinite-scroll
+    # controller reads its href from — the overflow row is only reachable
+    # through it.
+    assert_match %r{href="[^"]*[?&]page=2"}, @response.body
+  end
+
+  test "index mounts the infinite-scroll pagination trio" do
+    create_collections(1)
+
+    get :index
+
+    assert_response :success
+    # Stimulus controller mount — without it the scroll sentinel is never
+    # observed and no further page is ever fetched.
+    assert_includes @response.body, 'data-controller="infinite-scroll"'
+    assert_match(/data-infinite-scroll-target=['"]scrollArea['"]/, @response.body)
+    # The scroll sentinel and the pagination footer, whose id is the anchor
+    # the turbo_stream template updates.
+    assert_includes @response.body, 'id="my_collections_list"'
+    assert_includes @response.body, 'id="my_collections_pagination"'
+  end
+
+  test "index page 2 appends the remaining collections as a turbo stream" do
+    limit = Pagy::DEFAULT[:limit]
+    collections = create_collections(limit + 1)
+
+    get :index, params: { page: 2 }, as: :turbo_stream
+
+    assert_response :success
+    assert_includes @response.body, 'action="append"'
+    assert_includes @response.body, 'target="my_collections_list"'
+    assert_includes @response.body, 'action="update"'
+    assert_includes @response.body, 'target="my_collections_pagination"'
+
+    # The overflow row is appended and no first-page row is repeated.
+    assert_includes @response.body, collections.first.name
+    refute_includes @response.body, collections.last.name
+  end
+
+  test "index never repeats or skips a collection when timestamps tie" do
+    limit = Pagy::DEFAULT[:limit]
+    collections = create_collections(limit + 1, updated_at: Time.current)
+
+    get :index
+
+    assert_response :success
+    assert_includes @response.body, collections.last.name
+    refute_includes @response.body, collections.first.name
+
+    get :index, params: { page: 2 }, as: :turbo_stream
+
+    assert_response :success
+    assert_includes @response.body, collections.first.name
+    refute_includes @response.body, collections.last.name
   end
 
   # show ---------------------------------------------------------------
@@ -207,5 +270,32 @@ class Dashboard::CollectionsControllerTest < ActionController::TestCase
     # `may_destroy?` short-circuits the action; no redirect is performed,
     # so the response defaults to `head :no_content` semantics.
     assert_includes [ 302, 204, 200 ], @response.status
+  end
+
+  private
+
+  # Creates `count` collections for the current author with distinct,
+  # zero-padded names so assertions on the rendered body cannot collide.
+  #
+  # By default every collection gets a distinct `updated_at` (the oldest one
+  # first), which makes the page-1/page-2 split deterministic under
+  # `order(updated_at: :desc, id: :desc)`: the last created collection heads
+  # page 1 and the first created one is the overflow row on page 2. Pass
+  # `updated_at:` to give every collection the same timestamp instead.
+  def create_collections(count, updated_at: nil)
+    base = Time.current - count.minutes
+
+    (0...count).map do |i|
+      Collection.create!(
+        author: @user,
+        name: format("Collection %02d", i),
+        symbol: format("COLL%02d", i),
+        description: "collection #{i}",
+        asset_id: currencies(:btc).asset_id,
+        price: 0.0005,
+        revenue_ratio: 0.2,
+        updated_at: updated_at || base + i.minutes
+      )
+    end
   end
 end
