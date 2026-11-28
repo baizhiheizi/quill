@@ -353,6 +353,20 @@ subscribers.
   where no controller primed it (the guest-facing surfaces and the
   subscribe/destroy turbo-stream frames). A list of subscribers costs one
   SELECT for the page instead of one per row.
+- **The tag and article subscribe buttons kept asking once per row** — the
+  same shape survived on the two action verbs `ViewerActionSets` did not
+  cover yet. The dashboard's subscribed-tags and subscribed-articles lists
+  ran the live `subscribe_tag?` / `commenting_subscribe_article?` check for
+  every row (a pagy page of the default size, so up to a page of actions
+  SELECTs per render), and the home widgets — hot tags and active authors,
+  both mounted as turbo-frame srcs on the signed-in feed — rendered their
+  buttons unprimed for signed-in visitors. Both verbs join
+  `ViewerActionSets`, the four controllers prime the set
+  (`ids_for(:subscribe_tag)` / `ids_for(:commenting_subscribe_article)`),
+  and the two partials read it through `viewer_subscribed_to_tag?` /
+  `viewer_commenting_subscribed_to?`, which keep the live-check fallback
+  for the single-tag and single-article surfaces. A page of rows costs one
+  actions SELECT for the button states instead of one per row.
 
 - **`articles (state, published_at)`** — `state` was unindexed, so every
   `Article.only_published` query seq-scanned the table: the web feed, the

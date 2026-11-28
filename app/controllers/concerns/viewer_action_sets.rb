@@ -26,6 +26,8 @@ module ViewerActionSets
   # and an unsupported verb fails loudly at the lookup.
   ACTION_RELATIONS = {
     subscribe_user: :subscribe_user_actions,
+    subscribe_tag: :subscribe_tag_actions,
+    commenting_subscribe_article: :commenting_subscribe_article_actions,
     block_user: :block_user_actions,
     upvote_article: :upvote_article_actions,
     downvote_article: :downvote_article_actions,
