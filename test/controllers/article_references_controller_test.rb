@@ -67,7 +67,46 @@ class ArticleReferencesControllerTest < ActionController::TestCase
       "expected the oversized query to be truncated before SQL")
   end
 
+  # The picker serialises `author.name`, `author.avatar_image_url` and
+  # `author.mixin_uuid` for every row, and it is not paginated — without a
+  # preload each row costs a fresh users SELECT (plus attachment/authorization
+  # lookups inside the avatar), so a viewer with many reachable articles pays
+  # a users query per article.
+  test "index preloads authors so serialising rows costs one users query" do
+    create_free_published_article(author: users(:author_zh), title: "Free zh two")
+    create_free_published_article(author: users(:author_ja), title: "Free ja two")
+
+    queries = capture_sql { get :index, format: :json }
+
+    assert_response :success
+    assert_operator response.parsed_body.length, :>=, 3,
+      "expected the picker to list at least three articles by distinct authors"
+
+    users_queries = queries.count { |q| q.include?('FROM "users"') }
+    # One query resolves the signed-in viewer, one preload covers every row's
+    # author regardless of how many articles the viewer can reach.
+    assert users_queries <= 2,
+      "expected at most 2 users queries (viewer + author preload), got #{users_queries}"
+  end
+
   private
+
+  def create_free_published_article(author:, title:)
+    article = Article.create!(
+      title: title,
+      intro: "A free article intro.",
+      content: "<p>A free article body.</p>",
+      author: author,
+      price: 0.0,
+      state: "published",
+      locale: "en"
+    )
+    # published_at is set after create so the "frozen attributes once
+    # published" guard (which fires while asset_id is still dirty) doesn't
+    # reject the new record.
+    article.update_columns(published_at: 2.days.ago)
+    article
+  end
 
   def capture_sql
     queries = []

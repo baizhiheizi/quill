@@ -14,6 +14,6 @@ class Admin::SessionsController < Admin::BaseController
         sessions.order(created_at: :desc)
       end
 
-    @pagy, @sessions = pagy(sessions)
+    @pagy, @sessions = pagy(sessions.includes(user: User::AVATAR_PRELOADS))
   end
 end

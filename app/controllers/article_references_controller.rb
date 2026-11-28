@@ -14,5 +14,6 @@ class ArticleReferencesController < ApplicationController
       ArticleVisibility
       .for(current_user, base: current_user.available_articles, hide_blocked_authors: false)
       .searching(params[:query])
+      .includes(author: User::AVATAR_PRELOADS)
   end
 end
