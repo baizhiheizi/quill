@@ -201,6 +201,14 @@ real requirement is `rails >= 8.1.4`, not a json version.
 
 ### Corrections
 
+- **The dashboard collections index rendered the whole list unpaginated** —
+  every sibling dashboard index (articles, orders, payments, transfers,
+  notifications) pages its list with pagy, but `/dashboard/collections`
+  materialised the author's entire collection set on one render. It now
+  paginates like its siblings: the index mounts the `infinite-scroll`
+  controller with its scroll sentinel, and a turbo-stream template appends
+  each further page of collections, so the rows past the first page stay
+  reachable.
 - **The stale-snapshot watchdog reported the wrong count, or nothing at all**
   — `MixinNetworkSnapshots::MonitorJob` re-read `snapshots.count` after
   processing the backlog, but the relation re-queries `processed_at IS NULL`
